@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_9IWuEMuEEeOtT4qEJiN-Qw">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_tRJvYMuFEeOtT4qEJiN-Qw" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_aeQM4MuMEeOtT4qEJiN-Qw" elementId="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.ui.command.filter" commandName="Retention Index Calculator"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_tjxwcMuFEeOtT4qEJiN-Qw" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_deGpMMuMEeOtT4qEJiN-Qw" elementId="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.ui.handler.filter" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.ui/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.ui.handlers.FilterHandler" command="_aeQM4MuMEeOtT4qEJiN-Qw"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_t5wngMuFEeOtT4qEJiN-Qw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.msd">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_T3dpoMuNEeOtT4qEJiN-Qw" elementId="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.ui.handledmenuitem.filter" label="Retention Index Calculator" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/retentionIndex.gif" command="_aeQM4MuMEeOtT4qEJiN-Qw"></elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_uKYdcMuFEeOtT4qEJiN-Qw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.filter.chromatogram">
+    <elements xsi:type="menu:HandledToolItem" xmi:id="_UZpJoMuNEeOtT4qEJiN-Qw" elementId="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.ui.handledtoolitem.filter" label="Retention Index Calculator" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/retentionIndex.gif" command="_aeQM4MuMEeOtT4qEJiN-Qw"></elements>
+  </fragments>
+</fragment:ModelFragments>
