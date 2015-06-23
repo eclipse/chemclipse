@@ -20,22 +20,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
-import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.chromatogram.filter.processing.ChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.model.IRetentionIndexEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.model.RetentionIndexEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.settings.IRetentionIndexFilterSettingsPeak;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.model.IRetentionIndexEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.model.RetentionIndexEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.settings.IRetentionIndexFilterSettingsPeak;
-import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class RetentionIndexCalculator {
 
@@ -69,7 +68,9 @@ public class RetentionIndexCalculator {
 		String pathRetentionIndexFile = retentionIndexFilterSettings.getPathRetentionIndexFile();
 		File amdisCalFile = new File(pathRetentionIndexFile);
 		TreeMap<Integer, IRetentionIndexEntry> retentionIndices = getRetentionIndexEntries(amdisCalFile);
-		//
+		/*
+		 * Apply the filter on each peak.
+		 */
 		for(IPeakMSD peak : peaks) {
 			IScan scan = peak.getPeakModel().getPeakMaximum();
 			int retentionTime = scan.getRetentionTime();
