@@ -1,0 +1,16 @@
+chemclipse/plugins/net.openchrom.msd.converter.supplier.amdis.fragment.test/bin/*
+chemclipse/plugins/net.openchrom.msd.converter.supplier.amdis.ui/bin/*
+chemclipse/plugins/net.openchrom.msd.converter.supplier.amdis/bin/*
+chemclipse/plugins/net.openchrom.msd.converter.supplier.amdis.ui.fragment.test/bin/*
+chemclipse/plugins/net.openchrom.msd.converter.supplier.amdis.fragment.test/Openchrom.log
+chemclipse/plugins/net.openchrom.msd.converter.supplier.amdis.fragment.test/*.log*
+chemclipse/plugins/net.openchrom.msd.converter.supplier.amdis.fragment.test/testData/files/export/DB.msl
+chemclipse/sites/net.openchrom.msd.converter.supplier.amdis.updateSite/artifacts.jar
+chemclipse/sites/net.openchrom.msd.converter.supplier.amdis.updateSite/content.jar
+chemclipse/sites/net.openchrom.msd.converter.supplier.amdis.updateSite/features/
+chemclipse/sites/net.openchrom.msd.converter.supplier.amdis.updateSite/plugins/
+chemclipse/features/net.openchrom.msd.converter.supplier.amdis.feature/target/
+chemclipse/plugins/net.openchrom.msd.converter.supplier.amdis.ui/target/
+chemclipse/plugins/net.openchrom.msd.converter.supplier.amdis/target/
+chemclipse/sites/net.openchrom.msd.converter.supplier.amdis.updateSite/target/
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.amdis.fragment.test/testData/files/export/DB.msl
