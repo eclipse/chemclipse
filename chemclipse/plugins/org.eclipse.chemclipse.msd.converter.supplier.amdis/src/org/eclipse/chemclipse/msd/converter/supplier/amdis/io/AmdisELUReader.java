@@ -23,10 +23,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.IPeaks;
@@ -46,11 +45,14 @@ import org.eclipse.chemclipse.msd.model.implementation.PeakIon;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class AmdisELUReader implements IPeakReader {
 
+	/*
+	 * We could try to add additional filter options in this class.
+	 */
 	private static final Logger logger = Logger.getLogger(AmdisELUReader.class);
 	private static final Pattern hitsPattern = Pattern.compile("(NAME)");
 	private static final Pattern peakDataPattern = Pattern.compile("(NAME)(.*?)(^$)", Pattern.DOTALL | Pattern.MULTILINE);
