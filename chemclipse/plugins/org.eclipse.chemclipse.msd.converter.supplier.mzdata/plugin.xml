@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Reads mzData Chromatograms"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.mzdata.converter.ChromatogramExportConverter"
+            fileExtension=".mzData"
+            filterName="mzData Chromatogram (*.mzData)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.mzdata"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzdata.converter.ChromatogramImportConverter"
+            isExportable="false"
+            isImportable="true">
+      </ChromatogramSupplier>
+   </extension>
+
+</plugin>
