@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Writes AnIML Chromatograms."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.animl.converter.ChromatogramExportConverter"
+            fileExtension=".animl"
+            filterName="AnIML Chromatogram (*.animl)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.animl"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.animl.converter.ChromatogramImportConverter"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier>
+   </extension>
+
+</plugin>

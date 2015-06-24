@@ -1,0 +1,15 @@
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.animl.fragment.test/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.animl.ui/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.animl/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.animl.ui.fragment.test/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.animl.fragment.test/Openchrom.log
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.animl.fragment.test/*.log*
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.animl.fragment.test/testData/files/export/DB.msl
+chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.animl.updateSite/artifacts.jar
+chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.animl.updateSite/content.jar
+chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.animl.updateSite/features/
+chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.animl.updateSite/plugins/
+chemclipse/features/org.eclipse.chemclipse.msd.converter.supplier.animl.feature/target/
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.animl.ui/target/
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.animl/target/
+chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.animl.updateSite/target/
