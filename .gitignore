@@ -1,0 +1,13 @@
+chemclipse/plugins/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvolution.fragment.test/bin/*
+chemclipse/plugins/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvolution.ui/bin/*
+chemclipse/plugins/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvolution/bin/*
+chemclipse/plugins/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvolution.ui.fragment.test/bin/*
+chemclipse/sites/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvolution.updateSite/artifacts.jar
+chemclipse/sites/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvolution.updateSite/content.jar
+chemclipse/sites/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvolution.updateSite/features/
+chemclipse/sites/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvolution.updateSite/plugins/
+chemclipse/features/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvolution.feature/target/
+chemclipse/plugins/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvolution.ui/target/
+chemclipse/plugins/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvolution/target/
+chemclipse/sites/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvolution.updateSite/target/
+chemclipse/plugins/net.openchrom.chromatogram.msd.peak.detector.supplier.deconvolution.fragment.test/*.log

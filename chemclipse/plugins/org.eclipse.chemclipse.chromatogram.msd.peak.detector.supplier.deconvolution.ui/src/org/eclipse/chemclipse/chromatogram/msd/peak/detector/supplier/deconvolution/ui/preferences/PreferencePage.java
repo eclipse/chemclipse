@@ -1,0 +1,51 @@
+/*******************************************************************************
+ * Copyright (c) 2013, 2015 Dr. Philip Wenig.
+ * 
+ * All rights reserved.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Dr. Philip Wenig - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.ui.preferences;
+
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.RadioGroupFieldEditor;
+import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.IWorkbench;
+
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings.Sensitivity;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.ui.Activator;
+
+public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+
+	public PreferencePage() {
+
+		super(GRID);
+		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setDescription("Deconvolution peak detector");
+	}
+
+	/**
+	 * Creates the field editors. Field editors are abstractions of the common
+	 * GUI blocks needed to manipulate various types of preferences. Each field
+	 * editor knows how to save and restore itself.
+	 */
+	public void createFieldEditors() {
+
+		String[][] options = new String[][]{{"&OFF", Sensitivity.OFF.toString()}, {"&LOW", Sensitivity.LOW.toString()}, {"&MEDIUM", Sensitivity.MEDIUM.toString()}, {"&HIGH", Sensitivity.HIGH.toString()}};
+		addField(new RadioGroupFieldEditor(PreferenceSupplier.P_SENSITIVITY, "Set a sensitivity", 1, options, getFieldEditorParent()));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
+	 */
+	public void init(IWorkbench workbench) {
+
+	}
+}
