@@ -1,0 +1,14 @@
+chemclipse/plugins/net.openchrom.msd.converter.supplier.svg.fragment.test/bin/*
+chemclipse/plugins/net.openchrom.msd.converter.supplier.svg.ui/bin/*
+chemclipse/plugins/net.openchrom.msd.converter.supplier.svg/bin/*
+chemclipse/plugins/net.openchrom.msd.converter.supplier.svg.fragment.i18n/bin/*
+chemclipse/plugins/net.openchrom.msd.converter.supplier.svg.ui.fragment.i18n/bin/*
+chemclipse/plugins/net.openchrom.msd.converter.supplier.svg.ui.fragment.test/bin/*
+chemclipse/sites/net.openchrom.msd.converter.supplier.svg.updateSite/artifacts.jar
+chemclipse/sites/net.openchrom.msd.converter.supplier.svg.updateSite/content.jar
+chemclipse/sites/net.openchrom.msd.converter.supplier.svg.updateSite/features/
+chemclipse/sites/net.openchrom.msd.converter.supplier.svg.updateSite/plugins/
+chemclipse/features/net.openchrom.msd.converter.supplier.svg.feature/target/
+chemclipse/plugins/net.openchrom.msd.converter.supplier.svg.ui/target/
+chemclipse/plugins/net.openchrom.msd.converter.supplier.svg/target/
+chemclipse/sites/net.openchrom.msd.converter.supplier.svg.updateSite/target/
