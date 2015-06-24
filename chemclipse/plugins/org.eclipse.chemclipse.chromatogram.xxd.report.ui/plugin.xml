@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <category
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.ui.exportCategory"
+            name="Reporting">
+      </category>
+      <wizard
+            category="org.eclipse.chemclipse.chromatogram.xxd.report.ui.exportCategory"
+            class="org.eclipse.chemclipse.chromatogram.xxd.report.ui.export.wizards.ChromatogramReportExportWizard"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramReport.gif"
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.ui.chromatogramReportExportWizard"
+            name="Chromatogram Report">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+      		category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"      
+            class="org.eclipse.chemclipse.chromatogram.xxd.report.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.ui.preferences.reportPreferencePage"
+            name="Report">
+      </page>
+   </extension>
+
+</plugin>

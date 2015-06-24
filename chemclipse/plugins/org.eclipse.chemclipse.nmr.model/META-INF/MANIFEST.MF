@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Model
+Bundle-SymbolicName: org.eclipse.chemclipse.nmr.model
+Bundle-Version: 0.7.0.qualifier
+Bundle-Activator: org.eclipse.chemclipse.nmr.model.Activator
+Bundle-Vendor: ChemClipse
+Require-Bundle: org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy

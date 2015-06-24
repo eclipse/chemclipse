@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_kSoUcEbCEeK_ta06Ye28bw">
+  <imports xsi:type="basic:Part" xmi:id="_pYrwkEd4EeKhRMzT2OpX0g" elementId="org.eclipse.ui.console.ConsoleView"/>
+  <imports xsi:type="advanced:Area" xmi:id="_PUD2kLPgEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.rcp.app.ui.editor"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_0bIMkEbDEeK_ta06Ye28bw" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
+    <elements xsi:type="basic:Part" xmi:id="_3yWnEEbDEeK_ta06Ye28bw" elementId="org.eclipse.chemclipse.logging.ui.LogFileView" contributionURI="bundleclass://org.eclipse.chemclipse.logging.ui/org.eclipse.chemclipse.logging.ui.views.LogFileView" label="Log Files" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/log.gif"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_FFkJkEbEEeK_ta06Ye28bw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
+    <elements xsi:type="advanced:Perspective" xmi:id="_j5THUOTXEeKo5NCxhDBqQQ" elementId="org.eclipse.chemclipse.logging.ui.perspective.main" label="OpenChrom Logging" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/log.gif">
+      <children xsi:type="basic:PartSashContainer" xmi:id="_sjP_sOTXEeKo5NCxhDBqQQ" elementId="org.eclipse.chemclipse.logging.ui.partsashcontainer.main.0" horizontal="true">
+        <children xsi:type="basic:PartStack" xmi:id="_9X5zMOTYEeKo5NCxhDBqQQ" elementId="org.eclipse.chemclipse.logging.ui.partstack.main.0" containerData="2000">
+          <children xsi:type="advanced:Placeholder" xmi:id="_SZbFMOTZEeKo5NCxhDBqQQ" elementId="org.eclipse.chemclipse.logging.ui.placeholder.main.0" ref="_3yWnEEbDEeK_ta06Ye28bw"/>
+        </children>
+        <children xsi:type="basic:PartSashContainer" xmi:id="_9v74sOTYEeKo5NCxhDBqQQ" elementId="org.eclipse.chemclipse.logging.ui.partsashcontainer.main.1" containerData="8000">
+          <children xsi:type="advanced:Placeholder" xmi:id="_sl_9EEhoEeKQM_DMiSUl9A" elementId="org.eclipse.chemclipse.logging.ui.perspective.main.editorss" containerData="1500" ref="_PUD2kLPgEeKIeeBeP0URsw"/>
+          <children xsi:type="basic:PartStack" xmi:id="_Faz5sOTZEeKo5NCxhDBqQQ" elementId="org.eclipse.chemclipse.logging.ui.partstack.main.1" containerData="5000">
+            <children xsi:type="advanced:Placeholder" xmi:id="_tkbYQEd4EeKhRMzT2OpX0g" elementId="org.eclipse.chemclipse.logging.ui.placeholder.main.1" ref="_pYrwkEd4EeKhRMzT2OpX0g"/>
+          </children>
+        </children>
+      </children>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>

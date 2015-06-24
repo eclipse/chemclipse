@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="org.eclipse.chemclipse.ux.extension.msd.ui.modelContribution"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.overlayPreferencePage"
+            class="org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.ux.extension.msd.ui.preferencePage"
+            name="MSD Overlay">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.chemclipse.chromatogram.msd.ui.perspective.msProjectsCategory"
+            name="MS Projects">
+      </category>
+      <wizard
+            category="org.eclipse.chemclipse.chromatogram.msd.ui.perspective.msProjectsCategory"
+            class="org.eclipse.chemclipse.ux.extension.msd.ui.wizards.AnalysisProjectWizard"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif"
+            id="org.eclipse.chemclipse.chromatogram.msd.ui.perspective.analysisProjectWizard"
+            name="Analysis Project"
+            preferredPerspectives="org.eclipse.chemclipse.chromatogram.msd.ui.perspective.perspectives.ChromatogramMSPerspective"
+            project="true">
+      </wizard>
+   </extension>
+
+</plugin>

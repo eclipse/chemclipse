@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Progress Plug-in
+Bundle-SymbolicName: org.eclipse.chemclipse.progress
+Bundle-Version: 0.7.0.qualifier
+Bundle-Activator: org.eclipse.chemclipse.progress.Activator
+Require-Bundle: org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Export-Package: org.eclipse.chemclipse.progress.core
+Bundle-Vendor: ChemClipse

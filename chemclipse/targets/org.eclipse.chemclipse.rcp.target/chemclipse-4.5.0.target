@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?><target name="Eclipse 4.5.0" sequenceNumber="374">
+<locations>
+<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.ecf.filetransfer.httpclient4.ssl.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.rcp.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.sdk.ide" version="0.0.0"/>
+<unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.rcp.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ecf.core.ssl.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ecf.discovery.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ecf.filetransfer.httpclient4.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.rcp.sdk.id" version="0.0.0"/>
+<unit id="org.eclipse.epp.mpc.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.gef.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.jgit.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.platform.sdk" version="0.0.0"/>
+<unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.equinox.serverside.sdk.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/releases/mars"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.apache.log4j" version="0.0.0"/>
+<unit id="org.apache.commons.httpclient" version="0.0.0"/>
+<unit id="org.apache.httpcomponents.httpclient.source" version="0.0.0"/>
+<unit id="org.apache.httpcomponents.httpcore" version="0.0.0"/>
+<unit id="org.easymock" version="0.0.0"/>
+<unit id="org.apache.batik.svggen" version="0.0.0"/>
+<unit id="org.apache.batik.dom" version="0.0.0"/>
+<unit id="org.apache.batik.ext.awt" version="0.0.0"/>
+<unit id="org.dom4j" version="0.0.0"/>
+<unit id="org.apache.xmlbeans" version="0.0.0"/>
+<unit id="org.apache.xerces" version="0.0.0"/>
+<unit id="org.apache.poi.ooxml.schemas" version="0.0.0"/>
+<unit id="org.apache.poi.ooxml" version="0.0.0"/>
+<unit id="org.apache.poi" version="0.0.0"/>
+<unit id="org.apache.commons.io" version="0.0.0"/>
+<unit id="org.apache.commons.cli" version="0.0.0"/>
+<unit id="org.codehaus.jackson.core" version="0.0.0"/>
+<unit id="org.codehaus.jackson.mapper" version="0.0.0"/>
+<unit id="org.codehaus.jackson.jaxrs" version="0.0.0"/>
+<unit id="com.sun.jersey" version="0.0.0"/>
+<unit id="javax.ws.rs" version="0.0.0"/>
+<unit id="com.google.gson" version="0.0.0"/>
+<unit id="org.objectweb.asm" version="3.3.1.v201105211655"/>
+<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20140525021250/repository"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.e4.resources.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.ui.keys.feature.source.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.core.tools.feature.source.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.tools.css.spy.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.tools.context.spy.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.tools.css.spy.feature.source.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.ui.keys.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.tools.event.spy.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.tools.event.spy.feature.source.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.resources.feature.source.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.e4.core.tools.feature.feature.group" version="0.0.0"/>
+<repository location="http://update.openchrom.net/repositories/development/e4/repository"/>
+</location>
+</locations>
+</target>

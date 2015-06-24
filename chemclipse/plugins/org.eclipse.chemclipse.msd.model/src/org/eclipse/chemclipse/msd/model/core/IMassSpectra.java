@@ -1,0 +1,88 @@
+/*******************************************************************************
+ * Copyright (c) 2008, 2015 Philip (eselmeister) Wenig.
+ * 
+ * All rights reserved.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Philip (eselmeister) Wenig - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.chemclipse.msd.model.core;
+
+import java.util.List;
+
+/**
+ * This class stores a list of mass spectra.
+ * 
+ * @author eselmeister
+ */
+public interface IMassSpectra {
+
+	/**
+	 * Adds the mass spectrum to the end of the list.
+	 * 
+	 * @param massSpectrum
+	 */
+	void addMassSpectrum(IScanMSD massSpectrum);
+
+	/**
+	 * Removes the mass spectrum from the list.
+	 * 
+	 * @param massSpectrum
+	 */
+	void removeMassSpectrum(IScanMSD massSpectrum);
+
+	/**
+	 * Returns the mass spectrum with the given number.<br/>
+	 * Be aware, the index is 1 based and not 0 based like in a normal list.<br/>
+	 * If no mass spectrum is available, null will be returned.
+	 * 
+	 * @param i
+	 * @return IMassSpectrum
+	 */
+	IScanMSD getMassSpectrum(int i);
+
+	/**
+	 * Returns a list of stored mass spectra.
+	 * 
+	 * @return List<IMassSpectrum>
+	 */
+	List<IScanMSD> getList();
+
+	/**
+	 * Returns the number of stored mass spectra.
+	 * 
+	 * @return int
+	 */
+	int size();
+
+	/**
+	 * Returns the converter id.
+	 * 
+	 * @return String
+	 */
+	String getConverterId();
+
+	/**
+	 * Sets the converter id.
+	 * 
+	 * @param converterId
+	 */
+	void setConverterId(String converterId);
+
+	/**
+	 * Returns the name.
+	 * 
+	 * @return String
+	 */
+	String getName();
+
+	/**
+	 * Sets the name.
+	 * 
+	 * @param name
+	 */
+	void setName(String name);
+}

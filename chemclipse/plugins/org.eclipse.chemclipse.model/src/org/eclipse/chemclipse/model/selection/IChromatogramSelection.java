@@ -1,0 +1,141 @@
+/*******************************************************************************
+ * Copyright (c) 2012, 2015 Philip (eselmeister) Wenig.
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Philip (eselmeister) Wenig - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.chemclipse.model.selection;
+
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
+
+public interface IChromatogramSelection extends IChromatogramUpdateListener {
+
+	/**
+	 * Returns the stored chromatogram.
+	 * May return null.
+	 * 
+	 * @return {@link IChromatogram}
+	 */
+	IChromatogram getChromatogram();
+
+	/**
+	 * Reset all values to the given chromatogram bounds.<br/>
+	 * E.g. if the chromatogram stores 5726 scans, reset would set the startScan
+	 * to 1 and the stopScan to 5726. The start and stop abundance will be set
+	 * to 0 and max abundance and the selected scan and peak will be each time
+	 * the first one.
+	 */
+	void reset();
+
+	/**
+	 * Resets all values as reset and fires optionally an update.
+	 * 
+	 * @param fireUpdate
+	 */
+	void reset(boolean fireUpdate);
+
+	/**
+	 * Returns the start retention time.<br/>
+	 * The retention time is stored in milliseconds.
+	 * 
+	 * @return int
+	 */
+	int getStartRetentionTime();
+
+	/**
+	 * Sets the start retention time.<br/>
+	 * The retention time is stored in milliseconds.<br/>
+	 * The start retention time must be >= 0.
+	 */
+	void setStartRetentionTime(int startRetentionTime);
+
+	/**
+	 * Returns the stop retention time.<br/>
+	 * The retention time is stored in milliseconds.
+	 * 
+	 * @return int
+	 */
+	int getStopRetentionTime();
+
+	/**
+	 * Sets the stop retention time.<br/>
+	 * The retention time is stored in milliseconds.<br/>
+	 * The stop retention time must be >= 0.
+	 */
+	void setStopRetentionTime(int stopRetentionTime);
+
+	/**
+	 * Returns the start abundance.
+	 * 
+	 * @return float
+	 */
+	float getStartAbundance();
+
+	/**
+	 * Sets the start abundance.<br/>
+	 * The startAbundance must be >= 0.
+	 */
+	void setStartAbundance(float startAbundance);
+
+	/**
+	 * Returns the stop abundance.
+	 * 
+	 * @return float
+	 */
+	float getStopAbundance();
+
+	/**
+	 * Sets the stop abundance.<br/>
+	 * The stopAbundance must be >= 0.
+	 */
+	void setStopAbundance(float startAbundance);
+
+	/**
+	 * Sets the values and fires an update after validating and setting all
+	 * values.
+	 * 
+	 * @param startRetentionTime
+	 * @param stopRetentionTime
+	 * @param startAbundance
+	 * @param stopAbundance
+	 */
+	void setRanges(int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance);
+
+	/**
+	 * All listeners will be informed about an update.
+	 * This method needs to be implemented by each ChromatogramSelection implementation, e.g. for ChromatogramSelectionMSD:
+	 * org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionUpdateNotifier.fireUpdateChange(this, false);
+	 * 
+	 * @param forceReload
+	 */
+	void fireUpdateChange(boolean forceReload);
+
+	/**
+	 * Returns the selected scan of the current chromatogram or null, if none is
+	 * stored.
+	 * 
+	 * @return {@link IScan}
+	 */
+	IScan getSelectedScan();
+
+	/**
+	 * Sets the selected scan of the current chromatogram.<br/>
+	 * The scan must not be null.
+	 */
+	void setSelectedScan(IScan selectedScan);
+
+	/**
+	 * Use this convenient method, if you don't want to fire and update.
+	 * 
+	 * @param selectedScan
+	 * @param update
+	 */
+	void setSelectedScan(IScan selectedScan, boolean update);
+}

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_2kKtME3hEeOtxrESNeijsQ">
+  <imports xsi:type="basic:Part" xmi:id="_HszpIE3iEeOtxrESNeijsQ" elementId="org.eclipse.ui.console.ConsoleView"/>
+  <imports xsi:type="basic:Part" xmi:id="_JKrVUE3iEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.processing.ui.part.processingInfoView"/>
+  <imports xsi:type="advanced:Area" xmi:id="_LNStUE3iEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.rcp.app.ui.editor"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_QBvTwE3iEeOtxrESNeijsQ" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
+    <elements xsi:type="basic:Part" xmi:id="_kV_QEE3iEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.part.chromatogramFileExplorerView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.wsd.ui/org.eclipse.chemclipse.ux.extension.wsd.ui.views.ChromatogramFileExplorer" label="Chromatogram File Explorer (WSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramFileExplorer.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_jxmwoE3iEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.part.chromatogramOverviewView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.wsd.ui/org.eclipse.chemclipse.ux.extension.wsd.ui.views.ChromatogramOverviewView" label="Chromatogram Overview (WSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverview.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_2PrbUE7bEeOnILtzKooLhg" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.part.supplierScanProfileView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.wsd.ui/org.eclipse.chemclipse.ux.extension.wsd.ui.views.SupplierScanProfileView" label="Supplier Scan Profile" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/selectedScan.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_DC9BoE9tEeOomqj4DycpaQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.part.supplierScanCentroidView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.wsd.ui/org.eclipse.chemclipse.ux.extension.wsd.ui.views.SupplierScanCentroidView" label="Supplier Scan Centroid" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/selectedScan.gif"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_QmlGME3iEeOtxrESNeijsQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
+    <elements xsi:type="advanced:Perspective" xmi:id="_1szK4E3iEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.perspective.main" label="WSD Perspective" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif">
+      <children xsi:type="basic:PartSashContainer" xmi:id="_901pAE3iEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.partsashcontainer.0" horizontal="true">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_-dNQkE3iEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.partsashcontainer.1" containerData="3500">
+          <children xsi:type="basic:PartStack" xmi:id="_A2jGgE3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.partstack.0">
+            <children xsi:type="advanced:Placeholder" xmi:id="_FK4pgE3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.placeholder.1" ref="_kV_QEE3iEeOtxrESNeijsQ"/>
+          </children>
+          <children xsi:type="basic:PartStack" xmi:id="_BJssAE3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.partstack.1" containerData="2500">
+            <children xsi:type="advanced:Placeholder" xmi:id="_FeapgE3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.placeholder.2" ref="_jxmwoE3iEeOtxrESNeijsQ"/>
+          </children>
+        </children>
+        <children xsi:type="basic:PartSashContainer" xmi:id="_-wCtAE3iEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.partsashcontainer.2">
+          <children xsi:type="advanced:Placeholder" xmi:id="_CX5kgE3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.placeholder.0" ref="_LNStUE3iEeOtxrESNeijsQ"/>
+          <children xsi:type="basic:PartSashContainer" xmi:id="_CzcRAE3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.partsashcontainer.3" horizontal="true">
+            <children xsi:type="basic:PartStack" xmi:id="_K2kZ8E3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.partstack.2">
+              <children xsi:type="advanced:Placeholder" xmi:id="_DbShAE7cEeOnILtzKooLhg" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.placeholder.5" ref="_2PrbUE7bEeOnILtzKooLhg"/>
+              <children xsi:type="advanced:Placeholder" xmi:id="_RJKZYE3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.placeholder.3" ref="_HszpIE3iEeOtxrESNeijsQ"/>
+            </children>
+            <children xsi:type="basic:PartStack" xmi:id="_LMY48E3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.partstack.3">
+              <children xsi:type="advanced:Placeholder" xmi:id="_Mn3GYE9tEeOomqj4DycpaQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.placeholder.6" ref="_DC9BoE9tEeOomqj4DycpaQ"/>
+              <children xsi:type="advanced:Placeholder" xmi:id="_RerWYE3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.placeholder.4" ref="_JKrVUE3iEeOtxrESNeijsQ"/>
+            </children>
+          </children>
+        </children>
+      </children>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Q6gHwE3iEeOtxrESNeijsQ" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_ceHfcE3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.command.openChromatogram" commandName="Open Chromatogram (WSD)"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_RMz_wE3iEeOtxrESNeijsQ" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_hiSj8E3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.handler.openChromatogram" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.wsd.ui/org.eclipse.chemclipse.ux.extension.wsd.ui.handlers.OpenHandler" command="_ceHfcE3jEeOtxrESNeijsQ"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_RgtzME3iEeOtxrESNeijsQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.menuseparator.openChromatogram">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_p9Dw0E3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.handledmenuitem.openChromatogram" label="Open Chromatogram (WSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/importChromatogramWSD.gif" command="_ceHfcE3jEeOtxrESNeijsQ"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_R0aLQE3iEeOtxrESNeijsQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.openChromatogram">
+    <elements xsi:type="menu:HandledToolItem" xmi:id="_jDD9sE3kEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.handledtoolitem.openChromatogram" label="Open Chromatogram (WSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/importChromatogramWSD.gif" command="_ceHfcE3jEeOtxrESNeijsQ"/>
+    <elements xsi:type="menu:ToolBarSeparator" xmi:id="_IMGRAINHEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.toolbarseparator.0"/>
+  </fragments>
+</fragment:ModelFragments>
