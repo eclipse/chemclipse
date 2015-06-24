@@ -1,0 +1,15 @@
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.massbank.fragment.test/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.massbank.ui/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.massbank/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.massbank.ui.fragment.test/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.massbank.fragment.test/Openchrom.log
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.massbank.fragment.test/*.log*
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.massbank.fragment.test/testData/files/export/DB.msl
+chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.massbank.updateSite/artifacts.jar
+chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.massbank.updateSite/content.jar
+chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.massbank.updateSite/features/
+chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.massbank.updateSite/plugins/
+chemclipse/features/org.eclipse.chemclipse.msd.converter.supplier.massbank.feature/target/
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.massbank.ui/target/
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.massbank/target/
+chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.massbank.updateSite/target/
