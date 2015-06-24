@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.feature_0.7.0.qualifier.jar" id="org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.feature" version="0.7.0.qualifier">
+      <category name="org.eclipse.chemclipse.chromatogram.msd.plugins.process"/>
+   </feature>
+   <category-def name="org.eclipse.chemclipse.chromatogram.msd.plugins.process" label="Processing"/>
+</site>
