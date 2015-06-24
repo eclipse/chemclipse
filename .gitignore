@@ -1,0 +1,13 @@
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.fragment.test/bin/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.ui.fragment.test/bin/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.ui/bin/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass/bin/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.fragment.test/*.log
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.updateSite/artifacts.jar
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.updateSite/content.jar
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.updateSite/features/
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.updateSite/plugins/
+chemclipse/features/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.feature/target/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.ui/target/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass/target/
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.updateSite/target/
