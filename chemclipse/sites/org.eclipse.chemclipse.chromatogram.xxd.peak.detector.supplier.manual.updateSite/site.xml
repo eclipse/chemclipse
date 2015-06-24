@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.feature_0.7.0.qualifier.jar" id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.feature" version="0.7.0.qualifier">
+      <category name="org.eclipse.chemclipse.chromatogram.xxd.plugins.peak.detector"/>
+   </feature>
+   <category-def name="org.eclipse.chemclipse.chromatogram.xxd.plugins.peak.detector" label="Peak Detector"/>
+</site>
