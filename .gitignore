@@ -1,0 +1,17 @@
+chemclipse/plugins/net.openchrom.chromatogram.msd.comparison.supplier.distance.fragment.test/bin/*
+chemclipse/plugins/net.openchrom.chromatogram.msd.comparison.supplier.distance.ui/bin/*
+chemclipse/plugins/net.openchrom.chromatogram.msd.comparison.supplier.distance/bin/*
+chemclipse/plugins/net.openchrom.chromatogram.msd.comparison.supplier.distance.ui.fragment.test/bin/*
+chemclipse/sites/net.openchrom.chromatogram.msd.comparison.supplier.distance.updateSite/artifacts.jar
+chemclipse/sites/net.openchrom.chromatogram.msd.comparison.supplier.distance.updateSite/content.jar
+chemclipse/sites/net.openchrom.chromatogram.msd.comparison.supplier.distance.updateSite/features/
+chemclipse/sites/net.openchrom.chromatogram.msd.comparison.supplier.distance.updateSite/plugins/
+chemclipse/plugins/net.openchrom.chromatogram.msd.comparison.supplier.distance.fragment.test/Openchrom.log
+chemclipse/plugins/net.openchrom.chromatogram.msd.comparison.supplier.distance.fragment.test/*.log*
+chemclipse/features/net.openchrom.chromatogram.msd.comparison.supplier.distance.feature/target/
+chemclipse/plugins/net.openchrom.chromatogram.msd.comparison.supplier.distance.ui/target/
+chemclipse/plugins/net.openchrom.chromatogram.msd.comparison.supplier.distance/target/
+chemclipse/sites/net.openchrom.chromatogram.msd.comparison.supplier.distance.updateSite/target/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.fragment.test/Openchrom.log
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.fragment.test/Openchrom.log*
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.fragment.test/*.log*
