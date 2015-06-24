@@ -1,0 +1,113 @@
+/*******************************************************************************
+ * Copyright (c) 2013, 2015 Dr. Philip Wenig.
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Dr. Philip Wenig - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.views;
+
+import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventHandler;
+
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationCompoundDocument;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.events.IChemClipseQuantitationEvents;
+import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSelectionView;
+
+public abstract class AbstractQuantitationCompoundSelectionView extends AbstractSelectionView implements IQuantitationCompoundSelectionView {
+
+	private IQuantitationCompoundDocument quantitationCompoundDocument;
+	private IQuantDatabase database;
+	private IEventBroker eventBroker;
+	private EventHandler eventHandler;
+
+	public AbstractQuantitationCompoundSelectionView(MPart part, EPartService partService, IEventBroker eventBroker) {
+
+		super(part, partService);
+		this.eventBroker = eventBroker;
+		subscribe();
+	}
+
+	@Override
+	public IQuantitationCompoundDocument getQuantitationCompoundDocument() {
+
+		return quantitationCompoundDocument;
+	}
+
+	@Override
+	public void setQuantitationCompoundDocument(IQuantitationCompoundDocument quantitationCompoundDocument) {
+
+		this.quantitationCompoundDocument = quantitationCompoundDocument;
+	}
+
+	@Override
+	public IQuantDatabase getDatabase() {
+
+		return database;
+	}
+
+	@Override
+	public void setDatabase(IQuantDatabase database) {
+
+		this.database = database;
+	}
+
+	@Override
+	public boolean doUpdate() {
+
+		if(isPartVisible()) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Subscribes the selection update events.
+	 */
+	private void subscribe() {
+
+		if(eventBroker != null) {
+			/*
+			 * Receives and handles chromatogram selection updates.
+			 */
+			eventHandler = new EventHandler() {
+
+				public void handleEvent(Event event) {
+
+					Object objectDocument = event.getProperty(IChemClipseQuantitationEvents.PROPERTY_QUANTITATION_COMPOUND_DOCUMENT);
+					Object objectDatabase = event.getProperty(IChemClipseQuantitationEvents.PROPERTY_DATABASE);
+					if(objectDocument instanceof IQuantitationCompoundDocument && objectDatabase instanceof IQuantDatabase) {
+						/*
+						 * Ensures that the objects are valid.
+						 */
+						quantitationCompoundDocument = (IQuantitationCompoundDocument)objectDocument;
+						database = (IQuantDatabase)objectDatabase;
+						update(quantitationCompoundDocument, database);
+					} else {
+						/*
+						 * Unload the objects.
+						 */
+						update(null, null);
+					}
+				}
+			};
+			eventBroker.subscribe(IChemClipseQuantitationEvents.TOPIC_QUANTITATION_COMPOUND_DOCUMENT_UPDATE, eventHandler);
+		}
+	}
+
+	@Override
+	public void unsubscribe() {
+
+		if(eventBroker != null && eventHandler != null) {
+			eventBroker.unsubscribe(eventHandler);
+		}
+	}
+}

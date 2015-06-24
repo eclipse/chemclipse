@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.quantifier.peakQuantifierSupplier">
+      <PeakQuantifierSupplier
+            description="This quantifier handles to execute a peak quantitation."
+            id="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.peak"
+            peakQuantifier="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.core.ChemClipsePeakQuantifier"
+            peakQuantifierName="Peak Quantifier">
+      </PeakQuantifierSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>

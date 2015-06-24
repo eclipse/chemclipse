@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <!--
+	PARENT
+  -->
+  <parent>
+    <groupId>org.eclipse.chemclipse</groupId>
+    <artifactId>master</artifactId>
+    <version>BUILD-VERSION</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+  <!--
+	ARTIFACT
+  -->
+  <groupId>org.eclipse.chemclipse</groupId>
+  <artifactId>parent</artifactId>
+  <packaging>pom</packaging>
+  <!--
+	DESCRIPTION
+  --> 
+  <name>ChemClipse Quantifier Plug-in</name>
+  <description>
+	The ChemClipse Quantifier plug-in offers a solution to quantify peaks and chromatograms. It extends the functionality of the ChemClipse Rich Client Platform (RCP).
+  </description>
+  <url>http://sourceforge.net/projects/chemclipsequant</url>
+  <!--
+	LICENSES
+  -->
+  <licenses>
+    <license>
+      <name>EPL v1.0</name>
+      <url>http://www.eclipse.org/legal/epl-v10.html</url>
+    </license> 
+  </licenses>
+  <!--
+	DEVELOPERS
+  -->
+  <developers>
+    <developer>
+      <id>eselmeister</id>
+      <name>Philip Wenig</name>
+      <email>philip.wenig [at] openchrom.net</email>
+      <timezone>+1</timezone>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+  </developers>
+  <!--
+	MODULES
+  -->
+  <modules>
+    <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse</module>
+    <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui</module>
+    <module>../../features/org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.feature</module>
+    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.fragment.test</module>-->
+    <module>../../sites/org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.updateSite</module>
+  </modules>
+</project>
