@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter applies the Savitzky-Golay filter."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core.ChromatogramFilterMSD"
+            filterName="Savitzky-Golay Filter"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.savitzkygolay">
+      </ChromatogramFilterSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.csd.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter applies the Savitzky-Golay filter."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core.ChromatogramFilterFID"
+            filterName="Savitzky-Golay Filter"
+            id="org.eclipse.chemclipse.chromatogram.csd.filter.supplier.savitzkygolay">
+      </ChromatogramFilterSupplier>
+   </extension>   
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>

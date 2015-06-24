@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="Savitzky Golay Filter" url="http://www.chemclipse.net/plugins/filter/savitzkygolay/update">
+      This filter implements a Savitzky Golay filter.
+   </description>
+   <feature url="features/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.feature_0.7.0.qualifier.jar" id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.feature" version="0.7.0.qualifier">
+      <category name="org.eclipse.chemclipse.chromatogram.msd.plugins.filter"/>
+   </feature>
+   <category-def name="org.eclipse.chemclipse.chromatogram.msd.plugins.filter" label="Chromatogram Filter"/>
+</site>
