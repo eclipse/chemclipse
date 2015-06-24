@@ -1,0 +1,14 @@
+chemclipse/plugins/net.openchrom.csd.converter.supplier.xy.fragment.test/bin/*
+chemclipse/plugins/net.openchrom.csd.converter.supplier.xy.ui/bin/*
+chemclipse/plugins/net.openchrom.csd.converter.supplier.xy/bin/*
+chemclipse/plugins/net.openchrom.csd.converter.supplier.xy.fragment.i18n/bin/*
+chemclipse/plugins/net.openchrom.csd.converter.supplier.xy.ui.fragment.i18n/bin/*
+chemclipse/plugins/net.openchrom.csd.converter.supplier.xy.ui.fragment.test/bin/*
+chemclipse/sites/net.openchrom.csd.converter.supplier.xy.updateSite/artifacts.jar
+chemclipse/sites/net.openchrom.csd.converter.supplier.xy.updateSite/content.jar
+chemclipse/sites/net.openchrom.csd.converter.supplier.xy.updateSite/features/
+chemclipse/sites/net.openchrom.csd.converter.supplier.xy.updateSite/plugins/
+chemclipse/features/net.openchrom.csd.converter.supplier.xy.feature/target/
+chemclipse/plugins/net.openchrom.csd.converter.supplier.xy.ui/target/
+chemclipse/plugins/net.openchrom.csd.converter.supplier.xy/target/
+chemclipse/sites/net.openchrom.csd.converter.supplier.xy.updateSite/target/

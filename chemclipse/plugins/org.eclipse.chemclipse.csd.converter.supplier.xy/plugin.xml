@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.csd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Reads/Writes XY Chromatograms."
+            exportConverter="org.eclipse.chemclipse.csd.converter.supplier.xy.core.ChromatogramExportConverter"
+            fileExtension=".xy"
+            filterName="XY Chromatogram (*.xy)"
+            id="org.eclipse.chemclipse.csd.converter.supplier.xy"
+            importConverter="org.eclipse.chemclipse.csd.converter.supplier.xy.core.ChromatogramImportConverter"
+            isExportable="true"
+            isImportable="true">
+      </ChromatogramSupplier>
+   </extension>
+
+</plugin>
