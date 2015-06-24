@@ -1,0 +1,17 @@
+chemclipse/plugins/net.openchrom.chromatogram.msd.comparison.supplier.incos.fragment.test/bin/*
+chemclipse/plugins/net.openchrom.chromatogram.msd.comparison.supplier.incos.ui/bin/*
+chemclipse/plugins/net.openchrom.chromatogram.msd.comparison.supplier.incos/bin/*
+chemclipse/plugins/net.openchrom.chromatogram.msd.comparison.supplier.incos.ui.fragment.test/bin/*
+chemclipse/sites/net.openchrom.chromatogram.msd.comparison.supplier.incos.updateSite/artifacts.jar
+chemclipse/sites/net.openchrom.chromatogram.msd.comparison.supplier.incos.updateSite/content.jar
+chemclipse/sites/net.openchrom.chromatogram.msd.comparison.supplier.incos.updateSite/features/
+chemclipse/sites/net.openchrom.chromatogram.msd.comparison.supplier.incos.updateSite/plugins/
+chemclipse/plugins/net.openchrom.chromatogram.msd.comparison.supplier.incos.fragment.test/Openchrom.log
+chemclipse/plugins/net.openchrom.chromatogram.msd.comparison.supplier.incos.fragment.test/*.log*
+chemclipse/features/net.openchrom.chromatogram.msd.comparison.supplier.incos.feature/target/
+chemclipse/plugins/net.openchrom.chromatogram.msd.comparison.supplier.incos.ui/target/
+chemclipse/plugins/net.openchrom.chromatogram.msd.comparison.supplier.incos/target/
+chemclipse/sites/net.openchrom.chromatogram.msd.comparison.supplier.incos.updateSite/target/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.fragment.test/Openchrom.log
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.fragment.test/Openchrom.log*
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.fragment.test/*.log*

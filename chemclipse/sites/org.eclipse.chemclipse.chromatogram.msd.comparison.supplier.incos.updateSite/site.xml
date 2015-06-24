@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.feature_0.7.0.qualifier.jar" id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.feature" version="0.7.0.qualifier">
+      <category name="org.eclipse.chemclipse.chromatogram.msd.plugins.comparison"/>
+   </feature>
+   <category-def name="org.eclipse.chemclipse.chromatogram.msd.plugins.comparison" label="MS Comparison"/>
+</site>
