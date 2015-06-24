@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Denoising Filter</title>
+</head>
+
+<body>
+<h1>Denoising Filter</h1>
+The denoising filter implements algorithms to remove noise from chromatograms.
+<br/><br/>
+Watch also the <a href="http://www.chemclipse.net/main/content/videos.php">video</a> tutorials.
+<br/><br/>
+The user can define ions that will be removed in any case.<br/>
+It is also possible to define ions that will be preserved in any case.
+<img src="prefs.png" width="624" height="592" alt="prefs" title="prefs" />
+<br/><br/>
+The user can add/remove further ions using the new or remove button.
+<br/><br/>
+If <b>"adjust threshold transitions"</b> is activated, zero abundance values (due to systems threshold) will be replaced by a calculated value.
+<br/><br/>
+If the checkbox <b>"Use chromatogram specific ions"</b> is checked, the chosen ions from the chromatogram editor will be taken.
+<br/><br/>
+Remove or preserve the selected ions given by the chromatogram editor:<br/>
+<img src="emf.png" width="948" height="496" alt="emf" title="emf" />
+<br/><br/>
+It's also possible to set the scan width to determine noise segments using the drop-down box. Given values are a width of <b>7,9,11,13,15,17 and 19</b> scans.
+<br/><br/>
+To apply the filter, select a chromatogram or a distinct retention time range.
+<img src="chrom-before.png" width="950" height="499" alt="chrom-before" title="chrom-before" />
+<br/><br/>
+Click now on the filter button.
+<img src="filterbutton.png" width="273" height="74" alt="filterbutton" title="filterbutton" />
+<br/><br/>
+The noise will be removed from the chromatogram.
+<img src="chrom-after.png" width="957" height="504" alt="chrom-after" title="chrom-after" />
+<br/><br/>
+An extra view shows the mass spectra that have been identified as noise.
+<img src="noise.png" width="483" height="336" alt="noise" title="noise" />
+</body>
+</html>
