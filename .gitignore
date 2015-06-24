@@ -1,0 +1,14 @@
+chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.peakidentification.fragment.test/bin/
+chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.peakidentification.ui.fragment.test/bin/
+chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.peakidentification.ui/bin/
+chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.peakidentification/bin/
+chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.peakidentification.fragment.test/Openchrom.log
+chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.peakidentification.fragment.test/*.log*
+chemclipse/sites/net.openchrom.chromatogram.msd.process.supplier.peakidentification.updateSite/artifacts.jar
+chemclipse/sites/net.openchrom.chromatogram.msd.process.supplier.peakidentification.updateSite/content.jar
+chemclipse/sites/net.openchrom.chromatogram.msd.process.supplier.peakidentification.updateSite/features/
+chemclipse/sites/net.openchrom.chromatogram.msd.process.supplier.peakidentification.updateSite/plugins/
+chemclipse/features/net.openchrom.chromatogram.msd.process.supplier.peakidentification.feature/target/
+chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.peakidentification.ui/target/
+chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.peakidentification/target/
+chemclipse/sites/net.openchrom.chromatogram.msd.process.supplier.peakidentification.updateSite/target/
