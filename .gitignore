@@ -1,0 +1,14 @@
+chemclipse/plugins/net.openchrom.chromatogram.msd.filter.supplier.coda.fragment.test/bin/*
+chemclipse/plugins/net.openchrom.chromatogram.msd.filter.supplier.coda/bin/*
+chemclipse/plugins/net.openchrom.chromatogram.msd.filter.supplier.coda.fragment.i18n/bin/*
+chemclipse/plugins/net.openchrom.chromatogram.msd.filter.supplier.coda.ui.fragment.i18n/bin/*
+chemclipse/plugins/net.openchrom.chromatogram.msd.filter.supplier.coda.ui.fragment.test/bin/*
+chemclipse/plugins/net.openchrom.chromatogram.msd.filter.supplier.coda.ui/bin/*
+chemclipse/sites/net.openchrom.msd.converter.supplier.coda.updateSite/artifacts.jar
+chemclipse/sites/net.openchrom.msd.converter.supplier.coda.updateSite/content.jar
+chemclipse/sites/net.openchrom.msd.converter.supplier.coda.updateSite/features/
+chemclipse/sites/net.openchrom.msd.converter.supplier.coda.updateSite/plugins/
+chemclipse/features/net.openchrom.chromatogram.msd.filter.supplier.coda.feature/target/
+chemclipse/plugins/net.openchrom.chromatogram.msd.filter.supplier.coda.ui/target/
+chemclipse/plugins/net.openchrom.chromatogram.msd.filter.supplier.coda/target/
+chemclipse/sites/net.openchrom.chromatogram.msd.filter.supplier.coda.updateSite/target/
