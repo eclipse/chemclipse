@@ -1,0 +1,17 @@
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.fragment.test/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.ui/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.ui.fragment.test/bin/*
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.updateSite/artifacts.jar
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.updateSite/content.jar
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.updateSite/features/
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.updateSite/plugins/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.fragment.test/Openchrom.log
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.fragment.test/*.log*
+chemclipse/features/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.feature/target/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.ui/target/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein/target/
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.updateSite/target/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.fragment.test/Openchrom.log
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.fragment.test/Openchrom.log*
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.fragment.test/*.log*

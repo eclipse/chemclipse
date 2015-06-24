@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.xxd.calculator.noiseCalculationSupplier">
+      <NoiseCalculationSupplier
+            description="This supplier implements the S/N calculation by Stein."
+            calculatorName="Stein (experimental)"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein"
+            noiseCalculator="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.core.NoiseCalculator">
+      </NoiseCalculationSupplier>
+   </extension>
+
+</plugin>
