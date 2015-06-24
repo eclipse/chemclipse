@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.feature_0.7.0.qualifier.jar" id="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.feature" version="0.7.0.qualifier">
+      <category name="org.eclipse.chemclipse.chromatogram.msd.plugins.integrator"/>
+   </feature>
+   <category-def name="org.eclipse.chemclipse.chromatogram.msd.plugins.integrator" label="Chromatogram Integrator"/>
+</site>
