@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="Peak Integrator Trapezoid" url="http://www.chemclipse.net/plugins/integrators/integrator1/update">
+      Updates Peak Integrator Trapezoid
+   </description>
+   <feature url="features/org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.feature_0.7.0.qualifier.jar" id="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.feature" version="0.7.0.qualifier">
+      <category name="org.eclipse.chemclipse.chromatogram.xxd.plugins.integrators"/>
+   </feature>
+   <category-def name="org.eclipse.chemclipse.chromatogram.xxd.plugins.integrators" label="Chromatogram Integrators"/>
+</site>
