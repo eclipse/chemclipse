@@ -1,0 +1,12 @@
+chemclipse/plugins/net.openchrom.msd.converter.supplier.mzxml.fragment.test/bin/*
+chemclipse/plugins/net.openchrom.msd.converter.supplier.mzxml.ui/bin/*
+chemclipse/plugins/net.openchrom.msd.converter.supplier.mzxml/bin/*
+chemclipse/plugins/net.openchrom.msd.converter.supplier.mzxml.ui.fragment.test/bin/*
+chemclipse/sites/net.openchrom.msd.converter.supplier.mzxml.updateSite/artifacts.jar
+chemclipse/sites/net.openchrom.msd.converter.supplier.mzxml.updateSite/content.jar
+chemclipse/sites/net.openchrom.msd.converter.supplier.mzxml.updateSite/features/
+chemclipse/sites/net.openchrom.msd.converter.supplier.mzxml.updateSite/plugins/
+chemclipse/features/net.openchrom.msd.converter.supplier.mzxml.feature/target/
+chemclipse/plugins/net.openchrom.msd.converter.supplier.mzxml.ui/target/
+chemclipse/plugins/net.openchrom.msd.converter.supplier.mzxml/target/
+chemclipse/sites/net.openchrom.msd.converter.supplier.mzxml.updateSite/target/

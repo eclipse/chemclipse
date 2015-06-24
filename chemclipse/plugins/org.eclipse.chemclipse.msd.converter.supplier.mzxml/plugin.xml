@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Reads and Writes mzXML Chromatograms v2.1"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.MzXMLChromatogramExportConverter"
+            fileExtension=".mzXML"
+            filterName="mzXML Chromatogram v2.1 (*.mzXML)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.mzxml"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.MzXMLChromatogramImportConverter"
+            isExportable="false"
+            isImportable="false">
+      </ChromatogramSupplier>
+   </extension>
+
+</plugin>
