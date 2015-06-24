@@ -1,0 +1,121 @@
+/*******************************************************************************
+ * Copyright (c) 2013, 2015 Dr. Philip Wenig.
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Dr. Philip Wenig - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.Activator;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+
+public class PreferenceSupplier implements IPreferenceSupplier {
+
+	public static final String P_VERSION_SAVE = "versionSave";
+	public static final String DEF_VERSION_SAVE = IFormat.VERSION_LATEST;
+	public static final String P_USE_SCAN_PROXIES = "useScanProxies";
+	public static final boolean DEF_USE_SCAN_PROXIES = true;
+	public static final String P_LOAD_SCAN_PROXIES_IN_BACKGROUND = "loadScanProxiesInBackground";
+	public static final boolean DEF_LOAD_SCAN_PROXIES_IN_BACKGROUND = true;
+	public static final String P_MIN_BYTES_TO_LOAD_IN_BACKGROUND = "minBytesToLoadInBackground";
+	public static final int DEF_MIN_BYTES_TO_LOAD_IN_BACKGROUND = 2000000; // 2 MB
+	//
+	private static IPreferenceSupplier preferenceSupplier;
+
+	public static IPreferenceSupplier INSTANCE() {
+
+		if(preferenceSupplier == null) {
+			preferenceSupplier = new PreferenceSupplier();
+		}
+		return preferenceSupplier;
+	}
+
+	@Override
+	public IScopeContext getScopeContext() {
+
+		return InstanceScope.INSTANCE;
+	}
+
+	@Override
+	public String getPreferenceNode() {
+
+		return Activator.getContext().getBundle().getSymbolicName();
+	}
+
+	@Override
+	public Map<String, String> getDefaultValues() {
+
+		Map<String, String> defaultValues = new HashMap<String, String>();
+		defaultValues.put(P_VERSION_SAVE, DEF_VERSION_SAVE);
+		defaultValues.put(P_USE_SCAN_PROXIES, Boolean.toString(DEF_USE_SCAN_PROXIES));
+		defaultValues.put(P_LOAD_SCAN_PROXIES_IN_BACKGROUND, Boolean.toString(DEF_LOAD_SCAN_PROXIES_IN_BACKGROUND));
+		defaultValues.put(P_MIN_BYTES_TO_LOAD_IN_BACKGROUND, Integer.toString(DEF_MIN_BYTES_TO_LOAD_IN_BACKGROUND));
+		return defaultValues;
+	}
+
+	@Override
+	public IEclipsePreferences getPreferences() {
+
+		return getScopeContext().getNode(getPreferenceNode());
+	}
+
+	/**
+	 * Returns the export version.
+	 */
+	public static String getVersionSave() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.get(P_VERSION_SAVE, DEF_VERSION_SAVE);
+	}
+
+	public static String[][] getVersions() {
+
+		// TODO optimize the version handling!
+		int versions = 10;
+		String[][] elements = new String[versions][2];
+		//
+		elements[0][0] = IFormat.VERSION_0701;
+		elements[0][1] = IFormat.VERSION_0701;
+		//
+		elements[1][0] = IFormat.VERSION_0801;
+		elements[1][1] = IFormat.VERSION_0801;
+		//
+		elements[2][0] = IFormat.VERSION_0802;
+		elements[2][1] = IFormat.VERSION_0802;
+		//
+		elements[3][0] = IFormat.VERSION_0803;
+		elements[3][1] = IFormat.VERSION_0803;
+		//
+		elements[4][0] = IFormat.VERSION_0901;
+		elements[4][1] = IFormat.VERSION_0901;
+		//
+		elements[5][0] = IFormat.VERSION_0902;
+		elements[5][1] = IFormat.VERSION_0902;
+		//
+		elements[6][0] = IFormat.VERSION_0903;
+		elements[6][1] = IFormat.VERSION_0903;
+		//
+		elements[7][0] = IFormat.VERSION_1001;
+		elements[7][1] = IFormat.VERSION_1001;
+		//
+		elements[8][0] = IFormat.VERSION_1002;
+		elements[8][1] = IFormat.VERSION_1002;
+		//
+		elements[9][0] = IFormat.VERSION_1003;
+		elements[9][1] = IFormat.VERSION_1003;
+		//
+		return elements;
+	}
+}
