@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_QcGJAOTfEeSb-cAAGnXbYA">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_75Ut4OTxEeSknYV4EBdWYw" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="__n1nAOTxEeSknYV4EBdWYw" elementId="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.command.dw" commandName="Durbin-Watson Classifier"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_9NxYUOTxEeSknYV4EBdWYw" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_HwRGsOTyEeSknYV4EBdWYw" elementId="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.handler.dw" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui/org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.handlers.ClassifierHandler" command="__n1nAOTxEeSknYV4EBdWYw"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_QLp-oOTyEeSknYV4EBdWYw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.classifier">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_Sr-mUOTyEeSknYV4EBdWYw" elementId="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.handledmenuitem.dw" label="Durbin-Watson Classifier" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/durbin_watson.gif" command="__n1nAOTxEeSknYV4EBdWYw"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_QnV1EOTyEeSknYV4EBdWYw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.classifier">
+    <elements xsi:type="menu:HandledToolItem" xmi:id="_WTEBwOTyEeSknYV4EBdWYw" elementId="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.handledtoolitem.dw" label="Durbin-Watson Classifier" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/durbin_watson.gif" command="__n1nAOTxEeSknYV4EBdWYw"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_j6KTIOT-EeSknYV4EBdWYw" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
+    <elements xsi:type="basic:Part" xmi:id="_latf4OT-EeSknYV4EBdWYw" elementId="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.part.dw" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui/org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.views.DurbinWatsonResultsView" label="Durbin-Watson Classifier" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/durbin_watson.gif"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_4HOiAOUBEeSknYV4EBdWYw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.msd.ui.partstack.classifier">
+    <elements xsi:type="advanced:Placeholder" xmi:id="_5xK7UOUBEeSknYV4EBdWYw" elementId="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.placeholder.0" ref="_latf4OT-EeSknYV4EBdWYw"/>
+  </fragments>
+</fragment:ModelFragments>
