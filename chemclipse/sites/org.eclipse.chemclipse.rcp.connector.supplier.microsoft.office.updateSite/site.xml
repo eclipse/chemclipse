@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.feature_0.7.0.qualifier.jar" id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.feature" version="0.7.0.qualifier">
+      <category name="org.eclipse.chemclipse.chromatogram.msd.plugins.miscellaneous"/>
+   </feature>
+   <category-def name="org.eclipse.chemclipse.chromatogram.msd.plugins.miscellaneous" label="Miscellaneous"/>
+</site>
