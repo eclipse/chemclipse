@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="Ion Remover Filter" url="http://www.chemclipse.net/plugins/filter/ionremover/update">
+      This filter enables to remove ions.
+   </description>
+   <feature url="features/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.feature_0.7.0.qualifier.jar" id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.feature" version="0.7.0.qualifier">
+      <category name="org.eclipse.chemclipse.chromatogram.msd.plugins.filter"/>
+   </feature>
+   <category-def name="org.eclipse.chemclipse.chromatogram.msd.plugins.filter" label="Chromatogram Filter"/>
+</site>
