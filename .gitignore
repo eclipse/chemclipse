@@ -1,0 +1,14 @@
+chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.pca.fragment.test/bin/
+chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.pca.ui.fragment.test/bin/
+chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.pca.ui/bin/
+chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.pca/bin/
+chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.pca.fragment.test/Openchrom.log
+chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.pca.fragment.test/*.log*
+chemclipse/sites/net.openchrom.chromatogram.msd.process.supplier.pca.updateSite/artifacts.jar
+chemclipse/sites/net.openchrom.chromatogram.msd.process.supplier.pca.updateSite/content.jar
+chemclipse/sites/net.openchrom.chromatogram.msd.process.supplier.pca.updateSite/features/
+chemclipse/sites/net.openchrom.chromatogram.msd.process.supplier.pca.updateSite/plugins/
+chemclipse/features/net.openchrom.chromatogram.msd.process.supplier.pca.feature/target/
+chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.pca.ui/target/
+chemclipse/plugins/net.openchrom.chromatogram.msd.process.supplier.pca/target/
+chemclipse/sites/net.openchrom.chromatogram.msd.process.supplier.pca.updateSite/target/
