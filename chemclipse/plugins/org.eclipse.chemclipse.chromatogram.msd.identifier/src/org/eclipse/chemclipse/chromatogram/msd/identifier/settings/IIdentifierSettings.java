@@ -55,13 +55,13 @@ public interface IIdentifierSettings {
 	 */
 	IMarkedIons getExcludedIons();
 
-	float getLevelFactor();
+	float getPenaltyCalculationLevelFactor();
 
-	void setLevelFactor(float levelFactor);
+	void setPenaltyCalculationLevelFactor(float penaltyCalculationLevelFactor);
 
-	float getMaxPenalty();
+	float getPenaltyCalculationMaxValue();
 
-	void setMaxPenalty(float maxPenalty);
+	void setPenaltyCalculationMaxValue(float maxPenaltyCalculationValue);
 
 	// Identification
 	String getForceMatchFactorPenaltyCalculationForIdentification();
