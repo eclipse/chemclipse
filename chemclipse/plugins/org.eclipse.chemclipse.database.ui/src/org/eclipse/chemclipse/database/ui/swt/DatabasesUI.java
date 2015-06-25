@@ -17,7 +17,11 @@ import org.eclipse.chemclipse.database.model.IDatabases;
 import org.eclipse.chemclipse.database.ui.internal.provider.ContentProvider;
 import org.eclipse.chemclipse.database.ui.internal.provider.DatabaseLabelProvider;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.swt.ui.viewers.ExtendedTableViewer;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -83,6 +87,7 @@ public class DatabasesUI {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 
+				IProcessingInfo processingInfo = new ProcessingInfo();
 				IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection();
 				Object element = selection.getFirstElement();
 				if(element instanceof IDatabaseProxy) {
@@ -96,8 +101,13 @@ public class DatabasesUI {
 					if(returnCode == SWT.OK) {
 						try {
 							databases.setDatabaseInPreferenceSupplier(databaseProxy);
+							databases.getDatabase(databaseProxy);
+							processingInfo.addInfoMessage("Changed database", "Connected to: " + databaseName);
 						} catch(NoDatabaseAvailableException e1) {
-							logger.warn(e1);
+							MessageDialog.openError(shell, "Could not connect to database", "Could not connect to database: " + databaseName + "\nReason: " + e1.getMessage());
+							processingInfo.addErrorMessage("Could not connect to database: " + databaseName, e1.getMessage());
+						} finally {
+							ProcessingInfoViewSupport.updateProcessingInfoView(processingInfo);
 						}
 					}
 				}
