@@ -46,7 +46,6 @@ public class DatabaseFieldEditor extends StringFieldEditor {
 	private IDatabases databases;
 	private IDatabasePreferences databasePreferences;
 	private String title;
-	private IDatabaseSettings databaseSettings;
 
 	public DatabaseFieldEditor(String name, String labelText, IDatabases databases, IDatabasePreferences databasePreferences, String title, Composite parent) {
 
@@ -54,7 +53,6 @@ public class DatabaseFieldEditor extends StringFieldEditor {
 		this.databases = databases;
 		this.databasePreferences = databasePreferences;
 		this.title = title;
-		this.databaseSettings = databasePreferences.getDatabaseSettings();
 	}
 
 	@Override
