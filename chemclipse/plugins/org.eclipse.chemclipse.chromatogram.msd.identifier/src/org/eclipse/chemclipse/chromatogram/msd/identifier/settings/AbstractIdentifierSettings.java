@@ -19,8 +19,8 @@ public class AbstractIdentifierSettings implements IIdentifierSettings {
 	private String massSpectrumComparatorId = "";
 	private boolean setResultAutomatically;
 	private IMarkedIons excludedIons;
-	private float levelFactor;
-	private float maxPenalty;
+	private float penaltyCalculationLevelFactor;
+	private float penaltyCalculationMaxValue;
 	/*
 	 * Identification
 	 */
@@ -71,27 +71,27 @@ public class AbstractIdentifierSettings implements IIdentifierSettings {
 	}
 
 	@Override
-	public float getLevelFactor() {
+	public float getPenaltyCalculationLevelFactor() {
 
-		return levelFactor;
+		return penaltyCalculationLevelFactor;
 	}
 
 	@Override
-	public void setLevelFactor(float levelFactor) {
+	public void setPenaltyCalculationLevelFactor(float penaltyCalculationLevelFactor) {
 
-		this.levelFactor = levelFactor;
+		this.penaltyCalculationLevelFactor = penaltyCalculationLevelFactor;
 	}
 
 	@Override
-	public float getMaxPenalty() {
+	public float getPenaltyCalculationMaxValue() {
 
-		return maxPenalty;
+		return penaltyCalculationMaxValue;
 	}
 
 	@Override
-	public void setMaxPenalty(float maxPenalty) {
+	public void setPenaltyCalculationMaxValue(float maxPenaltyCalculationValue) {
 
-		this.maxPenalty = maxPenalty;
+		this.penaltyCalculationMaxValue = maxPenaltyCalculationValue;
 	}
 
 	/*
