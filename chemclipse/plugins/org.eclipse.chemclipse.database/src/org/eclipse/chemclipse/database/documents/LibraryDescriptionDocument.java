@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.database.documents;
 import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 
+@SuppressWarnings("unchecked")
 public class LibraryDescriptionDocument extends AbstractDocument implements ILibraryDescriptionDocument {
 
 	/**

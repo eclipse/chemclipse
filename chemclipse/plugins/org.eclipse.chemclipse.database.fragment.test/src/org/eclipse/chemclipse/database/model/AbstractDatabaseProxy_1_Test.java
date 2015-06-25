@@ -13,25 +13,19 @@ package org.eclipse.chemclipse.database.model;
 
 import junit.framework.TestCase;
 
-import org.eclipse.chemclipse.support.settings.IOperatingSystemUtils;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
-
 public class AbstractDatabaseProxy_1_Test extends TestCase {
 
-	private IOperatingSystemUtils osUtils;
 	private String database1 = "local:/home/user/.chemclipse/0.8.0/org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse/DefaultDB";
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		osUtils = new OperatingSystemUtils();
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
 
-		osUtils = null;
 		super.tearDown();
 	}
 

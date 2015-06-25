@@ -18,6 +18,7 @@ import java.util.Set;
 import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 
+@SuppressWarnings("unchecked")
 public abstract class AbstractDocument extends ODocument implements IDocument {
 
 	/**
