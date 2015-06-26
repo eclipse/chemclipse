@@ -931,10 +931,6 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 			//
 			if(startRetentionTime < stopRetentionTime) {
 				/*
-				 * Add the master selection.
-				 */
-				List<IChromatogramSelectionMSD> chromatogramSelections = new ArrayList<IChromatogramSelectionMSD>();
-				/*
 				 * Get all open parts.
 				 */
 				Collection<MPart> parts = partService.getParts();
@@ -945,26 +941,12 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 						 */
 						Object object = part.getObject();
 						if(object != null) {
-							/*
-							 * MSD/FID
-							 */
-							IChromatogramSelectionMSD selection = null;
 							if(object instanceof ChromatogramEditorMSD) {
 								ChromatogramEditorMSD editor = (ChromatogramEditorMSD)object;
-								selection = editor.getChromatogramSelection();
-								/*
-								 * Set it to the given range.
-								 */
-								selection.reset();
-								selection.update(true);
-								//
+								IChromatogramSelectionMSD selection = editor.getChromatogramSelection();
 								selection.setStartRetentionTime(startRetentionTime);
 								selection.setStopRetentionTime(stopRetentionTime);
-								// I do not know whether this is a good idea - update only that we are working with
-								if(selection == chromatogramSelection) {
-									chromatogramUI.updateSelectionManually(selection);
-									fireUpdate(selection, true);
-								}
+								selection.fireUpdateChange(true);
 							}
 						}
 					}
