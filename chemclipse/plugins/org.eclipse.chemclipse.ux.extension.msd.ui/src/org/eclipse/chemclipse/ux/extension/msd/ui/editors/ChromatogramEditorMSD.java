@@ -17,6 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -62,6 +63,7 @@ import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -158,7 +160,6 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 	private FormToolkit formToolkit;
 
 	public ChromatogramEditorMSD() {
-
 		/*
 		 * Decimal format.
 		 */
@@ -876,6 +877,16 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 				setRetentionTimeRange();
 			}
 		});
+		Button buttonAll = new Button(client, SWT.PUSH);
+		buttonAll.setText("Set Retention Time Range for all open Chromatograms");
+		buttonAll.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				setRetentionTimeRangeForAllOpenChromatograms();
+			}
+		});
 		/*
 		 * Add the client to the section and paint flat borders.
 		 */
@@ -903,6 +914,61 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 				chromatogramSelection.setStopRetentionTime(stopRetentionTime);
 				chromatogramUI.updateSelectionManually(chromatogramSelection);
 				fireUpdate(chromatogramSelection, true);
+			}
+		} catch(ParseException e) {
+			logger.warn(e);
+		}
+	}
+
+	private void setRetentionTimeRangeForAllOpenChromatograms() {
+
+		String startRetentionTimeText = textStartRetentionTime.getText().trim();
+		String stopRetentionTimeText = textStopRetentionTime.getText().trim();
+		//
+		try {
+			int startRetentionTime = (int)(decimalFormat.parse(startRetentionTimeText).doubleValue() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+			int stopRetentionTime = (int)(decimalFormat.parse(stopRetentionTimeText).doubleValue() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+			//
+			if(startRetentionTime < stopRetentionTime) {
+				/*
+				 * Add the master selection.
+				 */
+				List<IChromatogramSelectionMSD> chromatogramSelections = new ArrayList<IChromatogramSelectionMSD>();
+				/*
+				 * Get all open parts.
+				 */
+				Collection<MPart> parts = partService.getParts();
+				for(MPart part : parts) {
+					if(part instanceof MInputPart && (part.getElementId().equals(ChromatogramEditorMSD.ID))) {
+						/*
+						 * Select the chromatogram editor parts only.
+						 */
+						Object object = part.getObject();
+						if(object != null) {
+							/*
+							 * MSD/FID
+							 */
+							IChromatogramSelectionMSD selection = null;
+							if(object instanceof ChromatogramEditorMSD) {
+								ChromatogramEditorMSD editor = (ChromatogramEditorMSD)object;
+								selection = editor.getChromatogramSelection();
+								/*
+								 * Set it to the given range.
+								 */
+								selection.reset();
+								selection.update(true);
+								//
+								selection.setStartRetentionTime(startRetentionTime);
+								selection.setStopRetentionTime(stopRetentionTime);
+								// I do not know whether this is a good idea - update only that we are working with
+								if(selection == chromatogramSelection) {
+									chromatogramUI.updateSelectionManually(selection);
+									fireUpdate(selection, true);
+								}
+							}
+						}
+					}
+				}
 			}
 		} catch(ParseException e) {
 			logger.warn(e);
