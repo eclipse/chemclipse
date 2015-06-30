@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2015 Philip (eselmeister) Wenig.
+ * Copyright (c) 2008, 2015 Lablicate UG.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Janos Binder - implementation of further filters
  *******************************************************************************/
 package org.eclipse.chemclipse.model.signals;
 
@@ -25,7 +26,7 @@ public class TotalScanSignalsModifier {
 	 * This class has only static methods.
 	 */
 	private TotalScanSignalsModifier() {
-
+	
 	}
 
 	/**
