@@ -11,11 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.swt;
 
-import org.eclipse.swt.widgets.Composite;
-import org.swtchart.ILineSeries;
-import org.swtchart.ILineSeries.PlotSymbolType;
-import org.swtchart.ISeries.SeriesType;
-
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.swt.ui.converter.SeriesConverterCSD;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -27,6 +22,10 @@ import org.eclipse.chemclipse.swt.ui.series.ISeries;
 import org.eclipse.chemclipse.swt.ui.support.AxisTitlesIntensityScale;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
+import org.eclipse.swt.widgets.Composite;
+import org.swtchart.ILineSeries;
+import org.swtchart.ILineSeries.PlotSymbolType;
+import org.swtchart.ISeries.SeriesType;
 
 public abstract class AbstractChromatogramViewPeakUI extends AbstractChromatogramLineSeriesUI implements IIncludeBackground {
 
