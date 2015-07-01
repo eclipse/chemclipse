@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Eclipse 4.4.2" sequenceNumber="387">
+<?pde version="3.8"?><target name="Eclipse 4.4.2" sequenceNumber="392">
 <locations>
 <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.e4.rcp.feature.group" version="0.0.0"/>
@@ -71,6 +71,10 @@
 <unit id="org.eclipse.e4.resources.feature.source.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.e4.core.tools.feature.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/e4/downloads/drops/S-0.16-201408072200/repository"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.nebula.feature.feature.group" version="1.0.0.201506151822"/>
+<repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
 </location>
 </locations>
 </target>
