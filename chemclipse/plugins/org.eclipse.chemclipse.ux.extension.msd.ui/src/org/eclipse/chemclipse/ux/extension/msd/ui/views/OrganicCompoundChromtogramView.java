@@ -17,9 +17,8 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.swt.ui.components.chromatogram.OrganicCompoundChromatogramUI;
+import org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferenceSupplier;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -45,11 +44,7 @@ public class OrganicCompoundChromtogramView extends AbstractChromatogramSelectio
 	private void createControl() {
 
 		parent.setLayout(new FillLayout());
-		IMarkedIons compoundIons = new MarkedIons();
-		compoundIons.add(new MarkedIon(57));
-		compoundIons.add(new MarkedIon(71));
-		compoundIons.add(new MarkedIon(85));
-		organicCompoundChromatogramUI = new OrganicCompoundChromatogramUI(parent, SWT.NONE, compoundIons);
+		organicCompoundChromatogramUI = new OrganicCompoundChromatogramUI(parent, SWT.NONE);
 	}
 
 	@PreDestroy
@@ -73,6 +68,8 @@ public class OrganicCompoundChromtogramView extends AbstractChromatogramSelectio
 		 * selection is not null.
 		 */
 		if(doUpdate(chromatogramSelection)) {
+			IMarkedIons compoundIons = PreferenceSupplier.getOrganicCompoundIons();
+			organicCompoundChromatogramUI.setMarkedIons(compoundIons);
 			organicCompoundChromatogramUI.update(chromatogramSelection, forceReload);
 		}
 	}

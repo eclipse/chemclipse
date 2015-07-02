@@ -18,4 +18,5 @@ public class PreferenceConstants {
 
 	public static final String P_OVERLAY_X_OFFSET = "overlayXOffset";
 	public static final String P_OVERLAY_Y_OFFSET = "overlayYOffset";
+	public static final String P_SELECTED_ORGANIC_COMPOUND = "selectedOrganicCompound";
 }

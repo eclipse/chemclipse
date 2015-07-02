@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.ux.extension.msd.ui.preferences;
 
 import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
-
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -31,5 +30,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setDefault(PreferenceConstants.P_OVERLAY_X_OFFSET, 0);
 		store.setDefault(PreferenceConstants.P_OVERLAY_Y_OFFSET, 0);
+		store.setDefault(PreferenceConstants.P_SELECTED_ORGANIC_COMPOUND, PreferenceSupplier.P_ORGANIC_COMPOUND_HYDROCARBONS);
 	}
 }

@@ -39,9 +39,14 @@ public class OrganicCompoundChromatogramUI extends AbstractViewMSDChromatogramUI
 
 	private IMarkedIons compoundIons;
 
-	public OrganicCompoundChromatogramUI(Composite parent, int style, IMarkedIons compoundIons) {
+	public OrganicCompoundChromatogramUI(Composite parent, int style) {
 
 		super(parent, style);
+		this.compoundIons = new MarkedIons();
+	}
+
+	public void setMarkedIons(IMarkedIons compoundIons) {
+
 		if(compoundIons == null) {
 			this.compoundIons = new MarkedIons();
 		} else {

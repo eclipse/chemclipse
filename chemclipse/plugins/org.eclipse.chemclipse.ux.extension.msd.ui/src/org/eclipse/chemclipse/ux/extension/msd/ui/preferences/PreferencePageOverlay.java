@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 Dr. Philip Wenig.
+ * Copyright (c) 2008, 2015 Philip (eselmeister) Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,23 +7,23 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.preferences;
 
 import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
-import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferencePageOverlay extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public PreferencePage() {
+	public PreferencePageOverlay() {
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Mass Selective Detector (MSD)");
+		setDescription("MSD Overlay");
 	}
 
 	/**
@@ -33,7 +33,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceConstants.P_SELECTED_ORGANIC_COMPOUND, "Organic Compound:", PreferenceSupplier.getOrganicCompoundPresets(), getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceConstants.P_OVERLAY_X_OFFSET, "Retention time offset (milliseconds):", getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceConstants.P_OVERLAY_Y_OFFSET, "Abundance offset:", getFieldEditorParent()));
 	}
 
 	/*

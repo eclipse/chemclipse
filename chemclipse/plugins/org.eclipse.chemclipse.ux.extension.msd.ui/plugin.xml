@@ -11,9 +11,15 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            category="org.eclipse.chemclipse.rcp.app.ui.preferences.overlayPreferencePage"
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
             class="org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.ux.extension.msd.ui.preferencePage"
+            name="Mass Selective Detector (MSD)">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.overlayPreferencePage"
+            class="org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferencePageOverlay"
+            id="org.eclipse.chemclipse.ux.extension.msd.ui.overlayPreferencePage"
             name="MSD Overlay">
       </page>
    </extension>
