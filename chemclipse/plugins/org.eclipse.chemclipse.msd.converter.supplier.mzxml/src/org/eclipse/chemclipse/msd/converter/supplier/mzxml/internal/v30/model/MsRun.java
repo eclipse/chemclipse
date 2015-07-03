@@ -32,22 +32,22 @@ public class MsRun implements Serializable {
 
 	private final static long serialVersionUID = 300L;
 	@XmlElement(required = true)
-	protected List<ParentFile> parentFile;
-	protected List<MsInstrument> msInstrument;
+	private List<ParentFile> parentFile;
+	private List<MsInstrument> msInstrument;
 	@XmlElement(required = true)
-	protected List<DataProcessing> dataProcessing;
-	protected Separation separation;
-	protected Spotting spotting;
+	private List<DataProcessing> dataProcessing;
+	private Separation separation;
+	private Spotting spotting;
 	@XmlElement(required = true)
-	protected List<Scan> scan;
-	protected String sha1;
+	private List<Scan> scan;
+	private String sha1;
 	@XmlAttribute(name = "scanCount")
 	@XmlSchemaType(name = "positiveInteger")
-	protected BigInteger scanCount;
+	private BigInteger scanCount;
 	@XmlAttribute(name = "startTime")
-	protected Duration startTime;
+	private Duration startTime;
 	@XmlAttribute(name = "endTime")
-	protected Duration endTime;
+	private Duration endTime;
 
 	public List<ParentFile> getParentFile() {
 

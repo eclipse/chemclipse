@@ -31,24 +31,24 @@ public class MsRun implements Serializable {
 
 	private final static long serialVersionUID = 220L;
 	@XmlElement(required = true)
-	protected List<ParentFile> parentFile;
-	protected MsInstrument msInstrument;
+	private List<ParentFile> parentFile;
+	private MsInstrument msInstrument;
 	@XmlElement(required = true)
-	protected List<DataProcessing> dataProcessing;
-	protected Separation separation;
-	protected Spotting spotting;
+	private List<DataProcessing> dataProcessing;
+	private Separation separation;
+	private Spotting spotting;
 	@XmlElement(required = true)
-	protected List<Scan> scan;
-	protected String sha1;
+	private List<Scan> scan;
+	private String sha1;
 	@XmlAttribute(name = "scanCount")
 	@XmlSchemaType(name = "positiveInteger")
-	protected BigInteger scanCount;
+	private BigInteger scanCount;
 	@XmlAttribute(name = "startTime")
 	@XmlSchemaType(name = "dateTime")
-	protected XMLGregorianCalendar startTime;
+	private XMLGregorianCalendar startTime;
 	@XmlAttribute(name = "endTime")
 	@XmlSchemaType(name = "dateTime")
-	protected XMLGregorianCalendar endTime;
+	private XMLGregorianCalendar endTime;
 
 	public List<ParentFile> getParentFile() {
 

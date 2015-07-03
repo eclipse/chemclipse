@@ -23,9 +23,9 @@ public class Orientation implements Serializable {
 
 	private final static long serialVersionUID = 300L;
 	@XmlAttribute(name = "firstSpotID", required = true)
-	protected String firstSpotID;
+	private String firstSpotID;
 	@XmlAttribute(name = "secondSpotID", required = true)
-	protected String secondSpotID;
+	private String secondSpotID;
 
 	public String getFirstSpotID() {
 

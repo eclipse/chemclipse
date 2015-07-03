@@ -26,15 +26,15 @@ public class NameValue implements Serializable {
 	private final static long serialVersionUID = 300L;
 	@XmlValue
 	@XmlSchemaType(name = "anySimpleType")
-	protected Object value;
+	private Object value;
 	@XmlAttribute(name = "name")
-	protected String name;
+	private String name;
 	@XmlAttribute(name = "value")
 	@XmlSchemaType(name = "anySimpleType")
-	protected String theValue;
+	private String theValue;
 	@XmlAttribute(name = "type")
 	@XmlSchemaType(name = "anySimpleType")
-	protected String type;
+	private String type;
 
 	public Object getValue() {
 

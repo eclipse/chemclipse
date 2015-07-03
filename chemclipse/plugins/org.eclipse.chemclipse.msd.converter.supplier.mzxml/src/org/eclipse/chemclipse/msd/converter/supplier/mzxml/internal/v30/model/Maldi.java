@@ -26,19 +26,19 @@ public class Maldi implements Serializable {
 
 	private final static long serialVersionUID = 300L;
 	@XmlAttribute(name = "plateID", required = true)
-	protected String plateID;
+	private String plateID;
 	@XmlAttribute(name = "spotID", required = true)
-	protected String spotID;
+	private String spotID;
 	@XmlAttribute(name = "laserShootCount")
 	@XmlSchemaType(name = "positiveInteger")
-	protected BigInteger laserShootCount;
+	private BigInteger laserShootCount;
 	@XmlAttribute(name = "laserFrequency")
-	protected Duration laserFrequency;
+	private Duration laserFrequency;
 	@XmlAttribute(name = "laserIntensity")
 	@XmlSchemaType(name = "positiveInteger")
-	protected BigInteger laserIntensity;
+	private BigInteger laserIntensity;
 	@XmlAttribute(name = "collisionGas")
-	protected Boolean collisionGas;
+	private Boolean collisionGas;
 
 	public String getPlateID() {
 

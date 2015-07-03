@@ -25,13 +25,13 @@ public class Peaks implements Serializable {
 
 	private final static long serialVersionUID = 220L;
 	@XmlValue
-	protected byte[] value;
+	private byte[] value;
 	@XmlAttribute(name = "precision", required = true)
-	protected BigInteger precision;
+	private BigInteger precision;
 	@XmlAttribute(name = "byteOrder", required = true)
-	protected String byteOrder;
+	private String byteOrder;
 	@XmlAttribute(name = "pairOrder", required = true)
-	protected String pairOrder;
+	private String pairOrder;
 
 	public byte[] getValue() {
 

@@ -29,16 +29,16 @@ public class Software implements Serializable {
 	private final static long serialVersionUID = 310L;
 	@XmlValue
 	@XmlSchemaType(name = "anySimpleType")
-	protected Object value;
+	private Object value;
 	@XmlAttribute(name = "type", required = true)
-	protected String type;
+	private String type;
 	@XmlAttribute(name = "name", required = true)
-	protected String name;
+	private String name;
 	@XmlAttribute(name = "version", required = true)
-	protected String version;
+	private String version;
 	@XmlAttribute(name = "completionTime")
 	@XmlSchemaType(name = "dateTime")
-	protected XMLGregorianCalendar completionTime;
+	private XMLGregorianCalendar completionTime;
 
 	public Object getValue() {
 

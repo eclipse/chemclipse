@@ -26,17 +26,17 @@ public class PrecursorMz implements Serializable {
 
 	private final static long serialVersionUID = 220L;
 	@XmlValue
-	protected float value;
+	private float value;
 	@XmlAttribute(name = "precursorScanNum")
 	@XmlSchemaType(name = "positiveInteger")
-	protected BigInteger precursorScanNum;
+	private BigInteger precursorScanNum;
 	@XmlAttribute(name = "precursorIntensity", required = true)
-	protected float precursorIntensity;
+	private float precursorIntensity;
 	@XmlAttribute(name = "precursorCharge")
 	@XmlSchemaType(name = "positiveInteger")
-	protected BigInteger precursorCharge;
+	private BigInteger precursorCharge;
 	@XmlAttribute(name = "windowWideness")
-	protected Float windowWideness;
+	private Float windowWideness;
 
 	public float getValue() {
 

@@ -25,17 +25,17 @@ public class Peaks implements Serializable {
 
 	private final static long serialVersionUID = 320L;
 	@XmlValue
-	protected byte[] value;
+	private byte[] value;
 	@XmlAttribute(name = "precision")
-	protected BigInteger precision;
+	private BigInteger precision;
 	@XmlAttribute(name = "byteOrder", required = true)
-	protected String byteOrder;
+	private String byteOrder;
 	@XmlAttribute(name = "contentType", required = true)
-	protected String contentType;
+	private String contentType;
 	@XmlAttribute(name = "compressionType", required = true)
-	protected String compressionType;
+	private String compressionType;
 	@XmlAttribute(name = "compressedLen", required = true)
-	protected int compressedLen;
+	private int compressedLen;
 
 	public byte[] getValue() {
 

@@ -26,16 +26,16 @@ public class Spot implements Serializable {
 
 	private final static long serialVersionUID = 300L;
 	@XmlElement(required = true)
-	protected OntologyEntry maldiMatrix;
+	private OntologyEntry maldiMatrix;
 	@XmlAttribute(name = "spotID", required = true)
-	protected String spotID;
+	private String spotID;
 	@XmlAttribute(name = "spotXPosition", required = true)
-	protected String spotXPosition;
+	private String spotXPosition;
 	@XmlAttribute(name = "spotYPosition", required = true)
-	protected String spotYPosition;
+	private String spotYPosition;
 	@XmlAttribute(name = "spotDiameter")
 	@XmlSchemaType(name = "positiveInteger")
-	protected BigInteger spotDiameter;
+	private BigInteger spotDiameter;
 
 	public OntologyEntry getMaldiMatrix() {
 

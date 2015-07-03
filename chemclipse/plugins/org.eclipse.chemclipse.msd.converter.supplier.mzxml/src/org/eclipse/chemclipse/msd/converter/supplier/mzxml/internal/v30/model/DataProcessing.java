@@ -27,19 +27,19 @@ public class DataProcessing implements Serializable {
 
 	private final static long serialVersionUID = 300L;
 	@XmlElement(required = true)
-	protected Software software;
+	private Software software;
 	@XmlElements({@XmlElement(name = "processingOperation", type = NameValue.class), @XmlElement(name = "comment", type = String.class)})
-	protected List<Serializable> processingOperationAndComment;
+	private List<Serializable> processingOperationAndComment;
 	@XmlAttribute(name = "intensityCutoff")
-	protected Float intensityCutoff;
+	private Float intensityCutoff;
 	@XmlAttribute(name = "centroided")
-	protected Boolean centroided;
+	private Boolean centroided;
 	@XmlAttribute(name = "deisotoped")
-	protected Boolean deisotoped;
+	private Boolean deisotoped;
 	@XmlAttribute(name = "chargeDeconvoluted")
-	protected Boolean chargeDeconvoluted;
+	private Boolean chargeDeconvoluted;
 	@XmlAttribute(name = "spotIntegration")
-	protected Boolean spotIntegration;
+	private Boolean spotIntegration;
 
 	public Software getSoftware() {
 

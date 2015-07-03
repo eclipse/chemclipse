@@ -25,8 +25,8 @@ public class Spotting implements Serializable {
 
 	private final static long serialVersionUID = 310L;
 	@XmlElement(required = true)
-	protected List<Plate> plate;
-	protected Robot robot;
+	private List<Plate> plate;
+	private Robot robot;
 
 	public List<Plate> getPlate() {
 

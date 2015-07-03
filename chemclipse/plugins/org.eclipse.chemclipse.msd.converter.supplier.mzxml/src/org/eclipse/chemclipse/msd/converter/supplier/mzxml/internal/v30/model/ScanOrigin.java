@@ -25,10 +25,10 @@ public class ScanOrigin implements Serializable {
 
 	private final static long serialVersionUID = 300L;
 	@XmlAttribute(name = "parentFileID", required = true)
-	protected String parentFileID;
+	private String parentFileID;
 	@XmlAttribute(name = "num", required = true)
 	@XmlSchemaType(name = "nonNegativeInteger")
-	protected BigInteger num;
+	private BigInteger num;
 
 	public String getParentFileID() {
 

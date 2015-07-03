@@ -25,7 +25,7 @@ public class Separation implements Serializable {
 
 	private final static long serialVersionUID = 310L;
 	@XmlElement(required = true)
-	protected List<SeparationTechnique> separationTechnique;
+	private List<SeparationTechnique> separationTechnique;
 
 	public List<SeparationTechnique> getSeparationTechnique() {
 

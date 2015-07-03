@@ -26,14 +26,14 @@ public class ParentFile implements Serializable {
 	private final static long serialVersionUID = 300L;
 	@XmlValue
 	@XmlSchemaType(name = "anySimpleType")
-	protected Object value;
+	private Object value;
 	@XmlAttribute(name = "fileName", required = true)
 	@XmlSchemaType(name = "anyURI")
-	protected String fileName;
+	private String fileName;
 	@XmlAttribute(name = "fileType", required = true)
-	protected String fileType;
+	private String fileType;
 	@XmlAttribute(name = "fileSha1", required = true)
-	protected String fileSha1;
+	private String fileSha1;
 
 	public Object getValue() {
 

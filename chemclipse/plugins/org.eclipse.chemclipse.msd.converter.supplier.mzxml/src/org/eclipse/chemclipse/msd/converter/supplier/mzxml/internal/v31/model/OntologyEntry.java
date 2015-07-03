@@ -25,9 +25,9 @@ public class OntologyEntry implements Serializable {
 
 	private final static long serialVersionUID = 310L;
 	@XmlAttribute(name = "category", required = true)
-	protected String category;
+	private String category;
 	@XmlAttribute(name = "value", required = true)
-	protected String theValue;
+	private String theValue;
 
 	public String getCategory() {
 

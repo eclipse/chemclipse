@@ -27,14 +27,14 @@ public class Robot implements Serializable {
 
 	private final static long serialVersionUID = 300L;
 	@XmlElement(required = true)
-	protected OntologyEntry robotManufacturer;
+	private OntologyEntry robotManufacturer;
 	@XmlElement(required = true)
-	protected OntologyEntry robotModel;
+	private OntologyEntry robotModel;
 	@XmlAttribute(name = "timePerSpot", required = true)
-	protected Duration timePerSpot;
+	private Duration timePerSpot;
 	@XmlAttribute(name = "deadVolume")
 	@XmlSchemaType(name = "nonNegativeInteger")
-	protected BigInteger deadVolume;
+	private BigInteger deadVolume;
 
 	public OntologyEntry getRobotManufacturer() {
 

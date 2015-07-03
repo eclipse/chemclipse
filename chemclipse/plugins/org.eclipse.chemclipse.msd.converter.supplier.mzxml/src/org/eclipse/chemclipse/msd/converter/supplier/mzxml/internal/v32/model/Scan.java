@@ -31,61 +31,61 @@ import javax.xml.datatype.Duration;
 public class Scan implements Serializable {
 
 	private final static long serialVersionUID = 320L;
-	protected List<ScanOrigin> scanOrigin;
-	protected List<PrecursorMz> precursorMz;
-	protected Maldi maldi;
+	private List<ScanOrigin> scanOrigin;
+	private List<PrecursorMz> precursorMz;
+	private Maldi maldi;
 	@XmlElement(required = true, nillable = true)
-	protected List<Peaks> peaks;
+	private List<Peaks> peaks;
 	@XmlElements({@XmlElement(name = "nameValue", type = NameValue.class), @XmlElement(name = "comment", type = String.class)})
-	protected List<Serializable> nameValueAndComment;
-	protected List<Scan> scan;
+	private List<Serializable> nameValueAndComment;
+	private List<Scan> scan;
 	@XmlAttribute(name = "num", required = true)
 	@XmlSchemaType(name = "positiveInteger")
-	protected BigInteger num;
+	private BigInteger num;
 	@XmlAttribute(name = "msLevel", required = true)
 	@XmlSchemaType(name = "positiveInteger")
-	protected BigInteger msLevel;
+	private BigInteger msLevel;
 	@XmlAttribute(name = "peaksCount", required = true)
 	@XmlSchemaType(name = "nonNegativeInteger")
-	protected BigInteger peaksCount;
+	private BigInteger peaksCount;
 	@XmlAttribute(name = "polarity")
-	protected String polarity;
+	private String polarity;
 	@XmlAttribute(name = "scanType")
-	protected String scanType;
+	private String scanType;
 	@XmlAttribute(name = "filterLine")
-	protected String filterLine;
+	private String filterLine;
 	@XmlAttribute(name = "centroided")
-	protected Boolean centroided;
+	private Boolean centroided;
 	@XmlAttribute(name = "deisotoped")
-	protected Boolean deisotoped;
+	private Boolean deisotoped;
 	@XmlAttribute(name = "chargeDeconvoluted")
-	protected Boolean chargeDeconvoluted;
+	private Boolean chargeDeconvoluted;
 	@XmlAttribute(name = "retentionTime")
-	protected Duration retentionTime;
+	private Duration retentionTime;
 	@XmlAttribute(name = "ionisationEnergy")
-	protected Float ionisationEnergy;
+	private Float ionisationEnergy;
 	@XmlAttribute(name = "collisionEnergy")
-	protected Float collisionEnergy;
+	private Float collisionEnergy;
 	@XmlAttribute(name = "cidGasPressure")
-	protected Float cidGasPressure;
+	private Float cidGasPressure;
 	@XmlAttribute(name = "startMz")
-	protected Float startMz;
+	private Float startMz;
 	@XmlAttribute(name = "endMz")
-	protected Float endMz;
+	private Float endMz;
 	@XmlAttribute(name = "lowMz")
-	protected Float lowMz;
+	private Float lowMz;
 	@XmlAttribute(name = "highMz")
-	protected Float highMz;
+	private Float highMz;
 	@XmlAttribute(name = "basePeakMz")
-	protected Float basePeakMz;
+	private Float basePeakMz;
 	@XmlAttribute(name = "basePeakIntensity")
-	protected Float basePeakIntensity;
+	private Float basePeakIntensity;
 	@XmlAttribute(name = "totIonCurrent")
-	protected Float totIonCurrent;
+	private Float totIonCurrent;
 	@XmlAttribute(name = "msInstrumentID")
-	protected Integer msInstrumentID;
+	private Integer msInstrumentID;
 	@XmlAttribute(name = "compensationVoltage")
-	protected Float compensationVoltage;
+	private Float compensationVoltage;
 
 	public List<ScanOrigin> getScanOrigin() {
 

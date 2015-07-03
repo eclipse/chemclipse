@@ -26,21 +26,21 @@ public class MsInstrument implements Serializable {
 
 	private final static long serialVersionUID = 220L;
 	@XmlElement(required = true)
-	protected MsManufacturer msManufacturer;
+	private MsManufacturer msManufacturer;
 	@XmlElement(required = true)
-	protected OntologyEntry msModel;
+	private OntologyEntry msModel;
 	@XmlElement(required = true)
-	protected OntologyEntry msIonisation;
+	private OntologyEntry msIonisation;
 	@XmlElement(required = true)
-	protected MsMassAnalyzer msMassAnalyzer;
+	private MsMassAnalyzer msMassAnalyzer;
 	@XmlElement(required = true)
-	protected OntologyEntry msDetector;
+	private OntologyEntry msDetector;
 	@XmlElement(required = true)
-	protected Software software;
-	protected OntologyEntry msResolution;
-	protected Operator operator;
+	private Software software;
+	private OntologyEntry msResolution;
+	private Operator operator;
 	@XmlElements({@XmlElement(name = "nameValue", type = NameValue.class), @XmlElement(name = "comment", type = String.class)})
-	protected List<Serializable> nameValueAndComment;
+	private List<Serializable> nameValueAndComment;
 
 	public MsManufacturer getMsManufacturer() {
 

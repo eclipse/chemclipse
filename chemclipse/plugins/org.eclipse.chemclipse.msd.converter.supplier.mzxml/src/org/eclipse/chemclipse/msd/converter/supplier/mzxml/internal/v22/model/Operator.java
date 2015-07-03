@@ -28,18 +28,18 @@ public class Operator implements Serializable {
 	private final static long serialVersionUID = 220L;
 	@XmlValue
 	@XmlSchemaType(name = "anySimpleType")
-	protected Object value;
+	private Object value;
 	@XmlAttribute(name = "first", required = true)
-	protected String first;
+	private String first;
 	@XmlAttribute(name = "last", required = true)
-	protected String last;
+	private String last;
 	@XmlAttribute(name = "phone")
-	protected String phone;
+	private String phone;
 	@XmlAttribute(name = "email")
-	protected String email;
+	private String email;
 	@XmlAttribute(name = "URI")
 	@XmlSchemaType(name = "anyURI")
-	protected String uri;
+	private String uri;
 
 	public Object getValue() {
 

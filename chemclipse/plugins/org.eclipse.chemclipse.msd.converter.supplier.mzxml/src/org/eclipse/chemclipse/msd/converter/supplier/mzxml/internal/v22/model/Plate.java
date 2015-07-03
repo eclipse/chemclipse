@@ -28,20 +28,20 @@ public class Plate implements Serializable {
 
 	private final static long serialVersionUID = 220L;
 	@XmlElement(required = true)
-	protected OntologyEntry plateManufacturer;
+	private OntologyEntry plateManufacturer;
 	@XmlElement(required = true)
-	protected OntologyEntry plateModel;
-	protected Pattern pattern;
+	private OntologyEntry plateModel;
+	private Pattern pattern;
 	@XmlElement(required = true)
-	protected List<Spot> spot;
+	private List<Spot> spot;
 	@XmlAttribute(name = "plateID", required = true)
-	protected String plateID;
+	private String plateID;
 	@XmlAttribute(name = "spotXCount", required = true)
 	@XmlSchemaType(name = "positiveInteger")
-	protected BigInteger spotXCount;
+	private BigInteger spotXCount;
 	@XmlAttribute(name = "spotYCount", required = true)
 	@XmlSchemaType(name = "positiveInteger")
-	protected BigInteger spotYCount;
+	private BigInteger spotYCount;
 
 	public OntologyEntry getPlateManufacturer() {
 

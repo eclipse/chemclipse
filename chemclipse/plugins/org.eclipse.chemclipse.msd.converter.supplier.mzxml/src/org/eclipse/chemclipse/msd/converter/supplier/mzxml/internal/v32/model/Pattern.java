@@ -23,9 +23,9 @@ public class Pattern implements Serializable {
 
 	private final static long serialVersionUID = 320L;
 	@XmlElement(required = true)
-	protected OntologyEntry spottingPattern;
+	private OntologyEntry spottingPattern;
 	@XmlElement(required = true)
-	protected Orientation orientation;
+	private Orientation orientation;
 
 	public OntologyEntry getSpottingPattern() {
 
