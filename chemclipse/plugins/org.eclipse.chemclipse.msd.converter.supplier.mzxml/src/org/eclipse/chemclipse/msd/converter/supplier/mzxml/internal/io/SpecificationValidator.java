@@ -9,7 +9,7 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.converter;
+package org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io;
 
 import java.io.File;
 
@@ -30,7 +30,7 @@ public class SpecificationValidator {
 	 * 
 	 * @param file
 	 */
-	public static File validateMzXMLSpecification(File file) {
+	public static File validateSpecification(File file) {
 
 		if(file == null) {
 			return null;

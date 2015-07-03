@@ -1,0 +1,90 @@
+/*******************************************************************************
+ * Copyright (c) 2015 Dr. Philip Wenig.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Dr. Philip Wenig - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v30.model;
+
+import java.io.Serializable;
+import java.math.BigInteger;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlValue;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "", propOrder = {"value"})
+public class PrecursorMz implements Serializable {
+
+	private final static long serialVersionUID = 300L;
+	@XmlValue
+	protected float value;
+	@XmlAttribute(name = "precursorScanNum")
+	@XmlSchemaType(name = "positiveInteger")
+	protected BigInteger precursorScanNum;
+	@XmlAttribute(name = "precursorIntensity", required = true)
+	protected float precursorIntensity;
+	@XmlAttribute(name = "precursorCharge")
+	@XmlSchemaType(name = "positiveInteger")
+	protected BigInteger precursorCharge;
+	@XmlAttribute(name = "windowWideness")
+	protected Float windowWideness;
+
+	public float getValue() {
+
+		return value;
+	}
+
+	public void setValue(float value) {
+
+		this.value = value;
+	}
+
+	public BigInteger getPrecursorScanNum() {
+
+		return precursorScanNum;
+	}
+
+	public void setPrecursorScanNum(BigInteger value) {
+
+		this.precursorScanNum = value;
+	}
+
+	public float getPrecursorIntensity() {
+
+		return precursorIntensity;
+	}
+
+	public void setPrecursorIntensity(float value) {
+
+		this.precursorIntensity = value;
+	}
+
+	public BigInteger getPrecursorCharge() {
+
+		return precursorCharge;
+	}
+
+	public void setPrecursorCharge(BigInteger value) {
+
+		this.precursorCharge = value;
+	}
+
+	public Float getWindowWideness() {
+
+		return windowWideness;
+	}
+
+	public void setWindowWideness(Float value) {
+
+		this.windowWideness = value;
+	}
+}

@@ -9,14 +9,16 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.support;
+package org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io;
 
 public interface IConstants {
 
-	String IMPORT_MZXML_CHROMATOGRAM = "Import mzXML Chromatogram";
-	String IMPORT_MZXML_CHROMATOGRAM_OVERVIEW = "Import mzXML Chromatogram Overview";
+	String IMPORT_CHROMATOGRAM = "Import mzXML Chromatogram";
+	String IMPORT_CHROMATOGRAM_OVERVIEW = "Import mzXML Chromatogram Overview";
 	String PARSE_SCANS = "Parse Scans";
 	String EXPORT_MZXML_CHROMATOGRAM = "Export mzXML Chromatogram";
 	String EXPORT_SCANS = "Export Scans";
 	String SCAN = "Scan";
+	//
+	String NODE_MS_RUN = "msRun";
 }

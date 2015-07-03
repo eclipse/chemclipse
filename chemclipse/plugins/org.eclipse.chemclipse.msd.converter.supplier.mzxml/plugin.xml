@@ -4,14 +4,14 @@
    <extension
          point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
       <ChromatogramSupplier
-            description="Reads and Writes mzXML Chromatograms v2.1"
-            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.MzXMLChromatogramExportConverter"
+            description="Reads and Writes mzXML Chromatograms"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.ChromatogramExportConverter"
             fileExtension=".mzXML"
-            filterName="mzXML Chromatogram v2.1 (*.mzXML)"
+            filterName="mzXML Chromatogram (*.mzXML)"
             id="org.eclipse.chemclipse.msd.converter.supplier.mzxml"
-            importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.MzXMLChromatogramImportConverter"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter.ChromatogramImportConverter"
             isExportable="false"
-            isImportable="false">
+            isImportable="true">
       </ChromatogramSupplier>
    </extension>
 

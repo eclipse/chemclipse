@@ -29,6 +29,6 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 	@Override
 	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
-		logger.info("The mzXML reader needs to be re-implemented.");
+		logger.info("The mzXML writer needs to be re-implemented.");
 	}
 }
