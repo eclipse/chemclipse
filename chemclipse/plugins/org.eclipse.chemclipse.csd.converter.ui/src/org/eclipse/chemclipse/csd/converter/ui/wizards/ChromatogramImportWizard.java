@@ -16,6 +16,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
+import org.eclipse.chemclipse.csd.converter.processing.chromatogram.IChromatogramCSDImportConverterProcessingInfo;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -25,17 +30,10 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
-import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
-import org.eclipse.chemclipse.csd.converter.processing.chromatogram.IChromatogramCSDImportConverterProcessingInfo;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
-
 public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramImportWizard.class);
-	private static final String DESCRIPTION = "Chromatogram FID Import";
-	private static final String CONVERTER_ID = "org.eclipse.chemclipse.csd.converter.supplier.xy";
+	private static final String DESCRIPTION = "Chromatogram CSD Import";
 	private RawFileSelectionWizardPage rawFileSelectionWizardPage;
 	private ImportDirectoryWizardPage importDirectoryWizardPage;
 
@@ -79,6 +77,14 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 			return false;
 		}
 		/*
+		 * Converter Id
+		 */
+		final String converterId = importDirectoryWizardPage.getSelectedConverterId();
+		if(converterId == null || converterId.equals("")) {
+			MessageDialog.openError(getShell(), "Error", "Please select a valid converter.");
+			return false;
+		}
+		/*
 		 * Import the chromatograms.
 		 */
 		IRunnableWithProgress runnableWithProgress = new IRunnableWithProgress() {
@@ -108,7 +114,7 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 						 * Export
 						 */
 						File outputFile = new File(directory + chromatogram.getName());
-						ChromatogramConverterCSD.convert(outputFile, chromatogram, CONVERTER_ID, monitor);
+						ChromatogramConverterCSD.convert(outputFile, chromatogram, converterId, monitor);
 					} catch(TypeCastException e) {
 						logger.warn(e);
 					}

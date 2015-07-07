@@ -12,7 +12,7 @@
             class="org.eclipse.chemclipse.csd.converter.ui.wizards.ChromatogramImportWizard"
             icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif"
             id="org.eclipse.chemclipse.csd.converter.ui.chromatogramImportWizard"
-            name="Convert FID chromatograms to *.xy format">
+            name="Convert FID, ECD ... chromatograms to *.xy or *.ocb format">
       </wizard>
    </extension>
    <extension
