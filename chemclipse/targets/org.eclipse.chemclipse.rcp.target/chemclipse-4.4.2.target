@@ -73,7 +73,7 @@
 <repository location="http://download.eclipse.org/e4/downloads/drops/S-0.16-201408072200/repository"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.feature.feature.group" version="1.0.0.201507061257"/>
+<unit id="org.eclipse.nebula.feature.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
 </location>
 </locations>
