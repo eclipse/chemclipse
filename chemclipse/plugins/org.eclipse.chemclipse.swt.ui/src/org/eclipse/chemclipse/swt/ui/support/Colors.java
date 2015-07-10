@@ -14,12 +14,11 @@ package org.eclipse.chemclipse.swt.ui.support;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
-
-import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 
 public class Colors {
 
@@ -29,6 +28,7 @@ public class Colors {
 	public static final Color DARK_RED = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED);
 	public static final Color GREEN = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
 	public static final Color GRAY = Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
+	public static final Color DARK_CYAN = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_CYAN);
 	/*
 	 * These are system color ids, defined org.eclipse.swt.SWT. If you use own
 	 * color, dispose them, if not needed any more.

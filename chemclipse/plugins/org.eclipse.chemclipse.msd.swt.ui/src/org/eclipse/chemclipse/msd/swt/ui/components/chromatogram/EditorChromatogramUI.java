@@ -27,16 +27,16 @@ import org.eclipse.chemclipse.swt.ui.series.Series;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.Offset;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
+import org.swtchart.IErrorBar;
 import org.swtchart.ILineSeries;
-import org.swtchart.IPlotArea;
 import org.swtchart.ILineSeries.PlotSymbolType;
+import org.swtchart.IPlotArea;
 import org.swtchart.ISeries.SeriesType;
 import org.swtchart.LineStyle;
 
@@ -115,6 +115,15 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 				scatterSeries.setSymbolType(PlotSymbolType.INVERTED_TRIANGLE);
 				scatterSeries.setSymbolSize(5);
 				scatterSeries.setLineColor(Colors.GRAY);
+				/*
+				 * Setting up a dummy error bar
+				 */
+				IErrorBar errorBar = scatterSeries.getYErrorBar();
+				errorBar.setColor(Colors.DARK_CYAN);
+				errorBar.setType(org.swtchart.IErrorBar.ErrorBarType.BOTH);
+				errorBar.setLineWidth(2);
+				errorBar.setError(10000.0d);
+				errorBar.setVisible(false);
 				/*
 				 * Show the selected peak if available
 				 */
