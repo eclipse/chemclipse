@@ -35,6 +35,15 @@ public class PeakMassSpectraStatistics implements IPeakMassSpectraStatistics {
 		this.percentile = percentile;
 	}
 
+	public PeakMassSpectraStatistics(double[] abundances) {
+
+		this(abundances.length, abundances, new Mean(), new Variance(), new StandardDeviation(), new Percentile());
+		mean.setData(abundances);
+		variance.setData(abundances);
+		sd.setData(abundances);
+		percentile.setData(abundances);
+	}
+
 	@Override
 	public int getSampleSize() {
 
