@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
@@ -35,8 +38,21 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		 * This setting is needed to maximize the application window.
 		 * There also a tag in the Application.e4xmi which seems not to be used.
 		 * The maximize method seems to be not needed anymore.
+		 * Display.getCurrent().getActiveShell().setMaximized(true);
 		 */
 		super.postWindowCreate();
-		// Display.getCurrent().getActiveShell().setMaximized(true);
+	}
+
+	@Override
+	public boolean preWindowShellClose() {
+
+		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO | SWT.CANCEL);
+		messageBox.setText("Close the application");
+		messageBox.setMessage("Do you want to close the application now?");
+		if(messageBox.open() == SWT.YES) {
+			return super.preWindowShellClose();
+		} else {
+			return false;
+		}
 	}
 }
