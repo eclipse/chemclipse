@@ -17,5 +17,5 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 /**
  * If a new chromatogram type should be implemented, extend the abstract class {@link AbstractChromatogramMSD} and not this class.
  */
-public class ChromatogramMSD extends AbstractChromatogramMSD implements IChromatogramMSD {
+public final class ChromatogramMSD extends AbstractChromatogramMSD implements IChromatogramMSD {
 }
