@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.numeric.statistics;
 
 import junit.framework.TestCase;
 
-import org.eclipse.chemclipse.numeric.statistics.model.PeakMassSpectraStatistics;
+import org.eclipse.chemclipse.numeric.statistics.model.UnivariateStatistics;
 
 public class Calculations_Complex_2_Test extends TestCase {
 
@@ -51,7 +51,7 @@ public class Calculations_Complex_2_Test extends TestCase {
 		/*
 		 * Set up the statistics object;
 		 */
-		PeakMassSpectraStatistics statistics = new PeakMassSpectraStatistics(values);
+		UnivariateStatistics statistics = new UnivariateStatistics(values);
 		assertEquals("getSampleSize", values.length, statistics.getSampleSize());
 		assertEquals("getMean", 451.1538d, statistics.getMean(), 1E-4d);
 		assertEquals("getVariance", 12973.47d, statistics.getVariance(), 1E-2d);

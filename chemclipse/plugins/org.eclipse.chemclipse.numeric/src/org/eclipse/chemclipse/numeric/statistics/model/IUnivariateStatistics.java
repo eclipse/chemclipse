@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.numeric.statistics.model;
 
-public interface IPeakMassSpectraStatistics {
+public interface IUnivariateStatistics {
 
 	int getSampleSize();
 

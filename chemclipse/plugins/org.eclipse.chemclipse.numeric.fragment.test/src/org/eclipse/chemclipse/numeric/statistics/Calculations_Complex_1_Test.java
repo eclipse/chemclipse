@@ -17,7 +17,7 @@ import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.apache.commons.math3.stat.descriptive.moment.Variance;
 import org.apache.commons.math3.stat.descriptive.rank.Percentile;
-import org.eclipse.chemclipse.numeric.statistics.model.PeakMassSpectraStatistics;
+import org.eclipse.chemclipse.numeric.statistics.model.UnivariateStatistics;
 
 public class Calculations_Complex_1_Test extends TestCase {
 
@@ -63,7 +63,7 @@ public class Calculations_Complex_1_Test extends TestCase {
 		/*
 		 * Set up the statistics object;
 		 */
-		PeakMassSpectraStatistics statistics = new PeakMassSpectraStatistics(values.length, values, mean, variance, standardDeviation, percentile);
+		UnivariateStatistics statistics = new UnivariateStatistics(values.length, values, mean, variance, standardDeviation, percentile);
 		assertEquals("getMean", 451.1538d, statistics.getMean(), 1E-4d);
 		assertEquals("getVariance", 12973.47d, statistics.getVariance(), 1E-2d);
 		assertEquals("getStandardDeviation", 113.9012d, statistics.getStandardDeviation(), 1E-3d);

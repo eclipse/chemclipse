@@ -16,7 +16,7 @@ import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.apache.commons.math3.stat.descriptive.moment.Variance;
 import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 
-public class PeakMassSpectraStatistics implements IPeakMassSpectraStatistics {
+public class UnivariateStatistics implements IUnivariateStatistics {
 
 	final private int sampleSize;
 	final private double[] abundances;
@@ -25,7 +25,7 @@ public class PeakMassSpectraStatistics implements IPeakMassSpectraStatistics {
 	final private StandardDeviation sd;
 	final private Percentile percentile;
 
-	public PeakMassSpectraStatistics(int sampleSize, double[] abundances, Mean mean, Variance variance, StandardDeviation sd, Percentile percentile) {
+	public UnivariateStatistics(int sampleSize, double[] abundances, Mean mean, Variance variance, StandardDeviation sd, Percentile percentile) {
 
 		this.sampleSize = sampleSize;
 		this.abundances = abundances;
@@ -35,7 +35,7 @@ public class PeakMassSpectraStatistics implements IPeakMassSpectraStatistics {
 		this.percentile = percentile;
 	}
 
-	public PeakMassSpectraStatistics(double[] abundances) {
+	public UnivariateStatistics(double[] abundances) {
 
 		this(abundances.length, abundances, new Mean(), new Variance(), new StandardDeviation(), new Percentile());
 		mean.setData(abundances);
