@@ -120,6 +120,14 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.eclipse.nebula.visualization.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.python.pydev.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.jdt"
+         version="0.0.0"/>
+
    <plugin
          id="org.eclipse.chemclipse.keystore"
          download-size="0"
@@ -1957,6 +1965,54 @@ http://www.eclipse.org/legal/epl-v10.html
 
    <plugin
          id="javax.persistence"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.debug.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.debug.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.ant"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.ant.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.ant.launching"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.core.externaltools"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.ui.externaltools"
          download-size="0"
          install-size="0"
          version="0.0.0"
