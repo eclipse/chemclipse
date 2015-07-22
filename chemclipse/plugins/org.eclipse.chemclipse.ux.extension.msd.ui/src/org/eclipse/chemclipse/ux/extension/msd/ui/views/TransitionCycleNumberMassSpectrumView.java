@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2015 Philip (eselmeister) Wenig.
+ * Copyright (c) 2015 Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Philip (eselmeister) Wenig - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.views;
 
@@ -17,8 +17,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.ScanMassSpectrumUIWithLabel;
-
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.ScanMassSpectrumCycleNumberUIWithLabel;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -27,14 +26,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class InteractiveEnhancedNominalMassSpectrumView extends AbstractChromatogramSelectionMSDView {
+public class TransitionCycleNumberMassSpectrumView extends AbstractChromatogramSelectionMSDView {
 
 	@Inject
 	private Composite parent;
-	private ScanMassSpectrumUIWithLabel massSpectrumUIWithLabel;
+	private ScanMassSpectrumCycleNumberUIWithLabel massSpectrumCycleNumberUIWithLabel;
 
 	@Inject
-	public InteractiveEnhancedNominalMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
+	public TransitionCycleNumberMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
 
 		super(part, partService, eventBroker);
 	}
@@ -43,7 +42,7 @@ public class InteractiveEnhancedNominalMassSpectrumView extends AbstractChromato
 	private void createControl() {
 
 		parent.setLayout(new FillLayout());
-		massSpectrumUIWithLabel = new ScanMassSpectrumUIWithLabel(parent, SWT.NONE, MassValueDisplayPrecision.NOMINAL);
+		massSpectrumCycleNumberUIWithLabel = new ScanMassSpectrumCycleNumberUIWithLabel(parent, SWT.NONE, MassValueDisplayPrecision.TRANSITION);
 	}
 
 	@PreDestroy
@@ -55,7 +54,7 @@ public class InteractiveEnhancedNominalMassSpectrumView extends AbstractChromato
 	@Focus
 	public void setFocus() {
 
-		massSpectrumUIWithLabel.setFocus();
+		massSpectrumCycleNumberUIWithLabel.setFocus();
 		update(getChromatogramSelection(), false);
 	}
 
@@ -67,7 +66,7 @@ public class InteractiveEnhancedNominalMassSpectrumView extends AbstractChromato
 		 * selection is not null.
 		 */
 		if(doUpdate(chromatogramSelection)) {
-			massSpectrumUIWithLabel.update(chromatogramSelection, forceReload);
+			massSpectrumCycleNumberUIWithLabel.update(chromatogramSelection, forceReload);
 		}
 	}
 }

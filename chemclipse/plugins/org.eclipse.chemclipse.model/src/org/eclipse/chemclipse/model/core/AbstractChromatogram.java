@@ -1126,6 +1126,33 @@ public abstract class AbstractChromatogram implements IChromatogram {
 		return false;
 	}
 
+	@Override
+	public List<IScan> getScanCycleScans(int scanCycle) {
+
+		List<IScan> scanCycleScans = new ArrayList<IScan>();
+		if(scanCycle > 0) {
+			if(containsScanCycles()) {
+				/*
+				 * Yes, there are cycle scan available.
+				 */
+				for(IScan scan : scans) {
+					if(scan.getCycleNumber() == scanCycle) {
+						scanCycleScans.add(scan);
+					}
+				}
+			} else {
+				/*
+				 * If the cycle is 1, return the complete list.
+				 * Otherwise do nothing.
+				 */
+				if(scanCycle == 1) {
+					scanCycleScans.addAll(scans);
+				}
+			}
+		}
+		return scanCycleScans;
+	}
+
 	// -----------------------------------------------IChromatogramProcessorSupport
 	// ----------------------------hashCode, equals and toString
 	@Override

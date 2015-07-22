@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.signals;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
 public interface ITotalScanSignalExtractor {
@@ -61,6 +62,8 @@ public interface ITotalScanSignalExtractor {
 	 */
 	ITotalScanSignals getTotalScanSignals(int startScan, int stopScan, boolean validatePositive);
 
+	ITotalScanSignals getTotalScanSignals(int startScan, int stopScan, boolean validatePositive, boolean condenseCycleNumberScans);
+
 	/**
 	 * Returns the total scan signals given by the selection.
 	 * 
@@ -68,6 +71,8 @@ public interface ITotalScanSignalExtractor {
 	 * @return {@link ITotalScanSignal}
 	 */
 	ITotalScanSignals getTotalScanSignals(IChromatogramSelection chromatogramSelection);
+
+	ITotalScanSignals getTotalScanSignals(IChromatogram chromatogram, boolean validatePositive, boolean condenseCycleNumberScans);
 
 	/**
 	 * Returns the total scan signals given by the selection.
@@ -77,4 +82,6 @@ public interface ITotalScanSignalExtractor {
 	 * @return {@link ITotalScanSignal}
 	 */
 	ITotalScanSignals getTotalScanSignals(IChromatogramSelection chromatogramSelection, boolean validatePositive);
+
+	ITotalScanSignals getTotalScanSignals(IChromatogramSelection chromatogramSelection, boolean validatePositive, boolean condenseCycleNumberScans);
 }

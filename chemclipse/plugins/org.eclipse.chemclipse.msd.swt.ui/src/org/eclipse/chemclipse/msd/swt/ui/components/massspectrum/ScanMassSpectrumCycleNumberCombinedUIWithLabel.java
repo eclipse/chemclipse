@@ -12,11 +12,14 @@
 package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.msd.model.notifier.IChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -28,7 +31,7 @@ import org.eclipse.swt.widgets.Label;
 /**
  * TODO merge with ProfileMassSpectrumUIWithLabel
  */
-public class ScanMassSpectrumUIWithLabel extends Composite implements IChromatogramSelectionMSDUpdateNotifier {
+public class ScanMassSpectrumCycleNumberCombinedUIWithLabel extends Composite implements IChromatogramSelectionMSDUpdateNotifier {
 
 	private ScanMassSpectrumUI massSpectrumUI;
 	private Label label;
@@ -36,7 +39,7 @@ public class ScanMassSpectrumUIWithLabel extends Composite implements IChromatog
 	private DecimalFormat decimalFormat;
 	private MassValueDisplayPrecision massValueDisplayPrecision;
 
-	public ScanMassSpectrumUIWithLabel(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
+	public ScanMassSpectrumCycleNumberCombinedUIWithLabel(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
 
 		super(parent, style);
 		decimalFormat = new DecimalFormat("0.0##");
@@ -49,21 +52,15 @@ public class ScanMassSpectrumUIWithLabel extends Composite implements IChromatog
 
 	private void initialize(Composite parent) {
 
-		GridLayout layout;
 		GridData gridData;
+		//
 		setLayout(new FillLayout());
 		Composite composite = new Composite(this, SWT.FILL);
-		layout = new GridLayout();
-		layout.makeColumnsEqualWidth = true;
-		layout.numColumns = 1;
-		composite.setLayout(layout);
+		composite.setLayout(new GridLayout(1, true));
 		// -------------------------------------------Label
 		Composite labelbar = new Composite(composite, SWT.FILL);
-		layout = new GridLayout();
-		layout.makeColumnsEqualWidth = true;
-		layout.numColumns = 1;
-		labelbar.setLayout(layout);
-		gridData = new GridData();
+		labelbar.setLayout(new GridLayout(1, false));
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.horizontalAlignment = GridData.FILL;
 		labelbar.setLayoutData(gridData);
@@ -72,11 +69,10 @@ public class ScanMassSpectrumUIWithLabel extends Composite implements IChromatog
 		 */
 		label = new Label(labelbar, SWT.NONE);
 		label.setText("");
-		gridData = new GridData();
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
-		gridData.horizontalAlignment = GridData.FILL;
 		label.setLayoutData(gridData);
-		// -------------------------------------------MassSpectrum
+		// -------------------------------------------CycleNumber MassSpectra
 		massSpectrumUI = new ScanMassSpectrumUI(composite, SWT.FILL | SWT.BORDER, massValueDisplayPrecision);
 		gridData = new GridData();
 		gridData.grabExcessHorizontalSpace = true;
@@ -99,39 +95,57 @@ public class ScanMassSpectrumUIWithLabel extends Composite implements IChromatog
 			 * loaded.
 			 */
 			if(massSpectrum != chromatogramSelection.getSelectedScan()) {
-				massSpectrum = chromatogramSelection.getSelectedScan();
-				setMassSpectrumLabel(massSpectrum);
-				massSpectrumUI.update(chromatogramSelection, forceReload);
+				IScanMSD massSpectrum = chromatogramSelection.getSelectedScan();
+				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				if(chromatogram != null && massSpectrum != null) {
+					int cycleNumber = massSpectrum.getCycleNumber();
+					if(cycleNumber > 1) {
+						List<IScan> scans = chromatogram.getScanCycleScans(cycleNumber);
+						IScanMSD massSpectrumCycleNumber = new ScanMSD();
+						for(IScan scan : scans) {
+							if(scan instanceof IScanMSD) {
+								IScanMSD scanMSD = (IScanMSD)scan;
+								List<IIon> ions = scanMSD.getIons();
+								for(IIon ion : ions) {
+									massSpectrumCycleNumber.addIon(ion, false);
+								}
+							}
+						}
+						setMassSpectrumLabel(massSpectrumCycleNumber, scans.size());
+						massSpectrumUI.update(massSpectrumCycleNumber, forceReload);
+					} else {
+						setMassSpectrumLabel(massSpectrum, 1);
+						massSpectrumUI.update(massSpectrum, forceReload);
+					}
+				}
 			}
 		}
 	}
 
-	private void setMassSpectrumLabel(IScanMSD massSpectrum) {
+	private void setMassSpectrumLabel(IScanMSD massSpectrum, int sizeCycleNumberScans) {
 
 		StringBuilder builder = new StringBuilder();
 		/*
 		 * Check if the mass spectrum is a scan.
 		 */
+		builder.append("Cycle Number: ");
+		builder.append(massSpectrum.getCycleNumber());
+		builder.append(" | ");
 		builder.append("Scan: ");
 		builder.append(massSpectrum.getScanNumber());
 		builder.append(" | ");
 		builder.append("RT: ");
 		builder.append(decimalFormat.format(massSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 		builder.append(" | ");
-		builder.append("RI: ");
-		builder.append(decimalFormat.format(massSpectrum.getRetentionIndex()));
-		builder.append(" | ");
-		if(massSpectrum instanceof IVendorMassSpectrum) {
-			IVendorMassSpectrum actualMassSpectrum = (IVendorMassSpectrum)massSpectrum;
-			builder.append("Detector: MS");
-			builder.append(actualMassSpectrum.getMassSpectrometer());
-			builder.append(" | ");
-			builder.append("Type: ");
-			builder.append(actualMassSpectrum.getMassSpectrumTypeDescription());
-			builder.append(" | ");
-		}
 		builder.append("Signal: ");
-		builder.append((int)massSpectrum.getTotalSignal());
+		builder.append(decimalFormat.format(massSpectrum.getTotalSignal()));
+		builder.append(" | ");
+		builder.append("Time Segment Id: ");
+		builder.append(massSpectrum.getTimeSegmentId());
+		builder.append(" | ");
+		builder.append("Cyle Number Scans (");
+		builder.append(sizeCycleNumberScans);
+		builder.append(")");
 		/*
 		 * Set the label text.
 		 */
