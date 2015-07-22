@@ -63,5 +63,7 @@ public class SWTPreferencePage extends FieldEditorPreferencePage implements IWor
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_AXIS_RELATIVE_INTENSITY, "Show relative intensity axis", getFieldEditorParent()));
 		//
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_CHROMATOGRAM_HAIRLINE_DIVIDER, "Show chromatogram hairline divider", getFieldEditorParent()));
+		//
+		addField(new BooleanFieldEditor(PreferenceConstants.P_CONDENSE_CYCLE_NUMBER_SCANS, "Condense Scans with Cycle Number", getFieldEditorParent()));
 	}
 }

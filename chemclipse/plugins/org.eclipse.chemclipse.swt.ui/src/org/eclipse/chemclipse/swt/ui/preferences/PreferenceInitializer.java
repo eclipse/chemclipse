@@ -52,5 +52,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_AXIS_RELATIVE_INTENSITY, false);
 		//
 		store.setDefault(PreferenceConstants.P_SHOW_CHROMATOGRAM_HAIRLINE_DIVIDER, false);
+		//
+		store.setDefault(PreferenceConstants.P_CONDENSE_CYCLE_NUMBER_SCANS, true);
 	}
 }

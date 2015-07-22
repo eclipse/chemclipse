@@ -26,6 +26,14 @@ public abstract class AbstractScan implements IScan {
 	private int scanNumber = 0;
 	private boolean isDirty = false;
 	private String identifier = "";
+	private int timeSegmentId;
+	private int cycleNumber;
+
+	public AbstractScan() {
+
+		timeSegmentId = 1;
+		cycleNumber = 1;
+	}
 
 	@Override
 	public IChromatogram getParentChromatogram() {
@@ -108,6 +116,30 @@ public abstract class AbstractScan implements IScan {
 		if(identifier != null) {
 			this.identifier = identifier;
 		}
+	}
+
+	@Override
+	public int getTimeSegmentId() {
+
+		return timeSegmentId;
+	}
+
+	@Override
+	public void setTimeSegmentId(int timeSegmentId) {
+
+		this.timeSegmentId = timeSegmentId;
+	}
+
+	@Override
+	public int getCycleNumber() {
+
+		return cycleNumber;
+	}
+
+	@Override
+	public void setCycleNumber(int cycleNumber) {
+
+		this.cycleNumber = cycleNumber;
 	}
 
 	// -----------------------------IAdaptable
