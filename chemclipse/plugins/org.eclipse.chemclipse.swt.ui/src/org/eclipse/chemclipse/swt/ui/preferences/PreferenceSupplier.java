@@ -169,6 +169,12 @@ public class PreferenceSupplier {
 		return store.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_HAIRLINE_DIVIDER);
 	}
 
+	public static boolean condenseCycleNumberScans() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getBoolean(PreferenceConstants.P_CONDENSE_CYCLE_NUMBER_SCANS);
+	}
+
 	public static boolean autoAdjustViewIntensityDisplay() {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();

@@ -139,4 +139,19 @@ public interface IScan extends IAdaptable, IScanSerializable {
 	 * @param totalSignal
 	 */
 	void adjustTotalSignal(float totalSignal);
+
+	int getTimeSegmentId();
+
+	void setTimeSegmentId(int timeSegmentId);
+
+	/**
+	 * The default cycle number is 1.
+	 * Cycle numbers are used to display several scans of
+	 * one cycle number as one summed TIC.
+	 * 
+	 * @return int
+	 */
+	int getCycleNumber();
+
+	void setCycleNumber(int cycleNumber);
 }

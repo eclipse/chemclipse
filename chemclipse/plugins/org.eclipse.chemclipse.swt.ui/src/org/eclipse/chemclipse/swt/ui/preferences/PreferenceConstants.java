@@ -43,4 +43,6 @@ public class PreferenceConstants {
 	public static final String P_AUTO_ADJUST_VIEW_INTENSITY_DISPLAY = "autoAdjustViewIntensityDisplay";
 	//
 	public static final String P_SHOW_CHROMATOGRAM_HAIRLINE_DIVIDER = "drawChromatogramHairlineDivider";
+	//
+	public static final String P_CONDENSE_CYCLE_NUMBER_SCANS = "condenseCycleNumberScans";
 }

@@ -1114,6 +1114,18 @@ public abstract class AbstractChromatogram implements IChromatogram {
 		return unloaded;
 	}
 
+	@Override
+	public boolean containsScanCycles() {
+
+		int defaultCycleNumber = 1;
+		for(IScan scan : scans) {
+			if(scan.getCycleNumber() != defaultCycleNumber) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	// -----------------------------------------------IChromatogramProcessorSupport
 	// ----------------------------hashCode, equals and toString
 	@Override

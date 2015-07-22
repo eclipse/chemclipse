@@ -185,4 +185,13 @@ public interface IChromatogram extends IChromatogramOverview, IAdaptable, IChrom
 	 * @return
 	 */
 	boolean isUnloaded();
+
+	/**
+	 * This methods checks whether different scan cycles are contained.
+	 * All scans of one cycle shall be displayed in TIC mode with the
+	 * summed signal.
+	 * 
+	 * @return boolean
+	 */
+	boolean containsScanCycles();
 }

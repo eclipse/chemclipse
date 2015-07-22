@@ -25,7 +25,10 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
+import org.eclipse.chemclipse.model.signals.TotalScanSignal;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
+import org.eclipse.chemclipse.model.signals.TotalScanSignals;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
 import org.eclipse.chemclipse.swt.ui.series.MultipleSeries;
@@ -625,12 +628,59 @@ public class SeriesConverter {
 	 */
 	public static ITotalScanSignals getTotalScanSignals(IChromatogram chromatogram, int startScan, int stopScan, boolean validatePositive) {
 
+		if(chromatogram != null) {
+			if(PreferenceSupplier.condenseCycleNumberScans() && chromatogram.containsScanCycles()) {
+				return getTotalScanSignalsCondensedByCycleNumber(chromatogram, startScan, stopScan, validatePositive);
+			} else {
+				return getTotalScanSignalsUncondensed(chromatogram, startScan, stopScan, validatePositive);
+			}
+		} else {
+			return null;
+		}
+	}
+
+	private static ITotalScanSignals getTotalScanSignalsUncondensed(IChromatogram chromatogram, int startScan, int stopScan, boolean validatePositive) {
+
 		try {
 			ITotalScanSignalExtractor totalIonSignalExtractor = new TotalScanSignalExtractor(chromatogram);
 			ITotalScanSignals signals = totalIonSignalExtractor.getTotalScanSignals(startScan, stopScan, validatePositive);
 			return signals;
 		} catch(ChromatogramIsNullException e) {
 			logger.warn(e);
+			return null;
+		}
+	}
+
+	private static ITotalScanSignals getTotalScanSignalsCondensedByCycleNumber(IChromatogram chromatogram, int startScan, int stopScan, boolean validatePositive) {
+
+		if(chromatogram != null) {
+			ITotalScanSignals totalScanSignals = new TotalScanSignals(startScan, stopScan);
+			for(int scanNumber = startScan; scanNumber <= stopScan; scanNumber++) {
+				IScan scan = chromatogram.getScan(scanNumber);
+				if(scan != null) {
+					int cycleNumber = scan.getCycleNumber();
+					boolean readScansOfCycleNumber = true;
+					float totalSignal = scan.getTotalSignal();
+					while(readScansOfCycleNumber) {
+						scanNumber++;
+						IScan scanNext = chromatogram.getScan(scanNumber);
+						if(scanNext != null) {
+							if(scanNext.getCycleNumber() == cycleNumber) {
+								totalSignal += scanNext.getTotalSignal();
+							} else {
+								scanNumber--;
+								readScansOfCycleNumber = false;
+							}
+						} else {
+							readScansOfCycleNumber = false;
+						}
+					}
+					ITotalScanSignal totalScanSignal = new TotalScanSignal(scan.getRetentionTime(), scan.getRetentionIndex(), totalSignal, validatePositive);
+					totalScanSignals.add(totalScanSignal);
+				}
+			}
+			return totalScanSignals;
+		} else {
 			return null;
 		}
 	}

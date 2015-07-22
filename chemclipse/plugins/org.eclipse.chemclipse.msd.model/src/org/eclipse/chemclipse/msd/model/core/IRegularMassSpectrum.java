@@ -72,12 +72,4 @@ public interface IRegularMassSpectrum extends IScanMSD {
 	 * @param precursorIon
 	 */
 	void setPrecursorIon(double precursorIon);
-
-	int getTimeSegmentId();
-
-	void setTimeSegmentId(int timeSegmentId);
-
-	int getCycleNumber();
-
-	void setCycleNumber(int cycleNumber);
 }
