@@ -23,13 +23,12 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.INamedScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.numeric.statistics.model.AnovaStatistics;
+import org.eclipse.chemclipse.numeric.statistics.model.IUnivariateStatistics;
 import org.eclipse.chemclipse.numeric.statistics.model.UnivariateStatistics;
 
 public class StatisticsCalculator {
 
-	static public final String STATISTICS_ABUNDANCE = "abundance";
-
-	static public Map<Double, UnivariateStatistics> calculateStatistics(List<IScanMSD> massSpectra, String id) {
+	public Map<Double, IUnivariateStatistics> calculateStatistics(List<IScanMSD> massSpectra, StatisticsInputTypes id) {
 
 		int capacity = massSpectra.size();
 		/*
@@ -59,7 +58,7 @@ public class StatisticsCalculator {
 		/*
 		 * Calculating multiple statistical values
 		 */
-		Map<Double, UnivariateStatistics> peaksMassSpectraStatistics = new HashMap<Double, UnivariateStatistics>();
+		Map<Double, IUnivariateStatistics> valueStatisticsPairs = new HashMap<Double, IUnivariateStatistics>();
 		for(Double mz : mzAbundances.keySet()) {
 			/*
 			 * Unbox the gift, calculate the statistical values in a PeakMassSpectraStatistics object
@@ -70,19 +69,19 @@ public class StatisticsCalculator {
 			for(int i = 0; i < sampleSize; i++) {
 				abundances[i] = abundancesList.get(i).doubleValue();
 			}
-			UnivariateStatistics peakMassSpectraStatistics = new UnivariateStatistics(abundances);
+			UnivariateStatistics statistics = new UnivariateStatistics(abundances);
 			/*
 			 * Add to the resulting map
 			 */
-			peaksMassSpectraStatistics.put(mz, peakMassSpectraStatistics);
+			valueStatisticsPairs.put(mz, statistics);
 		}
-		return peaksMassSpectraStatistics;
+		return valueStatisticsPairs;
 	}
 
 	/*
 	 * A JoinedScanMSD knows about the Origin/Substance name, e.g. we group the replicate experiments on the substance name
 	 */
-	static public Map<Double, Collection<double[]>> calculateInputForOneWayAnova(List<INamedScanMSD> groupedMassSpectra) {
+	public Map<Double, Collection<double[]>> calculateInputForOneWayAnova(List<INamedScanMSD> groupedMassSpectra) {
 
 		Map<Double, Map<String, List<Double>>> mzSubstancesAbundances = new HashMap<Double, Map<String, List<Double>>>();
 		for(INamedScanMSD groupedMassSpectrum : groupedMassSpectra) {
@@ -141,7 +140,7 @@ public class StatisticsCalculator {
 		return mzAnovaInputPairs;
 	}
 
-	static public Map<Double, Double> calculateAnovaFValues(Map<Double, Collection<double[]>> mzAnovaInputPairs) {
+	public Map<Double, Double> calculateAnovaFValues(Map<Double, Collection<double[]>> mzAnovaInputPairs) {
 
 		OneWayAnova anova = new OneWayAnova();
 		Map<Double, Double> mzAnovaFPairs = new HashMap<Double, Double>();
@@ -153,7 +152,7 @@ public class StatisticsCalculator {
 		return mzAnovaFPairs;
 	}
 
-	static public Map<Double, Double> calculateAnovaPValues(Map<Double, Collection<double[]>> mzAnovaInputPairs) {
+	public Map<Double, Double> calculateAnovaPValues(Map<Double, Collection<double[]>> mzAnovaInputPairs) {
 
 		OneWayAnova anova = new OneWayAnova();
 		Map<Double, Double> mzAnovaPPairs = new HashMap<Double, Double>();
@@ -165,7 +164,7 @@ public class StatisticsCalculator {
 		return mzAnovaPPairs;
 	}
 
-	static public Map<Double, AnovaStatistics> calculateAnovaStatistics(Map<Double, Collection<double[]>> mzAnovaInputPairs) {
+	public Map<Double, AnovaStatistics> calculateAnovaStatistics(Map<Double, Collection<double[]>> mzAnovaInputPairs) {
 
 		OneWayAnova anova = new OneWayAnova();
 		Map<Double, AnovaStatistics> mzanovaStatistics = new HashMap<Double, AnovaStatistics>();
