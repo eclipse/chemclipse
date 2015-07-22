@@ -32,6 +32,8 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 	private short massSpectrometer;
 	private short massSpectrumType;
 	private double precursorIon;
+	private int timeSegmentId;
+	private int cycleNumber;
 
 	/**
 	 * By default:
@@ -41,8 +43,10 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 	public AbstractRegularMassSpectrum() {
 
 		super();
-		this.massSpectrometer = 1; // MS1
-		this.massSpectrumType = 0; // 0 = Centroid, 1 = Profile
+		massSpectrometer = 1; // MS1
+		massSpectrumType = 0; // 0 = Centroid, 1 = Profile
+		timeSegmentId = 1;
+		cycleNumber = 1;
 	}
 
 	public AbstractRegularMassSpectrum(short massSpectrometer, short massSpectrumType) {
@@ -122,5 +126,29 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 	public void setPrecursorIon(double precursorIon) {
 
 		this.precursorIon = precursorIon;
+	}
+
+	@Override
+	public int getTimeSegmentId() {
+
+		return timeSegmentId;
+	}
+
+	@Override
+	public void setTimeSegmentId(int timeSegmentId) {
+
+		this.timeSegmentId = timeSegmentId;
+	}
+
+	@Override
+	public int getCycleNumber() {
+
+		return cycleNumber;
+	}
+
+	@Override
+	public void setCycleNumber(int cycleNumber) {
+
+		this.cycleNumber = cycleNumber;
 	}
 }
