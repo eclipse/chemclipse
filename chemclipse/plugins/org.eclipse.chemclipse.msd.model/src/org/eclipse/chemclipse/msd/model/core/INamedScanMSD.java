@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
-
 public interface INamedScanMSD extends IScanMSD {
 
 	String getSubstanceName();
