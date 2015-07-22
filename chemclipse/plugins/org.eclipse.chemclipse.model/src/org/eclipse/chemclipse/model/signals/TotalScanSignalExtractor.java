@@ -86,6 +86,12 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 	@Override
 	public ITotalScanSignals getTotalScanSignals(int startScan, int stopScan, boolean validatePositive) {
 
+		return getTotalScanSignals(startScan, stopScan, validatePositive, false);
+	}
+
+	@Override
+	public ITotalScanSignals getTotalScanSignals(int startScan, int stopScan, boolean validatePositive, boolean condenseCycleNumberScans) {
+
 		/*
 		 * Change the order of start and stop scan if necessary.
 		 */
@@ -100,20 +106,53 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 		if(startScan < 1 || startScan > chromatogram.getNumberOfScans() || stopScan < 1 || stopScan > chromatogram.getNumberOfScans()) {
 			return new TotalScanSignals(0, chromatogram);
 		}
-		/*
-		 * Create the total ion signals object.
-		 */
-		ITotalScanSignal totalScanSignal;
-		ITotalScanSignals signals = new TotalScanSignals(startScan, stopScan, chromatogram);
-		/*
-		 * Get the signals
-		 */
-		for(int scan = startScan; scan <= stopScan; scan++) {
-			IScan selectedScan = chromatogram.getScan(scan);
-			totalScanSignal = new TotalScanSignal(selectedScan.getRetentionTime(), selectedScan.getRetentionIndex(), selectedScan.getTotalSignal(), validatePositive);
-			signals.add(totalScanSignal);
+		//
+		ITotalScanSignals totalScanSignals;
+		if(condenseCycleNumberScans) {
+			/*
+			 * Condensed cycle number scans.
+			 */
+			totalScanSignals = new TotalScanSignals(startScan, stopScan);
+			for(int scanNumber = startScan; scanNumber <= stopScan; scanNumber++) {
+				IScan scan = chromatogram.getScan(scanNumber);
+				if(scan != null) {
+					int cycleNumber = scan.getCycleNumber();
+					boolean readScansOfCycleNumber = true;
+					float totalSignal = scan.getTotalSignal();
+					while(readScansOfCycleNumber) {
+						scanNumber++;
+						IScan scanNext = chromatogram.getScan(scanNumber);
+						if(scanNext != null) {
+							if(scanNext.getCycleNumber() == cycleNumber) {
+								totalSignal += scanNext.getTotalSignal();
+							} else {
+								scanNumber--;
+								readScansOfCycleNumber = false;
+							}
+						} else {
+							readScansOfCycleNumber = false;
+						}
+					}
+					ITotalScanSignal totalScanSignal = new TotalScanSignal(scan.getRetentionTime(), scan.getRetentionIndex(), totalSignal, validatePositive);
+					totalScanSignals.add(totalScanSignal);
+				}
+			}
+		} else {
+			/*
+			 * Uncondensed scans.
+			 */
+			ITotalScanSignal totalScanSignal;
+			totalScanSignals = new TotalScanSignals(startScan, stopScan, chromatogram);
+			/*
+			 * Get the signals
+			 */
+			for(int scan = startScan; scan <= stopScan; scan++) {
+				IScan selectedScan = chromatogram.getScan(scan);
+				totalScanSignal = new TotalScanSignal(selectedScan.getRetentionTime(), selectedScan.getRetentionIndex(), selectedScan.getTotalSignal(), validatePositive);
+				totalScanSignals.add(totalScanSignal);
+			}
 		}
-		return signals;
+		return totalScanSignals;
 	}
 
 	@Override
@@ -123,7 +162,31 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 	}
 
 	@Override
+	public ITotalScanSignals getTotalScanSignals(IChromatogram chromatogram, boolean validatePositive, boolean condenseCycleNumberScans) {
+
+		/*
+		 * If the chromatogram selection is null, return an empty
+		 * ITotalIonSignals object.
+		 */
+		if(chromatogram == null) {
+			return new TotalScanSignals(0, chromatogram);
+		}
+		/*
+		 * Get the start and stop scan.
+		 */
+		int startScan = chromatogram.getScanNumber(chromatogram.getStartRetentionTime());
+		int stopScan = chromatogram.getScanNumber(chromatogram.getStopRetentionTime());
+		return getTotalScanSignals(startScan, stopScan, validatePositive, condenseCycleNumberScans);
+	}
+
+	@Override
 	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection chromatogramSelection, boolean validatePositive) {
+
+		return getTotalScanSignals(chromatogramSelection, validatePositive, false);
+	}
+
+	@Override
+	public ITotalScanSignals getTotalScanSignals(IChromatogramSelection chromatogramSelection, boolean validatePositive, boolean condenseCycleNumberScans) {
 
 		/*
 		 * If the chromatogram selection is null, return an empty
@@ -137,6 +200,11 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 		 */
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
-		return getTotalScanSignals(startScan, stopScan, validatePositive);
+		//
+		if(condenseCycleNumberScans) {
+			return getTotalScanSignals(startScan, stopScan, validatePositive, true);
+		} else {
+			return getTotalScanSignals(startScan, stopScan, validatePositive, false);
+		}
 	}
 }

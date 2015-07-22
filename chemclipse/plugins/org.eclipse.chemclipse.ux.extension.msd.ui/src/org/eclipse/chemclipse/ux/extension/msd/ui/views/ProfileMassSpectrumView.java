@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2015 Philip (eselmeister) Wenig.
+ * Copyright (c) 2013, 2015 Philip (eselmeister) Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,25 +16,23 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.ScanMassSpectrumUIWithLabel;
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.ProfileMassSpectrumUIWithLabel;
 
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class InteractiveEnhancedExactMassSpectrumView extends AbstractChromatogramSelectionMSDView {
+public class ProfileMassSpectrumView extends AbstractChromatogramSelectionMSDView {
 
 	@Inject
 	private Composite parent;
-	private ScanMassSpectrumUIWithLabel massSpectrumUIWithLabel;
+	private ProfileMassSpectrumUIWithLabel profileMassSpectrumUIWithLabel;
 
 	@Inject
-	public InteractiveEnhancedExactMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
+	public ProfileMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
 
 		super(part, partService, eventBroker);
 	}
@@ -42,8 +40,7 @@ public class InteractiveEnhancedExactMassSpectrumView extends AbstractChromatogr
 	@PostConstruct
 	private void createControl() {
 
-		parent.setLayout(new FillLayout());
-		massSpectrumUIWithLabel = new ScanMassSpectrumUIWithLabel(parent, SWT.NONE, MassValueDisplayPrecision.EXACT);
+		profileMassSpectrumUIWithLabel = new ProfileMassSpectrumUIWithLabel(parent, SWT.NONE);
 	}
 
 	@PreDestroy
@@ -55,7 +52,7 @@ public class InteractiveEnhancedExactMassSpectrumView extends AbstractChromatogr
 	@Focus
 	public void setFocus() {
 
-		massSpectrumUIWithLabel.setFocus();
+		profileMassSpectrumUIWithLabel.setFocus();
 		update(getChromatogramSelection(), false);
 	}
 
@@ -67,7 +64,7 @@ public class InteractiveEnhancedExactMassSpectrumView extends AbstractChromatogr
 		 * selection is not null.
 		 */
 		if(doUpdate(chromatogramSelection)) {
-			massSpectrumUIWithLabel.update(chromatogramSelection, forceReload);
+			profileMassSpectrumUIWithLabel.update(chromatogramSelection, forceReload);
 		}
 	}
 }

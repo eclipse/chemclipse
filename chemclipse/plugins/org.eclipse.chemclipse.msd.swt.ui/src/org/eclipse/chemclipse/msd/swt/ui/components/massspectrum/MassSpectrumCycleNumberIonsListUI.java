@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 Dr. Philip Wenig.
+ * Copyright (c) 2012, 2015 Philip (eselmeister) Wenig.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,11 +7,18 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
+import java.util.List;
+
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.IonListContentProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.IonListLabelProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.IonListTableComparator;
@@ -22,14 +29,14 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class MassSpectrumIonsListUI {
+public class MassSpectrumCycleNumberIonsListUI {
 
 	private ExtendedTableViewer tableViewer;
 	private IonListTableComparator ionListTableComparator;
 	private String[] titles = {"m/z", "abundance", "parent m/z", "parent resolution", "daughter m/z", "daughter resolution", "collision energy"};
 	private int bounds[] = {100, 100, 120, 120, 120, 120, 120};
 
-	public MassSpectrumIonsListUI(Composite parent, int style) {
+	public MassSpectrumCycleNumberIonsListUI(Composite parent, int style) {
 
 		parent.setLayout(new FillLayout());
 		/*
@@ -69,10 +76,30 @@ public class MassSpectrumIonsListUI {
 		tableViewer.getControl().setFocus();
 	}
 
-	public void update(IScanMSD massSpectrum, boolean forceReload) {
+	public void update(IChromatogramSelectionMSD chromatogramSelection, boolean forceReload) {
 
-		if(massSpectrum != null) {
-			tableViewer.setInput(massSpectrum);
+		if(chromatogramSelection != null) {
+			IScanMSD massSpectrum = chromatogramSelection.getSelectedScan();
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			if(chromatogram != null && massSpectrum != null) {
+				int cycleNumber = massSpectrum.getCycleNumber();
+				if(cycleNumber > 1) {
+					List<IScan> scans = chromatogram.getScanCycleScans(cycleNumber);
+					IScanMSD massSpectrumCycleNumber = new ScanMSD();
+					for(IScan scan : scans) {
+						if(scan instanceof IScanMSD) {
+							IScanMSD scanMSD = (IScanMSD)scan;
+							List<IIon> ions = scanMSD.getIons();
+							for(IIon ion : ions) {
+								massSpectrumCycleNumber.addIon(ion, false);
+							}
+						}
+					}
+					tableViewer.setInput(massSpectrumCycleNumber);
+				} else {
+					tableViewer.setInput(massSpectrum);
+				}
+			}
 		}
 	}
 

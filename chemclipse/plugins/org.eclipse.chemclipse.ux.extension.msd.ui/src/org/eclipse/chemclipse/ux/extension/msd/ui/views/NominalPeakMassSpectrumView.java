@@ -30,14 +30,14 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.PeakMassSpectrumUIWithLabel;
 
-public class InteractiveEnhancedNominalPeakMassSpectrumView extends AbstractChromatogramSelectionMSDView {
+public class NominalPeakMassSpectrumView extends AbstractChromatogramSelectionMSDView {
 
 	@Inject
 	private Composite parent;
 	private PeakMassSpectrumUIWithLabel massSpectrumUIWithLabel;
 
 	@Inject
-	public InteractiveEnhancedNominalPeakMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
+	public NominalPeakMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
 
 		super(part, partService, eventBroker);
 	}

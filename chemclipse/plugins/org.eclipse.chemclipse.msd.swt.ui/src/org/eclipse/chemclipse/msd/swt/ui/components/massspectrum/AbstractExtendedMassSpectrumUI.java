@@ -14,17 +14,7 @@ package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.swtchart.IBarSeries;
-import org.swtchart.ICustomPaintListener;
-import org.swtchart.IPlotArea;
-
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
@@ -44,7 +34,16 @@ import org.eclipse.chemclipse.msd.swt.ui.internal.components.massspectrum.IBarSe
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
-import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.swtchart.IBarSeries;
+import org.swtchart.ICustomPaintListener;
+import org.swtchart.IPlotArea;
 
 public abstract class AbstractExtendedMassSpectrumUI extends AbstractViewMassSpectrumUI {
 
@@ -207,7 +206,7 @@ public abstract class AbstractExtendedMassSpectrumUI extends AbstractViewMassSpe
 						 * 156 > 78.56 @12
 						 */
 						clearStringBuilder();
-						stringBuilder.append(Integer.toString(ionTransition.getFilter1Ion())); // 156
+						stringBuilder.append(Integer.toString((int)ionTransition.getFilter1FirstIon())); // 156
 						stringBuilder.append(" > ");
 						stringBuilder.append(label); // 78.56
 						stringBuilder.append(" @");

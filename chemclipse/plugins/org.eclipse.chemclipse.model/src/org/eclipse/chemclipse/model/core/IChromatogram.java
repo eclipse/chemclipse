@@ -194,4 +194,12 @@ public interface IChromatogram extends IChromatogramOverview, IAdaptable, IChrom
 	 * @return boolean
 	 */
 	boolean containsScanCycles();
+
+	/**
+	 * Returns the scans identified by the scan cycle id.
+	 * 
+	 * @param cycleNumber
+	 * @return List<IScan>
+	 */
+	List<IScan> getScanCycleScans(int cycleNumber);
 }

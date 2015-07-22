@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2015 Dr. Philip Wenig.
+ * Copyright (c) 2015 Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,8 +17,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.ScanMassSpectrumUIWithLabel;
-
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.ScanMassSpectrumCycleNumberCombinedUIWithLabel;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -27,14 +26,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class InteractiveEnhancedTransitionMassSpectrumView extends AbstractChromatogramSelectionMSDView {
+public class TransitionCombinedCycleNumberMassSpectrumView extends AbstractChromatogramSelectionMSDView {
 
 	@Inject
 	private Composite parent;
-	private ScanMassSpectrumUIWithLabel massSpectrumUIWithLabel;
+	private ScanMassSpectrumCycleNumberCombinedUIWithLabel massSpectrumCycleNumberCombinedUIWithLabel;
 
 	@Inject
-	public InteractiveEnhancedTransitionMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
+	public TransitionCombinedCycleNumberMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
 
 		super(part, partService, eventBroker);
 	}
@@ -43,7 +42,7 @@ public class InteractiveEnhancedTransitionMassSpectrumView extends AbstractChrom
 	private void createControl() {
 
 		parent.setLayout(new FillLayout());
-		massSpectrumUIWithLabel = new ScanMassSpectrumUIWithLabel(parent, SWT.NONE, MassValueDisplayPrecision.TRANSITION);
+		massSpectrumCycleNumberCombinedUIWithLabel = new ScanMassSpectrumCycleNumberCombinedUIWithLabel(parent, SWT.NONE, MassValueDisplayPrecision.TRANSITION);
 	}
 
 	@PreDestroy
@@ -55,7 +54,7 @@ public class InteractiveEnhancedTransitionMassSpectrumView extends AbstractChrom
 	@Focus
 	public void setFocus() {
 
-		massSpectrumUIWithLabel.setFocus();
+		massSpectrumCycleNumberCombinedUIWithLabel.setFocus();
 		update(getChromatogramSelection(), false);
 	}
 
@@ -67,7 +66,7 @@ public class InteractiveEnhancedTransitionMassSpectrumView extends AbstractChrom
 		 * selection is not null.
 		 */
 		if(doUpdate(chromatogramSelection)) {
-			massSpectrumUIWithLabel.update(chromatogramSelection, forceReload);
+			massSpectrumCycleNumberCombinedUIWithLabel.update(chromatogramSelection, forceReload);
 		}
 	}
 }
