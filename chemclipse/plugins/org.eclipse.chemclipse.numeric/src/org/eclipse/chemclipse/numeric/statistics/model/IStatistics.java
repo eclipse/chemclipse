@@ -8,12 +8,9 @@
  * 
  * Contributors:
  * Dr. Janos Binder - initial API and implementation
- *******************************************************************************/
+*******************************************************************************/
 package org.eclipse.chemclipse.numeric.statistics.model;
 
-public interface IAnovaStatistics extends IStatistics {
 
-	double getPValue();
-
-	double getFValue();
+public interface IStatistics {
 }

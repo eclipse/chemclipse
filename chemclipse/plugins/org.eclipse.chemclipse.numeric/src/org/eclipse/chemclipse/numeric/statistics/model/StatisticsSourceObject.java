@@ -11,9 +11,32 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.numeric.statistics.model;
 
-public interface IAnovaStatistics extends IStatistics {
+public class StatisticsSourceObject<T> implements IStatisticsSourceObject<T> {
 
-	double getPValue();
+	private boolean included;
+	private final T sourceObject;
 
-	double getFValue();
+	public StatisticsSourceObject(boolean included, T sourceObject) {
+
+		this.included = included;
+		this.sourceObject = sourceObject;
+	}
+
+	@Override
+	public void setIncluded(boolean included) {
+
+		this.included = included;
+	}
+
+	@Override
+	public boolean isIncluded() {
+
+		return included;
+	}
+
+	@Override
+	public T getSourceObject() {
+
+		return sourceObject;
+	}
 }

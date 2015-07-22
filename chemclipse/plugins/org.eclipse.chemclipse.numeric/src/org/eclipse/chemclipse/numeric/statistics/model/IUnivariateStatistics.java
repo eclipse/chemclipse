@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.numeric.statistics.model;
 
-public interface IUnivariateStatistics {
+public interface IUnivariateStatistics extends IStatistics {
 
 	int getSampleSize();
 
