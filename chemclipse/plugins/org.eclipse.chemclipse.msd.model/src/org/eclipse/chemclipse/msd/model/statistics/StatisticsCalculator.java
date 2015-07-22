@@ -59,7 +59,7 @@ public class StatisticsCalculator {
 		/*
 		 * Calculating multiple statistical values
 		 */
-		Map<Double, UnivariateStatistics> peaksMassSpectraStatistics = new HashMap<Double, UnivariateStatistics>();
+		Map<Double, UnivariateStatistics> valueStatisticsPairs = new HashMap<Double, UnivariateStatistics>();
 		for(Double mz : mzAbundances.keySet()) {
 			/*
 			 * Unbox the gift, calculate the statistical values in a PeakMassSpectraStatistics object
@@ -70,13 +70,13 @@ public class StatisticsCalculator {
 			for(int i = 0; i < sampleSize; i++) {
 				abundances[i] = abundancesList.get(i).doubleValue();
 			}
-			UnivariateStatistics peakMassSpectraStatistics = new UnivariateStatistics(abundances);
+			UnivariateStatistics statistics = new UnivariateStatistics(abundances);
 			/*
 			 * Add to the resulting map
 			 */
-			peaksMassSpectraStatistics.put(mz, peakMassSpectraStatistics);
+			valueStatisticsPairs.put(mz, statistics);
 		}
-		return peaksMassSpectraStatistics;
+		return valueStatisticsPairs;
 	}
 
 	/*
