@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.Chro
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1001;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1002;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1003;
+import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1004;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
@@ -62,8 +63,10 @@ public class ChromatogramWriterMSD extends AbstractChromatogramWriter implements
 			chromatogramWriter = new ChromatogramWriter_1001();
 		} else if(versionSave.equals(IFormat.VERSION_1002)) {
 			chromatogramWriter = new ChromatogramWriter_1002();
-		} else {
+		} else if(versionSave.equals(IFormat.VERSION_1003)) {
 			chromatogramWriter = new ChromatogramWriter_1003();
+		} else {
+			chromatogramWriter = new ChromatogramWriter_1004();
 		}
 		/*
 		 * Load all scan proxies before exporting the file.

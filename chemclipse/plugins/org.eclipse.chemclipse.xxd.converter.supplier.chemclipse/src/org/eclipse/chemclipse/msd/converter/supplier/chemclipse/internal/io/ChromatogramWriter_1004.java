@@ -44,6 +44,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
@@ -58,7 +59,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class ChromatogramWriter_1003 extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
+public class ChromatogramWriter_1004 extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
 
 	@Override
 	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
@@ -94,7 +95,7 @@ public class ChromatogramWriter_1003 extends AbstractChromatogramWriter implemen
 		zipEntry = new ZipEntry(IFormat.FILE_VERSION);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
-		String version = IFormat.VERSION_1003;
+		String version = IFormat.VERSION_1004;
 		dataOutputStream.writeInt(version.length()); // Length Version
 		dataOutputStream.writeChars(version); // Version
 		//
@@ -177,13 +178,25 @@ public class ChromatogramWriter_1003 extends AbstractChromatogramWriter implemen
 			int numberOfIons = massSpectrum.getNumberOfIons();
 			float totalSignal = massSpectrum.getTotalSignal();
 			float retentionIndex = massSpectrum.getRetentionIndex();
-			/*
-			 * Time segment id and cycle number were introduced in version 1.0.0.4.
-			 */
-			IScanProxy scanProxy = new ScanProxy(offset, retentionTime, numberOfIons, totalSignal, retentionIndex, 1, 1);
-			scanProxies.add(scanProxy);
+			int timeSegmentId = massSpectrum.getTimeSegmentId();
+			int cycleNumber = massSpectrum.getCycleNumber();
 			//
+			IScanProxy scanProxy = new ScanProxy(offset, retentionTime, numberOfIons, totalSignal, retentionIndex, timeSegmentId, cycleNumber);
+			scanProxies.add(scanProxy);
+			/*
+			 * Write the mass spectrum.
+			 * There could be an additionally optimized mass spectrum.
+			 * This is available, when the user has identified the
+			 * mass spectrum manually.
+			 */
 			writeMassSpectrum(dataOutputStream, massSpectrum);
+			IScanMSD optimizedMassSpectrum = massSpectrum.getOptimizedMassSpectrum();
+			if(optimizedMassSpectrum == null) {
+				dataOutputStream.writeBoolean(false);
+			} else {
+				dataOutputStream.writeBoolean(true);
+				writeNormalMassSpectrum(dataOutputStream, optimizedMassSpectrum);
+			}
 		}
 		//
 		dataOutputStream.flush();
@@ -213,6 +226,8 @@ public class ChromatogramWriter_1003 extends AbstractChromatogramWriter implemen
 			dataOutputStream.writeInt(scanProxy.getNumberOfIons()); // Number of Ions
 			dataOutputStream.writeFloat(scanProxy.getTotalSignal()); // Total Signal
 			dataOutputStream.writeFloat(scanProxy.getRetentionIndex()); // Retention Index
+			dataOutputStream.writeInt(scanProxy.getTimeSegmentId()); // Time Segment Id
+			dataOutputStream.writeInt(scanProxy.getCycleNumber()); // Cycle Number
 		}
 		//
 		dataOutputStream.flush();
@@ -362,8 +377,16 @@ public class ChromatogramWriter_1003 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeShort(massSpectrum.getMassSpectrometer()); // Mass Spectrometer
 		dataOutputStream.writeShort(massSpectrum.getMassSpectrumType()); // Mass Spectrum Type
 		dataOutputStream.writeDouble(massSpectrum.getPrecursorIon()); // Precursor Ion (0 if MS1 or none has been selected)
+		writeNormalMassSpectrum(dataOutputStream, massSpectrum);
+	}
+
+	private void writeNormalMassSpectrum(DataOutputStream dataOutputStream, IScanMSD massSpectrum) throws IOException {
+
 		dataOutputStream.writeInt(massSpectrum.getRetentionTime()); // Retention Time
 		dataOutputStream.writeFloat(massSpectrum.getRetentionIndex()); // Retention Index
+		dataOutputStream.writeInt(massSpectrum.getTimeSegmentId()); // Time Segment Id
+		dataOutputStream.writeInt(massSpectrum.getCycleNumber()); // Cycle Number
+		//
 		List<IIon> ions = massSpectrum.getIons();
 		writeMassSpectrumIons(dataOutputStream, ions); // Ions
 		/*
@@ -468,6 +491,16 @@ public class ChromatogramWriter_1003 extends AbstractChromatogramWriter implemen
 			} else {
 				dataOutputStream.writeBoolean(false); // No ion values is stored.
 			}
+		}
+		/*
+		 * Optimized Mass Spectrum
+		 */
+		IScanMSD optimizedMassSpectrum = massSpectrum.getOptimizedMassSpectrum();
+		if(optimizedMassSpectrum == null) {
+			dataOutputStream.writeBoolean(false);
+		} else {
+			dataOutputStream.writeBoolean(true);
+			writeNormalMassSpectrum(dataOutputStream, optimizedMassSpectrum);
 		}
 	}
 

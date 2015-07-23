@@ -28,7 +28,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_USE_SCAN_PROXIES = "useScanProxies";
 	public static final boolean DEF_USE_SCAN_PROXIES = true;
 	public static final String P_LOAD_SCAN_PROXIES_IN_BACKGROUND = "loadScanProxiesInBackground";
-	public static final boolean DEF_LOAD_SCAN_PROXIES_IN_BACKGROUND = true;
+	public static final boolean DEF_LOAD_SCAN_PROXIES_IN_BACKGROUND = false; // This could lead java.util.ConcurrentModificationException if true
 	public static final String P_MIN_BYTES_TO_LOAD_IN_BACKGROUND = "minBytesToLoadInBackground";
 	public static final int DEF_MIN_BYTES_TO_LOAD_IN_BACKGROUND = 2000000; // 2 MB
 	//
@@ -83,7 +83,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static String[][] getVersions() {
 
 		// TODO optimize the version handling!
-		int versions = 10;
+		int versions = 11;
 		String[][] elements = new String[versions][2];
 		//
 		elements[0][0] = IFormat.VERSION_0701;
@@ -115,6 +115,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		//
 		elements[9][0] = IFormat.VERSION_1003;
 		elements[9][1] = IFormat.VERSION_1003;
+		//
+		elements[10][0] = IFormat.VERSION_1004;
+		elements[10][1] = IFormat.VERSION_1004;
 		//
 		return elements;
 	}

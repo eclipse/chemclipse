@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.csd.converter.io.IChromatogramCSDReader;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1001;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1002;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1003;
+import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1004;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogram.IVendorScan;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogram.VendorChromatogram;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogram.VendorScan;
@@ -54,6 +55,8 @@ public class ChromatogramReaderFID extends AbstractChromatogramCSDReader impleme
 			chromatogramReader = new ChromatogramReader_1002();
 		} else if(version.equals(IFormat.VERSION_1003)) {
 			chromatogramReader = new ChromatogramReader_1003();
+		} else if(version.equals(IFormat.VERSION_1004)) {
+			chromatogramReader = new ChromatogramReader_1004();
 		}
 		//
 		if(chromatogramReader != null) {
@@ -85,6 +88,8 @@ public class ChromatogramReaderFID extends AbstractChromatogramCSDReader impleme
 			chromatogramReader = new ChromatogramReader_1002();
 		} else if(version.equals(IFormat.VERSION_1003)) {
 			chromatogramReader = new ChromatogramReader_1003();
+		} else if(version.equals(IFormat.VERSION_1004)) {
+			chromatogramReader = new ChromatogramReader_1004();
 		}
 		//
 		if(chromatogramReader != null) {
@@ -111,6 +116,8 @@ public class ChromatogramReaderFID extends AbstractChromatogramCSDReader impleme
 			for(IScan scan : chromatogram.getScans()) {
 				IVendorScan scanFID = new VendorScan(scan.getRetentionTime(), scan.getTotalSignal());
 				scanFID.setRetentionIndex(scan.getRetentionIndex());
+				scanFID.setTimeSegmentId(scan.getTimeSegmentId());
+				scanFID.setCycleNumber(scan.getCycleNumber());
 				chromatogramFID.addScan(scanFID);
 			}
 			//

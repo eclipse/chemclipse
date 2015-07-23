@@ -22,4 +22,8 @@ public interface IScanProxy {
 	float getTotalSignal();
 
 	float getRetentionIndex();
+
+	int getTimeSegmentId();
+
+	int getCycleNumber();
 }

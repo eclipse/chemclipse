@@ -18,14 +18,18 @@ public class ScanProxy implements IScanProxy {
 	private int numberOfIons;
 	private float totalSignal;
 	private float retentionIndex;
+	private int timeSegmentId;
+	private int cycleNumber;
 
-	public ScanProxy(int offset, int retentionTime, int numberOfIons, float totalSignal, float retentionIndex) {
+	public ScanProxy(int offset, int retentionTime, int numberOfIons, float totalSignal, float retentionIndex, int timeSegmentId, int cycleNumber) {
 
 		this.offset = offset;
 		this.retentionTime = retentionTime;
 		this.numberOfIons = numberOfIons;
 		this.totalSignal = totalSignal;
 		this.retentionIndex = retentionIndex;
+		this.timeSegmentId = timeSegmentId;
+		this.cycleNumber = cycleNumber;
 	}
 
 	@Override
@@ -56,5 +60,17 @@ public class ScanProxy implements IScanProxy {
 	public float getRetentionIndex() {
 
 		return retentionIndex;
+	}
+
+	@Override
+	public int getTimeSegmentId() {
+
+		return timeSegmentId;
+	}
+
+	@Override
+	public int getCycleNumber() {
+
+		return cycleNumber;
 	}
 }
