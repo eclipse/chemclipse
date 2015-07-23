@@ -26,7 +26,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_VERSION_SAVE = "versionSave";
 	public static final String DEF_VERSION_SAVE = IFormat.VERSION_LATEST;
 	public static final String P_USE_SCAN_PROXIES = "useScanProxies";
-	public static final boolean DEF_USE_SCAN_PROXIES = true;
+	public static final boolean DEF_USE_SCAN_PROXIES = false;
 	public static final String P_LOAD_SCAN_PROXIES_IN_BACKGROUND = "loadScanProxiesInBackground";
 	public static final boolean DEF_LOAD_SCAN_PROXIES_IN_BACKGROUND = false; // This could lead java.util.ConcurrentModificationException if true
 	public static final String P_MIN_BYTES_TO_LOAD_IN_BACKGROUND = "minBytesToLoadInBackground";
