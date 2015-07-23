@@ -93,6 +93,29 @@ public interface IScan extends IAdaptable, IScanSerializable {
 	void setRetentionIndex(float retentionIndex);
 
 	/**
+	 * Returns the total signal.<br/>
+	 * If no signal is stored, 0 will be returned.
+	 * 
+	 * @return float - signal
+	 */
+	float getTotalSignal();
+
+	int getTimeSegmentId();
+
+	void setTimeSegmentId(int timeSegmentId);
+
+	/**
+	 * The default cycle number is 1.
+	 * Cycle numbers are used to display several scans of
+	 * one cycle number as one summed TIC.
+	 * 
+	 * @return int
+	 */
+	int getCycleNumber();
+
+	void setCycleNumber(int cycleNumber);
+
+	/**
 	 * This flag marks if a this scan has been edited.
 	 */
 	boolean isDirty();
@@ -103,14 +126,6 @@ public interface IScan extends IAdaptable, IScanSerializable {
 	 * process time.
 	 */
 	void setDirty(boolean isDirty);
-
-	/**
-	 * Returns the total signal.<br/>
-	 * If no signal is stored, 0 will be returned.
-	 * 
-	 * @return float - signal
-	 */
-	float getTotalSignal();
 
 	/**
 	 * Returns the identifier of the scan.
@@ -139,19 +154,4 @@ public interface IScan extends IAdaptable, IScanSerializable {
 	 * @param totalSignal
 	 */
 	void adjustTotalSignal(float totalSignal);
-
-	int getTimeSegmentId();
-
-	void setTimeSegmentId(int timeSegmentId);
-
-	/**
-	 * The default cycle number is 1.
-	 * Cycle numbers are used to display several scans of
-	 * one cycle number as one summed TIC.
-	 * 
-	 * @return int
-	 */
-	int getCycleNumber();
-
-	void setCycleNumber(int cycleNumber);
 }

@@ -8,9 +8,8 @@
  * 
  * Contributors:
  * Dr. Janos Binder - initial API and implementation
-*******************************************************************************/
+ *******************************************************************************/
 package org.eclipse.chemclipse.numeric.statistics.model;
-
 
 public interface IStatistics {
 }
