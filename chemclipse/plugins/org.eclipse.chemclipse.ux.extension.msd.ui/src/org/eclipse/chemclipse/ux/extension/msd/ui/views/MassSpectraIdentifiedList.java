@@ -17,6 +17,13 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -26,14 +33,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
-
-import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 
 public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDView {
 
@@ -111,6 +110,10 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 					if(massSpectrum.getTargets().size() > 0) {
 						int retentionTime = massSpectrum.getRetentionTime();
 						if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
+							/*
+							 * Enforce to load the scan proxy if it is used.
+							 */
+							massSpectrum.enforceLoadScanProxy();
 							massSpectra.addMassSpectrum(massSpectrum);
 						}
 					}

@@ -65,8 +65,12 @@ public class SimpleOptimizedNominalMassSpectrumView extends AbstractMassSpectrum
 		 * Update the ui only if the actual view part is visible and the
 		 * selection is not null.
 		 */
-		if(isPartVisible() && massSpectrum != null && massSpectrum.getOptimizedMassSpectrum() != null) {
-			simpleMassSpectrumUI.update(massSpectrum.getOptimizedMassSpectrum(), forceReload);
+		if(isPartVisible() && massSpectrum != null) {
+			if(massSpectrum.getOptimizedMassSpectrum() != null) {
+				simpleMassSpectrumUI.update(massSpectrum.getOptimizedMassSpectrum(), forceReload);
+			} else {
+				simpleMassSpectrumUI.update(massSpectrum, forceReload);
+			}
 		}
 	}
 }

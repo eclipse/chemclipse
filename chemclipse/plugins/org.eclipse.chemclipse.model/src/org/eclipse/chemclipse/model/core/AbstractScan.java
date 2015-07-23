@@ -24,16 +24,13 @@ public abstract class AbstractScan implements IScan {
 	private float retentionIndex = 0;
 	private int retentionTime = 0;
 	private int scanNumber = 0;
+	private int timeSegmentId = 1; // Default 1
+	private int cycleNumber = 1; // Default 1
+	/*
+	 * Do not persist (only for internal use)
+	 */
 	private boolean isDirty = false;
 	private String identifier = "";
-	private int timeSegmentId;
-	private int cycleNumber;
-
-	public AbstractScan() {
-
-		timeSegmentId = 1;
-		cycleNumber = 1;
-	}
 
 	@Override
 	public IChromatogram getParentChromatogram() {
@@ -93,6 +90,30 @@ public abstract class AbstractScan implements IScan {
 	}
 
 	@Override
+	public int getTimeSegmentId() {
+
+		return timeSegmentId;
+	}
+
+	@Override
+	public void setTimeSegmentId(int timeSegmentId) {
+
+		this.timeSegmentId = timeSegmentId;
+	}
+
+	@Override
+	public int getCycleNumber() {
+
+		return cycleNumber;
+	}
+
+	@Override
+	public void setCycleNumber(int cycleNumber) {
+
+		this.cycleNumber = cycleNumber;
+	}
+
+	@Override
 	public boolean isDirty() {
 
 		return isDirty;
@@ -116,30 +137,6 @@ public abstract class AbstractScan implements IScan {
 		if(identifier != null) {
 			this.identifier = identifier;
 		}
-	}
-
-	@Override
-	public int getTimeSegmentId() {
-
-		return timeSegmentId;
-	}
-
-	@Override
-	public void setTimeSegmentId(int timeSegmentId) {
-
-		this.timeSegmentId = timeSegmentId;
-	}
-
-	@Override
-	public int getCycleNumber() {
-
-		return cycleNumber;
-	}
-
-	@Override
-	public void setCycleNumber(int cycleNumber) {
-
-		this.cycleNumber = cycleNumber;
 	}
 
 	// -----------------------------IAdaptable

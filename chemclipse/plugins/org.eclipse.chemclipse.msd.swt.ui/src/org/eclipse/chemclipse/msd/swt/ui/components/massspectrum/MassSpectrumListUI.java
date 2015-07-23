@@ -24,6 +24,11 @@ import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListTable
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.swt.ui.viewers.ExtendedTableViewer;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -38,7 +43,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
 public class MassSpectrumListUI extends Composite {
@@ -108,20 +118,26 @@ public class MassSpectrumListUI extends Composite {
 			}
 		});
 		/*
-		 * Copy and Paste of the table content.
+		 * Copy and delete
 		 */
-		tableViewer.getTable().addKeyListener(new KeyAdapter() {
+		tableViewer.getControl().addKeyListener(new KeyAdapter() {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 
-				/*
-				 * The selected content will be placed to the clipboard if the
-				 * user is using "Function + c". "Function-Key" 262144
-				 * (stateMask) + "c" 99 (keyCode)
-				 */
 				if(e.keyCode == 99 && e.stateMask == 262144) {
+					/*
+					 * The selected content will be placed to the clipboard if
+					 * the user is using "Function + c". "Function-Key" 262144
+					 * (stateMask) + "c" 99 (keyCode)
+					 */
 					tableViewer.copyToClipboard(titles);
+					//
+				} else if(e.keyCode == 127 && e.stateMask == 0) {
+					/*
+					 * Press "DEL" button.
+					 */
+					deleteSelectedTargets();
 				}
 			}
 		});
@@ -136,6 +152,8 @@ public class MassSpectrumListUI extends Composite {
 		label = new Label(this, SWT.NONE);
 		label.setText("");
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		initContextMenu();
 	}
 
 	public void update(IMassSpectra massSpectra, boolean forceReload) {
@@ -164,6 +182,88 @@ public class MassSpectrumListUI extends Composite {
 	}
 
 	// -----------------------------------------private methods
+	private void initContextMenu() {
+
+		MenuManager menuManager = new MenuManager("#PopUpMenu", "org.eclipse.chemclipse.chromatogram.msd.ui.perspective.internal.views.targetsView.popup");
+		menuManager.setRemoveAllWhenShown(true);
+		/*
+		 * Copy to clipboard
+		 */
+		menuManager.addMenuListener(new IMenuListener() {
+
+			@Override
+			public void menuAboutToShow(IMenuManager manager) {
+
+				IAction action = new Action() {
+
+					@Override
+					public void run() {
+
+						super.run();
+						tableViewer.copyToClipboard(titles);
+					}
+				};
+				action.setText("Copy selection to clipboard");
+				manager.add(action);
+			}
+		});
+		/*
+		 * Delete selected targets
+		 */
+		menuManager.addMenuListener(new IMenuListener() {
+
+			@Override
+			public void menuAboutToShow(IMenuManager manager) {
+
+				IAction action = new Action() {
+
+					@Override
+					public void run() {
+
+						super.run();
+						deleteSelectedTargets();
+					}
+				};
+				action.setText("Delete selected targets");
+				manager.add(action);
+			}
+		});
+		Menu menu = menuManager.createContextMenu(tableViewer.getControl());
+		tableViewer.getControl().setMenu(menu);
+	}
+
+	private void deleteSelectedTargets() {
+
+		Shell shell = Display.getCurrent().getActiveShell();
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.YES | SWT.NO | SWT.CANCEL);
+		messageBox.setText("Delete Selected Targets");
+		messageBox.setMessage("Do you really want to delete the selected targets?");
+		int decision = messageBox.open();
+		if(SWT.YES == decision) {
+			/*
+			 * Delete the selected items.
+			 */
+			Table table = tableViewer.getTable();
+			int[] indices = table.getSelectionIndices();
+			/*
+			 * Delete the selected targets. Make a distinction between: -
+			 * IChromatogram - IChromatogramPeak Don't delete entries in cause
+			 * they are temporary: - IMassSpectrumIdentificationResult
+			 */
+			Object input = tableViewer.getInput();
+			if(input instanceof IMassSpectra) {
+				IMassSpectra massSpectra = (IMassSpectra)input;
+				for(int i : indices) {
+					massSpectra.getMassSpectrum(i + 1).removeAllTargets();
+				}
+			}
+			/*
+			 * Delete targets in table.
+			 */
+			table.remove(indices);
+		}
+	}
+
 	private void updateLabel() {
 
 		label.setText("Mass Spectra: " + massSpectraSize + " (Filtered Mass Spectra: " + tableViewer.getTable().getItemCount() + " [" + text.getText().trim() + "])");
