@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.numeric.statistics.model;
 
 import java.util.List;
 
-public class StatisticsElement<T> {
+public class StatisticsElement<T> implements IStatisticsElement<T> {
 
 	private Object identifier;
 	private List<IStatisticsSourceObject<T>> sourceElements;
@@ -31,38 +31,78 @@ public class StatisticsElement<T> {
 		this.content = statistics;
 	}
 
-	public StatisticsElement(Object identifier, List<IStatisticsSourceObject<T>> sourceElements, List<StatisticsElement> elements) {
+	public StatisticsElement(Object identifier, List<IStatisticsSourceObject<T>> sourceElements, List<StatisticsElement<T>> elements) {
 
 		this(identifier, sourceElements);
 		this.content = elements;
 	}
 
+	@Override
 	public Object getIdentifier() {
 
 		return identifier;
 	}
 
+	@Override
 	public void setIdentifier(Object identifier) {
 
 		this.identifier = identifier;
 	}
 
+	@Override
 	public List<IStatisticsSourceObject<T>> getSourceElements() {
 
 		return sourceElements;
 	}
 
+	@Override
 	public void setSourceElements(List<IStatisticsSourceObject<T>> sourceElements) {
 
 		this.sourceElements = sourceElements;
 	}
 
-	public Object getContent() {
+	@Override
+	public boolean isContentStatistics() {
 
-		return content;
+		if(content instanceof IStatistics) {
+			return true;
+		}
+		return false;
 	}
 
-	public void setContent(Object content) {
+	@Override
+	public IStatistics getStatisticsContent() {
+
+		if(isContentStatistics()) {
+			return (IStatistics)content;
+		}
+		/*
+		 * Should we throw instead an exception?
+		 */
+		return null;
+	}
+
+	@Override
+	public void setStatisticsContent(IStatistics content) {
+
+		this.content = content;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<StatisticsElement<T>> getStatisticsElements() {
+
+		if(content instanceof List) {
+			return (List<StatisticsElement<T>>)content;
+		}
+		/*
+		 * Should we throw instead an exception?
+		 */
+		return null;
+	}
+
+	@Override
+	public void setStatisticsElements(List<StatisticsElement<T>> content) {
 
 		this.content = content;
 	}
