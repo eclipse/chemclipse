@@ -29,7 +29,7 @@ public interface IStatisticsElement<T> {
 
 	void setStatisticsContent(IStatistics content);
 
-	List<StatisticsElement<T>> getStatisticsElements();
+	<S> List<StatisticsElement<S>> getStatisticsElements();
 
-	void setStatisticsElements(List<StatisticsElement<T>> content);
+	<S> void setStatisticsElements(List<StatisticsElement<S>> content);
 }

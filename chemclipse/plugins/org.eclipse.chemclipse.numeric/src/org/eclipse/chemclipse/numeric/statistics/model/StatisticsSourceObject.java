@@ -16,10 +16,16 @@ public class StatisticsSourceObject<T> implements IStatisticsSourceObject<T> {
 	private boolean included;
 	private final T sourceObject;
 
-	public StatisticsSourceObject(boolean included, T sourceObject) {
+	public StatisticsSourceObject(T sourceObject, boolean included) {
 
+		this(sourceObject);
 		this.included = included;
+	}
+
+	public StatisticsSourceObject(T sourceObject) {
+
 		this.sourceObject = sourceObject;
+		this.included = true;
 	}
 
 	@Override

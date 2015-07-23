@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.numeric.statistics.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StatisticsElement<T> implements IStatisticsElement<T> {
@@ -19,21 +20,26 @@ public class StatisticsElement<T> implements IStatisticsElement<T> {
 	private List<IStatisticsSourceObject<T>> sourceElements;
 	private Object content; // this is either an IStatistics object or a List<StatisticsElement>
 
-	public StatisticsElement(Object identifier, List<IStatisticsSourceObject<T>> sourceElements) {
+	public StatisticsElement(Object identifier, List<T> rawSourceElements) {
 
+		sourceElements = new ArrayList<IStatisticsSourceObject<T>>();
+		for(T elem : rawSourceElements) {
+			this.sourceElements.add(new StatisticsSourceObject<T>(elem));
+		}
 		this.identifier = identifier;
-		this.sourceElements = sourceElements;
 	}
 
 	public StatisticsElement(Object identifier, List<IStatisticsSourceObject<T>> sourceElements, IStatistics statistics) {
 
-		this(identifier, sourceElements);
+		this.identifier = identifier;
+		this.sourceElements = sourceElements;
 		this.content = statistics;
 	}
 
 	public StatisticsElement(Object identifier, List<IStatisticsSourceObject<T>> sourceElements, List<StatisticsElement<T>> elements) {
 
-		this(identifier, sourceElements);
+		this.identifier = identifier;
+		this.sourceElements = sourceElements;
 		this.content = elements;
 	}
 
@@ -90,10 +96,10 @@ public class StatisticsElement<T> implements IStatisticsElement<T> {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<StatisticsElement<T>> getStatisticsElements() {
+	public <S> List<StatisticsElement<S>> getStatisticsElements() {
 
 		if(content instanceof List) {
-			return (List<StatisticsElement<T>>)content;
+			return (List<StatisticsElement<S>>)content;
 		}
 		/*
 		 * Should we throw instead an exception?
@@ -102,7 +108,7 @@ public class StatisticsElement<T> implements IStatisticsElement<T> {
 	}
 
 	@Override
-	public void setStatisticsElements(List<StatisticsElement<T>> content) {
+	public <S> void setStatisticsElements(List<StatisticsElement<S>> content) {
 
 		this.content = content;
 	}

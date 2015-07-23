@@ -23,7 +23,10 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.INamedScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.numeric.statistics.model.AnovaStatistics;
+import org.eclipse.chemclipse.numeric.statistics.model.IStatistics;
+import org.eclipse.chemclipse.numeric.statistics.model.IStatisticsElement;
 import org.eclipse.chemclipse.numeric.statistics.model.IUnivariateStatistics;
+import org.eclipse.chemclipse.numeric.statistics.model.StatisticsElement;
 import org.eclipse.chemclipse.numeric.statistics.model.UnivariateStatistics;
 
 public class StatisticsCalculator {
@@ -76,6 +79,66 @@ public class StatisticsCalculator {
 			valueStatisticsPairs.put(mz, statistics);
 		}
 		return valueStatisticsPairs;
+	}
+
+	public IStatisticsElement<IScanMSD> calculateStatisticsNew(List<IScanMSD> massSpectra, StatisticsInputTypes id) {
+
+		/*
+		 * Create root statistics element
+		 */
+		IStatisticsElement<IScanMSD> statisticsElementRoot = new StatisticsElement<IScanMSD>("RootElement", massSpectra);
+		int capacity = massSpectra.size();
+		/*
+		 * Creating a HashSet for the statistics
+		 */
+		Map<Double, List<IIon>> mzAbundances = new HashMap<Double, List<IIon>>();
+		switch(id) {
+			case STATISTICS_ABUNDANCE:
+				for(IScanMSD massSpectrum : massSpectra) {
+					for(IIon ion : massSpectrum.getIons()) {
+						double mz = ion.getIon();
+						if(mzAbundances.containsKey(mz)) {
+							mzAbundances.get(mz).add(ion);
+						} else {
+							List<IIon> ions = new ArrayList<IIon>(capacity);
+							ions.add(ion);
+							mzAbundances.put(mz, ions);
+						}
+					}
+				}
+				break;
+			default:
+				// Should we throw here an exception?
+				break;
+		}
+		/*
+		 * Create leaves for the root statistics element
+		 */
+		List<StatisticsElement<IIon>> statisticsElements = new ArrayList<StatisticsElement<IIon>>();
+		for(Double mz : mzAbundances.keySet()) {
+			switch(id) {
+				case STATISTICS_ABUNDANCE:
+					List<IIon> ions = mzAbundances.get(mz);
+					StatisticsElement<IIon> statisticsElementLeaf = new StatisticsElement<IIon>(mz, ions);
+					/*
+					 * Define the statistics object
+					 */
+					int sampleSize = ions.size();
+					double[] abundances = new double[sampleSize];
+					for(int i = 0; i < sampleSize; i++) {
+						abundances[i] = ions.get(i).getAbundance();
+					}
+					IStatistics statistics = new UnivariateStatistics(abundances);
+					statisticsElementLeaf.setStatisticsContent(statistics);
+					statisticsElements.add(statisticsElementLeaf);
+					break;
+				default:
+					// Should we throw here an exception?
+					break;
+			}
+		}
+		statisticsElementRoot.setStatisticsElements(statisticsElements);
+		return statisticsElementRoot;
 	}
 
 	/*
