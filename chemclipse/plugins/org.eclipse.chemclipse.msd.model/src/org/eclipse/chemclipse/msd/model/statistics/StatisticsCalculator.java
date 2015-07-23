@@ -25,63 +25,12 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.numeric.statistics.model.AnovaStatistics;
 import org.eclipse.chemclipse.numeric.statistics.model.IStatistics;
 import org.eclipse.chemclipse.numeric.statistics.model.IStatisticsElement;
-import org.eclipse.chemclipse.numeric.statistics.model.IUnivariateStatistics;
 import org.eclipse.chemclipse.numeric.statistics.model.StatisticsElement;
 import org.eclipse.chemclipse.numeric.statistics.model.UnivariateStatistics;
 
 public class StatisticsCalculator {
 
-	public Map<Double, IUnivariateStatistics> calculateStatistics(List<IScanMSD> massSpectra, StatisticsInputTypes id) {
-
-		int capacity = massSpectra.size();
-		/*
-		 * Creating a HashSet for the statistics
-		 */
-		Map<Double, List<Double>> mzAbundances = new HashMap<Double, List<Double>>();
-		switch(id) {
-			case STATISTICS_ABUNDANCE:
-				for(IScanMSD massSpectrum : massSpectra) {
-					for(IIon ion : massSpectrum.getIons()) {
-						double mz = ion.getIon();
-						double abundance = ion.getAbundance();
-						if(mzAbundances.containsKey(mz)) {
-							mzAbundances.get(mz).add(abundance);
-						} else {
-							List<Double> abundances = new ArrayList<Double>(capacity);
-							abundances.add(abundance);
-							mzAbundances.put(mz, abundances);
-						}
-					}
-				}
-				break;
-			default:
-				// Should we throw here an exception?
-				break;
-		}
-		/*
-		 * Calculating multiple statistical values
-		 */
-		Map<Double, IUnivariateStatistics> valueStatisticsPairs = new HashMap<Double, IUnivariateStatistics>();
-		for(Double mz : mzAbundances.keySet()) {
-			/*
-			 * Unbox the gift, calculate the statistical values in a PeakMassSpectraStatistics object
-			 */
-			List<Double> abundancesList = mzAbundances.get(mz);
-			int sampleSize = abundancesList.size();
-			double[] abundances = new double[sampleSize];
-			for(int i = 0; i < sampleSize; i++) {
-				abundances[i] = abundancesList.get(i).doubleValue();
-			}
-			UnivariateStatistics statistics = new UnivariateStatistics(abundances);
-			/*
-			 * Add to the resulting map
-			 */
-			valueStatisticsPairs.put(mz, statistics);
-		}
-		return valueStatisticsPairs;
-	}
-
-	public IStatisticsElement<IScanMSD> calculateStatisticsNew(List<IScanMSD> massSpectra, StatisticsInputTypes id) {
+	public IStatisticsElement<IScanMSD> calculateStatistics(List<IScanMSD> massSpectra, StatisticsInputTypes id) {
 
 		/*
 		 * Create root statistics element
@@ -114,7 +63,7 @@ public class StatisticsCalculator {
 		/*
 		 * Create leaves for the root statistics element
 		 */
-		List<StatisticsElement<IIon>> statisticsElements = new ArrayList<StatisticsElement<IIon>>();
+		List<IStatisticsElement<IIon>> statisticsElements = new ArrayList<IStatisticsElement<IIon>>();
 		for(Double mz : mzAbundances.keySet()) {
 			switch(id) {
 				case STATISTICS_ABUNDANCE:

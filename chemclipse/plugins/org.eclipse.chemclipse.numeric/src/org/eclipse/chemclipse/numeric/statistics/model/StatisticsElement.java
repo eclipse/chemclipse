@@ -96,10 +96,10 @@ public class StatisticsElement<T> implements IStatisticsElement<T> {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <S> List<StatisticsElement<S>> getStatisticsElements() {
+	public <S> List<IStatisticsElement<S>> getStatisticsElements() {
 
 		if(content instanceof List) {
-			return (List<StatisticsElement<S>>)content;
+			return (List<IStatisticsElement<S>>)content;
 		}
 		/*
 		 * Should we throw instead an exception?
@@ -108,7 +108,7 @@ public class StatisticsElement<T> implements IStatisticsElement<T> {
 	}
 
 	@Override
-	public <S> void setStatisticsElements(List<StatisticsElement<S>> content) {
+	public <S> void setStatisticsElements(List<IStatisticsElement<S>> content) {
 
 		this.content = content;
 	}
