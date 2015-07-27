@@ -31,12 +31,16 @@ import java.util.StringTokenizer;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.BaselineModel;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
+import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.history.EditHistory;
 import org.eclipse.chemclipse.model.history.EditInformation;
 import org.eclipse.chemclipse.model.history.IEditHistory;
 import org.eclipse.chemclipse.model.notifier.IChromatogramSelectionUpdateNotifier;
 import org.eclipse.chemclipse.model.processor.IChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
+import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
+import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
 import org.eclipse.chemclipse.model.versioning.IVersionManagement;
 import org.eclipse.chemclipse.model.versioning.VersionManagement;
@@ -282,21 +286,29 @@ public abstract class AbstractChromatogram implements IChromatogram {
 		return minSignal;
 	}
 
-	// TODO optimieren - verbraucht zu viel Prozessorzeit
 	@Override
 	public float getMaxSignal() {
 
-		float maxSignal = Float.MIN_VALUE;
-		float actSignal = 0.0f;
-		if(getNumberOfScans() < 1) {
-			return 0;
-		}
-		/*
-		 * Do the for loop if at least one scan exists.
-		 */
-		for(IScan scan : scans) {
-			actSignal = scan.getTotalSignal();
-			maxSignal = (maxSignal < actSignal) ? actSignal : maxSignal;
+		return getMaxSignal(containsScanCycles());
+	}
+
+	// TODO optimieren - verbraucht zu viel Prozessorzeit
+	@Override
+	public float getMaxSignal(boolean condenseCycleNumberScans) {
+
+		float maxSignal = 0;
+		if(getNumberOfScans() >= 1) {
+			/*
+			 * Do the for loop if at least one scan exists.
+			 */
+			try {
+				ITotalScanSignalExtractor totalIonSignalExtractor;
+				totalIonSignalExtractor = new TotalScanSignalExtractor(this);
+				ITotalScanSignals signals = totalIonSignalExtractor.getTotalScanSignals(this, true, condenseCycleNumberScans);
+				maxSignal = signals.getMaxSignal();
+			} catch(ChromatogramIsNullException e) {
+				logger.warn(e);
+			}
 		}
 		return maxSignal;
 	}

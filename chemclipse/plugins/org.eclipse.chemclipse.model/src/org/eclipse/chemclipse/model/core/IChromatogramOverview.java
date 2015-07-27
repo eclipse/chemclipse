@@ -57,6 +57,15 @@ public interface IChromatogramOverview extends IChromatogramInfo {
 	float getMaxSignal();
 
 	/**
+	 * The max signal is higher if the cycle number scans shall be
+	 * condensed.
+	 * 
+	 * @param condenseCycleNumberScans
+	 * @return float
+	 */
+	float getMaxSignal(boolean condenseCycleNumberScans);
+
+	/**
 	 * Returns the start retention time in milliseconds.<br/>
 	 * If no scans are stored, 0 will be returned.
 	 * 

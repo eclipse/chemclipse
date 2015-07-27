@@ -16,12 +16,8 @@ import java.util.List;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.notifier.IChromatogramSelectionUpdateNotifier;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
-import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
-import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.series.ChromatogramRange;
 import org.eclipse.chemclipse.swt.ui.series.IChromatogramRange;
@@ -69,7 +65,7 @@ public abstract class AbstractChromatogramLineSeriesUI extends AbstractLineSerie
 	public void updateSelection(IChromatogramSelection chromatogramSelection, boolean forceReload) {
 
 		this.chromatogramSelection = chromatogramSelection;
-		yMaxIntensityAdjusted = getMaxSignal(this.chromatogramSelection, true);
+		yMaxIntensityAdjusted = this.chromatogramSelection.getStopAbundance();
 		setYMaxIntensityAdjusted(yMaxIntensityAdjusted);
 		/*
 		 * If the current view is not a master, reload the data on each
@@ -77,7 +73,10 @@ public abstract class AbstractChromatogramLineSeriesUI extends AbstractLineSerie
 		 * load the series.
 		 */
 		if(!isMaster() || (isMaster() && forceReload)) {
-			double maxSignal = getMaxSignal(this.chromatogramSelection, false);
+			/*
+			 * Get the max signal.
+			 */
+			double maxSignal = this.chromatogramSelection.getChromatogram().getMaxSignal();
 			setMaxSignal(maxSignal);
 			/*
 			 * Scale to the intensity of the master selection.
@@ -604,33 +603,5 @@ public abstract class AbstractChromatogramLineSeriesUI extends AbstractLineSerie
 		} else {
 			return stopRetentionTimeNew;
 		}
-	}
-
-	private double getMaxSignal(IChromatogramSelection chromatogramSelection, boolean useSelectionOnly) {
-
-		double maxSignal;
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-		if(chromatogram.containsScanCycles()) {
-			try {
-				ITotalScanSignalExtractor totalIonSignalExtractor = new TotalScanSignalExtractor(chromatogram);
-				ITotalScanSignals signals;
-				if(useSelectionOnly) {
-					signals = totalIonSignalExtractor.getTotalScanSignals(chromatogramSelection, true, true);
-				} else {
-					signals = totalIonSignalExtractor.getTotalScanSignals(chromatogram, true, true);
-				}
-				maxSignal = signals.getMaxSignal();
-			} catch(ChromatogramIsNullException e) {
-				maxSignal = 0;
-			}
-		} else {
-			if(useSelectionOnly) {
-				maxSignal = chromatogramSelection.getStopAbundance();
-			} else {
-				maxSignal = chromatogram.getMaxSignal();
-			}
-		}
-		//
-		return maxSignal;
 	}
 }
