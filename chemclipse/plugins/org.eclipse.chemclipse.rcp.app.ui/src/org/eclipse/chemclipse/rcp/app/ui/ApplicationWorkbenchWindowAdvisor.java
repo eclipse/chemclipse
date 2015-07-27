@@ -46,7 +46,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	@Override
 	public boolean preWindowShellClose() {
 
-		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO | SWT.CANCEL);
+		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Close the application");
 		messageBox.setMessage("Do you want to close the application now?");
 		if(messageBox.open() == SWT.YES) {
