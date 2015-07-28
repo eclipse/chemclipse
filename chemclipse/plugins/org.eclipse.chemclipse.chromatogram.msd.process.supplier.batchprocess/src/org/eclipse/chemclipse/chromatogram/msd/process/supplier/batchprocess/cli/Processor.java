@@ -15,45 +15,45 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
-
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.core.BatchProcess;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io.BatchProcessJobReader;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
+import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
+import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.app.cli.AbstractCommandLineProcessor;
 import org.eclipse.chemclipse.rcp.app.cli.ICommandLineProcessor;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class Processor extends AbstractCommandLineProcessor implements ICommandLineProcessor {
+
+	private static final Logger logger = Logger.getLogger(Processor.class);
 
 	@Override
 	public void process(String[] args) {
 
-		IProgressMonitor monitor;
-		IBatchProcessJob batchProcessJob;
-		BatchProcessJobReader reader;
-		File file;
 		/*
 		 * Import the batch process job and execute it.
 		 */
-		reader = new BatchProcessJobReader();
+		BatchProcessJobReader reader = new BatchProcessJobReader();
 		String filePath = args[0].trim();
-		file = new File(filePath);
+		File file = new File(filePath);
 		try {
-			monitor = new NullProgressMonitor();
-			batchProcessJob = reader.read(file, monitor);
+			IProgressMonitor monitor = new NullProgressMonitor();
+			logger.info("Read batch process");
+			IBatchProcessJob batchProcessJob = reader.read(file, monitor);
+			logger.info("Execute batch process");
 			BatchProcess bp = new BatchProcess();
 			bp.execute(batchProcessJob, monitor);
 		} catch(FileNotFoundException e) {
-			System.out.println(e);
+			logger.warn(e);
 		} catch(FileIsNotReadableException e) {
-			System.out.println(e);
+			logger.warn(e);
 		} catch(FileIsEmptyException e) {
-			System.out.println(e);
+			logger.warn(e);
 		} catch(IOException e) {
-			System.out.println(e);
+			logger.warn(e);
 		}
 	}
 }
