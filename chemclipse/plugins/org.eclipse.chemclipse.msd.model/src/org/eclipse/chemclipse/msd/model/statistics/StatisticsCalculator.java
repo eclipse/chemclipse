@@ -25,7 +25,9 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.numeric.statistics.model.AnovaStatistics;
 import org.eclipse.chemclipse.numeric.statistics.model.IStatistics;
 import org.eclipse.chemclipse.numeric.statistics.model.IStatisticsElement;
+import org.eclipse.chemclipse.numeric.statistics.model.IStatisticsSourceObject;
 import org.eclipse.chemclipse.numeric.statistics.model.StatisticsElement;
+import org.eclipse.chemclipse.numeric.statistics.model.StatisticsSourceObject;
 import org.eclipse.chemclipse.numeric.statistics.model.UnivariateStatistics;
 
 public class StatisticsCalculator {
@@ -87,6 +89,85 @@ public class StatisticsCalculator {
 			}
 		}
 		statisticsElementRoot.setStatisticsElements(statisticsElements);
+		return statisticsElementRoot;
+	}
+
+	/*
+	 * A JoinedScanMSD knows about the Origin/Substance name, e.g. we group the replicate experiments on the substance name
+	 */
+	public IStatisticsElement<IScanMSD> calculateInputForOneWayAnovaNew(List<INamedScanMSD> groupedMassSpectra, StatisticsInputTypes id) {
+
+		/*
+		 * Converting objects
+		 */
+		List<IScanMSD> lists = new ArrayList<IScanMSD>();
+		for(INamedScanMSD groupedMassSpectrum : groupedMassSpectra) {
+			lists.add(groupedMassSpectrum);
+		}
+		IStatisticsElement<IScanMSD> statisticsElementRoot = new StatisticsElement<IScanMSD>("RootElement", lists);
+		int capacity = groupedMassSpectra.size();
+		/*
+		 * Creating a HashSet for the statistics
+		 */
+		Map<Double, Map<String, List<IIon>>> mzSubstancesAbundances = new HashMap<Double, Map<String, List<IIon>>>();
+		for(INamedScanMSD groupedMassSpectrum : groupedMassSpectra) {
+			String substance = groupedMassSpectrum.getSubstanceName();
+			for(IIon ion : groupedMassSpectrum.getIons()) {
+				double mz = ion.getIon();
+				double abundance = ion.getAbundance();
+				if(mzSubstancesAbundances.containsKey(mz)) {
+					if(mzSubstancesAbundances.get(mz).containsKey(substance)) {
+						mzSubstancesAbundances.get(mz).get(substance).add(ion);
+					} else {
+						List<IIon> ions = new ArrayList<IIon>();
+						ions.add(ion);
+						mzSubstancesAbundances.get(mz).put(substance, ions);
+					}
+				} else {
+					Map<String, List<IIon>> substancesAbundances = new HashMap<String, List<IIon>>();
+					List<IIon> ions = new ArrayList<IIon>();
+					ions.add(ion);
+					substancesAbundances.put(substance, ions);
+					mzSubstancesAbundances.put(mz, substancesAbundances);
+				}
+			}
+		}
+		/*
+		 * Create the proper data structure for OneWayAnova, maybe we need a hashmap based on {mz,Collection<double[]> - grouped by substance}
+		 */
+		List<IStatisticsElement<IStatisticsSourceObject<IIon>>> substanceStatisticsElements = new ArrayList<IStatisticsElement<IStatisticsSourceObject<IIon>>>();
+		Map<Double, Collection<double[]>> mzAnovaInputPairs = new HashMap<Double, Collection<double[]>>();
+		for(Entry<Double, Map<String, List<IIon>>> entry : mzSubstancesAbundances.entrySet()) {
+			switch(id) {
+				case ANOVA_ABUNDANCE:
+					Double mz = entry.getKey();
+					List<IStatisticsElement<IIon>> ions2 = new ArrayList<IStatisticsElement<IIon>>(); // TODO fix it
+					IStatisticsElement<IStatisticsElement<IIon>> substanceStatisticsElement = new StatisticsElement<IStatisticsElement<IIon>>(mz, ions2);
+					List<IStatisticsElement<IIon>> statisticsElements = new ArrayList<IStatisticsElement<IIon>>();
+					for(String substance : entry.getValue().keySet()) {
+						List<IIon> ions = entry.getValue().get(substance);
+						StatisticsElement<IIon> statisticsElementLeaf = new StatisticsElement<IIon>(substance, ions);
+						int size = ions.size();
+						if(size > 1) {
+							statisticsElements.add(statisticsElementLeaf);
+						}
+					}
+					int size2 = statisticsElements.size();
+					if(size2 > 1) {
+						IStatisticsSourceObject<List<IStatisticsElement<IIon>>> isso = new StatisticsSourceObject<List<IStatisticsElement<IIon>>>(statisticsElements);
+						// substanceStatisticsElements.add(isso);
+					}
+					// TODO calculate the statistics, and the statistics to the results
+					break;
+				default:
+					// Should we throw here an exception?
+					break;
+			}
+		}
+		statisticsElementRoot.setStatisticsElements(substanceStatisticsElements);
+		/*
+		 * One can use OneWayAnova.anovaFValue() or OneWayAnova.anovaPValue()
+		 */
 		return statisticsElementRoot;
 	}
 
