@@ -15,8 +15,8 @@
       <page
             class="org.eclipse.chemclipse.rcp.app.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"
-            name="Chromatography/Spectrometry">
-      </page>
+            name="A) Chromatography/Spectrometry">
+      </page>   
       <page
             category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"
             class="org.eclipse.chemclipse.rcp.app.ui.preferences.SettingsPreferencePage"
