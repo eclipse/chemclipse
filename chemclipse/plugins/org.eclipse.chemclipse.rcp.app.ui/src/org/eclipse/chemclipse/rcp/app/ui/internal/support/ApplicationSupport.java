@@ -22,6 +22,9 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.rcp.app.cli.ICommandLineProcessor;
+import org.eclipse.chemclipse.rcp.app.ui.ApplicationWorkbenchAdvisor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -31,18 +34,17 @@ import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
-import org.eclipse.chemclipse.rcp.app.cli.ICommandLineProcessor;
-import org.eclipse.chemclipse.rcp.app.ui.ApplicationWorkbenchAdvisor;
-
 public class ApplicationSupport {
 
+	private static final Logger logger = Logger.getLogger(ApplicationSupport.class);
+	//
 	private IExtensionRegistry registry;
 	private IConfigurationElement[] elements;
 	/*
 	 * The names are defined in the schema:
-	 * org.eclipse.chemclipse.ux.commandLineProcessor.exsd
+	 * org.eclipse.chemclipse.rcp.app.ui.commandLineProcessor.exsd
 	 */
-	private static final String EXTENSION_POINT_ID = "org.eclipse.chemclipse.ux.commandLineProcessor";
+	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.rcp.app.ui.commandLineProcessor";
 	// Help
 	private static final String OPTION_HELP = "help";
 	private static final String OPTION_HELP_DESCRIPTION = "Shows the help.";
@@ -60,7 +62,11 @@ public class ApplicationSupport {
 	public ApplicationSupport() {
 
 		registry = Platform.getExtensionRegistry();
-		elements = registry.getConfigurationElementsFor(EXTENSION_POINT_ID);
+		elements = registry.getConfigurationElementsFor(EXTENSION_POINT);
+		logger.info("Command Line Processor Options");
+		for(IConfigurationElement element : elements) {
+			logger.info("Option: -" + element.getAttribute(OPTION_ATTRIBUTE_NAME));
+		}
 	}
 
 	/**
