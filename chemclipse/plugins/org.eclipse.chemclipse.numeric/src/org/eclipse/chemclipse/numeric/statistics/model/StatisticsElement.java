@@ -62,6 +62,18 @@ public class StatisticsElement<T> implements IStatisticsElement<T> {
 	}
 
 	@Override
+	public List<T> getIncludedSourceElements() {
+
+		List<T> includedSourceElements = new ArrayList<T>();
+		for(IStatisticsSourceObject<T> t : sourceElements) {
+			if(t.isIncluded()) {
+				includedSourceElements.add(t.getSourceObject());
+			}
+		}
+		return includedSourceElements;
+	}
+
+	@Override
 	public void setSourceElements(List<IStatisticsSourceObject<T>> sourceElements) {
 
 		this.sourceElements = sourceElements;

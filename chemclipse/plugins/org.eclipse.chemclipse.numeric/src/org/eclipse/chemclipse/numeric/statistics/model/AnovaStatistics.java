@@ -11,15 +11,52 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.numeric.statistics.model;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 public class AnovaStatistics implements IAnovaStatistics {
 
-	final double pvalue;
-	final double fvalue;
+	double pvalue;
+	double fvalue;
+	Collection<double[]> anovaInput;
 
 	public AnovaStatistics(double pvalue, double fvalue) {
 
 		this.pvalue = pvalue;
 		this.fvalue = fvalue;
+	}
+
+	public <T> AnovaStatistics(IStatisticsElement<IStatisticsElement<T>> groupedStatisticsElement, Method getdata) {
+
+		List<IStatisticsElement<T>> groupedStatisticsElements = groupedStatisticsElement.getIncludedSourceElements();
+		this.anovaInput = new ArrayList<double[]>(groupedStatisticsElements.size());
+		if(groupedStatisticsElements.size() > 1) {
+			for(IStatisticsElement<T> gse : groupedStatisticsElements) {
+				List<T> statisticsElements = gse.getIncludedSourceElements();
+				int size = statisticsElements.size();
+				if(size > 1) {
+					double[] values = new double[size];
+					for(int i = 0; i < size; i++) {
+						T t = statisticsElements.get(i);
+						try {
+							values[i] = (double)getdata.invoke(t, new Object());
+						} catch(IllegalAccessException e) {
+							e.printStackTrace();
+						} catch(IllegalArgumentException e) {
+							e.printStackTrace();
+						} catch(InvocationTargetException e) {
+							e.printStackTrace();
+						}
+					}
+					anovaInput.add(values);
+				}
+			}
+		}
+		this.pvalue = 0;
+		this.fvalue = 0;
 	}
 
 	@Override

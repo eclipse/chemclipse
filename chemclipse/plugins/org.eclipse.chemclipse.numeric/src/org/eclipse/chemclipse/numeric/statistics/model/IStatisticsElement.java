@@ -32,4 +32,6 @@ public interface IStatisticsElement<T> {
 	<S> List<IStatisticsElement<S>> getStatisticsElements();
 
 	<S> void setStatisticsElements(List<IStatisticsElement<S>> content);
+
+	List<T> getIncludedSourceElements();
 }
