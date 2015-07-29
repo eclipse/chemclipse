@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.INamedScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.numeric.statistics.model.AnovaStatistics;
+import org.eclipse.chemclipse.numeric.statistics.model.IAnovaStatistics;
 import org.eclipse.chemclipse.numeric.statistics.model.IStatistics;
 import org.eclipse.chemclipse.numeric.statistics.model.IStatisticsElement;
 import org.eclipse.chemclipse.numeric.statistics.model.StatisticsElement;
@@ -110,32 +111,38 @@ public class StatisticsCalculator {
 		 */
 		Map<Double, Map<String, List<IIon>>> mzSubstancesAbundances = new HashMap<Double, Map<String, List<IIon>>>();
 		for(INamedScanMSD groupedMassSpectrum : groupedMassSpectra) {
-			String substance = groupedMassSpectrum.getSubstanceName();
-			for(IIon ion : groupedMassSpectrum.getIons()) {
-				double mz = ion.getIon();
-				if(mzSubstancesAbundances.containsKey(mz)) {
-					if(mzSubstancesAbundances.get(mz).containsKey(substance)) {
-						mzSubstancesAbundances.get(mz).get(substance).add(ion);
-					} else {
-						List<IIon> ions = new ArrayList<IIon>();
-						ions.add(ion);
-						mzSubstancesAbundances.get(mz).put(substance, ions);
+			switch(id) {
+				case ANOVA_ABUNDANCE:
+					String substance = groupedMassSpectrum.getSubstanceName();
+					for(IIon ion : groupedMassSpectrum.getIons()) {
+						double mz = ion.getIon();
+						if(mzSubstancesAbundances.containsKey(mz)) {
+							if(mzSubstancesAbundances.get(mz).containsKey(substance)) {
+								mzSubstancesAbundances.get(mz).get(substance).add(ion);
+							} else {
+								List<IIon> ions = new ArrayList<IIon>();
+								ions.add(ion);
+								mzSubstancesAbundances.get(mz).put(substance, ions);
+							}
+						} else {
+							Map<String, List<IIon>> substancesAbundances = new HashMap<String, List<IIon>>();
+							List<IIon> ions = new ArrayList<IIon>();
+							ions.add(ion);
+							substancesAbundances.put(substance, ions);
+							mzSubstancesAbundances.put(mz, substancesAbundances);
+						}
 					}
-				} else {
-					Map<String, List<IIon>> substancesAbundances = new HashMap<String, List<IIon>>();
-					List<IIon> ions = new ArrayList<IIon>();
-					ions.add(ion);
-					substancesAbundances.put(substance, ions);
-					mzSubstancesAbundances.put(mz, substancesAbundances);
-				}
+					break;
+				default:
+					// Should we throw here an exception?
+					break;
 			}
 		}
 		/*
 		 * Create the proper data structure for OneWayAnova, maybe we need a hashmap based on {mz,Collection<double[]> - grouped by substance}
 		 */
-		// level 2
+		// for level 1
 		List<IStatisticsElement<IStatisticsElement<IIon>>> substanceStatisticsElements = new ArrayList<IStatisticsElement<IStatisticsElement<IIon>>>();
-		Map<Double, Collection<double[]>> mzAnovaInputPairs = new HashMap<Double, Collection<double[]>>();
 		for(Entry<Double, Map<String, List<IIon>>> entry : mzSubstancesAbundances.entrySet()) {
 			switch(id) {
 				case ANOVA_ABUNDANCE:
@@ -164,7 +171,6 @@ public class StatisticsCalculator {
 							e.printStackTrace();
 						}
 						substanceStatisticsElements.add(substanceStatisticsElement);
-						// TODO calculate the statistics, and the statistics to the results
 					}
 					break;
 				default:
@@ -241,7 +247,7 @@ public class StatisticsCalculator {
 		return mzAnovaInputPairs;
 	}
 
-	public Map<Double, Double> calculateAnovaFValues(Map<Double, Collection<double[]>> mzAnovaInputPairs) {
+	public Map<Double, Double> calculateAnovaFValuesOld(Map<Double, Collection<double[]>> mzAnovaInputPairs) {
 
 		OneWayAnova anova = new OneWayAnova();
 		Map<Double, Double> mzAnovaFPairs = new HashMap<Double, Double>();
@@ -253,7 +259,19 @@ public class StatisticsCalculator {
 		return mzAnovaFPairs;
 	}
 
-	public Map<Double, Double> calculateAnovaPValues(Map<Double, Collection<double[]>> mzAnovaInputPairs) {
+	public Map<Double, Double> calculateAnovaFValues(IStatisticsElement<IScanMSD> anovaStatistics) {
+
+		Map<Double, IAnovaStatistics> mzStatisticsPairs = getMzStatisticsPairs(anovaStatistics);
+		Map<Double, Double> mzAnovaFPairs = new HashMap<Double, Double>();
+		for(Entry<Double, IAnovaStatistics> mzAnovaInputPair : mzStatisticsPairs.entrySet()) {
+			Double mz = mzAnovaInputPair.getKey();
+			double fvalue = mzAnovaInputPair.getValue().getFValue();
+			mzAnovaFPairs.put(mz, fvalue);
+		}
+		return mzAnovaFPairs;
+	}
+
+	public Map<Double, Double> calculateAnovaPValuesOld(Map<Double, Collection<double[]>> mzAnovaInputPairs) {
 
 		OneWayAnova anova = new OneWayAnova();
 		Map<Double, Double> mzAnovaPPairs = new HashMap<Double, Double>();
@@ -265,7 +283,19 @@ public class StatisticsCalculator {
 		return mzAnovaPPairs;
 	}
 
-	public Map<Double, AnovaStatistics> calculateAnovaStatistics(Map<Double, Collection<double[]>> mzAnovaInputPairs) {
+	public Map<Double, Double> calculateAnovaPValues(IStatisticsElement<IScanMSD> anovaStatistics) {
+
+		Map<Double, IAnovaStatistics> mzStatisticsPairs = getMzStatisticsPairs(anovaStatistics);
+		Map<Double, Double> mzAnovaPPairs = new HashMap<Double, Double>();
+		for(Entry<Double, IAnovaStatistics> mzAnovaInputPair : mzStatisticsPairs.entrySet()) {
+			Double mz = mzAnovaInputPair.getKey();
+			double fvalue = mzAnovaInputPair.getValue().getPValue();
+			mzAnovaPPairs.put(mz, fvalue);
+		}
+		return mzAnovaPPairs;
+	}
+
+	public Map<Double, AnovaStatistics> calculateAnovaStatisticsOld(Map<Double, Collection<double[]>> mzAnovaInputPairs) {
 
 		OneWayAnova anova = new OneWayAnova();
 		Map<Double, AnovaStatistics> mzanovaStatistics = new HashMap<Double, AnovaStatistics>();
@@ -274,9 +304,25 @@ public class StatisticsCalculator {
 			Collection<double[]> anovaInput = mzAnovaInputPair.getValue();
 			double pvalue = anova.anovaPValue(anovaInput);
 			double fvalue = anova.anovaFValue(anovaInput);
-			AnovaStatistics anovaStatistics = new AnovaStatistics(pvalue, fvalue);
-			mzanovaStatistics.put(mz, anovaStatistics);
+			// AnovaStatistics anovaStatistics = new AnovaStatistics(pvalue, fvalue);
+			// mzanovaStatistics.put(mz, anovaStatistics);
 		}
 		return mzanovaStatistics;
+	}
+
+	public Map<Double, IAnovaStatistics> calculateAnovaStatistics(IStatisticsElement<IScanMSD> anovaStatistics) {
+
+		return getMzStatisticsPairs(anovaStatistics);
+	}
+
+	private Map<Double, IAnovaStatistics> getMzStatisticsPairs(IStatisticsElement<IScanMSD> anovaStatistics) {
+
+		Map<Double, IAnovaStatistics> mzStatisticsPairs = new HashMap<Double, IAnovaStatistics>();
+		for(IStatisticsElement<Object> elem : anovaStatistics.getStatisticsElements()) {
+			Double mz = (Double)elem.getIdentifier();
+			IAnovaStatistics value = (IAnovaStatistics)elem.getStatisticsContent();
+			mzStatisticsPairs.put(mz, value);
+		}
+		return mzStatisticsPairs;
 	}
 }

@@ -21,15 +21,7 @@ import org.apache.commons.math3.stat.inference.OneWayAnova;
 
 public class AnovaStatistics implements IAnovaStatistics {
 
-	double pvalue;
-	double fvalue;
 	Collection<double[]> anovaInput;
-
-	public AnovaStatistics(double pvalue, double fvalue) {
-
-		this.pvalue = pvalue;
-		this.fvalue = fvalue;
-	}
 
 	public <T> AnovaStatistics(IStatisticsElement<IStatisticsElement<T>> groupedStatisticsElement, Method getdata) {
 
@@ -57,8 +49,6 @@ public class AnovaStatistics implements IAnovaStatistics {
 				}
 			}
 		}
-		this.pvalue = 0;
-		this.fvalue = 0;
 	}
 
 	@Override
