@@ -25,9 +25,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.numeric.statistics.model.AnovaStatistics;
 import org.eclipse.chemclipse.numeric.statistics.model.IStatistics;
 import org.eclipse.chemclipse.numeric.statistics.model.IStatisticsElement;
-import org.eclipse.chemclipse.numeric.statistics.model.IStatisticsSourceObject;
 import org.eclipse.chemclipse.numeric.statistics.model.StatisticsElement;
-import org.eclipse.chemclipse.numeric.statistics.model.StatisticsSourceObject;
 import org.eclipse.chemclipse.numeric.statistics.model.UnivariateStatistics;
 
 public class StatisticsCalculator {
@@ -95,17 +93,17 @@ public class StatisticsCalculator {
 	/*
 	 * A JoinedScanMSD knows about the Origin/Substance name, e.g. we group the replicate experiments on the substance name
 	 */
-	public IStatisticsElement<IScanMSD> calculateInputForOneWayAnovaNew(List<INamedScanMSD> groupedMassSpectra, StatisticsInputTypes id) {
+	public IStatisticsElement<IScanMSD> calculateInputForOneWayAnova(List<INamedScanMSD> groupedMassSpectra, StatisticsInputTypes id) {
 
 		/*
 		 * Converting objects
 		 */
-		List<IScanMSD> lists = new ArrayList<IScanMSD>();
+		List<IScanMSD> massSpectra = new ArrayList<IScanMSD>();
 		for(INamedScanMSD groupedMassSpectrum : groupedMassSpectra) {
-			lists.add(groupedMassSpectrum);
+			massSpectra.add(groupedMassSpectrum);
 		}
-		IStatisticsElement<IScanMSD> statisticsElementRoot = new StatisticsElement<IScanMSD>("RootElement", lists);
-		int capacity = groupedMassSpectra.size();
+		// level 1
+		IStatisticsElement<IScanMSD> statisticsElementRoot = new StatisticsElement<IScanMSD>("RootElement", massSpectra);
 		/*
 		 * Creating a HashSet for the statistics
 		 */
@@ -114,7 +112,6 @@ public class StatisticsCalculator {
 			String substance = groupedMassSpectrum.getSubstanceName();
 			for(IIon ion : groupedMassSpectrum.getIons()) {
 				double mz = ion.getIon();
-				double abundance = ion.getAbundance();
 				if(mzSubstancesAbundances.containsKey(mz)) {
 					if(mzSubstancesAbundances.get(mz).containsKey(substance)) {
 						mzSubstancesAbundances.get(mz).get(substance).add(ion);
@@ -135,29 +132,30 @@ public class StatisticsCalculator {
 		/*
 		 * Create the proper data structure for OneWayAnova, maybe we need a hashmap based on {mz,Collection<double[]> - grouped by substance}
 		 */
-		List<IStatisticsElement<IStatisticsSourceObject<IIon>>> substanceStatisticsElements = new ArrayList<IStatisticsElement<IStatisticsSourceObject<IIon>>>();
+		// level 2
+		List<IStatisticsElement<IStatisticsElement<IIon>>> substanceStatisticsElements = new ArrayList<IStatisticsElement<IStatisticsElement<IIon>>>();
 		Map<Double, Collection<double[]>> mzAnovaInputPairs = new HashMap<Double, Collection<double[]>>();
 		for(Entry<Double, Map<String, List<IIon>>> entry : mzSubstancesAbundances.entrySet()) {
 			switch(id) {
 				case ANOVA_ABUNDANCE:
 					Double mz = entry.getKey();
-					List<IStatisticsElement<IIon>> ions2 = new ArrayList<IStatisticsElement<IIon>>(); // TODO fix it
-					IStatisticsElement<IStatisticsElement<IIon>> substanceStatisticsElement = new StatisticsElement<IStatisticsElement<IIon>>(mz, ions2);
 					List<IStatisticsElement<IIon>> statisticsElements = new ArrayList<IStatisticsElement<IIon>>();
 					for(String substance : entry.getValue().keySet()) {
 						List<IIon> ions = entry.getValue().get(substance);
-						StatisticsElement<IIon> statisticsElementLeaf = new StatisticsElement<IIon>(substance, ions);
+						// level 3 - this statistics, will be empty
+						IStatisticsElement<IIon> statisticsElementLeaf = new StatisticsElement<IIon>(substance, ions);
 						int size = ions.size();
 						if(size > 1) {
 							statisticsElements.add(statisticsElementLeaf);
 						}
 					}
-					int size2 = statisticsElements.size();
-					if(size2 > 1) {
-						IStatisticsSourceObject<List<IStatisticsElement<IIon>>> isso = new StatisticsSourceObject<List<IStatisticsElement<IIon>>>(statisticsElements);
-						// substanceStatisticsElements.add(isso);
+					int statisticsElementsSize = statisticsElements.size();
+					if(statisticsElementsSize > 1) {
+						// level 2
+						IStatisticsElement<IStatisticsElement<IIon>> substanceStatisticsElement = new StatisticsElement<IStatisticsElement<IIon>>(mz, statisticsElements);
+						substanceStatisticsElements.add(substanceStatisticsElement);
+						// TODO calculate the statistics, and the statistics to the results
 					}
-					// TODO calculate the statistics, and the statistics to the results
 					break;
 				default:
 					// Should we throw here an exception?
@@ -174,7 +172,7 @@ public class StatisticsCalculator {
 	/*
 	 * A JoinedScanMSD knows about the Origin/Substance name, e.g. we group the replicate experiments on the substance name
 	 */
-	public Map<Double, Collection<double[]>> calculateInputForOneWayAnova(List<INamedScanMSD> groupedMassSpectra) {
+	public Map<Double, Collection<double[]>> calculateInputForOneWayAnovaOLD(List<INamedScanMSD> groupedMassSpectra) {
 
 		Map<Double, Map<String, List<Double>>> mzSubstancesAbundances = new HashMap<Double, Map<String, List<Double>>>();
 		for(INamedScanMSD groupedMassSpectrum : groupedMassSpectra) {
