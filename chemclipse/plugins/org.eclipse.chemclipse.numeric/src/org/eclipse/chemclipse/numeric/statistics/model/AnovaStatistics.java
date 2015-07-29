@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.math3.stat.inference.OneWayAnova;
+
 public class AnovaStatistics implements IAnovaStatistics {
 
 	double pvalue;
@@ -42,7 +44,7 @@ public class AnovaStatistics implements IAnovaStatistics {
 					for(int i = 0; i < size; i++) {
 						T t = statisticsElements.get(i);
 						try {
-							values[i] = (double)getdata.invoke(t, new Object());
+							values[i] = (double)getdata.invoke(t, new Object[0]);
 						} catch(IllegalAccessException e) {
 							e.printStackTrace();
 						} catch(IllegalArgumentException e) {
@@ -62,12 +64,16 @@ public class AnovaStatistics implements IAnovaStatistics {
 	@Override
 	public double getPValue() {
 
+		OneWayAnova anova = new OneWayAnova();
+		double pvalue = anova.anovaPValue(anovaInput);
 		return pvalue;
 	}
 
 	@Override
 	public double getFValue() {
 
+		OneWayAnova anova = new OneWayAnova();
+		double fvalue = anova.anovaFValue(anovaInput);
 		return fvalue;
 	}
 }

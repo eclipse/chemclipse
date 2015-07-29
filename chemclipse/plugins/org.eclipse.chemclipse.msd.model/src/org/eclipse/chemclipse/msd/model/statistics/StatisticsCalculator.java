@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.statistics;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -153,6 +154,15 @@ public class StatisticsCalculator {
 					if(statisticsElementsSize > 1) {
 						// level 2
 						IStatisticsElement<IStatisticsElement<IIon>> substanceStatisticsElement = new StatisticsElement<IStatisticsElement<IIon>>(mz, statisticsElements);
+						try {
+							Method getdata = IIon.class.getMethod("getAbundance", new Class[0]);
+							IStatistics statistics = new AnovaStatistics(substanceStatisticsElement, getdata);
+							substanceStatisticsElement.setStatisticsContent(statistics);
+						} catch(NoSuchMethodException e) {
+							e.printStackTrace();
+						} catch(SecurityException e) {
+							e.printStackTrace();
+						}
 						substanceStatisticsElements.add(substanceStatisticsElement);
 						// TODO calculate the statistics, and the statistics to the results
 					}
