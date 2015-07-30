@@ -55,6 +55,22 @@ public abstract class AbstractChemClipseLabelProvider extends LabelProvider impl
 		}
 	}
 
+	public DecimalFormat createScientificDecimalFormatInstance() {
+
+		DecimalFormat scientificDecimalFormat;
+		DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
+		char separator = decimalFormatSymbols.getDecimalSeparator();
+		String format = "0" + separator + "###E0";
+		try {
+			scientificDecimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.getDefault()));
+		} catch(NullPointerException e) {
+			scientificDecimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.getDefault()));
+		} catch(IllegalArgumentException e) {
+			scientificDecimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.getDefault()));
+		}
+		return scientificDecimalFormat;
+	}
+
 	public DecimalFormat getDecimalFormat() {
 
 		return decimalFormat;
