@@ -21,6 +21,8 @@ public interface IStatisticsElement<T> {
 
 	List<IStatisticsSourceObject<T>> getSourceElements();
 
+	List<T> getIncludedSourceElements();
+
 	void setSourceElements(List<IStatisticsSourceObject<T>> sourceElements);
 
 	boolean isContentStatistics();
@@ -32,6 +34,4 @@ public interface IStatisticsElement<T> {
 	<S> List<IStatisticsElement<S>> getStatisticsElements();
 
 	<S> void setStatisticsElements(List<IStatisticsElement<S>> content);
-
-	List<T> getIncludedSourceElements();
 }

@@ -139,7 +139,7 @@ public class StatisticsCalculator {
 			}
 		}
 		/*
-		 * Create the proper data structure for OneWayAnova, maybe we need a hashmap based on {mz,Collection<double[]> - grouped by substance}
+		 * Create the proper data structure for Anova analysis
 		 */
 		// for level 1
 		List<IStatisticsElement<IStatisticsElement<IIon>>> substanceStatisticsElements = new ArrayList<IStatisticsElement<IStatisticsElement<IIon>>>();
