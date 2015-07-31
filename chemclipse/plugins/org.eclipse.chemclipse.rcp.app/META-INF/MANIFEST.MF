@@ -12,3 +12,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.rcp.app.cli,
  org.eclipse.chemclipse.rcp.app.profiles
+Bundle-Vendor: ChemClipse
