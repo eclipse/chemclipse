@@ -16,10 +16,10 @@ function merge_project {
 
   echo 'git merge project: '$1
   cd $1
-  git checkout master
-  git merge --no-ff develop
-  git push origin master
-  git checkout develop
+  #git checkout master
+  #git merge --no-ff develop
+  #git push origin master
+  #git checkout develop
   cd $active
 }
 
