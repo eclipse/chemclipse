@@ -11,22 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.jcampdx;
 
-import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.PathResolver;
-
 /**
  * THIS CLASS IS NOT SUITED FOR PRODUCTIVE USE!<br/>
  * IT IS A TESTCLASS!
- * 
- * @author eselmeister
  */
 public class TestPathHelper extends PathResolver {
-
-	/*
-	 * IMPORT
-	 */
-	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1 = "testData/files/import/Chromatogram1.JDX";
-	/*
-	 * EXPORT
-	 */
-	public static final String TESTFILE_EXPORT_TEST = "testData/files/export/Test.JDX";
 }
