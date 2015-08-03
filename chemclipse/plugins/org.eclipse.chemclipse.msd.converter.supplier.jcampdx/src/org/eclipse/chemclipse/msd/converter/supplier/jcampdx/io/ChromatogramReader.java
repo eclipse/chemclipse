@@ -23,6 +23,11 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
+import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.internal.converter.IConstants;
 import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.IVendorChromatogram;
@@ -33,6 +38,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.VendorScan;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -45,6 +51,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 	private static final String RETENTION_TIME_MARKER = "##RETENTION_TIME=";
 	private static final String TIME_MARKER = "##TIME=";
 	private static final String TIC_MARKER = "##TIC=";
+	private static final String NAME_MARKER = "##NAME=";
 	private static final String SCAN_NUMBER_MARKER = "##SCAN_NUMBER=";
 	private static final String SCAN_MARKER = "##SCAN=";
 	private static final String XYDATA_MARKER_SPACE = "##XYDATA= (XY..XY)";
@@ -125,6 +132,20 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 				if(line.startsWith(RETENTION_TIME_MARKER) || line.startsWith(TIME_MARKER)) {
 					retentionTime = getRetentionTime(line);
 					massSpectrum.setRetentionTime(retentionTime);
+				} else if(line.startsWith(NAME_MARKER)) {
+					/*
+					 * Try to get the identification.
+					 */
+					String name = line.replace(NAME_MARKER, "").trim();
+					ILibraryInformation libraryInformation = new LibraryInformation();
+					libraryInformation.setName(name);
+					libraryInformation.setComments("JCAMP-DX");
+					IComparisonResult comparisonResult = new ComparisonResult(IComparisonResult.MAX_MATCH_FACTOR, IComparisonResult.MAX_REVERSE_MATCH_FACTOR);
+					try {
+						massSpectrum.addTarget(new MassSpectrumTarget(libraryInformation, comparisonResult));
+					} catch(ReferenceMustNotBeNullException e) {
+						logger.warn(e);
+					}
 				} else if(line.startsWith(XYDATA_MARKER_SPACE) || line.startsWith(XYDATA_MARKER_SHORT)) {
 					/*
 					 * Mark to read ions.
