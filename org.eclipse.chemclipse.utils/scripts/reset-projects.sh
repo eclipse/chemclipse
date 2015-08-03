@@ -17,7 +17,7 @@ function reset_project {
 
   echo 'git reset project: '$1
   cd $1
-	echo "git reset aktivieren ... !"  
+	echo "git reset activate ... !"  
 	#git reset --hard
   cd $active
 }
