@@ -1,19 +1,18 @@
 #!/bin/bash
 
 #*******************************************************************************
-# Copyright (c) 2015 Lablicate UG (haftungsbeschränkt).
-# 
-# All rights reserved. This program and the accompanying materials
-# are made available under the terms of the Eclipse Public License v1.0
-# which accompanies this distribution, and is available at
-# http://www.eclipse.org/legal/epl-v10.html
+#
+# Copyright (c) 2014, 2015 Lablicate UG (haftungsbeschränkt)
+#
+# All rights reserved.
 # 
 # Contributors:
-# 	Dr. Philip Wenig - initial API and implementation
-#	Dr. Janos Binder - initial API and implementation
-#*******************************************************************************
+#	Dr. Philip Wenig
+#       Dr. Janos Binder
+#
+#*******************************************************************************/
 
-GIT_FLAGS=" --quiet"
+PUSH_SCRIPT_GIT_FLAGS=" --quiet"
 
 function push_project {
 
@@ -21,32 +20,24 @@ function push_project {
   # Apply on a valid Git repository only.
   #
   if [ -e "$1/.git" ]; then
-    echo -e "git push$GIT_FLAGS project: \033[1m$1\033[0m"
+    echo -e "git push$PUSH_SCRIPT_GIT_FLAGS project: \033[1m$1\033[0m"
     cd $1
-    git push$GIT_FLAGS
+    git push$PUSH_SCRIPT_GIT_FLAGS
     #git push origin sr-0.7.0
-    cd $active
+    cd $push_script_active
   fi
-}
-
-function push_projects {
-  
-  while [ $1 ]; do
-    push_project $1
-    shift
-  done
 }
 
 while getopts "nqvh" opt; do
   case $opt in
     n)
-      GIT_FLAGS=""
+      PUSH_SCRIPT_GIT_FLAGS=""
       ;;
     q)
-      GIT_FLAGS=" --quiet"
+      PUSH_SCRIPT_GIT_FLAGS=" --quiet"
       ;;
     v)
-      GIT_FLAGS=" --verbose"
+      PUSH_SCRIPT_GIT_FLAGS=" --verbose"
       ;;
     h)
       echo "Pushes all project updates into the repository" >&2
@@ -64,7 +55,19 @@ while getopts "nqvh" opt; do
 done
 
 echo "Start git project push"
-  active=$(pwd)
-    # Go to the workspace area.
-  push_projects $(find ../../.. -maxdepth 1 -type d)
+  push_script_active=$(pwd)
+  # ../../../ go to workspace area.
+  export -f push_project
+  export PUSH_SCRIPT_GIT_FLAGS
+  export push_script_active
+  val=$(command -v parallel)
+  if [ -z "$val" ]; then
+    echo "WARN: Please consider installing 'parallel'. Falling back to snail mode."
+    for git_project in $(find ../../.. -maxdepth 1 -type d); do
+      push_project $git_project
+    done
+  else
+    # one can play with parallel --bar or --progress but it looks ugly
+    find ../../.. -maxdepth 1 -type d | parallel push_project :::: -
+  fi
 echo "finished"
