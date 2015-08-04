@@ -17,15 +17,6 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	private float reverseMatchFactor;
 	private float probability;
 	private String advise = "";
-	/*
-	 * The borders should be determined to give an advise if necessary.<br/> If
-	 * the fit value is high and the rfit value is low, the unknown mass
-	 * spectrum is maybe convoluted by impurities.
-	 */
-	private static final float MIN_MF_BORDER = 20.0f;
-	private static final float MAX_MF_BORDER = 80.0f;
-	private static final float MIN_RMF_BORDER = 20.0f;
-	private static final float MAX_RMF_BORDER = 80.0f;
 
 	public AbstractComparisonResult(float matchFactor, float reverseMatchFactor) {
 
@@ -70,9 +61,9 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	 */
 	private void determineAdvise() {
 
-		if(matchFactor >= MAX_MF_BORDER && reverseMatchFactor <= MIN_RMF_BORDER) {
+		if(matchFactor >= MAX_LIMIT_MATCH_FACTOR && reverseMatchFactor <= MIN_LIMIT_REVERSE_MATCH_FACTOR) {
 			advise = ADVISE_INCOMPLETE;
-		} else if(matchFactor <= MIN_MF_BORDER && reverseMatchFactor >= MAX_RMF_BORDER) {
+		} else if(matchFactor <= MIN_LIMIT_MATCH_FACTOR && reverseMatchFactor >= MAX_LIMIT_REVERSE_MATCH_FACTOR) {
 			advise = ADVISE_IMPURITIES;
 		}
 	}

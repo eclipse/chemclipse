@@ -13,8 +13,20 @@ package org.eclipse.chemclipse.model.identifier;
 
 public interface IComparisonResult {
 
+	float MAX_MATCH_FACTOR = 100.0f;
+	float MAX_REVERSE_MATCH_FACTOR = 100.0f;
+	//
 	String ADVISE_INCOMPLETE = "The target is maybe incomplete or recorded under bad conditions.";
 	String ADVISE_IMPURITIES = "The target is maybe convoluted by impurities.";
+	/*
+	 * The borders should be determined to give an advise if necessary.<br/> If
+	 * the fit value is high and the rfit value is low, the unknown mass
+	 * spectrum is maybe convoluted by impurities.
+	 */
+	float MIN_LIMIT_MATCH_FACTOR = 20.0f;
+	float MAX_LIMIT_MATCH_FACTOR = 80.0f;
+	float MIN_LIMIT_REVERSE_MATCH_FACTOR = 20.0f;
+	float MAX_LIMIT_REVERSE_MATCH_FACTOR = 80.0f;
 
 	/**
 	 * Returns the match factor.
