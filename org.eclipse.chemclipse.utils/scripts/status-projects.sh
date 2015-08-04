@@ -14,7 +14,7 @@
 
 STATUS_SCRIPT_GIT_FLAGS=" --short"
 MASTER_BRANCH="origin/develop"
-VERY_QUIET=true
+VERY_QUIET=false
 
 while getopts "nsvh" opt; do
   case $opt in
@@ -38,8 +38,8 @@ while getopts "nsvh" opt; do
     h)
       echo "Gets all project statuses" >&2
       echo "Flags: -n -- calls git status without any argument" >&2
-      echo "       -q -- calls git status very quiet in '--short' mode (default -- prints only if something has changed)" >&2
-      echo "       -s -- calls git status in '--short' mode" >&2
+      echo "       -q -- calls git status very quiet in '--short' mode (prints only if something has changed)" >&2
+      echo "       -s -- calls git status in '--short' mode (default)" >&2
       echo "       -v -- calls git status in '--verbose' mode" >&2
       echo "       -h -- shows this help" >&2
       exit 1
@@ -102,7 +102,7 @@ echo "Start git project status"
   export status_script_active
   val=$(command -v parallel)
   if [ -z "$val" ]; then
-    echo "WARN: Please consider installing 'parallel'. Falling back to snail mode."
+    echo "INFO: Please consider installing 'parallel' to make this script superfast."
     for git_project in $(find ../../.. -maxdepth 1 -type d); do
       status_project $git_project
     done

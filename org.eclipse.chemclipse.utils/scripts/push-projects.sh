@@ -62,7 +62,7 @@ echo "Start git project push"
   export push_script_active
   val=$(command -v parallel)
   if [ -z "$val" ]; then
-    echo "WARN: Please consider installing 'parallel'. Falling back to snail mode."
+    echo "INFO: Please consider installing 'parallel' to make this script superfast."
     for git_project in $(find ../../.. -maxdepth 1 -type d); do
       push_project $git_project
     done
