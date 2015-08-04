@@ -86,7 +86,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		int versions = 11;
 		String[][] elements = new String[versions][2];
 		//
-		elements[0][0] = IFormat.VERSION_0701;
+		elements[0][0] = IFormat.VERSION_0701 + " (Nernst)";
 		elements[0][1] = IFormat.VERSION_0701;
 		//
 		elements[1][0] = IFormat.VERSION_0801;
@@ -95,7 +95,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		elements[2][0] = IFormat.VERSION_0802;
 		elements[2][1] = IFormat.VERSION_0802;
 		//
-		elements[3][0] = IFormat.VERSION_0803;
+		elements[3][0] = IFormat.VERSION_0803 + " (Dempster)";
 		elements[3][1] = IFormat.VERSION_0803;
 		//
 		elements[4][0] = IFormat.VERSION_0901;
@@ -104,7 +104,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		elements[5][0] = IFormat.VERSION_0902;
 		elements[5][1] = IFormat.VERSION_0902;
 		//
-		elements[6][0] = IFormat.VERSION_0903;
+		elements[6][0] = IFormat.VERSION_0903 + " (Mattauch)";
 		elements[6][1] = IFormat.VERSION_0903;
 		//
 		elements[7][0] = IFormat.VERSION_1001;
@@ -116,7 +116,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		elements[9][0] = IFormat.VERSION_1003;
 		elements[9][1] = IFormat.VERSION_1003;
 		//
-		elements[10][0] = IFormat.VERSION_1004;
+		elements[10][0] = IFormat.VERSION_1004 + " (Aston)";
 		elements[10][1] = IFormat.VERSION_1004;
 		//
 		return elements;

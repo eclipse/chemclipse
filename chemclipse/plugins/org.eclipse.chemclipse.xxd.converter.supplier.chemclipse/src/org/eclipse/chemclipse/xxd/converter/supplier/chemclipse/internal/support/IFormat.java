@@ -24,17 +24,17 @@ public interface IFormat {
 	/*
 	 * File Settings
 	 */
-	String VERSION_0701 = "0.7.0.1"; // Version 0.7.0, Release 1
+	String VERSION_0701 = "0.7.0.1"; // Version 0.7.0, Release 1 (Nernst)
 	String VERSION_0801 = "0.8.0.1"; // Version 0.8.0, Release 1
 	String VERSION_0802 = "0.8.0.2"; // Version 0.8.0, Release 2
-	String VERSION_0803 = "0.8.0.3"; // Version 0.8.0, Release 3
+	String VERSION_0803 = "0.8.0.3"; // Version 0.8.0, Release 3 (Dempster)
 	String VERSION_0901 = "0.9.0.1"; // Version 0.9.0, Release 1
 	String VERSION_0902 = "0.9.0.2"; // Version 0.9.0, Release 2
-	String VERSION_0903 = "0.9.0.3"; // Version 0.9.0, Release 3
+	String VERSION_0903 = "0.9.0.3"; // Version 0.9.0, Release 3 (Mattauch)
 	String VERSION_1001 = "1.0.0.1"; // Version 1.0.0, Release 1
 	String VERSION_1002 = "1.0.0.2"; // Version 1.0.0, Release 2
-	String VERSION_1003 = "1.0.0.3"; // Version 1.0.0, Release 3 (1.0.0 Preview)
-	String VERSION_1004 = "1.0.0.4"; // Version 1.0.0, Release 4 (1.0.0 GA)
+	String VERSION_1003 = "1.0.0.3"; // Version 1.0.0, Release 3
+	String VERSION_1004 = "1.0.0.4"; // Version 1.0.0, Release 4 (Aston)
 	String VERSION_LATEST = VERSION_1004;
 	String FILE_VERSION = "VERSION";
 	//
