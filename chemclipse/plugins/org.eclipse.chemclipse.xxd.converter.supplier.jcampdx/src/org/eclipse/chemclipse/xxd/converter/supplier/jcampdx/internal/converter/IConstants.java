@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.internal.converter
 
 public interface IConstants {
 
-	String CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.jcampdx";
+	String CONVERTER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.jcampdx";
 	String IMPORT_CHROMATOGRAM = "Import JCAMP-DX Chromatogram";
 	String IMPORT_CHROMATOGRAM_OVERVIEW = "Import JCAMP-DX Overview";
 	String PARSE_SCANS = "Parse Scans";

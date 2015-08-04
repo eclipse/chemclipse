@@ -8,7 +8,7 @@
             exportConverter="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.converter.ChromatogramExportConverter"
             fileExtension=".JDX"
             filterName="JCAMP-DX Chromatogram (*.JDX)"
-            id="org.eclipse.chemclipse.msd.converter.supplier.jcampdx"
+            id="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx"
             importConverter="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.converter.ChromatogramImportConverter"
             isExportable="true"
             isImportable="true">
