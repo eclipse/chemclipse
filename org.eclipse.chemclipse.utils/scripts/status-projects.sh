@@ -16,7 +16,7 @@ STATUS_SCRIPT_GIT_FLAGS=" --short"
 MASTER_BRANCH="origin/develop"
 VERY_QUIET=false
 
-while getopts "nsvh" opt; do
+while getopts "nsqvh" opt; do
   case $opt in
     n)
       VERY_QUIET=false
