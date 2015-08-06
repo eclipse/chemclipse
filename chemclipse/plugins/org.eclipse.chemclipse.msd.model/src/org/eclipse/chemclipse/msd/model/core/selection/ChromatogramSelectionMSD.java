@@ -34,12 +34,11 @@ import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateN
  * area.<br/>
  * Start and stop scan are not provided as they can be calculated by the
  * retention time.
- * 
- * @author eselmeister
  */
 public class ChromatogramSelectionMSD extends AbstractChromatogramSelection implements IChromatogramSelectionMSD {
 
 	private IVendorMassSpectrum selectedScan;
+	private IVendorMassSpectrum selectedIdentifiedScan;
 	private IChromatogramPeakMSD selectedPeak;
 	private IMarkedIons selectedIons;
 	private IMarkedIons excludedIons;
@@ -83,6 +82,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 
 		super.dispose();
 		selectedScan = null;
+		selectedIdentifiedScan = null;
 		selectedPeak = null;
 		selectedIons = null;
 		excludedIons = null;
@@ -102,6 +102,12 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 	public IVendorMassSpectrum getSelectedScan() {
 
 		return selectedScan;
+	}
+
+	@Override
+	public IVendorMassSpectrum getSelectedIdentifiedScan() {
+
+		return selectedIdentifiedScan;
 	}
 
 	@Override
@@ -155,6 +161,10 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 			selectedScan = null;
 		}
 		/*
+		 * Selected Identified Scan
+		 */
+		selectedIdentifiedScan = null;
+		/*
 		 * Peak
 		 */
 		if(chromatogram instanceof IChromatogramMSD) {
@@ -199,10 +209,33 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 	}
 
 	@Override
+	public void setSelectedIdentifiedScan(IVendorMassSpectrum selectedIdentifiedScan) {
+
+		/*
+		 * FireUpdateChange will be called in the validate method.
+		 */
+		setSelectedIdentifiedScan(selectedIdentifiedScan, true);
+	}
+
+	@Override
 	public void setSelectedScan(IVendorMassSpectrum selectedScan, boolean update) {
 
 		if(selectedScan != null) {
 			this.selectedScan = selectedScan;
+			/*
+			 * Fire update change if neccessary.
+			 */
+			if(update) {
+				ChromatogramSelectionMSDUpdateNotifier.fireUpdateChange(this, false);
+			}
+		}
+	}
+
+	@Override
+	public void setSelectedIdentifiedScan(IVendorMassSpectrum selectedIdentifiedScan, boolean update) {
+
+		if(selectedIdentifiedScan != null) {
+			this.selectedIdentifiedScan = selectedIdentifiedScan;
 			/*
 			 * Fire update change if neccessary.
 			 */
@@ -249,6 +282,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 
 		super.update(forceReload);
 		setSelectedScan(selectedScan, false);
+		setSelectedIdentifiedScan(selectedIdentifiedScan, false);
 		setSelectedPeak(selectedPeak, false);
 		fireUpdateChange(forceReload);
 	}

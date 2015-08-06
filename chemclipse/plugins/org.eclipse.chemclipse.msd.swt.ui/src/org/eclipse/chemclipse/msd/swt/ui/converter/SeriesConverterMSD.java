@@ -15,10 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -28,6 +27,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -37,6 +37,7 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
@@ -48,6 +49,7 @@ import org.eclipse.chemclipse.numeric.equations.Equations;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.numeric.exceptions.SolverException;
 import org.eclipse.chemclipse.swt.ui.converter.SeriesConverter;
+import org.eclipse.chemclipse.swt.ui.exceptions.NoIdentifiedScansAvailableException;
 import org.eclipse.chemclipse.swt.ui.exceptions.NoPeaksAvailableException;
 import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
@@ -56,6 +58,7 @@ import org.eclipse.chemclipse.swt.ui.series.Series;
 import org.eclipse.chemclipse.swt.ui.support.IOffset;
 import org.eclipse.chemclipse.swt.ui.support.Offset;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 /**
  * Converts chromatograms, mass spectra, peaks, baselines to valid series
@@ -381,6 +384,108 @@ public class SeriesConverterMSD {
 			}
 		}
 		return peakSeries;
+	}
+
+	/**
+	 * Returns the identified scans of the given chromatogram selection.
+	 * 
+	 * @param chromatogramSelection
+	 * @param sign
+	 * @return ISeries
+	 */
+	public static ISeries convertIdentifiedScans(IChromatogramSelectionMSD chromatogramSelection, IOffset offset, Sign sign) throws NoIdentifiedScansAvailableException {
+
+		IMultipleSeries identifiedScansSeries = convertIdentifiedScans(chromatogramSelection, sign, offset);
+		return identifiedScansSeries.getMultipleSeries().get(0);
+	}
+
+	public static IMassSpectra getIdentifiedScans(IChromatogramSelectionMSD chromatogramSelection, boolean enforceLoadScanProxy) {
+
+		IMassSpectra massSpectra = new MassSpectra();
+		List<IScan> scans = chromatogramSelection.getChromatogram().getScans();
+		int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+		int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+		//
+		for(IScan scan : scans) {
+			if(scan instanceof IVendorMassSpectrum) {
+				IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scan;
+				if(massSpectrum.getTargets().size() > 0) {
+					int retentionTime = massSpectrum.getRetentionTime();
+					if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
+						/*
+						 * Enforce to load the scan proxy if it is used.
+						 */
+						if(enforceLoadScanProxy) {
+							massSpectrum.enforceLoadScanProxy();
+						}
+						massSpectra.addMassSpectrum(massSpectrum);
+					}
+				}
+			}
+		}
+		return massSpectra;
+	}
+
+	private static IMultipleSeries convertIdentifiedScans(IChromatogramSelectionMSD chromatogramSelection, Sign sign, IOffset offset) throws NoIdentifiedScansAvailableException {
+
+		/*
+		 * There must be at least one chromatogram in the list.
+		 */
+		IMultipleSeries identifiedScanSeries = new MultipleSeries();
+		if(chromatogramSelection != null) {
+			offset = SeriesConverter.validateOffset(offset);
+			IMassSpectra massSpectra = getIdentifiedScans(chromatogramSelection, false);
+			if(massSpectra.size() == 0) {
+				throw new NoIdentifiedScansAvailableException();
+			}
+			/*
+			 * Get the retention time and max abundance value for each peak.
+			 */
+			int amountIdentifiedScans = massSpectra.size();
+			double[] xSeries = new double[amountIdentifiedScans];
+			double[] ySeries = new double[amountIdentifiedScans];
+			int x = 0;
+			int y = 0;
+			double retentionTime;
+			double abundance;
+			double xOffset;
+			double yOffset;
+			/*
+			 * Iterate through all identified scans of the chromatogram selection.
+			 */
+			for(IScanMSD identifiedScan : massSpectra.getList()) {
+				/*
+				 * Retrieve the x and y signal of each peak.
+				 */
+				retentionTime = identifiedScan.getRetentionTime();
+				abundance = identifiedScan.getTotalSignal();
+				/*
+				 * Sign the abundance as a negative value?
+				 */
+				xOffset = offset.getCurrentXOffset();
+				yOffset = offset.getCurrentYOffset();
+				if(sign == Sign.NEGATIVE) {
+					abundance *= -1;
+					xOffset *= -1;
+					yOffset *= -1;
+				}
+				/*
+				 * Set the offset.
+				 */
+				retentionTime += xOffset;
+				abundance += yOffset;
+				/*
+				 * Store the values in the array.
+				 */
+				xSeries[x++] = retentionTime;
+				ySeries[y++] = abundance;
+				/*
+				 * Add the peak.
+				 */
+				identifiedScanSeries.add(new Series(xSeries, ySeries, "Identified Scans"));
+			}
+		}
+		return identifiedScanSeries;
 	}
 
 	/**

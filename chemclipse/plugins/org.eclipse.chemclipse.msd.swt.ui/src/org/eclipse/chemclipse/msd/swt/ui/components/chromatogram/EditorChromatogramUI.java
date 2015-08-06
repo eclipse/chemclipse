@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.swt.ui.converter.SeriesConverterMSD;
 import org.eclipse.chemclipse.swt.ui.converter.SeriesConverter;
+import org.eclipse.chemclipse.swt.ui.exceptions.NoIdentifiedScansAvailableException;
 import org.eclipse.chemclipse.swt.ui.exceptions.NoPeaksAvailableException;
 import org.eclipse.chemclipse.swt.ui.marker.MouseMoveMarker;
 import org.eclipse.chemclipse.swt.ui.marker.SelectedPositionMarker;
@@ -70,6 +71,7 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 			ISeries series;
 			ILineSeries lineSeries;
 			ILineSeries selectedScanSeries;
+			ILineSeries selectedIdentifiedScanSeries;
 			ILineSeries scatterSeries;
 			ILineSeries peakSeries;
 			ILineSeries backgroundSeries;
@@ -94,7 +96,7 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 			 */
 			IScan selectedScan = chromatogramSelection.getSelectedScan();
 			if(selectedScan != null) {
-				series = getSelectedScanSeries(selectedScan);
+				series = getScanSeries(selectedScan, "Selected Scan");
 				selectedScanSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, series.getId());
 				selectedScanSeries.setXSeries(series.getXSeries());
 				selectedScanSeries.setYSeries(series.getYSeries());
@@ -115,6 +117,7 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 				scatterSeries.setSymbolType(PlotSymbolType.INVERTED_TRIANGLE);
 				scatterSeries.setSymbolSize(5);
 				scatterSeries.setLineColor(Colors.GRAY);
+				scatterSeries.setSymbolColor(Colors.DARK_GRAY);
 				/*
 				 * Setting up a dummy error bar
 				 */
@@ -160,17 +163,51 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 			} catch(NoPeaksAvailableException e) {
 				/*
 				 * Do nothing.
+				 * Just don't add the series.
+				 */
+			}
+			/*
+			 * Set the identified scans marker if available.
+			 */
+			try {
+				series = SeriesConverterMSD.convertIdentifiedScans(chromatogramSelection, new Offset(0, 0), Sign.POSITIVE);
+				scatterSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, series.getId());
+				scatterSeries.setXSeries(series.getXSeries());
+				scatterSeries.setYSeries(series.getYSeries());
+				scatterSeries.setLineStyle(LineStyle.NONE);
+				scatterSeries.setSymbolType(PlotSymbolType.CIRCLE);
+				scatterSeries.setSymbolSize(5);
+				scatterSeries.setLineColor(Colors.GRAY);
+				scatterSeries.setSymbolColor(Colors.DARK_GRAY);
+				/*
+				 * Set the selected identified scan.
+				 */
+				IScan selectedIdentifiedScan = chromatogramSelection.getSelectedIdentifiedScan();
+				if(selectedIdentifiedScan != null) {
+					series = getScanSeries(selectedIdentifiedScan, "Selected Identified Scan");
+					selectedIdentifiedScanSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, series.getId());
+					selectedIdentifiedScanSeries.setXSeries(series.getXSeries());
+					selectedIdentifiedScanSeries.setYSeries(series.getYSeries());
+					selectedIdentifiedScanSeries.setLineStyle(LineStyle.NONE);
+					selectedIdentifiedScanSeries.setSymbolType(PlotSymbolType.CIRCLE);
+					selectedIdentifiedScanSeries.setSymbolSize(5);
+					selectedIdentifiedScanSeries.setSymbolColor(Colors.BLACK);
+				}
+			} catch(NoIdentifiedScansAvailableException e) {
+				/*
+				 * Do nothing.
+				 * Just don't add the series.
 				 */
 			}
 		}
 	}
 
-	private ISeries getSelectedScanSeries(IScan selectedScan) {
+	private ISeries getScanSeries(IScan selectedScan, String id) {
 
 		double[] xSeries = new double[]{selectedScan.getRetentionTime()};
 		int totalSignal = (int)selectedScan.getTotalSignal();
 		double[] ySeries = new double[]{totalSignal};
-		return new Series(xSeries, ySeries, "Selected Scan");
+		return new Series(xSeries, ySeries, id);
 	}
 
 	// ---------------------------------------------------------------ISeriesSetter

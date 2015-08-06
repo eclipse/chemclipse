@@ -122,6 +122,7 @@ public class MassSpectrumListUI extends Composite {
 		 */
 		tableViewer.getControl().addKeyListener(new KeyAdapter() {
 
+			// TODO Somehow, this function is not working if SelectionChangedListener is registered.
 			@Override
 			public void keyReleased(KeyEvent e) {
 
@@ -246,9 +247,7 @@ public class MassSpectrumListUI extends Composite {
 			Table table = tableViewer.getTable();
 			int[] indices = table.getSelectionIndices();
 			/*
-			 * Delete the selected targets. Make a distinction between: -
-			 * IChromatogram - IChromatogramPeak Don't delete entries in cause
-			 * they are temporary: - IMassSpectrumIdentificationResult
+			 * Delete the selected targets.
 			 */
 			Object input = tableViewer.getInput();
 			if(input instanceof IMassSpectra) {
@@ -261,6 +260,7 @@ public class MassSpectrumListUI extends Composite {
 			 * Delete targets in table.
 			 */
 			table.remove(indices);
+			// TODO Fire an event that the indices have been removed.
 		}
 	}
 

@@ -11,23 +11,24 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.views;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
+import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
+import org.eclipse.chemclipse.msd.swt.ui.converter.SeriesConverterMSD;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -41,6 +42,8 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 	private MassSpectrumListUI massSpectrumListUI;
 	private IEventBroker eventBroker;
 	private EventHandler eventHandler;
+	//
+	private IChromatogramSelectionMSD chromatogramSelection;
 
 	@Inject
 	public MassSpectraIdentifiedList(MPart part, EPartService partService, IEventBroker eventBroker) {
@@ -67,6 +70,22 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 
 		parent.setLayout(new FillLayout());
 		massSpectrumListUI = new MassSpectrumListUI(parent, SWT.NONE);
+		massSpectrumListUI.getTableViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+
+				Object firstElement = ((IStructuredSelection)event.getSelection()).getFirstElement();
+				if(firstElement != null && firstElement instanceof IVendorMassSpectrum) {
+					/*
+					 * Fire an update if an identified scan has been selected.
+					 */
+					IVendorMassSpectrum vendorMassSpectrum = (IVendorMassSpectrum)firstElement;
+					chromatogramSelection.setSelectedIdentifiedScan(vendorMassSpectrum, false);
+					ChromatogramSelectionMSDUpdateNotifier.fireUpdateChange(chromatogramSelection, true);
+				}
+			}
+		});
 	}
 
 	@PreDestroy
@@ -99,27 +118,8 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 		 * selection is not null.
 		 */
 		if(doUpdate(chromatogramSelection)) {
-			IMassSpectra massSpectra = new MassSpectra();
-			List<IScan> scans = chromatogramSelection.getChromatogram().getScans();
-			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
-			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
-			//
-			for(IScan scan : scans) {
-				if(scan instanceof IVendorMassSpectrum) {
-					IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scan;
-					if(massSpectrum.getTargets().size() > 0) {
-						int retentionTime = massSpectrum.getRetentionTime();
-						if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
-							/*
-							 * Enforce to load the scan proxy if it is used.
-							 */
-							massSpectrum.enforceLoadScanProxy();
-							massSpectra.addMassSpectrum(massSpectrum);
-						}
-					}
-				}
-			}
-			//
+			this.chromatogramSelection = chromatogramSelection;
+			IMassSpectra massSpectra = SeriesConverterMSD.getIdentifiedScans(chromatogramSelection, true);
 			massSpectrumListUI.update(massSpectra, forceReload);
 		}
 	}

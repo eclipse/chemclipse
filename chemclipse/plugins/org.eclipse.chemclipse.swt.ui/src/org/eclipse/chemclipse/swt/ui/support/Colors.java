@@ -28,6 +28,7 @@ public class Colors {
 	public static final Color DARK_RED = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED);
 	public static final Color GREEN = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
 	public static final Color GRAY = Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
+	public static final Color DARK_GRAY = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY);
 	public static final Color DARK_CYAN = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_CYAN);
 	/*
 	 * These are system color ids, defined org.eclipse.swt.SWT. If you use own
