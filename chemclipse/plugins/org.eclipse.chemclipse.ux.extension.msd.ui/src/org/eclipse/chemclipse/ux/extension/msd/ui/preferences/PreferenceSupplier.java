@@ -19,11 +19,19 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 public class PreferenceSupplier {
 
+	public static final String P_SELECTED_ORGANIC_COMPOUND = "selectedOrganicCompound";
+	//
 	public static final String P_ORGANIC_COMPOUND_HYDROCARBONS = "organicCompoundHydrocarbons";
 	public static final String P_ORGANIC_COMPOUND_FATTY_ACIDS = "organicCompoundFattyAcids";
 	public static final String P_ORGANIC_COMPOUND_FAME = "organicCompoundFattyAcidsAsMethylEsters";
 	//
+	public static final String P_MAGNIFICATION_FACTOR = "magnificationFactor";
+	public static final int DEF_MAGNIFICATION_FACTOR = 1;
+	public static final int DEF_MAGNIFICATION_FACTOR_MIN = 1;
+	public static final int DEF_MAGNIFICATION_FACTOR_MAX = 50;
+	//
 	private static IMarkedIons compoundIonsEmpty = new MarkedIons();
+	private static int magnificationFactor = -1;
 	private static IMarkedIons compoundIonsHydrocarbons = null;
 	private static IMarkedIons compoundIonsFattyAcids = null;
 	private static IMarkedIons compoundIonsFame = null;
@@ -49,16 +57,27 @@ public class PreferenceSupplier {
 		IMarkedIons compoundIons;
 		//
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		String selectedOrganicCompound = store.getString(PreferenceConstants.P_SELECTED_ORGANIC_COMPOUND);
+		String selectedOrganicCompound = store.getString(PreferenceSupplier.P_SELECTED_ORGANIC_COMPOUND);
+		/*
+		 * Set the compounds to null if the magnification factor
+		 * has been edited.
+		 */
+		if(magnificationFactor != store.getInt(PreferenceSupplier.P_MAGNIFICATION_FACTOR)) {
+			compoundIonsHydrocarbons = null;
+			compoundIonsFattyAcids = null;
+			compoundIonsFame = null;
+			magnificationFactor = store.getInt(PreferenceSupplier.P_MAGNIFICATION_FACTOR);
+		}
+		//
 		if(selectedOrganicCompound.equals(P_ORGANIC_COMPOUND_HYDROCARBONS)) {
 			/*
 			 * Hydrocarbons
 			 */
 			if(compoundIonsHydrocarbons == null) {
 				compoundIonsHydrocarbons = new MarkedIons();
-				compoundIonsHydrocarbons.add(new MarkedIon(57));
-				compoundIonsHydrocarbons.add(new MarkedIon(71));
-				compoundIonsHydrocarbons.add(new MarkedIon(85));
+				compoundIonsHydrocarbons.add(new MarkedIon(57, magnificationFactor));
+				compoundIonsHydrocarbons.add(new MarkedIon(71, magnificationFactor));
+				compoundIonsHydrocarbons.add(new MarkedIon(85, magnificationFactor));
 			}
 			compoundIons = compoundIonsHydrocarbons;
 		} else if(selectedOrganicCompound.equals(P_ORGANIC_COMPOUND_FATTY_ACIDS)) {
@@ -67,8 +86,8 @@ public class PreferenceSupplier {
 			 */
 			if(compoundIonsFattyAcids == null) {
 				compoundIonsFattyAcids = new MarkedIons();
-				compoundIonsFattyAcids.add(new MarkedIon(74));
-				compoundIonsFattyAcids.add(new MarkedIon(87));
+				compoundIonsFattyAcids.add(new MarkedIon(74, magnificationFactor));
+				compoundIonsFattyAcids.add(new MarkedIon(87, magnificationFactor));
 			}
 			compoundIons = compoundIonsFattyAcids;
 		} else if(selectedOrganicCompound.equals(P_ORGANIC_COMPOUND_FAME)) {
@@ -77,8 +96,8 @@ public class PreferenceSupplier {
 			 */
 			if(compoundIonsFame == null) {
 				compoundIonsFame = new MarkedIons();
-				compoundIonsFame.add(new MarkedIon(79));
-				compoundIonsFame.add(new MarkedIon(81));
+				compoundIonsFame.add(new MarkedIon(79, magnificationFactor));
+				compoundIonsFame.add(new MarkedIon(81, magnificationFactor));
 			}
 			compoundIons = compoundIonsFame;
 		} else {

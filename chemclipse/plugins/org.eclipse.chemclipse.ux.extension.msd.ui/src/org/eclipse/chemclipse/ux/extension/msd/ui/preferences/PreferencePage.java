@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.preferences;
 import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -33,7 +34,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceConstants.P_SELECTED_ORGANIC_COMPOUND, "Organic Compound:", PreferenceSupplier.getOrganicCompoundPresets(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_SELECTED_ORGANIC_COMPOUND, "Organic Compound:", PreferenceSupplier.getOrganicCompoundPresets(), getFieldEditorParent()));
+		IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(PreferenceSupplier.P_MAGNIFICATION_FACTOR, "Magnification Factor", getFieldEditorParent());
+		integerFieldEditor.setValidRange(PreferenceSupplier.DEF_MAGNIFICATION_FACTOR_MIN, PreferenceSupplier.DEF_MAGNIFICATION_FACTOR_MAX);
+		addField(integerFieldEditor);
 	}
 
 	/*
