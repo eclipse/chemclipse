@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListTable
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.swt.ui.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.swt.ui.viewers.IListItemsRemoveListener;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
@@ -53,7 +54,10 @@ import org.eclipse.swt.widgets.Text;
 
 public class MassSpectrumListUI extends Composite {
 
+	private static final String POPUP_MENU_ID = "#PopUpMenu"; // $NON-NLS-1$
+	private static final String POPUP_MENU_POSTFIX = "PopUpMenu"; // $NON-NLS-1$
 	private static final int MAX_SPECTRA_LOAD_COMPLETE = 5000;
+	//
 	private Text text;
 	private ExtendedTableViewer tableViewer;
 	private Label label;
@@ -62,10 +66,14 @@ public class MassSpectrumListUI extends Composite {
 	private String[] titles = {"Retention Time", "Retention Index", "Base Peak", "Base Peak Abundance", "Number of Ions", "Name", "CAS", "MW", "Formula"};
 	private int bounds[] = {100, 100, 100, 100, 100, 100, 100, 100, 100};
 	private int massSpectraSize = 0;
+	private List<IListItemsRemoveListener> listItemRemoveListeners;
 
 	public MassSpectrumListUI(Composite parent, int style) {
 
 		super(parent, style);
+		//
+		listItemRemoveListeners = new ArrayList<IListItemsRemoveListener>();
+		//
 		this.setLayout(new GridLayout(2, false));
 		this.setLayoutData(new GridData(GridData.FILL_BOTH));
 		text = new Text(this, SWT.BORDER);
@@ -114,6 +122,13 @@ public class MassSpectrumListUI extends Composite {
 					PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_MSD, viewIds);
 					IScanMSD massSpectrum = (IScanMSD)firstElement;
 					MassSpectrumSelectionUpdateNotifier.fireUpdateChange(massSpectrum, true);
+					/*
+					 * It's important to set the focus here.
+					 * The PerspectiveSwitchHandler.focusPerspectiveAndView activates other views and sets the
+					 * focus there. But when trying to press "DEL", the focus would be on the other views.
+					 * Hence, it needs to be set back to this list.
+					 */
+					setFocus();
 				}
 			}
 		});
@@ -122,7 +137,6 @@ public class MassSpectrumListUI extends Composite {
 		 */
 		tableViewer.getControl().addKeyListener(new KeyAdapter() {
 
-			// TODO Somehow, this function is not working if SelectionChangedListener is registered.
 			@Override
 			public void keyReleased(KeyEvent e) {
 
@@ -157,6 +171,22 @@ public class MassSpectrumListUI extends Composite {
 		initContextMenu();
 	}
 
+	@Override
+	public boolean setFocus() {
+
+		return tableViewer.getTable().setFocus();
+	}
+
+	public void addListItemsRemoveListener(IListItemsRemoveListener listItemRemoveListener) {
+
+		listItemRemoveListeners.add(listItemRemoveListener);
+	}
+
+	public void removeListItemsRemoveListener(IListItemsRemoveListener listItemRemoveListener) {
+
+		listItemRemoveListeners.remove(listItemRemoveListener);
+	}
+
 	public void update(IMassSpectra massSpectra, boolean forceReload) {
 
 		if(massSpectra != null) {
@@ -185,7 +215,7 @@ public class MassSpectrumListUI extends Composite {
 	// -----------------------------------------private methods
 	private void initContextMenu() {
 
-		MenuManager menuManager = new MenuManager("#PopUpMenu", "org.eclipse.chemclipse.chromatogram.msd.ui.perspective.internal.views.targetsView.popup");
+		MenuManager menuManager = new MenuManager(POPUP_MENU_ID, getClass().getName() + POPUP_MENU_POSTFIX);
 		menuManager.setRemoveAllWhenShown(true);
 		/*
 		 * Copy to clipboard
@@ -260,7 +290,14 @@ public class MassSpectrumListUI extends Composite {
 			 * Delete targets in table.
 			 */
 			table.remove(indices);
-			// TODO Fire an event that the indices have been removed.
+			fireUpdateListItemsRemoved();
+		}
+	}
+
+	private void fireUpdateListItemsRemoved() {
+
+		for(IListItemsRemoveListener listItemRemoveListener : listItemRemoveListeners) {
+			listItemRemoveListener.update();
 		}
 	}
 

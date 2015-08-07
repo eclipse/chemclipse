@@ -176,7 +176,7 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 				scatterSeries.setYSeries(series.getYSeries());
 				scatterSeries.setLineStyle(LineStyle.NONE);
 				scatterSeries.setSymbolType(PlotSymbolType.CIRCLE);
-				scatterSeries.setSymbolSize(5);
+				scatterSeries.setSymbolSize(3);
 				scatterSeries.setLineColor(Colors.GRAY);
 				scatterSeries.setSymbolColor(Colors.DARK_GRAY);
 				/*
@@ -191,7 +191,7 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 					selectedIdentifiedScanSeries.setLineStyle(LineStyle.NONE);
 					selectedIdentifiedScanSeries.setSymbolType(PlotSymbolType.CIRCLE);
 					selectedIdentifiedScanSeries.setSymbolSize(5);
-					selectedIdentifiedScanSeries.setSymbolColor(Colors.BLACK);
+					selectedIdentifiedScanSeries.setSymbolColor(Colors.DARK_RED);
 				}
 			} catch(NoIdentifiedScansAvailableException e) {
 				/*
