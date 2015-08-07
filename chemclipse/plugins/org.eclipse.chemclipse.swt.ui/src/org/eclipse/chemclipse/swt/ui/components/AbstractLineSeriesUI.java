@@ -203,6 +203,8 @@ public abstract class AbstractLineSeriesUI extends InteractiveChartExtended impl
 	@Override
 	public synchronized void redraw() {
 
+		assert (yAxisLeft != null) : "The abundance instance must be not null.";
+		assert (xAxisTop != null) : "The milliseconds instance must be not null.";
 		/*
 		 * x values
 		 */
@@ -442,6 +444,8 @@ public abstract class AbstractLineSeriesUI extends InteractiveChartExtended impl
 
 	private void setTopAndLeftAxisVisibility() {
 
+		assert (xAxisTop != null) : "The milliseconds instance must be not null.";
+		assert (yAxisRight != null) : "The relativeAbundance instance must be not null.";
 		/*
 		 * The title will be used white space
 		 * if the top axis is not visible.
