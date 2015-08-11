@@ -1,3 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
+   <feature url="features/org.eclipse.chemclipse.chromatogram.msd.process.supplier.pca.feature_0.7.0.qualifier.jar" id="org.eclipse.chemclipse.chromatogram.msd.process.supplier.pca.feature" version="0.7.0.qualifier">
+      <category name="org.eclipse.chemclipse.chromatogram.msd.plugins.miscellaneous"/>
+   </feature>
+   <category-def name="org.eclipse.chemclipse.chromatogram.msd.plugins.miscellaneous" label="ChemClipse Miscellaneous"/>
 </site>
