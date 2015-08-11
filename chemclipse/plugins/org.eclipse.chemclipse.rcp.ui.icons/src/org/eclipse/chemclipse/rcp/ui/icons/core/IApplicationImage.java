@@ -150,4 +150,10 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_CHROMATOGRAM_OVERLAY_SUBTRACT = "chromatogramOverlaySubtract.gif";
 	String IMAGE_CHROMATOGRAM_OVERLAY_MIRRORED = "chromatogramOverlayMirrored.gif";
 	String IMAGE_CHROMATOGRAM_OVERLAY = "chromatogramOverlay.gif";
+	//
+	String IMAGE_RESET = "reset.gif";
+	String IMAGE_OFFSET_LEFT = "offsetLeft.gif";
+	String IMAGE_OFFSET_RIGHT = "offsetRight.gif";
+	String IMAGE_OFFSET_UP = "offsetUp.gif";
+	String IMAGE_OFFSET_DOWN = "offsetDown.gif";
 }
