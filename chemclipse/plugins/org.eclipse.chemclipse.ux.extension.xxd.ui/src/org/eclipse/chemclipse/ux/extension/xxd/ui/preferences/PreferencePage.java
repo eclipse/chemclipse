@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
@@ -35,6 +36,11 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		addField(new IntegerFieldEditor(PreferenceConstants.P_OVERLAY_X_OFFSET, "Retention time offset (milliseconds):", getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceConstants.P_OVERLAY_Y_OFFSET, "Abundance offset:", getFieldEditorParent()));
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceConstants.P_OFFSET_STEP_LEFT, "Offset step left (milliseconds):", getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceConstants.P_OFFSET_STEP_RIGHT, "Offset step right (milliseconds):", getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceConstants.P_OFFSET_STEP_UP, "Offset step up (abundance):", getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceConstants.P_OFFSET_STEP_DOWN, "Offset step down (abundance):", getFieldEditorParent()));
 	}
 
 	/*

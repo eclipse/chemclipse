@@ -31,8 +31,6 @@ import org.swtchart.ISeries.SeriesType;
  * Shows the chromatogram selection by the selected ions stored in the
  * chromatogram selection instance.<br/>
  * The selected ions will be drawn separately.
- * 
- * @author eselmeister
  */
 public class MultipleChromatogramOffsetUI extends AbstractViewChromatogramUI {
 
