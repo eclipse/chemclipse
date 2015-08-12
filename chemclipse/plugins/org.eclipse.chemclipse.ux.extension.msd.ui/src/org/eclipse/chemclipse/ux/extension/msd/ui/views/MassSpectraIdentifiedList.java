@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.views;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
@@ -19,9 +22,12 @@ import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateNotifier;
+import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
 import org.eclipse.chemclipse.msd.swt.ui.converter.SeriesConverterMSD;
+import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.swt.ui.viewers.IListItemsRemoveListener;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -79,11 +85,26 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 				Object firstElement = ((IStructuredSelection)event.getSelection()).getFirstElement();
 				if(firstElement != null && firstElement instanceof IVendorMassSpectrum) {
 					/*
+					 * Activate the views.
+					 */
+					List<String> viewIds = new ArrayList<String>();
+					viewIds.add(IPerspectiveAndViewIds.VIEW_OPTIMIZED_MASS_SPECTRUM);
+					viewIds.add(IPerspectiveAndViewIds.VIEW_MASS_SPECTRUM_TARGETS);
+					PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_MSD, viewIds);
+					/*
 					 * Fire an update if an identified scan has been selected.
 					 */
 					IVendorMassSpectrum vendorMassSpectrum = (IVendorMassSpectrum)firstElement;
+					MassSpectrumSelectionUpdateNotifier.fireUpdateChange(vendorMassSpectrum, true);
 					chromatogramSelection.setSelectedIdentifiedScan(vendorMassSpectrum, false);
 					ChromatogramSelectionMSDUpdateNotifier.fireUpdateChange(chromatogramSelection, true);
+					/*
+					 * It's important to set the focus here.
+					 * The PerspectiveSwitchHandler.focusPerspectiveAndView activates other views and sets the
+					 * focus there. But when trying to press "DEL", the focus would be on the other views.
+					 * Hence, it needs to be set back to this list.
+					 */
+					massSpectrumListUI.setFocus();
 				}
 			}
 		});

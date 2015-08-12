@@ -15,14 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListContentProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListFilter;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListLabelProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListTableComparator;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.swt.ui.viewers.ExtendedTableViewer;
 import org.eclipse.chemclipse.swt.ui.viewers.IListItemsRemoveListener;
 import org.eclipse.jface.action.Action;
@@ -30,9 +26,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
@@ -106,32 +99,6 @@ public class MassSpectrumListUI extends Composite {
 		tableViewer.setLabelProvider(new MassSpectrumListLabelProvider());
 		massSpectrumListFilter = new MassSpectrumListFilter();
 		tableViewer.setFilters(new ViewerFilter[]{massSpectrumListFilter});
-		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-
-				Object firstElement = ((IStructuredSelection)event.getSelection()).getFirstElement();
-				if(firstElement != null && firstElement instanceof IScanMSD) {
-					/*
-					 * Fire an update if a mass spectrum has been selected.
-					 */
-					List<String> viewIds = new ArrayList<String>();
-					viewIds.add(IPerspectiveAndViewIds.VIEW_OPTIMIZED_MASS_SPECTRUM);
-					viewIds.add(IPerspectiveAndViewIds.VIEW_MASS_SPECTRUM_TARGETS);
-					PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_MSD, viewIds);
-					IScanMSD massSpectrum = (IScanMSD)firstElement;
-					MassSpectrumSelectionUpdateNotifier.fireUpdateChange(massSpectrum, true);
-					/*
-					 * It's important to set the focus here.
-					 * The PerspectiveSwitchHandler.focusPerspectiveAndView activates other views and sets the
-					 * focus there. But when trying to press "DEL", the focus would be on the other views.
-					 * Hence, it needs to be set back to this list.
-					 */
-					setFocus();
-				}
-			}
-		});
 		/*
 		 * Copy and delete
 		 */
