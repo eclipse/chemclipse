@@ -22,6 +22,31 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
+import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
+import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.csd.model.notifier.ChromatogramSelectionCSDUpdateNotifier;
+import org.eclipse.chemclipse.csd.model.notifier.IChromatogramSelectionCSDUpdateNotifier;
+import org.eclipse.chemclipse.csd.swt.ui.components.chromatogram.EditorChromatogramUI;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.chemclipse.ux.extension.csd.ui.internal.support.ChromatogramImportRunnable;
+import org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramFileSupport;
+import org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport;
+import org.eclipse.chemclipse.ux.extension.ui.dialogs.ReferencedChromatogramDialog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -61,39 +86,13 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
-import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
-import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
-import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
-import org.eclipse.chemclipse.csd.model.notifier.ChromatogramSelectionCSDUpdateNotifier;
-import org.eclipse.chemclipse.csd.model.notifier.IChromatogramSelectionCSDUpdateNotifier;
-import org.eclipse.chemclipse.csd.swt.ui.components.chromatogram.EditorChromatogramUI;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
-import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.ux.extension.csd.ui.internal.support.ChromatogramImportRunnable;
-import org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramFileSupport;
-import org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport;
-import org.eclipse.chemclipse.ux.extension.ui.dialogs.ReferencedChromatogramDialog;
-
 @SuppressWarnings("deprecation")
 public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatogramSelectionCSDUpdateNotifier {
 
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.csd.ui.part.chromatogramEditor";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.csd.ui/org.eclipse.chemclipse.ux.extension.csd.ui.editors.ChromatogramEditorCSD";
 	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif";
-	public static final String TOOLTIP = "Chromatogram - Detector Type: FID";
+	public static final String TOOLTIP = "Chromatogram - Detector Type: CSD";
 	//
 	private static final Logger logger = Logger.getLogger(ChromatogramEditorCSD.class);
 	/*
