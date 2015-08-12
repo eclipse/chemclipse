@@ -21,6 +21,31 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
+import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.chemclipse.ux.extension.ui.dialogs.ReferencedChromatogramDialog;
+import org.eclipse.chemclipse.ux.extension.wsd.ui.internal.support.ChromatogramImportRunnable;
+import org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramFileSupport;
+import org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramSupport;
+import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
+import org.eclipse.chemclipse.wsd.model.core.AbstractChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
+import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
+import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionUpdateNotifier;
+import org.eclipse.chemclipse.wsd.model.notifier.IChromatogramSelectionWSDUpdateNotifier;
+import org.eclipse.chemclipse.wsd.swt.ui.components.chromatogram.EditorChromatogramUI;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -57,32 +82,6 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
-
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
-import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
-import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
-import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.ux.extension.ui.dialogs.ReferencedChromatogramDialog;
-import org.eclipse.chemclipse.ux.extension.wsd.ui.internal.support.ChromatogramImportRunnable;
-import org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramFileSupport;
-import org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramSupport;
-import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
-import org.eclipse.chemclipse.wsd.model.core.AbstractChromatogramWSD;
-import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
-import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
-import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionUpdateNotifier;
-import org.eclipse.chemclipse.wsd.model.notifier.IChromatogramSelectionWSDUpdateNotifier;
-import org.eclipse.chemclipse.wsd.swt.ui.components.chromatogram.EditorChromatogramUI;
 
 @SuppressWarnings("deprecation")
 public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatogramSelectionWSDUpdateNotifier {
@@ -344,7 +343,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 					update(selection, forceReload);
 				}
 			};
-			eventBroker.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION, eventHandler);
+			eventBroker.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION, eventHandler);
 		}
 	}
 

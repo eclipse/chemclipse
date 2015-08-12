@@ -37,8 +37,7 @@ import org.swtchart.Range;
  * It has four axes: milliseconds and minutes on x, abundance and relative
  * abundance on y.<br/>
  * Childs must only override the method given by {@link ISeriesSetter}.
- * 
- * @author eselmeister
+ *
  */
 public abstract class AbstractChromatogramLineSeriesUI extends AbstractLineSeriesUI implements IChromatogramSelectionUpdateNotifier {
 
