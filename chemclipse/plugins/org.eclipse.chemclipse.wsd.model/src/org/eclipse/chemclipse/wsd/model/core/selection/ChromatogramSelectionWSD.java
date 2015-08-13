@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionUpdateNotifier;
+import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionWSDUpdateNotifier;
 
 public class ChromatogramSelectionWSD extends AbstractChromatogramSelection implements IChromatogramSelectionWSD {
 
@@ -30,17 +31,17 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 
 	public ChromatogramSelectionWSD(IChromatogram chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
 
-		super(chromatogram, fireUpdate);
 		/*
 		 * Set all members to default values.<br/> This includes also to set a
 		 * valid scan and if exists a valid peak.
 		 */
+		super(chromatogram, fireUpdate);
 		reset(fireUpdate);
 	}
 
-	// ------------------------------------IChromatogramSelection
 	public void dispose() {
 
+		selectedScan = null;
 		super.dispose();
 	}
 
@@ -55,21 +56,41 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 	}
 
 	@Override
+	public IScanWSD getSelectedScan() {
+
+		return selectedScan;
+	}
+
+	@Override
 	public void reset() {
 
 		reset(true);
 	}
 
 	@Override
-	public void fireUpdateChange(boolean forceReload) {
+	public void reset(boolean fireUpdate) {
 
-		ChromatogramSelectionUpdateNotifier.fireUpdateChange(this, forceReload);
-	}
-
-	@Override
-	public IScanWSD getSelectedScan() {
-
-		return selectedScan;
+		super.reset(fireUpdate);
+		IChromatogram chromatogram = getChromatogram();
+		/*
+		 * Scan
+		 */
+		if(chromatogram.getNumberOfScans() >= 1) {
+			/*
+			 * Chromatogram WSD
+			 */
+			if(chromatogram instanceof IChromatogramWSD) {
+				selectedScan = ((IChromatogramWSD)chromatogram).getSupplierScan(1);
+			}
+		} else {
+			selectedScan = null;
+		}
+		/*
+		 * Fire an update.
+		 */
+		if(fireUpdate) {
+			ChromatogramSelectionWSDUpdateNotifier.fireUpdateChange(this, false);
+		}
 	}
 
 	@Override
@@ -103,11 +124,25 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 		if(selectedScan != null) {
 			this.selectedScan = selectedScan;
 			/*
-			 * Fire update change if neccessary.
+			 * Fire update change if necessary.
 			 */
 			if(update) {
 				ChromatogramSelectionUpdateNotifier.fireUpdateChange(this, false);
 			}
 		}
+	}
+
+	@Override
+	public void fireUpdateChange(boolean forceReload) {
+
+		ChromatogramSelectionWSDUpdateNotifier.fireUpdateChange(this, forceReload);
+	}
+
+	@Override
+	public void update(boolean forceReload) {
+
+		super.update(forceReload);
+		setSelectedScan(selectedScan, false);
+		fireUpdateChange(forceReload);
 	}
 }

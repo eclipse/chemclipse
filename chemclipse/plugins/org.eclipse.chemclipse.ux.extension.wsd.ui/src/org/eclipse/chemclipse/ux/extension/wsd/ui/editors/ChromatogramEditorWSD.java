@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.ux.extension.wsd.ui.editors;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -109,10 +109,9 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 	@Inject
 	private EPartService partService;
 	/*
-	 * Number format
+	 * Decimal format to print values.
 	 */
-	private NumberFormat numberFormat;
-	private static final int FRACTION_DIGITS = 3;
+	private DecimalFormat decimalFormat;
 	/*
 	 * Chromatogram selection and the GUI element.
 	 */
@@ -142,11 +141,9 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 	public ChromatogramEditorWSD() {
 
 		/*
-		 * Number format of retention times.
+		 * Decimal format.
 		 */
-		numberFormat = NumberFormat.getInstance();
-		numberFormat.setMinimumFractionDigits(FRACTION_DIGITS);
-		numberFormat.setMaximumFractionDigits(FRACTION_DIGITS);
+		decimalFormat = new DecimalFormat("0.0##");
 	}
 
 	@PostConstruct
@@ -158,6 +155,12 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 		subscribe();
 		loadChromatogram();
 		createPages(parent);
+		/*
+		 * Force menu updates etc.
+		 */
+		if(chromatogramSelection != null) {
+			chromatogramSelection.update(true);
+		}
 	}
 
 	@Focus
@@ -246,13 +249,13 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 		 * type.<br/> If not, show the file save dialog.
 		 */
 		if(chromatogramSelection != null) {
-			IChromatogramWSD chromatogram = chromatogramSelection.getChromatogramWSD();
 			/*
 			 * Each chromatogram import converter should save its converter id
 			 * to the converted chromatogram instance.<br/> The id is used to
 			 * save the chromatogram automatically when "Save" or "Save all" is
 			 * called.
 			 */
+			IChromatogramWSD chromatogram = chromatogramSelection.getChromatogramWSD();
 			String converterId = chromatogram.getConverterId();
 			if(converterId != null && !converterId.equals("") && chromatogramFile != null) {
 				/*
@@ -416,6 +419,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 		} catch(InterruptedException e) {
 			logger.warn(e);
 		}
+		//
 		chromatogramSelection = runnable.getChromatogramSelection();
 		chromatogramFile = file;
 		/*
@@ -492,8 +496,8 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 	private void updateInfoPageValues() {
 
 		if(infoStartRetentionTimeLabel != null && infoStopRetentionTimeLabel != null) {
-			infoStartRetentionTimeLabel.setText("Start Retention Time (Minutes): " + numberFormat.format(chromatogramSelection.getStartRetentionTime() / AbstractChromatogramWSD.MINUTE_CORRELATION_FACTOR));
-			infoStopRetentionTimeLabel.setText("Stop Retention Time (Minutes): " + numberFormat.format(chromatogramSelection.getStopRetentionTime() / AbstractChromatogramWSD.MINUTE_CORRELATION_FACTOR));
+			infoStartRetentionTimeLabel.setText("Start Retention Time (Minutes): " + decimalFormat.format(chromatogramSelection.getStartRetentionTime() / AbstractChromatogramWSD.MINUTE_CORRELATION_FACTOR));
+			infoStopRetentionTimeLabel.setText("Stop Retention Time (Minutes): " + decimalFormat.format(chromatogramSelection.getStopRetentionTime() / AbstractChromatogramWSD.MINUTE_CORRELATION_FACTOR));
 		}
 	}
 

@@ -34,15 +34,14 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection impl
 
 	public ChromatogramSelectionCSD(IChromatogram chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
 
-		super(chromatogram, fireUpdate);
 		/*
 		 * Set all members to default values.<br/> This includes also to set a
 		 * valid scan and if exists a valid peak.
 		 */
+		super(chromatogram, fireUpdate);
 		reset(fireUpdate);
 	}
 
-	// ------------------------------------IChromatogramSelection
 	public void dispose() {
 
 		super.dispose();
@@ -88,7 +87,7 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection impl
 		 */
 		if(chromatogram.getNumberOfScans() >= 1) {
 			/*
-			 * Chromatogram MSD
+			 * Chromatogram CSD
 			 */
 			if(chromatogram instanceof IChromatogramCSD) {
 				selectedScan = ((IChromatogramCSD)chromatogram).getSupplierScan(1);
@@ -146,7 +145,7 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection impl
 		if(selectedScan != null) {
 			this.selectedScan = selectedScan;
 			/*
-			 * Fire update change if neccessary.
+			 * Fire update change if necessary.
 			 */
 			if(update) {
 				ChromatogramSelectionCSDUpdateNotifier.fireUpdateChange(this, false);

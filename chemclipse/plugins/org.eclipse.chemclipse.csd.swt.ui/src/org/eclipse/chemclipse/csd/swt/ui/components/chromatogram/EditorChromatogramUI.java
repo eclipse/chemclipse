@@ -11,18 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.swt.ui.components.chromatogram;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Composite;
-import org.swtchart.ILineSeries;
-import org.swtchart.IPlotArea;
-import org.swtchart.LineStyle;
-import org.swtchart.ILineSeries.PlotSymbolType;
-import org.swtchart.ISeries.SeriesType;
-
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
@@ -39,6 +27,17 @@ import org.eclipse.chemclipse.swt.ui.series.Series;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.Offset;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Composite;
+import org.swtchart.ILineSeries;
+import org.swtchart.ILineSeries.PlotSymbolType;
+import org.swtchart.IPlotArea;
+import org.swtchart.ISeries.SeriesType;
+import org.swtchart.LineStyle;
 
 public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 
@@ -158,7 +157,6 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 		return new Series(xSeries, ySeries, "Selected Scan");
 	}
 
-	// ---------------------------------------------------------------ISeriesSetter
 	@Override
 	protected void initialize() {
 

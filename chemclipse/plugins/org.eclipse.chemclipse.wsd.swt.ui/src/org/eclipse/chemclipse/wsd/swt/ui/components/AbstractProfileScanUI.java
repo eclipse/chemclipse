@@ -11,15 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.swt.ui.components;
 
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.widgets.Composite;
-import org.swtchart.Range;
-
 import org.eclipse.chemclipse.swt.ui.components.AbstractLineSeriesUI;
 import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.support.ChartUtil;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.notifier.IChromatogramSelectionWSDUpdateNotifier;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.widgets.Composite;
+import org.swtchart.Range;
 
 public abstract class AbstractProfileScanUI extends AbstractLineSeriesUI implements IChromatogramSelectionWSDUpdateNotifier {
 
@@ -83,15 +82,19 @@ public abstract class AbstractProfileScanUI extends AbstractLineSeriesUI impleme
 		IMultipleSeries multipleLineSeries = getMultipleSeries();
 		min = multipleLineSeries.getXMin();
 		max = multipleLineSeries.getXMax();
-		range = new Range(min, max);
-		getXAxisTop().setRange(range);
+		if(min < max) {
+			range = new Range(min, max);
+			getXAxisTop().setRange(range);
+		}
 		/*
 		 * Relative Abundance Range
 		 */
 		min = ChartUtil.getRelativeAbundance(getMaxSignal(), multipleLineSeries.getYMin());
 		max = ChartUtil.getRelativeAbundance(getMaxSignal(), multipleLineSeries.getYMax());
-		range = new Range(min, max);
-		getYAxisRight().setRange(range);
+		if(min < max) {
+			range = new Range(min, max);
+			getYAxisRight().setRange(range);
+		}
 	}
 
 	/**

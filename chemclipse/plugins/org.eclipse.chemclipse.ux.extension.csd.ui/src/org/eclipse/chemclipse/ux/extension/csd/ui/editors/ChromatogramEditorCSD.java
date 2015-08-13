@@ -423,6 +423,7 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 		} catch(InterruptedException e) {
 			logger.warn(e);
 		}
+		//
 		chromatogramSelection = runnable.getChromatogramSelection();
 		chromatogramFile = file;
 		/*

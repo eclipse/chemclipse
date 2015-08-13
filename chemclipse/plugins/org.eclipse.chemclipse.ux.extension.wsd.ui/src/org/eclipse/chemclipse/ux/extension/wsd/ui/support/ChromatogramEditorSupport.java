@@ -13,11 +13,6 @@ package org.eclipse.chemclipse.ux.extension.wsd.ui.support;
 
 import java.io.File;
 
-import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
-
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -25,11 +20,15 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractChromatogramEdito
 import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.editors.ChromatogramEditorWSD;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.internal.support.ChromatogramIdentifier;
+import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
 public class ChromatogramEditorSupport extends AbstractChromatogramEditorSupport implements IChromatogramEditorSupport {
 
 	@Override
-	public void openEditor(final File file, EModelService modelService, MApplication application, EPartService partService) {
+	public void openEditor(File file, EModelService modelService, MApplication application, EPartService partService) {
 
 		/*
 		 * Check that the selected file or directory is a valid chromatogram.
