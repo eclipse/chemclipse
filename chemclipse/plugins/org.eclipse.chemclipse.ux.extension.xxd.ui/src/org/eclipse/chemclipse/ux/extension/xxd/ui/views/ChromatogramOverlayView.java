@@ -21,13 +21,19 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.components.chromatogram.MultipleChromatogramOffsetUI;
+import org.eclipse.chemclipse.swt.ui.preferences.SWTPreferencePage;
 import org.eclipse.chemclipse.swt.ui.support.AxisTitlesIntensityScale;
 import org.eclipse.chemclipse.swt.ui.support.IOffset;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.PreferenceDialog;
+import org.eclipse.jface.preference.PreferenceManager;
+import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -65,7 +71,34 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 		GridData gridDataComposite = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataComposite.horizontalAlignment = SWT.END;
 		compositeButtons.setLayoutData(gridDataComposite);
-		compositeButtons.setLayout(new GridLayout(5, false));
+		compositeButtons.setLayout(new GridLayout(6, false));
+		//
+		Button buttonSettings = new Button(compositeButtons, SWT.PUSH);
+		buttonSettings.setText("");
+		buttonSettings.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
+		buttonSettings.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IPreferencePage preferencePage = new SWTPreferencePage();
+				preferencePage.setTitle("Display Settings");
+				//
+				IPreferencePage preferencePageOverlay = new PreferencePage();
+				preferencePageOverlay.setTitle("Overlay Settings");
+				//
+				PreferenceManager preferenceManager = new PreferenceManager();
+				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
+				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageOverlay));
+				//
+				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getCurrent().getActiveShell(), preferenceManager);
+				preferenceDialog.create();
+				preferenceDialog.setMessage("Overlay Settings");
+				if(preferenceDialog.open() == PreferenceDialog.OK) {
+					update(getChromatogramSelection(), false);
+				}
+			}
+		});
 		//
 		Button buttonResetAll = new Button(compositeButtons, SWT.PUSH);
 		buttonResetAll.setText("");
