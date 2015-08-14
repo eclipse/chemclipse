@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.rcp.app.ui.switcher;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MUIElement;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
@@ -32,6 +34,8 @@ public class PerspectiveSwitcher {
 	private EModelService modelService;
 	@Inject
 	private EPartService partService;
+	@Inject
+	private IEventBroker eventBroker;
 
 	/**
 	 * Try to load the perspective.
@@ -44,6 +48,9 @@ public class PerspectiveSwitcher {
 		if(element instanceof MPerspective) {
 			MPerspective perspective = (MPerspective)element;
 			partService.switchPerspective(perspective);
+			if(eventBroker != null) {
+				eventBroker.send(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, perspective.getLabel());
+			}
 		}
 	}
 
@@ -61,6 +68,9 @@ public class PerspectiveSwitcher {
 				partService.createPart(part.getElementId());
 			}
 			partService.showPart(part, PartState.ACTIVATE);
+			if(eventBroker != null) {
+				eventBroker.send(IChemClipseEvents.TOPIC_APPLICATION_SELECT_VIEW, part.getLabel());
+			}
 		}
 	}
 }

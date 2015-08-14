@@ -18,6 +18,9 @@ public interface IChemClipseEvents {
 	/*
 	 * Properties
 	 */
+	String PROPERTY_PERSPECTIVE_NAME = IEventBroker.DATA; // String
+	String PROPERTY_VIEW_NAME = IEventBroker.DATA; // String
+	//
 	String PROPERTY_CHROMATOGRAM_MSD_RAWFILE = IEventBroker.DATA; // File
 	String PROPERTY_CHROMATOGRAM_CSD_RAWFILE = IEventBroker.DATA; // File
 	String PROPERTY_CHROMATOGRAM_WSD_RAWFILE = IEventBroker.DATA; // File
@@ -51,6 +54,9 @@ public interface IChemClipseEvents {
 	/*
 	 * Topics
 	 */
+	String TOPIC_APPLICATION_SELECT_PERSPECTIVE = "application/select/perspective";
+	String TOPIC_APPLICATION_SELECT_VIEW = "application/select/view";
+	//
 	String TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE = "chromatogram/msd/update/rawfile";
 	String TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE = "chromatogram/csd/update/rawfile";
 	String TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE = "chromatogram/wsd/update/rawfile";

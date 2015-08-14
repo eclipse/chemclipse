@@ -16,10 +16,15 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.eclipse.chemclipse.rcp.app.ui.provider.PerspectiveSwitcherContentProvider;
+import org.eclipse.chemclipse.rcp.app.ui.provider.PerspectiveSwitcherLabelProvider;
+import org.eclipse.chemclipse.rcp.app.ui.provider.PerspectiveSwitcherViewerFilter;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.extensions.Preference;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -47,10 +52,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
-import org.eclipse.chemclipse.rcp.app.ui.provider.PerspectiveSwitcherContentProvider;
-import org.eclipse.chemclipse.rcp.app.ui.provider.PerspectiveSwitcherLabelProvider;
-import org.eclipse.chemclipse.rcp.app.ui.provider.PerspectiveSwitcherViewerFilter;
-
 @SuppressWarnings("restriction")
 public class PerspectiveSwitcherDialog extends Dialog implements ISelectionChangedListener {
 
@@ -76,6 +77,8 @@ public class PerspectiveSwitcherDialog extends Dialog implements ISelectionChang
 	private EModelService modelService;
 	@Inject
 	private EPartService partService;
+	@Inject
+	private IEventBroker eventBroker;
 	/*
 	 * Store the previous selected perspectives
 	 */
@@ -163,6 +166,9 @@ public class PerspectiveSwitcherDialog extends Dialog implements ISelectionChang
 
 		if(selectedPerspective != null) {
 			partService.switchPerspective(selectedPerspective);
+			if(eventBroker != null) {
+				eventBroker.send(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, selectedPerspective.getLabel());
+			}
 		}
 	}
 
