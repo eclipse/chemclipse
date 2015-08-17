@@ -9,7 +9,7 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.io;
+package org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;

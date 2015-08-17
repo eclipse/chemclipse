@@ -9,9 +9,15 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.model;
+package org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.support;
 
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+public interface IConstants {
 
-public interface IVendorChromatogram extends IChromatogramMSD {
+	String CONVERTER_ID_MSD = "org.eclipse.chemclipse.msd.converter.supplier.jcampdx";
+	String IMPORT_CHROMATOGRAM = "Import JCAMP-DX Chromatogram";
+	String IMPORT_CHROMATOGRAM_OVERVIEW = "Import JCAMP-DX Overview";
+	String PARSE_SCANS = "Parse Scans";
+	String EXPORT_CHROMATOGRAM = "Export JCAMP-DX Chromatogram";
+	String EXPORT_SCANS = "Export Scans";
+	String SCAN = "Scan";
 }

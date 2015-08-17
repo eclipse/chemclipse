@@ -9,9 +9,15 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.model;
+package org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model;
 
-import org.eclipse.chemclipse.msd.model.core.IScanIon;
+import org.eclipse.chemclipse.msd.model.core.AbstractChromatogramMSD;
 
-public interface IVendorIon extends IScanIon {
+public class VendorChromatogram extends AbstractChromatogramMSD implements IVendorChromatogram {
+
+	@Override
+	public String getName() {
+
+		return extractNameFromFile("JCAMPDXChromatogram");
+	}
 }

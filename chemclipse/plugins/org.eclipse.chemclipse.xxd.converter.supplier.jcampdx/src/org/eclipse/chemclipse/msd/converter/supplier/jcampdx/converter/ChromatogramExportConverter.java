@@ -9,7 +9,7 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.converter;
+package org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter;
 
 import java.io.File;
 
@@ -19,11 +19,11 @@ import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExp
 import org.eclipse.chemclipse.converter.support.IConstants;
 import org.eclipse.chemclipse.msd.converter.chromatogram.AbstractChromatogramMSDExportConverter;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
+import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io.ChromatogramWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.internal.converter.SpecificationValidator;
-import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.io.ChromatogramWriter;
 
 public class ChromatogramExportConverter extends AbstractChromatogramMSDExportConverter {
 

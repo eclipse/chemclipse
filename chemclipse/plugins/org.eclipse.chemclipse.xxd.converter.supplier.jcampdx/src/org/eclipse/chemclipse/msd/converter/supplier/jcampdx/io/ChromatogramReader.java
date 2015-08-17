@@ -9,7 +9,7 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.io;
+package org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,17 +29,17 @@ import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDReader;
+import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.IVendorChromatogram;
+import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.IVendorIon;
+import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.IVendorScan;
+import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.VendorChromatogram;
+import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.VendorIon;
+import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.VendorScan;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.internal.converter.IConstants;
-import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.model.IVendorChromatogram;
-import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.model.IVendorIon;
-import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.model.IVendorScan;
-import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.model.VendorChromatogram;
-import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.model.VendorIon;
-import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.model.VendorScan;
+import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.support.IConstants;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramReader extends AbstractChromatogramMSDReader {
@@ -209,7 +209,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 		chromatogram.setScanInterval(scanInterval);
 		//
 		chromatogram.setFile(file);
-		chromatogram.setConverterId(IConstants.CONVERTER_ID);
+		chromatogram.setConverterId(IConstants.CONVERTER_ID_MSD);
 		/*
 		 * Close the streams
 		 */
