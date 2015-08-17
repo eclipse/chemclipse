@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.support;
 public interface IConstants {
 
 	String CONVERTER_ID_MSD = "org.eclipse.chemclipse.msd.converter.supplier.jcampdx";
+	String CONVERTER_ID_MSD_LIBRARY = "org.eclipse.chemclipse.msd.converter.supplier.jcampdx.library";
+	//
 	String IMPORT_CHROMATOGRAM = "Import JCAMP-DX Chromatogram";
 	String IMPORT_CHROMATOGRAM_OVERVIEW = "Import JCAMP-DX Overview";
 	String PARSE_SCANS = "Parse Scans";
