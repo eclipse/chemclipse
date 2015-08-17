@@ -94,7 +94,7 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 				/*
 				 * Store an existing scan.
 				 */
-				if(massSpectrum != null) {
+				if(massSpectrum != null && massSpectrum.getIons().size() > 0) {
 					massSpectra.addMassSpectrum(massSpectrum);
 				}
 				/*
@@ -173,7 +173,7 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 		/*
 		 * Add the last scan.
 		 */
-		if(massSpectrum != null) {
+		if(massSpectrum != null && massSpectrum.getIons().size() > 0) {
 			massSpectra.addMassSpectrum(massSpectrum);
 		}
 		//
