@@ -91,7 +91,7 @@ public class StatisticsCalculator {
 		statisticsElementRoot.setStatisticsElements(statisticsElements);
 		return statisticsElementRoot;
 	}
-
+	
 	/*
 	 * A JoinedScanMSD knows about the Origin/Substance name, e.g. we group the replicate experiments on the substance name
 	 */

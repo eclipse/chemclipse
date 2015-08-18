@@ -12,5 +12,5 @@
 package org.eclipse.chemclipse.msd.model.statistics;
 
 public enum StatisticsInputTypes {
-	STATISTICS_ABUNDANCE, ANOVA_ABUNDANCE
+	STATISTICS_ABUNDANCE, ANOVA_ABUNDANCE, STATISTICS_SUBSTANCE
 }
