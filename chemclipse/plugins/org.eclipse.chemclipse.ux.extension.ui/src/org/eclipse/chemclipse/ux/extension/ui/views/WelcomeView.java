@@ -19,9 +19,11 @@ import java.util.Properties;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.support.Settings;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.css.swt.CSSSWTConstants;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -62,6 +64,8 @@ public class WelcomeView {
 	private EModelService modelService;
 	@Inject
 	private EPartService partService;
+	@Inject
+	private IEventBroker eventBroker;
 	/*
 	 * The button for the MSD perspective is selected by default.
 	 */
@@ -71,6 +75,12 @@ public class WelcomeView {
 	public WelcomeView(Composite parent) {
 
 		initializeContent(parent);
+	}
+
+	@Focus
+	public void setFocus() {
+
+		buttonMSDPerspective.setFocus();
 	}
 
 	private void initializeContent(Composite parent) {
@@ -120,12 +130,11 @@ public class WelcomeView {
 		 */
 		createWelcomeText(parent);
 		createPerspectivesInfo(parent);
-		createDemoButton(parent);
+		createRunDemoButton(parent);
 		createInfo(parent);
-		createXXDInfo(parent);
-		createMsdAdditionalInfo(parent);
-		createDetectorInfo(parent);
-		createWsdInfo(parent);
+		createPerspectivesLaunchButtons(parent);
+		createAdditionalInfo(parent);
+		createLibraryAndPeaksPerspectiveButtons(parent);
 		createContactLink(parent);
 	}
 
@@ -180,7 +189,7 @@ public class WelcomeView {
 		welcome.setText("Use the toolbar to (1) Install Plug-ins (2) Fetch Updates (3) Switch Perspectives (4) Open Views");
 	}
 
-	private void createDemoButton(Composite parent) {
+	private void createRunDemoButton(Composite parent) {
 
 		Button buttonDemo = new Button(parent, SWT.PUSH);
 		GridData gridData = new GridData();
@@ -245,7 +254,7 @@ public class WelcomeView {
 		info1.setText("The flexible open source solution for chromatography and mass spectrometry.\r\nIt offers a variety of solutions to analyze chromatographic data.\r\nSo far, the main focus is on mass spectrometric data (MSD).");
 	}
 
-	private void createXXDInfo(Composite parent) {
+	private void createPerspectivesLaunchButtons(Composite parent) {
 
 		GridData gridData;
 		//
@@ -255,7 +264,7 @@ public class WelcomeView {
 		gridData.horizontalAlignment = GridData.CENTER;
 		gridData.verticalIndent = 10;
 		buttonMSDPerspective.setLayoutData(gridData);
-		buttonMSDPerspective.setText("MSD Perspective");
+		buttonMSDPerspective.setText("MSD Perspective (MS, MS/MS, ...)");
 		buttonMSDPerspective.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -265,13 +274,13 @@ public class WelcomeView {
 			}
 		});
 		//
-		Button buttonFIDPerspective = new Button(parent, SWT.PUSH);
+		Button buttonCSDPerspective = new Button(parent, SWT.PUSH);
 		gridData = new GridData();
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.horizontalAlignment = GridData.CENTER;
-		buttonFIDPerspective.setLayoutData(gridData);
-		buttonFIDPerspective.setText("CSD Perspective");
-		buttonFIDPerspective.addSelectionListener(new SelectionAdapter() {
+		buttonCSDPerspective.setLayoutData(gridData);
+		buttonCSDPerspective.setText("CSD Perspective (FID, ECD, ...)");
+		buttonCSDPerspective.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -279,9 +288,34 @@ public class WelcomeView {
 				switchPerspective(IPerspectiveAndViewIds.PERSPECTIVE_CSD);
 			}
 		});
+		//
+		Button buttonWSDPerspective = new Button(parent, SWT.PUSH);
+		gridData = new GridData();
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.horizontalAlignment = GridData.CENTER;
+		buttonWSDPerspective.setLayoutData(gridData);
+		buttonWSDPerspective.setText("WSD Perspective (UV/Vis, DAD, ...)");
+		buttonWSDPerspective.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				switchPerspective(IPerspectiveAndViewIds.PERSPECTIVE_WSD);
+			}
+		});
 	}
 
-	private void createMsdAdditionalInfo(Composite parent) {
+	private void createAdditionalInfo(Composite parent) {
+
+		GridData gridData;
+		Label info = new Label(parent, SWT.WRAP | SWT.CENTER);
+		gridData = new GridData(SWT.CENTER, SWT.CENTER, true, false);
+		gridData.verticalIndent = 50;
+		info.setLayoutData(gridData);
+		info.setText("Several perspectives are offered, focused on different tasks.");
+	}
+
+	private void createLibraryAndPeaksPerspectiveButtons(Composite parent) {
 
 		GridData gridData;
 		//
@@ -306,43 +340,13 @@ public class WelcomeView {
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.horizontalAlignment = GridData.CENTER;
 		buttonSetPeaksPerspective.setLayoutData(gridData);
-		buttonSetPeaksPerspective.setText("Use Peaks Perspective (MSD)");
+		buttonSetPeaksPerspective.setText("Peaks Perspective (MSD)");
 		buttonSetPeaksPerspective.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				switchPerspective(IPerspectiveAndViewIds.PERSPECTIVE_PEAKS_MSD);
-			}
-		});
-	}
-
-	private void createDetectorInfo(Composite parent) {
-
-		GridData gridData;
-		Label info = new Label(parent, SWT.WRAP | SWT.CENTER);
-		gridData = new GridData(SWT.CENTER, SWT.TOP, true, false);
-		gridData.verticalIndent = 30;
-		gridData.verticalAlignment = SWT.BEGINNING;
-		info.setLayoutData(gridData);
-		info.setText("The software supports the import of data generated from flame-ionization or diode-array detectors.\r\nMethods to analyze this kind of data will be available within the next releases.\r\nAt the moment, it is only possible to view and export the data.");
-	}
-
-	private void createWsdInfo(Composite parent) {
-
-		Button buttonWSD = new Button(parent, SWT.PUSH);
-		GridData gridData = new GridData();
-		gridData.verticalIndent = 5;
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.horizontalAlignment = GridData.CENTER;
-		buttonWSD.setLayoutData(gridData);
-		buttonWSD.setText("Use WSD Perspective (experimental)");
-		buttonWSD.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				switchPerspective(IPerspectiveAndViewIds.PERSPECTIVE_WSD);
 			}
 		});
 	}
@@ -354,13 +358,7 @@ public class WelcomeView {
 		gridData = new GridData(SWT.CENTER, SWT.CENTER, true, false);
 		gridData.verticalIndent = 50;
 		info.setLayoutData(gridData);
-		info.setText("Support for further detectors like (WLD, NPD, UV/Vis ...) are in development.\r\nIf you have questions, don't hesitate to contact us.");
-	}
-
-	@Focus
-	public void setFocus() {
-
-		buttonMSDPerspective.setFocus();
+		info.setText("If you have questions, don't hesitate to contact us.");
 	}
 
 	/**
@@ -376,6 +374,9 @@ public class WelcomeView {
 		if(element instanceof MPerspective) {
 			MPerspective perspective = (MPerspective)element;
 			partService.switchPerspective(perspective);
+			if(eventBroker != null) {
+				eventBroker.send(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, perspective.getLabel());
+			}
 		}
 	}
 }

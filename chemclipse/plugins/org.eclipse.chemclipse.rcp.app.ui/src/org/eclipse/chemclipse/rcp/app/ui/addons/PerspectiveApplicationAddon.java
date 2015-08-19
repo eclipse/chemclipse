@@ -15,18 +15,19 @@ import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspectiveStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-
 public class PerspectiveApplicationAddon {
 
 	@PostConstruct
-	public void postConstruct(MApplication application, EModelService modelService, EPartService partService) {
+	public void postConstruct(MApplication application, EModelService modelService, EPartService partService, IEventBroker eventBroker) {
 
 		/*
 		 * The default perspective can be defined in the product definition, e.g.:
@@ -47,5 +48,8 @@ public class PerspectiveApplicationAddon {
 		MPerspective perspective = (MPerspective)modelService.find(perspectiveId, application);
 		MPerspectiveStack perspectiveStack = (MPerspectiveStack)modelService.find(IPerspectiveAndViewIds.STACK_PERSPECTIVES, application);
 		perspectiveStack.setSelectedElement(perspective);
+		if(eventBroker != null) {
+			eventBroker.send(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, perspective.getLabel());
+		}
 	}
 }
