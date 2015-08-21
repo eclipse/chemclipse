@@ -71,6 +71,21 @@ public abstract class AbstractChemClipseLabelProvider extends LabelProvider impl
 		return scientificDecimalFormat;
 	}
 
+	public DecimalFormat createIntegerDecimalFormatInstance() {
+
+		DecimalFormat scientificDecimalFormat;
+		DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
+		String format = "0";
+		try {
+			scientificDecimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.getDefault()));
+		} catch(NullPointerException e) {
+			scientificDecimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.getDefault()));
+		} catch(IllegalArgumentException e) {
+			scientificDecimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.getDefault()));
+		}
+		return scientificDecimalFormat;
+	}
+
 	public DecimalFormat getDecimalFormat() {
 
 		return decimalFormat;
