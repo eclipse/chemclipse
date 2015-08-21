@@ -69,7 +69,7 @@ public class UnivariateStatistics implements IUnivariateStatistics {
 	}
 
 	@Override
-	public double[] getAbundances() {
+	public double[] getValues() {
 
 		return abundances;
 	}

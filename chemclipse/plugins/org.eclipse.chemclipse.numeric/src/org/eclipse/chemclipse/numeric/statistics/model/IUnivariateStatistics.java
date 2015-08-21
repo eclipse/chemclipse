@@ -25,5 +25,5 @@ public interface IUnivariateStatistics extends IStatistics {
 
 	double getStandardDeviation();
 
-	double[] getAbundances();
+	double[] getValues();
 }
