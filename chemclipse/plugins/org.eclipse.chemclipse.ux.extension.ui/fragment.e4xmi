@@ -79,6 +79,7 @@
       <children xsi:type="menu:MenuSeparator" xmi:id="_OxxwkExJEeOWprdBMj2r0w" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.10"/>
       <children xsi:type="menu:Menu" xmi:id="_VC2tEExJEeOWprdBMj2r0w" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.miscellaneous" label="Miscellaneous"/>
     </elements>
+    <elements xsi:type="menu:Menu" xmi:id="_OE3pEE8xEeWZpNQ-SxTOqA" elementId="org.eclipse.chemclipse.ux.extension.ui.controls.menu" label="Controls"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_0O4XkDL_EeKMEOdllHiEaA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimbar.top" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.toolbar.openChromatogram">
     <elements xsi:type="menu:ToolBar" xmi:id="_w1DfkDMAEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.save">
