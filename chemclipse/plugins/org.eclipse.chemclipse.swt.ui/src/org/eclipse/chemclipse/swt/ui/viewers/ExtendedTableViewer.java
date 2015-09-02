@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.swt.ui.viewers;
 
+import org.eclipse.chemclipse.support.settings.IOperatingSystemUtils;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -18,6 +20,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -25,9 +29,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-
-import org.eclipse.chemclipse.support.settings.IOperatingSystemUtils;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 
 public class ExtendedTableViewer extends TableViewer {
 
@@ -45,6 +46,25 @@ public class ExtendedTableViewer extends TableViewer {
 		super(parent, style);
 		clipboard = new Clipboard(Display.getDefault());
 		operatingSystemUtils = new OperatingSystemUtils();
+	}
+
+	public void addCopyToClipboardListener(final String[] titles) {
+
+		this.getTable().addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				/*
+				 * The selected content will be placed to the clipboard if the
+				 * user is using "Function + c". "Function-Key" 262144
+				 * (stateMask) + "c" 99 (keyCode)
+				 */
+				if(e.stateMask == SWT.CTRL && e.keyCode == 'c') {
+					copyToClipboard(titles);
+				}
+			}
+		});
 	}
 
 	/**
