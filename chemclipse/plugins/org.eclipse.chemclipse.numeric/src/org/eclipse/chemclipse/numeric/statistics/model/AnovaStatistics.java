@@ -36,7 +36,8 @@ public class AnovaStatistics implements IAnovaStatistics {
 					for(int i = 0; i < size; i++) {
 						T t = statisticsElements.get(i);
 						try {
-							values[i] = (float)getdata.invoke(t, new Object[0]);
+							Number data = (Number)getdata.invoke(t, new Object[0]);
+							values[i] = data.doubleValue();
 						} catch(IllegalAccessException e) {
 							e.printStackTrace();
 						} catch(IllegalArgumentException e) {

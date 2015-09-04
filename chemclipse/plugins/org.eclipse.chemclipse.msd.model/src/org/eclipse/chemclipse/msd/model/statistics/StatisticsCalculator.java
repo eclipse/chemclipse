@@ -271,18 +271,6 @@ public class StatisticsCalculator {
 		return mzAnovaFPairs;
 	}
 
-	public Map<Double, Double> calculateAnovaPValuesOld(Map<Double, Collection<double[]>> mzAnovaInputPairs) {
-
-		OneWayAnova anova = new OneWayAnova();
-		Map<Double, Double> mzAnovaPPairs = new HashMap<Double, Double>();
-		for(Entry<Double, Collection<double[]>> mzAnovaInputPair : mzAnovaInputPairs.entrySet()) {
-			Double mz = mzAnovaInputPair.getKey();
-			double pvalue = anova.anovaPValue(mzAnovaInputPair.getValue());
-			mzAnovaPPairs.put(mz, pvalue);
-		}
-		return mzAnovaPPairs;
-	}
-
 	public Map<Double, Double> calculateAnovaPValues(IStatisticsElement<IScanMSD> anovaStatistics) {
 
 		Map<Double, IAnovaStatistics> mzStatisticsPairs = getMzStatisticsPairs(anovaStatistics);
@@ -295,27 +283,12 @@ public class StatisticsCalculator {
 		return mzAnovaPPairs;
 	}
 
-	public Map<Double, AnovaStatistics> calculateAnovaStatisticsOld(Map<Double, Collection<double[]>> mzAnovaInputPairs) {
-
-		OneWayAnova anova = new OneWayAnova();
-		Map<Double, AnovaStatistics> mzanovaStatistics = new HashMap<Double, AnovaStatistics>();
-		for(Entry<Double, Collection<double[]>> mzAnovaInputPair : mzAnovaInputPairs.entrySet()) {
-			Double mz = mzAnovaInputPair.getKey();
-			Collection<double[]> anovaInput = mzAnovaInputPair.getValue();
-			double pvalue = anova.anovaPValue(anovaInput);
-			double fvalue = anova.anovaFValue(anovaInput);
-			// AnovaStatistics anovaStatistics = new AnovaStatistics(pvalue, fvalue);
-			// mzanovaStatistics.put(mz, anovaStatistics);
-		}
-		return mzanovaStatistics;
-	}
-
-	public Map<Double, IAnovaStatistics> calculateAnovaStatistics(IStatisticsElement<IScanMSD> anovaStatistics) {
+	public Map<Double, IAnovaStatistics> calculateAnovaStatistics(IStatisticsElement<?> anovaStatistics) {
 
 		return getMzStatisticsPairs(anovaStatistics);
 	}
 
-	private Map<Double, IAnovaStatistics> getMzStatisticsPairs(IStatisticsElement<IScanMSD> anovaStatistics) {
+	private Map<Double, IAnovaStatistics> getMzStatisticsPairs(IStatisticsElement<?> anovaStatistics) {
 
 		Map<Double, IAnovaStatistics> mzStatisticsPairs = new HashMap<Double, IAnovaStatistics>();
 		for(IStatisticsElement<Object> elem : anovaStatistics.getStatisticsElements()) {
