@@ -11,15 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io;
 
-import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.zip.ZipFile;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
@@ -48,20 +45,22 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class ReaderProxy_1004 implements IReaderProxy {
+public class ReaderProxy_1004 extends AbstractZipReader implements IReaderProxy {
 
 	private static final Logger logger = Logger.getLogger(ReaderProxy_1004.class);
 
 	@Override
 	public void readMassSpectrum(File file, int offset, IVendorScanProxy massSpectrum, IIonTransitionSettings ionTransitionSettings, IProgressMonitor monitor) throws IOException {
 
-		ZipInputStream zipInputStream = getZipInputStream(file);
-		DataInputStream dataInputStream = getDataInputStream(zipInputStream, IFormat.FILE_SCANS_MSD);
-		dataInputStream.skipBytes(offset);
-		//
-		readMassSpectrum(massSpectrum, dataInputStream, ionTransitionSettings, monitor);
-		//
-		zipInputStream.close();
+		ZipFile zipFile = new ZipFile(file);
+		try {
+			DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_SCANS_MSD);
+			dataInputStream.skipBytes(offset);
+			readMassSpectrum(massSpectrum, dataInputStream, ionTransitionSettings, monitor);
+			dataInputStream.close();
+		} finally {
+			zipFile.close();
+		}
 	}
 
 	@Override
@@ -189,39 +188,5 @@ public class ReaderProxy_1004 implements IReaderProxy {
 				logger.warn(e);
 			}
 		}
-	}
-
-	private String readString(DataInputStream dataInputStream) throws IOException {
-
-		int length = dataInputStream.readInt();
-		StringBuilder builder = new StringBuilder();
-		for(int i = 1; i <= length; i++) {
-			builder.append(String.valueOf(dataInputStream.readChar()));
-		}
-		return builder.toString();
-	}
-
-	private ZipInputStream getZipInputStream(File file) throws IOException {
-
-		FileInputStream fileInputStream = new FileInputStream(file);
-		ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(fileInputStream));
-		return zipInputStream;
-	}
-
-	private DataInputStream getDataInputStream(ZipInputStream zipInputStream, String entryName) throws IOException {
-
-		ZipEntry zipEntry;
-		while((zipEntry = zipInputStream.getNextEntry()) != null) {
-			/*
-			 * Check each file.
-			 */
-			if(!zipEntry.isDirectory()) {
-				String name = zipEntry.getName();
-				if(name.equals(entryName)) {
-					return new DataInputStream(zipInputStream);
-				}
-			}
-		}
-		throw new IOException("There could be found no entry given with the name: " + entryName);
 	}
 }

@@ -11,21 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io;
 
-import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-
-import org.eclipse.core.runtime.IProgressMonitor;
+import java.util.zip.ZipFile;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.core.PeakType;
@@ -58,30 +54,34 @@ import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.MassSpectrometer;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.MassSpectrumType;
-import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class PeakReader_0701 implements IPeakReader {
+public class PeakReader_0701 extends AbstractZipReader implements IPeakReader {
 
 	private static final Logger logger = Logger.getLogger(PeakReader_0701.class);
 
 	@Override
 	public IPeakImportConverterProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
+		ZipFile zipFile = new ZipFile(file);
 		IPeakImportConverterProcessingInfo processingInfo = new PeakImportConverterProcessingInfo();
-		IPeaks peaks = readPeaksFromZipFile(file, monitor);
-		processingInfo.setPeaks(peaks);
+		try {
+			IPeaks peaks = readPeaksFromZipFile(zipFile, monitor);
+			processingInfo.setPeaks(peaks);
+		} finally {
+			zipFile.close();
+		}
 		return processingInfo;
 	}
 
-	private IPeaks readPeaksFromZipFile(File file, IProgressMonitor monitor) throws IOException {
+	private IPeaks readPeaksFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
 
 		IPeaks peaks = new Peaks();
-		ZipInputStream zipInputStream = getZipInputStream(file);
-		DataInputStream dataInputStream = getDataInputStream(zipInputStream, IFormat.FILE_PEAKS);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_PEAKS);
 		//
 		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
 		for(int i = 1; i <= numberOfPeaks; i++) {
@@ -95,7 +95,7 @@ public class PeakReader_0701 implements IPeakReader {
 				logger.warn(e);
 			}
 		}
-		zipInputStream.close();
+		dataInputStream.close();
 		/*
 		 * Return the peaks instance.
 		 */
@@ -251,39 +251,5 @@ public class PeakReader_0701 implements IPeakReader {
 			value = 1;
 		}
 		return value;
-	}
-
-	private ZipInputStream getZipInputStream(File file) throws IOException {
-
-		FileInputStream fileInputStream = new FileInputStream(file);
-		ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(fileInputStream));
-		return zipInputStream;
-	}
-
-	private DataInputStream getDataInputStream(ZipInputStream zipInputStream, String entryName) throws IOException {
-
-		ZipEntry zipEntry;
-		while((zipEntry = zipInputStream.getNextEntry()) != null) {
-			/*
-			 * Check each file.
-			 */
-			if(!zipEntry.isDirectory()) {
-				String name = zipEntry.getName();
-				if(name.equals(entryName)) {
-					return new DataInputStream(zipInputStream);
-				}
-			}
-		}
-		throw new IOException("There could be found no entry given with the name: " + entryName);
-	}
-
-	private String readString(DataInputStream dataInputStream) throws IOException {
-
-		int length = dataInputStream.readInt();
-		StringBuilder builder = new StringBuilder();
-		for(int i = 1; i <= length; i++) {
-			builder.append(String.valueOf(dataInputStream.readChar()));
-		}
-		return builder.toString();
 	}
 }

@@ -19,7 +19,7 @@ public interface IFormat {
 	/*
 	 * Zip Settings
 	 */
-	int LEVEL = 9;
+	int COMPRESSION_LEVEL = 0; // 0 - 9 => 0 no compression
 	int METHOD = ZipOutputStream.DEFLATED;
 	/*
 	 * File Settings

@@ -11,20 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io;
 
-import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.zip.ZipFile;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
-import org.eclipse.chemclipse.csd.converter.io.AbstractChromatogramCSDReader;
 import org.eclipse.chemclipse.csd.converter.io.IChromatogramCSDReader;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogram.IVendorChromatogram;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogram.IVendorScan;
@@ -55,7 +51,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class ChromatogramReader_1003 extends AbstractChromatogramCSDReader implements IChromatogramCSDReader {
+public class ChromatogramReader_1003 extends AbstractChromatogramReader implements IChromatogramCSDReader {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramReader_1003.class);
 
@@ -73,27 +69,31 @@ public class ChromatogramReader_1003 extends AbstractChromatogramCSDReader imple
 
 	private IChromatogramCSD readChromatogram(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
-		if(isValidFileFormat(file)) {
-			monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
-			/*
-			 * Read the chromatographic information.
-			 */
-			IVendorChromatogram chromatogram = new VendorChromatogram();
-			readScans(file, chromatogram, monitor);
-			readBaseline(file, chromatogram, monitor);
-			readPeaks(file, chromatogram, monitor);
-			//
-			setAdditionalInformation(file, chromatogram, monitor);
-			//
-			return chromatogram;
+		IVendorChromatogram chromatogram = null;
+		ZipFile zipFile = new ZipFile(file);
+		try {
+			if(isValidFileFormat(zipFile)) {
+				/*
+				 * Read the chromatographic information.
+				 */
+				monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
+				chromatogram = new VendorChromatogram();
+				readScans(zipFile, chromatogram, monitor);
+				readBaseline(zipFile, chromatogram, monitor);
+				readPeaks(zipFile, chromatogram, monitor);
+				//
+				setAdditionalInformation(file, chromatogram, monitor);
+			}
+		} finally {
+			zipFile.close();
 		}
-		return null;
+		//
+		return chromatogram;
 	}
 
-	private void readScans(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readScans(ZipFile zipFile, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		ZipInputStream zipInputStream = getZipInputStream(file);
-		DataInputStream dataInputStream = getDataInputStream(zipInputStream, IFormat.FILE_SCANS_FID);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_SCANS_FID);
 		/*
 		 * Scans
 		 */
@@ -110,13 +110,12 @@ public class ChromatogramReader_1003 extends AbstractChromatogramCSDReader imple
 			chromatogram.addScan(scanFID);
 		}
 		//
-		zipInputStream.close();
+		dataInputStream.close();
 	}
 
-	private void readBaseline(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readBaseline(ZipFile zipFile, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		ZipInputStream zipInputStream = getZipInputStream(file);
-		DataInputStream dataInputStream = getDataInputStream(zipInputStream, IFormat.FILE_BASELINE_FID);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_BASELINE_FID);
 		/*
 		 * Get the Baseline
 		 */
@@ -149,13 +148,12 @@ public class ChromatogramReader_1003 extends AbstractChromatogramCSDReader imple
 			baselineModel.addBaseline(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance, false);
 		}
 		//
-		zipInputStream.close();
+		dataInputStream.close();
 	}
 
-	private void readPeaks(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readPeaks(ZipFile zipFile, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		ZipInputStream zipInputStream = getZipInputStream(file);
-		DataInputStream dataInputStream = getDataInputStream(zipInputStream, IFormat.FILE_PEAKS_FID);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_PEAKS_FID);
 		//
 		int numberOfPeaks = dataInputStream.readInt(); // Number of Peaks
 		for(int i = 1; i <= numberOfPeaks; i++) {
@@ -169,7 +167,7 @@ public class ChromatogramReader_1003 extends AbstractChromatogramCSDReader imple
 				logger.warn(e);
 			}
 		}
-		zipInputStream.close();
+		dataInputStream.close();
 	}
 
 	private IChromatogramPeakCSD readPeak(DataInputStream dataInputStream, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException, IllegalArgumentException, PeakException {
@@ -238,55 +236,17 @@ public class ChromatogramReader_1003 extends AbstractChromatogramCSDReader imple
 		return integrationEntries;
 	}
 
-	private boolean isValidFileFormat(File file) throws IOException {
+	private boolean isValidFileFormat(ZipFile zipFile) throws IOException {
 
 		boolean isValid = false;
-		DataInputStream dataInputStream;
-		FileInputStream fileInputStream = new FileInputStream(file);
-		ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(fileInputStream));
-		//
-		dataInputStream = getDataInputStream(zipInputStream, IFormat.FILE_VERSION);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_VERSION);
 		String version = readString(dataInputStream);
 		if(version.equals(IFormat.VERSION_1003)) {
 			isValid = true;
 		}
 		//
-		zipInputStream.close();
+		dataInputStream.close();
 		//
 		return isValid;
-	}
-
-	private ZipInputStream getZipInputStream(File file) throws IOException {
-
-		FileInputStream fileInputStream = new FileInputStream(file);
-		ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(fileInputStream));
-		return zipInputStream;
-	}
-
-	private DataInputStream getDataInputStream(ZipInputStream zipInputStream, String entryName) throws IOException {
-
-		ZipEntry zipEntry;
-		while((zipEntry = zipInputStream.getNextEntry()) != null) {
-			/*
-			 * Check each file.
-			 */
-			if(!zipEntry.isDirectory()) {
-				String name = zipEntry.getName();
-				if(name.equals(entryName)) {
-					return new DataInputStream(zipInputStream);
-				}
-			}
-		}
-		throw new IOException("There could be found no entry given with the name: " + entryName);
-	}
-
-	private String readString(DataInputStream dataInputStream) throws IOException {
-
-		int length = dataInputStream.readInt();
-		StringBuilder builder = new StringBuilder();
-		for(int i = 1; i <= length; i++) {
-			builder.append(String.valueOf(dataInputStream.readChar()));
-		}
-		return builder.toString();
 	}
 }
