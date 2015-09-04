@@ -39,6 +39,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceSupplier.P_VERSION_SAVE, "Save (*.ocb) as version:", PreferenceSupplier.getVersions(), getFieldEditorParent()));
+		IntegerFieldEditor compressionLevelEditor = new IntegerFieldEditor(PreferenceSupplier.P_COMPRESSION_LEVEL, "Compression 0 = off, 9 = best", getFieldEditorParent());
+		compressionLevelEditor.setValidRange(PreferenceSupplier.MIN_COMPRESSION_LEVEL, PreferenceSupplier.MAX_COMPRESSION_LEVEL);
+		addField(compressionLevelEditor);
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_SCAN_PROXIES, "Use scan proxies (experimental).", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_LOAD_SCAN_PROXIES_IN_BACKGROUND, "Load scan proxies in background.", getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceSupplier.P_MIN_BYTES_TO_LOAD_IN_BACKGROUND, "Min size (bytes) to load proxies in background.", getFieldEditorParent()));

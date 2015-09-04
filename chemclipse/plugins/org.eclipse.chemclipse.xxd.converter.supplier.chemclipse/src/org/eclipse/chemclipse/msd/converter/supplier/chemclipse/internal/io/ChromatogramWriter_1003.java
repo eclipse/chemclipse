@@ -52,6 +52,7 @@ import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IScanProxy;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.ScanProxy;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -69,7 +70,7 @@ public class ChromatogramWriter_1003 extends AbstractChromatogramWriter implemen
 		 */
 		FileOutputStream fileOutputStream = new FileOutputStream(file);
 		ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(fileOutputStream));
-		zipOutputStream.setLevel(IFormat.COMPRESSION_LEVEL);
+		zipOutputStream.setLevel(PreferenceSupplier.getCompressionLevel());
 		zipOutputStream.setMethod(IFormat.METHOD);
 		/*
 		 * Write the data

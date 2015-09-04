@@ -25,6 +25,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_VERSION_SAVE = "versionSave";
 	public static final String DEF_VERSION_SAVE = IFormat.VERSION_LATEST;
+	public static final String P_COMPRESSION_LEVEL = "compressionLevel";
+	public static final int DEF_COMPRESSION_LEVEL = IFormat.COMPRESSION_LEVEL;
+	public static final int MIN_COMPRESSION_LEVEL = 0;
+	public static final int MAX_COMPRESSION_LEVEL = 9;
+	//
 	public static final String P_USE_SCAN_PROXIES = "useScanProxies";
 	public static final boolean DEF_USE_SCAN_PROXIES = false;
 	public static final String P_LOAD_SCAN_PROXIES_IN_BACKGROUND = "loadScanProxiesInBackground";
@@ -59,6 +64,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_VERSION_SAVE, DEF_VERSION_SAVE);
+		defaultValues.put(P_COMPRESSION_LEVEL, Integer.toString(DEF_COMPRESSION_LEVEL));
 		defaultValues.put(P_USE_SCAN_PROXIES, Boolean.toString(DEF_USE_SCAN_PROXIES));
 		defaultValues.put(P_LOAD_SCAN_PROXIES_IN_BACKGROUND, Boolean.toString(DEF_LOAD_SCAN_PROXIES_IN_BACKGROUND));
 		defaultValues.put(P_MIN_BYTES_TO_LOAD_IN_BACKGROUND, Integer.toString(DEF_MIN_BYTES_TO_LOAD_IN_BACKGROUND));
@@ -78,6 +84,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.get(P_VERSION_SAVE, DEF_VERSION_SAVE);
+	}
+
+	public static int getCompressionLevel() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_COMPRESSION_LEVEL, DEF_COMPRESSION_LEVEL);
 	}
 
 	public static String[][] getVersions() {
