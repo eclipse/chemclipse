@@ -44,14 +44,13 @@ public abstract class AbstractChemClipseLabelProvider extends LabelProvider impl
 	private void createDecimalFormatInstance(String pattern) {
 
 		DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-		char separator = decimalFormatSymbols.getDecimalSeparator();
-		String format = "0" + separator + "000";
+		String format = "0.000";
 		try {
-			decimalFormat = new DecimalFormat(pattern, new DecimalFormatSymbols(Locale.getDefault()));
+			decimalFormat = new DecimalFormat(pattern, decimalFormatSymbols);
 		} catch(NullPointerException e) {
-			decimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.getDefault()));
+			decimalFormat = new DecimalFormat(format, decimalFormatSymbols);
 		} catch(IllegalArgumentException e) {
-			decimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.getDefault()));
+			decimalFormat = new DecimalFormat(format, decimalFormatSymbols);
 		}
 	}
 
@@ -59,14 +58,13 @@ public abstract class AbstractChemClipseLabelProvider extends LabelProvider impl
 
 		DecimalFormat scientificDecimalFormat;
 		DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-		char separator = decimalFormatSymbols.getDecimalSeparator();
-		String format = "0" + separator + "###E0";
+		String format = "0.###E0";
 		try {
-			scientificDecimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.getDefault()));
+			scientificDecimalFormat = new DecimalFormat(format, decimalFormatSymbols);
 		} catch(NullPointerException e) {
-			scientificDecimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.getDefault()));
+			scientificDecimalFormat = new DecimalFormat(format, decimalFormatSymbols);
 		} catch(IllegalArgumentException e) {
-			scientificDecimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.getDefault()));
+			scientificDecimalFormat = new DecimalFormat(format, decimalFormatSymbols);
 		}
 		return scientificDecimalFormat;
 	}
@@ -77,11 +75,11 @@ public abstract class AbstractChemClipseLabelProvider extends LabelProvider impl
 		DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
 		String format = "0";
 		try {
-			scientificDecimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.getDefault()));
+			scientificDecimalFormat = new DecimalFormat(format, decimalFormatSymbols);
 		} catch(NullPointerException e) {
-			scientificDecimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.getDefault()));
+			scientificDecimalFormat = new DecimalFormat(format, decimalFormatSymbols);
 		} catch(IllegalArgumentException e) {
-			scientificDecimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.getDefault()));
+			scientificDecimalFormat = new DecimalFormat(format, decimalFormatSymbols);
 		}
 		return scientificDecimalFormat;
 	}
