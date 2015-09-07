@@ -13,6 +13,11 @@ package org.eclipse.chemclipse.swt.ui.viewers;
 
 import org.eclipse.chemclipse.support.settings.IOperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -26,6 +31,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -34,7 +40,9 @@ public class ExtendedTableViewer extends TableViewer {
 
 	private Clipboard clipboard;
 	private IOperatingSystemUtils operatingSystemUtils;
-	private static final String DELIMITER = "\t";
+	private final String DELIMITER = "\t";
+	private final String COPY_TO_CLIPBOARD = "Copy selection to clipboard";
+	private final String POPUP_MENU_ID = "org.eclipse.chemclipse.swt.ui.viewers.extendedTableViewer.popup";
 
 	public ExtendedTableViewer(Composite parent) {
 
@@ -65,6 +73,34 @@ public class ExtendedTableViewer extends TableViewer {
 				}
 			}
 		});
+		initContextMenu(titles);
+	}
+
+	private void initContextMenu(final String[] titles) {
+
+		MenuManager menuManager = new MenuManager("#PopUpMenu", POPUP_MENU_ID);
+		final Table table = this.getTable();
+		menuManager.setRemoveAllWhenShown(true);
+		menuManager.addMenuListener(new IMenuListener() {
+
+			@Override
+			public void menuAboutToShow(IMenuManager manager) {
+
+				IAction action = new Action() {
+
+					@Override
+					public void run() {
+
+						super.run();
+						copyToClipboard(titles);
+					}
+				};
+				action.setText(COPY_TO_CLIPBOARD);
+				manager.add(action);
+			}
+		});
+		Menu menu = menuManager.createContextMenu(table);
+		table.setMenu(menu);
 	}
 
 	/**
