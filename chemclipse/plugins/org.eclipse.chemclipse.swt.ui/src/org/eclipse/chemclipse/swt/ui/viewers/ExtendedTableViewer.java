@@ -25,8 +25,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -58,7 +58,7 @@ public class ExtendedTableViewer extends TableViewer {
 
 	public void addCopyToClipboardListener(final String[] titles) {
 
-		this.getTable().addKeyListener(new KeyAdapter() {
+		this.getTable().addKeyListener(new KeyListener() {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -71,6 +71,11 @@ public class ExtendedTableViewer extends TableViewer {
 				if(e.stateMask == SWT.CTRL && e.keyCode == 'c') {
 					copyToClipboard(titles);
 				}
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+
 			}
 		});
 		initContextMenu(titles);
