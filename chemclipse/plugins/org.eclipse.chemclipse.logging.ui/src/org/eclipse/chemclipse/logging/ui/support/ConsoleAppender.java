@@ -16,18 +16,13 @@ import java.io.IOException;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
+import org.eclipse.chemclipse.logging.ui.Activator;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 
-import org.eclipse.chemclipse.logging.ui.Activator;
-
-/**
- * @author Philip (eselmeister) Wenig
- * 
- */
 public class ConsoleAppender extends AppenderSkeleton {
 
 	protected IConsoleManager consoleManager;

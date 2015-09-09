@@ -13,17 +13,12 @@ package org.eclipse.chemclipse.logging.ui.internal.support;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-
-/**
- * @author Philip (eselmeister) Wenig
- * 
- */
 public class LogFileLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	@Override

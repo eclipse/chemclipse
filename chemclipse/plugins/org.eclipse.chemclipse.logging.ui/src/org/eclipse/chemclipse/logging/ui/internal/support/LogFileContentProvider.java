@@ -14,15 +14,10 @@ package org.eclipse.chemclipse.logging.ui.internal.support;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import org.eclipse.chemclipse.logging.support.PropertiesUtil;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import org.eclipse.chemclipse.logging.support.PropertiesUtil;
-
-/**
- * @author Philip (eselmeister) Wenig
- * 
- */
 public class LogFileContentProvider implements IStructuredContentProvider {
 
 	@Override

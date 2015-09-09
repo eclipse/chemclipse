@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.logging.core;
 
-/**
- * @author eselmeister
- */
 public class Logger extends Category {
 
 	/**

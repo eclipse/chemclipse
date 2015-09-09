@@ -6,7 +6,7 @@
     <elements xsi:type="basic:Part" xmi:id="_3yWnEEbDEeK_ta06Ye28bw" elementId="org.eclipse.chemclipse.logging.ui.LogFileView" contributionURI="bundleclass://org.eclipse.chemclipse.logging.ui/org.eclipse.chemclipse.logging.ui.views.LogFileView" label="Log Files" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/log.gif"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_FFkJkEbEEeK_ta06Ye28bw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
-    <elements xsi:type="advanced:Perspective" xmi:id="_j5THUOTXEeKo5NCxhDBqQQ" elementId="org.eclipse.chemclipse.logging.ui.perspective.main" label="OpenChrom Logging" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/log.gif">
+    <elements xsi:type="advanced:Perspective" xmi:id="_j5THUOTXEeKo5NCxhDBqQQ" elementId="org.eclipse.chemclipse.logging.ui.perspective.main" label="ChemClipse Logging" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/log.gif">
       <children xsi:type="basic:PartSashContainer" xmi:id="_sjP_sOTXEeKo5NCxhDBqQQ" elementId="org.eclipse.chemclipse.logging.ui.partsashcontainer.main.0" horizontal="true">
         <children xsi:type="basic:PartStack" xmi:id="_9X5zMOTYEeKo5NCxhDBqQQ" elementId="org.eclipse.chemclipse.logging.ui.partstack.main.0" containerData="2000">
           <children xsi:type="advanced:Placeholder" xmi:id="_SZbFMOTZEeKo5NCxhDBqQQ" elementId="org.eclipse.chemclipse.logging.ui.placeholder.main.0" ref="_3yWnEEbDEeK_ta06Ye28bw"/>

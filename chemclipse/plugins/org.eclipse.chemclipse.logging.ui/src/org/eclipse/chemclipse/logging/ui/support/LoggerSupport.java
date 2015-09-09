@@ -16,10 +16,6 @@ import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 
-/**
- * @author Philip (eselmeister) Wenig
- * 
- */
 public class LoggerSupport {
 
 	private static LoggerSupport loggerSupport;
@@ -52,7 +48,7 @@ public class LoggerSupport {
 	 */
 	public MessageConsole initConsole() {
 
-		String systemConsoleName = "OpenChrom Logging";
+		String systemConsoleName = "ChemClipse Logging";
 		/*
 		 * Get the console plugin.
 		 */
