@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.ui;
 
 import org.osgi.framework.BundleContext;
-
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 
