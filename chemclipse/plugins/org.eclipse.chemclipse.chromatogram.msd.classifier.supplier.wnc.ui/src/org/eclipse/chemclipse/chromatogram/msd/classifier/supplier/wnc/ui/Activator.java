@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui;
 
 import org.osgi.framework.BundleContext;
-
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 
