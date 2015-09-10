@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.msd.baseline.detector.supplier.smoothed.ui;
 
 import org.osgi.framework.BundleContext;
-
 import org.eclipse.chemclipse.chromatogram.msd.baseline.detector.supplier.smoothed.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 
