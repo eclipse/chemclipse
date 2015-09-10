@@ -12,10 +12,9 @@
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider;
 
 import org.eclipse.jface.viewers.Viewer;
-
 import org.eclipse.chemclipse.database.model.IDatabaseProxy;
-import org.eclipse.chemclipse.swt.ui.viewers.AbstractRecordTableComparator;
-import org.eclipse.chemclipse.swt.ui.viewers.IRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.viewers.AbstractRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.viewers.IRecordTableComparator;
 
 public class DatabaseTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 
