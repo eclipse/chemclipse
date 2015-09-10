@@ -25,8 +25,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.chemclipse.rcp.app.ui;bundle-version="0.7.0",
  org.eclipse.chemclipse.csd.model;bundle-version="0.7.0",
  org.eclipse.chemclipse.chromatogram.csd.peak.detector;bundle-version="0.7.0",
- org.eclipse.chemclipse.support.ui;bundle-version="0.7.0",
- org.eclipse.chemclipse.numeric;bundle-version="0.7.0"
+ org.eclipse.chemclipse.logging.ui;bundle-version="0.7.0",
+ org.eclipse.chemclipse.numeric;bundle-version="0.7.0",
+ org.eclipse.chemclipse.support.ui;bundle-version="0.7.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.annotation;version="1.1.0",

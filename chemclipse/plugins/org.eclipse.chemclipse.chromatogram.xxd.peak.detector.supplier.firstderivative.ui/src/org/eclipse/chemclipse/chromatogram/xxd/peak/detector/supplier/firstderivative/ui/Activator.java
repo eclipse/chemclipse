@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui;
 
 import org.osgi.framework.BundleContext;
-
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 
