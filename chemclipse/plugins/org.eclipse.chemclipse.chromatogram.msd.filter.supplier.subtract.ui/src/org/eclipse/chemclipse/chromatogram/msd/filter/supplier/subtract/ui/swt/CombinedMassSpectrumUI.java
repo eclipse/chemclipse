@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.swt;
 
+import java.text.DecimalFormat;
+
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.FilterSupport;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
@@ -22,15 +25,19 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
 public class CombinedMassSpectrumUI extends Composite {
 
+	private DecimalFormat decimalFormat;
+	private Label label;
 	private SimpleMassSpectrumUI simpleMassSpectrumUI;
 
 	public CombinedMassSpectrumUI(Composite parent, int style) {
 
 		super(parent, style);
 		initialize(parent);
+		decimalFormat = new DecimalFormat("0.0##");
 	}
 
 	private void initialize(Composite parent) {
@@ -43,7 +50,26 @@ public class CombinedMassSpectrumUI extends Composite {
 		layout.makeColumnsEqualWidth = true;
 		layout.numColumns = 1;
 		composite.setLayout(layout);
-		// composite.setBackground(new Color(SWT.COLOR_RED));
+		// composite.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+		// -------------------------------------------Label
+		Composite labelbar = new Composite(composite, SWT.FILL);
+		layout = new GridLayout();
+		layout.makeColumnsEqualWidth = true;
+		layout.numColumns = 1;
+		labelbar.setLayout(layout);
+		gridData = new GridData();
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.horizontalAlignment = GridData.FILL;
+		labelbar.setLayoutData(gridData);
+		/*
+		 * The label with scan, retention time and retention index.
+		 */
+		label = new Label(labelbar, SWT.NONE);
+		label.setText("");
+		gridData = new GridData();
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.horizontalAlignment = GridData.FILL;
+		label.setLayoutData(gridData);
 		// ------------------------------------------------------------------------------------------
 		// Mass Spectrum
 		simpleMassSpectrumUI = new SimpleMassSpectrumUI(composite, SWT.NONE, MassValueDisplayPrecision.NOMINAL);
@@ -60,7 +86,24 @@ public class CombinedMassSpectrumUI extends Composite {
 		if(chromatogramSelection != null) {
 			boolean useNormalize = PreferenceSupplier.isUseNormalize();
 			IScanMSD massSpectrum = FilterSupport.getCombinedMassSpectrum(chromatogramSelection, null, useNormalize);
+			setMassSpectrumLabel(chromatogramSelection);
 			simpleMassSpectrumUI.update(massSpectrum, forceReload);
 		}
+	}
+
+	private void setMassSpectrumLabel(IChromatogramSelectionMSD chromatogramSelection) {
+
+		int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+		int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+		StringBuilder builder = new StringBuilder();
+		builder.append("Scan range: ");
+		builder.append(chromatogramSelection.getChromatogram().getScanNumber(startRetentionTime));
+		builder.append("–");
+		builder.append(chromatogramSelection.getChromatogram().getScanNumber(stopRetentionTime));
+		builder.append(" | RT range: ");
+		builder.append(decimalFormat.format((double)startRetentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR));
+		builder.append("–");
+		builder.append(decimalFormat.format((double)stopRetentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR));
+		label.setText(builder.toString());
 	}
 }
