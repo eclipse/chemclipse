@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.ui;
 
 import org.osgi.framework.BundleContext;
-
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 
