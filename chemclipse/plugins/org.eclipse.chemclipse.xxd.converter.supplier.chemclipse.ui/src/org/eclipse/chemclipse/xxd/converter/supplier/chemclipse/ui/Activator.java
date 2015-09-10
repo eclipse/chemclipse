@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui;
 
 import org.osgi.framework.BundleContext;
-
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 
