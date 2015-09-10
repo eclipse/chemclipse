@@ -22,7 +22,7 @@ http://www.eclipse.org/legal/epl-v10.html
    </license>
 
    <includes
-         id="org.eclipse.chemclipse.rcp.app.feature"
+         id="org.eclipse.chemclipse.rcp.app.base.feature"
          version="0.0.0"/>
 
    <includes
