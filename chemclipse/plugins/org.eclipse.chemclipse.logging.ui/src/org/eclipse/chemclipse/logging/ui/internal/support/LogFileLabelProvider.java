@@ -13,8 +13,7 @@ package org.eclipse.chemclipse.logging.ui.internal.support;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.logging.ui.Activator;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -47,6 +46,6 @@ public class LogFileLabelProvider extends LabelProvider implements ITableLabelPr
 	 */
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_LOG, IApplicationImage.SIZE_16x16);
+		return Activator.getDefault().getImageRegistry().get(Activator.ICON_LOG);
 	}
 }

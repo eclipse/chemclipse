@@ -11,21 +11,27 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.logging.ui;
 
+import java.net.URL;
 import java.util.Properties;
 
 import org.apache.log4j.PropertyConfigurator;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.BundleContext;
-
 import org.eclipse.chemclipse.logging.support.PropertiesUtil;
 import org.eclipse.chemclipse.logging.ui.support.LoggerSupport;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractUIPlugin {
 
-	// The shared instance
+	public static final String ICON_LOG = "ICON_LOG"; // $NON-NLS-1$
+	//
 	private static Activator plugin;
 
 	/**
@@ -43,6 +49,7 @@ public class Activator extends AbstractUIPlugin {
 
 		super.start(context);
 		plugin = this;
+		getImageRegistry().put(ICON_LOG, createImageDescriptor(getBundle(), "icons/16x16/log.gif"));
 		initLogger();
 	}
 
@@ -91,5 +98,14 @@ public class Activator extends AbstractUIPlugin {
 		 */
 		PropertyConfigurator.configure(properties);
 		LoggerSupport.getInstance().initConsole();
+	}
+
+	private ImageDescriptor createImageDescriptor(Bundle bundle, String string) {
+
+		ImageDescriptor imageDescriptor = null;
+		IPath path = new Path(string);
+		URL url = FileLocator.find(bundle, path, null);
+		imageDescriptor = ImageDescriptor.createFromURL(url);
+		return imageDescriptor;
 	}
 }
