@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.ui;
 
 import org.osgi.framework.BundleContext;
-
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 
