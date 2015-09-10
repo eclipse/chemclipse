@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
-Bundle-Name: Numeric Plug-in
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.eclipse.chemclipse.numeric
 Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.numeric.Activator
@@ -17,4 +17,4 @@ Export-Package: org.eclipse.chemclipse.numeric.core,
  org.eclipse.chemclipse.numeric.miscellaneous,
  org.eclipse.chemclipse.numeric.statistics,
  org.eclipse.chemclipse.numeric.statistics.model
-Bundle-Vendor: ChemClipse
+Bundle-Vendor: %Bundle-Vendor

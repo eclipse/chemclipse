@@ -11,18 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.ui.internal.provider;
 
+import org.eclipse.chemclipse.processing.core.IProcessingMessage;
+import org.eclipse.chemclipse.processing.ui.Activator;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-
-/**
- * @author Philip (eselmeister) Wenig
- * 
- */
 public class ProcessingInfoLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	@Override
@@ -34,16 +28,16 @@ public class ProcessingInfoLabelProvider extends LabelProvider implements ITable
 				Image image;
 				switch(message.getMessageType()) {
 					case ERROR:
-						image = getImage(element, IApplicationImage.IMAGE_ERROR);
+						image = getImage(element, Activator.ICON_ERROR);
 						break;
 					case WARN:
-						image = getImage(element, IApplicationImage.IMAGE_WARN);
+						image = getImage(element, Activator.ICON_WARN);
 						break;
 					case INFO:
-						image = getImage(element, IApplicationImage.IMAGE_INFO);
+						image = getImage(element, Activator.ICON_INFO);
 						break;
 					default:
-						image = getImage(element, IApplicationImage.IMAGE_UNKNOWN);
+						image = getImage(element, Activator.ICON_UNKNOWN);
 				}
 				return image;
 			}
@@ -79,8 +73,8 @@ public class ProcessingInfoLabelProvider extends LabelProvider implements ITable
 		return text;
 	}
 
-	public Image getImage(Object element, String imageDescription) {
+	public Image getImage(Object element, String key) {
 
-		return ApplicationImageFactory.getInstance().getImage(imageDescription, IApplicationImage.SIZE_16x16);
+		return Activator.getDefault().getImageRegistry().get(key);
 	}
 }

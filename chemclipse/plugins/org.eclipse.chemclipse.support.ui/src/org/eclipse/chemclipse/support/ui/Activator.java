@@ -11,16 +11,21 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui;
 
-import org.osgi.framework.BundleContext;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.chemclipse.support.preferences.SupportPreferences;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
+import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractActivatorUI {
 
+	public static final String ICON_FOLDER_OPENED = "ICON_FOLDER_OPENED"; // $NON-NLS-1$
+	public static final String ICON_FOLDER_CLOSED = "ICON_FOLDER_CLOSED"; // $NON-NLS-1$
+	public static final String ICON_FILE = "ICON_FILE"; // $NON-NLS-1$
 	/*
 	 * Instance
 	 */
@@ -35,6 +40,7 @@ public class Activator extends AbstractActivatorUI {
 		super.start(context);
 		plugin = this;
 		initializePreferenceStore(SupportPreferences.INSTANCE());
+		initializeImageRegistry(getImageHashMap());
 	}
 
 	/*
@@ -55,5 +61,16 @@ public class Activator extends AbstractActivatorUI {
 	public static AbstractActivatorUI getDefault() {
 
 		return plugin;
+	}
+
+	private Map<String, String> getImageHashMap() {
+
+		Map<String, String> imageHashMap = new HashMap<String, String>();
+		//
+		imageHashMap.put(ICON_FOLDER_OPENED, "icons/16x16/folder_opened.gif"); // $NON-NLS-1$
+		imageHashMap.put(ICON_FOLDER_CLOSED, "icons/16x16/folder_closed.gif"); // $NON-NLS-1$
+		imageHashMap.put(ICON_FILE, "icons/16x16/file.gif"); // $NON-NLS-1$
+		//
+		return imageHashMap;
 	}
 }

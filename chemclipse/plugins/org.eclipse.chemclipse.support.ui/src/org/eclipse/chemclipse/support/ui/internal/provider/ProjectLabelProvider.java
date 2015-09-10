@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.internal.provider;
 
+import org.eclipse.chemclipse.support.ui.Activator;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -18,9 +19,6 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.navigator.IDescriptionProvider;
-
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 
 public class ProjectLabelProvider extends LabelProvider implements ILabelProvider, IDescriptionProvider {
 
@@ -43,11 +41,11 @@ public class ProjectLabelProvider extends LabelProvider implements ILabelProvide
 
 		Image image;
 		if(element instanceof IFolder) {
-			image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16);
+			image = Activator.getDefault().getImage(Activator.ICON_FOLDER_OPENED);
 		} else if(element instanceof IFile) {
-			image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FILE, IApplicationImage.SIZE_16x16);
+			image = Activator.getDefault().getImage(Activator.ICON_FILE);
 		} else {
-			image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FOLDER_CLOSED, IApplicationImage.SIZE_16x16);
+			image = Activator.getDefault().getImage(Activator.ICON_FOLDER_CLOSED);
 		}
 		//
 		return image;
