@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.ui;
 
 import org.osgi.framework.BundleContext;
-
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 
