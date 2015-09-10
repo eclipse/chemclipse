@@ -24,7 +24,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.chemclipse.thirdpartylibraries.orientdb;bundle-version="2.0.9",
  org.eclipse.chemclipse.thirdpartylibraries.swtchart;bundle-version="0.9.0",
  org.eclipse.chemclipse.rcp.app.ui;bundle-version="0.7.0",
- org.eclipse.chemclipse.support.ui;bundle-version="0.7.0",
+ org.eclipse.chemclipse.logging.ui;bundle-version="0.7.0",
  org.eclipse.chemclipse.rcp.ui.icons;bundle-version="0.7.0",
  org.eclipse.chemclipse.msd.swt.ui;bundle-version="0.7.0",
  org.eclipse.chemclipse.swt.ui;bundle-version="0.7.0",
@@ -33,7 +33,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.chemclipse.database;bundle-version="0.7.0",
  org.eclipse.chemclipse.database.ui;bundle-version="0.7.0",
  org.eclipse.chemclipse.ux.extension.ui;bundle-version="0.7.0",
- org.eclipse.chemclipse.numeric;bundle-version="0.7.0"
+ org.eclipse.chemclipse.numeric;bundle-version="0.7.0",
+ org.eclipse.chemclipse.support.ui;bundle-version="0.7.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: ChemClipse

@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui;
 
 import org.osgi.framework.BundleContext;
-
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 
