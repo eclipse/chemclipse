@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui;
 
 import org.osgi.framework.BundleContext;
-
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 
