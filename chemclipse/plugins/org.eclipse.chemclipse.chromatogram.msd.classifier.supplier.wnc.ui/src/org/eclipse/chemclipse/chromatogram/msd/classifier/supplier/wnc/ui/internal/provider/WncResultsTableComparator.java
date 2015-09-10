@@ -12,8 +12,8 @@
 package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider;
 
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIon;
-import org.eclipse.chemclipse.swt.ui.viewers.AbstractRecordTableComparator;
-import org.eclipse.chemclipse.swt.ui.viewers.IRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.viewers.AbstractRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.viewers.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
 public class WncResultsTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
