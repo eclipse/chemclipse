@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.processing.ui.internal.provider;
 
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.ui.Activator;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -75,6 +76,11 @@ public class ProcessingInfoLabelProvider extends LabelProvider implements ITable
 
 	public Image getImage(Object element, String key) {
 
-		return Activator.getDefault().getImageRegistry().get(key);
+		ImageRegistry imageRegistry = Activator.getDefault().getImageRegistry();
+		if(imageRegistry != null) {
+			return imageRegistry.get(key);
+		} else {
+			return null;
+		}
 	}
 }

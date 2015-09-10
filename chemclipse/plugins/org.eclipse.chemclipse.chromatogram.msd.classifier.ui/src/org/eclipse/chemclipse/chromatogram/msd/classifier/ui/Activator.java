@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.msd.classifier.ui;
 
 import org.osgi.framework.BundleContext;
-
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 
 /**

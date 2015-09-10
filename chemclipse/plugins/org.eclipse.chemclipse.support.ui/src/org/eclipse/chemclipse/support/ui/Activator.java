@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.support.preferences.SupportPreferences;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.osgi.framework.BundleContext;
@@ -40,7 +37,11 @@ public class Activator extends AbstractActivatorUI {
 		super.start(context);
 		plugin = this;
 		initializePreferenceStore(SupportPreferences.INSTANCE());
-		initializeImageRegistry(getImageHashMap());
+		/*
+		 * Don't initialize the image registry.
+		 * The plug-in crashed when running the unit tests.
+		 * To be honest, I don't understand that.
+		 */
 	}
 
 	/*
@@ -61,16 +62,5 @@ public class Activator extends AbstractActivatorUI {
 	public static AbstractActivatorUI getDefault() {
 
 		return plugin;
-	}
-
-	private Map<String, String> getImageHashMap() {
-
-		Map<String, String> imageHashMap = new HashMap<String, String>();
-		//
-		imageHashMap.put(ICON_FOLDER_OPENED, "icons/16x16/folder_opened.gif"); // $NON-NLS-1$
-		imageHashMap.put(ICON_FOLDER_CLOSED, "icons/16x16/folder_closed.gif"); // $NON-NLS-1$
-		imageHashMap.put(ICON_FILE, "icons/16x16/file.gif"); // $NON-NLS-1$
-		//
-		return imageHashMap;
 	}
 }

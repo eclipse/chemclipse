@@ -14,20 +14,20 @@ package org.eclipse.chemclipse.support.ui.activator;
 import java.net.URL;
 import java.util.Map;
 
+import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-
-public class AbstractActivatorUI extends AbstractUIPlugin {
+public abstract class AbstractActivatorUI extends AbstractUIPlugin {
 
 	/*
 	 * This preference store uses the model store instead of the GUI store
@@ -110,12 +110,13 @@ public class AbstractActivatorUI extends AbstractUIPlugin {
 	 */
 	protected void initializeImageRegistry(Map<String, String> imageHashMap) {
 
-		if(imageHashMap != null) {
+		ImageRegistry imageRegistry = getImageRegistry();
+		if(imageHashMap != null && imageRegistry != null) {
 			/*
 			 * Set the image/icon values.
 			 */
 			for(Map.Entry<String, String> entry : imageHashMap.entrySet()) {
-				getImageRegistry().put(entry.getKey(), createImageDescriptor(getBundle(), entry.getValue()));
+				imageRegistry.put(entry.getKey(), createImageDescriptor(getBundle(), entry.getValue()));
 			}
 		}
 	}

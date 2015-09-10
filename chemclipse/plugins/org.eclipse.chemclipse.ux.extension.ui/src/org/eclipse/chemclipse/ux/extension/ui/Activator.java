@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -76,7 +77,10 @@ public class Activator extends AbstractUIPlugin {
 		try {
 			URL fileLocation = getAbsolutePath(PATH_PERSPECTIVES_INFO);
 			ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(fileLocation);
-			getImageRegistry().put(INFO_PERSPECTIVES, imageDescriptor);
+			ImageRegistry imageRegistry = getImageRegistry();
+			if(imageRegistry != null) {
+				getImageRegistry().put(INFO_PERSPECTIVES, imageDescriptor);
+			}
 		} catch(MissingResourceException e) {
 			System.out.println(e);
 		} catch(IllegalArgumentException e) {

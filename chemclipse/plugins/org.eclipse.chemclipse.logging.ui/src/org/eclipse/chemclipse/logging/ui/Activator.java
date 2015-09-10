@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -49,7 +50,10 @@ public class Activator extends AbstractUIPlugin {
 
 		super.start(context);
 		plugin = this;
-		getImageRegistry().put(ICON_LOG, createImageDescriptor(getBundle(), "icons/16x16/log.gif"));
+		ImageRegistry imageRegistry = getImageRegistry();
+		if(imageRegistry != null) {
+			imageRegistry.put(ICON_LOG, createImageDescriptor(getBundle(), "icons/16x16/log.gif"));
+		}
 		initLogger();
 	}
 

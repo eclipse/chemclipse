@@ -14,11 +14,10 @@ package org.eclipse.chemclipse.support.preferences;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.support.Activator;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-
-import org.eclipse.chemclipse.support.Activator;
 
 public class SupportPreferences implements IPreferenceSupplier {
 

@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.ui;
 
 import org.osgi.framework.BundleContext;
-
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 
 /**

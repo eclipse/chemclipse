@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.msd.swt.ui;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.osgi.framework.BundleContext;
-
 import org.eclipse.chemclipse.msd.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 

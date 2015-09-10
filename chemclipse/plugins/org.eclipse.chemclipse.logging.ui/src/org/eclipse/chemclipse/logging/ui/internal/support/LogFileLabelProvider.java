@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.logging.ui.internal.support;
 import java.io.File;
 
 import org.eclipse.chemclipse.logging.ui.Activator;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -46,6 +47,11 @@ public class LogFileLabelProvider extends LabelProvider implements ITableLabelPr
 	 */
 	public Image getImage(Object element) {
 
-		return Activator.getDefault().getImageRegistry().get(Activator.ICON_LOG);
+		ImageRegistry imageRegistry = Activator.getDefault().getImageRegistry();
+		if(imageRegistry != null) {
+			return imageRegistry.get(Activator.ICON_LOG);
+		} else {
+			return null;
+		}
 	}
 }
