@@ -24,9 +24,8 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.swt.ui.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.EditHistoryContentProvider;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.EditHistoryLabelProvider;
 

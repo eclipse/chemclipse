@@ -2,7 +2,19 @@
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_h0A1MDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.ide.application" bindingContexts="_h0A1MTLzEeKMEOdllHiEaA">
   <children xsi:type="basic:TrimmedWindow" xmi:id="_h0BcQDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main" selectedElement="_6h3_kDPDEeKN2qL8NSaklg" label="org.eclipse.chemclipse.rcp.app.ui" iconURI="platform:/plugin/org.eclipse.ui/icons/full/eview16/defaultview_misc.gif" width="800" height="600">
     <tags>shellMaximized</tags>
-    <children xsi:type="advanced:PerspectiveStack" xmi:id="_6h3_kDPDEeKN2qL8NSaklg" elementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main"/>
+    <children xsi:type="advanced:PerspectiveStack" xmi:id="_6h3_kDPDEeKN2qL8NSaklg" elementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
+      <children xsi:type="advanced:Perspective" xmi:id="_L8vjcFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.perspective.main" label="ChemClipse Logging" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/log.gif">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_S0qdgFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.partsashcontainer.main.0" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_WjeRkFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.partstack.main.0" containerData="2000"/>
+          <children xsi:type="basic:PartSashContainer" xmi:id="_YOgQAFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.partsashcontainer.main.1" containerData="8000">
+            <children xsi:type="advanced:Placeholder" xmi:id="_bnx48FeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.perspective.main.editorss" containerData="15000" ref="_Jqg8MEnJEeKP49-EnXatSw"/>
+            <children xsi:type="basic:PartStack" xmi:id="_jR9WYFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.partstack.main.1" containerData="5000">
+              <children xsi:type="advanced:Placeholder" xmi:id="_lQTSYFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.placeholder.main.1" ref="_Sq1foEd4EeKhRMzT2OpX0g"/>
+            </children>
+          </children>
+        </children>
+      </children>
+    </children>
     <mainMenu xmi:id="_h0BcQTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.main">
       <children xsi:type="menu:Menu" xmi:id="_h0BcQjLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" label="File">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_k-VQwDgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.save" label="Save" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/save.gif" command="_SkvDQDgEEeKBGer45Yb2dA"/>
@@ -88,6 +100,8 @@
       </menus>
       <toolbar xmi:id="_hl6gQI1zEeKgaYcpx_IhbQ" elementId="org.eclipse.ui.internal.introview" visible="false"/>
     </sharedElements>
+    <sharedElements xsi:type="basic:Part" xmi:id="_T2mREFeKEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.processing.ui.part.processingInfoView" contributionURI="bundleclass://org.eclipse.chemclipse.processing.ui/org.eclipse.chemclipse.processing.ui.views.ProcessingInfoView" label="Processing Info" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif"/>
+    <sharedElements xsi:type="basic:Part" xmi:id="_qY-R0FeKEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.LogFileView" contributionURI="bundleclass://org.eclipse.chemclipse.logging.ui/org.eclipse.chemclipse.logging.ui.views.LogFileView" label="Log Files" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/log.gif"/>
     <trimBars xmi:id="_h0BcTDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.trimbar.top">
       <children xsi:type="menu:ToolBar" xmi:id="_h0BcTTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.main">
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_nIMLMINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.3"/>

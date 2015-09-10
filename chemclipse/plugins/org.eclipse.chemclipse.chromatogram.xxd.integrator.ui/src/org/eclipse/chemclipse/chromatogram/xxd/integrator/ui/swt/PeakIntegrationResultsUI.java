@@ -24,12 +24,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
-
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.internal.provider.PeakIntegrationResultsContentProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.internal.provider.PeakIntegrationResultsLabelProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.internal.provider.PeakIntegrationResultsTableComparator;
-import org.eclipse.chemclipse.swt.ui.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
 
 public class PeakIntegrationResultsUI extends Composite {
 

@@ -22,7 +22,7 @@ http://www.eclipse.org/legal/epl-v10.html
    </license>
 
    <requires>
-      <import feature="org.eclipse.chemclipse.rcp.app.feature" version="0.7.0.qualifier"/>
+      <import feature="org.eclipse.chemclipse.rcp.app.base.feature" version="0.7.0.qualifier"/>
    </requires>
 
    <plugin

@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Janos Binder - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.swt.ui.viewers;
+package org.eclipse.chemclipse.support.ui.swt.viewers;
 
 import org.eclipse.chemclipse.support.settings.IOperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;

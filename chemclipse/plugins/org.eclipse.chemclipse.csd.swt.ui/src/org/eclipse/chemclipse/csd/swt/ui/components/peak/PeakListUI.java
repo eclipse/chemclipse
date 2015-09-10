@@ -21,7 +21,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
-
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
@@ -30,7 +29,7 @@ import org.eclipse.chemclipse.csd.swt.ui.internal.provider.PeakListContentProvid
 import org.eclipse.chemclipse.csd.swt.ui.internal.provider.PeakListLabelProvider;
 import org.eclipse.chemclipse.csd.swt.ui.internal.provider.PeakListTableComparator;
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.swt.ui.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
 
 public class PeakListUI {
 

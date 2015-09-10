@@ -12,8 +12,8 @@
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.internal.provider;
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResult;
-import org.eclipse.chemclipse.swt.ui.viewers.AbstractRecordTableComparator;
-import org.eclipse.chemclipse.swt.ui.viewers.IRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.viewers.AbstractRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.viewers.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
 public class ChromatogramIntegrationResultsTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {

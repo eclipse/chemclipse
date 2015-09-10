@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.IonListContentProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.IonListLabelProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.IonListTableComparator;
-import org.eclipse.chemclipse.swt.ui.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;

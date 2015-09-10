@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.csd.swt.ui.internal.provider;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
-import org.eclipse.chemclipse.swt.ui.viewers.AbstractRecordTableComparator;
-import org.eclipse.chemclipse.swt.ui.viewers.IRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.viewers.AbstractRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.viewers.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
 public class PeakListTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {

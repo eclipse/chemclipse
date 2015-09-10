@@ -28,7 +28,7 @@ import org.eclipse.chemclipse.msd.swt.ui.converter.SeriesConverterMSD;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.swt.ui.viewers.IListItemsRemoveListener;
+import org.eclipse.chemclipse.support.ui.swt.viewers.IListItemsRemoveListener;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;

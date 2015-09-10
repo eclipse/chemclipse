@@ -19,8 +19,8 @@ import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListConte
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListFilter;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListLabelProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListTableComparator;
-import org.eclipse.chemclipse.swt.ui.viewers.ExtendedTableViewer;
-import org.eclipse.chemclipse.swt.ui.viewers.IListItemsRemoveListener;
+import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.viewers.IListItemsRemoveListener;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;

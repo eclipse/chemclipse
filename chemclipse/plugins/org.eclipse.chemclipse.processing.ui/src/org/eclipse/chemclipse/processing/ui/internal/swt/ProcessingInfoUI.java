@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.internal.provider.ProcessingInfoContentProvider;
 import org.eclipse.chemclipse.processing.ui.internal.provider.ProcessingInfoLabelProvider;
 import org.eclipse.chemclipse.processing.ui.internal.provider.ProcessingInfoTableComparator;
-import org.eclipse.chemclipse.swt.ui.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;

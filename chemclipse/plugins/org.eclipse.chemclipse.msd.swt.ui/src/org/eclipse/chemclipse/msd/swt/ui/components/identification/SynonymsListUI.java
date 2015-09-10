@@ -16,12 +16,11 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.SynonymsListContentProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.SynonymsListLabelProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.SynonymsListTableComparator;
-import org.eclipse.chemclipse.swt.ui.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
 
 public class SynonymsListUI {
 

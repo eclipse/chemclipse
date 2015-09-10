@@ -12,8 +12,8 @@
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
-import org.eclipse.chemclipse.swt.ui.viewers.AbstractRecordTableComparator;
-import org.eclipse.chemclipse.swt.ui.viewers.IRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.viewers.AbstractRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.viewers.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
 public class PeakQuantitationEntriesTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {

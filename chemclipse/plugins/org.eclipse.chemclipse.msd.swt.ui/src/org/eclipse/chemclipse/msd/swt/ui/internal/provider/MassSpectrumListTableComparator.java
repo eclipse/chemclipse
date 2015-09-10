@@ -17,8 +17,8 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
-import org.eclipse.chemclipse.swt.ui.viewers.AbstractRecordTableComparator;
-import org.eclipse.chemclipse.swt.ui.viewers.IRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.viewers.AbstractRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.viewers.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
 public class MassSpectrumListTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {

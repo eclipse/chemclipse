@@ -21,5 +21,6 @@ Export-Package: org.eclipse.chemclipse.support.ui.activator,
  org.eclipse.chemclipse.support.ui.preferences.editors,
  org.eclipse.chemclipse.support.ui.preferences.fieldeditors,
  org.eclipse.chemclipse.support.ui.provider,
+ org.eclipse.chemclipse.support.ui.swt.viewers,
  org.eclipse.chemclipse.support.ui.wizards
 Import-Package: javax.annotation;version="1.1.0"

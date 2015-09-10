@@ -24,5 +24,4 @@ Export-Package: org.eclipse.chemclipse.swt.ui.browser,
  org.eclipse.chemclipse.swt.ui.marker,
  org.eclipse.chemclipse.swt.ui.preferences,
  org.eclipse.chemclipse.swt.ui.series,
- org.eclipse.chemclipse.swt.ui.support,
- org.eclipse.chemclipse.swt.ui.viewers
+ org.eclipse.chemclipse.swt.ui.support

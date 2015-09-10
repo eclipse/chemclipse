@@ -190,7 +190,8 @@
     <!--
 	Feature
     -->
-    <module>../../features/org.eclipse.chemclipse.rcp.app.feature</module>
+    <module>../../features/org.eclipse.chemclipse.rcp.app.core.feature</module>
+    <module>../../features/org.eclipse.chemclipse.rcp.app.base.feature</module>
     <module>../../features/org.eclipse.chemclipse.ux.feature</module>
   </modules>
 </project>

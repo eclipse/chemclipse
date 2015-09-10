@@ -17,12 +17,11 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakIntegrationEntriesContentProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakIntegrationEntriesLabelProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakIntegrationEntriesTableComparator;
-import org.eclipse.chemclipse.swt.ui.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
 
 public class PeakIntegrationEntriesUI {
 

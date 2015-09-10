@@ -24,12 +24,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
-
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.internal.provider.ChromatogramIntegrationResultsContentProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.internal.provider.ChromatogramIntegrationResultsLabelProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.internal.provider.ChromatogramIntegrationResultsTableComparator;
-import org.eclipse.chemclipse.swt.ui.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
 
 public class ChromatogramIntegrationResultsUI extends Composite {
 
