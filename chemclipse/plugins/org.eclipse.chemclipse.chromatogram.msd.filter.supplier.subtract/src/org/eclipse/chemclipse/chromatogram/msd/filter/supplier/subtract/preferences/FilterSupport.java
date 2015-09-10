@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.prefere
 
 import java.util.Map;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -25,12 +26,12 @@ import org.eclipse.chemclipse.msd.model.implementation.CombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.support.CombinedMassSpectrumCalculator;
 import org.eclipse.chemclipse.msd.model.support.ICombinedMassSpectrumCalculator;
-import org.eclipse.chemclipse.logging.core.Logger;
 
 public class FilterSupport {
 
 	private static final Logger logger = Logger.getLogger(FilterSupport.class);
 	public static final float NORMALIZATION_FACTOR = 1000.0f;
+	public static final float MIN_ABDUNDANCE = 1.0f;
 
 	/**
 	 * Returns a combined mass spectrum using the chromatogram selection.
@@ -186,7 +187,7 @@ public class FilterSupport {
 			 * Check the abundance.
 			 */
 			abundance = ions.get(ion).floatValue();
-			if(abundance >= 1) {
+			if(abundance >= MIN_ABDUNDANCE) {
 				try {
 					IIon combinedIon = new Ion(ion, abundance);
 					combinedMassSpectrum.addIon(combinedIon);
