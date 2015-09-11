@@ -12,8 +12,8 @@
 package org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.internal.provider;
 
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.result.ISavitzkyGolayFilterRating;
-import org.eclipse.chemclipse.support.ui.swt.viewers.AbstractRecordTableComparator;
-import org.eclipse.chemclipse.support.ui.swt.viewers.IRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
 public class ClassifierResultTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
