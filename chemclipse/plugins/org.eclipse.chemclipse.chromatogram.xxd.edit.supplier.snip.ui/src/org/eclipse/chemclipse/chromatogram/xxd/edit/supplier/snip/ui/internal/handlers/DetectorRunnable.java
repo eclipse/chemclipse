@@ -13,15 +13,14 @@ package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.internal.h
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.BaselineDetector;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.processing.IBaselineDetectorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
@@ -43,26 +42,11 @@ public class DetectorRunnable implements IRunnableWithProgress {
 			monitor.beginTask("SNIP Baseline Detector", IProgressMonitor.UNKNOWN);
 			IBaselineDetectorSettings baselineDetectorSettings = PreferenceSupplier.getBaselineDetectorSettings();
 			IBaselineDetectorProcessingInfo processingInfo = BaselineDetector.setBaseline(chromatogramSelection, baselineDetectorSettings, BASELINE_DETECTOR_ID, monitor);
-			showErrorProcessingMessages(processingInfo);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
 			updateSelection();
 		} finally {
 			monitor.done();
 		}
-	}
-
-	// ---------------------------------------------------------private methods
-	private void showErrorProcessingMessages(final IBaselineDetectorProcessingInfo processingInfo) {
-
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-
-				if(processingInfo.hasErrorMessages()) {
-					ProcessingInfoViewSupport.updateProcessingInfoView(processingInfo);
-				}
-			}
-		});
 	}
 
 	/*
