@@ -7,7 +7,7 @@
   <imports xsi:type="basic:Part" xmi:id="_r-xO4J3kEeKyw-6yHNqBYg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.peakMSDView"/>
   <imports xsi:type="basic:Part" xmi:id="__blYIKaQEeK9fY-0Q0-3sg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramFileExplorerView"/>
   <imports xsi:type="basic:Part" xmi:id="_y8XgkKkQEeKiqMTTUAZMag" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.peakQuantitationEntries"/>
-  <imports xsi:type="basic:Part" xmi:id="_JjeugKzOEeKfmrS3DJJICQ" elementId="org.eclipse.chemclipse.processing.ui.part.processingInfoView"/>
+  <imports xsi:type="basic:Part" xmi:id="_JjeugKzOEeKfmrS3DJJICQ" elementId="org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_wS64QJVrEeKTnsLyI-EkSQ" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Command" xmi:id="_zRpTMJVrEeKTnsLyI-EkSQ" elementId="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.command.quantifySelectedPeak" commandName="Quantify Selected Peak"/>
     <elements xsi:type="commands:Command" xmi:id="_53xSoJVrEeKTnsLyI-EkSQ" elementId="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.command.quantifyAllPeaks" commandName="Quantify All Peaks"/>

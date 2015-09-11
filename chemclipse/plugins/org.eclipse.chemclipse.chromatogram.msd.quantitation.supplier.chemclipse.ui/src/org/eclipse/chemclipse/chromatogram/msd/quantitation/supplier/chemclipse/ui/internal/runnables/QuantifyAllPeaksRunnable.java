@@ -15,17 +15,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
-
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.PeakQuantifier;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.processing.IPeakQuantifierProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.PeakQuantifier;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.processing.IPeakQuantifierProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class QuantifyAllPeaksRunnable implements IRunnableWithProgress {
 
@@ -48,37 +46,15 @@ public class QuantifyAllPeaksRunnable implements IRunnableWithProgress {
 				peaks.add(peak);
 			}
 			IPeakQuantifierProcessingInfo processingInfo = PeakQuantifier.quantify(peaks, PEAK_QUANTIFIER_ID, monitor);
-			updateSelection(processingInfo);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			if(chromatogramSelection instanceof ChromatogramSelectionMSD) {
+				/*
+				 * The chromatogram editor shall be reloaded to show the peaks.
+				 */
+				((ChromatogramSelectionMSD)chromatogramSelection).update(true);
+			}
 		} finally {
 			monitor.done();
 		}
 	}
-
-	// ---------------------------------------------------------private methods
-	/*
-	 * Updates the selection using the GUI thread.
-	 */
-	private void updateSelection(final IPeakQuantifierProcessingInfo processingInfo) {
-
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-
-				/*
-				 * Show the processing view if error messages occurred.
-				 */
-				ProcessingInfoViewSupport.showErrorInfoReminder(processingInfo);
-				ProcessingInfoViewSupport.updateProcessingInfoView(processingInfo);
-				//
-				if(chromatogramSelection instanceof ChromatogramSelectionMSD) {
-					/*
-					 * The chromatogram editor shall be reloaded to show the peaks.
-					 */
-					((ChromatogramSelectionMSD)chromatogramSelection).update(true);
-				}
-			}
-		});
-	}
-	// ---------------------------------------------------------private methods
 }
