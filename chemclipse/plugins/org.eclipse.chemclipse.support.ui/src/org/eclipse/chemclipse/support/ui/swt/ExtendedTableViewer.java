@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.swt;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.chemclipse.support.settings.IOperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.jface.action.Action;
@@ -43,10 +46,14 @@ public class ExtendedTableViewer extends TableViewer {
 	private final String DELIMITER = "\t";
 	private final String COPY_TO_CLIPBOARD = "Copy selection to clipboard";
 	private final String POPUP_MENU_ID = "org.eclipse.chemclipse.swt.ui.viewers.extendedTableViewer.popup";
+	private List<TableViewerColumn> tableViewerColumns;
 
 	public ExtendedTableViewer(Composite parent) {
 
 		this(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		clipboard = new Clipboard(Display.getDefault());
+		operatingSystemUtils = new OperatingSystemUtils();
+		tableViewerColumns = new ArrayList<TableViewerColumn>();
 	}
 
 	public ExtendedTableViewer(Composite parent, int style) {
@@ -54,6 +61,7 @@ public class ExtendedTableViewer extends TableViewer {
 		super(parent, style);
 		clipboard = new Clipboard(Display.getDefault());
 		operatingSystemUtils = new OperatingSystemUtils();
+		tableViewerColumns = new ArrayList<TableViewerColumn>();
 	}
 
 	public void addCopyToClipboardListener(final String[] titles) {
@@ -170,6 +178,7 @@ public class ExtendedTableViewer extends TableViewer {
 		 * Clear the table and all existing columns.
 		 */
 		table.setRedraw(false);
+		tableViewerColumns.clear();
 		table.clearAll();
 		while(table.getColumnCount() > 0) {
 			table.getColumns()[0].dispose();
@@ -185,6 +194,7 @@ public class ExtendedTableViewer extends TableViewer {
 			 */
 			final int index = i;
 			final TableViewerColumn tableViewerColumn = new TableViewerColumn(this, SWT.NONE);
+			tableViewerColumns.add(tableViewerColumn);
 			final TableColumn tableColumn = tableViewerColumn.getColumn();
 			tableColumn.setText(titles[i]);
 			tableColumn.setWidth(bounds[i]);
@@ -223,5 +233,10 @@ public class ExtendedTableViewer extends TableViewer {
 		 */
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
+	}
+
+	public List<TableViewerColumn> getTableViewerColumns() {
+
+		return tableViewerColumns;
 	}
 }
