@@ -1,0 +1,46 @@
+/*******************************************************************************
+ * Copyright (c) 2015 Dr. Philip Wenig.
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Dr. Philip Wenig - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.chemclipse.support.messages;
+
+public interface ISupportMessages {
+
+	/*
+	 * The strings need to be listed and translated in:
+	 * OSGI-INF/l10n/bundle.properties ...
+	 */
+	String TASK_PREPARE_PROJECT = "taskPrepareProject";
+	String TASK_OPEN_EDITOR = "taskOpenEditor";
+	//
+	String PROCESSING_ERROR = "processingError";
+	String PROCESSING_PROCESS_INTERRUPTED = "processingProcessInterrupted";
+	String PROCESSING_SOMETHING_WRONG = "processingSomethingWrong";
+	String PROCESSING_SELECT_PROJECT = "processingSelectProject";
+	String PROCESSING_PROJECT_NOT_EXISTS = "processingProjectNotExists";
+	String PROCESSING_SELECT_VALID_FOLDER = "processingSelectValidFolder";
+	String PROCESSING_SELECT_VALID_PROJECT = "processingSelectValidProject";
+	String PROCESSING_NO_PROJECT = "processingNoProject";
+	String PROCESSING_TYPE_PROJECT_NAME = "processingTypeProjectName";
+	String PROCESSING_PROJECT_ALREADY_EXISTS = "processingProjectAlreadyExists";
+	String PROCESSING_SELECT_FILE_NAME = "processingSelectFileName";
+	String PROCESSING_FILE_EXISTS = "processingFileExists";
+	String PROCESSING_SELECT_VALID_FOLDER_FILE = "processingSelectValidFolderFile";
+	//
+	String LABEL_SELECT_CREATE_PROJECT = "labelSelectCreateProject";
+	String LABEL_SELECT_CREATE_PROJECT_INFO = "labelSelectCreateProjectInfo";
+	String LABEL_SELECT_EXISTING_PROJECT = "labelSelectExistingProject";
+	String LABEL_CREATE_NEW_PROJECT = "labelCreateNewProject";
+	String LABEL_FILE_NAME = "labelFileName";
+	String LABEL_FILE_NAME_INFO = "labelFileNameInfo";
+	String LABEL_FILE_CREATION_PROJECT_PATH = "labelFileCreationProjectPath";
+	String LABEL_SELECT_FILE_NAME = "labelSelectFileName";
+	String LABEL_SELECT_PROJECT = "labelSelectProject";
+}

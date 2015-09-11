@@ -11,11 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.wizards;
 
+import org.eclipse.chemclipse.support.l10n.Messages;
+import org.eclipse.chemclipse.support.messages.ISupportMessages;
+import org.eclipse.chemclipse.support.messages.SupportMessages;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -26,22 +28,40 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class SelectFileWizardPage extends WizardPage {
+public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 
 	private IWizardElements wizardElements;
-	private String defaultFileName;
-	private String fileExtension;
+	private String defaultReportName;
+	private String reportExtension;
 	private Label labelProjectName;
-	private Text fileNameText;
+	private Text reportNameText;
 
-	public SelectFileWizardPage(IWizardElements wizardElements, String defaultFileName, String fileExtension) {
+	public SelectFileWizardPage(IWizardElements wizardElements, String defaultReportName, String reportExtension) {
 
-		super("SelectFileWizardPage");
-		setTitle("File Name");
-		setDescription("Select a name for the file.");
+		super("SelectFileWizardPage"); // $NON-NLS-1$
+		setTitle(SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_FILE_NAME));
+		setDescription(SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_FILE_NAME_INFO));
 		this.wizardElements = wizardElements;
-		this.defaultFileName = defaultFileName;
-		this.fileExtension = fileExtension;
+		this.defaultReportName = defaultReportName;
+		this.reportExtension = reportExtension;
+	}
+
+	@Override
+	public boolean canFinish() {
+
+		/*
+		 * Report name.
+		 */
+		String fileName = wizardElements.getFileName();
+		if(fileName == null || fileName.equals("")) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public void setDefaultValues() {
+
 	}
 
 	@Override
@@ -50,13 +70,14 @@ public class SelectFileWizardPage extends WizardPage {
 		super.setVisible(visible);
 		if(visible) {
 			setSelectedProjectName();
-			validateFileName();
+			validateReportName();
 		}
 	}
 
 	@Override
 	public void createControl(Composite parent) {
 
+		Messages messages = SupportMessages.INSTANCE();
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, true));
 		//
@@ -66,7 +87,7 @@ public class SelectFileWizardPage extends WizardPage {
 		 * Project name
 		 */
 		Label labelProject = new Label(composite, SWT.NONE);
-		labelProject.setText("The new file will be created under the selected project path:");
+		labelProject.setText(messages.getMessage(ISupportMessages.LABEL_FILE_CREATION_PROJECT_PATH));
 		labelProject.setLayoutData(gridData);
 		//
 		labelProjectName = new Label(composite, SWT.WRAP);
@@ -74,24 +95,24 @@ public class SelectFileWizardPage extends WizardPage {
 		labelProjectName.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY));
 		labelProjectName.setLayoutData(gridData);
 		/*
-		 * File name
+		 * Report name
 		 */
-		Label labelFile = new Label(composite, SWT.NONE);
-		labelFile.setText("Select a file name:");
-		labelFile.setLayoutData(gridData);
+		Label labelReport = new Label(composite, SWT.NONE);
+		labelReport.setText(messages.getMessage(ISupportMessages.LABEL_SELECT_FILE_NAME));
+		labelReport.setLayoutData(gridData);
 		//
-		fileNameText = new Text(composite, SWT.BORDER);
-		fileNameText.setText(defaultFileName);
-		fileNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		fileNameText.addModifyListener(new ModifyListener() {
+		reportNameText = new Text(composite, SWT.BORDER);
+		reportNameText.setText(defaultReportName);
+		reportNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		reportNameText.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
 
-				validateFileName();
+				validateReportName();
 			}
 		});
 		//
-		validateFileName();
+		validateReportName();
 		setControl(composite);
 	}
 
@@ -103,41 +124,42 @@ public class SelectFileWizardPage extends WizardPage {
 		if(wizardElements.getContainer() != null) {
 			labelProjectName.setText(wizardElements.getContainer().getFullPath().toString());
 		} else {
-			labelProjectName.setText("Please select a project.");
+			labelProjectName.setText(SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_SELECT_PROJECT));
 		}
 	}
 
 	/**
 	 * Validates the made changes.
 	 */
-	private void validateFileName() {
+	private void validateReportName() {
 
+		Messages messages = SupportMessages.INSTANCE();
 		String message = null;
 		//
-		String fileName = fileNameText.getText().trim();
+		String fileName = reportNameText.getText().trim();
 		if(fileName == null || fileName.equals("")) {
-			message = "Please select a file name.";
+			message = messages.getMessage(ISupportMessages.PROCESSING_SELECT_FILE_NAME);
 		} else {
 			/*
 			 * Add the extension
 			 */
-			if(!fileName.endsWith(fileExtension)) {
-				fileName += fileExtension;
+			if(!fileName.endsWith(reportExtension)) {
+				fileName += reportExtension;
 			}
 			/*
-			 * Check that the file doesn't exists.
+			 * Check that the report doesn't exists.
 			 */
 			IContainer container = wizardElements.getContainer();
 			if(container != null) {
 				if(container.exists()) {
 					/*
-					 * Is there a file already?
+					 * Is there a report file already?
 					 */
 					if(container instanceof IFolder) {
 						IFolder folder = (IFolder)container;
 						IFile file = folder.getFile(fileName);
 						if(file.exists()) {
-							message = "The file already exists.";
+							message = messages.getMessage(ISupportMessages.PROCESSING_FILE_EXISTS);
 						} else {
 							/*
 							 * O.K. - all checks are passed.
@@ -152,7 +174,7 @@ public class SelectFileWizardPage extends WizardPage {
 						if(project.exists()) {
 							IFile file = project.getFile(fileName);
 							if(file.exists()) {
-								message = "The file already exists.";
+								message = messages.getMessage(ISupportMessages.PROCESSING_FILE_EXISTS);
 							} else {
 								/*
 								 * O.K. - all checks are passed.
@@ -166,7 +188,7 @@ public class SelectFileWizardPage extends WizardPage {
 							wizardElements.setFileName(fileName);
 						}
 					} else {
-						message = "Please select a valid folder to store the file.";
+						message = messages.getMessage(ISupportMessages.PROCESSING_SELECT_VALID_FOLDER_FILE);
 					}
 				} else {
 					/*
@@ -177,23 +199,12 @@ public class SelectFileWizardPage extends WizardPage {
 					wizardElements.setFileName(fileName);
 				}
 			} else {
-				message = "Please select a valid project to store the file.";
+				message = messages.getMessage(ISupportMessages.PROCESSING_SELECT_VALID_FOLDER_FILE);
 			}
 		}
 		/*
 		 * Updates the status
 		 */
 		updateStatus(message);
-	}
-
-	/**
-	 * Updates whether the next page can be selected or not.
-	 * 
-	 * @param message
-	 */
-	private void updateStatus(String message) {
-
-		setErrorMessage(message);
-		setPageComplete(message == null);
 	}
 }

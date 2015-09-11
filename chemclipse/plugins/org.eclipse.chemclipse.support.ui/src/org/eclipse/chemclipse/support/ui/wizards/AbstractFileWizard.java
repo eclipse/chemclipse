@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2015 Dr. Philip Wenig.
+ * Copyright (c) 2015 Dr. Philip Wenig.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,34 +11,25 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.wizards;
 
-import java.lang.reflect.InvocationTargetException;
-
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.messages.ISupportMessages;
+import org.eclipse.chemclipse.support.messages.SupportMessages;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-
-public abstract class AbstractFileWizard extends Wizard implements IFileWizard {
+public abstract class AbstractFileWizard extends AbstractWizard {
 
 	private static final Logger logger = Logger.getLogger(AbstractFileWizard.class);
 	private ISelection selection;
-	private IWizardElements wizardElements;
-	private SelectProjectWizardPage selectProjectWizardPage;
-	private SelectFileWizardPage selectFileWizardPage;
 	private String defaultFileName;
 	private String fileExtension;
 
@@ -49,102 +40,23 @@ public abstract class AbstractFileWizard extends Wizard implements IFileWizard {
 
 	public AbstractFileWizard(IWizardElements wizardElements, String defaultFileName, String fileExtension) {
 
-		super();
-		setNeedsProgressMonitor(true);
-		this.wizardElements = wizardElements;
+		super(wizardElements);
 		this.defaultFileName = defaultFileName;
 		this.fileExtension = fileExtension;
-	}
-
-	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
-
-		this.selection = selection;
 	}
 
 	@Override
 	public void addPages() {
 
 		/*
-		 * Select the project
+		 * Select the project an report file.
 		 */
-		selectProjectWizardPage = new SelectProjectWizardPage(selection, wizardElements);
-		addPage(selectProjectWizardPage);
-		/*
-		 * Select the file name
-		 */
-		selectFileWizardPage = new SelectFileWizardPage(wizardElements, defaultFileName, fileExtension);
-		addPage(selectFileWizardPage);
-	}
-
-	@Override
-	public boolean canFinish() {
-
-		/*
-		 * Project name.
-		 */
-		IContainer container = wizardElements.getContainer();
-		if(container == null) {
-			return false;
-		}
-		/*
-		 * File name.
-		 */
-		String fileName = wizardElements.getFileName();
-		if(fileName == null || fileName.equals("")) {
-			return false;
-		}
-		/*
-		 * All validations are passed successfully.
-		 */
-		return true;
+		addPage(new SelectProjectWizardPage(selection, getWizardElements()));
+		addPage(new SelectFileWizardPage(getWizardElements(), defaultFileName, fileExtension));
 	}
 
 	/**
-	 * Returns the wizard elements.
-	 * 
-	 * @return {@link IWizardElements}
-	 */
-	public IWizardElements getWizardElements() {
-
-		return wizardElements;
-	}
-
-	@Override
-	public boolean performFinish() {
-
-		/*
-		 * Creates the runnable.
-		 */
-		IRunnableWithProgress runnable = new IRunnableWithProgress() {
-
-			@Override
-			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-
-				try {
-					doFinish(monitor);
-				} catch(CoreException e) {
-					logger.warn(e);
-				}
-			}
-		};
-		/*
-		 * Run
-		 */
-		try {
-			getContainer().run(true, false, runnable);
-		} catch(InterruptedException e) {
-			MessageDialog.openError(getShell(), "Error", "The process was interrupted.");
-			return false;
-		} catch(InvocationTargetException e) {
-			MessageDialog.openError(getShell(), "Error", "Something has gone wrong.");
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Creates/Opens the project and returns the file instance.
+	 * Creates/Opens the project and returns the report file instance.
 	 * 
 	 * @param monitor
 	 * @throws CoreException
@@ -152,17 +64,17 @@ public abstract class AbstractFileWizard extends Wizard implements IFileWizard {
 	 */
 	protected IFile prepareProject(IProgressMonitor monitor) throws CoreException {
 
-		IContainer container = wizardElements.getContainer();
-		String fileName = wizardElements.getFileName();
+		IContainer container = getWizardElements().getContainer();
+		String fileName = getWizardElements().getFileName();
 		/*
 		 * Prepare
 		 */
-		monitor.setTaskName("Prepare project and file...");
+		monitor.subTask(SupportMessages.INSTANCE().getMessage(ISupportMessages.TASK_PREPARE_PROJECT));
 		if(container instanceof IProject) {
 			IProject project = (IProject)container;
 			if(!project.exists()) {
 				/*
-				 * Creates and opens the project if neccessary.
+				 * Creates and opens the project if necessary.
 				 */
 				project.create(monitor);
 				project.open(monitor);
@@ -175,7 +87,7 @@ public abstract class AbstractFileWizard extends Wizard implements IFileWizard {
 			}
 		}
 		/*
-		 * Returns the file.
+		 * Returns the report file.
 		 */
 		return container.getFile(new Path(fileName));
 	}
@@ -191,7 +103,7 @@ public abstract class AbstractFileWizard extends Wizard implements IFileWizard {
 		/*
 		 * Open the editor
 		 */
-		monitor.setTaskName("Open the editor");
+		monitor.subTask(SupportMessages.INSTANCE().getMessage(ISupportMessages.TASK_OPEN_EDITOR));
 		getShell().getDisplay().asyncExec(new Runnable() {
 
 			public void run() {
@@ -207,7 +119,7 @@ public abstract class AbstractFileWizard extends Wizard implements IFileWizard {
 	}
 
 	/**
-	 * Refreshes the workspace of the new file.
+	 * Refreshes the workspace of the new report file.
 	 * 
 	 * @param monitor
 	 */
@@ -216,9 +128,9 @@ public abstract class AbstractFileWizard extends Wizard implements IFileWizard {
 		/*
 		 * Refresh the local workspace.
 		 */
-		IContainer container = wizardElements.getContainer();
+		IContainer container = getWizardElements().getContainer();
 		if(container != null) {
-			container.refreshLocal(1, monitor);
+			container.refreshLocal(1, monitor); // IResource.DEPTH_INFINITE
 		}
 	}
 }
