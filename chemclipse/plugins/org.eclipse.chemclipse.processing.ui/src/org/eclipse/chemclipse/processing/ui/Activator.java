@@ -11,24 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.ui;
 
-import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.Bundle;
+import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends AbstractActivatorUI {
 
 	public static final String ICON_ERROR = "ICON_ERROR"; // $NON-NLS-1$
 	public static final String ICON_WARN = "ICON_WARN"; // $NON-NLS-1$
+	public static final String ICON_VALID = "INFO_VALID"; // $NON-NLS-1$
 	public static final String ICON_INFO = "ICON_INFO"; // $NON-NLS-1$
 	public static final String ICON_UNKNOWN = "ICON_UNKNOWN"; // $NON-NLS-1$
 	//
@@ -49,11 +45,7 @@ public class Activator extends AbstractUIPlugin {
 
 		super.start(context);
 		plugin = this;
-		ImageRegistry imageRegistry = getImageRegistry();
-		imageRegistry.put(ICON_ERROR, createImageDescriptor(getBundle(), "icons/16x16/error.gif"));
-		imageRegistry.put(ICON_WARN, createImageDescriptor(getBundle(), "icons/16x16/warn.gif"));
-		imageRegistry.put(ICON_INFO, createImageDescriptor(getBundle(), "icons/16x16/info.gif"));
-		imageRegistry.put(ICON_UNKNOWN, createImageDescriptor(getBundle(), "icons/16x16/unknown.gif"));
+		initializeImageRegistry(getImageHashMap());
 	}
 
 	/*
@@ -71,17 +63,21 @@ public class Activator extends AbstractUIPlugin {
 	 * 
 	 * @return the shared instance
 	 */
-	public static Activator getDefault() {
+	public static AbstractActivatorUI getDefault() {
 
 		return plugin;
 	}
 
-	private ImageDescriptor createImageDescriptor(Bundle bundle, String string) {
+	private Map<String, String> getImageHashMap() {
 
-		ImageDescriptor imageDescriptor = null;
-		IPath path = new Path(string);
-		URL url = FileLocator.find(bundle, path, null);
-		imageDescriptor = ImageDescriptor.createFromURL(url);
-		return imageDescriptor;
+		Map<String, String> imageHashMap = new HashMap<String, String>();
+		//
+		imageHashMap.put(ICON_INFO, "icons/16x16/info.gif");
+		imageHashMap.put(ICON_VALID, "icons/16x16/valid.gif");
+		imageHashMap.put(ICON_WARN, "icons/16x16/warn.gif");
+		imageHashMap.put(ICON_ERROR, "icons/16x16/error.gif");
+		imageHashMap.put(ICON_UNKNOWN, "icons/16x16/unknown.gif");
+		//
+		return imageHashMap;
 	}
 }

@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.ui.support;
 
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart;
+import org.eclipse.chemclipse.support.ui.addons.PerspectivePartSwitcherAddon;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -22,8 +25,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
-
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 
 @SuppressWarnings("restriction")
 public class ProcessingInfoViewSupport {
@@ -40,15 +41,42 @@ public class ProcessingInfoViewSupport {
 	 * 
 	 * @param processingInfo
 	 */
-	public static void showErrorInfoReminder(IProcessingInfo processingInfo) {
+	public static void updateProcessingInfo(final IProcessingInfo processingInfo, final boolean focusProcessingInfoView) {
 
-		if(processingInfo != null && processingInfo.hasErrorMessages()) {
-			Shell shell = Display.getCurrent().getActiveShell();
-			MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
-			messageBox.setText("An error/some errors occured.");
-			messageBox.setMessage("Please check the 'Processing Info' view.");
-			messageBox.open();
-		}
+		/*
+		 * Info error message.
+		 */
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+
+				/*
+				 * Show the message box.
+				 */
+				if(processingInfo != null && processingInfo.hasErrorMessages()) {
+					Shell shell = Display.getCurrent().getActiveShell();
+					MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
+					messageBox.setText("An error/some errors occured.");
+					messageBox.setMessage("Please check the 'Processing Info' view.");
+					messageBox.open();
+				}
+				/*
+				 * Update the info view.
+				 */
+				updateProcessingInfoView(processingInfo);
+				/*
+				 * Focus the view.
+				 */
+				if(focusProcessingInfoView) {
+					/*
+					 * Focus this part.
+					 * Use the ProcessingInfoPart.ID in the Application.e4xmi
+					 */
+					PerspectivePartSwitcherAddon.focusPart(ProcessingInfoPart.ID);
+				}
+			}
+		});
 	}
 
 	/**
@@ -57,7 +85,7 @@ public class ProcessingInfoViewSupport {
 	 * 
 	 * @param processingInfo
 	 */
-	public static void updateProcessingInfoView(IProcessingInfo processingInfo) {
+	private static void updateProcessingInfoView(IProcessingInfo processingInfo) {
 
 		/*
 		 * Create the dynamic update notifier if it has been not created yet.

@@ -35,7 +35,7 @@ public class ProcessingInfoLabelProvider extends LabelProvider implements ITable
 						image = getImage(element, Activator.ICON_WARN);
 						break;
 					case INFO:
-						image = getImage(element, Activator.ICON_INFO);
+						image = getImage(element, Activator.ICON_VALID); // INFO is blue, VALID is green
 						break;
 					default:
 						image = getImage(element, Activator.ICON_UNKNOWN);

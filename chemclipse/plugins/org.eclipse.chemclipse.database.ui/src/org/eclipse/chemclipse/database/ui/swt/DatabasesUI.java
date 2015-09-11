@@ -107,7 +107,7 @@ public class DatabasesUI {
 							MessageDialog.openError(shell, "Could not connect to database", "Could not connect to database: " + databaseName + "\nReason: " + e1.getMessage());
 							processingInfo.addErrorMessage("Could not connect to database: " + databaseName, e1.getMessage());
 						} finally {
-							ProcessingInfoViewSupport.updateProcessingInfoView(processingInfo);
+							ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
 						}
 					}
 				}

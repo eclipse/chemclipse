@@ -19,68 +19,113 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.internal.provider.ProcessingInfoContentProvider;
 import org.eclipse.chemclipse.processing.ui.internal.provider.ProcessingInfoLabelProvider;
 import org.eclipse.chemclipse.processing.ui.internal.provider.ProcessingInfoTableComparator;
-import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 
 public class ProcessingInfoUI {
 
-	private ExtendedTableViewer tableViewer;
+	private TableViewer tableViewer;
+	private ProcessingInfoTableComparator processingInfoTableComparator;
+	private Clipboard clipboard;
 	private String[] titles = {"Type", "Description", "Message", "Date"};
 	private int bounds[] = {100, 100, 100, 100};
-	private IProcessingInfo processingInfo;
+	/*
+	 * Unix: \n Windows: \r\n Mac OSX: \r
+	 */
+	private static final String DELIMITER = "\t";
+	private static final String END_OF_LINE = "\r\n";
 
 	public ProcessingInfoUI(Composite parent, int style) {
 
 		parent.setLayout(new FillLayout());
-		Map<Long, String> substances = new HashMap<Long, String>();
-		tableViewer = new ExtendedTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		tableViewer.createColumns(titles, bounds);
-		setTableProvider(substances);
 		/*
-		 * Copy and Paste of the table content.
+		 * Clipboard
 		 */
-		tableViewer.getTable().addKeyListener(new KeyAdapter() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-				/*
-				 * The selected content will be placed to the clipboard if the
-				 * user is using "Function + c". "Function-Key" 262144
-				 * (stateMask) + "c" 99 (keyCode)
-				 */
-				if(e.keyCode == 99 && e.stateMask == 262144) {
-					tableViewer.copyToClipboard(titles);
-				}
-			}
-		});
+		clipboard = new Clipboard(Display.getDefault());
+		Map<Long, String> substances = new HashMap<Long, String>();
+		tableViewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		createColumns(tableViewer);
+		setTableProvider(substances);
 	}
 
 	public void setFocus() {
 
 		tableViewer.getControl().setFocus();
-		if(processingInfo != null) {
-			tableViewer.setInput(processingInfo);
-		}
 	}
 
 	public void update(IProcessingInfo processingInfo) {
 
-		this.processingInfo = processingInfo;
+		tableViewer.setInput(processingInfo);
 	}
 
-	public ExtendedTableViewer getTableViewer() {
+	public TableViewer getTableViewer() {
 
 		return tableViewer;
 	}
 
-	public String[] getTitles() {
+	/**
+	 * Copies the actual selection to the clipboard.
+	 */
+	public void copyToClipboard() {
 
-		return titles;
+		/*
+		 * SYNCHRONIZE: PeakListLabelProvider PeakListLabelSorter PeakListView
+		 */
+		StringBuilder builder = new StringBuilder();
+		int size = titles.length;
+		/*
+		 * Header
+		 */
+		for(String title : titles) {
+			builder.append(title);
+			builder.append(DELIMITER);
+		}
+		builder.append(END_OF_LINE);
+		/*
+		 * Copy the selected items.
+		 */
+		TableItem selection;
+		Table table = tableViewer.getTable();
+		for(int index : table.getSelectionIndices()) {
+			/*
+			 * Get the nth selected item.
+			 */
+			selection = table.getItem(index);
+			/*
+			 * Dump all elements of the item, e.g. RT, Abundance, ... .
+			 */
+			for(int columnIndex = 0; columnIndex < size; columnIndex++) {
+				builder.append(selection.getText(columnIndex));
+				builder.append(DELIMITER);
+			}
+			builder.append(END_OF_LINE);
+		}
+		/*
+		 * If the builder is empty, give a note that items needs to be selected.
+		 */
+		if(builder.length() == 0) {
+			builder.append("Please select one or more entries in the list.");
+			builder.append(END_OF_LINE);
+		}
+		/*
+		 * Transfer the selected text (items) to the clipboard.
+		 */
+		TextTransfer textTransfer = TextTransfer.getInstance();
+		Object[] data = new Object[]{builder.toString()};
+		Transfer[] dataTypes = new Transfer[]{textTransfer};
+		clipboard.setContents(data, dataTypes);
 	}
 
 	// -----------------------------------------private methods
@@ -91,6 +136,60 @@ public class ProcessingInfoUI {
 		 */
 		tableViewer.setContentProvider(new ProcessingInfoContentProvider());
 		tableViewer.setLabelProvider(new ProcessingInfoLabelProvider());
-		tableViewer.setComparator(new ProcessingInfoTableComparator());
+		processingInfoTableComparator = new ProcessingInfoTableComparator();
+		tableViewer.setComparator(processingInfoTableComparator);
+	}
+
+	/**
+	 * Creates the columns for the peak viewer table.
+	 * 
+	 * @param tableViewer
+	 */
+	private void createColumns(final TableViewer tableViewer) {
+
+		/*
+		 * SYNCHRONIZE: PeakListLabelProvider PeakListLabelSorter PeakListView
+		 */
+		/*
+		 * Set the titles and bounds.
+		 */
+		for(int i = 0; i < titles.length; i++) {
+			/*
+			 * Column sort.
+			 */
+			final int index = i;
+			final TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+			final TableColumn tableColumn = tableViewerColumn.getColumn();
+			tableColumn.setText(titles[i]);
+			tableColumn.setWidth(bounds[i]);
+			tableColumn.setResizable(true);
+			tableColumn.setMoveable(true);
+			tableColumn.addSelectionListener(new SelectionAdapter() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+
+					processingInfoTableComparator.setColumn(index);
+					int direction = tableViewer.getTable().getSortDirection();
+					if(tableViewer.getTable().getSortColumn() == tableColumn) {
+						/*
+						 * Toggle the direction
+						 */
+						direction = (direction == SWT.UP) ? SWT.DOWN : SWT.UP;
+					} else {
+						direction = SWT.UP;
+					}
+					tableViewer.getTable().setSortDirection(direction);
+					tableViewer.getTable().setSortColumn(tableColumn);
+					tableViewer.refresh();
+				}
+			});
+		}
+		/*
+		 * Set header and lines visible.
+		 */
+		Table table = tableViewer.getTable();
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
 	}
 }

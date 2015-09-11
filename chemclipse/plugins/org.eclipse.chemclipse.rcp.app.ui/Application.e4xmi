@@ -100,7 +100,7 @@
       </menus>
       <toolbar xmi:id="_hl6gQI1zEeKgaYcpx_IhbQ" elementId="org.eclipse.ui.internal.introview" visible="false"/>
     </sharedElements>
-    <sharedElements xsi:type="basic:Part" xmi:id="_T2mREFeKEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.processing.ui.part.processingInfoView" contributionURI="bundleclass://org.eclipse.chemclipse.processing.ui/org.eclipse.chemclipse.processing.ui.views.ProcessingInfoView" label="Processing Info" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif"/>
+    <sharedElements xsi:type="basic:Part" xmi:id="_T2mREFeKEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart" contributionURI="bundleclass://org.eclipse.chemclipse.processing.ui/org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart" label="Feedback" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif"/>
     <sharedElements xsi:type="basic:Part" xmi:id="_qY-R0FeKEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.LogFileView" contributionURI="bundleclass://org.eclipse.chemclipse.logging.ui/org.eclipse.chemclipse.logging.ui.views.LogFileView" label="Log Files" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/log.gif"/>
     <trimBars xmi:id="_h0BcTDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.trimbar.top">
       <children xsi:type="menu:ToolBar" xmi:id="_h0BcTTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.main">
@@ -177,4 +177,5 @@
   <addons xmi:id="_0gTyoH9aEeKE1OxK--sJmg" elementId="org.eclipse.e4.ui.internal.workbench.addons.handlerprocessingaddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
   <addons xmi:id="_9QiAYJMJEeKS0dEiOP1gSw" elementId="org.eclipse.chemclipse.rcp.app.ui.addon.perspectiveAddon" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.addons.PerspectiveApplicationAddon"/>
   <addons xmi:id="_Z9jhkM1jEeOfr-UwE6wy8g" elementId="org.eclipse.chemclipse.rcp.app.ui.addon.modelSupport" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.addons.ModelSupportAddon"/>
+  <addons xmi:id="_nrS7AFiEEeWQX73trz8jug" elementId="org.eclipse.chemclipse.rcp.app.ui.addon.perspectivePartSwitcherAddon" contributionURI="bundleclass://org.eclipse.chemclipse.support.ui/org.eclipse.chemclipse.support.ui.addons.PerspectivePartSwitcherAddon"/>
 </application:Application>

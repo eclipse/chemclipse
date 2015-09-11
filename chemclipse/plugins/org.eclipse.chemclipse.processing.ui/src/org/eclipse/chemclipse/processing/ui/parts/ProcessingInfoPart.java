@@ -10,7 +10,7 @@
  * Philip (eselmeister) Wenig - initial API and implementation
  * Janos Binder - cleanup
  *******************************************************************************/
-package org.eclipse.chemclipse.processing.ui.views;
+package org.eclipse.chemclipse.processing.ui.parts;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -29,15 +29,21 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-public class ProcessingInfoView implements EventHandler {
+public class ProcessingInfoPart implements EventHandler {
 
-	private static final String POPUP_MENU_ID = "org.eclipse.chemclipse.processing.ui.views.processingInfoView.popup";
+	public static String ID = "org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart";
+	//
+	private static final String POPUP_MENU_ID = "#PopUpMenu"; // $NON-NLS-1$
+	private static final String POPUP_MENU_POSTFIX = "PopUpMenu"; // $NON-NLS-1$
+	//
 	@Inject
 	private Composite parent;
 	@Inject
@@ -55,6 +61,25 @@ public class ProcessingInfoView implements EventHandler {
 
 		parent.setLayout(new FillLayout());
 		processingInfoUI = new ProcessingInfoUI(parent, SWT.NONE);
+		TableViewer tableViewer = processingInfoUI.getTableViewer();
+		/*
+		 * Copy and Paste of the table content.
+		 */
+		tableViewer.getTable().addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				/*
+				 * The selected content will be placed to the clipboard if the
+				 * user is using "Function + c". "Function-Key" 262144
+				 * (stateMask) + "c" 99 (keyCode)
+				 */
+				if(e.keyCode == 99 && e.stateMask == 262144) {
+					processingInfoUI.copyToClipboard();
+				}
+			}
+		});
 		initContextMenu();
 	}
 
@@ -67,7 +92,6 @@ public class ProcessingInfoView implements EventHandler {
 	public void setFocus() {
 
 		update(getProcessingInfo());
-		processingInfoUI.setFocus();
 	}
 
 	public void update(IProcessingInfo processingInfo) {
@@ -78,6 +102,7 @@ public class ProcessingInfoView implements EventHandler {
 		 */
 		if(doUpdate(processingInfo)) {
 			processingInfoUI.update(processingInfo);
+			processingInfoUI.setFocus();
 		}
 	}
 
@@ -112,7 +137,7 @@ public class ProcessingInfoView implements EventHandler {
 	 */
 	private void initContextMenu() {
 
-		MenuManager menuManager = new MenuManager("#PopUpMenu", POPUP_MENU_ID);
+		MenuManager menuManager = new MenuManager(POPUP_MENU_ID, getClass().getName() + POPUP_MENU_POSTFIX);
 		menuManager.setRemoveAllWhenShown(true);
 		menuManager.addMenuListener(new IMenuListener() {
 
@@ -125,7 +150,7 @@ public class ProcessingInfoView implements EventHandler {
 					public void run() {
 
 						super.run();
-						processingInfoUI.getTableViewer().copyToClipboard(processingInfoUI.getTitles());
+						processingInfoUI.copyToClipboard();
 					}
 				};
 				action.setText("Copy selection to clipboard");

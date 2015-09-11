@@ -13,10 +13,9 @@ package org.eclipse.chemclipse.processing.ui.support;
 
 import javax.inject.Inject;
 
-import org.eclipse.e4.core.services.events.IEventBroker;
-
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.e4.core.services.events.IEventBroker;
 
 public class DynamicProcessingInfoUpdateNotifier {
 
@@ -25,6 +24,6 @@ public class DynamicProcessingInfoUpdateNotifier {
 
 	public void update(IProcessingInfo processingInfo) {
 
-		eventBroker.post(IChemClipseEvents.TOPIC_PROCESSING_INFO_UPDATE, processingInfo);
+		eventBroker.send(IChemClipseEvents.TOPIC_PROCESSING_INFO_UPDATE, processingInfo);
 	}
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<component name="org.eclipse.chemclipse.processing.ui.views.ProcessingInfoView">
-   <implementation class="org.eclipse.chemclipse.processing.ui.views.ProcessingInfoView" />
+<component name="org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart">
+   <implementation class="org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart" />
    <property name="event.topics" value="processinginfo/update" />
    <service>
       <provide interface="org.osgi.service.event.EventHandler" />
