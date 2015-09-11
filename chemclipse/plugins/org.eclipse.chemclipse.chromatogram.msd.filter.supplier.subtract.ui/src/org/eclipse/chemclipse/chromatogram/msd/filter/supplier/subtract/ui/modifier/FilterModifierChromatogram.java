@@ -13,10 +13,6 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.modi
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
-
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilter;
@@ -24,6 +20,9 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferen
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.widgets.Display;
 
 public class FilterModifierChromatogram extends AbstractChromatogramProcessor implements IRunnableWithProgress {
 
@@ -50,18 +49,7 @@ public class FilterModifierChromatogram extends AbstractChromatogramProcessor im
 			IChromatogramSelectionMSD chromatogramSelection = (IChromatogramSelectionMSD)getChromatogramSelection();
 			IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
 			final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, PreferenceSupplier.FILTER_ID_CHROMATOGRAM, monitor);
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					/*
-					 * Show the processing view if error messages occurred.
-					 */
-					ProcessingInfoViewSupport.showErrorInfoReminder(processingInfo);
-					ProcessingInfoViewSupport.updateProcessingInfoView(processingInfo);
-				}
-			});
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
 		}
 	}
 
