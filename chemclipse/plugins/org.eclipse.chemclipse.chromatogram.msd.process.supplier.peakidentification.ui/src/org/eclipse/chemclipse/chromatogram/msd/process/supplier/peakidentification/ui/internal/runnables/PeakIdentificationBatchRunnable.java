@@ -16,10 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
-
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.core.PeakIdentificationBatchProcess;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.io.PeakIdentificationBatchJobReader;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
@@ -32,6 +28,8 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class PeakIdentificationBatchRunnable implements IRunnableWithProgress {
 
@@ -57,33 +55,12 @@ public class PeakIdentificationBatchRunnable implements IRunnableWithProgress {
 			final IPeakIdentificationProcessingInfo processingInfo = batchProcess.execute(peakIdentificationBatchJob, monitor);
 			try {
 				final IPeakIdentificationBatchProcessReport report = processingInfo.getPeakIdentificationBatchProcessReport();
+				ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
 				/*
-				 * Update the peak results view.
+				 * Update the peak results page
 				 */
-				Display.getDefault().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-
-						/*
-						 * Show the processing view if error messages occurred.
-						 */
-						Display.getDefault().asyncExec(new Runnable() {
-
-							@Override
-							public void run() {
-
-								ProcessingInfoViewSupport.showErrorInfoReminder(processingInfo);
-							}
-						});
-						ProcessingInfoViewSupport.updateProcessingInfoView(processingInfo);
-						/*
-						 * Update the peak results page
-						 */
-						SelectionUpdateListener selectionUpdateListener = new PeakIdentificationResultsPage.SelectionUpdateListener();
-						selectionUpdateListener.update(report.getPeaks(), true);
-					}
-				});
+				SelectionUpdateListener selectionUpdateListener = new PeakIdentificationResultsPage.SelectionUpdateListener();
+				selectionUpdateListener.update(report.getPeaks(), true);
 			} catch(TypeCastException e) {
 				logger.warn(e);
 			}
