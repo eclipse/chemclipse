@@ -85,6 +85,13 @@ public interface IProcessingInfo {
 	boolean hasErrorMessages();
 
 	/**
+	 * Returns whether the process info stores warn message or not.
+	 * 
+	 * @return boolean
+	 */
+	boolean hasWarnMessages();
+
+	/**
 	 * Creates a new TypeCastException and adds a IProcessingMessage.
 	 * 
 	 * @param clazz

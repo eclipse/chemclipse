@@ -102,6 +102,17 @@ public abstract class AbstractProcessingInfo implements IProcessingInfo {
 	}
 
 	@Override
+	public boolean hasWarnMessages() {
+
+		for(IProcessingMessage processingMessage : processingMessages) {
+			if(processingMessage.getMessageType().equals(MessageType.WARN)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
 	public TypeCastException createTypeCastException(String description, Class<?> clazz) {
 
 		String message = "The object couldn't be casted to: " + clazz;
