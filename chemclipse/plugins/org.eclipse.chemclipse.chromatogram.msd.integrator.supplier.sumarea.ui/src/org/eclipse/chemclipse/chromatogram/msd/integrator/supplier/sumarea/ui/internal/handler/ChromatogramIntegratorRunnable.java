@@ -14,22 +14,20 @@ package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.ui.i
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
-
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.settings.ISumareaIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.settings.SumareaIntegrationSettings;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.chromatogram.ChromatogramIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.IChromatogramIntegratorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.notifier.IntegrationResultUpdateNotifier;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class ChromatogramIntegratorRunnable implements IRunnableWithProgress {
 
@@ -57,22 +55,8 @@ public class ChromatogramIntegratorRunnable implements IRunnableWithProgress {
 			/*
 			 * Result
 			 */
-			final IChromatogramIntegratorProcessingInfo processingInfo = ChromatogramIntegrator.integrate(chromatogramSelection, chromatogramIntegrationSettings, CHROMATOGRAM_INTEGRATOR_ID, monitor);
-			/*
-			 * asyncExec
-			 */
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					/*
-					 * Show the processing view if error messages occurred.
-					 */
-					ProcessingInfoViewSupport.showErrorInfoReminder(processingInfo);
-					ProcessingInfoViewSupport.updateProcessingInfoView(processingInfo);
-				}
-			});
+			IChromatogramIntegratorProcessingInfo processingInfo = ChromatogramIntegrator.integrate(chromatogramSelection, chromatogramIntegrationSettings, CHROMATOGRAM_INTEGRATOR_ID, monitor);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
 			/*
 			 * Try to set the results.
 			 */
