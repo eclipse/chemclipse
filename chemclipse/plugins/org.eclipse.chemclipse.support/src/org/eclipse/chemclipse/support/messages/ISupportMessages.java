@@ -43,4 +43,7 @@ public interface ISupportMessages {
 	String LABEL_FILE_CREATION_PROJECT_PATH = "labelFileCreationProjectPath";
 	String LABEL_SELECT_FILE_NAME = "labelSelectFileName";
 	String LABEL_SELECT_PROJECT = "labelSelectProject";
+	//
+	String LABEL_COPY_LINES_INFO = "labelCopyLinesInfo";
+	String LABEL_COPY_SELECTION_CLIPBOARD = "labelCopySelectionClipboard";
 }

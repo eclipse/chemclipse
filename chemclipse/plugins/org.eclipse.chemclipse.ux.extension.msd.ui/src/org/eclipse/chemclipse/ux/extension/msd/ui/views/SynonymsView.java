@@ -35,7 +35,7 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.identification.SynonymsListUI;
-import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 
 public class SynonymsView extends AbstractMassSpectrumSelectionView {
 

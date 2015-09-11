@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakIntegrationEntriesContentProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakIntegrationEntriesLabelProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakIntegrationEntriesTableComparator;
-import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 
 public class PeakIntegrationEntriesUI {
 

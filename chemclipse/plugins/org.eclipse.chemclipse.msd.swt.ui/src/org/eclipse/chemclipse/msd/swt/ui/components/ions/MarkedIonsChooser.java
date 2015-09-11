@@ -35,7 +35,7 @@ import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.swt.ui.internal.components.ions.MarkedIonsChooserContentProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.components.ions.MarkedIonsChooserLabelProvider;
-import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 
 /**
  * This class can be used to show and edit instances of {@link IMarkedIons}.<br/>

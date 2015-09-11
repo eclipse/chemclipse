@@ -12,8 +12,8 @@
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.chemclipse.support.ui.swt.viewers.AbstractRecordTableComparator;
-import org.eclipse.chemclipse.support.ui.swt.viewers.IRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 
 public class SynonymsListTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 

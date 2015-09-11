@@ -47,7 +47,7 @@ import org.eclipse.chemclipse.csd.model.notifier.ChromatogramSelectionCSDUpdateN
 import org.eclipse.chemclipse.csd.swt.ui.components.peak.PeakListUI;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.implementation.Peaks;
-import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 
 public class PeakListCSDView extends AbstractChromatogramSelectionCSDView {
 

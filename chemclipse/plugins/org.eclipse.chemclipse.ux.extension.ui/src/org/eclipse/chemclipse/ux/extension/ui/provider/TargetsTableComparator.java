@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.ux.extension.ui.provider;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.support.ui.swt.viewers.AbstractRecordTableComparator;
-import org.eclipse.chemclipse.support.ui.swt.viewers.IRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
 public class TargetsTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {

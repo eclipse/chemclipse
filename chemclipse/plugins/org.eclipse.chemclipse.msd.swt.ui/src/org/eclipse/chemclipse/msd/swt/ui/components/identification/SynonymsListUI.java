@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.SynonymsListContentProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.SynonymsListLabelProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.SynonymsListTableComparator;
-import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 
 public class SynonymsListUI {
 

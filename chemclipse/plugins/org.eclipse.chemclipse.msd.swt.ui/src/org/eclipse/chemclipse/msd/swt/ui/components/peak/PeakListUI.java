@@ -29,7 +29,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakListContentProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakListLabelProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakListTableComparator;
-import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 
 public class PeakListUI {
 

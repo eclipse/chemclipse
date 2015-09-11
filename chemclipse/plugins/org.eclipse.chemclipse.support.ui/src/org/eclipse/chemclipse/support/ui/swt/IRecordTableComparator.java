@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Janos Binder - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.support.ui.swt.viewers;
+package org.eclipse.chemclipse.support.ui.swt;
 
 import org.eclipse.jface.viewers.Viewer;
 

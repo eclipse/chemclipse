@@ -29,7 +29,7 @@ import org.eclipse.chemclipse.csd.swt.ui.internal.provider.PeakListContentProvid
 import org.eclipse.chemclipse.csd.swt.ui.internal.provider.PeakListLabelProvider;
 import org.eclipse.chemclipse.csd.swt.ui.internal.provider.PeakListTableComparator;
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 
 public class PeakListUI {
 

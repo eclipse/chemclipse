@@ -12,8 +12,8 @@
 package org.eclipse.chemclipse.processing.ui.internal.provider;
 
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.support.ui.swt.viewers.AbstractRecordTableComparator;
-import org.eclipse.chemclipse.support.ui.swt.viewers.IRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
 public class ProcessingInfoTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {

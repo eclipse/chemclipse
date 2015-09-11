@@ -28,7 +28,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIn
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.internal.provider.ChromatogramIntegrationResultsContentProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.internal.provider.ChromatogramIntegrationResultsLabelProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.internal.provider.ChromatogramIntegrationResultsTableComparator;
-import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 
 public class ChromatogramIntegrationResultsUI extends Composite {
 

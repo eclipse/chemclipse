@@ -28,7 +28,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegratio
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.internal.provider.PeakIntegrationResultsContentProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.internal.provider.PeakIntegrationResultsLabelProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.internal.provider.PeakIntegrationResultsTableComparator;
-import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 
 public class PeakIntegrationResultsUI extends Composite {
 

@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.support.ui.swt.viewers;
+package org.eclipse.chemclipse.support.ui.swt;
 
 public interface IListItemsRemoveListener {
 
