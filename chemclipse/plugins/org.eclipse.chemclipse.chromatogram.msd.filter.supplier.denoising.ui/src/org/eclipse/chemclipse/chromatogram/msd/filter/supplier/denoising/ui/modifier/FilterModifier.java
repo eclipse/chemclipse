@@ -14,11 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.mod
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
-
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilter;
@@ -34,6 +29,9 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class FilterModifier extends AbstractChromatogramProcessor implements IRunnableWithProgress {
 
@@ -100,25 +98,14 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 					/*
 					 * Update the noise mass spectrum view.
 					 */
-					Display.getDefault().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-
-							/*
-							 * Show the processing view if error messages occurred.
-							 */
-							ProcessingInfoViewSupport.showErrorInfoReminder(processingInfo);
-							ProcessingInfoViewSupport.updateProcessingInfoView(processingInfo);
-							/*
-							 * Show the interactive view.
-							 */
-							if(eventBroker != null) {
-								List<ICombinedMassSpectrum> noiseMassSpectra = denoisingResult.getNoiseMassSpectra();
-								eventBroker.send(IDenoisingEvents.TOPIC_NOISE_MASS_SPECTRA_UPDATE, noiseMassSpectra);
-							}
-						}
-					});
+					ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+					/*
+					 * Show the interactive view.
+					 */
+					if(eventBroker != null) {
+						List<ICombinedMassSpectrum> noiseMassSpectra = denoisingResult.getNoiseMassSpectra();
+						eventBroker.send(IDenoisingEvents.TOPIC_NOISE_MASS_SPECTRA_UPDATE, noiseMassSpectra);
+					}
 				}
 			} catch(TypeCastException e) {
 				logger.warn(e);
