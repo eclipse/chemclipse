@@ -13,9 +13,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.ui
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.combined.CombinedIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.ChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
@@ -26,10 +23,12 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ICombinedIntegr
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ITrapezoidPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.notifier.IntegrationResultUpdateNotifier;
+import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
@@ -62,22 +61,8 @@ public class CombinedIntegratorRunnable implements IRunnableWithProgress {
 			/*
 			 * Show the processing view if error messages occurred.
 			 */
-			final ICombinedIntegratorProcessingInfo processingInfo = CombinedIntegrator.integrate(chromatogramSelection, combinedIntegrationSettings, COMBINED_INTEGRATOR_ID, monitor);
-			/*
-			 * asyncExec
-			 */
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					/*
-					 * Show the processing view if error messages occurred.
-					 */
-					ProcessingInfoViewSupport.showErrorInfoReminder(processingInfo);
-					ProcessingInfoViewSupport.updateProcessingInfoView(processingInfo);
-				}
-			});
+			ICombinedIntegratorProcessingInfo processingInfo = CombinedIntegrator.integrate(chromatogramSelection, combinedIntegrationSettings, COMBINED_INTEGRATOR_ID, monitor);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
 			/*
 			 * Try to set the results.
 			 */

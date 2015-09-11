@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
 
 public class ChromatogramIntegratorRunnable implements IRunnableWithProgress {
 
@@ -50,22 +49,8 @@ public class ChromatogramIntegratorRunnable implements IRunnableWithProgress {
 			/*
 			 * Show the processing view if error messages occurred.
 			 */
-			final IChromatogramIntegratorProcessingInfo processingInfo = ChromatogramIntegrator.integrate(chromatogramSelection, chromatogramIntegrationSettings, CHROMATOGRAM_INTEGRATOR_ID, monitor);
-			/*
-			 * asyncExec
-			 */
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					/*
-					 * Show the processing view if error messages occurred.
-					 */
-					ProcessingInfoViewSupport.showErrorInfoReminder(processingInfo);
-					ProcessingInfoViewSupport.updateProcessingInfoView(processingInfo);
-				}
-			});
+			IChromatogramIntegratorProcessingInfo processingInfo = ChromatogramIntegrator.integrate(chromatogramSelection, chromatogramIntegrationSettings, CHROMATOGRAM_INTEGRATOR_ID, monitor);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
 			/*
 			 * Try to set the results.
 			 */
