@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.notifier.PeakSelectionUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.peak.PeakListUI;
-import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 
 /**
  * @author Philip (eselmeister) Wenig
