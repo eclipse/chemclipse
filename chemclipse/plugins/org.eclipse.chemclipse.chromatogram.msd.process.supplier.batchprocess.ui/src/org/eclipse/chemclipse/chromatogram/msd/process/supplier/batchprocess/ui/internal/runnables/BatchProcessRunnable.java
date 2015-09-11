@@ -26,7 +26,6 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
 
 /**
  * @author Philip (eselmeister) Wenig
@@ -54,16 +53,8 @@ public class BatchProcessRunnable implements IRunnableWithProgress {
 			monitor.beginTask("Batch Process", IProgressMonitor.UNKNOWN);
 			batchProcessJob = reader.read(file, monitor);
 			BatchProcess bp = new BatchProcess();
-			final IProcessingInfo processingInfo = bp.execute(batchProcessJob, monitor);
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					ProcessingInfoViewSupport.showErrorInfoReminder(processingInfo);
-					ProcessingInfoViewSupport.updateProcessingInfoView(processingInfo);
-				}
-			});
+			IProcessingInfo processingInfo = bp.execute(batchProcessJob, monitor);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
 		} catch(FileNotFoundException e) {
 			logger.warn(e);
 		} catch(FileIsNotReadableException e) {
