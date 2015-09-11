@@ -16,15 +16,14 @@ import java.io.IOException;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io.BatchProcessJobWriter;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
+import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.ui.wizards.AbstractFileWizard;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io.BatchProcessJobWriter;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.support.ui.wizards.AbstractFileWizard;
 
 public class BatchProcessJobWizard extends AbstractFileWizard {
 
