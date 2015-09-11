@@ -37,7 +37,7 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.intern
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider.WncResultsTableComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramResult;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.support.ui.swt.viewers.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.msd.ui.views.AbstractChromatogramSelectionMSDView;
 
 public class WncResultsView extends AbstractChromatogramSelectionMSDView {
