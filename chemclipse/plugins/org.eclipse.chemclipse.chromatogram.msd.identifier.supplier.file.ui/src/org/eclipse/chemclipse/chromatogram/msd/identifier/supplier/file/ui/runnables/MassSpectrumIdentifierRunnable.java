@@ -13,16 +13,14 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.runn
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
-
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.MassSpectrumIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IMassSpectraIdentifierProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
 
@@ -42,34 +40,10 @@ public class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
 			monitor.beginTask(description, IProgressMonitor.UNKNOWN);
 			IScanMSD massSpectrum = chromatogramSelection.getSelectedScan();
 			IMassSpectraIdentifierProcessingInfo processingInfo = MassSpectrumIdentifier.identify(massSpectrum, IDENTIFIER_ID, monitor);
-			update(processingInfo, massSpectrum);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			MassSpectrumSelectionUpdateNotifier.fireUpdateChange(massSpectrum, true);
 		} finally {
 			monitor.done();
 		}
 	}
-
-	// ---------------------------------------------------------private methods
-	/*
-	 * Updates the selection using the GUI thread.
-	 */
-	private void update(final IMassSpectraIdentifierProcessingInfo processingInfo, final IScanMSD massSpectrum) {
-
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-
-				/*
-				 * Show the processing view if error messages occurred.
-				 */
-				ProcessingInfoViewSupport.showErrorInfoReminder(processingInfo);
-				ProcessingInfoViewSupport.updateProcessingInfoView(processingInfo);
-				/*
-				 * Update the chromatogram selection.
-				 */
-				MassSpectrumSelectionUpdateNotifier.fireUpdateChange(massSpectrum, true);
-			}
-		});
-	}
-	// ---------------------------------------------------------private methods
 }
