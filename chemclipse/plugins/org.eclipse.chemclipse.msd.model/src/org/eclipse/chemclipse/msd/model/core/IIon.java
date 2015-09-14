@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.msd.model.core;
 
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-
 import org.eclipse.core.runtime.IAdaptable;
 
 /**
@@ -43,6 +42,8 @@ public interface IIon extends IIonSerializable, IAdaptable, Comparable<IIon> {
 
 	String TIC_DESCRIPTION = "TIC";
 	double TIC_ION = 0.0d;
+	float MIN_ABUNDANCE = 0.0f;
+	boolean MIN_ABUNDANCE_EQUAL_TO_CHECK = false; // to support <= or >=
 
 	/**
 	 * Returns the value of the actual ion.
