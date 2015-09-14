@@ -13,13 +13,12 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.intern
 
 import java.util.Map;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.exceptions.FilterException;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.support.IAnalysisSegment;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.model.support.SegmentValidator;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.exceptions.FilterException;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
@@ -31,12 +30,11 @@ import org.eclipse.chemclipse.msd.model.support.CombinedMassSpectrumCalculator;
 import org.eclipse.chemclipse.msd.model.support.ICombinedMassSpectrumCalculator;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
-import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class CalculatorSupport {
 
 	private static final Logger logger = Logger.getLogger(CalculatorSupport.class);
-	private static float MIN_ABDUNDANCE = 1.0f;
 	private static final float NORMALIZATION_FACTOR = 1000.0f;
 	private SegmentValidator segmentValidator;
 
@@ -108,7 +106,7 @@ public class CalculatorSupport {
 			 * Check the abundance.
 			 */
 			abundance = ions.get(ion).floatValue();
-			if(abundance >= MIN_ABDUNDANCE) {
+			if(IIon.MIN_ABUNDANCE_EQUAL_TO_CHECK ? abundance >= IIon.MIN_ABUNDANCE : abundance > IIon.MIN_ABUNDANCE) {
 				try {
 					noiseIon = new Ion(ion, abundance);
 					noiseMassSpectrum.addIon(noiseIon);
