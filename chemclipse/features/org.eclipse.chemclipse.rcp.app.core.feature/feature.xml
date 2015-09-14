@@ -20,7 +20,7 @@ are made available under the terms of the Eclipse Public License
 v1.0 which accompanies this distribution, and is available at
 http://www.eclipse.org/legal/epl-v10.html
    </license>
-   
+
    <includes
          id="org.eclipse.chemclipse.thirdpartylibraries.swtchart.feature"
          version="0.0.0"/>
@@ -34,27 +34,7 @@ http://www.eclipse.org/legal/epl-v10.html
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.chemclipse.thirdpartylibraries.jna.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.chemclipse.thirdpartylibraries.concurrentlinkedhashmap.feature"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.chemclipse.thirdpartylibraries.ejml.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.chemclipse.thirdpartylibraries.javassist.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.chemclipse.thirdpartylibraries.jsr305.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.chemclipse.thirdpartylibraries.xerial.feature"
          version="0.0.0"/>
 
    <includes
@@ -1511,7 +1491,6 @@ http://www.eclipse.org/legal/epl-v10.html
          version="0.0.0"
          unpack="false"/>
 
-
    <plugin
          id="org.eclipse.chemclipse.logging"
          download-size="0"
@@ -1539,12 +1518,26 @@ http://www.eclipse.org/legal/epl-v10.html
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.eclipse.chemclipse.numeric"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         unpack="false"/>         
+         unpack="false"/>
+
+   <plugin
+         id="com.google.guava"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="javassist"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>
