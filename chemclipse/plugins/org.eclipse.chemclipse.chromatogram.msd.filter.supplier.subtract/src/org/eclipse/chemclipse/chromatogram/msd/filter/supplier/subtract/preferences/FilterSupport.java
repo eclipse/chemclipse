@@ -186,7 +186,7 @@ public class FilterSupport {
 			 * Check the abundance.
 			 */
 			abundance = ions.get(ion).floatValue();
-			if(IIon.MIN_ABUNDANCE_EQUAL_TO_CHECK ? abundance >= IIon.MIN_ABUNDANCE : abundance > IIon.MIN_ABUNDANCE) {
+			if(abundance > IIon.ABUNDANCE_MUST_BE_GREATER_THAN) {
 				try {
 					IIon combinedIon = new Ion(ion, abundance);
 					combinedMassSpectrum.addIon(combinedIon);
