@@ -31,7 +31,6 @@ public class FilterSupport {
 
 	private static final Logger logger = Logger.getLogger(FilterSupport.class);
 	public static final float NORMALIZATION_FACTOR = 1000.0f;
-	public static final float MIN_ABUNDANCE = 1.0f;
 
 	/**
 	 * Returns a combined mass spectrum using the chromatogram selection.
@@ -187,7 +186,7 @@ public class FilterSupport {
 			 * Check the abundance.
 			 */
 			abundance = ions.get(ion).floatValue();
-			if(abundance >= MIN_ABUNDANCE) {
+			if(IIon.MIN_ABUNDANCE_EQUAL_TO_CHECK ? abundance >= IIon.MIN_ABUNDANCE : abundance > IIon.MIN_ABUNDANCE) {
 				try {
 					IIon combinedIon = new Ion(ion, abundance);
 					combinedMassSpectrum.addIon(combinedIon);
