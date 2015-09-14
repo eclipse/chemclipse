@@ -42,8 +42,7 @@ public interface IIon extends IIonSerializable, IAdaptable, Comparable<IIon> {
 
 	String TIC_DESCRIPTION = "TIC";
 	double TIC_ION = 0.0d;
-	float MIN_ABUNDANCE = 0.0f;
-	boolean MIN_ABUNDANCE_EQUAL_TO_CHECK = false; // to support <= or >=
+	float ABUNDANCE_MUST_BE_GREATER_THAN = 0.0f;
 
 	/**
 	 * Returns the value of the actual ion.
