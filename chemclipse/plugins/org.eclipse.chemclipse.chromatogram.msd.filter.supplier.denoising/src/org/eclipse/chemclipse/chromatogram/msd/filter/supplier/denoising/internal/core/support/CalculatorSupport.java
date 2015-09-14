@@ -106,7 +106,7 @@ public class CalculatorSupport {
 			 * Check the abundance.
 			 */
 			abundance = ions.get(ion).floatValue();
-			if(IIon.MIN_ABUNDANCE_EQUAL_TO_CHECK ? abundance >= IIon.MIN_ABUNDANCE : abundance > IIon.MIN_ABUNDANCE) {
+			if(abundance > IIon.ABUNDANCE_MUST_BE_GREATER_THAN) {
 				try {
 					noiseIon = new Ion(ion, abundance);
 					noiseMassSpectrum.addIon(noiseIon);
