@@ -106,7 +106,7 @@ public class INCOSMassSpectrumComparator extends AbstractMassSpectrumComparator 
 			int stopIon = signal.getStopIon();
 			for(int ion = startIon; ion <= stopIon; ion++) {
 				abundance = signal.getAbundance(ion);
-				if(IIon.MIN_ABUNDANCE_EQUAL_TO_CHECK ? abundance >= IIon.MIN_ABUNDANCE : abundance > IIon.MIN_ABUNDANCE) {
+				if(abundance > IIon.ABUNDANCE_MUST_BE_GREATER_THAN) {
 					/*
 					 * Calculate the new abundance and add the ion to the
 					 * fresh created mass spectrum.
