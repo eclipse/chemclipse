@@ -30,8 +30,6 @@ import javax.xml.stream.events.StartElement;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
-import org.eclipse.chemclipse.model.history.IEditHistory;
-import org.eclipse.chemclipse.model.history.IEditInformation;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.converter.supplier.openchromx.internal.support.DateSupport;
 import org.eclipse.chemclipse.msd.converter.supplier.openchromx.internal.support.IChromatogramTags;
@@ -39,6 +37,8 @@ import org.eclipse.chemclipse.msd.converter.supplier.openchromx.internal.support
 import org.eclipse.chemclipse.msd.converter.supplier.openchromx.internal.support.IonSupport;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.support.history.IEditHistory;
+import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**

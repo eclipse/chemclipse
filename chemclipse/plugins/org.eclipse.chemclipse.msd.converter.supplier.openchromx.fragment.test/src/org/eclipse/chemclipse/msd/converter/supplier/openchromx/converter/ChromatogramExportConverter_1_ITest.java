@@ -14,15 +14,14 @@ package org.eclipse.chemclipse.msd.converter.supplier.openchromx.converter;
 import java.io.File;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
-
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
-import org.eclipse.chemclipse.model.history.EditInformation;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.openchromx.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.supplier.openchromx.converter.ChromatogramExportConverter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.chemclipse.support.history.EditInformation;
 
 import junit.framework.TestCase;
 
