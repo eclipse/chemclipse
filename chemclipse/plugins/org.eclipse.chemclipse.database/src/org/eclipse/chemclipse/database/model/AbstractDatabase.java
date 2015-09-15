@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Dr. Janos Binder - more implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.database.model;
 
@@ -19,7 +20,6 @@ import org.eclipse.chemclipse.database.documents.ILibraryDescriptionDocument;
 import org.eclipse.chemclipse.database.documents.LibraryDescriptionDocument;
 import org.eclipse.chemclipse.database.exceptions.NoDatabaseAvailableException;
 import org.eclipse.chemclipse.database.support.DatabasePathHelper;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.settings.IOperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 
@@ -30,7 +30,6 @@ import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 
 public abstract class AbstractDatabase implements IDatabase {
 
-	private static final Logger logger = Logger.getLogger(AbstractDatabase.class);
 	//
 	public static final String DEFAULT_USER_NAME = "admin";
 	public static final String DEFAULT_USER_PASSWORD = "admin";
@@ -161,13 +160,30 @@ public abstract class AbstractDatabase implements IDatabase {
 	 */
 	protected ODocument queryDocumentById(String className, long id) {
 
+		return queryDocumentByIdOnSeparateConnection(className, id);
+		/*
+		 * If you uncomment it "Current database instance (com.orientechnologies.orient.core.db.OPartitionedDatabasePool is not active on current thread" exceptions occur.
+		 * It happens since OrientDB 2.1.2 when the ConcurrentLinkedHashMap was replaced by Guava.
+		 */
+		// return queryDocumentById(className, id, getDB());
+	}
+
+	/**
+	 * Selects a Document in the current database by its class name and id.
+	 * 
+	 * @param className
+	 * @param id
+	 * @return ODocument
+	 */
+	protected ODocument queryDocumentById(String className, long id, ODatabaseDocumentTx db) {
+
 		if(countCluster(className.toLowerCase()) == 0) {
 			return null;
 		} else {
 			/*
 			 * Create the query
 			 */
-			int cluster = getDB().getClusterIdByName(className);
+			int cluster = db.getClusterIdByName(className);
 			StringBuilder query = new StringBuilder();
 			query.append("SELECT FROM #");
 			query.append(cluster);
@@ -198,36 +214,29 @@ public abstract class AbstractDatabase implements IDatabase {
 	protected ODocument queryDocumentByIdOnSeparateConnection(String className, long id) {
 
 		ODatabaseDocumentTx separatedb = ownerPool.acquire();
-		if(countCluster(className.toLowerCase(), separatedb) == 0) {
-			return null;
-		} else {
-			/*
-			 * Create the query
-			 */
-			int cluster = separatedb.getClusterIdByName(className);
-			StringBuilder query = new StringBuilder();
-			query.append("SELECT FROM #");
-			query.append(cluster);
-			query.append(":");
-			query.append(id);
-			/*
-			 * Execute
-			 */
-			List<ODocument> results = null;
-			results = separatedb.query(new OSQLSynchQuery<ODocument>(query.toString()));
-			separatedb.close();
-			if(results.size() == 1) {
-				return results.get(0);
-			} else {
-				return null;
-			}
-		}
+		ODocument result = queryDocumentById(className, id, separatedb);
+		separatedb.close();
+		return result;
 	}
 
 	@Override
 	public long countCluster(String clusterName) {
 
-		return countCluster(clusterName, getDB());
+		return countClusterOnSeparateConnection(clusterName);
+		/*
+		 * If you uncomment it "Current database instance (com.orientechnologies.orient.core.db.OPartitionedDatabasePool is not active on current thread" exceptions occur.
+		 * It happens since OrientDB 2.1.2 when the ConcurrentLinkedHashMap was replaced by Guava.
+		 */
+		// return countCluster(clusterName, getDB());
+	}
+
+	@Override
+	public long countClusterOnSeparateConnection(String clusterName) {
+
+		ODatabaseDocumentTx separatedb = ownerPool.acquire();
+		long result = countCluster(clusterName, separatedb);
+		separatedb.close();
+		return result;
 	}
 
 	private long countCluster(String clusterName, ODatabaseDocumentTx dbtx) {
@@ -235,8 +244,9 @@ public abstract class AbstractDatabase implements IDatabase {
 		long result = 0;
 		try {
 			result = dbtx.countClusterElements(clusterName);
-		} catch(Exception e) {
-			logger.warn(e);
+		} catch(IllegalArgumentException e) {
+			// Should we make it nice when the cluster does not exist? Rethrow the exception?
+			// logger.warn(e);
 		}
 		return result;
 	}
@@ -245,6 +255,17 @@ public abstract class AbstractDatabase implements IDatabase {
 	public ILibraryDescriptionDocument getLibraryDescriptionDocument() {
 
 		ODocument document = queryDocumentById(ILibraryDescriptionDocument.CLASS_NAME, 0);
+		if(document == null) {
+			return null;
+		} else {
+			return new LibraryDescriptionDocument(document);
+		}
+	}
+
+	@Override
+	public ILibraryDescriptionDocument getLibraryDescriptionDocumentOnSeparateConnection() {
+
+		ODocument document = queryDocumentByIdOnSeparateConnection(ILibraryDescriptionDocument.CLASS_NAME, 0);
 		if(document == null) {
 			return null;
 		} else {

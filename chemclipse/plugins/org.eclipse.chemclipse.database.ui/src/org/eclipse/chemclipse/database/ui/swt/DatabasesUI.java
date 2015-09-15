@@ -71,7 +71,6 @@ public class DatabasesUI {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 
-				IProcessingInfo processingInfo = new ProcessingInfo();
 				IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection();
 				Object element = selection.getFirstElement();
 				if(element instanceof IDatabaseProxy) {
@@ -83,16 +82,7 @@ public class DatabasesUI {
 					dialog.setMessage(stringMessageBoxText + databaseName);
 					int returnCode = dialog.open();
 					if(returnCode == SWT.OK) {
-						try {
-							databases.setDatabaseInPreferenceSupplier(databaseProxy);
-							databases.getDatabase(databaseProxy);
-							processingInfo.addInfoMessage("Changed database", "Connected to: " + databaseName);
-						} catch(NoDatabaseAvailableException e1) {
-							MessageDialog.openError(shell, "Could not connect to database", "Could not connect to database: " + databaseName + "\nReason: " + e1.getMessage());
-							processingInfo.addErrorMessage("Could not connect to database: " + databaseName, e1.getMessage());
-						} finally {
-							ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
-						}
+						handleDatabase(databaseProxy, shell);
 					}
 				}
 			}
@@ -112,5 +102,22 @@ public class DatabasesUI {
 	public TableViewer getTableViewer() {
 
 		return tableViewer;
+	}
+
+	private void handleDatabase(IDatabaseProxy databaseProxy, Shell shell) {
+
+		IProcessingInfo processingInfo = new ProcessingInfo();
+		String databaseName = databaseProxy.getDatabaseName();
+		try {
+			databases.getDatabase().close();
+			databases.setDatabaseInPreferenceSupplier(databaseProxy);
+			databases.getDatabase(databaseProxy);
+			processingInfo.addInfoMessage("Changed database", "Connected to: " + databaseName);
+		} catch(NoDatabaseAvailableException e1) {
+			MessageDialog.openError(shell, "Could not connect to database", "Could not connect to database: " + databaseName + "\nReason: " + e1.getMessage());
+			processingInfo.addErrorMessage("Could not connect to database: " + databaseName, e1.getMessage());
+		} finally {
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
+		}
 	}
 }

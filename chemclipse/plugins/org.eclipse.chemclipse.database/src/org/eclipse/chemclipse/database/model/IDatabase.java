@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.database.model;
 
-import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
-
 import org.eclipse.chemclipse.database.documents.ILibraryDescriptionDocument;
+
+import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 
 public interface IDatabase {
 
@@ -44,4 +44,8 @@ public interface IDatabase {
 	 * @return long
 	 */
 	long countCluster(String clusterName);
+
+	ILibraryDescriptionDocument getLibraryDescriptionDocumentOnSeparateConnection();
+
+	long countClusterOnSeparateConnection(String clusterName);
 }
