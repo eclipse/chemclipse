@@ -96,4 +96,9 @@ public interface IChemClipseEvents {
 	 */
 	String TOPIC_CHROMATOGRAM_CONVERTER_MSD = "chromatogram/msd/update/converter/status";
 	String PROPERTY_CHROMATOGRAM_CONVERTER_MSD_INFO = IEventBroker.DATA; // String
+	/*
+	 * Event Broker: Edit History
+	 */
+	String PROPERTY_EDIT_HISTORY = IEventBroker.DATA; // IEditHistory
+	String TOPIC_EDIT_HISTORY_UPDATE = "edithistory/update"; // $NON-NLS-1$
 }

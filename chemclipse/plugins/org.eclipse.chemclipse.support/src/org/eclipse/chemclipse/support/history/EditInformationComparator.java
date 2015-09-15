@@ -9,15 +9,10 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.history;
+package org.eclipse.chemclipse.support.history;
 
 import java.util.Comparator;
 
-/**
- * Sorts the EditInformation objects.
- * 
- * @author eselmeister
- */
 public class EditInformationComparator implements Comparator<IEditInformation> {
 
 	private EditHistorySortOrder editHistorySortOrder;

@@ -9,13 +9,8 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.history;
+package org.eclipse.chemclipse.support.history;
 
-/**
- * Defines the order of a returned edit history list.
- * 
- * @author eselmeister
- */
 public enum EditHistorySortOrder {
 	DATE_ASC, DATE_DESC;
 }

@@ -13,10 +13,10 @@ package org.eclipse.chemclipse.model.history;
 
 import java.util.Date;
 
-import org.eclipse.chemclipse.model.history.EditInformation;
-import org.eclipse.chemclipse.model.history.IEditInformation;
-
 import junit.framework.TestCase;
+
+import org.eclipse.chemclipse.support.history.EditInformation;
+import org.eclipse.chemclipse.support.history.IEditInformation;
 
 public class EditInformation_3_Test extends TestCase {
 
@@ -29,7 +29,7 @@ public class EditInformation_3_Test extends TestCase {
 
 		super.setUp();
 		date = new Date();
-		editInformation = new EditInformation(null, entry);
+		editInformation = new EditInformation(date, entry);
 	}
 
 	@Override
