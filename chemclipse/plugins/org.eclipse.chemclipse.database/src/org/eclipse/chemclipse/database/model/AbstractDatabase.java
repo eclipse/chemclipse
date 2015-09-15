@@ -193,7 +193,7 @@ public abstract class AbstractDatabase implements IDatabase {
 			 * Execute
 			 */
 			List<ODocument> results = null;
-			results = getDB().query(new OSQLSynchQuery<ODocument>(query.toString()));
+			results = dbtx.query(new OSQLSynchQuery<ODocument>(query.toString()));
 			if(results.size() == 1) {
 				return results.get(0);
 			} else {
