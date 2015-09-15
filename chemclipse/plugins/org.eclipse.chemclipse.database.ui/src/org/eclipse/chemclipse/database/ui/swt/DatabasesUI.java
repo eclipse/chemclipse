@@ -25,8 +25,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -64,21 +62,7 @@ public class DatabasesUI {
 		/*
 		 * Copy and Paste of the table content.
 		 */
-		tableViewer.getTable().addKeyListener(new KeyAdapter() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-				/*
-				 * The selected content will be placed to the clipboard if the
-				 * user is using "Function + c". "Function-Key" 262144
-				 * (stateMask) + "c" 99 (keyCode)
-				 */
-				if(e.keyCode == 99 && e.stateMask == 262144) {
-					tableViewer.copyToClipboard(titles);
-				}
-			}
-		});
+		tableViewer.addCopyToClipboardListener(titles);
 		/*
 		 * Support double clicks
 		 */
@@ -107,7 +91,7 @@ public class DatabasesUI {
 							MessageDialog.openError(shell, "Could not connect to database", "Could not connect to database: " + databaseName + "\nReason: " + e1.getMessage());
 							processingInfo.addErrorMessage("Could not connect to database: " + databaseName, e1.getMessage());
 						} finally {
-							ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+							ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 						}
 					}
 				}
