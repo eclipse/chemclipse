@@ -175,7 +175,7 @@ public abstract class AbstractDatabase implements IDatabase {
 	 * @param id
 	 * @return ODocument
 	 */
-	protected ODocument queryDocumentById(String className, long id, ODatabaseDocumentTx db) {
+	protected ODocument queryDocumentById(String className, long id, ODatabaseDocumentTx dbtx) {
 
 		if(countCluster(className.toLowerCase()) == 0) {
 			return null;
@@ -183,7 +183,7 @@ public abstract class AbstractDatabase implements IDatabase {
 			/*
 			 * Create the query
 			 */
-			int cluster = db.getClusterIdByName(className);
+			int cluster = dbtx.getClusterIdByName(className);
 			StringBuilder query = new StringBuilder();
 			query.append("SELECT FROM #");
 			query.append(cluster);
