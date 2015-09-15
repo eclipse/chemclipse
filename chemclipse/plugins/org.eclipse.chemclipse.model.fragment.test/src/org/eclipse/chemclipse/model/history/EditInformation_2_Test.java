@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.model.history;
 
 import java.util.Date;
 
-import org.eclipse.chemclipse.model.history.EditInformation;
-import org.eclipse.chemclipse.model.history.IEditInformation;
+import org.eclipse.chemclipse.support.history.EditInformation;
+import org.eclipse.chemclipse.support.history.IEditInformation;
 
 import junit.framework.TestCase;
 

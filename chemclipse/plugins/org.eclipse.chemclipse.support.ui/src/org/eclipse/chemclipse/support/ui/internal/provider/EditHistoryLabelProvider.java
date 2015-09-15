@@ -1,19 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2015 Philip (eselmeister) Wenig.
+ * Copyright (c) 2014, 2015 Lablicate UG (haftungsbeschränkt).
  * 
- * All rights reserved.
- * This program and the accompanying materials are made available under the
- * terms of the Eclipse Public License v1.0 which accompanies this distribution,
- * and is available at http://www.eclipse.org/legal/epl-v10.html
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Philip (eselmeister) Wenig - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider;
+package org.eclipse.chemclipse.support.ui.internal.provider;
 
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.history.IEditInformation;
+import org.eclipse.chemclipse.support.messages.ISupportMessages;
+import org.eclipse.chemclipse.support.messages.SupportMessages;
+import org.eclipse.chemclipse.support.ui.Activator;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -23,11 +24,8 @@ public class EditHistoryLabelProvider extends LabelProvider implements ITableLab
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
 
-		if(columnIndex == 0) {
-			return getImage(element);
-		} else {
-			return null;
-		}
+		// Don't use an image.
+		return null;
 	}
 
 	@Override
@@ -43,8 +41,11 @@ public class EditHistoryLabelProvider extends LabelProvider implements ITableLab
 				case 1: // Description
 					text = editInformation.getDescription();
 					break;
+				case 2: // Editor
+					text = editInformation.getEditor();
+					break;
 				default:
-					text = "n.v.";
+					text = SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_NOT_AVAILABLE);
 			}
 		}
 		return text;
@@ -52,7 +53,6 @@ public class EditHistoryLabelProvider extends LabelProvider implements ITableLab
 
 	public Image getImage(Object element) {
 
-		Image image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FILE, IApplicationImage.SIZE_16x16);
-		return image;
+		return Activator.getDefault().getImage(Activator.ICON_FILE);
 	}
 }

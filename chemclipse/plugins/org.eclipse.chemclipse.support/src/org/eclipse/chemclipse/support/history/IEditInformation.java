@@ -9,16 +9,15 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.history;
+package org.eclipse.chemclipse.support.history;
 
-import org.eclipse.chemclipse.model.history.IEditHistory;
+import java.util.Date;
 
-public interface IChromatogramEditHistory {
+public interface IEditInformation {
 
-	/**
-	 * Returns the IEditHistory object of the chromatogram.
-	 * 
-	 * @return IEditHistory
-	 */
-	IEditHistory getEditHistory();
+	Date getDate();
+
+	String getDescription();
+
+	String getEditor();
 }

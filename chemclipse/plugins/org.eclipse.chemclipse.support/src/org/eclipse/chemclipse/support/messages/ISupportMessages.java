@@ -46,4 +46,13 @@ public interface ISupportMessages {
 	//
 	String LABEL_COPY_LINES_INFO = "labelCopyLinesInfo";
 	String LABEL_COPY_SELECTION_CLIPBOARD = "labelCopySelectionClipboard";
+	//
+	String COLUMN_DATE = "columnDate";
+	String COLUMN_DESCRIPTION = "columnDescription";
+	String COLUMN_EDITOR = "columnEditor";
+	//
+	String LABEL_NO_DESCRIPTION = "labelNoDescription";
+	String LABEL_NOT_AVAILABLE = "labelNotAvailable";
+	String LABEL_SELECT_ENTRIES = "labelSelectEntries";
+	String LABEL_SUPPLIER_AND_EXTENSIONS = "labelSupplierAndExtensions";
 }

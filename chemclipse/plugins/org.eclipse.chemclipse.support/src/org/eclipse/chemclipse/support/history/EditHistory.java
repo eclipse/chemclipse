@@ -9,39 +9,25 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.history;
+package org.eclipse.chemclipse.support.history;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.NavigableMap;
-import java.util.TreeMap;
 
-/**
- * Gives information about the history of the chromatogram.
- * 
- * @author eselmeister
- */
 public class EditHistory implements IEditHistory {
 
-	/*
-	 * Why do we use a TreeMap here instead of a ... ArrayList? A TreeMap
-	 * implements NavigableMap so it is possible to search after a subset of
-	 * time values. Let me say, if you are only interested in a certain time
-	 * range (and not the whole history) you could extract this time range by
-	 * using the NavigableMap interface.
-	 */
-	private NavigableMap<Long, IEditInformation> history;
+	private List<IEditInformation> history;
 
 	public EditHistory() {
 
-		history = new TreeMap<Long, IEditInformation>();
+		history = new ArrayList<IEditInformation>();
 	}
 
 	@Override
 	public void add(IEditInformation editInformation) {
 
-		history.put(editInformation.getDate().getTime(), editInformation);
+		history.add(editInformation);
 	}
 
 	@Override
@@ -53,8 +39,7 @@ public class EditHistory implements IEditHistory {
 	@Override
 	public List<IEditInformation> getHistoryList(EditHistorySortOrder editHistorySortOrder) {
 
-		List<IEditInformation> historyList = new ArrayList<IEditInformation>(history.values());
-		Collections.sort(historyList, new EditInformationComparator(editHistorySortOrder));
-		return historyList;
+		Collections.sort(history, new EditInformationComparator(editHistorySortOrder));
+		return history;
 	}
 }

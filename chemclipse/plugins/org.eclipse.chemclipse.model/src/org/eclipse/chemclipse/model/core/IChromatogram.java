@@ -14,12 +14,12 @@ package org.eclipse.chemclipse.model.core;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.baseline.IChromatogramBaseline;
-import org.eclipse.chemclipse.model.history.IChromatogramEditHistory;
 import org.eclipse.chemclipse.model.updates.IUpdater;
 import org.eclipse.chemclipse.model.versioning.IChromatogramVersioning;
+import org.eclipse.chemclipse.support.history.ISupplierEditHistory;
 import org.eclipse.core.runtime.IAdaptable;
 
-public interface IChromatogram extends IChromatogramOverview, IAdaptable, IChromatogramVersioning, IChromatogramEditHistory, IChromatogramBaseline, IUpdater, IChromatogramResultSupport, IChromatogramIntegrationSupport, IChromatogramProcessorSupport {
+public interface IChromatogram extends IChromatogramOverview, IAdaptable, IChromatogramVersioning, ISupplierEditHistory, IChromatogramBaseline, IUpdater, IChromatogramResultSupport, IChromatogramIntegrationSupport, IChromatogramProcessorSupport {
 
 	String DEFAULT_CHROMATOGRAM_NAME = "Chromatogram";
 	int MIN_SCANDELAY = 0;

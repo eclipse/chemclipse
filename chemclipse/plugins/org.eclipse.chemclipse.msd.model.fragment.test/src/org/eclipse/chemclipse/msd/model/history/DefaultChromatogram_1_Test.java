@@ -13,10 +13,10 @@ package org.eclipse.chemclipse.msd.model.history;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.model.history.EditHistorySortOrder;
-import org.eclipse.chemclipse.model.history.EditInformation;
-import org.eclipse.chemclipse.model.history.IEditInformation;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
+import org.eclipse.chemclipse.support.history.EditHistorySortOrder;
+import org.eclipse.chemclipse.support.history.EditInformation;
+import org.eclipse.chemclipse.support.history.IEditInformation;
 
 import junit.framework.TestCase;
 

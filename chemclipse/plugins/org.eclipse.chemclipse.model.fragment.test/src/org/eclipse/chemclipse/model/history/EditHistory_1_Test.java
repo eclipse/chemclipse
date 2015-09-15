@@ -13,11 +13,11 @@ package org.eclipse.chemclipse.model.history;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.model.history.EditHistory;
-import org.eclipse.chemclipse.model.history.EditHistorySortOrder;
-import org.eclipse.chemclipse.model.history.EditInformation;
-import org.eclipse.chemclipse.model.history.IEditHistory;
-import org.eclipse.chemclipse.model.history.IEditInformation;
+import org.eclipse.chemclipse.support.history.EditHistory;
+import org.eclipse.chemclipse.support.history.EditHistorySortOrder;
+import org.eclipse.chemclipse.support.history.EditInformation;
+import org.eclipse.chemclipse.support.history.IEditHistory;
+import org.eclipse.chemclipse.support.history.IEditInformation;
 
 import junit.framework.TestCase;
 

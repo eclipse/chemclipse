@@ -9,7 +9,7 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.history;
+package org.eclipse.chemclipse.support.history;
 
 import java.util.List;
 
