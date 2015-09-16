@@ -20,4 +20,8 @@ public interface INamedScanMSD extends IScanMSD {
 	String getOriginName();
 
 	void setOriginName(String originName);
+
+	Long getOriginalReferenceMassSpectrumId();
+
+	void setOriginalReferenceMassSpectrumId(Long originalReferenceMassSpectrumId);
 }

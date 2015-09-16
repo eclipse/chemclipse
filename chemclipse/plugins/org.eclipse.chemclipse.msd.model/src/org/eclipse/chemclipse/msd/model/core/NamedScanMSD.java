@@ -16,8 +16,9 @@ import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 public class NamedScanMSD extends ScanMSD implements INamedScanMSD {
 
 	private static final long serialVersionUID = -6525787873272881014L;
-	String substanceName;
-	String originName;
+	private String substanceName;
+	private String originName;
+	private Long originalReferenceMassSpectrumId;
 
 	public NamedScanMSD() {
 
@@ -46,5 +47,17 @@ public class NamedScanMSD extends ScanMSD implements INamedScanMSD {
 	public void setSubstanceName(String substanceName) {
 
 		this.substanceName = substanceName;
+	}
+
+	@Override
+	public Long getOriginalReferenceMassSpectrumId() {
+
+		return originalReferenceMassSpectrumId;
+	}
+
+	@Override
+	public void setOriginalReferenceMassSpectrumId(Long originalReferenceMassSpectrumId) {
+
+		this.originalReferenceMassSpectrumId = originalReferenceMassSpectrumId;
 	}
 }
