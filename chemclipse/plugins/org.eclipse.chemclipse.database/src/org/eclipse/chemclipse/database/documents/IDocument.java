@@ -13,14 +13,16 @@ package org.eclipse.chemclipse.database.documents;
 
 import java.util.Set;
 
+import com.orientechnologies.orient.core.record.ORecord;
 import com.orientechnologies.orient.core.record.ORecordAbstract;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 
-public interface IDocument {
+public interface IDocument extends ORecord {
 
 	String SINGLE_QUOTE = "'";
 	String ESCAPED_SINGLE_QUOTE = "__SINGLEQUOTE__";
 
+	@SuppressWarnings("unchecked")
 	ORecordAbstract save();
 
 	void setFields();

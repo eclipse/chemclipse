@@ -213,9 +213,10 @@ public abstract class AbstractDatabase implements IDatabase {
 	 */
 	protected ODocument queryDocumentByIdOnSeparateConnection(String className, long id) {
 
-		ODatabaseDocumentTx separatedb = ownerPool.acquire();
-		ODocument result = queryDocumentById(className, id, separatedb);
-		separatedb.close();
+		ODocument result = null;
+		try (ODatabaseDocumentTx separatedb = ownerPool.acquire()) {
+			result = queryDocumentById(className, id, separatedb);
+		}
 		return result;
 	}
 
@@ -233,9 +234,10 @@ public abstract class AbstractDatabase implements IDatabase {
 	@Override
 	public long countClusterOnSeparateConnection(String clusterName) {
 
-		ODatabaseDocumentTx separatedb = ownerPool.acquire();
-		long result = countCluster(clusterName, separatedb);
-		separatedb.close();
+		long result;
+		try (ODatabaseDocumentTx separatedb = ownerPool.acquire()) {
+			result = countCluster(clusterName, separatedb);
+		}
 		return result;
 	}
 
