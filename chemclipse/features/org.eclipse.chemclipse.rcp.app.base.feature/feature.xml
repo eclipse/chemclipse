@@ -301,7 +301,7 @@ http://www.eclipse.org/legal/epl-v10.html
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.eclipse.chemclipse.database"
          download-size="0"
@@ -413,13 +413,13 @@ http://www.eclipse.org/legal/epl-v10.html
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="org.eclipse.chemclipse.swt.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         unpack="false"/>         
+         unpack="false"/>
 
    <plugin
          id="org.eclipse.chemclipse.rcp.ui.icons"
@@ -493,6 +493,13 @@ http://www.eclipse.org/legal/epl-v10.html
 
    <plugin
          id="org.eclipse.birt.chart.engine.extension"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.nebula.visualization.xygraph"
          download-size="0"
          install-size="0"
          version="0.0.0"
