@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.orientechnologies.orient.core.record.impl.ODocument;
-import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
-
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationCompoundDocument;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationPeakDocument;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.QuantitationCompoundDocument;
@@ -28,44 +25,13 @@ import org.eclipse.chemclipse.database.model.AbstractDatabase;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
 
+import com.orientechnologies.orient.core.record.impl.ODocument;
+
 public class QuantDatabase extends AbstractDatabase implements IQuantDatabase {
 
 	public QuantDatabase(String database, String user, String password) throws org.eclipse.chemclipse.database.exceptions.NoDatabaseAvailableException {
 
 		super(database, user, password);
-	}
-
-	/**
-	 * Selects a Document in the current database by its class name and id.
-	 * 
-	 * @param className
-	 * @param id
-	 * @return ODocument
-	 */
-	protected ODocument queryDocumentById(String className, long id) {
-
-		if(countCluster(className.toLowerCase()) == 0) {
-			return null;
-		} else {
-			/*
-			 * Create the query
-			 */
-			int cluster = getDB().getClusterIdByName(className);
-			StringBuilder query = new StringBuilder();
-			query.append("SELECT FROM #");
-			query.append(cluster);
-			query.append(":");
-			query.append(id);
-			/*
-			 * Execute
-			 */
-			List<ODocument> results = getDB().query(new OSQLSynchQuery<ODocument>(query.toString()));
-			if(results.size() == 1) {
-				return results.get(0);
-			} else {
-				return null;
-			}
-		}
 	}
 
 	// ---------------------------------------------------------------------------------
@@ -124,26 +90,14 @@ public class QuantDatabase extends AbstractDatabase implements IQuantDatabase {
 	public IQuantitationCompoundDocument getQuantitationCompoundDocument(String name) {
 
 		IQuantitationCompoundDocument quantitationCompoundDocument = null;
-		if(countQuantitationCompoundDocuments() > 0) {
-			/*
-			 * Create the query
-			 */
-			StringBuilder query = new StringBuilder();
-			query.append("SELECT * FROM ");
-			query.append(IQuantitationCompoundDocument.CLASS_NAME);
-			query.append(" WHERE ");
-			query.append(IQuantitationCompoundDocument.FIELD_NAME);
-			query.append(" = '");
-			query.append(name.replaceAll(IDocument.SINGLE_QUOTE, IDocument.ESCAPED_SINGLE_QUOTE));
-			query.append("'");
-			/*
-			 * Create a new entry or return the id if the entry still exists.
-			 */
-			List<ODocument> results = getDB().query(new OSQLSynchQuery<ODocument>(query.toString()));
-			if(results.size() > 0) {
-				ODocument document = results.get(0);
-				quantitationCompoundDocument = new QuantitationCompoundDocument(document);
-			}
+		/*
+		 * Create a new entry or return the id if the entry still exists.
+		 */
+		String escapedName = name.replaceAll(IDocument.SINGLE_QUOTE, IDocument.ESCAPED_SINGLE_QUOTE);
+		List<ODocument> results = queryDocumentsByClassName(IQuantitationCompoundDocument.CLASS_NAME, " WHERE ", IQuantitationCompoundDocument.FIELD_NAME, " = '", escapedName, "'");
+		if(results.size() > 0) {
+			ODocument document = results.get(0);
+			quantitationCompoundDocument = new QuantitationCompoundDocument(document);
 		}
 		return quantitationCompoundDocument;
 	}
@@ -164,18 +118,16 @@ public class QuantDatabase extends AbstractDatabase implements IQuantDatabase {
 
 		IQuantitationCompoundDocument quantitationCompoundDocument;
 		List<IQuantitationCompoundDocument> quantitationCompoundDocuments = new ArrayList<IQuantitationCompoundDocument>();
-		if(countQuantitationCompoundDocuments() > 0) {
+		/*
+		 * Query the database
+		 */
+		List<ODocument> documents = queryDocumentsByClassName(IQuantitationCompoundDocument.CLASS_NAME);
+		for(ODocument document : documents) {
 			/*
-			 * Query the database
+			 * Create a new LibraryRecordDocument.
 			 */
-			List<ODocument> documents = getDB().query(new OSQLSynchQuery<ODocument>("SELECT FROM " + IQuantitationCompoundDocument.CLASS_NAME));
-			for(ODocument document : documents) {
-				/*
-				 * Create a new LibraryRecordDocument.
-				 */
-				quantitationCompoundDocument = new QuantitationCompoundDocument(document);
-				quantitationCompoundDocuments.add(quantitationCompoundDocument);
-			}
+			quantitationCompoundDocument = new QuantitationCompoundDocument(document);
+			quantitationCompoundDocuments.add(quantitationCompoundDocument);
 		}
 		return quantitationCompoundDocuments;
 	}
@@ -184,24 +136,13 @@ public class QuantDatabase extends AbstractDatabase implements IQuantDatabase {
 	public List<String> getQuantitationCompoundDocumentNames() {
 
 		List<String> documentNames = new ArrayList<String>();
-		if(countQuantitationCompoundDocuments() > 0) {
+		List<ODocument> documents = queryDocumentsByClassName(IQuantitationCompoundDocument.CLASS_NAME, " FROM ", IQuantitationCompoundDocument.CLASS_NAME);
+		for(ODocument document : documents) {
 			/*
-			 * Query the database
+			 * Get the name.
 			 */
-			StringBuilder builder = new StringBuilder();
-			builder.append("SELECT ");
-			builder.append(IQuantitationCompoundDocument.FIELD_NAME);
-			builder.append(" FROM ");
-			builder.append(IQuantitationCompoundDocument.CLASS_NAME);
-			//
-			List<ODocument> documents = getDB().query(new OSQLSynchQuery<ODocument>(builder.toString()));
-			for(ODocument document : documents) {
-				/*
-				 * Get the name.
-				 */
-				String name = document.field(IQuantitationCompoundDocument.FIELD_NAME);
-				documentNames.add(name);
-			}
+			String name = document.field(IQuantitationCompoundDocument.FIELD_NAME);
+			documentNames.add(name);
 		}
 		return documentNames;
 	}
@@ -226,23 +167,20 @@ public class QuantDatabase extends AbstractDatabase implements IQuantDatabase {
 	public String getQuantitationCompoundDocumentConcentrationUnit(String name) {
 
 		String concentrationUnit = "";
-		if(countQuantitationCompoundDocuments() > 0) {
+		/*
+		 * Query the database
+		 */
+		// builder.append("SELECT ");
+		// builder.append(IQuantitationCompoundDocument.FIELD_CONCENTRATION_UNIT);
+		// builder.append(" FROM ");
+		// builder.append(IQuantitationCompoundDocument.CLASS_NAME);
+		//
+		List<ODocument> documents = queryDocumentsByClassName(IQuantitationCompoundDocument.CLASS_NAME);
+		if(documents.size() > 0) {
 			/*
-			 * Query the database
+			 * Get the concentration unit.
 			 */
-			StringBuilder builder = new StringBuilder();
-			builder.append("SELECT ");
-			builder.append(IQuantitationCompoundDocument.FIELD_CONCENTRATION_UNIT);
-			builder.append(" FROM ");
-			builder.append(IQuantitationCompoundDocument.CLASS_NAME);
-			//
-			List<ODocument> documents = getDB().query(new OSQLSynchQuery<ODocument>(builder.toString()));
-			if(documents.size() > 0) {
-				/*
-				 * Get the concentration unit.
-				 */
-				concentrationUnit = documents.get(0).field(IQuantitationCompoundDocument.FIELD_CONCENTRATION_UNIT);
-			}
+			concentrationUnit = documents.get(0).field(IQuantitationCompoundDocument.FIELD_CONCENTRATION_UNIT);
 		}
 		return concentrationUnit;
 	}
