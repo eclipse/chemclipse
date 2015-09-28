@@ -41,5 +41,39 @@ public class Point implements IPoint {
 
 		this.y = y;
 	}
-	// TODO equals, hashCode, toString implementieren
+
+	@Override
+	public boolean equals(Object otherObject) {
+
+		if(this == otherObject) {
+			return true;
+		}
+		if(otherObject == null) {
+			return false;
+		}
+		if(getClass() != otherObject.getClass()) {
+			return false;
+		}
+		IPoint other = (IPoint)otherObject;
+		return getX() == other.getX() && getY() == other.getY();
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Double.valueOf(x).hashCode() + Double.valueOf(y).hashCode();
+	}
+
+	@Override
+	public String toString() {
+
+		StringBuilder builder = new StringBuilder();
+		builder.append(getClass().getName());
+		builder.append("[");
+		builder.append("x=" + x);
+		builder.append(",");
+		builder.append("y=" + y);
+		builder.append("]");
+		return builder.toString();
+	}
 }
