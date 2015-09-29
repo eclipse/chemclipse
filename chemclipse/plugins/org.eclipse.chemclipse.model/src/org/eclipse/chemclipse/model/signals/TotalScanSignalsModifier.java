@@ -169,6 +169,32 @@ public class TotalScanSignalsModifier {
 		}
 	}
 
+	public static void multiple(ITotalScanSignals totalIonSignals, float multiplier) throws NoTotalSignalStoredException, CalculationException {
+
+		if(totalIonSignals == null || totalIonSignals.size() == 0) {
+			throw new NoTotalSignalStoredException("There are no total ion signals stored.");
+		}
+		/*
+		 * Create the multiplied total ion signals instance.
+		 */
+		int startScan = totalIonSignals.getStartScan();
+		int stopScan = totalIonSignals.getStopScan();
+		for(int scan = startScan; scan <= stopScan; scan++) {
+			ITotalScanSignal totalIonSignal = totalIonSignals.getTotalScanSignal(scan);
+			/*
+			 * Calculate the new abundance.
+			 */
+			float normalizedAbundance = totalIonSignal.getTotalSignal() * multiplier;
+			if(normalizedAbundance < 0.0f) {
+				normalizedAbundance = 0.0f;
+			}
+			/*
+			 * Set the new abundance.
+			 */
+			totalIonSignal.setTotalSignal(normalizedAbundance);
+		}
+	}
+
 	public static void calculateMovingAverage(ITotalScanSignals totalIonSignals, WindowSize windowSize) {
 
 		/*
