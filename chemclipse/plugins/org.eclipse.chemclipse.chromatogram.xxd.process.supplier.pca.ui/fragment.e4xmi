@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_YzGkwG7pEeOKD81y804dEQ">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_cy40EG7pEeOKD81y804dEQ" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_29BlsG7pEeOKD81y804dEQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.command.createPcaEvaluation" commandName="PCA Evaluation"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_fKKNcG7pEeOKD81y804dEQ" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_73QEAG7pEeOKD81y804dEQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handler.createPcaEvaluation" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers.CreatePcaEvaluation" command="_29BlsG7pEeOKD81y804dEQ"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_hk9b8G7pEeOKD81y804dEQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.process">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_ByWwgG7qEeOKD81y804dEQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handledmenuitem.createPcaEvaluation" label="PCA Evaluation" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pca.gif" command="_29BlsG7pEeOKD81y804dEQ"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kCRy8G7pEeOKD81y804dEQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.processors">
+    <elements xsi:type="menu:HandledToolItem" xmi:id="_CfI-AG7qEeOKD81y804dEQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handledtoolitem.createPcaEvaluation" label="PCA Evaluation" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pca.gif" command="_29BlsG7pEeOKD81y804dEQ"/>
+  </fragments>
+</fragment:ModelFragments>
