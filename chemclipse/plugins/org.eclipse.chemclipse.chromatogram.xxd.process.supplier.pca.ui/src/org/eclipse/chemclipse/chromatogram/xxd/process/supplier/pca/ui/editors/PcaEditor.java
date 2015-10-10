@@ -24,6 +24,9 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+// 10/10/15
+// TODO: Change this
+import javax.swing.JOptionPane;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPeakInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
@@ -535,6 +538,7 @@ public class PcaEditor {
 					tabFolder.setSelection(scorePlotPageIndex);
 				} catch(InvocationTargetException ex) {
 					logger.warn(ex);
+					logger.warn(ex.getCause());
 				} catch(InterruptedException ex) {
 					logger.warn(ex);
 				}
@@ -860,9 +864,57 @@ public class PcaEditor {
 				titleList.add(numberFormat.format(retentionTime / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
 			}
 			String[] titles = titleList.toArray(new String[titleList.size()]);
-			for(int i = 0; i < titles.length; i++) {
-				TableColumn column = new TableColumn(peakListIntensityTable, SWT.NONE);
+			TableColumn filenameColumn = new TableColumn(peakListIntensityTable, SWT.NONE);
+			filenameColumn.setText(titles[0]);
+			// Makes filename entry clickable to be able to exclude columns from table given column range
+			filenameColumn.addSelectionListener(new SelectionAdapter() {
+
+				public void widgetSelected(SelectionEvent event) {
+
+					String range = JOptionPane.showInputDialog("Please enter time range to cut data to: (Ex. 3.5-4.5):");
+					int split = range.indexOf("-");
+					double startRange = Double.parseDouble(range.substring(0, split));
+					double endRange = Double.parseDouble(range.substring(split + 1));
+					if(endRange < startRange) {
+						return;
+					}
+					TableColumn[] columns = peakListIntensityTable.getColumns();
+					boolean startRowSet = false;
+					int startRow = 0;
+					int endRow = 0;
+					double currentTitle = 0.0;
+					for(int i = 1; i <= columns.length; i++) {
+						currentTitle = Double.parseDouble(columns[i].getText());
+						if(currentTitle > startRange && !startRowSet) {
+							startRowSet = true;
+							startRow = i;
+						} else if(currentTitle > endRange) {
+							if(i != 0) {
+								endRow = i - 1;
+							}
+							break;
+						}
+					}
+					// Deletes columns before start range
+					for(int j = 1; j < startRow; j++) {
+						columns[j].dispose();
+					}
+					// Deletes columns after end range
+					for(int k = endRow; k < columns.length; k++) {
+						columns[k].dispose();
+					}
+				}
+			});
+			for(int i = 1; i < titles.length; i++) {
+				final TableColumn column = new TableColumn(peakListIntensityTable, SWT.NONE);
 				column.setText(titles[i]);
+				column.addSelectionListener(new SelectionAdapter() {
+
+					public void widgetSelected(SelectionEvent event) {
+
+						column.dispose();
+					}
+				});
 			}
 			/*
 			 * Data
