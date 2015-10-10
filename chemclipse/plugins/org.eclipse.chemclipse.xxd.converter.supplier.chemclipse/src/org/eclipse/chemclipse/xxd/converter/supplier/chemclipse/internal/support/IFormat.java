@@ -35,10 +35,12 @@ public interface IFormat {
 	String VERSION_1002 = "1.0.0.2"; // Version 1.0.0, Release 2
 	String VERSION_1003 = "1.0.0.3"; // Version 1.0.0, Release 3
 	String VERSION_1004 = "1.0.0.4"; // Version 1.0.0, Release 4 (Aston)
-	String VERSION_LATEST = VERSION_1004;
+	String VERSION_1005 = "1.0.0.5"; // Version 1.0.0, Release 5
+	String VERSION_LATEST = VERSION_1005;
 	String FILE_VERSION = "VERSION";
 	//
 	String DIR_SEPARATOR = "/";
+	String WSD = "WSD";
 	String MSD = "MSD";
 	String FID = "FID";
 	String OVERVIEW = "OVERVIEW";
@@ -57,6 +59,7 @@ public interface IFormat {
 	 */
 	String DIR_MSD = MSD + DIR_SEPARATOR;
 	String DIR_FID = FID + DIR_SEPARATOR;
+	String DIR_WSD = WSD + DIR_SEPARATOR;
 	/*
 	 * Overview / TIC
 	 * Versions <= 0.9.0.3
@@ -68,8 +71,12 @@ public interface IFormat {
 	//
 	String DIR_OVERVIEW_MSD = DIR_MSD + DIR_OVERVIEW;
 	String FILE_TIC_MSD = DIR_OVERVIEW_MSD + TIC;
+	//
 	String DIR_OVERVIEW_FID = DIR_FID + DIR_OVERVIEW;
 	String FILE_TIC_FID = DIR_OVERVIEW_FID + TIC;
+	// WSD stuff
+	String DIR_OVERVIEW_WSD = DIR_WSD + DIR_OVERVIEW;
+	String FILE_TIC_WSD = DIR_OVERVIEW_WSD + TIC;
 	/*
 	 * Chromatogram
 	 * Versions <= 0.9.0.3
@@ -100,4 +107,10 @@ public interface IFormat {
 	String FILE_BASELINE_FID = DIR_CHROMATOGRAM_FID + BASELINE;
 	String FILE_PEAKS_FID = DIR_CHROMATOGRAM_FID + PEAKS;
 	String FILE_AREA_FID = DIR_CHROMATOGRAM_FID + AREA;
+	// WSD stuff
+	String DIR_CHROMATOGRAM_WSD = DIR_WSD + DIR_CHROMATOGRAM;
+	String FILE_SCANS_WSD = DIR_CHROMATOGRAM_WSD + SCANS;
+	String FILE_BASELINE_WSD = DIR_CHROMATOGRAM_WSD + BASELINE;
+	String FILE_HISTORY_WSD = DIR_CHROMATOGRAM_WSD + HISTORY;
+	String FILE_MISC_WSD = DIR_CHROMATOGRAM_WSD + MISC;
 }

@@ -30,6 +30,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.Peak
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.PeakReader_1002;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.PeakReader_1003;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.PeakReader_1004;
+import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.PeakReader_1005;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.ReaderHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -70,6 +71,8 @@ public class PeakReaderMSD implements IPeakReader {
 			peakReader = new PeakReader_1003();
 		} else if(version.equals(IFormat.VERSION_1004)) {
 			peakReader = new PeakReader_1004();
+		} else if(version.equals(IFormat.VERSION_1005)) {
+			peakReader = new PeakReader_1005();
 		}
 		//
 		if(peakReader != null) {

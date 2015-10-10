@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ReaderProxy_1003;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ReaderProxy_1004;
+import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ReaderProxy_1005;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorScanProxy;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
@@ -30,6 +31,8 @@ public class ProxyReaderMSD {
 			scanReaderProxy = new ReaderProxy_1003();
 		} else if(version.equals(IFormat.VERSION_1004)) {
 			scanReaderProxy = new ReaderProxy_1004();
+		} else if(version.equals(IFormat.VERSION_1005)) {
+			scanReaderProxy = new ReaderProxy_1005();
 		}
 		//
 		if(scanReaderProxy != null) {

@@ -46,4 +46,17 @@
             class="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.wsd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Reads and writes OpenChrom chromatograms"
+            exportConverter="org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter.ChromatogramExportConverter"
+            fileExtension=".ocb"
+            filterName="OpenChrom Chromatogram (*.ocb)"
+            id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse"
+            importConverter="org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter.ChromatogramImportConverter"
+            isExportable="true"
+            isImportable="true">
+      </ChromatogramSupplier>
+   </extension>
 </plugin>
