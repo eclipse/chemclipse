@@ -20,26 +20,32 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.ejml.example.PrincipalComponentAnalysis;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
+import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
+import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.ejml.example.PrincipalComponentAnalysis;
 
 public class PrincipleComponentProcessor {
 
 	private static final Logger logger = Logger.getLogger(PrincipleComponentProcessor.class);
 	private static final double NORMALIZATION_FACTOR = 1000;
 
-	public PcaResults process(List<File> inputFiles, int retentionTimeWindow, int numberOfPrincipleComponents, IProgressMonitor monitor) {
+	public PcaResults process(List<File> inputFiles, int retentionTimeWindow, int numberOfPrincipleComponents, IProgressMonitor monitor) {// , int typeOfExtraction) {
 
+		// PATRICK/KEVIN: added extraction type as local variable for now
+		int typeOfExtraction = 0; // 0 = peaks, 1 = scans
 		/*
 		 * Initialize PCA Results
 		 */
@@ -47,27 +53,41 @@ public class PrincipleComponentProcessor {
 		pcaResults.setRetentionTimeWindow(retentionTimeWindow);
 		pcaResults.setNumberOfPrincipleComponents(numberOfPrincipleComponents);
 		/*
-		 * Read Peaks and prepare intensity values.
+		 * Extract peaks
 		 */
-		monitor.subTask("Extract peak values");
-		Map<String, IPeaks> peakMap = extractPeaks(inputFiles, monitor);
-		monitor.subTask("Prepare peak values");
-		preparePcaResults(peakMap, pcaResults);
-		SortedSet<Integer> collectedRetentionTimes = collectRetentionTimes(peakMap);
-		List<Integer> extractedRetentionTimes = calculateCondensedRetentionTimes(collectedRetentionTimes, retentionTimeWindow);
-		pcaResults.setExtractedRetentionTimes(extractedRetentionTimes);
-		Map<String, double[]> pcaPeakMap = extractPcaPeakMap(peakMap, extractedRetentionTimes, retentionTimeWindow);
-		normalizeIntensityValues(pcaPeakMap);
-		/*
-		 * Run PCA
-		 */
-		monitor.subTask("Run PCA");
-		int sampleSize = extractedRetentionTimes.size();
-		int numSamples = pcaPeakMap.size();
-		PrincipalComponentAnalysis principleComponentAnalysis = initializePCA(pcaPeakMap, numSamples, sampleSize, numberOfPrincipleComponents);
-		List<double[]> basisVectors = getBasisVectors(principleComponentAnalysis, numberOfPrincipleComponents);
-		pcaResults.setBasisVectors(basisVectors);
-		setEigenSpaceAndErrorValues(principleComponentAnalysis, pcaPeakMap, pcaResults);
+		if(typeOfExtraction == 0) {
+			/*
+			 * Read Peaks and prepare intensity values.
+			 */
+			monitor.subTask("Extract peak values");
+			Map<String, IPeaks> peakMap = extractPeaks(inputFiles, monitor);
+			monitor.subTask("Prepare peak values");
+			preparePcaResults(peakMap, pcaResults);
+			SortedSet<Integer> collectedRetentionTimes = collectRetentionTimes(peakMap);
+			List<Integer> extractedRetentionTimes = calculateCondensedRetentionTimes(collectedRetentionTimes, retentionTimeWindow);
+			pcaResults.setExtractedRetentionTimes(extractedRetentionTimes);
+			Map<String, double[]> pcaPeakMap = extractPcaPeakMap(peakMap, extractedRetentionTimes, retentionTimeWindow);
+			normalizeIntensityValues(pcaPeakMap);
+			/*
+			 * Run PCA
+			 */
+			monitor.subTask("Run PCA");
+			int sampleSize = extractedRetentionTimes.size();
+			int numSamples = pcaPeakMap.size();
+			PrincipalComponentAnalysis principleComponentAnalysis = initializePCA(pcaPeakMap, numSamples, sampleSize, numberOfPrincipleComponents);
+			List<double[]> basisVectors = getBasisVectors(principleComponentAnalysis, numberOfPrincipleComponents);
+			pcaResults.setBasisVectors(basisVectors);
+			setEigenSpaceAndErrorValues(principleComponentAnalysis, pcaPeakMap, pcaResults);
+		} else if(typeOfExtraction == 1) {
+			/*
+			 * Read Scans and prepare intensity values.
+			 */
+			monitor.subTask("Extract scan values");
+			@SuppressWarnings("unused")
+			Map<String, List<Float>> scanMap = extractScans(inputFiles, monitor);
+			monitor.subTask("Prepare scan values");
+			// PATRICK/KEVIN TODO: convert scanMap to pcaResults
+		}
 		/*
 		 * Return result.
 		 */
@@ -295,6 +315,38 @@ public class PrincipleComponentProcessor {
 			}
 		}
 		return retentionTimeCondensed;
+	}
+
+	/**
+	 * Loads each file and tries to extract the scans.
+	 * 
+	 * @param scanFiles
+	 * @param monitor
+	 * @return Map<String, List<Float>>
+	 */
+	private Map<String, List<Float>> extractScans(List<File> scanFiles, IProgressMonitor monitor) {
+
+		Map<String, List<Float>> scanMap = new HashMap<String, List<Float>>();
+		for(File scanFile : scanFiles) {
+			IChromatogramMSDImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(scanFile, monitor);
+			try {
+				IChromatogramMSD chromatogram = processingInfo.getChromatogram();
+				String name = extractNameFromFile(scanFile, "n.a.");
+				List<Float> slopes = new ArrayList<Float>();
+				float previousSignal = 0;
+				for(IScan scan : chromatogram.getScans()) {
+					float currentSignal = scan.getTotalSignal();
+					float slope = currentSignal - previousSignal; // intensities
+					// scan.getRetentionTime()); // times
+					slopes.add(slope);
+					previousSignal = currentSignal;
+				}
+				scanMap.put(name, slopes);
+			} catch(TypeCastException e) {
+				logger.warn(e);
+			}
+		}
+		return scanMap;
 	}
 
 	/**
