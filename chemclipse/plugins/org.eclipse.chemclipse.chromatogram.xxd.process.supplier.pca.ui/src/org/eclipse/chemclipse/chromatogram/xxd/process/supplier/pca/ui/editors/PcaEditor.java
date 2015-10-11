@@ -65,6 +65,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -838,6 +839,18 @@ public class PcaEditor {
 		peakListIntensityTable.setLinesVisible(true);
 		//
 		tabItem.setControl(composite);
+		// add listener for rows to table
+		peakListIntensityTable.addListener(SWT.MouseDoubleClick, new Listener() {
+
+			@Override
+			public void handleEvent(org.eclipse.swt.widgets.Event event) {
+
+				TableItem[] selection = peakListIntensityTable.getSelection();
+				for(int i = 0; i < selection.length; i++) {
+					selection[i].dispose();
+				}
+			}
+		});
 	}
 
 	private void reloadPeakListIntensityTable() {
