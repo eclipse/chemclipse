@@ -42,6 +42,10 @@ http://www.eclipse.org/legal/epl-v10.html
          version="0.0.0"/>
 
    <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.feature"
+         version="0.0.0"/>
+
+   <includes
          id="org.eclipse.chemclipse.msd.converter.supplier.mzxml.feature"
          version="0.0.0"/>
 
