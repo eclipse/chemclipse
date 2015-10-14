@@ -24,9 +24,6 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
-// 10/10/15
-// TODO: Change this
-import javax.swing.JOptionPane;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPeakInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
@@ -35,6 +32,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakIn
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PeakInputFilesWizard;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PeakIntensityTableTimeRangeWizard;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -606,7 +604,7 @@ public class PcaEditor {
 		 */
 		section = formToolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
 		section.setText("Input files");
-		section.setDescription("Select the files to process. Use the add and remove buttons.");
+		section.setDescription("Select the files to process. Use the add and remove buttons as needed. Click Run PCA to process the files.");
 		section.marginWidth = 5;
 		section.marginHeight = 5;
 		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
@@ -619,6 +617,23 @@ public class PcaEditor {
 		layout.marginWidth = 2;
 		layout.marginHeight = 2;
 		client.setLayout(layout);
+		Label label;
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalIndent = 20;
+		gridData.heightHint = 30;
+		/*
+		 * Label II
+		 */
+		label = formToolkit.createLabel(client, "");
+		label.setLayoutData(gridData);
+		/*
+		 * Link Run
+		 * The label is a dirty workaround to make the run button full visible.
+		 * Otherwise, it is cutted at its bottom. I think, it has something to
+		 * do with the client height.
+		 * Adds Run PCA button
+		 */
+		createProcessHyperlink(client, gridData);
 		/*
 		 * Creates the table and the action buttons.
 		 */
@@ -879,42 +894,58 @@ public class PcaEditor {
 			String[] titles = titleList.toArray(new String[titleList.size()]);
 			TableColumn filenameColumn = new TableColumn(peakListIntensityTable, SWT.NONE);
 			filenameColumn.setText(titles[0]);
-			// Makes filename entry clickable to be able to exclude columns from table given column range
+			/*
+			 * Makes filename entry clickable to be able to display certain time range
+			 */
 			filenameColumn.addSelectionListener(new SelectionAdapter() {
 
 				public void widgetSelected(SelectionEvent event) {
 
-					String range = JOptionPane.showInputDialog("Please enter time range to cut data to: (Ex. 3.5-4.5):");
-					int split = range.indexOf("-");
-					double startRange = Double.parseDouble(range.substring(0, split));
-					double endRange = Double.parseDouble(range.substring(split + 1));
-					if(endRange < startRange) {
-						return;
-					}
-					TableColumn[] columns = peakListIntensityTable.getColumns();
-					boolean startRowSet = false;
-					int startRow = 0;
-					int endRow = 0;
-					double currentTitle = 0.0;
-					for(int i = 1; i <= columns.length; i++) {
-						currentTitle = Double.parseDouble(columns[i].getText());
-						if(currentTitle > startRange && !startRowSet) {
-							startRowSet = true;
-							startRow = i;
-						} else if(currentTitle > endRange) {
-							if(i != 0) {
-								endRow = i - 1;
-							}
-							break;
+					/*
+					 * Make wizard to allow user to input time range for table
+					 */
+					PeakIntensityTableTimeRangeWizard tableWizard = new PeakIntensityTableTimeRangeWizard();
+					WizardDialog wizardDialog = new WizardDialog(Display.getCurrent().getActiveShell(), tableWizard);
+					int returnCode = wizardDialog.open();
+					String range = tableWizard.getTextOne();
+					/*
+					 * If timerange entered
+					 */
+					if(returnCode == WizardDialog.OK) {
+						System.out.println("Ok pressed");
+						int split = range.indexOf("-");
+						double startRange = Double.parseDouble(range.substring(0, split));
+						double endRange = Double.parseDouble(range.substring(split + 1));
+						if(endRange < startRange) {
+							return;
 						}
-					}
-					// Deletes columns before start range
-					for(int j = 1; j < startRow; j++) {
-						columns[j].dispose();
-					}
-					// Deletes columns after end range
-					for(int k = endRow; k < columns.length; k++) {
-						columns[k].dispose();
+						TableColumn[] columns = peakListIntensityTable.getColumns();
+						boolean startRowSet = false;
+						int startRow = 0;
+						int endRow = 0;
+						double currentTitle = 0.0;
+						for(int i = 1; i <= columns.length; i++) {
+							currentTitle = Double.parseDouble(columns[i].getText());
+							if(currentTitle > startRange && !startRowSet) {
+								startRowSet = true;
+								startRow = i;
+							} else if(currentTitle > endRange) {
+								if(i != 0) {
+									endRow = i - 1;
+								}
+								break;
+							}
+						}
+						// Deletes columns before start range
+						for(int j = 1; j < startRow; j++) {
+							columns[j].dispose();
+						}
+						// Deletes columns after end range
+						for(int k = endRow; k < columns.length; k++) {
+							columns[k].dispose();
+						}
+					} else {
+						System.out.println("Cancel pressed");
 					}
 				}
 			});
