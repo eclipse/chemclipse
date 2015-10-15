@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-public interface IPeakInputEntry {
+public interface IDataInputEntry {
 
 	/**
 	 * Returns the path to the input file.

@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.io.File;
 
-public class PeakInputEntry implements IPeakInputEntry {
+public class DataInputEntry implements IDataInputEntry {
 
 	private String inputFile = "";
 
@@ -22,7 +22,7 @@ public class PeakInputEntry implements IPeakInputEntry {
 	 * 
 	 * @param inputFile
 	 */
-	public PeakInputEntry(String inputFile) {
+	public DataInputEntry(String inputFile) {
 
 		if(inputFile != null) {
 			this.inputFile = inputFile;

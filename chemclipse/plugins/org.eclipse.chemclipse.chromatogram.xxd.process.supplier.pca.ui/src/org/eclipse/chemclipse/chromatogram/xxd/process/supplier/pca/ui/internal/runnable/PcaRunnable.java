@@ -11,27 +11,25 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PrincipleComponentProcessor;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PrincipleComponentProcessor;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPeakInputEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 
 public class PcaRunnable implements IRunnableWithProgress {
 
-	private List<IPeakInputEntry> inputEntries;
+	private List<IDataInputEntry> dataInputEntries;
 	private int retentionTimeWindow;
 	private int numberOfPrincipleComponents;
 	private PcaResults pcaResults;
 
-	public PcaRunnable(List<IPeakInputEntry> inputEntries, int retentionTimeWindow, int numberOfPrincipleComponents) {
+	public PcaRunnable(List<IDataInputEntry> dataInputEntries, int retentionTimeWindow, int numberOfPrincipleComponents) {
 
-		this.inputEntries = inputEntries;
+		this.dataInputEntries = dataInputEntries;
 		this.retentionTimeWindow = retentionTimeWindow;
 		this.numberOfPrincipleComponents = numberOfPrincipleComponents;
 	}
@@ -40,11 +38,7 @@ public class PcaRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		PrincipleComponentProcessor principleComponentProcessor = new PrincipleComponentProcessor();
-		List<File> inputFiles = new ArrayList<File>();
-		for(IPeakInputEntry inputEntry : inputEntries) {
-			inputFiles.add(new File(inputEntry.getInputFile()));
-		}
-		pcaResults = principleComponentProcessor.process(inputFiles, retentionTimeWindow, numberOfPrincipleComponents, monitor);
+		pcaResults = principleComponentProcessor.process(dataInputEntries, retentionTimeWindow, numberOfPrincipleComponents, monitor);
 	}
 
 	public PcaResults getPcaResults() {

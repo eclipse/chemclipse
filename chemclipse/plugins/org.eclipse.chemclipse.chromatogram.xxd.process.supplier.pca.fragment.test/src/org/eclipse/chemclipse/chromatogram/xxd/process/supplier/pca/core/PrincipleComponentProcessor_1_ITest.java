@@ -15,10 +15,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PrincipleComponentProcessor;
-import org.eclipse.core.runtime.NullProgressMonitor;
-
 import junit.framework.TestCase;
+
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class PrincipleComponentProcessor_1_ITest extends TestCase {
 
@@ -40,10 +41,10 @@ public class PrincipleComponentProcessor_1_ITest extends TestCase {
 
 	public void testProcess_1() {
 
-		List<File> chromatograms = new ArrayList<File>();
+		List<IDataInputEntry> chromatograms = new ArrayList<IDataInputEntry>();
 		File dir = new File("/home/ocbfiles/");
 		for(File file : dir.listFiles()) {
-			chromatograms.add(file);
+			chromatograms.add(new DataInputEntry(file.toString()));
 		}
 		processor.process(chromatograms, 200, 3, new NullProgressMonitor());
 		assertTrue(true);

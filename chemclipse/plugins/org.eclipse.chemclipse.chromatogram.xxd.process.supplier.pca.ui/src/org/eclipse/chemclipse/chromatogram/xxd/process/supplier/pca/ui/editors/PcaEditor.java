@@ -13,22 +13,21 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPeakInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ResultExport;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PeakInputFilesWizard;
@@ -110,7 +109,6 @@ public class PcaEditor {
 	//
 	private static final Logger logger = Logger.getLogger(PcaEditor.class);
 	private static final String FILES = "Input Files: ";
-	private static final String TAB = "\t";
 	/*
 	 * Injected member in constructor
 	 */
@@ -141,7 +139,7 @@ public class PcaEditor {
 	private int inputFilesPageIndex;
 	private int scorePlotPageIndex;
 	//
-	private List<IPeakInputEntry> inputEntries;
+	private List<IDataInputEntry> dataInputEntries;
 	private PcaResults pcaResults;
 	private File exportFile;
 	/*
@@ -152,7 +150,7 @@ public class PcaEditor {
 
 	public PcaEditor() {
 
-		inputEntries = new ArrayList<IPeakInputEntry>();
+		dataInputEntries = new ArrayList<IDataInputEntry>();
 		/*
 		 * Number format of retention times.
 		 */
@@ -216,109 +214,13 @@ public class PcaEditor {
 		 */
 		if(exportFile != null) {
 			try {
-				exportResultsToFile(exportFile);
+				ResultExport resultExport = new ResultExport();
+				resultExport.exportToTextFile(exportFile, pcaResults);
 				dirtyable.setDirty(false);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
 			}
 		}
-	}
-
-	private void exportResultsToFile(File file) throws FileNotFoundException {
-
-		PrintWriter printWriter = new PrintWriter(file);
-		if(pcaResults != null) {
-			Set<Map.Entry<String, PcaResult>> entrySet = pcaResults.getPcaResultMap().entrySet();
-			/*
-			 * Header
-			 */
-			printWriter.println("-------------------------------------");
-			printWriter.println("Settings");
-			printWriter.println("-------------------------------------");
-			printWriter.print("Number of principle components:");
-			printWriter.print(TAB);
-			printWriter.println(pcaResults.getNumberOfPrincipleComponents());
-			printWriter.print("Retention time window:");
-			printWriter.print(TAB);
-			printWriter.println(pcaResults.getRetentionTimeWindow());
-			printWriter.println("");
-			printWriter.println("-------------------------------------");
-			printWriter.println("Input Files");
-			printWriter.println("-------------------------------------");
-			for(IPeakInputEntry entry : inputEntries) {
-				printWriter.print(entry.getName());
-				printWriter.print(TAB);
-				printWriter.println(entry.getInputFile());
-			}
-			printWriter.println("");
-			printWriter.println("-------------------------------------");
-			printWriter.println("Extracted Retention Times (Minutes)");
-			printWriter.println("-------------------------------------");
-			for(int retentionTime : pcaResults.getExtractedRetentionTimes()) {
-				printWriter.println(numberFormat.format(retentionTime / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
-			}
-			printWriter.println("");
-			printWriter.println("-------------------------------------");
-			printWriter.println("Peak Intensity Table");
-			printWriter.println("-------------------------------------");
-			printWriter.print("Filename");
-			printWriter.print(TAB);
-			for(int retentionTime : pcaResults.getExtractedRetentionTimes()) {
-				printWriter.print(numberFormat.format(retentionTime / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
-				printWriter.print(TAB);
-			}
-			printWriter.println("");
-			/*
-			 * Data
-			 */
-			for(Map.Entry<String, PcaResult> entry : entrySet) {
-				printWriter.print(entry.getKey());
-				printWriter.print(TAB);
-				PcaResult pcaResult = entry.getValue();
-				double[] sampleData = pcaResult.getSampleData();
-				for(double data : sampleData) {
-					printWriter.print(numberFormat.format(data));
-					printWriter.print(TAB);
-				}
-				printWriter.println("");
-			}
-			printWriter.println("");
-			printWriter.println("-------------------------------------");
-			printWriter.println("Principle Components");
-			printWriter.println("-------------------------------------");
-			//
-			printWriter.print("File");
-			printWriter.print(TAB);
-			for(int i = 1; i <= pcaResults.getNumberOfPrincipleComponents(); i++) {
-				printWriter.print("PC" + i);
-				printWriter.print(TAB);
-			}
-			printWriter.println("");
-			//
-			for(Map.Entry<String, PcaResult> entry : entrySet) {
-				/*
-				 * Print the PCs
-				 */
-				String name = entry.getKey();
-				PcaResult pcaResult = entry.getValue();
-				double[] eigenSpace = pcaResult.getEigenSpace();
-				printWriter.print(name);
-				printWriter.print(TAB);
-				for(double value : eigenSpace) {
-					printWriter.print(numberFormat.format(value));
-					printWriter.print(TAB);
-				}
-				printWriter.println("");
-			}
-		} else {
-			/*
-			 * No results available.
-			 */
-			printWriter.println("There are no results available yet.");
-		}
-		//
-		printWriter.flush();
-		printWriter.close();
 	}
 
 	private void createPages(Composite parent) {
@@ -461,88 +363,16 @@ public class PcaEditor {
 		gridData.horizontalIndent = 20;
 		gridData.heightHint = 30;
 		/*
-		 * Label I
+		 * Input files section.
 		 */
-		label = formToolkit.createLabel(client, "1. Select the input entries.");
+		label = formToolkit.createLabel(client, "Select the input chromatograms.");
 		label.setLayoutData(gridData);
-		/*
-		 * Link Pages
-		 */
 		createInputFilesPageHyperlink(client, gridData);
-		/*
-		 * Label II
-		 */
-		label = formToolkit.createLabel(client, "2. Run the process job after selecting the input files.");
-		label.setLayoutData(gridData);
-		/*
-		 * Link Run
-		 * The label is a dirty workaround to make the run button full visible.
-		 * Otherwise, it is cutted at its bottom. I think, it has something to
-		 * do with the client height.
-		 */
-		createProcessHyperlink(client, gridData);
-		label = formToolkit.createLabel(client, "");
 		/*
 		 * Add the client to the section and paint flat borders.
 		 */
 		section.setClient(client);
 		formToolkit.paintBordersFor(client);
-	}
-
-	private void createProcessHyperlink(Composite client, GridData gridData) {
-
-		ImageHyperlink imageHyperlink;
-		/*
-		 * Settings
-		 */
-		imageHyperlink = formToolkit.createImageHyperlink(client, SWT.WRAP);
-		imageHyperlink.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
-		imageHyperlink.setText("Run PCA");
-		imageHyperlink.setLayoutData(gridData);
-		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
-
-			public void linkActivated(HyperlinkEvent e) {
-
-				dirtyable.setDirty(true);
-				/*
-				 * Get the settings.
-				 */
-				int retentionTimeWindow = DEFAULT_RETENTION_TIME_WINDOW;
-				try {
-					retentionTimeWindow = Integer.parseInt(retentionTimeWindowText.getText().trim());
-				} catch(NumberFormatException e1) {
-					logger.warn(e1);
-				}
-				int numberOfPrincipleComponents = principleComponentSpinner.getSelection();
-				/*
-				 * Run the process.
-				 */
-				PcaRunnable runnable = new PcaRunnable(inputEntries, retentionTimeWindow, numberOfPrincipleComponents);
-				ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-				try {
-					/*
-					 * Calculate the results
-					 */
-					monitor.run(true, true, runnable);
-					pcaResults = runnable.getPcaResults();
-					/*
-					 * Reload the tables and charts.
-					 */
-					reloadPeakListIntensityTable();
-					updateSpinnerPCMaxima();
-					reloadScorePlotChart();
-					/*
-					 * Activate the score plot chart.
-					 */
-					tabFolder.setSelection(scorePlotPageIndex);
-				} catch(InvocationTargetException ex) {
-					logger.warn(ex);
-					logger.warn(ex.getCause());
-				} catch(InterruptedException ex) {
-					logger.warn(ex);
-				}
-			}
-		});
 	}
 
 	private void createInputFilesPageHyperlink(Composite client, GridData gridData) {
@@ -621,19 +451,12 @@ public class PcaEditor {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalIndent = 20;
 		gridData.heightHint = 30;
+		gridData.horizontalSpan = 2;
 		/*
 		 * Label II
 		 */
 		label = formToolkit.createLabel(client, "");
 		label.setLayoutData(gridData);
-		/*
-		 * Link Run
-		 * The label is a dirty workaround to make the run button full visible.
-		 * Otherwise, it is cutted at its bottom. I think, it has something to
-		 * do with the client height.
-		 * Adds Run PCA button
-		 */
-		createProcessHyperlink(client, gridData);
 		/*
 		 * Creates the table and the action buttons.
 		 */
@@ -659,7 +482,7 @@ public class PcaEditor {
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.heightHint = 300;
 		gridData.widthHint = 100;
-		gridData.verticalSpan = 2;
+		gridData.verticalSpan = 3;
 		inputFilesTable.setLayoutData(gridData);
 		inputFilesTable.setHeaderVisible(true);
 		inputFilesTable.setLinesVisible(true);
@@ -672,8 +495,11 @@ public class PcaEditor {
 	 */
 	private void createButtons(Composite client) {
 
-		createAddButton(client);
-		createRemoveButton(client);
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_BEGINNING);
+		//
+		createAddButton(client, gridData);
+		createRemoveButton(client, gridData);
+		createProcessButton(client, gridData);
 	}
 
 	/**
@@ -682,11 +508,11 @@ public class PcaEditor {
 	 * @param client
 	 * @param editorPart
 	 */
-	private void createAddButton(Composite client) {
+	private void createAddButton(Composite client, GridData gridData) {
 
 		Button add;
 		add = formToolkit.createButton(client, "Add", SWT.PUSH);
-		add.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_BEGINNING));
+		add.setLayoutData(gridData);
 		add.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -723,11 +549,11 @@ public class PcaEditor {
 	 * @param client
 	 * @param editorPart
 	 */
-	private void createRemoveButton(Composite client) {
+	private void createRemoveButton(Composite client, GridData gridData) {
 
 		Button remove;
 		remove = formToolkit.createButton(client, "Remove", SWT.PUSH);
-		remove.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_BEGINNING));
+		remove.setLayoutData(gridData);
 		remove.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -739,6 +565,65 @@ public class PcaEditor {
 		});
 	}
 
+	private void createProcessButton(Composite client, GridData gridData) {
+
+		Button process;
+		process = formToolkit.createButton(client, "Run PCA", SWT.PUSH);
+		process.setLayoutData(gridData);
+		process.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		process.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				super.widgetSelected(e);
+				runPcaCalculation();
+			}
+		});
+	}
+
+	private void runPcaCalculation() {
+
+		dirtyable.setDirty(true);
+		/*
+		 * Get the settings.
+		 */
+		int retentionTimeWindow = DEFAULT_RETENTION_TIME_WINDOW;
+		try {
+			retentionTimeWindow = Integer.parseInt(retentionTimeWindowText.getText().trim());
+		} catch(NumberFormatException e) {
+			logger.warn(e);
+		}
+		int numberOfPrincipleComponents = principleComponentSpinner.getSelection();
+		/*
+		 * Run the process.
+		 */
+		PcaRunnable runnable = new PcaRunnable(dataInputEntries, retentionTimeWindow, numberOfPrincipleComponents);
+		ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		try {
+			/*
+			 * Calculate the results
+			 */
+			monitor.run(true, true, runnable);
+			pcaResults = runnable.getPcaResults();
+			/*
+			 * Reload the tables and charts.
+			 */
+			reloadPeakListIntensityTable();
+			updateSpinnerPCMaxima();
+			reloadScorePlotChart();
+			/*
+			 * Activate the score plot chart.
+			 */
+			tabFolder.setSelection(scorePlotPageIndex);
+		} catch(InvocationTargetException e) {
+			logger.warn(e);
+			logger.warn(e.getCause());
+		} catch(InterruptedException e) {
+			logger.warn(e);
+		}
+	}
+
 	/**
 	 * Creates the file count labels.
 	 * 
@@ -747,7 +632,9 @@ public class PcaEditor {
 	private void createLabels(Composite client) {
 
 		countFiles = formToolkit.createLabel(client, FILES + "0", SWT.NONE);
-		countFiles.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+		gridData.horizontalSpan = 2;
+		countFiles.setLayoutData(gridData);
 	}
 
 	/**
@@ -757,10 +644,10 @@ public class PcaEditor {
 	 */
 	private void addEntries(List<String> selectedFiles) {
 
-		IPeakInputEntry inputEntry;
+		IDataInputEntry inputEntry;
 		for(String inputFile : selectedFiles) {
-			inputEntry = new PeakInputEntry(inputFile);
-			inputEntries.add(inputEntry);
+			inputEntry = new DataInputEntry(inputFile);
+			dataInputEntries.add(inputEntry);
 		}
 	}
 
@@ -788,10 +675,10 @@ public class PcaEditor {
 			 * Decrease the index and increase the counter to remove the correct entries.
 			 */
 			index -= counter;
-			inputEntries.remove(index);
+			dataInputEntries.remove(index);
 			counter++;
 		}
-		redrawCountFiles(inputEntries);
+		redrawCountFiles(dataInputEntries);
 	}
 
 	/**
@@ -815,7 +702,7 @@ public class PcaEditor {
 			/*
 			 * Data
 			 */
-			for(IPeakInputEntry entry : inputEntries) {
+			for(IDataInputEntry entry : dataInputEntries) {
 				TableItem item = new TableItem(inputFilesTable, SWT.NONE);
 				item.setText(0, entry.getName());
 				item.setText(1, entry.getInputFile());
@@ -829,11 +716,11 @@ public class PcaEditor {
 			/*
 			 * Set the count label information.
 			 */
-			redrawCountFiles(inputEntries);
+			redrawCountFiles(dataInputEntries);
 		}
 	}
 
-	private void redrawCountFiles(List<IPeakInputEntry> inputEntries) {
+	private void redrawCountFiles(List<IDataInputEntry> inputEntries) {
 
 		countFiles.setText(FILES + Integer.toString(inputEntries.size()));
 	}

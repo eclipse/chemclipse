@@ -17,15 +17,22 @@ import java.util.Map;
 
 public class PcaResults {
 
+	private List<IDataInputEntry> dataInputEntries;
 	private int retentionTimeWindow;
 	private int numberOfPrincipleComponents;
 	private List<Integer> extractedRetentionTimes;
 	private List<double[]> basisVectors;
 	private Map<String, PcaResult> pcaResultMap;
 
-	public PcaResults() {
+	public PcaResults(List<IDataInputEntry> dataInputEntries) {
 
+		this.dataInputEntries = dataInputEntries;
 		pcaResultMap = new HashMap<String, PcaResult>();
+	}
+
+	public List<IDataInputEntry> getDataInputEntries() {
+
+		return dataInputEntries;
 	}
 
 	public int getRetentionTimeWindow() {

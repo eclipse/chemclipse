@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Daniel Mariano - initial API and implementation
+ * Dr. Philip Wenig - minor improvements
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
@@ -15,8 +16,8 @@ import org.eclipse.jface.wizard.Wizard;
 
 public class PeakIntensityTableTimeRangeWizard extends Wizard {
 
-	protected PeakIntensityTableTimeRangeWizardPage one;
-	public String textOne;
+	protected PeakIntensityTableTimeRangeWizardPage timeRangeWizardPage;
+	public String textRetentionTimeRange;
 
 	public PeakIntensityTableTimeRangeWizard() {
 
@@ -33,14 +34,14 @@ public class PeakIntensityTableTimeRangeWizard extends Wizard {
 	@Override
 	public void addPages() {
 
-		one = new PeakIntensityTableTimeRangeWizardPage();
-		addPage(one);
+		timeRangeWizardPage = new PeakIntensityTableTimeRangeWizardPage();
+		addPage(timeRangeWizardPage);
 	}
 
 	@Override
 	public boolean performFinish() {
 
-		textOne = one.getText1();
+		textRetentionTimeRange = timeRangeWizardPage.getTextRetentionTimeRange();
 		return true;
 	}
 
@@ -49,7 +50,7 @@ public class PeakIntensityTableTimeRangeWizard extends Wizard {
 	 */
 	public PeakIntensityTableTimeRangeWizardPage getPageOne() {
 
-		return one;
+		return timeRangeWizardPage;
 	}
 
 	/*
@@ -57,6 +58,6 @@ public class PeakIntensityTableTimeRangeWizard extends Wizard {
 	 */
 	public String getTextOne() {
 
-		return textOne;
+		return textRetentionTimeRange;
 	}
 }

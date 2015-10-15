@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -42,19 +43,24 @@ public class PrincipleComponentProcessor {
 	private static final Logger logger = Logger.getLogger(PrincipleComponentProcessor.class);
 	private static final double NORMALIZATION_FACTOR = 1000;
 
-	public PcaResults process(List<File> inputFiles, int retentionTimeWindow, int numberOfPrincipleComponents, IProgressMonitor monitor) {// , int typeOfExtraction) {
+	public PcaResults process(List<IDataInputEntry> dataInputEntries, int retentionTimeWindow, int numberOfPrincipleComponents, IProgressMonitor monitor) {// , int typeOfExtraction) {
 
 		// PATRICK/KEVIN: added extraction type as local variable for now
 		int typeOfExtraction = 0; // 0 = peaks, 1 = scans
 		/*
 		 * Initialize PCA Results
 		 */
-		PcaResults pcaResults = new PcaResults();
+		PcaResults pcaResults = new PcaResults(dataInputEntries);
 		pcaResults.setRetentionTimeWindow(retentionTimeWindow);
 		pcaResults.setNumberOfPrincipleComponents(numberOfPrincipleComponents);
 		/*
-		 * Extract peaks
+		 * Extract data
 		 */
+		List<File> inputFiles = new ArrayList<File>();
+		for(IDataInputEntry inputEntry : dataInputEntries) {
+			inputFiles.add(new File(inputEntry.getInputFile()));
+		}
+		//
 		if(typeOfExtraction == 0) {
 			/*
 			 * Read Peaks and prepare intensity values.
