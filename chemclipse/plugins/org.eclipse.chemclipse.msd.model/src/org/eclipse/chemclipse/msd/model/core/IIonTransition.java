@@ -21,11 +21,15 @@ public interface IIonTransition extends Serializable {
 
 	int getFilter1Ion();
 
+	double getDeltaFilter1Ion();
+
 	double getFilter3FirstIon();
 
 	double getFilter3LastIon();
 
 	int getFilter3Ion();
+
+	double getDeltaFilter3Ion();
 
 	double getCollisionEnergy();
 

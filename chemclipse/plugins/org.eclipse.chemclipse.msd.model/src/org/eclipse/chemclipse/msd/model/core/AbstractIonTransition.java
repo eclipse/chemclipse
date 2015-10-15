@@ -108,6 +108,12 @@ public abstract class AbstractIonTransition implements IIonTransition {
 	}
 
 	@Override
+	public double getDeltaFilter1Ion() {
+
+		return filter1LastIon - filter1FirstIon;
+	}
+
+	@Override
 	public double getFilter3FirstIon() {
 
 		return filter3FirstIon;
@@ -123,6 +129,12 @@ public abstract class AbstractIonTransition implements IIonTransition {
 	public int getFilter3Ion() {
 
 		return filter3Ion;
+	}
+
+	@Override
+	public double getDeltaFilter3Ion() {
+
+		return filter3LastIon - filter3FirstIon;
 	}
 
 	@Override
