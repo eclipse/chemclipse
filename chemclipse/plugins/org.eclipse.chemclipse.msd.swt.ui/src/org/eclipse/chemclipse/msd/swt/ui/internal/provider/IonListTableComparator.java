@@ -30,29 +30,29 @@ public class IonListTableComparator extends AbstractRecordTableComparator implem
 			IIon ion1 = (IIon)e1;
 			IIon ion2 = (IIon)e2;
 			IIonTransition ionTransition1 = ion1.getIonTransition();
-			IIonTransition ionTransition2 = ion1.getIonTransition();
+			IIonTransition ionTransition2 = ion2.getIonTransition();
 			//
 			switch(getPropertyIndex()) {
 				case 0: // m/z
-					sortOrder = Double.compare(ion1.getIon(), ion2.getIon());
+					sortOrder = Double.compare(ion2.getIon(), ion1.getIon());
 					break;
 				case 1: // abundance
-					sortOrder = Float.compare(ion1.getAbundance(), ion2.getAbundance());
+					sortOrder = Float.compare(ion2.getAbundance(), ion1.getAbundance());
 					break;
 				case 2: // parent m/z
-					sortOrder = (ionTransition1 == null || ionTransition2 == null) ? 0 : Integer.compare(ionTransition1.getFilter1Ion(), ionTransition2.getFilter1Ion());
+					sortOrder = (ionTransition1 == null || ionTransition2 == null) ? 0 : Integer.compare(ionTransition2.getFilter1Ion(), ionTransition1.getFilter1Ion());
 					break;
 				case 3: // parent resolution
-					sortOrder = (ionTransition1 == null || ionTransition2 == null) ? 0 : Double.compare(ionTransition1.getFilter1Resolution(), ionTransition2.getFilter1Resolution());
+					sortOrder = (ionTransition1 == null || ionTransition2 == null) ? 0 : Double.compare(ionTransition2.getFilter1Resolution(), ionTransition1.getFilter1Resolution());
 					break;
 				case 4: // daughter m/z
-					sortOrder = (ionTransition1 == null || ionTransition2 == null) ? 0 : Integer.compare(ionTransition1.getFilter3Ion(), ionTransition2.getFilter3Ion());
+					sortOrder = (ionTransition1 == null || ionTransition2 == null) ? 0 : Integer.compare(ionTransition2.getFilter3Ion(), ionTransition1.getFilter3Ion());
 					break;
 				case 5: // daughter resolution
-					sortOrder = (ionTransition1 == null || ionTransition2 == null) ? 0 : Double.compare(ionTransition1.getFilter3Resolution(), ionTransition2.getFilter3Resolution());
+					sortOrder = (ionTransition1 == null || ionTransition2 == null) ? 0 : Double.compare(ionTransition2.getFilter3Resolution(), ionTransition1.getFilter3Resolution());
 					break;
 				case 6: // collision energy
-					sortOrder = (ionTransition1 == null || ionTransition2 == null) ? 0 : Double.compare(ionTransition1.getCollisionEnergy(), ionTransition2.getCollisionEnergy());
+					sortOrder = (ionTransition1 == null || ionTransition2 == null) ? 0 : Double.compare(ionTransition2.getCollisionEnergy(), ionTransition1.getCollisionEnergy());
 					break;
 				default:
 					sortOrder = 0;
