@@ -36,7 +36,7 @@ public class AbstractConverterSupport_1_Test extends AbstractConverterTestCase {
 		String converterId = "org.eclipse.chemclipse.msd.converter.supplier.agilent";
 		String converterName = "Agilent Chromatogram (*.D/DATA.MS)";
 		try {
-			assertEquals(converterId, converterSupport.getConverterId(converterName));
+			assertEquals(converterId, converterSupport.getConverterId(converterName, false));
 		} catch(NoConverterAvailableException e) {
 			assertTrue("The failure NoConverterAvailableException should not be thrown here.", false);
 		}
@@ -47,7 +47,7 @@ public class AbstractConverterSupport_1_Test extends AbstractConverterTestCase {
 		String converterId = "org.eclipse.chemclipse.msd.converter.supplier.agilent.msd1";
 		String converterName = "Agilent Chromatogram (*.D/MSD1.MS)";
 		try {
-			assertEquals(converterId, converterSupport.getConverterId(converterName));
+			assertEquals(converterId, converterSupport.getConverterId(converterName, false));
 		} catch(NoConverterAvailableException e) {
 			assertTrue("The failure NoConverterAvailableException should not be thrown here.", false);
 		}
@@ -58,7 +58,7 @@ public class AbstractConverterSupport_1_Test extends AbstractConverterTestCase {
 		String converterId = "net.openchrom.msd.converter.supplier.cdf";
 		String converterName = "ANDI/AIA CDF Chromatogram (*.CDF)";
 		try {
-			assertEquals(converterId, converterSupport.getConverterId(converterName));
+			assertEquals(converterId, converterSupport.getConverterId(converterName, false));
 		} catch(NoConverterAvailableException e) {
 			assertTrue("The failure NoConverterAvailableException should not be thrown here.", false);
 		}
@@ -69,7 +69,7 @@ public class AbstractConverterSupport_1_Test extends AbstractConverterTestCase {
 		String converterId = "org.eclipse.chemclipse.msd.converter.supplier.excel";
 		String converterName = "Excel Chromatogram (*.xlsx)";
 		try {
-			assertEquals(converterId, converterSupport.getConverterId(converterName));
+			assertEquals(converterId, converterSupport.getConverterId(converterName, false));
 		} catch(NoConverterAvailableException e) {
 			assertTrue("The failure NoConverterAvailableException should not be thrown here.", false);
 		}
@@ -80,7 +80,7 @@ public class AbstractConverterSupport_1_Test extends AbstractConverterTestCase {
 		String converterId = "org.eclipse.chemclipse.msd.converter.supplier.test";
 		String converterName = "Test Chromatogram (*.C/CHROM.MS)";
 		try {
-			assertEquals(converterId, converterSupport.getConverterId(converterName));
+			assertEquals(converterId, converterSupport.getConverterId(converterName, false));
 		} catch(NoConverterAvailableException e) {
 			assertTrue("The failure NoConverterAvailableException should not be thrown here.", false);
 		}
@@ -91,7 +91,7 @@ public class AbstractConverterSupport_1_Test extends AbstractConverterTestCase {
 		String converterName = "org.eclipse.chemclipse.msd.converter";
 		try {
 			@SuppressWarnings("unused")
-			String converterId = converterSupport.getConverterId(converterName);
+			String converterId = converterSupport.getConverterId(converterName, false);
 		} catch(NoConverterAvailableException e) {
 			assertTrue(true);
 		}
@@ -102,7 +102,7 @@ public class AbstractConverterSupport_1_Test extends AbstractConverterTestCase {
 		String converterName = "";
 		try {
 			@SuppressWarnings("unused")
-			String converterId = converterSupport.getConverterId(converterName);
+			String converterId = converterSupport.getConverterId(converterName, false);
 		} catch(NoConverterAvailableException e) {
 			assertTrue(true);
 		}

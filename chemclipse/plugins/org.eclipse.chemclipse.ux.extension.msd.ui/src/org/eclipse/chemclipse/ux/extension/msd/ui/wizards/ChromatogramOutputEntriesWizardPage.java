@@ -11,6 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.wizards;
 
+import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverterSupport;
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+import org.eclipse.chemclipse.converter.model.ChromatogramOutputEntry;
+import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
+import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -26,16 +31,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverterSupport;
-import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
-import org.eclipse.chemclipse.converter.model.ChromatogramOutputEntry;
-import org.eclipse.chemclipse.converter.model.IChromatogramOutputEntry;
-import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
-
-/**
- * @author Philip (eselmeister) Wenig
- * 
- */
 public class ChromatogramOutputEntriesWizardPage extends WizardPage {
 
 	private Combo chromatogramConverterComboBox;
@@ -50,6 +45,7 @@ public class ChromatogramOutputEntriesWizardPage extends WizardPage {
 		super(pageName);
 		setTitle("Chromatogram Output Formats");
 		setDescription("This wizard lets you select several output chromatogram formats.");
+		converterSupport = ChromatogramConverterMSD.getChromatogramConverterSupport();
 	}
 
 	/**
@@ -68,7 +64,7 @@ public class ChromatogramOutputEntriesWizardPage extends WizardPage {
 		int index = chromatogramConverterComboBox.getSelectionIndex();
 		if(index >= 0) {
 			String description = chromatogramConverterComboBox.getItem(index);
-			converterId = converterSupport.getConverterId(description);
+			converterId = converterSupport.getConverterId(description, true);
 		} else {
 			throw new NoConverterAvailableException("No converter has been selected.");
 		}
@@ -99,7 +95,6 @@ public class ChromatogramOutputEntriesWizardPage extends WizardPage {
 		/*
 		 * Select the output file format converter.
 		 */
-		converterSupport = ChromatogramConverterMSD.getChromatogramConverterSupport();
 		try {
 			gridData = new GridData(GridData.FILL_HORIZONTAL);
 			gridData.horizontalSpan = 2;

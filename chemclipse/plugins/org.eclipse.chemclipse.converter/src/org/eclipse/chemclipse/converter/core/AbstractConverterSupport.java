@@ -52,7 +52,7 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 	}
 
 	@Override
-	public String getConverterId(final String name) throws NoConverterAvailableException {
+	public String getConverterId(final String name, boolean exportConverterOnly) throws NoConverterAvailableException {
 
 		/*
 		 * Test if the suppliers ArrayList is empty.
@@ -65,8 +65,15 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 		breakloop:
 		for(ISupplier supplier : suppliers) {
 			if(supplier.getFilterName().equals(name)) {
-				id = supplier.getId();
-				break breakloop;
+				if(exportConverterOnly) {
+					if(supplier.isExportable()) {
+						id = supplier.getId();
+						break breakloop;
+					}
+				} else {
+					id = supplier.getId();
+					break breakloop;
+				}
 			}
 		}
 		/*

@@ -81,13 +81,15 @@ public interface IConverterSupport {
 
 	/**
 	 * Returns the converter id "org.eclipse.chemclipse.msd.converter.supplier.agilent" available in the list defined by its name, e.g. "Agilent Chromatogram (*.D/DATA.MS)".
-	 * If more converter with the given name "Agilent Chromatogram (*.D/DATA.MS)" are stored, the first match will be returned.
+	 * If more converter with the given name "Agilent Chromatogram (*.D/DATA.MS)" are stored, the first match will be returned. If exportConverterOnly is true, only a converter
+	 * that is able to export the file will be returned.
 	 * 
 	 * @param name
+	 * @param exportConverterOnly
 	 * @return String
 	 * @throws NoConverterAvailableException
 	 */
-	String getConverterId(String name) throws NoConverterAvailableException;
+	String getConverterId(String name, boolean exportConverterOnly) throws NoConverterAvailableException;
 
 	/**
 	 * Returns an ArrayList with all available converter ids for the given file.<br/>
