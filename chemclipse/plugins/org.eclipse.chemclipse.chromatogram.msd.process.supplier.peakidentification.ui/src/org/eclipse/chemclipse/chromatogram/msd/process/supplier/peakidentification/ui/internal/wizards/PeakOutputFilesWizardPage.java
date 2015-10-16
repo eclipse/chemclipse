@@ -11,6 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.wizards;
 
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakOutputEntry;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.PeakOutputEntry;
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+import org.eclipse.chemclipse.msd.converter.peak.IPeakConverterSupport;
+import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -25,12 +30,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-
-import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
-import org.eclipse.chemclipse.msd.converter.peak.IPeakConverterSupport;
-import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakOutputEntry;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.PeakOutputEntry;
 
 /**
  * @author Philip (eselmeister) Wenig
@@ -68,7 +67,7 @@ public class PeakOutputFilesWizardPage extends WizardPage {
 		int index = peakConverterComboBox.getSelectionIndex();
 		if(index >= 0) {
 			String description = peakConverterComboBox.getItem(index);
-			converterId = converterSupport.getConverterId(description);
+			converterId = converterSupport.getConverterId(description, true);
 		} else {
 			throw new NoConverterAvailableException("No converter has been selected.");
 		}
