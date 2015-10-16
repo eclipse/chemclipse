@@ -15,7 +15,11 @@ import java.io.File;
 
 import javax.inject.Inject;
 
-import org.eclipse.core.filesystem.EFS;
+import org.eclipse.chemclipse.support.ui.wizards.TreeViewerFilesystemSupport;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerContentProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerLabelProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
+import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramIdentifier;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -29,11 +33,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-
-import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerContentProvider;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerLabelProvider;
-import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramIdentifier;
 
 public abstract class AbstractChromatogramFileExplorer {
 
@@ -53,7 +52,7 @@ public abstract class AbstractChromatogramFileExplorer {
 		treeViewer = new TreeViewer(parent, SWT.VIRTUAL);
 		treeViewer.setContentProvider(new ChromatogramFileExplorerContentProvider(chromatogramIdentifier));
 		treeViewer.setLabelProvider(new ChromatogramFileExplorerLabelProvider(chromatogramIdentifier));
-		treeViewer.setInput(EFS.getLocalFileSystem());
+		TreeViewerFilesystemSupport.retrieveAndSetLocalFileSystem(treeViewer);
 		/*
 		 * Register single (selection changed)/double click listener here.<br/>
 		 * OK, it's not the best way, but it still works at beginning.

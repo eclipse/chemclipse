@@ -16,12 +16,11 @@ import java.io.File;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.chemclipse.support.ui.wizards.TreeViewerFilesystemSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.editors.MassSpectrumLibraryEditor;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.MassSpectrumIdentifier;
 import org.eclipse.chemclipse.ux.extension.msd.ui.provider.MassSpectrumFileExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.msd.ui.provider.MassSpectrumFileExplorerLabelProvider;
-
-import org.eclipse.core.filesystem.EFS;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
@@ -55,7 +54,7 @@ public class MassSpectrumLibraryExplorer {
 		treeViewer = new TreeViewer(parent);
 		treeViewer.setContentProvider(new MassSpectrumFileExplorerContentProvider());
 		treeViewer.setLabelProvider(new MassSpectrumFileExplorerLabelProvider());
-		treeViewer.setInput(EFS.getLocalFileSystem());
+		TreeViewerFilesystemSupport.retrieveAndSetLocalFileSystem(treeViewer);
 		/*
 		 * Register single (selection changed)/double click listener here.<br/>
 		 * OK, it's not the best way, but it still works at beginning.

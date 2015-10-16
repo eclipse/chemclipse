@@ -11,17 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.csd.ui.wizards;
 
-import org.eclipse.core.filesystem.EFS;
+import org.eclipse.chemclipse.support.ui.wizards.TreeViewerFilesystemSupport;
+import org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerContentProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-
-import org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerContentProvider;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerLabelProvider;
 
 public class ChromatogramInputEntriesWizardPage extends WizardPage {
 
@@ -58,7 +57,7 @@ public class ChromatogramInputEntriesWizardPage extends WizardPage {
 		chromatogramViewer = new TreeViewer(composite, SWT.MULTI);
 		chromatogramViewer.setLabelProvider(new ChromatogramFileExplorerLabelProvider(ChromatogramSupport.getInstanceIdentifier()));
 		chromatogramViewer.setContentProvider(new ChromatogramFileExplorerContentProvider(ChromatogramSupport.getInstanceIdentifier()));
-		chromatogramViewer.setInput(EFS.getLocalFileSystem());
+		TreeViewerFilesystemSupport.retrieveAndSetLocalFileSystem(chromatogramViewer);
 		/*
 		 * Set the control.
 		 */
