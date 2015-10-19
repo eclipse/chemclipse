@@ -25,9 +25,45 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.eclipse.chemclipse.rcp.app.core.feature"
          version="0.0.0"/>
 
+	<!--
+	Python integration part starts here
+	-->
+
    <includes
          id="org.python.pydev.feature"
          version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.ease.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.ease.python.feature"
+         version="0.0.0"/>
+         
+   <includes
+         id="org.eclipse.ease.ui.feature"
+         version="0.0.0"/>
+         
+  <includes
+         id="org.eclipse.ease.modules.charting.feature"
+         version="0.0.0"/>
+         
+  <includes
+         id="org.eclipse.ease.modules.feature"
+         version="0.0.0"/>
+
+  <includes
+         id="org.eclipse.ease.python.jython.feature"
+         version="0.0.0"/>
+
+	<!--
+	Python integration part ends here
+	-->
+
+	<!--
+	NatTable integration part starts here
+	-->
 
    <includes
          id="org.eclipse.nebula.visualization.feature"
@@ -40,6 +76,10 @@ http://www.eclipse.org/legal/epl-v10.html
    <includes
          id="org.eclipse.nebula.widgets.nattable.extension.glazedlists.feature"
          version="0.0.0"/>
+
+	<!--
+	NatTable integration part ends here
+	-->
 
    <plugin
          id="org.eclipse.chemclipse.keystore"
