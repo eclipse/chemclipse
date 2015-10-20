@@ -179,7 +179,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 		 * Fire an update.
 		 */
 		if(fireUpdate) {
-			ChromatogramSelectionMSDUpdateNotifier.fireUpdateChange(this, false);
+			fireUpdateChange(false);
 		}
 	}
 
@@ -226,7 +226,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 			 * Fire update change if neccessary.
 			 */
 			if(update) {
-				ChromatogramSelectionMSDUpdateNotifier.fireUpdateChange(this, false);
+				fireUpdateChange(false);
 			}
 		}
 	}
@@ -240,7 +240,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 			 * Fire update change if neccessary.
 			 */
 			if(update) {
-				ChromatogramSelectionMSDUpdateNotifier.fireUpdateChange(this, false);
+				fireUpdateChange(false);
 			}
 		}
 	}
@@ -264,7 +264,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 			 * Fire update change if neccessary.
 			 */
 			if(update) {
-				ChromatogramSelectionMSDUpdateNotifier.fireUpdateChange(this, false);
+				fireUpdateChange(false);
 			}
 		}
 	}
@@ -272,7 +272,11 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 	@Override
 	public void fireUpdateChange(boolean forceReload) {
 
-		ChromatogramSelectionMSDUpdateNotifier.fireUpdateChange(this, forceReload);
+		try {
+			ChromatogramSelectionMSDUpdateNotifier.fireUpdateChange(this, forceReload);
+		} catch(Exception e) {
+			System.out.println(e);
+		}
 	}
 
 	// ------------------------------------IChromatogramSelectionSetter
