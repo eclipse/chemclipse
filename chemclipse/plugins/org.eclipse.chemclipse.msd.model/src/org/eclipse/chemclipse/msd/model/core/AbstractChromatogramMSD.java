@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogr
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.implementation.DefaultNoiseCalculator;
 import org.eclipse.chemclipse.msd.model.implementation.IonTransitionSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -70,10 +71,11 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 		ionTransitionSettings = new IonTransitionSettings();
 		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
 		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
-		if(noiseCalculator != null) {
-			int segmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
-			noiseCalculator.setChromatogram(this, segmentWidth);
+		if(noiseCalculator == null) {
+			noiseCalculator = new DefaultNoiseCalculator();
 		}
+		int segmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
+		noiseCalculator.setChromatogram(this, segmentWidth);
 	}
 
 	@Override
