@@ -13,11 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum;
 
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.Platform;
-
+import org.eclipse.chemclipse.chromatogram.msd.comparison.comparator.DefaultMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.exceptions.ComparisonException;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.exceptions.NoMassSpectrumComparatorAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.exceptions.NoMassSpectrumComparisonResultAvailableException;
@@ -25,10 +21,14 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.purity.IM
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.purity.MassSpectrumPurityResult;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumComparatorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumPurityProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.MassSpectrumComparatorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.MassSpectrumPurityProcessingInfo;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 
 /**
  * This serves methods to compare IMassSpectrum instances.<br/>
@@ -138,7 +138,9 @@ public class MassSpectrumComparator {
 		if(massSpectrumComparator != null) {
 			processingInfo = massSpectrumComparator.compare(unknown, reference);
 		} else {
-			processingInfo = getNoComparatorAvailableProcessingInfo();
+			massSpectrumComparator = new DefaultMassSpectrumComparator();
+			processingInfo = massSpectrumComparator.compare(unknown, reference);
+			processingInfo.addInfoMessage("MassSpectrum Comparator", "The requested comparator was not available. Instead the default comparator has been used.");
 		}
 		return processingInfo;
 	}
@@ -219,13 +221,5 @@ public class MassSpectrumComparator {
 			}
 		}
 		return null;
-	}
-
-	// --------------------------------------------private methods
-	private static IMassSpectrumComparatorProcessingInfo getNoComparatorAvailableProcessingInfo() {
-
-		IMassSpectrumComparatorProcessingInfo processingInfo = new MassSpectrumComparatorProcessingInfo();
-		processingInfo.addErrorMessage("MassSpectrum Comparator", "There is no suitable mass spectrum comparator available.");
-		return processingInfo;
 	}
 }
