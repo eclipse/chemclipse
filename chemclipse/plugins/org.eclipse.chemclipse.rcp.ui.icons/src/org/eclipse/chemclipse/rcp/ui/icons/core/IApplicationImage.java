@@ -156,4 +156,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_OFFSET_RIGHT = "offsetRight.gif";
 	String IMAGE_OFFSET_UP = "offsetUp.gif";
 	String IMAGE_OFFSET_DOWN = "offsetDown.gif";
+	//
+	String IMAGE_SCRIPT_SHELL = "script_shell.png";
 }

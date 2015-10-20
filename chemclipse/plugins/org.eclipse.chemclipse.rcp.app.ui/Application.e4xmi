@@ -10,6 +10,7 @@
             <children xsi:type="advanced:Placeholder" xmi:id="_bnx48FeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.perspective.main.editorss" containerData="15000" ref="_Jqg8MEnJEeKP49-EnXatSw"/>
             <children xsi:type="basic:PartStack" xmi:id="_jR9WYFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.partstack.main.1" containerData="5000">
               <children xsi:type="advanced:Placeholder" xmi:id="_lQTSYFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.placeholder.main.1" ref="_Sq1foEd4EeKhRMzT2OpX0g"/>
+              <children xsi:type="advanced:Placeholder" xmi:id="_0jDjAHcBEeWs9YprkfnL3Q" elementId="org.eclipse.chemclipse.rcp.app.ui.placeholder.0" ref="_V3EBsHb_EeWs9YprkfnL3Q"/>
             </children>
           </children>
         </children>
@@ -103,6 +104,7 @@
     <sharedElements xsi:type="basic:Part" xmi:id="_T2mREFeKEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart" contributionURI="bundleclass://org.eclipse.chemclipse.processing.ui/org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart" label="Feedback" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif"/>
     <sharedElements xsi:type="basic:Part" xmi:id="_qY-R0FeKEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.LogFileView" contributionURI="bundleclass://org.eclipse.chemclipse.logging.ui/org.eclipse.chemclipse.logging.ui.views.LogFileView" label="Log Files" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/log.gif"/>
     <sharedElements xsi:type="basic:Part" xmi:id="_W8FzsFuuEeWKQYKM0-fotA" elementId="org.eclipse.chemclipse.rcp.app.ui.part.editHistory" contributionURI="bundleclass://org.eclipse.chemclipse.support.ui/org.eclipse.chemclipse.support.ui.parts.EditHistoryPart" label="Edit History" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif"/>
+    <sharedElements xsi:type="basic:Part" xmi:id="_V3EBsHb_EeWs9YprkfnL3Q" elementId="org.eclipse.ease.ui.views.scriptShell" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Script Shell" iconURI="platform:/plugin/org.eclipse.ui.console/icons/full/cview16/console_view.gif"/>
     <trimBars xmi:id="_h0BcTDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.trimbar.top">
       <children xsi:type="menu:ToolBar" xmi:id="_h0BcTTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.main">
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_nIMLMINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.3"/>
