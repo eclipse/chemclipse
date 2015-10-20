@@ -31,7 +31,7 @@ public class Settings {
 	private static File fileSettingsFolder = null; // will be initialized
 	private static File fileWorkspaceFolder = null; // will be initialized
 	//
-	private static final String VERSION_IDENTIFIER = "0.7.x";
+	private static final String DEFAULT_VERSION_IDENTIFIER = "0.7.x";
 
 	/**
 	 * Use only static methods.
@@ -70,7 +70,7 @@ public class Settings {
 	 */
 	public static final String getVersionIdentifier() {
 
-		String versionIdentifier = VERSION_IDENTIFIER;
+		String versionIdentifier = DEFAULT_VERSION_IDENTIFIER;
 		try {
 			Version version = Activator.getContext().getBundle().getVersion();
 			StringBuilder builder = new StringBuilder();
