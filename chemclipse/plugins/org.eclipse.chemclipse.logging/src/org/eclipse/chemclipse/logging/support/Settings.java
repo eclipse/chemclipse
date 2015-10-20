@@ -30,6 +30,8 @@ public class Settings {
 	//
 	private static File fileSettingsFolder = null; // will be initialized
 	private static File fileWorkspaceFolder = null; // will be initialized
+	//
+	private static final String DEFAULT_VERSION_IDENTIFIER = "0.7.x";
 
 	/**
 	 * Use only static methods.
@@ -68,14 +70,20 @@ public class Settings {
 	 */
 	public static final String getVersionIdentifier() {
 
-		Version version = Activator.getContext().getBundle().getVersion();
-		StringBuilder builder = new StringBuilder();
-		builder.append(version.getMajor());
-		builder.append(".");
-		builder.append(version.getMinor());
-		builder.append(".");
-		builder.append("x"); // version.getMicro()
-		return builder.toString();
+		String versionIdentifier = DEFAULT_VERSION_IDENTIFIER;
+		try {
+			Version version = Activator.getContext().getBundle().getVersion();
+			StringBuilder builder = new StringBuilder();
+			builder.append(version.getMajor());
+			builder.append(".");
+			builder.append(version.getMinor());
+			builder.append(".");
+			builder.append("x"); // version.getMicro()
+			versionIdentifier = builder.toString();
+		} catch(Exception e) {
+			System.out.println(e);
+		}
+		return versionIdentifier;
 	}
 
 	/**

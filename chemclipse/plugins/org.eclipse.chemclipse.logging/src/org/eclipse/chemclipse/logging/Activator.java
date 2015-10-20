@@ -12,9 +12,7 @@
 package org.eclipse.chemclipse.logging;
 
 import org.apache.log4j.PropertyConfigurator;
-
 import org.eclipse.chemclipse.logging.support.PropertiesUtil;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -34,7 +32,14 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext bundleContext) throws Exception {
 
 		Activator.context = bundleContext;
-		initLogger();
+		try {
+			/*
+			 * Try to initialize the logger properties.
+			 */
+			initLogger();
+		} catch(Exception e) {
+			System.out.println(e);
+		}
 	}
 
 	/*
