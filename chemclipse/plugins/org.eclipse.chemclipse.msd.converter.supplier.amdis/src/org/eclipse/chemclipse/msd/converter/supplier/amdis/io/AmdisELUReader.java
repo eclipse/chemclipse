@@ -60,7 +60,7 @@ public class AmdisELUReader implements IPeakReader {
 	private static final Pattern profileDataPattern = Pattern.compile("(RE)(.*?)(NUM PEAKS)", Pattern.DOTALL | Pattern.MULTILINE);
 	private static final Pattern profilePattern = Pattern.compile("([0-9]+)");
 	private static final Pattern peakPattern = Pattern.compile("(NUM PEAKS)(.*)", Pattern.DOTALL | Pattern.MULTILINE);
-	private static final Pattern ionPattern = Pattern.compile("([0-9]+)(,)(.*?)([0-9]+)");
+	private static final Pattern ionPattern = Pattern.compile("\\((\\d+),(\\d+) ?(\\w[\\d.]*)?\\)");
 	//
 	private static final String NEW_LINE = "\n";
 	private static final String CARRIAGE_RETURN = "\r";
@@ -351,18 +351,20 @@ public class AmdisELUReader implements IPeakReader {
 
 	private void extractPeakIons(String massSpectrumData, IPeakMassSpectrum peakMassSpectrum) {
 
-		double ion;
-		float abundance;
+		boolean EXCLUDE_UNCERTAIN_IONS = true;
 		Matcher ions = ionPattern.matcher(massSpectrumData);
 		while(ions.find()) {
 			try {
-				ion = Double.parseDouble(ions.group(1));
-				abundance = Float.parseFloat(ions.group(4));
+				if(EXCLUDE_UNCERTAIN_IONS) {
+					if(ions.group(3) == null) {
+						peakMassSpectrum.addIon(getPeakIonFromRegex(ions));
+					}
+				} else {
+					peakMassSpectrum.addIon(getPeakIonFromRegex(ions));
+				}
 				/*
 				 * TODO also parse uncertainty factor.
 				 */
-				IPeakIon peakIon = new PeakIon(ion, abundance);
-				peakMassSpectrum.addIon(peakIon);
 			} catch(NumberFormatException e) {
 				logger.warn(e);
 			} catch(AbundanceLimitExceededException e) {
@@ -371,5 +373,13 @@ public class AmdisELUReader implements IPeakReader {
 				logger.warn(e);
 			}
 		}
+	}
+
+	private IPeakIon getPeakIonFromRegex(Matcher ions) throws AbundanceLimitExceededException, IonLimitExceededException {
+
+		double ion = Double.parseDouble(ions.group(1));
+		float abundance = Float.parseFloat(ions.group(2));
+		IPeakIon peakIon = new PeakIon(ion, abundance);
+		return peakIon;
 	}
 }
