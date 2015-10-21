@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.processing.peak.PeakImportConverterProcessingInfo;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IPeakIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
@@ -351,11 +352,10 @@ public class AmdisELUReader implements IPeakReader {
 
 	private void extractPeakIons(String massSpectrumData, IPeakMassSpectrum peakMassSpectrum) {
 
-		boolean EXCLUDE_UNCERTAIN_IONS = true;
 		Matcher ions = ionPattern.matcher(massSpectrumData);
 		while(ions.find()) {
 			try {
-				if(EXCLUDE_UNCERTAIN_IONS) {
+				if(PreferenceSupplier.isExcludeUncertainIons()) {
 					if(ions.group(3) == null) {
 						peakMassSpectrum.addIon(getPeakIonFromRegex(ions));
 					}

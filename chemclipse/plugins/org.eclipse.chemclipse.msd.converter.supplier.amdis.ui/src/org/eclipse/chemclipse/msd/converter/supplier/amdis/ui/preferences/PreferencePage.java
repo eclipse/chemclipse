@@ -11,13 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.ui.preferences;
 
-import org.eclipse.jface.preference.BooleanFieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.IWorkbench;
-
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.ui.Activator;
+import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -36,6 +35,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public void createFieldEditors() {
 
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SPLIT_LIBRARY, "Split library to several output files (<= 65535 mass spectra)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_EXCLUDE_UNCERTAIN_IONS, "Exclude uncertain ions from ELU file conversion", getFieldEditorParent()));
 	}
 
 	/*

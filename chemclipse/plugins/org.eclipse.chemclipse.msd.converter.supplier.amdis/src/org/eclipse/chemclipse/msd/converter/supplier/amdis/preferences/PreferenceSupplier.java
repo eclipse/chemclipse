@@ -14,17 +14,18 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.Activator;
+import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.Activator;
-import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_SPLIT_LIBRARY = "splitLibrary";
 	public static final boolean DEF_SPLIT_LIBRARY = false;
+	public static final String P_EXCLUDE_UNCERTAIN_IONS = "excludeUncertainIons";
+	public static final boolean DEF_EXCLUDE_UNCERTAIN_IONS = false;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -53,6 +54,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_SPLIT_LIBRARY, Boolean.toString(DEF_SPLIT_LIBRARY));
+		defaultValues.put(P_EXCLUDE_UNCERTAIN_IONS, Boolean.toString(DEF_EXCLUDE_UNCERTAIN_IONS));
 		return defaultValues;
 	}
 
@@ -66,5 +68,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getBoolean(P_SPLIT_LIBRARY, DEF_SPLIT_LIBRARY);
+	}
+
+	public static boolean isExcludeUncertainIons() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_EXCLUDE_UNCERTAIN_IONS, DEF_EXCLUDE_UNCERTAIN_IONS);
 	}
 }
