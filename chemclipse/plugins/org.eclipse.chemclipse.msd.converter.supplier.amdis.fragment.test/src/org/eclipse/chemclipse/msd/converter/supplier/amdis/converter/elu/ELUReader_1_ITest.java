@@ -9,23 +9,24 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
+package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.elu;
 
 import java.io.File;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
-import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
+import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.AmdisELUReader;
 
 import junit.framework.TestCase;
 
-public class ELUReader_2_ITest extends TestCase {
+public class ELUReader_1_ITest extends TestCase {
 
 	private AmdisELUReader reader;
 	private File file;
-	private IPeakImportConverterProcessingInfo processingInfo;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -34,7 +35,6 @@ public class ELUReader_2_ITest extends TestCase {
 		reader = new AmdisELUReader();
 		String pathname = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_PEAKS_1);
 		file = new File(pathname);
-		processingInfo = reader.read(file, new NullProgressMonitor());
 	}
 
 	@Override
@@ -47,9 +47,14 @@ public class ELUReader_2_ITest extends TestCase {
 	public void testRead_1() {
 
 		try {
-			IPeaks peaks = processingInfo.getPeaks();
-			assertEquals(1132, peaks.size());
-		} catch(TypeCastException e) {
+			reader.read(file, new NullProgressMonitor());
+		} catch(FileNotFoundException e) {
+			assertTrue(false);
+		} catch(FileIsNotReadableException e) {
+			assertTrue(false);
+		} catch(FileIsEmptyException e) {
+			assertTrue(false);
+		} catch(IOException e) {
 			assertTrue(false);
 		}
 	}
