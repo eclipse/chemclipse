@@ -15,27 +15,27 @@ import java.io.Serializable;
 
 public interface IIonTransition extends Serializable {
 
-	double getFilter1FirstIon();
+	double getQ1StartIon();
 
-	double getFilter1LastIon();
+	double getQ1StopIon();
 
-	int getFilter1Ion();
+	int getQ1Ion(); // Q1 - precision 0
 
-	double getDeltaFilter1Ion();
+	double getDeltaQ1Ion();
 
-	double getFilter3FirstIon();
+	double getQ3StartIon();
 
-	double getFilter3LastIon();
+	double getQ3StopIon();
 
-	int getFilter3Ion();
+	double getQ3Ion(); // Q3 - precision 1
 
-	double getDeltaFilter3Ion();
+	double getDeltaQ3Ion();
 
 	double getCollisionEnergy();
 
 	int getTransitionGroup();
 
-	double getFilter1Resolution();
+	double getQ1Resolution();
 
-	double getFilter3Resolution();
+	double getQ3Resolution();
 }

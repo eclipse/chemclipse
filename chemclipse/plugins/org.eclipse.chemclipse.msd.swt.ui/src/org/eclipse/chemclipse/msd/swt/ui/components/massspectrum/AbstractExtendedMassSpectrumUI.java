@@ -206,7 +206,7 @@ public abstract class AbstractExtendedMassSpectrumUI extends AbstractViewMassSpe
 						 * 156 > 78.56 @12
 						 */
 						clearStringBuilder();
-						stringBuilder.append(Integer.toString((int)ionTransition.getFilter1FirstIon())); // 156
+						stringBuilder.append(Integer.toString((int)ionTransition.getQ1StartIon())); // 156
 						stringBuilder.append(" > ");
 						stringBuilder.append(label); // 78.56
 						stringBuilder.append(" @");
