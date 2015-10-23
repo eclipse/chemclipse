@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Dr. Janos Binder - supporting optional peaks
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
