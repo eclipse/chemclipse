@@ -24,11 +24,13 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.AmdisELUReader;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 public class ELUImportConverter_2_ITest extends TestCase {
 
@@ -53,6 +55,8 @@ public class ELUImportConverter_2_ITest extends TestCase {
 
 	public void testRead_1() {
 
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		preferences.putBoolean(PreferenceSupplier.P_EXCLUDE_UNCERTAIN_IONS, true);
 		try {
 			IPeakImportConverterProcessingInfo processingInfo = reader.read(file, new NullProgressMonitor());
 			List<IPeak> peaks = processingInfo.getPeaks().getPeaks();
