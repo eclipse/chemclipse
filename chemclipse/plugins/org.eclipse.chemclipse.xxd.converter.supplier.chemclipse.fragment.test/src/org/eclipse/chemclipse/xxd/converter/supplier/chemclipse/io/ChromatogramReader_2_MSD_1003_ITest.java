@@ -231,14 +231,14 @@ public class ChromatogramReader_2_MSD_1003_ITest extends ChromatogramReaderMSDTe
 		//
 		assertEquals(1, ionTransitionGroup.size());
 		assertEquals(15.0d, ionTransition.getCollisionEnergy());
-		assertEquals(292, ionTransition.getFilter1Ion());
-		assertEquals(292.0d, ionTransition.getFilter1FirstIon());
-		assertEquals(292.0d, ionTransition.getFilter1LastIon());
-		assertEquals(1.2d, ionTransition.getFilter1Resolution());
-		assertEquals(206, ionTransition.getFilter3Ion());
-		assertEquals(205.7d, ionTransition.getFilter3FirstIon());
-		assertEquals(206.4d, ionTransition.getFilter3LastIon());
-		assertEquals(1.2d, ionTransition.getFilter3Resolution());
+		assertEquals(292, ionTransition.getQ1Ion());
+		assertEquals(292.0d, ionTransition.getQ1StartIon());
+		assertEquals(292.0d, ionTransition.getQ1StopIon());
+		assertEquals(1.2d, ionTransition.getQ1Resolution());
+		assertEquals(206, ionTransition.getQ3Ion());
+		assertEquals(205.7d, ionTransition.getQ3StartIon());
+		assertEquals(206.4d, ionTransition.getQ3StopIon());
+		assertEquals(1.2d, ionTransition.getQ3Resolution());
 		assertEquals(6, ionTransition.getTransitionGroup());
 	}
 
@@ -251,14 +251,14 @@ public class ChromatogramReader_2_MSD_1003_ITest extends ChromatogramReaderMSDTe
 		//
 		assertEquals(14, ionTransitionGroup.size());
 		assertEquals(10.0d, ionTransition.getCollisionEnergy());
-		assertEquals(161, ionTransition.getFilter1Ion());
-		assertEquals(161.0d, ionTransition.getFilter1FirstIon());
-		assertEquals(161.0d, ionTransition.getFilter1LastIon());
-		assertEquals(1.2d, ionTransition.getFilter1Resolution());
-		assertEquals(99, ionTransition.getFilter3Ion());
-		assertEquals(98.7d, ionTransition.getFilter3FirstIon());
-		assertEquals(99.4d, ionTransition.getFilter3LastIon());
-		assertEquals(1.2d, ionTransition.getFilter3Resolution());
+		assertEquals(161, ionTransition.getQ1Ion());
+		assertEquals(161.0d, ionTransition.getQ1StartIon());
+		assertEquals(161.0d, ionTransition.getQ1StopIon());
+		assertEquals(1.2d, ionTransition.getQ1Resolution());
+		assertEquals(99, ionTransition.getQ3Ion());
+		assertEquals(98.7d, ionTransition.getQ3StartIon());
+		assertEquals(99.4d, ionTransition.getQ3StopIon());
+		assertEquals(1.2d, ionTransition.getQ3Resolution());
 		assertEquals(11, ionTransition.getTransitionGroup());
 	}
 
@@ -271,14 +271,14 @@ public class ChromatogramReader_2_MSD_1003_ITest extends ChromatogramReaderMSDTe
 		//
 		assertEquals(14, ionTransitionGroup.size());
 		assertEquals(15.0d, ionTransition.getCollisionEnergy());
-		assertEquals(359, ionTransition.getFilter1Ion());
-		assertEquals(359.0d, ionTransition.getFilter1FirstIon());
-		assertEquals(359.0d, ionTransition.getFilter1LastIon());
-		assertEquals(1.2d, ionTransition.getFilter1Resolution());
-		assertEquals(243, ionTransition.getFilter3Ion());
-		assertEquals(242.7d, ionTransition.getFilter3FirstIon());
-		assertEquals(243.4d, ionTransition.getFilter3LastIon());
-		assertEquals(1.2d, ionTransition.getFilter3Resolution());
+		assertEquals(359, ionTransition.getQ1Ion());
+		assertEquals(359.0d, ionTransition.getQ1StartIon());
+		assertEquals(359.0d, ionTransition.getQ1StopIon());
+		assertEquals(1.2d, ionTransition.getQ1Resolution());
+		assertEquals(243, ionTransition.getQ3Ion());
+		assertEquals(242.7d, ionTransition.getQ3StartIon());
+		assertEquals(243.4d, ionTransition.getQ3StopIon());
+		assertEquals(1.2d, ionTransition.getQ3Resolution());
 		assertEquals(11, ionTransition.getTransitionGroup());
 	}
 }

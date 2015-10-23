@@ -338,13 +338,13 @@ public class ChromatogramWriter_1001 extends AbstractChromatogramWriter implemen
 				 * parent m/z start, ...
 				 */
 				dataOutputStream.writeInt(1); // Ion transition available
-				dataOutputStream.writeDouble(ionTransition.getFilter1FirstIon()); // parent m/z start
-				dataOutputStream.writeDouble(ionTransition.getFilter1LastIon()); // parent m/z stop
-				dataOutputStream.writeDouble(ionTransition.getFilter3FirstIon()); // daughter m/z start
-				dataOutputStream.writeDouble(ionTransition.getFilter3LastIon()); // daughter m/z stop
+				dataOutputStream.writeDouble(ionTransition.getQ1StartIon()); // parent m/z start
+				dataOutputStream.writeDouble(ionTransition.getQ1StopIon()); // parent m/z stop
+				dataOutputStream.writeDouble(ionTransition.getQ3StartIon()); // daughter m/z start
+				dataOutputStream.writeDouble(ionTransition.getQ3StopIon()); // daughter m/z stop
 				dataOutputStream.writeDouble(ionTransition.getCollisionEnergy()); // collision energy
-				dataOutputStream.writeDouble(ionTransition.getFilter1Resolution()); // q1 resolution
-				dataOutputStream.writeDouble(ionTransition.getFilter3Resolution()); // q3 resolution
+				dataOutputStream.writeDouble(ionTransition.getQ1Resolution()); // q1 resolution
+				dataOutputStream.writeDouble(ionTransition.getQ3Resolution()); // q3 resolution
 				dataOutputStream.writeInt(ionTransition.getTransitionGroup()); // transition group
 			}
 		}
