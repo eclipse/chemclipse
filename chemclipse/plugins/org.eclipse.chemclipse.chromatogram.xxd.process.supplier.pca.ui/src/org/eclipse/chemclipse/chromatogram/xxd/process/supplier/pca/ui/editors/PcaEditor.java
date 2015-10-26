@@ -733,7 +733,7 @@ public class PcaEditor {
 		 * Create the peak intensity table.
 		 */
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Peak Intensity Table");
+		tabItem.setText("Data Table");
 		//
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new FillLayout());
