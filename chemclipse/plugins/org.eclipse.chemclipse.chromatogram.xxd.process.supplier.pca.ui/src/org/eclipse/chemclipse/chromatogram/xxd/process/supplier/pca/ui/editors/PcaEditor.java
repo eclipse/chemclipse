@@ -384,7 +384,7 @@ public class PcaEditor {
 		 */
 		imageHyperlink = formToolkit.createImageHyperlink(client, SWT.NONE);
 		imageHyperlink.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		imageHyperlink.setText("Peak Input Files");
+		imageHyperlink.setText("Data Input Files");
 		imageHyperlink.setLayoutData(gridData);
 		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
 
@@ -406,7 +406,7 @@ public class PcaEditor {
 		 * Input Files
 		 */
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Peak Input Files");
+		tabItem.setText("Data Input Files");
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new FillLayout());
 		/*
