@@ -21,8 +21,11 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
@@ -71,6 +74,7 @@ public class PrincipleComponentProcessor {
 			preparePcaResults(peakMap, pcaResults);
 			SortedSet<Integer> collectedRetentionTimes = collectRetentionTimes(peakMap);
 			List<Integer> extractedRetentionTimes = calculateCondensedRetentionTimes(collectedRetentionTimes, retentionTimeWindow);
+			int sampleSize = extractedRetentionTimes.size();
 			pcaResults.setExtractedRetentionTimes(extractedRetentionTimes);
 			Map<String, double[]> pcaPeakMap = extractPcaPeakMap(peakMap, extractedRetentionTimes, retentionTimeWindow);
 			normalizeIntensityValues(pcaPeakMap);
@@ -78,9 +82,7 @@ public class PrincipleComponentProcessor {
 			 * Run PCA
 			 */
 			monitor.subTask("Run PCA");
-			int sampleSize = extractedRetentionTimes.size();
-			int numSamples = pcaPeakMap.size();
-			PrincipalComponentAnalysis principleComponentAnalysis = initializePCA(pcaPeakMap, numSamples, sampleSize, numberOfPrincipleComponents);
+			PrincipalComponentAnalysis principleComponentAnalysis = initializePCA(pcaPeakMap, sampleSize, numberOfPrincipleComponents);
 			List<double[]> basisVectors = getBasisVectors(principleComponentAnalysis, numberOfPrincipleComponents);
 			pcaResults.setBasisVectors(basisVectors);
 			setEigenSpaceAndErrorValues(principleComponentAnalysis, pcaPeakMap, pcaResults);
@@ -101,6 +103,59 @@ public class PrincipleComponentProcessor {
 	}
 
 	/**
+	 * Re-evaluates the PCA results.
+	 * 
+	 * @param pcaResults
+	 */
+	public void reEvaluate(PcaResults pcaResults) {
+
+		int numberOfPrincipleComponents = pcaResults.getNumberOfPrincipleComponents();
+		int numSamples = 0;
+		int sampleSize = 0; // Needs to be the same size for each sample.
+		//
+		Map<ISample, IPcaResult> resultMap = pcaResults.getPcaResultMap();
+		for(Map.Entry<ISample, IPcaResult> entry : resultMap.entrySet()) {
+			if(entry.getKey().isSelected()) {
+				numSamples++;
+				sampleSize = entry.getValue().getSampleData().length;
+			}
+		}
+		//
+		PrincipalComponentAnalysis principleComponentAnalysis = new PrincipalComponentAnalysis();
+		principleComponentAnalysis.setup(numSamples, sampleSize);
+		/*
+		 * Add the samples.
+		 */
+		for(Map.Entry<ISample, IPcaResult> entry : resultMap.entrySet()) {
+			if(entry.getKey().isSelected()) {
+				double[] sampleData = entry.getValue().getSampleData();
+				principleComponentAnalysis.addSample(sampleData);
+			}
+		}
+		/*
+		 * Compute the basis for the number of principle components.
+		 */
+		principleComponentAnalysis.computeBasis(numberOfPrincipleComponents);
+		List<double[]> basisVectors = getBasisVectors(principleComponentAnalysis, numberOfPrincipleComponents);
+		pcaResults.setBasisVectors(basisVectors);
+		/*
+		 * Re-evaluate the eigen space and error membership.
+		 */
+		for(Map.Entry<ISample, IPcaResult> entry : resultMap.entrySet()) {
+			if(entry.getKey().isSelected()) {
+				//
+				IPcaResult pcaResult = entry.getValue();
+				double[] sampleData = pcaResult.getSampleData();
+				double[] eigenSpace = principleComponentAnalysis.sampleToEigenSpace(sampleData);
+				double errorMemberShip = principleComponentAnalysis.errorMembership(sampleData);
+				//
+				pcaResult.setEigenSpace(eigenSpace);
+				pcaResult.setErrorMemberShip(errorMemberShip);
+			}
+		}
+	}
+
+	/**
 	 * Sets the initial PCA result map.
 	 * 
 	 * @param peakMap
@@ -108,16 +163,15 @@ public class PrincipleComponentProcessor {
 	 */
 	private void preparePcaResults(Map<String, IPeaks> peakMap, PcaResults pcaResults) {
 
-		Map<String, PcaResult> pcaResultMap = pcaResults.getPcaResultMap();
+		Map<ISample, IPcaResult> pcaResultMap = pcaResults.getPcaResultMap();
 		for(Map.Entry<String, IPeaks> entry : peakMap.entrySet()) {
 			/*
 			 * PCA result
 			 */
 			PcaResult pcaResult = new PcaResult();
 			pcaResult.setPeaks(entry.getValue());
-			pcaResultMap.put(entry.getKey(), pcaResult);
+			pcaResultMap.put(new Sample(entry.getKey()), pcaResult);
 		}
-		pcaResults.setPcaResultMap(pcaResultMap);
 	}
 
 	/**
@@ -129,11 +183,12 @@ public class PrincipleComponentProcessor {
 	 * @param numberOfPrincipleComponents
 	 * @return PrincipleComponentAnalysis
 	 */
-	private PrincipalComponentAnalysis initializePCA(Map<String, double[]> pcaPeakMap, int numSamples, int sampleSize, int numberOfPrincipleComponents) {
+	private PrincipalComponentAnalysis initializePCA(Map<String, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipleComponents) {
 
 		/*
 		 * Initialize the PCA analysis.
 		 */
+		int numSamples = pcaPeakMap.size();
 		PrincipalComponentAnalysis principleComponentAnalysis = new PrincipalComponentAnalysis();
 		principleComponentAnalysis.setup(numSamples, sampleSize);
 		/*
@@ -169,8 +224,10 @@ public class PrincipleComponentProcessor {
 		 * Set the eigen space and error membership values.
 		 */
 		for(Map.Entry<String, double[]> entry : pcaPeakMap.entrySet()) {
-			String name = entry.getKey();
-			PcaResult pcaResult = pcaResults.getPcaResultMap().get(name);
+			/*
+			 * Get the sample result.
+			 */
+			IPcaResult pcaResult = pcaResults.getPcaResultMap().get(new Sample(entry.getKey()));
 			//
 			double[] sampleData = entry.getValue();
 			double[] eigenSpace = principleComponentAnalysis.sampleToEigenSpace(sampleData);
@@ -220,7 +277,7 @@ public class PrincipleComponentProcessor {
 	}
 
 	/**
-	 * Extracts a pca peak map.
+	 * Extracts a PCA peak map.
 	 * 
 	 * @param peakMap
 	 * @param extractedRetentionTimes

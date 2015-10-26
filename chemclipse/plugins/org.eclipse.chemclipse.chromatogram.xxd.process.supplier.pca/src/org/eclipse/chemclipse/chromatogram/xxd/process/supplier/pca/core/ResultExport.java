@@ -19,7 +19,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 
@@ -40,7 +41,7 @@ public class ResultExport {
 
 		PrintWriter printWriter = new PrintWriter(file);
 		if(pcaResults != null) {
-			Set<Map.Entry<String, PcaResult>> entrySet = pcaResults.getPcaResultMap().entrySet();
+			Set<Map.Entry<ISample, IPcaResult>> entrySet = pcaResults.getPcaResultMap().entrySet();
 			/*
 			 * Header
 			 */
@@ -83,10 +84,10 @@ public class ResultExport {
 			/*
 			 * Data
 			 */
-			for(Map.Entry<String, PcaResult> entry : entrySet) {
-				printWriter.print(entry.getKey());
+			for(Map.Entry<ISample, IPcaResult> entry : entrySet) {
+				printWriter.print(entry.getKey().getName());
 				printWriter.print(TAB);
-				PcaResult pcaResult = entry.getValue();
+				IPcaResult pcaResult = entry.getValue();
 				double[] sampleData = pcaResult.getSampleData();
 				for(double data : sampleData) {
 					printWriter.print(numberFormat.format(data));
@@ -107,12 +108,12 @@ public class ResultExport {
 			}
 			printWriter.println("");
 			//
-			for(Map.Entry<String, PcaResult> entry : entrySet) {
+			for(Map.Entry<ISample, IPcaResult> entry : entrySet) {
 				/*
 				 * Print the PCs
 				 */
-				String name = entry.getKey();
-				PcaResult pcaResult = entry.getValue();
+				String name = entry.getKey().getName();
+				IPcaResult pcaResult = entry.getValue();
 				double[] eigenSpace = pcaResult.getEigenSpace();
 				printWriter.print(name);
 				printWriter.print(TAB);

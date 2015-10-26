@@ -20,14 +20,15 @@ public class PcaResults {
 	private List<IDataInputEntry> dataInputEntries;
 	private int retentionTimeWindow;
 	private int numberOfPrincipleComponents;
+	private Map<ISample, IPcaResult> pcaResultMap;
+	//
 	private List<Integer> extractedRetentionTimes;
 	private List<double[]> basisVectors;
-	private Map<String, PcaResult> pcaResultMap;
 
 	public PcaResults(List<IDataInputEntry> dataInputEntries) {
 
 		this.dataInputEntries = dataInputEntries;
-		pcaResultMap = new HashMap<String, PcaResult>();
+		pcaResultMap = new HashMap<ISample, IPcaResult>();
 	}
 
 	public List<IDataInputEntry> getDataInputEntries() {
@@ -55,6 +56,11 @@ public class PcaResults {
 		this.numberOfPrincipleComponents = numberOfPrincipleComponents;
 	}
 
+	public Map<ISample, IPcaResult> getPcaResultMap() {
+
+		return pcaResultMap;
+	}
+
 	public List<Integer> getExtractedRetentionTimes() {
 
 		return extractedRetentionTimes;
@@ -73,15 +79,5 @@ public class PcaResults {
 	public void setBasisVectors(List<double[]> basisVectors) {
 
 		this.basisVectors = basisVectors;
-	}
-
-	public Map<String, PcaResult> getPcaResultMap() {
-
-		return pcaResultMap;
-	}
-
-	public void setPcaResultMap(Map<String, PcaResult> pcaResultMap) {
-
-		this.pcaResultMap = pcaResultMap;
 	}
 }

@@ -24,10 +24,11 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ResultExport;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PeakInputFilesWizard;
@@ -850,11 +851,11 @@ public class PcaEditor {
 			/*
 			 * Data
 			 */
-			for(Map.Entry<String, PcaResult> entry : pcaResults.getPcaResultMap().entrySet()) {
+			for(Map.Entry<ISample, IPcaResult> entry : pcaResults.getPcaResultMap().entrySet()) {
 				int index = 0;
 				TableItem item = new TableItem(peakListIntensityTable, SWT.NONE);
-				item.setText(index++, entry.getKey());
-				PcaResult pcaResult = entry.getValue();
+				item.setText(index++, entry.getKey().getName());
+				IPcaResult pcaResult = entry.getValue();
 				double[] sampleData = pcaResult.getSampleData();
 				for(double data : sampleData) {
 					item.setText(index++, numberFormat.format(data));
@@ -1046,16 +1047,16 @@ public class PcaEditor {
 			/*
 			 * Data
 			 */
-			for(Map.Entry<String, PcaResult> entry : pcaResults.getPcaResultMap().entrySet()) {
+			for(Map.Entry<ISample, IPcaResult> entry : pcaResults.getPcaResultMap().entrySet()) {
 				/*
 				 * Create the series.
 				 */
-				String name = entry.getKey();
+				String name = entry.getKey().getName();
 				ILineSeries scatterSeries = (ILineSeries)scorePlotChart.getSeriesSet().createSeries(SeriesType.LINE, name);
 				scatterSeries.setLineStyle(LineStyle.NONE);
 				scatterSeries.setSymbolSize(SYMBOL_SIZE);
 				//
-				PcaResult pcaResult = entry.getValue();
+				IPcaResult pcaResult = entry.getValue();
 				double[] eigenSpace = pcaResult.getEigenSpace();
 				/*
 				 * Note.
