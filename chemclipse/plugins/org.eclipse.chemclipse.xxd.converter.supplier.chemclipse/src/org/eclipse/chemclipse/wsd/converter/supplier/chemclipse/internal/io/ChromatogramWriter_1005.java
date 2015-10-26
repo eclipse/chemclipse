@@ -27,6 +27,8 @@ import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.wsd.converter.io.IChromatogramWSDWriter;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
@@ -126,8 +128,40 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 		writeChromatogramMiscellaneous(zipOutputStream, chromatogram, monitor);
 	}
 
-	private void writeChromatogramScans(ZipOutputStream zipOutputStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) {
+	private void writeChromatogramScans(ZipOutputStream zipOutputStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+		ZipEntry zipEntry;
+		DataOutputStream dataOutputStream;
+		
+		zipEntry = new ZipEntry(IFormat.FILE_SCANS_WSD);
+		zipOutputStream.putNextEntry(zipEntry);
+		dataOutputStream = new DataOutputStream(zipOutputStream);
+		int scans = chromatogram.getNumberOfScans();
+		dataOutputStream.writeInt(scans);
+		
+		
+		for(int scan = 1; scan <= scans; scan++) {
+			monitor.subTask(IConstants.EXPORT_SCANS + scan);
+			IScanWSD scanWsd = chromatogram.getSupplierScan(scan);
+			int scanSignalTotal = scanWsd.getScanSignals().size();
+			for(int signal = 0; signal < scanSignalTotal; signal++) {
+				IScanSignalWSD scanSignal = scanWsd.getScanSignal(signal);
+				int wavelength = scanSignal.getWavelength();
+				float abundance = scanSignal.getAbundance();
+				dataOutputStream.writeInt(wavelength);
+				dataOutputStream.writeFloat(abundance);
+			}
+			
+			int retentionTime = chromatogram.getSupplierScan(scan).getRetentionTime();			
+			dataOutputStream.writeInt(retentionTime); // Retention Time
+			dataOutputStream.writeFloat(chromatogram.getSupplierScan(scan).getRetentionIndex()); // Retention Index
+			dataOutputStream.writeFloat(chromatogram.getSupplierScan(scan).getTotalSignal()); // Total Signal
+			dataOutputStream.writeInt(chromatogram.getSupplierScan(scan).getTimeSegmentId()); // Time Segment Id
+			dataOutputStream.writeInt(chromatogram.getSupplierScan(scan).getCycleNumber()); // Cycle Number
 
+		}
+		//clean up flush the stream and close zip-entry 1 
+		dataOutputStream.flush();
+		zipOutputStream.closeEntry();
 	}
 
 	private void writeChromatogramBaseline(ZipOutputStream zipOutputStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
@@ -204,3 +238,4 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeChars(value); // Value
 	}
 }
+
