@@ -128,6 +128,7 @@ public class PcaEditor {
 	private FormToolkit formToolkit;
 	private Table inputFilesTable;
 	private Label countFiles;
+	private Label tableHeader;
 	private Text retentionTimeWindowText;
 	private Spinner principleComponentSpinner;
 	private Table peakListIntensityTable;
@@ -148,6 +149,10 @@ public class PcaEditor {
 	 */
 	private NumberFormat numberFormat;
 	private static final int FRACTION_DIGITS = 3;
+	/*
+	 * Peak Intensity Table Data
+	 */
+	private int currentNumberOfPeaks;
 
 	public PcaEditor() {
 
@@ -639,6 +644,19 @@ public class PcaEditor {
 	}
 
 	/**
+	 * Creates the peak intensity table labels.
+	 * 
+	 * @param client
+	 */
+	private void createPeakIntensityTableLabels(Composite client) {
+
+		tableHeader = formToolkit.createLabel(client, FILES + " " + "\t\tPeaks: " + " \tStart Peak: " + " \t End Peak: ", SWT.NONE);
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+		gridData.horizontalSpan = 2;
+		tableHeader.setLayoutData(gridData);
+	}
+
+	/**
 	 * Add the selected peak files to the input files list.
 	 * 
 	 * @param selectedChromatograms
@@ -726,6 +744,11 @@ public class PcaEditor {
 		countFiles.setText(FILES + Integer.toString(inputEntries.size()));
 	}
 
+	private void redrawTableHeader(List<IDataInputEntry> inputEntries, int numPeaks, String startPoint, String endPoint) {
+
+		tableHeader.setText(FILES + Integer.toString(inputEntries.size()) + "\t\tPeaks: " + numPeaks + " \t\tStart Peak: " + startPoint + "\t\tEnd Peak: " + endPoint);
+	}
+
 	// --------------------------------------------------------------------------------------------------------------Peak Intensity Table Page
 	private void createPeakListIntensityTablePage() {
 
@@ -734,15 +757,54 @@ public class PcaEditor {
 		 */
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Data Table");
-		//
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new FillLayout());
-		peakListIntensityTable = new Table(composite, SWT.MULTI | SWT.VIRTUAL);
+		/*
+		 * Forms API
+		 */
+		formToolkit = new FormToolkit(composite.getDisplay());
+		ScrolledForm scrolledForm = formToolkit.createScrolledForm(composite);
+		Composite scrolledFormComposite = scrolledForm.getBody();
+		scrolledFormComposite.setLayout(new TableWrapLayout());
+		scrolledForm.setText("Peak Intensity Table Editor");
+		createPeakListIntensityTableSection(scrolledFormComposite);
+		tabItem.setControl(composite);
+	}
+
+	private void createPeakListIntensityTableSection(Composite parent) {
+
+		Section section;
+		Composite client;
+		GridLayout layout;
+		/*
+		 * Section
+		 */
+		section = formToolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
+		section.setText("Peak Intensity Table");
+		section.setDescription("Click on the filename box to display a certain timerange.\n" + "Click on any peak column header to delete the corresponding column.\n");
+		section.marginWidth = 5;
+		section.marginHeight = 5;
+		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
+		/*
+		 * Set the layout for the client.
+		 */
+		client = formToolkit.createComposite(section, SWT.WRAP);
+		layout = new GridLayout();
+		layout.numColumns = 1;
+		layout.marginWidth = 2;
+		layout.marginHeight = 2;
+		client.setLayout(layout);
+		// Check if this works
+		createPeakIntensityTableLabels(client);
+		GridData gridData;
+		peakListIntensityTable = formToolkit.createTable(client, SWT.MULTI);
+		gridData = new GridData(GridData.FILL_BOTH);
+		gridData.heightHint = 300;
+		gridData.widthHint = 100;
+		gridData.verticalSpan = 3;
+		peakListIntensityTable.setLayoutData(gridData);
 		peakListIntensityTable.setHeaderVisible(true);
 		peakListIntensityTable.setLinesVisible(true);
-		//
-		tabItem.setControl(composite);
-		// add listener for rows to table
 		peakListIntensityTable.addListener(SWT.MouseDoubleClick, new Listener() {
 
 			@Override
@@ -754,11 +816,18 @@ public class PcaEditor {
 				}
 			}
 		});
+		/*
+		 * Add the client to the section and paint flat borders.
+		 */
+		section.setClient(client);
+		formToolkit.paintBordersFor(client);
 	}
 
 	private void reloadPeakListIntensityTable() {
 
 		if(peakListIntensityTable != null) {
+			String peakStartPoint;
+			String peakEndPoint;
 			/*
 			 * Remove all entries.
 			 */
@@ -779,7 +848,8 @@ public class PcaEditor {
 			for(int retentionTime : pcaResults.getExtractedRetentionTimes()) {
 				titleList.add(numberFormat.format(retentionTime / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
 			}
-			String[] titles = titleList.toArray(new String[titleList.size()]);
+			final String[] titles = titleList.toArray(new String[titleList.size()]);
+			currentNumberOfPeaks = titles.length - 1;
 			TableColumn filenameColumn = new TableColumn(peakListIntensityTable, SWT.NONE);
 			filenameColumn.setText(titles[0]);
 			/*
@@ -827,11 +897,14 @@ public class PcaEditor {
 						// Deletes columns before start range
 						for(int j = 1; j < startRow; j++) {
 							columns[j].dispose();
+							currentNumberOfPeaks--;
 						}
 						// Deletes columns after end range
 						for(int k = endRow; k < columns.length; k++) {
 							columns[k].dispose();
+							currentNumberOfPeaks--;
 						}
+						redrawTableHeader(dataInputEntries, currentNumberOfPeaks, columns[startRow].getText(), columns[endRow - 1].getText());
 					} else {
 						System.out.println("Cancel pressed");
 					}
@@ -845,6 +918,9 @@ public class PcaEditor {
 					public void widgetSelected(SelectionEvent event) {
 
 						column.dispose();
+						currentNumberOfPeaks--;
+						TableColumn[] newColumns = peakListIntensityTable.getColumns();
+						redrawTableHeader(dataInputEntries, currentNumberOfPeaks, newColumns[1].getText(), newColumns[newColumns.length - 1].getText());
 					}
 				});
 			}
@@ -867,6 +943,9 @@ public class PcaEditor {
 			for(int i = 0; i < titles.length; i++) {
 				peakListIntensityTable.getColumn(i).pack();
 			}
+			peakStartPoint = titles[1];
+			peakEndPoint = titles[titles.length - 1];
+			redrawTableHeader(dataInputEntries, currentNumberOfPeaks, peakStartPoint, peakEndPoint);
 		}
 	}
 
