@@ -129,16 +129,14 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 	}
 
 	private void writeChromatogramScans(ZipOutputStream zipOutputStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+
 		ZipEntry zipEntry;
 		DataOutputStream dataOutputStream;
-		
 		zipEntry = new ZipEntry(IFormat.FILE_SCANS_WSD);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
 		int scans = chromatogram.getNumberOfScans();
 		dataOutputStream.writeInt(scans);
-		
-		
 		for(int scan = 1; scan <= scans; scan++) {
 			monitor.subTask(IConstants.EXPORT_SCANS + scan);
 			IScanWSD scanWsd = chromatogram.getSupplierScan(scan);
@@ -150,16 +148,14 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 				dataOutputStream.writeInt(wavelength);
 				dataOutputStream.writeFloat(abundance);
 			}
-			
-			int retentionTime = chromatogram.getSupplierScan(scan).getRetentionTime();			
+			int retentionTime = chromatogram.getSupplierScan(scan).getRetentionTime();
 			dataOutputStream.writeInt(retentionTime); // Retention Time
 			dataOutputStream.writeFloat(chromatogram.getSupplierScan(scan).getRetentionIndex()); // Retention Index
 			dataOutputStream.writeFloat(chromatogram.getSupplierScan(scan).getTotalSignal()); // Total Signal
 			dataOutputStream.writeInt(chromatogram.getSupplierScan(scan).getTimeSegmentId()); // Time Segment Id
 			dataOutputStream.writeInt(chromatogram.getSupplierScan(scan).getCycleNumber()); // Cycle Number
-
 		}
-		//clean up flush the stream and close zip-entry 1 
+		// clean up flush the stream and close zip-entry 1
 		dataOutputStream.flush();
 		zipOutputStream.closeEntry();
 	}
@@ -238,4 +234,3 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeChars(value); // Value
 	}
 }
-
