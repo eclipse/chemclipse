@@ -94,8 +94,13 @@ public interface IChemClipseEvents {
 	/*
 	 * Converter MSD (mass selective)
 	 */
-	String TOPIC_CHROMATOGRAM_CONVERTER_MSD = "chromatogram/msd/update/converter/status";
-	String PROPERTY_CHROMATOGRAM_CONVERTER_MSD_INFO = IEventBroker.DATA; // String
+	String TOPIC_CHROMATOGRAM_CONVERTER_MSDx = "chromatogram/msd/update/converter/status";
+	String PROPERTY_CHROMATOGRAM_CONVERTER_MSD_INFOx = IEventBroker.DATA; // String
+	/*
+	 * Converter
+	 */
+	String TOPIC_CHROMATOGRAM_CONVERTER = "chromatogram/update/converter/status";
+	String PROPERTY_CHROMATOGRAM_CONVERTER_INFO = IEventBroker.DATA; // String
 	/*
 	 * Event Broker: Edit History
 	 */

@@ -95,34 +95,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	}
 
 	@Override
-	public void addIon(IIon ion, boolean checked) {
-
-		if(checked) {
-			addIon(ion);
-		} else {
-			ionsList.add(ion);
-			setDirty(true);
-		}
-	}
-
-	@Override
-	public void addIon(IIon ion) {
-
-		addIon(false, ion);
-	}
-
-	// ------------------------------------------private methods
-	/**
-	 * If addIntensity is true, the intensity of the given ion will be
-	 * added to the ion with the same ion value if exists.<br/>
-	 * If the ion not exists, the ion will be added normally. If
-	 * addIntensity is false, the higher of both abundance values (ion
-	 * and still existent ion) will be stored. The
-	 * 
-	 * @param addIntensity
-	 * @param ion
-	 */
-	private void addIon(boolean addIntensity, IIon ion) {
+	public void addIon(boolean addIntensity, IIon ion) {
 
 		/*
 		 * Return if the ion is null.
@@ -161,43 +134,23 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		}
 	}
 
-	/**
-	 * Adds both intensities from firstIon to secondIon.
-	 * 
-	 * @param firstIon
-	 * @param secondIon
-	 */
-	private void addIntensities(IIon firstIon, IIon secondIon) {
+	@Override
+	public void addIon(IIon ion, boolean checked) {
 
-		try {
-			firstIon.setAbundance(secondIon.getAbundance() + firstIon.getAbundance());
+		if(checked) {
+			addIon(ion);
+		} else {
+			ionsList.add(ion);
 			setDirty(true);
-		} catch(AbundanceLimitExceededException e) {
-			// If an exception will be thrown -> do nothing an keep the old
-			// value
-			setDirty(false);
 		}
 	}
 
-	/**
-	 * Adds the intensity of firstIon to secondIon.
-	 * 
-	 * @param firstIon
-	 * @param secondIon
-	 */
-	private void addHigherIntensity(IIon firstIon, IIon secondIon) {
+	@Override
+	public void addIon(IIon ion) {
 
-		try {
-			firstIon.setAbundance(secondIon.getAbundance());
-			setDirty(true);
-		} catch(AbundanceLimitExceededException e) {
-			// If an exception will be thrown -> do nothing an keep the old
-			// value
-			setDirty(false);
-		}
+		addIon(false, ion);
 	}
 
-	// ------------------------------------------private methods
 	@Override
 	public void removeIon(IIon ion) {
 
@@ -761,6 +714,42 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		AbstractScanMSD massSpectrum = (AbstractScanMSD)super.clone();
 		massSpectrum.createNewIonList();
 		return massSpectrum;
+	}
+
+	/**
+	 * Adds both intensities from firstIon to secondIon.
+	 * 
+	 * @param firstIon
+	 * @param secondIon
+	 */
+	private void addIntensities(IIon firstIon, IIon secondIon) {
+
+		try {
+			firstIon.setAbundance(secondIon.getAbundance() + firstIon.getAbundance());
+			setDirty(true);
+		} catch(AbundanceLimitExceededException e) {
+			// If an exception will be thrown -> do nothing an keep the old
+			// value
+			setDirty(false);
+		}
+	}
+
+	/**
+	 * Adds the intensity of firstIon to secondIon.
+	 * 
+	 * @param firstIon
+	 * @param secondIon
+	 */
+	private void addHigherIntensity(IIon firstIon, IIon secondIon) {
+
+		try {
+			firstIon.setAbundance(secondIon.getAbundance());
+			setDirty(true);
+		} catch(AbundanceLimitExceededException e) {
+			// If an exception will be thrown -> do nothing an keep the old
+			// value
+			setDirty(false);
+		}
 	}
 
 	/**
