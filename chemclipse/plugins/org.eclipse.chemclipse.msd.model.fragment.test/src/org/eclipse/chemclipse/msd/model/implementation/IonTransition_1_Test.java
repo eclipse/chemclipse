@@ -34,22 +34,22 @@ public class IonTransition_1_Test extends TestCase {
 
 	public void testGetFilter1FirstIon_1() {
 
-		assertEquals(120.2d, ionTransition.getFilter1FirstIon());
+		assertEquals(120.2d, ionTransition.getQ1StartIon());
 	}
 
 	public void testGetFilter1LastIon_1() {
 
-		assertEquals(121.3d, ionTransition.getFilter1LastIon());
+		assertEquals(121.3d, ionTransition.getQ1StopIon());
 	}
 
 	public void testGetFilter3FirstIon_1() {
 
-		assertEquals(88.5d, ionTransition.getFilter3FirstIon());
+		assertEquals(88.5d, ionTransition.getQ3StartIon());
 	}
 
 	public void testGetFilter3LastIon_1() {
 
-		assertEquals(87.4d, ionTransition.getFilter3LastIon());
+		assertEquals(87.4d, ionTransition.getQ3StopIon());
 	}
 
 	public void testGetCollisionEnergy_1() {

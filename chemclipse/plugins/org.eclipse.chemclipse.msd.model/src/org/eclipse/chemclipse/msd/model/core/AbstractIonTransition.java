@@ -21,17 +21,17 @@ public abstract class AbstractIonTransition implements IIonTransition {
 	 * methods.
 	 */
 	private static final long serialVersionUID = 96311762449505536L;
-	private double filter1FirstIon;
-	private double filter1LastIon;
-	private double filter3FirstIon;
-	private double filter3LastIon;
+	private double q1StartIon;
+	private double q1StopIon;
+	private double q3StartIon;
+	private double q3StopIon;
 	private double collisionEnergy;
-	private double filter1Resolution;
-	private double filter3Resolution;
+	private double q1Resolution;
+	private double q3Resolution;
 	private int transitionGroup;
 	//
-	private int filter1Ion;
-	private int filter3Ion;
+	private int q1Ion;
+	private double q3Ion;
 
 	/**
 	 * The transition has no methods to set the filter ions and the collision energy.
@@ -49,92 +49,82 @@ public abstract class AbstractIonTransition implements IIonTransition {
 	 */
 	public AbstractIonTransition(double filter1FirstIon, double filter1LastIon, double filter3FirstIon, double filter3LastIon, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup) {
 
-		this.filter1FirstIon = filter1FirstIon;
-		this.filter1LastIon = filter1LastIon;
-		this.filter3FirstIon = filter3FirstIon;
-		this.filter3LastIon = filter3LastIon;
+		this.q1StartIon = filter1FirstIon;
+		this.q1StopIon = filter1LastIon;
+		this.q3StartIon = filter3FirstIon;
+		this.q3StopIon = filter3LastIon;
 		this.collisionEnergy = collisionEnergy;
-		this.filter1Resolution = filter1Resolution;
-		this.filter3Resolution = filter3Resolution;
+		this.q1Resolution = filter1Resolution;
+		this.q3Resolution = filter3Resolution;
 		this.transitionGroup = transitionGroup;
 		//
-		filter1Ion = (int)Math.round((filter1FirstIon + filter1LastIon) / 2.0d);
-		filter3Ion = (int)Math.round((filter3FirstIon + filter3LastIon) / 2.0d);
+		q1Ion = (int)Math.round((filter1FirstIon + filter1LastIon) / 2.0d);
+		q3Ion = AbstractIon.getIon((filter3FirstIon + filter3LastIon) / 2.0d, 1);
 	}
 
-	/**
-	 * See other constructor.
-	 * 
-	 * @param filter1Ion
-	 * @param filter3Ion
-	 * @param collisionEnergy
-	 * @param filter1Resolution
-	 * @param filter3Resolution
-	 * @param transitionGroup
-	 */
 	public AbstractIonTransition(double filter1Ion, double filter3Ion, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup) {
 
 		this(filter1Ion, filter1Ion, filter3Ion, filter3Ion, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup);
 	}
 
 	@Override
-	public double getFilter1Resolution() {
+	public double getQ1Resolution() {
 
-		return filter1Resolution;
+		return q1Resolution;
 	}
 
 	@Override
-	public double getFilter3Resolution() {
+	public double getQ3Resolution() {
 
-		return filter3Resolution;
+		return q3Resolution;
 	}
 
 	@Override
-	public double getFilter1FirstIon() {
+	public double getQ1StartIon() {
 
-		return filter1FirstIon;
+		return q1StartIon;
 	}
 
 	@Override
-	public double getFilter1LastIon() {
+	public double getQ1StopIon() {
 
-		return filter1LastIon;
+		return q1StopIon;
 	}
 
 	@Override
-	public int getFilter1Ion() {
+	public int getQ1Ion() {
 
-		return filter1Ion;
+		return q1Ion;
 	}
 
 	@Override
-	public double getDeltaFilter1Ion() {
+	public double getDeltaQ1Ion() {
 
-		return filter1LastIon - filter1FirstIon;
+		return q1StopIon - q1StartIon;
 	}
 
 	@Override
-	public double getFilter3FirstIon() {
+	public double getQ3StartIon() {
 
-		return filter3FirstIon;
+		return q3StartIon;
 	}
 
 	@Override
-	public double getFilter3LastIon() {
+	public double getQ3StopIon() {
 
-		return filter3LastIon;
+		return q3StopIon;
 	}
 
 	@Override
-	public int getFilter3Ion() {
+	public double getQ3Ion() {
 
-		return filter3Ion;
+		return q3Ion;
 	}
 
 	@Override
-	public double getDeltaFilter3Ion() {
+	public double getDeltaQ3Ion() {
 
-		return filter3LastIon - filter3FirstIon;
+		return q3StopIon - q3StartIon;
 	}
 
 	@Override
@@ -163,13 +153,13 @@ public abstract class AbstractIonTransition implements IIonTransition {
 			return false;
 		}
 		AbstractIonTransition other = (AbstractIonTransition)otherObject;
-		return filter1FirstIon == other.getFilter1FirstIon() && filter1LastIon == other.getFilter1LastIon() && filter3FirstIon == other.getFilter3FirstIon() && filter3LastIon == other.getFilter3LastIon() && collisionEnergy == other.getCollisionEnergy() && transitionGroup == other.getTransitionGroup() && filter1Resolution == other.getFilter1Resolution() && filter3Resolution == other.getFilter3Resolution();
+		return q1StartIon == other.getQ1StartIon() && q1StopIon == other.getQ1StopIon() && q3StartIon == other.getQ3StartIon() && q3StopIon == other.getQ3StopIon() && collisionEnergy == other.getCollisionEnergy() && transitionGroup == other.getTransitionGroup() && q1Resolution == other.getQ1Resolution() && q3Resolution == other.getQ3Resolution();
 	}
 
 	@Override
 	public int hashCode() {
 
-		return 7 * new Double(filter1FirstIon).hashCode() + 11 * new Double(filter1LastIon).hashCode() + 13 * new Double(filter3FirstIon).hashCode() + 17 * new Double(filter3LastIon).hashCode() + 13 * new Double(collisionEnergy).hashCode() + 11 * new Integer(transitionGroup).hashCode() + 7 * new Double(filter1Resolution).hashCode() + 11 * new Double(filter3Resolution).hashCode();
+		return 7 * new Double(q1StartIon).hashCode() + 11 * new Double(q1StopIon).hashCode() + 13 * new Double(q3StartIon).hashCode() + 17 * new Double(q3StopIon).hashCode() + 13 * new Double(collisionEnergy).hashCode() + 11 * new Integer(transitionGroup).hashCode() + 7 * new Double(q1Resolution).hashCode() + 11 * new Double(q3Resolution).hashCode();
 	}
 
 	@Override
@@ -178,17 +168,17 @@ public abstract class AbstractIonTransition implements IIonTransition {
 		StringBuilder builder = new StringBuilder();
 		builder.append(getClass().getName());
 		builder.append("[");
-		builder.append("filter1FirstIon=" + filter1FirstIon);
+		builder.append("q1StartIon=" + q1StartIon);
 		builder.append(",");
-		builder.append("filter1LastIon=" + filter1LastIon);
+		builder.append("q1StopIon=" + q1StopIon);
 		builder.append(",");
-		builder.append("filter1Resolution=" + filter1Resolution);
+		builder.append("q1Resolution=" + q1Resolution);
 		builder.append(",");
-		builder.append("filter3FirstIon=" + filter3FirstIon);
+		builder.append("q3StartIon=" + q3StartIon);
 		builder.append(",");
-		builder.append("filter3LastIon=" + filter3LastIon);
+		builder.append("q3StopIon=" + q3StopIon);
 		builder.append(",");
-		builder.append("filter3Resolution=" + filter3Resolution);
+		builder.append("q3Resolution=" + q3Resolution);
 		builder.append(",");
 		builder.append("collisionEnergy=" + collisionEnergy);
 		builder.append(",");

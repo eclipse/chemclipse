@@ -177,6 +177,18 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	void addIon(IIon ion);
 
 	/**
+	 * If addIntensity is true, the intensity of the given ion will be
+	 * added to the ion with the same ion value if exists.<br/>
+	 * If the ion not exists, the ion will be added normally. If
+	 * addIntensity is false, the higher of both abundance values (ion
+	 * and still existent ion) will be stored. The
+	 * 
+	 * @param addIntensity
+	 * @param ion
+	 */
+	void addIon(boolean addIntensity, IIon ion);
+
+	/**
 	 * Removes a ion from the mass spectrum.
 	 * 
 	 * @param ion

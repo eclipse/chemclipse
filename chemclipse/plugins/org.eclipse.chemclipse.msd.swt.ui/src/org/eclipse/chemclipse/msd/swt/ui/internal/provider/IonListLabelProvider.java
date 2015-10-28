@@ -52,22 +52,22 @@ public class IonListLabelProvider extends AbstractChemClipseLabelProvider {
 			switch(columnIndex) {
 				case 0: // m/z (normal 28.3 or with Transition 128 > 78.4)
 					String mz = decimalFormat.format(ion.getIon());
-					text = (ionTransition == null) ? mz : Integer.toString((int)ionTransition.getFilter1FirstIon()) + " > " + mz;
+					text = (ionTransition == null) ? mz : Integer.toString((int)ionTransition.getQ1StartIon()) + " > " + mz;
 					break;
 				case 1: // abundance
 					text = decimalFormat.format(ion.getAbundance());
 					break;
 				case 2: // parent m/z
-					text = (ionTransition == null) ? "" : decimalFormat.format(ionTransition.getFilter1Ion());
+					text = (ionTransition == null) ? "" : decimalFormat.format(ionTransition.getQ1Ion());
 					break;
 				case 3: // parent resolution
-					text = (ionTransition == null) ? "" : decimalFormat.format(ionTransition.getFilter1Resolution());
+					text = (ionTransition == null) ? "" : decimalFormat.format(ionTransition.getQ1Resolution());
 					break;
 				case 4: // daughter m/z
-					text = (ionTransition == null) ? "" : decimalFormat.format(ionTransition.getFilter3Ion());
+					text = (ionTransition == null) ? "" : decimalFormat.format(ionTransition.getQ3Ion());
 					break;
 				case 5: // daughter resolution
-					text = (ionTransition == null) ? "" : decimalFormat.format(ionTransition.getFilter3Resolution());
+					text = (ionTransition == null) ? "" : decimalFormat.format(ionTransition.getQ3Resolution());
 					break;
 				case 6: // collision energy
 					text = (ionTransition == null) ? "" : decimalFormat.format(ionTransition.getCollisionEnergy());

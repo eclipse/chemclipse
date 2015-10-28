@@ -1227,15 +1227,15 @@ public class SeriesConverterMSD {
 			ySeries[y++] = abundance;
 		}
 		StringBuilder builder = new StringBuilder();
-		builder.append(ionTransition.getFilter1Ion());
+		builder.append(ionTransition.getQ1Ion());
 		builder.append(" > ");
-		builder.append(ionTransition.getFilter3Ion());
+		builder.append(ionTransition.getQ3Ion());
 		builder.append(" @");
 		builder.append(ionTransition.getCollisionEnergy());
 		builder.append(" r");
-		builder.append(ionTransition.getFilter1Resolution());
+		builder.append(ionTransition.getQ1Resolution());
 		builder.append(":");
-		builder.append(ionTransition.getFilter3Resolution());
+		builder.append(ionTransition.getQ3Resolution());
 		ISeries series = new Series(xSeries, ySeries, builder.toString());
 		return series;
 	}
