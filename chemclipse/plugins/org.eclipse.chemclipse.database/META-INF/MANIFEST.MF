@@ -7,7 +7,7 @@ Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.database.Activator
 Bundle-Vendor: ChemClipse
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.chemclipse.thirdpartylibraries.orientdb;bundle-version="2.1.2",
+ org.eclipse.chemclipse.thirdpartylibraries.orientdb;bundle-version="2.0.9",
  org.eclipse.chemclipse.logging;bundle-version="0.7.0",
  org.eclipse.chemclipse.support;bundle-version="0.7.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

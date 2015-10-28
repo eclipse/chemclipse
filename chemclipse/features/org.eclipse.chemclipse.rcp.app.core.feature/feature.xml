@@ -36,6 +36,14 @@ http://www.eclipse.org/legal/epl-v10.html
    <includes
          id="org.eclipse.chemclipse.thirdpartylibraries.ejml.feature"
          version="0.0.0"/>
+         
+   <includes
+         id="org.eclipse.chemclipse.thirdpartylibraries.concurrentlinkedhashmap.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.thirdpartylibraries.javassist.feature"
+         version="0.0.0"/>         
 
    <includes
          id="org.eclipse.e4.rcp"
