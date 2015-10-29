@@ -52,7 +52,7 @@ public class PrincipleComponentProcessor {
 		int typeOfExtraction = 0; // 0 = peaks, 1 = scans
 		/*
 		 * Initialize PCA Results
-		 * I've added a comment.
+		 * I've added a comment. And a new comment.
 		 */
 		PcaResults pcaResults = new PcaResults(dataInputEntries);
 		pcaResults.setRetentionTimeWindow(retentionTimeWindow);
