@@ -20,18 +20,22 @@ import org.osgi.framework.Version;
 public class Settings {
 
 	/*
-	 * The settings folder.
+	 * Application name and version are defined in the product definition
+	 * or as a parameter when starting the application.
+	 * -Dapplication.name=MyApp
+	 * -Dapplication.version=1.1.x
 	 */
 	public static final String D_APPLICATION_NAME = "application.name";
+	public static final String D_APPLICATION_VERSION = "application.version";
+	//
 	private static final String DEFAULT_APPLICATION_NAME = "Chromatography_Application";
+	private static final String DEFAULT_APPLICATION_VERSION = "0.7.x";
 	//
 	private static final String D_OSGI_INSTANCE_AREA = "osgi.instance.area";
 	private static final String D_OSGI_USER_AREA = "osgi.user.area";
 	//
 	private static File fileSettingsFolder = null; // will be initialized
 	private static File fileWorkspaceFolder = null; // will be initialized
-	//
-	private static final String DEFAULT_VERSION_IDENTIFIER = "0.7.x";
 
 	/**
 	 * Use only static methods.
@@ -70,20 +74,28 @@ public class Settings {
 	 */
 	public static final String getVersionIdentifier() {
 
-		String versionIdentifier = DEFAULT_VERSION_IDENTIFIER;
-		try {
-			Version version = Activator.getContext().getBundle().getVersion();
-			StringBuilder builder = new StringBuilder();
-			builder.append(version.getMajor());
-			builder.append(".");
-			builder.append(version.getMinor());
-			builder.append(".");
-			builder.append("x"); // version.getMicro()
-			versionIdentifier = builder.toString();
-		} catch(Exception e) {
-			System.out.println(e);
+		String applicationVersion;
+		//
+		Properties properties = System.getProperties();
+		Object name = properties.get(D_APPLICATION_VERSION);
+		if(name != null && name instanceof String) {
+			applicationVersion = (String)name;
+		} else {
+			applicationVersion = DEFAULT_APPLICATION_VERSION;
+			try {
+				Version version = Activator.getContext().getBundle().getVersion();
+				StringBuilder builder = new StringBuilder();
+				builder.append(version.getMajor());
+				builder.append(".");
+				builder.append(version.getMinor());
+				builder.append(".");
+				builder.append("x"); // version.getMicro()
+				applicationVersion = builder.toString();
+			} catch(Exception e) {
+				System.out.println(e);
+			}
 		}
-		return versionIdentifier;
+		return applicationVersion;
 	}
 
 	/**
