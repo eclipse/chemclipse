@@ -797,7 +797,7 @@ public class PcaEditor {
 		// Check if this works
 		createPeakIntensityTableLabels(client);
 		GridData gridData;
-		peakListIntensityTable = formToolkit.createTable(client, SWT.MULTI);
+		peakListIntensityTable = formToolkit.createTable(client, SWT.MULTI | SWT.VIRTUAL | SWT.CHECK);
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.heightHint = 300;
 		gridData.widthHint = 100;
@@ -813,6 +813,26 @@ public class PcaEditor {
 				TableItem[] selection = peakListIntensityTable.getSelection();
 				for(int i = 0; i < selection.length; i++) {
 					selection[i].dispose();
+				}
+			}
+		});
+		peakListIntensityTable.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent event) {
+
+				TableItem item = (TableItem)event.item;
+				String filename = item.getText();
+				Map<ISample, IPcaResult> resultMap = pcaResults.getPcaResultMap();
+				for(ISample key : resultMap.keySet()) {
+					if(key.getName().equals(filename)) {
+						if(key.isSelected()) {
+							key.setSelected(false);
+							return;
+						} else {
+							key.setSelected(true);
+							return;
+						}
+					}
 				}
 			}
 		});
@@ -930,6 +950,9 @@ public class PcaEditor {
 			for(Map.Entry<ISample, IPcaResult> entry : pcaResults.getPcaResultMap().entrySet()) {
 				int index = 0;
 				TableItem item = new TableItem(peakListIntensityTable, SWT.NONE);
+				if(entry.getKey().isSelected()) {
+					item.setChecked(true);
+				}
 				item.setText(index++, entry.getKey().getName());
 				IPcaResult pcaResult = entry.getValue();
 				double[] sampleData = pcaResult.getSampleData();
