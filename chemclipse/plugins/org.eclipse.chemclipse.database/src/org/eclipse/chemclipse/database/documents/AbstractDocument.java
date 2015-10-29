@@ -11,11 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.database.documents;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
+import com.orientechnologies.common.collection.OMultiValue;
+import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OType;
+import com.orientechnologies.orient.core.record.ORecord;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 
 @SuppressWarnings("unchecked")
@@ -180,5 +186,67 @@ public abstract class AbstractDocument extends ODocument implements IDocument {
 			arg1 = ((String)arg1).replaceAll(SINGLE_QUOTE, ESCAPED_SINGLE_QUOTE);
 		}
 		return super.field(arg0, arg1, arg2);
+	}
+
+	@Override
+	public String toString() {
+
+		try {
+			final boolean saveDirtyStatus = _dirty;
+			final boolean oldUpdateContent = _contentChanged;
+			try {
+				final StringBuilder buffer = new StringBuilder(128);
+				checkForFields();
+				final OClass _clazz = getImmutableSchemaClass();
+				if(_clazz != null)
+					buffer.append(_clazz.getStreamableName());
+				if(_recordId != null) {
+					if(_recordId.isValid())
+						buffer.append(_recordId);
+				}
+				boolean first = true;
+				for(Entry<String, Object> f : _fieldValues.entrySet()) {
+					buffer.append(first ? '{' : ',');
+					buffer.append(f.getKey());
+					buffer.append(':');
+					if(f.getValue() == null)
+						buffer.append("null");
+					else if(f.getValue() instanceof Collection<?> || f.getValue().getClass().isArray()) {
+						buffer.append("[#");
+						buffer.append(OMultiValue.getSize(f.getValue()));
+						buffer.append(':');
+						Iterator<Object> elemIterator = OMultiValue.getMultiValueIterator(f.getValue());
+						while(elemIterator.hasNext()) {
+							Long id = Long.parseLong(elemIterator.next().toString());
+							buffer.append(id);
+							if(elemIterator.hasNext()) {
+								buffer.append(',');
+							}
+						}
+						buffer.append(']');
+					} else if(f.getValue() instanceof ORecord) {
+						final ORecord record = (ORecord)f.getValue();
+						if(record.getIdentity().isValid())
+							record.getIdentity().toString(buffer);
+						else
+							buffer.append(record.toString());
+					} else
+						buffer.append(f.getValue());
+					if(first)
+						first = false;
+				}
+				if(!first)
+					buffer.append('}');
+				if(_recordId != null && _recordId.isValid()) {
+					buffer.append(" v");
+					buffer.append(_recordVersion);
+				}
+				return buffer.toString();
+			} finally {
+				_dirty = saveDirtyStatus;
+				_contentChanged = oldUpdateContent;
+			}
+		} finally {
+		}
 	}
 }
