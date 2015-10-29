@@ -217,8 +217,8 @@ public abstract class AbstractDocument extends ODocument implements IDocument {
 						buffer.append(':');
 						Iterator<Object> elemIterator = OMultiValue.getMultiValueIterator(f.getValue());
 						while(elemIterator.hasNext()) {
-							Long id = Long.parseLong(elemIterator.next().toString());
-							buffer.append(id);
+							Object next = elemIterator.next();
+							buffer.append(next.toString());
 							if(elemIterator.hasNext()) {
 								buffer.append(',');
 							}
