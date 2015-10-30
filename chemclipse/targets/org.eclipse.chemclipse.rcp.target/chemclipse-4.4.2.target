@@ -89,15 +89,15 @@
 <repository location="http://download.eclipse.org/nattable/releases/1.3.0/repository"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.ease.python.feature.feature.group" version="0.2.0.201504281226"/>
-<unit id="org.eclipse.ease.ui.feature.feature.group" version="0.2.0.201505111426"/>
-<unit id="org.eclipse.ease.modules.charting.feature.feature.group" version="0.2.0.201504281229"/>
-<unit id="org.eclipse.ease.feature.feature.group" version="0.2.0.201504281226"/>
-<unit id="org.eclipse.ease.modules.feature.feature.group" version="0.2.0.201504281229"/>
+<unit id="org.eclipse.ease.python.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ease.ui.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ease.modules.charting.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ease.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ease.modules.feature.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/ease/update/release"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.ease.python.jython.feature.feature.group" version="0.2.0.201504231511"/>
+<unit id="org.eclipse.ease.python.jython.feature.feature.group" version="0.0.0"/>
 <repository location="https://dl.bintray.com/pontesegger/ease-jython/"/>
 </location>
 </locations>
