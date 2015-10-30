@@ -192,20 +192,22 @@ public abstract class AbstractDocument extends ODocument implements IDocument {
 	public String toString() {
 
 		try {
-			final boolean saveDirtyStatus = _dirty;
-			final boolean oldUpdateContent = _contentChanged;
+			final boolean saveDirtyStatus = isDirty();
+			final boolean oldUpdateContent = isContentChanged();
 			try {
 				final StringBuilder buffer = new StringBuilder(128);
 				checkForFields();
 				final OClass _clazz = getImmutableSchemaClass();
 				if(_clazz != null)
 					buffer.append(_clazz.getStreamableName());
-				if(_recordId != null) {
-					if(_recordId.isValid())
-						buffer.append(_recordId);
+				if(getIdentity() != null) {
+					if(getIdentity().isValid())
+						buffer.append(getIdentity());
 				}
 				boolean first = true;
-				for(Entry<String, Object> f : _fieldValues.entrySet()) {
+				Iterator<Entry<String, Object>> fieldIterator = iterator();
+				while(fieldIterator.hasNext()) {
+					Entry<String, Object> f = fieldIterator.next();
 					buffer.append(first ? '{' : ',');
 					buffer.append(f.getKey());
 					buffer.append(':');
@@ -237,14 +239,18 @@ public abstract class AbstractDocument extends ODocument implements IDocument {
 				}
 				if(!first)
 					buffer.append('}');
-				if(_recordId != null && _recordId.isValid()) {
+				if(getIdentity() != null && getIdentity().isValid()) {
 					buffer.append(" v");
-					buffer.append(_recordVersion);
+					buffer.append(getRecordVersion().toString());
 				}
 				return buffer.toString();
 			} finally {
-				_dirty = saveDirtyStatus;
-				_contentChanged = oldUpdateContent;
+				if(saveDirtyStatus) {
+					setDirty();
+				}
+				if(oldUpdateContent) {
+					setContentChanged(oldUpdateContent);
+				}
 			}
 		} finally {
 		}
