@@ -13,10 +13,10 @@ package org.eclipse.chemclipse.model.history;
 
 import java.util.Date;
 
+import junit.framework.TestCase;
+
 import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.chemclipse.support.history.IEditInformation;
-
-import junit.framework.TestCase;
 
 public class EditInformation_2_Test extends TestCase {
 
@@ -44,7 +44,7 @@ public class EditInformation_2_Test extends TestCase {
 		long millisecondsEdit = editInformation.getDate().getTime();
 		long millisecondsCheck = date.getTime();
 		long delta = millisecondsCheck - millisecondsEdit;
-		assertTrue("getDate", delta > -5 && delta < 5); // Sometimes the time deviates in the check by 1 ms
+		assertTrue("getDate", delta > -100 && delta < 100); // Sometimes the time deviates in the check by 100 ms
 	}
 
 	public void testGetEditHistory_2() {
