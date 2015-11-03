@@ -23,9 +23,11 @@ import java.util.TreeSet;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISlopes;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Slopes;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
@@ -46,14 +48,14 @@ public class PrincipleComponentProcessor {
 	private static final Logger logger = Logger.getLogger(PrincipleComponentProcessor.class);
 	private static final double NORMALIZATION_FACTOR = 1000;
 
-	public PcaResults process(List<IDataInputEntry> dataInputEntries, int retentionTimeWindow, int numberOfPrincipleComponents, IProgressMonitor monitor) {// , int typeOfExtraction) {
+	public PcaResults process(List<IDataInputEntry> dataInputEntries, int retentionTimeWindow, int numberOfPrincipleComponents, IProgressMonitor monitor) {// , int extractionType) {
 
-		// PATRICK/KEVIN: added extraction type as local variable for now
-		int typeOfExtraction = 0; // 0 = peaks, 1 = scans
+		int extractionType = 0; // PATRICK: added as local variable until argument is accepted
+		if(extractionType < 0 || extractionType > 1) {
+			extractionType = 0;
+		}
 		/*
 		 * Initialize PCA Results
-		 * I've added a comment. And a new comment.
-		 * And another comment.
 		 */
 		PcaResults pcaResults = new PcaResults(dataInputEntries);
 		pcaResults.setRetentionTimeWindow(retentionTimeWindow);
@@ -66,7 +68,7 @@ public class PrincipleComponentProcessor {
 			inputFiles.add(new File(inputEntry.getInputFile()));
 		}
 		//
-		if(typeOfExtraction == 0) {
+		if(extractionType == 0) {
 			/*
 			 * Read Peaks and prepare intensity values.
 			 */
@@ -88,20 +90,77 @@ public class PrincipleComponentProcessor {
 			List<double[]> basisVectors = getBasisVectors(principleComponentAnalysis, numberOfPrincipleComponents);
 			pcaResults.setBasisVectors(basisVectors);
 			setEigenSpaceAndErrorValues(principleComponentAnalysis, pcaPeakMap, pcaResults);
-		} else if(typeOfExtraction == 1) {
+		} else if(extractionType == 1) {
 			/*
 			 * Read Scans and prepare intensity values.
 			 */
 			monitor.subTask("Extract scan values");
-			@SuppressWarnings("unused")
-			Map<String, List<Float>> scanMap = extractScans(inputFiles, monitor);
+			Map<String, ISlopes> scanMap = extractScans(inputFiles, monitor);
 			monitor.subTask("Prepare scan values");
-			// PATRICK/KEVIN TODO: convert scanMap to pcaResults
+			prepareScanPcaResults(scanMap, pcaResults);
+			SortedSet<Integer> collectedRetentionTimes = collectScanRetentionTimes(scanMap);
+			List<Integer> extractedRetentionTimes = calculateCondensedRetentionTimes(collectedRetentionTimes, retentionTimeWindow);
+			int sampleSize = extractedRetentionTimes.size();
+			pcaResults.setExtractedRetentionTimes(extractedRetentionTimes);
+			// TODO:
+			// Map<String, double[]> pcaScanMap = extractPcaScanMap(scanMap, extractedRetentionTimes, retentionTimeWindow);
+			// normalizeIntensityValues(pcaScanMap);
+			/*
+			 * Run PCA
+			 */
+			monitor.subTask("Run PCA");
+			/*
+			 * PrincipalComponentAnalysis principleComponentAnalysis = initializePCA(pcaScanMap, sampleSize, numberOfPrincipleComponents);
+			 * List<double[]> basisVectors = getBasisVectors(principleComponentAnalysis, numberOfPrincipleComponents);
+			 * pcaResults.setBasisVectors(basisVectors);
+			 * setEigenSpaceAndErrorValues(principleComponentAnalysis, pcaScanMap, pcaResults);
+			 */
 		}
 		/*
 		 * Return result.
 		 */
 		return pcaResults;
+	}
+
+	private void prepareScanPcaResults(Map<String, ISlopes> scanMap, PcaResults pcaResults) {
+
+		// ADDED CODE BY TEAM C
+		Map<ISample, IPcaResult> pcaResultMap = pcaResults.getPcaResultMap();
+		for(Map.Entry<String, ISlopes> entry : scanMap.entrySet()) {
+			PcaResult pcaResult = new PcaResult();
+			pcaResult.setSlopes(entry.getValue());
+			pcaResultMap.put(new Sample(entry.getKey()), pcaResult);
+		}
+	}
+
+	private SortedSet<Integer> collectScanRetentionTimes(Map<String, ISlopes> scanMap) {
+
+		SortedSet<Integer> collectedRetentionTimes = new TreeSet<Integer>();
+		for(Map.Entry<String, ISlopes> scansEntry : scanMap.entrySet()) {
+			ISlopes islopes = scansEntry.getValue();
+			List<Integer> retentionTimes = islopes.getRetentionTimes();
+			for(Integer retentionTime : retentionTimes) {
+				collectedRetentionTimes.add(retentionTime);
+			}
+		}
+		return collectedRetentionTimes;
+	}
+
+	private Map<String, double[]> extractPcaScanMap(Map<String, ISlopes> scanMap, List<Integer> extractedRetentionTimes, int retentionTimeWindow) {
+
+		// TODO Implement this method
+		Map<String, double[]> pcaScanMap = new HashMap<String, double[]>();
+		for(Map.Entry<String, ISlopes> ScansEntry : scanMap.entrySet()) {
+			String name = ScansEntry.getKey();
+			ISlopes scans = ScansEntry.getValue();
+			/*
+			 * double[] intensityValues = extractPcaScanIntensityValues(scans, extractedRetentionTimes, retentionTimeWindow);
+			 * pcaScanMap.put(name, intensityValues);
+			 * }
+			 * return pcaScanMap;
+			 */
+		}
+		return null;
 	}
 
 	/**
@@ -387,25 +446,32 @@ public class PrincipleComponentProcessor {
 	 * 
 	 * @param scanFiles
 	 * @param monitor
-	 * @return Map<String, List<Float>>
+	 * @return Map<String, ISlopes>
 	 */
-	private Map<String, List<Float>> extractScans(List<File> scanFiles, IProgressMonitor monitor) {
+	private Map<String, ISlopes> extractScans(List<File> scanFiles, IProgressMonitor monitor) {
 
-		Map<String, List<Float>> scanMap = new HashMap<String, List<Float>>();
+		Map<String, ISlopes> scanMap = new HashMap<String, ISlopes>();
 		for(File scanFile : scanFiles) {
 			IChromatogramMSDImportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(scanFile, monitor);
 			try {
 				IChromatogramMSD chromatogram = processingInfo.getChromatogram();
 				String name = extractNameFromFile(scanFile, "n.a.");
-				List<Float> slopes = new ArrayList<Float>();
+				Slopes slopes = new Slopes();
+				List<Float> slopeList = new ArrayList<Float>();
+				List<Integer> retentionTimes = new ArrayList<Integer>();
 				float previousSignal = 0;
+				int previousTime = 0;
 				for(IScan scan : chromatogram.getScans()) {
 					float currentSignal = scan.getTotalSignal();
-					float slope = currentSignal - previousSignal; // intensities
-					// scan.getRetentionTime()); // times
-					slopes.add(slope);
+					int currentTime = scan.getRetentionTime();
+					float slope = (currentSignal - previousSignal) / (currentTime - previousTime);
+					slopeList.add(slope);
+					retentionTimes.add(currentTime);
 					previousSignal = currentSignal;
+					previousTime = currentTime;
 				}
+				slopes.setSlopes(slopeList);
+				slopes.setRetentionTimes(retentionTimes);
 				scanMap.put(name, slopes);
 			} catch(TypeCastException e) {
 				logger.warn(e);

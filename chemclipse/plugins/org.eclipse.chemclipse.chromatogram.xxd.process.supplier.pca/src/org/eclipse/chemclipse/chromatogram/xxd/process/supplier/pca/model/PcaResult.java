@@ -15,10 +15,23 @@ import org.eclipse.chemclipse.model.core.IPeaks;
 
 public class PcaResult implements IPcaResult {
 
+	private ISlopes slopes;
 	private IPeaks peaks;
 	private double[] sampleData;
 	private double[] eigenSpace;
 	private double errorMemberShip;
+
+	@Override
+	public ISlopes getSlopes() {
+
+		return slopes;
+	}
+
+	@Override
+	public void setSlopes(ISlopes slopes) {
+
+		this.slopes = slopes;
+	}
 
 	@Override
 	public IPeaks getPeaks() {

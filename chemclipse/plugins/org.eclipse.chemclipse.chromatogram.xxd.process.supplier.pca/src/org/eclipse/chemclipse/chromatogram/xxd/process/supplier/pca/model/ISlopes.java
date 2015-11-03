@@ -11,27 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import org.eclipse.chemclipse.model.core.IPeaks;
+import java.util.List;
 
-public interface IPcaResult {
+public interface ISlopes {
 
-	ISlopes getSlopes();
+	void setSlopes(List<Float> slopes);
 
-	void setSlopes(ISlopes slopes);
+	void setRetentionTimes(List<Integer> retentionTimes);
 
-	IPeaks getPeaks();
+	List<Float> getSlopes();
 
-	void setPeaks(IPeaks peaks);
-
-	double[] getSampleData();
-
-	void setSampleData(double[] sampleData);
-
-	double[] getEigenSpace();
-
-	void setEigenSpace(double[] eigenSpace);
-
-	double getErrorMemberShip();
-
-	void setErrorMemberShip(double errorMemberShip);
+	List<Integer> getRetentionTimes();
 }
