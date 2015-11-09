@@ -354,10 +354,9 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		IIon lowest = null;
 		IIon highest = null;
 		if(hasIons()) {
-			Collections.sort(ionsList, new IonValueComparator());
-			int size = ionsList.size();
-			lowest = ionsList.get(0);
-			highest = ionsList.get(--size);
+			IonValueComparator comparator = new IonValueComparator();
+			lowest = Collections.min(ionsList, comparator);
+			highest = Collections.max(ionsList, comparator);
 			return new IonBounds(lowest, highest);
 		} else {
 			return null;
