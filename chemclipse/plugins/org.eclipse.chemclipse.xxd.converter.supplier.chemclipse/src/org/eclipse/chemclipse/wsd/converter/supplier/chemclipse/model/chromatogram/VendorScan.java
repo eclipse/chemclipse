@@ -11,34 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram;
 
-import java.util.List;
-
 import org.eclipse.chemclipse.wsd.model.core.AbstractScanWSD;
-import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 
 public class VendorScan extends AbstractScanWSD implements IVendorScan {
 
 	private static final long serialVersionUID = -6913519950824952048L;
-
-	@Override
-	public IScanSignalWSD getScanSignal(int scan) {
-
-		return null;
-	}
-
-	@Override
-	public void addScanSignal(IScanSignalWSD scanSignalWSD) {
-
-	}
-
-	@Override
-	public List<IScanSignalWSD> getScanSignals() {
-
-		return null;
-	}
-
-	@Override
-	public void removeScanSignal(int scan) {
-
-	}
 }

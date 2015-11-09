@@ -184,7 +184,7 @@ public class ChromatogramReader_2_MSD_0903_ITest extends ChromatogramReaderMSDTe
 		assertEquals(292.0d, ionTransition.getQ1StartIon());
 		assertEquals(292.0d, ionTransition.getQ1StopIon());
 		assertEquals(1.2d, ionTransition.getQ1Resolution());
-		assertEquals(206, ionTransition.getQ3Ion());
+		assertEquals(206.1d, ionTransition.getQ3Ion());
 		assertEquals(205.7d, ionTransition.getQ3StartIon());
 		assertEquals(206.4d, ionTransition.getQ3StopIon());
 		assertEquals(1.2d, ionTransition.getQ3Resolution());
@@ -203,7 +203,7 @@ public class ChromatogramReader_2_MSD_0903_ITest extends ChromatogramReaderMSDTe
 		assertEquals(161.0d, ionTransition.getQ1StartIon());
 		assertEquals(161.0d, ionTransition.getQ1StopIon());
 		assertEquals(1.2d, ionTransition.getQ1Resolution());
-		assertEquals(99, ionTransition.getQ3Ion());
+		assertEquals(99.1d, ionTransition.getQ3Ion());
 		assertEquals(98.7d, ionTransition.getQ3StartIon());
 		assertEquals(99.4d, ionTransition.getQ3StopIon());
 		assertEquals(1.2d, ionTransition.getQ3Resolution());
@@ -222,7 +222,7 @@ public class ChromatogramReader_2_MSD_0903_ITest extends ChromatogramReaderMSDTe
 		assertEquals(359.0d, ionTransition.getQ1StartIon());
 		assertEquals(359.0d, ionTransition.getQ1StopIon());
 		assertEquals(1.2d, ionTransition.getQ1Resolution());
-		assertEquals(243, ionTransition.getQ3Ion());
+		assertEquals(243.1d, ionTransition.getQ3Ion());
 		assertEquals(242.7d, ionTransition.getQ3StartIon());
 		assertEquals(243.4d, ionTransition.getQ3StopIon());
 		assertEquals(1.2d, ionTransition.getQ3Resolution());

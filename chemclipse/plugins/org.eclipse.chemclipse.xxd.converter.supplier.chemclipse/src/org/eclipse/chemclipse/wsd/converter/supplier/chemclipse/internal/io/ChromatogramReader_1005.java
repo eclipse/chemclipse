@@ -15,18 +15,29 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.zip.ZipFile;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
-import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.support.history.EditInformation;
+import org.eclipse.chemclipse.support.history.IEditHistory;
+import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.wsd.converter.io.IChromatogramWSDReader;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.IVendorChromatogram;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.IVendorScan;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.VendorChromatogram;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.VendorScan;
+import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.VendorScanSignal;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.BaselineElement;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IBaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -37,49 +48,102 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public class ChromatogramReader_1005 extends AbstractChromatogramReader implements IChromatogramWSDReader {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramReader_1005.class);
-
 	@Override
 	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
-		return readChromatogram(file, monitor);
+		IChromatogramOverview chromatogramOverview = null;
+		ZipFile zipFile = new ZipFile(file);
+		try {
+			if(isValidFileFormat(zipFile)) {
+				chromatogramOverview = readOverviewFromZipFile(zipFile, monitor);
+			}
+		} finally {
+			zipFile.close();
+		}
+		return chromatogramOverview;
+	}
+
+	private IChromatogramOverview readOverviewFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
+
+		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_TIC_MSD);
+		//
+		IVendorChromatogram chromatogram = new VendorChromatogram();
+		readScansOverview(dataInputStream, chromatogram, monitor);
+		//
+		dataInputStream.close();
+		//
+		return chromatogram;
+	}
+
+	private void readScansOverview(DataInputStream dataInputStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		IVendorScan _vendorScan;
+		int scans = dataInputStream.readInt();
+		//
+		for(int scan = 1; scan <= scans; scan++) {
+			//
+			_vendorScan = new VendorScan();
+			//
+			int retentionTime = dataInputStream.readInt();
+			float totalSignal = dataInputStream.readFloat();
+			//
+			_vendorScan.setRetentionTime(retentionTime);
+			_vendorScan.adjustTotalSignal(totalSignal);
+			//
+			chromatogram.addScan(_vendorScan);
+		}
 	}
 
 	@Override
 	public IChromatogramWSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
-		return readChromatogram(file, monitor);
-	}
-
-	private IChromatogramWSD readChromatogram(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
-
-		IVendorChromatogram chromatogram = null;
+		IChromatogramWSD chromatogram = null;
 		ZipFile zipFile = new ZipFile(file);
 		try {
 			if(isValidFileFormat(zipFile)) {
-				/*
-				 * Read the chromatographic information.
-				 */
 				monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
-				chromatogram = new VendorChromatogram();
-				readScans(zipFile, chromatogram, monitor);
+				chromatogram = readFromZipFile(zipFile, file, monitor);
 			}
 		} finally {
 			zipFile.close();
 		}
+		return chromatogram;
+	}
+
+	private IChromatogramWSD readFromZipFile(ZipFile zipFile, File file, IProgressMonitor monitor) throws IOException {
+
+		IVendorChromatogram chromatogram = new VendorChromatogram();
+		/*
+		 * Read chromatographic information... :-)
+		 */
+		readScans(zipFile, chromatogram, monitor);
+		readBaselines(zipFile, chromatogram, monitor);
+		readHistory(zipFile, chromatogram, monitor);
+		readMiscellaneous(zipFile, chromatogram, monitor);
 		//
 		return chromatogram;
 	}
 
 	private void readScans(ZipFile zipFile, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_SCANS_FID);
-		/*
-		 * Scans
-		 */
+		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_SCANS_WSD);
+		//
 		int scans = dataInputStream.readInt();
-		for(int scan = 1; scan <= scans; scan++) {
+		for(int scan = 1; scan <= scans; ++scan) {
 			monitor.subTask(IConstants.IMPORT_SCAN + scan);
+			IScanWSD scanObject = new VendorScan();
+			int scanSignals = dataInputStream.readInt();
+			//
+			for(int scanSignal = 1; scanSignal <= scanSignals; ++scanSignal) {
+				IScanSignalWSD scanSignalObject = new VendorScanSignal();
+				int abundance = dataInputStream.readInt();
+				float wavelength = dataInputStream.readFloat();
+				//
+				scanSignalObject.setAbundance(abundance);
+				scanSignalObject.setWavelength((int)wavelength);
+				//
+				scanObject.addScanSignal(scanSignalObject);
+			}
 			//
 			int retentionTime = dataInputStream.readInt();
 			float retentionIndex = dataInputStream.readFloat();
@@ -87,12 +151,84 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 			int timeSegmentId = dataInputStream.readInt();
 			int cycleNumber = dataInputStream.readInt();
 			//
-			IVendorScan scanFID = new VendorScan();
-			scanFID.setRetentionIndex(retentionIndex);
-			scanFID.setTimeSegmentId(timeSegmentId);
-			scanFID.setCycleNumber(cycleNumber);
-			chromatogram.addScan(scanFID);
+			scanObject.setRetentionTime(retentionTime);
+			scanObject.setRetentionIndex(retentionIndex);
+			scanObject.setTimeSegmentId(timeSegmentId);
+			scanObject.setCycleNumber(cycleNumber);
+			scanObject.adjustTotalSignal(totalSignal);
+			chromatogram.addScan(scanObject);
 		}
+		//
+		dataInputStream.close();
+	}
+
+	private void readBaselines(ZipFile zipFile, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_BASELINE_WSD);
+		/*
+		 * Baselines
+		 */
+		int scans = dataInputStream.readInt();
+		List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
+		for(int scan = 1; scan <= scans; ++scan) {
+			monitor.subTask(IConstants.IMPORT_SCAN + scan);
+			int retentionTime = dataInputStream.readInt();
+			float backgroundAbundance = dataInputStream.readFloat();
+			IBaselineElement baselineElement = new BaselineElement(retentionTime, backgroundAbundance);
+			baselineElements.add(baselineElement);
+		}
+		//
+		IBaselineModel baselineModel = chromatogram.getBaselineModel();
+		for(int index = 0; index < (scans - 1); ++index) {
+			/*
+			 * Retention times and background abundances.
+			 * Set the baseline.
+			 */
+			monitor.subTask(IConstants.IMPORT_BASELINE + index);
+			IBaselineElement baselineElement = baselineElements.get(index);
+			IBaselineElement baselineElementNext = baselineElements.get(index + 1);
+			int startRetentionTime = baselineElement.getRetentionTime();
+			float startBackgroundAbundance = baselineElement.getBackgroundAbundance();
+			int stopRetentionTime = baselineElementNext.getRetentionTime();
+			float stopBackgroundAbundance = baselineElementNext.getBackgroundAbundance();
+			/*
+			 * Found all baseline & next baseline elements.
+			 */
+			baselineModel.addBaseline(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance, false);
+		}
+		dataInputStream.close();
+	}
+
+	private void readHistory(ZipFile zipFile, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_HISTORY_WSD);
+		//
+		IEditHistory editHistory = chromatogram.getEditHistory();
+		int numEntries = dataInputStream.readInt();
+		for(int i = 1; i <= numEntries; ++i) {
+			long time = dataInputStream.readLong();
+			String description = readString(dataInputStream);
+			//
+			Date date = new Date(time);
+			IEditInformation editInformation = new EditInformation(date, description);
+			editHistory.add(editInformation);
+		}
+		//
+		dataInputStream.close();
+	}
+
+	private void readMiscellaneous(ZipFile zipFile, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_MISC_WSD);
+		//
+		long time = dataInputStream.readLong();
+		String miscInfo = readString(dataInputStream);
+		String operator = readString(dataInputStream);
+		//
+		Date date = new Date(time);
+		chromatogram.setDate(date);
+		chromatogram.setMiscInfo(miscInfo);
+		chromatogram.setOperator(operator);
 		//
 		dataInputStream.close();
 	}
