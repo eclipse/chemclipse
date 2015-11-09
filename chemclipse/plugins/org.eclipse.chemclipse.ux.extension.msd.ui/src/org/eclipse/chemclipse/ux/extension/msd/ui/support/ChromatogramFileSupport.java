@@ -30,9 +30,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
-/**
- * @author eselmeister
- */
 public class ChromatogramFileSupport {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramFileSupport.class);
