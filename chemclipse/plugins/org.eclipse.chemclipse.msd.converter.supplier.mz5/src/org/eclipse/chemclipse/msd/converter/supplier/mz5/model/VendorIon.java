@@ -25,7 +25,7 @@ public class VendorIon extends AbstractScanIon implements IVendorIon {
 	 */
 	private static final long serialVersionUID = 1612869889309603840L;
 	// A max value for abundance
-	public static final float MIN_ABUNDANCE = 0.0f;
+	public static final float LOWEST_INVALID_ABUNDANCE_VALUE = 0.0f;
 	public static final float MAX_ABUNDANCE = Float.MAX_VALUE;
 	// A max value for m/z
 	public static final double MIN_ION = 1.0d;
@@ -42,9 +42,9 @@ public class VendorIon extends AbstractScanIon implements IVendorIon {
 	}
 
 	@Override
-	public float getMinPossibleAbundanceValue() {
+	public float getLowestInvalidAbundanceValue() {
 
-		return MIN_ABUNDANCE;
+		return LOWEST_INVALID_ABUNDANCE_VALUE;
 	}
 
 	@Override
