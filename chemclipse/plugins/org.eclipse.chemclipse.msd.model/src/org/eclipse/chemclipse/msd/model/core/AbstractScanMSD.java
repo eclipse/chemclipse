@@ -685,18 +685,30 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 
 		StringBuilder builder = new StringBuilder();
 		builder.append(getClass().getName());
-		builder.append("[");
-		builder.append("basePeak=" + getBasePeak());
-		builder.append(",");
-		builder.append("basePeakAbundance=" + getBasePeakAbundance());
-		builder.append(",");
-		builder.append("numberOfIons=" + getNumberOfIons());
-		builder.append(",");
-		builder.append("totalSignal=" + getTotalSignal());
-		builder.append(",");
-		builder.append("isNormalized=" + isNormalized());
-		builder.append(",");
-		builder.append("normalizationBase=" + getNormalizationBase());
+		builder.append("[basePeak=");
+		builder.append(getBasePeak());
+		builder.append(",basePeakAbundance=");
+		builder.append(getBasePeakAbundance());
+		builder.append(",numberOfIons=");
+		builder.append(getNumberOfIons());
+		builder.append(",totalSignal=");
+		builder.append(getTotalSignal());
+		builder.append(",isNormalized=");
+		builder.append(isNormalized());
+		if(isNormalized()) {
+			builder.append(",normalizationBase=");
+			builder.append(getNormalizationBase());
+		}
+		builder.append(",Ion/Abundance pairs: ");
+		Iterator<IIon> iter = ionsList.iterator();
+		while(iter.hasNext()) {
+			builder.append(iter.next().getIon());
+			builder.append(":");
+			builder.append(iter.next().getAbundance());
+			if(iter.hasNext()) {
+				builder.append(", ");
+			}
+		}
 		builder.append("]");
 		return builder.toString();
 	}
