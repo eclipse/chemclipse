@@ -24,7 +24,7 @@ public class ScanIon extends AbstractScanIon implements IScanIon {
 	 */
 	private static final long serialVersionUID = -6040183420395784397L;
 	// A max value for abundance
-	public static final float MIN_ABUNDANCE = 0.0f;
+	public static final float LOWEST_INVALID_ABUNDANCE_VALUE = 0.0f;
 	public static final float MAX_ABUNDANCE = Float.MAX_VALUE;
 	// A max value for ion
 	public static final double MIN_Ion = 0.5d;
@@ -46,9 +46,9 @@ public class ScanIon extends AbstractScanIon implements IScanIon {
 	}
 
 	@Override
-	public float getMinPossibleAbundanceValue() {
+	public float getLowestInvalidAbundanceValue() {
 
-		return MIN_ABUNDANCE;
+		return LOWEST_INVALID_ABUNDANCE_VALUE;
 	}
 
 	@Override

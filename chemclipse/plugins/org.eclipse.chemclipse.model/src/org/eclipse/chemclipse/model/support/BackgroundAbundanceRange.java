@@ -25,21 +25,21 @@ public class BackgroundAbundanceRange implements IBackgroundAbundanceRange {
 	/**
 	 * Creates a new BackgroundAbundanceRange object. There are some
 	 * limitations:<br/>
-	 * The startBackgroundAbundance may not be < 0 and > MAX_ABUNDANCE. In such
-	 * a case it will be set to MIN_ABUNDANCE. The stopBackgroundAbundance
-	 * should be <= MAX_ABUNDANCE and >= 0 otherwise it will be set to
-	 * MAX_ABUNDANCE.
+	 * The startBackgroundAbundance may not be < 0 and > MAX_BACKGROUND_ABUNDANCE. In such
+	 * a case it will be set to MIN_BACKGROUND_ABUNDANCE. The stopBackgroundAbundance
+	 * should be <= MAX_BACKGROUND_ABUNDANCE and >= 0 otherwise it will be set to
+	 * MAX_BACKGROUND_ABUNDANCE.
 	 * 
 	 * @param startBackgroundAbundance
 	 * @param stopBackgroundAbundance
 	 */
 	public BackgroundAbundanceRange(float startBackgroundAbundance, float stopBackgroundAbundance) {
 
-		if(startBackgroundAbundance < MIN_ABUNDANCE || startBackgroundAbundance > MAX_ABUNDANCE) {
-			startBackgroundAbundance = MIN_ABUNDANCE;
+		if(startBackgroundAbundance < MIN_BACKGROUND_ABUNDANCE || startBackgroundAbundance > MAX_BACKGROUND_ABUNDANCE) {
+			startBackgroundAbundance = MIN_BACKGROUND_ABUNDANCE;
 		}
-		if(stopBackgroundAbundance > MAX_ABUNDANCE || stopBackgroundAbundance < MIN_ABUNDANCE) {
-			stopBackgroundAbundance = MAX_ABUNDANCE;
+		if(stopBackgroundAbundance > MAX_BACKGROUND_ABUNDANCE || stopBackgroundAbundance < MIN_BACKGROUND_ABUNDANCE) {
+			stopBackgroundAbundance = MAX_BACKGROUND_ABUNDANCE;
 		}
 		this.startBackgroundAbundance = startBackgroundAbundance;
 		this.stopBackgroundAbundance = stopBackgroundAbundance;

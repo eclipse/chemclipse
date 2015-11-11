@@ -55,7 +55,7 @@ public class BackgroundAbundanceRange_1_Test extends TestCase {
 	public void testSetup_3() {
 
 		backgroundAbundanceRange = new BackgroundAbundanceRange(-1, 5.0f);
-		assertEquals("startBackgroundAbundance", IBackgroundAbundanceRange.MIN_ABUNDANCE, backgroundAbundanceRange.getStartBackgroundAbundance());
+		assertEquals("startBackgroundAbundance", IBackgroundAbundanceRange.MIN_BACKGROUND_ABUNDANCE, backgroundAbundanceRange.getStartBackgroundAbundance());
 		assertEquals("stopBackgroundAbundance", 5.0f, backgroundAbundanceRange.getStopBackgroundAbundance());
 	}
 
@@ -63,21 +63,21 @@ public class BackgroundAbundanceRange_1_Test extends TestCase {
 
 		backgroundAbundanceRange = new BackgroundAbundanceRange(1, -1);
 		assertEquals("startBackgroundAbundance", 1.0f, backgroundAbundanceRange.getStartBackgroundAbundance());
-		assertEquals("stopBackgroundAbundance", IBackgroundAbundanceRange.MAX_ABUNDANCE, backgroundAbundanceRange.getStopBackgroundAbundance());
+		assertEquals("stopBackgroundAbundance", IBackgroundAbundanceRange.MAX_BACKGROUND_ABUNDANCE, backgroundAbundanceRange.getStopBackgroundAbundance());
 	}
 
 	public void testSetup_5() {
 
-		backgroundAbundanceRange = new BackgroundAbundanceRange(IBackgroundAbundanceRange.MAX_ABUNDANCE + 1, 5.0f);
+		backgroundAbundanceRange = new BackgroundAbundanceRange(IBackgroundAbundanceRange.MAX_BACKGROUND_ABUNDANCE + 1, 5.0f);
 		// Because max abundance can't be exceeded.
-		assertEquals("startBackgroundAbundance", IBackgroundAbundanceRange.MAX_ABUNDANCE, backgroundAbundanceRange.getStartBackgroundAbundance());
+		assertEquals("startBackgroundAbundance", IBackgroundAbundanceRange.MAX_BACKGROUND_ABUNDANCE, backgroundAbundanceRange.getStartBackgroundAbundance());
 		assertEquals("stopBackgroundAbundance", 5.0f, backgroundAbundanceRange.getStopBackgroundAbundance());
 	}
 
 	public void testSetup_6() {
 
-		backgroundAbundanceRange = new BackgroundAbundanceRange(1, IBackgroundAbundanceRange.MAX_ABUNDANCE + 1);
+		backgroundAbundanceRange = new BackgroundAbundanceRange(1, IBackgroundAbundanceRange.MAX_BACKGROUND_ABUNDANCE + 1);
 		assertEquals("startBackgroundAbundance", 1.0f, backgroundAbundanceRange.getStartBackgroundAbundance());
-		assertEquals("stopBackgroundAbundance", IBackgroundAbundanceRange.MAX_ABUNDANCE, backgroundAbundanceRange.getStopBackgroundAbundance());
+		assertEquals("stopBackgroundAbundance", IBackgroundAbundanceRange.MAX_BACKGROUND_ABUNDANCE, backgroundAbundanceRange.getStopBackgroundAbundance());
 	}
 }

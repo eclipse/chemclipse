@@ -14,13 +14,11 @@ package org.eclipse.chemclipse.model.support;
 /**
  * This class defines a start and stop background abundances used to create a
  * peak with PeakBuilder.
- * 
- * @author eselmeister
  */
 public interface IBackgroundAbundanceRange {
 
-	float MIN_ABUNDANCE = 0;
-	float MAX_ABUNDANCE = Float.MAX_VALUE;
+	float MIN_BACKGROUND_ABUNDANCE = 0;
+	float MAX_BACKGROUND_ABUNDANCE = Float.MAX_VALUE;
 
 	float getStartBackgroundAbundance();
 

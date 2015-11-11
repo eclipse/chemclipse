@@ -63,8 +63,8 @@ public abstract class AbstractScanIon extends AbstractIon implements IScanIon {
 
 		if(ignoreAbundanceLimit) {
 			super.setAbundance(abundance);
-		} else if(abundance < getMinPossibleAbundanceValue() || abundance > getMaxPossibleAbundanceValue() || Float.isNaN(abundance)) {
-			throw new AbundanceLimitExceededException("The value abundance: " + abundance + " is out of limit " + getMinPossibleAbundanceValue() + " - " + getMaxPossibleAbundanceValue());
+		} else if(abundance <= getLowestInvalidAbundanceValue() || abundance > getMaxPossibleAbundanceValue() || Float.isNaN(abundance)) {
+			throw new AbundanceLimitExceededException("The value abundance: " + abundance + " is out of limit > " + getLowestInvalidAbundanceValue() + " - " + getMaxPossibleAbundanceValue());
 		} else {
 			super.setAbundance(abundance);
 		}
@@ -124,6 +124,14 @@ public abstract class AbstractScanIon extends AbstractIon implements IScanIon {
 		builder.append(getClass().getName());
 		builder.append("[");
 		builder.append("ignoreAbundanceLimit=" + ignoreAbundanceLimit);
+		builder.append(",");
+		builder.append("maxPossibleAbundanceValue=" + getMaxPossibleAbundanceValue());
+		builder.append(",");
+		builder.append("maxPossibleIonValue=" + getMaxPossibleIonValue());
+		builder.append(",");
+		builder.append("lowestInvalidAbundanceValue=" + getLowestInvalidAbundanceValue());
+		builder.append(",");
+		builder.append("minPossibleIonValue=" + getMinPossibleIonValue());
 		builder.append("]");
 		return builder.toString();
 	}

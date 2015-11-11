@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
+import junit.framework.TestCase;
+
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-
-import junit.framework.TestCase;
 
 /**
  * Constructor test.
@@ -111,7 +111,7 @@ public class SupplierIon_1_Test extends TestCase {
 			@SuppressWarnings("unused")
 			ScanIon ion = new ScanIon(0.5f, 0.0f);
 		} catch(AbundanceLimitExceededException e) {
-			assertTrue(false);
+			assertTrue(true);
 		} catch(IonLimitExceededException e) {
 			assertTrue(false);
 		}
@@ -123,7 +123,7 @@ public class SupplierIon_1_Test extends TestCase {
 			@SuppressWarnings("unused")
 			ScanIon ion = new ScanIon(65535.0f, 0.0f);
 		} catch(AbundanceLimitExceededException e) {
-			assertTrue(false);
+			assertTrue(true);
 		} catch(IonLimitExceededException e) {
 			assertTrue(false);
 		}
@@ -180,7 +180,7 @@ public class SupplierIon_1_Test extends TestCase {
 	public void testConstructor_14() {
 
 		try {
-			ScanIon ion = new ScanIon(0.5f, 0.0f);
+			ScanIon ion = new ScanIon(0.5f, 0.1f);
 			ion.setIon(0.4f);
 		} catch(AbundanceLimitExceededException e) {
 			assertTrue(false);
