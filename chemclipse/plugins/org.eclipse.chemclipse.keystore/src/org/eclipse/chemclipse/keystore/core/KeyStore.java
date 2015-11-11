@@ -14,11 +14,11 @@ package org.eclipse.chemclipse.keystore.core;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.eclipse.core.runtime.Platform;
+import java.util.TreeSet;
 
 import org.eclipse.chemclipse.keystore.exceptions.NoKeyAvailableException;
 import org.eclipse.chemclipse.keystore.internal.support.KeyFileParser;
+import org.eclipse.core.runtime.Platform;
 
 public class KeyStore implements IKeyStore {
 
@@ -28,6 +28,12 @@ public class KeyStore implements IKeyStore {
 	public KeyStore() {
 
 		initializeKeyMap();
+	}
+
+	@Override
+	public TreeSet<String> getRegisteredIds() {
+
+		return new TreeSet<String>(keyMap.keySet());
 	}
 
 	@Override

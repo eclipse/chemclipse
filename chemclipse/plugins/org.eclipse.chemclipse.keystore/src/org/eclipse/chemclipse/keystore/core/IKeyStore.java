@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.keystore.core;
 
+import java.util.TreeSet;
+
 import org.eclipse.chemclipse.keystore.exceptions.NoKeyAvailableException;
 
 /**
@@ -22,6 +24,13 @@ import org.eclipse.chemclipse.keystore.exceptions.NoKeyAvailableException;
  * 
  */
 public interface IKeyStore {
+
+	/**
+	 * Returns the sorted set of registered keys.
+	 * 
+	 * @return Set<String>
+	 */
+	TreeSet<String> getRegisteredIds();
 
 	/**
 	 * This method returns the serial to the given id.
