@@ -25,13 +25,23 @@ import org.eclipse.chemclipse.csd.converter.supplier.jcampdx.model.IVendorScan;
 import org.eclipse.chemclipse.csd.converter.supplier.jcampdx.model.VendorChromatogram;
 import org.eclipse.chemclipse.csd.converter.supplier.jcampdx.model.VendorScan;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.identifier.scan.IScanTargetCSD;
+import org.eclipse.chemclipse.csd.model.implementation.ScanTargetCSD;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.support.IConstants;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramReader extends AbstractChromatogramCSDReader {
 
+	private static final Logger logger = Logger.getLogger(ChromatogramReader.class);
+	//
 	private static final String HEADER_TITLE = "##TITLE=";
 	private static final String HEADER_PROGRAM = "##PROGRAM=";
 	private static final String RETENTION_TIME_MARKER = "##RETENTION_TIME=";
@@ -82,7 +92,7 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 			 * [##HIT=90]
 			 */
 			if(line.startsWith(NAME_MARKER)) {
-				name = line.trim();
+				name = line.trim().replace(NAME_MARKER, "");
 			} else if(line.startsWith(TIC_MARKER)) {
 				String value = line.replace(TIC_MARKER, "").trim();
 				float abundance = Float.parseFloat(value); // TIC
@@ -102,14 +112,28 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 							 * Find the hit value and set it.
 							 */
 							boolean findHitMarker = true;
+							float matchFactor = 100.0f;
 							while((line = bufferedReader.readLine()) != null && findHitMarker) {
 								if(line.startsWith(HIT_MARKER)) {
 									String hitValue = line.replace(HIT_MARKER, "").trim();
-									Double.parseDouble(hitValue);
+									matchFactor = Float.parseFloat(hitValue);
 									findHitMarker = false;
 								} else if(line.startsWith(NAME_MARKER) || line.startsWith(TIC_MARKER)) {
 									findHitMarker = false;
 								}
+							}
+							/*
+							 * Add the target.
+							 */
+							try {
+								ILibraryInformation libraryInformation = new LibraryInformation();
+								libraryInformation.setName(name);
+								IComparisonResult comparisonResult = new ComparisonResult(matchFactor, matchFactor);
+								IScanTargetCSD scanTargetCSD = new ScanTargetCSD(libraryInformation, comparisonResult);
+								scanTargetCSD.setParentScan(scan);
+								scan.addTarget(scanTargetCSD);
+							} catch(ReferenceMustNotBeNullException e) {
+								logger.warn(e);
 							}
 						}
 					}
