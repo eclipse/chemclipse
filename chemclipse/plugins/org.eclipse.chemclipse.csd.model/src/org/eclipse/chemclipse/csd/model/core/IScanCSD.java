@@ -11,7 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.model.core;
 
+import org.eclipse.chemclipse.csd.model.core.identifier.scan.IScanTargetsCSD;
 import org.eclipse.chemclipse.model.core.IScan;
 
-public interface IScanCSD extends IScan {
+public interface IScanCSD extends IScan, IScanTargetsCSD {
 }
