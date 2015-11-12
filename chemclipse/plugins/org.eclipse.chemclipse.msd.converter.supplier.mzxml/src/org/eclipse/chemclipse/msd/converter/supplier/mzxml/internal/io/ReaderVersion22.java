@@ -124,8 +124,10 @@ public class ReaderVersion22 extends AbstractReaderVersion implements IChromatog
 					double mz = AbstractIon.getIon(values[peakIndex], ION_PRECISION);
 					float intensity = (float)values[peakIndex + 1];
 					try {
-						IVendorIon ion = new VendorIon(mz, intensity);
-						massSpectrum.addIon(ion);
+						if(intensity >= VendorIon.MIN_ABUNDANCE && intensity <= VendorIon.MAX_ABUNDANCE) {
+							IVendorIon ion = new VendorIon(mz, intensity);
+							massSpectrum.addIon(ion);
+						}
 					} catch(AbundanceLimitExceededException e) {
 						logger.warn(e);
 					} catch(IonLimitExceededException e) {
