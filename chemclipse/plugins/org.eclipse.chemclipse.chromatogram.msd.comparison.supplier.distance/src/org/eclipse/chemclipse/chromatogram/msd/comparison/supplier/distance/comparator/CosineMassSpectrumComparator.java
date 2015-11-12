@@ -11,8 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator;
 
+import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.linear.ArrayRealVector;
-
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.AbstractMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumComparatorProcessingInfo;
@@ -74,8 +75,8 @@ public class CosineMassSpectrumComparator extends AbstractMassSpectrumComparator
 		float match;
 		try {
 			match = (float)unknownVector.cosine(referenceVector);
-		} catch(Exception e) {
-			match = 0;
+		} catch(MathArithmeticException | DimensionMismatchException e) {
+			match = 0.0f;
 		}
 		return match;
 	}
