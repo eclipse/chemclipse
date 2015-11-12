@@ -103,6 +103,12 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 			 * 41.07158, 221
 			 * 44.05768, 36
 			 * ...
+			 * ##XYDATA=(X,Y)
+			 * 19 350
+			 * 26 1176
+			 * 27 3691
+			 * 28 1631
+			 * 29 3914
 			 */
 			if(line.startsWith(SCAN_NUMBER_MARKER) || line.startsWith(SCAN_MARKER)) {
 				/*
@@ -151,10 +157,9 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 					 * Mark to read ions.
 					 */
 					readIons = true;
+					readIonsSpace = false;
 					if(line.startsWith(XYDATA_MARKER_SPACE)) {
 						readIonsSpace = true;
-					} else {
-						readIonsSpace = false;
 					}
 				} else if(!line.startsWith(HEADER_MARKER) && readIons) {
 					/*
