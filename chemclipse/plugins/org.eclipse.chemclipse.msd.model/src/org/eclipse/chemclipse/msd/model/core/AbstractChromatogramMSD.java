@@ -19,16 +19,20 @@ import java.util.Set;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.noise.INoiseCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.noise.NoiseCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.DefaultNoiseCalculator;
+import org.eclipse.chemclipse.msd.model.implementation.ImmutableZeroIon;
 import org.eclipse.chemclipse.msd.model.implementation.IonTransitionSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -58,10 +62,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public abstract class AbstractChromatogramMSD extends AbstractChromatogram implements IChromatogramMSD {
 
+	private static final Logger logger = Logger.getLogger(AbstractChromatogramMSD.class);
 	private List<IChromatogramPeakMSD> peaks;
 	private Set<IChromatogramTargetMSD> targets;
 	private IIonTransitionSettings ionTransitionSettings;
 	private INoiseCalculator noiseCalculator;
+	private ImmutableZeroIon immutableZeroIon;
 
 	// -----------------------------------------------------------------
 	public AbstractChromatogramMSD() {
@@ -76,6 +82,11 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 		}
 		int segmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
 		noiseCalculator.setChromatogram(this, segmentWidth);
+		try {
+			immutableZeroIon = new ImmutableZeroIon();
+		} catch(AbundanceLimitExceededException | IonLimitExceededException e) {
+			logger.warn(e);
+		}
 	}
 
 	@Override
@@ -169,7 +180,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 			if(scan instanceof IVendorMassSpectrum) {
 				IVendorMassSpectrum ms = (IVendorMassSpectrum)scan;
 				ion = ms.getLowestAbundance();
-				if(ion != null) {
+				if(!isZeroImmutableIon(ion)) {
 					if(ion.getAbundance() < minAbundance) {
 						minAbundance = ion.getAbundance();
 					}
@@ -188,7 +199,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 			if(scan instanceof IVendorMassSpectrum) {
 				IVendorMassSpectrum ms = (IVendorMassSpectrum)scan;
 				ion = ms.getHighestAbundance();
-				if(ion != null) {
+				if(!isZeroImmutableIon(ion)) {
 					if(ion.getAbundance() > maxAbundance) {
 						maxAbundance = ion.getAbundance();
 					}
@@ -216,7 +227,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 			if(scan instanceof IVendorMassSpectrum) {
 				IVendorMassSpectrum ms = (IVendorMassSpectrum)scan;
 				IIon ion = ms.getLowestIon();
-				if(ion != null) {
+				if(!isZeroImmutableIon(ion)) {
 					actualIon = ion.getIon();
 					if(actualIon < lowestIon) {
 						lowestIon = actualIon;
@@ -245,7 +256,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 			if(scan instanceof IVendorMassSpectrum) {
 				IVendorMassSpectrum ms = (IVendorMassSpectrum)scan;
 				IIon ion = ms.getHighestIon();
-				if(ion != null) {
+				if(!isZeroImmutableIon(ion)) {
 					actualIon = ion.getIon();
 					if(actualIon > highestIon) {
 						highestIon = actualIon;
@@ -396,5 +407,14 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 		List<IChromatogramTargetMSD> targetList = new ArrayList<IChromatogramTargetMSD>(targets);
 		return targetList;
 	}
+
 	// -----------------------------------------------IChromatogramTargetsMSD
+	private boolean isZeroImmutableIon(IIon ion) {
+
+		if(immutableZeroIon.equals(ion)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
