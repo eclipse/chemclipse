@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.csd.swt.ui.converter.SeriesConverterCSD;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.swt.ui.converter.SeriesConverter;
+import org.eclipse.chemclipse.swt.ui.exceptions.NoIdentifiedScansAvailableException;
 import org.eclipse.chemclipse.swt.ui.exceptions.NoPeaksAvailableException;
 import org.eclipse.chemclipse.swt.ui.marker.MouseMoveMarker;
 import org.eclipse.chemclipse.swt.ui.marker.SelectedPositionMarker;
@@ -144,6 +145,25 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 			} catch(NoPeaksAvailableException e) {
 				/*
 				 * Do nothing.
+				 */
+			}
+			/*
+			 * Set the identified scans marker if available.
+			 */
+			try {
+				series = SeriesConverterCSD.convertIdentifiedScans(chromatogramSelection, new Offset(0, 0), Sign.POSITIVE);
+				scatterSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, series.getId());
+				scatterSeries.setXSeries(series.getXSeries());
+				scatterSeries.setYSeries(series.getYSeries());
+				scatterSeries.setLineStyle(LineStyle.NONE);
+				scatterSeries.setSymbolType(PlotSymbolType.CIRCLE);
+				scatterSeries.setSymbolSize(3);
+				scatterSeries.setLineColor(Colors.GRAY);
+				scatterSeries.setSymbolColor(Colors.DARK_GRAY);
+			} catch(NoIdentifiedScansAvailableException e) {
+				/*
+				 * Do nothing.
+				 * Just don't add the series.
 				 */
 			}
 		}
