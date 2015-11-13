@@ -87,7 +87,7 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	/**
 	 * Returns the base peak. The base peak is the peak with the highest
 	 * abundance.<br/>
-	 * If no ions are stored, null will be returned.
+	 * If no ions are stored, 0 will be returned.
 	 * 
 	 * @return float BasePeak
 	 */
@@ -95,7 +95,7 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 
 	/**
 	 * Returns the abundance of the base peak.<br/>
-	 * If no ions are stored, null will be returned.
+	 * If no ions are stored, 0 will be returned.
 	 * 
 	 * @return float BasePeakAbundance
 	 */
@@ -103,7 +103,7 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 
 	/**
 	 * Returns the lowest ion ion of the mass spectrum.<br/>
-	 * If no ions are stored, null will be returned.
+	 * If no ions are stored, the ImmutableZeroIon will be returned.
 	 * 
 	 * @return IIon
 	 */
@@ -111,7 +111,7 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 
 	/**
 	 * Returns the lowest abundance ion of the mass spectrum.<br/>
-	 * If no ions are stored, null will be returned.
+	 * If no ions are stored, the ImmutableZeroIon will be returned.
 	 * 
 	 * @return IIon
 	 */
@@ -119,7 +119,7 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 
 	/**
 	 * Returns the highest ion ion of the mass spectrum.<br/>
-	 * If no ions are stored, null will be returned.
+	 * If no ions are stored, the ImmutableZeroIon will be returned.
 	 * 
 	 * @return IIon
 	 */
@@ -127,7 +127,7 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 
 	/**
 	 * Returns the highest abundance ion of the mass spectrum.<br/>
-	 * If no ions are stored, null will be returned.
+	 * If no ions are stored, the ImmutableZeroIon will be returned.
 	 * 
 	 * @return IIon
 	 */

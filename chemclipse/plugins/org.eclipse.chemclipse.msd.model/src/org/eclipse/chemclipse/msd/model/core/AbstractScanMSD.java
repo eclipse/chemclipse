@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.IonIsNullException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.msd.model.implementation.ImmutableZeroIon;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignal;
@@ -59,6 +60,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	private boolean isNormalized = false;
 	private float normalizationBase = 0.0f;
 	private List<IIon> ionsList;
+	private ImmutableZeroIon immutableZeroIon;
 	/*
 	 * Targets and referenced mass spectra.
 	 */
@@ -76,6 +78,11 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		 */
 		createNewIonList();
 		targets = new HashSet<IMassSpectrumTarget>();
+		try {
+			immutableZeroIon = new ImmutableZeroIon();
+		} catch(AbundanceLimitExceededException | IonLimitExceededException e) {
+			logger.warn(e);
+		}
 	}
 
 	// -----------------------------IMassSpectrum
@@ -310,7 +317,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			int size = ionsList.size();
 			return ionsList.get(--size);
 		} else {
-			return null;
+			return immutableZeroIon;
 		}
 	}
 
@@ -322,7 +329,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			int size = ionsList.size();
 			return ionsList.get(--size);
 		} else {
-			return null;
+			return immutableZeroIon;
 		}
 	}
 
@@ -333,7 +340,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			Collections.sort(ionsList, new IonAbundanceComparator());
 			return ionsList.get(0);
 		} else {
-			return null;
+			return immutableZeroIon;
 		}
 	}
 
@@ -344,7 +351,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			Collections.sort(ionsList, new IonValueComparator());
 			return ionsList.get(0);
 		} else {
-			return null;
+			return immutableZeroIon;
 		}
 	}
 
