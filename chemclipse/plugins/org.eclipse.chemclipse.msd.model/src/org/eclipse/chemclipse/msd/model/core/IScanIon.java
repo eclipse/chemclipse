@@ -14,14 +14,14 @@ package org.eclipse.chemclipse.msd.model.core;
 public interface IScanIon extends IIon {
 
 	/**
-	 * The abundance must be > than the given value.<br/>
+	 * Returns the minimal possible abundance value.<br/>
 	 * It could be that the range of the abundance range differs from
 	 * manufacturer to manufacturer.<br/>
 	 * Be aware of that!
 	 * 
 	 * @return float
 	 */
-	float getLowestInvalidAbundanceValue();
+	float getMinPossibleAbundanceValue();
 
 	/**
 	 * Returns the maximal possible abundance value.<br/>

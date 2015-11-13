@@ -17,8 +17,15 @@ import java.util.List;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
+import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.numeric.core.IPoint;
+import org.eclipse.chemclipse.numeric.equations.Equations;
+import org.eclipse.chemclipse.numeric.equations.LinearEquation;
+import org.eclipse.chemclipse.numeric.exceptions.SolverException;
 import org.eclipse.chemclipse.swt.ui.converter.SeriesConverter;
+import org.eclipse.chemclipse.swt.ui.exceptions.NoIdentifiedScansAvailableException;
 import org.eclipse.chemclipse.swt.ui.exceptions.NoPeaksAvailableException;
 import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
@@ -27,10 +34,6 @@ import org.eclipse.chemclipse.swt.ui.series.Series;
 import org.eclipse.chemclipse.swt.ui.support.IOffset;
 import org.eclipse.chemclipse.swt.ui.support.Offset;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
-import org.eclipse.chemclipse.numeric.core.IPoint;
-import org.eclipse.chemclipse.numeric.equations.Equations;
-import org.eclipse.chemclipse.numeric.equations.LinearEquation;
-import org.eclipse.chemclipse.numeric.exceptions.SolverException;
 
 public class SeriesConverterCSD {
 
@@ -212,6 +215,95 @@ public class SeriesConverterCSD {
 			}
 		}
 		return peakSeries;
+	}
+
+	public static ISeries convertIdentifiedScans(IChromatogramSelectionCSD chromatogramSelection, IOffset offset, Sign sign) throws NoIdentifiedScansAvailableException {
+
+		IMultipleSeries identifiedScansSeries = convertIdentifiedScans(chromatogramSelection, sign, offset);
+		return identifiedScansSeries.getMultipleSeries().get(0);
+	}
+
+	public static List<IScanCSD> getIdentifiedScans(IChromatogramSelectionCSD chromatogramSelection, boolean enforceLoadScanProxy) {
+
+		List<IScanCSD> identifiedScans = new ArrayList<IScanCSD>();
+		List<IScan> scans = chromatogramSelection.getChromatogram().getScans();
+		int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+		int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+		//
+		for(IScan scan : scans) {
+			if(scan instanceof IScanCSD) {
+				IScanCSD scanCSD = (IScanCSD)scan;
+				if(scanCSD.getTargets().size() > 0) {
+					int retentionTime = scanCSD.getRetentionTime();
+					if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
+						identifiedScans.add(scanCSD);
+					}
+				}
+			}
+		}
+		return identifiedScans;
+	}
+
+	private static IMultipleSeries convertIdentifiedScans(IChromatogramSelectionCSD chromatogramSelection, Sign sign, IOffset offset) throws NoIdentifiedScansAvailableException {
+
+		/*
+		 * There must be at least one chromatogram in the list.
+		 */
+		IMultipleSeries identifiedScanSeries = new MultipleSeries();
+		if(chromatogramSelection != null) {
+			offset = SeriesConverter.validateOffset(offset);
+			List<IScanCSD> identifiedScans = getIdentifiedScans(chromatogramSelection, false);
+			int amountIdentifiedScans = identifiedScans.size();
+			if(amountIdentifiedScans == 0) {
+				throw new NoIdentifiedScansAvailableException();
+			}
+			/*
+			 * Get the retention time and max abundance value for each peak.
+			 */
+			double[] xSeries = new double[amountIdentifiedScans];
+			double[] ySeries = new double[amountIdentifiedScans];
+			int x = 0;
+			int y = 0;
+			double retentionTime;
+			double abundance;
+			double xOffset;
+			double yOffset;
+			/*
+			 * Iterate through all identified scans of the chromatogram selection.
+			 */
+			for(IScanCSD identifiedScan : identifiedScans) {
+				/*
+				 * Retrieve the x and y signal of each peak.
+				 */
+				retentionTime = identifiedScan.getRetentionTime();
+				abundance = identifiedScan.getTotalSignal();
+				/*
+				 * Sign the abundance as a negative value?
+				 */
+				xOffset = offset.getCurrentXOffset();
+				yOffset = offset.getCurrentYOffset();
+				if(sign == Sign.NEGATIVE) {
+					abundance *= -1;
+					xOffset *= -1;
+					yOffset *= -1;
+				}
+				/*
+				 * Set the offset.
+				 */
+				retentionTime += xOffset;
+				abundance += yOffset;
+				/*
+				 * Store the values in the array.
+				 */
+				xSeries[x++] = retentionTime;
+				ySeries[y++] = abundance;
+				/*
+				 * Add the peak.
+				 */
+				identifiedScanSeries.add(new Series(xSeries, ySeries, "Identified Scans"));
+			}
+		}
+		return identifiedScanSeries;
 	}
 
 	// TODO JUnit
