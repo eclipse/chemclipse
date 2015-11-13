@@ -702,9 +702,10 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		builder.append(",Ion/Abundance pairs: ");
 		Iterator<IIon> iter = ionsList.iterator();
 		while(iter.hasNext()) {
-			builder.append(iter.next().getIon());
+			IIon ion = iter.next();
+			builder.append(ion.getIon());
 			builder.append(":");
-			builder.append(iter.next().getAbundance());
+			builder.append(ion.getAbundance());
 			if(iter.hasNext()) {
 				builder.append(", ");
 			}
