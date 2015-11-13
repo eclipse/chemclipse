@@ -32,7 +32,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaRes
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PeakInputFilesWizard;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PeakIntensityTableTimeRangeWizard;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.TimeRangeWizard;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -882,7 +882,7 @@ public class PcaEditor {
 					/*
 					 * Make wizard to allow user to input time range for table
 					 */
-					PeakIntensityTableTimeRangeWizard tableWizard = new PeakIntensityTableTimeRangeWizard();
+					TimeRangeWizard tableWizard = new TimeRangeWizard();
 					WizardDialog wizardDialog = new WizardDialog(Display.getCurrent().getActiveShell(), tableWizard);
 					int returnCode = wizardDialog.open();
 					String range = tableWizard.getTextOne();

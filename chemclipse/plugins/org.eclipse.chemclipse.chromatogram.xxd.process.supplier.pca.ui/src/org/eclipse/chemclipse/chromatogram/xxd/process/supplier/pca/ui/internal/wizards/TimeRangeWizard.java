@@ -14,12 +14,12 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 
 import org.eclipse.jface.wizard.Wizard;
 
-public class PeakIntensityTableTimeRangeWizard extends Wizard {
+public class TimeRangeWizard extends Wizard {
 
-	protected PeakIntensityTableTimeRangeWizardPage timeRangeWizardPage;
+	protected TimeRangeWizardPage timeRangeWizardPage;
 	public String textRetentionTimeRange;
 
-	public PeakIntensityTableTimeRangeWizard() {
+	public TimeRangeWizard() {
 
 		super();
 		setNeedsProgressMonitor(true);
@@ -34,7 +34,7 @@ public class PeakIntensityTableTimeRangeWizard extends Wizard {
 	@Override
 	public void addPages() {
 
-		timeRangeWizardPage = new PeakIntensityTableTimeRangeWizardPage();
+		timeRangeWizardPage = new TimeRangeWizardPage();
 		addPage(timeRangeWizardPage);
 	}
 
@@ -48,7 +48,7 @@ public class PeakIntensityTableTimeRangeWizard extends Wizard {
 	/*
 	 * Gets first page of wizard
 	 */
-	public PeakIntensityTableTimeRangeWizardPage getPageOne() {
+	public TimeRangeWizardPage getPageOne() {
 
 		return timeRangeWizardPage;
 	}

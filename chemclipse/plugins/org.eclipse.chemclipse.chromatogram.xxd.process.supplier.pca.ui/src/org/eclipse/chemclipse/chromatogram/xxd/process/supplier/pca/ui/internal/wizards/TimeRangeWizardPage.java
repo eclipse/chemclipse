@@ -22,11 +22,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class PeakIntensityTableTimeRangeWizardPage extends WizardPage {
+public class TimeRangeWizardPage extends WizardPage {
 
 	private Text textRetentionTimeRange;
 
-	public PeakIntensityTableTimeRangeWizardPage() {
+	public TimeRangeWizardPage() {
 
 		super("Peak Intensity Table Actions");
 		setTitle("Peak Intensity Table Actions");
