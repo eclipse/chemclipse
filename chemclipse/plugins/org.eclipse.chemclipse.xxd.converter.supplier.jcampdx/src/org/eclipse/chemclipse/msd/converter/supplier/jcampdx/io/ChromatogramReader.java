@@ -165,35 +165,35 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 					/*
 					 * Parse the ions.
 					 */
-					line = line.trim();
-					if(readIonsSpace) {
-						String[] values = line.split(ION_DELIMITER_COMMA);
-						if(values.length == 2) {
-							double mz = Double.parseDouble(values[0].trim());
-							float abundance = Float.parseFloat(values[1].trim());
-							try {
-								ion = new VendorIon(mz, abundance);
-								massSpectrum.addIon(ion);
-							} catch(AbundanceLimitExceededException e) {
-								logger.warn(e);
-							} catch(IonLimitExceededException e) {
-								logger.warn(e);
+					try {
+						line = line.trim();
+						if(readIonsSpace) {
+							String[] values = line.split(ION_DELIMITER_COMMA);
+							if(values.length == 2) {
+								double mz = Double.parseDouble(values[0].trim());
+								float abundance = Float.parseFloat(values[1].trim());
+								if(abundance >= VendorIon.MIN_ABUNDANCE && abundance <= VendorIon.MAX_ABUNDANCE) {
+									ion = new VendorIon(mz, abundance);
+									massSpectrum.addIon(ion);
+								}
+							}
+						} else {
+							String[] values = line.split(ION_DELIMITER_WHITESPACE);
+							if(values.length == 2) {
+								double mz = Double.parseDouble(values[0].trim());
+								float abundance = Float.parseFloat(values[1].trim());
+								if(abundance >= VendorIon.MIN_ABUNDANCE && abundance <= VendorIon.MAX_ABUNDANCE) {
+									ion = new VendorIon(mz, abundance);
+									massSpectrum.addIon(ion);
+								}
 							}
 						}
-					} else {
-						String[] values = line.split(ION_DELIMITER_WHITESPACE);
-						if(values.length == 2) {
-							double mz = Integer.parseInt(values[0].trim());
-							float abundance = Integer.parseInt(values[1].trim());
-							try {
-								ion = new VendorIon(mz, abundance);
-								massSpectrum.addIon(ion);
-							} catch(AbundanceLimitExceededException e) {
-								logger.warn(e);
-							} catch(IonLimitExceededException e) {
-								logger.warn(e);
-							}
-						}
+					} catch(AbundanceLimitExceededException e) {
+						logger.warn(e);
+					} catch(IonLimitExceededException e) {
+						logger.warn(e);
+					} catch(NumberFormatException e) {
+						logger.warn(e);
 					}
 				}
 			}
@@ -250,10 +250,11 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 				 * Set a tic value only if a retention time is available.
 				 */
 				if(line.startsWith(TIC_MARKER) && retentionTimeIsAvailable) {
-					String value = line.replace(TIC_MARKER, "").trim();
-					float abundance = Float.parseFloat(value);
 					try {
-						IVendorIon ion = new VendorIon(AbstractIon.TIC_ION, abundance);
+						String value = line.replace(TIC_MARKER, "").trim();
+						float abundance = Float.parseFloat(value);
+						IVendorIon ion = new VendorIon(AbstractIon.TIC_ION, true);
+						ion.setAbundance(abundance);
 						IVendorScan massSpectrum = new VendorScan();
 						/*
 						 * Set retentionTimeIsAvailable = false
@@ -265,11 +266,15 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 						massSpectrum.setRetentionTime(retentionTime);
 						retentionTimeIsAvailable = false;
 						//
-						massSpectrum.addIon(ion);
-						chromatogram.addScan(massSpectrum);
+						if(retentionTime >= 0) {
+							massSpectrum.addIon(ion);
+							chromatogram.addScan(massSpectrum);
+						}
 					} catch(AbundanceLimitExceededException e) {
 						logger.warn(e);
 					} catch(IonLimitExceededException e) {
+						logger.warn(e);
+					} catch(NumberFormatException e) {
 						logger.warn(e);
 					}
 				}
@@ -290,33 +295,46 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 		 * The retention time is stored in seconds scale.
 		 * Milliseconds = seconds * 1000.0d
 		 */
-		int retentionTime = 0;
-		if(line.startsWith(RETENTION_TIME_MARKER)) {
-			String value = line.replace(RETENTION_TIME_MARKER, "").trim();
-			retentionTime = (int)(Double.parseDouble(value) * 1000.0d);
-		} else if(line.startsWith(TIME_MARKER)) {
-			String value = line.replace(TIME_MARKER, "").trim();
-			retentionTime = (int)(Double.parseDouble(value) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+		int retentionTime = -1;
+		try {
+			if(line.startsWith(RETENTION_TIME_MARKER)) {
+				String value = line.replace(RETENTION_TIME_MARKER, "").trim();
+				retentionTime = (int)(Double.parseDouble(value) * 1000.0d);
+			} else if(line.startsWith(TIME_MARKER)) {
+				String value = line.replace(TIME_MARKER, "").trim();
+				retentionTime = (int)(Double.parseDouble(value) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+			}
+		} catch(NumberFormatException e) {
+			logger.warn(e);
 		}
 		return retentionTime;
 	}
 
 	private boolean isValidFileFormat(File file) throws IOException {
 
+		boolean isValidFormat = false;
 		FileReader fileReader = new FileReader(file);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
+		String line = bufferedReader.readLine();
 		/*
 		 * Check the first column header.
 		 */
-		String line = bufferedReader.readLine();
+		if(line.startsWith(HEADER_TITLE) || line.startsWith(HEADER_PROGRAM)) {
+			boolean readIons = false;
+			exitloop:
+			while((line = bufferedReader.readLine()) != null) {
+				if(line.startsWith(XYDATA_MARKER_SPACE) || line.startsWith(XYDATA_MARKER_SHORT)) {
+					readIons = true;
+				} else if(!line.startsWith(HEADER_MARKER) && readIons) {
+					isValidFormat = true;
+					break exitloop;
+				}
+			}
+		}
 		//
 		bufferedReader.close();
 		fileReader.close();
 		//
-		if(line.startsWith(HEADER_TITLE) || line.startsWith(HEADER_PROGRAM)) {
-			return true;
-		} else {
-			return false;
-		}
+		return isValidFormat;
 	}
 }

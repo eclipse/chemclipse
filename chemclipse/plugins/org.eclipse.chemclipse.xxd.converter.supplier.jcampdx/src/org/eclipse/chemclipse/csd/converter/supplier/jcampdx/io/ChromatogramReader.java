@@ -49,6 +49,10 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 	private static final String TIC_MARKER = "##TIC=";
 	private static final String NAME_MARKER = "##NAME=";
 	private static final String HIT_MARKER = "##HIT=";
+	//
+	private static final String XYDATA_MARKER_SPACE = "##XYDATA= (XY..XY)";
+	private static final String XYDATA_MARKER_SHORT = "##XYDATA=(X,Y)";
+	private static final String HEADER_MARKER = "##";
 
 	@Override
 	public IChromatogramCSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -94,46 +98,57 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 			if(line.startsWith(NAME_MARKER)) {
 				name = line.trim().replace(NAME_MARKER, "");
 			} else if(line.startsWith(TIC_MARKER)) {
-				String value = line.replace(TIC_MARKER, "").trim();
-				float abundance = Float.parseFloat(value); // TIC
+				float abundance = 0;
+				try {
+					String value = line.replace(TIC_MARKER, "").trim();
+					abundance = Float.parseFloat(value); // TIC
+				} catch(NumberFormatException e) {
+					logger.warn(e);
+				}
 				bufferedReader.readLine(); // SCAN
 				//
 				if((line = bufferedReader.readLine()) != null) {
 					if(line.startsWith(RETENTION_TIME_MARKER) || line.startsWith(TIME_MARKER)) {
 						int retentionTime = getRetentionTime(line);
-						IVendorScan scan = new VendorScan(abundance);
-						scan.setRetentionTime(retentionTime);
-						chromatogram.addScan(scan);
-						/*
-						 * Add the identification
-						 */
-						if(!name.equals("")) {
+						if(retentionTime >= 0 && abundance > 0) {
+							IVendorScan scan = new VendorScan(abundance);
+							scan.setRetentionTime(retentionTime);
+							chromatogram.addScan(scan);
 							/*
-							 * Find the hit value and set it.
+							 * Add the identification
 							 */
-							boolean findHitMarker = true;
-							float matchFactor = 100.0f;
-							while((line = bufferedReader.readLine()) != null && findHitMarker) {
-								if(line.startsWith(HIT_MARKER)) {
-									String hitValue = line.replace(HIT_MARKER, "").trim();
-									matchFactor = Float.parseFloat(hitValue);
-									findHitMarker = false;
-								} else if(line.startsWith(NAME_MARKER) || line.startsWith(TIC_MARKER)) {
-									findHitMarker = false;
+							if(!name.equals("")) {
+								/*
+								 * Find the hit value and set it.
+								 */
+								boolean findHitMarker = true;
+								float matchFactor = 100.0f;
+								while((line = bufferedReader.readLine()) != null && findHitMarker) {
+									if(line.startsWith(HIT_MARKER)) {
+										try {
+											String hitValue = line.replace(HIT_MARKER, "").trim();
+											matchFactor = Float.parseFloat(hitValue);
+											findHitMarker = false;
+										} catch(NumberFormatException e) {
+											logger.warn(e);
+										}
+									} else if(line.startsWith(NAME_MARKER) || line.startsWith(TIC_MARKER)) {
+										findHitMarker = false;
+									}
 								}
-							}
-							/*
-							 * Add the target.
-							 */
-							try {
-								ILibraryInformation libraryInformation = new LibraryInformation();
-								libraryInformation.setName(name);
-								IComparisonResult comparisonResult = new ComparisonResult(matchFactor, matchFactor);
-								IScanTargetCSD scanTargetCSD = new ScanTargetCSD(libraryInformation, comparisonResult);
-								scanTargetCSD.setParentScan(scan);
-								scan.addTarget(scanTargetCSD);
-							} catch(ReferenceMustNotBeNullException e) {
-								logger.warn(e);
+								/*
+								 * Add the target.
+								 */
+								try {
+									ILibraryInformation libraryInformation = new LibraryInformation();
+									libraryInformation.setName(name);
+									IComparisonResult comparisonResult = new ComparisonResult(matchFactor, matchFactor);
+									IScanTargetCSD scanTargetCSD = new ScanTargetCSD(libraryInformation, comparisonResult);
+									scanTargetCSD.setParentScan(scan);
+									scan.addTarget(scanTargetCSD);
+								} catch(ReferenceMustNotBeNullException e) {
+									logger.warn(e);
+								}
 							}
 						}
 					}
@@ -170,33 +185,46 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 		 * The retention time is stored in seconds scale.
 		 * Milliseconds = seconds * 1000.0d
 		 */
-		int retentionTime = 0;
-		if(line.startsWith(RETENTION_TIME_MARKER)) {
-			String value = line.replace(RETENTION_TIME_MARKER, "").trim();
-			retentionTime = (int)(Double.parseDouble(value) * 1000.0d);
-		} else if(line.startsWith(TIME_MARKER)) {
-			String value = line.replace(TIME_MARKER, "").trim();
-			retentionTime = (int)(Double.parseDouble(value) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+		int retentionTime = -1;
+		try {
+			if(line.startsWith(RETENTION_TIME_MARKER)) {
+				String value = line.replace(RETENTION_TIME_MARKER, "").trim();
+				retentionTime = (int)(Double.parseDouble(value) * 1000.0d);
+			} else if(line.startsWith(TIME_MARKER)) {
+				String value = line.replace(TIME_MARKER, "").trim();
+				retentionTime = (int)(Double.parseDouble(value) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+			}
+		} catch(NumberFormatException e) {
+			logger.warn(e);
 		}
 		return retentionTime;
 	}
 
 	private boolean isValidFileFormat(File file) throws IOException {
 
+		boolean isValidFormat = true;
 		FileReader fileReader = new FileReader(file);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
+		String line = bufferedReader.readLine();
 		/*
 		 * Check the first column header.
 		 */
-		String line = bufferedReader.readLine();
+		if(line.startsWith(HEADER_TITLE) || line.startsWith(HEADER_PROGRAM)) {
+			boolean readIons = false;
+			exitloop:
+			while((line = bufferedReader.readLine()) != null) {
+				if(line.startsWith(XYDATA_MARKER_SPACE) || line.startsWith(XYDATA_MARKER_SHORT)) {
+					readIons = true;
+				} else if(!line.startsWith(HEADER_MARKER) && readIons) {
+					isValidFormat = false;
+					break exitloop;
+				}
+			}
+		}
 		//
 		bufferedReader.close();
 		fileReader.close();
 		//
-		if(line.startsWith(HEADER_TITLE) || line.startsWith(HEADER_PROGRAM)) {
-			return true;
-		} else {
-			return false;
-		}
+		return isValidFormat;
 	}
 }

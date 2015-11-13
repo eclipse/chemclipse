@@ -137,35 +137,35 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 					/*
 					 * Parse the ions.
 					 */
-					line = line.trim();
-					if(readIonsSpace) {
-						String[] values = line.split(ION_DELIMITER_COMMA);
-						if(values.length == 2) {
-							double mz = Double.parseDouble(values[0].trim());
-							float abundance = Float.parseFloat(values[1].trim());
-							try {
-								ion = new VendorIon(mz, abundance);
-								massSpectrum.addIon(ion);
-							} catch(AbundanceLimitExceededException e) {
-								logger.warn(e);
-							} catch(IonLimitExceededException e) {
-								logger.warn(e);
+					try {
+						line = line.trim();
+						if(readIonsSpace) {
+							String[] values = line.split(ION_DELIMITER_COMMA);
+							if(values.length == 2) {
+								double mz = Double.parseDouble(values[0].trim());
+								float abundance = Float.parseFloat(values[1].trim());
+								if(abundance >= VendorIon.MIN_ABUNDANCE && abundance <= VendorIon.MAX_ABUNDANCE) {
+									ion = new VendorIon(mz, abundance);
+									massSpectrum.addIon(ion);
+								}
+							}
+						} else {
+							String[] values = line.split(ION_DELIMITER_WHITESPACE);
+							if(values.length == 2) {
+								double mz = Double.parseDouble(values[0].trim());
+								float abundance = Float.parseFloat(values[1].trim());
+								if(abundance >= VendorIon.MIN_ABUNDANCE && abundance <= VendorIon.MAX_ABUNDANCE) {
+									ion = new VendorIon(mz, abundance);
+									massSpectrum.addIon(ion);
+								}
 							}
 						}
-					} else {
-						String[] values = line.split(ION_DELIMITER_WHITESPACE);
-						if(values.length == 2) {
-							double mz = Integer.parseInt(values[0].trim());
-							float abundance = Float.parseFloat(values[1].trim());
-							try {
-								ion = new VendorIon(mz, abundance);
-								massSpectrum.addIon(ion);
-							} catch(AbundanceLimitExceededException e) {
-								logger.warn(e);
-							} catch(IonLimitExceededException e) {
-								logger.warn(e);
-							}
-						}
+					} catch(AbundanceLimitExceededException e) {
+						logger.warn(e);
+					} catch(IonLimitExceededException e) {
+						logger.warn(e);
+					} catch(NumberFormatException e) {
+						logger.warn(e);
 					}
 				}
 			}
@@ -195,12 +195,16 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 		 * Milliseconds = seconds * 1000.0d
 		 */
 		int retentionTime = 0;
-		if(line.startsWith(RETENTION_TIME_MARKER)) {
-			String value = line.replace(RETENTION_TIME_MARKER, "").trim();
-			retentionTime = (int)(Double.parseDouble(value) * 1000.0d);
-		} else if(line.startsWith(TIME_MARKER)) {
-			String value = line.replace(TIME_MARKER, "").trim();
-			retentionTime = (int)(Double.parseDouble(value) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+		try {
+			if(line.startsWith(RETENTION_TIME_MARKER)) {
+				String value = line.replace(RETENTION_TIME_MARKER, "").trim();
+				retentionTime = (int)(Double.parseDouble(value) * 1000.0d);
+			} else if(line.startsWith(TIME_MARKER)) {
+				String value = line.replace(TIME_MARKER, "").trim();
+				retentionTime = (int)(Double.parseDouble(value) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+			}
+		} catch(NumberFormatException e) {
+			logger.warn(e);
 		}
 		return retentionTime;
 	}
