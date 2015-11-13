@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
+import junit.framework.TestCase;
+
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-
-import junit.framework.TestCase;
 
 /**
  * massSpectrum = new DefaultMassSpectrum();
@@ -75,24 +75,44 @@ public class MassSpectrum_3_Test extends TestCase {
 		assertEquals("getBasePeakAbundance", 0.0f, massSpectrum.getBasePeakAbundance());
 	}
 
-	public void testGetHighestAbundance_1() {
+	public void testGetHighestAbundance_1a() {
 
-		assertEquals("getHighestAbundance", null, massSpectrum.getHighestAbundance());
+		assertEquals("getHighestAbundance", 0.0d, massSpectrum.getHighestAbundance().getIon());
 	}
 
-	public void testGetHighestIon_1() {
+	public void testGetHighestAbundance_1b() {
 
-		assertEquals("getHighestIon", null, massSpectrum.getHighestIon());
+		assertEquals("getHighestAbundance", 0.0f, massSpectrum.getHighestAbundance().getAbundance());
 	}
 
-	public void testGetLowestAbundance_1() {
+	public void testGetHighestIon_1a() {
 
-		assertEquals("getLowestAbundance", null, massSpectrum.getLowestAbundance());
+		assertEquals("getHighestIon", 0.0d, massSpectrum.getHighestIon().getIon());
 	}
 
-	public void testGetLowestIon_1() {
+	public void testGetHighestIon_1b() {
 
-		assertEquals("getLowestIon", null, massSpectrum.getLowestIon());
+		assertEquals("getHighestIon", 0.0f, massSpectrum.getHighestIon().getAbundance());
+	}
+
+	public void testGetLowestAbundance_1a() {
+
+		assertEquals("getLowestAbundance", 0.0d, massSpectrum.getLowestAbundance().getIon());
+	}
+
+	public void testGetLowestAbundance_1b() {
+
+		assertEquals("getLowestAbundance", 0.0f, massSpectrum.getLowestAbundance().getAbundance());
+	}
+
+	public void testGetLowestIon_1a() {
+
+		assertEquals("getLowestIon", 0.0d, massSpectrum.getLowestIon().getIon());
+	}
+
+	public void testGetLowestIon_1b() {
+
+		assertEquals("getLowestIon", 0.0f, massSpectrum.getLowestIon().getAbundance());
 	}
 
 	public void testGetIonBounds_1() {

@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.IonIsNullException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.msd.model.implementation.ImmutableZeroIon;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignal;
@@ -58,6 +59,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	private boolean isNormalized = false;
 	private float normalizationBase = 0.0f;
 	private List<IIon> ionsList;
+	private ImmutableZeroIon immutableZeroIon;
 	/*
 	 * Targets and referenced mass spectra.
 	 */
@@ -75,6 +77,11 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		 */
 		createNewIonList();
 		targets = new HashSet<IMassSpectrumTarget>();
+		try {
+			immutableZeroIon = new ImmutableZeroIon();
+		} catch(AbundanceLimitExceededException | IonLimitExceededException e) {
+			logger.warn(e);
+		}
 	}
 
 	// -----------------------------IMassSpectrum
@@ -308,7 +315,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			IonAbundanceComparator comparator = new IonAbundanceComparator();
 			return Collections.max(ionsList, comparator);
 		} else {
-			return null;
+			return immutableZeroIon;
 		}
 	}
 
@@ -319,7 +326,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			IonValueComparator comparator = new IonValueComparator();
 			return Collections.max(ionsList, comparator);
 		} else {
-			return null;
+			return immutableZeroIon;
 		}
 	}
 
@@ -330,7 +337,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			IonAbundanceComparator comparator = new IonAbundanceComparator();
 			return Collections.min(ionsList, comparator);
 		} else {
-			return null;
+			return immutableZeroIon;
 		}
 	}
 
@@ -341,7 +348,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			IonValueComparator comparator = new IonValueComparator();
 			return Collections.min(ionsList, comparator);
 		} else {
-			return null;
+			return immutableZeroIon;
 		}
 	}
 
