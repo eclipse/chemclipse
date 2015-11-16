@@ -34,7 +34,7 @@ public class DemoWriterWSD_1_ITest extends TestCase {
 
 	public void testReader_1() {
 
-		String export = null;
+		String export = "/Users/michaelchang/Documents";
 		assertNotNull("Please specify an export path.", export);
 		File file = new File(export);
 		//
