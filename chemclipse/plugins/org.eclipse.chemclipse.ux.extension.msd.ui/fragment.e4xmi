@@ -5,6 +5,7 @@
   <imports xsi:type="advanced:Area" xmi:id="_kGjWIEnJEeKP49-EnXatSw" elementId="org.eclipse.chemclipse.rcp.app.ui.editor"/>
   <imports xsi:type="basic:Part" xmi:id="_SrVdMNNuEeOGVsF3IvlSBg" elementId="org.eclipse.chemclipse.ux.extension.ui.part.baselineAndChromatogramView"/>
   <imports xsi:type="basic:Part" xmi:id="_X8rRoNOHEeOGVsF3IvlSBg" elementId="org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.views.integrationResultView"/>
+  <imports xsi:type="basic:Part" xmi:id="_RjH6wI0NEeWqFMLk2l0O1w" elementId="org.eclipse.chemclipse.ux.extension.ui.part.editHistory"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="__2jlQDPDEeKN2qL8NSaklg" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_g8wgoDNBEeKp7tRCNPPdJw" elementId="org.eclipse.chemclipse.chromatogram.msd.perspective.ui.perspective.main" selectedElement="_i2rPoDNBEeKp7tRCNPPdJw" label="MSD Perspective" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif">
       <children xsi:type="basic:PartSashContainer" xmi:id="_i2rPoDNBEeKp7tRCNPPdJw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partsashcontainer.main.0" containerData="" horizontal="true">
@@ -16,6 +17,7 @@
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_GqEvoDNEEeKp7tRCNPPdJw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partstack.main.1" containerData="3000">
             <children xsi:type="advanced:Placeholder" xmi:id="_OilPsDf0EeKBwZX34jl_1A" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.main.3" ref="_J8DwgDf0EeKBwZX34jl_1A"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_eu-4EI0NEeWqFMLk2l0O1w" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.26" ref="_RjH6wI0NEeWqFMLk2l0O1w"/>
           </children>
         </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_u8EUIDNBEeKp7tRCNPPdJw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partsashcontainer.main.2" containerData="">

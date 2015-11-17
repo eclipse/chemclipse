@@ -167,7 +167,15 @@ public class EditHistoryPart {
 		update();
 	}
 
-	public void update() {
+	public void setInput(IEditHistory editHistory) {
+
+		if(doUpdate(editHistory)) {
+			this.editHistory = editHistory;
+			tableViewer.setInput(editHistory);
+		}
+	}
+
+	private void update() {
 
 		if(doUpdate(editHistory)) {
 			tableViewer.setInput(editHistory);
