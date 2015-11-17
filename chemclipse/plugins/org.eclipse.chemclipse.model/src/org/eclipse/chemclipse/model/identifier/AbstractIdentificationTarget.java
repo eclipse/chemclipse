@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
-import org.eclipse.chemclipse.model.targets.AbstractTarget;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
+import org.eclipse.chemclipse.model.targets.AbstractTarget;
 
 public abstract class AbstractIdentificationTarget extends AbstractTarget implements IIdentificationTarget {
 
@@ -100,9 +100,7 @@ public abstract class AbstractIdentificationTarget extends AbstractTarget implem
 		builder.append(",");
 		builder.append("cas=" + getLibraryInformation().getCasNumber());
 		builder.append(",");
-		builder.append("match quality=" + getComparisonResult().getMatchFactor());
-		builder.append(",");
-		builder.append("reverse match quality=" + getComparisonResult().getReverseMatchFactor());
+		builder.append(getComparisonResult().toString());
 		builder.append("]");
 		return builder.toString();
 	}

@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.ux.extension.ui.views;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +28,7 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectr
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.settings.IOperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsLabelProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsTableComparator;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -37,21 +37,13 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
-import org.eclipse.swt.dnd.TextTransfer;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -59,15 +51,14 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 public abstract class AbstractTargetsView {
 
-	private TableViewer tableViewer;
+	private ExtendedTableViewer tableViewer;
 	private TargetsTableComparator targetsTableComparator;
-	private String[] titles = {"Name", "CAS", "Match Factor", "Reverse Factor", "Formula", "Mol Weight", "Probability", "Advise", "Identifier", "Miscellaneous", "Comments"};
-	private int bounds[] = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
+	private String[] titles = {"Name", "CAS", "Match Factor", "Forward Factor", "Reverse Factor", "Formula", "Mol Weight", "Probability", "Advise", "Identifier", "Miscellaneous", "Comments"};
+	private int bounds[] = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 	private IStructuredContentProvider contentProvider;
 	/*
 	 * Clipboard
@@ -95,8 +86,8 @@ public abstract class AbstractTargetsView {
 		/*
 		 * Targets Table
 		 */
-		tableViewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		createColumns(tableViewer);
+		tableViewer = new ExtendedTableViewer(parent);
+		tableViewer.createColumns(titles, bounds);
 		tableViewer.setContentProvider(contentProvider);
 		tableViewer.setLabelProvider(new TargetsLabelProvider());
 		targetsTableComparator = new TargetsTableComparator();
@@ -112,7 +103,7 @@ public abstract class AbstractTargetsView {
 					 * the user is using "Function + c". "Function-Key" 262144
 					 * (stateMask) + "c" 99 (keyCode)
 					 */
-					copyToClipboard();
+					tableViewer.copyToClipboard(titles);
 					//
 				} else if(e.keyCode == 127 && e.stateMask == 0) {
 					/*
@@ -173,59 +164,6 @@ public abstract class AbstractTargetsView {
 		targetsTableComparator.setColumn(0);
 	}
 
-	/**
-	 * Creates the columns for the peak viewer table.
-	 * 
-	 * @param tableViewer
-	 */
-	private void createColumns(final TableViewer tableViewer) {
-
-		/*
-		 * SYNCHRONIZE: TargetsLabelProvider and TargetsLabelComparator
-		 */
-		/*
-		 * Set the titles and bounds.
-		 */
-		for(int i = 0; i < titles.length; i++) {
-			/*
-			 * Column sort.
-			 */
-			final int index = i;
-			final TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-			final TableColumn tableColumn = tableViewerColumn.getColumn();
-			tableColumn.setText(titles[i]);
-			tableColumn.setWidth(bounds[i]);
-			tableColumn.setResizable(true);
-			tableColumn.setMoveable(true);
-			tableColumn.addSelectionListener(new SelectionAdapter() {
-
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-
-					targetsTableComparator.setColumn(index);
-					int direction = tableViewer.getTable().getSortDirection();
-					if(tableViewer.getTable().getSortColumn() == tableColumn) {
-						/*
-						 * Toggle the direction
-						 */
-						direction = (direction == SWT.UP) ? SWT.DOWN : SWT.UP;
-					} else {
-						direction = SWT.UP;
-					}
-					tableViewer.getTable().setSortDirection(direction);
-					tableViewer.getTable().setSortColumn(tableColumn);
-					tableViewer.refresh();
-				}
-			});
-		}
-		/*
-		 * Set header and lines visible.
-		 */
-		Table table = tableViewer.getTable();
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-	}
-
 	private void initContextMenu() {
 
 		MenuManager menuManager = new MenuManager("#PopUpMenu", "org.eclipse.chemclipse.chromatogram.msd.ui.perspective.internal.views.targetsView.popup");
@@ -244,7 +182,7 @@ public abstract class AbstractTargetsView {
 					public void run() {
 
 						super.run();
-						copyToClipboard();
+						tableViewer.copyToClipboard(titles);
 					}
 				};
 				action.setText("Copy selection to clipboard");
@@ -391,34 +329,6 @@ public abstract class AbstractTargetsView {
 			}
 		}
 		return targetList;
-	}
-
-	private void copyToClipboard() {
-
-		/*
-		 * Copy the whole selection.
-		 */
-		StringBuilder builder = new StringBuilder();
-		builder.append(getHeadline());
-		/*
-		 * Data
-		 */
-		ISelection selection = tableViewer.getSelection();
-		if(selection instanceof IStructuredSelection) {
-			IStructuredSelection structuredSelection = (IStructuredSelection)selection;
-			@SuppressWarnings("rawtypes")
-			Iterator iterator = structuredSelection.iterator();
-			while(iterator.hasNext()) {
-				builder.append(extractIdentificationEntry(iterator.next()));
-			}
-		}
-		/*
-		 * Transfer the selected text (items) to the clipboard.
-		 */
-		TextTransfer textTransfer = TextTransfer.getInstance();
-		Object[] data = new Object[]{builder.toString()};
-		Transfer[] dataTypes = new Transfer[]{textTransfer};
-		clipboard.setContents(data, dataTypes);
 	}
 
 	private String getHeadline() {
