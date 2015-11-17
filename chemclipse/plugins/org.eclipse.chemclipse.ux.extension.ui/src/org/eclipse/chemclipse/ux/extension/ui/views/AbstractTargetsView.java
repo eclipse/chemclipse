@@ -57,8 +57,8 @@ public abstract class AbstractTargetsView {
 
 	private ExtendedTableViewer tableViewer;
 	private TargetsTableComparator targetsTableComparator;
-	private String[] titles = {"Name", "CAS", "Match Factor", "Forward Factor", "Reverse Factor", "Formula", "Mol Weight", "Probability", "Advise", "Identifier", "Miscellaneous", "Comments"};
-	private int bounds[] = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
+	private String[] titles = {"Name", "CAS", "Match Factor", "Reverse Factor", "Formula", "Mol Weight", "Probability", "Advise", "Identifier", "Miscellaneous", "Comments"};
+	private int bounds[] = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 	private IStructuredContentProvider contentProvider;
 	/*
 	 * Clipboard

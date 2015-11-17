@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.ux.extension.ui.provider;
 import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
-import org.eclipse.chemclipse.model.identifier.IExtendedComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -56,36 +55,28 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 				case 2: // MQ
 					text = decimalFormat.format(comparisonResult.getMatchFactor());
 					break;
-				case 3: // FMQ
-					if(comparisonResult instanceof IExtendedComparisonResult) {
-						IExtendedComparisonResult extendedComparisonResult = (IExtendedComparisonResult)comparisonResult;
-						text = decimalFormat.format(extendedComparisonResult.getForwardMatchFactor());
-					} else {
-						text = "";
-					}
-					break;
-				case 4: // RMQ
+				case 3: // RMQ
 					text = decimalFormat.format(comparisonResult.getReverseMatchFactor());
 					break;
-				case 5: // Formula
+				case 4: // Formula
 					text = libraryInformation.getFormula();
 					break;
-				case 6: // Mol Weight
+				case 5: // Mol Weight
 					text = decimalFormat.format(libraryInformation.getMolWeight());
 					break;
-				case 7: // Probability
+				case 6: // Probability
 					text = decimalFormat.format(comparisonResult.getProbability());
 					break;
-				case 8: // Advise
+				case 7: // Advise
 					text = comparisonResult.getAdvise();
 					break;
-				case 9: // Identifier
+				case 8: // Identifier
 					text = identificationEntry.getIdentifier();
 					break;
-				case 10: // Miscellaneous
+				case 9: // Miscellaneous
 					text = libraryInformation.getMiscellaneous();
 					break;
-				case 11: // Comments
+				case 10: // Comments
 					text = libraryInformation.getComments();
 					break;
 				default:
