@@ -13,14 +13,14 @@ package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.swt.graphics.Image;
-
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IExtendedComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.swt.graphics.Image;
 
 public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 
@@ -56,28 +56,36 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 				case 2: // MQ
 					text = decimalFormat.format(comparisonResult.getMatchFactor());
 					break;
-				case 3: // RMQ
+				case 3: // FMQ
+					if(comparisonResult instanceof IExtendedComparisonResult) {
+						IExtendedComparisonResult extendedComparisonResult = (IExtendedComparisonResult)comparisonResult;
+						text = decimalFormat.format(extendedComparisonResult.getForwardMatchFactor());
+					} else {
+						text = "";
+					}
+					break;
+				case 4: // RMQ
 					text = decimalFormat.format(comparisonResult.getReverseMatchFactor());
 					break;
-				case 4: // Formula
+				case 5: // Formula
 					text = libraryInformation.getFormula();
 					break;
-				case 5: // Mol Weight
+				case 6: // Mol Weight
 					text = decimalFormat.format(libraryInformation.getMolWeight());
 					break;
-				case 6: // Probability
+				case 7: // Probability
 					text = decimalFormat.format(comparisonResult.getProbability());
 					break;
-				case 7: // Advise
+				case 8: // Advise
 					text = comparisonResult.getAdvise();
 					break;
-				case 8: // Identifier
+				case 9: // Identifier
 					text = identificationEntry.getIdentifier();
 					break;
-				case 9: // Miscellaneous
+				case 10: // Miscellaneous
 					text = libraryInformation.getMiscellaneous();
 					break;
-				case 10: // Comments
+				case 11: // Comments
 					text = libraryInformation.getComments();
 					break;
 				default:

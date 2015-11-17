@@ -41,35 +41,35 @@ public class TargetsTableComparator extends AbstractRecordTableComparator implem
 				case 1: // CAS
 					sortOrder = libraryInformation2.getCasNumber().compareTo(libraryInformation1.getCasNumber());
 					break;
-				case 2: // Match Factor
+				case 3: // Match Factor
 					sortOrder = Float.compare(comparisonResult2.getMatchFactor(), comparisonResult1.getMatchFactor());
 					break;
-				case 3: // Reverse Match Factor
+				case 4: // Reverse Match Factor
 					sortOrder = Float.compare(comparisonResult2.getReverseMatchFactor(), comparisonResult1.getReverseMatchFactor());
 					break;
-				case 4: // Formula
+				case 5: // Formula
 					sortOrder = libraryInformation2.getFormula().compareTo(libraryInformation1.getFormula());
 					break;
-				case 5: // Mol Weight
+				case 6: // Mol Weight
 					sortOrder = Double.compare(libraryInformation2.getMolWeight(), libraryInformation1.getMolWeight());
 					break;
-				case 6: // Probability
+				case 7: // Probability
 					sortOrder = Float.compare(comparisonResult2.getProbability(), comparisonResult1.getProbability());
 					break;
-				case 7: // Advise
+				case 8: // Advise
 					String advise2 = comparisonResult2.getAdvise();
 					String advise1 = comparisonResult1.getAdvise();
 					if(advise2 != null && advise1 != null) {
 						sortOrder = comparisonResult2.getAdvise().compareTo(comparisonResult1.getAdvise());
 					}
 					break;
-				case 8: // Identifier
+				case 9: // Identifier
 					sortOrder = entry2.getIdentifier().compareTo(entry1.getIdentifier());
 					break;
-				case 9: // Miscellaneous
+				case 10: // Miscellaneous
 					sortOrder = libraryInformation2.getMiscellaneous().compareTo(libraryInformation1.getMiscellaneous());
 					break;
-				case 10: // Comments
+				case 11: // Comments
 					sortOrder = libraryInformation2.getComments().compareTo(libraryInformation1.getComments());
 					break;
 				default:
