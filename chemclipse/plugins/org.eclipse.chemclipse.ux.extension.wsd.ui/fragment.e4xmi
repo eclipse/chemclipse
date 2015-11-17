@@ -3,6 +3,7 @@
   <imports xsi:type="basic:Part" xmi:id="_HszpIE3iEeOtxrESNeijsQ" elementId="org.eclipse.ui.console.ConsoleView"/>
   <imports xsi:type="basic:Part" xmi:id="_JKrVUE3iEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart"/>
   <imports xsi:type="advanced:Area" xmi:id="_LNStUE3iEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.rcp.app.ui.editor"/>
+  <imports xsi:type="basic:Part" xmi:id="_VQ7MwI0OEeWqFMLk2l0O1w" elementId="org.eclipse.chemclipse.ux.extension.ui.part.editHistory"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_QBvTwE3iEeOtxrESNeijsQ" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
     <elements xsi:type="basic:Part" xmi:id="_kV_QEE3iEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.part.chromatogramFileExplorerView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.wsd.ui/org.eclipse.chemclipse.ux.extension.wsd.ui.views.ChromatogramFileExplorer" label="Chromatogram File Explorer (WSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramFileExplorer.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_jxmwoE3iEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.part.chromatogramOverviewView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.wsd.ui/org.eclipse.chemclipse.ux.extension.wsd.ui.views.ChromatogramOverviewView" label="Chromatogram Overview (WSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverview.gif"/>
@@ -18,6 +19,7 @@
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_BJssAE3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.partstack.1" containerData="2500">
             <children xsi:type="advanced:Placeholder" xmi:id="_FeapgE3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.placeholder.2" ref="_jxmwoE3iEeOtxrESNeijsQ"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_YU-zoI0OEeWqFMLk2l0O1w" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.placeholder.7" ref="_VQ7MwI0OEeWqFMLk2l0O1w"/>
           </children>
         </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_-wCtAE3iEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.partsashcontainer.2">
