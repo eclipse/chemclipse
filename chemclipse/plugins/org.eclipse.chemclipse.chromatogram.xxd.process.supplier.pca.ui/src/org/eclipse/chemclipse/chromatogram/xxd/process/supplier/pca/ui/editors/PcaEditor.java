@@ -23,6 +23,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PrincipleComponentProcessor;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ResultExport;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
@@ -508,6 +509,31 @@ public class PcaEditor {
 		createProcessButton(client, gridData);
 	}
 
+	private void createButtonForPeakListTable(Composite client) {
+
+		GridData gridData = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
+		createReevaluateButton(client, gridData);
+	}
+
+	private void createReevaluateButton(Composite client, GridData gridData) {
+
+		Button reevaluate;
+		reevaluate = formToolkit.createButton(client, "Re-evaluate", SWT.PUSH);
+		reevaluate.setLayoutData(gridData);
+		final PrincipleComponentProcessor principleComponentProcessor = new PrincipleComponentProcessor();
+		reevaluate.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+
+				super.widgetSelected(e);
+				principleComponentProcessor.reEvaluate(pcaResults);
+				reloadPeakListIntensityTable();
+				updateSpinnerPCMaxima();
+				reloadScorePlotChart();
+			}
+		});
+	}
+
 	/**
 	 * Creates the add button.
 	 * 
@@ -795,6 +821,7 @@ public class PcaEditor {
 		layout.marginHeight = 2;
 		client.setLayout(layout);
 		// Check if this works
+		createButtonForPeakListTable(client);
 		createPeakIntensityTableLabels(client);
 		GridData gridData;
 		peakListIntensityTable = formToolkit.createTable(client, SWT.MULTI | SWT.VIRTUAL | SWT.CHECK);
@@ -1153,44 +1180,46 @@ public class PcaEditor {
 				/*
 				 * Create the series.
 				 */
-				String name = entry.getKey().getName();
-				ILineSeries scatterSeries = (ILineSeries)scorePlotChart.getSeriesSet().createSeries(SeriesType.LINE, name);
-				scatterSeries.setLineStyle(LineStyle.NONE);
-				scatterSeries.setSymbolSize(SYMBOL_SIZE);
-				//
-				IPcaResult pcaResult = entry.getValue();
-				double[] eigenSpace = pcaResult.getEigenSpace();
-				/*
-				 * Note.
-				 * The spinners are 1 based.
-				 * The index is zero based.
-				 */
-				int pcx = spinnerPCx.getSelection();
-				int pcy = spinnerPCy.getSelection();
-				scorePlotChart.getAxisSet().getXAxis(0).getTitle().setText("PC" + pcx);
-				scorePlotChart.getAxisSet().getYAxis(0).getTitle().setText("PC" + pcy);
-				double x = eigenSpace[pcx - 1]; // e.g. 0 = PC1
-				double y = eigenSpace[pcy - 1]; // e.g. 1 = PC2
-				scatterSeries.setXSeries(new double[]{x});
-				scatterSeries.setYSeries(new double[]{y});
-				/*
-				 * Set the color.
-				 */
-				if(x > 0 && y > 0) {
-					scatterSeries.setSymbolColor(COLOR_RED);
-					scatterSeries.setSymbolType(PlotSymbolType.SQUARE);
-				} else if(x > 0 && y < 0) {
-					scatterSeries.setSymbolColor(COLOR_BLUE);
-					scatterSeries.setSymbolType(PlotSymbolType.TRIANGLE);
-				} else if(x < 0 && y > 0) {
-					scatterSeries.setSymbolColor(COLOR_MAGENTA);
-					scatterSeries.setSymbolType(PlotSymbolType.DIAMOND);
-				} else if(x < 0 && y < 0) {
-					scatterSeries.setSymbolColor(COLOR_CYAN);
-					scatterSeries.setSymbolType(PlotSymbolType.INVERTED_TRIANGLE);
-				} else {
-					scatterSeries.setSymbolColor(COLOR_GRAY);
-					scatterSeries.setSymbolType(PlotSymbolType.CIRCLE);
+				if(entry.getKey().isSelected()) {
+					String name = entry.getKey().getName();
+					ILineSeries scatterSeries = (ILineSeries)scorePlotChart.getSeriesSet().createSeries(SeriesType.LINE, name);
+					scatterSeries.setLineStyle(LineStyle.NONE);
+					scatterSeries.setSymbolSize(SYMBOL_SIZE);
+					//
+					IPcaResult pcaResult = entry.getValue();
+					double[] eigenSpace = pcaResult.getEigenSpace();
+					/*
+					 * Note.
+					 * The spinners are 1 based.
+					 * The index is zero based.
+					 */
+					int pcx = spinnerPCx.getSelection();
+					int pcy = spinnerPCy.getSelection();
+					scorePlotChart.getAxisSet().getXAxis(0).getTitle().setText("PC" + pcx);
+					scorePlotChart.getAxisSet().getYAxis(0).getTitle().setText("PC" + pcy);
+					double x = eigenSpace[pcx - 1]; // e.g. 0 = PC1
+					double y = eigenSpace[pcy - 1]; // e.g. 1 = PC2
+					scatterSeries.setXSeries(new double[]{x});
+					scatterSeries.setYSeries(new double[]{y});
+					/*
+					 * Set the color.
+					 */
+					if(x > 0 && y > 0) {
+						scatterSeries.setSymbolColor(COLOR_RED);
+						scatterSeries.setSymbolType(PlotSymbolType.SQUARE);
+					} else if(x > 0 && y < 0) {
+						scatterSeries.setSymbolColor(COLOR_BLUE);
+						scatterSeries.setSymbolType(PlotSymbolType.TRIANGLE);
+					} else if(x < 0 && y > 0) {
+						scatterSeries.setSymbolColor(COLOR_MAGENTA);
+						scatterSeries.setSymbolType(PlotSymbolType.DIAMOND);
+					} else if(x < 0 && y < 0) {
+						scatterSeries.setSymbolColor(COLOR_CYAN);
+						scatterSeries.setSymbolType(PlotSymbolType.INVERTED_TRIANGLE);
+					} else {
+						scatterSeries.setSymbolColor(COLOR_GRAY);
+						scatterSeries.setSymbolType(PlotSymbolType.CIRCLE);
+					}
 				}
 			}
 			scorePlotChart.getAxisSet().adjustRange();
