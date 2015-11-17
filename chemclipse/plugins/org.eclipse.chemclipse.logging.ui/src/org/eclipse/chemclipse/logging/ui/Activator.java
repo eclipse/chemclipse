@@ -89,19 +89,23 @@ public class Activator extends AbstractUIPlugin {
 		/*
 		 * Append
 		 */
-		properties.setProperty(PropertiesUtil.ROOT_LOGGER_KEY, PropertiesUtil.ROOT_LOGGER_VALUE + ", CONSOLEOUT");
+		properties.setProperty(PropertiesUtil.ROOT_LOGGER_KEY, PropertiesUtil.ROOT_LOGGER_VALUE); // + ", CONSOLEOUT"
 		/*
 		 * Console appender.
 		 */
-		properties.setProperty("log4j.appender.CONSOLEOUT", "org.eclipse.chemclipse.logging.ui.support.ConsoleAppender");
-		properties.setProperty("log4j.appender.CONSOLEOUT.layout", "org.apache.log4j.PatternLayout");
-		properties.setProperty("log4j.appender.CONSOLEOUT.layout.ConversionPattern", "%d{ISO8601} %-5p [%t] %c: %m%n");
-		properties.setProperty("log4j.appender.CONSOLEOUT.logLevel", "DEBUG");
+		// properties.setProperty("log4j.appender.CONSOLEOUT", "org.eclipse.chemclipse.logging.ui.support.ConsoleAppender");
+		// properties.setProperty("log4j.appender.CONSOLEOUT.layout", "org.apache.log4j.PatternLayout");
+		// properties.setProperty("log4j.appender.CONSOLEOUT.layout.ConversionPattern", "%d{ISO8601} %-5p [%t] %c: %m%n");
+		// properties.setProperty("log4j.appender.CONSOLEOUT.logLevel", "DEBUG");
 		/*
 		 * Configure log4j properties.
 		 */
-		PropertyConfigurator.configure(properties);
-		LoggerSupport.getInstance().initConsole();
+		try {
+			PropertyConfigurator.configure(properties);
+			LoggerSupport.getInstance().initConsole();
+		} catch(Exception e) {
+			System.out.println(e);
+		}
 	}
 
 	private ImageDescriptor createImageDescriptor(Bundle bundle, String string) {
