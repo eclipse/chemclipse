@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.model.identifier;
 
 public abstract class AbstractComparisonResult implements IComparisonResult {
 
-	private float matchFactor;
-	private float reverseMatchFactor;
+	final private float matchFactor;
+	final private float reverseMatchFactor;
 	private float probability;
 	private String advise = "";
 

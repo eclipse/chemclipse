@@ -14,12 +14,11 @@ package org.eclipse.chemclipse.msd.model.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.comparator.SortOrder;
 import org.eclipse.chemclipse.model.core.AbstractScan;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonAbundanceComparator;
@@ -231,7 +230,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			totalSignal = getTotalSignal();
 		} else {
 			IIon ion;
-			ListIterator<IIon> iterator = ionsList.listIterator();
+			Iterator<IIon> iterator = ionsList.iterator();
 			Set<Integer> excludedIonsNominal = excludedIons.getIonsNominal();
 			while(iterator.hasNext()) {
 				ion = iterator.next();
@@ -248,7 +247,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 
 		IIon ion;
 		float totalSignal = 0;
-		ListIterator<IIon> iterator = ionsList.listIterator();
+		Iterator<IIon> iterator = ionsList.iterator();
 		while(iterator.hasNext()) {
 			ion = iterator.next();
 			totalSignal += ion.getAbundance();
@@ -313,9 +312,8 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	public IIon getHighestAbundance() {
 
 		if(hasIons()) {
-			Collections.sort(ionsList, new IonAbundanceComparator());
-			int size = ionsList.size();
-			return ionsList.get(--size);
+			IonAbundanceComparator comparator = new IonAbundanceComparator();
+			return Collections.max(ionsList, comparator);
 		} else {
 			return immutableZeroIon;
 		}
@@ -325,9 +323,8 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	public IIon getHighestIon() {
 
 		if(hasIons()) {
-			Collections.sort(ionsList, new IonValueComparator());
-			int size = ionsList.size();
-			return ionsList.get(--size);
+			IonValueComparator comparator = new IonValueComparator();
+			return Collections.max(ionsList, comparator);
 		} else {
 			return immutableZeroIon;
 		}
@@ -337,8 +334,8 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	public IIon getLowestAbundance() {
 
 		if(hasIons()) {
-			Collections.sort(ionsList, new IonAbundanceComparator());
-			return ionsList.get(0);
+			IonAbundanceComparator comparator = new IonAbundanceComparator();
+			return Collections.min(ionsList, comparator);
 		} else {
 			return immutableZeroIon;
 		}
@@ -348,8 +345,8 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	public IIon getLowestIon() {
 
 		if(hasIons()) {
-			Collections.sort(ionsList, new IonValueComparator());
-			return ionsList.get(0);
+			IonValueComparator comparator = new IonValueComparator();
+			return Collections.min(ionsList, comparator);
 		} else {
 			return immutableZeroIon;
 		}
@@ -629,8 +626,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		 * code would not have reached this point.
 		 */
 		List<IIon> ions = getIons();
-		Collections.sort(ions, new IonAbundanceComparator(SortOrder.DESC));
-		double highestAbundance = ions.get(0).getAbundance();
+		double highestAbundance = Collections.max(ions, new IonAbundanceComparator()).getAbundance();
 		/*
 		 * Return if the highest abundance == 0.<br/> If yes a division through
 		 * 0 would throw a ArithmeticException.
@@ -696,18 +692,31 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 
 		StringBuilder builder = new StringBuilder();
 		builder.append(getClass().getName());
-		builder.append("[");
-		builder.append("basePeak=" + getBasePeak());
-		builder.append(",");
-		builder.append("basePeakAbundance=" + getBasePeakAbundance());
-		builder.append(",");
-		builder.append("numberOfIons=" + getNumberOfIons());
-		builder.append(",");
-		builder.append("totalSignal=" + getTotalSignal());
-		builder.append(",");
-		builder.append("isNormalized=" + isNormalized());
-		builder.append(",");
-		builder.append("normalizationBase=" + getNormalizationBase());
+		builder.append("[basePeak=");
+		builder.append(getBasePeak());
+		builder.append(",basePeakAbundance=");
+		builder.append(getBasePeakAbundance());
+		builder.append(",numberOfIons=");
+		builder.append(getNumberOfIons());
+		builder.append(",totalSignal=");
+		builder.append(getTotalSignal());
+		builder.append(",isNormalized=");
+		builder.append(isNormalized());
+		if(isNormalized()) {
+			builder.append(",normalizationBase=");
+			builder.append(getNormalizationBase());
+		}
+		builder.append(",Ion/Abundance pairs: ");
+		Iterator<IIon> iter = ionsList.iterator();
+		while(iter.hasNext()) {
+			IIon ion = iter.next();
+			builder.append(ion.getIon());
+			builder.append(":");
+			builder.append(ion.getAbundance());
+			if(iter.hasNext()) {
+				builder.append(", ");
+			}
+		}
 		builder.append("]");
 		return builder.toString();
 	}
