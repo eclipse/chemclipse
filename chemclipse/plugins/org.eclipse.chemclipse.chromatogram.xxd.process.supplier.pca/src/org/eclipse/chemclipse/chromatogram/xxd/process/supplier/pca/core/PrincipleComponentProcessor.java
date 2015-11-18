@@ -48,14 +48,13 @@ public class PrincipleComponentProcessor {
 	private static final Logger logger = Logger.getLogger(PrincipleComponentProcessor.class);
 	private static final double NORMALIZATION_FACTOR = 1000;
 
-	public PcaResults process(List<IDataInputEntry> dataInputEntries, int retentionTimeWindow, int numberOfPrincipleComponents, IProgressMonitor monitor) {// , int extractionType) {
+	public PcaResults process(List<IDataInputEntry> dataInputEntries, int retentionTimeWindow, int numberOfPrincipleComponents, IProgressMonitor monitor, int extractionType) {
 
 		/*
 		 * 0 = Peaks
 		 * 1 = Scans
 		 * I've changed to 0 by default for a showcase.
 		 */
-		int extractionType = 0; // ADDED BY TEAM C until argument is accepted
 		if(extractionType < 0 || extractionType > 1) {
 			extractionType = 0;
 		}

@@ -46,7 +46,8 @@ public class PrincipleComponentProcessor_1_ITest extends TestCase {
 		for(File file : dir.listFiles()) {
 			chromatograms.add(new DataInputEntry(file.toString()));
 		}
-		processor.process(chromatograms, 200, 3, new NullProgressMonitor());
+		// Note: Added argument for extraction type
+		processor.process(chromatograms, 200, 3, new NullProgressMonitor(), 0);
 		assertTrue(true);
 	}
 }

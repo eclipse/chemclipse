@@ -26,19 +26,22 @@ public class PcaRunnable implements IRunnableWithProgress {
 	private int retentionTimeWindow;
 	private int numberOfPrincipleComponents;
 	private PcaResults pcaResults;
+	private int extractionType;
 
-	public PcaRunnable(List<IDataInputEntry> dataInputEntries, int retentionTimeWindow, int numberOfPrincipleComponents) {
+	public PcaRunnable(List<IDataInputEntry> dataInputEntries, int retentionTimeWindow, int numberOfPrincipleComponents, int exType) {
 
 		this.dataInputEntries = dataInputEntries;
 		this.retentionTimeWindow = retentionTimeWindow;
 		this.numberOfPrincipleComponents = numberOfPrincipleComponents;
+		this.extractionType = exType;
 	}
 
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		PrincipleComponentProcessor principleComponentProcessor = new PrincipleComponentProcessor();
-		pcaResults = principleComponentProcessor.process(dataInputEntries, retentionTimeWindow, numberOfPrincipleComponents, monitor);
+		// Extraction type argument 0 for peaks, 1 for scans
+		pcaResults = principleComponentProcessor.process(dataInputEntries, retentionTimeWindow, numberOfPrincipleComponents, monitor, extractionType);
 	}
 
 	public PcaResults getPcaResults() {
