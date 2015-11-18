@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
-
 public interface IExtendedComparisonResult extends IComparisonResult {
 
 	float getForwardMatchFactor();

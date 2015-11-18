@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
-
 public class ExtendedComparisonResult extends AbstractComparisonResult implements IExtendedComparisonResult {
 
 	final private float forwardMatchFactor;
