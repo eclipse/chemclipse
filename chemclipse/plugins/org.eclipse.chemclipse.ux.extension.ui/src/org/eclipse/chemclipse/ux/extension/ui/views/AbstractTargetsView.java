@@ -39,7 +39,6 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
@@ -60,10 +59,6 @@ public abstract class AbstractTargetsView {
 	private String[] titles = {"Name", "CAS", "Match Factor", "Reverse Factor", "Formula", "Mol Weight", "Probability", "Advise", "Identifier", "Miscellaneous", "Comments"};
 	private int bounds[] = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 	private IStructuredContentProvider contentProvider;
-	/*
-	 * Clipboard
-	 */
-	private Clipboard clipboard;
 	private IOperatingSystemUtils operatingSystemUtils;
 	/*
 	 * Event Broker
@@ -75,7 +70,6 @@ public abstract class AbstractTargetsView {
 
 		this.contentProvider = contentProvider;
 		operatingSystemUtils = new OperatingSystemUtils();
-		clipboard = new Clipboard(Display.getDefault());
 		map = new HashMap<String, Object>();
 		this.eventBroker = eventBroker;
 	}
