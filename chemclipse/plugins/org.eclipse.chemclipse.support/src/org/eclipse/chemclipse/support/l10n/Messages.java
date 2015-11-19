@@ -125,12 +125,20 @@ public class Messages {
 	private void parseFile(String path, Bundle bundle, boolean checkKey) {
 
 		try {
+			/*
+			 * See:
+			 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=145096
+			 * Local installation, hence file: can be removed.
+			 */
 			URL url = FileLocator.toFileURL(bundle.getEntry(path));
 			if(url != null) {
-				File file = new File(url.toURI());
+				String pathname = url.toString().replace("file:", "");
+				File file = new File(pathname);
 				if(file.exists()) {
 					logger.info(file);
 					addMessages(file, checkKey);
+				} else {
+					logger.warn("File doesn't exists: " + file);
 				}
 			}
 		} catch(Exception e) {
