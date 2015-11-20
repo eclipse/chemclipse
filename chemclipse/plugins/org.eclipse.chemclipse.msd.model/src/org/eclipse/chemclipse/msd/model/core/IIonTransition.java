@@ -15,6 +15,10 @@ import java.io.Serializable;
 
 public interface IIonTransition extends Serializable {
 
+	String getCompoundName();
+
+	void setCompoundName(String compoundName);
+
 	double getQ1StartIon();
 
 	double getQ1StopIon();

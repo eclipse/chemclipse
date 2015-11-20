@@ -21,6 +21,7 @@ public abstract class AbstractIonTransition implements IIonTransition {
 	 * methods.
 	 */
 	private static final long serialVersionUID = 96311762449505536L;
+	private String compoundName = "";
 	private double q1StartIon;
 	private double q1StopIon;
 	private double q3StartIon;
@@ -65,6 +66,20 @@ public abstract class AbstractIonTransition implements IIonTransition {
 	public AbstractIonTransition(double filter1Ion, double filter3Ion, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup) {
 
 		this(filter1Ion, filter1Ion, filter3Ion, filter3Ion, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup);
+	}
+
+	@Override
+	public String getCompoundName() {
+
+		return compoundName;
+	}
+
+	@Override
+	public void setCompoundName(String compoundName) {
+
+		if(compoundName != null) {
+			this.compoundName = compoundName;
+		}
 	}
 
 	@Override
