@@ -65,6 +65,11 @@ public class EnhancedTableViewer extends Composite {
 		createControl();
 	}
 
+	// TODO in Interface auslagern! für AbstractReportColumnVerificationPage -> CalibrationProfile
+	public void createColumns(Object object) {
+
+	}
+
 	public TableViewer getTableViewer() {
 
 		return tableViewer;
@@ -221,11 +226,6 @@ public class EnhancedTableViewer extends Composite {
 		//
 		Menu menu = menuManager.createContextMenu(tableViewer.getTable());
 		tableViewer.getTable().setMenu(menu);
-	}
-
-	// TODO in Interface auslagern! für AbstractReportColumnVerificationPage -> CalibrationProfile
-	public void createColumns(Object object) {
-
 	}
 
 	private void createColumns(String[] titles, int[] bounds) {
