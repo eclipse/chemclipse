@@ -141,6 +141,7 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 			monitor.subTask(IConstants.EXPORT_SCANS + scan);
 			IScanWSD scanWsd = chromatogram.getSupplierScan(scan);
 			int scanSignalTotal = scanWsd.getScanSignals().size();
+			dataOutputStream.writeInt(scanSignalTotal);
 			for(int signal = 0; signal < scanSignalTotal; signal++) {
 				IScanSignalWSD scanSignal = scanWsd.getScanSignal(signal);
 				int wavelength = scanSignal.getWavelength();

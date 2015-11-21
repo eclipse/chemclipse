@@ -14,4 +14,9 @@ package org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatog
 import org.eclipse.chemclipse.wsd.model.core.AbstractScanSignalWSD;
 
 public class VendorScanSignal extends AbstractScanSignalWSD implements IVendorScanSignal {
+
+	public VendorScanSignal() {
+
+		super();
+	}
 }

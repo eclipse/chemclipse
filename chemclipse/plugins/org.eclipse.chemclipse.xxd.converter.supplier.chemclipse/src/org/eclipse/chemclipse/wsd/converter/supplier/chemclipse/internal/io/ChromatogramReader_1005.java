@@ -65,7 +65,7 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 
 	private IChromatogramOverview readOverviewFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
 
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_TIC_MSD);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_TIC_WSD);
 		//
 		IVendorChromatogram chromatogram = new VendorChromatogram();
 		readScansOverview(dataInputStream, chromatogram, monitor);
@@ -134,13 +134,13 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 			IScanWSD scanObject = new VendorScan();
 			int scanSignals = dataInputStream.readInt();
 			//
-			for(int scanSignal = 1; scanSignal <= scanSignals; ++scanSignal) {
+			for(int scanSignal = 0; scanSignal < scanSignals; ++scanSignal) {
 				IScanSignalWSD scanSignalObject = new VendorScanSignal();
-				int abundance = dataInputStream.readInt();
-				float wavelength = dataInputStream.readFloat();
+				int wavelength = dataInputStream.readInt();
+				float abundance = dataInputStream.readFloat();
 				//
+				scanSignalObject.setWavelength(wavelength);
 				scanSignalObject.setAbundance(abundance);
-				scanSignalObject.setWavelength((int)wavelength);
 				//
 				scanObject.addScanSignal(scanSignalObject);
 			}
