@@ -47,6 +47,15 @@ public interface IIonTransitionSettings {
 	IIonTransition getIonTransition(double filter1Ion, double filter3Ion, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup);
 
 	/**
+	 * Returns a new ion transition if an ion transition with the given compound name doesn't exist yet.
+	 * 
+	 * @param ionTransition
+	 * @param compoundName
+	 * @return {@link IIonTransition}
+	 */
+	IIonTransition getIonTransition(IIonTransition ionTransition, String compoundName);
+
+	/**
 	 * The index is 0 based.
 	 * The method may return null.
 	 * 

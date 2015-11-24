@@ -50,6 +50,27 @@ public abstract class AbstractIonTransition implements IIonTransition {
 	 */
 	public AbstractIonTransition(double filter1FirstIon, double filter1LastIon, double filter3FirstIon, double filter3LastIon, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup) {
 
+		this(filter1FirstIon, filter1LastIon, filter3FirstIon, filter3LastIon, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup, "");
+	}
+
+	public AbstractIonTransition(double filter1Ion, double filter3Ion, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup) {
+
+		this(filter1Ion, filter1Ion, filter3Ion, filter3Ion, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup, "");
+	}
+
+	public AbstractIonTransition(double filter1Ion, double filter3Ion, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup, String compoundName) {
+
+		this(filter1Ion, filter1Ion, filter3Ion, filter3Ion, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup, compoundName);
+	}
+
+	public AbstractIonTransition(IIonTransition ionTransition, String compoundName) {
+
+		this(ionTransition.getQ1StartIon(), ionTransition.getQ1StopIon(), ionTransition.getQ3StartIon(), ionTransition.getQ3StopIon(), ionTransition.getCollisionEnergy(), ionTransition.getQ1Resolution(), ionTransition.getQ3Resolution(), ionTransition.getTransitionGroup(), compoundName);
+	}
+
+	public AbstractIonTransition(double filter1FirstIon, double filter1LastIon, double filter3FirstIon, double filter3LastIon, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup, String compoundName) {
+
+		this.compoundName = compoundName;
 		this.q1StartIon = filter1FirstIon;
 		this.q1StopIon = filter1LastIon;
 		this.q3StartIon = filter3FirstIon;
@@ -61,11 +82,6 @@ public abstract class AbstractIonTransition implements IIonTransition {
 		//
 		q1Ion = (int)Math.round((filter1FirstIon + filter1LastIon) / 2.0d);
 		q3Ion = AbstractIon.getIon((filter3FirstIon + filter3LastIon) / 2.0d, 1);
-	}
-
-	public AbstractIonTransition(double filter1Ion, double filter3Ion, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup) {
-
-		this(filter1Ion, filter1Ion, filter3Ion, filter3Ion, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup);
 	}
 
 	@Override
@@ -168,13 +184,13 @@ public abstract class AbstractIonTransition implements IIonTransition {
 			return false;
 		}
 		AbstractIonTransition other = (AbstractIonTransition)otherObject;
-		return q1StartIon == other.getQ1StartIon() && q1StopIon == other.getQ1StopIon() && q3StartIon == other.getQ3StartIon() && q3StopIon == other.getQ3StopIon() && collisionEnergy == other.getCollisionEnergy() && transitionGroup == other.getTransitionGroup() && q1Resolution == other.getQ1Resolution() && q3Resolution == other.getQ3Resolution();
+		return compoundName.equals(other.getCompoundName()) && q1StartIon == other.getQ1StartIon() && q1StopIon == other.getQ1StopIon() && q3StartIon == other.getQ3StartIon() && q3StopIon == other.getQ3StopIon() && collisionEnergy == other.getCollisionEnergy() && transitionGroup == other.getTransitionGroup() && q1Resolution == other.getQ1Resolution() && q3Resolution == other.getQ3Resolution();
 	}
 
 	@Override
 	public int hashCode() {
 
-		return 7 * new Double(q1StartIon).hashCode() + 11 * new Double(q1StopIon).hashCode() + 13 * new Double(q3StartIon).hashCode() + 17 * new Double(q3StopIon).hashCode() + 13 * new Double(collisionEnergy).hashCode() + 11 * new Integer(transitionGroup).hashCode() + 7 * new Double(q1Resolution).hashCode() + 11 * new Double(q3Resolution).hashCode();
+		return compoundName.hashCode() + 7 * new Double(q1StartIon).hashCode() + 11 * new Double(q1StopIon).hashCode() + 13 * new Double(q3StartIon).hashCode() + 17 * new Double(q3StopIon).hashCode() + 13 * new Double(collisionEnergy).hashCode() + 11 * new Integer(transitionGroup).hashCode() + 7 * new Double(q1Resolution).hashCode() + 11 * new Double(q3Resolution).hashCode();
 	}
 
 	@Override
@@ -183,6 +199,8 @@ public abstract class AbstractIonTransition implements IIonTransition {
 		StringBuilder builder = new StringBuilder();
 		builder.append(getClass().getName());
 		builder.append("[");
+		builder.append("compoundName=" + compoundName);
+		builder.append(",");
 		builder.append("q1StartIon=" + q1StartIon);
 		builder.append(",");
 		builder.append("q1StopIon=" + q1StopIon);
