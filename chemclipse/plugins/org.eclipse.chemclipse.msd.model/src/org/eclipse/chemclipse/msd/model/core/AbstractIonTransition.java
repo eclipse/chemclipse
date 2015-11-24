@@ -30,6 +30,7 @@ public abstract class AbstractIonTransition implements IIonTransition {
 	private double q1Resolution;
 	private double q3Resolution;
 	private int transitionGroup;
+	private int dwell;
 	//
 	private int q1Ion;
 	private double q3Ion;
@@ -82,6 +83,8 @@ public abstract class AbstractIonTransition implements IIonTransition {
 		//
 		q1Ion = (int)Math.round((filter1FirstIon + filter1LastIon) / 2.0d);
 		q3Ion = AbstractIon.getIon((filter3FirstIon + filter3LastIon) / 2.0d, 1);
+		//
+		dwell = 100; // Default value
 	}
 
 	@Override
@@ -168,6 +171,18 @@ public abstract class AbstractIonTransition implements IIonTransition {
 	public int getTransitionGroup() {
 
 		return transitionGroup;
+	}
+
+	@Override
+	public int getDwell() {
+
+		return dwell;
+	}
+
+	@Override
+	public void setDwell(int dwell) {
+
+		this.dwell = dwell;
 	}
 
 	// -----------------------------equals, hashCode, toString

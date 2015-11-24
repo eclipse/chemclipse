@@ -42,4 +42,8 @@ public interface IIonTransition extends Serializable {
 	double getQ1Resolution();
 
 	double getQ3Resolution();
+
+	int getDwell();
+
+	void setDwell(int dwell);
 }

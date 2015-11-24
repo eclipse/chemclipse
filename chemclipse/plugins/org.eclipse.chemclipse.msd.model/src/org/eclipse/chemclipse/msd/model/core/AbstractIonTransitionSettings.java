@@ -76,7 +76,8 @@ public abstract class AbstractIonTransitionSettings implements IIonTransitionSet
 		if(ionTransition != null) {
 			int transitionGroup = ionTransition.getTransitionGroup();
 			IIonTransitionGroup ionTransitionGroup = ionTransitionGroups.get(transitionGroup);
-			if(ionTransitionGroup.contains(ionTransition)) {
+			//
+			if(ionTransition.getCompoundName().equals(compoundName) && ionTransitionGroup.contains(ionTransition)) {
 				return ionTransition;
 			} else {
 				IIonTransition ionTransitionWithCompoundName = new IonTransition(ionTransition, compoundName);

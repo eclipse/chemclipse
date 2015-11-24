@@ -18,7 +18,6 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -32,17 +31,14 @@ import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvaila
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.comparator.SortOrder;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIonTransition;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIonTransitionComparator;
 import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.msd.model.notifier.IChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.chromatogram.EditorChromatogramUI;
@@ -994,7 +990,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		 */
 		section = formToolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
 		section.setText("Please select ion transitions that shall be displayed in the transition view.");
-		section.setDescription("parent m/z > daughter m/z @collision energy r:parent resolution:daughter resolution [transition group]");
+		section.setDescription("(compound name) parent m/z > daughter m/z @collision energy r:parent resolution:daughter resolution [transition group]");
 		section.marginWidth = 5;
 		section.marginHeight = 5;
 		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
@@ -1011,42 +1007,6 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		 */
 		Set<IMarkedIonTransition> markedIonTransistions = chromatogramSelection.getMarkedIonTransitions().getAll();
 		List<IMarkedIonTransition> transitionList = new ArrayList<IMarkedIonTransition>(markedIonTransistions);
-		/*
-		 * Sort the list
-		 */
-		Collections.sort(transitionList, new MarkedIonTransitionComparator(SortOrder.ASC));
-		//
-		for(final IMarkedIonTransition markedIonTransition : transitionList) {
-			/*
-			 * Create the check box.
-			 * 188 > 132 @12 r1.2:1.3
-			 */
-			final Button button = new Button(client, SWT.CHECK);
-			IIonTransition ionTransition = markedIonTransition.getIonTransition();
-			StringBuilder builder = new StringBuilder();
-			builder.append(ionTransition.getQ1Ion());
-			builder.append(" > ");
-			builder.append(ionTransition.getQ3Ion());
-			builder.append(" @");
-			builder.append(decimalFormat.format(ionTransition.getCollisionEnergy()));
-			builder.append(" r");
-			builder.append(decimalFormat.format(ionTransition.getQ1Resolution()));
-			builder.append(":");
-			builder.append(decimalFormat.format(ionTransition.getQ3Resolution()));
-			builder.append(" [");
-			builder.append(decimalFormat.format(ionTransition.getTransitionGroup()));
-			builder.append("]");
-			button.setText(builder.toString());
-			//
-			button.addSelectionListener(new SelectionAdapter() {
-
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-
-					markedIonTransition.setSelected(button.getSelection());
-				}
-			});
-		}
 		/*
 		 * Add the client to the section and paint flat borders.
 		 */

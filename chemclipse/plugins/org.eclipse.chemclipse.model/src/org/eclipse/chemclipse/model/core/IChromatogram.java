@@ -202,4 +202,11 @@ public interface IChromatogram extends IChromatogramOverview, IAdaptable, IChrom
 	 * @return List<IScan>
 	 */
 	List<IScan> getScanCycleScans(int cycleNumber);
+
+	/**
+	 * Returns the chromatogram method.
+	 * 
+	 * @return IMethod
+	 */
+	IMethod getMethod();
 }

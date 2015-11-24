@@ -116,6 +116,8 @@ public abstract class AbstractChromatogram implements IChromatogram {
 	private List<IIntegrationEntry> chromatogramIntegrationEntries;
 	private String backgroundIntegratorDescription = "";
 	private List<IIntegrationEntry> backgroundIntegrationEntries;
+	//
+	private IMethod method;
 
 	/**
 	 * Constructs a normal chromatogram.
@@ -132,6 +134,7 @@ public abstract class AbstractChromatogram implements IChromatogram {
 		referencedChromatograms = new ArrayList<IChromatogram>();
 		chromatogramIntegrationEntries = new ArrayList<IIntegrationEntry>();
 		backgroundIntegrationEntries = new ArrayList<IIntegrationEntry>();
+		method = new Method();
 	}
 
 	@Override
@@ -1163,6 +1166,12 @@ public abstract class AbstractChromatogram implements IChromatogram {
 			}
 		}
 		return scanCycleScans;
+	}
+
+	@Override
+	public IMethod getMethod() {
+
+		return method;
 	}
 
 	// -----------------------------------------------IChromatogramProcessorSupport
