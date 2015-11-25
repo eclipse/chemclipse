@@ -60,6 +60,8 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	private float normalizationBase = 0.0f;
 	private List<IIon> ionsList;
 	private ImmutableZeroIon immutableZeroIon;
+	private IonAbundanceComparator ionAbundanceComparator;
+	private IonValueComparator ionValueComparator;
 	/*
 	 * Targets and referenced mass spectra.
 	 */
@@ -82,6 +84,8 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		} catch(AbundanceLimitExceededException | IonLimitExceededException e) {
 			logger.warn(e);
 		}
+		ionAbundanceComparator = new IonAbundanceComparator();
+		ionValueComparator = new IonValueComparator();
 	}
 
 	// -----------------------------IMassSpectrum
@@ -312,8 +316,12 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	public IIon getHighestAbundance() {
 
 		if(hasIons()) {
-			IonAbundanceComparator comparator = new IonAbundanceComparator();
-			return Collections.max(ionsList, comparator);
+			/*
+			 * Collections.max() doesn't work properly.
+			 */
+			Collections.sort(ionsList, ionAbundanceComparator);
+			int size = ionsList.size();
+			return ionsList.get(--size);
 		} else {
 			return immutableZeroIon;
 		}
@@ -323,8 +331,12 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	public IIon getHighestIon() {
 
 		if(hasIons()) {
-			IonValueComparator comparator = new IonValueComparator();
-			return Collections.max(ionsList, comparator);
+			/*
+			 * Collections.max() doesn't work properly.
+			 */
+			Collections.sort(ionsList, ionValueComparator);
+			int size = ionsList.size();
+			return ionsList.get(--size);
 		} else {
 			return immutableZeroIon;
 		}
@@ -334,8 +346,11 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	public IIon getLowestAbundance() {
 
 		if(hasIons()) {
-			IonAbundanceComparator comparator = new IonAbundanceComparator();
-			return Collections.min(ionsList, comparator);
+			/*
+			 * Collections.min() doesn't work properly.
+			 */
+			Collections.sort(ionsList, ionAbundanceComparator);
+			return ionsList.get(0);
 		} else {
 			return immutableZeroIon;
 		}
@@ -345,8 +360,11 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	public IIon getLowestIon() {
 
 		if(hasIons()) {
-			IonValueComparator comparator = new IonValueComparator();
-			return Collections.min(ionsList, comparator);
+			/*
+			 * Collections.min() doesn't work properly.
+			 */
+			Collections.sort(ionsList, ionValueComparator);
+			return ionsList.get(0);
 		} else {
 			return immutableZeroIon;
 		}
@@ -358,9 +376,10 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		IIon lowest = null;
 		IIon highest = null;
 		if(hasIons()) {
-			IonValueComparator comparator = new IonValueComparator();
-			lowest = Collections.min(ionsList, comparator);
-			highest = Collections.max(ionsList, comparator);
+			Collections.sort(ionsList, ionValueComparator);
+			int size = ionsList.size();
+			lowest = ionsList.get(0);
+			highest = ionsList.get(--size);
 			return new IonBounds(lowest, highest);
 		} else {
 			return null;
@@ -626,7 +645,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		 * code would not have reached this point.
 		 */
 		List<IIon> ions = getIons();
-		double highestAbundance = Collections.max(ions, new IonAbundanceComparator()).getAbundance();
+		double highestAbundance = Collections.max(ions, ionAbundanceComparator).getAbundance();
 		/*
 		 * Return if the highest abundance == 0.<br/> If yes a division through
 		 * 0 would throw a ArithmeticException.

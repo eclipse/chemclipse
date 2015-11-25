@@ -9,9 +9,11 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.core;
+package org.eclipse.chemclipse.model.implementation;
 
-public class Method implements IMethod {
+import org.eclipse.chemclipse.model.core.IMethod;
+
+public class TripleQuadMethod implements IMethod {
 
 	/*
 	 * These are default values for TripleQuad instruments.

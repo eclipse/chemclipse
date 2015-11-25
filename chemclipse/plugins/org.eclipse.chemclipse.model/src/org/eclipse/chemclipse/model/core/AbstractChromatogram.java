@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.BaselineModel;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.implementation.TripleQuadMethod;
 import org.eclipse.chemclipse.model.notifier.IChromatogramSelectionUpdateNotifier;
 import org.eclipse.chemclipse.model.processor.IChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -134,7 +135,7 @@ public abstract class AbstractChromatogram implements IChromatogram {
 		referencedChromatograms = new ArrayList<IChromatogram>();
 		chromatogramIntegrationEntries = new ArrayList<IIntegrationEntry>();
 		backgroundIntegrationEntries = new ArrayList<IIntegrationEntry>();
-		method = new Method();
+		method = new TripleQuadMethod();
 	}
 
 	@Override
