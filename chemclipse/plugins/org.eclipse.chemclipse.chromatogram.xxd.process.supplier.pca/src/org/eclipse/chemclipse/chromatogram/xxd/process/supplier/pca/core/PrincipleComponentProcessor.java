@@ -107,7 +107,8 @@ public class PrincipleComponentProcessor {
 			int sampleSize = extractedRetentionTimes.size();
 			pcaResults.setExtractedRetentionTimes(extractedRetentionTimes);
 			Map<String, double[]> pcaScanMap = extractPcaScanMap(scanMap, extractedRetentionTimes, retentionTimeWindow);
-			// TEAM C, NOT SURE IF THIS IS NEEDED: normalizeIntensityValues(pcaScanMap);
+			/* Normalization added TEAM C */
+			normalizeScanIntensityValues(pcaScanMap);
 			/*
 			 * Run PCA
 			 */
@@ -425,6 +426,44 @@ public class PrincipleComponentProcessor {
 			 * Normalize the values.
 			 */
 			for(Map.Entry<String, double[]> entry : pcaPeakMap.entrySet()) {
+				double[] sampleData = entry.getValue();
+				for(int i = 0; i < sampleData.length; i++) {
+					double value = sampleData[i];
+					if(value > 0) {
+						double normalizedValue = (NORMALIZATION_FACTOR / sampleMax) * value;
+						sampleData[i] = normalizedValue;
+					}
+				}
+				entry.setValue(sampleData);
+			}
+		}
+	}
+
+	/**
+	 * All extracted intensity values will be normalized.
+	 * ADDED BY TEAM C
+	 * 
+	 * @param pcaScanMap
+	 */
+	private void normalizeScanIntensityValues(Map<String, double[]> pcaScanMap) {
+
+		/*
+		 * Get the highest values
+		 */
+		double sampleMax = 0;
+		for(Map.Entry<String, double[]> entry : pcaScanMap.entrySet()) {
+			double[] sampleData = entry.getValue();
+			double sampleDataMax = Calculations.getMax(sampleData);
+			sampleMax = (sampleDataMax > sampleMax) ? sampleDataMax : sampleMax;
+		}
+		/*
+		 * Normalize the array if the maximum value is > 0.
+		 */
+		if(sampleMax > 0) {
+			/*
+			 * Normalize the values.
+			 */
+			for(Map.Entry<String, double[]> entry : pcaScanMap.entrySet()) {
 				double[] sampleData = entry.getValue();
 				for(int i = 0; i < sampleData.length; i++) {
 					double value = sampleData[i];
