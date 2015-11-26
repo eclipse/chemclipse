@@ -16,10 +16,8 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -38,7 +36,6 @@ import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMS
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIonTransition;
 import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.msd.model.notifier.IChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.chromatogram.EditorChromatogramUI;
@@ -48,6 +45,9 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.IonTransitionContentProvider;
+import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.IonTransitionLabelProvider;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.ChromatogramImportRunnable;
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramFileSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport;
@@ -964,54 +964,18 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new FillLayout());
 		/*
-		 * Forms API
+		 * Table
 		 */
-		formToolkit = new FormToolkit(composite.getDisplay());
-		ScrolledForm scrolledForm = formToolkit.createScrolledForm(composite);
-		Composite scrolledFormComposite = scrolledForm.getBody();
-		formToolkit.decorateFormHeading(scrolledForm.getForm());
-		scrolledFormComposite.setLayout(new TableWrapLayout());
-		scrolledForm.setText("All available ion transitions of this chromatogram");
-		/*
-		 * Add the sections
-		 */
-		createIonTransitionPageSection(scrolledFormComposite);
+		String[] titles = {"name", "parent m/z", "parent resolution", "daughter m/z", "daughter resolution", "collision energy", "selected"};
+		int bounds[] = {250, 100, 150, 100, 150, 150, 60};
+		//
+		ExtendedTableViewer tableViewer = new ExtendedTableViewer(composite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
+		tableViewer.createColumns(titles, bounds);
+		tableViewer.setContentProvider(new IonTransitionContentProvider());
+		tableViewer.setLabelProvider(new IonTransitionLabelProvider());
+		tableViewer.setInput(chromatogramSelection);
 		//
 		tabItem.setControl(composite);
-	}
-
-	private void createIonTransitionPageSection(Composite parent) {
-
-		Section section;
-		Composite client;
-		GridLayout layout;
-		/*
-		 * Sections
-		 */
-		section = formToolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
-		section.setText("Please select ion transitions that shall be displayed in the transition view.");
-		section.setDescription("(compound name) parent m/z > daughter m/z @collision energy r:parent resolution:daughter resolution [transition group]");
-		section.marginWidth = 5;
-		section.marginHeight = 5;
-		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
-		/*
-		 * Client
-		 */
-		client = formToolkit.createComposite(section, SWT.WRAP);
-		layout = new GridLayout(3, true);
-		layout.marginWidth = 10;
-		layout.marginHeight = 10;
-		client.setLayout(layout);
-		/*
-		 * Create check boxes
-		 */
-		Set<IMarkedIonTransition> markedIonTransistions = chromatogramSelection.getMarkedIonTransitions().getAll();
-		List<IMarkedIonTransition> transitionList = new ArrayList<IMarkedIonTransition>(markedIonTransistions);
-		/*
-		 * Add the client to the section and paint flat borders.
-		 */
-		section.setClient(client);
-		formToolkit.paintBordersFor(client);
 	}
 
 	private void createReferencedChromatogramPage() {
