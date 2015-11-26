@@ -36,6 +36,7 @@ public class DemoWriterWSD_1_ITest extends TestCase {
 
 	public void testReader_1() throws Exception {
 
+		// tests the reader & writer for wsd
 		String export = null;
 		assertNotNull("Please specify an export path.", export);
 		File file = new File(export);
