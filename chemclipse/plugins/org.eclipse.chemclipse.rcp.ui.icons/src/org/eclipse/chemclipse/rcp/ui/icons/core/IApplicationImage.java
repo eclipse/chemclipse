@@ -20,6 +20,9 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_LOGO = "logo.png";
 	String IMAGE_ABOUT = "about.png";
 	//
+	String IMAGE_DESELECTED = "deselected.gif";
+	String IMAGE_SELECTED = "selected.gif";
+	//
 	String IMAGE_PREFERENCES = "preferences.gif";
 	String IMAGE_DRIVE = "drive.gif";
 	String IMAGE_CHROMATOGRAM = "chromatogram.gif";

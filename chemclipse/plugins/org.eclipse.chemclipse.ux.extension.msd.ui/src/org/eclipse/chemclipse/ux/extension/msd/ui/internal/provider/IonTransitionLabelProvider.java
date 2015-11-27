@@ -25,10 +25,18 @@ public class IonTransitionLabelProvider extends LabelProvider implements ITableL
 	public Image getColumnImage(Object element, int columnIndex) {
 
 		if(columnIndex == 0) {
-			return getImage(element);
-		} else {
-			return null;
+			return getImage(element, IApplicationImage.IMAGE_ION_TRANSITION);
+		} else if(columnIndex == 6) {
+			if(element instanceof IMarkedIonTransition) {
+				IMarkedIonTransition markedIonTransition = (IMarkedIonTransition)element;
+				if(markedIonTransition.isSelected()) {
+					return getImage(element, IApplicationImage.IMAGE_SELECTED);
+				} else {
+					return getImage(element, IApplicationImage.IMAGE_DESELECTED);
+				}
+			}
 		}
+		return null;
 	}
 
 	@Override
@@ -58,7 +66,7 @@ public class IonTransitionLabelProvider extends LabelProvider implements ITableL
 					text = Double.valueOf(ionTransition.getCollisionEnergy()).toString();
 					break;
 				case 6:
-					text = Boolean.valueOf(markedIonTransition.isSelected()).toString();
+					text = ""; // An icon will be displayed
 					break;
 				default:
 					text = "n.v.";
@@ -67,9 +75,9 @@ public class IonTransitionLabelProvider extends LabelProvider implements ITableL
 		return text;
 	}
 
-	public Image getImage(Object element) {
+	public Image getImage(Object element, String key) {
 
-		Image image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ION_TRANSITION, IApplicationImage.SIZE_16x16);
+		Image image = ApplicationImageFactory.getInstance().getImage(key, IApplicationImage.SIZE_16x16);
 		return image;
 	}
 }

@@ -46,8 +46,10 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.IonTransitionCheckBoxEditingSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.IonTransitionContentProvider;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.IonTransitionLabelProvider;
+import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.IonTransitionTableComparator;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.ChromatogramImportRunnable;
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramFileSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport;
@@ -65,6 +67,7 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
@@ -966,13 +969,17 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		/*
 		 * Table
 		 */
-		String[] titles = {"name", "parent m/z", "parent resolution", "daughter m/z", "daughter resolution", "collision energy", "selected"};
+		String[] titles = {"name", "parent m/z", "parent resolution", "daughter m/z", "daughter resolution", "collision energy", "show"};
 		int bounds[] = {250, 100, 150, 100, 150, 150, 60};
 		//
 		ExtendedTableViewer tableViewer = new ExtendedTableViewer(composite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		tableViewer.createColumns(titles, bounds);
 		tableViewer.setContentProvider(new IonTransitionContentProvider());
 		tableViewer.setLabelProvider(new IonTransitionLabelProvider());
+		tableViewer.setComparator(new IonTransitionTableComparator());
+		List<TableViewerColumn> tableViewerColumns = tableViewer.getTableViewerColumns();
+		TableViewerColumn tableViewerColumn = tableViewerColumns.get(6); // see index in titles[]
+		tableViewerColumn.setEditingSupport(new IonTransitionCheckBoxEditingSupport(tableViewer));
 		tableViewer.setInput(chromatogramSelection);
 		//
 		tabItem.setControl(composite);
