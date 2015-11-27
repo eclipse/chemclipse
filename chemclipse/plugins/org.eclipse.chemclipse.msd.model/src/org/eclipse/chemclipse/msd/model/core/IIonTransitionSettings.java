@@ -32,6 +32,8 @@ public interface IIonTransitionSettings {
 	 */
 	IIonTransition getIonTransition(double filter1FirstIon, double filter1LastIon, double filter3FirstIon, double filter3LastIon, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup);
 
+	IIonTransition getIonTransition(String compoundName, double filter1FirstIon, double filter1LastIon, double filter3FirstIon, double filter3LastIon, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup);
+
 	/**
 	 * Returns the ion transition. If it doesn't exists, a the element and the group will be created.
 	 * Keep in mind that the transition group index is 0 based.

@@ -31,7 +31,13 @@ public abstract class AbstractIonTransitionSettings implements IIonTransitionSet
 	@Override
 	public IIonTransition getIonTransition(double filter1FirstIon, double filter1LastIon, double filter3FirstIon, double filter3LastIon, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup) {
 
-		IIonTransition ionTransition = new IonTransition(filter1FirstIon, filter1LastIon, filter3FirstIon, filter3LastIon, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup);
+		return getIonTransition("", filter1FirstIon, filter1LastIon, filter3FirstIon, filter3LastIon, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup);
+	}
+
+	@Override
+	public IIonTransition getIonTransition(String compoundName, double filter1FirstIon, double filter1LastIon, double filter3FirstIon, double filter3LastIon, double collisionEnergy, double filter1Resolution, double filter3Resolution, int transitionGroup) {
+
+		IIonTransition ionTransition = new IonTransition(filter1FirstIon, filter1LastIon, filter3FirstIon, filter3LastIon, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup, compoundName);
 		/*
 		 * The index (transition group) must be lower than the size of the
 		 * number of transition groups. The index is 0 based.
