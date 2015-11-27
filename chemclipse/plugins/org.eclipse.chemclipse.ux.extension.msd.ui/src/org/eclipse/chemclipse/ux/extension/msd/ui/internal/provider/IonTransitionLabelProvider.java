@@ -48,7 +48,7 @@ public class IonTransitionLabelProvider extends LabelProvider implements ITableL
 			IIonTransition ionTransition = markedIonTransition.getIonTransition();
 			switch(columnIndex) {
 				case 0:
-					text = ionTransition.getCompoundName();
+					text = (ionTransition.getCompoundName().equals("")) ? "not specified" : ionTransition.getCompoundName();
 					break;
 				case 1:
 					text = Integer.valueOf(ionTransition.getQ1Ion()).toString();
