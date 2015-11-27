@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
+import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.PeakType;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
@@ -142,6 +143,7 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 		/*
 		 * Read the chromatographic information.
 		 */
+		readMethod(zipFile, chromatogram, monitor);
 		if(useScanProxies) {
 			readScanProxies(zipFile, file, chromatogram, monitor);
 		} else {
@@ -157,6 +159,23 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 		setAdditionalInformation(file, chromatogram, monitor);
 		//
 		return chromatogram;
+	}
+
+	private void readMethod(ZipFile zipFile, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_SYSTEM_SETTINGS_MSD);
+		IMethod method = chromatogram.getMethod();
+		//
+		method.setInstrumentName(readString(dataInputStream));
+		method.setIonSource(readString(dataInputStream));
+		method.setSamplingRate(dataInputStream.readDouble());
+		method.setSolventDelay(dataInputStream.readInt());
+		method.setSourceHeater(dataInputStream.readDouble());
+		method.setStopMode(readString(dataInputStream));
+		method.setStopTime(dataInputStream.readInt());
+		method.setTimeFilterPeakWidth(dataInputStream.readInt());
+		//
+		dataInputStream.close();
 	}
 
 	private IChromatogramOverview readOverviewFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
@@ -669,6 +688,8 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 			/*
 			 * parent m/z start, ...
 			 */
+			String compoundName = readString(dataInputStream); // compound name
+			System.out.println(compoundName);
 			double filter1FirstIon = dataInputStream.readDouble(); // parent m/z start
 			double filter1LastIon = dataInputStream.readDouble(); // parent m/z stop
 			double filter3FirstIon = dataInputStream.readDouble(); // daughter m/z start
@@ -677,8 +698,10 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 			double filter1Resolution = dataInputStream.readDouble(); // q1 resolution
 			double filter3Resolution = dataInputStream.readDouble(); // q3 resolution
 			int transitionGroup = dataInputStream.readInt(); // transition group
+			int dwell = dataInputStream.readInt(); // dwell
 			//
-			IIonTransition ionTransition = ionTransitionSettings.getIonTransition(filter1FirstIon, filter1LastIon, filter3FirstIon, filter3LastIon, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup);
+			IIonTransition ionTransition = ionTransitionSettings.getIonTransition(compoundName, filter1FirstIon, filter1LastIon, filter3FirstIon, filter3LastIon, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup);
+			ionTransition.setDwell(dwell);
 			ion = new VendorIon(mz, abundance, ionTransition);
 		}
 		return ion;

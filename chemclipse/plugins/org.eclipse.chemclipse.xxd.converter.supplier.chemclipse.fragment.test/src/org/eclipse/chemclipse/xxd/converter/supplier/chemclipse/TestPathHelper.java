@@ -53,6 +53,10 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_3_FID_1003 = "testData/files/import/Chromatogram3-1003.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_3_FID_1004 = "testData/files/import/Chromatogram3-1004.ocb";
 	/*
+	 * Import WSD
+	 */
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_X_WSD_1005 = "testData/files/import/ChromatogramX-1005.ocb";
+	/*
 	 * EXPORT
 	 */
 }

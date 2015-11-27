@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
+import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -145,6 +146,7 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 		/*
 		 * WRITE THE FILES
 		 */
+		writeChromatogramMethod(zipOutputStream, chromatogram, monitor);
 		writeChromatogramScans(zipOutputStream, chromatogram, monitor);
 		writeChromatogramBaseline(zipOutputStream, chromatogram, monitor);
 		writeChromatogramPeaks(zipOutputStream, chromatogram, monitor);
@@ -152,6 +154,31 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 		writeChromatogramIdentification(zipOutputStream, chromatogram, monitor);
 		writeChromatogramHistory(zipOutputStream, chromatogram, monitor);
 		writeChromatogramMiscellaneous(zipOutputStream, chromatogram, monitor);
+	}
+
+	private void writeChromatogramMethod(ZipOutputStream zipOutputStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		ZipEntry zipEntry;
+		DataOutputStream dataOutputStream;
+		/*
+		 * Edit-History
+		 */
+		zipEntry = new ZipEntry(IFormat.FILE_SYSTEM_SETTINGS_MSD);
+		zipOutputStream.putNextEntry(zipEntry);
+		dataOutputStream = new DataOutputStream(zipOutputStream);
+		IMethod method = chromatogram.getMethod();
+		//
+		writeString(dataOutputStream, method.getInstrumentName());
+		writeString(dataOutputStream, method.getIonSource());
+		dataOutputStream.writeDouble(method.getSamplingRate());
+		dataOutputStream.writeInt(method.getSolventDelay());
+		dataOutputStream.writeDouble(method.getSourceHeater());
+		writeString(dataOutputStream, method.getStopMode());
+		dataOutputStream.writeInt(method.getStopTime());
+		dataOutputStream.writeInt(method.getTimeFilterPeakWidth());
+		//
+		dataOutputStream.flush();
+		zipOutputStream.closeEntry();
 	}
 
 	private void writeChromatogramScans(ZipOutputStream zipOutputStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
@@ -420,6 +447,8 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 				 * parent m/z start, ...
 				 */
 				dataOutputStream.writeInt(1); // Ion transition available
+				System.out.println(ionTransition.getCompoundName());
+				writeString(dataOutputStream, ionTransition.getCompoundName()); // compound name
 				dataOutputStream.writeDouble(ionTransition.getQ1StartIon()); // parent m/z start
 				dataOutputStream.writeDouble(ionTransition.getQ1StopIon()); // parent m/z stop
 				dataOutputStream.writeDouble(ionTransition.getQ3StartIon()); // daughter m/z start
@@ -428,6 +457,7 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 				dataOutputStream.writeDouble(ionTransition.getQ1Resolution()); // q1 resolution
 				dataOutputStream.writeDouble(ionTransition.getQ3Resolution()); // q3 resolution
 				dataOutputStream.writeInt(ionTransition.getTransitionGroup()); // transition group
+				dataOutputStream.writeInt(ionTransition.getDwell()); // dwell
 			}
 		}
 	}

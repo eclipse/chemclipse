@@ -23,6 +23,7 @@ import java.util.zip.ZipOutputStream;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
+import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.wsd.converter.io.IChromatogramWSDWriter;
@@ -122,10 +123,36 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 		/*
 		 * WRITE THE FILES
 		 */
+		writeChromatogramMethod(zipOutputStream, chromatogram, monitor);
 		writeChromatogramScans(zipOutputStream, chromatogram, monitor);
 		writeChromatogramBaseline(zipOutputStream, chromatogram, monitor);
 		writeChromatogramHistory(zipOutputStream, chromatogram, monitor);
 		writeChromatogramMiscellaneous(zipOutputStream, chromatogram, monitor);
+	}
+
+	private void writeChromatogramMethod(ZipOutputStream zipOutputStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		ZipEntry zipEntry;
+		DataOutputStream dataOutputStream;
+		/*
+		 * Edit-History
+		 */
+		zipEntry = new ZipEntry(IFormat.FILE_SYSTEM_SETTINGS_WSD);
+		zipOutputStream.putNextEntry(zipEntry);
+		dataOutputStream = new DataOutputStream(zipOutputStream);
+		IMethod method = chromatogram.getMethod();
+		//
+		writeString(dataOutputStream, method.getInstrumentName());
+		writeString(dataOutputStream, method.getIonSource());
+		dataOutputStream.writeDouble(method.getSamplingRate());
+		dataOutputStream.writeInt(method.getSolventDelay());
+		dataOutputStream.writeDouble(method.getSourceHeater());
+		writeString(dataOutputStream, method.getStopMode());
+		dataOutputStream.writeInt(method.getStopTime());
+		dataOutputStream.writeInt(method.getTimeFilterPeakWidth());
+		//
+		dataOutputStream.flush();
+		zipOutputStream.closeEntry();
 	}
 
 	private void writeChromatogramScans(ZipOutputStream zipOutputStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {

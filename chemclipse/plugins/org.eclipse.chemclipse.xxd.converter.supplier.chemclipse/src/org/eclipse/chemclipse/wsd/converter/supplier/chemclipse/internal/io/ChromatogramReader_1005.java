@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
@@ -77,20 +78,20 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 
 	private void readScansOverview(DataInputStream dataInputStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		IVendorScan _vendorScan;
+		IVendorScan vendorScan;
 		int scans = dataInputStream.readInt();
 		//
 		for(int scan = 1; scan <= scans; scan++) {
 			//
-			_vendorScan = new VendorScan();
+			vendorScan = new VendorScan();
 			//
 			int retentionTime = dataInputStream.readInt();
 			float totalSignal = dataInputStream.readFloat();
 			//
-			_vendorScan.setRetentionTime(retentionTime);
-			_vendorScan.adjustTotalSignal(totalSignal);
+			vendorScan.setRetentionTime(retentionTime);
+			vendorScan.adjustTotalSignal(totalSignal);
 			//
-			chromatogram.addScan(_vendorScan);
+			chromatogram.addScan(vendorScan);
 		}
 	}
 
@@ -116,12 +117,30 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 		/*
 		 * Read chromatographic information... :-)
 		 */
+		readMethod(zipFile, chromatogram, monitor);
 		readScans(zipFile, chromatogram, monitor);
 		readBaselines(zipFile, chromatogram, monitor);
 		readHistory(zipFile, chromatogram, monitor);
 		readMiscellaneous(zipFile, chromatogram, monitor);
 		//
 		return chromatogram;
+	}
+
+	private void readMethod(ZipFile zipFile, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_SYSTEM_SETTINGS_WSD);
+		IMethod method = chromatogram.getMethod();
+		//
+		method.setInstrumentName(readString(dataInputStream));
+		method.setIonSource(readString(dataInputStream));
+		method.setSamplingRate(dataInputStream.readDouble());
+		method.setSolventDelay(dataInputStream.readInt());
+		method.setSourceHeater(dataInputStream.readDouble());
+		method.setStopMode(readString(dataInputStream));
+		method.setStopTime(dataInputStream.readInt());
+		method.setTimeFilterPeakWidth(dataInputStream.readInt());
+		//
+		dataInputStream.close();
 	}
 
 	private void readScans(ZipFile zipFile, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {

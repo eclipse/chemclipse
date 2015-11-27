@@ -37,6 +37,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
+import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.PeakType;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
@@ -78,6 +79,7 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 				 */
 				monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 				chromatogram = new VendorChromatogram();
+				readMethod(zipFile, chromatogram, monitor);
 				readScans(zipFile, chromatogram, monitor);
 				readBaseline(zipFile, chromatogram, monitor);
 				readPeaks(zipFile, chromatogram, monitor);
@@ -89,6 +91,23 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 		}
 		//
 		return chromatogram;
+	}
+
+	private void readMethod(ZipFile zipFile, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_SYSTEM_SETTINGS_FID);
+		IMethod method = chromatogram.getMethod();
+		//
+		method.setInstrumentName(readString(dataInputStream));
+		method.setIonSource(readString(dataInputStream));
+		method.setSamplingRate(dataInputStream.readDouble());
+		method.setSolventDelay(dataInputStream.readInt());
+		method.setSourceHeater(dataInputStream.readDouble());
+		method.setStopMode(readString(dataInputStream));
+		method.setStopTime(dataInputStream.readInt());
+		method.setTimeFilterPeakWidth(dataInputStream.readInt());
+		//
+		dataInputStream.close();
 	}
 
 	private void readScans(ZipFile zipFile, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {

@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
+import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
@@ -97,10 +98,36 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 		/*
 		 * WRITE THE FILES
 		 */
+		writeChromatogramMethod(zipOutputStream, chromatogram, monitor);
 		writeChromatogramScans(zipOutputStream, chromatogram, monitor);
 		writeChromatogramBaseline(zipOutputStream, chromatogram, monitor);
 		writeChromatogramPeaks(zipOutputStream, chromatogram, monitor);
 		writeChromatogramArea(zipOutputStream, chromatogram, monitor);
+	}
+
+	private void writeChromatogramMethod(ZipOutputStream zipOutputStream, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		ZipEntry zipEntry;
+		DataOutputStream dataOutputStream;
+		/*
+		 * Edit-History
+		 */
+		zipEntry = new ZipEntry(IFormat.FILE_SYSTEM_SETTINGS_FID);
+		zipOutputStream.putNextEntry(zipEntry);
+		dataOutputStream = new DataOutputStream(zipOutputStream);
+		IMethod method = chromatogram.getMethod();
+		//
+		writeString(dataOutputStream, method.getInstrumentName());
+		writeString(dataOutputStream, method.getIonSource());
+		dataOutputStream.writeDouble(method.getSamplingRate());
+		dataOutputStream.writeInt(method.getSolventDelay());
+		dataOutputStream.writeDouble(method.getSourceHeater());
+		writeString(dataOutputStream, method.getStopMode());
+		dataOutputStream.writeInt(method.getStopTime());
+		dataOutputStream.writeInt(method.getTimeFilterPeakWidth());
+		//
+		dataOutputStream.flush();
+		zipOutputStream.closeEntry();
 	}
 
 	private void writeChromatogramScans(ZipOutputStream zipOutputStream, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {

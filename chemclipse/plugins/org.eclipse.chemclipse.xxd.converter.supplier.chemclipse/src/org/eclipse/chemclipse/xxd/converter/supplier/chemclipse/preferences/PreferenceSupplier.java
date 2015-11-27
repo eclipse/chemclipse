@@ -131,7 +131,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		elements[10][0] = IFormat.VERSION_1004 + " (Aston)";
 		elements[10][1] = IFormat.VERSION_1004;
 		//
-		elements[11][0] = IFormat.VERSION_1005;
+		elements[11][0] = IFormat.VERSION_1005 + " (under development)";
 		elements[11][1] = IFormat.VERSION_1005;
 		return elements;
 	}

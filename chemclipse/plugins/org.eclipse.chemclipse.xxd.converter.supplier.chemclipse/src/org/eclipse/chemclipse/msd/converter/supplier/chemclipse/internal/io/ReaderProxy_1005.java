@@ -133,6 +133,8 @@ public class ReaderProxy_1005 extends AbstractZipReader implements IReaderProxy 
 			/*
 			 * parent m/z start, ...
 			 */
+			String compoundName = readString(dataInputStream); // compound name
+			System.out.println(compoundName);
 			double filter1FirstIon = dataInputStream.readDouble(); // parent m/z start
 			double filter1LastIon = dataInputStream.readDouble(); // parent m/z stop
 			double filter3FirstIon = dataInputStream.readDouble(); // daughter m/z start
@@ -141,8 +143,10 @@ public class ReaderProxy_1005 extends AbstractZipReader implements IReaderProxy 
 			double filter1Resolution = dataInputStream.readDouble(); // q1 resolution
 			double filter3Resolution = dataInputStream.readDouble(); // q3 resolution
 			int transitionGroup = dataInputStream.readInt(); // transition group
+			int dwell = dataInputStream.readInt(); // dwell
 			//
-			IIonTransition ionTransition = ionTransitionSettings.getIonTransition(filter1FirstIon, filter1LastIon, filter3FirstIon, filter3LastIon, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup);
+			IIonTransition ionTransition = ionTransitionSettings.getIonTransition(compoundName, filter1FirstIon, filter1LastIon, filter3FirstIon, filter3LastIon, collisionEnergy, filter1Resolution, filter3Resolution, transitionGroup);
+			ionTransition.setDwell(dwell);
 			ion = new VendorIon(mz, abundance, ionTransition);
 		}
 		return ion;
