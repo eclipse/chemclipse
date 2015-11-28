@@ -52,6 +52,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -354,6 +355,7 @@ public class PcaEditor {
 	private void createExecuteSection(Composite parent) {
 
 		Label label;
+		Label radioLabels;
 		/*
 		 * Section
 		 */
@@ -381,6 +383,33 @@ public class PcaEditor {
 		label = formToolkit.createLabel(client, "Select the input chromatograms.");
 		label.setLayoutData(gridData);
 		createInputFilesPageHyperlink(client, gridData);
+		/*
+		 * Extraction type radio buttons.
+		 */
+		radioLabels = formToolkit.createLabel(client, "Select the extraction type.");
+		radioLabels.setLayoutData(gridData);
+		SelectionListener selectionListener = new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent event) {
+
+				Button button = ((Button)event.widget);
+				if(button.getText().equals("Peaks")) {
+					extractionType = 0;
+				} else {
+					extractionType = 1;
+				}
+			};
+		};
+		Button[] radios = new Button[2];
+		radios[0] = new Button(client, SWT.RADIO);
+		radios[0].setSelection(true);
+		radios[0].setText("Peaks");
+		radios[0].setLayoutData(gridData);
+		radios[0].addSelectionListener(selectionListener);
+		radios[1] = new Button(client, SWT.RADIO);
+		radios[1].setText("Scans");
+		radios[1].setLayoutData(gridData);
+		radios[1].addSelectionListener(selectionListener);
 		/*
 		 * Add the client to the section and paint flat borders.
 		 */
@@ -447,7 +476,7 @@ public class PcaEditor {
 		 */
 		section = formToolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
 		section.setText("Input files");
-		section.setDescription("Select the files to process. Use the add and remove buttons as needed. Click Peaks or Scans to pick appropriate extraction type. Default is set to Peaks. Click Run PCA to process the files. ");
+		section.setDescription("Select the files to process. Use the add and remove buttons as needed. Click Run PCA to process the files. ");
 		section.marginWidth = 5;
 		section.marginHeight = 5;
 		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
@@ -512,8 +541,6 @@ public class PcaEditor {
 
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_BEGINNING);
 		//
-		createPeaksTypeButton(client, gridData);
-		createScansTypeButton(client, gridData);
 		createAddButton(client, gridData);
 		createRemoveButton(client, gridData);
 		createProcessButton(client, gridData);
@@ -595,38 +622,6 @@ public class PcaEditor {
 
 				super.widgetSelected(e);
 				runPcaCalculation();
-			}
-		});
-	}
-
-	private void createPeaksTypeButton(Composite client, GridData gridData) {
-
-		Button scans;
-		scans = formToolkit.createButton(client, "Peaks", SWT.PUSH);
-		scans.setLayoutData(gridData);
-		scans.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				super.widgetSelected(e);
-				extractionType = 0;
-			}
-		});
-	}
-
-	private void createScansTypeButton(Composite client, GridData gridData) {
-
-		Button scans;
-		scans = formToolkit.createButton(client, "Scans", SWT.PUSH);
-		scans.setLayoutData(gridData);
-		scans.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				super.widgetSelected(e);
-				extractionType = 1;
 			}
 		});
 	}
