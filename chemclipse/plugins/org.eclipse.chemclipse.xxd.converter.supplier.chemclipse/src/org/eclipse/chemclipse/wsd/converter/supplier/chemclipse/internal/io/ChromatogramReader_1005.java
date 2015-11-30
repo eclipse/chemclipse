@@ -30,7 +30,6 @@ import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.wsd.converter.io.IChromatogramWSDReader;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.IVendorChromatogram;
-import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.IVendorScan;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.VendorChromatogram;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.VendorScan;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.VendorScanSignal;
@@ -78,20 +77,35 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 
 	private void readScansOverview(DataInputStream dataInputStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		IVendorScan vendorScan;
 		int scans = dataInputStream.readInt();
-		//
-		for(int scan = 1; scan <= scans; scan++) {
+		for(int scan = 1; scan <= scans; ++scan) {
+			monitor.subTask(IConstants.IMPORT_SCAN + scan);
+			IScanWSD scanObject = new VendorScan();
+			int scanSignals = dataInputStream.readInt();
 			//
-			vendorScan = new VendorScan();
+			for(int scanSignal = 0; scanSignal < scanSignals; ++scanSignal) {
+				IScanSignalWSD scanSignalObject = new VendorScanSignal();
+				int wavelength = dataInputStream.readInt();
+				float abundance = dataInputStream.readFloat();
+				//
+				scanSignalObject.setWavelength(wavelength);
+				scanSignalObject.setAbundance(abundance);
+				//
+				scanObject.addScanSignal(scanSignalObject);
+			}
 			//
 			int retentionTime = dataInputStream.readInt();
+			float retentionIndex = dataInputStream.readFloat();
 			float totalSignal = dataInputStream.readFloat();
+			int timeSegmentId = dataInputStream.readInt();
+			int cycleNumber = dataInputStream.readInt();
 			//
-			vendorScan.setRetentionTime(retentionTime);
-			vendorScan.adjustTotalSignal(totalSignal);
-			//
-			chromatogram.addScan(vendorScan);
+			scanObject.setRetentionTime(retentionTime);
+			scanObject.setRetentionIndex(retentionIndex);
+			scanObject.setTimeSegmentId(timeSegmentId);
+			scanObject.setCycleNumber(cycleNumber);
+			scanObject.adjustTotalSignal(totalSignal);
+			chromatogram.addScan(scanObject);
 		}
 	}
 

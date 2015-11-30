@@ -99,9 +99,23 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeInt(scans); // Number of Scans
 		// Retention Times - Total Signals
 		for(int scan = 1; scan <= scans; scan++) {
-			monitor.subTask(IConstants.EXPORT_SCAN + scan);
-			dataOutputStream.writeInt(chromatogram.getScan(scan).getRetentionTime()); // Retention Time
-			dataOutputStream.writeFloat(chromatogram.getScan(scan).getTotalSignal()); // Total Signal
+			monitor.subTask(IConstants.EXPORT_SCANS + scan);
+			IScanWSD scanWsd = chromatogram.getSupplierScan(scan);
+			int scanSignalTotal = scanWsd.getScanSignals().size();
+			dataOutputStream.writeInt(scanSignalTotal);
+			for(int signal = 0; signal < scanSignalTotal; signal++) {
+				IScanSignalWSD scanSignal = scanWsd.getScanSignal(signal);
+				int wavelength = scanSignal.getWavelength();
+				float abundance = scanSignal.getAbundance();
+				dataOutputStream.writeInt(wavelength);
+				dataOutputStream.writeFloat(abundance);
+			}
+			int retentionTime = chromatogram.getSupplierScan(scan).getRetentionTime();
+			dataOutputStream.writeInt(retentionTime); // Retention Time
+			dataOutputStream.writeFloat(chromatogram.getSupplierScan(scan).getRetentionIndex()); // Retention Index
+			dataOutputStream.writeFloat(chromatogram.getSupplierScan(scan).getTotalSignal()); // Total Signal
+			dataOutputStream.writeInt(chromatogram.getSupplierScan(scan).getTimeSegmentId()); // Time Segment Id
+			dataOutputStream.writeInt(chromatogram.getSupplierScan(scan).getCycleNumber()); // Cycle Number
 		}
 		//
 		dataOutputStream.flush();

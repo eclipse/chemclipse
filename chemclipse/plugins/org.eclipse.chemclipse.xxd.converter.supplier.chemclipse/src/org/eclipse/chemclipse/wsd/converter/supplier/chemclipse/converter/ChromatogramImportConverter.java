@@ -15,8 +15,6 @@ import java.io.File;
 
 import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
-import org.eclipse.chemclipse.csd.converter.io.IChromatogramCSDReader;
-import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io.ChromatogramReaderFID;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -77,7 +75,7 @@ public class ChromatogramImportConverter extends AbstractChromatogramWSDImportCo
 			 * Read the chromatogram overview.
 			 */
 			file = SpecificationValidator.validateSpecification(file);
-			IChromatogramCSDReader reader = new ChromatogramReaderFID();
+			IChromatogramWSDReader reader = new ChromatogramReaderWSD();
 			monitor.subTask(IConstants.IMPORT_CHROMATOGRAM_OVERVIEW);
 			try {
 				IChromatogramOverview chromatogramOverview = reader.readOverview(file, monitor);
