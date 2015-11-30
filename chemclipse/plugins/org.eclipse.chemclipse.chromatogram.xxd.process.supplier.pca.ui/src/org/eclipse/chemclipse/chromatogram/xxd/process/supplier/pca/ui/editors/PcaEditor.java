@@ -314,6 +314,7 @@ public class PcaEditor {
 		 */
 		createRetentionTimeWindowText(client);
 		createPrincipleComponentSpinner(client);
+		createExtractionTypeButtons(client);
 		/*
 		 * Add the client to the section and paint flat borders.
 		 */
@@ -347,6 +348,42 @@ public class PcaEditor {
 		principleComponentSpinner.setLayoutData(gridData);
 	}
 
+	private void createExtractionTypeButtons(Composite client) {
+
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		gridData.heightHint = 30;
+		/*
+		 * Extraction type radio buttons.
+		 */
+		Label radioLabels = formToolkit.createLabel(client, "Select the extraction type.");
+		radioLabels.setLayoutData(gridData);
+		SelectionListener selectionListener = new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent event) {
+
+				Button button = ((Button)event.widget);
+				if(button.getText().equals("Peaks")) {
+					extractionType = 0;
+				} else {
+					extractionType = 1;
+				}
+			};
+		};
+		Button[] radioButtons = new Button[2];
+		//
+		radioButtons[0] = new Button(client, SWT.RADIO);
+		radioButtons[0].setSelection(true);
+		radioButtons[0].setText("Peaks");
+		radioButtons[0].setLayoutData(gridData);
+		radioButtons[0].addSelectionListener(selectionListener);
+		//
+		radioButtons[1] = new Button(client, SWT.RADIO);
+		radioButtons[1].setText("Scans");
+		radioButtons[1].setLayoutData(gridData);
+		radioButtons[1].addSelectionListener(selectionListener);
+	}
+
 	/**
 	 * Creates the run section.
 	 * 
@@ -355,7 +392,6 @@ public class PcaEditor {
 	private void createExecuteSection(Composite parent) {
 
 		Label label;
-		Label radioLabels;
 		/*
 		 * Section
 		 */
@@ -383,33 +419,6 @@ public class PcaEditor {
 		label = formToolkit.createLabel(client, "Select the input chromatograms.");
 		label.setLayoutData(gridData);
 		createInputFilesPageHyperlink(client, gridData);
-		/*
-		 * Extraction type radio buttons.
-		 */
-		radioLabels = formToolkit.createLabel(client, "Select the extraction type.");
-		radioLabels.setLayoutData(gridData);
-		SelectionListener selectionListener = new SelectionAdapter() {
-
-			public void widgetSelected(SelectionEvent event) {
-
-				Button button = ((Button)event.widget);
-				if(button.getText().equals("Peaks")) {
-					extractionType = 0;
-				} else {
-					extractionType = 1;
-				}
-			};
-		};
-		Button[] radios = new Button[2];
-		radios[0] = new Button(client, SWT.RADIO);
-		radios[0].setSelection(true);
-		radios[0].setText("Peaks");
-		radios[0].setLayoutData(gridData);
-		radios[0].addSelectionListener(selectionListener);
-		radios[1] = new Button(client, SWT.RADIO);
-		radios[1].setText("Scans");
-		radios[1].setLayoutData(gridData);
-		radios[1].addSelectionListener(selectionListener);
 		/*
 		 * Add the client to the section and paint flat borders.
 		 */
