@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.model.identifier;
 
 public class ComparisonResult extends AbstractComparisonResult implements IComparisonResult {
 
+	static private final float nullFactorValue = 0.0f;
+
 	/**
 	 * Constructs the result.
 	 * 
@@ -27,5 +29,10 @@ public class ComparisonResult extends AbstractComparisonResult implements ICompa
 	public ComparisonResult(float matchFactor, float reverseMatchFactor, float probability) {
 
 		super(matchFactor, reverseMatchFactor, probability);
+	}
+
+	public static ComparisonResult createNullComparisonResult() {
+
+		return new ComparisonResult(nullFactorValue, nullFactorValue);
 	}
 }
