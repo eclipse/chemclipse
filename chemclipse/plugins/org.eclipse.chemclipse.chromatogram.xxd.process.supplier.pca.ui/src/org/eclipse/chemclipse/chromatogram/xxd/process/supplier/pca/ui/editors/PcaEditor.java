@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Daniel Mariano, Rafael Aguayo - additional functionality and UI improvements
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
@@ -356,7 +357,7 @@ public class PcaEditor {
 		/*
 		 * Extraction type radio buttons.
 		 */
-		Label radioLabels = formToolkit.createLabel(client, "Select the extraction type.");
+		Label radioLabels = formToolkit.createLabel(client, "Select the extraction type:");
 		radioLabels.setLayoutData(gridData);
 		SelectionListener selectionListener = new SelectionAdapter() {
 
@@ -416,7 +417,7 @@ public class PcaEditor {
 		/*
 		 * Input files section.
 		 */
-		label = formToolkit.createLabel(client, "Select the input chromatograms.");
+		label = formToolkit.createLabel(client, "Select the input chromatograms:\n");
 		label.setLayoutData(gridData);
 		createInputFilesPageHyperlink(client, gridData);
 		/*
@@ -553,6 +554,33 @@ public class PcaEditor {
 		createAddButton(client, gridData);
 		createRemoveButton(client, gridData);
 		createProcessButton(client, gridData);
+	}
+
+	private void createButtonForPeakListTable(Composite client) {
+
+		GridData gridData = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
+		createReevaluateButton(client, gridData);
+	}
+
+	private void createReevaluateButton(Composite client, GridData gridData) {
+
+		Button reevaluate;
+		reevaluate = formToolkit.createButton(client, "Re-Evaluate", SWT.PUSH);
+		reevaluate.setLayoutData(gridData);
+		// final PrincipleComponentProcessor principleComponentProcessor = new PrincipleComponentProcessor();
+		reevaluate.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+
+				super.widgetSelected(e);
+				System.out.println("Size: " + dataInputEntries.size());
+				runPcaCalculation();
+				reloadPeakListIntensityTable();
+				updateSpinnerPCMaxima();
+				reloadScorePlotChart();
+				reloadErrorResidueChart();
+			}
+		});
 	}
 
 	/**
@@ -698,7 +726,7 @@ public class PcaEditor {
 	 */
 	private void createPeakIntensityTableLabels(Composite client) {
 
-		tableHeader = formToolkit.createLabel(client, FILES + " " + "\t\tPeaks: " + " \tStart Peak: " + " \t End Peak: ", SWT.NONE);
+		tableHeader = formToolkit.createLabel(client, FILES + " " + "\t\tPeaks: " + " \t\tStart Peak: " + " \t End Peak: ", SWT.NONE);
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 		gridData.horizontalSpan = 2;
 		tableHeader.setLayoutData(gridData);
@@ -794,7 +822,14 @@ public class PcaEditor {
 
 	private void redrawTableHeader(List<IDataInputEntry> inputEntries, int numPeaks, String startPoint, String endPoint) {
 
-		tableHeader.setText(FILES + Integer.toString(inputEntries.size()) + "\t\tPeaks: " + numPeaks + " \t\tStart Peak: " + startPoint + "\t\tEnd Peak: " + endPoint);
+		// if peaks
+		if(extractionType == 0) {
+			tableHeader.setText(FILES + Integer.toString(inputEntries.size()) + "\t\tPeaks: " + numPeaks + " \t\tStart Peak: " + startPoint + "\t\tEnd Peak: " + endPoint);
+		}
+		// if scans
+		else {
+			tableHeader.setText(FILES + Integer.toString(inputEntries.size()) + "\t\tScans: " + numPeaks + " \t\tStart Scan: " + startPoint + "\t\tEnd Scan: " + endPoint);
+		}
 	}
 
 	// --------------------------------------------------------------------------------------------------------------Peak Intensity Table Page
@@ -829,7 +864,7 @@ public class PcaEditor {
 		 */
 		section = formToolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
 		section.setText("Peak Intensity Table");
-		section.setDescription("Click on the filename box to display a certain timerange.\n" + "Click on any peak column header to delete the corresponding column.\n");
+		section.setDescription("Click on the Times box to specify a certain timerange to display\n" + "Click on any time column header to delete the corresponding column\n\n" + "Click on any filename(not the checkboxes) to exclude/include that specific file in table\n" + "The checkboxes currently show what files are included\n\n" + "Click on the Re-Evaluate Button to recalcuate score plot and error chart\n");
 		section.marginWidth = 5;
 		section.marginHeight = 5;
 		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
@@ -842,7 +877,7 @@ public class PcaEditor {
 		layout.marginWidth = 2;
 		layout.marginHeight = 2;
 		client.setLayout(layout);
-		// Check if this works
+		createButtonForPeakListTable(client);
 		createPeakIntensityTableLabels(client);
 		GridData gridData;
 		peakListIntensityTable = formToolkit.createTable(client, SWT.MULTI | SWT.VIRTUAL | SWT.CHECK);
@@ -875,9 +910,20 @@ public class PcaEditor {
 					if(key.getName().equals(filename)) {
 						if(key.isSelected()) {
 							key.setSelected(false);
+							item.setChecked(false);
+							for(IDataInputEntry entry : dataInputEntries) {
+								// TODO: Check if there are other file types to consider. Only works when dealing with ocb files for now
+								if(entry.getName().equals(key.getName() + ".ocb")) {
+									dataInputEntries.remove(entry);
+								}
+							}
 							return;
 						} else {
 							key.setSelected(true);
+							item.setChecked(true);
+							// TODO: Check if there are other file types to consider. Only works when dealing with ocb files for now
+							DataInputEntry inputEntry = new DataInputEntry(key.getName() + ".ocb");
+							dataInputEntries.add(inputEntry);
 							return;
 						}
 					}
@@ -912,7 +958,7 @@ public class PcaEditor {
 			 * Header
 			 */
 			List<String> titleList = new ArrayList<String>();
-			titleList.add("Filename");
+			titleList.add("Times");
 			for(int retentionTime : pcaResults.getExtractedRetentionTimes()) {
 				titleList.add(numberFormat.format(retentionTime / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
 			}
