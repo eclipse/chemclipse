@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.msd.model.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractScan;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonAbundanceComparator;
+import org.eclipse.chemclipse.msd.model.core.comparator.IonCombinedComparator;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonValueComparator;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
@@ -319,9 +321,11 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			/*
 			 * Collections.max() doesn't work properly.
 			 */
-			Collections.sort(ionsList, ionAbundanceComparator);
-			int size = ionsList.size();
-			return ionsList.get(--size);
+			// Collections.sort(ionsList, ionAbundanceComparator);
+			// int size = ionsList.size();
+			// return ionsList.get(--size);
+			Comparator<IIon> comparator = new IonCombinedComparator(IonCombinedComparator.ComparatorMode.ABUNDANCE_FIRST);
+			return Collections.max(ionsList, comparator);
 		} else {
 			return immutableZeroIon;
 		}
@@ -334,9 +338,11 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			/*
 			 * Collections.max() doesn't work properly.
 			 */
-			Collections.sort(ionsList, ionValueComparator);
-			int size = ionsList.size();
-			return ionsList.get(--size);
+			// Collections.sort(ionsList, ionValueComparator);
+			// int size = ionsList.size();
+			// return ionsList.get(--size);
+			Comparator<IIon> comparator = new IonCombinedComparator(IonCombinedComparator.ComparatorMode.MZ_FIRST);
+			return Collections.max(ionsList, comparator);
 		} else {
 			return immutableZeroIon;
 		}
@@ -349,8 +355,10 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			/*
 			 * Collections.min() doesn't work properly.
 			 */
-			Collections.sort(ionsList, ionAbundanceComparator);
-			return ionsList.get(0);
+			// Collections.sort(ionsList, ionAbundanceComparator);
+			// return ionsList.get(0);
+			Comparator<IIon> comparator = new IonCombinedComparator(IonCombinedComparator.ComparatorMode.ABUNDANCE_FIRST);
+			return Collections.min(ionsList, comparator);
 		} else {
 			return immutableZeroIon;
 		}
@@ -363,8 +371,10 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			/*
 			 * Collections.min() doesn't work properly.
 			 */
-			Collections.sort(ionsList, ionValueComparator);
-			return ionsList.get(0);
+			// Collections.sort(ionsList, ionValueComparator);
+			// return ionsList.get(0);
+			Comparator<IIon> comparator = new IonCombinedComparator(IonCombinedComparator.ComparatorMode.MZ_FIRST);
+			return Collections.min(ionsList, comparator);
 		} else {
 			return immutableZeroIon;
 		}
@@ -376,10 +386,12 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		IIon lowest = null;
 		IIon highest = null;
 		if(hasIons()) {
-			Collections.sort(ionsList, ionValueComparator);
-			int size = ionsList.size();
-			lowest = ionsList.get(0);
-			highest = ionsList.get(--size);
+			// Collections.sort(ionsList, ionValueComparator);
+			// int size = ionsList.size();
+			// lowest = ionsList.get(0);
+			// highest = ionsList.get(--size);
+			lowest = Collections.min(ionsList, ionValueComparator);
+			highest = Collections.max(ionsList, ionValueComparator);
 			return new IonBounds(lowest, highest);
 		} else {
 			return null;
