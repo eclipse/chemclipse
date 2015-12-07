@@ -22,11 +22,7 @@ public class IonCombinedComparator implements Comparator<IIon>, Serializable {
 	private final Comparator<IIon> firstComparator;
 	private final Comparator<IIon> secondComparator;
 
-	public enum ComparatorMode {
-		ABUNDANCE_FIRST, MZ_FIRST
-	}
-
-	public IonCombinedComparator(ComparatorMode desiredMode) {
+	public IonCombinedComparator(IonComparatorMode desiredMode) {
 
 		switch(desiredMode) {
 			case ABUNDANCE_FIRST:
