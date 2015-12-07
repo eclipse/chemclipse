@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
@@ -26,8 +25,6 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.settings.IOperatingSystemUtils;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsLabelProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsTableComparator;
@@ -59,7 +56,6 @@ public abstract class AbstractTargetsView {
 	private String[] titles = {"Name", "CAS", "Match Factor", "Reverse Factor", "Formula", "Mol Weight", "Probability", "Advise", "Identifier", "Miscellaneous", "Comments"};
 	private int bounds[] = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 	private IStructuredContentProvider contentProvider;
-	private IOperatingSystemUtils operatingSystemUtils;
 	/*
 	 * Event Broker
 	 */
@@ -69,7 +65,6 @@ public abstract class AbstractTargetsView {
 	public AbstractTargetsView(IStructuredContentProvider contentProvider, IEventBroker eventBroker) {
 
 		this.contentProvider = contentProvider;
-		operatingSystemUtils = new OperatingSystemUtils();
 		map = new HashMap<String, Object>();
 		this.eventBroker = eventBroker;
 	}
@@ -323,74 +318,5 @@ public abstract class AbstractTargetsView {
 			}
 		}
 		return targetList;
-	}
-
-	private String getHeadline() {
-
-		/*
-		 * Headline
-		 */
-		StringBuilder builder = new StringBuilder();
-		builder.append("Name");
-		builder.append(IOperatingSystemUtils.TAB);
-		builder.append("CAS");
-		builder.append(IOperatingSystemUtils.TAB);
-		builder.append("MatchFactor");
-		builder.append(IOperatingSystemUtils.TAB);
-		builder.append("ReverseMatchFactor");
-		builder.append(IOperatingSystemUtils.TAB);
-		builder.append("Formula");
-		builder.append(IOperatingSystemUtils.TAB);
-		builder.append("Mol Weight");
-		builder.append(IOperatingSystemUtils.TAB);
-		builder.append("Probability");
-		builder.append(IOperatingSystemUtils.TAB);
-		builder.append("Advise");
-		builder.append(IOperatingSystemUtils.TAB);
-		builder.append("Identifier");
-		builder.append(IOperatingSystemUtils.TAB);
-		builder.append("Miscellaneous");
-		builder.append(IOperatingSystemUtils.TAB);
-		builder.append("Comments");
-		builder.append(operatingSystemUtils.getLineDelimiter());
-		return builder.toString();
-	}
-
-	private String extractIdentificationEntry(Object object) {
-
-		if(object instanceof IIdentificationTarget) {
-			IIdentificationTarget identificationEntry = (IIdentificationTarget)object;
-			ILibraryInformation libraryInformation = identificationEntry.getLibraryInformation();
-			IComparisonResult comparisonResult = identificationEntry.getComparisonResult();
-			/*
-			 * Build the string
-			 */
-			StringBuilder builder = new StringBuilder();
-			builder.append(libraryInformation.getName());
-			builder.append(IOperatingSystemUtils.TAB);
-			builder.append(libraryInformation.getCasNumber());
-			builder.append(IOperatingSystemUtils.TAB);
-			builder.append(comparisonResult.getMatchFactor());
-			builder.append(IOperatingSystemUtils.TAB);
-			builder.append(comparisonResult.getReverseMatchFactor());
-			builder.append(IOperatingSystemUtils.TAB);
-			builder.append(libraryInformation.getFormula());
-			builder.append(IOperatingSystemUtils.TAB);
-			builder.append(libraryInformation.getMolWeight());
-			builder.append(IOperatingSystemUtils.TAB);
-			builder.append(comparisonResult.getProbability());
-			builder.append(IOperatingSystemUtils.TAB);
-			builder.append(comparisonResult.getAdvise());
-			builder.append(IOperatingSystemUtils.TAB);
-			builder.append(identificationEntry.getIdentifier());
-			builder.append(IOperatingSystemUtils.TAB);
-			builder.append(libraryInformation.getMiscellaneous());
-			builder.append(IOperatingSystemUtils.TAB);
-			builder.append(libraryInformation.getComments());
-			builder.append(operatingSystemUtils.getLineDelimiter());
-			return builder.toString();
-		} else {
-			return "";
-		}
 	}
 }
