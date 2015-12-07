@@ -44,11 +44,12 @@ public abstract class AbstractChromatogramIdentifier implements IChromatogramIde
 			if(supplierExtension != "" && extension.endsWith(supplierExtension)) {
 				if(supplier.isImportable()) {
 					return true;
-				} else {
-					return false;
 				}
 			}
 		}
+		/*
+		 * If no converter was found, return false.
+		 */
 		return false;
 	}
 
@@ -71,11 +72,12 @@ public abstract class AbstractChromatogramIdentifier implements IChromatogramIde
 			if(directoryExtension != "" && directory.endsWith(directoryExtension)) {
 				if(supplier.isImportable()) {
 					return true;
-				} else {
-					return false;
 				}
 			}
 		}
+		/*
+		 * If no converter was found, return false.
+		 */
 		return false;
 	}
 }
