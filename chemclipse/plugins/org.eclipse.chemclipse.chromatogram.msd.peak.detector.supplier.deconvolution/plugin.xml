@@ -6,7 +6,7 @@
       <PeakDetector
             description="This extension point tries to implement a deconvolution peak detector."
             id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution"
-            peakDetector="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.core.DeconvolutionPeakDetector"
+            peakDetector="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.core.PeakDetector"
             peakDetectorName="Deconvolution Detector">
       </PeakDetector>
    </extension>

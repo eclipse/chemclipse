@@ -13,13 +13,12 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolu
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.PeakDetectorMSD;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings.DeconvolutionPeakDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings.IDeconvolutionPeakDetectorSettings;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.preferences.PreferenceSupplier;
-
+import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
