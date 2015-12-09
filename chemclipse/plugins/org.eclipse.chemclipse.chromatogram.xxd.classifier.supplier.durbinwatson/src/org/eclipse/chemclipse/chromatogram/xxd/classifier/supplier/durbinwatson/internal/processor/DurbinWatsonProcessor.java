@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.internal.processor;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.result.IDurbinWatsonClassifierResult;
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.result.SavitzkyGolayFilterRating;
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.settings.IDurbinWatsonClassifierSettings;
@@ -27,6 +25,7 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class DurbinWatsonProcessor {
 
@@ -42,41 +41,49 @@ public class DurbinWatsonProcessor {
 			TotalScanSignalExtractor signalExtractor = new TotalScanSignalExtractor(chromatogram);
 			ITotalScanSignals totalScanSignals = signalExtractor.getTotalScanSignals(chromatogramSelection, false);
 			double[] valuesOriginal = getScanSignalsAsArray(totalScanSignals);
-			SavitzkyGolayProcessor savitzkyGolayProcessor = new SavitzkyGolayProcessor();
-			/*
-			 * Iterate through the width
-			 */
-			int minDerivative = PreferenceSupplier.MIN_DERIVATIVE;
-			int maxDerivative = PreferenceSupplier.MAX_DERIVATIVE;
-			int minOrder = PreferenceSupplier.MIN_ORDER;
-			int maxOrder = PreferenceSupplier.MAX_ORDER;
-			int minWidth = PreferenceSupplier.MIN_WIDTH;
-			int maxWidth = PreferenceSupplier.MAX_WIDTH;
-			//
-			for(int derivative = minDerivative; derivative <= maxDerivative; derivative++) {
-				for(int order = minOrder; order <= maxOrder; order++) {
-					for(int width = minWidth; width <= maxWidth; width++) {
+			durbinWatsonMain(valuesOriginal, classifierSettings, durbinWatsonClassifierResult, monitor);
+		} catch(ChromatogramIsNullException e) {
+			logger.warn(e);
+		}
+	}
+
+	public void durbinWatsonMain(double[] valuesOriginal, IDurbinWatsonClassifierSettings classifierSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
+
+		SavitzkyGolayProcessor savitzkyGolayProcessor = new SavitzkyGolayProcessor();
+		/*
+		 * Iterate through the width
+		 */
+		int minDerivative = PreferenceSupplier.MIN_DERIVATIVE;
+		int maxDerivative = PreferenceSupplier.MAX_DERIVATIVE;
+		int minOrder = PreferenceSupplier.MIN_ORDER;
+		int maxOrder = PreferenceSupplier.MAX_ORDER;
+		int minWidth = PreferenceSupplier.MIN_WIDTH;
+		int maxWidth = PreferenceSupplier.MAX_WIDTH;
+		if(valuesOriginal.length < maxWidth) {
+			maxWidth = valuesOriginal.length;
+		}
+		//
+		for(int derivative = minDerivative; derivative <= maxDerivative; derivative++) {
+			for(int order = minOrder; order <= maxOrder; order++) {
+				for(int width = minWidth; width <= maxWidth; width++) {
+					/*
+					 * Create the settings and test.
+					 * Width must be odd.
+					 */
+					if(width % 2 == 1) {
+						ISupplierFilterSettings supplierFilterSettings = new SupplierFilterSettings();
+						supplierFilterSettings.setDerivative(derivative);
+						supplierFilterSettings.setOrder(order);
+						supplierFilterSettings.setWidth(width);
+						double[] valuesSmoothed = savitzkyGolayProcessor.smooth(valuesOriginal, supplierFilterSettings, monitor);
+						double rating = calculateDurbinWatsonRating(valuesOriginal, valuesSmoothed);
 						/*
-						 * Create the settings and test.
-						 * Width must be odd.
+						 * Store the result
 						 */
-						if(width % 2 == 1) {
-							ISupplierFilterSettings supplierFilterSettings = new SupplierFilterSettings();
-							supplierFilterSettings.setDerivative(derivative);
-							supplierFilterSettings.setOrder(order);
-							supplierFilterSettings.setWidth(width);
-							double[] valuesSmoothed = savitzkyGolayProcessor.smooth(totalScanSignals, supplierFilterSettings, monitor);
-							double rating = calculateDurbinWatsonRating(valuesOriginal, valuesSmoothed);
-							/*
-							 * Store the result
-							 */
-							durbinWatsonClassifierResult.getSavitzkyGolayFilterRatings().add(new SavitzkyGolayFilterRating(rating, supplierFilterSettings));
-						}
+						durbinWatsonClassifierResult.getSavitzkyGolayFilterRatings().add(new SavitzkyGolayFilterRating(rating, supplierFilterSettings));
 					}
 				}
 			}
-		} catch(ChromatogramIsNullException e) {
-			logger.warn(e);
 		}
 	}
 
