@@ -17,8 +17,6 @@ import org.apache.commons.math3.linear.QRDecomposition;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.SingularValueDecomposition;
 import org.apache.commons.math3.stat.StatUtils;
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
@@ -31,6 +29,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class SavitzkyGolayProcessor {
 
@@ -74,22 +73,31 @@ public class SavitzkyGolayProcessor {
 		return chromatogramFilterResult;
 	}
 
+	public double[] smooth(double[] ticValues, ISupplierFilterSettings supplierFilterSettings, IProgressMonitor monitor) {
+
+		return smoothValues(ticValues, supplierFilterSettings);
+	}
+
 	public double[] smooth(ITotalScanSignals totalScanSignals, ISupplierFilterSettings supplierFilterSettings, IProgressMonitor monitor) {
 
-		int derivative = supplierFilterSettings.getDerivative();
-		int order = supplierFilterSettings.getOrder();
-		int width = supplierFilterSettings.getWidth();
-		int p = calculateP(width);
-		//
 		int size = totalScanSignals.size();
 		double[] ticValues = new double[size];
 		int column = 0;
 		for(ITotalScanSignal signal : totalScanSignals.getTotalScanSignals()) {
 			ticValues[column++] = signal.getTotalSignal();
 		}
-		/*
-		 * Make value validations.
-		 */
+		//
+		return smoothValues(ticValues, supplierFilterSettings);
+	}
+
+	private double[] smoothValues(double[] ticValues, ISupplierFilterSettings supplierFilterSettings) {
+
+		int derivative = supplierFilterSettings.getDerivative();
+		int order = supplierFilterSettings.getOrder();
+		int width = supplierFilterSettings.getWidth();
+		int p = calculateP(width);
+		//
+		int size = ticValues.length;
 		width = Math.max(PreferenceSupplier.MIN_WIDTH, (1 + 2 * Math.round((width - 1) / 2)));
 		order = (int)StatUtils.min(new double[]{Math.max(0, order), 5, (width - 1)});
 		derivative = Math.min(Math.max(0, derivative), order);
