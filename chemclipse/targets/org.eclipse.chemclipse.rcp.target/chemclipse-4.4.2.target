@@ -33,6 +33,9 @@
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.apache.log4j" version="0.0.0"/>
+<unit id="ch.qos.logback.core" version="0.0.0"/>
+<unit id="org.slf4j.api" version="0.0.0"/>
+<unit id="ch.qos.logback.classic" version="0.0.0"/>
 <unit id="org.apache.commons.httpclient" version="0.0.0"/>
 <unit id="org.apache.httpcomponents.httpclient.source" version="0.0.0"/>
 <unit id="org.apache.httpcomponents.httpcore" version="0.0.0"/>
