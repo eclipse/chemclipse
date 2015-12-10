@@ -15,10 +15,10 @@ import org.apache.log4j.Logger;
 
 public class Category {
 
-	private Logger logger;
+	private final Logger logger;
 
 	@SuppressWarnings("rawtypes")
-	public Category(Class clazz) {
+	public Category(final Class clazz) {
 
 		logger = Logger.getLogger(clazz);
 	}
@@ -26,15 +26,7 @@ public class Category {
 	/**
 	 * @param message
 	 */
-	public void trace(Object message) {
-
-		logger.trace(message);
-	}
-
-	/**
-	 * @param message
-	 */
-	public void debug(Object message) {
+	public void debug(final Object message) {
 
 		logger.debug(message);
 	}
@@ -42,23 +34,7 @@ public class Category {
 	/**
 	 * @param message
 	 */
-	public void info(Object message) {
-
-		logger.info(message);
-	}
-
-	/**
-	 * @param message
-	 */
-	public void warn(Object message) {
-
-		logger.warn(message);
-	}
-
-	/**
-	 * @param message
-	 */
-	public void error(Object message) {
+	public void error(final Object message) {
 
 		logger.error(message);
 	}
@@ -66,8 +42,37 @@ public class Category {
 	/**
 	 * @param message
 	 */
-	public void fatal(Object message) {
+	public void fatal(final Object message) {
 
 		logger.fatal(message);
+	}
+
+	/**
+	 * @param message
+	 */
+	public void info(final Object message) {
+
+		logger.info(message);
+	}
+
+	/**
+	 * @param message
+	 */
+	public void trace(final Object message) {
+
+		logger.trace(message);
+	}
+
+	/**
+	 * @param message
+	 */
+	public void warn(final Object message) {
+
+		logger.warn(message);
+	}
+
+	public void warn(final Object message, final Throwable t) {
+
+		logger.warn(message, t);
 	}
 }
