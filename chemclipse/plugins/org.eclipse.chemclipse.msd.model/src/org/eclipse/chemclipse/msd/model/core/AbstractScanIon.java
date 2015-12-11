@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2015 Philip (eselmeister) Wenig.
- * 
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
@@ -59,7 +59,7 @@ public abstract class AbstractScanIon extends AbstractIon implements IScanIon {
 
 	// ----------------------Constructors
 	@Override
-	public void setAbundance(float abundance) throws AbundanceLimitExceededException {
+	public AbstractScanIon setAbundance(float abundance) throws AbundanceLimitExceededException {
 
 		if(ignoreAbundanceLimit) {
 			super.setAbundance(abundance);
@@ -68,10 +68,11 @@ public abstract class AbstractScanIon extends AbstractIon implements IScanIon {
 		} else {
 			super.setAbundance(abundance);
 		}
+		return this;
 	}
 
 	@Override
-	public void setIon(double ion) throws IonLimitExceededException {
+	public AbstractScanIon setIon(double ion) throws IonLimitExceededException {
 
 		/*
 		 * IIon.TIC_Ion is used to set a TIC value in case of
@@ -84,6 +85,7 @@ public abstract class AbstractScanIon extends AbstractIon implements IScanIon {
 		} else {
 			super.setIon(ion);
 		}
+		return this;
 	}
 
 	@Override

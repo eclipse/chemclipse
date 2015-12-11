@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2015 Philip (eselmeister) Wenig.
- * 
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
@@ -35,8 +35,9 @@ import org.eclipse.core.runtime.IAdaptable;
  * -------------------------------------------------<br/>
  * | | |<br/>
  * [AgilentIon] [NetCDFIon] [MzXMLIon]<br/>
- * 
+ *
  * @author eselmeister
+ * @author Alexander Kerner
  */
 public interface IIon extends IIonSerializable, IAdaptable, Comparable<IIon> {
 
@@ -46,39 +47,39 @@ public interface IIon extends IIonSerializable, IAdaptable, Comparable<IIon> {
 
 	/**
 	 * Returns the value of the actual ion.
-	 * 
+	 *
 	 * @return double
 	 */
 	double getIon();
 
 	/**
 	 * Sets the new value of the ion.
-	 * 
+	 *
 	 * @param ion
 	 *            - The new Value of the ion
 	 * @throws IonLimitExceededException
 	 */
-	void setIon(double ion) throws IonLimitExceededException;
+	IIon setIon(double ion) throws IonLimitExceededException;
 
 	/**
 	 * Returns the actual abundance of the ion.
-	 * 
+	 *
 	 * @return float - abundance
 	 */
 	float getAbundance();
 
 	/**
 	 * Sets an abundance value for the ion.
-	 * 
+	 *
 	 * @param abundance
 	 * @throws AbundanceLimitExceededException
 	 */
-	void setAbundance(float abundance) throws AbundanceLimitExceededException;
+	IIon setAbundance(float abundance) throws AbundanceLimitExceededException;
 
 	/**
 	 * Returns the ion transition.
 	 * If no triple quadrupole / ion transition is used, null will be returned.
-	 * 
+	 *
 	 * @return {@link IIonTransition}
 	 */
 	IIonTransition getIonTransition();

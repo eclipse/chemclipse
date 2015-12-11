@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2015 Philip (eselmeister) Wenig.
- * 
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
@@ -22,8 +22,9 @@ import org.eclipse.core.runtime.Platform;
  * automated storage in disk.<br/>
  * The serialization of ions is controlled by the corresponding mass
  * spectrum.
- * 
+ *
  * @author eselmeister
+ * @author Alexander Kerner
  * @see AbstractScanMSD
  */
 public abstract class AbstractIon implements IIon {
@@ -143,7 +144,7 @@ public abstract class AbstractIon implements IIon {
 	 * precision 4 => 28.7875
 	 * precision 5 => 28.78749
 	 * precision 6 => 28.787492
-	 * 
+	 *
 	 * The precision of 6 is the maximum. If the precious is outward of
 	 * this bounds it will set to 1.
 	 */
@@ -184,21 +185,23 @@ public abstract class AbstractIon implements IIon {
 	}
 
 	@Override
-	public void setAbundance(float abundance) throws AbundanceLimitExceededException {
+	public AbstractIon setAbundance(float abundance) throws AbundanceLimitExceededException {
 
 		if(abundance < 0) {
 			throw new AbundanceLimitExceededException("The abundance value can't be negative. It is actual: " + abundance);
 		}
 		this.abundance = abundance;
+		return this;
 	}
 
 	@Override
-	public void setIon(double ion) throws IonLimitExceededException {
+	public AbstractIon setIon(double ion) throws IonLimitExceededException {
 
 		if(ion < 0) {
 			throw new IonLimitExceededException("The ion value can't be negative. It is actual: " + ion);
 		}
 		this.ion = ion;
+		return this;
 	}
 
 	@Override
@@ -213,6 +216,7 @@ public abstract class AbstractIon implements IIon {
 	 * following values: a.compareTo(b) 0 a == b : 28 == 28 -1 a < b : 18 < 28
 	 * +1 a > b : 28 > 18
 	 */
+	@Override
 	public int compareTo(IIon other) {
 
 		return (int)(this.ion - other.getIon());

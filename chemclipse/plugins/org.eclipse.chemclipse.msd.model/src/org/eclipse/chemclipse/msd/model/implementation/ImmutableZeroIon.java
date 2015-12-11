@@ -5,9 +5,10 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
@@ -36,18 +37,22 @@ public class ImmutableZeroIon extends AbstractIon implements IIon {
 	}
 
 	@Override
-	public void setAbundance(float abundance) throws AbundanceLimitExceededException {
+	public ImmutableZeroIon setAbundance(float abundance) throws AbundanceLimitExceededException {
 
 		/*
 		 * Prevent modifying the immutable ion.
+		 * TODO maybe log invalid modification request
 		 */
+		return this;
 	}
 
 	@Override
-	public void setIon(double ion) throws IonLimitExceededException {
+	public ImmutableZeroIon setIon(double ion) throws IonLimitExceededException {
 
 		/*
 		 * Prevent modifying the immutable ion.
+		 * TODO maybe log invalid modification request
 		 */
+		return this;
 	}
 }
