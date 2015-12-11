@@ -11,15 +11,27 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.calculator.CodaCalculator;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.AbstractPeakDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.IPeakDetectorMSDProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.PeakDetectorMSDProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Derivatives.DerivativesAndNoise;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Derivatives.FirstDerivativeAndNoise;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Derivatives.IDerivativesAndNoise;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Derivatives.IFirstDerivativeAndNoise;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Derivatives.ISecondDerivativeAndNoise;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Derivatives.IThirdDerivativeAndNoise;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Derivatives.SecondDerivativeAndNoise;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Derivatives.ThirdDerivativeAndNoise;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.PeakRanges.IPeakDeconv;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.PeakRanges.IPeakRange;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.PeakRanges.IPeakRanges;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.PeakRanges.IPeaksDeconv;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.PeakRanges.PeakDeconv;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.PeakRanges.PeakRange;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.PeakRanges.PeakRanges;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.PeakRanges.PeaksDeconv;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.notifier.DeconvNotifier;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.support.ArrayView;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.support.ArraysViewDeconv;
@@ -40,15 +52,8 @@ import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
-import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
-import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
 import org.eclipse.chemclipse.msd.model.xic.ITotalIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.TotalIonSignalExtractor;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -68,11 +73,6 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	private double highestTicSignal = 0;
 	private boolean validStartPoint;
 	/*
-	 * Coda Parameter
-	 */
-	private WindowSize MOVING_AVERAGE_WINDOW = WindowSize.SCANS_3;
-	private float codaThreshold = 0.75f;
-	/*
 	 * Snip Parameter
 	 */
 	private int iterations = 70;
@@ -85,6 +85,11 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	 */
 	private int factorNoise = 5;
 	private int segmentSizeFactor = 30;
+	/*
+	 * Peak Ranges Parameter maybe later set up by user
+	 */
+	private int minPeakRising = 2;
+	private boolean useAverageNoiseForSmallNoise = false;
 
 	@Override
 	public IPeakDetectorMSDProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorMSDSettings peakDetectorSettings, IProgressMonitor monitor) {
@@ -124,8 +129,8 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			 */
 			ITotalIonSignalExtractor totalIonSignalExtractor = new TotalIonSignalExtractor(chromatogram);
 			ITotalScanSignals totalIONsignals = totalIonSignalExtractor.getTotalIonSignals(chromatogramSelection);
-			IExtractedIonSignalExtractor extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogram);
-			IExtractedIonSignals extractedIonSignals = extractedIonSignalExtractor.getExtractedIonSignals(chromatogramSelection);
+			// IExtractedIonSignalExtractor extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogram);
+			// IExtractedIonSignals extractedIonSignals = extractedIonSignalExtractor.getExtractedIonSignals(chromatogramSelection);
 			/*
 			 * Set Size of ArraysViewDeconv
 			 */
@@ -142,93 +147,25 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			 */
 			DurbinWatsonRatings(yChromatogram, null, durbinWatsonClassifierResult, monitor);
 			/*
-			 * Coda
-			 */
-			IMarkedIons excludedIonsCODA = CodaFilter(extractedIonSignals);
-			ITotalScanSignals totalIONsignalsExtractedCodaIons = totalIonSignalExtractor.getTotalIonSignals(excludedIonsCODA);
-			double[] codaTicValues = deconvHelper.getSignalAsArrayDoubleDeconvCODA(totalIONsignalsExtractedCodaIons, totalIONsignals);
-			/*
 			 * SNIP
 			 */
-			float[] baselineValues = calculateSNIPBaseline(deconvHelper.getFloatArray(yChromatogram), iterations, monitor);
+			double[] baselineValues = deconvHelper.getDoubleArray(calculateSNIPBaseline(deconvHelper.getFloatArray(yChromatogram), iterations, monitor));
 			/*
 			 * Noise by Vivo-Truyols
-			 * //
 			 */
 			double[] noiseValues = getNoiseOfTic(yChromatogram, false, false);
 			/*
 			 * Smoothed Values
 			 */
 			double[] smoothedValues = savitzkyGolaySmooth(noDerivative, yChromatogram, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
+			IDerivativesAndNoise derivativesAndNoise = setDerivatives(yChromatogram, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
 			/*
-			 * Get Derivatives with SavitzkyGolay
+			 * PeakRanges and set up for the view
 			 */
-			double[] firstDeriv = savitzkyGolaySmooth(firstDerivative, yChromatogram, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
-			double[] secondDeriv = savitzkyGolaySmooth(secondDerivative, yChromatogram, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
-			double[] thirdDeriv = savitzkyGolaySmooth(thirdDerivative, yChromatogram, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
-			// -------------------------------------------------
-			double[] firstDerivOriginal = getDerivative(yChromatogram, 1);
-			double[] SmoothedFirstDerivOrig = savitzkyGolaySmooth(noDerivative, firstDerivOriginal, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
-			double[] secondDerivOriginal = getDerivative(firstDerivOriginal, 2);
-			double[] SmoothedSecondDerivOrig = savitzkyGolaySmooth(noDerivative, secondDerivOriginal, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
-			/*
-			 * fill PrintView
-			 */
-			/*
-			 * alles normal anzeigen --- Savitzky Golay Derivs
-			 */
-			// fillArraysViewDeconv(xScales, yChromatogram, deconvHelper.getDoubleArray(baselineValues), noiseValues, smoothedValues, firstDeriv, secondDeriv, null, null, null);
-			/*----------------------------------------------------------
-			 *  alles normal anzeigen --- Deriv NOT SavitzkyGolay --- Smoothed with SG
-			 */
-			// fillArraysViewDeconv(xScales, yChromatogram, deconvHelper.getDoubleArray(baselineValues), noiseValues, smoothedValues, SmoothedFirstDerivOrig, SmoothedSecondDerivOrig, null, null, null);
-			/*----------------------------------------------------------
-			 * unterschiedliche erste Ableitungen
-			 */
-			// fillArraysViewDeconv(xScales, yChromatogram, deconvHelper.getDoubleArray(baselineValues), noiseValues, smoothedValues, firstDeriv, firstDerivOriginal, SmoothedFirstDerivOrig, null, null);
-			/*----------------------------------------------------------
-			 * unterschiedliche zweite Ableitungen
-			 */
-			// fillArraysViewDeconv(xScales, yChromatogram, null, noiseValues, smoothedValues, secondDeriv, secondDerivOriginal, SmoothedSecondDerivOrig, null, null);
-			/*
-			 * Tests
-			 */
-			double[] firstDerivCoda = getDerivative(codaTicValues, 1);
-			double[] SmoothedFirstDerivCoda = savitzkyGolaySmooth(noDerivative, firstDerivCoda, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
-			double[] noiseValuesFirstDerivPositivTEST = getNoiseOfTic(SmoothedFirstDerivOrig, false, false);
-			double[] noiseValuesFirstDerivPositiv = getNoiseOfTic(SmoothedFirstDerivOrig, true, true);
-			double[] noiseValuesFirstDerivNegativ = getNoiseOfTic(SmoothedFirstDerivOrig, true, false);
-			double[] noiseValuesFirstDerivPositivCODA = getNoiseOfTic(SmoothedFirstDerivCoda, true, true);
-			double[] noiseValuesFirstDerivNegativCODA = getNoiseOfTic(SmoothedFirstDerivCoda, true, false);
-			//
-			/*
-			 * CodaValues + Baseline
-			 */
-			// double[] codaWithBaselin = new double[xScales.length];
-			// for(int i = 0; i < xScales.length; i++) {
-			// codaWithBaselin[i] = codaTicValues[i] + baselineValues[i];
-			// }
-			/*
-			 * TODO
-			 * Mit Andreas mal anschauen und besprechen
-			 * Vergleich mit Matlab
-			 */
-			// fillArraysViewDeconv(xScales, smoothedValues, codaWithBaselin, null, SmoothedFirstDerivCoda, SmoothedFirstDerivOrig, noiseValuesFirstDerivPositivTEST, noiseValuesFirstDerivNegativ, null, null);
-			// ----------------------------------------------------------
-			// fillArraysViewDeconv(xScales, yChromatogram, null, null, smoothedValues, SmoothedFirstDerivOrig, noiseValuesFirstDerivPositivTEST, noiseValuesFirstDerivNegativ, null, null);
-			/*
-			 * TODO
-			 * Peakrange bestimmung
-			 * Alle Ableitungen auswerten
-			 */
-			double[] derivNegativeNoise = positivToNegativ(noiseValuesFirstDerivPositivTEST);
-			double[] peakRanges = detectPeakRanges(SmoothedFirstDerivOrig, noiseValuesFirstDerivPositivTEST, derivNegativeNoise);
-			fillArraysViewDeconv(xScales, smoothedValues, null, null, null, SmoothedFirstDerivOrig, noiseValuesFirstDerivPositivTEST, derivNegativeNoise, detectPeakRanges, PeakRangesEndPoints);
-			/*
-			 * CODA
-			 */
-			// double[] peakRanges = detectPeakRanges(SmoothedFirstDerivCoda, noiseValuesFirstDerivPositiv, noiseValuesFirstDerivNegativ);
-			// fillArraysViewDeconv(xScales, yChromatogram, null, null, smoothedValues, SmoothedFirstDerivCoda, noiseValuesFirstDerivPositivCODA, noiseValuesFirstDerivNegativCODA, peakRanges, null);
+			// Set peakRanges
+			IPeakRanges peakRanges = new PeakRanges(totalIONsignals);
+			peakRanges = detectPeakRanges(derivativesAndNoise, peakRanges, yChromatogram, deconvHelper.getNoisePlusBaselin(baselineValues, noiseValues));
+			fillArraysViewDeconv(xScales, smoothedValues, null, null, derivativesAndNoise.getSecondDerivativeAndNoise().getSecondDeriv(), derivativesAndNoise.getFirstDerivativeAndNoise().getFirstDeriv(), derivativesAndNoise.getSecondDerivativeAndNoise().getNoisePositiv(), derivativesAndNoise.getSecondDerivativeAndNoise().getNoiseNegative(), detectPeakRanges, PeakRangesEndPoints);
 			/*
 			 * TODO
 			 * Deconvolution
@@ -241,6 +178,30 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		}
 	}
 
+	private IDerivativesAndNoise setDerivatives(double[] yChromatogram, ISupplierFilterSettings supplierFilterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
+
+		/*
+		 * First deriv by Savitzky Golay with Noise (Factorised by 2 => now it's the same range like firstderiv by normal function)
+		 */
+		double[] firstDerivSmoothedFactorised = factorisingValues(savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(firstDerivative, yChromatogram, supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor), 2);
+		double[] noiseFirstDeriv = getNoiseOfTic(firstDerivSmoothedFactorised, false, false);
+		double[] noiseNegativeFirstDeriv = positivToNegativ(noiseFirstDeriv);
+		IFirstDerivativeAndNoise firstDerivative = new FirstDerivativeAndNoise(firstDerivSmoothedFactorised, noiseFirstDeriv, noiseNegativeFirstDeriv);
+		// SecondDerivative
+		double[] secondDerivSmoothedFactorised = factorisingValues(savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(secondDerivative, yChromatogram, supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor), 9);
+		double[] noiseSecondDeriv = getNoiseOfTic(secondDerivSmoothedFactorised, false, false);
+		double[] noiseNegativeSecondDeriv = positivToNegativ(noiseSecondDeriv);
+		ISecondDerivativeAndNoise secondDerivative = new SecondDerivativeAndNoise(secondDerivSmoothedFactorised, noiseSecondDeriv, noiseNegativeSecondDeriv);
+		// Third Derivative
+		double[] thirdDerivSmoothedFactorised = factorisingValues(savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(thirdDerivative, yChromatogram, supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor), 9);
+		double[] noiseThirdDeriv = getNoiseOfTic(thirdDerivSmoothedFactorised, false, false);
+		double[] noiseNegativeThirdDeriv = positivToNegativ(noiseThirdDeriv);
+		IThirdDerivativeAndNoise thirdDerivative = new ThirdDerivativeAndNoise(thirdDerivSmoothedFactorised, noiseThirdDeriv, noiseNegativeThirdDeriv);
+		// All in one
+		IDerivativesAndNoise derivativesAndNoise = new DerivativesAndNoise(firstDerivative, secondDerivative, thirdDerivative);
+		return derivativesAndNoise;
+	}
+
 	private double[] positivToNegativ(double[] noisePositiv) {
 
 		double[] noiseNegativ = new double[noisePositiv.length];
@@ -250,14 +211,26 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		return noiseNegativ;
 	}
 
-	private double[] detectPeakRanges(double[] firstDeriv, double[] noiseDerivPositiv, double[] noiseDerivNegativ) {
+	private double[] factorisingValues(double[] noisePositiv, int Factor) {
 
-		int size = firstDeriv.length;
+		double[] noiseNegativ = new double[noisePositiv.length];
+		for(int i = 0; i < noisePositiv.length; i++) {
+			noiseNegativ[i] = noisePositiv[i] * Factor;
+		}
+		return noiseNegativ;
+	}
+
+	private IPeakRanges detectPeakRanges(IDerivativesAndNoise derivativesAndNoise, IPeakRanges peakRanges, double[] yChromatogram, double[] noiseChroma) {
+
+		int size = derivativesAndNoise.getFirstDerivativeAndNoise().getFirstDeriv().length;
+		double[] firstDeriv = derivativesAndNoise.getFirstDerivativeAndNoise().getFirstDeriv();
+		double[] noisePositivFirstDeriv = derivativesAndNoise.getFirstDerivativeAndNoise().getNoisePositiv();
+		double[] noiseNegativSecondDeriv = derivativesAndNoise.getFirstDerivativeAndNoise().getNoiseNegative();
 		detectPeakRanges = new double[size];
 		PeakRangesEndPoints = new double[size];
 		validStartPoint = true;
 		double maxValueFirstDeriv = 0.0;
-		int peakStart, peakEnd;
+		int[] peakStartEndMaxPeak = new int[4];
 		/*
 		 * MaxValue: Only for the ViewSize
 		 */
@@ -269,35 +242,240 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		double noisePositivAverage = 0.0f;
 		double noiseNegativAverage = 0.0f;
 		for(int i = 0; i < size; i++) {
-			noisePositivAverage = noisePositivAverage + noiseDerivPositiv[i];
-			noiseNegativAverage = noiseNegativAverage + noiseDerivNegativ[i];
+			noisePositivAverage = noisePositivAverage + noisePositivFirstDeriv[i];
+			noiseNegativAverage = noiseNegativAverage + noiseNegativSecondDeriv[i];
 		}
 		noisePositivAverage = noisePositivAverage / size;
 		noiseNegativAverage = noiseNegativAverage / size;
-		/*
-		 * Detect Start and End of a Peak
-		 */
 		for(int i = 1; i < size; i++) {
-			peakStart = detectPeakStart(firstDeriv, i, noiseDerivPositiv, noisePositivAverage);
+			peakStartEndMaxPeak[0] = detectPeakStart(firstDeriv, i, noisePositivFirstDeriv, noisePositivAverage);
 			if(validStartPoint) {
-				peakEnd = detectPeakEnd(firstDeriv, peakStart, noiseDerivNegativ, noiseNegativAverage);
-				if(peakEnd == 0) {
-					detectPeakRanges[peakStart] = 0.0;
-					if(peakStart != 0) {
-						i = peakStart + 4;
+				peakStartEndMaxPeak = detectPeakEnd(firstDeriv, peakStartEndMaxPeak, noiseNegativSecondDeriv, noiseNegativAverage);
+				if(peakStartEndMaxPeak[1] == 0) {
+					if(peakStartEndMaxPeak[0] != 0) {
+						i = peakStartEndMaxPeak[0];
 					} else {
 						i++;
 					}
 				} else {
-					i = peakEnd - ((peakEnd - peakStart) / 2);// peakEnd;
+					i = peakStartEndMaxPeak[1] - ((peakStartEndMaxPeak[1] - peakStartEndMaxPeak[0]) / 2);
+					/*
+					 * Check Range with Second Derivative
+					 */
+					// int[] secondDerivativeCheck = checkPeakRangesWithSecondDerivative(derivativesAndNoise, peakStartEndMaxPeak);
+					// if(secondDerivativeCheck[0] == 1) {
+					// }
+					// For the view
+					detectPeakRanges[peakStartEndMaxPeak[3]] = highestTicSignal;
+					PeakRangesEndPoints[peakStartEndMaxPeak[1]] = highestTicSignal;
+					// For object PeakRange
+					int peakStart = peakStartEndMaxPeak[0];
+					int peakEnd = peakStartEndMaxPeak[1];
+					// Signal to NoiseRatio
+					double snr = getSignaltoNoiseRatioforPeakRange(yChromatogram, noiseChroma, peakStartEndMaxPeak);
+					// Add all to Object PeakRanges
+					IPeakRange peakRange = new PeakRange(peakStart, peakEnd, snr);
+					IPeaksDeconv peaksFirst = new PeaksDeconv("FristDerivative");
+					IPeakDeconv peakFirst = new PeakDeconv(peakStartEndMaxPeak[2]);
+					peaksFirst.addPeak(peakFirst);
+					peakRange.addPeaks(peaksFirst);
+					peakRanges.addPeakRange(peakRange);
 				}
 			} else {
-				i = peakStart;
+				i = peakStartEndMaxPeak[0] + 1;
 				validStartPoint = true;
 			}
 		}
 		// checkStartEndPoints(firstDeriv);
-		return detectPeakRanges;
+		return peakRanges;
+	}
+
+	private int[] checkPeakRangesWithSecondDerivative(IDerivativesAndNoise derivativesAndNoise, int[] peakStartEndMaxPeak) {
+
+		int peakRangeStart = peakStartEndMaxPeak[0];
+		int peakRangeStop = peakStartEndMaxPeak[1];
+		int peakCounter = 0;
+		int[] peaksWithSecondDerivHelper = new int[peakRangeStop - peakRangeStart];
+		boolean positivZoneFirst = false;
+		boolean negativeZone = false;
+		boolean positivZoneSecond = false;
+		double[] secondDeriv = derivativesAndNoise.getSecondDerivativeAndNoise().getSecondDeriv();
+		for(int i = peakRangeStart; i < peakRangeStop - 1; i++) {
+			double noiseNegativSecondDeriv = derivativesAndNoise.getSecondDerivativeAndNoise().getNoiseNegative()[i];
+			double noisePositivSecondDeriv = derivativesAndNoise.getSecondDerivativeAndNoise().getNoisePositiv()[i];
+			// Above noise
+			if((Double.compare(secondDeriv[i], noisePositivSecondDeriv) > 0) && !positivZoneFirst) {
+				positivZoneFirst = true;
+			}
+			if((Double.compare(secondDeriv[i], noiseNegativSecondDeriv) < 0) && !negativeZone) {
+				negativeZone = true;
+			}
+			if((Double.compare(secondDeriv[i], noisePositivSecondDeriv) > 0) && !positivZoneSecond && positivZoneFirst) {
+				positivZoneSecond = true;
+			}
+			if(positivZoneFirst && negativeZone) {
+				if((Double.compare(secondDeriv[i - 1], secondDeriv[i]) > 0) && (Double.compare(secondDeriv[i], secondDeriv[i + 1]) < 0)) {
+					peaksWithSecondDerivHelper[peakCounter++] = i;
+				}
+			}
+		}
+		int[] peaksSecondDerivativ = new int[peakCounter + 1];
+		peaksSecondDerivativ[0] = (positivZoneFirst && negativeZone && positivZoneSecond) ? 1 : 0;
+		for(int i = 1; i < peakCounter + 1; i++) {
+			peaksSecondDerivativ[i] = peaksWithSecondDerivHelper[i - 1];
+		}
+		return peaksSecondDerivativ;
+	}
+
+	private double getSignaltoNoiseRatioforPeakRange(double[] yChromatogram, double[] noiseChroma, int[] peakStartEndMaxPeak) {
+
+		int peakStart = peakStartEndMaxPeak[0];
+		int peakEnd = peakStartEndMaxPeak[1];
+		double snr = 0.0;
+		double averageNoise = 0.0;
+		double noise = 0.0;
+		double maxSignal = 0.0;
+		int i;
+		for(i = peakStart; i < peakEnd; i++) {
+			if(yChromatogram[i] > maxSignal) {
+				maxSignal = yChromatogram[i];
+			}
+			noise = noise + noiseChroma[i];
+		}
+		averageNoise = noise / i;
+		snr = (maxSignal - averageNoise) / averageNoise;
+		return snr;
+	}
+
+	/**
+	 * 
+	 * @param firstDeriv
+	 * @param startPoint
+	 * @param noiseDerivPositiv
+	 * @param noisePositivAverage
+	 * @return
+	 */
+	private int detectPeakStart(double[] firstDeriv, int startPoint, double[] noiseDerivPositiv, double noisePositivAverage) {
+
+		int startPeak = 0;
+		int i;
+		double noise = 0.0f;
+		boolean foundStartPeak = false;
+		outerloop:
+		for(i = startPoint; i < firstDeriv.length - 4; i++) {
+			noise = (useAverageNoiseForSmallNoise && Double.compare(noiseDerivPositiv[i], noisePositivAverage) < 0) ? noisePositivAverage : noiseDerivPositiv[i];
+			if((Double.compare(firstDeriv[i], noise) > 0)) {
+				if(checkRisingOfPeak(firstDeriv, i)) {
+					for(int j = i; i > startPoint; j--) {
+						if((Double.compare(firstDeriv[j], 0) > 0) && (Double.compare(firstDeriv[j - 1], 0) < 0)) {
+							startPeak = j - 1;
+							foundStartPeak = true;
+							break outerloop;
+						}
+						if(j == 1) {
+							startPeak = j;
+							foundStartPeak = true;
+							break outerloop;
+						}
+					}
+				} else {
+					validStartPoint = false;
+					break;
+				}
+			}
+		}
+		if(!foundStartPeak) {
+			startPeak = i;
+		}
+		return startPeak;
+	}
+
+	/**
+	 * 
+	 * @param firstDeriv
+	 * @param currentValue
+	 * @return
+	 */
+	private boolean checkRisingOfPeak(double[] firstDeriv, int currentValue) {
+
+		boolean validPeakRising = false;
+		switch(minPeakRising) {
+			case 5:
+				if(!checkNextValueBiggerthanCurrent(firstDeriv, currentValue, 5)) {
+					break;
+				}
+			case 4:
+				if(!checkNextValueBiggerthanCurrent(firstDeriv, currentValue, 4)) {
+					break;
+				}
+			case 3:
+				if(!checkNextValueBiggerthanCurrent(firstDeriv, currentValue, 3)) {
+					break;
+				}
+			case 2:
+				if(!checkNextValueBiggerthanCurrent(firstDeriv, currentValue, 2)) {
+					break;
+				}
+			case 1:
+				if(checkNextValueBiggerthanCurrent(firstDeriv, currentValue, 1)) {
+					validPeakRising = true;
+				} else {
+					break;
+				}
+			default:
+				break;
+		}
+		return validPeakRising;
+	}
+
+	/**
+	 * 
+	 * @param firstDeriv
+	 * @param currentValue
+	 * @param checkValue
+	 * @return
+	 */
+	private boolean checkNextValueBiggerthanCurrent(double[] firstDeriv, int currentValue, int checkValue) {
+
+		if(Double.compare(firstDeriv[currentValue + checkValue - 1], firstDeriv[currentValue + checkValue]) < 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private int[] detectPeakEnd(double[] firstDeriv, int[] peakStartEndMaxPeak, double[] noiseDerivNegativ, double noiseNegativAverage) {
+
+		int peakStart = peakStartEndMaxPeak[0];
+		peakStartEndMaxPeak[1] = 0;
+		peakStartEndMaxPeak[2] = 0;
+		peakStartEndMaxPeak[3] = peakStart;
+		double noise = 0.0f;
+		int i;
+		if(peakStart > 0) {
+			outerloop:
+			for(i = peakStart + 1; i < firstDeriv.length - 1; i++) {
+				if((Double.compare(firstDeriv[i], 0) > 0) && (Double.compare(firstDeriv[i + 1], 0) < 0)) {
+					for(int x = i + 1; x < firstDeriv.length - 4; x++) {
+						noise = (useAverageNoiseForSmallNoise && Double.compare(noiseDerivNegativ[x], noiseNegativAverage) > 0) ? noiseNegativAverage : noiseDerivNegativ[x];
+						if((Double.compare(firstDeriv[x], noise) < 0) && (Double.compare(firstDeriv[x + 1], noise) > 0)) {
+							for(int y = x - 3; y < firstDeriv.length; y++) {
+								if((Double.compare(firstDeriv[y], 0) < 0) && (Double.compare(firstDeriv[y + 1], 0) > 0)) {
+									peakStartEndMaxPeak[1] = y + 1;
+									peakStartEndMaxPeak[2] = i;
+									break outerloop;
+								}
+							}
+							// When its only inside the NoiseIntervall
+						} else if((Double.compare(firstDeriv[x], firstDeriv[x + 1]) < 0) && (Double.compare(firstDeriv[x + 1], noise) > 0)) {
+							break outerloop;
+						}
+					}
+				}
+			}
+			peakStartEndMaxPeak[0] = i;
+		}
+		return peakStartEndMaxPeak;
 	}
 
 	/*
@@ -364,121 +542,6 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		return maxValueCheckEndPoint;
 	}
 
-	/*
-	 * TODO
-	 * Check if Start Point are one of the previous points of the last EndPoint of PeakRange
-	 * aufsteigende Flanke als fallende Flanke betrachten und zurück gehen
-	 */
-	private int detectPeakStart(double[] firstDeriv, int startPoint, double[] noiseDerivPositiv, double noisePositivAverage) {
-
-		double firstBefore, firstNext, NoisePositiv;
-		int startPeak = 0;
-		double noise = 0.0f;
-		for(int i = startPoint; i < firstDeriv.length - 4; i++) {
-			firstBefore = firstDeriv[i - 1];
-			NoisePositiv = noiseDerivPositiv[i];
-			firstNext = firstDeriv[i + 1];
-			if(Double.compare(noiseDerivPositiv[i], noisePositivAverage) < 0) {
-				noise = noisePositivAverage;
-			} else {
-				noise = noiseDerivPositiv[i];
-			}
-			if((Double.compare(firstDeriv[i - 1], noise) < 0) && (Double.compare(firstDeriv[i + 1], noise) > 0)) {
-				/*
-				 * mindestens die nächsten 2 steigend sind!
-				 */
-				if((Double.compare(firstDeriv[i + 1], firstDeriv[i + 2]) < 0) && (Double.compare(firstDeriv[i + 2], firstDeriv[i + 3]) < 0)) {
-					startPeak = i;
-					detectPeakRanges[i] = highestTicSignal;
-					break;
-				} else {
-					startPeak = i + 3;
-					validStartPoint = false;
-					break;
-				}
-			}
-		}
-		return startPeak;
-	}
-
-	/*
-	 * TODO
-	 * Check if Points are in intervall of Positiv and Negativ Noise
-	 */
-	private int detectPeakEnd(double[] firstDeriv, int peakStart, double[] noiseDerivNegativ, double noiseNegativAverage) {
-
-		double firstBefore, firstNext, NoisePositiv;
-		int endPeak = 0;
-		boolean risingFlagDone = false;
-		double noise = 0.0f;
-		if(peakStart > 0) {
-			outerloop:
-			for(int i = peakStart + 1; i < firstDeriv.length - 4; i++) {
-				firstBefore = firstDeriv[i - 1];
-				firstNext = firstDeriv[i + 1];
-				if(Double.compare(firstDeriv[i - 1], firstDeriv[i + 1]) > 0) {
-					risingFlagDone = true;
-				}
-				if((Double.compare(firstDeriv[i - 1], firstDeriv[i + 1]) < 0) && risingFlagDone) {
-					if((Double.compare(firstDeriv[i + 1], firstDeriv[i + 2]) < 0) && (Double.compare(firstDeriv[i + 2], firstDeriv[i + 3]) < 0)) {
-						risingFlagDone = false;
-					} else {
-						break outerloop;
-					}
-				} else if((Double.compare(firstDeriv[i - 1], 0) > 0) && (Double.compare(firstDeriv[i + 1], 0) < 0)) {
-					/*
-					 * TODO
-					 * nächsten 3 fallen?
-					 */
-					for(int x = i; x < firstDeriv.length - 4; x++) {
-						firstBefore = firstDeriv[x - 1];
-						firstNext = firstDeriv[x + 1];
-						if(Double.compare(noiseDerivNegativ[x], noiseNegativAverage) > 0) {
-							noise = noiseDerivNegativ[x];// noiseNegativAverage;
-						} else {
-							noise = noiseDerivNegativ[x];
-						}
-						NoisePositiv = noiseDerivNegativ[x];
-						if((Double.compare(firstDeriv[x - 1], noise) < 0) && (Double.compare(firstDeriv[x + 1], noise) > 0)) {
-							endPeak = x;
-							PeakRangesEndPoints[x + 1] = highestTicSignal;
-							break outerloop;
-						}
-					}
-				}
-			}
-		}
-		return endPeak;
-	}
-
-	/**
-	 * 
-	 * @param extractedIonSignals
-	 * @return excludedIons
-	 */
-	private IMarkedIons CodaFilter(IExtractedIonSignals extractedIonSignals) {
-
-		IMarkedIons excludedIons = new MarkedIons();
-		List<Float> mcqs = new ArrayList<Float>();
-		float mcq;
-		int startIon = extractedIonSignals.getStartIon();
-		int stopIon = extractedIonSignals.getStopIon();
-		for(int ion = startIon; ion <= stopIon; ion++) {
-			mcq = CodaCalculator.getMCQValue(extractedIonSignals, MOVING_AVERAGE_WINDOW, ion);
-			/*
-			 * Add the ion value to the excluded ion list?
-			 */
-			if(mcq < codaThreshold) {
-				excludedIons.add(new MarkedIon(ion));
-			}
-			/*
-			 * Use mcqs to determine the data reduction value.
-			 */
-			mcqs.add(mcq);
-		}
-		return excludedIons;
-	}
-
 	/**
 	 * 
 	 * @param intensityValues
@@ -498,7 +561,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	 * Split into some more Functions
 	 * 
 	 * Problem with SegmentSizeFactor
-	 * will be set with Size of TicValues divide by 30
+	 * will be set with Size of TicValues divide by 15
 	 * 
 	 * @param ticValues
 	 * @return
@@ -506,7 +569,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	private double[] getNoiseOfTic(double[] ticValues, boolean derivActive, boolean aboveNullDeriv) {
 
 		int size = ticValues.length;
-		segmentSizeFactor = size / 30;
+		segmentSizeFactor = size / 15;
 		int segmentsize = size / segmentSizeFactor;
 		int maxFor = 0;
 		boolean setSegmentsize = false;
@@ -909,3 +972,30 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		return derivative;
 	}
 }
+// /**
+// *
+// * @param extractedIonSignals
+// * @return excludedIons
+// */
+// private IMarkedIons CodaFilter(IExtractedIonSignals extractedIonSignals) {
+//
+// IMarkedIons excludedIons = new MarkedIons();
+// List<Float> mcqs = new ArrayList<Float>();
+// float mcq;
+// int startIon = extractedIonSignals.getStartIon();
+// int stopIon = extractedIonSignals.getStopIon();
+// for(int ion = startIon; ion <= stopIon; ion++) {
+// mcq = CodaCalculator.getMCQValue(extractedIonSignals, MOVING_AVERAGE_WINDOW, ion);
+// /*
+// * Add the ion value to the excluded ion list?
+// */
+// if(mcq < codaThreshold) {
+// excludedIons.add(new MarkedIon(ion));
+// }
+// /*
+// * Use mcqs to determine the data reduction value.
+// */
+// mcqs.add(mcq);
+// }
+// return excludedIons;
+// }

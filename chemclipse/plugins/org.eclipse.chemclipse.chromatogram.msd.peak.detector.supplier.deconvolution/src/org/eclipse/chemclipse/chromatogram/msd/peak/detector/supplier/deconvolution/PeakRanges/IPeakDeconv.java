@@ -9,11 +9,11 @@
  * Contributors:
  * Florian Ernst - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.notifier;
+package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.PeakRanges;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.support.IArraysViewDeconv;
+public interface IPeakDeconv {
 
-public interface IDynamicDeconvNotifier {
+	int getPeak();
 
-	void update(IArraysViewDeconv arraysViewDeconv);
+	void setPeak(int value);
 }

@@ -9,11 +9,19 @@
  * Contributors:
  * Florian Ernst - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.notifier;
+package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Derivatives;
 
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.support.IArraysViewDeconv;
+public interface IFirstDerivativeAndNoise {
 
-public interface IDynamicDeconvNotifier {
+	double[] getFirstDeriv();
 
-	void update(IArraysViewDeconv arraysViewDeconv);
+	double[] getNoisePositiv();
+
+	double[] getNoiseNegative();
+
+	void setFirstDeriv(double[] firstDerivValues);
+
+	void setNoisePositiv(double[] noisePositivValues);
+
+	void setNoiseNegativ(double[] noiseNegativValues);
 }

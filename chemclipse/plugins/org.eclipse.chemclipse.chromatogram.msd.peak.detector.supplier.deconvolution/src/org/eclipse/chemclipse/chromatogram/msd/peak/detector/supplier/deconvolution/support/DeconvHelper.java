@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.support;
 
-import org.eclipse.chemclipse.chromatogram.peak.detector.support.IDetectorSlope;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlopes;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 
@@ -34,6 +32,16 @@ public class DeconvHelper implements IDeconvHelper {
 		double[] doubleArray = new double[size];
 		for(int i = 0; i < size; i++) {
 			doubleArray[i] = (double)floatArray[i];
+		}
+		return doubleArray;
+	}
+
+	public double[] getNoisePlusBaselin(double[] baseline, double[] noise) {
+
+		int size = baseline.length;
+		double[] doubleArray = new double[size];
+		for(int i = 0; i < size; i++) {
+			doubleArray[i] = baseline[i] + noise[i];
 		}
 		return doubleArray;
 	}
@@ -77,24 +85,6 @@ public class DeconvHelper implements IDeconvHelper {
 			ticValuesArray[counter++] = signal.getTotalSignal();
 		}
 		return ticValuesArray;
-	}
-
-	public void setSlopetoTotalScanSignals(ITotalScanSignals totalScanSignals, IFirstDerivativeDetectorSlopes slopes) {
-
-		int column = 0;
-		int scanOffset = slopes.getStartScan();
-		int slopesmax = slopes.getStopScan() - scanOffset + 1;
-		double newScan = 0.0f;
-		for(ITotalScanSignal signal : totalScanSignals.getTotalScanSignals()) {
-			if(column < slopesmax) {
-				IDetectorSlope slope = slopes.getDetectorSlope(column + scanOffset);
-				newScan = slope.getSlope();
-				signal.setTotalSignal((float)newScan);
-				column++;
-			} else {
-				break;
-			}
-		}
 	}
 
 	public double[] setXValueforPrint(ITotalScanSignals signals) {

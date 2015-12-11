@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.support;
 
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlopes;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 
 public interface IDeconvHelper {
@@ -40,13 +39,13 @@ public interface IDeconvHelper {
 
 	double[] getDoubleArray(float[] floatArray);
 
+	double[] getNoisePlusBaselin(double[] baseline, double[] noise);
+
 	float[] getSignalAsArrayFloatDeconv(ITotalScanSignals totalIonSignals);
 
 	double[] getSignalAsArrayDoubleDeconvCODA(ITotalScanSignals totalIONsignalsExtractedCodaIons, ITotalScanSignals totalIONsignals);
 
 	double[] getSignalAsArrayDoubleDeconv(ITotalScanSignals totalIonSignals);
-
-	void setSlopetoTotalScanSignals(ITotalScanSignals totalScanSignals, IFirstDerivativeDetectorSlopes slopes);
 
 	double[] setXValueforPrint(ITotalScanSignals signals);
 }
