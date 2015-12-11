@@ -23,55 +23,62 @@ public class Category {
 		logger = Logger.getLogger(clazz);
 	}
 
-	/**
-	 * @param message
-	 */
 	public void debug(final Object message) {
 
 		logger.debug(message);
 	}
 
-	/**
-	 * @param message
-	 */
+	public void debug(final Object message, Throwable t) {
+
+		logger.debug(message, t);
+	}
+
 	public void error(final Object message) {
 
 		logger.error(message);
 	}
 
-	/**
-	 * @param message
-	 */
+	public void error(final Object message, Throwable t) {
+
+		logger.error(message, t);
+	}
+
 	public void fatal(final Object message) {
 
 		logger.fatal(message);
 	}
 
-	/**
-	 * @param message
-	 */
+	public void fatal(final Object message, Throwable t) {
+
+		logger.fatal(message, t);
+	}
+
 	public void info(final Object message) {
 
 		logger.info(message);
 	}
 
-	/**
-	 * @param message
-	 */
+	public void info(final Object message, Throwable t) {
+
+		logger.info(message, t);
+	}
+
 	public void trace(final Object message) {
 
 		logger.trace(message);
 	}
 
-	/**
-	 * @param message
-	 */
+	public void trace(final Object message, Throwable t) {
+
+		logger.trace(message, t);
+	}
+
 	public void warn(final Object message) {
 
 		logger.warn(message);
 	}
 
-	public void warn(final Object message, final Throwable t) {
+	public void warn(final Object message, Throwable t) {
 
 		logger.warn(message, t);
 	}
