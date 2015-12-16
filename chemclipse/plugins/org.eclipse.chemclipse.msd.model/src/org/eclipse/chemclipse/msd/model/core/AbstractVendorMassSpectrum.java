@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
@@ -20,11 +21,12 @@ public abstract class AbstractVendorMassSpectrum extends AbstractRegularMassSpec
 	private static final long serialVersionUID = 5013842421250687340L;
 
 	@Override
-	public void addIon(IIon ion) {
+	public AbstractVendorMassSpectrum addIon(IIon ion) {
 
 		if(getNumberOfIons() < getMaxPossibleIons()) {
 			super.addIon(ion);
 		}
+		return this;
 	}
 
 	@Override

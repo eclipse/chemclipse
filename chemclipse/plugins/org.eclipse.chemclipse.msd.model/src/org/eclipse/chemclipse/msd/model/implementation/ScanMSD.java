@@ -8,20 +8,24 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
+import java.util.List;
+
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.logging.core.Logger;
 
 /**
  * If a new mass spectrum type should be implemented, extend the abstract class {@link AbstractScanMSD} and not this class.
  * 
  * @author eselmeister
+ * @author <a href="mailto:alex.kerner.24@googlemail.com">Alexander Kerner</a>
  */
 public class ScanMSD extends AbstractScanMSD implements IScanMSD {
 
@@ -60,7 +64,35 @@ public class ScanMSD extends AbstractScanMSD implements IScanMSD {
 	}
 
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
+	public ScanMSD addIons(List<IIon> ions, boolean addIntensities) {
+
+		super.addIons(ions, addIntensities);
+		return this;
+	}
+
+	@Override
+	public ScanMSD addIon(IIon ion) {
+
+		super.addIon(ion);
+		return this;
+	}
+
+	@Override
+	public ScanMSD addIon(IIon ion, boolean checked) {
+
+		super.addIon(ion, checked);
+		return this;
+	}
+
+	@Override
+	public ScanMSD addIon(boolean addIntensity, IIon ion) {
+
+		super.addIon(addIntensity, ion);
+		return this;
+	}
+
+	@Override
+	protected IScanMSD clone() throws CloneNotSupportedException {
 
 		return makeDeepCopy();
 	}

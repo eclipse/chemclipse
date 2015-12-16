@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
@@ -55,6 +56,7 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
  * [...]<br/>
  * 
  * @author eselmeister
+ * @author <a href="mailto:alex.kerner.24@googlemail.com">Alexander Kerner</a>
  * @see AbstractChromatogramMSD
  */
 public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNormalizable, IMassSpectrumTargets {
@@ -150,8 +152,9 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	 * 
 	 * @param ions
 	 * @param addIntensities
+	 * @return {@code this}
 	 */
-	void addIons(List<IIon> ions, boolean addIntensities);
+	IScanMSD addIons(List<IIon> ions, boolean addIntensities);
 
 	/**
 	 * Adds a new ion to the mass spectrum.<br/>
@@ -165,16 +168,18 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	 * 
 	 * @param ion
 	 * @param checked
+	 * @return {@code this}
 	 */
-	void addIon(IIon ion, boolean checked);
+	IScanMSD addIon(IIon ion, boolean checked);
 
 	/**
 	 * Adds a ion to the mass spectrum.<br/>
 	 * Use this method in all standard cases.
 	 * 
 	 * @param ion
+	 * @return {@code this}
 	 */
-	void addIon(IIon ion);
+	IScanMSD addIon(IIon ion);
 
 	/**
 	 * If addIntensity is true, the intensity of the given ion will be
@@ -185,20 +190,24 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	 * 
 	 * @param addIntensity
 	 * @param ion
+	 * @return {@code this}
 	 */
-	void addIon(boolean addIntensity, IIon ion);
+	IScanMSD addIon(boolean addIntensity, IIon ion);
 
 	/**
 	 * Removes a ion from the mass spectrum.
 	 * 
 	 * @param ion
+	 * @return {@code this}
 	 */
-	void removeIon(IIon ion);
+	IScanMSD removeIon(IIon ion);
 
 	/**
 	 * Removes all ions from the actual mass spectrum.
+	 * 
+	 * @return {@code this}
 	 */
-	void removeAllIons();
+	IScanMSD removeAllIons();
 
 	/**
 	 * Removes the ions stored in {@link IMarkedIons} from
@@ -208,8 +217,9 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	 * the rounding algorithm in AbstractIon.getIon(float ion).
 	 * 
 	 * @param excludedIons
+	 * @return {@code this}
 	 */
-	void removeIons(IMarkedIons excludedIons);
+	IScanMSD removeIons(IMarkedIons excludedIons);
 
 	/**
 	 * Removes all ions from the actual mass spectrum with the given
@@ -219,8 +229,9 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	 * the rounding algorithm in AbstractIon.getIon(float ion).
 	 * 
 	 * @param ion
+	 * @return {@code this}
 	 */
-	void removeIon(int ion);
+	IScanMSD removeIon(int ion);
 
 	/**
 	 * Removes all ion with the given mass over charge ratio (ion).
@@ -229,8 +240,9 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	 * the rounding algorithm in AbstractIon.getIon(float ion).
 	 * 
 	 * @param ions
+	 * @return {@code this}
 	 */
-	void removeIons(Set<Integer> ions);
+	IScanMSD removeIons(Set<Integer> ions);
 
 	/**
 	 * Returns the ion list.

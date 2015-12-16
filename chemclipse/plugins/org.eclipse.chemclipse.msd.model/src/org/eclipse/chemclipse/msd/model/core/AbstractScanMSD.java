@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
@@ -46,6 +47,7 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
  * specific retention time ... but a start and stop retention time and so on.
  * 
  * @author eselmeister
+ * @author <a href="mailto:alex.kerner.24@googlemail.com">Alexander Kerner</a>
  * @see AbstractChromatogramMSD
  */
 public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
@@ -87,7 +89,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 
 	// -----------------------------IMassSpectrum
 	@Override
-	public void addIons(List<IIon> ions, boolean addIntensities) {
+	public AbstractScanMSD addIons(List<IIon> ions, boolean addIntensities) {
 
 		for(IIon ion : ions) {
 			if(ion == null) {
@@ -99,16 +101,18 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 				addIon(false, ion);
 			}
 		}
+		return this;
 	}
 
 	@Override
-	public void addIon(boolean addIntensity, IIon ion) {
+	public AbstractScanMSD addIon(boolean addIntensity, IIon ion) {
 
 		/*
 		 * Return if the ion is null.
 		 */
 		if(ion == null) {
-			return;
+			// TODO maybe log warning?
+			return this;
 		}
 		boolean addNew = true;
 		for(IIon actualIon : ionsList) {
@@ -139,10 +143,11 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			this.ionsList.add(ion);
 			setDirty(true);
 		}
+		return this;
 	}
 
 	@Override
-	public void addIon(IIon ion, boolean checked) {
+	public AbstractScanMSD addIon(IIon ion, boolean checked) {
 
 		if(checked) {
 			addIon(ion);
@@ -150,28 +155,31 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			ionsList.add(ion);
 			setDirty(true);
 		}
+		return this;
 	}
 
 	@Override
-	public void addIon(IIon ion) {
+	public AbstractScanMSD addIon(IIon ion) {
 
-		addIon(false, ion);
+		return addIon(false, ion);
 	}
 
 	@Override
-	public void removeIon(IIon ion) {
+	public AbstractScanMSD removeIon(IIon ion) {
 
 		ionsList.remove(ion);
+		return this;
 	}
 
 	@Override
-	public void removeAllIons() {
+	public AbstractScanMSD removeAllIons() {
 
 		ionsList.clear();
+		return this;
 	}
 
 	@Override
-	public void removeIon(int ion) {
+	public AbstractScanMSD removeIon(int ion) {
 
 		/*
 		 * Initialize the list of mass over charge rations (ion) to be removed.
@@ -179,13 +187,15 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		Set<Integer> ions = new HashSet<Integer>();
 		ions.add(ion);
 		removeIons(ions);
+		return this;
 	}
 
 	@Override
-	public void removeIons(Set<Integer> ions) {
+	public AbstractScanMSD removeIons(Set<Integer> ions) {
 
 		if(ions == null) {
-			return;
+			// TODO maybe log warning?
+			return this;
 		}
 		List<IIon> ionsToRemove = new ArrayList<IIon>();
 		/*
@@ -197,16 +207,19 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			}
 		}
 		removeIonsFromMassSpectrum(ionsToRemove);
+		return this;
 	}
 
 	@Override
-	public void removeIons(IMarkedIons excludedIons) {
+	public AbstractScanMSD removeIons(IMarkedIons excludedIons) {
 
 		if(excludedIons == null) {
-			return;
+			// TODO maybe log warning?
+			return this;
 		}
 		Set<Integer> ions = excludedIons.getIonsNominal();
 		removeIons(ions);
+		return this;
 	}
 
 	/**

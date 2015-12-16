@@ -8,14 +8,17 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * @author eselmeister
+ * @author <a href="mailto:alexanderkerner24@gmail.com">Alexander Kerner</a>
  */
 public abstract class AbstractMassSpectra implements IMassSpectra {
 
@@ -37,6 +40,14 @@ public abstract class AbstractMassSpectra implements IMassSpectra {
 
 		if(massSpectrum != null) {
 			massSpectra.add(massSpectrum);
+		}
+	}
+
+	@Override
+	public void addMassSpectra(Collection<? extends IScanMSD> massSpectra) {
+
+		for(IScanMSD massSpectrum : massSpectra) {
+			addMassSpectrum(massSpectrum);
 		}
 	}
 

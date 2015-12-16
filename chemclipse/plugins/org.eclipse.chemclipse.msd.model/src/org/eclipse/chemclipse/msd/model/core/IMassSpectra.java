@@ -8,15 +8,18 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
  * This class stores a list of mass spectra.
  * 
  * @author eselmeister
+ * @author <a href="mailto:alexanderkerner24@gmail.com">Alexander Kerner</a>
  */
 public interface IMassSpectra {
 
@@ -26,6 +29,8 @@ public interface IMassSpectra {
 	 * @param massSpectrum
 	 */
 	void addMassSpectrum(IScanMSD massSpectrum);
+
+	void addMassSpectra(Collection<? extends IScanMSD> massSpectra);
 
 	/**
 	 * Removes the mass spectrum from the list.

@@ -35,6 +35,20 @@ public class Ion extends AbstractIon implements IIon {
 		super(ion);
 	}
 
+	@Override
+	public Ion setAbundance(float abundance) throws AbundanceLimitExceededException {
+
+		super.setAbundance(abundance);
+		return this;
+	}
+
+	@Override
+	public Ion setIon(double ion) throws IonLimitExceededException {
+
+		super.setIon(ion);
+		return this;
+	}
+
 	public Ion(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
 
 		super(ion, abundance);

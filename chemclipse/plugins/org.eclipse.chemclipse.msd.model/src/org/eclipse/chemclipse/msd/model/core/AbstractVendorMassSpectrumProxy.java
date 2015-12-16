@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
@@ -95,52 +96,59 @@ public abstract class AbstractVendorMassSpectrumProxy extends AbstractVendorMass
 	}
 
 	@Override
-	public void addIons(List<IIon> ions, boolean addIntensities) {
+	public AbstractVendorMassSpectrumProxy addIons(List<IIon> ions, boolean addIntensities) {
 
 		checkProxyAndImportOnDemand();
 		super.addIons(ions, addIntensities);
+		return this;
 	}
 
 	@Override
-	public void addIon(IIon ion, boolean checked) {
+	public AbstractVendorMassSpectrumProxy addIon(IIon ion, boolean checked) {
 
 		checkProxyAndImportOnDemand();
 		super.addIon(ion, checked);
+		return this;
 	}
 
 	@Override
-	public void removeIon(IIon ion) {
+	public AbstractVendorMassSpectrumProxy removeIon(IIon ion) {
 
 		checkProxyAndImportOnDemand();
 		super.removeIon(ion);
+		return this;
 	}
 
 	@Override
-	public void removeAllIons() {
+	public AbstractVendorMassSpectrumProxy removeAllIons() {
 
 		checkProxyAndImportOnDemand();
 		super.removeAllIons();
+		return this;
 	}
 
 	@Override
-	public void removeIon(int ion) {
+	public AbstractVendorMassSpectrumProxy removeIon(int ion) {
 
 		checkProxyAndImportOnDemand();
 		super.removeIon(ion);
+		return this;
 	}
 
 	@Override
-	public void removeIons(Set<Integer> ions) {
+	public AbstractVendorMassSpectrumProxy removeIons(Set<Integer> ions) {
 
 		checkProxyAndImportOnDemand();
 		super.removeIons(ions);
+		return this;
 	}
 
 	@Override
-	public void removeIons(IMarkedIons excludedIons) {
+	public AbstractVendorMassSpectrumProxy removeIons(IMarkedIons excludedIons) {
 
 		checkProxyAndImportOnDemand();
 		super.removeIons(excludedIons);
+		return this;
 	}
 
 	@Override
