@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.core;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.AbstractBaselineDetector;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.processing.IBaselineDetectorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.internal.calculator.SnipCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.calculator.SnipCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.ISnipBaselineDetectorSettings;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;

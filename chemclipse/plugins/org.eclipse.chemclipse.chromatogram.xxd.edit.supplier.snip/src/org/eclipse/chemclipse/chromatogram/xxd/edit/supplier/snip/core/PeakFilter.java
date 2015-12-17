@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.chromatogram.filter.processing.IPeakFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.processing.PeakFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.result.IPeakFilterResult;
@@ -23,7 +22,7 @@ import org.eclipse.chemclipse.chromatogram.filter.result.PeakFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.AbstractPeakFilter;
-import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.internal.calculator.FilterSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.calculator.FilterSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.ISnipPeakFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;

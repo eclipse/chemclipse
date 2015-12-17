@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.AbstractMassSpectrumFilter;
 import org.eclipse.chemclipse.chromatogram.msd.filter.processing.IMassSpectrumFilterProcessingInfo;
@@ -23,7 +22,7 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.processing.MassSpectrumFil
 import org.eclipse.chemclipse.chromatogram.msd.filter.result.IMassSpectrumFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.result.MassSpectrumFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.internal.calculator.FilterSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.calculator.FilterSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.ISnipMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;

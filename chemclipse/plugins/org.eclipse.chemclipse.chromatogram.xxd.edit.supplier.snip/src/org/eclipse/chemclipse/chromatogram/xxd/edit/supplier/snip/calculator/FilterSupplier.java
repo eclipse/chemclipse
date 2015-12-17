@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.internal.calculator;
+package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.calculator;
 
 import java.util.ArrayList;
 import java.util.Collections;
