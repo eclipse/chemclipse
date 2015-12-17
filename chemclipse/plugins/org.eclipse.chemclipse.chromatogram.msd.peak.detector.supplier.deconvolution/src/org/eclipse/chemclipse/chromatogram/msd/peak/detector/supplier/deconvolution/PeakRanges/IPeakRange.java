@@ -21,6 +21,8 @@ public interface IPeakRange {
 
 	double getSignalToNoise();
 
+	IPeaksDeconv getPeakList(int value);
+
 	void setPeakStartPoint(int value);
 
 	void setPeakEndPoint(int value);
@@ -30,4 +32,6 @@ public interface IPeakRange {
 	void setSignalToNoise(double snr);
 
 	void addPeaks(IPeaksDeconv peaks);
+
+	int sizePeakList();
 }

@@ -26,6 +26,24 @@ public class DeconvHelper implements IDeconvHelper {
 		return floatArray;
 	}
 
+	public double[] positivToNegativ(double[] noisePositiv) {
+
+		double[] noiseNegativ = new double[noisePositiv.length];
+		for(int i = 0; i < noisePositiv.length; i++) {
+			noiseNegativ[i] = noisePositiv[i] * (-1);
+		}
+		return noiseNegativ;
+	}
+
+	public double[] factorisingValues(double[] noisePositiv, int Factor) {
+
+		double[] noiseNegativ = new double[noisePositiv.length];
+		for(int i = 0; i < noisePositiv.length; i++) {
+			noiseNegativ[i] = noisePositiv[i] * Factor;
+		}
+		return noiseNegativ;
+	}
+
 	public double[] getDoubleArray(float[] floatArray) {
 
 		int size = floatArray.length;

@@ -48,4 +48,8 @@ public interface IDeconvHelper {
 	double[] getSignalAsArrayDoubleDeconv(ITotalScanSignals totalIonSignals);
 
 	double[] setXValueforPrint(ITotalScanSignals signals);
+
+	double[] positivToNegativ(double[] noisePositiv);
+
+	double[] factorisingValues(double[] noisePositiv, int Factor);
 }

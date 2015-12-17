@@ -49,6 +49,11 @@ public class PeakRanges implements IPeakRanges {
 		peakRanges.add(peakRange);
 	}
 
+	public void deletePeakRange(int value) {
+
+		peakRanges.remove(value);
+	}
+
 	public int size() {
 
 		return peakRanges.size();

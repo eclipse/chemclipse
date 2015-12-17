@@ -18,4 +18,8 @@ public interface IPeaksDeconv {
 	void setWhereGotPeak(String text);
 
 	void addPeak(IPeakDeconv peak);
+
+	IPeakDeconv getPeakDeconv(int value);
+
+	int sizePeakDeconv();
 }

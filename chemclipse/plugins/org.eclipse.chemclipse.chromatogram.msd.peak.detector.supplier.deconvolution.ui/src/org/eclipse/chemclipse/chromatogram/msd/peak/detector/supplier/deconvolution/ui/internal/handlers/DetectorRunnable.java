@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2015 Dr. Philip Wenig.
+ * Copyright (c) 2013, 2015
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Florian Ernst - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.ui.internal.handlers;
 
@@ -52,6 +53,11 @@ public class DetectorRunnable implements IRunnableWithProgress {
 			 */
 			IDeconvolutionPeakDetectorSettings peakDetectorSettings = new DeconvolutionPeakDetectorSettings();
 			peakDetectorSettings.setSensitivity(PreferenceSupplier.getSensitivity());
+			peakDetectorSettings.setMinimumSignalToNoiseRatio(PreferenceSupplier.getMinimumSignalToNoiseRatio());
+			peakDetectorSettings.setMinimumPeakWidth(PreferenceSupplier.getMinimumPeakWidth());
+			peakDetectorSettings.setMinimumPeakRising(PreferenceSupplier.getMinimumPeakRising());
+			peakDetectorSettings.setBaselineIterations(PreferenceSupplier.getBaselineIterations());
+			peakDetectorSettings.setQuantityNoiseSegments(PreferenceSupplier.getQuantityNoiseSegments());
 			PeakDetectorMSD.detect(chromatogramSelection, peakDetectorSettings, PEAK_DETECTOR_ID, monitor);
 			detectedPeaks = chromatogramSelection.getChromatogramMSD().getNumberOfPeaks();
 			updateSelection();

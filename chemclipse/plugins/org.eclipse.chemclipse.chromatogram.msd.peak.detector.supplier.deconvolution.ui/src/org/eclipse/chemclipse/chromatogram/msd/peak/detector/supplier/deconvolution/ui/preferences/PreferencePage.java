@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2015 Dr. Philip Wenig.
+ * Copyright (c) 2013, 2015
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,17 +8,20 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Florian Ernst - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.ui.preferences;
 
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.RadioGroupFieldEditor;
-import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.IWorkbench;
-
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings.Sensitivity;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.ui.Activator;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -36,8 +39,15 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void createFieldEditors() {
 
-		String[][] options = new String[][]{{"&OFF", Sensitivity.OFF.toString()}, {"&LOW", Sensitivity.LOW.toString()}, {"&MEDIUM", Sensitivity.MEDIUM.toString()}, {"&HIGH", Sensitivity.HIGH.toString()}};
-		addField(new RadioGroupFieldEditor(PreferenceSupplier.P_SENSITIVITY, "Set a sensitivity", 1, options, getFieldEditorParent()));
+		// String[][] options = new String[][]{{"&OFF", Sensitivity.OFF.toString()}, {"&LOW", Sensitivity.LOW.toString()}, {"&MEDIUM", Sensitivity.MEDIUM.toString()}, {"&HIGH", Sensitivity.HIGH.toString()}};
+		// addField(new RadioGroupFieldEditor(PreferenceSupplier.P_SENSITIVITY, "Set a sensitivity", 1, options, getFieldEditorParent()));
+		addField(new DoubleFieldEditor(PreferenceSupplier.P_MIN_SNR, "Minimum signal noise ratio", 0.0d, Double.MAX_VALUE, getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceSupplier.P_MIN_PEAKWIDTH, "Minimal peak width (Scans)", getFieldEditorParent()));
+		addField(new SpinnerFieldEditor(PreferenceSupplier.P_MIN_PEAKRISING, "Minimal peak rising (Scans)", 1, 5, getFieldEditorParent()));
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Advanced Settings:", getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceSupplier.P_NOISE_SEGMENTS, "Quantity of noise segments", getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceSupplier.P_SNIP_ITERATIONS, "Set baseline iterations (SNIP)", getFieldEditorParent()));
 	}
 
 	/*

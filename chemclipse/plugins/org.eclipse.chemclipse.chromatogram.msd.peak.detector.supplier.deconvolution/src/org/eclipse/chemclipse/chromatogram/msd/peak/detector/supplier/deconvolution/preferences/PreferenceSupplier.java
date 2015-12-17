@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2015 Dr. Philip Wenig.
+ * Copyright (c) 2013, 2015.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,26 +8,37 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Florian Ernst - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.preferences;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
-
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings.DeconvolutionPeakDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings.IDeconvolutionPeakDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings.Sensitivity;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_SENSITIVITY = "sensitivity";
 	public static final String DEF_SENSITIVITY = Sensitivity.MEDIUM.toString();
+	//
+	public static final String P_MIN_SNR = "minSNRatio";
+	public static final double DEF_MIN_SNR = 10.0d;
+	public static final String P_MIN_PEAKWIDTH = "minPeakWidth";
+	public static final int DEF_MIN_PEAKWIDTH = 4;
+	public static final String P_MIN_PEAKRISING = "minPeakRising";
+	public static final int DEF_MIN_PEAKRISING = 1; // should be between 1,4
+	public static final String P_SNIP_ITERATIONS = "snipIterations";
+	public static final int DEF_SNIP_ITERATIONS = 70;
+	public static final String P_NOISE_SEGMENTS = "howManySegmentsNoiseSplit";
+	public static final int DEF_NOISE_SEGMENTS = 15;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -56,6 +67,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_SENSITIVITY, DEF_SENSITIVITY);
+		defaultValues.put(P_MIN_SNR, Double.toString(DEF_MIN_SNR));
+		defaultValues.put(P_MIN_PEAKWIDTH, Integer.toString(DEF_MIN_PEAKWIDTH));
+		defaultValues.put(P_MIN_PEAKRISING, Integer.toString(DEF_MIN_PEAKRISING));
+		defaultValues.put(P_SNIP_ITERATIONS, Integer.toString(DEF_SNIP_ITERATIONS));
+		defaultValues.put(P_NOISE_SEGMENTS, Integer.toString(DEF_NOISE_SEGMENTS));
 		return defaultValues;
 	}
 
@@ -70,6 +86,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		IDeconvolutionPeakDetectorSettings peakDetectorSettings = new DeconvolutionPeakDetectorSettings();
 		peakDetectorSettings.setSensitivity(Sensitivity.valueOf(preferences.get(P_SENSITIVITY, DEF_SENSITIVITY)));
+		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getDouble(P_MIN_SNR, DEF_MIN_SNR));
+		peakDetectorSettings.setMinimumPeakWidth(preferences.getInt(P_MIN_PEAKWIDTH, DEF_MIN_PEAKWIDTH));
+		peakDetectorSettings.setMinimumPeakRising(preferences.getInt(P_MIN_PEAKRISING, DEF_MIN_PEAKRISING));
+		peakDetectorSettings.setBaselineIterations(preferences.getInt(P_SNIP_ITERATIONS, DEF_SNIP_ITERATIONS));
+		peakDetectorSettings.setQuantityNoiseSegments(preferences.getInt(P_NOISE_SEGMENTS, DEF_NOISE_SEGMENTS));
 		return peakDetectorSettings;
 	}
 
@@ -81,5 +102,35 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 			sensitivity = Sensitivity.OFF.toString();
 		}
 		return Sensitivity.valueOf(sensitivity);
+	}
+
+	public static double getMinimumSignalToNoiseRatio() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getDouble(P_MIN_SNR, DEF_MIN_SNR);
+	}
+
+	public static int getMinimumPeakWidth() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_MIN_PEAKWIDTH, DEF_MIN_PEAKWIDTH);
+	}
+
+	public static int getMinimumPeakRising() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_MIN_PEAKRISING, DEF_MIN_PEAKRISING);
+	}
+
+	public static int getBaselineIterations() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_SNIP_ITERATIONS, DEF_SNIP_ITERATIONS);
+	}
+
+	public static int getQuantityNoiseSegments() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_NOISE_SEGMENTS, DEF_NOISE_SEGMENTS);
 	}
 }

@@ -35,6 +35,16 @@ public class PeaksDeconv implements IPeaksDeconv {
 		this.whereGotPeak = text;
 	}
 
+	public IPeakDeconv getPeakDeconv(int value) {
+
+		return peaks.get(value);
+	}
+
+	public int sizePeakDeconv() {
+
+		return peaks.size();
+	}
+
 	public void addPeak(IPeakDeconv peak) {
 
 		peaks.add(peak);

@@ -19,6 +19,8 @@ public interface IPeakRanges {
 
 	IPeakRange getPeakRange(int value);
 
+	void deletePeakRange(int value);
+
 	void addPeakRange(IPeakRange peakRange);
 
 	int size();

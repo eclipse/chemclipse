@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2015 Dr. Philip Wenig.
+ * Copyright (c) 2013, 2015 .
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Florian Ernst - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.settings;
 
@@ -17,7 +18,30 @@ public interface IDeconvolutionPeakDetectorSettings extends IPeakDetectorMSDSett
 
 	Sensitivity INITIAL_SENSITIVITY = Sensitivity.MEDIUM;
 
+	void setSensitivity(Sensitivity sensitivity);
+
+	void setMinimumSignalToNoiseRatio(double minimumSignalToNoiseRatio);
+
+	void setMinimumPeakRising(int minPeakRising);
+
+	void setMinimumPeakWidth(int minimalPeakWidth);
+
+	void setBaselineIterations(int baselineIterations);
+
+	void setQuantityNoiseSegments(int quantityNoiseSegments);
+
+	/*
+	 * Getter
+	 */
 	Sensitivity getSensitivity();
 
-	void setSensitivity(Sensitivity sensitivity);
+	double getMinimumSignalToNoiseRatio();
+
+	int getMinimumPeakRising();
+
+	int getMinimumPeakWidth();
+
+	int getBaselineIterations();
+
+	int getQuantityNoiseSegments();
 }

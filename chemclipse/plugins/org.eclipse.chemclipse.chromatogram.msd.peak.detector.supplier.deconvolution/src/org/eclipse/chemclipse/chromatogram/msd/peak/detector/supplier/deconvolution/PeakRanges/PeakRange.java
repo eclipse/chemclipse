@@ -51,6 +51,11 @@ public class PeakRange implements IPeakRange {
 		return signalToNoise;
 	}
 
+	public IPeaksDeconv getPeakList(int value) {
+
+		return peakList.get(value);
+	}
+
 	public void setPeakStartPoint(int value) {
 
 		this.startPoint = value;
