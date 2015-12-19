@@ -19,6 +19,9 @@ public class NamedScanMSD extends ScanMSD implements INamedScanMSD {
 	private String substanceName;
 	private String originName;
 	private Long originalReferenceMassSpectrumId;
+	private Double peakArea;
+	private Float peakTailing;
+	private Float peakSN;
 
 	public NamedScanMSD() {
 
@@ -59,5 +62,41 @@ public class NamedScanMSD extends ScanMSD implements INamedScanMSD {
 	public void setOriginalReferenceMassSpectrumId(Long originalReferenceMassSpectrumId) {
 
 		this.originalReferenceMassSpectrumId = originalReferenceMassSpectrumId;
+	}
+
+	@Override
+	public Double getPeakArea() {
+
+		return peakArea;
+	}
+
+	@Override
+	public void setPeakArea(Double peakArea) {
+
+		this.peakArea = peakArea;
+	}
+
+	@Override
+	public Float getPeakTailing() {
+
+		return peakTailing;
+	}
+
+	@Override
+	public void setPeakTailing(Float peakTailing) {
+
+		this.peakTailing = peakTailing;
+	}
+
+	@Override
+	public Float getPeakSN() {
+
+		return peakSN;
+	}
+
+	@Override
+	public void setPeakSN(Float peakSN) {
+
+		this.peakSN = peakSN;
 	}
 }

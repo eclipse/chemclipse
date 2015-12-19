@@ -24,4 +24,16 @@ public interface INamedScanMSD extends IScanMSD {
 	Long getOriginalReferenceMassSpectrumId();
 
 	void setOriginalReferenceMassSpectrumId(Long originalReferenceMassSpectrumId);
+
+	Double getPeakArea();
+
+	void setPeakArea(Double peakArea);
+
+	Float getPeakTailing();
+
+	void setPeakTailing(Float peakTailing);
+
+	Float getPeakSN();
+
+	void setPeakSN(Float peakSN);
 }
