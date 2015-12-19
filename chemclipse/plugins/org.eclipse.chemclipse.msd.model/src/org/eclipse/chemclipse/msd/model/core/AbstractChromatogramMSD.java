@@ -39,12 +39,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * The abstract chromatogram is responsible to handle as much jobs concerning a
  * chromatogram independent of the specific supplier.<br/>
- * AbstractChromatogram extends ({@link IChromatogramMSD}) which implements ( {@link IChromatogramOverview}). ({@link IChromatogramOverview}) should enable
+ * AbstractChromatogram extends ({@link IChromatogramMSD}) which implements (
+ * {@link IChromatogramOverview}). ({@link IChromatogramOverview}) should enable
  * accessing some values of a chromatogram or a short overview. Some values like
  * amount of scans, min/max signal, min/max retention time and total ion
  * chromatogram signals, without accessing all scans. This should be more faster
  * than parsing all scans if they are not needed. On the other hand,
- * AbstractChromatogram implements ({@link IChromatogramMSD}) which itself extends
+ * AbstractChromatogram implements ({@link IChromatogramMSD}) which itself
+ * extends
  * ({@link IChromatogramOverview}). Why? When working with an IChromatogram
  * instance all the values like min/max signal, min/max retention time should be
  * accessible with out implementing them twice.<br/>
@@ -55,7 +57,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * extended AbstractChromatogram. If no scans are added to the chromatogram,
  * minSignal as stored will be returned, otherwise minSignal will be calculated.<br/>
  * <br/>
- * IUpdater is implemented which takes care that all registered listeners ( {@link IChromatogramUpdateListener}) will be informed if values of the
+ * IUpdater is implemented which takes care that all registered listeners (
+ * {@link IChromatogramUpdateListener}) will be informed if values of the
  * chromatogram has been changed.
  * 
  * @author eselmeister
@@ -67,6 +70,9 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 	private Set<IChromatogramTargetMSD> targets;
 	private IIonTransitionSettings ionTransitionSettings;
 	private INoiseCalculator noiseCalculator;
+	/**
+	 * Test comment
+	 */
 	private ImmutableZeroIon immutableZeroIon;
 
 	// -----------------------------------------------------------------
@@ -305,7 +311,8 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 		// TODO peak.getPeakModel().getWidthByInflectionPoints() should be
 		// tested in the peak creation method.
 		/*
-		 * Add the peak only if it not contains a type/instance of the peakimport org.eclipse.chemclipse.model.core.IChromatogramPeakMSD;
+		 * Add the peak only if it not contains a type/instance of the
+		 * peakimport org.eclipse.chemclipse.model.core.IChromatogramPeakMSD;
 		 * (equals).
 		 */
 		if(!peaks.contains(peak) && peak.getPeakModel().getWidthByInflectionPoints() > 0) {
