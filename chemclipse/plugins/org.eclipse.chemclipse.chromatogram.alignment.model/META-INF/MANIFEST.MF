@@ -7,7 +7,7 @@ Bundle-Activator: org.eclipse.chemclipse.chromatogram.alignment.model.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.logging;bundle-version="0.7.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.chemclipse.chromatogram.alignment.model.core,
  org.eclipse.chemclipse.chromatogram.alignment.model.exceptions
 Bundle-Vendor: ChemClipse

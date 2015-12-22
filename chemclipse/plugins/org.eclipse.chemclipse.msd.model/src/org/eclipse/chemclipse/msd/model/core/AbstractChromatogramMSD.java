@@ -39,8 +39,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * The abstract chromatogram is responsible to handle as much jobs concerning a
  * chromatogram independent of the specific supplier.<br/>
- * AbstractChromatogram extends ({@link IChromatogramMSD}) which implements (
- * {@link IChromatogramOverview}). ({@link IChromatogramOverview}) should enable
+ * AbstractChromatogram extends ({@link IChromatogramMSD}) which implements ( {@link IChromatogramOverview}). ({@link IChromatogramOverview}) should enable
  * accessing some values of a chromatogram or a short overview. Some values like
  * amount of scans, min/max signal, min/max retention time and total ion
  * chromatogram signals, without accessing all scans. This should be more faster
@@ -57,8 +56,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * extended AbstractChromatogram. If no scans are added to the chromatogram,
  * minSignal as stored will be returned, otherwise minSignal will be calculated.<br/>
  * <br/>
- * IUpdater is implemented which takes care that all registered listeners (
- * {@link IChromatogramUpdateListener}) will be informed if values of the
+ * IUpdater is implemented which takes care that all registered listeners ( {@link IChromatogramUpdateListener}) will be informed if values of the
  * chromatogram has been changed.
  * 
  * @author eselmeister
