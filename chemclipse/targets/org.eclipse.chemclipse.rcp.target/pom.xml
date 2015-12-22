@@ -10,7 +10,7 @@
 
   <artifactId>org.eclipse.chemclipse.rcp.target</artifactId>
   <packaging>pom</packaging>
-  <version>3.6.2-SNAPSHOT</version>
+  <version>4.5.1-SNAPSHOT</version>
 
   <build>
     <plugins>
@@ -31,7 +31,7 @@
                   <!--
                     File and classifier must have the same name.
                   -->
-                  <file>chemclipse-4.4.2.target</file>
+                  <file>chemclipse-4.5.1.target</file>
                   <type>target</type>
                   <classifier>chemclipse</classifier>
                 </artifact>
