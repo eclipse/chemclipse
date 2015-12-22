@@ -21,7 +21,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.model;bundle-version="0.7.0",
  org.apache.commons.cli;bundle-version="1.2.0",
  org.eclipse.chemclipse.rcp.app;bundle-version="0.7.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.core,
  org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io,
