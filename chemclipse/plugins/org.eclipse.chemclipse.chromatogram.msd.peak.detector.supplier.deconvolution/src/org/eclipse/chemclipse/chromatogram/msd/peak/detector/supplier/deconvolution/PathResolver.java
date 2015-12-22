@@ -20,6 +20,9 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.osgi.framework.Bundle;
 
+/*
+ * Optimize
+ */
 public class PathResolver {
 
 	/**
