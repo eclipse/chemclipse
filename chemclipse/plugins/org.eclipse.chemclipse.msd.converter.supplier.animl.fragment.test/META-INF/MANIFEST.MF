@@ -5,4 +5,4 @@ Bundle-SymbolicName: org.eclipse.chemclipse.msd.converter.supplier.animl.fragmen
 Bundle-Version: 0.7.0.qualifier
 Bundle-Vendor: ChemClipse
 Fragment-Host: org.eclipse.chemclipse.msd.converter.supplier.animl;bundle-version="0.7.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
