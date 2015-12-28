@@ -20,11 +20,11 @@ import org.eclipse.chemclipse.swt.ui.converter.SeriesConverter;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
-
 import org.eclipse.swt.widgets.Composite;
 import org.swtchart.Chart;
 import org.swtchart.IAxis;
 import org.swtchart.IAxisSet;
+import org.swtchart.IAxisTick;
 import org.swtchart.ILineSeries;
 import org.swtchart.ILineSeries.PlotSymbolType;
 import org.swtchart.ISeries.SeriesType;
@@ -40,7 +40,6 @@ public class ChromatogramOverviewUI extends Chart {
 	private DecimalFormat decimalFormat;
 
 	public ChromatogramOverviewUI(Composite parent, int style) {
-
 		super(parent, style);
 		decimalFormat = new DecimalFormat();
 		decimalFormat.setMaximumFractionDigits(0);
@@ -76,12 +75,17 @@ public class ChromatogramOverviewUI extends Chart {
 		/*
 		 * Axes and line series
 		 */
+		IAxisTick xAxisTick = getAxisSet().getXAxis(0).getTick();
+		IAxisTick yAxisTick = getAxisSet().getYAxis(0).getTick();
+		//
 		getAxisSet().getXAxis(0).getTitle().setVisible(false);
-		getAxisSet().getXAxis(0).getTick().setVisible(false);
+		xAxisTick.setVisible(false);
+		xAxisTick.setForeground(Colors.BLACK);
 		//
 		getAxisSet().getYAxis(0).getTitle().setVisible(false);
-		getAxisSet().getYAxis(0).getTick().setVisible(false);
-		getAxisSet().getYAxis(0).getTick().setFormat(decimalFormat);
+		yAxisTick.setVisible(false);
+		yAxisTick.setFormat(decimalFormat);
+		yAxisTick.setForeground(Colors.BLACK);
 		//
 		getAxisSet().adjustRange();
 	}
