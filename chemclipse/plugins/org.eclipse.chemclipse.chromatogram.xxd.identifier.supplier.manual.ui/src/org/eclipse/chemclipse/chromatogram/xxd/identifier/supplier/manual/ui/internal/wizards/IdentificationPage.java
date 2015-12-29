@@ -34,7 +34,6 @@ public class IdentificationPage extends WizardPage {
 	private NumberFormat numberFormat;
 
 	public IdentificationPage(String pageName) {
-
 		super(pageName);
 		setTitle("Manual Peak Identification");
 		setDescription("Set an identification entry manually.");

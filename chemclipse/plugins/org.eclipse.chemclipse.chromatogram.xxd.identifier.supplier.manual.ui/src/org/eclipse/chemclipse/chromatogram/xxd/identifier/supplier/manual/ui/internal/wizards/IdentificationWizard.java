@@ -32,7 +32,6 @@ public class IdentificationWizard extends Wizard {
 	private IPeak peak;
 
 	public IdentificationWizard(IPeak peak) {
-
 		setNeedsProgressMonitor(true);
 		setWindowTitle("Peak Identification");
 		this.peak = peak;
