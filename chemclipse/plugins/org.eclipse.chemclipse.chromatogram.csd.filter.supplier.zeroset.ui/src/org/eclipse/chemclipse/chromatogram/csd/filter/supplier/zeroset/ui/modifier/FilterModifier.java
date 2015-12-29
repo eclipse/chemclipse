@@ -25,7 +25,6 @@ public class FilterModifier implements IRunnableWithProgress {
 	private IChromatogramSelectionCSD chromatogramSelection;
 
 	public FilterModifier(IChromatogramSelectionCSD chromatogramSelection) {
-
 		this.chromatogramSelection = chromatogramSelection;
 	}
 

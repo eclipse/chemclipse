@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.ui.Activa
 public class FilterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public FilterPreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("FID ZeroSet Filter Settings.");
