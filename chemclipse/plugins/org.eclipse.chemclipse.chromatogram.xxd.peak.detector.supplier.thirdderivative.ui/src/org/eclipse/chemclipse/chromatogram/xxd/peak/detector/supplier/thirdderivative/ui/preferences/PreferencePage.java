@@ -23,7 +23,6 @@ import org.eclipse.ui.IWorkbench;
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Third derivative peak detector.");
