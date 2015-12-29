@@ -16,7 +16,6 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.AbstractMas
 public class DistanceMassSpectrumComparisonResult extends AbstractMassSpectrumComparisonResult {
 
 	public DistanceMassSpectrumComparisonResult(float matchFactor, float reverseMatchFactor) {
-
 		super(matchFactor, reverseMatchFactor);
 	}
 }
