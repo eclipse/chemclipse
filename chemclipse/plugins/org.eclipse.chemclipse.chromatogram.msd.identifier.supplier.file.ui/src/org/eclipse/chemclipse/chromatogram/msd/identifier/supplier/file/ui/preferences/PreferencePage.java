@@ -26,7 +26,6 @@ import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEdit
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("File Identifier Settings.");

@@ -29,7 +29,6 @@ public class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
 	private IChromatogramSelectionMSD chromatogramSelection;
 
 	public MassSpectrumIdentifierRunnable(IChromatogramSelectionMSD chromatogramSelection) {
-
 		this.chromatogramSelection = chromatogramSelection;
 	}
 

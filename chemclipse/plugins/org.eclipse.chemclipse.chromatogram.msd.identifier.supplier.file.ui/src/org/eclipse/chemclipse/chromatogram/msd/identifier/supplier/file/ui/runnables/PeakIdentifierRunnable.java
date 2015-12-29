@@ -33,7 +33,6 @@ public class PeakIdentifierRunnable implements IRunnableWithProgress {
 	private boolean identifySelectedPeak;
 
 	public PeakIdentifierRunnable(IChromatogramSelectionMSD chromatogramSelection, boolean identifySelectedPeak) {
-
 		this.chromatogramSelection = chromatogramSelection;
 		this.identifySelectedPeak = identifySelectedPeak;
 	}
