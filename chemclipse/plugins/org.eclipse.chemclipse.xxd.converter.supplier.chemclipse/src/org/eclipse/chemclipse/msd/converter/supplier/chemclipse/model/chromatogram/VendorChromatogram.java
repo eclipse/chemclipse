@@ -16,7 +16,6 @@ import org.eclipse.chemclipse.msd.model.core.AbstractChromatogramMSD;
 public class VendorChromatogram extends AbstractChromatogramMSD implements IVendorChromatogram {
 
 	public VendorChromatogram() {
-
 		super();
 	}
 

@@ -16,7 +16,6 @@ import org.eclipse.chemclipse.wsd.model.core.AbstractScanSignalWSD;
 public class VendorScanSignal extends AbstractScanSignalWSD implements IVendorScanSignal {
 
 	public VendorScanSignal() {
-
 		super();
 	}
 }

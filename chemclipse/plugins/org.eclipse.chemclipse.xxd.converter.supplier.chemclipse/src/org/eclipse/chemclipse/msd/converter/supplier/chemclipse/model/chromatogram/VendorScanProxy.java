@@ -38,7 +38,6 @@ public class VendorScanProxy extends AbstractVendorMassSpectrumProxy implements 
 	private IIonTransitionSettings ionTransitionSettings;
 
 	public VendorScanProxy(File file, int offset, String version, IIonTransitionSettings ionTransitionSettings) {
-
 		this.file = file;
 		this.offset = offset;
 		this.version = version;

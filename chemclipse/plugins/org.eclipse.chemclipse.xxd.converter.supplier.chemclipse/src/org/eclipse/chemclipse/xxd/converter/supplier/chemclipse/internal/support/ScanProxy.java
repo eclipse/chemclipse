@@ -22,7 +22,6 @@ public class ScanProxy implements IScanProxy {
 	private int cycleNumber;
 
 	public ScanProxy(int offset, int retentionTime, int numberOfIons, float totalSignal, float retentionIndex, int timeSegmentId, int cycleNumber) {
-
 		this.offset = offset;
 		this.retentionTime = retentionTime;
 		this.numberOfIons = numberOfIons;

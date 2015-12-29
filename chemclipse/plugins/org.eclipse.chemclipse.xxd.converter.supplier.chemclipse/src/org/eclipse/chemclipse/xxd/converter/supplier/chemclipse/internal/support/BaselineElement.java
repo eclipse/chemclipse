@@ -17,7 +17,6 @@ public class BaselineElement implements IBaselineElement {
 	private float backgroundAbundance;
 
 	public BaselineElement(int retentionTime, float backgroundAbundance) {
-
 		this.retentionTime = retentionTime;
 		this.backgroundAbundance = backgroundAbundance;
 	}

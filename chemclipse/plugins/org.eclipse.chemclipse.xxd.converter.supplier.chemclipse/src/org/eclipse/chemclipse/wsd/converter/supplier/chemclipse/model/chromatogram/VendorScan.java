@@ -18,7 +18,6 @@ public class VendorScan extends AbstractScanWSD implements IVendorScan {
 	private static final long serialVersionUID = -6913519950824952048L;
 
 	public VendorScan() {
-
 		super();
 	}
 }
