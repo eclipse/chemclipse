@@ -35,7 +35,6 @@ public class QuantitationPeaksListView extends AbstractQuantitationCompoundSelec
 
 	@Inject
 	public QuantitationPeaksListView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 		this.eventBroker = eventBroker;
 	}

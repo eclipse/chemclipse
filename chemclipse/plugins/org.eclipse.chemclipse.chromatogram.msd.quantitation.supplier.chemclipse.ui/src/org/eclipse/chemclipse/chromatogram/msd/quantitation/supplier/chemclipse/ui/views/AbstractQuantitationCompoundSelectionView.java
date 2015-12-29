@@ -30,7 +30,6 @@ public abstract class AbstractQuantitationCompoundSelectionView extends Abstract
 	private EventHandler eventHandler;
 
 	public AbstractQuantitationCompoundSelectionView(MPart part, EPartService partService, IEventBroker eventBroker) {
-
 		super(part, partService);
 		this.eventBroker = eventBroker;
 		subscribe();

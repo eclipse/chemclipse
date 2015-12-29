@@ -37,7 +37,6 @@ public class AddAllPeaksWizard extends Wizard {
 	private List<IChromatogramPeakMSD> peaks;
 
 	public AddAllPeaksWizard(List<IChromatogramPeakMSD> peaks) {
-
 		setNeedsProgressMonitor(true);
 		setWindowTitle("Add All Peak to the Quantitation Table");
 		this.peaks = peaks;

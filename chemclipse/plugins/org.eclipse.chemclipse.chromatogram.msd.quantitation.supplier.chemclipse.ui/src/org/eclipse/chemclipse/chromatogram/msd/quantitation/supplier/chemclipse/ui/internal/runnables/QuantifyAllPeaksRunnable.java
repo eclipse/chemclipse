@@ -31,7 +31,6 @@ public class QuantifyAllPeaksRunnable implements IRunnableWithProgress {
 	private static final String PEAK_QUANTIFIER_ID = "org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.peak";
 
 	public QuantifyAllPeaksRunnable(IChromatogramSelectionMSD chromatogramSelection) {
-
 		this.chromatogramSelection = chromatogramSelection;
 	}
 

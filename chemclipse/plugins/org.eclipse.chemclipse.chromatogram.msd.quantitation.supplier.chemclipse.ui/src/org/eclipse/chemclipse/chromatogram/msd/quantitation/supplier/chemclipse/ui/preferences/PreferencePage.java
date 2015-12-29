@@ -27,7 +27,6 @@ import org.eclipse.jface.preference.StringFieldEditor;
 public class PreferencePage extends AbstractCustomQuantitationPreferencePage {
 
 	public PreferencePage() {
-
 		super(Activator.getDefault().getPreferenceStore());
 		setDescription("Quantitation Support.");
 	}

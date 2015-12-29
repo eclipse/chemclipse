@@ -19,12 +19,10 @@ public class QuantitationCompoundAlreadyExistsException extends Exception {
 	private static final long serialVersionUID = -3414105831762922439L;
 
 	public QuantitationCompoundAlreadyExistsException() {
-
 		super();
 	}
 
 	public QuantitationCompoundAlreadyExistsException(String message) {
-
 		super(message);
 	}
 }

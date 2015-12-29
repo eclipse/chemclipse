@@ -54,7 +54,6 @@ public class QuantitationPeaksListUI extends AbstractTableViewerUI implements IQ
 	private Map<String, Object> map;
 
 	public QuantitationPeaksListUI(Composite parent, int style, IEventBroker eventBroker) {
-
 		parent.setLayout(new FillLayout());
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));

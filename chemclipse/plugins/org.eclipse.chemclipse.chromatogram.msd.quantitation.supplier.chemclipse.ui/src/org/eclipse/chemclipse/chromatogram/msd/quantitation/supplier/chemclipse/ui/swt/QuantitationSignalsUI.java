@@ -44,7 +44,6 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 	private IQuantitationCompoundDocument quantitationCompoundDocument;
 
 	public QuantitationSignalsUI(Composite parent, int style) {
-
 		parent.setLayout(new FillLayout());
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));

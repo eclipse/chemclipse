@@ -34,7 +34,6 @@ public class QuantitationSignalsView extends AbstractQuantitationCompoundSelecti
 
 	@Inject
 	public QuantitationSignalsView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

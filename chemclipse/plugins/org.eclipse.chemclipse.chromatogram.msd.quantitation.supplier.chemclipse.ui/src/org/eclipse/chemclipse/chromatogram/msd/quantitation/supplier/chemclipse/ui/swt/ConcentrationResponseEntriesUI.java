@@ -51,7 +51,6 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 	private Map<String, Object> map;
 
 	public ConcentrationResponseEntriesUI(Composite parent, int style, IEventBroker eventBroker) {
-
 		parent.setLayout(new FillLayout());
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));

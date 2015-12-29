@@ -41,7 +41,6 @@ public abstract class AbstractEntryEditDialog extends Dialog {
 	private Map<String, String> widgetInput;
 
 	public AbstractEntryEditDialog(Shell parentShell, String title, String message) {
-
 		super(parentShell);
 		this.title = title;
 		this.message = message;

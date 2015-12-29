@@ -17,12 +17,10 @@ import org.eclipse.chemclipse.database.model.DatabaseProxy;
 public class QuantDatabaseProxy extends DatabaseProxy implements IQuantDatabaseProxy {
 
 	public QuantDatabaseProxy(String databaseUrl, String databaseName) {
-
 		super(databaseUrl, databaseName);
 	}
 
 	public QuantDatabaseProxy(String databaseUrl, String databaseName, String username, String password) {
-
 		super(databaseUrl, databaseName, username, password);
 	}
 

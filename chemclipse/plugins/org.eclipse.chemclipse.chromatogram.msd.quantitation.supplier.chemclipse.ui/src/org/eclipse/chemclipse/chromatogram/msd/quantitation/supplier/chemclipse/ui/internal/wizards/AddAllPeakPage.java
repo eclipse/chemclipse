@@ -38,7 +38,6 @@ public class AddAllPeakPage extends WizardPage {
 	private NumberFormat numberFormat;
 
 	public AddAllPeakPage(String pageName) {
-
 		super(pageName);
 		setTitle("Peaks to Quantitation Table");
 		setDescription("Set the concentration details.");

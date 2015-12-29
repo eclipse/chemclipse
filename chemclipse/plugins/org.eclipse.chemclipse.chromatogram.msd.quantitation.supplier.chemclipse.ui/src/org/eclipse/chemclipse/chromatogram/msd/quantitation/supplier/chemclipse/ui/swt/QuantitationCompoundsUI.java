@@ -62,7 +62,6 @@ public class QuantitationCompoundsUI extends AbstractTableViewerUI {
 	private Map<String, Object> map;
 
 	public QuantitationCompoundsUI(Composite parent, int style, IEventBroker eventBroker) {
-
 		parent.setLayout(new FillLayout());
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));

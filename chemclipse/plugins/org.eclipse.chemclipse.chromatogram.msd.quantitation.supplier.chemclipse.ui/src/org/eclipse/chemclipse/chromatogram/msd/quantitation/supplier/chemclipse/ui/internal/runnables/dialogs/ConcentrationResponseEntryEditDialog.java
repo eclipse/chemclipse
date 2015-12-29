@@ -39,7 +39,6 @@ public class ConcentrationResponseEntryEditDialog extends AbstractEntryEditDialo
 	private static final int FRACTION_DIGITS = 3;
 
 	public ConcentrationResponseEntryEditDialog(Shell parentShell, ConcentrationResponseEntryEdit concentrationResponseEntryEdit, String title) {
-
 		super(parentShell, title, "Create/Edit a concentration response entry.");
 		this.concentrationResponseEntryEdit = concentrationResponseEntryEdit;
 		//

@@ -49,12 +49,10 @@ public class QuantitationPeakDocument extends AbstractDocument implements IQuant
 	private static final Logger logger = Logger.getLogger(QuantitationPeakDocument.class);
 
 	public QuantitationPeakDocument() {
-
 		super(CLASS_NAME);
 	}
 
 	public QuantitationPeakDocument(ODocument document) {
-
 		super(document);
 	}
 

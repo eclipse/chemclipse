@@ -38,7 +38,6 @@ public class AddPeakToQuantitationTableWizard extends Wizard {
 	private NumberFormat numberFormat;
 
 	public AddPeakToQuantitationTableWizard(IQuantDatabase database, IChromatogramPeakMSD chromatogramPeakMSD) {
-
 		setNeedsProgressMonitor(true);
 		setWindowTitle("Add Peak to Quantitation Table");
 		this.database = database;

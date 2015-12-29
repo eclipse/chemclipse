@@ -28,7 +28,6 @@ public class QuantDatabases extends AbstractDatabases implements IQuantDatabases
 	public static final String IDENTIFIER_QUANTITATION = "org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse";
 
 	public QuantDatabases() {
-
 		super(IDENTIFIER_QUANTITATION);
 	}
 

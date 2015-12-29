@@ -55,7 +55,6 @@ public class QuantitationCompoundEditDialog extends AbstractEntryEditDialog {
 	private boolean isNewCompound;
 
 	public QuantitationCompoundEditDialog(Shell parentShell, QuantitationCompoundEntryEdit quantitationCompoundEntryEdit, String title, IQuantDatabase database, boolean isNewCompound) {
-
 		super(parentShell, title, (isNewCompound) ? "Create a quantitation compound." : "Edit a quantitation compound.");
 		this.quantitationCompoundEntryEdit = quantitationCompoundEntryEdit;
 		if(database != null) {

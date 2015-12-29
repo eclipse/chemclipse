@@ -35,7 +35,6 @@ public class ConcentrationResponseEntriesView extends AbstractQuantitationCompou
 
 	@Inject
 	public ConcentrationResponseEntriesView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 		this.eventBroker = eventBroker;
 	}

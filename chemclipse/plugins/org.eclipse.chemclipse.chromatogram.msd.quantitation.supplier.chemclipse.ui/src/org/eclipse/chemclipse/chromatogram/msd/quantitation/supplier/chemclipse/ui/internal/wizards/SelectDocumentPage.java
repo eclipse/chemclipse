@@ -47,7 +47,6 @@ public class SelectDocumentPage extends WizardPage {
 	private Label label3;
 
 	protected SelectDocumentPage(String pageName, List<String> peakTargetNames, IQuantDatabase database) {
-
 		super(pageName);
 		setTitle("Quantitation Support");
 		setDescription("Create a quantitation document.");

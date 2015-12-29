@@ -19,7 +19,6 @@ public abstract class AbstractCustomQuantitationPreferencePage extends AbstractQ
 	private IPreferenceStore preferenceStore;
 
 	public AbstractCustomQuantitationPreferencePage(IPreferenceStore preferenceStore) {
-
 		this.preferenceStore = preferenceStore;
 	}
 

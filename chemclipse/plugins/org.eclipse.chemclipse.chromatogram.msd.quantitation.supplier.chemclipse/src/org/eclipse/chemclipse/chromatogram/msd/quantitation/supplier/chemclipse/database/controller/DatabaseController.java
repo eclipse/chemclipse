@@ -22,7 +22,6 @@ public class DatabaseController implements IDatabaseController {
 	private IQuantDatabase database;
 
 	public DatabaseController(IQuantDatabase database) {
-
 		this.database = database;
 	}
 

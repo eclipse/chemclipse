@@ -40,7 +40,6 @@ public class QuantitationSignalEntryEditDialog extends AbstractEntryEditDialog {
 	private static final int FRACTION_DIGITS = 3;
 
 	public QuantitationSignalEntryEditDialog(Shell parentShell, QuantitationSignalEntryEdit quantitationSignalEntryEdit, String title) {
-
 		super(parentShell, title, "Create/Edit a quantitation signal entry.");
 		this.quantitationSignalEntryEdit = quantitationSignalEntryEdit;
 		//

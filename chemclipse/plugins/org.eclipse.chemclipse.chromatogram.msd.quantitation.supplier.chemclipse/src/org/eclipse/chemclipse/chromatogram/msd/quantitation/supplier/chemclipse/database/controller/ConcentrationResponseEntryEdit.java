@@ -19,7 +19,6 @@ public class ConcentrationResponseEntryEdit {
 	private String concentrationUnit;
 
 	public ConcentrationResponseEntryEdit(String concentrationUnit) {
-
 		this.concentrationUnit = concentrationUnit;
 	}
 

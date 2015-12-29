@@ -43,12 +43,10 @@ public class QuantitationCompoundDocument extends AbstractDocument implements IQ
 	private static final String VALUE_DELIMITER = ";";
 
 	public QuantitationCompoundDocument() {
-
 		super(CLASS_NAME);
 	}
 
 	public QuantitationCompoundDocument(ODocument document) {
-
 		super(document);
 	}
 

@@ -63,7 +63,6 @@ public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartEx
 	private IQuantitationCompoundDocument quantitationCompoundDocument;
 
 	public ConcentrationResponseEntriesLineSeriesUI(Composite parent, int style) {
-
 		super(parent, style);
 		initialize();
 	}

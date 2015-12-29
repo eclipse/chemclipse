@@ -34,7 +34,6 @@ public class ConcentrationResponseEntriesChartView extends AbstractQuantitationC
 
 	@Inject
 	public ConcentrationResponseEntriesChartView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

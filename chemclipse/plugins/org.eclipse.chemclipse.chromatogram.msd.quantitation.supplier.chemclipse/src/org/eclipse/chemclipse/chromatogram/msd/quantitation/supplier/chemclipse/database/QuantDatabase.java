@@ -30,7 +30,6 @@ import com.orientechnologies.orient.core.record.impl.ODocument;
 public class QuantDatabase extends AbstractDatabase implements IQuantDatabase {
 
 	public QuantDatabase(String database, String user, String password) throws org.eclipse.chemclipse.database.exceptions.NoDatabaseAvailableException {
-
 		super(database, user, password);
 	}
 
