@@ -49,7 +49,6 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 	private static final int MAX_SPECTRA_CHUNK = 65535;
 
 	public AbstractAmdisWriter() {
-
 		numberFormat = NumberFormat.getInstance(Locale.US);
 		numberFormat.setMinimumFractionDigits(FRACTION_DIGITS);
 		numberFormat.setMaximumFractionDigits(FRACTION_DIGITS);

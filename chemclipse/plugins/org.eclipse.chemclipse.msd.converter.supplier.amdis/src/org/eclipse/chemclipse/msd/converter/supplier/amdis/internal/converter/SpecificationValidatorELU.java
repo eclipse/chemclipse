@@ -19,7 +19,6 @@ public class SpecificationValidatorELU {
 	 * Use only static methods.
 	 */
 	private SpecificationValidatorELU() {
-
 	}
 
 	/**

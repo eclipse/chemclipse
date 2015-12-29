@@ -19,7 +19,6 @@ public class SpecificationValidatorMSL {
 	 * Use only static methods.
 	 */
 	private SpecificationValidatorMSL() {
-
 	}
 
 	/**
