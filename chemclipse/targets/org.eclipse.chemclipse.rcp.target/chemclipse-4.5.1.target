@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Eclipse 4.5.1" sequenceNumber="414">
+<?pde version="3.8"?><target name="Eclipse 4.5.1" sequenceNumber="419">
 <locations>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.e4.rcp.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.sdk.ide" version="0.0.0"/>
 <unit id="org.eclipse.rcp.feature.group" version="0.0.0"/>
@@ -21,7 +21,7 @@
 <unit id="org.eclipse.jpt.jpa.eclipselink.feature.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/releases/mars"/>
 </location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.ecf.filetransfer.httpclient4.ssl.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="0.0.0"/>
@@ -31,7 +31,7 @@
 <unit id="org.eclipse.ecf.core.ssl.feature.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/rt/ecf/3.12.0/site.p2"/>
 </location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.apache.log4j" version="0.0.0"/>
 <unit id="ch.qos.logback.core" version="0.0.0"/>
 <unit id="org.slf4j.api" version="0.0.0"/>
@@ -63,7 +63,7 @@
 <unit id="ca.odell.glazedlists" version="0.0.0"/>
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20151118145958/repository"/>
 </location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.e4.resources.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.e4.ui.keys.feature.source.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.e4.core.tools.feature.source.feature.group" version="0.0.0"/>
@@ -77,20 +77,20 @@
 <unit id="org.eclipse.e4.core.tools.feature.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/e4/downloads/drops/S-0.17-201501051100/repository"/>
 </location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.feature.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
 </location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.python.pydev.feature.feature.group" version="0.0.0"/>
 <repository location="http://pydev.org/updates"/>
 </location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.widgets.nattable.core.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.nebula.widgets.nattable.extension.glazedlists.feature.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/nattable/releases/1.3.0/repository"/>
 </location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.ease.python.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.ease.ui.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.ease.modules.charting.feature.feature.group" version="0.0.0"/>
@@ -98,7 +98,7 @@
 <unit id="org.eclipse.ease.modules.feature.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/ease/update/release"/>
 </location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.ease.python.jython.feature.feature.group" version="0.0.0"/>
 <repository location="https://dl.bintray.com/pontesegger/ease-jython/"/>
 </location>
@@ -176,6 +176,19 @@
 <unit id="org.knime.features.jpmml.feature.group" version="0.0.0"/>
 <unit id="org.knime.product.desktop.feature.group" version="0.0.0"/>
 <repository location="http://update.knime.org/analytics-platform/3.1/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.fx.ide.converter.feature.feature.group" version="2.1.0.201508240705"/>
+<unit id="org.eclipse.fx.ide.css.feature.feature.group" version="2.1.0.201508240705"/>
+<unit id="org.eclipse.fx.ide.pde.feature.feature.group" version="2.1.0.201508240705"/>
+<unit id="org.eclipse.fx.ide.fxml.feature.feature.group" version="2.1.0.201508240705"/>
+<unit id="org.eclipse.fx.ide.fxgraph.feature.feature.group" version="2.1.0.201508240705"/>
+<unit id="org.eclipse.fx.ide.rrobot.feature.feature.group" version="2.1.0.201508240705"/>
+<unit id="org.eclipse.fx.ide.l10n.feature.feature.group" version="2.1.0.201508240705"/>
+<unit id="org.eclipse.fx.ide.feature.feature.group" version="2.1.0.201508240705"/>
+<unit id="org.eclipse.fx.ide.ldef.feature.feature.group" version="2.1.0.201508240705"/>
+<unit id="org.eclipse.fx.ide.basic.feature.feature.group" version="2.1.0.201508240705"/>
+<repository location="http://download.eclipse.org/efxclipse/updates-released/2.1.0/site"/>
 </location>
 </locations>
 </target>

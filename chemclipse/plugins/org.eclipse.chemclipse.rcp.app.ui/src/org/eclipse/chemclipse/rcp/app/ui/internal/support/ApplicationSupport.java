@@ -60,7 +60,6 @@ public class ApplicationSupport {
 	private static final String EXECUTABLE_EXTENSION_NAME = "processor";
 
 	public ApplicationSupport() {
-
 		registry = Platform.getExtensionRegistry();
 		elements = registry.getConfigurationElementsFor(EXTENSION_POINT);
 		logger.info("Command Line Processor Options");
@@ -85,7 +84,8 @@ public class ApplicationSupport {
 		CommandLineParser commandLineParser = new BasicParser();
 		CommandLine commandLine;
 		try {
-			commandLine = commandLineParser.parse(options, Platform.getCommandLineArgs(), false);
+			String[] commandLineArgs = getCommandLineArgs();
+			commandLine = commandLineParser.parse(options, commandLineArgs, false);
 			if(commandLine.hasOption(OPTION_HELP) || commandLine.hasOption(OPTION_COMMAND_LINE)) {
 				return startCommandLineContext(commandLine, options);
 			} else {
@@ -207,6 +207,32 @@ public class ApplicationSupport {
 				options.addOption(matcher.group(3), false, OPTION_ECLIPSE_COMMAND_LINE_DESCRIPTION);
 			}
 		}
+	}
+
+	private String[] getCommandLineArgs() {
+
+		/*
+		 * Arguments like:
+		 * --launcher.GTK_version
+		 * 2
+		 * will be removed.
+		 */
+		String[] commandLineArgs = Platform.getCommandLineArgs();
+		for(int i = 0; i < commandLineArgs.length; i++) {
+			String commandLineArg = commandLineArgs[i];
+			if(commandLineArg != null && commandLineArg.startsWith("--")) {
+				/*
+				 * --launcher.GTK_version
+				 * =>
+				 * launcher_GTK_version
+				 */
+				String modifiedArg = commandLineArg.replace("--", "");
+				modifiedArg = modifiedArg.replaceAll("\\.", "_");
+				commandLineArgs[i] = modifiedArg;
+			}
+		}
+		//
+		return commandLineArgs;
 	}
 
 	private void addExtensionPointOptions(IConfigurationElement[] elements, Options options) {
