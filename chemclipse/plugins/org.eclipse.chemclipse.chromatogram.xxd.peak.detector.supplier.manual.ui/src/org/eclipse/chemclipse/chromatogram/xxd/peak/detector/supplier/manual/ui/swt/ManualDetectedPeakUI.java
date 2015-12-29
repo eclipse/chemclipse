@@ -41,7 +41,6 @@ public class ManualDetectedPeakUI extends Composite {
 	 * @param style
 	 */
 	public ManualDetectedPeakUI(Composite parent, int style) {
-
 		super(parent, style);
 		initialize(parent);
 	}

@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Manual peak detector.");

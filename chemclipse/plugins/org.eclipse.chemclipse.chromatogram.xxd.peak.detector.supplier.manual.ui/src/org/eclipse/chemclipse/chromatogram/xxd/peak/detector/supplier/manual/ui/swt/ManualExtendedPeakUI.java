@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 public class ManualExtendedPeakUI extends AbstractChromatogramViewPeakUI {
 
 	public ManualExtendedPeakUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 

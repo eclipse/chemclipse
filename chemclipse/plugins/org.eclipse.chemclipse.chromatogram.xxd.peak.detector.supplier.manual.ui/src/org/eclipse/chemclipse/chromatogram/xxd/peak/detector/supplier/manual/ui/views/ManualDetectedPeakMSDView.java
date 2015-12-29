@@ -36,7 +36,6 @@ public class ManualDetectedPeakMSDView extends AbstractChromatogramAndPeakSelect
 
 	@Inject
 	public ManualDetectedPeakMSDView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

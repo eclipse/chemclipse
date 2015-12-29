@@ -28,7 +28,6 @@ public class ExtendedChromatogramSelectionUI extends Composite {
 	private ChromatogramSelectionUI selectedChromatogramUI;
 
 	public ExtendedChromatogramSelectionUI(Composite parent, int style) {
-
 		super(parent, style);
 		initialize(parent);
 	}

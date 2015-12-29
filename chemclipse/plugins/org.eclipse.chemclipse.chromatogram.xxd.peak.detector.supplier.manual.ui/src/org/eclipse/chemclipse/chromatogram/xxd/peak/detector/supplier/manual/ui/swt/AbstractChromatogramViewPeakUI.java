@@ -33,7 +33,6 @@ public abstract class AbstractChromatogramViewPeakUI extends AbstractChromatogra
 	private boolean includeBackground = false;
 
 	public AbstractChromatogramViewPeakUI(Composite parent, int style) {
-
 		super(parent, style, new AxisTitlesIntensityScale());
 	}
 

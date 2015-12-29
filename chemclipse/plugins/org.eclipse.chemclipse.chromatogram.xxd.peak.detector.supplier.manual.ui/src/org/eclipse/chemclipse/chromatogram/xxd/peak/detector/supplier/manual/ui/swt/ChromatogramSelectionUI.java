@@ -61,7 +61,6 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 	 * @param style
 	 */
 	public ChromatogramSelectionUI(Composite parent, int style) {
-
 		super(parent, style, new AxisTitlesIntensityScale());
 	}
 

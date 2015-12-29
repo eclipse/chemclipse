@@ -35,7 +35,6 @@ public class ChromatogramSelectionView extends AbstractChromatogramSelectionView
 
 	@Inject
 	public ChromatogramSelectionView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 
