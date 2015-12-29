@@ -28,7 +28,6 @@ public class ReportRunnable implements IRunnableWithProgress {
 	private static final String REPORT_SUPPLIER_ID = "org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.chromatogramReportASCII";
 
 	public ReportRunnable(File file, IChromatogram chromatogram) {
-
 		this.file = file;
 		this.chromatogram = chromatogram;
 	}

@@ -59,7 +59,6 @@ public class ChromatogramReport {
 	private DecimalFormat decimalFormat;
 
 	public ChromatogramReport() {
-
 		decimalFormat = new DecimalFormat("0.0####");
 	}
 

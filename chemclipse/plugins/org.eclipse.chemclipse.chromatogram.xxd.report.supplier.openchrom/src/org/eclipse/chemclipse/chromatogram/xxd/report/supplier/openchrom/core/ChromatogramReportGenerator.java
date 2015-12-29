@@ -35,7 +35,6 @@ public class ChromatogramReportGenerator extends AbstractChromatogramReportGener
 	private static final Logger logger = Logger.getLogger(ChromatogramReportGenerator.class);
 
 	public ChromatogramReportGenerator() {
-
 	}
 
 	@Override
