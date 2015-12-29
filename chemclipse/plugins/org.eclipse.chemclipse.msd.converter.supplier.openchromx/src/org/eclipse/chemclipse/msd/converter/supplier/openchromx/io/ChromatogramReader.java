@@ -63,7 +63,6 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 	public static final String VALID_FILE_FORMAT_CHECK = "ChemClipseChromatogram";
 
 	public ChromatogramReader() {
-
 	}
 
 	@Override

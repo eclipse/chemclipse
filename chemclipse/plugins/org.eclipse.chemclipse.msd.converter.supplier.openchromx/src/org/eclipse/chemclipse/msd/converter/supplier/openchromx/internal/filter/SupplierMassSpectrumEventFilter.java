@@ -29,7 +29,6 @@ public class SupplierMassSpectrumEventFilter implements EventFilter {
 	private List<String> acceptedElements;
 
 	public SupplierMassSpectrumEventFilter() {
-
 		acceptedElements = new ArrayList<String>();
 		acceptedElements.add(IChromatogramTags.SUPPLIER_MASS_SPECTRUM);
 	}

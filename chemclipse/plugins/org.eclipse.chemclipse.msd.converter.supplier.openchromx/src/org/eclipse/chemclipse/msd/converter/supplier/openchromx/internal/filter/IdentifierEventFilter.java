@@ -29,7 +29,6 @@ public class IdentifierEventFilter implements EventFilter {
 	private List<String> acceptedElements;
 
 	public IdentifierEventFilter() {
-
 		acceptedElements = new ArrayList<String>();
 		acceptedElements.add(IChromatogramTags.IDENTIFIER);
 	}

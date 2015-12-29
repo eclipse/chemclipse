@@ -29,7 +29,6 @@ public class SupplierIonsEventFilter implements EventFilter {
 	private List<String> acceptedElements;
 
 	public SupplierIonsEventFilter() {
-
 		acceptedElements = new ArrayList<String>();
 		acceptedElements.add(IChromatogramTags.SUPPLIER_IONS);
 	}
