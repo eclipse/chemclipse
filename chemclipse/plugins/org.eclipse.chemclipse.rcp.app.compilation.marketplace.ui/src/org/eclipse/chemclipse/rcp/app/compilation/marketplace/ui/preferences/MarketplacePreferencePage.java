@@ -39,7 +39,6 @@ public class MarketplacePreferencePage extends FieldEditorPreferencePage impleme
 	private static final Logger logger = Logger.getLogger(MarketplacePreferencePage.class);
 
 	public MarketplacePreferencePage() {
-
 		super(GRID);
 		// The preference store is not needed.
 		setDescription("Add the marketplace on demand, to fetch additional plug-ins.");
