@@ -26,7 +26,6 @@ import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEdi
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("SNIP Detector/Filter");

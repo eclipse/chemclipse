@@ -20,7 +20,6 @@ public class SnipBaselineDetectorSettings extends AbstractBaselineDetectorSettin
 	private WindowSize windowSize;
 
 	public SnipBaselineDetectorSettings() {
-
 		windowSize = WindowSize.SCANS_5;
 	}
 
