@@ -34,7 +34,6 @@ public class BatchProcessJob implements IBatchProcessJob {
 	 * Creates a new batch process job.
 	 */
 	public BatchProcessJob() {
-
 		/*
 		 * Why are ArrayLists used here?
 		 * The entries shall be processed in the order the user has chosen them.

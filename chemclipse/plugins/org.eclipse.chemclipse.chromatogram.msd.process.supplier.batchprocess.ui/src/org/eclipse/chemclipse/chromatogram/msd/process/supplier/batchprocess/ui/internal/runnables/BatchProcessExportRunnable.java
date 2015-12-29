@@ -35,7 +35,6 @@ public class BatchProcessExportRunnable implements IRunnableWithProgress {
 	private IBatchProcessJob batchProcessJob;
 
 	public BatchProcessExportRunnable(File file, IBatchProcessJob batchProcessJob) {
-
 		this.file = file;
 		this.batchProcessJob = batchProcessJob;
 	}

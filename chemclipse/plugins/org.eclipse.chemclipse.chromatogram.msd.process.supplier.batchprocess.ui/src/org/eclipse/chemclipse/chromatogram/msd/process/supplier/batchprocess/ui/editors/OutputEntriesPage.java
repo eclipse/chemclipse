@@ -52,7 +52,6 @@ public class OutputEntriesPage implements IMultiEditorPage {
 	private Table outputFilesTable;
 
 	public OutputEntriesPage(BatchProcessJobEditor editorPart, Composite container) {
-
 		createPage(editorPart, container);
 	}
 

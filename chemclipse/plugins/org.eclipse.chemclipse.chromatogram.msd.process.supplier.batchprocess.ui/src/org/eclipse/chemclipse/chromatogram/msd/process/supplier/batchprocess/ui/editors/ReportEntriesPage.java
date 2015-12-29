@@ -52,7 +52,6 @@ public class ReportEntriesPage implements IMultiEditorPage {
 	private Table reportSupplierTable;
 
 	public ReportEntriesPage(BatchProcessJobEditor editorPart, Composite container) {
-
 		createPage(editorPart, container);
 	}
 

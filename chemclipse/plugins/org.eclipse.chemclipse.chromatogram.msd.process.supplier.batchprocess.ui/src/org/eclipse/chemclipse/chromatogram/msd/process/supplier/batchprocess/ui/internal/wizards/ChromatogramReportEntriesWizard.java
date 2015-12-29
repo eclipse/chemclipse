@@ -26,7 +26,6 @@ public class ChromatogramReportEntriesWizard extends Wizard {
 	private IChromatogramReportSupplierEntry reportEntry = null;
 
 	public ChromatogramReportEntriesWizard() {
-
 		super();
 		setNeedsProgressMonitor(true);
 	}

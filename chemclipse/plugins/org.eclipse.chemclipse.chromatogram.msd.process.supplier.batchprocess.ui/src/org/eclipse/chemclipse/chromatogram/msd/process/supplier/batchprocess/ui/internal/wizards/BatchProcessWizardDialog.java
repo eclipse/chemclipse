@@ -26,7 +26,6 @@ public class BatchProcessWizardDialog extends WizardDialog {
 	 * @param newWizard
 	 */
 	public BatchProcessWizardDialog(Shell parentShell, IWizard newWizard) {
-
 		super(parentShell, newWizard);
 	}
 }

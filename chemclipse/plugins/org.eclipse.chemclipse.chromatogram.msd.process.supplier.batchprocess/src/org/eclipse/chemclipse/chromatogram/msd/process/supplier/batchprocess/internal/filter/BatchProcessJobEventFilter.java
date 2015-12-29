@@ -31,7 +31,6 @@ public class BatchProcessJobEventFilter implements EventFilter {
 	 * @param acceptedElements
 	 */
 	public BatchProcessJobEventFilter(List<String> acceptedElements) {
-
 		if(acceptedElements != null) {
 			this.acceptedElements = acceptedElements;
 		}

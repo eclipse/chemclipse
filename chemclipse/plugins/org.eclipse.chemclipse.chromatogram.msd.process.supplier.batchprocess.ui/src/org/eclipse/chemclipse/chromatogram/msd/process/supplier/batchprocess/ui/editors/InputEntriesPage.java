@@ -53,7 +53,6 @@ public class InputEntriesPage implements IMultiEditorPage {
 	private static final String FILES = "Input Files: ";
 
 	public InputEntriesPage(BatchProcessJobEditor editorPart, Composite container) {
-
 		createPage(editorPart, container);
 	}
 

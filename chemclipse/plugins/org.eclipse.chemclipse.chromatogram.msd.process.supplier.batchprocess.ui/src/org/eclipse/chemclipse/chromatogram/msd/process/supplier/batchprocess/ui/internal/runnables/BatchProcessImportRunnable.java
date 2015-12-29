@@ -34,7 +34,6 @@ public class BatchProcessImportRunnable implements IRunnableWithProgress {
 	private IBatchProcessJob batchProcessJob = null;
 
 	public BatchProcessImportRunnable(File file) {
-
 		this.file = file;
 	}
 

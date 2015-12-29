@@ -52,7 +52,6 @@ public class ProcessEntriesPage implements IMultiEditorPage {
 	private Table processEntriesTable;
 
 	public ProcessEntriesPage(BatchProcessJobEditor editorPart, Composite container) {
-
 		createPage(editorPart, container);
 	}
 

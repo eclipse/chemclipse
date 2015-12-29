@@ -30,7 +30,6 @@ public class BatchProcessJobWizard extends AbstractFileWizard {
 	private static final Logger logger = Logger.getLogger(BatchProcessJobWizard.class);
 
 	public BatchProcessJobWizard() {
-
 		super("BatchJob", ".obj");
 	}
 

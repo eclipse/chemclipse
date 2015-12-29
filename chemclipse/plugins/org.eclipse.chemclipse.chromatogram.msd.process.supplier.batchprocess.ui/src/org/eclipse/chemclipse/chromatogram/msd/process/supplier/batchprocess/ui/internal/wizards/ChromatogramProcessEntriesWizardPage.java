@@ -44,7 +44,6 @@ public class ChromatogramProcessEntriesWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	protected ChromatogramProcessEntriesWizardPage(String pageName, IChromatogramProcessEntry chromatogramProcessEntry) {
-
 		super(pageName);
 		setTitle("Chromatogram Process Entries");
 		setDescription("This wizard lets you select several chromatogram filter, integrators, identifier ...");

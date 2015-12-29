@@ -30,7 +30,6 @@ public class ChromatogramProcessEntriesWizard extends Wizard {
 	 * @param chromatogramProcessEntry
 	 */
 	public ChromatogramProcessEntriesWizard(IChromatogramProcessEntry chromatogramProcessEntry) {
-
 		super();
 		setNeedsProgressMonitor(true);
 		this.chromatogramProcessEntry = chromatogramProcessEntry;

@@ -46,7 +46,6 @@ public class BatchProcess implements IBatchProcess {
 	private ProcessTypeSupport processTypeSupport;
 
 	public BatchProcess() {
-
 		processTypeSupport = new ProcessTypeSupport();
 	}
 

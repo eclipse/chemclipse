@@ -58,7 +58,6 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 	private int pageIndex;
 
 	public BatchProcessEditorPage(BatchProcessJobEditor editorPart, Composite container) {
-
 		createPage(editorPart, container);
 	}
 

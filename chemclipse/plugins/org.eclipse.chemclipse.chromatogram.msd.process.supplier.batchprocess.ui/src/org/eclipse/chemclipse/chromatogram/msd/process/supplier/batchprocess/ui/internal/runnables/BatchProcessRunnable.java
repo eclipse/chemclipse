@@ -40,7 +40,6 @@ public class BatchProcessRunnable implements IRunnableWithProgress {
 	private BatchProcessJobReader reader;
 
 	public BatchProcessRunnable(String filePath) {
-
 		this.filePath = filePath;
 	}
 
