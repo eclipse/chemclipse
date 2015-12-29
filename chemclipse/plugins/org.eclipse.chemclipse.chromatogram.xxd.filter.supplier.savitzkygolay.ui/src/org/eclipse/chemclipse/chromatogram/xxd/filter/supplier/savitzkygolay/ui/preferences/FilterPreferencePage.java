@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEd
 public class FilterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public FilterPreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Savitzky-Golay Filter");

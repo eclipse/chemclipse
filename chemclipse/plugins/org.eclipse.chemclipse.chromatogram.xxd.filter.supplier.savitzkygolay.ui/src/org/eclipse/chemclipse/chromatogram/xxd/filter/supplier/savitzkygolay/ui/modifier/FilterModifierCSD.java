@@ -27,7 +27,6 @@ public class FilterModifierCSD extends AbstractChromatogramProcessor implements 
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.csd.filter.supplier.savitzkygolay";
 
 	public FilterModifierCSD(IChromatogramSelectionCSD chromatogramSelection) {
-
 		super(chromatogramSelection);
 	}
 
