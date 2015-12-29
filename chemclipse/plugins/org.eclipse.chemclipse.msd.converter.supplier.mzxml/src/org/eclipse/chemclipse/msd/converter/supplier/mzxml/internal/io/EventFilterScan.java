@@ -22,7 +22,6 @@ public class EventFilterScan implements EventFilter {
 	private List<String> acceptedElements;
 
 	public EventFilterScan() {
-
 		acceptedElements = new ArrayList<String>();
 		acceptedElements.add("scan");
 	}

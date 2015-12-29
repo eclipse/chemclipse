@@ -22,7 +22,6 @@ public class ObjectFactory {
 	private final static QName _SeparationTechnique_QNAME = new QName("http://sashimi.sourceforge.net/schema_revision/mzXML_3.0", "separationTechnique");
 
 	public ObjectFactory() {
-
 	}
 
 	public MsRun createMsRun() {

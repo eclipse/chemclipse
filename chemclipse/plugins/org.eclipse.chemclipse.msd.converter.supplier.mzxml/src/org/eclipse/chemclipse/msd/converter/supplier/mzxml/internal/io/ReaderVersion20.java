@@ -56,7 +56,6 @@ public class ReaderVersion20 extends AbstractReaderVersion implements IChromatog
 	private String contextPath;
 
 	public ReaderVersion20(String contextPath) {
-
 		this.contextPath = contextPath;
 	}
 

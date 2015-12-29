@@ -58,7 +58,6 @@ public class ReaderVersion32 extends AbstractReaderVersion implements IChromatog
 	private String contextPath;
 
 	public ReaderVersion32(String contextPath) {
-
 		this.contextPath = contextPath;
 	}
 
