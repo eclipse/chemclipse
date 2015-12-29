@@ -43,7 +43,6 @@ public class MatlabParafacPeakWriter implements IPeakWriter {
 	private static final int FRACTION_DIGITS = 3;
 
 	public MatlabParafacPeakWriter() {
-
 		setLineSeparator();
 		numberFormat = NumberFormat.getInstance();
 		numberFormat.setMinimumFractionDigits(FRACTION_DIGITS);

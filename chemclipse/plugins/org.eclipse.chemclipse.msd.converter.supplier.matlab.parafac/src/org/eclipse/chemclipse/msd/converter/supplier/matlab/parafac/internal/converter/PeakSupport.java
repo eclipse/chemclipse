@@ -28,7 +28,6 @@ public class PeakSupport {
 	private String modelDescription;
 
 	public PeakSupport() {
-
 		peakIntensityValues = new PeakIntensityValues();
 		peakMaximum = new PeakMassSpectrum();
 	}
