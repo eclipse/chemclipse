@@ -43,7 +43,6 @@ public class MassChromatographicQualityResult implements IMassChromatographicQua
 	 * @throws CodaCalculatorException
 	 */
 	public MassChromatographicQualityResult(IChromatogramSelectionMSD chromatogramSelection, float codaThreshold, WindowSize windowSize) throws CodaCalculatorException {
-
 		validateChromatogramSelection(chromatogramSelection);
 		codaThreshold = validateCodaThreshold(codaThreshold);
 		validateWindowSize(windowSize);

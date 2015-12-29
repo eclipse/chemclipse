@@ -23,12 +23,10 @@ public class CodaCalculatorException extends Exception {
 	private static final long serialVersionUID = 3534005973969512859L;
 
 	public CodaCalculatorException() {
-
 		super();
 	}
 
 	public CodaCalculatorException(String message) {
-
 		super(message);
 	}
 }

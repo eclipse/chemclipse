@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.ui.Activator
 public class FilterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public FilterPreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Set the CODA filter settings.");

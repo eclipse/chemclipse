@@ -24,7 +24,6 @@ public class MassChromatographicQualityCalculator {
 	 * Use only static methods.
 	 */
 	private MassChromatographicQualityCalculator() {
-
 	}
 
 	/**

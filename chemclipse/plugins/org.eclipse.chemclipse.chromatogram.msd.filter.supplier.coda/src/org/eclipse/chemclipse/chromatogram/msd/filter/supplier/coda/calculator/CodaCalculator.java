@@ -32,7 +32,6 @@ public class CodaCalculator {
 	 * Use it a singleton.
 	 */
 	private CodaCalculator() {
-
 	}
 
 	/**

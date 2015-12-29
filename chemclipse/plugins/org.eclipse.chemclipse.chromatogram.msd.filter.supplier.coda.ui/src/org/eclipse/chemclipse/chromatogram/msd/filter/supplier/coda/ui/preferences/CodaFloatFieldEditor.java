@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEdit
 public class CodaFloatFieldEditor extends FloatFieldEditor {
 
 	public CodaFloatFieldEditor(String name, String labelText, float minValue, float maxValue, Composite parent) {
-
 		super(name, labelText, minValue, maxValue, parent);
 	}
 }

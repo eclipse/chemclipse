@@ -18,7 +18,6 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 	private ICodaSettings codaSettings;
 
 	public SupplierFilterSettings() {
-
 		codaSettings = new CodaSettings();
 	}
 
