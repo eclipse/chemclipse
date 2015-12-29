@@ -22,7 +22,6 @@ public class ObjectFactory {
 	private final static QName _MzML_QNAME = new QName("http://psi.hupo.org/ms/mzml", "mzML");
 
 	public ObjectFactory() {
-
 	}
 
 	public MzMLType createMzMLType() {

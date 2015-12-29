@@ -24,7 +24,6 @@ public class ChromatogramSupport {
 	private Map<Integer, Float> retentionTimeIntensities;
 
 	public ChromatogramSupport(Number[] numbersRetentionTimeInMinutes, Number[] numbersIntensity) {
-
 		retentionTimeIntensities = new HashMap<Integer, Float>();
 		int size = numbersRetentionTimeInMinutes.length;
 		for(int i = 0; i < size; i++) {

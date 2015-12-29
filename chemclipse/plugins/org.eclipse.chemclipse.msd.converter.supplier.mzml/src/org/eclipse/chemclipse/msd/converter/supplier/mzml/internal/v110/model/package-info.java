@@ -11,4 +11,3 @@
  *******************************************************************************/
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://psi.hupo.org/ms/mzml", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model;
-
