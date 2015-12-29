@@ -26,7 +26,6 @@ public class VendorLibraryMassSpectrum extends AbstractRegularLibraryMassSpectru
 	private Map<String, String> infoMap;
 
 	public VendorLibraryMassSpectrum() {
-
 		infoMap = new HashMap<String, String>();
 	}
 
