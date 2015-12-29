@@ -17,7 +17,6 @@ import javax.xml.bind.annotation.XmlRegistry;
 public class ObjectFactory {
 
 	public ObjectFactory() {
-
 	}
 
 	public MzData createMzData() {
