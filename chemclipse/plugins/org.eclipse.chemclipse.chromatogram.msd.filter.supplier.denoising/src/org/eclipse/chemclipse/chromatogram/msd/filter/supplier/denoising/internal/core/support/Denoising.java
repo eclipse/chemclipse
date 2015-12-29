@@ -47,7 +47,6 @@ public class Denoising {
 	 * Use only static methods.
 	 */
 	private Denoising() {
-
 	}
 
 	/**

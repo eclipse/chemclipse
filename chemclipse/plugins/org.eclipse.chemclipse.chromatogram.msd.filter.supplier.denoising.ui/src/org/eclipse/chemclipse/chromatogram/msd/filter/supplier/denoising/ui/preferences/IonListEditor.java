@@ -24,7 +24,6 @@ import org.eclipse.swt.widgets.Shell;
 public class IonListEditor extends ListEditor {
 
 	public IonListEditor(String name, String labelText, Composite parent) {
-
 		super(name, labelText, parent);
 	}
 

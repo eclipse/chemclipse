@@ -49,7 +49,6 @@ public class NoiseMassSpectraUI extends Composite {
 	private NumberFormat numberFormat;
 
 	public NoiseMassSpectraUI(Composite parent, int style) {
-
 		super(parent, style);
 		// TODO store NumberFormat of retention time in another class e.g. in model
 		numberFormat = NumberFormat.getInstance();

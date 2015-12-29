@@ -20,7 +20,6 @@ public class NoiseSegment implements INoiseSegment {
 	private ICombinedMassSpectrum noiseMassSpectrum;
 
 	public NoiseSegment(IAnalysisSegment analysisSegment, ICombinedMassSpectrum noiseMassSpectrum) {
-
 		this.analysisSegment = analysisSegment;
 		this.noiseMassSpectrum = noiseMassSpectrum;
 	}

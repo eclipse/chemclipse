@@ -23,13 +23,11 @@ public class DenoisingFilterResult extends AbstractChromatogramFilterResult impl
 	private List<ICombinedMassSpectrum> noiseMassSpectra;
 
 	public DenoisingFilterResult(ResultStatus resultStatus, String description) {
-
 		super(resultStatus, description);
 		this.noiseMassSpectra = new ArrayList<ICombinedMassSpectrum>();
 	}
 
 	public DenoisingFilterResult(ResultStatus resultStatus, String description, List<ICombinedMassSpectrum> noiseMassSpectra) {
-
 		super(resultStatus, description);
 		if(noiseMassSpectra != null) {
 			this.noiseMassSpectra = noiseMassSpectra;

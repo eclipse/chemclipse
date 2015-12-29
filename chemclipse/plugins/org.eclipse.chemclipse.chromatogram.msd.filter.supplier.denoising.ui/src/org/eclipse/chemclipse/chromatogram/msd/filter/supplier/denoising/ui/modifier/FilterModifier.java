@@ -41,7 +41,6 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 	private IEventBroker eventBroker;
 
 	public FilterModifier(IChromatogramSelectionMSD chromatogramSelection, IEventBroker eventBroker) {
-
 		super(chromatogramSelection);
 		this.eventBroker = eventBroker;
 	}

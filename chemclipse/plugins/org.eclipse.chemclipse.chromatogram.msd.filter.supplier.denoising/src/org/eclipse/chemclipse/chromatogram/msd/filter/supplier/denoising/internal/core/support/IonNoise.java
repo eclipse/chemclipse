@@ -17,7 +17,6 @@ public class IonNoise implements Comparable<IonNoise> {
 	private float abundance;
 
 	public IonNoise(int ion, float abundance) {
-
 		this.ion = ion;
 		this.abundance = abundance;
 	}

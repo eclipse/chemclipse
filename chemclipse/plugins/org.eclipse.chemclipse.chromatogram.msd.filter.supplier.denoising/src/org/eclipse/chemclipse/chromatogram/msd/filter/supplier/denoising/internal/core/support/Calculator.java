@@ -40,7 +40,6 @@ public class Calculator {
 	private CalculatorSupport calculatorSupport;
 
 	public Calculator() {
-
 		/*
 		 * Why do we instantiate a class CalculatorSupport instance? If e.g. the
 		 * getNoiseMassSpectrum(...) method is called 1000 times, as much

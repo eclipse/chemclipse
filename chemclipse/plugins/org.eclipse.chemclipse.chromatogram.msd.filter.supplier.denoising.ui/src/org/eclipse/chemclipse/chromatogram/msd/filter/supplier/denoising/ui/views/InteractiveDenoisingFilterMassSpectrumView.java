@@ -43,7 +43,6 @@ public class InteractiveDenoisingFilterMassSpectrumView extends AbstractChromato
 
 	@Inject
 	public InteractiveDenoisingFilterMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 		subscribeToMassSpectraUpdates(eventBroker);
 	}

@@ -25,7 +25,6 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 	private SegmentWidth segmentWidth;
 
 	public SupplierFilterSettings() {
-
 		ionsToRemove = new MarkedIons();
 		ionsToPreserve = new MarkedIons();
 		adjustThresholdTransitions = true;

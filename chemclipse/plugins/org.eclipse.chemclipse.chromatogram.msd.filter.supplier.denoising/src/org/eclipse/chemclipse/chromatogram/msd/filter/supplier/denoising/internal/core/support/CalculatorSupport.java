@@ -39,7 +39,6 @@ public class CalculatorSupport {
 	private SegmentValidator segmentValidator;
 
 	public CalculatorSupport() {
-
 		segmentValidator = new SegmentValidator();
 	}
 
