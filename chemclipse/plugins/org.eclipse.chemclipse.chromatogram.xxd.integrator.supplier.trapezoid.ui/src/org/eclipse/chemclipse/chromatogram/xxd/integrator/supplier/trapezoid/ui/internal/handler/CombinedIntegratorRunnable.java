@@ -40,7 +40,6 @@ public class CombinedIntegratorRunnable implements IRunnableWithProgress {
 	private IChromatogramSelection chromatogramSelection;
 
 	public CombinedIntegratorRunnable(IChromatogramSelection chromatogramSelection) {
-
 		this.chromatogramSelection = chromatogramSelection;
 	}
 

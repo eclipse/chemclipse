@@ -36,7 +36,6 @@ public class PeakIntegratorRunnable implements IRunnableWithProgress {
 	private IChromatogramSelection chromatogramSelection;
 
 	public PeakIntegratorRunnable(IChromatogramSelection chromatogramSelection) {
-
 		this.chromatogramSelection = chromatogramSelection;
 	}
 

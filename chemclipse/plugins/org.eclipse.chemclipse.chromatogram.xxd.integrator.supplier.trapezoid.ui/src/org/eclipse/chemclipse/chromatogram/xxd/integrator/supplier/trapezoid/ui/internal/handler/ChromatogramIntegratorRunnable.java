@@ -33,7 +33,6 @@ public class ChromatogramIntegratorRunnable implements IRunnableWithProgress {
 	private IChromatogramSelection chromatogramSelection;
 
 	public ChromatogramIntegratorRunnable(IChromatogramSelection chromatogramSelection) {
-
 		this.chromatogramSelection = chromatogramSelection;
 	}
 

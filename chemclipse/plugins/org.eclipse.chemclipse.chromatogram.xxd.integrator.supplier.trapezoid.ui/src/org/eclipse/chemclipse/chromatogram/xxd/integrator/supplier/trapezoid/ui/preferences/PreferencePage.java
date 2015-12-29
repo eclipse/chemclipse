@@ -24,7 +24,6 @@ import org.eclipse.ui.IWorkbench;
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Standard integrator\n\nThe peak integrator aims to support functions as known from the FirstDerivative peak integrator.");
