@@ -30,17 +30,14 @@ public class VendorIon extends AbstractScanIon implements IVendorIon {
 	public static final double MAX_ION = 20000.0d;
 
 	public VendorIon(double ion, boolean ignoreAbundanceLimit) throws IonLimitExceededException {
-
 		super(ion, ignoreAbundanceLimit);
 	}
 
 	public VendorIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
-
 		super(ion, abundance);
 	}
 
 	public VendorIon(double ion) throws IonLimitExceededException {
-
 		super(ion);
 	}
 
