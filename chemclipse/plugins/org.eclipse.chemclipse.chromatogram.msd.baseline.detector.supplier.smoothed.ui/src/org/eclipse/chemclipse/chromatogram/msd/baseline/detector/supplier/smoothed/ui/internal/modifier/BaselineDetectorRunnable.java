@@ -29,7 +29,6 @@ public class BaselineDetectorRunnable implements IRunnableWithProgress {
 	private IChromatogramSelectionMSD chromatogramSelection;
 
 	public BaselineDetectorRunnable(IChromatogramSelectionMSD chromatogramSelection) {
-
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
