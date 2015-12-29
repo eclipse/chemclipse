@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.TextFieldEdito
 public class FilterMassSpectrumPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public FilterMassSpectrumPreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Substract filter mass spectrum.");

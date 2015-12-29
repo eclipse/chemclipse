@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.Activ
 public class FilterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public FilterPreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Select the Substract filter settings.");

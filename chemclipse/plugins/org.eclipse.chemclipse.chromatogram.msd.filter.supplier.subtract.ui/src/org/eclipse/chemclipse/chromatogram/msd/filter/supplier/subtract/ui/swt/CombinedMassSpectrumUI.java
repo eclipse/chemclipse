@@ -34,7 +34,6 @@ public class CombinedMassSpectrumUI extends Composite {
 	private SimpleMassSpectrumUI simpleMassSpectrumUI;
 
 	public CombinedMassSpectrumUI(Composite parent, int style) {
-
 		super(parent, style);
 		initialize(parent);
 		decimalFormat = new DecimalFormat("0.0##");

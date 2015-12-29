@@ -29,7 +29,6 @@ public class FilterModifierChromatogram extends AbstractChromatogramProcessor im
 	private static final String DESCRIPTION = "Subtract Filter Chromatogram";
 
 	public FilterModifierChromatogram(IChromatogramSelectionMSD chromatogramSelection) {
-
 		super(chromatogramSelection);
 	}
 

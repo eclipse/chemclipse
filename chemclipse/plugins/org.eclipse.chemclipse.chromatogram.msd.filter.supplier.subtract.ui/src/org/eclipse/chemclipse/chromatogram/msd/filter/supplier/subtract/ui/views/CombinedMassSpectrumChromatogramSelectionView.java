@@ -34,7 +34,6 @@ public class CombinedMassSpectrumChromatogramSelectionView extends AbstractChrom
 
 	@Inject
 	public CombinedMassSpectrumChromatogramSelectionView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

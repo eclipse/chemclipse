@@ -30,7 +30,6 @@ public class FilterModifierPeak implements IRunnableWithProgress {
 	private boolean useSelectedPeak = true; // default
 
 	public FilterModifierPeak(IChromatogramSelectionMSD chromatogramSelectionMSD, boolean useSelectedPeak) {
-
 		this.chromatogramSelectionMSD = chromatogramSelectionMSD;
 		this.useSelectedPeak = useSelectedPeak;
 	}

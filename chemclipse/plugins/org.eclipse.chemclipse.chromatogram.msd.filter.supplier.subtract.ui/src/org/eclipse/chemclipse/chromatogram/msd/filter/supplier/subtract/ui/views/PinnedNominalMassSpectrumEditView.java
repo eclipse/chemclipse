@@ -36,7 +36,6 @@ public class PinnedNominalMassSpectrumEditView extends AbstractChromatogramSelec
 
 	@Inject
 	public PinnedNominalMassSpectrumEditView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 		this.eventBroker = eventBroker;
 	}

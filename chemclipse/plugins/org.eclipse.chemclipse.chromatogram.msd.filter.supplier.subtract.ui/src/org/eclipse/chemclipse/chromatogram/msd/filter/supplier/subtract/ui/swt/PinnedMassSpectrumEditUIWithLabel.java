@@ -86,7 +86,6 @@ public class PinnedMassSpectrumEditUIWithLabel extends Composite implements IMas
 	private IEventBroker eventBroker;
 
 	public PinnedMassSpectrumEditUIWithLabel(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision, IEventBroker eventBroker) {
-
 		super(parent, style);
 		decimalFormat = new DecimalFormat("0.0####");
 		this.eventBroker = eventBroker;
