@@ -28,7 +28,6 @@ public class ClassifierEvaluator extends AbstractChromatogramProcessor implement
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson";
 
 	public ClassifierEvaluator(IChromatogramSelectionMSD chromatogramSelection) {
-
 		super(chromatogramSelection);
 	}
 

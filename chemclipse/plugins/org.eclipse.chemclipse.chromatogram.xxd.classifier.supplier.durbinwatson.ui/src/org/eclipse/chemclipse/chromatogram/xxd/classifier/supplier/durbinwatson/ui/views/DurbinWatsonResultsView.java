@@ -52,7 +52,6 @@ public class DurbinWatsonResultsView extends AbstractChromatogramSelectionMSDVie
 
 	@Inject
 	public DurbinWatsonResultsView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

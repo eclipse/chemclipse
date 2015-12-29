@@ -19,7 +19,6 @@ public class SavitzkyGolayFilterRating implements ISavitzkyGolayFilterRating {
 	private ISupplierFilterSettings supplierFilterSettings;
 
 	public SavitzkyGolayFilterRating(double rating, ISupplierFilterSettings supplierFilterSettings) {
-
 		this.rating = rating;
 		this.supplierFilterSettings = supplierFilterSettings;
 	}

@@ -22,7 +22,6 @@ public class DurbinWatsonClassifierResult extends AbstractChromatogramClassifier
 	private List<ISavitzkyGolayFilterRating> savitzkyGolayFilterRatings;
 
 	public DurbinWatsonClassifierResult(ResultStatus resultStatus, String description) {
-
 		super(resultStatus, description);
 		savitzkyGolayFilterRatings = new ArrayList<ISavitzkyGolayFilterRating>();
 	}
