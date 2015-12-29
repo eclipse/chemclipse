@@ -27,7 +27,6 @@ import org.eclipse.ui.IWorkbench;
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("First derivative peak detector\n\nThe peak detector aims to support functions as known from the ChemStation peak detector.");

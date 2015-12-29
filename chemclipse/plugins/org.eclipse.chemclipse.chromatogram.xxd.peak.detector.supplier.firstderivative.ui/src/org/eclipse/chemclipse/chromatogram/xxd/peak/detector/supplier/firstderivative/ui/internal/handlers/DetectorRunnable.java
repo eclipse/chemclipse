@@ -34,7 +34,6 @@ public class DetectorRunnable implements IRunnableWithProgress {
 	private int detectedPeaks;
 
 	public DetectorRunnable(IChromatogramSelection chromatogramSelection) {
-
 		this.chromatogramSelection = chromatogramSelection;
 	}
 

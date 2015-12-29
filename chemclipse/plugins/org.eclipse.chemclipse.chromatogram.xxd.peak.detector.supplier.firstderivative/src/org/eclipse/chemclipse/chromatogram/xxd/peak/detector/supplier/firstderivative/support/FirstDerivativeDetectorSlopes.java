@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.chromatogram.peak.detector.support.DetectorSlopes;
 public class FirstDerivativeDetectorSlopes extends DetectorSlopes implements IFirstDerivativeDetectorSlopes {
 
 	public FirstDerivativeDetectorSlopes(ITotalScanSignals signals) {
-
 		super(signals);
 	}
 }

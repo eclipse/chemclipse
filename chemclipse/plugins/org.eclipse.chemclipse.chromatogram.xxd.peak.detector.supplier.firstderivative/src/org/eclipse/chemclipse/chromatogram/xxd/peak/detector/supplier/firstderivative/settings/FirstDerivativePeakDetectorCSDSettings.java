@@ -22,7 +22,6 @@ public class FirstDerivativePeakDetectorCSDSettings extends AbstractPeakDetector
 	private WindowSize windowSize;
 
 	public FirstDerivativePeakDetectorCSDSettings() {
-
 		windowSize = WindowSize.SCANS_5;
 	}
 
