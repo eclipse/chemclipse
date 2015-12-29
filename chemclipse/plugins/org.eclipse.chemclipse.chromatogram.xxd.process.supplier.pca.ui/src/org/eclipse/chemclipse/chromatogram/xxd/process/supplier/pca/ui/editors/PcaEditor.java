@@ -162,7 +162,6 @@ public class PcaEditor {
 	private int extractionType;
 
 	public PcaEditor() {
-
 		dataInputEntries = new ArrayList<IDataInputEntry>();
 		/*
 		 * Number format of retention times.

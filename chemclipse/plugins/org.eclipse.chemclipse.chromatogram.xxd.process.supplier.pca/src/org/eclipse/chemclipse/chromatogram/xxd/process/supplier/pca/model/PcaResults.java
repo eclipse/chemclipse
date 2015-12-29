@@ -26,7 +26,6 @@ public class PcaResults {
 	private List<double[]> basisVectors;
 
 	public PcaResults(List<IDataInputEntry> dataInputEntries) {
-
 		this.dataInputEntries = dataInputEntries;
 		pcaResultMap = new HashMap<ISample, IPcaResult>();
 	}

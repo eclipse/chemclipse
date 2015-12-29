@@ -23,7 +23,6 @@ public class DataInputEntry implements IDataInputEntry {
 	 * @param inputFile
 	 */
 	public DataInputEntry(String inputFile) {
-
 		if(inputFile != null) {
 			this.inputFile = inputFile;
 		}

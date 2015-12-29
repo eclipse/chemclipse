@@ -31,7 +31,6 @@ public class ResultExport {
 	private static final int FRACTION_DIGITS = 3;
 
 	public ResultExport() {
-
 		numberFormat = NumberFormat.getInstance();
 		numberFormat.setMinimumFractionDigits(FRACTION_DIGITS);
 		numberFormat.setMaximumFractionDigits(FRACTION_DIGITS);

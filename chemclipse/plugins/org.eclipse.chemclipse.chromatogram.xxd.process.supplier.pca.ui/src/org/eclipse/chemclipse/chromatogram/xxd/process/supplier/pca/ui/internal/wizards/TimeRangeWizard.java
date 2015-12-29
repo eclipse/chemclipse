@@ -20,7 +20,6 @@ public class TimeRangeWizard extends Wizard {
 	public String textRetentionTimeRange;
 
 	public TimeRangeWizard() {
-
 		super();
 		setNeedsProgressMonitor(true);
 	}

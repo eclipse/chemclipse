@@ -34,7 +34,6 @@ public class PeakInputFilesWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	protected PeakInputFilesWizardPage(String pageName) {
-
 		super(pageName);
 		setTitle("Peak Input Files");
 		setDescription("This wizard lets you select several peak input files.");

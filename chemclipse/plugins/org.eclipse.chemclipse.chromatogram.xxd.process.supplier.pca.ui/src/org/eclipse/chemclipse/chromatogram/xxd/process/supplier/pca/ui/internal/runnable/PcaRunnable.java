@@ -29,7 +29,6 @@ public class PcaRunnable implements IRunnableWithProgress {
 	private int extractionType;
 
 	public PcaRunnable(List<IDataInputEntry> dataInputEntries, int retentionTimeWindow, int numberOfPrincipleComponents, int exType) {
-
 		this.dataInputEntries = dataInputEntries;
 		this.retentionTimeWindow = retentionTimeWindow;
 		this.numberOfPrincipleComponents = numberOfPrincipleComponents;

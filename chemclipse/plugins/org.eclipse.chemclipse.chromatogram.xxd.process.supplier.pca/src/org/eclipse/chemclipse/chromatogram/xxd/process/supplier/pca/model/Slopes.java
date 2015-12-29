@@ -20,7 +20,6 @@ public class Slopes implements ISlopes {
 	private List<Integer> retentionTimes;
 
 	public Slopes() {
-
 		slopes = new ArrayList<Float>();
 		retentionTimes = new ArrayList<Integer>();
 	}

@@ -17,7 +17,6 @@ public class Sample implements ISample {
 	private boolean selected;
 
 	public Sample(String name) {
-
 		this.name = name;
 		this.selected = true;
 	}

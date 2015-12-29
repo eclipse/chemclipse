@@ -28,7 +28,6 @@ public class PeakInputFilesWizard extends Wizard {
 	private List<String> selectedPeakFiles;
 
 	public PeakInputFilesWizard() {
-
 		super();
 		setNeedsProgressMonitor(true);
 	}

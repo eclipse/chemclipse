@@ -27,7 +27,6 @@ public class TimeRangeWizardPage extends WizardPage {
 	private Text textRetentionTimeRange;
 
 	public TimeRangeWizardPage() {
-
 		super("Peak Intensity Table Actions");
 		setTitle("Peak Intensity Table Actions");
 		setDescription("Display Time Range");
