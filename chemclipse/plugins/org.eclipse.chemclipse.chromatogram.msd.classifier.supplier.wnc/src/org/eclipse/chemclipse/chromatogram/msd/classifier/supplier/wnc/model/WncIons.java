@@ -20,7 +20,6 @@ public class WncIons implements IWncIons {
 	private Map<Integer, IWncIon> ions;
 
 	public WncIons() {
-
 		ions = new TreeMap<Integer, IWncIon>();
 	}
 

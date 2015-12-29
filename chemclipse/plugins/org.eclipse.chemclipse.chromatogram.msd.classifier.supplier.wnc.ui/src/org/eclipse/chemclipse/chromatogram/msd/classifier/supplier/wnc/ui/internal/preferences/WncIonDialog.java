@@ -41,12 +41,10 @@ public class WncIonDialog extends TitleAreaDialog {
 	private IWncIon wncIon;
 
 	public WncIonDialog(Shell shell) {
-
 		this(shell, null);
 	}
 
 	public WncIonDialog(Shell shell, IWncIon wncIon) {
-
 		super(shell);
 		this.title = "WNC Ion";
 		this.message = "Add a ion that shall be analyzed.";

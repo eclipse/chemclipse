@@ -28,7 +28,6 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	private WncIonsListComposite wncIonsListComposite;
 
 	public PreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Set the WNC classifier settings.");

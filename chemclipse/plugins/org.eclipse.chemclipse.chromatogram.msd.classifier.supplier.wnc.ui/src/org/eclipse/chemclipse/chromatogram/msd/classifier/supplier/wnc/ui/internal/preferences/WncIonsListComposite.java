@@ -40,9 +40,8 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWn
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIons;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider.WncIonContentProvider;
-import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider.WncIonLabelProvider;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider.WncIonLabelProvider;;
 
-;
 public class WncIonsListComposite {
 
 	private IWncIons wncIons;
@@ -57,7 +56,6 @@ public class WncIonsListComposite {
 	private static final int WIDTH_HINT = 400;
 
 	public WncIonsListComposite() {
-
 		wncIons = PreferenceSupplier.getWNCIons();
 	}
 

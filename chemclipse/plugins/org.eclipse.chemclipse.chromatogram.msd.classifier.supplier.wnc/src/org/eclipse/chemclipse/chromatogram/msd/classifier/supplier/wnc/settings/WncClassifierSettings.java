@@ -20,7 +20,6 @@ public class WncClassifierSettings extends AbstractChromatogramClassifierSetting
 	private IWncIons wncIons;
 
 	public WncClassifierSettings() {
-
 		wncIons = new WncIons();
 	}
 

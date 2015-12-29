@@ -20,12 +20,10 @@ public class WncClassifierResult extends AbstractChromatogramClassifierResult im
 	private IWncIons wncIons;
 
 	public WncClassifierResult(ResultStatus resultStatus, String description) {
-
 		super(resultStatus, description);
 	}
 
 	public WncClassifierResult(ResultStatus resultStatus, String description, IWncIons wncIons) {
-
 		super(resultStatus, description);
 		this.wncIons = wncIons;
 	}

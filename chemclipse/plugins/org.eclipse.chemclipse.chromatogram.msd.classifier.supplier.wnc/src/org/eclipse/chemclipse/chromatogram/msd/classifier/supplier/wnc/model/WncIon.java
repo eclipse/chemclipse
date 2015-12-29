@@ -21,7 +21,6 @@ public class WncIon implements IWncIon {
 	private double percentageSumIntensity;
 
 	public WncIon(int ion, String name) {
-
 		this.ion = ion;
 		/*
 		 * Some characters are not allowed.

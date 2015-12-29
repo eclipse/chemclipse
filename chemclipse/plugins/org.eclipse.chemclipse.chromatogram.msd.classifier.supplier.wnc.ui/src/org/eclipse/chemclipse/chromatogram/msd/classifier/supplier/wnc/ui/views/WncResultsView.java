@@ -52,7 +52,6 @@ public class WncResultsView extends AbstractChromatogramSelectionMSDView {
 
 	@Inject
 	public WncResultsView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

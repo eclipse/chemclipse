@@ -20,12 +20,10 @@ public class ClassifierException extends Exception {
 	private static final long serialVersionUID = 6189168747440470782L;
 
 	public ClassifierException() {
-
 		super();
 	}
 
 	public ClassifierException(String message) {
-
 		super(message);
 	}
 }
