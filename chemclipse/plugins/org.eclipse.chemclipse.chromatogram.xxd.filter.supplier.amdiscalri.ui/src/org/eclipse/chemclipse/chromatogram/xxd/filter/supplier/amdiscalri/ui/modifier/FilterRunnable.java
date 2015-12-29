@@ -32,7 +32,6 @@ public class FilterRunnable implements IRunnableWithProgress {
 	private IChromatogramSelectionMSD chromatogramSelection;
 
 	public FilterRunnable(IChromatogramSelectionMSD chromatogramSelection) {
-
 		this.chromatogramSelection = chromatogramSelection;
 	}
 

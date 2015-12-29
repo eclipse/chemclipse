@@ -23,7 +23,6 @@ import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEdit
 public class FilterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public FilterPreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Retention Index Filter Settings.");

@@ -18,7 +18,6 @@ public class RetentionIndexEntry implements IRetentionIndexEntry {
 	private String peakName;
 
 	public RetentionIndexEntry(int retentionTime, float retentionIndex, String peakName) {
-
 		this.retentionTime = retentionTime;
 		this.retentionIndex = retentionIndex;
 		this.peakName = peakName;
