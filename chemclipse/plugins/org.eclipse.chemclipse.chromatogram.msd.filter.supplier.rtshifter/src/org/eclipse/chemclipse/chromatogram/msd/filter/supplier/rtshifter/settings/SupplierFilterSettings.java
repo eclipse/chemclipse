@@ -18,7 +18,6 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 	private int millisecondsToShift;
 
 	public SupplierFilterSettings(int millisecondsToShift) {
-
 		this.millisecondsToShift = millisecondsToShift;
 	}
 

@@ -24,7 +24,6 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.rtshifter.ui.Acti
 public class FilterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public FilterPreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Set the RTSifter filter settings.");

@@ -17,7 +17,6 @@ public enum ShiftDirection {
 	private String description;
 
 	private ShiftDirection(String description) {
-
 		this.description = description;
 	}
 

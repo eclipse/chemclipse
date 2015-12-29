@@ -30,7 +30,6 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 	private int millisecondsToShift;
 
 	public FilterModifier(IChromatogramSelectionMSD chromatogramSelection, int millisecondsToShift) {
-
 		super(chromatogramSelection);
 		this.millisecondsToShift = millisecondsToShift;
 	}

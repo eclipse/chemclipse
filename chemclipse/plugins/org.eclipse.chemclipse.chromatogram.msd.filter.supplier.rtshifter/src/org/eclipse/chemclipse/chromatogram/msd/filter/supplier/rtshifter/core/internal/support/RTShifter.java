@@ -24,7 +24,6 @@ public class RTShifter {
 	 * Use only static methods.
 	 */
 	private RTShifter() {
-
 	}
 
 	public static void shiftRetentionTimes(IChromatogram chromatogram, int millisecondToShift) throws FilterException {
