@@ -24,7 +24,6 @@ public class BackfoldingPeakDetectorSettings extends AbstractPeakDetectorMSDSett
 	private Threshold threshold = IBackfoldingPeakDetectorSettings.INITIAL_THRESHOLD;
 
 	public BackfoldingPeakDetectorSettings() {
-
 		backfoldingSettings = new BackfoldingSettings();
 	}
 

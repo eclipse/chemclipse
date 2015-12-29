@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.numeric.core.IPoint;
 public class BackfoldingDetectorSlope extends DetectorSlope implements IBackfoldingDetectorSlope {
 
 	public BackfoldingDetectorSlope(IPoint p1, IPoint p2, int retentionTime) {
-
 		super(p1, p2, retentionTime);
 	}
 }

@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.chromatogram.peak.detector.support.DetectorSlopes;
 public class BackfoldingDetectorSlopes extends DetectorSlopes implements IBackfoldingDetectorSlopes {
 
 	public BackfoldingDetectorSlopes(ITotalScanSignals totalIonSignals) {
-
 		super(totalIonSignals);
 	}
 }

@@ -32,7 +32,6 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding";
 
 	public FilterModifier(IChromatogramSelectionMSD chromatogramSelection) {
-
 		super(chromatogramSelection);
 	}
 

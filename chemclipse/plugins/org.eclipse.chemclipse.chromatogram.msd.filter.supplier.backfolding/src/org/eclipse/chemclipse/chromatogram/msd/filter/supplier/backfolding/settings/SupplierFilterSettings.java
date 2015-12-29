@@ -18,7 +18,6 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 	private IBackfoldingSettings backfoldingSettings;
 
 	public SupplierFilterSettings() {
-
 		backfoldingSettings = new BackfoldingSettings();
 	}
 

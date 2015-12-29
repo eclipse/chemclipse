@@ -44,7 +44,6 @@ public class BackfoldingPeakDetectorSupport {
 	 * This class has only static methods.
 	 */
 	private BackfoldingPeakDetectorSupport() {
-
 	}
 
 	/**

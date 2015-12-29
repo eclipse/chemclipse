@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.ui.Ac
 public class FilterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public FilterPreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Set the Backfolding filter settings.");

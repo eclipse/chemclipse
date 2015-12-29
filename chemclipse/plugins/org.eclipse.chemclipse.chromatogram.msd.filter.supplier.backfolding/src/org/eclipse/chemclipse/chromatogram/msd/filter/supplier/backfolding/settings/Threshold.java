@@ -17,7 +17,6 @@ public enum Threshold implements IThreshold {
 	private int threshold;
 
 	private Threshold(int threshold) {
-
 		this.threshold = threshold;
 	}
 
