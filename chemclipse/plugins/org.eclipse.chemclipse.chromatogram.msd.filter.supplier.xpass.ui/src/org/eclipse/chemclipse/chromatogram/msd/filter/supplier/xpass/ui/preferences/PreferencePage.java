@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.ui.Activato
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("XPass Filter");
