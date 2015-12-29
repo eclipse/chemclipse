@@ -31,7 +31,6 @@ public class FileExtensionCompiler {
 	 * @param extension
 	 */
 	public FileExtensionCompiler(String extension, boolean useLowerAndUpperCase) {
-
 		/*
 		 * Avoid null pointer exceptions.
 		 */

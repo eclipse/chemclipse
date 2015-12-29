@@ -24,7 +24,6 @@ import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvide
 public class IonListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public IonListLabelProvider() {
-
 		super("0.0##");
 	}
 

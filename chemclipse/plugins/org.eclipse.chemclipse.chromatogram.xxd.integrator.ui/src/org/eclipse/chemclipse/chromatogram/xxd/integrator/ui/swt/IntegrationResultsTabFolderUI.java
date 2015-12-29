@@ -33,7 +33,6 @@ public class IntegrationResultsTabFolderUI extends Composite implements IIntegra
 	private PeakIntegrationResultsUI peakResultUI;
 
 	public IntegrationResultsTabFolderUI(Composite parent, int style) {
-
 		super(parent, style);
 		initialize();
 	}

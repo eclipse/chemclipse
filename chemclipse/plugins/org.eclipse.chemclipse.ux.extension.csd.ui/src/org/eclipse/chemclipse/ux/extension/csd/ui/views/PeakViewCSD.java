@@ -40,7 +40,6 @@ public class PeakViewCSD extends AbstractPeakCSDSelectionView {
 
 	@Inject
 	public PeakViewCSD(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 		this.eventBroker = eventBroker;
 		subscribe();

@@ -33,7 +33,6 @@ public class ProfileMassSpectrumView extends AbstractChromatogramSelectionMSDVie
 
 	@Inject
 	public ProfileMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

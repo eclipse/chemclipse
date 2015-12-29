@@ -43,7 +43,6 @@ public class ChromatogramTargetsView extends AbstractTargetsView {
 
 	@Inject
 	public ChromatogramTargetsView(IEventBroker eventBroker) {
-
 		super(new ChromatogramTargetsContentProvider(), eventBroker);
 		this.eventBroker = eventBroker;
 	}

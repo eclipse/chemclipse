@@ -24,12 +24,10 @@ public class NoPeaksAvailableException extends Exception {
 	private static final long serialVersionUID = 8679839908031344828L;
 
 	public NoPeaksAvailableException() {
-
 		super();
 	}
 
 	public NoPeaksAvailableException(String message) {
-
 		super(message);
 	}
 }

@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.wsd.swt.ui.components.AbstractBarSeriesUI;
 public abstract class AbstractViewScanUI extends AbstractBarSeriesUI {
 
 	public AbstractViewScanUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 }

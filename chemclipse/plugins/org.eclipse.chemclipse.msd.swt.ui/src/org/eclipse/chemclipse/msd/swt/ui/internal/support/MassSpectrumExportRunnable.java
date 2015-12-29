@@ -34,7 +34,6 @@ public class MassSpectrumExportRunnable implements IRunnableWithProgress {
 	private ISupplier supplier;
 
 	public MassSpectrumExportRunnable(File file, IScanMSD massSpectrum, ISupplier supplier) {
-
 		this.file = file;
 		this.massSpectrum = massSpectrum;
 		this.supplier = supplier;

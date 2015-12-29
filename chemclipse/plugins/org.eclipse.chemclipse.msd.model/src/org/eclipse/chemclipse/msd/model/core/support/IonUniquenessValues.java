@@ -22,7 +22,6 @@ public class IonUniquenessValues implements IIonUniquenessValues {
 	private static Map<Integer, Float> probabilityValues;
 
 	public IonUniquenessValues() {
-
 		probabilityValues = new HashMap<Integer, Float>();
 	}
 

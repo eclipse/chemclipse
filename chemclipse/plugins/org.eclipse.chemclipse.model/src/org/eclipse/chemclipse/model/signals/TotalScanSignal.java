@@ -26,7 +26,6 @@ public class TotalScanSignal extends AbstractTotalScanSignal implements ITotalSc
 	 * @param totalSignal
 	 */
 	public TotalScanSignal(int retentionTime, float retentionIndex, float totalSignal) {
-
 		this(retentionTime, retentionIndex, totalSignal, true);
 	}
 
@@ -40,7 +39,6 @@ public class TotalScanSignal extends AbstractTotalScanSignal implements ITotalSc
 	 * @param validatePositive
 	 */
 	public TotalScanSignal(int retentionTime, float retentionIndex, float totalSignal, boolean validatePositive) {
-
 		if(retentionTime >= 0) {
 			setRetentionTime(retentionTime);
 		}

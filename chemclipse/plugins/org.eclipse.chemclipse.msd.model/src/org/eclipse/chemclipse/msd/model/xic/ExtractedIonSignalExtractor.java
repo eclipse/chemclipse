@@ -28,7 +28,6 @@ public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor
 	 * @throws ChromatogramIsNullException
 	 */
 	public ExtractedIonSignalExtractor(IChromatogramMSD chromatogram) throws ChromatogramIsNullException {
-
 		if(chromatogram == null) {
 			throw new ChromatogramIsNullException();
 		}

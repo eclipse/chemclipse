@@ -22,7 +22,6 @@ public class TextFieldEditor extends FieldEditor {
 	private Text text;
 
 	public TextFieldEditor(String name, String labelText, Composite parent) {
-
 		init(name, labelText);
 		createControl(parent);
 	}

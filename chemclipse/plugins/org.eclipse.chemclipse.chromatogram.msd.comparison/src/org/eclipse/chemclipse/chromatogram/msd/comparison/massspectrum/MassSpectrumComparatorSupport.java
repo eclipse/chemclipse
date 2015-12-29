@@ -29,7 +29,6 @@ public class MassSpectrumComparatorSupport implements IMassSpectrumComparatorSup
 	private List<IMassSpectrumComparisonSupplier> suppliers;
 
 	public MassSpectrumComparatorSupport() {
-
 		suppliers = new ArrayList<IMassSpectrumComparisonSupplier>();
 	}
 

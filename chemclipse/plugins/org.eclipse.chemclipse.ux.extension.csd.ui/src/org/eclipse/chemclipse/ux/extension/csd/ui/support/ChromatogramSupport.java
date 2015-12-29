@@ -20,7 +20,6 @@ public class ChromatogramSupport {
 	private static IChromatogramEditorSupport chromatogramEditorSupport;
 
 	private ChromatogramSupport() {
-
 	}
 
 	public static IChromatogramIdentifier getInstanceIdentifier() {

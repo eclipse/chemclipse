@@ -17,7 +17,6 @@ public abstract class AbstractCombinedIntegrationResult implements ICombinedInte
 	private IPeakIntegrationResults peakIntegrationResults;
 
 	public AbstractCombinedIntegrationResult(IChromatogramIntegrationResults chromatogramIntegrationResults, IPeakIntegrationResults peakIntegrationResults) {
-
 		this.chromatogramIntegrationResults = chromatogramIntegrationResults;
 		this.peakIntegrationResults = peakIntegrationResults;
 	}

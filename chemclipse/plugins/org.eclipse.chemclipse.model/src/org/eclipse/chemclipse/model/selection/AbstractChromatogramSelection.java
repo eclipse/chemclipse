@@ -23,12 +23,10 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 	private float stopAbundance;
 
 	public AbstractChromatogramSelection(IChromatogram chromatogram) throws ChromatogramIsNullException {
-
 		this(chromatogram, true);
 	}
 
 	public AbstractChromatogramSelection(IChromatogram chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
-
 		if(chromatogram == null) {
 			throw new ChromatogramIsNullException("The chromatogram must not be null.");
 		}

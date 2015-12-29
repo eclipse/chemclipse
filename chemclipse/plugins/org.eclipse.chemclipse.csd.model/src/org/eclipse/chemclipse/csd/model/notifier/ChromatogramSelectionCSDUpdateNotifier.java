@@ -27,7 +27,6 @@ public class ChromatogramSelectionCSDUpdateNotifier {
 	private static DynamicChromatogramSelectionUpdateNotifier dynamicUpdateNotifier;
 
 	private ChromatogramSelectionCSDUpdateNotifier() {
-
 	}
 
 	/**

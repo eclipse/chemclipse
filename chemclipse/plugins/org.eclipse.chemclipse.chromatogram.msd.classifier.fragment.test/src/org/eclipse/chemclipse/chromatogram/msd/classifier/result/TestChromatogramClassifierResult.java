@@ -18,7 +18,6 @@ package org.eclipse.chemclipse.chromatogram.msd.classifier.result;
 public class TestChromatogramClassifierResult extends AbstractChromatogramClassifierResult {
 
 	public TestChromatogramClassifierResult(ResultStatus resultStatus, String description) {
-
 		super(resultStatus, description);
 	}
 }

@@ -37,7 +37,6 @@ public class ChromatogramSelectionMSDUpdateNotifier {
 	 * This class should not be instantiated.
 	 */
 	private ChromatogramSelectionMSDUpdateNotifier() {
-
 	}
 
 	/**

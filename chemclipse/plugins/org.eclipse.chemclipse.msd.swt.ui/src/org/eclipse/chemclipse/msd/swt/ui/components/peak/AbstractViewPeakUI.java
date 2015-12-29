@@ -34,7 +34,6 @@ public abstract class AbstractViewPeakUI extends AbstractPeakLineSeriesUI implem
 	private boolean includeBackground = false;
 
 	public AbstractViewPeakUI(Composite parent, int style, IAxisTitles axisTitles) {
-
 		super(parent, style, axisTitles);
 	}
 

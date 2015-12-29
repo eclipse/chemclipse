@@ -20,12 +20,10 @@ public class RetentionIndexExistsException extends Exception {
 	private static final long serialVersionUID = 8745857634635124977L;
 
 	public RetentionIndexExistsException() {
-
 		super();
 	}
 
 	public RetentionIndexExistsException(final String message) {
-
 		super(message);
 	}
 }

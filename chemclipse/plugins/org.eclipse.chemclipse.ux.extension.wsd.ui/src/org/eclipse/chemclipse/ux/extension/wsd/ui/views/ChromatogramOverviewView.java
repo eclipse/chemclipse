@@ -48,7 +48,6 @@ public class ChromatogramOverviewView {
 
 	@Inject
 	public ChromatogramOverviewView(Composite parent, IEventBroker eventBroker) {
-
 		chromatogramOverviewUI = new ChromatogramOverviewUI(parent, SWT.NONE);
 		if(eventBroker != null) {
 			/*

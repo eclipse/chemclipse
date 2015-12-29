@@ -34,7 +34,6 @@ public class SelectedExactIonChromtogramView extends AbstractChromatogramSelecti
 
 	@Inject
 	public SelectedExactIonChromtogramView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

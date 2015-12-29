@@ -35,7 +35,6 @@ public class MirroredNominalMassSpectrumView extends AbstractChromatogramSelecti
 
 	@Inject
 	public MirroredNominalMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

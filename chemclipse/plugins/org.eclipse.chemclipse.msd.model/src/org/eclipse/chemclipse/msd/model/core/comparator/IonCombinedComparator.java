@@ -23,7 +23,6 @@ public class IonCombinedComparator implements Comparator<IIon>, Serializable {
 	private final Comparator<IIon> secondComparator;
 
 	public IonCombinedComparator(IonComparatorMode desiredMode) {
-
 		switch(desiredMode) {
 			case ABUNDANCE_FIRST:
 				firstComparator = new IonAbundanceComparator();

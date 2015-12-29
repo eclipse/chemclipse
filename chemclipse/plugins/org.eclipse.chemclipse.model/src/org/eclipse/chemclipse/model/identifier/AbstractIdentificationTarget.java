@@ -28,7 +28,6 @@ public abstract class AbstractIdentificationTarget extends AbstractTarget implem
 	 * @throws ReferenceMustNotBeNullException
 	 */
 	public AbstractIdentificationTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
-
 		if(libraryInformation == null) {
 			throw new ReferenceMustNotBeNullException("The reference libraryInformation must be not null.");
 		}

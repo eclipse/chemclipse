@@ -21,7 +21,6 @@ public abstract class AbstractSupport implements ISupportSetter {
 	private List<ISupplier> suppliers;
 
 	public AbstractSupport() {
-
 		suppliers = new ArrayList<ISupplier>();
 	}
 

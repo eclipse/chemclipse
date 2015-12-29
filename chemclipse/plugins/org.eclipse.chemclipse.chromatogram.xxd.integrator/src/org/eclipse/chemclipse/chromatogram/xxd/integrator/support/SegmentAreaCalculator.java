@@ -35,7 +35,6 @@ public class SegmentAreaCalculator {
 	 * This class should have only static methods.
 	 */
 	private SegmentAreaCalculator() {
-
 	}
 
 	public static double calculateSegmentArea(ISegment segment) {

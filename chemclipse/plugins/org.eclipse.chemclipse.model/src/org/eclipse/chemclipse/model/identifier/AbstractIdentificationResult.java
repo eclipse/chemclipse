@@ -19,7 +19,6 @@ public abstract class AbstractIdentificationResult implements IIdentificationRes
 	private Set<IIdentificationTarget> entries;
 
 	public AbstractIdentificationResult() {
-
 		entries = new HashSet<IIdentificationTarget>();
 	}
 

@@ -29,7 +29,6 @@ public class ScanRange implements IScanRange {
 	 * @param stopScan
 	 */
 	public ScanRange(int startScan, int stopScan) {
-
 		if(startScan > stopScan) {
 			int tmp = startScan;
 			startScan = stopScan;

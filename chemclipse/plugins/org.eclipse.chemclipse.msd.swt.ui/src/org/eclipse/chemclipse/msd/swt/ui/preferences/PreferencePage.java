@@ -24,7 +24,6 @@ import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEdi
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Mass Spectrum View Settings");

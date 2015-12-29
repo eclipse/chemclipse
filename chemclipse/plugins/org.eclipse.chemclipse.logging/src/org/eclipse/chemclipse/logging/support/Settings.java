@@ -41,7 +41,6 @@ public class Settings {
 	 * Use only static methods.
 	 */
 	private Settings() {
-
 	}
 
 	/**

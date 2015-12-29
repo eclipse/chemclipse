@@ -20,12 +20,10 @@ public class ComparisonException extends Exception {
 	private static final long serialVersionUID = -4229501601121353914L;
 
 	public ComparisonException() {
-
 		super();
 	}
 
 	public ComparisonException(String message) {
-
 		super(message);
 	}
 }

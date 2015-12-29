@@ -35,7 +35,6 @@ public class IonPercentages implements IIonPercentages {
 	 * @param massSpectrum
 	 */
 	public IonPercentages(IScanMSD massSpectrum) {
-
 		this.massSpectrum = massSpectrum;
 		ionDistribution = new TreeMap<Integer, Float>();
 		setIonDistribution();

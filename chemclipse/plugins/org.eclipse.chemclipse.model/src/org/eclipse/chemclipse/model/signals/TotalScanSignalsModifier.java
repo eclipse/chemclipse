@@ -26,7 +26,6 @@ public class TotalScanSignalsModifier {
 	 * This class has only static methods.
 	 */
 	private TotalScanSignalsModifier() {
-
 	}
 
 	/**

@@ -20,12 +20,10 @@ public class ValueMustNotBeNullException extends Exception {
 	private static final long serialVersionUID = 1689842089104223021L;
 
 	public ValueMustNotBeNullException() {
-
 		super();
 	}
 
 	public ValueMustNotBeNullException(String message) {
-
 		super(message);
 	}
 }

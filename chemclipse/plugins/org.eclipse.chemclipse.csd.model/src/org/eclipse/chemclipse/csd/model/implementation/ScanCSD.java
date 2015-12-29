@@ -23,14 +23,12 @@ public class ScanCSD extends AbstractScanCSD {
 	private float totalSignal = 0.0f;
 
 	public ScanCSD(int retentionTime, float totalSignal) {
-
 		super();
 		setRetentionTime(retentionTime);
 		setTotalSignal(totalSignal);
 	}
 
 	public ScanCSD(float totalSignal) {
-
 		setTotalSignal(totalSignal);
 	}
 

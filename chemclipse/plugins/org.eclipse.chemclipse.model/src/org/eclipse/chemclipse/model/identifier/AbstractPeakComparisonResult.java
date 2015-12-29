@@ -20,12 +20,10 @@ public abstract class AbstractPeakComparisonResult extends AbstractComparisonRes
 	 * @param reverseMatchQuality
 	 */
 	public AbstractPeakComparisonResult(float matchFactor, float reverseMatchFactor) {
-
 		super(matchFactor, reverseMatchFactor);
 	}
 
 	public AbstractPeakComparisonResult(float matchFactor, float reverseMatchFactor, float probability) {
-
 		super(matchFactor, reverseMatchFactor, probability);
 	}
 }

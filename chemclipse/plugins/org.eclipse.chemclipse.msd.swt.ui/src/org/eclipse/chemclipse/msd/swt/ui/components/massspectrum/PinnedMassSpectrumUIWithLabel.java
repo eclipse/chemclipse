@@ -44,7 +44,6 @@ public class PinnedMassSpectrumUIWithLabel extends Composite implements IMassSpe
 	private boolean isPinned = false;
 
 	public PinnedMassSpectrumUIWithLabel(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
-
 		super(parent, style);
 		decimalFormat = new DecimalFormat("0.0####");
 		/*

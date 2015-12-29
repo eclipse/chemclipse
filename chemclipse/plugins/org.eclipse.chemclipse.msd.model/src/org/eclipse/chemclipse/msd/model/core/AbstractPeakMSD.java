@@ -18,13 +18,11 @@ public abstract class AbstractPeakMSD extends AbstractPeak implements IPeakMSD {
 	private IPeakModelMSD peakModel;
 
 	public AbstractPeakMSD(IPeakModelMSD peakModel) throws IllegalArgumentException {
-
 		validatePeakModel(peakModel);
 		this.peakModel = peakModel;
 	}
 
 	public AbstractPeakMSD(IPeakModelMSD peakModel, String modelDescription) throws IllegalArgumentException {
-
 		this(peakModel);
 		setModelDescription(modelDescription);
 	}

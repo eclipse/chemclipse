@@ -62,7 +62,6 @@ public class PeakIntegrator {
 	 * This class has only static methods.
 	 */
 	private PeakIntegrator() {
-
 	}
 
 	/**

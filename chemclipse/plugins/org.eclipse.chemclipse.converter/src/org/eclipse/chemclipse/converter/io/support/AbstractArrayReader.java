@@ -27,12 +27,10 @@ public abstract class AbstractArrayReader implements IArrayReader {
 	private int length;
 
 	public AbstractArrayReader(byte[] data) {
-
 		initialize(data);
 	}
 
 	public AbstractArrayReader(File file) throws FileNotFoundException, IOException {
-
 		byte[] data = getByteArrayFromFile(file);
 		initialize(data);
 	}

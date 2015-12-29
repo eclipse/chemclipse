@@ -43,7 +43,6 @@ public class CombinedIntegrator {
 	 * This class has only static methods.
 	 */
 	private CombinedIntegrator() {
-
 	}
 
 	public static ICombinedIntegratorProcessingInfo integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrationSettings combinedIntegrationSettings, String integratorId, IProgressMonitor monitor) {

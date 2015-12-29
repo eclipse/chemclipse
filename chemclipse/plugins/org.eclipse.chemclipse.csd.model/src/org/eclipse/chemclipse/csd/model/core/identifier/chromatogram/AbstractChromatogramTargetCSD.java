@@ -29,7 +29,6 @@ public abstract class AbstractChromatogramTargetCSD extends AbstractIdentificati
 	 * @throws ReferenceMustNotBeNullException
 	 */
 	public AbstractChromatogramTargetCSD(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
-
 		super(libraryInformation, comparisonResult);
 	}
 

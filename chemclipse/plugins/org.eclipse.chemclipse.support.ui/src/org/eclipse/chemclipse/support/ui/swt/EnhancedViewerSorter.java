@@ -20,7 +20,6 @@ public class EnhancedViewerSorter extends ViewerSorter {
 	private int direction = ASCENDING;
 
 	public EnhancedViewerSorter() {
-
 		propertyIndex = 0;
 		direction = ASCENDING;
 	}

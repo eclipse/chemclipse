@@ -45,7 +45,6 @@ public class ScanMassSpectrumCycleNumberUIWithLabel extends Composite implements
 	private MassValueDisplayPrecision massValueDisplayPrecision;
 
 	public ScanMassSpectrumCycleNumberUIWithLabel(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
-
 		super(parent, style);
 		decimalFormat = new DecimalFormat("0.0##");
 		/*

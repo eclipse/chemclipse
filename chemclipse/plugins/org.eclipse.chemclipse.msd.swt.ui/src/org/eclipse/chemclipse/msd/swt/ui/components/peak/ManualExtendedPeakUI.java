@@ -23,7 +23,6 @@ public class ManualExtendedPeakUI extends AbstractChromatogramViewPeakUI {
 	 * @param style
 	 */
 	public ManualExtendedPeakUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 

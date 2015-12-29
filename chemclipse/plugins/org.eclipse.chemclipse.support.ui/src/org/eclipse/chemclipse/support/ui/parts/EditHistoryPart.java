@@ -79,7 +79,6 @@ public class EditHistoryPart {
 
 	@Inject
 	public EditHistoryPart(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		this.partService = partService;
 		this.part = part;
 		this.eventBroker = eventBroker;

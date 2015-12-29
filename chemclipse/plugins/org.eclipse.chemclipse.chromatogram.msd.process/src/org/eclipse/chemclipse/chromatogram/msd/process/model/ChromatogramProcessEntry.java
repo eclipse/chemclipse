@@ -21,7 +21,6 @@ public class ChromatogramProcessEntry implements IChromatogramProcessEntry {
 	private String processorId = "";
 
 	public ChromatogramProcessEntry(String processCategory, String processorId) {
-
 		if(processCategory != null && processorId != null) {
 			this.processCategory = processCategory;
 			this.processorId = processorId;

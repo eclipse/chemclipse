@@ -27,7 +27,6 @@ public abstract class AbstractConcentrationResponseEntriesMSD implements IConcen
 	private List<IConcentrationResponseEntryMSD> concentrationResponseEntries;
 
 	public AbstractConcentrationResponseEntriesMSD() {
-
 		concentrationResponseEntries = new ArrayList<IConcentrationResponseEntryMSD>();
 	}
 

@@ -27,7 +27,6 @@ public class MouseMoveMarker implements ICustomPaintListener {
 	private Color foregroundColor;
 
 	public MouseMoveMarker() {
-
 		foregroundColor = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 	}
 

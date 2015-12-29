@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.filter.result;
 public class PeakFilterResult extends AbstractPeakFilterResult {
 
 	public PeakFilterResult(ResultStatus resultStatus, String description) {
-
 		super(resultStatus, description);
 	}
 }

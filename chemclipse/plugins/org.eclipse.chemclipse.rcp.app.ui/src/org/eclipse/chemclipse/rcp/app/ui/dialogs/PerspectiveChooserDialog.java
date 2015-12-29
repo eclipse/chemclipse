@@ -32,7 +32,6 @@ public class PerspectiveChooserDialog extends Dialog {
 	private Button changePerspectiveAutomatically;
 
 	public PerspectiveChooserDialog(Shell parentShell, String title, String message) {
-
 		super(parentShell);
 		if(title != null) {
 			this.title = title;

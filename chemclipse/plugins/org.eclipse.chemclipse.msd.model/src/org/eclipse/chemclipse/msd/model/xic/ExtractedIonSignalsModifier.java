@@ -39,7 +39,6 @@ public class ExtractedIonSignalsModifier {
 	 * Use the class as a singleton.
 	 */
 	private ExtractedIonSignalsModifier() {
-
 	}
 
 	/**

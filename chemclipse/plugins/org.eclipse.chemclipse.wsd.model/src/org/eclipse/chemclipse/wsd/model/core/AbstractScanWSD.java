@@ -26,7 +26,6 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	private List<IScanSignalWSD> scans;
 
 	public AbstractScanWSD() {
-
 		scans = new ArrayList<IScanSignalWSD>();
 	}
 

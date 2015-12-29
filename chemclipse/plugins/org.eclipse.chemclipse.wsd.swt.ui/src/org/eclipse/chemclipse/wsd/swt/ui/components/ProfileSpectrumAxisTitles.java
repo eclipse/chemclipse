@@ -16,7 +16,6 @@ import org.eclipse.chemclipse.swt.ui.support.AxisTitles;
 public class ProfileSpectrumAxisTitles extends AxisTitles {
 
 	public ProfileSpectrumAxisTitles() {
-
 		super("nm", "wavelength", "abundance", "relative abundance");
 	}
 }

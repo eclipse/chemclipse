@@ -27,7 +27,6 @@ public class ChromatogramFilterSupport implements IChromatogramFilterSupport {
 	 * Creates a new suppliers list.
 	 */
 	public ChromatogramFilterSupport() {
-
 		suppliers = new ArrayList<IChromatogramFilterSupplier>();
 	}
 

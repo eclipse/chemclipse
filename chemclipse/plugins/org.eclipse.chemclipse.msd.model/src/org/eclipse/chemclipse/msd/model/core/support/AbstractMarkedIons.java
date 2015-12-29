@@ -23,7 +23,6 @@ public class AbstractMarkedIons implements IMarkedIons {
 	private Set<IMarkedIon> markedIons;
 
 	public AbstractMarkedIons() {
-
 		markedIons = new HashSet<IMarkedIon>();
 	}
 

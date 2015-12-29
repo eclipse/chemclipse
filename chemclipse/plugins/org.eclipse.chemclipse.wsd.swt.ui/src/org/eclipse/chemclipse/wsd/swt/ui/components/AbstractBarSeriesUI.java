@@ -74,7 +74,6 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 	 * @param style
 	 */
 	public AbstractBarSeriesUI(Composite parent, int style) {
-
 		super(parent, style);
 		initialize();
 	}

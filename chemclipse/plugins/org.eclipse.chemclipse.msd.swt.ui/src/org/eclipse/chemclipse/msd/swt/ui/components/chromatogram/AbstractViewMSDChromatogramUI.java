@@ -24,7 +24,6 @@ import org.eclipse.swt.widgets.Composite;
 public abstract class AbstractViewMSDChromatogramUI extends AbstractChromatogramMSDLineSeriesUI {
 
 	public AbstractViewMSDChromatogramUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 }

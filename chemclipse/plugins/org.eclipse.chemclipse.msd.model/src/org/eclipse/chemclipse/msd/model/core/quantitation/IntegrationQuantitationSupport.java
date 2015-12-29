@@ -28,7 +28,6 @@ public class IntegrationQuantitationSupport {
 	private Map<Double, Double> integratedIons;
 
 	public IntegrationQuantitationSupport(IPeakMSD peak) {
-
 		this.peak = peak;
 		integratedIons = getListOfIntegratedIons();
 	}

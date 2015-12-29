@@ -19,7 +19,6 @@ import org.eclipse.jface.viewers.Viewer;
 public class ChromatogramIntegrationResultsTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 
 	public ChromatogramIntegrationResultsTableComparator() {
-
 		super();
 		setPropertyIndex(2);// ion
 	}

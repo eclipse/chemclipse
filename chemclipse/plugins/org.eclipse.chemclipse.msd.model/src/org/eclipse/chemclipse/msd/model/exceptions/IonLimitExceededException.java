@@ -22,12 +22,10 @@ public class IonLimitExceededException extends ValueLimitExceededException {
 	private static final long serialVersionUID = -3071227582762126158L;
 
 	public IonLimitExceededException() {
-
 		super();
 	}
 
 	public IonLimitExceededException(String message) {
-
 		super(message);
 	}
 }

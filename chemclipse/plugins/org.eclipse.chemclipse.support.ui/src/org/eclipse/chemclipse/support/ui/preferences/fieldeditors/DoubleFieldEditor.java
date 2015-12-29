@@ -21,12 +21,10 @@ public class DoubleFieldEditor extends StringFieldEditor {
 	private double maxValue = Double.MAX_VALUE;
 
 	public DoubleFieldEditor(String name, String labelText, Composite parent) {
-
 		super(name, labelText, parent);
 	}
 
 	public DoubleFieldEditor(String name, String labelText, double minValue, double maxValue, Composite parent) {
-
 		super(name, labelText, parent);
 		this.minValue = minValue;
 		this.maxValue = maxValue;

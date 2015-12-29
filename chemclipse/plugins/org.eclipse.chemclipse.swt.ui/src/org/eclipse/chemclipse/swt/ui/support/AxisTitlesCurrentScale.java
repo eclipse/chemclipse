@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.swt.ui.support;
 public class AxisTitlesCurrentScale extends AxisTitles {
 
 	public AxisTitlesCurrentScale() {
-
 		super("milliseconds (ms)", "minutes (min)", "Counts", "relative Counts");
 	}
 }

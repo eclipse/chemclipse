@@ -28,7 +28,6 @@ public class DynamicChromatogramSelectionUpdateNotifier implements IChromatogram
 	private Map<String, Object> map;
 
 	public DynamicChromatogramSelectionUpdateNotifier() {
-
 		map = new HashMap<String, Object>();
 	}
 

@@ -33,7 +33,6 @@ import org.eclipse.chemclipse.support.util.IonListUtil;
 public class IonListEditor extends ListEditor {
 
 	public IonListEditor(String name, String labelText, Composite parent) {
-
 		super(name, labelText, parent);
 		Composite composite = getButtonBoxControl(parent);
 		Button button = new Button(composite, SWT.PUSH);

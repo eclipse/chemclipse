@@ -17,7 +17,6 @@ import org.eclipse.chemclipse.model.core.IChromatogramResult;
 public class ChromatogramResult extends AbstractChromatogramResult implements IChromatogramResult {
 
 	public ChromatogramResult(String identifier, String description, Object result) {
-
 		super(identifier, description, result);
 	}
 }

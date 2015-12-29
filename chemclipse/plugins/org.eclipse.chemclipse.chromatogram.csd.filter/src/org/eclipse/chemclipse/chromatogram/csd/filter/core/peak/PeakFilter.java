@@ -46,7 +46,6 @@ public class PeakFilter {
 	 * This class is a singleton. Use only static methods.
 	 */
 	private PeakFilter() {
-
 	}
 
 	/**

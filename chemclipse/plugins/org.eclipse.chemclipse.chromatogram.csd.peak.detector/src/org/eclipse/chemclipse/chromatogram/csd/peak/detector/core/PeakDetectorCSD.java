@@ -49,7 +49,6 @@ public class PeakDetectorCSD {
 	 * This class offers only static methods.
 	 */
 	private PeakDetectorCSD() {
-
 	}
 
 	/**

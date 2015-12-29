@@ -24,7 +24,6 @@ import org.eclipse.chemclipse.swt.ui.support.IAxisTitles;
 public abstract class AbstractViewBaselineUI extends AbstractChromatogramLineSeriesUI {
 
 	public AbstractViewBaselineUI(Composite parent, int style, IAxisTitles axisTitles) {
-
 		super(parent, style, axisTitles);
 	}
 }

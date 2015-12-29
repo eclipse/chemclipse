@@ -42,7 +42,6 @@ public class ChromatogramFilter {
 	 * This class is a singleton. Use only static methods.
 	 */
 	private ChromatogramFilter() {
-
 	}
 
 	/**

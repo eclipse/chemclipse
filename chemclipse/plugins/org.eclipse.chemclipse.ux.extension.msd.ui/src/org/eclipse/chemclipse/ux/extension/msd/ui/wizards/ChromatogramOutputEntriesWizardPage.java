@@ -41,7 +41,6 @@ public class ChromatogramOutputEntriesWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	protected ChromatogramOutputEntriesWizardPage(String pageName) {
-
 		super(pageName);
 		setTitle("Chromatogram Output Formats");
 		setDescription("This wizard lets you select several output chromatogram formats.");

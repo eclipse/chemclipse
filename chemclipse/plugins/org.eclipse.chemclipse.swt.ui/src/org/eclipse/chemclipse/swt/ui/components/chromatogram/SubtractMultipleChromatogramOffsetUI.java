@@ -38,7 +38,6 @@ public class SubtractMultipleChromatogramOffsetUI extends AbstractViewChromatogr
 	private IOffset offset;
 
 	public SubtractMultipleChromatogramOffsetUI(Composite parent, int style, IOffset offset, IAxisTitles axisTitles) {
-
 		super(parent, style, axisTitles);
 	}
 

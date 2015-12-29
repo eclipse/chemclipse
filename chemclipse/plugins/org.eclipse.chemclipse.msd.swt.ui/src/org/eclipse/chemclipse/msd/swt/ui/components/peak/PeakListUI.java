@@ -39,7 +39,6 @@ public class PeakListUI {
 	private int bounds[] = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 	public PeakListUI(Composite parent, int style) {
-
 		parent.setLayout(new FillLayout());
 		/*
 		 * E.g. Scan

@@ -36,7 +36,6 @@ public class PeakQuantitationEntriesView extends AbstractChromatogramSelectionMS
 
 	@Inject
 	public PeakQuantitationEntriesView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

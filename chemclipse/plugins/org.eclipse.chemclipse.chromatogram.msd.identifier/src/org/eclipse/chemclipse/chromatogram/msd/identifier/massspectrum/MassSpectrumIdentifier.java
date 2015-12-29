@@ -47,7 +47,6 @@ public class MassSpectrumIdentifier {
 	 * This class should have only static methods.
 	 */
 	private MassSpectrumIdentifier() {
-
 	}
 
 	/**

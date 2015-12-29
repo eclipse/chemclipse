@@ -32,7 +32,6 @@ public class IonRange implements IIonRange {
 	 * @param stopIon
 	 */
 	public IonRange(int startIon, int stopIon) {
-
 		if(startIon > stopIon) {
 			int tmp = startIon;
 			startIon = stopIon;

@@ -22,7 +22,6 @@ public abstract class AbstractPeaks implements IPeaks {
 	 * Initialize mass spectra and create a new internal mass spectra list.
 	 */
 	public AbstractPeaks() {
-
 		peaks = new ArrayList<IPeak>();
 	}
 

@@ -65,7 +65,6 @@ public abstract class AbstractPeakModel implements IPeakModel {
 	 * @param stopBackgroundAbundance
 	 */
 	public AbstractPeakModel(IScan peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
-
 		/*
 		 * Checks all conditions for the peak model to be valid.
 		 */

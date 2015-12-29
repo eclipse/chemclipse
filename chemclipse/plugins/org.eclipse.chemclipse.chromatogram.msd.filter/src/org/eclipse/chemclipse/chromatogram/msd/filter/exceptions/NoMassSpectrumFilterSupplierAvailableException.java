@@ -20,12 +20,10 @@ public class NoMassSpectrumFilterSupplierAvailableException extends Exception {
 	private static final long serialVersionUID = -369464373462262164L;
 
 	public NoMassSpectrumFilterSupplierAvailableException() {
-
 		super();
 	}
 
 	public NoMassSpectrumFilterSupplierAvailableException(String message) {
-
 		super(message);
 	}
 }

@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.wsd.swt.ui.components.AbstractChromatogramWSDLineS
 public abstract class AbstractViewWSDChromatogramUI extends AbstractChromatogramWSDLineSeriesUI {
 
 	public AbstractViewWSDChromatogramUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 }

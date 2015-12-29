@@ -22,12 +22,10 @@ public class MarkedIon implements IMarkedIon {
 	 * @param ion
 	 */
 	public MarkedIon(double ion) {
-
 		this(ion, 1);
 	}
 
 	public MarkedIon(double ion, int magnification) {
-
 		setIon(ion);
 		setMagnification(magnification);
 	}

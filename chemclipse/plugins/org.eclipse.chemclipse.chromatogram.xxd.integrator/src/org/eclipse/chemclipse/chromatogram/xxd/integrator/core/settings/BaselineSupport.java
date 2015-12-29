@@ -22,7 +22,6 @@ public class BaselineSupport implements IBaselineSupport {
 	private IBaselineModel baselineModelModified;
 
 	public BaselineSupport() {
-
 		baselineModel = null;
 		baselineModelModified = null;
 	}
@@ -33,7 +32,6 @@ public class BaselineSupport implements IBaselineSupport {
 	 * @param chromatogram
 	 */
 	public BaselineSupport(IBaselineModel baselineModel) {
-
 		if(baselineModel != null) {
 			this.baselineModel = baselineModel;
 			this.baselineModelModified = baselineModel.makeDeepCopy();

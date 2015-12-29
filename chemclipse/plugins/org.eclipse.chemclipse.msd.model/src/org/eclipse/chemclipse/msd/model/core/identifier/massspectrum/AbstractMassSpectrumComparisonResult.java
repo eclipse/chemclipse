@@ -22,12 +22,10 @@ public abstract class AbstractMassSpectrumComparisonResult extends AbstractCompa
 	 * @param reverseMatchFactor
 	 */
 	public AbstractMassSpectrumComparisonResult(float matchFactor, float reverseMatchFactor) {
-
 		super(matchFactor, reverseMatchFactor);
 	}
 
 	public AbstractMassSpectrumComparisonResult(float matchFactor, float reverseMatchFactor, float probability) {
-
 		super(matchFactor, reverseMatchFactor, probability);
 	}
 }

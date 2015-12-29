@@ -28,7 +28,6 @@ public abstract class AbstractMacWineSupport extends AbstractWineRuntimeSupport 
 	 *            (e.g. "/Applications/Wine.app")
 	 */
 	public AbstractMacWineSupport(String application, String parameter, String macWineBinary) throws FileNotFoundException {
-
 		super(application, parameter);
 		this.macWineBinary = macWineBinary;
 	}

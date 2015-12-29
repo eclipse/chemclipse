@@ -28,7 +28,6 @@ public abstract class AbstractPeakCSDSelectionView extends AbstractSelectionView
 	private EventHandler eventHandler;
 
 	public AbstractPeakCSDSelectionView(MPart part, EPartService partService, IEventBroker eventBroker) {
-
 		super(part, partService);
 		this.eventBroker = eventBroker;
 		subscribe();

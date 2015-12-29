@@ -27,7 +27,6 @@ public class Converter {
 	private static final Logger logger = Logger.getLogger(Converter.class);
 
 	private Converter() {
-
 	}
 
 	/**

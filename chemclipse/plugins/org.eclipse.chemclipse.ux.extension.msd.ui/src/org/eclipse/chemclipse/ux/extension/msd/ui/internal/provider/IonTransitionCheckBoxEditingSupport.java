@@ -23,7 +23,6 @@ public class IonTransitionCheckBoxEditingSupport extends EditingSupport {
 	private TableViewer tableViewer;
 
 	public IonTransitionCheckBoxEditingSupport(TableViewer tableViewer) {
-
 		super(tableViewer);
 		this.tableViewer = tableViewer;
 		cellEditor = new CheckboxCellEditor(tableViewer.getTable());

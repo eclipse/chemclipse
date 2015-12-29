@@ -25,7 +25,6 @@ public class AnalysisSegment implements IAnalysisSegment {
 	private int stopScan = 0;
 
 	public AnalysisSegment(int startScan, int segmentWidth) {
-
 		if(startScan > 0 && segmentWidth > 0) {
 			this.startScan = startScan;
 			this.stopScan = startScan + segmentWidth - 1;

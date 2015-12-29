@@ -38,7 +38,6 @@ import org.swtchart.ISeries.SeriesType;
 public class SelectedExactIonChromatogramUI extends AbstractViewMSDChromatogramUI {
 
 	public SelectedExactIonChromatogramUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 

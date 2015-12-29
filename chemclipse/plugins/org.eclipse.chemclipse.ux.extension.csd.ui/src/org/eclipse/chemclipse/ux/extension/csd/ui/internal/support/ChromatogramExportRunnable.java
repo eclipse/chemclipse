@@ -34,7 +34,6 @@ public class ChromatogramExportRunnable implements IRunnableWithProgress {
 	private ISupplier supplier;
 
 	public ChromatogramExportRunnable(File file, IChromatogramCSD chromatogram, ISupplier supplier) {
-
 		this.file = file;
 		this.chromatogram = chromatogram;
 		this.supplier = supplier;

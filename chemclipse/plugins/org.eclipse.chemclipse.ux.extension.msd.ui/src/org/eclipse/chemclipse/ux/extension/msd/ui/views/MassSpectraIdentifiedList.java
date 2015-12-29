@@ -54,7 +54,6 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 
 	@Inject
 	public MassSpectraIdentifiedList(MPart part, EPartService partService, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 		/*
 		 * Receives and handles chromatogram selection updates.

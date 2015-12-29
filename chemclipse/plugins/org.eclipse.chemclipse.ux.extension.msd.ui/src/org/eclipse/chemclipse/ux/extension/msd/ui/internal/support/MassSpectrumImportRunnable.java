@@ -29,7 +29,6 @@ public class MassSpectrumImportRunnable implements IRunnableWithProgress {
 	private IMassSpectra massSpectra;
 
 	public MassSpectrumImportRunnable(File file, IMassSpectra massSpectra) {
-
 		this.file = file;
 		this.massSpectra = massSpectra;
 	}

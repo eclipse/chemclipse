@@ -34,7 +34,6 @@ public class SelectedNominalIonChromtogramView extends AbstractChromatogramSelec
 
 	@Inject
 	public SelectedNominalIonChromtogramView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

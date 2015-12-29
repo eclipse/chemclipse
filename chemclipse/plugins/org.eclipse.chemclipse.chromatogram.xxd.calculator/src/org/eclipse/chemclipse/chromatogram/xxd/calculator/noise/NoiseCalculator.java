@@ -37,7 +37,6 @@ public class NoiseCalculator {
 	 * This class has only static methods.
 	 */
 	private NoiseCalculator() {
-
 	}
 
 	/**

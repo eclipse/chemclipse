@@ -24,7 +24,6 @@ public class MassSpectrumFilterSupport implements IMassSpectrumFilterSupport {
 	 * Creates a new suppliers list.
 	 */
 	public MassSpectrumFilterSupport() {
-
 		suppliers = new ArrayList<IMassSpectrumFilterSupplier>();
 	}
 

@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 public class TestChromatogramFilterResult extends AbstractChromatogramFilterResult {
 
 	public TestChromatogramFilterResult(ResultStatus resultStatus, String description) {
-
 		super(resultStatus, description);
 	}
 }

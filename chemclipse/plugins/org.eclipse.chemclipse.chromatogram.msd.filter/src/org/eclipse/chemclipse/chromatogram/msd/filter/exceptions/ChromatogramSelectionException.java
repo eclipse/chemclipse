@@ -20,12 +20,10 @@ public class ChromatogramSelectionException extends Exception {
 	private static final long serialVersionUID = -5169717859171316620L;
 
 	public ChromatogramSelectionException() {
-
 		super();
 	}
 
 	public ChromatogramSelectionException(String message) {
-
 		super(message);
 	}
 }

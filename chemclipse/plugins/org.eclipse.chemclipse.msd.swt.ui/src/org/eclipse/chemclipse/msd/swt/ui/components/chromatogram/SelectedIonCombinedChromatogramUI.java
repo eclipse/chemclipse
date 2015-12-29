@@ -35,7 +35,6 @@ import org.swtchart.ISeries.SeriesType;
 public class SelectedIonCombinedChromatogramUI extends AbstractViewMSDChromatogramUI {
 
 	public SelectedIonCombinedChromatogramUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 

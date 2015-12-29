@@ -25,7 +25,6 @@ public class EditHistoryUpdateNotifier {
 	private static DynamicEditHistoryUpdateNotifier notifier;
 
 	private EditHistoryUpdateNotifier() {
-
 	}
 
 	public static void fireUpdateChange(IEditHistory editHistory) {

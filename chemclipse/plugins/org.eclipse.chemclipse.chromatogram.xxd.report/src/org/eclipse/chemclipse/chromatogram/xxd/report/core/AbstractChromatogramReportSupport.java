@@ -21,7 +21,6 @@ public abstract class AbstractChromatogramReportSupport implements IChromatogram
 	private List<IChromatogramReportSupplier> suppliers;
 
 	public AbstractChromatogramReportSupport() {
-
 		suppliers = new ArrayList<IChromatogramReportSupplier>();
 	}
 

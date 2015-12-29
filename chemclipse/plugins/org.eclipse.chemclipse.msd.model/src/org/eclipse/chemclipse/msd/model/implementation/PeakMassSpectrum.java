@@ -30,7 +30,6 @@ public class PeakMassSpectrum extends AbstractPeakMassSpectrum implements IPeakM
 	private static final Logger logger = Logger.getLogger(PeakMassSpectrum.class);
 
 	public PeakMassSpectrum() {
-
 		super();
 	}
 
@@ -44,7 +43,6 @@ public class PeakMassSpectrum extends AbstractPeakMassSpectrum implements IPeakM
 	 * @param intensity
 	 */
 	public PeakMassSpectrum(IPeakMassSpectrum peakMassSpectrum, float intensity) throws IllegalArgumentException {
-
 		super(peakMassSpectrum, intensity);
 	}
 
@@ -55,7 +53,6 @@ public class PeakMassSpectrum extends AbstractPeakMassSpectrum implements IPeakM
 	 * @param massSpectrum
 	 */
 	public PeakMassSpectrum(IScanMSD massSpectrum) throws IllegalArgumentException {
-
 		super(massSpectrum);
 	}
 
@@ -83,7 +80,6 @@ public class PeakMassSpectrum extends AbstractPeakMassSpectrum implements IPeakM
 	 * @param actualPercentageIntensity
 	 */
 	public PeakMassSpectrum(IScanMSD massSpectrum, float actualPercentageIntensity) throws IllegalArgumentException {
-
 		super(massSpectrum, actualPercentageIntensity);
 	}
 

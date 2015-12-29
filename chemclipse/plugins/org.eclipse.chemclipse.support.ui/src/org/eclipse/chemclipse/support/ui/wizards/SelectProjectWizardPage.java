@@ -57,7 +57,6 @@ public class SelectProjectWizardPage extends AbstractExtendedWizardPage {
 	private IWorkspaceRoot workspaceRoot;
 
 	public SelectProjectWizardPage(ISelection selection, IWizardElements wizardElements) {
-
 		super("SelectProjectWizardPage"); // $NON-NLS-1$
 		setTitle(SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_SELECT_CREATE_PROJECT));
 		setDescription(SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_SELECT_CREATE_PROJECT_INFO));

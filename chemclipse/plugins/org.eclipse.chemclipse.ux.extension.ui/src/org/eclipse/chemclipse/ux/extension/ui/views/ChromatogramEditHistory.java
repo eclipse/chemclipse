@@ -37,7 +37,6 @@ public class ChromatogramEditHistory extends EditHistoryPart {
 
 	@Inject
 	public ChromatogramEditHistory(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(partService, part, eventBroker);
 		subscribe();
 	}

@@ -35,7 +35,6 @@ public class TotalScanSignals implements ITotalScanSignals {
 	 * @param numberOfScans
 	 */
 	public TotalScanSignals(int numberOfScans) {
-
 		if(numberOfScans <= 0) {
 			numberOfScans = 0;
 			startScan = 0;
@@ -51,7 +50,6 @@ public class TotalScanSignals implements ITotalScanSignals {
 	 * Sets additionally the parent chromatogram to the signals instance.
 	 */
 	public TotalScanSignals(int numberOfScans, IChromatogram chromatogram) {
-
 		this(numberOfScans);
 		this.chromatogram = chromatogram;
 	}
@@ -65,7 +63,6 @@ public class TotalScanSignals implements ITotalScanSignals {
 	 * @param stopScan
 	 */
 	public TotalScanSignals(int startScan, int stopScan) {
-
 		startScan = (startScan <= 0) ? 0 : startScan;
 		stopScan = (stopScan <= 0) ? 0 : stopScan;
 		int start = Math.min(startScan, stopScan);
@@ -91,20 +88,17 @@ public class TotalScanSignals implements ITotalScanSignals {
 	 * @param chromatogram
 	 */
 	public TotalScanSignals(int startScan, int stopScan, IChromatogram chromatogram) {
-
 		this(startScan, stopScan);
 		this.chromatogram = chromatogram;
 	}
 
 	// TODO JUnit
 	public TotalScanSignals(IChromatogram chromatogram) throws ChromatogramIsNullException {
-
 		this(new ChromatogramSelection(chromatogram));
 	}
 
 	// TODO JUnit
 	public TotalScanSignals(IChromatogramSelection chromatogramSelection) {
-
 		chromatogram = chromatogramSelection.getChromatogram();
 		startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());

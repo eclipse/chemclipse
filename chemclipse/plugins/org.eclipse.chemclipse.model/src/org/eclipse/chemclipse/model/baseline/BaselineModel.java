@@ -36,7 +36,6 @@ public class BaselineModel implements IBaselineModel {
 	private NavigableMap<Integer, IBaselineSegment> baselineSegments = null;
 
 	public BaselineModel(IChromatogram chromatogram) {
-
 		this.chromatogram = chromatogram;
 		clearBaseline();
 	}

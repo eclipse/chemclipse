@@ -20,12 +20,10 @@ public class PeakException extends Exception {
 	private static final long serialVersionUID = 4103347733295806459L;
 
 	public PeakException() {
-
 		super();
 	}
 
 	public PeakException(String message) {
-
 		super(message);
 	}
 }

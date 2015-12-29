@@ -143,7 +143,6 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 	private FormToolkit formToolkit;
 
 	public ChromatogramEditorCSD() {
-
 		/*
 		 * Decimal format.
 		 */

@@ -26,7 +26,6 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 
 	// -----------------------------------------------ILibraryInformation
 	public AbstractLibraryInformation() {
-
 		synonyms = new HashSet<String>();
 	}
 

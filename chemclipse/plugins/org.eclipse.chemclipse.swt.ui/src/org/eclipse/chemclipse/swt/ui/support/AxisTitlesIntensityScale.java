@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.swt.ui.support;
 public class AxisTitlesIntensityScale extends AxisTitles {
 
 	public AxisTitlesIntensityScale() {
-
 		super("milliseconds (ms)", "minutes (min)", "intensity", "relative intensity");
 	}
 }

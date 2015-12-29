@@ -20,12 +20,10 @@ public class StatusLineManagerException extends Exception {
 	private static final long serialVersionUID = -2005112653919569863L;
 
 	public StatusLineManagerException() {
-
 		super();
 	}
 
 	public StatusLineManagerException(String message) {
-
 		super(message);
 	}
 }

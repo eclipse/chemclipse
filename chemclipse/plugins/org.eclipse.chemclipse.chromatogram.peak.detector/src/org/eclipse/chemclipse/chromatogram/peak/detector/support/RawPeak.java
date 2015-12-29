@@ -19,7 +19,6 @@ public class RawPeak implements IRawPeak {
 	private int stopScan = 0;
 
 	public RawPeak(int startScan, int maximumScan, int stopScan) {
-
 		if(startScan < maximumScan && maximumScan < stopScan) {
 			this.startScan = startScan;
 			this.maximumScan = maximumScan;

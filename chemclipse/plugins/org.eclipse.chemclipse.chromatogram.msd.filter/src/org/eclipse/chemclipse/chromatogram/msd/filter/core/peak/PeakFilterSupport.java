@@ -24,7 +24,6 @@ public class PeakFilterSupport implements IPeakFilterSupport {
 	 * Creates a new suppliers list.
 	 */
 	public PeakFilterSupport() {
-
 		suppliers = new ArrayList<IPeakFilterSupplier>();
 	}
 

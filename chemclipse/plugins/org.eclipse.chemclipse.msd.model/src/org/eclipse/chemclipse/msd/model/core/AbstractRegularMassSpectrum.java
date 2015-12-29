@@ -39,14 +39,12 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 	 * SupplierMassSpectrumType.CENTROID
 	 */
 	public AbstractRegularMassSpectrum() {
-
 		super();
 		massSpectrometer = 1; // MS1
 		massSpectrumType = 0; // 0 = Centroid, 1 = Profile
 	}
 
 	public AbstractRegularMassSpectrum(short massSpectrometer, short massSpectrumType) {
-
 		this();
 		setMassSpectrometer(massSpectrometer);
 		setMassSpectrumType(massSpectrumType);

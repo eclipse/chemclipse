@@ -21,7 +21,6 @@ public class StatisticsElement<T> implements IStatisticsElement<T> {
 	private Object content; // this is either an IStatistics object or a List<StatisticsElement>
 
 	public StatisticsElement(Object identifier, List<T> rawSourceElements) {
-
 		sourceElements = new ArrayList<IStatisticsSourceObject<T>>();
 		for(T elem : rawSourceElements) {
 			this.sourceElements.add(new StatisticsSourceObject<T>(elem));
@@ -30,14 +29,12 @@ public class StatisticsElement<T> implements IStatisticsElement<T> {
 	}
 
 	public StatisticsElement(Object identifier, List<IStatisticsSourceObject<T>> sourceElements, IStatistics statistics) {
-
 		this.identifier = identifier;
 		this.sourceElements = sourceElements;
 		this.content = statistics;
 	}
 
 	public StatisticsElement(Object identifier, List<IStatisticsSourceObject<T>> sourceElements, List<StatisticsElement<T>> elements) {
-
 		this.identifier = identifier;
 		this.sourceElements = sourceElements;
 		this.content = elements;

@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.swt.ui.support.AxisTitlesCurrentScale;
 public abstract class AbstractChromatogramCSDLineSeriesUI extends AbstractChromatogramLineSeriesUI implements IChromatogramSelectionCSDUpdateNotifier {
 
 	public AbstractChromatogramCSDLineSeriesUI(Composite parent, int style) {
-
 		super(parent, style, new AxisTitlesCurrentScale());
 	}
 

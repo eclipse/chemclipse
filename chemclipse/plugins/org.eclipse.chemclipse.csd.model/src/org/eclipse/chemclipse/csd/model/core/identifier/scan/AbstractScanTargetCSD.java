@@ -29,7 +29,6 @@ public abstract class AbstractScanTargetCSD extends AbstractIdentificationTarget
 	 * @throws ReferenceMustNotBeNullException
 	 */
 	public AbstractScanTargetCSD(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
-
 		super(libraryInformation, comparisonResult);
 	}
 

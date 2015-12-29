@@ -21,7 +21,6 @@ public class GCPoint implements IGCPoint {
 	private int x;
 
 	public GCPoint(int x, int y) {
-
 		setX(x);
 		setY(y);
 	}

@@ -20,12 +20,10 @@ public class NoIdentifiedScansAvailableException extends Exception {
 	private static final long serialVersionUID = -6185021897801072977L;
 
 	public NoIdentifiedScansAvailableException() {
-
 		super();
 	}
 
 	public NoIdentifiedScansAvailableException(String message) {
-
 		super(message);
 	}
 }

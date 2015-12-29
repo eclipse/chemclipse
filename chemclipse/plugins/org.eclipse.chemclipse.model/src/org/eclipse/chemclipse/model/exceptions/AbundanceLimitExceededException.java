@@ -20,12 +20,10 @@ public class AbundanceLimitExceededException extends ValueLimitExceededException
 	private static final long serialVersionUID = 6277711100673066188L;
 
 	public AbundanceLimitExceededException() {
-
 		super();
 	}
 
 	public AbundanceLimitExceededException(String message) {
-
 		super(message);
 	}
 }

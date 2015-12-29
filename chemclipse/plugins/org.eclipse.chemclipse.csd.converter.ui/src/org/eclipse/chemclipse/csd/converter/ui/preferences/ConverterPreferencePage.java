@@ -20,7 +20,6 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class ConverterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public ConverterPreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("FID Converter");

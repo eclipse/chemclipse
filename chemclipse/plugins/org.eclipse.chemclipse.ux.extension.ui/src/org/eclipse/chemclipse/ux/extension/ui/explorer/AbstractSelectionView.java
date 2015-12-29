@@ -20,7 +20,6 @@ public abstract class AbstractSelectionView implements ISelectionView {
 	private EPartService partService;
 
 	public AbstractSelectionView(MPart part, EPartService partService) {
-
 		this.part = part;
 		this.partService = partService;
 	}

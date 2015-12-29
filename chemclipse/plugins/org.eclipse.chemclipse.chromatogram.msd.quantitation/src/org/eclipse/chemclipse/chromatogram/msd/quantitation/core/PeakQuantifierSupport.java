@@ -21,7 +21,6 @@ public class PeakQuantifierSupport implements IPeakQuantifierSupport {
 	private List<IPeakQuantifierSupplier> suppliers;
 
 	public PeakQuantifierSupport() {
-
 		suppliers = new ArrayList<IPeakQuantifierSupplier>();
 	}
 

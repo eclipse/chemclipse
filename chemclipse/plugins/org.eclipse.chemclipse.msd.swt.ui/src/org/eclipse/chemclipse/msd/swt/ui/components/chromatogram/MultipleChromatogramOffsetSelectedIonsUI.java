@@ -32,7 +32,6 @@ public class MultipleChromatogramOffsetSelectedIonsUI extends AbstractViewMSDChr
 	private IOffset offset;
 
 	public MultipleChromatogramOffsetSelectedIonsUI(Composite parent, int style, IOffset offset) {
-
 		super(parent, style);
 	}
 

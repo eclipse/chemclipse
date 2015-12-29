@@ -40,7 +40,6 @@ public abstract class AbstractPeakLineSeriesUI extends AbstractLineSeriesUI impl
 	protected IPeakMSD peak;
 
 	public AbstractPeakLineSeriesUI(Composite parent, int style, IAxisTitles axisTitles) {
-
 		super(parent, style, axisTitles);
 	}
 

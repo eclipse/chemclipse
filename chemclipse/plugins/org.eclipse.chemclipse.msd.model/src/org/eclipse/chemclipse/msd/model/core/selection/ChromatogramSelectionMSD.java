@@ -45,12 +45,10 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 	private IMarkedIonTransitions markedIonTransitions;
 
 	public ChromatogramSelectionMSD(IChromatogram chromatogram) throws ChromatogramIsNullException {
-
 		this(chromatogram, true);
 	}
 
 	public ChromatogramSelectionMSD(IChromatogram chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
-
 		super(chromatogram, fireUpdate);
 		/*
 		 * Create instances of selected and excluded ions.

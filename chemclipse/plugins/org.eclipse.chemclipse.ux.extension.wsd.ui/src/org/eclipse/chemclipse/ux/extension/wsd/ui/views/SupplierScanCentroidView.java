@@ -33,7 +33,6 @@ public class SupplierScanCentroidView extends AbstractChromatogramSelectionWSDVi
 
 	@Inject
 	public SupplierScanCentroidView(MPart part, EPartService partService, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

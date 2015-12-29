@@ -14,17 +14,14 @@ package org.eclipse.chemclipse.msd.model.core.quantitation;
 public class QuantitationSignalMSD extends AbstractQuantitationSignalMSD implements IQuantitationSignalMSD {
 
 	public QuantitationSignalMSD(double ion, float relativeResponse) {
-
 		super(ion, relativeResponse);
 	}
 
 	public QuantitationSignalMSD(double ion, float relativeResponse, double uncertainty) {
-
 		super(ion, relativeResponse, uncertainty);
 	}
 
 	public QuantitationSignalMSD(double ion, float relativeResponse, double uncertainty, boolean use) {
-
 		super(ion, relativeResponse, uncertainty, use);
 	}
 }

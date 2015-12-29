@@ -30,7 +30,6 @@ public class PeakSelectionUpdateNotifier {
 	 * This class should not be instantiated.
 	 */
 	private PeakSelectionUpdateNotifier() {
-
 	}
 
 	/**

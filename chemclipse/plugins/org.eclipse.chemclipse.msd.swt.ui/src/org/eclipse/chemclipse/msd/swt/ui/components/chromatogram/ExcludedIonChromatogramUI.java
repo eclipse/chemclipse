@@ -36,7 +36,6 @@ import org.swtchart.ISeries.SeriesType;
 public class ExcludedIonChromatogramUI extends AbstractViewMSDChromatogramUI {
 
 	public ExcludedIonChromatogramUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 

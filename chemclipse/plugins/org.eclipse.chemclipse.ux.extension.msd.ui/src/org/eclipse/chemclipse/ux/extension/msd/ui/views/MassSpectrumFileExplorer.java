@@ -50,7 +50,6 @@ public class MassSpectrumFileExplorer {
 
 	@Inject
 	public MassSpectrumFileExplorer(Composite parent) {
-
 		treeViewer = new TreeViewer(parent);
 		treeViewer.setContentProvider(new MassSpectrumFileExplorerContentProvider());
 		treeViewer.setLabelProvider(new MassSpectrumFileExplorerLabelProvider());

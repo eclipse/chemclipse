@@ -14,12 +14,10 @@ package org.eclipse.chemclipse.model.identifier;
 public class PeakComparisonResult extends AbstractPeakComparisonResult implements IPeakComparisonResult {
 
 	public PeakComparisonResult(float matchQuality, float reverseMatchQuality) {
-
 		super(matchQuality, reverseMatchQuality);
 	}
 
 	public PeakComparisonResult(float matchFactor, float reverseMatchFactor, float probability) {
-
 		super(matchFactor, reverseMatchFactor, probability);
 	}
 }

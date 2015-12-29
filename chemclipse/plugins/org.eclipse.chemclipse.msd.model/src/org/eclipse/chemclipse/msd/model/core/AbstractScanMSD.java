@@ -70,7 +70,6 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	private IScanMSD optimizedMassSpectrum;
 
 	public AbstractScanMSD() {
-
 		/*
 		 * If mass spectrum will be cloned, the ion list will be
 		 * created as a new instance in the method

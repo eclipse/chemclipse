@@ -28,7 +28,6 @@ public abstract class AbstractProfileScanUI extends AbstractLineSeriesUI impleme
 	private IChromatogramSelectionWSD chromatogramSelection;
 
 	public AbstractProfileScanUI(Composite parent, int style) {
-
 		super(parent, style, new ProfileSpectrumAxisTitles());
 	}
 

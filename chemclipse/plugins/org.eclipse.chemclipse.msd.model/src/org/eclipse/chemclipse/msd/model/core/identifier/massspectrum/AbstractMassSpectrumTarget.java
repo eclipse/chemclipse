@@ -29,7 +29,6 @@ public abstract class AbstractMassSpectrumTarget extends AbstractIdentificationT
 	 * @throws ReferenceMustNotBeNullException
 	 */
 	public AbstractMassSpectrumTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
-
 		super(libraryInformation, comparisonResult);
 	}
 

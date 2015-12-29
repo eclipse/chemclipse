@@ -19,12 +19,10 @@ public class NoDatabaseAvailableException extends Exception {
 	private static final long serialVersionUID = -3251238946214569473L;
 
 	public NoDatabaseAvailableException() {
-
 		super();
 	}
 
 	public NoDatabaseAvailableException(String message) {
-
 		super(message);
 	}
 }

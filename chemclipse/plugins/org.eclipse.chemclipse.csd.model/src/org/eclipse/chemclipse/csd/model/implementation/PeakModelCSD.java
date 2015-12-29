@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
 public class PeakModelCSD extends AbstractPeakModelCSD implements IPeakModelCSD {
 
 	public PeakModelCSD(IScan peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
-
 		super(peakMaximum, peakIntensityValues, startBackgroundAbundance, stopBackgroundAbundance);
 	}
 }

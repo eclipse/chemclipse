@@ -19,14 +19,12 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	private String advise = "";
 
 	public AbstractComparisonResult(float matchFactor, float reverseMatchFactor) {
-
 		this.matchFactor = matchFactor;
 		this.reverseMatchFactor = reverseMatchFactor;
 		determineAdvise();
 	}
 
 	public AbstractComparisonResult(float matchFactor, float reverseMatchFactor, float probability) {
-
 		this(matchFactor, reverseMatchFactor);
 		this.probability = probability;
 	}

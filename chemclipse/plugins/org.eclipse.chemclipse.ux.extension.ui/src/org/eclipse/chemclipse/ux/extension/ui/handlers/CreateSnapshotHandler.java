@@ -33,7 +33,6 @@ public class CreateSnapshotHandler {
 	private Clipboard clipboard;
 
 	public CreateSnapshotHandler() {
-
 		clipboard = new Clipboard(Display.getDefault());
 	}
 

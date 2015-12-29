@@ -30,7 +30,6 @@ public enum PeakIonType {
 	private String description;
 
 	private PeakIonType(String description) {
-
 		this.description = description;
 	}
 

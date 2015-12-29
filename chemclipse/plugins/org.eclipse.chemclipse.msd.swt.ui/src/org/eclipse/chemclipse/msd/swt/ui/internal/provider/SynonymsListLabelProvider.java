@@ -20,7 +20,6 @@ import org.eclipse.swt.graphics.Image;
 public class SynonymsListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public SynonymsListLabelProvider() {
-
 		super("0.0##");
 	}
 

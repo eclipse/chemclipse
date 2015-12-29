@@ -33,7 +33,6 @@ public class IonBounds implements IIonBounds {
 	 * @param highestIon
 	 */
 	public IonBounds(IIon lowestIon, IIon highestIon) {
-
 		if(lowestIon != null && highestIon != null) {
 			/*
 			 * Change the order if necessary.

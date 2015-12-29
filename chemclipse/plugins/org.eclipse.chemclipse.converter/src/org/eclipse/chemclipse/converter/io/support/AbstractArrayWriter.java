@@ -17,7 +17,6 @@ public abstract class AbstractArrayWriter implements IArrayWriter {
 	private byte[] data;
 
 	public AbstractArrayWriter(byte[] data) {
-
 		this.position = 0;
 		this.data = data;
 	}

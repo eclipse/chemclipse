@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.swt.ui.support.IAxisTitles;
 public abstract class AbstractViewChromatogramUI extends AbstractChromatogramLineSeriesUI {
 
 	public AbstractViewChromatogramUI(Composite parent, int style, IAxisTitles axisTitles) {
-
 		super(parent, style, axisTitles);
 	}
 }

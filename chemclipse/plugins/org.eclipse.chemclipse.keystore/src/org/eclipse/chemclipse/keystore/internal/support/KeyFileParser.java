@@ -29,7 +29,6 @@ public class KeyFileParser {
 	 * Use only static methods.
 	 */
 	private KeyFileParser() {
-
 	}
 
 	public static Map<String, String> readKeysFromFile(File file) {

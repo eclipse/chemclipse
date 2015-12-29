@@ -34,7 +34,6 @@ public class ChromatogramHeatmapView extends AbstractChromatogramSelectionMSDVie
 
 	@Inject
 	public ChromatogramHeatmapView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

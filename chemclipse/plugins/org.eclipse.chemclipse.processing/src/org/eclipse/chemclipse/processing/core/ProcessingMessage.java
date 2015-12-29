@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.processing.core;
 public class ProcessingMessage extends AbstractProcessingMessage implements IProcessingMessage {
 
 	public ProcessingMessage(MessageType messageType, String description, String message) {
-
 		super(messageType, description, message);
 	}
 }

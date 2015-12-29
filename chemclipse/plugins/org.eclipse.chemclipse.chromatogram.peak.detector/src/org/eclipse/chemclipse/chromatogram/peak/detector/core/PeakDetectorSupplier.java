@@ -20,7 +20,6 @@ public class PeakDetectorSupplier implements IPeakDetectorSupplier {
 	private String peakDetectorName = "";
 
 	public PeakDetectorSupplier(String id, String description, String peakDetectorName) {
-
 		setId(id);
 		setDescription(description);
 		setPeakDetectorName(peakDetectorName);

@@ -20,12 +20,10 @@ public class IdentificatorException extends Exception {
 	private static final long serialVersionUID = 8815944181516280713L;
 
 	public IdentificatorException() {
-
 		super();
 	}
 
 	public IdentificatorException(String message) {
-
 		super(message);
 	}
 }

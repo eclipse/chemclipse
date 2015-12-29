@@ -20,12 +20,10 @@ public class NoPeakFilterSupplierAvailableException extends Exception {
 	private static final long serialVersionUID = -1389214655540242218L;
 
 	public NoPeakFilterSupplierAvailableException() {
-
 		super();
 	}
 
 	public NoPeakFilterSupplierAvailableException(String message) {
-
 		super(message);
 	}
 }

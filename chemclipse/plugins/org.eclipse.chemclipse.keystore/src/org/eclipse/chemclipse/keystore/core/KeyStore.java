@@ -26,7 +26,6 @@ public class KeyStore implements IKeyStore {
 	private Map<String, String> keyMap;
 
 	public KeyStore() {
-
 		initializeKeyMap();
 	}
 

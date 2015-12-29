@@ -34,12 +34,10 @@ public abstract class AbstractFileWizard extends AbstractWizard {
 	private String fileExtension;
 
 	public AbstractFileWizard(String defaultFileName, String fileExtension) {
-
 		this(new WizardElements(), defaultFileName, fileExtension);
 	}
 
 	public AbstractFileWizard(IWizardElements wizardElements, String defaultFileName, String fileExtension) {
-
 		super(wizardElements);
 		this.defaultFileName = defaultFileName;
 		this.fileExtension = fileExtension;

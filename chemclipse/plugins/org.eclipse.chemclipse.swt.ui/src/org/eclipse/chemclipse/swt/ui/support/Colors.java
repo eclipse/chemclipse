@@ -72,6 +72,7 @@ public class Colors {
 	public static final String COLOR_SCHEME_PUBLICATION = "Publication";
 	private static final RGB[] colorIdsGradientPublication = new RGB[]{new RGB(255, 0, 0), new RGB(0, 255, 0), new RGB(0, 0, 255), new RGB(150, 0, 0), new RGB(0, 150, 0), new RGB(0, 0, 150)};
 	private static List<Color> colorsGradientPublication;
+
 	/**
 	 * Creates a color array.
 	 */

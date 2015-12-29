@@ -26,7 +26,6 @@ public class UnivariateStatistics implements IUnivariateStatistics {
 	final private Percentile percentile;
 
 	public UnivariateStatistics(int sampleSize, double[] abundances, Mean mean, Variance variance, StandardDeviation sd, Percentile percentile) {
-
 		this.sampleSize = sampleSize;
 		this.abundances = abundances;
 		this.mean = mean;
@@ -36,7 +35,6 @@ public class UnivariateStatistics implements IUnivariateStatistics {
 	}
 
 	public UnivariateStatistics(double[] abundances) {
-
 		this(abundances.length, abundances, new Mean(), new Variance(), new StandardDeviation(), new Percentile());
 		mean.setData(abundances);
 		variance.setData(abundances);

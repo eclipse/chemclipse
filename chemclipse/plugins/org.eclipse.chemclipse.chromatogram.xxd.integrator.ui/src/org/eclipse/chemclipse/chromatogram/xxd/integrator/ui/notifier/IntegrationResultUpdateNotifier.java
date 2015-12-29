@@ -33,7 +33,6 @@ public class IntegrationResultUpdateNotifier {
 	 * This class should not be instantiated.
 	 */
 	private IntegrationResultUpdateNotifier() {
-
 	}
 
 	public static void fireUpdateChange(ICombinedIntegrationResult combinedIntegrationResult) {

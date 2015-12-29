@@ -38,7 +38,6 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 	 * @param stopIon
 	 */
 	public ExtractedIonSignal(double startIon, double stopIon) {
-
 		int start = AbstractIon.getIon(startIon);
 		int stop = AbstractIon.getIon(stopIon);
 		/*
@@ -65,7 +64,6 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 	}
 
 	public ExtractedIonSignal(List<IIon> ions) {
-
 		if(ions != null && ions.size() > 0) {
 			Collections.sort(ions, new IonValueComparator());
 			this.startIon = AbstractIon.getIon(ions.get(0).getIon());

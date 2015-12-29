@@ -32,7 +32,6 @@ public class ChromatogramAndPeakSelectionUpdateNotifierMSD {
 	 * This class should not be instantiated.
 	 */
 	private ChromatogramAndPeakSelectionUpdateNotifierMSD() {
-
 	}
 
 	/**

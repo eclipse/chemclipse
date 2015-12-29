@@ -22,12 +22,10 @@ public class ComparisonResult extends AbstractComparisonResult implements ICompa
 	 * @param reverseMatchQuality
 	 */
 	public ComparisonResult(float matchFactor, float reverseMatchFactor) {
-
 		super(matchFactor, reverseMatchFactor);
 	}
 
 	public ComparisonResult(float matchFactor, float reverseMatchFactor, float probability) {
-
 		super(matchFactor, reverseMatchFactor, probability);
 	}
 

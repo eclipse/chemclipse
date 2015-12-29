@@ -30,7 +30,6 @@ import org.eclipse.chemclipse.swt.ui.support.Sign;
 public class PeakWithBackgroundUI extends AbstractViewPeakUI {
 
 	public PeakWithBackgroundUI(Composite parent, int style, IAxisTitles axisTitles) {
-
 		super(parent, style, axisTitles);
 		/*
 		 * The minimum Y value is set to zero.

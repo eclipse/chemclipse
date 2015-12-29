@@ -22,7 +22,6 @@ public class TwoPoints implements ITwoPoints {
 	private IPoint p2;
 
 	public TwoPoints(IPoint p1, IPoint p2) throws PointIsNullException {
-
 		if(p1 == null || p2 == null) {
 			throw new PointIsNullException("The points p1 and p2 must not be null.");
 		}

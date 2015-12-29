@@ -28,7 +28,6 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 	private IChromatogramMSD chromatogram;
 
 	public TotalIonSignalExtractor(IChromatogramMSD chromatogram) throws ChromatogramIsNullException {
-
 		super(chromatogram);
 		this.chromatogram = chromatogram;
 	}

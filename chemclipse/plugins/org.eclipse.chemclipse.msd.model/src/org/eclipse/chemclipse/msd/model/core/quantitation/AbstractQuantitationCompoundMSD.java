@@ -53,7 +53,6 @@ public abstract class AbstractQuantitationCompoundMSD implements IQuantitationCo
 	 * @param retentionTime
 	 */
 	public AbstractQuantitationCompoundMSD(String name, String concentrationUnit, int retentionTime) {
-
 		this.name = name;
 		this.concentrationUnit = concentrationUnit;
 		retentionTimeWindow = new RetentionTimeWindow();

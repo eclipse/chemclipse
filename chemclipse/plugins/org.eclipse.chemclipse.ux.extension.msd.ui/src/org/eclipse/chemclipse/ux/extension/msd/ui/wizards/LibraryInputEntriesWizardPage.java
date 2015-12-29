@@ -26,7 +26,6 @@ public class LibraryInputEntriesWizardPage extends WizardPage {
 	private TreeViewer libraryViewer;
 
 	protected LibraryInputEntriesWizardPage(String pageName, String title, String description) {
-
 		super(pageName);
 		setTitle(title);
 		setDescription(description);

@@ -24,7 +24,6 @@ public class Scan extends AbstractScan implements IScan {
 	private float totalSignal;
 
 	public Scan(float totalSignal) {
-
 		if(totalSignal >= 0) {
 			this.totalSignal = totalSignal;
 		}

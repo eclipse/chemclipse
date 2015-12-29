@@ -125,7 +125,6 @@ public abstract class AbstractChromatogram implements IChromatogram {
 	 * Several initialization will be performed.
 	 */
 	public AbstractChromatogram() {
-
 		updateSupport = new ArrayList<IChromatogramUpdateListener>(5);
 		versionManagement = new VersionManagement();
 		editHistory = new EditHistory();

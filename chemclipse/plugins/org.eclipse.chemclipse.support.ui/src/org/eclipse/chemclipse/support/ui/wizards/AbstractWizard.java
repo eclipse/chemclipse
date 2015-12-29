@@ -38,7 +38,6 @@ public abstract class AbstractWizard extends Wizard implements IFileWizard {
 	private Set<IExtendedWizardPage> wizardPages;
 
 	public AbstractWizard(IWizardElements wizardElements) {
-
 		super();
 		setNeedsProgressMonitor(true);
 		this.wizardElements = wizardElements;

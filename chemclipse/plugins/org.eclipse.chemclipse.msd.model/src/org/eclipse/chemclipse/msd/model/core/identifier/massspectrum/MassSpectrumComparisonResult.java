@@ -14,12 +14,10 @@ package org.eclipse.chemclipse.msd.model.core.identifier.massspectrum;
 public class MassSpectrumComparisonResult extends AbstractMassSpectrumComparisonResult implements IMassSpectrumComparisonResult {
 
 	public MassSpectrumComparisonResult(float matchFactor, float reverseMatchFactor, float probability) {
-
 		super(matchFactor, reverseMatchFactor, probability);
 	}
 
 	public MassSpectrumComparisonResult(float matchFactor, float reverseMatchFactor) {
-
 		super(matchFactor, reverseMatchFactor);
 	}
 }

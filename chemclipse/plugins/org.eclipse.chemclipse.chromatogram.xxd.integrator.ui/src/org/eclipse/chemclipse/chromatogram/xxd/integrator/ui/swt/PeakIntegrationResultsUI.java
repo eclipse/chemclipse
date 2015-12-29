@@ -39,7 +39,6 @@ public class PeakIntegrationResultsUI extends Composite {
 	private int bounds[] = {150, 100, 100, 100};
 
 	public PeakIntegrationResultsUI(Composite parent, int style) {
-
 		super(parent, style);
 		initialize();
 	}

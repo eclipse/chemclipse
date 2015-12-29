@@ -22,11 +22,9 @@ public class Segment implements ISegment {
 	private IPoint peakBaselinePoint2 = new Point(0, 0);
 
 	public Segment() {
-
 	}
 
 	public Segment(IPoint chromatogramBaselinePoint1, IPoint chromatogramBaselinePoint2, IPoint peakBaselinePoint1, IPoint peakBaselinePoint2) {
-
 		setChromatogramBaselinePoint1(chromatogramBaselinePoint1);
 		setChromatogramBaselinePoint2(chromatogramBaselinePoint2);
 		setPeakBaselinePoint1(peakBaselinePoint1);

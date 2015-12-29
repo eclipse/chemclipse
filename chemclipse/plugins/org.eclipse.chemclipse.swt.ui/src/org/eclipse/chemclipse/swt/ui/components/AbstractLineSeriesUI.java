@@ -86,7 +86,6 @@ public abstract class AbstractLineSeriesUI extends InteractiveChartExtended impl
 	 * @param style
 	 */
 	public AbstractLineSeriesUI(Composite parent, int style, IAxisTitles axisTitles) {
-
 		super(parent, style);
 		suspendUpdate(true);
 		this.axisTitles = axisTitles;

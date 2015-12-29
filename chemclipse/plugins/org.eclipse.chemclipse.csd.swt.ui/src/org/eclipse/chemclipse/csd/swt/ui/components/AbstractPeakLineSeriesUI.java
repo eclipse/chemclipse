@@ -31,7 +31,6 @@ public abstract class AbstractPeakLineSeriesUI extends AbstractLineSeriesUI impl
 	protected IPeakCSD peak;
 
 	public AbstractPeakLineSeriesUI(Composite parent, int style) {
-
 		super(parent, style, new AxisTitlesCurrentScale());
 	}
 

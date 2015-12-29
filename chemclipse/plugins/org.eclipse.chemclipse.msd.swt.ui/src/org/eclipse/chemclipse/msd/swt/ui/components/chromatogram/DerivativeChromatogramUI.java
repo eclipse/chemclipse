@@ -31,7 +31,6 @@ public class DerivativeChromatogramUI extends AbstractViewMSDChromatogramUI {
 	private int scale;
 
 	public DerivativeChromatogramUI(Composite parent, int derivative, int scale, int style) {
-
 		super(parent, style);
 		this.derivative = derivative;
 		this.scale = scale;

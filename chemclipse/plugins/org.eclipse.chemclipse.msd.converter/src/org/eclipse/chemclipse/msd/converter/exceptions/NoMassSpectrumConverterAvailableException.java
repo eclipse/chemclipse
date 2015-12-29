@@ -22,12 +22,10 @@ public class NoMassSpectrumConverterAvailableException extends NoConverterAvaila
 	private static final long serialVersionUID = -7732390162073307409L;
 
 	public NoMassSpectrumConverterAvailableException() {
-
 		super();
 	}
 
 	public NoMassSpectrumConverterAvailableException(final String message) {
-
 		super(message);
 	}
 }

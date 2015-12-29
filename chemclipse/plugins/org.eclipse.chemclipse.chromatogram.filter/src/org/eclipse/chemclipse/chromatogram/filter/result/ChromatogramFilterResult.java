@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.filter.result;
 public class ChromatogramFilterResult extends AbstractChromatogramFilterResult {
 
 	public ChromatogramFilterResult(ResultStatus resultStatus, String description) {
-
 		super(resultStatus, description);
 	}
 }

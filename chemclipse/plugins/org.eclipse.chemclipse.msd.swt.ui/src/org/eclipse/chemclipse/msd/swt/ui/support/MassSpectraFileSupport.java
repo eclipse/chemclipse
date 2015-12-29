@@ -39,7 +39,6 @@ public class MassSpectraFileSupport {
 	 * Use only static methods.
 	 */
 	private MassSpectraFileSupport() {
-
 	}
 
 	/**

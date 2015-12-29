@@ -28,7 +28,6 @@ public abstract class AbstractMassSpectrumSelectionView extends AbstractSelectio
 	private EventHandler eventHandler;
 
 	public AbstractMassSpectrumSelectionView(MPart part, EPartService partService, IEventBroker eventBroker) {
-
 		super(part, partService);
 		this.eventBroker = eventBroker;
 		subscribe();

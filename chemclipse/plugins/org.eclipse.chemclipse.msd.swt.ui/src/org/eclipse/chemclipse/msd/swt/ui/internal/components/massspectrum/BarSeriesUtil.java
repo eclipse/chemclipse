@@ -22,7 +22,6 @@ public class BarSeriesUtil {
 	 * Use only static methods.
 	 */
 	private BarSeriesUtil() {
-
 	}
 
 	public static IBarSeriesIons getBarSeriesIonList(IBarSeries barSeries, int widthPlotArea) {

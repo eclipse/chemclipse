@@ -22,7 +22,6 @@ import org.eclipse.swt.widgets.Text;
 public abstract class AbstractExtendedWizardPage extends WizardPage implements IExtendedWizardPage {
 
 	public AbstractExtendedWizardPage(String pageName) {
-
 		super(pageName);
 	}
 

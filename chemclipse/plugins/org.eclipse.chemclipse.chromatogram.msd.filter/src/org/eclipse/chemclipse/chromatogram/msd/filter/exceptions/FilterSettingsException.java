@@ -20,12 +20,10 @@ public class FilterSettingsException extends Exception {
 	private static final long serialVersionUID = -132741393013246001L;
 
 	public FilterSettingsException() {
-
 		super();
 	}
 
 	public FilterSettingsException(String message) {
-
 		super(message);
 	}
 }

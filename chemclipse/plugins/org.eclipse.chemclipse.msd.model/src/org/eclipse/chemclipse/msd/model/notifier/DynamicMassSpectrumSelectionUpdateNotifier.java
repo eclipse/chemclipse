@@ -28,7 +28,6 @@ public class DynamicMassSpectrumSelectionUpdateNotifier implements IMassSpectrum
 	private Map<String, Object> map;
 
 	public DynamicMassSpectrumSelectionUpdateNotifier() {
-
 		map = new HashMap<String, Object>();
 	}
 

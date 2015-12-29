@@ -20,12 +20,10 @@ public class NoNoiseCalculatorAvailableException extends Exception {
 	private static final long serialVersionUID = -9199370781317032929L;
 
 	public NoNoiseCalculatorAvailableException() {
-
 		super();
 	}
 
 	public NoNoiseCalculatorAvailableException(String message) {
-
 		super(message);
 	}
 }

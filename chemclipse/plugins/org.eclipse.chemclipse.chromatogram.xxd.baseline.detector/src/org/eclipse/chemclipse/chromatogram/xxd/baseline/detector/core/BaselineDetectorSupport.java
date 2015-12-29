@@ -21,7 +21,6 @@ public class BaselineDetectorSupport implements IBaselineDetectorSupport {
 	private List<IBaselineDetectorSupplier> suppliers;
 
 	public BaselineDetectorSupport() {
-
 		suppliers = new ArrayList<IBaselineDetectorSupplier>();
 	}
 

@@ -30,7 +30,6 @@ public class MassSpectrumIonsListUI {
 	private int bounds[] = {100, 100, 120, 120, 120, 120, 120};
 
 	public MassSpectrumIonsListUI(Composite parent, int style) {
-
 		parent.setLayout(new FillLayout());
 		/*
 		 * E.g. Scan

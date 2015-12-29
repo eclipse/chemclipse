@@ -46,7 +46,6 @@ public class ChromatogramReportExportWizard extends Wizard implements IExportWiz
 	private ReportSupplierSelectionWizardPage reportSupplierSelectionWizardPage;
 
 	public ChromatogramReportExportWizard() {
-
 		setNeedsProgressMonitor(true);
 		setWindowTitle("Chromatogram Report Wizard");
 	}

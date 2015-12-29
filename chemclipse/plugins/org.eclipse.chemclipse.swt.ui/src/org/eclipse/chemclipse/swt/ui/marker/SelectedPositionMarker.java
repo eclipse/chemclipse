@@ -33,7 +33,6 @@ public class SelectedPositionMarker implements ICustomPaintListener, ISelectedPo
 	private StringBuilder stringBuilder;
 
 	public SelectedPositionMarker(Color foregroundColor, Color backgroundColor) {
-
 		if(foregroundColor == null || backgroundColor == null) {
 			foregroundColor = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 			backgroundColor = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);

@@ -28,7 +28,6 @@ public class DynamicPeakSelectionUpdateNotifier implements IPeakMSDSelectionUpda
 	private Map<String, Object> map;
 
 	public DynamicPeakSelectionUpdateNotifier() {
-
 		map = new HashMap<String, Object>();
 	}
 

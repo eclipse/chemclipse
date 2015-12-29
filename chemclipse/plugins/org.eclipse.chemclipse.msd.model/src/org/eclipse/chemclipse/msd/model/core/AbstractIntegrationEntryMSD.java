@@ -18,7 +18,6 @@ public abstract class AbstractIntegrationEntryMSD extends AbstractIntegrationEnt
 	private double ion;
 
 	public AbstractIntegrationEntryMSD(double ion, double integratedArea) {
-
 		super(integratedArea);
 		this.ion = ion;
 	}

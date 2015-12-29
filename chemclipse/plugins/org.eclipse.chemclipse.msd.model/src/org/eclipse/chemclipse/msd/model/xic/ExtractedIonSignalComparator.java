@@ -20,7 +20,6 @@ public class ExtractedIonSignalComparator implements Comparator<IExtractedIonSig
 	private SortOrder sortOrder = SortOrder.ASC;
 
 	public ExtractedIonSignalComparator(SortOrder sortOrder) {
-
 		if(sortOrder != null) {
 			this.sortOrder = sortOrder;
 		}

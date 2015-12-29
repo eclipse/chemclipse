@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.msd.model.core.quantitation;
 public class ConcentrationResponseEntryMSD extends AbstractConcentrationResponseEntry implements IConcentrationResponseEntryMSD {
 
 	public ConcentrationResponseEntryMSD(double ion, double concentration, double response) {
-
 		super(ion, concentration, response);
 	}
 }

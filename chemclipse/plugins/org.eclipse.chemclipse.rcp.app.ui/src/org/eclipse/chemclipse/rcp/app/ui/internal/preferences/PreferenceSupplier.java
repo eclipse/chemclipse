@@ -22,7 +22,6 @@ public class PreferenceSupplier {
 	 * Use only static methods.
 	 */
 	private PreferenceSupplier() {
-
 	}
 
 	/**

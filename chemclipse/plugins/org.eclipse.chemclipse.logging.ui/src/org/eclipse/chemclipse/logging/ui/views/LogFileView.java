@@ -54,7 +54,6 @@ public class LogFileView {
 
 	@Inject
 	public LogFileView(Composite parent) {
-
 		/*
 		 * Show the log files.
 		 */

@@ -34,7 +34,6 @@ import org.swtchart.ISeries.SeriesType;
 public class SelectedPeakChromatogramUI extends AbstractViewMSDChromatogramUI {
 
 	public SelectedPeakChromatogramUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 

@@ -31,7 +31,6 @@ public class RetentionIndicesConverterSupport implements IRetentionIndicesConver
 	private List<IRetentionIndicesSupplier> suppliers;
 
 	public RetentionIndicesConverterSupport() {
-
 		suppliers = new ArrayList<IRetentionIndicesSupplier>();
 	}
 

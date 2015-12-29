@@ -17,7 +17,6 @@ import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 public class IntegrationEntryMSD extends AbstractIntegrationEntryMSD implements IIntegrationEntryMSD {
 
 	public IntegrationEntryMSD(double ion, double integratedArea) {
-
 		super(ion, integratedArea);
 	}
 }

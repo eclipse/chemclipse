@@ -20,12 +20,10 @@ public class PointIsNullException extends Exception {
 	private static final long serialVersionUID = 3072935069893652069L;
 
 	public PointIsNullException() {
-
 		super();
 	}
 
 	public PointIsNullException(String message) {
-
 		super(message);
 	}
 }

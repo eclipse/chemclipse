@@ -18,7 +18,6 @@ public abstract class AbstractChromatogramResult implements IChromatogramResult 
 	Object result = null;
 
 	public AbstractChromatogramResult(String identifier, String description, Object result) {
-
 		this.identifier = identifier;
 		this.description = description;
 		this.result = result;

@@ -34,7 +34,6 @@ public class SelectedIonCombinedChromtogramView extends AbstractChromatogramSele
 
 	@Inject
 	public SelectedIonCombinedChromtogramView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

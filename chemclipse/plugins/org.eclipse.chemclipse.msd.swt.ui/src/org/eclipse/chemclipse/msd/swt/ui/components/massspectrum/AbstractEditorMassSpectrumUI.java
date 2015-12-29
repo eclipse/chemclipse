@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.msd.swt.ui.components.AbstractBarSeriesUI;
 public abstract class AbstractEditorMassSpectrumUI extends AbstractBarSeriesUI {
 
 	public AbstractEditorMassSpectrumUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 }

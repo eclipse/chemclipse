@@ -26,7 +26,6 @@ import org.eclipse.chemclipse.swt.ui.support.Sign;
 public class BaselineAndChromatogramUI extends AbstractViewBaselineUI {
 
 	public BaselineAndChromatogramUI(Composite parent, int style, IAxisTitles axisTitles) {
-
 		super(parent, style, axisTitles);
 	}
 

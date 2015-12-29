@@ -21,7 +21,6 @@ public class ChromatogramFileExplorerContentProvider extends FileExplorerContent
 	private IChromatogramIdentifier chromatogramIdentifier;
 
 	public ChromatogramFileExplorerContentProvider(IChromatogramIdentifier chromatogramIdentifier) {
-
 		this.chromatogramIdentifier = chromatogramIdentifier;
 	}
 

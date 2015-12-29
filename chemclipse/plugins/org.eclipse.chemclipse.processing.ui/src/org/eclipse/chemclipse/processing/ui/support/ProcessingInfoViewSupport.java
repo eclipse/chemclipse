@@ -32,7 +32,6 @@ public class ProcessingInfoViewSupport {
 	private static DynamicProcessingInfoUpdateNotifier dynamicUpdateNotifier;
 
 	private ProcessingInfoViewSupport() {
-
 	}
 
 	/**

@@ -37,7 +37,6 @@ public class SubtractChromatogramOverlayView extends AbstractChromatogramOverlay
 
 	@Inject
 	public SubtractChromatogramOverlayView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

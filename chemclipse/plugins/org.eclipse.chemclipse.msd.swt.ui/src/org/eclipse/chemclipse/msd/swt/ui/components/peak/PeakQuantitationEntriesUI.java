@@ -46,7 +46,6 @@ public class PeakQuantitationEntriesUI {
 	private int bounds[] = {100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 	public PeakQuantitationEntriesUI(Composite parent, int style) {
-
 		parent.setLayout(new FillLayout());
 		/*
 		 * E.g. Scan

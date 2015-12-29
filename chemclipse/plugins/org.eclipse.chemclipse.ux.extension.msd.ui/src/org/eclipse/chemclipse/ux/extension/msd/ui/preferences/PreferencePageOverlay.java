@@ -20,7 +20,6 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageOverlay extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageOverlay() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("MSD Overlay");

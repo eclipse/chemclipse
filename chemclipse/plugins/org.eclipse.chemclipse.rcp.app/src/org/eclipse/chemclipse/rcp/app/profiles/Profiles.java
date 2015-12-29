@@ -35,7 +35,6 @@ public class Profiles {
 	private static final String PROFILES = "profiles";
 
 	private Profiles() {
-
 	}
 
 	public static File[] getAvailableProfiles() {

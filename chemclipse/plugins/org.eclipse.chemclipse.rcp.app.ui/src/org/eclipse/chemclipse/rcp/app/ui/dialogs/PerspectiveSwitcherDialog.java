@@ -93,7 +93,6 @@ public class PerspectiveSwitcherDialog extends Dialog implements ISelectionChang
 
 	@Inject
 	public PerspectiveSwitcherDialog(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
-
 		super(shell);
 		setShellStyle(getShellStyle() | SWT.SHEET);
 	}

@@ -48,7 +48,6 @@ public class PeakQuantifier {
 	 * This class has only static methods.
 	 */
 	private PeakQuantifier() {
-
 	}
 
 	/**

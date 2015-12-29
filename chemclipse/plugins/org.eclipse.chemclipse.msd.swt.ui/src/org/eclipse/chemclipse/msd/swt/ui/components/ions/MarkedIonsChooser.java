@@ -63,7 +63,6 @@ public class MarkedIonsChooser {
 	 * @param style
 	 */
 	public MarkedIonsChooser(Composite parent, int style) {
-
 		numberFormat = NumberFormat.getInstance();
 		initialize(parent);
 	}

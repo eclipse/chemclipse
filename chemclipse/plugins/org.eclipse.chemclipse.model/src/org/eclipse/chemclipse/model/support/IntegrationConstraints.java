@@ -22,7 +22,6 @@ public class IntegrationConstraints implements IIntegrationConstraints {
 	private Set<IntegrationConstraint> integrationConstraints;
 
 	public IntegrationConstraints() {
-
 		integrationConstraints = new HashSet<IntegrationConstraint>();
 	}
 

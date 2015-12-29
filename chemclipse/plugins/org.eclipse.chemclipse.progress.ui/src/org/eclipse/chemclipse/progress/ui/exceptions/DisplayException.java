@@ -20,12 +20,10 @@ public class DisplayException extends Exception {
 	private static final long serialVersionUID = 7329390657947457963L;
 
 	public DisplayException() {
-
 		super();
 	}
 
 	public DisplayException(String message) {
-
 		super(message);
 	}
 }

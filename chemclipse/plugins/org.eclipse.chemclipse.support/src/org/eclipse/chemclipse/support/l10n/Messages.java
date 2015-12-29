@@ -48,7 +48,6 @@ public class Messages {
 	 * @param bundle
 	 */
 	public Messages(Bundle bundle) {
-
 		initializeMessageMap(bundle);
 	}
 

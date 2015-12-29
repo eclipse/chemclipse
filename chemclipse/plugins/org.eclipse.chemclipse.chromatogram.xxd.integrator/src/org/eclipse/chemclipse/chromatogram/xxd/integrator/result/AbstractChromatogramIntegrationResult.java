@@ -19,7 +19,6 @@ public abstract class AbstractChromatogramIntegrationResult implements IChromato
 	private double ion;
 
 	public AbstractChromatogramIntegrationResult(double ion, double chromatogramArea, double backgroundArea) {
-
 		this.ion = ion;
 		this.chromatogramArea = chromatogramArea;
 		this.backgroundArea = backgroundArea;

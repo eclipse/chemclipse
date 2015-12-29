@@ -44,7 +44,6 @@ public class MassSpectrumIonsListView extends AbstractChromatogramSelectionMSDVi
 
 	@Inject
 	public MassSpectrumIonsListView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

@@ -21,12 +21,10 @@ public class FloatFieldEditor extends StringFieldEditor {
 	private float maxValue = Float.MAX_VALUE;
 
 	public FloatFieldEditor(String name, String labelText, Composite parent) {
-
 		super(name, labelText, parent);
 	}
 
 	public FloatFieldEditor(String name, String labelText, float minValue, float maxValue, Composite parent) {
-
 		super(name, labelText, parent);
 		this.minValue = minValue;
 		this.maxValue = maxValue;

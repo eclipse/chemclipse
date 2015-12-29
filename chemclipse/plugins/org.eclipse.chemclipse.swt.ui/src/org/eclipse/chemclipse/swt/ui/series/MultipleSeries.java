@@ -26,7 +26,6 @@ public class MultipleSeries implements IMultipleSeries {
 
 	// TODO min max halten, und nur beim löschen und hinzufügen aktualisieren
 	public MultipleSeries() {
-
 		multipleSeries = new ArrayList<ISeries>();
 	}
 

@@ -18,7 +18,6 @@ public class AbstractConcentrationResponseEntry implements IConcentrationRespons
 	private double response;
 
 	public AbstractConcentrationResponseEntry(double ion, double concentration, double response) {
-
 		this.ion = ion;
 		this.concentration = concentration;
 		this.response = response;

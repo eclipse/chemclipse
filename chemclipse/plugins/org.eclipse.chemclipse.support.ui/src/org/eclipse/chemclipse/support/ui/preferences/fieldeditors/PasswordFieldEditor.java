@@ -17,17 +17,14 @@ import org.eclipse.swt.widgets.Composite;
 public class PasswordFieldEditor extends StringFieldEditor {
 
 	public PasswordFieldEditor(String name, String labelText, Composite parent) {
-
 		super(name, labelText, parent);
 	}
 
 	public PasswordFieldEditor(String name, String labelText, int width, Composite parent) {
-
 		super(name, labelText, width, parent);
 	}
 
 	public PasswordFieldEditor(String name, String labelText, int width, int strategy, Composite parent) {
-
 		super(name, labelText, width, strategy, parent);
 	}
 

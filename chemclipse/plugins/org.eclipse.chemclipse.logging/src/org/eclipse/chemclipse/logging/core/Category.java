@@ -19,7 +19,6 @@ public class Category {
 
 	@SuppressWarnings("rawtypes")
 	public Category(final Class clazz) {
-
 		logger = Logger.getLogger(clazz);
 	}
 

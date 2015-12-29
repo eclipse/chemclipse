@@ -38,7 +38,6 @@ import org.swtchart.ISeries.SeriesType;
 public class SelectedNominalIonChromatogramUI extends AbstractViewMSDChromatogramUI {
 
 	public SelectedNominalIonChromatogramUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 

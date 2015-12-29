@@ -18,12 +18,10 @@ public class EditInformationComparator implements Comparator<IEditInformation> {
 	private EditHistorySortOrder editHistorySortOrder;
 
 	public EditInformationComparator() {
-
 		this.editHistorySortOrder = EditHistorySortOrder.DATE_ASC;
 	}
 
 	public EditInformationComparator(EditHistorySortOrder editHistorySortOrder) {
-
 		this.editHistorySortOrder = editHistorySortOrder;
 	}
 

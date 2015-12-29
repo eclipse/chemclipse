@@ -26,7 +26,6 @@ public class ChromatogramSelectionWSDUpdateNotifier {
 	private static DynamicChromatogramSelectionUpdateNotifier dynamicUpdateNotifier;
 
 	private ChromatogramSelectionWSDUpdateNotifier() {
-
 	}
 
 	public static void fireUpdateChange(IChromatogramSelectionWSD chromatogramSelection, boolean forceReload) {

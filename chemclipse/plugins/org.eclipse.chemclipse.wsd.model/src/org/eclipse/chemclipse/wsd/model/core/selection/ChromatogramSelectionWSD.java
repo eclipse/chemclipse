@@ -25,12 +25,10 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 	private IScanWSD selectedScan;
 
 	public ChromatogramSelectionWSD(IChromatogram chromatogram) throws ChromatogramIsNullException {
-
 		this(chromatogram, true);
 	}
 
 	public ChromatogramSelectionWSD(IChromatogram chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
-
 		/*
 		 * Set all members to default values.<br/> This includes also to set a
 		 * valid scan and if exists a valid peak.

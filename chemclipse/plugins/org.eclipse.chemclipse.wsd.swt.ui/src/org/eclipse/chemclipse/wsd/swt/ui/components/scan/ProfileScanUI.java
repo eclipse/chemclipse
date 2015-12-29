@@ -27,7 +27,6 @@ import org.eclipse.chemclipse.wsd.swt.ui.converter.SeriesConverterWSD;
 public class ProfileScanUI extends AbstractProfileScanUI {
 
 	public ProfileScanUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 

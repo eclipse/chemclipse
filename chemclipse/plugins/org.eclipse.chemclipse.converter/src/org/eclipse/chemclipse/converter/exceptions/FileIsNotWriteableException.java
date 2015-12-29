@@ -20,12 +20,10 @@ public class FileIsNotWriteableException extends Exception {
 	private static final long serialVersionUID = -775860483316598989L;
 
 	public FileIsNotWriteableException() {
-
 		super();
 	}
 
 	public FileIsNotWriteableException(final String message) {
-
 		super(message + "\n\n" + "The file couldn't be written");
 	}
 }

@@ -30,7 +30,6 @@ public abstract class AbstractMassSpectra implements IMassSpectra {
 	 * Initialize mass spectra and create a new internal mass spectra list.
 	 */
 	public AbstractMassSpectra() {
-
 		massSpectra = new ArrayList<IScanMSD>();
 	}
 

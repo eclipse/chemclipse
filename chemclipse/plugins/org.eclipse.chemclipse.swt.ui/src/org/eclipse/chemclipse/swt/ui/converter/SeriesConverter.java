@@ -43,7 +43,6 @@ public class SeriesConverter {
 	 * Use only static methods.
 	 */
 	private SeriesConverter() {
-
 	}
 
 	/*

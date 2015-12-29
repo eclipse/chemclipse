@@ -28,7 +28,6 @@ public class DatabasePathHelper {
 	 * @param identifier
 	 */
 	public DatabasePathHelper(String identifier) {
-
 		if(identifier == null) {
 			this.identifier = DEFAULT_IDENTIFIER;
 		} else {

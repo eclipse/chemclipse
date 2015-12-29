@@ -38,7 +38,6 @@ public class ChromatogramImportWizard extends Wizard implements IImportWizard {
 	private ImportDirectoryWizardPage importDirectoryWizardPage;
 
 	public ChromatogramImportWizard() {
-
 		setNeedsProgressMonitor(true);
 		setWindowTitle("Chromatogram Import Wizard");
 	}

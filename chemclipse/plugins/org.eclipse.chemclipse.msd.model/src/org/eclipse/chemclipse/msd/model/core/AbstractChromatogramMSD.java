@@ -75,7 +75,6 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 
 	// -----------------------------------------------------------------
 	public AbstractChromatogramMSD() {
-
 		peaks = new ArrayList<IChromatogramPeakMSD>();
 		targets = new HashSet<IChromatogramTargetMSD>();
 		ionTransitionSettings = new IonTransitionSettings();

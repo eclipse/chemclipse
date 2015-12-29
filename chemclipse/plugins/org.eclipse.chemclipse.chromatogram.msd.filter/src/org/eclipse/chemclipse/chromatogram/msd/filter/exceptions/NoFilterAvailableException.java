@@ -20,12 +20,10 @@ public class NoFilterAvailableException extends Exception {
 	private static final long serialVersionUID = 8539852210592884885L;
 
 	public NoFilterAvailableException() {
-
 		super();
 	}
 
 	public NoFilterAvailableException(String message) {
-
 		super(message);
 	}
 }

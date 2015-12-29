@@ -29,7 +29,6 @@ public class ChartUtil {
 	 * Use only static methods.
 	 */
 	private ChartUtil() {
-
 	}
 
 	/**

@@ -92,7 +92,6 @@ public final class ChromatogramConverterMSD {
 	 * This class has only static methods.
 	 */
 	private ChromatogramConverterMSD() {
-
 	}
 
 	/**

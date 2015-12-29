@@ -24,7 +24,6 @@ public class AnovaStatistics implements IAnovaStatistics {
 	Collection<double[]> anovaInput;
 
 	public <T> AnovaStatistics(IStatisticsElement<IStatisticsElement<T>> groupedStatisticsElement, Method getdata) {
-
 		List<IStatisticsElement<T>> groupedStatisticsElements = groupedStatisticsElement.getIncludedSourceElements();
 		this.anovaInput = new ArrayList<double[]>(groupedStatisticsElements.size());
 		if(groupedStatisticsElements.size() > 1) {

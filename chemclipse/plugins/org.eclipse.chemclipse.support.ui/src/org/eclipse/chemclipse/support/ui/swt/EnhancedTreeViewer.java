@@ -50,7 +50,6 @@ public class EnhancedTreeViewer extends Composite {
 	private IOperatingSystemUtils operatingSystemUtils;
 
 	public EnhancedTreeViewer(Composite parent, int style) {
-
 		super(parent, style);
 		setLayout(new FillLayout());
 		createControl();

@@ -38,7 +38,6 @@ public abstract class AbstractChromatogramPeakMSD extends AbstractPeakMSD implem
 	 * @throws PeakException
 	 */
 	public AbstractChromatogramPeakMSD(IPeakModelMSD peakModel, IChromatogramMSD chromatogram) throws IllegalArgumentException, PeakException {
-
 		super(peakModel);
 		validateChromatogram(chromatogram);
 		validateRetentionTimes(chromatogram, peakModel);
@@ -50,7 +49,6 @@ public abstract class AbstractChromatogramPeakMSD extends AbstractPeakMSD implem
 	}
 
 	public AbstractChromatogramPeakMSD(IPeakModelMSD peakModel, IChromatogramMSD chromatogram, String modelDescription) throws IllegalArgumentException, PeakException {
-
 		this(peakModel, chromatogram);
 		setModelDescription(modelDescription);
 	}

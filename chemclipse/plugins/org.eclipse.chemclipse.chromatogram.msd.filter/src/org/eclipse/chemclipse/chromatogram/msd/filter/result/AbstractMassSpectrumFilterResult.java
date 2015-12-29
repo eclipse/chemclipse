@@ -28,7 +28,6 @@ public abstract class AbstractMassSpectrumFilterResult implements IMassSpectrumF
 	 * @param description
 	 */
 	public AbstractMassSpectrumFilterResult(ResultStatus resultStatus, String description) {
-
 		if(resultStatus != null) {
 			this.resultStatus = resultStatus;
 		}

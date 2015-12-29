@@ -47,7 +47,6 @@ public class ChromatogramReports {
 	 * This class has only static methods.
 	 */
 	private ChromatogramReports() {
-
 	}
 
 	public static IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram chromatogram, IChromatogramReportSettings chromatogramReportSettings, String reportSupplierId, IProgressMonitor monitor) {

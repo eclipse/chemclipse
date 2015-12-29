@@ -30,7 +30,6 @@ public class MassSpectrumSelectionUpdateNotifier {
 	 * This class should not be instantiated.
 	 */
 	private MassSpectrumSelectionUpdateNotifier() {
-
 	}
 
 	/**

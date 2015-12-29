@@ -21,12 +21,10 @@ import org.eclipse.chemclipse.converter.io.support.IArrayReader;
 public class ArrayReaderTestImplementation extends AbstractArrayReader implements IArrayReader {
 
 	public ArrayReaderTestImplementation(byte[] data) {
-
 		super(data);
 	}
 
 	public ArrayReaderTestImplementation(File file) throws FileNotFoundException, IOException {
-
 		super(file);
 	}
 }

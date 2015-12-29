@@ -38,7 +38,6 @@ public class PeakValuesListUI extends Composite implements IChromatogramSelectio
 	private StringBuilder stringBuilder;
 
 	public PeakValuesListUI(Composite parent, int style) {
-
 		super(parent, style);
 		decimalFormat = new DecimalFormat();
 		stringBuilder = new StringBuilder();

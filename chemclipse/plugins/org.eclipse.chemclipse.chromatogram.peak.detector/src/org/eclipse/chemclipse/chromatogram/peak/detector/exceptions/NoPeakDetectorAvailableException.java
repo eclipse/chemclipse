@@ -20,12 +20,10 @@ public class NoPeakDetectorAvailableException extends Exception {
 	private static final long serialVersionUID = 1332000225579098214L;
 
 	public NoPeakDetectorAvailableException() {
-
 		super();
 	}
 
 	public NoPeakDetectorAvailableException(String message) {
-
 		super(message);
 	}
 }

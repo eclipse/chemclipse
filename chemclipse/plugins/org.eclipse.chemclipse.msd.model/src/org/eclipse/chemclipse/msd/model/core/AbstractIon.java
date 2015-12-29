@@ -40,12 +40,10 @@ public abstract class AbstractIon implements IIon {
 	private IIonTransition ionTransition;
 
 	public AbstractIon(double ion) throws IonLimitExceededException {
-
 		setIon(ion);
 	}
 
 	public AbstractIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
-
 		/*
 		 * Why is setIon(ion) ... used here instead of this.ion = ion?<br/> The
 		 * methods setIon(float ion) and setAbundance(float abundance) are
@@ -61,7 +59,6 @@ public abstract class AbstractIon implements IIon {
 	}
 
 	public AbstractIon(double ion, float abundance, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
-
 		/*
 		 * Why is setIon(ion) ... used here instead of this.ion = ion?<br/> The
 		 * methods setIon(float ion) and setAbundance(float abundance) are
@@ -82,7 +79,6 @@ public abstract class AbstractIon implements IIon {
 	}
 
 	public AbstractIon(IIon ion) throws AbundanceLimitExceededException, IonLimitExceededException, IonIsNullException {
-
 		/*
 		 * Why is setIon(ion) ... used here instead of this.ion = ion?<br/> The
 		 * methods setIon(float ion) and setAbundance(float abundance) are
@@ -102,7 +98,6 @@ public abstract class AbstractIon implements IIon {
 	}
 
 	public AbstractIon(IIon ion, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonIsNullException, IonTransitionIsNullException {
-
 		/*
 		 * Why is setIon(ion) ... used here instead of this.ion = ion?<br/> The
 		 * methods setIon(float ion) and setAbundance(float abundance) are

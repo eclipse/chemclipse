@@ -36,7 +36,6 @@ public class IonAbundanceComparator implements Comparator<IIon>, Serializable {
 	 * The sort order is per default value ascending.
 	 */
 	public IonAbundanceComparator() {
-
 		sortOrder = SortOrder.ASC;
 	}
 
@@ -47,7 +46,6 @@ public class IonAbundanceComparator implements Comparator<IIon>, Serializable {
 	 * @param sortOrder
 	 */
 	public IonAbundanceComparator(SortOrder sortOrder) {
-
 		this.sortOrder = sortOrder;
 	}
 

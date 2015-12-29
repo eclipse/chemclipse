@@ -27,7 +27,6 @@ public class LabelFieldEditor extends FieldEditor {
 	private static final String LABEL_X = "LABELX";
 
 	public LabelFieldEditor(String labelText, Composite parent) {
-
 		super(LABEL_X, labelText, parent);
 	}
 

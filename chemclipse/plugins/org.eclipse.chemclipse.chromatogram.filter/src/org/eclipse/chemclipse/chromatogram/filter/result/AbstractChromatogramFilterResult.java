@@ -29,7 +29,6 @@ public abstract class AbstractChromatogramFilterResult implements IChromatogramF
 	 * @param description
 	 */
 	public AbstractChromatogramFilterResult(ResultStatus resultStatus, String description) {
-
 		if(resultStatus != null) {
 			this.resultStatus = resultStatus;
 		}

@@ -22,12 +22,10 @@ public class IonInputValidator implements IInputValidator {
 	private String[] items;
 
 	public IonInputValidator() {
-
 		items = new String[]{};
 	}
 
 	public IonInputValidator(List list) {
-
 		if(list != null) {
 			items = list.getItems();
 		} else {

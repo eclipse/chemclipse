@@ -32,7 +32,6 @@ public abstract class AbstractChromatogramOverlayView extends AbstractChromatogr
 	private EPartService partService;
 
 	public AbstractChromatogramOverlayView(MPart part, EPartService partService, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 		this.partService = partService;
 	}

@@ -24,7 +24,6 @@ public enum SegmentWidth {
 	private int width;
 
 	private SegmentWidth(int segmentWidth) {
-
 		this.width = segmentWidth;
 	}
 

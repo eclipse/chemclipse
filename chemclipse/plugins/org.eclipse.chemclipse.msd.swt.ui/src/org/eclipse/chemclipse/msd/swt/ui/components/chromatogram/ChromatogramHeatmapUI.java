@@ -44,7 +44,6 @@ public class ChromatogramHeatmapUI extends Composite {
 	private Composite header;
 
 	public ChromatogramHeatmapUI(Composite parent, int style) {
-
 		super(parent, style);
 		initialize(parent);
 	}

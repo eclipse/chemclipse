@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks;
 public class SettingStatus extends AbstractSettingStatus implements ISettingStatus {
 
 	public SettingStatus(boolean report, boolean sumOn) {
-
 		super(report, sumOn);
 	}
 }

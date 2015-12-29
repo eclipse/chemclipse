@@ -41,7 +41,6 @@ public class OverviewIntegrationResultsUI extends Composite {
 	private IOperatingSystemUtils operatingSystemUtils;
 
 	public OverviewIntegrationResultsUI(Composite parent, int style) {
-
 		super(parent, style);
 		operatingSystemUtils = new OperatingSystemUtils();
 		initialize();

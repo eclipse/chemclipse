@@ -31,17 +31,14 @@ public class ScanIon extends AbstractScanIon implements IScanIon {
 	public static final double MAX_Ion = 65535.0d;
 
 	public ScanIon(double ion) throws IonLimitExceededException {
-
 		super(ion);
 	}
 
 	public ScanIon(double ion, boolean ignoreAbundanceLimit) throws IonLimitExceededException {
-
 		super(ion, ignoreAbundanceLimit);
 	}
 
 	public ScanIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
-
 		super(ion, abundance);
 	}
 

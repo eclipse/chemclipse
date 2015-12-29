@@ -40,7 +40,6 @@ public class ReportSupplierSelectionWizardPage extends WizardPage {
 	boolean appendReports = false;
 
 	public ReportSupplierSelectionWizardPage(String pageName, String title, ImageDescriptor titleImage) {
-
 		super(pageName, title, titleImage);
 	}
 

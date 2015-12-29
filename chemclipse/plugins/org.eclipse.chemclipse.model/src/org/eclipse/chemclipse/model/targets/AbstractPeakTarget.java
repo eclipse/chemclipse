@@ -29,7 +29,6 @@ public abstract class AbstractPeakTarget extends AbstractIdentificationTarget im
 	 * @throws ReferenceMustNotBeNullException
 	 */
 	public AbstractPeakTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
-
 		super(libraryInformation, comparisonResult);
 	}
 

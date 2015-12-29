@@ -61,7 +61,6 @@ public abstract class AbstractExtendedMassSpectrumUI extends AbstractViewMassSpe
 	private StringBuilder stringBuilder;
 
 	public AbstractExtendedMassSpectrumUI(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
-
 		super(parent, style);
 		this.massValueDisplayPrecision = massValueDisplayPrecision;
 		decimalFormatExact = new DecimalFormat("0.0#####");

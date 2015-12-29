@@ -22,7 +22,6 @@ public abstract class AbstractMassSpectrumPurityResult implements IMassSpectrumP
 	private float reverseFitValue = 0;
 
 	public AbstractMassSpectrumPurityResult(IScanMSD unknown, IScanMSD reference) throws ComparisonException {
-
 		if(unknown == null) {
 			throw new ComparisonException("The unknown must not be null.");
 		}

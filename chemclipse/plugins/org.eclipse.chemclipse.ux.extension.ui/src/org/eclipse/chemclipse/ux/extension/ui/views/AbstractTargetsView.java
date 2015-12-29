@@ -63,7 +63,6 @@ public abstract class AbstractTargetsView {
 	private IEventBroker eventBroker;
 
 	public AbstractTargetsView(IStructuredContentProvider contentProvider, IEventBroker eventBroker) {
-
 		this.contentProvider = contentProvider;
 		map = new HashMap<String, Object>();
 		this.eventBroker = eventBroker;

@@ -46,7 +46,6 @@ public class PeakMassSpectrumIonsListView extends AbstractChromatogramSelectionM
 
 	@Inject
 	public PeakMassSpectrumIonsListView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

@@ -57,7 +57,6 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 	 * @param numberOfScans
 	 */
 	public ExtractedIonSignals(int numberOfScans) {
-
 		if(numberOfScans <= 0) {
 			numberOfScans = 0;
 			startScan = 0;
@@ -76,7 +75,6 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 	 * @param chromatogram
 	 */
 	public ExtractedIonSignals(int numberOfScans, IChromatogramMSD chromatogram) {
-
 		this(numberOfScans);
 		this.chromatogram = chromatogram;
 	}
@@ -90,7 +88,6 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 	 * @param stopScan
 	 */
 	public ExtractedIonSignals(int startScan, int stopScan) {
-
 		startScan = (startScan <= 0) ? 0 : startScan;
 		stopScan = (stopScan <= 0) ? 0 : stopScan;
 		int start = Math.min(startScan, stopScan);
@@ -116,7 +113,6 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 	 * @param chromatogram
 	 */
 	public ExtractedIonSignals(int startScan, int stopScan, IChromatogramMSD chromatogram) {
-
 		this(startScan, stopScan);
 		this.chromatogram = chromatogram;
 	}

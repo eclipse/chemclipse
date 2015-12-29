@@ -51,7 +51,6 @@ public abstract class ChromatogramPropertySource implements IPropertySource {
 	private final IChromatogramMSD chromatogram;
 
 	public ChromatogramPropertySource(IChromatogramMSD chromatogram) {
-
 		this.chromatogram = chromatogram;
 	}
 

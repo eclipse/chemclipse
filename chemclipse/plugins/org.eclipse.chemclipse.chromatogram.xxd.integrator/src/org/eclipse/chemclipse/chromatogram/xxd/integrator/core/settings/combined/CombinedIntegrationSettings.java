@@ -17,7 +17,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IP
 public class CombinedIntegrationSettings extends AbstractCombinedIntegrationSettings implements ICombinedIntegrationSettings {
 
 	public CombinedIntegrationSettings(IChromatogramIntegrationSettings chromatogramIntegrationSettings, IPeakIntegrationSettings peakIntegrationSettings) {
-
 		super(chromatogramIntegrationSettings, peakIntegrationSettings);
 	}
 }

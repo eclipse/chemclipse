@@ -16,12 +16,10 @@ public class FileIsEmptyException extends Exception {
 	private static final long serialVersionUID = -7431013143842747014L;
 
 	public FileIsEmptyException() {
-
 		super();
 	}
 
 	public FileIsEmptyException(String message) {
-
 		super(message);
 	}
 }

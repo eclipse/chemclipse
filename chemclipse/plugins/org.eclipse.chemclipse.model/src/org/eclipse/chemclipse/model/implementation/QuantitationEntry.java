@@ -17,7 +17,6 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 public class QuantitationEntry extends AbstractQuantitationEntry implements IQuantitationEntry {
 
 	public QuantitationEntry(String name, double concentration, String concentrationUnit, double area) {
-
 		super(name, concentration, concentrationUnit, area);
 	}
 }

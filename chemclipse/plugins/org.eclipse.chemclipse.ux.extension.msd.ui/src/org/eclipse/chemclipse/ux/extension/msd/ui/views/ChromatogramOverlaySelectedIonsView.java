@@ -38,7 +38,6 @@ public class ChromatogramOverlaySelectedIonsView extends AbstractChromatogramOve
 
 	@Inject
 	public ChromatogramOverlaySelectedIonsView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

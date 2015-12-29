@@ -27,7 +27,6 @@ public class CombinedIntegratorSupport implements ICombinedIntegratorSupport {
 	 * Creates a new suppliers list.
 	 */
 	public CombinedIntegratorSupport() {
-
 		suppliers = new ArrayList<ICombinedIntegratorSupplier>();
 	}
 

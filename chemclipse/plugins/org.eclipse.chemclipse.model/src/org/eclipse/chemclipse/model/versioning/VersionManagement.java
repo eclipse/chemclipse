@@ -37,7 +37,6 @@ public class VersionManagement implements IVersionManagement {
 	private boolean baseRevision;
 
 	public VersionManagement() {
-
 		initializeStorageDirectories();
 		// TODO baseRevision
 		baseRevision = true;

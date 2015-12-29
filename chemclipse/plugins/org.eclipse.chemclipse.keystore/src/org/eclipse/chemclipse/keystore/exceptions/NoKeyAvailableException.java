@@ -20,12 +20,10 @@ public class NoKeyAvailableException extends Exception {
 	private static final long serialVersionUID = -5260896469442694745L;
 
 	public NoKeyAvailableException() {
-
 		super();
 	}
 
 	public NoKeyAvailableException(String message) {
-
 		super(message);
 	}
 }

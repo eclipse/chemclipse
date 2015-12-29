@@ -48,7 +48,6 @@ public class DatabaseFieldEditor extends StringFieldEditor {
 	private String title;
 
 	public DatabaseFieldEditor(String name, String labelText, IDatabases databases, IDatabasePreferences databasePreferences, String title, Composite parent) {
-
 		super(name, labelText, parent);
 		this.databases = databases;
 		this.databasePreferences = databasePreferences;

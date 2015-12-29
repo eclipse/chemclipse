@@ -22,7 +22,6 @@ public class DetectorSlope extends Slope implements IDetectorSlope {
 	private int retentionTime;
 
 	public DetectorSlope(IPoint p1, IPoint p2, int retentionTime) {
-
 		super(p1, p2);
 		this.retentionTime = retentionTime;
 	}

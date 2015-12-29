@@ -34,7 +34,6 @@ public class SeriesConverterWSD {
 	 * Use only static methods.
 	 */
 	private SeriesConverterWSD() {
-
 	}
 
 	/**

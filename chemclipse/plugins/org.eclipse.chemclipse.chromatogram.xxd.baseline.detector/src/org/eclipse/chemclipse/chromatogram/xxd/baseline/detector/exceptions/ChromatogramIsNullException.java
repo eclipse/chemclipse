@@ -20,12 +20,10 @@ public class ChromatogramIsNullException extends Exception {
 	private static final long serialVersionUID = 7708240421417627583L;
 
 	public ChromatogramIsNullException() {
-
 		super();
 	}
 
 	public ChromatogramIsNullException(String message) {
-
 		super(message);
 	}
 }

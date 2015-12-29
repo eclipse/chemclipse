@@ -55,7 +55,6 @@ public class PeakConverterMSD {
 	 * This class has only static methods.
 	 */
 	private PeakConverterMSD() {
-
 	}
 
 	public static IPeakImportConverterProcessingInfo convert(File file, String converterId, IProgressMonitor monitor) {

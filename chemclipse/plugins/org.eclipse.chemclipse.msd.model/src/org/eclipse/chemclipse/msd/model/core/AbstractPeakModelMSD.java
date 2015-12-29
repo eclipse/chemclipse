@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 public abstract class AbstractPeakModelMSD extends AbstractPeakModel implements IPeakModelMSD {
 
 	public AbstractPeakModelMSD(IPeakMassSpectrum peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
-
 		super(peakMaximum, peakIntensityValues, startBackgroundAbundance, stopBackgroundAbundance);
 	}
 

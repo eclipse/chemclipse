@@ -54,7 +54,6 @@ public class LogFileEditor {
 
 	@Inject
 	public LogFileEditor(Composite parent, MInputPart inputPart, final MDirtyable dirtyable) {
-
 		this.dirtyable = dirtyable;
 		parent.setLayout(new FillLayout());
 		this.inputPart = inputPart;

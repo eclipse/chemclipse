@@ -62,7 +62,6 @@ public class MassSpectrumListUI extends Composite {
 	private List<IListItemsRemoveListener> listItemRemoveListeners;
 
 	public MassSpectrumListUI(Composite parent, int style) {
-
 		super(parent, style);
 		//
 		listItemRemoveListeners = new ArrayList<IListItemsRemoveListener>();

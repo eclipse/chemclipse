@@ -26,17 +26,14 @@ public class PeakIon extends AbstractPeakIon implements IPeakIon {
 	private static final long serialVersionUID = -4094514166910811629L;
 
 	public PeakIon(double ion) throws IonLimitExceededException {
-
 		super(ion);
 	}
 
 	public PeakIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
-
 		super(ion, abundance);
 	}
 
 	public PeakIon(IIon ion) throws AbundanceLimitExceededException, IonLimitExceededException {
-
 		super(ion.getIon(), ion.getAbundance());
 	}
 }

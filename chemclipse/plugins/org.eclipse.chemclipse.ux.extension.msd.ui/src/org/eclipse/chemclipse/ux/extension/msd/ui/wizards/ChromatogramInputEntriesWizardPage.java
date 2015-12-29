@@ -34,7 +34,6 @@ public class ChromatogramInputEntriesWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	protected ChromatogramInputEntriesWizardPage(String pageName, String title, String description) {
-
 		super(pageName);
 		setTitle(title);
 		setDescription(description);

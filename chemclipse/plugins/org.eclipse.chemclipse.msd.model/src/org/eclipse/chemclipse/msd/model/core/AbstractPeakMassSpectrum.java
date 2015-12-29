@@ -32,7 +32,6 @@ public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectr
 	private static final Logger logger = Logger.getLogger(AbstractPeakMassSpectrum.class);
 
 	public AbstractPeakMassSpectrum() {
-
 	}
 
 	/**
@@ -45,7 +44,6 @@ public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectr
 	 * @param intensity
 	 */
 	public AbstractPeakMassSpectrum(IPeakMassSpectrum peakMassSpectrum, float intensity) throws IllegalArgumentException {
-
 		if(peakMassSpectrum == null) {
 			throw new IllegalArgumentException("The peakMassSpectrum must not be null");
 		}
@@ -99,7 +97,6 @@ public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectr
 	 * @param actualPercentageIntensity
 	 */
 	public AbstractPeakMassSpectrum(IScanMSD massSpectrum, float actualPercentageIntensity) throws IllegalArgumentException {
-
 		if(massSpectrum == null) {
 			throw new IllegalArgumentException("The massSpectrum must not be null");
 		}
@@ -126,7 +123,6 @@ public abstract class AbstractPeakMassSpectrum extends AbstractRegularMassSpectr
 	}
 
 	public AbstractPeakMassSpectrum(IScanMSD massSpectrum) throws IllegalArgumentException {
-
 		if(massSpectrum == null) {
 			throw new IllegalArgumentException("The massSpectrum must not be null");
 		}

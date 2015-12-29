@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.wsd.converter.ui.Activator;
 public class ConverterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public ConverterPreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("WSD Converter");

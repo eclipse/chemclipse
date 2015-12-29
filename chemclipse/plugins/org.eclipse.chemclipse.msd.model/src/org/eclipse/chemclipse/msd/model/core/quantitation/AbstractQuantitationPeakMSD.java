@@ -20,7 +20,6 @@ public abstract class AbstractQuantitationPeakMSD implements IQuantitationPeakMS
 	private IPeakMSD referencePeakMSD;
 
 	public AbstractQuantitationPeakMSD(IPeakMSD referencePeakMSD, double concentration, String concentrationUnit) {
-
 		this.referencePeakMSD = referencePeakMSD;
 		this.concentration = concentration;
 		this.concentrationUnit = concentrationUnit;

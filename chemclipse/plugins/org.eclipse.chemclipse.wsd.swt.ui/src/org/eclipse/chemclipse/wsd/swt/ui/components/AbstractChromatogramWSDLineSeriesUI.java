@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Composite;
 public abstract class AbstractChromatogramWSDLineSeriesUI extends AbstractChromatogramLineSeriesUI implements IChromatogramSelectionWSDUpdateNotifier {
 
 	public AbstractChromatogramWSDLineSeriesUI(Composite parent, int style) {
-
 		super(parent, style, new AxisTitlesIntensityScale());
 	}
 

@@ -20,12 +20,10 @@ public class NoMassSpectrumComparatorAvailableException extends Exception {
 	private static final long serialVersionUID = 2331801993304774591L;
 
 	public NoMassSpectrumComparatorAvailableException() {
-
 		super();
 	}
 
 	public NoMassSpectrumComparatorAvailableException(String message) {
-
 		super(message);
 	}
 }

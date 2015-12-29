@@ -20,7 +20,6 @@ public abstract class AbstractCombinedIntegrationSettings implements ICombinedIn
 	private IPeakIntegrationSettings peakIntegrationSettings;
 
 	public AbstractCombinedIntegrationSettings(IChromatogramIntegrationSettings chromatogramIntegrationSettings, IPeakIntegrationSettings peakIntegrationSettings) {
-
 		this.chromatogramIntegrationSettings = chromatogramIntegrationSettings;
 		this.peakIntegrationSettings = peakIntegrationSettings;
 	}

@@ -16,12 +16,10 @@ public class NoRetentionIndicesConverterAvailableException extends Exception {
 	private static final long serialVersionUID = -3182700779195097912L;
 
 	public NoRetentionIndicesConverterAvailableException() {
-
 		super();
 	}
 
 	public NoRetentionIndicesConverterAvailableException(String message) {
-
 		super(message);
 	}
 }

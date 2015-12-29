@@ -38,7 +38,6 @@ public class MirroredMultipleChromatogramOffsetUI extends AbstractViewChromatogr
 	private IOffset offset;
 
 	public MirroredMultipleChromatogramOffsetUI(Composite parent, int style, IOffset offset, IAxisTitles axisTitles) {
-
 		super(parent, style, axisTitles);
 	}
 

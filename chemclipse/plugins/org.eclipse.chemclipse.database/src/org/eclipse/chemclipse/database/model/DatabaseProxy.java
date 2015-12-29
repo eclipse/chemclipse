@@ -21,20 +21,17 @@ public class DatabaseProxy implements IDatabaseProxy {
 	private String password = AbstractDatabase.DEFAULT_USER_PASSWORD;
 
 	public DatabaseProxy(String databaseUrl, String databaseName) {
-
 		this.databaseUrl = databaseUrl;
 		this.databaseName = databaseName;
 	}
 
 	public DatabaseProxy(String databaseUrl, String databaseName, String username, String password) {
-
 		this(databaseUrl, databaseName);
 		this.username = DatabasePathHelper.isRemoteDatabasePath(databaseUrl) ? username : AbstractDatabase.DEFAULT_USER_NAME;
 		this.password = DatabasePathHelper.isRemoteDatabasePath(databaseUrl) ? password : AbstractDatabase.DEFAULT_USER_PASSWORD;
 	}
 
 	public DatabaseProxy(String databaseUrl, String databaseName, IDatabaseSettings databaseSettings) {
-
 		this(databaseUrl, databaseName);
 		this.username = DatabasePathHelper.isRemoteDatabasePath(databaseUrl) ? databaseSettings.getUsername() : AbstractDatabase.DEFAULT_USER_NAME;
 		this.password = DatabasePathHelper.isRemoteDatabasePath(databaseUrl) ? databaseSettings.getPassword() : AbstractDatabase.DEFAULT_USER_PASSWORD;

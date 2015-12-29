@@ -19,20 +19,17 @@ public abstract class AbstractQuantitationSignalMSD implements IQuantitationSign
 	private boolean use;
 
 	public AbstractQuantitationSignalMSD(double ion, float relativeResponse) {
-
 		this.ion = ion;
 		this.relativeResponse = relativeResponse;
 		this.use = true;
 	}
 
 	public AbstractQuantitationSignalMSD(double ion, float relativeResponse, double uncertainty) {
-
 		this(ion, relativeResponse);
 		this.uncertainty = uncertainty;
 	}
 
 	public AbstractQuantitationSignalMSD(double ion, float relativeResponse, double uncertainty, boolean use) {
-
 		this(ion, relativeResponse);
 		this.uncertainty = uncertainty;
 		this.use = use;

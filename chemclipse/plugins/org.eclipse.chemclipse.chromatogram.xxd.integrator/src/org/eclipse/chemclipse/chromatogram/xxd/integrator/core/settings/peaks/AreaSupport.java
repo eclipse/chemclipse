@@ -24,7 +24,6 @@ public class AreaSupport implements IAreaSupport {
 	private List<IRetentionTimeRange> ranges;
 
 	public AreaSupport() {
-
 		ranges = new ArrayList<IRetentionTimeRange>();
 	}
 

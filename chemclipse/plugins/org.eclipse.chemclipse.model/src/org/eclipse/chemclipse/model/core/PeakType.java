@@ -44,7 +44,6 @@ public enum PeakType {
 	private String description = "";
 
 	private PeakType(String description) {
-
 		this.description = description;
 	}
 

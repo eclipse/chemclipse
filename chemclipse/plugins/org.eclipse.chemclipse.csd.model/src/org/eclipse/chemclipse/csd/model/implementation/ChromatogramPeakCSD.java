@@ -20,12 +20,10 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
 public class ChromatogramPeakCSD extends AbstractChromatogramPeakCSD implements IChromatogramPeakCSD {
 
 	public ChromatogramPeakCSD(IPeakModelCSD peakModel, IChromatogramCSD chromatogram) throws IllegalArgumentException, PeakException {
-
 		super(peakModel, chromatogram);
 	}
 
 	public ChromatogramPeakCSD(IPeakModelCSD peakModel, IChromatogramCSD chromatogram, String modelDescription) throws IllegalArgumentException, PeakException {
-
 		super(peakModel, chromatogram, modelDescription);
 	}
 }

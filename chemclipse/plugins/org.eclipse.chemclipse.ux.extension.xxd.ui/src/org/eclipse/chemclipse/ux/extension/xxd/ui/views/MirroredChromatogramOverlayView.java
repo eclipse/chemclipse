@@ -37,7 +37,6 @@ public class MirroredChromatogramOverlayView extends AbstractChromatogramOverlay
 
 	@Inject
 	public MirroredChromatogramOverlayView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

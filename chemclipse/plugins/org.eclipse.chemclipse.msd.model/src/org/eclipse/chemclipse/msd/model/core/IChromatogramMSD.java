@@ -27,7 +27,8 @@ public interface IChromatogramMSD extends IChromatogram, IChromatogramPeaksMSD, 
 	 * Returns a new mass spectrum from the scan with the given scan number from
 	 * the chromatogram.<br/>
 	 * The mass spectrum does not contain the ion specified in
-	 * excludedIons.</br> To retrieve the mass spectrum, it must be
+	 * excludedIons.</br>
+	 * To retrieve the mass spectrum, it must be
 	 * deeply cloned and the given excluded ions must be removed.<br/>
 	 * You can test the retrieved mass spectrum with "instanceof" if it is a
 	 * kind of ISupplierMassSpectrum. If no scan is available, null will be
@@ -104,7 +105,7 @@ public interface IChromatogramMSD extends IChromatogram, IChromatogramPeaksMSD, 
 	 * Used e.g. by triple quadrupol experiments.
 	 * 
 	 * @return {@link IIonTransitionSettings
-
+	 * 
 	 */
 	IIonTransitionSettings getIonTransitionSettings();
 }

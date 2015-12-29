@@ -34,7 +34,6 @@ public class TransitionCombinedCycleNumberMassSpectrumView extends AbstractChrom
 
 	@Inject
 	public TransitionCombinedCycleNumberMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

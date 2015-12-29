@@ -18,12 +18,10 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 public class PeakMSD extends AbstractPeakMSD implements IPeakMSD {
 
 	public PeakMSD(IPeakModelMSD peakModel, String modelDescription) throws IllegalArgumentException {
-
 		super(peakModel, modelDescription);
 	}
 
 	public PeakMSD(IPeakModelMSD peakModel) throws IllegalArgumentException {
-
 		super(peakModel);
 	}
 }

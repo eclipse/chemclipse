@@ -26,7 +26,6 @@ public class CombinedMassSpectrumCalculator implements ICombinedMassSpectrumCalc
 	private Map<Integer, Double> combinedMassSpectrum;
 
 	public CombinedMassSpectrumCalculator() {
-
 		combinedMassSpectrum = new HashMap<Integer, Double>();
 	}
 

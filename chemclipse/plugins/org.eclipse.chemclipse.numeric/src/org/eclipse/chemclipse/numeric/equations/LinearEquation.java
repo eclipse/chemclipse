@@ -30,7 +30,6 @@ public class LinearEquation implements IEquation {
 	 * @param b
 	 */
 	public LinearEquation(double a, double b) {
-
 		this.a = a;
 		this.b = b;
 	}

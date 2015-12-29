@@ -31,7 +31,6 @@ public class PeakIntegrationEntriesUI {
 	private int bounds[] = {100, 100};
 
 	public PeakIntegrationEntriesUI(Composite parent, int style) {
-
 		parent.setLayout(new FillLayout());
 		/*
 		 * E.g. Scan

@@ -27,7 +27,6 @@ public abstract class AbstractPeakIntegrationSettings extends AbstractIntegratio
 	private List<IReportDecider> reportDeciders;
 
 	public AbstractPeakIntegrationSettings() {
-
 		selectedIons = new MarkedIons();
 		areaSupport = new AreaSupport();
 		integratorSupport = new IntegrationSupport();

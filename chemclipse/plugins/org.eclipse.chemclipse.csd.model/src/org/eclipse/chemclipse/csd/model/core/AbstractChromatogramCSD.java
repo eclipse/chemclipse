@@ -33,7 +33,6 @@ public abstract class AbstractChromatogramCSD extends AbstractChromatogram imple
 	private INoiseCalculator noiseCalculator;
 
 	public AbstractChromatogramCSD() {
-
 		peaks = new ArrayList<IChromatogramPeakCSD>();
 		targets = new HashSet<IChromatogramTargetCSD>();
 		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();

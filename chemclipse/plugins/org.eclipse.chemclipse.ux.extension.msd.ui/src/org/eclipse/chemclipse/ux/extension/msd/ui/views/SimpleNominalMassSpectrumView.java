@@ -35,7 +35,6 @@ public class SimpleNominalMassSpectrumView extends AbstractMassSpectrumSelection
 
 	@Inject
 	public SimpleNominalMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

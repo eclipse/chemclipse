@@ -14,12 +14,10 @@ package org.eclipse.chemclipse.model.identifier;
 public abstract class AbstractChromatogramComparisonResult extends AbstractComparisonResult implements IChromatogramComparisonResult {
 
 	public AbstractChromatogramComparisonResult(float matchFactor, float reverseMatchFactor) {
-
 		super(matchFactor, reverseMatchFactor);
 	}
 
 	public AbstractChromatogramComparisonResult(float matchFactor, float reverseMatchFactor, float probability) {
-
 		super(matchFactor, reverseMatchFactor, probability);
 	}
 }

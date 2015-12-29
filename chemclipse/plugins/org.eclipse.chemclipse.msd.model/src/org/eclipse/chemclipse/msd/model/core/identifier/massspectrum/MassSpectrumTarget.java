@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 public class MassSpectrumTarget extends AbstractMassSpectrumTarget implements IMassSpectrumTarget {
 
 	public MassSpectrumTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
-
 		super(libraryInformation, comparisonResult);
 	}
 }

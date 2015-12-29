@@ -34,7 +34,6 @@ public class BackgroundAbundanceRange implements IBackgroundAbundanceRange {
 	 * @param stopBackgroundAbundance
 	 */
 	public BackgroundAbundanceRange(float startBackgroundAbundance, float stopBackgroundAbundance) {
-
 		if(startBackgroundAbundance < MIN_BACKGROUND_ABUNDANCE || startBackgroundAbundance > MAX_BACKGROUND_ABUNDANCE) {
 			startBackgroundAbundance = MIN_BACKGROUND_ABUNDANCE;
 		}

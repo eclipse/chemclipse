@@ -29,7 +29,6 @@ public class IntegrationSupport implements IIntegrationSupport {
 	private List<IRetentionTimeRange> ranges;
 
 	public IntegrationSupport() {
-
 		ranges = new ArrayList<IRetentionTimeRange>();
 	}
 

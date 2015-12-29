@@ -35,7 +35,6 @@ public class NominalMassSpectrumView extends AbstractChromatogramSelectionMSDVie
 
 	@Inject
 	public NominalMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

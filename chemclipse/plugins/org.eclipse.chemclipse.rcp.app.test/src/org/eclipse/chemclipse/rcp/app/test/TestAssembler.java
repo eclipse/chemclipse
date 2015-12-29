@@ -26,7 +26,6 @@ public class TestAssembler {
 	private Bundle[] bundles;
 
 	public TestAssembler(Bundle[] bundles) {
-
 		this.bundles = bundles;
 	}
 

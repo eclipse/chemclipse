@@ -82,7 +82,6 @@ public class SelectViewDialog extends Dialog implements ISelectionChangedListene
 
 	@Inject
 	public SelectViewDialog(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
-
 		super(shell);
 		setShellStyle(getShellStyle() | SWT.SHEET);
 	}

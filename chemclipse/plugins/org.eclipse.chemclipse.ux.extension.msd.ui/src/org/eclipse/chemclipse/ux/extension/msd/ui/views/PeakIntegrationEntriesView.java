@@ -36,7 +36,6 @@ public class PeakIntegrationEntriesView extends AbstractChromatogramSelectionMSD
 
 	@Inject
 	public PeakIntegrationEntriesView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

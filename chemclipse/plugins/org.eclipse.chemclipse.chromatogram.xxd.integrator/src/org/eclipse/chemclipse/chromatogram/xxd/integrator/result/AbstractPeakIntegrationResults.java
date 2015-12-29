@@ -23,7 +23,6 @@ public abstract class AbstractPeakIntegrationResults implements IPeakIntegration
 	private List<IPeakIntegrationResult> peakIntegrationResults;
 
 	public AbstractPeakIntegrationResults() {
-
 		peakIntegrationResults = new ArrayList<IPeakIntegrationResult>();
 	}
 

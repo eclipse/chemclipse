@@ -27,7 +27,6 @@ public class ChromatogramFileExplorerLabelProvider extends LabelProvider impleme
 	private IChromatogramIdentifier chromatogramIdentifier;
 
 	public ChromatogramFileExplorerLabelProvider(IChromatogramIdentifier chromatogramIdentifier) {
-
 		this.chromatogramIdentifier = chromatogramIdentifier;
 	}
 

@@ -56,7 +56,6 @@ public class DatabaseSelectDialog extends Dialog {
 	private String selectedDatabase;
 
 	public DatabaseSelectDialog(Shell parentShell, IDatabases databases, IDatabaseSettings databaseSettings, DatabaseSelectEntry databaseSelectEntry, String title) {
-
 		super(parentShell);
 		this.title = title;
 		this.message = "Select a database.";

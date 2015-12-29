@@ -27,7 +27,6 @@ public class LibraryInputEntriesWizard extends Wizard {
 	private String description;
 
 	public LibraryInputEntriesWizard(String pageName, String title, String description) {
-
 		super();
 		setNeedsProgressMonitor(true);
 		this.pageName = pageName;

@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.swt.ui.support.AxisTitlesMassScale;
 public abstract class AbstractChromatogramMSDLineSeriesUI extends AbstractChromatogramLineSeriesUI implements IChromatogramSelectionMSDUpdateNotifier {
 
 	public AbstractChromatogramMSDLineSeriesUI(Composite parent, int style) {
-
 		super(parent, style, new AxisTitlesMassScale());
 	}
 

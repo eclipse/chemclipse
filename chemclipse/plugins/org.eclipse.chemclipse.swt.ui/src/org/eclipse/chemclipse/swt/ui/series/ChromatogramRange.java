@@ -19,7 +19,6 @@ public class ChromatogramRange implements IChromatogramRange {
 	private float stopAbundance;
 
 	public ChromatogramRange() {
-
 		reset();
 	}
 

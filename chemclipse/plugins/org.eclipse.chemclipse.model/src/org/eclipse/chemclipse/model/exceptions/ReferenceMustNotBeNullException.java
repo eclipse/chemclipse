@@ -20,12 +20,10 @@ public class ReferenceMustNotBeNullException extends Exception {
 	private static final long serialVersionUID = 4708623844737508517L;
 
 	public ReferenceMustNotBeNullException() {
-
 		super();
 	}
 
 	public ReferenceMustNotBeNullException(String message) {
-
 		super(message);
 	}
 }

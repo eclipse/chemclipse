@@ -27,13 +27,11 @@ public abstract class AbstractMarker implements ICustomPaintListener, IMarker {
 	private Color backgroundColor;
 
 	public AbstractMarker() {
-
 		foregroundColor = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 		backgroundColor = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
 	}
 
 	public AbstractMarker(String marker) {
-
 		this();
 		this.marker = marker;
 	}

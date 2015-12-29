@@ -21,12 +21,10 @@ public class MarkedIonTransitions implements IMarkedIonTransitions {
 	private Set<IMarkedIonTransition> markedIonTransitions;
 
 	public MarkedIonTransitions() {
-
 		markedIonTransitions = new HashSet<IMarkedIonTransition>();
 	}
 
 	public MarkedIonTransitions(Set<IIonTransition> ionTransitions) {
-
 		this();
 		for(IIonTransition ionTransition : ionTransitions) {
 			IMarkedIonTransition markedIonTransition = new MarkedIonTransition(ionTransition);

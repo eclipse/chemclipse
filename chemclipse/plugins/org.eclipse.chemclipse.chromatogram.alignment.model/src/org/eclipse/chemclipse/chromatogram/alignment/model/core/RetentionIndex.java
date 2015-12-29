@@ -22,17 +22,14 @@ public class RetentionIndex implements IRetentionIndex, Comparable<IRetentionInd
 	private String name = "";
 
 	public RetentionIndex() {
-
 	}
 
 	public RetentionIndex(final int retentionTime, final float index) {
-
 		setCkeckedRetentionTime(retentionTime);
 		setCheckedIndex(index);
 	}
 
 	public RetentionIndex(final int retentionTime, final float index, final String name) {
-
 		this(retentionTime, index);
 		this.name = name;
 	}

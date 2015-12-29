@@ -73,7 +73,6 @@ public class WelcomeView {
 
 	@Inject
 	public WelcomeView(Composite parent) {
-
 		initializeContent(parent);
 	}
 

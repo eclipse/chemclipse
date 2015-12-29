@@ -20,12 +20,10 @@ public class NoExtractedIonSignalStoredException extends Exception {
 	private static final long serialVersionUID = 207787577401753126L;
 
 	public NoExtractedIonSignalStoredException() {
-
 		super();
 	}
 
 	public NoExtractedIonSignalStoredException(String message) {
-
 		super(message);
 	}
 }

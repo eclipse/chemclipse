@@ -34,7 +34,6 @@ public class ExcludedIonChromatogramView extends AbstractChromatogramSelectionMS
 
 	@Inject
 	public ExcludedIonChromatogramView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

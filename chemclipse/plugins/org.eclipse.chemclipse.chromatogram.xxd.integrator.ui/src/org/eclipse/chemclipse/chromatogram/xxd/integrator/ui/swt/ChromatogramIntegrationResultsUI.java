@@ -39,7 +39,6 @@ public class ChromatogramIntegrationResultsUI extends Composite {
 	private int bounds[] = {150, 150, 100};
 
 	public ChromatogramIntegrationResultsUI(Composite parent, int style) {
-
 		super(parent, style);
 		initialize();
 	}

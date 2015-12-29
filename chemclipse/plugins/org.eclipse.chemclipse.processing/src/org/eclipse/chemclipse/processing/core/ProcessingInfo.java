@@ -14,12 +14,10 @@ package org.eclipse.chemclipse.processing.core;
 public class ProcessingInfo extends AbstractProcessingInfo implements IProcessingInfo {
 
 	public ProcessingInfo() {
-
 		super();
 	}
 
 	public ProcessingInfo(IProcessingInfo processingInfo) {
-
 		super(processingInfo);
 	}
 }

@@ -38,7 +38,6 @@ public class ChromatogramFileSupport {
 	 * Use only static methods.
 	 */
 	private ChromatogramFileSupport() {
-
 	}
 
 	/**

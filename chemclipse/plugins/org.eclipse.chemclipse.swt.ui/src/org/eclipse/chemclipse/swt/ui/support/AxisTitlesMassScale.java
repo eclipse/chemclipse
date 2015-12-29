@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.swt.ui.support;
 public class AxisTitlesMassScale extends AxisTitles {
 
 	public AxisTitlesMassScale() {
-
 		super("milliseconds (ms)", "minutes (min)", "abundance", "relative abundance");
 	}
 }

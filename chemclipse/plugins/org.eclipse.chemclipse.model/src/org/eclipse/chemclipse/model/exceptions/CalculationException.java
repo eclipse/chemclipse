@@ -20,12 +20,10 @@ public class CalculationException extends Exception {
 	private static final long serialVersionUID = -6997133008445046562L;
 
 	public CalculationException() {
-
 		super();
 	}
 
 	public CalculationException(String message) {
-
 		super(message);
 	}
 }

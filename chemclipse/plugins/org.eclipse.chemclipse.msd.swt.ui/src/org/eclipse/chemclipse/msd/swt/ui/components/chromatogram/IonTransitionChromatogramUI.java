@@ -38,7 +38,6 @@ import org.swtchart.ISeries.SeriesType;
 public class IonTransitionChromatogramUI extends AbstractViewMSDChromatogramUI {
 
 	public IonTransitionChromatogramUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 

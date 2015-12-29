@@ -24,7 +24,6 @@ public class Slope implements ISlope {
 	private double slope;
 
 	public Slope(IPoint p1, IPoint p2) {
-
 		slope = Equations.calculateSlope(p1, p2);
 	}
 

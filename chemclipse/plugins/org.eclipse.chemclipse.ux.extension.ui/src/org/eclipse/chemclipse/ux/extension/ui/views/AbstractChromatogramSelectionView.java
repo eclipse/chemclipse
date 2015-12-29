@@ -28,7 +28,6 @@ public abstract class AbstractChromatogramSelectionView extends AbstractSelectio
 	private EventHandler eventHandler;
 
 	public AbstractChromatogramSelectionView(MPart part, EPartService partService, IEventBroker eventBroker) {
-
 		super(part, partService);
 		this.eventBroker = eventBroker;
 		subscribe();

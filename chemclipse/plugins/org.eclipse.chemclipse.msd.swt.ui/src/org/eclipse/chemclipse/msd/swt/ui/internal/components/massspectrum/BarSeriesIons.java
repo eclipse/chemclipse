@@ -27,7 +27,6 @@ public class BarSeriesIons implements IBarSeriesIons {
 	private BarSeriesIonComparator barSeriesIonComparator;
 
 	public BarSeriesIons() {
-
 		barSeriesIons = new ArrayList<IBarSeriesIon>();
 		barSeriesIonComparator = new BarSeriesIonComparator(SortOrder.DESCENDING);
 	}

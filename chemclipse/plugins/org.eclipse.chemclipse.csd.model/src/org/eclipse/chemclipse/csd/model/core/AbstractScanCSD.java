@@ -29,7 +29,6 @@ public abstract class AbstractScanCSD extends AbstractScan implements IScanCSD {
 	private Set<IScanTargetCSD> targets;
 
 	public AbstractScanCSD() {
-
 		targets = new HashSet<IScanTargetCSD>();
 	}
 

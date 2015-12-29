@@ -17,12 +17,10 @@ import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 public class PeakIntensityValues extends AbstractPeakIntensityValues implements IPeakIntensityValues {
 
 	public PeakIntensityValues() {
-
 		super();
 	}
 
 	public PeakIntensityValues(float maxIntensity) {
-
 		super(maxIntensity);
 	}
 }

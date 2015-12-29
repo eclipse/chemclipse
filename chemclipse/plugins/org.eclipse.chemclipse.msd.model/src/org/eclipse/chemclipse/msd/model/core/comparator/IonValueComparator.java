@@ -31,12 +31,10 @@ public class IonValueComparator implements Comparator<IIon>, Serializable {
 	private SortOrder sortOrder;
 
 	public IonValueComparator() {
-
 		sortOrder = SortOrder.ASC;
 	}
 
 	public IonValueComparator(SortOrder sortOrder) {
-
 		this.sortOrder = sortOrder;
 	}
 

@@ -20,12 +20,10 @@ public class NoChromatogramFilterSupplierAvailableException extends Exception {
 	private static final long serialVersionUID = 7446845229207444195L;
 
 	public NoChromatogramFilterSupplierAvailableException() {
-
 		super();
 	}
 
 	public NoChromatogramFilterSupplierAvailableException(String message) {
-
 		super(message);
 	}
 }

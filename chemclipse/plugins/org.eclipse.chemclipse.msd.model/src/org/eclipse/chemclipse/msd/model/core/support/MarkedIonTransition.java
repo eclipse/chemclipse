@@ -19,7 +19,6 @@ public class MarkedIonTransition implements IMarkedIonTransition {
 	private boolean isSelected;
 
 	public MarkedIonTransition(IIonTransition ionTransition) {
-
 		this.ionTransition = ionTransition;
 	}
 

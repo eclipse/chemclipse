@@ -44,7 +44,6 @@ public class AbstractDatabaseProxy_1_Test extends TestCase {
 	public class MyProxy extends DatabaseProxy {
 
 		public MyProxy(String databaseUrl, String databaseName) {
-
 			super(databaseUrl, databaseName);
 		}
 	}

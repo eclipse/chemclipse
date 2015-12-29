@@ -28,7 +28,6 @@ public class RetentionIndices implements IRetentionIndices {
 	private int actualRetentionIndex = 1;
 
 	public RetentionIndices() {
-
 		this.retentionIndices = new ArrayList<IRetentionIndex>(10);
 	}
 

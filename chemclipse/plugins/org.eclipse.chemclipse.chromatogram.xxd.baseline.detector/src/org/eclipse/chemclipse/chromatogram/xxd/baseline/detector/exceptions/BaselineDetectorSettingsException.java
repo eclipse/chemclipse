@@ -20,12 +20,10 @@ public class BaselineDetectorSettingsException extends Exception {
 	private static final long serialVersionUID = 183369077586118295L;
 
 	public BaselineDetectorSettingsException() {
-
 		super();
 	}
 
 	public BaselineDetectorSettingsException(String message) {
-
 		super(message);
 	}
 }

@@ -31,7 +31,6 @@ public class Ion extends AbstractIon implements IIon {
 	private static final long serialVersionUID = -1398709539024021635L;
 
 	public Ion(double ion) throws IonLimitExceededException {
-
 		super(ion);
 	}
 
@@ -50,22 +49,18 @@ public class Ion extends AbstractIon implements IIon {
 	}
 
 	public Ion(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
-
 		super(ion, abundance);
 	}
 
 	public Ion(IIon ion) throws AbundanceLimitExceededException, IonLimitExceededException, IonIsNullException {
-
 		super(ion);
 	}
 
 	public Ion(double ion, float abundance, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
-
 		super(ion, abundance, ionTransition);
 	}
 
 	public Ion(IIon ion, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonIsNullException, IonTransitionIsNullException {
-
 		super(ion, ionTransition);
 	}
 }

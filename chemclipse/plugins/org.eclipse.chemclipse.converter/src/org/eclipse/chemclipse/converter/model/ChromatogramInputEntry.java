@@ -27,7 +27,6 @@ public class ChromatogramInputEntry implements IChromatogramInputEntry {
 	 * @param inputFile
 	 */
 	public ChromatogramInputEntry(String inputFile) {
-
 		if(inputFile != null) {
 			this.inputFile = inputFile;
 		}

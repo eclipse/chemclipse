@@ -66,7 +66,6 @@ public class MassSpectrumComparator {
 	 * This class has only static methods.
 	 */
 	private MassSpectrumComparator() {
-
 	}
 
 	/**

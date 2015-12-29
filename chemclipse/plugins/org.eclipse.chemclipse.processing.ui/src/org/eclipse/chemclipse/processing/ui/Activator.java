@@ -34,7 +34,6 @@ public class Activator extends AbstractActivatorUI {
 	 * The constructor
 	 */
 	public Activator() {
-
 	}
 
 	/*

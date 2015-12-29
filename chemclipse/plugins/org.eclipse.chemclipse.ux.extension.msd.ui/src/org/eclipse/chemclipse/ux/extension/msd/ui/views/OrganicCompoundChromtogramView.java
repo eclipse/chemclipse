@@ -36,7 +36,6 @@ public class OrganicCompoundChromtogramView extends AbstractChromatogramSelectio
 
 	@Inject
 	public OrganicCompoundChromtogramView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

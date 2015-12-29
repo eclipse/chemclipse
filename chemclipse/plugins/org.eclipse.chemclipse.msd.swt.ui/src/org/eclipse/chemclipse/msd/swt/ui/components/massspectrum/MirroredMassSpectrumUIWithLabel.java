@@ -45,7 +45,6 @@ public class MirroredMassSpectrumUIWithLabel extends Composite implements IMassS
 	private boolean isPinned = false;
 
 	public MirroredMassSpectrumUIWithLabel(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
-
 		super(parent, style);
 		decimalFormat = new DecimalFormat("0.0####");
 		/*

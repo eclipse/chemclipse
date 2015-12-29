@@ -41,7 +41,6 @@ public enum WindowSize {
 	private int size;
 
 	private WindowSize(int size) {
-
 		this.size = size;
 	}
 

@@ -16,7 +16,6 @@ public abstract class AbstractIntegrationEntry implements IIntegrationEntry {
 	private double integratedArea;
 
 	public AbstractIntegrationEntry(double integratedArea) {
-
 		this.integratedArea = integratedArea;
 	}
 

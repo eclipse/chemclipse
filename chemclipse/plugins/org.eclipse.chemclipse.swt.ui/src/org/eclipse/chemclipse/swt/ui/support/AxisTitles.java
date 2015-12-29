@@ -19,7 +19,6 @@ public class AxisTitles implements IAxisTitles {
 	private String yAxisRightTitle = ""; // e.g.: relative abundance
 
 	public AxisTitles(String xAxisTopTitle, String xAxisBottomTitle, String yAxisLeftTitle, String yAxisRightTitle) {
-
 		this.xAxisTopTitle = xAxisTopTitle;
 		this.xAxisBottomTitle = xAxisBottomTitle;
 		this.yAxisLeftTitle = yAxisLeftTitle;

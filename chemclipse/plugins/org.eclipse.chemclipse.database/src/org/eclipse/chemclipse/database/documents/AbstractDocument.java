@@ -34,12 +34,10 @@ public abstract class AbstractDocument extends ODocument implements IDocument {
 	private ODocument document;
 
 	public AbstractDocument(String className) {
-
 		super(className);
 	}
 
 	public AbstractDocument(ODocument document) {
-
 		super(document.getIdentity());
 		this.document = document;
 		setFields();

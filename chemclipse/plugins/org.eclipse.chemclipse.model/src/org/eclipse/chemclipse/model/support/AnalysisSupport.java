@@ -39,7 +39,6 @@ public class AnalysisSupport implements IAnalysisSupport {
 	 * @throws AnalysisSupportException
 	 */
 	public AnalysisSupport(int numberOfScans, int segmentWidth) throws AnalysisSupportException {
-
 		/*
 		 * Starts at scan position 1.
 		 */
@@ -64,7 +63,6 @@ public class AnalysisSupport implements IAnalysisSupport {
 	 * @throws AnalysisSupportException
 	 */
 	public AnalysisSupport(IScanRange scanRange, int segmentWidth) throws AnalysisSupportException {
-
 		if(scanRange == null) {
 			throw new AnalysisSupportException("The scan range must not be null.");
 		}

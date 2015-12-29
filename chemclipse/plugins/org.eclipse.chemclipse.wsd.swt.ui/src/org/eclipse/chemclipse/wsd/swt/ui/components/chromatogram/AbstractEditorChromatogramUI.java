@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.wsd.swt.ui.components.AbstractChromatogramWSDLineS
 public abstract class AbstractEditorChromatogramUI extends AbstractChromatogramWSDLineSeriesUI {
 
 	public AbstractEditorChromatogramUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 }

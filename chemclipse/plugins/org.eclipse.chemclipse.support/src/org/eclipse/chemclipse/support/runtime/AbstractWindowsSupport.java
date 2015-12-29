@@ -23,7 +23,6 @@ public abstract class AbstractWindowsSupport extends AbstractRuntimeSupport impl
 	 * @param parameter
 	 */
 	public AbstractWindowsSupport(String application, String parameter) throws FileNotFoundException {
-
 		super(application, parameter);
 	}
 

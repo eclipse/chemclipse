@@ -46,7 +46,6 @@ public class SynonymsView extends AbstractMassSpectrumSelectionView {
 
 	@Inject
 	public SynonymsView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

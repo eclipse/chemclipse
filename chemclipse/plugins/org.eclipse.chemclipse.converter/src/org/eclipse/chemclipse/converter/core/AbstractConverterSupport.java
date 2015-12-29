@@ -24,7 +24,6 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 	private List<ISupplier> suppliers;
 
 	public AbstractConverterSupport() {
-
 		suppliers = new ArrayList<ISupplier>();
 	}
 

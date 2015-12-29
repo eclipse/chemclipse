@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.result;
 public class CombinedIntegrationResult extends AbstractCombinedIntegrationResult implements ICombinedIntegrationResult {
 
 	public CombinedIntegrationResult(IChromatogramIntegrationResults chromatogramIntegrationResults, IPeakIntegrationResults peakIntegrationResults) {
-
 		super(chromatogramIntegrationResults, peakIntegrationResults);
 	}
 }

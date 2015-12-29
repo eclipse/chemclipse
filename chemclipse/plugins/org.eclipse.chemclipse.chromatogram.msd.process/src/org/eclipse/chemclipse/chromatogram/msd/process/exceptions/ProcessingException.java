@@ -20,17 +20,14 @@ public class ProcessingException extends Exception {
 	private static final long serialVersionUID = 6588977957850747386L;
 
 	public ProcessingException() {
-
 		super();
 	}
 
 	public ProcessingException(String message) {
-
 		super(message);
 	}
 
 	public ProcessingException(Throwable throwable) {
-
 		super(throwable);
 	}
 }

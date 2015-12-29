@@ -38,7 +38,6 @@ public class ScanIdentifiedListView extends AbstractChromatogramSelectionCSDView
 
 	@Inject
 	public ScanIdentifiedListView(Composite parent, MPart part, EPartService partService, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 		createControl(parent);

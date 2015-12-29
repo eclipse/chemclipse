@@ -29,7 +29,6 @@ public class ImportDirectoryWizardPage extends WizardPage {
 	private Text textDirectory;
 
 	public ImportDirectoryWizardPage(String pageName, String title, ImageDescriptor titleImage) {
-
 		super(pageName, title, titleImage);
 	}
 

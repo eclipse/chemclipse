@@ -31,7 +31,6 @@ public class ChromatogramAndPeakSelectionUpdateNotifierCSD {
 	 * This class should not be instantiated.
 	 */
 	private ChromatogramAndPeakSelectionUpdateNotifierCSD() {
-
 	}
 
 	/**

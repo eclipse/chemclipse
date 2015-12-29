@@ -41,7 +41,6 @@ public class SeriesConverterCSD {
 	 * Use only static methods.
 	 */
 	private SeriesConverterCSD() {
-
 	}
 
 	public static ISeries convertPeak(IPeakCSD peak, boolean includeBackground, Sign sign) {

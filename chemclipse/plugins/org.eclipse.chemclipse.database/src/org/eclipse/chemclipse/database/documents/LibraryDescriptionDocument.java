@@ -23,12 +23,10 @@ public class LibraryDescriptionDocument extends AbstractDocument implements ILib
 	private static final long serialVersionUID = 1841510692926352886L;
 
 	public LibraryDescriptionDocument() {
-
 		super(CLASS_NAME);
 	}
 
 	public LibraryDescriptionDocument(ODocument document) {
-
 		super(document);
 	}
 

@@ -39,7 +39,6 @@ public class PlotSeries {
 	 * @param ySeries
 	 */
 	public PlotSeries(double[] xSeries, double[] ySeries) {
-
 		if(xSeries != null && ySeries != null) {
 			this.xSeries = xSeries;
 			this.ySeries = ySeries;

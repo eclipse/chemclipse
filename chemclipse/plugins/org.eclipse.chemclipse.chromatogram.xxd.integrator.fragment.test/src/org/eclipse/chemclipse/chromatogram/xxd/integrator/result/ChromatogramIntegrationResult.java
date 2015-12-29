@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIn
 public class ChromatogramIntegrationResult extends AbstractChromatogramIntegrationResult implements IChromatogramIntegrationResult {
 
 	public ChromatogramIntegrationResult(double ion, double chromatogramArea, double backgroundArea) {
-
 		super(ion, chromatogramArea, backgroundArea);
 	}
 }

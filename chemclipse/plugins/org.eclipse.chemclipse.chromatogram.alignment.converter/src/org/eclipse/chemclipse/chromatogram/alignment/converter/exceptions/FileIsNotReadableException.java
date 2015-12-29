@@ -16,12 +16,10 @@ public class FileIsNotReadableException extends Exception {
 	private static final long serialVersionUID = 2774633242374225379L;
 
 	public FileIsNotReadableException() {
-
 		super();
 	}
 
 	public FileIsNotReadableException(String message) {
-
 		super(message);
 	}
 }

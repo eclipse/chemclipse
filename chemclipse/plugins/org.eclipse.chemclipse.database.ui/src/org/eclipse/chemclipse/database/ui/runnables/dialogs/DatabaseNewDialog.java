@@ -46,7 +46,6 @@ public class DatabaseNewDialog extends Dialog {
 	private IDatabases databases;
 
 	public DatabaseNewDialog(Shell parentShell, IDatabases databases, DatabaseNewEntry databaseNewEntry, String title) {
-
 		super(parentShell);
 		this.title = title;
 		this.message = "Create a new database.";

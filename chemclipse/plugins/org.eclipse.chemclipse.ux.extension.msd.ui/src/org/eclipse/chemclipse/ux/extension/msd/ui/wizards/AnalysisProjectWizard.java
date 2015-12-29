@@ -39,7 +39,6 @@ public class AnalysisProjectWizard extends Wizard implements INewWizard {
 	private WizardNewProjectCreationPage projectCreationPage;
 
 	public AnalysisProjectWizard() {
-
 	}
 
 	@Override

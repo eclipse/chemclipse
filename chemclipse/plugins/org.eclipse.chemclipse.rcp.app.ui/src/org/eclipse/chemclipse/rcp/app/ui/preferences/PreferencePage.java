@@ -47,7 +47,6 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	private Text newProfileNameText;
 
 	public PreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("");

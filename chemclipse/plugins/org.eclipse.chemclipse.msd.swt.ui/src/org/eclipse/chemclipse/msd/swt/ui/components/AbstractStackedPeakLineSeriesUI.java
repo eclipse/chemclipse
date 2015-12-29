@@ -42,7 +42,6 @@ public abstract class AbstractStackedPeakLineSeriesUI extends AbstractLineSeries
 	protected List<IPeakMSD> peakListMSD;
 
 	public AbstractStackedPeakLineSeriesUI(Composite parent, int style, IAxisTitles axisTitles) {
-
 		super(parent, style, axisTitles);
 	}
 

@@ -49,7 +49,6 @@ public class ExtendedTableViewer extends TableViewer {
 	private List<TableViewerColumn> tableViewerColumns;
 
 	public ExtendedTableViewer(Composite parent) {
-
 		this(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		clipboard = new Clipboard(Display.getDefault());
 		operatingSystemUtils = new OperatingSystemUtils();
@@ -57,7 +56,6 @@ public class ExtendedTableViewer extends TableViewer {
 	}
 
 	public ExtendedTableViewer(Composite parent, int style) {
-
 		super(parent, style);
 		clipboard = new Clipboard(Display.getDefault());
 		operatingSystemUtils = new OperatingSystemUtils();

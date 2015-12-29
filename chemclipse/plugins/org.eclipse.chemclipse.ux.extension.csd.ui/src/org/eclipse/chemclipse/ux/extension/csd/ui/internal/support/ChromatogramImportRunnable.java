@@ -30,7 +30,6 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 	private ChromatogramSelectionCSD chromatogramSelection;
 
 	public ChromatogramImportRunnable(File file, ChromatogramSelectionCSD chromatogramSelection) {
-
 		this.file = file;
 		this.chromatogramSelection = chromatogramSelection;
 	}

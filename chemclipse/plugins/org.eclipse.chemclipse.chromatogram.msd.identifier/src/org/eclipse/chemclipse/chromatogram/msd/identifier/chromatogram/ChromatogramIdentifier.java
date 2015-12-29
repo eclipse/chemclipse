@@ -42,7 +42,6 @@ public class ChromatogramIdentifier {
 	 * This class should only have static methods.
 	 */
 	private ChromatogramIdentifier() {
-
 	}
 
 	/**

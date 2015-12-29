@@ -29,7 +29,6 @@ public abstract class AbstractPeakIntegrationResult implements IPeakIntegrationR
 	private Set<Integer> integratedIons;
 
 	public AbstractPeakIntegrationResult() {
-
 		integratedIons = new HashSet<Integer>();
 	}
 

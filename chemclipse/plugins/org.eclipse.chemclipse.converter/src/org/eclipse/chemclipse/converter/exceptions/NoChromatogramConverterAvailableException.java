@@ -20,12 +20,10 @@ public class NoChromatogramConverterAvailableException extends NoConverterAvaila
 	private static final long serialVersionUID = -2722934482143945710L;
 
 	public NoChromatogramConverterAvailableException() {
-
 		super();
 	}
 
 	public NoChromatogramConverterAvailableException(final String message) {
-
 		super(message);
 	}
 }

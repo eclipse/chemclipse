@@ -46,7 +46,6 @@ public class ChromatogramClassifier {
 	 * This class is a singleton. Use only static methods.
 	 */
 	private ChromatogramClassifier() {
-
 	}
 
 	public static IChromatogramClassifierProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, String classifierId, IProgressMonitor monitor) {

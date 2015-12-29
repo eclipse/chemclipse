@@ -19,7 +19,6 @@ public abstract class AbstractQuantitationSignalsMSD implements IQuantitationSig
 	private List<IQuantitationSignalMSD> quantitationSignals;
 
 	public AbstractQuantitationSignalsMSD() {
-
 		quantitationSignals = new ArrayList<IQuantitationSignalMSD>();
 	}
 

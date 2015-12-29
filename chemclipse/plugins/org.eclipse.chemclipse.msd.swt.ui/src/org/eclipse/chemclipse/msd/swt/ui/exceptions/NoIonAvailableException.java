@@ -20,12 +20,10 @@ public class NoIonAvailableException extends Exception {
 	private static final long serialVersionUID = -1217305426650825377L;
 
 	public NoIonAvailableException() {
-
 		super();
 	}
 
 	public NoIonAvailableException(String message) {
-
 		super(message);
 	}
 }

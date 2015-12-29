@@ -23,7 +23,6 @@ public class ExtendedTotalScanSignal extends AbstractTotalScanSignal implements 
 	 * No limits like in TotalIonSignal.
 	 */
 	public ExtendedTotalScanSignal(int retentionTime, float retentionIndex, float totalSignal) {
-
 		setRetentionTime(retentionTime);
 		setRetentionIndex(retentionIndex);
 		setTotalSignal(totalSignal);

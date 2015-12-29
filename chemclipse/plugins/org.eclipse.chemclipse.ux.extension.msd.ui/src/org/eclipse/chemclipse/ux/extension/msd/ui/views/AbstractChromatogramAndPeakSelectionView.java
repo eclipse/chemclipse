@@ -30,7 +30,6 @@ public abstract class AbstractChromatogramAndPeakSelectionView extends AbstractS
 	private EventHandler eventHandler;
 
 	public AbstractChromatogramAndPeakSelectionView(MPart part, EPartService partService, IEventBroker eventBroker) {
-
 		super(part, partService);
 		this.eventBroker = eventBroker;
 		subscribe();

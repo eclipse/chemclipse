@@ -24,7 +24,6 @@ public class ChromatogramClassifierSupport implements IChromatogramClassifierSup
 	 * Creates a new suppliers list.
 	 */
 	public ChromatogramClassifierSupport() {
-
 		suppliers = new ArrayList<IChromatogramClassifierSupplier>();
 	}
 

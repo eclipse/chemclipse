@@ -22,7 +22,6 @@ public class EditHistoryTableSorter extends ViewerSorter {
 	private int direction = ASCENDING;
 
 	public EditHistoryTableSorter() {
-
 		propertyIndex = 0;
 		direction = ASCENDING;
 	}

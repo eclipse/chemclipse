@@ -20,12 +20,10 @@ public class GaussJordanError extends Exception {
 	private static final long serialVersionUID = 6352583237883969140L;
 
 	public GaussJordanError() {
-
 		super();
 	}
 
 	public GaussJordanError(String message) {
-
 		super(message);
 	}
 }

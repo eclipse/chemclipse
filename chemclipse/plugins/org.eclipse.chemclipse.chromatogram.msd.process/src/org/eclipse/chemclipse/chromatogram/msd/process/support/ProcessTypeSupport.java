@@ -43,7 +43,6 @@ public class ProcessTypeSupport {
 	private List<IProcessTypeSupplier> processTypeSuppliers;
 
 	public ProcessTypeSupport() {
-
 		processTypeSuppliers = new ArrayList<IProcessTypeSupplier>();
 		//
 		processTypeSuppliers.add(new BaselineDetectorTypeSupplier());

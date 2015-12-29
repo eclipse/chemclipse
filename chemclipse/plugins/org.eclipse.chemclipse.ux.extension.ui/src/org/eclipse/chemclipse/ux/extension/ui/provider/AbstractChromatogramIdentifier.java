@@ -21,7 +21,6 @@ public abstract class AbstractChromatogramIdentifier implements IChromatogramIde
 	private List<ISupplier> suppliers;
 
 	public AbstractChromatogramIdentifier(List<ISupplier> suppliers) {
-
 		this.suppliers = suppliers;
 	}
 

@@ -30,7 +30,6 @@ public abstract class AbstractExtendedPreferenceInitializer extends AbstractPref
 	 * @param preferenceSupplier
 	 */
 	public AbstractExtendedPreferenceInitializer(IPreferenceSupplier preferenceSupplier) {
-
 		this.preferenceSupplier = preferenceSupplier;
 	}
 

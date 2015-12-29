@@ -18,7 +18,6 @@ public abstract class AbstractChromatogramProcessor implements IChromatogramProc
 	private IChromatogramSelection chromatogramSelection;
 
 	public AbstractChromatogramProcessor(IChromatogramSelection chromatogramSelection) {
-
 		this.chromatogramSelection = chromatogramSelection;
 	}
 

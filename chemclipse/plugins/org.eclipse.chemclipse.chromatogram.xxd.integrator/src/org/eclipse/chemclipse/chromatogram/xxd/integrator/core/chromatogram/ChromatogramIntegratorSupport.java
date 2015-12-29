@@ -27,7 +27,6 @@ public class ChromatogramIntegratorSupport implements IChromatogramIntegratorSup
 	 * Creates a new suppliers list.
 	 */
 	public ChromatogramIntegratorSupport() {
-
 		suppliers = new ArrayList<IChromatogramIntegratorSupplier>();
 	}
 

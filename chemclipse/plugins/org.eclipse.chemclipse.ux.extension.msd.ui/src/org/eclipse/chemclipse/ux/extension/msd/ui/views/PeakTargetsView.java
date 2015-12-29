@@ -45,7 +45,6 @@ public class PeakTargetsView extends AbstractTargetsView {
 
 	@Inject
 	public PeakTargetsView(IEventBroker eventBroker) {
-
 		super(new PeakTargetsContentProvider(), eventBroker);
 		this.eventBroker = eventBroker;
 	}

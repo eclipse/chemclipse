@@ -40,7 +40,6 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 	private SelectedPositionMarker selectedPositionMarker;
 
 	public EditorChromatogramUI(Composite parent, int style) {
-
 		super(parent, style);
 		boolean yMinimumToZero = PreferenceSupplier.showBackgroundInChromatogramEditor();
 		setYMinimumToZero(yMinimumToZero);

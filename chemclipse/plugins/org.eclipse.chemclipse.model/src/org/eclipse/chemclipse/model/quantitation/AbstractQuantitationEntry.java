@@ -23,7 +23,6 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 	private String description = "";
 
 	public AbstractQuantitationEntry(String name, double concentration, String concentrationUnit, double area) {
-
 		this.name = name;
 		this.concentration = concentration;
 		this.concentrationUnit = concentrationUnit;

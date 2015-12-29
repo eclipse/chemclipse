@@ -20,12 +20,10 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 public class ChromatogramPeakMSD extends AbstractChromatogramPeakMSD implements IChromatogramPeakMSD {
 
 	public ChromatogramPeakMSD(IPeakModelMSD peakModel, IChromatogramMSD chromatogram) throws IllegalArgumentException, PeakException {
-
 		super(peakModel, chromatogram);
 	}
 
 	public ChromatogramPeakMSD(IPeakModelMSD peakModel, IChromatogramMSD chromatogram, String modelDescription) throws IllegalArgumentException, PeakException {
-
 		super(peakModel, chromatogram, modelDescription);
 	}
 }

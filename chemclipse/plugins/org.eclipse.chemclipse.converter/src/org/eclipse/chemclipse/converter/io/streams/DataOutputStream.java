@@ -18,7 +18,6 @@ import java.io.FileOutputStream;
 public class DataOutputStream extends FileOutputStream {
 
 	public DataOutputStream(File file) throws FileNotFoundException {
-
 		super(file);
 	}
 }

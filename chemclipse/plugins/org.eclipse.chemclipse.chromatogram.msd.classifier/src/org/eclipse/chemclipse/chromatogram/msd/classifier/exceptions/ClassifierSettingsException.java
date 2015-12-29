@@ -20,12 +20,10 @@ public class ClassifierSettingsException extends Exception {
 	private static final long serialVersionUID = 5778918223078532725L;
 
 	public ClassifierSettingsException() {
-
 		super();
 	}
 
 	public ClassifierSettingsException(String message) {
-
 		super(message);
 	}
 }

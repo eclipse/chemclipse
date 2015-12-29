@@ -25,7 +25,6 @@ public class RectangularTrapezium {
 	 * @param stopHeight
 	 */
 	public RectangularTrapezium(double width, double startHeight, double stopHeight) {
-
 		this.width = width;
 		this.startHeight = startHeight;
 		this.stopHeight = stopHeight;

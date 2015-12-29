@@ -29,7 +29,6 @@ public abstract class AbstractChromatogramClassifierResult implements IChromatog
 	 * @param description
 	 */
 	public AbstractChromatogramClassifierResult(ResultStatus resultStatus, String description) {
-
 		if(resultStatus != null) {
 			this.resultStatus = resultStatus;
 		}

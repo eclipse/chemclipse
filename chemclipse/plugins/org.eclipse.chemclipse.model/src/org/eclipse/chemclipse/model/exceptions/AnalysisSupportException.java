@@ -20,12 +20,10 @@ public class AnalysisSupportException extends Exception {
 	private static final long serialVersionUID = 134049248548566712L;
 
 	public AnalysisSupportException() {
-
 		super();
 	}
 
 	public AnalysisSupportException(String message) {
-
 		super(message);
 	}
 }

@@ -31,7 +31,6 @@ import org.swtchart.ISeries.SeriesType;
 public class MirroredChromatogramUI extends AbstractViewMSDChromatogramUI {
 
 	public MirroredChromatogramUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 

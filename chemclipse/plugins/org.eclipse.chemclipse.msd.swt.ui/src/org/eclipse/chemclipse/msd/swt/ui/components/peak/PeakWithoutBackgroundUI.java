@@ -30,7 +30,6 @@ import org.eclipse.chemclipse.swt.ui.support.Sign;
 public class PeakWithoutBackgroundUI extends AbstractViewPeakUI {
 
 	public PeakWithoutBackgroundUI(Composite parent, int style, IAxisTitles axisTitles) {
-
 		super(parent, style, axisTitles);
 	}
 

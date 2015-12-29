@@ -41,7 +41,6 @@ public class ScanView extends AbstractChromatogramSelectionCSDView {
 
 	@Inject
 	public ScanView(Composite parent, MPart part, EPartService partService, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 		decimalFormat = new DecimalFormat("0.000");
 		createControl(parent);

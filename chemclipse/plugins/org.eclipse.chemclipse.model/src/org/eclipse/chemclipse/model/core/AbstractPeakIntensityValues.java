@@ -42,7 +42,6 @@ public abstract class AbstractPeakIntensityValues implements IPeakIntensityValue
 	 * intensity (key - value) mappings.
 	 */
 	public AbstractPeakIntensityValues() {
-
 		intensityValues = new TreeMap<Integer, Float>();
 		maxIntensity = MAX_INTENSITY;
 	}
@@ -55,7 +54,6 @@ public abstract class AbstractPeakIntensityValues implements IPeakIntensityValue
 	 * @param maxIntensity
 	 */
 	public AbstractPeakIntensityValues(float maxIntensity) {
-
 		this();
 		if(maxIntensity > 0.0f) {
 			this.maxIntensity = maxIntensity;

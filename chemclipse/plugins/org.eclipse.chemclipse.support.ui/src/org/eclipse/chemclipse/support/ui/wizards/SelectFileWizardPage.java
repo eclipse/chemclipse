@@ -37,7 +37,6 @@ public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 	private Text reportNameText;
 
 	public SelectFileWizardPage(IWizardElements wizardElements, String defaultReportName, String reportExtension) {
-
 		super("SelectFileWizardPage"); // $NON-NLS-1$
 		setTitle(SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_FILE_NAME));
 		setDescription(SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_FILE_NAME_INFO));

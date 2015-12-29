@@ -28,7 +28,6 @@ public class BrowserUI extends Composite {
 	private String url;
 
 	public BrowserUI(Composite parent, int style, String url) {
-
 		super(parent, style);
 		this.url = url;
 		initialize(parent);

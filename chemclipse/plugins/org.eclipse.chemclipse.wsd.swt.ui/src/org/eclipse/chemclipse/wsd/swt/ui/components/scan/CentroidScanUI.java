@@ -26,7 +26,6 @@ import org.swtchart.ISeries.SeriesType;
 public class CentroidScanUI extends AbstractExtendedScan implements IChromatogramSelectionWSDUpdateNotifier {
 
 	public CentroidScanUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 

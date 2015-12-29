@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.ui.Activator;
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Quantifier Preferences");

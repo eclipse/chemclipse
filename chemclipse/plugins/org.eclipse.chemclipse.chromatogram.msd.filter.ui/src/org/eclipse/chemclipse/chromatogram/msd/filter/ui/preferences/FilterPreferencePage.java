@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.ui.Activator;
 public class FilterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public FilterPreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Filter MSD");

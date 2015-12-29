@@ -21,7 +21,6 @@ public abstract class AbstractProcessingMessage implements IProcessingMessage {
 	private String message = "Message was null.";
 
 	public AbstractProcessingMessage(MessageType messageType, String description, String message) {
-
 		date = new Date();
 		/*
 		 * MessageType

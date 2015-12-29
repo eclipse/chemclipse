@@ -37,7 +37,6 @@ public class ScanMassSpectrumUIWithLabel extends Composite implements IChromatog
 	private MassValueDisplayPrecision massValueDisplayPrecision;
 
 	public ScanMassSpectrumUIWithLabel(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
-
 		super(parent, style);
 		decimalFormat = new DecimalFormat("0.0##");
 		/*

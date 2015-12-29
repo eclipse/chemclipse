@@ -30,7 +30,6 @@ public class ChromatogramSelection extends AbstractChromatogramSelection {
 	private static final Logger logger = Logger.getLogger(ChromatogramSelection.class);
 
 	public ChromatogramSelection(IChromatogram chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
-
 		super(chromatogram, fireUpdate);
 		/*
 		 * Set all members to default values.<br/> This includes also to set a
@@ -40,7 +39,6 @@ public class ChromatogramSelection extends AbstractChromatogramSelection {
 	}
 
 	public ChromatogramSelection(IChromatogram chromatogram) throws ChromatogramIsNullException {
-
 		this(chromatogram, true);
 	}
 

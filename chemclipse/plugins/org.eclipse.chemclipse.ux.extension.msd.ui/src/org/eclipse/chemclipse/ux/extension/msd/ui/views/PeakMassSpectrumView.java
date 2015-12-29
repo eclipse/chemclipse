@@ -38,7 +38,6 @@ public class PeakMassSpectrumView extends AbstractChromatogramSelectionMSDView {
 
 	@Inject
 	public PeakMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

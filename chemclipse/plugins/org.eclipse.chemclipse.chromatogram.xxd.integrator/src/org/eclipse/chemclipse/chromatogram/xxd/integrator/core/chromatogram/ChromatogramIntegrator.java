@@ -59,7 +59,6 @@ public class ChromatogramIntegrator {
 	 * This class has only static methods.
 	 */
 	private ChromatogramIntegrator() {
-
 	}
 
 	/**

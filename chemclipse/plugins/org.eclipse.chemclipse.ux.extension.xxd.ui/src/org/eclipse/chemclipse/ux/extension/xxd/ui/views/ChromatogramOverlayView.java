@@ -55,7 +55,6 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 	@Inject
 	public ChromatogramOverlayView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 		shell = Display.getCurrent().getActiveShell();
 		cursor = shell.getCursor();

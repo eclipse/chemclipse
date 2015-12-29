@@ -27,7 +27,6 @@ public class SimpleMirroredMassSpectrumUI extends AbstractExtendedMassSpectrumUI
 	private IScanMSD mirroredMassSpectrum;
 
 	public SimpleMirroredMassSpectrumUI(Composite parent, int style, MassValueDisplayPrecision massSpectrumType) {
-
 		super(parent, style, massSpectrumType);
 	}
 

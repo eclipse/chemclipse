@@ -44,7 +44,6 @@ public class MassSpectrumCycleNumberIonsListView extends AbstractChromatogramSel
 
 	@Inject
 	public MassSpectrumCycleNumberIonsListView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

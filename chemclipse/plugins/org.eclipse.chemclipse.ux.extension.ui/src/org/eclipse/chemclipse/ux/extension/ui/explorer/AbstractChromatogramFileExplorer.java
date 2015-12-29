@@ -48,7 +48,6 @@ public abstract class AbstractChromatogramFileExplorer {
 	private MApplication application;
 
 	public AbstractChromatogramFileExplorer(Composite parent, IChromatogramIdentifier chromatogramIdentifier, final IChromatogramEditorSupport chromatogramEditorSupport) {
-
 		treeViewer = new TreeViewer(parent, SWT.VIRTUAL);
 		treeViewer.setContentProvider(new ChromatogramFileExplorerContentProvider(chromatogramIdentifier));
 		treeViewer.setLabelProvider(new ChromatogramFileExplorerLabelProvider(chromatogramIdentifier));

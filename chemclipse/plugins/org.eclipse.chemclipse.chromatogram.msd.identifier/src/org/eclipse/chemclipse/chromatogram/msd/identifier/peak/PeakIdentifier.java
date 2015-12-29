@@ -45,7 +45,6 @@ public class PeakIdentifier {
 	 * This class should have only static methods.
 	 */
 	private PeakIdentifier() {
-
 	}
 
 	/**

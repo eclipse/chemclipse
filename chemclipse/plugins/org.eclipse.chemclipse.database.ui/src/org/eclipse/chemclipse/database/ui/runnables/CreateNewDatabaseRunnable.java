@@ -23,7 +23,6 @@ public class CreateNewDatabaseRunnable implements IRunnableWithProgress {
 	private String dbDescription;
 
 	public CreateNewDatabaseRunnable(IDatabases databases, String dbName, String dbDescription) {
-
 		this.databases = databases;
 		this.dbName = dbName;
 		this.dbDescription = dbDescription;

@@ -35,7 +35,6 @@ public class TransitionMassSpectrumView extends AbstractChromatogramSelectionMSD
 
 	@Inject
 	public TransitionMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

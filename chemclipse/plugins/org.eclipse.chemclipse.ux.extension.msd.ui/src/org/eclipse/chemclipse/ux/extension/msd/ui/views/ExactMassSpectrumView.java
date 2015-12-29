@@ -35,7 +35,6 @@ public class ExactMassSpectrumView extends AbstractChromatogramSelectionMSDView 
 
 	@Inject
 	public ExactMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

@@ -24,7 +24,6 @@ public abstract class AbstractCombinedLibraryMassSpectrum extends AbstractCombin
 	private ILibraryInformation libraryInformation;
 
 	public AbstractCombinedLibraryMassSpectrum() {
-
 		libraryInformation = new LibraryInformation();
 	}
 

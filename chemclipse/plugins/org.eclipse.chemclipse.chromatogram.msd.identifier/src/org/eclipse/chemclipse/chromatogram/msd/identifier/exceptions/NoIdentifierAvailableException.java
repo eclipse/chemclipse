@@ -20,12 +20,10 @@ public class NoIdentifierAvailableException extends Exception {
 	private static final long serialVersionUID = 5733483074384823327L;
 
 	public NoIdentifierAvailableException() {
-
 		super();
 	}
 
 	public NoIdentifierAvailableException(String message) {
-
 		super(message);
 	}
 }

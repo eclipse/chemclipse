@@ -20,12 +20,10 @@ public class NoChromatogramClassifierSupplierAvailableException extends Exceptio
 	private static final long serialVersionUID = -2019887628389096078L;
 
 	public NoChromatogramClassifierSupplierAvailableException() {
-
 		super();
 	}
 
 	public NoChromatogramClassifierSupplierAvailableException(String message) {
-
 		super(message);
 	}
 }

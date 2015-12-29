@@ -26,7 +26,6 @@ public class PeakDetectorSupport implements IPeakDetectorSupport {
 	List<IPeakDetectorSupplier> suppliers;
 
 	public PeakDetectorSupport() {
-
 		suppliers = new ArrayList<IPeakDetectorSupplier>();
 	}
 

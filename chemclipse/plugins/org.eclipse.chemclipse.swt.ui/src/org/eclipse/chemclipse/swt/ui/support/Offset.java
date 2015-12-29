@@ -27,7 +27,6 @@ public class Offset implements IOffset {
 	 * @param yOffset
 	 */
 	public Offset(double xOffset, double yOffset) {
-
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
 	}

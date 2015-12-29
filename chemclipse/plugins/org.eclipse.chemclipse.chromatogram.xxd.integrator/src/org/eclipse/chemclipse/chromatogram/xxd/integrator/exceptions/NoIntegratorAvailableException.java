@@ -20,12 +20,10 @@ public class NoIntegratorAvailableException extends Exception {
 	private static final long serialVersionUID = -5586169528951718526L;
 
 	public NoIntegratorAvailableException() {
-
 		super();
 	}
 
 	public NoIntegratorAvailableException(String message) {
-
 		super(message);
 	}
 }

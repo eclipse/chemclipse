@@ -19,7 +19,6 @@ public abstract class AbstractChromatogramIntegrationResults implements IChromat
 	private List<IChromatogramIntegrationResult> chromatogramIntegrationResults;
 
 	public AbstractChromatogramIntegrationResults() {
-
 		chromatogramIntegrationResults = new ArrayList<IChromatogramIntegrationResult>();
 	}
 

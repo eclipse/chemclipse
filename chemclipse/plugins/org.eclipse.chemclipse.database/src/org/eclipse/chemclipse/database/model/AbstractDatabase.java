@@ -51,7 +51,6 @@ public abstract class AbstractDatabase implements IDatabase {
 	private int maxNumberOfConnections = 512; // 640k is ought to be enough for everybody
 
 	public AbstractDatabase(String database, String user, String password) throws NoDatabaseAvailableException {
-
 		/*
 		 * Initialize the database map if neccessary.
 		 */

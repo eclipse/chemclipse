@@ -24,7 +24,6 @@ public class LoggerSupport {
 	 * This class is a singleton.
 	 */
 	private LoggerSupport() {
-
 	}
 
 	/**

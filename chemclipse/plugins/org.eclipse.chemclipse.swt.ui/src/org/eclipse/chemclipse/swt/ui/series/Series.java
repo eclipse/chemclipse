@@ -37,7 +37,6 @@ public class Series implements ISeries {
 	 * @param id
 	 */
 	public Series(double[] xSeries, double[] ySeries, String id) {
-
 		if(xSeries != null) {
 			this.xSeries = xSeries;
 		} else {

@@ -24,7 +24,6 @@ public class BarSeriesIonComparator implements Comparator<IBarSeriesIon> {
 	private SortOrder sortOrder;
 
 	public BarSeriesIonComparator(SortOrder sortOrder) {
-
 		this.sortOrder = sortOrder;
 	}
 

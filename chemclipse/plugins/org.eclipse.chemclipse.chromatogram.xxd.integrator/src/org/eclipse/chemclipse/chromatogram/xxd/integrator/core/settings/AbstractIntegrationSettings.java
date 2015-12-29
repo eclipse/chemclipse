@@ -16,7 +16,6 @@ public abstract class AbstractIntegrationSettings implements IIntegrationSetting
 	private IBaselineSupport baselineSupport;
 
 	public AbstractIntegrationSettings() {
-
 		baselineSupport = new BaselineSupport();
 	}
 

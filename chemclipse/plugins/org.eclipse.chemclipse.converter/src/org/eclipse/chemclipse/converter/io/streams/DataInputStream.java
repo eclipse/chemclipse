@@ -18,7 +18,6 @@ import java.io.FileNotFoundException;
 public class DataInputStream extends FileInputStream {
 
 	public DataInputStream(File file) throws FileNotFoundException {
-
 		super(file);
 	}
 }

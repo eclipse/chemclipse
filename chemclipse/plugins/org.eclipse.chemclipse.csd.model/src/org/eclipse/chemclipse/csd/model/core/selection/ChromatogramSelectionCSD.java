@@ -28,12 +28,10 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection impl
 	private IChromatogramPeakCSD selectedPeak;
 
 	public ChromatogramSelectionCSD(IChromatogram chromatogram) throws ChromatogramIsNullException {
-
 		this(chromatogram, true);
 	}
 
 	public ChromatogramSelectionCSD(IChromatogram chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
-
 		/*
 		 * Set all members to default values.<br/> This includes also to set a
 		 * valid scan and if exists a valid peak.

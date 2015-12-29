@@ -34,7 +34,6 @@ public class Converter {
 	 * This class has only static methods.
 	 */
 	private Converter() {
-
 	}
 
 	/**

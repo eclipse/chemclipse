@@ -29,7 +29,6 @@ public class RawFileSelectionWizardPage extends WizardPage {
 	private TreeViewer chromatogramViewer;
 
 	public RawFileSelectionWizardPage(String pageName, String title, ImageDescriptor titleImage) {
-
 		super(pageName, title, titleImage);
 	}
 

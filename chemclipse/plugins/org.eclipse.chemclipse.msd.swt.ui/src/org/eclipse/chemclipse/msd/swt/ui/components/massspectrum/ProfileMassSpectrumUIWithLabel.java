@@ -37,7 +37,6 @@ public class ProfileMassSpectrumUIWithLabel extends Composite implements IChroma
 	private NumberFormat numberFormat;
 
 	public ProfileMassSpectrumUIWithLabel(Composite parent, int style) {
-
 		super(parent, style);
 		setLayout(new FillLayout());
 		// TODO store NumberFormat of retention time in another class e.g. in model

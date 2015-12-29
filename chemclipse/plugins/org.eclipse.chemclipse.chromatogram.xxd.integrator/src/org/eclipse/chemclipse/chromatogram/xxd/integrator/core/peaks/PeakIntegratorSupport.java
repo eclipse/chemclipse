@@ -27,7 +27,6 @@ public class PeakIntegratorSupport implements IPeakIntegratorSupport {
 	 * Creates a new suppliers list.
 	 */
 	public PeakIntegratorSupport() {
-
 		suppliers = new ArrayList<IPeakIntegratorSupplier>();
 	}
 

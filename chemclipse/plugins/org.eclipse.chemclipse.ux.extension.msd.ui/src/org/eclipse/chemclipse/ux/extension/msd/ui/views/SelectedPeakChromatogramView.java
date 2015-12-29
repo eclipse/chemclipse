@@ -34,7 +34,6 @@ public class SelectedPeakChromatogramView extends AbstractChromatogramSelectionM
 
 	@Inject
 	public SelectedPeakChromatogramView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

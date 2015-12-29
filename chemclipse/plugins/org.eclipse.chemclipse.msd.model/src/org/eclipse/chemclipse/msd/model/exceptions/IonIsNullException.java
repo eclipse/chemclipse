@@ -20,12 +20,10 @@ public class IonIsNullException extends Exception {
 	private static final long serialVersionUID = 4836269324683192119L;
 
 	public IonIsNullException() {
-
 		super();
 	}
 
 	public IonIsNullException(String message) {
-
 		super(message);
 	}
 }

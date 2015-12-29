@@ -19,7 +19,6 @@ public class RetentionTimeConverter {
 	 * Use only static methods.
 	 */
 	private RetentionTimeConverter() {
-
 	}
 
 	/**

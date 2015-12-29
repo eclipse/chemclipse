@@ -28,7 +28,6 @@ public abstract class AbstractApplicationImage implements IApplicationImage {
 	private Bundle bundle;
 
 	public AbstractApplicationImage(Bundle bundle) {
-
 		this.bundle = bundle; // Activator.getContext().getBundle()
 	}
 

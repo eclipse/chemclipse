@@ -19,7 +19,6 @@ public abstract class AbstractIdentificationResults implements IIdentificationRe
 	private List<IIdentificationResult> results;
 
 	public AbstractIdentificationResults() {
-
 		results = new ArrayList<IIdentificationResult>();
 	}
 

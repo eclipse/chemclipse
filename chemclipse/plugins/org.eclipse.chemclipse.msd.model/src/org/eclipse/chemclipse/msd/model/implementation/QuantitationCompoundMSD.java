@@ -17,7 +17,6 @@ import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundM
 public class QuantitationCompoundMSD extends AbstractQuantitationCompoundMSD implements IQuantitationCompoundMSD {
 
 	public QuantitationCompoundMSD(String name, String concentrationUnit, int retentionTime) {
-
 		super(name, concentrationUnit, retentionTime);
 	}
 }

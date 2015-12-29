@@ -16,13 +16,11 @@ public class ExtendedComparisonResult extends AbstractComparisonResult implement
 	final private float forwardMatchFactor;
 
 	public ExtendedComparisonResult(float matchFactor, float reverseMatchFactor, float forwardMatchFactor) {
-
 		super(matchFactor, reverseMatchFactor);
 		this.forwardMatchFactor = forwardMatchFactor;
 	}
 
 	public ExtendedComparisonResult(float matchFactor, float reverseMatchFactor, float forwardMatchFactor, float probability) {
-
 		super(matchFactor, reverseMatchFactor, probability);
 		this.forwardMatchFactor = forwardMatchFactor;
 	}

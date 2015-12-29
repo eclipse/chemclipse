@@ -24,7 +24,6 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 	private ILibraryInformation libraryInformation;
 
 	public AbstractRegularLibraryMassSpectrum() {
-
 		libraryInformation = new LibraryInformation();
 	}
 

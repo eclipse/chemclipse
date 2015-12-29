@@ -27,7 +27,6 @@ import org.eclipse.chemclipse.rcp.app.ui.support.UpdateSiteSupport;
 public class AdditionalUpdateSitesPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public AdditionalUpdateSitesPreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Additional update sites are required for example to install further plug-ins. A default set of update sites is still added. Sometimes the extended set is needed. But note, that it will slown down the update process.");

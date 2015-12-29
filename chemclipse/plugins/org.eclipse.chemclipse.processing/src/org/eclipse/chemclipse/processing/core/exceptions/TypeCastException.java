@@ -20,12 +20,10 @@ public class TypeCastException extends Exception {
 	private static final long serialVersionUID = 7085763165946365431L;
 
 	public TypeCastException() {
-
 		super();
 	}
 
 	public TypeCastException(String message) {
-
 		super(message);
 	}
 }

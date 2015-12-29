@@ -22,7 +22,6 @@ public abstract class AbstractRuntimeSupport implements IRuntimeSupport {
 	private String parameter = "";
 
 	public AbstractRuntimeSupport(String application, String parameter) throws FileNotFoundException {
-
 		/*
 		 * Application
 		 */

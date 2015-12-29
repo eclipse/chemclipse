@@ -31,7 +31,6 @@ public abstract class AbstractDatabases implements IDatabases {
 	 * @param identifier
 	 */
 	public AbstractDatabases(String identifier) {
-
 		if(identifier != null) {
 			this.identifier = identifier;
 		}

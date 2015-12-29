@@ -26,7 +26,6 @@ public abstract class AbstractPeakFilterResult implements IPeakFilterResult {
 	 * @param description
 	 */
 	public AbstractPeakFilterResult(ResultStatus resultStatus, String description) {
-
 		if(resultStatus != null) {
 			this.resultStatus = resultStatus;
 		}

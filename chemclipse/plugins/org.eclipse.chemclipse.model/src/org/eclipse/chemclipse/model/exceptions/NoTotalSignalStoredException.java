@@ -20,12 +20,10 @@ public class NoTotalSignalStoredException extends Exception {
 	private static final long serialVersionUID = -2091754195301442517L;
 
 	public NoTotalSignalStoredException() {
-
 		super();
 	}
 
 	public NoTotalSignalStoredException(String message) {
-
 		super(message);
 	}
 }

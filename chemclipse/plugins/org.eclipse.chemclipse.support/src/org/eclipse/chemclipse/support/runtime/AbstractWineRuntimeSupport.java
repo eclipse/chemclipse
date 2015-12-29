@@ -20,7 +20,6 @@ public abstract class AbstractWineRuntimeSupport extends AbstractRuntimeSupport 
 	private String wineApplication = "";
 
 	public AbstractWineRuntimeSupport(String application, String parameter) throws FileNotFoundException {
-
 		super(application, parameter);
 		extractValues();
 	}

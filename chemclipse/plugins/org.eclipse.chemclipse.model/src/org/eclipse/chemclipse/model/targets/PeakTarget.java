@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 public class PeakTarget extends AbstractPeakTarget implements IPeakTarget {
 
 	public PeakTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
-
 		super(libraryInformation, comparisonResult);
 	}
 }

@@ -33,7 +33,6 @@ public class BaselineSegment implements IBaselineSegment {
 	 * @param stopRetentionTime
 	 */
 	public BaselineSegment(int startRetentionTime, int stopRetentionTime) {
-
 		if(startRetentionTime > stopRetentionTime) {
 			int tmp = startRetentionTime;
 			startRetentionTime = stopRetentionTime;

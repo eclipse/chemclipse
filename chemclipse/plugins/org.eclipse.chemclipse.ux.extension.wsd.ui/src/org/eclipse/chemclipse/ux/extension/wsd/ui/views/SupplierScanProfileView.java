@@ -33,7 +33,6 @@ public class SupplierScanProfileView extends AbstractChromatogramSelectionWSDVie
 
 	@Inject
 	public SupplierScanProfileView(MPart part, EPartService partService, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

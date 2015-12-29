@@ -40,7 +40,6 @@ public class ChromatogramSelectionWizardPage extends WizardPage {
 	private static final String FILES = "Input Files: ";
 
 	public ChromatogramSelectionWizardPage(String pageName, String title, ImageDescriptor titleImage) {
-
 		super(pageName, title, titleImage);
 	}
 

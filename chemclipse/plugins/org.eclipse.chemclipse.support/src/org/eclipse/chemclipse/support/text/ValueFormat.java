@@ -24,7 +24,6 @@ public class ValueFormat {
 	private static SimpleDateFormat simpleDateFormatGerman = null;
 
 	private ValueFormat() {
-
 	}
 
 	/**

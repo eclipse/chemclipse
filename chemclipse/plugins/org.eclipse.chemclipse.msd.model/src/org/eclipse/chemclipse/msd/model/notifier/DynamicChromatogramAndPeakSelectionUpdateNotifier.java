@@ -29,7 +29,6 @@ public class DynamicChromatogramAndPeakSelectionUpdateNotifier implements IChrom
 	private Map<String, Object> map;
 
 	public DynamicChromatogramAndPeakSelectionUpdateNotifier() {
-
 		map = new HashMap<String, Object>();
 	}
 

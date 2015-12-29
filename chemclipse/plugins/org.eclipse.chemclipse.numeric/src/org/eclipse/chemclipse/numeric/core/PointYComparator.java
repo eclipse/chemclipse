@@ -27,7 +27,6 @@ public class PointYComparator implements Comparator<IPoint> {
 	private SortOrder sortOrder = SortOrder.ASCENDING;
 
 	public PointYComparator() {
-
 		sortOrder = SortOrder.ASCENDING;
 	}
 
@@ -37,7 +36,6 @@ public class PointYComparator implements Comparator<IPoint> {
 	 * @param sortOrder
 	 */
 	public PointYComparator(SortOrder sortOrder) {
-
 		if(sortOrder != null) {
 			this.sortOrder = sortOrder;
 		}

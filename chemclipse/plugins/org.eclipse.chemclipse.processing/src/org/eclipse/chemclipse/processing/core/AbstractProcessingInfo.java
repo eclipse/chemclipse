@@ -22,12 +22,10 @@ public abstract class AbstractProcessingInfo implements IProcessingInfo {
 	private Object processingResult;
 
 	public AbstractProcessingInfo() {
-
 		processingMessages = new ArrayList<IProcessingMessage>();
 	}
 
 	public AbstractProcessingInfo(IProcessingInfo processingInfo) {
-
 		this();
 		addMessages(processingInfo);
 	}

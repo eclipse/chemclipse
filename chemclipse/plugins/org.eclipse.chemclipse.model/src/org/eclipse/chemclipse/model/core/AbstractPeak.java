@@ -33,7 +33,6 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	private List<IQuantitationEntry> quantitationEntries;
 
 	public AbstractPeak() {
-
 		/*
 		 * Create new default instances.
 		 */

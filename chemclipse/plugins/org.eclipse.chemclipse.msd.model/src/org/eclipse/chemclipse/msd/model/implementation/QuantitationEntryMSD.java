@@ -17,7 +17,6 @@ import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 public class QuantitationEntryMSD extends AbstractQuantitationEntryMSD implements IQuantitationEntryMSD {
 
 	public QuantitationEntryMSD(String name, double concentration, String concentrationUnit, double area, double ion) {
-
 		super(name, concentration, concentrationUnit, area, ion);
 	}
 }

@@ -22,7 +22,6 @@ public class PolynomicalEquation4thDegree implements IEquation {
 	private double d;
 
 	public PolynomicalEquation4thDegree(double a, double b, double c, double d) {
-
 		this.a = a;
 		this.b = b;
 		this.c = c;

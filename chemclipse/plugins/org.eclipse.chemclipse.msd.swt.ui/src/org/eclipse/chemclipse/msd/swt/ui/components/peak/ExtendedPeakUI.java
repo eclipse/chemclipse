@@ -22,7 +22,6 @@ import org.eclipse.swt.widgets.Composite;
 public class ExtendedPeakUI extends AbstractViewPeakUI {
 
 	public ExtendedPeakUI(Composite parent, int style, IAxisTitles axisTitles) {
-
 		super(parent, style, axisTitles);
 		setSuppressHairlineDivider(true);
 	}

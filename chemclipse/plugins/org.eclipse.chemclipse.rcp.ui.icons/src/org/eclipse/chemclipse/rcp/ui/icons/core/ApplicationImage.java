@@ -16,7 +16,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.Activator;
 public class ApplicationImage extends AbstractApplicationImage implements IApplicationImage {
 
 	public ApplicationImage() {
-
 		super(Activator.getDefault().getBundle());
 	}
 }

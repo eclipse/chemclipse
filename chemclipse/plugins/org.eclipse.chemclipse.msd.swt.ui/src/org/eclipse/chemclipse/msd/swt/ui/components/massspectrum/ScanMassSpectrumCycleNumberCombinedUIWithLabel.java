@@ -40,7 +40,6 @@ public class ScanMassSpectrumCycleNumberCombinedUIWithLabel extends Composite im
 	private MassValueDisplayPrecision massValueDisplayPrecision;
 
 	public ScanMassSpectrumCycleNumberCombinedUIWithLabel(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
-
 		super(parent, style);
 		decimalFormat = new DecimalFormat("0.0##");
 		/*

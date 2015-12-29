@@ -29,7 +29,6 @@ import org.eclipse.chemclipse.swt.ui.support.Sign;
 public class StackedPeakUI extends AbstractStackedPeakLineSeriesUI {
 
 	public StackedPeakUI(Composite parent, int style, IAxisTitles axisTitles) {
-
 		super(parent, style, axisTitles);
 	}
 

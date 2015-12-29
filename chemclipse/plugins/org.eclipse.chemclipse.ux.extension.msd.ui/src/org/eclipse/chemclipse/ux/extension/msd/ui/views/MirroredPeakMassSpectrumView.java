@@ -38,7 +38,6 @@ public class MirroredPeakMassSpectrumView extends AbstractChromatogramSelectionM
 
 	@Inject
 	public MirroredPeakMassSpectrumView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

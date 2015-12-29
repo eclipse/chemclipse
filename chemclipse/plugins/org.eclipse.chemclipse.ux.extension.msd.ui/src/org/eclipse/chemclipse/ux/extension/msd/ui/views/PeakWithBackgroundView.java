@@ -37,7 +37,6 @@ public class PeakWithBackgroundView extends AbstractChromatogramSelectionMSDView
 
 	@Inject
 	public PeakWithBackgroundView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

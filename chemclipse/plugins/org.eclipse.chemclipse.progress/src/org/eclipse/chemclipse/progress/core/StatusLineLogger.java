@@ -22,7 +22,6 @@ public class StatusLineLogger {
 	 * Use only static methods.
 	 */
 	private StatusLineLogger() {
-
 	}
 
 	/**

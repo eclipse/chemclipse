@@ -20,7 +20,6 @@ public class DatabaseSettings implements IDatabaseSettings {
 	private String password;
 
 	public DatabaseSettings(String url, String username, String password) {
-
 		this.url = url;
 		this.username = DatabasePathHelper.isRemoteDatabasePath(url) ? username : AbstractDatabase.DEFAULT_USER_NAME;
 		this.password = DatabasePathHelper.isRemoteDatabasePath(url) ? password : AbstractDatabase.DEFAULT_USER_PASSWORD;

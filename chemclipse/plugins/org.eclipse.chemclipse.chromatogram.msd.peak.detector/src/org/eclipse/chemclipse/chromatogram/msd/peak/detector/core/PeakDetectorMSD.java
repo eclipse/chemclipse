@@ -65,7 +65,6 @@ public class PeakDetectorMSD {
 	 * This class offers only static methods.
 	 */
 	private PeakDetectorMSD() {
-
 	}
 
 	/**

@@ -26,7 +26,6 @@ public class ChromatogramOutputEntriesWizard extends Wizard {
 	private IChromatogramOutputEntry outputEntry = null;
 
 	public ChromatogramOutputEntriesWizard() {
-
 		super();
 		setNeedsProgressMonitor(true);
 	}

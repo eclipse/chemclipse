@@ -36,7 +36,6 @@ public class AbstractIdentifierSettings implements IIdentifierSettings {
 	private String forceMatchFactorPenaltyCalculationForDatabase;
 
 	public AbstractIdentifierSettings() {
-
 		excludedIons = new MarkedIons();
 	}
 

@@ -53,7 +53,6 @@ public class ChromatogramReportEntriesWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	protected ChromatogramReportEntriesWizardPage(String pageName) {
-
 		super(pageName);
 		setTitle("Chromatogram Report Supplier");
 		setDescription("This wizard lets you select several chromatogram report supplier.");

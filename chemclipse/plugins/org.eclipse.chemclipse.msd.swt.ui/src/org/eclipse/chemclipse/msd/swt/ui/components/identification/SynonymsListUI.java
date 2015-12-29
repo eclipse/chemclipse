@@ -30,7 +30,6 @@ public class SynonymsListUI {
 	private int bounds[] = {300};
 
 	public SynonymsListUI(Composite parent, int style) {
-
 		parent.setLayout(new FillLayout());
 		/*
 		 * E.g. Scan

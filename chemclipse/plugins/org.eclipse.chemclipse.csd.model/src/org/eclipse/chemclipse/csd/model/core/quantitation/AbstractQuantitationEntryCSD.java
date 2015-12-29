@@ -16,7 +16,6 @@ import org.eclipse.chemclipse.model.quantitation.AbstractQuantitationEntry;
 public abstract class AbstractQuantitationEntryCSD extends AbstractQuantitationEntry implements IQuantitationEntryCSD {
 
 	public AbstractQuantitationEntryCSD(String name, double concentration, String concentrationUnit, double area) {
-
 		super(name, concentration, concentrationUnit, area);
 	}
 }

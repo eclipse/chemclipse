@@ -22,7 +22,6 @@ public class BarSeriesIon implements IBarSeriesIon {
 	private int index;
 
 	public BarSeriesIon(double ion, double abundance, int index) {
-
 		this.ion = ion;
 		this.abundance = abundance;
 		this.index = index;

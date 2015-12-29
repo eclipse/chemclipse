@@ -24,7 +24,6 @@ public class NamedScanMSD extends ScanMSD implements INamedScanMSD {
 	private Float peakSN;
 
 	public NamedScanMSD() {
-
 		super();
 	}
 

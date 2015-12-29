@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Composite;
 public abstract class AbstractExtendedScan extends AbstractViewScanUI {
 
 	public AbstractExtendedScan(Composite parent, int style) {
-
 		super(parent, style);
 	}
 }

@@ -37,7 +37,6 @@ public class ReferencedChromatogramDialog extends TitleAreaDialog {
 	private List<IChromatogram> selectedChromatograms;
 
 	public ReferencedChromatogramDialog(Shell parentShell, IChromatogram chromatogram) {
-
 		super(parentShell);
 		this.chromatogram = chromatogram;
 		checkBoxList = new ArrayList<Button>();

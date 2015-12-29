@@ -20,12 +20,10 @@ public class NoRetentionIndexAvailableException extends Exception {
 	private static final long serialVersionUID = 8362819742565588450L;
 
 	public NoRetentionIndexAvailableException() {
-
 		super();
 	}
 
 	public NoRetentionIndexAvailableException(final String message) {
-
 		super(message);
 	}
 }

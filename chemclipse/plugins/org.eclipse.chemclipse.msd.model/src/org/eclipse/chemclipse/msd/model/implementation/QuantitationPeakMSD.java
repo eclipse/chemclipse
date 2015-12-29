@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
 public class QuantitationPeakMSD extends AbstractQuantitationPeakMSD implements IQuantitationPeakMSD {
 
 	public QuantitationPeakMSD(IPeakMSD referencePeakMSD, double concentration, String concentrationUnit) {
-
 		super(referencePeakMSD, concentration, concentrationUnit);
 	}
 }

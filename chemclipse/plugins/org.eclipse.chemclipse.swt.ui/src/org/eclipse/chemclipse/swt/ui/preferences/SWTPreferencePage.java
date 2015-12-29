@@ -25,7 +25,6 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class SWTPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public SWTPreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Set the SWT settings.");

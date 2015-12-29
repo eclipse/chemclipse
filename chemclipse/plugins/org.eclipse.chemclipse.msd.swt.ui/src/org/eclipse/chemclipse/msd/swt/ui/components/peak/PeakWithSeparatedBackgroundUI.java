@@ -30,7 +30,6 @@ import org.eclipse.chemclipse.swt.ui.support.Sign;
 public class PeakWithSeparatedBackgroundUI extends AbstractViewPeakUI {
 
 	public PeakWithSeparatedBackgroundUI(Composite parent, int style, IAxisTitles axisTitles) {
-
 		super(parent, style, axisTitles);
 	}
 

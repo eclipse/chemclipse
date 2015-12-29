@@ -21,7 +21,6 @@ import org.eclipse.swt.graphics.Image;
 public class MarkedIonsChooserLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public MarkedIonsChooserLabelProvider() {
-
 		super("0.0####");
 	}
 

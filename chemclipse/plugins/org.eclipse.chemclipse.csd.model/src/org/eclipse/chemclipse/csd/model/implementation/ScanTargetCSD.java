@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 public class ScanTargetCSD extends AbstractScanTargetCSD implements IScanTargetCSD {
 
 	public ScanTargetCSD(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
-
 		super(libraryInformation, comparisonResult);
 	}
 }

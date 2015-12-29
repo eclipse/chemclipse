@@ -44,7 +44,6 @@ public class MassSpectrumFilter {
 	 * This class is a singleton. Use only static methods.
 	 */
 	private MassSpectrumFilter() {
-
 	}
 
 	/**

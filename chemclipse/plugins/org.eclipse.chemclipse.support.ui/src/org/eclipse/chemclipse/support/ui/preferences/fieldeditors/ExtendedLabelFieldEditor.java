@@ -26,12 +26,10 @@ public class ExtendedLabelFieldEditor extends FieldEditor {
 	private Color color;
 
 	public ExtendedLabelFieldEditor(String label, String info, Composite parent) {
-
 		this(label, info, null, parent);
 	}
 
 	public ExtendedLabelFieldEditor(String label, String info, Color color, Composite parent) {
-
 		init(EXTENDED_LABEL_PREFERENCE_NAME, label);
 		errorMessage = "";
 		this.color = color;
@@ -40,12 +38,10 @@ public class ExtendedLabelFieldEditor extends FieldEditor {
 	}
 
 	public ExtendedLabelFieldEditor(String label, int info, Color color, Composite parent) {
-
 		this(label, Integer.valueOf(info).toString(), color, parent);
 	}
 
 	public ExtendedLabelFieldEditor(String label, int info, Composite parent) {
-
 		this(label, Integer.valueOf(info).toString(), null, parent);
 	}
 

@@ -27,7 +27,6 @@ public class PolynomicalEquation9thDegree implements IEquation {
 	private double i;
 
 	public PolynomicalEquation9thDegree(double a, double b, double c, double d, double e, double f, double g, double h, double i) {
-
 		this.a = a;
 		this.b = b;
 		this.c = c;

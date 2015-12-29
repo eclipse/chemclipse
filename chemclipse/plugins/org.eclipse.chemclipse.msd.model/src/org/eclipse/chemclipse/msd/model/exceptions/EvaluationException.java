@@ -20,12 +20,10 @@ public class EvaluationException extends Exception {
 	private static final long serialVersionUID = 4006832512845483165L;
 
 	public EvaluationException() {
-
 		super();
 	}
 
 	public EvaluationException(String message) {
-
 		super(message);
 	}
 }

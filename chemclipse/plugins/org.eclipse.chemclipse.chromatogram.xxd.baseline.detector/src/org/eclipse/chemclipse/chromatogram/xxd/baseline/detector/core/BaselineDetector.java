@@ -57,7 +57,6 @@ public class BaselineDetector {
 	 * This class has only static methods.
 	 */
 	private BaselineDetector() {
-
 	}
 
 	/**

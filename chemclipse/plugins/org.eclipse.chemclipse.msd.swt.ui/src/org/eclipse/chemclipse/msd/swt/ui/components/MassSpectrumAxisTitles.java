@@ -16,7 +16,6 @@ import org.eclipse.chemclipse.swt.ui.support.AxisTitles;
 public class MassSpectrumAxisTitles extends AxisTitles {
 
 	public MassSpectrumAxisTitles() {
-
 		super("dalton", "m/z", "abundance", "relative abundance");
 	}
 }

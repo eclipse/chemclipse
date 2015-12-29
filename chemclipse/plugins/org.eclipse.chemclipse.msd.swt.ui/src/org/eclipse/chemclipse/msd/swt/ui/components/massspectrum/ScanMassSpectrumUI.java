@@ -26,7 +26,6 @@ import org.swtchart.ISeries.SeriesType;
 public class ScanMassSpectrumUI extends AbstractExtendedMassSpectrumUI implements IChromatogramSelectionMSDUpdateNotifier {
 
 	public ScanMassSpectrumUI(Composite parent, int style, MassValueDisplayPrecision massSpectrumType) {
-
 		super(parent, style, massSpectrumType);
 	}
 

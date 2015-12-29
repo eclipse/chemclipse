@@ -30,7 +30,6 @@ public class ChromatogramOverviewImportRunnable implements IRunnableWithProgress
 	private File chromatogram;
 
 	public ChromatogramOverviewImportRunnable(File chromatogram) {
-
 		this.chromatogram = chromatogram;
 	}
 

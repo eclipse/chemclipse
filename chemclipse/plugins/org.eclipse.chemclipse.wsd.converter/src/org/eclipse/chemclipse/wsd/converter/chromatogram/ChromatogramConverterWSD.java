@@ -44,7 +44,6 @@ public class ChromatogramConverterWSD {
 	 * This class has only static methods.
 	 */
 	private ChromatogramConverterWSD() {
-
 	}
 
 	/**

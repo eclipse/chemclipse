@@ -46,7 +46,6 @@ public class DatabasesUI {
 
 	// End of UI Strings
 	public DatabasesUI(Composite parent, int style, final IDatabases databases) {
-
 		parent.setLayout(new FillLayout());
 		//
 		this.databases = databases;

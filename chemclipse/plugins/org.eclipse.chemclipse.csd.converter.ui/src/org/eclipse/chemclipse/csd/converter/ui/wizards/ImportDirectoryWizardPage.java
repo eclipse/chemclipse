@@ -41,7 +41,6 @@ public class ImportDirectoryWizardPage extends WizardPage {
 	private Text textDirectory;
 
 	public ImportDirectoryWizardPage(String pageName, String title, ImageDescriptor titleImage) {
-
 		super(pageName, title, titleImage);
 		converterIds = new HashMap<String, String>();
 		converterIds.put(CONVERTER_LABEL_XY, CONVERTER_ID_XY);

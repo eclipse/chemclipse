@@ -20,12 +20,10 @@ public class InstanceIsNullException extends Exception {
 	private static final long serialVersionUID = -1000970121947163246L;
 
 	public InstanceIsNullException() {
-
 		super();
 	}
 
 	public InstanceIsNullException(String message) {
-
 		super(message);
 	}
 }

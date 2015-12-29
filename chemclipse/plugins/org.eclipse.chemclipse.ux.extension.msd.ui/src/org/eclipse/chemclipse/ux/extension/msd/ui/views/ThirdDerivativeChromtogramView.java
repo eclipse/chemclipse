@@ -34,7 +34,6 @@ public class ThirdDerivativeChromtogramView extends AbstractChromatogramSelectio
 
 	@Inject
 	public ThirdDerivativeChromtogramView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

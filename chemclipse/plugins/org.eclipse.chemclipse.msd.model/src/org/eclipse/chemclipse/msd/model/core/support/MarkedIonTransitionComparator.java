@@ -20,7 +20,6 @@ public class MarkedIonTransitionComparator implements Comparator<IMarkedIonTrans
 	private SortOrder sortOrder = SortOrder.ASC;
 
 	public MarkedIonTransitionComparator(SortOrder sortOrder) {
-
 		if(sortOrder != null) {
 			this.sortOrder = sortOrder;
 		}

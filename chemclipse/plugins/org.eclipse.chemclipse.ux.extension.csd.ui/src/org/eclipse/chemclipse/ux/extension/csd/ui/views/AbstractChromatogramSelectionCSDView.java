@@ -28,7 +28,6 @@ public abstract class AbstractChromatogramSelectionCSDView extends AbstractSelec
 	private EventHandler eventHandler;
 
 	public AbstractChromatogramSelectionCSDView(MPart part, EPartService partService, IEventBroker eventBroker) {
-
 		super(part, partService);
 		this.eventBroker = eventBroker;
 		subscribe();

@@ -27,7 +27,6 @@ public abstract class AbstractChemClipseLabelProvider extends LabelProvider impl
 	 * The pattern "0.000" is used by default.
 	 */
 	public AbstractChemClipseLabelProvider() {
-
 		createDecimalFormatInstance("0.000");
 	}
 
@@ -37,7 +36,6 @@ public abstract class AbstractChemClipseLabelProvider extends LabelProvider impl
 	 * @param pattern
 	 */
 	public AbstractChemClipseLabelProvider(String pattern) {
-
 		createDecimalFormatInstance(pattern);
 	}
 

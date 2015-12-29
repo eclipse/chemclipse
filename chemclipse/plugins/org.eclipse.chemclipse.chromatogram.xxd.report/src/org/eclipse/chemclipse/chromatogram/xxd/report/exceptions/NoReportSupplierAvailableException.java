@@ -20,12 +20,10 @@ public class NoReportSupplierAvailableException extends Exception {
 	private static final long serialVersionUID = -2540276204011272870L;
 
 	public NoReportSupplierAvailableException() {
-
 		super();
 	}
 
 	public NoReportSupplierAvailableException(String message) {
-
 		super(message);
 	}
 }

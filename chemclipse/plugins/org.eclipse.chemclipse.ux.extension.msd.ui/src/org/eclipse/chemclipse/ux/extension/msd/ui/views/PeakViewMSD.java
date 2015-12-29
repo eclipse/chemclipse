@@ -41,7 +41,6 @@ public class PeakViewMSD extends AbstractPeakMSDSelectionView {
 
 	@Inject
 	public PeakViewMSD(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 		this.eventBroker = eventBroker;
 		subscribe();

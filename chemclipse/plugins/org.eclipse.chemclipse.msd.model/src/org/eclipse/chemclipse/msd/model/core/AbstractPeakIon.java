@@ -25,17 +25,14 @@ public abstract class AbstractPeakIon extends AbstractIon implements IPeakIon {
 	private PeakIonType peakIonType = PeakIonType.NO_TYPE;
 
 	public AbstractPeakIon(double ion) throws IonLimitExceededException {
-
 		super(ion);
 	}
 
 	public AbstractPeakIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
-
 		super(ion, abundance);
 	}
 
 	public AbstractPeakIon(IIon ion) throws AbundanceLimitExceededException, IonLimitExceededException {
-
 		super(ion.getIon(), ion.getAbundance());
 	}
 
@@ -52,7 +49,6 @@ public abstract class AbstractPeakIon extends AbstractIon implements IPeakIon {
 	 * @throws IonLimitExceededException
 	 */
 	public AbstractPeakIon(double ion, float abundance, float uncertaintyFactor) throws AbundanceLimitExceededException, IonLimitExceededException {
-
 		super(ion, abundance);
 		/*
 		 * Set the uncertainty factor.

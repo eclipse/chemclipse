@@ -23,7 +23,6 @@ public abstract class AbstractQuantitationPeaksMSD implements IQuantitationPeaks
 	private List<IQuantitationPeakMSD> quantitationPeaks;
 
 	public AbstractQuantitationPeaksMSD(String concentrationUnit) {
-
 		this.concentrationUnit = concentrationUnit;
 		quantitationPeaks = new ArrayList<IQuantitationPeakMSD>();
 	}

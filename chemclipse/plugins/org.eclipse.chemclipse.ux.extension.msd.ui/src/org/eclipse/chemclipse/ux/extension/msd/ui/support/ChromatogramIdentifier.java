@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramIdentifier;
 public class ChromatogramIdentifier extends AbstractChromatogramIdentifier implements IChromatogramIdentifier {
 
 	public ChromatogramIdentifier() {
-
 		super(ChromatogramConverterMSD.getChromatogramConverterSupport().getSupplier());
 	}
 }

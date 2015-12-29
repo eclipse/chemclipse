@@ -31,7 +31,6 @@ public class ChromatogramInputEntriesWizard extends Wizard {
 	private String description;
 
 	public ChromatogramInputEntriesWizard(String pageName, String title, String description) {
-
 		super();
 		setNeedsProgressMonitor(true);
 		this.pageName = pageName;

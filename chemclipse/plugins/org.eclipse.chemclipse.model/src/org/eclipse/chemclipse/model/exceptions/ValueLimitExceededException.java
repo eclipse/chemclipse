@@ -22,12 +22,10 @@ public class ValueLimitExceededException extends Exception {
 	private static final long serialVersionUID = 6427281846317863329L;
 
 	public ValueLimitExceededException() {
-
 		super();
 	}
 
 	public ValueLimitExceededException(String message) {
-
 		super(message);
 	}
 }

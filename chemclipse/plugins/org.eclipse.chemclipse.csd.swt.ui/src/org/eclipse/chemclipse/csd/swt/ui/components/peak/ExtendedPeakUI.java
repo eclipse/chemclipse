@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.Composite;
 public class ExtendedPeakUI extends AbstractViewPeakUI {
 
 	public ExtendedPeakUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 

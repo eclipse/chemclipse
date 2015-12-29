@@ -20,12 +20,10 @@ public class NoPeakQuantifierAvailableException extends Exception {
 	private static final long serialVersionUID = -984735869392879575L;
 
 	public NoPeakQuantifierAvailableException() {
-
 		super();
 	}
 
 	public NoPeakQuantifierAvailableException(String message) {
-
 		super(message);
 	}
 }

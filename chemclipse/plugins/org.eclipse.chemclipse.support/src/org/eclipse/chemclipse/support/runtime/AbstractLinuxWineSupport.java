@@ -24,7 +24,6 @@ public abstract class AbstractLinuxWineSupport extends AbstractWineRuntimeSuppor
 	 * @param parameter
 	 */
 	public AbstractLinuxWineSupport(String application, String parameter) throws FileNotFoundException {
-
 		super(application, parameter);
 	}
 

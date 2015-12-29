@@ -26,7 +26,6 @@ public class ProcessWizardDialog extends WizardDialog {
 	 * @param newWizard
 	 */
 	public ProcessWizardDialog(Shell parentShell, IWizard newWizard) {
-
 		super(parentShell, newWizard);
 	}
 }

@@ -21,12 +21,10 @@ public class ChromatogramPeakMSDComparator implements Comparator<IChromatogramPe
 	private SortOrder sortOrder;
 
 	public ChromatogramPeakMSDComparator() {
-
 		sortOrder = SortOrder.ASC;
 	}
 
 	public ChromatogramPeakMSDComparator(SortOrder sortOrder) {
-
 		this.sortOrder = sortOrder;
 	}
 

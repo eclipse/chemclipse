@@ -31,7 +31,6 @@ import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEdi
 public class SettingsPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public SettingsPreferencePage() {
-
 		super(GRID);
 	}
 

@@ -20,12 +20,10 @@ public class NoClassifierAvailableException extends Exception {
 	private static final long serialVersionUID = -7573188156171617789L;
 
 	public NoClassifierAvailableException() {
-
 		super();
 	}
 
 	public NoClassifierAvailableException(String message) {
-
 		super(message);
 	}
 }

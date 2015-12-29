@@ -68,7 +68,6 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 
 	@Inject
 	public PeakListMSDView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

@@ -56,7 +56,6 @@ public abstract class AbstractChromatogramLineSeriesUI extends AbstractLineSerie
 	private int xStart, yStart;
 
 	public AbstractChromatogramLineSeriesUI(Composite parent, int style, IAxisTitles axisTitles) {
-
 		super(parent, style, axisTitles);
 	}
 

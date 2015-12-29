@@ -34,7 +34,6 @@ public class IonTransitionChromtogramView extends AbstractChromatogramSelectionM
 
 	@Inject
 	public IonTransitionChromtogramView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 	}
 

@@ -24,7 +24,6 @@ public abstract class AbstractIonTransitionSettings implements IIonTransitionSet
 	private List<IIonTransitionGroup> ionTransitionGroups;
 
 	public AbstractIonTransitionSettings() {
-
 		ionTransitionGroups = new ArrayList<IIonTransitionGroup>();
 	}
 

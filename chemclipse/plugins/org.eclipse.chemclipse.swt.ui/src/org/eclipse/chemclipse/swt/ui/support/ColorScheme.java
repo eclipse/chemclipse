@@ -21,7 +21,6 @@ public class ColorScheme implements IColorScheme {
 	private List<Color> colors;
 
 	public ColorScheme(List<Color> colors) {
-
 		this.colors = colors;
 	}
 

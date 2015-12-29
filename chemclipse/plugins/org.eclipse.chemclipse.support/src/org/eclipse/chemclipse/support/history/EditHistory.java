@@ -20,7 +20,6 @@ public class EditHistory implements IEditHistory {
 	private List<IEditInformation> history;
 
 	public EditHistory() {
-
 		history = new ArrayList<IEditInformation>();
 	}
 

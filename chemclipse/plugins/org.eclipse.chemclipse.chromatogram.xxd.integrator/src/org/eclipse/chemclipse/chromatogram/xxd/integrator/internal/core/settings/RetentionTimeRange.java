@@ -26,7 +26,6 @@ public class RetentionTimeRange implements IRetentionTimeRange {
 	 * @param stopRetentionTime
 	 */
 	public RetentionTimeRange(int startRetentionTime, int stopRetentionTime) {
-
 		if(startRetentionTime < 0) {
 			startRetentionTime = 0;
 		}

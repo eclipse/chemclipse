@@ -44,7 +44,6 @@ public class ChromatogramConverterCSD {
 	 * This class has only static methods.
 	 */
 	private ChromatogramConverterCSD() {
-
 	}
 
 	/**

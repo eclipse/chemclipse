@@ -41,7 +41,6 @@ public class ConverterMSD {
 	 * Use only the static methods.
 	 */
 	private ConverterMSD() {
-
 	}
 
 	/**

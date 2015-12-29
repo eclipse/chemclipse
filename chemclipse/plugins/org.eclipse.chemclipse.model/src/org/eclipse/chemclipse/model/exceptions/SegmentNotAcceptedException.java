@@ -20,12 +20,10 @@ public class SegmentNotAcceptedException extends Exception {
 	private static final long serialVersionUID = -8390238164756592408L;
 
 	public SegmentNotAcceptedException() {
-
 		super();
 	}
 
 	public SegmentNotAcceptedException(String message) {
-
 		super(message);
 	}
 }

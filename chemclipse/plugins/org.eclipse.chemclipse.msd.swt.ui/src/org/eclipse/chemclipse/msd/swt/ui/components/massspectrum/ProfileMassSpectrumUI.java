@@ -27,7 +27,6 @@ import org.eclipse.chemclipse.swt.ui.support.Sign;
 public class ProfileMassSpectrumUI extends AbstractProfileMassSpectrumUI {
 
 	public ProfileMassSpectrumUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 

@@ -20,12 +20,10 @@ public class NoBaselineDetectorAvailableException extends Exception {
 	private static final long serialVersionUID = 8651599325956431485L;
 
 	public NoBaselineDetectorAvailableException() {
-
 		super();
 	}
 
 	public NoBaselineDetectorAvailableException(String message) {
-
 		super(message);
 	}
 }

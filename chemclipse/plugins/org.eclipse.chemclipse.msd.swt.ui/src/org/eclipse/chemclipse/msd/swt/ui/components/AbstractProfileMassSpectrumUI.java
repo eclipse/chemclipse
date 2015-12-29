@@ -29,7 +29,6 @@ public abstract class AbstractProfileMassSpectrumUI extends AbstractLineSeriesUI
 	private IChromatogramSelectionMSD chromatogramSelection;
 
 	public AbstractProfileMassSpectrumUI(Composite parent, int style) {
-
 		super(parent, style, new MassSpectrumAxisTitles());
 	}
 

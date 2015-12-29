@@ -17,7 +17,6 @@ public abstract class AbstractSettingStatus implements ISettingStatus {
 	boolean sumOn = false;
 
 	public AbstractSettingStatus(boolean report, boolean sumOn) {
-
 		this.report = report;
 		this.sumOn = sumOn;
 	}

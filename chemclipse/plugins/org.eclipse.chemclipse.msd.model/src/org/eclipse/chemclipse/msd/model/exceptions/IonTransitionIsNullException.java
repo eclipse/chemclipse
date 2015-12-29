@@ -20,12 +20,10 @@ public class IonTransitionIsNullException extends Exception {
 	private static final long serialVersionUID = -1501948303231515252L;
 
 	public IonTransitionIsNullException() {
-
 		super();
 	}
 
 	public IonTransitionIsNullException(String message) {
-
 		super(message);
 	}
 }

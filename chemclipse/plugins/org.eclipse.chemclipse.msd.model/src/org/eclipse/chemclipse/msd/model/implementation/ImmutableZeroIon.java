@@ -32,7 +32,6 @@ public class ImmutableZeroIon extends AbstractIon implements IIon {
 	private static final long serialVersionUID = 3064769810691237712L;
 
 	public ImmutableZeroIon() throws AbundanceLimitExceededException, IonLimitExceededException {
-
 		super(TIC_ION, ZERO_INTENSITY);
 	}
 

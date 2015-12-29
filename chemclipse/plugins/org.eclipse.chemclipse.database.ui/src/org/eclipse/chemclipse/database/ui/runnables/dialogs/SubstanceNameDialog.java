@@ -38,7 +38,6 @@ public class SubstanceNameDialog extends Dialog {
 	private String[] availableSubstances;
 
 	public SubstanceNameDialog(Shell shell, SubstanceEntry substanceEntry, String[] availableSubstances, String title) {
-
 		super(shell);
 		this.title = title;
 		this.message = "Selected substance name.";

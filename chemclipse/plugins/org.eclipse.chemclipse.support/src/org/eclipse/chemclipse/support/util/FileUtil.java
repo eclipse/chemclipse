@@ -19,7 +19,6 @@ public class FileUtil {
 	 * Use only static methods.
 	 */
 	private FileUtil() {
-
 	}
 
 	/**

@@ -19,7 +19,6 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class OverlayPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public OverlayPreferencePage() {
-
 		super(GRID);
 	}
 

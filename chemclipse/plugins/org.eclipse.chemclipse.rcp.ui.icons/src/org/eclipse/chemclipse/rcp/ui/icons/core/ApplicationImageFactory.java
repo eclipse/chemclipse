@@ -16,7 +16,6 @@ public class ApplicationImageFactory {
 	private static IApplicationImage applicationImage;
 
 	private ApplicationImageFactory() {
-
 	}
 
 	/**

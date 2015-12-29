@@ -24,7 +24,6 @@ import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogr
 public class ChromatogramTarget extends AbstractChromatogramTargetMSD implements IChromatogramTargetMSD {
 
 	public ChromatogramTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
-
 		super(libraryInformation, comparisonResult);
 	}
 }

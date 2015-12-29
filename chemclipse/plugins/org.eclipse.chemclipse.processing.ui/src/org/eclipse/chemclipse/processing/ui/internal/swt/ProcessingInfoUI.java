@@ -48,7 +48,6 @@ public class ProcessingInfoUI {
 	private static final String END_OF_LINE = "\r\n";
 
 	public ProcessingInfoUI(Composite parent, int style) {
-
 		parent.setLayout(new FillLayout());
 		/*
 		 * Clipboard

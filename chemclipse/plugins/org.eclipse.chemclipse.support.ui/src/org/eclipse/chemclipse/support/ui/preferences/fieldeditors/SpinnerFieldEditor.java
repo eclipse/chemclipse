@@ -24,7 +24,6 @@ public class SpinnerFieldEditor extends FieldEditor {
 	private Spinner spinner;
 
 	public SpinnerFieldEditor(String name, String labelText, int min, int max, Composite parent) {
-
 		init(name, labelText);
 		this.min = min;
 		this.max = max;

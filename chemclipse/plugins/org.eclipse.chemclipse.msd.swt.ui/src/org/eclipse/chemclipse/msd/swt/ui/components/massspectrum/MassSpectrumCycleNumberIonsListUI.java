@@ -37,7 +37,6 @@ public class MassSpectrumCycleNumberIonsListUI {
 	private int bounds[] = {100, 100, 120, 120, 120, 120, 120};
 
 	public MassSpectrumCycleNumberIonsListUI(Composite parent, int style) {
-
 		parent.setLayout(new FillLayout());
 		/*
 		 * E.g. Scan

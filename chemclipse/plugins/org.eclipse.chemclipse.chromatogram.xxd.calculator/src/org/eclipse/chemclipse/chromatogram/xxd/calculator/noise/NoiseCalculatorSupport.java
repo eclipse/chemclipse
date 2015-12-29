@@ -21,7 +21,6 @@ public class NoiseCalculatorSupport implements INoiseCalculatorSupport {
 	private List<INoiseCalculatorSupplier> suppliers;
 
 	public NoiseCalculatorSupport() {
-
 		suppliers = new ArrayList<INoiseCalculatorSupplier>();
 	}
 

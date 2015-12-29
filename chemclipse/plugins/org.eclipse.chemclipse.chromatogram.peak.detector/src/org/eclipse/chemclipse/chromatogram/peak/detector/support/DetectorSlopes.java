@@ -28,7 +28,6 @@ public class DetectorSlopes implements IDetectorSlopes {
 	private int stopScan;
 
 	public DetectorSlopes(ITotalScanSignals totalIonSignals) {
-
 		startScan = totalIonSignals.getStartScan();
 		stopScan = totalIonSignals.getStopScan() - 1; // Why -1? Because the
 														// slope will be

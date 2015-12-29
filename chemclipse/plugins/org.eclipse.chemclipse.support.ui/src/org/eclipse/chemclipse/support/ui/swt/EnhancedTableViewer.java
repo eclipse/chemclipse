@@ -59,7 +59,6 @@ public class EnhancedTableViewer extends Composite {
 	private IOperatingSystemUtils operatingSystemUtils;
 
 	public EnhancedTableViewer(Composite parent, int style) {
-
 		super(parent, style);
 		setLayout(new FillLayout());
 		createControl();

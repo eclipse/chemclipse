@@ -24,7 +24,6 @@ import org.eclipse.chemclipse.swt.ui.support.Sign;
 public class SimpleMassSpectrumUI extends AbstractExtendedMassSpectrumUI {
 
 	public SimpleMassSpectrumUI(Composite parent, int style, MassValueDisplayPrecision massSpectrumType) {
-
 		super(parent, style, massSpectrumType);
 	}
 

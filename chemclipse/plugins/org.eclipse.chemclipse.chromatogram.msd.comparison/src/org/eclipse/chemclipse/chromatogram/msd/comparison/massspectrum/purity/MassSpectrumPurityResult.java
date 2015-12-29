@@ -27,7 +27,6 @@ public class MassSpectrumPurityResult extends AbstractMassSpectrumPurityResult {
 	 * @throws ComparisonException
 	 */
 	public MassSpectrumPurityResult(IScanMSD extractedMassSpectrum, IScanMSD genuineMassSpectrum) throws ComparisonException {
-
 		super(extractedMassSpectrum, genuineMassSpectrum);
 	}
 }

@@ -28,7 +28,6 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 	 * @throws ChromatogramIsNullException
 	 */
 	public TotalScanSignalExtractor(IChromatogram chromatogram) throws ChromatogramIsNullException {
-
 		if(chromatogram == null) {
 			throw new ChromatogramIsNullException();
 		}
@@ -42,7 +41,6 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 	 * @throws ChromatogramIsNullException
 	 */
 	public TotalScanSignalExtractor(IChromatogramOverview chromatogramOverview) throws ChromatogramIsNullException {
-
 		if(chromatogramOverview == null) {
 			throw new ChromatogramIsNullException();
 		}

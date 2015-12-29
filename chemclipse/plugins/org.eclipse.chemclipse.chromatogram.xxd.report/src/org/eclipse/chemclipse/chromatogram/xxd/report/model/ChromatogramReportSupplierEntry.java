@@ -27,7 +27,6 @@ public class ChromatogramReportSupplierEntry implements IChromatogramReportSuppl
 	 * @param converterId
 	 */
 	public ChromatogramReportSupplierEntry(String reportFolderOrFile, String converterId) {
-
 		if(reportFolderOrFile != null && converterId != null) {
 			this.reportFolderOrFile = reportFolderOrFile;
 			this.reportSupplierId = converterId;

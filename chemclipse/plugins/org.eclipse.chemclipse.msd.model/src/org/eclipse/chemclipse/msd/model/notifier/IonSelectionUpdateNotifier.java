@@ -32,7 +32,6 @@ public class IonSelectionUpdateNotifier {
 	 * This class should not be instantiated.
 	 */
 	private IonSelectionUpdateNotifier() {
-
 	}
 
 	/**

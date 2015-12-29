@@ -74,7 +74,6 @@ public class SeriesConverterMSD {
 	 * Use only static methods.
 	 */
 	private SeriesConverterMSD() {
-
 	}
 
 	// --------------------------------------------------IChromatogram

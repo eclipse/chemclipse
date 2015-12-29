@@ -18,7 +18,6 @@ public abstract class AbstractQuantitationEntryMSD extends AbstractQuantitationE
 	private double ion;
 
 	public AbstractQuantitationEntryMSD(String name, double concentration, String concentrationUnit, double area, double ion) {
-
 		super(name, concentration, concentrationUnit, area);
 		this.ion = ion;
 	}

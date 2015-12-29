@@ -44,7 +44,6 @@ public class MassSpectrumTargetsView extends AbstractTargetsView implements IMas
 
 	@Inject
 	public MassSpectrumTargetsView(IEventBroker eventBroker) {
-
 		super(new MassSpectrumTargetsContentProvider(), eventBroker);
 		this.eventBroker = eventBroker;
 	}

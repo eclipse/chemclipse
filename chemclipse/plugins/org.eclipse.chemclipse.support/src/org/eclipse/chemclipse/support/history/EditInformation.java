@@ -25,17 +25,14 @@ public class EditInformation implements IEditInformation {
 	public static final String NO_EDITOR = SupportMessages.INSTANCE().getMessage(ISupportMessages.LABEL_NOT_AVAILABLE);
 
 	public EditInformation(String description) {
-
 		this(new Date(), description, "");
 	}
 
 	public EditInformation(String description, String editor) {
-
 		this(new Date(), description, editor);
 	}
 
 	public EditInformation(Date date, String description) {
-
 		this(date, description, "");
 	}
 
@@ -46,7 +43,6 @@ public class EditInformation implements IEditInformation {
 	 * @param description
 	 */
 	public EditInformation(Date date, String description, String editor) {
-
 		setDate(date);
 		setDescription(description);
 		setEditor(editor);

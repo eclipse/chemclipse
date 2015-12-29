@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWS
 public class ChromatogramIdentifier extends AbstractChromatogramIdentifier implements IChromatogramIdentifier {
 
 	public ChromatogramIdentifier() {
-
 		super(ChromatogramConverterWSD.getChromatogramConverterSupport().getSupplier());
 	}
 }

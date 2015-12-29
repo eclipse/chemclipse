@@ -23,7 +23,6 @@ public class MassSpectrumListContentProviderLazy implements ILazyContentProvider
 	private IScanMSD[] massSpectra;
 
 	public MassSpectrumListContentProviderLazy(TableViewer tableViewer) {
-
 		this.tableViewer = tableViewer;
 	}
 

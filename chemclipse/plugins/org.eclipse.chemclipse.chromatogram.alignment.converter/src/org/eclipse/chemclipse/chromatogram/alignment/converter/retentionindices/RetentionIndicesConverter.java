@@ -59,7 +59,6 @@ public class RetentionIndicesConverter {
 	private static final String IMPORT_CONVERTER = "importConverter";
 
 	private RetentionIndicesConverter() {
-
 	}
 
 	/**

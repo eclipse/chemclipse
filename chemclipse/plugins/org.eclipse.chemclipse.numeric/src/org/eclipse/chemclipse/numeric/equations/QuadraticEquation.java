@@ -34,7 +34,6 @@ public class QuadraticEquation implements IEquation {
 	 * @param c
 	 */
 	public QuadraticEquation(double a, double b, double c) {
-
 		this.a = a;
 		this.b = b;
 		this.c = c;

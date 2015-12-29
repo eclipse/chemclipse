@@ -20,12 +20,10 @@ public class NoPeakConverterAvailableException extends NoConverterAvailableExcep
 	private static final long serialVersionUID = -6346922825478957363L;
 
 	public NoPeakConverterAvailableException() {
-
 		super();
 	}
 
 	public NoPeakConverterAvailableException(final String message) {
-
 		super(message);
 	}
 }

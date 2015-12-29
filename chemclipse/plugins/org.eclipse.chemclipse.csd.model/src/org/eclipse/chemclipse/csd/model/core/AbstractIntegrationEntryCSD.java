@@ -16,7 +16,6 @@ import org.eclipse.chemclipse.model.core.AbstractIntegrationEntry;
 public abstract class AbstractIntegrationEntryCSD extends AbstractIntegrationEntry implements IIntegrationEntryCSD {
 
 	public AbstractIntegrationEntryCSD(double integratedArea) {
-
 		super(integratedArea);
 	}
 }

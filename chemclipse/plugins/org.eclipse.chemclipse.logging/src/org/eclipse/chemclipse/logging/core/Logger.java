@@ -18,7 +18,6 @@ public class Logger extends Category {
 	 */
 	@SuppressWarnings("rawtypes")
 	protected Logger(Class clazz) {
-
 		super(clazz);
 	}
 

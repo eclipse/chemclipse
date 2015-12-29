@@ -16,7 +16,6 @@ import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 public class MassSpectrumFilterResult extends AbstractMassSpectrumFilterResult {
 
 	public MassSpectrumFilterResult(ResultStatus resultStatus, String description) {
-
 		super(resultStatus, description);
 	}
 }
