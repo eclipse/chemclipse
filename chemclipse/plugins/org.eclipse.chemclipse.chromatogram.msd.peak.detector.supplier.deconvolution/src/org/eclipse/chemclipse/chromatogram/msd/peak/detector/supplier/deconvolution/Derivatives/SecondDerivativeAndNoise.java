@@ -18,7 +18,6 @@ public class SecondDerivativeAndNoise implements ISecondDerivativeAndNoise {
 	private double[] noiseNegativ;
 
 	public SecondDerivativeAndNoise(double[] secondDerivValues, double[] noisePositivValues, double[] noiseNegativValues) {
-
 		secondDeriv = secondDerivValues;
 		noisePositiv = noisePositivValues;
 		noiseNegativ = noiseNegativValues;

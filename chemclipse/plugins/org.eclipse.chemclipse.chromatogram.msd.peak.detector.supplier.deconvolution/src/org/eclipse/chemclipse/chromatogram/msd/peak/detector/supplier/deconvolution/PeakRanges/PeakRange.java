@@ -23,7 +23,6 @@ public class PeakRange implements IPeakRange {
 	private List<IPeaksDeconv> peakList;
 
 	public PeakRange(int peakStart, int peakEnd, double snr) {
-
 		signalToNoise = snr;
 		startPoint = peakStart;
 		endPoint = peakEnd;

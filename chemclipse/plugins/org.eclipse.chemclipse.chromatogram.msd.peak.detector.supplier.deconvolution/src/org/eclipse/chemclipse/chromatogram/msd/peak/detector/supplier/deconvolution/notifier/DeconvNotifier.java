@@ -26,7 +26,6 @@ public class DeconvNotifier {
 	private static DynamicDeconvNotifier dynamicUpdateNotifier;
 
 	private DeconvNotifier() {
-
 	}
 
 	public static void fireUpdate(IArraysViewDeconv arraysViewDeconv) {

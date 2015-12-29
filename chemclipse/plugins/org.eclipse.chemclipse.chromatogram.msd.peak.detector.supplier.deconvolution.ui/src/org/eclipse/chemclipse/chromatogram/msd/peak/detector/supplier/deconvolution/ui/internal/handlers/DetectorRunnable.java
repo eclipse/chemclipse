@@ -31,7 +31,6 @@ public class DetectorRunnable implements IRunnableWithProgress {
 	private static final String PEAK_DETECTOR_ID = "org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution";
 
 	public DetectorRunnable(IChromatogramSelectionMSD chromatogramSelection) {
-
 		this.chromatogramSelection = chromatogramSelection;
 	}
 

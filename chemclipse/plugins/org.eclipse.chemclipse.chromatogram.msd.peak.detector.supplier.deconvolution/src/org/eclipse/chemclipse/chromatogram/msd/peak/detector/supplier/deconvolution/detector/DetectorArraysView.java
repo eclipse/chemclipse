@@ -33,7 +33,6 @@ public class DetectorArraysView implements IDetectorArraysView {
 	private int stopScan;
 
 	public DetectorArraysView(ITotalScanSignals signals) {
-
 		stopScan = signals.getStopScan();
 		startScan = signals.getStartScan();
 		int size = signals.size();

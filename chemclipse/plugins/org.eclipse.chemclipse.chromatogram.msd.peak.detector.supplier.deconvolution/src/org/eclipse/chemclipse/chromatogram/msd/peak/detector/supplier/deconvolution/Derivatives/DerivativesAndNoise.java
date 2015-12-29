@@ -18,7 +18,6 @@ public class DerivativesAndNoise implements IDerivativesAndNoise {
 	private IThirdDerivativeAndNoise thirdDerivativeAndNoise;
 
 	public DerivativesAndNoise(IFirstDerivativeAndNoise firstDerivative, ISecondDerivativeAndNoise secondDerivative, IThirdDerivativeAndNoise thirdDerivative) {
-
 		firstDerivativeAndNoise = firstDerivative;
 		secondDerivativeAndNoise = secondDerivative;
 		thirdDerivativeAndNoise = thirdDerivative;

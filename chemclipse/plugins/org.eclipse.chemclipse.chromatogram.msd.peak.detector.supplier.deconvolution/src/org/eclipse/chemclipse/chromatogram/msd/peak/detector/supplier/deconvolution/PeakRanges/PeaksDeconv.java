@@ -20,7 +20,6 @@ public class PeaksDeconv implements IPeaksDeconv {
 	private String whereGotPeak;
 
 	public PeaksDeconv(String whereArePeakDetect) {
-
 		whereGotPeak = whereArePeakDetect;
 		peaks = new ArrayList<IPeakDeconv>(0);
 	}

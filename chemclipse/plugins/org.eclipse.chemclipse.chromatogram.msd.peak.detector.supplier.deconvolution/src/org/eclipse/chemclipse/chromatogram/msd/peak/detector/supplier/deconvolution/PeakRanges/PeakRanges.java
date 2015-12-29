@@ -23,7 +23,6 @@ public class PeakRanges implements IPeakRanges {
 	private List<IPeakRange> peakRanges;
 
 	public PeakRanges(ITotalScanSignals signals) {
-
 		startScan = signals.getStartScan();
 		stopScan = signals.getStopScan();
 		peakRanges = new ArrayList<IPeakRange>(0);

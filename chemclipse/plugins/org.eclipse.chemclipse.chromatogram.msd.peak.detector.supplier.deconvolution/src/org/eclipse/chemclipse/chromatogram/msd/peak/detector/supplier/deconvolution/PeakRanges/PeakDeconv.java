@@ -16,7 +16,6 @@ public class PeakDeconv implements IPeakDeconv {
 	private int peak;
 
 	public PeakDeconv(int value) {
-
 		peak = value;
 	}
 

@@ -18,7 +18,6 @@ public class FirstDerivativeAndNoise implements IFirstDerivativeAndNoise {
 	private double[] noiseNegativ;
 
 	public FirstDerivativeAndNoise(double[] firstDerivValues, double[] noisePositivValues, double[] noiseNegativValues) {
-
 		firstDeriv = firstDerivValues;
 		noisePositiv = noisePositivValues;
 		noiseNegativ = noiseNegativValues;

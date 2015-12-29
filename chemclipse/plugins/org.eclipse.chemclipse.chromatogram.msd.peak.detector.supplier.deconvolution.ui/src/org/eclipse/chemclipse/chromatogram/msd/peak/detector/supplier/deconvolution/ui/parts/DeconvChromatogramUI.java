@@ -32,7 +32,6 @@ public class DeconvChromatogramUI extends AbstractViewMSDChromatogramUI {
 	private ISeries series;
 
 	public DeconvChromatogramUI(Composite parent, int style) {
-
 		super(parent, style);
 	}
 

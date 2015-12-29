@@ -18,7 +18,6 @@ public class ThirdDerivativeAndNoise implements IThirdDerivativeAndNoise {
 	private double[] noiseNegativ;
 
 	public ThirdDerivativeAndNoise(double[] thirdDerivValues, double[] noisePositivValues, double[] noiseNegativValues) {
-
 		thirdDeriv = thirdDerivValues;
 		noisePositiv = noisePositivValues;
 		noiseNegativ = noiseNegativValues;

@@ -17,7 +17,6 @@ public enum Sensitivity implements ISensitivity {
 	private int sensitivity;
 
 	private Sensitivity(int sensitivity) {
-
 		this.sensitivity = sensitivity;
 	}
 

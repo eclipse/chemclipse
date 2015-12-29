@@ -17,7 +17,6 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 public class ArraysViewDeconv extends DetectorArraysView implements IArraysViewDeconv {
 
 	public ArraysViewDeconv(ITotalScanSignals signals) {
-
 		super(signals);
 	}
 }

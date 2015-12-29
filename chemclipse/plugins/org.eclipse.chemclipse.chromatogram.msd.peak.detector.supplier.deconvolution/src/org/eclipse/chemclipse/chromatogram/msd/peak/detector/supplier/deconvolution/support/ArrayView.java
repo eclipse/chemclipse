@@ -16,7 +16,6 @@ public class ArrayView implements IArrayView {
 	private double yScale;
 
 	public ArrayView(double point) {
-
 		yScale = point;
 	}
 

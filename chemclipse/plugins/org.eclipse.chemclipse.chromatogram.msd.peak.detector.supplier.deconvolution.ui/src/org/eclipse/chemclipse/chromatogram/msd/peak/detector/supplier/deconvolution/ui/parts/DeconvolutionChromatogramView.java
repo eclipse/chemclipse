@@ -41,7 +41,6 @@ public class DeconvolutionChromatogramView extends AbstractChromatogramSelection
 
 	@Inject
 	public DeconvolutionChromatogramView(EPartService partService, MPart part, IEventBroker eventBroker) {
-
 		super(part, partService, eventBroker);
 		this.eventBroker = eventBroker;
 		subscribe();
