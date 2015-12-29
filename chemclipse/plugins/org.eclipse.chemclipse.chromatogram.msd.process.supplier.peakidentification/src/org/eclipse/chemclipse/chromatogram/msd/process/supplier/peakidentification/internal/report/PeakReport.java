@@ -27,7 +27,6 @@ public class PeakReport {
 	 * This class has only static methods.
 	 */
 	private PeakReport() {
-
 	}
 
 	public static void writeResults(IPeaks peaks, PrintWriter printWriter, String integrator, String identifier) {

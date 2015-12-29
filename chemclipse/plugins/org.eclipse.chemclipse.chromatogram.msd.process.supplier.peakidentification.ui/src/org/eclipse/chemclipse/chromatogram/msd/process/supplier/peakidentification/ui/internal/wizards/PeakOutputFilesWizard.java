@@ -26,7 +26,6 @@ public class PeakOutputFilesWizard extends Wizard {
 	private IPeakOutputEntry outputEntry = null;
 
 	public PeakOutputFilesWizard() {
-
 		super();
 		setNeedsProgressMonitor(true);
 	}

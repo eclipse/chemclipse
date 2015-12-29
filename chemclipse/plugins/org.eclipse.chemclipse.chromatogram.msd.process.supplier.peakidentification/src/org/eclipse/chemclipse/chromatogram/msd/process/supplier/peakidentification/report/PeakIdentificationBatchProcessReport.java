@@ -19,7 +19,6 @@ public class PeakIdentificationBatchProcessReport implements IPeakIdentification
 	private IPeaks peaks;
 
 	public PeakIdentificationBatchProcessReport() {
-
 		peaks = new Peaks();
 	}
 

@@ -35,7 +35,6 @@ public class PeakIdentificationBatchJobExportRunnable implements IRunnableWithPr
 	private IPeakIdentificationBatchJob peakIdentificationBatchJob;
 
 	public PeakIdentificationBatchJobExportRunnable(File file, IPeakIdentificationBatchJob peakIdentificationBatchJob) {
-
 		this.file = file;
 		this.peakIdentificationBatchJob = peakIdentificationBatchJob;
 	}

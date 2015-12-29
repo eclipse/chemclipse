@@ -39,7 +39,6 @@ public class PeakIdentificationBatchRunnable implements IRunnableWithProgress {
 	private PeakIdentificationBatchJobReader reader;
 
 	public PeakIdentificationBatchRunnable(String filePath) {
-
 		this.filePath = filePath;
 	}
 

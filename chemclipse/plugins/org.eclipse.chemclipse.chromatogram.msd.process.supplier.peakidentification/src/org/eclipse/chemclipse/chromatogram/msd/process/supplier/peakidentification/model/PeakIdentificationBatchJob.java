@@ -25,7 +25,6 @@ public class PeakIdentificationBatchJob implements IPeakIdentificationBatchJob {
 	private String name;
 
 	public PeakIdentificationBatchJob(String name) {
-
 		if(name != null) {
 			this.name = name;
 		}

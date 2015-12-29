@@ -44,7 +44,6 @@ public class PeakIdentificationResultsPage implements IMultiEditorPage {
 	private PeakIdentificationBatchProcessEditor editorPart;
 
 	public PeakIdentificationResultsPage(PeakIdentificationBatchProcessEditor editorPart, Composite container) {
-
 		createPage(editorPart, container);
 		this.editorPart = editorPart;
 		selectionUpdateListener = new PeakIdentificationResultsPage.SelectionUpdateListener();

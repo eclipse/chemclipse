@@ -78,7 +78,6 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 	private IdentificationSupport identifiationSupport;
 
 	public PeakIdentificationBatchProcessEditorPage(PeakIdentificationBatchProcessEditor editorPart, Composite container) {
-
 		integrationSupport = new IntegrationSupport();
 		identifiationSupport = new IdentificationSupport();
 		createPage(editorPart, container);

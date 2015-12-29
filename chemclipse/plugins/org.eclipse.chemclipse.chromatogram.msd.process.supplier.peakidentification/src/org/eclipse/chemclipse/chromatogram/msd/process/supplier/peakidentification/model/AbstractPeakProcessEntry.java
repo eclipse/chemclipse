@@ -17,14 +17,12 @@ public abstract class AbstractPeakProcessEntry implements IPeakProcessEntry {
 	private boolean report = false;
 
 	public AbstractPeakProcessEntry(String processorId) {
-
 		if(processorId != null) {
 			this.processorId = processorId;
 		}
 	}
 
 	public AbstractPeakProcessEntry(String processorId, boolean report) {
-
 		this(processorId);
 		this.report = report;
 	}

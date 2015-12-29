@@ -31,7 +31,6 @@ public class PeakIdentificationBatchJobEventFilter implements EventFilter {
 	 * @param acceptedElements
 	 */
 	public PeakIdentificationBatchJobEventFilter(List<String> acceptedElements) {
-
 		if(acceptedElements != null) {
 			this.acceptedElements = acceptedElements;
 		}

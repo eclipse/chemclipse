@@ -23,7 +23,6 @@ public class PeakInputEntry implements IPeakInputEntry {
 	 * @param inputFile
 	 */
 	public PeakInputEntry(String inputFile) {
-
 		if(inputFile != null) {
 			this.inputFile = inputFile;
 		}

@@ -32,7 +32,6 @@ public class PeakIdentificationBatchJobWizard extends AbstractFileWizard {
 	private static final Logger logger = Logger.getLogger(PeakIdentificationBatchJobWizard.class);
 
 	public PeakIdentificationBatchJobWizard() {
-
 		super("PeakIdentificationBatchJob", ".opi");
 	}
 

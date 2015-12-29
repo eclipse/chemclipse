@@ -23,7 +23,6 @@ public class PeakOutputEntry implements IPeakOutputEntry {
 	 * @param converterId
 	 */
 	public PeakOutputEntry(String outputFolder, String converterId) {
-
 		if(outputFolder != null && converterId != null) {
 			this.outputFolder = outputFolder;
 			this.converterId = converterId;

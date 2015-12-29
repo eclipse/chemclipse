@@ -45,7 +45,6 @@ public class PeakOutputFilesWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	protected PeakOutputFilesWizardPage(String pageName) {
-
 		super(pageName);
 		setTitle("Peak Output Formats");
 		setDescription("This wizard lets you select several output peak formats.");

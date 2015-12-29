@@ -14,12 +14,10 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentificat
 public class PeakIntegrationEntry extends AbstractPeakProcessEntry implements IPeakIntegrationEntry {
 
 	public PeakIntegrationEntry(String processorId, boolean report) {
-
 		super(processorId, report);
 	}
 
 	public PeakIntegrationEntry(String processorId) {
-
 		super(processorId);
 	}
 }

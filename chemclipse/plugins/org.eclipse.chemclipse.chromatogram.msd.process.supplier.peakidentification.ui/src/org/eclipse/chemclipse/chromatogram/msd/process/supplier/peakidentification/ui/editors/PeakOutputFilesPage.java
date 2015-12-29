@@ -52,7 +52,6 @@ public class PeakOutputFilesPage implements IMultiEditorPage {
 	private Table outputFilesTable;
 
 	public PeakOutputFilesPage(PeakIdentificationBatchProcessEditor editorPart, Composite container) {
-
 		createPage(editorPart, container);
 	}
 

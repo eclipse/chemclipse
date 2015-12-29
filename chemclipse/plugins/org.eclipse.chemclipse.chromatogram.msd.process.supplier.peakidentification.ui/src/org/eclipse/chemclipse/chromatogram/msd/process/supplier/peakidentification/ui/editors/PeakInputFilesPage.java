@@ -53,7 +53,6 @@ public class PeakInputFilesPage implements IMultiEditorPage {
 	private static final String FILES = "Input Files: ";
 
 	public PeakInputFilesPage(PeakIdentificationBatchProcessEditor editorPart, Composite container) {
-
 		createPage(editorPart, container);
 	}
 
