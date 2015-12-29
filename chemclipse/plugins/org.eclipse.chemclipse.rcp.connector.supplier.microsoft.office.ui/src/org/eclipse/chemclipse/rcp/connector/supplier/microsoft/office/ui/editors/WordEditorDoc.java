@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editor
 public class WordEditorDoc extends OLEEditor {
 
 	public WordEditorDoc() {
-
 		super(IOLEApplication.PROG_ID_WORD, "doc", "Microsoft Word 2003 (*.doc)");
 	}
 }

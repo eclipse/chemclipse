@@ -65,7 +65,6 @@ public abstract class OLEEditor extends EditorPart {
 	private boolean isDirty = false;
 
 	public OLEEditor(String progId, String filterExtension, String filterName) {
-
 		this.progId = progId;
 		this.filterExtension = filterExtension;
 		this.filterName = filterName;

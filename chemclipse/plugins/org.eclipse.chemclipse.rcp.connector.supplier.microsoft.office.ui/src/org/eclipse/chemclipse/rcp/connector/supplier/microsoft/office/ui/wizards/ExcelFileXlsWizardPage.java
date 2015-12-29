@@ -16,7 +16,6 @@ import org.eclipse.jface.viewers.ISelection;
 public class ExcelFileXlsWizardPage extends OfficeFileWizardPage {
 
 	public ExcelFileXlsWizardPage(ISelection selection) {
-
 		super(selection, "Microsoft Office Excel File", "This wizard creates a new Microsoft Office Excel (*.xls) file.", "report.xls", "xls");
 	}
 }

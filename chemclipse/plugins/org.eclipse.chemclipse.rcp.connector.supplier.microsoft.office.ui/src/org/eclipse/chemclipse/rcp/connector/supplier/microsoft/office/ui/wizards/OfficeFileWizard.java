@@ -51,7 +51,6 @@ public abstract class OfficeFileWizard extends Wizard implements INewWizard {
 	 * Constructor for ExcelFileXLSXWizard.
 	 */
 	public OfficeFileWizard() {
-
 		super();
 		setNeedsProgressMonitor(true);
 	}

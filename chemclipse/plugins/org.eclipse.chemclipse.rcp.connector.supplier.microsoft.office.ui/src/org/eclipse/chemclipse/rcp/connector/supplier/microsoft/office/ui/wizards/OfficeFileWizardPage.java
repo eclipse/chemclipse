@@ -45,7 +45,6 @@ public abstract class OfficeFileWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	public OfficeFileWizardPage(ISelection selection, String title, String description, String fileNameDefault, String fileExtension) {
-
 		super("wizardPage");
 		setTitle(title);
 		setDescription(description);

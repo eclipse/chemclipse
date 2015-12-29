@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editor
 public class ExcelEditorXlsx extends OLEEditor {
 
 	public ExcelEditorXlsx() {
-
 		super(IOLEApplication.PROG_ID_EXCEL, "xlsx", "Microsoft Excel 2007 (*.xlsx)");
 	}
 }

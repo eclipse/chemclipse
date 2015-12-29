@@ -16,7 +16,6 @@ import org.eclipse.jface.viewers.ISelection;
 public class WordFileDocxWizardPage extends OfficeFileWizardPage {
 
 	public WordFileDocxWizardPage(ISelection selection) {
-
 		super(selection, "Microsoft Office Word File", "This wizard creates a new Microsoft Office Word (*.docx) file.", "report.docx", "docx");
 	}
 }
