@@ -23,7 +23,6 @@ import org.eclipse.ui.IWorkbench;
 public class FilterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public FilterPreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Select the ions that will be removed using the filter.");

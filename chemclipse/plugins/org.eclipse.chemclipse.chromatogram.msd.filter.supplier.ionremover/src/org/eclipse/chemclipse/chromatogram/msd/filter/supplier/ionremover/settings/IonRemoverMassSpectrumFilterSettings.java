@@ -23,7 +23,6 @@ public class IonRemoverMassSpectrumFilterSettings extends AbstractMassSpectrumFi
 	 * Initialize the excluded ions instance.
 	 */
 	public IonRemoverMassSpectrumFilterSettings() {
-
 		ionsToRemove = new MarkedIons();
 	}
 

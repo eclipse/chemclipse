@@ -23,7 +23,6 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 	 * Initialize the excluded ions instance.
 	 */
 	public SupplierFilterSettings() {
-
 		ionsToRemove = new MarkedIons();
 	}
 

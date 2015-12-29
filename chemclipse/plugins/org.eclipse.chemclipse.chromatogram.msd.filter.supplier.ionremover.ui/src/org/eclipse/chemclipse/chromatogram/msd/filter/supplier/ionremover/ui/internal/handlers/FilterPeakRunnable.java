@@ -31,7 +31,6 @@ public class FilterPeakRunnable implements IRunnableWithProgress {
 	private boolean useSelectedPeak = true; // default
 
 	public FilterPeakRunnable(IChromatogramSelectionMSD chromatogramSelectionMSD, boolean useSelectedPeak) {
-
 		this.chromatogramSelectionMSD = chromatogramSelectionMSD;
 		this.useSelectedPeak = useSelectedPeak;
 	}

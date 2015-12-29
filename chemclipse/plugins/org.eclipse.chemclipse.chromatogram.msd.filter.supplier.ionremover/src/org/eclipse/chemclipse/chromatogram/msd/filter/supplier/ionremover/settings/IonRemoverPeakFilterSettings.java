@@ -23,7 +23,6 @@ public class IonRemoverPeakFilterSettings extends AbstractPeakFilterSettings imp
 	 * Initialize the excluded ions instance.
 	 */
 	public IonRemoverPeakFilterSettings() {
-
 		ionsToRemove = new MarkedIons();
 	}
 

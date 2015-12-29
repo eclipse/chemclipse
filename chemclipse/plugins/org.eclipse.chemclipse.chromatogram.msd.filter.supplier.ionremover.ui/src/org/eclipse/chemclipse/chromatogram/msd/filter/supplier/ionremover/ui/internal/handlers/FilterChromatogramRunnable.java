@@ -37,7 +37,6 @@ public class FilterChromatogramRunnable extends AbstractChromatogramProcessor im
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.chromatogram";
 
 	public FilterChromatogramRunnable(IChromatogramSelectionMSD chromatogramSelection) {
-
 		super(chromatogramSelection);
 	}
 
