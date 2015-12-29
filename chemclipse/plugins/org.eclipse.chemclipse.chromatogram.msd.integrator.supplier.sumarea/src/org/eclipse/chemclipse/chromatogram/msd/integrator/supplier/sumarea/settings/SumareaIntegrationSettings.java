@@ -23,7 +23,6 @@ public class SumareaIntegrationSettings extends AbstractChromatogramIntegrationS
 	private IMarkedIons selectedIons;
 
 	public SumareaIntegrationSettings() {
-
 		selectedIons = new MarkedIons();
 	}
 

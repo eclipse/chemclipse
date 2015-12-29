@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.support.ui.preferences.editors.IonListEditor;
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
-
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("The sumarea integrator supports the functionality to integrates ions.");
