@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2015 Philip (eselmeister) Wenig.
+ * Copyright (c) 2008, 2016 Philip (eselmeister) Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -65,7 +65,7 @@ public class MassSpectrum_7_Test extends TestCase {
 
 	public void getTotalSignal_1() {
 
-		assertEquals("getTotalSignal", 201501.1f, massSpectrum.getTotalSignal());
+		assertEquals("getTotalSignal", 201601.1f, massSpectrum.getTotalSignal());
 	}
 
 	public void getExtractedIonSignal_1() {

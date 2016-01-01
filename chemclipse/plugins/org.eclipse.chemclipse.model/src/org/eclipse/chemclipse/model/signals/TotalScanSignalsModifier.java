@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2015 Lablicate UG.
+ * Copyright (c) 2008, 2016 Lablicate UG.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
