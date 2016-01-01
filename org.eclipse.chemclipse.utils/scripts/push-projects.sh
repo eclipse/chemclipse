@@ -2,7 +2,7 @@
 
 #*******************************************************************************
 #
-# Copyright (c) 2014, 2015 Lablicate UG (haftungsbeschränkt)
+# Copyright (c) 2014, 2016 Lablicate UG (haftungsbeschränkt)
 #
 # All rights reserved.
 # 
