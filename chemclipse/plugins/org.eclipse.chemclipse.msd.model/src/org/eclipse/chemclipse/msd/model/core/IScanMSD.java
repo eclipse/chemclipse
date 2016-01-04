@@ -26,7 +26,8 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
  * The interface IMassSpectrum extends Serializable to enable an automated
  * storage of mass spectra on the disk.<br/>
  * It would be not efficient to load all mass spectra (e.g. scans of a
- * chromatogram) into the memory. In such a case, java would run out of memory.<br/>
+ * chromatogram) into the memory. In such a case, java would run out of memory.
+ * <br/>
  * That's not what we want. The storage of mass spectra is controlled by
  * AbstractChromatogram and its subclasses.<br/>
  * <br/>
@@ -59,7 +60,7 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
  * @author <a href="mailto:alex.kerner.24@googlemail.com">Alexander Kerner</a>
  * @see AbstractChromatogramMSD
  */
-public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNormalizable, IMassSpectrumTargets {
+public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNormalizable, IMassSpectrumTargets, IIonProvider {
 
 	/**
 	 * Returns the total ion current (TIC).<br/>
@@ -245,21 +246,6 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	IScanMSD removeIons(Set<Integer> ions);
 
 	/**
-	 * Returns the ion list.
-	 * 
-	 * @return List<Iion> - ion list
-	 */
-	List<IIon> getIons();
-
-	/**
-	 * Returns the number of stored ions.<br/>
-	 * If no ions are stored, 0 will be returned.
-	 * 
-	 * @return int
-	 */
-	int getNumberOfIons();
-
-	/**
 	 * Returns the IIon object for the given ion value.<br/>
 	 * BE CAREFUL, YOU CAN'T MODIFY THE ABUNDANCE OF THE MASS FRAGMENT WITH THE
 	 * RETURNED INSTANCE.<br/>
@@ -295,7 +281,8 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 
 	/**
 	 * Returns the ion with the given accurate ion value.
-	 * Precision see AbstractIon.getIon(float ion, int precision); {@link AbstractIon}
+	 * Precision see AbstractIon.getIon(float ion, int precision);
+	 * {@link AbstractIon}
 	 * 
 	 * @param ion
 	 * @param precision
@@ -316,7 +303,8 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	void adjustIons(float percentage);
 
 	/**
-	 * Returns a copy of the actual mass spectrum corrected by the given {@link IMarkedIons}.<br/>
+	 * Returns a copy of the actual mass spectrum corrected by the given
+	 * {@link IMarkedIons}.<br/>
 	 * The copy does not consists of ions stored in the excluded mass
 	 * fragment list.
 	 * 
