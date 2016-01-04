@@ -28,14 +28,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 
-public class DemoJavaFxPart {
+public class ChromatogramOverlay3D {
 
 	@PostConstruct
 	public void createComposite(Composite parent) {
 
 		parent.setLayout(new GridLayout(1, false));
 		final org.eclipse.swt.widgets.Button swtButton = new org.eclipse.swt.widgets.Button(parent, SWT.PUSH);
-		swtButton.setText("SWT");
+		swtButton.setText("Press me");
 		final FXCanvas fxCanvas = new FXCanvas(parent, SWT.NONE) {
 
 			@Override
@@ -49,7 +49,7 @@ public class DemoJavaFxPart {
 		};
 		//
 		Group group = new Group();
-		final Button javafxButton = new Button("JavaFX");
+		final Button javafxButton = new Button("Curious?");
 		javafxButton.setId("chemclipse");
 		group.getChildren().add(javafxButton);
 		Scene scene = new Scene(group, Color.rgb(parent.getBackground().getRed(), parent.getBackground().getGreen(), parent.getBackground().getBlue()));
@@ -63,7 +63,7 @@ public class DemoJavaFxPart {
 			@Override
 			public void handleEvent(Event event) {
 
-				javafxButton.setText("JavaFX: SWT Button has been pressed.");
+				javafxButton.setText("JavaFX: 3D chromatogram overlay is coming soon!");
 				parent.layout();
 			}
 		});
@@ -72,7 +72,7 @@ public class DemoJavaFxPart {
 			@Override
 			public void handle(ActionEvent event) {
 
-				swtButton.setText("SWT: JavaFX Button has been pressed.");
+				swtButton.setText("A SWT and JavaFX interaction is possible.");
 				parent.layout();
 			}
 		});
