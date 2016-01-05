@@ -9,6 +9,12 @@
             id="org.eclipse.chemclipse.support.ui.supportPreferencePage"
             name="General Settings">
       </page>
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
+            class="org.eclipse.chemclipse.support.ui.preferences.PreferencePageLanguage"
+            id="org.eclipse.chemclipse.support.ui.preferencePageLanguage"
+            name="Language">
+      </page>      
    </extension>
 
 </plugin>

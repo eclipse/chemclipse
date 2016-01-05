@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.preferences.SupportPreferences;
 import org.eclipse.core.runtime.FileLocator;
 import org.osgi.framework.Bundle;
 
@@ -88,9 +89,20 @@ public class Messages {
 
 		/*
 		 * Initialize the message map.
+		 * The user can manually select a language that shall be used.
 		 */
 		String language = System.getProperty("user.language"); // e.g.: de (ISO 639)
 		String country = System.getProperty("user.country"); // e.g.: DE (ISO 3166)
+		//
+		String userSelection = SupportPreferences.getApplicationLanguage();
+		if(userSelection != null && !userSelection.equals("")) {
+			String[] values = userSelection.split("_");
+			if(values.length == 2) {
+				language = values[0].trim();
+				country = values[1].trim();
+			}
+		}
+		//
 		messageMap = new HashMap<String, String>();
 		/*
 		 * Parse the language files.

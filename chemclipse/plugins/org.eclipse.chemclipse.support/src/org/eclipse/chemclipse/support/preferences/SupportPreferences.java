@@ -23,6 +23,14 @@ public class SupportPreferences implements IPreferenceSupplier {
 
 	public static final String P_CHROMATOGRAM_OPERATION_IS_UNDOABLE = "chromatogramOperationIsUndoable";
 	public static final boolean DEF_CHROMATOGRAM_OPERATION_IS_UNDOABLE = true;
+	public static final String P_APPLICATION_LANGUAGE = "applicationLanguage";
+	public static final String DEF_APPLICATION_LANGUAGE = "";
+	/*
+	 * No Selection. Use the language of the system.
+	 * de (ISO 639)
+	 * DE (ISO 3166)
+	 */
+	public static final String[][] AVAILABLE_LANGUAGES = new String[][]{{"Autodetect", ""}, {"English", "en_GB"}, {"German", "de_DE"}};
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -51,6 +59,7 @@ public class SupportPreferences implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_CHROMATOGRAM_OPERATION_IS_UNDOABLE, Boolean.toString(DEF_CHROMATOGRAM_OPERATION_IS_UNDOABLE));
+		defaultValues.put(P_APPLICATION_LANGUAGE, DEF_APPLICATION_LANGUAGE);
 		return defaultValues;
 	}
 
@@ -69,5 +78,11 @@ public class SupportPreferences implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getBoolean(P_CHROMATOGRAM_OPERATION_IS_UNDOABLE, DEF_CHROMATOGRAM_OPERATION_IS_UNDOABLE);
+	}
+
+	public static String getApplicationLanguage() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.get(P_APPLICATION_LANGUAGE, DEF_APPLICATION_LANGUAGE);
 	}
 }
