@@ -33,7 +33,7 @@ public class ELUReader_2_ITest extends TestCase {
 
 		super.setUp();
 		reader = new AmdisELUReader();
-		String pathname = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_PEAKS_1);
+		String pathname = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_PEAKS_1_ELU);
 		file = new File(pathname);
 		processingInfo = reader.read(file, new NullProgressMonitor());
 	}

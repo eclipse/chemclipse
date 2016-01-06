@@ -26,10 +26,11 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM = "testData/files/import/Chromtogram.msl";
 	public static final String TESTFILE_IMPORT_EMPTY = "testData/files/import/Empty.msl";
 	public static final String TESTFILE_IMPORT_NOT_READABLE = "testData/files/import/NotReadable.msl";
-	public static final String TESTFILE_IMPORT_PEAKS_1 = "testData/files/import/Peaks1.ELU";
+	public static final String TESTFILE_IMPORT_PEAKS_1_ELU = "testData/files/import/Peaks1.ELU";
 	public static final String TESTFILE_IMPORT_SYNONYMS = "testData/files/import/Synonyms.MSP";
 	public static final String TESTFILE_IMPORT_DB_1 = "testData/files/import/DB1.msl";
 	public static final String TESTFILE_IMPORT_DB_2 = "testData/files/import/DB2.msl";
+	public static final String TESTFILE_IMPORT_PEAKS_1_MSP = "testData/files/import/Peaks1.MSP";
 	/*
 	 * EXPORT
 	 */

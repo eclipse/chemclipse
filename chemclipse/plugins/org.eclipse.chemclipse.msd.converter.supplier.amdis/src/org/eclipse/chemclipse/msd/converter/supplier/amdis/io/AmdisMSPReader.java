@@ -26,8 +26,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -41,6 +39,7 @@ import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSpectraReader {
 
@@ -50,13 +49,14 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 	/**
 	 * Pre-compile all patterns to be a little bit faster.
 	 */
+	private static final String LINE_END = "\n";
 	private static final Pattern namePattern = Pattern.compile("(NAME:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern synonymPattern = Pattern.compile("(Synon:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern commentsPattern = Pattern.compile("(COMMENTS:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern casNumberPattern = Pattern.compile("(CASNO:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionTimePattern = Pattern.compile("(RT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionIndexPattern = Pattern.compile("(RI:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern ionPattern = Pattern.compile("(\\d+)(\\s+)(\\d+)");
+	private static final Pattern ionPattern = Pattern.compile("(\\d+)( )(\\d+)", Pattern.UNIX_LINES);
 
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -95,7 +95,7 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 				builder = new StringBuilder();
 			} else {
 				builder.append(line);
-				builder.append("\r\n");
+				builder.append(LINE_END);
 			}
 		}
 		/*

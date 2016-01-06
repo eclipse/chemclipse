@@ -14,14 +14,14 @@
             isImportable="true">
       </MassSpectrumSupplier>
       <MassSpectrumSupplier
-            description="Writes NIST Text  (MSP) mass spectra."
+            description="Reads and writes NIST Text  (MSP) mass spectra."
             exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MSPMassSpectrumExportConverter"
             fileExtension=".msp"
             filterName="NIST Text (*.msp)"
             id="org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msp"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MSPMassSpectrumImportConverter"
             isExportable="true"
-            isImportable="false">
+            isImportable="true">
       </MassSpectrumSupplier>
    </extension>
    <extension
