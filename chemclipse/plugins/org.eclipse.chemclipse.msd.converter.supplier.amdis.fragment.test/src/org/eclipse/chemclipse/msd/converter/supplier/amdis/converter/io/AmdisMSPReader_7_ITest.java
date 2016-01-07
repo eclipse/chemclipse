@@ -74,7 +74,7 @@ public class AmdisMSPReader_7_ITest extends TestCase {
 		assertEquals(45971.0f, massSpectrum.getHighestAbundance().getAbundance());
 		assertEquals(0, massSpectrum.getRetentionTime());
 		assertEquals(0.0f, massSpectrum.getRetentionIndex());
-		assertEquals(0.0f, massSpectrum.getTotalSignal());
+		assertEquals(135419.0f, massSpectrum.getTotalSignal());
 	}
 
 	public void test3() {
@@ -103,7 +103,7 @@ public class AmdisMSPReader_7_ITest extends TestCase {
 		assertEquals(85984.0f, massSpectrum.getHighestAbundance().getAbundance());
 		assertEquals(0, massSpectrum.getRetentionTime());
 		assertEquals(0.0f, massSpectrum.getRetentionIndex());
-		assertEquals(0.0f, massSpectrum.getTotalSignal());
+		assertEquals(331818.0f, massSpectrum.getTotalSignal());
 	}
 
 	public void test4() {
@@ -132,6 +132,6 @@ public class AmdisMSPReader_7_ITest extends TestCase {
 		assertEquals(173936.0f, massSpectrum.getHighestAbundance().getAbundance());
 		assertEquals(0, massSpectrum.getRetentionTime());
 		assertEquals(0.0f, massSpectrum.getRetentionIndex());
-		assertEquals(0.0f, massSpectrum.getTotalSignal());
+		assertEquals(394705.0f, massSpectrum.getTotalSignal());
 	}
 }

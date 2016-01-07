@@ -140,12 +140,29 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 	private IMassSpectra extractMassSpectra(List<String> massSpectraData) {
 
 		IMassSpectra massSpectra = new MassSpectra();
-		/*
-		 * Iterates through the saved mass spectrum text data and converts it to
-		 * a mass spectrum.
-		 */
-		for(String massSpectrumData : massSpectraData) {
-			addMassSpectrum(massSpectra, massSpectrumData);
+		if(massSpectraData.size() > 1) {
+			/*
+			 * Iterates through the saved mass spectrum text data and converts it to
+			 * a mass spectrum.
+			 */
+			for(String massSpectrumData : massSpectraData) {
+				addMassSpectrum(massSpectra, massSpectrumData);
+			}
+		} else if(massSpectraData.size() == 1) {
+			/*
+			 * Sometimes, mass spectra are not separated by an empty line.
+			 * Hence, check if several name patterns can be detected in the text.
+			 */
+			String[] splittedMassSpectra = massSpectraData.get(0).split("(NAME:|name:)");
+			for(String splittedMassSpectrum : splittedMassSpectra) {
+				if(!splittedMassSpectrum.equals("")) {
+					if(splittedMassSpectra.length == 1) {
+						addMassSpectrum(massSpectra, splittedMassSpectrum);
+					} else {
+						addMassSpectrum(massSpectra, "NAME:" + splittedMassSpectrum);
+					}
+				}
+			}
 		}
 		return massSpectra;
 	}
