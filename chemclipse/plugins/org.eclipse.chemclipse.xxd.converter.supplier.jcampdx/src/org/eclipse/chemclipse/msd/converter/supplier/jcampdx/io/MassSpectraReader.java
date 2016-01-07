@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
@@ -43,12 +45,18 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 	private static final String HEADER_TITLE = "##TITLE=";
 	private static final String HEADER_VERSION = "##VERSION=";
 	private static final String RETENTION_TIME_MARKER = "##RETENTION_TIME=";
+	private static final String RETENTION_INDEX_MARKER = "##$RETENTION INDEX=";
+	private static final String CAS_REGISTRY_NO = "##CAS REGISTRY NO=";
+	private static final String MOL_WEIGHT = "##MW=";
+	private static final String MOL_FORM = "##MOLFORM=";
 	private static final String TIME_MARKER = "##TIME=";
 	private static final String NAME_MARKER = "##NAME=";
-	private static final String XYDATA_MARKER_SPACE = "##XYDATA= (XY..XY)";
+	private static final String NAMES_MARKER = "##NAMES=";
+	private static final String XYDATA_MARKER_SPACE_TYPE1 = "##XYDATA= (XY..XY)";
+	private static final String XYDATA_MARKER_SPACE_TYPE2 = "##XYDATA=(XY..XY)";
 	private static final String XYDATA_MARKER_SHORT = "##XYDATA=(X,Y)";
-	private static final String ION_DELIMITER_COMMA = ",";
-	private static final String ION_DELIMITER_WHITESPACE = " ";
+	//
+	private static final Pattern ionPattern = Pattern.compile("(\\d+\\.?\\d{0,5})(.*?)(\\d+\\.?\\d{0,5})");
 
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -68,9 +76,7 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 		FileReader fileReader = new FileReader(file);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		String line;
-		int retentionTime = 0;
 		boolean readIons = false;
-		boolean readIonsSpace = false;
 		/*
 		 * Parse each line
 		 */
@@ -86,11 +92,16 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 			 * 44.05768, 36
 			 * ...
 			 */
-			if(line.startsWith(NAME_MARKER)) {
+			if(line.startsWith(NAME_MARKER) || line.startsWith(NAMES_MARKER)) {
 				/*
 				 * Try to get the identification.
 				 */
-				String name = line.replace(NAME_MARKER, "").trim();
+				String name;
+				if(line.startsWith(NAME_MARKER)) {
+					name = line.replace(NAME_MARKER, "").trim();
+				} else {
+					name = line.replace(NAMES_MARKER, "").trim();
+				}
 				/*
 				 * Store an existing scan.
 				 */
@@ -121,43 +132,38 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 				 * Parse the scan data
 				 */
 				if(line.startsWith(RETENTION_TIME_MARKER) || line.startsWith(TIME_MARKER)) {
-					retentionTime = getRetentionTime(line);
+					int retentionTime = getRetentionTime(line);
 					massSpectrum.setRetentionTime(retentionTime);
-				} else if(line.startsWith(XYDATA_MARKER_SPACE) || line.startsWith(XYDATA_MARKER_SHORT)) {
+				} else if(line.startsWith(RETENTION_INDEX_MARKER)) {
+					float retentionIndex = getRetentionIndex(line);
+					massSpectrum.setRetentionIndex(retentionIndex);
+				} else if(line.startsWith(CAS_REGISTRY_NO)) {
+					String casNumber = line.replace(CAS_REGISTRY_NO, "").trim();
+					massSpectrum.getLibraryInformation().setCasNumber(casNumber);
+				} else if(line.startsWith(MOL_WEIGHT)) {
+					double molWeight = getMolWeight(line);
+					massSpectrum.getLibraryInformation().setMolWeight(molWeight);
+				} else if(line.startsWith(MOL_FORM)) {
+					String formula = line.replace(MOL_FORM, "").trim();
+					massSpectrum.getLibraryInformation().setFormula(formula);
+				} else if(line.startsWith(XYDATA_MARKER_SPACE_TYPE1) || line.startsWith(XYDATA_MARKER_SPACE_TYPE2) || line.startsWith(XYDATA_MARKER_SHORT)) {
 					/*
 					 * Mark to read ions.
 					 */
 					readIons = true;
-					if(line.startsWith(XYDATA_MARKER_SPACE)) {
-						readIonsSpace = true;
-					} else {
-						readIonsSpace = false;
-					}
 				} else if(!line.startsWith(HEADER_MARKER) && readIons) {
 					/*
 					 * Parse the ions.
 					 */
 					try {
 						line = line.trim();
-						if(readIonsSpace) {
-							String[] values = line.split(ION_DELIMITER_COMMA);
-							if(values.length == 2) {
-								double mz = Double.parseDouble(values[0].trim());
-								float abundance = Float.parseFloat(values[1].trim());
-								if(abundance >= VendorIon.MIN_ABUNDANCE && abundance <= VendorIon.MAX_ABUNDANCE) {
-									ion = new VendorIon(mz, abundance);
-									massSpectrum.addIon(ion);
-								}
-							}
-						} else {
-							String[] values = line.split(ION_DELIMITER_WHITESPACE);
-							if(values.length == 2) {
-								double mz = Double.parseDouble(values[0].trim());
-								float abundance = Float.parseFloat(values[1].trim());
-								if(abundance >= VendorIon.MIN_ABUNDANCE && abundance <= VendorIon.MAX_ABUNDANCE) {
-									ion = new VendorIon(mz, abundance);
-									massSpectrum.addIon(ion);
-								}
+						Matcher ions = ionPattern.matcher(line.trim());
+						while(ions.find()) {
+							double mz = Double.parseDouble(ions.group(1));
+							float abundance = Float.parseFloat(ions.group(3));
+							if(abundance >= VendorIon.MIN_ABUNDANCE && abundance <= VendorIon.MAX_ABUNDANCE) {
+								ion = new VendorIon(mz, abundance);
+								massSpectrum.addIon(ion);
 							}
 						}
 					} catch(AbundanceLimitExceededException e) {
@@ -207,6 +213,34 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 			logger.warn(e);
 		}
 		return retentionTime;
+	}
+
+	private float getRetentionIndex(String line) {
+
+		float retentionIndex = 0;
+		try {
+			if(line.startsWith(RETENTION_INDEX_MARKER)) {
+				String value = line.replace(RETENTION_INDEX_MARKER, "").trim();
+				retentionIndex = (float)(Double.parseDouble(value));
+			}
+		} catch(NumberFormatException e) {
+			logger.warn(e);
+		}
+		return retentionIndex;
+	}
+
+	private double getMolWeight(String line) {
+
+		double molWeight = 0;
+		try {
+			if(line.startsWith(MOL_WEIGHT)) {
+				String value = line.replace(MOL_WEIGHT, "").trim();
+				molWeight = Double.parseDouble(value);
+			}
+		} catch(NumberFormatException e) {
+			logger.warn(e);
+		}
+		return molWeight;
 	}
 
 	private boolean isValidFileFormat(File file) throws IOException {
