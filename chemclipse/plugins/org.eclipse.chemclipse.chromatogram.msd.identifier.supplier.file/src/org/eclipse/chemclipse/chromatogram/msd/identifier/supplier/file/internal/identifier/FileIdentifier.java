@@ -15,8 +15,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumComparatorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IPeakIdentifierProcessingInfo;
@@ -44,10 +42,12 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectru
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class FileIdentifier {
 
 	private static final Logger logger = Logger.getLogger(FileIdentifier.class);
+	private static final String IDENTIFIER = "File Identifier";
 	/*
 	 * Don't reload the database on each request, only if neccessary.
 	 */
@@ -222,6 +222,7 @@ public class FileIdentifier {
 		} catch(ReferenceMustNotBeNullException e) {
 			logger.warn(e);
 		}
+		identificationEntry.setIdentifier(IDENTIFIER);
 		return identificationEntry;
 	}
 
@@ -254,6 +255,7 @@ public class FileIdentifier {
 		} catch(ReferenceMustNotBeNullException e) {
 			logger.warn(e);
 		}
+		identificationEntry.setIdentifier(IDENTIFIER);
 		return identificationEntry;
 	}
 }
