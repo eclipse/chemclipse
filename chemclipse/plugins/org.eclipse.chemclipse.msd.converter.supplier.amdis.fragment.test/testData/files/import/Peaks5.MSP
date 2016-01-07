@@ -1,0 +1,11 @@
+Name: Demo1
+Synon: Synonym1
+Synon: Synonym2
+Synon: Synonym3
+Formula: N2
+MW: 100
+CASNO: 222-111-3333
+Comment: Comment1
+Num peaks: 2
+   1   21;   2  999;
+

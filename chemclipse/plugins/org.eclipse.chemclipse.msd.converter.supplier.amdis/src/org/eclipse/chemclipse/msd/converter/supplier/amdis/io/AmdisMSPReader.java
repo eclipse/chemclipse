@@ -57,10 +57,10 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 	private static final Pattern synonymPattern = Pattern.compile("(Synon:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern commentsPattern = Pattern.compile("(COMMENTS:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern commentPattern = Pattern.compile("(COMMENT:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern casNumberPattern = Pattern.compile("(CASNO:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern casNumberPattern = Pattern.compile("(CAS(NO|#):[ ]+)([0-9-]*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionTimePattern = Pattern.compile("(RT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionIndexPattern = Pattern.compile("(RI:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern ionPattern = Pattern.compile("(\\d+\\.?\\d?)(\\s+)(\\d+\\.\\d+)");
+	private static final Pattern ionPattern = Pattern.compile("(\\d+\\.?\\d{0,5})([ ]+)(\\d+\\.?\\d{0,5})");
 
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -161,19 +161,19 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 		IVendorLibraryMassSpectrum massSpectrum = new VendorLibraryMassSpectrum();
 		ILibraryInformation libraryInformation = massSpectrum.getLibraryInformation();
 		//
-		String name = extractContentAsString(massSpectrumData, namePattern);
+		String name = extractContentAsString(massSpectrumData, namePattern, 2);
 		libraryInformation.setName(name);
-		String formula = extractContentAsString(massSpectrumData, formulaPattern);
+		String formula = extractContentAsString(massSpectrumData, formulaPattern, 2);
 		libraryInformation.setFormula(formula);
 		double molWeight = extractContentAsDouble(massSpectrumData, molweightPattern);
 		libraryInformation.setMolWeight(molWeight);
 		Set<String> synonyms = extractSynonyms(massSpectrumData, synonymPattern);
 		massSpectrum.getLibraryInformation().setSynonyms(synonyms);
-		String comments = extractContentAsString(massSpectrumData, commentsPattern);
-		String comment = extractContentAsString(massSpectrumData, commentPattern);
+		String comments = extractContentAsString(massSpectrumData, commentsPattern, 2);
+		String comment = extractContentAsString(massSpectrumData, commentPattern, 2);
 		String commentData = comments + comment;
 		libraryInformation.setComments(commentData.trim());
-		String casNumber = extractContentAsString(massSpectrumData, casNumberPattern);
+		String casNumber = extractContentAsString(massSpectrumData, casNumberPattern, 3);
 		libraryInformation.setCasNumber(casNumber);
 		int retentionTime = extractContentAsInt(massSpectrumData, retentionTimePattern);
 		massSpectrum.setRetentionTime(retentionTime);
@@ -232,12 +232,12 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 	 * @param massSpectrumData
 	 * @return String
 	 */
-	private String extractContentAsString(String massSpectrumData, Pattern pattern) {
+	private String extractContentAsString(String massSpectrumData, Pattern pattern, int group) {
 
 		String content = "";
 		Matcher matcher = pattern.matcher(massSpectrumData);
 		if(matcher.find()) {
-			content = matcher.group(2).trim();
+			content = matcher.group(group).trim();
 		}
 		return content;
 	}

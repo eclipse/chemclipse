@@ -31,6 +31,12 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_DB_1 = "testData/files/import/DB1.msl";
 	public static final String TESTFILE_IMPORT_DB_2 = "testData/files/import/DB2.msl";
 	public static final String TESTFILE_IMPORT_PEAKS_1_MSP = "testData/files/import/Peaks1.MSP";
+	public static final String TESTFILE_IMPORT_PEAKS_2_MSP = "testData/files/import/Peaks2.MSP";
+	public static final String TESTFILE_IMPORT_PEAKS_3_MSP = "testData/files/import/Peaks3.MSP";
+	public static final String TESTFILE_IMPORT_PEAKS_4_MSP = "testData/files/import/Peaks4.MSP";
+	public static final String TESTFILE_IMPORT_PEAKS_5_MSP = "testData/files/import/Peaks5.MSP";
+	public static final String TESTFILE_IMPORT_PEAKS_6_MSP = "testData/files/import/Peaks6.MSP";
+	public static final String TESTFILE_IMPORT_PEAKS_7_MSP = "testData/files/import/Peaks7.MSP";
 	/*
 	 * EXPORT
 	 */
