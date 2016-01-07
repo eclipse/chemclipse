@@ -13,8 +13,10 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.io;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.AmdisMSPReader;
+import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -49,6 +51,20 @@ public class AmdisMSPReader_1_ITest extends TestCase {
 	public void test2() {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(1);
+		if(massSpectrum instanceof ILibraryMassSpectrum) {
+			ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)massSpectrum;
+			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
+			assertEquals("Test1", libraryInformation.getName());
+			assertEquals("CHO", libraryInformation.getFormula());
+			assertEquals(100.0d, libraryInformation.getMolWeight());
+			assertEquals("44444", libraryInformation.getCasNumber());
+			assertEquals("Demo1", libraryInformation.getComments());
+		} else {
+			/*
+			 * It must be a library mass spectrum.
+			 */
+			assertTrue(false);
+		}
 		assertEquals(37, massSpectrum.getNumberOfIons());
 		assertEquals(42.0d, massSpectrum.getLowestIon().getIon());
 		assertEquals(17.98f, massSpectrum.getLowestIon().getAbundance());
@@ -58,13 +74,27 @@ public class AmdisMSPReader_1_ITest extends TestCase {
 		assertEquals(999.0f, massSpectrum.getHighestAbundance().getAbundance());
 		assertEquals(0, massSpectrum.getRetentionTime());
 		assertEquals(0.0f, massSpectrum.getRetentionIndex());
-		assertEquals(3439.78f, massSpectrum.getTotalSignal());
+		assertEquals(3439.7798f, massSpectrum.getTotalSignal());
 	}
 
 	public void test3() {
 
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(2);
-		assertEquals(37, massSpectrum.getNumberOfIons());
+		if(massSpectrum instanceof ILibraryMassSpectrum) {
+			ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)massSpectrum;
+			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
+			assertEquals("Test2", libraryInformation.getName());
+			assertEquals("CHO", libraryInformation.getFormula());
+			assertEquals(100.0d, libraryInformation.getMolWeight());
+			assertEquals("44444", libraryInformation.getCasNumber());
+			assertEquals("Demo2", libraryInformation.getComments());
+		} else {
+			/*
+			 * It must be a library mass spectrum.
+			 */
+			assertTrue(false);
+		}
+		assertEquals(45, massSpectrum.getNumberOfIons());
 		assertEquals(26.0d, massSpectrum.getLowestIon().getIon());
 		assertEquals(0.70f, massSpectrum.getLowestIon().getAbundance());
 		assertEquals(131.0d, massSpectrum.getHighestIon().getIon());
@@ -73,6 +103,6 @@ public class AmdisMSPReader_1_ITest extends TestCase {
 		assertEquals(999.0f, massSpectrum.getHighestAbundance().getAbundance());
 		assertEquals(0, massSpectrum.getRetentionTime());
 		assertEquals(0.0f, massSpectrum.getRetentionIndex());
-		assertEquals(1543.44f, massSpectrum.getTotalSignal());
+		assertEquals(1543.4396f, massSpectrum.getTotalSignal());
 	}
 }

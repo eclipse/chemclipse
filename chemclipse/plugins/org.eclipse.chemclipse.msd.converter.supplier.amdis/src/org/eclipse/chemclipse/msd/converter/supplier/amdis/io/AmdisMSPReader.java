@@ -30,6 +30,7 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.IVendorLibraryMassSpectrum;
@@ -51,12 +52,15 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 	 */
 	private static final String LINE_END = "\n";
 	private static final Pattern namePattern = Pattern.compile("(NAME:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern formulaPattern = Pattern.compile("(FORMULA:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern molweightPattern = Pattern.compile("(MW:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern synonymPattern = Pattern.compile("(Synon:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern commentsPattern = Pattern.compile("(COMMENTS:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern commentPattern = Pattern.compile("(COMMENT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern casNumberPattern = Pattern.compile("(CASNO:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionTimePattern = Pattern.compile("(RT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionIndexPattern = Pattern.compile("(RI:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern ionPattern = Pattern.compile("(\\d+)( )(\\d+)", Pattern.UNIX_LINES);
+	private static final Pattern ionPattern = Pattern.compile("(\\d+\\.?\\d?)(\\s+)(\\d+\\.\\d+)");
 
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -155,14 +159,22 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 	private void addMassSpectrum(IMassSpectra massSpectra, String massSpectrumData) {
 
 		IVendorLibraryMassSpectrum massSpectrum = new VendorLibraryMassSpectrum();
+		ILibraryInformation libraryInformation = massSpectrum.getLibraryInformation();
+		//
 		String name = extractContentAsString(massSpectrumData, namePattern);
-		massSpectrum.getLibraryInformation().setName(name);
+		libraryInformation.setName(name);
+		String formula = extractContentAsString(massSpectrumData, formulaPattern);
+		libraryInformation.setFormula(formula);
+		double molWeight = extractContentAsDouble(massSpectrumData, molweightPattern);
+		libraryInformation.setMolWeight(molWeight);
 		Set<String> synonyms = extractSynonyms(massSpectrumData, synonymPattern);
 		massSpectrum.getLibraryInformation().setSynonyms(synonyms);
 		String comments = extractContentAsString(massSpectrumData, commentsPattern);
-		massSpectrum.getLibraryInformation().setComments(comments);
+		String comment = extractContentAsString(massSpectrumData, commentPattern);
+		String commentData = comments + comment;
+		libraryInformation.setComments(commentData.trim());
 		String casNumber = extractContentAsString(massSpectrumData, casNumberPattern);
-		massSpectrum.getLibraryInformation().setCasNumber(casNumber);
+		libraryInformation.setCasNumber(casNumber);
 		int retentionTime = extractContentAsInt(massSpectrumData, retentionTimePattern);
 		massSpectrum.setRetentionTime(retentionTime);
 		float retentionIndex = extractContentAsFloat(massSpectrumData, retentionIndexPattern);
@@ -282,7 +294,21 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 		try {
 			Matcher matcher = pattern.matcher(massSpectrumData);
 			if(matcher.find()) {
-				content = (float)(Float.parseFloat(matcher.group(2)));
+				content = Float.parseFloat(matcher.group(2));
+			}
+		} catch(Exception e) {
+			logger.warn(e);
+		}
+		return content;
+	}
+
+	private double extractContentAsDouble(String massSpectrumData, Pattern pattern) {
+
+		double content = 0.0f;
+		try {
+			Matcher matcher = pattern.matcher(massSpectrumData);
+			if(matcher.find()) {
+				content = Double.parseDouble(matcher.group(2));
 			}
 		} catch(Exception e) {
 			logger.warn(e);
