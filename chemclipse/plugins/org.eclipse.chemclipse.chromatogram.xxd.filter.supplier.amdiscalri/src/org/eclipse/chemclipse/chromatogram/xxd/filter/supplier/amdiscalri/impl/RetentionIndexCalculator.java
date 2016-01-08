@@ -60,7 +60,7 @@ public class RetentionIndexCalculator {
 		}
 		//
 		processingInfo.setChromatogramFilterResult(new ChromatogramFilterResult(ResultStatus.OK, "The retention indices have been calculated."));
-		return null;
+		return processingInfo;
 	}
 
 	public void apply(List<IPeakMSD> peaks, IRetentionIndexFilterSettingsPeak retentionIndexFilterSettings, IProgressMonitor monitor) {
