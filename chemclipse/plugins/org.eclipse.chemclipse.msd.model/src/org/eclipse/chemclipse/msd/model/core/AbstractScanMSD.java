@@ -48,6 +48,7 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
  * 
  * @author eselmeister
  * @author <a href="mailto:alex.kerner.24@googlemail.com">Alexander Kerner</a>
+ * @author janosbinder
  * @see AbstractChromatogramMSD
  */
 public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
