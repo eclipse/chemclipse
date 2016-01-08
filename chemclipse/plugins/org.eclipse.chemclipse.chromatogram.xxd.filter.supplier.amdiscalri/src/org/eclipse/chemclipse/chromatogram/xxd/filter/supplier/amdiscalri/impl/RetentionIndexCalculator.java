@@ -79,7 +79,7 @@ public class RetentionIndexCalculator {
 		}
 	}
 
-	private TreeMap<Integer, IRetentionIndexEntry> getRetentionIndexEntries(File file) {
+	public TreeMap<Integer, IRetentionIndexEntry> getRetentionIndexEntries(File file) {
 
 		TreeMap<Integer, IRetentionIndexEntry> retentionIndices = new TreeMap<Integer, IRetentionIndexEntry>();
 		/*
@@ -115,7 +115,7 @@ public class RetentionIndexCalculator {
 		return retentionIndices;
 	}
 
-	private float calculateRetentionIndex(int retentionTime, TreeMap<Integer, IRetentionIndexEntry> retentionIndices) {
+	public float calculateRetentionIndex(int retentionTime, TreeMap<Integer, IRetentionIndexEntry> retentionIndices) {
 
 		float retentionIndex = 0;
 		Map.Entry<Integer, IRetentionIndexEntry> floorEntry = retentionIndices.floorEntry(retentionTime);
