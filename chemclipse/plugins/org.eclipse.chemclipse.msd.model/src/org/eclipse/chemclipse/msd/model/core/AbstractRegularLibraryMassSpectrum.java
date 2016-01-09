@@ -8,9 +8,11 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 
@@ -20,7 +22,23 @@ public abstract class AbstractRegularLibraryMassSpectrum extends AbstractRegular
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final long serialVersionUID = 3140941167337900216L;
+	private static final long serialVersionUID = -3521383640386911035L;
+
+	/**
+	 * Creates a new instance of {@code AbstractRegularLibraryMassSpectrum} by creating a
+	 * shallow copy of provided {@code templateScan}.
+	 * 
+	 * @param templateScan
+	 *            {@link IScan scan} that is used as a template
+	 */
+	public AbstractRegularLibraryMassSpectrum(IScanMSD templateScan) {
+		super(templateScan);
+	}
+
+	public AbstractRegularLibraryMassSpectrum(short massSpectrometer, short massSpectrumType) {
+		super(massSpectrometer, massSpectrumType);
+	}
+
 	private ILibraryInformation libraryInformation;
 
 	public AbstractRegularLibraryMassSpectrum() {

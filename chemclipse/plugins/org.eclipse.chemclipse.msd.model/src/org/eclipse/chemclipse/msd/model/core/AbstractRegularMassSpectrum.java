@@ -1,26 +1,29 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2016 Philip (eselmeister) Wenig.
- * 
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 
 /**
- * An abstract regular mass spectrum represents a single mass spectrum
+ * An {@code AbstractRegularMassSpectrum} represents a single mass spectrum
  * consisting of a retention time, a scan number and optionally a retention
  * index.<br/>
- * Opposite to this a combined mass spectrum (@link
- * AbstractCombinedMassSpectrum) represents a mass spectrum range.
- * 
+ * Opposite to this a combined mass spectrum {@link
+ * AbstractCombinedMassSpectrum} represents a mass spectrum range.
+ *
  * @author eselmeister
+ * @author <a href="mailto:alexander.kerner@openchrom.net">Alexander Kerner</a>
  */
 public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implements IRegularMassSpectrum {
 
@@ -28,7 +31,8 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final long serialVersionUID = 491290989250840877L;
+	private static final long serialVersionUID = 6001414280468244074L;
+	// TODO: enums?
 	private short massSpectrometer;
 	private short massSpectrumType;
 	private double precursorIon;
@@ -42,6 +46,23 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 		super();
 		massSpectrometer = 1; // MS1
 		massSpectrumType = 0; // 0 = Centroid, 1 = Profile
+	}
+
+	/**
+	 * Creates a new instance of {@code AbstractRegularMassSpectrum} by creating a
+	 * shallow copy of provided {@code templateScan}.
+	 * 
+	 * @param templateScan
+	 *            {@link IScan scan} that is used as a template
+	 */
+	public AbstractRegularMassSpectrum(IScanMSD templateScan) {
+		super(templateScan);
+		if(templateScan instanceof IRegularMassSpectrum) {
+			IRegularMassSpectrum regularMassSpectrum = (IRegularMassSpectrum)templateScan;
+			this.massSpectrometer = regularMassSpectrum.getMassSpectrometer();
+			this.massSpectrumType = regularMassSpectrum.getMassSpectrumType();
+			this.precursorIon = regularMassSpectrum.getPrecursorIon();
+		}
 	}
 
 	public AbstractRegularMassSpectrum(short massSpectrometer, short massSpectrumType) {

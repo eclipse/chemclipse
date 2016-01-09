@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2016 Philip (eselmeister) Wenig.
- * 
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  * Alexander Kerner - implementation
@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -37,17 +38,22 @@ import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 
 /**
- * The class AbstractMassSpectrum controls the basic operations for all types of
+ * The class {@code AbstractScanMSD} controls the basic operations for all types of
  * mass spectra.<br/>
- * Two kinds of mass spectra inherit from AbstractMassSpectrum.<br/>
- * {@link AbstractRegularMassSpectrum} implements a normal mass spectrum for
- * example an scan with a retention time, a retention index and a scan number.<br/>
+ * Two kinds of mass spectra inherit from AbstractMassSpectrum:
+ * <ol>
+ * <li>{@link AbstractRegularMassSpectrum} implements a normal mass spectrum, for
+ * example an scan with a retention time, a retention index and a scan number.
+ * </li>
+ * <li>
  * {@link AbstractCombinedMassSpectrum} implements a mass spectrum, which has
  * been created for example by combination of a mass spectrum range. It has no
- * specific retention time ... but a start and stop retention time and so on.
- * 
+ * specific retention time but a start and stop retention time and so on.
+ * </li>
+ * </ol>
+ *
  * @author eselmeister
- * @author <a href="mailto:alex.kerner.24@googlemail.com">Alexander Kerner</a>
+ * @author <a href="mailto:alexander.kerner@openchrom.net">Alexander Kerner</a>
  * @author janosbinder
  * @see AbstractChromatogramMSD
  */
@@ -71,6 +77,33 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	private IScanMSD optimizedMassSpectrum;
 
 	public AbstractScanMSD() {
+		super();
+		init();
+	}
+
+	/**
+	 * Creates a new instance of {@code AbstractScanMSD} by creating a
+	 * shallow copy of provided {@code templateScan}.
+	 * 
+	 * @param templateScan
+	 *            {@link IScanMSD scan} that is used as a template
+	 */
+	public AbstractScanMSD(IScanMSD templateScan) {
+		super(templateScan);
+		init();
+		this.ionsList = templateScan.getIons();
+		this.isNormalized = templateScan.isNormalized();
+		this.normalizationBase = templateScan.getNormalizationBase();
+		this.optimizedMassSpectrum = templateScan.getOptimizedMassSpectrum();
+		this.targets = new LinkedHashSet<>(templateScan.getTargets());
+		if(templateScan instanceof AbstractScanMSD) {
+			AbstractScanMSD templateScanAbstract = (AbstractScanMSD)templateScan;
+			this.immutableZeroIon = templateScanAbstract.immutableZeroIon;
+		}
+	}
+
+	private void init() {
+
 		/*
 		 * If mass spectrum will be cloned, the ion list will be
 		 * created as a new instance in the method
@@ -822,7 +855,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	 */
 	private void removeIonsFromMassSpectrum(List<IIon> ionsToRemove) {
 
-		assert (ionsToRemove != null) : "The ion list must not be null.";
+		assert(ionsToRemove != null) : "The ion list must not be null.";
 		/*
 		 * Remove all retrieved items.
 		 */

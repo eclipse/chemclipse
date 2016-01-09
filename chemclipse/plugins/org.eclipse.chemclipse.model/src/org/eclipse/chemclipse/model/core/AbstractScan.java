@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -19,7 +20,7 @@ public abstract class AbstractScan implements IScan {
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final long serialVersionUID = -7263229576142314628L;
+	private static final long serialVersionUID = 642924518234776409L;
 	private transient IChromatogram parentChromatogram;
 	private float retentionIndex = 0;
 	private int retentionTime = 0;
@@ -31,6 +32,26 @@ public abstract class AbstractScan implements IScan {
 	 */
 	private boolean isDirty = false;
 	private String identifier = "";
+
+	public AbstractScan() {
+	}
+
+	/**
+	 * Creates a new instance of {@code AbstractScan} by creating a
+	 * shallow copy of provided {@code templateScan}.
+	 * 
+	 * @param templateScan
+	 *            {@link IScan scan} that is used as a template
+	 */
+	public AbstractScan(IScan templateScan) {
+		this.parentChromatogram = templateScan.getParentChromatogram();
+		this.retentionIndex = templateScan.getRetentionIndex();
+		this.scanNumber = templateScan.getScanNumber();
+		this.timeSegmentId = templateScan.getTimeSegmentId();
+		this.cycleNumber = templateScan.getCycleNumber();
+		this.identifier = templateScan.getIdentifier();
+		this.isDirty = templateScan.isDirty();
+	}
 
 	@Override
 	public IChromatogram getParentChromatogram() {
@@ -141,7 +162,7 @@ public abstract class AbstractScan implements IScan {
 
 	// -----------------------------IAdaptable
 	@Override
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Object getAdapter(Class adapter) {
 
 		return Platform.getAdapterManager().getAdapter(this, adapter);

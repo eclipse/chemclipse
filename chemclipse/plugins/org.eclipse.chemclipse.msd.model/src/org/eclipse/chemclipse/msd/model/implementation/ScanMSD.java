@@ -25,7 +25,7 @@ import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
  * If a new mass spectrum type should be implemented, extend the abstract class {@link AbstractScanMSD} and not this class.
  * 
  * @author eselmeister
- * @author <a href="mailto:alex.kerner.24@googlemail.com">Alexander Kerner</a>
+ * @author <a href="mailto:alexander.kerner@openchrom.net">Alexander Kerner</a>
  */
 public class ScanMSD extends AbstractScanMSD implements IScanMSD {
 
@@ -35,6 +35,23 @@ public class ScanMSD extends AbstractScanMSD implements IScanMSD {
 	 */
 	private static final long serialVersionUID = -1794251778820195779L;
 	private static final Logger logger = Logger.getLogger(ScanMSD.class);
+
+	public ScanMSD() {
+		super();
+	}
+
+	/**
+	 * Creates a new instance of {@code ScanMSD} by creating a
+	 * shallow copy of provided {@code templateScan}.
+	 * </p>
+	 * To create a deep copy, use {@link #makeDeepCopy()}.
+	 * 
+	 * @param templateScan
+	 *            {@link IScanMSD scan} that is used as a template
+	 */
+	public ScanMSD(IScanMSD templateScan) {
+		super(templateScan);
+	}
 
 	// -------------------------------IMassSpectrumCloneable
 	@Override
