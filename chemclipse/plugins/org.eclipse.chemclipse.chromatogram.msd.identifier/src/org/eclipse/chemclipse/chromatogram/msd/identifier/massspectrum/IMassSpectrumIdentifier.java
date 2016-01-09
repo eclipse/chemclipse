@@ -25,8 +25,13 @@ public interface IMassSpectrumIdentifier {
 	 * Identifies a mass spectrum.
 	 * 
 	 * @param massSpectrum
+	 *            the mass spectrum to be identified
 	 * @param massSpectrumIdentifierSettings
+	 *            the settings that describe details of identification
+	 *            configuration
 	 * @param monitor
+	 *            a {@link IProgressMonitor monitor} to monitor progress and
+	 *            provide cancellation functionality
 	 * @return {@link IMassSpectraIdentifierProcessingInfo}
 	 */
 	IMassSpectraIdentifierProcessingInfo identify(IScanMSD massSpectrum, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor);
@@ -35,7 +40,10 @@ public interface IMassSpectrumIdentifier {
 	 * Identifies a mass spectrum.
 	 * 
 	 * @param massSpectrum
+	 *            the mass spectrum to be identified
 	 * @param monitor
+	 *            a {@link IProgressMonitor monitor} to monitor progress and
+	 *            provide cancellation functionality
 	 * @return {@link IMassSpectraIdentifierProcessingInfo}
 	 */
 	IMassSpectraIdentifierProcessingInfo identify(IScanMSD massSpectrum, IProgressMonitor monitor);
@@ -44,8 +52,11 @@ public interface IMassSpectrumIdentifier {
 	 * Identifies a list of mass spectra.
 	 * 
 	 * @param massSpectra
+	 *            the mass spectra to be identified
 	 * @param massSpectrumIdentifierSettings
 	 * @param monitor
+	 *            a {@link IProgressMonitor monitor} to monitor progress and
+	 *            provide cancellation functionality
 	 * @return {@link IMassSpectraIdentifierProcessingInfo}
 	 */
 	IMassSpectraIdentifierProcessingInfo identify(List<? extends IScanMSD> massSpectra, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor);
@@ -54,7 +65,10 @@ public interface IMassSpectrumIdentifier {
 	 * Identifies a list of mass spectra.
 	 * 
 	 * @param massSpectra
+	 *            the mass spectrum to be identified
 	 * @param monitor
+	 *            a {@link IProgressMonitor monitor} to monitor progress and
+	 *            provide cancellation functionality
 	 * @return {@link IMassSpectraIdentifierProcessingInfo}
 	 */
 	IMassSpectraIdentifierProcessingInfo identify(List<? extends IScanMSD> massSpectra, IProgressMonitor monitor);
