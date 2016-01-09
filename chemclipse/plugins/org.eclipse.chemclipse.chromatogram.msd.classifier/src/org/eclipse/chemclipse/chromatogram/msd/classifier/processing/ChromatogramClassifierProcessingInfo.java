@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.processing;
 
@@ -24,7 +25,7 @@ public class ChromatogramClassifierProcessingInfo extends AbstractProcessingInfo
 		if(object instanceof IChromatogramClassifierResult) {
 			return (IChromatogramClassifierResult)object;
 		} else {
-			throw createTypeCastException("Chromatogram Classifier", IChromatogramClassifierResult.class);
+			throw createTypeCastException("Chromatogram Classifier", object.getClass(), IChromatogramClassifierResult.class);
 		}
 	}
 

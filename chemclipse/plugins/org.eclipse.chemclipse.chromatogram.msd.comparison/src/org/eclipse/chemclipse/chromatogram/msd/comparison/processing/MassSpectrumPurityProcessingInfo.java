@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.processing;
 
@@ -24,7 +25,7 @@ public class MassSpectrumPurityProcessingInfo extends AbstractProcessingInfo imp
 		if(object instanceof IMassSpectrumPurityResult) {
 			return (IMassSpectrumPurityResult)object;
 		} else {
-			throw createTypeCastException("MassSpectrum Purity", IMassSpectrumPurityResult.class);
+			throw createTypeCastException("MassSpectrum Purity", object.getClass(), IMassSpectrumPurityResult.class);
 		}
 	}
 

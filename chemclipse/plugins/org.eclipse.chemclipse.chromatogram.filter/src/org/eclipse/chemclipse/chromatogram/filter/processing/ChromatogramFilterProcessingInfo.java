@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.filter.processing;
 
@@ -24,7 +25,7 @@ public class ChromatogramFilterProcessingInfo extends AbstractProcessingInfo imp
 		if(object instanceof IChromatogramFilterResult) {
 			return (IChromatogramFilterResult)object;
 		} else {
-			throw createTypeCastException("Chromatogram Filter", IChromatogramFilterResult.class);
+			throw createTypeCastException("Chromatogram Filter", object.getClass(), IChromatogramFilterResult.class);
 		}
 	}
 

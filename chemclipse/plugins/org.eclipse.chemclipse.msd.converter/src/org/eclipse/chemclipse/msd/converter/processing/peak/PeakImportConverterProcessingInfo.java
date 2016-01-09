@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.processing.peak;
 
@@ -24,7 +25,7 @@ public class PeakImportConverterProcessingInfo extends AbstractProcessingInfo im
 		if(object instanceof IPeaks) {
 			return (IPeaks)object;
 		} else {
-			throw createTypeCastException("Peak Import Converter", IPeaks.class);
+			throw createTypeCastException("Peak Import Converter", object.getClass(), IPeaks.class);
 		}
 	}
 

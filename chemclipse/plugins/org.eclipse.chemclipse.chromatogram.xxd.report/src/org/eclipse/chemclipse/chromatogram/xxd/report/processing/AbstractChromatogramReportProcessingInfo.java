@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.report.processing;
 
@@ -25,7 +26,7 @@ public abstract class AbstractChromatogramReportProcessingInfo extends AbstractP
 		if(object instanceof File) {
 			return (File)object;
 		} else {
-			throw createTypeCastException("Report Generator", File.class);
+			throw createTypeCastException("Report Generator", object.getClass(), File.class);
 		}
 	}
 

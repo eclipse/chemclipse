@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.filter.processing;
 
@@ -24,7 +25,7 @@ public class PeakFilterProcessingInfo extends AbstractProcessingInfo implements 
 		if(object instanceof IPeakFilterResult) {
 			return (IPeakFilterResult)object;
 		} else {
-			throw createTypeCastException("Peak Filter", IPeakFilterResult.class);
+			throw createTypeCastException("Peak Filter", object.getClass(), IPeakFilterResult.class);
 		}
 	}
 

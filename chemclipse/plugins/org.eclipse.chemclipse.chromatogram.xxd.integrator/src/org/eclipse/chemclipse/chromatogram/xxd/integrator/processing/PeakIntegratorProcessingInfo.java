@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.processing;
 
@@ -24,7 +25,7 @@ public class PeakIntegratorProcessingInfo extends AbstractProcessingInfo impleme
 		if(object instanceof IPeakIntegrationResults) {
 			return (IPeakIntegrationResults)object;
 		} else {
-			throw createTypeCastException("Peak Integrator", IPeakIntegrationResults.class);
+			throw createTypeCastException("Peak Integrator", object.getClass(), IPeakIntegrationResults.class);
 		}
 	}
 

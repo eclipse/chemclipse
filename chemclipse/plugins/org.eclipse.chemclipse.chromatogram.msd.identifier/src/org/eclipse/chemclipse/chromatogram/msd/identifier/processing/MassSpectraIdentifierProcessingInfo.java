@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.processing;
 
@@ -24,7 +25,7 @@ public class MassSpectraIdentifierProcessingInfo extends AbstractProcessingInfo 
 		if(object instanceof IMassSpectra) {
 			return (IMassSpectra)object;
 		} else {
-			throw createTypeCastException("MassSpectra", IMassSpectra.class);
+			throw createTypeCastException("MassSpectra", object.getClass(), IMassSpectra.class);
 		}
 	}
 
