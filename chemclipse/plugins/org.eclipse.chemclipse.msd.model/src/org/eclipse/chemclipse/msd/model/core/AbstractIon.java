@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.Platform;
  * spectrum.
  *
  * @author eselmeister
- * @author Alexander Kerner
+ * @author <a href="mailto:alexander.kerner@openchrom.net">Alexander Kerner</a>
  * @see AbstractScanMSD
  */
 public abstract class AbstractIon implements IIon {
@@ -220,7 +220,7 @@ public abstract class AbstractIon implements IIon {
 	// -----------------------------Comparable<IIon>
 	// -----------------------------IAdaptable
 	@Override
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Object getAdapter(Class adapter) {
 
 		return Platform.getAdapterManager().getAdapter(this, adapter);
