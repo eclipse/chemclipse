@@ -18,7 +18,8 @@ import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 public interface IProcessingInfo {
 
 	/**
-	 * Adds all message from {@link IProcessingInfo} to this processing info instance.
+	 * Adds all message from {@link IProcessingInfo} to this processing info
+	 * instance.
 	 * 
 	 * @param processingInfo
 	 */
@@ -58,12 +59,13 @@ public interface IProcessingInfo {
 	/**
 	 * Returns the list of messages.
 	 * 
-	 * @return
+	 * @return the list of messages
 	 */
 	List<IProcessingMessage> getMessages();
 
 	/**
-	 * Sets the processing result. Each plug-in knows which instance it expects as the return.
+	 * Sets the processing result. Each plug-in knows which instance it expects
+	 * as the return.
 	 * 
 	 * @param processingResult
 	 */
