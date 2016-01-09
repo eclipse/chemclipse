@@ -59,7 +59,7 @@ public interface IMassSpectrumIdentifier {
 	 *            provide cancellation functionality
 	 * @return {@link IMassSpectraIdentifierProcessingInfo}
 	 */
-	IMassSpectraIdentifierProcessingInfo identify(List<? extends IScanMSD> massSpectra, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor);
+	IMassSpectraIdentifierProcessingInfo identify(List<IScanMSD> massSpectra, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor);
 
 	/**
 	 * Identifies a list of mass spectra.
@@ -71,5 +71,5 @@ public interface IMassSpectrumIdentifier {
 	 *            provide cancellation functionality
 	 * @return {@link IMassSpectraIdentifierProcessingInfo}
 	 */
-	IMassSpectraIdentifierProcessingInfo identify(List<? extends IScanMSD> massSpectra, IProgressMonitor monitor);
+	IMassSpectraIdentifierProcessingInfo identify(List<IScanMSD> massSpectra, IProgressMonitor monitor);
 }
