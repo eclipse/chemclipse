@@ -8,7 +8,6 @@
  * 
  * Contributors: Philip
  * (eselmeister) Wenig - initial API and implementation
- * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum;
 
@@ -17,6 +16,7 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IMassSpectraIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IMassSpectrumIdentifier {
@@ -59,7 +59,7 @@ public interface IMassSpectrumIdentifier {
 	 *            provide cancellation functionality
 	 * @return {@link IMassSpectraIdentifierProcessingInfo}
 	 */
-	IMassSpectraIdentifierProcessingInfo identify(List<? extends IScanMSD> massSpectra, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor);
+	IMassSpectraIdentifierProcessingInfo identify(List<IScanMSD> massSpectra, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor);
 
 	/**
 	 * Identifies a list of mass spectra.
@@ -71,5 +71,5 @@ public interface IMassSpectrumIdentifier {
 	 *            provide cancellation functionality
 	 * @return {@link IMassSpectraIdentifierProcessingInfo}
 	 */
-	IMassSpectraIdentifierProcessingInfo identify(List<? extends IScanMSD> massSpectra, IProgressMonitor monitor);
+	IMassSpectraIdentifierProcessingInfo identify(List<IScanMSD> massSpectra, IProgressMonitor monitor);
 }
