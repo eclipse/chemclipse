@@ -11,13 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.database.documents;
 
+import java.io.Externalizable;
+import java.util.Map.Entry;
 import java.util.Set;
 
+import com.orientechnologies.orient.core.db.record.ODetachable;
 import com.orientechnologies.orient.core.record.ORecord;
 import com.orientechnologies.orient.core.record.ORecordAbstract;
+import com.orientechnologies.orient.core.record.ORecordSchemaAware;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 
-public interface IDocument extends ORecord {
+public interface IDocument extends ORecord, Iterable<Entry<String, Object>>, ORecordSchemaAware, ODetachable, Externalizable {
 
 	String SINGLE_QUOTE = "'";
 	String ESCAPED_SINGLE_QUOTE = "__SINGLEQUOTE__";
