@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
@@ -15,8 +16,10 @@ package org.eclipse.chemclipse.msd.model.core;
  * More informations about the class structure of mass spectra are stored in {@link IScanMSD}.
  * 
  * @author eselmeister
+ * @author <a href="mailto:alexander.kerner@openchrom.net">Alexander
+ *         Kerner</a>
  */
-public interface IRegularMassSpectrum extends IScanMSD {
+public interface IRegularMassSpectrum extends IFragmentedIonScan {
 
 	/**
 	 * Returns the mass spectrometer number that recorded the mass spectrum.
@@ -57,19 +60,4 @@ public interface IRegularMassSpectrum extends IScanMSD {
 	 * @param short
 	 */
 	void setMassSpectrumType(short massSpectrumType);
-
-	/**
-	 * Returns the precursor ion.
-	 * If none has been selected, 0 will be returned.
-	 * 
-	 * @return double
-	 */
-	double getPrecursorIon();
-
-	/**
-	 * Sets the precursor ion.
-	 * 
-	 * @param precursorIon
-	 */
-	void setPrecursorIon(double precursorIon);
 }
