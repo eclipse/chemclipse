@@ -8,7 +8,6 @@
  * 
  * Contributors: Philip
  * (eselmeister) Wenig - initial API and implementation
- * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum;
 
@@ -17,6 +16,7 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IMassSpectraIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IMassSpectrumIdentifier {
