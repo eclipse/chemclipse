@@ -855,7 +855,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	 */
 	private void removeIonsFromMassSpectrum(List<IIon> ionsToRemove) {
 
-		assert(ionsToRemove != null) : "The ion list must not be null.";
+		assert (ionsToRemove != null) : "The ion list must not be null.";
 		/*
 		 * Remove all retrieved items.
 		 */

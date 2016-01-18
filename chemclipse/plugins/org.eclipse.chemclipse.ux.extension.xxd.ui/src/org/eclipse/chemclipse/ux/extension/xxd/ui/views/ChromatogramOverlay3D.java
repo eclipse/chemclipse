@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.ui.views;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.views;
 
 import javax.annotation.PostConstruct;
 
