@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.interna
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
@@ -23,6 +25,8 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferen
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFilePeakIdentifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
+import org.eclipse.chemclipse.model.comparator.SortOrder;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
@@ -66,6 +70,7 @@ public class FileIdentifier {
 			String comparatorId = settings.getMassSpectrumComparatorId();
 			float minMatchFactor = settings.getMinMatchFactor();
 			float minReverseMatchFactor = settings.getMinReverseMatchFactor();
+			int numberOfTargets = settings.getNumberOfTargets();
 			/*
 			 * Load the mass spectra database only if the raw file or its content has changed.
 			 */
@@ -75,6 +80,7 @@ public class FileIdentifier {
 			 */
 			int countUnknown = 1;
 			for(IScanMSD unknown : massSpectraList) {
+				List<IMassSpectrumTarget> massSpectrumTargets = new ArrayList<IMassSpectrumTarget>();
 				int countReference = 1;
 				for(IScanMSD reference : database.getList()) {
 					try {
@@ -86,13 +92,22 @@ public class FileIdentifier {
 							/*
 							 * Add the target.
 							 */
-							unknown.addTarget(getMassSpectrumTarget(reference, comparisonResult));
-							massSpectra.addMassSpectrum(unknown);
+							massSpectrumTargets.add(getMassSpectrumTarget(reference, comparisonResult));
 						}
 					} catch(TypeCastException e1) {
 						logger.warn(e1);
 					}
 				}
+				/*
+				 * Assign only the best hits.
+				 */
+				Collections.sort(massSpectrumTargets, new IdentificationTargetComparator(SortOrder.DESC));
+				int size = (numberOfTargets <= massSpectrumTargets.size()) ? numberOfTargets : massSpectrumTargets.size();
+				for(int i = 0; i < size; i++) {
+					unknown.addTarget(massSpectrumTargets.get(i));
+					massSpectra.addMassSpectrum(unknown);
+				}
+				//
 				countUnknown++;
 			}
 		} else {
@@ -121,6 +136,7 @@ public class FileIdentifier {
 		String comparatorId = peakIdentifierSettings.getMassSpectrumComparatorId();
 		float minMatchFactor = peakIdentifierSettings.getMinMatchFactor();
 		float minReverseMatchFactor = peakIdentifierSettings.getMinReverseMatchFactor();
+		int numberOfTargets = peakIdentifierSettings.getNumberOfTargets();
 		/*
 		 * Load the mass spectra database only if the raw file or its content has changed.
 		 */
@@ -130,6 +146,7 @@ public class FileIdentifier {
 		 */
 		int countUnknown = 1;
 		for(IPeakMSD peakMSD : peaks) {
+			List<IPeakTarget> peakTargets = new ArrayList<IPeakTarget>();
 			int countReference = 1;
 			IScanMSD unknown = peakMSD.getPeakModel().getPeakMassSpectrum();
 			for(IScanMSD reference : database.getList()) {
@@ -142,14 +159,24 @@ public class FileIdentifier {
 						/*
 						 * Add the target.
 						 */
-						peakMSD.addTarget(getPeakTarget(reference, comparisonResult));
+						peakTargets.add(getPeakTarget(reference, comparisonResult));
 					}
 				} catch(TypeCastException e1) {
 					logger.warn(e1);
 				}
 			}
+			/*
+			 * Assign only the best hits.
+			 */
+			Collections.sort(peakTargets, new IdentificationTargetComparator(SortOrder.DESC));
+			int size = (numberOfTargets <= peakTargets.size()) ? numberOfTargets : peakTargets.size();
+			for(int i = 0; i < size; i++) {
+				peakMSD.addTarget(peakTargets.get(i));
+			}
+			//
 			countUnknown++;
 		}
+		//
 		return identificationResults;
 	}
 
