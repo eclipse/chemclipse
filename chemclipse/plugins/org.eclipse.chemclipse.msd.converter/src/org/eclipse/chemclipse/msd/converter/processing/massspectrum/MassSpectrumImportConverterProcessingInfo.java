@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.processing.massspectrum;
 
@@ -24,7 +25,7 @@ public class MassSpectrumImportConverterProcessingInfo extends AbstractProcessin
 		if(object instanceof IMassSpectra) {
 			return (IMassSpectra)object;
 		} else {
-			throw createTypeCastException("MassSpectra Import Converter", IMassSpectra.class);
+			throw createTypeCastException("MassSpectra Import Converter", object.getClass(), IMassSpectra.class);
 		}
 	}
 

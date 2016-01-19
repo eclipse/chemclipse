@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.core;
 
@@ -111,9 +112,9 @@ public abstract class AbstractProcessingInfo implements IProcessingInfo {
 	}
 
 	@Override
-	public TypeCastException createTypeCastException(String description, Class<?> clazz) {
+	public TypeCastException createTypeCastException(String description, Class<?> actual, Class<?> expected) {
 
-		String message = "The object couldn't be casted to: " + clazz;
+		String message = "Failed to cast from " + actual + " to " + expected;
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, description, message);
 		addMessage(processingMessage);
 		return new TypeCastException(message);

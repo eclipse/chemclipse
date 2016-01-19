@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.processing;
 
@@ -25,7 +26,7 @@ public abstract class AbstractExportConverterProcessingInfo extends AbstractProc
 		if(object instanceof File) {
 			return (File)object;
 		} else {
-			throw createTypeCastException("Export Converter", File.class);
+			throw createTypeCastException("Export Converter", object.getClass(), File.class);
 		}
 	}
 

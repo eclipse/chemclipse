@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.core;
 
@@ -96,9 +97,10 @@ public interface IProcessingInfo {
 	/**
 	 * Creates a new TypeCastException and adds a IProcessingMessage.
 	 * 
-	 * @param clazz
+	 * @param actual
+	 * @param expected
 	 * @param String
 	 * @return {@link TypeCastException}
 	 */
-	TypeCastException createTypeCastException(String description, Class<?> clazz);
+	TypeCastException createTypeCastException(String description, Class<?> actual, Class<?> expected);
 }

@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.processing;
 
@@ -24,7 +25,7 @@ public class PeakIdentifierProcessingInfo extends AbstractProcessingInfo impleme
 		if(object instanceof IPeakIdentificationResults) {
 			return (IPeakIdentificationResults)object;
 		} else {
-			throw createTypeCastException("Peak Identifier", IPeakIdentificationResults.class);
+			throw createTypeCastException("Peak Identifier", object.getClass(), IPeakIdentificationResults.class);
 		}
 	}
 

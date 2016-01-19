@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.processing.chromatogram;
 
@@ -24,7 +25,7 @@ public class ChromatogramOverviewImportConverterProcessingInfo extends AbstractP
 		if(object instanceof IChromatogramOverview) {
 			return (IChromatogramOverview)object;
 		} else {
-			throw createTypeCastException("ChromatogramOverview Import Converter", IChromatogramOverview.class);
+			throw createTypeCastException("ChromatogramOverview Import Converter", object.getClass(), IChromatogramOverview.class);
 		}
 	}
 

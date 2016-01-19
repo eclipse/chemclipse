@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.converter.processing.chromatogram;
 
@@ -24,7 +25,7 @@ public class ChromatogramCSDImportConverterProcessingInfo extends AbstractProces
 		if(object instanceof IChromatogramCSD) {
 			return (IChromatogramCSD)object;
 		} else {
-			throw createTypeCastException("Chromatogram Import Converter", IChromatogramCSD.class);
+			throw createTypeCastException("Chromatogram Import Converter", object.getClass(), IChromatogramCSD.class);
 		}
 	}
 

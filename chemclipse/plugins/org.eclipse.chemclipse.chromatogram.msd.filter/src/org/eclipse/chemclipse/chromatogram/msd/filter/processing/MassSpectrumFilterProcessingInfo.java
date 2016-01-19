@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Dr. Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.processing;
 
@@ -24,7 +25,7 @@ public class MassSpectrumFilterProcessingInfo extends AbstractProcessingInfo imp
 		if(object instanceof IMassSpectrumFilterResult) {
 			return (IMassSpectrumFilterResult)object;
 		} else {
-			throw createTypeCastException("Mass Spectrum Filter", IMassSpectrumFilterResult.class);
+			throw createTypeCastException("Mass Spectrum Filter", object.getClass(), IMassSpectrumFilterResult.class);
 		}
 	}
 

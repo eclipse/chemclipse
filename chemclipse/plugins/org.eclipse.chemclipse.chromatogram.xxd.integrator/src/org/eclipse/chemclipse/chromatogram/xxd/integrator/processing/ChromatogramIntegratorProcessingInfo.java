@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.processing;
 
@@ -24,7 +25,7 @@ public class ChromatogramIntegratorProcessingInfo extends AbstractProcessingInfo
 		if(object instanceof IChromatogramIntegrationResults) {
 			return (IChromatogramIntegrationResults)object;
 		} else {
-			throw createTypeCastException("Chromatogram Integrator", IChromatogramIntegrationResults.class);
+			throw createTypeCastException("Chromatogram Integrator", object.getClass(), IChromatogramIntegrationResults.class);
 		}
 	}
 

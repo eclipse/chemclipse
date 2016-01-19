@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Dr. Alexander Kerner - imlementation
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.converter.processing.chromatogram;
 
@@ -24,7 +25,7 @@ public class ChromatogramWSDImportConverterProcessingInfo extends AbstractProces
 		if(object instanceof IChromatogramWSD) {
 			return (IChromatogramWSD)object;
 		} else {
-			throw createTypeCastException("Chromatogram Import Converter", IChromatogramWSD.class);
+			throw createTypeCastException("Chromatogram Import Converter", object.getClass(), IChromatogramWSD.class);
 		}
 	}
 
