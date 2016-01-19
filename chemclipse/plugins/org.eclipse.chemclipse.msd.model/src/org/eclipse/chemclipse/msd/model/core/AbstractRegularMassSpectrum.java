@@ -138,8 +138,9 @@ public abstract class AbstractRegularMassSpectrum extends AbstractScanMSD implem
 	}
 
 	@Override
-	public void setPrecursorIon(double precursorIon) {
+	public AbstractRegularMassSpectrum setPrecursorIon(double precursorIon) {
 
 		this.precursorIon = precursorIon;
+		return this;
 	}
 }
