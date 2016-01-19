@@ -19,6 +19,7 @@ import java.io.IOException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IMassSpectraWriter {
 
@@ -32,7 +33,7 @@ public interface IMassSpectraWriter {
 	 * @throws FileIsNotWriteableException
 	 * @throws IOException
 	 */
-	void write(File file, IScanMSD massSpectrum, boolean append) throws FileNotFoundException, FileIsNotWriteableException, IOException;
+	void write(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException;
 
 	/**
 	 * Writes the given mass spectra to the file.
@@ -44,7 +45,7 @@ public interface IMassSpectraWriter {
 	 * @throws FileIsNotWriteableException
 	 * @throws IOException
 	 */
-	void write(File file, IMassSpectra massSpectra, boolean append) throws FileNotFoundException, FileIsNotWriteableException, IOException;
+	void write(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException;
 
 	/**
 	 * Writes the mass spectrum with the given file writer.
@@ -53,5 +54,5 @@ public interface IMassSpectraWriter {
 	 * @param massSpectrum
 	 * @throws IOException
 	 */
-	void writeMassSpectrum(FileWriter fileWriter, IScanMSD massSpectrum) throws IOException;
+	void writeMassSpectrum(FileWriter fileWriter, IScanMSD massSpectrum, IProgressMonitor monitor) throws IOException;
 }
