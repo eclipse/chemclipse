@@ -31,13 +31,9 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaRe
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaRunnable;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PeakInputFilesWizard;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.TimeRangeWizard;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.thirdpartylibraries.swtchart.ext.InteractiveChartExtended;
 import org.eclipse.e4.ui.di.Focus;
@@ -53,7 +49,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -72,11 +67,7 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.events.HyperlinkAdapter;
-import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
@@ -98,6 +89,10 @@ public class PcaEditor {
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor";
 	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif";
 	public static final String TOOLTIP = "PCA Editor";
+	/*
+	 * TODO protected
+	 */
+	protected List<IDataInputEntry> dataInputEntries;
 	//
 	private Color COLOR_BLACK = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 	private Color COLOR_WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
@@ -108,10 +103,8 @@ public class PcaEditor {
 	private Color COLOR_GRAY = Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
 	private int SYMBOL_SIZE = 8;
 	//
-	private static final int DEFAULT_RETENTION_TIME_WINDOW = 200;
 	//
 	private static final Logger logger = Logger.getLogger(PcaEditor.class);
-	private static final String FILES = "Input Files: ";
 	/*
 	 * Injected member in constructor
 	 */
@@ -128,11 +121,7 @@ public class PcaEditor {
 	 */
 	private TabFolder tabFolder;
 	private FormToolkit formToolkit;
-	private Table inputFilesTable;
-	private Label countFiles;
 	private Label tableHeader;
-	private Text retentionTimeWindowText;
-	private Spinner principleComponentSpinner;
 	private Table peakListIntensityTable;
 	private InteractiveChartExtended scorePlotChart;
 	private InteractiveChartExtended errorResidueChart;
@@ -141,10 +130,11 @@ public class PcaEditor {
 	/*
 	 * Indices of the pages.
 	 */
-	private int inputFilesPageIndex;
+	private OverviewPage overviewPage;
+	private InputFilesPage inputFilesPage;
+	//
 	private int scorePlotPageIndex;
 	//
-	private List<IDataInputEntry> dataInputEntries;
 	private PcaResults pcaResults;
 	private File exportFile;
 	/*
@@ -156,16 +146,10 @@ public class PcaEditor {
 	 * Peak Intensity Table Data
 	 */
 	private int currentNumberOfPeaks;
-	/*
-	 * ExtractionType - 0 for peaks, 1 for scans
-	 */
-	private int extractionType;
 
 	public PcaEditor() {
+		//
 		dataInputEntries = new ArrayList<IDataInputEntry>();
-		/*
-		 * Number format of retention times.
-		 */
 		numberFormat = NumberFormat.getInstance();
 		numberFormat.setMinimumFractionDigits(FRACTION_DIGITS);
 		numberFormat.setMaximumFractionDigits(FRACTION_DIGITS);
@@ -239,320 +223,15 @@ public class PcaEditor {
 
 		inputPart.setLabel("PCA");
 		tabFolder = new TabFolder(parent, SWT.BOTTOM);
-		// 0
-		createOverviewPage();
-		// 1
-		inputFilesPageIndex = 1;
-		createInputFilesPage();
-		// 2
+		//
+		overviewPage = new OverviewPage(this, tabFolder, formToolkit, 2); // 1
+		inputFilesPage = new InputFilesPage(this, tabFolder, formToolkit); // 2
 		createPeakListIntensityTablePage();
 		// 3
 		scorePlotPageIndex = 3;
 		createScorePlotPage();
 		// 4
 		createErrorResiduePage();
-	}
-
-	// --------------------------------------------------------------------------------------------------------------Overview Page
-	private void createOverviewPage() {
-
-		/*
-		 * Miscellaneous Page
-		 */
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Overview");
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new FillLayout());
-		/*
-		 * Forms API
-		 */
-		formToolkit = new FormToolkit(composite.getDisplay());
-		ScrolledForm scrolledForm = formToolkit.createScrolledForm(composite);
-		Composite scrolledFormComposite = scrolledForm.getBody();
-		formToolkit.decorateFormHeading(scrolledForm.getForm());
-		scrolledFormComposite.setLayout(new TableWrapLayout());
-		scrolledForm.setText("Principle Component Analysis");
-		/*
-		 * Add the sections
-		 */
-		createPropertiesSection(scrolledFormComposite);
-		createExecuteSection(scrolledFormComposite);
-		//
-		tabItem.setControl(composite);
-	}
-
-	/**
-	 * Creates the properties section.
-	 */
-	private void createPropertiesSection(Composite parent) {
-
-		/*
-		 * Section
-		 */
-		Section section = formToolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
-		section.setText("Properties");
-		section.setDescription("Use the properties to define the retention time window and the number of components.");
-		section.marginWidth = 5;
-		section.marginHeight = 5;
-		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
-		/*
-		 * Client
-		 */
-		Composite client = formToolkit.createComposite(section, SWT.WRAP);
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
-		layout.marginWidth = 2;
-		layout.marginHeight = 2;
-		client.setLayout(layout);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		gridData.grabExcessHorizontalSpace = true;
-		Label label = formToolkit.createLabel(client, "Select the PCA settings:");
-		label.setLayoutData(gridData);
-		/*
-		 * Settings
-		 */
-		createRetentionTimeWindowText(client);
-		createPrincipleComponentSpinner(client);
-		createExtractionTypeButtons(client);
-		/*
-		 * Add the client to the section and paint flat borders.
-		 */
-		section.setClient(client);
-		formToolkit.paintBordersFor(client);
-	}
-
-	private void createRetentionTimeWindowText(Composite client) {
-
-		formToolkit.createLabel(client, "Retention Time Window (milliseconds)");
-		//
-		retentionTimeWindowText = formToolkit.createText(client, Integer.toString(DEFAULT_RETENTION_TIME_WINDOW), SWT.NONE);
-		//
-		GridData gridData = new GridData();
-		gridData.widthHint = 300;
-		retentionTimeWindowText.setLayoutData(gridData);
-	}
-
-	private void createPrincipleComponentSpinner(Composite client) {
-
-		formToolkit.createLabel(client, "Number of Principle Components");
-		//
-		principleComponentSpinner = new Spinner(client, SWT.NONE);
-		principleComponentSpinner.setMinimum(3);
-		principleComponentSpinner.setMaximum(10);
-		principleComponentSpinner.setIncrement(1);
-		//
-		GridData gridData = new GridData();
-		gridData.widthHint = 50;
-		gridData.heightHint = 20;
-		principleComponentSpinner.setLayoutData(gridData);
-	}
-
-	private void createExtractionTypeButtons(Composite client) {
-
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		gridData.heightHint = 30;
-		/*
-		 * Extraction type radio buttons.
-		 */
-		Label radioLabels = formToolkit.createLabel(client, "Select the extraction type:");
-		radioLabels.setLayoutData(gridData);
-		SelectionListener selectionListener = new SelectionAdapter() {
-
-			public void widgetSelected(SelectionEvent event) {
-
-				Button button = ((Button)event.widget);
-				if(button.getText().equals("Peaks")) {
-					extractionType = 0;
-				} else {
-					extractionType = 1;
-				}
-			};
-		};
-		Button[] radioButtons = new Button[2];
-		//
-		radioButtons[0] = new Button(client, SWT.RADIO);
-		radioButtons[0].setSelection(true);
-		radioButtons[0].setText("Peaks");
-		radioButtons[0].setLayoutData(gridData);
-		radioButtons[0].addSelectionListener(selectionListener);
-		//
-		radioButtons[1] = new Button(client, SWT.RADIO);
-		radioButtons[1].setText("Scans");
-		radioButtons[1].setLayoutData(gridData);
-		radioButtons[1].addSelectionListener(selectionListener);
-	}
-
-	/**
-	 * Creates the run section.
-	 * 
-	 * @param parent
-	 */
-	private void createExecuteSection(Composite parent) {
-
-		Label label;
-		/*
-		 * Section
-		 */
-		Section section = formToolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
-		section.setText("Evaluation");
-		section.setDescription("Run the PCA evaluation after the entries have been edited.");
-		section.marginWidth = 5;
-		section.marginHeight = 5;
-		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
-		/*
-		 * Client
-		 */
-		Composite client = formToolkit.createComposite(section, SWT.WRAP);
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 1;
-		layout.marginWidth = 2;
-		layout.marginHeight = 2;
-		client.setLayout(layout);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalIndent = 20;
-		gridData.heightHint = 30;
-		/*
-		 * Input files section.
-		 */
-		label = formToolkit.createLabel(client, "Select the input chromatograms:\n");
-		label.setLayoutData(gridData);
-		createInputFilesPageHyperlink(client, gridData);
-		/*
-		 * Add the client to the section and paint flat borders.
-		 */
-		section.setClient(client);
-		formToolkit.paintBordersFor(client);
-	}
-
-	private void createInputFilesPageHyperlink(Composite client, GridData gridData) {
-
-		ImageHyperlink imageHyperlink;
-		/*
-		 * Settings
-		 */
-		imageHyperlink = formToolkit.createImageHyperlink(client, SWT.NONE);
-		imageHyperlink.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		imageHyperlink.setText("Data Input Files");
-		imageHyperlink.setLayoutData(gridData);
-		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
-
-			public void linkActivated(HyperlinkEvent e) {
-
-				tabFolder.setSelection(inputFilesPageIndex);
-			}
-		});
-	}
-
-	// --------------------------------------------------------------------------------------------------------------Input Files Page
-	/**
-	 * Creates the page.
-	 * 
-	 */
-	private void createInputFilesPage() {
-
-		/*
-		 * Input Files
-		 */
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Data Input Files");
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new FillLayout());
-		/*
-		 * Forms API
-		 */
-		formToolkit = new FormToolkit(composite.getDisplay());
-		ScrolledForm scrolledForm = formToolkit.createScrolledForm(composite);
-		Composite scrolledFormComposite = scrolledForm.getBody();
-		scrolledFormComposite.setLayout(new TableWrapLayout());
-		scrolledForm.setText("Input File Editor");
-		/*
-		 * Create the section.
-		 */
-		createInputFilesSection(scrolledFormComposite);
-		//
-		tabItem.setControl(composite);
-	}
-
-	private void createInputFilesSection(Composite parent) {
-
-		Section section;
-		Composite client;
-		GridLayout layout;
-		/*
-		 * Section
-		 */
-		section = formToolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
-		section.setText("Input files");
-		section.setDescription("Select the files to process. Use the add and remove buttons as needed. Click Run PCA to process the files. ");
-		section.marginWidth = 5;
-		section.marginHeight = 5;
-		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
-		/*
-		 * Set the layout for the client.
-		 */
-		client = formToolkit.createComposite(section, SWT.WRAP);
-		layout = new GridLayout();
-		layout.numColumns = 2;
-		layout.marginWidth = 2;
-		layout.marginHeight = 2;
-		client.setLayout(layout);
-		Label label;
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalIndent = 20;
-		gridData.heightHint = 30;
-		gridData.horizontalSpan = 2;
-		/*
-		 * Label II
-		 */
-		label = formToolkit.createLabel(client, "");
-		label.setLayoutData(gridData);
-		/*
-		 * Creates the table and the action buttons.
-		 */
-		createTable(client);
-		createButtons(client);
-		createLabels(client);
-		/*
-		 * Add the client to the section and paint flat borders.
-		 */
-		section.setClient(client);
-		formToolkit.paintBordersFor(client);
-	}
-
-	/**
-	 * Creates the table.
-	 * 
-	 * @param client
-	 */
-	private void createTable(Composite client) {
-
-		GridData gridData;
-		inputFilesTable = formToolkit.createTable(client, SWT.MULTI);
-		gridData = new GridData(GridData.FILL_BOTH);
-		gridData.heightHint = 400;
-		// gridData.widthHint = 150;
-		gridData.widthHint = 100;
-		gridData.verticalSpan = 5;
-		// gridData.verticalSpan = 3;
-		inputFilesTable.setLayoutData(gridData);
-		inputFilesTable.setHeaderVisible(true);
-		inputFilesTable.setLinesVisible(true);
-	}
-
-	/**
-	 * Create the action buttons.
-	 * 
-	 * @param client
-	 */
-	private void createButtons(Composite client) {
-
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_BEGINNING);
-		//
-		createAddButton(client, gridData);
-		createRemoveButton(client, gridData);
-		createProcessButton(client, gridData);
 	}
 
 	private void createButtonForPeakListTable(Composite client) {
@@ -582,103 +261,21 @@ public class PcaEditor {
 		});
 	}
 
-	/**
-	 * Creates the add button.
-	 * 
-	 * @param client
-	 * @param editorPart
+	/*
+	 * TODO protected
 	 */
-	private void createAddButton(Composite client, GridData gridData) {
-
-		Button add;
-		add = formToolkit.createButton(client, "Add", SWT.PUSH);
-		add.setLayoutData(gridData);
-		add.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				super.widgetSelected(e);
-				PeakInputFilesWizard inputWizard = new PeakInputFilesWizard();
-				BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getCurrent().getActiveShell(), inputWizard);
-				wizardDialog.create();
-				int returnCode = wizardDialog.open();
-				/*
-				 * If OK
-				 */
-				if(returnCode == WizardDialog.OK) {
-					/*
-					 * Get the list of selected chromatograms.
-					 */
-					List<String> selectedPeakFiles = inputWizard.getSelectedPeakFiles();
-					if(selectedPeakFiles.size() > 0) {
-						/*
-						 * If it contains at least 1 element, add it to the input files list.
-						 */
-						addEntries(selectedPeakFiles);
-						reloadInputFilesTable();
-					}
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the remove button.
-	 * 
-	 * @param client
-	 * @param editorPart
-	 */
-	private void createRemoveButton(Composite client, GridData gridData) {
-
-		Button remove;
-		remove = formToolkit.createButton(client, "Remove", SWT.PUSH);
-		remove.setLayoutData(gridData);
-		remove.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				super.widgetSelected(e);
-				removeEntries(inputFilesTable.getSelectionIndices());
-			}
-		});
-	}
-
-	private void createProcessButton(Composite client, GridData gridData) {
-
-		Button process;
-		process = formToolkit.createButton(client, "Run PCA", SWT.PUSH);
-		process.setLayoutData(gridData);
-		process.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
-		process.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				super.widgetSelected(e);
-				runPcaCalculation();
-			}
-		});
-	}
-
-	private void runPcaCalculation() {
+	protected void runPcaCalculation() {
 
 		dirtyable.setDirty(true);
 		/*
 		 * Get the settings.
 		 */
-		int retentionTimeWindow = DEFAULT_RETENTION_TIME_WINDOW;
-		try {
-			retentionTimeWindow = Integer.parseInt(retentionTimeWindowText.getText().trim());
-		} catch(NumberFormatException e) {
-			logger.warn(e);
-		}
-		int numberOfPrincipleComponents = principleComponentSpinner.getSelection();
+		int retentionTimeWindow = overviewPage.getRetentionTimeWindow();
+		int numberOfPrincipleComponents = overviewPage.getNumberOfPrincipleComponents();
 		/*
 		 * Run the process.
 		 */
-		PcaRunnable runnable = new PcaRunnable(dataInputEntries, retentionTimeWindow, numberOfPrincipleComponents, extractionType);
+		PcaRunnable runnable = new PcaRunnable(dataInputEntries, retentionTimeWindow, numberOfPrincipleComponents, overviewPage.getExtractionType());
 		ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 		try {
 			/*
@@ -706,128 +303,27 @@ public class PcaEditor {
 	}
 
 	/**
-	 * Creates the file count labels.
-	 * 
-	 * @param client
-	 */
-	private void createLabels(Composite client) {
-
-		countFiles = formToolkit.createLabel(client, FILES + "0", SWT.NONE);
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
-		gridData.horizontalSpan = 2;
-		countFiles.setLayoutData(gridData);
-	}
-
-	/**
 	 * Creates the peak intensity table labels.
 	 * 
 	 * @param client
 	 */
 	private void createPeakIntensityTableLabels(Composite client) {
 
-		tableHeader = formToolkit.createLabel(client, FILES + " " + "\t\tPeaks: " + " \t\tStart Peak: " + " \t End Peak: ", SWT.NONE);
+		tableHeader = formToolkit.createLabel(client, "Peaks: " + " \t\tStart Peak: " + " \t End Peak: ", SWT.NONE);
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 		gridData.horizontalSpan = 2;
 		tableHeader.setLayoutData(gridData);
 	}
 
-	/**
-	 * Add the selected peak files to the input files list.
-	 * 
-	 * @param selectedChromatograms
-	 */
-	private void addEntries(List<String> selectedFiles) {
-
-		IDataInputEntry inputEntry;
-		for(String inputFile : selectedFiles) {
-			inputEntry = new DataInputEntry(inputFile);
-			dataInputEntries.add(inputEntry);
-		}
-	}
-
-	/**
-	 * Remove the given entries.
-	 * The table need not to be reloaded.
-	 * 
-	 * @param indices
-	 */
-	private void removeEntries(int[] indices) {
-
-		if(indices == null || indices.length == 0) {
-			return;
-		}
-		/*
-		 * Remove the entries from the table.
-		 */
-		inputFilesTable.remove(indices);
-		/*
-		 * Remove the entries from the batchProcessJob instance.
-		 */
-		int counter = 0;
-		for(int index : indices) {
-			/*
-			 * Decrease the index and increase the counter to remove the correct entries.
-			 */
-			index -= counter;
-			dataInputEntries.remove(index);
-			counter++;
-		}
-		redrawCountFiles(dataInputEntries);
-	}
-
-	/**
-	 * Reload the table.
-	 */
-	private void reloadInputFilesTable() {
-
-		if(inputFilesTable != null) {
-			/*
-			 * Remove all entries.
-			 */
-			inputFilesTable.removeAll();
-			/*
-			 * Header
-			 */
-			String[] titles = {"Filename", "Path"};
-			for(int i = 0; i < titles.length; i++) {
-				TableColumn column = new TableColumn(inputFilesTable, SWT.NONE);
-				column.setText(titles[i]);
-			}
-			/*
-			 * Data
-			 */
-			for(IDataInputEntry entry : dataInputEntries) {
-				TableItem item = new TableItem(inputFilesTable, SWT.NONE);
-				item.setText(0, entry.getName());
-				item.setText(1, entry.getInputFile());
-			}
-			/*
-			 * Pack to make the entries visible.
-			 */
-			for(int i = 0; i < titles.length; i++) {
-				inputFilesTable.getColumn(i).pack();
-			}
-			/*
-			 * Set the count label information.
-			 */
-			redrawCountFiles(dataInputEntries);
-		}
-	}
-
-	private void redrawCountFiles(List<IDataInputEntry> inputEntries) {
-
-		countFiles.setText(FILES + Integer.toString(inputEntries.size()));
-	}
-
 	private void redrawTableHeader(List<IDataInputEntry> inputEntries, int numPeaks, String startPoint, String endPoint) {
 
 		// if peaks
-		if(extractionType == 0) {
-			tableHeader.setText(FILES + Integer.toString(inputEntries.size()) + "\t\tPeaks: " + numPeaks + " \t\tStart Peak: " + startPoint + "\t\tEnd Peak: " + endPoint);
+		if(overviewPage.getExtractionType() == 0) {
+			tableHeader.setText(Integer.toString(inputEntries.size()) + "\t\tPeaks: " + numPeaks + " \t\tStart Peak: " + startPoint + "\t\tEnd Peak: " + endPoint);
 		}
 		// if scans
 		else {
-			tableHeader.setText(FILES + Integer.toString(inputEntries.size()) + "\t\tScans: " + numPeaks + " \t\tStart Scan: " + startPoint + "\t\tEnd Scan: " + endPoint);
+			tableHeader.setText(Integer.toString(inputEntries.size()) + "\t\tScans: " + numPeaks + " \t\tStart Scan: " + startPoint + "\t\tEnd Scan: " + endPoint);
 		}
 	}
 
