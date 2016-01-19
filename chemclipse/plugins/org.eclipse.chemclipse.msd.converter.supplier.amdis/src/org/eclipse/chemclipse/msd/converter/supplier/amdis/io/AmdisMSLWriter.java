@@ -21,13 +21,14 @@ import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class AmdisMSLWriter extends AbstractAmdisWriter implements IMassSpectraWriter {
 
 	private static final Logger logger = Logger.getLogger(AmdisMSLWriter.class);
 
 	@Override
-	public void writeMassSpectrum(FileWriter fileWriter, IScanMSD massSpectrum) throws IOException {
+	public void writeMassSpectrum(FileWriter fileWriter, IScanMSD massSpectrum, IProgressMonitor monitor) throws IOException {
 
 		IScanMSD normalizedMassSpectrum;
 		try {

@@ -15,9 +15,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
@@ -29,9 +28,9 @@ import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.AmdisMSLWriter;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * NAME FIELD:
@@ -63,7 +62,7 @@ public class MSLPeakExportConverter extends AbstractPeakExportConverter {
 				 * Convert the mass spectrum.
 				 */
 				IMassSpectraWriter massSpectraWriter = new AmdisMSLWriter();
-				massSpectraWriter.write(file, peak.getExtractedMassSpectrum(), append);
+				massSpectraWriter.write(file, peak.getExtractedMassSpectrum(), append, monitor);
 				processingInfo.setFile(file);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
@@ -97,7 +96,7 @@ public class MSLPeakExportConverter extends AbstractPeakExportConverter {
 				 */
 				IMassSpectraWriter massSpectraWriter = new AmdisMSLWriter();
 				IMassSpectra massSpectra = extractMassSpectra(peaks);
-				massSpectraWriter.write(file, massSpectra, append);
+				massSpectraWriter.write(file, massSpectra, append, monitor);
 				processingInfo.setFile(file);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);

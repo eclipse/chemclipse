@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 
@@ -55,15 +56,15 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 	}
 
 	@Override
-	public void write(File file, IScanMSD massSpectrum, boolean append) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void write(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
 		FileWriter fileWriter = new FileWriter(file, append);
-		writeMassSpectrum(fileWriter, massSpectrum);
+		writeMassSpectrum(fileWriter, massSpectrum, monitor);
 		fileWriter.close();
 	}
 
 	@Override
-	public void write(File file, IMassSpectra massSpectra, boolean append) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void write(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
 		if(massSpectra.size() > 65535 && PreferenceSupplier.isSplitLibrary()) {
 			/*
@@ -77,7 +78,7 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 				String fileExtension = filePath.substring(filePath.lastIndexOf("."), filePath.length());
 				filePath = filePath.replace(fileExtension, "-" + counter + fileExtension);
 				FileWriter fileWriter = new FileWriter(new File(filePath), append);
-				writeMassSpectra(fileWriter, massSpectraChunk);
+				writeMassSpectra(fileWriter, massSpectraChunk, monitor);
 				fileWriter.close();
 				counter++;
 			}
@@ -86,7 +87,7 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 			 * <= 65535 mass spectra
 			 */
 			FileWriter fileWriter = new FileWriter(file, append);
-			writeMassSpectra(fileWriter, massSpectra);
+			writeMassSpectra(fileWriter, massSpectra, monitor);
 			fileWriter.close();
 		}
 	}
@@ -123,7 +124,7 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 	 * 
 	 * @throws IOException
 	 */
-	private void writeMassSpectra(FileWriter fileWriter, IMassSpectra massSpectra) throws IOException {
+	private void writeMassSpectra(FileWriter fileWriter, IMassSpectra massSpectra, IProgressMonitor monitor) throws IOException {
 
 		/*
 		 * Get all mass spectra, test to null and append them with the given
@@ -135,7 +136,7 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 			 * There must be at least one ion.
 			 */
 			if(massSpectrum != null && massSpectrum.getNumberOfIons() > 0) {
-				writeMassSpectrum(fileWriter, massSpectrum);
+				writeMassSpectrum(fileWriter, massSpectrum, monitor);
 			}
 		}
 	}
