@@ -19,15 +19,15 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 
-public class GaussianModelMSDFactory {
+public class GaussianPeakMSDFactory {
 
 	private static final float RATIO_OF_RETENTION_TIME_TO_CONSIDER = 0.005f;
 	private static final double NORMALIZATION_VALUE = 1000d;
 
-	private GaussianModelMSDFactory() {
+	private GaussianPeakMSDFactory() {
 	}
 
-	public static IPeakMSD createGaussianPeakMSD(IChromatogramMSD chromatogramMSD, int height, int retentionTime, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
+	public static IPeakMSD createGaussianPeakMSD(IChromatogramMSD chromatogramMSD, float height, int retentionTime, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
 
 		if(chromatogramMSD == null) {
 			throw new PeakException("The chromatogram must not be null.");
