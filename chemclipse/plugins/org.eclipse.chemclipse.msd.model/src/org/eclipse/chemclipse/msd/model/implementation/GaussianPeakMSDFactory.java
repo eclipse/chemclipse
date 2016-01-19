@@ -16,18 +16,22 @@ import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 
-public class GaussianPeakModelMSDFactory {
+public class GaussianPeakMSDFactory {
 
 	private static final float RATIO_OF_RETENTION_TIME_TO_CONSIDER = 0.005f;
 	private static final double NORMALIZATION_VALUE = 1000d;
 
-	private GaussianPeakModelMSDFactory() {
+	private GaussianPeakMSDFactory() {
 	}
 
-	public static IPeakModelMSD createGaussianPeakModelMSD(IChromatogramMSD chromatogramMSD, int height, int retentionTime, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
+	public static IPeakMSD createGaussianPeakMSD(IChromatogramMSD chromatogramMSD, float height, int retentionTime, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
 
+		if(chromatogramMSD == null) {
+			throw new PeakException("The chromatogram must not be null.");
+		}
 		final int scanNumber = chromatogramMSD.getScanNumber(retentionTime);
 		int retentionTimeRange = (int)(RATIO_OF_RETENTION_TIME_TO_CONSIDER * retentionTime);
 		// rounding
@@ -41,6 +45,7 @@ public class GaussianPeakModelMSDFactory {
 			peakIntensities.addIntensityValue(rt, (float)gaussian.value(rt));
 		}
 		peakIntensities.normalize();
-		return new PeakModelMSD(new PeakMassSpectrum(chromatogramMSD.getSupplierScan(scanNumber)), peakIntensities, startBackgroundAbundance, stopBackgroundAbundance);
+		IPeakModelMSD peakModelMSD = new PeakModelMSD(new PeakMassSpectrum(chromatogramMSD.getSupplierScan(scanNumber)), peakIntensities, startBackgroundAbundance, stopBackgroundAbundance);
+		return new PeakMSD(peakModelMSD);
 	}
 }
