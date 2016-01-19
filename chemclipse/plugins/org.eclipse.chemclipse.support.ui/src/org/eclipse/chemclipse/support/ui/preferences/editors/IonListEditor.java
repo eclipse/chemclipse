@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences.editors;
 
+import org.eclipse.chemclipse.support.util.IonListUtil;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.preference.ListEditor;
@@ -24,8 +25,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-
-import org.eclipse.chemclipse.support.util.IonListUtil;
 
 /**
  * @author eselmeister
@@ -73,7 +72,7 @@ public class IonListEditor extends ListEditor {
 	protected String getNewInputObject() {
 
 		List list = getList();
-		InputDialog dialog = new InputDialog(new Shell(), "Enter a single ion or an ion range.", "E.g. 104 for styrene or 310 - 340 to add the range.", "", new IonInputValidator(list));
+		InputDialog dialog = new InputDialog(Display.getCurrent().getActiveShell(), "Enter a single ion or an ion range.", "E.g. 104 for styrene or 310 - 340 to add the range.", "", new IonInputValidator(list));
 		dialog.create();
 		dialog.open();
 		String ions = dialog.getValue();
