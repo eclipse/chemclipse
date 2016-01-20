@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_ajUMsORHEeSoluczWUZOhA">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_ajUMsORHEeSoluczWUZOhA">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_JrSqMORIEeSoluczWUZOhA" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Command" xmi:id="_MPgTYORIEeSoluczWUZOhA" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.command.identifySelectedPeak" commandName="Identify Selected Peak"/>
     <elements xsi:type="commands:Command" xmi:id="_TpbuUORIEeSoluczWUZOhA" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.command.identifyAllPeaks" commandName="Identifiy All Peaks"/>
@@ -22,5 +22,11 @@
     <elements xsi:type="menu:HandledToolItem" xmi:id="_9uaqsORWEeSoluczWUZOhA" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.handledtoolitem.identifyAllPeaks" label="MSL - Identifiy All Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/identify_peaks.gif" command="_TpbuUORIEeSoluczWUZOhA"/>
     <elements xsi:type="menu:HandledToolItem" xmi:id="_-MGFMORWEeSoluczWUZOhA" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.handledtoolitem.identifySelectedMassSpectrum" label="MSL - Identify Selected Mass Spectrum" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/identify_massspectrum.gif" command="_wo7QkORVEeSoluczWUZOhA"/>
     <elements xsi:type="menu:ToolBarSeparator" xmi:id="_SeFXsORXEeSoluczWUZOhA" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.toolbarseparator.0"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_zYsxUL-SEeW0a512MSIp8w" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
+    <elements xsi:type="basic:Part" xmi:id="_KZ8fYL-TEeW0a512MSIp8w" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.part.massspectrumlibrarycomparison" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui/org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.parts.MassSpectrumLibraryComparisonView" label="Mass Spectrum Library Comparison" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/mirroredMassSpectrum.gif"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_XggF8L-TEeW0a512MSIp8w" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.partstack.chromatogramOverlay">
+    <elements xsi:type="advanced:Placeholder" xmi:id="_nV0Y0L-TEeW0a512MSIp8w" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.placeholder.0" ref="_KZ8fYL-TEeW0a512MSIp8w"/>
   </fragments>
 </fragment:ModelFragments>
