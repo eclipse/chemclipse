@@ -22,6 +22,7 @@ import java.util.TreeSet;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISlopes;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
@@ -48,7 +49,7 @@ public class PrincipleComponentProcessor {
 	private static final Logger logger = Logger.getLogger(PrincipleComponentProcessor.class);
 	private static final double NORMALIZATION_FACTOR = 1000;
 
-	public PcaResults process(List<IDataInputEntry> dataInputEntries, int retentionTimeWindow, int numberOfPrincipleComponents, IProgressMonitor monitor, int extractionType) {
+	public IPcaResults process(List<IDataInputEntry> dataInputEntries, int retentionTimeWindow, int numberOfPrincipleComponents, IProgressMonitor monitor, int extractionType) {
 
 		/*
 		 * 0 = Peaks
@@ -61,9 +62,10 @@ public class PrincipleComponentProcessor {
 		/*
 		 * Initialize PCA Results
 		 */
-		PcaResults pcaResults = new PcaResults(dataInputEntries);
+		IPcaResults pcaResults = new PcaResults(dataInputEntries);
 		pcaResults.setRetentionTimeWindow(retentionTimeWindow);
 		pcaResults.setNumberOfPrincipleComponents(numberOfPrincipleComponents);
+		pcaResults.setExtractionType(extractionType);
 		/*
 		 * Extract data
 		 */
@@ -125,6 +127,61 @@ public class PrincipleComponentProcessor {
 	}
 
 	/**
+	 * Re-evaluates the PCA results.
+	 * 
+	 * @param pcaResults
+	 */
+	public IPcaResults reEvaluate(IPcaResults pcaResults) {
+
+		int numberOfPrincipleComponents = pcaResults.getNumberOfPrincipleComponents();
+		int numSamples = 0;
+		int sampleSize = 0; // Needs to be the same size for each sample.
+		//
+		Map<ISample, IPcaResult> resultMap = pcaResults.getPcaResultMap();
+		for(Map.Entry<ISample, IPcaResult> entry : resultMap.entrySet()) {
+			if(entry.getKey().isSelected()) {
+				numSamples++;
+				sampleSize = entry.getValue().getSampleData().length;
+			}
+		}
+		//
+		PrincipalComponentAnalysis principleComponentAnalysis = new PrincipalComponentAnalysis();
+		principleComponentAnalysis.setup(numSamples, sampleSize);
+		/*
+		 * Add the samples.
+		 */
+		for(Map.Entry<ISample, IPcaResult> entry : resultMap.entrySet()) {
+			if(entry.getKey().isSelected()) {
+				double[] sampleData = entry.getValue().getSampleData();
+				principleComponentAnalysis.addSample(sampleData);
+			}
+		}
+		/*
+		 * Compute the basis for the number of principle components.
+		 */
+		principleComponentAnalysis.computeBasis(numberOfPrincipleComponents);
+		List<double[]> basisVectors = getBasisVectors(principleComponentAnalysis, numberOfPrincipleComponents);
+		pcaResults.setBasisVectors(basisVectors);
+		/*
+		 * Re-evaluate the eigen space and error membership.
+		 */
+		for(Map.Entry<ISample, IPcaResult> entry : resultMap.entrySet()) {
+			if(entry.getKey().isSelected()) {
+				//
+				IPcaResult pcaResult = entry.getValue();
+				double[] sampleData = pcaResult.getSampleData();
+				double[] eigenSpace = principleComponentAnalysis.sampleToEigenSpace(sampleData);
+				double errorMemberShip = principleComponentAnalysis.errorMembership(sampleData);
+				//
+				pcaResult.setEigenSpace(eigenSpace);
+				pcaResult.setErrorMemberShip(errorMemberShip);
+			}
+		}
+		//
+		return pcaResults;
+	}
+
+	/**
 	 * Loads each file and tries to extract the scans.
 	 * ADDED BY TEAM C
 	 * 
@@ -171,7 +228,7 @@ public class PrincipleComponentProcessor {
 	 * @param scanMap
 	 * @param pcaResults
 	 */
-	private void prepareScanPcaResults(Map<String, ISlopes> scanMap, PcaResults pcaResults) {
+	private void prepareScanPcaResults(Map<String, ISlopes> scanMap, IPcaResults pcaResults) {
 
 		Map<ISample, IPcaResult> pcaResultMap = pcaResults.getPcaResultMap();
 		for(Map.Entry<String, ISlopes> entry : scanMap.entrySet()) {
@@ -266,65 +323,12 @@ public class PrincipleComponentProcessor {
 	}
 
 	/**
-	 * Re-evaluates the PCA results.
-	 * 
-	 * @param pcaResults
-	 */
-	public void reEvaluate(PcaResults pcaResults) {
-
-		int numberOfPrincipleComponents = pcaResults.getNumberOfPrincipleComponents();
-		int numSamples = 0;
-		int sampleSize = 0; // Needs to be the same size for each sample.
-		//
-		Map<ISample, IPcaResult> resultMap = pcaResults.getPcaResultMap();
-		for(Map.Entry<ISample, IPcaResult> entry : resultMap.entrySet()) {
-			if(entry.getKey().isSelected()) {
-				numSamples++;
-				sampleSize = entry.getValue().getSampleData().length;
-			}
-		}
-		//
-		PrincipalComponentAnalysis principleComponentAnalysis = new PrincipalComponentAnalysis();
-		principleComponentAnalysis.setup(numSamples, sampleSize);
-		/*
-		 * Add the samples.
-		 */
-		for(Map.Entry<ISample, IPcaResult> entry : resultMap.entrySet()) {
-			if(entry.getKey().isSelected()) {
-				double[] sampleData = entry.getValue().getSampleData();
-				principleComponentAnalysis.addSample(sampleData);
-			}
-		}
-		/*
-		 * Compute the basis for the number of principle components.
-		 */
-		principleComponentAnalysis.computeBasis(numberOfPrincipleComponents);
-		List<double[]> basisVectors = getBasisVectors(principleComponentAnalysis, numberOfPrincipleComponents);
-		pcaResults.setBasisVectors(basisVectors);
-		/*
-		 * Re-evaluate the eigen space and error membership.
-		 */
-		for(Map.Entry<ISample, IPcaResult> entry : resultMap.entrySet()) {
-			if(entry.getKey().isSelected()) {
-				//
-				IPcaResult pcaResult = entry.getValue();
-				double[] sampleData = pcaResult.getSampleData();
-				double[] eigenSpace = principleComponentAnalysis.sampleToEigenSpace(sampleData);
-				double errorMemberShip = principleComponentAnalysis.errorMembership(sampleData);
-				//
-				pcaResult.setEigenSpace(eigenSpace);
-				pcaResult.setErrorMemberShip(errorMemberShip);
-			}
-		}
-	}
-
-	/**
 	 * Sets the initial PCA result map.
 	 * 
 	 * @param peakMap
 	 * @param pcaResults
 	 */
-	private void preparePcaResults(Map<String, IPeaks> peakMap, PcaResults pcaResults) {
+	private void preparePcaResults(Map<String, IPeaks> peakMap, IPcaResults pcaResults) {
 
 		Map<ISample, IPcaResult> pcaResultMap = pcaResults.getPcaResultMap();
 		for(Map.Entry<String, IPeaks> entry : peakMap.entrySet()) {
@@ -381,7 +385,7 @@ public class PrincipleComponentProcessor {
 		return basisVectors;
 	}
 
-	private void setEigenSpaceAndErrorValues(PrincipalComponentAnalysis principleComponentAnalysis, Map<String, double[]> pcaPeakMap, PcaResults pcaResults) {
+	private void setEigenSpaceAndErrorValues(PrincipalComponentAnalysis principleComponentAnalysis, Map<String, double[]> pcaPeakMap, IPcaResults pcaResults) {
 
 		/*
 		 * Set the eigen space and error membership values.

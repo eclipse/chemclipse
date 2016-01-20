@@ -20,8 +20,8 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 
 public class ResultExport {
@@ -36,7 +36,7 @@ public class ResultExport {
 		numberFormat.setMaximumFractionDigits(FRACTION_DIGITS);
 	}
 
-	public void exportToTextFile(File file, PcaResults pcaResults) throws FileNotFoundException {
+	public void exportToTextFile(File file, IPcaResults pcaResults) throws FileNotFoundException {
 
 		PrintWriter printWriter = new PrintWriter(file);
 		if(pcaResults != null) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2016 Dr. Philip Wenig.
+ * Copyright (c) 2016 Lablicate UG (haftungsbeschränkt).
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,27 +12,18 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PrincipleComponentProcessor;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-public class PcaRunnable implements IRunnableWithProgress {
+public class ReEvaluateRunnable implements IRunnableWithProgress {
 
-	private List<IDataInputEntry> dataInputEntries;
-	private int retentionTimeWindow;
-	private int numberOfPrincipleComponents;
 	private IPcaResults pcaResults;
-	private int extractionType;
 
-	public PcaRunnable(List<IDataInputEntry> dataInputEntries, int retentionTimeWindow, int numberOfPrincipleComponents, int exType) {
-		this.dataInputEntries = dataInputEntries;
-		this.retentionTimeWindow = retentionTimeWindow;
-		this.numberOfPrincipleComponents = numberOfPrincipleComponents;
-		this.extractionType = exType;
+	public ReEvaluateRunnable(IPcaResults pcaResults) {
+		this.pcaResults = pcaResults;
 	}
 
 	@Override
@@ -42,7 +33,7 @@ public class PcaRunnable implements IRunnableWithProgress {
 		 * Extraction type argument 0 for peaks, 1 for scans
 		 */
 		PrincipleComponentProcessor principleComponentProcessor = new PrincipleComponentProcessor();
-		pcaResults = principleComponentProcessor.process(dataInputEntries, retentionTimeWindow, numberOfPrincipleComponents, monitor, extractionType);
+		pcaResults = principleComponentProcessor.reEvaluate(pcaResults);
 	}
 
 	public IPcaResults getPcaResults() {

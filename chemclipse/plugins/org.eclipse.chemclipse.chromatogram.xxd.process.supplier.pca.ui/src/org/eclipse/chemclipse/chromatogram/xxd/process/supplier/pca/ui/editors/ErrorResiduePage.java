@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.thirdpartylibraries.swtchart.ext.InteractiveChartExtended;
 import org.eclipse.swt.SWT;
@@ -57,6 +58,69 @@ public class ErrorResiduePage {
 	public ErrorResiduePage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
 		this.pcaEditor = pcaEditor;
+		initialize(tabFolder, formToolkit);
+	}
+
+	public void update() {
+
+		if(errorResidueChart != null) {
+			/*
+			 * Delete all other series.
+			 */
+			IPcaResults pcaResults = pcaEditor.getPcaResults();
+			ISeriesSet seriesSet = errorResidueChart.getSeriesSet();
+			ISeries[] series = seriesSet.getSeries();
+			for(ISeries serie : series) {
+				seriesSet.deleteSeries(serie.getId());
+			}
+			String[] fileNames = new String[pcaResults.getPcaResultMap().entrySet().size()];
+			int count = 0;
+			/*
+			 * Data
+			 */
+			double[] errorResidue = new double[pcaResults.getPcaResultMap().size()];
+			int counter = 0;
+			errorResidueChart.getAxisSet().getXAxis(0).getTitle().setText("Sample Names");
+			errorResidueChart.getAxisSet().getYAxis(0).getTitle().setText("Error Values(10^-6)");
+			for(ISample key : pcaResults.getPcaResultMap().keySet()) {
+				IPcaResult temp = pcaResults.getPcaResultMap().get(key);
+				// Done to better display error values
+				errorResidue[counter] = temp.getErrorMemberShip() * Math.pow(10, 6);
+				counter++;
+			}
+			//
+			for(Map.Entry<ISample, IPcaResult> entry : pcaResults.getPcaResultMap().entrySet()) {
+				/*
+				 * Create the series.
+				 */
+				String name = entry.getKey().getName();
+				fileNames[count] = name;
+				count++;
+			}
+			ILineSeries scatterSeries = (ILineSeries)errorResidueChart.getSeriesSet().createSeries(SeriesType.LINE, "Samples");
+			scatterSeries.setLineStyle(LineStyle.NONE);
+			scatterSeries.setSymbolSize(SYMBOL_SIZE);
+			double[] xSeries = new double[fileNames.length];
+			for(int i = 0; i < fileNames.length; i++) {
+				xSeries[i] = i + 1;
+			}
+			scatterSeries.setYSeries(errorResidue);
+			scatterSeries.setXSeries(xSeries);
+			/*
+			 * Set the color.
+			 */
+			scatterSeries.setSymbolColor(COLOR_RED);
+			scatterSeries.setSymbolType(PlotSymbolType.DIAMOND);
+			errorResidueChart.getAxisSet().getXAxis(0).setCategorySeries(fileNames);
+			errorResidueChart.getAxisSet().getXAxis(0).enableCategory(true);
+			errorResidueChart.getAxisSet().adjustRange();
+			errorResidueChart.redraw();
+			errorResidueChart.update();
+		}
+	}
+
+	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
+
 		//
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Error Residues");
@@ -90,7 +154,7 @@ public class ErrorResiduePage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				reloadErrorResidueChart();
+				update();
 			}
 		});
 		//
@@ -191,63 +255,5 @@ public class ErrorResiduePage {
 		});
 		//
 		tabItem.setControl(composite);
-	}
-
-	// TODO
-	public void reloadErrorResidueChart() {
-
-		if(errorResidueChart != null) {
-			/*
-			 * Delete all other series.
-			 */
-			ISeriesSet seriesSet = errorResidueChart.getSeriesSet();
-			ISeries[] series = seriesSet.getSeries();
-			for(ISeries serie : series) {
-				seriesSet.deleteSeries(serie.getId());
-			}
-			String[] fileNames = new String[pcaEditor.pcaResults.getPcaResultMap().entrySet().size()];
-			int count = 0;
-			/*
-			 * Data
-			 */
-			double[] errorResidue = new double[pcaEditor.pcaResults.getPcaResultMap().size()];
-			int counter = 0;
-			errorResidueChart.getAxisSet().getXAxis(0).getTitle().setText("Sample Names");
-			errorResidueChart.getAxisSet().getYAxis(0).getTitle().setText("Error Values(10^-6)");
-			for(ISample key : pcaEditor.pcaResults.getPcaResultMap().keySet()) {
-				IPcaResult temp = pcaEditor.pcaResults.getPcaResultMap().get(key);
-				// Done to better display error values
-				errorResidue[counter] = temp.getErrorMemberShip() * Math.pow(10, 6);
-				counter++;
-			}
-			//
-			for(Map.Entry<ISample, IPcaResult> entry : pcaEditor.pcaResults.getPcaResultMap().entrySet()) {
-				/*
-				 * Create the series.
-				 */
-				String name = entry.getKey().getName();
-				fileNames[count] = name;
-				count++;
-			}
-			ILineSeries scatterSeries = (ILineSeries)errorResidueChart.getSeriesSet().createSeries(SeriesType.LINE, "Samples");
-			scatterSeries.setLineStyle(LineStyle.NONE);
-			scatterSeries.setSymbolSize(SYMBOL_SIZE);
-			double[] xSeries = new double[fileNames.length];
-			for(int i = 0; i < fileNames.length; i++) {
-				xSeries[i] = i + 1;
-			}
-			scatterSeries.setYSeries(errorResidue);
-			scatterSeries.setXSeries(xSeries);
-			/*
-			 * Set the color.
-			 */
-			scatterSeries.setSymbolColor(COLOR_RED);
-			scatterSeries.setSymbolType(PlotSymbolType.DIAMOND);
-			errorResidueChart.getAxisSet().getXAxis(0).setCategorySeries(fileNames);
-			errorResidueChart.getAxisSet().getXAxis(0).enableCategory(true);
-			errorResidueChart.getAxisSet().adjustRange();
-			errorResidueChart.redraw();
-			errorResidueChart.update();
-		}
 	}
 }

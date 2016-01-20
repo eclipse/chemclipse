@@ -20,6 +20,7 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.TimeRangeWizard;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
@@ -50,7 +51,6 @@ public class PeakListIntensityTablePage {
 
 	private PcaEditor pcaEditor;
 	private int currentNumberOfPeaks;
-	private InputFilesPage inputFilesPage;
 	private Label tableHeader;
 	private Table peakListIntensityTable;
 	//
@@ -64,28 +64,14 @@ public class PeakListIntensityTablePage {
 		numberFormat.setMaximumFractionDigits(FRACTION_DIGITS);
 		//
 		this.pcaEditor = pcaEditor;
-		/*
-		 * Create the peak intensity table.
-		 */
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Data Table");
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new FillLayout());
-		/*
-		 * Forms API
-		 */
-		formToolkit = new FormToolkit(composite.getDisplay());
-		ScrolledForm scrolledForm = formToolkit.createScrolledForm(composite);
-		Composite scrolledFormComposite = scrolledForm.getBody();
-		scrolledFormComposite.setLayout(new TableWrapLayout());
-		scrolledForm.setText("Peak Intensity Table Editor");
-		createPeakListIntensityTableSection(scrolledFormComposite, formToolkit);
-		tabItem.setControl(composite);
+		initialize(tabFolder, formToolkit);
 	}
 
-	public void reloadPeakListIntensityTable() {
+	public void update() {
 
 		if(peakListIntensityTable != null) {
+			//
+			IPcaResults pcaResults = pcaEditor.getPcaResults();
 			String peakStartPoint;
 			String peakEndPoint;
 			/*
@@ -105,7 +91,7 @@ public class PeakListIntensityTablePage {
 			 */
 			List<String> titleList = new ArrayList<String>();
 			titleList.add("Times");
-			for(int retentionTime : pcaEditor.pcaResults.getExtractedRetentionTimes()) {
+			for(int retentionTime : pcaResults.getExtractedRetentionTimes()) {
 				titleList.add(numberFormat.format(retentionTime / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
 			}
 			final String[] titles = titleList.toArray(new String[titleList.size()]);
@@ -164,7 +150,7 @@ public class PeakListIntensityTablePage {
 							columns[k].dispose();
 							currentNumberOfPeaks--;
 						}
-						redrawTableHeader(pcaEditor.dataInputEntries, currentNumberOfPeaks, columns[startRow].getText(), columns[endRow - 1].getText());
+						redrawTableHeader(currentNumberOfPeaks, columns[startRow].getText(), columns[endRow - 1].getText());
 					} else {
 						System.out.println("Cancel pressed");
 					}
@@ -180,14 +166,14 @@ public class PeakListIntensityTablePage {
 						column.dispose();
 						currentNumberOfPeaks--;
 						TableColumn[] newColumns = peakListIntensityTable.getColumns();
-						redrawTableHeader(pcaEditor.dataInputEntries, currentNumberOfPeaks, newColumns[1].getText(), newColumns[newColumns.length - 1].getText());
+						redrawTableHeader(currentNumberOfPeaks, newColumns[1].getText(), newColumns[newColumns.length - 1].getText());
 					}
 				});
 			}
 			/*
 			 * Data
 			 */
-			for(Map.Entry<ISample, IPcaResult> entry : pcaEditor.pcaResults.getPcaResultMap().entrySet()) {
+			for(Map.Entry<ISample, IPcaResult> entry : pcaResults.getPcaResultMap().entrySet()) {
 				int index = 0;
 				TableItem item = new TableItem(peakListIntensityTable, SWT.NONE);
 				if(entry.getKey().isSelected()) {
@@ -208,8 +194,26 @@ public class PeakListIntensityTablePage {
 			}
 			peakStartPoint = titles[1];
 			peakEndPoint = titles[titles.length - 1];
-			redrawTableHeader(pcaEditor.dataInputEntries, currentNumberOfPeaks, peakStartPoint, peakEndPoint);
+			redrawTableHeader(currentNumberOfPeaks, peakStartPoint, peakEndPoint);
 		}
+	}
+
+	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
+
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText("Data Table");
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayout(new FillLayout());
+		/*
+		 * Forms API
+		 */
+		formToolkit = new FormToolkit(composite.getDisplay());
+		ScrolledForm scrolledForm = formToolkit.createScrolledForm(composite);
+		Composite scrolledFormComposite = scrolledForm.getBody();
+		scrolledFormComposite.setLayout(new TableWrapLayout());
+		scrolledForm.setText("Peak Intensity Table Editor");
+		createPeakListIntensityTableSection(scrolledFormComposite, formToolkit);
+		tabItem.setControl(composite);
 	}
 
 	private void createPeakListIntensityTableSection(Composite parent, FormToolkit formToolkit) {
@@ -261,27 +265,34 @@ public class PeakListIntensityTablePage {
 
 			public void widgetSelected(SelectionEvent event) {
 
+				IPcaResults pcaResults = pcaEditor.getPcaResults();
+				List<IDataInputEntry> dataInputEntries = pcaResults.getDataInputEntries();
+				//
 				TableItem item = (TableItem)event.item;
 				String filename = item.getText();
-				Map<ISample, IPcaResult> resultMap = pcaEditor.pcaResults.getPcaResultMap();
+				Map<ISample, IPcaResult> resultMap = pcaResults.getPcaResultMap();
 				for(ISample key : resultMap.keySet()) {
 					if(key.getName().equals(filename)) {
 						if(key.isSelected()) {
 							key.setSelected(false);
 							item.setChecked(false);
-							for(IDataInputEntry entry : pcaEditor.dataInputEntries) {
-								// TODO: Check if there are other file types to consider. Only works when dealing with ocb files for now
+							for(IDataInputEntry entry : dataInputEntries) {
+								/*
+								 * TODO: Check if there are other file types to consider. Only works when dealing with ocb files for now
+								 */
 								if(entry.getName().equals(key.getName() + ".ocb")) {
-									pcaEditor.dataInputEntries.remove(entry);
+									dataInputEntries.remove(entry);
 								}
 							}
 							return;
 						} else {
 							key.setSelected(true);
 							item.setChecked(true);
-							// TODO: Check if there are other file types to consider. Only works when dealing with ocb files for now
+							/*
+							 * TODO: Check if there are other file types to consider. Only works when dealing with ocb files for now
+							 */
 							DataInputEntry inputEntry = new DataInputEntry(key.getName() + ".ocb");
-							pcaEditor.dataInputEntries.add(inputEntry);
+							dataInputEntries.add(inputEntry);
 							return;
 						}
 					}
@@ -314,40 +325,37 @@ public class PeakListIntensityTablePage {
 		tableHeader.setLayoutData(gridData);
 	}
 
-	private void redrawTableHeader(List<IDataInputEntry> inputEntries, int numPeaks, String startPoint, String endPoint) {
+	private void redrawTableHeader(int numPeaks, String startPoint, String endPoint) {
 
-		// if peaks
-		// TODO
-		System.out.println("GENERALIZE - PCA");
-		// if(overviewPage.getExtractionType() == 0) {
-		// tableHeader.setText(Integer.toString(inputEntries.size()) + "\t\tPeaks: " + numPeaks + " \t\tStart Peak: " + startPoint + "\t\tEnd Peak: " + endPoint);
-		// }
-		// // if scans
-		// else {
-		// tableHeader.setText(Integer.toString(inputEntries.size()) + "\t\tScans: " + numPeaks + " \t\tStart Scan: " + startPoint + "\t\tEnd Scan: " + endPoint);
-		// }
-		tableHeader.setText(Integer.toString(inputEntries.size()) + "\t\tPeaks: " + numPeaks + " \t\tStart Peak: " + startPoint + "\t\tEnd Peak: " + endPoint);
+		IPcaResults pcaResults = pcaEditor.getPcaResults();
+		if(pcaResults != null) {
+			int inputEntriesSize = pcaResults.getDataInputEntries().size();
+			if(pcaResults.getExtractionType() == 0) {
+				/*
+				 * Peaks
+				 */
+				tableHeader.setText(Integer.toString(inputEntriesSize) + "\t\tPeaks: " + numPeaks + " \t\tStart Peak: " + startPoint + "\t\tEnd Peak: " + endPoint);
+			} else {
+				/*
+				 * Scans
+				 */
+				tableHeader.setText(Integer.toString(inputEntriesSize) + "\t\tScans: " + numPeaks + " \t\tStart Scan: " + startPoint + "\t\tEnd Scan: " + endPoint);
+			}
+		} else {
+			tableHeader.setText("No data available.");
+		}
 	}
 
 	private void createReevaluateButton(Composite client, GridData gridData, FormToolkit formToolkit) {
 
-		Button reevaluate;
-		reevaluate = formToolkit.createButton(client, "Re-Evaluate", SWT.PUSH);
+		Button reevaluate = formToolkit.createButton(client, "Re-Evaluate", SWT.PUSH);
 		reevaluate.setLayoutData(gridData);
-		// final PrincipleComponentProcessor principleComponentProcessor = new PrincipleComponentProcessor();
 		reevaluate.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
 				super.widgetSelected(e);
-				System.out.println("Size: " + pcaEditor.dataInputEntries.size());
-				pcaEditor.runPcaCalculation();
-				// TODO
-				System.out.println("GENERALIZE - PCA");
-				// peakListIntensityTablePage.reloadPeakListIntensityTable();
-				// scorePlotPage.updateSpinnerPCMaxima();
-				// scorePlotPage.reloadScorePlotChart();
-				// errorResiduePage.reloadErrorResidueChart();
+				pcaEditor.reEvaluatePcaCalculation();
 			}
 		});
 	}

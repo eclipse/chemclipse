@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
@@ -49,13 +50,22 @@ public class InputFilesPage {
 	private PcaEditor pcaEditor;
 	private Table inputFilesTable;
 	private Label countFiles;
+	private List<IDataInputEntry> dataInputEntries;;
 
 	public InputFilesPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
 		this.pcaEditor = pcaEditor;
-		/*
-		 * Input Files
-		 */
+		dataInputEntries = new ArrayList<IDataInputEntry>();
+		initialize(tabFolder, formToolkit);
+	}
+
+	public List<IDataInputEntry> getDataInputEntries() {
+
+		return dataInputEntries;
+	}
+
+	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
+
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Data Input Files");
 		Composite composite = new Composite(tabFolder, SWT.NONE);
@@ -246,7 +256,7 @@ public class InputFilesPage {
 		IDataInputEntry inputEntry;
 		for(String inputFile : selectedFiles) {
 			inputEntry = new DataInputEntry(inputFile);
-			pcaEditor.dataInputEntries.add(inputEntry);
+			dataInputEntries.add(inputEntry);
 		}
 	}
 
@@ -274,10 +284,10 @@ public class InputFilesPage {
 			 * Decrease the index and increase the counter to remove the correct entries.
 			 */
 			index -= counter;
-			pcaEditor.dataInputEntries.remove(index);
+			dataInputEntries.remove(index);
 			counter++;
 		}
-		redrawCountFiles(pcaEditor.dataInputEntries);
+		redrawCountFiles(dataInputEntries);
 	}
 
 	/**
@@ -314,7 +324,7 @@ public class InputFilesPage {
 			/*
 			 * Data
 			 */
-			for(IDataInputEntry entry : pcaEditor.dataInputEntries) {
+			for(IDataInputEntry entry : dataInputEntries) {
 				TableItem item = new TableItem(inputFilesTable, SWT.NONE);
 				item.setText(0, entry.getName());
 				item.setText(1, entry.getInputFile());
@@ -328,7 +338,7 @@ public class InputFilesPage {
 			/*
 			 * Set the count label information.
 			 */
-			redrawCountFiles(pcaEditor.dataInputEntries);
+			redrawCountFiles(dataInputEntries);
 		}
 	}
 

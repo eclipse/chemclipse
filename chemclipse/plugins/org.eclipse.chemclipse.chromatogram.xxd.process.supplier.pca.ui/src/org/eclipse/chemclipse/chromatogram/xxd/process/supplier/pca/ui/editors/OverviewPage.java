@@ -42,9 +42,8 @@ public class OverviewPage {
 
 	private static final Logger logger = Logger.getLogger(OverviewPage.class);
 	private static final int DEFAULT_RETENTION_TIME_WINDOW = 200;
+	//
 	private PcaEditor pcaEditor;
-	private TabFolder tabFolder;
-	private int inputFilesPageIndex;
 	private Text retentionTimeWindowText;
 	private Spinner principleComponentSpinner;
 	/*
@@ -52,14 +51,14 @@ public class OverviewPage {
 	 */
 	private int extractionType;
 
-	public OverviewPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit, int inputFilesPageIndex) {
+	public OverviewPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
 		this.pcaEditor = pcaEditor;
-		this.tabFolder = tabFolder;
-		this.inputFilesPageIndex = inputFilesPageIndex;
-		/*
-		 * Miscellaneous Page
-		 */
+		initialize(tabFolder, formToolkit);
+	}
+
+	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
+
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Overview");
 		Composite composite = new Composite(tabFolder, SWT.NONE);
@@ -262,7 +261,7 @@ public class OverviewPage {
 
 			public void linkActivated(HyperlinkEvent e) {
 
-				tabFolder.setSelection(inputFilesPageIndex);
+				pcaEditor.showInputFilesPage();
 			}
 		});
 	}

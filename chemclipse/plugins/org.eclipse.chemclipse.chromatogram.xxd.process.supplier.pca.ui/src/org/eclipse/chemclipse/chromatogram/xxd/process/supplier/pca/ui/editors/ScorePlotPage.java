@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.thirdpartylibraries.swtchart.ext.InteractiveChartExtended;
 import org.eclipse.swt.SWT;
@@ -65,7 +66,17 @@ public class ScorePlotPage {
 	public ScorePlotPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
 		this.pcaEditor = pcaEditor;
-		//
+		initialize(tabFolder, formToolkit);
+	}
+
+	public void update() {
+
+		updateSpinnerPCMaxima();
+		reloadScorePlotChart();
+	}
+
+	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
+
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Score Plot");
 		//
@@ -216,33 +227,35 @@ public class ScorePlotPage {
 		tabItem.setControl(composite);
 	}
 
-	public void updateSpinnerPCMaxima() {
+	private void updateSpinnerPCMaxima() {
 
-		if(pcaEditor.pcaResults != null) {
-			spinnerPCx.setMaximum(pcaEditor.pcaResults.getNumberOfPrincipleComponents());
+		IPcaResults pcaResults = pcaEditor.getPcaResults();
+		if(pcaResults != null) {
+			spinnerPCx.setMaximum(pcaResults.getNumberOfPrincipleComponents());
 			spinnerPCx.setSelection(1); // PC1
-			spinnerPCy.setMaximum(pcaEditor.pcaResults.getNumberOfPrincipleComponents());
+			spinnerPCy.setMaximum(pcaResults.getNumberOfPrincipleComponents());
 			spinnerPCy.setSelection(2); // PC2
 		}
 	}
 
-	public void reloadScorePlotChart() {
+	private void reloadScorePlotChart() {
 
 		if(scorePlotChart != null) {
 			/*
 			 * Delete all other series.
 			 */
+			IPcaResults pcaResults = pcaEditor.getPcaResults();
 			ISeriesSet seriesSet = scorePlotChart.getSeriesSet();
 			ISeries[] series = seriesSet.getSeries();
 			for(ISeries serie : series) {
 				seriesSet.deleteSeries(serie.getId());
 			}
-			String[] fileNames = new String[pcaEditor.pcaResults.getPcaResultMap().entrySet().size()];
+			String[] fileNames = new String[pcaResults.getPcaResultMap().entrySet().size()];
 			int count = 0;
 			/*
 			 * Data
 			 */
-			for(Map.Entry<ISample, IPcaResult> entry : pcaEditor.pcaResults.getPcaResultMap().entrySet()) {
+			for(Map.Entry<ISample, IPcaResult> entry : pcaResults.getPcaResultMap().entrySet()) {
 				/*
 				 * Create the series.
 				 */

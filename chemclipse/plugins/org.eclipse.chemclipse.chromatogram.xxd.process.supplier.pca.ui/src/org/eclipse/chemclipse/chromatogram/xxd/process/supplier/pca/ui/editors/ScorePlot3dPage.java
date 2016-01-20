@@ -12,6 +12,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
+import java.util.Map;
+
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
@@ -33,8 +38,33 @@ import javafx.scene.paint.Color;
 
 public class ScorePlot3dPage {
 
+	private PcaEditor pcaEditor;
+
 	public ScorePlot3dPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
+		this.pcaEditor = pcaEditor;
+		initialize(tabFolder, formToolkit);
+	}
+
+	public void update() {
+
+		IPcaResults pcaResults = pcaEditor.getPcaResults();
+		for(Map.Entry<ISample, IPcaResult> entry : pcaResults.getPcaResultMap().entrySet()) {
+			IPcaResult pcaResult = entry.getValue();
+			double[] eigenSpace = pcaResult.getEigenSpace();
+			/*
+			 * Place each sample coordinates in a 3D view.
+			 */
+			String name = entry.getKey().getName();
+			double x = eigenSpace[0]; // PC1
+			double y = eigenSpace[1]; // PC2
+			double z = eigenSpace[2]; // PC3
+			System.out.println(name + " -> " + x + "," + y + "," + z);
+		}
+	}
+
+	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
+
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("3D View");
 		//
