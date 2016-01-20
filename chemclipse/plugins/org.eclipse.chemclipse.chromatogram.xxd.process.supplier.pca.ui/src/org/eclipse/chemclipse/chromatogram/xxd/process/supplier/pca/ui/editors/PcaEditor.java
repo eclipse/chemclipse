@@ -15,27 +15,19 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ResultExport;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaRunnable;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.TimeRangeWizard;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.thirdpartylibraries.swtchart.ext.InteractiveChartExtended;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -44,43 +36,12 @@ import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.forms.widgets.TableWrapData;
-import org.eclipse.ui.forms.widgets.TableWrapLayout;
-import org.swtchart.ICustomPaintListener;
-import org.swtchart.ILineSeries;
-import org.swtchart.ILineSeries.PlotSymbolType;
-import org.swtchart.IPlotArea;
-import org.swtchart.ISeries;
-import org.swtchart.ISeries.SeriesType;
-import org.swtchart.ISeriesSet;
-import org.swtchart.LineStyle;
-import org.swtchart.Range;
 
 @SuppressWarnings("deprecation")
 public class PcaEditor {
@@ -93,16 +54,7 @@ public class PcaEditor {
 	 * TODO protected
 	 */
 	protected List<IDataInputEntry> dataInputEntries;
-	//
-	private Color COLOR_BLACK = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
-	private Color COLOR_WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
-	private Color COLOR_RED = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
-	private Color COLOR_BLUE = Display.getCurrent().getSystemColor(SWT.COLOR_BLUE);
-	private Color COLOR_MAGENTA = Display.getCurrent().getSystemColor(SWT.COLOR_MAGENTA);
-	private Color COLOR_CYAN = Display.getCurrent().getSystemColor(SWT.COLOR_CYAN);
-	private Color COLOR_GRAY = Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
-	private int SYMBOL_SIZE = 8;
-	//
+	protected PcaResults pcaResults;
 	//
 	private static final Logger logger = Logger.getLogger(PcaEditor.class);
 	/*
@@ -121,38 +73,25 @@ public class PcaEditor {
 	 */
 	private TabFolder tabFolder;
 	private FormToolkit formToolkit;
-	private Label tableHeader;
-	private Table peakListIntensityTable;
-	private InteractiveChartExtended scorePlotChart;
-	private InteractiveChartExtended errorResidueChart;
-	private Spinner spinnerPCx;
-	private Spinner spinnerPCy;
 	/*
 	 * Indices of the pages.
 	 */
 	private OverviewPage overviewPage;
+	@SuppressWarnings("unused")
 	private InputFilesPage inputFilesPage;
+	private PeakListIntensityTablePage peakListIntensityTablePage;
+	private ScorePlotPage scorePlotPage;
+	private ErrorResiduePage errorResiduePage;
+	@SuppressWarnings("unused")
+	private ScorePlot3dPage scorePlot3dPage;
 	//
 	private int scorePlotPageIndex;
 	//
-	private PcaResults pcaResults;
 	private File exportFile;
-	/*
-	 * Number format
-	 */
-	private NumberFormat numberFormat;
-	private static final int FRACTION_DIGITS = 3;
-	/*
-	 * Peak Intensity Table Data
-	 */
-	private int currentNumberOfPeaks;
 
 	public PcaEditor() {
 		//
 		dataInputEntries = new ArrayList<IDataInputEntry>();
-		numberFormat = NumberFormat.getInstance();
-		numberFormat.setMinimumFractionDigits(FRACTION_DIGITS);
-		numberFormat.setMaximumFractionDigits(FRACTION_DIGITS);
 	}
 
 	@PostConstruct
@@ -226,39 +165,10 @@ public class PcaEditor {
 		//
 		overviewPage = new OverviewPage(this, tabFolder, formToolkit, 2); // 1
 		inputFilesPage = new InputFilesPage(this, tabFolder, formToolkit); // 2
-		createPeakListIntensityTablePage();
-		// 3
-		scorePlotPageIndex = 3;
-		createScorePlotPage();
-		// 4
-		createErrorResiduePage();
-	}
-
-	private void createButtonForPeakListTable(Composite client) {
-
-		GridData gridData = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
-		createReevaluateButton(client, gridData);
-	}
-
-	private void createReevaluateButton(Composite client, GridData gridData) {
-
-		Button reevaluate;
-		reevaluate = formToolkit.createButton(client, "Re-Evaluate", SWT.PUSH);
-		reevaluate.setLayoutData(gridData);
-		// final PrincipleComponentProcessor principleComponentProcessor = new PrincipleComponentProcessor();
-		reevaluate.addSelectionListener(new SelectionAdapter() {
-
-			public void widgetSelected(SelectionEvent e) {
-
-				super.widgetSelected(e);
-				System.out.println("Size: " + dataInputEntries.size());
-				runPcaCalculation();
-				reloadPeakListIntensityTable();
-				updateSpinnerPCMaxima();
-				reloadScorePlotChart();
-				reloadErrorResidueChart();
-			}
-		});
+		peakListIntensityTablePage = new PeakListIntensityTablePage(this, tabFolder, formToolkit);
+		scorePlotPage = new ScorePlotPage(this, tabFolder, formToolkit);
+		errorResiduePage = new ErrorResiduePage(this, tabFolder, formToolkit);
+		scorePlot3dPage = new ScorePlot3dPage(this, tabFolder, formToolkit);
 	}
 
 	/*
@@ -286,10 +196,10 @@ public class PcaEditor {
 			/*
 			 * Reload the tables and charts.
 			 */
-			reloadPeakListIntensityTable();
-			updateSpinnerPCMaxima();
-			reloadScorePlotChart();
-			reloadErrorResidueChart();
+			peakListIntensityTablePage.reloadPeakListIntensityTable();
+			scorePlotPage.updateSpinnerPCMaxima();
+			scorePlotPage.reloadScorePlotChart();
+			errorResiduePage.reloadErrorResidueChart();
 			/*
 			 * Activate the score plot chart.
 			 */
@@ -299,688 +209,6 @@ public class PcaEditor {
 			logger.warn(e.getCause());
 		} catch(InterruptedException e) {
 			logger.warn(e);
-		}
-	}
-
-	/**
-	 * Creates the peak intensity table labels.
-	 * 
-	 * @param client
-	 */
-	private void createPeakIntensityTableLabels(Composite client) {
-
-		tableHeader = formToolkit.createLabel(client, "Peaks: " + " \t\tStart Peak: " + " \t End Peak: ", SWT.NONE);
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
-		gridData.horizontalSpan = 2;
-		tableHeader.setLayoutData(gridData);
-	}
-
-	private void redrawTableHeader(List<IDataInputEntry> inputEntries, int numPeaks, String startPoint, String endPoint) {
-
-		// if peaks
-		if(overviewPage.getExtractionType() == 0) {
-			tableHeader.setText(Integer.toString(inputEntries.size()) + "\t\tPeaks: " + numPeaks + " \t\tStart Peak: " + startPoint + "\t\tEnd Peak: " + endPoint);
-		}
-		// if scans
-		else {
-			tableHeader.setText(Integer.toString(inputEntries.size()) + "\t\tScans: " + numPeaks + " \t\tStart Scan: " + startPoint + "\t\tEnd Scan: " + endPoint);
-		}
-	}
-
-	// --------------------------------------------------------------------------------------------------------------Peak Intensity Table Page
-	private void createPeakListIntensityTablePage() {
-
-		/*
-		 * Create the peak intensity table.
-		 */
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Data Table");
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new FillLayout());
-		/*
-		 * Forms API
-		 */
-		formToolkit = new FormToolkit(composite.getDisplay());
-		ScrolledForm scrolledForm = formToolkit.createScrolledForm(composite);
-		Composite scrolledFormComposite = scrolledForm.getBody();
-		scrolledFormComposite.setLayout(new TableWrapLayout());
-		scrolledForm.setText("Peak Intensity Table Editor");
-		createPeakListIntensityTableSection(scrolledFormComposite);
-		tabItem.setControl(composite);
-	}
-
-	private void createPeakListIntensityTableSection(Composite parent) {
-
-		Section section;
-		Composite client;
-		GridLayout layout;
-		/*
-		 * Section
-		 */
-		section = formToolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
-		section.setText("Peak Intensity Table");
-		section.setDescription("Click on the Times box to specify a certain timerange to display\n" + "Click on any time column header to delete the corresponding column\n\n" + "Click on any filename(not the checkboxes) to exclude/include that specific file in table\n" + "The checkboxes currently show what files are included\n\n" + "Click on the Re-Evaluate Button to recalcuate score plot and error chart\n");
-		section.marginWidth = 5;
-		section.marginHeight = 5;
-		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
-		/*
-		 * Set the layout for the client.
-		 */
-		client = formToolkit.createComposite(section, SWT.WRAP);
-		layout = new GridLayout();
-		layout.numColumns = 1;
-		layout.marginWidth = 2;
-		layout.marginHeight = 2;
-		client.setLayout(layout);
-		createButtonForPeakListTable(client);
-		createPeakIntensityTableLabels(client);
-		GridData gridData;
-		peakListIntensityTable = formToolkit.createTable(client, SWT.MULTI | SWT.VIRTUAL | SWT.CHECK);
-		gridData = new GridData(GridData.FILL_BOTH);
-		gridData.heightHint = 300;
-		gridData.widthHint = 100;
-		gridData.verticalSpan = 3;
-		peakListIntensityTable.setLayoutData(gridData);
-		peakListIntensityTable.setHeaderVisible(true);
-		peakListIntensityTable.setLinesVisible(true);
-		peakListIntensityTable.addListener(SWT.MouseDoubleClick, new Listener() {
-
-			@Override
-			public void handleEvent(org.eclipse.swt.widgets.Event event) {
-
-				TableItem[] selection = peakListIntensityTable.getSelection();
-				for(int i = 0; i < selection.length; i++) {
-					selection[i].dispose();
-				}
-			}
-		});
-		peakListIntensityTable.addSelectionListener(new SelectionAdapter() {
-
-			public void widgetSelected(SelectionEvent event) {
-
-				TableItem item = (TableItem)event.item;
-				String filename = item.getText();
-				Map<ISample, IPcaResult> resultMap = pcaResults.getPcaResultMap();
-				for(ISample key : resultMap.keySet()) {
-					if(key.getName().equals(filename)) {
-						if(key.isSelected()) {
-							key.setSelected(false);
-							item.setChecked(false);
-							for(IDataInputEntry entry : dataInputEntries) {
-								// TODO: Check if there are other file types to consider. Only works when dealing with ocb files for now
-								if(entry.getName().equals(key.getName() + ".ocb")) {
-									dataInputEntries.remove(entry);
-								}
-							}
-							return;
-						} else {
-							key.setSelected(true);
-							item.setChecked(true);
-							// TODO: Check if there are other file types to consider. Only works when dealing with ocb files for now
-							DataInputEntry inputEntry = new DataInputEntry(key.getName() + ".ocb");
-							dataInputEntries.add(inputEntry);
-							return;
-						}
-					}
-				}
-			}
-		});
-		/*
-		 * Add the client to the section and paint flat borders.
-		 */
-		section.setClient(client);
-		formToolkit.paintBordersFor(client);
-	}
-
-	private void reloadPeakListIntensityTable() {
-
-		if(peakListIntensityTable != null) {
-			String peakStartPoint;
-			String peakEndPoint;
-			/*
-			 * Remove all entries.
-			 */
-			peakListIntensityTable.setRedraw(false);
-			peakListIntensityTable.removeAll();
-			while(peakListIntensityTable.getColumnCount() > 0) {
-				/*
-				 * Delete all columns.
-				 */
-				peakListIntensityTable.getColumns()[0].dispose();
-			}
-			peakListIntensityTable.setRedraw(true);
-			/*
-			 * Header
-			 */
-			List<String> titleList = new ArrayList<String>();
-			titleList.add("Times");
-			for(int retentionTime : pcaResults.getExtractedRetentionTimes()) {
-				titleList.add(numberFormat.format(retentionTime / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
-			}
-			final String[] titles = titleList.toArray(new String[titleList.size()]);
-			currentNumberOfPeaks = titles.length - 1;
-			TableColumn filenameColumn = new TableColumn(peakListIntensityTable, SWT.NONE);
-			filenameColumn.setText(titles[0]);
-			/*
-			 * Makes filename entry clickable to be able to display certain time range
-			 */
-			filenameColumn.addSelectionListener(new SelectionAdapter() {
-
-				public void widgetSelected(SelectionEvent event) {
-
-					/*
-					 * Make wizard to allow user to input time range for table
-					 */
-					TimeRangeWizard tableWizard = new TimeRangeWizard();
-					WizardDialog wizardDialog = new WizardDialog(Display.getCurrent().getActiveShell(), tableWizard);
-					int returnCode = wizardDialog.open();
-					String range = tableWizard.getTextOne();
-					/*
-					 * If timerange entered
-					 */
-					if(returnCode == WizardDialog.OK) {
-						System.out.println("Ok pressed");
-						int split = range.indexOf("-");
-						double startRange = Double.parseDouble(range.substring(0, split));
-						double endRange = Double.parseDouble(range.substring(split + 1));
-						if(endRange < startRange) {
-							return;
-						}
-						TableColumn[] columns = peakListIntensityTable.getColumns();
-						boolean startRowSet = false;
-						int startRow = 0;
-						int endRow = 0;
-						double currentTitle = 0.0;
-						for(int i = 1; i <= columns.length; i++) {
-							currentTitle = Double.parseDouble(columns[i].getText());
-							if(currentTitle > startRange && !startRowSet) {
-								startRowSet = true;
-								startRow = i;
-							} else if(currentTitle > endRange) {
-								if(i != 0) {
-									endRow = i - 1;
-								}
-								break;
-							}
-						}
-						// Deletes columns before start range
-						for(int j = 1; j < startRow; j++) {
-							columns[j].dispose();
-							currentNumberOfPeaks--;
-						}
-						// Deletes columns after end range
-						for(int k = endRow; k < columns.length; k++) {
-							columns[k].dispose();
-							currentNumberOfPeaks--;
-						}
-						redrawTableHeader(dataInputEntries, currentNumberOfPeaks, columns[startRow].getText(), columns[endRow - 1].getText());
-					} else {
-						System.out.println("Cancel pressed");
-					}
-				}
-			});
-			for(int i = 1; i < titles.length; i++) {
-				final TableColumn column = new TableColumn(peakListIntensityTable, SWT.NONE);
-				column.setText(titles[i]);
-				column.addSelectionListener(new SelectionAdapter() {
-
-					public void widgetSelected(SelectionEvent event) {
-
-						column.dispose();
-						currentNumberOfPeaks--;
-						TableColumn[] newColumns = peakListIntensityTable.getColumns();
-						redrawTableHeader(dataInputEntries, currentNumberOfPeaks, newColumns[1].getText(), newColumns[newColumns.length - 1].getText());
-					}
-				});
-			}
-			/*
-			 * Data
-			 */
-			for(Map.Entry<ISample, IPcaResult> entry : pcaResults.getPcaResultMap().entrySet()) {
-				int index = 0;
-				TableItem item = new TableItem(peakListIntensityTable, SWT.NONE);
-				if(entry.getKey().isSelected()) {
-					item.setChecked(true);
-				}
-				item.setText(index++, entry.getKey().getName());
-				IPcaResult pcaResult = entry.getValue();
-				double[] sampleData = pcaResult.getSampleData();
-				for(double data : sampleData) {
-					item.setText(index++, numberFormat.format(data));
-				}
-			}
-			/*
-			 * Pack to make the entries visible.
-			 */
-			for(int i = 0; i < titles.length; i++) {
-				peakListIntensityTable.getColumn(i).pack();
-			}
-			peakStartPoint = titles[1];
-			peakEndPoint = titles[titles.length - 1];
-			redrawTableHeader(dataInputEntries, currentNumberOfPeaks, peakStartPoint, peakEndPoint);
-		}
-	}
-
-	// --------------------------------------------------------------------------------------------------------------Peak Intensity Table Page
-	private void createScorePlotPage() {
-
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Score Plot");
-		//
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new FillLayout());
-		//
-		Composite parent = new Composite(composite, SWT.NONE);
-		parent.setLayout(new GridLayout(1, true));
-		parent.setLayoutData(GridData.FILL_BOTH);
-		/*
-		 * Selection of the plotted PCs
-		 */
-		Composite spinnerComposite = new Composite(parent, SWT.NONE);
-		spinnerComposite.setLayout(new GridLayout(5, false));
-		spinnerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		Label label;
-		GridData gridData = new GridData();
-		gridData.widthHint = 50;
-		gridData.heightHint = 20;
-		//
-		label = new Label(spinnerComposite, SWT.NONE);
-		label.setText("PC X-Axis: ");
-		spinnerPCx = new Spinner(spinnerComposite, SWT.NONE);
-		spinnerPCx.setMinimum(1);
-		spinnerPCx.setMaximum(1);
-		spinnerPCx.setIncrement(1);
-		spinnerPCx.setLayoutData(gridData);
-		//
-		label = new Label(spinnerComposite, SWT.NONE);
-		label.setText(" PC Y-Axis: ");
-		spinnerPCy = new Spinner(spinnerComposite, SWT.NONE);
-		spinnerPCy.setMinimum(1);
-		spinnerPCy.setMaximum(1);
-		spinnerPCy.setIncrement(1);
-		spinnerPCy.setLayoutData(gridData);
-		//
-		Button button = new Button(spinnerComposite, SWT.PUSH);
-		button.setText("Reload Score Plot");
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				reloadScorePlotChart();
-			}
-		});
-		/*
-		 * Plot the PCA chart.
-		 */
-		Composite chartComposite = new Composite(parent, SWT.NONE);
-		chartComposite.setLayout(new GridLayout(1, true));
-		chartComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		//
-		scorePlotChart = new InteractiveChartExtended(chartComposite, SWT.NONE);
-		scorePlotChart.setLayoutData(new GridData(GridData.FILL_BOTH));
-		scorePlotChart.getTitle().setText("PCA Score Plot");
-		scorePlotChart.getTitle().setForeground(COLOR_BLACK);
-		//
-		scorePlotChart.setBackground(COLOR_WHITE);
-		scorePlotChart.getLegend().setVisible(false);
-		//
-		scorePlotChart.getAxisSet().getXAxis(0).getTitle().setText("PC" + spinnerPCx.getSelection());
-		scorePlotChart.getAxisSet().getXAxis(0).getTitle().setForeground(COLOR_BLACK);
-		scorePlotChart.getAxisSet().getXAxis(0).getTick().setForeground(COLOR_BLACK);
-		//
-		scorePlotChart.getAxisSet().getYAxis(0).getTitle().setText("PC" + spinnerPCy.getSelection());
-		scorePlotChart.getAxisSet().getYAxis(0).getTitle().setForeground(COLOR_BLACK);
-		scorePlotChart.getAxisSet().getYAxis(0).getTick().setForeground(COLOR_BLACK);
-		//
-		IPlotArea plotArea = (IPlotArea)scorePlotChart.getPlotArea();
-		/*
-		 * Plot a marker at zero.
-		 */
-		plotArea.addCustomPaintListener(new ICustomPaintListener() {
-
-			@Override
-			public void paintControl(PaintEvent e) {
-
-				Range xRange = scorePlotChart.getAxisSet().getXAxes()[0].getRange();
-				Range yRange = scorePlotChart.getAxisSet().getYAxes()[0].getRange();
-				/*
-				 * Mark the zero lines if possible.
-				 * Otherwise draw the marker in half width.
-				 */
-				if(xRange.lower < 0 && xRange.upper > 0 && yRange.lower < 0 && yRange.upper > 0) {
-					Rectangle rectangle = scorePlotChart.getPlotArea().getClientArea();
-					int width = rectangle.width;
-					int height = rectangle.height;
-					int xWidth;
-					int yHeight;
-					/*
-					 * Dependent where the zero values are.
-					 * xDelta and yDelta can't be zero -> protect from division by zero.
-					 */
-					double xDelta = xRange.upper - xRange.lower;
-					double yDelta = yRange.upper - yRange.lower;
-					double xDiff = xRange.lower * -1; // lower is negative
-					double yDiff = yRange.upper;
-					double xPart = ((100 / xDelta) * xDiff) / 100; // percent -> 0.0 - 1.0
-					double yPart = ((100 / yDelta) * yDiff) / 100; // percent -> 0.0 - 1.0
-					xWidth = (int)(width * xPart);
-					yHeight = (int)(height * yPart);
-					/*
-					 * Draw the line.
-					 */
-					e.gc.setForeground(COLOR_BLACK);
-					e.gc.drawLine(xWidth, 0, xWidth, height); // Vertical line through zero
-					e.gc.drawLine(0, yHeight, width, yHeight); // Horizontal line through zero
-				}
-			}
-
-			@Override
-			public boolean drawBehindSeries() {
-
-				return false;
-			}
-		});
-		/*
-		 * Plot the series name above the entry.
-		 */
-		plotArea.addCustomPaintListener(new ICustomPaintListener() {
-
-			@Override
-			public void paintControl(PaintEvent e) {
-
-				ISeriesSet seriesSet = scorePlotChart.getSeriesSet();
-				ISeries[] series = seriesSet.getSeries();
-				for(ISeries serie : series) {
-					String label = serie.getId();
-					Point point = serie.getPixelCoordinates(0);
-					/*
-					 * Draw the label
-					 */
-					Point labelSize = e.gc.textExtent(label);
-					e.gc.setForeground(COLOR_BLACK);
-					e.gc.drawText(label, (int)(point.x - labelSize.x / 2.0d), (int)(point.y - labelSize.y - SYMBOL_SIZE / 2.0d), true);
-				}
-			}
-
-			@Override
-			public boolean drawBehindSeries() {
-
-				return false;
-			}
-		});
-		//
-		tabItem.setControl(composite);
-	}
-
-	private void updateSpinnerPCMaxima() {
-
-		if(pcaResults != null) {
-			spinnerPCx.setMaximum(pcaResults.getNumberOfPrincipleComponents());
-			spinnerPCx.setSelection(1); // PC1
-			spinnerPCy.setMaximum(pcaResults.getNumberOfPrincipleComponents());
-			spinnerPCy.setSelection(2); // PC2
-		}
-	}
-
-	private void createErrorResiduePage() {
-
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Error Residues");
-		//
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new FillLayout());
-		//
-		Composite parent = new Composite(composite, SWT.NONE);
-		parent.setLayout(new GridLayout(1, true));
-		parent.setLayoutData(GridData.FILL_BOTH);
-		/*
-		 * Selection of the plotted PCs
-		 */
-		Composite spinnerComposite = new Composite(parent, SWT.NONE);
-		spinnerComposite.setLayout(new GridLayout(5, false));
-		spinnerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		GridData gridData = new GridData();
-		gridData.widthHint = 50;
-		gridData.heightHint = 20;
-		/*
-		 * Plot the Error residue chart chart.
-		 */
-		Composite chartComposite = new Composite(parent, SWT.NONE);
-		chartComposite.setLayout(new GridLayout(1, true));
-		chartComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		Button button = new Button(spinnerComposite, SWT.PUSH);
-		button.setText("Reload Error Chart");
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				reloadErrorResidueChart();
-			}
-		});
-		//
-		errorResidueChart = new InteractiveChartExtended(chartComposite, SWT.NONE);
-		errorResidueChart.setLayoutData(new GridData(GridData.FILL_BOTH));
-		errorResidueChart.getTitle().setText("Error Residue Chart");
-		errorResidueChart.getTitle().setForeground(COLOR_BLACK);
-		//
-		errorResidueChart.setBackground(COLOR_WHITE);
-		errorResidueChart.getLegend().setVisible(false);
-		//
-		errorResidueChart.getAxisSet().getXAxis(0).getTitle().setText("Sample Names");
-		errorResidueChart.getAxisSet().getXAxis(0).getTitle().setForeground(COLOR_BLACK);
-		errorResidueChart.getAxisSet().getXAxis(0).getTick().setForeground(COLOR_BLACK);
-		//
-		errorResidueChart.getAxisSet().getYAxis(0).getTitle().setText("Error Values(10^-6)");
-		errorResidueChart.getAxisSet().getYAxis(0).getTitle().setForeground(COLOR_BLACK);
-		errorResidueChart.getAxisSet().getYAxis(0).getTick().setForeground(COLOR_BLACK);
-		//
-		String[] tempCategories = {" ", " ", " "};
-		errorResidueChart.getAxisSet().getXAxis(0).setCategorySeries(tempCategories);
-		errorResidueChart.getAxisSet().getXAxis(0).enableCategory(true);
-		IPlotArea plotArea = (IPlotArea)errorResidueChart.getPlotArea();
-		/*
-		 * Plot a marker at zero.
-		 */
-		plotArea.addCustomPaintListener(new ICustomPaintListener() {
-
-			@Override
-			public void paintControl(PaintEvent e) {
-
-				Range xRange = errorResidueChart.getAxisSet().getXAxes()[0].getRange();
-				Range yRange = errorResidueChart.getAxisSet().getYAxes()[0].getRange();
-				/*
-				 * Mark the zero lines if possible.
-				 * Otherwise draw the marker in half width.
-				 */
-				if(xRange.lower < 0 && xRange.upper > 0 && yRange.lower < 0 && yRange.upper > 0) {
-					Rectangle rectangle = errorResidueChart.getPlotArea().getClientArea();
-					int width = rectangle.width;
-					int height = rectangle.height;
-					int xWidth;
-					int yHeight;
-					/*
-					 * Dependent where the zero values are.
-					 * xDelta and yDelta can't be zero -> protect from division by zero.
-					 */
-					double xDelta = xRange.upper - xRange.lower;
-					double yDelta = yRange.upper - yRange.lower;
-					double xDiff = xRange.lower * -1; // lower is negative
-					double yDiff = yRange.upper;
-					double xPart = ((100 / xDelta) * xDiff) / 100; // percent -> 0.0 - 1.0
-					double yPart = ((100 / yDelta) * yDiff) / 100; // percent -> 0.0 - 1.0
-					xWidth = (int)(width * xPart);
-					yHeight = (int)(height * yPart);
-					/*
-					 * Draw the line.
-					 */
-					e.gc.setForeground(COLOR_BLACK);
-					e.gc.drawLine(xWidth, 0, xWidth, height); // Vertical line through zero
-					e.gc.drawLine(0, yHeight, width, yHeight); // Horizontal line through zero
-				}
-			}
-
-			@Override
-			public boolean drawBehindSeries() {
-
-				return false;
-			}
-		});
-		/*
-		 * Plot the series name above the entry.
-		 */
-		plotArea.addCustomPaintListener(new ICustomPaintListener() {
-
-			@Override
-			public void paintControl(PaintEvent e) {
-
-				ISeriesSet seriesSet = errorResidueChart.getSeriesSet();
-				ISeries[] series = seriesSet.getSeries();
-				for(ISeries serie : series) {
-					String label = serie.getId();
-					Point point = serie.getPixelCoordinates(0);
-					/*
-					 * Draw the label
-					 */
-					Point labelSize = e.gc.textExtent(label);
-					e.gc.setForeground(COLOR_BLACK);
-					e.gc.drawText("", (int)(point.x - labelSize.x / 2.0d), (int)(point.y - labelSize.y - SYMBOL_SIZE / 2.0d), true);
-				}
-			}
-
-			@Override
-			public boolean drawBehindSeries() {
-
-				return false;
-			}
-		});
-		//
-		tabItem.setControl(composite);
-	}
-
-	private void reloadScorePlotChart() {
-
-		if(scorePlotChart != null) {
-			/*
-			 * Delete all other series.
-			 */
-			ISeriesSet seriesSet = scorePlotChart.getSeriesSet();
-			ISeries[] series = seriesSet.getSeries();
-			for(ISeries serie : series) {
-				seriesSet.deleteSeries(serie.getId());
-			}
-			String[] fileNames = new String[pcaResults.getPcaResultMap().entrySet().size()];
-			int count = 0;
-			/*
-			 * Data
-			 */
-			for(Map.Entry<ISample, IPcaResult> entry : pcaResults.getPcaResultMap().entrySet()) {
-				/*
-				 * Create the series.
-				 */
-				String name = entry.getKey().getName();
-				fileNames[count] = name;
-				ILineSeries scatterSeries = (ILineSeries)scorePlotChart.getSeriesSet().createSeries(SeriesType.LINE, name);
-				scatterSeries.setLineStyle(LineStyle.NONE);
-				scatterSeries.setSymbolSize(SYMBOL_SIZE);
-				//
-				IPcaResult pcaResult = entry.getValue();
-				double[] eigenSpace = pcaResult.getEigenSpace();
-				/*
-				 * Note.
-				 * The spinners are 1 based.
-				 * The index is zero based.
-				 */
-				int pcx = spinnerPCx.getSelection();
-				int pcy = spinnerPCy.getSelection();
-				scorePlotChart.getAxisSet().getXAxis(0).getTitle().setText("PC" + pcx);
-				scorePlotChart.getAxisSet().getYAxis(0).getTitle().setText("PC" + pcy);
-				double x = eigenSpace[pcx - 1]; // e.g. 0 = PC1
-				double y = eigenSpace[pcy - 1]; // e.g. 1 = PC2
-				scatterSeries.setXSeries(new double[]{x});
-				scatterSeries.setYSeries(new double[]{y});
-				/*
-				 * Set the color.
-				 */
-				if(x > 0 && y > 0) {
-					scatterSeries.setSymbolColor(COLOR_RED);
-					scatterSeries.setSymbolType(PlotSymbolType.SQUARE);
-				} else if(x > 0 && y < 0) {
-					scatterSeries.setSymbolColor(COLOR_BLUE);
-					scatterSeries.setSymbolType(PlotSymbolType.TRIANGLE);
-				} else if(x < 0 && y > 0) {
-					scatterSeries.setSymbolColor(COLOR_MAGENTA);
-					scatterSeries.setSymbolType(PlotSymbolType.DIAMOND);
-				} else if(x < 0 && y < 0) {
-					scatterSeries.setSymbolColor(COLOR_CYAN);
-					scatterSeries.setSymbolType(PlotSymbolType.INVERTED_TRIANGLE);
-				} else {
-					scatterSeries.setSymbolColor(COLOR_GRAY);
-					scatterSeries.setSymbolType(PlotSymbolType.CIRCLE);
-				}
-			}
-			scorePlotChart.getAxisSet().adjustRange();
-			scorePlotChart.redraw();
-			scorePlotChart.update();
-		}
-	}
-
-	private void reloadErrorResidueChart() {
-
-		if(errorResidueChart != null) {
-			/*
-			 * Delete all other series.
-			 */
-			ISeriesSet seriesSet = errorResidueChart.getSeriesSet();
-			ISeries[] series = seriesSet.getSeries();
-			for(ISeries serie : series) {
-				seriesSet.deleteSeries(serie.getId());
-			}
-			String[] fileNames = new String[pcaResults.getPcaResultMap().entrySet().size()];
-			int count = 0;
-			/*
-			 * Data
-			 */
-			double[] errorResidue = new double[pcaResults.getPcaResultMap().size()];
-			int counter = 0;
-			errorResidueChart.getAxisSet().getXAxis(0).getTitle().setText("Sample Names");
-			errorResidueChart.getAxisSet().getYAxis(0).getTitle().setText("Error Values(10^-6)");
-			for(ISample key : pcaResults.getPcaResultMap().keySet()) {
-				IPcaResult temp = pcaResults.getPcaResultMap().get(key);
-				// Done to better display error values
-				errorResidue[counter] = temp.getErrorMemberShip() * Math.pow(10, 6);
-				counter++;
-			}
-			for(Map.Entry<ISample, IPcaResult> entry : pcaResults.getPcaResultMap().entrySet()) {
-				/*
-				 * Create the series.
-				 */
-				String name = entry.getKey().getName();
-				fileNames[count] = name;
-				count++;
-			}
-			ILineSeries scatterSeries = (ILineSeries)errorResidueChart.getSeriesSet().createSeries(SeriesType.LINE, "Samples");
-			scatterSeries.setLineStyle(LineStyle.NONE);
-			scatterSeries.setSymbolSize(SYMBOL_SIZE);
-			double[] xSeries = new double[fileNames.length];
-			for(int i = 0; i < fileNames.length; i++) {
-				xSeries[i] = i + 1;
-			}
-			scatterSeries.setYSeries(errorResidue);
-			scatterSeries.setXSeries(xSeries);
-			/*
-			 * Set the color.
-			 */
-			scatterSeries.setSymbolColor(COLOR_RED);
-			scatterSeries.setSymbolType(PlotSymbolType.DIAMOND);
-			errorResidueChart.getAxisSet().getXAxis(0).setCategorySeries(fileNames);
-			errorResidueChart.getAxisSet().getXAxis(0).enableCategory(true);
-			errorResidueChart.getAxisSet().adjustRange();
-			errorResidueChart.redraw();
-			errorResidueChart.update();
 		}
 	}
 }

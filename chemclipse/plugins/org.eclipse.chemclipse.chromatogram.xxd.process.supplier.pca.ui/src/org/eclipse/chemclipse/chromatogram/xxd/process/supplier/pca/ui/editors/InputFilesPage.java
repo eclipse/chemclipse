@@ -45,6 +45,7 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 public class InputFilesPage {
 
 	private static final String FILES = "Input Files: ";
+	//
 	private PcaEditor pcaEditor;
 	private Table inputFilesTable;
 	private Label countFiles;
