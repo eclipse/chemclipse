@@ -48,9 +48,7 @@ public interface IChemClipseEvents {
 	String PROPERTY_FORCE_RELOAD = "ForceReload";
 	String PROPERTY_PROCESSING_INFO = IEventBroker.DATA;
 	//
-	String PROPERTY_IDENTIFICATION_ENTRY_NAME = "IdentificationEntryName";
-	String PROPERTY_IDENTIFICATION_ENTRY_CAS_NUMBER = "IdentificationEntryCASNumber";
-	String PROPERTY_IDENTIFICATION_ENTRY_FORMULA = "IdentificationEntryFormula";
+	String PROPERTY_IDENTIFICATION_TARGET = IEventBroker.DATA;
 	/*
 	 * Topics
 	 */
@@ -90,12 +88,7 @@ public interface IChemClipseEvents {
 	String TOPIC_CHROMATOGRAM_WSD_UPDATE_PEAKS = "chromatogram/wsd/update/peaks";
 	//
 	String TOPIC_PROCESSING_INFO_UPDATE = "processinginfo/update";
-	String TOPIC_IDENTIFICATION_ENTRY_UPDATE_CDK = "identification/entry/update/cdk";
-	/*
-	 * Converter MSD (mass selective)
-	 */
-	String TOPIC_CHROMATOGRAM_CONVERTER_MSDx = "chromatogram/msd/update/converter/status";
-	String PROPERTY_CHROMATOGRAM_CONVERTER_MSD_INFOx = IEventBroker.DATA; // String
+	String TOPIC_IDENTIFICATION_TARGET_UPDATE = "identification/target/update";
 	/*
 	 * Converter
 	 */

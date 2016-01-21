@@ -12,12 +12,9 @@
 package org.eclipse.chemclipse.ux.extension.ui.views;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -59,12 +56,10 @@ public abstract class AbstractTargetsView {
 	/*
 	 * Event Broker
 	 */
-	private Map<String, Object> map;
 	private IEventBroker eventBroker;
 
 	public AbstractTargetsView(IStructuredContentProvider contentProvider, IEventBroker eventBroker) {
 		this.contentProvider = contentProvider;
-		map = new HashMap<String, Object>();
 		this.eventBroker = eventBroker;
 	}
 
@@ -215,12 +210,7 @@ public abstract class AbstractTargetsView {
 			Object object = tableItem.getData();
 			if(object instanceof IIdentificationTarget) {
 				IIdentificationTarget target = (IIdentificationTarget)object;
-				ILibraryInformation libraryInformation = target.getLibraryInformation();
-				map.clear();
-				map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_ENTRY_NAME, libraryInformation.getName());
-				map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_ENTRY_CAS_NUMBER, libraryInformation.getCasNumber());
-				map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_ENTRY_FORMULA, libraryInformation.getFormula());
-				eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_ENTRY_UPDATE_CDK, map);
+				eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
 			}
 		}
 	}

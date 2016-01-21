@@ -16,7 +16,6 @@ import org.eclipse.chemclipse.msd.swt.ui.converter.SeriesConverterMSD;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
-
 import org.eclipse.swt.widgets.Composite;
 import org.swtchart.IBarSeries;
 import org.swtchart.IBarSeries.BarWidthStyle;
@@ -64,7 +63,7 @@ public class SimpleMirroredMassSpectrumUI extends AbstractExtendedMassSpectrumUI
 				barSeriesNegative.setYSeries(seriesMirrored.getYSeries());
 				barSeriesNegative.setBarWidthStyle(BarWidthStyle.FIXED);
 				barSeriesNegative.setBarWidth(1);
-				barSeriesNegative.setBarColor(Colors.GREEN);
+				barSeriesNegative.setBarColor(Colors.BLACK);
 			}
 			//
 			barSeries = barSeriesPositive;
