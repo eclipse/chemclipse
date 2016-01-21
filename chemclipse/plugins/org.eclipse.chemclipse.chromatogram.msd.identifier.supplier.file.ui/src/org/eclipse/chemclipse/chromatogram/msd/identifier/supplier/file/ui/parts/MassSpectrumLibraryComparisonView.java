@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.identifier.FileIdentifier;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.LibraryMassSpectrumComparisonUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
@@ -47,10 +48,13 @@ public class MassSpectrumLibraryComparisonView {
 	private String name = "";
 	private String casNumber = "";
 	private IScanMSD massSpectrum;
+	//
+	private FileIdentifier fileIdentifier;
 
 	@Inject
 	public MassSpectrumLibraryComparisonView(IEventBroker eventBroker) {
 		this.eventBroker = eventBroker;
+		this.fileIdentifier = new FileIdentifier();
 		subscribe();
 	}
 
@@ -130,7 +134,8 @@ public class MassSpectrumLibraryComparisonView {
 	private void update() {
 
 		if(isPartVisible()) {
-			libraryMassSpectrumComparisonUI.update(massSpectrum, massSpectrum, true);
+			IScanMSD libraryMassSpectrum = fileIdentifier.getMassSpectrum(name, casNumber);
+			libraryMassSpectrumComparisonUI.update(massSpectrum, libraryMassSpectrum, true);
 		}
 	}
 }
