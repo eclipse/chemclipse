@@ -54,6 +54,7 @@ public class SimpleMirroredMassSpectrumUI extends AbstractExtendedMassSpectrumUI
 			barSeriesPositive.setBarWidthStyle(BarWidthStyle.FIXED);
 			barSeriesPositive.setBarWidth(1);
 			barSeriesPositive.setBarColor(Colors.RED);
+			super.barSeriesPositive = barSeriesPositive;
 			//
 			if(mirroredMassSpectrum != null) {
 				ISeries seriesMirrored = SeriesConverterMSD.convertNominalMassSpectrum(mirroredMassSpectrum, Sign.NEGATIVE);
@@ -64,9 +65,8 @@ public class SimpleMirroredMassSpectrumUI extends AbstractExtendedMassSpectrumUI
 				barSeriesNegative.setBarWidthStyle(BarWidthStyle.FIXED);
 				barSeriesNegative.setBarWidth(1);
 				barSeriesNegative.setBarColor(Colors.BLACK);
+				super.barSeriesNegative = barSeriesNegative;
 			}
-			//
-			barSeries = barSeriesPositive;
 		}
 	}
 	// -------------------------------------------------------------

@@ -37,16 +37,16 @@ public class ScanMassSpectrumUI extends AbstractExtendedMassSpectrumUI implement
 		if(massSpectrum != null) {
 			ISeries series = getSeries(massSpectrum);
 			multipleLineSeries.add(series);
-			barSeries = (IBarSeries)getSeriesSet().createSeries(SeriesType.BAR, series.getId());
-			barSeries.setXSeries(series.getXSeries());
-			barSeries.setYSeries(series.getYSeries());
-			barSeries.setBarWidthStyle(BarWidthStyle.FIXED);
-			barSeries.setBarWidth(1);
+			barSeriesPositive = (IBarSeries)getSeriesSet().createSeries(SeriesType.BAR, series.getId());
+			barSeriesPositive.setXSeries(series.getXSeries());
+			barSeriesPositive.setYSeries(series.getYSeries());
+			barSeriesPositive.setBarWidthStyle(BarWidthStyle.FIXED);
+			barSeriesPositive.setBarWidth(1);
 			Color massSpectrumColor = PreferenceSupplier.getMassSpectrumColor();
 			if(massSpectrumColor == null) {
 				massSpectrumColor = Colors.RED;
 			}
-			barSeries.setBarColor(massSpectrumColor);
+			barSeriesPositive.setBarColor(massSpectrumColor);
 		}
 	}
 

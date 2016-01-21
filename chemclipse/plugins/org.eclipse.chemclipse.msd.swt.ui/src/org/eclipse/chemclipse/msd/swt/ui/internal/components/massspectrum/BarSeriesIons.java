@@ -17,18 +17,16 @@ import java.util.List;
 
 import org.eclipse.chemclipse.numeric.miscellaneous.SortOrder;
 
-/**
- * @author Philip (eselmeister) Wenig
- * 
- */
 public class BarSeriesIons implements IBarSeriesIons {
 
 	private List<IBarSeriesIon> barSeriesIons;
-	private BarSeriesIonComparator barSeriesIonComparator;
+	private BarSeriesIonComparator barSeriesIonComparatorAscending;
+	private BarSeriesIonComparator barSeriesIonComparatorDescending;
 
 	public BarSeriesIons() {
 		barSeriesIons = new ArrayList<IBarSeriesIon>();
-		barSeriesIonComparator = new BarSeriesIonComparator(SortOrder.DESCENDING);
+		barSeriesIonComparatorAscending = new BarSeriesIonComparator(SortOrder.ASCENDING);
+		barSeriesIonComparatorDescending = new BarSeriesIonComparator(SortOrder.DESCENDING);
 	}
 
 	@Override
@@ -44,35 +42,31 @@ public class BarSeriesIons implements IBarSeriesIons {
 	}
 
 	@Override
-	public List<IBarSeriesIon> getIonsWithHighestAbundance(int amount) {
+	public List<IBarSeriesIon> getIonsWithHighestAbundance(int amount, boolean mirrored) {
 
-		Collections.sort(barSeriesIons, barSeriesIonComparator);
-		List<IBarSeriesIon> barSeries = new ArrayList<IBarSeriesIon>();
-		if(amount > barSeriesIons.size()) {
-			amount = barSeriesIons.size();
+		if(mirrored) {
+			return getBarSeriesIons(amount, barSeriesIonComparatorAscending, mirrored);
+		} else {
+			return getBarSeriesIons(amount, barSeriesIonComparatorDescending, mirrored);
 		}
-		for(int index = 0; index < amount; index++) {
-			addIon(barSeries, index);
-		}
-		return barSeries;
 	}
 
 	@Override
-	public List<IBarSeriesIon> getIonsByModulo(int amount) {
+	public List<IBarSeriesIon> getIonsByModulo(int amount, boolean mirrored) {
 
 		List<IBarSeriesIon> barSeries = new ArrayList<IBarSeriesIon>();
 		if(amount > 0) {
-			Collections.sort(barSeriesIons, barSeriesIonComparator);
+			Collections.sort(barSeriesIons, barSeriesIonComparatorDescending);
 			int modulo = barSeriesIons.size() / amount;
 			/*
 			 * The list is sorted.
 			 */
 			for(int index = 0; index < barSeriesIons.size(); index++) {
 				if(barSeries.size() <= amount) {
-					addIon(barSeries, index);
+					addIon(barSeries, index, mirrored);
 				} else {
 					if(index % modulo == 0) {
-						addIon(barSeries, index);
+						addIon(barSeries, index, mirrored);
 					}
 				}
 			}
@@ -95,14 +89,34 @@ public class BarSeriesIons implements IBarSeriesIons {
 		return barSeriesIons.size();
 	}
 
-	private void addIon(List<IBarSeriesIon> barSeries, int index) {
+	private void addIon(List<IBarSeriesIon> barSeries, int index, boolean mirrored) {
 
 		/*
 		 * The abundance of the ion must be > 0.
 		 */
 		IBarSeriesIon barSeriesIon = barSeriesIons.get(index);
-		if(barSeriesIon.getAbundance() > 0.0d) {
-			barSeries.add(barSeriesIon);
+		double abundance = barSeriesIon.getAbundance();
+		if(mirrored) {
+			if(abundance < 0.0d) {
+				barSeries.add(barSeriesIon);
+			}
+		} else {
+			if(abundance > 0.0d) {
+				barSeries.add(barSeriesIon);
+			}
 		}
+	}
+
+	private List<IBarSeriesIon> getBarSeriesIons(int amount, BarSeriesIonComparator barSeriesIonComparator, boolean mirrored) {
+
+		Collections.sort(barSeriesIons, barSeriesIonComparator);
+		List<IBarSeriesIon> barSeries = new ArrayList<IBarSeriesIon>();
+		if(amount > barSeriesIons.size()) {
+			amount = barSeriesIons.size();
+		}
+		for(int index = 0; index < amount; index++) {
+			addIon(barSeries, index, mirrored);
+		}
+		return barSeries;
 	}
 }

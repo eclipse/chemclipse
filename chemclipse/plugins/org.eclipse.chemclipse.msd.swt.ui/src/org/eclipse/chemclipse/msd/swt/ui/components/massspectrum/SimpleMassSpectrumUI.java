@@ -34,12 +34,12 @@ public class SimpleMassSpectrumUI extends AbstractExtendedMassSpectrumUI {
 		if(this.massSpectrum != null) {
 			ISeries series = SeriesConverterMSD.convertNominalMassSpectrum(this.massSpectrum, Sign.POSITIVE);
 			multipleLineSeries.add(series);
-			barSeries = (IBarSeries)getSeriesSet().createSeries(SeriesType.BAR, series.getId());
-			barSeries.setXSeries(series.getXSeries());
-			barSeries.setYSeries(series.getYSeries());
-			barSeries.setBarWidthStyle(BarWidthStyle.FIXED);
-			barSeries.setBarWidth(1);
-			barSeries.setBarColor(Colors.RED);
+			barSeriesPositive = (IBarSeries)getSeriesSet().createSeries(SeriesType.BAR, series.getId());
+			barSeriesPositive.setXSeries(series.getXSeries());
+			barSeriesPositive.setYSeries(series.getYSeries());
+			barSeriesPositive.setBarWidthStyle(BarWidthStyle.FIXED);
+			barSeriesPositive.setBarWidth(1);
+			barSeriesPositive.setBarColor(Colors.RED);
 		}
 	}
 }

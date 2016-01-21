@@ -14,16 +14,6 @@ package org.eclipse.chemclipse.msd.swt.ui.components;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Composite;
-import org.swtchart.IAxis;
-import org.swtchart.IAxis.Position;
-import org.swtchart.IAxisSet;
-import org.swtchart.Range;
-
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.notifier.IChromatogramSelectionMSDUpdateNotifier;
@@ -33,6 +23,15 @@ import org.eclipse.chemclipse.swt.ui.series.MultipleSeries;
 import org.eclipse.chemclipse.swt.ui.support.ChartUtil;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.thirdpartylibraries.swtchart.ext.InteractiveChartExtended;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Composite;
+import org.swtchart.IAxis;
+import org.swtchart.IAxis.Position;
+import org.swtchart.IAxisSet;
+import org.swtchart.Range;
 
 public abstract class AbstractBarSeriesUI extends InteractiveChartExtended implements ISeriesSetter, KeyListener, MouseListener {
 

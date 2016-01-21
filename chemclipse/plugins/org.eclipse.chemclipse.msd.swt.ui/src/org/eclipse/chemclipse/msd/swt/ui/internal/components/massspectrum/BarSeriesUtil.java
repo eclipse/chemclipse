@@ -11,10 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.internal.components.massspectrum;
 
+import org.eclipse.chemclipse.msd.swt.ui.exceptions.NoIonAvailableException;
 import org.eclipse.swt.graphics.Point;
 import org.swtchart.IBarSeries;
-
-import org.eclipse.chemclipse.msd.swt.ui.exceptions.NoIonAvailableException;
 
 public class BarSeriesUtil {
 

@@ -23,9 +23,9 @@ public interface IBarSeriesIons {
 
 	void clear();
 
-	List<IBarSeriesIon> getIonsWithHighestAbundance(int amount);
+	List<IBarSeriesIon> getIonsWithHighestAbundance(int amount, boolean mirrored);
 
-	List<IBarSeriesIon> getIonsByModulo(int amount);
+	List<IBarSeriesIon> getIonsByModulo(int amount, boolean mirrored);
 
 	IBarSeriesIon getBarSeriesIon(int index);
 

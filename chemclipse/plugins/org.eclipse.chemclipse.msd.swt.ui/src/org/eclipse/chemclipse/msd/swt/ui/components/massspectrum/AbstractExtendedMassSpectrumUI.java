@@ -47,8 +47,10 @@ import org.swtchart.IPlotArea;
 
 public abstract class AbstractExtendedMassSpectrumUI extends AbstractViewMassSpectrumUI {
 
+	protected IBarSeries barSeriesPositive = null;
+	protected IBarSeries barSeriesNegative = null;
+	//
 	private static final Logger logger = Logger.getLogger(AbstractExtendedMassSpectrumUI.class);
-	protected IBarSeries barSeries = null;
 	private Color foregroundColor;
 	private static final int NUMBER_OF_IONS_TO_PAINT = 5;
 	private MassValueDisplayPrecision massValueDisplayPrecision;
@@ -74,7 +76,7 @@ public abstract class AbstractExtendedMassSpectrumUI extends AbstractViewMassSpe
 		super.mouseDoubleClick(event);
 		try {
 			int widthPlotArea = getPlotArea().getBounds().width;
-			double ion = BarSeriesUtil.getSelectedIon(event.x, barSeries, widthPlotArea);
+			double ion = BarSeriesUtil.getSelectedIon(event.x, barSeriesPositive, widthPlotArea);
 			updateSelectedIon(ion);
 		} catch(NoIonAvailableException e) {
 			logger.warn(e);
@@ -147,8 +149,12 @@ public abstract class AbstractExtendedMassSpectrumUI extends AbstractViewMassSpe
 
 			public void paintControl(PaintEvent e) {
 
-				if(barSeries != null) {
-					paintIonValues(barSeries, e);
+				if(barSeriesPositive != null) {
+					paintIonValues(barSeriesPositive, false, e);
+				}
+				//
+				if(barSeriesNegative != null) {
+					paintIonValues(barSeriesNegative, true, e);
 				}
 			}
 
@@ -159,10 +165,10 @@ public abstract class AbstractExtendedMassSpectrumUI extends AbstractViewMassSpe
 		});
 	}
 
-	protected void paintIonValues(IBarSeries barSeries, PaintEvent e) {
+	protected void paintIonValues(IBarSeries barSeries, boolean mirrored, PaintEvent e) {
 
 		e.gc.setForeground(foregroundColor);
-		List<IBarSeriesIon> barSeriesIons = getHighestXValueIndices(barSeries);
+		List<IBarSeriesIon> barSeriesIons = getHighestXValueIndices(barSeries, mirrored);
 		/*
 		 * Set the label for each ion.
 		 */
@@ -222,7 +228,14 @@ public abstract class AbstractExtendedMassSpectrumUI extends AbstractViewMassSpe
 			 * Draw the label
 			 */
 			Point labelSize = e.gc.textExtent(label);
-			e.gc.drawText(label, (int)(point.x + barSeries.getBarWidth() / 2d - labelSize.x / 2d), point.y - labelSize.y, true);
+			int x = (int)(point.x + barSeries.getBarWidth() / 2d - labelSize.x / 2d);
+			int y;
+			if(mirrored) {
+				y = point.y + labelSize.y;
+			} else {
+				y = point.y - labelSize.y;
+			}
+			e.gc.drawText(label, x, y, true);
 		}
 	}
 
@@ -234,7 +247,7 @@ public abstract class AbstractExtendedMassSpectrumUI extends AbstractViewMassSpe
 		stringBuilder.delete(0, stringBuilder.length());
 	}
 
-	private List<IBarSeriesIon> getHighestXValueIndices(IBarSeries barSeries) {
+	private List<IBarSeriesIon> getHighestXValueIndices(IBarSeries barSeries, boolean mirrored) {
 
 		int numberOfIonsToPaint = PreferenceSupplier.getScanDisplayNumberOfIons();
 		if(numberOfIonsToPaint < 0) {
@@ -247,9 +260,9 @@ public abstract class AbstractExtendedMassSpectrumUI extends AbstractViewMassSpe
 		 */
 		List<IBarSeriesIon> barSeriesIonList;
 		if(PreferenceSupplier.isUseModuloDisplayNumberOfIons()) {
-			barSeriesIonList = barSeriesIons.getIonsByModulo(numberOfIonsToPaint);
+			barSeriesIonList = barSeriesIons.getIonsByModulo(numberOfIonsToPaint, mirrored);
 		} else {
-			barSeriesIonList = barSeriesIons.getIonsWithHighestAbundance(numberOfIonsToPaint);
+			barSeriesIonList = barSeriesIons.getIonsWithHighestAbundance(numberOfIonsToPaint, mirrored);
 		}
 		//
 		return barSeriesIonList;
