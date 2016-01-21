@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.comparator.SortOrder;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.model.identifier.PeakIdentificationResults;
@@ -180,9 +181,16 @@ public class FileIdentifier {
 		return identificationResults;
 	}
 
-	public IScanMSD getMassSpectrum(String name, String casNumber) {
+	public IScanMSD getMassSpectrum(IIdentificationTarget identificationTarget) {
 
-		if(name != "" && casNumber != null) {
+		if(identificationTarget != null) {
+			/*
+			 * Extract the target library information.
+			 */
+			ILibraryInformation libraryInformationTarget = identificationTarget.getLibraryInformation();
+			String name = libraryInformationTarget.getName();
+			String casNumber = libraryInformationTarget.getCasNumber();
+			//
 			for(IScanMSD reference : massSpectraDatabase.getList()) {
 				if(reference instanceof IRegularLibraryMassSpectrum) {
 					IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)reference;

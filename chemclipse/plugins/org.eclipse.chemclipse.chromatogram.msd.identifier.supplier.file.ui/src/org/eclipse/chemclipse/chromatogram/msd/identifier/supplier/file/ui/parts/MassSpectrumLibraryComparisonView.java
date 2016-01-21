@@ -16,6 +16,7 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.identifier.FileIdentifier;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.LibraryMassSpectrumComparisonUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
@@ -45,8 +46,7 @@ public class MassSpectrumLibraryComparisonView {
 	//
 	private LibraryMassSpectrumComparisonUI libraryMassSpectrumComparisonUI;
 	//
-	private String name = "";
-	private String casNumber = "";
+	private IIdentificationTarget identificationTarget;
 	private IScanMSD massSpectrum;
 	//
 	private FileIdentifier fileIdentifier;
@@ -107,12 +107,11 @@ public class MassSpectrumLibraryComparisonView {
 					/*
 					 * Receive name and formula.
 					 */
-					name = (String)event.getProperty(IChemClipseEvents.PROPERTY_IDENTIFICATION_ENTRY_NAME);
-					casNumber = (String)event.getProperty(IChemClipseEvents.PROPERTY_IDENTIFICATION_ENTRY_CAS_NUMBER);
+					identificationTarget = (IIdentificationTarget)event.getProperty(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET);
 					update();
 				}
 			};
-			eventBroker.subscribe(IChemClipseEvents.TOPIC_IDENTIFICATION_ENTRY_UPDATE_CDK, eventHandlerName);
+			eventBroker.subscribe(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, eventHandlerName);
 			/*
 			 * Mass Spectrum
 			 */
@@ -121,9 +120,8 @@ public class MassSpectrumLibraryComparisonView {
 				@Override
 				public void handleEvent(Event event) {
 
+					identificationTarget = null;
 					massSpectrum = (IScanMSD)event.getProperty(IChemClipseEvents.PROPERTY_MASSPECTRUM);
-					name = "";
-					casNumber = "";
 					update();
 				}
 			};
@@ -134,7 +132,7 @@ public class MassSpectrumLibraryComparisonView {
 	private void update() {
 
 		if(isPartVisible()) {
-			IScanMSD libraryMassSpectrum = fileIdentifier.getMassSpectrum(name, casNumber);
+			IScanMSD libraryMassSpectrum = fileIdentifier.getMassSpectrum(identificationTarget);
 			libraryMassSpectrumComparisonUI.update(massSpectrum, libraryMassSpectrum, true);
 		}
 	}
