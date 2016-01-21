@@ -23,7 +23,7 @@ public interface IMassSpectrumNormalizable {
 	 * It means that the highest abundance gets the value of 100 (100%).<br/>
 	 * Subsequent all lower abundances are related to 100.
 	 */
-	void normalize();
+	IScanMSD normalize();
 
 	/**
 	 * This method normalizes the mass spectrum to the given base.<br/>
@@ -32,7 +32,7 @@ public interface IMassSpectrumNormalizable {
 	 * Subsequent all lower abundances are related to the given base.<br/>
 	 * Only values > 0 are permitted.
 	 */
-	void normalize(float base);
+	IScanMSD normalize(float base);
 
 	/**
 	 * Returns whether the mass spectrum is normalized or not.

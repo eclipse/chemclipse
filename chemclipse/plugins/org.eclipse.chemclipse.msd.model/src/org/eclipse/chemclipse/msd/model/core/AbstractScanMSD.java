@@ -648,25 +648,25 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	}
 
 	@Override
-	public void normalize() {
+	public IScanMSD normalize() {
 
-		normalize(NORMALIZATION_BASE);
+		return normalize(NORMALIZATION_BASE);
 	}
 
 	@Override
-	public void normalize(float base) {
+	public IScanMSD normalize(float base) {
 
 		/*
 		 * Return if the base value is lower than zero.
 		 */
 		if(base <= 0) {
-			return;
+			return this;
 		}
 		/*
 		 * Return if there are no ions stored.
 		 */
 		if(!hasIons()) {
-			return;
+			return this;
 		}
 		/*
 		 * There is at least 1 ion stored in the list otherwise the
@@ -681,7 +681,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		 */
 		double factor;
 		if(highestAbundance == 0) {
-			return;
+			return this;
 		} else {
 			factor = base / highestAbundance;
 			isNormalized = true;
@@ -697,6 +697,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 				logger.warn(e);
 			}
 		}
+		return this;
 	}
 
 	@Override

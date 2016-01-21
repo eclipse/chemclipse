@@ -250,17 +250,17 @@ public abstract class AbstractVendorMassSpectrumProxy extends AbstractVendorMass
 	}
 
 	@Override
-	public void normalize() {
+	public IScanMSD normalize() {
 
 		checkProxyAndImportOnDemand();
-		super.normalize();
+		return super.normalize();
 	}
 
 	@Override
-	public void normalize(float base) {
+	public IScanMSD normalize(float base) {
 
 		checkProxyAndImportOnDemand();
-		super.normalize(base);
+		return super.normalize(base);
 	}
 
 	private void checkProxyAndImportOnDemand() {

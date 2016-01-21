@@ -13,7 +13,10 @@ package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
 import java.text.DecimalFormat;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -24,6 +27,8 @@ import org.eclipse.swt.widgets.Label;
 
 public class LibraryMassSpectrumComparisonUI extends Composite {
 
+	private static final Logger logger = Logger.getLogger(LibraryMassSpectrumComparisonUI.class);
+	//
 	private SimpleMirroredMassSpectrumUI mirroredMassSpectrumUI;
 	private Label infoLabel;
 	private DecimalFormat decimalFormat;
@@ -75,8 +80,15 @@ public class LibraryMassSpectrumComparisonUI extends Composite {
 	public void update(IScanMSD unknownMassSpectrum, IScanMSD libraryMassSpectrum, boolean forceReload) {
 
 		if(unknownMassSpectrum != null && libraryMassSpectrum != null) {
-			setMassSpectrumLabel(unknownMassSpectrum, libraryMassSpectrum);
-			mirroredMassSpectrumUI.update(unknownMassSpectrum, libraryMassSpectrum, forceReload);
+			try {
+				IScanMSD unknownMassSpectrumCopy = unknownMassSpectrum.makeDeepCopy().normalize(1000.0f);
+				IScanMSD libraryMassSpectrumCopy = libraryMassSpectrum.makeDeepCopy().normalize(1000.0f);
+				//
+				setMassSpectrumLabel(unknownMassSpectrumCopy, libraryMassSpectrumCopy);
+				mirroredMassSpectrumUI.update(unknownMassSpectrumCopy, libraryMassSpectrumCopy, forceReload);
+			} catch(CloneNotSupportedException e) {
+				logger.warn(e);
+			}
 		}
 	}
 
@@ -86,17 +98,36 @@ public class LibraryMassSpectrumComparisonUI extends Composite {
 		/*
 		 * Check if the mass spectrum is a scan.
 		 */
-		addMassSpectrumLabelData(unknownMassSpectrum, builder);
+		addUnknownMassSpectrumLabel(unknownMassSpectrum, builder);
 		builder.append(" vs. ");
-		addMassSpectrumLabelData(libraryMassSpectrum, builder);
+		addLibraryMassSpectrumLabel(libraryMassSpectrum, builder);
 		/*
 		 * Set the label text.
 		 */
 		infoLabel.setText(builder.toString());
 	}
 
-	private void addMassSpectrumLabelData(IScanMSD massSpectrum, StringBuilder builder) {
+	private void addUnknownMassSpectrumLabel(IScanMSD massSpectrum, StringBuilder builder) {
 
+		builder.append("RT: ");
+		builder.append(decimalFormat.format(massSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
+		builder.append(" | ");
+		builder.append("RI: ");
+		builder.append(decimalFormat.format(massSpectrum.getRetentionIndex()));
+	}
+
+	private void addLibraryMassSpectrumLabel(IScanMSD massSpectrum, StringBuilder builder) {
+
+		if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
+			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
+			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
+			builder.append("NAME: ");
+			builder.append(libraryInformation.getName());
+			builder.append(" | ");
+			builder.append("CAS: ");
+			builder.append(libraryInformation.getCasNumber());
+			builder.append(" | ");
+		}
 		builder.append("RT: ");
 		builder.append(decimalFormat.format(massSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 		builder.append(" | ");
