@@ -37,6 +37,7 @@
               <children xsi:type="advanced:Placeholder" xmi:id="_YWfTsGWeEeSQKcLvrmntIw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.16" ref="_Mak6ADf3EeKBwZX34jl_1A"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_geglMBaOEeWRBsS9e2Uvhw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.19" ref="_LtRK4BaOEeWRBsS9e2Uvhw"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_xZVZcBnBEeWDe7OjtBx02w" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.20" ref="_gVnZwBnBEeWDe7OjtBx02w"/>
+              <children xsi:type="advanced:Placeholder" xmi:id="_HBh6UMENEeW3DIEeCEW-YQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.29" ref="_xvuJkMEMEeW3DIEeCEW-YQ"/>
             </children>
             <children xsi:type="basic:PartStack" xmi:id="_EhRQEDNEEeKp7tRCNPPdJw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partstack.main.3">
               <children xsi:type="advanced:Placeholder" xmi:id="_8yLgoOMPEeK0S-n5AiIN_A" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.main.15" ref="_rEy2gDf1EeKBwZX34jl_1A"/>
@@ -47,6 +48,7 @@
               <children xsi:type="advanced:Placeholder" xmi:id="_hLV7MK9AEeK4gKK_vWjU1Q" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.main.13" ref="_SrVdMNNuEeOGVsF3IvlSBg"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_G46HsOPOEeKoKcvBJOVy6w" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.5" ref="_Xc1pgOPNEeKoKcvBJOVy6w"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_V5pd0GWeEeSQKcLvrmntIw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.15" ref="_0ZGTcDf1EeKBwZX34jl_1A"/>
+              <children xsi:type="advanced:Placeholder" xmi:id="_GpRyYMENEeW3DIEeCEW-YQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.28" ref="_0JSB8MEMEeW3DIEeCEW-YQ"/>
             </children>
           </children>
         </children>
@@ -218,6 +220,8 @@
     <elements xsi:type="basic:Part" xmi:id="_5UA-sDCDEeWeZcZJAKvkeQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumCycleNumberIonsListView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.MassSpectrumCycleNumberIonsListView" label="Mass Spectrum Cycle Number Ions List" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/ion.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_tIviYDCIEeWeZcZJAKvkeQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.cycleNumberScansCombined" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.TransitionCombinedCycleNumberMassSpectrumView" label="Cycle Number Scans (Combined)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/selectedScan.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_5l6g8LVfEeWygKUUIuJEng" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramheader" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.ChromatogramHeaderView" label="Chromatogram Header (MSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverview.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_xvuJkMEMEeW3DIEeCEW-YQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.massspectrumlibrarycomparison" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.MassSpectrumLibraryComparisonView" label="Mass Spectrum Library Comparison" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/mirroredMassSpectrum.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_0JSB8MEMEeW3DIEeCEW-YQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.differencelibrarycomparison" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.MassSpectrumLibraryDifferenceView" label="Mass Spectrum Library Difference" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/mirroredMassSpectrum.gif"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_3ZvP8DhjEeKHL-DfrT7KNQ" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Command" xmi:id="_ZxnzMDhxEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.command.undo" commandName="Undo"/>
