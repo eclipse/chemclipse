@@ -15,7 +15,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumComparatorProcessingInfo;
@@ -58,7 +60,10 @@ public class FileIdentifier {
 	 */
 	private static long fileSize = 0;
 	private static String fileName = "";
+	//
 	private static IMassSpectra massSpectraDatabase = null;
+	private static Map<String, IScanMSD> databaseNames = null;
+	private static Map<String, IScanMSD> databaseCasNumbers = null;
 
 	public IMassSpectra runIdentification(List<IScanMSD> massSpectraList, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
 
@@ -181,28 +186,41 @@ public class FileIdentifier {
 		return identificationResults;
 	}
 
-	public IMassSpectra getMassSpectra(IIdentificationTarget identificationTarget) {
+	public IMassSpectra getMassSpectra(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
 
 		IMassSpectra massSpectra = new MassSpectra();
-		if(identificationTarget != null) {
-			/*
-			 * Extract the target library information.
-			 */
-			ILibraryInformation libraryInformationTarget = identificationTarget.getLibraryInformation();
-			String name = libraryInformationTarget.getName();
-			String casNumber = libraryInformationTarget.getCasNumber();
+		try {
 			//
-			for(IScanMSD reference : massSpectraDatabase.getList()) {
-				if(reference instanceof IRegularLibraryMassSpectrum) {
-					IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)reference;
-					ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
-					if(libraryInformation.getName().equals(name)) {
+			if(identificationTarget != null) {
+				/*
+				 * Extract the target library information.
+				 */
+				ILibraryInformation libraryInformationTarget = identificationTarget.getLibraryInformation();
+				if(identificationTarget.getIdentifier().equals(IDENTIFIER)) {
+					/*
+					 * Only evaluate the target if it contains the signature
+					 * of this plugin.
+					 */
+					Map<String, IScanMSD> databaseNames = getDatabaseNamesMap(monitor);
+					Map<String, IScanMSD> databaseCasNumbers = getDatabaseCasNamesMap(monitor);
+					//
+					IScanMSD reference;
+					String name = libraryInformationTarget.getName();
+					//
+					reference = databaseNames.get(name);
+					if(reference != null) {
 						massSpectra.addMassSpectrum(reference);
-					} else if(libraryInformation.getCasNumber().equals(casNumber)) {
+					}
+					//
+					String casNumber = libraryInformationTarget.getCasNumber();
+					reference = databaseCasNumbers.get(casNumber);
+					if(reference != null) {
 						massSpectra.addMassSpectrum(reference);
 					}
 				}
 			}
+		} catch(FileNotFoundException e) {
+			logger.warn(e);
 		}
 		//
 		return massSpectra;
@@ -240,12 +258,38 @@ public class FileIdentifier {
 		return massSpectraDatabase;
 	}
 
+	private Map<String, IScanMSD> getDatabaseNamesMap(IProgressMonitor monitor) throws FileNotFoundException {
+
+		getDatabase(PreferenceSupplier.getMassSpectraFile(), monitor);
+		return databaseNames;
+	}
+
+	private Map<String, IScanMSD> getDatabaseCasNamesMap(IProgressMonitor monitor) throws FileNotFoundException {
+
+		getDatabase(PreferenceSupplier.getMassSpectraFile(), monitor);
+		return databaseCasNumbers;
+	}
+
 	private void loadMassSpectraFromFile(File file, IProgressMonitor monitor) throws TypeCastException {
 
-		IMassSpectrumImportConverterProcessingInfo infoConvert = MassSpectrumConverter.convert(file, PreferenceSupplier.CONVERTER_ID, monitor);
+		IMassSpectrumImportConverterProcessingInfo infoConvert = MassSpectrumConverter.convert(file, monitor);
 		massSpectraDatabase = infoConvert.getMassSpectra();
+		//
 		fileName = file.getName();
 		fileSize = file.length();
+		/*
+		 * Initialize the reference maps.
+		 */
+		databaseNames = new HashMap<String, IScanMSD>();
+		databaseCasNumbers = new HashMap<String, IScanMSD>();
+		for(IScanMSD reference : massSpectraDatabase.getList()) {
+			if(reference instanceof IRegularLibraryMassSpectrum) {
+				IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)reference;
+				ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
+				databaseNames.put(libraryInformation.getName(), reference);
+				databaseCasNumbers.put(libraryInformation.getCasNumber(), reference);
+			}
+		}
 	}
 
 	// TODO Merge

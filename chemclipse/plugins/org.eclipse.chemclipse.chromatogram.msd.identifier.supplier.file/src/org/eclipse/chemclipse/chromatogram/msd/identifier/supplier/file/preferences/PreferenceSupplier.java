@@ -14,21 +14,18 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.prefere
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
-
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.FileMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.FilePeakIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFilePeakIdentifierSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	public static final String CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msl";
-	//
 	public static final String P_MASS_SPECTRA_FILE = "massSpectraFile";
 	public static final String DEF_MASS_SPECTRA_FILE = "";
 	public static final String P_MASS_SPECTRUM_COMPARATOR_ID = "massSpectrumComparatorId";
@@ -104,5 +101,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
 		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR));
 		return settings;
+	}
+
+	public static String getMassSpectraFile() {
+
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		return preferences.get(P_MASS_SPECTRA_FILE, DEF_MASS_SPECTRA_FILE);
 	}
 }

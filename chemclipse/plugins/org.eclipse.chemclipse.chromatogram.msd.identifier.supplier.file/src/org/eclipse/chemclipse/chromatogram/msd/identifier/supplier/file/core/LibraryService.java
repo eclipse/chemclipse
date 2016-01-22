@@ -35,7 +35,7 @@ public class LibraryService extends AbstractLibraryService implements ILibrarySe
 		ILibraryServiceProcessingInfo processingInfo = new LibraryServiceProcessingInfo();
 		try {
 			validateIdentificationTarget(identificationTarget);
-			IMassSpectra massSpectra = fileIdentifier.getMassSpectra(identificationTarget);
+			IMassSpectra massSpectra = fileIdentifier.getMassSpectra(identificationTarget, monitor);
 			processingInfo.setMassSpectra(massSpectra);
 		} catch(ValueMustNotBeNullException e) {
 			processingInfo.addErrorMessage("File Identifier", "The identification target is not available.");
