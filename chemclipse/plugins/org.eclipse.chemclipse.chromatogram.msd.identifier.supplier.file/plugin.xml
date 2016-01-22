@@ -25,4 +25,13 @@
             class="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.identifier.libraryService">
+      <LibraryServiceSupplier
+            description="This plugin tries to identify library mass spectra given by the target."
+            id="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.libraryservice"
+            identifier="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.LibraryService"
+            identifierName="File MS Library Service">
+      </LibraryServiceSupplier>
+   </extension>
 </plugin>

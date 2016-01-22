@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.AbstractPeakIdent
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IPeakIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.PeakIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.identifier.FileIdentifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.internal.identifier.FileIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFilePeakIdentifierSettings;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;

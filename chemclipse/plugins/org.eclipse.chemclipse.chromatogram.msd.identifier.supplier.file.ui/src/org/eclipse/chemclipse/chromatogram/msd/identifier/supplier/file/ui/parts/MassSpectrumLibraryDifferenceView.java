@@ -15,8 +15,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.identifier.FileIdentifier;
-import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.LibraryMassSpectrumDifferenceUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
@@ -34,12 +32,10 @@ public class MassSpectrumLibraryDifferenceView extends AbstractMassSpectrumLibra
 	private Composite parent;
 	//
 	private LibraryMassSpectrumDifferenceUI libraryMassSpectrumDifferenceUI;
-	private FileIdentifier fileIdentifier;
 
 	@Inject
 	public MassSpectrumLibraryDifferenceView(MPart part, EPartService partService, IEventBroker eventBroker) {
 		super(part, partService, eventBroker);
-		this.fileIdentifier = new FileIdentifier();
 	}
 
 	@PostConstruct
@@ -62,11 +58,8 @@ public class MassSpectrumLibraryDifferenceView extends AbstractMassSpectrumLibra
 	}
 
 	@Override
-	public void update(IScanMSD massSpectrum, IIdentificationTarget identificationTarget) {
+	public void update(IScanMSD unknownMassSpectrum, IScanMSD libraryMassSpectrum, boolean forceReload) {
 
-		if(isPartVisible()) {
-			IScanMSD libraryMassSpectrum = fileIdentifier.getMassSpectrum(identificationTarget);
-			libraryMassSpectrumDifferenceUI.update(massSpectrum, libraryMassSpectrum, true);
-		}
+		libraryMassSpectrumDifferenceUI.update(unknownMassSpectrum, libraryMassSpectrum, true);
 	}
 }

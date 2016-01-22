@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.identifier;
+package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.internal.identifier;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -181,8 +181,9 @@ public class FileIdentifier {
 		return identificationResults;
 	}
 
-	public IScanMSD getMassSpectrum(IIdentificationTarget identificationTarget) {
+	public IMassSpectra getMassSpectra(IIdentificationTarget identificationTarget) {
 
+		IMassSpectra massSpectra = new MassSpectra();
 		if(identificationTarget != null) {
 			/*
 			 * Extract the target library information.
@@ -196,15 +197,15 @@ public class FileIdentifier {
 					IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)reference;
 					ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 					if(libraryInformation.getName().equals(name)) {
-						return reference;
+						massSpectra.addMassSpectrum(reference);
 					} else if(libraryInformation.getCasNumber().equals(casNumber)) {
-						return reference;
+						massSpectra.addMassSpectrum(reference);
 					}
 				}
 			}
 		}
 		//
-		return null;
+		return massSpectra;
 	}
 
 	private IMassSpectra getDatabase(String databasePath, IProgressMonitor monitor) throws FileNotFoundException {
