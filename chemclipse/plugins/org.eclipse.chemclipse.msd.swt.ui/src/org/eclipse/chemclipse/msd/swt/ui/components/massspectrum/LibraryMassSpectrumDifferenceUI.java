@@ -15,9 +15,14 @@ import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.msd.model.implementation.Ion;
+import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -25,18 +30,18 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-public class LibraryMassSpectrumComparisonUI extends Composite {
+public class LibraryMassSpectrumDifferenceUI extends Composite {
 
-	private static final Logger logger = Logger.getLogger(LibraryMassSpectrumComparisonUI.class);
+	private static final Logger logger = Logger.getLogger(LibraryMassSpectrumDifferenceUI.class);
 	//
-	private Label infoLabelUnknown;
+	private Label infoLabelPositive;
 	private SimpleMirroredMassSpectrumUI mirroredMassSpectrumUI;
-	private Label infoLabelLibrary;
+	private Label infoLabelNegative;
 	//
 	private DecimalFormat decimalFormat;
 	private MassValueDisplayPrecision massValueDisplayPrecision;
 
-	public LibraryMassSpectrumComparisonUI(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
+	public LibraryMassSpectrumDifferenceUI(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
 		super(parent, style);
 		decimalFormat = new DecimalFormat("0.0####");
 		/*
@@ -55,9 +60,9 @@ public class LibraryMassSpectrumComparisonUI extends Composite {
 		layout.numColumns = 1;
 		composite.setLayout(layout);
 		//
-		infoLabelUnknown = new Label(composite, SWT.NONE);
-		infoLabelUnknown.setText("");
-		infoLabelUnknown.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		infoLabelPositive = new Label(composite, SWT.NONE);
+		infoLabelPositive.setText("");
+		infoLabelPositive.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		mirroredMassSpectrumUI = new SimpleMirroredMassSpectrumUI(composite, SWT.FILL | SWT.BORDER, massValueDisplayPrecision);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
@@ -65,30 +70,61 @@ public class LibraryMassSpectrumComparisonUI extends Composite {
 		gridData.grabExcessVerticalSpace = true;
 		mirroredMassSpectrumUI.setLayoutData(gridData);
 		//
-		infoLabelLibrary = new Label(composite, SWT.NONE);
-		infoLabelLibrary.setText("");
-		infoLabelLibrary.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		infoLabelNegative = new Label(composite, SWT.NONE);
+		infoLabelNegative.setText("");
+		infoLabelNegative.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
 	public void update(IScanMSD unknownMassSpectrum, IScanMSD libraryMassSpectrum, boolean forceReload) {
 
 		if(unknownMassSpectrum != null && libraryMassSpectrum != null) {
 			try {
-				IScanMSD unknownMassSpectrumCopy = unknownMassSpectrum.makeDeepCopy().normalize(1000.0f);
-				IScanMSD libraryMassSpectrumCopy = libraryMassSpectrum.makeDeepCopy().normalize(1000.0f);
+				IScanMSD differenceMassSpectrumPositive = unknownMassSpectrum.makeDeepCopy().normalize(1000.0f);
+				IScanMSD differenceMassSpectrumNegative = libraryMassSpectrum.makeDeepCopy().normalize(1000.0f);
 				//
-				setMassSpectrumLabel(unknownMassSpectrumCopy, libraryMassSpectrumCopy);
-				mirroredMassSpectrumUI.update(unknownMassSpectrumCopy, libraryMassSpectrumCopy, forceReload);
+				IExtractedIonSignal extractedIonSignalUnknown = differenceMassSpectrumPositive.getExtractedIonSignal();
+				IExtractedIonSignal extractedIonSignalLibrary = differenceMassSpectrumNegative.getExtractedIonSignal();
+				int startIon = (extractedIonSignalUnknown.getStartIon() < extractedIonSignalLibrary.getStartIon()) ? extractedIonSignalUnknown.getStartIon() : extractedIonSignalLibrary.getStartIon();
+				int stopIon = (extractedIonSignalUnknown.getStopIon() > extractedIonSignalLibrary.getStopIon()) ? extractedIonSignalUnknown.getStopIon() : extractedIonSignalLibrary.getStopIon();
+				//
+				differenceMassSpectrumPositive.getIons().clear();
+				differenceMassSpectrumNegative.getIons().clear();
+				//
+				for(int ion = startIon; ion <= stopIon; ion++) {
+					float abundance = extractedIonSignalUnknown.getAbundance(ion) - extractedIonSignalLibrary.getAbundance(ion);
+					if(abundance < 0) {
+						abundance *= -1;
+						differenceMassSpectrumNegative.addIon(getIon(ion, abundance));
+					} else {
+						differenceMassSpectrumPositive.addIon(getIon(ion, abundance));
+					}
+				}
+				//
+				setMassSpectrumLabel(differenceMassSpectrumPositive, differenceMassSpectrumNegative);
+				mirroredMassSpectrumUI.update(differenceMassSpectrumPositive, differenceMassSpectrumNegative, forceReload);
 			} catch(CloneNotSupportedException e) {
 				logger.warn(e);
 			}
 		}
 	}
 
-	private void setMassSpectrumLabel(IScanMSD unknownMassSpectrum, IScanMSD libraryMassSpectrum) {
+	private IIon getIon(int mz, float abundance) {
 
-		setMassSpectrumLabel(unknownMassSpectrum, "UNKNOWN MS = ", infoLabelUnknown);
-		setMassSpectrumLabel(libraryMassSpectrum, "LIBRARY MS = ", infoLabelLibrary);
+		IIon ion = null;
+		try {
+			ion = new Ion(mz, abundance);
+		} catch(AbundanceLimitExceededException e) {
+			logger.warn(e);
+		} catch(IonLimitExceededException e) {
+			logger.warn(e);
+		}
+		return ion;
+	}
+
+	private void setMassSpectrumLabel(IScanMSD differenceMassSpectrumPositive, IScanMSD differenceMassSpectrumNegative) {
+
+		setMassSpectrumLabel(differenceMassSpectrumPositive, "(+) [U-L] UNKNOWN MS = ", infoLabelPositive);
+		setMassSpectrumLabel(differenceMassSpectrumNegative, "(-) [U-L] LIBRARY MS = ", infoLabelNegative);
 	}
 
 	private void setMassSpectrumLabel(IScanMSD massSpectrum, String title, Label label) {

@@ -171,16 +171,18 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 			/*
 			 * Set extra space at top of the bar series, e.g. to show
 			 * the highest ion value.
+			 * If yMin is 0, than it will remain be 0.
 			 */
+			yMin += yMin * SPACE_FACTOR;
 			yMax += yMax * SPACE_FACTOR;
 			ChartUtil.checkAndSetRange(abundance, yMin, yMax);
-			addSpaceToTopOfAbundance(yMax);
+			addSpaceToTopOfAbundance(yMin, yMax);
 			redrawIonScale();
 			redrawRelativeAbundanceScale();
 		}
 	}
 
-	private void addSpaceToTopOfAbundance(double yMax) {
+	private void addSpaceToTopOfAbundance(double yMin, double yMax) {
 
 		Range range = abundance.getRange();
 		/*
@@ -189,6 +191,7 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		 * user clicks on the chart and the bars would be lowered.
 		 * That's not our intention.
 		 */
+		double lowerLimit = range.lower + range.lower * SPACE_FACTOR;
 		double upperLimit = range.upper + range.upper * SPACE_FACTOR;
 		/*
 		 * Cut the upper range to yMax, only if it is higher than yMax.
@@ -198,7 +201,8 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		 * the ChartUtil.checkAndSetRange(abundance, yMin, yMax) method
 		 * would reset the range.upper value ... and so on.
 		 */
-		if(upperLimit >= yMax) {
+		if(lowerLimit <= yMin || upperLimit >= yMax) {
+			range.lower = yMin;
 			range.upper = yMax;
 			abundance.setRange(range);
 		}
