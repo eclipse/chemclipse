@@ -25,8 +25,10 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_zYsxUL-SEeW0a512MSIp8w" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
     <elements xsi:type="basic:Part" xmi:id="_KZ8fYL-TEeW0a512MSIp8w" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.part.massspectrumlibrarycomparison" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui/org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.parts.MassSpectrumLibraryComparisonView" label="Mass Spectrum Library Comparison" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/mirroredMassSpectrum.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_4QDtEMDrEeW3DIEeCEW-YQ" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.part.differencelibrarycomparison" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui/org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.parts.MassSpectrumLibraryDifferenceView" label="Mass Spectrum Library Difference" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/mirroredMassSpectrum.gif"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_XggF8L-TEeW0a512MSIp8w" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.partstack.chromatogramOverlay">
     <elements xsi:type="advanced:Placeholder" xmi:id="_nV0Y0L-TEeW0a512MSIp8w" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.placeholder.0" ref="_KZ8fYL-TEeW0a512MSIp8w"/>
+    <elements xsi:type="advanced:Placeholder" xmi:id="_19-gQMDsEeW3DIEeCEW-YQ" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.placeholder.1" ref="_4QDtEMDrEeW3DIEeCEW-YQ"/>
   </fragments>
 </fragment:ModelFragments>
