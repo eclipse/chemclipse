@@ -229,10 +229,8 @@ public abstract class AbstractExtendedMassSpectrumUI extends AbstractViewMassSpe
 			 */
 			Point labelSize = e.gc.textExtent(label);
 			int x = (int)(point.x + barSeries.getBarWidth() / 2d - labelSize.x / 2d);
-			int y;
-			if(mirrored) {
-				y = point.y + labelSize.y;
-			} else {
+			int y = point.y;
+			if(!mirrored) {
 				y = point.y - labelSize.y;
 			}
 			e.gc.drawText(label, x, y, true);
