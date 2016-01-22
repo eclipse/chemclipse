@@ -49,6 +49,9 @@ public interface IChemClipseEvents {
 	String PROPERTY_PROCESSING_INFO = IEventBroker.DATA;
 	//
 	String PROPERTY_IDENTIFICATION_TARGET = IEventBroker.DATA;
+	String PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN = "MassSpectrumUnknown";
+	String PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_LIBRARY = "MassSpectrumLibrary";
+	String PROPERTY_IDENTIFICATION_TARGET_ENTRY = "IdentificationTarget";
 	/*
 	 * Topics
 	 */
@@ -89,6 +92,8 @@ public interface IChemClipseEvents {
 	//
 	String TOPIC_PROCESSING_INFO_UPDATE = "processinginfo/update";
 	String TOPIC_IDENTIFICATION_TARGET_UPDATE = "identification/target/update";
+	String TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE = "identification/target/update/massspectrum/unknown";
+	String TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_LIBRARY_UPDATE = "identification/target/update/massspectrum/library";
 	/*
 	 * Converter
 	 */

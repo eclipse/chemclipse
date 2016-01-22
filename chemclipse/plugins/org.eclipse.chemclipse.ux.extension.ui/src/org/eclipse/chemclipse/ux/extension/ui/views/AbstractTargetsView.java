@@ -32,6 +32,7 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -107,6 +108,11 @@ public abstract class AbstractTargetsView {
 			}
 		});
 		initContextMenu();
+	}
+
+	public TableViewer getTableViewer() {
+
+		return tableViewer;
 	}
 
 	public void setFocus() {
