@@ -11,14 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.library;
 
+import java.util.List;
+
 import org.eclipse.chemclipse.chromatogram.msd.identifier.core.Identifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.ILibraryServiceProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.LibraryServiceProcessingInfo;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -46,6 +51,50 @@ public class LibraryService {
 		} else {
 			processingInfo = getNoIdentifierAvailableProcessingInfo();
 		}
+		return processingInfo;
+	}
+
+	public static ILibraryServiceProcessingInfo identify(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
+
+		ILibraryServiceProcessingInfo processingInfo = new LibraryServiceProcessingInfo();
+		ILibraryServiceSupport libraryServiceSupport = getLibraryServiceSupport();
+		try {
+			/*
+			 * Get a match.
+			 */
+			List<String> availableIdentifierIds = libraryServiceSupport.getAvailableIdentifierIds();
+			IMassSpectra massSpectra = null;
+			exitloop:
+			for(String identifierId : availableIdentifierIds) {
+				/*
+				 * Test all available library services.
+				 */
+				ILibraryService libraryService = getLibraryService(identifierId);
+				if(libraryService != null) {
+					try {
+						/*
+						 * It's a match if at least one mass spectrum is returned.
+						 */
+						processingInfo = libraryService.identify(identificationTarget, monitor);
+						massSpectra = processingInfo.getMassSpectra();
+						if(massSpectra.size() > 0) {
+							break exitloop;
+						}
+					} catch(TypeCastException e) {
+						//
+					}
+				}
+			}
+			/*
+			 * Post check.
+			 */
+			if(massSpectra == null || massSpectra.size() == 0) {
+				processingInfo = getNoIdentifierAvailableProcessingInfo();
+			}
+		} catch(NoIdentifierAvailableException e) {
+			processingInfo = getNoIdentifierAvailableProcessingInfo();
+		}
+		//
 		return processingInfo;
 	}
 

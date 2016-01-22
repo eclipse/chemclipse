@@ -67,6 +67,8 @@ public class SimpleMirroredMassSpectrumUI extends AbstractExtendedMassSpectrumUI
 				barSeriesNegative.setBarColor(Colors.BLACK);
 				super.barSeriesNegative = barSeriesNegative;
 			}
+		} else {
+			clear();
 		}
 	}
 	// -------------------------------------------------------------

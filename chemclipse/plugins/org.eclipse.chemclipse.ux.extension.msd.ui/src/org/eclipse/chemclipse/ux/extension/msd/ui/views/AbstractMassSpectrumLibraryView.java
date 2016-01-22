@@ -80,24 +80,24 @@ public abstract class AbstractMassSpectrumLibraryView {
 					/*
 					 * Receive name and formula.
 					 */
-					IScanMSD massSpectrum = (IScanMSD)event.getProperty(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN);
+					IScanMSD unknownMassSpectrum = (IScanMSD)event.getProperty(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN);
 					IIdentificationTarget identificationTarget = (IIdentificationTarget)event.getProperty(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY);
-					update(massSpectrum, identificationTarget);
+					update(unknownMassSpectrum, identificationTarget);
 				}
 			};
 			eventBroker.subscribe(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, eventHandler);
 		}
 	}
 
-	private void update(IScanMSD massSpectrum, IIdentificationTarget identificationTarget) {
+	private void update(IScanMSD unknownMassSpectrum, IIdentificationTarget identificationTarget) {
 
 		if(isPartVisible()) {
 			try {
-				ILibraryServiceProcessingInfo processingInfo = LibraryService.identify(identificationTarget, "org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.libraryservice", new NullProgressMonitor());
+				ILibraryServiceProcessingInfo processingInfo = LibraryService.identify(identificationTarget, new NullProgressMonitor());
 				IMassSpectra massSpectra = processingInfo.getMassSpectra();
 				if(massSpectra.size() > 0) {
 					IScanMSD libraryMassSpectrum = massSpectra.getMassSpectrum(1);
-					update(massSpectrum, libraryMassSpectrum, true);
+					update(unknownMassSpectrum, libraryMassSpectrum, true);
 				}
 			} catch(TypeCastException e) {
 				logger.warn(e);

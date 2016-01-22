@@ -105,6 +105,8 @@ public class LibraryMassSpectrumDifferenceUI extends Composite {
 			} catch(CloneNotSupportedException e) {
 				logger.warn(e);
 			}
+		} else {
+			mirroredMassSpectrumUI.update(null, null, true);
 		}
 	}
 
