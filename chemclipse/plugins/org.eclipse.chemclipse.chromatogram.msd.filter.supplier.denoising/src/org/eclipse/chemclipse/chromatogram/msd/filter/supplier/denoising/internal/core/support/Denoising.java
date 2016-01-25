@@ -15,11 +15,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.exceptions.FilterException;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.comparator.SortOrder;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.support.SegmentWidth;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.exceptions.FilterException;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -34,14 +36,13 @@ import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalsModifier;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class Denoising {
 
 	private static final Logger logger = Logger.getLogger(Denoising.class);
+	private static IonNoiseAbundanceComparator ionNoiseAbundanceComparator = new IonNoiseAbundanceComparator(SortOrder.DESC);
 
 	/**
 	 * Use only static methods.
@@ -240,7 +241,10 @@ public class Denoising {
 		for(int ion = startIon; ion <= stopIon; ion++) {
 			entries.add(new IonNoise(ion, noiseSignal.getAbundance(ion)));
 		}
-		Collections.sort(entries);
+		/*
+		 * Sort by abundance descending.
+		 */
+		Collections.sort(entries, ionNoiseAbundanceComparator);
 		/*
 		 * The correlation factors. The number of used ions tells how
 		 * many ions shall be taken into account.
@@ -373,6 +377,8 @@ public class Denoising {
 			 * Calculate the start and stop scans for each segment and the noise
 			 * mass spectra. And extract the relevant noise mass spectra.
 			 */
+			System.out.println(segment);
+			//
 			segmentNoiseMassSpectra = new ArrayList<ICombinedMassSpectrum>();
 			currentNoiseSegment = noiseSegments.get(segment);
 			segmentNoiseMassSpectra.add(currentNoiseSegment.getNoiseMassSpectrum());

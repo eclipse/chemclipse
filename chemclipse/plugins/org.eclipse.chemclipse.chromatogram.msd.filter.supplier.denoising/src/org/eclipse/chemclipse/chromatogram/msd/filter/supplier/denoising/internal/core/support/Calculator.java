@@ -14,25 +14,23 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.intern
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.exceptions.FilterException;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
 import org.eclipse.chemclipse.model.exceptions.SegmentNotAcceptedException;
 import org.eclipse.chemclipse.model.support.AnalysisSupport;
 import org.eclipse.chemclipse.model.support.IAnalysisSegment;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.model.support.SegmentWidth;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.exceptions.FilterException;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
 import org.eclipse.chemclipse.msd.model.support.CombinedMassSpectrumCalculator;
 import org.eclipse.chemclipse.msd.model.support.ICombinedMassSpectrumCalculator;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class Calculator {
 
@@ -114,6 +112,7 @@ public class Calculator {
 		int rejected = 0;
 		@SuppressWarnings("unused")
 		int accepted = 0;
+		//
 		List<INoiseSegment> noiseSegments = new ArrayList<INoiseSegment>();
 		for(IAnalysisSegment analysisSegment : analysisSegments) {
 			/*
@@ -146,31 +145,36 @@ public class Calculator {
 	private void calculateMedianFromMean(IAnalysisSegment analysisSegment, IExtractedIonSignals extractedIonSignals) throws SegmentNotAcceptedException {
 
 		IExtractedIonSignal signal;
-		double[] values = new double[analysisSegment.getSegmentWidth()];
-		int counter = 0;
-		for(int scan = analysisSegment.getStartScan(); scan <= analysisSegment.getStopScan(); scan++) {
-			try {
-				signal = extractedIonSignals.getExtractedIonSignal(scan);
-				values[counter] = signal.getTotalSignal();
-			} catch(NoExtractedIonSignalStoredException e) {
-				logger.warn(e);
-			} finally {
-				/*
-				 * Increment counters position.
-				 */
-				counter++;
+		int size = analysisSegment.getSegmentWidth();
+		if(size > 0) {
+			double[] values = new double[size];
+			int counter = 0;
+			for(int scan = analysisSegment.getStartScan(); scan <= analysisSegment.getStopScan(); scan++) {
+				try {
+					signal = extractedIonSignals.getExtractedIonSignal(scan);
+					values[counter] = signal.getTotalSignal();
+				} catch(Exception e) {
+					logger.warn(e);
+				} finally {
+					/*
+					 * Increment counters position.
+					 */
+					counter++;
+				}
 			}
-		}
-		/*
-		 * Check if the segment is accepted.<br/> If yes, than calculate its
-		 * median.<br/> If no, than throw an exception.
-		 */
-		double mean = Calculations.getMean(values);
-		if(!calculatorSupport.acceptSegment(values, mean)) {
 			/*
-			 * The calling method has now the chance to not add the value to its
-			 * calculation.
+			 * Check if the segment is accepted.<br/> If yes, than calculate its
+			 * median.<br/> If no, than throw an exception.
 			 */
+			double mean = Calculations.getMean(values);
+			if(!calculatorSupport.acceptSegment(values, mean)) {
+				/*
+				 * The calling method has now the chance to not add the value to its
+				 * calculation.
+				 */
+				throw new SegmentNotAcceptedException();
+			}
+		} else {
 			throw new SegmentNotAcceptedException();
 		}
 	}
