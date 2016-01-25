@@ -17,8 +17,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.IBaselineSupport;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.IIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.ISettingStatus;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResult;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResult;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResults;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ITrapezoidPeakIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.ISegment;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.Segment;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.SegmentAreaCalculator;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IIntegrationEntryCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
@@ -34,25 +45,13 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.IIonPercentages;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.IonPercentages;
 import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.IBaselineSupport;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.IIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.ISettingStatus;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResult;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResult;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResults;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ITrapezoidPeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.ISegment;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.Segment;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.SegmentAreaCalculator;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * This integrator implements the chemstation peak integrator routines.<br/>
