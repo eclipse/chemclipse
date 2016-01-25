@@ -137,19 +137,19 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		return this;
 	}
 
-	@Override
 	public AbstractScanMSD addIon(boolean addIntensity, IIon ion) {
 
 		/*
 		 * Return if the ion is null.
 		 */
 		if(ion == null) {
-			// TODO maybe log warning?
+			logger.warn("The ion must be not null.");
 			return this;
 		}
+		//
 		boolean addNew = true;
 		for(IIon actualIon : ionsList) {
-			if(ion.getIon() == actualIon.getIon()) {
+			if(checkIon(ion, actualIon)) {
 				/*
 				 * Check whether the intensity should be added or only the
 				 * higher intensity should be taken.<br/> Replace the abundance
@@ -172,6 +172,9 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 				}
 			}
 		}
+		/*
+		 * Add a new ion.
+		 */
 		if(addNew) {
 			this.ionsList.add(ion);
 			setDirty(true);
@@ -863,6 +866,31 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		for(IIon ion : ionsToRemove) {
 			ionsList.remove(ion);
 		}
+	}
+
+	private boolean checkIon(IIon ion1, IIon ion2) {
+
+		if(ion1 != null && ion2 != null) {
+			if(ion1.getIon() == ion2.getIon()) {
+				/*
+				 * If it is the same ion, the ion transitions could
+				 * be different.
+				 */
+				IIonTransition ionTransition1 = ion1.getIonTransition();
+				IIonTransition ionTransition2 = ion2.getIonTransition();
+				if(ionTransition1 == null && ionTransition2 == null) {
+					return true;
+				} else {
+					if(ionTransition1 == null) {
+						return ionTransition2.equals(ionTransition1);
+					} else {
+						return ionTransition1.equals(ionTransition2);
+					}
+				}
+			}
+		}
+		//
+		return false;
 	}
 	// -----------------------------clone
 }
