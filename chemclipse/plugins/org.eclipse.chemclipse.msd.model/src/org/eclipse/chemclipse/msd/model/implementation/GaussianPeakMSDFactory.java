@@ -17,7 +17,9 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
+import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 
 public class GaussianPeakMSDFactory {
 
@@ -45,7 +47,38 @@ public class GaussianPeakMSDFactory {
 			peakIntensities.addIntensityValue(rt, (float)gaussian.value(rt));
 		}
 		peakIntensities.normalize();
-		IPeakModelMSD peakModelMSD = new PeakModelMSD(new PeakMassSpectrum(chromatogramMSD.getSupplierScan(scanNumber)), peakIntensities, startBackgroundAbundance, stopBackgroundAbundance);
+		final IVendorMassSpectrum vendorMassSpectrum = chromatogramMSD.getSupplierScan(scanNumber);
+		final IPeakModelMSD peakModelMSD = new PeakModelMSD(new PeakMassSpectrum(vendorMassSpectrum), peakIntensities, startBackgroundAbundance, stopBackgroundAbundance);
+		return new PeakMSD(peakModelMSD);
+	}
+
+	public static IPeakMSD createGaussianPeakMSD(IChromatogramMSD chromatogramMSD, float height, int retentionTime, float startBackgroundAbundance, float stopBackgroundAbundance, float retentionIndex, int setRetentionTimeColumn1, int setRetentionTimeColumn2) throws IllegalArgumentException, PeakException {
+
+		if(chromatogramMSD == null) {
+			throw new PeakException("The chromatogram must not be null.");
+		}
+		final int scanNumber = chromatogramMSD.getScanNumber(retentionTime);
+		int retentionTimeRange = (int)(RATIO_OF_RETENTION_TIME_TO_CONSIDER * retentionTime);
+		// rounding
+		if(retentionTimeRange % 2 == 1) {
+			retentionTimeRange += 1;
+		}
+		// create the gaussian curve, and fit peak values
+		final Gaussian gaussian = new Gaussian(NORMALIZATION_VALUE, retentionTime, retentionTimeRange);
+		final IPeakIntensityValues peakIntensities = new PeakIntensityValues(height);
+		for(int rt = retentionTime - 3 * retentionTimeRange; rt <= retentionTime + 3 * retentionTimeRange; rt += retentionTimeRange / 2) {
+			peakIntensities.addIntensityValue(rt, (float)gaussian.value(rt));
+		}
+		peakIntensities.normalize();
+		final IVendorMassSpectrum vendorMassSpectrum = chromatogramMSD.getSupplierScan(scanNumber);
+		/*
+		 * Here we pass the retention times and indexes
+		 */
+		final IPeakMassSpectrum peakMassSpectrum = new PeakMassSpectrum(vendorMassSpectrum);
+		peakMassSpectrum.setRetentionIndex(retentionIndex);
+		peakMassSpectrum.setRetentionTimeColumn1(setRetentionTimeColumn1);
+		peakMassSpectrum.setRetentionTimeColumn2(setRetentionTimeColumn2);
+		final IPeakModelMSD peakModelMSD = new PeakModelMSD(peakMassSpectrum, peakIntensities, startBackgroundAbundance, stopBackgroundAbundance);
 		return new PeakMSD(peakModelMSD);
 	}
 }
