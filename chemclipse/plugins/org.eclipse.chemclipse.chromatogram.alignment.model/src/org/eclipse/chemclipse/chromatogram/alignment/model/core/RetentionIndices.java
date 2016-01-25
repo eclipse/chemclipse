@@ -26,9 +26,11 @@ public class RetentionIndices implements IRetentionIndices {
 
 	private List<IRetentionIndex> retentionIndices;
 	private int actualRetentionIndex = 1;
+	private RetentionIndexComparator retentionIndexComparator;
 
 	public RetentionIndices() {
 		this.retentionIndices = new ArrayList<IRetentionIndex>(10);
+		retentionIndexComparator = new RetentionIndexComparator();
 	}
 
 	@Override
@@ -49,7 +51,7 @@ public class RetentionIndices implements IRetentionIndices {
 		 * entries. As for that, a ascending sorting concerning the index is
 		 * applicable.
 		 */
-		Collections.sort(this.retentionIndices, null);
+		Collections.sort(this.retentionIndices, retentionIndexComparator);
 		this.actualRetentionIndex = getRetentionIndexEntry(retentionIndex);
 	}
 
