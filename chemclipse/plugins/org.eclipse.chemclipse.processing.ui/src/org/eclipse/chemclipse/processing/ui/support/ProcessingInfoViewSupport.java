@@ -29,6 +29,8 @@ import org.osgi.framework.FrameworkUtil;
 @SuppressWarnings("restriction")
 public class ProcessingInfoViewSupport {
 
+	private final static String TITLE = "An error/some errors occured.";
+	private final static String MESSAGE = "Please check the 'Feedback' view.";
 	private static DynamicProcessingInfoUpdateNotifier dynamicUpdateNotifier;
 
 	private ProcessingInfoViewSupport() {
@@ -56,8 +58,8 @@ public class ProcessingInfoViewSupport {
 				if(processingInfo != null && processingInfo.hasErrorMessages()) {
 					Shell shell = Display.getCurrent().getActiveShell();
 					MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
-					messageBox.setText("An error/some errors occured.");
-					messageBox.setMessage("Please check the 'Processing Info' view.");
+					messageBox.setText(TITLE);
+					messageBox.setMessage(MESSAGE);
 					messageBox.open();
 				}
 				/*
