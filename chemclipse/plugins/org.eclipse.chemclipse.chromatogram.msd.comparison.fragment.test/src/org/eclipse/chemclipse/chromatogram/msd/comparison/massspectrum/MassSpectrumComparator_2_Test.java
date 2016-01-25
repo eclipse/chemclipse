@@ -11,19 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum;
 
-import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumComparatorProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 
 import junit.framework.TestCase;
 
 /**
  * Test the IMassSpectrumComparatorSupport.
- * 
- * @author eselmeister
  */
 public class MassSpectrumComparator_2_Test extends TestCase {
 
@@ -54,8 +50,8 @@ public class MassSpectrumComparator_2_Test extends TestCase {
 		assertTrue(processingInfo.hasErrorMessages());
 		try {
 			result = processingInfo.getMassSpectrumComparisonResult();
-		} catch(TypeCastException e) {
-			assertTrue("TypeCastException", true);
+		} catch(Exception e) {
+			assertTrue("Exception", true);
 		}
 	}
 
@@ -65,8 +61,8 @@ public class MassSpectrumComparator_2_Test extends TestCase {
 		assertTrue(processingInfo.hasErrorMessages());
 		try {
 			result = processingInfo.getMassSpectrumComparisonResult();
-		} catch(TypeCastException e) {
-			assertTrue("TypeCastException", true);
+		} catch(Exception e) {
+			assertTrue("Exception", true);
 		}
 	}
 
@@ -76,8 +72,8 @@ public class MassSpectrumComparator_2_Test extends TestCase {
 		assertTrue(processingInfo.hasErrorMessages());
 		try {
 			result = processingInfo.getMassSpectrumComparisonResult();
-		} catch(TypeCastException e) {
-			assertTrue("TypeCastException", true);
+		} catch(Exception e) {
+			assertTrue("Exception", true);
 		}
 	}
 
@@ -87,8 +83,8 @@ public class MassSpectrumComparator_2_Test extends TestCase {
 		assertTrue(processingInfo.hasErrorMessages());
 		try {
 			result = processingInfo.getMassSpectrumComparisonResult();
-		} catch(TypeCastException e) {
-			assertTrue("TypeCastException", true);
+		} catch(Exception e) {
+			assertTrue("Exception", true);
 		}
 	}
 
@@ -98,8 +94,8 @@ public class MassSpectrumComparator_2_Test extends TestCase {
 		assertTrue(processingInfo.hasErrorMessages());
 		try {
 			result = processingInfo.getMassSpectrumComparisonResult();
-		} catch(TypeCastException e) {
-			assertTrue("TypeCastException", true);
+		} catch(Exception e) {
+			assertTrue("Exception", true);
 		}
 	}
 
@@ -109,8 +105,8 @@ public class MassSpectrumComparator_2_Test extends TestCase {
 		assertTrue(processingInfo.hasErrorMessages());
 		try {
 			result = processingInfo.getMassSpectrumComparisonResult();
-		} catch(TypeCastException e) {
-			assertTrue("TypeCastException", true);
+		} catch(Exception e) {
+			assertTrue("Exception", true);
 		}
 	}
 }

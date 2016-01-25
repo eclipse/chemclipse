@@ -77,6 +77,38 @@ public interface IScan extends IAdaptable, IScanSerializable {
 	void setRetentionTime(int retentionTime);
 
 	/**
+	 * Get the retention time for column 1.
+	 * This is used for GCxGC or LCxLC applications.
+	 * 
+	 * @return int
+	 */
+	int getRetentionTimeColumn1();
+
+	/**
+	 * Set the retention time for column 1.
+	 * This is used for GCxGC or LCxLC applications.
+	 * 
+	 * @param retentionTimeColumn1
+	 */
+	void setRetentionTimeColumn1(int retentionTimeColumn1);
+
+	/**
+	 * Get the retention time for column 2.
+	 * This is used for GCxGC or LCxLC applications.
+	 * 
+	 * @return int
+	 */
+	int getRetentionTimeColumn2();
+
+	/**
+	 * Set the retention time for column 2.
+	 * This is used for GCxGC or LCxLC applications.
+	 * 
+	 * @param retentionTimeColumn2
+	 */
+	void setRetentionTimeColumn2(int retentionTimeColumn2);
+
+	/**
 	 * Returns the retention index.
 	 * 
 	 * @return float - retention index

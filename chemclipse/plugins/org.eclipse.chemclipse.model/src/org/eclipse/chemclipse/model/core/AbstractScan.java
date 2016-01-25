@@ -24,6 +24,8 @@ public abstract class AbstractScan implements IScan {
 	private transient IChromatogram parentChromatogram;
 	private float retentionIndex = 0;
 	private int retentionTime = 0;
+	private int retentionTimeColumn1 = 0; // GCxGC, LCxLC
+	private int retentionTimeColumn2 = 0; // GCxGC, LCxLC
 	private int scanNumber = 0;
 	private int timeSegmentId = 1; // Default 1
 	private int cycleNumber = 1; // Default 1
@@ -91,6 +93,36 @@ public abstract class AbstractScan implements IScan {
 
 		if(retentionTime >= 0) {
 			this.retentionTime = retentionTime;
+			setDirty(true);
+		}
+	}
+
+	@Override
+	public int getRetentionTimeColumn1() {
+
+		return retentionTimeColumn1;
+	}
+
+	@Override
+	public void setRetentionTimeColumn1(int retentionTimeColumn1) {
+
+		if(retentionTimeColumn1 >= 0) {
+			this.retentionTimeColumn1 = retentionTimeColumn1;
+			setDirty(true);
+		}
+	}
+
+	@Override
+	public int getRetentionTimeColumn2() {
+
+		return retentionTimeColumn2;
+	}
+
+	@Override
+	public void setRetentionTimeColumn2(int retentionTimeColumn2) {
+
+		if(retentionTimeColumn2 >= 0) {
+			this.retentionTimeColumn2 = retentionTimeColumn2;
 			setDirty(true);
 		}
 	}
