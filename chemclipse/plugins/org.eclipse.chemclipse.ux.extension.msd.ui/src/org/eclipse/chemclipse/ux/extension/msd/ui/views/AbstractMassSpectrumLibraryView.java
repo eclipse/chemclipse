@@ -11,18 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.views;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.library.LibraryService;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.ILibraryServiceProcessingInfo;
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.chemclipse.ux.extension.msd.ui.internal.runnables.LibraryServiceRunnable;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.widgets.Display;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
@@ -92,14 +93,13 @@ public abstract class AbstractMassSpectrumLibraryView {
 	private void update(IScanMSD unknownMassSpectrum, IIdentificationTarget identificationTarget) {
 
 		if(isPartVisible()) {
+			IRunnableWithProgress runnable = new LibraryServiceRunnable(this, unknownMassSpectrum, identificationTarget);
+			ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 			try {
-				ILibraryServiceProcessingInfo processingInfo = LibraryService.identify(identificationTarget, new NullProgressMonitor());
-				IMassSpectra massSpectra = processingInfo.getMassSpectra();
-				if(massSpectra.size() > 0) {
-					IScanMSD libraryMassSpectrum = massSpectra.getMassSpectrum(1);
-					update(unknownMassSpectrum, libraryMassSpectrum, true);
-				}
-			} catch(TypeCastException e) {
+				monitor.run(true, true, runnable);
+			} catch(InvocationTargetException e) {
+				logger.warn(e);
+			} catch(InterruptedException e) {
 				logger.warn(e);
 			}
 		}
