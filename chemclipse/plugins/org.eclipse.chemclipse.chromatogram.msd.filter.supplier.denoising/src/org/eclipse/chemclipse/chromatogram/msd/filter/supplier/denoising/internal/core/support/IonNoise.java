@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.internal.core.support;
 
-public class IonNoise implements Comparable<IonNoise> {
+public class IonNoise {
 
 	private int ion;
 	private float abundance;
@@ -39,14 +39,5 @@ public class IonNoise implements Comparable<IonNoise> {
 	public float getAbundance() {
 
 		return abundance;
-	}
-
-	/**
-	 * Do not remove this method, see: Denoising.calculateCorrelationFactor()
-	 */
-	@Override
-	public int compareTo(IonNoise other) {
-
-		return (int)(other.getAbundance() - abundance);
 	}
 }
