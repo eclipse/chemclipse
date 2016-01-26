@@ -50,11 +50,13 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 	private static final String MOL_WEIGHT = "##MW=";
 	private static final String MOL_FORM = "##MOLFORM=";
 	private static final String TIME_MARKER = "##TIME=";
+	private static final String TITLE_MARKER = "##TITLE=";
 	private static final String NAME_MARKER = "##NAME=";
 	private static final String NAMES_MARKER = "##NAMES=";
 	private static final String XYDATA_MARKER_SPACE_TYPE1 = "##XYDATA= (XY..XY)";
 	private static final String XYDATA_MARKER_SPACE_TYPE2 = "##XYDATA=(XY..XY)";
 	private static final String XYDATA_MARKER_SHORT = "##XYDATA=(X,Y)";
+	private static final String PEAK_TABLE_MARKER = "##PEAK TABLE=(XY..XY)";
 	//
 	private static final Pattern ionPattern = Pattern.compile("(\\d+\\.?\\d{0,5})(.*?)(\\d+\\.?\\d{0,5})");
 
@@ -62,12 +64,13 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		if(isValidFileFormat(file)) {
-			return extractMassSpectra(file, monitor);
+			boolean isNameMarkerAvailable = isNameMarkerAvailable(file);
+			return extractMassSpectra(file, isNameMarkerAvailable, monitor);
 		}
 		return null;
 	}
 
-	private IMassSpectra extractMassSpectra(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	private IMassSpectra extractMassSpectra(File file, boolean isNameMarkerAvailable, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		IMassSpectra massSpectra = new MassSpectra();
 		IVendorLibraryMassSpectrum massSpectrum = null;
@@ -92,15 +95,19 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 			 * 44.05768, 36
 			 * ...
 			 */
-			if(line.startsWith(NAME_MARKER) || line.startsWith(NAMES_MARKER)) {
+			if(addNewMassSpectrum(line, isNameMarkerAvailable)) {
 				/*
 				 * Try to get the identification.
 				 */
 				String name;
-				if(line.startsWith(NAME_MARKER)) {
-					name = line.replace(NAME_MARKER, "").trim();
+				if(isNameMarkerAvailable) {
+					if(line.startsWith(NAME_MARKER)) {
+						name = line.replace(NAME_MARKER, "").trim();
+					} else {
+						name = line.replace(NAMES_MARKER, "").trim();
+					}
 				} else {
-					name = line.replace(NAMES_MARKER, "").trim();
+					name = line.replace(TITLE_MARKER, "").trim();
 				}
 				/*
 				 * Store an existing scan.
@@ -146,7 +153,7 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 				} else if(line.startsWith(MOL_FORM)) {
 					String formula = line.replace(MOL_FORM, "").trim();
 					massSpectrum.getLibraryInformation().setFormula(formula);
-				} else if(line.startsWith(XYDATA_MARKER_SPACE_TYPE1) || line.startsWith(XYDATA_MARKER_SPACE_TYPE2) || line.startsWith(XYDATA_MARKER_SHORT)) {
+				} else if(line.startsWith(XYDATA_MARKER_SPACE_TYPE1) || line.startsWith(XYDATA_MARKER_SPACE_TYPE2) || line.startsWith(XYDATA_MARKER_SHORT) || line.startsWith(PEAK_TABLE_MARKER)) {
 					/*
 					 * Mark to read ions.
 					 */
@@ -192,6 +199,20 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 		fileReader.close();
 		//
 		return massSpectra;
+	}
+
+	private boolean addNewMassSpectrum(String line, boolean isNameMarkerAvailable) {
+
+		if(isNameMarkerAvailable) {
+			if(line.startsWith(NAME_MARKER) || line.startsWith(NAMES_MARKER)) {
+				return true;
+			}
+		} else {
+			if(line.startsWith(TITLE_MARKER)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private int getRetentionTime(String line) {
@@ -260,5 +281,27 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 		} else {
 			return false;
 		}
+	}
+
+	private boolean isNameMarkerAvailable(File file) throws IOException {
+
+		boolean nameMarkerAvailable = false;
+		FileReader fileReader = new FileReader(file);
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
+		/*
+		 * Check the first column header.
+		 */
+		String line;
+		exitloop:
+		while((line = bufferedReader.readLine()) != null) {
+			if(line.startsWith(NAME_MARKER) || line.startsWith(NAMES_MARKER)) {
+				nameMarkerAvailable = true;
+				break exitloop;
+			}
+		}
+		//
+		bufferedReader.close();
+		fileReader.close();
+		return nameMarkerAvailable;
 	}
 }
