@@ -11,21 +11,29 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.views;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.PeakTargetsContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.views.AbstractTargetsView;
-
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
@@ -42,11 +50,13 @@ public class PeakTargetsView extends AbstractTargetsView {
 	private EventHandler eventHandlerPeak;
 	//
 	private IPeakMSD peak;
+	private Map<String, Object> map;
 
 	@Inject
 	public PeakTargetsView(IEventBroker eventBroker) {
 		super(new PeakTargetsContentProvider(), eventBroker);
 		this.eventBroker = eventBroker;
+		map = new HashMap<String, Object>();
 	}
 
 	@PostConstruct
@@ -54,6 +64,15 @@ public class PeakTargetsView extends AbstractTargetsView {
 
 		super.createPartControl(parent);
 		subscribe();
+		TableViewer tableViewer = getTableViewer();
+		tableViewer.getControl().addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+
+				propagateSelectedTargetAndMassSpectrum();
+			}
+		});
 	}
 
 	@PreDestroy
@@ -147,6 +166,23 @@ public class PeakTargetsView extends AbstractTargetsView {
 		 */
 		if(doUpdate(peak)) {
 			super.update(peak, forceReload);
+		}
+	}
+
+	private void propagateSelectedTargetAndMassSpectrum() {
+
+		Table table = getTableViewer().getTable();
+		int index = table.getSelectionIndex();
+		if(index >= 0) {
+			TableItem tableItem = table.getItem(index);
+			Object object = tableItem.getData();
+			if(object instanceof IIdentificationTarget) {
+				IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
+				map.clear();
+				map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, peak.getExtractedMassSpectrum());
+				map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, identificationTarget);
+				eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+			}
 		}
 	}
 }

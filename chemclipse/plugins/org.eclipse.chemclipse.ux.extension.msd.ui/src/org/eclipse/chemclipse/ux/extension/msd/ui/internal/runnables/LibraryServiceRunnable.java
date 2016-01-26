@@ -15,11 +15,9 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.library.LibraryService;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.ILibraryServiceProcessingInfo;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.ux.extension.msd.ui.views.AbstractMassSpectrumLibraryView;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -27,8 +25,6 @@ import org.eclipse.swt.widgets.Display;
 
 public class LibraryServiceRunnable implements IRunnableWithProgress {
 
-	private static final Logger logger = Logger.getLogger(LibraryServiceRunnable.class);
-	//
 	private AbstractMassSpectrumLibraryView massSpectrumLibraryView;
 	private IScanMSD unknownMassSpectrum;
 	private IIdentificationTarget identificationTarget;
@@ -51,8 +47,8 @@ public class LibraryServiceRunnable implements IRunnableWithProgress {
 					IScanMSD libraryMassSpectrum = massSpectra.getMassSpectrum(1);
 					updateSelection(unknownMassSpectrum, libraryMassSpectrum, true);
 				}
-			} catch(TypeCastException e) {
-				logger.warn(e);
+			} catch(Exception e) {
+				updateSelection(unknownMassSpectrum, null, true);
 			}
 		} finally {
 			monitor.done();
