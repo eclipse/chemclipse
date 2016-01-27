@@ -15,21 +15,22 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import org.eclipse.chemclipse.converter.core.ISupplier;
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
+import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverterSupport;
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
+import org.eclipse.chemclipse.msd.swt.ui.Activator;
+import org.eclipse.chemclipse.msd.swt.ui.internal.support.MassSpectrumExportRunnable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
-
-import org.eclipse.chemclipse.converter.core.ISupplier;
-import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
-import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverterSupport;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.swt.ui.Activator;
-import org.eclipse.chemclipse.msd.swt.ui.internal.support.MassSpectrumExportRunnable;
 
 public class MassSpectrumFileSupport {
 
@@ -79,7 +80,51 @@ public class MassSpectrumFileSupport {
 		 */
 		String filename = dialog.open();
 		if(filename != null) {
-			validateFile(dialog, converterSupport.getExportSupplier(), shell, converterSupport, massSpectrum);
+			IMassSpectra massSpectra = new MassSpectra();
+			massSpectra.addMassSpectrum(massSpectrum);
+			validateFile(dialog, converterSupport.getExportSupplier(), shell, converterSupport, massSpectra);
+		}
+	}
+
+	/**
+	 * Opens a file dialog and tries to save the mass spectra
+	 * 
+	 * @param chromatogram
+	 * @throws NoConverterAvailableException
+	 */
+	public static void saveMassSpectra(IMassSpectra massSpectra) throws NoConverterAvailableException {
+
+		/*
+		 * If the chromatogram is null, exit.
+		 */
+		if(massSpectra == null || massSpectra.size() == 0) {
+			return;
+		}
+		Shell shell = Display.getCurrent().getActiveShell();
+		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
+		/*
+		 * Create the dialogue.
+		 */
+		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
+		dialog.setFileName("Mass Spectra");
+		dialog.setText("Save Mass Spectra As");
+		dialog.setOverwrite(true);
+		MassSpectrumConverterSupport converterSupport = MassSpectrumConverter.getMassSpectrumConverterSupport();
+		/*
+		 * Set the filters that allow an export of chromatographic data.
+		 */
+		String[] filterExtensions = converterSupport.getExportableFilterExtensions();
+		dialog.setFilterExtensions(filterExtensions);
+		String[] filterNames = converterSupport.getExportableFilterNames();
+		dialog.setFilterNames(filterNames);
+		/*
+		 * Opens the dialog.<br/> Use converterSupport.getExportSupplier()
+		 * instead of converterSupport.getSupplier() otherwise a wrong supplier
+		 * will be taken.
+		 */
+		String filename = dialog.open();
+		if(filename != null) {
+			validateFile(dialog, converterSupport.getExportSupplier(), shell, converterSupport, massSpectra);
 		}
 	}
 
@@ -91,20 +136,20 @@ public class MassSpectrumFileSupport {
 	 * @param chromatogram
 	 * @param supplier
 	 */
-	public static void writeFile(final File file, final IScanMSD massSpectrum, final ISupplier supplier) {
+	public static void writeFile(final File file, final IMassSpectra massSpectra, final ISupplier supplier) {
 
 		/*
 		 * If one of these instances is null, no chance to get it running.<br/>
 		 * The only possibility is to exit.
 		 */
-		if(file == null || massSpectrum == null || supplier == null) {
+		if(file == null || massSpectra == null || supplier == null) {
 			return;
 		}
 		/*
 		 * Convert the given mass spectrum.
 		 */
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-		MassSpectrumExportRunnable runnable = new MassSpectrumExportRunnable(file, massSpectrum, supplier);
+		MassSpectrumExportRunnable runnable = new MassSpectrumExportRunnable(file, massSpectra, supplier);
 		try {
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {
@@ -130,7 +175,7 @@ public class MassSpectrumFileSupport {
 	 * @param converterSupport
 	 * @param chromatogram
 	 */
-	private static void validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, MassSpectrumConverterSupport converterSupport, IScanMSD massSpectrum) {
+	private static void validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, MassSpectrumConverterSupport converterSupport, IMassSpectra massSpectra) {
 
 		File massSpectrumFolder = null;
 		boolean overwrite = dialog.getOverwrite();
@@ -168,7 +213,7 @@ public class MassSpectrumFileSupport {
 				massSpectrumFolder = new File(filename);
 				if(massSpectrumFolder.exists()) {
 					folderExists = true;
-					if(MessageDialog.openQuestion(shell, "Overwrite", "Would you like to overwrite the mass spectrum file " + massSpectrumFolder.toString() + "?")) {
+					if(MessageDialog.openQuestion(shell, "Overwrite", "Would you like to overwrite the file " + massSpectrumFolder.toString() + "?")) {
 						overwrite = true;
 					} else {
 						overwrite = false;
@@ -203,7 +248,7 @@ public class MassSpectrumFileSupport {
 					 */
 					File chromatogramFile = new File(filename);
 					if(chromatogramFile.exists()) {
-						if(MessageDialog.openQuestion(shell, "Overwrite", "Would you like to overwrite the mass spectrum file " + chromatogramFile.toString() + "?")) {
+						if(MessageDialog.openQuestion(shell, "Overwrite", "Would you like to overwrite the file " + chromatogramFile.toString() + "?")) {
 							overwrite = true;
 						} else {
 							overwrite = false;
@@ -212,7 +257,7 @@ public class MassSpectrumFileSupport {
 				}
 			}
 			/*
-			 * Write the chromatogram and check if the folder exists.
+			 * Write the file and check if the folder exists.
 			 */
 			if(overwrite) {
 				/*
@@ -239,7 +284,7 @@ public class MassSpectrumFileSupport {
 				/*
 				 * Export the mass spectra.
 				 */
-				writeFile(new File(filename), massSpectrum, selectedSupplier);
+				writeFile(new File(filename), massSpectra, selectedSupplier);
 			}
 		}
 	}
