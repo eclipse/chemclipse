@@ -128,8 +128,8 @@ public class ChromatogramHeaderView {
 			addHeaderLine(builder, "Misc", chromatogramOverview.getMiscInfo());
 			addHeaderLine(builder, "Details", chromatogramOverview.getDetailedInfo());
 			addHeaderLine(builder, "Scans", Integer.toString(chromatogramOverview.getNumberOfScans()));
-			addHeaderLine(builder, "Start RT", decimalFormat.format(chromatogramOverview.getStartRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
-			addHeaderLine(builder, "Stop RT", decimalFormat.format(chromatogramOverview.getStopRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+			addHeaderLine(builder, "Start RT (min)", decimalFormat.format(chromatogramOverview.getStartRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+			addHeaderLine(builder, "Stop RT (min)", decimalFormat.format(chromatogramOverview.getStopRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
 			addHeaderLine(builder, "Barcode", chromatogramOverview.getBarcode());
 			text.setText(builder.toString());
 		}

@@ -120,6 +120,9 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SUBTRACT_LOAD_SESSION_MASS_SPECTRUM = "subtractFilterLoadSessionMassSpectrum.gif";
 	String IMAGE_SUBTRACT_STORE_SESSION_MASS_SPECTRUM = "subtractFilterStoreSessionMassSpectrum.gif";
 	//
+	String IMAGE_SELECTED_SCAN = "selectedScan.gif";
+	String IMAGE_SELECTED_PEAK = "selectedPeak.gif";
+	//
 	String IMAGE_IMPORT_CHROMATOGRAM_MSD = "importChromatogramMSD.gif";
 	String IMAGE_IMPORT_CHROMATOGRAM_CSD = "importChromatogramCSD.gif";
 	String IMAGE_IMPORT_CHROMATOGRAM_WSD = "importChromatogramWSD.gif";
