@@ -46,6 +46,7 @@
     <elements xsi:type="basic:Part" xmi:id="_Nhq_QMbhEeKTZYaTAAgjxg" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.part.combinedMassSpectrumChromatogramSelection" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.views.CombinedMassSpectrumChromatogramSelectionView" label="Combined Mass Spectrum (Chromatogram Selection)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/massSpectrum.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_TU9LgMbsEeKTZYaTAAgjxg" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.part.sessionSubtractMassSpectrum" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.views.SessionSubtractMassSpectrumView" label="Subtract Mass Spectrum (Session)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/massSpectrum.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_PidKMBaCEeWRBsS9e2Uvhw" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.part.pinnedScanEditNominal" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.views.PinnedNominalMassSpectrumEditView" label="Pinned Scan Edit (Nominal)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/selectedScan.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_byTZEMTHEeWJUr3on-FBsw" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.part.peakMassSpectrumEdit" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.views.PeakMassSpectrumEditView" label="Peak Mass Spectrum Edit" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/selectedPeak.gif"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_r8-S0MbbEeKTZYaTAAgjxg" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_vKbtUMbbEeKTZYaTAAgjxg" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.perspective.main" label="Subtract Mass Spectra" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/subtractMassSpectrum.gif">
@@ -101,5 +102,11 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_AdEC8BaDEeWRBsS9e2Uvhw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.msd.ui.partstack.main.3">
     <elements xsi:type="advanced:Placeholder" xmi:id="_Ed73YBaDEeWRBsS9e2Uvhw" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.placeholder.8" ref="_TU9LgMbsEeKTZYaTAAgjxg"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_D-x4gMTSEeWJUr3on-FBsw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.msd.ui.partstack.chromatogramPeaks.1">
+    <elements xsi:type="advanced:Placeholder" xmi:id="_GBTw8MTSEeWJUr3on-FBsw" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.placeholder.9" ref="_byTZEMTHEeWJUr3on-FBsw"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_QPgDQMTSEeWJUr3on-FBsw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.msd.ui.partstack.chromatogramPeaks.3">
+    <elements xsi:type="advanced:Placeholder" xmi:id="_TX4wgMTSEeWJUr3on-FBsw" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.placeholder.10" ref="_TU9LgMbsEeKTZYaTAAgjxg"/>
   </fragments>
 </fragment:ModelFragments>
