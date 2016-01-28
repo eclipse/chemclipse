@@ -34,6 +34,7 @@ public class LibraryService extends AbstractLibraryService implements ILibrarySe
 
 		ILibraryServiceProcessingInfo processingInfo = new LibraryServiceProcessingInfo();
 		try {
+			monitor.subTask("File Identifier - get reference mass spectrum");
 			validateIdentificationTarget(identificationTarget);
 			IMassSpectra massSpectra = fileIdentifier.getMassSpectra(identificationTarget, monitor);
 			processingInfo.setMassSpectra(massSpectra);
