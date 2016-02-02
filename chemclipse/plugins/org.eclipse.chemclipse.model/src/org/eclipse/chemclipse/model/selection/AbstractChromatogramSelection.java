@@ -21,16 +21,21 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 	private int stopRetentionTime;
 	private float startAbundance;
 	private float stopAbundance;
+	private boolean overlaySelected;
 
 	public AbstractChromatogramSelection(IChromatogram chromatogram) throws ChromatogramIsNullException {
 		this(chromatogram, true);
 	}
 
 	public AbstractChromatogramSelection(IChromatogram chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
+		/*
+		 * Check
+		 */
 		if(chromatogram == null) {
 			throw new ChromatogramIsNullException("The chromatogram must not be null.");
 		}
 		this.chromatogram = chromatogram;
+		overlaySelected = true;
 		/*
 		 * If scans of the chromatogram will be deleted, this selection will be
 		 * adjusted to valid values.
@@ -201,6 +206,18 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 
 	// ------------------------------------IChromatogramUpdateListener
 	// ------------------------------------equals, hashCode, toString
+	@Override
+	public boolean isOverlaySelected() {
+
+		return overlaySelected;
+	}
+
+	@Override
+	public void setOverlaySelected(boolean overlaySelected) {
+
+		this.overlaySelected = overlaySelected;
+	}
+
 	@Override
 	public boolean equals(Object otherObject) {
 

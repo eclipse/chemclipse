@@ -138,4 +138,8 @@ public interface IChromatogramSelection extends IChromatogramUpdateListener {
 	 * @param update
 	 */
 	void setSelectedScan(IScan selectedScan, boolean update);
+
+	boolean isOverlaySelected();
+
+	void setOverlaySelected(boolean overlaySelected);
 }
