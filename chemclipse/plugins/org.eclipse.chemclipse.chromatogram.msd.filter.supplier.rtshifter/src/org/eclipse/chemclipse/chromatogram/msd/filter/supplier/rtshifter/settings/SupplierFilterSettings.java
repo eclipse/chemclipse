@@ -16,14 +16,22 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramF
 public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
 
 	private int millisecondsToShift;
+	private boolean isShiftAllScans;
 
-	public SupplierFilterSettings(int millisecondsToShift) {
+	public SupplierFilterSettings(int millisecondsToShift, boolean isShiftAllScans) {
 		this.millisecondsToShift = millisecondsToShift;
+		this.isShiftAllScans = isShiftAllScans;
 	}
 
 	@Override
 	public int getMillisecondsToShift() {
 
 		return millisecondsToShift;
+	}
+
+	@Override
+	public boolean isShiftAllScans() {
+
+		return isShiftAllScans;
 	}
 }
