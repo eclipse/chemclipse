@@ -14,9 +14,11 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.rtshifter.core.i
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.rtshifter.exceptions.FilterException;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.rtshifter.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.rtshifter.exceptions.FilterException;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
 public class RTShifter {
 
@@ -26,32 +28,48 @@ public class RTShifter {
 	private RTShifter() {
 	}
 
-	public static void shiftRetentionTimes(IChromatogram chromatogram, int millisecondToShift) throws FilterException {
+	public static void shiftRetentionTimes(IChromatogramSelection chromatogramSelection, ISupplierFilterSettings supplierFilterSettings) throws FilterException {
 
-		if(chromatogram == null) {
+		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() == null) {
 			throw new FilterException("The chromatogram must not be null.");
 		}
-		List<Integer> scansToRemove = adjustRetentionTimesAndReturnScansToRemove(chromatogram, millisecondToShift);
-		removeMarkedScans(chromatogram, scansToRemove);
-		setScanDelay(chromatogram);
+		//
+		List<Integer> scansToRemove = adjustRetentionTimesAndReturnScansToRemove(chromatogramSelection, supplierFilterSettings);
+		removeMarkedScans(chromatogramSelection, scansToRemove);
+		setScanDelay(chromatogramSelection);
 	}
 
-	private static List<Integer> adjustRetentionTimesAndReturnScansToRemove(IChromatogram chromatogram, int millisecondToShift) {
+	private static List<Integer> adjustRetentionTimesAndReturnScansToRemove(IChromatogramSelection chromatogramSelection, ISupplierFilterSettings supplierFilterSettings) {
 
-		IScan scanRecord;
-		int numberOfScans = chromatogram.getNumberOfScans();
+		boolean isShiftAllScans = supplierFilterSettings.isShiftAllScans();
+		int millisecondToShift = supplierFilterSettings.getMillisecondsToShift();
+		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		//
+		int startScan;
+		int stopScan;
+		if(isShiftAllScans) {
+			startScan = 1;
+			stopScan = chromatogram.getNumberOfScans();
+		} else {
+			startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
+			stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
+		}
+		//
+		int retentionTimeLeftBorder = getRetentionTimeLeftBorder(chromatogram, startScan);
+		int retentionTimeRightBorder = getRetentionTimeRightBorder(chromatogram, stopScan);
+		//
 		List<Integer> scansToRemove = new ArrayList<Integer>();
 		/*
 		 * Adjust the retention times.
 		 */
-		for(int scan = 1; scan <= numberOfScans; scan++) {
-			scanRecord = chromatogram.getScan(scan);
+		for(int scan = startScan; scan <= stopScan; scan++) {
+			IScan scanRecord = chromatogram.getScan(scan);
 			int retentionTimeNew = calculateNewRetentionTime(scanRecord, millisecondToShift);
 			/*
 			 * Remove the scan if less or equal than zero.
 			 * But don't remove it now, cause it would change the scan order.
 			 */
-			if(retentionTimeNew <= 0) {
+			if(retentionTimeNew <= retentionTimeLeftBorder || retentionTimeNew >= retentionTimeRightBorder) {
 				scansToRemove.add(scan);
 			} else {
 				scanRecord.setRetentionTime(retentionTimeNew);
@@ -63,8 +81,31 @@ public class RTShifter {
 		return scansToRemove;
 	}
 
-	private static IChromatogram removeMarkedScans(IChromatogram chromatogram, List<Integer> scansToRemove) {
+	private static int getRetentionTimeLeftBorder(IChromatogram chromatogram, int startScan) {
 
+		int retentionTime = 0;
+		int scanLeftBorder = startScan - 1;
+		IScan scan = chromatogram.getScan(scanLeftBorder);
+		if(scan != null) {
+			retentionTime = scan.getRetentionTime();
+		}
+		return retentionTime;
+	}
+
+	private static int getRetentionTimeRightBorder(IChromatogram chromatogram, int stopScan) {
+
+		int retentionTime = Integer.MAX_VALUE;
+		int scanRightBorder = stopScan + 1;
+		IScan scan = chromatogram.getScan(scanRightBorder);
+		if(scan != null) {
+			retentionTime = scan.getRetentionTime();
+		}
+		return retentionTime;
+	}
+
+	private static IChromatogram removeMarkedScans(IChromatogramSelection chromatogramSelection, List<Integer> scansToRemove) {
+
+		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		int counter = 0;
 		for(int scan : scansToRemove) {
 			chromatogram.removeScan(scan - counter);
@@ -73,8 +114,9 @@ public class RTShifter {
 		return chromatogram;
 	}
 
-	private static void setScanDelay(IChromatogram chromatogram) throws FilterException {
+	private static void setScanDelay(IChromatogramSelection chromatogramSelection) throws FilterException {
 
+		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		if(chromatogram.getNumberOfScans() <= 0) {
 			throw new FilterException("There is no scan available.");
 		}

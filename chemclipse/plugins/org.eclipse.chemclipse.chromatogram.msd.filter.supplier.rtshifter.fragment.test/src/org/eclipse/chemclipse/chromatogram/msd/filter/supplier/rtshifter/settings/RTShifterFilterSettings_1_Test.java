@@ -32,35 +32,35 @@ public class RTShifterFilterSettings_1_Test extends TestCase {
 	public void testCreateSettings_1() {
 
 		int millisecondsToShift = 0;
-		rtShifterFilterSettings = new SupplierFilterSettings(millisecondsToShift);
+		rtShifterFilterSettings = new SupplierFilterSettings(millisecondsToShift, true);
 		assertEquals(millisecondsToShift, rtShifterFilterSettings.getMillisecondsToShift());
 	}
 
 	public void testCreateSettings_2() {
 
 		int millisecondsToShift = 1;
-		rtShifterFilterSettings = new SupplierFilterSettings(millisecondsToShift);
+		rtShifterFilterSettings = new SupplierFilterSettings(millisecondsToShift, true);
 		assertEquals(millisecondsToShift, rtShifterFilterSettings.getMillisecondsToShift());
 	}
 
 	public void testCreateSettings_3() {
 
 		int millisecondsToShift = -1;
-		rtShifterFilterSettings = new SupplierFilterSettings(millisecondsToShift);
+		rtShifterFilterSettings = new SupplierFilterSettings(millisecondsToShift, true);
 		assertEquals(millisecondsToShift, rtShifterFilterSettings.getMillisecondsToShift());
 	}
 
 	public void testCreateSettings_4() {
 
 		int millisecondsToShift = 1500;
-		rtShifterFilterSettings = new SupplierFilterSettings(millisecondsToShift);
+		rtShifterFilterSettings = new SupplierFilterSettings(millisecondsToShift, true);
 		assertEquals(millisecondsToShift, rtShifterFilterSettings.getMillisecondsToShift());
 	}
 
 	public void testCreateSettings_5() {
 
 		int millisecondsToShift = -1500;
-		rtShifterFilterSettings = new SupplierFilterSettings(millisecondsToShift);
+		rtShifterFilterSettings = new SupplierFilterSettings(millisecondsToShift, true);
 		assertEquals(millisecondsToShift, rtShifterFilterSettings.getMillisecondsToShift());
 	}
 }

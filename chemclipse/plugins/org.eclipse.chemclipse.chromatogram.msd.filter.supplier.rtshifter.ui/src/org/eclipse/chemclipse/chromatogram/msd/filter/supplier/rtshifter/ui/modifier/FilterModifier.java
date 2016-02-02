@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilter;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.rtshifter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.rtshifter.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.rtshifter.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
@@ -42,7 +43,8 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 			/*
 			 * The filter settings.
 			 */
-			ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings(millisecondsToShift);
+			boolean isShiftAllScans = PreferenceSupplier.getIsShiftAllScans();
+			ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings(millisecondsToShift, isShiftAllScans);
 			/*
 			 * Apply the filter.
 			 */

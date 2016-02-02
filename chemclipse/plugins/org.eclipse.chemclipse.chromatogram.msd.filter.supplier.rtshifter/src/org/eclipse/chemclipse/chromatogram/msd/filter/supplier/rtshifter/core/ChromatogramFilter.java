@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.rtshifter.core;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.chromatogram.filter.processing.ChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
@@ -26,10 +23,9 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.rtshifter.excepti
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.rtshifter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.rtshifter.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilter {
-
-	private int millisecondsToShift;
 
 	@Override
 	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
@@ -42,12 +38,10 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 		/*
 		 * Try to shift the retention times.
 		 */
-		setFilterSettings(chromatogramFilterSettings);
 		IChromatogramFilterResult chromatogramFilterResult;
 		try {
 			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram has been shifted successfully.");
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			RTShifter.shiftRetentionTimes(chromatogram, millisecondsToShift);
+			RTShifter.shiftRetentionTimes(chromatogramSelection, getSupplierFilterSettings(chromatogramFilterSettings));
 		} catch(FilterException e) {
 			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage());
 		}
@@ -62,15 +56,15 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 	}
 
-	// ----------------------------private methods
-	private void setFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
+	private ISupplierFilterSettings getSupplierFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
 
 		/*
 		 * Get the excluded ions instance.
 		 */
 		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
-			ISupplierFilterSettings settings = (ISupplierFilterSettings)chromatogramFilterSettings;
-			millisecondsToShift = settings.getMillisecondsToShift();
+			return (ISupplierFilterSettings)chromatogramFilterSettings;
+		} else {
+			return PreferenceSupplier.getChromatogramFilterSettings();
 		}
 	}
 }

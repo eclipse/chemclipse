@@ -16,4 +16,6 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSe
 public interface ISupplierFilterSettings extends IChromatogramFilterSettings {
 
 	int getMillisecondsToShift();
+
+	boolean isShiftAllScans();
 }
