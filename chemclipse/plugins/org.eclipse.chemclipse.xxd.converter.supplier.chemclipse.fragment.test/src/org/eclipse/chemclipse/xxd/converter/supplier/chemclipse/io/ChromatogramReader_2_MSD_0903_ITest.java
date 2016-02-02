@@ -17,6 +17,15 @@ import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.TestPathHelper;
 
+/**
+ * NOTE:
+ * This file is a kind of special, cause e.g. scan 92 stores two transitions which has been eliminated in
+ * the other test files.
+ * 
+ * 237.0 52340.0 org.eclipse.chemclipse.msd.model.implementation.IonTransition[compoundName=,q1StartIon=266.0,q1StopIon=266.0,q1Resolution=1.2,q3StartIon=236.7,q3StopIon=237.4,q3Resolution=1.2,collisionEnergy=10.0,transitionGroup=8]
+ * 237.0 48153.0 org.eclipse.chemclipse.msd.model.implementation.IonTransition[compoundName=,q1StartIon=280.0,q1StopIon=280.0,q1Resolution=1.2,q3StartIon=236.7,q3StopIon=237.4,q3Resolution=1.2,collisionEnergy=13.0,transitionGroup=8]
+ *
+ */
 public class ChromatogramReader_2_MSD_0903_ITest extends ChromatogramReaderMSDTestCase {
 
 	@Override
@@ -38,7 +47,7 @@ public class ChromatogramReader_2_MSD_0903_ITest extends ChromatogramReaderMSDTe
 
 	public void testReader_3() {
 
-		assertEquals(2030, chromatogram.getNumberOfScanIons());
+		assertEquals(2126, chromatogram.getNumberOfScanIons()); // see Note on top
 	}
 
 	public void testReader_4() {
@@ -63,12 +72,12 @@ public class ChromatogramReader_2_MSD_0903_ITest extends ChromatogramReaderMSDTe
 
 	public void testReader_8() {
 
-		assertEquals(3.237204E7f, chromatogram.getMaxSignal());
+		assertEquals(3.2942506E7f, chromatogram.getMaxSignal()); // see Note on top
 	}
 
 	public void testReader_9() {
 
-		assertEquals(143985.0f, chromatogram.getMinSignal());
+		assertEquals(190480.0f, chromatogram.getMinSignal()); // see Note on top
 	}
 
 	public void testReader_10() {
@@ -100,7 +109,7 @@ public class ChromatogramReader_2_MSD_0903_ITest extends ChromatogramReaderMSDTe
 
 		IScanMSD massSpectrum = chromatogram.getSupplierScan(92);
 		//
-		assertEquals(11, massSpectrum.getNumberOfIons());
+		assertEquals(12, massSpectrum.getNumberOfIons());
 		assertEquals(135.0d, massSpectrum.getLowestIon().getIon());
 		assertEquals(24425.0f, massSpectrum.getLowestIon().getAbundance());
 		assertEquals(330.0d, massSpectrum.getHighestIon().getIon());
