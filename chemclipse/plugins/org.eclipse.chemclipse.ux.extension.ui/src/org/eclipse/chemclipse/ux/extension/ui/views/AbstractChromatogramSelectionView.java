@@ -11,15 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.views;
 
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSelectionView;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
-
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSelectionView;
 
 public abstract class AbstractChromatogramSelectionView extends AbstractSelectionView implements IChromatogramSelectionView {
 
@@ -52,7 +51,7 @@ public abstract class AbstractChromatogramSelectionView extends AbstractSelectio
 
 		if(eventBroker != null) {
 			/*
-			 * Receives and handles MSD/FID chromatogram selection updates.
+			 * Receives and handles MSD/CSD/WSD chromatogram selection updates.
 			 */
 			eventHandler = new EventHandler() {
 
@@ -65,6 +64,7 @@ public abstract class AbstractChromatogramSelectionView extends AbstractSelectio
 			};
 			eventBroker.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, eventHandler);
 			eventBroker.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION, eventHandler);
+			eventBroker.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION, eventHandler);
 		}
 	}
 

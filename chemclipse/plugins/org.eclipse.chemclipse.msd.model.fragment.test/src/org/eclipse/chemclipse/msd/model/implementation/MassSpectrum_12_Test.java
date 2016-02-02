@@ -39,7 +39,6 @@ import junit.framework.TestCase;
  */
 public class MassSpectrum_12_Test extends TestCase {
 
-	private ChromatogramMSD parentChromatogram;
 	private ScanMSD massSpectrum;
 	private Ion ion;
 	private ScanMSD templateMassSpectrum;
@@ -48,9 +47,7 @@ public class MassSpectrum_12_Test extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		parentChromatogram = new ChromatogramMSD();
 		templateMassSpectrum = new ScanMSD();
-		templateMassSpectrum.setParentChromatogram(parentChromatogram);
 		templateMassSpectrum.setDirty(true);
 		ion = new Ion(45.5f, 78500.2f);
 		templateMassSpectrum.addIon(ion);

@@ -15,18 +15,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
-
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.swt.ui.support.IOffset;
 import org.eclipse.chemclipse.swt.ui.support.Offset;
 import org.eclipse.chemclipse.ux.extension.csd.ui.editors.ChromatogramEditorCSD;
 import org.eclipse.chemclipse.ux.extension.msd.ui.editors.ChromatogramEditorMSD;
 import org.eclipse.chemclipse.ux.extension.ui.views.AbstractChromatogramSelectionView;
+import org.eclipse.chemclipse.ux.extension.wsd.ui.editors.ChromatogramEditorWSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
+import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
 @SuppressWarnings("deprecation")
 public abstract class AbstractChromatogramOverlayView extends AbstractChromatogramSelectionView {
@@ -55,7 +55,7 @@ public abstract class AbstractChromatogramOverlayView extends AbstractChromatogr
 		 */
 		Collection<MPart> parts = partService.getParts();
 		for(MPart part : parts) {
-			if(part instanceof MInputPart && (part.getElementId().equals(ChromatogramEditorMSD.ID) || part.getElementId().equals(ChromatogramEditorCSD.ID))) {
+			if(part instanceof MInputPart && (part.getElementId().equals(ChromatogramEditorMSD.ID) || part.getElementId().equals(ChromatogramEditorCSD.ID) || part.getElementId().equals(ChromatogramEditorWSD.ID))) {
 				/*
 				 * Select the chromatogram editor parts only.
 				 */
@@ -70,6 +70,9 @@ public abstract class AbstractChromatogramOverlayView extends AbstractChromatogr
 						selection = editor.getChromatogramSelection();
 					} else if(object instanceof ChromatogramEditorCSD) {
 						ChromatogramEditorCSD editor = (ChromatogramEditorCSD)object;
+						selection = editor.getChromatogramSelection();
+					} else if(object instanceof ChromatogramEditorWSD) {
+						ChromatogramEditorWSD editor = (ChromatogramEditorWSD)object;
 						selection = editor.getChromatogramSelection();
 					}
 					/*

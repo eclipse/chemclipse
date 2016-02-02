@@ -38,9 +38,9 @@ public class MassSpectrum_4_Test extends TestCase {
 		super.setUp();
 		chromatogram = new ChromatogramMSD();
 		massSpectrum = new ScanMSD();
-		massSpectrum.setParentChromatogram(chromatogram);
 		ion = new Ion(45.5f, 3000.5f);
 		massSpectrum.addIon(ion);
+		chromatogram.addScan(massSpectrum);
 	}
 
 	@Override

@@ -18,7 +18,6 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
-
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;

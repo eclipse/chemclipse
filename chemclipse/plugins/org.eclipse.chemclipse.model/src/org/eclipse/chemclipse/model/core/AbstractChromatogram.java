@@ -441,6 +441,7 @@ public abstract class AbstractChromatogram implements IChromatogram {
 	@Override
 	public void addScan(IScan scan) {
 
+		scan.setParentChromatogram(this);
 		int lastScan = scans.size();
 		scan.setScanNumber(++lastScan);
 		scans.add(scan);
