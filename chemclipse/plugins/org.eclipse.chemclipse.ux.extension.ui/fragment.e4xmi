@@ -147,7 +147,10 @@
     <elements xsi:type="advanced:Perspective" xmi:id="_0NUPgKuNEeSKQ7OYnQVHjQ" elementId="org.eclipse.chemclipse.ux.extension.ui.perspective.chromatogramOverlay" label="Chromatogram Overlay" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverlay.gif">
       <children xsi:type="basic:PartSashContainer" xmi:id="_FCKFsKuOEeSKQ7OYnQVHjQ" elementId="org.eclipse.chemclipse.ux.extension.ui.partsashcontainer.0">
         <children xsi:type="advanced:Placeholder" xmi:id="_LvYLoKuOEeSKQ7OYnQVHjQ" elementId="org.eclipse.chemclipse.ux.extension.ui.placeholder.0" ref="_I3_u0KuOEeSKQ7OYnQVHjQ"/>
-        <children xsi:type="basic:PartStack" xmi:id="_LWqJoKuOEeSKQ7OYnQVHjQ" elementId="org.eclipse.chemclipse.ux.extension.ui.partstack.chromatogramOverlay"/>
+        <children xsi:type="basic:PartSashContainer" xmi:id="_r9TesMnCEeWO_6AUKBdskw" elementId="org.eclipse.chemclipse.ux.extension.ui.partsashcontainer.1" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_tguZQMnCEeWO_6AUKBdskw" elementId="org.eclipse.chemclipse.ux.extension.ui.partstack.miscellaneousOverlay" containerData="2500"/>
+          <children xsi:type="basic:PartStack" xmi:id="_LWqJoKuOEeSKQ7OYnQVHjQ" elementId="org.eclipse.chemclipse.ux.extension.ui.partstack.chromatogramOverlay" containerData="7500"/>
+        </children>
       </children>
     </elements>
   </fragments>

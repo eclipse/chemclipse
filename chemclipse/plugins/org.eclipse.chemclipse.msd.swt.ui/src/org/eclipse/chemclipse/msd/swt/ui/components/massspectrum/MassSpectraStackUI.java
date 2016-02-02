@@ -76,7 +76,7 @@ public class MassSpectraStackUI extends Composite {
 		 * Previous mass spectrum.
 		 */
 		buttonPrevious = new Button(compositeButtons, SWT.NONE);
-		buttonPrevious.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_OFFSET_LEFT, IApplicationImage.SIZE_16x16));
+		buttonPrevious.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PREVIOUS, IApplicationImage.SIZE_16x16));
 		buttonPrevious.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -89,7 +89,7 @@ public class MassSpectraStackUI extends Composite {
 		 * Next mass spectrum.
 		 */
 		buttonNext = new Button(compositeButtons, SWT.NONE);
-		buttonNext.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_OFFSET_RIGHT, IApplicationImage.SIZE_16x16));
+		buttonNext.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_NEXT, IApplicationImage.SIZE_16x16));
 		buttonNext.addSelectionListener(new SelectionAdapter() {
 
 			@Override

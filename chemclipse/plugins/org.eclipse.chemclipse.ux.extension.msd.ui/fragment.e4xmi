@@ -281,4 +281,7 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_lgTMAKuOEeSKQ7OYnQVHjQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.partstack.chromatogramOverlay">
     <elements xsi:type="advanced:Placeholder" xmi:id="_q5wkAKuOEeSKQ7OYnQVHjQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.chromatogramOverlaySelectedIons" ref="_XDCmoNpPEeKwQ63eRWh8sA"/>
   </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_MW-7wMnDEeWO_6AUKBdskw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.partstack.miscellaneousOverlay">
+    <elements xsi:type="advanced:Placeholder" xmi:id="_OdTvEMnDEeWO_6AUKBdskw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.33" ref="_xSCLsMmWEeWO_6AUKBdskw"/>
+  </fragments>
 </fragment:ModelFragments>
