@@ -40,16 +40,24 @@ public abstract class AbstractChromatogramOverlayView extends AbstractChromatogr
 
 	/**
 	 * Returns a list of chromatogram selections.
+	 * If ignore overlay selection is true, the setting chromatogramSelection.isOverlaySelected() will
+	 * be not evaluated.
 	 * 
 	 * @return List<IChromatogramSelection>
 	 */
-	public List<IChromatogramSelection> getChromatogramSelections(IChromatogramSelection masterChromatogramSelection) {
+	public List<IChromatogramSelection> getChromatogramSelections(IChromatogramSelection masterChromatogramSelection, boolean ignoreOverlaySelection) {
 
 		/*
 		 * Add the master selection.
 		 */
 		List<IChromatogramSelection> chromatogramSelections = new ArrayList<IChromatogramSelection>();
-		chromatogramSelections.add(masterChromatogramSelection);
+		if(ignoreOverlaySelection) {
+			chromatogramSelections.add(masterChromatogramSelection);
+		} else {
+			if(masterChromatogramSelection.isOverlaySelected()) {
+				chromatogramSelections.add(masterChromatogramSelection);
+			}
+		}
 		/*
 		 * Get all open parts.
 		 */
@@ -62,7 +70,7 @@ public abstract class AbstractChromatogramOverlayView extends AbstractChromatogr
 				Object object = part.getObject();
 				if(object != null) {
 					/*
-					 * MSD/FID
+					 * MSD/CSD/WSD
 					 */
 					IChromatogramSelection selection = null;
 					if(object instanceof ChromatogramEditorMSD) {
@@ -79,7 +87,13 @@ public abstract class AbstractChromatogramOverlayView extends AbstractChromatogr
 					 * Do not add the master chromatogram selection twice.
 					 */
 					if(selection != null && selection != masterChromatogramSelection) {
-						chromatogramSelections.add(selection);
+						if(ignoreOverlaySelection) {
+							chromatogramSelections.add(selection);
+						} else {
+							if(selection.isOverlaySelected()) {
+								chromatogramSelections.add(selection);
+							}
+						}
 					}
 				}
 			}

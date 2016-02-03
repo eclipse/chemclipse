@@ -53,7 +53,7 @@ public class OverlaySettingsView extends AbstractChromatogramOverlayView {
 			 * Update the offset of the view. It necessary, the user must
 			 * restart the workbench in case of a change otherwise.
 			 */
-			List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(chromatogramSelection);
+			List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(chromatogramSelection, true);
 			overlaySettingsTableViewer.setInput(chromatogramSelections);
 		}
 	}

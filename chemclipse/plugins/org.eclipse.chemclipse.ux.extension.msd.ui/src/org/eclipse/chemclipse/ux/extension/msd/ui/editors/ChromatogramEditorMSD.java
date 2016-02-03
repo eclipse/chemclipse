@@ -150,6 +150,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 	/*
 	 * Info page
 	 */
+	private Button buttonOverlay;
 	private CLabel labelChromatogramRetentionTimeRange;
 	private Text textStartRetentionTime;
 	private Text textStopRetentionTime;
@@ -543,6 +544,10 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		/*
 		 * Min/Max RT
 		 */
+		if(buttonOverlay != null) {
+			buttonOverlay.setSelection(chromatogramSelection.isOverlaySelected());
+		}
+		//
 		if(labelChromatogramRetentionTimeRange != null) {
 			IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
 			String minRetentionTime = decimalFormat.format(chromatogram.getStartRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
@@ -853,6 +858,21 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		layout.marginWidth = 10;
 		layout.marginHeight = 10;
 		client.setLayout(layout);
+		/*
+		 * Overlay
+		 */
+		buttonOverlay = new Button(client, SWT.CHECK);
+		buttonOverlay.setEnabled(chromatogramSelection.isOverlaySelected());
+		buttonOverlay.setText("Show chromatogram in overlay");
+		buttonOverlay.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean overlaySelected = buttonOverlay.getSelection();
+				chromatogramSelection.setOverlaySelected(overlaySelected);
+			}
+		});
 		/*
 		 * Labels
 		 */

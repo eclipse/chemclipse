@@ -201,7 +201,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 			 * Update the offset of the view. It necessary, the user must
 			 * restart the workbench in case of a change otherwise.
 			 */
-			List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(chromatogramSelection);
+			List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(chromatogramSelection, false);
 			IOffset offset = getOffset();
 			chromatogramOverlayUI.setOffset(offset);
 			chromatogramOverlayUI.updateSelection(chromatogramSelections, forceReload);

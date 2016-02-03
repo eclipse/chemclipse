@@ -20,11 +20,10 @@ import org.eclipse.jface.viewers.TableViewer;
 public class OverlaySettingsCheckBoxEditingSupport extends EditingSupport {
 
 	private CheckboxCellEditor cellEditor;
-	private TableViewer tableViewer;
 
 	public OverlaySettingsCheckBoxEditingSupport(TableViewer tableViewer) {
 		super(tableViewer);
-		this.tableViewer = tableViewer;
+		this.cellEditor = new CheckboxCellEditor(tableViewer.getTable());
 	}
 
 	@Override
@@ -55,7 +54,7 @@ public class OverlaySettingsCheckBoxEditingSupport extends EditingSupport {
 		if(element instanceof IChromatogramSelection) {
 			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)element;
 			chromatogramSelection.setOverlaySelected((boolean)value);
-			tableViewer.refresh();
+			chromatogramSelection.fireUpdateChange(true);
 		}
 	}
 }

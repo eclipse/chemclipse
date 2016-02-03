@@ -35,10 +35,10 @@ public class OverlaySettingsTableViewer extends EnhancedTableViewer {
 
 	private void createColumns() {
 
-		setColumns(TITLES, BOUNDS);
 		/*
 		 * Set the provider.
 		 */
+		setColumns(TITLES, BOUNDS);
 		setLabelProvider(new OverlaySettingsLabelProvider());
 		setContentProvider(new OverlaySettingsContentProvider());
 		setSorter(new OverlaySettingsTableSorter());

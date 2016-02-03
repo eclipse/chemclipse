@@ -47,7 +47,9 @@ public abstract class AbstractChromatogramOverlayView extends AbstractChromatogr
 		 * Add the master selection.
 		 */
 		List<IChromatogramSelection> chromatogramSelections = new ArrayList<IChromatogramSelection>();
-		chromatogramSelections.add(masterChromatogramSelection);
+		if(masterChromatogramSelection.isOverlaySelected()) {
+			chromatogramSelections.add(masterChromatogramSelection);
+		}
 		/*
 		 * Get all open parts.
 		 */
@@ -65,7 +67,9 @@ public abstract class AbstractChromatogramOverlayView extends AbstractChromatogr
 					 * Do not add the master chromatogram selection twice.
 					 */
 					if(selection != masterChromatogramSelection) {
-						chromatogramSelections.add(selection);
+						if(selection.isOverlaySelected()) {
+							chromatogramSelections.add(selection);
+						}
 					}
 				}
 			}

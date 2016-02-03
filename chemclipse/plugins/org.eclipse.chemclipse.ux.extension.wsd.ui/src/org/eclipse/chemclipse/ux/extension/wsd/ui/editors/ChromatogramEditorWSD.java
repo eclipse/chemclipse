@@ -69,6 +69,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.program.Program;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Link;
@@ -131,8 +132,9 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 	/*
 	 * Info page
 	 */
-	CLabel infoStartRetentionTimeLabel;
-	CLabel infoStopRetentionTimeLabel;
+	private Button buttonOverlay;
+	private CLabel infoStartRetentionTimeLabel;
+	private CLabel infoStopRetentionTimeLabel;
 	/*
 	 * FormToolkit for the error message page.
 	 */
@@ -494,6 +496,10 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 
 	private void updateInfoPageValues() {
 
+		if(buttonOverlay != null) {
+			buttonOverlay.setSelection(chromatogramSelection.isOverlaySelected());
+		}
+		//
 		if(infoStartRetentionTimeLabel != null && infoStopRetentionTimeLabel != null) {
 			infoStartRetentionTimeLabel.setText("Start Retention Time (Minutes): " + decimalFormat.format(chromatogramSelection.getStartRetentionTime() / AbstractChromatogramWSD.MINUTE_CORRELATION_FACTOR));
 			infoStopRetentionTimeLabel.setText("Stop Retention Time (Minutes): " + decimalFormat.format(chromatogramSelection.getStopRetentionTime() / AbstractChromatogramWSD.MINUTE_CORRELATION_FACTOR));
@@ -720,6 +726,21 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 		layout.marginWidth = 10;
 		layout.marginHeight = 10;
 		client.setLayout(layout);
+		/*
+		 * Overlay
+		 */
+		buttonOverlay = new Button(client, SWT.CHECK);
+		buttonOverlay.setEnabled(chromatogramSelection.isOverlaySelected());
+		buttonOverlay.setText("Show chromatogram in overlay");
+		buttonOverlay.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean overlaySelected = buttonOverlay.getSelection();
+				chromatogramSelection.setOverlaySelected(overlaySelected);
+			}
+		});
 		/*
 		 * Labels
 		 */
