@@ -31,18 +31,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	}
 
 	@Override
-	public void postWindowCreate() {
-
-		/*
-		 * This setting is needed to maximize the application window.
-		 * There also a tag in the Application.e4xmi which seems not to be used.
-		 * The maximize method seems to be not needed anymore.
-		 * Display.getCurrent().getActiveShell().setMaximized(true);
-		 */
-		super.postWindowCreate();
-	}
-
-	@Override
 	public boolean preWindowShellClose() {
 
 		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);

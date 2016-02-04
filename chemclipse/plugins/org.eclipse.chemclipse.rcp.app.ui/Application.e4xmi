@@ -138,7 +138,7 @@
       </children>
     </trimBars>
   </children>
-  <handlers xmi:id="_h0A1OzLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.quit" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.ExitHandler" command="_h0A1OjLzEeKMEOdllHiEaA"/>
+  <handlers xmi:id="_h0A1OzLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.quit" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.QuitHandler" command="_h0A1OjLzEeKMEOdllHiEaA"/>
   <handlers xmi:id="_h0A1RTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.about" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.AboutHandler" command="_h0A1RDLzEeKMEOdllHiEaA"/>
   <handlers xmi:id="_Z6GHQDgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.save" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.SaveHandler" command="_SkvDQDgEEeKBGer45Yb2dA"/>
   <handlers xmi:id="_aMoBsDgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.saveAll" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.SaveAllHandler" command="_ZgJ9QDgEEeKBGer45Yb2dA"/>

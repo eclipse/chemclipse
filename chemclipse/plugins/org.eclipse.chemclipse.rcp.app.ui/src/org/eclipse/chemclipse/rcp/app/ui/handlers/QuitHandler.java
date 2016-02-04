@@ -11,20 +11,30 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui.handlers;
 
+import javax.inject.Named;
+
 import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.IWorkbench;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-public class ExitHandler {
+public class QuitHandler {
 
 	@Execute
-	public void execute(IWorkbench workbench) {
+	public void execute(IWorkbench workbench, @Named(IServiceConstants.ACTIVE_SHELL) Shell shell, EPartService partService) {
 
-		Shell shell = Display.getCurrent().getActiveShell();
 		if(MessageDialog.openConfirm(shell, "Confirmation", "Do you want to exit?")) {
-			workbench.close();
+			if(partService.getDirtyParts().size() > 0) {
+				if(MessageDialog.openConfirm(shell, "Save All", "Some data has not been saved yet. Would you like to save it?")) {
+					if(partService.saveAll(true)) {
+						workbench.close();
+					}
+				}
+			} else {
+				workbench.close();
+			}
 		}
 	}
 }

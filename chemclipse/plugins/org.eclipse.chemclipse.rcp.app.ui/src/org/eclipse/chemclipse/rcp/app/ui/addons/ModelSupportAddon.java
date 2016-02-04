@@ -15,6 +15,7 @@ import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 
+import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
@@ -22,8 +23,6 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
-
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 
 @SuppressWarnings("deprecation")
 public class ModelSupportAddon {

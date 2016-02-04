@@ -11,13 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui;
 
+import org.eclipse.chemclipse.rcp.app.ui.internal.support.ApplicationSupport;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
-
-import org.eclipse.chemclipse.rcp.app.ui.internal.support.ApplicationSupport;
 
 /**
  * This class controls all aspects of the application's execution
@@ -41,18 +40,16 @@ public class Application implements IApplication {
 	 */
 	public void stop() {
 
-		final IWorkbench workbench = PlatformUI.getWorkbench();
-		if(workbench == null) {
+		if(!PlatformUI.isWorkbenchRunning())
 			return;
-		}
+		final IWorkbench workbench = PlatformUI.getWorkbench();
 		final Display display = workbench.getDisplay();
 		display.syncExec(new Runnable() {
 
 			public void run() {
 
-				if(!display.isDisposed()) {
+				if(!display.isDisposed())
 					workbench.close();
-				}
 			}
 		});
 	}
