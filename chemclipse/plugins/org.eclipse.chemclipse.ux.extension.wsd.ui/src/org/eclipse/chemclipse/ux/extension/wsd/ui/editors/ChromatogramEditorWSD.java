@@ -196,14 +196,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
 			part.setToBeRendered(false);
 			part.setVisible(false);
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					partStack.getChildren().remove(part);
-				}
-			});
+			partStack.getChildren().remove(part);
 		}
 		/*
 		 * Dispose the form toolkit.
@@ -218,9 +211,9 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 	}
 
 	@Persist
-	public void save() {
+	public boolean save() {
 
-		Shell shell = Display.getDefault().getActiveShell();
+		Shell shell = Display.getCurrent().getActiveShell();
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
@@ -249,10 +242,12 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 			 */
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {
-			saveAs();
+			return saveAs();
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			return false;
 		}
+		return true;
 	}
 
 	private void saveChromatogram(IProgressMonitor monitor, Shell shell) throws NoChromatogramConverterAvailableException {
@@ -284,7 +279,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 					processingInfo.getFile();
 					dirtyable.setDirty(false);
 				} catch(TypeCastException e) {
-					logger.warn(e);
+					throw new NoChromatogramConverterAvailableException();
 				}
 			} else {
 				throw new NoChromatogramConverterAvailableException();
@@ -293,16 +288,18 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 	}
 
 	@Override
-	public void saveAs() {
+	public boolean saveAs() {
 
+		boolean saveSuccessful = false;
 		if(chromatogramSelection != null) {
 			try {
-				ChromatogramFileSupport.saveChromatogram(chromatogramSelection.getChromatogramWSD());
-				dirtyable.setDirty(false);
+				saveSuccessful = ChromatogramFileSupport.saveChromatogram(chromatogramSelection.getChromatogramWSD());
+				dirtyable.setDirty(saveSuccessful);
 			} catch(NoConverterAvailableException e) {
 				logger.warn(e);
 			}
 		}
+		return saveSuccessful;
 	}
 
 	@Override

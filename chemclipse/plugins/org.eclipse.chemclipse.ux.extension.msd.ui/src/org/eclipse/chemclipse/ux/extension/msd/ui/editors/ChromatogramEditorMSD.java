@@ -26,7 +26,6 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
-import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
@@ -237,9 +236,9 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 	}
 
 	@Persist
-	public void save() {
+	public boolean save() {
 
-		Shell shell = Display.getDefault().getActiveShell();
+		Shell shell = Display.getCurrent().getActiveShell();
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
@@ -268,10 +267,12 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 			 */
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {
-			saveAs();
+			return saveAs();
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			return false;
 		}
+		return true;
 	}
 
 	private void saveChromatogram(IProgressMonitor monitor, Shell shell) throws NoChromatogramConverterAvailableException {
@@ -303,7 +304,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 					processingInfo.getFile();
 					dirtyable.setDirty(false);
 				} catch(TypeCastException e) {
-					logger.warn(e);
+					throw new NoChromatogramConverterAvailableException();
 				}
 			} else {
 				throw new NoChromatogramConverterAvailableException();
@@ -312,16 +313,18 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 	}
 
 	@Override
-	public void saveAs() {
+	public boolean saveAs() {
 
+		boolean saveSuccessful = false;
 		if(chromatogramSelection != null) {
 			try {
-				ChromatogramFileSupport.saveChromatogram(chromatogramSelection.getChromatogramMSD());
-				dirtyable.setDirty(false);
-			} catch(NoConverterAvailableException e) {
+				saveSuccessful = ChromatogramFileSupport.saveChromatogram(chromatogramSelection.getChromatogramMSD());
+				dirtyable.setDirty(saveSuccessful);
+			} catch(Exception e) {
 				logger.warn(e);
 			}
 		}
+		return saveSuccessful;
 	}
 
 	@Override

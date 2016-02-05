@@ -113,14 +113,7 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
 			part.setToBeRendered(false);
 			part.setVisible(false);
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					partStack.getChildren().remove(part);
-				}
-			});
+			partStack.getChildren().remove(part);
 		}
 		/*
 		 * Run the garbage collector.
@@ -129,9 +122,9 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 	}
 
 	@Persist
-	public void save() {
+	public boolean save() {
 
-		Shell shell = Display.getDefault().getActiveShell();
+		Shell shell = Display.getCurrent().getActiveShell();
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
@@ -160,10 +153,12 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 			 */
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {
-			saveAs();
+			return saveAs();
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			return false;
 		}
+		return true;
 	}
 
 	private void saveMassSpectra(IProgressMonitor monitor, Shell shell) throws NoMassSpectrumConverterAvailableException {
@@ -200,16 +195,18 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 	}
 
 	@Override
-	public void saveAs() {
+	public boolean saveAs() {
 
+		boolean saveSuccessful = false;
 		if(massSpectra != null) {
 			try {
-				MassSpectraFileSupport.saveMassSpectra(massSpectra);
-				dirtyable.setDirty(false);
+				saveSuccessful = MassSpectraFileSupport.saveMassSpectra(massSpectra);
+				dirtyable.setDirty(saveSuccessful);
 			} catch(NoConverterAvailableException e) {
 				logger.warn(e);
 			}
 		}
+		return saveSuccessful;
 	}
 
 	private void loadMassSpectra() {

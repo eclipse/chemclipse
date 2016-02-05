@@ -46,15 +46,12 @@ public class MassSpectraFileSupport {
 	 * @param chromatogram
 	 * @throws NoConverterAvailableException
 	 */
-	public static void saveMassSpectra(IMassSpectra massSpectra) throws NoConverterAvailableException {
+	public static boolean saveMassSpectra(IMassSpectra massSpectra) throws NoConverterAvailableException {
 
-		/*
-		 * If the chromatogram is null, exit.
-		 */
-		if(massSpectra == null) {
-			return;
+		Shell shell = Display.getCurrent().getActiveShell();
+		if(massSpectra == null || shell == null) {
+			return false;
 		}
-		Shell shell = Display.getDefault().getActiveShell();
 		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		/*
 		 * Create the dialogue.
@@ -79,6 +76,9 @@ public class MassSpectraFileSupport {
 		String filename = dialog.open();
 		if(filename != null) {
 			validateFile(dialog, converterSupport.getExportSupplier(), shell, converterSupport, massSpectra);
+			return true;
+		} else {
+			return false;
 		}
 	}
 

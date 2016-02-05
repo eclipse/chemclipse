@@ -68,10 +68,11 @@ public abstract class AbstractChromatogramEditorSupport implements IChromatogram
 		 * File or chromatogram are maybe null.
 		 */
 		if(file == null) {
-			part.setObject(null);
 			if(chromatogram != null) {
+				part.setObject(chromatogram);
 				part.setLabel(chromatogram.getName());
 			} else {
+				part.setObject(null);
 				part.setLabel("No valid chromatogram");
 			}
 		} else {
