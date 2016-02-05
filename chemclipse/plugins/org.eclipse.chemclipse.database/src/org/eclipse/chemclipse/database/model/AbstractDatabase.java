@@ -18,10 +18,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.chemclipse.database.documents.ILibraryDescriptionDocument;
+import org.eclipse.chemclipse.database.documents.ISettingsDocument;
 import org.eclipse.chemclipse.database.documents.LibraryDescriptionDocument;
+import org.eclipse.chemclipse.database.documents.SettingsDocument;
 import org.eclipse.chemclipse.database.exceptions.NoDatabaseAvailableException;
 import org.eclipse.chemclipse.database.support.DatabasePathHelper;
 import org.eclipse.chemclipse.support.settings.IOperatingSystemUtils;
@@ -435,5 +438,12 @@ public abstract class AbstractDatabase implements IDatabase {
 		} else {
 			return new LibraryDescriptionDocument(document);
 		}
+	}
+
+	@Override
+	public Optional<ISettingsDocument> getSettingsDocument() {
+
+		ODocument document = queryDocumentById(ISettingsDocument.CLASS_NAME, 0);
+		return document == null ? Optional.empty() : Optional.of(new SettingsDocument(document));
 	}
 }

@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.database.model;
 
+import java.util.Optional;
+
 import org.eclipse.chemclipse.database.documents.ILibraryDescriptionDocument;
+import org.eclipse.chemclipse.database.documents.ISettingsDocument;
 
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 
@@ -48,4 +51,6 @@ public interface IDatabase {
 	ILibraryDescriptionDocument getLibraryDescriptionDocumentOnSeparateConnection();
 
 	long countClusterOnSeparateConnection(String clusterName);
+
+	Optional<ISettingsDocument> getSettingsDocument();
 }

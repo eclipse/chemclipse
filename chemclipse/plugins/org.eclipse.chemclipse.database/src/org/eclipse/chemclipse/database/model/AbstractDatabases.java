@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.database.documents.ILibraryDescriptionDocument;
+import org.eclipse.chemclipse.database.documents.ISettingsDocument;
 import org.eclipse.chemclipse.database.documents.LibraryDescriptionDocument;
+import org.eclipse.chemclipse.database.documents.SettingsDocument;
 import org.eclipse.chemclipse.database.exceptions.NoDatabaseAvailableException;
 import org.eclipse.chemclipse.database.support.DatabasePathHelper;
 
@@ -23,7 +25,7 @@ import com.orientechnologies.orient.core.exception.OStorageException;
 
 public abstract class AbstractDatabases implements IDatabases {
 
-	private String identifier = DatabasePathHelper.DEFAULT_IDENTIFIER;
+	final private String identifier;
 
 	/**
 	 * Uses e.g. "org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.chromident" as an identifier.
@@ -33,6 +35,8 @@ public abstract class AbstractDatabases implements IDatabases {
 	public AbstractDatabases(String identifier) {
 		if(identifier != null) {
 			this.identifier = identifier;
+		} else {
+			this.identifier = DatabasePathHelper.DEFAULT_IDENTIFIER;
 		}
 	}
 
@@ -71,6 +75,12 @@ public abstract class AbstractDatabases implements IDatabases {
 			libraryDescription.setName(trimmedName);
 			libraryDescription.setDescription(description);
 			libraryDescription.save();
+			/*
+			 * Create Settings
+			 */
+			ISettingsDocument settingsDocument = new SettingsDocument();
+			settingsDocument.setType(identifier);
+			settingsDocument.save();
 			/*
 			 * Close the database. A new connection will be opened in the Database instance.
 			 */
