@@ -19,24 +19,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.di.Persist;
-import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.model.application.ui.MDirtyable;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
-import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
@@ -54,8 +36,24 @@ import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.MassSpectrumImportRunnable;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.di.Persist;
+import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.ui.MDirtyable;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 
-@SuppressWarnings("deprecation")
 public class MassSpectrumEditor implements IChemClipseEditor {
 
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumEditor";
@@ -68,7 +66,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	 * Injected member in constructor
 	 */
 	@Inject
-	private MInputPart inputPart;
+	private MPart part;
 	@Inject
 	private MDirtyable dirtyable;
 	@Inject
@@ -105,9 +103,9 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		 */
 		if(modelService != null) {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
-			inputPart.setToBeRendered(false);
-			inputPart.setVisible(false);
-			partStack.getChildren().remove(inputPart);
+			part.setToBeRendered(false);
+			part.setVisible(false);
+			partStack.getChildren().remove(part);
 		}
 		/*
 		 * Run the garbage collector.
@@ -201,8 +199,11 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 			 * Import the chromatogram without showing it on the gui. The GUI
 			 * will take care itself of this action.
 			 */
-			File file = new File(inputPart.getInputURI());
-			importMassSpectrum(file);
+			Object object = part.getObject();
+			if(object instanceof String) {
+				File file = new File((String)object);
+				importMassSpectrum(file);
+			}
 		} catch(Exception e) {
 			logger.warn(e);
 		}
@@ -235,7 +236,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	private void createPages(Composite parent) {
 
 		if(massSpectra != null && massSpectra.getMassSpectrum(1) != null) {
-			inputPart.setLabel(massSpectrumFile.getName());
+			part.setLabel(massSpectrumFile.getName());
 			tabFolder = new TabFolder(parent, SWT.BOTTOM);
 			createMassSpectrumPage();
 		} else {

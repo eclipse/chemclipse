@@ -15,10 +15,15 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.logging.support.PropertiesUtil;
+import org.eclipse.chemclipse.logging.ui.editors.LogFileEditor;
+import org.eclipse.chemclipse.logging.ui.internal.support.LogFileContentProvider;
+import org.eclipse.chemclipse.logging.ui.internal.support.LogFileLabelProvider;
+import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -35,13 +40,6 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
-import org.eclipse.chemclipse.logging.support.PropertiesUtil;
-import org.eclipse.chemclipse.logging.ui.editors.LogFileEditor;
-import org.eclipse.chemclipse.logging.ui.internal.support.LogFileContentProvider;
-import org.eclipse.chemclipse.logging.ui.internal.support.LogFileLabelProvider;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-
-@SuppressWarnings("deprecation")
 public class LogFileView {
 
 	@Inject
@@ -79,19 +77,19 @@ public class LogFileView {
 					/*
 					 * Create the input part and prepare it.
 					 */
-					MInputPart inputPart = MBasicFactory.INSTANCE.createInputPart();
-					inputPart.setElementId(LogFileEditor.ID);
-					inputPart.setContributionURI(LogFileEditor.CONTRIBUTION_URI);
-					inputPart.setInputURI(file.getAbsolutePath());
-					inputPart.setIconURI(LogFileEditor.ICON_URI);
-					inputPart.setLabel(file.getName());
-					inputPart.setTooltip(LogFileEditor.TOOLTIP);
-					inputPart.setCloseable(true);
+					MPart part = MBasicFactory.INSTANCE.createInputPart();
+					part.setElementId(LogFileEditor.ID);
+					part.setContributionURI(LogFileEditor.CONTRIBUTION_URI);
+					part.setObject(file.getAbsolutePath());
+					part.setIconURI(LogFileEditor.ICON_URI);
+					part.setLabel(file.getName());
+					part.setTooltip(LogFileEditor.TOOLTIP);
+					part.setCloseable(true);
 					/*
 					 * Add it to the stack and show it.
 					 */
-					partStack.getChildren().add(inputPart);
-					partService.showPart(inputPart, PartState.ACTIVATE);
+					partStack.getChildren().add(part);
+					partService.showPart(part, PartState.ACTIVATE);
 				}
 			}
 		});

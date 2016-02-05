@@ -30,6 +30,10 @@ public class QuitHandler {
 				if(MessageDialog.openConfirm(shell, "Save All", "Some data has not been saved yet. Would you like to save it?")) {
 					if(partService.saveAll(true)) {
 						workbench.close();
+					} else {
+						if(MessageDialog.openConfirm(shell, "Exit", "Some parts have not been saved. Exit anyhow?")) {
+							workbench.close();
+						}
 					}
 				}
 			} else {

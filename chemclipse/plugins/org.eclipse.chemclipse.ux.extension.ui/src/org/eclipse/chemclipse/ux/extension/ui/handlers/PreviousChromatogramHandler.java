@@ -15,51 +15,42 @@ import java.util.Collection;
 
 import javax.inject.Named;
 
+import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 
-import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
-
-@SuppressWarnings("deprecation")
 public class PreviousChromatogramHandler {
 
 	@CanExecute
 	boolean canExecute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
 		if(part != null) {
-			if(part instanceof MInputPart) {
-				MInputPart inputPart = (MInputPart)part;
-				if(inputPart.getObject() instanceof IChemClipseEditor) {
-					return true;
-				}
+			if(part.getObject() instanceof IChemClipseEditor) {
+				return true;
 			}
 		}
 		return false;
 	}
 
 	@Execute
-	void execute(EPartService partService, @Named(IServiceConstants.ACTIVE_PART) MInputPart inputPart) {
+	void execute(EPartService partService, @Named(IServiceConstants.ACTIVE_PART) MPart selectedPart) {
 
-		if(inputPart != null) {
+		if(selectedPart != null) {
 			Collection<MPart> parts = partService.getParts();
-			MInputPart inputPartPrevious = null;
+			MPart inputPartPrevious = null;
 			exitloop:
 			for(MPart part : parts) {
-				if(part instanceof MInputPart) {
-					MInputPart inputPartSelected = (MInputPart)part;
-					if(inputPart == inputPartSelected) {
-						if(inputPartPrevious != null) {
-							partService.showPart(inputPartPrevious, PartState.ACTIVATE);
-							break exitloop;
-						}
-					} else {
-						inputPartPrevious = inputPartSelected;
+				if(selectedPart == part) {
+					if(inputPartPrevious != null) {
+						partService.showPart(inputPartPrevious, PartState.ACTIVATE);
+						break exitloop;
 					}
+				} else {
+					inputPartPrevious = part;
 				}
 			}
 		}

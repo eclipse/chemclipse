@@ -60,7 +60,6 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
@@ -95,7 +94,6 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-@SuppressWarnings("deprecation")
 public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatogramSelectionMSDUpdateNotifier {
 
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramEditor";
@@ -108,7 +106,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 	 * Injected member in constructor
 	 */
 	@Inject
-	private MInputPart inputPart;
+	private MPart part;
 	@Inject
 	private MDirtyable dirtyable;
 	@Inject
@@ -214,9 +212,16 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		 */
 		if(modelService != null) {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
-			inputPart.setToBeRendered(false);
-			inputPart.setVisible(false);
-			partStack.getChildren().remove(inputPart);
+			part.setToBeRendered(false);
+			part.setVisible(false);
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+
+					partStack.getChildren().remove(part);
+				}
+			});
 		}
 		/*
 		 * Dispose the form toolkit.
@@ -392,23 +397,17 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 			 * Import the chromatogram without showing it on the gui. The GUI
 			 * will take care itself of this action.
 			 */
-			String uri = inputPart.getInputURI();
-			if(uri != null) {
+			Object object = part.getObject();
+			if(object instanceof String) {
 				/*
 				 * Try to load the chromatogram from file.
 				 */
-				File file = new File(inputPart.getInputURI());
+				File file = new File((String)object);
 				importChromatogram(file);
-			} else {
-				/*
-				 * Try to load the stored object.
-				 */
-				Object object = inputPart.getObject();
-				if(object instanceof IChromatogramMSD) {
-					IChromatogramMSD chromatogram = (IChromatogramMSD)object;
-					chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
-					chromatogramFile = null;
-				}
+			} else if(object instanceof IChromatogramMSD) {
+				IChromatogramMSD chromatogram = (IChromatogramMSD)object;
+				chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
+				chromatogramFile = null;
 			}
 		} catch(Exception e) {
 			logger.warn(e);
@@ -468,7 +467,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		 * Create the editor pages.
 		 */
 		if(chromatogramSelection != null && chromatogramSelection.getChromatogramMSD() != null) {
-			inputPart.setLabel(chromatogramSelection.getChromatogramMSD().getName());
+			part.setLabel(chromatogramSelection.getChromatogramMSD().getName());
 			/*
 			 * Create the tab folder.
 			 */
@@ -954,7 +953,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 				 */
 				Collection<MPart> parts = partService.getParts();
 				for(MPart part : parts) {
-					if(part instanceof MInputPart && (part.getElementId().equals(ChromatogramEditorMSD.ID))) {
+					if(part.getElementId().equals(ChromatogramEditorMSD.ID)) {
 						/*
 						 * Select the chromatogram editor parts only.
 						 */

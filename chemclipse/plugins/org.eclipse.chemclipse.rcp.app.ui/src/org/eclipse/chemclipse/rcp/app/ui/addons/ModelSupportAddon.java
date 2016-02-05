@@ -18,13 +18,11 @@ import javax.annotation.PostConstruct;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
-@SuppressWarnings("deprecation")
 public class ModelSupportAddon {
 
 	private static MApplication mApplication;
@@ -67,11 +65,10 @@ public class ModelSupportAddon {
 			MPartStack partStack = (MPartStack)eModelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, mApplication);
 			Collection<MPart> parts = ePartService.getParts();
 			for(MPart part : parts) {
-				if(part instanceof MInputPart) {
-					MInputPart inputPart = (MInputPart)part;
-					inputPart.setToBeRendered(false);
-					inputPart.setVisible(false);
-					partStack.getChildren().remove(inputPart);
+				if(part.getObject() != null) {
+					part.setToBeRendered(false);
+					part.setVisible(false);
+					partStack.getChildren().remove(part);
 				}
 			}
 		}

@@ -30,7 +30,7 @@ import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MUIElement;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -51,7 +51,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-@SuppressWarnings({"deprecation", "restriction"})
+@SuppressWarnings("restriction")
 public class WelcomeView {
 
 	private static final String CSS_ID = "org-eclipse-chemclipse-ux-extension-ui-views-welcomeview-background";
@@ -219,19 +219,19 @@ public class WelcomeView {
 								/*
 								 * Create the input part and prepare it.
 								 */
-								MInputPart inputPart = MBasicFactory.INSTANCE.createInputPart();
-								inputPart.setElementId("org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramEditor");
-								inputPart.setContributionURI("bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.editors.ChromatogramEditorMSD");
-								inputPart.setInputURI(file.getAbsolutePath());
-								inputPart.setIconURI("platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif");
-								inputPart.setLabel(file.getName());
-								inputPart.setTooltip("Chromatogram - Detector Type: MSD");
-								inputPart.setCloseable(true);
+								MPart part = MBasicFactory.INSTANCE.createInputPart();
+								part.setElementId("org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramEditor");
+								part.setContributionURI("bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.editors.ChromatogramEditorMSD");
+								part.setObject(file.getAbsolutePath());
+								part.setIconURI("platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif");
+								part.setLabel(file.getName());
+								part.setTooltip("Chromatogram - Detector Type: MSD");
+								part.setCloseable(true);
 								/*
 								 * Add it to the stack and show it.
 								 */
-								partStack.getChildren().add(inputPart);
-								partService.showPart(inputPart, PartState.ACTIVATE);
+								partStack.getChildren().add(part);
+								partService.showPart(part, PartState.ACTIVATE);
 							}
 						} catch(MalformedURLException e) {
 							System.out.println(e);

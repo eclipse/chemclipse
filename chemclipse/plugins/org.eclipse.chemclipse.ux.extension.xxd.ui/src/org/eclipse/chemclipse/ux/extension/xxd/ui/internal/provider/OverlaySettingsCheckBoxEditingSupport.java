@@ -54,7 +54,7 @@ public class OverlaySettingsCheckBoxEditingSupport extends EditingSupport {
 		if(element instanceof IChromatogramSelection) {
 			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)element;
 			chromatogramSelection.setOverlaySelected((boolean)value);
-			chromatogramSelection.fireUpdateChange(true);
+			chromatogramSelection.fireUpdateChange(false);
 		}
 	}
 }
