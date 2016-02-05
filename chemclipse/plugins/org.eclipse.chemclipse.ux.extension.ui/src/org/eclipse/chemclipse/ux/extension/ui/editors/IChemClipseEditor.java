@@ -16,5 +16,5 @@ public interface IChemClipseEditor {
 	/**
 	 * Saves the chromatogram in a different format.
 	 */
-	void saveAs();
+	boolean saveAs();
 }

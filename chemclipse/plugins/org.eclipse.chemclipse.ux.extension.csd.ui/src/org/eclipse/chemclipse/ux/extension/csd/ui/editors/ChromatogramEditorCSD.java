@@ -53,7 +53,7 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -74,6 +74,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
@@ -86,7 +87,6 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-@SuppressWarnings("deprecation")
 public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatogramSelectionCSDUpdateNotifier {
 
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.csd.ui.part.chromatogramEditor";
@@ -99,7 +99,7 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 	 * Injected member in constructor
 	 */
 	@Inject
-	private MInputPart inputPart;
+	private MPart part;
 	@Inject
 	private MDirtyable dirtyable;
 	@Inject
@@ -197,9 +197,9 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 		 */
 		if(modelService != null) {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
-			inputPart.setToBeRendered(false);
-			inputPart.setVisible(false);
-			partStack.getChildren().remove(inputPart);
+			part.setToBeRendered(false);
+			part.setVisible(false);
+			partStack.getChildren().remove(part);
 		}
 		/*
 		 * Dispose the form toolkit.
@@ -216,7 +216,8 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 	@Persist
 	public void save() {
 
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		Shell shell = Display.getDefault().getActiveShell();
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
 			@Override
@@ -224,7 +225,11 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 
 				try {
 					monitor.beginTask("Save Chromatogram", IProgressMonitor.UNKNOWN);
-					saveChromatogram(monitor);
+					try {
+						saveChromatogram(monitor, shell);
+					} catch(NoChromatogramConverterAvailableException e) {
+						throw new InvocationTargetException(e);
+					}
 				} finally {
 					monitor.done();
 				}
@@ -240,19 +245,19 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 			 */
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {
-			logger.warn(e);
+			saveAs();
 		} catch(InterruptedException e) {
 			logger.warn(e);
 		}
 	}
 
-	private void saveChromatogram(IProgressMonitor monitor) {
+	private void saveChromatogram(IProgressMonitor monitor, Shell shell) throws NoChromatogramConverterAvailableException {
 
 		/*
 		 * Try to save the chromatogram automatically if it is an *.chrom
 		 * type.<br/> If not, show the file save dialog.
 		 */
-		if(chromatogramSelection != null) {
+		if(chromatogramSelection != null && shell != null) {
 			/*
 			 * Each chromatogram import converter should save its converter id
 			 * to the converted chromatogram instance.<br/> The id is used to
@@ -275,25 +280,27 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 					processingInfo.getFile();
 					dirtyable.setDirty(false);
 				} catch(TypeCastException e) {
-					logger.warn(e);
+					throw new NoChromatogramConverterAvailableException();
 				}
 			} else {
-				saveAs();
+				throw new NoChromatogramConverterAvailableException();
 			}
 		}
 	}
 
 	@Override
-	public void saveAs() {
+	public boolean saveAs() {
 
+		boolean saveSuccessful = false;
 		if(chromatogramSelection != null) {
 			try {
-				ChromatogramFileSupport.saveChromatogram(chromatogramSelection.getChromatogramCSD());
-				dirtyable.setDirty(true);
+				saveSuccessful = ChromatogramFileSupport.saveChromatogram(chromatogramSelection.getChromatogramCSD());
+				dirtyable.setDirty(!saveSuccessful);
 			} catch(NoConverterAvailableException e) {
 				logger.warn(e);
 			}
 		}
+		return saveSuccessful;
 	}
 
 	@Override
@@ -371,23 +378,17 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 			 * Import the chromatogram without showing it on the gui. The GUI
 			 * will take care itself of this action.
 			 */
-			String uri = inputPart.getInputURI();
-			if(uri != null) {
+			Object object = part.getObject();
+			if(object instanceof String) {
 				/*
 				 * Try to load the chromatogram from file.
 				 */
-				File file = new File(inputPart.getInputURI());
+				File file = new File((String)object);
 				importChromatogram(file);
-			} else {
-				/*
-				 * Try to load the stored object.
-				 */
-				Object object = inputPart.getObject();
-				if(object instanceof IChromatogramCSD) {
-					IChromatogramCSD chromatogram = (IChromatogramCSD)object;
-					chromatogramSelection = new ChromatogramSelectionCSD(chromatogram);
-					chromatogramFile = null;
-				}
+			} else if(object instanceof IChromatogramCSD) {
+				IChromatogramCSD chromatogram = (IChromatogramCSD)object;
+				chromatogramSelection = new ChromatogramSelectionCSD(chromatogram);
+				chromatogramFile = null;
 			}
 		} catch(Exception e) {
 			logger.warn(e);
@@ -448,7 +449,7 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 		 * Create the editor pages.
 		 */
 		if(chromatogramSelection != null && chromatogramSelection.getChromatogramCSD() != null) {
-			inputPart.setLabel(chromatogramSelection.getChromatogramCSD().getName());
+			part.setLabel(chromatogramSelection.getChromatogramCSD().getName());
 			/*
 			 * Create the tab folder.
 			 */

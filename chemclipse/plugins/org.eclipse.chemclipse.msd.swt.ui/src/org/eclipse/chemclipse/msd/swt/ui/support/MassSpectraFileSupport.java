@@ -15,13 +15,6 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Shell;
-
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -30,6 +23,12 @@ import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverterSu
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.swt.ui.Activator;
 import org.eclipse.chemclipse.msd.swt.ui.internal.support.MassSpectraExportRunnable;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 
 public class MassSpectraFileSupport {
 
@@ -47,15 +46,12 @@ public class MassSpectraFileSupport {
 	 * @param chromatogram
 	 * @throws NoConverterAvailableException
 	 */
-	public static void saveMassSpectra(IMassSpectra massSpectra) throws NoConverterAvailableException {
+	public static boolean saveMassSpectra(IMassSpectra massSpectra) throws NoConverterAvailableException {
 
-		/*
-		 * If the chromatogram is null, exit.
-		 */
-		if(massSpectra == null) {
-			return;
-		}
 		Shell shell = Display.getCurrent().getActiveShell();
+		if(massSpectra == null || shell == null) {
+			return false;
+		}
 		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		/*
 		 * Create the dialogue.
@@ -80,6 +76,9 @@ public class MassSpectraFileSupport {
 		String filename = dialog.open();
 		if(filename != null) {
 			validateFile(dialog, converterSupport.getExportSupplier(), shell, converterSupport, massSpectra);
+			return true;
+		} else {
+			return false;
 		}
 	}
 

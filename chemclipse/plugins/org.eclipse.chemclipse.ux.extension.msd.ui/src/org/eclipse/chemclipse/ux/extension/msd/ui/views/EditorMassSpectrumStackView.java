@@ -29,14 +29,12 @@ import org.eclipse.chemclipse.ux.extension.msd.ui.editors.ChromatogramEditorMSD;
 import org.eclipse.chemclipse.ux.extension.ui.views.AbstractChromatogramSelectionView;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-@SuppressWarnings("deprecation")
 public class EditorMassSpectrumStackView extends AbstractChromatogramSelectionView {
 
 	@Inject
@@ -80,7 +78,7 @@ public class EditorMassSpectrumStackView extends AbstractChromatogramSelectionVi
 		 */
 		Collection<MPart> parts = partService.getParts();
 		for(MPart part : parts) {
-			if(part instanceof MInputPart && (part.getElementId().equals(ChromatogramEditorMSD.ID))) {
+			if(part.getElementId().equals(ChromatogramEditorMSD.ID)) {
 				/*
 				 * Select the chromatogram editor parts only.
 				 */

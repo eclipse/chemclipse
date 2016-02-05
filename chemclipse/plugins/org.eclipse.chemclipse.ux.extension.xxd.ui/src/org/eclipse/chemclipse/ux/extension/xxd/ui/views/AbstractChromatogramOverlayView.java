@@ -24,11 +24,9 @@ import org.eclipse.chemclipse.ux.extension.ui.views.AbstractChromatogramSelectio
 import org.eclipse.chemclipse.ux.extension.wsd.ui.editors.ChromatogramEditorWSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
-@SuppressWarnings("deprecation")
 public abstract class AbstractChromatogramOverlayView extends AbstractChromatogramSelectionView {
 
 	private EPartService partService;
@@ -63,7 +61,7 @@ public abstract class AbstractChromatogramOverlayView extends AbstractChromatogr
 		 */
 		Collection<MPart> parts = partService.getParts();
 		for(MPart part : parts) {
-			if(part instanceof MInputPart && (part.getElementId().equals(ChromatogramEditorMSD.ID) || part.getElementId().equals(ChromatogramEditorCSD.ID) || part.getElementId().equals(ChromatogramEditorWSD.ID))) {
+			if(part.getElementId().equals(ChromatogramEditorMSD.ID) || part.getElementId().equals(ChromatogramEditorCSD.ID) || part.getElementId().equals(ChromatogramEditorWSD.ID)) {
 				/*
 				 * Select the chromatogram editor parts only.
 				 */

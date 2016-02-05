@@ -19,11 +19,9 @@ import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.msd.ui.editors.ChromatogramEditorMSD;
-
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.di.UISynchronize;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.swt.SWT;
@@ -33,7 +31,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-@SuppressWarnings("deprecation")
 public class RedoOperationHandler implements EventHandler {
 
 	private static IChromatogramSelectionMSD chromatogramSelection;
@@ -42,11 +39,8 @@ public class RedoOperationHandler implements EventHandler {
 	boolean canExecute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
 		if(part != null) {
-			if(part instanceof MInputPart) {
-				MInputPart inputPart = (MInputPart)part;
-				if(chromatogramSelection != null && inputPart.getElementId().equals(ChromatogramEditorMSD.ID)) {
-					return chromatogramSelection.getChromatogramMSD().canRedo();
-				}
+			if(chromatogramSelection != null && part.getElementId().equals(ChromatogramEditorMSD.ID)) {
+				return chromatogramSelection.getChromatogramMSD().canRedo();
 			}
 		}
 		return false;

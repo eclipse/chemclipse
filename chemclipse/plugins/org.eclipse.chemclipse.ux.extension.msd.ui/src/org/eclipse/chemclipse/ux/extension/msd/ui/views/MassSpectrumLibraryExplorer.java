@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.ux.extension.msd.ui.provider.MassSpectrumFileExplo
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -37,7 +37,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 
-@SuppressWarnings("deprecation")
 public class MassSpectrumLibraryExplorer {
 
 	private TreeViewer treeViewer;
@@ -114,19 +113,19 @@ public class MassSpectrumLibraryExplorer {
 			/*
 			 * Create the input part and prepare it.
 			 */
-			MInputPart inputPart = MBasicFactory.INSTANCE.createInputPart();
-			inputPart.setElementId(MassSpectrumLibraryEditor.ID);
-			inputPart.setContributionURI(MassSpectrumLibraryEditor.CONTRIBUTION_URI);
-			inputPart.setInputURI(file.getAbsolutePath());
-			inputPart.setIconURI(MassSpectrumLibraryEditor.ICON_URI);
-			inputPart.setLabel(file.getName());
-			inputPart.setTooltip(MassSpectrumLibraryEditor.TOOLTIP);
-			inputPart.setCloseable(true);
+			MPart part = MBasicFactory.INSTANCE.createInputPart();
+			part.setElementId(MassSpectrumLibraryEditor.ID);
+			part.setContributionURI(MassSpectrumLibraryEditor.CONTRIBUTION_URI);
+			part.setObject(file.getAbsolutePath());
+			part.setIconURI(MassSpectrumLibraryEditor.ICON_URI);
+			part.setLabel(file.getName());
+			part.setTooltip(MassSpectrumLibraryEditor.TOOLTIP);
+			part.setCloseable(true);
 			/*
 			 * Add it to the stack and show it.
 			 */
-			partStack.getChildren().add(inputPart);
-			partService.showPart(inputPart, PartState.ACTIVATE);
+			partStack.getChildren().add(part);
+			partService.showPart(part, PartState.ACTIVATE);
 		}
 	}
 	// --------------------------------------------private methods

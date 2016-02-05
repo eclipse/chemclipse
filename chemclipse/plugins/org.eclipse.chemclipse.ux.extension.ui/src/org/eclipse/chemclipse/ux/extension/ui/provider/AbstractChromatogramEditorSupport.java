@@ -13,20 +13,19 @@ package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.core.internal.contexts.EclipseContext;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 
-import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-
-@SuppressWarnings({"restriction", "deprecation"})
+@SuppressWarnings({"restriction"})
 public abstract class AbstractChromatogramEditorSupport implements IChromatogramEditorSupport {
 
 	/*
@@ -62,31 +61,31 @@ public abstract class AbstractChromatogramEditorSupport implements IChromatogram
 		/*
 		 * Create the input part and prepare it.
 		 */
-		MInputPart inputPart = MBasicFactory.INSTANCE.createInputPart();
-		inputPart.setElementId(elementId);
-		inputPart.setContributionURI(contributionURI);
+		MPart part = MBasicFactory.INSTANCE.createInputPart();
+		part.setElementId(elementId);
+		part.setContributionURI(contributionURI);
 		/*
 		 * File or chromatogram are maybe null.
 		 */
 		if(file == null) {
-			inputPart.setInputURI(null);
 			if(chromatogram != null) {
-				inputPart.setLabel(chromatogram.getName());
+				part.setObject(chromatogram);
+				part.setLabel(chromatogram.getName());
 			} else {
-				inputPart.setLabel("No valid chromatogram");
+				part.setObject(null);
+				part.setLabel("No valid chromatogram");
 			}
 		} else {
-			inputPart.setInputURI(file.getAbsolutePath());
-			inputPart.setLabel(file.getName());
+			part.setObject(file.getAbsolutePath());
+			part.setLabel(file.getName());
 		}
-		inputPart.setIconURI(iconURI);
-		inputPart.setTooltip(tooltip);
-		inputPart.setCloseable(true);
-		inputPart.setObject(chromatogram);
+		part.setIconURI(iconURI);
+		part.setTooltip(tooltip);
+		part.setCloseable(true);
 		/*
 		 * Add it to the stack and show it.
 		 */
-		partStack.getChildren().add(inputPart);
-		partService.showPart(inputPart, PartState.ACTIVATE);
+		partStack.getChildren().add(part);
+		partService.showPart(part, PartState.ACTIVATE);
 	}
 }

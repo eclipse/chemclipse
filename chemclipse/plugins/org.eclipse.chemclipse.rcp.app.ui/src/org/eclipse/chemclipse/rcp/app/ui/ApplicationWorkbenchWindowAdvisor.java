@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui;
 
+import org.eclipse.chemclipse.rcp.app.ui.addons.ModelSupportAddon;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
@@ -33,13 +35,17 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	@Override
 	public boolean preWindowShellClose() {
 
-		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText("Close the application");
-		messageBox.setMessage("Do you want to close the application now?");
-		if(messageBox.open() == SWT.YES) {
-			return super.preWindowShellClose();
-		} else {
-			return false;
+		if(ModelSupportAddon.saveDirtyParts()) {
+			Shell shell = Display.getCurrent().getActiveShell();
+			MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+			messageBox.setText("Close the application");
+			messageBox.setMessage("Do you want to close the application now?");
+			if(messageBox.open() == SWT.YES) {
+				return super.preWindowShellClose();
+			} else {
+				return false;
+			}
 		}
+		return false;
 	}
 }

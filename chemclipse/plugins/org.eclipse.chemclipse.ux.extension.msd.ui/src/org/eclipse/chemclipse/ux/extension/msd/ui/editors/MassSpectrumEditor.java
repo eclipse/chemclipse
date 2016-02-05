@@ -19,30 +19,13 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.di.Persist;
-import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.model.application.ui.MDirtyable;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
-import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.msd.converter.exceptions.NoMassSpectrumConverterAvailableException;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
@@ -54,8 +37,25 @@ import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.MassSpectrumImportRunnable;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.di.Persist;
+import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.ui.MDirtyable;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 
-@SuppressWarnings("deprecation")
 public class MassSpectrumEditor implements IChemClipseEditor {
 
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumEditor";
@@ -68,7 +68,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	 * Injected member in constructor
 	 */
 	@Inject
-	private MInputPart inputPart;
+	private MPart part;
 	@Inject
 	private MDirtyable dirtyable;
 	@Inject
@@ -105,9 +105,9 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		 */
 		if(modelService != null) {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
-			inputPart.setToBeRendered(false);
-			inputPart.setVisible(false);
-			partStack.getChildren().remove(inputPart);
+			part.setToBeRendered(false);
+			part.setVisible(false);
+			partStack.getChildren().remove(part);
 		}
 		/*
 		 * Run the garbage collector.
@@ -116,9 +116,10 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	}
 
 	@Persist
-	public void save() {
+	public boolean save() {
 
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		Shell shell = Display.getCurrent().getActiveShell();
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
 			@Override
@@ -126,7 +127,11 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 
 				try {
 					monitor.beginTask("Save Mass Spectra", IProgressMonitor.UNKNOWN);
-					saveMassSpectra(monitor);
+					try {
+						saveMassSpectra(monitor, shell);
+					} catch(NoMassSpectrumConverterAvailableException e) {
+						throw new InvocationTargetException(e);
+					}
 				} finally {
 					monitor.done();
 				}
@@ -142,19 +147,21 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 			 */
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {
-			logger.warn(e);
+			return saveAs();
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			return false;
 		}
+		return true;
 	}
 
-	private void saveMassSpectra(IProgressMonitor monitor) {
+	private void saveMassSpectra(IProgressMonitor monitor, Shell shell) throws NoMassSpectrumConverterAvailableException {
 
 		/*
 		 * Try to save the chromatogram automatically if it is an *.chrom
 		 * type.<br/> If not, show the file save dialog.
 		 */
-		if(massSpectrumFile != null && massSpectra != null) {
+		if(massSpectrumFile != null && massSpectra != null && shell != null) {
 			/*
 			 * Convert the mass spectra.
 			 */
@@ -176,22 +183,24 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 					logger.warn(e);
 				}
 			} else {
-				saveAs();
+				throw new NoMassSpectrumConverterAvailableException();
 			}
 		}
 	}
 
 	@Override
-	public void saveAs() {
+	public boolean saveAs() {
 
+		boolean saveSuccessful = false;
 		if(massSpectra != null) {
 			try {
-				MassSpectraFileSupport.saveMassSpectra(massSpectra);
-				dirtyable.setDirty(true);
+				saveSuccessful = MassSpectraFileSupport.saveMassSpectra(massSpectra);
+				dirtyable.setDirty(!saveSuccessful);
 			} catch(NoConverterAvailableException e) {
 				logger.warn(e);
 			}
 		}
+		return saveSuccessful;
 	}
 
 	private void loadMassSpectra() {
@@ -201,8 +210,11 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 			 * Import the chromatogram without showing it on the gui. The GUI
 			 * will take care itself of this action.
 			 */
-			File file = new File(inputPart.getInputURI());
-			importMassSpectrum(file);
+			Object object = part.getObject();
+			if(object instanceof String) {
+				File file = new File((String)object);
+				importMassSpectrum(file);
+			}
 		} catch(Exception e) {
 			logger.warn(e);
 		}
@@ -235,7 +247,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	private void createPages(Composite parent) {
 
 		if(massSpectra != null && massSpectra.getMassSpectrum(1) != null) {
-			inputPart.setLabel(massSpectrumFile.getName());
+			part.setLabel(massSpectrumFile.getName());
 			tabFolder = new TabFolder(parent, SWT.BOTTOM);
 			createMassSpectrumPage();
 		} else {

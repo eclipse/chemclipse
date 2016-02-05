@@ -46,15 +46,16 @@ public class ChromatogramFileSupport {
 	 * @param chromatogram
 	 * @throws NoConverterAvailableException
 	 */
-	public static void saveChromatogram(IChromatogramMSD chromatogram) throws NoConverterAvailableException {
+	public static boolean saveChromatogram(IChromatogramMSD chromatogram) throws NoConverterAvailableException {
 
 		/*
 		 * If the chromatogram is null, exit.
 		 */
-		if(chromatogram == null) {
-			return;
+		Shell shell = Display.getDefault().getActiveShell();
+		if(chromatogram == null || shell == null) {
+			return false;
 		}
-		Shell shell = Display.getCurrent().getActiveShell();
+		//
 		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		/*
 		 * Create the dialogue.
@@ -79,6 +80,9 @@ public class ChromatogramFileSupport {
 		String filename = dialog.open();
 		if(filename != null) {
 			validateFile(dialog, converterSupport.getExportSupplier(), shell, converterSupport, chromatogram);
+			return true;
+		} else {
+			return false;
 		}
 	}
 

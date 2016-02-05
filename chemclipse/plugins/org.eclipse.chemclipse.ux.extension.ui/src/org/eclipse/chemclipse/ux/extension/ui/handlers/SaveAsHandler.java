@@ -13,40 +13,34 @@ package org.eclipse.chemclipse.ux.extension.ui.handlers;
 
 import javax.inject.Named;
 
+import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
-import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
-
-@SuppressWarnings("deprecation")
 public class SaveAsHandler {
 
 	@CanExecute
 	boolean canExecute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
 		if(part != null) {
-			if(part instanceof MInputPart) {
-				MInputPart inputPart = (MInputPart)part;
-				if(inputPart.getObject() instanceof IChemClipseEditor) {
-					return true;
-				}
+			if(part.getObject() instanceof IChemClipseEditor) {
+				return true;
 			}
 		}
 		return false;
 	}
 
 	@Execute
-	void execute(EPartService partService, @Named(IServiceConstants.ACTIVE_PART) MInputPart inputPart) {
+	void execute(EPartService partService, @Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
-		if(inputPart != null) {
+		if(part != null) {
 			/*
 			 * Export the chromatogram as ...
 			 */
-			Object object = inputPart.getObject();
+			Object object = part.getObject();
 			if(object != null && object instanceof IChemClipseEditor) {
 				IChemClipseEditor editor = (IChemClipseEditor)object;
 				editor.saveAs();
