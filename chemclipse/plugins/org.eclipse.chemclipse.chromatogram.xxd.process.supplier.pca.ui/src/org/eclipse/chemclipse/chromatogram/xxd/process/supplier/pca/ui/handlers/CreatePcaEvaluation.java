@@ -14,20 +14,18 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
+import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 
-@SuppressWarnings("deprecation")
 public class CreatePcaEvaluation {
 
 	@Inject
@@ -47,10 +45,9 @@ public class CreatePcaEvaluation {
 		/*
 		 * Create the input part and prepare it.
 		 */
-		MInputPart inputPart = MBasicFactory.INSTANCE.createInputPart();
+		MPart inputPart = MBasicFactory.INSTANCE.createInputPart();
 		inputPart.setElementId(PcaEditor.ID);
 		inputPart.setContributionURI(PcaEditor.CONTRIBUTION_URI);
-		inputPart.setInputURI(null);
 		inputPart.setLabel("PCA Evaluation");
 		inputPart.setIconURI(PcaEditor.ICON_URI);
 		inputPart.setTooltip(PcaEditor.TOOLTIP);

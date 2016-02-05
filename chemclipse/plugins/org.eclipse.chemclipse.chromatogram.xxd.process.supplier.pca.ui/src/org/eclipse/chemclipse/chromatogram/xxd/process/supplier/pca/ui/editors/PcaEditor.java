@@ -34,7 +34,7 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -45,7 +45,6 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-@SuppressWarnings("deprecation")
 public class PcaEditor {
 
 	public static final String ID = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.pcaEditor";
@@ -58,7 +57,7 @@ public class PcaEditor {
 	 * Injected member in constructor
 	 */
 	@Inject
-	private MInputPart inputPart;
+	private MPart part;
 	@Inject
 	private MDirtyable dirtyable;
 	@Inject
@@ -110,9 +109,16 @@ public class PcaEditor {
 		 */
 		if(modelService != null) {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
-			inputPart.setToBeRendered(false);
-			inputPart.setVisible(false);
-			partStack.getChildren().remove(inputPart);
+			part.setToBeRendered(false);
+			part.setVisible(false);
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+
+					partStack.getChildren().remove(part);
+				}
+			});
 		}
 		/*
 		 * Dispose the form toolkit.
@@ -245,7 +251,7 @@ public class PcaEditor {
 
 	private void createPages(Composite parent) {
 
-		inputPart.setLabel("PCA");
+		part.setLabel("PCA");
 		tabFolder = new TabFolder(parent, SWT.BOTTOM);
 		//
 		pages.add(overviewPage = new OverviewPage(this, tabFolder, formToolkit));
