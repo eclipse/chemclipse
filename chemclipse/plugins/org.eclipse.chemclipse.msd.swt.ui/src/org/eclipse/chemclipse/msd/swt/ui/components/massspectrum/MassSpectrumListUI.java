@@ -52,6 +52,7 @@ public class MassSpectrumListUI extends Composite {
 	private static final int MAX_SPECTRA_LOAD_COMPLETE = 5000;
 	//
 	private Text text;
+	private Button checkboxCaseSensitive;
 	private ExtendedTableViewer tableViewer;
 	private Label label;
 	private MassSpectrumListTableComparator massSpectrumTableComparator;
@@ -66,11 +67,20 @@ public class MassSpectrumListUI extends Composite {
 		//
 		listItemRemoveListeners = new ArrayList<IListItemsRemoveListener>();
 		//
-		this.setLayout(new GridLayout(2, false));
+		this.setLayout(new GridLayout(3, false));
 		this.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
 		text = new Text(this, SWT.BORDER);
 		text.setText("");
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		text.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				search();
+			}
+		});
 		//
 		Button button = new Button(this, SWT.PUSH);
 		button.setText("Search");
@@ -79,17 +89,26 @@ public class MassSpectrumListUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				String searchText = text.getText().trim();
-				massSpectrumListFilter.setSearchText(searchText);
-				tableViewer.refresh();
-				updateLabel();
+				search();
+			}
+		});
+		//
+		checkboxCaseSensitive = new Button(this, SWT.CHECK);
+		checkboxCaseSensitive.setText("Case sensitive");
+		checkboxCaseSensitive.setSelection(true);
+		checkboxCaseSensitive.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				search();
 			}
 		});
 		/*
 		 * Table
 		 */
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.horizontalSpan = 2;
+		gridData.horizontalSpan = 3;
 		//
 		tableViewer = new ExtendedTableViewer(this, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		tableViewer.getTable().setLayoutData(gridData);
@@ -159,7 +178,7 @@ public class MassSpectrumListUI extends Composite {
 			//
 			if(massSpectra.size() > MAX_SPECTRA_LOAD_COMPLETE) {
 				String searchString = "Please use this filter";
-				massSpectrumListFilter.setSearchText(searchString);
+				massSpectrumListFilter.setSearchText(searchString, true);
 				text.setText(searchString);
 			}
 			tableViewer.setInput(massSpectra);
@@ -178,7 +197,15 @@ public class MassSpectrumListUI extends Composite {
 		return tableViewer;
 	}
 
-	// -----------------------------------------private methods
+	private void search() {
+
+		String searchText = text.getText().trim();
+		boolean caseSensitive = checkboxCaseSensitive.getSelection();
+		massSpectrumListFilter.setSearchText(searchText, caseSensitive);
+		tableViewer.refresh();
+		updateLabel();
+	}
+
 	private void initContextMenu() {
 
 		MenuManager menuManager = new MenuManager(POPUP_MENU_ID, getClass().getName() + POPUP_MENU_POSTFIX);

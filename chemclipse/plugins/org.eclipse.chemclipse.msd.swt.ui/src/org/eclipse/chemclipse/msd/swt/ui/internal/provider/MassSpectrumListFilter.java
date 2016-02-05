@@ -14,22 +14,23 @@ package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
-
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 
 public class MassSpectrumListFilter extends ViewerFilter {
 
 	private String searchText;
+	private boolean caseSensitive;
 
-	public void setSearchText(String searchText) {
+	public void setSearchText(String searchText, boolean caseSensitive) {
 
 		this.searchText = ".*" + searchText + ".*";
+		this.caseSensitive = caseSensitive;
 	}
 
 	@Override
@@ -76,7 +77,16 @@ public class MassSpectrumListFilter extends ViewerFilter {
 		/*
 		 * Search the name.
 		 */
+		String searchText = this.searchText;
 		String name = libraryInformation.getName();
+		//
+		if(!caseSensitive) {
+			searchText = searchText.toLowerCase();
+			name = name.toLowerCase();
+		}
+		/*
+		 * Name
+		 */
 		if(name.matches(searchText)) {
 			return true;
 		}
@@ -85,6 +95,15 @@ public class MassSpectrumListFilter extends ViewerFilter {
 		 */
 		Set<String> synonyms = libraryInformation.getSynonyms();
 		for(String synonym : synonyms) {
+			/*
+			 * Pre-check
+			 */
+			if(!caseSensitive) {
+				synonym = synonym.toLowerCase();
+			}
+			/*
+			 * Search
+			 */
 			if(synonym.matches(searchText)) {
 				return true;
 			}
