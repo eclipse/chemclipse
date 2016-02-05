@@ -122,9 +122,9 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 	}
 
 	@Persist
-	public boolean save() {
+	public void save() {
 
-		Shell shell = Display.getCurrent().getActiveShell();
+		Shell shell = Display.getDefault().getActiveShell();
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
@@ -153,12 +153,10 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 			 */
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {
-			return saveAs();
+			saveAs();
 		} catch(InterruptedException e) {
 			logger.warn(e);
-			return false;
 		}
-		return true;
 	}
 
 	private void saveMassSpectra(IProgressMonitor monitor, Shell shell) throws NoMassSpectrumConverterAvailableException {
@@ -201,7 +199,7 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 		if(massSpectra != null) {
 			try {
 				saveSuccessful = MassSpectraFileSupport.saveMassSpectra(massSpectra);
-				dirtyable.setDirty(saveSuccessful);
+				dirtyable.setDirty(!saveSuccessful);
 			} catch(NoConverterAvailableException e) {
 				logger.warn(e);
 			}

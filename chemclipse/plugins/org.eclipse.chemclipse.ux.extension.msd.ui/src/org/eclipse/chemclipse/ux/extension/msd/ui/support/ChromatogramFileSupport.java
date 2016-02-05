@@ -51,7 +51,7 @@ public class ChromatogramFileSupport {
 		/*
 		 * If the chromatogram is null, exit.
 		 */
-		Shell shell = Display.getCurrent().getActiveShell();
+		Shell shell = Display.getDefault().getActiveShell();
 		if(chromatogram == null || shell == null) {
 			return false;
 		}

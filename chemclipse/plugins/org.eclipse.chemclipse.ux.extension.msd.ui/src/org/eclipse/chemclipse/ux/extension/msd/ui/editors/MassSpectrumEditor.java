@@ -195,7 +195,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		if(massSpectra != null) {
 			try {
 				saveSuccessful = MassSpectraFileSupport.saveMassSpectra(massSpectra);
-				dirtyable.setDirty(saveSuccessful);
+				dirtyable.setDirty(!saveSuccessful);
 			} catch(NoConverterAvailableException e) {
 				logger.warn(e);
 			}
