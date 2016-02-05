@@ -23,7 +23,6 @@ import org.eclipse.chemclipse.ux.extension.wsd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.internal.support.ChromatogramExportRunnable;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
@@ -58,7 +57,7 @@ public class ChromatogramFileSupport {
 		if(chromatogram == null) {
 			return;
 		}
-		Shell shell = Display.getCurrent().getActiveShell();
+		Shell shell = Display.getDefault().getActiveShell();
 		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		/*
 		 * Create the dialogue.

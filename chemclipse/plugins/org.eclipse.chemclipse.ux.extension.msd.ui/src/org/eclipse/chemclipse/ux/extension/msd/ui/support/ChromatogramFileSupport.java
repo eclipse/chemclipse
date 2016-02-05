@@ -54,7 +54,8 @@ public class ChromatogramFileSupport {
 		if(chromatogram == null) {
 			return;
 		}
-		Shell shell = Display.getCurrent().getActiveShell();
+		//
+		Shell shell = Display.getDefault().getActiveShell();
 		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		/*
 		 * Create the dialogue.

@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvaila
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.msd.converter.exceptions.NoMassSpectrumConverterAvailableException;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
@@ -51,6 +52,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
@@ -116,7 +118,8 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	@Persist
 	public void save() {
 
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		Shell shell = Display.getDefault().getActiveShell();
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
 			@Override
@@ -124,7 +127,11 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 
 				try {
 					monitor.beginTask("Save Mass Spectra", IProgressMonitor.UNKNOWN);
-					saveMassSpectra(monitor);
+					try {
+						saveMassSpectra(monitor, shell);
+					} catch(NoMassSpectrumConverterAvailableException e) {
+						throw new InvocationTargetException(e);
+					}
 				} finally {
 					monitor.done();
 				}
@@ -140,19 +147,19 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 			 */
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {
-			logger.warn(e);
+			saveAs();
 		} catch(InterruptedException e) {
 			logger.warn(e);
 		}
 	}
 
-	private void saveMassSpectra(IProgressMonitor monitor) {
+	private void saveMassSpectra(IProgressMonitor monitor, Shell shell) throws NoMassSpectrumConverterAvailableException {
 
 		/*
 		 * Try to save the chromatogram automatically if it is an *.chrom
 		 * type.<br/> If not, show the file save dialog.
 		 */
-		if(massSpectrumFile != null && massSpectra != null) {
+		if(massSpectrumFile != null && massSpectra != null && shell != null) {
 			/*
 			 * Convert the mass spectra.
 			 */
@@ -174,7 +181,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 					logger.warn(e);
 				}
 			} else {
-				saveAs();
+				throw new NoMassSpectrumConverterAvailableException();
 			}
 		}
 	}
@@ -185,7 +192,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		if(massSpectra != null) {
 			try {
 				MassSpectraFileSupport.saveMassSpectra(massSpectra);
-				dirtyable.setDirty(true);
+				dirtyable.setDirty(false);
 			} catch(NoConverterAvailableException e) {
 				logger.warn(e);
 			}

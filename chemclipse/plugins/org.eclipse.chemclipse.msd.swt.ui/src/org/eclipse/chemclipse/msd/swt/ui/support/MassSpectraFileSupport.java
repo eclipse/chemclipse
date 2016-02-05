@@ -15,13 +15,6 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Shell;
-
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -30,6 +23,12 @@ import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverterSu
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.swt.ui.Activator;
 import org.eclipse.chemclipse.msd.swt.ui.internal.support.MassSpectraExportRunnable;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 
 public class MassSpectraFileSupport {
 
@@ -55,7 +54,7 @@ public class MassSpectraFileSupport {
 		if(massSpectra == null) {
 			return;
 		}
-		Shell shell = Display.getCurrent().getActiveShell();
+		Shell shell = Display.getDefault().getActiveShell();
 		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		/*
 		 * Create the dialogue.

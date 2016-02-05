@@ -82,6 +82,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
@@ -238,7 +239,8 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 	@Persist
 	public void save() {
 
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		Shell shell = Display.getDefault().getActiveShell();
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
 			@Override
@@ -246,7 +248,11 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 
 				try {
 					monitor.beginTask("Save Chromatogram", IProgressMonitor.UNKNOWN);
-					saveChromatogram(monitor);
+					try {
+						saveChromatogram(monitor, shell);
+					} catch(NoChromatogramConverterAvailableException e) {
+						throw new InvocationTargetException(e);
+					}
 				} finally {
 					monitor.done();
 				}
@@ -262,19 +268,19 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 			 */
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {
-			logger.warn(e);
+			saveAs();
 		} catch(InterruptedException e) {
 			logger.warn(e);
 		}
 	}
 
-	private void saveChromatogram(IProgressMonitor monitor) {
+	private void saveChromatogram(IProgressMonitor monitor, Shell shell) throws NoChromatogramConverterAvailableException {
 
 		/*
 		 * Try to save the chromatogram automatically if it is an *.chrom
 		 * type.<br/> If not, show the file save dialog.
 		 */
-		if(chromatogramSelection != null) {
+		if(chromatogramSelection != null && shell != null) {
 			/*
 			 * Each chromatogram import converter should save its converter id
 			 * to the converted chromatogram instance.<br/> The id is used to
@@ -300,7 +306,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 					logger.warn(e);
 				}
 			} else {
-				saveAs();
+				throw new NoChromatogramConverterAvailableException();
 			}
 		}
 	}
@@ -311,7 +317,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		if(chromatogramSelection != null) {
 			try {
 				ChromatogramFileSupport.saveChromatogram(chromatogramSelection.getChromatogramMSD());
-				dirtyable.setDirty(true);
+				dirtyable.setDirty(false);
 			} catch(NoConverterAvailableException e) {
 				logger.warn(e);
 			}
