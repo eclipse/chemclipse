@@ -73,4 +73,9 @@ public class ModelSupportAddon {
 			}
 		}
 	}
+
+	public static boolean saveDirtyParts() {
+
+		return ePartService.saveAll(true);
+	}
 }

@@ -25,18 +25,10 @@ public class QuitHandler {
 	@Execute
 	public void execute(IWorkbench workbench, @Named(IServiceConstants.ACTIVE_SHELL) Shell shell, EPartService partService) {
 
-		if(MessageDialog.openConfirm(shell, "Confirmation", "Do you want to exit?")) {
-			if(partService.getDirtyParts().size() > 0) {
-				if(MessageDialog.openConfirm(shell, "Save All", "Some data has not been saved yet. Would you like to save it?")) {
-					if(partService.saveAll(true)) {
-						workbench.close();
-					} else {
-						if(MessageDialog.openConfirm(shell, "Exit", "Some parts have not been saved. Exit anyhow?")) {
-							workbench.close();
-						}
-					}
-				}
-			} else {
+		if(partService.saveAll(true)) {
+			workbench.close();
+		} else {
+			if(MessageDialog.openConfirm(shell, "Exit", "Some parts have not been saved. Exit anyhow?")) {
 				workbench.close();
 			}
 		}
