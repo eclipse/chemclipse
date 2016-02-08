@@ -43,6 +43,15 @@ public interface IChromatogramInfo {
 	void setMiscInfo(String miscInfo);
 
 	/**
+	 * Returns separated miscellaneous information.
+	 * 
+	 * @return String
+	 */
+	String getMiscInfoSeparated();
+
+	void setMiscInfoSeparated(String miscInfoSeparated);
+
+	/**
 	 * Returns the short info, e.g.:
 	 * Sample A
 	 * 

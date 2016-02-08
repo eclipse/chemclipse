@@ -127,6 +127,7 @@ public class ChromatogramHeaderView {
 			}
 			addHeaderLine(builder, "Info", chromatogramOverview.getShortInfo());
 			addHeaderLine(builder, "Misc", chromatogramOverview.getMiscInfo());
+			addHeaderLine(builder, "Misc (separated)", chromatogramOverview.getMiscInfoSeparated());
 			addHeaderLine(builder, "Details", chromatogramOverview.getDetailedInfo());
 			addHeaderLine(builder, "Scans", Integer.toString(chromatogramOverview.getNumberOfScans()));
 			addHeaderLine(builder, "Start RT (min)", decimalFormat.format(chromatogramOverview.getStartRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));

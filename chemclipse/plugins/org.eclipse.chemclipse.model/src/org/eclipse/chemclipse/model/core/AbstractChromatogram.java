@@ -54,6 +54,8 @@ import org.eclipse.core.runtime.SafeRunner;
 public abstract class AbstractChromatogram implements IChromatogram {
 
 	private static final Logger logger = Logger.getLogger(AbstractChromatogram.class);
+	private static final String MISC_SEPARATOR = "!";
+	private static final String MISC_SEPARATED_DELIMITER = " ";
 	//
 	private String converterId = "";
 	private File file = null; // The file object of the chromatogram.
@@ -99,6 +101,7 @@ public abstract class AbstractChromatogram implements IChromatogram {
 	private String operator = "";
 	private Date date = new Date();
 	private String miscInfo = "";
+	private String miscInfoSeparated = "";
 	private String shortInfo = "";
 	private String detailedInfo = "";
 	private String sampleGroup = "";
@@ -268,7 +271,35 @@ public abstract class AbstractChromatogram implements IChromatogram {
 	@Override
 	public void setMiscInfo(String miscInfo) {
 
-		this.miscInfo = miscInfo;
+		if(miscInfo != null) {
+			String[] values = miscInfo.split(MISC_SEPARATOR);
+			if(values.length >= 2) {
+				this.miscInfo = values[0];
+				StringBuilder builder = new StringBuilder();
+				for(int i = 1; i < values.length; i++) {
+					builder.append(values[i].trim());
+					builder.append(MISC_SEPARATED_DELIMITER);
+				}
+				this.miscInfoSeparated = builder.toString().trim();
+			} else {
+				this.miscInfo = miscInfo;
+			}
+		} else {
+			this.miscInfo = "";
+			this.miscInfoSeparated = "";
+		}
+	}
+
+	@Override
+	public String getMiscInfoSeparated() {
+
+		return miscInfoSeparated;
+	}
+
+	@Override
+	public void setMiscInfoSeparated(String miscInfoSeparated) {
+
+		this.miscInfoSeparated = miscInfoSeparated;
 	}
 
 	// TODO optimieren - verbraucht zu viel Prozessorzeit
