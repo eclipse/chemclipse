@@ -78,7 +78,11 @@ public class MassSpectrumListUI extends Composite {
 			@Override
 			public void keyReleased(KeyEvent e) {
 
-				search();
+				if(text.getText().length() == 0) {
+					search();
+				} else if(text.getText().length() >= 4) {
+					search();
+				}
 			}
 		});
 		//
