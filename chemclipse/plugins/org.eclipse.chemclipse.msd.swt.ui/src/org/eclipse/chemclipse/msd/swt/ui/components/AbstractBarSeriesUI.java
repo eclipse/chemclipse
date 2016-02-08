@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.swt.ui.series.MultipleSeries;
 import org.eclipse.chemclipse.swt.ui.support.ChartUtil;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.thirdpartylibraries.swtchart.ext.InteractiveChartExtended;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -54,10 +55,18 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 	/*
 	 * The Axes
 	 */
-	private IAxis ions;
-	private IAxis dalton;
-	private IAxis abundance;
-	private IAxis relativeAbundance;
+	private boolean showAxisTop = true;
+	private boolean showAxisBottom = true;
+	private boolean showAxisLeft = true;
+	private boolean showAxisRight = true;
+	//
+	private int lowerX = -1;
+	private int upperX = -1;
+	//
+	private IAxis xAxisTop; // dalton
+	private IAxis xAxisBottom; // m/z
+	private IAxis yAxisLeft; // abundance
+	private IAxis yAxisRight; // relativeAbundance
 	/*
 	 * Space on top of abundance.
 	 */
@@ -80,6 +89,54 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 	}
 
 	/**
+	 * Use SWT.TOP or SWT.RIGHT, SWT.BOTTOM OR SWT.LEFT
+	 * 
+	 * @param selection
+	 * @param showAxis
+	 */
+	public void setShowAxis(int selection, boolean showAxis) {
+
+		switch(selection) {
+			case SWT.TOP:
+				showAxisTop = showAxis;
+				break;
+			case SWT.RIGHT:
+				showAxisRight = showAxis;
+				break;
+			case SWT.LEFT:
+				showAxisLeft = showAxis;
+				break;
+			case SWT.BOTTOM:
+				showAxisBottom = showAxis;
+				break;
+		}
+	}
+
+	/**
+	 * Display a fixed x range.
+	 * If you'd like to reset this.
+	 * 
+	 * @param lowerX
+	 * @param upperX
+	 */
+	public void setFixedAxisRangeX(int lowerX, int upperX) {
+
+		if(lowerX <= upperX) {
+			this.lowerX = lowerX;
+			this.upperX = upperX;
+		} else {
+			this.lowerX = upperX;
+			this.upperX = lowerX;
+		}
+	}
+
+	public void resetFixedAxisRangeX() {
+
+		lowerX = -1;
+		upperX = -1;
+	}
+
+	/**
 	 * Clears the current bar series.
 	 */
 	public void clear() {
@@ -88,10 +145,10 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		maxSignal = 1.0d;
 		massSpectrum = null;
 		List<IAxis> axisList = new ArrayList<IAxis>();
-		axisList.add(ions);
-		axisList.add(dalton);
-		axisList.add(abundance);
-		axisList.add(relativeAbundance);
+		axisList.add(xAxisBottom);
+		axisList.add(xAxisTop);
+		axisList.add(yAxisLeft);
+		axisList.add(yAxisRight);
 		for(IAxis axis : axisList) {
 			Range range = axis.getRange();
 			range.lower = 0;
@@ -154,7 +211,7 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 	}
 
 	@Override
-	public void redraw() {
+	public synchronized void redraw() {
 
 		super.redraw();
 		double xMin, xMax;
@@ -165,7 +222,7 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		 * both 0.
 		 */
 		if(xMin < xMax) {
-			ChartUtil.checkAndSetRange(ions, xMin, xMax);
+			ChartUtil.checkAndSetRange(xAxisBottom, xMin, xMax);
 			double yMin = multipleLineSeries.getYMin();
 			double yMax = multipleLineSeries.getYMax();
 			/*
@@ -175,16 +232,18 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 			 */
 			yMin += yMin * SPACE_FACTOR;
 			yMax += yMax * SPACE_FACTOR;
-			ChartUtil.checkAndSetRange(abundance, yMin, yMax);
+			ChartUtil.checkAndSetRange(yAxisLeft, yMin, yMax);
 			addSpaceToTopOfAbundance(yMin, yMax);
 			redrawIonScale();
 			redrawRelativeAbundanceScale();
 		}
+		//
+		setTopAndLeftAxisVisibility();
 	}
 
 	private void addSpaceToTopOfAbundance(double yMin, double yMax) {
 
-		Range range = abundance.getRange();
+		Range range = yAxisLeft.getRange();
 		/*
 		 * Don't set the range if the upperLimit is below yMax
 		 * as the interactive chart would be redrawn each time the
@@ -204,7 +263,7 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		if(lowerLimit <= yMin || upperLimit >= yMax) {
 			range.lower = yMin;
 			range.upper = yMax;
-			abundance.setRange(range);
+			yAxisLeft.setRange(range);
 		}
 	}
 
@@ -251,17 +310,17 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 
 	private void redrawIonScale() {
 
-		assert (ions != null) : "The ions instance must be not null.";
-		assert (dalton != null) : "The dalton instance must be not null.";
+		assert (xAxisBottom != null) : "The ions instance must be not null.";
+		assert (xAxisTop != null) : "The dalton instance must be not null.";
 		double min, max;
 		Range range;
 		/*
 		 * Set minutes scale.
 		 */
-		range = ions.getRange();
+		range = xAxisBottom.getRange();
 		min = range.lower;
 		max = range.upper;
-		ChartUtil.setRange(dalton, min, max);
+		ChartUtil.setRange(xAxisTop, min, max);
 	}
 
 	/**
@@ -269,17 +328,17 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 	 */
 	private void redrawRelativeAbundanceScale() {
 
-		assert (abundance != null) : "The abundance instance must be not null.";
-		assert (relativeAbundance != null) : "The relativeAbundance instance must be not null.";
+		assert (yAxisLeft != null) : "The abundance instance must be not null.";
+		assert (yAxisRight != null) : "The relativeAbundance instance must be not null.";
 		double min, max;
 		Range range;
 		/*
 		 * Set the relative abundance scale.
 		 */
-		range = abundance.getRange();
+		range = yAxisLeft.getRange();
 		min = ChartUtil.getRelativeAbundance(maxSignal, range.lower);
 		max = ChartUtil.getRelativeAbundance(maxSignal, range.upper);
-		ChartUtil.setRange(relativeAbundance, min, max);
+		ChartUtil.setRange(yAxisRight, min, max);
 	}
 
 	/**
@@ -291,10 +350,10 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		 * Main Axes.
 		 */
 		IAxisSet axisSet = getAxisSet();
-		ions = axisSet.getXAxis(0);
-		abundance = axisSet.getYAxis(0);
-		abundance.getTitle().setText("abundance");
-		ions.getTitle().setText("m/z");
+		xAxisBottom = axisSet.getXAxis(0);
+		yAxisLeft = axisSet.getYAxis(0);
+		yAxisLeft.getTitle().setText("abundance");
+		xAxisBottom.getTitle().setText("m/z");
 	}
 
 	/**
@@ -309,16 +368,16 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		 * Minute axis
 		 */
 		int axisIdMinutes = axisSet.createXAxis();
-		dalton = axisSet.getXAxis(axisIdMinutes);
-		dalton.getTitle().setText("dalton");
-		dalton.setPosition(Position.Secondary);
+		xAxisTop = axisSet.getXAxis(axisIdMinutes);
+		xAxisTop.getTitle().setText("dalton");
+		xAxisTop.setPosition(Position.Secondary);
 		/*
 		 * Relative abundance axis
 		 */
 		int axisIdAbundanceRelative = axisSet.createYAxis();
-		relativeAbundance = axisSet.getYAxis(axisIdAbundanceRelative);
-		relativeAbundance.getTitle().setText("relative abundance");
-		relativeAbundance.setPosition(Position.Secondary);
+		yAxisRight = axisSet.getYAxis(axisIdAbundanceRelative);
+		yAxisRight.getTitle().setText("relative abundance");
+		yAxisRight.setPosition(Position.Secondary);
 	}
 
 	/**
@@ -327,8 +386,8 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 	private void setSecondaryRanges() {
 
 		assert (chromatogramSelection != null) : "The chromatogramSelection instance must be not null.";
-		assert (dalton != null) : "The dalton instance must be not null.";
-		assert (relativeAbundance != null) : "The relativeAbundance instance must be not null.";
+		assert (xAxisTop != null) : "The dalton instance must be not null.";
+		assert (yAxisRight != null) : "The relativeAbundance instance must be not null.";
 		double min, max;
 		Range range;
 		/*
@@ -337,14 +396,14 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		min = multipleLineSeries.getXMin();
 		max = multipleLineSeries.getXMax();
 		range = new Range(min, max);
-		dalton.setRange(range);
+		xAxisTop.setRange(range);
 		/*
 		 * Relative Abundance Range
 		 */
 		min = ChartUtil.getRelativeAbundance(maxSignal, multipleLineSeries.getYMin());
 		max = ChartUtil.getRelativeAbundance(maxSignal, multipleLineSeries.getYMax());
 		range = new Range(min, max);
-		relativeAbundance.setRange(range);
+		yAxisRight.setRange(range);
 	}
 
 	/**
@@ -352,19 +411,19 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 	 */
 	private void setAxesAndBackgroundColors() {
 
-		assert (abundance != null) : "The abundance instance must be not null.";
-		assert (ions != null) : "The ions instance must be not null.";
-		assert (dalton != null) : "The dalton instance must be not null.";
-		assert (relativeAbundance != null) : "The relativeAbundance instance must be not null.";
+		assert (yAxisLeft != null) : "The abundance instance must be not null.";
+		assert (xAxisBottom != null) : "The ions instance must be not null.";
+		assert (xAxisTop != null) : "The dalton instance must be not null.";
+		assert (yAxisRight != null) : "The relativeAbundance instance must be not null.";
 		/*
 		 * Color background, axes and line series
 		 */
 		setBackground(Colors.WHITE);
 		setBackgroundInPlotArea(Colors.WHITE);
-		ChartUtil.setAxisColor(abundance, Colors.BLACK);
-		ChartUtil.setAxisColor(ions, Colors.BLACK);
-		ChartUtil.setAxisColor(dalton, Colors.BLACK);
-		ChartUtil.setAxisColor(relativeAbundance, Colors.BLACK);
+		ChartUtil.setAxisColor(yAxisLeft, Colors.BLACK);
+		ChartUtil.setAxisColor(xAxisBottom, Colors.BLACK);
+		ChartUtil.setAxisColor(xAxisTop, Colors.BLACK);
+		ChartUtil.setAxisColor(yAxisRight, Colors.BLACK);
 	}
 
 	/**
@@ -394,6 +453,7 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 			getAxisSet().adjustRange();
 			setSecondaryRanges();
 		}
+		//
 		redraw();
 	}
 
@@ -416,6 +476,48 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		 */
 		for(String id : ids) {
 			getSeriesSet().deleteSeries(id);
+		}
+	}
+
+	private void setTopAndLeftAxisVisibility() {
+
+		assert (xAxisTop != null) : "The dalton instance must be not null.";
+		assert (yAxisRight != null) : "The relativeAbundance instance must be not null.";
+		//
+		getTitle().setForeground(getBackground());
+		if(showAxisTop) {
+			getTitle().setText("");
+			getTitle().setVisible(false);
+		} else {
+			getTitle().setText("Series"); // White space is not recognized.
+			getTitle().setVisible(true);
+		}
+		//
+		if(xAxisTop != null) {
+			xAxisTop.getTitle().setVisible(showAxisTop);
+			xAxisTop.getTick().setVisible(showAxisTop);
+		}
+		//
+		if(yAxisLeft != null) {
+			yAxisLeft.getTitle().setVisible(showAxisLeft);
+			yAxisLeft.getTick().setVisible(showAxisLeft);
+		}
+		//
+		if(xAxisBottom != null) {
+			xAxisBottom.getTitle().setVisible(showAxisBottom);
+			xAxisBottom.getTick().setVisible(showAxisBottom);
+			//
+			if(lowerX != -1 && upperX != -1) {
+				Range rangeBottom = xAxisBottom.getRange();
+				rangeBottom.lower = lowerX;
+				rangeBottom.upper = upperX;
+				xAxisBottom.setRange(rangeBottom);
+			}
+		}
+		//
+		if(yAxisRight != null) {
+			yAxisRight.getTitle().setVisible(showAxisRight);
+			yAxisRight.getTick().setVisible(showAxisRight);
 		}
 	}
 }

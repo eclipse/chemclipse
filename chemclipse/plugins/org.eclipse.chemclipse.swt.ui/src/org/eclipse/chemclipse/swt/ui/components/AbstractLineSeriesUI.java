@@ -239,7 +239,6 @@ public abstract class AbstractLineSeriesUI extends InteractiveChartExtended impl
 		}
 		//
 		setTopAndLeftAxisVisibility();
-		//
 		super.redraw();
 	}
 
