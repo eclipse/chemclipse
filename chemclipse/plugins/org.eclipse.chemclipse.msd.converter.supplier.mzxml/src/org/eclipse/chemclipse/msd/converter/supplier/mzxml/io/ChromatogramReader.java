@@ -66,7 +66,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 		}
 	}
 
-	private IChromatogramMSDReader getReader(File file) throws IOException {
+	public static IChromatogramMSDReader getReader(File file) throws IOException {
 
 		IChromatogramMSDReader chromatogramReader = null;
 		//
