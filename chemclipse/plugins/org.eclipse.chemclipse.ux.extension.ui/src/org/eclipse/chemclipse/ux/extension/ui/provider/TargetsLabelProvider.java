@@ -27,10 +27,18 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	public Image getColumnImage(Object element, int columnIndex) {
 
 		if(columnIndex == 0) {
+			if(element instanceof IIdentificationTarget) {
+				IIdentificationTarget identificationTarget = (IIdentificationTarget)element;
+				if(identificationTarget.isManuallyVerified()) {
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED, IApplicationImage.SIZE_16x16);
+				} else {
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED, IApplicationImage.SIZE_16x16);
+				}
+			}
+		} else if(columnIndex == 1) {
 			return getImage(element);
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	@Override
@@ -46,37 +54,40 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 			ILibraryInformation libraryInformation = identificationEntry.getLibraryInformation();
 			IComparisonResult comparisonResult = identificationEntry.getComparisonResult();
 			switch(columnIndex) {
-				case 0: // Name
+				case 0:
+					text = "";
+					break;
+				case 1: // Name
 					text = libraryInformation.getName();
 					break;
-				case 1: // CAS
+				case 2: // CAS
 					text = libraryInformation.getCasNumber();
 					break;
-				case 2: // MQ
+				case 3: // MQ
 					text = decimalFormat.format(comparisonResult.getMatchFactor());
 					break;
-				case 3: // RMQ
+				case 4: // RMQ
 					text = decimalFormat.format(comparisonResult.getReverseMatchFactor());
 					break;
-				case 4: // Formula
+				case 5: // Formula
 					text = libraryInformation.getFormula();
 					break;
-				case 5: // Mol Weight
+				case 6: // Mol Weight
 					text = decimalFormat.format(libraryInformation.getMolWeight());
 					break;
-				case 6: // Probability
+				case 7: // Probability
 					text = decimalFormat.format(comparisonResult.getProbability());
 					break;
-				case 7: // Advise
+				case 8: // Advise
 					text = comparisonResult.getAdvise();
 					break;
-				case 8: // Identifier
+				case 9: // Identifier
 					text = identificationEntry.getIdentifier();
 					break;
-				case 9: // Miscellaneous
+				case 10: // Miscellaneous
 					text = libraryInformation.getMiscellaneous();
 					break;
-				case 10: // Comments
+				case 11: // Comments
 					text = libraryInformation.getComments();
 					break;
 				default:

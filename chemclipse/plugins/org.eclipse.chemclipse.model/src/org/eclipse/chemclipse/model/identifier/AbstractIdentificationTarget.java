@@ -19,6 +19,7 @@ public abstract class AbstractIdentificationTarget extends AbstractTarget implem
 	private ILibraryInformation libraryInformation;
 	private IComparisonResult comparisonResult;
 	private String identifier = "";
+	private boolean manuallyVerified = false;
 
 	/**
 	 * Set the libraryInformation and comparisonResult.
@@ -62,6 +63,18 @@ public abstract class AbstractIdentificationTarget extends AbstractTarget implem
 		if(identifier != null) {
 			this.identifier = identifier;
 		}
+	}
+
+	@Override
+	public boolean isManuallyVerified() {
+
+		return manuallyVerified;
+	}
+
+	@Override
+	public void setManuallyVerified(boolean manuallyVerified) {
+
+		this.manuallyVerified = manuallyVerified;
 	}
 
 	// ----------------------------hashCode, equals, toString

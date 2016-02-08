@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsLabelProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsTableComparator;
+import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsViewEditingSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -33,6 +34,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -51,8 +53,9 @@ public abstract class AbstractTargetsView {
 
 	private ExtendedTableViewer tableViewer;
 	private TargetsTableComparator targetsTableComparator;
-	private String[] titles = {"Name", "CAS", "Match Factor", "Reverse Factor", "Formula", "Mol Weight", "Probability", "Advise", "Identifier", "Miscellaneous", "Comments"};
-	private int bounds[] = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
+	private static final String VERIFIED_MANUALLY = "Verified (manually)";
+	private String[] titles = {VERIFIED_MANUALLY, "Name", "CAS", "Match Factor", "Reverse Factor", "Formula", "Mol Weight", "Probability", "Advise", "Identifier", "Miscellaneous", "Comments"};
+	private int bounds[] = {30, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 	private IStructuredContentProvider contentProvider;
 	/*
 	 * Event Broker
@@ -76,6 +79,10 @@ public abstract class AbstractTargetsView {
 		tableViewer.setLabelProvider(new TargetsLabelProvider());
 		targetsTableComparator = new TargetsTableComparator();
 		tableViewer.setComparator(targetsTableComparator);
+		setEditingSupport();
+		/*
+		 * Copy and event broker actions.
+		 */
 		tableViewer.getControl().addKeyListener(new KeyAdapter() {
 
 			@Override
@@ -134,7 +141,7 @@ public abstract class AbstractTargetsView {
 		 */
 		if(object != null) {
 			tableViewer.setInput(object);
-			sortTableInitially(2, TargetsTableComparator.DESCENDING); // MatchFactor
+			sortTableInitially(0, TargetsTableComparator.ASCENDING); // Manually Verified
 		}
 	}
 
@@ -313,5 +320,18 @@ public abstract class AbstractTargetsView {
 			}
 		}
 		return targetList;
+	}
+
+	private void setEditingSupport() {
+
+		TableViewer tableViewer = getTableViewer();
+		List<TableViewerColumn> tableViewerColumns = this.tableViewer.getTableViewerColumns();
+		for(int i = 0; i < tableViewerColumns.size(); i++) {
+			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);
+			String label = tableViewerColumn.getColumn().getText();
+			if(label.equals(VERIFIED_MANUALLY)) {
+				tableViewerColumn.setEditingSupport(new TargetsViewEditingSupport(tableViewer));
+			}
+		}
 	}
 }

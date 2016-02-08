@@ -42,4 +42,18 @@ public interface IIdentificationTarget extends ITarget {
 	 * @param identifier
 	 */
 	void setIdentifier(String identifier);
+
+	/**
+	 * Returns if this result has been verified manually.
+	 * 
+	 * @return boolean
+	 */
+	boolean isManuallyVerified();
+
+	/**
+	 * Set to verify this result manually.
+	 * 
+	 * @param manuallyVerified
+	 */
+	void setManuallyVerified(boolean manuallyVerified);
 }
