@@ -106,6 +106,7 @@ public abstract class AbstractChromatogram implements IChromatogram {
 	private String barcodeType = "";
 	private double sampleWeight = 0;
 	private String weightUnit = "";
+	private String dataName = "";
 	/*
 	 * Some vendors store several chromatograms in one file.
 	 */
@@ -601,7 +602,7 @@ public abstract class AbstractChromatogram implements IChromatogram {
 
 	// -----------------------------IAdaptable
 	@Override
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Object getAdapter(Class adapter) {
 
 		return Platform.getAdapterManager().getAdapter(this, adapter);
@@ -773,8 +774,6 @@ public abstract class AbstractChromatogram implements IChromatogram {
 		return chromatogramResults.values();
 	}
 
-	// -----------------------------------------------IChromatogramResultSupport
-	// -----------------------------------------------IChromatogramInfo
 	@Override
 	public String getShortInfo() {
 
@@ -872,7 +871,20 @@ public abstract class AbstractChromatogram implements IChromatogram {
 		}
 	}
 
-	// -----------------------------------------------IChromatogramInfo
+	@Override
+	public String getDataName() {
+
+		return dataName;
+	}
+
+	@Override
+	public void setDataName(String dataName) {
+
+		if(dataName != null) {
+			this.dataName = dataName;
+		}
+	}
+
 	@Override
 	public List<IChromatogram> getReferencedChromatograms() {
 
@@ -891,7 +903,6 @@ public abstract class AbstractChromatogram implements IChromatogram {
 		referencedChromatograms.remove(chromatogram);
 	}
 
-	// -----------------------------------------------IChromatogramIntegrationSupport
 	@Override
 	public String getChromatogramIntegratorDescription() {
 
@@ -985,8 +996,6 @@ public abstract class AbstractChromatogram implements IChromatogram {
 		chromatogramIntegrationEntries.clear();
 	}
 
-	// -----------------------------------------------IChromatogramIntegrationSupport
-	// -----------------------------------------------IChromatogramProcessorSupport
 	@Override
 	public void doOperation(IChromatogramProcessor chromatogramProcessor, IProgressMonitor monitor) {
 

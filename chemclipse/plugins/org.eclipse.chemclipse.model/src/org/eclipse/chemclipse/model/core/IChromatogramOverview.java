@@ -213,4 +213,18 @@ public interface IChromatogramOverview extends IChromatogramInfo {
 	 * Recalculates the scan numbers, e.g. if scans have been removed etc.
 	 */
 	void recalculateScanNumbers();
+
+	/**
+	 * This is the name of the contained data, e.g. sample name.
+	 * 
+	 * @return String
+	 */
+	String getDataName();
+
+	/**
+	 * Set the contained sample name.
+	 * 
+	 * @param dataName
+	 */
+	void setDataName(String dataName);
 }

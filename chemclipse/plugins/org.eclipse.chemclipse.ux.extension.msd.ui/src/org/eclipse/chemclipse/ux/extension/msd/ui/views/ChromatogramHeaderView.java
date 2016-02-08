@@ -117,6 +117,7 @@ public class ChromatogramHeaderView {
 		if(partService.isPartVisible(part) && chromatogramOverview != null) {
 			StringBuilder builder = new StringBuilder();
 			addHeaderLine(builder, "Name", chromatogramOverview.getName());
+			addHeaderLine(builder, "Data Name", chromatogramOverview.getDataName());
 			addHeaderLine(builder, "Operator", chromatogramOverview.getOperator());
 			Date date = chromatogramOverview.getDate();
 			if(date != null) {
