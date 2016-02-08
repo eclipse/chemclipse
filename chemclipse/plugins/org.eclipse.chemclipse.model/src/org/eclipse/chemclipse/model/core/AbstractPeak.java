@@ -31,6 +31,7 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	private List<? extends IIntegrationEntry> integrationEntries;
 	private String quantifierDescription = "";
 	private List<IQuantitationEntry> quantitationEntries;
+	private boolean activeForAnalysis = true;
 
 	public AbstractPeak() {
 		/*
@@ -188,6 +189,18 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	public void removeAllIntegrationEntries() {
 
 		integrationEntries.clear();
+	}
+
+	@Override
+	public boolean isActiveForAnalysis() {
+
+		return activeForAnalysis;
+	}
+
+	@Override
+	public void setActiveForAnalysis(boolean activeForAnalysis) {
+
+		this.activeForAnalysis = activeForAnalysis;
 	}
 
 	/**

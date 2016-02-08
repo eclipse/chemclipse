@@ -190,4 +190,18 @@ public interface IPeak extends IPeakTargets {
 	 * Removes all integration entries.
 	 */
 	void removeAllIntegrationEntries();
+
+	/**
+	 * Returns if the peak is active for analysis.
+	 * 
+	 * @return boolean
+	 */
+	boolean isActiveForAnalysis();
+
+	/**
+	 * Sets the peak active/inactive.
+	 * 
+	 * @param active
+	 */
+	void setActiveForAnalysis(boolean activeForAnalysis);
 }

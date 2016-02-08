@@ -33,49 +33,52 @@ public class PeakListTableComparator extends AbstractRecordTableComparator imple
 			IPeakMSD peak2 = (IPeakMSD)e2;
 			IPeakModelMSD peakModel2 = peak2.getPeakModel();
 			switch(getPropertyIndex()) {
-				case 0: // RT
+				case 0:
+					sortOrder = Boolean.compare(peak2.isActiveForAnalysis(), peak1.isActiveForAnalysis());
+					break;
+				case 1: // RT
 					sortOrder = peakModel2.getRetentionTimeAtPeakMaximum() - peakModel1.getRetentionTimeAtPeakMaximum();
 					break;
-				case 1: // RI
+				case 2: // RI
 					sortOrder = Float.compare(peakModel2.getPeakMassSpectrum().getRetentionIndex(), peakModel1.getPeakMassSpectrum().getRetentionIndex());
 					break;
-				case 2: // Area
+				case 3: // Area
 					sortOrder = Double.compare(peak2.getIntegratedArea(), peak1.getIntegratedArea());
 					break;
-				case 3: // Start RT
+				case 4: // Start RT
 					sortOrder = peakModel2.getStartRetentionTime() - peakModel1.getStartRetentionTime();
 					break;
-				case 4: // Stop RT
+				case 5: // Stop RT
 					sortOrder = peakModel2.getStopRetentionTime() - peakModel1.getStopRetentionTime();
 					break;
-				case 5: // Width
+				case 6: // Width
 					sortOrder = peakModel2.getWidthByInflectionPoints() - peakModel1.getWidthByInflectionPoints();
 					break;
-				case 6:
 				case 7:
+				case 8:
 					if(e1 instanceof IChromatogramPeakMSD && e2 instanceof IChromatogramPeakMSD) {
 						IChromatogramPeakMSD chromatogramPeak1 = (IChromatogramPeakMSD)e1;
 						IChromatogramPeakMSD chromatogramPeak2 = (IChromatogramPeakMSD)e2;
 						switch(getPropertyIndex()) {
-							case 6: // Scan# at Peak Maximum
+							case 7: // Scan# at Peak Maximum
 								sortOrder = chromatogramPeak2.getScanMax() - chromatogramPeak1.getScanMax();
 								break;
-							case 7: // S/N
+							case 8: // S/N
 								sortOrder = Float.compare(chromatogramPeak2.getSignalToNoiseRatio(), chromatogramPeak1.getSignalToNoiseRatio());
 								break;
 						}
 					}
 					break;
-				case 8: // Leading
+				case 9: // Leading
 					sortOrder = Float.compare(peakModel2.getLeading(), peakModel1.getLeading());
 					break;
-				case 9: // Tailing
+				case 10: // Tailing
 					sortOrder = Float.compare(peakModel2.getTailing(), peakModel1.getTailing());
 					break;
-				case 10: // Model Description
+				case 11: // Model Description
 					sortOrder = peak2.getModelDescription().compareTo(peak1.getModelDescription());
 					break;
-				case 11: // Suggested Components
+				case 12: // Suggested Components
 					sortOrder = peak2.getSuggestedNumberOfComponents() - peak1.getSuggestedNumberOfComponents();
 					break;
 				default:
