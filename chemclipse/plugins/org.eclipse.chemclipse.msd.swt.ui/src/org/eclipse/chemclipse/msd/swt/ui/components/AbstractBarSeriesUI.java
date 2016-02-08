@@ -60,6 +60,8 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 	private boolean showAxisLeft = true;
 	private boolean showAxisRight = true;
 	//
+	private static int LOWER_X_NOT_SET = -1;
+	private static int UPPER_X_NOT_SET = -1;
 	private int lowerX = -1;
 	private int upperX = -1;
 	//
@@ -132,8 +134,27 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 
 	public void resetFixedAxisRangeX() {
 
-		lowerX = -1;
-		upperX = -1;
+		lowerX = LOWER_X_NOT_SET;
+		upperX = UPPER_X_NOT_SET;
+	}
+
+	public Range getRange() {
+
+		if(xAxisBottom != null) {
+			return xAxisBottom.getRange();
+		}
+		return null;
+	}
+
+	public void setRange(Range range) {
+
+		if(xAxisBottom != null && range != null) {
+			Range rangeBottom = xAxisBottom.getRange();
+			rangeBottom.lower = range.lower;
+			rangeBottom.upper = range.upper;
+			xAxisBottom.setRange(rangeBottom);
+			redraw();
+		}
 	}
 
 	/**
@@ -393,8 +414,8 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		/*
 		 * dalton
 		 */
-		min = multipleLineSeries.getXMin();
-		max = multipleLineSeries.getXMax();
+		min = (lowerX > LOWER_X_NOT_SET) ? lowerX : multipleLineSeries.getXMin();
+		max = (upperX > UPPER_X_NOT_SET) ? upperX : multipleLineSeries.getXMax();
 		range = new Range(min, max);
 		xAxisTop.setRange(range);
 		/*
@@ -443,8 +464,8 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		/*
 		 * Set the max abundance signal.
 		 */
-		double xMin = multipleLineSeries.getXMin();
-		double xMax = multipleLineSeries.getXMax();
+		double xMin = (lowerX > LOWER_X_NOT_SET) ? lowerX : multipleLineSeries.getXMin();
+		double xMax = (upperX > UPPER_X_NOT_SET) ? upperX : multipleLineSeries.getXMax();
 		/*
 		 * Adjust only if a signal is available.
 		 */
@@ -506,11 +527,22 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		if(xAxisBottom != null) {
 			xAxisBottom.getTitle().setVisible(showAxisBottom);
 			xAxisBottom.getTick().setVisible(showAxisBottom);
-			//
-			if(lowerX != -1 && upperX != -1) {
+			/*
+			 * Set to manually adjusted range.
+			 */
+			if(lowerX != LOWER_X_NOT_SET && upperX != UPPER_X_NOT_SET) {
 				Range rangeBottom = xAxisBottom.getRange();
-				rangeBottom.lower = lowerX;
-				rangeBottom.upper = upperX;
+				if(rangeBottom.lower > multipleLineSeries.getXMin() || rangeBottom.upper < multipleLineSeries.getXMax()) {
+					/*
+					 * This happens when the user has zoomed-in.
+					 */
+				} else {
+					/*
+					 * Normal extend to maximum.
+					 */
+					rangeBottom.lower = lowerX;
+					rangeBottom.upper = upperX;
+				}
 				xAxisBottom.setRange(rangeBottom);
 			}
 		}

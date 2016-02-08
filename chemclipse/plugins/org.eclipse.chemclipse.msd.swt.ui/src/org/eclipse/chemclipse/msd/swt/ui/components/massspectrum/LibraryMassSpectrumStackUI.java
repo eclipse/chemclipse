@@ -20,11 +20,15 @@ import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.swtchart.Range;
 
 public class LibraryMassSpectrumStackUI extends Composite {
 
@@ -64,12 +68,52 @@ public class LibraryMassSpectrumStackUI extends Composite {
 		Composite massSpectraComposite = new Composite(composite, SWT.NONE);
 		massSpectraComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		massSpectraComposite.setLayout(new FillLayout(SWT.VERTICAL));
+		//
 		simpleMassSpectrumUnknown = new SimpleMassSpectrumUI(massSpectraComposite, SWT.FILL, massValueDisplayPrecision);
-		// simpleMassSpectrumUnknown.setShowAxis(SWT.TOP, false);
+		simpleMassSpectrumUnknown.setShowAxis(SWT.TOP, false);
 		simpleMassSpectrumUnknown.setShowAxis(SWT.RIGHT, false);
+		simpleMassSpectrumUnknown.getPlotArea().addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+
+				super.mouseUp(e);
+				Range range = simpleMassSpectrumUnknown.getRange();
+				simpleMassSpectrumLibrary.setRange(range);
+			}
+		});
+		simpleMassSpectrumUnknown.getPlotArea().addMouseWheelListener(new MouseWheelListener() {
+
+			@Override
+			public void mouseScrolled(MouseEvent e) {
+
+				Range range = simpleMassSpectrumUnknown.getRange();
+				simpleMassSpectrumLibrary.setRange(range);
+			}
+		});
+		//
 		simpleMassSpectrumLibrary = new SimpleMassSpectrumUI(massSpectraComposite, SWT.FILL, massValueDisplayPrecision);
 		simpleMassSpectrumLibrary.setShowAxis(SWT.TOP, false);
 		simpleMassSpectrumLibrary.setShowAxis(SWT.RIGHT, false);
+		simpleMassSpectrumLibrary.getPlotArea().addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+
+				super.mouseUp(e);
+				Range range = simpleMassSpectrumLibrary.getRange();
+				simpleMassSpectrumUnknown.setRange(range);
+			}
+		});
+		simpleMassSpectrumLibrary.getPlotArea().addMouseWheelListener(new MouseWheelListener() {
+
+			@Override
+			public void mouseScrolled(MouseEvent e) {
+
+				Range range = simpleMassSpectrumLibrary.getRange();
+				simpleMassSpectrumUnknown.setRange(range);
+			}
+		});
 		//
 		infoLabelLibrary = new Label(composite, SWT.NONE);
 		infoLabelLibrary.setText("");
