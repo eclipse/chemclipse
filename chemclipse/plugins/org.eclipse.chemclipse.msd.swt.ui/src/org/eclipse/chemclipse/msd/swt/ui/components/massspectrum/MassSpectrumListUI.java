@@ -50,6 +50,7 @@ public class MassSpectrumListUI extends Composite {
 	private static final String POPUP_MENU_ID = "#PopUpMenu"; // $NON-NLS-1$
 	private static final String POPUP_MENU_POSTFIX = "PopUpMenu"; // $NON-NLS-1$
 	private static final int MAX_SPECTRA_LOAD_COMPLETE = 5000;
+	private static final int SIZE_SEARCH_RESTRICTION = 15000;
 	//
 	private Text text;
 	private Button checkboxCaseSensitive;
@@ -78,9 +79,14 @@ public class MassSpectrumListUI extends Composite {
 			@Override
 			public void keyReleased(KeyEvent e) {
 
-				if(text.getText().length() == 0) {
-					search();
-				} else if(text.getText().length() >= 4) {
+				if(massSpectraSize >= SIZE_SEARCH_RESTRICTION) {
+					int length = text.getText().length();
+					if(length == 0) {
+						search();
+					} else if(length >= 5) {
+						search();
+					}
+				} else {
 					search();
 				}
 			}
