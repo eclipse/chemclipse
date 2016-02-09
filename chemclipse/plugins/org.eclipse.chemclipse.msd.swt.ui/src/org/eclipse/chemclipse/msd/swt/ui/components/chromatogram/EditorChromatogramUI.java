@@ -34,7 +34,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
-import org.swtchart.IErrorBar;
 import org.swtchart.ILineSeries;
 import org.swtchart.ILineSeries.PlotSymbolType;
 import org.swtchart.IPlotArea;
@@ -108,7 +107,10 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 			 * Set the detected peaks and the selected peak if available.
 			 */
 			try {
-				series = SeriesConverterMSD.convertPeaks(chromatogramSelection, new Offset(0, 0), Sign.POSITIVE);
+				/*
+				 * Active Peaks
+				 */
+				series = SeriesConverterMSD.convertPeaks(chromatogramSelection, new Offset(0, 0), Sign.POSITIVE, true);
 				scatterSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, series.getId());
 				scatterSeries.setXSeries(series.getXSeries());
 				scatterSeries.setYSeries(series.getYSeries());
@@ -117,15 +119,6 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 				scatterSeries.setSymbolSize(5);
 				scatterSeries.setLineColor(Colors.GRAY);
 				scatterSeries.setSymbolColor(Colors.DARK_GRAY);
-				/*
-				 * Setting up a dummy error bar
-				 */
-				IErrorBar errorBar = scatterSeries.getYErrorBar();
-				errorBar.setColor(Colors.DARK_CYAN);
-				errorBar.setType(org.swtchart.IErrorBar.ErrorBarType.BOTH);
-				errorBar.setLineWidth(2);
-				errorBar.setError(10000.0d);
-				errorBar.setVisible(false);
 				/*
 				 * Show the selected peak if available
 				 */
@@ -159,6 +152,25 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 					backgroundSeries.setSymbolType(PlotSymbolType.NONE);
 					backgroundSeries.setLineColor(Colors.BLACK);
 				}
+			} catch(NoPeaksAvailableException e) {
+				/*
+				 * Do nothing.
+				 * Just don't add the series.
+				 */
+			}
+			/*
+			 * Inactive Peaks
+			 */
+			try {
+				series = SeriesConverterMSD.convertPeaks(chromatogramSelection, new Offset(0, 0), Sign.POSITIVE, false);
+				scatterSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, series.getId());
+				scatterSeries.setXSeries(series.getXSeries());
+				scatterSeries.setYSeries(series.getYSeries());
+				scatterSeries.setLineStyle(LineStyle.NONE);
+				scatterSeries.setSymbolType(PlotSymbolType.INVERTED_TRIANGLE);
+				scatterSeries.setSymbolSize(5);
+				scatterSeries.setLineColor(Colors.GRAY);
+				scatterSeries.setSymbolColor(Colors.GRAY);
 			} catch(NoPeaksAvailableException e) {
 				/*
 				 * Do nothing.
