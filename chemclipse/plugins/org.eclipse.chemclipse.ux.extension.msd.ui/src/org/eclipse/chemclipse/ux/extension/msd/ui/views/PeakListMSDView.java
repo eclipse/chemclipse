@@ -17,6 +17,13 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.core.IPeaks;
+import org.eclipse.chemclipse.model.implementation.Peaks;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateNotifier;
+import org.eclipse.chemclipse.msd.swt.ui.components.peak.PeakListUI;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -40,14 +47,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-
-import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.model.implementation.Peaks;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateNotifier;
-import org.eclipse.chemclipse.msd.swt.ui.components.peak.PeakListUI;
 
 public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 
@@ -187,6 +186,7 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 			/*
 			 * Check if the chromatogram selection is actually selected.
 			 */
+			peakListUI.setChromatogramSelection(chromatogramSelection);
 			if(chromatogramSelectionMSDFocused == null || chromatogramSelectionMSDFocused != chromatogramSelection) {
 				/*
 				 * No: Load the selection

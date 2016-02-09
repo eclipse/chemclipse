@@ -18,10 +18,18 @@ import java.util.List;
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverterSupport;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.msd.swt.ui.Activator;
 import org.eclipse.chemclipse.msd.swt.ui.internal.support.MassSpectrumExportRunnable;
@@ -84,6 +92,48 @@ public class MassSpectrumFileSupport {
 			massSpectra.addMassSpectrum(massSpectrum);
 			validateFile(dialog, converterSupport.getExportSupplier(), shell, converterSupport, massSpectra);
 		}
+	}
+
+	/**
+	 * Opens a file dialog and tries to save the mass spectra
+	 * 
+	 * @param chromatogram
+	 * @throws NoConverterAvailableException
+	 */
+	public static void saveMassSpectra(List<IChromatogramPeakMSD> chromatogramPeaks) throws NoConverterAvailableException {
+
+		IMassSpectra massSpectra = new MassSpectra();
+		for(IChromatogramPeakMSD peak : chromatogramPeaks) {
+			try {
+				/*
+				 * Make a deep copy.
+				 */
+				IPeakMassSpectrum peakMassSpectrum = peak.getExtractedMassSpectrum();
+				IScanMSD massSpectrum = peakMassSpectrum.makeDeepCopy();
+				for(IPeakTarget peakTarget : peak.getTargets()) {
+					try {
+						/*
+						 * Transfer the targets.
+						 */
+						ILibraryInformation libraryInformation = peakTarget.getLibraryInformation();
+						IComparisonResult comparisonResult = peakTarget.getComparisonResult();
+						IMassSpectrumTarget massSpectrumTarget = new MassSpectrumTarget(libraryInformation, comparisonResult);
+						massSpectrumTarget.setIdentifier(peakTarget.getIdentifier());
+						massSpectrumTarget.setManuallyVerified(peakTarget.isManuallyVerified());
+						massSpectrum.addTarget(massSpectrumTarget);
+					} catch(ReferenceMustNotBeNullException e1) {
+						logger.warn(e1);
+					}
+				}
+				massSpectra.addMassSpectrum(massSpectrum);
+			} catch(CloneNotSupportedException e) {
+				logger.warn(e);
+			}
+		}
+		/*
+		 * Export the mass spectra.
+		 */
+		MassSpectrumFileSupport.saveMassSpectra(massSpectra);
 	}
 
 	/**
