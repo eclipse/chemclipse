@@ -20,23 +20,19 @@ import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.swtchart.Range;
 
 public class LibraryMassSpectrumStackUI extends Composite {
 
 	private static final Logger logger = Logger.getLogger(LibraryMassSpectrumStackUI.class);
 	//
 	private Label infoLabelUnknown;
-	private SimpleMassSpectrumUI simpleMassSpectrumUnknown;
-	private SimpleMassSpectrumUI simpleMassSpectrumLibrary;
+	private StackedMassSpectrumUI stackedMassSpectrumUnknown;
+	private StackedMassSpectrumUI stackedMassSpectrumLibrary;
 	private Label infoLabelLibrary;
 	//
 	private DecimalFormat decimalFormat;
@@ -69,51 +65,10 @@ public class LibraryMassSpectrumStackUI extends Composite {
 		massSpectraComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		massSpectraComposite.setLayout(new FillLayout(SWT.VERTICAL));
 		//
-		simpleMassSpectrumUnknown = new SimpleMassSpectrumUI(massSpectraComposite, SWT.FILL, massValueDisplayPrecision);
-		simpleMassSpectrumUnknown.setShowAxis(SWT.TOP, false);
-		simpleMassSpectrumUnknown.setShowAxis(SWT.RIGHT, false);
-		simpleMassSpectrumUnknown.getPlotArea().addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-
-				super.mouseUp(e);
-				Range range = simpleMassSpectrumUnknown.getRange();
-				simpleMassSpectrumLibrary.setRange(range);
-			}
-		});
-		simpleMassSpectrumUnknown.getPlotArea().addMouseWheelListener(new MouseWheelListener() {
-
-			@Override
-			public void mouseScrolled(MouseEvent e) {
-
-				Range range = simpleMassSpectrumUnknown.getRange();
-				simpleMassSpectrumLibrary.setRange(range);
-			}
-		});
-		//
-		simpleMassSpectrumLibrary = new SimpleMassSpectrumUI(massSpectraComposite, SWT.FILL, massValueDisplayPrecision);
-		simpleMassSpectrumLibrary.setShowAxis(SWT.TOP, false);
-		simpleMassSpectrumLibrary.setShowAxis(SWT.RIGHT, false);
-		simpleMassSpectrumLibrary.getPlotArea().addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-
-				super.mouseUp(e);
-				Range range = simpleMassSpectrumLibrary.getRange();
-				simpleMassSpectrumUnknown.setRange(range);
-			}
-		});
-		simpleMassSpectrumLibrary.getPlotArea().addMouseWheelListener(new MouseWheelListener() {
-
-			@Override
-			public void mouseScrolled(MouseEvent e) {
-
-				Range range = simpleMassSpectrumLibrary.getRange();
-				simpleMassSpectrumUnknown.setRange(range);
-			}
-		});
+		stackedMassSpectrumUnknown = new StackedMassSpectrumUI(massSpectraComposite, SWT.FILL, massValueDisplayPrecision);
+		stackedMassSpectrumLibrary = new StackedMassSpectrumUI(massSpectraComposite, SWT.FILL, massValueDisplayPrecision);
+		stackedMassSpectrumUnknown.setOtherStackedMassSpectrumUI(stackedMassSpectrumLibrary);
+		stackedMassSpectrumLibrary.setOtherStackedMassSpectrumUI(stackedMassSpectrumUnknown);
 		//
 		infoLabelLibrary = new Label(composite, SWT.NONE);
 		infoLabelLibrary.setText("");
@@ -131,18 +86,19 @@ public class LibraryMassSpectrumStackUI extends Composite {
 				IExtractedIonSignal libraryMS = libraryMassSpectrumCopy.getExtractedIonSignal();
 				int startMZ = ((unknownMS.getStartIon() < libraryMS.getStartIon()) ? unknownMS.getStartIon() : libraryMS.getStartIon()) - 1;
 				int stopMZ = ((unknownMS.getStopIon() > libraryMS.getStopIon()) ? unknownMS.getStopIon() : libraryMS.getStopIon()) + 1;
-				simpleMassSpectrumUnknown.setFixedAxisRangeX(startMZ, stopMZ);
-				simpleMassSpectrumLibrary.setFixedAxisRangeX(startMZ, stopMZ);
+				stackedMassSpectrumUnknown.setFixedAxisRangeX(startMZ, stopMZ);
+				stackedMassSpectrumLibrary.setFixedAxisRangeX(startMZ, stopMZ);
 				//
 				setMassSpectrumLabel(unknownMassSpectrumCopy, libraryMassSpectrumCopy);
-				simpleMassSpectrumUnknown.update(unknownMassSpectrumCopy, forceReload);
-				simpleMassSpectrumLibrary.update(libraryMassSpectrumCopy, forceReload);
+				stackedMassSpectrumUnknown.update(unknownMassSpectrumCopy, forceReload);
+				stackedMassSpectrumLibrary.update(libraryMassSpectrumCopy, forceReload);
+				//
 			} catch(CloneNotSupportedException e) {
 				logger.warn(e);
 			}
 		} else {
-			simpleMassSpectrumUnknown.update(null, true);
-			simpleMassSpectrumLibrary.update(null, true);
+			stackedMassSpectrumUnknown.update(null, true);
+			stackedMassSpectrumLibrary.update(null, true);
 		}
 	}
 

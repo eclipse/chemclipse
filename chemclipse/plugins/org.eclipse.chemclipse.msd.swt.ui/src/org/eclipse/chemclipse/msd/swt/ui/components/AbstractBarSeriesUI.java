@@ -132,6 +132,11 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		}
 	}
 
+	public Range getFixedAxisRangeX() {
+
+		return new Range(lowerX, upperX);
+	}
+
 	public void resetFixedAxisRangeX() {
 
 		lowerX = LOWER_X_NOT_SET;
@@ -236,8 +241,8 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 
 		super.redraw();
 		double xMin, xMax;
-		xMin = multipleLineSeries.getXMin();
-		xMax = multipleLineSeries.getXMax();
+		xMin = (lowerX > LOWER_X_NOT_SET) ? lowerX : multipleLineSeries.getXMin();
+		xMax = (upperX > UPPER_X_NOT_SET) ? upperX : multipleLineSeries.getXMax();
 		/*
 		 * Check and corrects the ranges and assures that xMin and xMax are not
 		 * both 0.
@@ -257,9 +262,8 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 			addSpaceToTopOfAbundance(yMin, yMax);
 			redrawIonScale();
 			redrawRelativeAbundanceScale();
+			setTopAndLeftAxisVisibility();
 		}
-		//
-		setTopAndLeftAxisVisibility();
 	}
 
 	private void addSpaceToTopOfAbundance(double yMin, double yMax) {
