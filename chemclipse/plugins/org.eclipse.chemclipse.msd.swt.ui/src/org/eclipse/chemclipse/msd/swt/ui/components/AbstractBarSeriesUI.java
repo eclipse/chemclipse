@@ -137,6 +137,24 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		return new Range(lowerX, upperX);
 	}
 
+	public void setAxisTitle(int selection, String title) {
+
+		switch(selection) {
+			case SWT.TOP:
+				xAxisTop.getTitle().setText(title);
+				break;
+			case SWT.RIGHT:
+				yAxisRight.getTitle().setText(title);
+				break;
+			case SWT.LEFT:
+				yAxisLeft.getTitle().setText(title);
+				break;
+			case SWT.BOTTOM:
+				xAxisBottom.getTitle().setText(title);
+				break;
+		}
+	}
+
 	public void resetFixedAxisRangeX() {
 
 		lowerX = LOWER_X_NOT_SET;

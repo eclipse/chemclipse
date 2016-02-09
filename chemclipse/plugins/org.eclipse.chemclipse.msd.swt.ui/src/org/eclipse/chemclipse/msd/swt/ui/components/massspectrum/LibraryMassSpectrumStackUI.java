@@ -21,19 +21,14 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 
 public class LibraryMassSpectrumStackUI extends Composite {
 
 	private static final Logger logger = Logger.getLogger(LibraryMassSpectrumStackUI.class);
 	//
-	private Label infoLabelUnknown;
 	private StackedMassSpectrumUI stackedMassSpectrumUnknown;
 	private StackedMassSpectrumUI stackedMassSpectrumLibrary;
-	private Label infoLabelLibrary;
 	//
 	private DecimalFormat decimalFormat;
 	private MassValueDisplayPrecision massValueDisplayPrecision;
@@ -52,27 +47,12 @@ public class LibraryMassSpectrumStackUI extends Composite {
 
 		setLayout(new FillLayout());
 		Composite composite = new Composite(this, SWT.FILL);
-		GridLayout layout = new GridLayout();
-		layout.makeColumnsEqualWidth = true;
-		layout.numColumns = 1;
-		composite.setLayout(layout);
+		composite.setLayout(new FillLayout(SWT.VERTICAL));
 		//
-		infoLabelUnknown = new Label(composite, SWT.NONE);
-		infoLabelUnknown.setText("");
-		infoLabelUnknown.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		Composite massSpectraComposite = new Composite(composite, SWT.NONE);
-		massSpectraComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		massSpectraComposite.setLayout(new FillLayout(SWT.VERTICAL));
-		//
-		stackedMassSpectrumUnknown = new StackedMassSpectrumUI(massSpectraComposite, SWT.FILL, massValueDisplayPrecision);
-		stackedMassSpectrumLibrary = new StackedMassSpectrumUI(massSpectraComposite, SWT.FILL, massValueDisplayPrecision);
+		stackedMassSpectrumUnknown = new StackedMassSpectrumUI(composite, SWT.FILL, massValueDisplayPrecision);
+		stackedMassSpectrumLibrary = new StackedMassSpectrumUI(composite, SWT.FILL, massValueDisplayPrecision);
 		stackedMassSpectrumUnknown.setOtherStackedMassSpectrumUI(stackedMassSpectrumLibrary);
 		stackedMassSpectrumLibrary.setOtherStackedMassSpectrumUI(stackedMassSpectrumUnknown);
-		//
-		infoLabelLibrary = new Label(composite, SWT.NONE);
-		infoLabelLibrary.setText("");
-		infoLabelLibrary.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
 	public void update(IScanMSD unknownMassSpectrum, IScanMSD libraryMassSpectrum, boolean forceReload) {
@@ -92,7 +72,6 @@ public class LibraryMassSpectrumStackUI extends Composite {
 				setMassSpectrumLabel(unknownMassSpectrumCopy, libraryMassSpectrumCopy);
 				stackedMassSpectrumUnknown.update(unknownMassSpectrumCopy, forceReload);
 				stackedMassSpectrumLibrary.update(libraryMassSpectrumCopy, forceReload);
-				//
 			} catch(CloneNotSupportedException e) {
 				logger.warn(e);
 			}
@@ -104,29 +83,26 @@ public class LibraryMassSpectrumStackUI extends Composite {
 
 	private void setMassSpectrumLabel(IScanMSD unknownMassSpectrum, IScanMSD libraryMassSpectrum) {
 
-		setMassSpectrumLabel(unknownMassSpectrum, "UNKNOWN MS = ", infoLabelUnknown);
-		setMassSpectrumLabel(libraryMassSpectrum, "LIBRARY MS = ", infoLabelLibrary);
+		setMassSpectrumLabel(unknownMassSpectrum, "UNKNOWN MS = ", stackedMassSpectrumUnknown);
+		setMassSpectrumLabel(libraryMassSpectrum, "LIBRARY MS = ", stackedMassSpectrumLibrary);
 	}
 
-	private void setMassSpectrumLabel(IScanMSD massSpectrum, String title, Label label) {
+	private void setMassSpectrumLabel(IScanMSD massSpectrum, String title, StackedMassSpectrumUI stackedMassSpectrumUI) {
 
 		StringBuilder builder = new StringBuilder();
+		builder.append("m/z [");
 		builder.append(title);
 		if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
 			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
 			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 			builder.append("NAME: ");
 			builder.append(libraryInformation.getName());
-			builder.append(" | ");
-			builder.append("CAS: ");
-			builder.append(libraryInformation.getCasNumber());
-			builder.append(" | ");
+		} else {
+			builder.append("RT: ");
+			builder.append(decimalFormat.format(massSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 		}
-		builder.append("RT: ");
-		builder.append(decimalFormat.format(massSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
-		builder.append(" | ");
-		builder.append("RI: ");
-		builder.append(decimalFormat.format(massSpectrum.getRetentionIndex()));
-		label.setText(builder.toString());
+		builder.append("]");
+		//
+		stackedMassSpectrumUI.setAxisTitle(SWT.BOTTOM, builder.toString());
 	}
 }
