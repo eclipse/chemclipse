@@ -30,4 +30,8 @@ public interface IFileSettings {
 	float getMinReverseMatchFactor();
 
 	void setMinReverseMatchFactor(float minReverseMatchFactor);
+
+	boolean isAddUnknownMzListTarget();
+
+	void setAddUnknownMzListTarget(boolean addUnknownMzListTarget);
 }
