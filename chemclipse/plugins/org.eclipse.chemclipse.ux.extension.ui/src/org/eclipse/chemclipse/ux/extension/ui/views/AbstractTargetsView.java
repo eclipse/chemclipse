@@ -141,7 +141,7 @@ public abstract class AbstractTargetsView {
 		 */
 		if(object != null) {
 			tableViewer.setInput(object);
-			sortTableInitially(0, TargetsTableComparator.ASCENDING); // Manually Verified
+			sortTableInitially(0, TargetsTableComparator.DESCENDING); // Manually Verified
 		}
 	}
 
