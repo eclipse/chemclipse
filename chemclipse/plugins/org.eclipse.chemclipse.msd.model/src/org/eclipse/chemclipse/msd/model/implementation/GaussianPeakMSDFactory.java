@@ -11,7 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.math3.analysis.function.Gaussian;
+import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
@@ -25,6 +29,8 @@ public class GaussianPeakMSDFactory {
 
 	private static final float RATIO_OF_RETENTION_TIME_TO_CONSIDER = 0.005f;
 	private static final double NORMALIZATION_VALUE = 1000d;
+	private static final double ION_VALUE = 18d;
+	private static final String INTEGRATOR_DESCRIPTION = "Gaussian Peak generator";
 
 	private GaussianPeakMSDFactory() {
 	}
@@ -52,7 +58,7 @@ public class GaussianPeakMSDFactory {
 		return new PeakMSD(peakModelMSD);
 	}
 
-	public static IPeakMSD createGaussianPeakMSD(IChromatogramMSD chromatogramMSD, float height, int retentionTime, float startBackgroundAbundance, float stopBackgroundAbundance, float retentionIndex, int setRetentionTimeColumn1, int setRetentionTimeColumn2) throws IllegalArgumentException, PeakException {
+	public static IPeakMSD createGaussianPeakMSD(IChromatogramMSD chromatogramMSD, float height, double area, int retentionTime, float startBackgroundAbundance, float stopBackgroundAbundance, float retentionIndex, int setRetentionTimeColumn1, int setRetentionTimeColumn2) throws IllegalArgumentException, PeakException {
 
 		if(chromatogramMSD == null) {
 			throw new PeakException("The chromatogram must not be null.");
@@ -79,6 +85,14 @@ public class GaussianPeakMSDFactory {
 		peakMassSpectrum.setRetentionTimeColumn1(setRetentionTimeColumn1);
 		peakMassSpectrum.setRetentionTimeColumn2(setRetentionTimeColumn2);
 		final IPeakModelMSD peakModelMSD = new PeakModelMSD(peakMassSpectrum, peakIntensities, startBackgroundAbundance, stopBackgroundAbundance);
-		return new PeakMSD(peakModelMSD);
+		/*
+		 * Set Peak Area
+		 */
+		final IIntegrationEntry integrationEntry = new IntegrationEntryMSD(ION_VALUE, area);
+		final List<IIntegrationEntry> integrationEntries = new ArrayList<>();
+		integrationEntries.add(integrationEntry);
+		final IPeakMSD peakMSD = new PeakMSD(peakModelMSD);
+		peakMSD.setIntegratedArea(integrationEntries, INTEGRATOR_DESCRIPTION);
+		return peakMSD;
 	}
 }

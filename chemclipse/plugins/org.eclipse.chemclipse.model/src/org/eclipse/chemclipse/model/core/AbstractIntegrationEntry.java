@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.model.core;
 
 public abstract class AbstractIntegrationEntry implements IIntegrationEntry {
 
-	private double integratedArea;
+	final private double integratedArea;
 
 	public AbstractIntegrationEntry(double integratedArea) {
 		this.integratedArea = integratedArea;
