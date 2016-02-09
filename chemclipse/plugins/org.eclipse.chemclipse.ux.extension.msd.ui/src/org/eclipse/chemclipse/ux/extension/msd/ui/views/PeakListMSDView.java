@@ -17,6 +17,13 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.core.IPeaks;
+import org.eclipse.chemclipse.model.implementation.Peaks;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateNotifier;
+import org.eclipse.chemclipse.msd.swt.ui.components.peak.PeakListUI;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -40,14 +47,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-
-import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.model.implementation.Peaks;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateNotifier;
-import org.eclipse.chemclipse.msd.swt.ui.components.peak.PeakListUI;
 
 public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 
@@ -187,6 +186,7 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 			/*
 			 * Check if the chromatogram selection is actually selected.
 			 */
+			peakListUI.setChromatogramSelection(chromatogramSelection);
 			if(chromatogramSelectionMSDFocused == null || chromatogramSelectionMSDFocused != chromatogramSelection) {
 				/*
 				 * No: Load the selection
@@ -234,6 +234,21 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 			peakDeleteUpdate = true;
 			peakListUI.deleteSelectedPeaks(getChromatogramSelection());
 		}
+	}
+
+	private void deactivateSelectedPeaks() {
+
+		peakListUI.setActiveStatusSelectedPeaks(getChromatogramSelection(), false);
+	}
+
+	private void activateSelectedPeaks() {
+
+		peakListUI.setActiveStatusSelectedPeaks(getChromatogramSelection(), true);
+	}
+
+	private void exportSelectedPeaks() {
+
+		peakListUI.exportSelectedPeaks(getChromatogramSelection());
 	}
 
 	private void updatePeaksInList(IChromatogramSelectionMSD chromatogramSelection, boolean forceReload) {
@@ -425,6 +440,69 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 					}
 				};
 				action.setText("Delete the selected peak(s)");
+				manager.add(action);
+			}
+		});
+		/*
+		 * Deactivate peaks
+		 */
+		menuManager.addMenuListener(new IMenuListener() {
+
+			@Override
+			public void menuAboutToShow(IMenuManager manager) {
+
+				IAction action = new Action() {
+
+					@Override
+					public void run() {
+
+						super.run();
+						deactivateSelectedPeaks();
+					}
+				};
+				action.setText("Deactivate the selected peak(s)");
+				manager.add(action);
+			}
+		});
+		/*
+		 * Activate selected peaks
+		 */
+		menuManager.addMenuListener(new IMenuListener() {
+
+			@Override
+			public void menuAboutToShow(IMenuManager manager) {
+
+				IAction action = new Action() {
+
+					@Override
+					public void run() {
+
+						super.run();
+						activateSelectedPeaks();
+					}
+				};
+				action.setText("Activate the selected peak(s)");
+				manager.add(action);
+			}
+		});
+		/*
+		 * Export selected peaks
+		 */
+		menuManager.addMenuListener(new IMenuListener() {
+
+			@Override
+			public void menuAboutToShow(IMenuManager manager) {
+
+				IAction action = new Action() {
+
+					@Override
+					public void run() {
+
+						super.run();
+						exportSelectedPeaks();
+					}
+				};
+				action.setText("Export the selected peak(s)");
 				manager.add(action);
 			}
 		});

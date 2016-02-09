@@ -29,6 +29,8 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -65,6 +67,17 @@ public class PeakTargetsView extends AbstractTargetsView {
 		super.createPartControl(parent);
 		subscribe();
 		TableViewer tableViewer = getTableViewer();
+		tableViewer.getControl().addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				if(e.keyCode != 127 && e.stateMask == 0) {
+					propagateSelectedTargetAndMassSpectrum();
+				}
+			}
+		});
+		//
 		tableViewer.getControl().addMouseListener(new MouseAdapter() {
 
 			@Override

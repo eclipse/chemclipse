@@ -286,9 +286,9 @@ public class SeriesConverterMSD {
 	 * @param sign
 	 * @return ISeries
 	 */
-	public static ISeries convertPeaks(IChromatogramSelectionMSD chromatogramSelection, IOffset offset, Sign sign) throws NoPeaksAvailableException {
+	public static ISeries convertPeaks(IChromatogramSelectionMSD chromatogramSelection, IOffset offset, Sign sign, boolean activeForAnalysis) throws NoPeaksAvailableException {
 
-		IMultipleSeries peakSeries = convertPeaks(chromatogramSelection, sign, offset);
+		IMultipleSeries peakSeries = convertPeaks(chromatogramSelection, sign, offset, activeForAnalysis);
 		return peakSeries.getMultipleSeries().get(0);
 	}
 
@@ -318,7 +318,7 @@ public class SeriesConverterMSD {
 	 * @param offset
 	 * @return IMultipleSeries
 	 */
-	private static IMultipleSeries convertPeaks(IChromatogramSelectionMSD chromatogramSelection, Sign sign, IOffset offset) throws NoPeaksAvailableException {
+	private static IMultipleSeries convertPeaks(IChromatogramSelectionMSD chromatogramSelection, Sign sign, IOffset offset, boolean activeForAnalysis) throws NoPeaksAvailableException {
 
 		/*
 		 * There must be at least one chromatogram in the list.
@@ -326,8 +326,9 @@ public class SeriesConverterMSD {
 		IMultipleSeries peakSeries = new MultipleSeries();
 		if(chromatogramSelection != null) {
 			offset = SeriesConverter.validateOffset(offset);
-			List<IChromatogramPeakMSD> peaks = chromatogramSelection.getChromatogramMSD().getPeaks(chromatogramSelection);
-			int amountPeaks = peaks.size();
+			List<IChromatogramPeakMSD> chromatogramPeaks = chromatogramSelection.getChromatogramMSD().getPeaks(chromatogramSelection);
+			int amountPeaks = getAmountPeaks(chromatogramPeaks, activeForAnalysis);
+			//
 			/*
 			 * Throw an exception if no peaks are available.
 			 */
@@ -337,52 +338,70 @@ public class SeriesConverterMSD {
 			/*
 			 * Get the retention time and max abundance value for each peak.
 			 */
-			IPeakModelMSD peakModel;
+			;
 			double[] xSeries = new double[amountPeaks];
 			double[] ySeries = new double[amountPeaks];
 			int x = 0;
 			int y = 0;
-			double retentionTime;
-			double abundance;
-			double xOffset;
-			double yOffset;
 			/*
 			 * Iterate through all peaks of the chromatogram selection.
 			 */
-			for(IChromatogramPeakMSD peak : peaks) {
+			for(IChromatogramPeakMSD chromatogramPeak : chromatogramPeaks) {
 				/*
 				 * Retrieve the x and y signal of each peak.
 				 */
-				peakModel = peak.getPeakModel();
-				retentionTime = peakModel.getRetentionTimeAtPeakMaximum();
-				abundance = peakModel.getBackgroundAbundance() + peakModel.getPeakAbundance();
-				/*
-				 * Sign the abundance as a negative value?
-				 */
-				xOffset = offset.getCurrentXOffset();
-				yOffset = offset.getCurrentYOffset();
-				if(sign == Sign.NEGATIVE) {
-					abundance *= -1;
-					xOffset *= -1;
-					yOffset *= -1;
+				if(printPeak(chromatogramPeak, activeForAnalysis)) {
+					IPeakModelMSD peakModel = chromatogramPeak.getPeakModel();
+					double retentionTime = peakModel.getRetentionTimeAtPeakMaximum();
+					double abundance = peakModel.getBackgroundAbundance() + peakModel.getPeakAbundance();
+					/*
+					 * Sign the abundance as a negative value?
+					 */
+					double xOffset = offset.getCurrentXOffset();
+					double yOffset = offset.getCurrentYOffset();
+					if(sign == Sign.NEGATIVE) {
+						abundance *= -1;
+						xOffset *= -1;
+						yOffset *= -1;
+					}
+					/*
+					 * Set the offset.
+					 */
+					retentionTime += xOffset;
+					abundance += yOffset;
+					/*
+					 * Store the values in the array.
+					 */
+					xSeries[x++] = retentionTime;
+					ySeries[y++] = abundance;
 				}
-				/*
-				 * Set the offset.
-				 */
-				retentionTime += xOffset;
-				abundance += yOffset;
-				/*
-				 * Store the values in the array.
-				 */
-				xSeries[x++] = retentionTime;
-				ySeries[y++] = abundance;
-				/*
-				 * Add the peak.
-				 */
-				peakSeries.add(new Series(xSeries, ySeries, "Peaks"));
+			}
+			/*
+			 * Add the series.
+			 */
+			if(activeForAnalysis) {
+				peakSeries.add(new Series(xSeries, ySeries, "Active Peaks"));
+			} else {
+				peakSeries.add(new Series(xSeries, ySeries, "Inactive Peaks"));
 			}
 		}
 		return peakSeries;
+	}
+
+	private static int getAmountPeaks(List<IChromatogramPeakMSD> chromatogramPeaks, boolean activeForAnalysis) {
+
+		int amountPeaks = 0;
+		for(IChromatogramPeakMSD chromatogramPeak : chromatogramPeaks) {
+			if(printPeak(chromatogramPeak, activeForAnalysis)) {
+				amountPeaks++;
+			}
+		}
+		return amountPeaks;
+	}
+
+	private static boolean printPeak(IChromatogramPeakMSD chromatogramPeak, boolean activeForAnalysis) {
+
+		return activeForAnalysis == chromatogramPeak.isActiveForAnalysis();
 	}
 
 	/**
