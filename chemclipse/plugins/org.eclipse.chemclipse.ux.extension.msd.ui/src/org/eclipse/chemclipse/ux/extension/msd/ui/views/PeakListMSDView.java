@@ -236,6 +236,21 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 		}
 	}
 
+	private void deactivateSelectedPeaks() {
+
+		peakListUI.setActiveStatusSelectedPeaks(getChromatogramSelection(), false);
+	}
+
+	private void activateSelectedPeaks() {
+
+		peakListUI.setActiveStatusSelectedPeaks(getChromatogramSelection(), true);
+	}
+
+	private void exportSelectedPeaks() {
+
+		peakListUI.exportSelectedPeaks(getChromatogramSelection());
+	}
+
 	private void updatePeaksInList(IChromatogramSelectionMSD chromatogramSelection, boolean forceReload) {
 
 		/*
@@ -425,6 +440,69 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 					}
 				};
 				action.setText("Delete the selected peak(s)");
+				manager.add(action);
+			}
+		});
+		/*
+		 * Deactivate peaks
+		 */
+		menuManager.addMenuListener(new IMenuListener() {
+
+			@Override
+			public void menuAboutToShow(IMenuManager manager) {
+
+				IAction action = new Action() {
+
+					@Override
+					public void run() {
+
+						super.run();
+						deactivateSelectedPeaks();
+					}
+				};
+				action.setText("Deactivate the selected peak(s)");
+				manager.add(action);
+			}
+		});
+		/*
+		 * Activate selected peaks
+		 */
+		menuManager.addMenuListener(new IMenuListener() {
+
+			@Override
+			public void menuAboutToShow(IMenuManager manager) {
+
+				IAction action = new Action() {
+
+					@Override
+					public void run() {
+
+						super.run();
+						activateSelectedPeaks();
+					}
+				};
+				action.setText("Activate the selected peak(s)");
+				manager.add(action);
+			}
+		});
+		/*
+		 * Export selected peaks
+		 */
+		menuManager.addMenuListener(new IMenuListener() {
+
+			@Override
+			public void menuAboutToShow(IMenuManager manager) {
+
+				IAction action = new Action() {
+
+					@Override
+					public void run() {
+
+						super.run();
+						exportSelectedPeaks();
+					}
+				};
+				action.setText("Export the selected peak(s)");
 				manager.add(action);
 			}
 		});

@@ -119,39 +119,6 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 				scatterSeries.setSymbolSize(5);
 				scatterSeries.setLineColor(Colors.GRAY);
 				scatterSeries.setSymbolColor(Colors.DARK_GRAY);
-				/*
-				 * Show the selected peak if available
-				 */
-				IPeakMSD peak = chromatogramSelection.getSelectedPeak();
-				if(peak != null && PreferenceSupplier.showSelectedPeakInEditor()) {
-					/*
-					 * Peak
-					 */
-					series = SeriesConverterMSD.convertSelectedPeak(peak, true, Sign.POSITIVE);
-					peakSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, series.getId());
-					peakSeries.setXSeries(series.getXSeries());
-					peakSeries.setYSeries(series.getYSeries());
-					peakSeries.enableArea(true);
-					if(PreferenceSupplier.showScansOfSelectedPeak()) {
-						peakSeries.setSymbolType(PlotSymbolType.CIRCLE);
-						peakSeries.setSymbolColor(Colors.DARK_RED);
-						int size = PreferenceSupplier.sizeOfPeakScanMarker();
-						peakSeries.setSymbolSize(size);
-					} else {
-						peakSeries.setSymbolType(PlotSymbolType.NONE);
-					}
-					peakSeries.setLineColor(Colors.DARK_RED);
-					/*
-					 * Background
-					 */
-					series = SeriesConverterMSD.convertSelectedPeakBackground(peak, Sign.POSITIVE);
-					backgroundSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, series.getId());
-					backgroundSeries.setXSeries(series.getXSeries());
-					backgroundSeries.setYSeries(series.getYSeries());
-					backgroundSeries.enableArea(true);
-					backgroundSeries.setSymbolType(PlotSymbolType.NONE);
-					backgroundSeries.setLineColor(Colors.BLACK);
-				}
 			} catch(NoPeaksAvailableException e) {
 				/*
 				 * Do nothing.
@@ -176,6 +143,39 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 				 * Do nothing.
 				 * Just don't add the series.
 				 */
+			}
+			/*
+			 * Show the selected peak if available
+			 */
+			IPeakMSD peak = chromatogramSelection.getSelectedPeak();
+			if(peak != null && PreferenceSupplier.showSelectedPeakInEditor()) {
+				/*
+				 * Peak
+				 */
+				series = SeriesConverterMSD.convertSelectedPeak(peak, true, Sign.POSITIVE);
+				peakSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, series.getId());
+				peakSeries.setXSeries(series.getXSeries());
+				peakSeries.setYSeries(series.getYSeries());
+				peakSeries.enableArea(true);
+				if(PreferenceSupplier.showScansOfSelectedPeak()) {
+					peakSeries.setSymbolType(PlotSymbolType.CIRCLE);
+					peakSeries.setSymbolColor(Colors.DARK_RED);
+					int size = PreferenceSupplier.sizeOfPeakScanMarker();
+					peakSeries.setSymbolSize(size);
+				} else {
+					peakSeries.setSymbolType(PlotSymbolType.NONE);
+				}
+				peakSeries.setLineColor(Colors.DARK_RED);
+				/*
+				 * Background
+				 */
+				series = SeriesConverterMSD.convertSelectedPeakBackground(peak, Sign.POSITIVE);
+				backgroundSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, series.getId());
+				backgroundSeries.setXSeries(series.getXSeries());
+				backgroundSeries.setYSeries(series.getYSeries());
+				backgroundSeries.enableArea(true);
+				backgroundSeries.setSymbolType(PlotSymbolType.NONE);
+				backgroundSeries.setLineColor(Colors.BLACK);
 			}
 			/*
 			 * Set the identified scans marker if available.

@@ -55,7 +55,7 @@ public class PeakListUI {
 	private PeakListTableComparator peakListTableComparator;
 	private static final String PEAK_IS_ACTIVE_FOR_ANALYSIS = "Active for Analysis";
 	private String[] titles = {PEAK_IS_ACTIVE_FOR_ANALYSIS, "RT (minutes)", "RI", "Area", "Start RT", "Stop RT", "Width", "Scan# at Peak Maximum", "S/N", "Leading", "Tailing", "Model Description", "Suggested Components"};
-	private int bounds[] = {30, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
+	private int bounds[] = {30, 100, 60, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 	public PeakListUI(Composite parent, int style) {
 		initialize(parent);
@@ -125,6 +125,30 @@ public class PeakListUI {
 				chromSelection.setSelectedPeak(peaks.get(0));
 			}
 			chromSelection.update(true); // true: forces the editor to update
+		}
+	}
+
+	public void setActiveStatusSelectedPeaks(IChromatogramSelectionMSD chromatogramSelection, boolean activeForAnalysis) {
+
+		Table table = tableViewer.getTable();
+		int[] indices = table.getSelectionIndices();
+		List<IChromatogramPeakMSD> chromatogramPeaks = getChromatogramPeakList(table, indices);
+		for(IChromatogramPeakMSD chromatogramPeak : chromatogramPeaks) {
+			chromatogramPeak.setActiveForAnalysis(activeForAnalysis);
+		}
+		tableViewer.refresh();
+		chromatogramSelection.update(true);
+	}
+
+	public void exportSelectedPeaks(IChromatogramSelectionMSD chromatogramSelection) {
+
+		try {
+			Table table = tableViewer.getTable();
+			int[] indices = table.getSelectionIndices();
+			List<IChromatogramPeakMSD> chromatogramPeaks = getChromatogramPeakList(table, indices);
+			MassSpectrumFileSupport.saveMassSpectra(chromatogramPeaks);
+		} catch(NoConverterAvailableException e1) {
+			logger.warn(e1);
 		}
 	}
 
