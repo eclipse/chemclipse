@@ -22,6 +22,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	//
 	String IMAGE_DESELECTED = "deselected.gif";
 	String IMAGE_SELECTED = "selected.gif";
+	String IMAGE_CHECK_ALL = "checkAll.gif";
+	String IMAGE_UNCHECK_ALL = "uncheckAll.gif";
 	//
 	String IMAGE_PREFERENCES = "preferences.gif";
 	String IMAGE_DRIVE = "drive.gif";
