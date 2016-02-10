@@ -27,8 +27,8 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferen
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFilePeakIdentifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.comparator.SortOrder;
+import org.eclipse.chemclipse.model.comparator.TargetCombinedComparator;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
@@ -71,11 +71,11 @@ public class FileIdentifier {
 	private static Map<String, IScanMSD> databaseCasNumbers = null;
 	//
 	private IonAbundanceComparator ionAbundanceComparator;
-	private IdentificationTargetComparator identificationTargetComparator;
+	private TargetCombinedComparator targetCombinedComparator;
 
 	public FileIdentifier() {
 		ionAbundanceComparator = new IonAbundanceComparator(SortOrder.DESC);
-		identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC);
+		targetCombinedComparator = new TargetCombinedComparator(SortOrder.DESC);
 	}
 
 	public IMassSpectra runIdentification(List<IScanMSD> massSpectraList, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
@@ -126,7 +126,7 @@ public class FileIdentifier {
 						setMassSpectrumTargetUnknown(unknown);
 					}
 				} else {
-					Collections.sort(massSpectrumTargets, identificationTargetComparator);
+					Collections.sort(massSpectrumTargets, targetCombinedComparator);
 					int size = (numberOfTargets <= massSpectrumTargets.size()) ? numberOfTargets : massSpectrumTargets.size();
 					for(int i = 0; i < size; i++) {
 						unknown.addTarget(massSpectrumTargets.get(i));
@@ -199,7 +199,7 @@ public class FileIdentifier {
 					setPeakTargetUnknown(peakMSD);
 				}
 			} else {
-				Collections.sort(peakTargets, identificationTargetComparator);
+				Collections.sort(peakTargets, targetCombinedComparator);
 				int size = (numberOfTargets <= peakTargets.size()) ? numberOfTargets : peakTargets.size();
 				for(int i = 0; i < size; i++) {
 					peakMSD.addTarget(peakTargets.get(i));
