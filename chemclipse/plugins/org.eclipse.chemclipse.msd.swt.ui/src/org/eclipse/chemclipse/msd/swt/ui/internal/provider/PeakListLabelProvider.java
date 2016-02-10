@@ -12,9 +12,15 @@
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import java.text.DecimalFormat;
+import java.util.Collections;
+import java.util.List;
 
+import org.eclipse.chemclipse.model.comparator.SortOrder;
+import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
@@ -24,6 +30,12 @@ import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvide
 import org.eclipse.swt.graphics.Image;
 
 public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
+
+	private TargetExtendedComparator targetExtendedComparator;
+
+	public PeakListLabelProvider() {
+		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
+	}
 
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
@@ -54,6 +66,8 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 		if(element instanceof IPeakMSD) {
 			IPeakMSD peak = (IPeakMSD)element;
 			IPeakModelMSD peakModel = peak.getPeakModel();
+			ILibraryInformation libraryInformation = getLibraryInformation(peak.getTargets());
+			//
 			switch(columnIndex) {
 				case 0:
 					text = "";
@@ -102,6 +116,11 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 				case 12: // Suggested Components
 					text = Integer.toString(peak.getSuggestedNumberOfComponents());
 					break;
+				case 13: // Name
+					if(libraryInformation != null) {
+						text = libraryInformation.getName();
+					}
+					break;
 				default:
 					text = "n.v.";
 			}
@@ -112,5 +131,15 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 	public Image getImage(Object element) {
 
 		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
+	}
+
+	private ILibraryInformation getLibraryInformation(List<IPeakTarget> targets) {
+
+		ILibraryInformation libraryInformation = null;
+		Collections.sort(targets, targetExtendedComparator);
+		if(targets.size() >= 1) {
+			libraryInformation = targets.get(0).getLibraryInformation();
+		}
+		return libraryInformation;
 	}
 }

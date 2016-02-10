@@ -11,6 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.chemclipse.model.comparator.SortOrder;
+import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
@@ -19,6 +26,12 @@ import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
 public class PeakListTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
+
+	private TargetExtendedComparator targetExtendedComparator;
+
+	public PeakListTableComparator() {
+		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
+	}
 
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {
@@ -30,8 +43,11 @@ public class PeakListTableComparator extends AbstractRecordTableComparator imple
 		if(e1 instanceof IPeakMSD && e2 instanceof IPeakMSD) {
 			IPeakMSD peak1 = (IPeakMSD)e1;
 			IPeakModelMSD peakModel1 = peak1.getPeakModel();
+			ILibraryInformation libraryInformation1 = getLibraryInformation(peak1.getTargets());
 			IPeakMSD peak2 = (IPeakMSD)e2;
 			IPeakModelMSD peakModel2 = peak2.getPeakModel();
+			ILibraryInformation libraryInformation2 = getLibraryInformation(peak2.getTargets());
+			//
 			switch(getPropertyIndex()) {
 				case 0:
 					sortOrder = Boolean.compare(peak2.isActiveForAnalysis(), peak1.isActiveForAnalysis());
@@ -81,6 +97,11 @@ public class PeakListTableComparator extends AbstractRecordTableComparator imple
 				case 12: // Suggested Components
 					sortOrder = peak2.getSuggestedNumberOfComponents() - peak1.getSuggestedNumberOfComponents();
 					break;
+				case 13: // Name
+					if(libraryInformation1 != null && libraryInformation2 != null) {
+						sortOrder = libraryInformation2.getName().compareTo(libraryInformation1.getName());
+					}
+					break;
 				default:
 					sortOrder = 0;
 			}
@@ -89,5 +110,15 @@ public class PeakListTableComparator extends AbstractRecordTableComparator imple
 			sortOrder = -sortOrder;
 		}
 		return sortOrder;
+	}
+
+	private ILibraryInformation getLibraryInformation(List<IPeakTarget> targets) {
+
+		ILibraryInformation libraryInformation = null;
+		Collections.sort(targets, targetExtendedComparator);
+		if(targets.size() >= 1) {
+			libraryInformation = targets.get(0).getLibraryInformation();
+		}
+		return libraryInformation;
 	}
 }
