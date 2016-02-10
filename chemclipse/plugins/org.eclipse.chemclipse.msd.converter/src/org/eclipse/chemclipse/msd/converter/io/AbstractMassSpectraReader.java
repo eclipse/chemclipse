@@ -16,35 +16,40 @@ import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 
 public abstract class AbstractMassSpectraReader extends AbstractFileHelper implements IMassSpectraReader {
 
+	@Override
 	public void extractNameAndReferenceIdentifier(IRegularLibraryMassSpectrum massSpectrum, String name, String referenceIdentifierMarker, String referenceIdentifierPrefix) {
 
-		boolean setNameTraditionally = true;
-		if(referenceIdentifierMarker != null && !referenceIdentifierPrefix.equals("")) {
-			if(name.contains(referenceIdentifierMarker)) {
-				String[] values = name.split(referenceIdentifierMarker);
-				if(values.length >= 2) {
-					/*
-					 * Extract the reference identifier.
-					 */
-					setNameTraditionally = false;
-					massSpectrum.getLibraryInformation().setName(values[0].trim());
-					//
-					StringBuilder builder = new StringBuilder();
-					builder.append(referenceIdentifierPrefix);
-					int size = values.length;
-					for(int i = 1; i < size; i++) {
-						builder.append(values[i]);
-						if(i < size - 1) {
-							builder.append(" ");
+		if(name != null) {
+			boolean setNameTraditionally = true;
+			if(referenceIdentifierMarker != null && !referenceIdentifierMarker.equals("")) {
+				if(name.contains(referenceIdentifierMarker)) {
+					String[] values = name.split(referenceIdentifierMarker);
+					if(values.length >= 2) {
+						/*
+						 * Extract the reference identifier.
+						 */
+						setNameTraditionally = false;
+						massSpectrum.getLibraryInformation().setName(values[0].trim());
+						//
+						StringBuilder builder = new StringBuilder();
+						if(referenceIdentifierPrefix != null) {
+							builder.append(referenceIdentifierPrefix);
 						}
+						int size = values.length;
+						for(int i = 1; i < size; i++) {
+							builder.append(values[i]);
+							if(i < size - 1) {
+								builder.append(" ");
+							}
+						}
+						massSpectrum.getLibraryInformation().setReferenceIdentifier(builder.toString().trim());
 					}
-					massSpectrum.getLibraryInformation().setReferenceIdentifier(builder.toString().trim());
 				}
 			}
-		}
-		//
-		if(setNameTraditionally) {
-			massSpectrum.getLibraryInformation().setName(name);
+			//
+			if(setNameTraditionally) {
+				massSpectrum.getLibraryInformation().setName(name);
+			}
 		}
 	}
 }

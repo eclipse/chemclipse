@@ -15,12 +15,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.io.IFileHelper;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IMassSpectraReader extends IFileHelper {
 
@@ -36,4 +36,15 @@ public interface IMassSpectraReader extends IFileHelper {
 	 * @throws IOException
 	 */
 	IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException;
+
+	/**
+	 * This method tries to extract the reference identifier from the given name.
+	 * Separated name and identifier will be set. If no identifier is available, the name will be set.
+	 * 
+	 * @param massSpectrum
+	 * @param name
+	 * @param referenceIdentifierMarker
+	 * @param referenceIdentifierPrefix
+	 */
+	void extractNameAndReferenceIdentifier(IRegularLibraryMassSpectrum massSpectrum, String name, String referenceIdentifierMarker, String referenceIdentifierPrefix);
 }
