@@ -54,6 +54,8 @@ public class AmdisMSLReader extends AbstractMassSpectraReader implements IMassSp
 	private static final Pattern retentionTimePattern = Pattern.compile("(RT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionIndexPattern = Pattern.compile("(RI:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern ionPattern = Pattern.compile("(\\d+)(\\s+)(\\d+)");
+	//
+	private static final String RETENTION_INDICES_DELIMITER = ", ";
 
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -165,8 +167,8 @@ public class AmdisMSLReader extends AbstractMassSpectraReader implements IMassSp
 		massSpectrum.getLibraryInformation().setCasNumber(casNumber);
 		int retentionTime = extractContentAsInt(massSpectrumData, retentionTimePattern);
 		massSpectrum.setRetentionTime(retentionTime);
-		float retentionIndex = extractContentAsFloat(massSpectrumData, retentionIndexPattern);
-		massSpectrum.setRetentionIndex(retentionIndex);
+		String retentionIndices = extractContentAsString(massSpectrumData, retentionIndexPattern);
+		extractRetentionIndices(massSpectrum, retentionIndices, RETENTION_INDICES_DELIMITER);
 		/*
 		 * Extracts all ions and stored them.
 		 */
@@ -244,27 +246,6 @@ public class AmdisMSLReader extends AbstractMassSpectraReader implements IMassSp
 			Matcher matcher = pattern.matcher(massSpectrumData);
 			if(matcher.find()) {
 				content = (int)(Float.parseFloat(matcher.group(2).trim()) * correctionFactor);
-			}
-		} catch(Exception e) {
-			logger.warn(e);
-		}
-		return content;
-	}
-
-	/**
-	 * Extracts the content from the given mass spectrum string defined by the
-	 * given pattern.
-	 * 
-	 * @param massSpectrumData
-	 * @return String
-	 */
-	private float extractContentAsFloat(String massSpectrumData, Pattern pattern) {
-
-		float content = 0.0f;
-		try {
-			Matcher matcher = pattern.matcher(massSpectrumData);
-			if(matcher.find()) {
-				content = (float)(Float.parseFloat(matcher.group(2)));
 			}
 		} catch(Exception e) {
 			logger.warn(e);
