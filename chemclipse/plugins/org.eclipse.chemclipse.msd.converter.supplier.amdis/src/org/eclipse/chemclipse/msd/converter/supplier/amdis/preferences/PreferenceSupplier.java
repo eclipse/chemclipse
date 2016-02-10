@@ -26,6 +26,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_SPLIT_LIBRARY = false;
 	public static final String P_EXCLUDE_UNCERTAIN_IONS = "excludeUncertainIons";
 	public static final boolean DEF_EXCLUDE_UNCERTAIN_IONS = false;
+	public static final String P_REFERENCE_IDENTIFIER_MARKER = "referenceIdentifierMarker";
+	public static final String DEF_REFERENCE_IDENTIFIER_MARKER = "";
+	public static final String P_REFERENCE_IDENTIFIER_PREFIX = "referenceIdentifierPrefix";
+	public static final String DEF_REFERENCE_IDENTIFIER_PREFIX = "";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -55,6 +59,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_SPLIT_LIBRARY, Boolean.toString(DEF_SPLIT_LIBRARY));
 		defaultValues.put(P_EXCLUDE_UNCERTAIN_IONS, Boolean.toString(DEF_EXCLUDE_UNCERTAIN_IONS));
+		defaultValues.put(P_REFERENCE_IDENTIFIER_MARKER, DEF_REFERENCE_IDENTIFIER_MARKER);
+		defaultValues.put(P_REFERENCE_IDENTIFIER_PREFIX, DEF_REFERENCE_IDENTIFIER_PREFIX);
 		return defaultValues;
 	}
 
@@ -74,5 +80,17 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getBoolean(P_EXCLUDE_UNCERTAIN_IONS, DEF_EXCLUDE_UNCERTAIN_IONS);
+	}
+
+	public static String getReferenceIdentifierMarker() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.get(P_REFERENCE_IDENTIFIER_MARKER, DEF_REFERENCE_IDENTIFIER_MARKER);
+	}
+
+	public static String getReferenceIdentifierPrefix() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.get(P_REFERENCE_IDENTIFIER_PREFIX, DEF_REFERENCE_IDENTIFIER_PREFIX);
 	}
 }

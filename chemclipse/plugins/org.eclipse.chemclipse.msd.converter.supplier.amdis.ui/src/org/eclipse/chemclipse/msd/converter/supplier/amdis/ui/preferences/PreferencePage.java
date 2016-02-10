@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.Preferenc
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.ui.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -35,6 +36,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SPLIT_LIBRARY, "Split library to several output files (<= 65535 mass spectra)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_EXCLUDE_UNCERTAIN_IONS, "Exclude uncertain ions from ELU file conversion", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceSupplier.P_REFERENCE_IDENTIFIER_MARKER, "Reference ID Marker", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceSupplier.P_REFERENCE_IDENTIFIER_PREFIX, "Reference ID Prefix", getFieldEditorParent()));
 	}
 
 	/*

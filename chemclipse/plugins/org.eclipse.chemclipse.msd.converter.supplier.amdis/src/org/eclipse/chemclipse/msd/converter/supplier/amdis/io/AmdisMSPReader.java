@@ -35,6 +35,7 @@ import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.IVendorLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.VendorLibraryMassSpectrum;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
@@ -140,13 +141,16 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 	private IMassSpectra extractMassSpectra(List<String> massSpectraData) {
 
 		IMassSpectra massSpectra = new MassSpectra();
+		String referenceIdentifierMarker = PreferenceSupplier.getReferenceIdentifierMarker();
+		String referenceIdentifierPrefix = PreferenceSupplier.getReferenceIdentifierPrefix();
+		//
 		if(massSpectraData.size() > 1) {
 			/*
 			 * Iterates through the saved mass spectrum text data and converts it to
 			 * a mass spectrum.
 			 */
 			for(String massSpectrumData : massSpectraData) {
-				addMassSpectrum(massSpectra, massSpectrumData);
+				addMassSpectrum(massSpectra, massSpectrumData, referenceIdentifierMarker, referenceIdentifierPrefix);
 			}
 		} else if(massSpectraData.size() == 1) {
 			/*
@@ -157,9 +161,9 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 			for(String splittedMassSpectrum : splittedMassSpectra) {
 				if(!splittedMassSpectrum.equals("")) {
 					if(splittedMassSpectra.length == 1) {
-						addMassSpectrum(massSpectra, splittedMassSpectrum);
+						addMassSpectrum(massSpectra, splittedMassSpectrum, referenceIdentifierMarker, referenceIdentifierPrefix);
 					} else {
-						addMassSpectrum(massSpectra, "NAME:" + splittedMassSpectrum);
+						addMassSpectrum(massSpectra, "NAME:" + splittedMassSpectrum, referenceIdentifierMarker, referenceIdentifierPrefix);
 					}
 				}
 			}
@@ -173,13 +177,13 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 	 * @param massSpectra
 	 * @param massSpectrumData
 	 */
-	private void addMassSpectrum(IMassSpectra massSpectra, String massSpectrumData) {
+	private void addMassSpectrum(IMassSpectra massSpectra, String massSpectrumData, String referenceIdentifierMarker, String referenceIdentifierPrefix) {
 
 		IVendorLibraryMassSpectrum massSpectrum = new VendorLibraryMassSpectrum();
 		ILibraryInformation libraryInformation = massSpectrum.getLibraryInformation();
 		//
 		String name = extractContentAsString(massSpectrumData, namePattern, 2);
-		libraryInformation.setName(name);
+		extractNameAndReferenceIdentifier(massSpectrum, name, referenceIdentifierMarker, referenceIdentifierPrefix);
 		String formula = extractContentAsString(massSpectrumData, formulaPattern, 2);
 		libraryInformation.setFormula(formula);
 		double molWeight = extractContentAsDouble(massSpectrumData, molweightPattern);

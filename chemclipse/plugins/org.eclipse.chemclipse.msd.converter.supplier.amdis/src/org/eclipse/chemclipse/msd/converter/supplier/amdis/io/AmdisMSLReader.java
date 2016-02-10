@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -34,11 +32,13 @@ import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.IVendorLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.VendorLibraryMassSpectrum;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class AmdisMSLReader extends AbstractMassSpectraReader implements IMassSpectraReader {
 
@@ -133,12 +133,14 @@ public class AmdisMSLReader extends AbstractMassSpectraReader implements IMassSp
 	private IMassSpectra extractMassSpectra(List<String> massSpectraData) {
 
 		IMassSpectra massSpectra = new MassSpectra();
+		String referenceIdentifierMarker = PreferenceSupplier.getReferenceIdentifierMarker();
+		String referenceIdentifierPrefix = PreferenceSupplier.getReferenceIdentifierPrefix();
 		/*
 		 * Iterates through the saved mass spectrum text data and converts it to
 		 * a mass spectrum.
 		 */
 		for(String massSpectrumData : massSpectraData) {
-			addMassSpectrum(massSpectra, massSpectrumData);
+			addMassSpectrum(massSpectra, massSpectrumData, referenceIdentifierMarker, referenceIdentifierPrefix);
 		}
 		return massSpectra;
 	}
@@ -149,11 +151,14 @@ public class AmdisMSLReader extends AbstractMassSpectraReader implements IMassSp
 	 * @param massSpectra
 	 * @param massSpectrumData
 	 */
-	private void addMassSpectrum(IMassSpectra massSpectra, String massSpectrumData) {
+	private void addMassSpectrum(IMassSpectra massSpectra, String massSpectrumData, String referenceIdentifierMarker, String referenceIdentifierPrefix) {
 
 		IVendorLibraryMassSpectrum massSpectrum = new VendorLibraryMassSpectrum();
+		/*
+		 * Extract name and reference identifier.
+		 */
 		String name = extractContentAsString(massSpectrumData, namePattern);
-		massSpectrum.getLibraryInformation().setName(name);
+		extractNameAndReferenceIdentifier(massSpectrum, name, referenceIdentifierMarker, referenceIdentifierPrefix);
 		String comments = extractContentAsString(massSpectrumData, commentsPattern);
 		massSpectrum.getLibraryInformation().setComments(comments);
 		String casNumber = extractContentAsString(massSpectrumData, casNumberPattern);
