@@ -18,7 +18,7 @@ import java.util.Set;
 
 public abstract class AbstractPeakTargets implements IPeakTargets {
 
-	private Set<IPeakTarget> targets;
+	final private Set<IPeakTarget> targets;
 
 	public AbstractPeakTargets() {
 		targets = new HashSet<IPeakTarget>();
