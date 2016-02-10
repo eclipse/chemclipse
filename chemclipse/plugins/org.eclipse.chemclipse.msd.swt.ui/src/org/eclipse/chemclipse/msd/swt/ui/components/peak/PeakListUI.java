@@ -109,13 +109,9 @@ public class PeakListUI {
 		if(selectedPeakMSD != null && selectedPeakMSD.getPeakModel() != null) {
 			IPeakModelMSD peakModel = selectedPeakMSD.getPeakModel();
 			String name = getName(selectedPeakMSD.getTargets());
-			if(name != null) {
-				labelSelectedPeak.setText("Selected Peak: " + decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR) + " min - Name: " + name);
-			} else {
-				labelSelectedPeak.setText("Selected Peak: " + decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR) + " min");
-			}
+			labelSelectedPeak.setText("Selected Peak: " + decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR) + " min - Name: " + name);
 		} else {
-			labelSelectedPeak.setText("");
+			labelSelectedPeak.setText("Selected Peak: none selected yet");
 		}
 	}
 
@@ -358,7 +354,7 @@ public class PeakListUI {
 
 	private String getName(List<IPeakTarget> targets) {
 
-		String name = "";
+		String name = "peak is not identified yet";
 		Collections.sort(targets, targetExtendedComparator);
 		if(targets.size() >= 1) {
 			name = targets.get(0).getLibraryInformation().getName();
