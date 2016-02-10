@@ -15,24 +15,23 @@ import java.io.IOException;
 
 public class UnknownVersionException extends IOException {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 7248123969997448857L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 7248123969997448857L;
 
-    public UnknownVersionException() {
-    }
+	public UnknownVersionException() {
+	}
 
-    public UnknownVersionException(final String message) {
-	super(message);
-    }
+	public UnknownVersionException(final String message) {
+		super(message);
+	}
 
-    public UnknownVersionException(final String message, final Throwable cause) {
-	super(message, cause);
-    }
+	public UnknownVersionException(final String message, final Throwable cause) {
+		super(message, cause);
+	}
 
-    public UnknownVersionException(final Throwable cause) {
-	super(cause);
-    }
-
+	public UnknownVersionException(final Throwable cause) {
+		super(cause);
+	}
 }
