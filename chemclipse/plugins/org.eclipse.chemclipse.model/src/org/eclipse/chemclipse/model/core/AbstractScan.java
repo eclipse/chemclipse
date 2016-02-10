@@ -12,6 +12,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.runtime.Platform;
 
 public abstract class AbstractScan implements IScan {
@@ -22,10 +25,17 @@ public abstract class AbstractScan implements IScan {
 	 */
 	private static final long serialVersionUID = 642924518234776409L;
 	private transient IChromatogram parentChromatogram;
-	private float retentionIndex = 0;
+	//
 	private int retentionTime = 0;
 	private int retentionTimeColumn1 = 0; // GCxGC, LCxLC
 	private int retentionTimeColumn2 = 0; // GCxGC, LCxLC
+	/*
+	 * The retention index stores the default value.
+	 * The map is loaded lazily. Normally it is not used.
+	 */
+	private float retentionIndex = 0;
+	private Map<RetentionIndexType, Float> additionalRetentionIndices = null;
+	//
 	private int scanNumber = 0;
 	private int timeSegmentId = 1; // Default 1
 	private int cycleNumber = 1; // Default 1
@@ -65,21 +75,6 @@ public abstract class AbstractScan implements IScan {
 	public void setParentChromatogram(IChromatogram parentChromatogram) {
 
 		this.parentChromatogram = parentChromatogram;
-	}
-
-	@Override
-	public float getRetentionIndex() {
-
-		return retentionIndex;
-	}
-
-	@Override
-	public void setRetentionIndex(float retentionIndex) {
-
-		if(retentionIndex > 0) {
-			this.retentionIndex = retentionIndex;
-			setDirty(true);
-		}
 	}
 
 	@Override
@@ -125,6 +120,53 @@ public abstract class AbstractScan implements IScan {
 			this.retentionTimeColumn2 = retentionTimeColumn2;
 			setDirty(true);
 		}
+	}
+
+	@Override
+	public float getRetentionIndex() {
+
+		return retentionIndex;
+	}
+
+	@Override
+	public void setRetentionIndex(float retentionIndex) {
+
+		if(retentionIndex > 0) {
+			this.retentionIndex = retentionIndex;
+			setDirty(true);
+		}
+	}
+
+	@Override
+	public boolean hasAdditionalRetentionIndices() {
+
+		if(additionalRetentionIndices == null) {
+			return false;
+		} else {
+			return (additionalRetentionIndices.size() > 0) ? true : false;
+		}
+	}
+
+	@Override
+	public float getRetentionIndex(RetentionIndexType retentionIndexType) {
+
+		if(additionalRetentionIndices != null && additionalRetentionIndices.containsKey(retentionIndexType)) {
+			return additionalRetentionIndices.get(retentionIndexType);
+		} else {
+			return 0.0f;
+		}
+	}
+
+	@Override
+	public void setRetentionIndex(RetentionIndexType retentionIndexType, float retentionIndex) {
+
+		if(additionalRetentionIndices == null) {
+			additionalRetentionIndices = new HashMap<RetentionIndexType, Float>();
+		}
+		/*
+		 * Add the index.
+		 */
+		additionalRetentionIndices.put(retentionIndexType, retentionIndex);
 	}
 
 	@Override

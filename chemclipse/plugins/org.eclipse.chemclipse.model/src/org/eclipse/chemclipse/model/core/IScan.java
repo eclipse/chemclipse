@@ -125,6 +125,31 @@ public interface IScan extends IAdaptable, IScanSerializable {
 	void setRetentionIndex(float retentionIndex);
 
 	/**
+	 * Returns whether this scan stores additional RI data.
+	 * 
+	 * @return boolean
+	 */
+	boolean hasAdditionalRetentionIndices();
+
+	/**
+	 * Returns the retention index given by the RetentionIndexType.
+	 * If none is available, 0 will be returned.
+	 * 
+	 * @param retentionIndexType
+	 * @return float
+	 */
+	float getRetentionIndex(RetentionIndexType retentionIndexType);
+
+	/**
+	 * Sets the retention index. Only values >= 0 are allowed.<br/>
+	 * Set a retention index for a certain column type.
+	 * 
+	 * @param retentionIndexType
+	 * @param retentionIndex
+	 */
+	void setRetentionIndex(RetentionIndexType retentionIndexType, float retentionIndex);
+
+	/**
 	 * Returns the total signal.<br/>
 	 * If no signal is stored, 0 will be returned.
 	 * 
