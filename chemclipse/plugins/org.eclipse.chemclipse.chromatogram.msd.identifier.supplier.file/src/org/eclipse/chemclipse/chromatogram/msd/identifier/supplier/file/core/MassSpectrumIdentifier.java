@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.AbstractMassSpectrumIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IMassSpectraIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.MassSpectraIdentifierProcessingInfo;
@@ -24,9 +22,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.internal
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 
@@ -41,9 +37,9 @@ public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 			FileIdentifier fileIdentifier = new FileIdentifier();
 			IMassSpectra massSpectra = fileIdentifier.runIdentification(massSpectraList, massSpectrumIdentifierSettings, monitor);
 			processingInfo.setMassSpectra(massSpectra);
+			processingInfo.addInfoMessage(FileIdentifier.IDENTIFIER, "Mass spectra have been identified.");
 		} catch(Exception e) {
-			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "File Identifier", "Something has gone wrong.");
-			processingInfo.addMessage(processingMessage);
+			processingInfo.addErrorMessage(FileIdentifier.IDENTIFIER, "Something has gone wrong.");
 		}
 		return processingInfo;
 	}
