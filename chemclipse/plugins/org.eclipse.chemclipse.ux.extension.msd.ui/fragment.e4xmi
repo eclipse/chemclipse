@@ -111,6 +111,7 @@
               <children xsi:type="advanced:Placeholder" xmi:id="_U3tZ4NOJEeOGVsF3IvlSBg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.12" ref="_X8rRoNOHEeOGVsF3IvlSBg"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_gfyZQGWiEeSQKcLvrmntIw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.17" ref="_PbiOEGWiEeSQKcLvrmntIw"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_0Tl4YMTZEeWJUr3on-FBsw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.30" ref="_xvuJkMEMEeW3DIEeCEW-YQ"/>
+              <children xsi:type="advanced:Placeholder" xmi:id="_yoD_oM_aEeWfH_f1Jsk4bw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.35" ref="_ahJk8M5kEeWGJ_RBEfsFbA"/>
             </children>
             <children xsi:type="basic:PartStack" xmi:id="_WimZQDf_EeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partstack.chromatogramPeaks.3">
               <children xsi:type="advanced:Placeholder" xmi:id="_2rj5wDf_EeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.chromatogramPeaks.10" ref="_dPHngDfyEeKBwZX34jl_1A"/>
