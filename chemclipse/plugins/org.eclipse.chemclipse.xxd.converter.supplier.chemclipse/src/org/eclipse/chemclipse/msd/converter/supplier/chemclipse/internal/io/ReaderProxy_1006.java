@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 Dr. Philip Wenig.
+ * Copyright (c) 2016 Lablicate UG (haftungsbeschränkt).
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * All rights reserved.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.zip.ZipFile;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.IReaderProxy;
@@ -45,9 +46,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class ReaderProxy_1005 extends AbstractZipReader implements IReaderProxy {
+public class ReaderProxy_1006 extends AbstractZipReader implements IReaderProxy {
 
-	private static final Logger logger = Logger.getLogger(ReaderProxy_1005.class);
+	private static final Logger logger = Logger.getLogger(ReaderProxy_1006.class);
 
 	@Override
 	public void readMassSpectrum(File file, int offset, IVendorScanProxy massSpectrum, IIonTransitionSettings ionTransitionSettings, IProgressMonitor monitor) throws IOException {
@@ -87,7 +88,17 @@ public class ReaderProxy_1005 extends AbstractZipReader implements IReaderProxy 
 	private void readNormalMassSpectrum(IScanMSD massSpectrum, DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings, IProgressMonitor monitor) throws IOException {
 
 		int retentionTime = dataInputStream.readInt(); // Retention Time
+		int retentionTimeColumn1 = dataInputStream.readInt();
+		int retentionTimeColumn2 = dataInputStream.readInt();
 		float retentionIndex = dataInputStream.readFloat(); // Retention Index
+		if(dataInputStream.readBoolean()) {
+			int size = dataInputStream.readInt();
+			for(int i = 0; i < size; i++) {
+				RetentionIndexType retentionIndexType = RetentionIndexType.valueOf(readString(dataInputStream));
+				float retentionIndexAdditional = dataInputStream.readFloat();
+				massSpectrum.setRetentionIndex(retentionIndexType, retentionIndexAdditional);
+			}
+		}
 		int timeSegmentId = dataInputStream.readInt(); // Time Segment Id
 		int cycleNumber = dataInputStream.readInt(); // Cycle Number
 		massSpectrum.setRetentionTime(retentionTime);
@@ -157,9 +168,11 @@ public class ReaderProxy_1005 extends AbstractZipReader implements IReaderProxy 
 		for(int i = 1; i <= numberOfMassSpectrumTargets; i++) {
 			//
 			String identifier = readString(dataInputStream); // Identifier
+			boolean manuallyVerified = dataInputStream.readBoolean();
 			//
 			String casNumber = readString(dataInputStream); // CAS-Number
 			String comments = readString(dataInputStream); // Comments
+			String referenceIdentifier = readString(dataInputStream);
 			String miscellaneous = readString(dataInputStream); // Miscellaneous
 			String name = readString(dataInputStream); // Name
 			Set<String> synonyms = new HashSet<String>(); // Synonyms
@@ -177,6 +190,7 @@ public class ReaderProxy_1005 extends AbstractZipReader implements IReaderProxy 
 			IMassSpectrumLibraryInformation libraryInformation = new MassSpectrumLibraryInformation();
 			libraryInformation.setCasNumber(casNumber);
 			libraryInformation.setComments(comments);
+			libraryInformation.setReferenceIdentifier(referenceIdentifier);
 			libraryInformation.setMiscellaneous(miscellaneous);
 			libraryInformation.setName(name);
 			libraryInformation.setSynonyms(synonyms);
@@ -186,6 +200,7 @@ public class ReaderProxy_1005 extends AbstractZipReader implements IReaderProxy 
 			try {
 				IMassSpectrumTarget identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
+				identificationEntry.setManuallyVerified(manuallyVerified);
 				massSpectrum.addTarget(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);

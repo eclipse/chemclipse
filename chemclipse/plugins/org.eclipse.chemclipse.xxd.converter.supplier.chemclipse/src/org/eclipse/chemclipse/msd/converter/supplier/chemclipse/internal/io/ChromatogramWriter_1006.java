@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 Dr. Philip Wenig.
+ * Copyright (c) 2016 Lablicate UG (haftungsbeschränkt).
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * All rights reserved.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
@@ -19,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -28,6 +29,7 @@ import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IMethod;
+import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -61,7 +63,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
+public class ChromatogramWriter_1006 extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
 
 	@Override
 	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
@@ -97,7 +99,7 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 		zipEntry = new ZipEntry(IFormat.FILE_VERSION);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
-		String version = IFormat.VERSION_1005;
+		String version = IFormat.VERSION_1006;
 		dataOutputStream.writeInt(version.length()); // Length Version
 		dataOutputStream.writeChars(version); // Version
 		//
@@ -394,6 +396,8 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 		//
 		dataOutputStream.writeLong(chromatogram.getDate().getTime()); // Date
 		writeString(dataOutputStream, chromatogram.getMiscInfo()); // Miscellaneous Info
+		writeString(dataOutputStream, chromatogram.getMiscInfoSeparated());
+		writeString(dataOutputStream, chromatogram.getDataName());
 		writeString(dataOutputStream, chromatogram.getOperator()); // Operator
 		//
 		dataOutputStream.flush();
@@ -411,7 +415,18 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 	private void writeNormalMassSpectrum(DataOutputStream dataOutputStream, IScanMSD massSpectrum) throws IOException {
 
 		dataOutputStream.writeInt(massSpectrum.getRetentionTime()); // Retention Time
+		dataOutputStream.writeInt(massSpectrum.getRetentionTimeColumn1());
+		dataOutputStream.writeInt(massSpectrum.getRetentionTimeColumn2());
 		dataOutputStream.writeFloat(massSpectrum.getRetentionIndex()); // Retention Index
+		dataOutputStream.writeBoolean(massSpectrum.hasAdditionalRetentionIndices());
+		if(massSpectrum.hasAdditionalRetentionIndices()) {
+			Map<RetentionIndexType, Float> retentionIndicesTyped = massSpectrum.getRetentionIndicesTyped();
+			dataOutputStream.writeInt(retentionIndicesTyped.size());
+			for(Map.Entry<RetentionIndexType, Float> retentionIndexTyped : retentionIndicesTyped.entrySet()) {
+				writeString(dataOutputStream, retentionIndexTyped.getKey().toString());
+				dataOutputStream.writeFloat(retentionIndexTyped.getValue());
+			}
+		}
 		dataOutputStream.writeInt(massSpectrum.getTimeSegmentId()); // Time Segment Id
 		dataOutputStream.writeInt(massSpectrum.getCycleNumber()); // Cycle Number
 		//
@@ -466,6 +481,8 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 		IPeakModelMSD peakModel = peak.getPeakModel();
 		//
 		writeString(dataOutputStream, peak.getDetectorDescription()); // Detector Description
+		writeString(dataOutputStream, peak.getQuantifierDescription());
+		dataOutputStream.writeBoolean(peak.isActiveForAnalysis());
 		writeString(dataOutputStream, peak.getIntegratorDescription()); // Integrator Description
 		writeString(dataOutputStream, peak.getModelDescription()); // Model Description
 		writeString(dataOutputStream, peak.getPeakType().toString()); // Peak Type
@@ -555,9 +572,11 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 		IComparisonResult comparisonResult = identificationEntry.getComparisonResult();
 		//
 		writeString(dataOutputStream, identificationEntry.getIdentifier()); // Identifier
+		dataOutputStream.writeBoolean(identificationEntry.isManuallyVerified());
 		//
 		writeString(dataOutputStream, libraryInformation.getCasNumber()); // CAS-Number
 		writeString(dataOutputStream, libraryInformation.getComments()); // Comments
+		writeString(dataOutputStream, libraryInformation.getReferenceIdentifier());
 		writeString(dataOutputStream, libraryInformation.getMiscellaneous()); // Miscellaneous
 		writeString(dataOutputStream, libraryInformation.getName()); // Name
 		Set<String> synonyms = libraryInformation.getSynonyms(); // Synonyms

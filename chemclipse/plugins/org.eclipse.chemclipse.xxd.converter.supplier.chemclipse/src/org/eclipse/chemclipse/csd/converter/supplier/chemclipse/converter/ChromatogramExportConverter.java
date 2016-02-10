@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramExpo
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.csd.converter.chromatogram.AbstractChromatogramCSDExportConverter;
 import org.eclipse.chemclipse.csd.converter.io.IChromatogramCSDWriter;
-import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io.ChromatogramWriterFID;
+import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io.ChromatogramWriterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -46,7 +46,7 @@ public class ChromatogramExportConverter extends AbstractChromatogramCSDExportCo
 			processingInfo.addMessages(processingInfoValidate);
 		} else {
 			monitor.subTask(IConstants.EXPORT_CHROMATOGRAM);
-			IChromatogramCSDWriter writer = new ChromatogramWriterFID();
+			IChromatogramCSDWriter writer = new ChromatogramWriterCSD();
 			try {
 				writer.writeChromatogram(file, chromatogram, monitor);
 			} catch(Exception e) {

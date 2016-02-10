@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.csd.converter.chromatogram.AbstractChromatogramCSD
 import org.eclipse.chemclipse.csd.converter.io.IChromatogramCSDReader;
 import org.eclipse.chemclipse.csd.converter.processing.chromatogram.ChromatogramCSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.csd.converter.processing.chromatogram.IChromatogramCSDImportConverterProcessingInfo;
-import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io.ChromatogramReaderFID;
+import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io.ChromatogramReaderCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -48,7 +48,7 @@ public class ChromatogramImportConverter extends AbstractChromatogramCSDImportCo
 			 * Read the chromatogram.
 			 */
 			file = SpecificationValidator.validateSpecification(file);
-			IChromatogramCSDReader reader = new ChromatogramReaderFID();
+			IChromatogramCSDReader reader = new ChromatogramReaderCSD();
 			monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 			try {
 				IChromatogramCSD chromatogram = reader.read(file, monitor);
@@ -76,7 +76,7 @@ public class ChromatogramImportConverter extends AbstractChromatogramCSDImportCo
 			 * Read the chromatogram overview.
 			 */
 			file = SpecificationValidator.validateSpecification(file);
-			IChromatogramCSDReader reader = new ChromatogramReaderFID();
+			IChromatogramCSDReader reader = new ChromatogramReaderCSD();
 			monitor.subTask(IConstants.IMPORT_CHROMATOGRAM_OVERVIEW);
 			try {
 				IChromatogramOverview chromatogramOverview = reader.readOverview(file, monitor);

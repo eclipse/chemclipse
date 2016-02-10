@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.Chro
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1003;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1004;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1005;
+import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1006;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogram.IVendorScan;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogram.VendorChromatogram;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogram.VendorScan;
@@ -36,7 +37,7 @@ import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.ReaderHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramReaderFID extends AbstractChromatogramCSDReader implements IChromatogramCSDReader {
+public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader implements IChromatogramCSDReader {
 
 	@Override
 	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -60,6 +61,8 @@ public class ChromatogramReaderFID extends AbstractChromatogramCSDReader impleme
 			chromatogramReader = new ChromatogramReader_1004();
 		} else if(version.equals(IFormat.VERSION_1005)) {
 			chromatogramReader = new ChromatogramReader_1005();
+		} else if(version.equals(IFormat.VERSION_1006)) {
+			chromatogramReader = new ChromatogramReader_1006();
 		}
 		//
 		if(chromatogramReader != null) {
@@ -95,6 +98,8 @@ public class ChromatogramReaderFID extends AbstractChromatogramCSDReader impleme
 			chromatogramReader = new ChromatogramReader_1004();
 		} else if(version.equals(IFormat.VERSION_1005)) {
 			chromatogramReader = new ChromatogramReader_1005();
+		} else if(version.equals(IFormat.VERSION_1006)) {
+			chromatogramReader = new ChromatogramReader_1006();
 		}
 		//
 		if(chromatogramReader != null) {

@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 Dr. Philip Wenig.
+ * Copyright (c) 2016 Lablicate UG (haftungsbeschränkt).
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * All rights reserved.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.PeakType;
+import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
@@ -98,9 +99,9 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class ChromatogramReader_1005 extends AbstractChromatogramReader implements IChromatogramMSDReader {
+public class ChromatogramReader_1006 extends AbstractChromatogramReader implements IChromatogramMSDReader {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramReader_1005.class);
+	private static final Logger logger = Logger.getLogger(ChromatogramReader_1006.class);
 
 	@Override
 	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -249,7 +250,7 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 			int timeSegmentId = dataInputStream.readInt(); // Time Segment Id
 			int cycleNumber = dataInputStream.readInt(); // Cycle Number
 			//
-			IVendorScanProxy massSpectrum = new VendorScanProxy(file, offset, IFormat.VERSION_1005, ionTransitionSettings);
+			IVendorScanProxy massSpectrum = new VendorScanProxy(file, offset, IFormat.VERSION_1006, ionTransitionSettings);
 			massSpectrum.setRetentionTime(retentionTime);
 			massSpectrum.setNumberOfIons(numberOfIons);
 			massSpectrum.setTotalSignal(totalSignal);
@@ -270,7 +271,7 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 		/*
 		 * Scans
 		 */
-		IReaderProxy readerProxy = new ReaderProxy_1005();
+		IReaderProxy readerProxy = new ReaderProxy_1006();
 		int scans = dataInputStream.readInt();
 		for(int scan = 1; scan <= scans; scan++) {
 			monitor.subTask(IConstants.IMPORT_SCAN + scan);
@@ -347,6 +348,8 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 		IIonTransitionSettings ionTransitionSettings = chromatogram.getIonTransitionSettings();
 		//
 		String detectorDescription = readString(dataInputStream); // Detector Description
+		String quantifierDescription = readString(dataInputStream);
+		boolean activeForAnalysis = dataInputStream.readBoolean();
 		String integratorDescription = readString(dataInputStream); // Integrator Description
 		String modelDescription = readString(dataInputStream); // Model Description
 		PeakType peakType = PeakType.valueOf(readString(dataInputStream)); // Peak Type
@@ -369,6 +372,8 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 		IPeakModelMSD peakModel = new PeakModelMSD(peakMaximum, intensityValues, startBackgroundAbundance, stopBackgroundAbundance);
 		IChromatogramPeakMSD peak = new ChromatogramPeakMSD(peakModel, chromatogram);
 		peak.setDetectorDescription(detectorDescription);
+		peak.setQuantifierDescription(quantifierDescription);
+		peak.setActiveForAnalysis(activeForAnalysis);
 		peak.setIntegratorDescription(integratorDescription);
 		peak.setModelDescription(modelDescription);
 		peak.setPeakType(peakType);
@@ -416,9 +421,11 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 		for(int i = 1; i <= numberOfPeakTargets; i++) {
 			//
 			String identifier = readString(dataInputStream); // Identifier
+			boolean manuallyVerified = dataInputStream.readBoolean();
 			//
 			String casNumber = readString(dataInputStream); // CAS-Number
 			String comments = readString(dataInputStream); // Comments
+			String referenceIdentifier = readString(dataInputStream);
 			String miscellaneous = readString(dataInputStream); // Miscellaneous
 			String name = readString(dataInputStream); // Name
 			Set<String> synonyms = new HashSet<String>(); // Synonyms
@@ -436,6 +443,7 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 			IPeakLibraryInformation libraryInformation = new PeakLibraryInformation();
 			libraryInformation.setCasNumber(casNumber);
 			libraryInformation.setComments(comments);
+			libraryInformation.setReferenceIdentifier(referenceIdentifier);
 			libraryInformation.setMiscellaneous(miscellaneous);
 			libraryInformation.setName(name);
 			libraryInformation.setSynonyms(synonyms);
@@ -445,6 +453,7 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 			try {
 				IPeakTarget identificationEntry = new PeakTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
+				identificationEntry.setManuallyVerified(manuallyVerified);
 				peak.addTarget(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
@@ -458,9 +467,11 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 		for(int i = 1; i <= numberOfMassSpectrumTargets; i++) {
 			//
 			String identifier = readString(dataInputStream); // Identifier
+			boolean manuallyVerified = dataInputStream.readBoolean();
 			//
 			String casNumber = readString(dataInputStream); // CAS-Number
 			String comments = readString(dataInputStream); // Comments
+			String referenceIdentifier = readString(dataInputStream);
 			String miscellaneous = readString(dataInputStream); // Miscellaneous
 			String name = readString(dataInputStream); // Name
 			Set<String> synonyms = new HashSet<String>(); // Synonyms
@@ -478,6 +489,7 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 			IMassSpectrumLibraryInformation libraryInformation = new MassSpectrumLibraryInformation();
 			libraryInformation.setCasNumber(casNumber);
 			libraryInformation.setComments(comments);
+			libraryInformation.setReferenceIdentifier(referenceIdentifier);
 			libraryInformation.setMiscellaneous(miscellaneous);
 			libraryInformation.setName(name);
 			libraryInformation.setSynonyms(synonyms);
@@ -487,6 +499,7 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 			try {
 				IMassSpectrumTarget identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
+				identificationEntry.setManuallyVerified(manuallyVerified);
 				massSpectrum.addTarget(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
@@ -551,9 +564,11 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 		for(int i = 1; i <= numberOfTargets; i++) {
 			//
 			String identifier = readString(dataInputStream); // Identifier
+			boolean manuallyVerified = dataInputStream.readBoolean();
 			//
 			String casNumber = readString(dataInputStream); // CAS-Number
 			String comments = readString(dataInputStream); // Comments
+			String referenceIdentifier = readString(dataInputStream);
 			String miscellaneous = readString(dataInputStream); // Miscellaneous
 			String name = readString(dataInputStream); // Name
 			Set<String> synonyms = new HashSet<String>(); // Synonyms
@@ -571,6 +586,7 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 			IChromatogramLibraryInformation libraryInformation = new ChromatogramLibraryInformation();
 			libraryInformation.setCasNumber(casNumber);
 			libraryInformation.setComments(comments);
+			libraryInformation.setReferenceIdentifier(referenceIdentifier);
 			libraryInformation.setMiscellaneous(miscellaneous);
 			libraryInformation.setName(name);
 			libraryInformation.setSynonyms(synonyms);
@@ -580,6 +596,7 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 			try {
 				IChromatogramTargetMSD identificationEntry = new ChromatogramTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
+				identificationEntry.setManuallyVerified(manuallyVerified);
 				chromatogram.addTarget(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
@@ -613,11 +630,15 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 		//
 		long time = dataInputStream.readLong(); // Date
 		String miscInfo = readString(dataInputStream); // Miscellaneous Info
+		String miscInfoSeparated = readString(dataInputStream);
+		String dataName = readString(dataInputStream);
 		String operator = readString(dataInputStream); // Operator
 		//
 		Date date = new Date(time);
 		chromatogram.setDate(date);
 		chromatogram.setMiscInfo(miscInfo);
+		chromatogram.setMiscInfoSeparated(miscInfoSeparated);
+		chromatogram.setDataName(dataName);
 		chromatogram.setOperator(operator);
 		//
 		dataInputStream.close();
@@ -642,10 +663,22 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 	private void readNormalMassSpectrum(IScanMSD massSpectrum, DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings, IProgressMonitor monitor) throws IOException {
 
 		int retentionTime = dataInputStream.readInt(); // Retention Time
+		int retentionTimeColumn1 = dataInputStream.readInt();
+		int retentionTimeColumn2 = dataInputStream.readInt();
 		float retentionIndex = dataInputStream.readFloat(); // Retention Index
+		if(dataInputStream.readBoolean()) {
+			int size = dataInputStream.readInt();
+			for(int i = 0; i < size; i++) {
+				RetentionIndexType retentionIndexType = RetentionIndexType.valueOf(readString(dataInputStream));
+				float retentionIndexAdditional = dataInputStream.readFloat();
+				massSpectrum.setRetentionIndex(retentionIndexType, retentionIndexAdditional);
+			}
+		}
 		int timeSegmentId = dataInputStream.readInt(); // Time Segment Id
 		int cycleNumber = dataInputStream.readInt(); // Cycle Number
 		massSpectrum.setRetentionTime(retentionTime);
+		massSpectrum.setRetentionTimeColumn1(retentionTimeColumn1);
+		massSpectrum.setRetentionTimeColumn2(retentionTimeColumn2);
 		massSpectrum.setRetentionIndex(retentionIndex);
 		massSpectrum.setTimeSegmentId(timeSegmentId);
 		massSpectrum.setCycleNumber(cycleNumber);
@@ -713,7 +746,7 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 		//
 		dataInputStream = getDataInputStream(zipFile, IFormat.FILE_VERSION);
 		String version = readString(dataInputStream);
-		if(version.equals(IFormat.VERSION_1005)) {
+		if(version.equals(IFormat.VERSION_1006)) {
 			isValid = true;
 		}
 		//

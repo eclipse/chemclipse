@@ -13,8 +13,6 @@ package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.io;
 
 import java.io.File;
 
-import junit.framework.TestCase;
-
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.wsd.converter.processing.chromatogram.IChromatogramWSDImportConverterProcessingInfo;
@@ -25,6 +23,8 @@ import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogr
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.VendorScan;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.VendorScanSignal;
 import org.eclipse.core.runtime.NullProgressMonitor;
+
+import junit.framework.TestCase;
 
 public class DemoWriterWSD_1_ITest extends TestCase {
 
@@ -101,7 +101,6 @@ public class DemoWriterWSD_1_ITest extends TestCase {
 			}
 		}
 		//
-		System.out.println("Trying overview test.");
 		for(int i = 1; i <= 100; i++) {
 			IVendorScan scan_read = (VendorScan)read_overview.getScan(i);
 			IVendorScan scan_orig = (VendorScan)chromatogram.getScan(i);
@@ -119,7 +118,6 @@ public class DemoWriterWSD_1_ITest extends TestCase {
 				// scan.removeScanSignal(j); // expects an int
 			}
 		}
-		System.out.println("Done");
 	}
 
 	private float getAbundance() {
