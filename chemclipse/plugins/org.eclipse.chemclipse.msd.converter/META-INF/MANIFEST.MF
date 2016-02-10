@@ -9,7 +9,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.logging;bundle-version="0.7.0",
  org.eclipse.chemclipse.processing;bundle-version="0.7.0",
  org.eclipse.chemclipse.converter;bundle-version="0.7.0",
- org.eclipse.chemclipse.model;bundle-version="0.7.0"
+ org.eclipse.chemclipse.model;bundle-version="0.7.0",
+ org.eclipse.chemclipse.support;bundle-version="0.7.0",
+ org.eclipse.chemclipse.msd.model;bundle-version="0.7.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.msd.converter.chromatogram,
@@ -18,9 +20,8 @@ Export-Package: org.eclipse.chemclipse.msd.converter.chromatogram,
  org.eclipse.chemclipse.msd.converter.io,
  org.eclipse.chemclipse.msd.converter.massspectrum,
  org.eclipse.chemclipse.msd.converter.peak,
+ org.eclipse.chemclipse.msd.converter.preferences,
  org.eclipse.chemclipse.msd.converter.processing.chromatogram,
  org.eclipse.chemclipse.msd.converter.processing.massspectrum,
  org.eclipse.chemclipse.msd.converter.processing.peak,
  org.eclipse.chemclipse.msd.converter.support
-Import-Package: org.eclipse.chemclipse.msd.model.core,
- org.eclipse.chemclipse.msd.model.implementation

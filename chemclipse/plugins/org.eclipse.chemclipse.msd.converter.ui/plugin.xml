@@ -24,11 +24,5 @@
             name="Converter MSD">
       </page>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.chemclipse.msd.converter.ui.preferences.PreferenceInitializer">
-      </initializer>
-   </extension>
 
 </plugin>
