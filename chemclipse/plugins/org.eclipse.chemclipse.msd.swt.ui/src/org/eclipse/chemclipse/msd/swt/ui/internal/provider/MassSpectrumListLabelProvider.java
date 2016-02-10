@@ -83,16 +83,35 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 		String text = "";
 		switch(columnIndex) {
 			case 0: // RT
-				text = decimalFormat.format(massSpectrum.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+				if(massSpectrum.getRetentionTime() == 0) {
+					text = "0";
+				} else {
+					text = decimalFormat.format(massSpectrum.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+				}
 				break;
 			case 1: // RI
-				text = decimalFormat.format(massSpectrum.getRetentionIndex());
+				int retentionIndexNoPrecision = (int)massSpectrum.getRetentionIndex();
+				if(retentionIndexNoPrecision == massSpectrum.getRetentionIndex()) {
+					text = Integer.toString(retentionIndexNoPrecision);
+				} else {
+					text = decimalFormat.format(massSpectrum.getRetentionIndex());
+				}
 				break;
 			case 2: // Base Peak
-				text = decimalFormat.format(massSpectrum.getBasePeak());
+				int basePeakNoPrecision = (int)massSpectrum.getBasePeak();
+				if(basePeakNoPrecision == massSpectrum.getBasePeak()) {
+					text = Integer.toString(basePeakNoPrecision);
+				} else {
+					text = decimalFormat.format(massSpectrum.getBasePeak());
+				}
 				break;
 			case 3: // Base Peak Abundance
-				text = decimalFormat.format(massSpectrum.getBasePeakAbundance());
+				int basePeakAbundanceNoPrecision = (int)massSpectrum.getBasePeakAbundance();
+				if(basePeakAbundanceNoPrecision == massSpectrum.getBasePeakAbundance()) {
+					text = Integer.toString(basePeakAbundanceNoPrecision);
+				} else {
+					text = decimalFormat.format(massSpectrum.getBasePeakAbundance());
+				}
 				break;
 			case 4: // Number of Ions
 				text = Integer.toString(massSpectrum.getNumberOfIons());
@@ -109,7 +128,12 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 				break;
 			case 7: // MW
 				if(libraryInformation != null) {
-					text = decimalFormat.format(libraryInformation.getMolWeight());
+					int molWeightNoPrecision = (int)libraryInformation.getMolWeight();
+					if(molWeightNoPrecision == libraryInformation.getMolWeight()) {
+						text = Integer.toString(molWeightNoPrecision);
+					} else {
+						text = decimalFormat.format(libraryInformation.getMolWeight());
+					}
 				}
 				break;
 			case 8: // Formula
