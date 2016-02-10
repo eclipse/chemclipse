@@ -58,8 +58,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class FileIdentifier {
 
+	public static final String IDENTIFIER = "File Identifier";
 	private static final Logger logger = Logger.getLogger(FileIdentifier.class);
-	private static final String IDENTIFIER = "File Identifier";
 	/*
 	 * Don't reload the database on each request, only if neccessary.
 	 */

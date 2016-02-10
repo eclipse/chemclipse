@@ -15,8 +15,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.AbstractPeakIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IPeakIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.PeakIdentifierProcessingInfo;
@@ -26,9 +24,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferen
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFilePeakIdentifierSettings;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakIdentifier extends AbstractPeakIdentifier {
 
@@ -50,9 +46,9 @@ public class PeakIdentifier extends AbstractPeakIdentifier {
 			//
 			IPeakIdentificationResults peakIdentificationResults = fileIdentifier.runPeakIdentification(peaks, filePeakIdentifierSettings, processingInfo, monitor);
 			processingInfo.setPeakIdentificationResults(peakIdentificationResults);
+			processingInfo.addInfoMessage(FileIdentifier.IDENTIFIER, "Done - peaks have been identified.");
 		} catch(FileNotFoundException e) {
-			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "File Identifier", "Something has gone wrong.");
-			processingInfo.addMessage(processingMessage);
+			processingInfo.addErrorMessage(FileIdentifier.IDENTIFIER, "Something has gone wrong.");
 		}
 		return processingInfo;
 	}
