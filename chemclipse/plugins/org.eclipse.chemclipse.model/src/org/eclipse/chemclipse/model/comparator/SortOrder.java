@@ -13,8 +13,6 @@ package org.eclipse.chemclipse.model.comparator;
 
 /**
  * Determines in which order to sort a list.
- * 
- * @author eselmeister
  */
 public enum SortOrder {
 	ASC, DESC;

@@ -12,8 +12,11 @@
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.comparator.SortOrder;
+import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
@@ -25,6 +28,12 @@ import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvide
 import org.eclipse.swt.graphics.Image;
 
 public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvider {
+
+	private TargetExtendedComparator targetExtendedComparator;
+
+	public MassSpectrumListLabelProvider() {
+		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
+	}
 
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
@@ -40,9 +49,16 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 	public String getColumnText(Object element, int columnIndex) {
 
 		if(element instanceof IRegularLibraryMassSpectrum) {
+			/*
+			 * Library Entry
+			 */
 			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)element;
-			return getText(libraryMassSpectrum, libraryMassSpectrum.getLibraryInformation(), columnIndex);
+			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
+			return getText(libraryMassSpectrum, libraryInformation, columnIndex);
 		} else if(element instanceof IScanMSD) {
+			/*
+			 * Scan
+			 */
 			IScanMSD massSpectrum = (IScanMSD)element;
 			ILibraryInformation libraryInformation = getLibraryInformation(massSpectrum.getTargets());
 			if(massSpectrum.getOptimizedMassSpectrum() != null) {
@@ -110,12 +126,9 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 	private ILibraryInformation getLibraryInformation(List<IMassSpectrumTarget> targets) {
 
 		ILibraryInformation libraryInformation = null;
-		float matchFactor = Float.MIN_VALUE;
-		for(IMassSpectrumTarget target : targets) {
-			if(target.getComparisonResult().getMatchFactor() > matchFactor) {
-				matchFactor = target.getComparisonResult().getMatchFactor();
-				libraryInformation = target.getLibraryInformation();
-			}
+		Collections.sort(targets, targetExtendedComparator);
+		if(targets.size() >= 1) {
+			libraryInformation = targets.get(0).getLibraryInformation();
 		}
 		return libraryInformation;
 	}

@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.msd.model.core.comparator;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import org.eclipse.chemclipse.model.comparator.SortOrder;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 
 public class IonCombinedComparator implements Comparator<IIon>, Serializable {
@@ -22,31 +23,38 @@ public class IonCombinedComparator implements Comparator<IIon>, Serializable {
 	private final Comparator<IIon> firstComparator;
 	private final Comparator<IIon> secondComparator;
 
-	public IonCombinedComparator(IonComparatorMode desiredMode) {
-		switch(desiredMode) {
+	/**
+	 * The sort order is per default value ascending.
+	 */
+	public IonCombinedComparator(IonComparatorMode ionComparatorMode) {
+		this(ionComparatorMode, SortOrder.ASC);
+	}
+
+	public IonCombinedComparator(IonComparatorMode ionComparatorMode, SortOrder sortOrder) {
+		switch(ionComparatorMode) {
 			case ABUNDANCE_FIRST:
-				firstComparator = new IonAbundanceComparator();
-				secondComparator = new IonValueComparator();
+				firstComparator = new IonAbundanceComparator(sortOrder);
+				secondComparator = new IonValueComparator(sortOrder);
 				break;
 			case MZ_FIRST:
-				firstComparator = new IonValueComparator();
-				secondComparator = new IonAbundanceComparator();
+				firstComparator = new IonValueComparator(sortOrder);
+				secondComparator = new IonAbundanceComparator(sortOrder);
 				break;
 			default:
-				firstComparator = new IonAbundanceComparator();
-				secondComparator = new IonValueComparator();
+				firstComparator = new IonAbundanceComparator(sortOrder);
+				secondComparator = new IonValueComparator(sortOrder);
 				break;
 		}
 	}
 
 	@Override
-	public int compare(IIon arg0, IIon arg1) {
+	public int compare(IIon ion1, IIon ion2) {
 
-		int result = firstComparator.compare(arg0, arg1);
+		int result = firstComparator.compare(ion1, ion2);
 		if(result != 0) {
 			return result;
 		}
-		result = secondComparator.compare(arg0, arg1);
+		result = secondComparator.compare(ion1, ion2);
 		return result;
 	}
 }
