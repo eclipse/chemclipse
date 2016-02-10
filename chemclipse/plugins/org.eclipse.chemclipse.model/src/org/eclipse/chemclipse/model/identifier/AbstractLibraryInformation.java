@@ -20,6 +20,7 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	private Set<String> synonyms;
 	private String casNumber = "";
 	private String comments = "";
+	private String referenceIdentifier = "";
 	private String miscellaneous = "";
 	private String formula = "";
 	private double molWeight = 0;
@@ -108,6 +109,20 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 
 		if(comments != null) {
 			this.comments = comments;
+		}
+	}
+
+	@Override
+	public String getReferenceIdentifier() {
+
+		return referenceIdentifier;
+	}
+
+	@Override
+	public void setReferenceIdentifier(String referenceIdentifier) {
+
+		if(referenceIdentifier != null) {
+			this.referenceIdentifier = referenceIdentifier;
 		}
 	}
 

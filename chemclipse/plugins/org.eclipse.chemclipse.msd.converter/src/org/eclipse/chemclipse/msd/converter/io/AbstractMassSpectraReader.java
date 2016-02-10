@@ -12,6 +12,33 @@
 package org.eclipse.chemclipse.msd.converter.io;
 
 import org.eclipse.chemclipse.converter.io.AbstractFileHelper;
+import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 
 public abstract class AbstractMassSpectraReader extends AbstractFileHelper implements IMassSpectraReader {
+
+	public void extractNameAndReferenceIdentifier(IRegularLibraryMassSpectrum massSpectrum, String name, String referenceIdentifierMarker, String referenceIdentifierPrefix) {
+
+		if(referenceIdentifierMarker != null && !referenceIdentifierPrefix.equals("")) {
+			if(name.contains(referenceIdentifierMarker)) {
+				String[] values = name.split(referenceIdentifierMarker);
+				if(values.length >= 2) {
+					massSpectrum.getLibraryInformation().setName(values[0].trim());
+					StringBuilder builder = new StringBuilder();
+					builder.append(referenceIdentifierPrefix);
+					int size = values.length;
+					for(int i = 1; i < size; i++) {
+						builder.append(values[i]);
+						if(i < size - 1) {
+							builder.append(" ");
+						}
+					}
+					massSpectrum.getLibraryInformation().setReferenceIdentifier(builder.toString().trim());
+				} else {
+					massSpectrum.getLibraryInformation().setName(name);
+				}
+			}
+		} else {
+			massSpectrum.getLibraryInformation().setName(name);
+		}
+	}
 }

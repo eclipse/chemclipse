@@ -91,6 +91,20 @@ public interface ILibraryInformation {
 	void setComments(String comments);
 
 	/**
+	 * Returns the reference id.
+	 * This field is used to track internal references.
+	 * 
+	 * @return String
+	 */
+	String getReferenceIdentifier();
+
+	/**
+	 * Sets the reference id.
+	 * This field is used to track other references.
+	 */
+	void setReferenceIdentifier(String referenceIdentifier);
+
+	/**
 	 * Returns miscellaneous information, e.g. InLib factors ...
 	 * 
 	 * @return String

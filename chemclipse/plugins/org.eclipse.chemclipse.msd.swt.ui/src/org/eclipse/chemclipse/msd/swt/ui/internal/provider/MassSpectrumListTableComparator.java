@@ -72,7 +72,7 @@ public class MassSpectrumListTableComparator extends AbstractRecordTableComparat
 		int sortOrder = 0;
 		switch(getPropertyIndex()) {
 			case 0: // RT
-				sortOrder = massSpectrum2.getRetentionTime() - massSpectrum1.getRetentionTime();
+				sortOrder = Integer.compare(massSpectrum2.getRetentionTime(), massSpectrum1.getRetentionTime());
 				break;
 			case 1: // RI
 				sortOrder = Float.compare(massSpectrum2.getRetentionIndex(), massSpectrum1.getRetentionIndex());
@@ -84,7 +84,7 @@ public class MassSpectrumListTableComparator extends AbstractRecordTableComparat
 				sortOrder = Float.compare(massSpectrum2.getBasePeakAbundance(), massSpectrum1.getBasePeakAbundance());
 				break;
 			case 4: // Number of Ions
-				sortOrder = massSpectrum2.getNumberOfIons() - massSpectrum1.getNumberOfIons();
+				sortOrder = Integer.compare(massSpectrum2.getNumberOfIons(), massSpectrum1.getNumberOfIons());
 				break;
 			case 5: // Name
 				if(libraryInformation1 != null && libraryInformation2 != null) {
@@ -104,6 +104,11 @@ public class MassSpectrumListTableComparator extends AbstractRecordTableComparat
 			case 8: // Formula
 				if(libraryInformation1 != null && libraryInformation2 != null) {
 					sortOrder = libraryInformation2.getFormula().compareTo(libraryInformation1.getFormula());
+				}
+				break;
+			case 9: // Reference Identifier
+				if(libraryInformation1 != null && libraryInformation2 != null) {
+					sortOrder = libraryInformation2.getReferenceIdentifier().compareTo(libraryInformation1.getReferenceIdentifier());
 				}
 				break;
 			default:
