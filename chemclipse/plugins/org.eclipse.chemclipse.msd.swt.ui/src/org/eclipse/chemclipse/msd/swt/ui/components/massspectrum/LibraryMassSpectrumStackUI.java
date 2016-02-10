@@ -35,7 +35,7 @@ public class LibraryMassSpectrumStackUI extends Composite {
 
 	public LibraryMassSpectrumStackUI(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
 		super(parent, style);
-		decimalFormat = new DecimalFormat("0.0####");
+		decimalFormat = new DecimalFormat("0.000");
 		/*
 		 * Mass spectrum type, nominal or accurate
 		 */
