@@ -27,22 +27,27 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferen
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFilePeakIdentifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.comparator.SortOrder;
+import org.eclipse.chemclipse.model.comparator.TargetCombinedComparator;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
+import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakIdentificationResults;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.comparator.IonAbundanceComparator;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumLibraryInformation;
@@ -64,23 +69,32 @@ public class FileIdentifier {
 	private static IMassSpectra massSpectraDatabase = null;
 	private static Map<String, IScanMSD> databaseNames = null;
 	private static Map<String, IScanMSD> databaseCasNumbers = null;
+	//
+	private IonAbundanceComparator ionAbundanceComparator;
+	private TargetCombinedComparator targetCombinedComparator;
+
+	public FileIdentifier() {
+		ionAbundanceComparator = new IonAbundanceComparator(SortOrder.DESC);
+		targetCombinedComparator = new TargetCombinedComparator(SortOrder.DESC);
+	}
 
 	public IMassSpectra runIdentification(List<IScanMSD> massSpectraList, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
 
 		IMassSpectra massSpectra = new MassSpectra();
+		//
 		if(massSpectrumIdentifierSettings instanceof IFileMassSpectrumIdentifierSettings) {
-			IFileMassSpectrumIdentifierSettings settings = (IFileMassSpectrumIdentifierSettings)massSpectrumIdentifierSettings;
+			IFileMassSpectrumIdentifierSettings fileIdentifierSettings = (IFileMassSpectrumIdentifierSettings)massSpectrumIdentifierSettings;
 			/*
 			 * Run the identification.
 			 */
-			String comparatorId = settings.getMassSpectrumComparatorId();
-			float minMatchFactor = settings.getMinMatchFactor();
-			float minReverseMatchFactor = settings.getMinReverseMatchFactor();
-			int numberOfTargets = settings.getNumberOfTargets();
+			String comparatorId = fileIdentifierSettings.getMassSpectrumComparatorId();
+			float minMatchFactor = fileIdentifierSettings.getMinMatchFactor();
+			float minReverseMatchFactor = fileIdentifierSettings.getMinReverseMatchFactor();
+			int numberOfTargets = fileIdentifierSettings.getNumberOfTargets();
 			/*
 			 * Load the mass spectra database only if the raw file or its content has changed.
 			 */
-			IMassSpectra database = getDatabase(settings.getMassSpectraFile(), monitor);
+			IMassSpectra database = getDatabase(fileIdentifierSettings.getMassSpectraFile(), monitor);
 			/*
 			 * Compare
 			 */
@@ -105,15 +119,21 @@ public class FileIdentifier {
 					}
 				}
 				/*
-				 * Assign only the best hits.
+				 * Assign only the best hits or the m/z list of the unknown.
 				 */
-				Collections.sort(massSpectrumTargets, new IdentificationTargetComparator(SortOrder.DESC));
-				int size = (numberOfTargets <= massSpectrumTargets.size()) ? numberOfTargets : massSpectrumTargets.size();
-				for(int i = 0; i < size; i++) {
-					unknown.addTarget(massSpectrumTargets.get(i));
-					massSpectra.addMassSpectrum(unknown);
+				if(massSpectrumTargets.size() == 0) {
+					if(fileIdentifierSettings.isAddUnknownMzListTarget()) {
+						setMassSpectrumTargetUnknown(unknown);
+					}
+				} else {
+					Collections.sort(massSpectrumTargets, targetCombinedComparator);
+					int size = (numberOfTargets <= massSpectrumTargets.size()) ? numberOfTargets : massSpectrumTargets.size();
+					for(int i = 0; i < size; i++) {
+						unknown.addTarget(massSpectrumTargets.get(i));
+					}
 				}
 				//
+				massSpectra.addMassSpectrum(unknown);
 				countUnknown++;
 			}
 		} else {
@@ -172,12 +192,18 @@ public class FileIdentifier {
 				}
 			}
 			/*
-			 * Assign only the best hits.
+			 * Assign only the best hits or the m/z list of the unknown.
 			 */
-			Collections.sort(peakTargets, new IdentificationTargetComparator(SortOrder.DESC));
-			int size = (numberOfTargets <= peakTargets.size()) ? numberOfTargets : peakTargets.size();
-			for(int i = 0; i < size; i++) {
-				peakMSD.addTarget(peakTargets.get(i));
+			if(peakTargets.size() == 0) {
+				if(peakIdentifierSettings.isAddUnknownMzListTarget()) {
+					setPeakTargetUnknown(peakMSD);
+				}
+			} else {
+				Collections.sort(peakTargets, targetCombinedComparator);
+				int size = (numberOfTargets <= peakTargets.size()) ? numberOfTargets : peakTargets.size();
+				for(int i = 0; i < size; i++) {
+					peakMSD.addTarget(peakTargets.get(i));
+				}
 			}
 			//
 			countUnknown++;
@@ -325,6 +351,19 @@ public class FileIdentifier {
 		return identificationEntry;
 	}
 
+	public void setMassSpectrumTargetUnknown(IScanMSD unknown) {
+
+		try {
+			ILibraryInformation libraryInformation = getLibraryInformationUnknown(unknown.getIons());
+			IComparisonResult comparisonResult = getComparisonResultUnknown();
+			IMassSpectrumTarget massSpectrumTarget = new MassSpectrumTarget(libraryInformation, comparisonResult);
+			massSpectrumTarget.setIdentifier(IDENTIFIER);
+			unknown.addTarget(massSpectrumTarget);
+		} catch(ReferenceMustNotBeNullException e) {
+			logger.warn(e);
+		}
+	}
+
 	// TODO Merge
 	public IPeakTarget getPeakTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult) {
 
@@ -339,7 +378,7 @@ public class FileIdentifier {
 			cas = libraryInformation.getCasNumber();
 			comments = libraryInformation.getComments();
 		}
-		IPeakTarget identificationEntry = null;
+		IPeakTarget peakTarget = null;
 		ILibraryInformation libraryInformation;
 		/*
 		 * Get the library information.
@@ -350,11 +389,48 @@ public class FileIdentifier {
 		libraryInformation.setMiscellaneous(comments);
 		//
 		try {
-			identificationEntry = new PeakTarget(libraryInformation, comparisonResult);
+			peakTarget = new PeakTarget(libraryInformation, comparisonResult);
 		} catch(ReferenceMustNotBeNullException e) {
 			logger.warn(e);
 		}
-		identificationEntry.setIdentifier(IDENTIFIER);
-		return identificationEntry;
+		peakTarget.setIdentifier(IDENTIFIER);
+		return peakTarget;
+	}
+
+	public void setPeakTargetUnknown(IPeakMSD peakMSD) {
+
+		try {
+			IScanMSD unknown = peakMSD.getExtractedMassSpectrum();
+			ILibraryInformation libraryInformation = getLibraryInformationUnknown(unknown.getIons());
+			IComparisonResult comparisonResult = getComparisonResultUnknown();
+			IPeakTarget peakTarget = new PeakTarget(libraryInformation, comparisonResult);
+			peakTarget.setIdentifier(IDENTIFIER);
+			peakMSD.addTarget(peakTarget);
+		} catch(ReferenceMustNotBeNullException e) {
+			logger.warn(e);
+		}
+	}
+
+	private IComparisonResult getComparisonResultUnknown() {
+
+		return new ComparisonResult(100.0f, 100.0f);
+	}
+
+	private ILibraryInformation getLibraryInformationUnknown(List<IIon> ions) {
+
+		ILibraryInformation libraryInformation = new LibraryInformation();
+		Collections.sort(ions, ionAbundanceComparator);
+		StringBuilder builder = new StringBuilder();
+		builder.append("Unknown [");
+		int size = (ions.size() >= 5) ? 5 : ions.size();
+		for(int i = 0; i < size; i++) {
+			builder.append((int)ions.get(i).getIon());
+			if(i < size - 1) {
+				builder.append(",");
+			}
+		}
+		builder.append("]");
+		libraryInformation.setName(builder.toString());
+		return libraryInformation;
 	}
 }

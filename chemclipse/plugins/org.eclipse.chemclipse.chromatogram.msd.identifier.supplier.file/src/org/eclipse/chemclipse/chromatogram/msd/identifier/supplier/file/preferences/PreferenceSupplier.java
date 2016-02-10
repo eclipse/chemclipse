@@ -39,6 +39,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_MIN_REVERSE_MATCH_FACTOR = "minReverseMatchFactor";
 	public static final float DEF_MIN_REVERSE_MATCH_FACTOR = 80.0f;
 	//
+	public static final String P_ADD_UNKNOWN_MZ_LIST_TARGET = "addUnknownMzListTarget";
+	public static final Boolean DEF_ADD_UNKNOWN_MZ_LIST_TARGET = true;
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -70,6 +73,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_NUMBER_OF_TARGETS, Integer.toString(DEF_NUMBER_OF_TARGETS));
 		defaultValues.put(P_MIN_MATCH_FACTOR, Float.toString(DEF_MIN_MATCH_FACTOR));
 		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
+		defaultValues.put(P_ADD_UNKNOWN_MZ_LIST_TARGET, Boolean.toString(DEF_ADD_UNKNOWN_MZ_LIST_TARGET));
 		return defaultValues;
 	}
 
@@ -88,6 +92,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
 		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR));
+		settings.setAddUnknownMzListTarget(preferences.getBoolean(P_ADD_UNKNOWN_MZ_LIST_TARGET, DEF_ADD_UNKNOWN_MZ_LIST_TARGET));
 		return settings;
 	}
 
@@ -100,6 +105,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
 		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR));
+		settings.setAddUnknownMzListTarget(preferences.getBoolean(P_ADD_UNKNOWN_MZ_LIST_TARGET, DEF_ADD_UNKNOWN_MZ_LIST_TARGET));
 		return settings;
 	}
 

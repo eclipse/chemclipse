@@ -19,6 +19,7 @@ public class FilePeakIdentifierSettings extends AbstractPeakIdentifierSettings i
 	private int numberOfTargets;
 	private float minMatchFactor;
 	private float minReverseMatchFactor;
+	private boolean addUnknownMzListTarget;
 
 	@Override
 	public String getMassSpectraFile() {
@@ -66,5 +67,17 @@ public class FilePeakIdentifierSettings extends AbstractPeakIdentifierSettings i
 	public void setMinReverseMatchFactor(float minReverseMatchFactor) {
 
 		this.minReverseMatchFactor = minReverseMatchFactor;
+	}
+
+	@Override
+	public boolean isAddUnknownMzListTarget() {
+
+		return addUnknownMzListTarget;
+	}
+
+	@Override
+	public void setAddUnknownMzListTarget(boolean addUnknownMzListTarget) {
+
+		this.addUnknownMzListTarget = addUnknownMzListTarget;
 	}
 }
