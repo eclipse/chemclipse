@@ -47,4 +47,13 @@ public interface IMassSpectraReader extends IFileHelper {
 	 * @param referenceIdentifierPrefix
 	 */
 	void extractNameAndReferenceIdentifier(IRegularLibraryMassSpectrum massSpectrum, String name, String referenceIdentifierMarker, String referenceIdentifierPrefix);
+
+	/**
+	 * Extracts the retention indices.
+	 * 
+	 * @param massSpectrum
+	 * @param value
+	 * @param delimiter
+	 */
+	void extractRetentionIndices(IRegularLibraryMassSpectrum massSpectrum, String value, String delimiter);
 }
