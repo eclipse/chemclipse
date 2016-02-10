@@ -115,4 +115,18 @@ public interface IChromatogramInfo {
 	String getWeightUnit();
 
 	void setWeightUnit(String weightUnit);
+
+	/**
+	 * This is the name of the contained data, e.g. sample name.
+	 * 
+	 * @return String
+	 */
+	String getDataName();
+
+	/**
+	 * Set the contained sample name.
+	 * 
+	 * @param dataName
+	 */
+	void setDataName(String dataName);
 }

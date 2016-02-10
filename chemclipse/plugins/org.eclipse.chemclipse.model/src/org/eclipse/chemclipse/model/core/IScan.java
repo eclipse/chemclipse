@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import java.util.Map;
+
 import org.eclipse.core.runtime.IAdaptable;
 
 /**
@@ -139,6 +141,8 @@ public interface IScan extends IAdaptable, IScanSerializable {
 	 * @return float
 	 */
 	float getRetentionIndex(RetentionIndexType retentionIndexType);
+
+	Map<RetentionIndexType, Float> getRetentionIndicesTyped();
 
 	/**
 	 * Sets the retention index. Only values >= 0 are allowed.<br/>

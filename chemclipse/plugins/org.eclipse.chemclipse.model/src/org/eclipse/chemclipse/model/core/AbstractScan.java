@@ -170,6 +170,16 @@ public abstract class AbstractScan implements IScan {
 	}
 
 	@Override
+	public Map<RetentionIndexType, Float> getRetentionIndicesTyped() {
+
+		if(additionalRetentionIndices == null) {
+			return new HashMap<RetentionIndexType, Float>();
+		} else {
+			return new HashMap<RetentionIndexType, Float>(additionalRetentionIndices);
+		}
+	}
+
+	@Override
 	public int getScanNumber() {
 
 		return scanNumber;
