@@ -11,15 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.components.peak;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakCheckBoxEditingSupport;
@@ -29,6 +32,7 @@ import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakListTableComparat
 import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -42,6 +46,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
@@ -51,13 +56,19 @@ public class PeakListUI {
 	//
 	private IChromatogramSelection chromatogramSelection;
 	//
+	private DecimalFormat decimalFormat;
+	//
 	private ExtendedTableViewer tableViewer;
+	private Label labelSelectedPeak;
+	private Label labelPeaks;
+	//
 	private PeakListTableComparator peakListTableComparator;
 	private static final String PEAK_IS_ACTIVE_FOR_ANALYSIS = "Active for Analysis";
 	private String[] titles = {PEAK_IS_ACTIVE_FOR_ANALYSIS, "RT (minutes)", "RI", "Area", "Start RT", "Stop RT", "Width", "Scan# at Peak Maximum", "S/N", "Leading", "Tailing", "Model Description", "Suggested Components"};
 	private int bounds[] = {30, 100, 60, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 	public PeakListUI(Composite parent, int style) {
+		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 		initialize(parent);
 	}
 
@@ -74,12 +85,27 @@ public class PeakListUI {
 	public void update(IPeaks peaks, boolean forceReload) {
 
 		if(peaks != null) {
+			if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
+				labelPeaks.setText(chromatogramSelection.getChromatogram().getNumberOfPeaks() + " chromatogram peaks - " + peaks.size() + " displayed peaks");
+			} else {
+				labelPeaks.setText(peaks.size() + " displayed peaks");
+			}
+			//
 			tableViewer.setInput(peaks);
+		}
+	}
+
+	public void setLabelSelectedPeak(IChromatogramPeakMSD selectedPeakMSD) {
+
+		if(selectedPeakMSD != null && selectedPeakMSD.getPeakModel() != null) {
+			IPeakModelMSD peakModel = selectedPeakMSD.getPeakModel();
+			labelSelectedPeak.setText("Selected Peak: " + decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR) + " min");
 		}
 	}
 
 	public void clear() {
 
+		labelPeaks.setText("");
 		tableViewer.setInput(null);
 	}
 
@@ -164,6 +190,7 @@ public class PeakListUI {
 		//
 		createButtons(composite);
 		createTable(composite);
+		createInfos(composite);
 	}
 
 	private void createButtons(Composite composite) {
@@ -213,16 +240,6 @@ public class PeakListUI {
 		});
 	}
 
-	private void setActiveForAnalysis(boolean activeForAnalysis) {
-
-		List<IChromatogramPeakMSD> peaks = getChromatogramPeakList();
-		for(IChromatogramPeakMSD peak : peaks) {
-			peak.setActiveForAnalysis(activeForAnalysis);
-		}
-		tableViewer.refresh();
-		chromatogramSelection.update(true);
-	}
-
 	private void createTable(Composite composite) {
 
 		// SWT.VIRTUAL | SWT.FULL_SELECTION
@@ -255,6 +272,27 @@ public class PeakListUI {
 				}
 			}
 		});
+	}
+
+	private void createInfos(Composite composite) {
+
+		labelSelectedPeak = new Label(composite, SWT.NONE);
+		labelSelectedPeak.setText("");
+		labelSelectedPeak.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		labelPeaks = new Label(composite, SWT.NONE);
+		labelPeaks.setText("");
+		labelPeaks.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	}
+
+	private void setActiveForAnalysis(boolean activeForAnalysis) {
+
+		List<IChromatogramPeakMSD> peaks = getChromatogramPeakList();
+		for(IChromatogramPeakMSD peak : peaks) {
+			peak.setActiveForAnalysis(activeForAnalysis);
+		}
+		tableViewer.refresh();
+		chromatogramSelection.update(true);
 	}
 
 	private List<IChromatogramPeakMSD> getChromatogramPeakList() {

@@ -184,6 +184,11 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 		 */
 		if(doUpdate(chromatogramSelection)) {
 			/*
+			 * Display the information of the selected peak.
+			 */
+			IChromatogramPeakMSD selectedPeak = chromatogramSelection.getSelectedPeak();
+			peakListUI.setLabelSelectedPeak(selectedPeak);
+			/*
 			 * Check if the chromatogram selection is actually selected.
 			 */
 			peakListUI.setChromatogramSelection(chromatogramSelection);
