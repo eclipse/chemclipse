@@ -17,11 +17,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.comparator.SortOrder;
+import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
@@ -48,11 +51,14 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 	private NumberFormat numberFormat;
 	private static final int FRACTION_DIGITS = 3;
 	private static final int MAX_SPECTRA_CHUNK = 65535;
+	//
+	private TargetExtendedComparator targetExtendedComparator;
 
 	public AbstractAmdisWriter() {
 		numberFormat = NumberFormat.getInstance(Locale.US);
 		numberFormat.setMinimumFractionDigits(FRACTION_DIGITS);
 		numberFormat.setMaximumFractionDigits(FRACTION_DIGITS);
+		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
 	}
 
 	@Override
@@ -229,12 +235,10 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 			/*
 			 * Scan/Chromatogram MS
 			 */
-			float matchFactor = Float.MIN_VALUE;
-			for(IMassSpectrumTarget target : massSpectrum.getTargets()) {
-				if(target.getComparisonResult().getMatchFactor() > matchFactor) {
-					matchFactor = target.getComparisonResult().getMatchFactor();
-					identificationTarget = target;
-				}
+			List<IMassSpectrumTarget> targets = massSpectrum.getTargets();
+			Collections.sort(targets, targetExtendedComparator);
+			if(targets.size() >= 1) {
+				identificationTarget = targets.get(0);
 			}
 		}
 		return identificationTarget;
