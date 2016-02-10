@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
+import org.eclipse.chemclipse.msd.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.IVendorLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.model.VendorIon;
@@ -47,6 +48,7 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 	private static final String RETENTION_TIME_MARKER = "##RETENTION_TIME=";
 	private static final String RETENTION_INDEX_MARKER = "##$RETENTION INDEX=";
 	private static final String CAS_REGISTRY_NO = "##CAS REGISTRY NO=";
+	private static final String CAS_NAME = "##CAS NAME=";
 	private static final String MOL_WEIGHT = "##MW=";
 	private static final String MOL_FORM = "##MOLFORM=";
 	private static final String TIME_MARKER = "##TIME=";
@@ -72,6 +74,9 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 
 	private IMassSpectra extractMassSpectra(File file, boolean isNameMarkerAvailable, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
+		String referenceIdentifierMarker = PreferenceSupplier.getReferenceIdentifierMarker();
+		String referenceIdentifierPrefix = PreferenceSupplier.getReferenceIdentifierPrefix();
+		//
 		IMassSpectra massSpectra = new MassSpectra();
 		IVendorLibraryMassSpectrum massSpectrum = null;
 		IVendorIon ion;
@@ -147,6 +152,9 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 				} else if(line.startsWith(CAS_REGISTRY_NO)) {
 					String casNumber = line.replace(CAS_REGISTRY_NO, "").trim();
 					massSpectrum.getLibraryInformation().setCasNumber(casNumber);
+				} else if(line.startsWith(CAS_NAME)) {
+					String name = line.replace(CAS_NAME, "").trim();
+					extractNameAndReferenceIdentifier(massSpectrum, name, referenceIdentifierMarker, referenceIdentifierPrefix);
 				} else if(line.startsWith(MOL_WEIGHT)) {
 					double molWeight = getMolWeight(line);
 					massSpectrum.getLibraryInformation().setMolWeight(molWeight);
