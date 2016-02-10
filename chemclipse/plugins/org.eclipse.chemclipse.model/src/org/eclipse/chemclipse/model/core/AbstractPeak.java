@@ -27,11 +27,11 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	private int suggestedNumberOfComponents = 0; // 0 is the default
 	private String integratorDescription = "";
 	private String detectorDescription = "";
-	private IIntegrationConstraints integrationConstraints;
-	private List<? extends IIntegrationEntry> integrationEntries;
 	private String quantifierDescription = "";
-	private List<IQuantitationEntry> quantitationEntries;
 	private boolean activeForAnalysis = true;
+	private List<? extends IIntegrationEntry> integrationEntries;
+	final private IIntegrationConstraints integrationConstraints;
+	final private List<IQuantitationEntry> quantitationEntries;
 
 	public AbstractPeak() {
 		/*

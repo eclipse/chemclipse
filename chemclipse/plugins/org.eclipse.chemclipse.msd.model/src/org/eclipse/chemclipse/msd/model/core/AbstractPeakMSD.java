@@ -15,7 +15,7 @@ import org.eclipse.chemclipse.model.core.AbstractPeak;
 
 public abstract class AbstractPeakMSD extends AbstractPeak implements IPeakMSD {
 
-	private IPeakModelMSD peakModel;
+	final private IPeakModelMSD peakModel;
 
 	public AbstractPeakMSD(IPeakModelMSD peakModel) throws IllegalArgumentException {
 		validatePeakModel(peakModel);
