@@ -13,13 +13,17 @@ package org.eclipse.chemclipse.msd.swt.ui.components.peak;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.comparator.SortOrder;
+import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
@@ -64,11 +68,14 @@ public class PeakListUI {
 	//
 	private PeakListTableComparator peakListTableComparator;
 	private static final String PEAK_IS_ACTIVE_FOR_ANALYSIS = "Active for Analysis";
-	private String[] titles = {PEAK_IS_ACTIVE_FOR_ANALYSIS, "RT (minutes)", "RI", "Area", "Start RT", "Stop RT", "Width", "Scan# at Peak Maximum", "S/N", "Leading", "Tailing", "Model Description", "Suggested Components"};
-	private int bounds[] = {30, 100, 60, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
+	private String[] titles = {PEAK_IS_ACTIVE_FOR_ANALYSIS, "RT (min)", "RI", "Area", "Start RT", "Stop RT", "Width", "Scan# at Peak Maximum", "S/N", "Leading", "Tailing", "Model Description", "Suggested Components", "Name"};
+	private int bounds[] = {30, 100, 60, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
+	//
+	private TargetExtendedComparator targetExtendedComparator;
 
 	public PeakListUI(Composite parent, int style) {
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
+		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
 		initialize(parent);
 	}
 
@@ -92,6 +99,8 @@ public class PeakListUI {
 			}
 			//
 			tableViewer.setInput(peaks);
+		} else {
+			clear();
 		}
 	}
 
@@ -99,12 +108,20 @@ public class PeakListUI {
 
 		if(selectedPeakMSD != null && selectedPeakMSD.getPeakModel() != null) {
 			IPeakModelMSD peakModel = selectedPeakMSD.getPeakModel();
-			labelSelectedPeak.setText("Selected Peak: " + decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR) + " min");
+			String name = getName(selectedPeakMSD.getTargets());
+			if(name != null) {
+				labelSelectedPeak.setText("Selected Peak: " + decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR) + " min - Name: " + name);
+			} else {
+				labelSelectedPeak.setText("Selected Peak: " + decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR) + " min");
+			}
+		} else {
+			labelSelectedPeak.setText("");
 		}
 	}
 
 	public void clear() {
 
+		labelSelectedPeak.setText("");
 		labelPeaks.setText("");
 		tableViewer.setInput(null);
 	}
@@ -337,5 +354,15 @@ public class PeakListUI {
 				tableViewerColumn.setEditingSupport(new PeakCheckBoxEditingSupport(tableViewer));
 			}
 		}
+	}
+
+	private String getName(List<IPeakTarget> targets) {
+
+		String name = "";
+		Collections.sort(targets, targetExtendedComparator);
+		if(targets.size() >= 1) {
+			name = targets.get(0).getLibraryInformation().getName();
+		}
+		return name;
 	}
 }

@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
+import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.comparator.SortOrder;
+import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -22,6 +25,12 @@ import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
 public class MassSpectrumListTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
+
+	private TargetExtendedComparator targetExtendedComparator;
+
+	public MassSpectrumListTableComparator() {
+		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
+	}
 
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {
@@ -106,12 +115,9 @@ public class MassSpectrumListTableComparator extends AbstractRecordTableComparat
 	private ILibraryInformation getLibraryInformation(List<IMassSpectrumTarget> targets) {
 
 		ILibraryInformation libraryInformation = null;
-		float matchFactor = Float.MIN_VALUE;
-		for(IMassSpectrumTarget target : targets) {
-			if(target.getComparisonResult().getMatchFactor() > matchFactor) {
-				matchFactor = target.getComparisonResult().getMatchFactor();
-				libraryInformation = target.getLibraryInformation();
-			}
+		Collections.sort(targets, targetExtendedComparator);
+		if(targets.size() >= 1) {
+			libraryInformation = targets.get(0).getLibraryInformation();
 		}
 		return libraryInformation;
 	}
