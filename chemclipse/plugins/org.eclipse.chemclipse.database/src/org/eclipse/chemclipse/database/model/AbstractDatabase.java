@@ -220,7 +220,7 @@ public abstract class AbstractDatabase implements IDatabase {
 	 * @param queryStrings
 	 * @return ODocument
 	 */
-	final protected ODocument queryDocumentById(String className, long id, ODatabaseDocumentTx dbtx, String... queryStrings) {
+	final protected ODocument queryDocumentById(String className, long id, ODatabaseDocumentTx dbtx, CharSequence... queryStrings) {
 
 		if(countCluster(className.toLowerCase()) == 0) {
 			return null;
@@ -234,7 +234,7 @@ public abstract class AbstractDatabase implements IDatabase {
 			query.append(cluster);
 			query.append(":");
 			query.append(id);
-			for(String s : queryStrings) {
+			for(CharSequence s : queryStrings) {
 				query.append(s);
 			}
 			/*
@@ -257,10 +257,6 @@ public abstract class AbstractDatabase implements IDatabase {
 
 	final protected List<ODocument> queryDocumentsByRecordIds(String className, OIntent intent, Set<Long> ids) {
 
-		// List<ODocument> result = null;
-		// try (ODatabaseDocumentTx separatedb = ownerPool.acquire()) {
-		// result = queryDocumentsByRecordIds(className, separatedb, intent, ids);
-		// }
 		List<ODocument> result = queryDocumentsByRecordIds(className, getDB(), intent, ids);
 		return result;
 	}
@@ -310,7 +306,7 @@ public abstract class AbstractDatabase implements IDatabase {
 		}
 	}
 
-	final protected List<ODocument> queryDocumentsByClassName(String className, String... queryStrings) {
+	final protected List<ODocument> queryDocumentsByClassName(String className, CharSequence... queryStrings) {
 
 		/*
 		 * Assume by default that we read a lot of stuff
@@ -318,28 +314,24 @@ public abstract class AbstractDatabase implements IDatabase {
 		return queryDocumentsByClassName(className, new OIntentMassiveRead(), queryStrings);
 	}
 
-	final protected List<ODocument> queryDocumentsByClassName(String className, OIntent intent, String... queryStrings) {
+	final protected List<ODocument> queryDocumentsByClassName(String className, OIntent intent, CharSequence... queryStrings) {
 
-		// List<ODocument> result = null;
-		// try (ODatabaseDocumentTx separatedb = ownerPool.acquire()) {
-		// result = queryDocumentsByClassName(className, separatedb, intent, queryStrings);
-		// }
 		List<ODocument> result = queryDocumentsByClassName(className, getDB(), intent, queryStrings);
 		return result;
 	}
 
-	final protected List<ODocument> queryDocumentsByClassName(String className, ODatabaseDocumentTx dbtx, String... queryStrings) {
+	final protected List<ODocument> queryDocumentsByClassName(String className, ODatabaseDocumentTx dbtx, CharSequence... queryStrings) {
 
 		return queryDocumentsByClassName(className, dbtx, new OIntentMassiveRead(), queryStrings);
 	}
 
-	final protected List<ODocument> queryDocumentsByClassName(String className, ODatabaseDocumentTx dbtx, OIntent intent, String... queryStrings) {
+	final protected List<ODocument> queryDocumentsByClassName(String className, ODatabaseDocumentTx dbtx, OIntent intent, CharSequence... queryStrings) {
 
 		if(countCluster(className.toLowerCase()) > 0) {
 			StringBuilder queryBuilder = new StringBuilder();
 			queryBuilder.append("SELECT FROM ");
 			queryBuilder.append(className);
-			for(String s : queryStrings) {
+			for(CharSequence s : queryStrings) {
 				queryBuilder.append(s);
 			}
 			String queryString = queryBuilder.toString();
