@@ -24,6 +24,8 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	private String miscellaneous = "";
 	private String formula = "";
 	private double molWeight = 0;
+	private String database = "";
+	private String contributor = "";
 
 	// -----------------------------------------------ILibraryInformation
 	public AbstractLibraryInformation() {
@@ -137,6 +139,34 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 
 		if(miscellaneous != null) {
 			this.miscellaneous = miscellaneous;
+		}
+	}
+
+	@Override
+	public String getDatabase() {
+
+		return database;
+	}
+
+	@Override
+	public void setDatabase(String database) {
+
+		if(database != null) {
+			this.database = database;
+		}
+	}
+
+	@Override
+	public String getContributor() {
+
+		return contributor;
+	}
+
+	@Override
+	public void setContributor(String contributor) {
+
+		if(contributor != null) {
+			this.contributor = contributor;
 		}
 	}
 

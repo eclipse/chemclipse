@@ -90,6 +90,12 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 				case 11: // Comments
 					text = libraryInformation.getComments();
 					break;
+				case 12:
+					text = libraryInformation.getDatabase();
+					break;
+				case 13:
+					text = libraryInformation.getContributor();
+					break;
 				default:
 					text = "n.v.";
 			}

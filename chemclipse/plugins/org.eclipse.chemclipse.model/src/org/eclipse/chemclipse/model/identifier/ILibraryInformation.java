@@ -117,4 +117,32 @@ public interface ILibraryInformation {
 	 * @return String
 	 */
 	void setMiscellaneous(String miscellaneous);
+
+	/**
+	 * Returns the database information.
+	 * 
+	 * @return String
+	 */
+	String getDatabase();
+
+	/**
+	 * Sets the database information.
+	 * 
+	 * @return String
+	 */
+	void setDatabase(String database);
+
+	/**
+	 * Returns the contributor information.
+	 * 
+	 * @return String
+	 */
+	String getContributor();
+
+	/**
+	 * Sets the contributor information.
+	 * 
+	 * @return String
+	 */
+	void setContributor(String contributor);
 }
