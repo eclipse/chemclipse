@@ -37,9 +37,9 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ChromatogramComparisonResult;
 import org.eclipse.chemclipse.model.identifier.ChromatogramLibraryInformation;
-import org.eclipse.chemclipse.model.identifier.IChromatogramComparisonResult;
+import org.eclipse.chemclipse.model.identifier.ExtendedComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IChromatogramLibraryInformation;
-import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
@@ -69,7 +69,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumLibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumComparisonResult;
@@ -427,6 +426,8 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			String comments = readString(dataInputStream); // Comments
 			String referenceIdentifier = readString(dataInputStream);
 			String miscellaneous = readString(dataInputStream); // Miscellaneous
+			String database = readString(dataInputStream);
+			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
 			Set<String> synonyms = new HashSet<String>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
@@ -435,7 +436,14 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			}
 			String formula = readString(dataInputStream); // Formula
 			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			//
+			/*
+			 * Check if this is an extended comparison result.
+			 */
+			boolean isExtendedComparisonResult = dataInputStream.readBoolean();
+			float forwardMatchFactor = 0.0f;
+			if(isExtendedComparisonResult) {
+				forwardMatchFactor = dataInputStream.readFloat(); // Forward Match Factor
+			}
 			float matchFactor = dataInputStream.readFloat(); // Match Factor
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
 			float probability = dataInputStream.readFloat(); // Probability
@@ -445,11 +453,20 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			libraryInformation.setComments(comments);
 			libraryInformation.setReferenceIdentifier(referenceIdentifier);
 			libraryInformation.setMiscellaneous(miscellaneous);
+			libraryInformation.setDatabase(database);
+			libraryInformation.setContributor(contributor);
 			libraryInformation.setName(name);
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
 			libraryInformation.setMolWeight(molWeight);
-			IPeakComparisonResult comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, probability);
+			//
+			IComparisonResult comparisonResult;
+			if(isExtendedComparisonResult) {
+				comparisonResult = new ExtendedComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, probability);
+			} else {
+				comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, probability);
+			}
+			//
 			try {
 				IPeakTarget identificationEntry = new PeakTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
@@ -473,6 +490,8 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			String comments = readString(dataInputStream); // Comments
 			String referenceIdentifier = readString(dataInputStream);
 			String miscellaneous = readString(dataInputStream); // Miscellaneous
+			String database = readString(dataInputStream);
+			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
 			Set<String> synonyms = new HashSet<String>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
@@ -481,7 +500,14 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			}
 			String formula = readString(dataInputStream); // Formula
 			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			//
+			/*
+			 * Check if this is an extended comparison result.
+			 */
+			boolean isExtendedComparisonResult = dataInputStream.readBoolean();
+			float forwardMatchFactor = 0.0f;
+			if(isExtendedComparisonResult) {
+				forwardMatchFactor = dataInputStream.readFloat(); // Forward Match Factor
+			}
 			float matchFactor = dataInputStream.readFloat(); // Match Factor
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
 			float probability = dataInputStream.readFloat(); // Probability
@@ -491,11 +517,20 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			libraryInformation.setComments(comments);
 			libraryInformation.setReferenceIdentifier(referenceIdentifier);
 			libraryInformation.setMiscellaneous(miscellaneous);
+			libraryInformation.setDatabase(database);
+			libraryInformation.setContributor(contributor);
 			libraryInformation.setName(name);
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
 			libraryInformation.setMolWeight(molWeight);
-			IMassSpectrumComparisonResult comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, probability);
+			//
+			IComparisonResult comparisonResult;
+			if(isExtendedComparisonResult) {
+				comparisonResult = new ExtendedComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, probability);
+			} else {
+				comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, probability);
+			}
+			//
 			try {
 				IMassSpectrumTarget identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
@@ -570,6 +605,8 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			String comments = readString(dataInputStream); // Comments
 			String referenceIdentifier = readString(dataInputStream);
 			String miscellaneous = readString(dataInputStream); // Miscellaneous
+			String database = readString(dataInputStream);
+			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
 			Set<String> synonyms = new HashSet<String>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
@@ -578,7 +615,14 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			}
 			String formula = readString(dataInputStream); // Formula
 			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			//
+			/*
+			 * Check if this is an extended comparison result.
+			 */
+			boolean isExtendedComparisonResult = dataInputStream.readBoolean();
+			float forwardMatchFactor = 0.0f;
+			if(isExtendedComparisonResult) {
+				forwardMatchFactor = dataInputStream.readFloat(); // Forward Match Factor
+			}
 			float matchFactor = dataInputStream.readFloat(); // Match Factor
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
 			float probability = dataInputStream.readFloat(); // Probability
@@ -588,11 +632,20 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			libraryInformation.setComments(comments);
 			libraryInformation.setReferenceIdentifier(referenceIdentifier);
 			libraryInformation.setMiscellaneous(miscellaneous);
+			libraryInformation.setDatabase(database);
+			libraryInformation.setContributor(contributor);
 			libraryInformation.setName(name);
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
 			libraryInformation.setMolWeight(molWeight);
-			IChromatogramComparisonResult comparisonResult = new ChromatogramComparisonResult(matchFactor, reverseMatchFactor, probability);
+			//
+			IComparisonResult comparisonResult;
+			if(isExtendedComparisonResult) {
+				comparisonResult = new ExtendedComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, probability);
+			} else {
+				comparisonResult = new ChromatogramComparisonResult(matchFactor, reverseMatchFactor, probability);
+			}
+			//
 			try {
 				IChromatogramTargetMSD identificationEntry = new ChromatogramTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);

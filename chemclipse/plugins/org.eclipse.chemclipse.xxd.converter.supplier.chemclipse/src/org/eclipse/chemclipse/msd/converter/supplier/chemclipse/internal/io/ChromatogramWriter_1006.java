@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IExtendedComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
@@ -578,6 +579,8 @@ public class ChromatogramWriter_1006 extends AbstractChromatogramWriter implemen
 		writeString(dataOutputStream, libraryInformation.getComments()); // Comments
 		writeString(dataOutputStream, libraryInformation.getReferenceIdentifier());
 		writeString(dataOutputStream, libraryInformation.getMiscellaneous()); // Miscellaneous
+		writeString(dataOutputStream, libraryInformation.getDatabase());
+		writeString(dataOutputStream, libraryInformation.getContributor());
 		writeString(dataOutputStream, libraryInformation.getName()); // Name
 		Set<String> synonyms = libraryInformation.getSynonyms(); // Synonyms
 		int numberOfSynonyms = synonyms.size();
@@ -588,6 +591,13 @@ public class ChromatogramWriter_1006 extends AbstractChromatogramWriter implemen
 		writeString(dataOutputStream, libraryInformation.getFormula()); // Formula
 		dataOutputStream.writeDouble(libraryInformation.getMolWeight()); // Mol Weight
 		//
+		if(comparisonResult instanceof IExtendedComparisonResult) {
+			dataOutputStream.writeBoolean(true);
+			IExtendedComparisonResult extendedComparisonResult = (IExtendedComparisonResult)comparisonResult;
+			dataOutputStream.writeFloat(extendedComparisonResult.getForwardMatchFactor()); // Forward Match Factor
+		} else {
+			dataOutputStream.writeBoolean(false);
+		}
 		dataOutputStream.writeFloat(comparisonResult.getMatchFactor()); // Match Factor
 		dataOutputStream.writeFloat(comparisonResult.getReverseMatchFactor()); // Reverse Match Factor
 		dataOutputStream.writeFloat(comparisonResult.getProbability()); // Probability
