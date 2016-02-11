@@ -210,6 +210,8 @@ public class PeakReader_1006 extends AbstractZipReader implements IPeakReader {
 		int timeSegmentId = dataInputStream.readInt(); // Time Segment Id
 		int cycleNumber = dataInputStream.readInt(); // Cycle Number
 		massSpectrum.setRetentionTime(retentionTime);
+		massSpectrum.setRetentionTimeColumn1(retentionTimeColumn1);
+		massSpectrum.setRetentionTimeColumn2(retentionTimeColumn2);
 		massSpectrum.setRetentionIndex(retentionIndex);
 		massSpectrum.setTimeSegmentId(timeSegmentId);
 		massSpectrum.setCycleNumber(cycleNumber);

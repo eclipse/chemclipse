@@ -210,9 +210,9 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 	private IChromatogramPeakCSD readPeak(DataInputStream dataInputStream, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException, IllegalArgumentException, PeakException {
 
 		String detectorDescription = readString(dataInputStream); // Detector Description
-		String integratorDescription = readString(dataInputStream); // Integrator Description
 		String quantifierDescription = readString(dataInputStream);
 		boolean activeForAnalysis = dataInputStream.readBoolean();
+		String integratorDescription = readString(dataInputStream); // Integrator Description
 		String modelDescription = readString(dataInputStream); // Model Description
 		PeakType peakType = PeakType.valueOf(readString(dataInputStream)); // Peak Type
 		int suggestedNumberOfComponents = dataInputStream.readInt(); // Suggest Number Of Components
@@ -223,7 +223,6 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 		int retentionTimeScan = dataInputStream.readInt();
 		float totalSignalScan = dataInputStream.readFloat();
 		IVendorScan peakMaximum = new VendorScan(retentionTimeScan, totalSignalScan);
-		//
 		int retentionTimeColumn1 = dataInputStream.readInt();
 		int retentionTimeColumn2 = dataInputStream.readInt();
 		float retentionIndexScan = dataInputStream.readFloat(); // Retention Index
