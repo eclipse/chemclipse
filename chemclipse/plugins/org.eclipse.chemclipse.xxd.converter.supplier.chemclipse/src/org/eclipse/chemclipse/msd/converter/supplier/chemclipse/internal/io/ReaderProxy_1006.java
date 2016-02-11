@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 Dr. Philip Wenig.
+ * Copyright (c) 2016 Lablicate UG (haftungsbeschränkt).
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * All rights reserved.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
@@ -19,8 +19,11 @@ import java.util.Set;
 import java.util.zip.ZipFile;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
+import org.eclipse.chemclipse.model.identifier.ExtendedComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.IReaderProxy;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorScan;
@@ -29,7 +32,6 @@ import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogr
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumLibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumComparisonResult;
@@ -45,9 +47,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class ReaderProxy_1005 extends AbstractZipReader implements IReaderProxy {
+public class ReaderProxy_1006 extends AbstractZipReader implements IReaderProxy {
 
-	private static final Logger logger = Logger.getLogger(ReaderProxy_1005.class);
+	private static final Logger logger = Logger.getLogger(ReaderProxy_1006.class);
 
 	@Override
 	public void readMassSpectrum(File file, int offset, IVendorScanProxy massSpectrum, IIonTransitionSettings ionTransitionSettings, IProgressMonitor monitor) throws IOException {
@@ -87,10 +89,22 @@ public class ReaderProxy_1005 extends AbstractZipReader implements IReaderProxy 
 	private void readNormalMassSpectrum(IScanMSD massSpectrum, DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings, IProgressMonitor monitor) throws IOException {
 
 		int retentionTime = dataInputStream.readInt(); // Retention Time
+		int retentionTimeColumn1 = dataInputStream.readInt();
+		int retentionTimeColumn2 = dataInputStream.readInt();
 		float retentionIndex = dataInputStream.readFloat(); // Retention Index
+		if(dataInputStream.readBoolean()) {
+			int size = dataInputStream.readInt();
+			for(int i = 0; i < size; i++) {
+				RetentionIndexType retentionIndexType = RetentionIndexType.valueOf(readString(dataInputStream));
+				float retentionIndexAdditional = dataInputStream.readFloat();
+				massSpectrum.setRetentionIndex(retentionIndexType, retentionIndexAdditional);
+			}
+		}
 		int timeSegmentId = dataInputStream.readInt(); // Time Segment Id
 		int cycleNumber = dataInputStream.readInt(); // Cycle Number
 		massSpectrum.setRetentionTime(retentionTime);
+		massSpectrum.setRetentionTimeColumn1(retentionTimeColumn1);
+		massSpectrum.setRetentionTimeColumn2(retentionTimeColumn2);
 		massSpectrum.setRetentionIndex(retentionIndex);
 		massSpectrum.setTimeSegmentId(timeSegmentId);
 		massSpectrum.setCycleNumber(cycleNumber);
@@ -157,10 +171,14 @@ public class ReaderProxy_1005 extends AbstractZipReader implements IReaderProxy 
 		for(int i = 1; i <= numberOfMassSpectrumTargets; i++) {
 			//
 			String identifier = readString(dataInputStream); // Identifier
+			boolean manuallyVerified = dataInputStream.readBoolean();
 			//
 			String casNumber = readString(dataInputStream); // CAS-Number
 			String comments = readString(dataInputStream); // Comments
+			String referenceIdentifier = readString(dataInputStream);
 			String miscellaneous = readString(dataInputStream); // Miscellaneous
+			String database = readString(dataInputStream);
+			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
 			Set<String> synonyms = new HashSet<String>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
@@ -169,7 +187,14 @@ public class ReaderProxy_1005 extends AbstractZipReader implements IReaderProxy 
 			}
 			String formula = readString(dataInputStream); // Formula
 			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			//
+			/*
+			 * Check if this is an extended comparison result.
+			 */
+			boolean isExtendedComparisonResult = dataInputStream.readBoolean();
+			float forwardMatchFactor = 0.0f;
+			if(isExtendedComparisonResult) {
+				forwardMatchFactor = dataInputStream.readFloat(); // Forward Match Factor
+			}
 			float matchFactor = dataInputStream.readFloat(); // Match Factor
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
 			float probability = dataInputStream.readFloat(); // Probability
@@ -177,15 +202,26 @@ public class ReaderProxy_1005 extends AbstractZipReader implements IReaderProxy 
 			IMassSpectrumLibraryInformation libraryInformation = new MassSpectrumLibraryInformation();
 			libraryInformation.setCasNumber(casNumber);
 			libraryInformation.setComments(comments);
+			libraryInformation.setReferenceIdentifier(referenceIdentifier);
 			libraryInformation.setMiscellaneous(miscellaneous);
+			libraryInformation.setDatabase(database);
+			libraryInformation.setContributor(contributor);
 			libraryInformation.setName(name);
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
 			libraryInformation.setMolWeight(molWeight);
-			IMassSpectrumComparisonResult comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, probability);
+			//
+			IComparisonResult comparisonResult;
+			if(isExtendedComparisonResult) {
+				comparisonResult = new ExtendedComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, probability);
+			} else {
+				comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, probability);
+			}
+			//
 			try {
 				IMassSpectrumTarget identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
+				identificationEntry.setManuallyVerified(manuallyVerified);
 				massSpectrum.addTarget(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);

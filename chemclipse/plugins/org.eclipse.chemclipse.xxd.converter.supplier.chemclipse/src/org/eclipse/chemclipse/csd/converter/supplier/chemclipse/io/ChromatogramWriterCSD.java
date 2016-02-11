@@ -22,12 +22,14 @@ import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.Chro
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1002;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1003;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1004;
+import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1005;
+import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1006;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramWriterFID extends AbstractChromatogramWriter implements IChromatogramCSDWriter {
+public class ChromatogramWriterCSD extends AbstractChromatogramWriter implements IChromatogramCSDWriter {
 
 	@Override
 	public void writeChromatogram(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
@@ -44,8 +46,12 @@ public class ChromatogramWriterFID extends AbstractChromatogramWriter implements
 			chromatogramWriter = new ChromatogramWriter_1002();
 		} else if(versionSave.equals(IFormat.VERSION_1003)) {
 			chromatogramWriter = new ChromatogramWriter_1003();
-		} else {
+		} else if(versionSave.equals(IFormat.VERSION_1004)) {
 			chromatogramWriter = new ChromatogramWriter_1004();
+		} else if(versionSave.equals(IFormat.VERSION_1005)) {
+			chromatogramWriter = new ChromatogramWriter_1005();
+		} else {
+			chromatogramWriter = new ChromatogramWriter_1006();
 		}
 		//
 		chromatogramWriter.writeChromatogram(file, chromatogram, monitor);

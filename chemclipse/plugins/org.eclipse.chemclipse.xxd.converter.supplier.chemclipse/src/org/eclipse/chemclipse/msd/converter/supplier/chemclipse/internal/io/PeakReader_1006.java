@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 Dr. Philip Wenig.
+ * Copyright (c) 2016 Lablicate UG (haftungsbeschränkt).
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * All rights reserved.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
@@ -27,10 +27,12 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.core.PeakType;
+import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
-import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
+import org.eclipse.chemclipse.model.identifier.ExtendedComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
@@ -52,7 +54,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumLibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumComparisonResult;
@@ -75,9 +76,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class PeakReader_1005 extends AbstractZipReader implements IPeakReader {
+public class PeakReader_1006 extends AbstractZipReader implements IPeakReader {
 
-	private static final Logger logger = Logger.getLogger(PeakReader_1005.class);
+	private static final Logger logger = Logger.getLogger(PeakReader_1006.class);
 
 	@Override
 	public IPeakImportConverterProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -122,6 +123,8 @@ public class PeakReader_1005 extends AbstractZipReader implements IPeakReader {
 		IIonTransitionSettings ionTransitionSettings = new IonTransitionSettings();
 		//
 		String detectorDescription = readString(dataInputStream); // Detector Description
+		String quantifierDescription = readString(dataInputStream);
+		boolean activeForAnalysis = dataInputStream.readBoolean();
 		String integratorDescription = readString(dataInputStream); // Integrator Description
 		String modelDescription = readString(dataInputStream); // Model Description
 		PeakType peakType = PeakType.valueOf(readString(dataInputStream)); // Peak Type
@@ -144,6 +147,8 @@ public class PeakReader_1005 extends AbstractZipReader implements IPeakReader {
 		IPeakModelMSD peakModel = new PeakModelMSD(peakMaximum, intensityValues, startBackgroundAbundance, stopBackgroundAbundance);
 		IPeakMSD peak = new PeakMSD(peakModel);
 		peak.setDetectorDescription(detectorDescription);
+		peak.setQuantifierDescription(quantifierDescription);
+		peak.setActiveForAnalysis(activeForAnalysis);
 		peak.setIntegratorDescription(integratorDescription);
 		peak.setModelDescription(modelDescription);
 		peak.setPeakType(peakType);
@@ -191,10 +196,22 @@ public class PeakReader_1005 extends AbstractZipReader implements IPeakReader {
 	private void readNormalMassSpectrum(IScanMSD massSpectrum, DataInputStream dataInputStream, IIonTransitionSettings ionTransitionSettings, IProgressMonitor monitor) throws IOException {
 
 		int retentionTime = dataInputStream.readInt(); // Retention Time
+		int retentionTimeColumn1 = dataInputStream.readInt();
+		int retentionTimeColumn2 = dataInputStream.readInt();
 		float retentionIndex = dataInputStream.readFloat(); // Retention Index
+		if(dataInputStream.readBoolean()) {
+			int size = dataInputStream.readInt();
+			for(int i = 0; i < size; i++) {
+				RetentionIndexType retentionIndexType = RetentionIndexType.valueOf(readString(dataInputStream));
+				float retentionIndexAdditional = dataInputStream.readFloat();
+				massSpectrum.setRetentionIndex(retentionIndexType, retentionIndexAdditional);
+			}
+		}
 		int timeSegmentId = dataInputStream.readInt(); // Time Segment Id
 		int cycleNumber = dataInputStream.readInt(); // Cycle Number
 		massSpectrum.setRetentionTime(retentionTime);
+		massSpectrum.setRetentionTimeColumn1(retentionTimeColumn1);
+		massSpectrum.setRetentionTimeColumn2(retentionTimeColumn2);
 		massSpectrum.setRetentionIndex(retentionIndex);
 		massSpectrum.setTimeSegmentId(timeSegmentId);
 		massSpectrum.setCycleNumber(cycleNumber);
@@ -227,10 +244,14 @@ public class PeakReader_1005 extends AbstractZipReader implements IPeakReader {
 		for(int i = 1; i <= numberOfMassSpectrumTargets; i++) {
 			//
 			String identifier = readString(dataInputStream); // Identifier
+			boolean manuallyVerified = dataInputStream.readBoolean();
 			//
 			String casNumber = readString(dataInputStream); // CAS-Number
 			String comments = readString(dataInputStream); // Comments
+			String referenceIdentifier = readString(dataInputStream);
 			String miscellaneous = readString(dataInputStream); // Miscellaneous
+			String database = readString(dataInputStream);
+			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
 			Set<String> synonyms = new HashSet<String>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
@@ -239,7 +260,14 @@ public class PeakReader_1005 extends AbstractZipReader implements IPeakReader {
 			}
 			String formula = readString(dataInputStream); // Formula
 			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			//
+			/*
+			 * Check if this is an extended comparison result.
+			 */
+			boolean isExtendedComparisonResult = dataInputStream.readBoolean();
+			float forwardMatchFactor = 0.0f;
+			if(isExtendedComparisonResult) {
+				forwardMatchFactor = dataInputStream.readFloat(); // Forward Match Factor
+			}
 			float matchFactor = dataInputStream.readFloat(); // Match Factor
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
 			float probability = dataInputStream.readFloat(); // Probability
@@ -247,15 +275,26 @@ public class PeakReader_1005 extends AbstractZipReader implements IPeakReader {
 			IMassSpectrumLibraryInformation libraryInformation = new MassSpectrumLibraryInformation();
 			libraryInformation.setCasNumber(casNumber);
 			libraryInformation.setComments(comments);
+			libraryInformation.setReferenceIdentifier(referenceIdentifier);
 			libraryInformation.setMiscellaneous(miscellaneous);
+			libraryInformation.setDatabase(database);
+			libraryInformation.setContributor(contributor);
 			libraryInformation.setName(name);
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
 			libraryInformation.setMolWeight(molWeight);
-			IMassSpectrumComparisonResult comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, probability);
+			//
+			IComparisonResult comparisonResult;
+			if(isExtendedComparisonResult) {
+				comparisonResult = new ExtendedComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, probability);
+			} else {
+				comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, probability);
+			}
+			//
 			try {
 				IMassSpectrumTarget identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
+				identificationEntry.setManuallyVerified(manuallyVerified);
 				massSpectrum.addTarget(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
@@ -316,10 +355,14 @@ public class PeakReader_1005 extends AbstractZipReader implements IPeakReader {
 		for(int i = 1; i <= numberOfPeakTargets; i++) {
 			//
 			String identifier = readString(dataInputStream); // Identifier
+			boolean manuallyVerified = dataInputStream.readBoolean();
 			//
 			String casNumber = readString(dataInputStream); // CAS-Number
 			String comments = readString(dataInputStream); // Comments
+			String referenceIdentifier = readString(dataInputStream);
 			String miscellaneous = readString(dataInputStream); // Miscellaneous
+			String database = readString(dataInputStream);
+			String contributor = readString(dataInputStream);
 			String name = readString(dataInputStream); // Name
 			Set<String> synonyms = new HashSet<String>(); // Synonyms
 			int numberOfSynonyms = dataInputStream.readInt();
@@ -328,7 +371,14 @@ public class PeakReader_1005 extends AbstractZipReader implements IPeakReader {
 			}
 			String formula = readString(dataInputStream); // Formula
 			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			//
+			/*
+			 * Check if this is an extended comparison result.
+			 */
+			boolean isExtendedComparisonResult = dataInputStream.readBoolean();
+			float forwardMatchFactor = 0.0f;
+			if(isExtendedComparisonResult) {
+				forwardMatchFactor = dataInputStream.readFloat(); // Forward Match Factor
+			}
 			float matchFactor = dataInputStream.readFloat(); // Match Factor
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
 			float probability = dataInputStream.readFloat(); // Probability
@@ -336,15 +386,26 @@ public class PeakReader_1005 extends AbstractZipReader implements IPeakReader {
 			IPeakLibraryInformation libraryInformation = new PeakLibraryInformation();
 			libraryInformation.setCasNumber(casNumber);
 			libraryInformation.setComments(comments);
+			libraryInformation.setReferenceIdentifier(referenceIdentifier);
 			libraryInformation.setMiscellaneous(miscellaneous);
+			libraryInformation.setDatabase(database);
+			libraryInformation.setContributor(contributor);
 			libraryInformation.setName(name);
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
 			libraryInformation.setMolWeight(molWeight);
-			IPeakComparisonResult comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, probability);
+			//
+			IComparisonResult comparisonResult;
+			if(isExtendedComparisonResult) {
+				comparisonResult = new ExtendedComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, probability);
+			} else {
+				comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, probability);
+			}
+			//
 			try {
 				IPeakTarget identificationEntry = new PeakTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
+				identificationEntry.setManuallyVerified(manuallyVerified);
 				peak.addTarget(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);

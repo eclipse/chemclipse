@@ -17,7 +17,7 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
-import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io.ChromatogramReaderFID;
+import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io.ChromatogramReaderCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -35,6 +35,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.Chro
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1003;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1004;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1005;
+import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1006;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorScan;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.VendorChromatogram;
@@ -87,6 +88,8 @@ public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader impleme
 			chromatogramReader = new ChromatogramReader_1004();
 		} else if(version.equals(IFormat.VERSION_1005)) {
 			chromatogramReader = new ChromatogramReader_1005();
+		} else if(version.equals(IFormat.VERSION_1006)) {
+			chromatogramReader = new ChromatogramReader_1006();
 		}
 		//
 		if(chromatogramReader != null) {
@@ -136,6 +139,8 @@ public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader impleme
 			chromatogramReader = new ChromatogramReader_1004();
 		} else if(version.equals(IFormat.VERSION_1005)) {
 			chromatogramReader = new ChromatogramReader_1005();
+		} else if(version.equals(IFormat.VERSION_1006)) {
+			chromatogramReader = new ChromatogramReader_1006();
 		}
 		//
 		if(chromatogramReader != null) {
@@ -185,7 +190,7 @@ public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader impleme
 
 		IChromatogramMSD chromatogramMSD = null;
 		//
-		ChromatogramReaderFID chromatogramReaderFID = new ChromatogramReaderFID();
+		ChromatogramReaderCSD chromatogramReaderFID = new ChromatogramReaderCSD();
 		IChromatogramCSD chromatogramFID = chromatogramReaderFID.read(file, monitor);
 		if(chromatogramFID != null) {
 			chromatogramMSD = new VendorChromatogram();
