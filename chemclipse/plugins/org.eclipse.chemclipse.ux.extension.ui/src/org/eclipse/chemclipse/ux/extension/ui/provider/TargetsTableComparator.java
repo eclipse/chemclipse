@@ -75,6 +75,12 @@ public class TargetsTableComparator extends AbstractRecordTableComparator implem
 				case 11: // Comments
 					sortOrder = libraryInformation2.getComments().compareTo(libraryInformation1.getComments());
 					break;
+				case 12:
+					sortOrder = libraryInformation2.getDatabase().compareTo(libraryInformation1.getDatabase());
+					break;
+				case 13:
+					sortOrder = libraryInformation2.getContributor().compareTo(libraryInformation1.getContributor());
+					break;
 				default:
 					sortOrder = 0;
 			}
