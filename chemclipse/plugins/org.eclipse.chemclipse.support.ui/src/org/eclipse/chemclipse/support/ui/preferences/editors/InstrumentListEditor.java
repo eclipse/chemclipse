@@ -13,6 +13,9 @@ package org.eclipse.chemclipse.support.ui.preferences.editors;
 
 import java.util.Arrays;
 
+import org.eclipse.chemclipse.support.l10n.Messages;
+import org.eclipse.chemclipse.support.messages.ISupportMessages;
+import org.eclipse.chemclipse.support.messages.SupportMessages;
 import org.eclipse.chemclipse.support.util.InstrumentListUtil;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -47,7 +50,8 @@ public class InstrumentListEditor extends ListEditor {
 	protected String getNewInputObject() {
 
 		List list = getList();
-		InputDialog dialog = new InputDialog(Display.getCurrent().getActiveShell(), "Instrument Name", "Type in an instrument name, e.g. API 5000.", "", new InstrumentInputValidator(list));
+		Messages messages = SupportMessages.INSTANCE();
+		InputDialog dialog = new InputDialog(Display.getCurrent().getActiveShell(), messages.getMessage(ISupportMessages.LABEL_INSTRUMENT_NAME), messages.getMessage(ISupportMessages.LABEL_ADD_INSTRUMENT, "API 5000"), "", new InstrumentInputValidator(list));
 		dialog.create();
 		if(dialog.open() == Dialog.OK) {
 			String instrument = dialog.getValue();
@@ -58,9 +62,10 @@ public class InstrumentListEditor extends ListEditor {
 
 	private void initialize(Composite parent) {
 
+		Messages messages = SupportMessages.INSTANCE();
 		Composite composite = getButtonBoxControl(parent);
 		Button button = new Button(composite, SWT.PUSH);
-		button.setText("Clear List");
+		button.setText(messages.getMessage(ISupportMessages.LABEL_CLEAR_INSTRUMENTS));
 		button.setFont(parent.getFont());
 		GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		int widthHint = convertHorizontalDLUsToPixels(button, IDialogConstants.BUTTON_WIDTH);
@@ -75,8 +80,8 @@ public class InstrumentListEditor extends ListEditor {
 				if(list != null) {
 					Shell shell = Display.getCurrent().getActiveShell();
 					MessageBox messageBox = new MessageBox(shell, SWT.YES | SWT.NO | SWT.CANCEL);
-					messageBox.setText("Delete Instrument");
-					messageBox.setMessage("Do you really want to delete all instruments from the list?");
+					messageBox.setText(messages.getMessage(ISupportMessages.LABEL_DELETE_INSTRUMENT));
+					messageBox.setMessage(messages.getMessage(ISupportMessages.LABEL_QUESTION_DELETE_INSTRUMENTS));
 					int decision = messageBox.open();
 					if(decision == SWT.YES) {
 						list.removeAll();
@@ -92,7 +97,7 @@ public class InstrumentListEditor extends ListEditor {
 		if(!itemExistsInList(instrument, items)) {
 			return instrument;
 		}
-		return "";
+		return null;
 	}
 
 	private boolean itemExistsInList(String instrument, String[] list) {

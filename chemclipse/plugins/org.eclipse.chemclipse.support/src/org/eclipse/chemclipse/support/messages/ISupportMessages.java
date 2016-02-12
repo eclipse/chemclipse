@@ -44,6 +44,14 @@ public interface ISupportMessages {
 	String LABEL_SELECT_FILE_NAME = "labelSelectFileName";
 	String LABEL_SELECT_PROJECT = "labelSelectProject";
 	//
+	String LABEL_INSTRUMENT_NAME = "labelInstrumentName";
+	String LABEL_ADD_INSTRUMENT = "labelAddInstrument";
+	String LABEL_DELETE_INSTRUMENT = "labelDeleteInstrument";
+	String LABEL_CLEAR_INSTRUMENTS = "labelClearInstruments";
+	String LABEL_QUESTION_DELETE_INSTRUMENTS = "labelQuestionDeleteInstruments";
+	String LABEL_TYPE_IN_INSTRUMENT = "labelTypeInInstrument";
+	String LABEL_INSTRUMENT_EXISTS = "labelInstrumentExists";
+	//
 	String LABEL_COPY_LINES_INFO = "labelCopyLinesInfo";
 	String LABEL_COPY_SELECTION_CLIPBOARD = "labelCopySelectionClipboard";
 	//

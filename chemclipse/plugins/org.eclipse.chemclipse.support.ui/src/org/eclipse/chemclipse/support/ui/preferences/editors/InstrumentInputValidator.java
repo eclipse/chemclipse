@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences.editors;
 
+import org.eclipse.chemclipse.support.l10n.Messages;
+import org.eclipse.chemclipse.support.messages.ISupportMessages;
+import org.eclipse.chemclipse.support.messages.SupportMessages;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.swt.widgets.List;
 
@@ -33,12 +36,13 @@ public class InstrumentInputValidator implements IInputValidator {
 	@Override
 	public String isValid(String newInstrument) {
 
+		Messages messages = SupportMessages.INSTANCE();
 		if(newInstrument.equals("")) {
-			return "Please type in an instrument name.";
+			return messages.getMessage(ISupportMessages.LABEL_TYPE_IN_INSTRUMENT);
 		} else {
 			for(String item : items) {
 				if(item.equals(newInstrument)) {
-					return "The instrument exists already.";
+					return messages.getMessage(ISupportMessages.LABEL_INSTRUMENT_EXISTS);
 				}
 			}
 		}
