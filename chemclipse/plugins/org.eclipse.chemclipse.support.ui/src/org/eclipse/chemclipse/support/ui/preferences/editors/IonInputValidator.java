@@ -14,9 +14,6 @@ package org.eclipse.chemclipse.support.ui.preferences.editors;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.swt.widgets.List;
 
-/**
- * @author eselmeister
- */
 public class IonInputValidator implements IInputValidator {
 
 	private String[] items;
@@ -74,11 +71,11 @@ public class IonInputValidator implements IInputValidator {
 			}
 		}
 		/*
-		 * Test if the ion value still exists.
+		 * Test if the ion value already exists.
 		 */
 		for(String item : items) {
 			if(item.equals(newText)) {
-				return "The ion value still exists.";
+				return "The ion value exists already.";
 			}
 		}
 		return null;
