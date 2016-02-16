@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_YzGkwG7pEeOKD81y804dEQ">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_YzGkwG7pEeOKD81y804dEQ">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_cy40EG7pEeOKD81y804dEQ" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Command" xmi:id="_29BlsG7pEeOKD81y804dEQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.command.createPcaEvaluation" commandName="PCA Evaluation"/>
   </fragments>
@@ -11,5 +11,11 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kCRy8G7pEeOKD81y804dEQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.processors">
     <elements xsi:type="menu:HandledToolItem" xmi:id="_CfI-AG7qEeOKD81y804dEQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handledtoolitem.createPcaEvaluation" label="PCA Evaluation" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pca.gif" command="_29BlsG7pEeOKD81y804dEQ"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_M5O6ENSAEeWQk9amfPZ_4Q" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
+    <elements xsi:type="basic:Part" xmi:id="_Oxmw8NSAEeWQk9amfPZ_4Q" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.fxmlcontrollertest" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.PartTic" label="FXML Controller Test" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pca.gif"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_fsFVENSAEeWQk9amfPZ_4Q" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.partstack.chromatogramOverlay" positionInList="">
+    <elements xsi:type="advanced:Placeholder" xmi:id="_IgjiQNSDEeWQk9amfPZ_4Q" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.placeholder.0" ref="_Oxmw8NSAEeWQk9amfPZ_4Q"/>
   </fragments>
 </fragment:ModelFragments>
