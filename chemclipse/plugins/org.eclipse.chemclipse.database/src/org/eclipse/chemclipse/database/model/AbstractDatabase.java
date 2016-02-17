@@ -342,6 +342,9 @@ public abstract class AbstractDatabase implements IDatabase {
 				dbtx.declareIntent(intent);
 			}
 			List<ODocument> documents = dbtx.query(new OSQLSynchQuery<ODocument>(queryString));
+			if(documents.size() == 0) {
+				return Collections.<ODocument> emptyList();
+			}
 			/*
 			 * WORKAROUND to bypass local cache
 			 */
