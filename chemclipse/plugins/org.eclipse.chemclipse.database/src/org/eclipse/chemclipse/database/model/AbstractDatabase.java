@@ -342,6 +342,9 @@ public abstract class AbstractDatabase implements IDatabase {
 				dbtx.declareIntent(intent);
 			}
 			List<ODocument> documents = dbtx.query(new OSQLSynchQuery<ODocument>(queryString));
+			if(intent != null) {
+				dbtx.declareIntent(null);
+			}
 			if(documents.size() == 0) {
 				return Collections.<ODocument> emptyList();
 			}
@@ -352,9 +355,6 @@ public abstract class AbstractDatabase implements IDatabase {
 			for(ODocument document : documents) {
 				ODocument reloadedDocument = dbtx.load(document.getIdentity(), null, true);
 				returnDocuments.add(reloadedDocument);
-			}
-			if(intent != null) {
-				dbtx.declareIntent(null);
 			}
 			return returnDocuments;
 		} else {
