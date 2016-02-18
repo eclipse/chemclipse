@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 <a href="mailto:alexander.kerner@openchrom.net">Alexander Kerner</a>.
+ * Copyright (c) 2016 Lablicate UG (haftungsbeschränkt).
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * <a href="mailto:alexander.kerner@openchrom.net">Alexander Kerner</a> - initial API and implementation
+ * Dr. Alexander Kerner - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
