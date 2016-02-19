@@ -27,4 +27,3 @@ Export-Package: org.eclipse.chemclipse.model.baseline,
  org.eclipse.chemclipse.model.targets,
  org.eclipse.chemclipse.model.updates,
  org.eclipse.chemclipse.model.versioning
-Import-Package: net.sf.kerner.utils
