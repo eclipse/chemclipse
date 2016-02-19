@@ -169,4 +169,25 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_PREVIOUS = "previous.gif";
 	//
 	String IMAGE_SCRIPT_SHELL = "script_shell.png";
+	//
+	String IMAGE_NIST_MASS_SPECTRUM = "nist_massSpectrum.gif";
+	String IMAGE_NIST_OPEN_MASS_SPECTRUM = "nist_open_massSpectrum.gif";
+	String IMAGE_NIST_OPEN_PEAK = "nist_open_peak.gif";
+	String IMAGE_NIST_OPEN_PEAKS = "nist_open_peaks.gif";
+	String IMAGE_NIST_OPEN = "nist_open.gif";
+	String IMAGE_NIST_PEAK = "nist_peak.gif";
+	String IMAGE_NIST_PEAKS = "nist_peaks.gif";
+	String IMAGE_NIST = "nist.gif";
+	//
+	String IMAGE_LIBRARY_DOCUMENT = "libraryDocument.gif";
+	String IMAGE_ORIGIN_DOCUMENT = "originDocument.gif";
+	String IMAGE_REFERENCE_PEAK = "referencePeak.gif";
+	String IMAGE_CHROMATOGRAM_DATABASE = "chromatogramDatabase.gif";
+	String IMAGE_SUBSTANCE_HIT_RESULT = "substanceHitResult.gif";
+	String IMAGE_PLUS = "plus.gif";
+	String IMAGE_MINUS = "minus.gif";
+	//
+	String IMAGE_ARROW_DOWN = "arrow_down.gif";
+	String IMAGE_ARROW_UP = "arrow_up.gif";
+	String IMAGE_ARROW_EQUAL = "arrow_equal.gif";
 }
