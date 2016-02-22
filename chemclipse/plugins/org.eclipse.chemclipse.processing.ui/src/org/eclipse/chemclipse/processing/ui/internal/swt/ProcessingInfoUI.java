@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.internal.provider.ProcessingInfoContentProvider;
 import org.eclipse.chemclipse.processing.ui.internal.provider.ProcessingInfoLabelProvider;
 import org.eclipse.chemclipse.processing.ui.internal.provider.ProcessingInfoTableComparator;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
@@ -41,17 +42,16 @@ public class ProcessingInfoUI {
 	private Clipboard clipboard;
 	private String[] titles = {"Type", "Description", "Message", "Date"};
 	private int bounds[] = {100, 100, 100, 100};
-	/*
-	 * Unix: \n Windows: \r\n Mac OSX: \r
-	 */
+	private OperatingSystemUtils operatingSystemUtils;
+	//
 	private static final String DELIMITER = "\t";
-	private static final String END_OF_LINE = "\r\n";
 
 	public ProcessingInfoUI(Composite parent, int style) {
-		parent.setLayout(new FillLayout());
 		/*
-		 * Clipboard
+		 * Clipboard / OS utils
 		 */
+		parent.setLayout(new FillLayout());
+		operatingSystemUtils = new OperatingSystemUtils();
 		clipboard = new Clipboard(Display.getDefault());
 		Map<Long, String> substances = new HashMap<Long, String>();
 		tableViewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -91,7 +91,7 @@ public class ProcessingInfoUI {
 			builder.append(title);
 			builder.append(DELIMITER);
 		}
-		builder.append(END_OF_LINE);
+		builder.append(operatingSystemUtils.getLineDelimiter());
 		/*
 		 * Copy the selected items.
 		 */
@@ -109,14 +109,14 @@ public class ProcessingInfoUI {
 				builder.append(selection.getText(columnIndex));
 				builder.append(DELIMITER);
 			}
-			builder.append(END_OF_LINE);
+			builder.append(operatingSystemUtils.getLineDelimiter());
 		}
 		/*
 		 * If the builder is empty, give a note that items needs to be selected.
 		 */
 		if(builder.length() == 0) {
 			builder.append("Please select one or more entries in the list.");
-			builder.append(END_OF_LINE);
+			builder.append(operatingSystemUtils.getLineDelimiter());
 		}
 		/*
 		 * Transfer the selected text (items) to the clipboard.
