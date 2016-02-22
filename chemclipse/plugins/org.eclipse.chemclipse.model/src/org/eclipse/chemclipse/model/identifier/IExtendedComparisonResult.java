@@ -12,13 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
-import java.util.List;
-
 public interface IExtendedComparisonResult extends IComparisonResult {
 
 	float getForwardMatchFactor();
-	
-	List<Double> getIntensitiesFromUnknown();
-	
-	List<Double> getIntensitiesFromReference();
 }
