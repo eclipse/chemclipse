@@ -8,27 +8,46 @@
  * 
  * Contributors:
  * Dr. Janos Binder - initial API and implementation
+ * Dr. Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
+
+import java.util.List;
 
 public class ExtendedComparisonResult extends AbstractComparisonResult implements IExtendedComparisonResult {
 
 	final private float forwardMatchFactor;
+	
+	final private List<Double> intensitiesFromUnknown;
 
-	public ExtendedComparisonResult(float matchFactor, float reverseMatchFactor, float forwardMatchFactor) {
+	final private List<Double> intensitiesFromReference;
+
+	public ExtendedComparisonResult(float matchFactor, float reverseMatchFactor, float forwardMatchFactor, List<Double> intensitiesFromUnknown, List<Double> intensitiesFromReference) {
 		super(matchFactor, reverseMatchFactor);
 		this.forwardMatchFactor = forwardMatchFactor;
+		this.intensitiesFromUnknown = intensitiesFromUnknown;
+		this.intensitiesFromReference = intensitiesFromReference;
 	}
 
-	public ExtendedComparisonResult(float matchFactor, float reverseMatchFactor, float forwardMatchFactor, float probability) {
+	public ExtendedComparisonResult(float matchFactor, float reverseMatchFactor, float forwardMatchFactor, List<Double> intensitiesFromUnknown, List<Double> intensitiesFromReference, float probability) {
 		super(matchFactor, reverseMatchFactor, probability);
 		this.forwardMatchFactor = forwardMatchFactor;
+		this.intensitiesFromUnknown = intensitiesFromUnknown;
+		this.intensitiesFromReference = intensitiesFromReference;
 	}
 
 	@Override
 	public float getForwardMatchFactor() {
 
 		return forwardMatchFactor;
+	}
+	
+	public List<Double> getIntensitiesFromUnknown() {
+	    return intensitiesFromUnknown;
+	}
+
+	public List<Double> getIntensitiesFromReference() {
+	    return intensitiesFromReference;
 	}
 
 	@Override
