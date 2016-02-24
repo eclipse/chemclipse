@@ -135,6 +135,12 @@ public class RetentionIndexCalculator {
 			int retentionTimeLow = floorIndex.getRetentionTime();
 			float retentionIndexHigh = ceilingIndex.getRetentionIndex();
 			int retentionTimeHigh = ceilingIndex.getRetentionTime();
+			if(retentionTimeLow == retentionTimeHigh) {
+				/*
+				 * We are at an exact value, return simply the RI, otherwise it will fail at if(denominatorRT != 0)
+				 */
+				return retentionIndexLow;
+			}
 			/*
 			 * Execute the calculation.
 			 */
