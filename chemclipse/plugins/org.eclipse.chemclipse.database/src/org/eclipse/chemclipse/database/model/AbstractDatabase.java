@@ -194,15 +194,11 @@ public abstract class AbstractDatabase implements IDatabase {
 			 */
 			int cluster = dbtx.getClusterIdByName(className);
 			StringBuilder query = new StringBuilder();
-			query.append("SELECT FROM #");
-			query.append(cluster);
-			query.append(":");
-			query.append(id);
+			query.append("SELECT FROM #").append(cluster).append(":").append(id);
 			/*
 			 * Execute
 			 */
-			List<ODocument> results = null;
-			results = dbtx.query(new OSQLSynchQuery<ODocument>(query.toString()));
+			List<ODocument> results = dbtx.query(new OSQLSynchQuery<ODocument>(query.toString()));
 			if(results.size() == 1) {
 				return results.get(0);
 			} else {
@@ -230,18 +226,14 @@ public abstract class AbstractDatabase implements IDatabase {
 			 */
 			int cluster = dbtx.getClusterIdByName(className);
 			StringBuilder query = new StringBuilder();
-			query.append("SELECT FROM #");
-			query.append(cluster);
-			query.append(":");
-			query.append(id);
+			query.append("SELECT FROM #").append(cluster).append(":").append(id);
 			for(CharSequence s : queryStrings) {
 				query.append(s);
 			}
 			/*
 			 * Execute
 			 */
-			List<ODocument> results = null;
-			results = dbtx.query(new OSQLSynchQuery<ODocument>(query.toString()));
+			List<ODocument> results = dbtx.query(new OSQLSynchQuery<ODocument>(query.toString()));
 			if(results.size() == 1) {
 				return results.get(0);
 			} else {
@@ -272,10 +264,7 @@ public abstract class AbstractDatabase implements IDatabase {
 			queryBuilder.append("SELECT FROM [");
 			Iterator<Long> idIterator = ids.iterator();
 			while(idIterator.hasNext()) {
-				queryBuilder.append("#");
-				queryBuilder.append(cluster);
-				queryBuilder.append(":");
-				queryBuilder.append(idIterator.next());
+				queryBuilder.append("#").append(cluster).append(":").append(idIterator.next());
 				if(idIterator.hasNext()) {
 					queryBuilder.append(", ");
 				}
