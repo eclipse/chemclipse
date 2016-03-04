@@ -28,7 +28,7 @@ http://www.eclipse.org/legal/epl-v10.html
    <includes
          id="org.python.pydev.feature"
          version="0.0.0"/>
-         
+
    <includes
          id="org.eclipse.ease.feature"
          version="0.0.0"/>
@@ -557,6 +557,27 @@ http://www.eclipse.org/legal/epl-v10.html
 
    <plugin
          id="ca.odell.glazedlists"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.e4.core.di.annotations"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.e4.core.di.extensions"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.e4.emf.xpath"
          download-size="0"
          install-size="0"
          version="0.0.0"
