@@ -68,6 +68,7 @@ public class FileIdentifier {
 	private static Map<String, Long> fileSizes;
 	private static Set<String> fileNames;
 	private static Map<String, IMassSpectra> massSpectraDatabases;
+	private static Map<String, List<Set<IIon>>> allDatabaseTopIons = null;
 	private static Map<String, Map<String, IScanMSD>> allDatabaseNames = null;
 	private static Map<String, Map<String, IScanMSD>> allDatabaseCasNumbers = null;
 	//
@@ -81,6 +82,7 @@ public class FileIdentifier {
 		fileSizes = new HashMap<String, Long>();
 		fileNames = new HashSet<String>();
 		massSpectraDatabases = new HashMap<String, IMassSpectra>();
+		allDatabaseTopIons = new HashMap<String, List<Set<IIon>>>();
 		allDatabaseNames = new HashMap<String, Map<String, IScanMSD>>();
 		allDatabaseCasNumbers = new HashMap<String, Map<String, IScanMSD>>();
 		//
@@ -116,22 +118,42 @@ public class FileIdentifier {
 		float minMatchFactor = fileIdentifierSettings.getMinMatchFactor();
 		float minReverseMatchFactor = fileIdentifierSettings.getMinReverseMatchFactor();
 		int numberOfTargets = fileIdentifierSettings.getNumberOfTargets();
+		String databaseName = database.getKey();
+		//
+		List<Set<IIon>> databaseTopIons = allDatabaseTopIons.get(databaseName);
 		//
 		int countUnknown = 1;
 		for(IScanMSD unknown : massSpectraList) {
 			List<IMassSpectrumTarget> massSpectrumTargets = new ArrayList<IMassSpectrumTarget>();
 			int countReference = 1;
-			for(IScanMSD reference : database.getValue().getList()) {
+			//
+			List<IIon> ions = unknown.getIons();
+			Collections.sort(ions, ionAbundanceComparator);
+			//
+			List<IScanMSD> references = database.getValue().getList();
+			for(int i = 0; i < references.size(); i++) {
 				try {
 					monitor.subTask("Compare " + countUnknown + " / " + countReference++);
-					IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, comparatorId);
-					IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
 					//
-					if(comparisonResult.getMatchFactor() >= minMatchFactor && comparisonResult.getReverseMatchFactor() >= minReverseMatchFactor) {
-						/*
-						 * Add the target.
-						 */
-						massSpectrumTargets.add(getMassSpectrumTarget(reference, comparisonResult, database.getKey()));
+					IScanMSD reference = references.get(i);
+					Set<IIon> referenceIons = databaseTopIons.get(i);
+					int hits = 0;
+					for(int j = 0; j < 5; j++) {
+						if(referenceIons.contains(ions.get(i))) {
+							hits++;
+						}
+					}
+					//
+					if(hits >= 3) {
+						IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, comparatorId);
+						IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
+						//
+						if(comparisonResult.getMatchFactor() >= minMatchFactor && comparisonResult.getReverseMatchFactor() >= minReverseMatchFactor) {
+							/*
+							 * Add the target.
+							 */
+							massSpectrumTargets.add(getMassSpectrumTarget(reference, comparisonResult, databaseName));
+						}
 					}
 				} catch(TypeCastException e1) {
 					logger.warn(e1);
@@ -356,14 +378,27 @@ public class FileIdentifier {
 			databaseCasNumbers = new HashMap<String, IScanMSD>();
 			allDatabaseCasNumbers.put(databaseName, databaseCasNumbers);
 		}
+		List<Set<IIon>> databaseTopIons = allDatabaseTopIons.get(databaseName);
+		if(databaseTopIons == null) {
+			databaseTopIons = new ArrayList<Set<IIon>>();
+			allDatabaseTopIons.put(databaseName, databaseTopIons);
+		}
 		//
 		for(IScanMSD reference : massSpectraDatabase.getList()) {
+			//
+			List<IIon> ions = reference.getIons();
+			Collections.sort(ions, ionAbundanceComparator);
+			Set<IIon> top5 = new HashSet<IIon>();
+			databaseTopIons.add(top5);
+			for(int i = 0; i < 5; i++) {
+				top5.add(ions.get(i));
+			}
+			//
 			if(reference instanceof IRegularLibraryMassSpectrum) {
 				IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)reference;
 				ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 				databaseNames.put(libraryInformation.getName(), reference);
 				databaseCasNumbers.put(libraryInformation.getCasNumber(), reference);
-				// TODO highest 5 m/z
 			}
 		}
 	}
