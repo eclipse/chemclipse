@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.Activator;
@@ -20,14 +21,15 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFilePeakIdentifierSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	public static final String P_MASS_SPECTRA_FILE = "massSpectraFile";
-	public static final String DEF_MASS_SPECTRA_FILE = "";
+	public static final String P_MASS_SPECTRA_FILES = "massSpectraFiles";
+	public static final String DEF_MASS_SPECTRA_FILES = "";
 	public static final String P_MASS_SPECTRUM_COMPARATOR_ID = "massSpectrumComparatorId";
 	public static final String DEF_MASS_SPECTRUM_COMPARATOR_ID = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos";
 	public static final String P_NUMBER_OF_TARGETS = "numberOfTargets";
@@ -68,7 +70,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_MASS_SPECTRA_FILE, DEF_MASS_SPECTRA_FILE);
+		defaultValues.put(P_MASS_SPECTRA_FILES, DEF_MASS_SPECTRA_FILES);
 		defaultValues.put(P_MASS_SPECTRUM_COMPARATOR_ID, DEF_MASS_SPECTRUM_COMPARATOR_ID);
 		defaultValues.put(P_NUMBER_OF_TARGETS, Integer.toString(DEF_NUMBER_OF_TARGETS));
 		defaultValues.put(P_MIN_MATCH_FACTOR, Float.toString(DEF_MIN_MATCH_FACTOR));
@@ -85,9 +87,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static IFileMassSpectrumIdentifierSettings getMassSpectrumIdentifierSettings() {
 
+		FileListUtil fileListUtil = new FileListUtil();
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		IFileMassSpectrumIdentifierSettings settings = new FileMassSpectrumIdentifierSettings();
-		settings.setMassSpectraFile(preferences.get(P_MASS_SPECTRA_FILE, DEF_MASS_SPECTRA_FILE));
+		settings.setMassSpectraFiles(fileListUtil.getFiles(preferences.get(P_MASS_SPECTRA_FILES, DEF_MASS_SPECTRA_FILES)));
 		settings.setMassSpectrumComparatorId(preferences.get(P_MASS_SPECTRUM_COMPARATOR_ID, DEF_MASS_SPECTRUM_COMPARATOR_ID));
 		settings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
@@ -98,9 +101,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static IFilePeakIdentifierSettings getPeakIdentifierSettings() {
 
+		FileListUtil fileListUtil = new FileListUtil();
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		IFilePeakIdentifierSettings settings = new FilePeakIdentifierSettings();
-		settings.setMassSpectraFile(preferences.get(P_MASS_SPECTRA_FILE, DEF_MASS_SPECTRA_FILE));
+		settings.setMassSpectraFiles(fileListUtil.getFiles(preferences.get(P_MASS_SPECTRA_FILES, DEF_MASS_SPECTRA_FILES)));
 		settings.setMassSpectrumComparatorId(preferences.get(P_MASS_SPECTRUM_COMPARATOR_ID, DEF_MASS_SPECTRUM_COMPARATOR_ID));
 		settings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
@@ -109,9 +113,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return settings;
 	}
 
-	public static String getMassSpectraFile() {
+	public static List<String> getMassSpectraFiles() {
 
+		FileListUtil fileListUtil = new FileListUtil();
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-		return preferences.get(P_MASS_SPECTRA_FILE, DEF_MASS_SPECTRA_FILE);
+		return fileListUtil.getFiles(preferences.get(P_MASS_SPECTRA_FILES, DEF_MASS_SPECTRA_FILES));
 	}
 }

@@ -11,11 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings;
 
+import java.util.List;
+
 public interface IFileSettings {
 
-	String getMassSpectraFile();
+	List<String> getMassSpectraFiles();
 
-	void setMassSpectraFile(String massSpectraFile);
+	void setMassSpectraFiles(List<String> massSpectraFiles);
 
 	String getMassSpectrumComparatorId();
 

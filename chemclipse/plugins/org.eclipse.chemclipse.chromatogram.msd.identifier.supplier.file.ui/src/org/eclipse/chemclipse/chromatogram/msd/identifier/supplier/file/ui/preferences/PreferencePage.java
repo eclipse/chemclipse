@@ -14,21 +14,26 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.pref
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.Activator;
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
+import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverterSupport;
+import org.eclipse.chemclipse.support.ui.preferences.editors.FileListEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
+	private static final Logger logger = Logger.getLogger(PreferencePage.class);
+
 	public PreferencePage() {
-		super(GRID);
+		super(FLAT);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("File Identifier Settings.");
 	}
@@ -40,8 +45,32 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void createFieldEditors() {
 
-		addField(new LabelFieldEditor("Allowed library formats: *.msl | *.msp | *.jdx", getFieldEditorParent()));
-		addField(new FileFieldEditor(PreferenceSupplier.P_MASS_SPECTRA_FILE, "Select a library file.", getFieldEditorParent()));
+		/*
+		 * Display all available import converter.
+		 */
+		FileListEditor fileListEditor = new FileListEditor(PreferenceSupplier.P_MASS_SPECTRA_FILES, "Load mass spectrum libraries", getFieldEditorParent());
+		MassSpectrumConverterSupport massSpectrumConverterSupport = MassSpectrumConverter.getMassSpectrumConverterSupport();
+		try {
+			String[] extensions = massSpectrumConverterSupport.getFilterExtensions();
+			String[] names = massSpectrumConverterSupport.getFilterNames();
+			if(extensions.length == names.length) {
+				String[] filterExtensions = new String[extensions.length + 1];
+				String[] filterNames = new String[extensions.length + 1];
+				//
+				filterExtensions[0] = "*.*";
+				filterNames[0] = "All files";
+				//
+				for(int i = 0; i < extensions.length; i++) {
+					filterExtensions[i + 1] = extensions[i].replace(".", "*.");
+					filterNames[i + 1] = names[i];
+				}
+				fileListEditor.setFilterExtensionsAndNames(filterExtensions, filterNames);
+			}
+		} catch(NoConverterAvailableException e) {
+			logger.warn(e);
+		}
+		addField(fileListEditor);
+		//
 		addField(new ComboFieldEditor(PreferenceSupplier.P_MASS_SPECTRUM_COMPARATOR_ID, "Mass Spectrum Comparator Id", MassSpectrumComparator.getAvailableComparatorIds(), getFieldEditorParent()));
 		StringBuilder builder = new StringBuilder();
 		builder.append("Number of Targets (");

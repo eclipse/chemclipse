@@ -11,26 +11,28 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings;
 
+import java.util.List;
+
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractPeakIdentifierSettings;
 
 public class FilePeakIdentifierSettings extends AbstractPeakIdentifierSettings implements IFilePeakIdentifierSettings {
 
-	private String massSpectraFile;
+	private List<String> massSpectraFiles;
 	private int numberOfTargets;
 	private float minMatchFactor;
 	private float minReverseMatchFactor;
 	private boolean addUnknownMzListTarget;
 
 	@Override
-	public String getMassSpectraFile() {
+	public List<String> getMassSpectraFiles() {
 
-		return massSpectraFile;
+		return massSpectraFiles;
 	}
 
 	@Override
-	public void setMassSpectraFile(String massSpectraFile) {
+	public void setMassSpectraFiles(List<String> massSpectraFiles) {
 
-		this.massSpectraFile = massSpectraFile;
+		this.massSpectraFiles = massSpectraFiles;
 	}
 
 	@Override

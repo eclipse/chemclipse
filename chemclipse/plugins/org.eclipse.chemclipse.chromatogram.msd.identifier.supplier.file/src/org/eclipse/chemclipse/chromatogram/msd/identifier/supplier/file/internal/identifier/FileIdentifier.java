@@ -16,8 +16,10 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumComparatorProcessingInfo;
@@ -63,17 +65,25 @@ public class FileIdentifier {
 	/*
 	 * Don't reload the database on each request, only if neccessary.
 	 */
-	private static long fileSize = 0;
-	private static String fileName = "";
-	//
-	private static IMassSpectra massSpectraDatabase = null;
-	private static Map<String, IScanMSD> databaseNames = null;
-	private static Map<String, IScanMSD> databaseCasNumbers = null;
+	private static Map<String, Long> fileSizes;
+	private static Set<String> fileNames;
+	private static Map<String, IMassSpectra> massSpectraDatabases;
+	private static Map<String, Map<String, IScanMSD>> allDatabaseNames = null;
+	private static Map<String, Map<String, IScanMSD>> allDatabaseCasNumbers = null;
 	//
 	private IonAbundanceComparator ionAbundanceComparator;
 	private TargetCombinedComparator targetCombinedComparator;
 
 	public FileIdentifier() {
+		/*
+		 * Cache and optimization
+		 */
+		fileSizes = new HashMap<String, Long>();
+		fileNames = new HashSet<String>();
+		massSpectraDatabases = new HashMap<String, IMassSpectra>();
+		allDatabaseNames = new HashMap<String, Map<String, IScanMSD>>();
+		allDatabaseCasNumbers = new HashMap<String, Map<String, IScanMSD>>();
+		//
 		ionAbundanceComparator = new IonAbundanceComparator(SortOrder.DESC);
 		targetCombinedComparator = new TargetCombinedComparator(SortOrder.DESC);
 	}
@@ -81,66 +91,70 @@ public class FileIdentifier {
 	public IMassSpectra runIdentification(List<IScanMSD> massSpectraList, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
 
 		IMassSpectra massSpectra = new MassSpectra();
-		//
 		if(massSpectrumIdentifierSettings instanceof IFileMassSpectrumIdentifierSettings) {
-			IFileMassSpectrumIdentifierSettings fileIdentifierSettings = (IFileMassSpectrumIdentifierSettings)massSpectrumIdentifierSettings;
-			/*
-			 * Run the identification.
-			 */
-			String comparatorId = fileIdentifierSettings.getMassSpectrumComparatorId();
-			float minMatchFactor = fileIdentifierSettings.getMinMatchFactor();
-			float minReverseMatchFactor = fileIdentifierSettings.getMinReverseMatchFactor();
-			int numberOfTargets = fileIdentifierSettings.getNumberOfTargets();
 			/*
 			 * Load the mass spectra database only if the raw file or its content has changed.
 			 */
-			IMassSpectra database = getDatabase(fileIdentifierSettings.getMassSpectraFile(), monitor);
-			/*
-			 * Compare
-			 */
-			int countUnknown = 1;
-			for(IScanMSD unknown : massSpectraList) {
-				List<IMassSpectrumTarget> massSpectrumTargets = new ArrayList<IMassSpectrumTarget>();
-				int countReference = 1;
-				for(IScanMSD reference : database.getList()) {
-					try {
-						monitor.subTask("Compare " + countUnknown + " / " + countReference++);
-						IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, comparatorId);
-						IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
-						//
-						if(comparisonResult.getMatchFactor() >= minMatchFactor && comparisonResult.getReverseMatchFactor() >= minReverseMatchFactor) {
-							/*
-							 * Add the target.
-							 */
-							massSpectrumTargets.add(getMassSpectrumTarget(reference, comparisonResult));
-						}
-					} catch(TypeCastException e1) {
-						logger.warn(e1);
-					}
-				}
-				/*
-				 * Assign only the best hits or the m/z list of the unknown.
-				 */
-				if(massSpectrumTargets.size() == 0) {
-					if(fileIdentifierSettings.isAddUnknownMzListTarget()) {
-						setMassSpectrumTargetUnknown(unknown);
-					}
-				} else {
-					Collections.sort(massSpectrumTargets, targetCombinedComparator);
-					int size = (numberOfTargets <= massSpectrumTargets.size()) ? numberOfTargets : massSpectrumTargets.size();
-					for(int i = 0; i < size; i++) {
-						unknown.addTarget(massSpectrumTargets.get(i));
-					}
-				}
-				//
-				massSpectra.addMassSpectrum(unknown);
-				countUnknown++;
+			IFileMassSpectrumIdentifierSettings fileIdentifierSettings = (IFileMassSpectrumIdentifierSettings)massSpectrumIdentifierSettings;
+			Map<String, IMassSpectra> databases = getDatabases(fileIdentifierSettings.getMassSpectraFiles(), monitor);
+			for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
+				compareMassSpectraAgainstDatabase(massSpectra, fileIdentifierSettings, massSpectraList, database, monitor);
 			}
 		} else {
 			throw new FileNotFoundException("Can't get the file from the settings.");
 		}
 		//
 		return massSpectra;
+	}
+
+	private void compareMassSpectraAgainstDatabase(IMassSpectra massSpectra, IFileMassSpectrumIdentifierSettings fileIdentifierSettings, List<IScanMSD> massSpectraList, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
+
+		/*
+		 * Run the identification.
+		 */
+		String comparatorId = fileIdentifierSettings.getMassSpectrumComparatorId();
+		float minMatchFactor = fileIdentifierSettings.getMinMatchFactor();
+		float minReverseMatchFactor = fileIdentifierSettings.getMinReverseMatchFactor();
+		int numberOfTargets = fileIdentifierSettings.getNumberOfTargets();
+		//
+		int countUnknown = 1;
+		for(IScanMSD unknown : massSpectraList) {
+			List<IMassSpectrumTarget> massSpectrumTargets = new ArrayList<IMassSpectrumTarget>();
+			int countReference = 1;
+			for(IScanMSD reference : database.getValue().getList()) {
+				try {
+					monitor.subTask("Compare " + countUnknown + " / " + countReference++);
+					IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, comparatorId);
+					IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
+					//
+					if(comparisonResult.getMatchFactor() >= minMatchFactor && comparisonResult.getReverseMatchFactor() >= minReverseMatchFactor) {
+						/*
+						 * Add the target.
+						 */
+						massSpectrumTargets.add(getMassSpectrumTarget(reference, comparisonResult, database.getKey()));
+					}
+				} catch(TypeCastException e1) {
+					logger.warn(e1);
+				}
+			}
+			/*
+			 * Assign only the best hits or the m/z list of the unknown.
+			 */
+			if(massSpectrumTargets.size() == 0) {
+				if(fileIdentifierSettings.isAddUnknownMzListTarget()) {
+					setMassSpectrumTargetUnknown(unknown);
+				}
+			} else {
+				Collections.sort(massSpectrumTargets, targetCombinedComparator);
+				int size = (numberOfTargets <= massSpectrumTargets.size()) ? numberOfTargets : massSpectrumTargets.size();
+				for(int i = 0; i < size; i++) {
+					unknown.addTarget(massSpectrumTargets.get(i));
+				}
+			}
+			//
+			massSpectra.addMassSpectrum(unknown);
+			countUnknown++;
+		}
 	}
 
 	/**
@@ -157,25 +171,32 @@ public class FileIdentifier {
 
 		IPeakIdentificationResults identificationResults = new PeakIdentificationResults();
 		/*
+		 * Load the mass spectra database only if the raw file or its content has changed.
+		 */
+		Map<String, IMassSpectra> databases = getDatabases(peakIdentifierSettings.getMassSpectraFiles(), monitor);
+		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
+			comparePeaksAgainstDatabase(peakIdentifierSettings, peaks, database, monitor);
+		}
+		//
+		return identificationResults;
+	}
+
+	private void comparePeaksAgainstDatabase(IFilePeakIdentifierSettings peakIdentifierSettings, List<IPeakMSD> peaks, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
+
+		/*
 		 * Run the identification.
 		 */
 		String comparatorId = peakIdentifierSettings.getMassSpectrumComparatorId();
 		float minMatchFactor = peakIdentifierSettings.getMinMatchFactor();
 		float minReverseMatchFactor = peakIdentifierSettings.getMinReverseMatchFactor();
 		int numberOfTargets = peakIdentifierSettings.getNumberOfTargets();
-		/*
-		 * Load the mass spectra database only if the raw file or its content has changed.
-		 */
-		IMassSpectra database = getDatabase(peakIdentifierSettings.getMassSpectraFile(), monitor);
-		/*
-		 * Compare
-		 */
+		//
 		int countUnknown = 1;
 		for(IPeakMSD peakMSD : peaks) {
 			List<IPeakTarget> peakTargets = new ArrayList<IPeakTarget>();
 			int countReference = 1;
 			IScanMSD unknown = peakMSD.getPeakModel().getPeakMassSpectrum();
-			for(IScanMSD reference : database.getList()) {
+			for(IScanMSD reference : database.getValue().getList()) {
 				try {
 					monitor.subTask("Compare " + countUnknown + " / " + countReference++);
 					IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, comparatorId);
@@ -185,7 +206,7 @@ public class FileIdentifier {
 						/*
 						 * Add the target.
 						 */
-						peakTargets.add(getPeakTarget(reference, comparisonResult));
+						peakTargets.add(getPeakTarget(reference, comparisonResult, database.getKey()));
 					}
 				} catch(TypeCastException e1) {
 					logger.warn(e1);
@@ -208,8 +229,6 @@ public class FileIdentifier {
 			//
 			countUnknown++;
 		}
-		//
-		return identificationResults;
 	}
 
 	public IMassSpectra getMassSpectra(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
@@ -227,21 +246,34 @@ public class FileIdentifier {
 					 * Only evaluate the target if it contains the signature
 					 * of this plugin.
 					 */
-					Map<String, IScanMSD> databaseNames = getDatabaseNamesMap(monitor);
-					Map<String, IScanMSD> databaseCasNumbers = getDatabaseCasNamesMap(monitor);
+					Map<String, Map<String, IScanMSD>> allDatabaseNames = getDatabaseNamesMap(monitor);
+					Map<String, Map<String, IScanMSD>> allDatabaseCasNumbers = getDatabaseCasNamesMap(monitor);
+					String database = identificationTarget.getLibraryInformation().getDatabase();
+					Map<String, IScanMSD> databaseNames = allDatabaseNames.get(database);
+					Map<String, IScanMSD> databaseCasNumbers = allDatabaseCasNumbers.get(database);
 					//
-					IScanMSD reference;
-					String name = libraryInformationTarget.getName();
-					//
-					reference = databaseNames.get(name);
-					if(reference != null) {
-						massSpectra.addMassSpectrum(reference);
+					IScanMSD reference = null;
+					/*
+					 * Find reference By Name
+					 */
+					if(databaseNames != null) {
+						String name = libraryInformationTarget.getName();
+						reference = databaseNames.get(name);
+						if(reference != null) {
+							massSpectra.addMassSpectrum(reference);
+						}
 					}
-					//
-					String casNumber = libraryInformationTarget.getCasNumber();
-					reference = databaseCasNumbers.get(casNumber);
-					if(reference != null) {
-						massSpectra.addMassSpectrum(reference);
+					/*
+					 * Find reference by CAS#
+					 */
+					if(reference == null) {
+						if(databaseCasNumbers != null) {
+							String casNumber = libraryInformationTarget.getCasNumber();
+							reference = databaseCasNumbers.get(casNumber);
+							if(reference != null) {
+								massSpectra.addMassSpectrum(reference);
+							}
+						}
 					}
 				}
 			}
@@ -252,74 +284,92 @@ public class FileIdentifier {
 		return massSpectra;
 	}
 
-	private IMassSpectra getDatabase(String databasePath, IProgressMonitor monitor) throws FileNotFoundException {
+	private Map<String, IMassSpectra> getDatabases(List<String> databaseList, IProgressMonitor monitor) throws FileNotFoundException {
 
-		try {
-			File file = new File(databasePath);
-			if(file.exists()) {
-				/*
-				 * Make further checks.
-				 */
-				if(massSpectraDatabase == null) {
-					loadMassSpectraFromFile(file, monitor);
-				} else {
+		for(String database : databaseList) {
+			try {
+				File file = new File(database);
+				String databaseName = file.getName();
+				if(file.exists()) {
 					/*
-					 * Has the content been edited?
+					 * Make further checks.
 					 */
-					if(file.length() != fileSize || !file.getName().equals(fileName)) {
+					if(massSpectraDatabases.get(databaseName) == null) {
 						loadMassSpectraFromFile(file, monitor);
+					} else {
+						/*
+						 * Has the content been edited?
+						 */
+						if(file.length() != fileSizes.get(databaseName) || !fileNames.contains(databaseName)) {
+							loadMassSpectraFromFile(file, monitor);
+						}
 					}
 				}
-			} else {
-				massSpectraDatabase = null;
+			} catch(TypeCastException e) {
+				logger.warn(e);
 			}
-		} catch(TypeCastException e) {
-			logger.warn(e);
 		}
-		//
-		if(massSpectraDatabase == null) {
+		/*
+		 * Post-check
+		 */
+		if(massSpectraDatabases.size() == 0) {
 			throw new FileNotFoundException();
 		}
 		//
-		return massSpectraDatabase;
+		return massSpectraDatabases;
 	}
 
-	private Map<String, IScanMSD> getDatabaseNamesMap(IProgressMonitor monitor) throws FileNotFoundException {
+	private Map<String, Map<String, IScanMSD>> getDatabaseNamesMap(IProgressMonitor monitor) throws FileNotFoundException {
 
-		getDatabase(PreferenceSupplier.getMassSpectraFile(), monitor);
-		return databaseNames;
+		getDatabases(PreferenceSupplier.getMassSpectraFiles(), monitor);
+		return allDatabaseNames;
 	}
 
-	private Map<String, IScanMSD> getDatabaseCasNamesMap(IProgressMonitor monitor) throws FileNotFoundException {
+	private Map<String, Map<String, IScanMSD>> getDatabaseCasNamesMap(IProgressMonitor monitor) throws FileNotFoundException {
 
-		getDatabase(PreferenceSupplier.getMassSpectraFile(), monitor);
-		return databaseCasNumbers;
+		getDatabases(PreferenceSupplier.getMassSpectraFiles(), monitor);
+		return allDatabaseCasNumbers;
 	}
 
 	private void loadMassSpectraFromFile(File file, IProgressMonitor monitor) throws TypeCastException {
 
 		IMassSpectrumImportConverterProcessingInfo infoConvert = MassSpectrumConverter.convert(file, monitor);
-		massSpectraDatabase = infoConvert.getMassSpectra();
-		//
-		fileName = file.getName();
-		fileSize = file.length();
+		IMassSpectra massSpectraDatabase = infoConvert.getMassSpectra();
+		/*
+		 * Add the datababse to databases.
+		 */
+		String databaseName = file.getName();
+		massSpectraDatabases.put(databaseName, massSpectraDatabase);
+		fileNames.add(databaseName);
+		fileSizes.put(databaseName, file.length());
 		/*
 		 * Initialize the reference maps.
 		 */
-		databaseNames = new HashMap<String, IScanMSD>();
-		databaseCasNumbers = new HashMap<String, IScanMSD>();
+		Map<String, IScanMSD> databaseNames = allDatabaseNames.get(databaseName);
+		if(databaseNames == null) {
+			databaseNames = new HashMap<String, IScanMSD>();
+			allDatabaseNames.put(databaseName, databaseNames);
+		}
+		//
+		Map<String, IScanMSD> databaseCasNumbers = allDatabaseCasNumbers.get(databaseName);
+		if(databaseCasNumbers == null) {
+			databaseCasNumbers = new HashMap<String, IScanMSD>();
+			allDatabaseCasNumbers.put(databaseName, databaseCasNumbers);
+		}
+		//
 		for(IScanMSD reference : massSpectraDatabase.getList()) {
 			if(reference instanceof IRegularLibraryMassSpectrum) {
 				IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)reference;
 				ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 				databaseNames.put(libraryInformation.getName(), reference);
 				databaseCasNumbers.put(libraryInformation.getCasNumber(), reference);
+				// TODO highest 5 m/z
 			}
 		}
 	}
 
 	// TODO Merge
-	public IMassSpectrumTarget getMassSpectrumTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult) {
+	public IMassSpectrumTarget getMassSpectrumTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult, String database) {
 
 		String name = "???";
 		String cas = "???";
@@ -341,6 +391,7 @@ public class FileIdentifier {
 		libraryInformation.setName(name);
 		libraryInformation.setCasNumber(cas);
 		libraryInformation.setMiscellaneous(comments);
+		libraryInformation.setDatabase(database);
 		//
 		try {
 			identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
@@ -365,7 +416,7 @@ public class FileIdentifier {
 	}
 
 	// TODO Merge
-	public IPeakTarget getPeakTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult) {
+	public IPeakTarget getPeakTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult, String database) {
 
 		String name = "???";
 		String cas = "???";
@@ -387,6 +438,7 @@ public class FileIdentifier {
 		libraryInformation.setName(name);
 		libraryInformation.setCasNumber(cas);
 		libraryInformation.setMiscellaneous(comments);
+		libraryInformation.setDatabase(database);
 		//
 		try {
 			peakTarget = new PeakTarget(libraryInformation, comparisonResult);
