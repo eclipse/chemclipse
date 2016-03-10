@@ -18,6 +18,8 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractMassS
 public class FileMassSpectrumIdentifierSettings extends AbstractMassSpectrumIdentifierSettings implements IFileMassSpectrumIdentifierSettings {
 
 	private List<String> massSpectraFiles;
+	private boolean usePreOptimization;
+	private double thresholdPreOptimization;
 	private int numberOfTargets;
 	private float minMatchFactor;
 	private float minReverseMatchFactor;
@@ -33,6 +35,30 @@ public class FileMassSpectrumIdentifierSettings extends AbstractMassSpectrumIden
 	public void setMassSpectraFiles(List<String> massSpectraFiles) {
 
 		this.massSpectraFiles = massSpectraFiles;
+	}
+
+	@Override
+	public boolean isUsePreOptimization() {
+
+		return usePreOptimization;
+	}
+
+	@Override
+	public void setUsePreOptimization(boolean usePreOptimization) {
+
+		this.usePreOptimization = usePreOptimization;
+	}
+
+	@Override
+	public double getThresholdPreOptimization() {
+
+		return thresholdPreOptimization;
+	}
+
+	@Override
+	public void setThresholdPreOptimization(double thresholdPreOptimization) {
+
+		this.thresholdPreOptimization = thresholdPreOptimization;
 	}
 
 	@Override

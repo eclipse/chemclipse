@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverterSupport;
 import org.eclipse.chemclipse.support.ui.preferences.editors.FileListEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -71,14 +72,13 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		}
 		addField(fileListEditor);
 		//
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_PRE_OPTIMIZATION, "Use search pre-optimization", getFieldEditorParent()));
+		String labelTextThreshold = getDescription("Threshold pre-optimization", PreferenceSupplier.MIN_THRESHOLD_PRE_OPTIMIZATION, PreferenceSupplier.MAX_THRESHOLD_PRE_OPTIMIZATION);
+		addField(new DoubleFieldEditor(PreferenceSupplier.P_THRESHOLD_PRE_OPTIMIZATION, labelTextThreshold, PreferenceSupplier.MIN_THRESHOLD_PRE_OPTIMIZATION, PreferenceSupplier.MAX_THRESHOLD_PRE_OPTIMIZATION, getFieldEditorParent()));
+		//
 		addField(new ComboFieldEditor(PreferenceSupplier.P_MASS_SPECTRUM_COMPARATOR_ID, "Mass Spectrum Comparator Id", MassSpectrumComparator.getAvailableComparatorIds(), getFieldEditorParent()));
-		StringBuilder builder = new StringBuilder();
-		builder.append("Number of Targets (");
-		builder.append(PreferenceSupplier.MIN_NUMBER_OF_TARGETS);
-		builder.append(" - ");
-		builder.append(PreferenceSupplier.MAX_NUMBER_OF_TARGETS);
-		builder.append(")");
-		IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(PreferenceSupplier.P_NUMBER_OF_TARGETS, builder.toString(), getFieldEditorParent(), 3);
+		String labelTextNumberOfTargets = getDescription("Number of Targets", PreferenceSupplier.MIN_NUMBER_OF_TARGETS, PreferenceSupplier.MAX_NUMBER_OF_TARGETS);
+		IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(PreferenceSupplier.P_NUMBER_OF_TARGETS, labelTextNumberOfTargets, getFieldEditorParent(), 3);
 		integerFieldEditor.setValidRange(PreferenceSupplier.MIN_NUMBER_OF_TARGETS, PreferenceSupplier.MAX_NUMBER_OF_TARGETS);
 		addField(integerFieldEditor);
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MIN_MATCH_FACTOR, "Min Match Factor", 0.0f, 100.0f, getFieldEditorParent()));
@@ -94,5 +94,17 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void init(IWorkbench workbench) {
 
+	}
+
+	private String getDescription(String info, double minValue, double maxValue) {
+
+		StringBuilder builder = new StringBuilder();
+		builder.append(info);
+		builder.append(" (");
+		builder.append((int)minValue);
+		builder.append(" - ");
+		builder.append((int)maxValue);
+		builder.append(")");
+		return builder.toString();
 	}
 }

@@ -21,6 +21,14 @@ public interface IFileSettings {
 
 	String getMassSpectrumComparatorId();
 
+	boolean isUsePreOptimization();
+
+	void setUsePreOptimization(boolean usePreOptimization);
+
+	double getThresholdPreOptimization();
+
+	void setThresholdPreOptimization(double thresholdPreOptimization);
+
 	int getNumberOfTargets();
 
 	void setNumberOfTargets(int numberOfTargets);
