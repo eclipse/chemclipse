@@ -44,6 +44,7 @@ import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
+import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -68,24 +69,19 @@ public class FileIdentifier {
 	private static Map<String, Long> fileSizes;
 	private static Set<String> fileNames;
 	private static Map<String, IMassSpectra> massSpectraDatabases;
-	private static Map<String, List<Set<IIon>>> allDatabaseTopIons = null;
+	private static Map<String, List<Set<Integer>>> allDatabaseTopIons = null;
 	private static Map<String, Map<String, IScanMSD>> allDatabaseNames = null;
 	private static Map<String, Map<String, IScanMSD>> allDatabaseCasNumbers = null;
+	//
+	private static final int NUMBER_TOP_IONS = 12;
+	private static final double LIMIT_PERCENTAGE_HITS = 0.1d; // 10% of the highest m/z values must be matched
 	//
 	private IonAbundanceComparator ionAbundanceComparator;
 	private TargetCombinedComparator targetCombinedComparator;
 
 	public FileIdentifier() {
-		/*
-		 * Cache and optimization
-		 */
-		fileSizes = new HashMap<String, Long>();
-		fileNames = new HashSet<String>();
-		massSpectraDatabases = new HashMap<String, IMassSpectra>();
-		allDatabaseTopIons = new HashMap<String, List<Set<IIon>>>();
-		allDatabaseNames = new HashMap<String, Map<String, IScanMSD>>();
-		allDatabaseCasNumbers = new HashMap<String, Map<String, IScanMSD>>();
 		//
+		initializeDatabaseMaps();
 		ionAbundanceComparator = new IonAbundanceComparator(SortOrder.DESC);
 		targetCombinedComparator = new TargetCombinedComparator(SortOrder.DESC);
 	}
@@ -95,88 +91,33 @@ public class FileIdentifier {
 		IMassSpectra massSpectra = new MassSpectra();
 		if(massSpectrumIdentifierSettings instanceof IFileMassSpectrumIdentifierSettings) {
 			/*
+			 * Add all unknowns to the mass spectra list.
+			 */
+			massSpectra.addMassSpectra(massSpectraList);
+			/*
 			 * Load the mass spectra database only if the raw file or its content has changed.
 			 */
 			IFileMassSpectrumIdentifierSettings fileIdentifierSettings = (IFileMassSpectrumIdentifierSettings)massSpectrumIdentifierSettings;
 			Map<String, IMassSpectra> databases = getDatabases(fileIdentifierSettings.getMassSpectraFiles(), monitor);
 			for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
-				compareMassSpectraAgainstDatabase(massSpectra, fileIdentifierSettings, massSpectraList, database, monitor);
+				compareMassSpectraAgainstDatabase(massSpectra, fileIdentifierSettings, database, monitor);
+			}
+			/*
+			 * Add m/z list on demand.
+			 */
+			for(IScanMSD unknown : massSpectra.getList()) {
+				List<IMassSpectrumTarget> massSpectrumTargets = unknown.getTargets();
+				if(massSpectrumTargets.size() == 0) {
+					if(fileIdentifierSettings.isAddUnknownMzListTarget()) {
+						setMassSpectrumTargetUnknown(unknown);
+					}
+				}
 			}
 		} else {
 			throw new FileNotFoundException("Can't get the file from the settings.");
 		}
 		//
 		return massSpectra;
-	}
-
-	private void compareMassSpectraAgainstDatabase(IMassSpectra massSpectra, IFileMassSpectrumIdentifierSettings fileIdentifierSettings, List<IScanMSD> massSpectraList, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
-
-		/*
-		 * Run the identification.
-		 */
-		String comparatorId = fileIdentifierSettings.getMassSpectrumComparatorId();
-		float minMatchFactor = fileIdentifierSettings.getMinMatchFactor();
-		float minReverseMatchFactor = fileIdentifierSettings.getMinReverseMatchFactor();
-		int numberOfTargets = fileIdentifierSettings.getNumberOfTargets();
-		String databaseName = database.getKey();
-		//
-		List<Set<IIon>> databaseTopIons = allDatabaseTopIons.get(databaseName);
-		//
-		int countUnknown = 1;
-		for(IScanMSD unknown : massSpectraList) {
-			List<IMassSpectrumTarget> massSpectrumTargets = new ArrayList<IMassSpectrumTarget>();
-			int countReference = 1;
-			//
-			List<IIon> ions = unknown.getIons();
-			Collections.sort(ions, ionAbundanceComparator);
-			//
-			List<IScanMSD> references = database.getValue().getList();
-			for(int i = 0; i < references.size(); i++) {
-				try {
-					monitor.subTask("Compare " + countUnknown + " / " + countReference++);
-					//
-					IScanMSD reference = references.get(i);
-					Set<IIon> referenceIons = databaseTopIons.get(i);
-					int hits = 0;
-					for(int j = 0; j < 5; j++) {
-						if(referenceIons.contains(ions.get(i))) {
-							hits++;
-						}
-					}
-					//
-					if(hits >= 3) {
-						IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, comparatorId);
-						IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
-						//
-						if(comparisonResult.getMatchFactor() >= minMatchFactor && comparisonResult.getReverseMatchFactor() >= minReverseMatchFactor) {
-							/*
-							 * Add the target.
-							 */
-							massSpectrumTargets.add(getMassSpectrumTarget(reference, comparisonResult, databaseName));
-						}
-					}
-				} catch(TypeCastException e1) {
-					logger.warn(e1);
-				}
-			}
-			/*
-			 * Assign only the best hits or the m/z list of the unknown.
-			 */
-			if(massSpectrumTargets.size() == 0) {
-				if(fileIdentifierSettings.isAddUnknownMzListTarget()) {
-					setMassSpectrumTargetUnknown(unknown);
-				}
-			} else {
-				Collections.sort(massSpectrumTargets, targetCombinedComparator);
-				int size = (numberOfTargets <= massSpectrumTargets.size()) ? numberOfTargets : massSpectrumTargets.size();
-				for(int i = 0; i < size; i++) {
-					unknown.addTarget(massSpectrumTargets.get(i));
-				}
-			}
-			//
-			massSpectra.addMassSpectrum(unknown);
-			countUnknown++;
-		}
 	}
 
 	/**
@@ -199,58 +140,18 @@ public class FileIdentifier {
 		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
 			comparePeaksAgainstDatabase(peakIdentifierSettings, peaks, database, monitor);
 		}
-		//
-		return identificationResults;
-	}
-
-	private void comparePeaksAgainstDatabase(IFilePeakIdentifierSettings peakIdentifierSettings, List<IPeakMSD> peaks, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
-
 		/*
-		 * Run the identification.
+		 * Assign a m/z list on demand if no match has been assigned.
 		 */
-		String comparatorId = peakIdentifierSettings.getMassSpectrumComparatorId();
-		float minMatchFactor = peakIdentifierSettings.getMinMatchFactor();
-		float minReverseMatchFactor = peakIdentifierSettings.getMinReverseMatchFactor();
-		int numberOfTargets = peakIdentifierSettings.getNumberOfTargets();
-		//
-		int countUnknown = 1;
 		for(IPeakMSD peakMSD : peaks) {
-			List<IPeakTarget> peakTargets = new ArrayList<IPeakTarget>();
-			int countReference = 1;
-			IScanMSD unknown = peakMSD.getPeakModel().getPeakMassSpectrum();
-			for(IScanMSD reference : database.getValue().getList()) {
-				try {
-					monitor.subTask("Compare " + countUnknown + " / " + countReference++);
-					IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, comparatorId);
-					IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
-					//
-					if(comparisonResult.getMatchFactor() >= minMatchFactor && comparisonResult.getReverseMatchFactor() >= minReverseMatchFactor) {
-						/*
-						 * Add the target.
-						 */
-						peakTargets.add(getPeakTarget(reference, comparisonResult, database.getKey()));
-					}
-				} catch(TypeCastException e1) {
-					logger.warn(e1);
-				}
-			}
-			/*
-			 * Assign only the best hits or the m/z list of the unknown.
-			 */
-			if(peakTargets.size() == 0) {
+			if(peakMSD.getTargets().size() == 0) {
 				if(peakIdentifierSettings.isAddUnknownMzListTarget()) {
 					setPeakTargetUnknown(peakMSD);
 				}
-			} else {
-				Collections.sort(peakTargets, targetCombinedComparator);
-				int size = (numberOfTargets <= peakTargets.size()) ? numberOfTargets : peakTargets.size();
-				for(int i = 0; i < size; i++) {
-					peakMSD.addTarget(peakTargets.get(i));
-				}
 			}
-			//
-			countUnknown++;
 		}
+		//
+		return identificationResults;
 	}
 
 	public IMassSpectra getMassSpectra(IIdentificationTarget identificationTarget, IProgressMonitor monitor) {
@@ -306,12 +207,143 @@ public class FileIdentifier {
 		return massSpectra;
 	}
 
+	private void compareMassSpectraAgainstDatabase(IMassSpectra massSpectra, IFileMassSpectrumIdentifierSettings fileIdentifierSettings, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
+
+		/*
+		 * Run the identification.
+		 */
+		String databaseName = database.getKey();
+		List<Set<Integer>> databaseTopIons = allDatabaseTopIons.get(databaseName);
+		//
+		String comparatorId = fileIdentifierSettings.getMassSpectrumComparatorId();
+		float minMatchFactor = fileIdentifierSettings.getMinMatchFactor();
+		float minReverseMatchFactor = fileIdentifierSettings.getMinReverseMatchFactor();
+		int numberOfTargets = fileIdentifierSettings.getNumberOfTargets();
+		//
+		int countUnknown = 1;
+		for(IScanMSD unknown : massSpectra.getList()) {
+			List<IMassSpectrumTarget> massSpectrumTargets = new ArrayList<IMassSpectrumTarget>();
+			int countReference = 1;
+			/*
+			 * Sort the ions of the unknown mass spectrum.
+			 */
+			List<IIon> ions = unknown.getIons();
+			Collections.sort(ions, ionAbundanceComparator);
+			//
+			List<IScanMSD> references = database.getValue().getList();
+			for(int i = 0; i < references.size(); i++) {
+				//
+				monitor.subTask("Compare " + countUnknown + " / " + countReference++);
+				//
+				IScanMSD reference = references.get(i);
+				Set<Integer> referenceIons = databaseTopIons.get(i);
+				if(useReferenceForComparison(ions, referenceIons)) {
+					/*
+					 * Only compare this spectrum.
+					 */
+					try {
+						IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, comparatorId);
+						IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
+						//
+						if(comparisonResult.getMatchFactor() >= minMatchFactor && comparisonResult.getReverseMatchFactor() >= minReverseMatchFactor) {
+							/*
+							 * Add the target.
+							 */
+							massSpectrumTargets.add(getMassSpectrumTarget(reference, comparisonResult, databaseName));
+						}
+					} catch(TypeCastException e1) {
+						logger.warn(e1);
+					}
+				}
+			}
+			/*
+			 * Assign a m/z list on demand if no match has been assigned.
+			 */
+			if(massSpectrumTargets.size() > 0) {
+				Collections.sort(massSpectrumTargets, targetCombinedComparator);
+				int size = (numberOfTargets <= massSpectrumTargets.size()) ? numberOfTargets : massSpectrumTargets.size();
+				for(int i = 0; i < size; i++) {
+					unknown.addTarget(massSpectrumTargets.get(i));
+				}
+			}
+			//
+			countUnknown++;
+		}
+	}
+
+	private void comparePeaksAgainstDatabase(IFilePeakIdentifierSettings peakIdentifierSettings, List<IPeakMSD> peaks, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
+
+		/*
+		 * Run the identification.
+		 */
+		String databaseName = database.getKey();
+		List<Set<Integer>> databaseTopIons = allDatabaseTopIons.get(databaseName);
+		//
+		String comparatorId = peakIdentifierSettings.getMassSpectrumComparatorId();
+		float minMatchFactor = peakIdentifierSettings.getMinMatchFactor();
+		float minReverseMatchFactor = peakIdentifierSettings.getMinReverseMatchFactor();
+		int numberOfTargets = peakIdentifierSettings.getNumberOfTargets();
+		//
+		int countUnknown = 1;
+		for(IPeakMSD peakMSD : peaks) {
+			/*
+			 * Sort the ions of the unknown mass spectrum.
+			 */
+			List<IIon> ions = peakMSD.getExtractedMassSpectrum().getIons();
+			Collections.sort(ions, ionAbundanceComparator);
+			//
+			List<IPeakTarget> peakTargets = new ArrayList<IPeakTarget>();
+			int countReference = 1;
+			IScanMSD unknown = peakMSD.getPeakModel().getPeakMassSpectrum();
+			List<IScanMSD> references = database.getValue().getList();
+			for(int i = 0; i < references.size(); i++) {
+				//
+				monitor.subTask("Compare " + countUnknown + " / " + countReference++);
+				//
+				IScanMSD reference = references.get(i);
+				Set<Integer> referenceIons = databaseTopIons.get(i);
+				if(useReferenceForComparison(ions, referenceIons)) {
+					/*
+					 * Only compare this spectrum.
+					 */
+					try {
+						IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, comparatorId);
+						IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
+						//
+						if(comparisonResult.getMatchFactor() >= minMatchFactor && comparisonResult.getReverseMatchFactor() >= minReverseMatchFactor) {
+							/*
+							 * Add the target.
+							 */
+							peakTargets.add(getPeakTarget(reference, comparisonResult, database.getKey()));
+						}
+					} catch(TypeCastException e1) {
+						logger.warn(e1);
+					}
+				}
+			}
+			/*
+			 * Assign only the best hits or the m/z list of the unknown.
+			 */
+			if(peakTargets.size() > 0) {
+				Collections.sort(peakTargets, targetCombinedComparator);
+				int size = (numberOfTargets <= peakTargets.size()) ? numberOfTargets : peakTargets.size();
+				for(int i = 0; i < size; i++) {
+					peakMSD.addTarget(peakTargets.get(i));
+				}
+			}
+			//
+			countUnknown++;
+		}
+	}
+
 	private Map<String, IMassSpectra> getDatabases(List<String> databaseList, IProgressMonitor monitor) throws FileNotFoundException {
 
+		List<String> databaseNames = new ArrayList<String>();
 		for(String database : databaseList) {
 			try {
 				File file = new File(database);
 				String databaseName = file.getName();
+				databaseNames.add(databaseName);
 				if(file.exists()) {
 					/*
 					 * Make further checks.
@@ -329,6 +361,18 @@ public class FileIdentifier {
 				}
 			} catch(TypeCastException e) {
 				logger.warn(e);
+			}
+		}
+		/*
+		 * Remove unused databases and info maps.
+		 */
+		Set<String> databaseKeys = massSpectraDatabases.keySet();
+		for(String databaseKey : databaseKeys) {
+			if(!databaseNames.contains(databaseKey)) {
+				massSpectraDatabases.remove(databaseKey);
+				allDatabaseNames.remove(databaseKey);
+				allDatabaseCasNumbers.remove(databaseKey);
+				allDatabaseTopIons.remove(databaseKey);
 			}
 		}
 		/*
@@ -378,20 +422,23 @@ public class FileIdentifier {
 			databaseCasNumbers = new HashMap<String, IScanMSD>();
 			allDatabaseCasNumbers.put(databaseName, databaseCasNumbers);
 		}
-		List<Set<IIon>> databaseTopIons = allDatabaseTopIons.get(databaseName);
+		List<Set<Integer>> databaseTopIons = allDatabaseTopIons.get(databaseName);
 		if(databaseTopIons == null) {
-			databaseTopIons = new ArrayList<Set<IIon>>();
+			databaseTopIons = new ArrayList<Set<Integer>>();
 			allDatabaseTopIons.put(databaseName, databaseTopIons);
 		}
 		//
 		for(IScanMSD reference : massSpectraDatabase.getList()) {
-			//
+			/*
+			 * Extract the list of n top ions.
+			 */
 			List<IIon> ions = reference.getIons();
 			Collections.sort(ions, ionAbundanceComparator);
-			Set<IIon> top5 = new HashSet<IIon>();
-			databaseTopIons.add(top5);
-			for(int i = 0; i < 5; i++) {
-				top5.add(ions.get(i));
+			Set<Integer> referenceTopIons = new HashSet<Integer>();
+			databaseTopIons.add(referenceTopIons);
+			int size = (ions.size() < NUMBER_TOP_IONS) ? ions.size() : NUMBER_TOP_IONS;
+			for(int i = 0; i < size; i++) {
+				referenceTopIons.add((int)AbstractIon.getIon(ions.get(i).getIon(), 0));
 			}
 			//
 			if(reference instanceof IRegularLibraryMassSpectrum) {
@@ -404,7 +451,7 @@ public class FileIdentifier {
 	}
 
 	// TODO Merge
-	public IMassSpectrumTarget getMassSpectrumTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult, String database) {
+	private IMassSpectrumTarget getMassSpectrumTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult, String database) {
 
 		String name = "???";
 		String cas = "???";
@@ -437,7 +484,7 @@ public class FileIdentifier {
 		return identificationEntry;
 	}
 
-	public void setMassSpectrumTargetUnknown(IScanMSD unknown) {
+	private void setMassSpectrumTargetUnknown(IScanMSD unknown) {
 
 		try {
 			ILibraryInformation libraryInformation = getLibraryInformationUnknown(unknown.getIons());
@@ -451,7 +498,7 @@ public class FileIdentifier {
 	}
 
 	// TODO Merge
-	public IPeakTarget getPeakTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult, String database) {
+	private IPeakTarget getPeakTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult, String database) {
 
 		String name = "???";
 		String cas = "???";
@@ -484,7 +531,7 @@ public class FileIdentifier {
 		return peakTarget;
 	}
 
-	public void setPeakTargetUnknown(IPeakMSD peakMSD) {
+	private void setPeakTargetUnknown(IPeakMSD peakMSD) {
 
 		try {
 			IScanMSD unknown = peakMSD.getExtractedMassSpectrum();
@@ -519,5 +566,53 @@ public class FileIdentifier {
 		builder.append("]");
 		libraryInformation.setName(builder.toString());
 		return libraryInformation;
+	}
+
+	private boolean useReferenceForComparison(List<IIon> ions, Set<Integer> referenceIons) {
+
+		int hits = 0;
+		int size = (ions.size() < NUMBER_TOP_IONS) ? ions.size() : NUMBER_TOP_IONS;
+		if(size > 0) {
+			for(int j = 0; j < size; j++) {
+				int mz = (int)AbstractIon.getIon(ions.get(j).getIon(), 0);
+				if(referenceIons.contains(mz)) {
+					hits++;
+				}
+			}
+			//
+			double percentageHits = hits / (double)size;
+			if(percentageHits >= LIMIT_PERCENTAGE_HITS) {
+				return true;
+			}
+		}
+		//
+		return false;
+	}
+
+	private void initializeDatabaseMaps() {
+
+		if(fileSizes == null) {
+			fileSizes = new HashMap<String, Long>();
+		}
+		//
+		if(fileNames == null) {
+			fileNames = new HashSet<String>();
+		}
+		//
+		if(massSpectraDatabases == null) {
+			massSpectraDatabases = new HashMap<String, IMassSpectra>();
+		}
+		//
+		if(allDatabaseTopIons == null) {
+			allDatabaseTopIons = new HashMap<String, List<Set<Integer>>>();
+		}
+		//
+		if(allDatabaseNames == null) {
+			allDatabaseNames = new HashMap<String, Map<String, IScanMSD>>();
+		}
+		//
+		if(allDatabaseCasNumbers == null) {
+			allDatabaseCasNumbers = new HashMap<String, Map<String, IScanMSD>>();
+		}
 	}
 }
