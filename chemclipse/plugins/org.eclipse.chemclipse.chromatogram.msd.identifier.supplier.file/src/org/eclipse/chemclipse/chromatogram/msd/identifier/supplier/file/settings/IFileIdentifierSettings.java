@@ -13,7 +13,25 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.setting
 
 import java.util.List;
 
-public interface IFileSettings {
+public interface IFileIdentifierSettings {
+
+	String PENALTY_CALCULATION_NONE = "NONE";
+	String PENALTY_CALCULATION_RETENTION_INDEX = "RI";
+	String PENALTY_CALCULATION_RETENTION_TIME = "RT";
+	//
+	String[][] PENALTY_CALCULATION_OPTIONS = new String[][]{//
+			{"None", PENALTY_CALCULATION_NONE}, //
+			{"Retention Index", PENALTY_CALCULATION_RETENTION_INDEX}, //
+			{"Retention Time", PENALTY_CALCULATION_RETENTION_TIME}//
+	};
+	//
+	float DEF_PENALTY_CALCULATION_LEVEL_FACTOR = 5.0f;
+	float MIN_PENALTY_CALCULATION_LEVEL_FACTOR = 1.0f;
+	float MAX_PENALTY_CALCULATION_LEVEL_FACTOR = 1000.0f;
+	//
+	float DEF_PENALTY_CALCULATION_VALUE = 20.0f;
+	float MIN_PENALTY_CALCULATION_VALUE = 0.0f;
+	float MAX_PENALTY_CALCULATION_VALUE = 100.0f;
 
 	List<String> getMassSpectraFiles();
 

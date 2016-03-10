@@ -18,6 +18,7 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.FileMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.FilePeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFilePeakIdentifierSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
@@ -51,6 +52,19 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	//
 	public static final String P_ADD_UNKNOWN_MZ_LIST_TARGET = "addUnknownMzListTarget";
 	public static final Boolean DEF_ADD_UNKNOWN_MZ_LIST_TARGET = true;
+	/*
+	 * RI / RT penalty calculation.
+	 */
+	public static final String P_PENALTY_CALCULATION = "forceMatchQualityPenaltyCalculation";
+	public static final String DEF_PENALTY_CALCULATION = IFileIdentifierSettings.PENALTY_CALCULATION_NONE;
+	public static final String P_RETENTION_INDEX_WINDOW = "retentionIndexWindow";
+	public static final float DEF_RETENTION_INDEX_WINDOW = 20.0f;
+	public static final float MIN_RETENTION_INDEX_WINDOW = 10.0f;
+	public static final float MAX_RETENTION_INDEX_WINDOW = 20.0f;
+	public static final String P_RETENTION_TIME_WINDOW = "retentionTimeWindow";
+	public static final float DEF_RETENTION_TIME_WINDOW = 0.2f;
+	public static final float MIN_RETENTION_TIME_WINDOW = 0.001f;
+	public static final float MAX_RETENTION_TIME_WINDOW = 1.0f;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -86,6 +100,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_MIN_MATCH_FACTOR, Float.toString(DEF_MIN_MATCH_FACTOR));
 		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
 		defaultValues.put(P_ADD_UNKNOWN_MZ_LIST_TARGET, Boolean.toString(DEF_ADD_UNKNOWN_MZ_LIST_TARGET));
+		defaultValues.put(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION);
+		defaultValues.put(P_RETENTION_TIME_WINDOW, Float.toString(DEF_RETENTION_TIME_WINDOW));
+		defaultValues.put(P_RETENTION_INDEX_WINDOW, Float.toString(DEF_RETENTION_INDEX_WINDOW));
 		return defaultValues;
 	}
 

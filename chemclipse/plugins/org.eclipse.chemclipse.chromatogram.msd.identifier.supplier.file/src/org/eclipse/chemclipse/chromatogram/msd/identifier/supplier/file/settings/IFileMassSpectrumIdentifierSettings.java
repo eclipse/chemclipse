@@ -13,5 +13,5 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.setting
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
 
-public interface IFileMassSpectrumIdentifierSettings extends IMassSpectrumIdentifierSettings, IFileSettings {
+public interface IFileMassSpectrumIdentifierSettings extends IMassSpectrumIdentifierSettings, IFileIdentifierSettings {
 }

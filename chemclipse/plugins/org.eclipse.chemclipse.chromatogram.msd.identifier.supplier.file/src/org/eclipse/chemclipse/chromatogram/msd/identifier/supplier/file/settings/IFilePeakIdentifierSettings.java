@@ -13,5 +13,5 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.setting
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettings;
 
-public interface IFilePeakIdentifierSettings extends IPeakIdentifierSettings, IFileSettings {
+public interface IFilePeakIdentifierSettings extends IPeakIdentifierSettings, IFileIdentifierSettings {
 }
