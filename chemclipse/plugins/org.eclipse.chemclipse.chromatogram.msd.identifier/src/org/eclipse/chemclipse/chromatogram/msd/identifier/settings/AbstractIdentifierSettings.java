@@ -19,14 +19,14 @@ public class AbstractIdentifierSettings implements IIdentifierSettings {
 	private String massSpectrumComparatorId = "";
 	private boolean setResultAutomatically;
 	private IMarkedIons excludedIons;
+	/*
+	 * Retention Time / Index Penalty Calculation
+	 */
+	private String penaltyCalculation;
+	private float retentionIndexWindow;
+	private float retentionTimeWindow;
 	private float penaltyCalculationLevelFactor;
 	private float penaltyCalculationMaxValue;
-	/*
-	 * Identification
-	 */
-	private float retentionIndexWindowForIdentification;
-	private float retentionTimeWindowForIdentification;
-	private String forceMatchFactorPenaltyCalculationForIdentification;
 
 	public AbstractIdentifierSettings() {
 		excludedIons = new MarkedIons();
@@ -62,6 +62,45 @@ public class AbstractIdentifierSettings implements IIdentifierSettings {
 		return excludedIons;
 	}
 
+	/*
+	 * Identification
+	 */
+	@Override
+	public String getPenaltyCalculation() {
+
+		return penaltyCalculation;
+	}
+
+	@Override
+	public void setPenaltyCalculation(String penaltyCalculation) {
+
+		this.penaltyCalculation = penaltyCalculation;
+	}
+
+	@Override
+	public float getRetentionIndexWindow() {
+
+		return retentionIndexWindow;
+	}
+
+	@Override
+	public void setRetentionIndexWindow(float retentionIndexWindow) {
+
+		this.retentionIndexWindow = retentionIndexWindow;
+	}
+
+	@Override
+	public float getRetentionTimeWindow() {
+
+		return retentionTimeWindow;
+	}
+
+	@Override
+	public void setRetentionTimeWindow(float retentionTimeWindow) {
+
+		this.retentionTimeWindow = retentionTimeWindow;
+	}
+
 	@Override
 	public float getPenaltyCalculationLevelFactor() {
 
@@ -81,47 +120,8 @@ public class AbstractIdentifierSettings implements IIdentifierSettings {
 	}
 
 	@Override
-	public void setPenaltyCalculationMaxValue(float maxPenaltyCalculationValue) {
+	public void setPenaltyCalculationMaxValue(float penaltyCalculationMaxValue) {
 
-		this.penaltyCalculationMaxValue = maxPenaltyCalculationValue;
-	}
-
-	/*
-	 * Identification
-	 */
-	@Override
-	public String getForceMatchFactorPenaltyCalculationForIdentification() {
-
-		return forceMatchFactorPenaltyCalculationForIdentification;
-	}
-
-	@Override
-	public void setForceMatchFactorPenaltyCalculationForIdentification(String forceMatchFactorPenaltyCalculationForIdentification) {
-
-		this.forceMatchFactorPenaltyCalculationForIdentification = forceMatchFactorPenaltyCalculationForIdentification;
-	}
-
-	@Override
-	public float getRetentionIndexWindowForIdentification() {
-
-		return retentionIndexWindowForIdentification;
-	}
-
-	@Override
-	public void setRetentionIndexWindowForIdentification(float retentionIndexWindowForIdentification) {
-
-		this.retentionIndexWindowForIdentification = retentionIndexWindowForIdentification;
-	}
-
-	@Override
-	public float getRetentionTimeWindowForIdentification() {
-
-		return retentionTimeWindowForIdentification;
-	}
-
-	@Override
-	public void setRetentionTimeWindowForIdentification(float retentionTimeWindowForIdentification) {
-
-		this.retentionTimeWindowForIdentification = retentionTimeWindowForIdentification;
+		this.penaltyCalculationMaxValue = penaltyCalculationMaxValue;
 	}
 }

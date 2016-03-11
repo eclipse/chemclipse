@@ -15,6 +15,24 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 
 public interface IIdentifierSettings {
 
+	String PENALTY_CALCULATION_NONE = "NONE";
+	String PENALTY_CALCULATION_RETENTION_INDEX = "RI";
+	String PENALTY_CALCULATION_RETENTION_TIME = "RT";
+	//
+	String[][] PENALTY_CALCULATION_OPTIONS = new String[][]{//
+			{"None", PENALTY_CALCULATION_NONE}, //
+			{"Retention Index", PENALTY_CALCULATION_RETENTION_INDEX}, //
+			{"Retention Time", PENALTY_CALCULATION_RETENTION_TIME}//
+	};
+	//
+	float DEF_PENALTY_CALCULATION_LEVEL_FACTOR = 5.0f;
+	float MIN_PENALTY_CALCULATION_LEVEL_FACTOR = 1.0f;
+	float MAX_PENALTY_CALCULATION_LEVEL_FACTOR = 1000.0f;
+	//
+	float DEF_PENALTY_CALCULATION_VALUE = 20.0f;
+	float MIN_PENALTY_CALCULATION_VALUE = 0.0f;
+	float MAX_PENALTY_CALCULATION_VALUE = 100.0f;
+
 	/**
 	 * Returns the id of the MS comparator that shall be used
 	 * for the mass spectrum identification.
@@ -55,24 +73,26 @@ public interface IIdentifierSettings {
 	 */
 	IMarkedIons getExcludedIons();
 
+	/**
+	 * Retention Time / Index Penalty Calculation
+	 */
+	String getPenaltyCalculation();
+
+	void setPenaltyCalculation(String penaltyCalculation);
+
+	float getRetentionIndexWindow();
+
+	void setRetentionIndexWindow(float retentionIndex);
+
+	float getRetentionTimeWindow();
+
+	void setRetentionTimeWindow(float retentionTimeWindow);
+
 	float getPenaltyCalculationLevelFactor();
 
 	void setPenaltyCalculationLevelFactor(float penaltyCalculationLevelFactor);
 
 	float getPenaltyCalculationMaxValue();
 
-	void setPenaltyCalculationMaxValue(float maxPenaltyCalculationValue);
-
-	// Identification
-	String getForceMatchFactorPenaltyCalculationForIdentification();
-
-	void setForceMatchFactorPenaltyCalculationForIdentification(String forceMatchFactorPenaltyCalculation);
-
-	float getRetentionIndexWindowForIdentification();
-
-	void setRetentionIndexWindowForIdentification(float retentionIndexWindow);
-
-	float getRetentionTimeWindowForIdentification();
-
-	void setRetentionTimeWindowForIdentification(float retentionTimeWindow);
+	void setPenaltyCalculationMaxValue(float penaltyCalculationMaxValue);
 }
