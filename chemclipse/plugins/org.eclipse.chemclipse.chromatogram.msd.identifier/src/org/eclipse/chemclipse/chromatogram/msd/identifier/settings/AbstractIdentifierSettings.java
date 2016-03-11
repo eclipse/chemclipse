@@ -27,13 +27,6 @@ public class AbstractIdentifierSettings implements IIdentifierSettings {
 	private float retentionIndexWindowForIdentification;
 	private float retentionTimeWindowForIdentification;
 	private String forceMatchFactorPenaltyCalculationForIdentification;
-	/*
-	 * Database
-	 * TODO need revision - NIST and File identifier don't enable the user to store mass spectra.
-	 */
-	private float retentionIndexWindowForDatabase;
-	private float retentionTimeWindowForDatabase;
-	private String forceMatchFactorPenaltyCalculationForDatabase;
 
 	public AbstractIdentifierSettings() {
 		excludedIons = new MarkedIons();
@@ -130,44 +123,5 @@ public class AbstractIdentifierSettings implements IIdentifierSettings {
 	public void setRetentionTimeWindowForIdentification(float retentionTimeWindowForIdentification) {
 
 		this.retentionTimeWindowForIdentification = retentionTimeWindowForIdentification;
-	}
-
-	/*
-	 * Database
-	 */
-	@Override
-	public String getForceMatchFactorPenaltyCalculationForDatabase() {
-
-		return forceMatchFactorPenaltyCalculationForDatabase;
-	}
-
-	@Override
-	public void setForceMatchFactorPenaltyCalculationForDatabase(String forceMatchFactorPenaltyCalculationForDatabase) {
-
-		this.forceMatchFactorPenaltyCalculationForDatabase = forceMatchFactorPenaltyCalculationForDatabase;
-	}
-
-	@Override
-	public float getRetentionIndexWindowForDatabase() {
-
-		return retentionIndexWindowForDatabase;
-	}
-
-	@Override
-	public void setRetentionIndexWindowForDatabase(float retentionIndexWindowForDatabase) {
-
-		this.retentionIndexWindowForDatabase = retentionIndexWindowForDatabase;
-	}
-
-	@Override
-	public float getRetentionTimeWindowForDatabase() {
-
-		return retentionTimeWindowForDatabase;
-	}
-
-	@Override
-	public void setRetentionTimeWindowForDatabase(float retentionTimeWindowForDatabase) {
-
-		this.retentionTimeWindowForDatabase = retentionTimeWindowForDatabase;
 	}
 }

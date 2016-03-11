@@ -75,17 +75,4 @@ public interface IIdentifierSettings {
 	float getRetentionTimeWindowForIdentification();
 
 	void setRetentionTimeWindowForIdentification(float retentionTimeWindow);
-
-	// Database
-	String getForceMatchFactorPenaltyCalculationForDatabase();
-
-	void setForceMatchFactorPenaltyCalculationForDatabase(String forceMatchFactorPenaltyCalculation);
-
-	float getRetentionIndexWindowForDatabase();
-
-	void setRetentionIndexWindowForDatabase(float retentionIndexWindow);
-
-	float getRetentionTimeWindowForDatabase();
-
-	void setRetentionTimeWindowForDatabase(float retentionTimeWindow);
 }
