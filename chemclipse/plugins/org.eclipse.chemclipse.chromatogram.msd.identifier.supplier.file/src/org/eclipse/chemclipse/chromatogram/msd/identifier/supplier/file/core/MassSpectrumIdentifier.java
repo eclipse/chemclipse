@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.MassSpectra
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.internal.identifier.FileIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileMassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -36,9 +36,9 @@ public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 		 */
 		try {
 			FileIdentifier fileIdentifier = new FileIdentifier();
-			IFileMassSpectrumIdentifierSettings fileIdentifierSettings;
-			if(massSpectrumIdentifierSettings instanceof IFileMassSpectrumIdentifierSettings) {
-				fileIdentifierSettings = (IFileMassSpectrumIdentifierSettings)massSpectrumIdentifierSettings;
+			IVendorMassSpectrumIdentifierSettings fileIdentifierSettings;
+			if(massSpectrumIdentifierSettings instanceof IVendorMassSpectrumIdentifierSettings) {
+				fileIdentifierSettings = (IVendorMassSpectrumIdentifierSettings)massSpectrumIdentifierSettings;
 			} else {
 				fileIdentifierSettings = PreferenceSupplier.getMassSpectrumIdentifierSettings();
 			}

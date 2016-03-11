@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 Dr. Philip Wenig.
+ * Copyright (c) 2014, 2016 Dr. Philip Wenig.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
 
-public interface IFilePeakIdentifierSettings extends IPeakIdentifierSettings, IFileIdentifierSettings {
+public interface IVendorMassSpectrumIdentifierSettings extends IMassSpectrumIdentifierSettings, IFileIdentifierSettings {
 }

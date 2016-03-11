@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.PeakIdentif
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.internal.identifier.FileIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFilePeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorPeakIdentifierSettings;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -37,9 +37,9 @@ public class PeakIdentifier extends AbstractPeakIdentifier {
 		 */
 		try {
 			FileIdentifier fileIdentifier = new FileIdentifier();
-			IFilePeakIdentifierSettings filePeakIdentifierSettings;
-			if(peakIdentifierSettings instanceof IFilePeakIdentifierSettings) {
-				filePeakIdentifierSettings = (IFilePeakIdentifierSettings)peakIdentifierSettings;
+			IVendorPeakIdentifierSettings filePeakIdentifierSettings;
+			if(peakIdentifierSettings instanceof IVendorPeakIdentifierSettings) {
+				filePeakIdentifierSettings = (IVendorPeakIdentifierSettings)peakIdentifierSettings;
 			} else {
 				filePeakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
 			}

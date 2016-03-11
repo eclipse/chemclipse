@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractMassSpectrumIdentifierSettings;
 
-public class FileMassSpectrumIdentifierSettings extends AbstractMassSpectrumIdentifierSettings implements IFileMassSpectrumIdentifierSettings {
+public class VendorMassSpectrumIdentifierSettings extends AbstractMassSpectrumIdentifierSettings implements IVendorMassSpectrumIdentifierSettings {
 
 	private List<String> massSpectraFiles;
 	private boolean usePreOptimization;

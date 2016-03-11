@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractPeakIdentifierSettings;
 
-public class FilePeakIdentifierSettings extends AbstractPeakIdentifierSettings implements IFilePeakIdentifierSettings {
+public class VendorPeakIdentifierSettings extends AbstractPeakIdentifierSettings implements IVendorPeakIdentifierSettings {
 
 	private List<String> massSpectraFiles;
 	private boolean usePreOptimization;
