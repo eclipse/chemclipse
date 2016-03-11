@@ -19,21 +19,14 @@ public class AbstractIdentifierSettings implements IIdentifierSettings {
 	private String massSpectrumComparatorId = "";
 	private boolean setResultAutomatically;
 	private IMarkedIons excludedIons;
+	/*
+	 * Retention Time / Index Penalty Calculation
+	 */
+	private String penaltyCalculation;
+	private float retentionIndexWindow;
+	private float retentionTimeWindow;
 	private float penaltyCalculationLevelFactor;
 	private float penaltyCalculationMaxValue;
-	/*
-	 * Identification
-	 */
-	private float retentionIndexWindowForIdentification;
-	private float retentionTimeWindowForIdentification;
-	private String forceMatchFactorPenaltyCalculationForIdentification;
-	/*
-	 * Database
-	 * TODO need revision - NIST and File identifier don't enable the user to store mass spectra.
-	 */
-	private float retentionIndexWindowForDatabase;
-	private float retentionTimeWindowForDatabase;
-	private String forceMatchFactorPenaltyCalculationForDatabase;
 
 	public AbstractIdentifierSettings() {
 		excludedIons = new MarkedIons();
@@ -69,6 +62,45 @@ public class AbstractIdentifierSettings implements IIdentifierSettings {
 		return excludedIons;
 	}
 
+	/*
+	 * Identification
+	 */
+	@Override
+	public String getPenaltyCalculation() {
+
+		return penaltyCalculation;
+	}
+
+	@Override
+	public void setPenaltyCalculation(String penaltyCalculation) {
+
+		this.penaltyCalculation = penaltyCalculation;
+	}
+
+	@Override
+	public float getRetentionIndexWindow() {
+
+		return retentionIndexWindow;
+	}
+
+	@Override
+	public void setRetentionIndexWindow(float retentionIndexWindow) {
+
+		this.retentionIndexWindow = retentionIndexWindow;
+	}
+
+	@Override
+	public float getRetentionTimeWindow() {
+
+		return retentionTimeWindow;
+	}
+
+	@Override
+	public void setRetentionTimeWindow(float retentionTimeWindow) {
+
+		this.retentionTimeWindow = retentionTimeWindow;
+	}
+
 	@Override
 	public float getPenaltyCalculationLevelFactor() {
 
@@ -88,86 +120,8 @@ public class AbstractIdentifierSettings implements IIdentifierSettings {
 	}
 
 	@Override
-	public void setPenaltyCalculationMaxValue(float maxPenaltyCalculationValue) {
+	public void setPenaltyCalculationMaxValue(float penaltyCalculationMaxValue) {
 
-		this.penaltyCalculationMaxValue = maxPenaltyCalculationValue;
-	}
-
-	/*
-	 * Identification
-	 */
-	@Override
-	public String getForceMatchFactorPenaltyCalculationForIdentification() {
-
-		return forceMatchFactorPenaltyCalculationForIdentification;
-	}
-
-	@Override
-	public void setForceMatchFactorPenaltyCalculationForIdentification(String forceMatchFactorPenaltyCalculationForIdentification) {
-
-		this.forceMatchFactorPenaltyCalculationForIdentification = forceMatchFactorPenaltyCalculationForIdentification;
-	}
-
-	@Override
-	public float getRetentionIndexWindowForIdentification() {
-
-		return retentionIndexWindowForIdentification;
-	}
-
-	@Override
-	public void setRetentionIndexWindowForIdentification(float retentionIndexWindowForIdentification) {
-
-		this.retentionIndexWindowForIdentification = retentionIndexWindowForIdentification;
-	}
-
-	@Override
-	public float getRetentionTimeWindowForIdentification() {
-
-		return retentionTimeWindowForIdentification;
-	}
-
-	@Override
-	public void setRetentionTimeWindowForIdentification(float retentionTimeWindowForIdentification) {
-
-		this.retentionTimeWindowForIdentification = retentionTimeWindowForIdentification;
-	}
-
-	/*
-	 * Database
-	 */
-	@Override
-	public String getForceMatchFactorPenaltyCalculationForDatabase() {
-
-		return forceMatchFactorPenaltyCalculationForDatabase;
-	}
-
-	@Override
-	public void setForceMatchFactorPenaltyCalculationForDatabase(String forceMatchFactorPenaltyCalculationForDatabase) {
-
-		this.forceMatchFactorPenaltyCalculationForDatabase = forceMatchFactorPenaltyCalculationForDatabase;
-	}
-
-	@Override
-	public float getRetentionIndexWindowForDatabase() {
-
-		return retentionIndexWindowForDatabase;
-	}
-
-	@Override
-	public void setRetentionIndexWindowForDatabase(float retentionIndexWindowForDatabase) {
-
-		this.retentionIndexWindowForDatabase = retentionIndexWindowForDatabase;
-	}
-
-	@Override
-	public float getRetentionTimeWindowForDatabase() {
-
-		return retentionTimeWindowForDatabase;
-	}
-
-	@Override
-	public void setRetentionTimeWindowForDatabase(float retentionTimeWindowForDatabase) {
-
-		this.retentionTimeWindowForDatabase = retentionTimeWindowForDatabase;
+		this.penaltyCalculationMaxValue = penaltyCalculationMaxValue;
 	}
 }
