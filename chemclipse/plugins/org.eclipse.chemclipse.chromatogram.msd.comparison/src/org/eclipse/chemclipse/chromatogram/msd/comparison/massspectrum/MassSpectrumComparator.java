@@ -16,15 +16,17 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.comparator.DefaultMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.exceptions.ComparisonException;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.exceptions.NoMassSpectrumComparatorAvailableException;
-import org.eclipse.chemclipse.chromatogram.msd.comparison.exceptions.NoMassSpectrumComparisonResultAvailableException;
+import org.eclipse.chemclipse.chromatogram.msd.comparison.internal.massspectrum.ComparatorCache;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.purity.IMassSpectrumPurityResult;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.purity.MassSpectrumPurityResult;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumComparatorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumPurityProcessingInfo;
+import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.MassSpectrumComparatorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.MassSpectrumPurityProcessingInfo;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumComparisonResult;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -61,11 +63,92 @@ public class MassSpectrumComparator {
 	private static final String DESCRIPTION = "description";
 	private static final String COMPARATOR_NAME = "comparatorName";
 	private static final String MASS_SPECTRUM_COMPARATOR = "massSpectrumComparator";
+	//
+	private static ComparatorCache comparatorCache;
+	private static IMassSpectrumComparatorProcessingInfo processingInfoComparisonSkip;
+	private static final float NO_MATCH = 0.0f;
+
+	/*
+	 * Initialize all values.
+	 */
+	static {
+		comparatorCache = new ComparatorCache();
+		processingInfoComparisonSkip = new MassSpectrumComparatorProcessingInfo();
+		processingInfoComparisonSkip.setMassSpectrumComparisonResult(new MassSpectrumComparisonResult(NO_MATCH, NO_MATCH));
+	}
 
 	/**
 	 * This class has only static methods.
 	 */
 	private MassSpectrumComparator() {
+	}
+
+	public static IMassSpectrumComparatorProcessingInfo compare(IScanMSD unknown, IScanMSD reference, String comparatorId) {
+
+		return compare(unknown, reference, comparatorId, false, 0.0d);
+	}
+
+	/**
+	 * This class returns a mass spectrum comparison result object.<br/>
+	 * Via an extension point several methods can register themselves to support
+	 * a comparison.<br/>
+	 * You can chose the comparator through the comparatorId.<br/>
+	 * The unknown and reference mass spectrum will be left as they are.
+	 * 
+	 * @param unknown
+	 * @param reference
+	 * @param converterId
+	 * @param ionRange
+	 * @return {@link IMassSpectrumComparisonResult}
+	 */
+	public static IMassSpectrumComparatorProcessingInfo compare(IScanMSD unknown, IScanMSD reference, String comparatorId, boolean usePreOptimization, double thresholdPreOptimization) {
+
+		/*
+		 * Check if the mass spectrum needs to be compared.
+		 */
+		boolean compare = true;
+		if(usePreOptimization) {
+			compare = comparatorCache.useReferenceForComparison(unknown, reference, thresholdPreOptimization);
+		}
+		/*
+		 * Do the comparison
+		 */
+		IMassSpectrumComparatorProcessingInfo processingInfo;
+		if(compare) {
+			IMassSpectrumComparator massSpectrumComparator = getMassSpectrumComparator(comparatorId);
+			if(massSpectrumComparator != null) {
+				processingInfo = massSpectrumComparator.compare(unknown, reference);
+			} else {
+				massSpectrumComparator = new DefaultMassSpectrumComparator();
+				processingInfo = massSpectrumComparator.compare(unknown, reference);
+				processingInfo.addInfoMessage("MassSpectrum Comparator", "The requested comparator was not available. Instead the default comparator has been used.");
+			}
+		} else {
+			processingInfo = processingInfoComparisonSkip;
+		}
+		//
+		return processingInfo;
+	}
+
+	/**
+	 * Calculates the purity of the extracted mass spectrum in comparison to the genuine.
+	 * 
+	 * @param extractedMassSpectrum
+	 * @param genuineMassSpectrum
+	 * @param ionRange
+	 * @return {@link IMassSpectrumPurityProcessingInfo}
+	 */
+	public static IMassSpectrumPurityProcessingInfo getPurityResult(IScanMSD extractedMassSpectrum, IScanMSD genuineMassSpectrum) {
+
+		IMassSpectrumPurityProcessingInfo processingInfo = new MassSpectrumPurityProcessingInfo();
+		try {
+			IMassSpectrumPurityResult massSpectrumPurityResult = new MassSpectrumPurityResult(extractedMassSpectrum, genuineMassSpectrum);
+			processingInfo.setMassSpectrumPurityResult(massSpectrumPurityResult);
+		} catch(ComparisonException e) {
+			logger.warn(e);
+			processingInfo.addErrorMessage("MassSpectrum Purity", "The mass spectrum purity couldn't be calculated.");
+		}
+		return processingInfo;
 	}
 
 	/**
@@ -116,55 +199,6 @@ public class MassSpectrumComparator {
 		return comparatorArray;
 	}
 
-	/**
-	 * This class returns a mass spectrum comparison result object.<br/>
-	 * Via an extension point several methods can register themselves to support
-	 * a comparison.<br/>
-	 * You can chose the comparator through the comparatorId.<br/>
-	 * The unknown and reference mass spectrum will be left as they are.
-	 * 
-	 * @param unknown
-	 * @param reference
-	 * @param converterId
-	 * @param ionRange
-	 * @return {@link IMassSpectrumComparisonResult}
-	 * @throws NoMassSpectrumComparisonResultAvailableException
-	 */
-	public static IMassSpectrumComparatorProcessingInfo compare(IScanMSD unknown, IScanMSD reference, String comparatorId) {
-
-		IMassSpectrumComparatorProcessingInfo processingInfo;
-		IMassSpectrumComparator massSpectrumComparator = getMassSpectrumComparator(comparatorId);
-		if(massSpectrumComparator != null) {
-			processingInfo = massSpectrumComparator.compare(unknown, reference);
-		} else {
-			massSpectrumComparator = new DefaultMassSpectrumComparator();
-			processingInfo = massSpectrumComparator.compare(unknown, reference);
-			processingInfo.addInfoMessage("MassSpectrum Comparator", "The requested comparator was not available. Instead the default comparator has been used.");
-		}
-		return processingInfo;
-	}
-
-	/**
-	 * Calculates the purity of the extracted mass spectrum in comparison to the genuine.
-	 * 
-	 * @param extractedMassSpectrum
-	 * @param genuineMassSpectrum
-	 * @param ionRange
-	 * @return {@link IMassSpectrumPurityProcessingInfo}
-	 */
-	public static IMassSpectrumPurityProcessingInfo getPurityResult(IScanMSD extractedMassSpectrum, IScanMSD genuineMassSpectrum) {
-
-		IMassSpectrumPurityProcessingInfo processingInfo = new MassSpectrumPurityProcessingInfo();
-		try {
-			IMassSpectrumPurityResult massSpectrumPurityResult = new MassSpectrumPurityResult(extractedMassSpectrum, genuineMassSpectrum);
-			processingInfo.setMassSpectrumPurityResult(massSpectrumPurityResult);
-		} catch(ComparisonException e) {
-			logger.warn(e);
-			processingInfo.addErrorMessage("MassSpectrum Purity", "The mass spectrum purity couldn't be calculated.");
-		}
-		return processingInfo;
-	}
-
 	public static IMassSpectrumComparatorSupport getMassSpectrumComparatorSupport() {
 
 		MassSpectrumComparisonSupplier supplier;
@@ -185,7 +219,6 @@ public class MassSpectrumComparator {
 		return massSpectrumComparisonSupport;
 	}
 
-	// --------------------------------------------private methods
 	private static IMassSpectrumComparator getMassSpectrumComparator(final String comparatorId) {
 
 		IConfigurationElement element;

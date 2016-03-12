@@ -31,10 +31,6 @@ public class RetentionTimeMinutesFieldEditor extends StringFieldEditor {
 	private double MINUTE_CORRELATION_FACTOR = 60000.0d; // 1ms * 1000 = 1s; 1s * 60 = 1min
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 
-	public RetentionTimeMinutesFieldEditor(String name, String labelText, Composite parent) {
-		super(name, labelText, parent);
-	}
-
 	public RetentionTimeMinutesFieldEditor(String name, String labelText, int minRetentionTimeMilliseconds, int maxRetentionTimeMilliseconds, Composite parent) {
 		super(name, labelText, parent);
 		minRetentionTimeMinutes = minRetentionTimeMilliseconds / MINUTE_CORRELATION_FACTOR;
@@ -69,10 +65,10 @@ public class RetentionTimeMinutesFieldEditor extends StringFieldEditor {
 
 		Text textControl = getTextControl();
 		if(textControl != null) {
-			Double value = getPreferenceStore().getInt(getPreferenceName()) / MINUTE_CORRELATION_FACTOR;
-			textControl.setText(value.toString());
+			Double retentionTimeMinutes = getPreferenceStore().getInt(getPreferenceName()) / MINUTE_CORRELATION_FACTOR;
+			textControl.setText(retentionTimeMinutes.toString());
+			oldValue = getPreferenceStore().getString(getPreferenceName());
 		}
-		super.doLoad();
 	}
 
 	@Override
