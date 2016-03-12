@@ -20,8 +20,10 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumComparatorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IPeakIdentifierProcessingInfo;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorPeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.support.PenaltyCalculationSupport;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.TargetBuilder;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.comparator.SortOrder;
@@ -45,12 +47,14 @@ public class FileIdentifier {
 	public static final String IDENTIFIER = "File Identifier";
 	private static final Logger logger = Logger.getLogger(FileIdentifier.class);
 	//
+	private PenaltyCalculationSupport penaltyCalculationSupport;
 	private TargetCombinedComparator targetCombinedComparator;
 	private TargetBuilder targetBuilder;
 	private FileDatabases fileDatabases;
 
 	public FileIdentifier() {
 		//
+		penaltyCalculationSupport = new PenaltyCalculationSupport();
 		targetCombinedComparator = new TargetCombinedComparator(SortOrder.DESC);
 		targetBuilder = new TargetBuilder();
 		fileDatabases = new FileDatabases();
@@ -162,6 +166,7 @@ public class FileIdentifier {
 					IScanMSD reference = references.get(index);
 					IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
 					IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
+					applyPenaltyOnDemand(unknown, reference, comparisonResult, fileIdentifierSettings);
 					if(isValidTarget(comparisonResult, fileIdentifierSettings.getMinMatchFactor(), fileIdentifierSettings.getMinReverseMatchFactor())) {
 						/*
 						 * Add the target.
@@ -215,6 +220,7 @@ public class FileIdentifier {
 					IScanMSD reference = references.get(index);
 					IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
 					IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
+					applyPenaltyOnDemand(unknown, reference, comparisonResult, fileIdentifierSettings);
 					if(isValidTarget(comparisonResult, fileIdentifierSettings.getMinMatchFactor(), fileIdentifierSettings.getMinReverseMatchFactor())) {
 						/*
 						 * Add the target.
@@ -239,6 +245,28 @@ public class FileIdentifier {
 			}
 			//
 			countUnknown++;
+		}
+	}
+
+	private void applyPenaltyOnDemand(IScanMSD unknown, IScanMSD reference, IComparisonResult comparisonResult, IIdentifierSettings identifierSettings) {
+
+		float penalty = 0.0f;
+		String penaltyCalculation = identifierSettings.getPenaltyCalculation();
+		//
+		switch(penaltyCalculation) {
+			case IIdentifierSettings.PENALTY_CALCULATION_RETENTION_TIME:
+				penalty = penaltyCalculationSupport.calculatePenaltyFromRetentionTime(unknown, reference, identifierSettings.getRetentionTimeWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getPenaltyCalculationMaxValue());
+				break;
+			case IIdentifierSettings.PENALTY_CALCULATION_RETENTION_INDEX:
+				penalty = penaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, identifierSettings.getRetentionIndexWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getPenaltyCalculationMaxValue());
+				break;
+		}
+		/*
+		 * Apply the penalty on demand.
+		 */
+		if(penalty != 0.0f) {
+			comparisonResult.adjustMatchFactor(penalty);
+			comparisonResult.adjustReverseMatchFactor(penalty);
 		}
 	}
 
