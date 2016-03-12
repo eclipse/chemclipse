@@ -31,7 +31,6 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.model.identifier.PeakIdentificationResults;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -147,45 +146,31 @@ public class FileIdentifier {
 		String databaseName = database.getKey();
 		List<IScanMSD> references = database.getValue().getList();
 		//
+		boolean usePreOptimization = fileIdentifierSettings.isUsePreOptimization();
+		double thresholdPreOptimization = fileIdentifierSettings.getThresholdPreOptimization();
+		//
 		int countUnknown = 1;
 		for(IScanMSD unknown : massSpectra.getList()) {
-			/*
-			 * Sort the ions of the unknown mass spectrum.
-			 */
+			//
 			List<IMassSpectrumTarget> massSpectrumTargets = new ArrayList<IMassSpectrumTarget>();
-			List<IIon> ions = unknown.getIons();
-			Collections.sort(ions, fileDatabases.getIonAbundanceComparator());
-			/*
-			 * Get the library
-			 */
 			for(int index = 0; index < references.size(); index++) {
 				/*
-				 * Compare?
+				 * Compare the unknown against each library spectrum.
 				 */
-				boolean compare = true;
-				if(fileIdentifierSettings.isUsePreOptimization()) {
-					compare = fileDatabases.useReferenceForComparison(ions, databaseName, index, fileIdentifierSettings.getThresholdPreOptimization(), true);
-				}
-				//
-				if(compare) {
-					/*
-					 * Only compare this spectrum.
-					 */
-					try {
-						monitor.subTask("Compare " + countUnknown + " / " + index);
-						IScanMSD reference = references.get(index);
-						IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId());
-						IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
-						if(isValidTarget(comparisonResult, fileIdentifierSettings.getMinMatchFactor(), fileIdentifierSettings.getMinReverseMatchFactor())) {
-							/*
-							 * Add the target.
-							 */
-							IMassSpectrumTarget massSpectrumTarget = targetBuilder.getMassSpectrumTarget(reference, comparisonResult, IDENTIFIER, databaseName);
-							massSpectrumTargets.add(massSpectrumTarget);
-						}
-					} catch(TypeCastException e1) {
-						logger.warn(e1);
+				try {
+					monitor.subTask("Compare " + countUnknown + " / " + index);
+					IScanMSD reference = references.get(index);
+					IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
+					IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
+					if(isValidTarget(comparisonResult, fileIdentifierSettings.getMinMatchFactor(), fileIdentifierSettings.getMinReverseMatchFactor())) {
+						/*
+						 * Add the target.
+						 */
+						IMassSpectrumTarget massSpectrumTarget = targetBuilder.getMassSpectrumTarget(reference, comparisonResult, IDENTIFIER, databaseName);
+						massSpectrumTargets.add(massSpectrumTarget);
 					}
+				} catch(TypeCastException e1) {
+					logger.warn(e1);
 				}
 				//
 			}
@@ -213,46 +198,32 @@ public class FileIdentifier {
 		String databaseName = database.getKey();
 		List<IScanMSD> references = database.getValue().getList();
 		//
+		boolean usePreOptimization = fileIdentifierSettings.isUsePreOptimization();
+		double thresholdPreOptimization = fileIdentifierSettings.getThresholdPreOptimization();
+		//
 		int countUnknown = 1;
 		for(IPeakMSD peakMSD : peaks) {
-			/*
-			 * Sort the ions of the unknown mass spectrum.
-			 */
+			//
 			List<IPeakTarget> peakTargets = new ArrayList<IPeakTarget>();
-			List<IIon> ions = peakMSD.getExtractedMassSpectrum().getIons();
-			Collections.sort(ions, fileDatabases.getIonAbundanceComparator());
-			/*
-			 * Get the library
-			 */
 			IScanMSD unknown = peakMSD.getPeakModel().getPeakMassSpectrum();
 			for(int index = 0; index < references.size(); index++) {
 				/*
-				 * Compare?
+				 * Compare the unknown against each library spectrum.
 				 */
-				boolean compare = true;
-				if(fileIdentifierSettings.isUsePreOptimization()) {
-					compare = fileDatabases.useReferenceForComparison(ions, databaseName, index, fileIdentifierSettings.getThresholdPreOptimization(), true);
-				}
-				//
-				if(compare) {
-					/*
-					 * Only compare this spectrum.
-					 */
-					try {
-						monitor.subTask("Compare " + countUnknown + " / " + index);
-						IScanMSD reference = references.get(index);
-						IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId());
-						IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
-						if(isValidTarget(comparisonResult, fileIdentifierSettings.getMinMatchFactor(), fileIdentifierSettings.getMinReverseMatchFactor())) {
-							/*
-							 * Add the target.
-							 */
-							IPeakTarget peakTarget = targetBuilder.getPeakTarget(reference, comparisonResult, IDENTIFIER, databaseName);
-							peakTargets.add(peakTarget);
-						}
-					} catch(TypeCastException e1) {
-						logger.warn(e1);
+				try {
+					monitor.subTask("Compare " + countUnknown + " / " + index);
+					IScanMSD reference = references.get(index);
+					IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
+					IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
+					if(isValidTarget(comparisonResult, fileIdentifierSettings.getMinMatchFactor(), fileIdentifierSettings.getMinReverseMatchFactor())) {
+						/*
+						 * Add the target.
+						 */
+						IPeakTarget peakTarget = targetBuilder.getPeakTarget(reference, comparisonResult, IDENTIFIER, databaseName);
+						peakTargets.add(peakTarget);
 					}
+				} catch(TypeCastException e1) {
+					logger.warn(e1);
 				}
 			}
 			/*

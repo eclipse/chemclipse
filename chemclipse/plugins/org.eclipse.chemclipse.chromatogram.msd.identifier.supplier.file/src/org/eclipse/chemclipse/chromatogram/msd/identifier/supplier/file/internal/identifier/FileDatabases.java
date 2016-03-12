@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.interna
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -28,8 +27,6 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -40,15 +37,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class FileDatabases {
 
 	private static final Logger logger = Logger.getLogger(FileDatabases.class);
-	//
-	private static final int NUMBER_TOP_IONS = 12;
 	/*
 	 * Don't reload the database on each request, only if it is necessary.
 	 */
 	private static Map<String, Long> fileSizes;
 	private static Set<String> fileNames;
 	private static Map<String, IMassSpectra> massSpectraDatabases;
-	private static Map<String, List<Set<Integer>>> allDatabaseTopIons = null;
 	private static Map<String, Map<String, IScanMSD>> allDatabaseNames = null;
 	private static Map<String, Map<String, IScanMSD>> allDatabaseCasNumbers = null;
 	//
@@ -108,7 +102,6 @@ public class FileDatabases {
 				massSpectraDatabases.remove(databaseKey);
 				allDatabaseNames.remove(databaseKey);
 				allDatabaseCasNumbers.remove(databaseKey);
-				allDatabaseTopIons.remove(databaseKey);
 			}
 		}
 		/*
@@ -119,31 +112,6 @@ public class FileDatabases {
 		}
 		//
 		return massSpectraDatabases;
-	}
-
-	/**
-	 * If sorted is false, the ion list will be sorted descending - m/z values with highest abundance first.
-	 * 
-	 * @param ions
-	 * @param referenceIons
-	 * @return boolean
-	 */
-	public boolean useReferenceForComparison(List<IIon> ions, String databaseName, int index, double thresholdPreOptimization, boolean sorted) {
-
-		if(!sorted) {
-			Collections.sort(ions, ionAbundanceComparator);
-		}
-		//
-		boolean result = true;
-		List<Set<Integer>> databaseTopIons = allDatabaseTopIons.get(databaseName);
-		if(databaseTopIons != null) {
-			Set<Integer> referenceIons = databaseTopIons.get(index);
-			if(referenceIons != null) {
-				result = useReferenceForComparison(ions, referenceIons, thresholdPreOptimization);
-			}
-		}
-		//
-		return result;
 	}
 
 	/**
@@ -236,24 +204,8 @@ public class FileDatabases {
 			databaseCasNumbers = new HashMap<String, IScanMSD>();
 			allDatabaseCasNumbers.put(databaseName, databaseCasNumbers);
 		}
-		List<Set<Integer>> databaseTopIons = allDatabaseTopIons.get(databaseName);
-		if(databaseTopIons == null) {
-			databaseTopIons = new ArrayList<Set<Integer>>();
-			allDatabaseTopIons.put(databaseName, databaseTopIons);
-		}
 		//
 		for(IScanMSD reference : massSpectraDatabase.getList()) {
-			/*
-			 * Extract the list of n top ions.
-			 */
-			List<IIon> ions = reference.getIons();
-			Collections.sort(ions, ionAbundanceComparator);
-			Set<Integer> referenceTopIons = new HashSet<Integer>();
-			databaseTopIons.add(referenceTopIons);
-			int size = (ions.size() < NUMBER_TOP_IONS) ? ions.size() : NUMBER_TOP_IONS;
-			for(int i = 0; i < size; i++) {
-				referenceTopIons.add((int)AbstractIon.getIon(ions.get(i).getIon(), 0));
-			}
 			//
 			if(reference instanceof IRegularLibraryMassSpectrum) {
 				IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)reference;
@@ -262,34 +214,6 @@ public class FileDatabases {
 				databaseCasNumbers.put(libraryInformation.getCasNumber(), reference);
 			}
 		}
-	}
-
-	/**
-	 * The ion list must be sorted descending - m/z values with highest abundance first.
-	 * 
-	 * @param ions
-	 * @param referenceIons
-	 * @return
-	 */
-	private boolean useReferenceForComparison(List<IIon> ions, Set<Integer> referenceIons, double thresholdPreOptimization) {
-
-		int hits = 0;
-		int size = (ions.size() < NUMBER_TOP_IONS) ? ions.size() : NUMBER_TOP_IONS;
-		if(size > 0) {
-			for(int j = 0; j < size; j++) {
-				int mz = (int)AbstractIon.getIon(ions.get(j).getIon(), 0);
-				if(referenceIons.contains(mz)) {
-					hits++;
-				}
-			}
-			//
-			double percentageHits = hits / (double)size;
-			if(percentageHits >= thresholdPreOptimization) {
-				return true;
-			}
-		}
-		//
-		return false;
 	}
 
 	private void initializeDatabaseMaps() {
@@ -304,10 +228,6 @@ public class FileDatabases {
 		//
 		if(massSpectraDatabases == null) {
 			massSpectraDatabases = new HashMap<String, IMassSpectra>();
-		}
-		//
-		if(allDatabaseTopIons == null) {
-			allDatabaseTopIons = new HashMap<String, List<Set<Integer>>>();
 		}
 		//
 		if(allDatabaseNames == null) {
