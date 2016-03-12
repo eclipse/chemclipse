@@ -80,13 +80,13 @@ public interface IIdentifierSettings {
 
 	void setPenaltyCalculation(String penaltyCalculation);
 
+	int getRetentionTimeWindow();
+
+	void setRetentionTimeWindow(int retentionTimeWindow);
+
 	float getRetentionIndexWindow();
 
 	void setRetentionIndexWindow(float retentionIndex);
-
-	float getRetentionTimeWindow();
-
-	void setRetentionTimeWindow(float retentionTimeWindow);
 
 	float getPenaltyCalculationLevelFactor();
 

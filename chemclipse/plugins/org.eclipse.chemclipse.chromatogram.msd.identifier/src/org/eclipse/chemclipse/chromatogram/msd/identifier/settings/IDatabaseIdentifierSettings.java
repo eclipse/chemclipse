@@ -18,11 +18,11 @@ public interface IDatabaseIdentifierSettings extends IIdentifierSettings {
 
 	void setForceMatchFactorPenaltyCalculationForDatabase(String forceMatchFactorPenaltyCalculation);
 
+	int getRetentionTimeWindowForDatabase();
+
+	void setRetentionTimeWindowForDatabase(int retentionTimeWindow);
+
 	float getRetentionIndexWindowForDatabase();
 
 	void setRetentionIndexWindowForDatabase(float retentionIndexWindow);
-
-	float getRetentionTimeWindowForDatabase();
-
-	void setRetentionTimeWindowForDatabase(float retentionTimeWindow);
 }

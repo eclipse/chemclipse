@@ -23,8 +23,8 @@ public class AbstractIdentifierSettings implements IIdentifierSettings {
 	 * Retention Time / Index Penalty Calculation
 	 */
 	private String penaltyCalculation;
+	private int retentionTimeWindow; // milliseconds
 	private float retentionIndexWindow;
-	private float retentionTimeWindow;
 	private float penaltyCalculationLevelFactor;
 	private float penaltyCalculationMaxValue;
 
@@ -78,6 +78,18 @@ public class AbstractIdentifierSettings implements IIdentifierSettings {
 	}
 
 	@Override
+	public int getRetentionTimeWindow() {
+
+		return retentionTimeWindow;
+	}
+
+	@Override
+	public void setRetentionTimeWindow(int retentionTimeWindow) {
+
+		this.retentionTimeWindow = retentionTimeWindow;
+	}
+
+	@Override
 	public float getRetentionIndexWindow() {
 
 		return retentionIndexWindow;
@@ -87,18 +99,6 @@ public class AbstractIdentifierSettings implements IIdentifierSettings {
 	public void setRetentionIndexWindow(float retentionIndexWindow) {
 
 		this.retentionIndexWindow = retentionIndexWindow;
-	}
-
-	@Override
-	public float getRetentionTimeWindow() {
-
-		return retentionTimeWindow;
-	}
-
-	@Override
-	public void setRetentionTimeWindow(float retentionTimeWindow) {
-
-		this.retentionTimeWindow = retentionTimeWindow;
 	}
 
 	@Override
