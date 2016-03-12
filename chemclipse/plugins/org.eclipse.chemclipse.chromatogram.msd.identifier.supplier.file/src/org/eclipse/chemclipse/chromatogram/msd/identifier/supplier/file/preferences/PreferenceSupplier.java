@@ -61,15 +61,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_PENALTY_CALCULATION_LEVEL_FACTOR = "penaltyCalculationLevelFactor";
 	public static final String P_PENALTY_CALCULATION_VALUE = "penaltyCalculationValue";
 	//
-	public static final String P_RETENTION_INDEX_WINDOW = "retentionIndexWindow";
-	public static final float DEF_RETENTION_INDEX_WINDOW = 20.0f;
-	public static final float MIN_RETENTION_INDEX_WINDOW = 10.0f;
-	public static final float MAX_RETENTION_INDEX_WINDOW = 20.0f;
-	//
 	public static final String P_RETENTION_TIME_WINDOW = "retentionTimeWindow";
 	public static final int DEF_RETENTION_TIME_WINDOW = 12000; // = 0.2 minutes
 	public static final int MIN_RETENTION_TIME_WINDOW = 60; // = 0.001 minutes
 	public static final int MAX_RETENTION_TIME_WINDOW = 60000; // = 1.0 minutes;
+	//
+	public static final String P_RETENTION_INDEX_WINDOW = "retentionIndexWindow";
+	public static final float DEF_RETENTION_INDEX_WINDOW = 20.0f;
+	public static final float MIN_RETENTION_INDEX_WINDOW = 10.0f;
+	public static final float MAX_RETENTION_INDEX_WINDOW = 20.0f;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 

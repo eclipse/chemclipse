@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverterSu
 import org.eclipse.chemclipse.support.ui.preferences.editors.FileListEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.RetentionTimeMinutesFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -91,10 +92,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new RadioGroupFieldEditor(PreferenceSupplier.P_PENALTY_CALCULATION, "Force Match Quality Penalty calculation", 1, IIdentifierSettings.PENALTY_CALCULATION_OPTIONS, getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_RETENTION_TIME_WINDOW, "Retention Time Window (minutes)", PreferenceSupplier.MIN_RETENTION_TIME_WINDOW, PreferenceSupplier.MAX_RETENTION_TIME_WINDOW, getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_RETENTION_INDEX_WINDOW, "Retention Index Window", PreferenceSupplier.MIN_RETENTION_INDEX_WINDOW, PreferenceSupplier.MAX_RETENTION_INDEX_WINDOW, getFieldEditorParent()));
-		IntegerFieldEditor retentionTimeWindow = new IntegerFieldEditor(PreferenceSupplier.P_RETENTION_TIME_WINDOW, "Retention Time Window (milliseconds)", getFieldEditorParent());
-		retentionTimeWindow.setValidRange(PreferenceSupplier.MIN_RETENTION_TIME_WINDOW, PreferenceSupplier.MAX_RETENTION_TIME_WINDOW);
-		addField(retentionTimeWindow);
 	}
 
 	/*
