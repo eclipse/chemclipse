@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.model.identifier;
 
 public abstract class AbstractComparisonResult implements IComparisonResult {
 
-	final private float matchFactor;
-	final private float reverseMatchFactor;
+	private float matchFactor;
+	private float reverseMatchFactor;
 	private float probability;
 	private String advise = "";
 
@@ -36,9 +36,31 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	}
 
 	@Override
+	public void adjustMatchFactor(float penalty) {
+
+		if(penalty >= MIN_PENALTY && penalty <= MAX_PENALTY) {
+			matchFactor -= penalty;
+			if(matchFactor < 0) {
+				matchFactor = 0.0f;
+			}
+		}
+	}
+
+	@Override
 	public float getReverseMatchFactor() {
 
 		return reverseMatchFactor;
+	}
+
+	@Override
+	public void adjustReverseMatchFactor(float penalty) {
+
+		if(penalty >= MIN_PENALTY && penalty <= MAX_PENALTY) {
+			reverseMatchFactor -= penalty;
+			if(reverseMatchFactor < 0) {
+				reverseMatchFactor = 0.0f;
+			}
+		}
 	}
 
 	@Override
