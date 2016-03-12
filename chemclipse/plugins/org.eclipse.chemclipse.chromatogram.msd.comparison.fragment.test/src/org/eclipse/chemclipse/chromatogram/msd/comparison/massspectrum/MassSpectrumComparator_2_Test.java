@@ -27,6 +27,9 @@ public class MassSpectrumComparator_2_Test extends TestCase {
 	private IMassSpectrumComparisonResult result;
 	private IScanMSD massSpectrum1;
 	private IScanMSD massSpectrum2;
+	//
+	private boolean usePreOptimization = false;
+	private double thresholdPreOptimization = 0.1d;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -46,7 +49,7 @@ public class MassSpectrumComparator_2_Test extends TestCase {
 
 	public void testMassSpectrumComparatorCompare_1() {
 
-		IMassSpectrumComparatorProcessingInfo processingInfo = MassSpectrumComparator.compare(null, null, null);
+		IMassSpectrumComparatorProcessingInfo processingInfo = MassSpectrumComparator.compare(null, null, null, usePreOptimization, thresholdPreOptimization);
 		assertTrue(processingInfo.hasErrorMessages());
 		try {
 			result = processingInfo.getMassSpectrumComparisonResult();
@@ -57,7 +60,7 @@ public class MassSpectrumComparator_2_Test extends TestCase {
 
 	public void testMassSpectrumComparatorCompare_2() {
 
-		IMassSpectrumComparatorProcessingInfo processingInfo = MassSpectrumComparator.compare(massSpectrum1, null, null);
+		IMassSpectrumComparatorProcessingInfo processingInfo = MassSpectrumComparator.compare(massSpectrum1, null, null, usePreOptimization, thresholdPreOptimization);
 		assertTrue(processingInfo.hasErrorMessages());
 		try {
 			result = processingInfo.getMassSpectrumComparisonResult();
@@ -68,7 +71,7 @@ public class MassSpectrumComparator_2_Test extends TestCase {
 
 	public void testMassSpectrumComparatorCompare_3() {
 
-		IMassSpectrumComparatorProcessingInfo processingInfo = MassSpectrumComparator.compare(null, massSpectrum2, null);
+		IMassSpectrumComparatorProcessingInfo processingInfo = MassSpectrumComparator.compare(null, massSpectrum2, null, usePreOptimization, thresholdPreOptimization);
 		assertTrue(processingInfo.hasErrorMessages());
 		try {
 			result = processingInfo.getMassSpectrumComparisonResult();
@@ -79,7 +82,7 @@ public class MassSpectrumComparator_2_Test extends TestCase {
 
 	public void testMassSpectrumComparatorCompare_4() {
 
-		IMassSpectrumComparatorProcessingInfo processingInfo = MassSpectrumComparator.compare(null, null, "?");
+		IMassSpectrumComparatorProcessingInfo processingInfo = MassSpectrumComparator.compare(null, null, "?", usePreOptimization, thresholdPreOptimization);
 		assertTrue(processingInfo.hasErrorMessages());
 		try {
 			result = processingInfo.getMassSpectrumComparisonResult();
@@ -90,7 +93,7 @@ public class MassSpectrumComparator_2_Test extends TestCase {
 
 	public void testMassSpectrumComparatorCompare_5() {
 
-		IMassSpectrumComparatorProcessingInfo processingInfo = MassSpectrumComparator.compare(massSpectrum1, massSpectrum2, "?");
+		IMassSpectrumComparatorProcessingInfo processingInfo = MassSpectrumComparator.compare(massSpectrum1, massSpectrum2, "?", usePreOptimization, thresholdPreOptimization);
 		assertTrue(processingInfo.hasErrorMessages());
 		try {
 			result = processingInfo.getMassSpectrumComparisonResult();
@@ -101,7 +104,7 @@ public class MassSpectrumComparator_2_Test extends TestCase {
 
 	public void testMassSpectrumComparatorCompare_6() {
 
-		IMassSpectrumComparatorProcessingInfo processingInfo = MassSpectrumComparator.compare(massSpectrum1, null, "?");
+		IMassSpectrumComparatorProcessingInfo processingInfo = MassSpectrumComparator.compare(massSpectrum1, null, "?", usePreOptimization, thresholdPreOptimization);
 		assertTrue(processingInfo.hasErrorMessages());
 		try {
 			result = processingInfo.getMassSpectrumComparisonResult();

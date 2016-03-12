@@ -83,11 +83,6 @@ public class MassSpectrumComparator {
 	private MassSpectrumComparator() {
 	}
 
-	public static IMassSpectrumComparatorProcessingInfo compare(IScanMSD unknown, IScanMSD reference, String comparatorId) {
-
-		return compare(unknown, reference, comparatorId, false, 0.0d);
-	}
-
 	/**
 	 * This class returns a mass spectrum comparison result object.<br/>
 	 * Via an extension point several methods can register themselves to support
