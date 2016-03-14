@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferen
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.Activator;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverterSupport;
 import org.eclipse.chemclipse.support.ui.preferences.editors.FileListEditor;
@@ -91,7 +92,9 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new RadioGroupFieldEditor(PreferenceSupplier.P_PENALTY_CALCULATION, "Force Match Quality Penalty calculation", 1, IIdentifierSettings.PENALTY_CALCULATION_OPTIONS, getFieldEditorParent()));
+		addField(new FloatFieldEditor(PreferenceSupplier.P_MAX_PENALTY, "Max Penalty", IComparisonResult.MIN_ALLOWED_PENALTY, IComparisonResult.MAX_ALLOWED_PENALTY, getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new FloatFieldEditor(PreferenceSupplier.P_PENALTY_CALCULATION_LEVEL_FACTOR, "Penalty Calculation Level Factor", IIdentifierSettings.MIN_PENALTY_CALCULATION_LEVEL_FACTOR, IIdentifierSettings.MAX_PENALTY_CALCULATION_LEVEL_FACTOR, getFieldEditorParent()));
 		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_RETENTION_TIME_WINDOW, "Retention Time Window (minutes)", PreferenceSupplier.MIN_RETENTION_TIME_WINDOW, PreferenceSupplier.MAX_RETENTION_TIME_WINDOW, getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_RETENTION_INDEX_WINDOW, "Retention Index Window", PreferenceSupplier.MIN_RETENTION_INDEX_WINDOW, PreferenceSupplier.MAX_RETENTION_INDEX_WINDOW, getFieldEditorParent()));
 	}

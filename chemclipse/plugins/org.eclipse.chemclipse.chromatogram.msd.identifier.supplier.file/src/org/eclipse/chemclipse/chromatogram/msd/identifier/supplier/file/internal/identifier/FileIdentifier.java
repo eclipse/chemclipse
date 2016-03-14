@@ -255,10 +255,10 @@ public class FileIdentifier {
 		//
 		switch(penaltyCalculation) {
 			case IIdentifierSettings.PENALTY_CALCULATION_RETENTION_TIME:
-				penalty = penaltyCalculationSupport.calculatePenaltyFromRetentionTime(unknown, reference, identifierSettings.getRetentionTimeWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getPenaltyCalculationMaxValue());
+				penalty = penaltyCalculationSupport.calculatePenaltyFromRetentionTime(unknown, reference, identifierSettings.getRetentionTimeWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
 				break;
 			case IIdentifierSettings.PENALTY_CALCULATION_RETENTION_INDEX:
-				penalty = penaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, identifierSettings.getRetentionIndexWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getPenaltyCalculationMaxValue());
+				penalty = penaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, identifierSettings.getRetentionIndexWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
 				break;
 		}
 		/*

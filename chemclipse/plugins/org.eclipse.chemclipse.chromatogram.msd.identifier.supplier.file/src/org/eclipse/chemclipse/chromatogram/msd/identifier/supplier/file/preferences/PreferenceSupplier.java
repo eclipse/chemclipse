@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorPeakIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorPeakIdentifierSettings;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -59,7 +60,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_PENALTY_CALCULATION = IIdentifierSettings.PENALTY_CALCULATION_NONE;
 	//
 	public static final String P_PENALTY_CALCULATION_LEVEL_FACTOR = "penaltyCalculationLevelFactor";
-	public static final String P_PENALTY_CALCULATION_VALUE = "penaltyCalculationValue";
+	public static final String P_MAX_PENALTY = "penaltyCalculationMaxValue";
 	//
 	public static final String P_RETENTION_TIME_WINDOW = "retentionTimeWindow";
 	public static final int DEF_RETENTION_TIME_WINDOW = 12000; // = 0.2 minutes
@@ -105,7 +106,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_ADD_UNKNOWN_MZ_LIST_TARGET, Boolean.toString(DEF_ADD_UNKNOWN_MZ_LIST_TARGET));
 		defaultValues.put(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION);
 		defaultValues.put(P_PENALTY_CALCULATION_LEVEL_FACTOR, Float.toString(IIdentifierSettings.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
-		defaultValues.put(P_PENALTY_CALCULATION_VALUE, Float.toString(IIdentifierSettings.DEF_PENALTY_CALCULATION_VALUE));
+		defaultValues.put(P_MAX_PENALTY, Float.toString(IComparisonResult.DEF_MAX_PENALTY));
 		defaultValues.put(P_RETENTION_TIME_WINDOW, Integer.toString(DEF_RETENTION_TIME_WINDOW));
 		defaultValues.put(P_RETENTION_INDEX_WINDOW, Float.toString(DEF_RETENTION_INDEX_WINDOW));
 		return defaultValues;
@@ -131,7 +132,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		//
 		settings.setPenaltyCalculation(preferences.get(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION));
 		settings.setPenaltyCalculationLevelFactor(preferences.getFloat(P_PENALTY_CALCULATION_LEVEL_FACTOR, IIdentifierSettings.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
-		settings.setPenaltyCalculationMaxValue(preferences.getFloat(P_PENALTY_CALCULATION_VALUE, IIdentifierSettings.DEF_PENALTY_CALCULATION_VALUE));
+		settings.setMaxPenalty(preferences.getFloat(P_MAX_PENALTY, IComparisonResult.DEF_MAX_PENALTY));
 		settings.setRetentionTimeWindow(preferences.getInt(P_RETENTION_TIME_WINDOW, DEF_RETENTION_TIME_WINDOW));
 		settings.setRetentionIndexWindow(preferences.getFloat(P_RETENTION_INDEX_WINDOW, DEF_RETENTION_INDEX_WINDOW));
 		//
@@ -152,7 +153,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		//
 		settings.setPenaltyCalculation(preferences.get(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION));
 		settings.setPenaltyCalculationLevelFactor(preferences.getFloat(P_PENALTY_CALCULATION_LEVEL_FACTOR, IIdentifierSettings.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
-		settings.setPenaltyCalculationMaxValue(preferences.getFloat(P_PENALTY_CALCULATION_VALUE, IIdentifierSettings.DEF_PENALTY_CALCULATION_VALUE));
+		settings.setMaxPenalty(preferences.getFloat(P_MAX_PENALTY, IComparisonResult.DEF_MAX_PENALTY));
 		settings.setRetentionTimeWindow(preferences.getInt(P_RETENTION_TIME_WINDOW, DEF_RETENTION_TIME_WINDOW));
 		settings.setRetentionIndexWindow(preferences.getFloat(P_RETENTION_INDEX_WINDOW, DEF_RETENTION_INDEX_WINDOW));
 		//
