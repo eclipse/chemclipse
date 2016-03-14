@@ -28,10 +28,6 @@ public interface IIdentifierSettings {
 	float DEF_PENALTY_CALCULATION_LEVEL_FACTOR = 5.0f;
 	float MIN_PENALTY_CALCULATION_LEVEL_FACTOR = 1.0f;
 	float MAX_PENALTY_CALCULATION_LEVEL_FACTOR = 1000.0f;
-	//
-	float DEF_PENALTY_CALCULATION_VALUE = 20.0f;
-	float MIN_PENALTY_CALCULATION_VALUE = 0.0f;
-	float MAX_PENALTY_CALCULATION_VALUE = 100.0f;
 
 	/**
 	 * Returns the id of the MS comparator that shall be used
@@ -92,7 +88,7 @@ public interface IIdentifierSettings {
 
 	void setPenaltyCalculationLevelFactor(float penaltyCalculationLevelFactor);
 
-	float getPenaltyCalculationMaxValue();
+	float getMaxPenalty();
 
-	void setPenaltyCalculationMaxValue(float penaltyCalculationMaxValue);
+	void setMaxPenalty(float penaltyCalculationMaxValue);
 }

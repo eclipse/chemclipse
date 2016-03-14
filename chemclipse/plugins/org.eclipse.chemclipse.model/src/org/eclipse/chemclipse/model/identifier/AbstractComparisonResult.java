@@ -38,7 +38,7 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public void adjustMatchFactor(float penalty) {
 
-		if(penalty >= MIN_PENALTY && penalty <= MAX_PENALTY) {
+		if(penalty >= MIN_ALLOWED_PENALTY && penalty <= MAX_ALLOWED_PENALTY) {
 			matchFactor -= penalty;
 			if(matchFactor < 0) {
 				matchFactor = 0.0f;
@@ -55,7 +55,7 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public void adjustReverseMatchFactor(float penalty) {
 
-		if(penalty >= MIN_PENALTY && penalty <= MAX_PENALTY) {
+		if(penalty >= MIN_ALLOWED_PENALTY && penalty <= MAX_ALLOWED_PENALTY) {
 			reverseMatchFactor -= penalty;
 			if(reverseMatchFactor < 0) {
 				reverseMatchFactor = 0.0f;

@@ -26,7 +26,7 @@ public class AbstractIdentifierSettings implements IIdentifierSettings {
 	private int retentionTimeWindow; // milliseconds
 	private float retentionIndexWindow;
 	private float penaltyCalculationLevelFactor;
-	private float penaltyCalculationMaxValue;
+	private float maxPenalty; // between 0 and 100, see IIdentifierSettings
 
 	public AbstractIdentifierSettings() {
 		excludedIons = new MarkedIons();
@@ -114,14 +114,14 @@ public class AbstractIdentifierSettings implements IIdentifierSettings {
 	}
 
 	@Override
-	public float getPenaltyCalculationMaxValue() {
+	public float getMaxPenalty() {
 
-		return penaltyCalculationMaxValue;
+		return maxPenalty;
 	}
 
 	@Override
-	public void setPenaltyCalculationMaxValue(float penaltyCalculationMaxValue) {
+	public void setMaxPenalty(float maxPenalty) {
 
-		this.penaltyCalculationMaxValue = penaltyCalculationMaxValue;
+		this.maxPenalty = maxPenalty;
 	}
 }

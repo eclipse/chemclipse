@@ -46,7 +46,7 @@ public class PenaltyCalculationSupport_1_Test extends TestCase {
 		reference = null;
 		retentionIndexWindow = 5.0f;
 		penaltyCalculationLevelFactor = 10.0f;
-		penaltyCalculationMaxValue = 100.0f;
+		penaltyCalculationMaxValue = 20.0f;
 		float value = penaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, retentionIndexWindow, penaltyCalculationLevelFactor, penaltyCalculationMaxValue);
 		assertEquals(0.0f, value);
 	}
@@ -57,7 +57,7 @@ public class PenaltyCalculationSupport_1_Test extends TestCase {
 		reference.setRetentionIndex(2505.5f);
 		retentionIndexWindow = 5.0f;
 		penaltyCalculationLevelFactor = 10.0f;
-		penaltyCalculationMaxValue = 100.0f;
+		penaltyCalculationMaxValue = 20.0f;
 		float value = penaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, retentionIndexWindow, penaltyCalculationLevelFactor, penaltyCalculationMaxValue);
 		assertEquals(0.0f, value);
 	}
@@ -68,7 +68,7 @@ public class PenaltyCalculationSupport_1_Test extends TestCase {
 		reference = null;
 		retentionIndexWindow = 5.0f;
 		penaltyCalculationLevelFactor = 10.0f;
-		penaltyCalculationMaxValue = 100.0f;
+		penaltyCalculationMaxValue = 20.0f;
 		float value = penaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, retentionIndexWindow, penaltyCalculationLevelFactor, penaltyCalculationMaxValue);
 		assertEquals(0.0f, value);
 	}
@@ -79,7 +79,7 @@ public class PenaltyCalculationSupport_1_Test extends TestCase {
 		reference.setRetentionIndex(2505.5f);
 		retentionIndexWindow = 5.0f;
 		penaltyCalculationLevelFactor = 10.0f;
-		penaltyCalculationMaxValue = 100.0f;
+		penaltyCalculationMaxValue = 20.0f;
 		float value = penaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, retentionIndexWindow, penaltyCalculationLevelFactor, penaltyCalculationMaxValue);
 		assertEquals(0.0f, value);
 	}
@@ -90,8 +90,74 @@ public class PenaltyCalculationSupport_1_Test extends TestCase {
 		reference.setRetentionIndex(2506.5f);
 		retentionIndexWindow = 5.0f;
 		penaltyCalculationLevelFactor = 10.0f;
-		penaltyCalculationMaxValue = 100.0f;
+		penaltyCalculationMaxValue = 20.0f;
 		float value = penaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, retentionIndexWindow, penaltyCalculationLevelFactor, penaltyCalculationMaxValue);
 		assertEquals(2.0000005f, value);
+	}
+
+	public void test6() {
+
+		unknown.setRetentionIndex(2500.5f);
+		reference.setRetentionIndex(2515.4f);
+		retentionIndexWindow = 5.0f;
+		penaltyCalculationLevelFactor = 10.0f;
+		penaltyCalculationMaxValue = 20.0f;
+		float value = penaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, retentionIndexWindow, penaltyCalculationLevelFactor, penaltyCalculationMaxValue);
+		assertEquals(19.799805f, value);
+	}
+
+	public void test7() {
+
+		unknown.setRetentionIndex(2500.5f);
+		reference.setRetentionIndex(2515.5f);
+		retentionIndexWindow = 5.0f;
+		penaltyCalculationLevelFactor = 10.0f;
+		penaltyCalculationMaxValue = 20.0f;
+		float value = penaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, retentionIndexWindow, penaltyCalculationLevelFactor, penaltyCalculationMaxValue);
+		assertEquals(20.0f, value);
+	}
+
+	public void test8() {
+
+		unknown.setRetentionIndex(2500.5f);
+		reference.setRetentionIndex(2515.6f);
+		retentionIndexWindow = 5.0f;
+		penaltyCalculationLevelFactor = 10.0f;
+		penaltyCalculationMaxValue = 20.0f;
+		float value = penaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, retentionIndexWindow, penaltyCalculationLevelFactor, penaltyCalculationMaxValue);
+		assertEquals(20.0f, value);
+	}
+
+	public void test9() {
+
+		unknown.setRetentionIndex(2500.5f);
+		reference.setRetentionIndex(2515.4f);
+		retentionIndexWindow = 0.0f;
+		penaltyCalculationLevelFactor = 10.0f;
+		penaltyCalculationMaxValue = 20.0f;
+		float value = penaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, retentionIndexWindow, penaltyCalculationLevelFactor, penaltyCalculationMaxValue);
+		assertEquals(0.0f, value);
+	}
+
+	public void test10() {
+
+		unknown.setRetentionIndex(2500.5f);
+		reference.setRetentionIndex(2515.4f);
+		retentionIndexWindow = 5.0f;
+		penaltyCalculationLevelFactor = 10.0f;
+		penaltyCalculationMaxValue = -0.1f;
+		float value = penaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, retentionIndexWindow, penaltyCalculationLevelFactor, penaltyCalculationMaxValue);
+		assertEquals(0.0f, value);
+	}
+
+	public void test11() {
+
+		unknown.setRetentionIndex(2500.5f);
+		reference.setRetentionIndex(2515.4f);
+		retentionIndexWindow = 5.0f;
+		penaltyCalculationLevelFactor = 10.0f;
+		penaltyCalculationMaxValue = 100.1f;
+		float value = penaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, retentionIndexWindow, penaltyCalculationLevelFactor, penaltyCalculationMaxValue);
+		assertEquals(0.0f, value);
 	}
 }

@@ -11,60 +11,82 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.support;
 
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
 public class PenaltyCalculationSupport {
 
 	/**
 	 * Calculate a penalty using the retention time.
+	 * The value max penalty must be between:
+	 * IComparisonResult.MIN_ALLOWED_PENALTY
+	 * and
+	 * IComparisonResult.MAX_ALLOWED_PENALTY
 	 * 
 	 * @param unknown
 	 * @param reference
 	 * @param retentionIndexWindow
 	 * @param penaltyCalculationLevelFactor
-	 * @param penaltyCalculationMaxValue
+	 * @param maxPenalty
 	 * @return float
 	 */
-	public float calculatePenaltyFromRetentionIndex(IScanMSD unknown, IScanMSD reference, float retentionIndexWindow, float penaltyCalculationLevelFactor, float penaltyCalculationMaxValue) {
+	public float calculatePenaltyFromRetentionIndex(IScanMSD unknown, IScanMSD reference, float retentionIndexWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
 
-		if(unknown == null || reference == null) {
+		try {
+			runPreConditionChecks(unknown, reference, retentionIndexWindow, maxPenalty);
+			return calculatePenalty(unknown.getRetentionIndex(), reference.getRetentionIndex(), retentionIndexWindow, penaltyCalculationLevelFactor, maxPenalty);
+		} catch(Exception e) {
 			return 0.0f;
-		}
-		//
-		float retentionIndexUnknown = unknown.getRetentionIndex();
-		float retentionIndexReference = reference.getRetentionIndex();
-		float retentionIndexWindowCount = Math.abs((retentionIndexUnknown - retentionIndexReference) / retentionIndexWindow);
-		if(retentionIndexWindowCount <= 1.0f) {
-			return 0.0f;
-		} else {
-			float result = (retentionIndexWindowCount - 1.0f) * penaltyCalculationLevelFactor;
-			return (result > penaltyCalculationMaxValue) ? penaltyCalculationMaxValue : result;
 		}
 	}
 
 	/**
 	 * Calculate a penalty using the retention index.
+	 * The value max penalty must be between:
+	 * IComparisonResult.MIN_ALLOWED_PENALTY
+	 * and
+	 * IComparisonResult.MAX_ALLOWED_PENALTY
 	 * 
 	 * @param unknown
 	 * @param reference
 	 * @param retentionTimeWindow
 	 * @param penaltyCalculationLevelFactor
-	 * @param penaltyCalculationMaxValue
+	 * @param maxPenalty
 	 * @return float
 	 */
-	public float calculatePenaltyFromRetentionTime(IScanMSD unknown, IScanMSD reference, int retentionTimeWindow, float penaltyCalculationLevelFactor, float penaltyCalculationMaxValue) {
+	public float calculatePenaltyFromRetentionTime(IScanMSD unknown, IScanMSD reference, int retentionTimeWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
 
-		if(unknown == null || reference == null) {
+		try {
+			runPreConditionChecks(unknown, reference, retentionTimeWindow, maxPenalty);
+			return calculatePenalty(unknown.getRetentionTime(), reference.getRetentionTime(), retentionTimeWindow, penaltyCalculationLevelFactor, maxPenalty);
+		} catch(Exception e) {
 			return 0.0f;
 		}
-		int retentionTimeUnknown = unknown.getRetentionTime();
-		int retentionTimeReference = reference.getRetentionTime();
-		int retentionTimeWindowCount = Math.abs((retentionTimeUnknown - retentionTimeReference) / retentionTimeWindow);
-		if(retentionTimeWindowCount <= 1) {
+	}
+
+	private void runPreConditionChecks(IScanMSD unknown, IScanMSD reference, float valueWindow, float maxPenalty) throws Exception {
+
+		if(unknown == null || reference == null) {
+			throw new Exception();
+		}
+		//
+		if(valueWindow == 0.0f) {
+			throw new Exception();
+		}
+		//
+		if(maxPenalty < IComparisonResult.MIN_ALLOWED_PENALTY || maxPenalty > IComparisonResult.MAX_ALLOWED_PENALTY) {
+			throw new Exception();
+		}
+	}
+
+	private float calculatePenalty(float valueUnknown, float valueReference, float valueWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
+
+		float windowRangeCount = Math.abs((valueUnknown - valueReference) / valueWindow);
+		if(windowRangeCount <= 1.0f) {
 			return 0.0f;
 		} else {
-			float result = (retentionTimeWindowCount - 1) * penaltyCalculationLevelFactor;
-			return (result > penaltyCalculationMaxValue) ? penaltyCalculationMaxValue : result;
+			float result = (windowRangeCount - 1.0f) * penaltyCalculationLevelFactor;
+			return (result > maxPenalty) ? maxPenalty : result;
 		}
 	}
 }
