@@ -27,6 +27,10 @@ public class PenaltyCalculationSupport {
 	 */
 	public float calculatePenaltyFromRetentionIndex(IScanMSD unknown, IScanMSD reference, float retentionIndexWindow, float penaltyCalculationLevelFactor, float penaltyCalculationMaxValue) {
 
+		if(unknown == null || reference == null) {
+			return 0.0f;
+		}
+		//
 		float retentionIndexUnknown = unknown.getRetentionIndex();
 		float retentionIndexReference = reference.getRetentionIndex();
 		float retentionIndexWindowCount = Math.abs((retentionIndexUnknown - retentionIndexReference) / retentionIndexWindow);
@@ -50,11 +54,14 @@ public class PenaltyCalculationSupport {
 	 */
 	public float calculatePenaltyFromRetentionTime(IScanMSD unknown, IScanMSD reference, int retentionTimeWindow, float penaltyCalculationLevelFactor, float penaltyCalculationMaxValue) {
 
+		if(unknown == null || reference == null) {
+			return 0.0f;
+		}
 		int retentionTimeUnknown = unknown.getRetentionTime();
 		int retentionTimeReference = reference.getRetentionTime();
 		int retentionTimeWindowCount = Math.abs((retentionTimeUnknown - retentionTimeReference) / retentionTimeWindow);
 		if(retentionTimeWindowCount <= 1) {
-			return 1.0f;
+			return 0.0f;
 		} else {
 			float result = (retentionTimeWindowCount - 1) * penaltyCalculationLevelFactor;
 			return (result > penaltyCalculationMaxValue) ? penaltyCalculationMaxValue : result;
