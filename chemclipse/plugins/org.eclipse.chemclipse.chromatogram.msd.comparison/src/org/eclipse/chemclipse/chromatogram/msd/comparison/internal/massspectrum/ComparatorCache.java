@@ -56,20 +56,22 @@ public class ComparatorCache {
 		/*
 		 * Warm up the cache.
 		 */
-		int keyUnknown = unknown.hashCode();
+		int keyUnknown = unknown.getIons().hashCode();
 		if(!unknownTopIons.containsKey(keyUnknown)) {
 			unknownTopIons.put(keyUnknown, extractTopIons(unknown));
 		}
-		//
-		int keyReference = reference.hashCode();
-		if(!referenceTopIons.containsKey(keyReference)) {
+		/*
+		 * It is assumed that the reference is not modified.
+		 */
+		int keyReference = unknown.getIons().hashCode();
+		if(!referenceTopIons.containsKey(reference)) {
 			referenceTopIons.put(keyReference, extractTopIons(reference));
 		}
 		/*
 		 * Make the comparison.
 		 */
 		Set<Integer> unknownIons = unknownTopIons.get(keyUnknown);
-		Set<Integer> referenceIons = referenceTopIons.get(keyReference);
+		Set<Integer> referenceIons = referenceTopIons.get(reference);
 		return useReferenceForComparison(unknownIons, referenceIons, thresholdPreOptimization);
 	}
 
@@ -93,7 +95,7 @@ public class ComparatorCache {
 				}
 			}
 			//
-			double percentageHits = hits / (double)size;
+			double percentageHits = hits / (double)referenceIons.size();
 			if(percentageHits >= thresholdPreOptimization) {
 				return true;
 			}
@@ -112,7 +114,7 @@ public class ComparatorCache {
 		Set<Integer> topIons = new HashSet<Integer>();
 		int size = (ions.size() < NUMBER_TOP_IONS) ? ions.size() : NUMBER_TOP_IONS;
 		for(int i = 0; i < size; i++) {
-			topIons.add((int)AbstractIon.getIon(ions.get(i).getIon(), 0));
+			topIons.add(AbstractIon.getIon(ions.get(i).getIon()));
 		}
 		//
 		return topIons;
