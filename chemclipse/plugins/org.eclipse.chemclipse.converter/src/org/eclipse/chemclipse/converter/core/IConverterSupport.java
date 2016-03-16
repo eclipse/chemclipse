@@ -19,6 +19,11 @@ import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException
 
 public interface IConverterSupport {
 
+	/*
+	 * E.g. ".r##" as a wildcard for ".r00" and ".r01"
+	 */
+	String WILDCARD_NUMBER = "#";
+
 	/**
 	 * Returns the filter extension which are actually registered at the
 	 * chromatogram converter extension point.<br/>

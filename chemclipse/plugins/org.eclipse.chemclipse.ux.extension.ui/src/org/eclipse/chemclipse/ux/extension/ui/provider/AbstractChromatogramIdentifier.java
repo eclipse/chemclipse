@@ -12,16 +12,21 @@
 package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.chemclipse.converter.core.ISupplier;
 
 public abstract class AbstractChromatogramIdentifier implements IChromatogramIdentifier {
 
+	private static final String WILDCARD_NUMBER = "#";
 	private List<ISupplier> suppliers;
+	private Map<String, String> regularExpressions;
 
 	public AbstractChromatogramIdentifier(List<ISupplier> suppliers) {
 		this.suppliers = suppliers;
+		regularExpressions = new HashMap<String, String>();
 	}
 
 	@Override
@@ -40,9 +45,24 @@ public abstract class AbstractChromatogramIdentifier implements IChromatogramIde
 		 */
 		for(ISupplier supplier : suppliers) {
 			supplierExtension = supplier.getFileExtension().toLowerCase();
-			if(supplierExtension != "" && extension.endsWith(supplierExtension)) {
-				if(supplier.isImportable()) {
-					return true;
+			if(supplierExtension != "") {
+				if(supplierExtension.contains(WILDCARD_NUMBER)) {
+					/*
+					 * Get the matcher.
+					 */
+					String extensionMatcher = regularExpressions.get(supplierExtension);
+					if(extensionMatcher == null) {
+						extensionMatcher = getExtensionMatcher(supplierExtension);
+						regularExpressions.put(supplierExtension, extensionMatcher);
+					}
+					/*
+					 * E.g. *.r## is a matcher for *.r01, *.r02 ...
+					 */
+					if(extension.matches(extensionMatcher)) {
+						return supplier.isImportable();
+					}
+				} else if(extension.endsWith(supplierExtension)) {
+					return supplier.isImportable();
 				}
 			}
 		}
@@ -78,5 +98,17 @@ public abstract class AbstractChromatogramIdentifier implements IChromatogramIde
 		 * If no converter was found, return false.
 		 */
 		return false;
+	}
+
+	/*
+	 * Gets e.g.
+	 * .r##
+	 * and returns
+	 * .*\\.r[0-9][0-9]
+	 */
+	private String getExtensionMatcher(String supplierExtension) {
+
+		String extensionMatcher = supplierExtension.replaceAll(WILDCARD_NUMBER, "[0-9]");
+		return extensionMatcher.replace(".", ".*\\.");
 	}
 }
