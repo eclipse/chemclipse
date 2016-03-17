@@ -60,7 +60,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_PENALTY_CALCULATION = IIdentifierSettings.PENALTY_CALCULATION_NONE;
 	//
 	public static final String P_PENALTY_CALCULATION_LEVEL_FACTOR = "penaltyCalculationLevelFactor";
-	public static final String P_MAX_PENALTY = "penaltyCalculationMaxValue";
+	public static final String P_MAX_PENALTY = "maxPenalty";
 	//
 	public static final String P_RETENTION_TIME_WINDOW = "retentionTimeWindow";
 	public static final int DEF_RETENTION_TIME_WINDOW = 12000; // = 0.2 minutes
@@ -100,6 +100,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_MASS_SPECTRA_FILES, DEF_MASS_SPECTRA_FILES);
 		defaultValues.put(P_MASS_SPECTRUM_COMPARATOR_ID, DEF_MASS_SPECTRUM_COMPARATOR_ID);
+		defaultValues.put(P_USE_PRE_OPTIMIZATION, Boolean.toString(DEF_USE_PRE_OPTIMIZATION));
+		defaultValues.put(P_THRESHOLD_PRE_OPTIMIZATION, Double.toString(DEF_THRESHOLD_PRE_OPTIMIZATION));
 		defaultValues.put(P_NUMBER_OF_TARGETS, Integer.toString(DEF_NUMBER_OF_TARGETS));
 		defaultValues.put(P_MIN_MATCH_FACTOR, Float.toString(DEF_MIN_MATCH_FACTOR));
 		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
