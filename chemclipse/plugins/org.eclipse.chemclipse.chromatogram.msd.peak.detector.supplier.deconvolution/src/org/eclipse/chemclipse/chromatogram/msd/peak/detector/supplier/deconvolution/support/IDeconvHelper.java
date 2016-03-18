@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.support;
 
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.IonSignals.IAllIonSignals;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 
 public interface IDeconvHelper {
@@ -52,4 +53,6 @@ public interface IDeconvHelper {
 	double[] positivToNegativ(double[] noisePositiv);
 
 	double[] factorisingValues(double[] noisePositiv, int Factor);
+
+	IAllIonSignals setXValueToAllIonSignals(IAllIonSignals allIonSignals, ITotalScanSignals signals);
 }

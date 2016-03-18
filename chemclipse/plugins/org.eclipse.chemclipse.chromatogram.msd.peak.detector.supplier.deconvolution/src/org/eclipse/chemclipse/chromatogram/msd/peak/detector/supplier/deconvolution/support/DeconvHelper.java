@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.support;
 
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.IonSignals.IAllIonSignals;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.IonSignals.IRetentionTime;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.IonSignals.RetentionTime;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 
@@ -116,5 +119,20 @@ public class DeconvHelper implements IDeconvHelper {
 			xScale[i++] = retentionTime;
 		}
 		return xScale;
+	}
+
+	public IAllIonSignals setXValueToAllIonSignals(IAllIonSignals allIonSignals, ITotalScanSignals signals) {
+
+		int sizeSignal = signals.size();
+		int i = 0;
+		double retentionTime;
+		double[] xScale = new double[sizeSignal];
+		for(ITotalScanSignal signal : signals.getTotalScanSignals()) {
+			retentionTime = signal.getRetentionTime();
+			IRetentionTime rTime = new RetentionTime(signal.getRetentionTime());
+			allIonSignals.addRetentionTime(rTime);
+			xScale[i++] = retentionTime;
+		}
+		return allIonSignals;
 	}
 }

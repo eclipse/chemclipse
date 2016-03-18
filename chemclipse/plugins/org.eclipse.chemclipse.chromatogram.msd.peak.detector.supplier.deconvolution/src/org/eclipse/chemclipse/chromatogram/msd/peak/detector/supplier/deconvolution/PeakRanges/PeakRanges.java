@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolu
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.IonSignals.IAllIonSignals;
 
 public class PeakRanges implements IPeakRanges {
 
@@ -22,7 +22,7 @@ public class PeakRanges implements IPeakRanges {
 	private int stopScan;
 	private List<IPeakRange> peakRanges;
 
-	public PeakRanges(ITotalScanSignals signals) {
+	public PeakRanges(IAllIonSignals signals) {
 		startScan = signals.getStartScan();
 		stopScan = signals.getStopScan();
 		peakRanges = new ArrayList<IPeakRange>(0);

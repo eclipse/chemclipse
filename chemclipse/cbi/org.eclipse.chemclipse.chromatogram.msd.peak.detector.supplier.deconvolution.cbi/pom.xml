@@ -1,60 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-  <modelVersion>4.0.0</modelVersion>
-  <!--
-	PARENT
-  -->
-  <parent>
-    <groupId>org.eclipse.chemclipse</groupId>
-    <artifactId>master</artifactId>
-    <version>BUILD-VERSION</version>
-    <relativePath>../../pom.xml</relativePath>
-  </parent>
-  <!--
-	ARTIFACT
-  -->
-  <groupId>org.eclipse.chemclipse</groupId>
-  <artifactId>parent</artifactId>
-  <packaging>pom</packaging>
-  <!--
-	DESCRIPTION
-  --> 
-  <name>ChemClipse Peak Detector Deconvolution Plug-in</name>
-  <description>
-	The ChemClipse MS peak deconvolution plug-in offers a solution to detect peaks by deconvolution techniques and sophisticated detection algorithms. It extends the functionality of the ChemClipse Rich Client Platform (RCP).
-  </description>
-  <url>http://sourceforge.net/projects/peakdeconvdetec</url>
-  <!--
-	LICENSES
-  -->
-  <licenses>
-    <license>
-      <name>EPL v1.0</name>
-      <url>http://www.eclipse.org/legal/epl-v10.html</url>
-    </license> 
-  </licenses>
-  <!--
-	DEVELOPERS
-  -->
-  <developers>
-    <developer>
-      <id>eselmeister</id>
-      <name>Philip Wenig</name>
-      <email>philip.wenig [at] openchrom.net</email>
-      <timezone>+1</timezone>
-      <roles>
-        <role>Developer</role>
-      </roles>
-    </developer>
-  </developers>
-  <!--
-	MODULES
-  -->
-  <modules>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution</module>
-    <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.ui</module>
-    <module>../../features/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.feature</module>
-    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.updateSite</module>
-  </modules>
+	<modelVersion>4.0.0</modelVersion>
+	<!-- PARENT -->
+	<parent>
+		<groupId>org.eclipse.chemclipse</groupId>
+		<artifactId>master</artifactId>
+		<version>BUILD-VERSION</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+	<!-- ARTIFACT -->
+	<groupId>org.eclipse.chemclipse</groupId>
+	<artifactId>parent</artifactId>
+	<packaging>pom</packaging>
+	<!-- DESCRIPTION -->
+	<name>ChemClipse Peak Detector Deconvolution Plug-in</name>
+	<description>
+		The ChemClipse MS peak deconvolution plug-in offers a solution to detect
+		peaks by deconvolution techniques and sophisticated detection
+		algorithms. It extends the functionality of the ChemClipse Rich Client
+		Platform (RCP).
+	</description>
+	<url>http://sourceforge.net/projects/peakdeconvdetec</url>
+	<!-- LICENSES -->
+	<licenses>
+		<license>
+			<name>EPL v1.0</name>
+			<url>http://www.eclipse.org/legal/epl-v10.html</url>
+		</license>
+	</licenses>
+	<!-- DEVELOPERS -->
+	<developers>
+		<developer>
+			<id>eselmeister</id>
+			<name>Philip Wenig</name>
+			<email>philip.wenig [at] openchrom.net</email>
+			<timezone>+1</timezone>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
+	<!-- MODULES -->
+	<modules>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution</module>
+		<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.ui</module>
+		<module>../../features/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.feature</module>
+		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.fragment.test</module> -->
+		<module>../../sites/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.updateSite</module>
+	</modules>
 </project>
