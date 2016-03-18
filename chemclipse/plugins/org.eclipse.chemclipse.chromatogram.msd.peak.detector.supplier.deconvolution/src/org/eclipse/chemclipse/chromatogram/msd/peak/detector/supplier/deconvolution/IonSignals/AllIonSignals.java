@@ -95,7 +95,7 @@ public class AllIonSignals implements IAllIonSignals {
 	}
 
 	public double getRetentionTime(int whichOne) {
-		
+
 		IRetentionTime rTime = retentionTimes.get(whichOne);
 		return rTime.getRetentionTime();
 	}
