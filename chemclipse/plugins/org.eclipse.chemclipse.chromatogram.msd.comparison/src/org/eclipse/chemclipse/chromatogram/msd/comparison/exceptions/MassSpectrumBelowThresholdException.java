@@ -9,20 +9,21 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.identifier.settings;
+package org.eclipse.chemclipse.chromatogram.msd.comparison.exceptions;
 
-public interface IDatabaseIdentifierSettings extends IIdentifierSettings {
+public class MassSpectrumBelowThresholdException extends Exception {
 
-	// Database
-	String getForceMatchFactorPenaltyCalculationForDatabase();
+	/**
+	 * Renew the serialVersionUID any time you have changed some fields or
+	 * methods.
+	 */
+	private static final long serialVersionUID = -178138977628794588L;
 
-	void setForceMatchFactorPenaltyCalculationForDatabase(String forceMatchFactorPenaltyCalculation);
+	public MassSpectrumBelowThresholdException() {
+		super();
+	}
 
-	int getRetentionTimeWindowForDatabase();
-
-	void setRetentionTimeWindowForDatabase(int retentionTimeWindow);
-
-	float getRetentionIndexWindowForDatabase();
-
-	void setRetentionIndexWindowForDatabase(float retentionIndexWindow);
+	public MassSpectrumBelowThresholdException(String message) {
+		super(message);
+	}
 }

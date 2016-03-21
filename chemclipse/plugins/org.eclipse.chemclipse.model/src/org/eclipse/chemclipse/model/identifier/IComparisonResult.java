@@ -16,6 +16,10 @@ public interface IComparisonResult {
 	float MAX_MATCH_FACTOR = 100.0f;
 	float MAX_REVERSE_MATCH_FACTOR = 100.0f;
 	//
+	float DEF_MAX_PENALTY = 20.0f;
+	float MIN_ALLOWED_PENALTY = 0.0f;
+	float MAX_ALLOWED_PENALTY = 100.0f;
+	//
 	String ADVISE_INCOMPLETE = "The target is maybe incomplete or recorded under bad conditions.";
 	String ADVISE_IMPURITIES = "The target is maybe convoluted by impurities.";
 	/*
@@ -37,12 +41,30 @@ public interface IComparisonResult {
 	float getMatchFactor();
 
 	/**
+	 * Adjust the match factor.
+	 * The penalty must be between 0 and 100:
+	 * MIN_ALLOWED_PENALTY and MAX_ALLOWED_PENALTY
+	 * 
+	 * @param penalty
+	 */
+	void adjustMatchFactor(float penalty);
+
+	/**
 	 * Returns the reverse match factor.
 	 * 0 means no match, 100 means perfect match.
 	 * 
 	 * @return float
 	 */
 	float getReverseMatchFactor();
+
+	/**
+	 * Adjust the reverse match factor.
+	 * The penalty must be between 0 and 100:
+	 * MIN_ALLOWED_PENALTY and MAX_ALLOWED_PENALTY
+	 * 
+	 * @param penalty
+	 */
+	void adjustReverseMatchFactor(float penalty);
 
 	/**
 	 * Returns the probability.

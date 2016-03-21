@@ -13,7 +13,9 @@ package org.eclipse.chemclipse.converter.core;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.support.FileExtensionCompiler;
@@ -22,9 +24,11 @@ import org.eclipse.chemclipse.support.util.FileUtil;
 public abstract class AbstractConverterSupport implements IConverterSupportSetter {
 
 	private List<ISupplier> suppliers;
+	private Map<String, String> regularExpressions;
 
 	public AbstractConverterSupport() {
 		suppliers = new ArrayList<ISupplier>();
+		regularExpressions = new HashMap<String, String>();
 	}
 
 	@Override
@@ -233,7 +237,26 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 					if(fileExtension == null || fileExtension.equals("")) {
 						continue;
 					} else {
-						if(fileName.endsWith(fileExtension) || fileName.endsWith(fileExtension.toLowerCase()) || fileName.endsWith(fileExtension.toUpperCase())) {
+						if(fileExtension.contains(WILDCARD_NUMBER)) {
+							/*
+							 * Get the matcher.
+							 */
+							String supplierExtension = fileExtension.toLowerCase();
+							String extensionMatcher = regularExpressions.get(supplierExtension);
+							if(extensionMatcher == null) {
+								extensionMatcher = getExtensionMatcher(supplierExtension);
+								regularExpressions.put(supplierExtension, extensionMatcher);
+							}
+							/*
+							 * E.g. *.r## is a matcher for *.r01, *.r02 ...
+							 */
+							if(fileName.toLowerCase().matches(extensionMatcher)) {
+								availableConverters.add(supplier.getId());
+							}
+						} else if(fileName.endsWith(fileExtension) || fileName.endsWith(fileExtension.toLowerCase()) || fileName.endsWith(fileExtension.toUpperCase())) {
+							/*
+							 * Normal handling
+							 */
 							availableConverters.add(supplier.getId());
 						}
 					}
@@ -299,7 +322,6 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 		return exportSupplier;
 	}
 
-	// ---------------------------------------------private methods
 	/**
 	 * Check if there are converters stored in the
 	 * ArrayList<IChromatogramSupplier>.
@@ -312,5 +334,16 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 			throw new NoConverterAvailableException();
 		}
 	}
-	// ---------------------------------------------private methods
+
+	/*
+	 * Gets e.g.
+	 * .r##
+	 * and returns
+	 * .*\\.r[0-9][0-9]
+	 */
+	private String getExtensionMatcher(String supplierExtension) {
+
+		String extensionMatcher = supplierExtension.replaceAll(WILDCARD_NUMBER, "[0-9]");
+		return extensionMatcher.replace(".", ".*\\.");
+	}
 }
