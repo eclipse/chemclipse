@@ -120,6 +120,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	private int factorNoiseSecondDerive = 2;
 	private int factorNoiseThirdDerive = 10;
 	// Internal setups
+	private boolean giveOutput = false;
 	private boolean useAverageNoiseForSmallNoise = false;
 	private boolean seePeakRanges = true;
 	private boolean checkWithSecondDerive = true;
@@ -206,11 +207,13 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			/*
 			 * Send Output to File
 			 */
-			File file = new File("/Users/fe22st/Desktop/java.log"); // "/Users/fe22st/Desktop/java.log"
-			try {
-				System.setOut(new PrintStream(new FileOutputStream(file, true)));
-			} catch(FileNotFoundException e) {
-				e.printStackTrace();
+			if(giveOutput) {
+				File file = new File("/Users/fe22st/Desktop/java.log"); // "/Users/fe22st/Desktop/java.log"
+				try {
+					System.setOut(new PrintStream(new FileOutputStream(file, true)));
+				} catch(FileNotFoundException e) {
+					e.printStackTrace();
+				}
 			}
 			/*
 			 * Set AllIonSignals with ExtractedIonSignal and TotalIonSignal
@@ -226,6 +229,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			 * Smoothed Values
 			 */
 			double[] smoothedValues = savitzkyGolaySmooth(noDerivative, allIonSignals.getIonSignals(0).getIonSignals(), supplierFilterSettings, durbinWatsonClassifierResult, monitor);
+			double[] smoothedValues2 = savitzkyGolaySmooth(firstDerivative, allIonSignals.getIonSignals(0).getIonSignals(), supplierFilterSettings, durbinWatsonClassifierResult, monitor);
 			/*
 			 * PeakRanges and set up for the view
 			 */
@@ -238,7 +242,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			/*
 			 * ueber alle Ionen welchen im PeakRange liegen, druebergehen, und anschauen ob diese Peaks haben koennen
 			 */
-			IPeakRanges peaksDeconv = getPeaksFromDeconvolution(allIonSignals, peakRanges);
+			IPeakRanges peaksDeconv = getPeaksFromDeconvolution(allIonSignals, peakRanges, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
 			/*
 			 * Output
 			 */
@@ -248,7 +252,37 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			// fillArraysViewDeconv(xScales, smoothedValues, null, null, derivativesAndNoise.getSecondDerivativeAndNoise().getSecondDeriv(), derivativesAndNoise.getFirstDerivativeAndNoise().getFirstDeriv(), derivativesAndNoise.getSecondDerivativeAndNoise().getNoisePositiv(), derivativesAndNoise.getSecondDerivativeAndNoise().getNoiseNegative(), PeakRangesStartPoints, PeakRangesEndPoints);
 			// fillArraysViewDeconv(xScales, smoothedValues, null, null, derivativesAndNoise.getFirstDerivativeAndNoise().getNoisePositiv(), derivativesAndNoise.getFirstDerivativeAndNoise().getFirstDeriv(), derivativesAndNoise.getFirstDerivativeAndNoise().getNoiseNegative(), null, PeakRangesStartPoints, PeakRangesEndPoints);
 			// fillArraysViewDeconv(xScales, smoothedValues, null, null, null, null, null, null, null, null);
-			fillArraysViewDeconv(deconvHelper.setXValueforPrint(totalIONsignals), smoothedValues, null, null, derivativesAndNoise.getThirdDerivativeAndNoise().getNoisePositiv(), derivativesAndNoise.getFirstDerivativeAndNoise().getFirstDeriv(), derivativesAndNoise.getThirdDerivativeAndNoise().getNoiseNegative(), derivativesAndNoise.getThirdDerivativeAndNoise().getThirdDeriv(), PeakRangesStartPoints, PeakRangesEndPoints);
+			int numberOfIon = 131;
+			boolean ionNumber = true;
+			//
+			int factorSizeNormal = 100;
+			int factorSizeFirstDeriv = 100;
+			int factorSizeSecondDeriv = 100;
+			//
+			int numberOfIonInList = 0;
+			double[] ionSignal = null;
+			if(ionNumber) {
+				for(int i = 1; i < allIonSignals.getIonSignals().size(); i++) {
+					if(allIonSignals.getIonSignals(i).getIon() == numberOfIon) {
+						ionSignal = allIonSignals.getIonSignals(i).getIonSignals();
+						numberOfIonInList = i;
+						break;
+					}
+				}
+			} else {
+				numberOfIonInList = numberOfIon;
+				ionSignal = allIonSignals.getIonSignals(numberOfIonInList).getIonSignals();
+			}
+			DurbinWatsonRatings(ionSignal, null, durbinWatsonClassifierResult, monitor);
+			double[] smoothedIonSignal = savitzkyGolaySmooth(noDerivative, ionSignal, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
+			double[] signal = allIonSignals.getIonSignals(numberOfIonInList).getIonSignals();
+			double[] firstDerivIon2 = savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(firstDerivative, signal, supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor);
+			double[] firstDerivIon2smoother = savitzkyGolaySmooth(noDerivative, firstDerivIon2, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
+			double[] secondDerivIon2 = savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(this.firstDerivative, savitzkyGolaySmooth(this.firstDerivative, signal, supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor);
+			double[] secondDerivIon2smoother = savitzkyGolaySmooth(noDerivative, secondDerivIon2, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
+			double[] noiseFirstDeriv = getNoiseOfTic(firstDerivIon2, 1, true);
+			//
+			fillArraysViewDeconv(deconvHelper.setXValueforPrint(totalIONsignals), smoothedValues, deconvHelper.factorisingValues(noiseFirstDeriv, factorSizeFirstDeriv), null, deconvHelper.factorisingValues(firstDerivIon2, factorSizeFirstDeriv), null, deconvHelper.factorisingValues(signal, factorSizeNormal), deconvHelper.factorisingValues(smoothedIonSignal, factorSizeNormal), PeakRangesStartPoints, PeakRangesEndPoints);
 			/*
 			 * Set Peaks
 			 */
@@ -283,14 +317,20 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 
 		IMarkedIons excludedIons = new MarkedIons();
 		for(IIonSignals ionSignal : allIonSignals.getIonSignals()) {
-			System.out.print("Ion " + ionSignal.getIon() + " SteinYes: " + ionSignal.getSteinYes() + " SteinNo: " + ionSignal.getSteinNo() + " ");
+			if(giveOutput) {
+				System.out.print("Ion " + ionSignal.getIon() + " SteinYes: " + ionSignal.getCounterSteinAccepted() + " SteinNo: " + ionSignal.getCounterSteinDenied() + " ");
+			}
 			for(IIonSignal segmentSignal : ionSignal.getSegmentSignals()) {
 				if(Double.compare(segmentSignal.getSignal(), 0.0) > 0.0) {
 					excludedIons.add(new MarkedIon(ionSignal.getIon()));
 				}
-				System.out.print((int)segmentSignal.getSignal() + " ");
+				if(giveOutput) {
+					System.out.print((int)segmentSignal.getSignal() + " ");
+				}
 			}
-			System.out.println("\n");
+			if(giveOutput) {
+				System.out.println("\n");
+			}
 		}
 		return excludedIons;
 	}
@@ -312,10 +352,69 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	/*
 	 * 
 	 */
-	private IPeakRanges getPeaksFromDeconvolution(IAllIonSignals allIonSignals, IPeakRanges peakRanges) {
+	private IPeakRanges getPeaksFromDeconvolution(IAllIonSignals allIonSignals, IPeakRanges peakRanges, ISupplierFilterSettings supplierFilterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
 
-		IPeakRanges peakRangesDeconv = null;
+		int signalSegmentWidth = quantityNoiseSegments;
+		IPeakRanges peakRangesDeconv = peakRanges;
+		for(int i = 0; i < peakRanges.size() - 1; i++) {
+			IPeakRange peakRange = peakRanges.getPeakRange(i);
+			int peakRangeBegin = peakRange.getPeakStartPoint();
+			int peakRangeEnd = peakRange.getPeakEndPoint();
+			int segmentBegin = peakRangeBegin / signalSegmentWidth;
+			int segmentEnd = peakRangeEnd / signalSegmentWidth;
+			int counter = 0;
+			for(IIonSignals ionSignal : allIonSignals.getIonSignals()) {
+				if(counter > 0) {
+					int zeroCounterSegment = 0;
+					// DurbinWatsonRatings(ionSignal.getIonSignals(), null, durbinWatsonClassifierResult, monitor);
+					for(int x = segmentBegin; x <= segmentEnd; x++) {
+						if(ionSignal.getSegmentValue(x).getSignal() <= 0.0) {
+							zeroCounterSegment++;
+						}
+					}
+					if(zeroCounterSegment >= ((segmentEnd - segmentBegin + 1) / 2)) {
+						double[] firstDerivSmoothedFactorised = deconvHelper.factorisingValues(savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(firstDerivative, ionSignal.getIonSignals(), supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor), 1);
+						double[] peakRangeForIonSignal = Arrays.copyOfRange(firstDerivSmoothedFactorised, segmentBegin * quantityNoiseSegments, segmentEnd * quantityNoiseSegments + 1);
+						int[] firstCrossing = firstDerivZeroCrossing(peakRangeForIonSignal);
+						/*
+						 * TODO
+						 * - Model Peak Bilden: die groesten Massenspuren dafuer nutzen, und ein model peak erstellen und die darunter liegenden "aufsummieren"
+						 * - Range?? Wie Amdis damit mehrere modelle auf den gleichen Scan gebildet werden koennen
+						 * - Angabe von dem ModelIon: welches genutzt wurde, danach die ausschlaggebenden Ionen und die Model Kurve bzw PeakBuilder Settings
+						 */
+					}
+				}
+				counter++;
+			}
+		}
 		return peakRangesDeconv;
+	}
+
+	private int[] firstDerivZeroCrossing(double[] signal) {
+
+		int[] zeroCrossings = new int[signal.length];
+		boolean aboveNull = false;
+		if(signal[0] > 0.0) {
+			aboveNull = true;
+		}
+		int length = (signal.length - 1);
+		int counter = 0;
+		for(int i = 0; i < length; i++) {
+			if(aboveNull) {
+				if(signal[i + 1] < 0.0) {
+					zeroCrossings[counter] = i;
+					counter++;
+					aboveNull = false;
+				}
+			} else {
+				if(signal[i + 1] > 0.0) {
+					zeroCrossings[counter] = i;
+					counter++;
+					aboveNull = true;
+				}
+			}
+		}
+		return zeroCrossings;
 	}
 
 	private IAllIonSignals calcNoiseSegments(IAllIonSignals allIonSignals, IProgressMonitor monitor) {
@@ -342,8 +441,8 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 
 	private IAllIonSignals calculateIonSignalSegments(List<IAnalysisSegment> analysisSegments, IAllIonSignals allIonSignals, IProgressMonitor monitor) {
 
-		int steinYes = 0;
-		int steinNo = 0;
+		int counterSteinAccepted = 0;
+		int counterSteinDenied = 0;
 		@SuppressWarnings("unused")
 		int counter = 0;
 		@SuppressWarnings("unused")
@@ -355,18 +454,18 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			for(IAnalysisSegment analysisSegment : analysisSegments) {
 				meanSegment = calculateAcceptedSegment(analysisSegment, ionSignal, startallIonSignals);
 				if(Double.compare(meanSegment, 0) > 0.0) {
-					steinYes++;
+					counterSteinAccepted++;
 				} else {
-					steinNo++;
+					counterSteinDenied++;
 				}
 				segmentSignal = new IonSignal(meanSegment);
 				ionSignal.addSegmentValue(segmentSignal);
 				counter++;
 			}
-			ionSignal.setSteinYes(steinYes);
-			ionSignal.setSteinNo(steinNo);
-			steinYes = 0;
-			steinNo = 0;
+			ionSignal.setCounterSteinAccepted(counterSteinAccepted);
+			ionSignal.setCounterSteinDenied(counterSteinDenied);
+			counterSteinAccepted = 0;
+			counterSteinDenied = 0;
 			counter = 0;
 			counterIon++;
 		}
@@ -780,22 +879,28 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 					IPeakDeconv peakFirst = new PeakDeconv(peakStartEndMaxPeak[2]);
 					peaksFirst.addPeak(peakFirst);
 					peakRange.addPeaks(peaksFirst);
-					System.out.println("");
-					System.out.println("First Peak Detect: " + peakStartEndMaxPeak[2]);
+					if(giveOutput) {
+						System.out.println("");
+						System.out.println("First Peak Detect: " + peakStartEndMaxPeak[2]);
+					}
 					/*
 					 * Check Range with Second Derivative
 					 */
 					int[] secondDerivativeCheck = checkPeakRangesWithSecondDerivative(derivativesAndNoise, peakStartEndMaxPeak);
 					if(secondDerivativeCheck[0] == 1 && checkWithSecondDerive) {
-						System.out.print(" Second Derivative News: || Negative Zone: " + secondDerivativeCheck[1] + " || Positive Zone: " + secondDerivativeCheck[2] + " Peaks: " + (secondDerivativeCheck.length - 3));
-						// Second Deriv
-						if((secondDerivativeCheck.length - 3) >= 1) {
-							System.out.print(" --- ");
-							for(int l = 3; l < secondDerivativeCheck.length; l++) {
-								System.out.print(secondDerivativeCheck[l] + "  ");
-							}
+						if(giveOutput) {
+							System.out.print(" Second Derivative News: || Negative Zone: " + secondDerivativeCheck[1] + " || Positive Zone: " + secondDerivativeCheck[2] + " Peaks: " + (secondDerivativeCheck.length - 3));
 						}
-						System.out.print("\n");
+						// Second Deriv
+						if(giveOutput) {
+							if((secondDerivativeCheck.length - 3) >= 1) {
+								System.out.print(" --- ");
+								for(int l = 3; l < secondDerivativeCheck.length; l++) {
+									System.out.print(secondDerivativeCheck[l] + "  ");
+								}
+							}
+							System.out.print("\n");
+						}
 						IPeaksDeconv peaksSecond = new PeaksDeconv("SecondDerivative");
 						for(int z = 3; z < secondDerivativeCheck.length; z++) {
 							IPeakDeconv peakSecond = new PeakDeconv(secondDerivativeCheck[z]);
@@ -804,20 +909,24 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 						peakRange.addPeaks(peaksSecond);
 						secDerivCheck = true;
 					} else {
-						System.out.println("	SecondDerivative Check :: False");
+						if(giveOutput) {
+							System.out.println("	SecondDerivative Check :: False");
+						}
 					}
 					/*
 					 * Check Range with Third Derivative
 					 */
 					int[] thirdDerivativeCheck = checkPeakRangesWithThirdDerivative(derivativesAndNoise, peakStartEndMaxPeak);
-					if(thirdDerivativeCheck[0] == 1 && checkWithThirdDerivative) {
-						System.out.println(" Third  Derivative News: || Change Signs: " + thirdDerivativeCheck[1]);
-						System.out.println("--------------------------------------------");
-						System.out.println("");
-					} else {
-						System.out.println(" 	ThirdDerivative Check :: False");
-						System.out.println("--------------------------------------------");
-						System.out.println("");
+					if(giveOutput) {
+						if(thirdDerivativeCheck[0] == 1 && checkWithThirdDerivative) {
+							System.out.println(" Third  Derivative News: || Change Signs: " + thirdDerivativeCheck[1]);
+							System.out.println("--------------------------------------------");
+							System.out.println("");
+						} else {
+							System.out.println(" 	ThirdDerivative Check :: False");
+							System.out.println("--------------------------------------------");
+							System.out.println("");
+						}
 					}
 					// All together
 					if(secDerivCheck || !checkWithSecondDerive) {

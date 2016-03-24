@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.PeakRanges;
 
+import java.util.List;
+
 public interface IPeakRanges {
 
 	int getStartScan();
@@ -18,6 +20,8 @@ public interface IPeakRanges {
 	int getStopScan();
 
 	IPeakRange getPeakRange(int value);
+
+	List<IPeakRange> getAllPeakRanges();
 
 	void deletePeakRange(int value);
 

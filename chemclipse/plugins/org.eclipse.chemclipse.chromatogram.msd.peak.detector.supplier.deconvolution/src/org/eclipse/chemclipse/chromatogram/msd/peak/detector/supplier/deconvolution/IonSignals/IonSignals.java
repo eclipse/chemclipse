@@ -20,16 +20,16 @@ public class IonSignals implements IIonSignals {
 	private double[] ionSignals;
 	private List<IIonSignal> ionSegmentValue;
 	private double meanValue;
-	private int steinYes;
-	private int steinNo;
+	private int counterSteinAccepted;
+	private int counterSteinDenied;
 
 	public IonSignals(int ion, double[] IonSignals, double MeanValue) {
 		Ion = ion;
 		ionSignals = IonSignals;
 		ionSegmentValue = new ArrayList<IIonSignal>(0);
 		meanValue = MeanValue;
-		steinYes = 0;
-		steinNo = 0;
+		counterSteinAccepted = 0;
+		counterSteinDenied = 0;
 	}
 
 	public int getIon() {
@@ -77,23 +77,23 @@ public class IonSignals implements IIonSignals {
 		ionSegmentValue.add(value);
 	}
 
-	public void setSteinYes(int value) {
+	public void setCounterSteinAccepted(int value) {
 
-		this.steinYes = value;
+		this.counterSteinAccepted = value;
 	}
 
-	public int getSteinYes() {
+	public int getCounterSteinAccepted() {
 
-		return steinYes;
+		return counterSteinAccepted;
 	}
 
-	public void setSteinNo(int value) {
+	public void setCounterSteinDenied(int value) {
 
-		this.steinNo = value;
+		this.counterSteinDenied = value;
 	}
 
-	public int getSteinNo() {
+	public int getCounterSteinDenied() {
 
-		return steinNo;
+		return counterSteinDenied;
 	}
 }

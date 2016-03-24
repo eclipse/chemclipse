@@ -33,11 +33,11 @@ public interface IIonSignals {
 
 	void addSegmentValue(IIonSignal value);
 
-	void setSteinYes(int value);
+	void setCounterSteinAccepted(int value);
 
-	int getSteinYes();
+	int getCounterSteinAccepted();
 
-	void setSteinNo(int value);
+	void setCounterSteinDenied(int value);
 
-	int getSteinNo();
+	int getCounterSteinDenied();
 }

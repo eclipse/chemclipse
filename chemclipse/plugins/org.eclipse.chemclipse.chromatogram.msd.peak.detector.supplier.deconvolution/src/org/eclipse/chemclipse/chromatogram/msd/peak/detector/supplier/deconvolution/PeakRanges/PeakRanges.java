@@ -43,6 +43,11 @@ public class PeakRanges implements IPeakRanges {
 		return peakRanges.get(value);
 	}
 
+	public List<IPeakRange> getAllPeakRanges() {
+
+		return peakRanges;
+	}
+
 	public void addPeakRange(IPeakRange peakRange) {
 
 		peakRanges.add(peakRange);
