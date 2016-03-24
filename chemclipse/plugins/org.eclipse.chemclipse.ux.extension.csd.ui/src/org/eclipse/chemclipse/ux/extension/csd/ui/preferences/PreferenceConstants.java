@@ -16,8 +16,8 @@ package org.eclipse.chemclipse.ux.extension.csd.ui.preferences;
  */
 public class PreferenceConstants {
 
-	public static final String P_SHOW_PERSPECTIVE_DIALOG = "showPerspectiveDialog";
-	public static final String P_CHANGE_PERSPECTIVE_AUTOMATICALLY = "changePerspectiveAutomatically";
+	public static final int MIN_X_OFFSET = 0; // = 0.0 minutes
+	public static final int MAX_X_OFFSET = 6000000; // = 100.0 minutes;
 	//
 	public static final String P_OVERLAY_X_OFFSET = "overlayXOffset";
 	public static final String P_OVERLAY_Y_OFFSET = "overlayYOffset";
