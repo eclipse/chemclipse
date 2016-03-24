@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.wsd.ui.preferences;
 
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.RetentionTimeMinutesFieldEditor;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.Activator;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
@@ -32,7 +33,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void createFieldEditors() {
 
-		addField(new IntegerFieldEditor(PreferenceConstants.P_OVERLAY_X_OFFSET, "Retention time offset (milliseconds):", getFieldEditorParent()));
+		addField(new RetentionTimeMinutesFieldEditor(PreferenceConstants.P_OVERLAY_X_OFFSET, "Retention time offset (minutes):", PreferenceConstants.MIN_X_OFFSET, PreferenceConstants.MAX_X_OFFSET, getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceConstants.P_OVERLAY_Y_OFFSET, "Abundance offset:", getFieldEditorParent()));
 	}
 

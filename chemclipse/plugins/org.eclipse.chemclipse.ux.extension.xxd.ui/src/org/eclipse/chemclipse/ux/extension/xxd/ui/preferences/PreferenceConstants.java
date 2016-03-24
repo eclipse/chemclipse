@@ -19,6 +19,9 @@ public class PreferenceConstants {
 	public static final String P_OVERLAY_X_OFFSET = "overlayXOffset";
 	public static final String P_OVERLAY_Y_OFFSET = "overlayYOffset";
 	//
+	public static final int MIN_X_OFFSET = 0; // = 0.0 minutes
+	public static final int MAX_X_OFFSET = 6000000; // = 100.0 minutes;
+	//
 	public static final String P_OFFSET_STEP_LEFT = "offsetStepLeft";
 	public static final String P_OFFSET_STEP_RIGHT = "offsetStepRight";
 	public static final String P_OFFSET_STEP_DOWN = "offsetStepUp";
