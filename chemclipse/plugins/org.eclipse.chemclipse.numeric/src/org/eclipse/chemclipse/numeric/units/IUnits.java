@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2016 Philip (eselmeister) Wenig.
+ * Copyright (c) 2014, 2016 Lablicate UG (haftungsbeschränkt).
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,17 +7,16 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Philip (eselmeister) Wenig - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.numeric.core;
+package org.eclipse.chemclipse.numeric.units;
 
-public interface IPoint {
+public interface IUnits {
 
-	double getX();
-
-	void setX(double x);
-
-	double getY();
-
-	void setY(double y);
+	String g = "g";
+	String kg = "kg";
+	String ml = "ml";
+	String l = "l";
+	String mg_per_kg = "mg/kg";
+	String mg_per_liter = "mg/l";
 }
