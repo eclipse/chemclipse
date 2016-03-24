@@ -39,6 +39,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int DEF_MILLISECONDS_FAST_FORWARD = 1500;
 	public static final String DEF_DEFAULT_SHIFT_DIRECTION = ShiftDirection.FORWARD.toString();
 	//
+	public static final int MIN_RETENTION_TIME = 0; // = 0.0 minutes
+	public static final int MAX_RETENTION_TIME = 6000000; // = 100.0 minutes;
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
