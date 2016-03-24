@@ -11,16 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.preferences;
 
-import java.util.Set;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
-
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.ChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.chromatogram.IChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.CombinedIntegrationSettings;
@@ -29,10 +23,15 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IA
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IIntegrationSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.TrapezoidPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ITrapezoidPeakIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.TrapezoidPeakIntegrationSettings;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.IonListUtil;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
@@ -46,6 +45,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int DEF_MINIMUM_PEAK_AREA = 0; // 0 all peaks will be accepted
 	public static final String P_PEAK_AREA_INCLUDE_BACKGROUND = "peakAreaIncludeBackground";
 	public static final boolean DEF_PEAK_AREA_INCLUDE_BACKGROUND = false; // The background will be not calculated
+	//
+	public static final int MIN_RETENTION_TIME = 0; // = 0.0 minutes
+	public static final int MAX_RETENTION_TIME = 60000; // = 1.0 minutes;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
