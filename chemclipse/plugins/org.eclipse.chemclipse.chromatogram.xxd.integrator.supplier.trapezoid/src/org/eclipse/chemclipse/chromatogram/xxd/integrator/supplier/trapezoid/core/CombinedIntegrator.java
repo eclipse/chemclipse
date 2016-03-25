@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.core;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.combined.AbstractCombinedIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined.ICombinedIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
@@ -22,13 +19,15 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.ICombinedIn
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.CombinedIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support.TrapezoidChromatogramIntegratorSupport;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support.TrapezoidPeakIntegratorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support.ITrapezoidChromatogramIntegratorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support.ITrapezoidPeakIntegratorSupport;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support.TrapezoidChromatogramIntegratorSupport;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support.TrapezoidPeakIntegratorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class CombinedIntegrator extends AbstractCombinedIntegrator {
 
@@ -62,10 +61,24 @@ public class CombinedIntegrator extends AbstractCombinedIntegrator {
 		return processingInfo;
 	}
 
+	private ICombinedIntegrationSettings combinedIntegrationSettings;
+
+	public ICombinedIntegrationSettings getCombinedIntegrationSettings() {
+
+		return combinedIntegrationSettings;
+	}
+
+	public CombinedIntegrator setCombinedIntegrationSettings(ICombinedIntegrationSettings combinedIntegrationSettings) {
+
+		this.combinedIntegrationSettings = combinedIntegrationSettings;
+		return this;
+	}
+
 	@Override
 	public ICombinedIntegratorProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		ICombinedIntegrationSettings combinedIntegrationSettings = PreferenceSupplier.getCombinedIntegrationSettings();
+		if(combinedIntegrationSettings == null)
+			combinedIntegrationSettings = PreferenceSupplier.getCombinedIntegrationSettings();
 		return integrate(chromatogramSelection, combinedIntegrationSettings, monitor);
 	}
 
