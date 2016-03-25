@@ -107,20 +107,24 @@ public final class ChromatogramConverterMSD {
 	 * @param monitor
 	 * @return {@link IChromatogramMSDImportConverterProcessingInfo}
 	 */
-	public static IChromatogramMSDImportConverterProcessingInfo convert(final File file, final String converterId, final IProgressMonitor monitor) {
+	public static IChromatogramMSDImportConverterProcessingInfo convert(final File file, final IChromatogramMSDImportConverter importConverter, final IProgressMonitor monitor) {
 
 		IChromatogramMSDImportConverterProcessingInfo processingInfo;
 		/*
 		 * Do not use a safe runnable here, because a IChromatogram object must
 		 * be returned or null.
 		 */
-		IChromatogramMSDImportConverter importConverter = getChromatogramImportConverter(converterId);
 		if(importConverter != null) {
 			processingInfo = importConverter.convert(file, monitor);
 		} else {
 			processingInfo = getNoImportConverterAvailableProcessingInfo(file);
 		}
 		return processingInfo;
+	}
+
+	public static IChromatogramMSDImportConverterProcessingInfo convert(final File file, final String converterId, final IProgressMonitor monitor) {
+
+		return convert(file, getChromatogramImportConverter(converterId), monitor);
 	}
 
 	// ------------------------------------convenience-import

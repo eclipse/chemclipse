@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
+import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.ChromatogramConfiguration;
 import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -73,15 +74,20 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 	 */
 	private ImmutableZeroIon immutableZeroIon;
 
-	// -----------------------------------------------------------------
-	public AbstractChromatogramMSD(INoiseCalculator noiseCalculator) {
+	/**
+	 * This constructor does not depend on a running RCP platform.
+	 * 
+	 * 
+	 */
+	public AbstractChromatogramMSD(ChromatogramConfiguration chromatogramConfiguration) {
 		peaks = new ArrayList<IChromatogramPeakMSD>();
 		targets = new HashSet<IChromatogramTargetMSD>();
 		ionTransitionSettings = new IonTransitionSettings();
+		noiseCalculator = chromatogramConfiguration.getNoiseCalculator();
 		if(noiseCalculator == null) {
 			noiseCalculator = new DefaultNoiseCalculator();
 		}
-		int segmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
+		int segmentWidth = chromatogramConfiguration.getSelectedSegmentWidth();
 		noiseCalculator.setChromatogram(this, segmentWidth);
 		try {
 			immutableZeroIon = new ImmutableZeroIon();
@@ -90,8 +96,11 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 		}
 	}
 
+	/**
+	 * This constructor needs to be called from within a running RCP platform.
+	 */
 	public AbstractChromatogramMSD() {
-		this(NoiseCalculator.getNoiseCalculator(PreferenceSupplier.getSelectedNoiseCalculatorId()));
+		this(new ChromatogramConfiguration().setNoiseCalculator(NoiseCalculator.getNoiseCalculator(PreferenceSupplier.getSelectedNoiseCalculatorId())).setSelectedSegmentWidth(PreferenceSupplier.getSelectedSegmentWidth()));
 	}
 
 	@Override
