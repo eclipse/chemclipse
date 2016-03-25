@@ -8,15 +8,15 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.chromatogram;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverter;
 import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IChromatogramMSDImportConverter extends IChromatogramImportConverter {
 
@@ -34,4 +34,8 @@ public interface IChromatogramMSDImportConverter extends IChromatogramImportConv
 	 * @return {@link IChromatogramMSDImportConverterProcessingInfo}
 	 */
 	IChromatogramMSDImportConverterProcessingInfo convert(File file, IProgressMonitor monitor);
+
+	ChromatogramConfiguration getChromatogramConfiguration();
+
+	IChromatogramMSDImportConverter setChromatogramConfiguration(ChromatogramConfiguration chromatogramConfiguration);
 }

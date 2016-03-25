@@ -12,6 +12,20 @@
 package org.eclipse.chemclipse.msd.converter.io;
 
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramReader;
+import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConfiguration;
 
 public abstract class AbstractChromatogramMSDReader extends AbstractChromatogramReader implements IChromatogramMSDReader {
+
+	private ChromatogramConfiguration chromatogramConfiguration;
+
+	public ChromatogramConfiguration getChromatogramConfiguration() {
+
+		return chromatogramConfiguration;
+	}
+
+	public AbstractChromatogramMSDReader setChromatogramConfiguration(ChromatogramConfiguration chromatogramConfiguration) {
+
+		this.chromatogramConfiguration = chromatogramConfiguration;
+		return this;
+	}
 }
