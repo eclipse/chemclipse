@@ -74,12 +74,10 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 	private ImmutableZeroIon immutableZeroIon;
 
 	// -----------------------------------------------------------------
-	public AbstractChromatogramMSD() {
+	public AbstractChromatogramMSD(INoiseCalculator noiseCalculator) {
 		peaks = new ArrayList<IChromatogramPeakMSD>();
 		targets = new HashSet<IChromatogramTargetMSD>();
 		ionTransitionSettings = new IonTransitionSettings();
-		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
-		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
 		if(noiseCalculator == null) {
 			noiseCalculator = new DefaultNoiseCalculator();
 		}
@@ -90,6 +88,10 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 		} catch(AbundanceLimitExceededException | IonLimitExceededException e) {
 			logger.warn(e);
 		}
+	}
+
+	public AbstractChromatogramMSD() {
+		this(NoiseCalculator.getNoiseCalculator(PreferenceSupplier.getSelectedNoiseCalculatorId()));
 	}
 
 	@Override
