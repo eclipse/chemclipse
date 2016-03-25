@@ -52,6 +52,14 @@ public interface ISupportMessages {
 	String LABEL_TYPE_IN_INSTRUMENT = "labelTypeInInstrument";
 	String LABEL_INSTRUMENT_EXISTS = "labelInstrumentExists";
 	//
+	String LABEL_DILUTION = "labelDilution";
+	String LABEL_ADD_DILUTION = "labelAddDilution";
+	String LABEL_DELETE_DILUTION = "labelDeleteDilution";
+	String LABEL_CLEAR_DILUTIONS = "labelClearDilutions";
+	String LABEL_QUESTION_DELETE_DILUTIONS = "labelQuestionDeleteDilutions";
+	String LABEL_TYPE_IN_DILUTION = "labelTypeInDilution";
+	String LABEL_DILUTION_EXISTS = "labelDilutionExists";
+	//
 	String LABEL_COPY_LINES_INFO = "labelCopyLinesInfo";
 	String LABEL_COPY_SELECTION_CLIPBOARD = "labelCopySelectionClipboard";
 	//
