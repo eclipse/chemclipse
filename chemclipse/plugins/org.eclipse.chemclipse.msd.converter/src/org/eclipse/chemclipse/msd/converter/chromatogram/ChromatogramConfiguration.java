@@ -11,8 +11,9 @@ public class ChromatogramConfiguration {
 		return noiseCalculator;
 	}
 
-	public void setNoiseCalculator(INoiseCalculator noiseCalculator) {
+	public ChromatogramConfiguration setNoiseCalculator(INoiseCalculator noiseCalculator) {
 
 		this.noiseCalculator = noiseCalculator;
+		return this;
 	}
 }
