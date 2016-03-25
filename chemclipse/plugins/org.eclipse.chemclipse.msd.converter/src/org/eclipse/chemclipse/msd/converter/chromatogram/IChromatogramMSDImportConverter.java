@@ -16,6 +16,7 @@ import java.io.File;
 
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverter;
 import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
+import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.ChromatogramConfiguration;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IChromatogramMSDImportConverter extends IChromatogramImportConverter {
