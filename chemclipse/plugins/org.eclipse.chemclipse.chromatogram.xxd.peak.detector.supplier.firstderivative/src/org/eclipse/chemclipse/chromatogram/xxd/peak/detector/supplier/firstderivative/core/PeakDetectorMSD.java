@@ -8,28 +8,13 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
-import org.eclipse.chemclipse.model.exceptions.PeakException;
-import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
-import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
-import org.eclipse.chemclipse.model.signals.TotalScanSignalsModifier;
-import org.eclipse.chemclipse.model.support.IScanRange;
-import org.eclipse.chemclipse.model.support.ScanRange;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.core.support.PeakBuilderMSD;
-import org.eclipse.chemclipse.msd.model.xic.ITotalIonSignalExtractor;
-import org.eclipse.chemclipse.msd.model.xic.TotalIonSignalExtractor;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.AbstractPeakDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.IPeakDetectorMSDProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.PeakDetectorMSDProcessingInfo;
@@ -45,12 +30,27 @@ import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderiv
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlopes;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.exceptions.PeakException;
+import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
+import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
+import org.eclipse.chemclipse.model.signals.TotalScanSignalsModifier;
+import org.eclipse.chemclipse.model.support.IScanRange;
+import org.eclipse.chemclipse.model.support.ScanRange;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.core.support.PeakBuilderMSD;
+import org.eclipse.chemclipse.msd.model.xic.ITotalIonSignalExtractor;
+import org.eclipse.chemclipse.msd.model.xic.TotalIonSignalExtractor;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.miscellaneous.Evaluation;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * This is the peak detector extension point entry.
@@ -90,11 +90,25 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 		return processingInfo;
 	}
 
+	private IPeakDetectorMSDSettings peakDetectorSettings;
+
+	public IPeakDetectorMSDSettings getPeakDetectorSettings() {
+
+		return peakDetectorSettings;
+	}
+
+	public PeakDetectorMSD setPeakDetectorSettings(IPeakDetectorMSDSettings peakDetectorSettings) {
+
+		this.peakDetectorSettings = peakDetectorSettings;
+		return this;
+	}
+
 	// TODO JUnit
 	@Override
 	public IPeakDetectorMSDProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
-		IPeakDetectorMSDSettings peakDetectorSettings = PreferenceSupplier.getPeakDetectorMSDSettings();
+		if(peakDetectorSettings == null)
+			peakDetectorSettings = PreferenceSupplier.getPeakDetectorMSDSettings();
 		return detect(chromatogramSelection, peakDetectorSettings, monitor);
 	}
 
