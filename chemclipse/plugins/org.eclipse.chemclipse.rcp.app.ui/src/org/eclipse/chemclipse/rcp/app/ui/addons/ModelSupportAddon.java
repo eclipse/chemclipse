@@ -16,6 +16,7 @@ import java.util.Collection;
 import javax.annotation.PostConstruct;
 
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -29,14 +30,16 @@ public class ModelSupportAddon {
 	private static EModelService eModelService;
 	private static EPartService ePartService;
 	private static IEventBroker eventBroker;
+	private static IEclipseContext eclipseContext;
 
 	@PostConstruct
-	public void postConstruct(MApplication application, EModelService modelService, EPartService partService, IEventBroker broker) {
+	public void postConstruct(MApplication application, EModelService modelService, EPartService partService, IEventBroker broker, IEclipseContext context) {
 
 		mApplication = application;
 		eModelService = modelService;
 		ePartService = partService;
 		eventBroker = broker;
+		eclipseContext = context;
 	}
 
 	public static MApplication getApplication() {
@@ -57,6 +60,11 @@ public class ModelSupportAddon {
 	public static IEventBroker getEventBroker() {
 
 		return eventBroker;
+	}
+
+	public static IEclipseContext getEclipseContext() {
+
+		return eclipseContext;
 	}
 
 	public static void removeEditorsFromPartStack() {

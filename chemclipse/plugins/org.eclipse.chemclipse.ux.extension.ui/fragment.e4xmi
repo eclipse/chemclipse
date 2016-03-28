@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_Jm8iUDL1EeKMEOdllHiEaA">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_Jm8iUDL1EeKMEOdllHiEaA">
   <imports xsi:type="advanced:Area" xmi:id="_I3_u0KuOEeSKQ7OYnQVHjQ" elementId="org.eclipse.chemclipse.rcp.app.ui.editor"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_WF1aADL3EeKMEOdllHiEaA" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Command" xmi:id="_hheJ4DhoEeKHL-DfrT7KNQ" elementId="org.eclipse.chemclipse.ux.extension.ui.command.createSnapshot" commandName="Create Snapshot"/>
@@ -50,7 +50,9 @@
         <children xsi:type="menu:MenuSeparator" xmi:id="_RUrE4MIBEeKzppesdjCSCQ" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors.separator.misc"/>
         <children xsi:type="menu:Menu" xmi:id="_xh9vEBZJEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors.msd" label="MSD"/>
         <children xsi:type="menu:Menu" xmi:id="_x_uCEBZJEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors.csd" label="CSD"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_EadVsPTnEeWJxMXPMOexOQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.deleteSelectedPeak" label="Delete Selected Peak" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_peak.gif" command="_YP-30NQ6EeOqJuPuL0y2ew"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_EadVsPTnEeWJxMXPMOexOQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.deleteSelectedPeak" label="Delete Selected Peak" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_peak.gif" command="_YP-30NQ6EeOqJuPuL0y2ew">
+          <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_zjek8PT7EeWJxMXPMOexOQ" coreExpressionId="isDetectorTypeMSD"/>
+        </children>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_nmc-0PTmEeWJxMXPMOexOQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.deleteallpeaks" label="Delete All Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_peaks.gif" command="_XpYx4NQ6EeOqJuPuL0y2ew"/>
       </children>
       <children xsi:type="menu:MenuSeparator" xmi:id="_pQOuIDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.5"/>
@@ -58,9 +60,7 @@
         <children xsi:type="menu:MenuSeparator" xmi:id="_ioauoBZOEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.integrators.separator.misc"/>
         <children xsi:type="menu:Menu" xmi:id="_20kmQBZLEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.integrators.msd" label="MSD"/>
         <children xsi:type="menu:Menu" xmi:id="_3KFjQBZLEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.integrators.csd" label="CSD"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_8u1b4PToEeWJxMXPMOexOQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.deleteallpeakintegrations" label="Delete All Peak Integrations" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/deletePeakIntegrations.gif" command="_6h99sBZOEeSk0dq6nce8LA">
-          <parameters xmi:id="_6rZRkPT1EeWJxMXPMOexOQ" elementId="org.eclipse.chemclipse.ux.extension.ui.parameter.0"/>
-        </children>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_8u1b4PToEeWJxMXPMOexOQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.deleteallpeakintegrations" label="Delete All Peak Integrations" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/deletePeakIntegrations.gif" command="_6h99sBZOEeSk0dq6nce8LA"/>
       </children>
       <children xsi:type="menu:MenuSeparator" xmi:id="_FqiyoDL_EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.6"/>
       <children xsi:type="menu:Menu" xmi:id="_59QsIDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier" label="Identifier">

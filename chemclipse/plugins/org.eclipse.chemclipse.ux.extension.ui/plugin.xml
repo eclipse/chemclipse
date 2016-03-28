@@ -8,16 +8,66 @@
             uri="fragment.e4xmi">
       </fragment>
    </extension>
-   <extension point="org.eclipse.core.expressions.definitions">
+   <extension
+         point="org.eclipse.core.expressions.definitions">
       <definition
-            id="isChromatogramEditor">
+            id="isDetectorTypeMSD">
          <with
-               variable="detectorType">
-            <adapt
-                  type="org.eclipse.chemclipse.ux.extension.ui.definitions.ChromatogramDetectorType">
-            </adapt>
+               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.detectorType">
+            <equals
+                  value="NONE">
+            </equals>
          </with>
       </definition>
-   </extension>   
+      <definition
+            id="isDetectorTypeCSD">
+         <with
+               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.detectorType">
+            <equals
+                  value="CSD">
+            </equals>
+         </with>
+      </definition>
+      <definition
+            id="isDetectorTypeWSD">
+         <with
+               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.detectorType">
+            <equals
+                  value="WSD">
+            </equals>
+         </with>
+      </definition>
+      <definition
+            id="isDetectorTypeXXD">
+         <with
+               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.detectorType">
+            <iterate
+                  ifEmpty="false"
+                  operator="or">
+               <equals
+                     value="MSD">
+               </equals>
+               <equals
+                     value="CSD">
+               </equals>
+               <equals
+                     value="WSD">
+               </equals>
+               <equals
+                     value="NONE">
+               </equals>
+            </iterate>
+         </with>
+      </definition>
+      <definition
+            id="isDetectorTypeNone">
+         <with
+               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.detectorType">
+            <equals
+                  value="NONE">
+            </equals>
+         </with>
+      </definition>                        
+   </extension>
    
 </plugin>

@@ -32,7 +32,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.swt;bundle-version="3.104.1",
  org.eclipse.chemclipse.support.ui;bundle-version="0.7.0",
  org.eclipse.jface;bundle-version="3.11.0",
- org.eclipse.chemclipse.model;bundle-version="0.7.0"
+ org.eclipse.chemclipse.model;bundle-version="0.7.0",
+ org.eclipse.chemclipse.wsd.model;bundle-version="0.7.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: ChemClipse
@@ -44,7 +45,10 @@ Export-Package: org.eclipse.chemclipse.ux.extension.ui.dialogs,
 Import-Package: javax.annotation;version="1.1.0",
  org.osgi.service.event;version="1.3.0",
  org.osgi.framework;version="1.3.0" 
-Service-Component: OSGI-INF/unzoomChromatogramHandlerMSD.xml,
+Service-Component: OSGI-INF/detectorTypeMSD.xml,
+ OSGI-INF/detectorTypeCSD.xml,
+ OSGI-INF/detectorTypeWSD.xml,
+ OSGI-INF/unzoomChromatogramHandlerMSD.xml,
  OSGI-INF/unzoomChromatogramHandlerCSD.xml,
  OSGI-INF/deleteSelectedPeakHandlerMSD.xml,
  OSGI-INF/deleteSelectedPeakHandlerCSD.xml,
