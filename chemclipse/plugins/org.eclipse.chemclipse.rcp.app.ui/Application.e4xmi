@@ -113,9 +113,6 @@
         <children xsi:type="menu:HandledToolItem" xmi:id="_vo3g0DgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.saveAll" label="Save All" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/saveall.gif" command="_ZgJ9QDgEEeKBGer45Yb2dA"/>
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_rJYIsINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.4"/>
       </children>
-      <children xsi:type="menu:ToolBar" xmi:id="_DR5H4L7mEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.openChromatogram">
-        <children xsi:type="menu:ToolBarSeparator" xmi:id="_mnTrsINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.2"/>
-      </children>
       <children xsi:type="menu:ToolBar" xmi:id="_y11CQDiXEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.perspectives">
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_lwvQEINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.1"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_G9eogOToEeK3p9M57zVYqQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.updates" label="Updates" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/updates.gif" command="_LrC6QDiWEeKDEdWQrkwLnQ"/>

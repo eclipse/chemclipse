@@ -277,10 +277,6 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_uImZ8L7lEeKcwbn54SGPtA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.menuseparator.openChromatogram">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_eeZ9gL7bEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.openChromatogram" label="Open Chromatogram (MSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/importChromatogramMSD.gif" command="_JewTwL7bEeKcwbn54SGPtA"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_I_iAIL7mEeKcwbn54SGPtA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.openChromatogram">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_S2ZJ0L7hEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledtoolitem.openChromatogram" label="Open Chromatogram (MSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/importChromatogramMSD.gif" command="_JewTwL7bEeKcwbn54SGPtA"/>
-    <elements xsi:type="menu:ToolBarSeparator" xmi:id="_BBCYgINHEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.toolbarseparator.1"/>
-  </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_lgTMAKuOEeSKQ7OYnQVHjQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.partstack.chromatogramOverlay">
     <elements xsi:type="advanced:Placeholder" xmi:id="_q5wkAKuOEeSKQ7OYnQVHjQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.chromatogramOverlaySelectedIons" ref="_XDCmoNpPEeKwQ63eRWh8sA"/>
   </fragments>

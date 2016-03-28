@@ -8,5 +8,16 @@
             uri="fragment.e4xmi">
       </fragment>
    </extension>
+   <extension point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="isChromatogramEditor">
+         <with
+               variable="detectorType">
+            <adapt
+                  type="org.eclipse.chemclipse.ux.extension.ui.definitions.ChromatogramDetectorType">
+            </adapt>
+         </with>
+      </definition>
+   </extension>   
    
 </plugin>
