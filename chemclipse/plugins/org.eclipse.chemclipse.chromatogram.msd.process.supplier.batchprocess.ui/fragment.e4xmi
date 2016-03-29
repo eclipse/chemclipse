@@ -9,7 +9,4 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_iZxxMECHEeKMcNE1hx3pmQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.process">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_rYQvIECHEeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.handledmenuitem.batchProcess" label="Batch Process" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif" command="_QPXPMECHEeKMcNE1hx3pmQ"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_znrnoECHEeKMcNE1hx3pmQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.processors">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_3UIEMECHEeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.handledtoolitem.runBatchProcess" label="Batch Process" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif" command="_QPXPMECHEeKMcNE1hx3pmQ"/>
-  </fragments>
 </fragment:ModelFragments>
