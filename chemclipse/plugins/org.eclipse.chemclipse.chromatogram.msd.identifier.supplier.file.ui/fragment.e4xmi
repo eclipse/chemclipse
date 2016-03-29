@@ -17,10 +17,4 @@
       <children xsi:type="menu:HandledMenuItem" xmi:id="_xofasORWEeSoluczWUZOhA" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.handledmenuitem.identifySelectedMassSpectrum" label="Identify Selected Mass Spectrum" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/identify_massspectrum.gif" command="_wo7QkORVEeSoluczWUZOhA"/>
     </elements>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_lyfdEORWEeSoluczWUZOhA" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.identifier">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_9W6wsORWEeSoluczWUZOhA" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.handledtoolitem.identifySelectedPeak" label="MSL - Identify Selected Peak" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/identify_peak.gif" command="_MPgTYORIEeSoluczWUZOhA"/>
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_9uaqsORWEeSoluczWUZOhA" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.handledtoolitem.identifyAllPeaks" label="MSL - Identifiy All Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/identify_peaks.gif" command="_TpbuUORIEeSoluczWUZOhA"/>
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_-MGFMORWEeSoluczWUZOhA" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.handledtoolitem.identifySelectedMassSpectrum" label="MSL - Identify Selected Mass Spectrum" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/identify_massspectrum.gif" command="_wo7QkORVEeSoluczWUZOhA"/>
-    <elements xsi:type="menu:ToolBarSeparator" xmi:id="_SeFXsORXEeSoluczWUZOhA" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.toolbarseparator.0"/>
-  </fragments>
 </fragment:ModelFragments>
