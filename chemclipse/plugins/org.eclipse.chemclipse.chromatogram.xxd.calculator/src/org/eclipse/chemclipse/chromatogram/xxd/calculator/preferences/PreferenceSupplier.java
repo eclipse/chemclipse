@@ -8,19 +8,19 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Dr. Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
-
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.Activator;
 import org.eclipse.chemclipse.model.support.SegmentWidth;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
@@ -37,6 +37,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 			preferenceSupplier = new PreferenceSupplier();
 		}
 		return preferenceSupplier;
+	}
+
+	public static boolean isAvailable() {
+
+		return Activator.getContext() != null;
 	}
 
 	@Override
