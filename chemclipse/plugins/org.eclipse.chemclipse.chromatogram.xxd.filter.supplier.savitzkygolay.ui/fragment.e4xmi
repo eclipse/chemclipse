@@ -11,10 +11,6 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_H-RugDlPEeKPNuw33USp1w" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.msd.chromatogram">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_KK4wADlPEeKPNuw33USp1w" elementId="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.handledmenuitem.filterMSD" label="Savitzky-Golay Filter" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/savitzkygolay.gif" command="_r9I_ADlOEeKPNuw33USp1w"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_VJoVgDlPEeKPNuw33USp1w" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.filter.chromatogram">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_Y3g8gDlPEeKPNuw33USp1w" elementId="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.handledtoolitem.filterMSD" label="Savitzky-Golay Filter (MSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/savitzkygolay.gif" command="_r9I_ADlOEeKPNuw33USp1w"/>
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_oc_iAN9UEeS85cBktcn4BA" elementId="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.handledtoolitem.filterCSD" label="Savitzky-Golay Filter (CSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/savitzkygolay.gif" command="_RwE6oN9TEeS85cBktcn4BA"/>
-  </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_b9ZqQN9TEeS85cBktcn4BA" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.csd.chromatogram">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_jOQBsN9TEeS85cBktcn4BA" elementId="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.handledmenuitem.filterCSD" label="Savitzky-Golay Filter" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/savitzkygolay.gif" command="_RwE6oN9TEeS85cBktcn4BA"/>
   </fragments>
