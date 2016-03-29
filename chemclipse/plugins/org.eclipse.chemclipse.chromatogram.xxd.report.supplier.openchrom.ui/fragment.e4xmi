@@ -9,9 +9,6 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_wYFq4ECiEeKJW-dxxi4EOQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.reports.msd">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_0BsO0ECiEeKJW-dxxi4EOQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.ui.handledmenuitem.report.msd" label="OpenChrom Report" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/report.gif" command="_lipLUECiEeKJW-dxxi4EOQ"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_4xuPUECiEeKJW-dxxi4EOQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.reports">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_7jGx0ECiEeKJW-dxxi4EOQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.ui.handledtoolitem.report" label="OpenChrom Report" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/report.gif" command="_lipLUECiEeKJW-dxxi4EOQ"/>
-  </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_vBFiMBZTEeSk0dq6nce8LA" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.reports.csd">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_yIXcMBZTEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.ui.handledmenuitem.report.csd" label="OpenChrom Report" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/report.gif" command="_lipLUECiEeKJW-dxxi4EOQ"/>
   </fragments>
