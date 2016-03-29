@@ -9,9 +9,6 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_hk9b8G7pEeOKD81y804dEQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.process">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_ByWwgG7qEeOKD81y804dEQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handledmenuitem.createPcaEvaluation" label="PCA Evaluation" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pca.gif" command="_29BlsG7pEeOKD81y804dEQ"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kCRy8G7pEeOKD81y804dEQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.processors">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_CfI-AG7qEeOKD81y804dEQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handledtoolitem.createPcaEvaluation" label="PCA Evaluation" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pca.gif" command="_29BlsG7pEeOKD81y804dEQ"/>
-  </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_M5O6ENSAEeWQk9amfPZ_4Q" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
     <elements xsi:type="basic:Part" xmi:id="_Oxmw8NSAEeWQk9amfPZ_4Q" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.fxmlcontrollertest" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.PartTic" label="FXML Controller Test" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pca.gif"/>
   </fragments>
