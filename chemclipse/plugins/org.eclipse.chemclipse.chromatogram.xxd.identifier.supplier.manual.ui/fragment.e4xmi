@@ -11,10 +11,6 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_pPU5UK2LEeK3VeXGJwEQag" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier.msd">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_r_QqUK2LEeK3VeXGJwEQag" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.manual.ui.handledmenuitem.identifySelectedPeakMSD" label="Manual - Identify Selected Peak" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peakIdentifierManual.gif" command="_YoN9IK2LEeK3VeXGJwEQag"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_8xTEIK2LEeK3VeXGJwEQag" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.identifier">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_-alWIK2LEeK3VeXGJwEQag" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.manual.ui.handledtoolitem.identifySelectedPeakMSD" label="Manual - Identify Selected Peak (MSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peakIdentifierManual.gif" command="_YoN9IK2LEeK3VeXGJwEQag"/>
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_SkJcYKrQEeSzIJcLjxpOWA" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.manual.ui.handledtoolitem.identifySelectedPeakCSD" label="Manual - Identify Selected Peak (CSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peakIdentifierManual.gif" command="_8RvxUKrPEeSzIJcLjxpOWA"/>
-  </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_JxdewKrQEeSzIJcLjxpOWA" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier.csd">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_MQP1YKrQEeSzIJcLjxpOWA" elementId="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.manual.ui.handledmenuitem.identifySelectedPeakCSD" label="Manual - Identify Selected Peak" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peakIdentifierManual.gif" command="_8RvxUKrPEeSzIJcLjxpOWA"/>
   </fragments>
