@@ -9,7 +9,4 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kNTUgNQxEeOqJuPuL0y2ew" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector" positionInList="before:org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector.separator.misc">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_y8zO0NQxEeOqJuPuL0y2ew" elementId="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui.handledmenuitem.deleteBaseline" label="Delete Baseline" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/baselineDelete.gif" command="_xfNPcNQxEeOqJuPuL0y2ew"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kfc0cNQxEeOqJuPuL0y2ew" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.baselinedetectors">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_8WklINQyEeOqJuPuL0y2ew" elementId="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui.handledtoolitem.0" label="Delete Baseline" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/baselineDelete.gif" command="_xfNPcNQxEeOqJuPuL0y2ew"/>
-  </fragments>
 </fragment:ModelFragments>

@@ -262,11 +262,6 @@
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_Z0xakDiBEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.deleteAllIdentifications" label="Delete All Identifications" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_all_identifications.gif" command="_c1jrADiBEeKLl-NzluZ-Gg"/>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_QY0oEDiCEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.deleteUnidentifiedPeaks" label="Delete Unidentified Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_unidentified_peaks.gif" command="_nalwADiBEeKLl-NzluZ-Gg"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_g9rPkDiEEeKLl-NzluZ-Gg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.identifier">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_j0oOkDiEEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledtoolitem.deleteAllIdentifications" label="Delete All Identifications" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_all_identifications.gif" command="_c1jrADiBEeKLl-NzluZ-Gg"/>
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_Uz2-EDiEEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledtoolitem.deleteUnidentifiedPeaks" label="Delete Unidentified Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_unidentified_peaks.gif" command="_nalwADiBEeKLl-NzluZ-Gg"/>
-    <elements xsi:type="menu:ToolBarSeparator" xmi:id="_ABVPAINHEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.toolbarseparator.0"/>
-  </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_tec7sDpJEeKA5v4GDoyzvg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu" positionInList="after:org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.undo">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_0VakgDh9EeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.redo" label="Redo" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/redo.gif" command="_o2GBgDh9EeKLl-NzluZ-Gg"/>
   </fragments>
