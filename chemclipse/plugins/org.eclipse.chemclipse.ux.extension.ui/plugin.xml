@@ -15,7 +15,7 @@
          <with
                variable="org.eclipse.chemclipse.ux.extension.ui.definitions.detectorType">
             <equals
-                  value="NONE">
+                  value="MSD">
             </equals>
          </with>
       </definition>
@@ -41,9 +41,7 @@
             id="isDetectorTypeXXD">
          <with
                variable="org.eclipse.chemclipse.ux.extension.ui.definitions.detectorType">
-            <iterate
-                  ifEmpty="false"
-                  operator="or">
+            <or>
                <equals
                      value="MSD">
                </equals>
@@ -53,10 +51,7 @@
                <equals
                      value="WSD">
                </equals>
-               <equals
-                     value="NONE">
-               </equals>
-            </iterate>
+            </or>
          </with>
       </definition>
       <definition

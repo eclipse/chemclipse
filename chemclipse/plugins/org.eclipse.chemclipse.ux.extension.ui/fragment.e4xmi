@@ -51,7 +51,7 @@
         <children xsi:type="menu:Menu" xmi:id="_xh9vEBZJEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors.msd" label="MSD"/>
         <children xsi:type="menu:Menu" xmi:id="_x_uCEBZJEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors.csd" label="CSD"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_EadVsPTnEeWJxMXPMOexOQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.deleteSelectedPeak" label="Delete Selected Peak" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_peak.gif" command="_YP-30NQ6EeOqJuPuL0y2ew">
-          <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_zjek8PT7EeWJxMXPMOexOQ" coreExpressionId="isDetectorTypeMSD"/>
+          <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_zjek8PT7EeWJxMXPMOexOQ" coreExpressionId="isDetectorTypeXXD"/>
         </children>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_nmc-0PTmEeWJxMXPMOexOQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.deleteallpeaks" label="Delete All Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_peaks.gif" command="_XpYx4NQ6EeOqJuPuL0y2ew"/>
       </children>
