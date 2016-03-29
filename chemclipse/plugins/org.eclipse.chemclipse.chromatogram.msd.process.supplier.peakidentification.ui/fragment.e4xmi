@@ -14,9 +14,6 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_BFiaQECQEeKbmYL7tP6V9g" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.process">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_Cz7OsECQEeKbmYL7tP6V9g" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.handledmenuitem.batchProcess" label="Peak Identification Batch Process" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocessPeakIdent.gif" command="_vTiYQECPEeKbmYL7tP6V9g"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_LxC6sECQEeKbmYL7tP6V9g" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.processors">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_M8zjMECQEeKbmYL7tP6V9g" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.handledtoolitem.batchProcess" label="Peak Identification Batch Process" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocessPeakIdent.gif" command="_vTiYQECPEeKbmYL7tP6V9g"/>
-  </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_WBoZsECQEeKbmYL7tP6V9g" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_XtllMECQEeKbmYL7tP6V9g" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.perspective" label="Peak Identification" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocessPeakIdent.gif">
       <children xsi:type="basic:PartSashContainer" xmi:id="_c1oPELPpEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.partsashcontainer.0" containerData="" horizontal="true">
