@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.msd.model.implementation.DefaultNoiseCalculator;
 
 public class ChromatogramConfiguration {
 
-	public final static int DEFAULT_SELECTED_SEGMENT_WIDTH = 1;
+	public final static int DEFAULT_SELECTED_SEGMENT_WIDTH = 13;
 	public final static INoiseCalculator DEFAULT_NOISE_CALCULATOR = new DefaultNoiseCalculator();
 	private INoiseCalculator noiseCalculator;
 	private int selectedSegmentWidth;
@@ -26,12 +26,22 @@ public class ChromatogramConfiguration {
 	public ChromatogramConfiguration() {
 		boolean isPreferencesSupplierAvailable = PreferenceSupplier.isAvailable();
 		if(isPreferencesSupplierAvailable) {
-			noiseCalculator = NoiseCalculator.getNoiseCalculator(PreferenceSupplier.getSelectedNoiseCalculatorId());
-			selectedSegmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
+			initPreferenesFromPreferencesSupplier();
 		} else {
-			selectedSegmentWidth = DEFAULT_SELECTED_SEGMENT_WIDTH;
-			noiseCalculator = DEFAULT_NOISE_CALCULATOR;
+			initPreferencesFromDefaults();
 		}
+	}
+
+	protected void initPreferencesFromDefaults() {
+
+		selectedSegmentWidth = DEFAULT_SELECTED_SEGMENT_WIDTH;
+		noiseCalculator = DEFAULT_NOISE_CALCULATOR;
+	}
+
+	protected void initPreferenesFromPreferencesSupplier() {
+
+		noiseCalculator = NoiseCalculator.getNoiseCalculator(PreferenceSupplier.getSelectedNoiseCalculatorId());
+		selectedSegmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
 	}
 
 	public int getSelectedSegmentWidth() {
