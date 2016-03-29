@@ -9,9 +9,6 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_b1k8MDlnEeK1PoLkZ6ghTQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.classifier">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_fsT9MDlnEeK1PoLkZ6ghTQ" elementId="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.handledmenuitem.classifier" label="WNC Classifier" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/wnc.gif" command="_MphBsDlnEeK1PoLkZ6ghTQ"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_nO8oMDlnEeK1PoLkZ6ghTQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.classifier">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_qdPwMDlnEeK1PoLkZ6ghTQ" elementId="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.handledtoolitem.classifier" label="WNC Classifier" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/wnc.gif" command="_MphBsDlnEeK1PoLkZ6ghTQ"/>
-  </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_v7WXoDlnEeK1PoLkZ6ghTQ" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
     <elements xsi:type="basic:Part" xmi:id="_4jzbMDlnEeK1PoLkZ6ghTQ" elementId="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.part.classifier" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui/org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.views.WncResultsView" label="WNC Classifier" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/wnc.gif"/>
   </fragments>
