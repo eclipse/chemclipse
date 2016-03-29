@@ -9,7 +9,4 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kOqpoNamEeONfofmiBq3Xw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.csd.chromatogram">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_z2U7ANamEeONfofmiBq3Xw" elementId="org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.ui.handledmenuitem.filter" label="CSD ZeroSet" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramZeroSet.gif" command="_yDmZINamEeONfofmiBq3Xw"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kilEINamEeONfofmiBq3Xw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.filter.chromatogram">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_0UnZgNamEeONfofmiBq3Xw" elementId="org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.ui.handledtoolitem.filter" label="CSD ZeroSet" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramZeroSet.gif" command="_yDmZINamEeONfofmiBq3Xw"/>
-  </fragments>
 </fragment:ModelFragments>
