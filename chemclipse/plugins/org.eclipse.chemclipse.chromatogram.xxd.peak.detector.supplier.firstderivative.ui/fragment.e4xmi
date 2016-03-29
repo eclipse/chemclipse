@@ -9,9 +9,6 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_N-ULMDpIEeKA5v4GDoyzvg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors.msd" positionInList="">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_R67KsDpIEeKA5v4GDoyzvg" elementId="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.chemstation.ui.handledmenuitem.detect.msd" label="First Derivative" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peakdetector.gif" command="__nblMDpHEeKA5v4GDoyzvg"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_XG4SMDpIEeKA5v4GDoyzvg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.toolbar.peakdetectors">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_b8LNMDpIEeKA5v4GDoyzvg" elementId="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.chemstation.ui.handledtoolitem.detect" label="First Derivative Peak Detector" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peakdetector.gif" command="__nblMDpHEeKA5v4GDoyzvg"/>
-  </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_5krBQBZJEeSk0dq6nce8LA" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors.csd">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_9y0csBZJEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.chemstation.ui.handledmenuitem.detect.csd" label="First Derivative" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peakdetector.gif" command="__nblMDpHEeKA5v4GDoyzvg"/>
   </fragments>
