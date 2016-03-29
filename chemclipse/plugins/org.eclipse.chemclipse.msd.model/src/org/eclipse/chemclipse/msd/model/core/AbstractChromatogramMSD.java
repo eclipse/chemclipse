@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
@@ -17,8 +18,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.noise.INoiseCalculator;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.noise.NoiseCalculator;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
@@ -32,7 +31,6 @@ import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.msd.model.implementation.DefaultNoiseCalculator;
 import org.eclipse.chemclipse.msd.model.implementation.ImmutableZeroIon;
 import org.eclipse.chemclipse.msd.model.implementation.IonTransitionSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -69,24 +67,29 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 	private Set<IChromatogramTargetMSD> targets;
 	private IIonTransitionSettings ionTransitionSettings;
 	private INoiseCalculator noiseCalculator;
+	private ChromatogramConfiguration chromatogramConfiguration;
+
+	public ChromatogramConfiguration getChromatogramConfiguration() {
+
+		return chromatogramConfiguration;
+	}
+
+	public AbstractChromatogramMSD setChromatogramConfiguration(ChromatogramConfiguration chromatogramConfiguration) {
+
+		this.chromatogramConfiguration = chromatogramConfiguration;
+		return this;
+	}
+
 	/**
 	 * Test comment
 	 */
 	private ImmutableZeroIon immutableZeroIon;
 
-	/**
-	 * This constructor does not depend on a running RCP platform.
-	 * 
-	 * 
-	 */
 	public AbstractChromatogramMSD(ChromatogramConfiguration chromatogramConfiguration) {
 		peaks = new ArrayList<IChromatogramPeakMSD>();
 		targets = new HashSet<IChromatogramTargetMSD>();
 		ionTransitionSettings = new IonTransitionSettings();
 		noiseCalculator = chromatogramConfiguration.getNoiseCalculator();
-		if(noiseCalculator == null) {
-			noiseCalculator = new DefaultNoiseCalculator();
-		}
 		int segmentWidth = chromatogramConfiguration.getSelectedSegmentWidth();
 		noiseCalculator.setChromatogram(this, segmentWidth);
 		try {
@@ -96,11 +99,8 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 		}
 	}
 
-	/**
-	 * This constructor needs to be called from within a running RCP platform.
-	 */
 	public AbstractChromatogramMSD() {
-		this(new ChromatogramConfiguration().setNoiseCalculator(NoiseCalculator.getNoiseCalculator(PreferenceSupplier.getSelectedNoiseCalculatorId())).setSelectedSegmentWidth(PreferenceSupplier.getSelectedSegmentWidth()));
+		this(new ChromatogramConfiguration());
 	}
 
 	@Override
