@@ -65,6 +65,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.pro
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.comparator.SortOrder;
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
@@ -78,6 +79,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.comparator.IonAbundanceComparator;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
@@ -247,7 +249,8 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			/*
 			 * ueber alle Ionen welchen im PeakRange liegen, druebergehen, und anschauen ob diese Peaks haben koennen
 			 */
-			IPeakRanges peaksDeconv = getPeaksFromDeconvolution(allIonSignals, peakRanges, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
+			// IPeakRanges peaksDeconv = getPeaksFromDeconvolution(allIonSignals, peakRanges, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
+			setPeaksFromDeconvolution(allIonSignals, peakRanges, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
 			/*
 			 * Output
 			 */
@@ -257,10 +260,10 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			// fillArraysViewDeconv(xScales, smoothedValues, null, null, derivativesAndNoise.getSecondDerivativeAndNoise().getSecondDeriv(), derivativesAndNoise.getFirstDerivativeAndNoise().getFirstDeriv(), derivativesAndNoise.getSecondDerivativeAndNoise().getNoisePositiv(), derivativesAndNoise.getSecondDerivativeAndNoise().getNoiseNegative(), PeakRangesStartPoints, PeakRangesEndPoints);
 			// fillArraysViewDeconv(xScales, smoothedValues, null, null, derivativesAndNoise.getFirstDerivativeAndNoise().getNoisePositiv(), derivativesAndNoise.getFirstDerivativeAndNoise().getFirstDeriv(), derivativesAndNoise.getFirstDerivativeAndNoise().getNoiseNegative(), null, PeakRangesStartPoints, PeakRangesEndPoints);
 			// fillArraysViewDeconv(xScales, smoothedValues, null, null, null, null, null, null, null, null);
-			int numberOfIon = 94;
+			int numberOfIon = 167;
 			boolean ionNumber = true;
 			//
-			int factorSizeNormal = 10;
+			int factorSizeNormal = 5;
 			int factorSizeFirstDeriv = 1;
 			int factorSizeSecondDeriv = 1;
 			//
@@ -287,7 +290,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			double[] secondDerivIon2smoother = savitzkyGolaySmooth(noDerivative, secondDerivIon2, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
 			double[] noiseFirstDeriv = getNoiseOfTic(signal, 0, false);
 			//
-			int numberOfIon2 = 137;
+			int numberOfIon2 = 94;
 			boolean ionNumber2 = true;
 			//
 			int factorSizeNormal2 = 1;
@@ -303,14 +306,15 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 					}
 				}
 			} else {
-				numberOfIonInList = numberOfIon;
+				numberOfIonInList = numberOfIon2;
 				ionSignal2 = allIonSignals.getIonSignals(numberOfIonInList).getIonSignals();
 			}
 			DurbinWatsonRatings(ionSignal2, null, durbinWatsonClassifierResult, monitor);
 			double[] smoothedIonSignal2 = savitzkyGolaySmooth(noDerivative, ionSignal, supplierFilterSettings, durbinWatsonClassifierResult, monitor);
 			double[] signal2 = allIonSignals.getIonSignals(numberOfIonInList2).getIonSignals();
-			fillArraysViewDeconv(deconvHelper.setXValueforPrint(totalIONsignals), smoothedValues, deconvHelper.factorisingValues(signal2, factorSizeNormal2), null, deconvHelper.factorisingValues(firstDerivIon2, factorSizeFirstDeriv), null, deconvHelper.factorisingValues(signal, factorSizeNormal), deconvHelper.factorisingValues(smoothedIonSignal, factorSizeNormal), PeakRangesStartPoints, PeakRangesEndPoints);
+			fillArraysViewDeconv(deconvHelper.setXValueforPrint(totalIONsignals), smoothedValues, deconvHelper.factorisingValues(signal2, factorSizeNormal2), null, null, null, deconvHelper.factorisingValues(signal, factorSizeNormal), deconvHelper.factorisingValues(smoothedIonSignal, factorSizeNormal), null, null);
 			/*
+			 * fillArraysViewDeconv(deconvHelper.setXValueforPrint(totalIONsignals), smoothedValues, deconvHelper.factorisingValues(signal2, factorSizeNormal2), null, deconvHelper.factorisingValues(firstDerivIon2, factorSizeFirstDeriv), null, deconvHelper.factorisingValues(signal, factorSizeNormal), deconvHelper.factorisingValues(smoothedIonSignal, factorSizeNormal), PeakRangesStartPoints, PeakRangesEndPoints);
 			 */
 			System.out.println("Deconv ist durchgelaufen");
 			System.out.println("--------------------------------------------");
@@ -372,8 +376,68 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		}
 	}
 
+	private void setPeaksFromDeconvolution(IAllIonSignals allIonSignals, IPeakRanges peakRanges, ISupplierFilterSettings supplierFilterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
+
+		boolean doingAll = false;
+		boolean foundPeakModel = false;
+		//
+		//
+		int counterPeaksInPeak = 0, counterPeak = 0, counterIonInList = 0;
+		List<IChromatogramPeakMSD> listAllPeaksFromPeakDetection = chromatogram.getPeaks();
+		List<IChromatogramPeakMSD> listPeaksDeconvolution = new ArrayList<IChromatogramPeakMSD>();
+		for(IChromatogramPeakMSD peakFromPeakDetection : listAllPeaksFromPeakDetection) {
+			IMarkedIons excludedIons = new MarkedIons();
+			IScanRange scanRange = new ScanRange(peakRanges.getPeakRange(counterPeak).getPeakStartPoint() + peakRanges.getStartScan(), peakRanges.getPeakRange(counterPeak).getPeakEndPoint() + peakRanges.getStartScan());
+			List<IIon> listIons = getCopyOfIonListFromPeak(peakFromPeakDetection);
+			for(IIon ion : listIons) {
+				excludedIons.add(new MarkedIon(ion.getIon()));
+			}
+			for(int i = 0; i < listIons.size(); i++) {
+				excludedIons.remove(new MarkedIon(listIons.get(i).getIon()));
+				IChromatogramPeakMSD peak = getModel(scanRange, excludedIons);
+				if(peak != null) {
+					int rTOfPeak = peak.getExtractedMassSpectrum().getRetentionTime();
+				}
+				/*
+				 * 
+				 */
+				excludedIons.add(new MarkedIon(listIons.get(i).getIon()));
+				counterIonInList++;
+			}
+			if(counterPeaksInPeak == 1) {
+				listPeaksDeconvolution.add(peakFromPeakDetection);
+			}
+			counterIonInList = 0;
+			counterPeak++;
+		}
+	}
+
+	private IChromatogramPeakMSD getModel(IScanRange scanRange, IMarkedIons excludedIons) {
+
+		try {
+			IChromatogramPeakMSD peak = PeakBuilderMSD.createPeak(chromatogram, scanRange, excludedIons);
+			return peak;
+		} catch(PeakException e) {
+			// logger.warn(e);
+		}
+		return null;
+	}
+
+	private List<IIon> getCopyOfIonListFromPeak(IChromatogramPeakMSD peakFromPeakDetection) {
+
+		List<IIon> listIons = peakFromPeakDetection.getExtractedMassSpectrum().getIons();
+		List<IIon> listIonsCopy = new ArrayList<IIon>();
+		for(int i = 0; i < listIons.size(); i++) {
+			listIonsCopy.add(listIons.get(i));
+		}
+		// Sort of a list of IIon
+		// listIons.sort(new IonValueComparator());
+		listIons.sort(new IonAbundanceComparator(SortOrder.DESC));
+		return listIonsCopy;
+	}
+
 	/*
-	 * 
+	 * Testing different peak models
 	 */
 	private IPeakRanges getPeaksFromDeconvolution(IAllIonSignals allIonSignals, IPeakRanges peakRanges, ISupplierFilterSettings supplierFilterSettings, IDurbinWatsonClassifierResult durbinWatsonClassifierResult, IProgressMonitor monitor) {
 
@@ -383,22 +447,24 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		IPeakRanges peakRangesDeconv = peakRanges;
 		IScanRange scanRange, scanRange137, scanRange167, scanRangePeak2_1,
 				scanRangePeak2_2 = null;
-		scanRange = new ScanRange(peakRanges.getPeakRange(0).getPeakStartPoint() + peakRanges.getStartScan(), peakRanges.getPeakRange(0).getPeakEndPoint() + peakRanges.getStartScan());
+		scanRange = new ScanRange(peakRanges.getPeakRange(1).getPeakStartPoint() + peakRanges.getStartScan(), peakRanges.getPeakRange(1).getPeakEndPoint() + peakRanges.getStartScan());
 		scanRangePeak2_1 = new ScanRange(peakRanges.getPeakRange(2).getPeakStartPoint() + peakRanges.getStartScan() + 2, peakRanges.getPeakRange(2).getPeakEndPoint() + peakRanges.getStartScan() - 7);
 		scanRangePeak2_2 = new ScanRange(peakRanges.getPeakRange(2).getPeakStartPoint() + peakRanges.getStartScan(), peakRanges.getPeakRange(2).getPeakEndPoint() + peakRanges.getStartScan() + 4);
-		peak = peakList.get(0);
+		peak = peakList.get(1);
 		float tailing = peak.getPeakModel().getTailing();
 		float leading = peak.getPeakModel().getLeading();
 		List<IIon> listIons = peak.getExtractedMassSpectrum().getIons();
 		IIon highestIon = peak.getExtractedMassSpectrum().getHighestAbundance();
 		// peak.getExtractedMassSpectrum().removeIon(highestIon);
-		IIon Iontest = listIons.get(71);
 		IIon secondhighestIon = peak.getExtractedMassSpectrum().getHighestAbundance();
 		float test = peak.getExtractedMassSpectrum().getTotalSignal();
 		float tailing2 = peak.getPeakModel().getTailing();
 		float leading2 = peak.getPeakModel().getLeading();
-		peak.getExtractedMassSpectrum().removeAllIons();
-		peak.getExtractedMassSpectrum().addIon(Iontest);
+		if(listIons.size() > 71) {
+			IIon Iontest = listIons.get(71);
+			peak.getExtractedMassSpectrum().removeAllIons();
+			peak.getExtractedMassSpectrum().addIon(Iontest);
+		}
 		//
 		IMarkedIons excludedIons = new MarkedIons();
 		IMarkedIons excludedIons2 = new MarkedIons();
@@ -424,7 +490,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		@SuppressWarnings("unused")
 		int start137 = 0, end137 = 0;
 		boolean start = false;
-		for(int i = peakRanges.getPeakRange(0).getPeakStartPoint(); i <= peakRanges.getPeakRange(0).getPeakEndPoint(); i++) {
+		for(int i = peakRanges.getPeakRange(1).getPeakStartPoint(); i <= peakRanges.getPeakRange(1).getPeakEndPoint(); i++) {
 			if(Double.compare(signal137[i], noise137[i]) > 0 && !start) {
 				start137 = i;
 				start = true;
@@ -434,7 +500,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 				start = false;
 			}
 		}
-		scanRange137 = new ScanRange(peakRanges.getPeakRange(0).getPeakStartPoint() + peakRanges.getStartScan() + 1, peakRanges.getPeakRange(0).getPeakEndPoint() + peakRanges.getStartScan());
+		scanRange137 = new ScanRange(peakRanges.getPeakRange(1).getPeakStartPoint() + peakRanges.getStartScan() + 1, peakRanges.getPeakRange(1).getPeakEndPoint() + peakRanges.getStartScan());
 		for(IIonSignals ionSignal : allIonSignals.getIonSignals()) {
 			if(ionSignal.getIon() == 167 || ionSignal.getIon() == 15) {
 			} else {
@@ -457,7 +523,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		double[] noise167 = getNoiseOfTic(signal167, 0, false);
 		@SuppressWarnings("unused")
 		int start167 = 0, end167 = 0;
-		for(int i = peakRanges.getPeakRange(0).getPeakStartPoint(); i <= peakRanges.getPeakRange(0).getPeakEndPoint(); i++) {
+		for(int i = peakRanges.getPeakRange(1).getPeakStartPoint(); i <= peakRanges.getPeakRange(1).getPeakEndPoint(); i++) {
 			if(Double.compare(signal167[i], noise167[i]) > 0 && !start) {
 				start167 = i;
 				start = true;
@@ -467,7 +533,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 				start = false;
 			}
 		}
-		scanRange167 = new ScanRange(peakRanges.getPeakRange(0).getPeakStartPoint() + peakRanges.getStartScan() + 3, peakRanges.getPeakRange(0).getPeakEndPoint() + peakRanges.getStartScan() - 2);
+		scanRange167 = new ScanRange(peakRanges.getPeakRange(1).getPeakStartPoint() + peakRanges.getStartScan() + 3, peakRanges.getPeakRange(1).getPeakEndPoint() + peakRanges.getStartScan() - 2);
 		/*
 		 * 
 		 * 
@@ -485,57 +551,30 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			}
 		}
 		try {
-			chromatogram.removeAllPeaks();
 			peak2 = PeakBuilderMSD.createPeak(chromatogram, scanRangePeak2_1, excludedIonsPeak2_1);
 			peak2.getExtractedMassSpectrum().removeIon(167);
 			peak3 = PeakBuilderMSD.createPeak(chromatogram, scanRange137, excludedIons);
 			peak4 = PeakBuilderMSD.createPeak(chromatogram, scanRangePeak2_2, excludedIonsPeak2_2);
 			peak5 = PeakBuilderMSD.createPeak(chromatogram, scanRange137, excludedIons5);
 			peak6 = PeakBuilderMSD.createPeak(chromatogram, scanRange167, excludedIons4);
+			//
+			chromatogram.removeAllPeaks();
 			// chromatogram.addPeak(peak);
 			chromatogram.addPeak(peak3);
 			// chromatogram.addPeak(peak5);
 			chromatogram.addPeak(peak6);
 			chromatogram.addPeak(peak4);
 			chromatogram.addPeak(peak2);
+			/*
+			 * List<IChromatogramPeakMSD> peakList2 = chromatogram.getPeaks();
+			 * peakList2.remove(0);
+			 * peakList2.remove(0);
+			 */
 		} catch(PeakException e) {
 			logger.warn(e);
 		}
 		peak.setDetectorDescription("Peak detector deconvolution");
 		// 89 = Ion 137
-		if(1 == 2) {
-			for(int i = 0; i < peakRanges.size() - 1; i++) {
-				IPeakRange peakRange = peakRanges.getPeakRange(i);
-				int peakRangeBegin = peakRange.getPeakStartPoint();
-				int peakRangeEnd = peakRange.getPeakEndPoint();
-				int segmentBegin = peakRangeBegin / signalSegmentWidth;
-				int segmentEnd = peakRangeEnd / signalSegmentWidth;
-				int counter = 0;
-				for(IIonSignals ionSignal : allIonSignals.getIonSignals()) {
-					if(counter > 0) {
-						int zeroCounterSegment = 0;
-						// DurbinWatsonRatings(ionSignal.getIonSignals(), null, durbinWatsonClassifierResult, monitor);
-						for(int x = segmentBegin; x <= segmentEnd; x++) {
-							if(ionSignal.getSegmentValue(x).getSignal() <= 0.0) {
-								zeroCounterSegment++;
-							}
-						}
-						if(zeroCounterSegment >= ((segmentEnd - segmentBegin + 1) / 2)) {
-							double[] firstDerivSmoothedFactorised = deconvHelper.factorisingValues(savitzkyGolaySmooth(noDerivative, savitzkyGolaySmooth(firstDerivative, ionSignal.getIonSignals(), supplierFilterSettings, durbinWatsonClassifierResult, monitor), supplierFilterSettings, durbinWatsonClassifierResult, monitor), 1);
-							double[] peakRangeForIonSignal = Arrays.copyOfRange(firstDerivSmoothedFactorised, segmentBegin * quantityNoiseSegments, segmentEnd * quantityNoiseSegments + 1);
-							int[] firstCrossing = firstDerivZeroCrossing(peakRangeForIonSignal);
-							/*
-							 * TODO
-							 * - Model Peak Bilden: die groesten Massenspuren dafuer nutzen, und ein model peak erstellen und die darunter liegenden "aufsummieren"
-							 * - Range?? Wie Amdis damit mehrere modelle auf den gleichen Scan gebildet werden koennen
-							 * - Angabe von dem ModelIon: welches genutzt wurde, danach die ausschlaggebenden Ionen und die Model Kurve bzw PeakBuilder Settings
-							 */
-						}
-					}
-					counter++;
-				}
-			}
-		}
 		return peakRangesDeconv;
 	}
 
