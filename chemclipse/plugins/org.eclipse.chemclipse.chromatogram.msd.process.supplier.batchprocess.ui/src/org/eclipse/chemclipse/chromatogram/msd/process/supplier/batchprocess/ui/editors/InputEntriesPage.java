@@ -13,6 +13,13 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.internal.wizards.BatchProcessWizardDialog;
+import org.eclipse.chemclipse.converter.model.ChromatogramInputEntry;
+import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
+import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
+import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
+import org.eclipse.chemclipse.ux.extension.msd.ui.wizards.ChromatogramInputEntriesWizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -32,12 +39,6 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
-
-import org.eclipse.chemclipse.converter.model.ChromatogramInputEntry;
-import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.internal.wizards.BatchProcessWizardDialog;
-import org.eclipse.chemclipse.ux.extension.msd.ui.wizards.ChromatogramInputEntriesWizard;
 
 /**
  * @author Philip (eselmeister) Wenig
@@ -192,10 +193,8 @@ public class InputEntriesPage implements IMultiEditorPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				super.widgetSelected(e);
-				String pageName = "Input Files";
-				String title = "Chromatogram Input Files";
-				String description = "This wizard lets you select several input chromatogram files.";
-				ChromatogramInputEntriesWizard inputWizard = new ChromatogramInputEntriesWizard(pageName, title, description);
+				IChromatogramWizardElements chromatogramWizardElements = new ChromatogramWizardElements();
+				ChromatogramInputEntriesWizard inputWizard = new ChromatogramInputEntriesWizard(chromatogramWizardElements);
 				BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getCurrent().getActiveShell(), inputWizard);
 				wizardDialog.create();
 				int returnCode = wizardDialog.open();
@@ -206,7 +205,7 @@ public class InputEntriesPage implements IMultiEditorPage {
 					/*
 					 * Get the list of selected chromatograms.
 					 */
-					List<String> selectedChromatograms = inputWizard.getSelectedChromatograms();
+					List<String> selectedChromatograms = chromatogramWizardElements.getSelectedChromatograms();
 					if(selectedChromatograms.size() > 0) {
 						/*
 						 * If it contains at least 1 element, add it to the input files list.
