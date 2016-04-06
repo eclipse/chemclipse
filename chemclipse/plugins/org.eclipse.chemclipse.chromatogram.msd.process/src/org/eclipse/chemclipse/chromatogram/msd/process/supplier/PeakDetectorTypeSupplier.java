@@ -9,42 +9,43 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.process.internal.support;
+package org.eclipse.chemclipse.chromatogram.msd.process.supplier;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.PeakDetectorMSD;
+import org.eclipse.chemclipse.chromatogram.msd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupplier;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.chromatogram.msd.process.support.IProcessTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.IPeakIntegratorSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegrator;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+public class PeakDetectorTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
-public class PeakIntegratorTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
+	public static final String CATEGORY = "Peak Detector";
 
 	@Override
 	public String getCategory() {
 
-		return "Peak Integrator";
+		return CATEGORY;
 	}
 
 	@Override
 	public String getProcessorName(String processorId) throws Exception {
 
-		IPeakIntegratorSupplier integratorSupplier = PeakIntegrator.getPeakIntegratorSupport().getIntegratorSupplier(processorId);
-		return integratorSupplier.getIntegratorName();
+		IPeakDetectorSupplier peakDetectorSupplier = PeakDetectorMSD.getPeakDetectorSupport().getPeakDetectorSupplier(processorId);
+		return peakDetectorSupplier.getPeakDetectorName();
 	}
 
 	@Override
 	public List<String> getPluginIds() throws Exception {
 
-		return PeakIntegrator.getPeakIntegratorSupport().getAvailableIntegratorIds();
+		return PeakDetectorMSD.getPeakDetectorSupport().getAvailablePeakDetectorIds();
 	}
 
 	@Override
 	public IProcessingInfo applyProcessor(IChromatogramSelectionMSD chromatogramSelection, String processorId, IProgressMonitor monitor) {
 
-		return PeakIntegrator.integrate(chromatogramSelection, processorId, monitor);
+		return PeakDetectorMSD.detect(chromatogramSelection, processorId, monitor);
 	}
 }

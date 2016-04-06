@@ -22,4 +22,5 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.process.model,
+ org.eclipse.chemclipse.chromatogram.msd.process.supplier,
  org.eclipse.chemclipse.chromatogram.msd.process.support

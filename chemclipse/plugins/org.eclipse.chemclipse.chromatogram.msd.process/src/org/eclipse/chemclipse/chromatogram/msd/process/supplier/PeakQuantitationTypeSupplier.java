@@ -9,26 +9,27 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.process.internal.support;
+package org.eclipse.chemclipse.chromatogram.msd.process.supplier;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.chromatogram.msd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.IPeakQuantifierSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.PeakQuantifier;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakQuantitationTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
+
+	public static final String CATEGORY = "Peak Quantifier";
 
 	@Override
 	public String getCategory() {
 
-		return "Peak Quantifier";
+		return CATEGORY;
 	}
 
 	@Override

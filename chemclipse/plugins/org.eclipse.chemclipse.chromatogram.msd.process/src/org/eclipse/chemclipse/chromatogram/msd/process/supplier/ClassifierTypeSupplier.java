@@ -9,42 +9,43 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.process.internal.support;
+package org.eclipse.chemclipse.chromatogram.msd.process.supplier;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.classifier.core.ChromatogramClassifier;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.core.IChromatogramClassifierSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram.ChromatogramIdentifier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.core.ISupplier;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.chromatogram.msd.process.support.IProcessTypeSupplier;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+public class ClassifierTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
-public class ChromatogramIdentifierTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
+	public static final String CATEGORY = "Classifier";
 
 	@Override
 	public String getCategory() {
 
-		return "Chromatogram Identifier";
+		return CATEGORY;
 	}
 
 	@Override
 	public String getProcessorName(String processorId) throws Exception {
 
-		ISupplier chromatogramIdentifierSupplier = ChromatogramIdentifier.getChromatogramIdentifierSupport().getIdentifierSupplier(processorId);
-		return chromatogramIdentifierSupplier.getIdentifierName();
+		IChromatogramClassifierSupplier classifierSupplier = ChromatogramClassifier.getChromatogramClassifierSupport().getClassifierSupplier(processorId);
+		return classifierSupplier.getClassifierName();
 	}
 
 	@Override
 	public List<String> getPluginIds() throws Exception {
 
-		return ChromatogramIdentifier.getChromatogramIdentifierSupport().getAvailableIdentifierIds();
+		return ChromatogramClassifier.getChromatogramClassifierSupport().getAvailableClassifierIds();
 	}
 
 	@Override
 	public IProcessingInfo applyProcessor(IChromatogramSelectionMSD chromatogramSelection, String processorId, IProgressMonitor monitor) {
 
-		return ChromatogramIdentifier.identify(chromatogramSelection, processorId, monitor);
+		return ChromatogramClassifier.applyClassifier(chromatogramSelection, processorId, monitor);
 	}
 }

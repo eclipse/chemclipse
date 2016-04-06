@@ -9,7 +9,7 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.process.internal.support;
+package org.eclipse.chemclipse.chromatogram.msd.process.supplier;
 
 import org.eclipse.chemclipse.chromatogram.msd.process.support.IProcessTypeSupplier;
 
