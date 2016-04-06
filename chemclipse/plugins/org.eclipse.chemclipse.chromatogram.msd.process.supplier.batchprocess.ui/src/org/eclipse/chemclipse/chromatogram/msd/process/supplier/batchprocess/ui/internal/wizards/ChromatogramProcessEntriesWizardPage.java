@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.internal.wizards;
 
+import org.eclipse.chemclipse.chromatogram.msd.process.model.ChromatogramProcessEntry;
+import org.eclipse.chemclipse.chromatogram.msd.process.model.IChromatogramProcessEntry;
+import org.eclipse.chemclipse.chromatogram.msd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.process.support.ProcessTypeSupport;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -20,11 +24,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-
-import org.eclipse.chemclipse.chromatogram.msd.process.model.ChromatogramProcessEntry;
-import org.eclipse.chemclipse.chromatogram.msd.process.model.IChromatogramProcessEntry;
-import org.eclipse.chemclipse.chromatogram.msd.process.support.IProcessTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.process.support.ProcessTypeSupport;
 
 /**
  * @author Philip (eselmeister) Wenig
