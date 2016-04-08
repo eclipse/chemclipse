@@ -9,42 +9,43 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.process.internal.support;
+package org.eclipse.chemclipse.chromatogram.msd.process.supplier;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.BaselineDetector;
+import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.IBaselineDetectorSupplier;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.chromatogram.msd.process.support.IProcessTypeSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.combined.CombinedIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.combined.ICombinedIntegratorSupplier;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+public class BaselineDetectorTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
-public class CombinedIntegratorTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
+	public static final String CATEGORY = "Baseline Detector";
 
 	@Override
 	public String getCategory() {
 
-		return "Combined Chromatogram and Peak Integrator";
+		return CATEGORY;
 	}
 
 	@Override
 	public String getProcessorName(String processorId) throws Exception {
 
-		ICombinedIntegratorSupplier integratorSupplier = CombinedIntegrator.getCombinedIntegratorSupport().getIntegratorSupplier(processorId);
-		return integratorSupplier.getIntegratorName();
+		IBaselineDetectorSupplier baselineSupplier = BaselineDetector.getBaselineDetectorSupport().getBaselineDetectorSupplier(processorId);
+		return baselineSupplier.getDetectorName();
 	}
 
 	@Override
 	public List<String> getPluginIds() throws Exception {
 
-		return CombinedIntegrator.getCombinedIntegratorSupport().getAvailableIntegratorIds();
+		return BaselineDetector.getBaselineDetectorSupport().getAvailableDetectorIds();
 	}
 
 	@Override
 	public IProcessingInfo applyProcessor(IChromatogramSelectionMSD chromatogramSelection, String processorId, IProgressMonitor monitor) {
 
-		return CombinedIntegrator.integrate(chromatogramSelection, processorId, monitor);
+		return BaselineDetector.setBaseline(chromatogramSelection, processorId, monitor);
 	}
 }

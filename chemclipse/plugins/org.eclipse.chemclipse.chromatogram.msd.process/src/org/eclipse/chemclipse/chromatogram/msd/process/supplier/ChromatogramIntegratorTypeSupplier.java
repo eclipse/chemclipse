@@ -9,42 +9,43 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.process.internal.support;
+package org.eclipse.chemclipse.chromatogram.msd.process.supplier;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.process.support.IProcessTypeSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.chromatogram.ChromatogramIntegrator;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.chromatogram.IChromatogramIntegratorSupplier;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilter;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupplier;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.chromatogram.msd.process.support.IProcessTypeSupplier;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+public class ChromatogramIntegratorTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
 
-public class ChromatogramFilterTypeSupplier extends AbstractProcessTypeSupplier implements IProcessTypeSupplier {
+	public static final String CATEGORY = "Chromatogram Integrator";
 
 	@Override
 	public String getCategory() {
 
-		return "Chromatogram Filter";
+		return CATEGORY;
 	}
 
 	@Override
 	public String getProcessorName(String processorId) throws Exception {
 
-		IChromatogramFilterSupplier filterSupplier = ChromatogramFilter.getChromatogramFilterSupport().getFilterSupplier(processorId);
-		return filterSupplier.getFilterName();
+		IChromatogramIntegratorSupplier integratorSupplier = ChromatogramIntegrator.getChromatogramIntegratorSupport().getIntegratorSupplier(processorId);
+		return integratorSupplier.getIntegratorName();
 	}
 
 	@Override
 	public List<String> getPluginIds() throws Exception {
 
-		return ChromatogramFilter.getChromatogramFilterSupport().getAvailableFilterIds();
+		return ChromatogramIntegrator.getChromatogramIntegratorSupport().getAvailableIntegratorIds();
 	}
 
 	@Override
 	public IProcessingInfo applyProcessor(IChromatogramSelectionMSD chromatogramSelection, String processorId, IProgressMonitor monitor) {
 
-		return ChromatogramFilter.applyFilter(chromatogramSelection, processorId, monitor);
+		return ChromatogramIntegrator.integrate(chromatogramSelection, processorId, monitor);
 	}
 }

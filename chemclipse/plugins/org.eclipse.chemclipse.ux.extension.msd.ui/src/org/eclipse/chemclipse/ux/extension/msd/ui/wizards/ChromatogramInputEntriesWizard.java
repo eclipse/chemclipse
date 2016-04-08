@@ -11,59 +11,31 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.wizards;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 import org.eclipse.jface.wizard.Wizard;
 
-/**
- * @author Philip (eselmeister) Wenig
- * 
- */
 public class ChromatogramInputEntriesWizard extends Wizard {
 
 	private ChromatogramInputEntriesWizardPage inputEntriesPage;
-	private List<String> selectedChromatograms;
-	private String pageName;
-	private String title;
-	private String description;
+	private IChromatogramWizardElements chromatogramWizardElements;
 
-	public ChromatogramInputEntriesWizard(String pageName, String title, String description) {
+	public ChromatogramInputEntriesWizard(IChromatogramWizardElements chromatogramWizardElements) {
+		//
 		super();
 		setNeedsProgressMonitor(true);
-		this.pageName = pageName;
-		this.title = title;
-		this.description = description;
+		this.chromatogramWizardElements = chromatogramWizardElements;
 	}
 
 	@Override
 	public boolean performFinish() {
 
-		ISelection selection = inputEntriesPage.getSelection();
-		IStructuredSelection structuredSelection = (IStructuredSelection)selection;
-		selectedChromatograms = new ArrayList<String>();
-		for(Object element : structuredSelection.toList()) {
-			selectedChromatograms.add(element.toString());
-		}
 		return true;
-	}
-
-	/**
-	 * Returns the selected chromatograms.
-	 * 
-	 * @return List<String>
-	 */
-	public List<String> getSelectedChromatograms() {
-
-		return selectedChromatograms;
 	}
 
 	@Override
 	public void addPages() {
 
-		inputEntriesPage = new ChromatogramInputEntriesWizardPage(pageName, title, description);
+		inputEntriesPage = new ChromatogramInputEntriesWizardPage(chromatogramWizardElements);
 		addPage(inputEntriesPage);
 	}
 }
