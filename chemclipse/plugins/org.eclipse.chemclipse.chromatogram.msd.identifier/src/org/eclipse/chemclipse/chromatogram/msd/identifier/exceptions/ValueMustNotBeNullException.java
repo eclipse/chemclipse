@@ -8,10 +8,11 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions;
 
-public class ValueMustNotBeNullException extends Exception {
+public class ValueMustNotBeNullException extends RuntimeException {
 
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or
