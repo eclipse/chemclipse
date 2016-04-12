@@ -21,12 +21,6 @@ public abstract class AbstractArrayWriter implements IArrayWriter {
 		this.data = data;
 	}
 
-	@Override
-	public void writeIntegerAsBigEndian(int b) {
-
-		write(get4BytesAsIntegerBigEndian(b));
-	}
-
 	/**
 	 * Writes the byte array to this.data at the actual position.
 	 * 
@@ -90,12 +84,27 @@ public abstract class AbstractArrayWriter implements IArrayWriter {
 		return bytes;
 	}
 
-	/**
-	 * Converts an integer value to a byte array.
-	 * 
-	 * @param value
-	 * @return byte[]
-	 */
+	@Override
+	public void writeIntegerAsBigEndian(int value) {
+
+		write(get4BytesAsIntegerBigEndian(value));
+	}
+
+	@Override
+	public byte[] get2BytesAsShortBigEndian(int value) {
+
+		byte[] bytes = new byte[2];
+		for(int i = 0; i < 2; i++) {
+			/*
+			 * i = 0 - 0000|0000 >> 0000|0000 = 0 i = 1 - 0000|0001 >> 0000|1000
+			 * = 8
+			 */
+			int shift = i << 3;
+			bytes[1 - i] = (byte)((value & (0xff << shift)) >>> shift);
+		}
+		return bytes;
+	}
+
 	@Override
 	public byte[] get4BytesAsIntegerBigEndian(int value) {
 
@@ -112,23 +121,36 @@ public abstract class AbstractArrayWriter implements IArrayWriter {
 		return bytes;
 	}
 
-	/**
-	 * Converts an integer value to a byte array.
-	 * 
-	 * @param value
-	 * @return byte[]
-	 */
 	@Override
-	public byte[] get2BytesAsShortBigEndian(int value) {
+	public void write4BytesUnsignedIntegerLittleEndian(int value) {
+
+		write(get4BytesLittleEndian(value));
+	}
+
+	@Override
+	public void write2BytesUnsignedIntegerLittleEndian(int value) {
+
+		write(get2BytesLittleEndian(value));
+	}
+
+	@Override
+	public byte[] get2BytesLittleEndian(int value) {
 
 		byte[] bytes = new byte[2];
 		for(int i = 0; i < 2; i++) {
-			/*
-			 * i = 0 - 0000|0000 >> 0000|0000 = 0 i = 1 - 0000|0001 >> 0000|1000
-			 * = 8
-			 */
-			int shift = i << 3;
-			bytes[1 - i] = (byte)((value & (0xff << shift)) >>> shift);
+			int shift = i * 8;
+			bytes[i] = (byte)(value >>> shift);
+		}
+		return bytes;
+	}
+
+	@Override
+	public byte[] get4BytesLittleEndian(int value) {
+
+		byte[] bytes = new byte[4];
+		for(int i = 0; i < 4; i++) {
+			int shift = i * 8;
+			bytes[i] = (byte)(value >>> shift);
 		}
 		return bytes;
 	}

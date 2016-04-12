@@ -13,15 +13,23 @@ package org.eclipse.chemclipse.converter.io.support;
 
 public interface IArrayWriter {
 
-	void writeIntegerAsBigEndian(int b);
-
 	void write(byte[] bytes);
 
 	void skipBytes(int bytes);
 
 	byte[] getBytesWithStringLengthIndex(int writeBytes, String entry);
 
+	void writeIntegerAsBigEndian(int value);
+
 	byte[] get2BytesAsShortBigEndian(int value);
 
 	byte[] get4BytesAsIntegerBigEndian(int value);
+
+	void write4BytesUnsignedIntegerLittleEndian(int value);
+
+	void write2BytesUnsignedIntegerLittleEndian(int value);
+
+	byte[] get2BytesLittleEndian(int value);
+
+	byte[] get4BytesLittleEndian(int value);
 }
