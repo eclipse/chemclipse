@@ -49,6 +49,8 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 	private static final String TIC_MARKER = "##TIC=";
 	private static final String NAME_MARKER = "##NAME=";
 	private static final String HIT_MARKER = "##HIT=";
+	// private static final String RRT_MARKER = "##RRT=";
+	// private static final String SCAN = "##SCAN";
 	//
 	private static final String XYDATA_MARKER_SPACE = "##XYDATA= (XY..XY)";
 	private static final String XYDATA_MARKER_SHORT = "##XYDATA=(X,Y)";
@@ -105,50 +107,62 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 				} catch(NumberFormatException e) {
 					logger.warn(e);
 				}
-				bufferedReader.readLine(); // SCAN
+				/*
+				 * Read until
+				 * RETENTION_TIME_MARKER
+				 * or
+				 * TIME_MARKER
+				 * is reached.
+				 */
+				boolean searchForRetentionTime = true;
+				while(searchForRetentionTime) {
+					if((line = bufferedReader.readLine()) != null) {
+						if(isRetentionTimeMarker(line)) {
+							searchForRetentionTime = false;
+						}
+					}
+				}
 				//
-				if((line = bufferedReader.readLine()) != null) {
-					if(line.startsWith(RETENTION_TIME_MARKER) || line.startsWith(TIME_MARKER)) {
-						int retentionTime = getRetentionTime(line);
-						if(retentionTime >= 0 && abundance > 0) {
-							IVendorScan scan = new VendorScan(abundance);
-							scan.setRetentionTime(retentionTime);
-							chromatogram.addScan(scan);
+				if(line != null) {
+					int retentionTime = getRetentionTime(line);
+					if(retentionTime >= 0 && abundance > 0) {
+						IVendorScan scan = new VendorScan(abundance);
+						scan.setRetentionTime(retentionTime);
+						chromatogram.addScan(scan);
+						/*
+						 * Add the identification
+						 */
+						if(!name.equals("")) {
 							/*
-							 * Add the identification
+							 * Find the hit value and set it.
 							 */
-							if(!name.equals("")) {
-								/*
-								 * Find the hit value and set it.
-								 */
-								boolean findHitMarker = true;
-								float matchFactor = 100.0f;
-								while((line = bufferedReader.readLine()) != null && findHitMarker) {
-									if(line.startsWith(HIT_MARKER)) {
-										try {
-											String hitValue = line.replace(HIT_MARKER, "").trim();
-											matchFactor = Float.parseFloat(hitValue);
-											findHitMarker = false;
-										} catch(NumberFormatException e) {
-											logger.warn(e);
-										}
-									} else if(line.startsWith(NAME_MARKER) || line.startsWith(TIC_MARKER)) {
+							boolean findHitMarker = true;
+							float matchFactor = 100.0f;
+							while((line = bufferedReader.readLine()) != null && findHitMarker) {
+								if(line.startsWith(HIT_MARKER)) {
+									try {
+										String hitValue = line.replace(HIT_MARKER, "").trim();
+										matchFactor = Float.parseFloat(hitValue);
 										findHitMarker = false;
+									} catch(NumberFormatException e) {
+										logger.warn(e);
 									}
+								} else if(line.startsWith(NAME_MARKER) || line.startsWith(TIC_MARKER)) {
+									findHitMarker = false;
 								}
-								/*
-								 * Add the target.
-								 */
-								try {
-									ILibraryInformation libraryInformation = new LibraryInformation();
-									libraryInformation.setName(name);
-									IComparisonResult comparisonResult = new ComparisonResult(matchFactor, matchFactor);
-									IScanTargetCSD scanTargetCSD = new ScanTargetCSD(libraryInformation, comparisonResult);
-									scanTargetCSD.setParentScan(scan);
-									scan.addTarget(scanTargetCSD);
-								} catch(ReferenceMustNotBeNullException e) {
-									logger.warn(e);
-								}
+							}
+							/*
+							 * Add the target.
+							 */
+							try {
+								ILibraryInformation libraryInformation = new LibraryInformation();
+								libraryInformation.setName(name);
+								IComparisonResult comparisonResult = new ComparisonResult(matchFactor, matchFactor);
+								IScanTargetCSD scanTargetCSD = new ScanTargetCSD(libraryInformation, comparisonResult);
+								scanTargetCSD.setParentScan(scan);
+								scan.addTarget(scanTargetCSD);
+							} catch(ReferenceMustNotBeNullException e) {
+								logger.warn(e);
 							}
 						}
 					}
@@ -177,6 +191,14 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 		fileReader.close();
 		//
 		return chromatogram;
+	}
+
+	private boolean isRetentionTimeMarker(String line) {
+
+		if(line.startsWith(RETENTION_TIME_MARKER) || line.startsWith(TIME_MARKER)) {
+			return true;
+		}
+		return false;
 	}
 
 	private int getRetentionTime(String line) {
