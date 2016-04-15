@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.logging.core;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 public class Category {
@@ -24,61 +25,61 @@ public class Category {
 
 	public void debug(final Object message) {
 
-		logger.debug(message);
+		logger.log(Category.class.getName(), Level.DEBUG, message, null);
 	}
 
 	public void debug(final Object message, Throwable t) {
 
-		logger.debug(message, t);
+		logger.log(Category.class.getName(), Level.DEBUG, message, null);
 	}
 
 	public void error(final Object message) {
 
-		logger.error(message);
+		logger.log(Category.class.getName(), Level.ERROR, message, null);
 	}
 
 	public void error(final Object message, Throwable t) {
 
-		logger.error(message, t);
+		logger.log(Category.class.getName(), Level.ERROR, message, null);
 	}
 
 	public void fatal(final Object message) {
 
-		logger.fatal(message);
+		logger.log(Category.class.getName(), Level.FATAL, message, null);
 	}
 
 	public void fatal(final Object message, Throwable t) {
 
-		logger.fatal(message, t);
+		logger.log(Category.class.getName(), Level.FATAL, message, null);
 	}
 
 	public void info(final Object message) {
 
-		logger.info(message);
+		logger.log(Category.class.getName(), Level.INFO, message, null);
 	}
 
 	public void info(final Object message, Throwable t) {
 
-		logger.info(message, t);
+		logger.log(Category.class.getName(), Level.INFO, message, null);
 	}
 
 	public void trace(final Object message) {
 
-		logger.trace(message);
+		logger.log(Category.class.getName(), Level.TRACE, message, null);
 	}
 
 	public void trace(final Object message, Throwable t) {
 
-		logger.trace(message, t);
+		logger.log(Category.class.getName(), Level.TRACE, message, null);
 	}
 
 	public void warn(final Object message) {
 
-		logger.warn(message);
+		logger.log(Category.class.getName(), Level.WARN, message, null);
 	}
 
 	public void warn(final Object message, Throwable t) {
 
-		logger.warn(message, t);
+		logger.log(Category.class.getName(), Level.WARN, message, null);
 	}
 }
