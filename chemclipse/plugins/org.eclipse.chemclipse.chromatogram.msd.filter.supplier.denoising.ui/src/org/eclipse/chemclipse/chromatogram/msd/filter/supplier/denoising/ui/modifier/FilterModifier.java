@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilter;
+import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.result.IDenoisingFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.ISupplierFilterSettings;
@@ -90,7 +90,7 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 			 * Apply the filter and show the view.
 			 */
 			try {
-				final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, FILTER_ID, monitor);
+				final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, chromatogramFilterSettings, FILTER_ID, monitor);
 				IChromatogramFilterResult result = processingInfo.getChromatogramFilterResult();
 				if(result instanceof IDenoisingFilterResult) {
 					final IDenoisingFilterResult denoisingResult = (IDenoisingFilterResult)result;
