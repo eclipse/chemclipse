@@ -16,9 +16,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoPeakFilterSupplierAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.IPeakFilterSupport;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.PeakFilter;
-import org.eclipse.chemclipse.chromatogram.msd.filter.exceptions.NoPeakFilterSupplierAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.FilterSupport;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.internal.support.ISubtractFilterEvents;

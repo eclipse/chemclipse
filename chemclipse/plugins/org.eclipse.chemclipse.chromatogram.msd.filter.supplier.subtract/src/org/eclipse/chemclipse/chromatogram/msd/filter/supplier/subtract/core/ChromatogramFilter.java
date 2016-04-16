@@ -11,23 +11,22 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.core;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.chromatogram.filter.processing.ChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.AbstractChromatogramFilter;
+import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.AbstractChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.internal.calculator.SubtractCalculator;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramFilter extends AbstractChromatogramFilter {
+public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 
 	private static final String DESCRIPTION = "Subtract Filter Chromatogram";
 

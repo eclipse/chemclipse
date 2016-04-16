@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilter;
+import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -47,7 +47,7 @@ public class FilterModifierChromatogram extends AbstractChromatogramProcessor im
 		if(getChromatogramSelection() instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelection = (IChromatogramSelectionMSD)getChromatogramSelection();
 			IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
-			final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, PreferenceSupplier.FILTER_ID_CHROMATOGRAM, monitor);
+			final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, chromatogramFilterSettings, PreferenceSupplier.FILTER_ID_CHROMATOGRAM, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
 		}
 	}
