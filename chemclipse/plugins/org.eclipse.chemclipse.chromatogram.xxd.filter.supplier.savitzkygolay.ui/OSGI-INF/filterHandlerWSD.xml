@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<component name="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.handlers.FilterHandlerMSD">
+<component name="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.handlers.FilterHandlerWSD">
    <implementation class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.handlers.FilterHandler" />
-   <property name="event.topics" value="chromatogram/msd/update/chromatogramselection" />
+   <property name="event.topics" value="chromatogram/wsd/update/chromatogramselection" />
    <service>
       <provide interface="org.osgi.service.event.EventHandler" />
    </service>

@@ -11,23 +11,22 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
+import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
+import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.processing.ChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.AbstractChromatogramFilter;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.processor.SavitzkyGolayProcessor;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramFilterMSD extends AbstractChromatogramFilter implements IChromatogramFilter {
+public class ChromatogramFilter extends AbstractChromatogramFilter implements IChromatogramFilter {
 
 	@Override
-	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		IChromatogramFilterProcessingInfo processingInfo = new ChromatogramFilterProcessingInfo();
 		processingInfo.addMessages(validate(chromatogramSelection, chromatogramFilterSettings));
@@ -49,7 +48,7 @@ public class ChromatogramFilterMSD extends AbstractChromatogramFilter implements
 	}
 
 	@Override
-	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getSupplierFilterSettings();
 		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
