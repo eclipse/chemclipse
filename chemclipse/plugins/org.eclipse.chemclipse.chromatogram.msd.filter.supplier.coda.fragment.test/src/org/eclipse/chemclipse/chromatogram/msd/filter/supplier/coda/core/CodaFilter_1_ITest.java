@@ -11,18 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.core;
 
+import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterMSD;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.SupplierFilterSettings;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilter;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.SupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.ISupplierFilterSettings;
-
-/**
- * @author eselmeister
- */
 public class CodaFilter_1_ITest extends ChromatogramImporterTestCase {
 
-	private IChromatogramFilter chromatogramFilter;
+	private IChromatogramFilterMSD chromatogramFilter;
 	private ISupplierFilterSettings chromatogramFilterSettings;
 
 	@Override
