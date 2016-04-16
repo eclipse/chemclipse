@@ -34,6 +34,9 @@ chemclipse/plugins/org.eclipse.chemclipse.msd.converter/bin/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter.fragment.test/bin/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter.ui/bin/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter/bin/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.wsd.filter.fragment.test/bin/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.wsd.filter.ui/bin/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.wsd.filter/bin/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.identifier.fragment.test/bin/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.identifier.ui/bin/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.identifier/bin/
@@ -88,6 +91,7 @@ chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.batchprocess.ui.fragm
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.ui.fragment.test/bin/
 chemclipse/plugins/org.eclipse.chemclipse.msd.converter.ui.fragment.test/bin/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter.ui.fragment.test/bin/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.wsd.filter.ui.fragment.test/bin/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.identifier.ui.fragment.test/bin/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.fragment.test/bin/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.ui.fragment.test/bin/
@@ -182,6 +186,8 @@ chemclipse/plugins/org.eclipse.chemclipse.msd.converter.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.msd.converter/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.filter/target/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.wsd.filter.ui/target/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.wsd.filter/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.identifier.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.identifier/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.integrator.ui/target/
