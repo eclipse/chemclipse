@@ -9,21 +9,29 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.filter.exceptions;
+package org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram;
 
-public class ChromatogramSelectionException extends Exception {
+public interface IChromatogramFilterSupplierMSD {
 
 	/**
-	 * Renew the serialVersionUID any time you have changed some fields or
-	 * methods.
+	 * The id of the extension point: e.g.
+	 * (org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backgroundRemover)
+	 * 
+	 * @return String
 	 */
-	private static final long serialVersionUID = -5169717859171316620L;
+	String getId();
 
-	public ChromatogramSelectionException() {
-		super();
-	}
+	/**
+	 * A short description of the functionality of the extension point.
+	 * 
+	 * @return String
+	 */
+	String getDescription();
 
-	public ChromatogramSelectionException(String message) {
-		super(message);
-	}
+	/**
+	 * The filter name that can be shown in a list box dialogue.
+	 * 
+	 * @return String
+	 */
+	String getFilterName();
 }

@@ -9,21 +9,21 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.filter.exceptions;
+package org.eclipse.chemclipse.chromatogram.filter.exceptions;
 
-public class NoChromatogramFilterSupplierAvailableException extends Exception {
+public class FilterSettingsException extends Exception {
 
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final long serialVersionUID = 7446845229207444195L;
+	private static final long serialVersionUID = -132741393013246001L;
 
-	public NoChromatogramFilterSupplierAvailableException() {
+	public FilterSettingsException() {
 		super();
 	}
 
-	public NoChromatogramFilterSupplierAvailableException(String message) {
+	public FilterSettingsException(String message) {
 		super(message);
 	}
 }

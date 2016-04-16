@@ -11,21 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram;
 
+import org.eclipse.chemclipse.chromatogram.filter.processing.ChromatogramFilterProcessingInfo;
+import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
+import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 
-import org.eclipse.chemclipse.chromatogram.filter.processing.ChromatogramFilterProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.logging.core.Logger;
+public class ChromatogramFilterMSD {
 
-public class ChromatogramFilter {
-
-	private static final Logger logger = Logger.getLogger(ChromatogramFilter.class);
+	private static final Logger logger = Logger.getLogger(ChromatogramFilterMSD.class);
 	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.msd.filter.chromatogramFilterSupplier";
 	/*
 	 * These are the attributes of the extension point elements.
@@ -41,7 +40,7 @@ public class ChromatogramFilter {
 	/**
 	 * This class is a singleton. Use only static methods.
 	 */
-	private ChromatogramFilter() {
+	private ChromatogramFilterMSD() {
 	}
 
 	/**
@@ -59,7 +58,7 @@ public class ChromatogramFilter {
 	public static IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor) {
 
 		IChromatogramFilterProcessingInfo processingInfo;
-		IChromatogramFilter chromatogramFilter = getChromatogramFilter(filterId);
+		IChromatogramFilterMSD chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 		} else {
@@ -82,7 +81,7 @@ public class ChromatogramFilter {
 	public static IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, String filterId, IProgressMonitor monitor) {
 
 		IChromatogramFilterProcessingInfo processingInfo;
-		IChromatogramFilter chromatogramFilter = getChromatogramFilter(filterId);
+		IChromatogramFilterMSD chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, monitor);
 		} else {
@@ -92,10 +91,10 @@ public class ChromatogramFilter {
 		return processingInfo;
 	}
 
-	public static IChromatogramFilterSupport getChromatogramFilterSupport() {
+	public static IChromatogramFilterSupportMSD getChromatogramFilterSupport() {
 
-		ChromatogramFilterSupplier supplier;
-		ChromatogramFilterSupport filterSupport = new ChromatogramFilterSupport();
+		ChromatogramFilterSupplierMSD supplier;
+		ChromatogramFilterSupportMSD filterSupport = new ChromatogramFilterSupportMSD();
 		/*
 		 * Search in the extension registry and fill the comparison support
 		 * object with supplier information.
@@ -103,7 +102,7 @@ public class ChromatogramFilter {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] extensions = registry.getConfigurationElementsFor(EXTENSION_POINT);
 		for(IConfigurationElement element : extensions) {
-			supplier = new ChromatogramFilterSupplier();
+			supplier = new ChromatogramFilterSupplierMSD();
 			supplier.setId(element.getAttribute(ID));
 			supplier.setDescription(element.getAttribute(DESCRIPTION));
 			supplier.setFilterName(element.getAttribute(FILTER_NAME));
@@ -114,17 +113,17 @@ public class ChromatogramFilter {
 
 	// --------------------------------------------private methods
 	/**
-	 * Returns a {@link IChromatogramFilter} instance given by the filterId or
+	 * Returns a {@link IChromatogramFilterMSD} instance given by the filterId or
 	 * null, if none is available.
 	 */
-	private static IChromatogramFilter getChromatogramFilter(final String filterId) {
+	private static IChromatogramFilterMSD getChromatogramFilter(final String filterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(filterId);
-		IChromatogramFilter instance = null;
+		IChromatogramFilterMSD instance = null;
 		if(element != null) {
 			try {
-				instance = (IChromatogramFilter)element.createExecutableExtension(FILTER);
+				instance = (IChromatogramFilterMSD)element.createExecutableExtension(FILTER);
 			} catch(CoreException e) {
 				logger.warn(e);
 			}
@@ -133,7 +132,7 @@ public class ChromatogramFilter {
 	}
 
 	/**
-	 * Returns an {@link IChromatogramFilter} instance or null if none is
+	 * Returns an {@link IChromatogramFilterMSD} instance or null if none is
 	 * available.
 	 * 
 	 * @param filterId

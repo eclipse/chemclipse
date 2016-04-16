@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2016 Philip (eselmeister) Wenig.
+ * Copyright (c) 2016 Lablicate UG (haftungsbeschränkt).
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,21 +7,17 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Philip (eselmeister) Wenig - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
+package org.eclipse.chemclipse.chromatogram.filter.core.chromatogram;
 
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
-/**
- * @author eselmeister
- */
 public interface IChromatogramFilter {
 
 	/**
@@ -35,7 +31,7 @@ public interface IChromatogramFilter {
 	 * @param monitor
 	 * @return {@link IChromatogramFilterProcessingInfo}
 	 */
-	IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor);
+	IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor);
 
 	/**
 	 * Apply the filter in the given chromatogram selection.
@@ -46,7 +42,7 @@ public interface IChromatogramFilter {
 	 * @param monitor
 	 * @return {@link IChromatogramFilterProcessingInfo}
 	 */
-	IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor);
+	IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);
 
 	/**
 	 * Validates the selection and settings and returns a process info instance.
@@ -55,5 +51,5 @@ public interface IChromatogramFilter {
 	 * @param chromatogramFilterSettings
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo validate(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings);
+	IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings);
 }

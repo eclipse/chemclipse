@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2016 Philip (eselmeister) Wenig.
+ * Copyright (c) 2016 Lablicate UG (haftungsbeschränkt).
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,13 +7,10 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Philip (eselmeister) Wenig - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram;
+package org.eclipse.chemclipse.chromatogram.filter.core.chromatogram;
 
-/**
- * @author eselmeister
- */
 public interface IChromatogramFilterSupplier {
 
 	/**

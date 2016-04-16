@@ -38,6 +38,13 @@
         <children xsi:type="menu:Menu" xmi:id="_o0fwABZGEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.csd" label="CSD">
           <children xsi:type="menu:Menu" xmi:id="_tVLs8BZGEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.csd.chromatogram" label="Chromatogram"/>
         </children>
+        <children xsi:type="menu:Menu" xmi:id="_tcotcAPsEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.chromatogram" label="Chromatogram"/>
+        <children xsi:type="menu:Menu" xmi:id="_vrBQkAPsEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.peaks" label="Peaks"/>
+      </children>
+      <children xsi:type="menu:MenuSeparator" xmi:id="_DEcqwAPqEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.1"/>
+      <children xsi:type="menu:Menu" xmi:id="_BJuDcAPqEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.calculators" label="Calculators">
+        <children xsi:type="menu:Menu" xmi:id="_xaKS8APsEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.calculators.chromatogram" label="Chromatogram"/>
+        <children xsi:type="menu:Menu" xmi:id="_32iggAPsEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.calculators.peaks" label="Peaks"/>
       </children>
       <children xsi:type="menu:MenuSeparator" xmi:id="_mX-uoDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.3"/>
       <children xsi:type="menu:Menu" xmi:id="_eTFrIDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector" label="Baseline Detectors">

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2016 Philip (eselmeister) Wenig.
+ * Copyright (c) 2016 Lablicate UG (haftungsbeschränkt).
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,24 +7,21 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Philip (eselmeister) Wenig - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram;
+package org.eclipse.chemclipse.chromatogram.filter.core.chromatogram;
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
-/**
- * @author eselmeister
- */
 public abstract class AbstractChromatogramFilter implements IChromatogramFilter {
 
 	private static final String DESCRIPTION = "Chromatogram Filter";
 
 	@Override
-	public IProcessingInfo validate(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings) {
+	public IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		processingInfo.addMessages(validateChromatogramSelection(chromatogramSelection));
@@ -40,7 +37,7 @@ public abstract class AbstractChromatogramFilter implements IChromatogramFilter 
 	 * @param chromatogramSelection
 	 * @return {@link IProcessingInfo}
 	 */
-	private IProcessingInfo validateChromatogramSelection(IChromatogramSelectionMSD chromatogramSelection) {
+	private IProcessingInfo validateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(chromatogramSelection == null) {

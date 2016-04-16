@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2016 Philip (eselmeister) Wenig.
+ * Copyright (c) 2013, 2016 Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,23 +7,23 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Philip (eselmeister) Wenig - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.filter.exceptions;
+package org.eclipse.chemclipse.chromatogram.filter.exceptions;
 
-public class FilterSettingsException extends Exception {
+public class NoPeakFilterSupplierAvailableException extends Exception {
 
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final long serialVersionUID = -132741393013246001L;
+	private static final long serialVersionUID = 546873388754875708L;
 
-	public FilterSettingsException() {
+	public NoPeakFilterSupplierAvailableException() {
 		super();
 	}
 
-	public FilterSettingsException(String message) {
+	public NoPeakFilterSupplierAvailableException(String message) {
 		super(message);
 	}
 }

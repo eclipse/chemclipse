@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilter;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
+import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupplierMSD;
 import org.eclipse.chemclipse.chromatogram.msd.process.support.IProcessTypeSupplier;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -33,19 +33,19 @@ public class ChromatogramFilterTypeSupplier extends AbstractProcessTypeSupplier 
 	@Override
 	public String getProcessorName(String processorId) throws Exception {
 
-		IChromatogramFilterSupplier filterSupplier = ChromatogramFilter.getChromatogramFilterSupport().getFilterSupplier(processorId);
+		IChromatogramFilterSupplierMSD filterSupplier = ChromatogramFilterMSD.getChromatogramFilterSupport().getFilterSupplier(processorId);
 		return filterSupplier.getFilterName();
 	}
 
 	@Override
 	public List<String> getPluginIds() throws Exception {
 
-		return ChromatogramFilter.getChromatogramFilterSupport().getAvailableFilterIds();
+		return ChromatogramFilterMSD.getChromatogramFilterSupport().getAvailableFilterIds();
 	}
 
 	@Override
 	public IProcessingInfo applyProcessor(IChromatogramSelectionMSD chromatogramSelection, String processorId, IProgressMonitor monitor) {
 
-		return ChromatogramFilter.applyFilter(chromatogramSelection, processorId, monitor);
+		return ChromatogramFilterMSD.applyFilter(chromatogramSelection, processorId, monitor);
 	}
 }

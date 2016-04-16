@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram;
 /**
  * @author eselmeister
  */
-public class ChromatogramFilterSupplier implements IChromatogramFilterSupplier {
+public class ChromatogramFilterSupplierMSD implements IChromatogramFilterSupplierMSD {
 
 	private String id = "";
 	private String description = "";
@@ -88,7 +88,7 @@ public class ChromatogramFilterSupplier implements IChromatogramFilterSupplier {
 		if(this.getClass() != other.getClass()) {
 			return false;
 		}
-		IChromatogramFilterSupplier otherSupplier = (IChromatogramFilterSupplier)other;
+		IChromatogramFilterSupplierMSD otherSupplier = (IChromatogramFilterSupplierMSD)other;
 		return id.equals(otherSupplier.getId()) && description.equals(otherSupplier.getDescription()) && filterName.equals(otherSupplier.getFilterName());
 	}
 
