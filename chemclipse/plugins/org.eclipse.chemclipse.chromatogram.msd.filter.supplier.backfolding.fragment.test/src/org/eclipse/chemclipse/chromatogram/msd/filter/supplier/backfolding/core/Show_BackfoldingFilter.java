@@ -13,25 +13,24 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.core
 
 import java.io.File;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
+import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterMSD;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilter;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.SupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class Show_BackfoldingFilter extends ChromatogramImporterTestCase {
 
 	private final static String EXTENSION_POINT_ID = "org.eclipse.chemclipse.msd.converter.supplier.agilent";
 	protected IChromatogramMSD chromatogram;
 	protected IChromatogramSelectionMSD chromatogramSelection;
-	private IChromatogramFilter chromatogramFilter;
+	private IChromatogramFilterMSD chromatogramFilter;
 	private ISupplierFilterSettings chromatogramFilterSettings;
 	private File fileImport;
 	private File fileExport;
