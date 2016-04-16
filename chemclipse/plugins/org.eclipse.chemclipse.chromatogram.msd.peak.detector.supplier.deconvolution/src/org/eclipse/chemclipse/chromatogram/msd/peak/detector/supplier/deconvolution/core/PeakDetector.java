@@ -385,7 +385,6 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		boolean doingAll = false;
 		boolean foundPeakModel = false;
 		boolean ionInModel = false;
-		@SuppressWarnings("unused")
 		int rTOfPeak = 0;
 		//
 		//
