@@ -34,6 +34,7 @@ public class ChromatogramReaderWSD extends AbstractChromatogramWSDReader impleme
 
 		IChromatogramOverview chromatogramOverview = null;
 		ReaderHelper readerHelper = new ReaderHelper();
+		@SuppressWarnings("unused")
 		String version = readerHelper.getVersion(file);
 		/*
 		 * It's used to support older versions of
@@ -50,8 +51,6 @@ public class ChromatogramReaderWSD extends AbstractChromatogramWSDReader impleme
 			} catch(Exception e) {
 				// chromatogramOverview = createChromatogramMSDFromFID(AbstractIon.TIC_ION, file, monitor);
 			}
-		} else {
-			// chromatogramOverview = createChromatogramMSDFromFID(AbstractIon.TIC_ION, file, monitor);
 		}
 		return chromatogramOverview;
 	}
@@ -61,6 +60,7 @@ public class ChromatogramReaderWSD extends AbstractChromatogramWSDReader impleme
 
 		IChromatogramWSD chromatogramWSD = null;
 		ReaderHelper readerHelper = new ReaderHelper();
+		@SuppressWarnings("unused")
 		String version = readerHelper.getVersion(file);
 		/*
 		 * It's used to support older versions of
@@ -76,8 +76,6 @@ public class ChromatogramReaderWSD extends AbstractChromatogramWSDReader impleme
 			} catch(Exception e) {
 				// chromatogramWSD = createChromatogramMSDFromFID(18.0d, file, monitor);
 			}
-		} else {
-			// chromatogramWSD = createChromatogramMSDFromFID(18.0d, file, monitor);
 		}
 		/*
 		 * Load scan proxies in the background on demand.
@@ -97,6 +95,7 @@ public class ChromatogramReaderWSD extends AbstractChromatogramWSDReader impleme
 				 * if scans are deleted before they are loaded.
 				 * We should find a way to handle this.
 				 */
+				@SuppressWarnings("unused")
 				final IChromatogramWSD chromatogram = chromatogramWSD;
 				Thread t = new Thread(new Runnable() {
 

@@ -29,6 +29,7 @@ public class ChromatogramWriterWSD extends AbstractChromatogramWriter implements
 	public void writeChromatogram(File file, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
 		// not currently being used? needs multiple versions before start using.
+		@SuppressWarnings("unused")
 		String versionSave = PreferenceSupplier.getVersionSave();
 		IChromatogramWSDWriter chromatogramWriter;
 		// needs logic here to be able to choose different versions
