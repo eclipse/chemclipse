@@ -11,19 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.core;
 
+import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.impl.RetentionIndexCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilter {
 
 	@Override
-	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		ISupplierFilterSettings retentionIndexFilterSettings;
 		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
@@ -37,7 +37,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 	}
 
 	@Override
-	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		/*
 		 * The settings are fetched dynamically.

@@ -13,12 +13,13 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.ui.mo
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.PeakFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.settings.IRetentionIndexFilterSettingsPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -29,9 +30,9 @@ public class FilterRunnable implements IRunnableWithProgress {
 
 	private static final String FILTER_ID_SCANS = "org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.scans";
 	private static final String FILTER_ID_PEAKS = "org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.peaks";
-	private IChromatogramSelectionMSD chromatogramSelection;
+	private IChromatogramSelection chromatogramSelection;
 
-	public FilterRunnable(IChromatogramSelectionMSD chromatogramSelection) {
+	public FilterRunnable(IChromatogramSelection chromatogramSelection) {
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
@@ -46,8 +47,10 @@ public class FilterRunnable implements IRunnableWithProgress {
 			ISupplierFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
 			final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, FILTER_ID_SCANS, monitor);
 			//
-			IRetentionIndexFilterSettingsPeak peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
-			PeakFilter.applyFilter(chromatogramSelection, peakFilterSettings, FILTER_ID_PEAKS, monitor);
+			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+				IRetentionIndexFilterSettingsPeak peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
+				PeakFilter.applyFilter(((IChromatogramSelectionMSD)chromatogramSelection), peakFilterSettings, FILTER_ID_PEAKS, monitor);
+			}
 			//
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
 			updateSelection();

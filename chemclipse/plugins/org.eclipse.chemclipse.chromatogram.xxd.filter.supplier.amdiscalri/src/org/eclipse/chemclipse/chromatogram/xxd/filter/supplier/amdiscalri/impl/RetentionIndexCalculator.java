@@ -30,10 +30,10 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.settin
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class RetentionIndexCalculator {
@@ -41,14 +41,14 @@ public class RetentionIndexCalculator {
 	private static final Logger logger = Logger.getLogger(RetentionIndexCalculator.class);
 	private static final String DELIMITER = " ";
 
-	public IChromatogramFilterProcessingInfo apply(IChromatogramSelectionMSD chromatogramSelection, ISupplierFilterSettings retentionIndexFilterSettings, IProgressMonitor monitor) {
+	public IChromatogramFilterProcessingInfo apply(IChromatogramSelection chromatogramSelection, ISupplierFilterSettings retentionIndexFilterSettings, IProgressMonitor monitor) {
 
 		IChromatogramFilterProcessingInfo processingInfo = new ChromatogramFilterProcessingInfo();
 		String pathRetentionIndexFile = retentionIndexFilterSettings.getPathRetentionIndexFile();
 		File amdisCalFile = new File(pathRetentionIndexFile);
 		TreeMap<Integer, IRetentionIndexEntry> retentionIndices = getRetentionIndexEntries(amdisCalFile);
 		//
-		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
+		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
 		//

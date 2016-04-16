@@ -13,6 +13,15 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.ui.ha
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.ui.modifier.FilterRunnable;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.progress.core.InfoType;
+import org.eclipse.chemclipse.progress.core.StatusLineLogger;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -20,17 +29,10 @@ import org.eclipse.swt.widgets.Display;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.amdiscalri.ui.modifier.FilterRunnable;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.progress.core.InfoType;
-import org.eclipse.chemclipse.progress.core.StatusLineLogger;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-
 public class FilterHandler implements EventHandler {
 
 	private static final Logger logger = Logger.getLogger(FilterHandler.class);
-	private static IChromatogramSelectionMSD chromatogramSelection;
+	private static IChromatogramSelection chromatogramSelection;
 
 	@Execute
 	public void execute() {
@@ -66,6 +68,10 @@ public class FilterHandler implements EventHandler {
 
 		if(event.getTopic().equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION)) {
 			chromatogramSelection = (IChromatogramSelectionMSD)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+		} else if(event.getTopic().equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION)) {
+			chromatogramSelection = (IChromatogramSelectionCSD)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+		} else if(event.getTopic().equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION)) {
+			chromatogramSelection = (IChromatogramSelectionWSD)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
 		} else {
 			chromatogramSelection = null;
 		}
