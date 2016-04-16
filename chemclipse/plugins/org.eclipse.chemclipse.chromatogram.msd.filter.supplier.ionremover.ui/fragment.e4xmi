@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_5MP1kD0oEeK2Fc4cCHdBUg">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_5MP1kD0oEeK2Fc4cCHdBUg">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_WRTgMD0pEeK2Fc4cCHdBUg" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Command" xmi:id="_XR72wD0pEeK2Fc4cCHdBUg" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.command.chromatogram" commandName="Ion Remover Chromatogram"/>
     <elements xsi:type="commands:Command" xmi:id="_pI_E0GQPEeSlDuFT8RyH7A" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.command.allPeaks" commandName="Ion Remover All Peaks"/>
@@ -10,8 +10,10 @@
     <elements xsi:type="commands:Handler" xmi:id="_vPUw8GQPEeSlDuFT8RyH7A" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.handler.allPeaks" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.handlers.FilterHandlerAllPeaks" command="_pI_E0GQPEeSlDuFT8RyH7A"/>
     <elements xsi:type="commands:Handler" xmi:id="_vpPFwGQPEeSlDuFT8RyH7A" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.handler.selectedPeak" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.handlers.FilterHandlerSelectedPeak" command="_phGC0GQPEeSlDuFT8RyH7A"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_i7xnsD0pEeK2Fc4cCHdBUg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.msd.chromatogram">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_lKrIMD0pEeK2Fc4cCHdBUg" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.handledmenuitem.chromatogram" label="Ion Remover" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/ionremover.gif" command="_XR72wD0pEeK2Fc4cCHdBUg"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_i7xnsD0pEeK2Fc4cCHdBUg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.chromatogram">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_lKrIMD0pEeK2Fc4cCHdBUg" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.handledmenuitem.chromatogram" label="Ion Remover" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/ionremover.gif" command="_XR72wD0pEeK2Fc4cCHdBUg">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_bwLU8AP7Eea988xguwzXfA" coreExpressionId="isDetectorTypeMSD"/>
+    </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_aQK2cGQPEeSlDuFT8RyH7A" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.msd.peak">
     <elements xsi:type="menu:Menu" xmi:id="_mvA8wGQPEeSlDuFT8RyH7A" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.menu.peaks" label="Ion Remover">

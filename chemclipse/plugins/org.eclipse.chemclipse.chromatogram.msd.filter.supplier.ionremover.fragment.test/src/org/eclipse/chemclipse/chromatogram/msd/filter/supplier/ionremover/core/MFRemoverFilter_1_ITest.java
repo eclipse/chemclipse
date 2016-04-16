@@ -11,18 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilter;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core.ChromatogramFilter;
+import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class MFRemoverFilter_1_ITest extends ChromatogramImporterTestCase {
 
-	private IChromatogramFilter chromatogramFilter;
+	private IChromatogramFilterMSD chromatogramFilter;
 	private ISupplierFilterSettings chromatogramFilterSettings;
 	private IMarkedIons excludedIons;
 

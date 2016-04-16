@@ -15,18 +15,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
+import org.eclipse.chemclipse.chromatogram.filter.exceptions.ChromatogramSelectionException;
+import org.eclipse.chemclipse.chromatogram.filter.exceptions.FilterSettingsException;
+import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoFilterAvailableException;
+import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilter;
-import org.eclipse.chemclipse.chromatogram.msd.filter.exceptions.ChromatogramSelectionException;
-import org.eclipse.chemclipse.chromatogram.msd.filter.exceptions.FilterSettingsException;
-import org.eclipse.chemclipse.chromatogram.msd.filter.exceptions.NoFilterAvailableException;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.SupplierFilterSettings;
 // import
 // org.eclipse.chemclipse.chromatogram.msd.filter.supplier.normalizer.settings.INormalizerFilterSettings;
 // import
@@ -37,6 +35,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class Show_Filter extends ChromatogramImporterTestCase {
 
@@ -97,7 +96,7 @@ public class Show_Filter extends ChromatogramImporterTestCase {
 		excludedIons.add(new MarkedIon(32));
 		excludedIons.add(new MarkedIon(207));
 		excludedIons.add(new MarkedIon(281));
-		ChromatogramFilter.applyFilter(chromatogramSelection, rFilterSettings, FILTER_BACKGROUND, new NullProgressMonitor());
+		ChromatogramFilterMSD.applyFilter(chromatogramSelection, rFilterSettings, FILTER_BACKGROUND, new NullProgressMonitor());
 		/*
 		 * fileExport = new File(
 		 * "E:\\Dissertation\\Pyrolyseläufe\\OP\\OP21680-707\\OP21705-NB.D\\DATA.MS"
@@ -151,7 +150,7 @@ public class Show_Filter extends ChromatogramImporterTestCase {
 		excludedIons.add(new MarkedIon(32));
 		excludedIons.add(new MarkedIon(207));
 		excludedIons.add(new MarkedIon(281));
-		ChromatogramFilter.applyFilter(chromatogramSelection, rFilterSettings, FILTER_BACKGROUND, new NullProgressMonitor());
+		ChromatogramFilterMSD.applyFilter(chromatogramSelection, rFilterSettings, FILTER_BACKGROUND, new NullProgressMonitor());
 		fileExport = new File("E:\\Dissertation\\Pyrolyseläufe\\OP\\OP21680-707\\OP21705-NB.D\\DATA.MS");
 		ChromatogramConverterMSD.convert(fileExport, chromatogram, EXTENSION_POINT_ID, new NullProgressMonitor());
 		/**
