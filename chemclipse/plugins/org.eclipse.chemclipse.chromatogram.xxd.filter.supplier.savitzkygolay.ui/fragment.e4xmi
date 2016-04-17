@@ -8,7 +8,7 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_H-RugDlPEeKPNuw33USp1w" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.chromatogram">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_KK4wADlPEeKPNuw33USp1w" elementId="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.handledmenuitem.filterMSD" label="Savitzky-Golay Smoother" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/savitzkygolay.gif" command="_r9I_ADlOEeKPNuw33USp1w">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_OBoPYAP9Eea988xguwzXfA" coreExpressionId="isDetectorTypeXXD"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_OBoPYAP9Eea988xguwzXfA" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
     </elements>
   </fragments>
 </fragment:ModelFragments>
