@@ -8,7 +8,7 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_fpbhADsXEeKTHfJoY5WeUw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.chromatogram">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_g_y3ADsXEeKTHfJoY5WeUw" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.ui.handledmenuitem.filter" label="Backfolding" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/backfolding.gif" command="_ShlhADsXEeKTHfJoY5WeUw">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_HAHmYAP7Eea988xguwzXfA" coreExpressionId="isDetectorTypeMSD"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_HAHmYAP7Eea988xguwzXfA" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
     </elements>
   </fragments>
 </fragment:ModelFragments>
