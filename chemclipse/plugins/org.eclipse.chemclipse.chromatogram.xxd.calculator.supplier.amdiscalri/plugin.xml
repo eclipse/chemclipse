@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter calculates retention indices (RI) for scans."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.ChromatogramFilter"
+            filterName="RI Calculation Filter (Scans)"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.scans">
+      </ChromatogramFilterSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.peakFilterSupplier">
+      <PeakFilterSupplier
+            description="This filter calculates retention indices (RI) for peaks."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.PeakFilter"
+            filterName="RI Calculation Filter (Peaks)"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.peaks">
+      </PeakFilterSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>
