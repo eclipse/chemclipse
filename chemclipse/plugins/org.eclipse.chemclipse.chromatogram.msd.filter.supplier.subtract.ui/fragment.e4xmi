@@ -28,11 +28,12 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_ho5bEL4AEeKXPeHmDlb6kw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.chromatogram">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="__eaSQL4AEeKXPeHmDlb6kw" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.handledmenuitem.filter.chromatogram" label="Subtract Noise" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/subtractMassSpectrum.gif" command="_mhZbEL4AEeKXPeHmDlb6kw">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_mU0_cAP7Eea988xguwzXfA" coreExpressionId="isDetectorTypeMSD"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_mU0_cAP7Eea988xguwzXfA" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
     </elements>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_coINwMIPEeKzppesdjCSCQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.msd.peak">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_coINwMIPEeKzppesdjCSCQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.peaks">
     <elements xsi:type="menu:Menu" xmi:id="_oNPk0MIREeKzppesdjCSCQ" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.menu.peak" label="Subtract Filter">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_zoRUkASBEeaL1b-1PIqZow" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
       <children xsi:type="menu:HandledMenuItem" xmi:id="_DYbZMMIREeKzppesdjCSCQ" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.handledmenuitem.filter.selectedPeak" label="Selected Peak" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/subtractMassSpectrumPeak.gif" command="_cdA_YMIOEeKzppesdjCSCQ"/>
       <children xsi:type="menu:HandledMenuItem" xmi:id="_ELAFoMIREeKzppesdjCSCQ" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.handledmenuitem.filter.allPeaks" label="All Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/subtractMassSpectrumPeaks.gif" command="_dZSaYMIOEeKzppesdjCSCQ"/>
     </elements>
@@ -93,8 +94,9 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_QPgDQMTSEeWJUr3on-FBsw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.msd.ui.partstack.chromatogramPeaks.3">
     <elements xsi:type="advanced:Placeholder" xmi:id="_TX4wgMTSEeWJUr3on-FBsw" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.placeholder.10" ref="_TU9LgMbsEeKTZYaTAAgjxg"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="__awMYPTkEeWJxMXPMOexOQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.msd">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="__awMYPTkEeWJxMXPMOexOQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter">
     <elements xsi:type="menu:Menu" xmi:id="_C-NsEPTlEeWJxMXPMOexOQ" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.menu" label="Subtract Filter">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_m9zNEASBEeaL1b-1PIqZow" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
       <children xsi:type="menu:HandledMenuItem" xmi:id="_K1r-oPTlEeWJxMXPMOexOQ" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.handledmenuitem.clearSubtractMassSpectrumSession" label="Clear Subtract Mass Spectrum (Session)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/subtractFilterClearSessionMassSpectrum.gif" command="_LysKUMekEeKe1Kma8mPN4w"/>
       <children xsi:type="menu:HandledMenuItem" xmi:id="_L5_UQPTlEeWJxMXPMOexOQ" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.handledmenuitem.addSelectedScan" label="Add Selected Scan" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/subtractFilterAddSelectedScan.gif" command="_P7TNMMeeEeKe1Kma8mPN4w"/>
       <children xsi:type="menu:HandledMenuItem" xmi:id="_M4T9sPTlEeWJxMXPMOexOQ" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.handledmenuitem.addCombinedScans" label="Add Combined Scans" command="_Ik28YMekEeKe1Kma8mPN4w"/>
