@@ -34,7 +34,7 @@ public class ChromatogramFilterMSD {
 	private static final String FILTER_NAME = "filterName";
 	private static final String FILTER = "filter";
 	//
-	private static final String PROCESSING_DESCRIPTION = "Chromatogram Filter";
+	private static final String PROCESSING_DESCRIPTION = "Chromatogram Filter MSD";
 	private static final String NO_CHROMATOGRAM_FILTER_AVAILABLE = "There is no chromatogram filter available.";
 
 	/**

@@ -14,14 +14,12 @@ package org.eclipse.chemclipse.chromatogram.msd.process.support;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.chromatogram.msd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.BaselineDetectorTypeSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramFilterTypeSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramIdentifierTypeSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramIntegratorTypeSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramMSDFilterTypeSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ClassifierTypeSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.CombinedIntegratorTypeSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.PeakDetectorTypeSupplier;
@@ -30,8 +28,10 @@ import org.eclipse.chemclipse.chromatogram.msd.process.supplier.PeakIdentifierTy
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.PeakIntegratorTypeSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.PeakQuantitationTypeSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * @author Philip (eselmeister) Wenig
@@ -51,6 +51,7 @@ public class ProcessTypeSupport {
 		processTypeSuppliers.add(new ClassifierTypeSupplier());
 		processTypeSuppliers.add(new CombinedIntegratorTypeSupplier());
 		processTypeSuppliers.add(new ChromatogramFilterTypeSupplier());
+		processTypeSuppliers.add(new ChromatogramMSDFilterTypeSupplier());
 		processTypeSuppliers.add(new PeakFilterTypeSupplier());
 		processTypeSuppliers.add(new PeakDetectorTypeSupplier());
 		processTypeSuppliers.add(new PeakIdentifierTypeSupplier());
