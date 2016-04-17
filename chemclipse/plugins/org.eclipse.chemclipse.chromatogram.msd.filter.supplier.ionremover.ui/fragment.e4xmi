@@ -12,11 +12,12 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_i7xnsD0pEeK2Fc4cCHdBUg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.chromatogram">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_lKrIMD0pEeK2Fc4cCHdBUg" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.handledmenuitem.chromatogram" label="Ion Remover" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/ionremover.gif" command="_XR72wD0pEeK2Fc4cCHdBUg">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_bwLU8AP7Eea988xguwzXfA" coreExpressionId="isDetectorTypeMSD"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_bwLU8AP7Eea988xguwzXfA" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
     </elements>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_aQK2cGQPEeSlDuFT8RyH7A" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.msd.peak">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_aQK2cGQPEeSlDuFT8RyH7A" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.peaks">
     <elements xsi:type="menu:Menu" xmi:id="_mvA8wGQPEeSlDuFT8RyH7A" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.menu.peaks" label="Ion Remover">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_BqiVcASCEeaL1b-1PIqZow" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
       <children xsi:type="menu:HandledMenuItem" xmi:id="_BBtNcGQQEeSlDuFT8RyH7A" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.handledmenuitem.peaks.allPeaks" label="All Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/ionremoverMassSpectrumPeaks.gif" command="_pI_E0GQPEeSlDuFT8RyH7A"/>
       <children xsi:type="menu:HandledMenuItem" xmi:id="_BSpMcGQQEeSlDuFT8RyH7A" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.handledmenuitem.selectedPeak" label="Selected Peak" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/ionremoverMassSpectrumPeak.gif" command="_phGC0GQPEeSlDuFT8RyH7A"/>
     </elements>
