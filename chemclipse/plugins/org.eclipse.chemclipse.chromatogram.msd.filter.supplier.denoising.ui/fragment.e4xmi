@@ -10,7 +10,7 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="__cXYEDsgEeK8yJqmargYRA" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.chromatogram">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_BRefkDshEeK8yJqmargYRA" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.handledmenuitem.filter" label="Denoising" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/denoising.gif" command="_z9zqEDsgEeK8yJqmargYRA">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_Tsub4AP7Eea988xguwzXfA" coreExpressionId="isDetectorTypeMSD"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_Tsub4AP7Eea988xguwzXfA" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_TUG-kDshEeK8yJqmargYRA" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
