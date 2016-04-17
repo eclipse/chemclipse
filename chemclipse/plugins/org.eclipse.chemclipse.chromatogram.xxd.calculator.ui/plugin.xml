@@ -6,8 +6,8 @@
       <page
             category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
             class="org.eclipse.chemclipse.chromatogram.xxd.calculator.ui.preferences.PreferencePage"
-            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.ui.preferences.noiseCalculatorPreferencePage"
-            name="S/N Calculation">
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.ui.preferences.preferencePage"
+            name="Calculators">
       </page>
    </extension>
 </plugin>

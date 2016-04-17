@@ -11,23 +11,22 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.ui.preferences;
 
-import org.eclipse.jface.preference.ComboFieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.IWorkbench;
-
-import org.eclipse.chemclipse.model.support.SegmentWidth;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.noise.NoiseCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.ui.Activator;
+import org.eclipse.chemclipse.model.support.SegmentWidth;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
+import org.eclipse.jface.preference.ComboFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Select the S/N calculator.");
+		setDescription("Calculators");
 	}
 
 	/**

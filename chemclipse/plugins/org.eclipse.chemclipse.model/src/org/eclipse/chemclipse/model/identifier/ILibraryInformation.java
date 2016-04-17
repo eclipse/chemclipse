@@ -11,9 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
+import java.io.Serializable;
 import java.util.Set;
 
-public interface ILibraryInformation {
+public interface ILibraryInformation extends Serializable {
 
 	/**
 	 * Returns the name of the library mass spectrum.
