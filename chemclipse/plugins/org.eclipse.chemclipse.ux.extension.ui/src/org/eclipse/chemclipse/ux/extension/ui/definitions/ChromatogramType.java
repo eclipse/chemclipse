@@ -21,49 +21,50 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-public class DetectorType implements EventHandler {
+public class ChromatogramType implements EventHandler {
 
-	public static final String DETECTOR_TYPE = "org.eclipse.chemclipse.ux.extension.ui.definitions.detectorType";
+	public static final String CHROMATOGRAM_TYPE = "org.eclipse.chemclipse.ux.extension.ui.definitions.chromatogramType";
 	public static final String CHROMATOGRAM_SELECTION = "org.eclipse.chemclipse.ux.extension.ui.chromatogramSelection";
 	//
-	public static final String MSD = "MSD";
-	public static final String CSD = "CSD";
-	public static final String WSD = "WSD";
-	public static final String XXD = "XXD";
-	public static final String NONE = "NONE";
+	public static final String CHROMATOGRAM_TYPE_MSD = "CHROMATOGRAM_TYPE_MSD";
+	public static final String CHROMATOGRAM_TYPE_CSD = "CHROMATOGRAM_TYPE_CSD";
+	public static final String CHROMATOGRAM_TYPE_WSD = "CHROMATOGRAM_TYPE_WSD";
+	public static final String CHROMATOGRAM_TYPE_XXD = "CHROMATOGRAM_TYPE_XXD";
+	public static final String CHROMATOGRAM_TYPE_NONE = "CHROMATOGRAM_TYPE_NONE";
 
 	@Override
 	public void handleEvent(Event event) {
 
-		String value;
 		String topic = event.getTopic();
 		Object property = event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		IChromatogramSelection chromatogramSelection;
 		/*
-		 * Get the chromaotgram selection.
+		 * Get the chromatogram selection.
 		 */
+		IChromatogramSelection chromatogramSelection = null;
+		String chromatogramType = CHROMATOGRAM_TYPE_NONE;
+		//
 		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION)) {
 			chromatogramSelection = (IChromatogramSelectionMSD)property;
-			value = MSD;
+			chromatogramType = CHROMATOGRAM_TYPE_MSD;
 		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION)) {
 			chromatogramSelection = (IChromatogramSelectionCSD)property;
-			value = CSD;
+			chromatogramType = CHROMATOGRAM_TYPE_CSD;
 		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION)) {
 			chromatogramSelection = (IChromatogramSelectionWSD)property;
-			value = WSD;
-		} else {
+			chromatogramType = CHROMATOGRAM_TYPE_WSD;
+		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION)) {
 			chromatogramSelection = null;
-			value = NONE;
+			chromatogramType = CHROMATOGRAM_TYPE_NONE;
 		}
 		/*
 		 * Set the type, see:
 		 * org.eclipse.core.expressions.definitions
-		 * isDetectorTypeMSD
+		 * isChromatogramTypeMSD
 		 */
 		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
 		if(eclipseContext != null) {
-			eclipseContext.set(DETECTOR_TYPE, value);
 			eclipseContext.set(CHROMATOGRAM_SELECTION, chromatogramSelection);
+			eclipseContext.set(CHROMATOGRAM_TYPE, chromatogramType);
 		}
 	}
 }

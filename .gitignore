@@ -46,6 +46,9 @@ chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.integrator/bin/
 chemclipse/plugins/org.eclipse.chemclipse.msd.model.fragment.test/Openchrom.log
 chemclipse/plugins/org.eclipse.chemclipse.msd.model.fragment.test/bin/
 chemclipse/plugins/org.eclipse.chemclipse.msd.model/bin/
+chemclipse/plugins/org.eclipse.chemclipse.xxd.model.fragment.test/Openchrom.log
+chemclipse/plugins/org.eclipse.chemclipse.xxd.model.fragment.test/bin/
+chemclipse/plugins/org.eclipse.chemclipse.xxd.model/bin/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.fragment.test/bin/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.ui/bin/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector/bin/
@@ -193,6 +196,7 @@ chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.identifier/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.integrator.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.integrator/target/
 chemclipse/plugins/org.eclipse.chemclipse.msd.model/target/
+chemclipse/plugins/org.eclipse.chemclipse.xxd.model/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.ui/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector/target/
 chemclipse/plugins/org.eclipse.chemclipse.chromatogram.msd.process.ui/target/

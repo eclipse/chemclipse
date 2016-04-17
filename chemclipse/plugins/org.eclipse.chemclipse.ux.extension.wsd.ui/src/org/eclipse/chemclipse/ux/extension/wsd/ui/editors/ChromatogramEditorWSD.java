@@ -182,6 +182,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 	private void preDestroy() {
 
 		unsubscribe();
+		ChromatogramSelectionUpdateNotifier.fireUpdateChange(null, true);
 		/*
 		 * Remove the actual editor to be not in the updatee list anymore.
 		 */

@@ -77,6 +77,7 @@
     <module>../../plugins/org.eclipse.chemclipse.wsd.model</module>
     <module>../../plugins/org.eclipse.chemclipse.msd.model</module>
     <module>../../plugins/org.eclipse.chemclipse.nmr.model</module>
+    <module>../../plugins/org.eclipse.chemclipse.xxd.model</module>
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.alignment.model</module>
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.alignment.converter</module>
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.method.model</module>

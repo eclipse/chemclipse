@@ -62,6 +62,11 @@ public interface IChemClipseEvents {
 	String TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE = "chromatogram/csd/update/rawfile";
 	String TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE = "chromatogram/wsd/update/rawfile";
 	/*
+	 * UNLOAD
+	 * Close the chromatogram editor.
+	 */
+	String TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION = "chromatogram/xxd/unload/chromatogramselection";
+	/*
 	 * Detector: MSD
 	 */
 	String TOPIC_CHROMATOGRAM_MSD_UPDATE_OVERVIEW = "chromatogram/msd/update/overview";

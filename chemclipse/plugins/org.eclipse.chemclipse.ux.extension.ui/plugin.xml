@@ -11,58 +11,101 @@
    <extension
          point="org.eclipse.core.expressions.definitions">
       <definition
-            id="isDetectorTypeMSD">
+            id="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD">
          <with
-               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.detectorType">
+               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.chromatogramType">
             <equals
-                  value="MSD">
+                  value="CHROMATOGRAM_TYPE_MSD">
             </equals>
          </with>
       </definition>
       <definition
-            id="isDetectorTypeCSD">
+            id="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeCSD">
          <with
-               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.detectorType">
+               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.chromatogramType">
             <equals
-                  value="CSD">
+                  value="CHROMATOGRAM_TYPE_CSD">
             </equals>
          </with>
       </definition>
       <definition
-            id="isDetectorTypeWSD">
+            id="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeWSD">
          <with
-               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.detectorType">
+               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.chromatogramType">
             <equals
-                  value="WSD">
+                  value="CHROMATOGRAM_TYPE_WSD">
             </equals>
          </with>
       </definition>
       <definition
-            id="isDetectorTypeXXD">
+            id="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD">
          <with
-               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.detectorType">
+               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.chromatogramType">
             <or>
                <equals
-                     value="MSD">
+                     value="CHROMATOGRAM_TYPE_MSD">
                </equals>
                <equals
-                     value="CSD">
+                     value="CHROMATOGRAM_TYPE_CSD">
                </equals>
                <equals
-                     value="WSD">
+                     value="CHROMATOGRAM_TYPE_WSD">
                </equals>
             </or>
          </with>
       </definition>
       <definition
-            id="isDetectorTypeNone">
+            id="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeNone">
          <with
-               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.detectorType">
+               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.chromatogramType">
             <equals
-                  value="NONE">
+                  value="CHROMATOGRAM_TYPE_NONE">
             </equals>
          </with>
       </definition>                        
    </extension>
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="org.eclipse.chemclipse.ux.extension.ui.definitions.isScanTypeMSD">
+         <with
+               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.scanType">
+            <equals
+                  value="SCAN_TYPE_MSD">
+            </equals>
+         </with>
+      </definition>
+      <definition
+            id="org.eclipse.chemclipse.ux.extension.ui.definitions.isScanTypeNone">
+         <with
+               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.scanType">
+            <equals
+                  value="SCAN_TYPE_NONE">
+            </equals>
+         </with>
+      </definition>                        
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="org.eclipse.chemclipse.ux.extension.ui.definitions.isLibraryTypeMSD">
+         <with
+               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.libraryType">
+            <equals
+                  value="LIBRARY_TYPE_MSD">
+            </equals>
+         </with>
+      </definition>
+      <definition
+            id="org.eclipse.chemclipse.ux.extension.ui.definitions.isLibraryTypeNone">
+         <with
+               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.libraryType">
+            <equals
+                  value="LIBRARY_TYPE_NONE">
+            </equals>
+         </with>
+      </definition>                        
+   </extension>      
+   
    
 </plugin>
