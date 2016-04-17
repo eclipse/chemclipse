@@ -8,7 +8,7 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_f27DEDsaEeK8yJqmargYRA" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.chromatogram">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_j62LgDsaEeK8yJqmargYRA" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.ui.handledmenuitem.filter" label="CODA" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/coda.gif" command="_EQ3tEDsaEeKBvppetYtJAA">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_Mdd_4AP7Eea988xguwzXfA" coreExpressionId="isDetectorTypeMSD"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_Mdd_4AP7Eea988xguwzXfA" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
     </elements>
   </fragments>
 </fragment:ModelFragments>
