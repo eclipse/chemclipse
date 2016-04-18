@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.updateSite</module>
   </modules>
 </project>

@@ -12,8 +12,8 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.chemclipse.chromatogram.msd.filter.ui.preferences.filterPreferencePage"
-            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.preferences.FilterPreferencePage"
-            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.normalizer.ui.preferences.ionRemoverFilterPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.normalizer.ui.preferences.preferencePage"
             name="Ion Remover">
       </page>
    </extension>
