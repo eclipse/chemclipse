@@ -47,7 +47,7 @@ public class CalculatorRunnable implements IRunnableWithProgress {
 				PeakFilter.applyFilter(((IChromatogramSelectionMSD)chromatogramSelection), peakFilterSettings, FILTER_ID_PEAKS, monitor);
 			}
 			//
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			updateSelection();
 		} finally {
 			monitor.done();
