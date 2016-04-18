@@ -20,14 +20,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.eclipse.chemclipse.chromatogram.filter.processing.ChromatogramFilterProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
-import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.processing.CalculatorProcessingInfo;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.processing.ICalculatorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.RetentionIndexEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.IRetentionIndexFilterSettingsPeak;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ISupplierCalculatorSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -41,10 +39,10 @@ public class RetentionIndexCalculator {
 	private static final Logger logger = Logger.getLogger(RetentionIndexCalculator.class);
 	private static final String DELIMITER = " ";
 
-	public IChromatogramFilterProcessingInfo apply(IChromatogramSelection chromatogramSelection, ISupplierFilterSettings retentionIndexFilterSettings, IProgressMonitor monitor) {
+	public ICalculatorProcessingInfo apply(IChromatogramSelection chromatogramSelection, ISupplierCalculatorSettings supplierCalculatorSettings, IProgressMonitor monitor) {
 
-		IChromatogramFilterProcessingInfo processingInfo = new ChromatogramFilterProcessingInfo();
-		String pathRetentionIndexFile = retentionIndexFilterSettings.getPathRetentionIndexFile();
+		ICalculatorProcessingInfo processingInfo = new CalculatorProcessingInfo();
+		String pathRetentionIndexFile = supplierCalculatorSettings.getPathRetentionIndexFile();
 		File amdisCalFile = new File(pathRetentionIndexFile);
 		TreeMap<Integer, IRetentionIndexEntry> retentionIndices = getRetentionIndexEntries(amdisCalFile);
 		//
@@ -59,7 +57,6 @@ public class RetentionIndexCalculator {
 			supplierScan.setRetentionIndex(retentionIndex);
 		}
 		//
-		processingInfo.setChromatogramFilterResult(new ChromatogramFilterResult(ResultStatus.OK, "The retention indices have been calculated."));
 		return processingInfo;
 	}
 

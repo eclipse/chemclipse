@@ -2,13 +2,13 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
-      <ChromatogramFilterSupplier
+         point="org.eclipse.chemclipse.chromatogram.xxd.calculator.chromatogramCalculatorSupplier">
+      <ChromatogramCalculatorSupplier
             description="This filter calculates retention indices (RI) for scans."
-            filter="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.ChromatogramFilter"
-            filterName="RI Calculation Filter (Scans)"
+            calculator="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.ChromatogramCalculator"
+            calculatorName="RI Calculation Filter (Scans)"
             id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.scans">
-      </ChromatogramFilterSupplier>
+      </ChromatogramCalculatorSupplier>
    </extension>
    <extension
          point="org.eclipse.chemclipse.chromatogram.msd.filter.peakFilterSupplier">

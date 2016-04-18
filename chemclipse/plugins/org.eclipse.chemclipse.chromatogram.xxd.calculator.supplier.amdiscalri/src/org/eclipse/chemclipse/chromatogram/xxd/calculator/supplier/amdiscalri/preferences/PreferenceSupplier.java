@@ -14,15 +14,15 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.p
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.IRetentionIndexFilterSettingsPeak;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ISupplierCalculatorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.RetentionIndexFilterSettingsPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
@@ -65,13 +65,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static ISupplierFilterSettings getChromatogramFilterSettings() {
+	public static ISupplierCalculatorSettings getChromatogramCalculatorSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		String pathCalibrationFile = preferences.get(P_PATH_RI_FILE, DEF_PATH_RI_FILE);
-		ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
-		chromatogramFilterSettings.setPathRetentionIndexFile(pathCalibrationFile);
-		return chromatogramFilterSettings;
+		ISupplierCalculatorSettings chromatogramCalculatorSettings = new SupplierFilterSettings();
+		chromatogramCalculatorSettings.setPathRetentionIndexFile(pathCalibrationFile);
+		return chromatogramCalculatorSettings;
 	}
 
 	public static IRetentionIndexFilterSettingsPeak getPeakFilterSettings() {

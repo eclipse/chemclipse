@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.modifier.FilterRunnable;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.modifier.CalculatorRunnable;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -29,9 +29,9 @@ import org.eclipse.swt.widgets.Display;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-public class FilterHandler implements EventHandler {
+public class CalculatorHandler implements EventHandler {
 
-	private static final Logger logger = Logger.getLogger(FilterHandler.class);
+	private static final Logger logger = Logger.getLogger(CalculatorHandler.class);
 	private static IChromatogramSelection chromatogramSelection;
 
 	@Execute
@@ -46,7 +46,7 @@ public class FilterHandler implements EventHandler {
 			/*
 			 * Do the operation.<br/> Open a progress monitor dialog.
 			 */
-			IRunnableWithProgress runnable = new FilterRunnable(chromatogramSelection);
+			IRunnableWithProgress runnable = new CalculatorRunnable(chromatogramSelection);
 			ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
 			try {
 				/*

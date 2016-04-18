@@ -13,12 +13,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilter;
-import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.PeakFilter;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram.ChromatogramCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.processing.ICalculatorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.IRetentionIndexFilterSettingsPeak;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
@@ -26,13 +25,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 
-public class FilterRunnable implements IRunnableWithProgress {
+public class CalculatorRunnable implements IRunnableWithProgress {
 
 	private static final String FILTER_ID_SCANS = "org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.scans";
 	private static final String FILTER_ID_PEAKS = "org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.peaks";
 	private IChromatogramSelection chromatogramSelection;
 
-	public FilterRunnable(IChromatogramSelection chromatogramSelection) {
+	public CalculatorRunnable(IChromatogramSelection chromatogramSelection) {
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
@@ -41,11 +40,7 @@ public class FilterRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Retention Index Calculator Filter", IProgressMonitor.UNKNOWN);
-			/*
-			 * Apply the filter on the selected scans and peaks.
-			 */
-			ISupplierFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
-			final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, FILTER_ID_SCANS, monitor);
+			ICalculatorProcessingInfo processingInfo = ChromatogramCalculator.applyCalculator(chromatogramSelection, FILTER_ID_SCANS, monitor);
 			//
 			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 				IRetentionIndexFilterSettingsPeak peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();

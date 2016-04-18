@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.s
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 
-public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
+public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierCalculatorSettings {
 
 	private String pathRetentionIndexFile;
 
