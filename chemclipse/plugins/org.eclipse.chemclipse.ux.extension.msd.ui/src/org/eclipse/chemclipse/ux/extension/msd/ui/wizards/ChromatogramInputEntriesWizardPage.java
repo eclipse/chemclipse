@@ -31,9 +31,6 @@ public class ChromatogramInputEntriesWizardPage extends WizardPage {
 	private TreeViewer chromatogramViewer;
 	private IChromatogramWizardElements chromatogramWizardElements;
 
-	/**
-	 * @param pageName
-	 */
 	public ChromatogramInputEntriesWizardPage(IChromatogramWizardElements chromatogramWizardElements) {
 		//
 		super(ChromatogramInputEntriesWizardPage.class.getName());
