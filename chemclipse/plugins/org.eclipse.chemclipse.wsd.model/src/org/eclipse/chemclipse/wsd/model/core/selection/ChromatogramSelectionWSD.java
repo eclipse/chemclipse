@@ -17,7 +17,6 @@ import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
-import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionUpdateNotifier;
 import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionWSDUpdateNotifier;
 
 public class ChromatogramSelectionWSD extends AbstractChromatogramSelection implements IChromatogramSelectionWSD {
@@ -125,7 +124,7 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 			 * Fire update change if necessary.
 			 */
 			if(update) {
-				ChromatogramSelectionUpdateNotifier.fireUpdateChange(this, false);
+				ChromatogramSelectionWSDUpdateNotifier.fireUpdateChange(this, false);
 			}
 		}
 	}

@@ -53,7 +53,6 @@ import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.ChromatogramI
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramFileSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport;
 import org.eclipse.chemclipse.ux.extension.ui.dialogs.ReferencedChromatogramDialog;
-import org.eclipse.chemclipse.xxd.model.notifier.ChromatogramSelectionUpdateNotifier;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -200,7 +199,6 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 	private void preDestroy() {
 
 		unsubscribe();
-		ChromatogramSelectionUpdateNotifier.fireUpdateChange(null, true);
 		/*
 		 * Remove the actual editor to be not in the updatee list anymore.
 		 */
