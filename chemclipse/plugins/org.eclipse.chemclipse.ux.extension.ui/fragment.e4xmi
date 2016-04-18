@@ -40,11 +40,7 @@
         <children xsi:type="menu:Menu" xmi:id="_32iggAPsEea988xguwzXfA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.calculators.peaks" label="Peaks"/>
       </children>
       <children xsi:type="menu:MenuSeparator" xmi:id="_mX-uoDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.3"/>
-      <children xsi:type="menu:Menu" xmi:id="_eTFrIDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector" label="Baseline Detectors">
-        <children xsi:type="menu:MenuSeparator" xmi:id="_8LclUO7XEeKx8pcdnfoEIQ" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector.separator.misc"/>
-        <children xsi:type="menu:Menu" xmi:id="_vJGPsBZIEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector.msd" label="MSD"/>
-        <children xsi:type="menu:Menu" xmi:id="_vw_9MBZIEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector.csd" label="CSD"/>
-      </children>
+      <children xsi:type="menu:Menu" xmi:id="_eTFrIDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector" label="Baseline Detectors"/>
       <children xsi:type="menu:MenuSeparator" xmi:id="_oB89IDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.4"/>
       <children xsi:type="menu:Menu" xmi:id="_eoc3IDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors" label="Peak Detectors">
         <children xsi:type="menu:MenuSeparator" xmi:id="_RUrE4MIBEeKzppesdjCSCQ" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors.separator.misc"/>

@@ -6,7 +6,7 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_j80ogNQxEeOqJuPuL0y2ew" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Handler" xmi:id="_yNHeUNQxEeOqJuPuL0y2ew" elementId="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui.handler.deleteBaseline" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui/org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui.handlers.DeleteBaselineHandler" command="_xfNPcNQxEeOqJuPuL0y2ew"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kNTUgNQxEeOqJuPuL0y2ew" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector" positionInList="before:org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector.separator.misc">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kNTUgNQxEeOqJuPuL0y2ew" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector" positionInList="">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_y8zO0NQxEeOqJuPuL0y2ew" elementId="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui.handledmenuitem.deleteBaseline" label="Delete Baseline" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/baselineDelete.gif" command="_xfNPcNQxEeOqJuPuL0y2ew"/>
   </fragments>
 </fragment:ModelFragments>
