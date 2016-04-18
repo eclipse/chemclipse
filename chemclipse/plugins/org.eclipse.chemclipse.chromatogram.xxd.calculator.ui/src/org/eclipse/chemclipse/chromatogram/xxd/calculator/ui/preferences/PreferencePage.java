@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.ui.preferences;
 
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.noise.NoiseCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.ui.Activator;
 import org.eclipse.chemclipse.model.support.SegmentWidth;

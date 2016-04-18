@@ -9,7 +9,15 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.calculator.noise;
+package org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise;
 
-public abstract class AbstractNoiseCalculator implements INoiseCalculator {
+import org.eclipse.chemclipse.model.core.IChromatogram;
+
+public interface INoiseCalculator {
+
+	void setChromatogram(IChromatogram chromatogram, int segmentWidth);
+
+	void recalculate();
+
+	float getSignalToNoiseRatio(float intensity);
 }

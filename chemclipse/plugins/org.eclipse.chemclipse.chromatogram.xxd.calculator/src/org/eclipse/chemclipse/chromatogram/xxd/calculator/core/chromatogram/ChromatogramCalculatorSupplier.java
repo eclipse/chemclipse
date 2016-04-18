@@ -1,40 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2016 Dr. Philip Wenig.
+ * Copyright (c) 2016 Lablicate UG (haftungsbeschränkt).
  * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * All rights reserved.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.calculator.noise;
+package org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram;
 
-public class NoiseCalculatorSupplier implements INoiseCalculatorSupplier {
+public class ChromatogramCalculatorSupplier implements IChromatogramCalculatorSupplier {
 
 	private String id = "";
 	private String description = "";
 	private String calculatorName = "";
-
-	@Override
-	public String getId() {
-
-		return id;
-	}
-
-	/**
-	 * Sets the supplier id like
-	 * "org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.dyson".
-	 * 
-	 * @param id
-	 */
-	protected void setId(String id) {
-
-		if(id != null) {
-			this.id = id;
-		}
-	}
 
 	@Override
 	public String getDescription() {
@@ -43,7 +24,7 @@ public class NoiseCalculatorSupplier implements INoiseCalculatorSupplier {
 	}
 
 	/**
-	 * Sets the description of the noise calculator supplier.
+	 * Sets the description of the chromatogram calculator supplier.
 	 * 
 	 * @param description
 	 */
@@ -61,14 +42,33 @@ public class NoiseCalculatorSupplier implements INoiseCalculatorSupplier {
 	}
 
 	/**
-	 * Sets the detector name of the noise calculator supplier.
+	 * Sets the name of the chromatogram calculator supplier.
 	 * 
-	 * @param comparatorName
+	 * @param calculatorName
 	 */
-	protected void setDetectorName(String detectorName) {
+	protected void setCalculatorName(String calculatorName) {
 
-		if(detectorName != null) {
-			this.calculatorName = detectorName;
+		if(calculatorName != null) {
+			this.calculatorName = calculatorName;
+		}
+	}
+
+	@Override
+	public String getId() {
+
+		return id;
+	}
+
+	/**
+	 * Sets the chromatogram filter supplier id like
+	 * "org.eclipse.chemclipse.chromatogram.msd.calculator.supplier.ri".
+	 * 
+	 * @param id
+	 */
+	protected void setId(String id) {
+
+		if(id != null) {
+			this.id = id;
 		}
 	}
 
@@ -85,7 +85,7 @@ public class NoiseCalculatorSupplier implements INoiseCalculatorSupplier {
 		if(this.getClass() != other.getClass()) {
 			return false;
 		}
-		INoiseCalculatorSupplier otherSupplier = (INoiseCalculatorSupplier)other;
+		IChromatogramCalculatorSupplier otherSupplier = (IChromatogramCalculatorSupplier)other;
 		return id.equals(otherSupplier.getId()) && description.equals(otherSupplier.getDescription()) && calculatorName.equals(otherSupplier.getCalculatorName());
 	}
 
@@ -105,7 +105,7 @@ public class NoiseCalculatorSupplier implements INoiseCalculatorSupplier {
 		builder.append(",");
 		builder.append("description=" + description);
 		builder.append(",");
-		builder.append("detectorName=" + calculatorName);
+		builder.append("calculatorName=" + calculatorName);
 		builder.append("]");
 		return builder.toString();
 	}

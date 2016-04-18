@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.calculator.noise;
+package org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise;
 
 import java.util.List;
 
