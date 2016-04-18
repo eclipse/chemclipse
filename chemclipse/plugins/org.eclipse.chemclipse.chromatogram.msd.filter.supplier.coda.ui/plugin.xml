@@ -12,8 +12,8 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.chemclipse.chromatogram.msd.filter.ui.preferences.filterPreferencePage"
-            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.ui.preferences.FilterPreferencePage"
-            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.ui.preferences.codaFilterPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.ui.preferences.preferencePage"
             name="CODA">
       </page>
    </extension>

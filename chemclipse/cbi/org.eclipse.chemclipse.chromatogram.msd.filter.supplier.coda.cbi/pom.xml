@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.updateSite</module>
   </modules>
 </project>

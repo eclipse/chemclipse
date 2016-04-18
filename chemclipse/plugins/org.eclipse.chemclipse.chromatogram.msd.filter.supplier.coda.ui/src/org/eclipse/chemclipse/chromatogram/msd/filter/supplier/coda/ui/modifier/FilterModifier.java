@@ -15,15 +15,12 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.widgets.Display;
 
 public class FilterModifier extends AbstractChromatogramProcessor implements IRunnableWithProgress {
 
@@ -37,18 +34,18 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 	@Override
 	public void execute(IProgressMonitor monitor) {
 
-		IChromatogramSelection chromatogramSelection = getChromatogramSelection();
-		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			/*
-			 * The filter settings.
-			 */
-			ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
-			chromatogramFilterSettings.getCodaSettings().setCodaThreshold(PreferenceSupplier.getCodaThreshold());
-			/*
-			 * Apply the filter.
-			 */
-			final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter((IChromatogramSelectionMSD)chromatogramSelection, chromatogramFilterSettings, FILTER_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+		if(getChromatogramSelection() instanceof IChromatogramSelectionMSD) {
+			IChromatogramSelectionMSD chromatogramSelection = (IChromatogramSelectionMSD)getChromatogramSelection();
+			final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, FILTER_ID, monitor);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+
+					chromatogramSelection.reset(true);
+				}
+			});
 		}
 	}
 
