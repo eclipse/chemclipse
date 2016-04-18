@@ -11,9 +11,9 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            category="org.eclipse.chemclipse.chromatogram.msd.filter.ui.preferences.filterPreferencePage"
-            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui.preferences.FilterPreferencePage"
-            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui.preferences.rtShifterPreferencePage"
+            category="org.eclipse.chemclipse.chromatogram.filter.ui.preferences.filterPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui.preferences.preferencePage"
             name="Retention Time Shifter">
       </page>
    </extension>

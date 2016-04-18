@@ -13,13 +13,13 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui.mod
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -30,7 +30,7 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter";
 	private int millisecondsToShift;
 
-	public FilterModifier(IChromatogramSelectionMSD chromatogramSelection, int millisecondsToShift) {
+	public FilterModifier(IChromatogramSelection chromatogramSelection, int millisecondsToShift) {
 		super(chromatogramSelection);
 		this.millisecondsToShift = millisecondsToShift;
 	}
@@ -38,18 +38,12 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 	@Override
 	public void execute(IProgressMonitor monitor) {
 
-		if(getChromatogramSelection() instanceof IChromatogramSelectionMSD) {
-			IChromatogramSelectionMSD chromatogramSelection = (IChromatogramSelectionMSD)getChromatogramSelection();
-			/*
-			 * The filter settings.
-			 */
+		if(getChromatogramSelection() != null) {
+			IChromatogramSelection chromatogramSelection = getChromatogramSelection();
 			boolean isShiftAllScans = PreferenceSupplier.getIsShiftAllScans();
 			ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings(millisecondsToShift, isShiftAllScans);
-			/*
-			 * Apply the filter.
-			 */
-			final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, chromatogramFilterSettings, FILTER_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, FILTER_ID, monitor);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 		}
 	}
 

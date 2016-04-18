@@ -21,12 +21,22 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.e4.core.di;bundle-version="1.2.0",
  org.eclipse.chemclipse.model;bundle-version="0.7.0",
  org.eclipse.chemclipse.support.ui;bundle-version="0.7.0",
- org.eclipse.chemclipse.chromatogram.filter;bundle-version="0.7.0"
+ org.eclipse.chemclipse.chromatogram.filter;bundle-version="0.7.0",
+ org.eclipse.chemclipse.csd.model;bundle-version="0.7.0",
+ org.eclipse.chemclipse.wsd.model;bundle-version="0.7.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: org.osgi.service.event;version="1.3.0"
-Service-Component: OSGI-INF/filterHandlerShiftForward.xml,
- OSGI-INF/filterHandlerShiftFastForward.xml,
- OSGI-INF/filterHandlerShiftBackward.xml,
- OSGI-INF/filterHandlerShiftFastBackward.xml
+Service-Component: OSGI-INF/filterHandlerShiftForwardMSD.xml,
+ OSGI-INF/filterHandlerShiftForwardCSD.xml,
+ OSGI-INF/filterHandlerShiftForwardWSD.xml,
+ OSGI-INF/filterHandlerShiftFastForwardMSD.xml,
+ OSGI-INF/filterHandlerShiftFastForwardCSD.xml,
+ OSGI-INF/filterHandlerShiftFastForwardWSD.xml,  
+ OSGI-INF/filterHandlerShiftBackwardMSD.xml,
+ OSGI-INF/filterHandlerShiftBackwardCSD.xml,
+ OSGI-INF/filterHandlerShiftBackwardWSD.xml,
+ OSGI-INF/filterHandlerShiftFastBackwardMSD.xml,
+ OSGI-INF/filterHandlerShiftFastBackwardCSD.xml,
+ OSGI-INF/filterHandlerShiftFastBackwardWSD.xml
 

@@ -2,11 +2,11 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.chemclipse.chromatogram.msd.filter.chromatogramFilterSupplier">
+         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
       <ChromatogramFilterSupplier
             description="This filter shifts retention times."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.ChromatogramFilter"
-            filterName="RT Shifter Filter"
+            filterName="Retention Time Shifter"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter">
       </ChromatogramFilterSupplier>
    </extension>
