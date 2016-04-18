@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.widgets.Display;
 
 public class FilterModifier extends AbstractChromatogramProcessor implements IRunnableWithProgress {
 
@@ -94,17 +95,19 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 				IChromatogramFilterResult result = processingInfo.getChromatogramFilterResult();
 				if(result instanceof IDenoisingFilterResult) {
 					final IDenoisingFilterResult denoisingResult = (IDenoisingFilterResult)result;
-					/*
-					 * Update the noise mass spectrum view.
-					 */
-					ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
-					/*
-					 * Show the interactive view.
-					 */
+					ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 					if(eventBroker != null) {
 						List<ICombinedMassSpectrum> noiseMassSpectra = denoisingResult.getNoiseMassSpectra();
 						eventBroker.send(IDenoisingEvents.TOPIC_NOISE_MASS_SPECTRA_UPDATE, noiseMassSpectra);
 					}
+					Display.getDefault().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+
+							chromatogramSelection.reset(true);
+						}
+					});
 				}
 			} catch(TypeCastException e) {
 				logger.warn(e);

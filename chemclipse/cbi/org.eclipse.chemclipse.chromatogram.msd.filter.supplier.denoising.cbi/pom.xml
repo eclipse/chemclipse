@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.updateSite</module>
   </modules>
 </project>
