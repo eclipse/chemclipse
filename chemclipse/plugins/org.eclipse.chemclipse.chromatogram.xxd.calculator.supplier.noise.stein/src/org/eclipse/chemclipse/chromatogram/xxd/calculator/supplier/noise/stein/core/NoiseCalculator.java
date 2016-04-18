@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.AbstractNoiseCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculator;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
@@ -33,8 +35,6 @@ import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.noise.AbstractNoiseCalculator;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.noise.INoiseCalculator;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
 
 /*
