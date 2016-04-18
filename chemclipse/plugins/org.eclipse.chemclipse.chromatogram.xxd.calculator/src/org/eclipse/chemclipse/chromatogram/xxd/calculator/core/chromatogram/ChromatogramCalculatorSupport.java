@@ -38,7 +38,7 @@ public class ChromatogramCalculatorSupport implements IChromatogramCalculatorSup
 	}
 
 	@Override
-	public List<String> getAvailableFilterIds() throws NoChromatogramCalculatorSupplierAvailableException {
+	public List<String> getAvailableCalculatorIds() throws NoChromatogramCalculatorSupplierAvailableException {
 
 		/*
 		 * Test if the suppliers ArrayList is empty.
@@ -52,7 +52,7 @@ public class ChromatogramCalculatorSupport implements IChromatogramCalculatorSup
 	}
 
 	@Override
-	public String getFilterId(int index) throws NoChromatogramCalculatorSupplierAvailableException {
+	public String getCalculatorId(int index) throws NoChromatogramCalculatorSupplierAvailableException {
 
 		/*
 		 * Test if the suppliers ArrayList is empty.
@@ -69,7 +69,7 @@ public class ChromatogramCalculatorSupport implements IChromatogramCalculatorSup
 	}
 
 	@Override
-	public String[] getFilterNames() throws NoChromatogramCalculatorSupplierAvailableException {
+	public String[] getCalculatorNames() throws NoChromatogramCalculatorSupplierAvailableException {
 
 		/*
 		 * Test if the suppliers ArrayList is empty.
@@ -87,7 +87,7 @@ public class ChromatogramCalculatorSupport implements IChromatogramCalculatorSup
 	}
 
 	@Override
-	public IChromatogramCalculatorSupplier getFilterSupplier(String calculatorId) throws NoChromatogramCalculatorSupplierAvailableException {
+	public IChromatogramCalculatorSupplier getCalculatorSupplier(String calculatorId) throws NoChromatogramCalculatorSupplierAvailableException {
 
 		IChromatogramCalculatorSupplier filterSupplier = null;
 		/*

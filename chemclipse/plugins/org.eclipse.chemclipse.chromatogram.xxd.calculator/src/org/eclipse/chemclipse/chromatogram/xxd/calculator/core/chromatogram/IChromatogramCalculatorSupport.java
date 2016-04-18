@@ -27,17 +27,17 @@ public interface IChromatogramCalculatorSupport {
 	 * @return String
 	 * @throws NoChromatogramCalculatorSupplierAvailableException
 	 */
-	String getFilterId(int index) throws NoChromatogramCalculatorSupplierAvailableException;
+	String getCalculatorId(int index) throws NoChromatogramCalculatorSupplierAvailableException;
 
 	/**
 	 * Returns an IChromatogramFilterSupplier object.<br/>
 	 * The object stores some additional supplier information.
 	 * 
-	 * @param filterId
+	 * @param calculatorId
 	 * @return {@link IChromatogramCalculatorSupplier}
 	 * @throws NoChromatogramCalculatorSupplierAvailableException
 	 */
-	IChromatogramCalculatorSupplier getFilterSupplier(String filterId) throws NoChromatogramCalculatorSupplierAvailableException;
+	IChromatogramCalculatorSupplier getCalculatorSupplier(String calculatorId) throws NoChromatogramCalculatorSupplierAvailableException;
 
 	/**
 	 * Returns an ArrayList with all available chromatogram calculator supplier ids.<br/>
@@ -45,7 +45,7 @@ public interface IChromatogramCalculatorSupport {
 	 * @return List<String>
 	 * @throws NoChromatogramCalculatorSupplierAvailableException
 	 */
-	List<String> getAvailableFilterIds() throws NoChromatogramCalculatorSupplierAvailableException;
+	List<String> getAvailableCalculatorIds() throws NoChromatogramCalculatorSupplierAvailableException;
 
 	/**
 	 * Returns the list of available chromatogram calculator names.
@@ -53,5 +53,5 @@ public interface IChromatogramCalculatorSupport {
 	 * @return String[]
 	 * @throws NoChromatogramCalculatorSupplierAvailableException
 	 */
-	String[] getFilterNames() throws NoChromatogramCalculatorSupplierAvailableException;
+	String[] getCalculatorNames() throws NoChromatogramCalculatorSupplierAvailableException;
 }

@@ -55,7 +55,7 @@ public class ChromatogramCalculator {
 	 * @param filterId
 	 * @return {@link IChromatogramCalculatorProcessingInfo}
 	 */
-	public static ICalculatorProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, String filterId, IProgressMonitor monitor) {
+	public static ICalculatorProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, String filterId, IProgressMonitor monitor) {
 
 		ICalculatorProcessingInfo processingInfo;
 		IChromatogramCalculator chromatogramCalculator = getChromatogramCalculator(filterId);
