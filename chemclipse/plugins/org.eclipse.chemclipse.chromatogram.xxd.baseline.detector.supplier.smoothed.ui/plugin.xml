@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         id="org.eclipse.chemclipse.chromatogram.msd.baseline.detector.ui.modelContribution"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui.preferences.baselineDetectorPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.ui.preferencePage"
+            name="Smoothed Baseline Detector">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc_baselinedectector.xml">
+      </toc>
+   </extension>
+
+</plugin>

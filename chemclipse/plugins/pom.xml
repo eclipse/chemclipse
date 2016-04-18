@@ -6,7 +6,7 @@
     <groupId>org.eclipse.chemclipse</groupId>
     <artifactId>parent</artifactId>
     <version>BUILD-VERSION</version>
-    <relativePath>../cbi/org.eclipse.chemclipse.chromatogram.msd.baseline.detector.supplier.smoothed.cbi/pom.xml</relativePath>
+    <relativePath>../cbi/org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.smoothed.cbi/pom.xml</relativePath>
   </parent>
 
   <artifactId>org.eclipse.chemclipse.plugins.parent</artifactId>
