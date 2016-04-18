@@ -15,6 +15,13 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.inject.Named;
 
+import org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.ui.modifier.FilterModifier;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.progress.core.InfoType;
+import org.eclipse.chemclipse.progress.core.StatusLineLogger;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -23,14 +30,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
-
-import org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.ui.modifier.FilterModifier;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.progress.core.InfoType;
-import org.eclipse.chemclipse.progress.core.StatusLineLogger;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 
 public class FilterHandler implements EventHandler {
 
@@ -74,6 +73,8 @@ public class FilterHandler implements EventHandler {
 
 		if(event.getTopic().equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION)) {
 			chromatogramSelection = (IChromatogramSelectionCSD)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+		} else {
+			chromatogramSelection = null;
 		}
 	}
 }

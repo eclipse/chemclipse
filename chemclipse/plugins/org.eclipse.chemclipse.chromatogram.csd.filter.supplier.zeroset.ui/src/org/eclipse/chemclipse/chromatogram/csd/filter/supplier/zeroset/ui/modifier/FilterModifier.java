@@ -13,40 +13,57 @@ package org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.ui.modif
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram.ChromatogramFilterCSD;
+import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.widgets.Display;
 
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
-import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IScan;
+public class FilterModifier extends AbstractChromatogramProcessor implements IRunnableWithProgress {
 
-public class FilterModifier implements IRunnableWithProgress {
+	private static final String DESCRIPTION = "ZeroSet (CSD)";
+	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset";
 
-	private IChromatogramSelectionCSD chromatogramSelection;
+	public FilterModifier(IChromatogramSelection chromatogramSelection) {
+		super(chromatogramSelection);
+	}
 
-	public FilterModifier(IChromatogramSelectionCSD chromatogramSelection) {
-		this.chromatogramSelection = chromatogramSelection;
+	@Override
+	public void execute(IProgressMonitor monitor) {
+
+		if(getChromatogramSelection() instanceof IChromatogramSelectionCSD) {
+			IChromatogramSelectionCSD chromatogramSelection = (IChromatogramSelectionCSD)getChromatogramSelection();
+			IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilterCSD.applyFilter(chromatogramSelection, FILTER_ID, monitor);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+
+					chromatogramSelection.reset(true);
+				}
+			});
+		}
+	}
+
+	@Override
+	public String getDescription() {
+
+		return DESCRIPTION;
 	}
 
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		/*
-		 * THIS IS A TEST CASE, PLEASE COMBINE WITH FILTER EXTENSION POINT!
-		 */
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-		float minSignal = chromatogram.getMinSignal();
-		if(minSignal < 0) {
-			float delta = minSignal * -1;
-			for(IScan scan : chromatogram.getScans()) {
-				float adjustedIntensity = scan.getTotalSignal() + delta;
-				scan.adjustTotalSignal(adjustedIntensity);
-			}
+		try {
+			monitor.beginTask(DESCRIPTION, IProgressMonitor.UNKNOWN);
+			getChromatogramSelection().getChromatogram().doOperation(this, monitor);
+		} finally {
+			monitor.done();
 		}
-		/*
-		 * Update the retention times.
-		 */
-		chromatogramSelection.reset();
-		chromatogramSelection.update(true);
 	}
 }

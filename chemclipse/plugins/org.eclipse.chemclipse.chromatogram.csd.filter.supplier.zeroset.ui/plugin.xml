@@ -12,7 +12,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.chemclipse.chromatogram.csd.filter.ui.preferences.filterPreferencePage"
-            class="org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.ui.preferences.FilterPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.ui.preferences.scanremoverFilterPreferencePage"
             name="FID ZeroSet">
       </page>

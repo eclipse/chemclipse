@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.updateSite</module>
   </modules>
 </project>
