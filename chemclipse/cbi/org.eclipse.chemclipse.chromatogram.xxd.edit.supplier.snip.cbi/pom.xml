@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.updateSite</module>
   </modules>
 </project>

@@ -10,11 +10,10 @@
     <elements xsi:type="commands:Handler" xmi:id="_wRFLUGN_EeSTIbm1OKHvbA" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handler.filterSelectedPeak" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui/org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handlers.FilterHandlerSelectedPeak" command="_ozZRwGN_EeSTIbm1OKHvbA"/>
     <elements xsi:type="commands:Handler" xmi:id="_ZXKakGP-EeSlDuFT8RyH7A" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handler.filterAllPeaks" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui/org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handlers.FilterHandlerAllPeaks" command="_QtWsIGP-EeSlDuFT8RyH7A"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_TBYXEK9lEeK8N6YSg9UECw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector.msd">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_42HuoK9lEeK8N6YSg9UECw" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handledmenuitem.detector.msd" label="SNIP Baseline Detector" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/baselineSnip.gif" command="_gm_4MK9lEeK8N6YSg9UECw"/>
-  </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_8kVs0BZIEeSk0dq6nce8LA" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector.csd">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_DsRY0BZJEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handledmenuitem.detector.csd" label="SNIP Baseline Detector" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/baselineSnip.gif" command="_gm_4MK9lEeK8N6YSg9UECw"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_TBYXEK9lEeK8N6YSg9UECw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.baselinedetector">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_42HuoK9lEeK8N6YSg9UECw" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handledmenuitem.detector" label="SNIP Baseline Detector" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/baselineSnip.gif" command="_gm_4MK9lEeK8N6YSg9UECw">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_4ysAkAVpEea6VKKU8xZa-Q" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
+    </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_5k7VQGN_EeSTIbm1OKHvbA" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.peak">
     <elements xsi:type="menu:Menu" xmi:id="_jaCqMGP9EeSlDuFT8RyH7A" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.menu.filter" label="SNIP">
