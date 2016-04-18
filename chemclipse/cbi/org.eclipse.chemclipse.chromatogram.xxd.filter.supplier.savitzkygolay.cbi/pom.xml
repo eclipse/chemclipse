@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.updateSite</module>
   </modules>
 </project>

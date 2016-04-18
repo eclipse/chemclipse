@@ -35,11 +35,8 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 
 		if(getChromatogramSelection() != null) {
 			IChromatogramSelection chromatogramSelection = getChromatogramSelection();
-			/*
-			 * Apply the filter.
-			 */
 			IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, FILTER_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 		}
 	}
 

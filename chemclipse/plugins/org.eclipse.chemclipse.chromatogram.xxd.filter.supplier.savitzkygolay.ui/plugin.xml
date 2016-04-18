@@ -18,8 +18,8 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.chemclipse.chromatogram.filter.ui.preferences.filterPreferencePage"
-            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences.FilterPreferencePage"
-            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences.savitzkyGolayPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences.preferencePage"
             name="Savitzky-Golay Filter">
       </page>
    </extension>

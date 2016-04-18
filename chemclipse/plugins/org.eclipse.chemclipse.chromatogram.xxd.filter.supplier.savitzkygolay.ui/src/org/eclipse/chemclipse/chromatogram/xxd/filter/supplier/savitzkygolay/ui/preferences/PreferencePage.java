@@ -19,9 +19,9 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.pre
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.Activator;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditor;
 
-public class FilterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public FilterPreferencePage() {
+	public PreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Savitzky-Golay Filter");
