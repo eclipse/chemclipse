@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.updateSite</module>
   </modules>
 </project>
