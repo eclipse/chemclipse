@@ -19,15 +19,15 @@ import org.eclipse.chemclipse.chromatogram.csd.filter.exceptions.NoChromatogramF
 
 public class ChromatogramFilterSupport_1_Test extends TestCase {
 
-	private ChromatogramFilterSupport support;
-	private ChromatogramFilterSupplier supplier;
+	private ChromatogramFilterSupportCSD support;
+	private ChromatogramFilterSupplierCSD supplier;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		support = new ChromatogramFilterSupport();
-		supplier = new ChromatogramFilterSupplier();
+		support = new ChromatogramFilterSupportCSD();
+		supplier = new ChromatogramFilterSupplierCSD();
 		supplier.setId("net.first.supplier");
 		supplier.setDescription("Filter Description");
 		supplier.setFilterName("Test Filter Name");
@@ -64,7 +64,7 @@ public class ChromatogramFilterSupport_1_Test extends TestCase {
 
 	public void testGetIntegratorSupplier_1() {
 
-		IChromatogramFilterSupplier supplier;
+		IChromatogramFilterSupplierCSD supplier;
 		try {
 			supplier = support.getFilterSupplier("net.first.supplier");
 			assertNotNull(supplier);

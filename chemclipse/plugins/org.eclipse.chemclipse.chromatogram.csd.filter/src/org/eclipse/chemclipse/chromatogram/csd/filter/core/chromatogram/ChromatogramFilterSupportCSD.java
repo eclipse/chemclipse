@@ -19,23 +19,23 @@ import org.eclipse.chemclipse.chromatogram.csd.filter.exceptions.NoChromatogramF
 /**
  * @author eselmeister
  */
-public class ChromatogramFilterSupport implements IChromatogramFilterSupport {
+public class ChromatogramFilterSupportCSD implements IChromatogramFilterSupportCSD {
 
-	private List<IChromatogramFilterSupplier> suppliers;
+	private List<IChromatogramFilterSupplierCSD> suppliers;
 
 	/**
 	 * Creates a new suppliers list.
 	 */
-	public ChromatogramFilterSupport() {
-		suppliers = new ArrayList<IChromatogramFilterSupplier>();
+	public ChromatogramFilterSupportCSD() {
+		suppliers = new ArrayList<IChromatogramFilterSupplierCSD>();
 	}
 
 	/**
-	 * Adds a {@link IChromatogramFilterSupplier} to the {@link IChromatogramFilterSupport}.
+	 * Adds a {@link IChromatogramFilterSupplierCSD} to the {@link IChromatogramFilterSupportCSD}.
 	 * 
 	 * @param supplier
 	 */
-	protected void add(IChromatogramFilterSupplier supplier) {
+	protected void add(IChromatogramFilterSupplierCSD supplier) {
 
 		suppliers.add(supplier);
 	}
@@ -48,7 +48,7 @@ public class ChromatogramFilterSupport implements IChromatogramFilterSupport {
 		 */
 		areChromatogramFiltersStored();
 		List<String> availableFilters = new ArrayList<String>();
-		for(IChromatogramFilterSupplier supplier : suppliers) {
+		for(IChromatogramFilterSupplierCSD supplier : suppliers) {
 			availableFilters.add(supplier.getId());
 		}
 		return availableFilters;
@@ -67,7 +67,7 @@ public class ChromatogramFilterSupport implements IChromatogramFilterSupport {
 		if(index < 0 || index > suppliers.size() - 1) {
 			throw new NoChromatogramFilterSupplierAvailableException("There is no chromatogram filter available with the following id: " + index + ".");
 		}
-		IChromatogramFilterSupplier supplier = suppliers.get(index);
+		IChromatogramFilterSupplierCSD supplier = suppliers.get(index);
 		return supplier.getId();
 	}
 
@@ -83,16 +83,16 @@ public class ChromatogramFilterSupport implements IChromatogramFilterSupport {
 		 * converter filter names.<br/>
 		 */
 		ArrayList<String> filterNames = new ArrayList<String>();
-		for(IChromatogramFilterSupplier supplier : suppliers) {
+		for(IChromatogramFilterSupplierCSD supplier : suppliers) {
 			filterNames.add(supplier.getFilterName());
 		}
 		return filterNames.toArray(new String[filterNames.size()]);
 	}
 
 	@Override
-	public IChromatogramFilterSupplier getFilterSupplier(String filterId) throws NoChromatogramFilterSupplierAvailableException {
+	public IChromatogramFilterSupplierCSD getFilterSupplier(String filterId) throws NoChromatogramFilterSupplierAvailableException {
 
-		IChromatogramFilterSupplier filterSupplier = null;
+		IChromatogramFilterSupplierCSD filterSupplier = null;
 		/*
 		 * Test if the suppliers ArrayList is empty.
 		 */
@@ -101,7 +101,7 @@ public class ChromatogramFilterSupport implements IChromatogramFilterSupport {
 			throw new NoChromatogramFilterSupplierAvailableException("There is no chromatogram filter supplier available with the following id: " + filterId + ".");
 		}
 		endsearch:
-		for(IChromatogramFilterSupplier supplier : suppliers) {
+		for(IChromatogramFilterSupplierCSD supplier : suppliers) {
 			if(supplier.getId().equals(filterId)) {
 				filterSupplier = supplier;
 				break endsearch;

@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 /**
  * @author eselmeister
  */
-public abstract class AbstractChromatogramFilter implements IChromatogramFilter {
+public abstract class AbstractChromatogramFilterCSD implements IChromatogramFilterCSD {
 
 	private static final String DESCRIPTION = "Chromatogram Filter";
 

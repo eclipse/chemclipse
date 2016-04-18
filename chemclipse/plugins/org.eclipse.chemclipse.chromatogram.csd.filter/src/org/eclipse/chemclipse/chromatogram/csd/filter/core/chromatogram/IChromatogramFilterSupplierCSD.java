@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram;
 
-public interface IChromatogramFilterSupplier {
+public interface IChromatogramFilterSupplierCSD {
 
 	/**
 	 * The id of the extension point: e.g.

@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD
 /**
  * THIS IS A TEST CLASS. DO NOT USE IT BUT ONLY FOR TESTING PURPOSE.
  */
-public class TestChromatogramFilter extends AbstractChromatogramFilter {
+public class TestChromatogramFilter extends AbstractChromatogramFilterCSD {
 
 	@Override
 	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionCSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {

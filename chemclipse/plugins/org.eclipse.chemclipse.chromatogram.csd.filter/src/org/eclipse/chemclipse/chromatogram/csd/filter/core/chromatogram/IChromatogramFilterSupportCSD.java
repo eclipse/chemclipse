@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.csd.filter.exceptions.NoChromatogramFilterSupplierAvailableException;
 
-public interface IChromatogramFilterSupport {
+public interface IChromatogramFilterSupportCSD {
 
 	/**
 	 * Returns the id of the selected filter name.<br/>
@@ -34,10 +34,10 @@ public interface IChromatogramFilterSupport {
 	 * The object stores some additional supplier information.
 	 * 
 	 * @param filterId
-	 * @return {@link IChromatogramFilterSupplier}
+	 * @return {@link IChromatogramFilterSupplierCSD}
 	 * @throws NoChromatogramFilterSupplierAvailableException
 	 */
-	IChromatogramFilterSupplier getFilterSupplier(String filterId) throws NoChromatogramFilterSupplierAvailableException;
+	IChromatogramFilterSupplierCSD getFilterSupplier(String filterId) throws NoChromatogramFilterSupplierAvailableException;
 
 	/**
 	 * Returns an ArrayList with all available chromatogram filter supplier ids.<br/>

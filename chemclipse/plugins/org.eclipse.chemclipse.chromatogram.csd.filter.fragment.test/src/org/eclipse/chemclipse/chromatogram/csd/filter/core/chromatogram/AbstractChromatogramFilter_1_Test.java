@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 
 public class AbstractChromatogramFilter_1_Test extends TestCase {
 
-	private IChromatogramFilter filter;
+	private IChromatogramFilterCSD filter;
 	private IChromatogramSelectionCSD chromatogramSelection;
 	private IChromatogramCSD chromatogram;
 	private IChromatogramFilterSettings chromatogramFilterSettings;

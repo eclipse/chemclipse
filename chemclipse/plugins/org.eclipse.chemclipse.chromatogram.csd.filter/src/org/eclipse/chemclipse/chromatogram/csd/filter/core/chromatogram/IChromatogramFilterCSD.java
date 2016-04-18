@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSe
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 
-public interface IChromatogramFilter {
+public interface IChromatogramFilterCSD {
 
 	/**
 	 * Apply the filter in the given chromatogram selection and take care of the

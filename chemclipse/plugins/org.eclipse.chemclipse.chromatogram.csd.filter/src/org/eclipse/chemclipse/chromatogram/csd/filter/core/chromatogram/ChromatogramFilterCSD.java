@@ -23,9 +23,9 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSe
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 
-public class ChromatogramFilter {
+public class ChromatogramFilterCSD {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramFilter.class);
+	private static final Logger logger = Logger.getLogger(ChromatogramFilterCSD.class);
 	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.csd.filter.chromatogramFilterSupplier";
 	/*
 	 * These are the attributes of the extension point elements.
@@ -41,7 +41,7 @@ public class ChromatogramFilter {
 	/**
 	 * This class is a singleton. Use only static methods.
 	 */
-	private ChromatogramFilter() {
+	private ChromatogramFilterCSD() {
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class ChromatogramFilter {
 	public static IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionCSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor) {
 
 		IChromatogramFilterProcessingInfo processingInfo;
-		IChromatogramFilter chromatogramFilter = getChromatogramFilter(filterId);
+		IChromatogramFilterCSD chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 		} else {
@@ -82,7 +82,7 @@ public class ChromatogramFilter {
 	public static IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionCSD chromatogramSelection, String filterId, IProgressMonitor monitor) {
 
 		IChromatogramFilterProcessingInfo processingInfo;
-		IChromatogramFilter chromatogramFilter = getChromatogramFilter(filterId);
+		IChromatogramFilterCSD chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, monitor);
 		} else {
@@ -92,10 +92,10 @@ public class ChromatogramFilter {
 		return processingInfo;
 	}
 
-	public static IChromatogramFilterSupport getChromatogramFilterSupport() {
+	public static IChromatogramFilterSupportCSD getChromatogramFilterSupport() {
 
-		ChromatogramFilterSupplier supplier;
-		ChromatogramFilterSupport filterSupport = new ChromatogramFilterSupport();
+		ChromatogramFilterSupplierCSD supplier;
+		ChromatogramFilterSupportCSD filterSupport = new ChromatogramFilterSupportCSD();
 		/*
 		 * Search in the extension registry and fill the comparison support
 		 * object with supplier information.
@@ -103,7 +103,7 @@ public class ChromatogramFilter {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] extensions = registry.getConfigurationElementsFor(EXTENSION_POINT);
 		for(IConfigurationElement element : extensions) {
-			supplier = new ChromatogramFilterSupplier();
+			supplier = new ChromatogramFilterSupplierCSD();
 			supplier.setId(element.getAttribute(ID));
 			supplier.setDescription(element.getAttribute(DESCRIPTION));
 			supplier.setFilterName(element.getAttribute(FILTER_NAME));
@@ -114,17 +114,17 @@ public class ChromatogramFilter {
 
 	// --------------------------------------------private methods
 	/**
-	 * Returns a {@link IChromatogramFilter} instance given by the filterId or
+	 * Returns a {@link IChromatogramFilterCSD} instance given by the filterId or
 	 * null, if none is available.
 	 */
-	private static IChromatogramFilter getChromatogramFilter(final String filterId) {
+	private static IChromatogramFilterCSD getChromatogramFilter(final String filterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(filterId);
-		IChromatogramFilter instance = null;
+		IChromatogramFilterCSD instance = null;
 		if(element != null) {
 			try {
-				instance = (IChromatogramFilter)element.createExecutableExtension(FILTER);
+				instance = (IChromatogramFilterCSD)element.createExecutableExtension(FILTER);
 			} catch(CoreException e) {
 				logger.warn(e);
 			}
@@ -133,7 +133,7 @@ public class ChromatogramFilter {
 	}
 
 	/**
-	 * Returns an {@link IChromatogramFilter} instance or null if none is
+	 * Returns an {@link IChromatogramFilterCSD} instance or null if none is
 	 * available.
 	 * 
 	 * @param filterId
