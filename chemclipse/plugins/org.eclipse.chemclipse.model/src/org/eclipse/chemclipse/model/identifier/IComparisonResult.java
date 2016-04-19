@@ -81,4 +81,8 @@ public interface IComparisonResult {
 	 * @return String
 	 */
 	String getAdvise();
+
+	boolean isMatch();
+
+	void setMatch(boolean match);
 }
