@@ -16,8 +16,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.noise.INoiseCalculator;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.noise.NoiseCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.csd.model.core.identifier.chromatogram.IChromatogramTargetCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;

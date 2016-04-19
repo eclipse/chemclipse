@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
-public interface IComparisonResult {
+import java.io.Serializable;
+
+public interface IComparisonResult extends Serializable {
 
 	float MAX_MATCH_FACTOR = 100.0f;
 	float MAX_REVERSE_MATCH_FACTOR = 100.0f;

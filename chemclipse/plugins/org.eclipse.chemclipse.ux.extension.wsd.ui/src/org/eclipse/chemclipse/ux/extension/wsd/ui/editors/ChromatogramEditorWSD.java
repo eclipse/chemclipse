@@ -43,7 +43,7 @@ import org.eclipse.chemclipse.wsd.model.core.AbstractChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
-import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionUpdateNotifier;
+import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionWSDUpdateNotifier;
 import org.eclipse.chemclipse.wsd.model.notifier.IChromatogramSelectionWSDUpdateNotifier;
 import org.eclipse.chemclipse.wsd.swt.ui.components.chromatogram.EditorChromatogramUI;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -185,7 +185,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 		/*
 		 * Remove the actual editor to be not in the updatee list anymore.
 		 */
-		ChromatogramSelectionUpdateNotifier.fireUpdateChange(null, true);
+		ChromatogramSelectionWSDUpdateNotifier.fireUpdateChange(null, true);
 		if(chromatogramSelection != null) {
 			chromatogramSelection.dispose();
 		}

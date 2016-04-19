@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.identifier.chromatogram;
 
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.noise.INoiseCalculator;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.noise.NoiseCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.implementation.DefaultNoiseCalculator;
 

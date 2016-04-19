@@ -13,10 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterSupport;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.exceptions.NoChromatogramFilterSupplierAvailableException;
+import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoChromatogramFilterSupplierAvailableException;
 
 import junit.framework.TestCase;
 
@@ -25,15 +22,15 @@ import junit.framework.TestCase;
  */
 public class ChromatogramFilterSupport_1_Test extends TestCase {
 
-	private ChromatogramFilterSupport support;
-	private ChromatogramFilterSupplier supplier;
+	private ChromatogramFilterSupportMSD support;
+	private ChromatogramFilterSupplierMSD supplier;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		support = new ChromatogramFilterSupport();
-		supplier = new ChromatogramFilterSupplier();
+		support = new ChromatogramFilterSupportMSD();
+		supplier = new ChromatogramFilterSupplierMSD();
 		supplier.setId("net.first.supplier");
 		supplier.setDescription("Filter Description");
 		supplier.setFilterName("Test Filter Name");
@@ -70,7 +67,7 @@ public class ChromatogramFilterSupport_1_Test extends TestCase {
 
 	public void testGetIntegratorSupplier_1() {
 
-		IChromatogramFilterSupplier supplier;
+		IChromatogramFilterSupplierMSD supplier;
 		try {
 			supplier = support.getFilterSupplier("net.first.supplier");
 			assertNotNull(supplier);

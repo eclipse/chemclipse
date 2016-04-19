@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.core.peak;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.exceptions.NoPeakFilterSupplierAvailableException;
+import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoPeakFilterSupplierAvailableException;
 
 public interface IPeakFilterSupport {
 

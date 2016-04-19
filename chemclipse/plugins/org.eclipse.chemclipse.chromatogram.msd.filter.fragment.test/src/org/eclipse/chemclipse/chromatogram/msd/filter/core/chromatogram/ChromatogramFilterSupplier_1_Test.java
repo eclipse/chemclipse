@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterSupplier;
-
 import junit.framework.TestCase;
 
 /**
@@ -20,13 +18,13 @@ import junit.framework.TestCase;
  */
 public class ChromatogramFilterSupplier_1_Test extends TestCase {
 
-	private ChromatogramFilterSupplier supplier;
+	private ChromatogramFilterSupplierMSD supplier;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		supplier = new ChromatogramFilterSupplier();
+		supplier = new ChromatogramFilterSupplierMSD();
 		supplier.setId("org.eclipse.chemclipse.test");
 		supplier.setDescription("This is a description.");
 		supplier.setFilterName("Filter Name");

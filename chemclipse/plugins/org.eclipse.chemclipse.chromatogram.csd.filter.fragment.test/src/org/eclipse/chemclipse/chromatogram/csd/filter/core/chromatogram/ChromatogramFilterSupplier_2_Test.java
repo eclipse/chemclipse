@@ -15,13 +15,13 @@ import junit.framework.TestCase;
 
 public class ChromatogramFilterSupplier_2_Test extends TestCase {
 
-	private ChromatogramFilterSupplier supplier;
+	private ChromatogramFilterSupplierCSD supplier;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		supplier = new ChromatogramFilterSupplier();
+		supplier = new ChromatogramFilterSupplierCSD();
 	}
 
 	@Override

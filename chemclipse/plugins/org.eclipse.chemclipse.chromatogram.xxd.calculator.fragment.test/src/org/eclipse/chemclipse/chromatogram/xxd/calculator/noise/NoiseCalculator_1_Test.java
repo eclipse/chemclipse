@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.noise;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseCalculator;
+
 import junit.framework.TestCase;
 
 public class NoiseCalculator_1_Test extends TestCase {

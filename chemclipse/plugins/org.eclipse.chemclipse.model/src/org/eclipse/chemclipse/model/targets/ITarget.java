@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.targets;
 
+import java.io.Serializable;
+
 /**
  * A target is used to identify a peak or a chromatogram. This can be done in
  * various ways.<br/>
@@ -27,5 +29,5 @@ package org.eclipse.chemclipse.model.targets;
  * 
  * @author eselmeister
  */
-public interface ITarget {
+public interface ITarget extends Serializable {
 }

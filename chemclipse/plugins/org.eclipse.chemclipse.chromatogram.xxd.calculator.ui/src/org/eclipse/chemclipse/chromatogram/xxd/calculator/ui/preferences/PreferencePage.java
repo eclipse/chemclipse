@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2016 Dr. Philip Wenig.
+ * Copyright (c) 2016 Lablicate UG (haftungsbeschränkt).
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,23 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.ui.preferences;
 
-import org.eclipse.jface.preference.ComboFieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.IWorkbench;
-
-import org.eclipse.chemclipse.model.support.SegmentWidth;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.noise.NoiseCalculator;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.ui.Activator;
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Select the S/N calculator.");
+		setDescription("Calculators");
 	}
 
 	/**
@@ -37,9 +31,6 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void createFieldEditors() {
 
-		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceSupplier.P_NOISE_CALCULATOR_ID, "Calculator Method", NoiseCalculator.getAvailableCalculatorIds(), getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceSupplier.P_SEGMENT_WIDTH, "Segment width to determine noise", SegmentWidth.getElements(), getFieldEditorParent()));
 	}
 
 	/*
