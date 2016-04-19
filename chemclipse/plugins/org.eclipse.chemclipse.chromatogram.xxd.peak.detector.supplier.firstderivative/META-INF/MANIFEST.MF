@@ -19,5 +19,6 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core,
  org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences,
- org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings
+ org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings,
+ org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support
 Bundle-Vendor: ChemClipse
