@@ -17,6 +17,7 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	private float reverseMatchFactor;
 	private float probability;
 	private String advise = "";
+	private boolean isMatch = true;
 
 	public AbstractComparisonResult(float matchFactor, float reverseMatchFactor) {
 		this.matchFactor = matchFactor;
@@ -73,6 +74,18 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	public String getAdvise() {
 
 		return advise;
+	}
+
+	@Override
+	public boolean isMatch() {
+
+		return isMatch;
+	}
+
+	@Override
+	public void setMatch(boolean match) {
+
+		this.isMatch = match;
 	}
 
 	// ----------------------------------------private methods
