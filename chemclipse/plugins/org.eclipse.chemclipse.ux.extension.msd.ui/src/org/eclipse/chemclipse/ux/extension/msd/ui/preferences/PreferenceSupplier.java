@@ -35,6 +35,9 @@ public class PreferenceSupplier {
 	private static IMarkedIons compoundIonsHydrocarbons = null;
 	private static IMarkedIons compoundIonsFattyAcids = null;
 	private static IMarkedIons compoundIonsFame = null;
+	//
+	public static final String P_USE_PROFILE_MASS_SPECTRUM_VIEW = "useProfileMassSpectrumView";
+	public static final boolean DEF_USE_PROFILE_MASS_SPECTRUM_VIEW = false;
 
 	/*
 	 * Use only static methods.
@@ -128,5 +131,11 @@ public class PreferenceSupplier {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		return store.getInt(PreferenceConstants.P_OVERLAY_Y_OFFSET);
+	}
+
+	public static boolean useProfileMassSpectrumView() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getBoolean(P_USE_PROFILE_MASS_SPECTRUM_VIEW);
 	}
 }

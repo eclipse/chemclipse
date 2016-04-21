@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
+import java.io.File;
+
 public abstract class AbstractVendorMassSpectrum extends AbstractRegularMassSpectrum implements IVendorMassSpectrum {
 
 	/**
@@ -19,6 +21,30 @@ public abstract class AbstractVendorMassSpectrum extends AbstractRegularMassSpec
 	 * methods.
 	 */
 	private static final long serialVersionUID = 5013842421250687340L;
+	//
+	private File file;
+
+	@Override
+	public File getFile() {
+
+		return file;
+	}
+
+	@Override
+	public void setFile(File file) {
+
+		this.file = file;
+	}
+
+	@Override
+	public String getName() {
+
+		String name = "No file has been set yet.";
+		if(file != null) {
+			name = file.getName();
+		}
+		return name;
+	}
 
 	@Override
 	public AbstractVendorMassSpectrum addIon(IIon ion) {

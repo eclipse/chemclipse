@@ -32,5 +32,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_OVERLAY_Y_OFFSET, 0);
 		store.setDefault(PreferenceSupplier.P_SELECTED_ORGANIC_COMPOUND, PreferenceSupplier.P_ORGANIC_COMPOUND_HYDROCARBONS);
 		store.setDefault(PreferenceSupplier.P_MAGNIFICATION_FACTOR, PreferenceSupplier.DEF_MAGNIFICATION_FACTOR);
+		store.setDefault(PreferenceSupplier.P_USE_PROFILE_MASS_SPECTRUM_VIEW, PreferenceSupplier.DEF_USE_PROFILE_MASS_SPECTRUM_VIEW);
 	}
 }

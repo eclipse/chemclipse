@@ -30,12 +30,16 @@ import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.AbstractExtendedMassSpectrumUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleContinuousMassSpectrumUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
 import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectraFileSupport;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.MassSpectrumImportRunnable;
+import org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.ui.di.Focus;
@@ -247,7 +251,6 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	private void createPages(Composite parent) {
 
 		if(massSpectra != null && massSpectra.getMassSpectrum(1) != null) {
-			part.setLabel(massSpectrumFile.getName());
 			tabFolder = new TabFolder(parent, SWT.BOTTOM);
 			createMassSpectrumPage();
 		} else {
@@ -263,8 +266,20 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Mass Spectrum");
 		//
-		SimpleMassSpectrumUI massSpectrumUI = new SimpleMassSpectrumUI(tabFolder, SWT.NONE, MassValueDisplayPrecision.EXACT);
 		IScanMSD massSpectrum = massSpectra.getMassSpectrum(1);
+		if(massSpectrum instanceof IVendorMassSpectrum) {
+			part.setLabel(((IVendorMassSpectrum)massSpectrum).getName());
+		} else {
+			part.setLabel(massSpectra.getName());
+		}
+		//
+		boolean isProfile = PreferenceSupplier.useProfileMassSpectrumView();
+		AbstractExtendedMassSpectrumUI massSpectrumUI;
+		if(isProfile) {
+			massSpectrumUI = new SimpleContinuousMassSpectrumUI(tabFolder, SWT.NONE, MassValueDisplayPrecision.EXACT);
+		} else {
+			massSpectrumUI = new SimpleMassSpectrumUI(tabFolder, SWT.NONE, MassValueDisplayPrecision.EXACT);
+		}
 		massSpectrumUI.update(massSpectrum, true);
 		tabItem.setControl(massSpectrumUI);
 	}
