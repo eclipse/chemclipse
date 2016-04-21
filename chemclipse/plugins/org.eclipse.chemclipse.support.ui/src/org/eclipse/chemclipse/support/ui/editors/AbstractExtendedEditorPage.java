@@ -12,6 +12,8 @@
 package org.eclipse.chemclipse.support.ui.editors;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -24,14 +26,27 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
-public abstract class AbstractEditorPage {
+/**
+ * PLEASE ASK BEFORE CHANGING THIS CLASS.
+ */
+public abstract class AbstractExtendedEditorPage implements IExtendedEditorPage {
 
 	protected static final int HORIZONTAL_INDENT = 15;
 	//
 	private FormToolkit toolkit;
 	private Composite control;
+	private ScrolledForm scrolledForm;
 
-	public AbstractEditorPage(String pageName, Composite container) {
+	/**
+	 * Use fillBody == false if you want to call the fillBody(ScrolledForm scrolledForm) method
+	 * after doing some extra initializations. Otherwise, the fillBody method is called directly
+	 * by the constructor.
+	 * 
+	 * @param pageName
+	 * @param container
+	 * @param fillBody
+	 */
+	public AbstractExtendedEditorPage(String pageName, Composite container, boolean fillBody) {
 		/*
 		 * Create the parent composite.
 		 */
@@ -42,30 +57,32 @@ public abstract class AbstractEditorPage {
 		 * Forms API
 		 */
 		toolkit = new FormToolkit(control.getDisplay());
-		ScrolledForm scrolledForm = toolkit.createScrolledForm(control);
+		scrolledForm = toolkit.createScrolledForm(control);
 		scrolledForm.setText(pageName);
-		fillBody(scrolledForm);
+		if(fillBody) {
+			fillBody(scrolledForm);
+		}
 	}
 
-	/**
-	 * Override this method.
-	 * 
-	 * @param scrolledForm
-	 */
-	public void fillBody(ScrolledForm scrolledForm) {
+	@Override
+	public ScrolledForm getScrolledForm() {
 
+		return scrolledForm;
 	}
 
+	@Override
 	public FormToolkit getFormToolkit() {
 
 		return toolkit;
 	}
 
+	@Override
 	public Composite getControl() {
 
 		return control;
 	}
 
+	@Override
 	public void dispose() {
 
 		if(toolkit != null) {
@@ -121,6 +138,17 @@ public abstract class AbstractEditorPage {
 
 		Label label = toolkit.createLabel(client, text);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		label.setLayoutData(gridData);
+		return label;
+	}
+
+	protected CLabel createCLabel(Composite client, String text, Image image, int horizontalIndent) {
+
+		CLabel label = new CLabel(client, SWT.LEFT);
+		label.setText(text);
+		label.setImage(image);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalIndent = horizontalIndent;
 		label.setLayoutData(gridData);
 		return label;
 	}
