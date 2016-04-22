@@ -14,9 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.BaselineDetector;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.IBaselineDetectorSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core.IBaselineDetectorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.exceptions.NoBaselineDetectorAvailableException;
 
 import junit.framework.TestCase;
@@ -49,7 +46,7 @@ public class BaselineDetector_1_Test extends TestCase {
 		int count = 0;
 		String[] names = support.getDetectorNames();
 		String[] rcs = new String[1];
-		rcs[0] = "TIC Baseline Detector";
+		rcs[0] = "Threshold (TIC) Baseline Detector";
 		for(String name : names) {
 			for(String rc : rcs) {
 				if(name.equals(rc)) {
@@ -65,7 +62,7 @@ public class BaselineDetector_1_Test extends TestCase {
 		int count = 0;
 		List<String> ids = support.getAvailableDetectorIds();
 		String[] rcs = new String[1];
-		rcs[0] = "net.openchrom.chromatogram.msd.baseline.detector.supplier.tic";
+		rcs[0] = "net.openchrom.chromatogram.xxd.baseline.detector.supplier.tic";
 		for(String id : ids) {
 			for(String rc : rcs) {
 				if(id.equals(rc)) {
@@ -110,9 +107,9 @@ public class BaselineDetector_1_Test extends TestCase {
 
 	public void testGetMassSpectrumComparisonSupplier_3() throws NoBaselineDetectorAvailableException {
 
-		String comparatorName = "TIC Baseline Detector";
-		String description = "This is a simple total ion current (tic) baseline detector. It works automatically.";
-		String id = "net.openchrom.chromatogram.msd.baseline.detector.supplier.tic";
+		String comparatorName = "Threshold (TIC) Baseline Detector";
+		String description = "This baseline detector calculator sets the baseline by the lowest TIC value.";
+		String id = "net.openchrom.chromatogram.xxd.baseline.detector.supplier.tic";
 		IBaselineDetectorSupplier supplier = support.getBaselineDetectorSupplier(id);
 		assertEquals("DetectorName", comparatorName, supplier.getDetectorName());
 		assertEquals("Description", description, supplier.getDescription());
