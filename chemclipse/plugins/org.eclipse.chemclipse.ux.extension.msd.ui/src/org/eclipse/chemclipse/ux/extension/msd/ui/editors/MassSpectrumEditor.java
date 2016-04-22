@@ -100,6 +100,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 
 	@Focus
 	public void setFocus() {
+
 		/*
 		 * Fire an update if a loaded mass spectrum has been selected.
 		 */
