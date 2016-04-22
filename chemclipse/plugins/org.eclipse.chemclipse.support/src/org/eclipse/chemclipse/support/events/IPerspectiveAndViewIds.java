@@ -63,6 +63,7 @@ public interface IPerspectiveAndViewIds {
 	String VIEW_SCAN_ACCURATE = "org.eclipse.chemclipse.ux.extension.msd.ui.part.scanAccurate";
 	String VIEW_MASS_SPECTRUM_IONS_LIST = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumIonsListView";
 	String VIEW_PEAK_MASS_SPECTRUM_IONS_LIST = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakMassSpectrumIonsListView";
+	String VIEW_MASS_SPECTRUM_PEAK_LIST = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumPeakListView";
 	String VIEW_PEAK_MASS_SPECTRUM = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakMassSpectrumView";
 	String VIEW_PEAK_VALUES_LIST = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakValuesListView";
 	String VIEW_PEAK_MSD = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakMSDView";

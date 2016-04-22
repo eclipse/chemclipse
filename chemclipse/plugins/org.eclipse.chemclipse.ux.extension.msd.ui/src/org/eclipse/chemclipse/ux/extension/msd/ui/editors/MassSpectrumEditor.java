@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectru
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.AbstractExtendedMassSpectrumUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleContinuousMassSpectrumUI;
@@ -84,6 +85,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	 */
 	private File massSpectrumFile;
 	private IMassSpectra massSpectra;
+	private IScanMSD massSpectrum;
 	/*
 	 * Showing additional info in tabs.
 	 */
@@ -98,7 +100,11 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 
 	@Focus
 	public void setFocus() {
-
+		/*
+		 * Fire an update if a loaded mass spectrum has been selected.
+		 */
+		if(massSpectrum != null)
+			MassSpectrumSelectionUpdateNotifier.fireUpdateChange(massSpectrum, true);
 	}
 
 	@PreDestroy
@@ -266,7 +272,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Mass Spectrum");
 		//
-		IScanMSD massSpectrum = massSpectra.getMassSpectrum(1);
+		massSpectrum = massSpectra.getMassSpectrum(1);
 		if(massSpectrum instanceof IVendorMassSpectrum) {
 			part.setLabel(((IVendorMassSpectrum)massSpectrum).getName());
 		} else {
