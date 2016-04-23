@@ -57,10 +57,12 @@ public class ProcessingInfoViewSupport {
 				 */
 				if(processingInfo != null && processingInfo.hasErrorMessages()) {
 					Shell shell = Display.getCurrent().getActiveShell();
-					MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
-					messageBox.setText(TITLE);
-					messageBox.setMessage(MESSAGE);
-					messageBox.open();
+					if(shell != null) {
+						MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
+						messageBox.setText(TITLE);
+						messageBox.setMessage(MESSAGE);
+						messageBox.open();
+					}
 				}
 				/*
 				 * Update the info view.
