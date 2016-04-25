@@ -47,6 +47,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new LabelFieldEditor("Advanced Settings:", getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceSupplier.P_NOISE_SEGMENTS, "Quantity of noise segments", getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceSupplier.P_SNIP_ITERATIONS, "Set baseline iterations (SNIP)", getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceSupplier.P_SENS_DECONVOLUTIONS, "Set Sensitivity of Deconv", getFieldEditorParent()));
 	}
 
 	/*

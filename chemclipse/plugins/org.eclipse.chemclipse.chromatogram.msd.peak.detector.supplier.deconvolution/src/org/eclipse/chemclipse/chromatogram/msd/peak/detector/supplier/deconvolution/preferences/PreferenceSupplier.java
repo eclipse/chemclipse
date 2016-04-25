@@ -39,6 +39,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int DEF_SNIP_ITERATIONS = 70;
 	public static final String P_NOISE_SEGMENTS = "howManySegmentsNoiseSplit";
 	public static final int DEF_NOISE_SEGMENTS = 15;
+	public static final String P_SENS_DECONVOLUTIONS = "Sensitivity Deconvolution";
+	public static final int DEF_SENS_DECONVOLUTIONS = 1;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -72,6 +74,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_MIN_PEAKRISING, Integer.toString(DEF_MIN_PEAKRISING));
 		defaultValues.put(P_SNIP_ITERATIONS, Integer.toString(DEF_SNIP_ITERATIONS));
 		defaultValues.put(P_NOISE_SEGMENTS, Integer.toString(DEF_NOISE_SEGMENTS));
+		defaultValues.put(P_SENS_DECONVOLUTIONS, Integer.toString(DEF_SENS_DECONVOLUTIONS));
 		return defaultValues;
 	}
 
@@ -91,6 +94,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		peakDetectorSettings.setMinimumPeakRising(preferences.getInt(P_MIN_PEAKRISING, DEF_MIN_PEAKRISING));
 		peakDetectorSettings.setBaselineIterations(preferences.getInt(P_SNIP_ITERATIONS, DEF_SNIP_ITERATIONS));
 		peakDetectorSettings.setQuantityNoiseSegments(preferences.getInt(P_NOISE_SEGMENTS, DEF_NOISE_SEGMENTS));
+		peakDetectorSettings.setSensitivityOfDeconvolution(preferences.getInt(P_SENS_DECONVOLUTIONS, DEF_SENS_DECONVOLUTIONS));
 		return peakDetectorSettings;
 	}
 
@@ -132,5 +136,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getInt(P_NOISE_SEGMENTS, DEF_NOISE_SEGMENTS);
+	}
+
+	public static int getSensitivityOfDeconvolution() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_SENS_DECONVOLUTIONS, DEF_SENS_DECONVOLUTIONS);
 	}
 }

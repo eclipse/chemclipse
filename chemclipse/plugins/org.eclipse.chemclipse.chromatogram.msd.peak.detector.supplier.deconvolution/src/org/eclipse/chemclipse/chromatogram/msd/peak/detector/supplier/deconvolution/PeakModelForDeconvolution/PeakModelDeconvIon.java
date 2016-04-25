@@ -27,23 +27,23 @@ public class PeakModelDeconvIon implements IPeakModelDeconvIon {
 		scanMax = peakModel.getScanMax();
 	}
 
-	public double getModelIon() {
+	public double getIon() {
 
-		return this.ion;
+		return ion;
 	}
 
-	public int getModelRetentionTime() {
+	public int getRetentionTime() {
 
-		return this.retentionTime;
+		return retentionTime;
 	}
 
-	public float getModelAbundance() {
+	public float getAbundance() {
 
-		return this.abundance;
+		return abundance;
 	}
 
-	public int getModelScanMax() {
+	public int getScanMax() {
 
-		return this.scanMax;
+		return scanMax;
 	}
 }

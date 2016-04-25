@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolu
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 
 public class PeakModelDeconv implements IPeakModelDeconv {
@@ -22,44 +23,58 @@ public class PeakModelDeconv implements IPeakModelDeconv {
 	private int modelRetentionTime;
 	private float modelAbundance;
 	private int modelScanMax;
+	private IScanRange modelScanRange;
+	private float ticAbundanceMax;
 	private List<IPeakModelDeconvIon> ionsInModel;
 
-	public PeakModelDeconv(IChromatogramPeakMSD peakModel) {
+	public PeakModelDeconv(IChromatogramPeakMSD peakModel, IScanRange scanRange, float ticSignalAbundanceMax) {
 		modelIon = peakModel.getExtractedMassSpectrum().getHighestIon().getIon();
 		modelRetentionTime = peakModel.getExtractedMassSpectrum().getRetentionTime();
 		modelAbundance = peakModel.getExtractedMassSpectrum().getHighestAbundance().getAbundance();
 		modelScanMax = peakModel.getScanMax();
 		ionsInModel = new ArrayList<IPeakModelDeconvIon>(0);
+		modelScanRange = scanRange;
+		ticAbundanceMax = ticSignalAbundanceMax;
 	}
 
 	public double getModelIon() {
 
-		return this.modelIon;
+		return modelIon;
 	}
 
 	public int getModelRetentionTime() {
 
-		return this.modelRetentionTime;
+		return modelRetentionTime;
 	}
 
 	public float getModelAbundance() {
 
-		return this.modelAbundance;
+		return modelAbundance;
 	}
 
 	public int getModelScanMax() {
 
-		return this.modelScanMax;
+		return modelScanMax;
+	}
+
+	public IScanRange getScanRange() {
+
+		return modelScanRange;
+	}
+
+	public float getTicAbundanceMax() {
+
+		return ticAbundanceMax;
 	}
 
 	public List<IPeakModelDeconvIon> getAllIonsInModel() {
 
-		return this.ionsInModel;
+		return ionsInModel;
 	}
 
 	public IPeakModelDeconvIon getIonInModel(int scan) {
 
-		return this.getIonInModel(scan);
+		return getIonInModel(scan);
 	}
 
 	public int sizeOfIonsWithoutModelIon() {

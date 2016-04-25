@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolu
 
 import java.util.List;
 
+import org.eclipse.chemclipse.model.support.IScanRange;
+
 public interface IPeakModelDeconv {
 
 	double getModelIon();
@@ -22,6 +24,10 @@ public interface IPeakModelDeconv {
 	float getModelAbundance();
 
 	int getModelScanMax();
+
+	IScanRange getScanRange();
+
+	float getTicAbundanceMax();
 
 	List<IPeakModelDeconvIon> getAllIonsInModel();
 

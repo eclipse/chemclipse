@@ -13,11 +13,11 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolu
 
 public interface IPeakModelDeconvIon {
 
-	double getModelIon();
+	double getIon();
 
-	int getModelRetentionTime();
+	int getRetentionTime();
 
-	float getModelAbundance();
+	float getAbundance();
 
-	int getModelScanMax();
+	int getScanMax();
 }

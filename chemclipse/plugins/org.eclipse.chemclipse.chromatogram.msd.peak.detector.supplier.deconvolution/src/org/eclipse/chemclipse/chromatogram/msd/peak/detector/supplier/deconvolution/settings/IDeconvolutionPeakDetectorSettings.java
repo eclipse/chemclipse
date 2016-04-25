@@ -30,6 +30,8 @@ public interface IDeconvolutionPeakDetectorSettings extends IPeakDetectorMSDSett
 
 	void setQuantityNoiseSegments(int quantityNoiseSegments);
 
+	void setSensitivityOfDeconvolution(int sensitivityDeconvolution);
+
 	/*
 	 * Getter
 	 */
@@ -44,4 +46,6 @@ public interface IDeconvolutionPeakDetectorSettings extends IPeakDetectorMSDSett
 	int getBaselineIterations();
 
 	int getQuantityNoiseSegments();
+
+	int getSensitivityOfDeconvolution();
 }

@@ -139,6 +139,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	private int minPeakWidth;
 	private double minSignalToNoiseRatio;
 	private int baselineIterations;
+	private int sensitivityOfDeconvolution;
 	// Noise
 	private int quantityNoiseSegments;
 
@@ -155,6 +156,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 			setMinimumPeakRising(peakDetectorSettings);
 			setBaselineIterations(peakDetectorSettings);
 			setQuantityNoiseSegments(peakDetectorSettings);
+			setSensitivityOfDeconvolution(peakDetectorSettings);
 			deconv(chromatogramSelection, durbinWatsonClassifierResult, supplierFilterSettings, monitor);
 			processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Peak Detector Deconvolution", "Peaks have been detected successfully."));
 		}
@@ -172,6 +174,14 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		if(peakDetectorSettings instanceof IDeconvolutionPeakDetectorSettings) {
 			IDeconvolutionPeakDetectorSettings deconvolutionPeakDetectorSettings = (IDeconvolutionPeakDetectorSettings)peakDetectorSettings;
 			this.minSignalToNoiseRatio = deconvolutionPeakDetectorSettings.getMinimumSignalToNoiseRatio();
+		}
+	}
+
+	private void setSensitivityOfDeconvolution(IPeakDetectorMSDSettings peakDetectorSettings) {
+
+		if(peakDetectorSettings instanceof IDeconvolutionPeakDetectorSettings) {
+			IDeconvolutionPeakDetectorSettings deconvolutionPeakDetectorSettings = (IDeconvolutionPeakDetectorSettings)peakDetectorSettings;
+			this.sensitivityOfDeconvolution = deconvolutionPeakDetectorSettings.getSensitivityOfDeconvolution();
 		}
 	}
 
@@ -385,6 +395,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		boolean doingAll = false;
 		boolean foundPeakModel = false;
 		boolean ionInModel = false;
+		@SuppressWarnings("unused")
 		int rTOfPeak = 0;
 		//
 		//
@@ -396,6 +407,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		int counterPeaksInPeak = 0, counterPeak = 0, counterIonInList = 0;
 		List<IChromatogramPeakMSD> listAllPeaksFromPeakDetection = chromatogram.getPeaks();
 		List<IChromatogramPeakMSD> listPeaksDeconvolution = new ArrayList<IChromatogramPeakMSD>();
+		List<List<IPeakModelDeconv>> allModelPeaks = new ArrayList<List<IPeakModelDeconv>>();
 		//
 		for(IChromatogramPeakMSD peakFromPeakDetection : listAllPeaksFromPeakDetection) {
 			List<IPeakModelDeconv> listModelPeaks = new ArrayList<IPeakModelDeconv>();
@@ -418,14 +430,12 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 							peak.getExtractedMassSpectrum().getHighestAbundance().getAbundance();
 						}
 						if(listModelPeaks.size() == 0) {
-							IPeakModelDeconv peakModel = new PeakModelDeconv(peak);
+							float ticSignalAbundanceMax = listAllPeaksFromPeakDetection.get(counterPeak).getPeakModel().getPeakAbundance();
+							IPeakModelDeconv peakModel = new PeakModelDeconv(peak, scanRange, ticSignalAbundanceMax);
 							listModelPeaks.add(peakModel);
 						} else if(listModelPeaks.size() > 0) {
-							// double ion = peak.getExtractedMassSpectrum().getHighestIon().getIon();
 							int rT = peak.getExtractedMassSpectrum().getRetentionTime();
-							// int scanMax = peak.getScanMax();
-							// float abundance = peak.getExtractedMassSpectrum().getHighestAbundance().getAbundance();
-							for(int counterModelPeak = 0; i <= listModelPeaks.size(); i++) {
+							for(int counterModelPeak = 0; counterModelPeak < listModelPeaks.size(); counterModelPeak++) {
 								if(rT == listModelPeaks.get(counterModelPeak).getModelRetentionTime()) {
 									IPeakModelDeconvIon deconvIon = new PeakModelDeconvIon(peak);
 									listModelPeaks.get(counterModelPeak).addIonToDeconvModel(deconvIon);
@@ -434,7 +444,8 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 								}
 							}
 							if(!ionInModel) {
-								IPeakModelDeconv peakModel = new PeakModelDeconv(peak);
+								float ticSignalAbundanceMax = listAllPeaksFromPeakDetection.get(counterPeak).getPeakModel().getPeakAbundance();
+								IPeakModelDeconv peakModel = new PeakModelDeconv(peak, scanRange, ticSignalAbundanceMax);
 								listModelPeaks.add(peakModel);
 							}
 						}
@@ -442,6 +453,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 					/*
 					 * 
 					 */
+					ionInModel = false;
 					excludedIons.add(new MarkedIon(listIons.get(i).getIon()));
 					counterIonInList++;
 				}
@@ -449,12 +461,46 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 					listPeaksDeconvolution.add(peakFromPeakDetection);
 				}
 			}
+			allModelPeaks.add(listModelPeaks);
 			counterIonInList = 0;
 			counterPeak++;
 			if(giveOutput) {
 				System.out.println("");
 			}
 		}
+		setPeaksToChromatogramDeconvolution(allModelPeaks, listAllPeaksFromPeakDetection);
+	}
+
+	private void setPeaksToChromatogramDeconvolution(List<List<IPeakModelDeconv>> allModelPeaks, List<IChromatogramPeakMSD> listAllPeaksFromPeakDetection) {
+
+		List<IChromatogramPeakMSD> listOldPeaks = new ArrayList<IChromatogramPeakMSD>();
+		for(IChromatogramPeakMSD peakMSD : listAllPeaksFromPeakDetection) {
+			listOldPeaks.add(peakMSD);
+		}
+		for(List<IPeakModelDeconv> listModelPeaks : allModelPeaks) {
+			for(IPeakModelDeconv modelPeaks : listModelPeaks) {
+				IMarkedIons excludedIons = new MarkedIons();
+				excludedIons = getExcludedIons(modelPeaks.getScanRange());
+				for(IPeakModelDeconvIon ionsInModelPeak : modelPeaks.getAllIonsInModel()) {
+					excludedIons.remove(new MarkedIon(ionsInModelPeak.getIon()));
+				}
+				excludedIons.remove(new MarkedIon(modelPeaks.getModelIon()));
+				//
+				//
+				IChromatogramPeakMSD peak;
+				try {
+					peak = PeakBuilderMSD.createPeak(chromatogram, modelPeaks.getScanRange(), excludedIons);
+					double prozentOfModelPeakToTic = 1 / (modelPeaks.getTicAbundanceMax() / peak.getPeakModel().getPeakAbundance());
+					if(Double.compare(prozentOfModelPeakToTic, 0.2) > 0) {
+						chromatogram.addPeak(peak);
+					}
+				} catch(PeakException e) {
+					logger.warn(e);
+				}
+				//
+			}
+		}
+		chromatogram.removePeaks(listOldPeaks);
 	}
 
 	private IMarkedIons getExcludedIons(IScanRange scanRange) {

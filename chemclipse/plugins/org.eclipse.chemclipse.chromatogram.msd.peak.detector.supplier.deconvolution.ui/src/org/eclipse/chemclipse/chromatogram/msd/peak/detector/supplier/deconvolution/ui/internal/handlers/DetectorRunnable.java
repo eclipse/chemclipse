@@ -57,6 +57,7 @@ public class DetectorRunnable implements IRunnableWithProgress {
 			peakDetectorSettings.setMinimumPeakRising(PreferenceSupplier.getMinimumPeakRising());
 			peakDetectorSettings.setBaselineIterations(PreferenceSupplier.getBaselineIterations());
 			peakDetectorSettings.setQuantityNoiseSegments(PreferenceSupplier.getQuantityNoiseSegments());
+			peakDetectorSettings.setSensitivityOfDeconvolution(PreferenceSupplier.getSensitivityOfDeconvolution());
 			PeakDetectorMSD.detect(chromatogramSelection, peakDetectorSettings, PEAK_DETECTOR_ID, monitor);
 			detectedPeaks = chromatogramSelection.getChromatogramMSD().getNumberOfPeaks();
 			updateSelection();

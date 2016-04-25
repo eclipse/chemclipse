@@ -22,6 +22,7 @@ public class DeconvolutionPeakDetectorSettings extends AbstractPeakDetectorMSDSe
 	private int minimalPeakWidth;
 	private int baselineIterations;
 	private int quantityNoiseSegments;
+	private int sensitivityOfDeconvolution;
 
 	@Override
 	public Sensitivity getSensitivity() {
@@ -62,6 +63,11 @@ public class DeconvolutionPeakDetectorSettings extends AbstractPeakDetectorMSDSe
 		this.quantityNoiseSegments = quantityNoiseSegments;
 	}
 
+	public void setSensitivityOfDeconvolution(int sensitivityDeconvolution) {
+
+		this.sensitivityOfDeconvolution = sensitivityDeconvolution;
+	}
+
 	/*
 	 * Getter
 	 */
@@ -88,5 +94,10 @@ public class DeconvolutionPeakDetectorSettings extends AbstractPeakDetectorMSDSe
 	public int getQuantityNoiseSegments() {
 
 		return quantityNoiseSegments;
+	}
+
+	public int getSensitivityOfDeconvolution() {
+
+		return sensitivityOfDeconvolution;
 	}
 }
