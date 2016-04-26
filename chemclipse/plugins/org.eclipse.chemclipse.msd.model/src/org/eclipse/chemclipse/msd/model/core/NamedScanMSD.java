@@ -23,6 +23,10 @@ public class NamedScanMSD extends ScanMSD implements INamedScanMSD {
 	private Float peakTailing;
 	private Float peakSN;
 
+	public NamedScanMSD(IScanMSD templateScan) {
+		super(templateScan);
+	}
+
 	public NamedScanMSD() {
 		super();
 	}
