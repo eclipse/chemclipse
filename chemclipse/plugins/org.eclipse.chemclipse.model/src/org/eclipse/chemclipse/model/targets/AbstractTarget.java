@@ -12,4 +12,9 @@
 package org.eclipse.chemclipse.model.targets;
 
 public abstract class AbstractTarget implements ITarget {
+
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 387080346455077364L;
 }

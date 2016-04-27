@@ -19,6 +19,11 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 
 public class IdentificationTarget extends AbstractIdentificationTarget implements IIdentificationTarget {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 4894831489940672007L;
+
 	public IdentificationTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
 		super(libraryInformation, comparisonResult);
 	}

@@ -19,6 +19,11 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 
 public class ScanTargetCSD extends AbstractScanTargetCSD implements IScanTargetCSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -8733810674355675411L;
+
 	public ScanTargetCSD(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
 		super(libraryInformation, comparisonResult);
 	}

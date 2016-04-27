@@ -16,6 +16,11 @@ import org.eclipse.chemclipse.model.identifier.AbstractComparisonResult;
 public abstract class AbstractMassSpectrumComparisonResult extends AbstractComparisonResult implements IMassSpectrumComparisonResult {
 
 	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -903508479872960637L;
+
+	/**
 	 * Constructs the result.
 	 * 
 	 * @param matchFactor

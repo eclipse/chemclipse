@@ -14,4 +14,9 @@ package org.eclipse.chemclipse.msd.model.core.identifier.massspectrum;
 import org.eclipse.chemclipse.model.identifier.AbstractLibraryInformation;
 
 public abstract class AbstractMassSpectrumLibraryInformation extends AbstractLibraryInformation implements IMassSpectrumLibraryInformation {
+
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -7713691807280350760L;
 }

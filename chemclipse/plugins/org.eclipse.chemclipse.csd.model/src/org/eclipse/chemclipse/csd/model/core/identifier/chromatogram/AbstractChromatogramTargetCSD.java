@@ -19,6 +19,11 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 
 public abstract class AbstractChromatogramTargetCSD extends AbstractIdentificationTarget implements IChromatogramTargetCSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 2068089855978708975L;
+	//
 	private IChromatogramCSD parentChromatogram = null;
 
 	/**

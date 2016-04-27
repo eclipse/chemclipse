@@ -19,6 +19,11 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 
 public abstract class AbstractScanTargetCSD extends AbstractIdentificationTarget implements IScanTargetCSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -5380450282576684200L;
+	//
 	private IScanCSD parentScan = null;
 
 	/**

@@ -13,6 +13,11 @@ package org.eclipse.chemclipse.model.identifier;
 
 public abstract class AbstractComparisonResult implements IComparisonResult {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 7832661625546592609L;
+	//
 	private float matchFactor;
 	private float reverseMatchFactor;
 	private float probability;

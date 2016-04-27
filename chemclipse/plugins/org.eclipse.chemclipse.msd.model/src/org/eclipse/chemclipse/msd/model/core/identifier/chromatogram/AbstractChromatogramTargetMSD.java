@@ -19,6 +19,11 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 
 public abstract class AbstractChromatogramTargetMSD extends AbstractIdentificationTarget implements IChromatogramTargetMSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 7432640756057462278L;
+	//
 	private IChromatogramMSD parentChromatogram = null;
 
 	/**

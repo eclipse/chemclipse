@@ -12,4 +12,9 @@
 package org.eclipse.chemclipse.model.identifier;
 
 public class ChromatogramLibraryInformation extends AbstractChromatogramLibraryInformation implements IChromatogramLibraryInformation {
+
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 3380986651701582628L;
 }

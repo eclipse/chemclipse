@@ -16,6 +16,11 @@ import java.util.Set;
 
 public abstract class AbstractLibraryInformation implements ILibraryInformation {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 6013690371824712517L;
+	//
 	private String name = "";
 	private Set<String> synonyms;
 	private String casNumber = "";

@@ -19,6 +19,11 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 
 public abstract class AbstractPeakTarget extends AbstractIdentificationTarget implements IPeakTarget {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 6404311260395410018L;
+	//
 	private IPeak parentPeak = null;
 
 	/**

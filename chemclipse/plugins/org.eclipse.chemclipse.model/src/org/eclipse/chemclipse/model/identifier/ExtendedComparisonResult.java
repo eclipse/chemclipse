@@ -13,7 +13,12 @@ package org.eclipse.chemclipse.model.identifier;
 
 public class ExtendedComparisonResult extends AbstractComparisonResult implements IExtendedComparisonResult {
 
-	final private float forwardMatchFactor;
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 6013367828007715388L;
+	//
+	private final float forwardMatchFactor;
 
 	public ExtendedComparisonResult(float matchFactor, float reverseMatchFactor, float forwardMatchFactor) {
 		super(matchFactor, reverseMatchFactor);

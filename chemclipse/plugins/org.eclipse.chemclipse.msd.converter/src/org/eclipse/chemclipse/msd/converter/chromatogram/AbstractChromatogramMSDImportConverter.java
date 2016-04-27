@@ -12,20 +12,6 @@
 package org.eclipse.chemclipse.msd.converter.chromatogram;
 
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportConverter;
-import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.ChromatogramConfiguration;
 
 public abstract class AbstractChromatogramMSDImportConverter extends AbstractChromatogramImportConverter implements IChromatogramMSDImportConverter {
-
-	private ChromatogramConfiguration chromatogramConfiguration;
-
-	public ChromatogramConfiguration getChromatogramConfiguration() {
-
-		return chromatogramConfiguration;
-	}
-
-	public AbstractChromatogramMSDImportConverter setChromatogramConfiguration(ChromatogramConfiguration chromatogramConfiguration) {
-
-		this.chromatogramConfiguration = chromatogramConfiguration;
-		return this;
-	}
 }

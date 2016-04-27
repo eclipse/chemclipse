@@ -13,6 +13,11 @@ package org.eclipse.chemclipse.msd.model.core.identifier.massspectrum;
 
 public class MassSpectrumComparisonResult extends AbstractMassSpectrumComparisonResult implements IMassSpectrumComparisonResult {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -5698918504463648333L;
+
 	public MassSpectrumComparisonResult(float matchFactor, float reverseMatchFactor, float probability) {
 		super(matchFactor, reverseMatchFactor, probability);
 	}

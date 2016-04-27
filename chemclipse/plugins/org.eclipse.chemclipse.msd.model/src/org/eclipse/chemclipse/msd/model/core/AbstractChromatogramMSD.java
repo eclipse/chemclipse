@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
@@ -25,12 +27,12 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
-import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.ChromatogramConfiguration;
 import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.msd.model.implementation.DefaultNoiseCalculator;
 import org.eclipse.chemclipse.msd.model.implementation.ImmutableZeroIon;
 import org.eclipse.chemclipse.msd.model.implementation.IonTransitionSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -67,40 +69,27 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 	private Set<IChromatogramTargetMSD> targets;
 	private IIonTransitionSettings ionTransitionSettings;
 	private INoiseCalculator noiseCalculator;
-	private ChromatogramConfiguration chromatogramConfiguration;
-
-	public ChromatogramConfiguration getChromatogramConfiguration() {
-
-		return chromatogramConfiguration;
-	}
-
-	public AbstractChromatogramMSD setChromatogramConfiguration(ChromatogramConfiguration chromatogramConfiguration) {
-
-		this.chromatogramConfiguration = chromatogramConfiguration;
-		return this;
-	}
-
 	/**
 	 * Test comment
 	 */
 	private ImmutableZeroIon immutableZeroIon;
 
-	public AbstractChromatogramMSD(ChromatogramConfiguration chromatogramConfiguration) {
+	public AbstractChromatogramMSD() {
 		peaks = new ArrayList<IChromatogramPeakMSD>();
 		targets = new HashSet<IChromatogramTargetMSD>();
 		ionTransitionSettings = new IonTransitionSettings();
-		noiseCalculator = chromatogramConfiguration.getNoiseCalculator();
-		int segmentWidth = chromatogramConfiguration.getSelectedSegmentWidth();
+		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
+		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
+		if(noiseCalculator == null) {
+			noiseCalculator = new DefaultNoiseCalculator();
+		}
+		int segmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
 		noiseCalculator.setChromatogram(this, segmentWidth);
 		try {
 			immutableZeroIon = new ImmutableZeroIon();
 		} catch(AbundanceLimitExceededException | IonLimitExceededException e) {
 			logger.warn(e);
 		}
-	}
-
-	public AbstractChromatogramMSD() {
-		this(new ChromatogramConfiguration());
 	}
 
 	@Override

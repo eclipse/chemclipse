@@ -17,6 +17,11 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 
 public class MassSpectrumTarget extends AbstractMassSpectrumTarget implements IMassSpectrumTarget {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 4329531744489831169L;
+
 	public MassSpectrumTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
 		super(libraryInformation, comparisonResult);
 	}

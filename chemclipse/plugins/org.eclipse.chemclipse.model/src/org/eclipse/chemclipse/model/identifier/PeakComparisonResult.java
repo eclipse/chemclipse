@@ -13,6 +13,11 @@ package org.eclipse.chemclipse.model.identifier;
 
 public class PeakComparisonResult extends AbstractPeakComparisonResult implements IPeakComparisonResult {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -4205512988016131199L;
+
 	public PeakComparisonResult(float matchQuality, float reverseMatchQuality) {
 		super(matchQuality, reverseMatchQuality);
 	}

@@ -17,6 +17,11 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 
 public class PeakTarget extends AbstractPeakTarget implements IPeakTarget {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -6543361051855639255L;
+
 	public PeakTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
 		super(libraryInformation, comparisonResult);
 	}

@@ -15,4 +15,9 @@ import org.eclipse.chemclipse.model.identifier.AbstractLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 
 public class LibraryInformation extends AbstractLibraryInformation implements ILibraryInformation {
+
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -9125906197393207340L;
 }

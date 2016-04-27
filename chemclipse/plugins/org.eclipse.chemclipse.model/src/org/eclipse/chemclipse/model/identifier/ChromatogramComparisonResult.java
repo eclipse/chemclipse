@@ -13,6 +13,11 @@ package org.eclipse.chemclipse.model.identifier;
 
 public class ChromatogramComparisonResult extends AbstractChromatogramComparisonResult implements IChromatogramComparisonResult {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 5564837982655617963L;
+
 	public ChromatogramComparisonResult(float matchFactor, float reverseMatchFactor, float probability) {
 		super(matchFactor, reverseMatchFactor, probability);
 	}

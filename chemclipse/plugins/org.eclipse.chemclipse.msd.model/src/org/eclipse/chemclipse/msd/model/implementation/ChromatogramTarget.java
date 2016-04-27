@@ -23,6 +23,11 @@ import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogr
  */
 public class ChromatogramTarget extends AbstractChromatogramTargetMSD implements IChromatogramTargetMSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 1062244239962986610L;
+
 	public ChromatogramTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
 		super(libraryInformation, comparisonResult);
 	}

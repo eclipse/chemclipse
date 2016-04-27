@@ -19,6 +19,11 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
 public abstract class AbstractMassSpectrumTarget extends AbstractIdentificationTarget implements IMassSpectrumTarget {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 3774815554992298233L;
+	//
 	private IScanMSD parentMassSpectrum;
 
 	/**

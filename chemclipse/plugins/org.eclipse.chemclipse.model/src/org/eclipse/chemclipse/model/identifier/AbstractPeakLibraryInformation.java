@@ -12,4 +12,9 @@
 package org.eclipse.chemclipse.model.identifier;
 
 public abstract class AbstractPeakLibraryInformation extends AbstractLibraryInformation implements IPeakLibraryInformation {
+
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 4461109302684524150L;
 }
