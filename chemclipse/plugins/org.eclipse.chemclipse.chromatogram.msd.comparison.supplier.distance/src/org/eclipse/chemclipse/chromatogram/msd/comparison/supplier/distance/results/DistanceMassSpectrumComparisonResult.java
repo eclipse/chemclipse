@@ -15,6 +15,11 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.AbstractMas
 
 public class DistanceMassSpectrumComparisonResult extends AbstractMassSpectrumComparisonResult {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -2870687289335594522L;
+
 	public DistanceMassSpectrumComparisonResult(float matchFactor, float reverseMatchFactor) {
 		super(matchFactor, reverseMatchFactor);
 	}
