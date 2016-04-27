@@ -15,6 +15,11 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.AbstractMas
 
 public class INCOSMassSpectrumComparisonResult extends AbstractMassSpectrumComparisonResult {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 8980174287452222536L;
+
 	public INCOSMassSpectrumComparisonResult(float matchFactor, float reverseMatchFactor) {
 		super(matchFactor, reverseMatchFactor);
 	}
