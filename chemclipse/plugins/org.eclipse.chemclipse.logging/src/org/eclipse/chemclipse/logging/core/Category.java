@@ -80,6 +80,6 @@ public class Category {
 
 	public void warn(final Object message, Throwable t) {
 
-		logger.log(Category.class.getName(), Level.WARN, message, null);
+		logger.log(Category.class.getName(), Level.WARN, message, t);
 	}
 }
