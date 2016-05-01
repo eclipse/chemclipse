@@ -36,6 +36,7 @@ public class PenaltyCalculationSupport {
 			runPreConditionChecks(unknown, reference, retentionIndexWindow, maxPenalty);
 			return calculatePenalty(unknown.getRetentionIndex(), reference.getRetentionIndex(), retentionIndexWindow, penaltyCalculationLevelFactor, maxPenalty);
 		} catch(Exception e) {
+			e.printStackTrace();
 			return 0.0f;
 		}
 	}
@@ -60,6 +61,7 @@ public class PenaltyCalculationSupport {
 			runPreConditionChecks(unknown, reference, retentionTimeWindow, maxPenalty);
 			return calculatePenalty(unknown.getRetentionTime(), reference.getRetentionTime(), retentionTimeWindow, penaltyCalculationLevelFactor, maxPenalty);
 		} catch(Exception e) {
+			e.printStackTrace();
 			return 0.0f;
 		}
 	}
