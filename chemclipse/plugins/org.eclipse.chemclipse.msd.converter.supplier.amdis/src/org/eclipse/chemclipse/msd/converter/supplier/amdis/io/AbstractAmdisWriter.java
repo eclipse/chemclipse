@@ -48,6 +48,8 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 	//
 	private static final Logger logger = Logger.getLogger(AbstractAmdisWriter.class);
 	//
+	private static final float FACTOR = 100.0f;
+	//
 	private NumberFormat numberFormat;
 	private static final int FRACTION_DIGITS = 3;
 	private static final int MAX_SPECTRA_CHUNK = 65535;
@@ -227,7 +229,7 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 			 */
 			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
 			try {
-				identificationTarget = new MassSpectrumTarget(libraryMassSpectrum.getLibraryInformation(), new ComparisonResult(100.0f, 100.0f));
+				identificationTarget = new MassSpectrumTarget(libraryMassSpectrum.getLibraryInformation(), new ComparisonResult(FACTOR, FACTOR, FACTOR, FACTOR));
 			} catch(ReferenceMustNotBeNullException e) {
 				logger.warn(e);
 			}
