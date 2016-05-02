@@ -20,7 +20,7 @@ public class DefaultMassSpectrumComparisonResult extends AbstractMassSpectrumCom
 	 */
 	private static final long serialVersionUID = 3743204303964137767L;
 
-	public DefaultMassSpectrumComparisonResult(float matchFactor, float reverseMatchFactor) {
-		super(matchFactor, reverseMatchFactor);
+	public DefaultMassSpectrumComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect) {
+		super(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
 	}
 }

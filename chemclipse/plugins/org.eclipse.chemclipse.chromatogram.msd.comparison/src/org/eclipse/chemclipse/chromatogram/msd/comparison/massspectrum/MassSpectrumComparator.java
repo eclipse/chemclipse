@@ -74,7 +74,7 @@ public class MassSpectrumComparator {
 	static {
 		comparatorCache = new ComparatorCache();
 		processingInfoComparisonSkip = new MassSpectrumComparatorProcessingInfo();
-		processingInfoComparisonSkip.setMassSpectrumComparisonResult(new MassSpectrumComparisonResult(NO_MATCH, NO_MATCH));
+		processingInfoComparisonSkip.setMassSpectrumComparisonResult(new MassSpectrumComparisonResult(NO_MATCH, NO_MATCH, NO_MATCH, NO_MATCH));
 	}
 
 	/**

@@ -38,6 +38,7 @@ public class TargetBuilder {
 
 	private static final Logger logger = Logger.getLogger(TargetBuilder.class);
 	private static final String UNKNOWN = "???";
+	private static final float MAX_FACTOR = 100.0f;
 	private IonAbundanceComparator ionAbundanceComparator;
 
 	public TargetBuilder() {
@@ -168,6 +169,6 @@ public class TargetBuilder {
 
 	private IComparisonResult getComparisonResultUnknown() {
 
-		return new ComparisonResult(100.0f, 100.0f);
+		return new ComparisonResult(MAX_FACTOR, MAX_FACTOR, MAX_FACTOR, MAX_FACTOR);
 	}
 }

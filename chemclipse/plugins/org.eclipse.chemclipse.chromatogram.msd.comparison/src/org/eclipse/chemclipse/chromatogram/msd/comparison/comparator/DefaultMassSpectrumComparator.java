@@ -11,6 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.comparator;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.AbstractMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparator;
@@ -38,8 +43,10 @@ public class DefaultMassSpectrumComparator extends AbstractMassSpectrumComparato
 			 */
 			float matchFactor = calculateCosinePhi(unknown.getExtractedIonSignal(), reference.getExtractedIonSignal()) * 100;
 			float reverseMatchFactor = calculateCosinePhi(reference.getExtractedIonSignal(), unknown.getExtractedIonSignal()) * 100;
+			float matchFactorDirect = calculateCosinePhiDirect(unknown.getExtractedIonSignal(), reference.getExtractedIonSignal()) * 100;
+			float reverseMatchFactorDirect = calculateCosinePhiDirect(reference.getExtractedIonSignal(), unknown.getExtractedIonSignal()) * 100;
 			//
-			IMassSpectrumComparisonResult massSpectrumComparisonResult = new DefaultMassSpectrumComparisonResult(matchFactor, reverseMatchFactor);
+			IMassSpectrumComparisonResult massSpectrumComparisonResult = new DefaultMassSpectrumComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
 			processingInfo.setMassSpectrumComparisonResult(massSpectrumComparisonResult);
 		}
 		return processingInfo;
@@ -75,6 +82,40 @@ public class DefaultMassSpectrumComparator extends AbstractMassSpectrumComparato
 			match = (float)unknownVector.cosine(referenceVector);
 		} catch(Exception e) {
 			match = 0;
+		}
+		return match;
+	}
+
+	public float calculateCosinePhiDirect(IExtractedIonSignal unknownSignal, IExtractedIonSignal referenceSignal) {
+
+		List<Integer> ionList = new ArrayList<Integer>();
+		int startIon = unknownSignal.getStartIon();
+		int stopIon = unknownSignal.getStopIon();
+		for(int ion = startIon; ion <= stopIon; ion++) {
+			if(unknownSignal.getAbundance(ion) > 0.0f) {
+				ionList.add(ion);
+			}
+		}
+		//
+		double unknown[] = new double[ionList.size()];
+		double reference[] = new double[ionList.size()];
+		int j = 0;
+		for(int ion : ionList) {
+			unknown[j] = unknownSignal.getAbundance(ion);
+			reference[j] = referenceSignal.getAbundance(ion);
+			j++;
+		}
+		/*
+		 * Calculate the cosine phi.
+		 */
+		ArrayRealVector unknownVector = new ArrayRealVector(unknown);
+		ArrayRealVector referenceVector = new ArrayRealVector(reference);
+		//
+		float match;
+		try {
+			match = (float)unknownVector.cosine(referenceVector);
+		} catch(MathArithmeticException | DimensionMismatchException e) {
+			match = 0.0f;
 		}
 		return match;
 	}

@@ -27,6 +27,9 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	public Image getColumnImage(Object element, int columnIndex) {
 
 		if(columnIndex == 0) {
+			/*
+			 * CheckBox
+			 */
 			if(element instanceof IIdentificationTarget) {
 				IIdentificationTarget identificationTarget = (IIdentificationTarget)element;
 				if(identificationTarget.isManuallyVerified()) {
@@ -36,7 +39,25 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 				}
 			}
 		} else if(columnIndex == 1) {
+			/*
+			 * Entry
+			 */
 			return getImage(element);
+		} else if(columnIndex == 10) {
+			/*
+			 * Rating
+			 */
+			if(element instanceof IIdentificationTarget) {
+				IIdentificationTarget identificationTarget = (IIdentificationTarget)element;
+				float rating = identificationTarget.getComparisonResult().getRating();
+				if(rating >= IComparisonResult.RATING_LIMIT_UP) {
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP, IApplicationImage.SIZE_16x16);
+				} else if(rating >= IComparisonResult.RATING_LIMIT_EQUAL) {
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_EQUAL, IApplicationImage.SIZE_16x16);
+				} else {
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN, IApplicationImage.SIZE_16x16);
+				}
+			}
 		}
 		return null;
 	}
@@ -69,31 +90,40 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 				case 4: // RMQ
 					text = decimalFormat.format(comparisonResult.getReverseMatchFactor());
 					break;
-				case 5: // Formula
+				case 5: // MQD
+					text = decimalFormat.format(comparisonResult.getMatchFactorDirect());
+					break;
+				case 6: // RMQD
+					text = decimalFormat.format(comparisonResult.getReverseMatchFactorDirect());
+					break;
+				case 7: // Formula
 					text = libraryInformation.getFormula();
 					break;
-				case 6: // Mol Weight
+				case 8: // Mol Weight
 					text = decimalFormat.format(libraryInformation.getMolWeight());
 					break;
-				case 7: // Probability
+				case 9: // Probability
 					text = decimalFormat.format(comparisonResult.getProbability());
 					break;
-				case 8: // Advise
+				case 10: // Rating
+					text = "";
+					break;
+				case 11: // Advise
 					text = comparisonResult.getAdvise();
 					break;
-				case 9: // Identifier
+				case 12: // Identifier
 					text = identificationEntry.getIdentifier();
 					break;
-				case 10: // Miscellaneous
+				case 13: // Miscellaneous
 					text = libraryInformation.getMiscellaneous();
 					break;
-				case 11: // Comments
+				case 14: // Comments
 					text = libraryInformation.getComments();
 					break;
-				case 12:
+				case 15:
 					text = libraryInformation.getDatabase();
 					break;
-				case 13:
+				case 16:
 					text = libraryInformation.getContributor();
 					break;
 				default:

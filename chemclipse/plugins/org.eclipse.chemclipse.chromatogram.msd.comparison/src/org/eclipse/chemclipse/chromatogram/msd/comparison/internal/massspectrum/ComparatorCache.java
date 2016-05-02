@@ -71,7 +71,7 @@ public class ComparatorCache {
 		 * Make the comparison.
 		 */
 		Set<Integer> unknownIons = unknownTopIons.get(keyUnknown);
-		Set<Integer> referenceIons = referenceTopIons.get(reference);
+		Set<Integer> referenceIons = referenceTopIons.get(keyReference);
 		return useReferenceForComparison(unknownIons, referenceIons, thresholdPreOptimization);
 	}
 

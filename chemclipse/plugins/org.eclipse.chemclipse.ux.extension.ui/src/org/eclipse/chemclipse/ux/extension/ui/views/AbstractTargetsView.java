@@ -54,8 +54,8 @@ public abstract class AbstractTargetsView {
 	private ExtendedTableViewer tableViewer;
 	private TargetsTableComparator targetsTableComparator;
 	private static final String VERIFIED_MANUALLY = "Verified (manually)";
-	private String[] titles = {VERIFIED_MANUALLY, "Name", "CAS", "Match Factor", "Reverse Factor", "Formula", "Mol Weight", "Probability", "Advise", "Identifier", "Miscellaneous", "Comments", "Database", "Contributor"};
-	private int bounds[] = {30, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
+	private String[] titles = {VERIFIED_MANUALLY, "Name", "CAS", "Match Factor", "Reverse Factor", "Match Factor Direct", "Reverse Factor Direct", "Formula", "Mol Weight", "Probability", "Rating", "Advise", "Identifier", "Miscellaneous", "Comments", "Database", "Contributor"};
+	private int bounds[] = {30, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 	private IStructuredContentProvider contentProvider;
 	/*
 	 * Event Broker

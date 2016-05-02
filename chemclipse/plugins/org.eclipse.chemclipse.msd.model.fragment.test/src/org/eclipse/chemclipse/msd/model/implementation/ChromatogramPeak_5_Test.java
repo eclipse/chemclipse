@@ -44,7 +44,7 @@ public class ChromatogramPeak_5_Test extends ChromatogramPeakTestCase {
 		super.setUp();
 		peak = new ChromatogramPeakMSD(getPeakModel(), getChromatogram());
 		libraryInformation = new LibraryInformation();
-		comparisonResult = new ComparisonResult(0.8f, 0.95f);
+		comparisonResult = new ComparisonResult(0.8f, 0.95f, 0.0f, 0.0f);
 		entry1 = new PeakTarget(libraryInformation, comparisonResult);
 		entry1.setIdentifier("PBM");
 		entry2 = new PeakTarget(libraryInformation, comparisonResult);

@@ -13,14 +13,14 @@ package org.eclipse.chemclipse.msd.model.implementation;
 
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
+
+import junit.framework.TestCase;
 
 public class Chromatogram_19_Test extends TestCase {
 
@@ -36,7 +36,7 @@ public class Chromatogram_19_Test extends TestCase {
 		super.setUp();
 		chromatogram = new ChromatogramMSD();
 		libraryInformation = new LibraryInformation();
-		comparisonResult = new ComparisonResult(0.8f, 0.95f);
+		comparisonResult = new ComparisonResult(0.8f, 0.95f, 0.0f, 0.0f);
 		entry1 = new ChromatogramTarget(libraryInformation, comparisonResult);
 		entry1.setIdentifier("Test-Tools");
 		entry2 = new ChromatogramTarget(libraryInformation, comparisonResult);

@@ -24,7 +24,7 @@ public class IdentificationTarget_1_Test extends TestCase {
 
 		super.setUp();
 		ILibraryInformation libraryInformation = new LibraryInformation();
-		IComparisonResult comparisonResult = new ComparisonResult(100.0f, 100.0f);
+		IComparisonResult comparisonResult = new ComparisonResult(100.0f, 100.0f, 0.0f, 0.0f);
 		identificationTarget = new IdentificationTarget(libraryInformation, comparisonResult);
 	}
 

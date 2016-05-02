@@ -18,11 +18,11 @@ public abstract class AbstractChromatogramComparisonResult extends AbstractCompa
 	 */
 	private static final long serialVersionUID = -6291504910545916283L;
 
-	public AbstractChromatogramComparisonResult(float matchFactor, float reverseMatchFactor) {
-		super(matchFactor, reverseMatchFactor);
+	public AbstractChromatogramComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect) {
+		super(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
 	}
 
-	public AbstractChromatogramComparisonResult(float matchFactor, float reverseMatchFactor, float probability) {
-		super(matchFactor, reverseMatchFactor, probability);
+	public AbstractChromatogramComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect, float probability) {
+		super(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
 	}
 }

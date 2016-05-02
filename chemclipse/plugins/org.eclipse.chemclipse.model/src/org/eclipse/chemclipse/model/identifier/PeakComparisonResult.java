@@ -18,11 +18,11 @@ public class PeakComparisonResult extends AbstractPeakComparisonResult implement
 	 */
 	private static final long serialVersionUID = -4205512988016131199L;
 
-	public PeakComparisonResult(float matchQuality, float reverseMatchQuality) {
-		super(matchQuality, reverseMatchQuality);
+	public PeakComparisonResult(float matchQuality, float reverseMatchQuality, float matchFactorDirect, float reverseMatchFactorDirect) {
+		super(matchQuality, reverseMatchQuality, matchFactorDirect, reverseMatchFactorDirect);
 	}
 
-	public PeakComparisonResult(float matchFactor, float reverseMatchFactor, float probability) {
-		super(matchFactor, reverseMatchFactor, probability);
+	public PeakComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect, float probability) {
+		super(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
 	}
 }

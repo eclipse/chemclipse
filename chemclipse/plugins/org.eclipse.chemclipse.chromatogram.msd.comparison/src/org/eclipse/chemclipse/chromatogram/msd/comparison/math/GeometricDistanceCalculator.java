@@ -11,50 +11,72 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.math;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IIonRange;
 
 public class GeometricDistanceCalculator implements IMatchCalculator {
 
-	/**
-	 * Returns the geometric distance match quality.<br/>
-	 * 0 : no match
-	 * 1 : best match <br/>
-	 * A normalization of the unknown and reference mass spectrum is not
-	 * required.<br/>
-	 * See
-	 * "Alfassi, Z. B., Vector analysis of multi-measurements identification", 2004
-	 * Equation (3).
-	 */
 	@Override
-	public float calculate(IScanMSD unknown, IScanMSD reference, IIonRange ionRange) {
+	public float calculate(IScanMSD unknown, IScanMSD reference) {
 
-		int startIon = ionRange.getStartIon();
-		int stopIon = ionRange.getStopIon();
-		double sqrtSquaredIntensitiesU = calculateSqrtSumSquaredIntensities(unknown, ionRange);
-		double sqrtSquaredIntensitiesR = calculateSqrtSumSquaredIntensities(reference, ionRange);
+		List<Integer> ionList = getIonList(unknown);
+		double sqrtSquaredIntensitiesU = calculateSqrtSumSquaredIntensities(unknown, ionList);
+		double sqrtSquaredIntensitiesR = calculateSqrtSumSquaredIntensities(reference, ionList);
 		/*
 		 * If at least one mass spectrum has no match, return 0.
 		 */
 		if(sqrtSquaredIntensitiesU == 0 || sqrtSquaredIntensitiesR == 0) {
 			return 0;
 		} else {
-			IExtractedIonSignal u;
-			u = unknown.getExtractedIonSignal(startIon, stopIon);
-			IExtractedIonSignal r;
-			r = reference.getExtractedIonSignal(startIon, stopIon);
-			//
-			double sumDistance = 0.0d;
-			//
-			for(int ion = startIon; ion <= stopIon; ion++) {
-				double uValue = (u.getAbundance(ion) / sqrtSquaredIntensitiesU);
-				double rValue = (r.getAbundance(ion) / sqrtSquaredIntensitiesR);
-				sumDistance += Math.pow(uValue - rValue, 2);
-			}
-			sumDistance += 1;
-			return (float)Math.pow(sumDistance, -1);
+			/*
+			 * Do a direct forward match.
+			 */
+			IExtractedIonSignal extractedIonSignalU = unknown.getExtractedIonSignal();
+			IExtractedIonSignal extractedIonSignalR = reference.getExtractedIonSignal();
+			return calculate(sqrtSquaredIntensitiesU, sqrtSquaredIntensitiesR, extractedIonSignalU, extractedIonSignalR, ionList);
 		}
+	}
+
+	@Override
+	public float calculate(IScanMSD unknown, IScanMSD reference, IIonRange ionRange) {
+
+		List<Integer> ionList = getIonList(ionRange);
+		double sqrtSquaredIntensitiesU = calculateSqrtSumSquaredIntensities(unknown, ionList);
+		double sqrtSquaredIntensitiesR = calculateSqrtSumSquaredIntensities(reference, ionList);
+		/*
+		 * If at least one mass spectrum has no match, return 0.
+		 */
+		if(sqrtSquaredIntensitiesU == 0 || sqrtSquaredIntensitiesR == 0) {
+			return 0;
+		} else {
+			/*
+			 * Match the complete range.
+			 */
+			int startIon = ionRange.getStartIon();
+			int stopIon = ionRange.getStopIon();
+			IExtractedIonSignal extractedIonSignalU = unknown.getExtractedIonSignal(startIon, stopIon);
+			IExtractedIonSignal extractedIonSignalR = reference.getExtractedIonSignal(startIon, stopIon);
+			return calculate(sqrtSquaredIntensitiesU, sqrtSquaredIntensitiesR, extractedIonSignalU, extractedIonSignalR, ionList);
+		}
+	}
+
+	private float calculate(double sqrtSquaredIntensitiesU, double sqrtSquaredIntensitiesR, IExtractedIonSignal extractedIonSignalU, IExtractedIonSignal extractedIonSignalR, List<Integer> ionList) {
+
+		/*
+		 * Calculate the distance.
+		 */
+		double sumDistance = 0.0d;
+		for(int ion : ionList) {
+			double uValue = (extractedIonSignalU.getAbundance(ion) / sqrtSquaredIntensitiesU);
+			double rValue = (extractedIonSignalR.getAbundance(ion) / sqrtSquaredIntensitiesR);
+			sumDistance += Math.pow(uValue - rValue, 2);
+		}
+		sumDistance += 1;
+		return (float)Math.pow(sumDistance, -1);
 	}
 
 	/**
@@ -64,13 +86,11 @@ public class GeometricDistanceCalculator implements IMatchCalculator {
 	 * @param ionRange
 	 * @return double
 	 */
-	private double calculateSumSquaredIntensities(IScanMSD massSpectrum, IIonRange ionRange) {
+	private double calculateSumSquaredIntensities(IScanMSD massSpectrum, List<Integer> ions) {
 
 		double normalizedLength = 0.0d;
-		int startIon = ionRange.getStartIon();
-		int stopIon = ionRange.getStopIon();
-		IExtractedIonSignal signal = massSpectrum.getExtractedIonSignal(startIon, stopIon);
-		for(int ion = startIon; ion <= stopIon; ion++) {
+		IExtractedIonSignal signal = massSpectrum.getExtractedIonSignal();
+		for(int ion : ions) {
 			normalizedLength += Math.pow(signal.getAbundance(ion), 2);
 		}
 		return normalizedLength;
@@ -83,8 +103,37 @@ public class GeometricDistanceCalculator implements IMatchCalculator {
 	 * @param ionRange
 	 * @return
 	 */
-	private double calculateSqrtSumSquaredIntensities(IScanMSD massSpectrum, IIonRange ionRange) {
+	private double calculateSqrtSumSquaredIntensities(IScanMSD massSpectrum, List<Integer> ions) {
 
-		return Math.sqrt(calculateSumSquaredIntensities(massSpectrum, ionRange));
+		return Math.sqrt(calculateSumSquaredIntensities(massSpectrum, ions));
+	}
+
+	private List<Integer> getIonList(IIonRange ionRange) {
+
+		List<Integer> ionList = new ArrayList<Integer>();
+		//
+		int startIon = ionRange.getStartIon();
+		int stopIon = ionRange.getStopIon();
+		for(int ion = startIon; ion <= stopIon; ion++) {
+			ionList.add(ion);
+		}
+		//
+		return ionList;
+	}
+
+	private List<Integer> getIonList(IScanMSD massSpectrum) {
+
+		List<Integer> ionList = new ArrayList<Integer>();
+		//
+		IExtractedIonSignal signal = massSpectrum.getExtractedIonSignal();
+		int startIon = signal.getStartIon();
+		int stopIon = signal.getStopIon();
+		for(int ion = startIon; ion <= stopIon; ion++) {
+			if(signal.getAbundance(ion) > 0.0f) {
+				ionList.add(ion);
+			}
+		}
+		//
+		return ionList;
 	}
 }

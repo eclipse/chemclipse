@@ -26,16 +26,16 @@ public class ComparisonResult extends AbstractComparisonResult implements ICompa
 	 * @param matchQuality
 	 * @param reverseMatchQuality
 	 */
-	public ComparisonResult(float matchFactor, float reverseMatchFactor) {
-		super(matchFactor, reverseMatchFactor);
+	public ComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect) {
+		super(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
 	}
 
-	public ComparisonResult(float matchFactor, float reverseMatchFactor, float probability) {
-		super(matchFactor, reverseMatchFactor, probability);
+	public ComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect, float probability) {
+		super(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
 	}
 
 	public static ComparisonResult createNullComparisonResult() {
 
-		return new ComparisonResult(NULL_FACTOR_VALUE, NULL_FACTOR_VALUE);
+		return new ComparisonResult(NULL_FACTOR_VALUE, NULL_FACTOR_VALUE, NULL_FACTOR_VALUE, NULL_FACTOR_VALUE);
 	}
 }

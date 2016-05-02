@@ -22,6 +22,13 @@ public interface IComparisonResult extends Serializable {
 	float MIN_ALLOWED_PENALTY = 0.0f;
 	float MAX_ALLOWED_PENALTY = 100.0f;
 	//
+	float MIN_ALLOWED_PROBABILITY = 0.0f;
+	float MAX_ALLOWED_PROBABILITY = 100.0f;
+	//
+	float RATING_LIMIT_UP = 90.0f;
+	float RATING_LIMIT_EQUAL = 70.0f;
+	float RATING_LIMIT_DOWN = 0.0f;
+	//
 	String ADVISE_INCOMPLETE = "The target is maybe incomplete or recorded under bad conditions.";
 	String ADVISE_IMPURITIES = "The target is maybe convoluted by impurities.";
 	/*
@@ -35,12 +42,34 @@ public interface IComparisonResult extends Serializable {
 	float MAX_LIMIT_REVERSE_MATCH_FACTOR = 80.0f;
 
 	/**
+	 * Is the result marked as a match.
+	 * 
+	 * @return boolean
+	 */
+	boolean isMatch();
+
+	/**
+	 * Set the result to be marked as a match.
+	 * 
+	 * @param match
+	 */
+	void setMatch(boolean match);
+
+	/**
 	 * Returns the match factor.
 	 * 0 means no match, 100 means perfect match.
 	 * 
 	 * @return float
 	 */
 	float getMatchFactor();
+
+	/**
+	 * Returns the match factor direct.
+	 * 0 means no match, 100 means perfect match.
+	 * 
+	 * @return float
+	 */
+	float getMatchFactorDirect();
 
 	/**
 	 * Adjust the match factor.
@@ -58,6 +87,14 @@ public interface IComparisonResult extends Serializable {
 	 * @return float
 	 */
 	float getReverseMatchFactor();
+
+	/**
+	 * Returns the reverse match factor direct.
+	 * 0 means no match, 100 means perfect match.
+	 * 
+	 * @return float
+	 */
+	float getReverseMatchFactorDirect();
 
 	/**
 	 * Adjust the reverse match factor.
@@ -84,7 +121,10 @@ public interface IComparisonResult extends Serializable {
 	 */
 	String getAdvise();
 
-	boolean isMatch();
-
-	void setMatch(boolean match);
+	/**
+	 * Returns the rating given by the probability, match and reverse match factors.
+	 * 
+	 * @return float
+	 */
+	float getRating();
 }
