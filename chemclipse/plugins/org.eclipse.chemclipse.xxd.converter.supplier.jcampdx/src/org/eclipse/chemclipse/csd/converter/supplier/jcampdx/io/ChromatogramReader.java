@@ -157,7 +157,7 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 							try {
 								ILibraryInformation libraryInformation = new LibraryInformation();
 								libraryInformation.setName(name);
-								IComparisonResult comparisonResult = new ComparisonResult(matchFactor, matchFactor);
+								IComparisonResult comparisonResult = new ComparisonResult(matchFactor, matchFactor, 0.0f, 0.0f);
 								IScanTargetCSD scanTargetCSD = new ScanTargetCSD(libraryInformation, comparisonResult);
 								scanTargetCSD.setParentScan(scan);
 								scan.addTarget(scanTargetCSD);

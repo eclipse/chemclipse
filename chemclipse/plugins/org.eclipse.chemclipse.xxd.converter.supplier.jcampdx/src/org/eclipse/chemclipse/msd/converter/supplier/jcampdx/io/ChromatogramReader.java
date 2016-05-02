@@ -146,7 +146,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 					ILibraryInformation libraryInformation = new LibraryInformation();
 					libraryInformation.setName(name);
 					libraryInformation.setComments("JCAMP-DX");
-					IComparisonResult comparisonResult = new ComparisonResult(IComparisonResult.MAX_MATCH_FACTOR, IComparisonResult.MAX_REVERSE_MATCH_FACTOR);
+					IComparisonResult comparisonResult = new ComparisonResult(IComparisonResult.MAX_MATCH_FACTOR, IComparisonResult.MAX_REVERSE_MATCH_FACTOR, 0.0f, 0.0f);
 					try {
 						massSpectrum.addTarget(new MassSpectrumTarget(libraryInformation, comparisonResult));
 					} catch(ReferenceMustNotBeNullException e) {
