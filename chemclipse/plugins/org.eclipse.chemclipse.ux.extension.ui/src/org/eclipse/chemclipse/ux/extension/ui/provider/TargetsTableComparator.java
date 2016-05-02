@@ -38,56 +38,62 @@ public class TargetsTableComparator extends AbstractRecordTableComparator implem
 				case 0:
 					sortOrder = Boolean.compare(entry2.isManuallyVerified(), entry1.isManuallyVerified());
 					break;
-				case 1: // Name
-					sortOrder = libraryInformation2.getName().compareTo(libraryInformation1.getName());
-					break;
-				case 2: // CAS
-					sortOrder = libraryInformation2.getCasNumber().compareTo(libraryInformation1.getCasNumber());
-					break;
-				case 3: // Match Factor
-					sortOrder = Float.compare(comparisonResult2.getMatchFactor(), comparisonResult1.getMatchFactor());
-					break;
-				case 4: // Reverse Match Factor
-					sortOrder = Float.compare(comparisonResult2.getReverseMatchFactor(), comparisonResult1.getReverseMatchFactor());
-					break;
-				case 5: // Match Factor Direct
-					sortOrder = Float.compare(comparisonResult2.getMatchFactorDirect(), comparisonResult1.getMatchFactorDirect());
-					break;
-				case 6: // Reverse Match Factor Direct
-					sortOrder = Float.compare(comparisonResult2.getReverseMatchFactorDirect(), comparisonResult1.getReverseMatchFactorDirect());
-					break;
-				case 7: // Formula
-					sortOrder = libraryInformation2.getFormula().compareTo(libraryInformation1.getFormula());
-					break;
-				case 8: // Mol Weight
-					sortOrder = Double.compare(libraryInformation2.getMolWeight(), libraryInformation1.getMolWeight());
-					break;
-				case 9: // Probability
-					sortOrder = Float.compare(comparisonResult2.getProbability(), comparisonResult1.getProbability());
-					break;
-				case 10: // Rating
+				case 1: // Rating
 					sortOrder = Float.compare(comparisonResult2.getRating(), comparisonResult1.getRating());
 					break;
-				case 11: // Advise
+				case 2: // Name
+					sortOrder = libraryInformation2.getName().compareTo(libraryInformation1.getName());
+					break;
+				case 3: // CAS
+					sortOrder = libraryInformation2.getCasNumber().compareTo(libraryInformation1.getCasNumber());
+					break;
+				case 4: // Match Factor
+					sortOrder = Float.compare(comparisonResult2.getMatchFactor(), comparisonResult1.getMatchFactor());
+					break;
+				case 5: // Reverse Match Factor
+					sortOrder = Float.compare(comparisonResult2.getReverseMatchFactor(), comparisonResult1.getReverseMatchFactor());
+					break;
+				case 6: // Match Factor Direct
+					sortOrder = Float.compare(comparisonResult2.getMatchFactorDirect(), comparisonResult1.getMatchFactorDirect());
+					break;
+				case 7: // Reverse Match Factor Direct
+					sortOrder = Float.compare(comparisonResult2.getReverseMatchFactorDirect(), comparisonResult1.getReverseMatchFactorDirect());
+					break;
+				case 8: // Formula
+					sortOrder = libraryInformation2.getFormula().compareTo(libraryInformation1.getFormula());
+					break;
+				case 9: // Smiles
+					sortOrder = libraryInformation2.getSmiles().compareTo(libraryInformation1.getSmiles());
+					break;
+				case 10: // InChI
+					sortOrder = libraryInformation2.getInChI().compareTo(libraryInformation1.getInChI());
+					break;
+				case 11: // Mol Weight
+					sortOrder = Double.compare(libraryInformation2.getMolWeight(), libraryInformation1.getMolWeight());
+					break;
+				case 12: // Probability
+					sortOrder = Float.compare(comparisonResult2.getProbability(), comparisonResult1.getProbability());
+					break;
+				case 13: // Advise
 					String advise2 = comparisonResult2.getAdvise();
 					String advise1 = comparisonResult1.getAdvise();
 					if(advise2 != null && advise1 != null) {
 						sortOrder = comparisonResult2.getAdvise().compareTo(comparisonResult1.getAdvise());
 					}
 					break;
-				case 12: // Identifier
+				case 14: // Identifier
 					sortOrder = entry2.getIdentifier().compareTo(entry1.getIdentifier());
 					break;
-				case 13: // Miscellaneous
+				case 15: // Miscellaneous
 					sortOrder = libraryInformation2.getMiscellaneous().compareTo(libraryInformation1.getMiscellaneous());
 					break;
-				case 14: // Comments
+				case 16: // Comments
 					sortOrder = libraryInformation2.getComments().compareTo(libraryInformation1.getComments());
 					break;
-				case 15:
+				case 17:
 					sortOrder = libraryInformation2.getDatabase().compareTo(libraryInformation1.getDatabase());
 					break;
-				case 16:
+				case 18:
 					sortOrder = libraryInformation2.getContributor().compareTo(libraryInformation1.getContributor());
 					break;
 				default:

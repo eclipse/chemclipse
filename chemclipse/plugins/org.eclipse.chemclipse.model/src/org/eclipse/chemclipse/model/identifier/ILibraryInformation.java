@@ -68,6 +68,30 @@ public interface ILibraryInformation extends Serializable {
 	void setFormula(String formula);
 
 	/**
+	 * Returns the SMILES of the library mass spectrum.
+	 * 
+	 * @return String
+	 */
+	String getSmiles();
+
+	/**
+	 * Sets the SMILES of the library mass spectrum.
+	 */
+	void setSmiles(String smiles);
+
+	/**
+	 * Returns the InChI of the library mass spectrum.
+	 * 
+	 * @return String
+	 */
+	String getInChI();
+
+	/**
+	 * Sets the InChI of the library mass spectrum.
+	 */
+	void setInChI(String inChI);
+
+	/**
 	 * Returns the mol weight of the library mass spectrum.
 	 * 
 	 * @return String

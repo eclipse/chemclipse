@@ -28,6 +28,8 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	private String referenceIdentifier = "";
 	private String miscellaneous = "";
 	private String formula = "";
+	private String inChI = "";
+	private String smiles = "";
 	private double molWeight = 0;
 	private String database = "";
 	private String contributor = "";
@@ -90,6 +92,34 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 
 		if(formula != null) {
 			this.formula = formula;
+		}
+	}
+
+	@Override
+	public String getSmiles() {
+
+		return smiles;
+	}
+
+	@Override
+	public void setSmiles(String smiles) {
+
+		if(smiles != null) {
+			this.smiles = smiles;
+		}
+	}
+
+	@Override
+	public String getInChI() {
+
+		return inChI;
+	}
+
+	@Override
+	public void setInChI(String inChI) {
+
+		if(inChI != null) {
+			this.inChI = inChI;
 		}
 	}
 
