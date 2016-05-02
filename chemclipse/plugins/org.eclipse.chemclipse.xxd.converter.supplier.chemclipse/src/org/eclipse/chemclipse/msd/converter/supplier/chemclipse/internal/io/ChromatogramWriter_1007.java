@@ -63,7 +63,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class ChromatogramWriter_1006 extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
+public class ChromatogramWriter_1007 extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
 
 	@Override
 	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
@@ -99,7 +99,7 @@ public class ChromatogramWriter_1006 extends AbstractChromatogramWriter implemen
 		zipEntry = new ZipEntry(IFormat.FILE_VERSION);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
-		String version = IFormat.VERSION_1006;
+		String version = IFormat.VERSION_1007;
 		dataOutputStream.writeInt(version.length()); // Length Version
 		dataOutputStream.writeChars(version); // Version
 		//
@@ -588,11 +588,15 @@ public class ChromatogramWriter_1006 extends AbstractChromatogramWriter implemen
 			writeString(dataOutputStream, synonym);
 		}
 		writeString(dataOutputStream, libraryInformation.getFormula()); // Formula
+		writeString(dataOutputStream, libraryInformation.getSmiles()); // SMILES
+		writeString(dataOutputStream, libraryInformation.getInChI()); // InChI
 		dataOutputStream.writeDouble(libraryInformation.getMolWeight()); // Mol Weight
-		dataOutputStream.writeBoolean(false); // IExtendedComparisonResult has been removed.
 		dataOutputStream.writeFloat(comparisonResult.getMatchFactor()); // Match Factor
+		dataOutputStream.writeFloat(comparisonResult.getMatchFactorDirect()); // Match Factor Direct
 		dataOutputStream.writeFloat(comparisonResult.getReverseMatchFactor()); // Reverse Match Factor
+		dataOutputStream.writeFloat(comparisonResult.getReverseMatchFactorDirect()); // Reverse Match Factor Direct
 		dataOutputStream.writeFloat(comparisonResult.getProbability()); // Probability
+		dataOutputStream.writeBoolean(comparisonResult.isMatch()); // Is Match
 	}
 
 	private void writeString(DataOutputStream dataOutputStream, String value) throws IOException {

@@ -18,7 +18,7 @@ import java.io.IOException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.wsd.converter.io.IChromatogramWSDWriter;
-import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1005;
+import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1007;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -33,7 +33,7 @@ public class ChromatogramWriterWSD extends AbstractChromatogramWriter implements
 		String versionSave = PreferenceSupplier.getVersionSave();
 		IChromatogramWSDWriter chromatogramWriter;
 		// needs logic here to be able to choose different versions
-		chromatogramWriter = new ChromatogramWriter_1005();
+		chromatogramWriter = new ChromatogramWriter_1007();
 		//
 		chromatogramWriter.writeChromatogram(file, chromatogram, monitor);
 	}

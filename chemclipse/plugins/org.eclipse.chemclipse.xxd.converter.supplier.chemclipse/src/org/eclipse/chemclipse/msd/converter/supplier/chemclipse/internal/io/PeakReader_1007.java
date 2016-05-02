@@ -31,7 +31,6 @@ import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
-import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
@@ -76,9 +75,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class PeakReader_1006 extends AbstractZipReader implements IPeakReader {
+public class PeakReader_1007 extends AbstractZipReader implements IPeakReader {
 
-	private static final Logger logger = Logger.getLogger(PeakReader_1006.class);
+	private static final Logger logger = Logger.getLogger(PeakReader_1007.class);
 
 	@Override
 	public IPeakImportConverterProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -259,18 +258,15 @@ public class PeakReader_1006 extends AbstractZipReader implements IPeakReader {
 				synonyms.add(readString(dataInputStream));
 			}
 			String formula = readString(dataInputStream); // Formula
+			String smiles = readString(dataInputStream); // SMILES
+			String inChI = readString(dataInputStream); // InChI
 			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			/*
-			 * Check if this is an extended comparison result.
-			 */
-			boolean isExtendedComparisonResult = dataInputStream.readBoolean();
-			float forwardMatchFactor = 0.0f;
-			if(isExtendedComparisonResult) {
-				forwardMatchFactor = dataInputStream.readFloat(); // Forward Match Factor
-			}
 			float matchFactor = dataInputStream.readFloat(); // Match Factor
+			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
+			float reverseMatchFactorDirect = dataInputStream.readFloat(); // Reverse Match Factor Direct
 			float probability = dataInputStream.readFloat(); // Probability
+			boolean isMatch = dataInputStream.readBoolean();
 			//
 			IMassSpectrumLibraryInformation libraryInformation = new MassSpectrumLibraryInformation();
 			libraryInformation.setCasNumber(casNumber);
@@ -282,14 +278,12 @@ public class PeakReader_1006 extends AbstractZipReader implements IPeakReader {
 			libraryInformation.setName(name);
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
+			libraryInformation.setSmiles(smiles);
+			libraryInformation.setInChI(inChI);
 			libraryInformation.setMolWeight(molWeight);
 			//
-			IComparisonResult comparisonResult;
-			if(isExtendedComparisonResult) {
-				comparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, 0.0f, probability);
-			} else {
-				comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
-			}
+			IComparisonResult comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
+			comparisonResult.setMatch(isMatch);
 			//
 			try {
 				IMassSpectrumTarget identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
@@ -370,18 +364,15 @@ public class PeakReader_1006 extends AbstractZipReader implements IPeakReader {
 				synonyms.add(readString(dataInputStream));
 			}
 			String formula = readString(dataInputStream); // Formula
+			String smiles = readString(dataInputStream); // SMILES
+			String inChI = readString(dataInputStream); // InChI
 			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			/*
-			 * Check if this is an extended comparison result.
-			 */
-			boolean isExtendedComparisonResult = dataInputStream.readBoolean();
-			float forwardMatchFactor = 0.0f;
-			if(isExtendedComparisonResult) {
-				forwardMatchFactor = dataInputStream.readFloat(); // Forward Match Factor
-			}
 			float matchFactor = dataInputStream.readFloat(); // Match Factor
+			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
+			float reverseMatchFactorDirect = dataInputStream.readFloat(); // Reverse Match Factor Direct
 			float probability = dataInputStream.readFloat(); // Probability
+			boolean isMatch = dataInputStream.readBoolean();
 			//
 			IPeakLibraryInformation libraryInformation = new PeakLibraryInformation();
 			libraryInformation.setCasNumber(casNumber);
@@ -393,14 +384,12 @@ public class PeakReader_1006 extends AbstractZipReader implements IPeakReader {
 			libraryInformation.setName(name);
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
+			libraryInformation.setSmiles(smiles);
+			libraryInformation.setInChI(inChI);
 			libraryInformation.setMolWeight(molWeight);
 			//
-			IComparisonResult comparisonResult;
-			if(isExtendedComparisonResult) {
-				comparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, 0.0f, probability);
-			} else {
-				comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
-			}
+			IComparisonResult comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
+			comparisonResult.setMatch(isMatch);
 			//
 			try {
 				IPeakTarget identificationEntry = new PeakTarget(libraryInformation, comparisonResult);

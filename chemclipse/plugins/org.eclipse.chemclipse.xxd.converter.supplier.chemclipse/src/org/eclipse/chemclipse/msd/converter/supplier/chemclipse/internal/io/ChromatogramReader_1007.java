@@ -37,7 +37,6 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ChromatogramComparisonResult;
 import org.eclipse.chemclipse.model.identifier.ChromatogramLibraryInformation;
-import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IChromatogramLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
@@ -98,9 +97,9 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class ChromatogramReader_1006 extends AbstractChromatogramReader implements IChromatogramMSDReader {
+public class ChromatogramReader_1007 extends AbstractChromatogramReader implements IChromatogramMSDReader {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramReader_1006.class);
+	private static final Logger logger = Logger.getLogger(ChromatogramReader_1007.class);
 
 	@Override
 	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -249,7 +248,7 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			int timeSegmentId = dataInputStream.readInt(); // Time Segment Id
 			int cycleNumber = dataInputStream.readInt(); // Cycle Number
 			//
-			IVendorScanProxy massSpectrum = new VendorScanProxy(file, offset, IFormat.VERSION_1006, ionTransitionSettings);
+			IVendorScanProxy massSpectrum = new VendorScanProxy(file, offset, IFormat.VERSION_1007, ionTransitionSettings);
 			massSpectrum.setRetentionTime(retentionTime);
 			massSpectrum.setNumberOfIons(numberOfIons);
 			massSpectrum.setTotalSignal(totalSignal);
@@ -270,7 +269,7 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 		/*
 		 * Scans
 		 */
-		IReaderProxy readerProxy = new ReaderProxy_1006();
+		IReaderProxy readerProxy = new ReaderProxy_1007();
 		int scans = dataInputStream.readInt();
 		for(int scan = 1; scan <= scans; scan++) {
 			monitor.subTask(IConstants.IMPORT_SCAN + scan);
@@ -435,18 +434,15 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 				synonyms.add(readString(dataInputStream));
 			}
 			String formula = readString(dataInputStream); // Formula
+			String smiles = readString(dataInputStream); // SMILES
+			String inChI = readString(dataInputStream); // InChI
 			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			/*
-			 * Check if this is an extended comparison result.
-			 */
-			boolean isExtendedComparisonResult = dataInputStream.readBoolean();
-			float forwardMatchFactor = 0.0f;
-			if(isExtendedComparisonResult) {
-				forwardMatchFactor = dataInputStream.readFloat(); // Forward Match Factor
-			}
 			float matchFactor = dataInputStream.readFloat(); // Match Factor
+			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
+			float reverseMatchFactorDirect = dataInputStream.readFloat(); // Reverse Match Factor Direct
 			float probability = dataInputStream.readFloat(); // Probability
+			boolean isMatch = dataInputStream.readBoolean();
 			//
 			IPeakLibraryInformation libraryInformation = new PeakLibraryInformation();
 			libraryInformation.setCasNumber(casNumber);
@@ -458,14 +454,12 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			libraryInformation.setName(name);
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
+			libraryInformation.setSmiles(smiles);
+			libraryInformation.setInChI(inChI);
 			libraryInformation.setMolWeight(molWeight);
 			//
-			IComparisonResult comparisonResult;
-			if(isExtendedComparisonResult) {
-				comparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, 0.0f, probability);
-			} else {
-				comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
-			}
+			IComparisonResult comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
+			comparisonResult.setMatch(isMatch);
 			//
 			try {
 				IPeakTarget identificationEntry = new PeakTarget(libraryInformation, comparisonResult);
@@ -499,18 +493,15 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 				synonyms.add(readString(dataInputStream));
 			}
 			String formula = readString(dataInputStream); // Formula
+			String smiles = readString(dataInputStream); // SMILES
+			String inChI = readString(dataInputStream); // InChI
 			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			/*
-			 * Check if this is an extended comparison result.
-			 */
-			boolean isExtendedComparisonResult = dataInputStream.readBoolean();
-			float forwardMatchFactor = 0.0f;
-			if(isExtendedComparisonResult) {
-				forwardMatchFactor = dataInputStream.readFloat(); // Forward Match Factor
-			}
 			float matchFactor = dataInputStream.readFloat(); // Match Factor
+			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
+			float reverseMatchFactorDirect = dataInputStream.readFloat(); // Reverse Match Factor Direct
 			float probability = dataInputStream.readFloat(); // Probability
+			boolean isMatch = dataInputStream.readBoolean();
 			//
 			IMassSpectrumLibraryInformation libraryInformation = new MassSpectrumLibraryInformation();
 			libraryInformation.setCasNumber(casNumber);
@@ -522,14 +513,12 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			libraryInformation.setName(name);
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
+			libraryInformation.setSmiles(smiles);
+			libraryInformation.setInChI(inChI);
 			libraryInformation.setMolWeight(molWeight);
 			//
-			IComparisonResult comparisonResult;
-			if(isExtendedComparisonResult) {
-				comparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, 0.0f, probability);
-			} else {
-				comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
-			}
+			IComparisonResult comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
+			comparisonResult.setMatch(isMatch);
 			//
 			try {
 				IMassSpectrumTarget identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
@@ -614,18 +603,15 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 				synonyms.add(readString(dataInputStream));
 			}
 			String formula = readString(dataInputStream); // Formula
+			String smiles = readString(dataInputStream); // SMILES
+			String inChI = readString(dataInputStream); // InChI
 			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			/*
-			 * Check if this is an extended comparison result.
-			 */
-			boolean isExtendedComparisonResult = dataInputStream.readBoolean();
-			float forwardMatchFactor = 0.0f;
-			if(isExtendedComparisonResult) {
-				forwardMatchFactor = dataInputStream.readFloat(); // Forward Match Factor
-			}
 			float matchFactor = dataInputStream.readFloat(); // Match Factor
+			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
+			float reverseMatchFactorDirect = dataInputStream.readFloat(); // Reverse Match Factor Direct
 			float probability = dataInputStream.readFloat(); // Probability
+			boolean isMatch = dataInputStream.readBoolean();
 			//
 			IChromatogramLibraryInformation libraryInformation = new ChromatogramLibraryInformation();
 			libraryInformation.setCasNumber(casNumber);
@@ -637,14 +623,12 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			libraryInformation.setName(name);
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
+			libraryInformation.setSmiles(smiles);
+			libraryInformation.setInChI(inChI);
 			libraryInformation.setMolWeight(molWeight);
 			//
-			IComparisonResult comparisonResult;
-			if(isExtendedComparisonResult) {
-				comparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, 0.0f, probability);
-			} else {
-				comparisonResult = new ChromatogramComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
-			}
+			IComparisonResult comparisonResult = new ChromatogramComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
+			comparisonResult.setMatch(isMatch);
 			//
 			try {
 				IChromatogramTargetMSD identificationEntry = new ChromatogramTarget(libraryInformation, comparisonResult);
@@ -799,7 +783,7 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 		//
 		dataInputStream = getDataInputStream(zipFile, IFormat.FILE_VERSION);
 		String version = readString(dataInputStream);
-		if(version.equals(IFormat.VERSION_1006)) {
+		if(version.equals(IFormat.VERSION_1007)) {
 			isValid = true;
 		}
 		//

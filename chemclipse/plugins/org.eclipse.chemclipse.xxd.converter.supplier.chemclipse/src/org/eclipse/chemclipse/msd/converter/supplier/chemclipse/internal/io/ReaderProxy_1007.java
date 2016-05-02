@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
-import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.IReaderProxy;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorIon;
@@ -47,9 +46,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class ReaderProxy_1006 extends AbstractZipReader implements IReaderProxy {
+public class ReaderProxy_1007 extends AbstractZipReader implements IReaderProxy {
 
-	private static final Logger logger = Logger.getLogger(ReaderProxy_1006.class);
+	private static final Logger logger = Logger.getLogger(ReaderProxy_1007.class);
 
 	@Override
 	public void readMassSpectrum(File file, int offset, IVendorScanProxy massSpectrum, IIonTransitionSettings ionTransitionSettings, IProgressMonitor monitor) throws IOException {
@@ -186,18 +185,15 @@ public class ReaderProxy_1006 extends AbstractZipReader implements IReaderProxy 
 				synonyms.add(readString(dataInputStream));
 			}
 			String formula = readString(dataInputStream); // Formula
+			String smiles = readString(dataInputStream); // SMILES
+			String inChI = readString(dataInputStream); // InChI
 			double molWeight = dataInputStream.readDouble(); // Mol Weight
-			/*
-			 * Check if this is an extended comparison result.
-			 */
-			boolean isExtendedComparisonResult = dataInputStream.readBoolean();
-			float forwardMatchFactor = 0.0f;
-			if(isExtendedComparisonResult) {
-				forwardMatchFactor = dataInputStream.readFloat(); // Forward Match Factor
-			}
 			float matchFactor = dataInputStream.readFloat(); // Match Factor
+			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
+			float reverseMatchFactorDirect = dataInputStream.readFloat(); // Reverse Match Factor Direct
 			float probability = dataInputStream.readFloat(); // Probability
+			boolean isMatch = dataInputStream.readBoolean();
 			//
 			IMassSpectrumLibraryInformation libraryInformation = new MassSpectrumLibraryInformation();
 			libraryInformation.setCasNumber(casNumber);
@@ -209,14 +205,12 @@ public class ReaderProxy_1006 extends AbstractZipReader implements IReaderProxy 
 			libraryInformation.setName(name);
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
+			libraryInformation.setSmiles(smiles);
+			libraryInformation.setInChI(inChI);
 			libraryInformation.setMolWeight(molWeight);
 			//
-			IComparisonResult comparisonResult;
-			if(isExtendedComparisonResult) {
-				comparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, 0.0f, probability);
-			} else {
-				comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
-			}
+			IComparisonResult comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
+			comparisonResult.setMatch(isMatch);
 			//
 			try {
 				IMassSpectrumTarget identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
