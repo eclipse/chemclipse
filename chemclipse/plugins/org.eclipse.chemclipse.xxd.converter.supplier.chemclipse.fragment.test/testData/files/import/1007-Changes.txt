@@ -2,3 +2,7 @@ IComparisonResult
 	isMatch
 	MatchFactorDirect
 	ReverseMatchFactorDirect
+	
+ILibraryInformation
+	SMILES
+	InChI
