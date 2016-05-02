@@ -1,0 +1,4 @@
+IComparisonResult
+	isMatch
+	MatchFactorDirect
+	ReverseMatchFactorDirect

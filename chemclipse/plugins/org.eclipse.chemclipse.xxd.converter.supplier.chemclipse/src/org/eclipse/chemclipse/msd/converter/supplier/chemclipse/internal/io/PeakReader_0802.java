@@ -248,7 +248,7 @@ public class PeakReader_0802 extends AbstractZipReader implements IPeakReader {
 			libraryInformation.setComments(comments);
 			libraryInformation.setMiscellaneous(miscellaneous);
 			libraryInformation.setName(name);
-			IPeakComparisonResult comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, probability);
+			IPeakComparisonResult comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
 			try {
 				IPeakTarget identificationEntry = new PeakTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);

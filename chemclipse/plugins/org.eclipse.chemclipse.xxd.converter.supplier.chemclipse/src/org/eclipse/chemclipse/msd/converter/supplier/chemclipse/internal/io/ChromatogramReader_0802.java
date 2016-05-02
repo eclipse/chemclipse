@@ -300,7 +300,7 @@ public class ChromatogramReader_0802 extends AbstractChromatogramReader implemen
 			libraryInformation.setComments(comments);
 			libraryInformation.setMiscellaneous(miscellaneous);
 			libraryInformation.setName(name);
-			IPeakComparisonResult comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, probability);
+			IPeakComparisonResult comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
 			try {
 				IPeakTarget identificationEntry = new PeakTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
@@ -383,7 +383,7 @@ public class ChromatogramReader_0802 extends AbstractChromatogramReader implemen
 			libraryInformation.setComments(comments);
 			libraryInformation.setMiscellaneous(miscellaneous);
 			libraryInformation.setName(name);
-			IChromatogramComparisonResult comparisonResult = new ChromatogramComparisonResult(matchFactor, reverseMatchFactor, probability);
+			IChromatogramComparisonResult comparisonResult = new ChromatogramComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
 			try {
 				IChromatogramTargetMSD identificationEntry = new ChromatogramTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);

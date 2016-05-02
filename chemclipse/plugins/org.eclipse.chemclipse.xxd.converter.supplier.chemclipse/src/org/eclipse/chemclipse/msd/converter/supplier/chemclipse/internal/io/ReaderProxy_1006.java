@@ -215,7 +215,7 @@ public class ReaderProxy_1006 extends AbstractZipReader implements IReaderProxy 
 			if(isExtendedComparisonResult) {
 				comparisonResult = new ExtendedComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, probability);
 			} else {
-				comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, probability);
+				comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
 			}
 			//
 			try {

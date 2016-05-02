@@ -422,7 +422,7 @@ public class ChromatogramReader_1004 extends AbstractChromatogramReader implemen
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
 			libraryInformation.setMolWeight(molWeight);
-			IPeakComparisonResult comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, probability);
+			IPeakComparisonResult comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
 			try {
 				IPeakTarget identificationEntry = new PeakTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
@@ -464,7 +464,7 @@ public class ChromatogramReader_1004 extends AbstractChromatogramReader implemen
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
 			libraryInformation.setMolWeight(molWeight);
-			IMassSpectrumComparisonResult comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, probability);
+			IMassSpectrumComparisonResult comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
 			try {
 				IMassSpectrumTarget identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
@@ -557,7 +557,7 @@ public class ChromatogramReader_1004 extends AbstractChromatogramReader implemen
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
 			libraryInformation.setMolWeight(molWeight);
-			IChromatogramComparisonResult comparisonResult = new ChromatogramComparisonResult(matchFactor, reverseMatchFactor, probability);
+			IChromatogramComparisonResult comparisonResult = new ChromatogramComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
 			try {
 				IChromatogramTargetMSD identificationEntry = new ChromatogramTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);

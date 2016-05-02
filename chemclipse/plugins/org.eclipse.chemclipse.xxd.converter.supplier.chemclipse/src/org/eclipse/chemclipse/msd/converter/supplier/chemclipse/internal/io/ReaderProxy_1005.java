@@ -182,7 +182,7 @@ public class ReaderProxy_1005 extends AbstractZipReader implements IReaderProxy 
 			libraryInformation.setSynonyms(synonyms);
 			libraryInformation.setFormula(formula);
 			libraryInformation.setMolWeight(molWeight);
-			IMassSpectrumComparisonResult comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, probability);
+			IMassSpectrumComparisonResult comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
 			try {
 				IMassSpectrumTarget identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);

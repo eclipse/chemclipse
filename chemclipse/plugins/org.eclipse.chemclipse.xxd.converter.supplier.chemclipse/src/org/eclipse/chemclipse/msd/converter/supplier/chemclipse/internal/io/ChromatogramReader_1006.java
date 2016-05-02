@@ -464,7 +464,7 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			if(isExtendedComparisonResult) {
 				comparisonResult = new ExtendedComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, probability);
 			} else {
-				comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, probability);
+				comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
 			}
 			//
 			try {
@@ -528,7 +528,7 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			if(isExtendedComparisonResult) {
 				comparisonResult = new ExtendedComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, probability);
 			} else {
-				comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, probability);
+				comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
 			}
 			//
 			try {
@@ -643,7 +643,7 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			if(isExtendedComparisonResult) {
 				comparisonResult = new ExtendedComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, probability);
 			} else {
-				comparisonResult = new ChromatogramComparisonResult(matchFactor, reverseMatchFactor, probability);
+				comparisonResult = new ChromatogramComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
 			}
 			//
 			try {

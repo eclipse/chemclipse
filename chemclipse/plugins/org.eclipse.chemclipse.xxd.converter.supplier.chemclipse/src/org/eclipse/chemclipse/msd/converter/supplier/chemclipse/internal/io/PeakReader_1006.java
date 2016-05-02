@@ -288,7 +288,7 @@ public class PeakReader_1006 extends AbstractZipReader implements IPeakReader {
 			if(isExtendedComparisonResult) {
 				comparisonResult = new ExtendedComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, probability);
 			} else {
-				comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, probability);
+				comparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
 			}
 			//
 			try {
@@ -399,7 +399,7 @@ public class PeakReader_1006 extends AbstractZipReader implements IPeakReader {
 			if(isExtendedComparisonResult) {
 				comparisonResult = new ExtendedComparisonResult(matchFactor, reverseMatchFactor, forwardMatchFactor, probability);
 			} else {
-				comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, probability);
+				comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
 			}
 			//
 			try {
