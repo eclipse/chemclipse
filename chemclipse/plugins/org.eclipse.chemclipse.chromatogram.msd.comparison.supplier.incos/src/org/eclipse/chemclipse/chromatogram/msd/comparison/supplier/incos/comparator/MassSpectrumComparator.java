@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.math.GeometricDistance
 import org.eclipse.chemclipse.chromatogram.msd.comparison.math.IMatchCalculator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.IMassSpectrumComparatorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.MassSpectrumComparatorProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.results.INCOSMassSpectrumComparisonResult;
+import org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.results.MassSpectrumComparisonResult;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -35,10 +35,10 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
  * 
  * @author eselmeister
  */
-public class INCOSMassSpectrumComparator extends AbstractMassSpectrumComparator implements IMassSpectrumComparator {
+public class MassSpectrumComparator extends AbstractMassSpectrumComparator implements IMassSpectrumComparator {
 
 	public static final String COMPARATOR_ID = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos";
-	private static final Logger logger = Logger.getLogger(INCOSMassSpectrumComparator.class);
+	private static final Logger logger = Logger.getLogger(MassSpectrumComparator.class);
 	private static final int NORMALIZATION_FACTOR = 100;
 
 	@Override
@@ -61,10 +61,12 @@ public class INCOSMassSpectrumComparator extends AbstractMassSpectrumComparator 
 			//
 			float matchFactor = geometricDistanceCalculator.calculate(unknownAdjusted, referenceAdjusted, signalU.getIonRange()) * 100;
 			float reverseMatchFactor = geometricDistanceCalculator.calculate(referenceAdjusted, unknownAdjusted, signalR.getIonRange()) * 100;
+			float matchFactorDirect = geometricDistanceCalculator.calculate(unknownAdjusted, referenceAdjusted) * 100;
+			float reverseMatchFactorDirect = geometricDistanceCalculator.calculate(referenceAdjusted, unknownAdjusted) * 100;
 			/*
 			 * Result
 			 */
-			IMassSpectrumComparisonResult massSpectrumComparisonResult = new INCOSMassSpectrumComparisonResult(matchFactor, reverseMatchFactor);
+			IMassSpectrumComparisonResult massSpectrumComparisonResult = new MassSpectrumComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
 			processingInfo.setMassSpectrumComparisonResult(massSpectrumComparisonResult);
 		}
 		return processingInfo;

@@ -13,14 +13,14 @@ package org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.result
 
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.AbstractMassSpectrumComparisonResult;
 
-public class INCOSMassSpectrumComparisonResult extends AbstractMassSpectrumComparisonResult {
+public class MassSpectrumComparisonResult extends AbstractMassSpectrumComparisonResult {
 
 	/**
 	 * Renew the UUID on change.
 	 */
 	private static final long serialVersionUID = 8980174287452222536L;
 
-	public INCOSMassSpectrumComparisonResult(float matchFactor, float reverseMatchFactor) {
-		super(matchFactor, reverseMatchFactor);
+	public MassSpectrumComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect) {
+		super(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
 	}
 }
