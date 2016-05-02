@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.manual.ui.internal.wizards;
 
-import org.eclipse.jface.wizard.Wizard;
-
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -24,10 +22,14 @@ import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.jface.wizard.Wizard;
 
 public class IdentificationWizard extends Wizard {
 
 	private static final Logger logger = Logger.getLogger(IdentificationWizard.class);
+	//
+	private static final float FACTOR = 100.0f;
+	//
 	private IdentificationPage identificationPage;
 	private IPeak peak;
 
@@ -74,7 +76,7 @@ public class IdentificationWizard extends Wizard {
 			 * Comparison Result
 			 */
 			try {
-				IPeakComparisonResult comparisonResult = new PeakComparisonResult(100.0f, 100.0f, 100.0f);
+				IPeakComparisonResult comparisonResult = new PeakComparisonResult(FACTOR, FACTOR, FACTOR, FACTOR, FACTOR);
 				IPeakTarget peakTarget = new PeakTarget(libraryInformation, comparisonResult);
 				peakTarget.setIdentifier("Manual Peak Identifier");
 				if(peak instanceof IChromatogramPeakMSD) {
