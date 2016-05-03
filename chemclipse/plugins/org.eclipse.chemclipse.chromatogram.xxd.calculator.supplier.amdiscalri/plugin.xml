@@ -20,6 +20,19 @@
       </PeakFilterSupplier>
    </extension>
    <extension
+         point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Exports RI Calibration Files"
+            exportConverter="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.ChromatogramExportConverter"
+            fileExtension=".CAL"
+            filterName="AMDIS RI Calibration (*.CAL)"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.chromatogram.cal"
+            importConverter="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.ChromatogramImportConverter"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier>
+   </extension>   
+   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceInitializer">
