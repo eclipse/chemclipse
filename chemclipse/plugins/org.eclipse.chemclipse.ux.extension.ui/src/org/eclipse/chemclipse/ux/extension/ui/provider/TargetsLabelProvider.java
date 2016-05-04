@@ -99,20 +99,20 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 				case 7: // RMQD
 					text = decimalFormat.format(comparisonResult.getReverseMatchFactorDirect());
 					break;
-				case 8: // Formula
+				case 8: // Probability
+					text = decimalFormat.format(comparisonResult.getProbability());
+					break;
+				case 9: // Formula
 					text = libraryInformation.getFormula();
 					break;
-				case 9: // SMILES
+				case 10: // SMILES
 					text = libraryInformation.getSmiles();
 					break;
-				case 10: // InChI
+				case 11: // InChI
 					text = libraryInformation.getInChI();
 					break;
-				case 11: // Mol Weight
+				case 12: // Mol Weight
 					text = decimalFormat.format(libraryInformation.getMolWeight());
-					break;
-				case 12: // Probability
-					text = decimalFormat.format(comparisonResult.getProbability());
 					break;
 				case 13: // Advise
 					text = comparisonResult.getAdvise();

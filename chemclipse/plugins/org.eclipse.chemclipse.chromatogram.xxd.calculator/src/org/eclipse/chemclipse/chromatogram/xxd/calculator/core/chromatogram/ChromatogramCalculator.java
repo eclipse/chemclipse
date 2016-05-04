@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.Platform;
 public class ChromatogramCalculator {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramCalculator.class);
-	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.calculator.chromatogramCalculatorSupplier";
+	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.xxd.calculator.chromatogramCalculatorSupplier";
 	/*
 	 * These are the attributes of the extension point elements.
 	 */
