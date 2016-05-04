@@ -14,6 +14,18 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions;
 
 public class ValueMustNotBeNullException extends RuntimeException {
 
+	public ValueMustNotBeNullException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
+	public ValueMustNotBeNullException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public ValueMustNotBeNullException(Throwable cause) {
+		super(cause);
+	}
+
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
