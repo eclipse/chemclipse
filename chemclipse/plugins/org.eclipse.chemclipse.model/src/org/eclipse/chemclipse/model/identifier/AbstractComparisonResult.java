@@ -128,12 +128,8 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 
 		float rating = (matchFactor + reverseMatchFactor) / 2.0f;
 		/*
-		 * Legacy: contains probability or direct hits?
+		 * Shall the probability be used too?
 		 */
-		if(probability > 0.0f) {
-			rating = (rating + probability) / 2.0f;
-		}
-		//
 		if(matchFactorDirect > 0.0f) {
 			rating = (rating + matchFactorDirect) / 2.0f;
 		}

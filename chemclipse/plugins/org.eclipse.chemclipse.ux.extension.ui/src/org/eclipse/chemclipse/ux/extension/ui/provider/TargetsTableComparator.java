@@ -28,18 +28,26 @@ public class TargetsTableComparator extends AbstractRecordTableComparator implem
 		 */
 		int sortOrder = 0;
 		if(e1 instanceof IIdentificationTarget && e2 instanceof IIdentificationTarget) {
+			//
 			IIdentificationTarget entry1 = (IIdentificationTarget)e1;
 			IIdentificationTarget entry2 = (IIdentificationTarget)e2;
 			ILibraryInformation libraryInformation1 = entry1.getLibraryInformation();
 			IComparisonResult comparisonResult1 = entry1.getComparisonResult();
 			ILibraryInformation libraryInformation2 = entry2.getLibraryInformation();
 			IComparisonResult comparisonResult2 = entry2.getComparisonResult();
+			//
 			switch(getPropertyIndex()) {
 				case 0:
 					sortOrder = Boolean.compare(entry2.isManuallyVerified(), entry1.isManuallyVerified());
+					if(sortOrder == 0) {
+						sortOrder = getAdditionalSortOrder(comparisonResult1, comparisonResult2);
+					}
 					break;
 				case 1: // Rating
 					sortOrder = Float.compare(comparisonResult2.getRating(), comparisonResult1.getRating());
+					if(sortOrder == 0) {
+						sortOrder = getAdditionalSortOrder(comparisonResult1, comparisonResult2);
+					}
 					break;
 				case 2: // Name
 					sortOrder = libraryInformation2.getName().compareTo(libraryInformation1.getName());
@@ -59,20 +67,20 @@ public class TargetsTableComparator extends AbstractRecordTableComparator implem
 				case 7: // Reverse Match Factor Direct
 					sortOrder = Float.compare(comparisonResult2.getReverseMatchFactorDirect(), comparisonResult1.getReverseMatchFactorDirect());
 					break;
-				case 8: // Formula
+				case 8: // Probability
+					sortOrder = Float.compare(comparisonResult2.getProbability(), comparisonResult1.getProbability());
+					break;
+				case 9: // Formula
 					sortOrder = libraryInformation2.getFormula().compareTo(libraryInformation1.getFormula());
 					break;
-				case 9: // Smiles
+				case 10: // Smiles
 					sortOrder = libraryInformation2.getSmiles().compareTo(libraryInformation1.getSmiles());
 					break;
-				case 10: // InChI
+				case 11: // InChI
 					sortOrder = libraryInformation2.getInChI().compareTo(libraryInformation1.getInChI());
 					break;
-				case 11: // Mol Weight
+				case 12: // Mol Weight
 					sortOrder = Double.compare(libraryInformation2.getMolWeight(), libraryInformation1.getMolWeight());
-					break;
-				case 12: // Probability
-					sortOrder = Float.compare(comparisonResult2.getProbability(), comparisonResult1.getProbability());
 					break;
 				case 13: // Advise
 					String advise2 = comparisonResult2.getAdvise();
@@ -102,6 +110,46 @@ public class TargetsTableComparator extends AbstractRecordTableComparator implem
 		}
 		if(getDirection() == ASCENDING) {
 			sortOrder = -sortOrder;
+		}
+		return sortOrder;
+	}
+
+	/**
+	 * Calculates the additional sort order by MF, RMF, MFD, RMFD and Probability
+	 * 
+	 * @param comparisonResult1
+	 * @param comparisonResult2
+	 * @return int
+	 */
+	private int getAdditionalSortOrder(IComparisonResult comparisonResult1, IComparisonResult comparisonResult2) {
+
+		/*
+		 * Match Factor
+		 */
+		int sortOrder = Float.compare(comparisonResult2.getMatchFactor(), comparisonResult1.getMatchFactor());
+		if(sortOrder == 0) {
+			/*
+			 * Reverse Match Factor
+			 */
+			sortOrder = Float.compare(comparisonResult2.getReverseMatchFactor(), comparisonResult1.getReverseMatchFactor());
+			if(sortOrder == 0) {
+				/*
+				 * Match Factor Direct
+				 */
+				sortOrder = Float.compare(comparisonResult2.getMatchFactorDirect(), comparisonResult1.getMatchFactorDirect());
+				if(sortOrder == 0) {
+					/*
+					 * Reverse Match Factor
+					 */
+					sortOrder = Float.compare(comparisonResult2.getReverseMatchFactorDirect(), comparisonResult1.getReverseMatchFactorDirect());
+					if(sortOrder == 0) {
+						/*
+						 * Probability
+						 */
+						sortOrder = Float.compare(comparisonResult2.getProbability(), comparisonResult1.getProbability());
+					}
+				}
+			}
 		}
 		return sortOrder;
 	}
