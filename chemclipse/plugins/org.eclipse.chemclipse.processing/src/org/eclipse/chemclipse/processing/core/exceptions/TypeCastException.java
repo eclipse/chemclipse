@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.core.exceptions;
 
-public class TypeCastException extends Exception {
+public class TypeCastException extends RuntimeException {
 
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or
