@@ -13,13 +13,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.PeakFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram.ChromatogramCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.processing.ICalculatorProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.IRetentionIndexFilterSettingsPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -27,8 +23,7 @@ import org.eclipse.swt.widgets.Display;
 
 public class CalculatorRunnable implements IRunnableWithProgress {
 
-	private static final String FILTER_ID_SCANS = "org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.scans";
-	private static final String FILTER_ID_PEAKS = "org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.peaks";
+	private static final String CALCULATOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri";
 	private IChromatogramSelection chromatogramSelection;
 
 	public CalculatorRunnable(IChromatogramSelection chromatogramSelection) {
@@ -39,14 +34,8 @@ public class CalculatorRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask("Retention Index Calculator Filter", IProgressMonitor.UNKNOWN);
-			ICalculatorProcessingInfo processingInfo = ChromatogramCalculator.applyCalculator(chromatogramSelection, FILTER_ID_SCANS, monitor);
-			//
-			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-				IRetentionIndexFilterSettingsPeak peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
-				PeakFilter.applyFilter(((IChromatogramSelectionMSD)chromatogramSelection), peakFilterSettings, FILTER_ID_PEAKS, monitor);
-			}
-			//
+			monitor.beginTask("Retention Index Calculator", IProgressMonitor.UNKNOWN);
+			ICalculatorProcessingInfo processingInfo = ChromatogramCalculator.applyCalculator(chromatogramSelection, CALCULATOR_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			updateSelection();
 		} finally {
