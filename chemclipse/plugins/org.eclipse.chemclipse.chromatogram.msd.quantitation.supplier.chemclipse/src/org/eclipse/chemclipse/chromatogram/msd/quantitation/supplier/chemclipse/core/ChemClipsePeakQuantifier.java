@@ -14,16 +14,15 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.AbstractPeakQuantifier;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.IPeakQuantifier;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.processing.IPeakQuantifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.core.PeakQuantitationCalculator;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.PeakQuantitationCalculator;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings.IChemClipsePeakQuantifierSettings;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChemClipsePeakQuantifier extends AbstractPeakQuantifier implements IPeakQuantifier {
 

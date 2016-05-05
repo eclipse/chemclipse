@@ -11,16 +11,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.chromatogram.msd.quantitation;bundle-version="0.7.0",
  org.eclipse.chemclipse.logging;bundle-version="0.7.0",
  org.eclipse.chemclipse.processing;bundle-version="0.7.0",
- org.eclipse.chemclipse.thirdpartylibraries.orientdb;bundle-version="2.0.9",
  org.eclipse.chemclipse.support;bundle-version="0.7.0",
- org.eclipse.chemclipse.database;bundle-version="0.7.0",
  org.eclipse.chemclipse.numeric;bundle-version="0.7.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.core,
- org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database,
- org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller,
- org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents,
  org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions,
  org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences,
  org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings
