@@ -126,10 +126,6 @@ http://www.eclipse.org/legal/epl-v10.html
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.feature"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.manual.feature"
          version="0.0.0"/>
 
