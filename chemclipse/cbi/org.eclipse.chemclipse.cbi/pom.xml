@@ -70,8 +70,6 @@
     <module>../../plugins/org.eclipse.chemclipse.progress</module>
     <module>../../plugins/org.eclipse.chemclipse.progress.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.keystore</module>
-    <module>../../plugins/org.eclipse.chemclipse.database</module>
-    <module>../../plugins/org.eclipse.chemclipse.database.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.model</module>
     <module>../../plugins/org.eclipse.chemclipse.csd.model</module>
     <module>../../plugins/org.eclipse.chemclipse.wsd.model</module>
@@ -159,7 +157,6 @@
     <!--
 	Other        
     -->    
-    <!--<module>../../plugins/org.eclipse.chemclipse.database.fragment.test</module>-->    
     <!--<module>../../plugins/org.eclipse.chemclipse.csd.model.fragment.test</module>-->
     <!--<module>../../plugins/org.eclipse.chemclipse.wsd.model.fragment.test</module>-->
     <!--<module>../../plugins/org.eclipse.chemclipse.msd.model.fragment.test</module>-->
