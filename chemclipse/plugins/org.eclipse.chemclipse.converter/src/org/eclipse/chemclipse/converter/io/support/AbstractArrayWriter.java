@@ -122,15 +122,21 @@ public abstract class AbstractArrayWriter implements IArrayWriter {
 	}
 
 	@Override
+	public void write2BytesUnsignedIntegerLittleEndian(int value) {
+
+		write(get2BytesLittleEndian(value));
+	}
+
+	@Override
 	public void write4BytesUnsignedIntegerLittleEndian(int value) {
 
 		write(get4BytesLittleEndian(value));
 	}
 
 	@Override
-	public void write2BytesUnsignedIntegerLittleEndian(int value) {
+	public void write8BytesUnsignedLittleEndian(long value) {
 
-		write(get2BytesLittleEndian(value));
+		write(get8BytesLittleEndian(value));
 	}
 
 	@Override
@@ -149,6 +155,17 @@ public abstract class AbstractArrayWriter implements IArrayWriter {
 
 		byte[] bytes = new byte[4];
 		for(int i = 0; i < 4; i++) {
+			int shift = i * 8;
+			bytes[i] = (byte)(value >>> shift);
+		}
+		return bytes;
+	}
+
+	@Override
+	public byte[] get8BytesLittleEndian(long value) {
+
+		byte[] bytes = new byte[8];
+		for(int i = 0; i < 8; i++) {
 			int shift = i * 8;
 			bytes[i] = (byte)(value >>> shift);
 		}

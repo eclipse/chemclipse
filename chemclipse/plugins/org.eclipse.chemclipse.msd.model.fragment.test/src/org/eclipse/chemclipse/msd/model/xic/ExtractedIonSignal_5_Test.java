@@ -65,4 +65,9 @@ public class ExtractedIonSignal_5_Test extends TestCase {
 
 		assertEquals(829.1f, extractedIonSignal.getMedianIntensity());
 	}
+
+	public void testSize_6() {
+
+		assertEquals(24, extractedIonSignal.getIonMaxIntensity());
+	}
 }

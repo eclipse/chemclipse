@@ -162,6 +162,31 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 	}
 
 	@Override
+	public int getIonMaxIntensity() {
+
+		/*
+		 * No intensities available, then 0.
+		 */
+		if(abundanceValues.length == 0) {
+			return 0;
+		}
+		/*
+		 * Max intensity 0, then 0.
+		 */
+		float maxIntensity = getMaxIntensity();
+		if(maxIntensity == 0) {
+			return 0;
+		}
+		//
+		for(int i = 0; i < abundanceValues.length; i++) {
+			if(abundanceValues[i] == maxIntensity) {
+				return i + startIon;
+			}
+		}
+		return 0;
+	}
+
+	@Override
 	public float getMaxIntensity() {
 
 		return Calculations.getMax(abundanceValues);

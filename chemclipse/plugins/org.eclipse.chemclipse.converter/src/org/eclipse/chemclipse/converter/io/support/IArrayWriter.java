@@ -25,11 +25,15 @@ public interface IArrayWriter {
 
 	byte[] get4BytesAsIntegerBigEndian(int value);
 
+	void write2BytesUnsignedIntegerLittleEndian(int value);
+
 	void write4BytesUnsignedIntegerLittleEndian(int value);
 
-	void write2BytesUnsignedIntegerLittleEndian(int value);
+	void write8BytesUnsignedLittleEndian(long value);
 
 	byte[] get2BytesLittleEndian(int value);
 
 	byte[] get4BytesLittleEndian(int value);
+
+	byte[] get8BytesLittleEndian(long value);
 }

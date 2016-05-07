@@ -83,6 +83,14 @@ public interface IExtractedIonSignal {
 	float getTotalSignal();
 
 	/**
+	 * Returns the ion with the highest intensity.
+	 * May return 0 if no ion was found.
+	 * 
+	 * @return int
+	 */
+	int getIonMaxIntensity();
+
+	/**
 	 * Returns the highest intensity.
 	 * 
 	 * @return float
