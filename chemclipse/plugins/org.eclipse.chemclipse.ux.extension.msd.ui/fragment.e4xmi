@@ -62,9 +62,11 @@
         <children xsi:type="basic:PartSashContainer" xmi:id="_UWp0MDgBEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partsashcontainer.exactMassSpectrum.1" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_XvCFQDgBEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partstack.exactMassSpectrum.0">
             <children xsi:type="advanced:Placeholder" xmi:id="_nYY_wDgBEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.exactMassSpectrum.1" ref="_hqOZgDf1EeKBwZX34jl_1A"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_8h05QBRmEeaohcFlflpk0A" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.36" ref="_3ZNZADf2EeKBwZX34jl_1A"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_YFAVQDgBEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partstack.exactMassSpectrum.1">
             <children xsi:type="advanced:Placeholder" xmi:id="_ozBxwDgBEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.exactMassSpectrum.2" ref="_uENYgDf2EeKBwZX34jl_1A"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_-wzSQBRmEeaohcFlflpk0A" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.37" ref="_SpTYADf1EeKBwZX34jl_1A"/>
           </children>
         </children>
       </children>
