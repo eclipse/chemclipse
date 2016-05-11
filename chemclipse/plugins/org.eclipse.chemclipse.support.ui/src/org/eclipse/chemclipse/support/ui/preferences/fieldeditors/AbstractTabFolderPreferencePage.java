@@ -152,5 +152,8 @@ public abstract class AbstractTabFolderPreferencePage extends PreferencePage imp
 			}
 		}
 		setValid(valid);
+		if(valid) {
+			setErrorMessage(null);
+		}
 	}
 }

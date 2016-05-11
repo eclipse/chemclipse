@@ -19,6 +19,7 @@ public class FloatFieldEditor extends StringFieldEditor {
 
 	private float minValue = Float.MIN_VALUE;
 	private float maxValue = Float.MAX_VALUE;
+	private Composite parent;
 
 	public FloatFieldEditor(String name, String labelText, Composite parent) {
 		super(name, labelText, parent);
@@ -35,7 +36,12 @@ public class FloatFieldEditor extends StringFieldEditor {
 
 		Text textControl = getTextControl();
 		if(textControl == null) {
-			return false;
+			clearErrorMessage();
+			return true;
+		}
+		if(!getTextControl().isEnabled()) {
+			clearErrorMessage();
+			return true;
 		}
 		String stringValue = textControl.getText();
 		Float value;
@@ -65,6 +71,12 @@ public class FloatFieldEditor extends StringFieldEditor {
 	}
 
 	@Override
+	public boolean isValid() {
+
+		return !getTextControl().isEnabled() || super.isValid();
+	}
+
+	@Override
 	protected void doLoadDefault() {
 
 		Text textControl = getTextControl();
@@ -73,6 +85,13 @@ public class FloatFieldEditor extends StringFieldEditor {
 			textControl.setText(value.toString());
 		}
 		valueChanged();
+	}
+
+	@Override
+	public void setEnabled(boolean enabled, Composite parent) {
+
+		super.setEnabled(enabled, parent);
+		this.parent = parent;
 	}
 
 	@Override
