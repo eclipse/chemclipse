@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.settings;
 public abstract class AbstractDatabaseIdentifierSettings extends AbstractIdentifierSettings implements IDatabaseIdentifierSettings {
 
 	private int retentionTimeWindowForDatabase; // milliseconds
-	private float retentionIndexWindowForDatabase;
+	private int retentionIndexWindowForDatabase;
 	private String forceMatchFactorPenaltyCalculationForDatabase;
 
 	@Override
@@ -42,13 +42,13 @@ public abstract class AbstractDatabaseIdentifierSettings extends AbstractIdentif
 	}
 
 	@Override
-	public float getRetentionIndexWindowForDatabase() {
+	public int getRetentionIndexWindowForDatabase() {
 
 		return retentionIndexWindowForDatabase;
 	}
 
 	@Override
-	public void setRetentionIndexWindowForDatabase(float retentionIndexWindowForDatabase) {
+	public void setRetentionIndexWindowForDatabase(int retentionIndexWindowForDatabase) {
 
 		this.retentionIndexWindowForDatabase = retentionIndexWindowForDatabase;
 	}

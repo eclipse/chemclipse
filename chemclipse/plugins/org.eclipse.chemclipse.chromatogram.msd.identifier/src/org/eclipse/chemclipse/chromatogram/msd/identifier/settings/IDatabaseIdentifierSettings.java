@@ -22,7 +22,7 @@ public interface IDatabaseIdentifierSettings extends IIdentifierSettings {
 
 	void setRetentionTimeWindowForDatabase(int retentionTimeWindow);
 
-	float getRetentionIndexWindowForDatabase();
+	int getRetentionIndexWindowForDatabase();
 
-	void setRetentionIndexWindowForDatabase(float retentionIndexWindow);
+	void setRetentionIndexWindowForDatabase(int retentionIndexWindow);
 }
