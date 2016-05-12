@@ -39,8 +39,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final Boolean DEF_USE_PRE_OPTIMIZATION = true;
 	public static final String P_THRESHOLD_PRE_OPTIMIZATION = "thresholdPreOptimization";
 	public static final double DEF_THRESHOLD_PRE_OPTIMIZATION = 0.1d;
-	public static final double MIN_THRESHOLD_PRE_OPTIMIZATION = 0.0d; //
-	public static final double MAX_THRESHOLD_PRE_OPTIMIZATION = 1.0d; //
+	public static final double MIN_THRESHOLD_PRE_OPTIMIZATION = 0.0d; // no restriction
+	public static final double MAX_THRESHOLD_PRE_OPTIMIZATION = 1.0d; // hardest restriction
 	//
 	public static final String P_NUMBER_OF_TARGETS = "numberOfTargets";
 	public static final int DEF_NUMBER_OF_TARGETS = 3;
