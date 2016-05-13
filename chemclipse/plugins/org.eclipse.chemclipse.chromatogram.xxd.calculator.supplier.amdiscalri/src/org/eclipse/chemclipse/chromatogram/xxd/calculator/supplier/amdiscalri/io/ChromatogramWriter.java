@@ -14,29 +14,26 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.i
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.RetentionIndexEntry;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramWriter extends AbstractChromatogramMSDWriter {
 
 	private Map<String, Integer> retentionIndices;
-	private DecimalFormat decimalFormat;
 
 	public ChromatogramWriter() {
 		initializeReferenceMap();
-		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
 	@Override
@@ -48,35 +45,22 @@ public class ChromatogramWriter extends AbstractChromatogramMSDWriter {
 		/*
 		 * Write the cal specifiation.
 		 */
-		PrintWriter printWriter = new PrintWriter(file);
-		//
+		List<IRetentionIndexEntry> retentionIndexEntries = new ArrayList<IRetentionIndexEntry>();
 		for(IChromatogramPeakMSD peak : chromatogram.getPeaks()) {
 			List<IPeakTarget> peakTargets = peak.getTargets();
 			if(peakTargets.size() > 0) {
 				String name = peakTargets.get(0).getLibraryInformation().getName().trim();
 				if(retentionIndices.containsKey(name)) {
-					/*
-					 * e.g.
-					 * 11.336 1700.0 100 937 Heptadecane
-					 */
-					double retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR;
-					int retentionIndex = retentionIndices.get(name);
-					//
-					printWriter.print(decimalFormat.format(retentionTime));
-					printWriter.print(" ");
-					printWriter.print(retentionIndex);
-					printWriter.print(" ");
-					printWriter.print(100);
-					printWriter.print(" ");
-					printWriter.print(999);
-					printWriter.print(" ");
-					printWriter.println(name);
+					int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
+					float retentionIndex = retentionIndices.get(name);
+					IRetentionIndexEntry retentionIndexEntry = new RetentionIndexEntry(retentionTime, retentionIndex, name);
+					retentionIndexEntries.add(retentionIndexEntry);
 				}
 			}
 		}
 		//
-		printWriter.flush();
-		printWriter.close();
+		CalibrationFileWriter calibrationFileWriter = new CalibrationFileWriter();
+		calibrationFileWriter.write(file, retentionIndexEntries);
 	}
 
 	private void initializeReferenceMap() {

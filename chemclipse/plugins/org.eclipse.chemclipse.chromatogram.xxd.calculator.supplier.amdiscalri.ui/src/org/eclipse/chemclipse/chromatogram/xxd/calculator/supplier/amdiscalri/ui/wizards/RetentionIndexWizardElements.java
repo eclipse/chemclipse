@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2016 Dr. Philip Wenig.
+ * Copyright (c) 2016 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,13 +9,9 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model;
+package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
-public interface IRetentionIndexEntry {
+import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 
-	int getRetentionTime();
-
-	float getRetentionIndex();
-
-	String getName();
+public class RetentionIndexWizardElements extends ChromatogramWizardElements implements IRetentionIndexWizardElements {
 }

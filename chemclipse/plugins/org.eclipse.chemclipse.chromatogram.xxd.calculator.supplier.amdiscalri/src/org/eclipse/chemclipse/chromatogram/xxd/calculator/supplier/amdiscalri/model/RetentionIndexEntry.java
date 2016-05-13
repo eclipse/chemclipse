@@ -15,12 +15,12 @@ public class RetentionIndexEntry implements IRetentionIndexEntry {
 
 	private int retentionTime;
 	private float retentionIndex;
-	private String peakName;
+	private String name;
 
-	public RetentionIndexEntry(int retentionTime, float retentionIndex, String peakName) {
+	public RetentionIndexEntry(int retentionTime, float retentionIndex, String name) {
 		this.retentionTime = retentionTime;
 		this.retentionIndex = retentionIndex;
-		this.peakName = peakName;
+		this.name = name;
 	}
 
 	@Override
@@ -36,9 +36,9 @@ public class RetentionIndexEntry implements IRetentionIndexEntry {
 	}
 
 	@Override
-	public String getPeakName() {
+	public String getName() {
 
-		return peakName;
+		return name;
 	}
 
 	// -----------------------------equals, hashCode, toString
@@ -74,7 +74,7 @@ public class RetentionIndexEntry implements IRetentionIndexEntry {
 		builder.append(",");
 		builder.append("retentionIndex=" + retentionIndex);
 		builder.append(",");
-		builder.append("peakName=" + peakName);
+		builder.append("name=" + name);
 		builder.append("]");
 		return builder.toString();
 	}
