@@ -19,7 +19,6 @@ public class FloatFieldEditor extends StringFieldEditor {
 
 	private float minValue = Float.MIN_VALUE;
 	private float maxValue = Float.MAX_VALUE;
-	private Composite parent;
 
 	public FloatFieldEditor(String name, String labelText, Composite parent) {
 		super(name, labelText, parent);
@@ -91,7 +90,6 @@ public class FloatFieldEditor extends StringFieldEditor {
 	public void setEnabled(boolean enabled, Composite parent) {
 
 		super.setEnabled(enabled, parent);
-		this.parent = parent;
 	}
 
 	@Override

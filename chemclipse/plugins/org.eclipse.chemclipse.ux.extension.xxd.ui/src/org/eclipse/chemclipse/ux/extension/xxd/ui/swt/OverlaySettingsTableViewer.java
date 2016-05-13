@@ -13,9 +13,9 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.EnhancedTableViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.OverlaySettingsCheckBoxEditingSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.OverlaySettingsContentProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.OverlaySettingsLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.OverlaySettingsTableSorter;
 import org.eclipse.jface.viewers.TableViewer;
@@ -40,7 +40,7 @@ public class OverlaySettingsTableViewer extends EnhancedTableViewer {
 		 */
 		setColumns(TITLES, BOUNDS);
 		setLabelProvider(new OverlaySettingsLabelProvider());
-		setContentProvider(new OverlaySettingsContentProvider());
+		setContentProvider(new ListContentProvider());
 		setSorter(new OverlaySettingsTableSorter());
 		setEditingSupport();
 	}
