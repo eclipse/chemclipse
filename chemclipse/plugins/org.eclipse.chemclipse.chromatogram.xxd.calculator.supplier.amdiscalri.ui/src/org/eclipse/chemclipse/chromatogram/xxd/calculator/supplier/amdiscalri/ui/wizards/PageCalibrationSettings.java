@@ -20,6 +20,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
@@ -28,7 +29,8 @@ import org.eclipse.swt.widgets.Text;
 public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 
 	private IRetentionIndexWizardElements wizardElements;
-	private Text textFileCal;
+	private Text textCalibrationFile;
+	private Button buttonSelectCalibrationFile;
 
 	public PageCalibrationSettings(IRetentionIndexWizardElements wizardElements) {
 		//
@@ -66,6 +68,9 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		composite.setLayout(new GridLayout(2, false));
 		//
 		createCalibrationFileField(composite);
+		createStartRetentionIndexField(composite);
+		createStopRetentionIndexField(composite);
+		createPeakIdentificationField(composite);
 		//
 		validateSelection();
 		setControl(composite);
@@ -73,10 +78,27 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 
 	private void createCalibrationFileField(Composite composite) {
 
-		textFileCal = new Text(composite, SWT.BORDER);
-		textFileCal.setText("");
-		textFileCal.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		textFileCal.addModifyListener(new ModifyListener() {
+		Button checkBoxUseExistingCalFile = new Button(composite, SWT.CHECK);
+		checkBoxUseExistingCalFile.setText("Use existing *.cal file for improved detection");
+		checkBoxUseExistingCalFile.setEnabled(true);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		checkBoxUseExistingCalFile.setLayoutData(gridData);
+		checkBoxUseExistingCalFile.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean enabled = checkBoxUseExistingCalFile.getSelection();
+				textCalibrationFile.setEnabled(enabled);
+				buttonSelectCalibrationFile.setEnabled(enabled);
+			}
+		});
+		//
+		textCalibrationFile = new Text(composite, SWT.BORDER);
+		textCalibrationFile.setText("");
+		textCalibrationFile.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		textCalibrationFile.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
 
@@ -84,9 +106,9 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 			}
 		});
 		//
-		Button buttonStandards = new Button(composite, SWT.PUSH);
-		buttonStandards.setText("Select *.cal");
-		buttonStandards.addSelectionListener(new SelectionAdapter() {
+		buttonSelectCalibrationFile = new Button(composite, SWT.PUSH);
+		buttonSelectCalibrationFile.setText("Select *.cal");
+		buttonSelectCalibrationFile.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -99,8 +121,44 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 				String pathname = fileDialog.open();
 				if(pathname != null) {
 					fileDialog.getFilterPath(); // TODO persist path
-					textFileCal.setText(pathname);
+					textCalibrationFile.setText(pathname);
 				}
+			}
+		});
+	}
+
+	private void createStartRetentionIndexField(Composite composite) {
+
+		Combo combo = new Combo(composite, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		combo.setLayoutData(gridData);
+		combo.setItems(new String[]{"C6 (Hexane)", "C7 (Heptane)"});
+	}
+
+	private void createStopRetentionIndexField(Composite composite) {
+
+		Combo combo = new Combo(composite, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		combo.setLayoutData(gridData);
+		combo.setItems(new String[]{"C8 (Octane)", "C9 (Nonane)"});
+	}
+
+	private void createPeakIdentificationField(Composite composite) {
+
+		Button checkBoxUseExistingPeaks = new Button(composite, SWT.CHECK);
+		checkBoxUseExistingPeaks.setText("Use existing peaks in chromatogram if available.");
+		checkBoxUseExistingPeaks.setEnabled(true);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		checkBoxUseExistingPeaks.setLayoutData(gridData);
+		checkBoxUseExistingPeaks.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				System.out.println("Use peaks.");
 			}
 		});
 	}
