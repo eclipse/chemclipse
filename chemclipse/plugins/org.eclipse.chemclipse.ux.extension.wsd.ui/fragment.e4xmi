@@ -23,7 +23,7 @@
           </children>
         </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_-wCtAE3iEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.partsashcontainer.2">
-          <children xsi:type="advanced:Placeholder" xmi:id="_CX5kgE3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.placeholder.0" ref="_LNStUE3iEeOtxrESNeijsQ"/>
+          <children xsi:type="advanced:Placeholder" xmi:id="_CX5kgE3jEeOtxrESNeijsQ" elementId="org.eclipse.ui.editorss" ref="_LNStUE3iEeOtxrESNeijsQ"/>
           <children xsi:type="basic:PartSashContainer" xmi:id="_CzcRAE3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.partsashcontainer.3" horizontal="true">
             <children xsi:type="basic:PartStack" xmi:id="_K2kZ8E3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.partstack.2">
               <children xsi:type="advanced:Placeholder" xmi:id="_DbShAE7cEeOnILtzKooLhg" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.placeholder.5" ref="_2PrbUE7bEeOnILtzKooLhg"/>

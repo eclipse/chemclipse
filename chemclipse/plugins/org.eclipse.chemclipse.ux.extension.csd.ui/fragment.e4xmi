@@ -29,7 +29,7 @@
           </children>
         </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_KFIcQFM4EeKO4dM54-DH7g" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.partsashcontainer.2">
-          <children xsi:type="advanced:Placeholder" xmi:id="_LMxZwFM4EeKO4dM54-DH7g" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.perspective.main.editorss" ref="_KodscJUbEeK9SdEQujNeFg"/>
+          <children xsi:type="advanced:Placeholder" xmi:id="_LMxZwFM4EeKO4dM54-DH7g" elementId="org.eclipse.ui.editorss" ref="_KodscJUbEeK9SdEQujNeFg"/>
           <children xsi:type="basic:PartSashContainer" xmi:id="_LtWXQFM4EeKO4dM54-DH7g" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.partsashcontainer.3" horizontal="true">
             <children xsi:type="basic:PartStack" xmi:id="_Oxp1wFM4EeKO4dM54-DH7g" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.partstack.2">
               <children xsi:type="advanced:Placeholder" xmi:id="_U8sxANKsEeONsNJ7n41rvA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.placeholder.6" ref="_D03GUNKsEeONsNJ7n41rvA"/>
