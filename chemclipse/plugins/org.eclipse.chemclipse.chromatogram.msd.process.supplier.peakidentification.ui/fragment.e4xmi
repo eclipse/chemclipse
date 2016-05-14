@@ -26,7 +26,7 @@
           </children>
         </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_WnSBALPqEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.partsashcontainer.2">
-          <children xsi:type="advanced:Placeholder" xmi:id="_T4HsELPqEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.perspective.editorss" ref="_lyy-YLPpEeKIeeBeP0URsw"/>
+          <children xsi:type="advanced:Placeholder" xmi:id="_T4HsELPqEeKIeeBeP0URsw" elementId="org.eclipse.ui.editorss" ref="_lyy-YLPpEeKIeeBeP0URsw"/>
           <children xsi:type="basic:PartSashContainer" xmi:id="_iL8zgLPpEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.partsashcontainer.3" horizontal="true">
             <children xsi:type="basic:PartStack" xmi:id="_jfQ1gLPpEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.partstack.2">
               <children xsi:type="advanced:Placeholder" xmi:id="_dcXCcLPqEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.placeholder.2" ref="_5sRDMLPpEeKIeeBeP0URsw"/>
