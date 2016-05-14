@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.StandardsReader;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -31,6 +32,7 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 	private IRetentionIndexWizardElements wizardElements;
 	private Text textCalibrationFile;
 	private Button buttonSelectCalibrationFile;
+	private String[] availableStandards;
 
 	public PageCalibrationSettings(IRetentionIndexWizardElements wizardElements) {
 		//
@@ -38,6 +40,8 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		setTitle("Calibration Settings");
 		setDescription("Please select the calibration settings.");
 		this.wizardElements = wizardElements;
+		StandardsReader standardsReader = new StandardsReader();
+		availableStandards = standardsReader.getAvailableStandards();
 	}
 
 	@Override
@@ -133,7 +137,7 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		combo.setLayoutData(gridData);
-		combo.setItems(new String[]{"C6 (Hexane)", "C7 (Heptane)"});
+		combo.setItems(availableStandards);
 	}
 
 	private void createStopRetentionIndexField(Composite composite) {
@@ -142,7 +146,7 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		combo.setLayoutData(gridData);
-		combo.setItems(new String[]{"C8 (Octane)", "C9 (Nonane)"});
+		combo.setItems(availableStandards);
 	}
 
 	private void createPeakIdentificationField(Composite composite) {
