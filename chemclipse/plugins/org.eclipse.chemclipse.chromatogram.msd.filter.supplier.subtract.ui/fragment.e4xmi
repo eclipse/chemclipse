@@ -63,7 +63,7 @@
           </children>
         </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_-WQ-UMbbEeKTZYaTAAgjxg" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.partsashcontainer.3">
-          <children xsi:type="advanced:Placeholder" xmi:id="_NFyGwMbcEeKTZYaTAAgjxg" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.perspective.main.editorss" ref="_JIwQgMbcEeKTZYaTAAgjxg"/>
+          <children xsi:type="advanced:Placeholder" xmi:id="_NFyGwMbcEeKTZYaTAAgjxg" elementId="org.eclipse.ui.editorss" ref="_JIwQgMbcEeKTZYaTAAgjxg"/>
           <children xsi:type="basic:PartSashContainer" xmi:id="_HArwwMbcEeKTZYaTAAgjxg" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.partsashcontainer.4" horizontal="true">
             <children xsi:type="basic:PartSashContainer" xmi:id="_gL2uwMeXEeKe1Kma8mPN4w" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.partsashcontainer.5" containerData="" horizontal="true">
               <children xsi:type="basic:PartStack" xmi:id="_GGA4QMbcEeKTZYaTAAgjxg" elementId="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.partstack.3">
