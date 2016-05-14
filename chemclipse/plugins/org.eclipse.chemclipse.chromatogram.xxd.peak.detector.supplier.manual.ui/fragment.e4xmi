@@ -22,7 +22,7 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_DWbcoECBEeKMcNE1hx3pmQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_FWOKIECBEeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.perspective" label="Manual Peak Detector" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peak-manual.gif">
       <children xsi:type="basic:PartSashContainer" xmi:id="_jDH34ECBEeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.partsashcontainer.0">
-        <children xsi:type="advanced:Placeholder" xmi:id="_kPQ64ECBEeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.perspective.editorss" ref="_qkglcLPfEeKIeeBeP0URsw"/>
+        <children xsi:type="advanced:Placeholder" xmi:id="_kPQ64ECBEeKMcNE1hx3pmQ" elementId="org.eclipse.ui.editorss" ref="_qkglcLPfEeKIeeBeP0URsw"/>
         <children xsi:type="basic:PartSashContainer" xmi:id="_kl7HYECBEeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.partsashcontainer.1" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_lILf4ECBEeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.partstack.0">
             <children xsi:type="advanced:Placeholder" xmi:id="_oiJsYECBEeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.placeholder.1" ref="_AeBsIECBEeKMcNE1hx3pmQ"/>
