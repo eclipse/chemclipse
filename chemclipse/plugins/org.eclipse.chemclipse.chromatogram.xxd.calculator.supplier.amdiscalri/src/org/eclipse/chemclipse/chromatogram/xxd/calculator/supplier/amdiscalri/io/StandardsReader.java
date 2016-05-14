@@ -14,8 +14,10 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.i
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.PathResolver;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
@@ -29,13 +31,19 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class StandardsReader {
 
+	public IMassSpectra getStandardsMassSpectra() {
+
+		File file = new File(PathResolver.getAbsolutePath(PathResolver.ALKANES));
+		IMassSpectrumImportConverterProcessingInfo processingInfo = MassSpectrumConverter.convert(file, new NullProgressMonitor());
+		IMassSpectra massSpectra = processingInfo.getMassSpectra();
+		return massSpectra;
+	}
+
 	public List<IRetentionIndexEntry> getStandardsList() {
 
 		List<IRetentionIndexEntry> retentionIndexEntries = new ArrayList<IRetentionIndexEntry>();
 		//
-		File file = new File(PathResolver.getAbsolutePath(PathResolver.ALKANES));
-		IMassSpectrumImportConverterProcessingInfo processingInfo = MassSpectrumConverter.convert(file, new NullProgressMonitor());
-		IMassSpectra massSpectra = processingInfo.getMassSpectra();
+		IMassSpectra massSpectra = getStandardsMassSpectra();
 		for(IScanMSD massSpectrum : massSpectra.getList()) {
 			if(massSpectrum instanceof ILibraryMassSpectrum) {
 				ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)massSpectrum;
@@ -48,6 +56,16 @@ public class StandardsReader {
 		}
 		//
 		return retentionIndexEntries;
+	}
+
+	public Set<String> getStandardNames() {
+
+		Set<String> standardNames = new HashSet<String>();
+		List<IRetentionIndexEntry> retentionIndexEntries = getStandardsList();
+		for(IRetentionIndexEntry retentionIndexEntry : retentionIndexEntries) {
+			standardNames.add(retentionIndexEntry.getName());
+		}
+		return standardNames;
 	}
 
 	public String[] getAvailableStandards() {
