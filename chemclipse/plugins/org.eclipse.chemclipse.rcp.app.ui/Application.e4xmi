@@ -73,8 +73,7 @@
       <tags>View</tags>
       <tags>categoryTag:General</tags>
     </sharedElements>
-    <sharedElements xsi:type="advanced:Area" xmi:id="_Jqg8MEnJEeKP49-EnXatSw" elementId="org.eclipse.chemclipse.rcp.app.ui.editor" label="Editor Area 3.x">
-      <children xsi:type="advanced:Placeholder" xmi:id="_NKLVkOSLEeKpB8AVWhCO0Q" elementId="org.eclipse.ui.editorss" ref="_N2AsQEnJEeKP49-EnXatSw"/>
+    <sharedElements xsi:type="advanced:Area" xmi:id="_Jqg8MEnJEeKP49-EnXatSw" elementId="org.eclipse.chemclipse.rcp.app.ui.editor" selectedElement="_N2AsQEnJEeKP49-EnXatSw" label="Editor Area">
       <children xsi:type="basic:PartStack" xmi:id="_N2AsQEnJEeKP49-EnXatSw" elementId="org.eclipse.e4.primaryDataStack">
         <tags>newtablook</tags>
         <tags>org.eclipse.e4.primaryDataStack</tags>

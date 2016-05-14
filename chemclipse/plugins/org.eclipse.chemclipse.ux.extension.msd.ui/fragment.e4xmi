@@ -24,9 +24,7 @@
           </children>
         </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_u8EUIDNBEeKp7tRCNPPdJw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partsashcontainer.main.2" containerData="">
-          <children xsi:type="basic:PartSashContainer" xmi:id="_wYV28I1sEeKgaYcpx_IhbQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partsashcontainer.main.3">
-            <children xsi:type="advanced:Placeholder" xmi:id="_y8rb8I1sEeKgaYcpx_IhbQ" elementId="org.eclipse.chemclipse.chromatogram.msd.perspective.ui.perspective.main.editorss" ref="_kGjWIEnJEeKP49-EnXatSw"/>
-          </children>
+          <children xsi:type="advanced:Placeholder" xmi:id="_2TAwsBnDEeaEkJ-bL8kgdw" elementId="org.eclipse.ui.editorss" ref="_kGjWIEnJEeKP49-EnXatSw"/>
           <children xsi:type="basic:PartSashContainer" xmi:id="_w7LCSDNBEeKp7tRCNPPdJw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partsashcontainer.main.4" horizontal="true">
             <children xsi:type="basic:PartStack" xmi:id="_EKiyIDNEEeKp7tRCNPPdJw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partstack.main.2">
               <children xsi:type="advanced:Placeholder" xmi:id="_a-UpkDfyEeKBwZX34jl_1A" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.main.6" ref="_UhBO8DfyEeKBwZX34jl_1A"/>
