@@ -11,7 +11,21 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.StandardsReader;
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 
 public class RetentionIndexWizardElements extends ChromatogramWizardElements implements IRetentionIndexWizardElements {
+
+	private String[] availableStandards;
+
+	public RetentionIndexWizardElements() {
+		StandardsReader standardsReader = new StandardsReader();
+		availableStandards = standardsReader.getAvailableStandards();
+	}
+
+	@Override
+	public String[] getAvailableStandards() {
+
+		return availableStandards;
+	}
 }

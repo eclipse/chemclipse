@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.StandardsReader;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -25,6 +24,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 public class PageCalibrationSettings extends AbstractExtendedWizardPage {
@@ -32,7 +32,6 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 	private IRetentionIndexWizardElements wizardElements;
 	private Text textCalibrationFile;
 	private Button buttonSelectCalibrationFile;
-	private String[] availableStandards;
 
 	public PageCalibrationSettings(IRetentionIndexWizardElements wizardElements) {
 		//
@@ -40,8 +39,6 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		setTitle("Calibration Settings");
 		setDescription("Please select the calibration settings.");
 		this.wizardElements = wizardElements;
-		StandardsReader standardsReader = new StandardsReader();
-		availableStandards = standardsReader.getAvailableStandards();
 	}
 
 	@Override
@@ -85,9 +82,7 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		Button checkBoxUseExistingCalFile = new Button(composite, SWT.CHECK);
 		checkBoxUseExistingCalFile.setText("Use existing *.cal file for improved detection");
 		checkBoxUseExistingCalFile.setEnabled(true);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		checkBoxUseExistingCalFile.setLayoutData(gridData);
+		checkBoxUseExistingCalFile.setLayoutData(getGridData());
 		checkBoxUseExistingCalFile.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -133,20 +128,24 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 
 	private void createStartRetentionIndexField(Composite composite) {
 
+		Label label = new Label(composite, SWT.NONE);
+		label.setText("Start Index");
+		label.setLayoutData(getGridData());
+		//
 		Combo combo = new Combo(composite, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		combo.setLayoutData(gridData);
-		combo.setItems(availableStandards);
+		combo.setLayoutData(getGridData());
+		combo.setItems(wizardElements.getAvailableStandards());
 	}
 
 	private void createStopRetentionIndexField(Composite composite) {
 
+		Label label = new Label(composite, SWT.NONE);
+		label.setText("Stop Index");
+		label.setLayoutData(getGridData());
+		//
 		Combo combo = new Combo(composite, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		combo.setLayoutData(gridData);
-		combo.setItems(availableStandards);
+		combo.setLayoutData(getGridData());
+		combo.setItems(wizardElements.getAvailableStandards());
 	}
 
 	private void createPeakIdentificationField(Composite composite) {
@@ -154,9 +153,7 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		Button checkBoxUseExistingPeaks = new Button(composite, SWT.CHECK);
 		checkBoxUseExistingPeaks.setText("Use existing peaks in chromatogram if available.");
 		checkBoxUseExistingPeaks.setEnabled(true);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		checkBoxUseExistingPeaks.setLayoutData(gridData);
+		checkBoxUseExistingPeaks.setLayoutData(getGridData());
 		checkBoxUseExistingPeaks.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -165,6 +162,15 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 				System.out.println("Use peaks.");
 			}
 		});
+	}
+
+	private GridData getGridData() {
+
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.horizontalSpan = 2;
+		gridData.verticalIndent = 5;
+		return gridData;
 	}
 
 	private void validateSelection() {

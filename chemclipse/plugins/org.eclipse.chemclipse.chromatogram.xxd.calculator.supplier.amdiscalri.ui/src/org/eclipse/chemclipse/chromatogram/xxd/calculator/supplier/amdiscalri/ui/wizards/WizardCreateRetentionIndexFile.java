@@ -23,6 +23,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 
+	/**
+	 * Preferred size of the wizard.
+	 */
+	public static final int PREFERRED_WIDTH = 300;
+	public static final int PREFERRED_HEIGHT = 540;
+	//
 	private static final Logger logger = Logger.getLogger(WizardCreateRetentionIndexFile.class);
 	//
 	private static final String CALIBRATION_FILE_EXTENSION = ".cal";
@@ -32,7 +38,7 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 	private PageCalibrationSettings pageCalibrationSettings;
 	private ChromatogramInputEntriesWizardPage pageChromatogramInputEntries;
 	private PagePeakSelection pagePeakSelection;
-	private PagePeakStart pagePeakStart;
+	private PagePeakRange pagePeakRange;
 	private PagePeakAssignment pagePeakAssignment;
 	private PageCalibrationTable pageCalibrationTable;
 
@@ -50,14 +56,14 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 		pageCalibrationSettings = new PageCalibrationSettings(wizardElements);
 		pageChromatogramInputEntries = new ChromatogramInputEntriesWizardPage(wizardElements);
 		pagePeakSelection = new PagePeakSelection(wizardElements);
-		pagePeakStart = new PagePeakStart(wizardElements);
+		pagePeakRange = new PagePeakRange(wizardElements);
 		pagePeakAssignment = new PagePeakAssignment(wizardElements);
 		pageCalibrationTable = new PageCalibrationTable(wizardElements);
 		//
 		addPage(pageCalibrationSettings);
 		addPage(pageChromatogramInputEntries);
 		addPage(pagePeakSelection);
-		addPage(pagePeakStart);
+		addPage(pagePeakRange);
 		addPage(pagePeakAssignment);
 		addPage(pageCalibrationTable);
 	}
@@ -73,7 +79,7 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 			canFinish = pagePeakSelection.canFinish();
 		}
 		if(canFinish) {
-			canFinish = pagePeakStart.canFinish();
+			canFinish = pagePeakRange.canFinish();
 		}
 		if(canFinish) {
 			canFinish = pagePeakAssignment.canFinish();

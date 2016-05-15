@@ -12,6 +12,10 @@
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.CalibrationFileTableViewerUI;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -19,11 +23,28 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Text;
 
 public class PageCalibrationTable extends AbstractExtendedWizardPage {
 
+	private static final Logger logger = Logger.getLogger(PageCalibrationTable.class);
+	//
 	private IRetentionIndexWizardElements wizardElements;
+	//
+	private Button buttonCancel;
+	private Button buttonDelete;
+	private Button buttonAdd;
+	//
+	private Combo comboReferences;
+	private Button buttonAddReference;
+	private Text textRetentionTime;
+	//
 	private CalibrationFileTableViewerUI calibrationFileTableViewerUI;
 
 	public PageCalibrationTable(IRetentionIndexWizardElements wizardElements) {
@@ -59,9 +80,12 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 	public void createControl(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(1, false));
+		composite.setLayout(new GridLayout(4, false));
 		//
 		createCheckBoxField(composite);
+		createButtonField(composite);
+		createAddReferenceField(composite);
+		createAddReferenceButton(composite);
 		createTableField(composite);
 		//
 		validateSelection();
@@ -73,7 +97,9 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 		Button buttonValidateRetentionIndices = new Button(composite, SWT.CHECK);
 		buttonValidateRetentionIndices.setText("Retention indices are valid.");
 		buttonValidateRetentionIndices.setSelection(false);
-		buttonValidateRetentionIndices.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 4;
+		buttonValidateRetentionIndices.setLayoutData(gridData);
 		buttonValidateRetentionIndices.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -84,10 +110,154 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 		});
 	}
 
+	private void createButtonField(Composite composite) {
+
+		Label label = new Label(composite, SWT.NONE);
+		label.setText("");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 3;
+		label.setLayoutData(gridData);
+		/*
+		 * Buttons
+		 */
+		Composite compositeButtons = new Composite(composite, SWT.NONE);
+		compositeButtons.setLayout(new GridLayout(3, true));
+		GridData gridDataComposite = new GridData();
+		gridDataComposite.horizontalAlignment = SWT.RIGHT;
+		compositeButtons.setLayoutData(gridDataComposite);
+		//
+		buttonCancel = new Button(compositeButtons, SWT.PUSH);
+		buttonCancel.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CANCEL, IApplicationImage.SIZE_16x16));
+		buttonCancel.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				comboReferences.setText("");
+				textRetentionTime.setText("");
+				enableButtonFields(false);
+			}
+		});
+		//
+		buttonDelete = new Button(compositeButtons, SWT.PUSH);
+		buttonDelete.setEnabled(false);
+		buttonDelete.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		buttonDelete.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Table table = calibrationFileTableViewerUI.getTable();
+				int index = table.getSelectionIndex();
+				if(index >= 0) {
+					MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING);
+					messageBox.setText("Delete reference");
+					messageBox.setMessage("Would you like to delete the reference?");
+					if(messageBox.open() == SWT.OK) {
+						//
+						enableButtonFields(false);
+						// wizardElements.getReferencePattern().remove(index);
+						// calibrationFileTableViewerUI.setInput(wizardElements.getReferencePattern());
+						validateSelection();
+					}
+				}
+			}
+		});
+		//
+		buttonAdd = new Button(compositeButtons, SWT.PUSH);
+		buttonAdd.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		buttonAdd.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				enableButtonFields(true);
+			}
+		});
+	}
+
+	private void createAddReferenceField(Composite composite) {
+
+		Label labelAlkane = new Label(composite, SWT.NONE);
+		labelAlkane.setText("Reference:");
+		//
+		comboReferences = new Combo(composite, SWT.BORDER);
+		comboReferences.setText("");
+		comboReferences.setItems(wizardElements.getAvailableStandards());
+		comboReferences.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		Label labelRetentionTime = new Label(composite, SWT.NONE);
+		labelRetentionTime.setText("RT (minutes):");
+		//
+		textRetentionTime = new Text(composite, SWT.BORDER);
+		textRetentionTime.setText("");
+		GridData gridDataText = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataText.grabExcessHorizontalSpace = true;
+		textRetentionTime.setLayoutData(gridDataText);
+	}
+
+	private void createAddReferenceButton(Composite composite) {
+
+		buttonAddReference = new Button(composite, SWT.PUSH);
+		buttonAddReference.setText("Add reference");
+		buttonAddReference.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_ADD, IApplicationImage.SIZE_16x16));
+		GridData gridDataButton = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataButton.horizontalSpan = 4;
+		buttonAddReference.setLayoutData(gridDataButton);
+		buttonAddReference.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				try {
+					enableButtonFields(false);
+					String name = comboReferences.getText().trim();
+					int retentionTime = (int)(Double.parseDouble(textRetentionTime.getText().trim()) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+					//
+					comboReferences.setText("");
+					textRetentionTime.setText("");
+					//
+					// wizardElements.getReferencePattern().add(reference);
+					// calibrationFileTableViewerUI.setInput(wizardElements.getReferencePattern());
+					validateSelection();
+				} catch(Exception e1) {
+					logger.warn(e1);
+				}
+			}
+		});
+	}
+
 	private void createTableField(Composite composite) {
 
 		calibrationFileTableViewerUI = new CalibrationFileTableViewerUI(composite);
-		calibrationFileTableViewerUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.horizontalSpan = 4;
+		calibrationFileTableViewerUI.getTable().setLayoutData(gridData);
+	}
+
+	private void enableButtonFields(boolean enabled) {
+
+		buttonAdd.setEnabled(!enabled);
+		buttonCancel.setEnabled(enabled);
+		if(!enabled) {
+			if(calibrationFileTableViewerUI.getTable().getSelectionIndex() >= 0) {
+				buttonDelete.setEnabled(true);
+			} else {
+				buttonDelete.setEnabled(false);
+			}
+		}
+		//
+		comboReferences.setEnabled(enabled);
+		textRetentionTime.setEnabled(enabled);
+		buttonAddReference.setEnabled(enabled);
+	}
+
+	private GridData getGridData() {
+
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.horizontalSpan = 4;
+		return gridData;
 	}
 
 	private void validateSelection() {

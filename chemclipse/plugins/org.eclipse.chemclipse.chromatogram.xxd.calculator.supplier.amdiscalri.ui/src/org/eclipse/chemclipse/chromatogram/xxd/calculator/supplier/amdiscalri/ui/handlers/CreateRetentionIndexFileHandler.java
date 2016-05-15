@@ -22,6 +22,7 @@ public class CreateRetentionIndexFileHandler {
 	public void execute() {
 
 		WizardDialog wizardDialog = new WizardDialog(Display.getCurrent().getActiveShell(), new WizardCreateRetentionIndexFile());
+		wizardDialog.setPageSize(WizardCreateRetentionIndexFile.PREFERRED_WIDTH, WizardCreateRetentionIndexFile.PREFERRED_HEIGHT);
 		wizardDialog.open();
 	}
 }

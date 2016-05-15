@@ -11,33 +11,25 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider.PeakLabelProvider;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.swt.ui.components.chromatogram.SelectedPeakChromatogramUI;
-import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
-import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Label;
 
-public class PagePeakSelection extends AbstractExtendedWizardPage {
+public class PagePeakRange extends AbstractExtendedWizardPage {
 
-	private static final Logger logger = Logger.getLogger(PagePeakSelection.class);
 	private IRetentionIndexWizardElements wizardElements;
-	private String[] titles = {"RT", "S/N", "Peak Area"};
-	private int[] bounds = {200, 150, 150};
 
-	public PagePeakSelection(IRetentionIndexWizardElements wizardElements) {
+	public PagePeakRange(IRetentionIndexWizardElements wizardElements) {
 		//
-		super(PagePeakSelection.class.getName());
-		setTitle("Peak Selection");
-		setDescription("Please select the peaks that shall be used.");
+		super(PagePeakRange.class.getName());
+		setTitle("Peak Start");
+		setDescription("Please select the start peak.");
 		this.wizardElements = wizardElements;
 	}
 
@@ -69,7 +61,8 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 		composite.setLayout(new GridLayout(1, false));
 		//
 		createChromatogramField(composite);
-		createPeakTableField(composite);
+		createStartIndexPeakField(composite);
+		createStopIndexPeakField(composite);
 		//
 		validateSelection();
 		setControl(composite);
@@ -83,26 +76,34 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 		SelectedPeakChromatogramUI selectedPeakChromatogramUI = new SelectedPeakChromatogramUI(parent, SWT.NONE);
 	}
 
-	private void createPeakTableField(Composite composite) {
+	private void createStartIndexPeakField(Composite composite) {
 
-		ExtendedTableViewer chromatogramTableViewer = new ExtendedTableViewer(composite, SWT.BORDER);
-		chromatogramTableViewer.createColumns(titles, bounds);
-		Table table = chromatogramTableViewer.getTable();
+		Label label = new Label(composite, SWT.NONE);
+		label.setText("Start Index Peak");
+		label.setLayoutData(getGridData());
+		//
+		Combo combo = new Combo(composite, SWT.NONE);
+		combo.setLayoutData(getGridData());
+		combo.setItems(wizardElements.getAvailableStandards());
+	}
+
+	private void createStopIndexPeakField(Composite composite) {
+
+		Label label = new Label(composite, SWT.NONE);
+		label.setText("Stop Index Peak");
+		label.setLayoutData(getGridData());
+		//
+		Combo combo = new Combo(composite, SWT.NONE);
+		combo.setLayoutData(getGridData());
+		combo.setItems(wizardElements.getAvailableStandards());
+	}
+
+	private GridData getGridData() {
+
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
-		gridData.heightHint = 100;
-		table.setLayoutData(gridData);
-		chromatogramTableViewer.setLabelProvider(new PeakLabelProvider());
-		chromatogramTableViewer.setContentProvider(new ListContentProvider());
-		chromatogramTableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-
-				int index = chromatogramTableViewer.getTable().getSelectionIndex();
-				logger.info("TODO index");
-			}
-		});
+		gridData.verticalIndent = 5;
+		return gridData;
 	}
 
 	private void validateSelection() {

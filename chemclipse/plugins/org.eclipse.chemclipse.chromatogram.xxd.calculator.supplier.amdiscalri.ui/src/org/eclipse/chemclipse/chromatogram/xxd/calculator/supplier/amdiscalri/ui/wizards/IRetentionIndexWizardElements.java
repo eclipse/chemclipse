@@ -14,4 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 
 public interface IRetentionIndexWizardElements extends IChromatogramWizardElements {
+
+	String[] getAvailableStandards();
 }
