@@ -73,10 +73,7 @@
       <children xsi:type="menu:MenuSeparator" xmi:id="_HYosIDL_EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.8"/>
       <children xsi:type="menu:Menu" xmi:id="_9qTloDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.process" label="Processors"/>
       <children xsi:type="menu:MenuSeparator" xmi:id="_K5F7IDL_EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.9"/>
-      <children xsi:type="menu:Menu" xmi:id="_AxvQoDL_EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.reports" label="Reports">
-        <children xsi:type="menu:Menu" xmi:id="_nm9S8BZTEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.reports.msd" label="MSD"/>
-        <children xsi:type="menu:Menu" xmi:id="_n8CLEBZTEeSk0dq6nce8LA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.reports.csd" label="CSD"/>
-      </children>
+      <children xsi:type="menu:Menu" xmi:id="_AxvQoDL_EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.reports" label="Reports"/>
       <children xsi:type="menu:MenuSeparator" xmi:id="_OxxwkExJEeOWprdBMj2r0w" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.10"/>
       <children xsi:type="menu:Menu" xmi:id="_VC2tEExJEeOWprdBMj2r0w" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.miscellaneous" label="Miscellaneous"/>
     </elements>
