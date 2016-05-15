@@ -14,10 +14,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.ui.int
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.chromatogram.xxd.report.core.ChromatogramReports;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.preferences.PreferenceSupplier;
-
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -36,9 +35,11 @@ public class ReportRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask("ChemClipse Chromatogram Report", IProgressMonitor.UNKNOWN);
-			boolean appendFiles = PreferenceSupplier.isAppendFiles();
-			ChromatogramReports.generate(file, appendFiles, chromatogram, REPORT_SUPPLIER_ID, monitor);
+			if(file != null && chromatogram != null) {
+				monitor.beginTask("ChemClipse Chromatogram Report", IProgressMonitor.UNKNOWN);
+				boolean appendFiles = PreferenceSupplier.isAppendFiles();
+				ChromatogramReports.generate(file, appendFiles, chromatogram, REPORT_SUPPLIER_ID, monitor);
+			}
 		} finally {
 			monitor.done();
 		}
