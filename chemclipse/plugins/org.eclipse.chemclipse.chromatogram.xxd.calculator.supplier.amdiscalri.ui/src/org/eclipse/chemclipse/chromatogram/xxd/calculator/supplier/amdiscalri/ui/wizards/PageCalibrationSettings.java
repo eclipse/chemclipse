@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
+import java.io.File;
+
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -30,8 +32,14 @@ import org.eclipse.swt.widgets.Text;
 public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 
 	private IRetentionIndexWizardElements wizardElements;
-	private Text textCalibrationFile;
+	private String[] availableStandards;
+	//
+	private Button checkBoxUseExistingCalibrationFile;
+	private Text textPathRetentionIndexFile;
 	private Button buttonSelectCalibrationFile;
+	private Combo comboStartIndexName;
+	private Combo comboStopIndexName;
+	private Button checkBoxUseExistingPeaks;
 
 	public PageCalibrationSettings(IRetentionIndexWizardElements wizardElements) {
 		//
@@ -39,12 +47,17 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		setTitle("Calibration Settings");
 		setDescription("Please select the calibration settings.");
 		this.wizardElements = wizardElements;
+		availableStandards = wizardElements.getAvailableStandards();
 	}
 
 	@Override
 	public boolean canFinish() {
 
-		return true;
+		if(getMessage() == null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -57,7 +70,11 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 
 		super.setVisible(visible);
 		if(visible) {
-			System.out.println(wizardElements.getFileName());
+			checkBoxUseExistingCalibrationFile.setSelection(wizardElements.isUseExistingRetentionIndexFile());
+			setCalibrationFileSelection(wizardElements.isUseExistingRetentionIndexFile());
+			comboStartIndexName.select(getComboIndex(wizardElements.getStartIndexName()));
+			comboStopIndexName.select(getComboIndex(wizardElements.getStopIndexName()));
+			checkBoxUseExistingPeaks.setSelection(wizardElements.isUseAlreadyDetectedPeaks());
 			validateSelection();
 		}
 	}
@@ -79,28 +96,30 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 
 	private void createCalibrationFileField(Composite composite) {
 
-		Button checkBoxUseExistingCalFile = new Button(composite, SWT.CHECK);
-		checkBoxUseExistingCalFile.setText("Use existing *.cal file for improved detection");
-		checkBoxUseExistingCalFile.setEnabled(true);
-		checkBoxUseExistingCalFile.setLayoutData(getGridData());
-		checkBoxUseExistingCalFile.addSelectionListener(new SelectionAdapter() {
+		checkBoxUseExistingCalibrationFile = new Button(composite, SWT.CHECK);
+		checkBoxUseExistingCalibrationFile.setText("Use existing *.cal file for improved detection");
+		checkBoxUseExistingCalibrationFile.setEnabled(true);
+		checkBoxUseExistingCalibrationFile.setLayoutData(getGridData());
+		checkBoxUseExistingCalibrationFile.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean enabled = checkBoxUseExistingCalFile.getSelection();
-				textCalibrationFile.setEnabled(enabled);
-				buttonSelectCalibrationFile.setEnabled(enabled);
+				boolean useExistingCalibrationFile = checkBoxUseExistingCalibrationFile.getSelection();
+				wizardElements.setUseExistingRetentionIndexFile(useExistingCalibrationFile);
+				setCalibrationFileSelection(useExistingCalibrationFile);
+				validateSelection();
 			}
 		});
 		//
-		textCalibrationFile = new Text(composite, SWT.BORDER);
-		textCalibrationFile.setText("");
-		textCalibrationFile.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		textCalibrationFile.addModifyListener(new ModifyListener() {
+		textPathRetentionIndexFile = new Text(composite, SWT.BORDER);
+		textPathRetentionIndexFile.setText("");
+		textPathRetentionIndexFile.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		textPathRetentionIndexFile.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
 
+				wizardElements.setPathRetentionIndexFile(textPathRetentionIndexFile.getText().trim());
 				validateSelection();
 			}
 		});
@@ -116,11 +135,13 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 				fileDialog.setText("Select an existing *.cal template file.");
 				fileDialog.setFilterExtensions(new String[]{"*.cal", "*.CAL"});
 				fileDialog.setFilterNames(new String[]{"AMDIS Calibration *.cal", "AMDIS Calibration *.CAL"});
-				fileDialog.setFilterPath(""); // TODO persist path
-				String pathname = fileDialog.open();
-				if(pathname != null) {
-					fileDialog.getFilterPath(); // TODO persist path
-					textCalibrationFile.setText(pathname);
+				fileDialog.setFilterPath(wizardElements.getFilterPathCalibrationFile());
+				String pathRetentionIndexFile = fileDialog.open();
+				if(pathRetentionIndexFile != null) {
+					textPathRetentionIndexFile.setText(pathRetentionIndexFile);
+					wizardElements.setFilterPathCalibrationFile(fileDialog.getFilterPath());
+					wizardElements.setPathRetentionIndexFile(pathRetentionIndexFile);
+					validateSelection();
 				}
 			}
 		});
@@ -132,9 +153,18 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		label.setText("Start Index");
 		label.setLayoutData(getGridData());
 		//
-		Combo combo = new Combo(composite, SWT.NONE);
-		combo.setLayoutData(getGridData());
-		combo.setItems(wizardElements.getAvailableStandards());
+		comboStartIndexName = new Combo(composite, SWT.NONE);
+		comboStartIndexName.setLayoutData(getGridData());
+		comboStartIndexName.setItems(availableStandards);
+		comboStartIndexName.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				wizardElements.setStartIndexName(comboStartIndexName.getText().trim());
+				validateSelection();
+			}
+		});
 	}
 
 	private void createStopRetentionIndexField(Composite composite) {
@@ -143,14 +173,23 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		label.setText("Stop Index");
 		label.setLayoutData(getGridData());
 		//
-		Combo combo = new Combo(composite, SWT.NONE);
-		combo.setLayoutData(getGridData());
-		combo.setItems(wizardElements.getAvailableStandards());
+		comboStopIndexName = new Combo(composite, SWT.NONE);
+		comboStopIndexName.setLayoutData(getGridData());
+		comboStopIndexName.setItems(availableStandards);
+		comboStopIndexName.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				wizardElements.setStopIndexName(comboStopIndexName.getText().trim());
+				validateSelection();
+			}
+		});
 	}
 
 	private void createPeakIdentificationField(Composite composite) {
 
-		Button checkBoxUseExistingPeaks = new Button(composite, SWT.CHECK);
+		checkBoxUseExistingPeaks = new Button(composite, SWT.CHECK);
 		checkBoxUseExistingPeaks.setText("Use existing peaks in chromatogram if available.");
 		checkBoxUseExistingPeaks.setEnabled(true);
 		checkBoxUseExistingPeaks.setLayoutData(getGridData());
@@ -159,7 +198,7 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				System.out.println("Use peaks.");
+				wizardElements.setUseAlreadyDetectedPeaks(checkBoxUseExistingPeaks.getSelection());
 			}
 		});
 	}
@@ -173,9 +212,65 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		return gridData;
 	}
 
+	private void setCalibrationFileSelection(boolean enabled) {
+
+		textPathRetentionIndexFile.setEnabled(enabled);
+		buttonSelectCalibrationFile.setEnabled(enabled);
+	}
+
+	private int getComboIndex(String name) {
+
+		for(int i = 0; i < availableStandards.length; i++) {
+			if(availableStandards[i].equals(name)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
 	private void validateSelection() {
 
 		String message = null;
+		/*
+		 * *.cal file
+		 */
+		if(wizardElements.isUseExistingRetentionIndexFile()) {
+			String pathCalibrationFile = wizardElements.getPathRetentionIndexFile();
+			if(pathCalibrationFile.equals("")) {
+				message = "Please select an existing calibration (*.cal) file.";
+			} else {
+				File file = new File(pathCalibrationFile);
+				if(!file.exists()) {
+					message = "The selected *.cal doesn't exist.";
+				}
+			}
+		}
+		/*
+		 * Start index
+		 */
+		if(message == null) {
+			String startIndexName = wizardElements.getStartIndexName();
+			if(startIndexName.equals("")) {
+				message = "Please select and start index.";
+			} else {
+				if(getComboIndex(startIndexName) == -1) {
+					message = "The select start index is not valid.";
+				}
+			}
+		}
+		/*
+		 * Stop index
+		 */
+		if(message == null) {
+			String stopIndexName = wizardElements.getStopIndexName();
+			if(stopIndexName.equals("")) {
+				message = "Please select and stop index.";
+			} else {
+				if(getComboIndex(stopIndexName) == -1) {
+					message = "The select stop index is not valid.";
+				}
+			}
+		}
 		/*
 		 * Updates the status
 		 */

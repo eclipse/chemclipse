@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.Ac
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.IRetentionIndexFilterSettingsPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ISupplierCalculatorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.RetentionIndexFilterSettingsPeak;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.SupplierCalculatorSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -69,7 +69,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		String pathCalibrationFile = preferences.get(P_PATH_RI_FILE, DEF_PATH_RI_FILE);
-		ISupplierCalculatorSettings chromatogramCalculatorSettings = new SupplierFilterSettings();
+		ISupplierCalculatorSettings chromatogramCalculatorSettings = new SupplierCalculatorSettings();
 		chromatogramCalculatorSettings.setPathRetentionIndexFile(pathCalibrationFile);
 		return chromatogramCalculatorSettings;
 	}

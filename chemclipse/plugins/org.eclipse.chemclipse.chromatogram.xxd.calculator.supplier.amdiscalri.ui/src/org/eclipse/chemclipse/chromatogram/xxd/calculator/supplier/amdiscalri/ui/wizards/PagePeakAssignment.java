@@ -12,6 +12,10 @@
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider.PeakLabelProvider;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.ChromatogramPeakTableViewerUI;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.LibraryMassSpectrumComparisonUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -35,6 +39,8 @@ import org.eclipse.swt.widgets.Table;
 public class PagePeakAssignment extends AbstractExtendedWizardPage {
 
 	private IRetentionIndexWizardElements wizardElements;
+	private ChromatogramPeakTableViewerUI chromatogramPeakTableViewerUI;
+	private LibraryMassSpectrumComparisonUI libraryMassSpectrumComparisonUI;
 
 	public PagePeakAssignment(IRetentionIndexWizardElements wizardElements) {
 		//
@@ -60,7 +66,8 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 
 		super.setVisible(visible);
 		if(visible) {
-			System.out.println(wizardElements.getFileName());
+			IChromatogramMSD chromatogramMSD = wizardElements.getChromatogramMSD();
+			chromatogramPeakTableViewerUI.setInput(chromatogramMSD.getPeaks());
 			validateSelection();
 		}
 	}
@@ -71,6 +78,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(3, false));
 		//
+		createPeakTableField(composite);
 		createLibraryComparisonField(composite);
 		createPeakSpinnerField(composite);
 		createAssignIndexField(composite);
@@ -80,6 +88,32 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		setControl(composite);
 	}
 
+	private void createPeakTableField(Composite composite) {
+
+		chromatogramPeakTableViewerUI = new ChromatogramPeakTableViewerUI(composite, SWT.BORDER);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 3;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.heightHint = 100;
+		chromatogramPeakTableViewerUI.getTable().setLayoutData(gridData);
+		chromatogramPeakTableViewerUI.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+
+				Table table = chromatogramPeakTableViewerUI.getTable();
+				int index = table.getSelectionIndex();
+				Object object = chromatogramPeakTableViewerUI.getElementAt(index);
+				if(object instanceof IChromatogramPeakMSD) {
+					IChromatogramPeakMSD selectedPeak = (IChromatogramPeakMSD)object;
+					// TODO Target
+					IScanMSD unknownMassSpectrum = selectedPeak.getPeakModel().getPeakMassSpectrum();
+					libraryMassSpectrumComparisonUI.update(unknownMassSpectrum, unknownMassSpectrum, true);
+				}
+			}
+		});
+	}
+
 	private void createLibraryComparisonField(Composite composite) {
 
 		Composite parent = new Composite(composite, SWT.NONE);
@@ -87,7 +121,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		gridData.horizontalSpan = 3;
 		parent.setLayoutData(gridData);
 		parent.setLayout(new FillLayout());
-		LibraryMassSpectrumComparisonUI libraryMassSpectrumComparisonUI = new LibraryMassSpectrumComparisonUI(parent, SWT.NONE, MassValueDisplayPrecision.NOMINAL);
+		libraryMassSpectrumComparisonUI = new LibraryMassSpectrumComparisonUI(parent, SWT.NONE, MassValueDisplayPrecision.NOMINAL);
 	}
 
 	private void createPeakSpinnerField(Composite composite) {
@@ -96,8 +130,11 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		buttonPrevious.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PREVIOUS, IApplicationImage.SIZE_16x16));
 		//
 		Label label = new Label(composite, SWT.NONE);
-		label.setText("C9 (Octane)");
-		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		label.setText("C9 (Hexane)");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = SWT.CENTER;
+		gridData.grabExcessHorizontalSpace = true;
+		label.setLayoutData(gridData);
 		//
 		Button buttonNext = new Button(composite, SWT.PUSH);
 		buttonNext.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_NEXT, IApplicationImage.SIZE_16x16));
@@ -109,7 +146,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 3;
 		buttonAdd.setLayoutData(gridData);
-		buttonAdd.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		buttonAdd.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_ADD, IApplicationImage.SIZE_16x16));
 		buttonAdd.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -122,8 +159,8 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 
 	private void createPeakTargetsField(Composite composite) {
 
-		String[] titles = {"RT", "S/N", "Peak Area"};
-		int[] bounds = {200, 150, 150};
+		String[] titles = {"Retention Time", "Retention Index", "S/N", "Peak Area"};
+		int[] bounds = {200, 200, 150, 150};
 		//
 		ExtendedTableViewer chromatogramTableViewer = new ExtendedTableViewer(composite, SWT.BORDER);
 		chromatogramTableViewer.createColumns(titles, bounds);

@@ -14,12 +14,17 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.CalibrationFileTableViewerUI;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.swt.ui.components.chromatogram.SelectedPeakChromatogramUI;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -36,6 +41,9 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 	private static final Logger logger = Logger.getLogger(PageCalibrationTable.class);
 	//
 	private IRetentionIndexWizardElements wizardElements;
+	//
+	private Button buttonValidateRetentionIndices;
+	private SelectedPeakChromatogramUI selectedPeakChromatogramUI;
 	//
 	private Button buttonCancel;
 	private Button buttonDelete;
@@ -71,7 +79,12 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 
 		super.setVisible(visible);
 		if(visible) {
-			System.out.println(wizardElements.getFileName());
+			try {
+				IChromatogramSelectionMSD chromatogramSelectionMSD = new ChromatogramSelectionMSD(wizardElements.getChromatogramMSD());
+				selectedPeakChromatogramUI.update(chromatogramSelectionMSD, true);
+			} catch(ChromatogramIsNullException e) {
+				logger.warn(e);
+			}
 			validateSelection();
 		}
 	}
@@ -83,6 +96,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 		composite.setLayout(new GridLayout(4, false));
 		//
 		createCheckBoxField(composite);
+		createChromatogramField(composite);
 		createButtonField(composite);
 		createAddReferenceField(composite);
 		createAddReferenceButton(composite);
@@ -94,7 +108,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 
 	private void createCheckBoxField(Composite composite) {
 
-		Button buttonValidateRetentionIndices = new Button(composite, SWT.CHECK);
+		buttonValidateRetentionIndices = new Button(composite, SWT.CHECK);
 		buttonValidateRetentionIndices.setText("Retention indices are valid.");
 		buttonValidateRetentionIndices.setSelection(false);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -108,6 +122,16 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 				validateSelection();
 			}
 		});
+	}
+
+	private void createChromatogramField(Composite composite) {
+
+		Composite parent = new Composite(composite, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.horizontalSpan = 4;
+		parent.setLayoutData(gridData);
+		parent.setLayout(new FillLayout());
+		selectedPeakChromatogramUI = new SelectedPeakChromatogramUI(parent, SWT.BORDER);
 	}
 
 	private void createButtonField(Composite composite) {
@@ -229,7 +253,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 
 	private void createTableField(Composite composite) {
 
-		calibrationFileTableViewerUI = new CalibrationFileTableViewerUI(composite);
+		calibrationFileTableViewerUI = new CalibrationFileTableViewerUI(composite, SWT.BORDER);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 4;
 		calibrationFileTableViewerUI.getTable().setLayoutData(gridData);

@@ -45,8 +45,8 @@ public class RetentionIndexCalculator {
 
 		ICalculatorProcessingInfo processingInfo = new CalculatorProcessingInfo();
 		String pathRetentionIndexFile = supplierCalculatorSettings.getPathRetentionIndexFile();
-		File calFile = new File(pathRetentionIndexFile);
-		TreeMap<Integer, IRetentionIndexEntry> retentionIndices = getRetentionIndexEntries(calFile);
+		File calibrationFile = new File(pathRetentionIndexFile);
+		TreeMap<Integer, IRetentionIndexEntry> retentionIndices = getRetentionIndexEntries(calibrationFile);
 		//
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		int startRetentionTime = chromatogramSelection.getStartRetentionTime();
