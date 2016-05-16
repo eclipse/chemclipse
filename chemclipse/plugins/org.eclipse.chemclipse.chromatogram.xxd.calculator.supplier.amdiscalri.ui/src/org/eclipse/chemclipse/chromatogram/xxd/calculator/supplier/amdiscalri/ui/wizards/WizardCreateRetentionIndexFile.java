@@ -13,8 +13,13 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileWriter;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractFileWizard;
 import org.eclipse.chemclipse.ux.extension.msd.ui.wizards.ChromatogramInputEntriesWizardPage;
 import org.eclipse.core.resources.IFile;
@@ -32,6 +37,8 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 	private static final Logger logger = Logger.getLogger(WizardCreateRetentionIndexFile.class);
 	//
 	private static final String CALIBRATION_FILE_EXTENSION = ".cal";
+	private static final String CHROMATOGRAM_FILE_EXTENSION = ".ocb";
+	private static final String CHROMATOGRAM_CONVERTER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
 	//
 	private IRetentionIndexWizardElements wizardElements = new RetentionIndexWizardElements();
 	//
@@ -90,8 +97,26 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 		monitor.beginTask("Create Chromatogram Evaluation", IProgressMonitor.UNKNOWN);
 		final IFile file = super.prepareProject(monitor);
 		try {
+			/*
+			 * Export
+			 */
+			List<IRetentionIndexEntry> retentionIndexEntries = wizardElements.getExtractedRetentionIndexEntries();
+			IChromatogramMSD chromatogramMSD = wizardElements.getChromatogramSelectionMSD().getChromatogramMSD();
+			/*
+			 * Calibration File.
+			 */
 			File calibrationFile = file.getLocation().toFile();
-			System.out.println(calibrationFile);
+			if(!calibrationFile.getAbsolutePath().endsWith(CALIBRATION_FILE_EXTENSION)) {
+				calibrationFile = new File(calibrationFile.getAbsolutePath() + CALIBRATION_FILE_EXTENSION);
+			}
+			CalibrationFileWriter calibrationFileWriter = new CalibrationFileWriter();
+			calibrationFileWriter.write(calibrationFile, retentionIndexEntries);
+			/*
+			 * Chromatogram File
+			 */
+			String path = calibrationFile.getAbsolutePath();
+			File chromatogramFile = new File(path.substring(0, path.length() - CALIBRATION_FILE_EXTENSION.length()) + CHROMATOGRAM_FILE_EXTENSION);
+			ChromatogramConverterMSD.convert(chromatogramFile, chromatogramMSD, CHROMATOGRAM_CONVERTER_ID, monitor);
 		} catch(Exception e) {
 			logger.warn(e);
 		}
