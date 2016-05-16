@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import java.util.List;
+
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 
 public interface IRetentionIndexWizardElements extends IChromatogramWizardElements {
@@ -42,7 +45,11 @@ public interface IRetentionIndexWizardElements extends IChromatogramWizardElemen
 
 	void setUseAlreadyDetectedPeaks(boolean useAlreadyDetectedPeaks);
 
-	IChromatogramMSD getChromatogramMSD();
+	IChromatogramSelectionMSD getChromatogramSelectionMSD();
 
-	void setChromatogramMSD(IChromatogramMSD chromatogramMSD);
+	void setChromatogramSelectionMSD(IChromatogramSelectionMSD chromatogramSelectionMSD);
+
+	List<IRetentionIndexEntry> getExtractedRetentionIndexEntries();
+
+	void setExtractedRetentionIndexEntries(List<IRetentionIndexEntry> extractedRetentionIndexEntries);
 }

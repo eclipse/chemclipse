@@ -1,0 +1,83 @@
+/*******************************************************************************
+ * Copyright (c) 2016 Lablicate GmbH.
+ * 
+ * All rights reserved.
+ * 
+ * Contributors:
+ * Dr. Philip Wenig - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider;
+
+import java.text.DecimalFormat;
+
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.swt.graphics.Image;
+
+public class TargetsLabelProvider extends LabelProvider implements ITableLabelProvider {
+
+	private DecimalFormat decimalFormat;
+
+	public TargetsLabelProvider() {
+		decimalFormat = ValueFormat.getDecimalFormatEnglish();
+	}
+
+	@Override
+	public Image getColumnImage(Object element, int columnIndex) {
+
+		if(columnIndex == 0) {
+			/*
+			 * Rating
+			 */
+			if(element instanceof IIdentificationTarget) {
+				IIdentificationTarget identificationTarget = (IIdentificationTarget)element;
+				float rating = identificationTarget.getComparisonResult().getRating();
+				if(rating >= IComparisonResult.RATING_LIMIT_UP) {
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP, IApplicationImage.SIZE_16x16);
+				} else if(rating >= IComparisonResult.RATING_LIMIT_EQUAL) {
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_EQUAL, IApplicationImage.SIZE_16x16);
+				} else {
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN, IApplicationImage.SIZE_16x16);
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public String getColumnText(Object element, int columnIndex) {
+
+		String text = "";
+		if(element instanceof IIdentificationTarget) {
+			IIdentificationTarget identificationEntry = (IIdentificationTarget)element;
+			ILibraryInformation libraryInformation = identificationEntry.getLibraryInformation();
+			IComparisonResult comparisonResult = identificationEntry.getComparisonResult();
+			switch(columnIndex) {
+				case 0: // Name
+					text = libraryInformation.getName();
+					break;
+				case 1: // MQ
+					text = decimalFormat.format(comparisonResult.getMatchFactor());
+					break;
+				case 2: // RMQ
+					text = decimalFormat.format(comparisonResult.getReverseMatchFactor());
+					break;
+				case 3: // MQD
+					text = decimalFormat.format(comparisonResult.getMatchFactorDirect());
+					break;
+				case 4: // RMQD
+					text = decimalFormat.format(comparisonResult.getReverseMatchFactorDirect());
+					break;
+				default:
+					text = "n.v.";
+			}
+		}
+		return text;
+	}
+}

@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.CalibrationFileTableViewerUI;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.RetentionIndexTableViewerUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Display;
 public class PageCalibration {
 
 	private Composite control;
-	private CalibrationFileTableViewerUI extendedTableViewer;
+	private RetentionIndexTableViewerUI extendedTableViewer;
 
 	public PageCalibration(Composite container) {
 		createControl(container);
@@ -50,7 +50,7 @@ public class PageCalibration {
 		Composite composite = new Composite(control, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 		//
-		extendedTableViewer = new CalibrationFileTableViewerUI(composite, SWT.NONE);
+		extendedTableViewer = new RetentionIndexTableViewerUI(composite, SWT.NONE);
 		extendedTableViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 }

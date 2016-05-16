@@ -11,11 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.StandardsReader;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 
 public class RetentionIndexWizardElements extends ChromatogramWizardElements implements IRetentionIndexWizardElements {
@@ -32,7 +33,8 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 	private String stopIndexName;
 	private boolean useAlreadyDetectedPeaks;
 	//
-	private IChromatogramMSD chromatogramMSD;
+	private IChromatogramSelectionMSD chromatogramSelectionMSD;
+	private List<IRetentionIndexEntry> extractedRetentionIndexEntries;
 
 	public RetentionIndexWizardElements() {
 		initialize();
@@ -117,15 +119,27 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 	}
 
 	@Override
-	public IChromatogramMSD getChromatogramMSD() {
+	public IChromatogramSelectionMSD getChromatogramSelectionMSD() {
 
-		return chromatogramMSD;
+		return chromatogramSelectionMSD;
 	}
 
 	@Override
-	public void setChromatogramMSD(IChromatogramMSD chromatogramMSD) {
+	public void setChromatogramSelectionMSD(IChromatogramSelectionMSD chromatogramSelectionMSD) {
 
-		this.chromatogramMSD = chromatogramMSD;
+		this.chromatogramSelectionMSD = chromatogramSelectionMSD;
+	}
+
+	@Override
+	public List<IRetentionIndexEntry> getExtractedRetentionIndexEntries() {
+
+		return extractedRetentionIndexEntries;
+	}
+
+	@Override
+	public void setExtractedRetentionIndexEntries(List<IRetentionIndexEntry> extractedRetentionIndexEntries) {
+
+		this.extractedRetentionIndexEntries = extractedRetentionIndexEntries;
 	}
 
 	private void initialize() {
@@ -143,5 +157,7 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 		startIndexName = "";
 		stopIndexName = "";
 		useAlreadyDetectedPeaks = false;
+		//
+		extractedRetentionIndexEntries = new ArrayList<IRetentionIndexEntry>();
 	}
 }

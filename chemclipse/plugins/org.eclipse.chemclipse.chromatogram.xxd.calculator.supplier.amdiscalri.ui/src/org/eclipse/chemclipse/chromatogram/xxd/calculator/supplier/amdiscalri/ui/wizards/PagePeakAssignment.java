@@ -11,21 +11,38 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider.PeakLabelProvider;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.ChromatogramPeakTableViewerUI;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.chemclipse.chromatogram.msd.identifier.library.LibraryService;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.ILibraryServiceProcessingInfo;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.AlkaneIdentifier;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.PeakTableViewerUI;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.TargetsViewerUI;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
+import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
+import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
+import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
+import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.LibraryMassSpectrumComparisonUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
-import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -33,14 +50,22 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Text;
 
 public class PagePeakAssignment extends AbstractExtendedWizardPage {
 
+	private static final Logger logger = Logger.getLogger(PagePeakAssignment.class);
+	//
 	private IRetentionIndexWizardElements wizardElements;
-	private ChromatogramPeakTableViewerUI chromatogramPeakTableViewerUI;
+	private PeakTableViewerUI peakTableViewerUI;
 	private LibraryMassSpectrumComparisonUI libraryMassSpectrumComparisonUI;
+	private TargetsViewerUI targetsViewerUI;
+	private Button buttonPrevious;
+	private Text textCurrentIndexName;
+	private Button buttonNext;
+	private String[] availableStandards;
+	private int indexSelectedStandard;
 
 	public PagePeakAssignment(IRetentionIndexWizardElements wizardElements) {
 		//
@@ -48,12 +73,17 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		setTitle("Peak Assigment");
 		setDescription("Please assign the alkanes.");
 		this.wizardElements = wizardElements;
+		availableStandards = wizardElements.getAvailableStandards();
 	}
 
 	@Override
 	public boolean canFinish() {
 
-		return true;
+		if(getMessage() == null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -66,8 +96,21 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 
 		super.setVisible(visible);
 		if(visible) {
-			IChromatogramMSD chromatogramMSD = wizardElements.getChromatogramMSD();
-			chromatogramPeakTableViewerUI.setInput(chromatogramMSD.getPeaks());
+			IChromatogramSelectionMSD chromatogramSelectionMSD = wizardElements.getChromatogramSelectionMSD();
+			if(chromatogramSelectionMSD != null && chromatogramSelectionMSD.getChromatogramMSD() != null) {
+				IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogramMSD();
+				peakTableViewerUI.setInput(chromatogramMSD.getPeaks());
+				indexSelectedStandard = getStartIndex(availableStandards, wizardElements.getStartIndexName());
+				if(indexSelectedStandard > -1) {
+					textCurrentIndexName.setText(availableStandards[indexSelectedStandard]);
+				} else {
+					textCurrentIndexName.setText("");
+				}
+				validateSelection();
+			} else {
+				peakTableViewerUI.setInput(null);
+				textCurrentIndexName.setText("");
+			}
 			validateSelection();
 		}
 	}
@@ -80,7 +123,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		//
 		createPeakTableField(composite);
 		createLibraryComparisonField(composite);
-		createPeakSpinnerField(composite);
+		createTargetSpinnerField(composite);
 		createAssignIndexField(composite);
 		createPeakTargetsField(composite);
 		//
@@ -90,25 +133,20 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 
 	private void createPeakTableField(Composite composite) {
 
-		chromatogramPeakTableViewerUI = new ChromatogramPeakTableViewerUI(composite, SWT.BORDER);
+		peakTableViewerUI = new PeakTableViewerUI(composite, SWT.BORDER);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 3;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.heightHint = 100;
-		chromatogramPeakTableViewerUI.getTable().setLayoutData(gridData);
-		chromatogramPeakTableViewerUI.addSelectionChangedListener(new ISelectionChangedListener() {
+		peakTableViewerUI.getTable().setLayoutData(gridData);
+		peakTableViewerUI.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 
-				Table table = chromatogramPeakTableViewerUI.getTable();
-				int index = table.getSelectionIndex();
-				Object object = chromatogramPeakTableViewerUI.getElementAt(index);
-				if(object instanceof IChromatogramPeakMSD) {
-					IChromatogramPeakMSD selectedPeak = (IChromatogramPeakMSD)object;
-					// TODO Target
-					IScanMSD unknownMassSpectrum = selectedPeak.getPeakModel().getPeakMassSpectrum();
-					libraryMassSpectrumComparisonUI.update(unknownMassSpectrum, unknownMassSpectrum, true);
+				IChromatogramPeakMSD selectedPeak = getSelectedPeak();
+				if(selectedPeak != null) {
+					targetsViewerUI.setInput(selectedPeak.getTargets());
 				}
 			}
 		});
@@ -124,20 +162,49 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		libraryMassSpectrumComparisonUI = new LibraryMassSpectrumComparisonUI(parent, SWT.NONE, MassValueDisplayPrecision.NOMINAL);
 	}
 
-	private void createPeakSpinnerField(Composite composite) {
+	private void createTargetSpinnerField(Composite composite) {
 
-		Button buttonPrevious = new Button(composite, SWT.PUSH);
+		buttonPrevious = new Button(composite, SWT.PUSH);
 		buttonPrevious.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PREVIOUS, IApplicationImage.SIZE_16x16));
+		buttonPrevious.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				buttonNext.setEnabled(true);
+				indexSelectedStandard--;
+				if(indexSelectedStandard < 0) {
+					indexSelectedStandard = 0;
+					buttonPrevious.setEnabled(false);
+				}
+				textCurrentIndexName.setText(availableStandards[indexSelectedStandard]);
+				super.widgetSelected(e);
+			}
+		});
 		//
-		Label label = new Label(composite, SWT.NONE);
-		label.setText("C9 (Hexane)");
+		textCurrentIndexName = new Text(composite, SWT.BORDER);
+		textCurrentIndexName.setText("");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.CENTER;
 		gridData.grabExcessHorizontalSpace = true;
-		label.setLayoutData(gridData);
+		textCurrentIndexName.setLayoutData(gridData);
 		//
-		Button buttonNext = new Button(composite, SWT.PUSH);
+		buttonNext = new Button(composite, SWT.PUSH);
 		buttonNext.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_NEXT, IApplicationImage.SIZE_16x16));
+		buttonNext.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				buttonPrevious.setEnabled(true);
+				indexSelectedStandard++;
+				if(indexSelectedStandard >= availableStandards.length) {
+					indexSelectedStandard = availableStandards.length - 1;
+					buttonNext.setEnabled(false);
+				}
+				textCurrentIndexName.setText(availableStandards[indexSelectedStandard]);
+				super.widgetSelected(e);
+			}
+		});
 	}
 
 	private void createAssignIndexField(Composite composite) {
@@ -146,40 +213,142 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 3;
 		buttonAdd.setLayoutData(gridData);
+		buttonAdd.setText("Replace peak targets by selected index.");
 		buttonAdd.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_ADD, IApplicationImage.SIZE_16x16));
 		buttonAdd.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				//
+				IChromatogramPeakMSD selectedPeak = getSelectedPeak();
+				if(selectedPeak != null) {
+					String name = textCurrentIndexName.getText().trim();
+					selectedPeak.removeAllTargets();
+					//
+					try {
+						float FACTOR = 100.0f;
+						IPeakLibraryInformation libraryInformation = new PeakLibraryInformation();
+						libraryInformation.setName(name);
+						IPeakComparisonResult comparisonResult = new PeakComparisonResult(FACTOR, FACTOR, FACTOR, FACTOR, FACTOR);
+						IPeakTarget peakTarget = new PeakTarget(libraryInformation, comparisonResult);
+						peakTarget.setIdentifier(AlkaneIdentifier.IDENTIFIER);
+						selectedPeak.addTarget(peakTarget);
+						targetsViewerUI.setInput(selectedPeak.getTargets());
+					} catch(ReferenceMustNotBeNullException e1) {
+						logger.warn(e1);
+					}
+				}
 			}
 		});
 	}
 
 	private void createPeakTargetsField(Composite composite) {
 
-		String[] titles = {"Retention Time", "Retention Index", "S/N", "Peak Area"};
-		int[] bounds = {200, 200, 150, 150};
-		//
-		ExtendedTableViewer chromatogramTableViewer = new ExtendedTableViewer(composite, SWT.BORDER);
-		chromatogramTableViewer.createColumns(titles, bounds);
-		Table table = chromatogramTableViewer.getTable();
+		targetsViewerUI = new TargetsViewerUI(composite, SWT.BORDER);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 3;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.heightHint = 100;
-		table.setLayoutData(gridData);
-		chromatogramTableViewer.setLabelProvider(new PeakLabelProvider());
-		chromatogramTableViewer.setContentProvider(new ListContentProvider());
-		chromatogramTableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		targetsViewerUI.getTable().setLayoutData(gridData);
+		targetsViewerUI.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 
-				int index = chromatogramTableViewer.getTable().getSelectionIndex();
+				IPeakTarget peakTarget = getSelectedTarget();
+				if(peakTarget != null) {
+					/*
+					 * Get the selected peak
+					 */
+					IChromatogramPeakMSD selectedPeak = getSelectedPeak();
+					if(selectedPeak != null) {
+						/*
+						 * Get the target.
+						 */
+						ILibraryServiceProcessingInfo processingInfo = LibraryService.identify(peakTarget, new NullProgressMonitor());
+						IMassSpectra massSpectra = processingInfo.getMassSpectra();
+						if(massSpectra.size() > 0) {
+							/*
+							 * Show the mass spectrum in comparison modus.
+							 */
+							IScanMSD unknownMassSpectrum = selectedPeak.getPeakModel().getPeakMassSpectrum();
+							IScanMSD libraryMassSpectrum = massSpectra.getMassSpectrum(1);
+							libraryMassSpectrumComparisonUI.update(unknownMassSpectrum, libraryMassSpectrum, true);
+						}
+					}
+				}
 			}
 		});
+		//
+		targetsViewerUI.getControl().addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				if(e.keyCode == 127 && e.stateMask == 0) {
+					/*
+					 * Press "DEL" button.
+					 */
+					IChromatogramPeakMSD selectedPeak = getSelectedPeak();
+					if(selectedPeak != null) {
+						Table table = targetsViewerUI.getTable();
+						int[] selectionIndices = table.getSelectionIndices();
+						List<IPeakTarget> targetsToDelete = new ArrayList<IPeakTarget>();
+						for(int index : selectionIndices) {
+							Object object = targetsViewerUI.getElementAt(index);
+							if(object instanceof IPeakTarget) {
+								targetsToDelete.add((IPeakTarget)object);
+							}
+						}
+						selectedPeak.removeTargets(targetsToDelete);
+						targetsViewerUI.setInput(selectedPeak.getTargets());
+					}
+				}
+			}
+		});
+	}
+
+	/*
+	 * May return null.
+	 */
+	private IChromatogramPeakMSD getSelectedPeak() {
+
+		Table table = peakTableViewerUI.getTable();
+		int index = table.getSelectionIndex();
+		Object object = peakTableViewerUI.getElementAt(index);
+		if(object instanceof IChromatogramPeakMSD) {
+			return (IChromatogramPeakMSD)object;
+		} else {
+			return null;
+		}
+	}
+
+	/*
+	 * May return null.
+	 */
+	private IPeakTarget getSelectedTarget() {
+
+		Table table = targetsViewerUI.getTable();
+		int index = table.getSelectionIndex();
+		Object object = targetsViewerUI.getElementAt(index);
+		if(object instanceof IPeakTarget) {
+			return (IPeakTarget)object;
+		} else {
+			return null;
+		}
+	}
+
+	/*
+	 * If no index is found, -1 will be returned.
+	 */
+	private int getStartIndex(String[] availableStandards, String startIndexName) {
+
+		for(int i = 0; i < availableStandards.length; i++) {
+			if(availableStandards[i].equals(startIndexName)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	private void validateSelection() {

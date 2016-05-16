@@ -14,17 +14,13 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.i
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.RetentionIndexExtractor;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.RetentionIndexEntry;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramWriter extends AbstractChromatogramMSDWriter {
@@ -38,22 +34,8 @@ public class ChromatogramWriter extends AbstractChromatogramMSDWriter {
 		/*
 		 * Write the cal specifiation.
 		 */
-		StandardsReader standardsReader = new StandardsReader();
-		Map<String, Integer> nameIndexMap = standardsReader.getNameIndexMap();
-		//
-		List<IRetentionIndexEntry> retentionIndexEntries = new ArrayList<IRetentionIndexEntry>();
-		for(IChromatogramPeakMSD peak : chromatogram.getPeaks()) {
-			List<IPeakTarget> peakTargets = peak.getTargets();
-			if(peakTargets.size() > 0) {
-				String name = peakTargets.get(0).getLibraryInformation().getName().trim();
-				if(nameIndexMap.containsKey(name)) {
-					int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
-					float retentionIndex = nameIndexMap.get(name);
-					IRetentionIndexEntry retentionIndexEntry = new RetentionIndexEntry(retentionTime, retentionIndex, name);
-					retentionIndexEntries.add(retentionIndexEntry);
-				}
-			}
-		}
+		RetentionIndexExtractor retentionIndexExtractor = new RetentionIndexExtractor();
+		List<IRetentionIndexEntry> retentionIndexEntries = retentionIndexExtractor.extract(chromatogram);
 		//
 		CalibrationFileWriter calibrationFileWriter = new CalibrationFileWriter();
 		calibrationFileWriter.write(file, retentionIndexEntries);

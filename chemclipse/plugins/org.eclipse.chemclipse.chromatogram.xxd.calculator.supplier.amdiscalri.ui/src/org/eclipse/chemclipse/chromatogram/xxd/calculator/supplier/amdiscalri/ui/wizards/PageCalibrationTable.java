@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.CalibrationFileTableViewerUI;
+import java.util.List;
+
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.RetentionIndexExtractor;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.RetentionIndexTableViewerUI;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
-import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
-import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.chromatogram.SelectedPeakChromatogramUI;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -42,7 +45,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 	//
 	private IRetentionIndexWizardElements wizardElements;
 	//
-	private Button buttonValidateRetentionIndices;
+	private Button checkBoxValidateRetentionIndices;
 	private SelectedPeakChromatogramUI selectedPeakChromatogramUI;
 	//
 	private Button buttonCancel;
@@ -53,7 +56,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 	private Button buttonAddReference;
 	private Text textRetentionTime;
 	//
-	private CalibrationFileTableViewerUI calibrationFileTableViewerUI;
+	private RetentionIndexTableViewerUI retentionIndexTableViewerUI;
 
 	public PageCalibrationTable(IRetentionIndexWizardElements wizardElements) {
 		//
@@ -66,7 +69,11 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 	@Override
 	public boolean canFinish() {
 
-		return true;
+		if(getMessage() == null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -79,11 +86,14 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 
 		super.setVisible(visible);
 		if(visible) {
-			try {
-				IChromatogramSelectionMSD chromatogramSelectionMSD = new ChromatogramSelectionMSD(wizardElements.getChromatogramMSD());
+			IChromatogramSelectionMSD chromatogramSelectionMSD = wizardElements.getChromatogramSelectionMSD();
+			if(chromatogramSelectionMSD != null && chromatogramSelectionMSD.getChromatogramMSD() != null) {
+				IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogramMSD();
 				selectedPeakChromatogramUI.update(chromatogramSelectionMSD, true);
-			} catch(ChromatogramIsNullException e) {
-				logger.warn(e);
+				RetentionIndexExtractor retentionIndexExtractor = new RetentionIndexExtractor();
+				List<IRetentionIndexEntry> extractedRetentionIndexEntries = retentionIndexExtractor.extract(chromatogramMSD);
+				wizardElements.setExtractedRetentionIndexEntries(extractedRetentionIndexEntries);
+				retentionIndexTableViewerUI.setInput(extractedRetentionIndexEntries);
 			}
 			validateSelection();
 		}
@@ -108,13 +118,13 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 
 	private void createCheckBoxField(Composite composite) {
 
-		buttonValidateRetentionIndices = new Button(composite, SWT.CHECK);
-		buttonValidateRetentionIndices.setText("Retention indices are valid.");
-		buttonValidateRetentionIndices.setSelection(false);
+		checkBoxValidateRetentionIndices = new Button(composite, SWT.CHECK);
+		checkBoxValidateRetentionIndices.setText("Retention indices are valid.");
+		checkBoxValidateRetentionIndices.setSelection(false);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 4;
-		buttonValidateRetentionIndices.setLayoutData(gridData);
-		buttonValidateRetentionIndices.addSelectionListener(new SelectionAdapter() {
+		checkBoxValidateRetentionIndices.setLayoutData(gridData);
+		checkBoxValidateRetentionIndices.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -171,7 +181,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Table table = calibrationFileTableViewerUI.getTable();
+				Table table = retentionIndexTableViewerUI.getTable();
 				int index = table.getSelectionIndex();
 				if(index >= 0) {
 					MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING);
@@ -253,10 +263,10 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 
 	private void createTableField(Composite composite) {
 
-		calibrationFileTableViewerUI = new CalibrationFileTableViewerUI(composite, SWT.BORDER);
+		retentionIndexTableViewerUI = new RetentionIndexTableViewerUI(composite, SWT.BORDER);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 4;
-		calibrationFileTableViewerUI.getTable().setLayoutData(gridData);
+		retentionIndexTableViewerUI.getTable().setLayoutData(gridData);
 	}
 
 	private void enableButtonFields(boolean enabled) {
@@ -264,7 +274,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 		buttonAdd.setEnabled(!enabled);
 		buttonCancel.setEnabled(enabled);
 		if(!enabled) {
-			if(calibrationFileTableViewerUI.getTable().getSelectionIndex() >= 0) {
+			if(retentionIndexTableViewerUI.getTable().getSelectionIndex() >= 0) {
 				buttonDelete.setEnabled(true);
 			} else {
 				buttonDelete.setEnabled(false);
@@ -287,6 +297,9 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 	private void validateSelection() {
 
 		String message = null;
+		if(!checkBoxValidateRetentionIndices.getSelection()) {
+			message = "Please verify the data and activate the check box.";
+		}
 		/*
 		 * Updates the status
 		 */
