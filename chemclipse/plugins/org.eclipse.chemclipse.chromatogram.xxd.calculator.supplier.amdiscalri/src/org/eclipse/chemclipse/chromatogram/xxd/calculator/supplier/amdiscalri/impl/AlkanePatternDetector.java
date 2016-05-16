@@ -67,7 +67,7 @@ public class AlkanePatternDetector {
 				 */
 				PeakDetectorMSD peakDetectorMSD = new PeakDetectorMSD();
 				IFirstDerivativePeakDetectorMSDSettings peakDetectorSettings = new FirstDerivativePeakDetectorMSDSettings();
-				peakDetectorSettings.setThreshold(Threshold.MEDIUM);
+				peakDetectorSettings.setThreshold(Threshold.LOW);
 				peakDetectorSettings.setIncludeBackground(false);
 				peakDetectorSettings.setMinimumSignalToNoiseRatio(50.0f);
 				peakDetectorSettings.setMovingAverageWindowSize(WindowSize.SCANS_5);

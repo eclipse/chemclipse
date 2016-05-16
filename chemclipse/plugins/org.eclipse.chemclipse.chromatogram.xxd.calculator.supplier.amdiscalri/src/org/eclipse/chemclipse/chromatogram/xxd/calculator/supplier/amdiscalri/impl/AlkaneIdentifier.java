@@ -43,8 +43,13 @@ public class AlkaneIdentifier {
 	public AlkaneIdentifier() {
 		//
 		massSpectraFiles = new ArrayList<String>();
-		massSpectraFiles.add(PathResolver.getAbsolutePath(PathResolver.ALKANES));
+		massSpectraFiles.add(getDatabase());
 		databasesCache = new DatabasesCache(massSpectraFiles);
+	}
+
+	public static String getDatabase() {
+
+		return PathResolver.getAbsolutePath(PathResolver.ALKANES);
 	}
 
 	/**

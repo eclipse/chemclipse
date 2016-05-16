@@ -69,7 +69,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 	@Override
 	public boolean canFinish() {
 
-		if(getMessage() == null) {
+		if(wizardElements.getExtractedRetentionIndexEntries().size() > 0) {
 			return true;
 		} else {
 			return false;
