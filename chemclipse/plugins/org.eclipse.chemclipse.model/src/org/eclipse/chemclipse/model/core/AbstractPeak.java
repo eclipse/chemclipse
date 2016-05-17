@@ -30,8 +30,8 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	private String quantifierDescription = "";
 	private boolean activeForAnalysis = true;
 	private List<? extends IIntegrationEntry> integrationEntries;
-	final private IIntegrationConstraints integrationConstraints;
-	final private List<IQuantitationEntry> quantitationEntries;
+	private IIntegrationConstraints integrationConstraints;
+	private List<IQuantitationEntry> quantitationEntries;
 
 	public AbstractPeak() {
 		/*

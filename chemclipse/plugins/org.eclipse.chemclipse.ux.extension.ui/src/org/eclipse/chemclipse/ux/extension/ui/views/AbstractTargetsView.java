@@ -254,20 +254,21 @@ public abstract class AbstractTargetsView {
 				List<IChromatogramTargetMSD> targetsToRemove = getChromatogramTargetList(table, indices);
 				IChromatogramMSD chromatogram = (IChromatogramMSD)input;
 				chromatogram.removeTargets(targetsToRemove);
+				tableViewer.setInput(chromatogram.getTargets());
 				//
 			} else if(input instanceof IChromatogramPeakMSD) {
 				List<IPeakTarget> targetsToRemove = getPeakTargetList(table, indices);
 				IChromatogramPeakMSD chromatogramPeak = (IChromatogramPeakMSD)input;
 				chromatogramPeak.removeTargets(targetsToRemove);
+				tableViewer.setInput(chromatogramPeak.getTargets());
+				//
 			} else if(input instanceof IScanMSD) {
 				List<IMassSpectrumTarget> targetsToRemove = getMassSpectrumTargetList(table, indices);
 				IScanMSD scan = (IScanMSD)input;
 				scan.removeTargets(targetsToRemove);
+				tableViewer.setInput(scan.getTargets());
+				//
 			}
-			/*
-			 * Delete targets in table.
-			 */
-			table.remove(indices);
 		}
 	}
 

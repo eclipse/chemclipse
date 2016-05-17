@@ -82,7 +82,6 @@ public abstract class AbstractIdentificationTarget extends AbstractTarget implem
 		this.manuallyVerified = manuallyVerified;
 	}
 
-	// ----------------------------hashCode, equals, toString
 	@Override
 	public boolean equals(Object other) {
 
@@ -96,13 +95,21 @@ public abstract class AbstractIdentificationTarget extends AbstractTarget implem
 			return false;
 		}
 		IIdentificationTarget otherEntry = (IIdentificationTarget)other;
-		return getIdentifier().equals(otherEntry.getIdentifier()) && getLibraryInformation().getName().equals(otherEntry.getLibraryInformation().getName()) && getLibraryInformation().getCasNumber().equals(otherEntry.getLibraryInformation().getCasNumber()) && getComparisonResult().getMatchFactor() == otherEntry.getComparisonResult().getMatchFactor() && getComparisonResult().getReverseMatchFactor() == otherEntry.getComparisonResult().getReverseMatchFactor();
+		return getIdentifier().equals(otherEntry.getIdentifier()) && //
+		getLibraryInformation().getName().equals(otherEntry.getLibraryInformation().getName()) && //
+		getLibraryInformation().getCasNumber().equals(otherEntry.getLibraryInformation().getCasNumber()) && //
+		getComparisonResult().getMatchFactor() == otherEntry.getComparisonResult().getMatchFactor() && //
+		getComparisonResult().getReverseMatchFactor() == otherEntry.getComparisonResult().getReverseMatchFactor();
 	}
 
 	@Override
 	public int hashCode() {
 
-		return 7 * identifier.hashCode() + 11 * getLibraryInformation().getName().hashCode() + 13 * getLibraryInformation().getCasNumber().hashCode() + 11 * Float.valueOf(getComparisonResult().getMatchFactor()).hashCode() + 7 * Float.valueOf(getComparisonResult().getReverseMatchFactor()).hashCode();
+		return 7 * identifier.hashCode() + //
+		11 * getLibraryInformation().getName().hashCode() + //
+		13 * getLibraryInformation().getCasNumber().hashCode() + //
+		11 * Float.valueOf(getComparisonResult().getMatchFactor()).hashCode() + //
+		7 * Float.valueOf(getComparisonResult().getReverseMatchFactor()).hashCode();
 	}
 
 	@Override
@@ -121,5 +128,4 @@ public abstract class AbstractIdentificationTarget extends AbstractTarget implem
 		builder.append("]");
 		return builder.toString();
 	}
-	// ----------------------------hashCode, equals, toString
 }
