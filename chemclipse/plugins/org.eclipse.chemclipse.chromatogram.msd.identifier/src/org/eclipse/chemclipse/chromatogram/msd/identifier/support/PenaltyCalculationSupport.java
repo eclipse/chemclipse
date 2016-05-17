@@ -34,6 +34,7 @@ public class PenaltyCalculationSupport {
 
 		try {
 			runPreConditionChecks(unknown, reference, retentionIndexWindow, maxPenalty);
+			runRetentionIndexCheck(unknown, reference);
 			return calculatePenalty(unknown.getRetentionIndex(), reference.getRetentionIndex(), retentionIndexWindow, penaltyCalculationLevelFactor, maxPenalty);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -59,6 +60,7 @@ public class PenaltyCalculationSupport {
 
 		try {
 			runPreConditionChecks(unknown, reference, retentionTimeWindow, maxPenalty);
+			runRetentionTimeCheck(unknown, reference);
 			return calculatePenalty(unknown.getRetentionTime(), reference.getRetentionTime(), retentionTimeWindow, penaltyCalculationLevelFactor, maxPenalty);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -78,6 +80,34 @@ public class PenaltyCalculationSupport {
 		//
 		if(maxPenalty < IComparisonResult.MIN_ALLOWED_PENALTY || maxPenalty > IComparisonResult.MAX_ALLOWED_PENALTY) {
 			throw new Exception();
+		}
+	}
+
+	/**
+	 * Don't calculate penalties if the retention time is not set.
+	 * 
+	 * @param unknown
+	 * @param reference
+	 * @throws Exception
+	 */
+	private void runRetentionTimeCheck(IScanMSD unknown, IScanMSD reference) throws Exception {
+
+		if(unknown.getRetentionTime() == 0 || reference.getRetentionTime() == 0) {
+			throw new Exception("The retention time of the unknown or reference is not set.");
+		}
+	}
+
+	/**
+	 * Don't calculate penalties if the retention index is not set.
+	 * 
+	 * @param unknown
+	 * @param reference
+	 * @throws Exception
+	 */
+	private void runRetentionIndexCheck(IScanMSD unknown, IScanMSD reference) throws Exception {
+
+		if(unknown.getRetentionIndex() == 0.0f || reference.getRetentionIndex() == 0.0f) {
+			throw new Exception("The retention index of the unknown or reference is not set.");
 		}
 	}
 

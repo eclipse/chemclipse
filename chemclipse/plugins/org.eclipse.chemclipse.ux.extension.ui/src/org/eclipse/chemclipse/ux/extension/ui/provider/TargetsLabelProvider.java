@@ -132,6 +132,9 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 				case 18:
 					text = libraryInformation.getContributor();
 					break;
+				case 19:
+					text = libraryInformation.getReferenceIdentifier();
+					break;
 				default:
 					text = "n.v.";
 			}
