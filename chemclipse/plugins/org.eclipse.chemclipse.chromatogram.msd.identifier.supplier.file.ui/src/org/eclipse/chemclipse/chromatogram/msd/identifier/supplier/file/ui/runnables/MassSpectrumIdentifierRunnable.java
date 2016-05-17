@@ -39,7 +39,7 @@ public class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
 			monitor.beginTask(description, IProgressMonitor.UNKNOWN);
 			IScanMSD massSpectrum = chromatogramSelection.getSelectedScan();
 			IMassSpectraIdentifierProcessingInfo processingInfo = MassSpectrumIdentifier.identify(massSpectrum, IDENTIFIER_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			MassSpectrumSelectionUpdateNotifier.fireUpdateChange(massSpectrum, true);
 		} finally {
 			monitor.done();
