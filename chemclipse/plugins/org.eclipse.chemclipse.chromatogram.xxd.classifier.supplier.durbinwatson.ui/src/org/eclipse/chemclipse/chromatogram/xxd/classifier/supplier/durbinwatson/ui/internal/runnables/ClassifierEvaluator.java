@@ -37,7 +37,7 @@ public class ClassifierEvaluator extends AbstractChromatogramProcessor implement
 		final IChromatogramSelection chromatogramSelection = getChromatogramSelection();
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			IChromatogramClassifierProcessingInfo processingInfo = ChromatogramClassifier.applyClassifier((IChromatogramSelectionMSD)chromatogramSelection, FILTER_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			chromatogramSelection.update(true);
 		}
 	}
