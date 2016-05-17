@@ -36,11 +36,11 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 	//
 	private static final Logger logger = Logger.getLogger(WizardCreateRetentionIndexFile.class);
 	//
+	private IRetentionIndexWizardElements wizardElements = new RetentionIndexWizardElements();
+	//
 	private static final String CALIBRATION_FILE_EXTENSION = ".cal";
 	private static final String CHROMATOGRAM_FILE_EXTENSION = ".ocb";
 	private static final String CHROMATOGRAM_CONVERTER_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
-	//
-	private IRetentionIndexWizardElements wizardElements = new RetentionIndexWizardElements();
 	//
 	private PageCalibrationSettings pageCalibrationSettings;
 	private ChromatogramInputEntriesWizardPage pageChromatogramInputEntries;
@@ -86,7 +86,7 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 			canFinish = pagePeakAssignment.canFinish();
 		}
 		if(canFinish) {
-			canFinish = pageCalibrationTable.canFinish();
+			canFinish = wizardElements.isRetentionIndexDataValidated();
 		}
 		return canFinish;
 	}

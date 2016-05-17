@@ -19,9 +19,9 @@ import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 
 public interface IRetentionIndexWizardElements extends IChromatogramWizardElements {
 
-	String[] getAvailableStandards();
-
 	float getRetentionIndex(String name);
+
+	String[] getAvailableStandards();
 
 	boolean isUseExistingRetentionIndexFile();
 
@@ -54,4 +54,8 @@ public interface IRetentionIndexWizardElements extends IChromatogramWizardElemen
 	List<IRetentionIndexEntry> getExtractedRetentionIndexEntries();
 
 	void setExtractedRetentionIndexEntries(List<IRetentionIndexEntry> extractedRetentionIndexEntries);
+
+	boolean isRetentionIndexDataValidated();
+
+	void setRetentionIndexDataIsValidated(boolean retentionIndexDataIsValidated);
 }

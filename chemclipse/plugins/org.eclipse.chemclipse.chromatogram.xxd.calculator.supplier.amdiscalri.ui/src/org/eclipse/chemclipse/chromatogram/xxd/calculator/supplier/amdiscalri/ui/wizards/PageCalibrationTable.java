@@ -72,7 +72,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 	@Override
 	public boolean canFinish() {
 
-		if(wizardElements.getExtractedRetentionIndexEntries().size() > 0) {
+		if(wizardElements.isRetentionIndexDataValidated()) {
 			return true;
 		} else {
 			return false;
@@ -133,6 +133,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				wizardElements.setRetentionIndexDataIsValidated(checkBoxValidateRetentionIndices.getSelection());
 				validateSelection();
 			}
 		});

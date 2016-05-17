@@ -35,6 +35,8 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 	//
 	private IChromatogramSelectionMSD chromatogramSelectionMSD;
 	private List<IRetentionIndexEntry> extractedRetentionIndexEntries;
+	//
+	private boolean retentionIndexDataIsValidated;
 
 	public RetentionIndexWizardElements() {
 		initialize();
@@ -154,6 +156,18 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 		this.extractedRetentionIndexEntries = extractedRetentionIndexEntries;
 	}
 
+	@Override
+	public boolean isRetentionIndexDataValidated() {
+
+		return retentionIndexDataIsValidated;
+	}
+
+	@Override
+	public void setRetentionIndexDataIsValidated(boolean retentionIndexDataIsValidated) {
+
+		this.retentionIndexDataIsValidated = retentionIndexDataIsValidated;
+	}
+
 	private void initialize() {
 
 		StandardsReader standardsReader = new StandardsReader();
@@ -171,5 +185,7 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 		useAlreadyDetectedPeaks = false;
 		//
 		extractedRetentionIndexEntries = new ArrayList<IRetentionIndexEntry>();
+		//
+		retentionIndexDataIsValidated = false;
 	}
 }
