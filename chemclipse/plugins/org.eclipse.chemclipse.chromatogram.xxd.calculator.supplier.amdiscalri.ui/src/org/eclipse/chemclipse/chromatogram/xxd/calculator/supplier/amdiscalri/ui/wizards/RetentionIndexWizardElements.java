@@ -41,6 +41,18 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 	}
 
 	@Override
+	public float getRetentionIndex(String name) {
+
+		float retentionIndex = 0.0f;
+		for(IRetentionIndexEntry retentionIndexEntry : retentionIndexEntries) {
+			if(retentionIndexEntry.getName().equals(name)) {
+				return retentionIndexEntry.getRetentionIndex();
+			}
+		}
+		return retentionIndex;
+	}
+
+	@Override
 	public String[] getAvailableStandards() {
 
 		return availableStandards;

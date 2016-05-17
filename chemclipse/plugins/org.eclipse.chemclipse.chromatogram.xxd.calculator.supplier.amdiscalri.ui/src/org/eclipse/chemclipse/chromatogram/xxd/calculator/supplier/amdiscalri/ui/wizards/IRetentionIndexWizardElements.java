@@ -21,6 +21,8 @@ public interface IRetentionIndexWizardElements extends IChromatogramWizardElemen
 
 	String[] getAvailableStandards();
 
+	float getRetentionIndex(String name);
+
 	boolean isUseExistingRetentionIndexFile();
 
 	void setUseExistingRetentionIndexFile(boolean useExistingRetentionIndexFile);

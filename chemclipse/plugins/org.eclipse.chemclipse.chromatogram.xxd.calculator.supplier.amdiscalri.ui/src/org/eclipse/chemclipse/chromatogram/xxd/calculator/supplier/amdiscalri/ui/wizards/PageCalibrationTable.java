@@ -15,10 +15,12 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.RetentionIndexExtractor;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.RetentionIndexEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.RetentionIndexTableViewerUI;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.chromatogram.SelectedPeakChromatogramUI;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -37,6 +39,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 public class PageCalibrationTable extends AbstractExtendedWizardPage {
@@ -112,6 +115,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 		createAddReferenceButton(composite);
 		createTableField(composite);
 		//
+		enableButtonFields(false);
 		validateSelection();
 		setControl(composite);
 	}
@@ -185,13 +189,18 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 				int index = table.getSelectionIndex();
 				if(index >= 0) {
 					MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING);
-					messageBox.setText("Delete reference");
-					messageBox.setMessage("Would you like to delete the reference?");
+					messageBox.setText("Delete reference(s)?");
+					messageBox.setMessage("Would you like to delete the reference(s)?");
 					if(messageBox.open() == SWT.OK) {
 						//
 						enableButtonFields(false);
-						// wizardElements.getReferencePattern().remove(index);
-						// calibrationFileTableViewerUI.setInput(wizardElements.getReferencePattern());
+						TableItem tableItem = table.getItem(index);
+						Object object = tableItem.getData();
+						if(object instanceof IRetentionIndexEntry) {
+							IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)object;
+							wizardElements.getExtractedRetentionIndexEntries().remove(retentionIndexEntry);
+							retentionIndexTableViewerUI.setInput(wizardElements.getExtractedRetentionIndexEntries());
+						}
 						validateSelection();
 					}
 				}
@@ -245,14 +254,17 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 
 				try {
 					enableButtonFields(false);
+					//
 					String name = comboReferences.getText().trim();
 					int retentionTime = (int)(Double.parseDouble(textRetentionTime.getText().trim()) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+					float retentionIndex = wizardElements.getRetentionIndex(name);
 					//
 					comboReferences.setText("");
 					textRetentionTime.setText("");
 					//
-					// wizardElements.getReferencePattern().add(reference);
-					// calibrationFileTableViewerUI.setInput(wizardElements.getReferencePattern());
+					IRetentionIndexEntry retentionIndexEntry = new RetentionIndexEntry(retentionTime, retentionIndex, name);
+					wizardElements.getExtractedRetentionIndexEntries().add(retentionIndexEntry);
+					retentionIndexTableViewerUI.setInput(wizardElements.getExtractedRetentionIndexEntries());
 					validateSelection();
 				} catch(Exception e1) {
 					logger.warn(e1);
@@ -263,10 +275,51 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 
 	private void createTableField(Composite composite) {
 
-		retentionIndexTableViewerUI = new RetentionIndexTableViewerUI(composite, SWT.BORDER);
+		retentionIndexTableViewerUI = new RetentionIndexTableViewerUI(composite, SWT.BORDER | SWT.MULTI);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 4;
 		retentionIndexTableViewerUI.getTable().setLayoutData(gridData);
+		retentionIndexTableViewerUI.getTable().addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Table table = retentionIndexTableViewerUI.getTable();
+				int index = table.getSelectionIndex();
+				TableItem tableItem = table.getItem(index);
+				Object object = tableItem.getData();
+				if(object instanceof IRetentionIndexEntry) {
+					IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)object;
+					int retentionTime = retentionIndexEntry.getRetentionTime();
+					IChromatogramSelectionMSD chromatogramSelectionMSD = wizardElements.getChromatogramSelectionMSD();
+					if(chromatogramSelectionMSD != null && chromatogramSelectionMSD.getChromatogramMSD() != null) {
+						IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogramMSD();
+						IChromatogramPeakMSD selectedPeak = getSelectedPeak(chromatogramMSD, retentionTime);
+						if(selectedPeak != null) {
+							chromatogramSelectionMSD.setSelectedPeak(selectedPeak);
+							selectedPeakChromatogramUI.update(chromatogramSelectionMSD, true);
+						}
+					}
+				}
+			}
+		});
+	}
+
+	/**
+	 * May return null.
+	 * 
+	 * @param chromatogramMSD
+	 * @param retentionTime
+	 * @return {@link IChromatogramPeakMSD}
+	 */
+	private IChromatogramPeakMSD getSelectedPeak(IChromatogramMSD chromatogramMSD, int retentionTime) {
+
+		for(IChromatogramPeakMSD peak : chromatogramMSD.getPeaks()) {
+			if(peak.getPeakModel().getRetentionTimeAtPeakMaximum() == retentionTime) {
+				return peak;
+			}
+		}
+		return null;
 	}
 
 	private void enableButtonFields(boolean enabled) {
@@ -284,14 +337,6 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 		comboReferences.setEnabled(enabled);
 		textRetentionTime.setEnabled(enabled);
 		buttonAddReference.setEnabled(enabled);
-	}
-
-	private GridData getGridData() {
-
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.horizontalSpan = 4;
-		return gridData;
 	}
 
 	private void validateSelection() {
