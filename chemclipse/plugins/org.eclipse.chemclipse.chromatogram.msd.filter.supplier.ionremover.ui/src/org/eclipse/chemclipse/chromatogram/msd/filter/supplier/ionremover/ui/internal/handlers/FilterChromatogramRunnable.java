@@ -77,7 +77,7 @@ public class FilterChromatogramRunnable extends AbstractChromatogramProcessor im
 			 * Apply the filter.
 			 */
 			final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, chromatogramFilterSettings, FILTER_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 		}
 	}
 
