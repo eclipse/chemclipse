@@ -55,7 +55,7 @@ public class ChromatogramIntegratorRunnable implements IRunnableWithProgress {
 			 * Result
 			 */
 			IChromatogramIntegratorProcessingInfo processingInfo = ChromatogramIntegrator.integrate(chromatogramSelection, chromatogramIntegrationSettings, CHROMATOGRAM_INTEGRATOR_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			/*
 			 * Try to set the results.
 			 */
