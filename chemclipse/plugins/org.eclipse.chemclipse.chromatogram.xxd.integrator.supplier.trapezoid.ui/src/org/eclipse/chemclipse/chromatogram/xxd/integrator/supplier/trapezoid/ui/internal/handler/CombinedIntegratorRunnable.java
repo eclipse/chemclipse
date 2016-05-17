@@ -61,7 +61,7 @@ public class CombinedIntegratorRunnable implements IRunnableWithProgress {
 			 * Show the processing view if error messages occurred.
 			 */
 			ICombinedIntegratorProcessingInfo processingInfo = CombinedIntegrator.integrate(chromatogramSelection, combinedIntegrationSettings, COMBINED_INTEGRATOR_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			/*
 			 * Try to set the results.
 			 */
