@@ -48,7 +48,7 @@ public class FilterModifierChromatogram extends AbstractChromatogramProcessor im
 			IChromatogramSelectionMSD chromatogramSelection = (IChromatogramSelectionMSD)getChromatogramSelection();
 			IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
 			final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, chromatogramFilterSettings, PreferenceSupplier.FILTER_ID_CHROMATOGRAM, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 		}
 	}
 

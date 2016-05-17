@@ -55,7 +55,7 @@ public class FilterModifierPeak implements IRunnableWithProgress {
 				processingInfo = PeakFilter.applyFilter(chromatogramSelectionMSD, peakFilterSettings, PreferenceSupplier.FILTER_ID_PEAK, monitor);
 			}
 			//
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			updateSelection();
 		} finally {
 			monitor.done();
