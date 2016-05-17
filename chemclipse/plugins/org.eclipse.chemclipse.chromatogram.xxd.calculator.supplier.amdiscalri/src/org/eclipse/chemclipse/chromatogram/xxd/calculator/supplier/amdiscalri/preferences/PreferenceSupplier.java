@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.Activator;
@@ -20,14 +21,15 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.se
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.RetentionIndexFilterSettingsPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.SupplierCalculatorSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	public static final String P_PATH_RI_FILE = "pathCalibrationFile";
-	public static final String DEF_PATH_RI_FILE = "";
+	public static final String P_RETENTION_INDEX_FILES = "retentionIndexFiles";
+	public static final String DEF_RETENTION_INDEX_FILES = "";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -55,7 +57,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_PATH_RI_FILE, DEF_PATH_RI_FILE);
+		defaultValues.put(P_RETENTION_INDEX_FILES, DEF_RETENTION_INDEX_FILES);
 		return defaultValues;
 	}
 
@@ -67,19 +69,22 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static ISupplierCalculatorSettings getChromatogramCalculatorSettings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		String pathCalibrationFile = preferences.get(P_PATH_RI_FILE, DEF_PATH_RI_FILE);
 		ISupplierCalculatorSettings chromatogramCalculatorSettings = new SupplierCalculatorSettings();
-		chromatogramCalculatorSettings.setPathRetentionIndexFile(pathCalibrationFile);
+		chromatogramCalculatorSettings.setRetentionIndexFiles(getRetentionIndexFiles());
 		return chromatogramCalculatorSettings;
 	}
 
 	public static IRetentionIndexFilterSettingsPeak getPeakFilterSettings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		String pathCalibrationFile = preferences.get(P_PATH_RI_FILE, DEF_PATH_RI_FILE);
 		IRetentionIndexFilterSettingsPeak peakFilterSettings = new RetentionIndexFilterSettingsPeak();
-		peakFilterSettings.setPathRetentionIndexFile(pathCalibrationFile);
+		peakFilterSettings.setRetentionIndexFiles(getRetentionIndexFiles());
 		return peakFilterSettings;
+	}
+
+	public static List<String> getRetentionIndexFiles() {
+
+		FileListUtil fileListUtil = new FileListUtil();
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		return fileListUtil.getFiles(preferences.get(P_RETENTION_INDEX_FILES, DEF_RETENTION_INDEX_FILES));
 	}
 }

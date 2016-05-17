@@ -93,7 +93,9 @@ public class AlkanePatternDetector {
 			if(!"".equals(pathRetentionIndexFile)) {
 				RetentionIndexCalculator retentionIndexCalculator = new RetentionIndexCalculator();
 				ISupplierCalculatorSettings supplierCalculatorSettings = new SupplierCalculatorSettings();
-				supplierCalculatorSettings.setPathRetentionIndexFile(pathRetentionIndexFile);
+				List<String> retentionIndexFiles = new ArrayList<String>();
+				retentionIndexFiles.add(pathRetentionIndexFile);
+				supplierCalculatorSettings.setRetentionIndexFiles(retentionIndexFiles);
 				retentionIndexCalculator.apply(chromatogramSelectionMSD, supplierCalculatorSettings, monitor);
 			}
 			/*

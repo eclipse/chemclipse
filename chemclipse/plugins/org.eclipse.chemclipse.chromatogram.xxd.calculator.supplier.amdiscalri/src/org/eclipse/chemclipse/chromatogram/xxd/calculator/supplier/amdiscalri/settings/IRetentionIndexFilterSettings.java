@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings;
 
+import java.util.List;
+
 public interface IRetentionIndexFilterSettings {
 
-	String getPathRetentionIndexFile();
+	List<String> getRetentionIndexFiles();
 
-	void setPathRetentionIndexFile(String pathRetentionIndexFile);
+	void setRetentionIndexFiles(List<String> retentionIndexFiles);
 }

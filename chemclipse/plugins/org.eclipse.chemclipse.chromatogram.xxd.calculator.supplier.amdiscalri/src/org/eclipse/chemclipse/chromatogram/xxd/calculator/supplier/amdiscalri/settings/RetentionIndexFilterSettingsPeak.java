@@ -11,21 +11,23 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings;
 
+import java.util.List;
+
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractPeakFilterSettings;
 
 public class RetentionIndexFilterSettingsPeak extends AbstractPeakFilterSettings implements IRetentionIndexFilterSettingsPeak {
 
-	private String pathRetentionIndexFile;
+	private List<String> retentionIndexFiles;
 
 	@Override
-	public String getPathRetentionIndexFile() {
+	public List<String> getRetentionIndexFiles() {
 
-		return pathRetentionIndexFile;
+		return retentionIndexFiles;
 	}
 
 	@Override
-	public void setPathRetentionIndexFile(String pathRetentionIndexFile) {
+	public void setRetentionIndexFiles(List<String> retentionIndexFiles) {
 
-		this.pathRetentionIndexFile = pathRetentionIndexFile;
+		this.retentionIndexFiles = retentionIndexFiles;
 	}
 }

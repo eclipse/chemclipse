@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -40,59 +42,39 @@ public class RetentionIndexCalculator {
 
 	private static final Logger logger = Logger.getLogger(RetentionIndexCalculator.class);
 	private static final String DELIMITER = " ";
+	private static final String FILE_EXTENSION = ".cal";
 
 	public ICalculatorProcessingInfo apply(IChromatogramSelection chromatogramSelection, ISupplierCalculatorSettings supplierCalculatorSettings, IProgressMonitor monitor) {
 
 		ICalculatorProcessingInfo processingInfo = new CalculatorProcessingInfo();
-		String pathRetentionIndexFile = supplierCalculatorSettings.getPathRetentionIndexFile();
-		File calibrationFile = new File(pathRetentionIndexFile);
-		TreeMap<Integer, IRetentionIndexEntry> retentionIndices = getRetentionIndexEntries(calibrationFile);
-		//
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-		int startRetentionTime = chromatogramSelection.getStartRetentionTime();
-		int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
-		int startScan = chromatogram.getScanNumber(startRetentionTime);
-		int stopScan = chromatogram.getScanNumber(stopRetentionTime);
+		List<String> retentionIndexFiles = supplierCalculatorSettings.getRetentionIndexFiles();
 		/*
-		 * Scans
+		 * Create a calibration map for different column polarities.
 		 */
-		for(int scan = startScan; scan <= stopScan; scan++) {
-			IScan supplierScan = chromatogram.getScan(scan);
-			int retentionTime = supplierScan.getRetentionTime();
-			float retentionIndex = calculateRetentionIndex(retentionTime, retentionIndices);
-			supplierScan.setRetentionIndex(retentionIndex);
-			if(supplierScan instanceof IScanMSD) {
-				IScanMSD scanMSD = (IScanMSD)supplierScan;
-				IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
-				if(optimizedMassSpectrum != null) {
-					optimizedMassSpectrum.setRetentionIndex(retentionIndex);
-				}
+		Map<String, String> calibrationMap = new HashMap<String, String>();
+		for(String retentionIndexFile : retentionIndexFiles) {
+			File file = new File(retentionIndexFile);
+			if(file.exists() && retentionIndexFile.toLowerCase().endsWith(FILE_EXTENSION)) {
+				String name = file.getName();
+				String key = name.substring(0, name.length() - 4);
+				calibrationMap.put(key, retentionIndexFile);
+			}
+		}
+		String miscInfo = chromatogramSelection.getChromatogram().getMiscInfo();
+		String pathRetentionIndexFile;
+		if(calibrationMap.containsKey(miscInfo)) {
+			pathRetentionIndexFile = calibrationMap.get(miscInfo);
+		} else {
+			if(retentionIndexFiles.size() > 0) {
+				pathRetentionIndexFile = retentionIndexFiles.get(0);
+			} else {
+				pathRetentionIndexFile = "";
 			}
 		}
 		/*
-		 * Peaks
+		 * Run the calculation.
 		 */
-		if(chromatogram instanceof IChromatogramMSD) {
-			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-			for(IChromatogramPeakMSD peak : chromatogramMSD.getPeaks()) {
-				IScan scan = peak.getPeakModel().getPeakMaximum();
-				int retentionTime = scan.getRetentionTime();
-				if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
-					float retentionIndex = calculateRetentionIndex(retentionTime, retentionIndices);
-					scan.setRetentionIndex(retentionIndex);
-				}
-			}
-		} else if(chromatogram instanceof IChromatogramCSD) {
-			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-			for(IChromatogramPeakCSD peak : chromatogramCSD.getPeaks()) {
-				IScan scan = peak.getPeakModel().getPeakMaximum();
-				int retentionTime = scan.getRetentionTime();
-				if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
-					float retentionIndex = calculateRetentionIndex(retentionTime, retentionIndices);
-					scan.setRetentionIndex(retentionIndex);
-				}
-			}
-		}
+		calculateIndex(chromatogramSelection, pathRetentionIndexFile);
 		//
 		return processingInfo;
 	}
@@ -174,5 +156,59 @@ public class RetentionIndexCalculator {
 		}
 		//
 		return retentionIndex;
+	}
+
+	private void calculateIndex(IChromatogramSelection chromatogramSelection, String pathRetentionIndexFile) {
+
+		File calibrationFile = new File(pathRetentionIndexFile);
+		if(calibrationFile.exists()) {
+			TreeMap<Integer, IRetentionIndexEntry> retentionIndices = getRetentionIndexEntries(calibrationFile);
+			//
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+			int startScan = chromatogram.getScanNumber(startRetentionTime);
+			int stopScan = chromatogram.getScanNumber(stopRetentionTime);
+			/*
+			 * Scans
+			 */
+			for(int scan = startScan; scan <= stopScan; scan++) {
+				IScan supplierScan = chromatogram.getScan(scan);
+				int retentionTime = supplierScan.getRetentionTime();
+				float retentionIndex = calculateRetentionIndex(retentionTime, retentionIndices);
+				supplierScan.setRetentionIndex(retentionIndex);
+				if(supplierScan instanceof IScanMSD) {
+					IScanMSD scanMSD = (IScanMSD)supplierScan;
+					IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
+					if(optimizedMassSpectrum != null) {
+						optimizedMassSpectrum.setRetentionIndex(retentionIndex);
+					}
+				}
+			}
+			/*
+			 * Peaks
+			 */
+			if(chromatogram instanceof IChromatogramMSD) {
+				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+				for(IChromatogramPeakMSD peak : chromatogramMSD.getPeaks()) {
+					IScan scan = peak.getPeakModel().getPeakMaximum();
+					int retentionTime = scan.getRetentionTime();
+					if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
+						float retentionIndex = calculateRetentionIndex(retentionTime, retentionIndices);
+						scan.setRetentionIndex(retentionIndex);
+					}
+				}
+			} else if(chromatogram instanceof IChromatogramCSD) {
+				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+				for(IChromatogramPeakCSD peak : chromatogramCSD.getPeaks()) {
+					IScan scan = peak.getPeakModel().getPeakMaximum();
+					int retentionTime = scan.getRetentionTime();
+					if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
+						float retentionIndex = calculateRetentionIndex(retentionTime, retentionIndices);
+						scan.setRetentionIndex(retentionIndex);
+					}
+				}
+			}
+		}
 	}
 }

@@ -13,9 +13,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.Activator;
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.editors.FileListEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -34,8 +34,12 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void createFieldEditors() {
 
-		addField(new LabelFieldEditor("AMDIS Retention Index File (*.CAL)", getFieldEditorParent()));
-		addField(new FileFieldEditor(PreferenceSupplier.P_PATH_RI_FILE, "", getFieldEditorParent()));
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		FileListEditor fileListEditor = new FileListEditor(PreferenceSupplier.P_RETENTION_INDEX_FILES, "Retention Index (*.cal) Files", getFieldEditorParent());
+		String[] filterExtensions = new String[]{"*.cal", "*.CAL"};
+		String[] filterNames = new String[]{"AMDIS Calibration *.cal", "AMDIS Calibration *.CAL"};
+		fileListEditor.setFilterExtensionsAndNames(filterExtensions, filterNames);
+		addField(fileListEditor);
 	}
 
 	/*
