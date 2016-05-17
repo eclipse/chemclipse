@@ -16,10 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IMassSpectraIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IPeakIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.PeakIdentifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorPeakIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorPeakIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.DatabasesCache;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.PathResolver;
@@ -29,6 +33,8 @@ import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -99,6 +105,51 @@ public class AlkaneIdentifier {
 				String name = peakTarget.getLibraryInformation().getName();
 				if(standardNames.contains(name)) {
 					peakTarget.setIdentifier(IDENTIFIER);
+				}
+			}
+		}
+		//
+		return processingInfo;
+	}
+
+	public IMassSpectraIdentifierProcessingInfo runIdentification(List<IScanMSD> massSpectraList, IVendorMassSpectrumIdentifierSettings fileIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
+
+		/*
+		 * Create the file identifier settings.
+		 */
+		IVendorMassSpectrumIdentifierSettings massSpectrumIdentifierSettings = new VendorMassSpectrumIdentifierSettings();
+		massSpectrumIdentifierSettings.setMassSpectraFiles(massSpectraFiles);
+		massSpectrumIdentifierSettings.setUsePreOptimization(false);
+		massSpectrumIdentifierSettings.setThresholdPreOptimization(0.1d);
+		massSpectrumIdentifierSettings.setMassSpectrumComparatorId(MASS_SPECTRUM_COMPARATOR_ID);
+		massSpectrumIdentifierSettings.setNumberOfTargets(5);
+		massSpectrumIdentifierSettings.setMinMatchFactor(70.0f);
+		massSpectrumIdentifierSettings.setMinReverseMatchFactor(70.0f);
+		massSpectrumIdentifierSettings.setAddUnknownMzListTarget(false);
+		massSpectrumIdentifierSettings.setPenaltyCalculation(IIdentifierSettings.PENALTY_CALCULATION_NONE);
+		massSpectrumIdentifierSettings.setPenaltyCalculationLevelFactor(0.0f);
+		massSpectrumIdentifierSettings.setMaxPenalty(0.0f);
+		massSpectrumIdentifierSettings.setRetentionTimeWindow(0);
+		massSpectrumIdentifierSettings.setRetentionIndexWindow(0.0f);
+		/*
+		 * Run the file identifier.
+		 */
+		MassSpectrumIdentifier peakIdentifier = new MassSpectrumIdentifier();
+		IMassSpectraIdentifierProcessingInfo processingInfo = peakIdentifier.identify(massSpectraList, massSpectrumIdentifierSettings, monitor);
+		IMassSpectra massSpectra = processingInfo.getMassSpectra();
+		/*
+		 * Overwrite the identifier ID.
+		 * This is needed by the library service to get the appropriate DB mass spectrum.
+		 */
+		StandardsReader standardsReader = new StandardsReader();
+		Set<String> standardNames = standardsReader.getStandardNames();
+		//
+		for(IScanMSD scan : massSpectra.getList()) {
+			List<IMassSpectrumTarget> massSpectrumTargets = scan.getTargets();
+			for(IMassSpectrumTarget massSpectrumTarget : massSpectrumTargets) {
+				String name = massSpectrumTarget.getLibraryInformation().getName();
+				if(standardNames.contains(name)) {
+					massSpectrumTarget.setIdentifier(IDENTIFIER);
 				}
 			}
 		}

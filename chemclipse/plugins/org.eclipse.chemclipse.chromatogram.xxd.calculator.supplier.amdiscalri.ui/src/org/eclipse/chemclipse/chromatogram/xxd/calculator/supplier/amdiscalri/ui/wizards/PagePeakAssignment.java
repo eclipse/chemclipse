@@ -291,8 +291,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 						int[] indices = table.getSelectionIndices();
 						List<IPeakTarget> targetsToRemove = getPeakTargetList(table, indices);
 						chromatogramPeakMSD.removeTargets(targetsToRemove);
-						// TODO Fix
-						// table.remove(indices);
+						targetsViewerUI.setInput(chromatogramPeakMSD.getTargets());
 					}
 				}
 			}
