@@ -45,7 +45,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
@@ -233,12 +232,10 @@ public abstract class AbstractTargetsView {
 	 */
 	private void deleteSelectedTargets() {
 
-		Shell shell = Display.getCurrent().getActiveShell();
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.YES | SWT.NO | SWT.CANCEL);
+		MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.YES | SWT.NO | SWT.ICON_WARNING);
 		messageBox.setText("Delete Selected Targets");
 		messageBox.setMessage("Do you really want to delete the selected targets?");
-		int decision = messageBox.open();
-		if(SWT.YES == decision) {
+		if(messageBox.open() == SWT.YES) {
 			/*
 			 * Delete the selected items.
 			 */
@@ -254,20 +251,19 @@ public abstract class AbstractTargetsView {
 				List<IChromatogramTargetMSD> targetsToRemove = getChromatogramTargetList(table, indices);
 				IChromatogramMSD chromatogram = (IChromatogramMSD)input;
 				chromatogram.removeTargets(targetsToRemove);
-				tableViewer.setInput(chromatogram.getTargets());
+				tableViewer.refresh();
 				//
 			} else if(input instanceof IChromatogramPeakMSD) {
 				List<IPeakTarget> targetsToRemove = getPeakTargetList(table, indices);
 				IChromatogramPeakMSD chromatogramPeak = (IChromatogramPeakMSD)input;
 				chromatogramPeak.removeTargets(targetsToRemove);
-				tableViewer.setInput(chromatogramPeak.getTargets());
+				tableViewer.refresh();
 				//
 			} else if(input instanceof IScanMSD) {
 				List<IMassSpectrumTarget> targetsToRemove = getMassSpectrumTargetList(table, indices);
 				IScanMSD scan = (IScanMSD)input;
 				scan.removeTargets(targetsToRemove);
-				tableViewer.setInput(scan.getTargets());
-				//
+				tableViewer.refresh();
 			}
 		}
 	}
