@@ -287,7 +287,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 					/*
 					 * Press "DEL" button.
 					 */
-					MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.YES | SWT.CANCEL | SWT.ICON_WARNING);
+					MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.YES | SWT.NO | SWT.ICON_WARNING);
 					messageBox.setText("Delete identification(s)");
 					messageBox.setMessage("Would you like to delete the identification(s)?");
 					if(messageBox.open() == SWT.YES) {
