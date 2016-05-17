@@ -54,7 +54,7 @@ public class PeakIdentificationBatchRunnable implements IRunnableWithProgress {
 			final IPeakIdentificationProcessingInfo processingInfo = batchProcess.execute(peakIdentificationBatchJob, monitor);
 			try {
 				final IPeakIdentificationBatchProcessReport report = processingInfo.getPeakIdentificationBatchProcessReport();
-				ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+				ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 				/*
 				 * Update the peak results page
 				 */
