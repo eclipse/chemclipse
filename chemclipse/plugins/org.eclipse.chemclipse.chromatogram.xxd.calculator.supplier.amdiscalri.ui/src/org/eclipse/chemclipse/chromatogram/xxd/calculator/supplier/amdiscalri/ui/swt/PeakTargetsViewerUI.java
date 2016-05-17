@@ -11,30 +11,33 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt;
 
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider.TargetsLabelProvider;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider.PeakTargetsLabelProvider;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider.PeakTargetsTableComparator;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.swt.widgets.Composite;
 
-public class TargetsViewerUI extends ExtendedTableViewer {
+public class PeakTargetsViewerUI extends ExtendedTableViewer {
 
 	private String[] titles = {"Name", "Match Factor", "Reverse Factor", "Match Factor Direct", "Reverse Factor Direct"};
 	private int bounds[] = {150, 100, 100, 100, 100};
 
-	public TargetsViewerUI(Composite parent) {
+	public PeakTargetsViewerUI(Composite parent) {
 		super(parent);
-		initialize();
+		createColumns();
 	}
 
-	public TargetsViewerUI(Composite parent, int style) {
+	public PeakTargetsViewerUI(Composite parent, int style) {
 		super(parent, style);
-		initialize();
+		createColumns();
 	}
 
-	private void initialize() {
+	private void createColumns() {
 
 		createColumns(titles, bounds);
-		setLabelProvider(new TargetsLabelProvider());
+		//
+		setLabelProvider(new PeakTargetsLabelProvider());
 		setContentProvider(new ListContentProvider());
+		setComparator(new PeakTargetsTableComparator());
 	}
 }

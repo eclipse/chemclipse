@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.library.LibraryService
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.ILibraryServiceProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.AlkaneIdentifier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.PeakTableViewerUI;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.TargetsViewerUI;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.PeakTargetsViewerUI;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
@@ -51,6 +51,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
@@ -62,7 +64,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 	private IRetentionIndexWizardElements wizardElements;
 	private PeakTableViewerUI peakTableViewerUI;
 	private LibraryMassSpectrumComparisonUI libraryMassSpectrumComparisonUI;
-	private TargetsViewerUI targetsViewerUI;
+	private PeakTargetsViewerUI targetsViewerUI;
 	private Button buttonPrevious;
 	private Text textCurrentIndexName;
 	private Button buttonNext;
@@ -261,7 +263,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 
 	private void createPeakTargetsField(Composite composite) {
 
-		targetsViewerUI = new TargetsViewerUI(composite, SWT.BORDER | SWT.MULTI);
+		targetsViewerUI = new PeakTargetsViewerUI(composite, SWT.BORDER | SWT.MULTI);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 3;
 		gridData.grabExcessHorizontalSpace = true;
@@ -285,13 +287,22 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 					/*
 					 * Press "DEL" button.
 					 */
-					IChromatogramPeakMSD chromatogramPeakMSD = getSelectedPeak();
-					if(chromatogramPeakMSD != null) {
-						Table table = targetsViewerUI.getTable();
-						int[] indices = table.getSelectionIndices();
-						List<IPeakTarget> targetsToRemove = getPeakTargetList(table, indices);
-						chromatogramPeakMSD.removeTargets(targetsToRemove);
-						targetsViewerUI.setInput(chromatogramPeakMSD.getTargets());
+					MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.YES | SWT.CANCEL | SWT.ICON_WARNING);
+					messageBox.setText("Delete identification(s)");
+					messageBox.setMessage("Would you like to delete the identification(s)?");
+					if(messageBox.open() == SWT.YES) {
+						/*
+						 * Delete the identifications.
+						 */
+						IChromatogramPeakMSD chromatogramPeakMSD = getSelectedPeak();
+						if(chromatogramPeakMSD != null) {
+							Table table = targetsViewerUI.getTable();
+							int[] indices = table.getSelectionIndices();
+							List<IPeakTarget> targetsToRemove = getPeakTargetList(table, indices);
+							chromatogramPeakMSD.removeTargets(targetsToRemove);
+							targetsViewerUI.setInput(chromatogramPeakMSD.getTargets());
+							validateSelection();
+						}
 					}
 				}
 			}

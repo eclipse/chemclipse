@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider.RetentionIndexLabelProvider;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider.RetentionIndexTableSorter;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider.RetentionIndexTableComparator;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.swt.widgets.Composite;
@@ -24,19 +24,20 @@ public class RetentionIndexTableViewerUI extends ExtendedTableViewer {
 
 	public RetentionIndexTableViewerUI(Composite parent) {
 		super(parent);
-		initialize();
+		createColumns();
 	}
 
 	public RetentionIndexTableViewerUI(Composite parent, int style) {
 		super(parent, style);
-		initialize();
+		createColumns();
 	}
 
-	private void initialize() {
+	private void createColumns() {
 
 		createColumns(titles, bounds);
+		//
 		setLabelProvider(new RetentionIndexLabelProvider());
 		setContentProvider(new ListContentProvider());
-		setSorter(new RetentionIndexTableSorter());
+		setComparator(new RetentionIndexTableComparator());
 	}
 }

@@ -23,11 +23,11 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-public class TargetsLabelProvider extends LabelProvider implements ITableLabelProvider {
+public class PeakTargetsLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	private DecimalFormat decimalFormat;
 
-	public TargetsLabelProvider() {
+	public PeakTargetsLabelProvider() {
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
