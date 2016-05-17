@@ -51,7 +51,7 @@ public class PeakIntegratorRunnable implements IRunnableWithProgress {
 			 * Show the processing view if error messages occurred.
 			 */
 			IPeakIntegratorProcessingInfo processingInfo = PeakIntegrator.integrate(chromatogramSelection, peakIntegrationSettings, PEAK_INTEGRATOR_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			/*
 			 * Try to set the results.
 			 */
