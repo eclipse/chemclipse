@@ -14,27 +14,24 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.i
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IMassSpectraIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IPeakIdentifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.PeakIdentifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorPeakIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorPeakIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.DatabasesCache;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.PathResolver;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.StandardsReader;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
-import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -73,43 +70,14 @@ public class AlkaneIdentifier {
 		/*
 		 * Create the file identifier settings.
 		 */
-		IVendorPeakIdentifierSettings fileIdentifierSettings = new VendorPeakIdentifierSettings();
-		fileIdentifierSettings.setMassSpectraFiles(massSpectraFiles);
-		fileIdentifierSettings.setUsePreOptimization(false);
-		fileIdentifierSettings.setThresholdPreOptimization(0.1d);
-		fileIdentifierSettings.setMassSpectrumComparatorId(MASS_SPECTRUM_COMPARATOR_ID);
-		fileIdentifierSettings.setNumberOfTargets(5);
-		fileIdentifierSettings.setMinMatchFactor(70.0f);
-		fileIdentifierSettings.setMinReverseMatchFactor(70.0f);
-		fileIdentifierSettings.setAddUnknownMzListTarget(false);
-		fileIdentifierSettings.setPenaltyCalculation(IIdentifierSettings.PENALTY_CALCULATION_NONE);
-		fileIdentifierSettings.setPenaltyCalculationLevelFactor(0.0f);
-		fileIdentifierSettings.setMaxPenalty(0.0f);
-		fileIdentifierSettings.setRetentionTimeWindow(0);
-		fileIdentifierSettings.setRetentionIndexWindow(0.0f);
+		IVendorPeakIdentifierSettings peakIdentifierSettings = new VendorPeakIdentifierSettings();
+		setIdentifierSettings(peakIdentifierSettings);
+		setFileIdentifierSettings(peakIdentifierSettings);
 		/*
 		 * Run the file identifier.
 		 */
 		PeakIdentifier peakIdentifier = new PeakIdentifier();
-		IPeakIdentifierProcessingInfo processingInfo = peakIdentifier.identify(peaks, fileIdentifierSettings, monitor);
-		/*
-		 * Overwrite the identifier ID.
-		 * This is needed by the library service to get the appropriate DB mass spectrum.
-		 */
-		StandardsReader standardsReader = new StandardsReader();
-		Set<String> standardNames = standardsReader.getStandardNames();
-		//
-		for(IPeakMSD peak : peaks) {
-			List<IPeakTarget> peakTargets = peak.getTargets();
-			for(IPeakTarget peakTarget : peakTargets) {
-				String name = peakTarget.getLibraryInformation().getName();
-				if(standardNames.contains(name)) {
-					peakTarget.setIdentifier(IDENTIFIER);
-				}
-			}
-		}
-		//
-		return processingInfo;
+		return peakIdentifier.identify(peaks, peakIdentifierSettings, monitor);
 	}
 
 	public IMassSpectraIdentifierProcessingInfo runIdentification(List<IScanMSD> massSpectraList, IVendorMassSpectrumIdentifierSettings fileIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
@@ -118,43 +86,13 @@ public class AlkaneIdentifier {
 		 * Create the file identifier settings.
 		 */
 		IVendorMassSpectrumIdentifierSettings massSpectrumIdentifierSettings = new VendorMassSpectrumIdentifierSettings();
-		massSpectrumIdentifierSettings.setMassSpectraFiles(massSpectraFiles);
-		massSpectrumIdentifierSettings.setUsePreOptimization(false);
-		massSpectrumIdentifierSettings.setThresholdPreOptimization(0.1d);
-		massSpectrumIdentifierSettings.setMassSpectrumComparatorId(MASS_SPECTRUM_COMPARATOR_ID);
-		massSpectrumIdentifierSettings.setNumberOfTargets(5);
-		massSpectrumIdentifierSettings.setMinMatchFactor(70.0f);
-		massSpectrumIdentifierSettings.setMinReverseMatchFactor(70.0f);
-		massSpectrumIdentifierSettings.setAddUnknownMzListTarget(false);
-		massSpectrumIdentifierSettings.setPenaltyCalculation(IIdentifierSettings.PENALTY_CALCULATION_NONE);
-		massSpectrumIdentifierSettings.setPenaltyCalculationLevelFactor(0.0f);
-		massSpectrumIdentifierSettings.setMaxPenalty(0.0f);
-		massSpectrumIdentifierSettings.setRetentionTimeWindow(0);
-		massSpectrumIdentifierSettings.setRetentionIndexWindow(0.0f);
+		setIdentifierSettings(massSpectrumIdentifierSettings);
+		setFileIdentifierSettings(massSpectrumIdentifierSettings);
 		/*
 		 * Run the file identifier.
 		 */
 		MassSpectrumIdentifier peakIdentifier = new MassSpectrumIdentifier();
-		IMassSpectraIdentifierProcessingInfo processingInfo = peakIdentifier.identify(massSpectraList, massSpectrumIdentifierSettings, monitor);
-		IMassSpectra massSpectra = processingInfo.getMassSpectra();
-		/*
-		 * Overwrite the identifier ID.
-		 * This is needed by the library service to get the appropriate DB mass spectrum.
-		 */
-		StandardsReader standardsReader = new StandardsReader();
-		Set<String> standardNames = standardsReader.getStandardNames();
-		//
-		for(IScanMSD scan : massSpectra.getList()) {
-			List<IMassSpectrumTarget> massSpectrumTargets = scan.getTargets();
-			for(IMassSpectrumTarget massSpectrumTarget : massSpectrumTargets) {
-				String name = massSpectrumTarget.getLibraryInformation().getName();
-				if(standardNames.contains(name)) {
-					massSpectrumTarget.setIdentifier(IDENTIFIER);
-				}
-			}
-		}
-		//
-		return processingInfo;
+		return peakIdentifier.identify(massSpectraList, massSpectrumIdentifierSettings, monitor);
 	}
 
 	/**
@@ -177,5 +115,27 @@ public class AlkaneIdentifier {
 		}
 		//
 		return massSpectra;
+	}
+
+	private void setIdentifierSettings(IIdentifierSettings identifierSettings) {
+
+		identifierSettings.setMassSpectrumComparatorId(MASS_SPECTRUM_COMPARATOR_ID);
+		identifierSettings.setPenaltyCalculation(IIdentifierSettings.PENALTY_CALCULATION_NONE);
+		identifierSettings.setPenaltyCalculationLevelFactor(0.0f);
+		identifierSettings.setMaxPenalty(0.0f);
+		identifierSettings.setRetentionTimeWindow(0);
+		identifierSettings.setRetentionIndexWindow(0.0f);
+	}
+
+	private void setFileIdentifierSettings(IFileIdentifierSettings fileIdentifierSettings) {
+
+		fileIdentifierSettings.setMassSpectraFiles(massSpectraFiles);
+		fileIdentifierSettings.setUsePreOptimization(false);
+		fileIdentifierSettings.setThresholdPreOptimization(0.1d);
+		fileIdentifierSettings.setNumberOfTargets(5);
+		fileIdentifierSettings.setMinMatchFactor(70.0f);
+		fileIdentifierSettings.setMinReverseMatchFactor(70.0f);
+		fileIdentifierSettings.setAddUnknownMzListTarget(false);
+		fileIdentifierSettings.setAlternateIdentifierId(IDENTIFIER);
 	}
 }
