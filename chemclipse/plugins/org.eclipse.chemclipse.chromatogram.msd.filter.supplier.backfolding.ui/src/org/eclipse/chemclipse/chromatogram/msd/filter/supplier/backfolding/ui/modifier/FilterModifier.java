@@ -54,7 +54,7 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 			 * Apply the filter.
 			 */
 			final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter((IChromatogramSelectionMSD)chromatogramSelection, chromatogramFilterSettings, FILTER_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 		}
 	}
 
