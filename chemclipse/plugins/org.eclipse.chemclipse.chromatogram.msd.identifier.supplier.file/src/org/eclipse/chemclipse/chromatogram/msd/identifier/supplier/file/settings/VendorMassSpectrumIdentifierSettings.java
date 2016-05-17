@@ -24,6 +24,7 @@ public class VendorMassSpectrumIdentifierSettings extends AbstractMassSpectrumId
 	private float minMatchFactor;
 	private float minReverseMatchFactor;
 	private boolean addUnknownMzListTarget;
+	private String alternateIdentifierId = "";
 
 	@Override
 	public List<String> getMassSpectraFiles() {
@@ -107,5 +108,17 @@ public class VendorMassSpectrumIdentifierSettings extends AbstractMassSpectrumId
 	public void setAddUnknownMzListTarget(boolean addUnknownMzListTarget) {
 
 		this.addUnknownMzListTarget = addUnknownMzListTarget;
+	}
+
+	@Override
+	public String getAlternateIdentifierId() {
+
+		return alternateIdentifierId;
+	}
+
+	@Override
+	public void setAlternateIdentifierId(String alternateIdentifierId) {
+
+		this.alternateIdentifierId = alternateIdentifierId;
 	}
 }

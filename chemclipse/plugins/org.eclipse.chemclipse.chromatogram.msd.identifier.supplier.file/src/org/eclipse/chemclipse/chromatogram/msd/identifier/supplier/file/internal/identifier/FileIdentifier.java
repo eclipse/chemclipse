@@ -66,12 +66,18 @@ public class FileIdentifier {
 
 		IMassSpectra massSpectra = new MassSpectra();
 		massSpectra.addMassSpectra(massSpectraList);
+		//
+		String identifier = IDENTIFIER;
+		String alternateIdentifierId = fileIdentifierSettings.getAlternateIdentifierId();
+		if(!alternateIdentifierId.equals("")) {
+			identifier = alternateIdentifierId;
+		}
 		/*
 		 * Try to identify the mass spectra.
 		 */
 		Map<String, IMassSpectra> databases = databasesCache.getDatabases(fileIdentifierSettings.getMassSpectraFiles(), monitor);
 		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
-			compareMassSpectraAgainstDatabase(massSpectra, fileIdentifierSettings, database, monitor);
+			compareMassSpectraAgainstDatabase(massSpectra, fileIdentifierSettings, identifier, database, monitor);
 		}
 		/*
 		 * Add m/z list on demand if no match was found.
@@ -80,7 +86,7 @@ public class FileIdentifier {
 			List<IMassSpectrumTarget> massSpectrumTargets = unknown.getTargets();
 			if(massSpectrumTargets.size() == 0) {
 				if(fileIdentifierSettings.isAddUnknownMzListTarget()) {
-					targetBuilder.setMassSpectrumTargetUnknown(unknown, IDENTIFIER);
+					targetBuilder.setMassSpectrumTargetUnknown(unknown, identifier);
 				}
 			}
 		}
@@ -101,12 +107,17 @@ public class FileIdentifier {
 	public IPeakIdentificationResults runPeakIdentification(List<IPeakMSD> peaks, IVendorPeakIdentifierSettings peakIdentifierSettings, IPeakIdentifierProcessingInfo processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
 
 		IPeakIdentificationResults identificationResults = new PeakIdentificationResults();
+		String identifier = IDENTIFIER;
+		String alternateIdentifierId = peakIdentifierSettings.getAlternateIdentifierId();
+		if(!alternateIdentifierId.equals("")) {
+			identifier = alternateIdentifierId;
+		}
 		/*
 		 * Load the mass spectra database only if the raw file or its content has changed.
 		 */
 		Map<String, IMassSpectra> databases = databasesCache.getDatabases(peakIdentifierSettings.getMassSpectraFiles(), monitor);
 		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
-			comparePeaksAgainstDatabase(peakIdentifierSettings, peaks, database, monitor);
+			comparePeaksAgainstDatabase(peakIdentifierSettings, peaks, identifier, database, monitor);
 		}
 		/*
 		 * Assign a m/z list on demand if no match has been found.
@@ -114,7 +125,7 @@ public class FileIdentifier {
 		for(IPeakMSD peakMSD : peaks) {
 			if(peakMSD.getTargets().size() == 0) {
 				if(peakIdentifierSettings.isAddUnknownMzListTarget()) {
-					targetBuilder.setPeakTargetUnknown(peakMSD, IDENTIFIER);
+					targetBuilder.setPeakTargetUnknown(peakMSD, identifier);
 				}
 			}
 		}
@@ -144,7 +155,7 @@ public class FileIdentifier {
 		return massSpectra;
 	}
 
-	private void compareMassSpectraAgainstDatabase(IMassSpectra massSpectra, IVendorMassSpectrumIdentifierSettings fileIdentifierSettings, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
+	private void compareMassSpectraAgainstDatabase(IMassSpectra massSpectra, IVendorMassSpectrumIdentifierSettings fileIdentifierSettings, String identifier, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
 
 		/*
 		 * Run the identification.
@@ -173,7 +184,7 @@ public class FileIdentifier {
 						/*
 						 * Add the target.
 						 */
-						IMassSpectrumTarget massSpectrumTarget = targetBuilder.getMassSpectrumTarget(reference, comparisonResult, IDENTIFIER, databaseName);
+						IMassSpectrumTarget massSpectrumTarget = targetBuilder.getMassSpectrumTarget(reference, comparisonResult, identifier, databaseName);
 						massSpectrumTargets.add(massSpectrumTarget);
 					}
 				} catch(TypeCastException e1) {
@@ -197,7 +208,7 @@ public class FileIdentifier {
 		}
 	}
 
-	private void comparePeaksAgainstDatabase(IVendorPeakIdentifierSettings fileIdentifierSettings, List<IPeakMSD> peaks, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
+	private void comparePeaksAgainstDatabase(IVendorPeakIdentifierSettings fileIdentifierSettings, List<IPeakMSD> peaks, String identifier, Map.Entry<String, IMassSpectra> database, IProgressMonitor monitor) {
 
 		/*
 		 * Run the identification.
@@ -227,7 +238,7 @@ public class FileIdentifier {
 						/*
 						 * Add the target.
 						 */
-						IPeakTarget peakTarget = targetBuilder.getPeakTarget(reference, comparisonResult, IDENTIFIER, databaseName);
+						IPeakTarget peakTarget = targetBuilder.getPeakTarget(reference, comparisonResult, identifier, databaseName);
 						peakTargets.add(peakTarget);
 					}
 				} catch(TypeCastException e1) {

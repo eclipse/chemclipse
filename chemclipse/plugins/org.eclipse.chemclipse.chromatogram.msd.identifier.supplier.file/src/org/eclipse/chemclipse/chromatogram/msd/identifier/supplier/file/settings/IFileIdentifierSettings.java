@@ -44,4 +44,8 @@ public interface IFileIdentifierSettings {
 	boolean isAddUnknownMzListTarget();
 
 	void setAddUnknownMzListTarget(boolean addUnknownMzListTarget);
+
+	String getAlternateIdentifierId();
+
+	void setAlternateIdentifierId(String alternateIdentifierId);
 }
