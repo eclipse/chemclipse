@@ -50,7 +50,7 @@ public class IdentifyAlkanesRunnable implements IRunnableWithProgress {
 			/*
 			 * Update the chromatogram selection.
 			 */
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			if(chromatogramSelection instanceof ChromatogramSelectionMSD) {
 				((ChromatogramSelectionMSD)chromatogramSelection).update(false);
 			}
