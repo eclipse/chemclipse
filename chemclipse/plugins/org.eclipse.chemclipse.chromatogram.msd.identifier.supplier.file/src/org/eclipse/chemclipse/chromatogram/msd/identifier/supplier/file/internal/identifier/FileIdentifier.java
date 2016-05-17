@@ -146,8 +146,11 @@ public class FileIdentifier {
 		if(identificationTarget != null) {
 			/*
 			 * Extract the target library information.
+			 * Old *.ocb version don't store the identifier id.
+			 * Hence, try to get mass spectrum anyhow.
 			 */
-			if(identificationTarget.getIdentifier().equals(IDENTIFIER)) {
+			String identifier = identificationTarget.getIdentifier();
+			if(identifier.equals(IDENTIFIER) || identifier.equals("")) {
 				massSpectra.addMassSpectra(databasesCache.getDatabaseMassSpectra(identificationTarget, monitor));
 			}
 		}
@@ -175,7 +178,7 @@ public class FileIdentifier {
 				 * Compare the unknown against each library spectrum.
 				 */
 				try {
-					monitor.subTask("Compare " + countUnknown + " / " + index);
+					monitor.subTask("Compare " + countUnknown);
 					IScanMSD reference = references.get(index);
 					IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
 					IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
@@ -229,7 +232,7 @@ public class FileIdentifier {
 				 * Compare the unknown against each library spectrum.
 				 */
 				try {
-					monitor.subTask("Compare " + countUnknown + " / " + index);
+					monitor.subTask("Compare " + countUnknown);
 					IScanMSD reference = references.get(index);
 					IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
 					IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
