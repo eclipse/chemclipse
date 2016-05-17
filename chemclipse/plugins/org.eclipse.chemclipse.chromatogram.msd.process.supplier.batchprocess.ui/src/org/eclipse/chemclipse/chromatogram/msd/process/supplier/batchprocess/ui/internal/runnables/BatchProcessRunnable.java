@@ -53,7 +53,7 @@ public class BatchProcessRunnable implements IRunnableWithProgress {
 			batchProcessJob = reader.read(file, monitor);
 			BatchProcess bp = new BatchProcess();
 			IProcessingInfo processingInfo = bp.execute(batchProcessJob, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 		} catch(FileNotFoundException e) {
 			logger.warn(e);
 		} catch(FileIsNotReadableException e) {
