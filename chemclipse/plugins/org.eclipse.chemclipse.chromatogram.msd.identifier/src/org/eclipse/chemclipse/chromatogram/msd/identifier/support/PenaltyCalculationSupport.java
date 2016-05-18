@@ -69,6 +69,17 @@ public class PenaltyCalculationSupport {
 		}
 	}
 
+	private static float calculatePenalty(float valueUnknown, float valueReference, float valueWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
+
+		float windowRangeCount = Math.abs((valueUnknown - valueReference) / valueWindow);
+		if(windowRangeCount <= 1.0f) {
+			return 0.0f;
+		} else {
+			float result = (windowRangeCount - 1.0f) * penaltyCalculationLevelFactor;
+			return (result > maxPenalty) ? maxPenalty : result;
+		}
+	}
+
 	private static void runPreConditionChecks(IScanMSD unknown, IScanMSD reference, float valueWindow, float maxPenalty) {
 
 		if(unknown == null || reference == null) {
@@ -81,20 +92,6 @@ public class PenaltyCalculationSupport {
 		//
 		if(maxPenalty < IComparisonResult.MIN_ALLOWED_PENALTY || maxPenalty > IComparisonResult.MAX_ALLOWED_PENALTY) {
 			throw new IllegalArgumentException();
-		}
-	}
-
-	/**
-	 * Don't calculate penalties if the retention time is not set.
-	 * 
-	 * @param unknown
-	 * @param reference
-	 * @throws Exception
-	 */
-	private static void runRetentionTimeCheck(IScanMSD unknown, IScanMSD reference) {
-
-		if(unknown.getRetentionTime() == 0 || reference.getRetentionTime() == 0) {
-			throw new IllegalArgumentException("The retention time of the unknown or reference is not set.");
 		}
 	}
 
@@ -112,14 +109,17 @@ public class PenaltyCalculationSupport {
 		}
 	}
 
-	private static float calculatePenalty(float valueUnknown, float valueReference, float valueWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
+	/**
+	 * Don't calculate penalties if the retention time is not set.
+	 * 
+	 * @param unknown
+	 * @param reference
+	 * @throws Exception
+	 */
+	private static void runRetentionTimeCheck(IScanMSD unknown, IScanMSD reference) {
 
-		float windowRangeCount = Math.abs((valueUnknown - valueReference) / valueWindow);
-		if(windowRangeCount <= 1.0f) {
-			return 0.0f;
-		} else {
-			float result = (windowRangeCount - 1.0f) * penaltyCalculationLevelFactor;
-			return (result > maxPenalty) ? maxPenalty : result;
+		if(unknown.getRetentionTime() == 0 || reference.getRetentionTime() == 0) {
+			throw new IllegalArgumentException("The retention time of the unknown or reference is not set.");
 		}
 	}
 }
