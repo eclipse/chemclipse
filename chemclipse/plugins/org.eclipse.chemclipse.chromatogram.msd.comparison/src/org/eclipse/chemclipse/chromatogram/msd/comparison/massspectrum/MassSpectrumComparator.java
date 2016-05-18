@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.MassSpectru
 import org.eclipse.chemclipse.chromatogram.msd.comparison.processing.MassSpectrumPurityProcessingInfo;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumComparisonResult;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -67,7 +66,6 @@ public class MassSpectrumComparator {
 	private static ComparatorCache comparatorCache;
 	private static IMassSpectrumComparatorProcessingInfo processingInfoComparisonSkip;
 	private static final float NO_MATCH = 0.0f;
-
 	/*
 	 * Initialize all values.
 	 */
@@ -84,19 +82,19 @@ public class MassSpectrumComparator {
 	}
 
 	/**
-	 * This class returns a mass spectrum comparison result object.<br/>
+	 * Returns a mass spectrum comparison result object.<br/>
 	 * Via an extension point several methods can register themselves to support
 	 * a comparison.<br/>
 	 * You can chose the comparator through the comparatorId.<br/>
 	 * The unknown and reference mass spectrum will be left as they are.
 	 * 
-	 * @param unknown
-	 * @param reference
-	 * @param converterId
-	 * @param ionRange
-	 * @return {@link IMassSpectrumComparisonResult}
 	 */
 	public static IMassSpectrumComparatorProcessingInfo compare(IScanMSD unknown, IScanMSD reference, String comparatorId, boolean usePreOptimization, double thresholdPreOptimization) {
+
+		return compare(unknown, reference, getMassSpectrumComparator(comparatorId), usePreOptimization, thresholdPreOptimization);
+	}
+
+	public static IMassSpectrumComparatorProcessingInfo compare(IScanMSD unknown, IScanMSD reference, IMassSpectrumComparator massSpectrumComparator, boolean usePreOptimization, double thresholdPreOptimization) {
 
 		/*
 		 * Check if the mass spectrum needs to be compared.
@@ -110,7 +108,6 @@ public class MassSpectrumComparator {
 		 */
 		IMassSpectrumComparatorProcessingInfo processingInfo;
 		if(compare) {
-			IMassSpectrumComparator massSpectrumComparator = getMassSpectrumComparator(comparatorId);
 			if(massSpectrumComparator != null) {
 				processingInfo = massSpectrumComparator.compare(unknown, reference);
 			} else {
