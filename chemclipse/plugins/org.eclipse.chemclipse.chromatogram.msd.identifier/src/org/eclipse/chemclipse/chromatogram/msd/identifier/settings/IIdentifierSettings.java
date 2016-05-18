@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.settings;
 
@@ -18,12 +19,13 @@ public interface IIdentifierSettings {
 	String PENALTY_CALCULATION_NONE = "NONE";
 	String PENALTY_CALCULATION_RETENTION_INDEX = "RI";
 	String PENALTY_CALCULATION_RETENTION_TIME = "RT";
+	String BOTH = "BOTH";
 	//
 	String[][] PENALTY_CALCULATION_OPTIONS = new String[][]{//
 			{"None", PENALTY_CALCULATION_NONE}, //
 			{"Retention Index", PENALTY_CALCULATION_RETENTION_INDEX}, //
-			{"Retention Time", PENALTY_CALCULATION_RETENTION_TIME}//
-	};
+			{"Retention Time", PENALTY_CALCULATION_RETENTION_TIME}, //
+			{"Both", BOTH}};
 	//
 	float DEF_PENALTY_CALCULATION_LEVEL_FACTOR = 5.0f;
 	float MIN_PENALTY_CALCULATION_LEVEL_FACTOR = 1.0f;
