@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Dr. Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.support;
 
@@ -30,7 +31,7 @@ public class PenaltyCalculationSupport {
 	 * @param maxPenalty
 	 * @return float
 	 */
-	public float calculatePenaltyFromRetentionIndex(IScanMSD unknown, IScanMSD reference, float retentionIndexWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
+	public static float calculatePenaltyFromRetentionIndex(IScanMSD unknown, IScanMSD reference, float retentionIndexWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
 
 		try {
 			runPreConditionChecks(unknown, reference, retentionIndexWindow, maxPenalty);
@@ -56,7 +57,7 @@ public class PenaltyCalculationSupport {
 	 * @param maxPenalty
 	 * @return float
 	 */
-	public float calculatePenaltyFromRetentionTime(IScanMSD unknown, IScanMSD reference, int retentionTimeWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
+	public static float calculatePenaltyFromRetentionTime(IScanMSD unknown, IScanMSD reference, int retentionTimeWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
 
 		try {
 			runPreConditionChecks(unknown, reference, retentionTimeWindow, maxPenalty);
@@ -68,18 +69,18 @@ public class PenaltyCalculationSupport {
 		}
 	}
 
-	private void runPreConditionChecks(IScanMSD unknown, IScanMSD reference, float valueWindow, float maxPenalty) throws Exception {
+	private static void runPreConditionChecks(IScanMSD unknown, IScanMSD reference, float valueWindow, float maxPenalty) {
 
 		if(unknown == null || reference == null) {
-			throw new Exception();
+			throw new NullPointerException();
 		}
 		//
 		if(valueWindow == 0.0f) {
-			throw new Exception();
+			throw new IllegalArgumentException();
 		}
 		//
 		if(maxPenalty < IComparisonResult.MIN_ALLOWED_PENALTY || maxPenalty > IComparisonResult.MAX_ALLOWED_PENALTY) {
-			throw new Exception();
+			throw new IllegalArgumentException();
 		}
 	}
 
@@ -90,10 +91,10 @@ public class PenaltyCalculationSupport {
 	 * @param reference
 	 * @throws Exception
 	 */
-	private void runRetentionTimeCheck(IScanMSD unknown, IScanMSD reference) throws Exception {
+	private static void runRetentionTimeCheck(IScanMSD unknown, IScanMSD reference) {
 
 		if(unknown.getRetentionTime() == 0 || reference.getRetentionTime() == 0) {
-			throw new Exception("The retention time of the unknown or reference is not set.");
+			throw new IllegalArgumentException("The retention time of the unknown or reference is not set.");
 		}
 	}
 
@@ -104,14 +105,14 @@ public class PenaltyCalculationSupport {
 	 * @param reference
 	 * @throws Exception
 	 */
-	private void runRetentionIndexCheck(IScanMSD unknown, IScanMSD reference) throws Exception {
+	private static void runRetentionIndexCheck(IScanMSD unknown, IScanMSD reference) {
 
 		if(unknown.getRetentionIndex() == 0.0f || reference.getRetentionIndex() == 0.0f) {
-			throw new Exception("The retention index of the unknown or reference is not set.");
+			throw new IllegalArgumentException("The retention index of the unknown or reference is not set.");
 		}
 	}
 
-	private float calculatePenalty(float valueUnknown, float valueReference, float valueWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
+	private static float calculatePenalty(float valueUnknown, float valueReference, float valueWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
 
 		float windowRangeCount = Math.abs((valueUnknown - valueReference) / valueWindow);
 		if(windowRangeCount <= 1.0f) {
