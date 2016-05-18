@@ -69,7 +69,7 @@ public class PenaltyCalculationSupport {
 		}
 	}
 
-	private static float calculatePenalty(float valueUnknown, float valueReference, float valueWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
+	public static float calculatePenalty(float valueUnknown, float valueReference, float valueWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
 
 		float windowRangeCount = Math.abs((valueUnknown - valueReference) / valueWindow);
 		if(windowRangeCount <= 1.0f) {
