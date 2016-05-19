@@ -86,7 +86,18 @@ public interface IComparisonResult extends Serializable {
 	@Deprecated
 	void adjustMatchFactor(float penalty);
 
+	/**
+	 * Adds given penalty to this {@code IComparisonResult}'s penalty.
+	 * 
+	 * @param penalty
+	 *            penalty value to add
+	 */
 	void setPenalty(float penalty);
+
+	/**
+	 * Resets the penalty to {@code 0}.
+	 */
+	void clearPenalty();
 
 	/**
 	 * Returns the reverse match factor.

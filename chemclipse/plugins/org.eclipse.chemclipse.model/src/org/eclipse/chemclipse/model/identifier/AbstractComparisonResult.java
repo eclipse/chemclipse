@@ -48,9 +48,15 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 		return penalty;
 	}
 
+	@Override
+	public void clearPenalty() {
+
+		this.penalty = 0;
+	}
+
 	public void setPenalty(float penalty) {
 
-		this.penalty = penalty;
+		this.penalty += penalty;
 	}
 
 	@Override
