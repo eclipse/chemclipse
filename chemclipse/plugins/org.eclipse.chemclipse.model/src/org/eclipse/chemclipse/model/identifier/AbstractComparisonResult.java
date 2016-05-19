@@ -80,7 +80,7 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public float getMatchFactorDirect() {
 
-		return getAdjustedValue(matchFactorDirect, penalty);
+		return matchFactorDirect;
 	}
 
 	public float getMatchFactorNotAdjusted() {
@@ -115,7 +115,7 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public float getReverseMatchFactor() {
 
-		return reverseMatchFactor;
+		return getAdjustedValue(reverseMatchFactor, penalty);
 	}
 
 	@Override
