@@ -12,10 +12,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.support;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
 public class PenaltyCalculationSupport {
+
+	private final static Logger logger = Logger.getLogger(PenaltyCalculationSupport.class);
 
 	/**
 	 * Calculate a penalty using the retention time.
@@ -33,6 +36,7 @@ public class PenaltyCalculationSupport {
 	 */
 	public static float calculatePenaltyFromRetentionIndex(IScanMSD unknown, IScanMSD reference, float retentionIndexWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
 
+		logger.debug("Calculate penalty from retention index");
 		try {
 			runPreConditionChecks(unknown, reference, retentionIndexWindow, maxPenalty);
 			runRetentionIndexCheck(unknown, reference);
@@ -59,6 +63,7 @@ public class PenaltyCalculationSupport {
 	 */
 	public static float calculatePenaltyFromRetentionTime(IScanMSD unknown, IScanMSD reference, int retentionTimeWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
 
+		logger.debug("Calculate penalty from retention time");
 		try {
 			runPreConditionChecks(unknown, reference, retentionTimeWindow, maxPenalty);
 			runRetentionTimeCheck(unknown, reference);
@@ -71,11 +76,14 @@ public class PenaltyCalculationSupport {
 
 	public static float calculatePenalty(float valueUnknown, float valueReference, float valueWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
 
+		logger.debug("unkown " + valueReference + ", reference " + valueReference + ", window size " + valueWindow);
 		float windowRangeCount = Math.abs((valueUnknown - valueReference) / valueWindow);
+		logger.debug("window count " + windowRangeCount);
 		if(windowRangeCount <= 1.0f) {
 			return 0.0f;
 		} else {
 			float result = (windowRangeCount - 1.0f) * penaltyCalculationLevelFactor;
+			logger.debug("penalty result " + result);
 			return (result > maxPenalty) ? maxPenalty : result;
 		}
 	}
