@@ -99,6 +99,8 @@ public interface IComparisonResult extends Serializable {
 	 */
 	void clearPenalty();
 
+	float getPenalty();
+
 	/**
 	 * Returns the reverse match factor.
 	 * 0 means no match, 100 means perfect match.
