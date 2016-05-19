@@ -203,16 +203,6 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public String toString() {
 
-		StringBuilder builder = new StringBuilder();
-		builder.append(getClass().getName());
-		builder.append("[");
-		builder.append("matchFactor=" + getMatchFactor());
-		builder.append(",");
-		builder.append("reverseMatchFactor=" + getReverseMatchFactor());
-		builder.append(",");
-		builder.append("probability=" + probability);
-		builder.append("]");
-		return builder.toString();
+		return "AbstractComparisonResult [isMatch=" + isMatch + ", matchFactor=" + matchFactor + ", matchFactorDirect=" + matchFactorDirect + ", reverseMatchFactor=" + reverseMatchFactor + ", reverseMatchFactorDirect=" + reverseMatchFactorDirect + ", probability=" + probability + ", penalty=" + penalty + ", advise=" + advise + "]";
 	}
-	// ----------------------------hashCode, equals, toString
 }
