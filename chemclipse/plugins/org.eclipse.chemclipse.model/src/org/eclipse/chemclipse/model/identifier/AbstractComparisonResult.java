@@ -6,8 +6,9 @@
  * the Eclipse Public License v1.0 which accompanies this distribution, and is
  * available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors: Philip
- * (eselmeister) Wenig - initial API and implementation
+ * Contributors:
+ * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
@@ -24,6 +25,7 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	private float reverseMatchFactor;
 	private float reverseMatchFactorDirect;
 	private float probability;
+	private float penalty;
 	private String advise = "";
 
 	public AbstractComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect) {
@@ -41,6 +43,16 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 		}
 	}
 
+	public float getPenalty() {
+
+		return penalty;
+	}
+
+	public void setPenalty(float penalty) {
+
+		this.penalty = penalty;
+	}
+
 	@Override
 	public boolean isMatch() {
 
@@ -56,29 +68,41 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public float getMatchFactor() {
 
-		return matchFactor;
+		return getAdjustedValue(matchFactor, penalty);
 	}
 
 	@Override
 	public float getMatchFactorDirect() {
 
+		return getAdjustedValue(matchFactorDirect, penalty);
+	}
+
+	public float getMatchFactorNotAdjusted() {
+
+		return matchFactor;
+	}
+
+	public float getMatchFactorDirectNotAdjusted() {
+
 		return matchFactorDirect;
+	}
+
+	private static float getAdjustedValue(float value, float penalty) {
+
+		float result = value - penalty;
+		if(result < 0) {
+			return 0;
+		}
+		return result;
 	}
 
 	@Override
 	public void adjustMatchFactor(float penalty) {
 
 		if(penalty >= MIN_ALLOWED_PENALTY && penalty <= MAX_ALLOWED_PENALTY) {
-			//
-			matchFactor -= penalty;
-			if(matchFactor < 0) {
-				matchFactor = 0.0f;
-			}
-			//
-			matchFactorDirect -= penalty;
-			if(matchFactorDirect < 0) {
-				matchFactorDirect = 0.0f;
-			}
+			this.penalty = penalty;
+		} else {
+			throw new IllegalArgumentException();
 		}
 	}
 
@@ -98,16 +122,9 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	public void adjustReverseMatchFactor(float penalty) {
 
 		if(penalty >= MIN_ALLOWED_PENALTY && penalty <= MAX_ALLOWED_PENALTY) {
-			//
-			reverseMatchFactor -= penalty;
-			if(reverseMatchFactor < 0) {
-				reverseMatchFactor = 0.0f;
-			}
-			//
-			reverseMatchFactorDirect -= penalty;
-			if(reverseMatchFactorDirect < 0) {
-				reverseMatchFactorDirect = 0.0f;
-			}
+			this.penalty = penalty;
+		} else {
+			throw new IllegalArgumentException();
 		}
 	}
 
@@ -147,9 +164,9 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	 */
 	private void determineAdvise() {
 
-		if(matchFactor >= MAX_LIMIT_MATCH_FACTOR && reverseMatchFactor <= MIN_LIMIT_REVERSE_MATCH_FACTOR) {
+		if(getMatchFactor() >= MAX_LIMIT_MATCH_FACTOR && getReverseMatchFactor() <= MIN_LIMIT_REVERSE_MATCH_FACTOR) {
 			advise = ADVISE_INCOMPLETE;
-		} else if(matchFactor <= MIN_LIMIT_MATCH_FACTOR && reverseMatchFactor >= MAX_LIMIT_REVERSE_MATCH_FACTOR) {
+		} else if(getMatchFactor() <= MIN_LIMIT_MATCH_FACTOR && getReverseMatchFactor() >= MAX_LIMIT_REVERSE_MATCH_FACTOR) {
 			advise = ADVISE_IMPURITIES;
 		}
 	}
@@ -174,7 +191,7 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public int hashCode() {
 
-		return 7 * Float.valueOf(matchFactor).hashCode() + 11 * Float.valueOf(reverseMatchFactor).hashCode() + 13 * Float.valueOf(probability).hashCode();
+		return 7 * Float.valueOf(getMatchFactor()).hashCode() + 11 * Float.valueOf(getReverseMatchFactor()).hashCode() + 13 * Float.valueOf(probability).hashCode();
 	}
 
 	@Override
@@ -183,9 +200,9 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 		StringBuilder builder = new StringBuilder();
 		builder.append(getClass().getName());
 		builder.append("[");
-		builder.append("matchQuality=" + matchFactor);
+		builder.append("matchFactor=" + getMatchFactor());
 		builder.append(",");
-		builder.append("reverseMatchQuality=" + reverseMatchFactor);
+		builder.append("reverseMatchFactor=" + getReverseMatchFactor());
 		builder.append(",");
 		builder.append("probability=" + probability);
 		builder.append("]");

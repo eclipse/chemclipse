@@ -8,6 +8,7 @@
  * 
  * Contributors: Philip
  * (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
@@ -63,6 +64,8 @@ public interface IComparisonResult extends Serializable {
 	 */
 	float getMatchFactor();
 
+	float getMatchFactorNotAdjusted();
+
 	/**
 	 * Returns the match factor direct.
 	 * 0 means no match, 100 means perfect match.
@@ -71,6 +74,8 @@ public interface IComparisonResult extends Serializable {
 	 */
 	float getMatchFactorDirect();
 
+	float getMatchFactorDirectNotAdjusted();
+
 	/**
 	 * Adjust the match factor.
 	 * The penalty must be between 0 and 100:
@@ -78,7 +83,10 @@ public interface IComparisonResult extends Serializable {
 	 * 
 	 * @param penalty
 	 */
+	@Deprecated
 	void adjustMatchFactor(float penalty);
+
+	void setPenalty(float penalty);
 
 	/**
 	 * Returns the reverse match factor.
@@ -103,6 +111,7 @@ public interface IComparisonResult extends Serializable {
 	 * 
 	 * @param penalty
 	 */
+	@Deprecated
 	void adjustReverseMatchFactor(float penalty);
 
 	/**
