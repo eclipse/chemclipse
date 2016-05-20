@@ -55,7 +55,7 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	}
 
 	@Override
-	public void setPenalty(float penalty) {
+	public void addPenalty(float penalty) {
 
 		this.penalty += penalty;
 	}
@@ -75,7 +75,8 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public float getMatchFactor() {
 
-		return getAdjustedValue(matchFactor, penalty);
+		float result = getAdjustedValue(matchFactor, penalty);
+		return result;
 	}
 
 	@Override

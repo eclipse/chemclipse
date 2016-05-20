@@ -92,7 +92,7 @@ public interface IComparisonResult extends Serializable {
 	 * @param penalty
 	 *            penalty value to add
 	 */
-	void setPenalty(float penalty);
+	void addPenalty(float penalty);
 
 	/**
 	 * Resets the penalty to {@code 0}.
