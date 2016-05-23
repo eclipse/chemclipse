@@ -96,7 +96,7 @@ public class FloatFieldEditor extends StringFieldEditor {
 	protected void doStore() {
 
 		Text textControl = getTextControl();
-		if(textControl != null) {
+		if(textControl != null && textControl.isEnabled()) {
 			float value = Float.valueOf(textControl.getText());
 			getPreferenceStore().setValue(getPreferenceName(), value);
 		}
