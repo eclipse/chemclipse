@@ -70,12 +70,27 @@ public class FloatFieldEditor extends StringFieldEditor {
 	}
 
 	@Override
-	    public boolean isValid() {
+	public boolean isValid() {
+
 		// stupid workaround, since 'refreshValidState()' is only package
 		// private
 		refreshValidState();
 		return !getTextControl().isEnabled() || super.isValid();
-	    }
+	}
+
+	@Override
+	protected void refreshValidState() {
+
+		// TODO Auto-generated method stub
+		super.refreshValidState();
+	}
+
+	@Override
+	protected boolean doCheckState() {
+
+		// TODO Auto-generated method stub
+		return super.doCheckState();
+	}
 
 	@Override
 	protected void doLoadDefault() {

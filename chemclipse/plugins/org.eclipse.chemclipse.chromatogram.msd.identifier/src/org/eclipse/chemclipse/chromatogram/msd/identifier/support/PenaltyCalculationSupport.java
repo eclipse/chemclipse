@@ -36,7 +36,7 @@ public class PenaltyCalculationSupport {
 	 */
 	public static float calculatePenaltyFromRetentionIndex(IScanMSD unknown, IScanMSD reference, float retentionIndexWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
 
-		logger.debug("Calculate penalty from retention index");
+		// logger.debug("Calculate penalty from retention index");
 		try {
 			runPreConditionChecks(unknown, reference, retentionIndexWindow, maxPenalty);
 			runRetentionIndexCheck(unknown, reference);
@@ -63,7 +63,7 @@ public class PenaltyCalculationSupport {
 	 */
 	public static float calculatePenaltyFromRetentionTime(IScanMSD unknown, IScanMSD reference, int retentionTimeWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
 
-		logger.debug("Calculate penalty from retention time");
+		// logger.debug("Calculate penalty from retention time");
 		try {
 			runPreConditionChecks(unknown, reference, retentionTimeWindow, maxPenalty);
 			runRetentionTimeCheck(unknown, reference);
@@ -76,14 +76,14 @@ public class PenaltyCalculationSupport {
 
 	public static float calculatePenalty(float valueUnknown, float valueReference, float valueWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
 
-		logger.debug("unkown " + valueReference + ", reference " + valueReference + ", window size " + valueWindow);
+		// logger.debug("unkown " + valueReference + ", reference " + valueReference + ", window size " + valueWindow);
 		float windowRangeCount = Math.abs((valueUnknown - valueReference) / valueWindow);
-		logger.debug("window count " + windowRangeCount);
+		// logger.debug("window count " + windowRangeCount);
 		if(windowRangeCount <= 1.0f) {
 			return 0.0f;
 		} else {
 			float result = (windowRangeCount - 1.0f) * penaltyCalculationLevelFactor;
-			logger.debug("penalty result " + result);
+			// logger.debug("penalty result " + result);
 			return (result > maxPenalty) ? maxPenalty : result;
 		}
 	}
