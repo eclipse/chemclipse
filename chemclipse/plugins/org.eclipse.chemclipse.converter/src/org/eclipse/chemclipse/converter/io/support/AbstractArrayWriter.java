@@ -45,7 +45,7 @@ public abstract class AbstractArrayWriter implements IArrayWriter {
 	 * The example has e.g. 1 + 19 chars. The first char defines the
 	 * length of the string.<br/>
 	 * So you can call the method:<br/>
-	 * ... getBytes(19, chrom.getFileString);<br/>
+	 * ... getBytes(20, chrom.getFileString);<br/>
 	 * and get a byte array of the length 20.<br/>
 	 * 
 	 * @param writeBytes
@@ -55,31 +55,39 @@ public abstract class AbstractArrayWriter implements IArrayWriter {
 	@Override
 	public byte[] getBytesWithStringLengthIndex(int writeBytes, String entry) {
 
-		byte[] bytes = new byte[++writeBytes];
-		int length = entry.length();
-		byte[] bytesLength;
-		byte[] bytesEntry;
 		/*
 		 * 1 byte is used to store the length of the string.
 		 * That's why the length must not exceed a length of 255.
 		 */
-		if(writeBytes > 255) {
-			writeBytes = 255;
+		int maxLength = 255;
+		if(writeBytes > maxLength) {
+			writeBytes = maxLength;
 		}
-		/*
-		 * Checks if the entry is longer than the allowed byte length.
-		 */
-		if(length > writeBytes) {
-			length = writeBytes;
-		}
-		/*
-		 * Getting the byte arrays for the length an the entry
-		 */
-		bytesLength = get4BytesAsIntegerBigEndian(length);
-		bytesEntry = entry.getBytes();
-		bytes[0] = bytesLength[3];
-		for(int i = 1; i <= length; i++) {
-			bytes[i] = bytesEntry[i - 1];
+		//
+		byte[] bytes = new byte[writeBytes];
+		int endIndex = writeBytes - 1;
+		if(endIndex > 0) {
+			/*
+			 * The string may not exceed a certain length.
+			 */
+			int length;
+			if(endIndex > entry.length()) {
+				length = entry.length();
+			} else {
+				length = entry.substring(0, endIndex).length();
+			}
+			//
+			byte[] bytesLength;
+			byte[] bytesEntry;
+			/*
+			 * Getting the byte arrays for the length an the entry
+			 */
+			bytesLength = get4BytesAsIntegerBigEndian(length);
+			bytesEntry = entry.getBytes();
+			bytes[0] = bytesLength[3];
+			for(int i = 1; i <= length; i++) {
+				bytes[i] = bytesEntry[i - 1];
+			}
 		}
 		return bytes;
 	}

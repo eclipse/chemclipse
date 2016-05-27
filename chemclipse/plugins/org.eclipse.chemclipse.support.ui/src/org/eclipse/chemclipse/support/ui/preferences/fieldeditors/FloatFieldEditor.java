@@ -70,7 +70,7 @@ public class FloatFieldEditor extends StringFieldEditor {
 	}
 
 	@Override
-	    public boolean isValid() {
+	public boolean isValid() {
 
 		// stupid workaround, since 'refreshValidState()' is only package
 		// private
@@ -90,7 +90,7 @@ public class FloatFieldEditor extends StringFieldEditor {
 
 		// TODO Auto-generated method stub
 		return super.doCheckState();
-	    }
+	}
 
 	@Override
 	protected void doLoadDefault() {
