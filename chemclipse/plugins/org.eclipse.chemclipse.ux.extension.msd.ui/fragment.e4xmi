@@ -264,8 +264,12 @@
     <elements xsi:type="menu:MenuSeparator" xmi:id="_Hu8kkJiIEeOBdeuz4rhR6Q" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.menuseparator.1"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_ABSHADiEEeKLl-NzluZ-Gg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier.msd" positionInList="before:org.eclipse.chemclipse.ux.extension.ui.menu.identifier.msd.separator.misc">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_Z0xakDiBEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.deleteAllIdentifications" label="Delete All Identifications" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_all_identifications.gif" command="_c1jrADiBEeKLl-NzluZ-Gg"/>
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_QY0oEDiCEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.deleteUnidentifiedPeaks" label="Delete Unidentified Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_unidentified_peaks.gif" command="_nalwADiBEeKLl-NzluZ-Gg"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_Z0xakDiBEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.deleteAllIdentifications" label="Delete All Identifications" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_all_identifications.gif" command="_c1jrADiBEeKLl-NzluZ-Gg">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_lwQDYCaEEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
+    </elements>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_QY0oEDiCEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.deleteUnidentifiedPeaks" label="Delete Unidentified Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_unidentified_peaks.gif" command="_nalwADiBEeKLl-NzluZ-Gg">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_mNKB0CaEEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
+    </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_tec7sDpJEeKA5v4GDoyzvg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu" positionInList="after:org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.undo">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_0VakgDh9EeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.redo" label="Redo" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/redo.gif" command="_o2GBgDh9EeKLl-NzluZ-Gg">
