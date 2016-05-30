@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_RBsFAEB8EeKMcNE1hx3pmQ">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_RBsFAEB8EeKMcNE1hx3pmQ">
   <imports xsi:type="basic:Part" xmi:id="_UeP4YEp1EeKZ_plecEwiSg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.peakListView"/>
   <imports xsi:type="advanced:Area" xmi:id="_qkglcLPfEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.rcp.app.ui.editor"/>
   <imports xsi:type="basic:Part" xmi:id="_TPbhUKicEeSHVKbkTTIfUw" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.part.peakListView"/>
@@ -12,7 +12,9 @@
     <elements xsi:type="commands:Handler" xmi:id="_QRolYKiaEeSHVKbkTTIfUw" elementId="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.handler.manualPeakDetectorCSD" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.handlers.DetectorHandlerCSD" command="_LXlGMKiaEeSHVKbkTTIfUw"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_vs8xEEB_EeKMcNE1hx3pmQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors.msd">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_xTppIEB_EeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.handledmenuitem.manualPeakDetectorMSD" label="Manual Peak Detector" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peak-manual.gif" command="_krZIIEB_EeKMcNE1hx3pmQ"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_xTppIEB_EeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.handledmenuitem.manualPeakDetectorMSD" label="Manual Peak Detector" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peak-manual.gif" command="_krZIIEB_EeKMcNE1hx3pmQ">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_0EDgMCaEEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
+    </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_-5PfoECAEeKMcNE1hx3pmQ" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
     <elements xsi:type="basic:Part" xmi:id="_AeBsIECBEeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.views.chromatogramSelectionView" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.views.ChromatogramSelectionView" label="Chromatogram Selection" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif"/>
@@ -42,6 +44,8 @@
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_VQlLoKiaEeSHVKbkTTIfUw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors.csd">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_Ye8lEKiaEeSHVKbkTTIfUw" elementId="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.handledmenuitem.manualPeakDetectorCSD" label="Manual Peak Detector" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peak-manual.gif" command="_LXlGMKiaEeSHVKbkTTIfUw"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_Ye8lEKiaEeSHVKbkTTIfUw" elementId="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.handledmenuitem.manualPeakDetectorCSD" label="Manual Peak Detector" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peak-manual.gif" command="_LXlGMKiaEeSHVKbkTTIfUw">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_ycJHMCaEEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeCSD"/>
+    </elements>
   </fragments>
 </fragment:ModelFragments>
