@@ -25,7 +25,9 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_yuL6gDL3EeKMEOdllHiEaA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.main" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.menu.file">
     <elements xsi:type="menu:Menu" xmi:id="_QKMFgDL4EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu" label="Chromatogram">
-      <children xsi:type="menu:HandledMenuItem" xmi:id="_SszSAMCEEeOvhYBWy9aiDQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.unzoomChromatogram" label="Unzoom Chromatogram" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/unzoomChromatogram.gif" command="_0cbDwMCDEeOvhYBWy9aiDQ"/>
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_SszSAMCEEeOvhYBWy9aiDQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.unzoomChromatogram" label="Unzoom Chromatogram" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/unzoomChromatogram.gif" command="_0cbDwMCDEeOvhYBWy9aiDQ">
+        <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_7RFO8CaBEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
+      </children>
       <children xsi:type="menu:MenuSeparator" xmi:id="_3b4mcDL8EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.1"/>
       <children xsi:type="menu:Menu" xmi:id="_6R6_cDL8EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.classifier" label="Classifier"/>
       <children xsi:type="menu:MenuSeparator" xmi:id="_fmoWoDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.2"/>
