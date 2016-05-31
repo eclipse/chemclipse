@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui</module>
     <module>../../features/org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.updateSite</module>
   </modules>
 </project>
