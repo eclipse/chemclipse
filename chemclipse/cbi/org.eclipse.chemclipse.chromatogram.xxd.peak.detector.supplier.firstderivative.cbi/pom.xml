@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.updateSite</module>
   </modules>
 </project>
