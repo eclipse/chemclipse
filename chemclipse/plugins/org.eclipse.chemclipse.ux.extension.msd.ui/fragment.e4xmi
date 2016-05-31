@@ -263,7 +263,7 @@
     </elements>
     <elements xsi:type="menu:MenuSeparator" xmi:id="_Hu8kkJiIEeOBdeuz4rhR6Q" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.menuseparator.1"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_ABSHADiEEeKLl-NzluZ-Gg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier.msd" positionInList="before:org.eclipse.chemclipse.ux.extension.ui.menu.identifier.msd.separator.misc">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_ABSHADiEEeKLl-NzluZ-Gg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier" positionInList="before:org.eclipse.chemclipse.ux.extension.ui.menu.identifier.separator.misc">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_Z0xakDiBEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.deleteAllIdentifications" label="Delete All Identifications" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_all_identifications.gif" command="_c1jrADiBEeKLl-NzluZ-Gg">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_lwQDYCaEEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
     </elements>
