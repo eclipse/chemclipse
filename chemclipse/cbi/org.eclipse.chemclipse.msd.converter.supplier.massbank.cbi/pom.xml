@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.msd.converter.supplier.massbank.ui</module>
     <module>../../features/org.eclipse.chemclipse.msd.converter.supplier.massbank.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.msd.converter.supplier.massbank.fragment.test</module>-->   
-    <module>../../sites/org.eclipse.chemclipse.msd.converter.supplier.massbank.updateSite</module>
   </modules>
 </project>
