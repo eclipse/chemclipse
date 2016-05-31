@@ -11,9 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.swt;
 
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -26,11 +31,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-
-import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
 
 /**
  * @author Philip (eselmeister) Wenig
@@ -46,14 +46,11 @@ public class NoiseMassSpectraUI extends Composite {
 	private Text textGoto;
 	private Button buttonGoto;
 	private Label labelDetails;
-	private NumberFormat numberFormat;
+	private DecimalFormat decimalFormat;
 
 	public NoiseMassSpectraUI(Composite parent, int style) {
 		super(parent, style);
-		// TODO store NumberFormat of retention time in another class e.g. in model
-		numberFormat = NumberFormat.getInstance();
-		numberFormat.setMinimumFractionDigits(3);
-		numberFormat.setMaximumFractionDigits(3);
+		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 		initialize(parent);
 	}
 
@@ -256,9 +253,9 @@ public class NoiseMassSpectraUI extends Composite {
 		builder.append(actualMassSpectrum.getStopScan());
 		builder.append(" | ");
 		builder.append("RT: ");
-		builder.append(numberFormat.format(actualMassSpectrum.getStartRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
+		builder.append(decimalFormat.format(actualMassSpectrum.getStartRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 		builder.append(" - ");
-		builder.append(numberFormat.format(actualMassSpectrum.getStopRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
+		builder.append(decimalFormat.format(actualMassSpectrum.getStopRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 		labelDetails.setText(builder.toString());
 	}
 }
