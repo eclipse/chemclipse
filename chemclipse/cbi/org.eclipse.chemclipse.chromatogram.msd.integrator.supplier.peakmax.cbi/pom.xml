@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.updateSite</module>
   </modules>
 </project>
