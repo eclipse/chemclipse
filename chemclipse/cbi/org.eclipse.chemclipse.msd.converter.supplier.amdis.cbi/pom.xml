@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.msd.converter.supplier.amdis.ui</module>
     <module>../../features/org.eclipse.chemclipse.msd.converter.supplier.amdis.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.msd.converter.supplier.amdis.fragment.test</module>-->   
-    <module>../../sites/org.eclipse.chemclipse.msd.converter.supplier.amdis.updateSite</module>
   </modules>
 </project>
