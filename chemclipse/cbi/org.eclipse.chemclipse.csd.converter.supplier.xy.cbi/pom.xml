@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.csd.converter.supplier.xy.ui</module>
     <module>../../features/org.eclipse.chemclipse.csd.converter.supplier.xy.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.csd.converter.supplier.xy.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.csd.converter.supplier.xy.updateSite</module>
   </modules>
 </project>
