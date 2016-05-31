@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.updateSite</module>
   </modules>
 </project>
