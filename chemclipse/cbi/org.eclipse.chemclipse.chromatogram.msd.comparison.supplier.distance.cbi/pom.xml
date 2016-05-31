@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.updateSite</module>
   </modules>
 </project>
