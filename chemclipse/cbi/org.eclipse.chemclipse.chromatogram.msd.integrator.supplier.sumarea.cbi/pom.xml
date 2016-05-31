@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.updateSite</module>
   </modules>
 </project>

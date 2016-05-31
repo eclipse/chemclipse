@@ -6,7 +6,7 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_6NsdID_pEeKRob0ySoIctA" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Handler" xmi:id="_8GZEID_pEeKRob0ySoIctA" elementId="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.ui.handler.chromatogramIntegrator" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.ui/org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.ui.handlers.ChromatogramIntegratorHandler" command="_3Y4MID_pEeKRob0ySoIctA"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EKSCED_qEeKRob0ySoIctA" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.integrators.msd">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EKSCED_qEeKRob0ySoIctA" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.integrators">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_FrjnkD_qEeKRob0ySoIctA" elementId="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.ui.handledmenuitem.chromatogramIntegrator" label="Sumarea Chromatogram Integrator" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/sumareaIntegrator.gif" command="_3Y4MID_pEeKRob0ySoIctA">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_u8E88CaIEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
     </elements>
