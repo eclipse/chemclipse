@@ -54,6 +54,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.updateSite</module>
   </modules>
 </project>
