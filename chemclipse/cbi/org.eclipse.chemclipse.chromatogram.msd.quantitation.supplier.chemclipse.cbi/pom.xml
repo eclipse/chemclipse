@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.updateSite</module>
   </modules>
 </project>

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<site>
-   <feature url="features/org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.feature_0.7.0.qualifier.jar" id="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.feature" version="0.7.0.qualifier">
-      <category name="org.eclipse.chemclipse.chromatogram.msd.plugins.quantifier"/>
-   </feature>
-   <category-def name="org.eclipse.chemclipse.chromatogram.msd.plugins.quantifier" label="Chromatogram / Peak Quantifier"/>
-</site>
