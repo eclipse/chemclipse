@@ -46,6 +46,5 @@
 		<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.ui</module>
 		<module>../../features/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.feature</module>
 		<!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.fragment.test</module> -->
-		<module>../../sites/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.updateSite</module>
 	</modules>
 </project>

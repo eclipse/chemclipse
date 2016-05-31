@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<site>
-   <feature url="features/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.feature_0.7.0.qualifier.jar" id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.feature" version="0.7.0.qualifier">
-      <category name="org.eclipse.chemclipse.chromatogram.msd.plugins.peak.detector"/>
-   </feature>
-   <category-def name="org.eclipse.chemclipse.chromatogram.msd.plugins.peak.detector" label="Peak Detector"/>
-</site>

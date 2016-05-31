@@ -6,7 +6,7 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_VYihQFgSEeOFM475zo4KCQ" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Handler" xmi:id="_lwpYIFgSEeOFM475zo4KCQ" elementId="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.ui.handler.detect" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.ui/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.ui.handlers.DetectorHandler" command="_g_MbUFgSEeOFM475zo4KCQ"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_VtOX0FgSEeOFM475zo4KCQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors.msd">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_VtOX0FgSEeOFM475zo4KCQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_vJ1VEFgSEeOFM475zo4KCQ" elementId="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.ui.handledmenuitem.detect" label="Deconvolution" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/deconvolution.gif" command="_g_MbUFgSEeOFM475zo4KCQ">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_Sc3U4CaJEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
     </elements>
