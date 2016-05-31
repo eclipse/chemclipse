@@ -19,8 +19,7 @@ import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IChemClipseChromatogramReportSettings;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
@@ -47,7 +46,8 @@ import org.eclipse.chemclipse.msd.model.core.comparator.IonAbundanceComparator;
 import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IChemClipseChromatogramReportSettings;
+import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramReport {
 
@@ -59,7 +59,7 @@ public class ChromatogramReport {
 	private DecimalFormat decimalFormat;
 
 	public ChromatogramReport() {
-		decimalFormat = new DecimalFormat("0.0####");
+		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0####");
 	}
 
 	public void generate(File file, boolean append, List<IChromatogram> chromatograms, IChemClipseChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) throws IOException {
