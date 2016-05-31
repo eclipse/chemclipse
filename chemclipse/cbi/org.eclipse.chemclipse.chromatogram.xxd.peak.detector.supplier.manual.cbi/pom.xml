@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.updateSite</module>
   </modules>
 </project>
