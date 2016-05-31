@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.updateSite</module>
   </modules>
 </project>
