@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.updateSite</module>
   </modules>
 </project>
