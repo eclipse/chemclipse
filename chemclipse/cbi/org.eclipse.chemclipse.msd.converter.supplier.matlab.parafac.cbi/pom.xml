@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.ui</module>
     <module>../../features/org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.updateSite</module>
   </modules>
 </project>
