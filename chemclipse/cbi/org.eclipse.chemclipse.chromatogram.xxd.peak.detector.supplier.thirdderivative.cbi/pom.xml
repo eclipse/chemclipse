@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.updateSite</module>
   </modules>
 </project>
