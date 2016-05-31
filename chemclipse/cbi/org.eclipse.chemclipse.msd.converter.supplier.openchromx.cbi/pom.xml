@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.msd.converter.supplier.openchromx.ui</module>
     <module>../../features/org.eclipse.chemclipse.msd.converter.supplier.openchromx.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.msd.converter.supplier.openchromx.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.msd.converter.supplier.openchromx.updateSite</module>
   </modules>
 </project>
