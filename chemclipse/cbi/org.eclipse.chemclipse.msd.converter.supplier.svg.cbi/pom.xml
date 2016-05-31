@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.msd.converter.supplier.svg.ui</module>
     <module>../../features/org.eclipse.chemclipse.msd.converter.supplier.svg.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.msd.converter.supplier.svg.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.msd.converter.supplier.svg.updateSite</module>
   </modules>
 </project>
