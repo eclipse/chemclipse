@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.ui</module>
     <module>../../features/org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.updateSite</module>
   </modules>
 </project>
