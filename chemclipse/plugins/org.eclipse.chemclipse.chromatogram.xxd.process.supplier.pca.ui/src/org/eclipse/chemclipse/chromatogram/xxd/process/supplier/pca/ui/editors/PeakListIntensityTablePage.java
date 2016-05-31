@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaRe
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.TimeRangeWizard;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -55,13 +56,10 @@ public class PeakListIntensityTablePage {
 	private Table peakListIntensityTable;
 	//
 	private NumberFormat numberFormat;
-	private static final int FRACTION_DIGITS = 3;
 
 	public PeakListIntensityTablePage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
-		numberFormat = NumberFormat.getInstance();
-		numberFormat.setMinimumFractionDigits(FRACTION_DIGITS);
-		numberFormat.setMaximumFractionDigits(FRACTION_DIGITS);
+		numberFormat = ValueFormat.getNumberFormatEnglish();
 		//
 		this.pcaEditor = pcaEditor;
 		initialize(tabFolder, formToolkit);
