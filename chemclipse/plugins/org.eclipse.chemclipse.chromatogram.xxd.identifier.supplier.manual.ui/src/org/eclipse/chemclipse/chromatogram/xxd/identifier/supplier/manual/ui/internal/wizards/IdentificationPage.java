@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.manual.ui.in
 import java.text.NumberFormat;
 import java.text.ParseException;
 
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -38,7 +39,7 @@ public class IdentificationPage extends WizardPage {
 		setTitle("Manual Peak Identification");
 		setDescription("Set an identification entry manually.");
 		setErrorMessage("Please set an identification name.");
-		numberFormat = NumberFormat.getInstance();
+		numberFormat = ValueFormat.getNumberFormatEnglish();
 	}
 
 	/**
