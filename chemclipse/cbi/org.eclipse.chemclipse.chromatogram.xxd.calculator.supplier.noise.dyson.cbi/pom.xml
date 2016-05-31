@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.updateSite</module>
   </modules>
 </project>
