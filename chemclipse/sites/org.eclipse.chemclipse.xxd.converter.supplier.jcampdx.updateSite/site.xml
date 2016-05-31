@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<site>
-   <feature url="features/org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.feature_0.7.0.qualifier.jar" id="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.feature" version="0.7.0.qualifier">
-      <category name="org.eclipse.chemclipse.xxd.plugins.converter"/>
-   </feature>
-   <category-def name="org.eclipse.chemclipse.xxd.plugins.converter" label="Chromatogram Converter"/>
-</site>

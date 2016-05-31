@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.ui</module>
     <module>../../features/org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.updateSite</module>
   </modules>
 </project>
