@@ -42,6 +42,7 @@ import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -84,7 +85,7 @@ public class PeakMassSpectrumEditUIWithLabel extends Composite implements IChrom
 
 	public PeakMassSpectrumEditUIWithLabel(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision, IEventBroker eventBroker) {
 		super(parent, style);
-		decimalFormat = new DecimalFormat("0.0####");
+		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0####");
 		this.eventBroker = eventBroker;
 		/*
 		 * Mass spectrum type, nominal or accurate

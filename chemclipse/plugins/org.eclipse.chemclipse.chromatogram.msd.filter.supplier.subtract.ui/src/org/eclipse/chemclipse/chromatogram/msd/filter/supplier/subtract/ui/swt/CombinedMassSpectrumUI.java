@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -36,7 +37,7 @@ public class CombinedMassSpectrumUI extends Composite {
 	public CombinedMassSpectrumUI(Composite parent, int style) {
 		super(parent, style);
 		initialize(parent);
-		decimalFormat = new DecimalFormat("0.0##");
+		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0##");
 	}
 
 	private void initialize(Composite parent) {
