@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
@@ -34,19 +34,17 @@ import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 
 public class MatlabParafacPeakWriter implements IPeakWriter {
 
 	private String lineSeparator;
 	private int peakCounter = 1;
-	private NumberFormat numberFormat;
-	private static final int FRACTION_DIGITS = 3;
+	private DecimalFormat decimalFormat;
 
 	public MatlabParafacPeakWriter() {
 		setLineSeparator();
-		numberFormat = NumberFormat.getInstance();
-		numberFormat.setMinimumFractionDigits(FRACTION_DIGITS);
-		numberFormat.setMaximumFractionDigits(FRACTION_DIGITS);
+		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
 	@Override
@@ -142,7 +140,7 @@ public class MatlabParafacPeakWriter implements IPeakWriter {
 			builder.append(peak.getDetectorDescription());
 			builder.append("], RT (Minutes) [");
 			double retentionTimeInMinutes = peak.getPeakModel().getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
-			builder.append(numberFormat.format(retentionTimeInMinutes));
+			builder.append(decimalFormat.format(retentionTimeInMinutes));
 			builder.append("]");
 		} else {
 			builder.append(modelDescription);
