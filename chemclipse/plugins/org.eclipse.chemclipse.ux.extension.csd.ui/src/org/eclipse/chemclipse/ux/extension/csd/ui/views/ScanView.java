@@ -15,6 +15,10 @@ import java.text.DecimalFormat;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.csd.model.core.IScanCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -25,10 +29,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-
-import org.eclipse.chemclipse.csd.model.core.IScanCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 
 public class ScanView extends AbstractChromatogramSelectionCSDView {
 
@@ -42,7 +42,7 @@ public class ScanView extends AbstractChromatogramSelectionCSDView {
 	@Inject
 	public ScanView(Composite parent, MPart part, EPartService partService, IEventBroker eventBroker) {
 		super(part, partService, eventBroker);
-		decimalFormat = new DecimalFormat("0.000");
+		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 		createControl(parent);
 	}
 

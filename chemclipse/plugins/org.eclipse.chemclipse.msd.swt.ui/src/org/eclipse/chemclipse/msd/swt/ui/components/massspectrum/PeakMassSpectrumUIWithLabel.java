@@ -13,18 +13,18 @@ package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
 import java.text.DecimalFormat;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.notifier.IChromatogramSelectionMSDUpdateNotifier;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-
-import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.notifier.IChromatogramSelectionMSDUpdateNotifier;
 
 /**
  * TODO merge with ScanMassSpectrumUIWithLabel
@@ -38,7 +38,7 @@ public class PeakMassSpectrumUIWithLabel extends Composite implements IChromatog
 
 	public PeakMassSpectrumUIWithLabel(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
 		super(parent, style);
-		decimalFormat = new DecimalFormat("0.0##");
+		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0##");
 		/*
 		 * Mass spectrum type, nominal or accurate
 		 */

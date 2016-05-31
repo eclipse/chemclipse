@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.msd.swt.ui.exceptions.NoIonAvailableException;
 import org.eclipse.chemclipse.msd.swt.ui.internal.components.massspectrum.BarSeriesUtil;
 import org.eclipse.chemclipse.msd.swt.ui.internal.components.massspectrum.IBarSeriesIon;
 import org.eclipse.chemclipse.msd.swt.ui.internal.components.massspectrum.IBarSeriesIons;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
@@ -65,7 +66,7 @@ public abstract class AbstractExtendedMassSpectrumUI extends AbstractViewMassSpe
 	public AbstractExtendedMassSpectrumUI(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
 		super(parent, style);
 		this.massValueDisplayPrecision = massValueDisplayPrecision;
-		decimalFormatExact = new DecimalFormat("0.0#####");
+		decimalFormatExact = ValueFormat.getDecimalFormatEnglish("0.0#####");
 		//
 		stringBuilder = new StringBuilder();
 	}

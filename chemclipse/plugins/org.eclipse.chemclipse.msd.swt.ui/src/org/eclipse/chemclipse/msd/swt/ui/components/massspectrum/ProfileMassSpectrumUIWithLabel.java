@@ -11,20 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
-import java.text.NumberFormat;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.notifier.IChromatogramSelectionMSDUpdateNotifier;
+import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
 /**
  * TODO merge with ScanMassSpectrumUIWithLabel
@@ -34,15 +34,12 @@ public class ProfileMassSpectrumUIWithLabel extends Composite implements IChroma
 	private ProfileMassSpectrumUI profileMassSpectrumUI;
 	private Label label;
 	private IScanMSD massSpectrum;
-	private NumberFormat numberFormat;
+	private DecimalFormat decimalFormat;
 
 	public ProfileMassSpectrumUIWithLabel(Composite parent, int style) {
 		super(parent, style);
 		setLayout(new FillLayout());
-		// TODO store NumberFormat of retention time in another class e.g. in model
-		numberFormat = NumberFormat.getInstance();
-		numberFormat.setMinimumFractionDigits(3);
-		numberFormat.setMaximumFractionDigits(3);
+		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 		initialize();
 	}
 
@@ -120,10 +117,10 @@ public class ProfileMassSpectrumUIWithLabel extends Composite implements IChroma
 			builder.append(actualMassSpectrum.getScanNumber());
 			builder.append(" | ");
 			builder.append("RT: ");
-			builder.append(numberFormat.format(actualMassSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
+			builder.append(decimalFormat.format(actualMassSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 			builder.append(" | ");
 			builder.append("RI: ");
-			builder.append(numberFormat.format(actualMassSpectrum.getRetentionIndex()));
+			builder.append(decimalFormat.format(actualMassSpectrum.getRetentionIndex()));
 			builder.append(" | ");
 			builder.append("Detector: MS");
 			builder.append(actualMassSpectrum.getMassSpectrometer());

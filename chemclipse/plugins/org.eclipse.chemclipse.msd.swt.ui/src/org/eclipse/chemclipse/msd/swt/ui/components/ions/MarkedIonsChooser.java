@@ -15,6 +15,14 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.List;
 
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIon;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
+import org.eclipse.chemclipse.msd.swt.ui.internal.components.ions.MarkedIonsChooserContentProvider;
+import org.eclipse.chemclipse.msd.swt.ui.internal.components.ions.MarkedIonsChooserLabelProvider;
+import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -29,13 +37,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIon;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.msd.swt.ui.internal.components.ions.MarkedIonsChooserContentProvider;
-import org.eclipse.chemclipse.msd.swt.ui.internal.components.ions.MarkedIonsChooserLabelProvider;
-import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 
 /**
  * This class can be used to show and edit instances of {@link IMarkedIons}.<br/>
@@ -63,7 +64,7 @@ public class MarkedIonsChooser {
 	 * @param style
 	 */
 	public MarkedIonsChooser(Composite parent, int style) {
-		numberFormat = NumberFormat.getInstance();
+		numberFormat = ValueFormat.getNumberFormatEnglish();
 		initialize(parent);
 	}
 

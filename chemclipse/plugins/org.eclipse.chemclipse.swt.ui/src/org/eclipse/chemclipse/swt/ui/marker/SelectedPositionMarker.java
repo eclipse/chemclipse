@@ -13,13 +13,13 @@ package org.eclipse.chemclipse.swt.ui.marker;
 
 import java.text.DecimalFormat;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.swtchart.ICustomPaintListener;
-
-import org.eclipse.chemclipse.model.core.IChromatogram;
 
 public class SelectedPositionMarker implements ICustomPaintListener, ISelectedPositionMarker {
 
@@ -39,8 +39,8 @@ public class SelectedPositionMarker implements ICustomPaintListener, ISelectedPo
 		}
 		this.foregroundColor = foregroundColor;
 		this.backgroundColor = backgroundColor;
-		decimalFormatRetentionTime = new DecimalFormat("0.00");
-		decimalFormatAbundance = new DecimalFormat("0");
+		decimalFormatRetentionTime = ValueFormat.getDecimalFormatEnglish("0.00");
+		decimalFormatAbundance = ValueFormat.getDecimalFormatEnglish("0");
 	}
 
 	@Override

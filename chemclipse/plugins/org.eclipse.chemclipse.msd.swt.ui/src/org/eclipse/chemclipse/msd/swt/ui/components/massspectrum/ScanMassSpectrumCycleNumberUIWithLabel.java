@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.notifier.IChromatogramSelectionMSDUpdateNotifier;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -46,7 +47,7 @@ public class ScanMassSpectrumCycleNumberUIWithLabel extends Composite implements
 
 	public ScanMassSpectrumCycleNumberUIWithLabel(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
 		super(parent, style);
-		decimalFormat = new DecimalFormat("0.0##");
+		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0##");
 		/*
 		 * Mass spectrum type, nominal or accurate
 		 */

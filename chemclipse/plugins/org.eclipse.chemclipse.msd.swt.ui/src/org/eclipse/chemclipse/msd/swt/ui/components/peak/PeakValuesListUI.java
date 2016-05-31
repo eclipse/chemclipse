@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.notifier.IChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -39,7 +40,7 @@ public class PeakValuesListUI extends Composite implements IChromatogramSelectio
 
 	public PeakValuesListUI(Composite parent, int style) {
 		super(parent, style);
-		decimalFormat = new DecimalFormat();
+		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 		stringBuilder = new StringBuilder();
 		initialize(parent);
 	}

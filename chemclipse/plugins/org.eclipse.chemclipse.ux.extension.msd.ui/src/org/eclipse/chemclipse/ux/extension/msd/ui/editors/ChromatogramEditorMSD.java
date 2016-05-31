@@ -44,6 +44,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.IonTransitionCheckBoxEditingSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.IonTransitionContentProvider;
@@ -161,7 +162,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		/*
 		 * Decimal format.
 		 */
-		decimalFormat = new DecimalFormat("0.0##");
+		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0##");
 	}
 
 	@PostConstruct

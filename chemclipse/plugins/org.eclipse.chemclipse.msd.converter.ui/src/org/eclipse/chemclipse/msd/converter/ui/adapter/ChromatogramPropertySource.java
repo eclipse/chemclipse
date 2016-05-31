@@ -15,7 +15,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
@@ -168,7 +168,7 @@ public abstract class ChromatogramPropertySource implements IPropertySource {
 		if(pattern == null || pattern == "") {
 			pattern = "#.00";
 		}
-		formatter = new DecimalFormat(pattern);
+		formatter = ValueFormat.getDecimalFormatEnglish(pattern);
 		return formatter.format(value);
 	}
 

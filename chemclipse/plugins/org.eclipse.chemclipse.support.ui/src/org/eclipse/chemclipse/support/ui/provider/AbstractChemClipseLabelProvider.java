@@ -13,9 +13,8 @@
 package org.eclipse.chemclipse.support.ui.provider;
 
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
 
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 
@@ -41,45 +40,17 @@ public abstract class AbstractChemClipseLabelProvider extends LabelProvider impl
 
 	private void createDecimalFormatInstance(String pattern) {
 
-		DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-		String format = "0.000";
-		try {
-			decimalFormat = new DecimalFormat(pattern, decimalFormatSymbols);
-		} catch(NullPointerException e) {
-			decimalFormat = new DecimalFormat(format, decimalFormatSymbols);
-		} catch(IllegalArgumentException e) {
-			decimalFormat = new DecimalFormat(format, decimalFormatSymbols);
-		}
+		decimalFormat = ValueFormat.getDecimalFormatEnglish(pattern);
 	}
 
 	public DecimalFormat createScientificDecimalFormatInstance() {
 
-		DecimalFormat scientificDecimalFormat;
-		DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-		String format = "0.###E0";
-		try {
-			scientificDecimalFormat = new DecimalFormat(format, decimalFormatSymbols);
-		} catch(NullPointerException e) {
-			scientificDecimalFormat = new DecimalFormat(format, decimalFormatSymbols);
-		} catch(IllegalArgumentException e) {
-			scientificDecimalFormat = new DecimalFormat(format, decimalFormatSymbols);
-		}
-		return scientificDecimalFormat;
+		return ValueFormat.getDecimalFormatEnglish("0.###E0");
 	}
 
 	public DecimalFormat createIntegerDecimalFormatInstance() {
 
-		DecimalFormat scientificDecimalFormat;
-		DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.getDefault());
-		String format = "0";
-		try {
-			scientificDecimalFormat = new DecimalFormat(format, decimalFormatSymbols);
-		} catch(NullPointerException e) {
-			scientificDecimalFormat = new DecimalFormat(format, decimalFormatSymbols);
-		} catch(IllegalArgumentException e) {
-			scientificDecimalFormat = new DecimalFormat(format, decimalFormatSymbols);
-		}
-		return scientificDecimalFormat;
+		return ValueFormat.getDecimalFormatEnglish("0");
 	}
 
 	public DecimalFormat getDecimalFormat() {

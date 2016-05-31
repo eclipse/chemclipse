@@ -34,6 +34,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.ux.extension.ui.dialogs.ReferencedChromatogramDialog;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.internal.support.ChromatogramImportRunnable;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramFileSupport;
@@ -144,7 +145,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 		/*
 		 * Decimal format.
 		 */
-		decimalFormat = new DecimalFormat("0.0##");
+		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0##");
 	}
 
 	@PostConstruct

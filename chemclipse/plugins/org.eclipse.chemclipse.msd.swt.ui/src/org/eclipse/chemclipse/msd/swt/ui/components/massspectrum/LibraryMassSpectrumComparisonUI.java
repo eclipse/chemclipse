@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -38,7 +39,7 @@ public class LibraryMassSpectrumComparisonUI extends Composite {
 
 	public LibraryMassSpectrumComparisonUI(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
 		super(parent, style);
-		decimalFormat = new DecimalFormat("0.0####");
+		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0####");
 		/*
 		 * Mass spectrum type, nominal or accurate
 		 */

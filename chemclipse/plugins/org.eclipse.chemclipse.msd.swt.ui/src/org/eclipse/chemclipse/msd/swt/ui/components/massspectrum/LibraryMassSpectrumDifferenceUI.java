@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -43,7 +44,7 @@ public class LibraryMassSpectrumDifferenceUI extends Composite {
 
 	public LibraryMassSpectrumDifferenceUI(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
 		super(parent, style);
-		decimalFormat = new DecimalFormat("0.0####");
+		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0####");
 		/*
 		 * Mass spectrum type, nominal or accurate
 		 */
