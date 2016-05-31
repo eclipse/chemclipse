@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.updateSite</module>
   </modules>
 </project>
