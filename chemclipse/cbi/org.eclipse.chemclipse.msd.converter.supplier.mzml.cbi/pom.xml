@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.msd.converter.supplier.mzml.ui</module>
     <module>../../features/org.eclipse.chemclipse.msd.converter.supplier.mzml.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.msd.converter.supplier.mzml.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.msd.converter.supplier.mzml.updateSite</module>
   </modules>
 </project>
