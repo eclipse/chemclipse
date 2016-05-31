@@ -55,6 +55,5 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.ui</module>
     <module>../../features/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.feature</module>
     <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.fragment.test</module>-->
-    <module>../../sites/org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.updateSite</module>
   </modules>
 </project>
