@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2016 Philip (eselmeister) Wenig.
+ * Copyright (c) 2016 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,15 +7,15 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Philip (eselmeister) Wenig - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
+import java.util.List;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -24,10 +24,14 @@ import org.eclipse.ui.navigator.IDescriptionProvider;
 
 public class ChromatogramFileExplorerLabelProvider extends LabelProvider implements ILabelProvider, IDescriptionProvider {
 
-	private IChromatogramIdentifier chromatogramIdentifier;
+	private List<IChromatogramIdentifier> chromatogramIdentifierList;
 
 	public ChromatogramFileExplorerLabelProvider(IChromatogramIdentifier chromatogramIdentifier) {
-		this.chromatogramIdentifier = chromatogramIdentifier;
+		this(ExplorerListSupport.getChromatogramIdentifierList(chromatogramIdentifier));
+	}
+
+	public ChromatogramFileExplorerLabelProvider(List<IChromatogramIdentifier> chromatogramIdentifierList) {
+		this.chromatogramIdentifierList = chromatogramIdentifierList;
 	}
 
 	@Override
@@ -63,18 +67,48 @@ public class ChromatogramFileExplorerLabelProvider extends LabelProvider impleme
 					 * Check if the directory could be a registered
 					 * chromatogram.
 					 */
-					if(chromatogramIdentifier.isChromatogramDirectory(file)) {
-						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16);
-					} else {
+					boolean isNormalDirectory = true;
+					exitloop:
+					for(IChromatogramIdentifier chromatogramIdentifier : chromatogramIdentifierList) {
+						if(chromatogramIdentifier.isChromatogramDirectory(file)) {
+							/*
+							 * Check and validate.
+							 */
+							descriptor = getImageDescriptor(chromatogramIdentifier);
+							if(descriptor != null) {
+								isNormalDirectory = false;
+								break exitloop;
+							}
+						}
+					}
+					/*
+					 * Default dir.
+					 */
+					if(isNormalDirectory) {
 						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16);
 					}
 				} else {
 					/*
 					 * Check if the file could be a registered chromatogram.
 					 */
-					if(chromatogramIdentifier.isChromatogram(file)) {
-						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16);
-					} else {
+					boolean isNormalFile = true;
+					exitloop:
+					for(IChromatogramIdentifier chromatogramIdentifier : chromatogramIdentifierList) {
+						if(chromatogramIdentifier.isChromatogram(file)) {
+							/*
+							 * Check and validate.
+							 */
+							descriptor = getImageDescriptor(chromatogramIdentifier);
+							if(descriptor != null) {
+								isNormalFile = false;
+								break exitloop;
+							}
+						}
+					}
+					/*
+					 * Default file.
+					 */
+					if(isNormalFile) {
 						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FILE, IApplicationImage.SIZE_16x16);
 					}
 				}
@@ -83,6 +117,27 @@ public class ChromatogramFileExplorerLabelProvider extends LabelProvider impleme
 			return image;
 		}
 		return null;
+	}
+
+	private ImageDescriptor getImageDescriptor(IChromatogramIdentifier chromatogramIdentifier) {
+
+		ImageDescriptor descriptor = null;
+		if(chromatogramIdentifier != null) {
+			switch(chromatogramIdentifier.getType()) {
+				case IChromatogramIdentifier.TYPE_MSD:
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_MSD, IApplicationImage.SIZE_16x16);
+					break;
+				case IChromatogramIdentifier.TYPE_CSD:
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_CSD, IApplicationImage.SIZE_16x16);
+					break;
+				case IChromatogramIdentifier.TYPE_WSD:
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_WSD, IApplicationImage.SIZE_16x16);
+					break;
+				default:
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16);
+			}
+		}
+		return descriptor;
 	}
 
 	@Override
