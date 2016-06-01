@@ -15,13 +15,10 @@ import junit.framework.TestCase;
 
 public class OperatingSystemUtils_1_Test extends TestCase {
 
-	private IOperatingSystemUtils operatingSystemUtils;
-
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		operatingSystemUtils = new OperatingSystemUtils();
 	}
 
 	@Override
@@ -32,7 +29,7 @@ public class OperatingSystemUtils_1_Test extends TestCase {
 
 	public void testGetLineDelimiter_1() {
 
-		String delimiter = operatingSystemUtils.getLineDelimiter();
+		String delimiter = OperatingSystemUtils.getLineDelimiter();
 		String os = System.getProperty("os.name").toLowerCase();
 		if(os.startsWith("windows")) {
 			assertEquals("\r\n", delimiter);

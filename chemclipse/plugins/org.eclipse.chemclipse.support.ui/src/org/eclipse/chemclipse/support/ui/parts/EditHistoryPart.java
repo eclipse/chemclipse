@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.messages.ISupportMessages;
 import org.eclipse.chemclipse.support.messages.SupportMessages;
-import org.eclipse.chemclipse.support.settings.IOperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.internal.provider.EditHistoryContentProvider;
 import org.eclipse.chemclipse.support.ui.internal.provider.EditHistoryLabelProvider;
@@ -75,7 +74,6 @@ public class EditHistoryPart {
 	private EditHistoryTableSorter editHistoryTableSorter;
 	//
 	private Clipboard clipboard;
-	private IOperatingSystemUtils operatingSystemUtils;
 
 	@Inject
 	public EditHistoryPart(EPartService partService, MPart part, IEventBroker eventBroker) {
@@ -92,7 +90,6 @@ public class EditHistoryPart {
 		 * Clipboard
 		 */
 		clipboard = new Clipboard(Display.getDefault());
-		operatingSystemUtils = new OperatingSystemUtils();
 		//
 		parent.setLayout(new FillLayout());
 		tableViewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -240,8 +237,8 @@ public class EditHistoryPart {
 	 */
 	private void copyToClipboard() {
 
-		String DELIMITER = IOperatingSystemUtils.TAB;
-		String END_OF_LINE = operatingSystemUtils.getLineDelimiter();
+		String DELIMITER = OperatingSystemUtils.TAB;
+		String END_OF_LINE = OperatingSystemUtils.getLineDelimiter();
 		StringBuilder builder = new StringBuilder();
 		int size = titles.length;
 		/*

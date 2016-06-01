@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.swt;
 
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
@@ -30,19 +31,14 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Menu;
 
-import org.eclipse.chemclipse.support.settings.IOperatingSystemUtils;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
-
 public class OverviewIntegrationResultsUI extends Composite {
 
 	public static final String POPUP_MENU_ID = "org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.swt.overviewIntegrationResultsUI.popup";
 	private List list;
 	private Clipboard clipboard;
-	private IOperatingSystemUtils operatingSystemUtils;
 
 	public OverviewIntegrationResultsUI(Composite parent, int style) {
 		super(parent, style);
-		operatingSystemUtils = new OperatingSystemUtils();
 		initialize();
 	}
 
@@ -129,7 +125,7 @@ public class OverviewIntegrationResultsUI extends Composite {
 		StringBuilder builder = new StringBuilder();
 		for(String selection : list.getSelection()) {
 			builder.append(selection);
-			builder.append(operatingSystemUtils.getLineDelimiter());
+			builder.append(OperatingSystemUtils.getLineDelimiter());
 		}
 		/*
 		 * Transfer the selected text (items) to the clipboard.

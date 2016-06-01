@@ -16,7 +16,6 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.support.messages.ISupportMessages;
 import org.eclipse.chemclipse.support.messages.SupportMessages;
-import org.eclipse.chemclipse.support.settings.IOperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -47,7 +46,6 @@ public class EnhancedTreeViewer extends Composite {
 	private TreeViewer treeViewer;
 	//
 	private Clipboard clipboard;
-	private IOperatingSystemUtils operatingSystemUtils;
 
 	public EnhancedTreeViewer(Composite parent, int style) {
 		super(parent, style);
@@ -78,7 +76,6 @@ public class EnhancedTreeViewer extends Composite {
 	private void createControl() {
 
 		clipboard = new Clipboard(Display.getDefault());
-		operatingSystemUtils = new OperatingSystemUtils();
 		//
 		treeViewer = new TreeViewer(this, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		treeViewer.getTree().setLayout(new FillLayout());
@@ -145,7 +142,7 @@ public class EnhancedTreeViewer extends Composite {
 
 	private void copyToClipboard() {
 
-		String END_OF_LINE = operatingSystemUtils.getLineDelimiter();
+		String END_OF_LINE = OperatingSystemUtils.getLineDelimiter();
 		StringBuilder builder = new StringBuilder();
 		Tree tree = treeViewer.getTree();
 		/*
@@ -187,8 +184,8 @@ public class EnhancedTreeViewer extends Composite {
 
 	private void copyTreeToClipboard(TreeItem treeItem, StringBuilder builder, String intend) {
 
-		String DELIMITER = IOperatingSystemUtils.TAB;
-		String END_OF_LINE = operatingSystemUtils.getLineDelimiter();
+		String DELIMITER = OperatingSystemUtils.TAB;
+		String END_OF_LINE = OperatingSystemUtils.getLineDelimiter();
 		//
 		if(!treeItem.getText().equals("")) {
 			builder.append(intend + treeItem.getText());

@@ -42,7 +42,6 @@ public class ProcessingInfoUI {
 	private Clipboard clipboard;
 	private String[] titles = {"Type", "Description", "Message", "Date"};
 	private int bounds[] = {100, 100, 100, 100};
-	private OperatingSystemUtils operatingSystemUtils;
 	//
 	private static final String DELIMITER = "\t";
 
@@ -51,7 +50,6 @@ public class ProcessingInfoUI {
 		 * Clipboard / OS utils
 		 */
 		parent.setLayout(new FillLayout());
-		operatingSystemUtils = new OperatingSystemUtils();
 		clipboard = new Clipboard(Display.getDefault());
 		Map<Long, String> substances = new HashMap<Long, String>();
 		tableViewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -91,7 +89,7 @@ public class ProcessingInfoUI {
 			builder.append(title);
 			builder.append(DELIMITER);
 		}
-		builder.append(operatingSystemUtils.getLineDelimiter());
+		builder.append(OperatingSystemUtils.getLineDelimiter());
 		/*
 		 * Copy the selected items.
 		 */
@@ -109,14 +107,14 @@ public class ProcessingInfoUI {
 				builder.append(selection.getText(columnIndex));
 				builder.append(DELIMITER);
 			}
-			builder.append(operatingSystemUtils.getLineDelimiter());
+			builder.append(OperatingSystemUtils.getLineDelimiter());
 		}
 		/*
 		 * If the builder is empty, give a note that items needs to be selected.
 		 */
 		if(builder.length() == 0) {
 			builder.append("Please select one or more entries in the list.");
-			builder.append(operatingSystemUtils.getLineDelimiter());
+			builder.append(OperatingSystemUtils.getLineDelimiter());
 		}
 		/*
 		 * Transfer the selected text (items) to the clipboard.

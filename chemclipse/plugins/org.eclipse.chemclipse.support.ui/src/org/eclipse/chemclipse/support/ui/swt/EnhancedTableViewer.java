@@ -17,7 +17,6 @@ import java.util.List;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.messages.ISupportMessages;
 import org.eclipse.chemclipse.support.messages.SupportMessages;
-import org.eclipse.chemclipse.support.settings.IOperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -56,7 +55,6 @@ public class EnhancedTableViewer extends Composite {
 	private EnhancedViewerSorter sorter;
 	//
 	private Clipboard clipboard;
-	private IOperatingSystemUtils operatingSystemUtils;
 
 	public EnhancedTableViewer(Composite parent, int style) {
 		super(parent, style);
@@ -126,7 +124,6 @@ public class EnhancedTableViewer extends Composite {
 		tableViewerColumns = new ArrayList<TableViewerColumn>();
 		//
 		clipboard = new Clipboard(Display.getDefault());
-		operatingSystemUtils = new OperatingSystemUtils();
 		//
 		tableViewer = new TableViewer(this, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		final Table table = tableViewer.getTable();
@@ -151,8 +148,8 @@ public class EnhancedTableViewer extends Composite {
 
 	private void copyToClipboard() {
 
-		String DELIMITER = IOperatingSystemUtils.TAB;
-		String END_OF_LINE = operatingSystemUtils.getLineDelimiter();
+		String DELIMITER = OperatingSystemUtils.TAB;
+		String END_OF_LINE = OperatingSystemUtils.getLineDelimiter();
 		StringBuilder builder = new StringBuilder();
 		Table table = tableViewer.getTable();
 		TableColumn[] tableColumns = table.getColumns();

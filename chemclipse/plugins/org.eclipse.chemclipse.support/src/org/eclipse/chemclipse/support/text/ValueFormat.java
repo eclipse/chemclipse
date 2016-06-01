@@ -42,6 +42,12 @@ public class ValueFormat {
 	}
 
 	/**
+	 * Use static methods only.
+	 */
+	private ValueFormat() {
+	}
+
+	/**
 	 * Returns the decimal instance:
 	 * "0.###", ENGLISH
 	 * All values are displayed with a precision of 3 decimals.
