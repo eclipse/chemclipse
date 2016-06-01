@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.swt.ui.components.chromatogram.MultipleChromatogra
 import org.eclipse.chemclipse.swt.ui.preferences.SWTPreferencePage;
 import org.eclipse.chemclipse.swt.ui.support.AxisTitlesIntensityScale;
 import org.eclipse.chemclipse.swt.ui.support.IOffset;
+import org.eclipse.chemclipse.swt.ui.support.Offset;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -52,12 +53,15 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 	private MultipleChromatogramOffsetUI chromatogramOverlayUI;
 	private Shell shell;
 	private Cursor cursor;
+	private Button buttonLockOffset;
+	private Offset lockOffset;
 
 	@Inject
 	public ChromatogramOverlayView(EPartService partService, MPart part, IEventBroker eventBroker) {
 		super(part, partService, eventBroker);
 		shell = Display.getCurrent().getActiveShell();
 		cursor = shell.getCursor();
+		lockOffset = new Offset(0.0d, 0.0d);
 	}
 
 	@PostConstruct
@@ -66,11 +70,31 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 		IOffset offset = getOffset();
 		composite.setLayout(new GridLayout(1, true));
 		//
+		createButtonBar(composite);
+		chromatogramOverlayUI = new MultipleChromatogramOffsetUI(composite, SWT.NONE, offset, new AxisTitlesIntensityScale());
+		chromatogramOverlayUI.setLayoutData(new GridData(GridData.FILL_BOTH));
+	}
+
+	private void createButtonBar(Composite composite) {
+
 		Composite compositeButtons = new Composite(composite, SWT.NONE);
 		GridData gridDataComposite = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataComposite.horizontalAlignment = SWT.END;
 		compositeButtons.setLayoutData(gridDataComposite);
-		compositeButtons.setLayout(new GridLayout(6, false));
+		compositeButtons.setLayout(new GridLayout(7, false));
+		//
+		buttonLockOffset = new Button(compositeButtons, SWT.CHECK);
+		buttonLockOffset.setText("Lock Offset");
+		buttonLockOffset.setSelection(false);
+		buttonLockOffset.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				setLockOffset(buttonLockOffset.getSelection());
+				update(getChromatogramSelection(), false);
+			}
+		});
 		//
 		Button buttonSettings = new Button(compositeButtons, SWT.PUSH);
 		buttonSettings.setText("");
@@ -108,6 +132,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 			public void widgetSelected(SelectionEvent e) {
 
 				PreferenceSupplier.resetOffset();
+				resetLockedOffset();
 				update(getChromatogramSelection(), false);
 			}
 		});
@@ -122,6 +147,9 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 				setWaitCursor();
 				PreferenceSupplier.decreaseXOffset();
+				if(buttonLockOffset.getSelection()) {
+					setLockedOffsetX();
+				}
 				update(getChromatogramSelection(), false);
 				setDefaultCursor();
 			}
@@ -137,6 +165,9 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 				setWaitCursor();
 				PreferenceSupplier.increaseXOffset();
+				if(buttonLockOffset.getSelection()) {
+					setLockedOffsetX();
+				}
 				update(getChromatogramSelection(), false);
 				setDefaultCursor();
 			}
@@ -152,6 +183,9 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 				setWaitCursor();
 				PreferenceSupplier.increaseYOffset();
+				if(buttonLockOffset.getSelection()) {
+					setLockedOffsetY();
+				}
 				update(getChromatogramSelection(), false);
 				setDefaultCursor();
 			}
@@ -167,13 +201,13 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 				setWaitCursor();
 				PreferenceSupplier.decreaseYOffset();
+				if(buttonLockOffset.getSelection()) {
+					setLockedOffsetY();
+				}
 				update(getChromatogramSelection(), false);
 				setDefaultCursor();
 			}
 		});
-		//
-		chromatogramOverlayUI = new MultipleChromatogramOffsetUI(composite, SWT.NONE, offset, new AxisTitlesIntensityScale());
-		chromatogramOverlayUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	@PreDestroy
@@ -201,9 +235,13 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 			 * Update the offset of the view. It necessary, the user must
 			 * restart the workbench in case of a change otherwise.
 			 */
+			if(buttonLockOffset.getSelection()) {
+				chromatogramOverlayUI.setOffset(lockOffset);
+			} else {
+				chromatogramOverlayUI.setOffset(getOffset());
+			}
+			//
 			List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(chromatogramSelection, false);
-			IOffset offset = getOffset();
-			chromatogramOverlayUI.setOffset(offset);
 			chromatogramOverlayUI.updateSelection(chromatogramSelections, forceReload);
 		}
 	}
@@ -216,5 +254,43 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 	private void setDefaultCursor() {
 
 		shell.setCursor(cursor);
+	}
+
+	private void setLockedOffsetX() {
+
+		int xOffset = PreferenceSupplier.getOverlayXOffset();
+		List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(getChromatogramSelection(), false);
+		int x = 0;
+		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
+			chromatogramSelection.getOffset().setX(x);
+			x += xOffset;
+		}
+	}
+
+	private void setLockedOffsetY() {
+
+		int yOffset = PreferenceSupplier.getOverlayYOffset();
+		List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(getChromatogramSelection(), false);
+		int y = 0;
+		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
+			chromatogramSelection.getOffset().setY(y);
+			y += yOffset;
+		}
+	}
+
+	private void setLockOffset(boolean lockOffset) {
+
+		List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(getChromatogramSelection(), false);
+		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
+			chromatogramSelection.setLockOffset(lockOffset);
+		}
+	}
+
+	private void resetLockedOffset() {
+
+		List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(getChromatogramSelection(), false);
+		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
+			chromatogramSelection.resetOffset();
+		}
 	}
 }

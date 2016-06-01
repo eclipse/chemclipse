@@ -151,6 +151,9 @@ public class SeriesConverter {
 		 */
 		IMultipleSeries chromatogramSeries = new MultipleSeries();
 		if(chromatogramSelections != null && chromatogramSelections.size() >= 1) {
+			/*
+			 * Validate Offset
+			 */
 			offset = SeriesConverter.validateOffset(offset);
 			/*
 			 * The first chromatogram is the master.
@@ -164,6 +167,10 @@ public class SeriesConverter {
 			 */
 			int counter = 0;
 			for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
+				/*
+				 * Is the offset locked?
+				 */
+				boolean isLockOffset = chromatogramSelection.isLockOffset();
 				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 				counter++;
 				/*
@@ -210,8 +217,13 @@ public class SeriesConverter {
 					/*
 					 * Sign the abundance as a negative value?
 					 */
-					xOffset = offset.getCurrentXOffset();
-					yOffset = offset.getCurrentYOffset();
+					if(isLockOffset) {
+						xOffset = chromatogramSelection.getOffset().getX();
+						yOffset = chromatogramSelection.getOffset().getY();
+					} else {
+						xOffset = offset.getCurrentXOffset();
+						yOffset = offset.getCurrentYOffset();
+					}
 					if(sign == Sign.NEGATIVE) {
 						abundance *= -1;
 						xOffset *= -1;
