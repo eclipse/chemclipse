@@ -40,7 +40,7 @@ public class Category {
 
 	public void error(final Object message, Throwable t) {
 
-		logger.log(Category.class.getName(), Level.ERROR, message, null);
+		logger.log(Category.class.getName(), Level.ERROR, message, t);
 	}
 
 	public void fatal(final Object message) {
