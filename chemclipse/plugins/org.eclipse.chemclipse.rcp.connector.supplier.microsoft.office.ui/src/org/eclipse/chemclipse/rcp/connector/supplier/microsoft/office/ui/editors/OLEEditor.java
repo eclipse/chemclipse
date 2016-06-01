@@ -13,6 +13,9 @@ package org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editor
 
 import java.io.File;
 
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
@@ -45,17 +48,11 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.eclipse.ui.part.EditorPart;
 
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.settings.IOperatingSystemUtils;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
-
 public abstract class OLEEditor extends EditorPart {
 
 	private FormToolkit formToolkit;
 	private OleControlSite oleControlSite;
 	private File officeFile;
-	private IOperatingSystemUtils operatingSystemUtils;
 	private String progId; // e.g. "Excel.Sheet";
 	private String filterExtension; // e.g. "xlsx";
 	private String filterName; // e.g. "Microsoft Excel 2007 (*.xlsx)";
@@ -68,7 +65,6 @@ public abstract class OLEEditor extends EditorPart {
 		this.progId = progId;
 		this.filterExtension = filterExtension;
 		this.filterName = filterName;
-		operatingSystemUtils = new OperatingSystemUtils();
 	}
 
 	@Override
@@ -136,7 +132,7 @@ public abstract class OLEEditor extends EditorPart {
 	public void createPartControl(Composite parent) {
 
 		parent.setLayout(new FillLayout());
-		if(operatingSystemUtils.isWindows()) {
+		if(OperatingSystemUtils.isWindows()) {
 			Composite oleComposite = new Composite(parent, SWT.NONE);
 			oleComposite.setLayout(new FillLayout());
 			OleFrame oleFrame = new OleFrame(oleComposite, SWT.NONE);
@@ -243,7 +239,7 @@ public abstract class OLEEditor extends EditorPart {
 		/*
 		 * Labels
 		 */
-		if(operatingSystemUtils.isWindows()) {
+		if(OperatingSystemUtils.isWindows()) {
 			createLabel(client, "The editor couldn't be started.", IApplicationImage.IMAGE_WARN);
 			createLabel(client, "Is an office version already installed?", IApplicationImage.IMAGE_QUESTION);
 			createLabel(client, "Have you installed the latest office version?", IApplicationImage.IMAGE_QUESTION);
