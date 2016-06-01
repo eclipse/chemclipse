@@ -24,9 +24,11 @@ import org.eclipse.swt.widgets.Composite;
 
 public class OverlaySettingsTableViewer extends EnhancedTableViewer {
 
-	private static final String OVERLAY = "Overlay";
-	private String[] TITLES = {"Chromatogram", OVERLAY};
-	private int[] BOUNDS = {250, 50};
+	public static final String OVERLAY_SELECTED = "Overlay";
+	public static final String LOCK_OFFSET = "Lock Offset";
+	//
+	private String[] TITLES = {"Chromatogram", OVERLAY_SELECTED, LOCK_OFFSET};
+	private int[] BOUNDS = {250, 100, 100};
 
 	public OverlaySettingsTableViewer(Composite parent, int style) {
 		super(parent, style);
@@ -52,8 +54,10 @@ public class OverlaySettingsTableViewer extends EnhancedTableViewer {
 		for(int i = 0; i < tableViewerColumns.size(); i++) {
 			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);
 			String label = tableViewerColumn.getColumn().getText();
-			if(label.equals(OVERLAY)) {
-				tableViewerColumn.setEditingSupport(new OverlaySettingsCheckBoxEditingSupport(tableViewer));
+			if(label.equals(OVERLAY_SELECTED)) {
+				tableViewerColumn.setEditingSupport(new OverlaySettingsCheckBoxEditingSupport(tableViewer, OVERLAY_SELECTED));
+			} else if(label.equals(LOCK_OFFSET)) {
+				tableViewerColumn.setEditingSupport(new OverlaySettingsCheckBoxEditingSupport(tableViewer, LOCK_OFFSET));
 			}
 		}
 	}

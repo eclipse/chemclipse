@@ -139,6 +139,7 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 	private CLabel labelChromatogramRetentionTimeRange;
 	private Text textStartRetentionTime;
 	private Text textStopRetentionTime;
+	private Button buttonLockOffset;
 	/*
 	 * FormToolkit for the error message page.
 	 */
@@ -521,6 +522,12 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 			textStartRetentionTime.setText(decimalFormat.format(chromatogramSelection.getStartRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
 			textStopRetentionTime.setText(decimalFormat.format(chromatogramSelection.getStopRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
 		}
+		/*
+		 * Locked Offset
+		 */
+		if(buttonLockOffset != null) {
+			buttonLockOffset.setSelection(chromatogramSelection.isLockOffset());
+		}
 	}
 
 	private void createChromatogramPage() {
@@ -747,7 +754,7 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 		 * Overlay
 		 */
 		buttonOverlay = new Button(client, SWT.CHECK);
-		buttonOverlay.setEnabled(chromatogramSelection.isOverlaySelected());
+		buttonOverlay.setSelection(chromatogramSelection.isOverlaySelected());
 		buttonOverlay.setText("Show chromatogram in overlay");
 		buttonOverlay.addSelectionListener(new SelectionAdapter() {
 
@@ -779,6 +786,21 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 			public void widgetSelected(SelectionEvent e) {
 
 				setRetentionTimeRange();
+			}
+		});
+		/*
+		 * Lock Offset
+		 */
+		buttonLockOffset = new Button(client, SWT.CHECK);
+		buttonLockOffset.setSelection(chromatogramSelection.isLockOffset());
+		buttonLockOffset.setText("Lock Offset");
+		buttonLockOffset.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean lockOffset = buttonLockOffset.getSelection();
+				chromatogramSelection.setLockOffset(lockOffset);
 			}
 		});
 		/*
