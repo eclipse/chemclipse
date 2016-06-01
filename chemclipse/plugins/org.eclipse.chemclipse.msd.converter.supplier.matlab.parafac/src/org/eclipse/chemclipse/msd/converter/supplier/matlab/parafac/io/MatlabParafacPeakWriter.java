@@ -215,10 +215,9 @@ public class MatlabParafacPeakWriter implements IPeakWriter {
 
 	private void setLineSeparator() {
 
-		OperatingSystemUtils operatingSystem = new OperatingSystemUtils();
-		if(operatingSystem.isWindows()) {
+		if(OperatingSystemUtils.isWindows()) {
 			lineSeparator = IConstants.CRLF;
-		} else if(operatingSystem.isMac()) {
+		} else if(OperatingSystemUtils.isMac()) {
 			lineSeparator = IConstants.CR;
 		} else {
 			lineSeparator = IConstants.LF;
