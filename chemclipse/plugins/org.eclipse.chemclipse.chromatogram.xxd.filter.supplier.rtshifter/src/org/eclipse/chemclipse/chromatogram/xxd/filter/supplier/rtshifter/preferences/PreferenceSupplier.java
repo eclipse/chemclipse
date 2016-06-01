@@ -42,6 +42,20 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int MIN_RETENTION_TIME = 0; // = 0.0 minutes
 	public static final int MAX_RETENTION_TIME = 6000000; // = 100.0 minutes;
 	//
+	public static final String P_OVERLAY_X_OFFSET = "overlayXOffset";
+	public static final int DEF_OVERLAY_X_OFFSET = 0;
+	public static final String P_OVERLAY_Y_OFFSET = "overlayYOffset";
+	public static final int DEF_OVERLAY_Y_OFFSET = 0;
+	//
+	public static final String P_OFFSET_STEP_LEFT = "offsetStepLeft";
+	public static final int DEF_OFFSET_STEP_LEFT = 25000;
+	public static final String P_OFFSET_STEP_RIGHT = "offsetStepRight";
+	public static final int DEF_OFFSET_STEP_RIGHT = 25000;
+	public static final String P_OFFSET_STEP_DOWN = "offsetStepUp";
+	public static final int DEF_OFFSET_STEP_DOWN = 500000;
+	public static final String P_OFFSET_STEP_UP = "offsetStepDown";
+	public static final int DEF_OFFSET_STEP_UP = 500000;
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -74,6 +88,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_MILLISECONDS_FAST_BACKWARD, Integer.toString(DEF_MILLISECONDS_FAST_BACKWARD));
 		defaultValues.put(P_MILLISECONDS_FORWARD, Integer.toString(DEF_MILLISECONDS_FORWARD));
 		defaultValues.put(P_MILLISECONDS_FAST_FORWARD, Integer.toString(DEF_MILLISECONDS_FAST_FORWARD));
+		//
+		defaultValues.put(P_OVERLAY_X_OFFSET, Integer.toString(DEF_OVERLAY_X_OFFSET));
+		defaultValues.put(P_OVERLAY_Y_OFFSET, Integer.toString(DEF_OVERLAY_Y_OFFSET));
+		//
+		defaultValues.put(P_OFFSET_STEP_LEFT, Integer.toString(DEF_OFFSET_STEP_LEFT));
+		defaultValues.put(P_OFFSET_STEP_RIGHT, Integer.toString(DEF_OFFSET_STEP_RIGHT));
+		defaultValues.put(P_OFFSET_STEP_DOWN, Integer.toString(DEF_OFFSET_STEP_DOWN));
+		defaultValues.put(P_OFFSET_STEP_UP, Integer.toString(DEF_OFFSET_STEP_UP));
+		//
 		return defaultValues;
 	}
 
@@ -206,5 +229,62 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 			millisecondsToShift *= -1;
 		}
 		return millisecondsToShift;
+	}
+
+	/**
+	 * Returns the x offset value.
+	 * 
+	 * @return int
+	 */
+	public static int getOverlayXOffset() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_OVERLAY_X_OFFSET, DEF_OVERLAY_X_OFFSET);
+	}
+
+	/**
+	 * Returns the y offset value.
+	 * 
+	 * @return int
+	 */
+	public static int getOverlayYOffset() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_OVERLAY_Y_OFFSET, DEF_OVERLAY_Y_OFFSET);
+	}
+
+	public static void resetOffset() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		preferences.putInt(P_OVERLAY_X_OFFSET, 0);
+		preferences.putInt(P_OVERLAY_Y_OFFSET, 0);
+	}
+
+	public static void decreaseXOffset() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		int value = preferences.getInt(P_OVERLAY_X_OFFSET, DEF_OVERLAY_X_OFFSET) - preferences.getInt(P_OFFSET_STEP_LEFT, DEF_OFFSET_STEP_LEFT);
+		preferences.putInt(P_OVERLAY_X_OFFSET, value);
+	}
+
+	public static void increaseXOffset() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		int value = preferences.getInt(P_OVERLAY_X_OFFSET, DEF_OVERLAY_X_OFFSET) + preferences.getInt(P_OFFSET_STEP_RIGHT, DEF_OFFSET_STEP_RIGHT);
+		preferences.putInt(P_OVERLAY_X_OFFSET, value);
+	}
+
+	public static void decreaseYOffset() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		int value = preferences.getInt(P_OVERLAY_Y_OFFSET, DEF_OVERLAY_Y_OFFSET) - preferences.getInt(P_OFFSET_STEP_DOWN, DEF_OFFSET_STEP_DOWN);
+		preferences.putInt(P_OVERLAY_Y_OFFSET, value);
+	}
+
+	public static void increaseYOffset() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		int value = preferences.getInt(P_OVERLAY_Y_OFFSET, DEF_OVERLAY_Y_OFFSET) + preferences.getInt(P_OFFSET_STEP_UP, DEF_OFFSET_STEP_UP);
+		preferences.putInt(P_OVERLAY_Y_OFFSET, value);
 	}
 }

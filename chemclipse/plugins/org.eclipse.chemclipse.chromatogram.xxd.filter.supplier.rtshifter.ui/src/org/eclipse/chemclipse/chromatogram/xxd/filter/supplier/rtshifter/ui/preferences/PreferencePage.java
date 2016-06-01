@@ -15,9 +15,11 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.prefere
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ShiftDirection;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui.Activator;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.RetentionTimeMinutesFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -46,6 +48,14 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		 * Default Shift Direction (in case of batch processing.
 		 */
 		addField(new ComboFieldEditor(PreferenceSupplier.P_DEFAULT_SHIFT_DIRECTION, "Default Shift Direction", ShiftDirection.getElements(), getFieldEditorParent()));
+		//
+		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_OVERLAY_X_OFFSET, "Retention time offset (minutes):", PreferenceSupplier.MIN_RETENTION_TIME, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceSupplier.P_OVERLAY_Y_OFFSET, "Abundance offset:", getFieldEditorParent()));
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_OFFSET_STEP_LEFT, "Offset step left (minutes):", PreferenceSupplier.MIN_RETENTION_TIME, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
+		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_OFFSET_STEP_RIGHT, "Offset step right (minutes):", PreferenceSupplier.MIN_RETENTION_TIME, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceSupplier.P_OFFSET_STEP_UP, "Offset step up (abundance):", getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceSupplier.P_OFFSET_STEP_DOWN, "Offset step down (abundance):", getFieldEditorParent()));
 	}
 
 	/*
