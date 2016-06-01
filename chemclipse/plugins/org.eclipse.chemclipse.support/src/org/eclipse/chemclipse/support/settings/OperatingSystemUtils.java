@@ -11,49 +11,63 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.settings;
 
-public class OperatingSystemUtils implements IOperatingSystemUtils {
+public class OperatingSystemUtils {
 
-	@Override
-	public String getLineDelimiter() {
+	/*
+	 * Tab
+	 */
+	public static final String TAB = "\t";
+	/*
+	 * Unix: \n Windows: \r\n Mac OSX: \r
+	 */
+	private static final String END_OF_LINE_LINUX = "\n";
+	private static final String END_OF_LINE_UNIX = "\n";
+	private static final String END_OF_LINE_WINDOWS = "\r\n";
+	private static final String END_OF_LINE_MAC = "\r";
+	private static final String END_OF_LINE_DEFAULT = "\r\n";
+
+	/**
+	 * Use static methods only.
+	 */
+	private OperatingSystemUtils() {
+	}
+
+	public static String getLineDelimiter() {
 
 		if(isWindows()) {
-			return IOperatingSystemUtils.END_OF_LINE_WINDOWS;
+			return END_OF_LINE_WINDOWS;
 		} else if(isMac()) {
-			return IOperatingSystemUtils.END_OF_LINE_MAC;
+			return END_OF_LINE_MAC;
 		} else if(isLinux()) {
-			return IOperatingSystemUtils.END_OF_LINE_LINUX;
+			return END_OF_LINE_LINUX;
 		} else if(isUnix()) {
-			return IOperatingSystemUtils.END_OF_LINE_UNIX;
+			return END_OF_LINE_UNIX;
 		} else {
-			return IOperatingSystemUtils.END_OF_LINE_DEFAULT;
+			return END_OF_LINE_DEFAULT;
 		}
 	}
 
-	@Override
-	public boolean isWindows() {
+	public static boolean isWindows() {
 
 		return (getOperatingSystem().indexOf("win") >= 0);
 	}
 
-	@Override
-	public boolean isLinux() {
+	public static boolean isLinux() {
 
 		return (getOperatingSystem().indexOf("linux") >= 0);
 	}
 
-	@Override
-	public boolean isMac() {
+	public static boolean isMac() {
 
 		return (getOperatingSystem().indexOf("mac") >= 0);
 	}
 
-	@Override
-	public boolean isUnix() {
+	public static boolean isUnix() {
 
 		return (getOperatingSystem().indexOf("unix") >= 0);
 	}
 
-	private String getOperatingSystem() {
+	private static String getOperatingSystem() {
 
 		return System.getProperty("os.name").toLowerCase();
 	}

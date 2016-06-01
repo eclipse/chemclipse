@@ -50,8 +50,7 @@ public class CreateSnapshotHandler {
 			/*
 			 * There is a bug on Linux x86 and x86_64.
 			 */
-			OperatingSystemUtils operatingSystemUtils = new OperatingSystemUtils();
-			if(operatingSystemUtils.isLinux()) {
+			if(OperatingSystemUtils.isLinux()) {
 				/*
 				 * Save the image to a file.
 				 */

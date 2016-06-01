@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.support.ui.swt;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.support.settings.IOperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -42,7 +41,6 @@ import org.eclipse.swt.widgets.TableItem;
 public class ExtendedTableViewer extends TableViewer {
 
 	private Clipboard clipboard;
-	private IOperatingSystemUtils operatingSystemUtils;
 	private final String DELIMITER = "\t";
 	private final String COPY_TO_CLIPBOARD = "Copy selection to clipboard";
 	private final String POPUP_MENU_ID = "org.eclipse.chemclipse.swt.ui.viewers.extendedTableViewer.popup";
@@ -51,14 +49,12 @@ public class ExtendedTableViewer extends TableViewer {
 	public ExtendedTableViewer(Composite parent) {
 		this(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		clipboard = new Clipboard(Display.getDefault());
-		operatingSystemUtils = new OperatingSystemUtils();
 		tableViewerColumns = new ArrayList<TableViewerColumn>();
 	}
 
 	public ExtendedTableViewer(Composite parent, int style) {
 		super(parent, style);
 		clipboard = new Clipboard(Display.getDefault());
-		operatingSystemUtils = new OperatingSystemUtils();
 		tableViewerColumns = new ArrayList<TableViewerColumn>();
 	}
 
@@ -128,7 +124,7 @@ public class ExtendedTableViewer extends TableViewer {
 			builder.append(title);
 			builder.append(DELIMITER);
 		}
-		builder.append(operatingSystemUtils.getLineDelimiter());
+		builder.append(OperatingSystemUtils.getLineDelimiter());
 		/*
 		 * Copy the selected items.
 		 */
@@ -146,14 +142,14 @@ public class ExtendedTableViewer extends TableViewer {
 				builder.append(selection.getText(columnIndex));
 				builder.append(DELIMITER);
 			}
-			builder.append(operatingSystemUtils.getLineDelimiter());
+			builder.append(OperatingSystemUtils.getLineDelimiter());
 		}
 		/*
 		 * If the builder is empty, give a note that items needs to be selected.
 		 */
 		if(builder.length() == 0) {
 			builder.append("Please select one or more entries in the list.");
-			builder.append(operatingSystemUtils.getLineDelimiter());
+			builder.append(OperatingSystemUtils.getLineDelimiter());
 		}
 		/*
 		 * Transfer the selected text (items) to the clipboard.

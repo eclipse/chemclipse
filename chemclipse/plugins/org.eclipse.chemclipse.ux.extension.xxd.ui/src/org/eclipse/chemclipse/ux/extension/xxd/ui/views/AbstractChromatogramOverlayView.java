@@ -16,13 +16,10 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.swt.ui.support.IOffset;
-import org.eclipse.chemclipse.swt.ui.support.Offset;
 import org.eclipse.chemclipse.ux.extension.csd.ui.editors.ChromatogramEditorCSD;
 import org.eclipse.chemclipse.ux.extension.msd.ui.editors.ChromatogramEditorMSD;
 import org.eclipse.chemclipse.ux.extension.ui.views.AbstractChromatogramSelectionView;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.editors.ChromatogramEditorWSD;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -101,18 +98,5 @@ public abstract class AbstractChromatogramOverlayView extends AbstractChromatogr
 		 * contains 0 elements.
 		 */
 		return chromatogramSelections;
-	}
-
-	/**
-	 * Returns an offset instance.
-	 * 
-	 * @return {@link IOffset}import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
-	 */
-	public IOffset getOffset() {
-
-		int xOffset = PreferenceSupplier.getOverlayXOffset();
-		int yOffset = PreferenceSupplier.getOverlayYOffset();
-		IOffset offset = new Offset(xOffset, yOffset);
-		return offset;
 	}
 }

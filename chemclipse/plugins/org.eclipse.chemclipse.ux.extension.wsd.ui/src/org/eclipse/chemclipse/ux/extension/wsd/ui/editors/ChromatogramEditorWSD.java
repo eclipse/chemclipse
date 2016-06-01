@@ -136,6 +136,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 	private Button buttonOverlay;
 	private CLabel infoStartRetentionTimeLabel;
 	private CLabel infoStopRetentionTimeLabel;
+	private Button buttonLockOffset;
 	/*
 	 * FormToolkit for the error message page.
 	 */
@@ -506,6 +507,12 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 			infoStartRetentionTimeLabel.setText("Start Retention Time (Minutes): " + decimalFormat.format(chromatogramSelection.getStartRetentionTime() / AbstractChromatogramWSD.MINUTE_CORRELATION_FACTOR));
 			infoStopRetentionTimeLabel.setText("Stop Retention Time (Minutes): " + decimalFormat.format(chromatogramSelection.getStopRetentionTime() / AbstractChromatogramWSD.MINUTE_CORRELATION_FACTOR));
 		}
+		/*
+		 * Locked Offset
+		 */
+		if(buttonLockOffset != null) {
+			buttonLockOffset.setSelection(chromatogramSelection.isLockOffset());
+		}
 	}
 
 	private void createChromatogramPage() {
@@ -732,7 +739,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 		 * Overlay
 		 */
 		buttonOverlay = new Button(client, SWT.CHECK);
-		buttonOverlay.setEnabled(chromatogramSelection.isOverlaySelected());
+		buttonOverlay.setSelection(chromatogramSelection.isOverlaySelected());
 		buttonOverlay.setText("Show chromatogram in overlay");
 		buttonOverlay.addSelectionListener(new SelectionAdapter() {
 
@@ -748,6 +755,21 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 		 */
 		infoStartRetentionTimeLabel = createLabel(client, "", IApplicationImage.IMAGE_INFO);
 		infoStopRetentionTimeLabel = createLabel(client, "", IApplicationImage.IMAGE_INFO);
+		/*
+		 * Lock Offset
+		 */
+		buttonLockOffset = new Button(client, SWT.CHECK);
+		buttonLockOffset.setSelection(chromatogramSelection.isLockOffset());
+		buttonLockOffset.setText("Lock Offset");
+		buttonLockOffset.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean lockOffset = buttonLockOffset.getSelection();
+				chromatogramSelection.setLockOffset(lockOffset);
+			}
+		});
 		/*
 		 * Add the client to the section and paint flat borders.
 		 */

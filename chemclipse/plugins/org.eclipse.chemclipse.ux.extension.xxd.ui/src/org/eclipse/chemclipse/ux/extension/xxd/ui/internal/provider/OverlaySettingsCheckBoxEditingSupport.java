@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.OverlaySettingsTableViewer;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -20,9 +21,11 @@ import org.eclipse.jface.viewers.TableViewer;
 public class OverlaySettingsCheckBoxEditingSupport extends EditingSupport {
 
 	private CheckboxCellEditor cellEditor;
+	private String type;
 
-	public OverlaySettingsCheckBoxEditingSupport(TableViewer tableViewer) {
+	public OverlaySettingsCheckBoxEditingSupport(TableViewer tableViewer, String type) {
 		super(tableViewer);
+		this.type = type;
 		this.cellEditor = new CheckboxCellEditor(tableViewer.getTable());
 	}
 
@@ -43,7 +46,11 @@ public class OverlaySettingsCheckBoxEditingSupport extends EditingSupport {
 
 		if(element instanceof IChromatogramSelection) {
 			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)element;
-			return chromatogramSelection.isOverlaySelected();
+			if(type.equals(OverlaySettingsTableViewer.OVERLAY_SELECTED)) {
+				return chromatogramSelection.isOverlaySelected();
+			} else if(type.equals(OverlaySettingsTableViewer.LOCK_OFFSET)) {
+				return chromatogramSelection.isLockOffset();
+			}
 		}
 		return false;
 	}
@@ -53,7 +60,11 @@ public class OverlaySettingsCheckBoxEditingSupport extends EditingSupport {
 
 		if(element instanceof IChromatogramSelection) {
 			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)element;
-			chromatogramSelection.setOverlaySelected((boolean)value);
+			if(type.equals(OverlaySettingsTableViewer.OVERLAY_SELECTED)) {
+				chromatogramSelection.setOverlaySelected((boolean)value);
+			} else if(type.equals(OverlaySettingsTableViewer.LOCK_OFFSET)) {
+				chromatogramSelection.setLockOffset((boolean)value);
+			}
 			chromatogramSelection.fireUpdateChange(false);
 		}
 	}

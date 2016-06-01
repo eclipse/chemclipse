@@ -51,6 +51,9 @@ public class OverlaySettingsTableSorter extends EnhancedViewerSorter {
 				case 1:
 					sortOrder = Boolean.compare(chromatogramSelection2.isOverlaySelected(), chromatogramSelection1.isOverlaySelected());
 					break;
+				case 2:
+					sortOrder = Boolean.compare(chromatogramSelection2.isLockOffset(), chromatogramSelection1.isLockOffset());
+					break;
 				default:
 					sortOrder = 0;
 			}

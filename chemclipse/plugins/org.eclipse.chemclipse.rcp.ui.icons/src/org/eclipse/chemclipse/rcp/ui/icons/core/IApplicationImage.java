@@ -30,9 +30,13 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_CHECK_ALL = "checkAll.gif";
 	String IMAGE_UNCHECK_ALL = "uncheckAll.gif";
 	//
+	String IMAGE_CHROMATOGRAM = "chromatogram.gif";
+	String IMAGE_CHROMATOGRAM_MSD = "chromatogram-msd.gif";
+	String IMAGE_CHROMATOGRAM_CSD = "chromatogram-csd.gif";
+	String IMAGE_CHROMATOGRAM_WSD = "chromatogram-wsd.gif";
+	//
 	String IMAGE_PREFERENCES = "preferences.gif";
 	String IMAGE_DRIVE = "drive.gif";
-	String IMAGE_CHROMATOGRAM = "chromatogram.gif";
 	String IMAGE_CHROMATOGRAM_ZERO_SET = "chromatogramZeorSet.gif";
 	String IMAGE_FOLDER_OPENED = "folder_opened.gif";
 	String IMAGE_FOLDER_CLOSED = "folder_closed.gif";

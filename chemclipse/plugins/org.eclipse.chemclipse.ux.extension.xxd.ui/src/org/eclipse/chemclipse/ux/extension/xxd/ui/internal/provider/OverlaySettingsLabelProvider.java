@@ -34,6 +34,15 @@ public class OverlaySettingsLabelProvider extends LabelProvider implements ITabl
 					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED, IApplicationImage.SIZE_16x16);
 				}
 			}
+		} else if(columnIndex == 2) {
+			if(element instanceof IChromatogramSelection) {
+				IChromatogramSelection chromatogramSelection = (IChromatogramSelection)element;
+				if(chromatogramSelection.isLockOffset()) {
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED, IApplicationImage.SIZE_16x16);
+				} else {
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED, IApplicationImage.SIZE_16x16);
+				}
+			}
 		}
 		return null;
 	}
@@ -49,6 +58,9 @@ public class OverlaySettingsLabelProvider extends LabelProvider implements ITabl
 					text = modelStandard.getChromatogram().getName();
 					break;
 				case 1:
+					text = ""; // Editing Support
+					break;
+				case 2:
 					text = ""; // Editing Support
 					break;
 			}

@@ -20,4 +20,10 @@ public class ChromatogramIdentifier extends AbstractChromatogramIdentifier imple
 	public ChromatogramIdentifier() {
 		super(ChromatogramConverterMSD.getChromatogramConverterSupport().getSupplier());
 	}
+
+	@Override
+	public String getType() {
+
+		return TYPE_MSD;
+	}
 }

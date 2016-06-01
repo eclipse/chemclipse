@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.model.selection;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.numeric.core.Point;
 
 public abstract class AbstractChromatogramSelection implements IChromatogramSelection {
 
@@ -21,7 +22,12 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 	private int stopRetentionTime;
 	private float startAbundance;
 	private float stopAbundance;
+	/*
+	 * UI fields
+	 */
 	private boolean overlaySelected;
+	private boolean lockOffset;
+	private Point offset;
 
 	public AbstractChromatogramSelection(IChromatogram chromatogram) throws ChromatogramIsNullException {
 		this(chromatogram, true);
@@ -36,6 +42,8 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 		}
 		this.chromatogram = chromatogram;
 		overlaySelected = true;
+		lockOffset = false;
+		offset = new Point(0.0d, 0.0d);
 		/*
 		 * If scans of the chromatogram will be deleted, this selection will be
 		 * adjusted to valid values.
@@ -194,7 +202,6 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 		update(false);
 	}
 
-	// ------------------------------------IChromatogramUpdateListener
 	@Override
 	public void update(boolean forceReload) {
 
@@ -204,8 +211,6 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 		setStopAbundance(stopAbundance, false);
 	}
 
-	// ------------------------------------IChromatogramUpdateListener
-	// ------------------------------------equals, hashCode, toString
 	@Override
 	public boolean isOverlaySelected() {
 
@@ -216,6 +221,31 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 	public void setOverlaySelected(boolean overlaySelected) {
 
 		this.overlaySelected = overlaySelected;
+	}
+
+	@Override
+	public boolean isLockOffset() {
+
+		return lockOffset;
+	}
+
+	@Override
+	public void setLockOffset(boolean lockOffset) {
+
+		this.lockOffset = lockOffset;
+	}
+
+	@Override
+	public Point getOffset() {
+
+		return offset;
+	}
+
+	@Override
+	public void resetOffset() {
+
+		offset.setX(0.0d);
+		offset.setY(0.0d);
 	}
 
 	@Override

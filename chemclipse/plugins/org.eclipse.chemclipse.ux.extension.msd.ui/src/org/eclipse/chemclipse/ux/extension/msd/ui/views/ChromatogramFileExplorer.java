@@ -15,7 +15,6 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport;
 import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractChromatogramFileExplorer;
-
 import org.eclipse.swt.widgets.Composite;
 
 /**

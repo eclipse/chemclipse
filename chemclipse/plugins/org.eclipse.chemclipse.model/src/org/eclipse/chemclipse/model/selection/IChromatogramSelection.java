@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.model.selection;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
+import org.eclipse.chemclipse.numeric.core.Point;
 
 public interface IChromatogramSelection extends IChromatogramUpdateListener {
 
@@ -142,4 +143,22 @@ public interface IChromatogramSelection extends IChromatogramUpdateListener {
 	boolean isOverlaySelected();
 
 	void setOverlaySelected(boolean overlaySelected);
+
+	/**
+	 * Lock the offset in the UI display.
+	 * 
+	 * @return boolean
+	 */
+	boolean isLockOffset();
+
+	/**
+	 * Set this value to lock the offset in the UI.
+	 * 
+	 * @param lockOffset
+	 */
+	void setLockOffset(boolean lockOffset);
+
+	Point getOffset();
+
+	void resetOffset();
 }

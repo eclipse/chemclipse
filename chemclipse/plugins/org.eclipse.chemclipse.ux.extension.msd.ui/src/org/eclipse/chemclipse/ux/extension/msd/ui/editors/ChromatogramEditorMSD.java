@@ -153,6 +153,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 	private CLabel labelChromatogramRetentionTimeRange;
 	private Text textStartRetentionTime;
 	private Text textStopRetentionTime;
+	private Button buttonLockOffset;
 	/*
 	 * FormToolkit for the error message page.
 	 */
@@ -568,6 +569,12 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 			textStartRetentionTime.setText(decimalFormat.format(chromatogramSelection.getStartRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
 			textStopRetentionTime.setText(decimalFormat.format(chromatogramSelection.getStopRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
 		}
+		/*
+		 * Locked Offset
+		 */
+		if(buttonLockOffset != null) {
+			buttonLockOffset.setSelection(chromatogramSelection.isLockOffset());
+		}
 	}
 
 	private void updateIonTransitionPageValues() {
@@ -869,7 +876,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		 * Overlay
 		 */
 		buttonOverlay = new Button(client, SWT.CHECK);
-		buttonOverlay.setEnabled(chromatogramSelection.isOverlaySelected());
+		buttonOverlay.setSelection(chromatogramSelection.isOverlaySelected());
 		buttonOverlay.setText("Show chromatogram in overlay");
 		buttonOverlay.addSelectionListener(new SelectionAdapter() {
 
@@ -911,6 +918,21 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 			public void widgetSelected(SelectionEvent e) {
 
 				setRetentionTimeRangeForAllOpenChromatograms();
+			}
+		});
+		/*
+		 * Lock Offset
+		 */
+		buttonLockOffset = new Button(client, SWT.CHECK);
+		buttonLockOffset.setSelection(chromatogramSelection.isLockOffset());
+		buttonLockOffset.setText("Lock Offset");
+		buttonLockOffset.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean lockOffset = buttonLockOffset.getSelection();
+				chromatogramSelection.setLockOffset(lockOffset);
 			}
 		});
 		/*

@@ -18,10 +18,14 @@ import java.util.List;
 
 public class ChromatogramFileExplorerContentProvider extends FileExplorerContentProvider {
 
-	private IChromatogramIdentifier chromatogramIdentifier;
+	private List<IChromatogramIdentifier> chromatogramIdentifierList;
 
 	public ChromatogramFileExplorerContentProvider(IChromatogramIdentifier chromatogramIdentifier) {
-		this.chromatogramIdentifier = chromatogramIdentifier;
+		this(ExplorerListSupport.getChromatogramIdentifierList(chromatogramIdentifier));
+	}
+
+	public ChromatogramFileExplorerContentProvider(List<IChromatogramIdentifier> chromatogramIdentifierList) {
+		this.chromatogramIdentifierList = chromatogramIdentifierList;
 	}
 
 	@Override
@@ -48,8 +52,13 @@ public class ChromatogramFileExplorerContentProvider extends FileExplorerContent
 						if(file.isDirectory()) {
 							files.add(file);
 						} else {
-							if(chromatogramIdentifier.isChromatogram(file)) {
-								files.add(file);
+							/*
+							 * Add MSD, CSD, WSD ... files.
+							 */
+							for(IChromatogramIdentifier chromatogramIdentifier : chromatogramIdentifierList) {
+								if(chromatogramIdentifier.isChromatogram(file)) {
+									files.add(file);
+								}
 							}
 						}
 					}

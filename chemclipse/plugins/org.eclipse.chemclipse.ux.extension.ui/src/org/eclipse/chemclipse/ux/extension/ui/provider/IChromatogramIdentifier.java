@@ -15,6 +15,17 @@ import java.io.File;
 
 public interface IChromatogramIdentifier {
 
+	String TYPE_MSD = "MSD";
+	String TYPE_CSD = "CSD";
+	String TYPE_WSD = "WSD";
+
+	/**
+	 * Returns the identifier type.
+	 * 
+	 * @return String
+	 */
+	String getType();
+
 	/**
 	 * Check whether the file is a supplied chromatogram or not.
 	 * 
