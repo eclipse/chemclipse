@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.swt.ui.components.chromatogram.SubtractMultipleChromatogramOffsetUI;
 import org.eclipse.chemclipse.swt.ui.support.AxisTitlesIntensityScale;
 import org.eclipse.chemclipse.swt.ui.support.IOffset;
+import org.eclipse.chemclipse.swt.ui.support.Offset;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -34,6 +35,7 @@ public class SubtractChromatogramOverlayView extends AbstractChromatogramOverlay
 	@Inject
 	private Composite parent;
 	private SubtractMultipleChromatogramOffsetUI chromatogramOverlayUI;
+	private IOffset offset = new Offset(0.0d, 0.0d);
 
 	@Inject
 	public SubtractChromatogramOverlayView(EPartService partService, MPart part, IEventBroker eventBroker) {
@@ -44,7 +46,6 @@ public class SubtractChromatogramOverlayView extends AbstractChromatogramOverlay
 	private void createControl() {
 
 		parent.setLayout(new FillLayout());
-		IOffset offset = getOffset();
 		chromatogramOverlayUI = new SubtractMultipleChromatogramOffsetUI(parent, SWT.NONE, offset, new AxisTitlesIntensityScale());
 	}
 
@@ -74,7 +75,6 @@ public class SubtractChromatogramOverlayView extends AbstractChromatogramOverlay
 			 * restart the workbench in case of a change otherwise.
 			 */
 			List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(chromatogramSelection, false);
-			IOffset offset = getOffset();
 			chromatogramOverlayUI.setOffset(offset);
 			chromatogramOverlayUI.updateSelection(chromatogramSelections, forceReload);
 		}
