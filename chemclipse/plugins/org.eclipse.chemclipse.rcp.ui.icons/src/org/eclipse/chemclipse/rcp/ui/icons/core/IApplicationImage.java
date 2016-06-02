@@ -150,6 +150,11 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_CDK_PEAKS = "cdkPeaks.gif";
 	String IMAGE_CDK_DELETE = "cdkDelete.gif";
 	//
+	String IMAGE_LOCK_OFFSET = "lockOffset.gif";
+	String IMAGE_UNLOCK_OFFSET = "unlockOffset.gif";
+	//
+	String IMAGE_PIN_CHROMATOGRAM = "pinChromatogram.gif";
+	String IMAGE_UNPIN_CHROMATOGRAM = "unpinChromatogram.gif";
 	String IMAGE_PIN_MASS_SPECTRUM = "pinMassSpectrum.gif";
 	String IMAGE_UNPIN_MASS_SPECTRUM = "unpinMassSpectrum.gif";
 	String IMAGE_RETENION_INDEX = "retentionIndex.gif";
@@ -170,7 +175,9 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	//
 	String IMAGE_RESET = "reset.gif";
 	String IMAGE_OFFSET_LEFT = "offsetLeft.gif";
+	String IMAGE_OFFSET_LEFT_FAST = "offsetLeftFast.gif";
 	String IMAGE_OFFSET_RIGHT = "offsetRight.gif";
+	String IMAGE_OFFSET_RIGHT_FAST = "offsetRightFast.gif";
 	String IMAGE_OFFSET_UP = "offsetUp.gif";
 	String IMAGE_OFFSET_DOWN = "offsetDown.gif";
 	//
