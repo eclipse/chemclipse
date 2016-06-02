@@ -29,14 +29,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_SHIFT_ALL_SCANS = true;
 	//
 	public static final String P_MILLISECONDS_BACKWARD = "millisecondsBackward";
-	public static final String P_MILLISECONDS_FAST_BACKWARD = "millisecondsFastBackward";
-	public static final String P_MILLISECONDS_FORWARD = "millisecondsForward";
-	public static final String P_MILLISECONDS_FAST_FORWARD = "millisecondsFastForward";
-	public static final String P_DEFAULT_SHIFT_DIRECTION = "defaultShiftDirection";
 	public static final int DEF_MILLISECONDS_BACKWARD = 500; // IntegerFieldEditor doesn't allow negative values
+	public static final String P_MILLISECONDS_FAST_BACKWARD = "millisecondsFastBackward";
 	public static final int DEF_MILLISECONDS_FAST_BACKWARD = 1500; // IntegerFieldEditor doesn't allow negative values
+	public static final String P_MILLISECONDS_FORWARD = "millisecondsForward";
 	public static final int DEF_MILLISECONDS_FORWARD = 500;
+	public static final String P_MILLISECONDS_FAST_FORWARD = "millisecondsFastForward";
 	public static final int DEF_MILLISECONDS_FAST_FORWARD = 1500;
+	//
+	public static final String P_DEFAULT_SHIFT_DIRECTION = "defaultShiftDirection";
 	public static final String DEF_DEFAULT_SHIFT_DIRECTION = ShiftDirection.FORWARD.toString();
 	//
 	public static final int MIN_RETENTION_TIME = 0; // = 0.0 minutes
@@ -47,10 +48,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_OVERLAY_Y_OFFSET = "overlayYOffset";
 	public static final int DEF_OVERLAY_Y_OFFSET = 0;
 	//
-	public static final String P_OFFSET_STEP_LEFT = "offsetStepLeft";
-	public static final int DEF_OFFSET_STEP_LEFT = 25000;
-	public static final String P_OFFSET_STEP_RIGHT = "offsetStepRight";
-	public static final int DEF_OFFSET_STEP_RIGHT = 25000;
 	public static final String P_OFFSET_STEP_DOWN = "offsetStepUp";
 	public static final int DEF_OFFSET_STEP_DOWN = 500000;
 	public static final String P_OFFSET_STEP_UP = "offsetStepDown";
@@ -92,8 +89,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_OVERLAY_X_OFFSET, Integer.toString(DEF_OVERLAY_X_OFFSET));
 		defaultValues.put(P_OVERLAY_Y_OFFSET, Integer.toString(DEF_OVERLAY_Y_OFFSET));
 		//
-		defaultValues.put(P_OFFSET_STEP_LEFT, Integer.toString(DEF_OFFSET_STEP_LEFT));
-		defaultValues.put(P_OFFSET_STEP_RIGHT, Integer.toString(DEF_OFFSET_STEP_RIGHT));
 		defaultValues.put(P_OFFSET_STEP_DOWN, Integer.toString(DEF_OFFSET_STEP_DOWN));
 		defaultValues.put(P_OFFSET_STEP_UP, Integer.toString(DEF_OFFSET_STEP_UP));
 		//
@@ -263,14 +258,28 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static void decreaseXOffset() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		int value = preferences.getInt(P_OVERLAY_X_OFFSET, DEF_OVERLAY_X_OFFSET) - preferences.getInt(P_OFFSET_STEP_LEFT, DEF_OFFSET_STEP_LEFT);
+		int value = preferences.getInt(P_OVERLAY_X_OFFSET, DEF_OVERLAY_X_OFFSET) - preferences.getInt(P_MILLISECONDS_BACKWARD, DEF_MILLISECONDS_BACKWARD);
+		preferences.putInt(P_OVERLAY_X_OFFSET, value);
+	}
+
+	public static void decreaseXOffsetFast() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		int value = preferences.getInt(P_OVERLAY_X_OFFSET, DEF_OVERLAY_X_OFFSET) - preferences.getInt(P_MILLISECONDS_FAST_BACKWARD, DEF_MILLISECONDS_FAST_BACKWARD);
 		preferences.putInt(P_OVERLAY_X_OFFSET, value);
 	}
 
 	public static void increaseXOffset() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		int value = preferences.getInt(P_OVERLAY_X_OFFSET, DEF_OVERLAY_X_OFFSET) + preferences.getInt(P_OFFSET_STEP_RIGHT, DEF_OFFSET_STEP_RIGHT);
+		int value = preferences.getInt(P_OVERLAY_X_OFFSET, DEF_OVERLAY_X_OFFSET) + preferences.getInt(P_MILLISECONDS_FORWARD, DEF_MILLISECONDS_FORWARD);
+		preferences.putInt(P_OVERLAY_X_OFFSET, value);
+	}
+
+	public static void increaseXOffsetFast() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		int value = preferences.getInt(P_OVERLAY_X_OFFSET, DEF_OVERLAY_X_OFFSET) + preferences.getInt(P_MILLISECONDS_FAST_FORWARD, DEF_MILLISECONDS_FAST_FORWARD);
 		preferences.putInt(P_OVERLAY_X_OFFSET, value);
 	}
 

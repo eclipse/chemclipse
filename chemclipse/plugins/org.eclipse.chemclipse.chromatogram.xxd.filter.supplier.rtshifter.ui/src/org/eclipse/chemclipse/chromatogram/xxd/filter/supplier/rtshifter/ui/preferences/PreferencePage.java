@@ -40,10 +40,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHIFT_ALL_SCANS, "Shift all scans", getFieldEditorParent()));
 		//
-		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_MILLISECONDS_BACKWARD, "Backward (minutes)", PreferenceSupplier.MIN_RETENTION_TIME, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
-		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_MILLISECONDS_FAST_BACKWARD, "Fast Backward (minutes)", PreferenceSupplier.MIN_RETENTION_TIME, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
-		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_MILLISECONDS_FORWARD, "Forward (minutes)", PreferenceSupplier.MIN_RETENTION_TIME, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
-		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_MILLISECONDS_FAST_FORWARD, "Fast Forward (minutes)", PreferenceSupplier.MIN_RETENTION_TIME, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
+		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_MILLISECONDS_BACKWARD, "Offset Backward (minutes)", PreferenceSupplier.MIN_RETENTION_TIME, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
+		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_MILLISECONDS_FAST_BACKWARD, "Offset Fast Backward (minutes)", PreferenceSupplier.MIN_RETENTION_TIME, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
+		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_MILLISECONDS_FORWARD, "Offset Forward (minutes)", PreferenceSupplier.MIN_RETENTION_TIME, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
+		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_MILLISECONDS_FAST_FORWARD, "Offset Fast Forward (minutes)", PreferenceSupplier.MIN_RETENTION_TIME, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
 		/*
 		 * Default Shift Direction (in case of batch processing.
 		 */
@@ -52,8 +52,6 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_OVERLAY_X_OFFSET, "Retention time offset (minutes):", PreferenceSupplier.MIN_RETENTION_TIME, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceSupplier.P_OVERLAY_Y_OFFSET, "Abundance offset:", getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_OFFSET_STEP_LEFT, "Offset step left (minutes):", PreferenceSupplier.MIN_RETENTION_TIME, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
-		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_OFFSET_STEP_RIGHT, "Offset step right (minutes):", PreferenceSupplier.MIN_RETENTION_TIME, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceSupplier.P_OFFSET_STEP_UP, "Offset step up (abundance):", getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceSupplier.P_OFFSET_STEP_DOWN, "Offset step down (abundance):", getFieldEditorParent()));
 	}
