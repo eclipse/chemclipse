@@ -66,7 +66,6 @@ public class MassSpectrumComparator {
 	private static ComparatorCache comparatorCache;
 	private static IMassSpectrumComparatorProcessingInfo processingInfoComparisonSkip;
 	private static final float NO_MATCH = 0.0f;
-
 	/*
 	 * Initialize all values.
 	 */
@@ -212,7 +211,7 @@ public class MassSpectrumComparator {
 		return massSpectrumComparisonSupport;
 	}
 
-	private static IMassSpectrumComparator getMassSpectrumComparator(final String comparatorId) {
+	public static IMassSpectrumComparator getMassSpectrumComparator(final String comparatorId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(comparatorId);
@@ -221,7 +220,7 @@ public class MassSpectrumComparator {
 			try {
 				instance = (IMassSpectrumComparator)element.createExecutableExtension(MASS_SPECTRUM_COMPARATOR);
 			} catch(CoreException e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			}
 		}
 		return instance;
