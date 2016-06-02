@@ -28,7 +28,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public PreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Set the RTSifter filter settings.");
+		setDescription("RT Shifter/Offset settings.");
 	}
 
 	/**
@@ -49,11 +49,15 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		 */
 		addField(new ComboFieldEditor(PreferenceSupplier.P_DEFAULT_SHIFT_DIRECTION, "Default Shift Direction", ShiftDirection.getElements(), getFieldEditorParent()));
 		//
-		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_OVERLAY_X_OFFSET, "Retention time offset (minutes):", PreferenceSupplier.MIN_RETENTION_TIME, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_OVERLAY_X_OFFSET, "Retention time offset (minutes):", PreferenceSupplier.MIN_X_OFFSET, PreferenceSupplier.MAX_RETENTION_TIME, getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceSupplier.P_OVERLAY_Y_OFFSET, "Abundance offset:", getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceSupplier.P_OFFSET_STEP_UP, "Offset step up (abundance):", getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceSupplier.P_OFFSET_STEP_DOWN, "Offset step down (abundance):", getFieldEditorParent()));
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_IS_EDIT_SELECTED_CHROMATOGRAM, "Edit Selected Chromatogram", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_IS_LOCK_OFFSET, "Lock Offset", getFieldEditorParent()));
 	}
 
 	/*

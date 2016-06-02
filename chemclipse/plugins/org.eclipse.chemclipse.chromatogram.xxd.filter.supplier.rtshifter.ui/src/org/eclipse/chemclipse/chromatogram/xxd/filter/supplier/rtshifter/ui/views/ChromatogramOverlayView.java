@@ -52,28 +52,40 @@ import org.eclipse.swt.widgets.Shell;
 
 public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
+	private static final Offset LOCK_OFFSET = new Offset(0.0d, 0.0d);
+	//
 	@Inject
 	private Composite composite;
+	//
 	private MultipleChromatogramOffsetUI chromatogramOverlayUI;
 	private Shell shell;
 	private Cursor cursor;
-	private Button buttonLockOffset;
-	private Offset lockOffset;
 	//
-	private Label labelStatus;
+	private Button buttonEditSelectedChromatogram;
+	private Button buttonLockOffset;
+	private Button buttonOffsetLeft;
+	private Button buttonOffsetLeftFast;
+	private Button buttonOffsetRight;
+	private Button buttonOffsetRightFast;
+	private Button buttonOffsetUp;
+	private Button buttonOffsetDown;
+	private Button buttonApplyOffset;
+	//
+	private Label labelStatusEditChromatogram;
+	private Label labelStatusDataDisplay;
+	private Label labelStatusLockOffset;
 
 	@Inject
 	public ChromatogramOverlayView(EPartService partService, MPart part, IEventBroker eventBroker) {
 		super(part, partService, eventBroker);
 		shell = Display.getCurrent().getActiveShell();
 		cursor = shell.getCursor();
-		lockOffset = new Offset(0.0d, 0.0d);
 	}
 
 	@PostConstruct
 	private void createControl() {
 
-		composite.setLayout(new GridLayout(2, true));
+		composite.setLayout(new GridLayout(4, false));
 		//
 		createButtonBar(composite);
 		createOverlayChart(composite);
@@ -82,51 +94,81 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 	private void createButtonBar(Composite composite) {
 
 		Composite compositeButtonsLeft = new Composite(composite, SWT.NONE);
-		GridData gridDataCompositeLeft = new GridData(GridData.FILL_HORIZONTAL);
-		gridDataCompositeLeft.horizontalAlignment = SWT.BEGINNING;
-		compositeButtonsLeft.setLayoutData(gridDataCompositeLeft);
+		compositeButtonsLeft.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		compositeButtonsLeft.setLayout(new GridLayout(1, false));
+		//
+		Composite compositeButtonsCenterLeft = new Composite(composite, SWT.NONE);
+		compositeButtonsCenterLeft.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		compositeButtonsCenterLeft.setLayout(new GridLayout(1, false));
+		//
+		Composite compositeButtonsCenterRight = new Composite(composite, SWT.NONE);
+		compositeButtonsCenterRight.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		compositeButtonsCenterRight.setLayout(new GridLayout(1, false));
 		//
 		Composite compositeButtonsRight = new Composite(composite, SWT.NONE);
 		GridData gridDataCompositeRight = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataCompositeRight.horizontalAlignment = SWT.END;
 		compositeButtonsRight.setLayoutData(gridDataCompositeRight);
 		compositeButtonsRight.setLayout(new GridLayout(11, false));
-		/*
-		 * LEFT
-		 */
 		//
-		labelStatus = new Label(compositeButtonsLeft, SWT.BORDER);
-		labelStatus.setText("");
-		labelStatus.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		/*
-		 * RIGHT
-		 */
-		createButtonPinChromatogram(compositeButtonsRight);
-		createButtonOffsetApply(compositeButtonsRight);
-		createButtonLockOffset(compositeButtonsRight);
-		createButtonSettings(compositeButtonsRight);
-		createButtonReset(compositeButtonsRight);
-		createButtonOffsetLeft(compositeButtonsRight);
-		createButtonOffsetLeftFast(compositeButtonsRight);
-		createButtonOffsetRight(compositeButtonsRight);
-		createButtonOffsetRightFast(compositeButtonsRight);
-		createButtonOffsetUp(compositeButtonsRight);
-		createButtonOffsetDown(compositeButtonsRight);
+		createButtonsLeft(compositeButtonsLeft);
+		createButtonsCenterLeft(compositeButtonsCenterLeft);
+		createButtonsCenterRight(compositeButtonsCenterRight);
+		createButtonsRight(compositeButtonsRight);
 		//
-		setLabelStatus();
+		setWidgetStatus();
 	}
 
-	private void createButtonPinChromatogram(Composite composite) {
+	private void createButtonsLeft(Composite composite) {
 
-		Button buttonPinChromatogram = new Button(composite, SWT.PUSH);
-		buttonPinChromatogram.setText("");
-		buttonPinChromatogram.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PIN_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
-		buttonPinChromatogram.addSelectionListener(new SelectionAdapter() {
+		labelStatusEditChromatogram = new Label(composite, SWT.BORDER);
+		labelStatusEditChromatogram.setText("");
+		labelStatusEditChromatogram.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	}
+
+	private void createButtonsCenterLeft(Composite composite) {
+
+		labelStatusDataDisplay = new Label(composite, SWT.BORDER);
+		labelStatusDataDisplay.setText("");
+		labelStatusDataDisplay.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	}
+
+	private void createButtonsCenterRight(Composite composite) {
+
+		labelStatusLockOffset = new Label(composite, SWT.BORDER);
+		labelStatusLockOffset.setText("");
+		labelStatusLockOffset.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	}
+
+	private void createButtonsRight(Composite composite) {
+
+		createButtonEditSelectedChromatogram(composite);
+		createButtonLockOffset(composite);
+		createButtonSettings(composite);
+		createButtonReset(composite);
+		createButtonOffsetLeft(composite);
+		createButtonOffsetLeftFast(composite);
+		createButtonOffsetRight(composite);
+		createButtonOffsetRightFast(composite);
+		createButtonOffsetUp(composite);
+		createButtonOffsetDown(composite);
+		createButtonApplyOffset(composite);
+	}
+
+	private void createButtonEditSelectedChromatogram(Composite composite) {
+
+		buttonEditSelectedChromatogram = new Button(composite, SWT.PUSH);
+		buttonEditSelectedChromatogram.setText("");
+		buttonEditSelectedChromatogram.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PIN_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
+		buttonEditSelectedChromatogram.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				PreferenceSupplier.toggleEditSelectedChromatogram();
+				if(PreferenceSupplier.isEditSelectedChromatogram()) {
+					reset();
+				}
 				update(getChromatogramSelection(), true);
 			}
 		});
@@ -137,14 +179,13 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 		buttonLockOffset = new Button(composite, SWT.PUSH);
 		buttonLockOffset.setText("");
 		buttonLockOffset.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_LOCK_OFFSET, IApplicationImage.SIZE_16x16));
-		buttonLockOffset.setSelection(false);
 		buttonLockOffset.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				setLockOffset(buttonLockOffset.getSelection());
-				buttonLockOffset.setSelection(!buttonLockOffset.getSelection());
+				PreferenceSupplier.toggleLockOffset();
+				setLockOffset();
 				update(getChromatogramSelection(), true);
 			}
 		});
@@ -172,8 +213,11 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getCurrent().getActiveShell(), preferenceManager);
 				preferenceDialog.create();
-				preferenceDialog.setMessage("Overlay Settings");
+				preferenceDialog.setMessage("Overlay/Shifter Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
+					/*
+					 * Update the chromatogram.
+					 */
 					update(getChromatogramSelection(), false);
 				}
 			}
@@ -190,8 +234,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PreferenceSupplier.resetOffset();
-				resetLockedOffset();
+				reset();
 				update(getChromatogramSelection(), false);
 			}
 		});
@@ -199,7 +242,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 	private void createButtonOffsetLeft(Composite composite) {
 
-		Button buttonOffsetLeft = new Button(composite, SWT.PUSH);
+		buttonOffsetLeft = new Button(composite, SWT.PUSH);
 		buttonOffsetLeft.setText("");
 		buttonOffsetLeft.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_OFFSET_LEFT, IApplicationImage.SIZE_16x16));
 		buttonOffsetLeft.addSelectionListener(new SelectionAdapter() {
@@ -209,9 +252,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 				setWaitCursor();
 				PreferenceSupplier.decreaseXOffset();
-				if(buttonLockOffset.getSelection()) {
-					setLockedOffsetX();
-				}
+				setXLockedOffsetConditionally();
 				update(getChromatogramSelection(), false);
 				setDefaultCursor();
 			}
@@ -220,19 +261,17 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 	private void createButtonOffsetLeftFast(Composite composite) {
 
-		Button buttonOffsetLeft = new Button(composite, SWT.PUSH);
-		buttonOffsetLeft.setText("");
-		buttonOffsetLeft.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_OFFSET_LEFT_FAST, IApplicationImage.SIZE_16x16));
-		buttonOffsetLeft.addSelectionListener(new SelectionAdapter() {
+		buttonOffsetLeftFast = new Button(composite, SWT.PUSH);
+		buttonOffsetLeftFast.setText("");
+		buttonOffsetLeftFast.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_OFFSET_LEFT_FAST, IApplicationImage.SIZE_16x16));
+		buttonOffsetLeftFast.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				setWaitCursor();
 				PreferenceSupplier.decreaseXOffsetFast();
-				if(buttonLockOffset.getSelection()) {
-					setLockedOffsetX();
-				}
+				setXLockedOffsetConditionally();
 				update(getChromatogramSelection(), false);
 				setDefaultCursor();
 			}
@@ -241,7 +280,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 	private void createButtonOffsetRight(Composite composite) {
 
-		Button buttonOffsetRight = new Button(composite, SWT.PUSH);
+		buttonOffsetRight = new Button(composite, SWT.PUSH);
 		buttonOffsetRight.setText("");
 		buttonOffsetRight.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_OFFSET_RIGHT, IApplicationImage.SIZE_16x16));
 		buttonOffsetRight.addSelectionListener(new SelectionAdapter() {
@@ -251,9 +290,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 				setWaitCursor();
 				PreferenceSupplier.increaseXOffset();
-				if(buttonLockOffset.getSelection()) {
-					setLockedOffsetX();
-				}
+				setXLockedOffsetConditionally();
 				update(getChromatogramSelection(), false);
 				setDefaultCursor();
 			}
@@ -262,19 +299,17 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 	private void createButtonOffsetRightFast(Composite composite) {
 
-		Button buttonOffsetRight = new Button(composite, SWT.PUSH);
-		buttonOffsetRight.setText("");
-		buttonOffsetRight.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_OFFSET_RIGHT_FAST, IApplicationImage.SIZE_16x16));
-		buttonOffsetRight.addSelectionListener(new SelectionAdapter() {
+		buttonOffsetRightFast = new Button(composite, SWT.PUSH);
+		buttonOffsetRightFast.setText("");
+		buttonOffsetRightFast.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_OFFSET_RIGHT_FAST, IApplicationImage.SIZE_16x16));
+		buttonOffsetRightFast.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				setWaitCursor();
 				PreferenceSupplier.increaseXOffsetFast();
-				if(buttonLockOffset.getSelection()) {
-					setLockedOffsetX();
-				}
+				setXLockedOffsetConditionally();
 				update(getChromatogramSelection(), false);
 				setDefaultCursor();
 			}
@@ -283,7 +318,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 	private void createButtonOffsetUp(Composite composite) {
 
-		Button buttonOffsetUp = new Button(composite, SWT.PUSH);
+		buttonOffsetUp = new Button(composite, SWT.PUSH);
 		buttonOffsetUp.setText("");
 		buttonOffsetUp.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_OFFSET_UP, IApplicationImage.SIZE_16x16));
 		buttonOffsetUp.addSelectionListener(new SelectionAdapter() {
@@ -293,9 +328,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 				setWaitCursor();
 				PreferenceSupplier.increaseYOffset();
-				if(buttonLockOffset.getSelection()) {
-					setLockedOffsetY();
-				}
+				setYLockedOffsetConditionally();
 				update(getChromatogramSelection(), false);
 				setDefaultCursor();
 			}
@@ -304,7 +337,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 	private void createButtonOffsetDown(Composite composite) {
 
-		Button buttonOffsetDown = new Button(composite, SWT.PUSH);
+		buttonOffsetDown = new Button(composite, SWT.PUSH);
 		buttonOffsetDown.setText("");
 		buttonOffsetDown.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_OFFSET_DOWN, IApplicationImage.SIZE_16x16));
 		buttonOffsetDown.addSelectionListener(new SelectionAdapter() {
@@ -314,21 +347,19 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 				setWaitCursor();
 				PreferenceSupplier.decreaseYOffset();
-				if(buttonLockOffset.getSelection()) {
-					setLockedOffsetY();
-				}
+				setYLockedOffsetConditionally();
 				update(getChromatogramSelection(), false);
 				setDefaultCursor();
 			}
 		});
 	}
 
-	private void createButtonOffsetApply(Composite composite) {
+	private void createButtonApplyOffset(Composite composite) {
 
-		Button buttonOffsetApply = new Button(composite, SWT.PUSH);
-		buttonOffsetApply.setText("");
-		buttonOffsetApply.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_ADD, IApplicationImage.SIZE_16x16));
-		buttonOffsetApply.addSelectionListener(new SelectionAdapter() {
+		buttonApplyOffset = new Button(composite, SWT.PUSH);
+		buttonApplyOffset.setText("");
+		buttonApplyOffset.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_ADD, IApplicationImage.SIZE_16x16));
+		buttonApplyOffset.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -337,7 +368,11 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 				messageBox.setText("Apply Offset");
 				messageBox.setMessage("Would you like to apply the offset to all chromatograms?");
 				if(messageBox.open() == SWT.YES) {
-					System.out.println("Apply");
+					if(PreferenceSupplier.isLockOffset()) {
+						System.out.println("Lock Offset Data");
+					} else {
+						System.out.println("Use normal data.");
+					}
 				}
 			}
 		});
@@ -345,10 +380,9 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 	private void createOverlayChart(Composite composite) {
 
-		IOffset offset = getOffset();
-		chromatogramOverlayUI = new MultipleChromatogramOffsetUI(composite, SWT.NONE, offset, new AxisTitlesIntensityScale());
+		chromatogramOverlayUI = new MultipleChromatogramOffsetUI(composite, SWT.NONE, new AxisTitlesIntensityScale());
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.horizontalSpan = 2;
+		gridData.horizontalSpan = 4;
 		chromatogramOverlayUI.setLayoutData(gridData);
 	}
 
@@ -377,14 +411,82 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 			 * Update the offset of the view. It necessary, the user must
 			 * restart the workbench in case of a change otherwise.
 			 */
-			if(buttonLockOffset.getSelection()) {
-				chromatogramOverlayUI.setOffset(lockOffset);
-			} else {
-				chromatogramOverlayUI.setOffset(getOffset());
-			}
-			//
+			setWidgetStatus();
+			setChromatogramOverlayOffset();
 			List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(chromatogramSelection, false);
 			chromatogramOverlayUI.updateSelection(chromatogramSelections, forceReload);
+		}
+	}
+
+	private void setWidgetStatus() {
+
+		int xOffset = PreferenceSupplier.getOverlayXOffset();
+		int yOffset = PreferenceSupplier.getOverlayYOffset();
+		boolean isLockOffset = PreferenceSupplier.isLockOffset();
+		boolean isEditSelectedChromatogram = PreferenceSupplier.isEditSelectedChromatogram();
+		//
+		if((xOffset == 0 && yOffset == 0) || isEditSelectedChromatogram) {
+			labelStatusDataDisplay.setText("REAL MODE");
+			labelStatusDataDisplay.setBackground(Colors.GREEN);
+		} else {
+			labelStatusDataDisplay.setText("DISPLAY MODE");
+			labelStatusDataDisplay.setBackground(Colors.YELLOW);
+		}
+		/*
+		 * Lock Offset
+		 */
+		if(isLockOffset) {
+			buttonLockOffset.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_UNLOCK_OFFSET, IApplicationImage.SIZE_16x16));
+			labelStatusLockOffset.setText("LOCKED OFFSET");
+			labelStatusLockOffset.setBackground(Colors.YELLOW);
+		} else {
+			buttonLockOffset.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_LOCK_OFFSET, IApplicationImage.SIZE_16x16));
+			labelStatusLockOffset.setText("DYNAMIC OFFSET");
+			labelStatusLockOffset.setBackground(Colors.GREEN);
+		}
+		/*
+		 * Edit Selected Chromatogram
+		 */
+		buttonEditSelectedChromatogram.setEnabled(true);
+		buttonOffsetLeft.setEnabled(true);
+		buttonOffsetLeftFast.setEnabled(true);
+		buttonOffsetRight.setEnabled(true);
+		buttonOffsetRightFast.setEnabled(true);
+		labelStatusEditChromatogram.setEnabled(true);
+		//
+		if(isEditSelectedChromatogram) {
+			buttonEditSelectedChromatogram.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_UNPIN_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
+			labelStatusEditChromatogram.setText("EDIT CHROMATOGRAM");
+			labelStatusEditChromatogram.setBackground(Colors.YELLOW);
+			//
+			buttonLockOffset.setEnabled(false);
+			buttonOffsetUp.setEnabled(false);
+			buttonOffsetDown.setEnabled(false);
+			buttonApplyOffset.setEnabled(false);
+			labelStatusLockOffset.setEnabled(false);
+		} else {
+			buttonEditSelectedChromatogram.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PIN_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
+			labelStatusEditChromatogram.setText("SHOW CHROMATOGRAM");
+			labelStatusEditChromatogram.setBackground(Colors.GREEN);
+			//
+			buttonLockOffset.setEnabled(true);
+			buttonOffsetUp.setEnabled(true);
+			buttonOffsetDown.setEnabled(true);
+			buttonApplyOffset.setEnabled(true);
+			labelStatusLockOffset.setEnabled(true);
+		}
+	}
+
+	private void setChromatogramOverlayOffset() {
+
+		if(buttonLockOffset.getSelection()) {
+			chromatogramOverlayUI.setOffset(LOCK_OFFSET);
+		} else {
+			int xOffset = PreferenceSupplier.getOverlayXOffset();
+			int yOffset = PreferenceSupplier.getOverlayYOffset();
+			IOffset offset = new Offset(xOffset, yOffset);
+			//
+			chromatogramOverlayUI.setOffset(offset);
 		}
 	}
 
@@ -398,72 +500,54 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 		shell.setCursor(cursor);
 	}
 
-	private void setLockedOffsetX() {
+	private void setXLockedOffsetConditionally() {
 
-		int xOffset = PreferenceSupplier.getOverlayXOffset();
-		List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(getChromatogramSelection(), false);
-		int x = 0;
-		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
-			chromatogramSelection.getOffset().setX(x);
-			x += xOffset;
+		if(PreferenceSupplier.isLockOffset()) {
+			int xOffset = PreferenceSupplier.getOverlayXOffset();
+			List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(getChromatogramSelection(), false);
+			int x = 0;
+			for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
+				chromatogramSelection.getOffset().setX(x);
+				x += xOffset;
+			}
 		}
-		setLabelStatus();
 	}
 
-	private void setLockedOffsetY() {
+	private void setYLockedOffsetConditionally() {
 
-		int yOffset = PreferenceSupplier.getOverlayYOffset();
-		List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(getChromatogramSelection(), false);
-		int y = 0;
-		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
-			chromatogramSelection.getOffset().setY(y);
-			y += yOffset;
+		if(PreferenceSupplier.isLockOffset()) {
+			int yOffset = PreferenceSupplier.getOverlayYOffset();
+			List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(getChromatogramSelection(), false);
+			int y = 0;
+			for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
+				chromatogramSelection.getOffset().setY(y);
+				y += yOffset;
+			}
 		}
-		setLabelStatus();
 	}
 
-	private void setLockOffset(boolean lockOffset) {
+	/*
+	 * Lock the offset
+	 */
+	private void setLockOffset() {
 
+		boolean isLockOffset = PreferenceSupplier.isLockOffset();
 		List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(getChromatogramSelection(), false);
 		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
-			chromatogramSelection.setLockOffset(lockOffset);
+			chromatogramSelection.setLockOffset(isLockOffset);
 		}
-		setLabelStatus();
 	}
 
-	private void resetLockedOffset() {
+	/*
+	 * Reset
+	 */
+	private void reset() {
 
+		PreferenceSupplier.resetOffset();
+		//
 		List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(getChromatogramSelection(), false);
 		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
 			chromatogramSelection.resetOffset();
 		}
-		setLabelStatus();
-	}
-
-	private void setLabelStatus() {
-
-		int xOffset = PreferenceSupplier.getOverlayXOffset();
-		int yOffset = PreferenceSupplier.getOverlayYOffset();
-		//
-		if(xOffset == 0 && yOffset == 0) {
-			labelStatus.setText("REAL DATA MODE");
-			labelStatus.setBackground(Colors.GREEN);
-		} else {
-			labelStatus.setText("DISPLAY MODE");
-			labelStatus.setBackground(Colors.YELLOW);
-		}
-	}
-
-	/**
-	 * Returns an offset instance.
-	 * 
-	 * @return {@link IOffset}import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
-	 */
-	private IOffset getOffset() {
-
-		int xOffset = PreferenceSupplier.getOverlayXOffset();
-		int yOffset = PreferenceSupplier.getOverlayYOffset();
-		IOffset offset = new Offset(xOffset, yOffset);
-		return offset;
 	}
 }
