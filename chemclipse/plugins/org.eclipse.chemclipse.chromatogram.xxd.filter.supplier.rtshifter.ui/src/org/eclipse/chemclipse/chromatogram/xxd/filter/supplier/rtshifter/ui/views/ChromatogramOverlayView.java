@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui.views;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -18,8 +19,12 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui.modifier.FilterModifier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui.preferences.PreferencePage;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.progress.core.InfoType;
+import org.eclipse.chemclipse.progress.core.StatusLineLogger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.components.chromatogram.MultipleChromatogramOffsetUI;
@@ -33,6 +38,8 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
@@ -52,6 +59,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
+	private static final Logger logger = Logger.getLogger(ChromatogramOverlayView.class);
 	private static final Offset LOCK_OFFSET = new Offset(0.0d, 0.0d);
 	//
 	@Inject
@@ -167,7 +175,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 
 				PreferenceSupplier.toggleEditSelectedChromatogram();
 				if(PreferenceSupplier.isEditSelectedChromatogram()) {
-					reset();
+					resetOffsets();
 				}
 				update(getChromatogramSelection(), true);
 			}
@@ -234,7 +242,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				reset();
+				resetOffsets();
 				update(getChromatogramSelection(), false);
 			}
 		});
@@ -250,11 +258,15 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				setWaitCursor();
-				PreferenceSupplier.decreaseXOffset();
-				setXLockedOffsetConditionally();
-				update(getChromatogramSelection(), false);
-				setDefaultCursor();
+				if(PreferenceSupplier.isEditSelectedChromatogram()) {
+					shiftChromatogram(PreferenceSupplier.getMillisecondsToShiftBackward());
+				} else {
+					setWaitCursor();
+					PreferenceSupplier.decreaseXOffset();
+					setXLockedOffsetConditionally();
+					update(getChromatogramSelection(), false);
+					setDefaultCursor();
+				}
 			}
 		});
 	}
@@ -269,11 +281,15 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				setWaitCursor();
-				PreferenceSupplier.decreaseXOffsetFast();
-				setXLockedOffsetConditionally();
-				update(getChromatogramSelection(), false);
-				setDefaultCursor();
+				if(PreferenceSupplier.isEditSelectedChromatogram()) {
+					shiftChromatogram(PreferenceSupplier.getMillisecondsToShiftFastBackward());
+				} else {
+					setWaitCursor();
+					PreferenceSupplier.decreaseXOffsetFast();
+					setXLockedOffsetConditionally();
+					update(getChromatogramSelection(), false);
+					setDefaultCursor();
+				}
 			}
 		});
 	}
@@ -288,11 +304,15 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				setWaitCursor();
-				PreferenceSupplier.increaseXOffset();
-				setXLockedOffsetConditionally();
-				update(getChromatogramSelection(), false);
-				setDefaultCursor();
+				if(PreferenceSupplier.isEditSelectedChromatogram()) {
+					shiftChromatogram(PreferenceSupplier.getMillisecondsToShiftForward());
+				} else {
+					setWaitCursor();
+					PreferenceSupplier.increaseXOffset();
+					setXLockedOffsetConditionally();
+					update(getChromatogramSelection(), false);
+					setDefaultCursor();
+				}
 			}
 		});
 	}
@@ -307,11 +327,15 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				setWaitCursor();
-				PreferenceSupplier.increaseXOffsetFast();
-				setXLockedOffsetConditionally();
-				update(getChromatogramSelection(), false);
-				setDefaultCursor();
+				if(PreferenceSupplier.isEditSelectedChromatogram()) {
+					shiftChromatogram(PreferenceSupplier.getMillisecondsToShiftFastForward());
+				} else {
+					setWaitCursor();
+					PreferenceSupplier.increaseXOffsetFast();
+					setXLockedOffsetConditionally();
+					update(getChromatogramSelection(), false);
+					setDefaultCursor();
+				}
 			}
 		});
 	}
@@ -368,11 +392,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 				messageBox.setText("Apply Offset");
 				messageBox.setMessage("Would you like to apply the offset to all chromatograms?");
 				if(messageBox.open() == SWT.YES) {
-					if(PreferenceSupplier.isLockOffset()) {
-						System.out.println("Lock Offset Data");
-					} else {
-						System.out.println("Use normal data.");
-					}
+					shiftChromatograms();
 				}
 			}
 		});
@@ -541,7 +561,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 	/*
 	 * Reset
 	 */
-	private void reset() {
+	private void resetOffsets() {
 
 		PreferenceSupplier.resetOffset();
 		//
@@ -549,5 +569,58 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
 			chromatogramSelection.resetOffset();
 		}
+	}
+
+	private void shiftChromatograms() {
+
+		List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(getChromatogramSelection(), false);
+		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
+			/*
+			 * Get the retention time shift.
+			 */
+			int millisecondsToShift = 0;
+			if(PreferenceSupplier.isLockOffset()) {
+				millisecondsToShift = (int)chromatogramSelection.getOffset().getX();
+			} else {
+				millisecondsToShift = PreferenceSupplier.getOverlayXOffset();
+			}
+			runShiftChromatogram(chromatogramSelection, millisecondsToShift);
+		}
+		/*
+		 * Finally, reset all offsets.
+		 */
+		resetOffsets();
+	}
+
+	private void shiftChromatogram(int millisecondsToShift) {
+
+		/*
+		 * Reset Offsets before running the filter.
+		 */
+		resetOffsets();
+		runShiftChromatogram(getChromatogramSelection(), millisecondsToShift);
+	}
+
+	private void runShiftChromatogram(IChromatogramSelection chromatogramSelection, int millisecondsToShift) {
+
+		StatusLineLogger.setInfo(InfoType.MESSAGE, "Start RTShifter Filter");
+		/*
+		 * Do the operation.<br/> Open a progress monitor dialog.
+		 */
+		final Display display = Display.getCurrent();
+		IRunnableWithProgress runnable = new FilterModifier(chromatogramSelection, millisecondsToShift);
+		ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
+		try {
+			/*
+			 * Use true, true ... instead of false, true ... if the progress bar
+			 * should be shown in action.
+			 */
+			monitor.run(true, true, runnable);
+		} catch(InvocationTargetException e) {
+			logger.warn(e);
+		} catch(InterruptedException e) {
+			logger.warn(e);
+		}
+		StatusLineLogger.setInfo(InfoType.MESSAGE, "RTShifter Filter finished");
 	}
 }
