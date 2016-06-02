@@ -36,6 +36,11 @@ public class MultipleChromatogramOffsetUI extends AbstractViewChromatogramUI {
 
 	private IOffset offset;
 
+	public MultipleChromatogramOffsetUI(Composite parent, int style, IAxisTitles axisTitles) {
+		super(parent, style, axisTitles);
+		setOffset(null);
+	}
+
 	public MultipleChromatogramOffsetUI(Composite parent, int style, IOffset offset, IAxisTitles axisTitles) {
 		super(parent, style, axisTitles);
 	}
