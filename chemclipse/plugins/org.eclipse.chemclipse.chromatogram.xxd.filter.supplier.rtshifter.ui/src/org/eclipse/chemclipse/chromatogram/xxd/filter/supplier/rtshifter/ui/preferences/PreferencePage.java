@@ -28,7 +28,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public PreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("RT Shifter/Offset settings.");
+		setDescription("RT Shifter/Offset settings");
 	}
 
 	/**

@@ -213,7 +213,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 				preferencePage.setTitle("Display Settings");
 				//
 				IPreferencePage preferencePageOverlay = new PreferencePage();
-				preferencePageOverlay.setTitle("Overlay Settings");
+				preferencePageOverlay.setTitle("RT Shifter/Offset settings");
 				//
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
