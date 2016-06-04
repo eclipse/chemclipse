@@ -66,6 +66,7 @@ public class MassSpectrumComparator {
 	private static ComparatorCache comparatorCache;
 	private static IMassSpectrumComparatorProcessingInfo processingInfoComparisonSkip;
 	private static final float NO_MATCH = 0.0f;
+
 	/*
 	 * Initialize all values.
 	 */
