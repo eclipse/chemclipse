@@ -43,8 +43,6 @@ public class ChromatogramOverviewUI extends Chart {
 	public ChromatogramOverviewUI(Composite parent, int style) {
 		super(parent, style);
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
-		decimalFormat.setMaximumFractionDigits(0);
-		decimalFormat.setMaximumIntegerDigits(0);
 		initialize();
 	}
 

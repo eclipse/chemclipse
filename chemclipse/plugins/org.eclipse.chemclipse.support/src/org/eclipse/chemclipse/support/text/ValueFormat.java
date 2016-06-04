@@ -52,6 +52,10 @@ public class ValueFormat {
 	 * "0.###", ENGLISH
 	 * All values are displayed with a precision of 3 decimals.
 	 * 
+	 * DON'T MODIFY THIS INSTANCE, e.g.
+	 * decimalFormat.setMaximumFractionDigits(0);
+	 * decimalFormat.setMaximumIntegerDigits(0);
+	 * 
 	 * @return {@link DecimalFormat}
 	 */
 	public static DecimalFormat getDecimalFormatEnglish() {
@@ -63,7 +67,21 @@ public class ValueFormat {
 	}
 
 	/**
+	 * It's allowed to modify this pattern.
+	 * 
+	 * @return {@link DecimalFormat}
+	 */
+	public static DecimalFormat getDecimalFormatEnglishModifiable() {
+
+		return new DecimalFormat((DEFAULT_DECIMAL_PATTERN), new DecimalFormatSymbols(Locale.ENGLISH));
+	}
+
+	/**
 	 * If the pattern is invalid, the default pattern will be returned.
+	 * 
+	 * DON'T MODIFY THIS INSTANCE, e.g.
+	 * decimalFormat.setMaximumFractionDigits(0);
+	 * decimalFormat.setMaximumIntegerDigits(0);
 	 * 
 	 * @param decimalPattern
 	 * @return {@link DecimalFormat}
@@ -89,8 +107,29 @@ public class ValueFormat {
 	}
 
 	/**
+	 * It's allowed to modify this pattern.
+	 * 
+	 * @param decimalPattern
+	 * @return {@link DecimalFormat}
+	 */
+	public static DecimalFormat getDecimalFormatEnglishModifiable(String decimalPattern) {
+
+		DecimalFormat decimalFormat;
+		try {
+			decimalFormat = new DecimalFormat((decimalPattern), new DecimalFormatSymbols(Locale.ENGLISH));
+		} catch(Exception e) {
+			decimalFormat = getDecimalFormatEnglishModifiable();
+		}
+		return decimalFormat;
+	}
+
+	/**
 	 * Returns the english number format.
 	 * You could use also getDecimalFormatEnglish.
+	 * 
+	 * DON'T MODIFY THIS INSTANCE, e.g.
+	 * numberFormat.setMaximumFractionDigits(0);
+	 * numberFormat.setMaximumIntegerDigits(0);
 	 * 
 	 * @return NumberFormat
 	 */
@@ -105,6 +144,10 @@ public class ValueFormat {
 	/**
 	 * Returns the english number format with min/max digits.
 	 * You could use also getDecimalFormatEnglish.
+	 * 
+	 * DON'T MODIFY THIS INSTANCE, e.g.
+	 * numberFormat.setMaximumFractionDigits(0);
+	 * numberFormat.setMaximumIntegerDigits(0);
 	 * 
 	 * @return NumberFormat
 	 */
