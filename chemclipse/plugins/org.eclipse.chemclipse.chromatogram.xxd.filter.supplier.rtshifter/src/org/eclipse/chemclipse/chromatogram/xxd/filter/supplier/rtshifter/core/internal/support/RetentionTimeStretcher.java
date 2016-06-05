@@ -33,8 +33,8 @@ public class RetentionTimeStretcher {
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		int scanRange = chromatogram.getNumberOfScans() - 1;
 		if(scanRange > 0) {
-			int retentionTimeRange = supplierFilterSettings.getChromatogramLength() - supplierFilterSettings.getScanDelay();
-			int scanInterval = retentionTimeRange / scanRange;
+			float retentionTimeRange = supplierFilterSettings.getChromatogramLength() - supplierFilterSettings.getScanDelay();
+			int scanInterval = Math.round(retentionTimeRange / scanRange);
 			//
 			chromatogram.setScanDelay(supplierFilterSettings.getScanDelay());
 			chromatogram.setScanInterval(scanInterval);
