@@ -349,4 +349,16 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		boolean value = preferences.getBoolean(P_IS_LOCK_OFFSET, DEF_IS_LOCK_OFFSET);
 		preferences.putBoolean(P_IS_LOCK_OFFSET, !value);
 	}
+
+	public static void setStretchScanDelay(int scanDelay) {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		preferences.putInt(P_STRETCH_MILLISECONDS_SCAN_DELAY, scanDelay);
+	}
+
+	public static void setStretchLength(int length) {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		preferences.putInt(P_STRETCH_MILLISECONDS_LENGTH, length);
+	}
 }
