@@ -19,7 +19,7 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui.modifier.FilterModifier;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui.modifier.FilterModifierShift;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -608,7 +608,7 @@ public class ChromatogramOverlayView extends AbstractChromatogramOverlayView {
 		 * Do the operation.<br/> Open a progress monitor dialog.
 		 */
 		final Display display = Display.getCurrent();
-		IRunnableWithProgress runnable = new FilterModifier(chromatogramSelection, millisecondsToShift);
+		IRunnableWithProgress runnable = new FilterModifierShift(chromatogramSelection, millisecondsToShift);
 		ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
 		try {
 			/*

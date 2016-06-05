@@ -15,9 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterShiftSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterStretchSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ShiftDirection;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.SupplierFilterShiftSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.SupplierFilterStretchSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -58,6 +60,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_IS_EDIT_SELECTED_CHROMATOGRAM = false;
 	public static final String P_IS_LOCK_OFFSET = "isLockOffset";
 	public static final boolean DEF_IS_LOCK_OFFSET = false;
+	//
+	public static final String P_STRETCH_MILLISECONDS_SCAN_DELAY = "stretchMillisecondsScanDelay";
+	public static final int DEF_STRETCH_MILLISECONDS_SCAN_DELAY = 0;
+	public static final String P_STRETCH_MILLISECONDS_LENGTH = "stretchMillisecondsLength";
+	public static final int DEF_STRETCH_MILLISECONDS_LENGTH = 6000000; // = 100.0 minutes;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -101,6 +108,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_IS_EDIT_SELECTED_CHROMATOGRAM, Boolean.toString(DEF_IS_EDIT_SELECTED_CHROMATOGRAM));
 		defaultValues.put(P_IS_LOCK_OFFSET, Boolean.toString(DEF_IS_LOCK_OFFSET));
 		//
+		defaultValues.put(P_STRETCH_MILLISECONDS_SCAN_DELAY, Integer.toString(DEF_STRETCH_MILLISECONDS_SCAN_DELAY));
+		defaultValues.put(P_STRETCH_MILLISECONDS_LENGTH, Integer.toString(DEF_STRETCH_MILLISECONDS_LENGTH));
+		//
 		return defaultValues;
 	}
 
@@ -110,12 +120,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	/**
-	 * Returns the chromatogram filter settings.
-	 * 
-	 * @return IChromatogramFilterSettings
-	 */
-	public static ISupplierFilterSettings getChromatogramFilterSettings() {
+	public static ISupplierFilterShiftSettings getChromatogramFilterSettingsShift() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		/*
@@ -124,7 +129,20 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		ShiftDirection defaultShiftDirection = ShiftDirection.valueOf(preferences.get(P_DEFAULT_SHIFT_DIRECTION, DEF_DEFAULT_SHIFT_DIRECTION));
 		boolean isShiftAllScans = getIsShiftAllScans();
 		int millisecondsToShift = getMillisecondsToShift(preferences, defaultShiftDirection);
-		ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings(millisecondsToShift, isShiftAllScans);
+		ISupplierFilterShiftSettings chromatogramFilterSettings = new SupplierFilterShiftSettings(millisecondsToShift, isShiftAllScans);
+		return chromatogramFilterSettings;
+	}
+
+	public static ISupplierFilterStretchSettings getChromatogramFilterSettingsStretch() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		/*
+		 * Set the properties.
+		 */
+		int scanDelay = preferences.getInt(P_STRETCH_MILLISECONDS_SCAN_DELAY, DEF_STRETCH_MILLISECONDS_SCAN_DELAY);
+		int chromatogramLength = preferences.getInt(P_STRETCH_MILLISECONDS_LENGTH, DEF_STRETCH_MILLISECONDS_LENGTH);
+		ISupplierFilterStretchSettings chromatogramFilterSettings = new SupplierFilterStretchSettings(chromatogramLength);
+		chromatogramFilterSettings.setScanDelay(scanDelay);
 		return chromatogramFilterSettings;
 	}
 

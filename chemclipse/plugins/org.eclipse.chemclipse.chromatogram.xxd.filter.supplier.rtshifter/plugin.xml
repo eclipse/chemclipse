@@ -5,11 +5,20 @@
          point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
       <ChromatogramFilterSupplier
             description="This filter shifts retention times."
-            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.ChromatogramFilter"
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.ChromatogramFilterShift"
             filterName="Retention Time Shifter"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter">
       </ChromatogramFilterSupplier>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter stretches retention times."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.ChromatogramFilterStretch"
+            filterName="Retention Time Stretcher"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtstretcher">
+      </ChromatogramFilterSupplier>
+   </extension>   
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer

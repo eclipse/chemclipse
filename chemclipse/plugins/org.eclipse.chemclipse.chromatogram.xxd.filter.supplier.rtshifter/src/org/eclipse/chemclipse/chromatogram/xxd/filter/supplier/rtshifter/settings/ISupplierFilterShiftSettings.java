@@ -11,27 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
+import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 
-public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
+public interface ISupplierFilterShiftSettings extends IChromatogramFilterSettings {
 
-	private int millisecondsToShift;
-	private boolean isShiftAllScans;
+	int getMillisecondsToShift();
 
-	public SupplierFilterSettings(int millisecondsToShift, boolean isShiftAllScans) {
-		this.millisecondsToShift = millisecondsToShift;
-		this.isShiftAllScans = isShiftAllScans;
-	}
-
-	@Override
-	public int getMillisecondsToShift() {
-
-		return millisecondsToShift;
-	}
-
-	@Override
-	public boolean isShiftAllScans() {
-
-		return isShiftAllScans;
-	}
+	boolean isShiftAllScans();
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 Philip (eselmeister) Wenig.
+ * Copyright (c) 2016 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Philip (eselmeister) Wenig - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core;
 
@@ -18,14 +18,14 @@ import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResul
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.internal.support.RTShifter;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.internal.support.RetentionTimeStretcher;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterStretchSettings;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramFilter extends AbstractChromatogramFilter {
+public class ChromatogramFilterStretch extends AbstractChromatogramFilter {
 
 	@Override
 	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
@@ -40,8 +40,8 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 		 */
 		IChromatogramFilterResult chromatogramFilterResult;
 		try {
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram has been shifted successfully.");
-			RTShifter.shiftRetentionTimes(chromatogramSelection, getSupplierFilterSettings(chromatogramFilterSettings));
+			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram has been stretched successfully.");
+			RetentionTimeStretcher.stretchChromatogram(chromatogramSelection, getSupplierFilterSettings(chromatogramFilterSettings));
 		} catch(FilterException e) {
 			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage());
 		}
@@ -52,19 +52,19 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 	@Override
 	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
+		IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettingsStretch();
 		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 	}
 
-	private ISupplierFilterSettings getSupplierFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
+	private ISupplierFilterStretchSettings getSupplierFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
 
 		/*
 		 * Get the excluded ions instance.
 		 */
-		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
-			return (ISupplierFilterSettings)chromatogramFilterSettings;
+		if(chromatogramFilterSettings instanceof ISupplierFilterStretchSettings) {
+			return (ISupplierFilterStretchSettings)chromatogramFilterSettings;
 		} else {
-			return PreferenceSupplier.getChromatogramFilterSettings();
+			return PreferenceSupplier.getChromatogramFilterSettingsStretch();
 		}
 	}
 }

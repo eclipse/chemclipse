@@ -15,20 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.exceptions.FilterException;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterShiftSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
-public class RTShifter {
+public class RetentionTimeShifter {
 
 	/*
 	 * Use only static methods.
 	 */
-	private RTShifter() {
+	private RetentionTimeShifter() {
 	}
 
-	public static void shiftRetentionTimes(IChromatogramSelection chromatogramSelection, ISupplierFilterSettings supplierFilterSettings) throws FilterException {
+	public static void shiftRetentionTimes(IChromatogramSelection chromatogramSelection, ISupplierFilterShiftSettings supplierFilterSettings) throws FilterException {
 
 		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() == null) {
 			throw new FilterException("The chromatogram must not be null.");
@@ -39,7 +39,7 @@ public class RTShifter {
 		setScanDelay(chromatogramSelection);
 	}
 
-	private static List<Integer> adjustRetentionTimesAndReturnScansToRemove(IChromatogramSelection chromatogramSelection, ISupplierFilterSettings supplierFilterSettings) {
+	private static List<Integer> adjustRetentionTimesAndReturnScansToRemove(IChromatogramSelection chromatogramSelection, ISupplierFilterShiftSettings supplierFilterSettings) {
 
 		boolean isShiftAllScans = supplierFilterSettings.isShiftAllScans();
 		int millisecondToShift = supplierFilterSettings.getMillisecondsToShift();

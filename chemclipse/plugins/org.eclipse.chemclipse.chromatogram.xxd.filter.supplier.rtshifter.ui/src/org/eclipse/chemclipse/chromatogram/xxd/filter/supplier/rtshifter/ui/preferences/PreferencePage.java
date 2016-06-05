@@ -58,6 +58,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_IS_EDIT_SELECTED_CHROMATOGRAM, "Edit Selected Chromatogram", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_IS_LOCK_OFFSET, "Lock Offset", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_STRETCH_MILLISECONDS_SCAN_DELAY, "Stretch Scan Delay (minutes)", 0, Integer.MAX_VALUE, getFieldEditorParent()));
+		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_STRETCH_MILLISECONDS_LENGTH, "Stretch Length (minutes)", 0, Integer.MAX_VALUE, getFieldEditorParent()));
 	}
 
 	/*

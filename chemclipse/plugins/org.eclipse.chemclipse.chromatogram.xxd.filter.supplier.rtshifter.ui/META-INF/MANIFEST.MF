@@ -47,5 +47,7 @@ Service-Component: OSGI-INF/filterHandlerShiftForwardMSD.xml,
  OSGI-INF/filterHandlerShiftBackwardWSD.xml,
  OSGI-INF/filterHandlerShiftFastBackwardMSD.xml,
  OSGI-INF/filterHandlerShiftFastBackwardCSD.xml,
- OSGI-INF/filterHandlerShiftFastBackwardWSD.xml
-
+ OSGI-INF/filterHandlerShiftFastBackwardWSD.xml,
+ OSGI-INF/filterHandlerStretchMSD.xml,
+ OSGI-INF/filterHandlerStretchCSD.xml,
+ OSGI-INF/filterHandlerStretchWSD.xml

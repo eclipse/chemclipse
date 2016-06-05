@@ -16,23 +16,20 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ISupplierFilterStretchSettings;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-public class FilterModifier extends AbstractChromatogramProcessor implements IRunnableWithProgress {
+public class FilterModifierStretch extends AbstractChromatogramProcessor implements IRunnableWithProgress {
 
-	private static final String description = "RTShifter Filter";
-	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter";
-	private int millisecondsToShift;
+	private static final String description = "RTStretch Filter";
+	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtstretcher";
 
-	public FilterModifier(IChromatogramSelection chromatogramSelection, int millisecondsToShift) {
+	public FilterModifierStretch(IChromatogramSelection chromatogramSelection) {
 		super(chromatogramSelection);
-		this.millisecondsToShift = millisecondsToShift;
 	}
 
 	@Override
@@ -40,8 +37,7 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 
 		if(getChromatogramSelection() != null) {
 			IChromatogramSelection chromatogramSelection = getChromatogramSelection();
-			boolean isShiftAllScans = PreferenceSupplier.getIsShiftAllScans();
-			ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings(millisecondsToShift, isShiftAllScans);
+			ISupplierFilterStretchSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettingsStretch();
 			final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, FILTER_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 		}
@@ -62,7 +58,7 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 		 * handled separately.
 		 */
 		try {
-			monitor.beginTask("RTShifter Filter", IProgressMonitor.UNKNOWN);
+			monitor.beginTask("RTStretch Filter", IProgressMonitor.UNKNOWN);
 			getChromatogramSelection().getChromatogram().doOperation(this, monitor);
 		} finally {
 			monitor.done();
