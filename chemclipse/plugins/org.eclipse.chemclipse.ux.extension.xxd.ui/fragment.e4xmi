@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_RvTHsKuDEeSKQ7OYnQVHjQ">
+  <imports xsi:type="advanced:Area" xmi:id="_qjvtkCskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.rcp.app.ui.editor"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_TxCZIKuHEeSKQ7OYnQVHjQ" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
     <elements xsi:type="basic:Part" xmi:id="_u-XfABQzEeW0y8Q1koI2OA" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramOverlayMirrored" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.views.MirroredChromatogramOverlayView" label="Chromatogram Overlay (Mirrored)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverlayMirrored.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_MIwuoBTOEeW6yZo_81fQOw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramOverlaySubtract" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.views.SubtractChromatogramOverlayView" label="Chromatogram Overlay (Subtract)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverlaySubtract.gif"/>
@@ -14,5 +15,19 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_3wrCQMnGEeWO_6AUKBdskw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.partstack.miscellaneousOverlay">
     <elements xsi:type="advanced:Placeholder" xmi:id="_8KQRoMnGEeWO_6AUKBdskw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.1" ref="_aLRqsMnGEeWO_6AUKBdskw"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_NOrRACskEeakPPc3RJFSAg" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
+    <elements xsi:type="advanced:Perspective" xmi:id="_PjP7sCskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main" label="Unified Chromatograms (experimental)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif">
+      <children xsi:type="basic:PartSashContainer" xmi:id="_gTEvACskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.0" horizontal="true">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_ioDCUCskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.1" containerData="2500">
+          <children xsi:type="basic:PartStack" xmi:id="_kUeu8CskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.0" containerData="2500">
+            <children xsi:type="advanced:Placeholder" xmi:id="_2Aqc0CskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.2" ref="_qtur4Cf2EeafjOXnfHSw0Q"/>
+          </children>
+        </children>
+        <children xsi:type="basic:PartSashContainer" xmi:id="_i_FpUCskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.2">
+          <children xsi:type="advanced:Placeholder" xmi:id="_w2dBwCskEeakPPc3RJFSAg" elementId="org.eclipse.ui.editorss" ref="_qjvtkCskEeakPPc3RJFSAg"/>
+        </children>
+      </children>
+    </elements>
   </fragments>
 </fragment:ModelFragments>
