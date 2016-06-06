@@ -26,6 +26,6 @@ public class ChromatogramFileExplorer extends AbstractChromatogramFileExplorer {
 
 	@Inject
 	public ChromatogramFileExplorer(Composite parent) {
-		super(parent, ChromatogramSupport.getInstanceIdentifier(), ChromatogramSupport.getInstanceEditorSupport());
+		super(parent, ChromatogramSupport.getInstanceEditorSupport());
 	}
 }

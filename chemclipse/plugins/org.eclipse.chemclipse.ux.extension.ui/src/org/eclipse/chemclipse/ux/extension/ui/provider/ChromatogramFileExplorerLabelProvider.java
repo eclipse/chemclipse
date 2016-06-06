@@ -24,13 +24,13 @@ import org.eclipse.ui.navigator.IDescriptionProvider;
 
 public class ChromatogramFileExplorerLabelProvider extends LabelProvider implements ILabelProvider, IDescriptionProvider {
 
-	private List<IChromatogramIdentifier> chromatogramIdentifierList;
+	private List<? extends IChromatogramIdentifier> chromatogramIdentifierList;
 
 	public ChromatogramFileExplorerLabelProvider(IChromatogramIdentifier chromatogramIdentifier) {
 		this(ExplorerListSupport.getChromatogramIdentifierList(chromatogramIdentifier));
 	}
 
-	public ChromatogramFileExplorerLabelProvider(List<IChromatogramIdentifier> chromatogramIdentifierList) {
+	public ChromatogramFileExplorerLabelProvider(List<? extends IChromatogramIdentifier> chromatogramIdentifierList) {
 		this.chromatogramIdentifierList = chromatogramIdentifierList;
 	}
 

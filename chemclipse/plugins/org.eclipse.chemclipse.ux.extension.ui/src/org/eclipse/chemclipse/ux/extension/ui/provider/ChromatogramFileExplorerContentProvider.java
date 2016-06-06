@@ -18,13 +18,13 @@ import java.util.List;
 
 public class ChromatogramFileExplorerContentProvider extends FileExplorerContentProvider {
 
-	private List<IChromatogramIdentifier> chromatogramIdentifierList;
+	private List<? extends IChromatogramIdentifier> chromatogramIdentifierList;
 
 	public ChromatogramFileExplorerContentProvider(IChromatogramIdentifier chromatogramIdentifier) {
 		this(ExplorerListSupport.getChromatogramIdentifierList(chromatogramIdentifier));
 	}
 
-	public ChromatogramFileExplorerContentProvider(List<IChromatogramIdentifier> chromatogramIdentifierList) {
+	public ChromatogramFileExplorerContentProvider(List<? extends IChromatogramIdentifier> chromatogramIdentifierList) {
 		this.chromatogramIdentifierList = chromatogramIdentifierList;
 	}
 

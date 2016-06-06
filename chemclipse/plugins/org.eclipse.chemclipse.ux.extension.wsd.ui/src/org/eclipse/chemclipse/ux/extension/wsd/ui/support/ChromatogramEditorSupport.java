@@ -20,12 +20,23 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractChromatogramEdito
 import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.editors.ChromatogramEditorWSD;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.internal.support.ChromatogramIdentifier;
+import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
 public class ChromatogramEditorSupport extends AbstractChromatogramEditorSupport implements IChromatogramEditorSupport {
+
+	public ChromatogramEditorSupport() {
+		super(ChromatogramConverterWSD.getChromatogramConverterSupport().getSupplier());
+	}
+
+	@Override
+	public String getType() {
+
+		return TYPE_WSD;
+	}
 
 	@Override
 	public void openEditor(File file, EModelService modelService, MApplication application, EPartService partService) {
