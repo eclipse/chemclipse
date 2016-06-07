@@ -24,13 +24,13 @@ import org.eclipse.ui.navigator.IDescriptionProvider;
 
 public class ChromatogramFileExplorerLabelProvider extends LabelProvider implements ILabelProvider, IDescriptionProvider {
 
-	private List<IChromatogramIdentifier> chromatogramIdentifierList;
+	private List<? extends IChromatogramIdentifier> chromatogramIdentifierList;
 
 	public ChromatogramFileExplorerLabelProvider(IChromatogramIdentifier chromatogramIdentifier) {
 		this(ExplorerListSupport.getChromatogramIdentifierList(chromatogramIdentifier));
 	}
 
-	public ChromatogramFileExplorerLabelProvider(List<IChromatogramIdentifier> chromatogramIdentifierList) {
+	public ChromatogramFileExplorerLabelProvider(List<? extends IChromatogramIdentifier> chromatogramIdentifierList) {
 		this.chromatogramIdentifierList = chromatogramIdentifierList;
 	}
 
@@ -74,10 +74,12 @@ public class ChromatogramFileExplorerLabelProvider extends LabelProvider impleme
 							/*
 							 * Check and validate.
 							 */
-							descriptor = getImageDescriptor(chromatogramIdentifier);
-							if(descriptor != null) {
-								isNormalDirectory = false;
-								break exitloop;
+							if(chromatogramIdentifier.isMatchMagicNumber(file)) {
+								descriptor = getImageDescriptor(chromatogramIdentifier);
+								if(descriptor != null) {
+									isNormalDirectory = false;
+									break exitloop;
+								}
 							}
 						}
 					}
@@ -98,10 +100,12 @@ public class ChromatogramFileExplorerLabelProvider extends LabelProvider impleme
 							/*
 							 * Check and validate.
 							 */
-							descriptor = getImageDescriptor(chromatogramIdentifier);
-							if(descriptor != null) {
-								isNormalFile = false;
-								break exitloop;
+							if(chromatogramIdentifier.isMatchMagicNumber(file)) {
+								descriptor = getImageDescriptor(chromatogramIdentifier);
+								if(descriptor != null) {
+									isNormalFile = false;
+									break exitloop;
+								}
 							}
 						}
 					}

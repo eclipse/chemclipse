@@ -14,26 +14,26 @@ package org.eclipse.chemclipse.wsd.converter.chromatogram;
 import java.io.File;
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
-
 import org.eclipse.chemclipse.converter.chromatogram.ChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.chromatogram.ChromatogramSupplier;
 import org.eclipse.chemclipse.converter.core.Converter;
+import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.wsd.converter.processing.chromatogram.ChromatogramWSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.wsd.converter.processing.chromatogram.IChromatogramWSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 
 public class ChromatogramConverterWSD {
 
@@ -344,10 +344,25 @@ public class ChromatogramConverterWSD {
 				supplier.setFilterName(element.getAttribute(Converter.FILTER_NAME));
 				supplier.setExportable(Boolean.valueOf(element.getAttribute(Converter.IS_EXPORTABLE)));
 				supplier.setImportable(Boolean.valueOf(element.getAttribute(Converter.IS_IMPORTABLE)));
+				supplier.setMagicNumberMatcher(getMagicNumberMatcher(element));
 				chromatogramConverterSupport.add(supplier);
 			}
 		}
 		return chromatogramConverterSupport;
+	}
+
+	/*
+	 * This method may return null.
+	 */
+	private static IMagicNumberMatcher getMagicNumberMatcher(IConfigurationElement element) {
+
+		IMagicNumberMatcher magicNumberMatcher;
+		try {
+			magicNumberMatcher = (IMagicNumberMatcher)element.createExecutableExtension(Converter.IMPORT_MAGIC_NUMBER_MATCHER);
+		} catch(Exception e) {
+			magicNumberMatcher = null;
+		}
+		return magicNumberMatcher;
 	}
 
 	// ---------------------------------------------ConverterMethods

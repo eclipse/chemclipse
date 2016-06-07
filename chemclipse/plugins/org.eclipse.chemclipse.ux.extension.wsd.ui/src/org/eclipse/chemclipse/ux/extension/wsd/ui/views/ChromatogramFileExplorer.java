@@ -15,7 +15,6 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractChromatogramFileExplorer;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramSupport;
-
 import org.eclipse.swt.widgets.Composite;
 
 /**
@@ -27,6 +26,6 @@ public class ChromatogramFileExplorer extends AbstractChromatogramFileExplorer {
 
 	@Inject
 	public ChromatogramFileExplorer(Composite parent) {
-		super(parent, ChromatogramSupport.getInstanceIdentifier(), ChromatogramSupport.getInstanceEditorSupport());
+		super(parent, ChromatogramSupport.getInstanceEditorSupport());
 	}
 }

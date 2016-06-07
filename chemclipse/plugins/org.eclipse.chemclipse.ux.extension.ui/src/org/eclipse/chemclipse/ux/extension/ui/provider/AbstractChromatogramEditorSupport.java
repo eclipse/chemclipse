@@ -12,7 +12,9 @@
 package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
+import java.util.List;
 
+import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.core.internal.contexts.EclipseContext;
@@ -26,7 +28,11 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 
 @SuppressWarnings({"restriction"})
-public abstract class AbstractChromatogramEditorSupport implements IChromatogramEditorSupport {
+public abstract class AbstractChromatogramEditorSupport extends AbstractChromatogramIdentifier implements IChromatogramEditorSupport {
+
+	public AbstractChromatogramEditorSupport(List<ISupplier> suppliers) {
+		super(suppliers);
+	}
 
 	/*
 	 * A protected member shall be not used normally. This could be improved.

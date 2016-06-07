@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerC
 import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerLabelProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ExplorerListSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramIdentifier;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -49,17 +48,17 @@ public abstract class AbstractChromatogramFileExplorer {
 	@Inject
 	private MApplication application;
 
-	public AbstractChromatogramFileExplorer(Composite parent, IChromatogramIdentifier chromatogramIdentifier, IChromatogramEditorSupport chromatogramEditorSupport) {
-		this(parent, ExplorerListSupport.getChromatogramIdentifierList(chromatogramIdentifier), ExplorerListSupport.getChromatogramEditorSupportList(chromatogramEditorSupport));
+	public AbstractChromatogramFileExplorer(Composite parent, IChromatogramEditorSupport chromatogramEditorSupport) {
+		this(parent, ExplorerListSupport.getChromatogramEditorSupportList(chromatogramEditorSupport));
 	}
 
-	public AbstractChromatogramFileExplorer(Composite parent, List<IChromatogramIdentifier> chromatogramIdentifierList, List<IChromatogramEditorSupport> chromatogramEditorSupportList) {
+	public AbstractChromatogramFileExplorer(Composite parent, List<IChromatogramEditorSupport> chromatogramEditorSupportList) {
 		/*
 		 * Create the tree viewer.
 		 */
 		treeViewer = new TreeViewer(parent, SWT.VIRTUAL);
-		treeViewer.setContentProvider(new ChromatogramFileExplorerContentProvider(chromatogramIdentifierList));
-		treeViewer.setLabelProvider(new ChromatogramFileExplorerLabelProvider(chromatogramIdentifierList));
+		treeViewer.setContentProvider(new ChromatogramFileExplorerContentProvider(chromatogramEditorSupportList));
+		treeViewer.setLabelProvider(new ChromatogramFileExplorerLabelProvider(chromatogramEditorSupportList));
 		TreeViewerFilesystemSupport.retrieveAndSetLocalFileSystem(treeViewer);
 		/*
 		 * Register single (selection changed)/double click listener here.<br/>
@@ -92,9 +91,15 @@ public abstract class AbstractChromatogramFileExplorer {
 					 * stored also as directories.
 					 */
 					if(isNewFile(file)) {
-						// TODO
+						exitloop:
 						for(IChromatogramEditorSupport chromatogramEditorSupport : chromatogramEditorSupportList) {
-							chromatogramEditorSupport.openOverview(file, eventBroker);
+							if(chromatogramEditorSupport.isMatchMagicNumber(file)) {
+								/*
+								 * Show the first overview only.
+								 */
+								chromatogramEditorSupport.openOverview(file, eventBroker);
+								break exitloop;
+							}
 						}
 					}
 				}
@@ -108,10 +113,14 @@ public abstract class AbstractChromatogramFileExplorer {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
 
-				// TODO
 				File file = (File)((IStructuredSelection)event.getSelection()).getFirstElement();
 				for(IChromatogramEditorSupport chromatogramEditorSupport : chromatogramEditorSupportList) {
-					chromatogramEditorSupport.openEditor(file, modelService, application, partService);
+					/*
+					 * Open all chromatograms that are contained.
+					 */
+					if(chromatogramEditorSupport.isMatchMagicNumber(file)) {
+						chromatogramEditorSupport.openEditor(file, modelService, application, partService);
+					}
 				}
 			}
 		});

@@ -18,26 +18,16 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractChromatogramFileExplorer;
 import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramIdentifier;
 import org.eclipse.swt.widgets.Composite;
 
 public class SupplierFileExplorer extends AbstractChromatogramFileExplorer {
 
 	@Inject
 	public SupplierFileExplorer(Composite parent) {
-		super(parent, getChromatogramIdentifierList(), getChromatogramEditorSupportList());
+		super(parent, getChromatogramEditorSupport());
 	}
 
-	public static List<IChromatogramIdentifier> getChromatogramIdentifierList() {
-
-		List<IChromatogramIdentifier> list = new ArrayList<IChromatogramIdentifier>();
-		list.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport.getInstanceIdentifier());
-		list.add(org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport.getInstanceIdentifier());
-		list.add(org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramSupport.getInstanceIdentifier());
-		return list;
-	}
-
-	public static List<IChromatogramEditorSupport> getChromatogramEditorSupportList() {
+	public static List<IChromatogramEditorSupport> getChromatogramEditorSupport() {
 
 		List<IChromatogramEditorSupport> list = new ArrayList<IChromatogramEditorSupport>();
 		list.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport.getInstanceEditorSupport());

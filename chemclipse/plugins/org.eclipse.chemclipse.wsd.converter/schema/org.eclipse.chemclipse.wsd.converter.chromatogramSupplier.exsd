@@ -106,7 +106,7 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.wsd.converter.chromatogram.AbstractChromatogramExportConverter:"/>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.wsd.converter.chromatogram.AbstractChromatogramExportConverter:org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverter"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -116,7 +116,7 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.wsd.converter.chromatogram.AbstractChromatogramImportConverter:"/>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.wsd.converter.chromatogram.AbstractChromatogramImportConverter:org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverter"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -132,6 +132,16 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
                <documentation>
                   Select whether this format is importable or not. It is possible that a chromatogram can be written for export but not be parsed for import.
                </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="importMagicNumberMatcher" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher:org.eclipse.chemclipse.converter.core.IMagicNumberMatcher"/>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>

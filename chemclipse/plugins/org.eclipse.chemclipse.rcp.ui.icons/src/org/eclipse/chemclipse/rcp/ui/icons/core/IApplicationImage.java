@@ -30,6 +30,10 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_CHECK_ALL = "checkAll.gif";
 	String IMAGE_UNCHECK_ALL = "uncheckAll.gif";
 	//
+	String IMAGE_SHRINK_CHROMATOGRAMS = "shrinkChromatograms.gif";
+	String IMAGE_ALIGN_CHROMATOGRAMS = "alignChromatograms.gif";
+	String IMAGE_STRETCH_CHROMATOGRAMS = "stretchChromatograms.gif";
+	//
 	String IMAGE_CHROMATOGRAM = "chromatogram.gif";
 	String IMAGE_CHROMATOGRAM_MSD = "chromatogram-msd.gif";
 	String IMAGE_CHROMATOGRAM_CSD = "chromatogram-csd.gif";

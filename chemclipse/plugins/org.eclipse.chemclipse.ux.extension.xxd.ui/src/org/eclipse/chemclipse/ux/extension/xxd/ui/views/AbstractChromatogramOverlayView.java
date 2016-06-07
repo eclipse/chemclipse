@@ -58,7 +58,7 @@ public abstract class AbstractChromatogramOverlayView extends AbstractChromatogr
 		 */
 		Collection<MPart> parts = partService.getParts();
 		for(MPart part : parts) {
-			if(part.getElementId().equals(ChromatogramEditorMSD.ID) || part.getElementId().equals(ChromatogramEditorCSD.ID) || part.getElementId().equals(ChromatogramEditorWSD.ID)) {
+			if(isChromatogramEditor(part)) {
 				/*
 				 * Select the chromatogram editor parts only.
 				 */
@@ -98,5 +98,12 @@ public abstract class AbstractChromatogramOverlayView extends AbstractChromatogr
 		 * contains 0 elements.
 		 */
 		return chromatogramSelections;
+	}
+
+	private boolean isChromatogramEditor(MPart part) {
+
+		return (part.getElementId().equals(ChromatogramEditorMSD.ID) || //
+		part.getElementId().equals(ChromatogramEditorCSD.ID) || //
+		part.getElementId().equals(ChromatogramEditorWSD.ID));
 	}
 }
