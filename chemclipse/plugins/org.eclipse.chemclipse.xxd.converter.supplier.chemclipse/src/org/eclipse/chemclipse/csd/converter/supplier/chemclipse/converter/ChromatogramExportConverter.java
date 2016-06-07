@@ -13,8 +13,7 @@ package org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
+import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverter;
 import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.csd.converter.chromatogram.AbstractChromatogramCSDExportConverter;
@@ -25,8 +24,9 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.SpecificationValidator;
+import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramExportConverter extends AbstractChromatogramCSDExportConverter {
+public class ChromatogramExportConverter extends AbstractChromatogramCSDExportConverter implements IChromatogramExportConverter {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramExportConverter.class);
 

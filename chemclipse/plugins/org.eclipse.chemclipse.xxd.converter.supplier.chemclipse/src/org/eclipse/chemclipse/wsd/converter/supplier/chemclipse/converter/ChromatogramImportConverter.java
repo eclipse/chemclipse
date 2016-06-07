@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverter;
 import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -28,7 +29,7 @@ import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.SpecificationValidator;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramImportConverter extends AbstractChromatogramWSDImportConverter {
+public class ChromatogramImportConverter extends AbstractChromatogramWSDImportConverter implements IChromatogramImportConverter {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramImportConverter.class);
 

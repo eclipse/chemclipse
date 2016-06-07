@@ -6,11 +6,12 @@
       <ChromatogramSupplier
             description="Reads and writes OpenChrom chromatograms"
             exportConverter="org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter.ChromatogramExportConverter"
-            isExportable="true"
             fileExtension=".ocb"
             filterName="OpenChrom Chromatogram (*.ocb)"
             id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.MagicNumberMatcher"
+            isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>
    </extension>
@@ -32,11 +33,12 @@
       <ChromatogramSupplier
             description="Reads and writes OpenChrom chromatograms"
             exportConverter="org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter.ChromatogramExportConverter"
-            isExportable="true"
             fileExtension=".ocb"
             filterName="OpenChrom Chromatogram (*.ocb)"
             id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse"
             importConverter="org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.MagicNumberMatcher"
+            isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>
    </extension>   
@@ -55,6 +57,7 @@
             filterName="OpenChrom Chromatogram (*.ocb)"
             id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse"
             importConverter="org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>
