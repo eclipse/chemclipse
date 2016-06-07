@@ -23,6 +23,7 @@
             filterName="Chromatogram Peak Loadings (*.mpl)"
             id="org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.chromatogram"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.converter.ChromatogramPeakImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.converter.MagicNumberMatcher"
             isExportable="true"
             isImportable="false">
       </ChromatogramSupplier>
