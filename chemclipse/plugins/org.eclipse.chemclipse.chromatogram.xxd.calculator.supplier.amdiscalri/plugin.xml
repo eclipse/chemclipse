@@ -19,6 +19,7 @@
             filterName="AMDIS RI Calibration (*.CAL)"
             id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.chromatogram.cal"
             importConverter="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.MagicNumberMatcher"
             isExportable="true"
             isImportable="false">
       </ChromatogramSupplier>

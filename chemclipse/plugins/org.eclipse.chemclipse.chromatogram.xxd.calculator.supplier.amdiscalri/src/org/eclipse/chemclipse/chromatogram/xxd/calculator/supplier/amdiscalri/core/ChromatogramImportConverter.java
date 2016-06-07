@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.c
 
 import java.io.File;
 
+import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverter;
 import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.chromatogram.AbstractChromatogramMSDImportConverter;
@@ -20,7 +21,7 @@ import org.eclipse.chemclipse.msd.converter.processing.chromatogram.Chromatogram
 import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramImportConverter extends AbstractChromatogramMSDImportConverter {
+public class ChromatogramImportConverter extends AbstractChromatogramMSDImportConverter implements IChromatogramExportConverter {
 
 	private static final String DESCRIPTION = "AMDIS Chromatogram *.cal Import";
 	private static final String MESSAGE = "It's only possible to import peaks using the chromatogram peak import converter.";
