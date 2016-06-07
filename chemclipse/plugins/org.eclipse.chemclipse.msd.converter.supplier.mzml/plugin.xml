@@ -10,6 +10,7 @@
             filterName="mzML Chromatogram (*.mzML)"
             id="org.eclipse.chemclipse.msd.converter.supplier.mzml"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.MagicNumberMatcher"
             isExportable="false"
             isImportable="false">
       </ChromatogramSupplier>
