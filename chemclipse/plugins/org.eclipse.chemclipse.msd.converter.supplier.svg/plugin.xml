@@ -10,6 +10,7 @@
             filterName="SVG Chromatogram (*.svg)"
             id="org.eclipse.chemclipse.msd.converter.supplier.svg"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.svg.converter.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.svg.converter.MagicNumberMatcher"
             isExportable="true"
             isImportable="false">
       </ChromatogramSupplier>
