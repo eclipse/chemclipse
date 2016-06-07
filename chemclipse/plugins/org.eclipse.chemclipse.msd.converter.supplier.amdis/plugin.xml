@@ -66,6 +66,7 @@
             filterName="Chromatogram Peak NIST Text (*.msp)"
             id="org.eclipse.chemclipse.msd.converter.supplier.amdis.chromatogram.peak.msp"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.ChromatogramPeakImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.MagicNumberMatcher"
             isExportable="true"
             isImportable="false">
       </ChromatogramSupplier>
@@ -76,6 +77,7 @@
             filterName="Chromatogram Peaks AMDIS (*.msl)"
             id="org.eclipse.chemclipse.msd.converter.supplier.amdis.chromatogram.peak.msl"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.ChromatogramPeakImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.MagicNumberMatcher"
             isExportable="true"
             isImportable="false">
       </ChromatogramSupplier>
