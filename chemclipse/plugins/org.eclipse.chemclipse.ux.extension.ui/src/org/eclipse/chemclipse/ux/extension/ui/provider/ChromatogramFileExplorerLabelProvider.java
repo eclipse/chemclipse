@@ -74,10 +74,12 @@ public class ChromatogramFileExplorerLabelProvider extends LabelProvider impleme
 							/*
 							 * Check and validate.
 							 */
-							descriptor = getImageDescriptor(chromatogramIdentifier);
-							if(descriptor != null) {
-								isNormalDirectory = false;
-								break exitloop;
+							if(chromatogramIdentifier.isMatchMagicNumber(file)) {
+								descriptor = getImageDescriptor(chromatogramIdentifier);
+								if(descriptor != null) {
+									isNormalDirectory = false;
+									break exitloop;
+								}
 							}
 						}
 					}
@@ -98,10 +100,12 @@ public class ChromatogramFileExplorerLabelProvider extends LabelProvider impleme
 							/*
 							 * Check and validate.
 							 */
-							descriptor = getImageDescriptor(chromatogramIdentifier);
-							if(descriptor != null) {
-								isNormalFile = false;
-								break exitloop;
+							if(chromatogramIdentifier.isMatchMagicNumber(file)) {
+								descriptor = getImageDescriptor(chromatogramIdentifier);
+								if(descriptor != null) {
+									isNormalFile = false;
+									break exitloop;
+								}
 							}
 						}
 					}

@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.core;
 
+import java.io.File;
+
 public interface ISupplier {
 
 	/**
@@ -72,4 +74,14 @@ public interface ISupplier {
 	 * @return boolean
 	 */
 	boolean isImportable();
+
+	/**
+	 * This method tries to match the magic number or another specific file format identifier.
+	 * The other methods are used to determine if the file is importable. This check is more expensive
+	 * and shall be only applied if it is pretty sure, that the file is a chromatogram.
+	 * 
+	 * @param file
+	 * @return boolean
+	 */
+	boolean isMatchMagicNumber(File file);
 }

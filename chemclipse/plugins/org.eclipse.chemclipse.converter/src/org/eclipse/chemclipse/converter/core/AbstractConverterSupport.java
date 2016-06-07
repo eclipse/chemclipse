@@ -31,6 +31,18 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 		regularExpressions = new HashMap<String, String>();
 	}
 
+	/**
+	 * Gets e.g.
+	 * .r##
+	 * and returns
+	 * .*\\.r[0-9][0-9]
+	 */
+	public static String getExtensionMatcher(String supplierExtension) {
+
+		String extensionMatcher = supplierExtension.replaceAll(WILDCARD_NUMBER, "[0-9]");
+		return extensionMatcher.replace(".", ".*\\.");
+	}
+
 	@Override
 	public void add(final ISupplier supplier) {
 
@@ -333,17 +345,5 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 		if(suppliers.size() < 1) {
 			throw new NoConverterAvailableException();
 		}
-	}
-
-	/*
-	 * Gets e.g.
-	 * .r##
-	 * and returns
-	 * .*\\.r[0-9][0-9]
-	 */
-	private String getExtensionMatcher(String supplierExtension) {
-
-		String extensionMatcher = supplierExtension.replaceAll(WILDCARD_NUMBER, "[0-9]");
-		return extensionMatcher.replace(".", ".*\\.");
 	}
 }

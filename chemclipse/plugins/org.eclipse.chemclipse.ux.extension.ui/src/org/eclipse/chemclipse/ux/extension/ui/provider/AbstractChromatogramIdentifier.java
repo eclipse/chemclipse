@@ -16,11 +16,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.chemclipse.converter.core.AbstractConverterSupport;
+import org.eclipse.chemclipse.converter.core.IConverterSupport;
 import org.eclipse.chemclipse.converter.core.ISupplier;
 
 public abstract class AbstractChromatogramIdentifier implements IChromatogramIdentifier {
 
-	private static final String WILDCARD_NUMBER = "#";
 	private List<ISupplier> suppliers;
 	private Map<String, String> regularExpressions;
 
@@ -46,13 +47,13 @@ public abstract class AbstractChromatogramIdentifier implements IChromatogramIde
 		for(ISupplier supplier : suppliers) {
 			supplierExtension = supplier.getFileExtension().toLowerCase();
 			if(supplierExtension != "") {
-				if(supplierExtension.contains(WILDCARD_NUMBER)) {
+				if(supplierExtension.contains(IConverterSupport.WILDCARD_NUMBER)) {
 					/*
 					 * Get the matcher.
 					 */
 					String extensionMatcher = regularExpressions.get(supplierExtension);
 					if(extensionMatcher == null) {
-						extensionMatcher = getExtensionMatcher(supplierExtension);
+						extensionMatcher = AbstractConverterSupport.getExtensionMatcher(supplierExtension);
 						regularExpressions.put(supplierExtension, extensionMatcher);
 					}
 					/*
@@ -100,15 +101,14 @@ public abstract class AbstractChromatogramIdentifier implements IChromatogramIde
 		return false;
 	}
 
-	/*
-	 * Gets e.g.
-	 * .r##
-	 * and returns
-	 * .*\\.r[0-9][0-9]
-	 */
-	private String getExtensionMatcher(String supplierExtension) {
+	@Override
+	public boolean isMatchMagicNumber(File file) {
 
-		String extensionMatcher = supplierExtension.replaceAll(WILDCARD_NUMBER, "[0-9]");
-		return extensionMatcher.replace(".", ".*\\.");
+		for(ISupplier supplier : suppliers) {
+			if(supplier.isMatchMagicNumber(file)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

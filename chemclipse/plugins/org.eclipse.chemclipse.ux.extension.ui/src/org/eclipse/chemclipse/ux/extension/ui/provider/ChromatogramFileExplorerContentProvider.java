@@ -57,7 +57,9 @@ public class ChromatogramFileExplorerContentProvider extends FileExplorerContent
 							 */
 							for(IChromatogramIdentifier chromatogramIdentifier : chromatogramIdentifierList) {
 								if(chromatogramIdentifier.isChromatogram(file)) {
-									files.add(file);
+									if(chromatogramIdentifier.isMatchMagicNumber(file)) {
+										files.add(file);
+									}
 								}
 							}
 						}

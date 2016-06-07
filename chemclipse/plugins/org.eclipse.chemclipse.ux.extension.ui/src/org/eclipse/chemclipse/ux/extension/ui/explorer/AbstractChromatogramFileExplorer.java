@@ -91,9 +91,15 @@ public abstract class AbstractChromatogramFileExplorer {
 					 * stored also as directories.
 					 */
 					if(isNewFile(file)) {
-						// TODO
+						exitloop:
 						for(IChromatogramEditorSupport chromatogramEditorSupport : chromatogramEditorSupportList) {
-							chromatogramEditorSupport.openOverview(file, eventBroker);
+							if(chromatogramEditorSupport.isMatchMagicNumber(file)) {
+								/*
+								 * Show the first overview only.
+								 */
+								chromatogramEditorSupport.openOverview(file, eventBroker);
+								break exitloop;
+							}
 						}
 					}
 				}
@@ -107,10 +113,14 @@ public abstract class AbstractChromatogramFileExplorer {
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
 
-				// TODO
 				File file = (File)((IStructuredSelection)event.getSelection()).getFirstElement();
 				for(IChromatogramEditorSupport chromatogramEditorSupport : chromatogramEditorSupportList) {
-					chromatogramEditorSupport.openEditor(file, modelService, application, partService);
+					/*
+					 * Open all chromatograms that are contained.
+					 */
+					if(chromatogramEditorSupport.isMatchMagicNumber(file)) {
+						chromatogramEditorSupport.openEditor(file, modelService, application, partService);
+					}
 				}
 			}
 		});

@@ -72,4 +72,11 @@ public interface ISupplierSetter extends ISupplier {
 	 * @param isImportable
 	 */
 	public void setImportable(final boolean isImportable);
+
+	/**
+	 * Sets the magic number matcher.
+	 * 
+	 * @param magicNumberMatcher
+	 */
+	public void setMagicNumberMatcher(final IMagicNumberMatcher magicNumberMatcher);
 }

@@ -41,4 +41,13 @@ public interface IChromatogramIdentifier {
 	 * @return boolean
 	 */
 	boolean isChromatogramDirectory(File file);
+
+	/**
+	 * Try to match the magic number of the file format.
+	 * If true, it's pretty likely that the format can be imported.
+	 * 
+	 * @param file
+	 * @return true
+	 */
+	boolean isMatchMagicNumber(File file);
 }

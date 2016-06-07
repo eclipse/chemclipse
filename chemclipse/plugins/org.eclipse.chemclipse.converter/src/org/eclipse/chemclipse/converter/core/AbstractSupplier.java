@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.core;
 
+import java.io.File;
+
 public abstract class AbstractSupplier implements ISupplierSetter {
 
 	private String id = "";
@@ -21,6 +23,7 @@ public abstract class AbstractSupplier implements ISupplierSetter {
 	private String directoryExtension = "";
 	private boolean exportable = false;
 	private boolean importable = false;
+	private IMagicNumberMatcher magicNumberMatcher = null;
 
 	@Override
 	public String getId() {
@@ -136,6 +139,21 @@ public abstract class AbstractSupplier implements ISupplierSetter {
 	public void setImportable(final boolean isImportable) {
 
 		this.importable = isImportable;
+	}
+
+	@Override
+	public boolean isMatchMagicNumber(File file) {
+
+		if(magicNumberMatcher != null) {
+			return magicNumberMatcher.checkFileFormat(file);
+		}
+		return false;
+	}
+
+	@Override
+	public void setMagicNumberMatcher(final IMagicNumberMatcher magicNumberMatcher) {
+
+		this.magicNumberMatcher = magicNumberMatcher;
 	}
 
 	// -----------------------------------------------equals, hashCode, toString
