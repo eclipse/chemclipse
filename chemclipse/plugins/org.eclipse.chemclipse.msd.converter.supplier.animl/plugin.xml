@@ -10,6 +10,7 @@
             filterName="AnIML Chromatogram (*.animl)"
             id="org.eclipse.chemclipse.msd.converter.supplier.animl"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.animl.converter.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.animl.converter.MagicNumberMatcher"
             isExportable="true"
             isImportable="false">
       </ChromatogramSupplier>
