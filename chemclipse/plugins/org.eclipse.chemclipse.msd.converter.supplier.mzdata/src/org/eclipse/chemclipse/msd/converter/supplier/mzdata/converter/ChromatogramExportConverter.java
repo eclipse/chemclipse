@@ -13,14 +13,14 @@ package org.eclipse.chemclipse.msd.converter.supplier.mzdata.converter;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
+import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverter;
 import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.chromatogram.AbstractChromatogramMSDExportConverter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramExportConverter extends AbstractChromatogramMSDExportConverter {
+public class ChromatogramExportConverter extends AbstractChromatogramMSDExportConverter implements IChromatogramExportConverter {
 
 	@Override
 	public IChromatogramExportConverterProcessingInfo convert(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) {

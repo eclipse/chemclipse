@@ -10,6 +10,7 @@
             filterName="mzData Chromatogram (*.mzData)"
             id="org.eclipse.chemclipse.msd.converter.supplier.mzdata"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzdata.converter.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzdata.converter.MagicNumberMatcher"
             isExportable="false"
             isImportable="true">
       </ChromatogramSupplier>
