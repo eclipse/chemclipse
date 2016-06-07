@@ -10,6 +10,7 @@
             filterName="XY Chromatogram (*.xy)"
             id="org.eclipse.chemclipse.csd.converter.supplier.xy"
             importConverter="org.eclipse.chemclipse.csd.converter.supplier.xy.core.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.csd.converter.supplier.xy.core.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>

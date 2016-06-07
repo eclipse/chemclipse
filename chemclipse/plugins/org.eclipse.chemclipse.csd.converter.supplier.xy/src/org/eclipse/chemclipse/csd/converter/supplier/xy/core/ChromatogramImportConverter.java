@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.csd.converter.supplier.xy.core;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverter;
 import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.csd.converter.chromatogram.AbstractChromatogramCSDImportConverter;
@@ -28,7 +29,7 @@ import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramImportConverter extends AbstractChromatogramCSDImportConverter {
+public class ChromatogramImportConverter extends AbstractChromatogramCSDImportConverter implements IChromatogramImportConverter {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramImportConverter.class);
 	private static final String DESCRIPTION = "XY Import Converter";
