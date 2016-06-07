@@ -76,9 +76,9 @@ public class PenaltyCalculationSupport {
 
 	public static float calculatePenalty(float valueUnknown, float valueReference, float valueWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
 
-		if(Float.isNaN(valueUnknown) || valueUnknown <= 0)
+		if(Float.isNaN(valueUnknown) || valueUnknown < 0)
 			throw new IllegalArgumentException("" + valueUnknown);
-		if(Float.isNaN(valueReference) || valueReference <= 0)
+		if(Float.isNaN(valueReference) || valueReference < 0)
 			throw new IllegalArgumentException("" + valueReference);
 		if(Float.isNaN(valueWindow) || valueWindow <= 0)
 			throw new IllegalArgumentException("" + valueWindow);
