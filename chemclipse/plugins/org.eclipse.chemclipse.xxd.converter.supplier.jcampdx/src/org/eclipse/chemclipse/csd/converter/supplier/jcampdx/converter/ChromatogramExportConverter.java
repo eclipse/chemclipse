@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.csd.converter.supplier.jcampdx.converter;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverter;
 import org.eclipse.chemclipse.converter.processing.chromatogram.ChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
 import org.eclipse.chemclipse.converter.support.IConstants;
@@ -25,7 +26,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.internal.converter.SpecificationValidator;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramExportConverter extends AbstractChromatogramCSDExportConverter {
+public class ChromatogramExportConverter extends AbstractChromatogramCSDExportConverter implements IChromatogramExportConverter {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramExportConverter.class);
 	private static final String DESCRIPTION = "JCAMP-DX Export Converter";

@@ -10,6 +10,7 @@
             filterName="JCAMP-DX Chromatogram (*.JDX)"
             id="org.eclipse.chemclipse.msd.converter.supplier.jcampdx"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.internal.converter.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>
@@ -36,6 +37,7 @@
             filterName="JCAMP-DX Chromatogram (*.JDX)"
             id="org.eclipse.chemclipse.csd.converter.supplier.jcampdx"
             importConverter="org.eclipse.chemclipse.csd.converter.supplier.jcampdx.converter.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.internal.converter.MagicNumberMatcher"
             isExportable="false"
             isImportable="true">
       </ChromatogramSupplier>
