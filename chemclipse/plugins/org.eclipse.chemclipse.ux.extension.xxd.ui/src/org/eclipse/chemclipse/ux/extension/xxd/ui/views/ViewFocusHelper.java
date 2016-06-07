@@ -46,5 +46,16 @@ public class ViewFocusHelper {
 				System.out.println("Show Peaks Views");
 			}
 		});
+		//
+		Button buttonPCA = new Button(composite, SWT.PUSH);
+		buttonPCA.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PCA, IApplicationImage.SIZE_16x16));
+		buttonPCA.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				System.out.println("Show PCA Views");
+			}
+		});
 	}
 }
