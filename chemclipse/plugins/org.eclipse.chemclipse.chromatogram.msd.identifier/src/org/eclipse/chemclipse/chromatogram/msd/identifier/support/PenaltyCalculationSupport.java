@@ -76,6 +76,16 @@ public class PenaltyCalculationSupport {
 
 	public static float calculatePenalty(float valueUnknown, float valueReference, float valueWindow, float penaltyCalculationLevelFactor, float maxPenalty) {
 
+		if(Float.isNaN(valueUnknown) || valueUnknown <= 0)
+			throw new IllegalArgumentException("" + valueUnknown);
+		if(Float.isNaN(valueReference) || valueReference <= 0)
+			throw new IllegalArgumentException("" + valueReference);
+		if(Float.isNaN(valueWindow) || valueWindow <= 0)
+			throw new IllegalArgumentException("" + valueWindow);
+		if(Float.isNaN(penaltyCalculationLevelFactor) || penaltyCalculationLevelFactor <= 0)
+			throw new IllegalArgumentException("" + penaltyCalculationLevelFactor);
+		if(Float.isNaN(maxPenalty) || maxPenalty <= 0)
+			throw new IllegalArgumentException("" + maxPenalty);
 		// logger.debug("unkown " + valueReference + ", reference " + valueReference + ", window size " + valueWindow);
 		float windowRangeCount = Math.abs((valueUnknown - valueReference) / valueWindow);
 		// logger.debug("window count " + windowRangeCount);
