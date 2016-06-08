@@ -13,14 +13,23 @@ package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.io;
 
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.TestPathHelper;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 
 public class ChromatogramReader_3_MSD_1006_ITest extends ChromatogramReaderMSDTestCase {
 
 	@Override
 	protected void setUp() throws Exception {
 
+		PreferenceSupplier.setForceLoadAlternateDetector(true);
 		pathImport = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_3_FID_1006);
 		super.setUp();
+	}
+
+	@Override
+	protected void tearDown() throws Exception {
+
+		super.tearDown();
+		PreferenceSupplier.setForceLoadAlternateDetector(false);
 	}
 
 	public void testReader_1() {

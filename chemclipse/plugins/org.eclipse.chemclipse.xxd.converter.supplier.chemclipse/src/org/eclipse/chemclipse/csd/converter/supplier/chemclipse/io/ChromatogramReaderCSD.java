@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramReaderMSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.ReaderHelper;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader implements IChromatogramCSDReader {
@@ -122,31 +123,35 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 	private IChromatogramCSD createChromatogramFIDFromMSD(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		IChromatogramCSD chromatogramFID = null;
-		//
-		ChromatogramReaderMSD chromatogramReaderMSD = new ChromatogramReaderMSD();
-		IChromatogramOverview chromatogramOverview = chromatogramReaderMSD.readOverview(file, monitor);
-		if(chromatogramOverview instanceof IChromatogram) {
-			IChromatogram chromatogram = (IChromatogram)chromatogramOverview;
-			chromatogramFID = new VendorChromatogram();
-			for(IScan scan : chromatogram.getScans()) {
-				IVendorScan scanFID = new VendorScan(scan.getRetentionTime(), scan.getTotalSignal());
-				scanFID.setRetentionIndex(scan.getRetentionIndex());
-				scanFID.setTimeSegmentId(scan.getTimeSegmentId());
-				scanFID.setCycleNumber(scan.getCycleNumber());
-				chromatogramFID.addScan(scanFID);
+		/*
+		 * Is the force modus used?
+		 */
+		if(PreferenceSupplier.isForceLoadAlternateDetector()) {
+			ChromatogramReaderMSD chromatogramReaderMSD = new ChromatogramReaderMSD();
+			IChromatogramOverview chromatogramOverview = chromatogramReaderMSD.readOverview(file, monitor);
+			if(chromatogramOverview instanceof IChromatogram) {
+				IChromatogram chromatogram = (IChromatogram)chromatogramOverview;
+				chromatogramFID = new VendorChromatogram();
+				for(IScan scan : chromatogram.getScans()) {
+					IVendorScan scanFID = new VendorScan(scan.getRetentionTime(), scan.getTotalSignal());
+					scanFID.setRetentionIndex(scan.getRetentionIndex());
+					scanFID.setTimeSegmentId(scan.getTimeSegmentId());
+					scanFID.setCycleNumber(scan.getCycleNumber());
+					chromatogramFID.addScan(scanFID);
+				}
+				//
+				chromatogramFID.setConverterId(IFormat.CONVERTER_ID);
+				File fileConverted = new File(file.getAbsolutePath().replace(".ocb", "-fromMSD.ocb"));
+				chromatogramFID.setFile(fileConverted);
+				// Delay
+				int startRetentionTime = chromatogramFID.getStartRetentionTime();
+				int scanDelay = startRetentionTime;
+				chromatogramFID.setScanDelay(scanDelay);
+				// Interval
+				int endRetentionTime = chromatogramFID.getStopRetentionTime();
+				int scanInterval = endRetentionTime / chromatogramFID.getNumberOfScans();
+				chromatogramFID.setScanInterval(scanInterval);
 			}
-			//
-			chromatogramFID.setConverterId(IFormat.CONVERTER_ID);
-			File fileConverted = new File(file.getAbsolutePath().replace(".ocb", "-fromMSD.ocb"));
-			chromatogramFID.setFile(fileConverted);
-			// Delay
-			int startRetentionTime = chromatogramFID.getStartRetentionTime();
-			int scanDelay = startRetentionTime;
-			chromatogramFID.setScanDelay(scanDelay);
-			// Interval
-			int endRetentionTime = chromatogramFID.getStopRetentionTime();
-			int scanInterval = endRetentionTime / chromatogramFID.getNumberOfScans();
-			chromatogramFID.setScanInterval(scanInterval);
 		}
 		//
 		return chromatogramFID;

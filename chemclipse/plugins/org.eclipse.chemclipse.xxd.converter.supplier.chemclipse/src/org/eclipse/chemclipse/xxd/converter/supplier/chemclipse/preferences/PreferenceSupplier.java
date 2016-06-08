@@ -30,6 +30,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int MIN_COMPRESSION_LEVEL = 0;
 	public static final int MAX_COMPRESSION_LEVEL = 9;
 	//
+	public static final String P_FORCE_LOAD_ALTERNATE_DETECTOR = "forceLoadAlternateDetector";
+	public static final boolean DEF_FORCE_LOAD_ALTERNATE_DETECTOR = false;
+	//
 	public static final String P_USE_SCAN_PROXIES = "useScanProxies";
 	public static final boolean DEF_USE_SCAN_PROXIES = false;
 	public static final String P_LOAD_SCAN_PROXIES_IN_BACKGROUND = "loadScanProxiesInBackground";
@@ -65,6 +68,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_VERSION_SAVE, DEF_VERSION_SAVE);
 		defaultValues.put(P_COMPRESSION_LEVEL, Integer.toString(DEF_COMPRESSION_LEVEL));
+		defaultValues.put(P_FORCE_LOAD_ALTERNATE_DETECTOR, Boolean.toString(DEF_FORCE_LOAD_ALTERNATE_DETECTOR));
 		defaultValues.put(P_USE_SCAN_PROXIES, Boolean.toString(DEF_USE_SCAN_PROXIES));
 		defaultValues.put(P_LOAD_SCAN_PROXIES_IN_BACKGROUND, Boolean.toString(DEF_LOAD_SCAN_PROXIES_IN_BACKGROUND));
 		defaultValues.put(P_MIN_BYTES_TO_LOAD_IN_BACKGROUND, Integer.toString(DEF_MIN_BYTES_TO_LOAD_IN_BACKGROUND));
@@ -90,6 +94,18 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getInt(P_COMPRESSION_LEVEL, DEF_COMPRESSION_LEVEL);
+	}
+
+	public static void setForceLoadAlternateDetector(boolean forceLoadAlternateDetector) {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		preferences.putBoolean(P_FORCE_LOAD_ALTERNATE_DETECTOR, forceLoadAlternateDetector);
+	}
+
+	public static boolean isForceLoadAlternateDetector() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_FORCE_LOAD_ALTERNATE_DETECTOR, DEF_FORCE_LOAD_ALTERNATE_DETECTOR);
 	}
 
 	public static String[][] getVersions() {

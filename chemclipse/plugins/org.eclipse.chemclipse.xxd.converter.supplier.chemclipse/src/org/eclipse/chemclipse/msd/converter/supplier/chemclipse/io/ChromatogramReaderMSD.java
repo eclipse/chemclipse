@@ -194,35 +194,39 @@ public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader impleme
 	private IChromatogramMSD createChromatogramMSDFromFID(double mz, File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		IChromatogramMSD chromatogramMSD = null;
-		//
-		ChromatogramReaderCSD chromatogramReaderFID = new ChromatogramReaderCSD();
-		IChromatogramCSD chromatogramFID = chromatogramReaderFID.read(file, monitor);
-		if(chromatogramFID != null) {
-			chromatogramMSD = new VendorChromatogram();
-			for(IScan scan : chromatogramFID.getScans()) {
-				IVendorScan massSpectrum = new VendorScan();
-				massSpectrum.setRetentionTime(scan.getRetentionTime());
-				massSpectrum.setRetentionIndex(scan.getRetentionIndex());
-				try {
-					IVendorIon ion = new VendorIon(mz, scan.getTotalSignal());
-					massSpectrum.addIon(ion);
-				} catch(Exception e1) {
-					//
+		/*
+		 * Is the force modus used?
+		 */
+		if(PreferenceSupplier.isForceLoadAlternateDetector()) {
+			ChromatogramReaderCSD chromatogramReaderFID = new ChromatogramReaderCSD();
+			IChromatogramCSD chromatogramFID = chromatogramReaderFID.read(file, monitor);
+			if(chromatogramFID != null) {
+				chromatogramMSD = new VendorChromatogram();
+				for(IScan scan : chromatogramFID.getScans()) {
+					IVendorScan massSpectrum = new VendorScan();
+					massSpectrum.setRetentionTime(scan.getRetentionTime());
+					massSpectrum.setRetentionIndex(scan.getRetentionIndex());
+					try {
+						IVendorIon ion = new VendorIon(mz, scan.getTotalSignal());
+						massSpectrum.addIon(ion);
+					} catch(Exception e1) {
+						//
+					}
+					chromatogramMSD.addScan(massSpectrum);
 				}
-				chromatogramMSD.addScan(massSpectrum);
+				//
+				chromatogramMSD.setConverterId(IFormat.CONVERTER_ID);
+				File fileConverted = new File(file.getAbsolutePath().replace(".ocb", "-fromFID.ocb"));
+				chromatogramMSD.setFile(fileConverted);
+				// Delay
+				int startRetentionTime = chromatogramMSD.getStartRetentionTime();
+				int scanDelay = startRetentionTime;
+				chromatogramMSD.setScanDelay(scanDelay);
+				// Interval
+				int endRetentionTime = chromatogramMSD.getStopRetentionTime();
+				int scanInterval = endRetentionTime / chromatogramMSD.getNumberOfScans();
+				chromatogramMSD.setScanInterval(scanInterval);
 			}
-			//
-			chromatogramMSD.setConverterId(IFormat.CONVERTER_ID);
-			File fileConverted = new File(file.getAbsolutePath().replace(".ocb", "-fromFID.ocb"));
-			chromatogramMSD.setFile(fileConverted);
-			// Delay
-			int startRetentionTime = chromatogramMSD.getStartRetentionTime();
-			int scanDelay = startRetentionTime;
-			chromatogramMSD.setScanDelay(scanDelay);
-			// Interval
-			int endRetentionTime = chromatogramMSD.getStopRetentionTime();
-			int scanInterval = endRetentionTime / chromatogramMSD.getNumberOfScans();
-			chromatogramMSD.setScanInterval(scanInterval);
 		}
 		//
 		return chromatogramMSD;
