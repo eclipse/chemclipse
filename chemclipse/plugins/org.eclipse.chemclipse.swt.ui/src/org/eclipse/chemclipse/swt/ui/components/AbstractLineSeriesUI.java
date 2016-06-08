@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.notifier.IChromatogramSelectionUpdateNotifier;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
@@ -390,6 +391,7 @@ public abstract class AbstractLineSeriesUI extends InteractiveChartExtended impl
 		yAxisLeft = axisSet.getYAxis(0);
 		yAxisLeft.getTitle().setText(axisTitles.getYAxisLeftTitle());
 		yAxisLeft.setPosition(Position.Primary);
+		yAxisLeft.getTick().setFormat(ValueFormat.getDecimalFormatEnglish("0.0#E0"));
 		/*
 		 * e.g. Milliseconds
 		 */
