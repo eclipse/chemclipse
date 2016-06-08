@@ -9,12 +9,17 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support;
+package org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter;
 
 import java.io.File;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.SpecificationValidator;
 
 public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
 
@@ -24,9 +29,23 @@ public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IM
 		boolean isValidFormat = false;
 		try {
 			file = SpecificationValidator.validateSpecification(file);
-			if(file.exists()) {
-				return true;
+			ZipFile zipFile = new ZipFile(file);
+			Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
+			exitloop:
+			while(zipEntries.hasMoreElements()) {
+				/*
+				 * Check each file.
+				 */
+				ZipEntry zipEntry = zipEntries.nextElement();
+				if(zipEntry.isDirectory()) {
+					String name = zipEntry.getName();
+					if(name.equals(IFormat.DIR_CHROMATOGRAM_WSD)) {
+						isValidFormat = true;
+						break exitloop;
+					}
+				}
 			}
+			zipFile.close();
 		} catch(Exception e) {
 			// Print no exception.
 		}

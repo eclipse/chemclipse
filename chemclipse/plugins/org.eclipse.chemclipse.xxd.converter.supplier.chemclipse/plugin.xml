@@ -10,7 +10,7 @@
             filterName="OpenChrom Chromatogram (*.ocb)"
             id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter.ChromatogramImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.MagicNumberMatcher"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>
@@ -37,7 +37,7 @@
             filterName="OpenChrom Chromatogram (*.ocb)"
             id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse"
             importConverter="org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter.ChromatogramImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.MagicNumberMatcher"
+            importMagicNumberMatcher="org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>
@@ -57,7 +57,7 @@
             filterName="OpenChrom Chromatogram (*.ocb)"
             id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse"
             importConverter="org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter.ChromatogramImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.MagicNumberMatcher"
+            importMagicNumberMatcher="org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>
