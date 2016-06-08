@@ -99,6 +99,12 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 	public void setShowAxis(int selection, boolean showAxis) {
 
 		switch(selection) {
+			case SWT.ALL:
+				showAxisTop = showAxis;
+				showAxisRight = showAxis;
+				showAxisLeft = showAxis;
+				showAxisBottom = showAxis;
+				break;
 			case SWT.TOP:
 				showAxisTop = showAxis;
 				break;
@@ -140,6 +146,12 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 	public void setAxisTitle(int selection, String title) {
 
 		switch(selection) {
+			case SWT.ALL:
+				xAxisTop.getTitle().setText(title);
+				yAxisRight.getTitle().setText(title);
+				yAxisLeft.getTitle().setText(title);
+				xAxisBottom.getTitle().setText(title);
+				break;
 			case SWT.TOP:
 				xAxisTop.getTitle().setText(title);
 				break;
