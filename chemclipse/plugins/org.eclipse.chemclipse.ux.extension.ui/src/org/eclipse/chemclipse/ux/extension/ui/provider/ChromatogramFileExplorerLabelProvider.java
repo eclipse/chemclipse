@@ -75,7 +75,7 @@ public class ChromatogramFileExplorerLabelProvider extends LabelProvider impleme
 							 * Check and validate.
 							 */
 							if(chromatogramIdentifier.isMatchMagicNumber(file)) {
-								descriptor = getImageDescriptor(chromatogramIdentifier);
+								descriptor = getImageDescriptor(chromatogramIdentifier, file);
 								if(descriptor != null) {
 									isNormalDirectory = false;
 									break exitloop;
@@ -101,7 +101,7 @@ public class ChromatogramFileExplorerLabelProvider extends LabelProvider impleme
 							 * Check and validate.
 							 */
 							if(chromatogramIdentifier.isMatchMagicNumber(file)) {
-								descriptor = getImageDescriptor(chromatogramIdentifier);
+								descriptor = getImageDescriptor(chromatogramIdentifier, file);
 								if(descriptor != null) {
 									isNormalFile = false;
 									break exitloop;
@@ -123,7 +123,7 @@ public class ChromatogramFileExplorerLabelProvider extends LabelProvider impleme
 		return null;
 	}
 
-	private ImageDescriptor getImageDescriptor(IChromatogramIdentifier chromatogramIdentifier) {
+	private ImageDescriptor getImageDescriptor(IChromatogramIdentifier chromatogramIdentifier, File file) {
 
 		ImageDescriptor descriptor = null;
 		if(chromatogramIdentifier != null) {
@@ -138,7 +138,13 @@ public class ChromatogramFileExplorerLabelProvider extends LabelProvider impleme
 					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_WSD, IApplicationImage.SIZE_16x16);
 					break;
 				default:
-					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16);
+					if(file.isDirectory()) {
+						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16);
+					} else if(file.isFile()) {
+						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FILE, IApplicationImage.SIZE_16x16);
+					} else {
+						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_QUESTION, IApplicationImage.SIZE_16x16);
+					}
 			}
 		}
 		return descriptor;
