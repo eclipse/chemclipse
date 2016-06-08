@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
-import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.converter.SeriesConverter;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -42,7 +41,14 @@ public class ChromatogramOverviewUI extends Chart {
 
 	public ChromatogramOverviewUI(Composite parent, int style) {
 		super(parent, style);
-		decimalFormat = ValueFormat.getDecimalFormatEnglish();
+		/*
+		 * The overview shall be displayed without
+		 * extra space for the intensity axis.
+		 * That's why ValueFormat isn't used here.
+		 */
+		decimalFormat = new DecimalFormat();
+		decimalFormat.setMaximumFractionDigits(0);
+		decimalFormat.setMaximumIntegerDigits(0);
 		initialize();
 	}
 
