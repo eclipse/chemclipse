@@ -9,18 +9,23 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter;
+package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl;
 
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.SpecificationValidatorMSL;
 
 public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
 
 	@Override
 	public boolean checkFileFormat(File file) {
 
-		return true;
+		file = SpecificationValidatorMSL.validateSpecification(file);
+		if(file.exists()) {
+			return true;
+		}
+		return false;
 	}
 }
