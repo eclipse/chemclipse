@@ -93,6 +93,23 @@ public abstract class AbstractArrayWriter implements IArrayWriter {
 	}
 
 	@Override
+	public byte[] getBytesWithoutStringLengthIndexNullBased(int writeBytes, String entry) {
+
+		writeBytes *= 2;
+		byte[] bytes = new byte[writeBytes];
+		byte[] bytesEntry = entry.getBytes();
+		//
+		int index = 0;
+		for(int i = 0; i < bytesEntry.length; i++) {
+			if(index < writeBytes) {
+				bytes[index++] = bytesEntry[i];
+				bytes[index++] = 0;
+			}
+		}
+		return bytes;
+	}
+
+	@Override
 	public void writeIntegerAsBigEndian(int value) {
 
 		write(get4BytesAsIntegerBigEndian(value));
