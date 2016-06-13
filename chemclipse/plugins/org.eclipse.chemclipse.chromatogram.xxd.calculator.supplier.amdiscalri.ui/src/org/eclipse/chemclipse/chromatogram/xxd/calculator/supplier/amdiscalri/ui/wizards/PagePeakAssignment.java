@@ -189,8 +189,19 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 								IRetentionIndexEntry retentionIndexEntry = retentionIndexEntries.get(i);
 								setPeakTarget(chromatogramPeak, retentionIndexEntry.getName(), true);
 							}
+							/*
+							 * Set the first peak.
+							 */
+							peakTableViewerUI.getTable().setSelection(0);
+							chromatogramSelectionMSD.reset();
+							IChromatogramPeakMSD selectedPeak = getSelectedPeak();
+							if(selectedPeak != null) {
+								targetsViewerUI.setInput(selectedPeak.getTargets());
+								targetsViewerUI.getTable().setSelection(0);
+								showLibraryMassSpectrum();
+							}
 						} else {
-							String message = "The amount of peaks (" + chromatogramPeaks.size() + ") and selected standards (" + retentionIndexEntries.size() + ") is unequal.";
+							String message = "The number of peaks (" + chromatogramPeaks.size() + ") and selected standards (" + retentionIndexEntries.size() + ") is unequal.";
 							updateStatus(message);
 						}
 					}
@@ -215,6 +226,8 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 				IChromatogramPeakMSD selectedPeak = getSelectedPeak();
 				if(selectedPeak != null) {
 					targetsViewerUI.setInput(selectedPeak.getTargets());
+					targetsViewerUI.getTable().setSelection(0);
+					showLibraryMassSpectrum();
 				}
 			}
 		});

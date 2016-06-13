@@ -46,6 +46,12 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 
 	private static final Logger logger = Logger.getLogger(PageCalibrationTable.class);
 	//
+	private static final String ACTION_INITIALIZE = "ACTION_INITIALIZE";
+	private static final String ACTION_CANCEL = "ACTION_CANCEL";
+	private static final String ACTION_DELETE = "ACTION_DELETE";
+	private static final String ACTION_ADD = "ACTION_ADD";
+	private static final String ACTION_SELECT = "ACTION_SELECT";
+	//
 	private IRetentionIndexWizardElements wizardElements;
 	//
 	private Button checkBoxValidateRetentionIndices;
@@ -115,7 +121,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 		createAddReferenceButton(composite);
 		createTableField(composite);
 		//
-		enableButtonFields(false);
+		enableButtonFields(ACTION_INITIALIZE);
 		validateSelection();
 		setControl(composite);
 	}
@@ -174,7 +180,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 
 				comboReferences.setText("");
 				textRetentionTime.setText("");
-				enableButtonFields(false);
+				enableButtonFields(ACTION_CANCEL);
 			}
 		});
 		//
@@ -194,7 +200,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 					messageBox.setMessage("Would you like to delete the reference(s)?");
 					if(messageBox.open() == SWT.OK) {
 						//
-						enableButtonFields(false);
+						enableButtonFields(ACTION_DELETE);
 						TableItem tableItem = table.getItem(index);
 						Object object = tableItem.getData();
 						if(object instanceof IRetentionIndexEntry) {
@@ -215,7 +221,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				enableButtonFields(true);
+				enableButtonFields(ACTION_ADD);
 			}
 		});
 	}
@@ -254,7 +260,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				try {
-					enableButtonFields(false);
+					enableButtonFields(ACTION_INITIALIZE);
 					//
 					String name = comboReferences.getText().trim();
 					int retentionTime = (int)(Double.parseDouble(textRetentionTime.getText().trim()) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
@@ -285,6 +291,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				enableButtonFields(ACTION_SELECT);
 				Table table = retentionIndexTableViewerUI.getTable();
 				int index = table.getSelectionIndex();
 				TableItem tableItem = table.getItem(index);
@@ -323,17 +330,41 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 		return null;
 	}
 
-	private void enableButtonFields(boolean enabled) {
+	private void enableButtonFields(String action) {
 
-		buttonAdd.setEnabled(!enabled);
-		buttonCancel.setEnabled(enabled);
-		if(!enabled) {
-			if(retentionIndexTableViewerUI.getTable().getSelectionIndex() >= 0) {
-				buttonDelete.setEnabled(true);
-			} else {
-				buttonDelete.setEnabled(false);
-			}
+		enableFields(false);
+		switch(action) {
+			case ACTION_INITIALIZE:
+				buttonAdd.setEnabled(true);
+				break;
+			case ACTION_CANCEL:
+				buttonAdd.setEnabled(true);
+				break;
+			case ACTION_DELETE:
+				buttonAdd.setEnabled(true);
+				break;
+			case ACTION_ADD:
+				buttonCancel.setEnabled(true);
+				comboReferences.setEnabled(true);
+				textRetentionTime.setEnabled(true);
+				buttonAddReference.setEnabled(true);
+				break;
+			case ACTION_SELECT:
+				buttonAdd.setEnabled(true);
+				if(retentionIndexTableViewerUI.getTable().getSelectionIndex() >= 0) {
+					buttonDelete.setEnabled(true);
+				} else {
+					buttonDelete.setEnabled(false);
+				}
+				break;
 		}
+	}
+
+	private void enableFields(boolean enabled) {
+
+		buttonCancel.setEnabled(enabled);
+		buttonDelete.setEnabled(enabled);
+		buttonAdd.setEnabled(enabled);
 		//
 		comboReferences.setEnabled(enabled);
 		textRetentionTime.setEnabled(enabled);
