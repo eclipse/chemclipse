@@ -93,7 +93,7 @@ public abstract class AbstractArrayWriter implements IArrayWriter {
 	}
 
 	@Override
-	public byte[] getBytesWithoutStringLengthIndexNullBased(int writeBytes, String entry) {
+	public byte[] getBytesWithoutStringLengthIndexNullTerminated(int writeBytes, String entry) {
 
 		writeBytes *= 2;
 		byte[] bytes = new byte[writeBytes];

@@ -19,7 +19,7 @@ public interface IArrayWriter {
 
 	byte[] getBytesWithStringLengthIndex(int writeBytes, String entry);
 
-	byte[] getBytesWithoutStringLengthIndexNullBased(int writeBytes, String entry);
+	byte[] getBytesWithoutStringLengthIndexNullTerminated(int writeBytes, String entry);
 
 	void writeIntegerAsBigEndian(int value);
 
