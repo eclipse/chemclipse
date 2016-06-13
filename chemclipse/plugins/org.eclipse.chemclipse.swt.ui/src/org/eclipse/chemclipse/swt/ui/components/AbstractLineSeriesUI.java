@@ -415,6 +415,7 @@ public abstract class AbstractLineSeriesUI extends InteractiveChartExtended impl
 		xAxisBottom = axisSet.getXAxis(axisIdMinutes);
 		xAxisBottom.getTitle().setText(axisTitles.getXAxisBottomTitle());
 		xAxisBottom.setPosition(Position.Primary);
+		xAxisBottom.getTick().setFormat(ValueFormat.getDecimalFormatEnglish("0.0##"));
 		/*
 		 * e.g. Relative abundance axis
 		 */
@@ -422,6 +423,7 @@ public abstract class AbstractLineSeriesUI extends InteractiveChartExtended impl
 		yAxisRight = axisSet.getYAxis(axisIdAbundanceRelative);
 		yAxisRight.getTitle().setText(axisTitles.getYAxisRightTitle());
 		yAxisRight.setPosition(Position.Secondary);
+		yAxisRight.getTick().setFormat(ValueFormat.getDecimalFormatEnglish("0.0##"));
 	}
 
 	/**

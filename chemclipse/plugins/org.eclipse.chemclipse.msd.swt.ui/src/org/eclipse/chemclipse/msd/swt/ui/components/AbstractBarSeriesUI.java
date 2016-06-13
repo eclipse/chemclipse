@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.notifier.IChromatogramSelectionMSDUpdateNotifier;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.series.ISeriesSetter;
 import org.eclipse.chemclipse.swt.ui.series.MultipleSeries;
@@ -408,7 +409,10 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		xAxisBottom = axisSet.getXAxis(0);
 		yAxisLeft = axisSet.getYAxis(0);
 		yAxisLeft.getTitle().setText("abundance");
+		yAxisLeft.getTick().setFormat(ValueFormat.getDecimalFormatEnglish("0"));
+		//
 		xAxisBottom.getTitle().setText("m/z");
+		xAxisBottom.getTick().setFormat(ValueFormat.getDecimalFormatEnglish("0.0###"));
 	}
 
 	/**
@@ -426,6 +430,7 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		xAxisTop = axisSet.getXAxis(axisIdMinutes);
 		xAxisTop.getTitle().setText("dalton");
 		xAxisTop.setPosition(Position.Secondary);
+		xAxisTop.getTick().setFormat(ValueFormat.getDecimalFormatEnglish("0.0###"));
 		/*
 		 * Relative abundance axis
 		 */
@@ -433,6 +438,7 @@ public abstract class AbstractBarSeriesUI extends InteractiveChartExtended imple
 		yAxisRight = axisSet.getYAxis(axisIdAbundanceRelative);
 		yAxisRight.getTitle().setText("relative abundance");
 		yAxisRight.setPosition(Position.Secondary);
+		yAxisRight.getTick().setFormat(ValueFormat.getDecimalFormatEnglish("0.0##"));
 	}
 
 	/**
