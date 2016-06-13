@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter;
+package org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter;
 
 import java.io.File;
 import java.util.Enumeration;
@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.SpecificationValidator;
 
-public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
+public class MagicNumberMatcherCSD extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
 
 	@Override
 	public boolean checkFileFormat(File file) {
@@ -39,7 +39,7 @@ public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IM
 				ZipEntry zipEntry = zipEntries.nextElement();
 				if(zipEntry.isDirectory()) {
 					String name = zipEntry.getName();
-					if(name.equals(IFormat.DIR_CHROMATOGRAM_WSD)) {
+					if(name.equals(IFormat.DIR_CHROMATOGRAM_FID)) {
 						isValidFormat = true;
 						break exitloop;
 					}
