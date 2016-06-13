@@ -55,6 +55,31 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 	}
 
 	@Override
+	public List<IRetentionIndexEntry> getSelectedRetentionIndexEntries() {
+
+		List<IRetentionIndexEntry> selectedRetentionIndexEntries = new ArrayList<IRetentionIndexEntry>();
+		//
+		boolean addIndex = false;
+		for(IRetentionIndexEntry retentionIndexEntry : retentionIndexEntries) {
+			String name = retentionIndexEntry.getName();
+			if(name.equals(startIndexName)) {
+				addIndex = true;
+			} else if(name.equals(stopIndexName)) {
+				selectedRetentionIndexEntries.add(retentionIndexEntry);
+				addIndex = false;
+			}
+			/*
+			 * Add the index if it's within the selection.
+			 */
+			if(addIndex) {
+				selectedRetentionIndexEntries.add(retentionIndexEntry);
+			}
+		}
+		//
+		return selectedRetentionIndexEntries;
+	}
+
+	@Override
 	public String[] getAvailableStandards() {
 
 		return availableStandards;

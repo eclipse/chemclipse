@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.runnables.ImportChromatogramRunnable;
@@ -35,7 +36,10 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 
 public class PagePeakSelection extends AbstractExtendedWizardPage {
 
@@ -46,7 +50,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 	private PeakTableViewerUI peakTableViewerUI;
 	//
 	private static final int PEAK_SHOW = 1;
-	private static final int PEAK_DELETE = 2;
+	private static final int PEAKS_DELETE = 2;
 
 	public PagePeakSelection(IRetentionIndexWizardElements wizardElements) {
 		//
@@ -125,7 +129,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 
 	private void createPeakTableField(Composite composite) {
 
-		peakTableViewerUI = new PeakTableViewerUI(composite, SWT.BORDER);
+		peakTableViewerUI = new PeakTableViewerUI(composite, SWT.BORDER | SWT.MULTI);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.heightHint = 100;
@@ -148,7 +152,12 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 					/*
 					 * Press "DEL" button.
 					 */
-					propagateChange(PEAK_DELETE);
+					MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.YES | SWT.NO | SWT.ICON_WARNING);
+					messageBox.setText("Delete peak(s)");
+					messageBox.setMessage("Would you like to delete the selected peak(s)?");
+					if(messageBox.open() == SWT.YES) {
+						propagateChange(PEAKS_DELETE);
+					}
 				}
 			}
 		});
@@ -170,10 +179,12 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 					chromatogramSelectionMSD.setSelectedPeak(selectedPeak);
 					simpleMassSpectrumUI.update(selectedPeak.getExtractedMassSpectrum(), true);
 					break;
-				case PEAK_DELETE:
+				case PEAKS_DELETE:
+					List<IChromatogramPeakMSD> peaksToDelete = getSelectionChromatogramPeakList();
 					IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogramMSD();
-					chromatogramMSD.removePeak(selectedPeak);
+					chromatogramMSD.removePeaks(peaksToDelete);
 					chromatogramSelectionMSD.reset();
+					peakTableViewerUI.setInput(chromatogramMSD.getPeaks());
 					break;
 			}
 			selectedPeakChromatogramUI.update(chromatogramSelectionMSD, true);
@@ -198,6 +209,25 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 		}
 		//
 		return chromatogramSelectionMSD;
+	}
+
+	private List<IChromatogramPeakMSD> getSelectionChromatogramPeakList() {
+
+		Table table = peakTableViewerUI.getTable();
+		List<IChromatogramPeakMSD> peakList = new ArrayList<IChromatogramPeakMSD>();
+		int[] indices = table.getSelectionIndices();
+		for(int index : indices) {
+			/*
+			 * Get the selected item.
+			 */
+			TableItem tableItem = table.getItem(index);
+			Object object = tableItem.getData();
+			if(object instanceof IChromatogramPeakMSD) {
+				IChromatogramPeakMSD chromatogramPeak = (IChromatogramPeakMSD)object;
+				peakList.add(chromatogramPeak);
+			}
+		}
+		return peakList;
 	}
 
 	private void validateSelection() {
