@@ -77,6 +77,11 @@ public class ExtendedRetentionIndexTableViewerUI extends Composite {
 		return retentionIndexEntries;
 	}
 
+	public RetentionIndexTableViewerUI getRetentionIndexTableViewerUI() {
+
+		return retentionIndexTableViewerUI;
+	}
+
 	private void initialize() {
 
 		setLayout(new FillLayout());
@@ -140,13 +145,15 @@ public class ExtendedRetentionIndexTableViewerUI extends Composite {
 					if(messageBox.open() == SWT.OK) {
 						//
 						enableButtonFields(ACTION_DELETE);
-						TableItem tableItem = table.getItem(index);
-						Object object = tableItem.getData();
-						if(object instanceof IRetentionIndexEntry) {
-							IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)object;
-							retentionIndexEntries.remove(retentionIndexEntry);
-							retentionIndexTableViewerUI.setInput(retentionIndexEntries);
+						TableItem[] tableItems = table.getSelection();
+						for(TableItem tableItem : tableItems) {
+							Object object = tableItem.getData();
+							if(object instanceof IRetentionIndexEntry) {
+								IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)object;
+								retentionIndexEntries.remove(retentionIndexEntry);
+							}
 						}
+						retentionIndexTableViewerUI.setInput(retentionIndexEntries);
 					}
 				}
 			}
@@ -251,14 +258,6 @@ public class ExtendedRetentionIndexTableViewerUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				enableButtonFields(ACTION_SELECT);
-				Table table = retentionIndexTableViewerUI.getTable();
-				int index = table.getSelectionIndex();
-				TableItem tableItem = table.getItem(index);
-				Object object = tableItem.getData();
-				if(object instanceof IRetentionIndexEntry) {
-					IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)object;
-					System.out.println(retentionIndexEntry.getName());
-				}
 			}
 		});
 	}
