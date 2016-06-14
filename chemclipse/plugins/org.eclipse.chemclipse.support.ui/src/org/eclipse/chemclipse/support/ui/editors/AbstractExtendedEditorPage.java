@@ -20,6 +20,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
@@ -140,6 +141,14 @@ public abstract class AbstractExtendedEditorPage implements IExtendedEditorPage 
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		label.setLayoutData(gridData);
 		return label;
+	}
+
+	protected Text createText(Composite client, int style, String text) {
+
+		Text textField = toolkit.createText(client, text, style);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		textField.setLayoutData(gridData);
+		return textField;
 	}
 
 	protected CLabel createCLabel(Composite client, String text, Image image, int horizontalIndent) {
