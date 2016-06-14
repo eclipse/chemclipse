@@ -17,9 +17,9 @@ public interface IArrayWriter {
 
 	void skipBytes(int bytes);
 
-	byte[] getBytesWithStringLengthIndex(int writeBytes, String entry);
+	byte[] getBytesStringTerminated(int writeBytes, String entry);
 
-	byte[] getBytesWithoutStringLengthIndexNullTerminated(int writeBytes, String entry);
+	byte[] getBytesStringNullTerminated(int writeBytes, String entry);
 
 	void writeIntegerAsBigEndian(int value);
 

@@ -53,7 +53,7 @@ public abstract class AbstractArrayWriter implements IArrayWriter {
 	 * @return byte[]
 	 */
 	@Override
-	public byte[] getBytesWithStringLengthIndex(int writeBytes, String entry) {
+	public byte[] getBytesStringTerminated(int writeBytes, String entry) {
 
 		/*
 		 * 1 byte is used to store the length of the string.
@@ -93,7 +93,7 @@ public abstract class AbstractArrayWriter implements IArrayWriter {
 	}
 
 	@Override
-	public byte[] getBytesWithoutStringLengthIndexNullTerminated(int writeBytes, String entry) {
+	public byte[] getBytesStringNullTerminated(int writeBytes, String entry) {
 
 		writeBytes *= 2;
 		byte[] bytes = new byte[writeBytes];

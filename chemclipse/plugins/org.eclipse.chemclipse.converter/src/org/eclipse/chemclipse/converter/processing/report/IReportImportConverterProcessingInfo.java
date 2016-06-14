@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2016 Lablicate GmbH.
+ * Copyright (c) 2016 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -9,14 +9,15 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.converter.report;
-
-import java.io.File;
+package org.eclipse.chemclipse.converter.processing.report;
 
 import org.eclipse.chemclipse.converter.model.IReportRowModel;
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 
-public interface IReportConverter {
+public interface IReportImportConverterProcessingInfo extends IProcessingInfo {
 
-	IReportRowModel read(File file, IProgressMonitor monitor);
+	IReportRowModel getReportRowModel() throws TypeCastException;
+
+	void setReportRowModel(IReportRowModel reportRowModel);
 }

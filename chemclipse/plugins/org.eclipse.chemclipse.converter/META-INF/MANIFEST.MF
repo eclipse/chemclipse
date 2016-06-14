@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Converter
-Bundle-SymbolicName: org.eclipse.chemclipse.converter
+Bundle-SymbolicName: org.eclipse.chemclipse.converter;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.converter.Activator
 Bundle-Vendor: ChemClipse
@@ -21,5 +21,6 @@ Export-Package: org.eclipse.chemclipse.converter.chromatogram,
  org.eclipse.chemclipse.converter.model,
  org.eclipse.chemclipse.converter.processing,
  org.eclipse.chemclipse.converter.processing.chromatogram,
+ org.eclipse.chemclipse.converter.processing.report,
  org.eclipse.chemclipse.converter.report,
  org.eclipse.chemclipse.converter.support
