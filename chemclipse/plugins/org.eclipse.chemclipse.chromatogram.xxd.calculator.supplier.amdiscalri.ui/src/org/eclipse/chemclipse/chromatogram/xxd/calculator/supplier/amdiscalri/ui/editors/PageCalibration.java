@@ -14,18 +14,16 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.RetentionIndexTableViewerUI;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.ExtendedRetentionIndexTableViewerUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 public class PageCalibration {
 
 	private Composite control;
-	private RetentionIndexTableViewerUI extendedTableViewer;
+	private ExtendedRetentionIndexTableViewerUI extendedTableViewer;
 
 	public PageCalibration(Composite container) {
 		createControl(container);
@@ -41,16 +39,17 @@ public class PageCalibration {
 		extendedTableViewer.setInput(retentionIndexEntries);
 	}
 
+	public List<IRetentionIndexEntry> getRetentionIndexEntries() {
+
+		return extendedTableViewer.getRetentionIndexEntries();
+	}
+
 	private void createControl(Composite container) {
 
 		control = new Composite(container, SWT.NONE);
 		control.setLayout(new FillLayout());
 		control.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		//
-		Composite composite = new Composite(control, SWT.NONE);
-		composite.setLayout(new GridLayout(1, false));
-		//
-		extendedTableViewer = new RetentionIndexTableViewerUI(composite, SWT.NONE);
-		extendedTableViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		extendedTableViewer = new ExtendedRetentionIndexTableViewerUI(control, SWT.NONE);
 	}
 }

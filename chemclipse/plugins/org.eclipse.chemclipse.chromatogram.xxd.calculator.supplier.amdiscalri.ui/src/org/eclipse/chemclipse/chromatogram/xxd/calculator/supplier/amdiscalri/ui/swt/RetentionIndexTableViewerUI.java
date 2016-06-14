@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 public class RetentionIndexTableViewerUI extends ExtendedTableViewer {
 
 	private String[] titles = {"Retention Time (Minutes)", "Retention Index", "Name"};
-	private int[] bounds = {150, 150, 200};
+	private int[] bounds = {200, 150, 200};
 
 	public RetentionIndexTableViewerUI(Composite parent) {
 		super(parent);

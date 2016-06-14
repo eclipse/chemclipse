@@ -15,9 +15,14 @@ import java.io.File;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileReader;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileWriter;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
@@ -27,7 +32,8 @@ public class EditorCalibration extends MultiPageEditorPart {
 
 	private PageCalibration pageCalibration;
 	private File file;
-	private List<IRetentionIndexEntry> retentionIndexEntries;
+	private boolean isDirty = false;
+	private boolean initialize = true;
 
 	@Override
 	protected void createPages() {
@@ -35,32 +41,48 @@ public class EditorCalibration extends MultiPageEditorPart {
 		pageCalibration = new PageCalibration(getContainer());
 		int pageIndex = addPage(pageCalibration.getControl());
 		setPageText(pageIndex, "Retention Index Calibration (*.cal)");
+		setDirty(true);
 	}
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 
+		CalibrationFileWriter calibrationFileWriter = new CalibrationFileWriter();
+		calibrationFileWriter.write(file, pageCalibration.getRetentionIndexEntries());
+		setDirty(false);
 	}
 
 	@Override
 	public void doSaveAs() {
 
+		FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
+		fileDialog.setText("Save the *.cal file.");
+		fileDialog.setFilterExtensions(new String[]{"*.cal"});
+		fileDialog.setFilterNames(new String[]{"AMDIS Calibration *.cal"});
+		String pathRetentionIndexFile = fileDialog.open();
+		if(pathRetentionIndexFile != null) {
+			File file = new File(pathRetentionIndexFile);
+			CalibrationFileWriter calibrationFileWriter = new CalibrationFileWriter();
+			calibrationFileWriter.write(file, pageCalibration.getRetentionIndexEntries());
+			setDirty(false);
+		}
 	}
 
 	@Override
 	public boolean isSaveAsAllowed() {
 
-		return false;
+		return true;
 	}
 
 	@Override
 	public void setFocus() {
 
-		if(retentionIndexEntries == null) {
+		if(initialize) {
+			initialize = false;
 			CalibrationFileReader calibrationFileReader = new CalibrationFileReader();
-			retentionIndexEntries = calibrationFileReader.parse(file);
+			List<IRetentionIndexEntry> retentionIndexEntries = calibrationFileReader.parse(file);
+			pageCalibration.showData(retentionIndexEntries);
 		}
-		pageCalibration.showData(retentionIndexEntries);
 	}
 
 	@Override
@@ -83,5 +105,17 @@ public class EditorCalibration extends MultiPageEditorPart {
 	public void dispose() {
 
 		super.dispose();
+	}
+
+	@Override
+	public boolean isDirty() {
+
+		return isDirty;
+	}
+
+	public void setDirty(boolean isDirty) {
+
+		this.isDirty = isDirty;
+		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 }

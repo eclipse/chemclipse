@@ -46,6 +46,9 @@ public class CalibrationFileReader {
 						int retentionTime = (int)(Double.parseDouble(values[0]) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 						float retentionIndex = Float.parseFloat(values[1]);
 						String peakName = values[4].trim();
+						if(values.length >= 6) {
+							peakName += " " + values[5].trim();
+						}
 						IRetentionIndexEntry retentionIndexEntry = new RetentionIndexEntry(retentionTime, retentionIndex, peakName);
 						retentionIndexEntries.add(retentionIndexEntry);
 					}
