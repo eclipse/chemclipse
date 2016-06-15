@@ -16,8 +16,10 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.StandardsReader;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
+import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 
 public class RetentionIndexWizardElements extends ChromatogramWizardElements implements IRetentionIndexWizardElements {
 
@@ -29,11 +31,15 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 	private boolean useExistingRetentionIndexFile;
 	private String filterPathRetentionIndexFile; // used for File Dialog
 	private String pathRetentionIndexFile;
+	private boolean useMassSpectrometryData;
+	private IChromatogramWizardElements chromatogramWizardElementsMSD;
+	private IChromatogramWizardElements chromatogramWizardElementsCSD;
 	private String startIndexName;
 	private String stopIndexName;
 	private boolean useAlreadyDetectedPeaks;
 	//
 	private IChromatogramSelectionMSD chromatogramSelectionMSD;
+	private IChromatogramSelectionCSD chromatogramSelectionCSD;
 	private List<IRetentionIndexEntry> extractedRetentionIndexEntries;
 	//
 	private boolean retentionIndexDataIsValidated;
@@ -122,6 +128,30 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 	}
 
 	@Override
+	public boolean isUseMassSpectrometryData() {
+
+		return useMassSpectrometryData;
+	}
+
+	@Override
+	public void setUseMassSpectrometryData(boolean useMassSpectrometryData) {
+
+		this.useMassSpectrometryData = useMassSpectrometryData;
+	}
+
+	@Override
+	public IChromatogramWizardElements getChromatogramWizardElementsMSD() {
+
+		return chromatogramWizardElementsMSD;
+	}
+
+	@Override
+	public IChromatogramWizardElements getChromatogramWizardElementsCSD() {
+
+		return chromatogramWizardElementsCSD;
+	}
+
+	@Override
 	public String getStartIndexName() {
 
 		return startIndexName;
@@ -170,6 +200,18 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 	}
 
 	@Override
+	public IChromatogramSelectionCSD getChromatogramSelectionCSD() {
+
+		return chromatogramSelectionCSD;
+	}
+
+	@Override
+	public void setChromatogramSelectionCSD(IChromatogramSelectionCSD chromatogramSelectionCSD) {
+
+		this.chromatogramSelectionCSD = chromatogramSelectionCSD;
+	}
+
+	@Override
 	public List<IRetentionIndexEntry> getExtractedRetentionIndexEntries() {
 
 		return extractedRetentionIndexEntries;
@@ -204,6 +246,9 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 		}
 		//
 		useExistingRetentionIndexFile = false;
+		useMassSpectrometryData = true;
+		chromatogramWizardElementsMSD = new ChromatogramWizardElements();
+		chromatogramWizardElementsCSD = new ChromatogramWizardElements();
 		pathRetentionIndexFile = "";
 		startIndexName = "";
 		stopIndexName = "";

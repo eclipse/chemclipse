@@ -37,6 +37,10 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 	private Button checkBoxUseExistingCalibrationFile;
 	private Text textPathRetentionIndexFile;
 	private Button buttonSelectCalibrationFile;
+	//
+	private Button buttonMSD;
+	private Button buttonCSD;
+	//
 	private Combo comboStartIndexName;
 	private Combo comboStopIndexName;
 	private Button checkBoxUseExistingPeaks;
@@ -86,6 +90,9 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		composite.setLayout(new GridLayout(2, false));
 		//
 		createCalibrationFileField(composite);
+		createLabelDataField(composite);
+		createButtonMSDField(composite);
+		createButtonCSDField(composite);
 		createStartRetentionIndexField(composite);
 		createStopRetentionIndexField(composite);
 		createPeakIdentificationField(composite);
@@ -143,6 +150,45 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 					wizardElements.setPathRetentionIndexFile(pathRetentionIndexFile);
 					validateSelection();
 				}
+			}
+		});
+	}
+
+	private void createLabelDataField(Composite composite) {
+
+		Label label = new Label(composite, SWT.NONE);
+		label.setText("Select whether to use MSD or CSD data to detect the RI pattern.");
+		label.setLayoutData(getGridData());
+	}
+
+	private void createButtonMSDField(Composite composite) {
+
+		buttonMSD = new Button(composite, SWT.RADIO);
+		buttonMSD.setText("MSD (Quadrupole, IonTrap, ...) data");
+		buttonMSD.setSelection(wizardElements.isUseMassSpectrometryData());
+		buttonMSD.setLayoutData(getGridData());
+		buttonMSD.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				wizardElements.setUseMassSpectrometryData(true);
+			}
+		});
+	}
+
+	private void createButtonCSDField(Composite composite) {
+
+		buttonCSD = new Button(composite, SWT.RADIO);
+		buttonCSD.setText("CSD (FID, ECD, ...) data");
+		buttonCSD.setSelection(!wizardElements.isUseMassSpectrometryData());
+		buttonCSD.setLayoutData(getGridData());
+		buttonCSD.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				wizardElements.setUseMassSpectrometryData(false);
 			}
 		});
 	}

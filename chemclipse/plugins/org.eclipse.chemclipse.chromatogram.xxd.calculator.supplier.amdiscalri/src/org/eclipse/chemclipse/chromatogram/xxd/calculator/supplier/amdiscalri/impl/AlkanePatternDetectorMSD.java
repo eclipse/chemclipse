@@ -40,9 +40,9 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class AlkanePatternDetector {
+public class AlkanePatternDetectorMSD {
 
-	private static final Logger logger = Logger.getLogger(AlkanePatternDetector.class);
+	private static final Logger logger = Logger.getLogger(AlkanePatternDetectorMSD.class);
 
 	public IChromatogramMSD parseChromatogram(String chromatogramPath, String pathRetentionIndexFile, boolean useAlreadyDetectedPeaks, IProgressMonitor monitor) {
 

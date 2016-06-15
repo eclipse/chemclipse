@@ -18,15 +18,16 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.runnables.ImportChromatogramRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.PeakTableViewerUI;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.swt.ui.components.chromatogram.SelectedPeakChromatogramUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
+import org.eclipse.chemclipse.swt.ui.components.chromatogram.SelectedPeakChromatogramUI;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -41,9 +42,9 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
-public class PagePeakSelection extends AbstractExtendedWizardPage {
+public class PagePeakSelectionMSD extends AbstractExtendedWizardPage {
 
-	private static final Logger logger = Logger.getLogger(PagePeakSelection.class);
+	private static final Logger logger = Logger.getLogger(PagePeakSelectionMSD.class);
 	private IRetentionIndexWizardElements wizardElements;
 	private SelectedPeakChromatogramUI selectedPeakChromatogramUI;
 	private SimpleMassSpectrumUI simpleMassSpectrumUI;
@@ -52,10 +53,10 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 	private static final int PEAK_SHOW = 1;
 	private static final int PEAKS_DELETE = 2;
 
-	public PagePeakSelection(IRetentionIndexWizardElements wizardElements) {
+	public PagePeakSelectionMSD(IRetentionIndexWizardElements wizardElements) {
 		//
-		super(PagePeakSelection.class.getName());
-		setTitle("Peak Selection");
+		super(PagePeakSelectionMSD.class.getName());
+		setTitle("Peak Selection MSD");
 		setDescription("Please select the peaks that shall be used.");
 		this.wizardElements = wizardElements;
 	}
@@ -89,7 +90,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 				if(peaks.size() > 0) {
 					IChromatogramPeakMSD selectedPeak = peaks.get(0);
 					chromatogramSelectionMSD.setSelectedPeak(selectedPeak);
-					selectedPeakChromatogramUI.update(chromatogramSelectionMSD, true);
+					selectedPeakChromatogramUI.updateSelection(chromatogramSelectionMSD, true);
 					simpleMassSpectrumUI.update(selectedPeak.getExtractedMassSpectrum(), true);
 				}
 			}
@@ -187,7 +188,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 					peakTableViewerUI.setInput(chromatogramMSD.getPeaks());
 					break;
 			}
-			selectedPeakChromatogramUI.update(chromatogramSelectionMSD, true);
+			selectedPeakChromatogramUI.updateSelection(chromatogramSelectionMSD, true);
 		}
 	}
 
@@ -198,8 +199,11 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 		//
 		try {
 			getContainer().run(true, false, runnable);
-			IChromatogramMSD chromatogramMSD = runnable.getChromatogramMSD();
-			chromatogramSelectionMSD = new ChromatogramSelectionMSD(chromatogramMSD);
+			IChromatogram chromatogram = runnable.getChromatogram();
+			if(chromatogram instanceof IChromatogramMSD) {
+				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+				chromatogramSelectionMSD = new ChromatogramSelectionMSD(chromatogramMSD);
+			}
 		} catch(InterruptedException e) {
 			logger.warn(e);
 		} catch(InvocationTargetException e) {
@@ -233,7 +237,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 	private void validateSelection() {
 
 		String message = null;
-		if(wizardElements.getSelectedChromatograms().size() == 0) {
+		if(wizardElements.getChromatogramWizardElementsMSD().getSelectedChromatograms().size() == 0) {
 			message = "No chromatogram has been selected.";
 		}
 		//

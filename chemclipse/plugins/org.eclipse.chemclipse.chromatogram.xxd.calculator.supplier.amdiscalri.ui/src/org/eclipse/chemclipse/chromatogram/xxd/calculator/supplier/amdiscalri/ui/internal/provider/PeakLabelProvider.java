@@ -13,7 +13,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 
 import java.text.DecimalFormat;
 
+import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -46,10 +48,11 @@ public class PeakLabelProvider extends LabelProvider implements ITableLabelProvi
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof IChromatogramPeakMSD) {
-			IChromatogramPeakMSD chromatogramPeakMSD = (IChromatogramPeakMSD)element;
-			IPeakModel peakModel = chromatogramPeakMSD.getPeakModel();
+		if(element instanceof IPeak) {
+			IPeak peak = (IPeak)element;
+			IPeakModel peakModel = peak.getPeakModel();
 			IScan peakMaximum = peakModel.getPeakMaximum();
+			//
 			switch(columnIndex) {
 				case 0:
 					text = decimalFormat.format(peakMaximum.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
@@ -58,10 +61,14 @@ public class PeakLabelProvider extends LabelProvider implements ITableLabelProvi
 					text = decimalFormat.format(peakMaximum.getRetentionIndex());
 					break;
 				case 2:
-					text = decimalFormat.format(chromatogramPeakMSD.getSignalToNoiseRatio());
+					if(peak instanceof IChromatogramPeakMSD) {
+						text = decimalFormat.format(((IChromatogramPeakMSD)peak).getSignalToNoiseRatio());
+					} else if(peak instanceof IChromatogramPeakCSD) {
+						text = decimalFormat.format(((IChromatogramPeakCSD)peak).getSignalToNoiseRatio());
+					}
 					break;
 				case 3:
-					text = decimalFormat.format(chromatogramPeakMSD.getIntegratedArea());
+					text = decimalFormat.format(peak.getIntegratedArea());
 					break;
 				default:
 					text = "n.v.";

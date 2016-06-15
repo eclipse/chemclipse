@@ -20,8 +20,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.swt.ui.components.chromatogram.SelectedPeakChromatogramUI;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
+import org.eclipse.chemclipse.swt.ui.components.chromatogram.SelectedPeakChromatogramUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -72,7 +72,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = wizardElements.getChromatogramSelectionMSD();
 			if(chromatogramSelectionMSD != null && chromatogramSelectionMSD.getChromatogramMSD() != null) {
 				IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogramMSD();
-				selectedPeakChromatogramUI.update(chromatogramSelectionMSD, true);
+				selectedPeakChromatogramUI.updateSelection(chromatogramSelectionMSD, true);
 				RetentionIndexExtractor retentionIndexExtractor = new RetentionIndexExtractor();
 				List<IRetentionIndexEntry> extractedRetentionIndexEntries = retentionIndexExtractor.extract(chromatogramMSD);
 				wizardElements.setExtractedRetentionIndexEntries(extractedRetentionIndexEntries);
@@ -144,7 +144,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 						IChromatogramPeakMSD selectedPeak = getSelectedPeak(chromatogramMSD, retentionTime);
 						if(selectedPeak != null) {
 							chromatogramSelectionMSD.setSelectedPeak(selectedPeak);
-							selectedPeakChromatogramUI.update(chromatogramSelectionMSD, true);
+							selectedPeakChromatogramUI.updateSelection(chromatogramSelectionMSD, true);
 						}
 					}
 				}

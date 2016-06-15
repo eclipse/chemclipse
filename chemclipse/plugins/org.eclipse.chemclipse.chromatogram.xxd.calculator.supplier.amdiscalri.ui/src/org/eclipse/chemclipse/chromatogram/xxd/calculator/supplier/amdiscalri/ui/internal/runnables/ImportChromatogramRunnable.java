@@ -13,36 +13,49 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.AlkanePatternDetector;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.AlkanePatternDetectorCSD;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.AlkanePatternDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards.IRetentionIndexWizardElements;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class ImportChromatogramRunnable implements IRunnableWithProgress {
 
 	private IRetentionIndexWizardElements wizardElements;
-	private IChromatogramMSD chromatogramMSD;
+	private IChromatogram chromatogram;
 
 	public ImportChromatogramRunnable(IRetentionIndexWizardElements wizardElements) {
 		this.wizardElements = wizardElements;
 	}
 
-	public IChromatogramMSD getChromatogramMSD() {
+	public IChromatogram getChromatogram() {
 
-		return chromatogramMSD;
+		return chromatogram;
 	}
 
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		String chromatogramPath = wizardElements.getSelectedChromatograms().get(0);
+		/*
+		 * Calibration file
+		 */
 		String pathRetentionIndexFile = "";
 		if(wizardElements.isUseExistingRetentionIndexFile()) {
 			pathRetentionIndexFile = wizardElements.getPathRetentionIndexFile();
 		}
+		/*
+		 * MSD/CSD
+		 */
 		boolean useAlreadyDetectedPeaks = wizardElements.isUseAlreadyDetectedPeaks();
-		AlkanePatternDetector alkanePatternDetector = new AlkanePatternDetector();
-		chromatogramMSD = alkanePatternDetector.parseChromatogram(chromatogramPath, pathRetentionIndexFile, useAlreadyDetectedPeaks, monitor);
+		if(wizardElements.isUseMassSpectrometryData()) {
+			String chromatogramPath = wizardElements.getChromatogramWizardElementsMSD().getSelectedChromatograms().get(0);
+			AlkanePatternDetectorMSD alkanePatternDetector = new AlkanePatternDetectorMSD();
+			chromatogram = alkanePatternDetector.parseChromatogram(chromatogramPath, pathRetentionIndexFile, useAlreadyDetectedPeaks, monitor);
+		} else {
+			String chromatogramPath = wizardElements.getChromatogramWizardElementsCSD().getSelectedChromatograms().get(0);
+			AlkanePatternDetectorCSD alkanePatternDetector = new AlkanePatternDetectorCSD();
+			chromatogram = alkanePatternDetector.parseChromatogram(chromatogramPath, pathRetentionIndexFile, useAlreadyDetectedPeaks, monitor);
+		}
 	}
 }
