@@ -118,7 +118,7 @@ public class PagePeakSelectionCSD extends AbstractExtendedWizardPage {
 	private void createPeakTableField(Composite composite) {
 
 		peakTableViewerUI = new PeakTableViewerUI(composite, SWT.BORDER | SWT.MULTI);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.heightHint = 100;
 		peakTableViewerUI.getTable().setLayoutData(gridData);
