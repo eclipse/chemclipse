@@ -13,6 +13,32 @@ package org.eclipse.chemclipse.model.implementation;
 
 import org.eclipse.chemclipse.model.core.AbstractPeak;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IPeakModel;
 
 public class Peak extends AbstractPeak implements IPeak {
+
+	private IPeakModel peakModel;
+
+	/**
+	 * Better use the other constructors otherwise
+	 * peak model is null.
+	 */
+	public Peak() {
+	}
+
+	public Peak(IPeakModel peakModel) throws IllegalArgumentException {
+		validatePeakModel(peakModel);
+		this.peakModel = peakModel;
+	}
+
+	public Peak(IPeakModel peakModel, String modelDescription) throws IllegalArgumentException {
+		this(peakModel);
+		setModelDescription(modelDescription);
+	}
+
+	@Override
+	public IPeakModel getPeakModel() {
+
+		return peakModel;
+	}
 }

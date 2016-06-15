@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.model.selection;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
 import org.eclipse.chemclipse.numeric.core.Point;
@@ -139,6 +140,13 @@ public interface IChromatogramSelection extends IChromatogramUpdateListener {
 	 * @param update
 	 */
 	void setSelectedScan(IScan selectedScan, boolean update);
+
+	/**
+	 * Returns the selected peak.
+	 * 
+	 * @return IPeak
+	 */
+	IPeak getSelectedPeak();
 
 	boolean isOverlaySelected();
 

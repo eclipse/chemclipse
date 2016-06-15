@@ -16,8 +16,7 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.swt.ui.components.chromatogram.SelectedPeakChromatogramUI;
-
+import org.eclipse.chemclipse.swt.ui.components.chromatogram.SelectedPeakChromatogramUI;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -65,7 +64,7 @@ public class SelectedPeakChromatogramView extends AbstractChromatogramSelectionM
 		 * selection is not null.
 		 */
 		if(doUpdate(chromatogramSelection)) {
-			selectedPeakChromatogramUI.update(chromatogramSelection, forceReload);
+			selectedPeakChromatogramUI.updateSelection(chromatogramSelection, forceReload);
 		}
 	}
 }

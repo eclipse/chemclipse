@@ -19,6 +19,8 @@ import org.eclipse.chemclipse.model.targets.IPeakTargets;
 
 public interface IPeak extends IPeakTargets {
 
+	IPeakModel getPeakModel();
+
 	/**
 	 * Returns the modelDescription of the peak.<br/>
 	 * The modelDescription is given as:<br/>

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.swt.ui.converter.SeriesConverterMSD;
+import org.eclipse.chemclipse.swt.ui.converter.SeriesConverter;
 import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.support.IOffset;
 import org.eclipse.chemclipse.swt.ui.support.Offset;
@@ -52,13 +52,13 @@ public class SeriesConverter_30_Test extends PeakTestCase {
 
 	public void testConvertPeak_1() {
 
-		series = SeriesConverterMSD.convertPeak(peaks, true, Sign.NEGATIVE, offset);
+		series = SeriesConverter.convertPeak(peaks, true, Sign.NEGATIVE, offset);
 		assertEquals("XMin", 1000.0d, series.getXMin());
 	}
 
 	public void testConvertPeak_2() {
 
-		series = SeriesConverterMSD.convertPeak(peaks, true, Sign.NEGATIVE, offset);
+		series = SeriesConverter.convertPeak(peaks, true, Sign.NEGATIVE, offset);
 		assertEquals("XMax", 15500.0d, series.getXMax());
 	}
 
@@ -67,7 +67,7 @@ public class SeriesConverter_30_Test extends PeakTestCase {
 		/*
 		 * background 1760
 		 */
-		series = SeriesConverterMSD.convertPeak(peaks, true, Sign.NEGATIVE, offset);
+		series = SeriesConverter.convertPeak(peaks, true, Sign.NEGATIVE, offset);
 		assertEquals("YMin", -16991.0d, series.getYMin());
 	}
 
@@ -76,7 +76,7 @@ public class SeriesConverter_30_Test extends PeakTestCase {
 		/*
 		 * 5231 + 10000 offset + background 1760
 		 */
-		series = SeriesConverterMSD.convertPeak(peaks, true, Sign.NEGATIVE, offset);
+		series = SeriesConverter.convertPeak(peaks, true, Sign.NEGATIVE, offset);
 		assertEquals("YMax", -1760.0d, series.getYMax());
 	}
 }

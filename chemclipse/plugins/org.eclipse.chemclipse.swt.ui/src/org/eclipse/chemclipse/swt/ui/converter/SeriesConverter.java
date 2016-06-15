@@ -18,6 +18,8 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelection;
@@ -709,5 +711,199 @@ public class SeriesConverter {
 			}
 		}
 		return counter;
+	}
+
+	public static ISeries convertSelectedPeak(IPeak peak, boolean includeBackground, Sign sign) {
+
+		List<IPeak> peaks = new ArrayList<IPeak>();
+		peaks.add(peak);
+		IOffset offset = new Offset(0, 0);
+		IMultipleSeries peakSeries = convertPeak(peaks, includeBackground, sign, offset);
+		return peakSeries.getMultipleSeries().get(0);
+	}
+
+	public static ISeries convertSelectedPeakBackground(IPeak peak, Sign sign) {
+
+		List<IPeak> peaks = new ArrayList<IPeak>();
+		peaks.add(peak);
+		IOffset offset = new Offset(0, 0);
+		IMultipleSeries peakSeries = convertPeakBackground(peaks, sign, offset);
+		return peakSeries.getMultipleSeries().get(0);
+	}
+
+	/**
+	 * Returns an ISeries instance of the given peak.
+	 * 
+	 * @param peak
+	 * @param includeBackground
+	 * @param sign
+	 */
+	public static ISeries convertPeak(IPeak peak, boolean includeBackground, Sign sign) {
+
+		List<IPeak> peaks = new ArrayList<IPeak>();
+		peaks.add(peak);
+		IOffset offset = new Offset(0, 0);
+		IMultipleSeries peakSeries = convertPeak(peaks, includeBackground, sign, offset);
+		return peakSeries.getMultipleSeries().get(0);
+	}
+
+	// TODO JUnit
+	public static ISeries convertPeakBackground(IPeak peak, Sign sign) {
+
+		List<IPeak> peaks = new ArrayList<IPeak>();
+		peaks.add(peak);
+		IOffset offset = new Offset(0, 0);
+		IMultipleSeries peakSeries = convertPeakBackground(peaks, sign, offset);
+		return peakSeries.getMultipleSeries().get(0);
+	}
+
+	/**
+	 * Returns a list of peaks with a given sign, and a given offset.<br/>
+	 * You can also choose if you would like to include the background.
+	 * 
+	 * @param peaks
+	 * @param includeBackground
+	 * @param sign
+	 * @param offset
+	 * @return List<ISeries>
+	 */
+	public static IMultipleSeries convertPeak(List<? extends IPeak> peaks, boolean includeBackground, Sign sign, IOffset offset) {
+
+		IMultipleSeries peakSeries = new MultipleSeries();
+		if(peaks != null) {
+			offset = SeriesConverter.validateOffset(offset);
+			/*
+			 * Convert each peak to a series.
+			 */
+			for(IPeak peak : peaks) {
+				/*
+				 * Continue if the actual peak is null.
+				 */
+				if(peak == null) {
+					continue;
+				}
+				IPeakModel peakModel = peak.getPeakModel();
+				/*
+				 * Initialize with zero.
+				 */
+				int size = peakModel.getRetentionTimes().size();
+				double[] xSeries = new double[size];
+				double[] ySeries = new double[size];
+				int x = 0;
+				int y = 0;
+				/*
+				 * Values.
+				 */
+				double abundance;
+				double xOffset;
+				double yOffset;
+				/*
+				 * Go through all retention times of the peak.
+				 */
+				for(int retentionTime : peakModel.getRetentionTimes()) {
+					abundance = peakModel.getPeakAbundance(retentionTime);
+					/*
+					 * Include the background?
+					 */
+					if(includeBackground) {
+						abundance += peakModel.getBackgroundAbundance(retentionTime);
+					}
+					/*
+					 * Sign the abundance as a negative value?
+					 */
+					xOffset = offset.getCurrentXOffset();
+					yOffset = offset.getCurrentYOffset();
+					if(sign == Sign.NEGATIVE) {
+						abundance *= -1;
+						xOffset *= -1;
+						yOffset *= -1;
+					}
+					/*
+					 * Set the offset.
+					 */
+					retentionTime += xOffset;
+					abundance += yOffset;
+					/*
+					 * Set the values.
+					 */
+					xSeries[x++] = retentionTime;
+					ySeries[y++] = abundance;
+				}
+				/*
+				 * Increment the offset.
+				 */
+				offset.incrementCurrentXOffset();
+				offset.incrementCurrentYOffset();
+				peakSeries.add(new Series(xSeries, ySeries, "Peak"));
+			}
+		}
+		return peakSeries;
+	}
+
+	public static IMultipleSeries convertPeakBackground(List<? extends IPeak> peaks, Sign sign, IOffset offset) {
+
+		IMultipleSeries peakBackgroundSeries = new MultipleSeries();
+		if(peaks != null) {
+			offset = SeriesConverter.validateOffset(offset);
+			/*
+			 * Convert each peak to a series.
+			 */
+			for(IPeak peak : peaks) {
+				/*
+				 * Continue if the actual peak is null.
+				 */
+				if(peak == null) {
+					continue;
+				}
+				IPeakModel peakModel = peak.getPeakModel();
+				/*
+				 * Initialize with zero.
+				 */
+				int size = peakModel.getRetentionTimes().size();
+				double[] xSeries = new double[size];
+				double[] ySeries = new double[size];
+				int x = 0;
+				int y = 0;
+				/*
+				 * Values.
+				 */
+				double abundance;
+				double xOffset;
+				double yOffset;
+				/*
+				 * Go through all retention times of the peak.
+				 */
+				for(int retentionTime : peakModel.getRetentionTimes()) {
+					abundance = peakModel.getBackgroundAbundance(retentionTime);
+					/*
+					 * Sign the abundance as a negative value?
+					 */
+					xOffset = offset.getCurrentXOffset();
+					yOffset = offset.getCurrentYOffset();
+					if(sign == Sign.NEGATIVE) {
+						abundance *= -1;
+						xOffset *= -1;
+						yOffset *= -1;
+					}
+					/*
+					 * Set the offset.
+					 */
+					retentionTime += xOffset;
+					abundance += yOffset;
+					/*
+					 * Set the values.
+					 */
+					xSeries[x++] = retentionTime;
+					ySeries[y++] = abundance;
+				}
+				/*
+				 * Increment the offset.
+				 */
+				offset.incrementCurrentXOffset();
+				offset.incrementCurrentYOffset();
+				peakBackgroundSeries.add(new Series(xSeries, ySeries, "Background"));
+			}
+		}
+		return peakBackgroundSeries;
 	}
 }

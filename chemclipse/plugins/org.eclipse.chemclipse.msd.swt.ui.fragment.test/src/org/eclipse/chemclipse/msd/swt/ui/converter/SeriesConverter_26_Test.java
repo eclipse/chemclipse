@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.msd.swt.ui.converter;
 
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.swt.ui.converter.SeriesConverterMSD;
+import org.eclipse.chemclipse.swt.ui.converter.SeriesConverter;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
 
@@ -48,19 +48,19 @@ public class SeriesConverter_26_Test extends PeakTestCase {
 
 	public void testConvertPeak_1() {
 
-		series = SeriesConverterMSD.convertPeak(peak, true, Sign.NEGATIVE);
+		series = SeriesConverter.convertPeak(peak, true, Sign.NEGATIVE);
 		assertEquals("XMin", 1500.0d, series.getXMin());
 	}
 
 	public void testConvertPeak_2() {
 
-		series = SeriesConverterMSD.convertPeak(peak, true, Sign.NEGATIVE);
+		series = SeriesConverter.convertPeak(peak, true, Sign.NEGATIVE);
 		assertEquals("XMax", 15500.0d, series.getXMax());
 	}
 
 	public void testConvertPeak_3() {
 
-		series = SeriesConverterMSD.convertPeak(peak, true, Sign.NEGATIVE);
+		series = SeriesConverter.convertPeak(peak, true, Sign.NEGATIVE);
 		assertEquals("YMin", -6991.0d, series.getYMin());
 	}
 
@@ -69,7 +69,7 @@ public class SeriesConverter_26_Test extends PeakTestCase {
 		/*
 		 * 5231.0d +1760 background
 		 */
-		series = SeriesConverterMSD.convertPeak(peak, true, Sign.NEGATIVE);
+		series = SeriesConverter.convertPeak(peak, true, Sign.NEGATIVE);
 		assertEquals("YMax", -1760.0d, series.getYMax());
 	}
 }

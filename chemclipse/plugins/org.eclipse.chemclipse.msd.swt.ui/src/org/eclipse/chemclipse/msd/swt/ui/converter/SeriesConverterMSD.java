@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.converter;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -56,7 +55,6 @@ import org.eclipse.chemclipse.swt.ui.series.ISeries;
 import org.eclipse.chemclipse.swt.ui.series.MultipleSeries;
 import org.eclipse.chemclipse.swt.ui.series.Series;
 import org.eclipse.chemclipse.swt.ui.support.IOffset;
-import org.eclipse.chemclipse.swt.ui.support.Offset;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
@@ -289,24 +287,6 @@ public class SeriesConverterMSD {
 	public static ISeries convertPeaks(IChromatogramSelectionMSD chromatogramSelection, IOffset offset, Sign sign, boolean activeForAnalysis) throws NoPeaksAvailableException {
 
 		IMultipleSeries peakSeries = convertPeaks(chromatogramSelection, sign, offset, activeForAnalysis);
-		return peakSeries.getMultipleSeries().get(0);
-	}
-
-	public static ISeries convertSelectedPeak(IPeakMSD peak, boolean includeBackground, Sign sign) {
-
-		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
-		peaks.add(peak);
-		IOffset offset = new Offset(0, 0);
-		IMultipleSeries peakSeries = convertPeak(peaks, includeBackground, sign, offset);
-		return peakSeries.getMultipleSeries().get(0);
-	}
-
-	public static ISeries convertSelectedPeakBackground(IPeakMSD peak, Sign sign) {
-
-		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
-		peaks.add(peak);
-		IOffset offset = new Offset(0, 0);
-		IMultipleSeries peakSeries = convertPeakBackground(peaks, sign, offset);
 		return peakSeries.getMultipleSeries().get(0);
 	}
 
@@ -718,185 +698,8 @@ public class SeriesConverterMSD {
 		double[] ySeries = {0, 0};
 		return new Series(xSeries, ySeries, "no mass spectrum available");
 	}
-
 	// --------------------------------------------------IMassSpectrum
 	// --------------------------------------------------IPeak
-	/**
-	 * Returns an ISeries instance of the given peak.
-	 * 
-	 * @param peak
-	 * @param includeBackground
-	 * @param sign
-	 */
-	public static ISeries convertPeak(IPeakMSD peak, boolean includeBackground, Sign sign) {
-
-		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
-		peaks.add(peak);
-		IOffset offset = new Offset(0, 0);
-		IMultipleSeries peakSeries = convertPeak(peaks, includeBackground, sign, offset);
-		return peakSeries.getMultipleSeries().get(0);
-	}
-
-	/**
-	 * Returns a list of peaks with a given sign, and a given offset.<br/>
-	 * You can also choose if you would like to include the background.
-	 * 
-	 * @param peaks
-	 * @param includeBackground
-	 * @param sign
-	 * @param offset
-	 * @return List<ISeries>
-	 */
-	public static IMultipleSeries convertPeak(List<IPeakMSD> peaks, boolean includeBackground, Sign sign, IOffset offset) {
-
-		IMultipleSeries peakSeries = new MultipleSeries();
-		if(peaks != null) {
-			offset = SeriesConverter.validateOffset(offset);
-			/*
-			 * Convert each peak to a series.
-			 */
-			for(IPeakMSD peak : peaks) {
-				/*
-				 * Continue if the actual peak is null.
-				 */
-				if(peak == null) {
-					continue;
-				}
-				IPeakModelMSD peakModel = peak.getPeakModel();
-				/*
-				 * Initialize with zero.
-				 */
-				int size = peakModel.getRetentionTimes().size();
-				double[] xSeries = new double[size];
-				double[] ySeries = new double[size];
-				int x = 0;
-				int y = 0;
-				/*
-				 * Values.
-				 */
-				double abundance;
-				double xOffset;
-				double yOffset;
-				/*
-				 * Go through all retention times of the peak.
-				 */
-				for(int retentionTime : peakModel.getRetentionTimes()) {
-					abundance = peakModel.getPeakAbundance(retentionTime);
-					/*
-					 * Include the background?
-					 */
-					if(includeBackground) {
-						abundance += peakModel.getBackgroundAbundance(retentionTime);
-					}
-					/*
-					 * Sign the abundance as a negative value?
-					 */
-					xOffset = offset.getCurrentXOffset();
-					yOffset = offset.getCurrentYOffset();
-					if(sign == Sign.NEGATIVE) {
-						abundance *= -1;
-						xOffset *= -1;
-						yOffset *= -1;
-					}
-					/*
-					 * Set the offset.
-					 */
-					retentionTime += xOffset;
-					abundance += yOffset;
-					/*
-					 * Set the values.
-					 */
-					xSeries[x++] = retentionTime;
-					ySeries[y++] = abundance;
-				}
-				/*
-				 * Increment the offset.
-				 */
-				offset.incrementCurrentXOffset();
-				offset.incrementCurrentYOffset();
-				peakSeries.add(new Series(xSeries, ySeries, "Peak"));
-			}
-		}
-		return peakSeries;
-	}
-
-	// TODO JUnit
-	public static ISeries convertPeakBackground(IPeakMSD peak, Sign sign) {
-
-		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
-		peaks.add(peak);
-		IOffset offset = new Offset(0, 0);
-		IMultipleSeries peakSeries = convertPeakBackground(peaks, sign, offset);
-		return peakSeries.getMultipleSeries().get(0);
-	}
-
-	// TODO JUnit und mit den anderen Methoden zusammenfassen
-	public static IMultipleSeries convertPeakBackground(List<IPeakMSD> peaks, Sign sign, IOffset offset) {
-
-		IMultipleSeries peakBackgroundSeries = new MultipleSeries();
-		if(peaks != null) {
-			offset = SeriesConverter.validateOffset(offset);
-			/*
-			 * Convert each peak to a series.
-			 */
-			for(IPeakMSD peak : peaks) {
-				/*
-				 * Continue if the actual peak is null.
-				 */
-				if(peak == null) {
-					continue;
-				}
-				IPeakModelMSD peakModel = peak.getPeakModel();
-				/*
-				 * Initialize with zero.
-				 */
-				int size = peakModel.getRetentionTimes().size();
-				double[] xSeries = new double[size];
-				double[] ySeries = new double[size];
-				int x = 0;
-				int y = 0;
-				/*
-				 * Values.
-				 */
-				double abundance;
-				double xOffset;
-				double yOffset;
-				/*
-				 * Go through all retention times of the peak.
-				 */
-				for(int retentionTime : peakModel.getRetentionTimes()) {
-					abundance = peakModel.getBackgroundAbundance(retentionTime);
-					/*
-					 * Sign the abundance as a negative value?
-					 */
-					xOffset = offset.getCurrentXOffset();
-					yOffset = offset.getCurrentYOffset();
-					if(sign == Sign.NEGATIVE) {
-						abundance *= -1;
-						xOffset *= -1;
-						yOffset *= -1;
-					}
-					/*
-					 * Set the offset.
-					 */
-					retentionTime += xOffset;
-					abundance += yOffset;
-					/*
-					 * Set the values.
-					 */
-					xSeries[x++] = retentionTime;
-					ySeries[y++] = abundance;
-				}
-				/*
-				 * Increment the offset.
-				 */
-				offset.incrementCurrentXOffset();
-				offset.incrementCurrentYOffset();
-				peakBackgroundSeries.add(new Series(xSeries, ySeries, "Background"));
-			}
-		}
-		return peakBackgroundSeries;
-	}
 
 	// TODO JUnit
 	public static ISeries convertIncreasingInflectionPoints(IPeakMSD peak, boolean includeBackground, Sign sign) {

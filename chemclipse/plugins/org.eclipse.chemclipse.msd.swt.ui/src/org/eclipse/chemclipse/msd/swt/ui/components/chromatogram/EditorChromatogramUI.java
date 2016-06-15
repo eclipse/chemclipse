@@ -152,7 +152,7 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 				/*
 				 * Peak
 				 */
-				series = SeriesConverterMSD.convertSelectedPeak(peak, true, Sign.POSITIVE);
+				series = SeriesConverter.convertSelectedPeak(peak, true, Sign.POSITIVE);
 				peakSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, series.getId());
 				peakSeries.setXSeries(series.getXSeries());
 				peakSeries.setYSeries(series.getYSeries());
@@ -169,7 +169,7 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 				/*
 				 * Background
 				 */
-				series = SeriesConverterMSD.convertSelectedPeakBackground(peak, Sign.POSITIVE);
+				series = SeriesConverter.convertSelectedPeakBackground(peak, Sign.POSITIVE);
 				backgroundSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, series.getId());
 				backgroundSeries.setXSeries(series.getXSeries());
 				backgroundSeries.setYSeries(series.getYSeries());

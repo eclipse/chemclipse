@@ -11,10 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.selection;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
-import org.eclipse.chemclipse.logging.core.Logger;
 
 /**
  * ONLY USE THIS CLASS WHEN NO UPDATES SHALL BE FIRED.
@@ -25,7 +26,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
  * by a mass selective, a flame ionization or another detector.
  * 
  */
-public class ChromatogramSelection extends AbstractChromatogramSelection {
+public class ChromatogramSelection extends AbstractChromatogramSelection implements IChromatogramSelection {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramSelection.class);
 
@@ -58,6 +59,13 @@ public class ChromatogramSelection extends AbstractChromatogramSelection {
 	public IScan getSelectedScan() {
 
 		logger.warn("Bad boy - getSelectedScan(): don't use the ChromatogramSelection implementation");
+		return null;
+	}
+
+	@Override
+	public IPeak getSelectedPeak() {
+
+		logger.warn("Bad boy - getSelectedPeak(): don't use the ChromatogramSelection implementation");
 		return null;
 	}
 

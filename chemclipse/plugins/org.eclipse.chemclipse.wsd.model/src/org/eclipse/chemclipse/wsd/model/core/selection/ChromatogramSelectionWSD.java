@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.wsd.model.core.selection;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
@@ -22,6 +23,7 @@ import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionWSDUpdateN
 public class ChromatogramSelectionWSD extends AbstractChromatogramSelection implements IChromatogramSelectionWSD {
 
 	private IScanWSD selectedScan;
+	private IPeak selectedPeak;
 
 	public ChromatogramSelectionWSD(IChromatogram chromatogram) throws ChromatogramIsNullException {
 		this(chromatogram, true);
@@ -39,6 +41,7 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 	public void dispose() {
 
 		selectedScan = null;
+		selectedPeak = null;
 		super.dispose();
 	}
 
@@ -56,6 +59,12 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 	public IScanWSD getSelectedScan() {
 
 		return selectedScan;
+	}
+
+	@Override
+	public IPeak getSelectedPeak() {
+
+		return selectedPeak;
 	}
 
 	@Override
