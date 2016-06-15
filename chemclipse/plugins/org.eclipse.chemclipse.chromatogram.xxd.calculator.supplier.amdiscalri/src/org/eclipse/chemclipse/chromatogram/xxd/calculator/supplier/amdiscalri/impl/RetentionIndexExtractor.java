@@ -18,19 +18,22 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.StandardsReader;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.RetentionIndexEntry;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 
 public class RetentionIndexExtractor {
 
-	public List<IRetentionIndexEntry> extract(IChromatogramMSD chromatogram) {
+	public List<IRetentionIndexEntry> extract(IChromatogram chromatogram) {
 
 		StandardsReader standardsReader = new StandardsReader();
 		Map<String, Integer> nameIndexMap = standardsReader.getNameIndexMap();
 		//
 		List<IRetentionIndexEntry> retentionIndexEntries = new ArrayList<IRetentionIndexEntry>();
-		for(IChromatogramPeakMSD peak : chromatogram.getPeaks()) {
+		List<? extends IPeak> peaks = getPeaks(chromatogram);
+		for(IPeak peak : peaks) {
 			List<IPeakTarget> peakTargets = peak.getTargets();
 			if(peakTargets.size() > 0) {
 				String name = peakTargets.get(0).getLibraryInformation().getName().trim();
@@ -43,5 +46,18 @@ public class RetentionIndexExtractor {
 			}
 		}
 		return retentionIndexEntries;
+	}
+
+	private List<? extends IPeak> getPeaks(IChromatogram chromatogram) {
+
+		List<IPeak> peaks = new ArrayList<IPeak>();
+		if(chromatogram instanceof IChromatogramMSD) {
+			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+			peaks.addAll(chromatogramMSD.getPeaks());
+		} else if(chromatogram instanceof IChromatogramCSD) {
+			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+			peaks.addAll(chromatogramCSD.getPeaks());
+		}
+		return peaks;
 	}
 }

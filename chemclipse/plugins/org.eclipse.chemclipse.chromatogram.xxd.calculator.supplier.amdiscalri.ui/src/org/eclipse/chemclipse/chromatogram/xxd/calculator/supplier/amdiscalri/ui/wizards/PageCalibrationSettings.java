@@ -140,8 +140,8 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 
 				FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText("Select an existing *.cal template file.");
-				fileDialog.setFilterExtensions(new String[]{"*.cal", "*.CAL"});
-				fileDialog.setFilterNames(new String[]{"AMDIS Calibration *.cal", "AMDIS Calibration *.CAL"});
+				fileDialog.setFilterExtensions(new String[]{"*.CAL", "*.cal"});
+				fileDialog.setFilterNames(new String[]{"AMDIS Calibration *.CAL", "AMDIS Calibration *.cal"});
 				fileDialog.setFilterPath(wizardElements.getFilterPathCalibrationFile());
 				String pathRetentionIndexFile = fileDialog.open();
 				if(pathRetentionIndexFile != null) {
