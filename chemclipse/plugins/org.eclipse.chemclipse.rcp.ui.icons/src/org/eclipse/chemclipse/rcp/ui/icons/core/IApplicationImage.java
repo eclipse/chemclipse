@@ -39,6 +39,9 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_CHROMATOGRAM_CSD = "chromatogram-csd.gif";
 	String IMAGE_CHROMATOGRAM_WSD = "chromatogram-wsd.gif";
 	//
+	String IMAGE_SAMPLE = "sample.gif";
+	String IMAGE_SAMPLE_ISTD = "sample-istd.gif";
+	//
 	String IMAGE_PREFERENCES = "preferences.gif";
 	String IMAGE_DRIVE = "drive.gif";
 	String IMAGE_CHROMATOGRAM_ZERO_SET = "chromatogramZeorSet.gif";

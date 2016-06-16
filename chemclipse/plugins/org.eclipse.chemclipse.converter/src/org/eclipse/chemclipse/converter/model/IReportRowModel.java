@@ -14,4 +14,13 @@ package org.eclipse.chemclipse.converter.model;
 import java.util.List;
 
 public interface IReportRowModel extends List<List<String>> {
+
+	/**
+	 * Returns -1 of the column identified by the name can't be found.
+	 * It is assumed that the first row contains the column header.
+	 * 
+	 * @param columnName
+	 * @return int
+	 */
+	int getColumnIndex(String columnName);
 }

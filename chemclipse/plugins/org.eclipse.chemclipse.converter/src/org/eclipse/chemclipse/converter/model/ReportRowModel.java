@@ -26,6 +26,20 @@ public class ReportRowModel implements IReportRowModel {
 	}
 
 	@Override
+	public int getColumnIndex(String columnName) {
+
+		if(rows.size() > 0) {
+			List<String> header = rows.get(0);
+			for(int index = 0; index < header.size(); index++) {
+				if(header.get(index).equals(columnName)) {
+					return index;
+				}
+			}
+		}
+		return -1;
+	}
+
+	@Override
 	public boolean add(List<String> e) {
 
 		return rows.add(e);
