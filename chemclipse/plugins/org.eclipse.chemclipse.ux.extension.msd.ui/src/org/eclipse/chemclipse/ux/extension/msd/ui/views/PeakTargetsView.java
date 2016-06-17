@@ -179,6 +179,11 @@ public class PeakTargetsView extends AbstractTargetsView {
 		 */
 		if(doUpdate(peak)) {
 			super.update(peak, forceReload);
+			/*
+			 * Propagate the first selection
+			 */
+			getTableViewer().getTable().setSelection(0);
+			propagateSelectedTargetAndMassSpectrum();
 		}
 	}
 

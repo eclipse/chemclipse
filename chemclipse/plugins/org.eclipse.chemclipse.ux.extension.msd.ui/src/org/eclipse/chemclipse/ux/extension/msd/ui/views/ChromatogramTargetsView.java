@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.ChromatogramTargetsContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.views.AbstractTargetsView;
-
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -124,6 +123,10 @@ public class ChromatogramTargetsView extends AbstractTargetsView {
 		 */
 		if(doUpdate(chromatogramSelection)) {
 			super.update(chromatogramSelection.getChromatogramMSD(), forceReload);
+			/*
+			 * Propagate the first selection
+			 */
+			getTableViewer().getTable().setSelection(0);
 		}
 	}
 }
