@@ -180,6 +180,12 @@ public class PreferenceSupplier {
 		return store.getBoolean(PreferenceConstants.P_AUTO_ADJUST_VIEW_INTENSITY_DISPLAY);
 	}
 
+	public static boolean useAlternateWindowMoveDirection() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getBoolean(PreferenceConstants.P_ALTERNATE_WINDOW_MOVE_DIRECTION);
+	}
+
 	public static boolean isShowMilliseconds() {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();

@@ -47,6 +47,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		//
 		store.setDefault(PreferenceConstants.P_AUTO_ADJUST_EDITOR_INTENSITY_DISPLAY, false);
 		store.setDefault(PreferenceConstants.P_AUTO_ADJUST_VIEW_INTENSITY_DISPLAY, false);
+		store.setDefault(PreferenceConstants.P_ALTERNATE_WINDOW_MOVE_DIRECTION, false);
 		//
 		store.setDefault(PreferenceConstants.P_SHOW_AXIS_MILLISECONDS, false);
 		store.setDefault(PreferenceConstants.P_SHOW_AXIS_RELATIVE_INTENSITY, false);

@@ -383,8 +383,15 @@ public abstract class AbstractChromatogramLineSeriesUI extends AbstractLineSerie
 			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
 			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
 			int retentionTimeMoveWindow = (stopRetentionTime - startRetentionTime) / 20;
-			int startRetentionTimeNew = (keyCode == SWT.ARROW_RIGHT) ? startRetentionTime + retentionTimeMoveWindow : startRetentionTime - retentionTimeMoveWindow;
-			int stopRetentionTimeNew = (keyCode == SWT.ARROW_RIGHT) ? stopRetentionTime + retentionTimeMoveWindow : stopRetentionTime - retentionTimeMoveWindow;
+			int startRetentionTimeNew;
+			int stopRetentionTimeNew;
+			if(PreferenceSupplier.useAlternateWindowMoveDirection()) {
+				startRetentionTimeNew = (keyCode == SWT.ARROW_RIGHT) ? startRetentionTime - retentionTimeMoveWindow : startRetentionTime + retentionTimeMoveWindow;
+				stopRetentionTimeNew = (keyCode == SWT.ARROW_RIGHT) ? stopRetentionTime - retentionTimeMoveWindow : stopRetentionTime + retentionTimeMoveWindow;
+			} else {
+				startRetentionTimeNew = (keyCode == SWT.ARROW_RIGHT) ? startRetentionTime + retentionTimeMoveWindow : startRetentionTime - retentionTimeMoveWindow;
+				stopRetentionTimeNew = (keyCode == SWT.ARROW_RIGHT) ? stopRetentionTime + retentionTimeMoveWindow : stopRetentionTime - retentionTimeMoveWindow;
+			}
 			//
 			chromatogramSelection.setRanges(getValidatedStartRetentionTime(startRetentionTimeNew), getValidatedStopRetentionTime(stopRetentionTimeNew), chromatogramSelection.getStartAbundance(), chromatogramSelection.getStopAbundance());
 			chromatogramSelection.update(true);
@@ -396,7 +403,12 @@ public abstract class AbstractChromatogramLineSeriesUI extends AbstractLineSerie
 			 * Doesn't work if auto adjust signals is enabled.
 			 */
 			float stopAbundance = chromatogramSelection.getStopAbundance();
-			float newStopAbundance = (keyCode == SWT.ARROW_UP) ? stopAbundance + stopAbundance / 20.0f : stopAbundance - stopAbundance / 20.0f;
+			float newStopAbundance;
+			if(PreferenceSupplier.useAlternateWindowMoveDirection()) {
+				newStopAbundance = (keyCode == SWT.ARROW_UP) ? stopAbundance - stopAbundance / 20.0f : stopAbundance + stopAbundance / 20.0f;
+			} else {
+				newStopAbundance = (keyCode == SWT.ARROW_UP) ? stopAbundance + stopAbundance / 20.0f : stopAbundance - stopAbundance / 20.0f;
+			}
 			chromatogramSelection.setRanges(chromatogramSelection.getStartRetentionTime(), chromatogramSelection.getStopRetentionTime(), chromatogramSelection.getStartAbundance(), newStopAbundance);
 			chromatogramSelection.update(true);
 		}

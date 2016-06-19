@@ -57,6 +57,7 @@ public class SWTPreferencePage extends FieldEditorPreferencePage implements IWor
 		//
 		addField(new BooleanFieldEditor(PreferenceConstants.P_AUTO_ADJUST_EDITOR_INTENSITY_DISPLAY, "Auto adjust editor intensity display.", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_AUTO_ADJUST_VIEW_INTENSITY_DISPLAY, "Auto adjust view intensity display.", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_ALTERNATE_WINDOW_MOVE_DIRECTION, "Alternate window move direction.", getFieldEditorParent()));
 		//
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_AXIS_MILLISECONDS, "Show milliseconds axis", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_AXIS_RELATIVE_INTENSITY, "Show relative intensity axis", getFieldEditorParent()));
