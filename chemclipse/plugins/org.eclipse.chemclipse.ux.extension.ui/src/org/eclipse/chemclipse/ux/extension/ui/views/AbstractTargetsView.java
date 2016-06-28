@@ -100,6 +100,11 @@ public abstract class AbstractTargetsView {
 					 * Press "DEL" button.
 					 */
 					deleteSelectedTargets();
+				} else if(e.keyCode == 105 && e.stateMask == 262144) {
+					/*
+					 * CTRL + I
+					 */
+					manuallyVerifySelectedTargets();
 				} else {
 					propagateSelectedTarget();
 				}
@@ -205,6 +210,27 @@ public abstract class AbstractTargetsView {
 				manager.add(action);
 			}
 		});
+		/*
+		 * Manuall Verify Selected Targets
+		 */
+		menuManager.addMenuListener(new IMenuListener() {
+
+			@Override
+			public void menuAboutToShow(IMenuManager manager) {
+
+				IAction action = new Action() {
+
+					@Override
+					public void run() {
+
+						super.run();
+						manuallyVerifySelectedTargets();
+					}
+				};
+				action.setText("Manually verify selected targets");
+				manager.add(action);
+			}
+		});
 		Menu menu = menuManager.createContextMenu(tableViewer.getControl());
 		tableViewer.getControl().setMenu(menu);
 	}
@@ -265,6 +291,42 @@ public abstract class AbstractTargetsView {
 				scan.removeTargets(targetsToRemove);
 				tableViewer.refresh();
 			}
+		}
+	}
+
+	private void manuallyVerifySelectedTargets() {
+
+		/*
+		 * Delete the selected items.
+		 */
+		Table table = tableViewer.getTable();
+		int[] indices = table.getSelectionIndices();
+		/*
+		 * Delete the selected targets. Make a distinction between: -
+		 * IChromatogram - IChromatogramPeak Don't delete entries in cause
+		 * they are temporary: - IMassSpectrumIdentificationResult
+		 */
+		Object input = tableViewer.getInput();
+		if(input instanceof IChromatogramMSD) {
+			List<IChromatogramTargetMSD> chromatogramTargets = getChromatogramTargetList(table, indices);
+			for(IChromatogramTargetMSD chromatogramTarget : chromatogramTargets) {
+				chromatogramTarget.setManuallyVerified(true);
+			}
+			tableViewer.refresh();
+			//
+		} else if(input instanceof IChromatogramPeakMSD) {
+			List<IPeakTarget> peakTargets = getPeakTargetList(table, indices);
+			for(IPeakTarget peakTarget : peakTargets) {
+				peakTarget.setManuallyVerified(true);
+			}
+			tableViewer.refresh();
+			//
+		} else if(input instanceof IScanMSD) {
+			List<IMassSpectrumTarget> massSpectrumTargets = getMassSpectrumTargetList(table, indices);
+			for(IMassSpectrumTarget massSpectrumTarget : massSpectrumTargets) {
+				massSpectrumTarget.setManuallyVerified(true);
+			}
+			tableViewer.refresh();
 		}
 	}
 
