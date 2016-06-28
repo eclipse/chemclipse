@@ -55,9 +55,19 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	}
 
 	@Override
+	public void setPenalty(float penalty) {
+
+		if(penalty >= 0) {
+			this.penalty = penalty;
+		}
+	}
+
+	@Override
 	public void addPenalty(float penalty) {
 
-		this.penalty += penalty;
+		if(penalty >= 0) {
+			this.penalty += penalty;
+		}
 	}
 
 	@Override
@@ -75,43 +85,25 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public float getMatchFactor() {
 
-		float result = getAdjustedValue(matchFactor, penalty);
-		return result;
+		return getAdjustedValue(matchFactor, penalty);
 	}
 
 	@Override
 	public float getMatchFactorDirect() {
 
-		return matchFactorDirect;
+		return getAdjustedValue(matchFactorDirect, penalty);
 	}
 
+	@Override
 	public float getMatchFactorNotAdjusted() {
 
 		return matchFactor;
 	}
 
+	@Override
 	public float getMatchFactorDirectNotAdjusted() {
 
 		return matchFactorDirect;
-	}
-
-	private static float getAdjustedValue(float value, float penalty) {
-
-		float result = value - penalty;
-		if(result < 0) {
-			return 0;
-		}
-		return result;
-	}
-
-	@Override
-	public void adjustMatchFactor(float penalty) {
-
-		if(penalty >= MIN_ALLOWED_PENALTY && penalty <= MAX_ALLOWED_PENALTY) {
-			this.penalty = penalty;
-		} else {
-			throw new IllegalArgumentException();
-		}
 	}
 
 	@Override
@@ -123,7 +115,29 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public float getReverseMatchFactorDirect() {
 
+		return getAdjustedValue(reverseMatchFactorDirect, penalty);
+	}
+
+	@Override
+	public float getReverseMatchFactorNotAdjusted() {
+
+		return reverseMatchFactor;
+	}
+
+	@Override
+	public float getReverseMatchFactorDirectNotAdjusted() {
+
 		return reverseMatchFactorDirect;
+	}
+
+	@Override
+	public void adjustMatchFactor(float penalty) {
+
+		if(penalty >= MIN_ALLOWED_PENALTY && penalty <= MAX_ALLOWED_PENALTY) {
+			this.penalty = penalty;
+		} else {
+			throw new IllegalArgumentException();
+		}
 	}
 
 	@Override
@@ -166,7 +180,15 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 		return rating;
 	}
 
-	// ----------------------------------------private methods
+	private static float getAdjustedValue(float value, float penalty) {
+
+		float result = value - penalty;
+		if(result < 0) {
+			return 0;
+		}
+		return result;
+	}
+
 	/**
 	 * Determines the advise.
 	 */
@@ -179,7 +201,6 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 		}
 	}
 
-	// ----------------------------hashCode, equals, toString
 	@Override
 	public boolean equals(Object other) {
 

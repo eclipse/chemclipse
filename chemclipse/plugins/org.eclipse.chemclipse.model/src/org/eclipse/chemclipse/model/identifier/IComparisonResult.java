@@ -87,6 +87,15 @@ public interface IComparisonResult extends Serializable {
 	void adjustMatchFactor(float penalty);
 
 	/**
+	 * Sets a penalty.
+	 * It's effectively the same as if you would call
+	 * clearPenalty() and then addPenalty(...).
+	 * 
+	 * @param penalty
+	 */
+	void setPenalty(float penalty);
+
+	/**
 	 * Adds given penalty to this {@code IComparisonResult}'s penalty.
 	 * 
 	 * @param penalty
@@ -109,6 +118,8 @@ public interface IComparisonResult extends Serializable {
 	 */
 	float getReverseMatchFactor();
 
+	float getReverseMatchFactorNotAdjusted();
+
 	/**
 	 * Returns the reverse match factor direct.
 	 * 0 means no match, 100 means perfect match.
@@ -116,6 +127,8 @@ public interface IComparisonResult extends Serializable {
 	 * @return float
 	 */
 	float getReverseMatchFactorDirect();
+
+	float getReverseMatchFactorDirectNotAdjusted();
 
 	/**
 	 * Adjust the reverse match factor.

@@ -63,34 +63,17 @@ public class TargetBuilder {
 	 */
 	public IPeakTarget getPeakTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult, String identifier, String database) {
 
-		String name = UNKNOWN;
-		String cas = UNKNOWN;
-		String comments = UNKNOWN;
-		//
-		if(reference instanceof IRegularLibraryMassSpectrum) {
-			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)reference;
-			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
-			name = libraryInformation.getName();
-			cas = libraryInformation.getCasNumber();
-			comments = libraryInformation.getComments();
-		}
-		IPeakTarget peakTarget = null;
-		ILibraryInformation libraryInformation;
-		/*
-		 * Get the library information.
-		 */
-		libraryInformation = new PeakLibraryInformation();
-		libraryInformation.setName(name);
-		libraryInformation.setCasNumber(cas);
-		libraryInformation.setMiscellaneous(comments);
+		ILibraryInformation libraryInformation = new PeakLibraryInformation();
+		initializeLibraryInformation(libraryInformation, reference);
 		libraryInformation.setDatabase(database);
 		//
+		IPeakTarget peakTarget = null;
 		try {
 			peakTarget = new PeakTarget(libraryInformation, comparisonResult);
+			peakTarget.setIdentifier(identifier);
 		} catch(ReferenceMustNotBeNullException e) {
 			logger.warn(e);
 		}
-		peakTarget.setIdentifier(identifier);
 		return peakTarget;
 	}
 
@@ -115,34 +98,17 @@ public class TargetBuilder {
 
 	public IMassSpectrumTarget getMassSpectrumTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult, String identifier, String database) {
 
-		String name = UNKNOWN;
-		String cas = UNKNOWN;
-		String comments = UNKNOWN;
-		//
-		if(reference instanceof IRegularLibraryMassSpectrum) {
-			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)reference;
-			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
-			name = libraryInformation.getName();
-			cas = libraryInformation.getCasNumber();
-			comments = libraryInformation.getComments();
-		}
-		IMassSpectrumTarget identificationEntry = null;
-		ILibraryInformation libraryInformation;
-		/*
-		 * Get the library information.
-		 */
-		libraryInformation = new MassSpectrumLibraryInformation();
-		libraryInformation.setName(name);
-		libraryInformation.setCasNumber(cas);
-		libraryInformation.setMiscellaneous(comments);
+		ILibraryInformation libraryInformation = new MassSpectrumLibraryInformation();
+		initializeLibraryInformation(libraryInformation, reference);
 		libraryInformation.setDatabase(database);
 		//
+		IMassSpectrumTarget identificationEntry = null;
 		try {
 			identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
+			identificationEntry.setIdentifier(identifier);
 		} catch(ReferenceMustNotBeNullException e) {
 			logger.warn(e);
 		}
-		identificationEntry.setIdentifier(identifier);
 		return identificationEntry;
 	}
 
@@ -156,6 +122,24 @@ public class TargetBuilder {
 			unknown.addTarget(massSpectrumTarget);
 		} catch(ReferenceMustNotBeNullException e) {
 			logger.warn(e);
+		}
+	}
+
+	private void initializeLibraryInformation(ILibraryInformation libraryInformation, IScanMSD reference) {
+
+		if(reference instanceof IRegularLibraryMassSpectrum) {
+			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)reference;
+			ILibraryInformation libraryInformationReference = libraryMassSpectrum.getLibraryInformation();
+			//
+			libraryInformation.setName(libraryInformationReference.getName());
+			libraryInformation.setCasNumber(libraryInformationReference.getCasNumber());
+			libraryInformation.setMiscellaneous(libraryInformationReference.getComments());
+			libraryInformation.setSmiles(libraryInformationReference.getSmiles());
+			libraryInformation.setReferenceIdentifier(libraryInformationReference.getReferenceIdentifier());
+		} else {
+			libraryInformation.setName(UNKNOWN);
+			libraryInformation.setCasNumber(UNKNOWN);
+			libraryInformation.setMiscellaneous(UNKNOWN);
 		}
 	}
 
