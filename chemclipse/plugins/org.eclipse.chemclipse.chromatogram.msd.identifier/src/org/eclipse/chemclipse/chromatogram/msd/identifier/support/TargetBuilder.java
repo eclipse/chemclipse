@@ -45,6 +45,11 @@ public class TargetBuilder {
 		ionAbundanceComparator = new IonAbundanceComparator(SortOrder.DESC);
 	}
 
+	public IPeakTarget getPeakTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult, String identifier) {
+
+		return getPeakTarget(reference, comparisonResult, identifier, "");
+	}
+
 	/**
 	 * Use e.g.
 	 * identifier = File Identifier
@@ -101,6 +106,11 @@ public class TargetBuilder {
 		} catch(ReferenceMustNotBeNullException e) {
 			logger.warn(e);
 		}
+	}
+
+	public IMassSpectrumTarget getMassSpectrumTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult, String identifier) {
+
+		return getMassSpectrumTarget(reference, comparisonResult, identifier, "");
 	}
 
 	public IMassSpectrumTarget getMassSpectrumTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult, String identifier, String database) {
