@@ -49,14 +49,12 @@ public class FileIdentifier {
 	public static final String IDENTIFIER = "File Identifier";
 	private static final Logger logger = Logger.getLogger(FileIdentifier.class);
 	//
-	private PenaltyCalculationSupport penaltyCalculationSupport;
 	private TargetCombinedComparator targetCombinedComparator;
 	private TargetBuilder targetBuilder;
 	private DatabasesCache databasesCache;
 
 	public FileIdentifier() {
 		//
-		penaltyCalculationSupport = new PenaltyCalculationSupport();
 		targetCombinedComparator = new TargetCombinedComparator(SortOrder.DESC);
 		targetBuilder = new TargetBuilder();
 		databasesCache = new DatabasesCache(PreferenceSupplier.getMassSpectraFiles());
@@ -174,11 +172,13 @@ public class FileIdentifier {
 			//
 			List<IMassSpectrumTarget> massSpectrumTargets = new ArrayList<IMassSpectrumTarget>();
 			for(int index = 0; index < references.size(); index++) {
-				/*
-				 * Compare the unknown against each library spectrum.
-				 */
 				try {
+					/*
+					 * Compare the unknown against each library spectrum.
+					 * Update the monitor only for each unknown mass spectrum.
+					 */
 					monitor.subTask("Compare " + countUnknown);
+					//
 					IScanMSD reference = references.get(index);
 					IMassSpectrumComparatorProcessingInfo infoCompare = MassSpectrumComparator.compare(unknown, reference, fileIdentifierSettings.getMassSpectrumComparatorId(), usePreOptimization, thresholdPreOptimization);
 					IMassSpectrumComparisonResult comparisonResult = infoCompare.getMassSpectrumComparisonResult();
@@ -271,18 +271,17 @@ public class FileIdentifier {
 		//
 		switch(penaltyCalculation) {
 			case IIdentifierSettings.PENALTY_CALCULATION_RETENTION_TIME:
-				penalty = penaltyCalculationSupport.calculatePenaltyFromRetentionTime(unknown, reference, identifierSettings.getRetentionTimeWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
+				penalty = PenaltyCalculationSupport.calculatePenaltyFromRetentionTime(unknown, reference, identifierSettings.getRetentionTimeWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
 				break;
 			case IIdentifierSettings.PENALTY_CALCULATION_RETENTION_INDEX:
-				penalty = penaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, identifierSettings.getRetentionIndexWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
+				penalty = PenaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, identifierSettings.getRetentionIndexWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
 				break;
 		}
 		/*
 		 * Apply the penalty on demand.
 		 */
 		if(penalty != 0.0f) {
-			comparisonResult.adjustMatchFactor(penalty);
-			comparisonResult.adjustReverseMatchFactor(penalty);
+			comparisonResult.setPenalty(penalty);
 		}
 	}
 
