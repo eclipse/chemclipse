@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Eclipse 4.5.1" sequenceNumber="419">
+<?pde version="3.8"?><target name="Eclipse 4.5.2" sequenceNumber="419">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.e4.rcp.feature.group" version="0.0.0"/>
@@ -37,7 +37,6 @@
 <unit id="org.slf4j.api" version="0.0.0"/>
 <unit id="ch.qos.logback.classic" version="0.0.0"/>
 <unit id="org.apache.commons.httpclient" version="0.0.0"/>
-<unit id="org.apache.httpcomponents.httpclient.source" version="0.0.0"/>
 <unit id="org.apache.httpcomponents.httpcore" version="0.0.0"/>
 <unit id="org.easymock" version="0.0.0"/>
 <unit id="org.apache.batik.svggen" version="0.0.0"/>
@@ -50,6 +49,7 @@
 <unit id="org.apache.poi" version="0.0.0"/>
 <unit id="org.apache.commons.io" version="0.0.0"/>
 <unit id="org.apache.commons.cli" version="0.0.0"/>
+<unit id="org.apache.commons.lang" version="0.0.0"/>
 <unit id="org.codehaus.jackson.core" version="0.0.0"/>
 <unit id="org.codehaus.jackson.mapper" version="0.0.0"/>
 <unit id="org.codehaus.jackson.jaxrs" version="0.0.0"/>
@@ -61,7 +61,10 @@
 <unit id="com.google.guava" version="0.0.0"/>
 <unit id="javassist" version="0.0.0"/>
 <unit id="ca.odell.glazedlists" version="0.0.0"/>
-<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20151118145958/repository"/>
+<unit id="org.json" version="0.0.0"/>
+<unit id="com.sun.jersey" version="0.0.0"/>
+<unit id="javax.ws.rs" version="0.0.0"/>
+<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20160221192158/repository"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.e4.resources.feature.feature.group" version="0.0.0"/>
