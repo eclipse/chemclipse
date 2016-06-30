@@ -81,12 +81,14 @@ public class MassSpectrumListFilter extends ViewerFilter {
 		String name = libraryInformation.getName();
 		String referenceIdentifier = libraryInformation.getReferenceIdentifier();
 		String formula = libraryInformation.getFormula();
+		String casNumber = libraryInformation.getCasNumber();
 		//
 		if(!caseSensitive) {
 			searchText = searchText.toLowerCase();
 			name = name.toLowerCase();
 			referenceIdentifier = referenceIdentifier.toLowerCase();
 			formula = formula.toLowerCase();
+			casNumber = casNumber.toLowerCase();
 		}
 		/*
 		 * Name
@@ -104,6 +106,12 @@ public class MassSpectrumListFilter extends ViewerFilter {
 		 * Formula
 		 */
 		if(formula.matches(searchText)) {
+			return true;
+		}
+		/*
+		 * CAS
+		 */
+		if(casNumber.matches(searchText)) {
 			return true;
 		}
 		/*
