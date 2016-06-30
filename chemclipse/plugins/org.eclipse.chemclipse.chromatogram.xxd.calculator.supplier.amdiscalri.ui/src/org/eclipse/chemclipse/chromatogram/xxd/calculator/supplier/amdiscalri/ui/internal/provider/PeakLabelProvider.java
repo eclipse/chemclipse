@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -58,7 +59,11 @@ public class PeakLabelProvider extends LabelProvider implements ITableLabelProvi
 					text = decimalFormat.format(peakMaximum.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 1:
-					text = decimalFormat.format(peakMaximum.getRetentionIndex());
+					if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+						text = Integer.toString((int)peakMaximum.getRetentionIndex());
+					} else {
+						text = decimalFormat.format(peakMaximum.getRetentionIndex());
+					}
 					break;
 				case 2:
 					if(peak instanceof IChromatogramPeakMSD) {

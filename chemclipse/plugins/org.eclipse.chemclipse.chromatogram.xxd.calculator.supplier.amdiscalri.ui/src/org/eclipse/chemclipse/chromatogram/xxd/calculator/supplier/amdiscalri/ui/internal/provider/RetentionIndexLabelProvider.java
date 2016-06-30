@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -51,7 +52,11 @@ public class RetentionIndexLabelProvider extends LabelProvider implements ITable
 					text = decimalFormat.format(retentionIndexEntry.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 1:
-					text = decimalFormat.format(retentionIndexEntry.getRetentionIndex());
+					if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+						text = Integer.toString((int)retentionIndexEntry.getRetentionIndex());
+					} else {
+						text = decimalFormat.format(retentionIndexEntry.getRetentionIndex());
+					}
 					break;
 				case 2:
 					text = retentionIndexEntry.getName();
