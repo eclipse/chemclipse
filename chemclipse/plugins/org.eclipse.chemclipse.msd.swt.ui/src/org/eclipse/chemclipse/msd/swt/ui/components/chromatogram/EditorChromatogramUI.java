@@ -11,8 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.components.chromatogram;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.chemclipse.model.comparator.ChromatogramPeakComparator;
+import org.eclipse.chemclipse.model.comparator.SortOrder;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.selection.MoveDirection;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -49,11 +57,13 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 
 	private MouseMoveMarker mouseMoveMarker;
 	private SelectedPositionMarker selectedPositionMarker;
+	private ChromatogramPeakComparator chromatogramPeakComparator;
 
 	public EditorChromatogramUI(Composite parent, int style) {
 		super(parent, style);
 		boolean yMinimumToZero = PreferenceSupplier.showBackgroundInChromatogramEditor();
 		setYMinimumToZero(yMinimumToZero);
+		chromatogramPeakComparator = new ChromatogramPeakComparator(SortOrder.ASC);
 	}
 
 	@Override
@@ -318,7 +328,38 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 				 * Fire an update.
 				 */
 				chromatogramSelection.setSelectedPeak(selectedPeak, true);
+				if(PreferenceSupplier.isMoveRetentionTimeOnPeakSelection()) {
+					adjustChromatogramSelection(selectedPeak, chromatogramSelection);
+				}
 				chromatogramSelection.update(true);
+			}
+		}
+	}
+
+	private void adjustChromatogramSelection(IChromatogramPeakMSD selectedPeak, IChromatogramSelectionMSD chromatogramSelection) {
+
+		/*
+		 * TODO refactor Editor CSD, MSD, WSD and peak list view!
+		 */
+		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogramMSD();
+		List<IChromatogramPeakMSD> peaks = chromatogramMSD.getPeaks();
+		List<IChromatogramPeakMSD> peaksSelection = chromatogramMSD.getPeaks(chromatogramSelection);
+		Collections.sort(peaks, chromatogramPeakComparator);
+		Collections.sort(peaksSelection, chromatogramPeakComparator);
+		//
+		if(peaks.get(0).equals(selectedPeak) || peaks.get(peaks.size() - 1).equals(selectedPeak)) {
+			/*
+			 * Don't move if it is the first or last peak of the chromatogram.
+			 */
+		} else {
+			/*
+			 * First peak of the selection: move left
+			 * Last peak of the selection: move right
+			 */
+			if(peaksSelection.get(0).equals(selectedPeak)) {
+				ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.LEFT, 5);
+			} else if(peaksSelection.get(peaksSelection.size() - 1).equals(selectedPeak)) {
+				ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.RIGHT, 5);
 			}
 		}
 	}

@@ -9,27 +9,26 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.model.core.comparator;
+package org.eclipse.chemclipse.model.comparator;
 
 import java.util.Comparator;
 
-import org.eclipse.chemclipse.model.comparator.SortOrder;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.model.core.IPeak;
 
-public class ChromatogramPeakMSDComparator implements Comparator<IChromatogramPeakMSD> {
+public class ChromatogramPeakComparator implements Comparator<IPeak> {
 
 	private SortOrder sortOrder;
 
-	public ChromatogramPeakMSDComparator() {
+	public ChromatogramPeakComparator() {
 		sortOrder = SortOrder.ASC;
 	}
 
-	public ChromatogramPeakMSDComparator(SortOrder sortOrder) {
+	public ChromatogramPeakComparator(SortOrder sortOrder) {
 		this.sortOrder = sortOrder;
 	}
 
 	@Override
-	public int compare(IChromatogramPeakMSD peak1, IChromatogramPeakMSD peak2) {
+	public int compare(IPeak peak1, IPeak peak2) {
 
 		int retentionTime1 = peak1.getPeakModel().getRetentionTimeAtPeakMaximum();
 		int retentionTime2 = peak2.getPeakModel().getRetentionTimeAtPeakMaximum();

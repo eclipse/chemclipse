@@ -65,6 +65,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public abstract class AbstractChromatogramMSD extends AbstractChromatogram implements IChromatogramMSD {
 
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramMSD.class);
+	//
 	private List<IChromatogramPeakMSD> peaks;
 	private Set<IChromatogramTargetMSD> targets;
 	private IIonTransitionSettings ionTransitionSettings;

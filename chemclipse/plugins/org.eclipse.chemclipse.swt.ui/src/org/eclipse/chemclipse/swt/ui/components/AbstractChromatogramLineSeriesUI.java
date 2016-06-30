@@ -17,7 +17,9 @@ import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.notifier.IChromatogramSelectionUpdateNotifier;
+import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.selection.MoveDirection;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.series.ChromatogramRange;
 import org.eclipse.chemclipse.swt.ui.series.IChromatogramRange;
@@ -380,20 +382,14 @@ public abstract class AbstractChromatogramLineSeriesUI extends AbstractLineSerie
 			 * Left, Right
 			 * (Retention Time)
 			 */
-			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
-			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
-			int retentionTimeMoveWindow = (stopRetentionTime - startRetentionTime) / 20;
-			int startRetentionTimeNew;
-			int stopRetentionTimeNew;
-			if(PreferenceSupplier.useAlternateWindowMoveDirection()) {
-				startRetentionTimeNew = (keyCode == SWT.ARROW_RIGHT) ? startRetentionTime - retentionTimeMoveWindow : startRetentionTime + retentionTimeMoveWindow;
-				stopRetentionTimeNew = (keyCode == SWT.ARROW_RIGHT) ? stopRetentionTime - retentionTimeMoveWindow : stopRetentionTime + retentionTimeMoveWindow;
+			if(keyCode == SWT.ARROW_RIGHT) {
+				MoveDirection moveDirection = (PreferenceSupplier.useAlternateWindowMoveDirection()) ? MoveDirection.LEFT : MoveDirection.RIGHT;
+				ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, moveDirection, 20);
 			} else {
-				startRetentionTimeNew = (keyCode == SWT.ARROW_RIGHT) ? startRetentionTime + retentionTimeMoveWindow : startRetentionTime - retentionTimeMoveWindow;
-				stopRetentionTimeNew = (keyCode == SWT.ARROW_RIGHT) ? stopRetentionTime + retentionTimeMoveWindow : stopRetentionTime - retentionTimeMoveWindow;
+				MoveDirection moveDirection = (PreferenceSupplier.useAlternateWindowMoveDirection()) ? MoveDirection.RIGHT : MoveDirection.LEFT;
+				ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, moveDirection, 20);
 			}
 			//
-			chromatogramSelection.setRanges(getValidatedStartRetentionTime(startRetentionTimeNew), getValidatedStopRetentionTime(stopRetentionTimeNew), chromatogramSelection.getStartAbundance(), chromatogramSelection.getStopAbundance());
 			chromatogramSelection.update(true);
 			//
 		} else if(keyCode == SWT.ARROW_UP || keyCode == SWT.ARROW_DOWN) {
@@ -442,20 +438,13 @@ public abstract class AbstractChromatogramLineSeriesUI extends AbstractLineSerie
 			int scanRetentionTime = selectedScan.getRetentionTime();
 			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
 			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
-			int retentionTimeMoveWindow = (stopRetentionTime - startRetentionTime) / 5;
 			/*
 			 * Left or right slide on demand.
 			 */
 			if(scanRetentionTime <= startRetentionTime) {
-				//
-				int startRetentionTimeNew = startRetentionTime - retentionTimeMoveWindow;
-				int stopRetentionTimeNew = stopRetentionTime - retentionTimeMoveWindow;
-				chromatogramSelection.setRanges(getValidatedStartRetentionTime(startRetentionTimeNew), getValidatedStopRetentionTime(stopRetentionTimeNew), chromatogramSelection.getStartAbundance(), chromatogramSelection.getStopAbundance());
+				ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.LEFT, 5);
 			} else if(scanRetentionTime >= stopRetentionTime) {
-				//
-				int startRetentionTimeNew = startRetentionTime + retentionTimeMoveWindow;
-				int stopRetentionTimeNew = stopRetentionTime + retentionTimeMoveWindow;
-				chromatogramSelection.setRanges(getValidatedStartRetentionTime(startRetentionTimeNew), getValidatedStopRetentionTime(stopRetentionTimeNew), chromatogramSelection.getStartAbundance(), chromatogramSelection.getStopAbundance());
+				ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.RIGHT, 5);
 			}
 			//
 			chromatogramSelection.setSelectedScan(selectedScan, false);
@@ -485,7 +474,9 @@ public abstract class AbstractChromatogramLineSeriesUI extends AbstractLineSerie
 		int startRetentionTimeNew = (direction == SWT.DOWN) ? startRetentionTime + retentionTimeMoveWindow : startRetentionTime - retentionTimeMoveWindow;
 		int stopRetentionTimeNew = (direction == SWT.DOWN) ? stopRetentionTime - retentionTimeMoveWindow : stopRetentionTime + retentionTimeMoveWindow;
 		//
-		chromatogramSelection.setRanges(getValidatedStartRetentionTime(startRetentionTimeNew), getValidatedStopRetentionTime(stopRetentionTimeNew), chromatogramSelection.getStartAbundance(), chromatogramSelection.getStopAbundance());
+		startRetentionTimeNew = ChromatogramSelectionSupport.getValidatedStartRetentionTime(chromatogramSelection, startRetentionTimeNew);
+		stopRetentionTimeNew = ChromatogramSelectionSupport.getValidatedStopRetentionTime(chromatogramSelection, stopRetentionTimeNew);
+		chromatogramSelection.setRanges(startRetentionTimeNew, stopRetentionTimeNew, chromatogramSelection.getStartAbundance(), chromatogramSelection.getStopAbundance());
 		chromatogramSelection.update(true);
 	}
 
@@ -591,27 +582,5 @@ public abstract class AbstractChromatogramLineSeriesUI extends AbstractLineSerie
 		}
 		setSecondaryRanges();
 		redraw();
-	}
-
-	private int getValidatedStartRetentionTime(int startRetentionTimeNew) {
-
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-		int minRetentionTime = chromatogram.getStartRetentionTime();
-		if(startRetentionTimeNew < minRetentionTime) {
-			return minRetentionTime;
-		} else {
-			return startRetentionTimeNew;
-		}
-	}
-
-	private int getValidatedStopRetentionTime(int stopRetentionTimeNew) {
-
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-		int maxRetentionTime = chromatogram.getStopRetentionTime();
-		if(stopRetentionTimeNew > maxRetentionTime) {
-			return maxRetentionTime;
-		} else {
-			return stopRetentionTimeNew;
-		}
 	}
 }

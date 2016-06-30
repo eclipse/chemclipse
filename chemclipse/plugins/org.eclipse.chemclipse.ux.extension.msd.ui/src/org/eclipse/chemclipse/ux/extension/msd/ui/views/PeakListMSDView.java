@@ -11,19 +11,26 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.views;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.comparator.ChromatogramPeakComparator;
+import org.eclipse.chemclipse.model.comparator.SortOrder;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.implementation.Peaks;
+import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
+import org.eclipse.chemclipse.model.selection.MoveDirection;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.peak.PeakListUI;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -60,6 +67,7 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 	private double lastIntegratedArea = 0.0d;
 	private float retentionIndexSum = 0.0f; // initial == 0
 	private IChromatogramSelectionMSD chromatogramSelectionMSDFocused;
+	private ChromatogramPeakComparator chromatogramPeakComparator;
 	/*
 	 * Update the cache if the peaks have been deleted.
 	 */
@@ -68,6 +76,7 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 	@Inject
 	public PeakListMSDView(EPartService partService, MPart part, IEventBroker eventBroker) {
 		super(part, partService, eventBroker);
+		chromatogramPeakComparator = new ChromatogramPeakComparator(SortOrder.ASC);
 	}
 
 	@PostConstruct
@@ -113,7 +122,11 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 									/*
 									 * Show the selected peak.
 									 */
-									((ChromatogramSelectionMSD)chromatogramSelection).setSelectedPeak((IChromatogramPeakMSD)element, false);
+									IChromatogramPeakMSD selectedPeak = (IChromatogramPeakMSD)element;
+									((ChromatogramSelectionMSD)chromatogramSelection).setSelectedPeak(selectedPeak, false);
+									if(PreferenceSupplier.isMoveRetentionTimeOnPeakSelection()) {
+										adjustChromatogramSelection(selectedPeak, chromatogramSelection);
+									}
 									ChromatogramSelectionMSDUpdateNotifier.fireUpdateChange(chromatogramSelection, true);
 								} finally {
 									/*
@@ -514,5 +527,33 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 		TableViewer tableViewer = peakListUI.getTableViewer();
 		Menu menu = menuManager.createContextMenu(tableViewer.getTable());
 		tableViewer.getTable().setMenu(menu);
+	}
+
+	private void adjustChromatogramSelection(IChromatogramPeakMSD selectedPeak, IChromatogramSelectionMSD chromatogramSelection) {
+
+		/*
+		 * TODO refactor Editor CSD, MSD, WSD and peak list view!
+		 */
+		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogramMSD();
+		List<IChromatogramPeakMSD> peaks = chromatogramMSD.getPeaks();
+		List<IChromatogramPeakMSD> peaksSelection = chromatogramMSD.getPeaks(chromatogramSelection);
+		Collections.sort(peaks, chromatogramPeakComparator);
+		Collections.sort(peaksSelection, chromatogramPeakComparator);
+		//
+		if(peaks.get(0).equals(selectedPeak) || peaks.get(peaks.size() - 1).equals(selectedPeak)) {
+			/*
+			 * Don't move if it is the first or last peak of the chromatogram.
+			 */
+		} else {
+			/*
+			 * First peak of the selection: move left
+			 * Last peak of the selection: move right
+			 */
+			if(peaksSelection.get(0).equals(selectedPeak)) {
+				ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.LEFT, 5);
+			} else if(peaksSelection.get(peaksSelection.size() - 1).equals(selectedPeak)) {
+				ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.RIGHT, 5);
+			}
+		}
 	}
 }

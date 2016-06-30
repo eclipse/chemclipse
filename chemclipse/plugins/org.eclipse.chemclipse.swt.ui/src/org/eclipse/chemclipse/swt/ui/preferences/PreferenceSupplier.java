@@ -186,6 +186,12 @@ public class PreferenceSupplier {
 		return store.getBoolean(PreferenceConstants.P_SHOW_AREA_WITHOUT_DECIMALS);
 	}
 
+	public static boolean isMoveRetentionTimeOnPeakSelection() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
+	}
+
 	public static boolean autoAdjustViewIntensityDisplay() {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();

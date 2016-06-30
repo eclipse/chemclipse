@@ -58,5 +58,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		//
 		store.setDefault(PreferenceConstants.P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS, true);
 		store.setDefault(PreferenceConstants.P_SHOW_AREA_WITHOUT_DECIMALS, true);
+		//
+		store.setDefault(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION, true);
 	}
 }

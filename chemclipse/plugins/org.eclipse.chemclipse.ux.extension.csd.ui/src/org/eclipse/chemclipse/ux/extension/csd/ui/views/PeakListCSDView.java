@@ -11,12 +11,27 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.csd.ui.views;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.csd.model.notifier.ChromatogramSelectionCSDUpdateNotifier;
+import org.eclipse.chemclipse.csd.swt.ui.components.peak.PeakListUI;
+import org.eclipse.chemclipse.model.comparator.ChromatogramPeakComparator;
+import org.eclipse.chemclipse.model.comparator.SortOrder;
+import org.eclipse.chemclipse.model.core.IPeaks;
+import org.eclipse.chemclipse.model.implementation.Peaks;
+import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
+import org.eclipse.chemclipse.model.selection.MoveDirection;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -40,14 +55,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
-import org.eclipse.chemclipse.csd.model.notifier.ChromatogramSelectionCSDUpdateNotifier;
-import org.eclipse.chemclipse.csd.swt.ui.components.peak.PeakListUI;
-import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.model.implementation.Peaks;
-import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 
 public class PeakListCSDView extends AbstractChromatogramSelectionCSDView {
 
@@ -60,6 +67,7 @@ public class PeakListCSDView extends AbstractChromatogramSelectionCSDView {
 	private IChromatogramPeakCSD lastPeak = null;
 	private double lastIntegratedArea = 0.0d;
 	private IChromatogramSelectionCSD chromatogramSelectionMSDFocused;
+	private ChromatogramPeakComparator chromatogramPeakComparator;
 	/*
 	 * Update the cache if the peaks have been deleted.
 	 */
@@ -68,6 +76,7 @@ public class PeakListCSDView extends AbstractChromatogramSelectionCSDView {
 	@Inject
 	public PeakListCSDView(EPartService partService, MPart part, IEventBroker eventBroker) {
 		super(part, partService, eventBroker);
+		chromatogramPeakComparator = new ChromatogramPeakComparator(SortOrder.ASC);
 	}
 
 	@PostConstruct
@@ -113,7 +122,11 @@ public class PeakListCSDView extends AbstractChromatogramSelectionCSDView {
 									/*
 									 * Show the selected peak.
 									 */
-									((ChromatogramSelectionCSD)chromatogramSelection).setSelectedPeak((IChromatogramPeakCSD)element, false);
+									IChromatogramPeakCSD selectedPeak = (IChromatogramPeakCSD)element;
+									((ChromatogramSelectionCSD)chromatogramSelection).setSelectedPeak(selectedPeak, false);
+									if(PreferenceSupplier.isMoveRetentionTimeOnPeakSelection()) {
+										adjustChromatogramSelection(selectedPeak, chromatogramSelection);
+									}
 									ChromatogramSelectionCSDUpdateNotifier.fireUpdateChange(chromatogramSelection, true);
 								} finally {
 									/*
@@ -384,5 +397,33 @@ public class PeakListCSDView extends AbstractChromatogramSelectionCSDView {
 		TableViewer tableViewer = peakListUI.getTableViewer();
 		Menu menu = menuManager.createContextMenu(tableViewer.getTable());
 		tableViewer.getTable().setMenu(menu);
+	}
+
+	private void adjustChromatogramSelection(IChromatogramPeakCSD selectedPeak, IChromatogramSelectionCSD chromatogramSelection) {
+
+		/*
+		 * TODO refactor Editor CSD, MSD, WSD and peak list view!
+		 */
+		IChromatogramCSD chromatogramCSD = chromatogramSelection.getChromatogramCSD();
+		List<IChromatogramPeakCSD> peaks = chromatogramCSD.getPeaks();
+		List<IChromatogramPeakCSD> peaksSelection = chromatogramCSD.getPeaks(chromatogramSelection);
+		Collections.sort(peaks, chromatogramPeakComparator);
+		Collections.sort(peaksSelection, chromatogramPeakComparator);
+		//
+		if(peaks.get(0).equals(selectedPeak) || peaks.get(peaks.size() - 1).equals(selectedPeak)) {
+			/*
+			 * Don't move if it is the first or last peak of the chromatogram.
+			 */
+		} else {
+			/*
+			 * First peak of the selection: move left
+			 * Last peak of the selection: move right
+			 */
+			if(peaksSelection.get(0).equals(selectedPeak)) {
+				ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.LEFT, 5);
+			} else if(peaksSelection.get(peaksSelection.size() - 1).equals(selectedPeak)) {
+				ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.RIGHT, 5);
+			}
+		}
 	}
 }
