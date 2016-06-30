@@ -227,7 +227,7 @@ public abstract class AbstractTargetsView {
 						manuallyVerifySelectedTargets();
 					}
 				};
-				action.setText("Manually verify selected targets");
+				action.setText("Verify selected targets (CTRL+I)");
 				manager.add(action);
 			}
 		});

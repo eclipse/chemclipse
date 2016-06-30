@@ -12,13 +12,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.support;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
 public class PenaltyCalculationSupport {
-
-	private final static Logger logger = Logger.getLogger(PenaltyCalculationSupport.class);
 
 	/**
 	 * Calculate a penalty using the retention time.

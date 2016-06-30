@@ -26,6 +26,9 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_NOrRACskEeakPPc3RJFSAg" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_PjP7sCskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main" label="Unified Chromatograms (experimental)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif">
       <children xsi:type="basic:PartSashContainer" xmi:id="_qS_7gCyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.3">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_AQSZ4D6qEeaZw7wlcv9jBg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.5" containerData="330" selectedElement="_YbTeUD6oEeaZw7wlcv9jBg">
+          <children xsi:type="advanced:Placeholder" xmi:id="_YbTeUD6oEeaZw7wlcv9jBg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.5" ref="_9qZQcCv3EeaU8utKPKf5-A"/>
+        </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_gTEvACskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.0" containerData="6000" horizontal="true">
           <children xsi:type="basic:PartSashContainer" xmi:id="_ioDCUCskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.1" containerData="2500">
             <children xsi:type="basic:PartStack" xmi:id="_kUeu8CskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.files" containerData="4000">
@@ -39,12 +42,11 @@
               <children xsi:type="advanced:Placeholder" xmi:id="_jzYH0Cs2Eea9JYQkIDiHKQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.4" ref="_EyP-kCvlEeaU8utKPKf5-A"/>
             </children>
           </children>
-          <children xsi:type="advanced:Placeholder" xmi:id="_LPkssCv4EeaU8utKPKf5-A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.5" containerData="250" ref="_9qZQcCv3EeaU8utKPKf5-A"/>
-          <children xsi:type="basic:PartSashContainer" xmi:id="_i_FpUCskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.2" containerData="7250">
+          <children xsi:type="basic:PartSashContainer" xmi:id="_i_FpUCskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.2" containerData="7500">
             <children xsi:type="advanced:Placeholder" xmi:id="_w2dBwCskEeakPPc3RJFSAg" elementId="org.eclipse.ui.editorss" ref="_qjvtkCskEeakPPc3RJFSAg"/>
           </children>
         </children>
-        <children xsi:type="basic:PartSashContainer" xmi:id="_rvP3ECyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.4" containerData="4000" horizontal="true">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_rvP3ECyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.4" containerData="3670" selectedElement="_v9YrcCyHEeakko_bfjza1A" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_v9YrcCyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.0">
             <children xsi:type="advanced:Placeholder" xmi:id="_6Zv8oCyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.6" ref="_5dOqACyHEeakko_bfjza1A"/>
           </children>

@@ -18,8 +18,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
@@ -32,12 +31,11 @@ public class ViewFocusHelper {
 
 	private void initialize(Composite parent) {
 
-		parent.setLayout(new FillLayout());
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(1, true));
+		parent.setLayout(new RowLayout());
 		//
-		Button buttonPeaks = new Button(composite, SWT.PUSH);
+		Button buttonPeaks = new Button(parent, SWT.PUSH);
 		buttonPeaks.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAKS, IApplicationImage.SIZE_16x16));
+		buttonPeaks.setToolTipText("Focus Peaks");
 		buttonPeaks.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -47,8 +45,9 @@ public class ViewFocusHelper {
 			}
 		});
 		//
-		Button buttonPCA = new Button(composite, SWT.PUSH);
+		Button buttonPCA = new Button(parent, SWT.PUSH);
 		buttonPCA.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PCA, IApplicationImage.SIZE_16x16));
+		buttonPCA.setToolTipText("Focus PCA");
 		buttonPCA.addSelectionListener(new SelectionAdapter() {
 
 			@Override

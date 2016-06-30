@@ -239,6 +239,7 @@
     <elements xsi:type="commands:Command" xmi:id="_P7-xUJeIEeKXHuHB-GLIaw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.command.deleteAllQuantitations" commandName="Delete All Quantitations"/>
     <elements xsi:type="commands:Command" xmi:id="_Z3kQsJeIEeKXHuHB-GLIaw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.command.deleteNonQuantifiedPeaks" commandName="Delete NonQuantified Peaks"/>
     <elements xsi:type="commands:Command" xmi:id="_JewTwL7bEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.command.openChromatogram" commandName="Open Chromatogram (MSD)"/>
+    <elements xsi:type="commands:Command" xmi:id="_R-Nt0D6iEeaZw7wlcv9jBg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.command.resetDatabaseCacheMSD" commandName="Reset Database Cache (MSD)"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Cvu30DhkEeKHL-DfrT7KNQ" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Handler" xmi:id="_dO6ZcDhxEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handler.undo" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.handlers.UndoOperationHandler" command="_ZxnzMDhxEeKLl-NzluZ-Gg"/>
@@ -248,6 +249,7 @@
     <elements xsi:type="commands:Handler" xmi:id="_rtcGEJeIEeKXHuHB-GLIaw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handler.deleteAllQuantitations" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.handlers.DeleteAllQuantitationsHandler" command="_P7-xUJeIEeKXHuHB-GLIaw"/>
     <elements xsi:type="commands:Handler" xmi:id="_vBX8AJeIEeKXHuHB-GLIaw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handler.deleteNonQuantifiedPeaks" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.handlers.DeleteNonQuantifiedPeaksHandler" command="_Z3kQsJeIEeKXHuHB-GLIaw"/>
     <elements xsi:type="commands:Handler" xmi:id="_T8rEIL7bEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handler.openChromatogram" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.handlers.OpenHandler" command="_JewTwL7bEeKcwbn54SGPtA"/>
+    <elements xsi:type="commands:Handler" xmi:id="_a_b2sD6iEeaZw7wlcv9jBg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handler.resetDatabaseCacheMSD" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.handlers.ResetDatabaseHandler" command="_R-Nt0D6iEeaZw7wlcv9jBg"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_pHZ9UDhkEeKHL-DfrT7KNQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.main" positionInList="">
     <elements xsi:type="menu:HandledToolItem" xmi:id="_hKwj8DhxEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledtoolitem.undo" label="Undo" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/undo.gif" command="_ZxnzMDhxEeKLl-NzluZ-Gg"/>
@@ -269,6 +271,9 @@
     </elements>
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_QY0oEDiCEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.deleteUnidentifiedPeaks" label="Delete Unidentified Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/delete_unidentified_peaks.gif" command="_nalwADiBEeKLl-NzluZ-Gg">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_mNKB0CaEEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
+    </elements>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_DnBwYD6jEeaZw7wlcv9jBg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.resetDatabaseCacheMSD" label="Reset Database Cache (MSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/reset.gif" command="_R-Nt0D6iEeaZw7wlcv9jBg">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_68-0kD6mEeaZw7wlcv9jBg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_tec7sDpJEeKA5v4GDoyzvg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu" positionInList="after:org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.undo">

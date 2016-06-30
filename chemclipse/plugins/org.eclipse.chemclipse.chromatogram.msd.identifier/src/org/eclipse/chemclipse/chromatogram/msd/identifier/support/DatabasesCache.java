@@ -40,6 +40,7 @@ public class DatabasesCache {
 	 * Don't reload the database on each request, only if it is necessary.
 	 */
 	private static Map<String, Long> fileSizes;
+	private static Map<String, Long> fileModifications;
 	private static Set<String> fileNames;
 	private static Map<String, IMassSpectra> massSpectraDatabases;
 	private static Map<String, Map<String, IScanMSD>> allDatabaseNames = null;
@@ -54,6 +55,14 @@ public class DatabasesCache {
 		 */
 		ionAbundanceComparator = new IonAbundanceComparator(SortOrder.DESC);
 		this.massSpectraFiles = massSpectraFiles;
+		initializeDatabaseMaps();
+	}
+
+	/**
+	 * This method resets the cache.
+	 */
+	public static void resetCache() {
+
 		initializeDatabaseMaps();
 	}
 
@@ -85,7 +94,7 @@ public class DatabasesCache {
 						/*
 						 * Has the content been edited?
 						 */
-						if(file.length() != fileSizes.get(databaseName) || !fileNames.contains(databaseName)) {
+						if(file.length() != fileSizes.get(databaseName) || file.lastModified() != fileModifications.get(databaseName) || !fileNames.contains(databaseName)) {
 							loadMassSpectraFromFile(file, monitor);
 						}
 					}
@@ -191,6 +200,7 @@ public class DatabasesCache {
 		massSpectraDatabases.put(databaseName, massSpectraDatabase);
 		fileNames.add(databaseName);
 		fileSizes.put(databaseName, file.length());
+		fileModifications.put(databaseName, file.lastModified());
 		/*
 		 * Initialize the reference maps.
 		 */
@@ -217,10 +227,14 @@ public class DatabasesCache {
 		}
 	}
 
-	private void initializeDatabaseMaps() {
+	private static void initializeDatabaseMaps() {
 
 		if(fileSizes == null) {
 			fileSizes = new HashMap<String, Long>();
+		}
+		//
+		if(fileModifications == null) {
+			fileModifications = new HashMap<String, Long>();
 		}
 		//
 		if(fileNames == null) {
