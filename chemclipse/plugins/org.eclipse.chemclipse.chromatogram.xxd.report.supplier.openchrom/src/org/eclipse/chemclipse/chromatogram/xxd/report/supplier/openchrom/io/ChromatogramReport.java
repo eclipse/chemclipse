@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
 import org.eclipse.chemclipse.csd.model.core.comparator.ChromatogramPeakCSDComparator;
+import org.eclipse.chemclipse.model.comparator.ChromatogramPeakComparator;
 import org.eclipse.chemclipse.model.comparator.SortOrder;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
@@ -41,7 +42,6 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.comparator.ChromatogramPeakMSDComparator;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonAbundanceComparator;
 import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
@@ -111,7 +111,7 @@ public class ChromatogramReport {
 		 * Print
 		 */
 		List<IChromatogramPeakMSD> peaks = chromatogram.getPeaks();
-		Collections.sort(peaks, new ChromatogramPeakMSDComparator(SortOrder.ASC));
+		Collections.sort(peaks, new ChromatogramPeakComparator(SortOrder.ASC));
 		//
 		printWriter.println("");
 		printWriter.println("NAME: " + chromatogram.getName());
