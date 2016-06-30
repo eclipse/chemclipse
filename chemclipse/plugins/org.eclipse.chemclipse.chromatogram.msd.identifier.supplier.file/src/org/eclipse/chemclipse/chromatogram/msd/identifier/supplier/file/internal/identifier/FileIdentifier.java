@@ -64,7 +64,11 @@ public class FileIdentifier {
 
 		IMassSpectra massSpectra = new MassSpectra();
 		massSpectra.addMassSpectra(massSpectraList);
-		//
+		/*
+		 * The alternate identifier is used, when another plugin tries to use this file identification process.
+		 * The LibraryService uses the identifier to get a mass spectrum of a given target.
+		 * It would then use this plugin instead of the plugin who used this identifier.
+		 */
 		String identifier = IDENTIFIER;
 		String alternateIdentifierId = fileIdentifierSettings.getAlternateIdentifierId();
 		if(!alternateIdentifierId.equals("")) {
@@ -104,6 +108,11 @@ public class FileIdentifier {
 	 */
 	public IPeakIdentificationResults runPeakIdentification(List<IPeakMSD> peaks, IVendorPeakIdentifierSettings peakIdentifierSettings, IPeakIdentifierProcessingInfo processingInfo, IProgressMonitor monitor) throws FileNotFoundException {
 
+		/*
+		 * The alternate identifier is used, when another plugin tries to use this file identification process.
+		 * The LibraryService uses the identifier to get a mass spectrum of a given target.
+		 * It would then use this plugin instead of the plugin who used this identifier.
+		 */
 		IPeakIdentificationResults identificationResults = new PeakIdentificationResults();
 		String identifier = IDENTIFIER;
 		String alternateIdentifierId = peakIdentifierSettings.getAlternateIdentifierId();
@@ -169,6 +178,12 @@ public class FileIdentifier {
 		//
 		int countUnknown = 1;
 		for(IScanMSD unknown : massSpectra.getList()) {
+			/*
+			 * Cancel the operation on demand.
+			 */
+			if(monitor.isCanceled()) {
+				return;
+			}
 			//
 			List<IMassSpectrumTarget> massSpectrumTargets = new ArrayList<IMassSpectrumTarget>();
 			for(int index = 0; index < references.size(); index++) {
@@ -224,6 +239,12 @@ public class FileIdentifier {
 		//
 		int countUnknown = 1;
 		for(IPeakMSD peakMSD : peaks) {
+			/*
+			 * Cancel the operation on demand.
+			 */
+			if(monitor.isCanceled()) {
+				return;
+			}
 			//
 			List<IPeakTarget> peakTargets = new ArrayList<IPeakTarget>();
 			IScanMSD unknown = peakMSD.getPeakModel().getPeakMassSpectrum();
