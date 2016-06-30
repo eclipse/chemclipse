@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -53,8 +54,18 @@ public class ScanView extends AbstractChromatogramSelectionCSDView {
 			IScanCSD selectedScan = chromatogramSelection.getSelectedScan();
 			scanNumberLabel.setText(Integer.toString(selectedScan.getScanNumber()));
 			retentionTimeLabel.setText(decimalFormat.format(selectedScan.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
-			retentionIndexLabel.setText(decimalFormat.format(selectedScan.getRetentionIndex()));
-			totalSignalLabel.setText(decimalFormat.format(selectedScan.getTotalSignal()));
+			//
+			if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+				retentionIndexLabel.setText(Integer.toString((int)selectedScan.getRetentionIndex()));
+			} else {
+				retentionIndexLabel.setText(decimalFormat.format(selectedScan.getRetentionIndex()));
+			}
+			//
+			if(PreferenceSupplier.showAreaWithoutDecimals()) {
+				totalSignalLabel.setText(Integer.toString((int)selectedScan.getTotalSignal()));
+			} else {
+				totalSignalLabel.setText(decimalFormat.format(selectedScan.getTotalSignal()));
+			}
 		}
 	}
 

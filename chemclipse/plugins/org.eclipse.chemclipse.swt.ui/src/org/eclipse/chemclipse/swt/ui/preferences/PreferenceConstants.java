@@ -46,4 +46,7 @@ public class PreferenceConstants {
 	public static final String P_SHOW_CHROMATOGRAM_HAIRLINE_DIVIDER = "drawChromatogramHairlineDivider";
 	//
 	public static final String P_CONDENSE_CYCLE_NUMBER_SCANS = "condenseCycleNumberScans";
+	//
+	public static final String P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS = "showRetentionIndexWithoutDecimals";
+	public static final String P_SHOW_AREA_WITHOUT_DECIMALS = "showAreaWithoutDecimals";
 }

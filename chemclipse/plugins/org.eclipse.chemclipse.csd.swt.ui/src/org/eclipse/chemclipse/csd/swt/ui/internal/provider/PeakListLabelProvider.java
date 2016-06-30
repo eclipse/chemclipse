@@ -13,8 +13,6 @@ package org.eclipse.chemclipse.csd.swt.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.swt.graphics.Image;
-
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
@@ -22,6 +20,8 @@ import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
+import org.eclipse.swt.graphics.Image;
 
 public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 
@@ -51,10 +51,18 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 					text = decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 1: // RI
-					text = decimalFormat.format(peakModel.getPeakMaximum().getRetentionIndex());
+					if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+						text = Integer.toString((int)peakModel.getPeakMaximum().getRetentionIndex());
+					} else {
+						text = decimalFormat.format(peakModel.getPeakMaximum().getRetentionIndex());
+					}
 					break;
 				case 2: // Area
-					text = decimalFormat.format(peak.getIntegratedArea());
+					if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+						text = Integer.toString((int)peak.getIntegratedArea());
+					} else {
+						text = decimalFormat.format(peak.getIntegratedArea());
+					}
 					break;
 				case 3: // Start RT
 					text = decimalFormat.format(peakModel.getStartRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);

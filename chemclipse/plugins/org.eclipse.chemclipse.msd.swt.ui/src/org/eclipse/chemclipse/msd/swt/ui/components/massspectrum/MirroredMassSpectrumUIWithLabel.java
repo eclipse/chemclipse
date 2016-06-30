@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.msd.model.notifier.IMassSpectrumSelectionUpdateNot
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -179,7 +180,11 @@ public class MirroredMassSpectrumUIWithLabel extends Composite implements IMassS
 		builder.append(decimalFormat.format(massSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 		builder.append(" | ");
 		builder.append("RI: ");
-		builder.append(decimalFormat.format(massSpectrum.getRetentionIndex()));
+		if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+			builder.append(Integer.toString((int)massSpectrum.getRetentionIndex()));
+		} else {
+			builder.append(decimalFormat.format(massSpectrum.getRetentionIndex()));
+		}
 		label.setText(builder.toString());
 	}
 }

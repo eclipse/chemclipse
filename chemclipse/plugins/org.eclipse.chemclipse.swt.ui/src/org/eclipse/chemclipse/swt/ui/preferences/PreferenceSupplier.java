@@ -174,6 +174,18 @@ public class PreferenceSupplier {
 		return store.getBoolean(PreferenceConstants.P_CONDENSE_CYCLE_NUMBER_SCANS);
 	}
 
+	public static boolean showRetentionIndexWithoutDecimals() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getBoolean(PreferenceConstants.P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS);
+	}
+
+	public static boolean showAreaWithoutDecimals() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getBoolean(PreferenceConstants.P_SHOW_AREA_WITHOUT_DECIMALS);
+	}
+
 	public static boolean autoAdjustViewIntensityDisplay() {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();

@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.msd.model.notifier.IMassSpectrumSelectionUpdateNot
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -145,7 +146,11 @@ public class PinnedMassSpectrumUIWithLabel extends Composite implements IMassSpe
 			builder.append(decimalFormat.format(actualMassSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 			builder.append(" | ");
 			builder.append("RI: ");
-			builder.append(decimalFormat.format(actualMassSpectrum.getRetentionIndex()));
+			if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+				builder.append(Integer.toString((int)actualMassSpectrum.getRetentionIndex()));
+			} else {
+				builder.append(decimalFormat.format(actualMassSpectrum.getRetentionIndex()));
+			}
 			builder.append(" | ");
 			builder.append("Detector: MS");
 			builder.append(actualMassSpectrum.getMassSpectrometer());

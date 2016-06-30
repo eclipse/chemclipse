@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -40,11 +41,11 @@ public class MassSpectraStackUI extends Composite {
 	private Button buttonPrevious;
 	private Button buttonNext;
 	private Label labelDetails;
-	private NumberFormat numberFormat;
+	private DecimalFormat decimalFormat;
 
 	public MassSpectraStackUI(Composite parent, int style) {
 		super(parent, style);
-		numberFormat = ValueFormat.getDecimalFormatEnglish();
+		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 		initialize(parent);
 	}
 
@@ -173,10 +174,14 @@ public class MassSpectraStackUI extends Composite {
 			builder.append(" | ");
 		}
 		builder.append("RT: ");
-		builder.append(numberFormat.format(actualMassSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
+		builder.append(decimalFormat.format(actualMassSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 		builder.append(" | ");
 		builder.append("RI: ");
-		builder.append(actualMassSpectrum.getRetentionIndex());
+		if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+			builder.append(Integer.toString((int)actualMassSpectrum.getRetentionIndex()));
+		} else {
+			builder.append(decimalFormat.format(actualMassSpectrum.getRetentionIndex()));
+		}
 		builder.append(" | ");
 		builder.append("TIC: ");
 		builder.append(actualMassSpectrum.getTotalSignal());

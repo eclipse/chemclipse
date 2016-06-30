@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -148,7 +149,11 @@ public class LibraryMassSpectrumDifferenceUI extends Composite {
 		builder.append(decimalFormat.format(massSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 		builder.append(" | ");
 		builder.append("RI: ");
-		builder.append(decimalFormat.format(massSpectrum.getRetentionIndex()));
+		if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+			builder.append(Integer.toString((int)massSpectrum.getRetentionIndex()));
+		} else {
+			builder.append(decimalFormat.format(massSpectrum.getRetentionIndex()));
+		}
 		label.setText(builder.toString());
 	}
 }

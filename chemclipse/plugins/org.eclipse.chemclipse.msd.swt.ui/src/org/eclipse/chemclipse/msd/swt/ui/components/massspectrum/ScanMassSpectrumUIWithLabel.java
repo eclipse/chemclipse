@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.notifier.IChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -119,7 +120,11 @@ public class ScanMassSpectrumUIWithLabel extends Composite implements IChromatog
 		builder.append(decimalFormat.format(massSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 		builder.append(" | ");
 		builder.append("RI: ");
-		builder.append(decimalFormat.format(massSpectrum.getRetentionIndex()));
+		if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+			builder.append(Integer.toString((int)massSpectrum.getRetentionIndex()));
+		} else {
+			builder.append(decimalFormat.format(massSpectrum.getRetentionIndex()));
+		}
 		builder.append(" | ");
 		if(massSpectrum instanceof IVendorMassSpectrum) {
 			IVendorMassSpectrum actualMassSpectrum = (IVendorMassSpectrum)massSpectrum;

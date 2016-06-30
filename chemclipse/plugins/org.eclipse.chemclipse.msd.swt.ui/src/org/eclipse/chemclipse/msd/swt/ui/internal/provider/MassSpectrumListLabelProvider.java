@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectr
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.swt.graphics.Image;
 
 public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvider {
@@ -94,7 +95,11 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 				if(retentionIndexNoPrecision == massSpectrum.getRetentionIndex()) {
 					text = Integer.toString(retentionIndexNoPrecision);
 				} else {
-					text = decimalFormat.format(massSpectrum.getRetentionIndex());
+					if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+						text = Integer.toString(retentionIndexNoPrecision);
+					} else {
+						text = decimalFormat.format(massSpectrum.getRetentionIndex());
+					}
 				}
 				break;
 			case 2: // Base Peak
