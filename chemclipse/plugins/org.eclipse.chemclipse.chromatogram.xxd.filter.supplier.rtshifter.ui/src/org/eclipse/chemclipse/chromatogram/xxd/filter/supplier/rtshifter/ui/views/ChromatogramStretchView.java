@@ -138,6 +138,7 @@ public class ChromatogramStretchView extends AbstractChromatogramOverlayView {
 
 		buttonShrinkChromatograms = new Button(composite, SWT.PUSH);
 		buttonShrinkChromatograms.setText("");
+		buttonShrinkChromatograms.setToolTipText("Shrink chromatograms");
 		buttonShrinkChromatograms.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHRINK_CHROMATOGRAMS, IApplicationImage.SIZE_16x16));
 		buttonShrinkChromatograms.addSelectionListener(new SelectionAdapter() {
 
@@ -158,6 +159,7 @@ public class ChromatogramStretchView extends AbstractChromatogramOverlayView {
 
 		buttonAlignToSelectedChromatogram = new Button(composite, SWT.PUSH);
 		buttonAlignToSelectedChromatogram.setText("");
+		buttonAlignToSelectedChromatogram.setToolTipText("Align to selected chromatogram");
 		buttonAlignToSelectedChromatogram.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ALIGN_CHROMATOGRAMS, IApplicationImage.SIZE_16x16));
 		buttonAlignToSelectedChromatogram.addSelectionListener(new SelectionAdapter() {
 
@@ -178,6 +180,7 @@ public class ChromatogramStretchView extends AbstractChromatogramOverlayView {
 
 		buttonStretchChromatograms = new Button(composite, SWT.PUSH);
 		buttonStretchChromatograms.setText("");
+		buttonStretchChromatograms.setToolTipText("Stretch chromatograms");
 		buttonStretchChromatograms.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STRETCH_CHROMATOGRAMS, IApplicationImage.SIZE_16x16));
 		buttonStretchChromatograms.addSelectionListener(new SelectionAdapter() {
 
