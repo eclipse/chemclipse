@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.BaselineDetectorTypeSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramCalculatorTypeSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramFilterTypeSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramIdentifierTypeSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.ChromatogramIntegratorTypeSupplier;
@@ -57,6 +58,7 @@ public class ProcessTypeSupport {
 		processTypeSuppliers.add(new PeakIdentifierTypeSupplier());
 		processTypeSuppliers.add(new PeakIntegratorTypeSupplier());
 		processTypeSuppliers.add(new PeakQuantitationTypeSupplier());
+		processTypeSuppliers.add(new ChromatogramCalculatorTypeSupplier());
 	}
 
 	/**
