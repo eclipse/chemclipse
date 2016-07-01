@@ -31,6 +31,12 @@ public class PreferenceSupplier {
 	private PreferenceSupplier() {
 	}
 
+	public static boolean showChromatogramPositionMarkerBox() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_POSITION_MARKER_BOX);
+	}
+
 	/**
 	 * Returns the x offset value.
 	 * 

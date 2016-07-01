@@ -199,22 +199,24 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 		/*
 		 * The selection position marker draws the selected retention time and abundance.
 		 */
-		Color foregroundColor = PreferenceSupplier.getPositionMarkerForegroundColor();
-		Color backgroundColor = PreferenceSupplier.getPositionMarkerBackgroundColor();
-		selectedPositionMarker = new SelectedPositionMarker(foregroundColor, backgroundColor);
-		plotArea.addCustomPaintListener(selectedPositionMarker);
-		getPlotArea().addMouseMoveListener(new MouseMoveListener() {
+		if(PreferenceSupplier.showChromatogramPositionMarkerBox()) {
+			Color foregroundColor = PreferenceSupplier.getPositionMarkerForegroundColor();
+			Color backgroundColor = PreferenceSupplier.getPositionMarkerBackgroundColor();
+			selectedPositionMarker = new SelectedPositionMarker(foregroundColor, backgroundColor);
+			plotArea.addCustomPaintListener(selectedPositionMarker);
+			getPlotArea().addMouseMoveListener(new MouseMoveListener() {
 
-			@Override
-			public void mouseMove(MouseEvent e) {
+				@Override
+				public void mouseMove(MouseEvent e) {
 
-				mouseMoveMarker.setXPosition(e.x);
-				double abundance = getSelectedAbundance(e.y);
-				int retentionTimeInMilliseconds = getSelectedRetentionTimeAsMilliseconds(e.x);
-				selectedPositionMarker.setActualPosition(retentionTimeInMilliseconds, abundance);
-				getPlotArea().redraw();
-			}
-		});
+					mouseMoveMarker.setXPosition(e.x);
+					double abundance = getSelectedAbundance(e.y);
+					int retentionTimeInMilliseconds = getSelectedRetentionTimeAsMilliseconds(e.x);
+					selectedPositionMarker.setActualPosition(retentionTimeInMilliseconds, abundance);
+					getPlotArea().redraw();
+				}
+			});
+		}
 	}
 
 	@Override

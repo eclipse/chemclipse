@@ -28,6 +28,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.setDefault(PreferenceConstants.P_SHOW_CHROMATOGRAM_POSITION_MARKER_BOX, true);
 		store.setDefault(PreferenceConstants.P_POSITION_MARKER_BACKGROUND_COLOR, "255,255,255");
 		store.setDefault(PreferenceConstants.P_POSITION_MARKER_FOREGROUND_COLOR, "192,192,192");
 		//

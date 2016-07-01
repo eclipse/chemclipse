@@ -38,6 +38,7 @@ public class SWTPreferencePage extends FieldEditorPreferencePage implements IWor
 	@Override
 	protected void createFieldEditors() {
 
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_CHROMATOGRAM_POSITION_MARKER_BOX, "Show chromatogram position marker box.", getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_POSITION_MARKER_BACKGROUND_COLOR, "Position marker background color", getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_POSITION_MARKER_FOREGROUND_COLOR, "Position marker foreground color", getFieldEditorParent()));
 		//

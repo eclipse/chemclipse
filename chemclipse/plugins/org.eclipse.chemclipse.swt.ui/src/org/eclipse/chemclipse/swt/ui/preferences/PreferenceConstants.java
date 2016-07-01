@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
  */
 public class PreferenceConstants {
 
+	public static final String P_SHOW_CHROMATOGRAM_POSITION_MARKER_BOX = "showChromatogramSelectionPositionBox";
 	public static final String P_POSITION_MARKER_BACKGROUND_COLOR = "positionMarkerBackgroundColor";
 	public static final String P_POSITION_MARKER_FOREGROUND_COLOR = "positionMarkerForegroundColor";
 	//
