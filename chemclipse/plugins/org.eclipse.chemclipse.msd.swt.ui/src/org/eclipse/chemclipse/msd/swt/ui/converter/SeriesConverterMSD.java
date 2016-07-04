@@ -407,6 +407,10 @@ public class SeriesConverterMSD {
 		for(IScan scan : scans) {
 			if(scan instanceof IVendorMassSpectrum) {
 				IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scan;
+				/*
+				 * TODO This method makes some problems when using
+				 * Scan Proxies.
+				 */
 				if(massSpectrum.getTargets().size() > 0) {
 					int retentionTime = massSpectrum.getRetentionTime();
 					if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
