@@ -201,4 +201,8 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.feature"
+         version="0.0.0"/>
+
 </feature>
