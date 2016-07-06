@@ -18,13 +18,19 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings.ChemClipsePeakQuantifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings.IChemClipsePeakQuantifierSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.osgi.service.prefs.BackingStoreException;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
+	private static Logger logger = Logger.getLogger(PreferenceSupplier.class);
+	//
+	public static final String P_SELECTED_QUANTITATION_TABLE = "selectedQuantitationTable";
+	public static final String DEF_SELECTED_QUANTITATION_TABLE = "";
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -51,6 +57,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
+		//
+		defaultValues.put(P_SELECTED_QUANTITATION_TABLE, DEF_SELECTED_QUANTITATION_TABLE);
+		//
 		return defaultValues;
 	}
 
@@ -58,6 +67,23 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public IEclipsePreferences getPreferences() {
 
 		return getScopeContext().getNode(getPreferenceNode());
+	}
+
+	public static String getSelectedQuantitationTable() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.get(P_SELECTED_QUANTITATION_TABLE, DEF_SELECTED_QUANTITATION_TABLE);
+	}
+
+	public static void setSelectedQuantitationTable(String selectedQuantitationTable) {
+
+		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			preferences.put(P_SELECTED_QUANTITATION_TABLE, selectedQuantitationTable);
+			preferences.flush();
+		} catch(BackingStoreException e) {
+			logger.warn(e);
+		}
 	}
 
 	public static IChemClipsePeakQuantifierSettings getPeakQuantifierSetting() {

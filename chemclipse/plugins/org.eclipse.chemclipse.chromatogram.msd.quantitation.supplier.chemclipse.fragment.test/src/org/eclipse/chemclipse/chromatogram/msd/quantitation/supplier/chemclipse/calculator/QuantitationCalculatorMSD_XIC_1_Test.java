@@ -1,0 +1,114 @@
+/*******************************************************************************
+ * Copyright (c) 2013, 2016 Dr. Philip Wenig.
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Dr. Philip Wenig - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.calculator;
+
+import java.util.List;
+
+import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.IQuantitationCalculatorMSD;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
+
+public class QuantitationCalculatorMSD_XIC_1_Test extends QuantitationCalculator_XIC_TestCase {
+
+	/*
+	 * UseTIC: false
+	 * CalibrationMethod: LINEAR
+	 * isZeroCrossing: true
+	 */
+	private IQuantitationCalculatorMSD calculator;
+	private List<IQuantitationEntryMSD> quantitationEntries;
+	private IQuantitationEntryMSD quantitationEntry;
+
+	@Override
+	protected void setUp() throws Exception {
+
+		super.setUp();
+		//
+		IQuantitationCompoundMSD quantitationCompound = getQuantitationCompound();
+		List<IQuantitationPeakMSD> quantitationPeaks = getQuantitationPeaks();
+		//
+		quantitationCompound.setUseTIC(false);
+		quantitationCompound.setCalibrationMethod(CalibrationMethod.LINEAR);
+		quantitationCompound.calculateQuantitationSignalsAndConcentrationResponseEntries(quantitationPeaks);
+		//
+		calculator = new QuantitationCalculatorMSD();
+		quantitationCompound.setUseCrossZero(true);
+		quantitationEntries = calculator.calculateQuantitationResults(getReferencePeakMSD_XIC_X(), quantitationCompound);
+		quantitationEntry = quantitationEntries.get(0);
+	}
+
+	@Override
+	protected void tearDown() throws Exception {
+
+		super.tearDown();
+		calculator = null;
+		quantitationEntries = null;
+		quantitationEntry = null;
+	}
+
+	public void testCalculateConcentration_1() {
+
+		assertEquals(8, quantitationEntries.size());
+	}
+
+	public void testCalculateConcentration0_1() {
+
+		quantitationEntry = quantitationEntries.get(0);
+		assertEquals(0.020000000000000004d, quantitationEntry.getConcentration());
+	}
+
+	public void testCalculateConcentration0_2() {
+
+		quantitationEntry = quantitationEntries.get(0);
+		assertEquals(50.0d, quantitationEntry.getIon());
+	}
+
+	public void testCalculateConcentration1_1() {
+
+		quantitationEntry = quantitationEntries.get(6);
+		assertEquals(0.01999999999999998d, quantitationEntry.getConcentration());
+	}
+
+	public void testCalculateConcentration1_2() {
+
+		quantitationEntry = quantitationEntries.get(6);
+		assertEquals(104.0d, quantitationEntry.getIon());
+	}
+
+	public void testCalculateConcentration_2() {
+
+		assertNotNull(quantitationEntry);
+	}
+
+	public void testCalculateConcentration_3() {
+
+		assertEquals("Styrene", quantitationEntry.getName());
+	}
+
+	public void testCalculateConcentration_4() {
+
+		assertEquals("Styrene-Butadiene", quantitationEntry.getChemicalClass());
+	}
+
+	public void testCalculateConcentration_6() {
+
+		assertEquals("mg/ml", quantitationEntry.getConcentrationUnit());
+	}
+
+	public void testCalculateConcentration_7() {
+
+		assertEquals("", quantitationEntry.getDescription());
+	}
+}

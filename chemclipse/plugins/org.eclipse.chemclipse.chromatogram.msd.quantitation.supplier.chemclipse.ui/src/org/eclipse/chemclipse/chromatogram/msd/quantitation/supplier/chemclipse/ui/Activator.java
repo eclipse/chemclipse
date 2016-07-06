@@ -11,8 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui;
 
-import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.osgi.framework.BundleContext;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 
 public class Activator extends AbstractActivatorUI {
 
@@ -29,7 +30,7 @@ public class Activator extends AbstractActivatorUI {
 
 		super.start(context);
 		plugin = this;
-		// initializePreferenceStore(PreferenceSupplier.INSTANCE());
+		initializePreferenceStore(PreferenceSupplier.INSTANCE());
 	}
 
 	/*
