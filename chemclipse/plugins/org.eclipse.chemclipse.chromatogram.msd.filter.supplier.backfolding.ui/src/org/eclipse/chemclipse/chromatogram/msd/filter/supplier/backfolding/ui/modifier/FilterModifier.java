@@ -28,7 +28,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class FilterModifier extends AbstractChromatogramProcessor implements IRunnableWithProgress {
 
-	private static final String description = "Backfolding Filter";
+	private static final String DESCRIPTION = "Backfolding Filter";
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding";
 
 	public FilterModifier(IChromatogramSelectionMSD chromatogramSelection) {
@@ -61,7 +61,7 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 	@Override
 	public String getDescription() {
 
-		return description;
+		return DESCRIPTION;
 	}
 
 	@Override
