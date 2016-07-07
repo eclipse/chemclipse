@@ -27,7 +27,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class IdentifyAlkanesRunnable implements IRunnableWithProgress {
 
-	private static final String description = "Alkane Identifier";
+	private static final String DESCRIPTION = "Alkane Identifier";
 	private static final String IDENTIFIER_ID = "org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.peak";
 	private IChromatogramSelectionMSD chromatogramSelection;
 
@@ -39,7 +39,7 @@ public class IdentifyAlkanesRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask(description, IProgressMonitor.UNKNOWN);
+			monitor.beginTask(DESCRIPTION, IProgressMonitor.UNKNOWN);
 			//
 			List<IChromatogramPeakMSD> peaks = chromatogramSelection.getChromatogramMSD().getPeaks(chromatogramSelection);
 			List<IPeakMSD> peakList = new ArrayList<IPeakMSD>();
