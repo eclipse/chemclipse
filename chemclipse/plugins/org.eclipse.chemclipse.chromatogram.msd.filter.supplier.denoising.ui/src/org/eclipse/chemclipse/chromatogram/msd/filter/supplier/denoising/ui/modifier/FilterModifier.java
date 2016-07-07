@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.Display;
 public class FilterModifier extends AbstractChromatogramProcessor implements IRunnableWithProgress {
 
 	private static final Logger logger = Logger.getLogger(FilterModifier.class);
-	private static final String description = "Denoising Filter";
+	private static final String DESCRIPTION = "Denoising Filter";
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising";
 	private IEventBroker eventBroker;
 
@@ -118,7 +118,7 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 	@Override
 	public String getDescription() {
 
-		return description;
+		return DESCRIPTION;
 	}
 
 	@Override
