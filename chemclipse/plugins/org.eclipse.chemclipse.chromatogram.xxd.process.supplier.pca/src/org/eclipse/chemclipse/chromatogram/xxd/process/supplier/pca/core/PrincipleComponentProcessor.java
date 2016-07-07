@@ -596,12 +596,15 @@ public class PrincipleComponentProcessor {
 
 		Map<String, IPeaks> peakMap = new HashMap<String, IPeaks>();
 		for(File peakFile : peakFiles) {
-			IPeakImportConverterProcessingInfo processingInfo = PeakConverterMSD.convert(peakFile, monitor);
 			try {
+				/*
+				 * Try to catch exceptions if wrong files have been selected.
+				 */
+				IPeakImportConverterProcessingInfo processingInfo = PeakConverterMSD.convert(peakFile, monitor);
 				IPeaks peaks = processingInfo.getPeaks();
 				String name = extractNameFromFile(peakFile, "n.a.");
 				peakMap.put(name, peaks);
-			} catch(TypeCastException e) {
+			} catch(Exception e) {
 				logger.warn(e);
 			}
 		}
