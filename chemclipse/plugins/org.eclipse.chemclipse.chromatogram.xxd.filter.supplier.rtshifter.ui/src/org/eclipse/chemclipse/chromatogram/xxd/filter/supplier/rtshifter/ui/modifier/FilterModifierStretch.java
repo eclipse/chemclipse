@@ -25,7 +25,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class FilterModifierStretch extends AbstractChromatogramProcessor implements IRunnableWithProgress {
 
-	private static final String description = "RTStretch Filter";
+	private static final String DESCRIPTION = "RTStretch Filter";
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtstretcher";
 
 	public FilterModifierStretch(IChromatogramSelection chromatogramSelection) {
@@ -46,7 +46,7 @@ public class FilterModifierStretch extends AbstractChromatogramProcessor impleme
 	@Override
 	public String getDescription() {
 
-		return description;
+		return DESCRIPTION;
 	}
 
 	@Override

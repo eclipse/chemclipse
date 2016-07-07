@@ -26,7 +26,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class FilterModifierShift extends AbstractChromatogramProcessor implements IRunnableWithProgress {
 
-	private static final String description = "RTShifter Filter";
+	private static final String DESCRIPTION = "RTShifter Filter";
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter";
 	private int millisecondsToShift;
 
@@ -50,7 +50,7 @@ public class FilterModifierShift extends AbstractChromatogramProcessor implement
 	@Override
 	public String getDescription() {
 
-		return description;
+		return DESCRIPTION;
 	}
 
 	@Override
