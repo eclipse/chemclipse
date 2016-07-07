@@ -28,7 +28,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class ClassifierEvaluator extends AbstractChromatogramProcessor implements IRunnableWithProgress {
 
-	private static final String description = "WNC Classifier";
+	private static final String DESCRIPTION = "WNC Classifier";
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc";
 
 	public ClassifierEvaluator(IChromatogramSelectionMSD chromatogramSelection) {
@@ -58,7 +58,7 @@ public class ClassifierEvaluator extends AbstractChromatogramProcessor implement
 	@Override
 	public String getDescription() {
 
-		return description;
+		return DESCRIPTION;
 	}
 
 	@Override
