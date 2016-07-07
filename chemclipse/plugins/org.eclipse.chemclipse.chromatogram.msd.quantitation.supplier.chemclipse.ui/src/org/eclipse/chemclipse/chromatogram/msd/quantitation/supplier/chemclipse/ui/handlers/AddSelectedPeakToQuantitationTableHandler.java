@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabases;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.QuantDatabases;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.NoQuantitationTableAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences.PreferenceSupplier;
@@ -62,8 +61,7 @@ public class AddSelectedPeakToQuantitationTableHandler implements EventHandler {
 				 * Open a wizard to get relevant information.
 				 */
 				try {
-					IQuantDatabases databasesQuant = new QuantDatabases();
-					IQuantDatabase database = databasesQuant.getQuantDatabase();
+					IQuantDatabase database = QuantDatabases.getQuantDatabase();
 					AddPeakToQuantitationTableWizard wizard = new AddPeakToQuantitationTableWizard(database, chromatogramPeakMSD);
 					WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 					if(dialog.open() == Dialog.OK) {

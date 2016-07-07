@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabaseProxy;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabases;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.QuantDatabases;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller.QuantitationCompoundEntryEdit;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.NoQuantitationTableAvailableException;
@@ -71,7 +69,6 @@ public class QuantitationCompoundsUI extends AbstractTableViewerUI {
 		this.eventBroker = eventBroker;
 		map = new HashMap<String, Object>();
 		subscribeToDatabaseUpdates();
-		// setDatabaseInput();
 	}
 
 	@Override
@@ -372,12 +369,12 @@ public class QuantitationCompoundsUI extends AbstractTableViewerUI {
 
 				public void handleEvent(Event event) {
 
-					Object quantDatabaseProxy = event.getProperty(IChemClipseQuantitationEvents.PROPERTY_QUANTITATION_TABLE_NAME);
-					if(quantDatabaseProxy instanceof IQuantDatabaseProxy) {
+					Object databaseName = event.getProperty(IChemClipseQuantitationEvents.PROPERTY_QUANTITATION_TABLE_NAME);
+					if(databaseName instanceof String) {
 						/*
 						 * Update the database.
 						 */
-						setDatabaseInput((IQuantDatabaseProxy)quantDatabaseProxy);
+						setDatabaseInput((String)databaseName);
 					} else {
 						/*
 						 * If a null value will be published.
@@ -390,19 +387,18 @@ public class QuantitationCompoundsUI extends AbstractTableViewerUI {
 		}
 	}
 
-	private void setDatabaseInput(IQuantDatabaseProxy quantDatabaseProxy) {
+	private void setDatabaseInput(String databaseName) {
 
 		/*
 		 * Set the selected database entries.
 		 */
 		try {
-			IQuantDatabases databases = new QuantDatabases();
-			database = databases.getQuantDatabase(quantDatabaseProxy.getDatabaseName());
-			label.setText("Quantitation Table: " + quantDatabaseProxy.getDatabaseName());
+			label.setText("Quantitation Table: " + databaseName);
+			database = QuantDatabases.getQuantDatabase(databaseName);
 			setTableViewerInput();
 		} catch(NoQuantitationTableAvailableException e) {
-			logger.warn(e);
 			clearDatabaseInput();
+			logger.warn(e);
 		}
 	}
 

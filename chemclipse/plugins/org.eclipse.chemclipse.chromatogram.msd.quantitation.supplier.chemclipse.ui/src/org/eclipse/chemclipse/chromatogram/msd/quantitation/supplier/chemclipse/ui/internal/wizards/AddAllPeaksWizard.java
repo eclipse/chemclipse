@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabases;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.QuantDatabases;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.NoQuantitationTableAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.QuantitationCompoundAlreadyExistsException;
@@ -67,8 +66,7 @@ public class AddAllPeaksWizard extends Wizard {
 			 * Library Info
 			 */
 			try {
-				IQuantDatabases databasesQuant = new QuantDatabases();
-				IQuantDatabase database = databasesQuant.getQuantDatabase();
+				IQuantDatabase database = QuantDatabases.getQuantDatabase();
 				for(IChromatogramPeakMSD peak : peaks) {
 					//
 					String name = getPeakTargetName(peak);

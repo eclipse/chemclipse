@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.swt;
 
+import java.util.Date;
+
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabaseProxy;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabases;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.QuantDatabases;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.NoQuantitationTableAvailableException;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.QuantitationTableAlreadyExistsException;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.events.IChemClipseQuantitationEvents;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.DatabaseTableComparator;
@@ -95,9 +97,8 @@ public class DatabasesUI extends AbstractTableViewerUI {
 
 	private void setTableViewerInput() {
 
-		IQuantDatabases databasesQuant = new QuantDatabases();
 		try {
-			getTableViewer().setInput(databasesQuant.listAvailableDatabaseProxies());
+			getTableViewer().setInput(QuantDatabases.listAvailableDatabaseProxies());
 		} catch(NoQuantitationTableAvailableException e) {
 			logger.warn(e);
 		}
@@ -158,7 +159,11 @@ public class DatabasesUI extends AbstractTableViewerUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				System.out.println("Create a new quantitation table.");
+				try {
+					QuantDatabases.createDatabase(Long.toString(new Date().getTime()));
+				} catch(QuantitationTableAlreadyExistsException e1) {
+					logger.warn(e1);
+				}
 			}
 		});
 	}

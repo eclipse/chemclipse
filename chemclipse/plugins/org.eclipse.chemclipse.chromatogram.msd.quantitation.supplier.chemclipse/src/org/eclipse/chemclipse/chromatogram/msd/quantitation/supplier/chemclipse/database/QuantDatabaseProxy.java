@@ -24,20 +24,19 @@ public class QuantDatabaseProxy implements IQuantDatabaseProxy {
 	@Override
 	public String getDatabaseName() {
 
-		return "TODO Proxy NAME";
+		return databaseName;
 	}
 
 	@Override
 	public String getDatabaseUrl() {
 
-		return "TODO Proxy URL";
+		return QuantDatabases.getStoragePath().getAbsolutePath();
 	}
 
 	@Override
 	public IQuantDatabase getDatabase() throws NoQuantitationTableAvailableException {
 
-		QuantDatabases databases = new QuantDatabases();
-		IQuantDatabase database = databases.getQuantDatabase(databaseName);
+		IQuantDatabase database = QuantDatabases.getQuantDatabase(databaseName);
 		return database;
 	}
 }

@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.processing.IPeakQuan
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.processing.PeakQuantifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabases;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.QuantDatabases;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.NoQuantitationTableAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
@@ -46,8 +45,7 @@ public class PeakQuantitationCalculator {
 		IPeakQuantifierProcessingInfo processingInfo = new PeakQuantifierProcessingInfo();
 		IQuantDatabase database;
 		try {
-			IQuantDatabases databases = new QuantDatabases();
-			database = databases.getQuantDatabase();
+			database = QuantDatabases.getQuantDatabase();
 			//
 			QuantitationCalculatorMSD calculator = new QuantitationCalculatorMSD();
 			List<IQuantitationCompoundMSD> quantitationCompounds = database.getQuantitationCompounds();
