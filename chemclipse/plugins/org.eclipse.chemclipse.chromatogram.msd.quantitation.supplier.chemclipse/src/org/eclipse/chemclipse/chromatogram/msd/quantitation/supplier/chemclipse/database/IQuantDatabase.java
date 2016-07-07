@@ -14,58 +14,35 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationCompoundDocument;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationPeakDocument;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.QuantitationCompoundAlreadyExistsException;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
 
 public interface IQuantDatabase {
 
-	/*
-	 * Create
-	 */
-	long createQuantitationCompoundDocument(IQuantitationCompoundMSD quantitationCompoundMSD) throws QuantitationCompoundAlreadyExistsException;
+	IQuantitationCompoundMSD getQuantitationCompound(String name);
 
-	long createQuantitationPeakDocument(IQuantitationPeakMSD quantitationPeakMSD, long quantitationCompoundId);
+	void addQuantitationCompound(IQuantitationCompoundMSD quantitationCompound) throws QuantitationCompoundAlreadyExistsException;
 
-	/*
-	 * Get
-	 */
-	IQuantitationCompoundDocument getQuantitationCompoundDocument(long id);
+	List<IQuantitationCompoundMSD> getQuantitationCompounds();
 
-	IQuantitationCompoundDocument getQuantitationCompoundDocument(String name);
+	List<String> getQuantitationCompoundNames();
 
-	IQuantitationPeakDocument getQuantitationPeakDocument(long id);
+	String getQuantitationCompoundConcentrationUnit(String name);
 
-	List<IQuantitationCompoundDocument> getQuantitationCompoundDocuments();
+	long countQuantitationCompounds();
 
-	List<String> getQuantitationCompoundDocumentNames();
-
-	List<IQuantitationPeakDocument> getQuantitationPeakDocuments(IQuantitationCompoundDocument quantitationCompoundDocument);
-
-	String getQuantitationCompoundDocumentConcentrationUnit(String name); // TODO
-
-	/*
-	 * Count
-	 */
-	long countQuantitationCompoundDocuments();
-
-	/*
-	 * Exists
-	 */
 	boolean isQuantitationCompoundAlreadyAvailable(String name);
 
-	/*
-	 * Delete
-	 */
-	void deleteQuantitationCompoundDocument(IQuantitationCompoundDocument quantitationCompoundDocument);
+	void deleteQuantitationCompound(IQuantitationCompoundMSD quantitationCompound);
 
-	void deleteQuantitationCompoundDocuments(List<IQuantitationCompoundDocument> quantitationCompoundDocuments);
+	void deleteQuantitationCompound(List<IQuantitationCompoundMSD> quantitationCompounds);
 
-	void deleteAllQuantitationCompoundDocuments();
+	void deleteAllQuantitationCompounds();
 
-	void deleteQuantitationPeakDocument(IQuantitationCompoundDocument quantitationCompoundDocument, long id);
+	List<IQuantitationPeakMSD> getQuantitationPeaks(IQuantitationCompoundMSD quantitationCompound);
 
-	void deleteQuantitationPeakDocuments(IQuantitationCompoundDocument quantitationCompoundDocument, Set<Long> ids);
+	void deleteQuantitationPeakDocument(IQuantitationCompoundMSD quantitationCompound, IQuantitationPeakMSD quantitationPeak);
+
+	void deleteQuantitationPeakDocuments(IQuantitationCompoundMSD quantitationCompound, Set<IQuantitationPeakMSD> quantitationPeaks);
 }

@@ -11,10 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider;
 
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationCompoundDocument;
 
 public class ConcentrationResponseContentProvider implements IStructuredContentProvider {
 
@@ -31,8 +30,8 @@ public class ConcentrationResponseContentProvider implements IStructuredContentP
 	@Override
 	public Object[] getElements(Object inputElement) {
 
-		if(inputElement instanceof IQuantitationCompoundDocument) {
-			IQuantitationCompoundDocument document = (IQuantitationCompoundDocument)inputElement;
+		if(inputElement instanceof IQuantitationCompoundMSD) {
+			IQuantitationCompoundMSD document = (IQuantitationCompoundMSD)inputElement;
 			Object[] elements = document.getConcentrationResponseEntriesMSD().getList().toArray();
 			return elements;
 		}

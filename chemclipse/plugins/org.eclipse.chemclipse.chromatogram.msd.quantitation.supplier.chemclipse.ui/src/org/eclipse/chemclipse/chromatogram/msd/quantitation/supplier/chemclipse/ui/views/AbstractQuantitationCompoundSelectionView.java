@@ -11,20 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.views;
 
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.events.IChemClipseQuantitationEvents;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
+import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSelectionView;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationCompoundDocument;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.events.IChemClipseQuantitationEvents;
-import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSelectionView;
-
 public abstract class AbstractQuantitationCompoundSelectionView extends AbstractSelectionView implements IQuantitationCompoundSelectionView {
 
-	private IQuantitationCompoundDocument quantitationCompoundDocument;
+	private IQuantitationCompoundMSD quantitationCompoundMSD;
 	private IQuantDatabase database;
 	private IEventBroker eventBroker;
 	private EventHandler eventHandler;
@@ -36,15 +35,15 @@ public abstract class AbstractQuantitationCompoundSelectionView extends Abstract
 	}
 
 	@Override
-	public IQuantitationCompoundDocument getQuantitationCompoundDocument() {
+	public IQuantitationCompoundMSD getQuantitationCompoundDocument() {
 
-		return quantitationCompoundDocument;
+		return quantitationCompoundMSD;
 	}
 
 	@Override
-	public void setQuantitationCompoundDocument(IQuantitationCompoundDocument quantitationCompoundDocument) {
+	public void setQuantitationCompoundDocument(IQuantitationCompoundMSD quantitationCompoundMSD) {
 
-		this.quantitationCompoundDocument = quantitationCompoundDocument;
+		this.quantitationCompoundMSD = quantitationCompoundMSD;
 	}
 
 	@Override
@@ -83,13 +82,13 @@ public abstract class AbstractQuantitationCompoundSelectionView extends Abstract
 
 					Object objectDocument = event.getProperty(IChemClipseQuantitationEvents.PROPERTY_QUANTITATION_COMPOUND_DOCUMENT);
 					Object objectDatabase = event.getProperty(IChemClipseQuantitationEvents.PROPERTY_DATABASE);
-					if(objectDocument instanceof IQuantitationCompoundDocument && objectDatabase instanceof IQuantDatabase) {
+					if(objectDocument instanceof IQuantitationCompoundMSD && objectDatabase instanceof IQuantDatabase) {
 						/*
 						 * Ensures that the objects are valid.
 						 */
-						quantitationCompoundDocument = (IQuantitationCompoundDocument)objectDocument;
+						quantitationCompoundMSD = (IQuantitationCompoundMSD)objectDocument;
 						database = (IQuantDatabase)objectDatabase;
-						update(quantitationCompoundDocument, database);
+						update(quantitationCompoundMSD, database);
 					} else {
 						/*
 						 * Unload the objects.

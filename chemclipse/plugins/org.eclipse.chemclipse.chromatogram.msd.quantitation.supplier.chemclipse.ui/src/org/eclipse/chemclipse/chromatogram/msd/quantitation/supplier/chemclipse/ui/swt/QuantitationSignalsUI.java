@@ -14,6 +14,15 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller.QuantitationSignalEntryEdit;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.QuantitationSignalsContentProvider;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.QuantitationSignalsLabelProvider;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.QuantitationSignalsTableComparator;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.dialogs.QuantitationSignalEntryEditDialog;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalMSD;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalsMSD;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -28,20 +37,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller.QuantitationSignalEntryEdit;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationCompoundDocument;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.QuantitationSignalsContentProvider;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.QuantitationSignalsLabelProvider;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.QuantitationSignalsTableComparator;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.dialogs.QuantitationSignalEntryEditDialog;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalsMSD;
-
 public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQuantitationCompoundUpdater {
 
 	private static final String MESSAGE_BOX_TEXT = "Quantitation Signal";
-	private IQuantitationCompoundDocument quantitationCompoundDocument;
+	private IQuantitationCompoundMSD quantitationCompoundDocument;
 
 	public QuantitationSignalsUI(Composite parent, int style) {
 		parent.setLayout(new FillLayout());
@@ -53,7 +52,7 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 	}
 
 	@Override
-	public void update(IQuantitationCompoundDocument quantitationCompoundDocument, IQuantDatabase database) {
+	public void update(IQuantitationCompoundMSD quantitationCompoundDocument, IQuantDatabase database) {
 
 		this.quantitationCompoundDocument = quantitationCompoundDocument;
 		//
@@ -127,7 +126,7 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 						 */
 						IQuantitationSignalMSD quantitationSignalMSD = quantitationSignalEntryEdit.getQuantitationSignalMSD();
 						if(quantitationSignalMSD != null) {
-							quantitationCompoundDocument.addQuantitationSignalMSD(quantitationSignalMSD);
+							quantitationCompoundDocument.getQuantitationSignalsMSD().add(quantitationSignalMSD);
 							setTableViewerInput();
 						}
 					}
@@ -204,7 +203,7 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 					 */
 					int decision = showQuestion(MESSAGE_BOX_TEXT, "Would you like to delete the selected quantitation signals?");
 					if(decision == SWT.YES) {
-						quantitationCompoundDocument.removeQuantitationSignalsMSD(quantitationSignalsMSD);
+						quantitationCompoundDocument.getQuantitationSignalsMSD().removeAll(quantitationSignalsMSD);
 						setTableViewerInput();
 					}
 				} else {
@@ -229,7 +228,7 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 				 */
 				int decision = showQuestion(MESSAGE_BOX_TEXT, "Would you like to delete all response entry?");
 				if(decision == SWT.YES) {
-					quantitationCompoundDocument.removeAllQuantitationSignalsMSD();
+					quantitationCompoundDocument.getQuantitationSignalsMSD().clear();
 					setTableViewerInput();
 				}
 			}

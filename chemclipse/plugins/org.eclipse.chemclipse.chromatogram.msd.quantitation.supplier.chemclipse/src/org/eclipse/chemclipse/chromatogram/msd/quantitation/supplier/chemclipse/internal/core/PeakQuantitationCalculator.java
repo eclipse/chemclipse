@@ -20,10 +20,10 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuanti
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabases;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.QuantDatabases;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationCompoundDocument;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.NoQuantitationTableAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.calculator.QuantitationCalculatorMSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
@@ -50,14 +50,14 @@ public class PeakQuantitationCalculator {
 			database = databases.getQuantDatabase();
 			//
 			QuantitationCalculatorMSD calculator = new QuantitationCalculatorMSD();
-			List<IQuantitationCompoundDocument> quantitationCompoundDocuments = database.getQuantitationCompoundDocuments();
+			List<IQuantitationCompoundMSD> quantitationCompounds = database.getQuantitationCompounds();
 			//
 			for(IPeakMSD peakMSD : peaks) {
 				/*
 				 * Try to quantify the selected peak.
 				 * The results will be added to the peak.
 				 */
-				List<IQuantitationCompoundMSD> quantitationCompoundsMSD = getQuantitationEntries(quantitationCompoundDocuments, peakMSD);
+				List<IQuantitationCompoundMSD> quantitationCompoundsMSD = getQuantitationEntries(quantitationCompounds, peakMSD);
 				List<IQuantitationEntryMSD> entries = calculator.calculateQuantitationResults(peakMSD, quantitationCompoundsMSD, processingInfo);
 				for(IQuantitationEntryMSD quantitationEntry : entries) {
 					peakMSD.addQuantitationEntry(quantitationEntry);
@@ -70,17 +70,18 @@ public class PeakQuantitationCalculator {
 		return processingInfo;
 	}
 
-	private List<IQuantitationCompoundMSD> getQuantitationEntries(List<IQuantitationCompoundDocument> quantitationCompoundDocuments, IPeakMSD peakMSD) {
+	private List<IQuantitationCompoundMSD> getQuantitationEntries(List<IQuantitationCompoundMSD> quantitationCompounds, IPeakMSD peakMSD) {
 
 		List<IQuantitationCompoundMSD> quantitationCompoundsMSD = new ArrayList<IQuantitationCompoundMSD>();
-		for(IQuantitationCompoundDocument quantitationCompoundDocument : quantitationCompoundDocuments) {
+		for(IQuantitationCompoundMSD quantitationCompound : quantitationCompounds) {
 			/*
 			 * Add the compound if it matches certain conditions:
 			 * Retention Time Window
 			 */
 			int retentionTime = peakMSD.getPeakModel().getRetentionTimeAtPeakMaximum();
-			if(retentionTime >= quantitationCompoundDocument.getLowerRetentionTimeLimit() && retentionTime <= quantitationCompoundDocument.getUpperRetentionTimeLimit()) {
-				quantitationCompoundsMSD.add(quantitationCompoundDocument.getQuantitationCompound());
+			IRetentionTimeWindow retentionTimeWindow = quantitationCompound.getRetentionTimeWindow();
+			if(retentionTimeWindow.isRetentionTimeInWindow(retentionTime)) {
+				quantitationCompoundsMSD.add(quantitationCompound);
 			}
 		}
 		return quantitationCompoundsMSD;

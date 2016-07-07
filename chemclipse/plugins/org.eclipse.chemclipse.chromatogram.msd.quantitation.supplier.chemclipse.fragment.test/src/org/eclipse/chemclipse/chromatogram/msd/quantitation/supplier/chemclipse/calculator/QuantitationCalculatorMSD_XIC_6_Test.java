@@ -46,8 +46,8 @@ public class QuantitationCalculatorMSD_XIC_6_Test extends QuantitationCalculator
 		quantitationCompound.setCalibrationMethod(CalibrationMethod.LINEAR);
 		quantitationCompound.calculateQuantitationSignalsAndConcentrationResponseEntries(quantitationPeaks);
 		//
-		quantitationSignals = quantitationCompound.getQuantitationSignals();
-		concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntries();
+		quantitationSignals = quantitationCompound.getQuantitationSignalsMSD();
+		concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntriesMSD();
 	}
 
 	@Override

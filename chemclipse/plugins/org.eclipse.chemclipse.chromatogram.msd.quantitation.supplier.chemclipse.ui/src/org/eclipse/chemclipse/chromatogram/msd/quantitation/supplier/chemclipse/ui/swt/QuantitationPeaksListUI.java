@@ -19,8 +19,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationCompoundDocument;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationPeakDocument;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.events.IChemClipseQuantitationEvents;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.QuantitationPeaksContentProvider;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.QuantitationPeaksLabelProvider;
@@ -47,7 +45,7 @@ import org.eclipse.swt.widgets.Composite;
 public class QuantitationPeaksListUI extends AbstractTableViewerUI implements IQuantitationCompoundUpdater {
 
 	private static final String MESSAGE_BOX_TEXT = "Quantitation Peaks";
-	private IQuantitationCompoundDocument quantitationCompoundDocument;
+	private IQuantitationCompoundMSD quantitationCompoundDocument;
 	private IEventBroker eventBroker;
 	private IQuantDatabase database;
 	private Map<String, Object> map;
@@ -65,7 +63,7 @@ public class QuantitationPeaksListUI extends AbstractTableViewerUI implements IQ
 	}
 
 	@Override
-	public void update(IQuantitationCompoundDocument quantitationCompoundDocument, IQuantDatabase database) {
+	public void update(IQuantitationCompoundMSD quantitationCompoundDocument, IQuantDatabase database) {
 
 		this.database = database;
 		this.quantitationCompoundDocument = quantitationCompoundDocument;
@@ -99,9 +97,9 @@ public class QuantitationPeaksListUI extends AbstractTableViewerUI implements IQ
 				/*
 				 * Show the peak and the mass spectrum.
 				 */
-				IQuantitationPeakDocument quantitationPeakDocument = getSelectedQuantitationPeakDocument();
+				IQuantitationPeakMSD quantitationPeakDocument = getSelectedQuantitationPeak();
 				if(quantitationPeakDocument != null) {
-					IPeakMSD peakMSD = quantitationPeakDocument.getPeakMSD();
+					IPeakMSD peakMSD = quantitationPeakDocument.getReferencePeakMSD();
 					PeakSelectionUpdateNotifier.fireUpdateChange(peakMSD, true);
 				}
 			}
@@ -112,7 +110,7 @@ public class QuantitationPeaksListUI extends AbstractTableViewerUI implements IQ
 	private void setTableViewerInput() {
 
 		if(database != null && quantitationCompoundDocument != null) {
-			List<IQuantitationPeakDocument> quantitationPeakDocuments = database.getQuantitationPeakDocuments(quantitationCompoundDocument);
+			List<IQuantitationPeakMSD> quantitationPeakDocuments = database.getQuantitationPeaks(quantitationCompoundDocument);
 			getTableViewer().setInput(quantitationPeakDocuments);
 		} else {
 			getTableViewer().setInput(null);
@@ -143,9 +141,9 @@ public class QuantitationPeaksListUI extends AbstractTableViewerUI implements IQ
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IQuantitationPeakDocument quantitationPeakDocument = getSelectedQuantitationPeakDocument();
+				IQuantitationPeakMSD quantitationPeakDocument = getSelectedQuantitationPeak();
 				if(quantitationCompoundDocument != null && quantitationPeakDocument != null && database != null) {
-					database.deleteQuantitationPeakDocument(quantitationCompoundDocument, quantitationPeakDocument.getDocumentId());
+					database.deleteQuantitationPeakDocument(quantitationCompoundDocument, quantitationPeakDocument);
 					triggerCompoundDocumentUpdateEvent();
 				}
 			}
@@ -162,14 +160,9 @@ public class QuantitationPeaksListUI extends AbstractTableViewerUI implements IQ
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				List<IQuantitationPeakDocument> quantitationPeakDocuments = getSelectedQuantitationPeakDocuments();
+				Set<IQuantitationPeakMSD> quantitationPeakDocuments = new HashSet<IQuantitationPeakMSD>(getSelectedQuantitationPeaks());
 				if(quantitationCompoundDocument != null && quantitationPeakDocuments != null && database != null) {
-					Set<Long> ids = new HashSet<Long>();
-					for(IQuantitationPeakDocument quantitationPeakDocument : quantitationPeakDocuments) {
-						ids.add(quantitationPeakDocument.getDocumentId());
-					}
-					//
-					database.deleteQuantitationPeakDocuments(quantitationCompoundDocument, ids);
+					database.deleteQuantitationPeakDocuments(quantitationCompoundDocument, quantitationPeakDocuments);
 					triggerCompoundDocumentUpdateEvent();
 				}
 			}
@@ -188,23 +181,19 @@ public class QuantitationPeaksListUI extends AbstractTableViewerUI implements IQ
 
 				if(database != null) {
 					//
-					List<IQuantitationPeakDocument> quantitationPeakDocuments = database.getQuantitationPeakDocuments(quantitationCompoundDocument);
+					List<IQuantitationPeakMSD> quantitationPeakDocuments = database.getQuantitationPeaks(quantitationCompoundDocument);
 					if(quantitationPeakDocuments.size() > 0) {
 						if(showQuestion(MESSAGE_BOX_TEXT, "Would you like to create new concentration response and signal tables?") == SWT.YES) {
-							IQuantitationCompoundMSD quantitationCompoundMSD = quantitationCompoundDocument.getQuantitationCompound();
+							IQuantitationCompoundMSD quantitationCompoundMSD = quantitationCompoundDocument;
 							List<IQuantitationPeakMSD> quantitationPeaks = new ArrayList<IQuantitationPeakMSD>();
-							for(IQuantitationPeakDocument quantitationPeakDocument : quantitationPeakDocuments) {
-								IPeakMSD referencePeakMSD = quantitationPeakDocument.getPeakMSD();
+							for(IQuantitationPeakMSD quantitationPeakDocument : quantitationPeakDocuments) {
+								IPeakMSD referencePeakMSD = quantitationPeakDocument.getReferencePeakMSD();
 								double concentration = quantitationPeakDocument.getConcentration();
 								String concentrationUnit = quantitationPeakDocument.getConcentrationUnit();
 								IQuantitationPeakMSD quantitationPeakMSD = new QuantitationPeakMSD(referencePeakMSD, concentration, concentrationUnit);
 								quantitationPeaks.add(quantitationPeakMSD);
 							}
 							quantitationCompoundMSD.calculateQuantitationSignalsAndConcentrationResponseEntries(quantitationPeaks);
-							quantitationCompoundDocument.setQuantitationCompound(quantitationCompoundMSD);
-							System.out.println("Save");
-							// quantitationCompoundDocument.save();
-							//
 							triggerCompoundDocumentUpdateEvent();
 						}
 					} else {
@@ -229,23 +218,23 @@ public class QuantitationPeaksListUI extends AbstractTableViewerUI implements IQ
 		}
 	}
 
-	private IQuantitationPeakDocument getSelectedQuantitationPeakDocument() {
+	private IQuantitationPeakMSD getSelectedQuantitationPeak() {
 
-		IQuantitationPeakDocument quantitationPeakDocument = null;
+		IQuantitationPeakMSD quantitationPeakDocument = null;
 		Object element = getSelectedTableItem();
-		if(element instanceof IQuantitationPeakDocument) {
-			quantitationPeakDocument = (IQuantitationPeakDocument)element;
+		if(element instanceof IQuantitationPeakMSD) {
+			quantitationPeakDocument = (IQuantitationPeakMSD)element;
 		}
 		return quantitationPeakDocument;
 	}
 
-	private List<IQuantitationPeakDocument> getSelectedQuantitationPeakDocuments() {
+	private List<IQuantitationPeakMSD> getSelectedQuantitationPeaks() {
 
-		List<IQuantitationPeakDocument> quantitationPeakDocuments = new ArrayList<IQuantitationPeakDocument>();
+		List<IQuantitationPeakMSD> quantitationPeakDocuments = new ArrayList<IQuantitationPeakMSD>();
 		List<Object> elements = getSelectedTableItems();
 		for(Object element : elements) {
-			if(element instanceof IQuantitationPeakDocument) {
-				IQuantitationPeakDocument quantitationPeakDocument = (IQuantitationPeakDocument)element;
+			if(element instanceof IQuantitationPeakMSD) {
+				IQuantitationPeakMSD quantitationPeakDocument = (IQuantitationPeakMSD)element;
 				quantitationPeakDocuments.add(quantitationPeakDocument);
 			}
 		}

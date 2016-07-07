@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -24,8 +25,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
 
 public class SelectDocumentPage extends WizardPage {
 
@@ -98,7 +97,7 @@ public class SelectDocumentPage extends WizardPage {
 		//
 		comboQuantitationCompoundNames = new Combo(parent, SWT.NONE);
 		if(database != null) {
-			List<String> quantitationCompoundNames = database.getQuantitationCompoundDocumentNames();
+			List<String> quantitationCompoundNames = database.getQuantitationCompoundNames();
 			comboQuantitationCompoundNames.setItems(quantitationCompoundNames.toArray(new String[quantitationCompoundNames.size()]));
 		}
 		comboQuantitationCompoundNames.setLayoutData(gridData);
@@ -112,7 +111,7 @@ public class SelectDocumentPage extends WizardPage {
 				 */
 				if(database != null) {
 					String name = comboQuantitationCompoundNames.getText();
-					String concentrationUnit = database.getQuantitationCompoundDocumentConcentrationUnit(name); // TODO
+					String concentrationUnit = database.getQuantitationCompoundConcentrationUnit(name); // TODO
 					labelConcentrationUnitMerge.setText(concentrationUnit);
 				}
 			}

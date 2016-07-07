@@ -16,6 +16,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller.ConcentrationResponseEntryEdit;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.events.IChemClipseQuantitationEvents;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.ConcentrationResponseContentProvider;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.ConcentrationResponseLabelProvider;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.ConcentrationResponseTableComparator;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.dialogs.ConcentrationResponseEntryEditDialog;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntriesMSD;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -31,21 +41,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller.ConcentrationResponseEntryEdit;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationCompoundDocument;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.events.IChemClipseQuantitationEvents;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.ConcentrationResponseContentProvider;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.ConcentrationResponseLabelProvider;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.provider.ConcentrationResponseTableComparator;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.dialogs.ConcentrationResponseEntryEditDialog;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntriesMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
-
 public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implements IQuantitationCompoundUpdater {
 
 	private static final String MESSAGE_BOX_TEXT = "Concentration Response Entry";
-	private IQuantitationCompoundDocument quantitationCompoundDocument;
+	private IQuantitationCompoundMSD quantitationCompoundMSD;
 	private IEventBroker eventBroker;
 	private IQuantDatabase database;
 	private Map<String, Object> map;
@@ -63,12 +62,12 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 	}
 
 	@Override
-	public void update(IQuantitationCompoundDocument quantitationCompoundDocument, IQuantDatabase database) {
+	public void update(IQuantitationCompoundMSD quantitationCompoundMSD, IQuantDatabase database) {
 
 		this.database = database;
-		this.quantitationCompoundDocument = quantitationCompoundDocument;
+		this.quantitationCompoundMSD = quantitationCompoundMSD;
 		//
-		if(quantitationCompoundDocument == null || database == null) {
+		if(quantitationCompoundMSD == null || database == null) {
 			getTableViewer().setInput(null);
 		} else {
 			setTableViewerInput();
@@ -77,7 +76,7 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 
 	private void setTableViewerInput() {
 
-		getTableViewer().setInput(quantitationCompoundDocument);
+		getTableViewer().setInput(quantitationCompoundMSD);
 	}
 
 	private void addList(Composite parent) {
@@ -131,12 +130,12 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 				/*
 				 * The selected compound must be not null.
 				 */
-				if(quantitationCompoundDocument != null) {
+				if(quantitationCompoundMSD != null) {
 					/*
 					 * Try to add a new response entry.
 					 */
 					Shell shell = Display.getCurrent().getActiveShell();
-					String concentrationUnit = quantitationCompoundDocument.getQuantitationCompound().getConcentrationUnit();
+					String concentrationUnit = quantitationCompoundMSD.getConcentrationUnit();
 					ConcentrationResponseEntryEdit concentrationResponseEntryEdit = new ConcentrationResponseEntryEdit(concentrationUnit);
 					ConcentrationResponseEntryEditDialog dialog = new ConcentrationResponseEntryEditDialog(shell, concentrationResponseEntryEdit, "Create a new concentration response entry.");
 					if(dialog.open() == IDialogConstants.OK_ID) {
@@ -145,7 +144,7 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 						 */
 						IConcentrationResponseEntryMSD concentrationResponseEntryMSD = concentrationResponseEntryEdit.getConcentrationResponseEntryMSD();
 						if(concentrationResponseEntryMSD != null) {
-							quantitationCompoundDocument.addConcentrationResponseEntryMSD(concentrationResponseEntryMSD);
+							quantitationCompoundMSD.getConcentrationResponseEntriesMSD().add(concentrationResponseEntryMSD);
 							setTableViewerInput();
 							triggerCompoundDocumentUpdateEvent();
 						}
@@ -176,7 +175,7 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 				/*
 				 * The selected compound must be not null.
 				 */
-				if(quantitationCompoundDocument != null) {
+				if(quantitationCompoundMSD != null) {
 					/*
 					 * Try to edit a new response entry.
 					 */
@@ -186,7 +185,7 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 						 * Edit
 						 */
 						Shell shell = Display.getCurrent().getActiveShell();
-						String concentrationUnit = quantitationCompoundDocument.getQuantitationCompound().getConcentrationUnit();
+						String concentrationUnit = quantitationCompoundMSD.getConcentrationUnit();
 						ConcentrationResponseEntryEdit concentrationResponseEntryEdit = new ConcentrationResponseEntryEdit(concentrationUnit);
 						concentrationResponseEntryEdit.setConcentrationResponseEntryMSD(concentrationResponseEntryOld);
 						ConcentrationResponseEntryEditDialog dialog = new ConcentrationResponseEntryEditDialog(shell, concentrationResponseEntryEdit, "Edit the concentration response entry.");
@@ -196,10 +195,10 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 							 */
 							IConcentrationResponseEntryMSD concentrationResponseEntryNew = concentrationResponseEntryEdit.getConcentrationResponseEntryMSD();
 							if(concentrationResponseEntryOld != null) {
-								IConcentrationResponseEntriesMSD concentrationResponseEntriesMSD = quantitationCompoundDocument.getConcentrationResponseEntriesMSD();
+								IConcentrationResponseEntriesMSD concentrationResponseEntriesMSD = quantitationCompoundMSD.getConcentrationResponseEntriesMSD();
 								concentrationResponseEntriesMSD.remove(concentrationResponseEntryOld);
 								concentrationResponseEntriesMSD.add(concentrationResponseEntryNew);
-								quantitationCompoundDocument.updateConcentrationResponseEntries(concentrationResponseEntriesMSD);
+								quantitationCompoundMSD.updateConcentrationResponseEntries(concentrationResponseEntriesMSD);
 								setTableViewerInput();
 								triggerCompoundDocumentUpdateEvent();
 							}
@@ -237,7 +236,7 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 					 */
 					int decision = showQuestion(MESSAGE_BOX_TEXT, "Would you like to delete the selected concentration response entries?");
 					if(decision == SWT.YES) {
-						quantitationCompoundDocument.removeConcentrationResponseEntriesMSD(concentrationResponseEntriesMSD);
+						quantitationCompoundMSD.getConcentrationResponseEntriesMSD().removeAll(concentrationResponseEntriesMSD);
 						setTableViewerInput();
 						triggerCompoundDocumentUpdateEvent();
 					}
@@ -269,7 +268,7 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 				 */
 				int decision = showQuestion(MESSAGE_BOX_TEXT, "Would you like to delete all response entry?");
 				if(decision == SWT.YES) {
-					quantitationCompoundDocument.removeAllConcentrationResponseEntriesMSD();
+					quantitationCompoundMSD.getConcentrationResponseEntriesMSD().clear();
 					setTableViewerInput();
 					triggerCompoundDocumentUpdateEvent();
 				}
@@ -279,13 +278,13 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 
 	private void triggerCompoundDocumentUpdateEvent() {
 
-		if(eventBroker != null && quantitationCompoundDocument != null && database != null) {
+		if(eventBroker != null && quantitationCompoundMSD != null && database != null) {
 			/*
 			 * Inform all other views about the selected quantitation compound.
 			 * The element could be null.
 			 */
 			map.clear();
-			map.put(IChemClipseQuantitationEvents.PROPERTY_QUANTITATION_COMPOUND_DOCUMENT, quantitationCompoundDocument);
+			map.put(IChemClipseQuantitationEvents.PROPERTY_QUANTITATION_COMPOUND_DOCUMENT, quantitationCompoundMSD);
 			map.put(IChemClipseQuantitationEvents.PROPERTY_DATABASE, database);
 			eventBroker.send(IChemClipseQuantitationEvents.TOPIC_QUANTITATION_COMPOUND_DOCUMENT_UPDATE, map);
 		}

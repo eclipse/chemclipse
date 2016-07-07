@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.swt;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationCompoundDocument;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 
 public interface IQuantitationCompoundUpdater {
 
@@ -23,5 +23,5 @@ public interface IQuantitationCompoundUpdater {
 	 * @param quantitationCompoundDocument
 	 * @param database
 	 */
-	void update(IQuantitationCompoundDocument quantitationCompoundDocument, IQuantDatabase database);
+	void update(IQuantitationCompoundMSD quantitationCompound, IQuantDatabase database);
 }

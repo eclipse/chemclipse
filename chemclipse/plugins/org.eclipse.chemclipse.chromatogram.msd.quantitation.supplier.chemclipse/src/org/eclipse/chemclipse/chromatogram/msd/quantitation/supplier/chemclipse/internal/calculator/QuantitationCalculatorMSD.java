@@ -83,7 +83,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 			/*
 			 * XIC
 			 */
-			IQuantitationSignalsMSD quantitationSignals = quantitationCompound.getQuantitationSignals();
+			IQuantitationSignalsMSD quantitationSignals = quantitationCompound.getQuantitationSignalsMSD();
 			List<Double> selectedQuantitationIons = quantitationSignals.getSelectedIons();
 			if(integrationQuantitationSupport.validateXIC(selectedQuantitationIons)) {
 				return getQuantitationEntriesXIC(quantitationCompound, peak, selectedQuantitationIons, integrationQuantitationSupport);
@@ -181,7 +181,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 		CalibrationMethod calibrationMethod = quantitationCompound.getCalibrationMethod();
 		switch(calibrationMethod) {
 			case LINEAR:
-				LinearEquation linearEquation = quantitationCompound.getConcentrationResponseEntries().getLinearEquation(ion, isCrossZero);
+				LinearEquation linearEquation = quantitationCompound.getConcentrationResponseEntriesMSD().getLinearEquation(ion, isCrossZero);
 				concentration = linearEquation.calculateX(integratedArea);
 				break;
 			case QUADRATIC:
@@ -189,10 +189,10 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 				 * The quadratic equation could lead to two results.
 				 * Select the result that is closer to the average value.
 				 */
-				double factorAverage = quantitationCompound.getConcentrationResponseEntries().getAverageFactor(ion, isCrossZero);
+				double factorAverage = quantitationCompound.getConcentrationResponseEntriesMSD().getAverageFactor(ion, isCrossZero);
 				double concentrationAverage = factorAverage * integratedArea;
 				//
-				QuadraticEquation quadraticEquation = quantitationCompound.getConcentrationResponseEntries().getQuadraticEquation(ion, isCrossZero);
+				QuadraticEquation quadraticEquation = quantitationCompound.getConcentrationResponseEntriesMSD().getQuadraticEquation(ion, isCrossZero);
 				double concentration1 = quadraticEquation.calculateX(integratedArea, true);
 				double concentration2 = quadraticEquation.calculateX(integratedArea, false);
 				double delta1 = Math.abs(concentration1 - concentrationAverage);
@@ -201,7 +201,7 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 				concentration = (delta1 < delta2) ? concentration1 : concentration2;
 				break;
 			case AVERAGE:
-				double factor = quantitationCompound.getConcentrationResponseEntries().getAverageFactor(ion, isCrossZero);
+				double factor = quantitationCompound.getConcentrationResponseEntriesMSD().getAverageFactor(ion, isCrossZero);
 				concentration = factor * integratedArea;
 				break;
 		}

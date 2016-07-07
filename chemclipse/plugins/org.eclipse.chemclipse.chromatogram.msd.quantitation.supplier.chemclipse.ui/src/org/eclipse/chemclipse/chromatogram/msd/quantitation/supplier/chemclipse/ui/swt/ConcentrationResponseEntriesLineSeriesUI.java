@@ -15,26 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.widgets.Composite;
-import org.swtchart.IAxis;
-import org.swtchart.IAxisSet;
-import org.swtchart.ILineSeries;
-import org.swtchart.LineStyle;
-import org.swtchart.Range;
-import org.swtchart.IAxis.Position;
-import org.swtchart.ILineSeries.PlotSymbolType;
-import org.swtchart.ISeries.SeriesType;
-
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntriesMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationCompoundDocument;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
+import org.eclipse.chemclipse.numeric.core.IPoint;
+import org.eclipse.chemclipse.numeric.core.Point;
+import org.eclipse.chemclipse.numeric.equations.IEquation;
+import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
@@ -44,11 +34,20 @@ import org.eclipse.chemclipse.swt.ui.series.Series;
 import org.eclipse.chemclipse.swt.ui.support.ChartUtil;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
-import org.eclipse.chemclipse.numeric.core.IPoint;
-import org.eclipse.chemclipse.numeric.core.Point;
-import org.eclipse.chemclipse.numeric.equations.IEquation;
-import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.thirdpartylibraries.swtchart.ext.InteractiveChartExtended;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.widgets.Composite;
+import org.swtchart.IAxis;
+import org.swtchart.IAxis.Position;
+import org.swtchart.IAxisSet;
+import org.swtchart.ILineSeries;
+import org.swtchart.ILineSeries.PlotSymbolType;
+import org.swtchart.ISeries.SeriesType;
+import org.swtchart.LineStyle;
+import org.swtchart.Range;
 
 public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartExtended implements ISeriesSetter, IQuantitationCompoundUpdater, KeyListener, MouseListener {
 
@@ -60,7 +59,7 @@ public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartEx
 	//
 	private double maxSignal = 0.0d;
 	//
-	private IQuantitationCompoundDocument quantitationCompoundDocument;
+	private IQuantitationCompoundMSD quantitationCompoundMSD;
 
 	public ConcentrationResponseEntriesLineSeriesUI(Composite parent, int style) {
 		super(parent, style);
@@ -68,13 +67,13 @@ public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartEx
 	}
 
 	@Override
-	public void update(IQuantitationCompoundDocument quantitationCompoundDocument, IQuantDatabase database) {
+	public void update(IQuantitationCompoundMSD quantitationCompoundMSD, IQuantDatabase database) {
 
-		if(quantitationCompoundDocument == null || database == null) {
+		if(quantitationCompoundMSD == null || database == null) {
 			setConcentrationLabel("");
 			deleteAllCurrentSeries();
 		} else {
-			this.quantitationCompoundDocument = quantitationCompoundDocument;
+			this.quantitationCompoundMSD = quantitationCompoundMSD;
 			setViewSeries();
 		}
 	}
@@ -82,17 +81,17 @@ public class ConcentrationResponseEntriesLineSeriesUI extends InteractiveChartEx
 	@Override
 	public void setViewSeries() {
 
-		if(quantitationCompoundDocument != null) {
+		if(quantitationCompoundMSD != null) {
 			/*
 			 * Delete the current and set the new series.
 			 */
 			deleteAllCurrentSeries();
-			setConcentrationLabel(quantitationCompoundDocument.getConcentrationUnit());
+			setConcentrationLabel(quantitationCompoundMSD.getConcentrationUnit());
 			//
-			IConcentrationResponseEntriesMSD concentrationResponseEntriesMSD = quantitationCompoundDocument.getConcentrationResponseEntriesMSD();
+			IConcentrationResponseEntriesMSD concentrationResponseEntriesMSD = quantitationCompoundMSD.getConcentrationResponseEntriesMSD();
 			maxSignal = concentrationResponseEntriesMSD.getMaxResponseValue();
-			CalibrationMethod calibrationMethod = quantitationCompoundDocument.getCalibrationMethod();
-			boolean useCrossZero = quantitationCompoundDocument.isUseCrossZero();
+			CalibrationMethod calibrationMethod = quantitationCompoundMSD.getCalibrationMethod();
+			boolean useCrossZero = quantitationCompoundMSD.isCrossZero();
 			//
 			IMultipleSeries multipleSeries;
 			ILineSeries lineSeries;

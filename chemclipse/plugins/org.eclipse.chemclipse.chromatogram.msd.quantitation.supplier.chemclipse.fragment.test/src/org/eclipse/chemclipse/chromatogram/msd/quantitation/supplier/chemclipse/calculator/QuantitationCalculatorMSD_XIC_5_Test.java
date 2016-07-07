@@ -41,8 +41,8 @@ public class QuantitationCalculatorMSD_XIC_5_Test extends QuantitationCalculator
 		quantitationCompound = getQuantitationCompound();
 		quantitationCompound.setUseTIC(false);
 		quantitationCompound.setCalibrationMethod(CalibrationMethod.LINEAR);
-		quantitationSignals = quantitationCompound.getQuantitationSignals();
-		concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntries();
+		quantitationSignals = quantitationCompound.getQuantitationSignalsMSD();
+		concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntriesMSD();
 		//
 		calculator = new QuantitationCalculatorMSD();
 	}

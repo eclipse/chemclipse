@@ -18,19 +18,18 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
+import org.eclipse.chemclipse.msd.swt.ui.components.peak.StackedPeakUI;
+import org.eclipse.chemclipse.swt.ui.support.AxisTitlesMassScale;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationCompoundDocument;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationPeakDocument;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.swt.ui.components.peak.StackedPeakUI;
-import org.eclipse.chemclipse.swt.ui.support.AxisTitlesMassScale;
 
 public class QuantitationPeaksView extends AbstractQuantitationCompoundSelectionView {
 
@@ -62,26 +61,26 @@ public class QuantitationPeaksView extends AbstractQuantitationCompoundSelection
 	}
 
 	@Override
-	public void update(IQuantitationCompoundDocument quantitationCompoundDocument, IQuantDatabase database) {
+	public void update(IQuantitationCompoundMSD quantitationCompoundMSD, IQuantDatabase database) {
 
 		if(doUpdate()) {
-			if(quantitationCompoundDocument != null && database != null) {
+			if(quantitationCompoundMSD != null && database != null) {
 				/*
 				 * Extract and display the compound peaks stacked.
 				 */
-				List<IQuantitationPeakDocument> quantitationPeakDocuments = database.getQuantitationPeakDocuments(quantitationCompoundDocument);
-				List<IPeakMSD> peakListMSD = getPeakList(quantitationPeakDocuments);
+				List<IQuantitationPeakMSD> quantitationPeaks = database.getQuantitationPeaks(quantitationCompoundMSD);
+				List<IPeakMSD> peakListMSD = getPeakList(quantitationPeaks);
 				stackedPeakUI.update(peakListMSD, true);
 			}
 		}
 	}
 
-	private List<IPeakMSD> getPeakList(List<IQuantitationPeakDocument> quantitationPeakDocuments) {
+	private List<IPeakMSD> getPeakList(List<IQuantitationPeakMSD> quantitationPeaks) {
 
-		assert quantitationPeakDocuments != null : "The peak documents list must be not null.";
+		assert quantitationPeaks != null : "The peak documents list must be not null.";
 		List<IPeakMSD> peakListMSD = new ArrayList<IPeakMSD>();
-		for(IQuantitationPeakDocument quantitationPeakDocument : quantitationPeakDocuments) {
-			peakListMSD.add(quantitationPeakDocument.getPeakMSD());
+		for(IQuantitationPeakMSD quantitationPeakDocument : quantitationPeaks) {
+			peakListMSD.add(quantitationPeakDocument.getReferencePeakMSD());
 		}
 		return peakListMSD;
 	}

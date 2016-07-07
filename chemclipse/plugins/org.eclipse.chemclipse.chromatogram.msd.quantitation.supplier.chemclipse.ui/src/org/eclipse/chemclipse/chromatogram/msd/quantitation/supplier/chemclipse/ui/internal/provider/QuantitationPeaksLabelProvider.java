@@ -13,12 +13,11 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 
 import java.text.DecimalFormat;
 
-import org.eclipse.swt.graphics.Image;
-
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationPeakDocument;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.swt.graphics.Image;
 
 public class QuantitationPeaksLabelProvider extends AbstractChemClipseLabelProvider {
 
@@ -37,8 +36,8 @@ public class QuantitationPeaksLabelProvider extends AbstractChemClipseLabelProvi
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IQuantitationPeakDocument) {
-			IQuantitationPeakDocument entry = (IQuantitationPeakDocument)element;
+		if(element instanceof IQuantitationPeakMSD) {
+			IQuantitationPeakMSD entry = (IQuantitationPeakMSD)element;
 			//
 			switch(columnIndex) {
 				case 0: // Concentration

@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller;
 
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.QuantitationCompoundAlreadyExistsException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 
 public class DatabaseController implements IDatabaseController {
 
@@ -29,7 +29,7 @@ public class DatabaseController implements IDatabaseController {
 	public void addQuantitationCompound(IQuantitationCompoundMSD quantitationCompound) {
 
 		try {
-			database.createQuantitationCompoundDocument(quantitationCompound);
+			database.addQuantitationCompound(quantitationCompound);
 		} catch(QuantitationCompoundAlreadyExistsException e) {
 			logger.warn(e);
 		}

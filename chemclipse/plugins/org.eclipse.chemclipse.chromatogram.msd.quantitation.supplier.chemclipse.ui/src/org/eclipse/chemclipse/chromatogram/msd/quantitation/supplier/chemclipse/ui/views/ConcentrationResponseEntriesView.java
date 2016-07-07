@@ -15,16 +15,15 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.swt.ConcentrationResponseEntriesUI;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.documents.IQuantitationCompoundDocument;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.swt.ConcentrationResponseEntriesUI;
 
 public class ConcentrationResponseEntriesView extends AbstractQuantitationCompoundSelectionView {
 
@@ -58,10 +57,10 @@ public class ConcentrationResponseEntriesView extends AbstractQuantitationCompou
 	}
 
 	@Override
-	public void update(IQuantitationCompoundDocument quantitationCompoundDocument, IQuantDatabase database) {
+	public void update(IQuantitationCompoundMSD quantitationCompoundMSD, IQuantDatabase database) {
 
 		if(doUpdate()) {
-			concentrationResponseEntriesUI.update(quantitationCompoundDocument, database);
+			concentrationResponseEntriesUI.update(quantitationCompoundMSD, database);
 		}
 	}
 }
