@@ -24,7 +24,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class ClassifierEvaluator extends AbstractChromatogramProcessor implements IRunnableWithProgress {
 
-	private static final String description = "Durbin-Watson Classifier";
+	private static final String DESCRIPTION = "Durbin-Watson Classifier";
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson";
 
 	public ClassifierEvaluator(IChromatogramSelectionMSD chromatogramSelection) {
@@ -45,7 +45,7 @@ public class ClassifierEvaluator extends AbstractChromatogramProcessor implement
 	@Override
 	public String getDescription() {
 
-		return description;
+		return DESCRIPTION;
 	}
 
 	@Override
