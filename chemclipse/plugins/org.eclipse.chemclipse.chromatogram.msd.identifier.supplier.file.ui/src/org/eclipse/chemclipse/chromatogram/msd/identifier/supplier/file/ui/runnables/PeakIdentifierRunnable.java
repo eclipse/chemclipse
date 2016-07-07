@@ -27,7 +27,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class PeakIdentifierRunnable implements IRunnableWithProgress {
 
-	private static final String description = "File Peak Identifier";
+	private static final String DESCRIPTION = "File Peak Identifier";
 	private static final String IDENTIFIER_ID = "org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.peak";
 	private IChromatogramSelectionMSD chromatogramSelection;
 	private boolean identifySelectedPeak;
@@ -41,7 +41,7 @@ public class PeakIdentifierRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask(description, IProgressMonitor.UNKNOWN);
+			monitor.beginTask(DESCRIPTION, IProgressMonitor.UNKNOWN);
 			//
 			IPeakIdentifierProcessingInfo processingInfo;
 			if(identifySelectedPeak) {

@@ -24,7 +24,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
 
-	private static final String description = "File Mass Spectrum Identifier";
+	private static final String DESCRIPTION = "File Mass Spectrum Identifier";
 	private static final String IDENTIFIER_ID = "org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.massSpectrum";
 	private IChromatogramSelectionMSD chromatogramSelection;
 
@@ -36,7 +36,7 @@ public class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask(description, IProgressMonitor.UNKNOWN);
+			monitor.beginTask(DESCRIPTION, IProgressMonitor.UNKNOWN);
 			IScanMSD massSpectrum = chromatogramSelection.getSelectedScan();
 			IMassSpectraIdentifierProcessingInfo processingInfo = MassSpectrumIdentifier.identify(massSpectrum, IDENTIFIER_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
