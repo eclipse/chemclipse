@@ -20,4 +20,6 @@ public interface IRetentionTimeWindow extends IIdentificationWindow {
 	boolean isUseMilliseconds();
 
 	void setUseMilliseconds(boolean useMilliseconds);
+
+	boolean isRetentionTimeInWindow(int retentionTime);
 }

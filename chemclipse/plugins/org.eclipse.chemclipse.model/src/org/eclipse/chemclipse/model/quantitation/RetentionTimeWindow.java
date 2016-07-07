@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.model.quantitation;
 
 public class RetentionTimeWindow extends AbstractIdentificationWindow implements IRetentionTimeWindow {
 
-	private int retentionTime;
+	private int retentionTime; // milliseconds
 	private boolean useMilliseconds = true; // Otherwise use percentage deviation
 
 	@Override
@@ -40,5 +40,27 @@ public class RetentionTimeWindow extends AbstractIdentificationWindow implements
 	public void setUseMilliseconds(boolean useMilliseconds) {
 
 		this.useMilliseconds = useMilliseconds;
+	}
+
+	// TODO JUnit
+	@Override
+	public boolean isRetentionTimeInWindow(int retentionTime) {
+
+		int leftBorder;
+		int rightBorder;
+		//
+		if(useMilliseconds) {
+			leftBorder = (int)(this.retentionTime - getAllowedNegativeDeviation());
+			rightBorder = (int)(this.retentionTime + getAllowedPositiveDeviation());
+		} else {
+			leftBorder = (int)(this.retentionTime - this.retentionTime * getAllowedNegativeDeviation());
+			rightBorder = (int)(this.retentionTime + this.retentionTime * getAllowedPositiveDeviation());
+		}
+		//
+		if(retentionTime >= leftBorder && retentionTime <= rightBorder) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

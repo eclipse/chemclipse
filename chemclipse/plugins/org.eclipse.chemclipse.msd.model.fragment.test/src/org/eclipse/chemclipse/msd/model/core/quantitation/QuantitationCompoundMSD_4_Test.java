@@ -45,8 +45,8 @@ public class QuantitationCompoundMSD_4_Test extends ReferencePeakMSDTestCase {
 		quantitationCompound.setUseTIC(true);
 		quantitationCompound.calculateQuantitationSignalsAndConcentrationResponseEntries(quantitationPeaks);
 		//
-		quantitationSignals = quantitationCompound.getQuantitationSignals();
-		concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntries();
+		quantitationSignals = quantitationCompound.getQuantitationSignalsMSD();
+		concentrationResponseEntries = quantitationCompound.getConcentrationResponseEntriesMSD();
 	}
 
 	@Override

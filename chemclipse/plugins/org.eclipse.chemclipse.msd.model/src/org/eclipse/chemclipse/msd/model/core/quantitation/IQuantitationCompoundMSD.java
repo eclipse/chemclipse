@@ -86,21 +86,21 @@ public interface IQuantitationCompoundMSD {
 	 * 
 	 * @return IQuantitationSignalsMSD
 	 */
-	IQuantitationSignalsMSD getQuantitationSignals();
+	IQuantitationSignalsMSD getQuantitationSignalsMSD();
 
 	/**
 	 * Updates the existing signals by the given list.
 	 * 
 	 * @param quantitationSignalsMSD
 	 */
-	void updateQuantitationSignals(IQuantitationSignalsMSD quantitationSignalsMSD);
+	void updateQuantitationSignalsMSD(IQuantitationSignalsMSD quantitationSignalsMSD);
 
 	/**
 	 * Returns the concentration / response entries.
 	 * 
 	 * @return {@link IConcentrationResponseEntriesMSD}
 	 */
-	IConcentrationResponseEntriesMSD getConcentrationResponseEntries();
+	IConcentrationResponseEntriesMSD getConcentrationResponseEntriesMSD();
 
 	/**
 	 * Updates the concentration response entries.
@@ -136,4 +136,6 @@ public interface IQuantitationCompoundMSD {
 	 * @param boolean
 	 */
 	void setUseCrossZero(boolean useCrossZero);
+
+	void updateQuantitationCompound(IQuantitationCompoundMSD quantitationCompoundMSD);
 }

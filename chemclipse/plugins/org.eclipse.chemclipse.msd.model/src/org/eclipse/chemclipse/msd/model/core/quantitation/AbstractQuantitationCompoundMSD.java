@@ -20,8 +20,8 @@ import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
 import org.eclipse.chemclipse.model.quantitation.RetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.RetentionTimeWindow;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 
 public abstract class AbstractQuantitationCompoundMSD implements IQuantitationCompoundMSD {
@@ -122,13 +122,13 @@ public abstract class AbstractQuantitationCompoundMSD implements IQuantitationCo
 	}
 
 	@Override
-	public IQuantitationSignalsMSD getQuantitationSignals() {
+	public IQuantitationSignalsMSD getQuantitationSignalsMSD() {
 
 		return quantitationSignalsMSD;
 	}
 
 	@Override
-	public void updateQuantitationSignals(IQuantitationSignalsMSD quantitationSignalsMSD) {
+	public void updateQuantitationSignalsMSD(IQuantitationSignalsMSD quantitationSignalsMSD) {
 
 		if(quantitationSignalsMSD != null) {
 			this.quantitationSignalsMSD = quantitationSignalsMSD;
@@ -136,7 +136,7 @@ public abstract class AbstractQuantitationCompoundMSD implements IQuantitationCo
 	}
 
 	@Override
-	public IConcentrationResponseEntriesMSD getConcentrationResponseEntries() {
+	public IConcentrationResponseEntriesMSD getConcentrationResponseEntriesMSD() {
 
 		return concentrationResponseEntriesMSD;
 	}
@@ -311,5 +311,18 @@ public abstract class AbstractQuantitationCompoundMSD implements IQuantitationCo
 	public void setUseCrossZero(boolean useCrossZero) {
 
 		this.useCrossZero = useCrossZero;
+	}
+
+	@Override
+	public void updateQuantitationCompound(IQuantitationCompoundMSD quantitationCompoundMSD) {
+
+		if(quantitationCompoundMSD != null) {
+			this.name = quantitationCompoundMSD.getName();
+			this.chemicalClass = quantitationCompoundMSD.getChemicalClass();
+			this.concentrationUnit = quantitationCompoundMSD.getConcentrationUnit();
+			this.useTIC = quantitationCompoundMSD.isUseTIC();
+			this.calibrationMethod = quantitationCompoundMSD.getCalibrationMethod();
+			this.useCrossZero = quantitationCompoundMSD.isCrossZero();
+		}
 	}
 }

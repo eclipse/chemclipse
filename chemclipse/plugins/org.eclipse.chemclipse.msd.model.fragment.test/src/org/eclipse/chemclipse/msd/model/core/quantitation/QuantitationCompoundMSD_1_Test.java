@@ -49,12 +49,12 @@ public class QuantitationCompoundMSD_1_Test extends TestCase {
 
 	public void testGetConcentrationResponseEntries_1() {
 
-		assertNotNull(quantitationCompound.getConcentrationResponseEntries());
+		assertNotNull(quantitationCompound.getConcentrationResponseEntriesMSD());
 	}
 
 	public void testGetConcentrationResponseEntries_2() {
 
-		IConcentrationResponseEntriesMSD entries = quantitationCompound.getConcentrationResponseEntries();
+		IConcentrationResponseEntriesMSD entries = quantitationCompound.getConcentrationResponseEntriesMSD();
 		assertEquals(0, entries.size());
 	}
 
@@ -70,12 +70,12 @@ public class QuantitationCompoundMSD_1_Test extends TestCase {
 
 	public void testGetQuantitationSignals_1() {
 
-		assertNotNull(quantitationCompound.getQuantitationSignals());
+		assertNotNull(quantitationCompound.getQuantitationSignalsMSD());
 	}
 
 	public void testGetQuantitationSignals_2() {
 
-		IQuantitationSignalsMSD entries = quantitationCompound.getQuantitationSignals();
+		IQuantitationSignalsMSD entries = quantitationCompound.getQuantitationSignalsMSD();
 		assertEquals(0, entries.size());
 	}
 
