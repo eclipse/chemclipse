@@ -33,7 +33,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
  */
 public class FilterChromatogramRunnable extends AbstractChromatogramProcessor implements IRunnableWithProgress {
 
-	private static final String description = "Ion Remover Chromatogram Filter";
+	private static final String DESCRIPTION = "Ion Remover Chromatogram Filter";
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.chromatogram";
 
 	public FilterChromatogramRunnable(IChromatogramSelectionMSD chromatogramSelection) {
@@ -84,7 +84,7 @@ public class FilterChromatogramRunnable extends AbstractChromatogramProcessor im
 	@Override
 	public String getDescription() {
 
-		return description;
+		return DESCRIPTION;
 	}
 
 	// ----------------------------------------------------------------------IRunnableWithProgress
