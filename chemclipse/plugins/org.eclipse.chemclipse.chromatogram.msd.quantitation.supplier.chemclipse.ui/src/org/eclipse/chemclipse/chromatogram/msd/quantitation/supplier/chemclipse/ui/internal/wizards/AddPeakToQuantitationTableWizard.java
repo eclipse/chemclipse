@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.QuantitationCompoundAlreadyExistsException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -140,8 +141,13 @@ public class AddPeakToQuantitationTableWizard extends Wizard {
 							quantitationCompoundMSD.getRetentionIndexWindow().setAllowedPositiveDeviation(1500);
 							quantitationCompoundMSD.setUseTIC(true);
 							//
-							IQuantitationPeakMSD quantitationPeakMSD = new QuantitationPeakMSD(chromatogramPeakMSD, concentration, concentrationUnit);
-							database.getQuantitationPeaks(quantitationCompoundMSD).add(quantitationPeakMSD);
+							try {
+								IQuantitationPeakMSD quantitationPeakMSD = new QuantitationPeakMSD(chromatogramPeakMSD, concentration, concentrationUnit);
+								database.addQuantitationCompound(quantitationCompoundMSD);
+								database.getQuantitationPeaks(quantitationCompoundMSD).add(quantitationPeakMSD);
+							} catch(QuantitationCompoundAlreadyExistsException e) {
+								logger.warn(e);
+							}
 							/*
 							 * Return true, cause all checks are valid.
 							 */
