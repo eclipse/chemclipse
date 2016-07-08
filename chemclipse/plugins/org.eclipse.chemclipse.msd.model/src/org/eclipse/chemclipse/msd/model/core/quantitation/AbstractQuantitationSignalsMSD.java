@@ -34,6 +34,12 @@ public abstract class AbstractQuantitationSignalsMSD implements IQuantitationSig
 	}
 
 	@Override
+	public void addAll(List<IQuantitationSignalMSD> quantitationSignals) {
+
+		this.quantitationSignals.addAll(quantitationSignals);
+	}
+
+	@Override
 	public void remove(IQuantitationSignalMSD quantitationSignalMSD) {
 
 		quantitationSignals.remove(quantitationSignalMSD);

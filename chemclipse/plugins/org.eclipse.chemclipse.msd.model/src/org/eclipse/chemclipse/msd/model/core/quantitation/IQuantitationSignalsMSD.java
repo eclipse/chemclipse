@@ -23,6 +23,8 @@ public interface IQuantitationSignalsMSD extends Serializable {
 	 */
 	void add(IQuantitationSignalMSD quantitationSignalMSD);
 
+	void addAll(List<IQuantitationSignalMSD> quantitationSignals);
+
 	/**
 	 * Removes the quantitation signal.
 	 * 

@@ -42,6 +42,12 @@ public abstract class AbstractConcentrationResponseEntriesMSD implements IConcen
 	}
 
 	@Override
+	public void addAll(List<IConcentrationResponseEntryMSD> concentrationResponseEntries) {
+
+		this.concentrationResponseEntries.addAll(concentrationResponseEntries);
+	}
+
+	@Override
 	public void remove(IConcentrationResponseEntryMSD concentrationResponseEntry) {
 
 		concentrationResponseEntries.remove(concentrationResponseEntry);

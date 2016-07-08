@@ -27,6 +27,8 @@ public interface IConcentrationResponseEntriesMSD extends Serializable {
 	 */
 	void add(IConcentrationResponseEntryMSD concentrationResponseEntry);
 
+	void addAll(List<IConcentrationResponseEntryMSD> concentrationResponseEntries);
+
 	/**
 	 * Removes the concentration response entry.
 	 * 
