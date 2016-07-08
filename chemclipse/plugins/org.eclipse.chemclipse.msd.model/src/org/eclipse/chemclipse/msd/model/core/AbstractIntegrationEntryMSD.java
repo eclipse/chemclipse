@@ -15,6 +15,11 @@ import org.eclipse.chemclipse.model.core.AbstractIntegrationEntry;
 
 public abstract class AbstractIntegrationEntryMSD extends AbstractIntegrationEntry implements IIntegrationEntryMSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -1040348962621857624L;
+	//
 	final private double ion;
 
 	public AbstractIntegrationEntryMSD(double ion, double integratedArea) {

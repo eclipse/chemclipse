@@ -12,4 +12,9 @@
 package org.eclipse.chemclipse.msd.model.core.quantitation;
 
 public class QuantitationSignalsMSD extends AbstractQuantitationSignalsMSD implements IQuantitationSignalsMSD {
+
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -8749441957714112503L;
 }

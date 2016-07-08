@@ -11,13 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 
-public interface IPeakIntensityValues {
+public interface IPeakIntensityValues extends Serializable {
 
 	float MAX_INTENSITY = 100.0f; // means 100%
 

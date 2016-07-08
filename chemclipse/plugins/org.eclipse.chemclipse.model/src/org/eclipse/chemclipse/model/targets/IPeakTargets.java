@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.targets;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ import java.util.List;
  * 
  * @author eselmeister
  */
-public interface IPeakTargets {
+public interface IPeakTargets extends Serializable {
 
 	/**
 	 * Add a target to the peak.

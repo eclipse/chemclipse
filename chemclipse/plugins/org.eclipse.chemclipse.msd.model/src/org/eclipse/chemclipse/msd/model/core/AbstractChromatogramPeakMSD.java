@@ -25,7 +25,12 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
  */
 public abstract class AbstractChromatogramPeakMSD extends AbstractPeakMSD implements IChromatogramPeakMSD {
 
-	private IChromatogramMSD chromatogram;
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 7031247154782115765L;
+	//
+	private transient IChromatogramMSD chromatogram;
 	private static final float INITIAL_SN_VALUE = -1.0f;
 	private float signalToNoiseRatio = INITIAL_SN_VALUE;
 

@@ -11,13 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.quantitation;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.numeric.equations.QuadraticEquation;
 
-public interface IConcentrationResponseEntriesMSD {
+public interface IConcentrationResponseEntriesMSD extends Serializable {
 
 	/**
 	 * Adds a concentration response entry.

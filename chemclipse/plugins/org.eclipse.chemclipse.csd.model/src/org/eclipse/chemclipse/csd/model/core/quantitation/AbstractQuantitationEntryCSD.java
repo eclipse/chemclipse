@@ -15,6 +15,11 @@ import org.eclipse.chemclipse.model.quantitation.AbstractQuantitationEntry;
 
 public abstract class AbstractQuantitationEntryCSD extends AbstractQuantitationEntry implements IQuantitationEntryCSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 7729464374191770733L;
+
 	public AbstractQuantitationEntryCSD(String name, double concentration, String concentrationUnit, double area) {
 		super(name, concentration, concentrationUnit, area);
 	}

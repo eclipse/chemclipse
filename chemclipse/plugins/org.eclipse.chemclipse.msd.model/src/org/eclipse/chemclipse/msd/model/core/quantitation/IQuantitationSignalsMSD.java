@@ -11,9 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.quantitation;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface IQuantitationSignalsMSD {
+public interface IQuantitationSignalsMSD extends Serializable {
 
 	/**
 	 * Adds the quantitation signal.

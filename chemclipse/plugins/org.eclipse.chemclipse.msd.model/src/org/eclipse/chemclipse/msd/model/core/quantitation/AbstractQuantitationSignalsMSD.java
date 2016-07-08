@@ -16,6 +16,11 @@ import java.util.List;
 
 public abstract class AbstractQuantitationSignalsMSD implements IQuantitationSignalsMSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 2941156198167427720L;
+	//
 	private List<IQuantitationSignalMSD> quantitationSignals;
 
 	public AbstractQuantitationSignalsMSD() {

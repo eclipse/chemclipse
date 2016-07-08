@@ -16,6 +16,11 @@ import org.eclipse.chemclipse.csd.model.core.IIntegrationEntryCSD;
 
 public class IntegrationEntryCSD extends AbstractIntegrationEntryCSD implements IIntegrationEntryCSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 4606649360612794845L;
+
 	public IntegrationEntryCSD(double integratedArea) {
 		super(integratedArea);
 	}

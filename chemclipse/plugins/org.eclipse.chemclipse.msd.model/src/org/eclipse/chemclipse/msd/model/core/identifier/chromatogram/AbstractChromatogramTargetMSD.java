@@ -24,7 +24,7 @@ public abstract class AbstractChromatogramTargetMSD extends AbstractIdentificati
 	 */
 	private static final long serialVersionUID = 7432640756057462278L;
 	//
-	private IChromatogramMSD parentChromatogram = null;
+	private transient IChromatogramMSD parentChromatogram = null;
 
 	/**
 	 * Constructs a new entry.

@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.numeric.equations;
 
-public interface IEquation {
+import java.io.Serializable;
+
+public interface IEquation extends Serializable {
 
 	double calculateX(double y);
 

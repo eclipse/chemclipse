@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.quantitation;
 
+import java.io.Serializable;
+
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 
-public interface IQuantitationPeakMSD {
+public interface IQuantitationPeakMSD extends Serializable {
 
 	double getConcentration();
 

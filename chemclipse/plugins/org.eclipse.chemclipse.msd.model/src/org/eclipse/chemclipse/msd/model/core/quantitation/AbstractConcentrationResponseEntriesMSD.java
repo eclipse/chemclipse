@@ -24,6 +24,11 @@ import org.eclipse.chemclipse.numeric.equations.QuadraticEquation;
 
 public abstract class AbstractConcentrationResponseEntriesMSD implements IConcentrationResponseEntriesMSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 163932807502826445L;
+	//
 	private List<IConcentrationResponseEntryMSD> concentrationResponseEntries;
 
 	public AbstractConcentrationResponseEntriesMSD() {

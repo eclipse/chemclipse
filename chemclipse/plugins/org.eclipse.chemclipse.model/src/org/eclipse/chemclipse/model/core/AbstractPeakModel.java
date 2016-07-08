@@ -24,6 +24,10 @@ import org.eclipse.chemclipse.numeric.exceptions.SolverException;
 
 public abstract class AbstractPeakModel implements IPeakModel {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -5447031278614316999L;
 	/*
 	 * The peak maximum is a mass spectrum or a simple tic signal.
 	 */

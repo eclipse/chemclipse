@@ -16,6 +16,11 @@ import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 
 public class PeakIntensityValues extends AbstractPeakIntensityValues implements IPeakIntensityValues {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 8596503209176077779L;
+
 	public PeakIntensityValues() {
 		super();
 	}

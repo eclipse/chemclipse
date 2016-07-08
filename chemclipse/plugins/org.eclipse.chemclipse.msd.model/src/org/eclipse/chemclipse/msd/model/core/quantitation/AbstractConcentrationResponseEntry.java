@@ -13,6 +13,11 @@ package org.eclipse.chemclipse.msd.model.core.quantitation;
 
 public class AbstractConcentrationResponseEntry implements IConcentrationResponseEntryMSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 4734986421851701665L;
+	//
 	private double ion;
 	private double concentration;
 	private double response;

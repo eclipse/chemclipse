@@ -16,9 +16,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.support.ITwoPoints;
@@ -30,6 +30,11 @@ import org.eclipse.chemclipse.numeric.exceptions.PointIsNullException;
 
 public abstract class AbstractPeakIntensityValues implements IPeakIntensityValues {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 1597422380319731942L;
+	//
 	private NavigableMap<Integer, Float> intensityValues;
 	private float maxIntensity;
 

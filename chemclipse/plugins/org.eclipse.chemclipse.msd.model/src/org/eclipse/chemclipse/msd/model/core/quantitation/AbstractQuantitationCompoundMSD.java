@@ -26,6 +26,11 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 
 public abstract class AbstractQuantitationCompoundMSD implements IQuantitationCompoundMSD {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8760040551533353962L;
+	//
 	private String name = ""; // Styrene
 	private String chemicalClass = ""; // SB (Styrene-Butadiene)
 	private IRetentionTimeWindow retentionTimeWindow;

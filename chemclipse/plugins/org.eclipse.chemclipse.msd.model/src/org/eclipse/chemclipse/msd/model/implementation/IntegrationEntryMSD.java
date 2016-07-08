@@ -16,6 +16,11 @@ import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 
 public class IntegrationEntryMSD extends AbstractIntegrationEntryMSD implements IIntegrationEntryMSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -8967772130185437663L;
+
 	public IntegrationEntryMSD(double ion, double integratedArea) {
 		super(ion, integratedArea);
 	}

@@ -13,6 +13,11 @@ package org.eclipse.chemclipse.msd.model.core.quantitation;
 
 public class ConcentrationResponseEntryMSD extends AbstractConcentrationResponseEntry implements IConcentrationResponseEntryMSD {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 602913566986867408L;
+
 	public ConcentrationResponseEntryMSD(double ion, double concentration, double response) {
 		super(ion, concentration, response);
 	}

@@ -16,6 +16,11 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 
 public class QuantitationEntry extends AbstractQuantitationEntry implements IQuantitationEntry {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -8475836941611695083L;
+
 	public QuantitationEntry(String name, double concentration, String concentrationUnit, double area) {
 		super(name, concentration, concentrationUnit, area);
 	}

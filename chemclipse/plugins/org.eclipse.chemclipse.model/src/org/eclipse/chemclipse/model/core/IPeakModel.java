@@ -11,11 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 
-public interface IPeakModel {
+public interface IPeakModel extends Serializable {
 
 	int MINIMUM_SCANS = 3;
 

@@ -19,6 +19,11 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
 
 public class PeakModel extends AbstractPeakModel implements IPeakModel {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -5942483159915658483L;
+
 	public PeakModel(IScan peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
 		super(peakMaximum, peakIntensityValues, startBackgroundAbundance, stopBackgroundAbundance);
 	}

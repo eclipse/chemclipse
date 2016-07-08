@@ -15,6 +15,11 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 
 public abstract class AbstractQuantitationPeakMSD implements IQuantitationPeakMSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -3649217581379583706L;
+	//
 	private double concentration;
 	private String concentrationUnit;
 	private IPeakMSD referencePeakMSD;

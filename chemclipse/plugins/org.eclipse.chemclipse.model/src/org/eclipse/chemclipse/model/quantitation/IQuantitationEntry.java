@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.quantitation;
 
-public interface IQuantitationEntry {
+import java.io.Serializable;
+
+public interface IQuantitationEntry extends Serializable {
 
 	String getName();
 

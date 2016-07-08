@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.quantitation;
 
-public interface IConcentrationResponseEntryMSD {
+import java.io.Serializable;
+
+public interface IConcentrationResponseEntryMSD extends Serializable {
 
 	/**
 	 * E.g. 104 for styrene.

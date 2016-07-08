@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
-public interface IIntegrationEntry {
+import java.io.Serializable;
+
+public interface IIntegrationEntry extends Serializable {
 
 	double getIntegratedArea();
 }

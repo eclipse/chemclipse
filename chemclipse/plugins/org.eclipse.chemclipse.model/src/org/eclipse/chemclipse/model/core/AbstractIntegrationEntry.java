@@ -13,6 +13,11 @@ package org.eclipse.chemclipse.model.core;
 
 public abstract class AbstractIntegrationEntry implements IIntegrationEntry {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 7699124444314965496L;
+	//
 	final private double integratedArea;
 
 	public AbstractIntegrationEntry(double integratedArea) {

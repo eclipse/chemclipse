@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.numeric.equations;
 
-import java.lang.Math;
-
 /**
  * This class represents a quadratic equation.<br/>
  * f(x) = ax^2 + bx + c
@@ -21,6 +19,11 @@ import java.lang.Math;
  */
 public class QuadraticEquation implements IEquation {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -2371137795806083758L;
+	//
 	private double a;
 	private double b;
 	private double c;

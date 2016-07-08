@@ -19,6 +19,11 @@ package org.eclipse.chemclipse.numeric.equations;
  */
 public class LinearEquation implements IEquation {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -7941955423018899201L;
+	//
 	private double a;
 	private double b;
 

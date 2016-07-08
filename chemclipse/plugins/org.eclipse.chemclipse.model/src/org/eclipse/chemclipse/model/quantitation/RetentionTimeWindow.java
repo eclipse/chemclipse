@@ -13,6 +13,11 @@ package org.eclipse.chemclipse.model.quantitation;
 
 public class RetentionTimeWindow extends AbstractIdentificationWindow implements IRetentionTimeWindow {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -8489097558854054118L;
+	//
 	private int retentionTime; // milliseconds
 	private boolean useMilliseconds = true; // Otherwise use percentage deviation
 

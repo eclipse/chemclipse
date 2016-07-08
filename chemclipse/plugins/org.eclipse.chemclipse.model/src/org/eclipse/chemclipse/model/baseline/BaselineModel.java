@@ -29,7 +29,7 @@ import org.eclipse.chemclipse.numeric.equations.LinearEquation;
  */
 public class BaselineModel implements IBaselineModel {
 
-	private IChromatogram chromatogram;
+	private transient IChromatogram chromatogram;
 	/*
 	 * The start retention time is the key.
 	 */

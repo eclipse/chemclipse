@@ -19,6 +19,11 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 
 public class ChromatogramPeakMSD extends AbstractChromatogramPeakMSD implements IChromatogramPeakMSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -804747961963875724L;
+
 	public ChromatogramPeakMSD(IPeakModelMSD peakModel, IChromatogramMSD chromatogram) throws IllegalArgumentException, PeakException {
 		super(peakModel, chromatogram);
 	}

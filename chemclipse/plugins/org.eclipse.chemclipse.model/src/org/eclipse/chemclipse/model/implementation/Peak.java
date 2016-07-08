@@ -17,6 +17,11 @@ import org.eclipse.chemclipse.model.core.IPeakModel;
 
 public class Peak extends AbstractPeak implements IPeak {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 8407887114553864483L;
+	//
 	private IPeakModel peakModel;
 
 	/**

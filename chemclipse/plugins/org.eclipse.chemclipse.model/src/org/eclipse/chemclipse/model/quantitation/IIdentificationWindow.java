@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.quantitation;
 
-public interface IIdentificationWindow {
+import java.io.Serializable;
+
+public interface IIdentificationWindow extends Serializable {
 
 	/**
 	 * Returns the negative deviation.

@@ -19,6 +19,11 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 
 public class PeakModelMSD extends AbstractPeakModelMSD implements IPeakModelMSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -1550042043393366604L;
+
 	public PeakModelMSD(IPeakMassSpectrum peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
 		super(peakMaximum, peakIntensityValues, startBackgroundAbundance, stopBackgroundAbundance);
 	}

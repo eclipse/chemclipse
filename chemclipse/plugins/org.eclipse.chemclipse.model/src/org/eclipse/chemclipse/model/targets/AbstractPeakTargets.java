@@ -18,6 +18,11 @@ import java.util.Set;
 
 public abstract class AbstractPeakTargets implements IPeakTargets {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 5786029500958913141L;
+	//
 	private Set<IPeakTarget> targets;
 
 	public AbstractPeakTargets() {

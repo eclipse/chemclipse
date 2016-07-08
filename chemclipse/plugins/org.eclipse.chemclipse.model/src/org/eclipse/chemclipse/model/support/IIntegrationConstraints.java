@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.support;
 
+import java.io.Serializable;
+
 /**
  * @author eselmeister
  */
-public interface IIntegrationConstraints {
+public interface IIntegrationConstraints extends Serializable {
 
 	/**
 	 * Add an integration constraint to the list.

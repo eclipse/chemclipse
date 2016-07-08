@@ -22,6 +22,11 @@ import org.eclipse.chemclipse.model.targets.AbstractPeakTargets;
 
 public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -491170278267735090L;
+	//
 	private String modelDescription = "";
 	private PeakType peakType = PeakType.DEFAULT;
 	private int suggestedNumberOfComponents = 0; // 0 is the default

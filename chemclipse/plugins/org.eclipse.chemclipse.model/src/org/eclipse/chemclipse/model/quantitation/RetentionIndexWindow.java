@@ -13,6 +13,11 @@ package org.eclipse.chemclipse.model.quantitation;
 
 public class RetentionIndexWindow extends AbstractIdentificationWindow implements IRetentionIndexWindow {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -6789731365073867766L;
+	//
 	private float retentionIndex;
 
 	@Override

@@ -11,13 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.quantitation;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
 
-public interface IQuantitationCompoundMSD {
+public interface IQuantitationCompoundMSD extends Serializable {
 
 	/**
 	 * Levoglucosan

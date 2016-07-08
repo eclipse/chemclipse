@@ -15,6 +15,11 @@ import org.eclipse.chemclipse.model.core.AbstractPeak;
 
 public abstract class AbstractPeakCSD extends AbstractPeak implements IPeakCSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -1459911842215911857L;
+	//
 	private IPeakModelCSD peakModel;
 
 	public AbstractPeakCSD(IPeakModelCSD peakModel) throws IllegalArgumentException {

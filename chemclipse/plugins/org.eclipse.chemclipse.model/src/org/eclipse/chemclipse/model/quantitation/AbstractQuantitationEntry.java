@@ -13,6 +13,11 @@ package org.eclipse.chemclipse.model.quantitation;
 
 public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = -6312658397485712262L;
+	//
 	private String name;
 	private String chemicalClass = "";
 	private double concentration;

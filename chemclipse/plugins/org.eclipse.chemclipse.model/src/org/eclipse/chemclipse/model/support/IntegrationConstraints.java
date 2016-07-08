@@ -19,6 +19,11 @@ import java.util.Set;
  */
 public class IntegrationConstraints implements IIntegrationConstraints {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 7698157179435806626L;
+	//
 	private Set<IntegrationConstraint> integrationConstraints;
 
 	public IntegrationConstraints() {

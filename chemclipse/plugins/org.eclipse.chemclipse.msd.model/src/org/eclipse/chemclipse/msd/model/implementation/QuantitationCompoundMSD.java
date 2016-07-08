@@ -16,6 +16,11 @@ import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundM
 
 public class QuantitationCompoundMSD extends AbstractQuantitationCompoundMSD implements IQuantitationCompoundMSD {
 
+	/**
+	 * Renew the UUID on change.
+	 */
+	private static final long serialVersionUID = 2376307650470986106L;
+
 	public QuantitationCompoundMSD(String name, String concentrationUnit, int retentionTime) {
 		super(name, concentrationUnit, retentionTime);
 	}
