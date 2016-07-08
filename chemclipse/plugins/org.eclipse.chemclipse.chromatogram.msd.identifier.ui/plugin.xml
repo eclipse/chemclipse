@@ -1,30 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.4"?>
 <plugin>
+
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-      		category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"      
+            name="Identifier"
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"
             class="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.preferences.PreferencePage"
-            id="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.preferences.identifierPreferencePage"
-            name="Identifier">
+            id="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.preferences.identifierPreferencePage">
       </page>
    </extension>
-   
    <extension
          point="org.eclipse.ui.exportWizards">
       <category
-            id="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.export.database.export.category"
-            name="Database">
+            name="Database"
+            id="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.export.database.export.category">
       </category>
    </extension>
-   
-  <extension
+   <extension
          point="org.eclipse.ui.importWizards">
       <category
-            id="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.import.database.import.category"
-            name="Database">
+            name="Database"
+            id="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.import.database.import.category">
       </category>
+   </extension>
+   <extension
+         id="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.fragment"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
    </extension>
 
 </plugin>

@@ -9,23 +9,25 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.msd.ui.handlers;
+package org.eclipse.chemclipse.chromatogram.msd.identifier.ui.handlers;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.inject.Named;
 
+import org.eclipse.chemclipse.chromatogram.msd.identifier.ui.runnables.PeakIdentifierRunnable;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.progress.core.InfoType;
+import org.eclipse.chemclipse.progress.core.StatusLineLogger;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.services.IServiceConstants;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.event.Event;
@@ -33,6 +35,7 @@ import org.osgi.service.event.EventHandler;
 
 public class DeleteUnidentifiedPeaksHandler implements EventHandler {
 
+	private static final Logger logger = Logger.getLogger(DeleteUnidentifiedPeaksHandler.class);
 	private static IChromatogramSelectionMSD chromatogramSelection;
 
 	@Execute
@@ -52,14 +55,20 @@ public class DeleteUnidentifiedPeaksHandler implements EventHandler {
 					/*
 					 * Delete all unidentified peaks.
 					 */
-					deleteUnidentifiedPeaks(chromatogram);
-					/*
-					 * Try to update if the IChromatogramSelection is an
-					 * instance of ChromatogramSelection.
-					 */
-					if(chromatogramSelection instanceof ChromatogramSelectionMSD) {
-						((ChromatogramSelectionMSD)chromatogramSelection).update(true);
+					StatusLineLogger.setInfo(InfoType.MESSAGE, "Start delete peaks without identifications.");
+					ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+					try {
+						/*
+						 * Use true, true ... instead of false, true ... if the progress bar
+						 * should be shown in action.
+						 */
+						monitor.run(true, true, new PeakIdentifierRunnable(chromatogramSelection));
+					} catch(InvocationTargetException e) {
+						logger.warn(e);
+					} catch(InterruptedException e) {
+						logger.warn(e);
 					}
+					StatusLineLogger.setInfo(InfoType.MESSAGE, "Done: Unidentified Peak(s) deleted");
 				}
 			}
 		}
@@ -70,30 +79,8 @@ public class DeleteUnidentifiedPeaksHandler implements EventHandler {
 
 		if(event.getTopic().equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION)) {
 			chromatogramSelection = (IChromatogramSelectionMSD)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		}
-	}
-
-	private void deleteUnidentifiedPeaks(IChromatogramMSD chromatogram) {
-
-		List<IChromatogramPeakMSD> peaks = chromatogram.getPeaks();
-		List<IChromatogramPeakMSD> peaksToDelete = new ArrayList<IChromatogramPeakMSD>();
-		/*
-		 * Parse each peak in the chromatogram.
-		 */
-		for(IChromatogramPeakMSD chromatogramPeak : peaks) {
-			/*
-			 * If the peak has no identification record,
-			 * mark the peak for the deletion queue.
-			 */
-			if(chromatogramPeak.getTargets().size() == 0) {
-				peaksToDelete.add(chromatogramPeak);
-			}
-		}
-		/*
-		 * Delete the marked peaks
-		 */
-		for(IChromatogramPeakMSD peak : peaksToDelete) {
-			chromatogram.removePeak(peak);
+		} else {
+			chromatogramSelection = null;
 		}
 	}
 }

@@ -58,6 +58,5 @@ Import-Package: javax.annotation;version="1.1.0",
 Service-Component: OSGI-INF/undoOperationHandler.xml,
  OSGI-INF/redoOperationHandler.xml,
  OSGI-INF/deleteAllIdentificationsHandler.xml,
- OSGI-INF/deleteUnidentifiedPeaksHandler.xml,
  OSGI-INF/deleteAllQuantitationsHandler.xml,
  OSGI-INF/deleteNonQuantifiedPeaksHandler.xml
