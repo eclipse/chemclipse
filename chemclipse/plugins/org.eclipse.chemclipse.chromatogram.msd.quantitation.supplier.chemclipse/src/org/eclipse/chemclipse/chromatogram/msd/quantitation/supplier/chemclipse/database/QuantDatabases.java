@@ -12,8 +12,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +41,21 @@ public class QuantDatabases {
 	private QuantDatabases() {
 	}
 
+	public static void persistDatabases() {
+
+		String storagePath = getStoragePath().getAbsolutePath();
+		for(Map.Entry<String, IQuantDatabase> entry : databases.entrySet()) {
+			try {
+				File file = new File(storagePath + File.separator + entry.getKey());
+				ObjectOutputStream outputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
+				outputStream.writeObject(entry.getValue());
+				outputStream.close();
+			} catch(Exception e) {
+				logger.warn(e);
+			}
+		}
+	}
+
 	public static IQuantDatabase getQuantDatabase() throws NoQuantitationTableAvailableException {
 
 		String databaseName = PreferenceSupplier.getSelectedQuantitationTable();
@@ -43,12 +64,26 @@ public class QuantDatabases {
 
 	public static IQuantDatabase getQuantDatabase(String databaseName) throws NoQuantitationTableAvailableException {
 
-		System.out.println("Implement database retrieval/storage");
-		databaseName = "TEST";
-		//
 		IQuantDatabase quantDatabase = databases.get(databaseName);
 		if(quantDatabase == null) {
-			quantDatabase = new QuantDatabase();
+			/*
+			 * Try to read the database
+			 */
+			try {
+				File file = new File(getStoragePath() + File.separator + databaseName);
+				ObjectInputStream inputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
+				Object object = inputStream.readObject();
+				if(object instanceof IQuantDatabase) {
+					quantDatabase = (IQuantDatabase)object;
+				}
+				inputStream.close();
+			} catch(Exception e) {
+				/*
+				 * New database
+				 */
+				quantDatabase = new QuantDatabase();
+				logger.warn(e);
+			}
 			databases.put(databaseName, quantDatabase);
 		}
 		return quantDatabase;
@@ -89,6 +124,16 @@ public class QuantDatabases {
 				logger.warn(e);
 			}
 		}
+	}
+
+	public static boolean deleteDatabase(IQuantDatabaseProxy quantDatabaseProxy) {
+
+		String databaseName = quantDatabaseProxy.getDatabaseName();
+		String databaseUrl = quantDatabaseProxy.getDatabaseUrl();
+		//
+		databases.remove(databaseName);
+		File database = new File(databaseUrl + File.separator + databaseUrl);
+		return database.delete();
 	}
 
 	/**

@@ -240,7 +240,6 @@ public class QuantitationCompoundsUI extends AbstractTableViewerUI {
 							/*
 							 * Update the quantitation compound document
 							 */
-							System.out.println("TODO Check");
 							quantitationCompoundMSD.updateQuantitationCompound(quantitationCompoundNew);
 							setTableViewerInput();
 						}

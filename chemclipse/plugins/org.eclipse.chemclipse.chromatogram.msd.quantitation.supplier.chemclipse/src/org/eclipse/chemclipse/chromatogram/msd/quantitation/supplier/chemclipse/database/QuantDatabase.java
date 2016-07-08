@@ -23,6 +23,11 @@ import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
 
 public class QuantDatabase implements IQuantDatabase {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6356089588484376410L;
+	//
 	private List<IQuantitationCompoundMSD> quantitationCompounds;
 	private Map<IQuantitationCompoundMSD, List<IQuantitationPeakMSD>> quantitationCompoundPeaks;
 

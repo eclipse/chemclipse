@@ -125,16 +125,15 @@ public class QuantitationPeaksListUI extends AbstractTableViewerUI implements IQ
 		gridDataButtons.verticalAlignment = SWT.TOP;
 		composite.setLayoutData(gridDataButtons);
 		//
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		addButtonRemove(composite, gridData);
-		addButtonRemoveAll(composite, gridData);
-		addButtonCreate(composite, gridData);
+		addButtonRemove(composite);
+		addButtonRemoveAll(composite);
+		addButtonCreate(composite);
 	}
 
-	private void addButtonRemove(Composite parent, GridData gridData) {
+	private void addButtonRemove(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setLayoutData(gridData);
+		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		button.setText("Delete");
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -150,10 +149,10 @@ public class QuantitationPeaksListUI extends AbstractTableViewerUI implements IQ
 		});
 	}
 
-	private void addButtonRemoveAll(Composite parent, GridData gridData) {
+	private void addButtonRemoveAll(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setLayoutData(gridData);
+		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		button.setText("Delete All");
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -169,10 +168,10 @@ public class QuantitationPeaksListUI extends AbstractTableViewerUI implements IQ
 		});
 	}
 
-	private void addButtonCreate(Composite parent, GridData gridData) {
+	private void addButtonCreate(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setLayoutData(gridData);
+		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		button.setText("Create Response Table");
 		button.addSelectionListener(new SelectionAdapter() {
 

@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 
 import java.util.List;
 
+import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -25,8 +27,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
-import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 
 public abstract class AbstractTableViewerUI {
 

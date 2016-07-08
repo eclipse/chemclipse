@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.swt;
 
-import java.util.Date;
-
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabaseProxy;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.QuantDatabases;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.NoQuantitationTableAvailableException;
@@ -28,7 +26,10 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -36,15 +37,14 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 
 public class DatabasesUI extends AbstractTableViewerUI {
 
 	private static final Logger logger = Logger.getLogger(DatabasesUI.class);
 	private static final String MESSAGE_BOX_TEXT = "Quantitation Tables";
 	private IEventBroker eventBroker;
-	private Button buttonNewDatabase;
-	private Button buttonSelectDatabase;
-	private Button buttonDeleteDatabase;
 
 	public DatabasesUI(Composite parent, int style, IEventBroker eventBroker) {
 		parent.setLayout(new FillLayout());
@@ -53,7 +53,6 @@ public class DatabasesUI extends AbstractTableViewerUI {
 		//
 		addList(composite);
 		addButtons(composite);
-		checkButtons();
 		//
 		this.eventBroker = eventBroker;
 	}
@@ -62,7 +61,6 @@ public class DatabasesUI extends AbstractTableViewerUI {
 	public void setFocus() {
 
 		super.setFocus();
-		checkButtons();
 		setTableViewerInput();
 	}
 
@@ -75,24 +73,26 @@ public class DatabasesUI extends AbstractTableViewerUI {
 		composite.setLayout(new GridLayout(1, true));
 		composite.setLayoutData(gridDataTable);
 		//
-		String[] titles = {"Quantitation Table", "URL"};
+		String[] titles = {"Quantitation Table", "Path"};
 		int bounds[] = {100, 100};
 		IStructuredContentProvider contentProvider = new DatabasesContentProvider();
 		LabelProvider labelProvider = new DatabasesLabelProvider();
 		DatabaseTableComparator viewerTableComparator = new DatabaseTableComparator();
 		//
 		createTableViewer(composite, gridDataTable, contentProvider, labelProvider, viewerTableComparator, titles, bounds);
+		getTableViewer().getTable().addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+
+				IQuantDatabaseProxy databaseProxy = getSelectedDatabaseProxy();
+				if(databaseProxy != null) {
+					setDatabase(databaseProxy.getDatabaseName());
+					showMessage(MESSAGE_BOX_TEXT, "The quantitation table has been selected successfully: " + databaseProxy.getDatabaseName());
+				}
+			}
+		});
 		setTableViewerInput();
-	}
-
-	/**
-	 * If a remote database is used, disable the buttons to select, delete or add
-	 * a database.
-	 */
-	private void checkButtons() {
-
-		buttonNewDatabase.setEnabled(true);
-		buttonDeleteDatabase.setEnabled(true);
 	}
 
 	private void setTableViewerInput() {
@@ -112,10 +112,10 @@ public class DatabasesUI extends AbstractTableViewerUI {
 		gridDataButtons.verticalAlignment = SWT.TOP;
 		composite.setLayoutData(gridDataButtons);
 		//
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		addButtonSelect(composite, gridData);
-		addButtonNew(composite, gridData);
-		addButtonRemove(composite, gridData);
+		addButtonSelect(composite);
+		addButtonNew(composite);
+		addButtonRemove(composite);
+		addButtonSave(composite);
 	}
 
 	/**
@@ -124,20 +124,20 @@ public class DatabasesUI extends AbstractTableViewerUI {
 	 * @param parent
 	 * @param gridData
 	 */
-	private void addButtonSelect(Composite parent, GridData gridData) {
+	private void addButtonSelect(Composite parent) {
 
-		buttonSelectDatabase = new Button(parent, SWT.PUSH);
-		buttonSelectDatabase.setLayoutData(gridData);
+		Button buttonSelectDatabase = new Button(parent, SWT.PUSH);
+		buttonSelectDatabase.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		buttonSelectDatabase.setText("Select");
 		buttonSelectDatabase.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				String databaseName = getDatabaseNameFromTableSelection();
-				if(databaseName != null) {
-					setDatabase(databaseName);
-					showMessage(MESSAGE_BOX_TEXT, "The quantitation table has been selected successfully: " + databaseName);
+				IQuantDatabaseProxy databaseProxy = getSelectedDatabaseProxy();
+				if(databaseProxy != null) {
+					setDatabase(databaseProxy.getDatabaseName());
+					showMessage(MESSAGE_BOX_TEXT, "The quantitation table has been selected successfully: " + databaseProxy.getDatabaseName());
 				}
 			}
 		});
@@ -149,20 +149,27 @@ public class DatabasesUI extends AbstractTableViewerUI {
 	 * @param parent
 	 * @param gridData
 	 */
-	private void addButtonNew(Composite parent, GridData gridData) {
+	private void addButtonNew(Composite parent) {
 
-		buttonNewDatabase = new Button(parent, SWT.PUSH);
-		buttonNewDatabase.setLayoutData(gridData);
+		Button buttonNewDatabase = new Button(parent, SWT.PUSH);
+		buttonNewDatabase.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		buttonNewDatabase.setText("New");
 		buttonNewDatabase.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				try {
-					QuantDatabases.createDatabase(Long.toString(new Date().getTime()));
-				} catch(QuantitationTableAlreadyExistsException e1) {
-					logger.warn(e1);
+				Shell shell = Display.getCurrent().getActiveShell();
+				DatabaseNameDialog databaseNameDialog = new DatabaseNameDialog(shell);
+				databaseNameDialog.create();
+				if(databaseNameDialog.open() == Window.OK) {
+					try {
+						QuantDatabases.createDatabase(databaseNameDialog.getDatabaseName().trim());
+						setTableViewerInput();
+					} catch(QuantitationTableAlreadyExistsException e1) {
+						showMessage("Quantitation Table", "The database already exists.");
+						logger.warn(e1);
+					}
 				}
 			}
 		});
@@ -174,26 +181,38 @@ public class DatabasesUI extends AbstractTableViewerUI {
 	 * @param parent
 	 * @param gridData
 	 */
-	private void addButtonRemove(Composite parent, GridData gridData) {
+	private void addButtonRemove(Composite parent) {
 
-		buttonDeleteDatabase = new Button(parent, SWT.PUSH);
-		buttonDeleteDatabase.setLayoutData(gridData);
+		Button buttonDeleteDatabase = new Button(parent, SWT.PUSH);
+		buttonDeleteDatabase.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		buttonDeleteDatabase.setText("Delete");
 		buttonDeleteDatabase.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				String databaseName = getDatabaseNameFromTableSelection();
-				if(databaseName != null) {
-					int decision = showQuestion(MESSAGE_BOX_TEXT, "Do you really want to delete the quantitation table: " + databaseName);
-					if(decision == SWT.YES) {
-						/*
-						 * Database that shall be deleted.
-						 */
-						System.out.println("Delete database: " + databaseName);
-					}
-				}
+				showMessage("Quantitation Table", "Please delete the database manually under the given path.");
+			}
+		});
+	}
+
+	/**
+	 * Remove a database.
+	 * 
+	 * @param parent
+	 * @param gridData
+	 */
+	private void addButtonSave(Composite parent) {
+
+		Button buttonSaveDatabases = new Button(parent, SWT.PUSH);
+		buttonSaveDatabases.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		buttonSaveDatabases.setText("Save");
+		buttonSaveDatabases.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				QuantDatabases.persistDatabases();
 			}
 		});
 	}
@@ -215,17 +234,16 @@ public class DatabasesUI extends AbstractTableViewerUI {
 	/*
 	 * May return null.
 	 */
-	private String getDatabaseNameFromTableSelection() {
+	private IQuantDatabaseProxy getSelectedDatabaseProxy() {
 
-		String databaseName = null;
 		ISelection selection = getTableViewer().getSelection();
 		if(selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection)selection;
 			Object object = structuredSelection.getFirstElement();
 			if(object instanceof IQuantDatabaseProxy) {
-				databaseName = ((IQuantDatabaseProxy)object).getDatabaseName();
+				return (IQuantDatabaseProxy)object;
 			}
 		}
-		return databaseName;
+		return null;
 	}
 }
