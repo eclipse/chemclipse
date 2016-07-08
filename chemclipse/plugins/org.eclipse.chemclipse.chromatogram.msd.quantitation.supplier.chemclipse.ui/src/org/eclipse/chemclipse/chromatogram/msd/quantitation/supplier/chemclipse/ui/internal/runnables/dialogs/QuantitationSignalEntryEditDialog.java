@@ -11,19 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.dialogs;
 
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller.QuantitationSignalEntryEdit;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalMSD;
+import org.eclipse.chemclipse.msd.model.core.quantitation.QuantitationSignalMSD;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.QuantitationSignalMSD;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller.QuantitationSignalEntryEdit;
-import org.eclipse.chemclipse.logging.core.Logger;
 
 public class QuantitationSignalEntryEditDialog extends AbstractEntryEditDialog {
 
@@ -36,16 +36,13 @@ public class QuantitationSignalEntryEditDialog extends AbstractEntryEditDialog {
 	//
 	private QuantitationSignalEntryEdit quantitationSignalEntryEdit;
 	//
-	private NumberFormat numberFormat;
-	private static final int FRACTION_DIGITS = 3;
+	private DecimalFormat decimalFormat;
 
 	public QuantitationSignalEntryEditDialog(Shell parentShell, QuantitationSignalEntryEdit quantitationSignalEntryEdit, String title) {
 		super(parentShell, title, "Create/Edit a quantitation signal entry.");
 		this.quantitationSignalEntryEdit = quantitationSignalEntryEdit;
 		//
-		numberFormat = NumberFormat.getInstance();
-		numberFormat.setMinimumFractionDigits(FRACTION_DIGITS);
-		numberFormat.setMaximumFractionDigits(FRACTION_DIGITS);
+		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
 	/*
@@ -58,9 +55,9 @@ public class QuantitationSignalEntryEditDialog extends AbstractEntryEditDialog {
 		 */
 		if(buttonId == IDialogConstants.OK_ID) {
 			try {
-				double ion = numberFormat.parse(getWidgetInput(KEY_ION)).doubleValue();
-				float relativeResponse = numberFormat.parse(getWidgetInput(KEY_RELATIVE_RESPONSE)).floatValue();
-				double uncertainty = numberFormat.parse(getWidgetInput(KEY_UNCERTAINTY)).doubleValue();
+				double ion = decimalFormat.parse(getWidgetInput(KEY_ION)).doubleValue();
+				float relativeResponse = decimalFormat.parse(getWidgetInput(KEY_RELATIVE_RESPONSE)).floatValue();
+				double uncertainty = decimalFormat.parse(getWidgetInput(KEY_UNCERTAINTY)).doubleValue();
 				boolean use = Boolean.parseBoolean(getWidgetInput(KEY_USE));
 				//
 				IQuantitationSignalMSD quantitationSignalMSD = new QuantitationSignalMSD(ion, relativeResponse, uncertainty, use);
@@ -90,9 +87,9 @@ public class QuantitationSignalEntryEditDialog extends AbstractEntryEditDialog {
 		//
 		IQuantitationSignalMSD quantitationSignalMSD = quantitationSignalEntryEdit.getQuantitationSignalMSD();
 		if(quantitationSignalMSD != null) {
-			ion = numberFormat.format(quantitationSignalMSD.getIon());
-			relativeResponse = numberFormat.format(quantitationSignalMSD.getRelativeResponse());
-			uncertainty = numberFormat.format(quantitationSignalMSD.getUncertainty());
+			ion = decimalFormat.format(quantitationSignalMSD.getIon());
+			relativeResponse = decimalFormat.format(quantitationSignalMSD.getRelativeResponse());
+			uncertainty = decimalFormat.format(quantitationSignalMSD.getUncertainty());
 			use = quantitationSignalMSD.isUse();
 		}
 		/*
@@ -118,7 +115,7 @@ public class QuantitationSignalEntryEditDialog extends AbstractEntryEditDialog {
 			 * Ion
 			 */
 			try {
-				double value = numberFormat.parse(getWidgetInput(KEY_ION)).doubleValue();
+				double value = decimalFormat.parse(getWidgetInput(KEY_ION)).doubleValue();
 				if(value < 0) {
 					setErrorMessage("Select a ion >= 0 (TIC = 0).");
 					return false;
@@ -131,7 +128,7 @@ public class QuantitationSignalEntryEditDialog extends AbstractEntryEditDialog {
 			 * Relative Response
 			 */
 			try {
-				float value = numberFormat.parse(getWidgetInput(KEY_RELATIVE_RESPONSE)).floatValue();
+				float value = decimalFormat.parse(getWidgetInput(KEY_RELATIVE_RESPONSE)).floatValue();
 				if(value <= 0 || value > IQuantitationSignalMSD.ABSOLUTE_RESPONSE) {
 					setErrorMessage("Select a relative response >= 0 and <= " + IQuantitationSignalMSD.ABSOLUTE_RESPONSE + ".");
 					return false;
@@ -144,7 +141,7 @@ public class QuantitationSignalEntryEditDialog extends AbstractEntryEditDialog {
 			 * Uncertainty
 			 */
 			try {
-				double value = numberFormat.parse(getWidgetInput(KEY_UNCERTAINTY)).doubleValue();
+				double value = decimalFormat.parse(getWidgetInput(KEY_UNCERTAINTY)).doubleValue();
 				if(value < 0) {
 					setErrorMessage("Select a uncertainty value >= 0.");
 					return false;

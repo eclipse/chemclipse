@@ -11,24 +11,24 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.dialogs;
 
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
-
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller.QuantitationCompoundEntryEdit;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.quantitation.CalibrationMethod;
 import org.eclipse.chemclipse.model.quantitation.IRetentionIndexWindow;
 import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationCompoundMSD;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.IQuantDatabase;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller.QuantitationCompoundEntryEdit;
-import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
 
 public class QuantitationCompoundEditDialog extends AbstractEntryEditDialog {
 
@@ -49,8 +49,7 @@ public class QuantitationCompoundEditDialog extends AbstractEntryEditDialog {
 	//
 	private QuantitationCompoundEntryEdit quantitationCompoundEntryEdit;
 	//
-	private NumberFormat numberFormat;
-	private static final int FRACTION_DIGITS = 3;
+	private DecimalFormat decimalFormat;
 	private IQuantDatabase database;
 	private boolean isNewCompound;
 
@@ -64,9 +63,7 @@ public class QuantitationCompoundEditDialog extends AbstractEntryEditDialog {
 		}
 		this.isNewCompound = isNewCompound;
 		//
-		numberFormat = NumberFormat.getInstance();
-		numberFormat.setMinimumFractionDigits(FRACTION_DIGITS);
-		numberFormat.setMaximumFractionDigits(FRACTION_DIGITS);
+		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
 	/*
@@ -86,13 +83,13 @@ public class QuantitationCompoundEditDialog extends AbstractEntryEditDialog {
 				CalibrationMethod calibrationMethod = CalibrationMethod.valueOf(getWidgetInput(KEY_CALIBRATION_METHOD));
 				boolean useCrossZero = Boolean.parseBoolean(getWidgetInput(KEY_USE_CROSS_ZERO));
 				boolean useTIC = Boolean.parseBoolean(getWidgetInput(KEY_USE_TIC));
-				int retentionTime = (int)(numberFormat.parse(getWidgetInput(KEY_RETENTION_TIME)).doubleValue() * IChromatogram.MINUTE_CORRELATION_FACTOR);
-				float allowedNegativeDeviationRT = (int)(numberFormat.parse(getWidgetInput(KEY_RT_NEGATIVE)).doubleValue() * IChromatogram.MINUTE_CORRELATION_FACTOR);
-				float allowedPositiveDeviationRT = (int)(numberFormat.parse(getWidgetInput(KEY_RT_POSITIVE)).doubleValue() * IChromatogram.MINUTE_CORRELATION_FACTOR);
+				int retentionTime = (int)(decimalFormat.parse(getWidgetInput(KEY_RETENTION_TIME)).doubleValue() * IChromatogram.MINUTE_CORRELATION_FACTOR);
+				float allowedNegativeDeviationRT = (int)(decimalFormat.parse(getWidgetInput(KEY_RT_NEGATIVE)).doubleValue() * IChromatogram.MINUTE_CORRELATION_FACTOR);
+				float allowedPositiveDeviationRT = (int)(decimalFormat.parse(getWidgetInput(KEY_RT_POSITIVE)).doubleValue() * IChromatogram.MINUTE_CORRELATION_FACTOR);
 				//
-				float retentionIndex = numberFormat.parse(getWidgetInput(KEY_RETENTION_INDEX)).floatValue();
-				float allowedNegativeDeviationRI = numberFormat.parse(getWidgetInput(KEY_RI_NEGATIVE)).floatValue();
-				float allowedPositiveDeviationRI = numberFormat.parse(getWidgetInput(KEY_RI_POSITIVE)).floatValue();
+				float retentionIndex = decimalFormat.parse(getWidgetInput(KEY_RETENTION_INDEX)).floatValue();
+				float allowedNegativeDeviationRI = decimalFormat.parse(getWidgetInput(KEY_RI_NEGATIVE)).floatValue();
+				float allowedPositiveDeviationRI = decimalFormat.parse(getWidgetInput(KEY_RI_POSITIVE)).floatValue();
 				//
 				IQuantitationCompoundMSD quantitationCompoundMSD = new QuantitationCompoundMSD(name, concentrationUnit, retentionTime);
 				quantitationCompoundMSD.setUseTIC(useTIC);
@@ -137,12 +134,12 @@ public class QuantitationCompoundEditDialog extends AbstractEntryEditDialog {
 		boolean useTIC = true;
 		//
 		String retentionTime = "";
-		String allowedNegativeDeviationRT = numberFormat.format(1500.0d / IChromatogram.MINUTE_CORRELATION_FACTOR);
-		String allowedPositiveDeviationRT = numberFormat.format(1500.0d / IChromatogram.MINUTE_CORRELATION_FACTOR);
+		String allowedNegativeDeviationRT = decimalFormat.format(1500.0d / IChromatogram.MINUTE_CORRELATION_FACTOR);
+		String allowedPositiveDeviationRT = decimalFormat.format(1500.0d / IChromatogram.MINUTE_CORRELATION_FACTOR);
 		//
-		String retentionIndex = numberFormat.format(0);
-		String allowedNegativeDeviationRI = numberFormat.format(5);
-		String allowedPositiveDeviationRI = numberFormat.format(5);
+		String retentionIndex = decimalFormat.format(0);
+		String allowedNegativeDeviationRI = decimalFormat.format(5);
+		String allowedPositiveDeviationRI = decimalFormat.format(5);
 		//
 		IQuantitationCompoundMSD quantitationCompoundMSD = quantitationCompoundEntryEdit.getQuantitationCompoundMSD();
 		if(quantitationCompoundMSD != null) {
@@ -153,13 +150,13 @@ public class QuantitationCompoundEditDialog extends AbstractEntryEditDialog {
 			useCrossZero = quantitationCompoundMSD.isCrossZero();
 			useTIC = quantitationCompoundMSD.isUseTIC();
 			//
-			retentionTime = numberFormat.format(quantitationCompoundMSD.getRetentionTimeWindow().getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR);
-			allowedNegativeDeviationRT = numberFormat.format(quantitationCompoundMSD.getRetentionTimeWindow().getAllowedNegativeDeviation() / IChromatogram.MINUTE_CORRELATION_FACTOR);
-			allowedPositiveDeviationRT = numberFormat.format(quantitationCompoundMSD.getRetentionTimeWindow().getAllowedPositiveDeviation() / IChromatogram.MINUTE_CORRELATION_FACTOR);
+			retentionTime = decimalFormat.format(quantitationCompoundMSD.getRetentionTimeWindow().getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR);
+			allowedNegativeDeviationRT = decimalFormat.format(quantitationCompoundMSD.getRetentionTimeWindow().getAllowedNegativeDeviation() / IChromatogram.MINUTE_CORRELATION_FACTOR);
+			allowedPositiveDeviationRT = decimalFormat.format(quantitationCompoundMSD.getRetentionTimeWindow().getAllowedPositiveDeviation() / IChromatogram.MINUTE_CORRELATION_FACTOR);
 			//
-			retentionIndex = numberFormat.format(quantitationCompoundMSD.getRetentionIndexWindow().getRetentionIndex());
-			allowedNegativeDeviationRI = numberFormat.format(quantitationCompoundMSD.getRetentionIndexWindow().getAllowedNegativeDeviation());
-			allowedPositiveDeviationRI = numberFormat.format(quantitationCompoundMSD.getRetentionIndexWindow().getAllowedPositiveDeviation());
+			retentionIndex = decimalFormat.format(quantitationCompoundMSD.getRetentionIndexWindow().getRetentionIndex());
+			allowedNegativeDeviationRI = decimalFormat.format(quantitationCompoundMSD.getRetentionIndexWindow().getAllowedNegativeDeviation());
+			allowedPositiveDeviationRI = decimalFormat.format(quantitationCompoundMSD.getRetentionIndexWindow().getAllowedPositiveDeviation());
 		}
 		/*
 		 * Text fields, ...
@@ -221,7 +218,7 @@ public class QuantitationCompoundEditDialog extends AbstractEntryEditDialog {
 			 * Retention Time
 			 */
 			try {
-				double retentionTime = numberFormat.parse(getWidgetInput(KEY_RETENTION_TIME)).doubleValue();
+				double retentionTime = decimalFormat.parse(getWidgetInput(KEY_RETENTION_TIME)).doubleValue();
 				if(retentionTime <= 0) {
 					setErrorMessage("Select a retention time > 0.");
 					return false;
@@ -234,7 +231,7 @@ public class QuantitationCompoundEditDialog extends AbstractEntryEditDialog {
 			 * Deviation Retention Time Negative
 			 */
 			try {
-				double value = numberFormat.parse(getWidgetInput(KEY_RT_NEGATIVE)).doubleValue();
+				double value = decimalFormat.parse(getWidgetInput(KEY_RT_NEGATIVE)).doubleValue();
 				if(value < 0) {
 					setErrorMessage("Select an allowed negative retention time deviation >= 0.");
 					return false;
@@ -247,7 +244,7 @@ public class QuantitationCompoundEditDialog extends AbstractEntryEditDialog {
 			 * Deviation Retention Time Positive
 			 */
 			try {
-				double value = numberFormat.parse(getWidgetInput(KEY_RT_POSITIVE)).doubleValue();
+				double value = decimalFormat.parse(getWidgetInput(KEY_RT_POSITIVE)).doubleValue();
 				if(value < 0) {
 					setErrorMessage("Select an allowed positive retention time deviation >= 0.");
 					return false;
@@ -260,7 +257,7 @@ public class QuantitationCompoundEditDialog extends AbstractEntryEditDialog {
 			 * Retention Index
 			 */
 			try {
-				float retentionIndex = numberFormat.parse(getWidgetInput(KEY_RETENTION_INDEX)).floatValue();
+				float retentionIndex = decimalFormat.parse(getWidgetInput(KEY_RETENTION_INDEX)).floatValue();
 				if(retentionIndex < 0) {
 					setErrorMessage("Select a retention index >= 0.");
 					return false;
@@ -273,7 +270,7 @@ public class QuantitationCompoundEditDialog extends AbstractEntryEditDialog {
 			 * Deviation Retention Index Negative
 			 */
 			try {
-				float value = numberFormat.parse(getWidgetInput(KEY_RI_NEGATIVE)).floatValue();
+				float value = decimalFormat.parse(getWidgetInput(KEY_RI_NEGATIVE)).floatValue();
 				if(value < 0) {
 					setErrorMessage("Select an allowed negative retention index deviation >= 0.");
 					return false;
@@ -286,7 +283,7 @@ public class QuantitationCompoundEditDialog extends AbstractEntryEditDialog {
 			 * Deviation Retention Index Positive
 			 */
 			try {
-				float value = numberFormat.parse(getWidgetInput(KEY_RI_POSITIVE)).floatValue();
+				float value = decimalFormat.parse(getWidgetInput(KEY_RI_POSITIVE)).floatValue();
 				if(value < 0) {
 					setErrorMessage("Select an allowed positive retention index deviation >= 0.");
 					return false;

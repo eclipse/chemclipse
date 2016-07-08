@@ -121,6 +121,7 @@ public class QuantDatabase implements IQuantDatabase {
 		List<IQuantitationPeakMSD> quantitationPeaks = quantitationCompoundPeaks.get(quantitationCompound);
 		if(quantitationPeaks == null) {
 			quantitationPeaks = new ArrayList<IQuantitationPeakMSD>();
+			quantitationCompoundPeaks.put(quantitationCompound, quantitationPeaks);
 		}
 		return quantitationPeaks;
 	}

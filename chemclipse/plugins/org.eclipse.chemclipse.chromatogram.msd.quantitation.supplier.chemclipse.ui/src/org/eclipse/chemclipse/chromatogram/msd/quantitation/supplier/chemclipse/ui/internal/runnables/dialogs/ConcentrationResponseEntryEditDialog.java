@@ -11,19 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.dialogs;
 
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller.ConcentrationResponseEntryEdit;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.model.core.quantitation.ConcentrationResponseEntryMSD;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-
-import org.eclipse.chemclipse.msd.model.core.quantitation.ConcentrationResponseEntryMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database.controller.ConcentrationResponseEntryEdit;
-import org.eclipse.chemclipse.logging.core.Logger;
 
 public class ConcentrationResponseEntryEditDialog extends AbstractEntryEditDialog {
 
@@ -35,16 +35,13 @@ public class ConcentrationResponseEntryEditDialog extends AbstractEntryEditDialo
 	//
 	private ConcentrationResponseEntryEdit concentrationResponseEntryEdit;
 	//
-	private NumberFormat numberFormat;
-	private static final int FRACTION_DIGITS = 3;
+	private DecimalFormat decimalFormat;
 
 	public ConcentrationResponseEntryEditDialog(Shell parentShell, ConcentrationResponseEntryEdit concentrationResponseEntryEdit, String title) {
 		super(parentShell, title, "Create/Edit a concentration response entry.");
 		this.concentrationResponseEntryEdit = concentrationResponseEntryEdit;
 		//
-		numberFormat = NumberFormat.getInstance();
-		numberFormat.setMinimumFractionDigits(FRACTION_DIGITS);
-		numberFormat.setMaximumFractionDigits(FRACTION_DIGITS);
+		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
 	/*
@@ -57,9 +54,9 @@ public class ConcentrationResponseEntryEditDialog extends AbstractEntryEditDialo
 		 */
 		if(buttonId == IDialogConstants.OK_ID) {
 			try {
-				double ion = numberFormat.parse(getWidgetInput(KEY_ION)).doubleValue();
-				double concentration = numberFormat.parse(getWidgetInput(KEY_CONCENTRATION)).doubleValue();
-				double response = numberFormat.parse(getWidgetInput(KEY_RESPONSE)).doubleValue();
+				double ion = decimalFormat.parse(getWidgetInput(KEY_ION)).doubleValue();
+				double concentration = decimalFormat.parse(getWidgetInput(KEY_CONCENTRATION)).doubleValue();
+				double response = decimalFormat.parse(getWidgetInput(KEY_RESPONSE)).doubleValue();
 				IConcentrationResponseEntryMSD concentrationResponseEntryMSD = new ConcentrationResponseEntryMSD(ion, concentration, response);
 				concentrationResponseEntryEdit.setConcentrationResponseEntryMSD(concentrationResponseEntryMSD);
 			} catch(ParseException e) {
@@ -86,9 +83,9 @@ public class ConcentrationResponseEntryEditDialog extends AbstractEntryEditDialo
 		//
 		IConcentrationResponseEntryMSD concentrationResponseEntryMSD = concentrationResponseEntryEdit.getConcentrationResponseEntryMSD();
 		if(concentrationResponseEntryMSD != null) {
-			ion = numberFormat.format(concentrationResponseEntryMSD.getIon());
-			concentration = numberFormat.format(concentrationResponseEntryMSD.getConcentration());
-			response = numberFormat.format(concentrationResponseEntryMSD.getResponse());
+			ion = decimalFormat.format(concentrationResponseEntryMSD.getIon());
+			concentration = decimalFormat.format(concentrationResponseEntryMSD.getConcentration());
+			response = decimalFormat.format(concentrationResponseEntryMSD.getResponse());
 		}
 		/*
 		 * Text fields, ...
@@ -112,7 +109,7 @@ public class ConcentrationResponseEntryEditDialog extends AbstractEntryEditDialo
 			 * Ion
 			 */
 			try {
-				double value = numberFormat.parse(getWidgetInput(KEY_ION)).doubleValue();
+				double value = decimalFormat.parse(getWidgetInput(KEY_ION)).doubleValue();
 				if(value < 0) {
 					setErrorMessage("Select a ion >= 0 (TIC = 0).");
 					return false;
@@ -125,7 +122,7 @@ public class ConcentrationResponseEntryEditDialog extends AbstractEntryEditDialo
 			 * Concentration
 			 */
 			try {
-				double value = numberFormat.parse(getWidgetInput(KEY_CONCENTRATION)).doubleValue();
+				double value = decimalFormat.parse(getWidgetInput(KEY_CONCENTRATION)).doubleValue();
 				if(value <= 0) {
 					setErrorMessage("Select a concentration > 0.");
 					return false;
@@ -138,7 +135,7 @@ public class ConcentrationResponseEntryEditDialog extends AbstractEntryEditDialo
 			 * Response
 			 */
 			try {
-				double value = numberFormat.parse(getWidgetInput(KEY_RESPONSE)).doubleValue();
+				double value = decimalFormat.parse(getWidgetInput(KEY_RESPONSE)).doubleValue();
 				if(value <= 0) {
 					setErrorMessage("Select a response > 0.");
 					return false;

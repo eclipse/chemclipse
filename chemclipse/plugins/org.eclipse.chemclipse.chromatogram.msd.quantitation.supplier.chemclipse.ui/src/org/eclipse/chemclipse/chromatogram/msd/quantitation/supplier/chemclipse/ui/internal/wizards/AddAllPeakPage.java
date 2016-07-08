@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.wizards;
 
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -24,18 +26,18 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-
 public class AddAllPeakPage extends WizardPage {
 
 	private static final Logger logger = Logger.getLogger(AddAllPeakPage.class);
+	//
 	private Text textConcentration;
 	private Text textConcentrationUnit;
 	private Text textChemicalClass;
 	private double concentration;
 	private String concentrationUnit;
 	private String chemicalClass;
-	private NumberFormat numberFormat;
+	//
+	private DecimalFormat decimalFormat;
 
 	public AddAllPeakPage(String pageName) {
 		super(pageName);
@@ -45,7 +47,7 @@ public class AddAllPeakPage extends WizardPage {
 		concentrationUnit = "";
 		chemicalClass = "";
 		setErrorMessage("Please add a concentration.");
-		this.numberFormat = NumberFormat.getInstance();
+		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
 	protected double getConcentration() {
@@ -91,7 +93,7 @@ public class AddAllPeakPage extends WizardPage {
 					setErrorMessage("Please set a concentration.");
 				} else {
 					try {
-						concentration = numberFormat.parse(value).doubleValue();
+						concentration = decimalFormat.parse(value).doubleValue();
 						setErrorMessage(null);
 					} catch(ParseException e1) {
 						logger.warn(e1);
