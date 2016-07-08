@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
 public class QuantDatabase implements IQuantDatabase {
 
 	/**
-	 * 
+	 * Renew this UUID on change.
 	 */
 	private static final long serialVersionUID = 6356089588484376410L;
 	//

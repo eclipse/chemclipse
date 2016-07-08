@@ -12,14 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.database;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +21,8 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.NoQuantitationTableAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.exceptions.QuantitationTableAlreadyExistsException;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.io.QuantDatabaseReader;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.io.QuantDatabaseWriter;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.settings.ApplicationSettings;
@@ -47,9 +43,8 @@ public class QuantDatabases {
 		for(Map.Entry<String, IQuantDatabase> entry : databases.entrySet()) {
 			try {
 				File file = new File(storagePath + File.separator + entry.getKey());
-				ObjectOutputStream outputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
-				outputStream.writeObject(entry.getValue());
-				outputStream.close();
+				IQuantDatabase quantDatabase = entry.getValue();
+				QuantDatabaseWriter.write(quantDatabase, file);
 			} catch(Exception e) {
 				logger.warn(e);
 			}
@@ -71,12 +66,7 @@ public class QuantDatabases {
 			 */
 			try {
 				File file = new File(getStoragePath() + File.separator + databaseName);
-				ObjectInputStream inputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
-				Object object = inputStream.readObject();
-				if(object instanceof IQuantDatabase) {
-					quantDatabase = (IQuantDatabase)object;
-				}
-				inputStream.close();
+				quantDatabase = QuantDatabaseReader.read(file);
 			} catch(Exception e) {
 				/*
 				 * New database
