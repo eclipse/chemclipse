@@ -32,7 +32,7 @@ function tag_project {
   #git tag -d OC-CODE-MIGRATE-ECLIPSE
   #git push origin :refs/tags/OC-CODE-MIGRATE-ECLIPSE
   # ADD
-  #git tag -a "REL-1.1.0-XR" -m "This is the release 1.1.0."
+  #git tag -a "REL-1.2.0-XR" -m "This is the release 1.2.0."
   #git push --tags
   cd $active
 }
