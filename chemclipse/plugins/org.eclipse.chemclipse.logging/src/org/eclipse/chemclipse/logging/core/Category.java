@@ -30,7 +30,7 @@ public class Category {
 
 	public void debug(final Object message, Throwable t) {
 
-		logger.log(Category.class.getName(), Level.DEBUG, message, null);
+		logger.log(Category.class.getName(), Level.DEBUG, message, t);
 	}
 
 	public void error(final Object message) {
@@ -50,7 +50,7 @@ public class Category {
 
 	public void fatal(final Object message, Throwable t) {
 
-		logger.log(Category.class.getName(), Level.FATAL, message, null);
+		logger.log(Category.class.getName(), Level.FATAL, message, t);
 	}
 
 	public void info(final Object message) {
@@ -60,7 +60,7 @@ public class Category {
 
 	public void info(final Object message, Throwable t) {
 
-		logger.log(Category.class.getName(), Level.INFO, message, null);
+		logger.log(Category.class.getName(), Level.INFO, message, t);
 	}
 
 	public void trace(final Object message) {
@@ -70,7 +70,7 @@ public class Category {
 
 	public void trace(final Object message, Throwable t) {
 
-		logger.log(Category.class.getName(), Level.TRACE, message, null);
+		logger.log(Category.class.getName(), Level.TRACE, message, t);
 	}
 
 	public void warn(final Object message) {
