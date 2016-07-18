@@ -11,8 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.definitions;
 
-import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.rcp.app.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
@@ -28,17 +29,25 @@ public class LibraryType implements EventHandler {
 	@Override
 	public void handleEvent(Event event) {
 
+		String topic = event.getTopic();
+		Object property = event.getProperty(IChemClipseEvents.PROPERTY_LIBRARY_SELECTION);
 		/*
-		 * TODO implement
+		 * Get the library selection.
 		 */
-		// String topic = event.getTopic();
-		// Object property = event.getProperty(IChemClipseEvents.PROPERTY_SELECTED_LIBRARY);
-		IScan librarySelection = null;
+		IMassSpectra librarySelection = null;
 		String libraryType = LIBRARY_TYPE_NONE;
+		//
+		if(topic.equals(IChemClipseEvents.TOPIC_LIBRARY_MSD_UPDATE_SELECTION)) {
+			librarySelection = (IMassSpectra)property;
+			libraryType = LIBRARY_TYPE_MSD;
+		} else if(topic.equals(IChemClipseEvents.TOPIC_LIBRARY_MSD_UNLOAD_SELECTION)) {
+			librarySelection = null;
+			libraryType = LIBRARY_TYPE_NONE;
+		}
 		/*
 		 * Set the type, see:
 		 * org.eclipse.core.expressions.definitions
-		 * isChromatogramTypeMSD
+		 * isLibraryTypeMSD
 		 */
 		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
 		if(eclipseContext != null) {

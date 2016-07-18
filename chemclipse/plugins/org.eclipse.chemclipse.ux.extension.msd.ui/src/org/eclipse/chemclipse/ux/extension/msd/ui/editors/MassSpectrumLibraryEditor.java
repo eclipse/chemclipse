@@ -37,10 +37,12 @@ import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumLis
 import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectraFileSupport;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.MassSpectrumImportRunnable;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -81,6 +83,8 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 	private MApplication application;
 	@Inject
 	private EModelService modelService;
+	@Inject
+	private IEventBroker eventBroker;
 	/*
 	 * Mass spectrum selection and the GUI element.
 	 */
@@ -101,6 +105,7 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 	@Focus
 	public void setFocus() {
 
+		eventBroker.post(IChemClipseEvents.TOPIC_LIBRARY_MSD_UPDATE_SELECTION, massSpectra);
 	}
 
 	@PreDestroy
@@ -109,6 +114,8 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 		/*
 		 * Remove the editor from the listed parts.
 		 */
+		eventBroker.post(IChemClipseEvents.TOPIC_LIBRARY_MSD_UNLOAD_SELECTION, null);
+		//
 		if(modelService != null) {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
 			part.setToBeRendered(false);

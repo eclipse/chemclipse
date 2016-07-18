@@ -30,6 +30,8 @@ public interface IChemClipseEvents {
 	String PROPERTY_CHROMATOGRAM_WSD_OVERVIEW = IEventBroker.DATA; // IChromatogramOverview - no map
 	//
 	String PROPERTY_CHROMATOGRAM_SELECTION = "ChromatogramSelection"; // IChromatogramSelection (MSD, CSD, WSD)
+	String PROPERTY_LIBRARY_SELECTION = IEventBroker.DATA; // IMassSpectra
+	String PROPERTY_SCAN_SELECTION = IEventBroker.DATA; // IScanMSD, ...
 	//
 	String PROPERTY_CHROMATOGRAM_OVERVIEW = "ChromatogramOverview"; // IChromatogramOverview
 	String PROPERTY_CHROMATOGRAM_PEAK_MSD = "ChromatogramPeakMSD"; // IChromatogramPeakMSD
@@ -77,6 +79,12 @@ public interface IChemClipseEvents {
 	String TOPIC_CHROMATOGRAM_MSD_UPDATE_PEAKS = "chromatogram/msd/update/peaks";
 	String TOPIC_CHROMATOGRAM_MSD_UPDATE_MASSSPECTRUM = "chromatogram/msd/update/massspectrum";
 	String TOPIC_CHROMATOGRAM_MSD_UPDATE_ION_SELECTION = "chromatogram/msd/update/ionselection";
+	//
+	String TOPIC_LIBRARY_MSD_UPDATE_SELECTION = "library/msd/update/selection";
+	String TOPIC_LIBRARY_MSD_UNLOAD_SELECTION = "library/msd/unload/selection";
+	//
+	String TOPIC_SCAN_MSD_UPDATE_SELECTION = "scan/msd/update/selection";
+	String TOPIC_SCAN_MSD_UNLOAD_SELECTION = "scan/msd/unload/selection";
 	/*
 	 * Detector: CSD (conductivity selective)
 	 */

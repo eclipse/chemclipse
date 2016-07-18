@@ -11,8 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.definitions;
 
-import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.app.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
@@ -28,17 +29,25 @@ public class ScanType implements EventHandler {
 	@Override
 	public void handleEvent(Event event) {
 
+		String topic = event.getTopic();
+		Object property = event.getProperty(IChemClipseEvents.PROPERTY_SCAN_SELECTION);
 		/*
-		 * TODO implement
+		 * Get the scan type.
 		 */
-		// String topic = event.getTopic();
-		// Object property = event.getProperty(IChemClipseEvents.PROPERTY_SELECTED_SCAN);
-		IScan scanSelection = null;
+		IScanMSD scanSelection = null;
 		String scanType = SCAN_TYPE_NONE;
+		//
+		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_MSD_UPDATE_SELECTION)) {
+			scanSelection = (IScanMSD)property;
+			scanType = SCAN_TYPE_MSD;
+		} else if(topic.equals(IChemClipseEvents.TOPIC_SCAN_MSD_UNLOAD_SELECTION)) {
+			scanSelection = null;
+			scanType = SCAN_TYPE_NONE;
+		}
 		/*
 		 * Set the type, see:
 		 * org.eclipse.core.expressions.definitions
-		 * isChromatogramTypeMSD
+		 * isScanTypeMSD
 		 */
 		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
 		if(eclipseContext != null) {

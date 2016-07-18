@@ -59,4 +59,8 @@ Service-Component: OSGI-INF/chromatogramTypeMSD.xml,
  OSGI-INF/deleteAllPeakIntegrationsHandlerHandlerCSD.xml,
  OSGI-INF/deleteAllPeakIntegrationsHandlerHandlerMSD.xml,
  OSGI-INF/deleteChromatogramIntegrationsHandlerCSD.xml,
- OSGI-INF/deleteChromatogramIntegrationsHandlerMSD.xml
+ OSGI-INF/deleteChromatogramIntegrationsHandlerMSD.xml,
+ OSGI-INF/libraryTypeMSD.xml,
+ OSGI-INF/libraryTypeUNLOAD.xml,
+ OSGI-INF/scanTypeMSD.xml,
+ OSGI-INF/scanTypeUNLOAD.xml  

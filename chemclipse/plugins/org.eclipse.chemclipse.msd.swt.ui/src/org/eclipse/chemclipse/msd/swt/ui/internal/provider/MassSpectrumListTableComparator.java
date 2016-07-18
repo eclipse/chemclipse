@@ -106,9 +106,24 @@ public class MassSpectrumListTableComparator extends AbstractRecordTableComparat
 					sortOrder = libraryInformation2.getFormula().compareTo(libraryInformation1.getFormula());
 				}
 				break;
-			case 9: // Reference Identifier
+			case 9:
+				if(libraryInformation1 != null && libraryInformation2 != null) {
+					sortOrder = libraryInformation2.getSmiles().compareTo(libraryInformation1.getSmiles());
+				}
+				break;
+			case 10:
+				if(libraryInformation1 != null && libraryInformation2 != null) {
+					sortOrder = libraryInformation2.getInChI().compareTo(libraryInformation1.getInChI());
+				}
+				break;
+			case 11: // Reference Identifier
 				if(libraryInformation1 != null && libraryInformation2 != null) {
 					sortOrder = libraryInformation2.getReferenceIdentifier().compareTo(libraryInformation1.getReferenceIdentifier());
+				}
+				break;
+			case 12:
+				if(libraryInformation1 != null && libraryInformation2 != null) {
+					sortOrder = libraryInformation2.getComments().compareTo(libraryInformation1.getComments());
 				}
 				break;
 			default:

@@ -81,7 +81,10 @@ public class MassSpectrumListFilter extends ViewerFilter {
 		String name = libraryInformation.getName();
 		String referenceIdentifier = libraryInformation.getReferenceIdentifier();
 		String formula = libraryInformation.getFormula();
+		String smiles = libraryInformation.getSmiles();
+		String inchi = libraryInformation.getInChI();
 		String casNumber = libraryInformation.getCasNumber();
+		String comments = libraryInformation.getComments();
 		//
 		if(!caseSensitive) {
 			searchText = searchText.toLowerCase();
@@ -89,6 +92,9 @@ public class MassSpectrumListFilter extends ViewerFilter {
 			referenceIdentifier = referenceIdentifier.toLowerCase();
 			formula = formula.toLowerCase();
 			casNumber = casNumber.toLowerCase();
+			smiles = smiles.toLowerCase();
+			inchi = inchi.toLowerCase();
+			comments = comments.toLowerCase();
 		}
 		/*
 		 * Name
@@ -109,9 +115,27 @@ public class MassSpectrumListFilter extends ViewerFilter {
 			return true;
 		}
 		/*
+		 * SMILES
+		 */
+		if(smiles.matches(searchText)) {
+			return true;
+		}
+		/*
+		 * InChI
+		 */
+		if(inchi.matches(searchText)) {
+			return true;
+		}
+		/*
 		 * CAS
 		 */
 		if(casNumber.matches(searchText)) {
+			return true;
+		}
+		/*
+		 * Comments
+		 */
+		if(comments.matches(searchText)) {
 			return true;
 		}
 		/*

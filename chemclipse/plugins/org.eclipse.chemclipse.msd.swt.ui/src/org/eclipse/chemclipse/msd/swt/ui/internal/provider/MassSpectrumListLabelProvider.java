@@ -146,9 +146,24 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 					text = libraryInformation.getFormula();
 				}
 				break;
-			case 9: // Reference Identifier
+			case 9:
+				if(libraryInformation != null) {
+					text = libraryInformation.getSmiles();
+				}
+				break;
+			case 10:
+				if(libraryInformation != null) {
+					text = libraryInformation.getInChI();
+				}
+				break;
+			case 11: // Reference Identifier
 				if(libraryInformation != null) {
 					text = libraryInformation.getReferenceIdentifier();
+				}
+				break;
+			case 12:
+				if(libraryInformation != null) {
+					text = libraryInformation.getComments();
 				}
 				break;
 			default:
