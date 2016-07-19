@@ -15,13 +15,15 @@ package org.eclipse.chemclipse.msd.model.core;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.updates.IUpdateListener;
+
 /**
  * This class stores a list of mass spectra.
  * 
  * @author eselmeister
  * @author <a href="mailto:alexanderkerner24@gmail.com">Alexander Kerner</a>
  */
-public interface IMassSpectra {
+public interface IMassSpectra extends IUpdateListener {
 
 	/**
 	 * Adds the mass spectrum to the end of the list.
@@ -90,4 +92,18 @@ public interface IMassSpectra {
 	 * @param name
 	 */
 	void setName(String name);
+
+	/**
+	 * Use the update listener to react to updates.
+	 * 
+	 * @param updateListener
+	 */
+	void addUpdateListener(IUpdateListener updateListener);
+
+	/**
+	 * Remove the specified update listener.
+	 * 
+	 * @param updateListener
+	 */
+	void removeUpdateListener(IUpdateListener updateListener);
 }

@@ -17,8 +17,6 @@ public class ComparisonResult extends AbstractComparisonResult implements ICompa
 	 * Renew the UUID on change.
 	 */
 	private static final long serialVersionUID = -1880511926278090160L;
-	//
-	private static final float NULL_FACTOR_VALUE = 0.0f;
 
 	/**
 	 * Constructs the result.
@@ -34,8 +32,13 @@ public class ComparisonResult extends AbstractComparisonResult implements ICompa
 		super(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
 	}
 
-	public static ComparisonResult createNullComparisonResult() {
+	public static ComparisonResult createNoMatchComparisonResult() {
 
-		return new ComparisonResult(NULL_FACTOR_VALUE, NULL_FACTOR_VALUE, NULL_FACTOR_VALUE, NULL_FACTOR_VALUE);
+		return new ComparisonResult(FACTOR_NO_MATCH, FACTOR_NO_MATCH, FACTOR_NO_MATCH, FACTOR_NO_MATCH);
+	}
+
+	public static ComparisonResult createBestMatchComparisonResult() {
+
+		return new ComparisonResult(FACTOR_BEST_MATCH, FACTOR_BEST_MATCH, FACTOR_BEST_MATCH, FACTOR_BEST_MATCH);
 	}
 }

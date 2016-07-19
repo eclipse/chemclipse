@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.updates.IUpdateListener;
+
 /**
  * @author eselmeister
  * @author <a href="mailto:alexanderkerner24@gmail.com">Alexander Kerner</a>
@@ -25,15 +27,16 @@ public abstract class AbstractMassSpectra implements IMassSpectra {
 	private List<IScanMSD> massSpectra;
 	private String converterId = "";
 	private String name = "";
+	private List<IUpdateListener> updateListeners;
 
 	/**
 	 * Initialize mass spectra and create a new internal mass spectra list.
 	 */
 	public AbstractMassSpectra() {
 		massSpectra = new ArrayList<IScanMSD>();
+		updateListeners = new ArrayList<IUpdateListener>();
 	}
 
-	// ---------------------------------------------------IMassSpectra
 	@Override
 	public void addMassSpectrum(IScanMSD massSpectrum) {
 
@@ -103,5 +106,24 @@ public abstract class AbstractMassSpectra implements IMassSpectra {
 
 		this.name = name;
 	}
-	// ---------------------------------------------------IMassSpectra
+
+	@Override
+	public void update() {
+
+		for(IUpdateListener updateListener : updateListeners) {
+			updateListener.update();
+		}
+	}
+
+	@Override
+	public void addUpdateListener(IUpdateListener updateListener) {
+
+		updateListeners.add(updateListener);
+	}
+
+	@Override
+	public void removeUpdateListener(IUpdateListener updateListener) {
+
+		updateListeners.remove(updateListener);
+	}
 }

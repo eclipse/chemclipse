@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.views;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
@@ -21,6 +18,7 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.notifier.IMassSpectrumSelectionUpdateNotifier;
+import org.eclipse.chemclipse.msd.model.notifier.IdentificationTargetUpdateNotifier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.MassSpectrumTargetsContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.views.AbstractTargetsView;
@@ -51,13 +49,11 @@ public class MassSpectrumTargetsView extends AbstractTargetsView implements IMas
 	private EventHandler eventHandler;
 	//
 	private IScanMSD massSpectrum;
-	private Map<String, Object> map;
 
 	@Inject
 	public MassSpectrumTargetsView(IEventBroker eventBroker) {
 		super(new MassSpectrumTargetsContentProvider(), eventBroker);
 		this.eventBroker = eventBroker;
-		map = new HashMap<String, Object>();
 	}
 
 	@PostConstruct
@@ -174,10 +170,7 @@ public class MassSpectrumTargetsView extends AbstractTargetsView implements IMas
 			Object object = tableItem.getData();
 			if(object instanceof IIdentificationTarget) {
 				IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
-				map.clear();
-				map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, massSpectrum);
-				map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, identificationTarget);
-				eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+				IdentificationTargetUpdateNotifier.fireUpdateChange(massSpectrum, identificationTarget);
 			}
 		}
 	}

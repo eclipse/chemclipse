@@ -58,8 +58,8 @@ public class MassSpectrumListUI extends Composite {
 	private Label label;
 	private MassSpectrumListTableComparator massSpectrumTableComparator;
 	private MassSpectrumListFilter massSpectrumListFilter;
-	private String[] titles = {"Retention Time", "Retention Index", "Base Peak", "Base Peak Abundance", "Number of Ions", "Name", "CAS", "MW", "Formula", "SMILES", "InChI", "Reference Identifier", "Comments"};
-	private int bounds[] = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
+	private String[] titles = {"Name", "Retention Time", "Retention Index", "Base Peak", "Base Peak Abundance", "Number of Ions", "CAS", "MW", "Formula", "SMILES", "InChI", "Reference Identifier", "Comments"};
+	private int bounds[] = {300, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 	private int massSpectraSize = 0;
 	private List<IListItemsRemoveListener> listItemRemoveListeners;
 

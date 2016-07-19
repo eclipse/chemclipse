@@ -27,11 +27,19 @@ import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvaila
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.msd.converter.exceptions.NoMassSpectrumConverterAvailableException;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
 import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectraFileSupport;
@@ -88,8 +96,10 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 	/*
 	 * Mass spectrum selection and the GUI element.
 	 */
+	private MassSpectrumListUI massSpectrumListUI;
 	private File massSpectrumFile;
 	private IMassSpectra massSpectra;
+	private IComparisonResult comparisonResult;
 	/*
 	 * Showing additional info in tabs.
 	 */
@@ -98,6 +108,7 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 	@PostConstruct
 	private void createControl(Composite parent) {
 
+		comparisonResult = ComparisonResult.createBestMatchComparisonResult();
 		loadMassSpectra();
 		createPages(parent);
 	}
@@ -250,9 +261,20 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 		} catch(InterruptedException e) {
 			logger.warn(e);
 		}
+		/*
+		 * Add the mass spectra handling.
+		 */
 		dirtyable.setDirty(true);
 		massSpectra = runnable.getMassSpectra();
 		massSpectrumFile = file;
+		massSpectra.addUpdateListener(new IUpdateListener() {
+
+			@Override
+			public void update() {
+
+				updateMassSpectrumListUI();
+			}
+		});
 	}
 
 	private void createPages(Composite parent) {
@@ -274,7 +296,7 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Mass Spectra");
 		//
-		final MassSpectrumListUI massSpectrumListUI = new MassSpectrumListUI(tabFolder, SWT.NONE);
+		massSpectrumListUI = new MassSpectrumListUI(tabFolder, SWT.NONE);
 		massSpectrumListUI.update(massSpectra, true);
 		massSpectrumListUI.getTableViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 
@@ -295,6 +317,9 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 					 */
 					IScanMSD massSpectrum = (IScanMSD)firstElement;
 					MassSpectrumSelectionUpdateNotifier.fireUpdateChange(massSpectrum, true);
+					//
+					IIdentificationTarget identificationTarget = getIdentificationTarget(massSpectrum);
+					eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, identificationTarget);
 					/*
 					 * It's important to set the focus here.
 					 * The PerspectiveSwitchHandler.focusPerspectiveAndView activates other views and sets the
@@ -314,5 +339,30 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 		composite.setLayout(new FillLayout());
 		Label label = new Label(composite, SWT.NONE);
 		label.setText("The mass spectrum couldn't be loaded.");
+	}
+
+	private void updateMassSpectrumListUI() {
+
+		massSpectrumListUI.update(massSpectra, true);
+	}
+
+	private IIdentificationTarget getIdentificationTarget(IScanMSD scanMSD) {
+
+		IIdentificationTarget identificationTarget = null;
+		//
+		ILibraryInformation libraryInformation = null;
+		if(scanMSD instanceof IRegularLibraryMassSpectrum) {
+			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)scanMSD;
+			libraryInformation = libraryMassSpectrum.getLibraryInformation();
+			if(libraryInformation != null) {
+				try {
+					identificationTarget = new MassSpectrumTarget(libraryInformation, comparisonResult);
+				} catch(ReferenceMustNotBeNullException e) {
+					logger.warn(e);
+				}
+			}
+		}
+		//
+		return identificationTarget;
 	}
 }

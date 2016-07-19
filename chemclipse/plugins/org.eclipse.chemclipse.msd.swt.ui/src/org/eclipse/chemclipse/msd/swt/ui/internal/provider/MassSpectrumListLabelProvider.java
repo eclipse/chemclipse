@@ -83,14 +83,19 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
 		switch(columnIndex) {
-			case 0: // RT
+			case 0: // Name
+				if(libraryInformation != null) {
+					text = libraryInformation.getName();
+				}
+				break;
+			case 1: // RT
 				if(massSpectrum.getRetentionTime() == 0) {
 					text = "0";
 				} else {
 					text = decimalFormat.format(massSpectrum.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 				}
 				break;
-			case 1: // RI
+			case 2: // RI
 				int retentionIndexNoPrecision = (int)massSpectrum.getRetentionIndex();
 				if(retentionIndexNoPrecision == massSpectrum.getRetentionIndex()) {
 					text = Integer.toString(retentionIndexNoPrecision);
@@ -102,7 +107,7 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 					}
 				}
 				break;
-			case 2: // Base Peak
+			case 3: // Base Peak
 				int basePeakNoPrecision = (int)massSpectrum.getBasePeak();
 				if(basePeakNoPrecision == massSpectrum.getBasePeak()) {
 					text = Integer.toString(basePeakNoPrecision);
@@ -110,7 +115,7 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 					text = decimalFormat.format(massSpectrum.getBasePeak());
 				}
 				break;
-			case 3: // Base Peak Abundance
+			case 4: // Base Peak Abundance
 				int basePeakAbundanceNoPrecision = (int)massSpectrum.getBasePeakAbundance();
 				if(basePeakAbundanceNoPrecision == massSpectrum.getBasePeakAbundance()) {
 					text = Integer.toString(basePeakAbundanceNoPrecision);
@@ -118,13 +123,8 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 					text = decimalFormat.format(massSpectrum.getBasePeakAbundance());
 				}
 				break;
-			case 4: // Number of Ions
+			case 5: // Number of Ions
 				text = Integer.toString(massSpectrum.getNumberOfIons());
-				break;
-			case 5: // Name
-				if(libraryInformation != null) {
-					text = libraryInformation.getName();
-				}
 				break;
 			case 6: // CAS
 				if(libraryInformation != null) {

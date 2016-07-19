@@ -16,8 +16,11 @@ import java.io.Serializable;
 
 public interface IComparisonResult extends Serializable {
 
-	float MAX_MATCH_FACTOR = 100.0f;
-	float MAX_REVERSE_MATCH_FACTOR = 100.0f;
+	float FACTOR_BEST_MATCH = 100.0f;
+	float FACTOR_NO_MATCH = 0.0f;
+	//
+	float MAX_MATCH_FACTOR = FACTOR_BEST_MATCH;
+	float MAX_REVERSE_MATCH_FACTOR = FACTOR_BEST_MATCH;
 	//
 	float DEF_MAX_PENALTY = 20.0f;
 	float MIN_ALLOWED_PENALTY = 0.0f;

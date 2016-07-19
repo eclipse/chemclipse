@@ -71,25 +71,25 @@ public class MassSpectrumListTableComparator extends AbstractRecordTableComparat
 
 		int sortOrder = 0;
 		switch(getPropertyIndex()) {
-			case 0: // RT
-				sortOrder = Integer.compare(massSpectrum2.getRetentionTime(), massSpectrum1.getRetentionTime());
-				break;
-			case 1: // RI
-				sortOrder = Float.compare(massSpectrum2.getRetentionIndex(), massSpectrum1.getRetentionIndex());
-				break;
-			case 2: // Base Peak
-				sortOrder = Double.compare(massSpectrum2.getBasePeak(), massSpectrum1.getBasePeak());
-				break;
-			case 3: // Base Peak Abundance
-				sortOrder = Float.compare(massSpectrum2.getBasePeakAbundance(), massSpectrum1.getBasePeakAbundance());
-				break;
-			case 4: // Number of Ions
-				sortOrder = Integer.compare(massSpectrum2.getNumberOfIons(), massSpectrum1.getNumberOfIons());
-				break;
-			case 5: // Name
+			case 0: // Name
 				if(libraryInformation1 != null && libraryInformation2 != null) {
 					sortOrder = libraryInformation2.getName().compareTo(libraryInformation1.getName());
 				}
+				break;
+			case 1: // RT
+				sortOrder = Integer.compare(massSpectrum2.getRetentionTime(), massSpectrum1.getRetentionTime());
+				break;
+			case 2: // RI
+				sortOrder = Float.compare(massSpectrum2.getRetentionIndex(), massSpectrum1.getRetentionIndex());
+				break;
+			case 3: // Base Peak
+				sortOrder = Double.compare(massSpectrum2.getBasePeak(), massSpectrum1.getBasePeak());
+				break;
+			case 4: // Base Peak Abundance
+				sortOrder = Float.compare(massSpectrum2.getBasePeakAbundance(), massSpectrum1.getBasePeakAbundance());
+				break;
+			case 5: // Number of Ions
+				sortOrder = Integer.compare(massSpectrum2.getNumberOfIons(), massSpectrum1.getNumberOfIons());
 				break;
 			case 6: // CAS
 				if(libraryInformation1 != null && libraryInformation2 != null) {
