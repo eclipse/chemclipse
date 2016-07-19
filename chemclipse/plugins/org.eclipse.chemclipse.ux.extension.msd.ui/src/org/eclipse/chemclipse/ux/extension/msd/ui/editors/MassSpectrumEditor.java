@@ -25,10 +25,12 @@ import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvaila
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.converter.exceptions.NoMassSpectrumConverterAvailableException;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
@@ -280,12 +282,17 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Mass Spectrum");
 		//
+		String name = ("".equals(massSpectra.getName())) ? "NoName" : massSpectra.getName();
 		massSpectrum = massSpectra.getMassSpectrum(1);
 		if(massSpectrum instanceof IVendorMassSpectrum) {
-			part.setLabel(((IVendorMassSpectrum)massSpectrum).getName());
-		} else {
-			part.setLabel(massSpectra.getName());
+			name = ((IVendorMassSpectrum)massSpectrum).getName();
+		} else if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
+			ILibraryInformation libraryInformation = ((IRegularLibraryMassSpectrum)massSpectrum).getLibraryInformation();
+			if(libraryInformation != null) {
+				name = libraryInformation.getName();
+			}
 		}
+		part.setLabel(name);
 		//
 		boolean isProfile = PreferenceSupplier.useProfileMassSpectrumView();
 		AbstractExtendedMassSpectrumUI massSpectrumUI;
