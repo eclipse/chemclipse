@@ -262,6 +262,21 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 	}
 
 	/**
+	 * Returns the CAS number information from the mass spectrum.
+	 * 
+	 * @param massSpectrum
+	 * @return String
+	 */
+	protected String getSmilesField(IIdentificationTarget identificationTarget) {
+
+		String field = "SMILES: ";
+		if(identificationTarget != null) {
+			field += identificationTarget.getLibraryInformation().getSmiles();
+		}
+		return field;
+	}
+
+	/**
 	 * Returns the comments information from the mass spectrum.
 	 * 
 	 * @param massSpectrum

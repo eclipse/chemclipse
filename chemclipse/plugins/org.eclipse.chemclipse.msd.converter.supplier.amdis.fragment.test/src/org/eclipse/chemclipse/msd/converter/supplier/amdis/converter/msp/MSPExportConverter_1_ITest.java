@@ -13,8 +13,6 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
 import org.eclipse.chemclipse.msd.converter.massspectrum.IMassSpectrumExportConverter;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
@@ -24,6 +22,7 @@ import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -33,8 +32,6 @@ public class MSPExportConverter_1_ITest extends TestCase {
 	private File exportFile;
 	private IScanMSD massSpectrum;
 	private IMassSpectra massSpectra;
-	@SuppressWarnings("unused")
-	private File result;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -64,7 +61,6 @@ public class MSPExportConverter_1_ITest extends TestCase {
 
 		IMassSpectrumExportConverterProcessingInfo processingInfo = exportConverter.convert(null, massSpectrum, false, new NullProgressMonitor());
 		try {
-			result = processingInfo.getFile();
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(TypeCastException e) {
 			assertTrue("TypeCastException", true);
@@ -76,7 +72,6 @@ public class MSPExportConverter_1_ITest extends TestCase {
 		massSpectrum = null;
 		IMassSpectrumExportConverterProcessingInfo processingInfo = exportConverter.convert(exportFile, massSpectrum, false, new NullProgressMonitor());
 		try {
-			result = processingInfo.getFile();
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(TypeCastException e) {
 			assertTrue("TypeCastException", true);
@@ -88,7 +83,6 @@ public class MSPExportConverter_1_ITest extends TestCase {
 		massSpectra = null;
 		IMassSpectrumExportConverterProcessingInfo processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
 		try {
-			result = processingInfo.getFile();
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(TypeCastException e) {
 			assertTrue("TypeCastException", true);
@@ -101,7 +95,6 @@ public class MSPExportConverter_1_ITest extends TestCase {
 			exportFile.setWritable(false);
 			IMassSpectrumExportConverterProcessingInfo processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
 			try {
-				result = processingInfo.getFile();
 				assertTrue(processingInfo.hasErrorMessages());
 			} catch(TypeCastException e) {
 				assertTrue("TypeCastException", true);

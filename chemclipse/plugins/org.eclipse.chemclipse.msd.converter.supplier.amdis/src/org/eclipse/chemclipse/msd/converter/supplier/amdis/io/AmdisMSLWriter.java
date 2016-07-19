@@ -46,6 +46,7 @@ public class AmdisMSLWriter extends AbstractAmdisWriter implements IMassSpectraW
 		 */
 		fileWriter.write(getNameField(massSpectrum, identificationTarget) + CRLF);
 		fileWriter.write(getCasNumberField(identificationTarget) + CRLF);
+		fileWriter.write(getSmilesField(identificationTarget) + CRLF);
 		/*
 		 * Retention time, retention index
 		 */

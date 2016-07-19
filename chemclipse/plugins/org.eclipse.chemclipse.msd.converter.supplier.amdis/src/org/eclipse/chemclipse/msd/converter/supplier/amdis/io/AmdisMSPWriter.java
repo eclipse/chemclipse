@@ -57,6 +57,7 @@ public class AmdisMSPWriter extends AbstractAmdisWriter implements IMassSpectraW
 		fileWriter.write(getFormulaField(normalizedMassSpectrum) + CRLF);
 		fileWriter.write(getMWField(normalizedMassSpectrum) + CRLF);
 		fileWriter.write(getCasNumberField(identificationTarget) + CRLF);
+		fileWriter.write(getSmilesField(identificationTarget) + CRLF);
 		fileWriter.write(getNumberOfPeaks(normalizedMassSpectrum) + CRLF);
 		fileWriter.write(getMassSpectra(normalizedMassSpectrum));
 		/*
