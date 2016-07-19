@@ -63,6 +63,7 @@ public class AmdisMSLReader extends AbstractMassSpectraReader implements IMassSp
 		List<String> massSpectraData = getMassSpectraData(file);
 		IMassSpectra massSpectra = extractMassSpectra(massSpectraData);
 		massSpectra.setConverterId("org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msl");
+		massSpectra.setName(file.getName());
 		return massSpectra;
 	}
 
