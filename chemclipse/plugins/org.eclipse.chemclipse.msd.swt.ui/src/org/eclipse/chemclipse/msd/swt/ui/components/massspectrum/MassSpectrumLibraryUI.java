@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -24,6 +25,8 @@ import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
+import org.eclipse.chemclipse.msd.model.implementation.Ion;
+import org.eclipse.chemclipse.msd.model.implementation.RegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
 import org.eclipse.chemclipse.rcp.app.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
@@ -31,6 +34,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -45,10 +49,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 
 public class MassSpectrumLibraryUI extends Composite {
 
@@ -61,12 +65,17 @@ public class MassSpectrumLibraryUI extends Composite {
 	private static final String ACTION_INITIALIZE = "ACTION_INITIALIZE";
 	private static final String ACTION_CANCEL = "ACTION_CANCEL";
 	private static final String ACTION_DELETE = "ACTION_DELETE";
-	private static final String ACTION_ADD = "ACTION_ADD";
+	private static final String ACTION_IMPORT = "ACTION_IMPORT";
 	private static final String ACTION_SELECT = "ACTION_SELECT";
+	//
+	private Text textLibraryPath;
+	private Button buttonSelectLibrary;
+	private Button buttonMergeLibrary;
 	//
 	private Button buttonCancel;
 	private Button buttonDelete;
 	private Button buttonAdd;
+	private Button buttonImport;
 	//
 	private IMassSpectra massSpectra;
 
@@ -87,7 +96,7 @@ public class MassSpectrumLibraryUI extends Composite {
 
 		setLayout(new FillLayout());
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setLayout(new GridLayout(6, false));
+		composite.setLayout(new GridLayout(4, false));
 		//
 		createButtonField(composite);
 		createTableField(composite);
@@ -100,16 +109,21 @@ public class MassSpectrumLibraryUI extends Composite {
 		/*
 		 * Spacer Label
 		 */
-		Label label = new Label(composite, SWT.NONE);
-		label.setText("");
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 5;
-		label.setLayoutData(gridData);
+		textLibraryPath = new Text(composite, SWT.BORDER);
+		textLibraryPath.setText("");
+		textLibraryPath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		buttonSelectLibrary = new Button(composite, SWT.PUSH);
+		buttonSelectLibrary.setText("Select Library");
+		//
+		buttonMergeLibrary = new Button(composite, SWT.PUSH);
+		buttonMergeLibrary.setText("Merge Library");
+		buttonMergeLibrary.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
 		/*
 		 * Buttons
 		 */
 		Composite compositeButtons = new Composite(composite, SWT.NONE);
-		compositeButtons.setLayout(new GridLayout(3, true));
+		compositeButtons.setLayout(new GridLayout(4, true));
 		GridData gridDataComposite = new GridData();
 		gridDataComposite.horizontalAlignment = SWT.RIGHT;
 		compositeButtons.setLayoutData(gridDataComposite);
@@ -163,7 +177,44 @@ public class MassSpectrumLibraryUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				enableButtonFields(ACTION_ADD);
+				MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_INFORMATION | SWT.OK | SWT.CANCEL);
+				messageBox.setText("Add library entry?");
+				messageBox.setMessage("Would you like to add a new library entry?");
+				if(messageBox.open() == SWT.OK) {
+					try {
+						/*
+						 * Create a standard library mass spectrum.
+						 */
+						String name = "Add a name";
+						IRegularLibraryMassSpectrum libraryMassSpectrum = new RegularLibraryMassSpectrum();
+						ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
+						libraryInformation.setName(name);
+						libraryInformation.setComments("This library entry has been added manually");
+						libraryInformation.setMiscellaneous(ValueFormat.getDateFormatEnglish().format(new Date()));
+						libraryMassSpectrum.addIon(new Ion(18.0d, 600.0f));
+						libraryMassSpectrum.addIon(new Ion(28.0d, 1000.0f));
+						libraryMassSpectrum.addIon(new Ion(32.0d, 250.0f));
+						/*
+						 * Add to library and update the list.
+						 */
+						massSpectra.addMassSpectrum(libraryMassSpectrum);
+						massSpectrumListUI.setSearchSelection(name);
+						//
+					} catch(Exception e1) {
+						logger.warn(e1);
+					}
+				}
+			}
+		});
+		//
+		buttonImport = new Button(compositeButtons, SWT.PUSH);
+		buttonImport.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
+		buttonImport.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				enableButtonFields(ACTION_IMPORT);
 			}
 		});
 	}
@@ -172,7 +223,7 @@ public class MassSpectrumLibraryUI extends Composite {
 
 		Composite compositeTable = new Composite(composite, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.horizontalSpan = 6;
+		gridData.horizontalSpan = 4;
 		compositeTable.setLayoutData(gridData);
 		compositeTable.setBackground(Colors.MAGENTA);
 		compositeTable.setLayout(new FillLayout());
@@ -228,19 +279,25 @@ public class MassSpectrumLibraryUI extends Composite {
 		switch(action) {
 			case ACTION_INITIALIZE:
 				buttonAdd.setEnabled(true);
+				buttonImport.setEnabled(true);
 				break;
 			case ACTION_CANCEL:
 				buttonAdd.setEnabled(true);
+				buttonImport.setEnabled(true);
 				break;
 			case ACTION_DELETE:
 				buttonAdd.setEnabled(true);
 				break;
-			case ACTION_ADD:
+			case ACTION_IMPORT:
 				buttonCancel.setEnabled(true);
-				// TODO enable text fields
+				textLibraryPath.setEnabled(true);
+				buttonSelectLibrary.setEnabled(true);
+				buttonMergeLibrary.setEnabled(true);
 				break;
 			case ACTION_SELECT:
 				buttonAdd.setEnabled(true);
+				buttonImport.setEnabled(true);
+				//
 				if(massSpectrumListUI.getTableViewer().getTable().getSelectionIndex() >= 0) {
 					buttonDelete.setEnabled(true);
 				} else {
@@ -255,8 +312,11 @@ public class MassSpectrumLibraryUI extends Composite {
 		buttonCancel.setEnabled(enabled);
 		buttonDelete.setEnabled(enabled);
 		buttonAdd.setEnabled(enabled);
+		buttonImport.setEnabled(enabled);
 		//
-		// TODO enable text fields
+		textLibraryPath.setEnabled(enabled);
+		buttonSelectLibrary.setEnabled(enabled);
+		buttonMergeLibrary.setEnabled(enabled);
 	}
 
 	private IIdentificationTarget getIdentificationTarget(IScanMSD scanMSD) {

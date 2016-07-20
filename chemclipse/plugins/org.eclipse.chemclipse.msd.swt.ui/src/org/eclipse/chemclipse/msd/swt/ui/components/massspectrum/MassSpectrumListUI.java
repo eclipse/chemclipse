@@ -65,9 +65,59 @@ public class MassSpectrumListUI extends Composite {
 
 	public MassSpectrumListUI(Composite parent, int style) {
 		super(parent, style);
-		//
 		listItemRemoveListeners = new ArrayList<IListItemsRemoveListener>();
-		//
+		initialize();
+	}
+
+	public void setSearchSelection(String searchString) {
+
+		text.setText(searchString);
+		search();
+	}
+
+	@Override
+	public boolean setFocus() {
+
+		return tableViewer.getTable().setFocus();
+	}
+
+	public void addListItemsRemoveListener(IListItemsRemoveListener listItemRemoveListener) {
+
+		listItemRemoveListeners.add(listItemRemoveListener);
+	}
+
+	public void removeListItemsRemoveListener(IListItemsRemoveListener listItemRemoveListener) {
+
+		listItemRemoveListeners.remove(listItemRemoveListener);
+	}
+
+	public void update(IMassSpectra massSpectra, boolean forceReload) {
+
+		if(massSpectra != null) {
+			//
+			if(massSpectra.size() > MAX_SPECTRA_LOAD_COMPLETE) {
+				String searchString = "Please use this filter";
+				massSpectrumListFilter.setSearchText(searchString, true);
+				text.setText(searchString);
+			}
+			tableViewer.setInput(massSpectra);
+			massSpectraSize = massSpectra.size();
+			updateLabel();
+		}
+	}
+
+	public void clear() {
+
+		tableViewer.setInput(null);
+	}
+
+	public TableViewer getTableViewer() {
+
+		return tableViewer;
+	}
+
+	private void initialize() {
+
 		this.setLayout(new GridLayout(3, false));
 		this.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
@@ -164,47 +214,6 @@ public class MassSpectrumListUI extends Composite {
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		initContextMenu();
-	}
-
-	@Override
-	public boolean setFocus() {
-
-		return tableViewer.getTable().setFocus();
-	}
-
-	public void addListItemsRemoveListener(IListItemsRemoveListener listItemRemoveListener) {
-
-		listItemRemoveListeners.add(listItemRemoveListener);
-	}
-
-	public void removeListItemsRemoveListener(IListItemsRemoveListener listItemRemoveListener) {
-
-		listItemRemoveListeners.remove(listItemRemoveListener);
-	}
-
-	public void update(IMassSpectra massSpectra, boolean forceReload) {
-
-		if(massSpectra != null) {
-			//
-			if(massSpectra.size() > MAX_SPECTRA_LOAD_COMPLETE) {
-				String searchString = "Please use this filter";
-				massSpectrumListFilter.setSearchText(searchString, true);
-				text.setText(searchString);
-			}
-			tableViewer.setInput(massSpectra);
-			massSpectraSize = massSpectra.size();
-			updateLabel();
-		}
-	}
-
-	public void clear() {
-
-		tableViewer.setInput(null);
-	}
-
-	public TableViewer getTableViewer() {
-
-		return tableViewer;
 	}
 
 	private void search() {
