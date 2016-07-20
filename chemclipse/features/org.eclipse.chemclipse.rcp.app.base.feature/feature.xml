@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.eclipse.chemclipse.rcp.app.base.feature"
-      label="Application Base"
+      label="ChemClipse Base"
       version="0.7.0.qualifier"
       provider-name="ChemClipse">
 
