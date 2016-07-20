@@ -222,6 +222,18 @@ public class PreferenceSupplier {
 		return store.getBoolean(PreferenceConstants.P_SHOW_AXIS_RELATIVE_INTENSITY);
 	}
 
+	public static String getPathMassSpectrumLibraries() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getString(PreferenceConstants.P_PATH_MASS_SPECTRUM_LIBRARIES);
+	}
+
+	public static void setPathMassSpectrumLibraries(String pathMassSpectrumLibraries) {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.setValue(PreferenceConstants.P_PATH_MASS_SPECTRUM_LIBRARIES, pathMassSpectrumLibraries);
+	}
+
 	private static Color getColor(String preference) throws NumberFormatException {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();

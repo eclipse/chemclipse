@@ -11,16 +11,21 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
+import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverterSupport;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -28,6 +33,7 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectru
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.RegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
+import org.eclipse.chemclipse.msd.swt.ui.internal.runnables.ImportLibraryRunnable;
 import org.eclipse.chemclipse.rcp.app.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -35,8 +41,10 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -49,7 +57,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
@@ -115,10 +125,92 @@ public class MassSpectrumLibraryUI extends Composite {
 		//
 		buttonSelectLibrary = new Button(composite, SWT.PUSH);
 		buttonSelectLibrary.setText("Select Library");
+		buttonSelectLibrary.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				MassSpectrumConverterSupport massSpectrumConverterSupport = MassSpectrumConverter.getMassSpectrumConverterSupport();
+				try {
+					String[] extensions = massSpectrumConverterSupport.getFilterExtensions();
+					String[] names = massSpectrumConverterSupport.getFilterNames();
+					if(extensions.length == names.length) {
+						String[] filterExtensions = new String[extensions.length + 1];
+						String[] filterNames = new String[extensions.length + 1];
+						//
+						filterExtensions[0] = "*.*";
+						filterNames[0] = "All files";
+						//
+						for(int i = 0; i < extensions.length; i++) {
+							filterExtensions[i + 1] = extensions[i].replace(".", "*.");
+							filterNames[i + 1] = names[i];
+						}
+						//
+						Shell shell = Display.getCurrent().getActiveShell();
+						FileDialog fileDialog = new FileDialog(shell, SWT.READ_ONLY);
+						fileDialog.setText("Select Library");
+						fileDialog.setFilterExtensions(filterExtensions);
+						fileDialog.setFilterNames(filterNames);
+						fileDialog.setFilterPath(PreferenceSupplier.getPathMassSpectrumLibraries());
+						String pathname = fileDialog.open();
+						if(pathname != null) {
+							PreferenceSupplier.setPathMassSpectrumLibraries(fileDialog.getFilterPath());
+							textLibraryPath.setText(pathname);
+						}
+					}
+				} catch(NoConverterAvailableException e1) {
+					logger.warn(e1);
+				}
+			}
+		});
 		//
+		Shell shell = Display.getCurrent().getActiveShell();
 		buttonMergeLibrary = new Button(composite, SWT.PUSH);
 		buttonMergeLibrary.setText("Merge Library");
 		buttonMergeLibrary.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		buttonMergeLibrary.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				String pathLibrary = textLibraryPath.getText().trim();
+				if("".equals(pathLibrary)) {
+					/*
+					 * No library selected.
+					 */
+					MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
+					messageBox.setText("Merge Library");
+					messageBox.setMessage("Please select a library.");
+					messageBox.open();
+				} else {
+					/*
+					 * Merge library.
+					 */
+					File file = new File(textLibraryPath.getText().trim());
+					ImportLibraryRunnable runnable = new ImportLibraryRunnable(file);
+					ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
+					try {
+						/*
+						 * Use true, true ... instead of false, true ... if the progress bar
+						 * should be shown in action.
+						 */
+						monitor.run(true, true, runnable);
+					} catch(InvocationTargetException e1) {
+						logger.warn(e1);
+					} catch(InterruptedException e1) {
+						logger.warn(e1);
+					}
+					//
+					IMassSpectra massSpectraImport = runnable.getMassSpectra();
+					if(massSpectraImport != null) {
+						textLibraryPath.setText("");
+						massSpectra.addMassSpectra(massSpectraImport.getList());
+						massSpectrumSearchListUI.update(massSpectra, true);
+					}
+					enableButtonFields(ACTION_INITIALIZE);
+				}
+			}
+		});
 		/*
 		 * Buttons
 		 */
@@ -150,7 +242,7 @@ public class MassSpectrumLibraryUI extends Composite {
 				Table table = massSpectrumSearchListUI.getTableViewer().getTable();
 				int index = table.getSelectionIndex();
 				if(index >= 0) {
-					MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING);
+					MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
 					messageBox.setText("Delete library entrie(s)?");
 					messageBox.setMessage("Would you like to delete the library entrie(s)?");
 					if(messageBox.open() == SWT.OK) {
