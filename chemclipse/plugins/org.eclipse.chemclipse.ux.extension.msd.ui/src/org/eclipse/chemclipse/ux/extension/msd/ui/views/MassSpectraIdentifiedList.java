@@ -25,7 +25,7 @@ import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumSearchListUI;
 import org.eclipse.chemclipse.msd.swt.ui.converter.SeriesConverterMSD;
 import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
@@ -58,7 +58,7 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 	//
 	@Inject
 	private Composite parent;
-	private MassSpectrumListUI massSpectrumListUI;
+	private MassSpectrumSearchListUI massSpectrumListUI;
 	private IEventBroker eventBroker;
 	private EventHandler eventHandler;
 	//
@@ -122,7 +122,7 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 		/*
 		 * List
 		 */
-		massSpectrumListUI = new MassSpectrumListUI(composite, SWT.NONE);
+		massSpectrumListUI = new MassSpectrumSearchListUI(composite, SWT.NONE);
 		massSpectrumListUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		massSpectrumListUI.getTableViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 

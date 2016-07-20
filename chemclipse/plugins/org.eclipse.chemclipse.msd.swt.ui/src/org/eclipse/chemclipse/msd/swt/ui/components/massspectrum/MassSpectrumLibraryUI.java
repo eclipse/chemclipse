@@ -58,7 +58,7 @@ public class MassSpectrumLibraryUI extends Composite {
 
 	private static final Logger logger = Logger.getLogger(MassSpectrumLibraryUI.class);
 	//
-	private MassSpectrumListUI massSpectrumListUI;
+	private MassSpectrumSearchListUI massSpectrumSearchListUI;
 	private IEventBroker eventBroker;
 	private IComparisonResult comparisonResult;
 	//
@@ -89,7 +89,7 @@ public class MassSpectrumLibraryUI extends Composite {
 	public void update(IMassSpectra massSpectra, boolean forceReload) {
 
 		this.massSpectra = massSpectra;
-		massSpectrumListUI.update(massSpectra, true);
+		massSpectrumSearchListUI.update(massSpectra, true);
 	}
 
 	private void initialize() {
@@ -147,7 +147,7 @@ public class MassSpectrumLibraryUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Table table = massSpectrumListUI.getTableViewer().getTable();
+				Table table = massSpectrumSearchListUI.getTableViewer().getTable();
 				int index = table.getSelectionIndex();
 				if(index >= 0) {
 					MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING);
@@ -164,7 +164,7 @@ public class MassSpectrumLibraryUI extends Composite {
 								massSpectra.removeMassSpectrum(massSpectrum);
 							}
 						}
-						massSpectrumListUI.update(massSpectra, true);
+						massSpectrumSearchListUI.update(massSpectra, true);
 					}
 				}
 			}
@@ -198,7 +198,7 @@ public class MassSpectrumLibraryUI extends Composite {
 						 * Add to library and update the list.
 						 */
 						massSpectra.addMassSpectrum(libraryMassSpectrum);
-						massSpectrumListUI.setSearchSelection(name);
+						massSpectrumSearchListUI.setSearchSelection(name);
 						//
 					} catch(Exception e1) {
 						logger.warn(e1);
@@ -230,8 +230,8 @@ public class MassSpectrumLibraryUI extends Composite {
 		//
 		Composite compositeInner = new Composite(compositeTable, SWT.NONE);
 		compositeInner.setLayout(new GridLayout(1, true));
-		massSpectrumListUI = new MassSpectrumListUI(compositeInner, SWT.BORDER | SWT.MULTI);
-		massSpectrumListUI.getTableViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+		massSpectrumSearchListUI = new MassSpectrumSearchListUI(compositeInner, SWT.BORDER | SWT.MULTI);
+		massSpectrumSearchListUI.getTableViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -259,11 +259,11 @@ public class MassSpectrumLibraryUI extends Composite {
 					 * focus there. But when trying to press "DEL", the focus would be on the other views.
 					 * Hence, it needs to be set back to this list.
 					 */
-					massSpectrumListUI.setFocus();
+					massSpectrumSearchListUI.setFocus();
 				}
 			}
 		});
-		massSpectrumListUI.getTableViewer().getTable().addSelectionListener(new SelectionAdapter() {
+		massSpectrumSearchListUI.getTableViewer().getTable().addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -298,7 +298,7 @@ public class MassSpectrumLibraryUI extends Composite {
 				buttonAdd.setEnabled(true);
 				buttonImport.setEnabled(true);
 				//
-				if(massSpectrumListUI.getTableViewer().getTable().getSelectionIndex() >= 0) {
+				if(massSpectrumSearchListUI.getTableViewer().getTable().getSelectionIndex() >= 0) {
 					buttonDelete.setEnabled(true);
 				} else {
 					buttonDelete.setEnabled(false);
