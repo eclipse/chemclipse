@@ -52,7 +52,7 @@ public class MassSpectrumIonsListUI extends ExtendedTableViewer {
 		setLabelProvider(new IonListLabelProvider());
 		setContentProvider(new IonListContentProvider());
 		setComparator(new IonListTableComparator());
-		// TODO Filter
+		// TODO Filter wenn zu viele m/z
 		setEditingSupport();
 	}
 
