@@ -18,7 +18,7 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.swt.ui.components.identification.SynonymsListUI;
+import org.eclipse.chemclipse.msd.swt.ui.components.identification.SynonymsEditUI;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -31,7 +31,7 @@ public class SynonymsView extends AbstractMassSpectrumSelectionView {
 
 	@Inject
 	private Composite parent;
-	private SynonymsListUI synonymsListUI;
+	private SynonymsEditUI synonymsEditUI;
 
 	@Inject
 	public SynonymsView(EPartService partService, MPart part, IEventBroker eventBroker) {
@@ -42,7 +42,7 @@ public class SynonymsView extends AbstractMassSpectrumSelectionView {
 	private void createControl() {
 
 		parent.setLayout(new FillLayout());
-		synonymsListUI = new SynonymsListUI(parent, SWT.NONE);
+		synonymsEditUI = new SynonymsEditUI(parent, SWT.NONE);
 	}
 
 	@PreDestroy
@@ -54,14 +54,14 @@ public class SynonymsView extends AbstractMassSpectrumSelectionView {
 	@Focus
 	public void setFocus() {
 
-		synonymsListUI.update(getLibraryInformation(getMassSpectrum()), true);
+		synonymsEditUI.update(getLibraryInformation(getMassSpectrum()), true);
 	}
 
 	@Override
 	public void update(IScanMSD massSpectrum, boolean forceReload) {
 
 		if(doUpdate(massSpectrum)) {
-			synonymsListUI.update(getLibraryInformation(massSpectrum), true);
+			synonymsEditUI.update(getLibraryInformation(massSpectrum), true);
 		}
 	}
 

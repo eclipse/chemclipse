@@ -42,7 +42,6 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -68,15 +67,15 @@ public class MassSpectrumLibraryUI extends Composite {
 
 	private static final Logger logger = Logger.getLogger(MassSpectrumLibraryUI.class);
 	//
-	private MassSpectrumSearchListUI massSpectrumSearchListUI;
-	private IEventBroker eventBroker;
-	private IComparisonResult comparisonResult;
-	//
 	private static final String ACTION_INITIALIZE = "ACTION_INITIALIZE";
 	private static final String ACTION_CANCEL = "ACTION_CANCEL";
 	private static final String ACTION_DELETE = "ACTION_DELETE";
 	private static final String ACTION_IMPORT = "ACTION_IMPORT";
 	private static final String ACTION_SELECT = "ACTION_SELECT";
+	//
+	private MassSpectrumSearchListUI massSpectrumSearchListUI;
+	private IEventBroker eventBroker;
+	private IComparisonResult comparisonResult;
 	//
 	private Text textLibraryPath;
 	private Button buttonSelectLibrary;
@@ -317,7 +316,6 @@ public class MassSpectrumLibraryUI extends Composite {
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 4;
 		compositeTable.setLayoutData(gridData);
-		compositeTable.setBackground(Colors.MAGENTA);
 		compositeTable.setLayout(new FillLayout());
 		//
 		Composite compositeInner = new Composite(compositeTable, SWT.NONE);

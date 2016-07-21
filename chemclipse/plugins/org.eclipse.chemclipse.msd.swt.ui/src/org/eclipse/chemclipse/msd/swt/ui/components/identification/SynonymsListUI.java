@@ -11,11 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.components.identification;
 
+import java.util.List;
+
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.msd.swt.ui.internal.editingsupport.SynonymsTextEditingSupport;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.SynonymsListContentProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.SynonymsListLabelProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.SynonymsListTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.widgets.Composite;
 
 public class SynonymsListUI extends ExtendedTableViewer {
@@ -40,6 +44,7 @@ public class SynonymsListUI extends ExtendedTableViewer {
 		setLabelProvider(new SynonymsListLabelProvider());
 		setContentProvider(new SynonymsListContentProvider());
 		setComparator(new SynonymsListTableComparator());
+		setEditingSupport();
 	}
 
 	public void update(ILibraryInformation libraryInformation, boolean forceReload) {
@@ -47,5 +52,12 @@ public class SynonymsListUI extends ExtendedTableViewer {
 		if(libraryInformation != null) {
 			setInput(libraryInformation.getSynonyms());
 		}
+	}
+
+	private void setEditingSupport() {
+
+		List<TableViewerColumn> tableViewerColumns = getTableViewerColumns();
+		TableViewerColumn tableViewerColumn = tableViewerColumns.get(0);
+		tableViewerColumn.setEditingSupport(new SynonymsTextEditingSupport(this));
 	}
 }
