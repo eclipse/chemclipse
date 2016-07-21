@@ -18,12 +18,21 @@ import org.eclipse.chemclipse.swt.ui.series.ISeries;
 import org.eclipse.chemclipse.swt.ui.support.AxisTitlesMassScale;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.swtchart.ICustomPaintListener;
 import org.swtchart.ILineSeries;
 import org.swtchart.ILineSeries.PlotSymbolType;
+import org.swtchart.IPlotArea;
 import org.swtchart.ISeries.SeriesType;
 
 public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
+
+	private ISeries peakSeries = null;
+	private Color foregroundColor;
 
 	public LabeledPeakChromatogramUI(Composite parent, int style) {
 		super(parent, style, new AxisTitlesMassScale());
@@ -46,5 +55,33 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 			lineSeries.setSymbolType(PlotSymbolType.NONE);
 			lineSeries.setLineColor(Colors.BLACK);
 		}
+	}
+
+	@Override
+	protected void initialize() {
+
+		super.initialize();
+		foregroundColor = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
+		IPlotArea plotArea = (IPlotArea)getPlotArea();
+		plotArea.addCustomPaintListener(new ICustomPaintListener() {
+
+			public void paintControl(PaintEvent e) {
+
+				if(peakSeries != null) {
+					paintPeakNames(peakSeries, false, e);
+				}
+			}
+
+			public boolean drawBehindSeries() {
+
+				return false;
+			}
+		});
+	}
+
+	protected void paintPeakNames(ISeries peakSeries, boolean mirrored, PaintEvent e) {
+
+		e.gc.setForeground(foregroundColor);
+		// TODO draw the name of the best identification
 	}
 }
