@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Eclipse-BuddyPolicy: registered
 Bundle-ManifestVersion: 2
 Bundle-Name: Model
-Bundle-SymbolicName: org.eclipse.chemclipse.model
+Bundle-SymbolicName: org.eclipse.chemclipse.model;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.model.Activator
 Bundle-Vendor: ChemClipse
@@ -19,6 +19,7 @@ Export-Package: org.eclipse.chemclipse.model.baseline,
  org.eclipse.chemclipse.model.identifier,
  org.eclipse.chemclipse.model.implementation,
  org.eclipse.chemclipse.model.notifier,
+ org.eclipse.chemclipse.model.preferences,
  org.eclipse.chemclipse.model.processor,
  org.eclipse.chemclipse.model.quantitation,
  org.eclipse.chemclipse.model.selection,

@@ -11,7 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.swt.ui;
 
+import java.util.Map;
+
+import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -21,6 +27,7 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
+	private ScopedPreferenceStore preferenceStoreChromatogram = null;
 
 	/**
 	 * The constructor
@@ -56,5 +63,19 @@ public class Activator extends AbstractUIPlugin {
 	public static Activator getDefault() {
 
 		return plugin;
+	}
+
+	public IPreferenceStore getPreferenceStoreChromatogram() {
+
+		// Create the preference store lazily.
+		if(preferenceStoreChromatogram == null) {
+			IPreferenceSupplier preferenceSupplier = PreferenceSupplier.INSTANCE();
+			preferenceStoreChromatogram = new ScopedPreferenceStore(preferenceSupplier.getScopeContext(), preferenceSupplier.getPreferenceNode());
+			Map<String, String> initializationEntries = preferenceSupplier.getDefaultValues();
+			for(Map.Entry<String, String> entry : initializationEntries.entrySet()) {
+				preferenceStoreChromatogram.setDefault(entry.getKey(), entry.getValue());
+			}
+		}
+		return preferenceStoreChromatogram;
 	}
 }
