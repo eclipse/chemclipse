@@ -44,7 +44,7 @@ public class CombinedMassSpectrumSelectionTableView extends AbstractChromatogram
 	private void createControl() {
 
 		parent.setLayout(new FillLayout());
-		massSpectrumIonsListUI = new MassSpectrumIonsListUI(parent, SWT.NONE);
+		massSpectrumIonsListUI = new MassSpectrumIonsListUI(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 	}
 
 	@PreDestroy
@@ -56,7 +56,7 @@ public class CombinedMassSpectrumSelectionTableView extends AbstractChromatogram
 	@Focus
 	public void setFocus() {
 
-		massSpectrumIonsListUI.setFocus();
+		massSpectrumIonsListUI.getTable().setFocus();
 		update(getChromatogramSelection(), false);
 	}
 
