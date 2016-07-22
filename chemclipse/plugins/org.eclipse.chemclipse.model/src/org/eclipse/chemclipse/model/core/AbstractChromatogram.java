@@ -34,6 +34,7 @@ import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.implementation.TripleQuadMethod;
 import org.eclipse.chemclipse.model.notifier.IChromatogramSelectionUpdateNotifier;
+import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.processor.IChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
@@ -54,8 +55,6 @@ import org.eclipse.core.runtime.SafeRunner;
 public abstract class AbstractChromatogram implements IChromatogram {
 
 	private static final Logger logger = Logger.getLogger(AbstractChromatogram.class);
-	private static final String MISC_SEPARATOR = "!";
-	private static final String MISC_SEPARATED_DELIMITER = " ";
 	//
 	private String converterId = "";
 	private File file = null; // The file object of the chromatogram.
@@ -272,13 +271,13 @@ public abstract class AbstractChromatogram implements IChromatogram {
 	public void setMiscInfo(String miscInfo) {
 
 		if(miscInfo != null) {
-			String[] values = miscInfo.split(MISC_SEPARATOR);
+			String[] values = miscInfo.split(PreferenceSupplier.getMiscSeparator());
 			if(values.length >= 2) {
 				this.miscInfo = values[0];
 				StringBuilder builder = new StringBuilder();
 				for(int i = 1; i < values.length; i++) {
 					builder.append(values[i].trim());
-					builder.append(MISC_SEPARATED_DELIMITER);
+					builder.append(PreferenceSupplier.getMiscSeparatedDelimiter());
 				}
 				this.miscInfoSeparated = builder.toString().trim();
 			} else {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2016 Philip (eselmeister) Wenig.
+ * Copyright (c) 2016 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,18 +7,21 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Philip (eselmeister) Wenig - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.msd.ui.views;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.views;
+
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumIonsListUI;
+import org.eclipse.chemclipse.swt.ui.components.chromatogram.MirroredMultipleChromatogramOffsetUI;
+import org.eclipse.chemclipse.swt.ui.support.AxisTitlesIntensityScale;
+import org.eclipse.chemclipse.swt.ui.support.IOffset;
+import org.eclipse.chemclipse.swt.ui.support.Offset;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -27,14 +30,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class PeakMassSpectrumIonsListView extends AbstractChromatogramSelectionMSDView {
+public class LabeledPeakChromatogramView extends AbstractChromatogramOverlayView {
 
 	@Inject
 	private Composite parent;
-	private MassSpectrumIonsListUI massSpectrumIonsListUI;
+	private MirroredMultipleChromatogramOffsetUI chromatogramOverlayUI;
+	private IOffset offset = new Offset(0.0d, 0.0d);
 
 	@Inject
-	public PeakMassSpectrumIonsListView(EPartService partService, MPart part, IEventBroker eventBroker) {
+	public LabeledPeakChromatogramView(EPartService partService, MPart part, IEventBroker eventBroker) {
 		super(part, partService, eventBroker);
 	}
 
@@ -42,7 +46,7 @@ public class PeakMassSpectrumIonsListView extends AbstractChromatogramSelectionM
 	private void createControl() {
 
 		parent.setLayout(new FillLayout());
-		massSpectrumIonsListUI = new MassSpectrumIonsListUI(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		chromatogramOverlayUI = new MirroredMultipleChromatogramOffsetUI(parent, SWT.NONE, offset, new AxisTitlesIntensityScale());
 	}
 
 	@PreDestroy
@@ -54,31 +58,25 @@ public class PeakMassSpectrumIonsListView extends AbstractChromatogramSelectionM
 	@Focus
 	public void setFocus() {
 
-		massSpectrumIonsListUI.getControl().setFocus();
+		chromatogramOverlayUI.setFocus();
 		update(getChromatogramSelection(), false);
 	}
 
 	@Override
-	public void update(IChromatogramSelectionMSD chromatogramSelection, boolean forceReload) {
+	public void update(IChromatogramSelection chromatogramSelection, boolean forceReload) {
 
 		/*
 		 * Update the ui only if the actual view part is visible and the
 		 * selection is not null.
 		 */
 		if(doUpdate(chromatogramSelection)) {
-			IScanMSD massSpectrum = chromatogramSelection.getSelectedPeak().getPeakModel().getPeakMassSpectrum();
-			massSpectrumIonsListUI.update(massSpectrum, forceReload);
+			/*
+			 * Update the offset of the view. It necessary, the user must
+			 * restart the workbench in case of a change otherwise.
+			 */
+			List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(chromatogramSelection, false);
+			chromatogramOverlayUI.setOffset(offset);
+			chromatogramOverlayUI.updateSelection(chromatogramSelections, forceReload);
 		}
-	}
-
-	@Override
-	public boolean doUpdate(IChromatogramSelection chromatogramSelection) {
-
-		if(super.doUpdate(chromatogramSelection)) {
-			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-				return (((IChromatogramSelectionMSD)chromatogramSelection).getSelectedScan() != null) ? true : false;
-			}
-		}
-		return false;
 	}
 }

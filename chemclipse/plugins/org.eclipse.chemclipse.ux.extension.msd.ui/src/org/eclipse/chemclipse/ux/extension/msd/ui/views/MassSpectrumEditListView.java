@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2016 Dr. Philip Wenig.
+ * Copyright (c) 2014, 2016 Dr. Philip Wenig, Matthias Mailänder.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.views;
 
@@ -16,7 +17,7 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumIonsListUI;
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumEditListUI;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -25,14 +26,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class SimpleNominalMassSpectrumIonListView extends AbstractMassSpectrumSelectionView {
+public class MassSpectrumEditListView extends AbstractMassSpectrumSelectionView {
 
 	@Inject
 	private Composite parent;
-	private MassSpectrumIonsListUI massSpectrumIonsListUI;
+	private MassSpectrumEditListUI massSpectrumEditListUI;
 
 	@Inject
-	public SimpleNominalMassSpectrumIonListView(EPartService partService, MPart part, IEventBroker eventBroker) {
+	public MassSpectrumEditListView(EPartService partService, MPart part, IEventBroker eventBroker) {
 		super(part, partService, eventBroker);
 	}
 
@@ -40,7 +41,7 @@ public class SimpleNominalMassSpectrumIonListView extends AbstractMassSpectrumSe
 	private void createControl() {
 
 		parent.setLayout(new FillLayout());
-		massSpectrumIonsListUI = new MassSpectrumIonsListUI(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		massSpectrumEditListUI = new MassSpectrumEditListUI(parent, SWT.NONE);
 	}
 
 	@PreDestroy
@@ -52,7 +53,7 @@ public class SimpleNominalMassSpectrumIonListView extends AbstractMassSpectrumSe
 	@Focus
 	public void setFocus() {
 
-		massSpectrumIonsListUI.getControl().setFocus();
+		massSpectrumEditListUI.setFocus();
 		update(getMassSpectrum(), false);
 	}
 
@@ -64,7 +65,7 @@ public class SimpleNominalMassSpectrumIonListView extends AbstractMassSpectrumSe
 		 * selection is not null.
 		 */
 		if(isPartVisible() && massSpectrum != null) {
-			massSpectrumIonsListUI.update(massSpectrum, forceReload);
+			massSpectrumEditListUI.update(massSpectrum, forceReload);
 		}
 	}
 }

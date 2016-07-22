@@ -16,77 +16,48 @@ import org.eclipse.chemclipse.msd.swt.ui.internal.provider.IonListContentProvide
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.IonListLabelProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.IonListTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class MassSpectrumIonsListUI {
+public class MassSpectrumIonsListUI extends ExtendedTableViewer {
 
-	private ExtendedTableViewer tableViewer;
-	private IonListTableComparator ionListTableComparator;
 	private String[] titles = {"m/z", "abundance", "parent m/z", "parent resolution", "daughter m/z", "daughter resolution", "collision energy"};
 	private int bounds[] = {100, 100, 120, 120, 120, 120, 120};
 
-	public MassSpectrumIonsListUI(Composite parent, int style) {
-		parent.setLayout(new FillLayout());
-		/*
-		 * E.g. Scan
-		 */
-		tableViewer = new ExtendedTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		tableViewer.createColumns(titles, bounds);
-		tableViewer.setContentProvider(new IonListContentProvider());
-		tableViewer.setLabelProvider(new IonListLabelProvider());
-		/*
-		 * Sorting the table.
-		 */
-		ionListTableComparator = new IonListTableComparator();
-		tableViewer.setComparator(ionListTableComparator);
-		/*
-		 * Copy and Paste of the table content.
-		 */
-		tableViewer.getTable().addKeyListener(new KeyAdapter() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-				/*
-				 * The selected content will be placed to the clipboard if the
-				 * user is using "Function + c". "Function-Key" 262144
-				 * (stateMask) + "c" 99 (keyCode)
-				 */
-				if(e.keyCode == 99 && e.stateMask == 262144) {
-					tableViewer.copyToClipboard(titles);
-				}
-			}
-		});
+	public MassSpectrumIonsListUI(Composite parent) {
+		super(parent);
+		createColumns();
 	}
 
-	public void setFocus() {
-
-		tableViewer.getControl().setFocus();
+	public MassSpectrumIonsListUI(Composite parent, int style) {
+		super(parent, style);
+		createColumns();
 	}
 
 	public void update(IScanMSD massSpectrum, boolean forceReload) {
 
 		if(massSpectrum != null) {
-			tableViewer.setInput(massSpectrum);
+			setInput(massSpectrum);
 		}
 	}
 
 	public void clear() {
 
-		tableViewer.setInput(null);
+		setInput(null);
 	}
 
-	public ExtendedTableViewer getTableViewer() {
+	private void createColumns() {
 
-		return tableViewer;
+		createColumns(titles, bounds);
+		//
+		setLabelProvider(new IonListLabelProvider());
+		setContentProvider(new IonListContentProvider());
+		setComparator(new IonListTableComparator());
+		// TODO add a filter to display a subset of m/z values only
+		setEditingSupport();
 	}
 
-	public String[] getTitles() {
+	private void setEditingSupport() {
 
-		return titles;
+		// TODO implement
 	}
 }
