@@ -36,8 +36,9 @@ public class PropertiesUtil {
 		properties.setProperty("log4j.appender.ChemClipseConsoleAppender", "org.apache.log4j.ConsoleAppender");
 		properties.setProperty("log4j.appender.ChemClipseConsoleAppender.target", "System.out");
 		properties.setProperty("log4j.appender.ChemClipseConsoleAppender.layout", "org.apache.log4j.PatternLayout");
-		// properties.setProperty("log4j.appender.ChemClipseConsoleAppender.layout.ConversionPattern", "%d{ISO8601} %-5p [%t] %c{3}:%L %m%n");
-		properties.setProperty("log4j.appender.ChemClipseConsoleAppender.layout.ConversionPattern", "%-5p %C.%M (%F:%L) %m%n");
+		// properties.setProperty("log4j.appender.ChemClipseConsoleAppender.layout.ConversionPattern",
+		// "%d{ISO8601} %-5p [%t] %c{3}:%L %m%n");
+		properties.setProperty("log4j.appender.ChemClipseConsoleAppender.layout.ConversionPattern", "%-5p %C{2}.%M (%F:%L) %m%n");
 		/*
 		 * Log to a file.
 		 */
@@ -58,8 +59,8 @@ public class PropertiesUtil {
 	}
 
 	/**
-	 * Returns the log file path and name.
-	 * E.g.: "/home/user/.chemclipse/net.chemclipse.logging"
+	 * Returns the log file path and name. E.g.:
+	 * "/home/user/.chemclipse/net.chemclipse.logging"
 	 * 
 	 * @return
 	 */
