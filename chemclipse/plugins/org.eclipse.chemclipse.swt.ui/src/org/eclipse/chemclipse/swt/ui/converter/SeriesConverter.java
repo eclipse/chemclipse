@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
+import org.eclipse.chemclipse.swt.ui.exceptions.NoPeaksAvailableException;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
@@ -718,7 +719,7 @@ public class SeriesConverter {
 		List<IPeak> peaks = new ArrayList<IPeak>();
 		peaks.add(peak);
 		IOffset offset = new Offset(0, 0);
-		IMultipleSeries peakSeries = convertPeak(peaks, includeBackground, sign, offset);
+		IMultipleSeries peakSeries = convertPeaks(peaks, includeBackground, sign, offset);
 		return peakSeries.getMultipleSeries().get(0);
 	}
 
@@ -743,7 +744,7 @@ public class SeriesConverter {
 		List<IPeak> peaks = new ArrayList<IPeak>();
 		peaks.add(peak);
 		IOffset offset = new Offset(0, 0);
-		IMultipleSeries peakSeries = convertPeak(peaks, includeBackground, sign, offset);
+		IMultipleSeries peakSeries = convertPeaks(peaks, includeBackground, sign, offset);
 		return peakSeries.getMultipleSeries().get(0);
 	}
 
@@ -767,7 +768,7 @@ public class SeriesConverter {
 	 * @param offset
 	 * @return List<ISeries>
 	 */
-	public static IMultipleSeries convertPeak(List<? extends IPeak> peaks, boolean includeBackground, Sign sign, IOffset offset) {
+	public static IMultipleSeries convertPeaks(List<? extends IPeak> peaks, boolean includeBackground, Sign sign, IOffset offset) {
 
 		IMultipleSeries peakSeries = new MultipleSeries();
 		if(peaks != null) {
@@ -905,5 +906,98 @@ public class SeriesConverter {
 			}
 		}
 		return peakBackgroundSeries;
+	}
+
+	/**
+	 * Returns the chromatogram selections as series.
+	 * 
+	 * @param chromatograms
+	 * @param sign
+	 * @param offset
+	 * @return IMultipleSeries
+	 */
+	public static IMultipleSeries convertPeakMaxMarker(List<? extends IPeak> peaks, Sign sign, IOffset offset, boolean activeForAnalysis) throws NoPeaksAvailableException {
+
+		/*
+		 * There must be at least one chromatogram in the list.
+		 */
+		IMultipleSeries peakSeries = new MultipleSeries();
+		if(peaks != null) {
+			offset = SeriesConverter.validateOffset(offset);
+			int amountPeaks = getAmountPeaks(peaks, activeForAnalysis);
+			//
+			/*
+			 * Throw an exception if no peaks are available.
+			 */
+			if(amountPeaks == 0) {
+				throw new NoPeaksAvailableException();
+			}
+			/*
+			 * Get the retention time and max abundance value for each peak.
+			 */
+			;
+			double[] xSeries = new double[amountPeaks];
+			double[] ySeries = new double[amountPeaks];
+			int x = 0;
+			int y = 0;
+			/*
+			 * Iterate through all peaks of the chromatogram selection.
+			 */
+			for(IPeak peak : peaks) {
+				/*
+				 * Retrieve the x and y signal of each peak.
+				 */
+				if(printPeak(peak, activeForAnalysis)) {
+					IPeakModel peakModel = peak.getPeakModel();
+					double retentionTime = peakModel.getRetentionTimeAtPeakMaximum();
+					double abundance = peakModel.getBackgroundAbundance() + peakModel.getPeakAbundance();
+					/*
+					 * Sign the abundance as a negative value?
+					 */
+					double xOffset = offset.getCurrentXOffset();
+					double yOffset = offset.getCurrentYOffset();
+					if(sign == Sign.NEGATIVE) {
+						abundance *= -1;
+						xOffset *= -1;
+						yOffset *= -1;
+					}
+					/*
+					 * Set the offset.
+					 */
+					retentionTime += xOffset;
+					abundance += yOffset;
+					/*
+					 * Store the values in the array.
+					 */
+					xSeries[x++] = retentionTime;
+					ySeries[y++] = abundance;
+				}
+			}
+			/*
+			 * Add the series.
+			 */
+			if(activeForAnalysis) {
+				peakSeries.add(new Series(xSeries, ySeries, "Active Peaks"));
+			} else {
+				peakSeries.add(new Series(xSeries, ySeries, "Inactive Peaks"));
+			}
+		}
+		return peakSeries;
+	}
+
+	private static int getAmountPeaks(List<? extends IPeak> peaks, boolean activeForAnalysis) {
+
+		int amountPeaks = 0;
+		for(IPeak peak : peaks) {
+			if(printPeak(peak, activeForAnalysis)) {
+				amountPeaks++;
+			}
+		}
+		return amountPeaks;
+	}
+
+	private static boolean printPeak(IPeak peak, boolean activeForAnalysis) {
+
+		return activeForAnalysis == peak.isActiveForAnalysis();
 	}
 }

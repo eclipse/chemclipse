@@ -11,17 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.views;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.swt.ui.components.chromatogram.MirroredMultipleChromatogramOffsetUI;
-import org.eclipse.chemclipse.swt.ui.support.AxisTitlesIntensityScale;
-import org.eclipse.chemclipse.swt.ui.support.IOffset;
-import org.eclipse.chemclipse.swt.ui.support.Offset;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.LabeledPeakChromatogramUI;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -34,8 +29,7 @@ public class LabeledPeakChromatogramView extends AbstractChromatogramOverlayView
 
 	@Inject
 	private Composite parent;
-	private MirroredMultipleChromatogramOffsetUI chromatogramOverlayUI;
-	private IOffset offset = new Offset(0.0d, 0.0d);
+	private LabeledPeakChromatogramUI labeledPeakChromatogramUI;
 
 	@Inject
 	public LabeledPeakChromatogramView(EPartService partService, MPart part, IEventBroker eventBroker) {
@@ -46,7 +40,7 @@ public class LabeledPeakChromatogramView extends AbstractChromatogramOverlayView
 	private void createControl() {
 
 		parent.setLayout(new FillLayout());
-		chromatogramOverlayUI = new MirroredMultipleChromatogramOffsetUI(parent, SWT.NONE, offset, new AxisTitlesIntensityScale());
+		labeledPeakChromatogramUI = new LabeledPeakChromatogramUI(parent, SWT.NONE);
 	}
 
 	@PreDestroy
@@ -58,7 +52,7 @@ public class LabeledPeakChromatogramView extends AbstractChromatogramOverlayView
 	@Focus
 	public void setFocus() {
 
-		chromatogramOverlayUI.setFocus();
+		labeledPeakChromatogramUI.setFocus();
 		update(getChromatogramSelection(), false);
 	}
 
@@ -74,9 +68,7 @@ public class LabeledPeakChromatogramView extends AbstractChromatogramOverlayView
 			 * Update the offset of the view. It necessary, the user must
 			 * restart the workbench in case of a change otherwise.
 			 */
-			List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(chromatogramSelection, false);
-			chromatogramOverlayUI.setOffset(offset);
-			chromatogramOverlayUI.updateSelection(chromatogramSelections, forceReload);
+			labeledPeakChromatogramUI.updateSelection(chromatogramSelection, forceReload);
 		}
 	}
 }
