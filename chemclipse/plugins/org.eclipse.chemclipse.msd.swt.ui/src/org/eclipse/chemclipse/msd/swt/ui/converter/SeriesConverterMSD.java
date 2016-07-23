@@ -300,7 +300,8 @@ public class SeriesConverterMSD {
 	 */
 	public static ISeries convertIdentifiedScans(IChromatogramSelectionMSD chromatogramSelection, IOffset offset, Sign sign) throws NoIdentifiedScansAvailableException {
 
-		IMultipleSeries identifiedScansSeries = convertIdentifiedScans(chromatogramSelection, sign, offset);
+		IMassSpectra massSpectra = getIdentifiedScans(chromatogramSelection, false);
+		IMultipleSeries identifiedScansSeries = convertIdentifiedScans(massSpectra, sign, offset);
 		return identifiedScansSeries.getMultipleSeries().get(0);
 	}
 
@@ -335,15 +336,11 @@ public class SeriesConverterMSD {
 		return massSpectra;
 	}
 
-	private static IMultipleSeries convertIdentifiedScans(IChromatogramSelectionMSD chromatogramSelection, Sign sign, IOffset offset) throws NoIdentifiedScansAvailableException {
+	public static IMultipleSeries convertIdentifiedScans(IMassSpectra massSpectra, Sign sign, IOffset offset) throws NoIdentifiedScansAvailableException {
 
-		/*
-		 * There must be at least one chromatogram in the list.
-		 */
 		IMultipleSeries identifiedScanSeries = new MultipleSeries();
-		if(chromatogramSelection != null) {
+		if(massSpectra != null) {
 			offset = SeriesConverter.validateOffset(offset);
-			IMassSpectra massSpectra = getIdentifiedScans(chromatogramSelection, false);
 			if(massSpectra.size() == 0) {
 				throw new NoIdentifiedScansAvailableException();
 			}

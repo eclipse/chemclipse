@@ -20,9 +20,14 @@ import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.swt.ui.converter.SeriesConverterMSD;
 import org.eclipse.chemclipse.swt.ui.components.chromatogram.AbstractViewChromatogramUI;
 import org.eclipse.chemclipse.swt.ui.converter.SeriesConverter;
+import org.eclipse.chemclipse.swt.ui.exceptions.NoIdentifiedScansAvailableException;
 import org.eclipse.chemclipse.swt.ui.exceptions.NoPeaksAvailableException;
 import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
@@ -47,6 +52,8 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 	private List<String> activePeakLabels;
 	private ILineSeries inactivePeaksSeries;
 	private List<String> inactivePeakLabels;
+	private ILineSeries identifiedScanSeries;
+	private List<String> identifiedScanLabels;
 	//
 	private IOffset offset;
 	private TargetExtendedComparator targetComparator;
@@ -66,9 +73,12 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 			 * Get the data
 			 */
 			List<? extends IPeak> peaks = null;
+			IMassSpectra massSpectra = null;
+			//
 			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 				IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 				peaks = chromatogramSelectionMSD.getChromatogramMSD().getPeaks(chromatogramSelectionMSD);
+				massSpectra = SeriesConverterMSD.getIdentifiedScans(chromatogramSelectionMSD, false);
 			} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
 				IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
 				peaks = chromatogramSelectionCSD.getChromatogramCSD().getPeaks(chromatogramSelectionCSD);
@@ -133,6 +143,29 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 					 */
 				}
 			}
+			/*
+			 * Identified scans
+			 */
+			if(massSpectra != null) {
+				try {
+					identifiedScanLabels = extractLabels(massSpectra);
+					IMultipleSeries multipleSeries = SeriesConverterMSD.convertIdentifiedScans(massSpectra, Sign.POSITIVE, offset);
+					ISeries seriesScans = multipleSeries.getMultipleSeries().get(0);
+					identifiedScanSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, seriesScans.getId());
+					identifiedScanSeries.setXSeries(seriesScans.getXSeries());
+					identifiedScanSeries.setYSeries(seriesScans.getYSeries());
+					identifiedScanSeries.setLineStyle(LineStyle.NONE);
+					identifiedScanSeries.setSymbolType(PlotSymbolType.CIRCLE);
+					identifiedScanSeries.setSymbolSize(3);
+					identifiedScanSeries.setLineColor(Colors.GRAY);
+					identifiedScanSeries.setSymbolColor(Colors.DARK_GRAY);
+				} catch(NoIdentifiedScansAvailableException e) {
+					/*
+					 * Do nothing.
+					 * Just don't add the series.
+					 */
+				}
+			}
 		}
 	}
 
@@ -145,7 +178,7 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 
 			public void paintControl(PaintEvent e) {
 
-				paintPeakIdentificationNames(e);
+				paintIdentificationLabels(e);
 			}
 
 			public boolean drawBehindSeries() {
@@ -193,7 +226,40 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 		return labels;
 	}
 
-	private void paintPeakIdentificationNames(PaintEvent e) {
+	private List<String> extractLabels(IMassSpectra massSpectra) {
+
+		List<String> labels = new ArrayList<String>();
+		if(massSpectra != null) {
+			for(IScanMSD scanMSD : massSpectra.getList()) {
+				/*
+				 * Continue if the actual peak is null.
+				 */
+				if(scanMSD == null) {
+					continue;
+				}
+				/*
+				 * Add an empty string if no identification is set,
+				 * cause printing the labels depends on the position
+				 * in the list.
+				 */
+				List<IMassSpectrumTarget> massSpectrumTargets = scanMSD.getTargets();
+				if(massSpectrumTargets.size() == 0) {
+					labels.add("");
+				} else {
+					/*
+					 * Get retention time and abundance.
+					 */
+					Collections.sort(massSpectrumTargets, targetComparator);
+					IMassSpectrumTarget massSpectrumTarget = massSpectrumTargets.get(0);
+					String name = massSpectrumTarget.getLibraryInformation().getName();
+					labels.add(name);
+				}
+			}
+		}
+		return labels;
+	}
+
+	private void paintIdentificationLabels(PaintEvent e) {
 
 		/*
 		 * Active peaks
@@ -206,6 +272,12 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 		 */
 		if(inactivePeakLabels != null && inactivePeaksSeries != null) {
 			printLabels(inactivePeakLabels, inactivePeaksSeries, e);
+		}
+		/*
+		 * Identified scans
+		 */
+		if(identifiedScanLabels != null && identifiedScanSeries != null) {
+			printLabels(identifiedScanLabels, identifiedScanSeries, e);
 		}
 	}
 
