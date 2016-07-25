@@ -109,20 +109,20 @@ public class ReportSupplier implements IReportSupplierSetter {
 		}
 		ISupplier other = (ISupplier)otherObject;
 		return id.equals(other.getId()) && //
-		description.equals(other.getDescription()) && //
-		filterName.equals(other.getFilterName()) && //
-		fileExtension.equals(other.getFileExtension()) && //
-		fileName.equals(other.getFileName());
+				description.equals(other.getDescription()) && //
+				filterName.equals(other.getFilterName()) && //
+				fileExtension.equals(other.getFileExtension()) && //
+				fileName.equals(other.getFileName());
 	}
 
 	@Override
 	public int hashCode() {
 
 		return id.hashCode() + //
-		description.hashCode() + //
-		filterName.hashCode() + //
-		fileExtension.hashCode() + //
-		fileName.hashCode();
+				description.hashCode() + //
+				filterName.hashCode() + //
+				fileExtension.hashCode() + //
+				fileName.hashCode();
 	}
 
 	@Override

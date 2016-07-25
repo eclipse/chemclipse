@@ -31,7 +31,6 @@ public class ValueFormat {
 	//
 	private static final String DEFAULT_NUMBER_FORMAT = "DNF"; // $NON-NLS-1$
 	private static Map<String, NumberFormat> numberFormatsEnglish = null;
-
 	static {
 		decimalFormatsEnglish = new HashMap<String, DecimalFormat>();
 		decimalFormatsGerman = new HashMap<String, DecimalFormat>();
