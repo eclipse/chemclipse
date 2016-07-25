@@ -37,8 +37,11 @@ import org.eclipse.chemclipse.swt.ui.support.IOffset;
 import org.eclipse.chemclipse.swt.ui.support.Offset;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
 import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.swtchart.ICustomPaintListener;
 import org.swtchart.ILineSeries;
 import org.swtchart.ILineSeries.PlotSymbolType;
@@ -57,11 +60,18 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 	//
 	private IOffset offset;
 	private TargetExtendedComparator targetComparator;
+	//
+	private Transform transform;
 
 	public LabeledPeakChromatogramUI(Composite parent, int style) {
 		super(parent, style, new AxisTitlesMassScale());
 		offset = new Offset(0.0d, 0.0d);
 		targetComparator = new TargetExtendedComparator();
+		/*
+		 * Draw the text upright
+		 */
+		transform = new Transform(Display.getCurrent());
+		transform.rotate(-90);
 	}
 
 	@Override
@@ -290,9 +300,13 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 			 * Draw the label
 			 */
 			Point labelSize = e.gc.textExtent(label);
-			int x = (int)(point.x - labelSize.x / 2d);
-			int y = point.y - (point.y / 4);
-			e.gc.drawText(label, x, y, true);
+			int x = -labelSize.x - (point.y - labelSize.x - 15);
+			int y = point.x - (labelSize.y / 2);
+			//
+			GC gc = e.gc;
+			gc.setTransform(transform);
+			gc.drawText(label, x, y, true);
+			gc.setTransform(null);
 		}
 	}
 }
