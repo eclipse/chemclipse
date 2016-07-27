@@ -52,6 +52,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class AmdisELUReader implements IPeakReader {
 
+	public static final String START_SCAN = "START_SCAN";
+	public static final String STOP_SCAN = "STOP_SCAN";
+	public static final String MAX_SCAN = "MAX_SCAN";
 	/*
 	 * We could try to add additional filter options in this class.
 	 */
@@ -262,6 +265,7 @@ public class AmdisELUReader implements IPeakReader {
 			 */
 			try {
 				IPeakModelMSD peakModel = new PeakModelMSD(peakMassSpectrum, peakIntensityValues, 0.0f, 0.0f);
+				extractScanRange(peakModel, peakData);
 				peak = new PeakMSD(peakModel, "AMDIS ELU");
 			} catch(IllegalArgumentException e) {
 				logger.warn(e);
@@ -310,6 +314,20 @@ public class AmdisELUReader implements IPeakReader {
 			}
 		}
 		return startRetentionTime;
+	}
+
+	private void extractScanRange(IPeakModelMSD peakModel, String peakData) {
+
+		Matcher matcher = namePattern.matcher(peakData);
+		if(matcher.find()) {
+			int maxScan = Integer.parseInt(matcher.group(4));
+			int startScan = Integer.parseInt(matcher.group(7));
+			int stopScan = Integer.parseInt(matcher.group(9));
+			//
+			peakModel.setTemporarilyInfo(START_SCAN, startScan);
+			peakModel.setTemporarilyInfo(STOP_SCAN, stopScan);
+			peakModel.setTemporarilyInfo(MAX_SCAN, maxScan);
+		}
 	}
 
 	private IPeakIntensityValues extractPeakProfile(String peakData, int peakStartRetentionTime, int scanInterval) {
