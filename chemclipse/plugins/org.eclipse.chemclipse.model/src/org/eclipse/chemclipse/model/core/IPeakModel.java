@@ -169,6 +169,22 @@ public interface IPeakModel extends Serializable {
 	int getRetentionTimeAtPeakMaximumByInflectionPoints();
 
 	/**
+	 * Replaces the existing retentionTimes by the new list.
+	 * Retention times are given in milliseconds.
+	 * Number of scans and list size must be equal.
+	 * 
+	 * @param retentionTimes
+	 */
+	void replaceRetentionTimes(List<Integer> retentionTimes);
+
+	/**
+	 * Returns the number of scans.
+	 * 
+	 * @return
+	 */
+	int getNumberOfScans();
+
+	/**
 	 * Returns the increasing inflection point abundance (height) of the current
 	 * peak model at a given retention time.<br/>
 	 * The abundance is given exclusive the background abundance.<br/>
@@ -294,4 +310,21 @@ public interface IPeakModel extends Serializable {
 	IScan getPeakScan(int retentionTime);
 
 	float getIntensity(int retentionTime);
+
+	/**
+	 * This method may return null if no value was set.
+	 * 
+	 * @param key
+	 * @return String
+	 */
+	Object getTemporarilyInfo(String key);
+
+	/**
+	 * Set additional information.
+	 * This data is not stored. Use this for temporarily data only.
+	 * 
+	 * @param key
+	 * @param value
+	 */
+	void setTemporarilyInfo(String key, Object value);
 }

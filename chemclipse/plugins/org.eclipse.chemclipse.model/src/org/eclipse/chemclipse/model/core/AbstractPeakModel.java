@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +54,11 @@ public abstract class AbstractPeakModel implements IPeakModel {
 	 * end.
 	 */
 	private double gradientAngle;
+	/*
+	 * Temp info can be stored here.
+	 * This data is not stored in the file format.
+	 */
+	private Map<String, Object> temporarilyInfo;
 
 	/**
 	 * The abstract peak model creates a peak model by defining its core values.<br/>
@@ -81,6 +87,10 @@ public abstract class AbstractPeakModel implements IPeakModel {
 		 */
 		increasingInflectionPointEquation = peakIntensityValues.calculateIncreasingInflectionPointEquation(peakMaximum.getTotalSignal());
 		decreasingInflectionPointEquation = peakIntensityValues.calculateDecreasingInflectionPointEquation(peakMaximum.getTotalSignal());
+		/*
+		 * Temp info
+		 */
+		temporarilyInfo = new HashMap<String, Object>();
 	}
 
 	@Override
@@ -162,6 +172,18 @@ public abstract class AbstractPeakModel implements IPeakModel {
 		} catch(SolverException e) {
 		}
 		return x;
+	}
+
+	@Override
+	public void replaceRetentionTimes(List<Integer> retentionTimes) {
+
+		System.out.println("TODO: Replace retention times.");
+	}
+
+	@Override
+	public int getNumberOfScans() {
+
+		return peakIntensityValues.size();
 	}
 
 	@Override
@@ -438,6 +460,18 @@ public abstract class AbstractPeakModel implements IPeakModel {
 		 * Use the arcus tangens to determine alpha.
 		 */
 		return Math.toDegrees(Math.atan(a / b));
+	}
+
+	@Override
+	public Object getTemporarilyInfo(String key) {
+
+		return temporarilyInfo.get(key);
+	}
+
+	@Override
+	public void setTemporarilyInfo(String key, Object value) {
+
+		temporarilyInfo.put(key, value);
 	}
 
 	@Override
