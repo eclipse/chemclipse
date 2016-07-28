@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.ui.views;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.ui.definitions.ChromatogramType;
 import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSelectionView;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -35,6 +36,9 @@ public abstract class AbstractChromatogramSelectionView extends AbstractSelectio
 	@Override
 	public IChromatogramSelection getChromatogramSelection() {
 
+		if(chromatogramSelection == null) {
+			chromatogramSelection = ChromatogramType.getChromatogramSelection();
+		}
 		return chromatogramSelection;
 	}
 

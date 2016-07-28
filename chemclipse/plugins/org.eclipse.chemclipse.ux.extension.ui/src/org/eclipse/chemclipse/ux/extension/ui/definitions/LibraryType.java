@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.definitions;
 
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.rcp.app.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -54,5 +55,23 @@ public class LibraryType implements EventHandler {
 			eclipseContext.set(LIBRARY_SELECTION, librarySelection);
 			eclipseContext.set(LIBRARY_TYPE, libraryType);
 		}
+	}
+
+	/**
+	 * Get the current library selection.
+	 * 
+	 * @return {@link IMassSpectra}
+	 */
+	public static IMassSpectra getMassSpectra() {
+
+		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		Object object = eclipseContext.get(LIBRARY_SELECTION);
+		//
+		IMassSpectra massSpectra = null;
+		if(object != null && object instanceof IChromatogramSelection) {
+			massSpectra = (IMassSpectra)object;
+		}
+		//
+		return massSpectra;
 	}
 }

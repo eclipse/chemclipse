@@ -67,4 +67,22 @@ public class ChromatogramType implements EventHandler {
 			eclipseContext.set(CHROMATOGRAM_TYPE, chromatogramType);
 		}
 	}
+
+	/**
+	 * Get the current chromatogram selection.
+	 * 
+	 * @return {@link IChromatogramSelection}
+	 */
+	public static IChromatogramSelection getChromatogramSelection() {
+
+		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		Object object = eclipseContext.get(ChromatogramType.CHROMATOGRAM_SELECTION);
+		//
+		IChromatogramSelection chromatogramSelection = null;
+		if(object != null && object instanceof IChromatogramSelection) {
+			chromatogramSelection = (IChromatogramSelection)object;
+		}
+		//
+		return chromatogramSelection;
+	}
 }

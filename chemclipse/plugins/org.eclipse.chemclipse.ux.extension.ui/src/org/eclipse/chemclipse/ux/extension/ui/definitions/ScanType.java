@@ -55,4 +55,22 @@ public class ScanType implements EventHandler {
 			eclipseContext.set(SCAN_TYPE, scanType);
 		}
 	}
+
+	/**
+	 * Get the current scan selection.
+	 * 
+	 * @return IScanMSD
+	 */
+	public static IScanMSD getSelectedScan() {
+
+		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		Object object = eclipseContext.get(SCAN_SELECTION);
+		//
+		IScanMSD scanMSD = null;
+		if(object != null && object instanceof IScanMSD) {
+			scanMSD = (IScanMSD)object;
+		}
+		//
+		return scanMSD;
+	}
 }
