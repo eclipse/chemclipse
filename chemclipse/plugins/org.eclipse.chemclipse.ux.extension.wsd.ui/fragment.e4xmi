@@ -9,6 +9,7 @@
     <elements xsi:type="basic:Part" xmi:id="_jxmwoE3iEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.part.chromatogramOverviewView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.wsd.ui/org.eclipse.chemclipse.ux.extension.wsd.ui.views.ChromatogramOverviewView" label="Chromatogram Overview (WSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverview.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_2PrbUE7bEeOnILtzKooLhg" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.part.supplierScanProfileView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.wsd.ui/org.eclipse.chemclipse.ux.extension.wsd.ui.views.SupplierScanProfileView" label="Supplier Scan Profile" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/selectedScan.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_DC9BoE9tEeOomqj4DycpaQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.part.supplierScanCentroidView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.wsd.ui/org.eclipse.chemclipse.ux.extension.wsd.ui.views.SupplierScanCentroidView" label="Supplier Scan Centroid" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/selectedScan.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_dOt-oFTQEeaAprecbXRi8Q" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.part.selectedwavelengthchromatogram" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.wsd.ui/org.eclipse.chemclipse.ux.extension.wsd.ui.views.SelectedWavelengthChromtogramView" label="Selected Wavelength Chromatogram" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_QmlGME3iEeOtxrESNeijsQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_1szK4E3iEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.perspective.main" label="WSD Perspective" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif">
@@ -32,6 +33,7 @@
             <children xsi:type="basic:PartStack" xmi:id="_LMY48E3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.partstack.3">
               <children xsi:type="advanced:Placeholder" xmi:id="_Mn3GYE9tEeOomqj4DycpaQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.placeholder.6" ref="_DC9BoE9tEeOomqj4DycpaQ"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_RerWYE3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.placeholder.4" ref="_JKrVUE3iEeOtxrESNeijsQ"/>
+              <children xsi:type="advanced:Placeholder" xmi:id="_lr_F4FTQEeaAprecbXRi8Q" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.placeholder.0" ref="_dOt-oFTQEeaAprecbXRi8Q"/>
             </children>
           </children>
         </children>

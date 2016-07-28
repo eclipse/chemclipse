@@ -13,12 +13,17 @@ package org.eclipse.chemclipse.wsd.swt.ui.converter;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
+import org.eclipse.chemclipse.swt.ui.series.MultipleSeries;
 import org.eclipse.chemclipse.swt.ui.series.Series;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
-import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
-import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 
 /**
  * Converts chromatograms, mass spectra, peaks, baselines to valid series
@@ -79,6 +84,56 @@ public class SeriesConverterWSD {
 			scanSeries = getZeroScanSeries();
 		}
 		return scanSeries;
+	}
+
+	public static IMultipleSeries convertChromatogram(IChromatogramSelectionWSD chromatogramSelection, List<Integer> wavelengths, boolean combine, Sign sign) {
+
+		IMultipleSeries wavelengthSeries = new MultipleSeries();
+		if(chromatogramSelection != null) {
+			/*
+			 * Extract the wavelength
+			 */
+			IChromatogramWSD chromatogram = chromatogramSelection.getChromatogramWSD();
+			int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
+			int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
+			int scans = stopScan - startScan + 1;
+			//
+			for(Integer wavelength : wavelengths) {
+				/*
+				 * Series per Wavelength
+				 */
+				double[] xSeries = new double[scans];
+				double[] ySeries = new double[scans];
+				int x = 0;
+				int y = 0;
+				//
+				for(int i = startScan; i <= stopScan; i++) {
+					IScan scan = chromatogram.getScan(i);
+					if(scan instanceof IScanWSD) {
+						IScanWSD scanWSD = (IScanWSD)scan;
+						List<IScanSignalWSD> scanSignals = scanWSD.getScanSignals();
+						//
+						double retentionTime = scanWSD.getRetentionTime();
+						double abundance = getIntensityWavelength(scanSignals, wavelength);
+						xSeries[x++] = retentionTime;
+						ySeries[y++] = abundance;
+					}
+				}
+				ISeries series = new Series(xSeries, ySeries, "nm: " + wavelength);
+				wavelengthSeries.add(series);
+			}
+		}
+		return wavelengthSeries;
+	}
+
+	private static double getIntensityWavelength(List<IScanSignalWSD> scanSignals, int wavelength) {
+
+		for(IScanSignalWSD scanSignal : scanSignals) {
+			if(scanSignal.getWavelength() == wavelength) {
+				return scanSignal.getAbundance();
+			}
+		}
+		return 0;
 	}
 
 	private static ISeries getZeroScanSeries() {
