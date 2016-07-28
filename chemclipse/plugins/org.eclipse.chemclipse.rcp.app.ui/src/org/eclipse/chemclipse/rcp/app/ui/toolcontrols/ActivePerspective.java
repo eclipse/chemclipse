@@ -48,12 +48,13 @@ public class ActivePerspective {
 
 		parent.setLayout(new GridLayout(1, true));
 		//
-		final Label label = new Label(parent, SWT.NONE);
-		label.setText("Active Perspective: " + getActiveInitialPerspective());
+		Label label = new Label(parent, SWT.NONE);
+		setPerspectiveLabel(label, getActiveInitialPerspective());
+		//
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.verticalAlignment = SWT.CENTER;
-		gridData.minimumWidth = 400;
+		gridData.minimumWidth = 300;
 		label.setLayoutData(gridData);
 		//
 		if(eventBroker != null) {
@@ -62,11 +63,18 @@ public class ActivePerspective {
 				public void handleEvent(Event event) {
 
 					String perspectiveName = (String)event.getProperty(IChemClipseEvents.PROPERTY_PERSPECTIVE_NAME);
-					label.setText("Active Perspective: " + perspectiveName);
+					setPerspectiveLabel(label, perspectiveName);
 				}
 			};
 			eventBroker.subscribe(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, eventHandler);
 		}
+	}
+
+	private void setPerspectiveLabel(Label label, String perspectiveName) {
+
+		perspectiveName = perspectiveName.replaceAll("<", "");
+		perspectiveName = perspectiveName.replaceAll(">", "");
+		label.setText("Perspective: " + perspectiveName);
 	}
 
 	@PreDestroy
