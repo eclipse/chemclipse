@@ -55,6 +55,11 @@ public abstract class AbstractPeakModel implements IPeakModel {
 	 */
 	private double gradientAngle;
 	/*
+	 * Start and stop background abundance.
+	 */
+	private float startBackgroundAbundance;
+	private float stopBackgroundAbundance;
+	/*
 	 * Temp info can be stored here.
 	 * This data is not stored in the file format.
 	 */
@@ -78,15 +83,12 @@ public abstract class AbstractPeakModel implements IPeakModel {
 		/*
 		 * Checks all conditions for the peak model to be valid.
 		 */
-		checkModelConditions(peakMaximum, peakIntensityValues);
-		backgroundEquation = calculateBackgroundEquation(startBackgroundAbundance, stopBackgroundAbundance);
-		gradientAngle = calculateGradientAngle();
-		/*
-		 * Calculate the equation for the points of inflection.<br/> The peak
-		 * maximum has been checked, so it can be used here.
-		 */
-		increasingInflectionPointEquation = peakIntensityValues.calculateIncreasingInflectionPointEquation(peakMaximum.getTotalSignal());
-		decreasingInflectionPointEquation = peakIntensityValues.calculateDecreasingInflectionPointEquation(peakMaximum.getTotalSignal());
+		this.peakMaximum = peakMaximum;
+		this.peakIntensityValues = peakIntensityValues;
+		this.startBackgroundAbundance = startBackgroundAbundance;
+		this.stopBackgroundAbundance = stopBackgroundAbundance;
+		//
+		calculatePeakModel();
 		/*
 		 * Temp info
 		 */
@@ -175,9 +177,10 @@ public abstract class AbstractPeakModel implements IPeakModel {
 	}
 
 	@Override
-	public void replaceRetentionTimes(List<Integer> retentionTimes) {
+	public void replaceRetentionTimes(List<Integer> retentionTimes) throws IllegalArgumentException, PeakException {
 
-		System.out.println("TODO: Replace retention times.");
+		peakIntensityValues.replaceRetentionTimes(retentionTimes);
+		calculatePeakModel();
 	}
 
 	@Override
@@ -472,6 +475,19 @@ public abstract class AbstractPeakModel implements IPeakModel {
 	public void setTemporarilyInfo(String key, Object value) {
 
 		temporarilyInfo.put(key, value);
+	}
+
+	private void calculatePeakModel() throws IllegalArgumentException, PeakException {
+
+		checkModelConditions(peakMaximum, peakIntensityValues);
+		backgroundEquation = calculateBackgroundEquation(startBackgroundAbundance, stopBackgroundAbundance);
+		gradientAngle = calculateGradientAngle();
+		/*
+		 * Calculate the equation for the points of inflection.<br/> The peak
+		 * maximum has been checked, so it can be used here.
+		 */
+		increasingInflectionPointEquation = peakIntensityValues.calculateIncreasingInflectionPointEquation(peakMaximum.getTotalSignal());
+		decreasingInflectionPointEquation = peakIntensityValues.calculateDecreasingInflectionPointEquation(peakMaximum.getTotalSignal());
 	}
 
 	@Override

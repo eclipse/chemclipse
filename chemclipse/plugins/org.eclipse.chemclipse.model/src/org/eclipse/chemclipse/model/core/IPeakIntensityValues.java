@@ -101,6 +101,15 @@ public interface IPeakIntensityValues extends Serializable {
 	int getStopRetentionTime();
 
 	/**
+	 * Replaces the existing retentionTimes by the new list.
+	 * Retention times are given in milliseconds.
+	 * Number of scans and list size must be equal.
+	 * 
+	 * @param retentionTimes
+	 */
+	void replaceRetentionTimes(List<Integer> retentionTimes);
+
+	/**
 	 * Returns an Map.Entry<Integer, Float> corresponding to the given retention
 	 * time.<br/>
 	 * Internally floorEntry() will be used.<br/>

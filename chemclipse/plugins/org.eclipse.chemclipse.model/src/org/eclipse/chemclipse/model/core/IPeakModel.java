@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.model.core;
 import java.io.Serializable;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 
 public interface IPeakModel extends Serializable {
@@ -175,7 +176,7 @@ public interface IPeakModel extends Serializable {
 	 * 
 	 * @param retentionTimes
 	 */
-	void replaceRetentionTimes(List<Integer> retentionTimes);
+	void replaceRetentionTimes(List<Integer> retentionTimes) throws IllegalArgumentException, PeakException;
 
 	/**
 	 * Returns the number of scans.

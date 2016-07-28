@@ -15,13 +15,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IPeakReader {
+
+	String TEMP_INFO_START_SCAN = "START_SCAN";
+	String TEMP_INFO_STOP_SCAN = "STOP_SCAN";
+	String TEMP_INFO_MAX_SCAN = "MAX_SCAN";
 
 	/**
 	 * Imports peaks from a file.
