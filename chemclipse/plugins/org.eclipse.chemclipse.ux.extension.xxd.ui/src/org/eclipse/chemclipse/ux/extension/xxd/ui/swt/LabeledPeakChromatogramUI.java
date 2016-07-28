@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.model.comparator.SortOrder;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -66,7 +67,7 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 	public LabeledPeakChromatogramUI(Composite parent, int style) {
 		super(parent, style, new AxisTitlesMassScale());
 		offset = new Offset(0.0d, 0.0d);
-		targetComparator = new TargetExtendedComparator();
+		targetComparator = new TargetExtendedComparator(SortOrder.DESC);
 		/*
 		 * Draw the text upright
 		 */
