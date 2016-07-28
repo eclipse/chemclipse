@@ -52,9 +52,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class AmdisELUReader implements IPeakReader {
 
-	public static final String START_SCAN = "START_SCAN";
-	public static final String STOP_SCAN = "STOP_SCAN";
-	public static final String MAX_SCAN = "MAX_SCAN";
 	/*
 	 * We could try to add additional filter options in this class.
 	 */
@@ -324,9 +321,9 @@ public class AmdisELUReader implements IPeakReader {
 			int startScan = Integer.parseInt(matcher.group(7));
 			int stopScan = Integer.parseInt(matcher.group(9));
 			//
-			peakModel.setTemporarilyInfo(START_SCAN, startScan);
-			peakModel.setTemporarilyInfo(STOP_SCAN, stopScan);
-			peakModel.setTemporarilyInfo(MAX_SCAN, maxScan);
+			peakModel.setTemporarilyInfo(TEMP_INFO_START_SCAN, startScan);
+			peakModel.setTemporarilyInfo(TEMP_INFO_STOP_SCAN, stopScan);
+			peakModel.setTemporarilyInfo(TEMP_INFO_MAX_SCAN, maxScan);
 		}
 	}
 

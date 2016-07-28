@@ -16,11 +16,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.AmdisELUReader;
@@ -31,6 +30,8 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+
+import junit.framework.TestCase;
 
 public class ELUImportConverter_1_ITest extends TestCase {
 
@@ -61,6 +62,11 @@ public class ELUImportConverter_1_ITest extends TestCase {
 			IPeakImportConverterProcessingInfo processingInfo = reader.read(file, new NullProgressMonitor());
 			List<IPeak> peaks = processingInfo.getPeaks().getPeaks();
 			IPeakMSD peak1 = (IPeakMSD)peaks.get(0);
+			//
+			assertEquals(14, peak1.getPeakModel().getTemporarilyInfo(IPeakReader.TEMP_INFO_START_SCAN));
+			assertEquals(23, peak1.getPeakModel().getTemporarilyInfo(IPeakReader.TEMP_INFO_STOP_SCAN));
+			assertEquals(17, peak1.getPeakModel().getTemporarilyInfo(IPeakReader.TEMP_INFO_MAX_SCAN));
+			//
 			IPeakMassSpectrum peakMassSpectrum1 = peak1.getPeakModel().getPeakMassSpectrum();
 			List<IIon> ions1 = peakMassSpectrum1.getIons();
 			IIon ion10 = ions1.get(0);
