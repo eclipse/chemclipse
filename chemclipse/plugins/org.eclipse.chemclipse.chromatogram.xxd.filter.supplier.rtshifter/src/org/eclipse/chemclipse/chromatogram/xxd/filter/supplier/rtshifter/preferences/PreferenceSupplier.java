@@ -56,8 +56,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_OFFSET_STEP_UP = "offsetStepDown";
 	public static final int DEF_OFFSET_STEP_UP = 500000;
 	//
-	public static final String P_IS_EDIT_SELECTED_CHROMATOGRAM = "isEditSelectedChromatogram";
-	public static final boolean DEF_IS_EDIT_SELECTED_CHROMATOGRAM = false;
 	public static final String P_IS_LOCK_OFFSET = "isLockOffset";
 	public static final boolean DEF_IS_LOCK_OFFSET = false;
 	//
@@ -105,7 +103,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_OFFSET_STEP_DOWN, Integer.toString(DEF_OFFSET_STEP_DOWN));
 		defaultValues.put(P_OFFSET_STEP_UP, Integer.toString(DEF_OFFSET_STEP_UP));
 		//
-		defaultValues.put(P_IS_EDIT_SELECTED_CHROMATOGRAM, Boolean.toString(DEF_IS_EDIT_SELECTED_CHROMATOGRAM));
 		defaultValues.put(P_IS_LOCK_OFFSET, Boolean.toString(DEF_IS_LOCK_OFFSET));
 		//
 		defaultValues.put(P_STRETCH_MILLISECONDS_SCAN_DELAY, Integer.toString(DEF_STRETCH_MILLISECONDS_SCAN_DELAY));
@@ -322,19 +319,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		int value = preferences.getInt(P_OVERLAY_Y_OFFSET, DEF_OVERLAY_Y_OFFSET) + preferences.getInt(P_OFFSET_STEP_UP, DEF_OFFSET_STEP_UP);
 		preferences.putInt(P_OVERLAY_Y_OFFSET, value);
-	}
-
-	public static boolean isEditSelectedChromatogram() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_IS_EDIT_SELECTED_CHROMATOGRAM, DEF_IS_EDIT_SELECTED_CHROMATOGRAM);
-	}
-
-	public static void toggleEditSelectedChromatogram() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		boolean value = preferences.getBoolean(P_IS_EDIT_SELECTED_CHROMATOGRAM, DEF_IS_EDIT_SELECTED_CHROMATOGRAM);
-		preferences.putBoolean(P_IS_EDIT_SELECTED_CHROMATOGRAM, !value);
 	}
 
 	public static boolean isLockOffset() {

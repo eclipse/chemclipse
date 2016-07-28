@@ -56,7 +56,6 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new IntegerFieldEditor(PreferenceSupplier.P_OFFSET_STEP_UP, "Offset step up (abundance):", getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceSupplier.P_OFFSET_STEP_DOWN, "Offset step down (abundance):", getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_IS_EDIT_SELECTED_CHROMATOGRAM, "Edit Selected Chromatogram", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_IS_LOCK_OFFSET, "Lock Offset", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
