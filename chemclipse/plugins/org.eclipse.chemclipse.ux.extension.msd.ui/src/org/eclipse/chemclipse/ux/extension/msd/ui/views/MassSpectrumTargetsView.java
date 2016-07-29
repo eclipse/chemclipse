@@ -101,9 +101,10 @@ public class MassSpectrumTargetsView extends AbstractTargetsView implements IMas
 			super.update(massSpectrum, forceReload);
 			/*
 			 * Propagate the first selection
+			 * TODO This causes a loop and needs a fix.
 			 */
-			getTableViewer().getTable().setSelection(0);
-			propagateSelectedTargetAndMassSpectrum();
+			// getTableViewer().getTable().setSelection(0);
+			// propagateSelectedTargetAndMassSpectrum();
 		}
 	}
 
