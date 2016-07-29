@@ -69,7 +69,7 @@ public class ChromatogramHeaderView {
 				public void handleEvent(Event event) {
 
 					try {
-						Object object = event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_MSD_RAWFILE);
+						Object object = event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_CSD_RAWFILE);
 						if(object instanceof File) {
 							setChromatogram((File)object);
 						}
@@ -78,7 +78,7 @@ public class ChromatogramHeaderView {
 					}
 				}
 			};
-			eventBroker.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE, eventHandlerFileOverview);
+			eventBroker.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE, eventHandlerFileOverview);
 			/*
 			 * Receives and handles chromatogram instances overview updates.
 			 */
@@ -87,7 +87,7 @@ public class ChromatogramHeaderView {
 				public void handleEvent(Event event) {
 
 					try {
-						Object object = event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_MSD_OVERVIEW);
+						Object object = event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_CSD_OVERVIEW);
 						if(object instanceof IChromatogramOverview) {
 							IChromatogramOverview chromatogramOverview = (IChromatogramOverview)object;
 							updateChromatogram(chromatogramOverview);
@@ -97,7 +97,7 @@ public class ChromatogramHeaderView {
 					}
 				}
 			};
-			eventBroker.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_OVERVIEW, eventHandlerInstanceOverview);
+			eventBroker.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_OVERVIEW, eventHandlerInstanceOverview);
 		}
 	}
 
