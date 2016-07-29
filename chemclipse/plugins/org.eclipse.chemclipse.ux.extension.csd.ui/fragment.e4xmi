@@ -14,16 +14,20 @@
     <elements xsi:type="basic:Part" xmi:id="_D03GUNKsEeONsNJ7n41rvA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.part.selectedScan" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.csd.ui/org.eclipse.chemclipse.ux.extension.csd.ui.views.ScanView" label="Selected Scan (CSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/selectedScan.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_QKBKAKrVEeSzIJcLjxpOWA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.part.peakTargetsView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.csd.ui/org.eclipse.chemclipse.ux.extension.csd.ui.views.PeakTargetsView" label="Peak Targets (CSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peak.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_ocbDsIldEeWYgNsSWgddrw" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.part.scanIdentifiedListView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.csd.ui/org.eclipse.chemclipse.ux.extension.csd.ui.views.ScanIdentifiedListView" label="Identified Scans" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverview.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_Ms1O4FW7EeaUhtCK7miK3Q" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.part.chromatogramheader" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.csd.ui/org.eclipse.chemclipse.ux.extension.csd.ui.views.ChromatogramHeaderView" label="Chromatogram Header (CSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverview.gif"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_s-fIgFEOEeK2HN1t0lHwOA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_ujG88FEOEeK2HN1t0lHwOA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.perspective.main" label="CSD Perspective" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif">
       <children xsi:type="basic:PartSashContainer" xmi:id="_K9zb8FEPEeK2HN1t0lHwOA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.partsashcontainer.0" horizontal="true">
         <children xsi:type="basic:PartSashContainer" xmi:id="_Id3jgFM4EeKO4dM54-DH7g" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.partsashcontainer.1" containerData="3500">
-          <children xsi:type="basic:PartStack" xmi:id="_5ANN8FEOEeK2HN1t0lHwOA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.partstack.0">
+          <children xsi:type="basic:PartStack" xmi:id="_5ANN8FEOEeK2HN1t0lHwOA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.partstack.0" containerData="6000" selectedElement="_5ScNcFEOEeK2HN1t0lHwOA">
             <children xsi:type="advanced:Placeholder" xmi:id="_5ScNcFEOEeK2HN1t0lHwOA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.placeholder.0" ref="_ARYu0FEKEeK_26wVgj44vg"/>
             <children xsi:type="advanced:Placeholder" xmi:id="_iNc1kNBgEeO127v7769ovg" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.placeholder.2" ref="_Z_v0UNBgEeO127v7769ovg"/>
           </children>
-          <children xsi:type="basic:PartStack" xmi:id="_Mei18FEPEeK2HN1t0lHwOA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.partstack.1" containerData="2500">
+          <children xsi:type="basic:PartStack" xmi:id="_aAtfwFW7EeaUhtCK7miK3Q" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.partstack.4" containerData="2000" selectedElement="_kKVbIFW7EeaUhtCK7miK3Q">
+            <children xsi:type="advanced:Placeholder" xmi:id="_kKVbIFW7EeaUhtCK7miK3Q" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.placeholder.12" ref="_Ms1O4FW7EeaUhtCK7miK3Q"/>
+          </children>
+          <children xsi:type="basic:PartStack" xmi:id="_Mei18FEPEeK2HN1t0lHwOA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.partstack.1" containerData="2000" selectedElement="_MvAzcFHWEeK67uNr8ncePw">
             <children xsi:type="advanced:Placeholder" xmi:id="_MvAzcFHWEeK67uNr8ncePw" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.placeholder.1" ref="_8JDGwFHVEeK67uNr8ncePw"/>
             <children xsi:type="advanced:Placeholder" xmi:id="_daFFMI0OEeWqFMLk2l0O1w" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.placeholder.11" ref="_bPFNQI0OEeWqFMLk2l0O1w"/>
           </children>
