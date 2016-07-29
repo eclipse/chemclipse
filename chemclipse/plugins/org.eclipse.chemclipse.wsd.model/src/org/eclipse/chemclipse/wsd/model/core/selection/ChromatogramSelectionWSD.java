@@ -18,12 +18,16 @@ import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
+import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelength;
+import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionWSDUpdateNotifier;
 
 public class ChromatogramSelectionWSD extends AbstractChromatogramSelection implements IChromatogramSelectionWSD {
 
 	private IScanWSD selectedScan;
 	private IPeak selectedPeak;
+	private IMarkedWavelengths selectedWavelengths;
 
 	public ChromatogramSelectionWSD(IChromatogram chromatogram) throws ChromatogramIsNullException {
 		this(chromatogram, true);
@@ -35,6 +39,15 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 		 * valid scan and if exists a valid peak.
 		 */
 		super(chromatogram, fireUpdate);
+		/*
+		 * Add some default wavelengths
+		 */
+		selectedWavelengths = new MarkedWavelengths();
+		selectedWavelengths.add(new MarkedWavelength(540));
+		selectedWavelengths.add(new MarkedWavelength(568));
+		selectedWavelengths.add(new MarkedWavelength(595));
+		selectedWavelengths.add(new MarkedWavelength(615));
+		//
 		reset(fireUpdate);
 	}
 
@@ -150,5 +163,11 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 		super.update(forceReload);
 		setSelectedScan(selectedScan, false);
 		fireUpdateChange(forceReload);
+	}
+
+	@Override
+	public IMarkedWavelengths getSelectedWavelengths() {
+
+		return selectedWavelengths;
 	}
 }

@@ -31,18 +31,8 @@ import org.swtchart.ISeries.SeriesType;
 
 public class SelectedWavelengthChromatogramUI extends AbstractViewWSDChromatogramUI {
 
-	private List<Integer> wavelengths;
-
 	public SelectedWavelengthChromatogramUI(Composite parent, int style) {
 		super(parent, style);
-		/*
-		 * TODO make wavelength selection dynamic
-		 */
-		wavelengths = new ArrayList<Integer>();
-		wavelengths.add(540);
-		wavelengths.add(568);
-		wavelengths.add(595);
-		wavelengths.add(615);
 	}
 
 	// ---------------------------------------------------------------ISeriesSetter
@@ -55,6 +45,7 @@ public class SelectedWavelengthChromatogramUI extends AbstractViewWSDChromatogra
 			/*
 			 * Convert a selection.
 			 */
+			List<Integer> wavelengths = new ArrayList<Integer>(chromatogramSelection.getSelectedWavelengths().getWavelengths());
 			IMultipleSeries multipleSeries = SeriesConverterWSD.convertChromatogram(chromatogramSelection, wavelengths, false, Sign.POSITIVE);
 			int size = multipleSeries.getMultipleSeries().size();
 			ISeries series;

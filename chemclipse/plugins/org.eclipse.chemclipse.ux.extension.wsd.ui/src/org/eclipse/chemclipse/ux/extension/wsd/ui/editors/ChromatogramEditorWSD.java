@@ -47,6 +47,7 @@ import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD
 import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionWSDUpdateNotifier;
 import org.eclipse.chemclipse.wsd.model.notifier.IChromatogramSelectionWSDUpdateNotifier;
 import org.eclipse.chemclipse.wsd.swt.ui.components.chromatogram.EditorChromatogramUI;
+import org.eclipse.chemclipse.wsd.swt.ui.components.chromatogram.MarkedWavelengthsChooser;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -121,9 +122,14 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 	private ChromatogramSelectionWSD chromatogramSelection;
 	private EditorChromatogramUI chromatogramUI;
 	/*
+	 * Options.
+	 */
+	private MarkedWavelengthsChooser selectedWavelengthChooser;
+	/*
 	 * Indices of the pages.
 	 */
 	private int chromatogramPageIndex;
+	private int optionsPageIndex;
 	private int infoPageIndex;
 	private int referencedChromatogramPageIndex;
 	/*
@@ -326,7 +332,9 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 			 * Update the chromatogram options page if visible.
 			 */
 			int selectionIndex = tabFolder.getSelectionIndex();
-			if(selectionIndex == infoPageIndex) {
+			if(selectionIndex == optionsPageIndex) {
+				updateOptionsPageValues();
+			} else if(selectionIndex == infoPageIndex) {
 				updateInfoPageValues();
 			} else if(selectionIndex == referencedChromatogramPageIndex) {
 				// do nothing
@@ -458,12 +466,16 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 			final int cpi = 0;
 			chromatogramPageIndex = cpi;
 			//
+			createOptionsPage();
+			final int opi = 1;
+			optionsPageIndex = opi;
+			//
 			createInfoPage();
-			final int ipi = 1;
+			final int ipi = 2;
 			infoPageIndex = ipi;
 			//
 			createReferencedChromatogramPage();
-			final int rcp = 2;
+			final int rcp = 3;
 			referencedChromatogramPageIndex = rcp;
 			/*
 			 * React on tab folder selection.
@@ -482,6 +494,9 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 							case cpi:
 								update(chromatogramSelection, false);
 								break;
+							case opi:
+								updateOptionsPageValues();
+								break;
 							case ipi:
 								updateInfoPageValues();
 								break;
@@ -494,6 +509,13 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 			});
 		} else {
 			createErrorMessagePage(parent);
+		}
+	}
+
+	private void updateOptionsPageValues() {
+
+		if(selectedWavelengthChooser != null) {
+			selectedWavelengthChooser.setMarkedWavelengths(chromatogramSelection.getSelectedWavelengths());
 		}
 	}
 
@@ -687,6 +709,33 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 		});
 	}
 
+	private void createOptionsPage() {
+
+		/*
+		 * Options Page
+		 */
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText("Options");
+		//
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayout(new FillLayout());
+		/*
+		 * Forms API
+		 */
+		formToolkit = new FormToolkit(composite.getDisplay());
+		ScrolledForm scrolledForm = formToolkit.createScrolledForm(composite);
+		Composite scrolledFormComposite = scrolledForm.getBody();
+		formToolkit.decorateFormHeading(scrolledForm.getForm());
+		scrolledFormComposite.setLayout(new TableWrapLayout());
+		scrolledForm.setText("Chromatogram Options");
+		/*
+		 * Add the sections
+		 */
+		createOptionsPageSection(scrolledFormComposite);
+		//
+		tabItem.setControl(composite);
+	}
+
 	private void createInfoPage() {
 
 		/*
@@ -711,6 +760,46 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 		createInfoPageSection(scrolledFormComposite);
 		//
 		tabItem.setControl(composite);
+	}
+
+	private void createOptionsPageSection(Composite parent) {
+
+		Section section;
+		Composite client;
+		GridLayout layout;
+		/*
+		 * Sections
+		 */
+		section = formToolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
+		section.setText("Options");
+		section.setDescription("This page shows several additional chromatogram options.");
+		section.marginWidth = 5;
+		section.marginHeight = 5;
+		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
+		/*
+		 * Client
+		 */
+		client = formToolkit.createComposite(section, SWT.WRAP);
+		layout = new GridLayout(1, true);
+		layout.marginWidth = 10;
+		layout.marginHeight = 10;
+		client.setLayout(layout);
+		/*
+		 * Labels and Forms
+		 */
+		createLabel(client, "Use the selected wavelengths to inspect the chromatogram using different views.", IApplicationImage.IMAGE_INFO);
+		Composite compositeIons = new Composite(client, SWT.NONE);
+		compositeIons.setLayout(new GridLayout(1, true));
+		compositeIons.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		selectedWavelengthChooser = new MarkedWavelengthsChooser(compositeIons, SWT.NONE);
+		selectedWavelengthChooser.setMarkedWavelengths(chromatogramSelection.getSelectedWavelengths());
+		selectedWavelengthChooser.setLabelText("Add/Remove selected wavelengths");
+		/*
+		 * Add the client to the section and paint flat borders.
+		 */
+		section.setClient(client);
+		formToolkit.paintBordersFor(client);
 	}
 
 	private void createInfoPageSection(Composite parent) {

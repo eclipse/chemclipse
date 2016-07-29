@@ -18,5 +18,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.wsd.model.core,
  org.eclipse.chemclipse.wsd.model.core.selection,
+ org.eclipse.chemclipse.wsd.model.core.support,
  org.eclipse.chemclipse.wsd.model.notifier
 Import-Package: javax.annotation;version="1.1.0"
