@@ -119,7 +119,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	@PreDestroy
 	private void preDestroy() {
 
-		eventBroker.post(IChemClipseEvents.TOPIC_SCAN_MSD_UNLOAD_SELECTION, null);
+		eventBroker.post(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, null);
 		/*
 		 * Remove the editor from the listed parts.
 		 */
