@@ -11,16 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.csd.ui.views;
 
+import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
+import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.ui.definitions.ChromatogramType;
+import org.eclipse.chemclipse.ux.extension.ui.definitions.PeakType;
+import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSelectionView;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
-
-import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSelectionView;
 
 public abstract class AbstractChromatogramAndPeakSelectionView extends AbstractSelectionView implements IChromatogramAndPeakSelectionView {
 
@@ -38,6 +40,9 @@ public abstract class AbstractChromatogramAndPeakSelectionView extends AbstractS
 	@Override
 	public IChromatogramSelectionCSD getChromatogramSelection() {
 
+		if(chromatogramSelection == null) {
+			chromatogramSelection = ChromatogramType.getChromatogramSelectionCSD();
+		}
 		return chromatogramSelection;
 	}
 
@@ -50,6 +55,12 @@ public abstract class AbstractChromatogramAndPeakSelectionView extends AbstractS
 	@Override
 	public IChromatogramPeakCSD getChromatogramPeak() {
 
+		if(chromatogramPeak == null) {
+			IPeakCSD peakCSD = PeakType.getSelectedPeakCSD();
+			if(peakCSD instanceof IChromatogramPeakCSD) {
+				chromatogramPeak = (IChromatogramPeakCSD)peakCSD;
+			}
+		}
 		return chromatogramPeak;
 	}
 

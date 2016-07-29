@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.views;
 
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.ui.definitions.ScanType;
 import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSelectionView;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -35,6 +36,9 @@ public abstract class AbstractMassSpectrumSelectionView extends AbstractSelectio
 	@Override
 	public IScanMSD getMassSpectrum() {
 
+		if(massSpectrum == null) {
+			massSpectrum = ScanType.getSelectedScanMSD();
+		}
 		return massSpectrum;
 	}
 
