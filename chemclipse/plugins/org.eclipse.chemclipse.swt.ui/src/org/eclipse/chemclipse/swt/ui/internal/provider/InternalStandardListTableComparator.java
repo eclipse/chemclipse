@@ -28,13 +28,16 @@ public class InternalStandardListTableComparator extends AbstractRecordTableComp
 			//
 			switch(getPropertyIndex()) {
 				case 0:
-					sortOrder = Double.compare(internalStandard2.getContent(), internalStandard1.getContent());
+					sortOrder = Double.compare(internalStandard2.getConcentration(), internalStandard1.getConcentration());
 					break;
 				case 1:
+					sortOrder = internalStandard2.getConcentrationUnit().compareTo(internalStandard1.getConcentrationUnit());
+					break;
+				case 3:
 					sortOrder = Double.compare(internalStandard2.getResponseFactor(), internalStandard1.getResponseFactor());
 					break;
-				case 2:
-					sortOrder = internalStandard2.getUnit().compareTo(internalStandard1.getUnit());
+				case 4:
+					sortOrder = internalStandard2.getChemicalClass().compareTo(internalStandard1.getChemicalClass());
 					break;
 				default:
 					sortOrder = 0;

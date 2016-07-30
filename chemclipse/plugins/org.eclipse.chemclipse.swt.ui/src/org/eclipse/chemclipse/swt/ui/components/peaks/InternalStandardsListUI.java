@@ -22,8 +22,8 @@ import org.eclipse.swt.widgets.Composite;
 
 public class InternalStandardsListUI extends ExtendedTableViewer {
 
-	private String[] titles = {"Content", "Response Factor", "Unit"};
-	private int bounds[] = {120, 120, 120};
+	private String[] titles = {"Concentration (Conc.)", "Concentration Unit", "Response Factor (RF)", "Chemical Class"};
+	private int bounds[] = {170, 150, 170, 150};
 
 	public InternalStandardsListUI(Composite parent) {
 		super(parent);
@@ -52,11 +52,5 @@ public class InternalStandardsListUI extends ExtendedTableViewer {
 		setLabelProvider(new InternalStandardListLabelProvider());
 		setContentProvider(new ListContentProvider());
 		setComparator(new InternalStandardListTableComparator());
-		setEditingSupport();
-	}
-
-	private void setEditingSupport() {
-
-		// TODO implement
 	}
 }

@@ -13,20 +13,27 @@ package org.eclipse.chemclipse.model.quantitation;
 
 public class InternalStandard implements IInternalStandard {
 
-	private double content;
+	private double concentration;
+	private String concentrationUnit;
 	private double responseFactor;
-	private String unit;
+	private String chemicalClass = "";
 
-	public InternalStandard(double content, double responseFactor, String unit) {
-		this.content = content;
+	public InternalStandard(double concentration, String concentrationUnit, double responseFactor) {
+		this.concentration = concentration;
+		this.concentrationUnit = concentrationUnit;
 		this.responseFactor = responseFactor;
-		this.unit = unit;
 	}
 
 	@Override
-	public double getContent() {
+	public double getConcentration() {
 
-		return content;
+		return concentration;
+	}
+
+	@Override
+	public String getConcentrationUnit() {
+
+		return concentrationUnit;
 	}
 
 	@Override
@@ -36,9 +43,15 @@ public class InternalStandard implements IInternalStandard {
 	}
 
 	@Override
-	public String getUnit() {
+	public String getChemicalClass() {
 
-		return unit;
+		return chemicalClass;
+	}
+
+	@Override
+	public void setChemicalClass(String chemicalClass) {
+
+		this.chemicalClass = chemicalClass;
 	}
 
 	@Override
@@ -54,17 +67,17 @@ public class InternalStandard implements IInternalStandard {
 			return false;
 		}
 		IInternalStandard other = (IInternalStandard)otherObject;
-		return content == other.getContent() && //
-				responseFactor == other.getResponseFactor() && //
-				unit == other.getUnit();
+		return concentration == other.getConcentration() && //
+				concentrationUnit == other.getConcentrationUnit() && //
+				responseFactor == other.getResponseFactor();
 	}
 
 	@Override
 	public int hashCode() {
 
-		return Double.valueOf(content).hashCode() + //
-				Double.valueOf(responseFactor).hashCode() + //
-				unit.hashCode();
+		return Double.valueOf(concentration).hashCode() + //
+				concentrationUnit.hashCode() + //
+				Double.valueOf(responseFactor).hashCode();
 	}
 
 	@Override
@@ -73,11 +86,11 @@ public class InternalStandard implements IInternalStandard {
 		StringBuilder builder = new StringBuilder();
 		builder.append(getClass().getName());
 		builder.append("[");
-		builder.append("content=" + content);
+		builder.append("concentration=" + concentration);
+		builder.append(",");
+		builder.append("concentrationUnit=" + concentrationUnit);
 		builder.append(",");
 		builder.append("responseFactor=" + responseFactor);
-		builder.append(",");
-		builder.append("unit=" + unit);
 		builder.append("]");
 		return builder.toString();
 	}

@@ -13,9 +13,13 @@ package org.eclipse.chemclipse.model.quantitation;
 
 public interface IInternalStandard {
 
-	double getContent();
+	double getConcentration();
+
+	String getConcentrationUnit();
 
 	double getResponseFactor();
 
-	String getUnit();
+	String getChemicalClass();
+
+	void setChemicalClass(String chemicalClass);
 }
