@@ -37,6 +37,8 @@ import org.eclipse.chemclipse.swt.ui.series.Series;
 import org.eclipse.chemclipse.swt.ui.support.IOffset;
 import org.eclipse.chemclipse.swt.ui.support.Offset;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Display;
 
 public class SeriesConverter {
 
@@ -89,9 +91,23 @@ public class SeriesConverter {
 				try {
 					ITotalScanSignalExtractor totalIonSignalExtractor = new TotalScanSignalExtractor(chromatogramOverview);
 					ITotalScanSignals signals = totalIonSignalExtractor.getTotalScanSignals(validatePositive);
-					int scans = signals.size();
-					double[] xSeries = new double[scans];
-					double[] ySeries = new double[scans];
+					/*
+					 * Pre-optimization
+					 */
+					Rectangle clientArea = Display.getCurrent().getClientArea();
+					int scansDisplay = clientArea.width;
+					int numberOfScans = signals.size();
+					int modulo = 0;
+					if(numberOfScans > scansDisplay && scansDisplay > 0) {
+						int factor = numberOfScans / scansDisplay;
+						if(factor >= 2) {
+							modulo = factor;
+							numberOfScans /= modulo;
+						}
+					}
+					//
+					double[] xSeries = new double[numberOfScans];
+					double[] ySeries = new double[numberOfScans];
 					int x = 0;
 					int y = 0;
 					double retentionTime;
@@ -101,7 +117,18 @@ public class SeriesConverter {
 					/*
 					 * Retrieve the chromatogram x and y signals.
 					 */
+					int i = 1;
 					for(ITotalScanSignal signal : signals.getTotalScanSignals()) {
+						/*
+						 * Pre-optimization
+						 */
+						if(modulo > 0) {
+							if((i % modulo) != 0) {
+								i++;
+								continue;
+							}
+						}
+						i++;
 						retentionTime = signal.getRetentionTime();
 						abundance = signal.getTotalSignal();
 						xOffset = offset.getCurrentXOffset();
