@@ -1,0 +1,279 @@
+/*******************************************************************************
+ * Copyright (c) 2016 Lablicate GmbH.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Dr. Philip Wenig - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.chemclipse.swt.ui.components.peaks;
+
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
+import org.eclipse.chemclipse.model.quantitation.InternalStandard;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
+
+public class PeakInternalStandardsEditListUI extends Composite {
+
+	private static final Logger logger = Logger.getLogger(PeakInternalStandardsEditListUI.class);
+	//
+	private static final String ACTION_INITIALIZE = "ACTION_INITIALIZE";
+	private static final String ACTION_CANCEL = "ACTION_CANCEL";
+	private static final String ACTION_ADD = "ACTION_ADD";
+	private static final String ACTION_DELETE = "ACTION_DELETE";
+	private static final String ACTION_SELECT = "ACTION_SELECT";
+	//
+	private InternalStandardsListUI peakInternalStandardsListUI;
+	//
+	private Button buttonCancel;
+	private Button buttonDelete;
+	private Button buttonAdd;
+	//
+	private Text textContent;
+	private Text textResponseFactor;
+	private Text textUnit;
+	private Button buttonInternalStandardAdd;
+	//
+	private IPeak peak;
+
+	public PeakInternalStandardsEditListUI(Composite parent, int style) {
+		super(parent, style);
+		initialize();
+	}
+
+	public void update(IPeak peak, boolean forceReload) {
+
+		this.peak = peak;
+		if(peak != null) {
+			peakInternalStandardsListUI.setInput(peak.getInternalStandards());
+		} else {
+			peakInternalStandardsListUI.setInput(null);
+		}
+	}
+
+	private void initialize() {
+
+		setLayout(new FillLayout());
+		Composite composite = new Composite(this, SWT.NONE);
+		composite.setLayout(new GridLayout(9, false));
+		//
+		createButtonField(composite);
+		createTableField(composite);
+		//
+		enableButtonFields(ACTION_INITIALIZE);
+	}
+
+	private void createButtonField(Composite composite) {
+
+		Label labelContent = new Label(composite, SWT.NONE);
+		labelContent.setText("Content");
+		//
+		textContent = new Text(composite, SWT.BORDER);
+		textContent.setText("");
+		textContent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		Label labelResponseFactor = new Label(composite, SWT.NONE);
+		labelResponseFactor.setText("Response Factor");
+		//
+		textResponseFactor = new Text(composite, SWT.BORDER);
+		textResponseFactor.setText("1.0");
+		textResponseFactor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		Label labelUnit = new Label(composite, SWT.NONE);
+		labelUnit.setText("Unit");
+		//
+		textUnit = new Text(composite, SWT.BORDER);
+		textUnit.setText("");
+		textUnit.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		buttonInternalStandardAdd = new Button(composite, SWT.PUSH);
+		buttonInternalStandardAdd.setText("Add");
+		buttonInternalStandardAdd.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		buttonInternalStandardAdd.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Shell shell = Display.getCurrent().getActiveShell();
+				if(peak == null) {
+					MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
+					messageBox.setText("Add ISTD");
+					messageBox.setMessage("No peak has been selected.");
+					messageBox.open();
+				} else {
+					try {
+						double content = Double.parseDouble(textContent.getText().trim());
+						double responseFactor = Double.parseDouble(textContent.getText().trim());
+						String unit = textUnit.getText().trim();
+						IInternalStandard internalStandard = new InternalStandard(content, responseFactor, unit);
+						//
+						if(peak.getInternalStandards().contains(internalStandard)) {
+							MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
+							messageBox.setText("Add ISTD");
+							messageBox.setMessage("The ISTD exists already.");
+							messageBox.open();
+						} else {
+							peak.addInternalStandard(internalStandard);
+							textContent.setText("");
+							textResponseFactor.setText("1.0");
+							textUnit.setText("");
+							enableButtonFields(ACTION_INITIALIZE);
+						}
+					} catch(Exception e1) {
+						logger.warn(e1);
+						MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
+						messageBox.setText("Add ISTD");
+						messageBox.setMessage("Please check the content, response factor and unit values.");
+						messageBox.open();
+					}
+				}
+			}
+		});
+		/*
+		 * Buttons
+		 */
+		Composite compositeButtons = new Composite(composite, SWT.NONE);
+		compositeButtons.setLayout(new GridLayout(3, true));
+		GridData gridDataComposite = new GridData();
+		gridDataComposite.horizontalAlignment = SWT.RIGHT;
+		compositeButtons.setLayoutData(gridDataComposite);
+		//
+		buttonCancel = new Button(compositeButtons, SWT.PUSH);
+		buttonCancel.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CANCEL, IApplicationImage.SIZE_16x16));
+		buttonCancel.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				enableButtonFields(ACTION_CANCEL);
+			}
+		});
+		//
+		buttonDelete = new Button(compositeButtons, SWT.PUSH);
+		buttonDelete.setEnabled(false);
+		buttonDelete.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		buttonDelete.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(peak != null) {
+					Table table = peakInternalStandardsListUI.getTable();
+					int index = table.getSelectionIndex();
+					if(index >= 0) {
+						MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
+						messageBox.setText("Delete ion(s)?");
+						messageBox.setMessage("Would you like to delete the ion(s)?");
+						if(messageBox.open() == SWT.OK) {
+							//
+							enableButtonFields(ACTION_DELETE);
+							TableItem[] tableItems = table.getSelection();
+							for(TableItem tableItem : tableItems) {
+								Object object = tableItem.getData();
+								if(object instanceof IInternalStandard) {
+									IInternalStandard internalStandard = (IInternalStandard)object;
+									peak.removeInternalStandard(internalStandard);
+								}
+							}
+							peakInternalStandardsListUI.update(peak.getInternalStandards(), true);
+						}
+					}
+				}
+			}
+		});
+		//
+		buttonAdd = new Button(compositeButtons, SWT.PUSH);
+		buttonAdd.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		buttonAdd.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				enableButtonFields(ACTION_ADD);
+			}
+		});
+	}
+
+	private void createTableField(Composite composite) {
+
+		Composite compositeTable = new Composite(composite, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.horizontalSpan = 9;
+		compositeTable.setLayoutData(gridData);
+		compositeTable.setLayout(new FillLayout());
+		//
+		peakInternalStandardsListUI = new InternalStandardsListUI(compositeTable, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		peakInternalStandardsListUI.getTable().addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				enableButtonFields(ACTION_SELECT);
+			}
+		});
+	}
+
+	private void enableButtonFields(String action) {
+
+		enableFields(false);
+		switch(action) {
+			case ACTION_INITIALIZE:
+				buttonAdd.setEnabled(true);
+				break;
+			case ACTION_CANCEL:
+				buttonAdd.setEnabled(true);
+				break;
+			case ACTION_ADD:
+				buttonCancel.setEnabled(true);
+				textContent.setEnabled(true);
+				textUnit.setEnabled(true);
+				textResponseFactor.setEnabled(true);
+				buttonInternalStandardAdd.setEnabled(true);
+				break;
+			case ACTION_DELETE:
+				buttonAdd.setEnabled(true);
+				break;
+			case ACTION_SELECT:
+				buttonAdd.setEnabled(true);
+				//
+				if(peakInternalStandardsListUI.getTable().getSelectionIndex() >= 0) {
+					buttonDelete.setEnabled(true);
+				} else {
+					buttonDelete.setEnabled(false);
+				}
+				break;
+		}
+	}
+
+	private void enableFields(boolean enabled) {
+
+		buttonCancel.setEnabled(enabled);
+		buttonDelete.setEnabled(enabled);
+		buttonAdd.setEnabled(enabled);
+		//
+		textContent.setEnabled(enabled);
+		textUnit.setEnabled(enabled);
+		textResponseFactor.setEnabled(enabled);
+		buttonInternalStandardAdd.setEnabled(enabled);
+	}
+}

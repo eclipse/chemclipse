@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.exceptions.PeakException;
+import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.support.IIntegrationConstraints;
 import org.eclipse.chemclipse.model.support.IntegrationConstraints;
@@ -37,6 +38,7 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	private List<? extends IIntegrationEntry> integrationEntries;
 	private IIntegrationConstraints integrationConstraints;
 	private List<IQuantitationEntry> quantitationEntries;
+	private List<IInternalStandard> internalStandards;
 
 	public AbstractPeak() {
 		/*
@@ -45,6 +47,7 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 		integrationConstraints = new IntegrationConstraints();
 		integrationEntries = new ArrayList<IIntegrationEntry>();
 		quantitationEntries = new ArrayList<IQuantitationEntry>();
+		internalStandards = new ArrayList<IInternalStandard>();
 	}
 
 	@Override
@@ -242,5 +245,23 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 		if(peakModel.getStartRetentionTime() < start || peakModel.getStopRetentionTime() > stop) {
 			throw new PeakException("The start and stop retention times of the peak must be within the chromatogram retention time borders.");
 		}
+	}
+
+	@Override
+	public List<IInternalStandard> getInternalStandards() {
+
+		return internalStandards;
+	}
+
+	@Override
+	public void addInternalStandard(IInternalStandard internalStandard) {
+
+		internalStandards.add(internalStandard);
+	}
+
+	@Override
+	public void removeInternalStandard(IInternalStandard internalStandard) {
+
+		internalStandards.remove(internalStandard);
 	}
 }

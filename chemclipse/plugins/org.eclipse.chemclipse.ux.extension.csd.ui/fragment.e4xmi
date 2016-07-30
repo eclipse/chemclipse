@@ -15,6 +15,7 @@
     <elements xsi:type="basic:Part" xmi:id="_QKBKAKrVEeSzIJcLjxpOWA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.part.peakTargetsView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.csd.ui/org.eclipse.chemclipse.ux.extension.csd.ui.views.PeakTargetsView" label="Peak Targets (CSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peak.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_ocbDsIldEeWYgNsSWgddrw" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.part.scanIdentifiedListView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.csd.ui/org.eclipse.chemclipse.ux.extension.csd.ui.views.ScanIdentifiedListView" label="Identified Scans" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverview.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_Ms1O4FW7EeaUhtCK7miK3Q" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.part.chromatogramheader" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.csd.ui/org.eclipse.chemclipse.ux.extension.csd.ui.views.ChromatogramHeaderView" label="Chromatogram Header (CSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverview.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_wZrBYFZhEeaBZ4f__0WjCQ" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.part.peakistdcsd" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.csd.ui/org.eclipse.chemclipse.ux.extension.csd.ui.views.PeakInternalStandardListView" label="Peak ISTD (CSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peak.gif"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_s-fIgFEOEeK2HN1t0lHwOA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_ujG88FEOEeK2HN1t0lHwOA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.perspective.main" label="CSD Perspective" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif">
@@ -46,6 +47,7 @@
               <children xsi:type="advanced:Placeholder" xmi:id="_0ShBgNKlEeONsNJ7n41rvA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.placeholder.5" ref="_aGGX8NKlEeONsNJ7n41rvA"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_wbvK4NNuEeOGVsF3IvlSBg" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.placeholder.7" ref="_t0KrsNNuEeOGVsF3IvlSBg"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_QDvvwFM4EeKO4dM54-DH7g" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.placeholder.4" ref="_Cg85IFM4EeKO4dM54-DH7g"/>
+              <children xsi:type="advanced:Placeholder" xmi:id="_2pfZoFZhEeaBZ4f__0WjCQ" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.placeholder.13" ref="_wZrBYFZhEeaBZ4f__0WjCQ"/>
             </children>
           </children>
         </children>
