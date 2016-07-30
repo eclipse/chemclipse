@@ -15,8 +15,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IChemClipseChromatogramReportSettings;
@@ -26,7 +28,9 @@ import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
 import org.eclipse.chemclipse.csd.model.core.comparator.ChromatogramPeakCSDComparator;
 import org.eclipse.chemclipse.model.comparator.ChromatogramPeakComparator;
 import org.eclipse.chemclipse.model.comparator.SortOrder;
+import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
@@ -57,9 +61,11 @@ public class ChromatogramReport {
 	private static final String RESULTS_DELIMITER = "---";
 	//
 	private DecimalFormat decimalFormat;
+	private DateFormat dateFormat;
 
 	public ChromatogramReport() {
 		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0####");
+		dateFormat = ValueFormat.getDateFormatEnglish();
 	}
 
 	public void generate(File file, boolean append, List<IChromatogram> chromatograms, IChemClipseChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) throws IOException {
@@ -73,6 +79,7 @@ public class ChromatogramReport {
 		 * Print each chromatogram.
 		 */
 		for(IChromatogram chromatogram : chromatograms) {
+			printHeader(printWriter, chromatogram, monitor);
 			if(chromatogram instanceof IChromatogramMSD) {
 				/*
 				 * MSD
@@ -96,6 +103,35 @@ public class ChromatogramReport {
 		fileWriter.flush();
 		printWriter.close();
 		fileWriter.close();
+	}
+
+	private void printHeader(PrintWriter printWriter, IChromatogramOverview chromatogramOverview, IProgressMonitor monitor) {
+
+		printHeaderLine(printWriter, "Name", chromatogramOverview.getName());
+		printHeaderLine(printWriter, "Data Name", chromatogramOverview.getDataName());
+		printHeaderLine(printWriter, "Operator", chromatogramOverview.getOperator());
+		Date date = chromatogramOverview.getDate();
+		if(date != null) {
+			printHeaderLine(printWriter, "Date", dateFormat.format(chromatogramOverview.getDate()));
+		} else {
+			printHeaderLine(printWriter, "Date", "");
+		}
+		printHeaderLine(printWriter, "Info", chromatogramOverview.getShortInfo());
+		printHeaderLine(printWriter, "Misc", chromatogramOverview.getMiscInfo());
+		printHeaderLine(printWriter, "Misc (separated)", chromatogramOverview.getMiscInfoSeparated());
+		printHeaderLine(printWriter, "Details", chromatogramOverview.getDetailedInfo());
+		printHeaderLine(printWriter, "Scans", Integer.toString(chromatogramOverview.getNumberOfScans()));
+		printHeaderLine(printWriter, "Start RT (min)", decimalFormat.format(chromatogramOverview.getStartRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+		printHeaderLine(printWriter, "Stop RT (min)", decimalFormat.format(chromatogramOverview.getStopRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+		printHeaderLine(printWriter, "Barcode", chromatogramOverview.getBarcode());
+		printWriter.println("------------------------------");
+	}
+
+	private void printHeaderLine(PrintWriter printWriter, String key, String value) {
+
+		printWriter.print(key);
+		printWriter.print(": ");
+		printWriter.println(value);
 	}
 
 	/**
