@@ -53,7 +53,6 @@ public class UpdateSiteSupport {
 		updateSites.put("Mars", "http://download.eclipse.org/releases/mars");
 		updateSites.put("The Eclipse Project Updates", "http://download.eclipse.org/eclipse/updates/4.5");
 		updateSites.put("Eclipse Orbit", "http://download.eclipse.org/tools/orbit/downloads/drops/R20160221192158/repository");
-		updateSites.put("e4 Tools", "http://download.eclipse.org/e4/downloads/drops/S-0.17-201501051100/repository");
 		/*
 		 * Add the additional p2 repositories.
 		 */
