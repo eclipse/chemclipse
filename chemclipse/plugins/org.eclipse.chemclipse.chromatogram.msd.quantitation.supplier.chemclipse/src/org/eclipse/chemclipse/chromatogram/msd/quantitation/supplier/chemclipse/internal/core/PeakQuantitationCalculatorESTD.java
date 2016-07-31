@@ -28,9 +28,9 @@ import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundM
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PeakQuantitationCalculator {
+public class PeakQuantitationCalculatorESTD {
 
-	private static final Logger logger = Logger.getLogger(PeakQuantitationCalculator.class);
+	private static final Logger logger = Logger.getLogger(PeakQuantitationCalculatorESTD.class);
 
 	/**
 	 * Calculates the quantitation results for each peak.

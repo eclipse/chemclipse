@@ -17,7 +17,7 @@ import javax.inject.Named;
 
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.preferences.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.QuantifySelectedPeakRunnable;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.QuantifyAllPeaksESTDRunnable;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
@@ -32,9 +32,9 @@ import org.eclipse.swt.widgets.Display;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-public class QuantifySelectedPeakHandler implements EventHandler {
+public class QuantifyAllPeaksESTDHandler implements EventHandler {
 
-	private static final Logger logger = Logger.getLogger(QuantifySelectedPeakHandler.class);
+	private static final Logger logger = Logger.getLogger(QuantifyAllPeaksESTDHandler.class);
 	private static IChromatogramSelectionMSD chromatogramSelection;
 
 	@Execute
@@ -57,7 +57,7 @@ public class QuantifySelectedPeakHandler implements EventHandler {
 		 */
 		if(chromatogramSelection != null) {
 			final Display display = Display.getCurrent();
-			QuantifySelectedPeakRunnable runnable = new QuantifySelectedPeakRunnable(chromatogramSelection);
+			QuantifyAllPeaksESTDRunnable runnable = new QuantifyAllPeaksESTDRunnable(chromatogramSelection);
 			ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
 			try {
 				/*
@@ -70,7 +70,7 @@ public class QuantifySelectedPeakHandler implements EventHandler {
 			} catch(InterruptedException e) {
 				logger.warn(e);
 			}
-			StatusLineLogger.setInfo(InfoType.MESSAGE, "Done: The peaks has been quantified.");
+			StatusLineLogger.setInfo(InfoType.MESSAGE, "Done: The peak list has been quantified.");
 		}
 	}
 

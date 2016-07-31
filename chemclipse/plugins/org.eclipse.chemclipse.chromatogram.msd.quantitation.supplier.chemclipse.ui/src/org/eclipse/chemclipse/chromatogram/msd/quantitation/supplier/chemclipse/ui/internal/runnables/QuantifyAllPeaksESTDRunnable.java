@@ -25,12 +25,12 @@ import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-public class QuantifyAllPeaksRunnable implements IRunnableWithProgress {
+public class QuantifyAllPeaksESTDRunnable implements IRunnableWithProgress {
 
 	private IChromatogramSelectionMSD chromatogramSelection;
 	private static final String PEAK_QUANTIFIER_ID = "org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.peak";
 
-	public QuantifyAllPeaksRunnable(IChromatogramSelectionMSD chromatogramSelection) {
+	public QuantifyAllPeaksESTDRunnable(IChromatogramSelectionMSD chromatogramSelection) {
 		this.chromatogramSelection = chromatogramSelection;
 	}
 

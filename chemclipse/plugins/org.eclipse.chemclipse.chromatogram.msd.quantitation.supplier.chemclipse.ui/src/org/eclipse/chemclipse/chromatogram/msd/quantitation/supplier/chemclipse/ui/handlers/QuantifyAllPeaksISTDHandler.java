@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2016 Dr. Philip Wenig.
+ * Copyright (c) 2016 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,15 +15,15 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.inject.Named;
 
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.preferences.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.QuantifyAllPeaksRunnable;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.internal.runnables.QuantifyAllPeaksISTDRunnable;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-
+import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -32,18 +32,14 @@ import org.eclipse.swt.widgets.Display;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-public class QuantifyAllPeaksHandler implements EventHandler {
+public class QuantifyAllPeaksISTDHandler implements EventHandler {
 
-	private static final Logger logger = Logger.getLogger(QuantifyAllPeaksHandler.class);
-	private static IChromatogramSelectionMSD chromatogramSelection;
+	private static final Logger logger = Logger.getLogger(QuantifyAllPeaksISTDHandler.class);
+	private static IChromatogramSelection chromatogramSelection;
 
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
-		/*
-		 * Try to select and show the perspective and view.
-		 */
-		PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_ID, IPerspectiveAndViewIds.PEAK_QUANTITATION_ENTRIES_VIEW);
 		/*
 		 * Get the actual cursor, create a new wait cursor and show the wait
 		 * cursor.<br/> Show the origin cursor when finished.<br/> Use the
@@ -57,7 +53,7 @@ public class QuantifyAllPeaksHandler implements EventHandler {
 		 */
 		if(chromatogramSelection != null) {
 			final Display display = Display.getCurrent();
-			QuantifyAllPeaksRunnable runnable = new QuantifyAllPeaksRunnable(chromatogramSelection);
+			QuantifyAllPeaksISTDRunnable runnable = new QuantifyAllPeaksISTDRunnable(chromatogramSelection);
 			ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
 			try {
 				/*
@@ -79,6 +75,12 @@ public class QuantifyAllPeaksHandler implements EventHandler {
 
 		if(event.getTopic().equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION)) {
 			chromatogramSelection = (IChromatogramSelectionMSD)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+		} else if(event.getTopic().equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION)) {
+			chromatogramSelection = (IChromatogramSelectionCSD)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+		} else if(event.getTopic().equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION)) {
+			chromatogramSelection = (IChromatogramSelectionWSD)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+		} else {
+			chromatogramSelection = null;
 		}
 	}
 }

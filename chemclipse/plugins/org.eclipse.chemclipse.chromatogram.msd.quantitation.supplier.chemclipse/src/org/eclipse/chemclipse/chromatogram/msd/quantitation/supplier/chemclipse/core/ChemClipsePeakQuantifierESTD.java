@@ -21,11 +21,11 @@ import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.AbstractPeakQua
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.core.IPeakQuantifier;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.processing.IPeakQuantifierProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.settings.IPeakQuantifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.core.PeakQuantitationCalculator;
+import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.internal.core.PeakQuantitationCalculatorESTD;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings.IChemClipsePeakQuantifierSettings;
 
-public class ChemClipsePeakQuantifier extends AbstractPeakQuantifier implements IPeakQuantifier {
+public class ChemClipsePeakQuantifierESTD extends AbstractPeakQuantifier implements IPeakQuantifier {
 
 	@Override
 	public IPeakQuantifierProcessingInfo quantify(IPeakMSD peak, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
@@ -47,7 +47,7 @@ public class ChemClipsePeakQuantifier extends AbstractPeakQuantifier implements 
 	@Override
 	public IPeakQuantifierProcessingInfo quantify(List<IPeakMSD> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
 
-		PeakQuantitationCalculator peakQuantitationCalculator = new PeakQuantitationCalculator();
+		PeakQuantitationCalculatorESTD peakQuantitationCalculator = new PeakQuantitationCalculatorESTD();
 		return peakQuantitationCalculator.quantify(peaks, peakQuantifierSettings, monitor);
 	}
 

@@ -6,7 +6,7 @@
       <PeakQuantifierSupplier
             description="This quantifier handles to execute a peak quantitation."
             id="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.peak"
-            peakQuantifier="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.core.ChemClipsePeakQuantifier"
+            peakQuantifier="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.core.ChemClipsePeakQuantifierESTD"
             peakQuantifierName="Peak Quantifier">
       </PeakQuantifierSupplier>
    </extension>
