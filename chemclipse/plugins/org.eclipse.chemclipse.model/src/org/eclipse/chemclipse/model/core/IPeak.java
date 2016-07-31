@@ -212,5 +212,7 @@ public interface IPeak extends IPeakTargets {
 
 	void addInternalStandard(IInternalStandard internalStandard);
 
+	void addInternalStandards(List<IInternalStandard> internalStandards);
+
 	void removeInternalStandard(IInternalStandard internalStandard);
 }
