@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.model.quantitation;
 
 public interface IInternalStandard {
 
+	String getName();
+
 	double getConcentration();
 
 	String getConcentrationUnit();

@@ -55,9 +55,11 @@ public class PeakInternalStandardsEditListUI extends Composite {
 	private Button buttonAdd;
 	//
 	private Label labelPeakInfo;
+	private Text textName;
 	private Text textConcentration;
 	private Text textConcentrationUnit;
 	private Text textResponseFactor;
+	private Text textChemicalClass;
 	private Button buttonInternalStandardAdd;
 	//
 	private IPeak peak;
@@ -86,16 +88,33 @@ public class PeakInternalStandardsEditListUI extends Composite {
 
 		setLayout(new FillLayout());
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setLayout(new GridLayout(9, false));
+		composite.setLayout(new GridLayout(2, false));
 		//
-		createLabelField(composite);
+		createLabelAndActionField(composite);
+		createInputField(composite);
 		createButtonField(composite);
 		createTableField(composite);
 		//
 		enableButtonFields(ACTION_INITIALIZE);
 	}
 
-	private void createLabelField(Composite composite) {
+	private void createLabelAndActionField(Composite composite) {
+
+		Composite compositeLeft = new Composite(composite, SWT.NONE);
+		compositeLeft.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		compositeLeft.setLayout(new GridLayout(1, false));
+		//
+		Composite compositeRight = new Composite(composite, SWT.NONE);
+		GridData gridDataCompositeRight = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataCompositeRight.horizontalAlignment = SWT.END;
+		compositeRight.setLayoutData(gridDataCompositeRight);
+		compositeRight.setLayout(new GridLayout(3, false));
+		//
+		createHeaderLeft(compositeLeft);
+		createHeaderRight(compositeRight);
+	}
+
+	private void createHeaderLeft(Composite composite) {
 
 		labelPeakInfo = new Label(composite, SWT.NONE);
 		labelPeakInfo.setText("");
@@ -104,83 +123,9 @@ public class PeakInternalStandardsEditListUI extends Composite {
 		labelPeakInfo.setLayoutData(gridData);
 	}
 
-	private void createButtonField(Composite composite) {
+	private void createHeaderRight(Composite composite) {
 
-		Label labelContent = new Label(composite, SWT.NONE);
-		labelContent.setText("Conc.");
-		//
-		textConcentration = new Text(composite, SWT.BORDER);
-		textConcentration.setText("");
-		textConcentration.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		Label labelConcentrationUnit = new Label(composite, SWT.NONE);
-		labelConcentrationUnit.setText("Unit");
-		//
-		textConcentrationUnit = new Text(composite, SWT.BORDER);
-		textConcentrationUnit.setText("");
-		textConcentrationUnit.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		Label labelResponseFactor = new Label(composite, SWT.NONE);
-		labelResponseFactor.setText("RF");
-		//
-		textResponseFactor = new Text(composite, SWT.BORDER);
-		textResponseFactor.setText("1.0");
-		textResponseFactor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		buttonInternalStandardAdd = new Button(composite, SWT.PUSH);
-		buttonInternalStandardAdd.setText("Add");
-		buttonInternalStandardAdd.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
-		buttonInternalStandardAdd.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				Shell shell = Display.getCurrent().getActiveShell();
-				if(peak == null) {
-					MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
-					messageBox.setText("Add ISTD");
-					messageBox.setMessage("No peak has been selected.");
-					messageBox.open();
-				} else {
-					try {
-						double concentration = Double.parseDouble(textConcentration.getText().trim());
-						String concentrationUnit = textConcentrationUnit.getText().trim();
-						double responseFactor = Double.parseDouble(textConcentration.getText().trim());
-						IInternalStandard internalStandard = new InternalStandard(concentration, concentrationUnit, responseFactor);
-						//
-						if(peak.getInternalStandards().contains(internalStandard)) {
-							MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
-							messageBox.setText("Add ISTD");
-							messageBox.setMessage("The ISTD exists already.");
-							messageBox.open();
-						} else {
-							peak.addInternalStandard(internalStandard);
-							textConcentration.setText("");
-							textResponseFactor.setText("1.0");
-							textConcentrationUnit.setText("");
-							enableButtonFields(ACTION_INITIALIZE);
-							peakInternalStandardsListUI.update(peak.getInternalStandards(), true);
-						}
-					} catch(Exception e1) {
-						logger.warn(e1);
-						MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
-						messageBox.setText("Add ISTD");
-						messageBox.setMessage("Please check the content, response factor and unit values.");
-						messageBox.open();
-					}
-				}
-			}
-		});
-		/*
-		 * Buttons
-		 */
-		Composite compositeButtons = new Composite(composite, SWT.NONE);
-		compositeButtons.setLayout(new GridLayout(3, true));
-		GridData gridDataComposite = new GridData();
-		gridDataComposite.horizontalAlignment = SWT.RIGHT;
-		compositeButtons.setLayoutData(gridDataComposite);
-		//
-		buttonCancel = new Button(compositeButtons, SWT.PUSH);
+		buttonCancel = new Button(composite, SWT.PUSH);
 		buttonCancel.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CANCEL, IApplicationImage.SIZE_16x16));
 		buttonCancel.addSelectionListener(new SelectionAdapter() {
 
@@ -191,7 +136,7 @@ public class PeakInternalStandardsEditListUI extends Composite {
 			}
 		});
 		//
-		buttonDelete = new Button(compositeButtons, SWT.PUSH);
+		buttonDelete = new Button(composite, SWT.PUSH);
 		buttonDelete.setEnabled(false);
 		buttonDelete.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		buttonDelete.addSelectionListener(new SelectionAdapter() {
@@ -224,7 +169,7 @@ public class PeakInternalStandardsEditListUI extends Composite {
 			}
 		});
 		//
-		buttonAdd = new Button(compositeButtons, SWT.PUSH);
+		buttonAdd = new Button(composite, SWT.PUSH);
 		buttonAdd.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		buttonAdd.addSelectionListener(new SelectionAdapter() {
 
@@ -236,11 +181,111 @@ public class PeakInternalStandardsEditListUI extends Composite {
 		});
 	}
 
+	private void createInputField(Composite composite) {
+
+		Composite compositeInput = new Composite(composite, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		compositeInput.setLayoutData(gridData);
+		compositeInput.setLayout(new GridLayout(10, false));
+		//
+		Label labelName = new Label(compositeInput, SWT.NONE);
+		labelName.setText("Name");
+		//
+		textName = new Text(compositeInput, SWT.BORDER);
+		textName.setText("");
+		textName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		Label labelContent = new Label(compositeInput, SWT.NONE);
+		labelContent.setText("Conc.");
+		//
+		textConcentration = new Text(compositeInput, SWT.BORDER);
+		textConcentration.setText("");
+		textConcentration.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		Label labelConcentrationUnit = new Label(compositeInput, SWT.NONE);
+		labelConcentrationUnit.setText("Unit");
+		//
+		textConcentrationUnit = new Text(compositeInput, SWT.BORDER);
+		textConcentrationUnit.setText("");
+		textConcentrationUnit.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		Label labelResponseFactor = new Label(compositeInput, SWT.NONE);
+		labelResponseFactor.setText("RF");
+		//
+		textResponseFactor = new Text(compositeInput, SWT.BORDER);
+		textResponseFactor.setText("1.0");
+		textResponseFactor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		Label labelChemicalClass = new Label(compositeInput, SWT.NONE);
+		labelChemicalClass.setText("Class");
+		//
+		textChemicalClass = new Text(compositeInput, SWT.BORDER);
+		textChemicalClass.setText("");
+		textChemicalClass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	}
+
+	private void createButtonField(Composite composite) {
+
+		buttonInternalStandardAdd = new Button(composite, SWT.PUSH);
+		buttonInternalStandardAdd.setText("Add");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		buttonInternalStandardAdd.setLayoutData(gridData);
+		buttonInternalStandardAdd.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		buttonInternalStandardAdd.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Shell shell = Display.getCurrent().getActiveShell();
+				if(peak == null) {
+					MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
+					messageBox.setText("Add ISTD");
+					messageBox.setMessage("No peak has been selected.");
+					messageBox.open();
+				} else {
+					try {
+						String name = textName.getText().trim();
+						double concentration = Double.parseDouble(textConcentration.getText().trim());
+						String concentrationUnit = textConcentrationUnit.getText().trim();
+						double responseFactor = Double.parseDouble(textResponseFactor.getText().trim());
+						String chemicalClass = textChemicalClass.getText().trim();
+						IInternalStandard internalStandard = new InternalStandard(name, concentration, concentrationUnit, responseFactor);
+						internalStandard.setChemicalClass(chemicalClass);
+						//
+						if(peak.getInternalStandards().contains(internalStandard)) {
+							MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
+							messageBox.setText("Add ISTD");
+							messageBox.setMessage("The ISTD exists already.");
+							messageBox.open();
+						} else {
+							peak.addInternalStandard(internalStandard);
+							textName.setText("");
+							textConcentration.setText("");
+							textConcentrationUnit.setText("");
+							textResponseFactor.setText("1.0");
+							textChemicalClass.setText("");
+							enableButtonFields(ACTION_INITIALIZE);
+							peakInternalStandardsListUI.update(peak.getInternalStandards(), true);
+						}
+					} catch(Exception e1) {
+						logger.warn(e1);
+						MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
+						messageBox.setText("Add ISTD");
+						messageBox.setMessage("Please check the content, response factor and unit values.");
+						messageBox.open();
+					}
+				}
+			}
+		});
+	}
+
 	private void createTableField(Composite composite) {
 
 		Composite compositeTable = new Composite(composite, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.horizontalSpan = 9;
+		gridData.horizontalSpan = 2;
 		compositeTable.setLayoutData(gridData);
 		compositeTable.setLayout(new FillLayout());
 		//
@@ -267,9 +312,11 @@ public class PeakInternalStandardsEditListUI extends Composite {
 				break;
 			case ACTION_ADD:
 				buttonCancel.setEnabled(true);
+				textName.setEnabled(true);
 				textConcentration.setEnabled(true);
 				textConcentrationUnit.setEnabled(true);
 				textResponseFactor.setEnabled(true);
+				textChemicalClass.setEnabled(true);
 				buttonInternalStandardAdd.setEnabled(true);
 				break;
 			case ACTION_DELETE:
@@ -293,9 +340,11 @@ public class PeakInternalStandardsEditListUI extends Composite {
 		buttonDelete.setEnabled(enabled);
 		buttonAdd.setEnabled(enabled);
 		//
+		textName.setEnabled(enabled);
 		textConcentration.setEnabled(enabled);
 		textConcentrationUnit.setEnabled(enabled);
 		textResponseFactor.setEnabled(enabled);
+		textChemicalClass.setEnabled(enabled);
 		buttonInternalStandardAdd.setEnabled(enabled);
 	}
 
@@ -311,7 +360,7 @@ public class PeakInternalStandardsEditListUI extends Composite {
 			builder.append(decimalFormat.format(peakModel.getTailing()));
 			builder.append(" | ");
 			builder.append("Area: ");
-			builder.append(decimalFormat.format(peak.getIntegratedArea()));
+			builder.append(Integer.valueOf(((int)peak.getIntegratedArea())).toString());
 			labelPeakInfo.setText(builder.toString());
 		} else {
 			labelPeakInfo.setText("No peak has been selected yet.");

@@ -13,15 +13,23 @@ package org.eclipse.chemclipse.model.quantitation;
 
 public class InternalStandard implements IInternalStandard {
 
+	private String name = "";
 	private double concentration;
 	private String concentrationUnit;
 	private double responseFactor;
 	private String chemicalClass = "";
 
-	public InternalStandard(double concentration, String concentrationUnit, double responseFactor) {
+	public InternalStandard(String name, double concentration, String concentrationUnit, double responseFactor) {
+		this.name = name;
 		this.concentration = concentration;
 		this.concentrationUnit = concentrationUnit;
 		this.responseFactor = responseFactor;
+	}
+
+	@Override
+	public String getName() {
+
+		return name;
 	}
 
 	@Override

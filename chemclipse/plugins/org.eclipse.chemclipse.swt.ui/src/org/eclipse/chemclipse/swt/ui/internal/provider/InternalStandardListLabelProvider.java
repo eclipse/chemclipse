@@ -44,15 +44,18 @@ public class InternalStandardListLabelProvider extends AbstractChemClipseLabelPr
 			IInternalStandard internalStandard = (IInternalStandard)element;
 			switch(columnIndex) {
 				case 0:
-					text = decimalFormat.format(internalStandard.getConcentration());
+					text = internalStandard.getName();
 					break;
 				case 1:
-					text = internalStandard.getConcentrationUnit();
+					text = decimalFormat.format(internalStandard.getConcentration());
 					break;
 				case 2:
-					text = decimalFormat.format(internalStandard.getResponseFactor());
+					text = internalStandard.getConcentrationUnit();
 					break;
 				case 3:
+					text = decimalFormat.format(internalStandard.getResponseFactor());
+					break;
+				case 4:
 					text = internalStandard.getChemicalClass();
 					break;
 				default:
