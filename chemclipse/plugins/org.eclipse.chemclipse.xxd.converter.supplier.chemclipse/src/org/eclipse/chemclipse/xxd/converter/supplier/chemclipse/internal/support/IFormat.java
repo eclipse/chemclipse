@@ -38,7 +38,8 @@ public interface IFormat {
 	String VERSION_1005 = "1.0.0.5"; // Version 1.0.0, Release 5
 	String VERSION_1006 = "1.0.0.6"; // Version 1.0.0, Release 6
 	String VERSION_1007 = "1.0.0.7"; // Version 1.0.0, Release 7
-	String VERSION_LATEST = VERSION_1004;
+	String VERSION_1100 = "1.1.0.0"; // Version 1.1.0, Release 1 (Diels)
+	String VERSION_LATEST = VERSION_1100;
 	String FILE_VERSION = "VERSION";
 	//
 	String DIR_SEPARATOR = "/";

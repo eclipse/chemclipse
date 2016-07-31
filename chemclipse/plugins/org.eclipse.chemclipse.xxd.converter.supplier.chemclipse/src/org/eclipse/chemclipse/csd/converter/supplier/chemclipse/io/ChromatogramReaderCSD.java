@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.Chro
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1005;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1006;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1007;
+import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1100;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogram.IVendorScan;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogram.VendorChromatogram;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogram.VendorScan;
@@ -67,6 +68,8 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 			chromatogramReader = new ChromatogramReader_1006();
 		} else if(version.equals(IFormat.VERSION_1007)) {
 			chromatogramReader = new ChromatogramReader_1007();
+		} else if(version.equals(IFormat.VERSION_1100)) {
+			chromatogramReader = new ChromatogramReader_1100();
 		}
 		//
 		if(chromatogramReader != null) {
@@ -106,6 +109,8 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 			chromatogramReader = new ChromatogramReader_1006();
 		} else if(version.equals(IFormat.VERSION_1007)) {
 			chromatogramReader = new ChromatogramReader_1007();
+		} else if(version.equals(IFormat.VERSION_1100)) {
+			chromatogramReader = new ChromatogramReader_1100();
 		}
 		//
 		if(chromatogramReader != null) {

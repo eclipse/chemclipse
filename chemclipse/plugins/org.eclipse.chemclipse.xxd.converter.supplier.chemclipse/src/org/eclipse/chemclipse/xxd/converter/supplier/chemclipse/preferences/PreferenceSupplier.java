@@ -111,50 +111,23 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static String[][] getVersions() {
 
 		// TODO optimize the version handling!
-		int versions = 14;
+		int versions = 5;
 		String[][] elements = new String[versions][2];
 		//
 		elements[0][0] = IFormat.VERSION_0701 + " (Nernst)";
 		elements[0][1] = IFormat.VERSION_0701;
 		//
-		elements[1][0] = IFormat.VERSION_0801;
-		elements[1][1] = IFormat.VERSION_0801;
+		elements[1][0] = IFormat.VERSION_0803 + " (Dempster)";
+		elements[1][1] = IFormat.VERSION_0803;
 		//
-		elements[2][0] = IFormat.VERSION_0802;
-		elements[2][1] = IFormat.VERSION_0802;
+		elements[2][0] = IFormat.VERSION_0903 + " (Mattauch)";
+		elements[2][1] = IFormat.VERSION_0903;
 		//
-		elements[3][0] = IFormat.VERSION_0803 + " (Dempster)";
-		elements[3][1] = IFormat.VERSION_0803;
+		elements[3][0] = IFormat.VERSION_1004 + " (Aston)";
+		elements[3][1] = IFormat.VERSION_1004;
 		//
-		elements[4][0] = IFormat.VERSION_0901;
-		elements[4][1] = IFormat.VERSION_0901;
-		//
-		elements[5][0] = IFormat.VERSION_0902;
-		elements[5][1] = IFormat.VERSION_0902;
-		//
-		elements[6][0] = IFormat.VERSION_0903 + " (Mattauch)";
-		elements[6][1] = IFormat.VERSION_0903;
-		//
-		elements[7][0] = IFormat.VERSION_1001;
-		elements[7][1] = IFormat.VERSION_1001;
-		//
-		elements[8][0] = IFormat.VERSION_1002;
-		elements[8][1] = IFormat.VERSION_1002;
-		//
-		elements[9][0] = IFormat.VERSION_1003;
-		elements[9][1] = IFormat.VERSION_1003;
-		//
-		elements[10][0] = IFormat.VERSION_1004 + " (Aston)";
-		elements[10][1] = IFormat.VERSION_1004;
-		//
-		elements[11][0] = IFormat.VERSION_1005;
-		elements[11][1] = IFormat.VERSION_1005;
-		//
-		elements[12][0] = IFormat.VERSION_1006;
-		elements[12][1] = IFormat.VERSION_1006;
-		//
-		elements[13][0] = IFormat.VERSION_1007;
-		elements[13][1] = IFormat.VERSION_1007;
+		elements[4][0] = IFormat.VERSION_1100 + " (Diels)";
+		elements[4][1] = IFormat.VERSION_1100;
 		//
 		return elements;
 	}
