@@ -53,7 +53,7 @@ public class PeakQuantitationCalculatorISTD {
 		IPeakQuantifierProcessingInfo processingInfo = new PeakQuantifierProcessingInfo();
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		List<? extends IPeak> internalStandardPeaks = getInternalStandardPeaks(chromatogram);
-		List<? extends IPeak> peaksToQuantify = getPeaks(chromatogramSelection);
+		List<? extends IPeak> peaksToQuantify = getPeaksToQuantify(chromatogramSelection);
 		//
 		for(IPeak peakToQuantify : peaksToQuantify) {
 			quantifyPeak(internalStandardPeaks, peakToQuantify);
@@ -142,25 +142,27 @@ public class PeakQuantitationCalculatorISTD {
 		return new ArrayList<IPeak>();
 	}
 
-	private List<? extends IPeak> getPeaks(IChromatogramSelection chromatogramSelection) {
+	private List<IPeak> getPeaksToQuantify(IChromatogramSelection chromatogramSelection) {
 
+		List<IPeak> peaksToQuantify = new ArrayList<IPeak>();
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			/*
 			 * MSD
 			 */
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-			return chromatogramSelectionMSD.getChromatogramMSD().getPeaks(chromatogramSelectionMSD);
-		} else if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+			for(IChromatogramPeakMSD peak : chromatogramSelectionMSD.getChromatogramMSD().getPeaks(chromatogramSelectionMSD)) {
+				peaksToQuantify.add(peak);
+			}
+		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
 			/*
 			 * CSD
 			 */
 			IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
-			return chromatogramSelectionCSD.getChromatogramCSD().getPeaks(chromatogramSelectionCSD);
-		} else {
-			/*
-			 * No peaks.
-			 */
-			return new ArrayList<IPeak>();
+			for(IChromatogramPeakCSD peak : chromatogramSelectionCSD.getChromatogramCSD().getPeaks(chromatogramSelectionCSD)) {
+				peaksToQuantify.add(peak);
+			}
 		}
+		//
+		return peaksToQuantify;
 	}
 }

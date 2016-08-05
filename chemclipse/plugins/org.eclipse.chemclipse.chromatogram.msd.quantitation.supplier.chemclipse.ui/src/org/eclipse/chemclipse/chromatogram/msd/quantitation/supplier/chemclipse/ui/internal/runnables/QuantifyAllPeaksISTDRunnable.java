@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.core.ChemClipsePeakQuantifierISTD;
+import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -34,7 +35,12 @@ public class QuantifyAllPeaksISTDRunnable implements IRunnableWithProgress {
 			monitor.beginTask("Peak List Quantifier (ISTD)", IProgressMonitor.UNKNOWN);
 			ChemClipsePeakQuantifierISTD peakQuantifierISTD = new ChemClipsePeakQuantifierISTD();
 			peakQuantifierISTD.quantifyAllPeaks(chromatogramSelection, monitor);
-			((ChromatogramSelectionMSD)chromatogramSelection).update(true);
+			//
+			if(chromatogramSelection instanceof ChromatogramSelectionMSD) {
+				((ChromatogramSelectionMSD)chromatogramSelection).update(true);
+			} else if(chromatogramSelection instanceof ChromatogramSelectionCSD) {
+				((ChromatogramSelectionCSD)chromatogramSelection).update(true);
+			}
 		} finally {
 			monitor.done();
 		}
