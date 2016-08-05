@@ -164,6 +164,11 @@ public class SeriesConverter {
 		return chromatogramSeries;
 	}
 
+	public static IMultipleSeries convertChromatograms(List<IChromatogramSelection> chromatogramSelections, Sign sign, IOffset offset, boolean validatePositive) {
+
+		return convertChromatograms(chromatogramSelections, sign, offset, false, validatePositive);
+	}
+
 	/**
 	 * Returns the chromatogram selections as series.
 	 * 
@@ -172,7 +177,7 @@ public class SeriesConverter {
 	 * @param offset
 	 * @return IMultipleSeries
 	 */
-	public static IMultipleSeries convertChromatograms(List<IChromatogramSelection> chromatogramSelections, Sign sign, IOffset offset, boolean validatePositive) {
+	public static IMultipleSeries convertChromatograms(List<IChromatogramSelection> chromatogramSelections, Sign sign, IOffset offset, boolean useLockedOffset, boolean validatePositive) {
 
 		/*
 		 * There must be at least one chromatogram in the list.
@@ -198,7 +203,10 @@ public class SeriesConverter {
 				/*
 				 * Is the offset locked?
 				 */
-				boolean isLockOffset = chromatogramSelection.isLockOffset();
+				boolean isLockOffset = false;
+				if(useLockedOffset) {
+					isLockOffset = chromatogramSelection.isLockOffset();
+				}
 				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 				counter++;
 				/*
@@ -495,6 +503,11 @@ public class SeriesConverter {
 		return chromatogramSeries;
 	}
 
+	public static ISeries convertChromatogram(IChromatogramSelection chromatogramSelection, Sign sign, boolean validatePositive) {
+
+		return convertChromatogram(chromatogramSelection, sign, false, validatePositive);
+	}
+
 	/**
 	 * Returns the given chromatogram selection.
 	 * 
@@ -502,12 +515,12 @@ public class SeriesConverter {
 	 * @param sign
 	 * @return ISeries
 	 */
-	public static ISeries convertChromatogram(IChromatogramSelection chromatogramSelection, Sign sign, boolean validatePositive) {
+	public static ISeries convertChromatogram(IChromatogramSelection chromatogramSelection, Sign sign, boolean useLockedOffset, boolean validatePositive) {
 
 		List<IChromatogramSelection> chromatogramSelections = new ArrayList<IChromatogramSelection>();
 		chromatogramSelections.add(chromatogramSelection);
 		IOffset offset = new Offset(0, 0);
-		IMultipleSeries chromatogramSelectionSeries = convertChromatograms(chromatogramSelections, sign, offset, validatePositive);
+		IMultipleSeries chromatogramSelectionSeries = convertChromatograms(chromatogramSelections, sign, offset, useLockedOffset, validatePositive);
 		return chromatogramSelectionSeries.getMultipleSeries().get(0);
 	}
 
@@ -580,6 +593,11 @@ public class SeriesConverter {
 		return multipleSeries;
 	}
 
+	public static ISeries convertChromatogram(IChromatogram chromatogram, Sign sign, boolean validatePositive) {
+
+		return convertChromatogram(chromatogram, sign, false, validatePositive);
+	}
+
 	/**
 	 * Returns a series instance of the given chromatogram.
 	 * 
@@ -587,13 +605,13 @@ public class SeriesConverter {
 	 * @param sign
 	 * @return
 	 */
-	public static ISeries convertChromatogram(IChromatogram chromatogram, Sign sign, boolean validatePositive) {
+	public static ISeries convertChromatogram(IChromatogram chromatogram, Sign sign, boolean useLockedOffset, boolean validatePositive) {
 
 		ISeries series = null;
 		IChromatogramSelection chromatogramSelection;
 		try {
 			chromatogramSelection = new ChromatogramSelection(chromatogram);
-			series = convertChromatogram(chromatogramSelection, sign, validatePositive);
+			series = convertChromatogram(chromatogramSelection, sign, useLockedOffset, validatePositive);
 		} catch(ChromatogramIsNullException e) {
 			logger.warn(e);
 		}
