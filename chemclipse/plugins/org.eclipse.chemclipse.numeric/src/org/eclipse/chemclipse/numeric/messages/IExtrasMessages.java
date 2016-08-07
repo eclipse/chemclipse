@@ -23,4 +23,5 @@ public interface IExtrasMessages {
 	String UNIT_GRAM_OR_MILLILITER = "unitGramOrMilliliter";
 	String UNIT_MILLIGRAM_PER_KILOGRAM_OR_LITER = "unitMilligramPerKilogramOrLiter";
 	String UNIT_MILLIGRAM_PER_LITER = "unitMilligramPerLiter";
+	String UNIT_GRAM_PER_HUNDRED_GRAM_OR_MILLILITER = "unitGramPerHundredGramOrMilliliter";
 }
