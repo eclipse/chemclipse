@@ -19,4 +19,6 @@ public interface IUnits {
 	String l = "l";
 	String mg_per_kg = "mg/kg";
 	String mg_per_liter = "mg/l";
+	String g_per_100g = "g/100 g";
+	String g_per_100ml = "g/100 ml";
 }
