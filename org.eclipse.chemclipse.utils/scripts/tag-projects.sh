@@ -32,8 +32,8 @@ function tag_project {
   #git tag -d OC-CODE-MIGRATE-ECLIPSE
   #git push origin :refs/tags/OC-CODE-MIGRATE-ECLIPSE
   # ADD
-  git tag -a "REL-1.1.0-OC" -m "Release 1.1.0 OpenChrom."
-  git push --tags
+  #git tag -a "REL-1.2.0.1-XR" -m "Release 1.2.0.1 XR"
+  #git push --tags
   cd $active
 }
 
