@@ -32,6 +32,7 @@ public interface IChemClipseEvents {
 	String PROPERTY_CHROMATOGRAM_SELECTION = "ChromatogramSelection"; // IChromatogramSelection (MSD, CSD, WSD)
 	String PROPERTY_LIBRARY_SELECTION = IEventBroker.DATA; // IMassSpectra
 	String PROPERTY_SCAN_SELECTION = IEventBroker.DATA; // IScanMSD, ...
+	String PROPERTY_PEAK_SELECTION = IEventBroker.DATA; // IPeakMSD, ...
 	//
 	String PROPERTY_CHROMATOGRAM_OVERVIEW = "ChromatogramOverview"; // IChromatogramOverview
 	String PROPERTY_CHROMATOGRAM_PEAK_MSD = "ChromatogramPeakMSD"; // IChromatogramPeakMSD
@@ -68,6 +69,8 @@ public interface IChemClipseEvents {
 	 * Close the chromatogram editor.
 	 */
 	String TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION = "chromatogram/xxd/unload/chromatogramselection";
+	String TOPIC_SCAN_XXD_UNLOAD_SELECTION = "scan/xxd/unload/selection";
+	String TOPIC_PEAK_XXD_UNLOAD_SELECTION = "peak/xxd/unload/selection";
 	/*
 	 * Detector: MSD
 	 */
@@ -79,12 +82,10 @@ public interface IChemClipseEvents {
 	String TOPIC_CHROMATOGRAM_MSD_UPDATE_PEAKS = "chromatogram/msd/update/peaks";
 	String TOPIC_CHROMATOGRAM_MSD_UPDATE_MASSSPECTRUM = "chromatogram/msd/update/massspectrum";
 	String TOPIC_CHROMATOGRAM_MSD_UPDATE_ION_SELECTION = "chromatogram/msd/update/ionselection";
-	//
 	String TOPIC_LIBRARY_MSD_UPDATE_SELECTION = "library/msd/update/selection";
 	String TOPIC_LIBRARY_MSD_UNLOAD_SELECTION = "library/msd/unload/selection";
-	//
 	String TOPIC_SCAN_MSD_UPDATE_SELECTION = "scan/msd/update/selection";
-	String TOPIC_SCAN_MSD_UNLOAD_SELECTION = "scan/msd/unload/selection";
+	String TOPIC_PEAK_MSD_UPDATE_SELECTION = "peak/msd/update/selection";
 	/*
 	 * Detector: CSD (conductivity selective)
 	 */
@@ -94,6 +95,8 @@ public interface IChemClipseEvents {
 	String TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM = "chromatogram/csd/update/chromatogram";
 	String TOPIC_CHROMATOGRAM_CSD_UPDATE_PEAK = "chromatogram/csd/update/peak";
 	String TOPIC_CHROMATOGRAM_CSD_UPDATE_PEAKS = "chromatogram/csd/update/peaks";
+	String TOPIC_SCAN_CSD_UPDATE_SELECTION = "scan/csd/update/selection";
+	String TOPIC_PEAK_CSD_UPDATE_SELECTION = "peak/csd/update/selection";
 	/*
 	 * Detector: WSD (wavelength selective)
 	 */
@@ -102,6 +105,8 @@ public interface IChemClipseEvents {
 	String TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM = "chromatogram/wsd/update/chromatogram";
 	String TOPIC_CHROMATOGRAM_WSD_UPDATE_PEAK = "chromatogram/wsd/update/peak";
 	String TOPIC_CHROMATOGRAM_WSD_UPDATE_PEAKS = "chromatogram/wsd/update/peaks";
+	String TOPIC_SCAN_WSD_UPDATE_SELECTION = "scan/wsd/update/selection";
+	String TOPIC_PEAK_WSD_UPDATE_SELECTION = "peak/wsd/update/selection";
 	//
 	String TOPIC_PROCESSING_INFO_UPDATE = "processinginfo/update";
 	String TOPIC_IDENTIFICATION_TARGET_UPDATE = "identification/target/update";

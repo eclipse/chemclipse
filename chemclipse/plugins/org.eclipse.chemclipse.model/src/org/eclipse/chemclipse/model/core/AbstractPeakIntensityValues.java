@@ -122,6 +122,25 @@ public abstract class AbstractPeakIntensityValues implements IPeakIntensityValue
 	}
 
 	@Override
+	public void replaceRetentionTimes(List<Integer> retentionTimes) {
+
+		if(intensityValues.size() == retentionTimes.size()) {
+			/*
+			 * Create a new map.
+			 */
+			int i = 0;
+			NavigableMap<Integer, Float> intensityValuesNew = new TreeMap<Integer, Float>();
+			for(Map.Entry<Integer, Float> intensityValue : intensityValues.entrySet()) {
+				intensityValuesNew.put(retentionTimes.get(i++), intensityValue.getValue());
+			}
+			/*
+			 * Replace the old by the new map.
+			 */
+			intensityValues = intensityValuesNew;
+		}
+	}
+
+	@Override
 	public int size() {
 
 		return intensityValues.size();

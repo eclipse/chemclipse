@@ -35,6 +35,7 @@ import org.swtchart.ISeries.SeriesType;
 public class MultipleChromatogramOffsetUI extends AbstractViewChromatogramUI {
 
 	private IOffset offset;
+	private boolean useLockedOffset = false;
 
 	public MultipleChromatogramOffsetUI(Composite parent, int style, IAxisTitles axisTitles) {
 		super(parent, style, axisTitles);
@@ -43,6 +44,18 @@ public class MultipleChromatogramOffsetUI extends AbstractViewChromatogramUI {
 
 	public MultipleChromatogramOffsetUI(Composite parent, int style, IOffset offset, IAxisTitles axisTitles) {
 		super(parent, style, axisTitles);
+		this.offset = offset;
+	}
+
+	public MultipleChromatogramOffsetUI(Composite parent, int style, IAxisTitles axisTitles, boolean useLockedOffset) {
+		super(parent, style, axisTitles);
+		this.useLockedOffset = useLockedOffset;
+	}
+
+	public MultipleChromatogramOffsetUI(Composite parent, int style, IOffset offset, IAxisTitles axisTitles, boolean useLockedOffset) {
+		super(parent, style, axisTitles);
+		this.offset = offset;
+		this.useLockedOffset = useLockedOffset;
 	}
 
 	/**
@@ -75,7 +88,7 @@ public class MultipleChromatogramOffsetUI extends AbstractViewChromatogramUI {
 		//
 		ISeries series;
 		//
-		IMultipleSeries multipleSeries = SeriesConverter.convertChromatograms(getChromatogramSelections(), Sign.POSITIVE, offset, true);
+		IMultipleSeries multipleSeries = SeriesConverter.convertChromatograms(getChromatogramSelections(), Sign.POSITIVE, offset, useLockedOffset, true);
 		int size = multipleSeries.getMultipleSeries().size();
 		/*
 		 * Set the series.

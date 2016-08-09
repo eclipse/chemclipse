@@ -33,6 +33,8 @@ public class LibraryMassSpectrumStackUI extends Composite {
 	//
 	private DecimalFormat decimalFormat;
 	private MassValueDisplayPrecision massValueDisplayPrecision;
+	//
+	public static final int MAX_LENGTH_NAME = 20;
 
 	public LibraryMassSpectrumStackUI(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
 		super(parent, style);
@@ -97,11 +99,19 @@ public class LibraryMassSpectrumStackUI extends Composite {
 			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
 			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 			builder.append("NAME: ");
-			builder.append(libraryInformation.getName());
+			String name = libraryInformation.getName();
+			if(name.length() > MAX_LENGTH_NAME) {
+				builder.append(name.substring(0, MAX_LENGTH_NAME));
+				builder.append("...");
+			} else {
+				builder.append(name);
+			}
 		} else {
 			builder.append("RT: ");
 			builder.append(decimalFormat.format(massSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 		}
+		builder.append(" RI:");
+		builder.append(Integer.toString((int)massSpectrum.getRetentionIndex()));
 		builder.append("]");
 		//
 		stackedMassSpectrumUI.setAxisTitle(SWT.BOTTOM, builder.toString());

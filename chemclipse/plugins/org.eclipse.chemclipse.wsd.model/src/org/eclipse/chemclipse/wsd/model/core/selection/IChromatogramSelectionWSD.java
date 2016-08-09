@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.wsd.model.core.selection;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 
 public interface IChromatogramSelectionWSD extends IChromatogramSelection {
 
@@ -46,4 +47,11 @@ public interface IChromatogramSelectionWSD extends IChromatogramSelection {
 	 * @param update
 	 */
 	void setSelectedScan(IScanWSD selectedScan, boolean update);
+
+	/**
+	 * Returns a list of selected wavelength.
+	 * 
+	 * @return Wavelengths
+	 */
+	IMarkedWavelengths getSelectedWavelengths();
 }

@@ -120,7 +120,7 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 				/*
 				 * Active Peaks
 				 */
-				series = SeriesConverterMSD.convertPeaks(chromatogramSelection, new Offset(0, 0), Sign.POSITIVE, true);
+				series = SeriesConverterMSD.convertPeakMaxPositions(chromatogramSelection, new Offset(0, 0), Sign.POSITIVE, true);
 				scatterSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, series.getId());
 				scatterSeries.setXSeries(series.getXSeries());
 				scatterSeries.setYSeries(series.getYSeries());
@@ -139,7 +139,7 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 			 * Inactive Peaks
 			 */
 			try {
-				series = SeriesConverterMSD.convertPeaks(chromatogramSelection, new Offset(0, 0), Sign.POSITIVE, false);
+				series = SeriesConverterMSD.convertPeakMaxPositions(chromatogramSelection, new Offset(0, 0), Sign.POSITIVE, false);
 				scatterSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, series.getId());
 				scatterSeries.setXSeries(series.getXSeries());
 				scatterSeries.setYSeries(series.getYSeries());

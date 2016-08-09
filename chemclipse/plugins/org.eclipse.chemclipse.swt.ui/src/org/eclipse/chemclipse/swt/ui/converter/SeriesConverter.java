@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
+import org.eclipse.chemclipse.swt.ui.exceptions.NoPeaksAvailableException;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
@@ -88,9 +89,23 @@ public class SeriesConverter {
 				try {
 					ITotalScanSignalExtractor totalIonSignalExtractor = new TotalScanSignalExtractor(chromatogramOverview);
 					ITotalScanSignals signals = totalIonSignalExtractor.getTotalScanSignals(validatePositive);
-					int scans = signals.size();
-					double[] xSeries = new double[scans];
-					double[] ySeries = new double[scans];
+					/*
+					 * Pre-optimization
+					 */
+					// Rectangle clientArea = Display.getCurrent().getClientArea();
+					// int scansDisplay = clientArea.width;
+					int numberOfScans = signals.size();
+					// int modulo = 0;
+					// if(numberOfScans > scansDisplay && scansDisplay > 0) {
+					// int factor = numberOfScans / scansDisplay;
+					// if(factor >= 2) {
+					// modulo = factor;
+					// numberOfScans /= modulo;
+					// }
+					// }
+					//
+					double[] xSeries = new double[numberOfScans];
+					double[] ySeries = new double[numberOfScans];
 					int x = 0;
 					int y = 0;
 					double retentionTime;
@@ -100,7 +115,18 @@ public class SeriesConverter {
 					/*
 					 * Retrieve the chromatogram x and y signals.
 					 */
+					// int i = 1;
 					for(ITotalScanSignal signal : signals.getTotalScanSignals()) {
+						/*
+						 * Pre-optimization
+						 */
+						// if(modulo > 0) {
+						// if((i % modulo) != 0) {
+						// i++;
+						// continue;
+						// }
+						// }
+						// i++;
 						retentionTime = signal.getRetentionTime();
 						abundance = signal.getTotalSignal();
 						xOffset = offset.getCurrentXOffset();
@@ -138,6 +164,11 @@ public class SeriesConverter {
 		return chromatogramSeries;
 	}
 
+	public static IMultipleSeries convertChromatograms(List<IChromatogramSelection> chromatogramSelections, Sign sign, IOffset offset, boolean validatePositive) {
+
+		return convertChromatograms(chromatogramSelections, sign, offset, false, validatePositive);
+	}
+
 	/**
 	 * Returns the chromatogram selections as series.
 	 * 
@@ -146,7 +177,7 @@ public class SeriesConverter {
 	 * @param offset
 	 * @return IMultipleSeries
 	 */
-	public static IMultipleSeries convertChromatograms(List<IChromatogramSelection> chromatogramSelections, Sign sign, IOffset offset, boolean validatePositive) {
+	public static IMultipleSeries convertChromatograms(List<IChromatogramSelection> chromatogramSelections, Sign sign, IOffset offset, boolean useLockedOffset, boolean validatePositive) {
 
 		/*
 		 * There must be at least one chromatogram in the list.
@@ -172,7 +203,10 @@ public class SeriesConverter {
 				/*
 				 * Is the offset locked?
 				 */
-				boolean isLockOffset = chromatogramSelection.isLockOffset();
+				boolean isLockOffset = false;
+				if(useLockedOffset) {
+					isLockOffset = chromatogramSelection.isLockOffset();
+				}
 				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 				counter++;
 				/*
@@ -469,6 +503,11 @@ public class SeriesConverter {
 		return chromatogramSeries;
 	}
 
+	public static ISeries convertChromatogram(IChromatogramSelection chromatogramSelection, Sign sign, boolean validatePositive) {
+
+		return convertChromatogram(chromatogramSelection, sign, false, validatePositive);
+	}
+
 	/**
 	 * Returns the given chromatogram selection.
 	 * 
@@ -476,12 +515,12 @@ public class SeriesConverter {
 	 * @param sign
 	 * @return ISeries
 	 */
-	public static ISeries convertChromatogram(IChromatogramSelection chromatogramSelection, Sign sign, boolean validatePositive) {
+	public static ISeries convertChromatogram(IChromatogramSelection chromatogramSelection, Sign sign, boolean useLockedOffset, boolean validatePositive) {
 
 		List<IChromatogramSelection> chromatogramSelections = new ArrayList<IChromatogramSelection>();
 		chromatogramSelections.add(chromatogramSelection);
 		IOffset offset = new Offset(0, 0);
-		IMultipleSeries chromatogramSelectionSeries = convertChromatograms(chromatogramSelections, sign, offset, validatePositive);
+		IMultipleSeries chromatogramSelectionSeries = convertChromatograms(chromatogramSelections, sign, offset, useLockedOffset, validatePositive);
 		return chromatogramSelectionSeries.getMultipleSeries().get(0);
 	}
 
@@ -554,6 +593,11 @@ public class SeriesConverter {
 		return multipleSeries;
 	}
 
+	public static ISeries convertChromatogram(IChromatogram chromatogram, Sign sign, boolean validatePositive) {
+
+		return convertChromatogram(chromatogram, sign, false, validatePositive);
+	}
+
 	/**
 	 * Returns a series instance of the given chromatogram.
 	 * 
@@ -561,13 +605,13 @@ public class SeriesConverter {
 	 * @param sign
 	 * @return
 	 */
-	public static ISeries convertChromatogram(IChromatogram chromatogram, Sign sign, boolean validatePositive) {
+	public static ISeries convertChromatogram(IChromatogram chromatogram, Sign sign, boolean useLockedOffset, boolean validatePositive) {
 
 		ISeries series = null;
 		IChromatogramSelection chromatogramSelection;
 		try {
 			chromatogramSelection = new ChromatogramSelection(chromatogram);
-			series = convertChromatogram(chromatogramSelection, sign, validatePositive);
+			series = convertChromatogram(chromatogramSelection, sign, useLockedOffset, validatePositive);
 		} catch(ChromatogramIsNullException e) {
 			logger.warn(e);
 		}
@@ -718,7 +762,7 @@ public class SeriesConverter {
 		List<IPeak> peaks = new ArrayList<IPeak>();
 		peaks.add(peak);
 		IOffset offset = new Offset(0, 0);
-		IMultipleSeries peakSeries = convertPeak(peaks, includeBackground, sign, offset);
+		IMultipleSeries peakSeries = convertPeaks(peaks, includeBackground, sign, offset);
 		return peakSeries.getMultipleSeries().get(0);
 	}
 
@@ -743,7 +787,7 @@ public class SeriesConverter {
 		List<IPeak> peaks = new ArrayList<IPeak>();
 		peaks.add(peak);
 		IOffset offset = new Offset(0, 0);
-		IMultipleSeries peakSeries = convertPeak(peaks, includeBackground, sign, offset);
+		IMultipleSeries peakSeries = convertPeaks(peaks, includeBackground, sign, offset);
 		return peakSeries.getMultipleSeries().get(0);
 	}
 
@@ -767,7 +811,7 @@ public class SeriesConverter {
 	 * @param offset
 	 * @return List<ISeries>
 	 */
-	public static IMultipleSeries convertPeak(List<? extends IPeak> peaks, boolean includeBackground, Sign sign, IOffset offset) {
+	public static IMultipleSeries convertPeaks(List<? extends IPeak> peaks, boolean includeBackground, Sign sign, IOffset offset) {
 
 		IMultipleSeries peakSeries = new MultipleSeries();
 		if(peaks != null) {
@@ -905,5 +949,98 @@ public class SeriesConverter {
 			}
 		}
 		return peakBackgroundSeries;
+	}
+
+	/**
+	 * Returns the chromatogram selections as series.
+	 * 
+	 * @param chromatograms
+	 * @param sign
+	 * @param offset
+	 * @return IMultipleSeries
+	 */
+	public static IMultipleSeries convertPeakMaxMarker(List<? extends IPeak> peaks, Sign sign, IOffset offset, boolean activeForAnalysis) throws NoPeaksAvailableException {
+
+		/*
+		 * There must be at least one chromatogram in the list.
+		 */
+		IMultipleSeries peakSeries = new MultipleSeries();
+		if(peaks != null) {
+			offset = SeriesConverter.validateOffset(offset);
+			int amountPeaks = getAmountPeaks(peaks, activeForAnalysis);
+			//
+			/*
+			 * Throw an exception if no peaks are available.
+			 */
+			if(amountPeaks == 0) {
+				throw new NoPeaksAvailableException();
+			}
+			/*
+			 * Get the retention time and max abundance value for each peak.
+			 */
+			;
+			double[] xSeries = new double[amountPeaks];
+			double[] ySeries = new double[amountPeaks];
+			int x = 0;
+			int y = 0;
+			/*
+			 * Iterate through all peaks of the chromatogram selection.
+			 */
+			for(IPeak peak : peaks) {
+				/*
+				 * Retrieve the x and y signal of each peak.
+				 */
+				if(printPeak(peak, activeForAnalysis)) {
+					IPeakModel peakModel = peak.getPeakModel();
+					double retentionTime = peakModel.getRetentionTimeAtPeakMaximum();
+					double abundance = peakModel.getBackgroundAbundance() + peakModel.getPeakAbundance();
+					/*
+					 * Sign the abundance as a negative value?
+					 */
+					double xOffset = offset.getCurrentXOffset();
+					double yOffset = offset.getCurrentYOffset();
+					if(sign == Sign.NEGATIVE) {
+						abundance *= -1;
+						xOffset *= -1;
+						yOffset *= -1;
+					}
+					/*
+					 * Set the offset.
+					 */
+					retentionTime += xOffset;
+					abundance += yOffset;
+					/*
+					 * Store the values in the array.
+					 */
+					xSeries[x++] = retentionTime;
+					ySeries[y++] = abundance;
+				}
+			}
+			/*
+			 * Add the series.
+			 */
+			if(activeForAnalysis) {
+				peakSeries.add(new Series(xSeries, ySeries, "Active Peaks"));
+			} else {
+				peakSeries.add(new Series(xSeries, ySeries, "Inactive Peaks"));
+			}
+		}
+		return peakSeries;
+	}
+
+	private static int getAmountPeaks(List<? extends IPeak> peaks, boolean activeForAnalysis) {
+
+		int amountPeaks = 0;
+		for(IPeak peak : peaks) {
+			if(printPeak(peak, activeForAnalysis)) {
+				amountPeaks++;
+			}
+		}
+		return amountPeaks;
+	}
+
+	private static boolean printPeak(IPeak peak, boolean activeForAnalysis) {
+
+		return activeForAnalysis == peak.isActiveForAnalysis();
 	}
 }

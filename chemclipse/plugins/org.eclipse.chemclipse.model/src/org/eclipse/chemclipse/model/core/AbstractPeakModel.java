@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +54,16 @@ public abstract class AbstractPeakModel implements IPeakModel {
 	 * end.
 	 */
 	private double gradientAngle;
+	/*
+	 * Start and stop background abundance.
+	 */
+	private float startBackgroundAbundance;
+	private float stopBackgroundAbundance;
+	/*
+	 * Temp info can be stored here.
+	 * This data is not stored in the file format.
+	 */
+	private Map<String, Object> temporarilyInfo;
 
 	/**
 	 * The abstract peak model creates a peak model by defining its core values.<br/>
@@ -72,15 +83,16 @@ public abstract class AbstractPeakModel implements IPeakModel {
 		/*
 		 * Checks all conditions for the peak model to be valid.
 		 */
-		checkModelConditions(peakMaximum, peakIntensityValues);
-		backgroundEquation = calculateBackgroundEquation(startBackgroundAbundance, stopBackgroundAbundance);
-		gradientAngle = calculateGradientAngle();
+		this.peakMaximum = peakMaximum;
+		this.peakIntensityValues = peakIntensityValues;
+		this.startBackgroundAbundance = startBackgroundAbundance;
+		this.stopBackgroundAbundance = stopBackgroundAbundance;
+		//
+		calculatePeakModel();
 		/*
-		 * Calculate the equation for the points of inflection.<br/> The peak
-		 * maximum has been checked, so it can be used here.
+		 * Temp info
 		 */
-		increasingInflectionPointEquation = peakIntensityValues.calculateIncreasingInflectionPointEquation(peakMaximum.getTotalSignal());
-		decreasingInflectionPointEquation = peakIntensityValues.calculateDecreasingInflectionPointEquation(peakMaximum.getTotalSignal());
+		temporarilyInfo = new HashMap<String, Object>();
 	}
 
 	@Override
@@ -162,6 +174,19 @@ public abstract class AbstractPeakModel implements IPeakModel {
 		} catch(SolverException e) {
 		}
 		return x;
+	}
+
+	@Override
+	public void replaceRetentionTimes(List<Integer> retentionTimes) throws IllegalArgumentException, PeakException {
+
+		peakIntensityValues.replaceRetentionTimes(retentionTimes);
+		calculatePeakModel();
+	}
+
+	@Override
+	public int getNumberOfScans() {
+
+		return peakIntensityValues.size();
 	}
 
 	@Override
@@ -438,6 +463,31 @@ public abstract class AbstractPeakModel implements IPeakModel {
 		 * Use the arcus tangens to determine alpha.
 		 */
 		return Math.toDegrees(Math.atan(a / b));
+	}
+
+	@Override
+	public Object getTemporarilyInfo(String key) {
+
+		return temporarilyInfo.get(key);
+	}
+
+	@Override
+	public void setTemporarilyInfo(String key, Object value) {
+
+		temporarilyInfo.put(key, value);
+	}
+
+	private void calculatePeakModel() throws IllegalArgumentException, PeakException {
+
+		checkModelConditions(peakMaximum, peakIntensityValues);
+		backgroundEquation = calculateBackgroundEquation(startBackgroundAbundance, stopBackgroundAbundance);
+		gradientAngle = calculateGradientAngle();
+		/*
+		 * Calculate the equation for the points of inflection.<br/> The peak
+		 * maximum has been checked, so it can be used here.
+		 */
+		increasingInflectionPointEquation = peakIntensityValues.calculateIncreasingInflectionPointEquation(peakMaximum.getTotalSignal());
+		decreasingInflectionPointEquation = peakIntensityValues.calculateDecreasingInflectionPointEquation(peakMaximum.getTotalSignal());
 	}
 
 	@Override

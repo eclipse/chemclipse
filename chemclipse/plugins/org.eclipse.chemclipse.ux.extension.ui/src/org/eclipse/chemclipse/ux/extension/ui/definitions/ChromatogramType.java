@@ -67,4 +67,76 @@ public class ChromatogramType implements EventHandler {
 			eclipseContext.set(CHROMATOGRAM_TYPE, chromatogramType);
 		}
 	}
+
+	/**
+	 * Get the current chromatogram selection.
+	 * 
+	 * @return {@link IChromatogramSelection}
+	 */
+	public static IChromatogramSelection getChromatogramSelection() {
+
+		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		Object object = eclipseContext.get(ChromatogramType.CHROMATOGRAM_SELECTION);
+		//
+		IChromatogramSelection chromatogramSelection = null;
+		if(object != null && object instanceof IChromatogramSelection) {
+			chromatogramSelection = (IChromatogramSelection)object;
+		}
+		//
+		return chromatogramSelection;
+	}
+
+	/**
+	 * Get the current chromatogram selection.
+	 * 
+	 * @return {@link IChromatogramSelectionMSD}
+	 */
+	public static IChromatogramSelectionMSD getChromatogramSelectionMSD() {
+
+		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		Object object = eclipseContext.get(ChromatogramType.CHROMATOGRAM_SELECTION);
+		//
+		IChromatogramSelectionMSD chromatogramSelectionMSD = null;
+		if(object != null && object instanceof IChromatogramSelectionMSD) {
+			chromatogramSelectionMSD = (IChromatogramSelectionMSD)object;
+		}
+		//
+		return chromatogramSelectionMSD;
+	}
+
+	/**
+	 * Get the current chromatogram selection.
+	 * 
+	 * @return {@link IChromatogramSelectionCSD}
+	 */
+	public static IChromatogramSelectionCSD getChromatogramSelectionCSD() {
+
+		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		Object object = eclipseContext.get(ChromatogramType.CHROMATOGRAM_SELECTION);
+		//
+		IChromatogramSelectionCSD chromatogramSelectionCSD = null;
+		if(object != null && object instanceof IChromatogramSelectionCSD) {
+			chromatogramSelectionCSD = (IChromatogramSelectionCSD)object;
+		}
+		//
+		return chromatogramSelectionCSD;
+	}
+
+	/**
+	 * Get the current chromatogram selection.
+	 * 
+	 * @return {@link IChromatogramSelectionWSD}
+	 */
+	public static IChromatogramSelectionWSD getChromatogramSelectionWSD() {
+
+		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		Object object = eclipseContext.get(ChromatogramType.CHROMATOGRAM_SELECTION);
+		//
+		IChromatogramSelectionWSD chromatogramSelectionWSD = null;
+		if(object != null && object instanceof IChromatogramSelectionWSD) {
+			chromatogramSelectionWSD = (IChromatogramSelectionWSD)object;
+		}
+		//
+		return chromatogramSelectionWSD;
+	}
 }

@@ -11,15 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.csd.ui.views;
 
+import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.ui.definitions.PeakType;
+import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSelectionView;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
-
-import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSelectionView;
 
 public abstract class AbstractPeakCSDSelectionView extends AbstractSelectionView implements IPeakCSDSelectionView {
 
@@ -36,6 +36,9 @@ public abstract class AbstractPeakCSDSelectionView extends AbstractSelectionView
 	@Override
 	public IPeakCSD getPeak() {
 
+		if(peak == null) {
+			peak = PeakType.getSelectedPeakCSD();
+		}
 		return peak;
 	}
 

@@ -11,15 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.wsd.ui.views;
 
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.ui.definitions.ChromatogramType;
+import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSelectionView;
+import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
-
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSelectionView;
-import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 
 public abstract class AbstractChromatogramSelectionWSDView extends AbstractSelectionView implements IChromatogramSelectionWSDView {
 
@@ -36,6 +36,9 @@ public abstract class AbstractChromatogramSelectionWSDView extends AbstractSelec
 	@Override
 	public IChromatogramSelectionWSD getChromatogramSelection() {
 
+		if(chromatogramSelection == null) {
+			chromatogramSelection = ChromatogramType.getChromatogramSelectionWSD();
+		}
 		return chromatogramSelection;
 	}
 

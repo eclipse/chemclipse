@@ -103,7 +103,7 @@ public abstract class AbstractChromatogramOverlayView extends AbstractChromatogr
 	private boolean isChromatogramEditor(MPart part) {
 
 		return (part.getElementId().equals(ChromatogramEditorMSD.ID) || //
-		part.getElementId().equals(ChromatogramEditorCSD.ID) || //
-		part.getElementId().equals(ChromatogramEditorWSD.ID));
+				part.getElementId().equals(ChromatogramEditorCSD.ID) || //
+				part.getElementId().equals(ChromatogramEditorWSD.ID));
 	}
 }

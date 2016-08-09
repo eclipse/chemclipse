@@ -12,5 +12,9 @@
 package org.eclipse.chemclipse.model.quantitation;
 
 public enum CalibrationMethod {
-	LINEAR, QUADRATIC, AVERAGE;
+	/*
+	 * ISTD is used for internal standards only.
+	 * All other are used for external calibration.
+	 */
+	LINEAR, QUADRATIC, AVERAGE, ISTD;
 }

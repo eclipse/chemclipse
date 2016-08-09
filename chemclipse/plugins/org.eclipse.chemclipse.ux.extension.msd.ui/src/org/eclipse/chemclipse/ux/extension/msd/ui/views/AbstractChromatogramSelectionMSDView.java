@@ -11,16 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.views;
 
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.ui.definitions.ChromatogramType;
+import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSelectionView;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
-
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSelectionView;
 
 public abstract class AbstractChromatogramSelectionMSDView extends AbstractSelectionView implements IChromatogramSelectionMSDView {
 
@@ -37,6 +37,9 @@ public abstract class AbstractChromatogramSelectionMSDView extends AbstractSelec
 	@Override
 	public IChromatogramSelectionMSD getChromatogramSelection() {
 
+		if(chromatogramSelection == null) {
+			chromatogramSelection = ChromatogramType.getChromatogramSelectionMSD();
+		}
 		return chromatogramSelection;
 	}
 

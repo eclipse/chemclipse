@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.model.core;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.support.IIntegrationConstraints;
 import org.eclipse.chemclipse.model.targets.IPeakTargets;
@@ -206,4 +207,12 @@ public interface IPeak extends IPeakTargets {
 	 * @param active
 	 */
 	void setActiveForAnalysis(boolean activeForAnalysis);
+
+	List<IInternalStandard> getInternalStandards();
+
+	void addInternalStandard(IInternalStandard internalStandard);
+
+	void addInternalStandards(List<IInternalStandard> internalStandards);
+
+	void removeInternalStandard(IInternalStandard internalStandard);
 }

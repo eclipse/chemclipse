@@ -52,13 +52,13 @@ public class SeriesConverter_30_Test extends PeakTestCase {
 
 	public void testConvertPeak_1() {
 
-		series = SeriesConverter.convertPeak(peaks, true, Sign.NEGATIVE, offset);
+		series = SeriesConverter.convertPeaks(peaks, true, Sign.NEGATIVE, offset);
 		assertEquals("XMin", 1000.0d, series.getXMin());
 	}
 
 	public void testConvertPeak_2() {
 
-		series = SeriesConverter.convertPeak(peaks, true, Sign.NEGATIVE, offset);
+		series = SeriesConverter.convertPeaks(peaks, true, Sign.NEGATIVE, offset);
 		assertEquals("XMax", 15500.0d, series.getXMax());
 	}
 
@@ -67,7 +67,7 @@ public class SeriesConverter_30_Test extends PeakTestCase {
 		/*
 		 * background 1760
 		 */
-		series = SeriesConverter.convertPeak(peaks, true, Sign.NEGATIVE, offset);
+		series = SeriesConverter.convertPeaks(peaks, true, Sign.NEGATIVE, offset);
 		assertEquals("YMin", -16991.0d, series.getYMin());
 	}
 
@@ -76,7 +76,7 @@ public class SeriesConverter_30_Test extends PeakTestCase {
 		/*
 		 * 5231 + 10000 offset + background 1760
 		 */
-		series = SeriesConverter.convertPeak(peaks, true, Sign.NEGATIVE, offset);
+		series = SeriesConverter.convertPeaks(peaks, true, Sign.NEGATIVE, offset);
 		assertEquals("YMax", -1760.0d, series.getYMax());
 	}
 }
