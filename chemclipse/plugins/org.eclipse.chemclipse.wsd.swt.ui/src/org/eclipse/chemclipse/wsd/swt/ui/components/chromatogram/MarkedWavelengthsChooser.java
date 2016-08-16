@@ -127,7 +127,7 @@ public class MarkedWavelengthsChooser {
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		Label label1 = new Label(compositeMarkedIonChooser, SWT.NONE);
-		label1.setText("m/z");
+		label1.setText("Wavelength");
 		label1.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		Label label2 = new Label(compositeMarkedIonChooser, SWT.NONE);

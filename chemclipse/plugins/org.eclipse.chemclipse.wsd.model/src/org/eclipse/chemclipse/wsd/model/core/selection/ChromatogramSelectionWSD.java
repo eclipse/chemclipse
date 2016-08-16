@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2016 Dr. Philip Wenig.
+ * Copyright (c) 2013, 2016 Dr. Philip Wenig, Matthias Mailänder.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - refined the wavelength selection
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core.selection;
 
@@ -17,6 +18,7 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelength;
@@ -40,13 +42,14 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 		 */
 		super(chromatogram, fireUpdate);
 		/*
-		 * Add some default wavelengths
+		 * Populate the list with wavelengths from the first scan of the currently loaded chromatogram.
 		 */
+		IChromatogramWSD wsdChromatogram = (IChromatogramWSD)chromatogram;
+		IScanWSD scan = (IScanWSD)wsdChromatogram.getScans().stream().findFirst().get();
 		selectedWavelengths = new MarkedWavelengths();
-		selectedWavelengths.add(new MarkedWavelength(540));
-		selectedWavelengths.add(new MarkedWavelength(568));
-		selectedWavelengths.add(new MarkedWavelength(595));
-		selectedWavelengths.add(new MarkedWavelength(615));
+		for(IScanSignalWSD signal : scan.getScanSignals()) {
+			selectedWavelengths.add(new MarkedWavelength(signal.getWavelength()));
+		}
 		//
 		reset(fireUpdate);
 	}
