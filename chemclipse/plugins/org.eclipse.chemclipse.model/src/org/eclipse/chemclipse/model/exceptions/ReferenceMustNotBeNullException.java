@@ -8,22 +8,23 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.exceptions;
 
-public class ReferenceMustNotBeNullException extends Exception {
+public class ReferenceMustNotBeNullException extends RuntimeException {
 
-	/**
-	 * Renew the serialVersionUID any time you have changed some fields or
-	 * methods.
-	 */
-	private static final long serialVersionUID = 4708623844737508517L;
+    /**
+     * Renew the serialVersionUID any time you have changed some fields or
+     * methods.
+     */
+    private static final long serialVersionUID = 3279315896784657146L;
 
-	public ReferenceMustNotBeNullException() {
-		super();
-	}
+    public ReferenceMustNotBeNullException() {
+	super();
+    }
 
-	public ReferenceMustNotBeNullException(String message) {
-		super(message);
-	}
+    public ReferenceMustNotBeNullException(String message) {
+	super(message);
+    }
 }
