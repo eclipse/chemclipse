@@ -54,7 +54,7 @@ import org.osgi.service.event.EventHandler;
 
 public class EditHistoryPart {
 
-	private static final String POPUP_MENU_ID = "com.lablicate.xreport.supplier.ui.parts.editHistoryPart.popup"; // $NON-NLS-1$
+	private static final String POPUP_MENU_ID = "org.eclipse.chemclipse.support.ui.parts.editHistoryPart.popup"; // $NON-NLS-1$
 	@Inject
 	private Composite parent;
 	private TableViewer tableViewer;
