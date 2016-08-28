@@ -102,7 +102,7 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_mmvNUMxrEeOp3IEcthiWqQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_0k-CwMxrEeOp3IEcthiWqQ" elementId="org.eclipse.chemclipse.ux.extension.ui.perspective.welcome" label="Welcome" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif">
-      <children xsi:type="advanced:Placeholder" xmi:id="_BNUDUMxsEeOp3IEcthiWqQ" elementId="org.eclipse.chemclipse.ux.extension.ui.placeholder.welcome.0" ref="_sEZv4MxrEeOp3IEcthiWqQ"/>
+      <children xsi:type="advanced:Placeholder" xmi:id="_BNUDUMxsEeOp3IEcthiWqQ" elementId="org.eclipse.chemclipse.ux.extension.ui.placeholder.welcome.0" ref="_sEZv4MxrEeOp3IEcthiWqQ" closeable="true"/>
     </elements>
     <elements xsi:type="advanced:Perspective" xmi:id="_0NUPgKuNEeSKQ7OYnQVHjQ" elementId="org.eclipse.chemclipse.ux.extension.ui.perspective.chromatogramOverlay" label="Chromatogram Overlay" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverlay.gif">
       <children xsi:type="basic:PartSashContainer" xmi:id="_FCKFsKuOEeSKQ7OYnQVHjQ" elementId="org.eclipse.chemclipse.ux.extension.ui.partsashcontainer.0">
