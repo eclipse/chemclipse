@@ -90,7 +90,7 @@
       </menus>
       <toolbar xmi:id="_JJI_MH9YEeKoCe-SGRyJ_w" elementId="org.eclipse.ui.views.PropertySheet"/>
     </sharedElements>
-    <sharedElements xsi:type="basic:Part" xmi:id="_KwDYQI1yEeKgaYcpx_IhbQ" elementId="org.eclipse.ui.internal.introview" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Welcome" iconURI="platform:/plugin/org.eclipse.ui/icons/full/eview16/defaultview_misc.gif">
+    <sharedElements xsi:type="basic:Part" xmi:id="_KwDYQI1yEeKgaYcpx_IhbQ" elementId="org.eclipse.ui.internal.introview" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Welcome" iconURI="platform:/plugin/org.eclipse.ui/icons/full/eview16/defaultview_misc.gif" closeable="true">
       <persistedState key="memento" value="&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?>&amp;#xD;&amp;#xA;&amp;lt;view>&amp;#xD;&amp;#xA;&amp;lt;presentation currentPage=&amp;quot;root&amp;quot; restore=&amp;quot;true&amp;quot;/>&amp;#xD;&amp;#xA;&amp;lt;standbyPart/>&amp;#xD;&amp;#xA;&amp;lt;/view>"/>
       <tags>View</tags>
       <tags>categoryTag:General</tags>
