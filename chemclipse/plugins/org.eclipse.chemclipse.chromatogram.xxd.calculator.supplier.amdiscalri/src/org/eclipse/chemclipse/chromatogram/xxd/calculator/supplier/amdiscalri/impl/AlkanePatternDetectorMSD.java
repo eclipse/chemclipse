@@ -60,11 +60,15 @@ public class AlkanePatternDetectorMSD {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = new ChromatogramSelectionMSD(chromatogramMSD);
 			List<IPeakMSD> peaks;
 			if(useAlreadyDetectedPeaks) {
+				/*
+				 * Use existing peaks.
+				 */
 				peaks = extractPeaks(chromatogramMSD);
 			} else {
 				/*
 				 * Peak detector.
 				 */
+				chromatogramMSD.removeAllPeaks();
 				PeakDetectorMSD peakDetectorMSD = new PeakDetectorMSD();
 				IFirstDerivativePeakDetectorMSDSettings peakDetectorSettings = new FirstDerivativePeakDetectorMSDSettings();
 				peakDetectorSettings.setThreshold(Threshold.LOW);
