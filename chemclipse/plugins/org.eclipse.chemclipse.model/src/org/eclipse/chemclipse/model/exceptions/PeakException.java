@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.exceptions;
 
-public class PeakException extends Exception {
+public class PeakException extends RuntimeException {
 
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or
