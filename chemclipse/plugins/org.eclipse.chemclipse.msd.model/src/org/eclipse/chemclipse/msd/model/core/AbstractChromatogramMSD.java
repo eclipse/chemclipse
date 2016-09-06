@@ -40,57 +40,61 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * The abstract chromatogram is responsible to handle as much jobs concerning a
  * chromatogram independent of the specific supplier.<br/>
- * AbstractChromatogram extends ({@link IChromatogramMSD}) which implements ( {@link IChromatogramOverview}). ({@link IChromatogramOverview}) should enable
+ * AbstractChromatogram extends ({@link IChromatogramMSD}) which implements (
+ * {@link IChromatogramOverview}). ({@link IChromatogramOverview}) should enable
  * accessing some values of a chromatogram or a short overview. Some values like
  * amount of scans, min/max signal, min/max retention time and total ion
  * chromatogram signals, without accessing all scans. This should be more faster
  * than parsing all scans if they are not needed. On the other hand,
  * AbstractChromatogram implements ({@link IChromatogramMSD}) which itself
- * extends
- * ({@link IChromatogramOverview}). Why? When working with an IChromatogram
- * instance all the values like min/max signal, min/max retention time should be
- * accessible with out implementing them twice.<br/>
+ * extends ({@link IChromatogramOverview}). Why? When working with an
+ * IChromatogram instance all the values like min/max signal, min/max retention
+ * time should be accessible with out implementing them twice.<br/>
  * But now IChromatogramOverview can be used. It is less confusing to use only
  * those method which are needed for an overview than to select from all the
  * IChromatogram methods.<br/>
  * For instance, a value could be stored for minSignal in an instance of the
  * extended AbstractChromatogram. If no scans are added to the chromatogram,
- * minSignal as stored will be returned, otherwise minSignal will be calculated.<br/>
+ * minSignal as stored will be returned, otherwise minSignal will be calculated.
  * <br/>
- * IUpdater is implemented which takes care that all registered listeners ( {@link IChromatogramUpdateListener}) will be informed if values of the
+ * <br/>
+ * IUpdater is implemented which takes care that all registered listeners (
+ * {@link IChromatogramUpdateListener}) will be informed if values of the
  * chromatogram has been changed.
  * 
  * @author eselmeister
  */
 public abstract class AbstractChromatogramMSD extends AbstractChromatogram implements IChromatogramMSD {
 
+	public static int DEFAULT_SEGMENT_WIDTH = 10;
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramMSD.class);
-	//
 	private List<IChromatogramPeakMSD> peaks;
 	private Set<IChromatogramTargetMSD> targets;
 	private IIonTransitionSettings ionTransitionSettings;
 	private INoiseCalculator noiseCalculator;
-	/**
-	 * Test comment
-	 */
 	private ImmutableZeroIon immutableZeroIon;
 
 	public AbstractChromatogramMSD() {
 		peaks = new ArrayList<IChromatogramPeakMSD>();
 		targets = new HashSet<IChromatogramTargetMSD>();
 		ionTransitionSettings = new IonTransitionSettings();
-		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
-		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
-		if(noiseCalculator == null) {
-			noiseCalculator = new DefaultNoiseCalculator();
-		}
-		int segmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
-		noiseCalculator.setChromatogram(this, segmentWidth);
+		int segmentWidth = DEFAULT_SEGMENT_WIDTH;
 		try {
 			immutableZeroIon = new ImmutableZeroIon();
 		} catch(AbundanceLimitExceededException | IonLimitExceededException e) {
-			logger.warn(e);
+			logger.error(e.getLocalizedMessage(), e);
 		}
+		if(PreferenceSupplier.isAvailable()) {
+			segmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
+			String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
+			noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
+			if(noiseCalculator == null) {
+				noiseCalculator = new DefaultNoiseCalculator();
+			}
+		} else {
+			noiseCalculator = new DefaultNoiseCalculator();
+		}
+		noiseCalculator.setChromatogram(this, segmentWidth);
 	}
 
 	@Override
@@ -374,6 +378,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 	}
 
 	// -----------------------------------------------IChromatogramPeaks
+	@Override
 	public IIonTransitionSettings getIonTransitionSettings() {
 
 		return ionTransitionSettings;
