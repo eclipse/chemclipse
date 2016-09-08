@@ -292,7 +292,7 @@ public class FileIdentifier {
 		//
 		switch(penaltyCalculation) {
 			case IIdentifierSettings.PENALTY_CALCULATION_RETENTION_TIME:
-				penalty = PenaltyCalculationSupport.calculatePenaltyFromRetentionTime(unknown, reference, identifierSettings.getRetentionTimeWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
+				penalty = PenaltyCalculationSupport.calculatePenaltyFromRetentionTime(unknown.getRetentionTime(), reference.getRetentionTime(), identifierSettings.getRetentionTimeWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
 				break;
 			case IIdentifierSettings.PENALTY_CALCULATION_RETENTION_INDEX:
 				penalty = PenaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, identifierSettings.getRetentionIndexWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
