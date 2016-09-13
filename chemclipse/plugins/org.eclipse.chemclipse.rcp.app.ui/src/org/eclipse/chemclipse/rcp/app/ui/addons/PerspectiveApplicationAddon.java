@@ -46,6 +46,11 @@ public class PerspectiveApplicationAddon {
 		 * The Bug #408678 has been fixed since Eclipse 4.3.2
 		 */
 		MPerspective perspective = (MPerspective)modelService.find(perspectiveId, application);
+		if(perspective == null) {
+			perspectiveId = IPerspectiveAndViewIds.PERSPECTIVE_WELCOME;
+			perspective = (MPerspective)modelService.find(perspectiveId, application);
+		}
+		//
 		MPerspectiveStack perspectiveStack = (MPerspectiveStack)modelService.find(IPerspectiveAndViewIds.STACK_PERSPECTIVES, application);
 		perspectiveStack.setSelectedElement(perspective);
 		if(eventBroker != null) {
