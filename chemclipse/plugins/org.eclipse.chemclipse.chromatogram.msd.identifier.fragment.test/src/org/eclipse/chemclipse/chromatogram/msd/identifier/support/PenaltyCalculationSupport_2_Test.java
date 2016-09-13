@@ -38,39 +38,6 @@ public class PenaltyCalculationSupport_2_Test extends TestCase {
 		super.tearDown();
 	}
 
-	public void test1() {
-
-		unknown = null;
-		reference = null;
-		retentionTimeWindow = 500;
-		penaltyCalculationLevelFactor = 10.0f;
-		penaltyCalculationMaxValue = 20.0f;
-		float value = PenaltyCalculationSupport.calculatePenaltyFromRetentionTime(unknown.getRetentionTime(), reference.getRetentionTime(), retentionTimeWindow, penaltyCalculationLevelFactor, penaltyCalculationMaxValue);
-		assertEquals(0.0f, value);
-	}
-
-	public void test2() {
-
-		unknown = null;
-		reference.setRetentionTime(3000);
-		retentionTimeWindow = 500;
-		penaltyCalculationLevelFactor = 10.0f;
-		penaltyCalculationMaxValue = 20.0f;
-		float value = PenaltyCalculationSupport.calculatePenaltyFromRetentionTime(unknown.getRetentionTime(), reference.getRetentionTime(), retentionTimeWindow, penaltyCalculationLevelFactor, penaltyCalculationMaxValue);
-		assertEquals(0.0f, value);
-	}
-
-	public void test3() {
-
-		unknown.setRetentionTime(2500);
-		reference = null;
-		retentionTimeWindow = 500;
-		penaltyCalculationLevelFactor = 10.0f;
-		penaltyCalculationMaxValue = 20.0f;
-		float value = PenaltyCalculationSupport.calculatePenaltyFromRetentionTime(unknown.getRetentionTime(), reference.getRetentionTime(), retentionTimeWindow, penaltyCalculationLevelFactor, penaltyCalculationMaxValue);
-		assertEquals(0.0f, value);
-	}
-
 	public void test4() {
 
 		unknown.setRetentionTime(2500);
