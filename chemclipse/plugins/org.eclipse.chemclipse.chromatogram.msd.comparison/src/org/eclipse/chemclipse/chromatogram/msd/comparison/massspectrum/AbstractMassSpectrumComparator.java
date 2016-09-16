@@ -19,38 +19,36 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
 public abstract class AbstractMassSpectrumComparator implements IMassSpectrumComparator {
 
-    private static final String DESCRIPTION = "MassSpectrum Comparator";
+	private static final String DESCRIPTION = "MassSpectrum Comparator";
+	private final static Logger logger = Logger.getLogger(AbstractMassSpectrumComparator.class);
 
-    private final static Logger logger = Logger.getLogger(AbstractMassSpectrumComparator.class);
+	@Override
+	public IProcessingInfo validate(final IScanMSD unknown, final IScanMSD reference) {
 
-    @Override
-    public IProcessingInfo validate(final IScanMSD unknown, final IScanMSD reference) {
-
-	String msg = null;
-	final IProcessingInfo processingInfo = new ProcessingInfo();
-	if (unknown == null) {
-	    msg = "The unknown mass spectum does not exists.";
-	    logger.error(msg);
-	    processingInfo.addErrorMessage(DESCRIPTION, msg);
-	} else {
-	    if (unknown.getIons().size() == 0) {
-		msg = "There is no ion in the unknown mass spectum.";
-		logger.error(msg);
-		processingInfo.addErrorMessage(DESCRIPTION, msg);
-	    }
+		String msg = null;
+		final IProcessingInfo processingInfo = new ProcessingInfo();
+		if(unknown == null) {
+			msg = "The unknown mass spectum does not exists.";
+			logger.error(msg);
+			processingInfo.addErrorMessage(DESCRIPTION, msg);
+		} else {
+			if(unknown.getIons().size() == 0) {
+				msg = "There is no ion in the unknown mass spectum.";
+				logger.error(msg);
+				processingInfo.addErrorMessage(DESCRIPTION, msg);
+			}
+		}
+		if(reference == null) {
+			msg = "The reference mass spectum does not exists.";
+			logger.error(msg);
+			processingInfo.addErrorMessage(DESCRIPTION, msg);
+		} else {
+			if(reference.getIons().size() == 0) {
+				msg = "There is no ion in the reference mass spectum.";
+				logger.error(msg);
+				processingInfo.addErrorMessage(DESCRIPTION, msg);
+			}
+		}
+		return processingInfo;
 	}
-	if (reference == null) {
-	    msg = "The reference mass spectum does not exists.";
-	    logger.error(msg);
-	    processingInfo.addErrorMessage(DESCRIPTION, msg);
-	} else {
-	    if (reference.getIons().size() == 0) {
-		msg = "There is no ion in the reference mass spectum.";
-		logger.error(msg);
-		processingInfo.addErrorMessage(DESCRIPTION, msg);
-	    }
-	}
-
-	return processingInfo;
-    }
 }
