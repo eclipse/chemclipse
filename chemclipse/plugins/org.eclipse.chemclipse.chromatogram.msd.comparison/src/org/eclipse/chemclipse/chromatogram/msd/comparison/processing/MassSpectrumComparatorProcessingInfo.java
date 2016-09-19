@@ -16,22 +16,27 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectr
 import org.eclipse.chemclipse.processing.core.AbstractProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 
-public class MassSpectrumComparatorProcessingInfo extends AbstractProcessingInfo implements IMassSpectrumComparatorProcessingInfo {
+public class MassSpectrumComparatorProcessingInfo extends AbstractProcessingInfo
+	implements IMassSpectrumComparatorProcessingInfo {
 
-	@Override
-	public IMassSpectrumComparisonResult getMassSpectrumComparisonResult() throws TypeCastException {
+    @Override
+    public IMassSpectrumComparisonResult getMassSpectrumComparisonResult() throws TypeCastException {
 
-		Object object = getProcessingResult();
-		if(object instanceof IMassSpectrumComparisonResult) {
-			return (IMassSpectrumComparisonResult)object;
-		} else {
-			throw createTypeCastException("MassSpectrum Comparator", object.getClass(), IMassSpectrumComparisonResult.class);
-		}
+	Object object = getProcessingResult();
+	if (object == null) {
+	    throw new NullPointerException();
 	}
-
-	@Override
-	public void setMassSpectrumComparisonResult(IMassSpectrumComparisonResult massSpectrumComparisonResult) {
-
-		setProcessingResult(massSpectrumComparisonResult);
+	if (object instanceof IMassSpectrumComparisonResult) {
+	    return (IMassSpectrumComparisonResult) object;
+	} else {
+	    throw createTypeCastException("MassSpectrum Comparator", object.getClass(),
+		    IMassSpectrumComparisonResult.class);
 	}
+    }
+
+    @Override
+    public void setMassSpectrumComparisonResult(IMassSpectrumComparisonResult massSpectrumComparisonResult) {
+
+	setProcessingResult(massSpectrumComparisonResult);
+    }
 }
