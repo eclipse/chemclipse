@@ -26,11 +26,13 @@ public class MassSpectrumIonsListUI extends ExtendedTableViewer {
 	public MassSpectrumIonsListUI(Composite parent) {
 		super(parent);
 		createColumns();
+		addCopyToClipboardListener(titles);
 	}
 
 	public MassSpectrumIonsListUI(Composite parent, int style) {
 		super(parent, style);
 		createColumns();
+		addCopyToClipboardListener(titles);
 	}
 
 	public void update(IScanMSD massSpectrum, boolean forceReload) {
