@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.processing.chromatogram;
 
-import java.util.Objects;
-
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.AbstractProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
@@ -24,7 +22,6 @@ public class ChromatogramMSDImportConverterProcessingInfo extends AbstractProces
 	public IChromatogramMSD getChromatogram() throws TypeCastException {
 
 		Object object = getProcessingResult();
-		Objects.requireNonNull(object);
 		if(object instanceof IChromatogramMSD) {
 			return (IChromatogramMSD)object;
 		} else {
