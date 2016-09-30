@@ -25,6 +25,7 @@ function tag_project {
   # REL-1.0.0-OC
   # PREV-1.0.0.1-OC
   # PREV-1.0.0.0-OC
+  # REL-1.2.0.2-XR
   #
   echo 'git tag project: '$1
   cd $1
@@ -32,7 +33,7 @@ function tag_project {
   #git tag -d OC-CODE-MIGRATE-ECLIPSE
   #git push origin :refs/tags/OC-CODE-MIGRATE-ECLIPSE
   # ADD
-  #git tag -a "REL-1.2.0.1-XR" -m "Release 1.2.0.1 XR"
+  #git tag -a "REL-0.7.0.0-CC" -m "Release 0.7.0.1 CC"
   #git push --tags
   cd $active
 }
