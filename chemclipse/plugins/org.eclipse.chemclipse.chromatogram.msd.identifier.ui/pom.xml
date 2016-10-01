@@ -10,6 +10,6 @@
 
   <artifactId>org.eclipse.chemclipse.chromatogram.msd.identifier.ui</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <version>0.7.0-SNAPSHOT</version>
+  <version>0.8.0-SNAPSHOT</version>
   
 </project>

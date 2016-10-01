@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.eclipse.chemclipse.processing
-Bundle-Version: 0.7.0.qualifier
+Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.processing.Activator
 Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.core.runtime
