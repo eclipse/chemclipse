@@ -10,6 +10,6 @@
 
   <artifactId>org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.feature</artifactId>
   <packaging>eclipse-feature</packaging>
-  <version>0.7.0-SNAPSHOT</version>
+  <version>0.8.0-SNAPSHOT</version>
   
 </project>
