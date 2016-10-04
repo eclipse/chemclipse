@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class FloatFieldEditor extends StringFieldEditor {
 
-	private float minValue = -Float.MIN_VALUE;
+	private float minValue = -Float.MAX_VALUE;
 	private float maxValue = Float.MAX_VALUE;
 
 	public FloatFieldEditor(String name, String labelText, Composite parent) {
@@ -27,6 +27,9 @@ public class FloatFieldEditor extends StringFieldEditor {
 
 	public FloatFieldEditor(String name, String labelText, float minValue, float maxValue, Composite parent) {
 		super(name, labelText, parent);
+		if(minValue >= maxValue) {
+			throw new IllegalArgumentException("Invalid min/max values: " + minValue + ", " + maxValue);
+		}
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 	}
