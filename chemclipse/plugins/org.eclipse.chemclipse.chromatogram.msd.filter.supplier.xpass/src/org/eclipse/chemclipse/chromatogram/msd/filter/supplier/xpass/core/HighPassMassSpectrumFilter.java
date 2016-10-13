@@ -26,12 +26,12 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.result.MassSpectrumFilterR
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.IXPassMassSpectrumFilterSettings;
-import org.eclipse.chemclipse.model.comparator.SortOrder;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonAbundanceComparator;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public class HighPassMassSpectrumFilter extends AbstractMassSpectrumFilter {
 
