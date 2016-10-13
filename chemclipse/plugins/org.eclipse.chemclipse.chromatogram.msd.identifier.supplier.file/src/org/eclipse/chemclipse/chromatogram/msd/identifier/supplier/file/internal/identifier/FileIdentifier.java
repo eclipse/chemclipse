@@ -28,7 +28,6 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.support.DatabasesCache
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.PenaltyCalculationSupport;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.TargetBuilder;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.comparator.SortOrder;
 import org.eclipse.chemclipse.model.comparator.TargetCombinedComparator;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
@@ -42,6 +41,7 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectr
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class FileIdentifier {
