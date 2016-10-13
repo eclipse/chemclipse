@@ -13,9 +13,7 @@
 package org.eclipse.chemclipse.msd.model.core;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseCalculator;
@@ -36,6 +34,9 @@ import org.eclipse.chemclipse.msd.model.implementation.DefaultNoiseCalculator;
 import org.eclipse.chemclipse.msd.model.implementation.ImmutableZeroIon;
 import org.eclipse.chemclipse.msd.model.implementation.IonTransitionSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * The abstract chromatogram is responsible to handle as much jobs concerning a
@@ -69,14 +70,14 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 	public static int DEFAULT_SEGMENT_WIDTH = 10;
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramMSD.class);
 	private List<IChromatogramPeakMSD> peaks;
-	private Set<IChromatogramTargetMSD> targets;
+	private ObservableList<IChromatogramTargetMSD> targets;
 	private IIonTransitionSettings ionTransitionSettings;
 	private INoiseCalculator noiseCalculator;
 	private ImmutableZeroIon immutableZeroIon;
 
 	public AbstractChromatogramMSD() {
 		peaks = new ArrayList<IChromatogramPeakMSD>();
-		targets = new HashSet<IChromatogramTargetMSD>();
+		targets = FXCollections.observableArrayList();
 		ionTransitionSettings = new IonTransitionSettings();
 		int segmentWidth = DEFAULT_SEGMENT_WIDTH;
 		try {
@@ -414,8 +415,13 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 	@Override
 	public List<IChromatogramTargetMSD> getTargets() {
 
-		List<IChromatogramTargetMSD> targetList = new ArrayList<IChromatogramTargetMSD>(targets);
-		return targetList;
+		return targetsProperty();
+	}
+
+	@Override
+	public ObservableList<IChromatogramTargetMSD> targetsProperty() {
+
+		return targets;
 	}
 
 	// -----------------------------------------------IChromatogramTargetsMSD
