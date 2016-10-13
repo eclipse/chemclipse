@@ -9,7 +9,7 @@
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.comparator;
+package org.eclipse.chemclipse.support.comparator;
 
 /**
  * Determines in which order to sort a list.

@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.alignment.model.core;
 
 import java.util.Comparator;
 
-import org.eclipse.chemclipse.model.comparator.SortOrder;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public class RetentionIndexComparator implements Comparator<IRetentionIndex> {
 

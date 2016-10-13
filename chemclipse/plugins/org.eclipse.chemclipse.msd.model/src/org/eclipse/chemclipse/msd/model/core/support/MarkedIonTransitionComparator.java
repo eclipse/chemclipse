@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.msd.model.core.support;
 
 import java.util.Comparator;
 
-import org.eclipse.chemclipse.model.comparator.SortOrder;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public class MarkedIonTransitionComparator implements Comparator<IMarkedIonTransition> {
 

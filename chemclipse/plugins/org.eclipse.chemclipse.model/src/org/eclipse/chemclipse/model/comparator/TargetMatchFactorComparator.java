@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.model.comparator;
 import java.util.Comparator;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public class TargetMatchFactorComparator implements Comparator<IIdentificationTarget> {
 
