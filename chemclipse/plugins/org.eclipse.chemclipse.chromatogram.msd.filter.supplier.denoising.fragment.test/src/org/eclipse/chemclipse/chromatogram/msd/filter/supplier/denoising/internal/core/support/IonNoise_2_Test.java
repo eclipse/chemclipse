@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.internal.core.support;
 
-import org.eclipse.chemclipse.model.comparator.SortOrder;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 import junit.framework.TestCase;
 
