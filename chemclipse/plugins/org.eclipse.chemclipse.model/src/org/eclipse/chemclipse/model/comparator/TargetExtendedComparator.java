@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public class TargetExtendedComparator implements Comparator<IIdentificationTarget>, Serializable {
 

@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.csd.model.core.comparator;
 import java.util.Comparator;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.model.comparator.SortOrder;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public class ChromatogramPeakCSDComparator implements Comparator<IChromatogramPeakCSD> {
 

@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.e4.core.services;bundle-version="1.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.chemclipse.support.events,
+Export-Package: org.eclipse.chemclipse.support.comparator,
+ org.eclipse.chemclipse.support.events,
  org.eclipse.chemclipse.support.history,
  org.eclipse.chemclipse.support.l10n,
  org.eclipse.chemclipse.support.messages,

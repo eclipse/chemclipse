@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.msd.model.core.comparator;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import org.eclipse.chemclipse.model.comparator.SortOrder;
 import org.eclipse.chemclipse.msd.model.core.IIon;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public class IonCombinedComparator implements Comparator<IIon>, Serializable {
 
