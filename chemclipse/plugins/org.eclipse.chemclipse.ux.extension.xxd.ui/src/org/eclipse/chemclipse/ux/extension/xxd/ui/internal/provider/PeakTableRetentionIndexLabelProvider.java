@@ -27,11 +27,11 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-public class PeakLabelProvider extends LabelProvider implements ITableLabelProvider {
+public class PeakTableRetentionIndexLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	private DecimalFormat decimalFormat;
 
-	public PeakLabelProvider() {
+	public PeakTableRetentionIndexLabelProvider() {
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 

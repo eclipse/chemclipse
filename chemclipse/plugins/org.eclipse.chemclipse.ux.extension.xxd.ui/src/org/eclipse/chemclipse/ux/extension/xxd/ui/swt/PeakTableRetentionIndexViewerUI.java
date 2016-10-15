@@ -13,20 +13,20 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakTableRetentionIndexLabelProvider;
 import org.eclipse.swt.widgets.Composite;
 
-public class PeakTableViewerUI extends ExtendedTableViewer {
+public class PeakTableRetentionIndexViewerUI extends ExtendedTableViewer {
 
 	private String[] titles = {"Retention Time (Minutes)", "Retention Index", "S/N", "Peak Area"};
 	private int[] bounds = {150, 150, 150, 150};
 
-	public PeakTableViewerUI(Composite parent) {
+	public PeakTableRetentionIndexViewerUI(Composite parent) {
 		super(parent);
 		initialize();
 	}
 
-	public PeakTableViewerUI(Composite parent, int style) {
+	public PeakTableRetentionIndexViewerUI(Composite parent, int style) {
 		super(parent, style);
 		initialize();
 	}
@@ -34,7 +34,7 @@ public class PeakTableViewerUI extends ExtendedTableViewer {
 	private void initialize() {
 
 		createColumns(titles, bounds);
-		setLabelProvider(new PeakLabelProvider());
+		setLabelProvider(new PeakTableRetentionIndexLabelProvider());
 		setContentProvider(new ListContentProvider());
 	}
 }
