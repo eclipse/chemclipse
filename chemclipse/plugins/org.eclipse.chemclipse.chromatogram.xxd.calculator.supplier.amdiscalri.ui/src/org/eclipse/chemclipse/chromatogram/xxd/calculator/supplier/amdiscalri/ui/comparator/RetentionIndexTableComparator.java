@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider;
+package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.comparator;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;

@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.comparator.RetentionIndexTableComparator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider.RetentionIndexLabelProvider;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider.RetentionIndexTableComparator;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.swt.widgets.Composite;

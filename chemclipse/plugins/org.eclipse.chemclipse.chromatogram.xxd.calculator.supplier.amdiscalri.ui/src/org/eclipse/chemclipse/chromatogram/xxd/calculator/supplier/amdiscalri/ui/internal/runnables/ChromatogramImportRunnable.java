@@ -20,12 +20,12 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-public class ImportChromatogramRunnable implements IRunnableWithProgress {
+public class ChromatogramImportRunnable implements IRunnableWithProgress {
 
 	private IRetentionIndexWizardElements wizardElements;
 	private IChromatogram chromatogram;
 
-	public ImportChromatogramRunnable(IRetentionIndexWizardElements wizardElements) {
+	public ChromatogramImportRunnable(IRetentionIndexWizardElements wizardElements) {
 		this.wizardElements = wizardElements;
 	}
 

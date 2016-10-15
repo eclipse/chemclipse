@@ -17,8 +17,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.AlkaneIdentifier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.PeakTableViewerUI;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.PeakTargetsViewerUI;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
@@ -33,6 +31,8 @@ import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakTableViewerUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakTargetsViewerUI;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;

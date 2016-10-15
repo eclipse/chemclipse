@@ -15,8 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.runnables.ImportChromatogramRunnable;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.PeakTableViewerUI;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.runnables.ChromatogramImportRunnable;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
@@ -26,6 +25,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.chemclipse.swt.ui.components.chromatogram.SelectedPeakChromatogramUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakTableViewerUI;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -181,7 +181,7 @@ public class PagePeakSelectionCSD extends AbstractExtendedWizardPage {
 	private IChromatogramSelectionCSD getChromatogramSelectionCSD() {
 
 		IChromatogramSelectionCSD chromatogramSelectionCSD = null;
-		ImportChromatogramRunnable runnable = new ImportChromatogramRunnable(wizardElements);
+		ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(wizardElements);
 		//
 		try {
 			getContainer().run(true, false, runnable);
