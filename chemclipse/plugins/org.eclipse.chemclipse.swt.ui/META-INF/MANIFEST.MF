@@ -18,6 +18,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.swt.ui.browser,
+ org.eclipse.chemclipse.swt.ui.comparator,
  org.eclipse.chemclipse.swt.ui.components,
  org.eclipse.chemclipse.swt.ui.components.baseline,
  org.eclipse.chemclipse.swt.ui.components.chromatogram,
