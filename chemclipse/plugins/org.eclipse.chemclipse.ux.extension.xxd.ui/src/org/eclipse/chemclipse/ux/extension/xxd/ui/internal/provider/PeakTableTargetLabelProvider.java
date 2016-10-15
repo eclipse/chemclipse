@@ -39,7 +39,7 @@ public class PeakTableTargetLabelProvider extends LabelProvider implements ITabl
 	private TargetExtendedComparator targetExtendedComparator;
 
 	public PeakTableTargetLabelProvider() {
-		decimalFormat = ValueFormat.getDecimalFormatEnglish();
+		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
 	}
 

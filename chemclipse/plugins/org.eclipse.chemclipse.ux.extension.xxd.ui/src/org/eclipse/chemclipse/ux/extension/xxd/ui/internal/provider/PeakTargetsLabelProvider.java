@@ -28,7 +28,7 @@ public class PeakTargetsLabelProvider extends LabelProvider implements ITableLab
 	private DecimalFormat decimalFormat;
 
 	public PeakTargetsLabelProvider() {
-		decimalFormat = ValueFormat.getDecimalFormatEnglish();
+		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 	}
 
 	@Override
