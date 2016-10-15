@@ -31,7 +31,7 @@ import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakTableViewerUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakTableRetentionIndexViewerUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakTargetsViewerUI;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -55,7 +55,7 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 	private static final Logger logger = Logger.getLogger(PagePeakAssignmentCSD.class);
 	//
 	private IRetentionIndexWizardElements wizardElements;
-	private PeakTableViewerUI peakTableViewerUI;
+	private PeakTableRetentionIndexViewerUI peakTableViewerUI;
 	private PeakTargetsViewerUI targetsViewerUI;
 	private Button buttonPrevious;
 	private Text textCurrentIndexName;
@@ -199,7 +199,7 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 
 	private void createPeakTableField(Composite composite) {
 
-		peakTableViewerUI = new PeakTableViewerUI(composite, SWT.BORDER);
+		peakTableViewerUI = new PeakTableRetentionIndexViewerUI(composite, SWT.BORDER);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 3;
 		gridData.grabExcessHorizontalSpace = true;

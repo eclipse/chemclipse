@@ -25,7 +25,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.chemclipse.swt.ui.components.chromatogram.SelectedPeakChromatogramUI;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakTableViewerUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakTableRetentionIndexViewerUI;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -45,7 +45,7 @@ public class PagePeakSelectionCSD extends AbstractExtendedWizardPage {
 	private static final Logger logger = Logger.getLogger(PagePeakSelectionCSD.class);
 	private IRetentionIndexWizardElements wizardElements;
 	private SelectedPeakChromatogramUI selectedPeakChromatogramUI;
-	private PeakTableViewerUI peakTableViewerUI;
+	private PeakTableRetentionIndexViewerUI peakTableViewerUI;
 	//
 	private static final int PEAK_SHOW = 1;
 	private static final int PEAKS_DELETE = 2;
@@ -117,7 +117,7 @@ public class PagePeakSelectionCSD extends AbstractExtendedWizardPage {
 
 	private void createPeakTableField(Composite composite) {
 
-		peakTableViewerUI = new PeakTableViewerUI(composite, SWT.BORDER | SWT.MULTI);
+		peakTableViewerUI = new PeakTableRetentionIndexViewerUI(composite, SWT.BORDER | SWT.MULTI);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.heightHint = 100;
