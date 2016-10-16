@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
+import org.eclipse.chemclipse.swt.ui.series.ISelectedRangeInfo;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
 import org.eclipse.chemclipse.swt.ui.series.ISeriesSetter;
 import org.eclipse.chemclipse.swt.ui.series.MultipleSeries;
@@ -46,7 +47,7 @@ import org.swtchart.Range;
  * 
  * @author eselmeister
  */
-public abstract class AbstractLineSeriesUI extends InteractiveChartExtended implements ISeriesSetter {
+public abstract class AbstractLineSeriesUI extends InteractiveChartExtended implements ISeriesSetter, ISelectedRangeInfo {
 
 	private boolean master = false;
 	private IMultipleSeries multipleLineSeries;
@@ -104,6 +105,26 @@ public abstract class AbstractLineSeriesUI extends InteractiveChartExtended impl
 
 		ChartUtil.checkAndSetRange(xAxisTop, chromatogramSelection.getStartRetentionTime(), chromatogramSelection.getStopRetentionTime());
 		redraw();
+	}
+
+	@Override
+	public Composite getChartPlotArea() {
+
+		return getPlotArea();
+	}
+
+	@Override
+	public int getSelectedStartRetentionTime() {
+
+		int startRetentionTime = (int)getXAxisTop().getRange().lower;
+		return startRetentionTime;
+	}
+
+	@Override
+	public int getSelectedStopRetentionTime() {
+
+		int stopRetentionTime = (int)getXAxisTop().getRange().upper;
+		return stopRetentionTime;
 	}
 
 	/**
