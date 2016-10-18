@@ -213,4 +213,18 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_ARROW_DOWN = "arrow_down.gif";
 	String IMAGE_ARROW_UP = "arrow_up.gif";
 	String IMAGE_ARROW_EQUAL = "arrow_equal.gif";
+	//
+	String IMAGE_ARROW_FORWARD = "arrowForward.gif";
+	String IMAGE_ARROW_BACKWARD = "arrowBackward.gif";
+	String IMAGE_EXCEL = "excel.gif";
+	String IMAGE_PDF = "pdf.gif";
+	String IMAGE_TXT = "txt.gif";
+	String IMAGE_CALCULATE = "calculate.gif";
+	String IMAGE_CHECK = "check.gif";
+	String IMAGE_SELECT_ROWS = "select-rows.gif";
+	String IMAGE_REMOVE = "remove.gif";
+	String IMAGE_STATUS_EMPTY = "status-empty.gif";
+	String IMAGE_STATUS_OK = "status-ok.gif";
+	String IMAGE_STATUS_WARN = "status-warn.gif";
+	String IMAGE_STATUS_ERROR = "status-error.gif";
 }
