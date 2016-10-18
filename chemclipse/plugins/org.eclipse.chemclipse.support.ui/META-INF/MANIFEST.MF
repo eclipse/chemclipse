@@ -28,6 +28,7 @@ Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.support.ui.activator,
  org.eclipse.chemclipse.support.ui.addons,
  org.eclipse.chemclipse.support.ui.editors,
+ org.eclipse.chemclipse.support.ui.listener,
  org.eclipse.chemclipse.support.ui.notifier,
  org.eclipse.chemclipse.support.ui.parts,
  org.eclipse.chemclipse.support.ui.preferences,
