@@ -13,8 +13,6 @@ package org.eclipse.chemclipse.msd.model.core.identifier.chromatogram;
 
 import java.util.List;
 
-import javafx.collections.ObservableList;
-
 /**
  * This interfaces declares some method to get and set identities of a
  * chromatogram.
@@ -50,6 +48,4 @@ public interface IChromatogramTargetsMSD {
 	 * @return List<IChromatogram>
 	 */
 	List<IChromatogramTargetMSD> getTargets();
-
-	ObservableList<IChromatogramTargetMSD> targetsProperty();
 }
