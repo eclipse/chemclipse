@@ -11,11 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.wsd.ui.wizards;
 
+import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 import org.eclipse.chemclipse.support.ui.wizards.TreeViewerFilesystemSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerLabelProvider;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramSupport;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -25,24 +29,19 @@ import org.eclipse.swt.widgets.Composite;
 public class ChromatogramInputEntriesWizardPage extends WizardPage {
 
 	private TreeViewer chromatogramViewer;
+	private IChromatogramWizardElements chromatogramWizardElements;
 
-	/**
-	 * @param pageName
-	 */
-	protected ChromatogramInputEntriesWizardPage(String pageName, String title, String description) {
-		super(pageName);
-		setTitle(title);
-		setDescription(description);
+	public ChromatogramInputEntriesWizardPage(IChromatogramWizardElements chromatogramWizardElements) {
+		//
+		this(chromatogramWizardElements, "Open Chromatogram (WSD) File(s)", "Select a chromatogram/chromatograms file to open.");
 	}
 
-	/**
-	 * Returns the chromatogram viewer selection.
-	 * 
-	 * @return
-	 */
-	public ISelection getSelection() {
-
-		return chromatogramViewer.getSelection();
+	public ChromatogramInputEntriesWizardPage(IChromatogramWizardElements chromatogramWizardElements, String title, String description) {
+		//
+		super(ChromatogramInputEntriesWizardPage.class.getName());
+		setTitle(title);
+		setDescription(description);
+		this.chromatogramWizardElements = chromatogramWizardElements;
 	}
 
 	@Override
@@ -56,6 +55,19 @@ public class ChromatogramInputEntriesWizardPage extends WizardPage {
 		chromatogramViewer = new TreeViewer(composite, SWT.MULTI);
 		chromatogramViewer.setLabelProvider(new ChromatogramFileExplorerLabelProvider(ChromatogramSupport.getInstanceIdentifier()));
 		chromatogramViewer.setContentProvider(new ChromatogramFileExplorerContentProvider(ChromatogramSupport.getInstanceIdentifier()));
+		chromatogramViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+
+				chromatogramWizardElements.clearSelectedChromatograms();
+				ISelection selection = chromatogramViewer.getSelection();
+				IStructuredSelection structuredSelection = (IStructuredSelection)selection;
+				for(Object element : structuredSelection.toList()) {
+					chromatogramWizardElements.addSelectedChromatogram(element.toString());
+				}
+			}
+		});
 		TreeViewerFilesystemSupport.retrieveAndSetLocalFileSystem(chromatogramViewer);
 		/*
 		 * Set the control.

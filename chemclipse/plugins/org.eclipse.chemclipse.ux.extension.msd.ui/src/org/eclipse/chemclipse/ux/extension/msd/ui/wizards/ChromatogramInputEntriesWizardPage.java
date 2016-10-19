@@ -33,9 +33,14 @@ public class ChromatogramInputEntriesWizardPage extends WizardPage {
 
 	public ChromatogramInputEntriesWizardPage(IChromatogramWizardElements chromatogramWizardElements) {
 		//
+		this(chromatogramWizardElements, "Open Chromatogram (MSD) File(s)", "Select a chromatogram/chromatograms file to open.");
+	}
+
+	public ChromatogramInputEntriesWizardPage(IChromatogramWizardElements chromatogramWizardElements, String title, String description) {
+		//
 		super(ChromatogramInputEntriesWizardPage.class.getName());
-		setTitle("Open Chromatogram (MSD) File(s)");
-		setDescription("Select a chromatogram/chromatograms file to open.");
+		setTitle(title);
+		setDescription(description);
 		this.chromatogramWizardElements = chromatogramWizardElements;
 	}
 
