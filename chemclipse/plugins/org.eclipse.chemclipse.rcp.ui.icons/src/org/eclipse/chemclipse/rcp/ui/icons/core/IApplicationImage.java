@@ -190,6 +190,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	//
 	String IMAGE_NEXT = "next.gif";
 	String IMAGE_PREVIOUS = "previous.gif";
+	String IMAGE_NEXT_YELLOW = "nextYellow.gif";
+	String IMAGE_PREVIOUS_YELLOW = "previousYellow.gif";
 	//
 	String IMAGE_SCRIPT_SHELL = "script_shell.png";
 	//
