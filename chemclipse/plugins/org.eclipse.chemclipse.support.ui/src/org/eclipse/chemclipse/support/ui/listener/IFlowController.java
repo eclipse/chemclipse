@@ -17,6 +17,10 @@ public interface IFlowController {
 
 	void removeNextListener(INextListener nextListener);
 
+	void addNextSectionListener(INextListener nextListener);
+
+	void removeNextSectionListener(INextListener nextListener);
+
 	void addPreviousListener(IPreviousListener previousListener);
 
 	void removePreviousListener(IPreviousListener previousListener);
