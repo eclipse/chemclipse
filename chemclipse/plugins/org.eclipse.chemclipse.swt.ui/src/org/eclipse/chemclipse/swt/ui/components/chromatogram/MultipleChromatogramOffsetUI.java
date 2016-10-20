@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.swt.ui.converter.SeriesConverter;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.series.IMultipleSeries;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
+import org.eclipse.chemclipse.swt.ui.support.AxisTitlesIntensityScale;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IAxisTitles;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
@@ -36,6 +37,11 @@ public class MultipleChromatogramOffsetUI extends AbstractViewChromatogramUI {
 
 	private IOffset offset;
 	private boolean useLockedOffset = false;
+
+	public MultipleChromatogramOffsetUI(Composite parent, int style) {
+		super(parent, style, new AxisTitlesIntensityScale());
+		setOffset(null);
+	}
 
 	public MultipleChromatogramOffsetUI(Composite parent, int style, IAxisTitles axisTitles) {
 		super(parent, style, axisTitles);
