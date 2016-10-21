@@ -60,8 +60,7 @@ public interface IComparisonResult extends Serializable {
 	void setMatch(boolean match);
 
 	/**
-	 * Returns the match factor.
-	 * 0 means no match, 100 means perfect match.
+	 * Returns the match factor. 0 means no match, 100 means perfect match.
 	 * 
 	 * @return float
 	 */
@@ -70,8 +69,8 @@ public interface IComparisonResult extends Serializable {
 	float getMatchFactorNotAdjusted();
 
 	/**
-	 * Returns the match factor direct.
-	 * 0 means no match, 100 means perfect match.
+	 * Returns the match factor direct. 0 means no match, 100 means perfect
+	 * match.
 	 * 
 	 * @return float
 	 */
@@ -80,8 +79,7 @@ public interface IComparisonResult extends Serializable {
 	float getMatchFactorDirectNotAdjusted();
 
 	/**
-	 * Adjust the match factor.
-	 * The penalty must be between 0 and 100:
+	 * Adjust the match factor. The penalty must be between 0 and 100:
 	 * MIN_ALLOWED_PENALTY and MAX_ALLOWED_PENALTY
 	 * 
 	 * @param penalty
@@ -90,8 +88,7 @@ public interface IComparisonResult extends Serializable {
 	void adjustMatchFactor(float penalty);
 
 	/**
-	 * Sets a penalty.
-	 * It's effectively the same as if you would call
+	 * Sets a penalty. It's effectively the same as if you would call
 	 * clearPenalty() and then addPenalty(...).
 	 * 
 	 * @param penalty
@@ -114,8 +111,8 @@ public interface IComparisonResult extends Serializable {
 	float getPenalty();
 
 	/**
-	 * Returns the reverse match factor.
-	 * 0 means no match, 100 means perfect match.
+	 * Returns the reverse match factor. 0 means no match, 100 means perfect
+	 * match.
 	 * 
 	 * @return float
 	 */
@@ -124,8 +121,8 @@ public interface IComparisonResult extends Serializable {
 	float getReverseMatchFactorNotAdjusted();
 
 	/**
-	 * Returns the reverse match factor direct.
-	 * 0 means no match, 100 means perfect match.
+	 * Returns the reverse match factor direct. 0 means no match, 100 means
+	 * perfect match.
 	 * 
 	 * @return float
 	 */
@@ -134,8 +131,7 @@ public interface IComparisonResult extends Serializable {
 	float getReverseMatchFactorDirectNotAdjusted();
 
 	/**
-	 * Adjust the reverse match factor.
-	 * The penalty must be between 0 and 100:
+	 * Adjust the reverse match factor. The penalty must be between 0 and 100:
 	 * MIN_ALLOWED_PENALTY and MAX_ALLOWED_PENALTY
 	 * 
 	 * @param penalty
@@ -160,9 +156,27 @@ public interface IComparisonResult extends Serializable {
 	String getAdvise();
 
 	/**
-	 * Returns the rating given by the probability, match and reverse match factors.
+	 * Returns the rating given by the probability, match and reverse match
+	 * factors.
 	 * 
 	 * @return float
 	 */
 	float getRating();
+
+	/**
+	 * Sets weather this comparison is the result of a unique match.
+	 * 
+	 * @param unique
+	 *            {@code true} if this comparison is the result of a unique
+	 *            match; {@code false} otherwise
+	 */
+	void setUnique(boolean unique);
+
+	/**
+	 * Checks weather this comparison is the result of a unique match.
+	 * 
+	 * @return {@code true} if this comparison is the result of a unique match;
+	 *         {@code false} otherwise
+	 */
+	boolean isUnique();
 }
