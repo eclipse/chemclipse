@@ -59,8 +59,10 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public void setPenalty(float penalty) {
 
-		if(penalty >= 0) {
+		if(penalty >= MIN_ALLOWED_PENALTY && penalty <= MAX_ALLOWED_PENALTY) {
 			this.penalty = penalty;
+		} else {
+			throw new IllegalArgumentException();
 		}
 	}
 
@@ -135,21 +137,13 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public void adjustMatchFactor(float penalty) {
 
-		if(penalty >= MIN_ALLOWED_PENALTY && penalty <= MAX_ALLOWED_PENALTY) {
-			this.penalty = penalty;
-		} else {
-			throw new IllegalArgumentException();
-		}
+		setPenalty(penalty);
 	}
 
 	@Override
 	public void adjustReverseMatchFactor(float penalty) {
 
-		if(penalty >= MIN_ALLOWED_PENALTY && penalty <= MAX_ALLOWED_PENALTY) {
-			this.penalty = penalty;
-		} else {
-			throw new IllegalArgumentException();
-		}
+		setPenalty(penalty);
 	}
 
 	@Override
@@ -182,7 +176,7 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 		return rating;
 	}
 
-	private static float getAdjustedValue(float value, float penalty) {
+	public static float getAdjustedValue(float value, float penalty) {
 
 		float result = value - penalty;
 		if(result < 0) {
