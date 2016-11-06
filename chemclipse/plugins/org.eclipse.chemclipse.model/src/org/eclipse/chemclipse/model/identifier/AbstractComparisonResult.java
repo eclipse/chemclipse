@@ -69,8 +69,13 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public void addPenalty(float penalty) {
 
-		if(penalty >= 0) {
-			this.penalty += penalty;
+		float newPenalty = getPenalty() + penalty;
+		if(newPenalty > MAX_ALLOWED_PENALTY) {
+			setPenalty(MAX_ALLOWED_PENALTY);
+		} else if(newPenalty < MIN_ALLOWED_PENALTY) {
+			setPenalty(MIN_ALLOWED_PENALTY);
+		} else {
+			setPenalty(newPenalty);
 		}
 	}
 

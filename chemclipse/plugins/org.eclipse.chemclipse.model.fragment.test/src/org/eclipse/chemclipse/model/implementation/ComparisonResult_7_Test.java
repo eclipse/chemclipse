@@ -77,7 +77,7 @@ public class ComparisonResult_7_Test extends TestCase {
 		assertEquals(DEFAULT_VALUE, comparisonResult.getReverseMatchFactorDirectNotAdjusted());
 	}
 
-	public void test10() {
+	public void testSetPenalty01() {
 
 		try {
 			comparisonResult.setPenalty(-22.0f);
@@ -85,5 +85,48 @@ public class ComparisonResult_7_Test extends TestCase {
 		} catch(IllegalArgumentException e) {
 			// everything as expected
 		}
+	}
+
+	public void testSetPenalty02() {
+
+		try {
+			comparisonResult.setPenalty(100.1f);
+			fail(IllegalArgumentException.class + " was excepted but not thrown");
+		} catch(IllegalArgumentException e) {
+			// everything as expected
+		}
+	}
+
+	public void testSetPenalty03() {
+
+		comparisonResult.setPenalty(42);
+	}
+
+	public void testAddPenalty01() {
+
+		comparisonResult.setPenalty(42);
+		comparisonResult.addPenalty(10);
+		assertEquals(52f, comparisonResult.getPenalty());
+	}
+
+	public void testAddPenalty02() {
+
+		comparisonResult.setPenalty(10);
+		comparisonResult.addPenalty(90);
+		assertEquals(100f, comparisonResult.getPenalty());
+	}
+
+	public void testAddPenalty03() {
+
+		comparisonResult.setPenalty(60);
+		comparisonResult.addPenalty(60);
+		assertEquals(100f, comparisonResult.getPenalty());
+	}
+
+	public void testAddPenalty04() {
+
+		comparisonResult.setPenalty(60);
+		comparisonResult.addPenalty(-120);
+		assertEquals(0f, comparisonResult.getPenalty());
 	}
 }
