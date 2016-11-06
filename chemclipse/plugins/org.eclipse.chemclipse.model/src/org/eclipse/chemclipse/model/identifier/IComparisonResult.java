@@ -90,8 +90,10 @@ public interface IComparisonResult extends Serializable {
 	/**
 	 * Sets a penalty. It's effectively the same as if you would call
 	 * clearPenalty() and then addPenalty(...).
+	 * Penalty must be between MIN_ALLOWED_PENALTY and MAX_ALLOWED_PENALTY otherwise an exception is thrown.
 	 * 
 	 * @param penalty
+	 * @throws IllegalArgumentException
 	 */
 	void setPenalty(float penalty);
 
