@@ -77,14 +77,13 @@ public class ComparisonResult_7_Test extends TestCase {
 		assertEquals(DEFAULT_VALUE, comparisonResult.getReverseMatchFactorDirectNotAdjusted());
 	}
 
-	public void test10() throws Exception {
+	public void test10() {
 
 		try {
 			comparisonResult.setPenalty(-22.0f);
+			fail(IllegalArgumentException.class + " was excepted but not thrown");
 		} catch(IllegalArgumentException e) {
 			// everything as expected
-			return;
 		}
-		throw new Exception(IllegalArgumentException.class + " was excepted but not thrown");
 	}
 }
