@@ -88,12 +88,13 @@ public interface IComparisonResult extends Serializable {
 	void adjustMatchFactor(float penalty);
 
 	/**
-	 * Sets a penalty. It's effectively the same as if you would call
-	 * clearPenalty() and then addPenalty(...).
-	 * Penalty must be between MIN_ALLOWED_PENALTY and MAX_ALLOWED_PENALTY otherwise an exception is thrown.
+	 * Sets a penalty. It's effectively the same as calling {@link #clearPenalty()} and {@link #addPenalty(float)}.
+	 * {@code penalty} must be between MIN_ALLOWED_PENALTY and MAX_ALLOWED_PENALTY otherwise an exception is thrown.
 	 * 
 	 * @param penalty
+	 *            the penalty to set
 	 * @throws IllegalArgumentException
+	 *             if {@code penalty} is smaller than {@link #MIN_ALLOWED_PENALTY} or larger than {@link #MAX_ALLOWED_PENALTY}
 	 */
 	void setPenalty(float penalty);
 
