@@ -23,7 +23,7 @@ public class ComparisonResult_7_Test extends TestCase {
 
 		super.setUp();
 		comparisonResult = new ComparisonResult(DEFAULT_VALUE, DEFAULT_VALUE, DEFAULT_VALUE, DEFAULT_VALUE, DEFAULT_VALUE);
-		comparisonResult.setPenalty(-22.0f);
+		// comparisonResult.setPenalty(-22.0f);
 	}
 
 	@Override
@@ -75,5 +75,16 @@ public class ComparisonResult_7_Test extends TestCase {
 	public void test9() {
 
 		assertEquals(DEFAULT_VALUE, comparisonResult.getReverseMatchFactorDirectNotAdjusted());
+	}
+
+	public void test10() throws Exception {
+
+		try {
+			comparisonResult.setPenalty(-22.0f);
+		} catch(IllegalArgumentException e) {
+			// everything as expected
+			return;
+		}
+		throw new Exception(IllegalArgumentException.class + " was excepted but not thrown");
 	}
 }
