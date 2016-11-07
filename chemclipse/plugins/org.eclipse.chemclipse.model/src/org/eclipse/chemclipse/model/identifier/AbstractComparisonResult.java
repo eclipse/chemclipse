@@ -86,9 +86,10 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	}
 
 	@Override
-	public void setMatch(boolean match) {
+	public AbstractComparisonResult setMatch(boolean match) {
 
 		this.isMatch = match;
+		return this;
 	}
 
 	@Override

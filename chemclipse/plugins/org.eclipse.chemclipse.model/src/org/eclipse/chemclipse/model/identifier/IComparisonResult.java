@@ -56,8 +56,9 @@ public interface IComparisonResult extends Serializable {
 	 * Set the result to be marked as a match.
 	 * 
 	 * @param match
+	 * @return {@code this}
 	 */
-	void setMatch(boolean match);
+	IComparisonResult setMatch(boolean match);
 
 	/**
 	 * Returns the match factor. 0 means no match, 100 means perfect match.
@@ -88,13 +89,17 @@ public interface IComparisonResult extends Serializable {
 	void adjustMatchFactor(float penalty);
 
 	/**
-	 * Sets a penalty. It's effectively the same as calling {@link #clearPenalty()} and {@link #addPenalty(float)}.
-	 * {@code penalty} must be between MIN_ALLOWED_PENALTY and MAX_ALLOWED_PENALTY otherwise an exception is thrown.
+	 * Sets a penalty. It's effectively the same as calling
+	 * {@link #clearPenalty()} and {@link #addPenalty(float)}. {@code penalty}
+	 * must be between MIN_ALLOWED_PENALTY and MAX_ALLOWED_PENALTY otherwise an
+	 * exception is thrown.
 	 * 
 	 * @param penalty
 	 *            the penalty to set
 	 * @throws IllegalArgumentException
-	 *             if {@code penalty} is smaller than {@link #MIN_ALLOWED_PENALTY} or larger than {@link #MAX_ALLOWED_PENALTY}
+	 *             if {@code penalty} is smaller than
+	 *             {@link #MIN_ALLOWED_PENALTY} or larger than
+	 *             {@link #MAX_ALLOWED_PENALTY}
 	 */
 	void setPenalty(float penalty);
 

@@ -32,13 +32,20 @@ public class ComparisonResult extends AbstractComparisonResult implements ICompa
 		super(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
 	}
 
+	@Override
+	public ComparisonResult setMatch(boolean match) {
+
+		super.setMatch(match);
+		return this;
+	}
+
 	public static ComparisonResult createNoMatchComparisonResult() {
 
-		return new ComparisonResult(FACTOR_NO_MATCH, FACTOR_NO_MATCH, FACTOR_NO_MATCH, FACTOR_NO_MATCH);
+		return new ComparisonResult(FACTOR_NO_MATCH, FACTOR_NO_MATCH, FACTOR_NO_MATCH, FACTOR_NO_MATCH).setMatch(false);
 	}
 
 	public static ComparisonResult createBestMatchComparisonResult() {
 
-		return new ComparisonResult(FACTOR_BEST_MATCH, FACTOR_BEST_MATCH, FACTOR_BEST_MATCH, FACTOR_BEST_MATCH);
+		return new ComparisonResult(FACTOR_BEST_MATCH, FACTOR_BEST_MATCH, FACTOR_BEST_MATCH, FACTOR_BEST_MATCH).setMatch(false);
 	}
 }
