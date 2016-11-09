@@ -14,5 +14,4 @@ package org.eclipse.chemclipse.msd.model.core.identifier.massspectrum;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 
 public interface IMassSpectrumComparisonResult extends IComparisonResult {
-
 }

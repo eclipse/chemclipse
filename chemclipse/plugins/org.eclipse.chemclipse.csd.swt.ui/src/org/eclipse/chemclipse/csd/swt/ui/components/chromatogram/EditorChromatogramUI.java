@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.csd.swt.ui.converter.SeriesConverterCSD;
-import org.eclipse.chemclipse.model.comparator.ChromatogramPeakComparator;
+import org.eclipse.chemclipse.model.comparator.ChromatogramPeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -52,13 +52,13 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 
 	private MouseMoveMarker mouseMoveMarker;
 	private SelectedPositionMarker selectedPositionMarker;
-	private ChromatogramPeakComparator chromatogramPeakComparator;
+	private ChromatogramPeakRetentionTimeComparator chromatogramPeakComparator;
 
 	public EditorChromatogramUI(Composite parent, int style) {
 		super(parent, style);
 		boolean yMinimumToZero = PreferenceSupplier.showBackgroundInChromatogramEditor();
 		setYMinimumToZero(yMinimumToZero);
-		chromatogramPeakComparator = new ChromatogramPeakComparator(SortOrder.ASC);
+		chromatogramPeakComparator = new ChromatogramPeakRetentionTimeComparator(SortOrder.ASC);
 	}
 
 	@Override

@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.csd.model.notifier.ChromatogramSelectionCSDUpdateNotifier;
 import org.eclipse.chemclipse.csd.swt.ui.components.peak.PeakListUI;
-import org.eclipse.chemclipse.model.comparator.ChromatogramPeakComparator;
+import org.eclipse.chemclipse.model.comparator.ChromatogramPeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
@@ -67,7 +67,7 @@ public class PeakListCSDView extends AbstractChromatogramSelectionCSDView {
 	private IChromatogramPeakCSD lastPeak = null;
 	private double lastIntegratedArea = 0.0d;
 	private IChromatogramSelectionCSD chromatogramSelectionMSDFocused;
-	private ChromatogramPeakComparator chromatogramPeakComparator;
+	private ChromatogramPeakRetentionTimeComparator chromatogramPeakComparator;
 	/*
 	 * Update the cache if the peaks have been deleted.
 	 */
@@ -76,7 +76,7 @@ public class PeakListCSDView extends AbstractChromatogramSelectionCSDView {
 	@Inject
 	public PeakListCSDView(EPartService partService, MPart part, IEventBroker eventBroker) {
 		super(part, partService, eventBroker);
-		chromatogramPeakComparator = new ChromatogramPeakComparator(SortOrder.ASC);
+		chromatogramPeakComparator = new ChromatogramPeakRetentionTimeComparator(SortOrder.ASC);
 	}
 
 	@PostConstruct
