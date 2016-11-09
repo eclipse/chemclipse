@@ -26,7 +26,7 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
 import org.eclipse.chemclipse.csd.model.core.comparator.ChromatogramPeakCSDComparator;
-import org.eclipse.chemclipse.model.comparator.ChromatogramPeakComparator;
+import org.eclipse.chemclipse.model.comparator.ChromatogramPeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
@@ -147,7 +147,7 @@ public class ChromatogramReport {
 		 * Print
 		 */
 		List<IChromatogramPeakMSD> peaks = chromatogram.getPeaks();
-		Collections.sort(peaks, new ChromatogramPeakComparator(SortOrder.ASC));
+		Collections.sort(peaks, new ChromatogramPeakRetentionTimeComparator(SortOrder.ASC));
 		//
 		printWriter.println("");
 		printWriter.println("NAME: " + chromatogram.getName());
