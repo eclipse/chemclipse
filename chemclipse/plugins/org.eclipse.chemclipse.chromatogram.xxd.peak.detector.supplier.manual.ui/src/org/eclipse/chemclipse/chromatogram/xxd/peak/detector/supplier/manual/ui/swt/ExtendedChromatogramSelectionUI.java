@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.swt;
 
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -19,8 +22,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
 public class ExtendedChromatogramSelectionUI extends Composite {
 
@@ -57,6 +58,7 @@ public class ExtendedChromatogramSelectionUI extends Composite {
 		 */
 		buttonDetect = new Button(buttonbar, SWT.NONE);
 		buttonDetect.setText("Start Peak Detection Mode (or press \"d\")");
+		buttonDetect.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		buttonDetect.addSelectionListener(new SelectionAdapter() {
 
 			@Override
