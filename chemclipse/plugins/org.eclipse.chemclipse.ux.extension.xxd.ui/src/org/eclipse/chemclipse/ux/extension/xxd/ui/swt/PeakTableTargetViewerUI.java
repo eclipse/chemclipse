@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakTableTargetComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakTableTargetLabelProvider;
 import org.eclipse.swt.widgets.Composite;
 
@@ -36,5 +37,6 @@ public class PeakTableTargetViewerUI extends ExtendedTableViewer {
 		createColumns(titles, bounds);
 		setLabelProvider(new PeakTableTargetLabelProvider());
 		setContentProvider(new ListContentProvider());
+		setComparator(new PeakTableTargetComparator());
 	}
 }
