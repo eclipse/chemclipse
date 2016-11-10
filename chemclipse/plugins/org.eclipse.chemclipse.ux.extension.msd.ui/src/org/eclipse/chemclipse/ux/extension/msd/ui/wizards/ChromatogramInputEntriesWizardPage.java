@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.wizards;
 
+import java.io.File;
+
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 import org.eclipse.chemclipse.support.ui.wizards.TreeViewerFilesystemSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport;
@@ -28,6 +31,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class ChromatogramInputEntriesWizardPage extends WizardPage {
 
+	private static final Logger logger = Logger.getLogger(ChromatogramInputEntriesWizardPage.class);
 	private TreeViewer chromatogramViewer;
 	private IChromatogramWizardElements chromatogramWizardElements;
 
@@ -42,6 +46,21 @@ public class ChromatogramInputEntriesWizardPage extends WizardPage {
 		setTitle(title);
 		setDescription(description);
 		this.chromatogramWizardElements = chromatogramWizardElements;
+	}
+
+	/**
+	 * The given directory will be expanded if available.
+	 * 
+	 * @param directoryPath
+	 */
+	public void expandTree(String directoryPath) {
+
+		try {
+			File elementOrTreePath = new File(directoryPath);
+			chromatogramViewer.expandToLevel(elementOrTreePath, 1);
+		} catch(Exception e) {
+			logger.warn(e);
+		}
 	}
 
 	@Override
