@@ -232,6 +232,19 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	}
 
 	@Override
+	public int compareTo(IComparisonResult o) {
+
+		int result = Boolean.compare(this.isMatch(), o.isMatch());
+		if(result == 0) {
+			result = Float.compare(this.getMatchFactor(), o.getMatchFactor());
+		}
+		if(result == 0) {
+			result = Float.compare(this.getReverseMatchFactor(), o.getReverseMatchFactor());
+		}
+		return result;
+	}
+
+	@Override
 	public int hashCode() {
 
 		return 7 * Float.valueOf(getMatchFactor()).hashCode() + 11 * Float.valueOf(getReverseMatchFactor()).hashCode() + 13 * Float.valueOf(probability).hashCode();

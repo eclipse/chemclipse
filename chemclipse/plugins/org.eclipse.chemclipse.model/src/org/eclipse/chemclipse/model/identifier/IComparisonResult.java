@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.model.identifier;
 
 import java.io.Serializable;
 
-public interface IComparisonResult extends Serializable {
+public interface IComparisonResult extends Serializable, Comparable<IComparisonResult> {
 
 	float FACTOR_BEST_MATCH = 100.0f;
 	float FACTOR_NO_MATCH = 0.0f;
