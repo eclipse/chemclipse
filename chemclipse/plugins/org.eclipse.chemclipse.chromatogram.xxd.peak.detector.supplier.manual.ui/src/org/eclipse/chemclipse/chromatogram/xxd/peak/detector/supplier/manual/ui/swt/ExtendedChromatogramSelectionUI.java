@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Composite;
 public class ExtendedChromatogramSelectionUI extends Composite {
 
 	private Button buttonDetect;
-	private ChromatogramSelectionUI selectedChromatogramUI;
+	private ChromatogramSelectionUI chromatogramSelectionUI;
 
 	public ExtendedChromatogramSelectionUI(Composite parent, int style) {
 		super(parent, style);
@@ -35,7 +35,12 @@ public class ExtendedChromatogramSelectionUI extends Composite {
 
 	public void update(IChromatogramSelection chromatogramSelection, boolean forceReload) {
 
-		selectedChromatogramUI.updateSelection(chromatogramSelection, forceReload);
+		chromatogramSelectionUI.updateSelection(chromatogramSelection, forceReload);
+	}
+
+	public ChromatogramSelectionUI getChromatogramSelectionUI() {
+
+		return chromatogramSelectionUI;
 	}
 
 	/**
@@ -44,38 +49,27 @@ public class ExtendedChromatogramSelectionUI extends Composite {
 	private void initialize(Composite parent) {
 
 		setLayout(new FillLayout());
-		Composite composite = new Composite(this, SWT.FILL);
-		GridLayout layout;
-		layout = new GridLayout();
-		layout.makeColumnsEqualWidth = true;
-		layout.numColumns = 1;
-		composite.setLayout(layout);
-		// ------------------------------------------------------------------------------------------Buttons
-		Composite buttonbar = new Composite(composite, SWT.FILL);
-		buttonbar.setLayout(new FillLayout());
+		Composite composite = new Composite(this, SWT.NONE);
+		composite.setLayout(new GridLayout(1, true));
 		/*
 		 * Add the "d" detect button
 		 */
-		buttonDetect = new Button(buttonbar, SWT.NONE);
+		buttonDetect = new Button(composite, SWT.NONE);
 		buttonDetect.setText("Start Peak Detection Mode (or press \"d\")");
 		buttonDetect.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		buttonDetect.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		buttonDetect.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				selectedChromatogramUI.startDetectionMode();
+				chromatogramSelectionUI.startDetectionMode();
 			}
 		});
 		/*
 		 * Chromatogram selection view
 		 */
-		selectedChromatogramUI = new ChromatogramSelectionUI(composite, SWT.FILL | SWT.BORDER);
-		GridData gridData = new GridData();
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.grabExcessVerticalSpace = true;
-		gridData.horizontalAlignment = GridData.FILL;
-		gridData.verticalAlignment = GridData.FILL;
-		selectedChromatogramUI.setLayoutData(gridData);
+		chromatogramSelectionUI = new ChromatogramSelectionUI(composite, SWT.BORDER);
+		chromatogramSelectionUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 }

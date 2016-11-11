@@ -11,6 +11,28 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.swt;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.core.ManualPeakDetector;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.csd.model.notifier.ChromatogramAndPeakSelectionUpdateNotifierCSD;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.exceptions.PeakException;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.notifier.ChromatogramAndPeakSelectionUpdateNotifierMSD;
+import org.eclipse.chemclipse.swt.ui.components.chromatogram.AbstractViewChromatogramUI;
+import org.eclipse.chemclipse.swt.ui.converter.SeriesConverter;
+import org.eclipse.chemclipse.swt.ui.series.ISeries;
+import org.eclipse.chemclipse.swt.ui.support.AxisTitlesIntensityScale;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.swt.ui.support.Sign;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
@@ -24,25 +46,6 @@ import org.swtchart.IPlotArea;
 import org.swtchart.ISeries.SeriesType;
 import org.swtchart.Range;
 
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.core.ManualPeakDetector;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
-import org.eclipse.chemclipse.csd.model.notifier.ChromatogramAndPeakSelectionUpdateNotifierCSD;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.PeakException;
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.notifier.ChromatogramAndPeakSelectionUpdateNotifierMSD;
-import org.eclipse.chemclipse.swt.ui.components.chromatogram.AbstractViewChromatogramUI;
-import org.eclipse.chemclipse.swt.ui.converter.SeriesConverter;
-import org.eclipse.chemclipse.swt.ui.series.ISeries;
-import org.eclipse.chemclipse.swt.ui.support.AxisTitlesIntensityScale;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.swt.ui.support.Sign;
-
 public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramSelectionUI.class);
@@ -55,6 +58,7 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 	private boolean isManualPeakSelection = false;
 	private Cursor defaultCursor;
 	private PeakSelectionPaintListener peakSelectionPaintListener;
+	private List<IPeakDetectionListener> peakDetectionListeners;
 
 	/**
 	 * @param parent
@@ -62,6 +66,17 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 	 */
 	public ChromatogramSelectionUI(Composite parent, int style) {
 		super(parent, style, new AxisTitlesIntensityScale());
+		peakDetectionListeners = new ArrayList<IPeakDetectionListener>();
+	}
+
+	public void addPeakDetectionListener(IPeakDetectionListener peakDetectionListener) {
+
+		peakDetectionListeners.add(peakDetectionListener);
+	}
+
+	public void removePeakDetectionListener(IPeakDetectionListener peakDetectionListener) {
+
+		peakDetectionListeners.remove(peakDetectionListener);
 	}
 
 	@Override
@@ -249,6 +264,7 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 				 * Fire an update.
 				 * Show the peak in the ManualDetectedPeakView.
 				 */
+				firePeakDetected(chromatogramPeak);
 				ChromatogramAndPeakSelectionUpdateNotifierMSD.fireUpdateChange(chromatogramSelection, chromatogramPeak, false);
 			} catch(PeakException e) {
 				logger.warn(e);
@@ -266,6 +282,7 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 				 * Fire an update.
 				 * Show the peak in the ManualDetectedPeakView.
 				 */
+				firePeakDetected(chromatogramPeak);
 				ChromatogramAndPeakSelectionUpdateNotifierCSD.fireUpdateChange(chromatogramSelection, chromatogramPeak, false);
 			} catch(PeakException e) {
 				logger.warn(e);
@@ -284,5 +301,11 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 		peakSelectionPaintListener.setY2(y);
 		redraw();
 	}
-	// -------------------------------------------private methods
+
+	private void firePeakDetected(IPeak peak) {
+
+		for(IPeakDetectionListener peakDetectionListener : peakDetectionListeners) {
+			peakDetectionListener.peakDetected(peak);
+		}
+	}
 }
