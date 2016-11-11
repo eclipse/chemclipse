@@ -65,21 +65,15 @@ public class ManualDetectedPeakUI extends Composite {
 	private void initialize(Composite parent) {
 
 		setLayout(new FillLayout());
-		Composite composite = new Composite(this, SWT.FILL);
-		GridLayout layout;
-		layout = new GridLayout();
-		layout.makeColumnsEqualWidth = true;
-		layout.numColumns = 1;
-		composite.setLayout(layout);
-		// ------------------------------------------------------------------------------------------Buttons
-		Composite buttonbar = new Composite(composite, SWT.FILL);
-		buttonbar.setLayout(new FillLayout());
+		Composite composite = new Composite(this, SWT.NONE);
+		composite.setLayout(new GridLayout(1, true));
 		/*
 		 * Add the selected peak.
 		 */
-		buttonAdd = new Button(buttonbar, SWT.NONE);
+		buttonAdd = new Button(composite, SWT.NONE);
 		buttonAdd.setText("Add Peak");
 		buttonAdd.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		buttonAdd.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		buttonAdd.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -118,12 +112,7 @@ public class ManualDetectedPeakUI extends Composite {
 		/*
 		 * Peak
 		 */
-		manualExtendedPeakUI = new ManualExtendedPeakUI(composite, SWT.FILL | SWT.BORDER);
-		GridData gridData = new GridData();
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.grabExcessVerticalSpace = true;
-		gridData.horizontalAlignment = GridData.FILL;
-		gridData.verticalAlignment = GridData.FILL;
-		manualExtendedPeakUI.setLayoutData(gridData);
+		manualExtendedPeakUI = new ManualExtendedPeakUI(composite, SWT.BORDER);
+		manualExtendedPeakUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 }
