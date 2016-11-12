@@ -6,6 +6,7 @@
   <imports xsi:type="basic:Part" xmi:id="_SrVdMNNuEeOGVsF3IvlSBg" elementId="org.eclipse.chemclipse.ux.extension.ui.part.baselineAndChromatogramView"/>
   <imports xsi:type="basic:Part" xmi:id="_X8rRoNOHEeOGVsF3IvlSBg" elementId="org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.views.integrationResultView"/>
   <imports xsi:type="basic:Part" xmi:id="_RjH6wI0NEeWqFMLk2l0O1w" elementId="org.eclipse.chemclipse.ux.extension.ui.part.editHistory"/>
+  <imports xsi:type="basic:Part" xmi:id="_We_CcKjeEeaN593P6UOL3Q" elementId="org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="__2jlQDPDEeKN2qL8NSaklg" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_g8wgoDNBEeKp7tRCNPPdJw" elementId="org.eclipse.chemclipse.chromatogram.msd.perspective.ui.perspective.main" selectedElement="_i2rPoDNBEeKp7tRCNPPdJw" label="MSD Perspective" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif">
       <children xsi:type="basic:PartSashContainer" xmi:id="_i2rPoDNBEeKp7tRCNPPdJw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partsashcontainer.main.0" containerData="" horizontal="true">
@@ -49,6 +50,7 @@
               <children xsi:type="advanced:Placeholder" xmi:id="_G46HsOPOEeKoKcvBJOVy6w" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.5" ref="_Xc1pgOPNEeKoKcvBJOVy6w"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_V5pd0GWeEeSQKcLvrmntIw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.15" ref="_0ZGTcDf1EeKBwZX34jl_1A"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_GpRyYMENEeW3DIEeCEW-YQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.28" ref="_0JSB8MEMEeW3DIEeCEW-YQ"/>
+              <children xsi:type="advanced:Placeholder" xmi:id="_atbY0KjeEeaN593P6UOL3Q" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.39" ref="_We_CcKjeEeaN593P6UOL3Q"/>
             </children>
           </children>
         </children>
