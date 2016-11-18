@@ -48,22 +48,29 @@ import org.swtchart.Range;
 
 public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 
+	public static final String DETECTION_TYPE_BASELINE = "DETECTION_TYPE_BASELINE";
+	public static final String DETECTION_TYPE_SCAN_BB = "DETECTION_TYPE_SCAN_BB";
+	public static final String DETECTION_TYPE_SCAN_VV = "DETECTION_TYPE_SCAN_VV";
+	public static final String DETECTION_TYPE_NONE = "";
+	//
 	private static final Logger logger = Logger.getLogger(ChromatogramSelectionUI.class);
 	/*
-	 * These will be set if mouse clicks will be performed.
+	 * Baseline Detection Method
 	 */
 	private int xStart;
 	private int yStart;
-	private boolean isKeyPressed = false;
-	private boolean isManualPeakSelection = false;
+	private int xStop;
+	private int yStop;
+	//
+	private String detectionType = "";
+	private boolean isBaselinePeakSelection = false;
+	//
+	private BaselineSelectionPaintListener baselineSelectionPaintListener;
+	private ScanSelectionPaintListener scanSelectionPaintListener;
+	//
 	private Cursor defaultCursor;
-	private PeakSelectionPaintListener peakSelectionPaintListener;
 	private List<IPeakDetectionListener> peakDetectionListeners;
 
-	/**
-	 * @param parent
-	 * @param style
-	 */
 	public ChromatogramSelectionUI(Composite parent, int style) {
 		super(parent, style, new AxisTitlesIntensityScale());
 		peakDetectionListeners = new ArrayList<IPeakDetectionListener>();
@@ -85,27 +92,34 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 		super.initialize();
 		IPlotArea plotArea = (IPlotArea)getPlotArea();
 		/*
-		 * Add the peak selection listener.
+		 * Add the paint listeners to draw the selected peak range.
 		 */
-		peakSelectionPaintListener = new PeakSelectionPaintListener();
-		plotArea.addCustomPaintListener(peakSelectionPaintListener);
+		baselineSelectionPaintListener = new BaselineSelectionPaintListener();
+		scanSelectionPaintListener = new ScanSelectionPaintListener();
+		plotArea.addCustomPaintListener(baselineSelectionPaintListener);
+		plotArea.addCustomPaintListener(scanSelectionPaintListener);
 	}
 
-	public void startDetectionMode() {
+	public void startDetectionMode(String detectionType) {
 
-		isKeyPressed = true;
+		this.detectionType = detectionType;
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 
-		/*
-		 * Check if the "d" key is pressed and activate the manual peak detection.
-		 * d = 100
-		 * d = Manual Peak Detection
-		 */
-		if(!isKeyPressed && e.keyCode == 100) {
-			isKeyPressed = true;
+		if(detectionType.equals(DETECTION_TYPE_NONE)) {
+			/*
+			 * See ASCII code table.
+			 * Baseline Modus (d = 100), Scan Modus (s = 115)
+			 */
+			if(e.keyCode == 100) {
+				detectionType = DETECTION_TYPE_BASELINE;
+			} else if(e.keyCode == 115) {
+				detectionType = DETECTION_TYPE_SCAN_BB;
+			} else {
+				detectionType = "";
+			}
 		} else {
 			super.keyPressed(e);
 		}
@@ -114,8 +128,8 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 	@Override
 	public void mouseDown(MouseEvent e) {
 
-		if(isKeyPressed && e.button == 1) {
-			startManualPeakSelection(e.x, e.y);
+		if(detectionType.equals(DETECTION_TYPE_BASELINE) && e.button == 1) {
+			startBaselinePeakSelection(e.x, e.y);
 		} else {
 			super.mouseDown(e);
 		}
@@ -124,8 +138,8 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 	@Override
 	public void mouseUp(MouseEvent e) {
 
-		if(isManualPeakSelection && e.button == 1) {
-			stopManualPeakSelection(e.x, e.y);
+		if(isBaselinePeakSelection && e.button == 1) {
+			stopBaselinePeakSelection(e.x, e.y);
 		} else {
 			super.mouseUp(e);
 		}
@@ -134,24 +148,40 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 	@Override
 	public void mouseMove(MouseEvent e) {
 
-		if(isManualPeakSelection) {
-			trackManualPeakSelection(e.x, e.y);
+		if(isBaselinePeakSelection) {
+			trackBaselinePeakSelection(e.x, e.y);
 		} else {
 			super.mouseMove(e);
 		}
 	}
 
 	@Override
+	public void mouseDoubleClick(MouseEvent e) {
+
+		if(detectionType.equals(DETECTION_TYPE_SCAN_BB)) {
+			if(xStart == 0) {
+				int y = getPlotArea().getBounds().height;
+				startScanPeakSelection(e.x, y);
+			} else if(xStart > 0 && xStop == 0) {
+				int y = getPlotArea().getBounds().height;
+				stopScanPeakSelection(e.x, y);
+			} else {
+				resetScanPeakSelection();
+			}
+		} else {
+			super.mouseDoubleClick(e);
+		}
+	}
+
+	@Override
 	public void setViewSeries() {
 
-		ISeries series;
-		ILineSeries lineSeries;
 		/*
 		 * Converts the positive chromatogram.
 		 */
-		series = SeriesConverter.convertChromatogram(getChromatogramSelection(), Sign.POSITIVE, true);
+		ISeries series = SeriesConverter.convertChromatogram(getChromatogramSelection(), Sign.POSITIVE, true);
 		addSeries(series);
-		lineSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, series.getId());
+		ILineSeries lineSeries = (ILineSeries)getSeriesSet().createSeries(SeriesType.LINE, series.getId());
 		lineSeries.setXSeries(series.getXSeries());
 		lineSeries.setYSeries(series.getYSeries());
 		lineSeries.enableArea(true);
@@ -159,52 +189,72 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 		lineSeries.setLineColor(Colors.RED);
 	}
 
-	// -------------------------------------------private methods
-	/**
-	 * Starts the manual peak selection.
-	 * 
-	 * @param event
-	 */
-	private void startManualPeakSelection(int x, int y) {
+	private void startBaselinePeakSelection(int x, int y) {
 
 		xStart = x;
 		yStart = y;
-		/*
-		 * Preserve the old and set the new cursor.
-		 */
+		isBaselinePeakSelection = true;
 		defaultCursor = getPlotArea().getCursor();
 		getPlotArea().setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_CROSS));
 		/*
-		 * Start the manual peak selection.
-		 */
-		isManualPeakSelection = true;
-		/*
 		 * Set the start point.
 		 */
-		peakSelectionPaintListener.setX1(xStart);
-		peakSelectionPaintListener.setY1(yStart);
+		baselineSelectionPaintListener.setX1(xStart);
+		baselineSelectionPaintListener.setY1(yStart);
 	}
 
-	/**
-	 * Stops the manual peak selection.
-	 * 
-	 * @param event
-	 */
-	private void stopManualPeakSelection(int x, int y) {
+	private void stopBaselinePeakSelection(int x, int y) {
 
-		int xStop = x;
-		int yStop = y;
-		/*
-		 * Reset the paint listener and cursor.
-		 */
-		isKeyPressed = false;
-		isManualPeakSelection = false;
-		peakSelectionPaintListener.reset();
+		xStop = x;
+		yStop = y;
+		detectionType = DETECTION_TYPE_NONE;
+		isBaselinePeakSelection = false;
+		baselineSelectionPaintListener.reset();
 		getPlotArea().setCursor(defaultCursor);
 		/*
 		 * Extract the selected peak
 		 */
 		extractSelectedPeak(xStop, yStop);
+		resetSelectedRange();
+	}
+
+	private void startScanPeakSelection(int x, int y) {
+
+		xStart = x;
+		yStart = y;
+		defaultCursor = getPlotArea().getCursor();
+		getPlotArea().setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_CROSS));
+		/*
+		 * Set the start point.
+		 */
+		scanSelectionPaintListener.setX1(xStart);
+		scanSelectionPaintListener.setX2(xStop);
+		redraw();
+	}
+
+	private void stopScanPeakSelection(int x, int y) {
+
+		xStop = x;
+		yStop = y;
+		/*
+		 * Set the start point.
+		 */
+		scanSelectionPaintListener.setX1(xStart);
+		scanSelectionPaintListener.setX2(xStop);
+		redraw();
+		/*
+		 * Extract the selected peak
+		 */
+		extractSelectedPeak(xStop, yStop);
+	}
+
+	private void resetScanPeakSelection() {
+
+		resetSelectedRange();
+		detectionType = DETECTION_TYPE_NONE;
+		getPlotArea().setCursor(defaultCursor);
+		scanSelectionPaintListener.reset();
+		redraw();
 	}
 
 	/**
@@ -290,15 +340,19 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 		}
 	}
 
-	/**
-	 * Tracks the manual peak selection.
-	 * 
-	 * @param event
-	 */
-	private void trackManualPeakSelection(int x, int y) {
+	private void resetSelectedRange() {
 
-		peakSelectionPaintListener.setX2(x);
-		peakSelectionPaintListener.setY2(y);
+		xStart = 0;
+		yStart = 0;
+		xStop = 0;
+		yStop = 0;
+	}
+
+	private void trackBaselinePeakSelection(int x, int y) {
+
+		baselineSelectionPaintListener.setX2(x);
+		baselineSelectionPaintListener.setY2(y);
+		//
 		redraw();
 	}
 

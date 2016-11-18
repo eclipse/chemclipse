@@ -16,11 +16,7 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.widgets.Display;
 import org.swtchart.ICustomPaintListener;
 
-/**
- * @author Philip (eselmeister) Wenig
- * 
- */
-public class PeakSelectionPaintListener implements ICustomPaintListener {
+public class BaselineSelectionPaintListener implements ICustomPaintListener {
 
 	private int x1;
 	private int y1;
@@ -30,7 +26,7 @@ public class PeakSelectionPaintListener implements ICustomPaintListener {
 	@Override
 	public void paintControl(PaintEvent e) {
 
-		e.gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		e.gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		e.gc.drawLine(x1, y1, x2, y2);
 	}
 

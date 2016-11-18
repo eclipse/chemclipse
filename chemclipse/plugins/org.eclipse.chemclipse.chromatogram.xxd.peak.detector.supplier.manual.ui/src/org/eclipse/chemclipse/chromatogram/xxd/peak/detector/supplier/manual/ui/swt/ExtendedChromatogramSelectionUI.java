@@ -63,7 +63,7 @@ public class ExtendedChromatogramSelectionUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				chromatogramSelectionUI.startDetectionMode();
+				chromatogramSelectionUI.startDetectionMode(ChromatogramSelectionUI.DETECTION_TYPE_BASELINE);
 			}
 		});
 		/*
