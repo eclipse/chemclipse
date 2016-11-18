@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.swtchart.ICustomPaintListener;
 
@@ -26,8 +27,12 @@ public class BaselineSelectionPaintListener implements ICustomPaintListener {
 	@Override
 	public void paintControl(PaintEvent e) {
 
-		e.gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+		Color foreground = e.gc.getForeground();
+		Color background = e.gc.getBackground();
+		e.gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 		e.gc.drawLine(x1, y1, x2, y2);
+		e.gc.setForeground(foreground);
+		e.gc.setBackground(background);
 	}
 
 	@Override

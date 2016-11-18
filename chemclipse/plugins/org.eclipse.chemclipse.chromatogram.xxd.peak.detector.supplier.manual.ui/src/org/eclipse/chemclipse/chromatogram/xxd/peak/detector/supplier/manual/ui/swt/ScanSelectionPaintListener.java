@@ -11,9 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.swt;
 
-import org.eclipse.swt.SWT;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Pattern;
 import org.swtchart.ICustomPaintListener;
 
 public class ScanSelectionPaintListener implements ICustomPaintListener {
@@ -24,7 +25,11 @@ public class ScanSelectionPaintListener implements ICustomPaintListener {
 	@Override
 	public void paintControl(PaintEvent e) {
 
-		e.gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		Color foreground = e.gc.getForeground();
+		Color background = e.gc.getBackground();
+		Pattern pattern = e.gc.getBackgroundPattern();
+		e.gc.setForeground(Colors.BLACK);
+		e.gc.setBackgroundPattern(new Pattern(e.display, 0, e.height, e.width, e.height, Colors.WHITE, 0xBB, Colors.WHITE, 0xBB));
 		int height = e.height;
 		/*
 		 * Left Box
@@ -32,6 +37,7 @@ public class ScanSelectionPaintListener implements ICustomPaintListener {
 		if(x1 > 0) {
 			int width = x1;
 			e.gc.fillRectangle(0, 0, width, height);
+			e.gc.drawLine(x1, 0, x1, height);
 		}
 		/*
 		 * Right Box
@@ -39,7 +45,12 @@ public class ScanSelectionPaintListener implements ICustomPaintListener {
 		if(x2 > 0) {
 			int width = e.width - x2;
 			e.gc.fillRectangle(x2, 0, width, height);
+			e.gc.drawLine(x2, 0, x2, height);
 		}
+		//
+		e.gc.setForeground(foreground);
+		e.gc.setBackground(background);
+		e.gc.setBackgroundPattern(pattern);
 	}
 
 	@Override

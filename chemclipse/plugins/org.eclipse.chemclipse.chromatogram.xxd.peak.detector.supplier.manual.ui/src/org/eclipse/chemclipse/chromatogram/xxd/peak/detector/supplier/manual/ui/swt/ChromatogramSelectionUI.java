@@ -49,9 +49,16 @@ import org.swtchart.Range;
 public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 
 	public static final String DETECTION_TYPE_BASELINE = "DETECTION_TYPE_BASELINE";
-	public static final String DETECTION_TYPE_SCAN_BB = "DETECTION_TYPE_SCAN_BB";
-	public static final String DETECTION_TYPE_SCAN_VV = "DETECTION_TYPE_SCAN_VV";
+	private static final String DETECTION_TYPE_SCAN = "DETECTION_TYPE_SCAN";
+	public static final String DETECTION_TYPE_SCAN_BB = DETECTION_TYPE_SCAN + "_BB";
+	public static final String DETECTION_TYPE_SCAN_VV = DETECTION_TYPE_SCAN + "_VV";
+	public static final String DETECTION_TYPE_SCAN_BV = DETECTION_TYPE_SCAN + "_BV";
+	public static final String DETECTION_TYPE_SCAN_VB = DETECTION_TYPE_SCAN + "_VB";
 	public static final String DETECTION_TYPE_NONE = "";
+	//
+	public static final String DETECTION_BOX_LEFT = "DETECTION_BOX_LEFT";
+	public static final String DETECTION_BOX_RIGHT = "DETECTION_BOX_RIGHT";
+	public static final String DETECTION_BOX_NONE = "DETECTION_BOX_NONE";
 	//
 	private static final Logger logger = Logger.getLogger(ChromatogramSelectionUI.class);
 	/*
@@ -62,8 +69,11 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 	private int xStop;
 	private int yStop;
 	//
-	private String detectionType = "";
-	private boolean isBaselinePeakSelection = false;
+	private int xMoveStart;
+	//
+	private String detectionType = DETECTION_TYPE_NONE;
+	private String detectionBox = DETECTION_BOX_NONE;
+	private boolean isDetectionBoxLocked = false;
 	//
 	private BaselineSelectionPaintListener baselineSelectionPaintListener;
 	private ScanSelectionPaintListener scanSelectionPaintListener;
@@ -91,6 +101,7 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 
 		super.initialize();
 		IPlotArea plotArea = (IPlotArea)getPlotArea();
+		defaultCursor = getPlotArea().getCursor();
 		/*
 		 * Add the paint listeners to draw the selected peak range.
 		 */
@@ -111,14 +122,44 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 		if(detectionType.equals(DETECTION_TYPE_NONE)) {
 			/*
 			 * See ASCII code table.
-			 * Baseline Modus (d = 100), Scan Modus (s = 115)
+			 * Baseline Modus (d = 100)
+			 * Scan Modus (s = 115)
 			 */
 			if(e.keyCode == 100) {
 				detectionType = DETECTION_TYPE_BASELINE;
 			} else if(e.keyCode == 115) {
 				detectionType = DETECTION_TYPE_SCAN_BB;
 			} else {
-				detectionType = "";
+				detectionType = DETECTION_TYPE_NONE;
+			}
+		} else if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
+			/*
+			 * Detection Type Scan
+			 */
+			if(e.keyCode == 16777219) {
+				/*
+				 * Arrow left
+				 */
+				if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+					xStart -= 1;
+					redrawScanPeakSelection(true);
+				} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+					xStop -= 1;
+					redrawScanPeakSelection(true);
+				}
+			} else if(e.keyCode == 16777220) {
+				/*
+				 * Arrow right
+				 */
+				if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+					xStart += 1;
+					redrawScanPeakSelection(true);
+				} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+					xStop += 1;
+					redrawScanPeakSelection(true);
+				}
+			} else {
+				super.keyPressed(e);
 			}
 		} else {
 			super.keyPressed(e);
@@ -130,6 +171,15 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 
 		if(detectionType.equals(DETECTION_TYPE_BASELINE) && e.button == 1) {
 			startBaselinePeakSelection(e.x, e.y);
+			setCursor(SWT.CURSOR_CROSS);
+		} else if(detectionType.startsWith(DETECTION_TYPE_SCAN) && e.button == 1) {
+			if(!detectionBox.equals(DETECTION_BOX_NONE)) {
+				setCursor(SWT.CURSOR_SIZEWE);
+				xMoveStart = e.x;
+			} else {
+				setCursor(SWT.CURSOR_CROSS);
+				xMoveStart = 0;
+			}
 		} else {
 			super.mouseDown(e);
 		}
@@ -138,8 +188,26 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 	@Override
 	public void mouseUp(MouseEvent e) {
 
-		if(isBaselinePeakSelection && e.button == 1) {
+		if(detectionType.equals(DETECTION_TYPE_BASELINE)) {
 			stopBaselinePeakSelection(e.x, e.y);
+			setDefaultCursor();
+		} else if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
+			/*
+			 * Move.
+			 */
+			if(e.button == 1) {
+				setCursor(SWT.CURSOR_CROSS);
+				if(!detectionBox.equals(DETECTION_BOX_NONE)) {
+					int delta = e.x - xMoveStart;
+					if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+						xStart += delta;
+						redrawScanPeakSelection(true);
+					} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+						xStop += delta;
+						redrawScanPeakSelection(true);
+					}
+				}
+			}
 		} else {
 			super.mouseUp(e);
 		}
@@ -148,8 +216,29 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 	@Override
 	public void mouseMove(MouseEvent e) {
 
-		if(isBaselinePeakSelection) {
+		if(detectionType.equals(DETECTION_TYPE_BASELINE) && e.stateMask == 524288) {
 			trackBaselinePeakSelection(e.x, e.y);
+		} else if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
+			/*
+			 * Move.
+			 */
+			if(e.button == 1) {
+				if(!detectionBox.equals(DETECTION_BOX_NONE)) {
+					int delta = e.x - xMoveStart;
+					//
+					if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+						xStart += delta;
+						redrawScanPeakSelection(false);
+					} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+						xStop += delta;
+						redrawScanPeakSelection(false);
+					}
+				}
+			} else {
+				if(!isDetectionBoxLocked) {
+					detectionBox = getDetectionBox(e.x);
+				}
+			}
 		} else {
 			super.mouseMove(e);
 		}
@@ -158,14 +247,51 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 	@Override
 	public void mouseDoubleClick(MouseEvent e) {
 
-		if(detectionType.equals(DETECTION_TYPE_SCAN_BB)) {
+		if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
+			//
+			setCursor(SWT.CURSOR_CROSS);
 			if(xStart == 0) {
+				/*
+				 * Get the y coordinate
+				 */
 				int y = getPlotArea().getBounds().height;
+				switch(detectionType) {
+					case DETECTION_TYPE_SCAN_BB:
+						y = getPlotArea().getBounds().height;
+						break;
+					case DETECTION_TYPE_SCAN_VV:
+						y = e.y;
+						break;
+					case DETECTION_TYPE_SCAN_BV:
+						y = getPlotArea().getBounds().height;
+						break;
+					case DETECTION_TYPE_SCAN_VB:
+						y = e.y;
+						break;
+				}
 				startScanPeakSelection(e.x, y);
 			} else if(xStart > 0 && xStop == 0) {
+				/*
+				 * Get the y coordinate
+				 */
 				int y = getPlotArea().getBounds().height;
+				switch(detectionType) {
+					case DETECTION_TYPE_SCAN_BB:
+						y = getPlotArea().getBounds().height;
+						break;
+					case DETECTION_TYPE_SCAN_VV:
+						y = e.y;
+						break;
+					case DETECTION_TYPE_SCAN_BV:
+						y = e.y;
+						break;
+					case DETECTION_TYPE_SCAN_VB:
+						y = getPlotArea().getBounds().height;
+						break;
+				}
 				stopScanPeakSelection(e.x, y);
 			} else {
+				setDefaultCursor();
 				resetScanPeakSelection();
 			}
 		} else {
@@ -189,13 +315,26 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 		lineSeries.setLineColor(Colors.RED);
 	}
 
+	private String getDetectionBox(int x) {
+
+		if(xStart > 0) {
+			if(x <= xStart) {
+				return DETECTION_BOX_LEFT;
+			} else {
+				if(xStop > 0) {
+					if(x >= xStop) {
+						return DETECTION_BOX_RIGHT;
+					}
+				}
+			}
+		}
+		return DETECTION_BOX_NONE;
+	}
+
 	private void startBaselinePeakSelection(int x, int y) {
 
 		xStart = x;
 		yStart = y;
-		isBaselinePeakSelection = true;
-		defaultCursor = getPlotArea().getCursor();
-		getPlotArea().setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_CROSS));
 		/*
 		 * Set the start point.
 		 */
@@ -207,23 +346,34 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 
 		xStop = x;
 		yStop = y;
-		detectionType = DETECTION_TYPE_NONE;
-		isBaselinePeakSelection = false;
-		baselineSelectionPaintListener.reset();
-		getPlotArea().setCursor(defaultCursor);
 		/*
 		 * Extract the selected peak
 		 */
-		extractSelectedPeak(xStop, yStop);
+		detectionType = DETECTION_TYPE_NONE;
+		extractSelectedPeak();
+		baselineSelectionPaintListener.reset();
 		resetSelectedRange();
+		redraw();
+	}
+
+	private void trackBaselinePeakSelection(int x, int y) {
+
+		xStop = x;
+		yStop = y;
+		//
+		baselineSelectionPaintListener.setX1(xStart);
+		baselineSelectionPaintListener.setY1(yStart);
+		baselineSelectionPaintListener.setX2(xStop);
+		baselineSelectionPaintListener.setY2(yStop);
+		redraw();
 	}
 
 	private void startScanPeakSelection(int x, int y) {
 
 		xStart = x;
 		yStart = y;
-		defaultCursor = getPlotArea().getCursor();
-		getPlotArea().setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_CROSS));
+		//
+		setCursor(SWT.CURSOR_CROSS);
 		/*
 		 * Set the start point.
 		 */
@@ -245,14 +395,30 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 		/*
 		 * Extract the selected peak
 		 */
-		extractSelectedPeak(xStop, yStop);
+		extractSelectedPeak();
+	}
+
+	private void redrawScanPeakSelection(boolean extractPeak) {
+
+		/*
+		 * Set the start point.
+		 */
+		scanSelectionPaintListener.setX1(xStart);
+		scanSelectionPaintListener.setX2(xStop);
+		redraw();
+		/*
+		 * Extract the selected peak
+		 */
+		if(extractPeak) {
+			extractSelectedPeak();
+		}
 	}
 
 	private void resetScanPeakSelection() {
 
 		resetSelectedRange();
 		detectionType = DETECTION_TYPE_NONE;
-		getPlotArea().setCursor(defaultCursor);
+		setDefaultCursor();
 		scanSelectionPaintListener.reset();
 		redraw();
 	}
@@ -263,7 +429,7 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 	 * @param xStop
 	 * @param yStop
 	 */
-	private void extractSelectedPeak(int xStop, int yStop) {
+	private void extractSelectedPeak() {
 
 		/*
 		 * Calculate the rectangle factors.
@@ -348,12 +514,14 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 		yStop = 0;
 	}
 
-	private void trackBaselinePeakSelection(int x, int y) {
+	private void setCursor(int cursorId) {
 
-		baselineSelectionPaintListener.setX2(x);
-		baselineSelectionPaintListener.setY2(y);
-		//
-		redraw();
+		getPlotArea().setCursor(Display.getCurrent().getSystemCursor(cursorId));
+	}
+
+	private void setDefaultCursor() {
+
+		getPlotArea().setCursor(defaultCursor);
 	}
 
 	private void firePeakDetected(IPeak peak) {
