@@ -62,7 +62,7 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 	private static final Pattern smilesPattern = Pattern.compile("(SMILES:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionTimePattern = Pattern.compile("(RT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionIndexPattern = Pattern.compile("(RI:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern ionPattern = Pattern.compile("(\\d+\\.?\\d{0,5})([ ]+)(\\d+\\.?\\d{0,5})");
+	private static final Pattern ionPattern = Pattern.compile("(\\d+\\.?\\d{0,5})([ ]+)(\\d+\\.?\\d*([eE][+-]?\\d{1,3})?)");
 	//
 	private static final String RETENTION_INDICES_DELIMITER = ", ";
 
