@@ -37,6 +37,7 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_PEAKS_5_MSP = "testData/files/import/Peaks5.MSP";
 	public static final String TESTFILE_IMPORT_PEAKS_6_MSP = "testData/files/import/Peaks6.MSP";
 	public static final String TESTFILE_IMPORT_PEAKS_7_MSP = "testData/files/import/Peaks7.MSP";
+	public static final String TESTFILE_IMPORT_LIB_1_MSP = "testData/files/import/Lib1.msp";
 	/*
 	 * EXPORT
 	 */
