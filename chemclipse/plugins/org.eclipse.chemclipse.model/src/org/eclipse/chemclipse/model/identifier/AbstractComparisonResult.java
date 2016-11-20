@@ -241,6 +241,12 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 		if(result == 0) {
 			result = Float.compare(this.getReverseMatchFactor(), o.getReverseMatchFactor());
 		}
+		if(result == 0) {
+			result = Float.compare(this.getMatchFactorDirect(), o.getMatchFactorDirect());
+		}
+		if(result == 0) {
+			result = Float.compare(this.getReverseMatchFactorDirect(), o.getReverseMatchFactorDirect());
+		}
 		return result;
 	}
 
