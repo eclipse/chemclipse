@@ -229,4 +229,14 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_STATUS_OK = "status-ok.gif";
 	String IMAGE_STATUS_WARN = "status-warn.gif";
 	String IMAGE_STATUS_ERROR = "status-error.gif";
+	//
+	String IMAGE_DETECTION_BOX_BOTH = "detectionBoxBoth.gif";
+	String IMAGE_DETECTION_BOX_LEFT = "detectionBoxLeft.gif";
+	String IMAGE_DETECTION_BOX_RIGHT = "detectionBoxRight.gif";
+	//
+	String IMAGE_DETECTION_TYPE_BASELINE = "detectionTypeBaseline.gif";
+	String IMAGE_DETECTION_TYPE_SCAN_BB = "detectionTypeScanBB.gif";
+	String IMAGE_DETECTION_TYPE_SCAN_BV = "detectionTypeScanBV.gif";
+	String IMAGE_DETECTION_TYPE_SCAN_VB = "detectionTypeScanVB.gif";
+	String IMAGE_DETECTION_TYPE_SCAN_VV = "detectionTypeScanVV.gif";
 }
