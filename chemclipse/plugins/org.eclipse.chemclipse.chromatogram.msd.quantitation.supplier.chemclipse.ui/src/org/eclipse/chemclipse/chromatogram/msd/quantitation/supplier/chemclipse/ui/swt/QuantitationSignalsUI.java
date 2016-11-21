@@ -24,8 +24,8 @@ import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundM
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationSignalsMSD;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -78,7 +78,7 @@ public class QuantitationSignalsUI extends AbstractTableViewerUI implements IQua
 		String[] titles = {"Ion", "Relative Response", "Uncertainty", "Use"};
 		int bounds[] = {100, 100, 100, 100};
 		IStructuredContentProvider contentProvider = new QuantitationSignalsContentProvider();
-		LabelProvider labelProvider = new QuantitationSignalsLabelProvider();
+		ILabelProvider labelProvider = new QuantitationSignalsLabelProvider();
 		QuantitationSignalsTableComparator viewerTableComparator = new QuantitationSignalsTableComparator();
 		//
 		createTableViewer(composite, gridDataTable, contentProvider, labelProvider, viewerTableComparator, titles, bounds);

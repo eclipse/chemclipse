@@ -15,9 +15,9 @@ import java.util.List;
 
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -37,7 +37,7 @@ public abstract class AbstractTableViewerUI {
 		tableViewer.getControl().setFocus();
 	}
 
-	public void createTableViewer(Composite parent, GridData gridData, IStructuredContentProvider contentProvider, LabelProvider labelProvider, AbstractRecordTableComparator viewerTableComparator, final String[] titles, int[] bounds) {
+	public void createTableViewer(Composite parent, GridData gridData, IStructuredContentProvider contentProvider, ILabelProvider labelProvider, AbstractRecordTableComparator viewerTableComparator, final String[] titles, int[] bounds) {
 
 		tableViewer = new ExtendedTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
 		tableViewer.getControl().setLayoutData(gridData);

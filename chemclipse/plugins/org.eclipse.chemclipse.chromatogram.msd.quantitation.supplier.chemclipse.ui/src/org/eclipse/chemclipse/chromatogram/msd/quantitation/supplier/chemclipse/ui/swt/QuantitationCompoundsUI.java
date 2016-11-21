@@ -30,9 +30,9 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -110,7 +110,7 @@ public class QuantitationCompoundsUI extends AbstractTableViewerUI {
 		String[] titles = {"Name", "Chemical Class", "Concentration Unit", "Calibration Method", "Cross Zero", "Use TIC", "Retention Time (RT)", "RT (-)", "RT (+)", "Retention Index (RI)", "RI (-)", "RI (+)"};
 		int bounds[] = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 		IStructuredContentProvider contentProvider = new QuantitationCompoundContentProvider();
-		LabelProvider labelProvider = new QuantitationCompoundLabelProvider();
+		ILabelProvider labelProvider = new QuantitationCompoundLabelProvider();
 		QuantitationCompoundTableComparator viewerTableComparator = new QuantitationCompoundTableComparator();
 		//
 		createTableViewer(composite, gridDataTable, contentProvider, labelProvider, viewerTableComparator, titles, bounds);
@@ -231,8 +231,8 @@ public class QuantitationCompoundsUI extends AbstractTableViewerUI {
 						 */
 						if(dialog.open() == IDialogConstants.OK_ID) {
 							/*
-							 * Get the edited compound and set the quantitation signals
-							 * and concentration response entries.
+							 * Get the edited compound and set the quantitation
+							 * signals and concentration response entries.
 							 */
 							IQuantitationCompoundMSD quantitationCompoundNew = quantitationCompoundEntryEdit.getQuantitationCompoundMSD();
 							quantitationCompoundNew.updateQuantitationSignalsMSD(quantitationCompoundOld.getQuantitationSignalsMSD());
@@ -366,6 +366,7 @@ public class QuantitationCompoundsUI extends AbstractTableViewerUI {
 			 */
 			EventHandler eventHandler = new EventHandler() {
 
+				@Override
 				public void handleEvent(Event event) {
 
 					Object databaseName = event.getProperty(IChemClipseQuantitationEvents.PROPERTY_QUANTITATION_TABLE_NAME);

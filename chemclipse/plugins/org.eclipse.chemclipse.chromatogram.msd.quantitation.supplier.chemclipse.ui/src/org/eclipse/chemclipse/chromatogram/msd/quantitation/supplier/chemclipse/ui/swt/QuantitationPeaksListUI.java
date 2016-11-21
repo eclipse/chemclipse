@@ -29,9 +29,9 @@ import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.QuantitationPeakMSD;
 import org.eclipse.chemclipse.msd.model.notifier.PeakSelectionUpdateNotifier;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -85,7 +85,7 @@ public class QuantitationPeaksListUI extends AbstractTableViewerUI implements IQ
 		String[] titles = {"Concentration", "Concentration Unit"};
 		int bounds[] = {100, 100};
 		IStructuredContentProvider contentProvider = new QuantitationPeaksContentProvider();
-		LabelProvider labelProvider = new QuantitationPeaksLabelProvider();
+		ILabelProvider labelProvider = new QuantitationPeaksLabelProvider();
 		QuantitationPeaksTableComparator viewerTableComparator = new QuantitationPeaksTableComparator();
 		//
 		createTableViewer(composite, gridDataTable, contentProvider, labelProvider, viewerTableComparator, titles, bounds);

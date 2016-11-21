@@ -28,8 +28,8 @@ import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponse
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -89,7 +89,7 @@ public class ConcentrationResponseEntriesUI extends AbstractTableViewerUI implem
 		String[] titles = {"Ion (0 = TIC)", "Concentration", "Response"};
 		int bounds[] = {100, 100, 100};
 		IStructuredContentProvider contentProvider = new ConcentrationResponseContentProvider();
-		LabelProvider labelProvider = new ConcentrationResponseLabelProvider();
+		ILabelProvider labelProvider = new ConcentrationResponseLabelProvider();
 		ConcentrationResponseTableComparator viewerTableComparator = new ConcentrationResponseTableComparator();
 		//
 		createTableViewer(composite, gridDataTable, contentProvider, labelProvider, viewerTableComparator, titles, bounds);
