@@ -87,7 +87,6 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 	//
 	private String detectionType = DETECTION_TYPE_NONE;
 	private String detectionBox = DETECTION_BOX_NONE;
-	private boolean isDetectionBoxLocked = false;
 	//
 	private BaselineSelectionPaintListener baselineSelectionPaintListener;
 	private ScanSelectionPaintListener scanSelectionPaintListener;
@@ -115,8 +114,6 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 		setDefaultCursor();
 		resetBaselinePeakSelection();
 		resetScanPeakSelection();
-		//
-		this.isDetectionBoxLocked = false;
 		//
 		this.detectionType = detectionType;
 		if(detectionType.equals(DETECTION_TYPE_BASELINE)) {
@@ -234,21 +231,29 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 			 * Move.
 			 */
 			if(e.button == 1) {
+				/*
+				 * Set the peak.
+				 */
 				setCursor(SWT.CURSOR_CROSS);
 				if(!detectionBox.equals(DETECTION_BOX_NONE)) {
 					/*
 					 * Validate that the snap marker is matched.
 					 */
-					if(isLeftMoveSnapMarker(e.x) || isRightMoveSnapMarker(e.x)) {
-						int delta = getDeltaMove(e.x);
-						if(detectionBox.equals(DETECTION_BOX_LEFT)) {
-							xStart += delta;
-							redrawScanPeakSelection(true);
-						} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
-							xStop += delta;
-							redrawScanPeakSelection(true);
-						}
+					int delta = getDeltaMove(e.x);
+					if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+						xStart += delta;
+						redrawScanPeakSelection(true);
+					} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+						xStop += delta;
+						redrawScanPeakSelection(true);
 					}
+				}
+				/*
+				 * Mark the selected box.
+				 */
+				if(e.count == 1) {
+					detectionBox = getDetectionBox(e.x);
+					redrawScanPeakSelection(false);
 				}
 			}
 		} else {
@@ -286,10 +291,6 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 						xStop += delta;
 						redrawScanPeakSelection(false);
 					}
-				}
-			} else {
-				if(!isDetectionBoxLocked) {
-					detectionBox = getDetectionBox(e.x);
 				}
 			}
 		} else {
@@ -496,6 +497,13 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 		 */
 		scanSelectionPaintListener.setX1(xStart);
 		scanSelectionPaintListener.setX2(xStop);
+		if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+			scanSelectionPaintListener.setHighlightBox(ScanSelectionPaintListener.HIGHLIGHT_BOX_LEFT);
+		} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+			scanSelectionPaintListener.setHighlightBox(ScanSelectionPaintListener.HIGHLIGHT_BOX_RIGHT);
+		} else {
+			scanSelectionPaintListener.setHighlightBox(ScanSelectionPaintListener.HIGHLIGHT_BOX_NONE);
+		}
 		redraw();
 		/*
 		 * Extract the selected peak
