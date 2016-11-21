@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
@@ -18,7 +19,9 @@ import java.util.List;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -28,7 +31,9 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 
 public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 
@@ -36,6 +41,25 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public PeakListLabelProvider() {
 		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
+	}
+
+	@Override
+	public Color getBackground(final Object element) {
+
+		if(element instanceof IPeak) {
+			IPeak peak = (IPeak)element;
+			List<IPeakTarget> peakTargets = peak.getTargets();
+			for(IPeakTarget t : peakTargets) {
+				IComparisonResult cp = t.getComparisonResult();
+				if(cp instanceof IPeakComparisonResult) {
+					IPeakComparisonResult pcp = (IPeakComparisonResult)cp;
+					if(pcp.isUnique()) {
+						return new Color(Display.getDefault(), 255, 140, 0);
+					}
+				}
+			}
+		}
+		return super.getBackground(element);
 	}
 
 	@Override
@@ -60,7 +84,8 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 	public String getColumnText(Object element, int columnIndex) {
 
 		/*
-		 * SYNCHRONIZE: PeakListLabelProvider PeakListLabelComparator PeakListView
+		 * SYNCHRONIZE: PeakListLabelProvider PeakListLabelComparator
+		 * PeakListView
 		 */
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";

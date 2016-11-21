@@ -9,16 +9,17 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Dr. Janos Binder - locale dependent implementation
+ * Dr. Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.provider;
 
 import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 
-public abstract class AbstractChemClipseLabelProvider extends LabelProvider implements ITableLabelProvider {
+public abstract class AbstractChemClipseLabelProvider extends ColumnLabelProvider implements ITableLabelProvider {
 
 	private DecimalFormat decimalFormat;
 
