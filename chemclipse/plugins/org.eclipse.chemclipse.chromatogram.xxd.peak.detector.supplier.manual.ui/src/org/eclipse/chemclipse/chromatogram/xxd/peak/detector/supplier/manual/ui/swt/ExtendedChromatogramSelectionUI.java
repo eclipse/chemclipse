@@ -54,7 +54,7 @@ public class ExtendedChromatogramSelectionUI extends Composite {
 		 * Buttons
 		 */
 		Composite compositeButtons = new Composite(composite, SWT.NONE);
-		compositeButtons.setLayout(new GridLayout(9, true));
+		compositeButtons.setLayout(new GridLayout(6, true));
 		GridData gridDataComposite = new GridData();
 		gridDataComposite.horizontalAlignment = SWT.RIGHT;
 		compositeButtons.setLayoutData(gridDataComposite);

@@ -48,6 +48,10 @@ import org.swtchart.Range;
 
 public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 
+	private static final Logger logger = Logger.getLogger(ChromatogramSelectionUI.class);
+	/*
+	 * Detection Type
+	 */
 	private static final String DETECTION_TYPE_SCAN = "DETECTION_TYPE_SCAN";
 	//
 	public static final String DETECTION_TYPE_BASELINE = "DETECTION_TYPE_BASELINE";
@@ -62,12 +66,15 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 	public static final char KEY_VV = 'v';
 	public static final char KEY_BV = 'n';
 	public static final char KEY_VB = 'm';
-	//
+	/*
+	 * Detection Box
+	 */
 	private static final String DETECTION_BOX_LEFT = "DETECTION_BOX_LEFT";
 	private static final String DETECTION_BOX_RIGHT = "DETECTION_BOX_RIGHT";
 	private static final String DETECTION_BOX_NONE = "DETECTION_BOX_NONE";
 	//
-	private static final Logger logger = Logger.getLogger(ChromatogramSelectionUI.class);
+	private static final int BOX_SNAP_MARKER_WINDOW = 4;
+	private static final int BOX_MAX_DELTA = 1;
 	/*
 	 * Baseline Detection Method
 	 */
@@ -196,12 +203,20 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 			startBaselinePeakSelection(e.x, e.y);
 			setCursor(SWT.CURSOR_CROSS);
 		} else if(detectionType.startsWith(DETECTION_TYPE_SCAN) && e.button == 1) {
-			if(!detectionBox.equals(DETECTION_BOX_NONE)) {
+			/*
+			 * Set the move start coordinate.
+			 */
+			if(isLeftMoveSnapMarker(e.x)) {
 				setCursor(SWT.CURSOR_SIZEWE);
 				xMoveStart = e.x;
+				detectionBox = DETECTION_BOX_LEFT;
+			} else if(isRightMoveSnapMarker(e.x)) {
+				setCursor(SWT.CURSOR_SIZEWE);
+				xMoveStart = e.x;
+				detectionBox = DETECTION_BOX_RIGHT;
 			} else {
 				setCursor(SWT.CURSOR_CROSS);
-				xMoveStart = 0;
+				detectionBox = DETECTION_BOX_NONE;
 			}
 		} else {
 			super.mouseDown(e);
@@ -221,13 +236,18 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 			if(e.button == 1) {
 				setCursor(SWT.CURSOR_CROSS);
 				if(!detectionBox.equals(DETECTION_BOX_NONE)) {
-					int delta = e.x - xMoveStart;
-					if(detectionBox.equals(DETECTION_BOX_LEFT)) {
-						xStart += delta;
-						redrawScanPeakSelection(true);
-					} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
-						xStop += delta;
-						redrawScanPeakSelection(true);
+					/*
+					 * Validate that the snap marker is matched.
+					 */
+					if(isLeftMoveSnapMarker(e.x) || isRightMoveSnapMarker(e.x)) {
+						int delta = getDeltaMove(e.x);
+						if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+							xStart += delta;
+							redrawScanPeakSelection(true);
+						} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+							xStop += delta;
+							redrawScanPeakSelection(true);
+						}
 					}
 				}
 			}
@@ -243,12 +263,22 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 			trackBaselinePeakSelection(e.x, e.y);
 		} else if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
 			/*
-			 * Move.
+			 * Mark the mouse
 			 */
+			if(isLeftMoveSnapMarker(e.x)) {
+				setCursor(SWT.CURSOR_SIZEWE);
+			} else if(isRightMoveSnapMarker(e.x)) {
+				setCursor(SWT.CURSOR_SIZEWE);
+			} else {
+				setCursor(SWT.CURSOR_CROSS);
+			}
+			//
 			if(e.stateMask == 524288) {
 				if(!detectionBox.equals(DETECTION_BOX_NONE)) {
-					int delta = e.x - xMoveStart;
-					//
+					/*
+					 * Get the move delta.
+					 */
+					int delta = getDeltaMove(e.x);
 					if(detectionBox.equals(DETECTION_BOX_LEFT)) {
 						xStart += delta;
 						redrawScanPeakSelection(false);
@@ -356,6 +386,35 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 			}
 		}
 		return DETECTION_BOX_NONE;
+	}
+
+	private boolean isLeftMoveSnapMarker(int x) {
+
+		if(x > xStart - BOX_SNAP_MARKER_WINDOW && x < xStart + BOX_SNAP_MARKER_WINDOW) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isRightMoveSnapMarker(int x) {
+
+		if(x > xStop - BOX_SNAP_MARKER_WINDOW && x < xStop + BOX_SNAP_MARKER_WINDOW) {
+			return true;
+		}
+		return false;
+	}
+
+	private int getDeltaMove(int x) {
+
+		int delta = x - xMoveStart;
+		if(Math.abs(delta) > BOX_MAX_DELTA) {
+			if(delta < 0) {
+				delta = -BOX_MAX_DELTA;
+			} else {
+				delta = BOX_MAX_DELTA;
+			}
+		}
+		return delta;
 	}
 
 	private void startBaselinePeakSelection(int x, int y) {
