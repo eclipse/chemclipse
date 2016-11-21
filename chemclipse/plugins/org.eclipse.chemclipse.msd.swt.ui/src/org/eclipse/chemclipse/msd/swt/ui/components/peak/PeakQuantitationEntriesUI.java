@@ -14,6 +14,13 @@ package org.eclipse.chemclipse.msd.swt.ui.components.peak;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
+import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakQuantitationEntriesContentProvider;
+import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakQuantitationEntriesLabelProvider;
+import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakQuantitationEntriesTableComparator;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
@@ -30,13 +37,6 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
-import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakQuantitationEntriesContentProvider;
-import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakQuantitationEntriesLabelProvider;
-import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakQuantitationEntriesTableComparator;
-import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 
 public class PeakQuantitationEntriesUI {
 
@@ -53,7 +53,6 @@ public class PeakQuantitationEntriesUI {
 		// SWT.VIRTUAL | SWT.FULL_SELECTION
 		tableViewer = new ExtendedTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		tableViewer.createColumns(titles, bounds);
-		;
 		tableViewer.setContentProvider(new PeakQuantitationEntriesContentProvider());
 		tableViewer.setLabelProvider(new PeakQuantitationEntriesLabelProvider());
 		/*
