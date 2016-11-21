@@ -6,10 +6,15 @@
  * the Eclipse Public License v1.0 which accompanies this distribution, and is
  * available at http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors: Philip
- * (eselmeister) Wenig - initial API and implementation
+ * Contributors:
+ * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
 public interface IPeakComparisonResult extends IComparisonResult {
+
+	boolean isUnique();
+
+	void setUnique(boolean unique);
 }
