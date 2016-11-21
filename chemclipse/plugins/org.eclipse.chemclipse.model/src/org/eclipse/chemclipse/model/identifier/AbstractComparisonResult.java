@@ -17,7 +17,7 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	/**
 	 * Renew the UUID on change.
 	 */
-	private static final long serialVersionUID = 7832661625546592609L;
+	private static final long serialVersionUID = 1295884624032029498L;
 	//
 	private boolean isMatch = true;
 	private float matchFactor;
@@ -27,7 +27,6 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	private float probability;
 	private float penalty;
 	private String advise = "";
-	private boolean unique;
 
 	public AbstractComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect) {
 		this.matchFactor = matchFactor;
@@ -201,18 +200,6 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 		} else if(getMatchFactor() <= MIN_LIMIT_MATCH_FACTOR && getReverseMatchFactor() >= MAX_LIMIT_REVERSE_MATCH_FACTOR) {
 			advise = ADVISE_IMPURITIES;
 		}
-	}
-
-	@Override
-	public void setUnique(boolean unique) {
-
-		this.unique = unique;
-	}
-
-	@Override
-	public boolean isUnique() {
-
-		return unique;
 	}
 
 	@Override

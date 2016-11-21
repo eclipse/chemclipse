@@ -170,21 +170,4 @@ public interface IComparisonResult extends Serializable, Comparable<IComparisonR
 	 * @return float
 	 */
 	float getRating();
-
-	/**
-	 * Sets weather this comparison is the result of a unique match.
-	 * 
-	 * @param unique
-	 *            {@code true} if this comparison is the result of a unique
-	 *            match; {@code false} otherwise
-	 */
-	void setUnique(boolean unique);
-
-	/**
-	 * Checks weather this comparison is the result of a unique match.
-	 * 
-	 * @return {@code true} if this comparison is the result of a unique match;
-	 *         {@code false} otherwise
-	 */
-	boolean isUnique();
 }

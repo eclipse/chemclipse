@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip (eselmeister) Wenig - initial API and implementation
+ * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
@@ -16,7 +17,8 @@ public class PeakComparisonResult extends AbstractPeakComparisonResult implement
 	/**
 	 * Renew the UUID on change.
 	 */
-	private static final long serialVersionUID = -4205512988016131199L;
+	private static final long serialVersionUID = -1197615645280532178L;
+	private boolean unique;
 
 	public PeakComparisonResult(float matchQuality, float reverseMatchQuality, float matchFactorDirect, float reverseMatchFactorDirect) {
 		super(matchQuality, reverseMatchQuality, matchFactorDirect, reverseMatchFactorDirect);
@@ -24,5 +26,17 @@ public class PeakComparisonResult extends AbstractPeakComparisonResult implement
 
 	public PeakComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect, float probability) {
 		super(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
+	}
+
+	@Override
+	public boolean isUnique() {
+
+		return unique;
+	}
+
+	@Override
+	public void setUnique(boolean unique) {
+
+		this.unique = unique;
 	}
 }
