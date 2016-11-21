@@ -57,10 +57,15 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 	public static final String DETECTION_TYPE_SCAN_VB = DETECTION_TYPE_SCAN + "_VB";
 	public static final String DETECTION_TYPE_NONE = "";
 	//
-	public static final String DETECTION_BOX_LEFT = "DETECTION_BOX_LEFT";
-	public static final String DETECTION_BOX_RIGHT = "DETECTION_BOX_RIGHT";
-	public static final String DETECTION_BOX_BOTH = "DETECTION_BOX_BOTH";
-	public static final String DETECTION_BOX_NONE = "DETECTION_BOX_NONE";
+	public static final char KEY_BASELINE = 'd';
+	public static final char KEY_BB = 'b';
+	public static final char KEY_VV = 'v';
+	public static final char KEY_BV = 'n';
+	public static final char KEY_VB = 'm';
+	//
+	private static final String DETECTION_BOX_LEFT = "DETECTION_BOX_LEFT";
+	private static final String DETECTION_BOX_RIGHT = "DETECTION_BOX_RIGHT";
+	private static final String DETECTION_BOX_NONE = "DETECTION_BOX_NONE";
 	//
 	private static final Logger logger = Logger.getLogger(ChromatogramSelectionUI.class);
 	/*
@@ -118,16 +123,6 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 		}
 	}
 
-	public void setDetectionBox(String detectionBox) {
-
-		this.detectionBox = detectionBox;
-		if(detectionBox.equals(DETECTION_BOX_BOTH)) {
-			this.isDetectionBoxLocked = false;
-		} else {
-			this.isDetectionBoxLocked = true;
-		}
-	}
-
 	@Override
 	protected void initialize() {
 
@@ -147,23 +142,15 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 	public void keyPressed(KeyEvent e) {
 
 		if(detectionType.equals(DETECTION_TYPE_NONE)) {
-			/*
-			 * See ASCII code table.
-			 * Baseline Modus (d = 100)
-			 * Scan Modus BB (b = 98)
-			 * Scan Modus VV (v = 118)
-			 * Scan Modus BV (n = 110)
-			 * Scan Modus VB (m = 109)
-			 */
-			if(e.keyCode == 100) {
+			if(e.keyCode == KEY_BASELINE) {
 				detectionType = DETECTION_TYPE_BASELINE;
-			} else if(e.keyCode == 98) {
+			} else if(e.keyCode == KEY_BB) {
 				detectionType = DETECTION_TYPE_SCAN_BB;
-			} else if(e.keyCode == 118) {
+			} else if(e.keyCode == KEY_VV) {
 				detectionType = DETECTION_TYPE_SCAN_VV;
-			} else if(e.keyCode == 110) {
+			} else if(e.keyCode == KEY_BV) {
 				detectionType = DETECTION_TYPE_SCAN_BV;
-			} else if(e.keyCode == 109) {
+			} else if(e.keyCode == KEY_VB) {
 				detectionType = DETECTION_TYPE_SCAN_VB;
 			} else {
 				detectionType = DETECTION_TYPE_NONE;
@@ -258,7 +245,7 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 			/*
 			 * Move.
 			 */
-			if(e.button == 1) {
+			if(e.stateMask == 524288) {
 				if(!detectionBox.equals(DETECTION_BOX_NONE)) {
 					int delta = e.x - xMoveStart;
 					//
