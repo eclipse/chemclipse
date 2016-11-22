@@ -19,6 +19,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IChemClipseChromatogramReportSettings;
@@ -35,6 +36,9 @@ import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.support.PeakQuantitation;
+import org.eclipse.chemclipse.model.support.PeakQuantitations;
+import org.eclipse.chemclipse.model.support.PeakQuantitationsExtractor;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.model.targets.ITarget;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
@@ -60,10 +64,12 @@ public class ChromatogramReport {
 	private static final String ION_DELIMITER = " ";
 	private static final String RESULTS_DELIMITER = "---";
 	//
+	private PeakQuantitationsExtractor peakQuantitationsExtractor;
 	private DecimalFormat decimalFormat;
 	private DateFormat dateFormat;
 
 	public ChromatogramReport() {
+		peakQuantitationsExtractor = new PeakQuantitationsExtractor();
 		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0####");
 		dateFormat = ValueFormat.getDateFormatEnglish();
 	}
@@ -88,7 +94,7 @@ public class ChromatogramReport {
 				reportChromatogram(printWriter, chromatogramMSD, monitor);
 			} else if(chromatogram instanceof IChromatogramCSD) {
 				/*
-				 * FID
+				 * CSD
 				 */
 				IChromatogramCSD chromatogramFID = (IChromatogramCSD)chromatogram;
 				reportChromatogram(printWriter, chromatogramFID, monitor);
@@ -197,6 +203,11 @@ public class ChromatogramReport {
 		printWriter.println("------------------------------");
 		reportPeakListQuantitationResults(printWriter, peaks, "Peak quantitation results are not available.", monitor);
 		printWriter.println("");
+		printWriter.println("");
+		printWriter.println("PEAK QUANTITATION SUMMARY");
+		printWriter.println("------------------------------");
+		reportPeakListQuantitationSummary(printWriter, peakQuantitationsExtractor.extract(peaks), "The peak quantitation summary is not available.", monitor);
+		printWriter.println("");
 		printWriter.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	}
 
@@ -220,6 +231,11 @@ public class ChromatogramReport {
 		printWriter.println("PEAK RESULTS");
 		printWriter.println("------------------------------");
 		reportPeakListFIDOverview(printWriter, peaks, "Peaks are not available.", monitor);
+		printWriter.println("");
+		printWriter.println("");
+		printWriter.println("PEAK QUANTITATION SUMMARY");
+		printWriter.println("------------------------------");
+		reportPeakListQuantitationSummary(printWriter, peakQuantitationsExtractor.extract(peaks), "The peak quantitation summary is not available.", monitor);
 		printWriter.println("");
 		printWriter.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	}
@@ -780,6 +796,39 @@ public class ChromatogramReport {
 				printWriter.print("--");
 			}
 			printWriter.println("");
+		}
+	}
+
+	private void reportPeakListQuantitationSummary(PrintWriter printWriter, PeakQuantitations peakQuantitations, String messageNoResults, IProgressMonitor monitor) {
+
+		if(peakQuantitations.getTitles().size() > 0) {
+			/*
+			 * Headline
+			 */
+			Iterator<String> titles = peakQuantitations.getTitles().iterator();
+			while(titles.hasNext()) {
+				printWriter.print(titles.next());
+				if(titles.hasNext()) {
+					printWriter.print(DELIMITER);
+				}
+			}
+			printWriter.println("");
+			/*
+			 * Data
+			 */
+			List<PeakQuantitation> peakQuantitationEntries = peakQuantitations.getQuantitationEntries();
+			for(PeakQuantitation peakQuantitationEntry : peakQuantitationEntries) {
+				printWriter.print(decimalFormat.format(peakQuantitationEntry.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+				printWriter.print(DELIMITER);
+				printWriter.print(decimalFormat.format(peakQuantitationEntry.getIntegratedArea()));
+				for(double concentration : peakQuantitationEntry.getConcentrations()) {
+					printWriter.print(DELIMITER);
+					printWriter.print(decimalFormat.format(concentration));
+				}
+				printWriter.println("");
+			}
+		} else {
+			printWriter.println(messageNoResults);
 		}
 	}
 }
