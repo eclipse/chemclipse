@@ -7,6 +7,7 @@
   <imports xsi:type="basic:Part" xmi:id="_X8rRoNOHEeOGVsF3IvlSBg" elementId="org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.views.integrationResultView"/>
   <imports xsi:type="basic:Part" xmi:id="_RjH6wI0NEeWqFMLk2l0O1w" elementId="org.eclipse.chemclipse.ux.extension.ui.part.editHistory"/>
   <imports xsi:type="basic:Part" xmi:id="_We_CcKjeEeaN593P6UOL3Q" elementId="org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart"/>
+  <imports xsi:type="basic:Part" xmi:id="_t0R3ALC3EeaEvIJF6SXnIQ" elementId="org.eclipse.chemclipse.ux.extension.ui.part.peaklistquantitations"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="__2jlQDPDEeKN2qL8NSaklg" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_g8wgoDNBEeKp7tRCNPPdJw" elementId="org.eclipse.chemclipse.chromatogram.msd.perspective.ui.perspective.main" selectedElement="_i2rPoDNBEeKp7tRCNPPdJw" label="MSD Perspective" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif">
       <children xsi:type="basic:PartSashContainer" xmi:id="_i2rPoDNBEeKp7tRCNPPdJw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partsashcontainer.main.0" containerData="" horizontal="true">
@@ -15,6 +16,7 @@
             <children xsi:type="advanced:Placeholder" xmi:id="_HiMWIDf0EeKBwZX34jl_1A" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.main.0" ref="_CSxq8Df0EeKBwZX34jl_1A"/>
             <children xsi:type="advanced:Placeholder" xmi:id="_VjcVgEX5EeKBM5U8OaQPAw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.main.2" ref="_q4GYEEd8EeKxr87RO7WY0w"/>
             <children xsi:type="advanced:Placeholder" xmi:id="_AtMnIGQ-EeSlDuFT8RyH7A" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.14" ref="_sULfkGQ9EeSlDuFT8RyH7A"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_5GJM0LC3EeaEvIJF6SXnIQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.40" ref="_t0R3ALC3EeaEvIJF6SXnIQ"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_PG0TELVfEeWygKUUIuJEng" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partstack.0" containerData="2000" selectedElement="_EJAFMLVgEeWygKUUIuJEng">
             <children xsi:type="advanced:Placeholder" xmi:id="_EJAFMLVgEeWygKUUIuJEng" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.27" ref="_5l6g8LVfEeWygKUUIuJEng"/>
