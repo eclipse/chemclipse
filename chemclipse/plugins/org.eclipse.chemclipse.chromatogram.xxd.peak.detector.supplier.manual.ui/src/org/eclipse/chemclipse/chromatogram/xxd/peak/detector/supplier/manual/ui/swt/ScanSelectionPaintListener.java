@@ -69,6 +69,11 @@ public class ScanSelectionPaintListener implements ICustomPaintListener {
 		e.gc.setForeground(foreground);
 		e.gc.setBackground(background);
 		e.gc.setBackgroundPattern(pattern);
+		/*
+		 * Dispose the patterns
+		 */
+		patternNormal.dispose();
+		patternSelected.dispose();
 	}
 
 	@Override
