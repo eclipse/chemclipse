@@ -13,9 +13,9 @@ package org.eclipse.chemclipse.wsd.model.core.support;
 
 public interface IMarkedWavelength {
 
-	int getWavelength();
+	double getWavelength();
 
-	void setWavelength(int wavelength);
+	void setWavelength(double wavelength);
 
 	int getMagnification();
 

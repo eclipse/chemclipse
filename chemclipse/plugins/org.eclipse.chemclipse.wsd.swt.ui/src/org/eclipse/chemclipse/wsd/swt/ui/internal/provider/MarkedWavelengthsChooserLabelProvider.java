@@ -41,7 +41,7 @@ public class MarkedWavelengthsChooserLabelProvider extends AbstractChemClipseLab
 			IMarkedWavelength markedWavelength = (IMarkedWavelength)element;
 			switch(columnIndex) {
 				case 0: // Wavelength
-					text = Integer.valueOf(markedWavelength.getWavelength()).toString();
+					text = Double.valueOf(markedWavelength.getWavelength()).toString();
 					break;
 				case 1: // Magnification
 					text = Integer.valueOf(markedWavelength.getMagnification()).toString();

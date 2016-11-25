@@ -18,9 +18,9 @@ public interface IMarkedWavelengths extends Set<IMarkedWavelength> {
 	/**
 	 * Returns the set of wavelengths.
 	 * 
-	 * @return Set<Integer>
+	 * @return Set<Double>
 	 */
-	Set<Integer> getWavelengths();
+	Set<Double> getWavelengths();
 
 	/**
 	 * Adds the ion range with magnification factor = 1.

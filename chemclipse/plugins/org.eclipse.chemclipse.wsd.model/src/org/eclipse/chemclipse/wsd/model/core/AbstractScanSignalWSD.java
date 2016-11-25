@@ -13,17 +13,17 @@ package org.eclipse.chemclipse.wsd.model.core;
 
 public abstract class AbstractScanSignalWSD implements IScanSignalWSD {
 
-	private int wavelength;
+	private double wavelength;
 	private float abundance;
 
 	@Override
-	public int getWavelength() {
+	public double getWavelength() {
 
 		return wavelength;
 	}
 
 	@Override
-	public void setWavelength(int wavelength) {
+	public void setWavelength(double wavelength) {
 
 		this.wavelength = wavelength;
 	}

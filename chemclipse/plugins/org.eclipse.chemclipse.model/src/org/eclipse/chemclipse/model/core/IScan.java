@@ -111,6 +111,26 @@ public interface IScan extends IAdaptable, IScanSerializable {
 	void setRetentionTimeColumn2(int retentionTimeColumn2);
 
 	/**
+	 * RRT
+	 * Returns the relative retention time of the mass spectrum.<br/>
+	 * Relative retention time is stored as milliseconds.
+	 * 
+	 * @return int - relative retention time
+	 */
+	int getRelativeRetentionTime();
+
+	/**
+	 * RRT
+	 * Sets a new relative retention time.<br/>
+	 * Relative retention time in milliseconds.<br/>
+	 * Only values >= 0 are allowed.
+	 * 
+	 * @param relative
+	 *            retention time
+	 */
+	void setRelativeRetentionTime(int relativeRetentionTime);
+
+	/**
 	 * Returns the retention index.
 	 * 
 	 * @return float - retention index

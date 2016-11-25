@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.model.core;
 
 import java.util.Date;
+import java.util.Map;
 
 public interface IChromatogramInfo {
 
@@ -50,6 +51,14 @@ public interface IChromatogramInfo {
 	String getMiscInfoSeparated();
 
 	void setMiscInfoSeparated(String miscInfoSeparated);
+
+	/**
+	 * Returns the miscellaneous map to store various
+	 * other values.
+	 * 
+	 * @return Map<String, String>
+	 */
+	Map<String, String> getMiscellaneous();
 
 	/**
 	 * Returns the short info, e.g.:

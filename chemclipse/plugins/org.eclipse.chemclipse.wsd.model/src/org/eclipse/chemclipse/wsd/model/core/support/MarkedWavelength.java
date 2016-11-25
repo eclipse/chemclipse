@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.wsd.model.core.support;
 
 public class MarkedWavelength implements IMarkedWavelength {
 
-	private int wavelength;
+	private double wavelength;
 	private int magnification;
 
 	/**
@@ -21,23 +21,23 @@ public class MarkedWavelength implements IMarkedWavelength {
 	 * 
 	 * @param ion
 	 */
-	public MarkedWavelength(int wavelength) {
+	public MarkedWavelength(double wavelength) {
 		this(wavelength, 1);
 	}
 
-	public MarkedWavelength(int wavelength, int magnification) {
+	public MarkedWavelength(double wavelength, int magnification) {
 		setWavelength(wavelength);
 		setMagnification(magnification);
 	}
 
 	@Override
-	public int getWavelength() {
+	public double getWavelength() {
 
 		return wavelength;
 	}
 
 	@Override
-	public void setWavelength(int wavelength) {
+	public void setWavelength(double wavelength) {
 
 		this.wavelength = wavelength;
 	}
@@ -68,13 +68,15 @@ public class MarkedWavelength implements IMarkedWavelength {
 			return false;
 		}
 		MarkedWavelength other = (MarkedWavelength)otherObject;
-		return wavelength == other.getWavelength() && magnification == other.getMagnification();
+		return wavelength == other.getWavelength() && //
+				magnification == other.getMagnification();
 	}
 
 	@Override
 	public int hashCode() {
 
-		return 7 * new Integer(wavelength).hashCode() + 11 * new Integer(magnification).hashCode();
+		return 7 * new Double(wavelength).hashCode() + //
+				11 * new Integer(magnification).hashCode();
 	}
 
 	@Override

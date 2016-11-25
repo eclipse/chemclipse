@@ -45,7 +45,7 @@ public class SelectedWavelengthChromatogramUI extends AbstractViewWSDChromatogra
 			/*
 			 * Convert a selection.
 			 */
-			List<Integer> wavelengths = new ArrayList<Integer>(chromatogramSelection.getSelectedWavelengths().getWavelengths());
+			List<Double> wavelengths = new ArrayList<Double>(chromatogramSelection.getSelectedWavelengths().getWavelengths());
 			IMultipleSeries multipleSeries = SeriesConverterWSD.convertChromatogram(chromatogramSelection, wavelengths, false, Sign.POSITIVE);
 			int size = multipleSeries.getMultipleSeries().size();
 			ISeries series;

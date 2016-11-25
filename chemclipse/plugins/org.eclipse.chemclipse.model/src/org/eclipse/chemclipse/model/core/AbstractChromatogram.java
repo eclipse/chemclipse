@@ -101,6 +101,7 @@ public abstract class AbstractChromatogram implements IChromatogram {
 	private Date date = new Date();
 	private String miscInfo = "";
 	private String miscInfoSeparated = "";
+	private Map<String, String> miscellaneous;
 	private String shortInfo = "";
 	private String detailedInfo = "";
 	private String sampleGroup = "";
@@ -138,6 +139,7 @@ public abstract class AbstractChromatogram implements IChromatogram {
 		chromatogramIntegrationEntries = new ArrayList<IIntegrationEntry>();
 		backgroundIntegrationEntries = new ArrayList<IIntegrationEntry>();
 		method = new TripleQuadMethod();
+		miscellaneous = new HashMap<String, String>();
 	}
 
 	@Override
@@ -299,6 +301,12 @@ public abstract class AbstractChromatogram implements IChromatogram {
 	public void setMiscInfoSeparated(String miscInfoSeparated) {
 
 		this.miscInfoSeparated = miscInfoSeparated;
+	}
+
+	@Override
+	public Map<String, String> getMiscellaneous() {
+
+		return miscellaneous;
 	}
 
 	// TODO optimieren - verbraucht zu viel Prozessorzeit

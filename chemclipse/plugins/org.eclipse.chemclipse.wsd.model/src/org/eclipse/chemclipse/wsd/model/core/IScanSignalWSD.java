@@ -18,15 +18,15 @@ public interface IScanSignalWSD {
 	/**
 	 * Returns the wavelength in nanometer (nm) scale.
 	 * 
-	 * @return int
+	 * @return double
 	 */
-	int getWavelength();
+	double getWavelength();
 
 	/**
 	 * Sets the wavelength in nanometer (nm) scale.
 	 * 
 	 */
-	void setWavelength(int wavelength);
+	void setWavelength(double wavelength);
 
 	/**
 	 * Returns the actual abundance of the wavelength.

@@ -30,6 +30,10 @@ public abstract class AbstractScan implements IScan {
 	private int retentionTimeColumn1 = 0; // GCxGC, LCxLC
 	private int retentionTimeColumn2 = 0; // GCxGC, LCxLC
 	/*
+	 * RRT
+	 */
+	private int relativeRetentionTime = 0;
+	/*
 	 * The retention index stores the default value.
 	 * The map is loaded lazily. Normally it is not used.
 	 */
@@ -118,6 +122,21 @@ public abstract class AbstractScan implements IScan {
 
 		if(retentionTimeColumn2 >= 0) {
 			this.retentionTimeColumn2 = retentionTimeColumn2;
+			setDirty(true);
+		}
+	}
+
+	@Override
+	public int getRelativeRetentionTime() {
+
+		return relativeRetentionTime;
+	}
+
+	@Override
+	public void setRelativeRetentionTime(int relativeRetentionTime) {
+
+		if(relativeRetentionTime >= 0) {
+			this.relativeRetentionTime = relativeRetentionTime;
 			setDirty(true);
 		}
 	}

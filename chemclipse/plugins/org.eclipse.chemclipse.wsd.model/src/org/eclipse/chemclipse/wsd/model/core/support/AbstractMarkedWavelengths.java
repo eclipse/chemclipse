@@ -103,9 +103,9 @@ public class AbstractMarkedWavelengths implements IMarkedWavelengths {
 	}
 
 	@Override
-	public Set<Integer> getWavelengths() {
+	public Set<Double> getWavelengths() {
 
-		Set<Integer> wavelengths = new HashSet<Integer>();
+		Set<Double> wavelengths = new HashSet<Double>();
 		for(IMarkedWavelength markedWavelength : markedWavelengths) {
 			wavelengths.add(markedWavelength.getWavelength());
 		}

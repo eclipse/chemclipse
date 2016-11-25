@@ -86,7 +86,7 @@ public class SeriesConverterWSD {
 		return scanSeries;
 	}
 
-	public static IMultipleSeries convertChromatogram(IChromatogramSelectionWSD chromatogramSelection, List<Integer> wavelengths, boolean combine, Sign sign) {
+	public static IMultipleSeries convertChromatogram(IChromatogramSelectionWSD chromatogramSelection, List<Double> wavelengths, boolean combine, Sign sign) {
 
 		IMultipleSeries wavelengthSeries = new MultipleSeries();
 		if(chromatogramSelection != null) {
@@ -98,7 +98,7 @@ public class SeriesConverterWSD {
 			int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
 			int scans = stopScan - startScan + 1;
 			//
-			for(Integer wavelength : wavelengths) {
+			for(Double wavelength : wavelengths) {
 				/*
 				 * Series per Wavelength
 				 */
@@ -126,7 +126,7 @@ public class SeriesConverterWSD {
 		return wavelengthSeries;
 	}
 
-	private static double getIntensityWavelength(List<IScanSignalWSD> scanSignals, int wavelength) {
+	private static double getIntensityWavelength(List<IScanSignalWSD> scanSignals, double wavelength) {
 
 		for(IScanSignalWSD scanSignal : scanSignals) {
 			if(scanSignal.getWavelength() == wavelength) {
