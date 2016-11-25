@@ -72,7 +72,7 @@ public class DemoWriterWSD_1_ITest extends TestCase {
 		IVendorChromatogram read_overview = (VendorChromatogram)processingInfo_overview.getChromatogramOverview();
 		//
 		int _retentionTime;
-		int wavelength;
+		double wavelength;
 		float abundance;
 		//
 		// String id = read_chromatogram.getConverterId();

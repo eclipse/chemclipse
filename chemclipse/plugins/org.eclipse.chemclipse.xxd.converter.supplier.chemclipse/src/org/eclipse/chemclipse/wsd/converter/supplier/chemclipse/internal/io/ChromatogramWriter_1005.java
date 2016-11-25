@@ -105,7 +105,7 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 			dataOutputStream.writeInt(scanSignalTotal);
 			for(int signal = 0; signal < scanSignalTotal; signal++) {
 				IScanSignalWSD scanSignal = scanWsd.getScanSignal(signal);
-				int wavelength = scanSignal.getWavelength();
+				int wavelength = (int)scanSignal.getWavelength(); // Change to double 1.2.0.0
 				float abundance = scanSignal.getAbundance();
 				dataOutputStream.writeInt(wavelength);
 				dataOutputStream.writeFloat(abundance);
@@ -185,7 +185,7 @@ public class ChromatogramWriter_1005 extends AbstractChromatogramWriter implemen
 			dataOutputStream.writeInt(scanSignalTotal);
 			for(int signal = 0; signal < scanSignalTotal; signal++) {
 				IScanSignalWSD scanSignal = scanWsd.getScanSignal(signal);
-				int wavelength = scanSignal.getWavelength();
+				int wavelength = (int)scanSignal.getWavelength(); // Change to double 1.2.0.0
 				float abundance = scanSignal.getAbundance();
 				dataOutputStream.writeInt(wavelength);
 				dataOutputStream.writeFloat(abundance);
