@@ -24,6 +24,9 @@ import org.eclipse.chemclipse.numeric.statistics.Calculations;
 public class ExtractedIonSignal implements IExtractedIonSignal {
 
 	private static final Logger logger = Logger.getLogger(ExtractedIonSignal.class);
+	//
+	private static final float NORMALIZATION_BASE = 1000.0f;
+	//
 	private float[] abundanceValues;
 	private int startIon;
 	private int stopIon;
@@ -251,7 +254,26 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 		return ionRange;
 	}
 
-	// --------------------------------------------IExtractedIonSignal
+	@Override
+	public void normalize() {
+
+		normalize(NORMALIZATION_BASE);
+	}
+
+	@Override
+	public void normalize(float normalizationBase) {
+
+		if(normalizationBase > 0) {
+			float maxIntensity = Calculations.getMax(abundanceValues);
+			if(maxIntensity > 0) {
+				float factor = normalizationBase / maxIntensity;
+				for(int i = 0; i < abundanceValues.length; i++) {
+					abundanceValues[i] = factor * abundanceValues[i];
+				}
+			}
+		}
+	}
+
 	private boolean isValidIon(int ion) {
 
 		/*
@@ -273,7 +295,6 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 		return true;
 	}
 
-	// --------------------------------------------hashCode, toString, equals
 	@Override
 	public boolean equals(Object otherObject) {
 
@@ -287,13 +308,19 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 			return false;
 		}
 		ExtractedIonSignal extractedIonSignal = (ExtractedIonSignal)otherObject;
-		return startIon == extractedIonSignal.startIon && stopIon == extractedIonSignal.stopIon && getNumberOfIonValues() == extractedIonSignal.getNumberOfIonValues() && getTotalSignal() == extractedIonSignal.getTotalSignal();
+		return startIon == extractedIonSignal.startIon && //
+				stopIon == extractedIonSignal.stopIon && //
+				getNumberOfIonValues() == extractedIonSignal.getNumberOfIonValues() && //
+				getTotalSignal() == extractedIonSignal.getTotalSignal();
 	}
 
 	@Override
 	public int hashCode() {
 
-		return 7 * Integer.valueOf(startIon).hashCode() + 9 * Integer.valueOf(stopIon).hashCode() + 11 * Integer.valueOf(getNumberOfIonValues()).hashCode() + 13 * Float.valueOf(getTotalSignal()).hashCode();
+		return 7 * Integer.valueOf(startIon).hashCode() + //
+				9 * Integer.valueOf(stopIon).hashCode() + //
+				11 * Integer.valueOf(getNumberOfIonValues()).hashCode() + //
+				13 * Float.valueOf(getTotalSignal()).hashCode();
 	}
 
 	@Override
@@ -312,5 +339,4 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 		builder.append("]");
 		return builder.toString();
 	}
-	// --------------------------------------------hashCode, toString, equals
 }
