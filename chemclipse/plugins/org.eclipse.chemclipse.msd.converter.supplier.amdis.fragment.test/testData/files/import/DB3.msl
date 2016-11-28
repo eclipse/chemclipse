@@ -1,0 +1,19 @@
+NAME: 1,3,5-Trimethylbenzol
+CASNO: 0
+RT: 10.5
+RRT: 20.2
+RI: 400.7
+COMMENTS: Converted
+SOURCE: 
+NUM PEAKS: 2
+(100 1000) (101 608) 
+
+NAME: (+)-Longifolen
+CASNO: 0
+RT: 11.2
+RRT: 20.3
+RI: 500.5
+COMMENTS: Converted
+SOURCE: 
+NUM PEAKS: 2
+(100 1000) (101 608) 

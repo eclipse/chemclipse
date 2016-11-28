@@ -50,11 +50,12 @@ public class AmdisMSLReader extends AbstractMassSpectraReader implements IMassSp
 	 */
 	private static final Pattern namePattern = Pattern.compile("(NAME:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern commentsPattern = Pattern.compile("(COMMENTS:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern casNumberPattern = Pattern.compile("(CASNO:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern casNumberPattern = Pattern.compile("(CAS(NO|#)?:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern smilesPattern = Pattern.compile("(SMILES:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionTimePattern = Pattern.compile("(RT:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern relativeRetentionTimePattern = Pattern.compile("(RRT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionIndexPattern = Pattern.compile("(RI:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern ionPattern = Pattern.compile("(\\d+)(\\s+)(\\d+)");
+	private static final Pattern ionPattern = Pattern.compile("(\\d+)(\\s+)([+-]?\\d+\\.?\\d*([eE][+-]?\\d+)?)");
 	//
 	private static final String RETENTION_INDICES_DELIMITER = ", ";
 
@@ -161,17 +162,19 @@ public class AmdisMSLReader extends AbstractMassSpectraReader implements IMassSp
 		/*
 		 * Extract name and reference identifier.
 		 */
-		String name = extractContentAsString(massSpectrumData, namePattern);
+		String name = extractContentAsString(massSpectrumData, namePattern, 2);
 		extractNameAndReferenceIdentifier(massSpectrum, name, referenceIdentifierMarker, referenceIdentifierPrefix);
-		String comments = extractContentAsString(massSpectrumData, commentsPattern);
+		String comments = extractContentAsString(massSpectrumData, commentsPattern, 2);
 		massSpectrum.getLibraryInformation().setComments(comments);
-		String casNumber = extractContentAsString(massSpectrumData, casNumberPattern);
+		String casNumber = extractContentAsString(massSpectrumData, casNumberPattern, 3);
 		massSpectrum.getLibraryInformation().setCasNumber(casNumber);
-		String smiles = extractContentAsString(massSpectrumData, smilesPattern);
+		String smiles = extractContentAsString(massSpectrumData, smilesPattern, 2);
 		massSpectrum.getLibraryInformation().setSmiles(smiles);
-		int retentionTime = extractContentAsInt(massSpectrumData, retentionTimePattern);
+		int retentionTime = extractContentAsInt(massSpectrumData, retentionTimePattern, 2);
 		massSpectrum.setRetentionTime(retentionTime);
-		String retentionIndices = extractContentAsString(massSpectrumData, retentionIndexPattern);
+		int relativeRetentionTime = extractContentAsInt(massSpectrumData, relativeRetentionTimePattern, 2);
+		massSpectrum.setRelativeRetentionTime(relativeRetentionTime);
+		String retentionIndices = extractContentAsString(massSpectrumData, retentionIndexPattern, 2);
 		extractRetentionIndices(massSpectrum, retentionIndices, RETENTION_INDICES_DELIMITER);
 		/*
 		 * Extracts all ions and stored them.
@@ -226,12 +229,12 @@ public class AmdisMSLReader extends AbstractMassSpectraReader implements IMassSp
 	 * @param massSpectrumData
 	 * @return String
 	 */
-	private String extractContentAsString(String massSpectrumData, Pattern pattern) {
+	private String extractContentAsString(String massSpectrumData, Pattern pattern, int group) {
 
 		String content = "";
 		Matcher matcher = pattern.matcher(massSpectrumData);
 		if(matcher.find()) {
-			content = matcher.group(2).trim();
+			content = matcher.group(group).trim();
 		}
 		return content;
 	}
@@ -243,13 +246,13 @@ public class AmdisMSLReader extends AbstractMassSpectraReader implements IMassSp
 	 * @param massSpectrumData
 	 * @return int
 	 */
-	private int extractContentAsInt(String massSpectrumData, Pattern pattern) {
+	private int extractContentAsInt(String massSpectrumData, Pattern pattern, int group) {
 
 		int content = 0;
 		try {
 			Matcher matcher = pattern.matcher(massSpectrumData);
 			if(matcher.find()) {
-				content = (int)(Float.parseFloat(matcher.group(2).trim()) * correctionFactor);
+				content = (int)(Float.parseFloat(matcher.group(group).trim()) * correctionFactor);
 			}
 		} catch(Exception e) {
 			logger.warn(e);

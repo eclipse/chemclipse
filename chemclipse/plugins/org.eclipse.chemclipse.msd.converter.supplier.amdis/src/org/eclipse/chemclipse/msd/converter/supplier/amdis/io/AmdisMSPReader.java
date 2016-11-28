@@ -58,11 +58,12 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 	private static final Pattern synonymPattern = Pattern.compile("(Synon:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern commentsPattern = Pattern.compile("(COMMENTS:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern commentPattern = Pattern.compile("(COMMENT:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern casNumberPattern = Pattern.compile("(CAS(NO|#):[ ]+)([0-9-]*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern casNumberPattern = Pattern.compile("(CAS(NO|#)?:[ ]+)([0-9-]*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern smilesPattern = Pattern.compile("(SMILES:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionTimePattern = Pattern.compile("(RT:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern relativeRetentionTimePattern = Pattern.compile("(RRT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionIndexPattern = Pattern.compile("(RI:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern ionPattern = Pattern.compile("(\\d+\\.?\\d{0,5})([ ]+)(\\d+\\.?\\d*([eE][+-]?\\d{1,3})?)");
+	private static final Pattern ionPattern = Pattern.compile("([+-]?\\d+\\.?\\d*)([\t ,;:]+)([+-]?\\d+\\.?\\d*([eE][+-]?\\d+)?)");
 	//
 	private static final String RETENTION_INDICES_DELIMITER = ", ";
 
@@ -202,8 +203,10 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 		libraryInformation.setCasNumber(casNumber);
 		String smiles = extractContentAsString(massSpectrumData, smilesPattern, 2);
 		libraryInformation.setSmiles(smiles);
-		int retentionTime = extractContentAsInt(massSpectrumData, retentionTimePattern);
+		int retentionTime = extractContentAsInt(massSpectrumData, retentionTimePattern, 2);
 		massSpectrum.setRetentionTime(retentionTime);
+		int relativeRetentionTime = extractContentAsInt(massSpectrumData, relativeRetentionTimePattern, 2);
+		massSpectrum.setRelativeRetentionTime(relativeRetentionTime);
 		String retentionIndices = extractContentAsString(massSpectrumData, retentionIndexPattern, 2);
 		extractRetentionIndices(massSpectrum, retentionIndices, RETENTION_INDICES_DELIMITER);
 		/*
@@ -294,13 +297,13 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 	 * @param massSpectrumData
 	 * @return int
 	 */
-	private int extractContentAsInt(String massSpectrumData, Pattern pattern) {
+	private int extractContentAsInt(String massSpectrumData, Pattern pattern, int group) {
 
 		int content = 0;
 		try {
 			Matcher matcher = pattern.matcher(massSpectrumData);
 			if(matcher.find()) {
-				content = (int)(Float.parseFloat(matcher.group(2).trim()) * correctionFactor);
+				content = (int)(Float.parseFloat(matcher.group(group).trim()) * correctionFactor);
 			}
 		} catch(Exception e) {
 			logger.warn(e);
