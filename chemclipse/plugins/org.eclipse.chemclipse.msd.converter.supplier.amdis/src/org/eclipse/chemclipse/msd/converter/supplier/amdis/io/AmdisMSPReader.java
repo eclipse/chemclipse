@@ -53,12 +53,14 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 	 */
 	private static final String LINE_END = "\n";
 	private static final Pattern namePattern = Pattern.compile("(NAME:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern nameRetentionTimePattern = Pattern.compile("(rt:\\s*)(\\d+\\.?\\d*([eE][+-]?\\d+)?)(\\s*min)", Pattern.CASE_INSENSITIVE); // (rt: 10.818 min)
 	private static final Pattern formulaPattern = Pattern.compile("(FORMULA:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern molweightPattern = Pattern.compile("(MW:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern synonymPattern = Pattern.compile("(Synon:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern commentsPattern = Pattern.compile("(COMMENTS:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern commentPattern = Pattern.compile("(COMMENT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern casNumberPattern = Pattern.compile("(CAS(NO|#)?:[ ]+)([0-9-]*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern databaseNamePattern = Pattern.compile("(DB(NO|#)?:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern smilesPattern = Pattern.compile("(SMILES:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionTimePattern = Pattern.compile("(RT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern relativeRetentionTimePattern = Pattern.compile("(RRT:)(.*)", Pattern.CASE_INSENSITIVE);
@@ -201,9 +203,14 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 		libraryInformation.setComments(commentData.trim());
 		String casNumber = extractContentAsString(massSpectrumData, casNumberPattern, 3);
 		libraryInformation.setCasNumber(casNumber);
+		String database = extractContentAsString(massSpectrumData, databaseNamePattern, 3);
+		libraryInformation.setDatabase(database);
 		String smiles = extractContentAsString(massSpectrumData, smilesPattern, 2);
 		libraryInformation.setSmiles(smiles);
 		int retentionTime = extractContentAsInt(massSpectrumData, retentionTimePattern, 2);
+		if(retentionTime == 0) {
+			retentionTime = extractContentAsInt(massSpectrumData, nameRetentionTimePattern, 2);
+		}
 		massSpectrum.setRetentionTime(retentionTime);
 		int relativeRetentionTime = extractContentAsInt(massSpectrumData, relativeRetentionTimePattern, 2);
 		massSpectrum.setRelativeRetentionTime(relativeRetentionTime);
