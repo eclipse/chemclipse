@@ -79,49 +79,52 @@ public class MassSpectrumListTableComparator extends AbstractRecordTableComparat
 			case 1: // RT
 				sortOrder = Integer.compare(massSpectrum2.getRetentionTime(), massSpectrum1.getRetentionTime());
 				break;
-			case 2: // RI
+			case 2: // RRT
+				sortOrder = Integer.compare(massSpectrum2.getRelativeRetentionTime(), massSpectrum1.getRelativeRetentionTime());
+				break;
+			case 3: // RI
 				sortOrder = Float.compare(massSpectrum2.getRetentionIndex(), massSpectrum1.getRetentionIndex());
 				break;
-			case 3: // Base Peak
+			case 4: // Base Peak
 				sortOrder = Double.compare(massSpectrum2.getBasePeak(), massSpectrum1.getBasePeak());
 				break;
-			case 4: // Base Peak Abundance
+			case 5: // Base Peak Abundance
 				sortOrder = Float.compare(massSpectrum2.getBasePeakAbundance(), massSpectrum1.getBasePeakAbundance());
 				break;
-			case 5: // Number of Ions
+			case 6: // Number of Ions
 				sortOrder = Integer.compare(massSpectrum2.getNumberOfIons(), massSpectrum1.getNumberOfIons());
 				break;
-			case 6: // CAS
+			case 7: // CAS
 				if(libraryInformation1 != null && libraryInformation2 != null) {
 					sortOrder = libraryInformation2.getCasNumber().compareTo(libraryInformation1.getCasNumber());
 				}
 				break;
-			case 7: // MW
+			case 8: // MW
 				if(libraryInformation1 != null && libraryInformation2 != null) {
 					sortOrder = Double.compare(libraryInformation2.getMolWeight(), libraryInformation1.getMolWeight());
 				}
 				break;
-			case 8: // Formula
+			case 9: // Formula
 				if(libraryInformation1 != null && libraryInformation2 != null) {
 					sortOrder = libraryInformation2.getFormula().compareTo(libraryInformation1.getFormula());
 				}
 				break;
-			case 9:
+			case 10:
 				if(libraryInformation1 != null && libraryInformation2 != null) {
 					sortOrder = libraryInformation2.getSmiles().compareTo(libraryInformation1.getSmiles());
 				}
 				break;
-			case 10:
+			case 11:
 				if(libraryInformation1 != null && libraryInformation2 != null) {
 					sortOrder = libraryInformation2.getInChI().compareTo(libraryInformation1.getInChI());
 				}
 				break;
-			case 11: // Reference Identifier
+			case 12: // Reference Identifier
 				if(libraryInformation1 != null && libraryInformation2 != null) {
 					sortOrder = libraryInformation2.getReferenceIdentifier().compareTo(libraryInformation1.getReferenceIdentifier());
 				}
 				break;
-			case 12:
+			case 13:
 				if(libraryInformation1 != null && libraryInformation2 != null) {
 					sortOrder = libraryInformation2.getComments().compareTo(libraryInformation1.getComments());
 				}

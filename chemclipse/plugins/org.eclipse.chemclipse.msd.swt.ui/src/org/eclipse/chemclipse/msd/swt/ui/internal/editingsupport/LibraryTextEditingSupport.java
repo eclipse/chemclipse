@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -61,31 +62,34 @@ public class LibraryTextEditingSupport extends EditingSupport {
 			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 			//
 			switch(columnLabel) {
-				case "Name":
+				case MassSpectrumListUI.NAME:
 					object = libraryInformation.getName();
 					break;
-				case "Retention Time":
+				case MassSpectrumListUI.RETENTION_TIME:
 					object = decimalFormat.format(libraryMassSpectrum.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 					break;
-				case "Retention Index":
+				case MassSpectrumListUI.RELATIVE_RETENTION_TIME:
+					object = decimalFormat.format(libraryMassSpectrum.getRelativeRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+					break;
+				case MassSpectrumListUI.RETENTION_INDEX:
 					object = decimalFormat.format(libraryMassSpectrum.getRetentionIndex());
 					break;
-				case "CAS":
+				case MassSpectrumListUI.CAS:
 					object = libraryInformation.getCasNumber();
 					break;
-				case "Formula":
+				case MassSpectrumListUI.FORMULA:
 					object = libraryInformation.getFormula();
 					break;
-				case "SMILES":
+				case MassSpectrumListUI.SMILES:
 					object = libraryInformation.getSmiles();
 					break;
-				case "InChI":
+				case MassSpectrumListUI.INCHI:
 					object = libraryInformation.getInChI();
 					break;
-				case "Reference Identifier":
+				case MassSpectrumListUI.REFERENCE_IDENTIFIER:
 					object = libraryInformation.getReferenceIdentifier();
 					break;
-				case "Comments":
+				case MassSpectrumListUI.COMMENTS:
 					object = libraryInformation.getComments();
 					break;
 			}
@@ -101,31 +105,34 @@ public class LibraryTextEditingSupport extends EditingSupport {
 			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 			//
 			switch(columnLabel) {
-				case "Name":
+				case MassSpectrumListUI.NAME:
 					libraryInformation.setName(value.toString());
 					break;
-				case "Retention Time":
+				case MassSpectrumListUI.RETENTION_TIME:
 					libraryMassSpectrum.setRetentionTime((int)(Double.parseDouble(value.toString()) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
 					break;
-				case "Retention Index":
+				case MassSpectrumListUI.RELATIVE_RETENTION_TIME:
+					libraryMassSpectrum.setRelativeRetentionTime((int)(Double.parseDouble(value.toString()) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+					break;
+				case MassSpectrumListUI.RETENTION_INDEX:
 					libraryMassSpectrum.setRetentionIndex(Float.parseFloat(value.toString()));
 					break;
-				case "CAS":
+				case MassSpectrumListUI.CAS:
 					libraryInformation.setCasNumber(value.toString());
 					break;
-				case "Formula":
+				case MassSpectrumListUI.FORMULA:
 					libraryInformation.setFormula(value.toString());
 					break;
-				case "SMILES":
+				case MassSpectrumListUI.SMILES:
 					libraryInformation.setSmiles(value.toString());
 					break;
-				case "InChI":
+				case MassSpectrumListUI.INCHI:
 					libraryInformation.setInChI(value.toString());
 					break;
-				case "Reference Identifier":
+				case MassSpectrumListUI.REFERENCE_IDENTIFIER:
 					libraryInformation.setReferenceIdentifier(value.toString());
 					break;
-				case "Comments":
+				case MassSpectrumListUI.COMMENTS:
 					libraryInformation.setComments(value.toString());
 					break;
 			}

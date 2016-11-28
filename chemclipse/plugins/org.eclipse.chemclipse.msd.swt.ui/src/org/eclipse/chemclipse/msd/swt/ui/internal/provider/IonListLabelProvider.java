@@ -13,18 +13,17 @@ package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.swt.graphics.Image;
-
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.swt.graphics.Image;
 
 public class IonListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public IonListLabelProvider() {
-		super("0.0##");
+		super("0.0###");
 	}
 
 	@Override

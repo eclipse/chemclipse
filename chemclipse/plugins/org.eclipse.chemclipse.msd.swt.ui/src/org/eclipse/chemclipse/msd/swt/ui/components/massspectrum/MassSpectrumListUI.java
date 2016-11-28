@@ -27,8 +27,53 @@ import org.eclipse.swt.widgets.Composite;
 
 public class MassSpectrumListUI extends ExtendedTableViewer {
 
-	private String[] titles = {"Name", "Retention Time", "Retention Index", "Base Peak", "Base Peak Abundance", "Number of Ions", "CAS", "MW", "Formula", "SMILES", "InChI", "Reference Identifier", "Comments"};
-	private int bounds[] = {300, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
+	public static final String NAME = "Name";
+	public static final String RETENTION_TIME = "Retention Time";
+	public static final String RELATIVE_RETENTION_TIME = "Relative Retention Time";
+	public static final String RETENTION_INDEX = "Retention Index";
+	public static final String BASE_PEAK = "Base Peak";
+	public static final String BASE_PEAK_ABUNDANCE = "Base Peak Abundance";
+	public static final String NUMBER_OF_IONS = "Number of Ions";
+	public static final String CAS = "CAS";
+	public static final String MW = "MW";
+	public static final String FORMULA = "Formula";
+	public static final String SMILES = "SMILES";
+	public static final String INCHI = "InChI";
+	public static final String REFERENCE_IDENTIFIER = "Reference Identifier";
+	public static final String COMMENTS = "Comments";
+	//
+	private String[] titles = {//
+			NAME, //
+			RETENTION_TIME, //
+			RELATIVE_RETENTION_TIME, //
+			RETENTION_INDEX, //
+			BASE_PEAK, //
+			BASE_PEAK_ABUNDANCE, //
+			NUMBER_OF_IONS, //
+			CAS, //
+			MW, //
+			FORMULA, //
+			SMILES, //
+			INCHI, //
+			REFERENCE_IDENTIFIER, //
+			COMMENTS//
+	};
+	private int bounds[] = {//
+			300, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100 //
+	};
 	//
 	private MassSpectrumListFilter massSpectrumListFilter;
 
@@ -63,9 +108,9 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 	private void setEditingSupport() {
 
 		Set<String> excludeFromEditing = new HashSet<String>();
-		excludeFromEditing.add("Base Peak");
-		excludeFromEditing.add("Base Peak Abundance");
-		excludeFromEditing.add("Number of Ions");
+		excludeFromEditing.add(BASE_PEAK);
+		excludeFromEditing.add(BASE_PEAK_ABUNDANCE);
+		excludeFromEditing.add(NUMBER_OF_IONS);
 		//
 		List<TableViewerColumn> tableViewerColumns = getTableViewerColumns();
 		for(TableViewerColumn tableViewerColumn : tableViewerColumns) {

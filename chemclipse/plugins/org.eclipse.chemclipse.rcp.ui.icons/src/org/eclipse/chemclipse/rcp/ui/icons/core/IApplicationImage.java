@@ -20,6 +20,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_CANCEL = "cancel.gif";
 	String IMAGE_DELETE = "delete.gif";
 	String IMAGE_EXECUTE_ADD = "execute_add.gif";
+	String IMAGE_EDIT = "edit.gif";
+	String IMAGE_EDIT_DISABLED = "edit_disabled.gif";
 	//
 	String IMAGE_EMPTY = "empty.png";
 	String IMAGE_LOGO = "logo.png";

@@ -8,6 +8,7 @@ Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.rcp.app.ui.addons,
  org.eclipse.chemclipse.rcp.app.ui.dialogs,
  org.eclipse.chemclipse.rcp.app.ui.handlers,
+ org.eclipse.chemclipse.rcp.app.ui.preferences,
  org.eclipse.chemclipse.rcp.app.ui.provider,
  org.eclipse.chemclipse.rcp.app.ui.support
 Require-Bundle: javax.inject;bundle-version="1.0.0",

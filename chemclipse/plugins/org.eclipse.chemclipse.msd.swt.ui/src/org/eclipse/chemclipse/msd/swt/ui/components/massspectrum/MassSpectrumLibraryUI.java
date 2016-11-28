@@ -81,6 +81,7 @@ public class MassSpectrumLibraryUI extends Composite {
 	private Button buttonSelectLibrary;
 	private Button buttonMergeLibrary;
 	//
+	private Button buttonEditLibrary;
 	private Button buttonCancel;
 	private Button buttonDelete;
 	private Button buttonAdd;
@@ -214,10 +215,35 @@ public class MassSpectrumLibraryUI extends Composite {
 		 * Buttons
 		 */
 		Composite compositeButtons = new Composite(composite, SWT.NONE);
-		compositeButtons.setLayout(new GridLayout(4, true));
+		compositeButtons.setLayout(new GridLayout(5, true));
 		GridData gridDataComposite = new GridData();
 		gridDataComposite.horizontalAlignment = SWT.RIGHT;
 		compositeButtons.setLayoutData(gridDataComposite);
+		//
+		buttonEditLibrary = new Button(compositeButtons, SWT.PUSH);
+		if(org.eclipse.chemclipse.rcp.app.ui.preferences.PreferenceSupplier.isChangePerspectivesAutomatically()) {
+			buttonEditLibrary.setSelection(false);
+			buttonEditLibrary.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DISABLED, IApplicationImage.SIZE_16x16));
+		} else {
+			buttonEditLibrary.setSelection(true);
+			buttonEditLibrary.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+		}
+		buttonEditLibrary.setToolTipText("Edit Library");
+		buttonEditLibrary.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean selection = org.eclipse.chemclipse.rcp.app.ui.preferences.PreferenceSupplier.isChangePerspectivesAutomatically();
+				org.eclipse.chemclipse.rcp.app.ui.preferences.PreferenceSupplier.setChangePerspectivesAutomatically(!selection);
+				//
+				if(selection) {
+					buttonEditLibrary.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DISABLED, IApplicationImage.SIZE_16x16));
+				} else {
+					buttonEditLibrary.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+				}
+			}
+		});
 		//
 		buttonCancel = new Button(compositeButtons, SWT.PUSH);
 		buttonCancel.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CANCEL, IApplicationImage.SIZE_16x16));
