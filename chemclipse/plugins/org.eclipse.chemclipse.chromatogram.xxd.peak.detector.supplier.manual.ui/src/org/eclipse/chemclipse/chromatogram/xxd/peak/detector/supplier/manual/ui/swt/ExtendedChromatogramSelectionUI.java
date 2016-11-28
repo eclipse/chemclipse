@@ -54,7 +54,7 @@ public class ExtendedChromatogramSelectionUI extends Composite {
 		 * Buttons
 		 */
 		Composite compositeButtons = new Composite(composite, SWT.NONE);
-		compositeButtons.setLayout(new GridLayout(6, true));
+		compositeButtons.setLayout(new GridLayout(4, true));
 		GridData gridDataComposite = new GridData();
 		gridDataComposite.horizontalAlignment = SWT.RIGHT;
 		compositeButtons.setLayoutData(gridDataComposite);
@@ -62,8 +62,6 @@ public class ExtendedChromatogramSelectionUI extends Composite {
 		addButtonDetectionType(compositeButtons, "Reset", IApplicationImage.IMAGE_RESET, ChromatogramSelectionUI.DETECTION_TYPE_NONE);
 		addButtonDetectionType(compositeButtons, "Detection Modus (Baseline) [Key:" + ChromatogramSelectionUI.KEY_BASELINE + "]", IApplicationImage.IMAGE_DETECTION_TYPE_BASELINE, ChromatogramSelectionUI.DETECTION_TYPE_BASELINE);
 		addButtonDetectionType(compositeButtons, "Detection Modus (BB) [Key:" + ChromatogramSelectionUI.KEY_BB + "]", IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_BB, ChromatogramSelectionUI.DETECTION_TYPE_SCAN_BB);
-		addButtonDetectionType(compositeButtons, "Detection Modus (BV) [Key:" + ChromatogramSelectionUI.KEY_BV + "]", IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_BV, ChromatogramSelectionUI.DETECTION_TYPE_SCAN_BV);
-		addButtonDetectionType(compositeButtons, "Detection Modus (VB) [Key:" + ChromatogramSelectionUI.KEY_VB + "]", IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_VB, ChromatogramSelectionUI.DETECTION_TYPE_SCAN_VB);
 		addButtonDetectionType(compositeButtons, "Detection Modus (VV) [Key:" + ChromatogramSelectionUI.KEY_VV + "]", IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_VV, ChromatogramSelectionUI.DETECTION_TYPE_SCAN_VV);
 		/*
 		 * Chromatogram selection view

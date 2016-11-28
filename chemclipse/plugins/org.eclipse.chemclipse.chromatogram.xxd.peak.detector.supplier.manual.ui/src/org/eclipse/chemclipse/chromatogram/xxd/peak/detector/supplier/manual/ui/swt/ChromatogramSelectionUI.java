@@ -57,15 +57,11 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 	public static final String DETECTION_TYPE_BASELINE = "DETECTION_TYPE_BASELINE";
 	public static final String DETECTION_TYPE_SCAN_BB = DETECTION_TYPE_SCAN + "_BB";
 	public static final String DETECTION_TYPE_SCAN_VV = DETECTION_TYPE_SCAN + "_VV";
-	public static final String DETECTION_TYPE_SCAN_BV = DETECTION_TYPE_SCAN + "_BV";
-	public static final String DETECTION_TYPE_SCAN_VB = DETECTION_TYPE_SCAN + "_VB";
 	public static final String DETECTION_TYPE_NONE = "";
 	//
 	public static final char KEY_BASELINE = 'd';
 	public static final char KEY_BB = 'b';
 	public static final char KEY_VV = 'v';
-	public static final char KEY_BV = 'n';
-	public static final char KEY_VB = 'm';
 	/*
 	 * Detection Box
 	 */
@@ -152,10 +148,6 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 				detectionType = DETECTION_TYPE_SCAN_BB;
 			} else if(e.keyCode == KEY_VV) {
 				detectionType = DETECTION_TYPE_SCAN_VV;
-			} else if(e.keyCode == KEY_BV) {
-				detectionType = DETECTION_TYPE_SCAN_BV;
-			} else if(e.keyCode == KEY_VB) {
-				detectionType = DETECTION_TYPE_SCAN_VB;
 			} else {
 				detectionType = DETECTION_TYPE_NONE;
 			}
@@ -309,17 +301,12 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 				 * Get the y coordinate
 				 */
 				int y;
+				//
 				switch(detectionType) {
 					case DETECTION_TYPE_SCAN_BB:
 						y = getPlotArea().getBounds().height;
 						break;
 					case DETECTION_TYPE_SCAN_VV:
-						y = e.y;
-						break;
-					case DETECTION_TYPE_SCAN_BV:
-						y = getPlotArea().getBounds().height;
-						break;
-					case DETECTION_TYPE_SCAN_VB:
 						y = e.y;
 						break;
 					default:
@@ -331,18 +318,13 @@ public class ChromatogramSelectionUI extends AbstractViewChromatogramUI {
 				 * Get the y coordinate
 				 */
 				int y;
+				//
 				switch(detectionType) {
 					case DETECTION_TYPE_SCAN_BB:
 						y = getPlotArea().getBounds().height;
 						break;
 					case DETECTION_TYPE_SCAN_VV:
 						y = e.y;
-						break;
-					case DETECTION_TYPE_SCAN_BV:
-						y = e.y;
-						break;
-					case DETECTION_TYPE_SCAN_VB:
-						y = getPlotArea().getBounds().height;
 						break;
 					default:
 						y = getPlotArea().getBounds().height;
