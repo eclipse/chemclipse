@@ -40,7 +40,7 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectru
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
-import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
+import org.eclipse.chemclipse.msd.model.implementation.RegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
@@ -67,6 +67,8 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 	private static final String NUM_PEAKS = "NUM PEAKS: ";
 	private static final String FORMULA = "FORMULA: ";
 	private static final String MW = "MW: ";
+	private static final String DB = "DB: ";
+	private static final String REFID = "REFID: ";
 	//
 	private TargetExtendedComparator targetExtendedComparator;
 
@@ -369,6 +371,24 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 		return field;
 	}
 
+	protected String getDBField(IIdentificationTarget identificationTarget) {
+
+		String field = DB;
+		if(identificationTarget != null) {
+			field += identificationTarget.getLibraryInformation().getDatabase();
+		}
+		return field;
+	}
+
+	protected String getReferenceIdentifierField(IIdentificationTarget identificationTarget) {
+
+		String field = REFID;
+		if(identificationTarget != null) {
+			field += identificationTarget.getLibraryInformation().getReferenceIdentifier();
+		}
+		return field;
+	}
+
 	private List<IMassSpectra> getSplittedMassSpectra(IMassSpectra massSpectra) {
 
 		IMassSpectra massSpectraChunk;
@@ -426,7 +446,7 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 		 */
 		if(PreferenceSupplier.isUseUnitMassResolution()) {
 			IExtractedIonSignal extractedIonSignal = massSpectrum.getExtractedIonSignal();
-			optimizedMassSpectrum = getCopy(massSpectrum, false);
+			optimizedMassSpectrum = getMassSpectrumCopy(massSpectrum, false);
 			int startIon = extractedIonSignal.getStartIon();
 			int stopIon = extractedIonSignal.getStopIon();
 			for(int ion = startIon; ion <= stopIon; ion++) {
@@ -439,7 +459,7 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 				}
 			}
 		} else {
-			optimizedMassSpectrum = getCopy(massSpectrum, true);
+			optimizedMassSpectrum = getMassSpectrumCopy(massSpectrum, true);
 		}
 		return optimizedMassSpectrum;
 	}
@@ -458,12 +478,16 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 		}
 	}
 
-	private IScanMSD getCopy(IScanMSD massSpectrum, boolean copyIons) {
+	private IScanMSD getMassSpectrumCopy(IScanMSD massSpectrum, boolean copyIons) {
 
-		IScanMSD massSpectrumCopy = new ScanMSD();
+		IRegularLibraryMassSpectrum massSpectrumCopy = new RegularLibraryMassSpectrum();
 		massSpectrumCopy.setRetentionTime(massSpectrum.getRetentionTime());
 		massSpectrumCopy.setRelativeRetentionTime(massSpectrum.getRelativeRetentionTime());
 		massSpectrumCopy.setRetentionIndex(massSpectrum.getRetentionIndex());
+		if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
+			IRegularLibraryMassSpectrum regularMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
+			massSpectrumCopy.setLibraryInformation(regularMassSpectrum.getLibraryInformation());
+		}
 		massSpectrumCopy.getTargets().addAll(massSpectrum.getTargets());
 		//
 		if(copyIons) {

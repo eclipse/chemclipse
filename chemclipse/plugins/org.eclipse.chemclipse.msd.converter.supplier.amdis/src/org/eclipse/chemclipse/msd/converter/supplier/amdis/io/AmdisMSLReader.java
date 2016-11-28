@@ -52,6 +52,7 @@ public class AmdisMSLReader extends AbstractMassSpectraReader implements IMassSp
 	private static final Pattern commentsPattern = Pattern.compile("(COMMENTS:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern casNumberPattern = Pattern.compile("(CAS(NO|#)?:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern databaseNamePattern = Pattern.compile("(DB(NO|#)?:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern referenceIdentifierPattern = Pattern.compile("(REFID:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern smilesPattern = Pattern.compile("(SMILES:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionTimePattern = Pattern.compile("(RT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern relativeRetentionTimePattern = Pattern.compile("(RRT:)(.*)", Pattern.CASE_INSENSITIVE);
@@ -171,6 +172,8 @@ public class AmdisMSLReader extends AbstractMassSpectraReader implements IMassSp
 		massSpectrum.getLibraryInformation().setCasNumber(casNumber);
 		String database = extractContentAsString(massSpectrumData, databaseNamePattern, 3);
 		massSpectrum.getLibraryInformation().setDatabase(database);
+		String referenceIdentifier = extractContentAsString(massSpectrumData, referenceIdentifierPattern, 2);
+		massSpectrum.getLibraryInformation().setReferenceIdentifier(referenceIdentifier);
 		String smiles = extractContentAsString(massSpectrumData, smilesPattern, 2);
 		massSpectrum.getLibraryInformation().setSmiles(smiles);
 		int retentionTime = extractContentAsInt(massSpectrumData, retentionTimePattern, 2);

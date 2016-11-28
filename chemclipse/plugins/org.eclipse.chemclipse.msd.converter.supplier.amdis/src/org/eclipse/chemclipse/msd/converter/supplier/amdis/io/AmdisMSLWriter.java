@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -41,6 +42,8 @@ public class AmdisMSLWriter extends AbstractAmdisWriter implements IMassSpectraW
 		fileWriter.write(getRetentionTimeField(normalizedMassSpectrum) + CRLF);
 		fileWriter.write(getRelativeRetentionTimeField(normalizedMassSpectrum) + CRLF);
 		fileWriter.write(getRetentionIndexField(normalizedMassSpectrum) + CRLF);
+		fileWriter.write(getDBField(identificationTarget) + CRLF);
+		fileWriter.write(getReferenceIdentifierField(identificationTarget) + CRLF);
 		fileWriter.write(getCommentsField(normalizedMassSpectrum) + CRLF);
 		fileWriter.write(getSourceField(normalizedMassSpectrum, identificationTarget) + CRLF);
 		/*
@@ -65,6 +68,8 @@ public class AmdisMSLWriter extends AbstractAmdisWriter implements IMassSpectraW
 
 		int blockSize = 5;
 		int actualPosition = 1;
+		boolean exportIntensityAsInteger = PreferenceSupplier.isExportIntensitiesAsInteger();
+		//
 		StringBuilder builder = new StringBuilder();
 		List<IIon> ions = massSpectrum.getIons();
 		for(IIon ion : ions) {
@@ -79,9 +84,13 @@ public class AmdisMSLWriter extends AbstractAmdisWriter implements IMassSpectraW
 			 * Add each ion.
 			 */
 			builder.append("(");
-			builder.append(AbstractIon.getIon(ion.getIon()));
+			builder.append(ion.getIon());
 			builder.append(" ");
-			builder.append(AbstractIon.getAbundance(ion.getAbundance()));
+			if(exportIntensityAsInteger) {
+				builder.append(AbstractIon.getAbundance(ion.getAbundance()));
+			} else {
+				builder.append(ion.getAbundance());
+			}
 			builder.append(")");
 			/*
 			 * The last element in the row do not need to have a whitespace at

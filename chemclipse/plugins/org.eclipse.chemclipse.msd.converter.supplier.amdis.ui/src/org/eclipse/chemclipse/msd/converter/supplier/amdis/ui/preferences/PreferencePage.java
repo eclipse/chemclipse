@@ -38,6 +38,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_UNIT_MASS_RESOLUTION, "Use unit mass resolution", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_REMOVE_INTENSITIES_LOWER_THAN_ONE, "Remove intesities < 1.0", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_NORMALIZE_INTENSITIES, "Normalize intensities", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_EXPORT_INTENSITIES_AS_INTEGER, "Export intensities as Integer", getFieldEditorParent()));
 	}
 
 	/*
