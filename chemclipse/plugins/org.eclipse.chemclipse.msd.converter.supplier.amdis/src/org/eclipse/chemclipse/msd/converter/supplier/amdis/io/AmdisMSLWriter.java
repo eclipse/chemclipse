@@ -15,7 +15,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
@@ -25,21 +24,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class AmdisMSLWriter extends AbstractAmdisWriter implements IMassSpectraWriter {
 
-	private static final Logger logger = Logger.getLogger(AmdisMSLWriter.class);
-
 	@Override
 	public void writeMassSpectrum(FileWriter fileWriter, IScanMSD massSpectrum, IProgressMonitor monitor) throws IOException {
 
-		IScanMSD normalizedMassSpectrum;
-		try {
-			normalizedMassSpectrum = makeDeepCopyAndNormalize(massSpectrum);
-		} catch(CloneNotSupportedException e) {
-			logger.warn(e);
-			return;
-		}
-		/*
-		 * Get the best identification target if available.
-		 */
+		IScanMSD normalizedMassSpectrum = getOptimizedMassSpectrum(massSpectrum);
 		IIdentificationTarget identificationTarget = getIdentificationTarget(normalizedMassSpectrum);
 		/*
 		 * Write the fields
@@ -51,6 +39,7 @@ public class AmdisMSLWriter extends AbstractAmdisWriter implements IMassSpectraW
 		 * Retention time, retention index
 		 */
 		fileWriter.write(getRetentionTimeField(normalizedMassSpectrum) + CRLF);
+		fileWriter.write(getRelativeRetentionTimeField(normalizedMassSpectrum) + CRLF);
 		fileWriter.write(getRetentionIndexField(normalizedMassSpectrum) + CRLF);
 		fileWriter.write(getCommentsField(normalizedMassSpectrum) + CRLF);
 		fileWriter.write(getSourceField(normalizedMassSpectrum, identificationTarget) + CRLF);
@@ -58,7 +47,7 @@ public class AmdisMSLWriter extends AbstractAmdisWriter implements IMassSpectraW
 		 * Mass spectra
 		 */
 		fileWriter.write(getNumberOfPeaks(normalizedMassSpectrum) + CRLF);
-		fileWriter.write(getMassSpectra(normalizedMassSpectrum) + CRLF);
+		fileWriter.write(getIons(normalizedMassSpectrum) + CRLF);
 		/*
 		 * To separate the mass spectra correctly.
 		 */
@@ -67,12 +56,12 @@ public class AmdisMSLWriter extends AbstractAmdisWriter implements IMassSpectraW
 	}
 
 	/**
-	 * Returns the mass spectra in the convenient amdis format.
+	 * Returns the mass spectra in the convenient AMDIS format.
 	 * 
 	 * @param massSpectrum
 	 * @return String
 	 */
-	private String getMassSpectra(IScanMSD massSpectrum) {
+	private String getIons(IScanMSD massSpectrum) {
 
 		int blockSize = 5;
 		int actualPosition = 1;

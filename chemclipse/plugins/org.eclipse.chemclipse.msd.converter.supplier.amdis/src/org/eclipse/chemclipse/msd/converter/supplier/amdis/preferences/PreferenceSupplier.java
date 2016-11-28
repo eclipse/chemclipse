@@ -26,6 +26,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_SPLIT_LIBRARY = false;
 	public static final String P_EXCLUDE_UNCERTAIN_IONS = "excludeUncertainIons";
 	public static final boolean DEF_EXCLUDE_UNCERTAIN_IONS = false;
+	public static final String P_USE_UNIT_MASS_RESOLUTION = "useUnitMassResolution";
+	public static final boolean DEF_USE_UNIT_MASS_RESOLUTION = true;
+	public static final String P_REMOVE_INTENSITIES_LOWER_THAN_ONE = "removeIntensitiesLowerThanOne";
+	public static final boolean DEF_REMOVE_INTENSITIES_LOWER_THAN_ONE = true;
+	public static final String P_NORMALIZE_INTENSITIES = "normalizeIntensities";
+	public static final boolean DEF_NORMALIZE_INTENSITIES = true;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -55,6 +61,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_SPLIT_LIBRARY, Boolean.toString(DEF_SPLIT_LIBRARY));
 		defaultValues.put(P_EXCLUDE_UNCERTAIN_IONS, Boolean.toString(DEF_EXCLUDE_UNCERTAIN_IONS));
+		defaultValues.put(P_USE_UNIT_MASS_RESOLUTION, Boolean.toString(DEF_USE_UNIT_MASS_RESOLUTION));
+		defaultValues.put(P_REMOVE_INTENSITIES_LOWER_THAN_ONE, Boolean.toString(DEF_REMOVE_INTENSITIES_LOWER_THAN_ONE));
+		defaultValues.put(P_NORMALIZE_INTENSITIES, Boolean.toString(DEF_NORMALIZE_INTENSITIES));
 		return defaultValues;
 	}
 
@@ -74,5 +83,23 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getBoolean(P_EXCLUDE_UNCERTAIN_IONS, DEF_EXCLUDE_UNCERTAIN_IONS);
+	}
+
+	public static boolean isUseUnitMassResolution() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_USE_UNIT_MASS_RESOLUTION, DEF_USE_UNIT_MASS_RESOLUTION);
+	}
+
+	public static boolean isRemoveIntensitiesLowerThanOne() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_REMOVE_INTENSITIES_LOWER_THAN_ONE, DEF_REMOVE_INTENSITIES_LOWER_THAN_ONE);
+	}
+
+	public static boolean isNormalizeIntensities() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_NORMALIZE_INTENSITIES, DEF_NORMALIZE_INTENSITIES);
 	}
 }

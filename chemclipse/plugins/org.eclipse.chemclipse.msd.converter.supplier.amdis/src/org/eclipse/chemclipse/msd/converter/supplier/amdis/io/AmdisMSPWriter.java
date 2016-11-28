@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
@@ -27,39 +26,29 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class AmdisMSPWriter extends AbstractAmdisWriter implements IMassSpectraWriter {
 
-	private static final Logger logger = Logger.getLogger(AmdisMSPWriter.class);
-
 	@Override
 	public void writeMassSpectrum(FileWriter fileWriter, IScanMSD massSpectrum, IProgressMonitor monitor) throws IOException {
 
-		IScanMSD normalizedMassSpectrum;
-		try {
-			normalizedMassSpectrum = makeDeepCopyAndNormalize(massSpectrum);
-		} catch(CloneNotSupportedException e) {
-			logger.warn(e);
-			return;
-		}
-		/*
-		 * Get the best identification target if available.
-		 */
-		IIdentificationTarget identificationTarget = getIdentificationTarget(normalizedMassSpectrum);
+		IScanMSD optimizedMassSpectrum = getOptimizedMassSpectrum(massSpectrum);
+		IIdentificationTarget identificationTarget = getIdentificationTarget(optimizedMassSpectrum);
 		/*
 		 * Write the fields
 		 */
 		fileWriter.write(getNameField(massSpectrum, identificationTarget) + CRLF);
-		String synonyms = getSynonyms(normalizedMassSpectrum);
+		String synonyms = getSynonyms(optimizedMassSpectrum);
 		if(synonyms != null && !synonyms.equals("")) {
 			fileWriter.write(synonyms);
 		}
-		fileWriter.write(getCommentsField(normalizedMassSpectrum) + CRLF);
-		fileWriter.write(getRetentionTimeField(normalizedMassSpectrum) + CRLF);
-		fileWriter.write(getRetentionIndexField(normalizedMassSpectrum) + CRLF);
-		fileWriter.write(getFormulaField(normalizedMassSpectrum) + CRLF);
-		fileWriter.write(getMWField(normalizedMassSpectrum) + CRLF);
+		fileWriter.write(getCommentsField(optimizedMassSpectrum) + CRLF);
+		fileWriter.write(getRetentionTimeField(optimizedMassSpectrum) + CRLF);
+		fileWriter.write(getRelativeRetentionTimeField(optimizedMassSpectrum) + CRLF);
+		fileWriter.write(getRetentionIndexField(optimizedMassSpectrum) + CRLF);
+		fileWriter.write(getFormulaField(optimizedMassSpectrum) + CRLF);
+		fileWriter.write(getMWField(optimizedMassSpectrum) + CRLF);
 		fileWriter.write(getCasNumberField(identificationTarget) + CRLF);
 		fileWriter.write(getSmilesField(identificationTarget) + CRLF);
-		fileWriter.write(getNumberOfPeaks(normalizedMassSpectrum) + CRLF);
-		fileWriter.write(getMassSpectra(normalizedMassSpectrum));
+		fileWriter.write(getNumberOfPeaks(optimizedMassSpectrum) + CRLF);
+		fileWriter.write(getIons(optimizedMassSpectrum));
 		/*
 		 * To separate the mass spectra correctly.
 		 */
@@ -89,12 +78,12 @@ public class AmdisMSPWriter extends AbstractAmdisWriter implements IMassSpectraW
 	}
 
 	/**
-	 * Returns the mass spectra in the convenient amdis format.
+	 * Returns the mass spectra in the convenient AMDIS format.
 	 * 
 	 * @param massSpectrum
 	 * @return String
 	 */
-	private String getMassSpectra(IScanMSD massSpectrum) {
+	private String getIons(IScanMSD massSpectrum) {
 
 		StringBuilder builder = new StringBuilder();
 		List<IIon> ions = massSpectrum.getIons();

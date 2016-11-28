@@ -23,7 +23,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public PreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("AMDIS file format settings.");
+		setDescription("AMDIS Settings.");
 	}
 
 	/**
@@ -35,6 +35,9 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SPLIT_LIBRARY, "Split library to several output files (<= 65535 mass spectra)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_EXCLUDE_UNCERTAIN_IONS, "Exclude uncertain ions from ELU file conversion", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_UNIT_MASS_RESOLUTION, "Use unit mass resolution", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_REMOVE_INTENSITIES_LOWER_THAN_ONE, "Remove intesities < 1.0", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_NORMALIZE_INTENSITIES, "Normalize intensities", getFieldEditorParent()));
 	}
 
 	/*
