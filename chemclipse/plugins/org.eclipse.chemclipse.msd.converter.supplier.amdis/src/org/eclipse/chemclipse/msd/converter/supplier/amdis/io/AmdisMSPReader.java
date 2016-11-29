@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
@@ -46,8 +47,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSpectraReader {
 
 	private static final Logger logger = Logger.getLogger(AmdisMSPReader.class);
-	private static final int correctionFactor = 1000 * 60; // 60 seconds * 1000
-															// milliseconds
 	/**
 	 * Pre-compile all patterns to be a little bit faster.
 	 */
@@ -66,7 +65,7 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 	private static final Pattern retentionTimePattern = Pattern.compile("(RT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern relativeRetentionTimePattern = Pattern.compile("(RRT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionIndexPattern = Pattern.compile("(RI:)(.*)", Pattern.CASE_INSENSITIVE);
-	private static final Pattern ionPattern = Pattern.compile("([+-]?\\d+\\.?\\d*)([\t ,;:]+)([+-]?\\d+\\.?\\d*([eE][+-]?\\d+)?)");
+	private static final Pattern ionPattern = Pattern.compile("([+]?\\d+\\.?\\d*)([\t ,;:]+)([+-]?\\d+\\.?\\d*([eE][+-]?\\d+)?)");
 	//
 	private static final String RETENTION_INDICES_DELIMITER = ", ";
 
@@ -313,7 +312,7 @@ public class AmdisMSPReader extends AbstractMassSpectraReader implements IMassSp
 		try {
 			Matcher matcher = pattern.matcher(massSpectrumData);
 			if(matcher.find()) {
-				content = (int)(Float.parseFloat(matcher.group(group).trim()) * correctionFactor);
+				content = (int)(Double.parseDouble(matcher.group(group).trim()) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 			}
 		} catch(Exception e) {
 			logger.warn(e);

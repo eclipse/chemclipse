@@ -162,16 +162,20 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 		 * is available, set it.
 		 */
 		String field = NAME;
+		String identification = "";
 		String identifier = massSpectrum.getIdentifier();
 		//
 		if(identifier != null && !identifier.equals("")) {
-			field += identifier;
+			identification = identifier;
 		} else if(identificationTarget != null) {
-			field += identificationTarget.getLibraryInformation().getName();
-		} else {
-			field += "NO IDENTIFIER AVAILABLE";
+			identification = identificationTarget.getLibraryInformation().getName();
 		}
-		return field;
+		//
+		if(identification.equals("")) {
+			identification = "NO IDENTIFIER AVAILABLE";
+		}
+		//
+		return field + identification;
 	}
 
 	/**
@@ -441,10 +445,10 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 	private IScanMSD getUnitOrHighMassResolutionCopy(IScanMSD massSpectrum) {
 
 		IScanMSD optimizedMassSpectrum;
-		/*
-		 * Unit or High Mass Resolution
-		 */
 		if(PreferenceSupplier.isUseUnitMassResolution()) {
+			/*
+			 * Unit Mass Resolution
+			 */
 			IExtractedIonSignal extractedIonSignal = massSpectrum.getExtractedIonSignal();
 			optimizedMassSpectrum = getMassSpectrumCopy(massSpectrum, false);
 			int startIon = extractedIonSignal.getStartIon();
@@ -459,6 +463,9 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 				}
 			}
 		} else {
+			/*
+			 * High Mass Resolution
+			 */
 			optimizedMassSpectrum = getMassSpectrumCopy(massSpectrum, true);
 		}
 		return optimizedMassSpectrum;

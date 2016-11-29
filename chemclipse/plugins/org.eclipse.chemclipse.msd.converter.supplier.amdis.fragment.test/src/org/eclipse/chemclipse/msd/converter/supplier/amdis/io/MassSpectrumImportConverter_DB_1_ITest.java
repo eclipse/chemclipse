@@ -50,7 +50,7 @@ public class MassSpectrumImportConverter_DB_1_ITest extends MassSpectrumImportCo
 		assertEquals("Name", "0.5203 min, OP17760", ms.getLibraryInformation().getName());
 		assertEquals("CAS Number", "OP17760-N1001", ms.getLibraryInformation().getCasNumber());
 		assertEquals("Comments", "0.5203 min, OP17760", ms.getLibraryInformation().getComments());
-		assertEquals("Retention Time", 31217, ms.getRetentionTime());
+		assertEquals("Retention Time", 31218, ms.getRetentionTime());
 		assertEquals("Retention Index", 0.0f, ms.getRetentionIndex());
 		assertEquals("Ion", 6, ms.getNumberOfIons());
 		assertEquals("Lowest Ion", 16.0d, ms.getLowestIon().getIon());

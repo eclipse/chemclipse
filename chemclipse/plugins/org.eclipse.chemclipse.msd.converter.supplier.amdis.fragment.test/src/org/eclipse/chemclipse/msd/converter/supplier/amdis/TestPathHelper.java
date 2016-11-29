@@ -20,28 +20,34 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis;
 public class TestPathHelper extends PathResolver {
 
 	/*
-	 * IMPORT
+	 * IMPORT MSL
 	 */
-	public static final String TESTFILE_IMPORT_TEST = "testData/files/import/Test.msl";
-	public static final String TESTFILE_IMPORT_CHROMATOGRAM = "testData/files/import/Chromtogram.msl";
-	public static final String TESTFILE_IMPORT_EMPTY = "testData/files/import/Empty.msl";
-	public static final String TESTFILE_IMPORT_NOT_READABLE = "testData/files/import/NotReadable.msl";
-	public static final String TESTFILE_IMPORT_PEAKS_1_ELU = "testData/files/import/Peaks1.ELU";
-	public static final String TESTFILE_IMPORT_SYNONYMS = "testData/files/import/Synonyms.MSP";
-	public static final String TESTFILE_IMPORT_DB_1 = "testData/files/import/DB1.msl";
-	public static final String TESTFILE_IMPORT_DB_2 = "testData/files/import/DB2.msl";
-	public static final String TESTFILE_IMPORT_DB_3 = "testData/files/import/DB3.msl";
-	public static final String TESTFILE_IMPORT_PEAKS_1_MSP = "testData/files/import/Peaks1.MSP";
-	public static final String TESTFILE_IMPORT_PEAKS_2_MSP = "testData/files/import/Peaks2.MSP";
-	public static final String TESTFILE_IMPORT_PEAKS_3_MSP = "testData/files/import/Peaks3.MSP";
-	public static final String TESTFILE_IMPORT_PEAKS_4_MSP = "testData/files/import/Peaks4.MSP";
-	public static final String TESTFILE_IMPORT_PEAKS_5_MSP = "testData/files/import/Peaks5.MSP";
-	public static final String TESTFILE_IMPORT_PEAKS_6_MSP = "testData/files/import/Peaks6.MSP";
-	public static final String TESTFILE_IMPORT_PEAKS_7_MSP = "testData/files/import/Peaks7.MSP";
-	public static final String TESTFILE_IMPORT_LIB_1_MSP = "testData/files/import/Lib1.msp";
-	public static final String TESTFILE_IMPORT_LIB_2_MSP = "testData/files/import/Lib2.msp";
-	public static final String TESTFILE_IMPORT_LIB_3_MSP = "testData/files/import/Lib3.MSP";
-	public static final String TESTFILE_IMPORT_LIB_4_MSP = "testData/files/import/Lib4.MSP";
+	public static final String TESTFILE_IMPORT_TEST = "testData/files/import/msl/Test.msl";
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM = "testData/files/import/msl/Chromtogram.msl";
+	public static final String TESTFILE_IMPORT_EMPTY = "testData/files/import/msl/Empty.msl";
+	public static final String TESTFILE_IMPORT_NOT_READABLE = "testData/files/import/msl/NotReadable.msl";
+	public static final String TESTFILE_IMPORT_DB_1 = "testData/files/import/msl/DB1.msl";
+	public static final String TESTFILE_IMPORT_DB_2 = "testData/files/import/msl/DB2.msl";
+	public static final String TESTFILE_IMPORT_DB_3 = "testData/files/import/msl/DB3.msl";
+	/*
+	 * IMPORT MSP
+	 */
+	public static final String TESTFILE_IMPORT_PEAKS_1_MSP = "testData/files/import/msp/Peaks1.MSP";
+	public static final String TESTFILE_IMPORT_PEAKS_2_MSP = "testData/files/import/msp/Peaks2.MSP";
+	public static final String TESTFILE_IMPORT_PEAKS_3_MSP = "testData/files/import/msp/Peaks3.MSP";
+	public static final String TESTFILE_IMPORT_PEAKS_4_MSP = "testData/files/import/msp/Peaks4.MSP";
+	public static final String TESTFILE_IMPORT_PEAKS_5_MSP = "testData/files/import/msp/Peaks5.MSP";
+	public static final String TESTFILE_IMPORT_PEAKS_6_MSP = "testData/files/import/msp/Peaks6.MSP";
+	public static final String TESTFILE_IMPORT_PEAKS_7_MSP = "testData/files/import/msp/Peaks7.MSP";
+	public static final String TESTFILE_IMPORT_LIB_1_MSP = "testData/files/import/msp/Lib1.msp";
+	public static final String TESTFILE_IMPORT_LIB_2_MSP = "testData/files/import/msp/Lib2.msp";
+	public static final String TESTFILE_IMPORT_LIB_3_MSP = "testData/files/import/msp/Lib3.MSP";
+	public static final String TESTFILE_IMPORT_LIB_4_MSP = "testData/files/import/msp/Lib4.MSP";
+	public static final String TESTFILE_IMPORT_SYNONYMS = "testData/files/import/msp/Synonyms.MSP";
+	/*
+	 * IMPORT ELU
+	 */
+	public static final String TESTFILE_IMPORT_PEAKS_1_ELU = "testData/files/import/elu/Peaks1.ELU";
 	/*
 	 * EXPORT
 	 */
@@ -54,15 +60,15 @@ public class TestPathHelper extends PathResolver {
 	/*
 	 * SPECIFICATION VALIDATOR TEST MSL
 	 */
-	public static final String VALIDATOR_TEST_SPEC_MSL = "testData/files/import/MASSSPECTRA.msl";
-	public static final String VALIDATOR_TEST_MSL_1 = "testData/files/import/MASSSPECTRA.msl";
-	public static final String VALIDATOR_TEST_MSL_2 = "testData/files/import/MASSSPECTRA";
-	public static final String VALIDATOR_TEST_MSL_3 = "testData/files/import";
+	public static final String VALIDATOR_TEST_SPEC_MSL = "testData/files/import/msl/MASSSPECTRA.msl";
+	public static final String VALIDATOR_TEST_MSL_1 = "testData/files/import/msl/MASSSPECTRA.msl";
+	public static final String VALIDATOR_TEST_MSL_2 = "testData/files/import/msl/MASSSPECTRA";
+	public static final String VALIDATOR_TEST_MSL_3 = "testData/files/import/msl";
 	/*
 	 * SPECIFICATION VALIDATOR TEST MSP
 	 */
-	public static final String VALIDATOR_TEST_SPEC_MSP = "testData/files/import/MASSSPECTRA.MSP";
-	public static final String VALIDATOR_TEST_MSP_1 = "testData/files/import/MASSSPECTRA.MSP";
-	public static final String VALIDATOR_TEST_MSP_2 = "testData/files/import/MASSSPECTRA";
-	public static final String VALIDATOR_TEST_MSP_3 = "testData/files/import";
+	public static final String VALIDATOR_TEST_SPEC_MSP = "testData/files/import/msp/MASSSPECTRA.MSP";
+	public static final String VALIDATOR_TEST_MSP_1 = "testData/files/import/msp/MASSSPECTRA.MSP";
+	public static final String VALIDATOR_TEST_MSP_2 = "testData/files/import/msp/MASSSPECTRA";
+	public static final String VALIDATOR_TEST_MSP_3 = "testData/files/import/msp";
 }
