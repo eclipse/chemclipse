@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrumProxy;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
@@ -314,26 +315,43 @@ public class SeriesConverterMSD {
 		//
 		for(IScan scan : scans) {
 			if(scan instanceof IVendorMassSpectrum) {
-				IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scan;
 				/*
-				 * TODO This method makes some problems when using
-				 * Scan Proxies.
+				 * TODO This method makes huge some problems when using Scan Proxies.
+				 * So it's disabled for Scan Proxies at the moment.
 				 */
-				if(massSpectrum.getTargets().size() > 0) {
-					int retentionTime = massSpectrum.getRetentionTime();
-					if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
-						/*
-						 * Enforce to load the scan proxy if it is used.
-						 */
-						if(enforceLoadScanProxy) {
-							massSpectrum.enforceLoadScanProxy();
-						}
+				IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scan;
+				if(massSpectrum instanceof IVendorMassSpectrumProxy) {
+					/*
+					 * Proxy
+					 */
+					// if(isTargetMassSpectrum(massSpectrum, startRetentionTime, stopRetentionTime)) {
+					// if(enforceLoadScanProxy) {
+					// massSpectrum.enforceLoadScanProxy();
+					// }
+					// massSpectra.addMassSpectrum(massSpectrum);
+					// }
+				} else {
+					/*
+					 * Normal
+					 */
+					if(isTargetMassSpectrum(massSpectrum, startRetentionTime, stopRetentionTime)) {
 						massSpectra.addMassSpectrum(massSpectrum);
 					}
 				}
 			}
 		}
 		return massSpectra;
+	}
+
+	private static boolean isTargetMassSpectrum(IVendorMassSpectrum massSpectrum, int startRetentionTime, int stopRetentionTime) {
+
+		if(massSpectrum.getTargets().size() > 0) {
+			int retentionTime = massSpectrum.getRetentionTime();
+			if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static IMultipleSeries convertIdentifiedScans(IMassSpectra massSpectra, Sign sign, IOffset offset) throws NoIdentifiedScansAvailableException {
