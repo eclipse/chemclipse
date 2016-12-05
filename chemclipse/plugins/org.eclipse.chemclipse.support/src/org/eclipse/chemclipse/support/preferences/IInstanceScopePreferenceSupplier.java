@@ -26,6 +26,7 @@ public interface IInstanceScopePreferenceSupplier extends IPreferenceSupplier {
 	@Override
 	default IEclipsePreferences getPreferences() {
 
+		// TODO: should be one up in hierarchy
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 }
