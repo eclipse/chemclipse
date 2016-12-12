@@ -17,14 +17,14 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.AmdisELUReader;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.ELUReader;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 
 import junit.framework.TestCase;
 
 public class ELUReader_2_ITest extends TestCase {
 
-	private AmdisELUReader reader;
+	private ELUReader reader;
 	private File file;
 	private IPeakImportConverterProcessingInfo processingInfo;
 
@@ -32,7 +32,7 @@ public class ELUReader_2_ITest extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		reader = new AmdisELUReader();
+		reader = new ELUReader();
 		String pathname = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_PEAKS_1_ELU);
 		file = new File(pathname);
 		processingInfo = reader.read(file, new NullProgressMonitor());

@@ -15,7 +15,7 @@ import java.io.File;
 
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.AmdisMSPReader;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.MSPReader;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -32,7 +32,7 @@ public class AmdisMSPReader_3_ITest extends TestCase {
 
 		super.setUp();
 		File file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_PEAKS_3_MSP));
-		AmdisMSPReader reader = new AmdisMSPReader();
+		MSPReader reader = new MSPReader();
 		massSpectra = reader.read(file, new NullProgressMonitor());
 	}
 

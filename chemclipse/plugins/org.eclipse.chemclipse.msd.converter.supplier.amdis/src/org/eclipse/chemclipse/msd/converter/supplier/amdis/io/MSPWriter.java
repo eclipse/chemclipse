@@ -13,19 +13,13 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
-import java.util.Set;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class AmdisMSPWriter extends AbstractAmdisWriter implements IMassSpectraWriter {
+public class MSPWriter extends AbstractMassSpectraWriter implements IMassSpectraWriter {
 
 	@Override
 	public void writeMassSpectrum(FileWriter fileWriter, IScanMSD massSpectrum, IProgressMonitor monitor) throws IOException {
@@ -36,10 +30,7 @@ public class AmdisMSPWriter extends AbstractAmdisWriter implements IMassSpectraW
 		 * Write the fields
 		 */
 		fileWriter.write(getNameField(massSpectrum, identificationTarget) + CRLF);
-		String synonyms = getSynonyms(optimizedMassSpectrum);
-		if(synonyms != null && !synonyms.equals("")) {
-			fileWriter.write(synonyms);
-		}
+		fileWriter.write(getSynonyms(massSpectrum));
 		fileWriter.write(getCommentsField(optimizedMassSpectrum) + CRLF);
 		fileWriter.write(getRetentionTimeField(optimizedMassSpectrum) + CRLF);
 		fileWriter.write(getRelativeRetentionTimeField(optimizedMassSpectrum) + CRLF);
@@ -51,60 +42,11 @@ public class AmdisMSPWriter extends AbstractAmdisWriter implements IMassSpectraW
 		fileWriter.write(getNumberOfPeaks(optimizedMassSpectrum) + CRLF);
 		fileWriter.write(getDBField(identificationTarget) + CRLF);
 		fileWriter.write(getReferenceIdentifierField(identificationTarget) + CRLF);
-		fileWriter.write(getIons(optimizedMassSpectrum));
+		fileWriter.write(getIonsFormatMSP(optimizedMassSpectrum));
 		/*
 		 * To separate the mass spectra correctly.
 		 */
 		fileWriter.write(CRLF);
 		fileWriter.flush();
-	}
-
-	private String getSynonyms(IScanMSD massSpectrum) {
-
-		StringBuilder builder = new StringBuilder();
-		if(massSpectrum instanceof ILibraryMassSpectrum) {
-			ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)massSpectrum;
-			Set<String> synonyms = libraryMassSpectrum.getLibraryInformation().getSynonyms();
-			if(synonyms.size() > 0) {
-				for(String synonym : synonyms) {
-					/*
-					 * Set the synonym.
-					 */
-					builder.append("Synon: ");
-					builder.append(synonym);
-					builder.append(CRLF);
-				}
-			}
-		}
-		//
-		return builder.toString();
-	}
-
-	/**
-	 * Returns the mass spectra in the convenient AMDIS format.
-	 * 
-	 * @param massSpectrum
-	 * @return String
-	 */
-	private String getIons(IScanMSD massSpectrum) {
-
-		boolean exportIntensityAsInteger = PreferenceSupplier.isExportIntensitiesAsInteger();
-		StringBuilder builder = new StringBuilder();
-		List<IIon> ions = massSpectrum.getIons();
-		for(IIon ion : ions) {
-			/*
-			 * Add each ion.
-			 */
-			builder.append(ion.getIon());
-			builder.append(" ");
-			if(exportIntensityAsInteger) {
-				builder.append(AbstractIon.getAbundance(ion.getAbundance()));
-			} else {
-				builder.append(ion.getAbundance());
-			}
-			builder.append(";");
-			builder.append(CRLF);
-		}
-		return builder.toString();
 	}
 }

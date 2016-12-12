@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.msd.converter.massspectrum.AbstractMassSpectrumExp
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.MassSpectrumExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.SpecificationValidatorMSP;
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.AmdisMSPWriter;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.MSPWriter;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -58,7 +58,7 @@ public class MSPMassSpectrumExportConverter extends AbstractMassSpectrumExportCo
 				/*
 				 * Convert the mass spectrum.
 				 */
-				IMassSpectraWriter massSpectraWriter = new AmdisMSPWriter();
+				IMassSpectraWriter massSpectraWriter = new MSPWriter();
 				massSpectraWriter.write(file, massSpectrum, append, monitor);
 				processingInfo.setFile(file);
 			} catch(FileNotFoundException e) {
@@ -91,7 +91,7 @@ public class MSPMassSpectrumExportConverter extends AbstractMassSpectrumExportCo
 				/*
 				 * Convert the mass spectra.
 				 */
-				IMassSpectraWriter massSpectraWriter = new AmdisMSPWriter();
+				IMassSpectraWriter massSpectraWriter = new MSPWriter();
 				massSpectraWriter.write(file, massSpectra, append, monitor);
 				processingInfo.setFile(file);
 			} catch(FileNotFoundException e) {

@@ -17,17 +17,13 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
 import org.eclipse.chemclipse.msd.converter.peak.AbstractPeakExportConverter;
 import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.processing.peak.PeakExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.SpecificationValidatorMSL;
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.AmdisMSLWriter;
-import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.PeakWriterMSL;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -37,13 +33,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * If the mass spectrum is a type of IRegularLibraryMassSpectrum, than getLibraryInformation().getName() will be used,
  * otherwise massSpectrum.getIdentifier().
  * 
- * @author chemclipse
- * 
  */
 public class MSLPeakExportConverter extends AbstractPeakExportConverter {
 
 	private static final Logger logger = Logger.getLogger(MSLPeakExportConverter.class);
-	private static final String DESCRIPTION = "AMDIS MSL MassSpectrum Export";
+	private static final String DESCRIPTION = "AMDIS MSL Peak Export";
 
 	@Override
 	public IPeakExportConverterProcessingInfo convert(File file, IPeakMSD peak, boolean append, IProgressMonitor monitor) {
@@ -61,8 +55,8 @@ public class MSLPeakExportConverter extends AbstractPeakExportConverter {
 				/*
 				 * Convert the mass spectrum.
 				 */
-				IMassSpectraWriter massSpectraWriter = new AmdisMSLWriter();
-				massSpectraWriter.write(file, peak.getExtractedMassSpectrum(), append, monitor);
+				PeakWriterMSL peakWriter = new PeakWriterMSL();
+				peakWriter.write(file, peak, append, monitor);
 				processingInfo.setFile(file);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
@@ -94,9 +88,8 @@ public class MSLPeakExportConverter extends AbstractPeakExportConverter {
 				/*
 				 * Convert the mass spectra.
 				 */
-				IMassSpectraWriter massSpectraWriter = new AmdisMSLWriter();
-				IMassSpectra massSpectra = extractMassSpectra(peaks);
-				massSpectraWriter.write(file, massSpectra, append, monitor);
+				PeakWriterMSL peakWriter = new PeakWriterMSL();
+				peakWriter.write(file, peaks, append, monitor);
 				processingInfo.setFile(file);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
@@ -110,21 +103,6 @@ public class MSLPeakExportConverter extends AbstractPeakExportConverter {
 			}
 		}
 		return processingInfo;
-	}
-
-	private IMassSpectra extractMassSpectra(IPeaks peaks) {
-
-		/*
-		 * Get the mass spectra.
-		 */
-		IMassSpectra massSpectra = new MassSpectra();
-		for(IPeak peak : peaks.getPeaks()) {
-			if(peak instanceof IPeakMSD) {
-				IPeakMSD peakMSD = (IPeakMSD)peak;
-				massSpectra.addMassSpectrum(peakMSD.getExtractedMassSpectrum());
-			}
-		}
-		return massSpectra;
 	}
 
 	private IProcessingInfo validate(File file, IPeakMSD peak) {

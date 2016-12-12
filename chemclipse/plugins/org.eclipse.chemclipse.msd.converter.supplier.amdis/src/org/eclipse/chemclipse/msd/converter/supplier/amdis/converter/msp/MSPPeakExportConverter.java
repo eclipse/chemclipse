@@ -17,17 +17,13 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
 import org.eclipse.chemclipse.msd.converter.peak.AbstractPeakExportConverter;
 import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.processing.peak.PeakExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.SpecificationValidatorMSP;
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.AmdisMSPWriter;
-import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.PeakWriterMSP;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -61,8 +57,8 @@ public class MSPPeakExportConverter extends AbstractPeakExportConverter {
 				/*
 				 * Convert the mass spectrum.
 				 */
-				IMassSpectraWriter massSpectraWriter = new AmdisMSPWriter();
-				massSpectraWriter.write(file, peak.getExtractedMassSpectrum(), append, monitor);
+				PeakWriterMSP peakWriter = new PeakWriterMSP();
+				peakWriter.write(file, peak, append, monitor);
 				processingInfo.setFile(file);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
@@ -94,9 +90,8 @@ public class MSPPeakExportConverter extends AbstractPeakExportConverter {
 				/*
 				 * Convert the mass spectra.
 				 */
-				IMassSpectraWriter massSpectraWriter = new AmdisMSPWriter();
-				IMassSpectra massSpectra = extractMassSpectra(peaks);
-				massSpectraWriter.write(file, massSpectra, append, monitor);
+				PeakWriterMSP peakWriter = new PeakWriterMSP();
+				peakWriter.write(file, peaks, append, monitor);
 				processingInfo.setFile(file);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
@@ -110,21 +105,6 @@ public class MSPPeakExportConverter extends AbstractPeakExportConverter {
 			}
 		}
 		return processingInfo;
-	}
-
-	private IMassSpectra extractMassSpectra(IPeaks peaks) {
-
-		/*
-		 * Get the mass spectra.
-		 */
-		IMassSpectra massSpectra = new MassSpectra();
-		for(IPeak peak : peaks.getPeaks()) {
-			if(peak instanceof IPeakMSD) {
-				IPeakMSD peakMSD = (IPeakMSD)peak;
-				massSpectra.addMassSpectrum(peakMSD.getExtractedMassSpectrum());
-			}
-		}
-		return massSpectra;
 	}
 
 	private IProcessingInfo validate(File file, IPeakMSD peak) {

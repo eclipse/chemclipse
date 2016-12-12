@@ -25,7 +25,7 @@ import junit.framework.TestCase;
 
 public class MSPReader_1_ITest extends TestCase {
 
-	private AmdisMSPReader reader;
+	private MSPReader reader;
 	private File file;
 	private IMassSpectra massSpectra;
 
@@ -33,7 +33,7 @@ public class MSPReader_1_ITest extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		reader = new AmdisMSPReader();
+		reader = new MSPReader();
 		String pathname = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_SYNONYMS);
 		file = new File(pathname);
 		massSpectra = reader.read(file, new NullProgressMonitor());

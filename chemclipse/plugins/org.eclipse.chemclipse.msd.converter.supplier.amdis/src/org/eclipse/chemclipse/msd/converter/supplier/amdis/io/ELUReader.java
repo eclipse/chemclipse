@@ -50,12 +50,12 @@ import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class AmdisELUReader implements IPeakReader {
+public class ELUReader implements IPeakReader {
 
 	/*
 	 * We could try to add additional filter options in this class.
 	 */
-	private static final Logger logger = Logger.getLogger(AmdisELUReader.class);
+	private static final Logger logger = Logger.getLogger(ELUReader.class);
 	private static final Pattern hitsPattern = Pattern.compile("(NAME)");
 	private static final Pattern peakDataPattern = Pattern.compile("(NAME)(.*?)(^$)", Pattern.DOTALL | Pattern.MULTILINE);
 	private static final Pattern namePattern = Pattern.compile("(NAME)(.*)(SC)([0-9]+)(.*)(FR)([0-9]+)(-)([0-9]+)(.*)(RT)([0-9]+[.,]+[0-9]+)"); // "(NAME)(.*)"

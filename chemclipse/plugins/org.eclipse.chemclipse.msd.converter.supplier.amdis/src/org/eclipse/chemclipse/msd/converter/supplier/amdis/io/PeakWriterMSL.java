@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2016 Philip (eselmeister) Wenig.
+ * Copyright (c) 2016 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,27 +7,43 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Philip (eselmeister) Wenig - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
+import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.IIon;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class AmdisMSLWriter extends AbstractAmdisWriter implements IMassSpectraWriter {
+public class PeakWriterMSL extends AbstractWriter {
 
-	@Override
-	public void writeMassSpectrum(FileWriter fileWriter, IScanMSD massSpectrum, IProgressMonitor monitor) throws IOException {
+	public void write(File file, IPeaks peaks, boolean append, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
+		FileWriter fileWriter = new FileWriter(file, append);
+		for(IPeak peak : peaks.getPeaks()) {
+			if(peak instanceof IPeakMSD) {
+				writePeak(fileWriter, (IPeakMSD)peak);
+			}
+		}
+	}
+
+	public void write(File file, IPeakMSD peak, boolean append, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
+
+		FileWriter fileWriter = new FileWriter(file, append);
+		writePeak(fileWriter, peak);
+	}
+
+	private void writePeak(FileWriter fileWriter, IPeakMSD peak) throws IOException {
+
+		IScanMSD massSpectrum = peak.getExtractedMassSpectrum();
 		IScanMSD normalizedMassSpectrum = getOptimizedMassSpectrum(massSpectrum);
 		IIdentificationTarget identificationTarget = getIdentificationTarget(normalizedMassSpectrum);
 		/*
@@ -36,6 +52,9 @@ public class AmdisMSLWriter extends AbstractAmdisWriter implements IMassSpectraW
 		fileWriter.write(getNameField(massSpectrum, identificationTarget) + CRLF);
 		fileWriter.write(getCasNumberField(identificationTarget) + CRLF);
 		fileWriter.write(getSmilesField(identificationTarget) + CRLF);
+		fileWriter.write(getArea(peak) + CRLF);
+		fileWriter.write(getInternalStandards(peak));
+		fileWriter.write(getQuantitations(peak));
 		/*
 		 * Retention time, retention index
 		 */
@@ -50,60 +69,11 @@ public class AmdisMSLWriter extends AbstractAmdisWriter implements IMassSpectraW
 		 * Mass spectra
 		 */
 		fileWriter.write(getNumberOfPeaks(normalizedMassSpectrum) + CRLF);
-		fileWriter.write(getIons(normalizedMassSpectrum) + CRLF);
+		fileWriter.write(getIonsFormatMSL(normalizedMassSpectrum) + CRLF);
 		/*
 		 * To separate the mass spectra correctly.
 		 */
 		fileWriter.write(CRLF);
 		fileWriter.flush();
-	}
-
-	/**
-	 * Returns the mass spectra in the convenient AMDIS format.
-	 * 
-	 * @param massSpectrum
-	 * @return String
-	 */
-	private String getIons(IScanMSD massSpectrum) {
-
-		int blockSize = 5;
-		int actualPosition = 1;
-		boolean exportIntensityAsInteger = PreferenceSupplier.isExportIntensitiesAsInteger();
-		//
-		StringBuilder builder = new StringBuilder();
-		List<IIon> ions = massSpectrum.getIons();
-		for(IIon ion : ions) {
-			/*
-			 * Insert a carriage return / line feed after each block size.
-			 */
-			if(actualPosition > blockSize) {
-				builder.append(CRLF);
-				actualPosition = 1;
-			}
-			/*
-			 * Add each ion.
-			 */
-			builder.append("(");
-			builder.append(ion.getIon());
-			builder.append(" ");
-			if(exportIntensityAsInteger) {
-				builder.append(AbstractIon.getAbundance(ion.getAbundance()));
-			} else {
-				builder.append(ion.getAbundance());
-			}
-			builder.append(")");
-			/*
-			 * The last element in the row do not need to have a whitespace at
-			 * its end.
-			 */
-			if(actualPosition < blockSize) {
-				builder.append(" ");
-			}
-			/*
-			 * Increase the actual position.
-			 */
-			actualPosition++;
-		}
-		return builder.toString();
 	}
 }

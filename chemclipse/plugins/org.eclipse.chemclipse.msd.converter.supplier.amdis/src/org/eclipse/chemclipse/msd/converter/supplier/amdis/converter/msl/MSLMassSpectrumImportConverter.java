@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.msd.converter.massspectrum.AbstractMassSpectrumImp
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.MassSpectrumImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.SpecificationValidatorMSL;
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.AmdisMSLReader;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.MSLReader;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -47,7 +47,7 @@ public class MSLMassSpectrumImportConverter extends AbstractMassSpectrumImportCo
 		} else {
 			try {
 				file = SpecificationValidatorMSL.validateSpecification(file);
-				IMassSpectraReader massSpectraReader = new AmdisMSLReader();
+				IMassSpectraReader massSpectraReader = new MSLReader();
 				IMassSpectra massSpectra = massSpectraReader.read(file, monitor);
 				processingInfo.setMassSpectra(massSpectra);
 			} catch(FileNotFoundException e) {

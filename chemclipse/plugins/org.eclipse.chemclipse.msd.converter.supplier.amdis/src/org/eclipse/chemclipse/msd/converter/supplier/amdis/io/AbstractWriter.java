@@ -11,27 +11,26 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
+import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.IVendorLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -39,22 +38,19 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectr
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
-import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.msd.model.implementation.RegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.core.runtime.IProgressMonitor;
 
-public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
+public abstract class AbstractWriter {
 
 	public static final String CRLF = "\r\n";
 	public static final float NORMALIZATION_BASE = 1000.0f;
 	//
-	private static final Logger logger = Logger.getLogger(AbstractAmdisWriter.class);
+	private static final Logger logger = Logger.getLogger(AbstractWriter.class);
 	//
 	private DecimalFormat decimalFormat;
-	private static final int MAX_SPECTRA_CHUNK = 65535;
 	//
 	private static final String RT = "RT: ";
 	private static final String RRT = "RRT: ";
@@ -69,49 +65,16 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 	private static final String MW = "MW: ";
 	private static final String DB = "DB: ";
 	private static final String REFID = "REFID: ";
+	private static final String SYNONYM = "Synon:";
+	private static final String ISTD = "ISTD: ";
+	private static final String QUANT = "QUANT: ";
+	private static final String AREA = "AREA: ";
 	//
 	private TargetExtendedComparator targetExtendedComparator;
 
-	public AbstractAmdisWriter() {
+	public AbstractWriter() {
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
-	}
-
-	@Override
-	public void write(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
-
-		FileWriter fileWriter = new FileWriter(file, append);
-		writeMassSpectrum(fileWriter, massSpectrum, monitor);
-		fileWriter.close();
-	}
-
-	@Override
-	public void write(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
-
-		if(massSpectra.size() > 65535 && PreferenceSupplier.isSplitLibrary()) {
-			/*
-			 * Split the export file to several files.
-			 */
-			file.delete();
-			List<IMassSpectra> splittedMassSpectra = getSplittedMassSpectra(massSpectra);
-			int counter = 1;
-			for(IMassSpectra massSpectraChunk : splittedMassSpectra) {
-				String filePath = file.getAbsolutePath();
-				String fileExtension = filePath.substring(filePath.lastIndexOf("."), filePath.length());
-				filePath = filePath.replace(fileExtension, "-" + counter + fileExtension);
-				FileWriter fileWriter = new FileWriter(new File(filePath), append);
-				writeMassSpectra(fileWriter, massSpectraChunk, monitor);
-				fileWriter.close();
-				counter++;
-			}
-		} else {
-			/*
-			 * <= 65535 mass spectra
-			 */
-			FileWriter fileWriter = new FileWriter(file, append);
-			writeMassSpectra(fileWriter, massSpectra, monitor);
-			fileWriter.close();
-		}
 	}
 
 	/**
@@ -146,6 +109,29 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 		for(IIon ion : ionsToRemove) {
 			normalizedMassSpectrum.removeIon(ion);
 		}
+	}
+
+	protected String getSynonyms(IScanMSD massSpectrum) {
+
+		StringBuilder builder = new StringBuilder();
+		if(massSpectrum instanceof ILibraryMassSpectrum) {
+			ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)massSpectrum;
+			Set<String> synonyms = libraryMassSpectrum.getLibraryInformation().getSynonyms();
+			if(synonyms.size() > 0) {
+				for(String synonym : synonyms) {
+					/*
+					 * Set the synonym.
+					 */
+					if(!synonym.equals("")) {
+						builder.append(SYNONYM);
+						builder.append(synonym);
+						builder.append(CRLF);
+					}
+				}
+			}
+		}
+		//
+		return builder.toString();
 	}
 
 	/**
@@ -393,55 +379,6 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 		return field;
 	}
 
-	private List<IMassSpectra> getSplittedMassSpectra(IMassSpectra massSpectra) {
-
-		IMassSpectra massSpectraChunk;
-		List<IMassSpectra> splittedMassSpectra = new ArrayList<IMassSpectra>();
-		//
-		massSpectraChunk = new MassSpectra();
-		int counter = 1;
-		/*
-		 * Split
-		 */
-		for(int i = 1; i <= massSpectra.size(); i++) {
-			IScanMSD massSpectrum = massSpectra.getMassSpectrum(i);
-			if(counter <= MAX_SPECTRA_CHUNK) {
-				massSpectraChunk.addMassSpectrum(massSpectrum);
-				counter++;
-			} else {
-				splittedMassSpectra.add(massSpectraChunk);
-				massSpectraChunk = new MassSpectra();
-				massSpectraChunk.addMassSpectrum(massSpectrum);
-				counter = 1;
-			}
-		}
-		splittedMassSpectra.add(massSpectraChunk);
-		//
-		return splittedMassSpectra;
-	}
-
-	/**
-	 * Writes the mass spectra with the given file writer.
-	 * 
-	 * @throws IOException
-	 */
-	private void writeMassSpectra(FileWriter fileWriter, IMassSpectra massSpectra, IProgressMonitor monitor) throws IOException {
-
-		/*
-		 * Get all mass spectra, test to null and append them with the given
-		 * file writer.
-		 */
-		for(int i = 1; i <= massSpectra.size(); i++) {
-			IScanMSD massSpectrum = massSpectra.getMassSpectrum(i);
-			/*
-			 * There must be at least one ion.
-			 */
-			if(massSpectrum != null && massSpectrum.getNumberOfIons() > 0) {
-				writeMassSpectrum(fileWriter, massSpectrum, monitor);
-			}
-		}
-	}
-
 	private IScanMSD getUnitOrHighMassResolutionCopy(IScanMSD massSpectrum) {
 
 		IScanMSD optimizedMassSpectrum;
@@ -510,5 +447,135 @@ public abstract class AbstractAmdisWriter implements IMassSpectraWriter {
 		}
 		//
 		return massSpectrumCopy;
+	}
+
+	/**
+	 * Returns the mass spectra in the convenient AMDIS format.
+	 * 
+	 * @param massSpectrum
+	 * @return String
+	 */
+	protected String getIonsFormatMSL(IScanMSD massSpectrum) {
+
+		int blockSize = 5;
+		int actualPosition = 1;
+		boolean exportIntensityAsInteger = PreferenceSupplier.isExportIntensitiesAsInteger();
+		//
+		StringBuilder builder = new StringBuilder();
+		List<IIon> ions = massSpectrum.getIons();
+		for(IIon ion : ions) {
+			/*
+			 * Insert a carriage return / line feed after each block size.
+			 */
+			if(actualPosition > blockSize) {
+				builder.append(CRLF);
+				actualPosition = 1;
+			}
+			/*
+			 * Add each ion.
+			 */
+			builder.append("(");
+			builder.append(ion.getIon());
+			builder.append(" ");
+			if(exportIntensityAsInteger) {
+				builder.append(AbstractIon.getAbundance(ion.getAbundance()));
+			} else {
+				builder.append(ion.getAbundance());
+			}
+			builder.append(")");
+			/*
+			 * The last element in the row do not need to have a whitespace at
+			 * its end.
+			 */
+			if(actualPosition < blockSize) {
+				builder.append(" ");
+			}
+			/*
+			 * Increase the actual position.
+			 */
+			actualPosition++;
+		}
+		return builder.toString();
+	}
+
+	/**
+	 * Returns the mass spectra in the convenient AMDIS format.
+	 * 
+	 * @param massSpectrum
+	 * @return String
+	 */
+	protected String getIonsFormatMSP(IScanMSD massSpectrum) {
+
+		boolean exportIntensityAsInteger = PreferenceSupplier.isExportIntensitiesAsInteger();
+		StringBuilder builder = new StringBuilder();
+		List<IIon> ions = massSpectrum.getIons();
+		for(IIon ion : ions) {
+			/*
+			 * Add each ion.
+			 */
+			builder.append(ion.getIon());
+			builder.append(" ");
+			if(exportIntensityAsInteger) {
+				builder.append(AbstractIon.getAbundance(ion.getAbundance()));
+			} else {
+				builder.append(ion.getAbundance());
+			}
+			builder.append(";");
+			builder.append(CRLF);
+		}
+		return builder.toString();
+	}
+
+	protected String getInternalStandards(IPeakMSD peak) {
+
+		StringBuilder builder = new StringBuilder();
+		List<IInternalStandard> internalStandards = peak.getInternalStandards();
+		if(internalStandards.size() > 0) {
+			for(IInternalStandard internalStandard : internalStandards) {
+				/*
+				 * Set the synonym.
+				 */
+				builder.append(ISTD);
+				builder.append(internalStandard.getName());
+				builder.append(" ");
+				builder.append(internalStandard.getConcentration());
+				builder.append(" ");
+				builder.append(internalStandard.getConcentrationUnit());
+				builder.append(" ");
+				builder.append(internalStandard.getResponseFactor());
+				builder.append(CRLF);
+			}
+		}
+		//
+		return builder.toString();
+	}
+
+	protected String getQuantitations(IPeakMSD peak) {
+
+		StringBuilder builder = new StringBuilder();
+		List<IQuantitationEntry> quanitationEntries = peak.getQuantitationEntries();
+		if(quanitationEntries.size() > 0) {
+			for(IQuantitationEntry quantitationEntry : quanitationEntries) {
+				/*
+				 * Set the synonym.
+				 */
+				builder.append(QUANT);
+				builder.append(quantitationEntry.getName());
+				builder.append(" ");
+				builder.append(quantitationEntry.getConcentration());
+				builder.append(" ");
+				builder.append(quantitationEntry.getConcentrationUnit());
+				builder.append(CRLF);
+			}
+		}
+		//
+		return builder.toString();
+	}
+
+	protected String getArea(IPeakMSD peak) {
+
+		String field = AREA;
+		field += decimalFormat.format(peak.getIntegratedArea());
+		return field;
 	}
 }

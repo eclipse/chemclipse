@@ -25,7 +25,7 @@ import org.eclipse.chemclipse.msd.converter.peak.AbstractPeakImportConverter;
 import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.processing.peak.PeakImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.SpecificationValidatorELU;
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.AmdisELUReader;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.ELUReader;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
@@ -44,7 +44,7 @@ public class ELUPeakImportConverter extends AbstractPeakImportConverter {
 		try {
 			super.validate(file);
 			file = SpecificationValidatorELU.validateSpecification(file);
-			IPeakReader peakReader = new AmdisELUReader();
+			IPeakReader peakReader = new ELUReader();
 			IPeakImportConverterProcessingInfo processingInfoReader = peakReader.read(file, monitor);
 			processingInfo.addMessages(processingInfoReader);
 			try {

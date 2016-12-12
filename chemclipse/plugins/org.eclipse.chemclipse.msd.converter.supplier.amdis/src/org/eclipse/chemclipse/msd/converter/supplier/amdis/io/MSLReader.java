@@ -41,9 +41,10 @@ import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class AmdisMSLReader extends AbstractMassSpectraReader implements IMassSpectraReader {
+public class MSLReader extends AbstractMassSpectraReader implements IMassSpectraReader {
 
-	private static final Logger logger = Logger.getLogger(AmdisMSLReader.class);
+	private static final Logger logger = Logger.getLogger(MSLReader.class);
+	private static final String CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msl";
 	/**
 	 * Pre-compile all patterns to be a little bit faster.
 	 */
@@ -65,12 +66,11 @@ public class AmdisMSLReader extends AbstractMassSpectraReader implements IMassSp
 
 		List<String> massSpectraData = getMassSpectraData(file);
 		IMassSpectra massSpectra = extractMassSpectra(massSpectraData);
-		massSpectra.setConverterId("org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msl");
+		massSpectra.setConverterId(CONVERTER_ID);
 		massSpectra.setName(file.getName());
 		return massSpectra;
 	}
 
-	// ---------------------------------------------------private methods
 	/**
 	 * Returns a list of mass spectral data.
 	 * 
@@ -264,5 +264,4 @@ public class AmdisMSLReader extends AbstractMassSpectraReader implements IMassSp
 		}
 		return content;
 	}
-	// ---------------------------------------------------private methods
 }
