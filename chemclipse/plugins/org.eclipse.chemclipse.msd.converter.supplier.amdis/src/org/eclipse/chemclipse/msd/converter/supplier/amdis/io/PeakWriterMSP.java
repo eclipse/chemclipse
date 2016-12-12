@@ -62,9 +62,12 @@ public class PeakWriterMSP extends AbstractWriter {
 		fileWriter.write(getMWField(optimizedMassSpectrum) + CRLF);
 		fileWriter.write(getCasNumberField(identificationTarget) + CRLF);
 		fileWriter.write(getSmilesField(identificationTarget) + CRLF);
-		fileWriter.write(getNumberOfPeaks(optimizedMassSpectrum) + CRLF);
 		fileWriter.write(getDBField(identificationTarget) + CRLF);
 		fileWriter.write(getReferenceIdentifierField(identificationTarget) + CRLF);
+		/*
+		 * Mass spectrum
+		 */
+		fileWriter.write(getNumberOfPeaks(optimizedMassSpectrum) + CRLF);
 		fileWriter.write(getIonsFormatMSP(optimizedMassSpectrum));
 		/*
 		 * To separate the mass spectra correctly.

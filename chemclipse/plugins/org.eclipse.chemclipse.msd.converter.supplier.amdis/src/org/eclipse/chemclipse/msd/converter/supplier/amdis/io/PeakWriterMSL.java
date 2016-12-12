@@ -66,7 +66,7 @@ public class PeakWriterMSL extends AbstractWriter {
 		fileWriter.write(getCommentsField(normalizedMassSpectrum) + CRLF);
 		fileWriter.write(getSourceField(normalizedMassSpectrum, identificationTarget) + CRLF);
 		/*
-		 * Mass spectra
+		 * Mass spectrum
 		 */
 		fileWriter.write(getNumberOfPeaks(normalizedMassSpectrum) + CRLF);
 		fileWriter.write(getIonsFormatMSL(normalizedMassSpectrum) + CRLF);
