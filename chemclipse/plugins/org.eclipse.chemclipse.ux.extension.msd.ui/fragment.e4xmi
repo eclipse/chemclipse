@@ -53,6 +53,7 @@
               <children xsi:type="advanced:Placeholder" xmi:id="_V5pd0GWeEeSQKcLvrmntIw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.15" ref="_0ZGTcDf1EeKBwZX34jl_1A"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_GpRyYMENEeW3DIEeCEW-YQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.28" ref="_0JSB8MEMEeW3DIEeCEW-YQ"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_atbY0KjeEeaN593P6UOL3Q" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.39" ref="_We_CcKjeEeaN593P6UOL3Q"/>
+              <children xsi:type="advanced:Placeholder" xmi:id="_mVs-8MEFEea8zuNmSAozMQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.41" ref="_LWwsQMEFEea8zuNmSAozMQ"/>
             </children>
           </children>
         </children>
@@ -237,6 +238,7 @@
     <elements xsi:type="basic:Part" xmi:id="_xSCLsMmWEeWO_6AUKBdskw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.editorMassSpectrumStackView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.EditorMassSpectrumStackView" label="Editor Mass Spectrum Stack" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/massSpectrum.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_ahJk8M5kEeWGJ_RBEfsFbA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.massspectrumlibrarystack" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.MassSpectrumLibraryStackView" label="Mass Spectrum Library Stack" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/mirroredMassSpectrum.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_kTTFcFZhEeaBZ4f__0WjCQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.peakistdmsd" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.PeakInternalStandardListView" label="Peak ISTD (MSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peak.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_LWwsQMEFEea8zuNmSAozMQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramscaninfomsd" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.ChromtogramScanInfoView" label="Chromatogram Scan Info (MSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/selectedScan.gif"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_3ZvP8DhjEeKHL-DfrT7KNQ" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Command" xmi:id="_ZxnzMDhxEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.command.undo" commandName="Undo"/>
