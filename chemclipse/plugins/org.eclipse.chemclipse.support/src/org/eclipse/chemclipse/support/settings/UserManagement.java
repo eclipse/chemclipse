@@ -17,4 +17,9 @@ public class UserManagement {
 
 		return System.getProperty("user.name"); // $NON-NLS-1$
 	}
+
+	public static String getUserHome() {
+
+		return System.getProperty("user.home"); // $NON-NLS-1$
+	}
 }

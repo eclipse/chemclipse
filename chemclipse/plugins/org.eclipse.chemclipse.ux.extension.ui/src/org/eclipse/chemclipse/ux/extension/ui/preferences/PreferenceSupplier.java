@@ -22,15 +22,39 @@ public class PreferenceSupplier {
 	private PreferenceSupplier() {
 	}
 
-	public static String getLastDirectoryPath() {
+	public static String getSelectedDrivePath() {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		return store.getString(PreferenceConstants.P_LAST_DIRECTOY_PATH);
+		return store.getString(PreferenceConstants.P_SELECTED_DRIVE_PATH);
 	}
 
-	public static void setLastDirectoryPath(String lastDirectoryPath) {
+	public static void setSelectedDrivePath(String directoryPath) {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setValue(PreferenceConstants.P_LAST_DIRECTOY_PATH, lastDirectoryPath);
+		store.setValue(PreferenceConstants.P_SELECTED_DRIVE_PATH, directoryPath);
+	}
+
+	public static String getSelectedHomePath() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getString(PreferenceConstants.P_SELECTED_HOME_PATH);
+	}
+
+	public static void setSelectedHomePath(String directoryPath) {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.setValue(PreferenceConstants.P_SELECTED_HOME_PATH, directoryPath);
+	}
+
+	public static String getSelectedUserLocationPath() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getString(PreferenceConstants.P_SELECTED_USER_LOCATION_PATH);
+	}
+
+	public static void setSelectedUserLocationPath(String directoryPath) {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.setValue(PreferenceConstants.P_SELECTED_USER_LOCATION_PATH, directoryPath);
 	}
 }

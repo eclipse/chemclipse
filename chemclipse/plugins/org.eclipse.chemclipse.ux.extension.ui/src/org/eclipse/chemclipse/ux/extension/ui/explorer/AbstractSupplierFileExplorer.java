@@ -16,6 +16,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerLabelProvider;
@@ -34,8 +37,16 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 
 public abstract class AbstractSupplierFileExplorer {
 
@@ -49,31 +60,106 @@ public abstract class AbstractSupplierFileExplorer {
 	private MApplication application;
 	//
 	private File lastClickedFile;
-	private TreeViewer treeViewer;
 	private List<IChromatogramEditorSupport> chromatogramEditorSupportList;
+	//
+	private TabItem drivesTab;
+	private TreeViewer drivesTreeViewer;
+	//
+	private TreeViewer homeTreeViewer;
+	private TabItem homeTab;
+	//
+	private TreeViewer userLocationTreeViewer;
+	private TabItem userLocationTab;
 
 	public AbstractSupplierFileExplorer(Composite parent, IChromatogramEditorSupport chromatogramEditorSupport) {
 		this(parent, ExplorerListSupport.getChromatogramEditorSupportList(chromatogramEditorSupport));
 	}
 
 	public AbstractSupplierFileExplorer(Composite parent, List<IChromatogramEditorSupport> chromatogramEditorSupportList) {
-		//
+		/*
+		 * The supplier editor support list is used to show
+		 * the preview and open the editor on demand.
+		 */
 		this.chromatogramEditorSupportList = chromatogramEditorSupportList;
 		/*
 		 * Create the tree viewer.
 		 */
-		treeViewer = new TreeViewer(parent, SWT.NONE);
-		treeViewer.setContentProvider(new ChromatogramFileExplorerContentProvider(chromatogramEditorSupportList));
-		treeViewer.setLabelProvider(new ChromatogramFileExplorerLabelProvider(chromatogramEditorSupportList));
-		Display.getCurrent().asyncExec(new Runnable() {
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(1, true));
+		TabFolder tabFolder = new TabFolder(composite, SWT.NONE);
+		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		createDrivesTreeViewer(tabFolder);
+		createHomeTreeViewer(tabFolder);
+		createUserLocationTreeViewer(tabFolder);
+	}
+
+	private void createDrivesTreeViewer(TabFolder tabFolder) {
+
+		drivesTab = new TabItem(tabFolder, SWT.NONE);
+		drivesTab.setText("Drives");
+		drivesTreeViewer = createTreeViewer(tabFolder);
+		drivesTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+		setTreeViewerContent(drivesTreeViewer, EFS.getLocalFileSystem());
+		drivesTab.setControl(drivesTreeViewer.getControl());
+	}
+
+	private void createHomeTreeViewer(TabFolder tabFolder) {
+
+		homeTab = new TabItem(tabFolder, SWT.NONE);
+		homeTab.setText("Home");
+		homeTreeViewer = createTreeViewer(tabFolder);
+		homeTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+		setTreeViewerContent(homeTreeViewer, new File(UserManagement.getUserHome()));
+		homeTab.setControl(homeTreeViewer.getControl());
+	}
+
+	private void createUserLocationTreeViewer(TabFolder tabFolder) {
+
+		userLocationTab = new TabItem(tabFolder, SWT.NONE);
+		userLocationTab.setText("User Location");
+		Composite compositeUserLocation = new Composite(tabFolder, SWT.NONE);
+		compositeUserLocation.setLayoutData(new GridData(GridData.FILL_BOTH));
+		compositeUserLocation.setLayout(new GridLayout());
+		//
+		Button buttonSelectUserLocation = new Button(compositeUserLocation, SWT.PUSH);
+		buttonSelectUserLocation.setText("Select User Location");
+		buttonSelectUserLocation.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16));
+		buttonSelectUserLocation.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		buttonSelectUserLocation.addSelectionListener(new SelectionAdapter() {
 
 			@Override
-			public void run() {
+			public void widgetSelected(SelectionEvent e) {
 
-				treeViewer.setInput(EFS.getLocalFileSystem());
-				expandLastDirectoryPath();
+				DirectoryDialog directoryDialog = new DirectoryDialog(Display.getCurrent().getActiveShell(), SWT.READ_ONLY);
+				directoryDialog.setText("Select a directory.");
+				String pathname = directoryDialog.open();
+				if(pathname != null) {
+					File directory = new File(pathname);
+					if(directory.exists()) {
+						userLocationTreeViewer.setInput(directory);
+						saveDirectoryPath(directory);
+					}
+				}
 			}
 		});
+		//
+		String userLocationPath = PreferenceSupplier.getSelectedUserLocationPath();
+		File file = new File(userLocationPath);
+		if(!file.exists()) {
+			file = new File(UserManagement.getUserHome());
+		}
+		userLocationTreeViewer = createTreeViewer(compositeUserLocation);
+		userLocationTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+		setTreeViewerContent(userLocationTreeViewer, file);
+		userLocationTab.setControl(compositeUserLocation);
+	}
+
+	private TreeViewer createTreeViewer(Composite parent) {
+
+		TreeViewer treeViewer = new TreeViewer(parent, SWT.NONE);
+		treeViewer.setContentProvider(new ChromatogramFileExplorerContentProvider(chromatogramEditorSupportList));
+		treeViewer.setLabelProvider(new ChromatogramFileExplorerLabelProvider(chromatogramEditorSupportList));
 		/*
 		 * Register single (selection changed)/double click listener here.<br/>
 		 * OK, it's not the best way, but it still works at beginning.
@@ -99,6 +185,21 @@ public abstract class AbstractSupplierFileExplorer {
 				openEditor(file);
 			}
 		});
+		//
+		return treeViewer;
+	}
+
+	private void setTreeViewerContent(TreeViewer treeViewer, Object input) {
+
+		Display.getCurrent().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+
+				treeViewer.setInput(input);
+				expandLastDirectoryPath(treeViewer);
+			}
+		});
 	}
 
 	private void openOverview(File file) {
@@ -111,11 +212,16 @@ public abstract class AbstractSupplierFileExplorer {
 			 * specific function via e.g. JNI.
 			 */
 			if(file.isDirectory()) {
-				treeViewer.refresh(file);
+				if(drivesTab.getControl().isVisible()) {
+					drivesTreeViewer.refresh(file);
+				} else if(homeTab.getControl().isVisible()) {
+					homeTreeViewer.refresh(file);
+				} else if(userLocationTab.getControl().isVisible()) {
+					userLocationTreeViewer.refresh(file);
+				}
 			}
 			/*
-			 * Don't use a else here, cause chromatogram can be
-			 * stored also as directories.
+			 * Supplier files can be stored also as a directory.
 			 */
 			if(isNewFile(file)) {
 				exitloop:
@@ -150,7 +256,13 @@ public abstract class AbstractSupplierFileExplorer {
 	@Focus
 	private void setFocus() {
 
-		treeViewer.getTree().setFocus();
+		if(drivesTab.getControl().isVisible()) {
+			drivesTreeViewer.getTree().setFocus();
+		} else if(homeTab.getControl().isVisible()) {
+			homeTreeViewer.getTree().setFocus();
+		} else if(userLocationTab.getControl().isVisible()) {
+			userLocationTreeViewer.getTree().setFocus();
+		}
 	}
 
 	/*
@@ -174,12 +286,32 @@ public abstract class AbstractSupplierFileExplorer {
 		} else {
 			directoryPath = file.getAbsolutePath();
 		}
-		PreferenceSupplier.setLastDirectoryPath(directoryPath);
+		/*
+		 * Store the specific directory path.
+		 */
+		if(drivesTab.getControl().isVisible()) {
+			PreferenceSupplier.setSelectedDrivePath(directoryPath);
+		} else if(homeTab.getControl().isVisible()) {
+			PreferenceSupplier.setSelectedHomePath(directoryPath);
+		} else if(userLocationTab.getControl().isVisible()) {
+			PreferenceSupplier.setSelectedUserLocationPath(directoryPath);
+		}
 	}
 
-	private void expandLastDirectoryPath() {
+	private void expandLastDirectoryPath(TreeViewer treeViewer) {
 
-		String directoryPath = PreferenceSupplier.getLastDirectoryPath();
+		/*
+		 * Get the specific directory path.
+		 */
+		String directoryPath = "";
+		if(treeViewer == drivesTreeViewer) {
+			directoryPath = PreferenceSupplier.getSelectedDrivePath();
+		} else if(treeViewer == homeTreeViewer) {
+			directoryPath = PreferenceSupplier.getSelectedHomePath();
+		} else if(treeViewer == userLocationTreeViewer) {
+			directoryPath = PreferenceSupplier.getSelectedUserLocationPath();
+		}
+		//
 		File elementOrTreePath = new File(directoryPath);
 		if(elementOrTreePath.exists()) {
 			treeViewer.expandToLevel(elementOrTreePath, 1);

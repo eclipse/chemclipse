@@ -34,7 +34,9 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public void createFieldEditors() {
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_LAST_DIRECTOY_PATH, "Last Directory Path", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_SELECTED_DRIVE_PATH, "Selected Drive Path", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_SELECTED_HOME_PATH, "Selected Home Path", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_SELECTED_USER_LOCATION_PATH, "Selected User Location Path", getFieldEditorParent()));
 	}
 
 	/*

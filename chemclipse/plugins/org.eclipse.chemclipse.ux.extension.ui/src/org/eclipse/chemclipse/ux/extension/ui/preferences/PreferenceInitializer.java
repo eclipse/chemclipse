@@ -28,6 +28,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(PreferenceConstants.P_LAST_DIRECTOY_PATH, "");
+		store.setDefault(PreferenceConstants.P_SELECTED_DRIVE_PATH, "");
+		store.setDefault(PreferenceConstants.P_SELECTED_HOME_PATH, "");
+		store.setDefault(PreferenceConstants.P_SELECTED_USER_LOCATION_PATH, "");
 	}
 }
