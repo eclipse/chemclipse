@@ -16,11 +16,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.support.ui.wizards.TreeViewerFilesystemSupport;
+import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerLabelProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ExplorerListSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
+import org.eclipse.core.filesystem.EFS;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -34,11 +35,10 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
-public abstract class AbstractChromatogramFileExplorer {
+public abstract class AbstractSupplierFileExplorer {
 
-	private File lastClickedFile;
-	private TreeViewer treeViewer;
 	@Inject
 	private EPartService partService;
 	@Inject
@@ -47,19 +47,33 @@ public abstract class AbstractChromatogramFileExplorer {
 	private EModelService modelService;
 	@Inject
 	private MApplication application;
+	//
+	private File lastClickedFile;
+	private TreeViewer treeViewer;
+	private List<IChromatogramEditorSupport> chromatogramEditorSupportList;
 
-	public AbstractChromatogramFileExplorer(Composite parent, IChromatogramEditorSupport chromatogramEditorSupport) {
+	public AbstractSupplierFileExplorer(Composite parent, IChromatogramEditorSupport chromatogramEditorSupport) {
 		this(parent, ExplorerListSupport.getChromatogramEditorSupportList(chromatogramEditorSupport));
 	}
 
-	public AbstractChromatogramFileExplorer(Composite parent, List<IChromatogramEditorSupport> chromatogramEditorSupportList) {
+	public AbstractSupplierFileExplorer(Composite parent, List<IChromatogramEditorSupport> chromatogramEditorSupportList) {
+		//
+		this.chromatogramEditorSupportList = chromatogramEditorSupportList;
 		/*
 		 * Create the tree viewer.
 		 */
-		treeViewer = new TreeViewer(parent, SWT.VIRTUAL);
+		treeViewer = new TreeViewer(parent, SWT.NONE);
 		treeViewer.setContentProvider(new ChromatogramFileExplorerContentProvider(chromatogramEditorSupportList));
 		treeViewer.setLabelProvider(new ChromatogramFileExplorerLabelProvider(chromatogramEditorSupportList));
-		TreeViewerFilesystemSupport.retrieveAndSetLocalFileSystem(treeViewer);
+		Display.getCurrent().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+
+				treeViewer.setInput(EFS.getLocalFileSystem());
+				expandLastDirectoryPath();
+			}
+		});
 		/*
 		 * Register single (selection changed)/double click listener here.<br/>
 		 * OK, it's not the best way, but it still works at beginning.
@@ -69,40 +83,8 @@ public abstract class AbstractChromatogramFileExplorer {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 
-				/*
-				 * Check the first element if null otherwise an
-				 * NullPointerException would be thrown if the
-				 * firstElement is null.
-				 */
-				Object firstElement = ((IStructuredSelection)event.getSelection()).getFirstElement();
-				if(firstElement != null) {
-					File file = (File)firstElement;
-					/*
-					 * Update the directories content, until there is
-					 * actual no way to monitor the file system outside
-					 * of the workbench without using operating system
-					 * specific function via e.g. JNI.
-					 */
-					if(file.isDirectory()) {
-						treeViewer.refresh(firstElement);
-					}
-					/*
-					 * Don't use a else here, cause chromatogram can be
-					 * stored also as directories.
-					 */
-					if(isNewFile(file)) {
-						exitloop:
-						for(IChromatogramEditorSupport chromatogramEditorSupport : chromatogramEditorSupportList) {
-							if(chromatogramEditorSupport.isMatchMagicNumber(file)) {
-								/*
-								 * Show the first overview only.
-								 */
-								chromatogramEditorSupport.openOverview(file, eventBroker);
-								break exitloop;
-							}
-						}
-					}
-				}
+				File file = (File)((IStructuredSelection)event.getSelection()).getFirstElement();
+				openOverview(file);
 			}
 		});
 		/*
@@ -114,16 +96,55 @@ public abstract class AbstractChromatogramFileExplorer {
 			public void doubleClick(DoubleClickEvent event) {
 
 				File file = (File)((IStructuredSelection)event.getSelection()).getFirstElement();
+				openEditor(file);
+			}
+		});
+	}
+
+	private void openOverview(File file) {
+
+		if(file != null) {
+			/*
+			 * Update the directories content, until there is
+			 * actual no way to monitor the file system outside
+			 * of the workbench without using operating system
+			 * specific function via e.g. JNI.
+			 */
+			if(file.isDirectory()) {
+				treeViewer.refresh(file);
+			}
+			/*
+			 * Don't use a else here, cause chromatogram can be
+			 * stored also as directories.
+			 */
+			if(isNewFile(file)) {
+				exitloop:
 				for(IChromatogramEditorSupport chromatogramEditorSupport : chromatogramEditorSupportList) {
-					/*
-					 * Open all chromatograms that are contained.
-					 */
 					if(chromatogramEditorSupport.isMatchMagicNumber(file)) {
-						chromatogramEditorSupport.openEditor(file, modelService, application, partService);
+						/*
+						 * Show the first overview only.
+						 */
+						chromatogramEditorSupport.openOverview(file, eventBroker);
+						break exitloop;
 					}
 				}
 			}
-		});
+		}
+	}
+
+	private void openEditor(File file) {
+
+		if(file != null) {
+			for(IChromatogramEditorSupport chromatogramEditorSupport : chromatogramEditorSupportList) {
+				/*
+				 * Open the supplier file.
+				 */
+				if(chromatogramEditorSupport.isMatchMagicNumber(file)) {
+					saveDirectoryPath(file);
+					chromatogramEditorSupport.openEditor(file, modelService, application, partService);
+				}
+			}
+		}
 	}
 
 	@Focus
@@ -142,6 +163,26 @@ public abstract class AbstractChromatogramFileExplorer {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	private void saveDirectoryPath(File file) {
+
+		String directoryPath;
+		if(file.isFile()) {
+			directoryPath = file.getParent();
+		} else {
+			directoryPath = file.getAbsolutePath();
+		}
+		PreferenceSupplier.setLastDirectoryPath(directoryPath);
+	}
+
+	private void expandLastDirectoryPath() {
+
+		String directoryPath = PreferenceSupplier.getLastDirectoryPath();
+		File elementOrTreePath = new File(directoryPath);
+		if(elementOrTreePath.exists()) {
+			treeViewer.expandToLevel(elementOrTreePath, 1);
 		}
 	}
 }

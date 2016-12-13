@@ -16,11 +16,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractChromatogramFileExplorer;
+import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSupplierFileExplorer;
 import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
 import org.eclipse.swt.widgets.Composite;
 
-public class SupplierFileExplorer extends AbstractChromatogramFileExplorer {
+public class SupplierFileExplorer extends AbstractSupplierFileExplorer {
 
 	@Inject
 	public SupplierFileExplorer(Composite parent) {

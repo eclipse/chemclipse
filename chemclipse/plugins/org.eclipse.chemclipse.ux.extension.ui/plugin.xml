@@ -197,5 +197,19 @@
          </with>
       </definition>                        
    </extension>     
-   
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
+            class="org.eclipse.chemclipse.ux.extension.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.ux.extension.ui.preferencePage"
+            name="File Supplier Settings">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>   
 </plugin>

@@ -13,16 +13,11 @@ package org.eclipse.chemclipse.ux.extension.wsd.ui.views;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractChromatogramFileExplorer;
+import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSupplierFileExplorer;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramSupport;
 import org.eclipse.swt.widgets.Composite;
 
-/**
- * This view part supports a simple chromatogram file explorer.
- * 
- * @author eselmeister
- */
-public class ChromatogramFileExplorer extends AbstractChromatogramFileExplorer {
+public class ChromatogramFileExplorer extends AbstractSupplierFileExplorer {
 
 	@Inject
 	public ChromatogramFileExplorer(Composite parent) {
