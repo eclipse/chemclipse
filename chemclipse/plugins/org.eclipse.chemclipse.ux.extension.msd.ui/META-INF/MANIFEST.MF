@@ -50,6 +50,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.ux.extension.msd.ui.editors,
+ org.eclipse.chemclipse.ux.extension.msd.ui.internal.support,
  org.eclipse.chemclipse.ux.extension.msd.ui.provider,
  org.eclipse.chemclipse.ux.extension.msd.ui.support,
  org.eclipse.chemclipse.ux.extension.msd.ui.views,
