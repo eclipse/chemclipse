@@ -37,7 +37,7 @@ public class FileExplorerContentProvider implements ITreeContentProvider {
 		if(element instanceof File) {
 			File file = (File)element;
 			File parentFile = file.getParentFile();
-			if(parentFile.canRead() && !parentFile.isHidden()) {
+			if(parentFile != null && parentFile.canRead() && !parentFile.isHidden()) {
 				return parentFile;
 			}
 		}
