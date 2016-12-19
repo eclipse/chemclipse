@@ -378,6 +378,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 			 */
 			eventHandler = new EventHandler() {
 
+				@Override
 				public void handleEvent(Event event) {
 
 					IChromatogramSelectionMSD selection = (IChromatogramSelectionMSD)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
@@ -440,7 +441,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		 * as it must be initialized first.
 		 */
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-		ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(file, chromatogramSelection);
+		ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(file);
 		try {
 			/*
 			 * True to show the moving progress bar. False, a chromatogram
