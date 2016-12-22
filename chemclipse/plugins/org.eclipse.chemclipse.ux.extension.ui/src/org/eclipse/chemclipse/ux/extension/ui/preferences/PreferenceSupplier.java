@@ -57,4 +57,16 @@ public class PreferenceSupplier {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setValue(PreferenceConstants.P_SELECTED_USER_LOCATION_PATH, directoryPath);
 	}
+
+	public static String getUserLocationPath() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getString(PreferenceConstants.P_USER_LOCATION_PATH);
+	}
+
+	public static void setUserLocationPath(String directoryPath) {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.setValue(PreferenceConstants.P_USER_LOCATION_PATH, directoryPath);
+	}
 }

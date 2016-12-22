@@ -19,4 +19,6 @@ public class PreferenceConstants {
 	public static final String P_SELECTED_DRIVE_PATH = "selectedDrivePath";
 	public static final String P_SELECTED_HOME_PATH = "selectedHomePath";
 	public static final String P_SELECTED_USER_LOCATION_PATH = "selectedUserLocationPath";
+	//
+	public static final String P_USER_LOCATION_PATH = "userLocation";
 }

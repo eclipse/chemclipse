@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.preferences;
 
+import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -31,5 +32,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SELECTED_DRIVE_PATH, "");
 		store.setDefault(PreferenceConstants.P_SELECTED_HOME_PATH, "");
 		store.setDefault(PreferenceConstants.P_SELECTED_USER_LOCATION_PATH, "");
+		//
+		store.setDefault(PreferenceConstants.P_USER_LOCATION_PATH, UserManagement.getUserHome());
 	}
 }

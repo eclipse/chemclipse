@@ -138,20 +138,20 @@ public abstract class AbstractSupplierFileExplorer {
 					File directory = new File(pathname);
 					if(directory.exists()) {
 						userLocationTreeViewer.setInput(directory);
-						saveDirectoryPath(directory);
+						PreferenceSupplier.setUserLocationPath(directory.getAbsolutePath());
 					}
 				}
 			}
 		});
 		//
-		String userLocationPath = PreferenceSupplier.getSelectedUserLocationPath();
-		File file = new File(userLocationPath);
-		if(!file.exists()) {
-			file = new File(UserManagement.getUserHome());
+		String userLocationPath = PreferenceSupplier.getUserLocationPath();
+		File userLocation = new File(userLocationPath);
+		if(!userLocation.exists()) {
+			userLocation = new File(UserManagement.getUserHome());
 		}
 		userLocationTreeViewer = createTreeViewer(compositeUserLocation);
 		userLocationTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-		setTreeViewerContent(userLocationTreeViewer, file);
+		setTreeViewerContent(userLocationTreeViewer, userLocation);
 		userLocationTab.setControl(compositeUserLocation);
 	}
 
@@ -187,19 +187,6 @@ public abstract class AbstractSupplierFileExplorer {
 		});
 		//
 		return treeViewer;
-	}
-
-	private void setTreeViewerContent(TreeViewer treeViewer, Object input) {
-
-		Display.getCurrent().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-
-				treeViewer.setInput(input);
-				expandLastDirectoryPath(treeViewer);
-			}
-		});
 	}
 
 	private void openOverview(File file) {
@@ -280,22 +267,62 @@ public abstract class AbstractSupplierFileExplorer {
 
 	private void saveDirectoryPath(File file) {
 
-		String directoryPath;
+		String directoryPath = "";
 		if(file.isFile()) {
-			directoryPath = file.getParent();
+			/*
+			 * Sometimes the data is stored
+			 * in nested directories.
+			 */
+			File directory = file.getParentFile();
+			if(directory != null) {
+				File directoryRoot = directory.getParentFile();
+				if(getNumberOfChildDirectories(directoryRoot) <= 1) {
+					directoryPath = directoryRoot.getAbsolutePath();
+				} else {
+					directoryPath = directory.getAbsolutePath();
+				}
+			}
 		} else {
 			directoryPath = file.getAbsolutePath();
 		}
 		/*
 		 * Store the specific directory path.
 		 */
-		if(drivesTab.getControl().isVisible()) {
-			PreferenceSupplier.setSelectedDrivePath(directoryPath);
-		} else if(homeTab.getControl().isVisible()) {
-			PreferenceSupplier.setSelectedHomePath(directoryPath);
-		} else if(userLocationTab.getControl().isVisible()) {
-			PreferenceSupplier.setSelectedUserLocationPath(directoryPath);
+		if(!directoryPath.equals("")) {
+			if(drivesTab.getControl().isVisible()) {
+				PreferenceSupplier.setSelectedDrivePath(directoryPath);
+			} else if(homeTab.getControl().isVisible()) {
+				PreferenceSupplier.setSelectedHomePath(directoryPath);
+			} else if(userLocationTab.getControl().isVisible()) {
+				PreferenceSupplier.setSelectedUserLocationPath(directoryPath);
+			}
 		}
+	}
+
+	private int getNumberOfChildDirectories(File directory) {
+
+		int counter = 0;
+		if(directory != null) {
+			for(File file : directory.listFiles()) {
+				if(file.isDirectory()) {
+					counter++;
+				}
+			}
+		}
+		return counter;
+	}
+
+	private void setTreeViewerContent(TreeViewer treeViewer, Object input) {
+
+		Display.getCurrent().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+
+				treeViewer.setInput(input);
+				expandLastDirectoryPath(treeViewer);
+			}
+		});
 	}
 
 	private void expandLastDirectoryPath(TreeViewer treeViewer) {
