@@ -63,9 +63,13 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final float NORMALIZATION_BASE = 100.0f;
 	private static final long serialVersionUID = -5705437012632871946L;
+	//
 	private static final Logger logger = Logger.getLogger(AbstractScanMSD.class);
+	//
+	private static final float NORMALIZATION_BASE = 100.0f;
+	private static final int LIMIT_SIM_MEASUREMENT = 10; // 10 m/z values
+	//
 	private boolean isNormalized = false;
 	private float normalizationBase = 0.0f;
 	private List<IIon> ionsList;
@@ -715,8 +719,16 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		return optimizedMassSpectrum;
 	}
 
-	// -----------------------------IMassSpectrumNormalizable
-	// -----------------------------equals, hashCode, toString
+	@Override
+	public boolean isMeasurementSIM() {
+
+		if(ionsList.size() > 0 && ionsList.size() <= LIMIT_SIM_MEASUREMENT) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	@Override
 	public boolean equals(Object otherObject) {
 
@@ -773,8 +785,6 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		return builder.toString();
 	}
 
-	// -----------------------------equals, hashCode, toString
-	// -----------------------------clone
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
 
@@ -892,5 +902,4 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		//
 		return false;
 	}
-	// -----------------------------clone
 }

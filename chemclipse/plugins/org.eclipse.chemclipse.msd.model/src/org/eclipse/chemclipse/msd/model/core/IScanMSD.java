@@ -340,4 +340,11 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	 * @return
 	 */
 	IScanMSD getOptimizedMassSpectrum();
+
+	/**
+	 * Returns whether this is a SIM (<= 10 m/z values) or SCAN measurement.
+	 * 
+	 * @return boolean
+	 */
+	boolean isMeasurementSIM();
 }
