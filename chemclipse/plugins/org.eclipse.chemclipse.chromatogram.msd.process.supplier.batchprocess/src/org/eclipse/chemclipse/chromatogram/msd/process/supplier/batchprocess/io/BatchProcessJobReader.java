@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2016 Philip (eselmeister) Wenig.
+ * Copyright (c) 2010, 2016 Dr. Philip Wenig.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Philip (eselmeister) Wenig - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io;
 
@@ -45,7 +45,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.model.ChromatogramReportSu
 import org.eclipse.chemclipse.chromatogram.xxd.report.model.IChromatogramReportSupplierEntry;
 
 /**
- * @author Philip (eselmeister) Wenig
+ * @author Dr. Philip Wenig
  * 
  */
 public class BatchProcessJobReader implements IBatchProcessJobReader {
