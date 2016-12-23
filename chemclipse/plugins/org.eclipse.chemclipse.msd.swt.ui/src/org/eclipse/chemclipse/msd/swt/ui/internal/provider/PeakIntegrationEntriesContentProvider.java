@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2016 Dr. Philip (eselmeister) Wenig.
+ * Copyright (c) 2013, 2016 Dr. Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the

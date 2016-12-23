@@ -4,7 +4,7 @@
  * All rights reserved.
  * 
  * Contributors:
- * Philip (eselmeister) Wenig - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.wizards;

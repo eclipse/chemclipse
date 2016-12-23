@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Philip (eselmeister) Wenig - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  * Janos Binder - implementation of further filters
  *******************************************************************************/
 package org.eclipse.chemclipse.model.signals;
