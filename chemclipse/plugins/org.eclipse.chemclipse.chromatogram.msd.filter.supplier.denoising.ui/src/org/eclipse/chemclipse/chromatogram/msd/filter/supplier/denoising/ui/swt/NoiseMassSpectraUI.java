@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2016 Philip (eselmeister) Wenig.
+ * Copyright (c) 2010, 2016 Dr. Philip Wenig.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -33,7 +33,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 /**
- * @author Philip (eselmeister) Wenig
+ * @author Dr. Philip Wenig
  */
 public class NoiseMassSpectraUI extends Composite {
 
