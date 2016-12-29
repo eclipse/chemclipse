@@ -2,6 +2,9 @@
  * Copyright (c) 2012, 2016 Lablicate GmbH.
  * 
  * All rights reserved.
+ * 
+ * Contributors:
+ * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.internal.support;
 
