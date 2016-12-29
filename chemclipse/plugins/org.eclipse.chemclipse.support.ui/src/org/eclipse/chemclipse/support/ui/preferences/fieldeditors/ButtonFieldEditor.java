@@ -7,7 +7,7 @@
  * available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Alexander Kerner - initial API and implementation
+ * Dr. Alexander Kerner - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences.fieldeditors;
 
