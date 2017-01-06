@@ -66,6 +66,7 @@ public class ChromatogramHeaderView {
 			 */
 			EventHandler eventHandlerFileOverview = new EventHandler() {
 
+				@Override
 				public void handleEvent(Event event) {
 
 					try {
@@ -74,7 +75,7 @@ public class ChromatogramHeaderView {
 							setChromatogram((File)object);
 						}
 					} catch(Exception e) {
-						logger.warn(e);
+						logger.error(e.getLocalizedMessage(), e);
 					}
 				}
 			};
@@ -84,6 +85,7 @@ public class ChromatogramHeaderView {
 			 */
 			EventHandler eventHandlerInstanceOverview = new EventHandler() {
 
+				@Override
 				public void handleEvent(Event event) {
 
 					try {
