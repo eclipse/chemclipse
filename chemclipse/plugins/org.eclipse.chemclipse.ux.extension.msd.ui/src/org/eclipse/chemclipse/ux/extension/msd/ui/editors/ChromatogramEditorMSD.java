@@ -420,7 +420,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 				chromatogramFile = null;
 			}
 		} catch(Exception e) {
-			logger.warn(e);
+			logger.error(e.getLocalizedMessage(), e);
 		}
 	}
 
@@ -1027,7 +1027,10 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		tableViewer.setLabelProvider(new IonTransitionLabelProvider());
 		tableViewer.setComparator(new IonTransitionTableComparator());
 		List<TableViewerColumn> tableViewerColumns = tableViewer.getTableViewerColumns();
-		TableViewerColumn tableViewerColumn = tableViewerColumns.get(6); // see index in titles[]
+		TableViewerColumn tableViewerColumn = tableViewerColumns.get(6); // see
+		// index
+		// in
+		// titles[]
 		tableViewerColumn.setEditingSupport(new IonTransitionCheckBoxEditingSupport(tableViewer));
 		tableViewer.setInput(chromatogramSelection);
 		//
