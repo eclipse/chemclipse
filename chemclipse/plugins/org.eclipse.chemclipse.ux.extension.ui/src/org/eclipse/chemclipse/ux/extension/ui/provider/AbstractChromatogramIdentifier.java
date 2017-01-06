@@ -63,7 +63,24 @@ public abstract class AbstractChromatogramIdentifier implements IChromatogramIde
 						return supplier.isImportable();
 					}
 				} else if(extension.endsWith(supplierExtension)) {
-					return supplier.isImportable();
+					/*
+					 * Test various implementations.
+					 */
+					if(supplier.isImportable()) {
+						return true;
+					} else {
+						/*
+						 * Try to find a supplier which is capable
+						 * to read the data.
+						 */
+						for(ISupplier specificSupplier : suppliers) {
+							if(extension.endsWith(specificSupplier.getFileExtension())) {
+								if(specificSupplier.isImportable()) {
+									return true;
+								}
+							}
+						}
+					}
 				}
 			}
 		}
