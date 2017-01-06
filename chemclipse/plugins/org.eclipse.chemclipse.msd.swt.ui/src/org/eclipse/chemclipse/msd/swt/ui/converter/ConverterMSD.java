@@ -15,8 +15,6 @@ package org.eclipse.chemclipse.msd.swt.ui.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -32,6 +30,7 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
 import org.eclipse.chemclipse.msd.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
 import org.eclipse.chemclipse.swt.ui.support.PlotSeries;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 public class ConverterMSD {
 
@@ -87,15 +86,14 @@ public class ConverterMSD {
 				j++;
 			}
 		} else {
-			ions = massSpectrum.getIons();
+			ions = new ArrayList<>(massSpectrum.getIons());
 		}
 		return ions;
 	}
 
 	/**
 	 * Returns the tic signal of the selected ions.<br/>
-	 * If chromatogram or selected ions are null, null will be
-	 * returned.
+	 * If chromatogram or selected ions are null, null will be returned.
 	 * 
 	 * @param chromatogram
 	 * @param selectedIons
@@ -156,8 +154,7 @@ public class ConverterMSD {
 				IExtractedIonSignals signals = extractedIonSignalExtractor.getExtractedIonSignals();
 				int scans = signals.size();
 				/*
-				 * Retrieve for each selected ion the ion x and
-				 * y signals.
+				 * Retrieve for each selected ion the ion x and y signals.
 				 */
 				for(int ion : selectedIons.getIonsNominal()) {
 					double[] xSeries = new double[scans];
@@ -172,8 +169,7 @@ public class ConverterMSD {
 						ySeries[y++] = signal.getAbundance(ion);
 					}
 					/*
-					 * Create the ion plot series and store it in the
-					 * list.
+					 * Create the ion plot series and store it in the list.
 					 */
 					ionSeries = new PlotSeries(xSeries, ySeries);
 					plotSeriesList.add(ionSeries);
