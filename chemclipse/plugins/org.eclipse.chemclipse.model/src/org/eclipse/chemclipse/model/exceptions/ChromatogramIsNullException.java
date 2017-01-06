@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.exceptions;
 
-public class ChromatogramIsNullException extends Exception {
+public class ChromatogramIsNullException extends RuntimeException {
 
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final long serialVersionUID = -1869218872950620113L;
+	private static final long serialVersionUID = 3462469886917959112L;
 
 	public ChromatogramIsNullException() {
 		super();
