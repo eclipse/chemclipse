@@ -13,7 +13,8 @@
 package org.eclipse.chemclipse.msd.model.core;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -76,7 +77,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 
 	public AbstractChromatogramMSD() {
 		peaks = new ArrayList<IChromatogramPeakMSD>();
-		targets = new HashSet<IChromatogramTargetMSD>();
+		targets = new LinkedHashSet<IChromatogramTargetMSD>();
 		ionTransitionSettings = new IonTransitionSettings();
 		int segmentWidth = DEFAULT_SEGMENT_WIDTH;
 		try {
@@ -414,8 +415,8 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 	@Override
 	public List<IChromatogramTargetMSD> getTargets() {
 
-		List<IChromatogramTargetMSD> targetList = new ArrayList<IChromatogramTargetMSD>(targets);
-		return targetList;
+		// targets is stored in a set
+		return Collections.unmodifiableList(new ArrayList<IChromatogramTargetMSD>(targets));
 	}
 
 	// -----------------------------------------------IChromatogramTargetsMSD
