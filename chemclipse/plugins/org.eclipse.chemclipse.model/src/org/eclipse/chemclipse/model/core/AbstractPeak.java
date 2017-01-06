@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.model.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.exceptions.PeakException;
@@ -184,7 +185,7 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	@Override
 	public List<IQuantitationEntry> getQuantitationEntries() {
 
-		return quantitationEntries;
+		return Collections.unmodifiableList(quantitationEntries);
 	}
 
 	@Override
@@ -250,7 +251,7 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	@Override
 	public List<IInternalStandard> getInternalStandards() {
 
-		return internalStandards;
+		return Collections.unmodifiableList(internalStandards);
 	}
 
 	@Override

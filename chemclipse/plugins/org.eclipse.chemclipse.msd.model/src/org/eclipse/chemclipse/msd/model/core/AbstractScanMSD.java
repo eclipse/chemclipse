@@ -141,6 +141,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		return this;
 	}
 
+	@Override
 	public AbstractScanMSD addIon(boolean addIntensity, IIon ion) {
 
 		/*
@@ -270,7 +271,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	@Override
 	public List<IIon> getIons() {
 
-		return ionsList;
+		return Collections.unmodifiableList(ionsList);
 	}
 
 	@Override
@@ -421,6 +422,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		}
 	}
 
+	@Override
 	public int getNumberOfIons() {
 
 		return ionsList.size();
