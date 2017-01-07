@@ -243,7 +243,9 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 
 		int start = chromatogram.getStartRetentionTime();
 		int stop = chromatogram.getStopRetentionTime();
-		if(peakModel.getStartRetentionTime() < start || peakModel.getStopRetentionTime() > stop) {
+		int startPeakModel = peakModel.getStartRetentionTime();
+		int stopPeakModel = peakModel.getStopRetentionTime();
+		if(startPeakModel < start || stopPeakModel > stop) {
 			throw new PeakException("The start and stop retention times of the peak must be within the chromatogram retention time borders.");
 		}
 	}
