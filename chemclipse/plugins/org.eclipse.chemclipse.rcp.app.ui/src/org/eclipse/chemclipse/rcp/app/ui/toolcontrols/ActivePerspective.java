@@ -11,17 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui.toolcontrols;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.rcp.app.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.model.application.ui.advanced.MPerspectiveStack;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -35,10 +31,6 @@ public class ActivePerspective {
 	@Inject
 	private Composite parent;
 	@Inject
-	private MApplication application;
-	@Inject
-	private EModelService modelService;
-	@Inject
 	private IEventBroker eventBroker;
 	@Inject
 	private EventHandler eventHandler;
@@ -49,7 +41,7 @@ public class ActivePerspective {
 		parent.setLayout(new GridLayout(1, true));
 		//
 		Label label = new Label(parent, SWT.NONE);
-		setPerspectiveLabel(label, getActiveInitialPerspective());
+		setPerspectiveLabel(label, ModelSupportAddon.getActivePerspective());
 		//
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
@@ -82,17 +74,6 @@ public class ActivePerspective {
 
 		if(eventBroker != null) {
 			eventBroker.unsubscribe(eventHandler);
-		}
-	}
-
-	private String getActiveInitialPerspective() {
-
-		List<MPerspectiveStack> perspectiveStacks = modelService.findElements(application, null, MPerspectiveStack.class, null);
-		if(perspectiveStacks.size() > 0) {
-			MPerspectiveStack perspectiveStack = perspectiveStacks.get(0);
-			return perspectiveStack.getSelectedElement().getLabel();
-		} else {
-			return "n.a.";
 		}
 	}
 }

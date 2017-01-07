@@ -16,6 +16,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.rcp.app.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.rcp.app.ui.dialogs.PerspectiveChooserDialog;
+import org.eclipse.chemclipse.rcp.app.ui.dialogs.PerspectiveSwitcherDialog;
+import org.eclipse.chemclipse.rcp.app.ui.internal.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.rcp.app.ui.switcher.PerspectiveSwitcher;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
@@ -23,11 +28,6 @@ import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-
-import org.eclipse.chemclipse.rcp.app.ui.dialogs.PerspectiveChooserDialog;
-import org.eclipse.chemclipse.rcp.app.ui.dialogs.PerspectiveSwitcherDialog;
-import org.eclipse.chemclipse.rcp.app.ui.internal.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.rcp.app.ui.switcher.PerspectiveSwitcher;
 
 public class PerspectiveSwitchHandler {
 
@@ -47,6 +47,11 @@ public class PerspectiveSwitchHandler {
 		List<String> viewIds = new ArrayList<String>();
 		viewIds.add(viewId);
 		focusPerspectiveAndView(perspectiveId, viewIds);
+	}
+
+	public static void focusViews(List<String> viewIds) {
+
+		focusPerspectiveAndView(null, viewIds);
 	}
 
 	public static void focusPerspectiveAndView(String perspectiveId, List<String> viewIds) {
@@ -80,11 +85,19 @@ public class PerspectiveSwitchHandler {
 			/*
 			 * Change perspective and view.
 			 */
-			perspectiveSwitcher.changePerspective(perspectiveId);
+			if(perspectiveId != null) {
+				perspectiveSwitcher.changePerspective(perspectiveId);
+			}
+			//
 			for(String viewId : viewIds) {
 				perspectiveSwitcher.focusView(viewId);
 			}
 		}
+	}
+
+	public static boolean isActivePerspective(String perspectiveId) {
+
+		return ModelSupportAddon.getActivePerspective().equals(perspectiveId);
 	}
 
 	/*

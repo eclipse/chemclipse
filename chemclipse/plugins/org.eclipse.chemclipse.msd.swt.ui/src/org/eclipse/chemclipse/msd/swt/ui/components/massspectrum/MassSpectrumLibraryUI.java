@@ -355,12 +355,14 @@ public class MassSpectrumLibraryUI extends Composite {
 				Object firstElement = ((IStructuredSelection)event.getSelection()).getFirstElement();
 				if(firstElement != null && firstElement instanceof IScanMSD) {
 					/*
-					 * Activate the views.
+					 * Activate the views if the Mass Spectrum Library Perspective is active.
 					 */
-					List<String> viewIds = new ArrayList<String>();
-					viewIds.add(IPerspectiveAndViewIds.VIEW_MASS_SPECTRUM);
-					viewIds.add(IPerspectiveAndViewIds.VIEW_MASS_SPECTRUM_TARGETS);
-					PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_MS_LIBRARY, viewIds);
+					if(PerspectiveSwitchHandler.isActivePerspective(IPerspectiveAndViewIds.PERSPECTIVE_MS_LIBRARY)) {
+						List<String> viewIds = new ArrayList<String>();
+						viewIds.add(IPerspectiveAndViewIds.VIEW_MASS_SPECTRUM);
+						viewIds.add(IPerspectiveAndViewIds.VIEW_MASS_SPECTRUM_TARGETS);
+						PerspectiveSwitchHandler.focusViews(viewIds);
+					}
 					/*
 					 * Fire an update if an identified scan has been selected.
 					 */

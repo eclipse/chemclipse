@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.rcp.app.ui.addons;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -19,6 +20,7 @@ import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.ui.advanced.MPerspectiveStack;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
@@ -85,5 +87,19 @@ public class ModelSupportAddon {
 	public static boolean saveDirtyParts() {
 
 		return ePartService.saveAll(true);
+	}
+
+	public static String getActivePerspective() {
+
+		List<MPerspectiveStack> perspectiveStacks = eModelService.findElements(mApplication, null, MPerspectiveStack.class, null);
+		if(perspectiveStacks.size() > 0) {
+			MPerspectiveStack perspectiveStack = perspectiveStacks.get(0);
+			String perspectiveName = perspectiveStack.getSelectedElement().getLabel();
+			perspectiveName = perspectiveName.replaceAll("<", "");
+			perspectiveName = perspectiveName.replaceAll(">", "");
+			return perspectiveName;
+		} else {
+			return "";
+		}
 	}
 }

@@ -11,15 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
-import org.eclipse.swt.widgets.Composite;
-import org.swtchart.IBarSeries;
-import org.swtchart.IBarSeries.BarWidthStyle;
-import org.swtchart.ISeries.SeriesType;
-
 import org.eclipse.chemclipse.msd.swt.ui.converter.SeriesConverterMSD;
 import org.eclipse.chemclipse.swt.ui.series.ISeries;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
+import org.eclipse.swt.widgets.Composite;
+import org.swtchart.IBarSeries;
+import org.swtchart.IBarSeries.BarWidthStyle;
+import org.swtchart.ISeries.SeriesType;
 
 public class SimpleMassSpectrumUI extends AbstractExtendedMassSpectrumUI {
 
@@ -27,7 +26,6 @@ public class SimpleMassSpectrumUI extends AbstractExtendedMassSpectrumUI {
 		super(parent, style, massSpectrumType);
 	}
 
-	// -------------------------------------------------------------
 	@Override
 	public void setViewSeries() {
 
