@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.model.identifier;
 
 public interface IPeakComparisonResult extends IComparisonResult {
 
-	boolean isUnique();
+	boolean isMarkerPeak();
 
-	void setUnique(boolean unique);
+	void setMarkerPeak(boolean unique);
 }

@@ -53,7 +53,7 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 				IComparisonResult cp = t.getComparisonResult();
 				if(cp instanceof IPeakComparisonResult) {
 					IPeakComparisonResult pcp = (IPeakComparisonResult)cp;
-					if(pcp.isUnique()) {
+					if(pcp.isMarkerPeak()) {
 						return new Color(Display.getDefault(), 255, 140, 0);
 					}
 				}

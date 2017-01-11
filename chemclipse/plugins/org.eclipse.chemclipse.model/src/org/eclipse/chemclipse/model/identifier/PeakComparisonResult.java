@@ -29,13 +29,13 @@ public class PeakComparisonResult extends AbstractPeakComparisonResult implement
 	}
 
 	@Override
-	public boolean isUnique() {
+	public boolean isMarkerPeak() {
 
 		return unique;
 	}
 
 	@Override
-	public void setUnique(boolean unique) {
+	public void setMarkerPeak(boolean unique) {
 
 		this.unique = unique;
 	}
