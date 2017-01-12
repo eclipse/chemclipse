@@ -16,20 +16,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISubtractFilterSettingsMassSpectrum;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISubtractFilterSettingsPeak;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISubtractFilterSettingsMassSpectrum;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.ISubtractFilterSettingsPeak;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
-import org.eclipse.chemclipse.logging.core.Logger;
 
 public class SubtractCalculator {
 
@@ -123,7 +123,7 @@ public class SubtractCalculator {
 			/*
 			 * Delete the peak area. It needs to be recalculated.
 			 */
-			peak.getTargets().clear();
+			peak.removeAllTargets();
 			peak.getIntegrationEntries().clear();
 			peak.getQuantitationEntries().clear();
 		}
