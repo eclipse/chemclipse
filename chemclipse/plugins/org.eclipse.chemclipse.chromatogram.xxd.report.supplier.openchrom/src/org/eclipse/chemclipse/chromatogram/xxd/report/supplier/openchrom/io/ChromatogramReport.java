@@ -482,7 +482,7 @@ public class ChromatogramReport {
 
 	private void reportPeakIntegrationResults(PrintWriter printWriter, IChromatogramPeakMSD peak, int number, IProgressMonitor monitor) {
 
-		List<? extends IIntegrationEntry> integrationEntries = peak.getIntegrationEntries();
+		List<IIntegrationEntry> integrationEntries = peak.getIntegrationEntries();
 		for(IIntegrationEntry integrationEntry : integrationEntries) {
 			if(integrationEntry instanceof IIntegrationEntryMSD) {
 				IIntegrationEntryMSD integrationEntryMSD = (IIntegrationEntryMSD)integrationEntry;
