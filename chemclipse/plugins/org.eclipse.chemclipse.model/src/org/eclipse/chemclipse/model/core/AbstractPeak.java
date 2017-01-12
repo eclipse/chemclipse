@@ -12,6 +12,8 @@
 package org.eclipse.chemclipse.model.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -168,6 +170,18 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	public void addQuantitationEntry(IQuantitationEntry quantitationEntry) {
 
 		quantitationEntries.add(quantitationEntry);
+	}
+
+	@Override
+	public void addAllQuantitationEntries(IQuantitationEntry... quantitationEntries) {
+
+		this.addAllQuantitationEntries(Arrays.asList(quantitationEntries));
+	}
+
+	@Override
+	public void addAllQuantitationEntries(Collection<? extends IQuantitationEntry> quantitationEntries) {
+
+		this.quantitationEntries.addAll(quantitationEntries);
 	}
 
 	@Override

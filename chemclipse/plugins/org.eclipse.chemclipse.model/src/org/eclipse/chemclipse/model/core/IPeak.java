@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
@@ -161,6 +162,10 @@ public interface IPeak extends IPeakTargets {
 	 * @param quantitationEntry
 	 */
 	void addQuantitationEntry(IQuantitationEntry quantitationEntry);
+
+	void addAllQuantitationEntries(Collection<? extends IQuantitationEntry> quantitationEntries);
+
+	void addAllQuantitationEntries(IQuantitationEntry... quantitationEntries);
 
 	/**
 	 * Removes the quantitation entry from the list.
