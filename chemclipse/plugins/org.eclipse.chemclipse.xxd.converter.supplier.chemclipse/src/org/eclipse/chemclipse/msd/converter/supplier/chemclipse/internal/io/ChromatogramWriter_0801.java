@@ -229,7 +229,7 @@ public class ChromatogramWriter_0801 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeInt(chromatogramTargets.size()); // Number of Targets
 		for(IChromatogramTargetMSD chromatogramTarget : chromatogramTargets) {
 			if(chromatogramTarget instanceof IIdentificationTarget) {
-				IIdentificationTarget identificationEntry = (IIdentificationTarget)chromatogramTarget;
+				IIdentificationTarget identificationEntry = chromatogramTarget;
 				writeIdentificationEntry(dataOutputStream, identificationEntry);
 			}
 		}
@@ -321,7 +321,7 @@ public class ChromatogramWriter_0801 extends AbstractChromatogramWriter implemen
 			dataOutputStream.writeFloat(peakModel.getPeakAbundance(retentionTime)); // Intensity
 		}
 		//
-		List<? extends IIntegrationEntry> integrationEntries = peak.getIntegrationEntries();
+		List<IIntegrationEntry> integrationEntries = peak.getIntegrationEntries();
 		writeIntegrationEntries(dataOutputStream, integrationEntries);
 		/*
 		 * Identification Results
@@ -330,7 +330,7 @@ public class ChromatogramWriter_0801 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeInt(peakTargets.size()); // Number Peak Targets
 		for(IPeakTarget peakTarget : peakTargets) {
 			if(peakTarget instanceof IIdentificationTarget) {
-				IIdentificationTarget identificationEntry = (IIdentificationTarget)peakTarget;
+				IIdentificationTarget identificationEntry = peakTarget;
 				writeIdentificationEntry(dataOutputStream, identificationEntry);
 			}
 		}

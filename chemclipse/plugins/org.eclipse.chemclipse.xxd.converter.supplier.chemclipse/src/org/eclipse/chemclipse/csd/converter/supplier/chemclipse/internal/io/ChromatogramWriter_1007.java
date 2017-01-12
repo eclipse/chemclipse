@@ -284,7 +284,7 @@ public class ChromatogramWriter_1007 extends AbstractChromatogramWriter implemen
 			dataOutputStream.writeFloat(peakModel.getPeakAbundance(retentionTime)); // Intensity
 		}
 		//
-		List<? extends IIntegrationEntry> integrationEntries = peak.getIntegrationEntries();
+		List<IIntegrationEntry> integrationEntries = peak.getIntegrationEntries();
 		writeIntegrationEntries(dataOutputStream, integrationEntries);
 	}
 
