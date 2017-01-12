@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -65,10 +66,10 @@ public class PeakTableTargetLabelProvider extends LabelProvider implements ITabl
 			List<IPeakTarget> peakTargets = null;
 			if(peak instanceof IPeakMSD) {
 				IPeakMSD peakMSD = (IPeakMSD)peak;
-				peakTargets = peakMSD.getTargets();
+				peakTargets = new ArrayList<>(peakMSD.getTargets());
 			} else if(peak instanceof IPeakCSD) {
 				IPeakCSD peakCSD = (IPeakCSD)peak;
-				peakTargets = peakCSD.getTargets();
+				peakTargets = new ArrayList<>(peakCSD.getTargets());
 			}
 			//
 			String peakTarget = "";
@@ -101,6 +102,7 @@ public class PeakTableTargetLabelProvider extends LabelProvider implements ITabl
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
 		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);

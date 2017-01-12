@@ -187,11 +187,13 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 		IPlotArea plotArea = (IPlotArea)getPlotArea();
 		plotArea.addCustomPaintListener(new ICustomPaintListener() {
 
+			@Override
 			public void paintControl(PaintEvent e) {
 
 				paintIdentificationLabels(e);
 			}
 
+			@Override
 			public boolean drawBehindSeries() {
 
 				return true;
@@ -219,7 +221,7 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 					 * cause printing the labels depends on the position
 					 * in the list.
 					 */
-					List<IPeakTarget> peakTargets = peak.getTargets();
+					List<IPeakTarget> peakTargets = new ArrayList<>(peak.getTargets());
 					if(peakTargets.size() == 0) {
 						labels.add("");
 					} else {

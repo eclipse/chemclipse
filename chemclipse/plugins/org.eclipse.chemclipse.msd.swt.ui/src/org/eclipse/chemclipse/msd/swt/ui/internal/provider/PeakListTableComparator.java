@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,10 +44,10 @@ public class PeakListTableComparator extends AbstractRecordTableComparator imple
 		if(e1 instanceof IPeakMSD && e2 instanceof IPeakMSD) {
 			IPeakMSD peak1 = (IPeakMSD)e1;
 			IPeakModelMSD peakModel1 = peak1.getPeakModel();
-			ILibraryInformation libraryInformation1 = getLibraryInformation(peak1.getTargets());
+			ILibraryInformation libraryInformation1 = getLibraryInformation(new ArrayList<>(peak1.getTargets()));
 			IPeakMSD peak2 = (IPeakMSD)e2;
 			IPeakModelMSD peakModel2 = peak2.getPeakModel();
-			ILibraryInformation libraryInformation2 = getLibraryInformation(peak2.getTargets());
+			ILibraryInformation libraryInformation2 = getLibraryInformation(new ArrayList<>(peak2.getTargets()));
 			//
 			switch(getPropertyIndex()) {
 				case 0:

@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,10 +52,10 @@ public class PeakTableTargetComparator extends AbstractRecordTableComparator imp
 			List<IPeakTarget> peakTargets1 = null;
 			if(peak1 instanceof IPeakMSD) {
 				IPeakMSD peakMSD = (IPeakMSD)peak1;
-				peakTargets1 = peakMSD.getTargets();
+				peakTargets1 = new ArrayList<>(peakMSD.getTargets());
 			} else if(peak1 instanceof IPeakCSD) {
 				IPeakCSD peakCSD = (IPeakCSD)peak1;
-				peakTargets1 = peakCSD.getTargets();
+				peakTargets1 = new ArrayList<>(peakCSD.getTargets());
 			}
 			//
 			String peakTarget1 = "";
