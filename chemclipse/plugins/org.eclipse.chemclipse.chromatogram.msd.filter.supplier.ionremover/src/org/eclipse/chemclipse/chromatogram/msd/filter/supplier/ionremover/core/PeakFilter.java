@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.chromatogram.filter.processing.IPeakFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.processing.PeakFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.result.IPeakFilterResult;
@@ -33,6 +31,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakFilter extends AbstractPeakFilter {
 
@@ -54,7 +53,7 @@ public class PeakFilter extends AbstractPeakFilter {
 			IIonRemoverPeakFilterSettings ionRemoverPeakFilterSettings = (IIonRemoverPeakFilterSettings)peakFilterSettings;
 			IMarkedIons ionsToRemove = ionRemoverPeakFilterSettings.getIonsToRemove();
 			for(IPeakMSD peak : peaks) {
-				peak.getTargets().clear();
+				peak.removeAllTargets();
 				IPeakMassSpectrum peakMassSpectrum = peak.getPeakModel().getPeakMassSpectrum();
 				peakMassSpectrum.removeIons(ionsToRemove);
 			}
