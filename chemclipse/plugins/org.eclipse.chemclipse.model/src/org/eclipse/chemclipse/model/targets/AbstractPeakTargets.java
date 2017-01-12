@@ -12,6 +12,9 @@
 package org.eclipse.chemclipse.model.targets;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +24,7 @@ public abstract class AbstractPeakTargets implements IPeakTargets {
 	/**
 	 * Renew the UUID on change.
 	 */
-	private static final long serialVersionUID = 5786029500958913141L;
+	private static final long serialVersionUID = 2862105934040282729L;
 	//
 	private Set<IPeakTarget> targets;
 
@@ -35,6 +38,18 @@ public abstract class AbstractPeakTargets implements IPeakTargets {
 		if(peakTarget != null) {
 			targets.add(peakTarget);
 		}
+	}
+
+	@Override
+	public void addAllTargets(Collection<? extends IPeakTarget> peakTargets) {
+
+		targets.addAll(peakTargets);
+	}
+
+	@Override
+	public void addAllTargets(IPeakTarget... peakTargets) {
+
+		addAllTargets(Arrays.asList(peakTargets));
 	}
 
 	@Override
@@ -58,7 +73,6 @@ public abstract class AbstractPeakTargets implements IPeakTargets {
 	@Override
 	public List<IPeakTarget> getTargets() {
 
-		List<IPeakTarget> targetList = new ArrayList<IPeakTarget>(targets);
-		return targetList;
+		return Collections.unmodifiableList(new ArrayList<>(targets));
 	}
 }

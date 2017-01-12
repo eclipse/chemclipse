@@ -31,5 +31,6 @@ Export-Package: org.eclipse.chemclipse.msd.model.core,
  org.eclipse.chemclipse.msd.model.notifier,
  org.eclipse.chemclipse.msd.model.statistics,
  org.eclipse.chemclipse.msd.model.support,
+ org.eclipse.chemclipse.msd.model.util,
  org.eclipse.chemclipse.msd.model.xic
 Import-Package: javax.annotation;version="1.1.0"

@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.model.targets;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -28,6 +29,10 @@ public interface IPeakTargets extends Serializable {
 	 * @param peakTarget
 	 */
 	void addTarget(IPeakTarget peakTarget);
+
+	void addAllTargets(Collection<? extends IPeakTarget> peakTargets);
+
+	void addAllTargets(IPeakTarget... peakTargets);
 
 	/**
 	 * Remove a target from the peak.
