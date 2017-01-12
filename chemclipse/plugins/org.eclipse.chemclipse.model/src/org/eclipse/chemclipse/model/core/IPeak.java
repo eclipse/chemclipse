@@ -140,7 +140,11 @@ public interface IPeak extends IPeakTargets {
 	 * 
 	 * @return List<IIntegrationEntry>
 	 */
-	List<? extends IIntegrationEntry> getIntegrationEntries();
+	List<IIntegrationEntry> getIntegrationEntries();
+
+	void addAllIntegrationEntries(Collection<? extends IIntegrationEntry> integrationEntries);
+
+	void addAllIntegrationEntries(IIntegrationEntry... integrationEntries);
 
 	/**
 	 * Returns the peak quantifier description.

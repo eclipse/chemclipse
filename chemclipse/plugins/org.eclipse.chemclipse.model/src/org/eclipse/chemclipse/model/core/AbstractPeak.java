@@ -38,7 +38,7 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	private String detectorDescription = "";
 	private String quantifierDescription = "";
 	private boolean activeForAnalysis = true;
-	private List<? extends IIntegrationEntry> integrationEntries;
+	private List<IIntegrationEntry> integrationEntries;
 	private IIntegrationConstraints integrationConstraints;
 	private List<IQuantitationEntry> quantitationEntries;
 	private List<IInternalStandard> internalStandards;
@@ -140,9 +140,21 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	}
 
 	@Override
-	public List<? extends IIntegrationEntry> getIntegrationEntries() {
+	public List<IIntegrationEntry> getIntegrationEntries() {
 
-		return integrationEntries;
+		return Collections.unmodifiableList(integrationEntries);
+	}
+
+	@Override
+	public void addAllIntegrationEntries(Collection<? extends IIntegrationEntry> integrationEntries) {
+
+		this.integrationEntries.addAll(integrationEntries);
+	}
+
+	@Override
+	public void addAllIntegrationEntries(IIntegrationEntry... integrationEntries) {
+
+		this.addAllIntegrationEntries(Arrays.asList(integrationEntries));
 	}
 
 	@Override
@@ -150,7 +162,7 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 
 		if(integrationEntries != null) {
 			setIntegratorDescription(integratorDescription);
-			this.integrationEntries = integrationEntries;
+			this.integrationEntries = new ArrayList<>(integrationEntries);
 		}
 	}
 
