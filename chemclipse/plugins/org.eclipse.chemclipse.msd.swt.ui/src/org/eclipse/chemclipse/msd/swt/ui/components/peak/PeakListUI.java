@@ -108,7 +108,7 @@ public class PeakListUI {
 
 		if(selectedPeakMSD != null && selectedPeakMSD.getPeakModel() != null) {
 			IPeakModelMSD peakModel = selectedPeakMSD.getPeakModel();
-			String name = getName(selectedPeakMSD.getTargets());
+			String name = getName(new ArrayList<>(selectedPeakMSD.getTargets()));
 			labelSelectedPeak.setText("Selected Peak: " + decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR) + " min - Name: " + name);
 		} else {
 			labelSelectedPeak.setText("Selected Peak: none selected yet");

@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -92,7 +93,7 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 		if(element instanceof IPeakMSD) {
 			IPeakMSD peak = (IPeakMSD)element;
 			IPeakModelMSD peakModel = peak.getPeakModel();
-			ILibraryInformation libraryInformation = getLibraryInformation(peak.getTargets());
+			ILibraryInformation libraryInformation = getLibraryInformation(new ArrayList<>(peak.getTargets()));
 			//
 			switch(columnIndex) {
 				case 0:
