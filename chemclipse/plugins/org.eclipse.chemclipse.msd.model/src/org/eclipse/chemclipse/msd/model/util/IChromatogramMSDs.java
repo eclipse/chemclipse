@@ -18,7 +18,13 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
 
-public class ChromatogramMSDs {
+/**
+ * Utility class for {@link IChromatogramMSD} related stuff.
+ * 
+ * @author Alexander Kerner
+ *
+ */
+public class IChromatogramMSDs {
 
 	/**
 	 * Convenience method to add a {@link IPeakMSD} to an {@link IChromatogramMSD}.
