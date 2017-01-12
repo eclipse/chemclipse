@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
  * @author Alexander Kerner
  *
  */
-public class IChromatogramMSDs {
+public class ChromatogramMSDs {
 
 	/**
 	 * Convenience method to add a {@link IPeakMSD} to an {@link IChromatogramMSD}.
@@ -34,9 +34,9 @@ public class IChromatogramMSDs {
 	 * {@link IIntegrationEntry integration entries} and {@link IPeakTarget peak targets} are copied from given peak.
 	 * </p>
 	 * 
-	 * @param chromatogramMSD
+	 * @param chromatogram
 	 *            {@link IChromatogramMSD} to which given peak should be added
-	 * @param peakMSD
+	 * @param peak
 	 *            {@link IPeakMSD} peak to add to given chromatogram
 	 * 
 	 * @return {@link IChromatogramPeakMSD} which was created and added to given {@link IChromatogramMSD}
@@ -47,12 +47,13 @@ public class IChromatogramMSDs {
 	 * @see IPeakTarget
 	 * @see IIntegrationEntry
 	 */
-	public static ChromatogramPeakMSD addPeakToChromatogram(IChromatogramMSD chromatogramMSD, IPeakMSD peakMSD) {
+	public static ChromatogramPeakMSD addPeakToChromatogram(IChromatogramMSD chromatogram, IPeakMSD peak) {
 
-		ChromatogramPeakMSD chromatogramPeakMSD = new ChromatogramPeakMSD(peakMSD.getPeakModel(), chromatogramMSD);
-		chromatogramPeakMSD.addAllIntegrationEntries(peakMSD.getIntegrationEntries());
-		chromatogramPeakMSD.addAllTargets(peakMSD.getTargets());
-		chromatogramMSD.addPeak(chromatogramPeakMSD);
-		return chromatogramPeakMSD;
+		// TODO: find common super type implementation (MSD, CSD, WSD). -> Generic ChromatogramPeak type is needed
+		ChromatogramPeakMSD chromatogramPeak = new ChromatogramPeakMSD(peak.getPeakModel(), chromatogram);
+		chromatogramPeak.addAllIntegrationEntries(peak.getIntegrationEntries());
+		chromatogramPeak.addAllTargets(peak.getTargets());
+		chromatogram.addPeak(chromatogramPeak);
+		return chromatogramPeak;
 	}
 }
