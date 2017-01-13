@@ -170,4 +170,8 @@ public interface ILibraryInformation extends Serializable {
 	 * @return String
 	 */
 	void setContributor(String contributor);
+
+	String getHit();
+
+	String getClassification();
 }

@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Dr. Alexander Kerner - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
@@ -19,7 +20,7 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	/**
 	 * Renew the UUID on change.
 	 */
-	private static final long serialVersionUID = 6013690371824712517L;
+	private static final long serialVersionUID = -7091140092667283293L;
 	//
 	private String name = "";
 	private Set<String> synonyms;
@@ -33,6 +34,8 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	private double molWeight = 0;
 	private String database = "";
 	private String contributor = "";
+	private String hit;
+	private String classification;
 
 	// -----------------------------------------------ILibraryInformation
 	public AbstractLibraryInformation() {
@@ -203,6 +206,28 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 		if(contributor != null) {
 			this.contributor = contributor;
 		}
+	}
+
+	@Override
+	public String getHit() {
+
+		return hit;
+	}
+
+	public void setHit(String hit) {
+
+		this.hit = hit;
+	}
+
+	@Override
+	public String getClassification() {
+
+		return classification;
+	}
+
+	public void setClassification(String classification) {
+
+		this.classification = classification;
 	}
 
 	// -----------------------------------------------ILibraryInformation
