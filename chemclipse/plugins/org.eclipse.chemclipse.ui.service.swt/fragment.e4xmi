@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_nMQXcNtnEeaJesxyMKbrbQ">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_c4FjgNtoEeaJesxyMKbrbQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
+    <elements xsi:type="advanced:Perspective" xmi:id="_fp4VsNtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.perspective.eavp" label="EAVP">
+      <children xsi:type="basic:PartSashContainer" xmi:id="_itjiENtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partsashcontainer.0">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_jl3qINtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partsashcontainer.1" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_k3zzINtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partstack.0">
+            <children xsi:type="basic:Part" xmi:id="_JE20INtpEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.part.basechart" contributionURI="bundleclass://org.eclipse.chemclipse.ui.service.swt/org.eclipse.chemclipse.ui.service.swt.parts.DemoChartPart" label="Base Chart"/>
+          </children>
+          <children xsi:type="basic:PartStack" xmi:id="_lLHJoNtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partstack.1"/>
+        </children>
+        <children xsi:type="basic:PartSashContainer" xmi:id="_j7xBoNtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partsashcontainer.2" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_loZikNtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partstack.2"/>
+          <children xsi:type="basic:PartStack" xmi:id="_l8imkNtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partstack.3"/>
+        </children>
+      </children>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>
