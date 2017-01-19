@@ -11,9 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.core;
 
+import java.util.List;
+
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ui.service.swt.impl.SeriesConverter;
 import org.eclipse.chemclipse.ui.service.swt.internal.charts.BaseChart;
 import org.eclipse.chemclipse.ui.service.swt.internal.charts.ScrollableChart;
 import org.eclipse.swt.graphics.Color;
@@ -22,7 +23,6 @@ import org.swtchart.IAxis;
 import org.swtchart.IAxis.Position;
 import org.swtchart.IAxisSet;
 import org.swtchart.ILineSeries;
-import org.swtchart.ILineSeries.PlotSymbolType;
 import org.swtchart.ISeries.SeriesType;
 
 public class LineChart extends ScrollableChart {
@@ -39,9 +39,22 @@ public class LineChart extends ScrollableChart {
 		initialize();
 	}
 
-	public void applySettings(LineChartSettings settings) {
+	public void addSeriesData(List<ILineSeriesData> lineSeriesDataList) {
 
-		super.applySettings(settings);
+		BaseChart baseChart = getBaseChart();
+		baseChart.suspendUpdate(true);
+		//
+		for(ILineSeriesData lineSeriesData : lineSeriesDataList) {
+			ILineSeries lineSeries = (ILineSeries)createSeries(SeriesType.LINE, lineSeriesData.getXSeries(), lineSeriesData.getYSeries(), lineSeriesData.getId());
+			lineSeries.enableArea(lineSeriesData.isEnableArea());
+			lineSeries.setSymbolType(lineSeriesData.getSymbolType());
+			lineSeries.setSymbolSize(lineSeriesData.getSymbolSize());
+			lineSeries.setLineColor(lineSeriesData.getLineColor());
+			lineSeries.setLineWidth(lineSeriesData.getLineWidth());
+		}
+		//
+		baseChart.suspendUpdate(false);
+		baseChart.adjustRange();
 	}
 
 	private void initialize() {
@@ -80,14 +93,6 @@ public class LineChart extends ScrollableChart {
 		setColors();
 		setVisibility();
 		baseChart.suspendUpdate(false);
-		//
-		ILineSeries lineSeries = (ILineSeries)createSeries(SeriesType.LINE, SeriesConverter.getXSeries(), SeriesConverter.getYSeries(), "Demo");
-		lineSeries.enableArea(true);
-		lineSeries.setSymbolType(PlotSymbolType.NONE);
-		lineSeries.setSymbolSize(8);
-		lineSeries.setLineColor(Colors.RED);
-		lineSeries.setLineWidth(1);
-		baseChart.adjustRange();
 	}
 
 	private void setColors() {

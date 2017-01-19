@@ -11,5 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.core;
 
-public class LineChartSettings extends AbstractChartSettings {
+public interface ISeriesData {
+
+	double[] getXSeries();
+
+	void setXSeries(double[] xSeries);
+
+	double[] getYSeries();
+
+	void setYSeries(double[] ySeries);
+
+	String getId();
+
+	void setId(String id);
 }

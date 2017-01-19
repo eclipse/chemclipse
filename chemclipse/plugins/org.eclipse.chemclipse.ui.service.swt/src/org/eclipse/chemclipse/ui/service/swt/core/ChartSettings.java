@@ -15,7 +15,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
-public class AbstractChartSettings {
+public class ChartSettings {
 
 	private boolean verticalSliderVisible;
 	private boolean horizontalSliderVisible;
@@ -28,7 +28,7 @@ public class AbstractChartSettings {
 	private Color background;
 	private Color backgroundInPlotArea;
 
-	public AbstractChartSettings() {
+	public ChartSettings() {
 		verticalSliderVisible = false;
 		horizontalSliderVisible = true;
 		//

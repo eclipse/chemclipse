@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
-import org.eclipse.chemclipse.ui.service.swt.core.AbstractChartSettings;
+import org.eclipse.chemclipse.ui.service.swt.core.ChartSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
@@ -40,16 +40,16 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 		initialize();
 	}
 
-	public void applySettings(AbstractChartSettings settings) {
+	public void applySettings(ChartSettings chartSettings) {
 
-		sliderVertical.setVisible(settings.isVerticalSliderVisible());
-		sliderHorizontal.setVisible(settings.isHorizontalSliderVisible());
+		sliderVertical.setVisible(chartSettings.isVerticalSliderVisible());
+		sliderHorizontal.setVisible(chartSettings.isHorizontalSliderVisible());
 		//
-		baseChart.setOrientation(settings.getOrientation());
-		baseChart.getLegend().setVisible(settings.isLegendVisible());
-		baseChart.getTitle().setVisible(settings.isTitleVisible());
-		baseChart.setBackground(settings.getBackground());
-		baseChart.setBackgroundInPlotArea(settings.getBackgroundInPlotArea());
+		baseChart.setOrientation(chartSettings.getOrientation());
+		baseChart.getLegend().setVisible(chartSettings.isLegendVisible());
+		baseChart.getTitle().setVisible(chartSettings.isTitleVisible());
+		baseChart.setBackground(chartSettings.getBackground());
+		baseChart.setBackgroundInPlotArea(chartSettings.getBackgroundInPlotArea());
 	}
 
 	public BaseChart getBaseChart() {
