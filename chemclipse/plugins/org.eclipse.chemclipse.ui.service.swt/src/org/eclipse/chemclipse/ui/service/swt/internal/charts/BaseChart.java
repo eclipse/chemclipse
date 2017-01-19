@@ -154,6 +154,21 @@ public class BaseChart extends Chart implements PaintListener, IEventHandler {
 		return maxY;
 	}
 
+	public void adjustMinRange(IAxis axis) {
+
+		if(axis != null) {
+			Range range = axis.getRange();
+			if(axis.getDirection().equals(Direction.X)) {
+				range.lower = (range.lower < minX) ? minX : range.lower;
+				range.upper = (range.upper > maxX) ? maxX : range.upper;
+			} else {
+				range.lower = (range.lower < minY) ? minY : range.lower;
+				range.upper = (range.upper > maxY) ? maxY : range.upper;
+			}
+			axis.setRange(range);
+		}
+	}
+
 	@Override
 	public void handleMouseMoveEvent(Event event) {
 
@@ -257,21 +272,6 @@ public class BaseChart extends Chart implements PaintListener, IEventHandler {
 			double max = axis.getDataCoordinate((stop > start) ? stop : start);
 			axis.setRange(new Range(min, max));
 			adjustMinRange(axis);
-		}
-	}
-
-	private void adjustMinRange(IAxis axis) {
-
-		if(axis != null) {
-			Range range = axis.getRange();
-			if(axis.getDirection().equals(Direction.X)) {
-				range.lower = (range.lower < minX) ? minX : range.lower;
-				range.upper = (range.upper > maxX) ? maxX : range.upper;
-			} else {
-				range.lower = (range.lower < minY) ? minY : range.lower;
-				range.upper = (range.upper > maxY) ? maxY : range.upper;
-			}
-			axis.setRange(range);
 		}
 	}
 }
