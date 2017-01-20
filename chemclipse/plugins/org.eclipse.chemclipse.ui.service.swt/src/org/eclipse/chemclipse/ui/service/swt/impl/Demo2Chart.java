@@ -19,14 +19,17 @@ import org.eclipse.chemclipse.ui.service.swt.core.ChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.core.ILineSeriesData;
 import org.eclipse.chemclipse.ui.service.swt.core.LineChart;
 import org.eclipse.chemclipse.ui.service.swt.core.LineSeriesData;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.swtchart.ILineSeries.PlotSymbolType;
 
-public class DemoChart extends LineChart {
+public class Demo2Chart extends LineChart {
 
-	public DemoChart(Composite parent, int style) {
+	public Demo2Chart(Composite parent, int style) {
 		super(parent, style);
-		applySettings(new ChartSettings());
+		ChartSettings chartSettings = new ChartSettings();
+		chartSettings.setOrientation(SWT.VERTICAL);
+		applySettings(chartSettings);
 		ILineSeriesData lineSeriesData = new LineSeriesData();
 		lineSeriesData.setXSeries(SeriesConverter.getXSeries());
 		lineSeriesData.setYSeries(SeriesConverter.getYSeries());
@@ -36,6 +39,8 @@ public class DemoChart extends LineChart {
 		lineSeriesData.setSymbolSize(8);
 		lineSeriesData.setLineColor(Colors.RED);
 		lineSeriesData.setLineWidth(1);
+		lineSeriesData.setEnableStack(false);
+		lineSeriesData.setEnableStep(false);
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 		lineSeriesDataList.add(lineSeriesData);
 		addSeriesData(lineSeriesDataList);

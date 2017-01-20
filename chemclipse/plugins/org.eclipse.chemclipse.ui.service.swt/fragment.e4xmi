@@ -5,9 +5,11 @@
       <children xsi:type="basic:PartSashContainer" xmi:id="_itjiENtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partsashcontainer.0">
         <children xsi:type="basic:PartSashContainer" xmi:id="_jl3qINtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partsashcontainer.1" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_k3zzINtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partstack.0">
-            <children xsi:type="basic:Part" xmi:id="_JE20INtpEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.part.basechart" contributionURI="bundleclass://org.eclipse.chemclipse.ui.service.swt/org.eclipse.chemclipse.ui.service.swt.parts.DemoChartPart" label="Base Chart"/>
+            <children xsi:type="basic:Part" xmi:id="_JE20INtpEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.part.basechart" contributionURI="bundleclass://org.eclipse.chemclipse.ui.service.swt/org.eclipse.chemclipse.ui.service.swt.parts.Demo1ChartPart" label="Demo 1 Chart"/>
           </children>
-          <children xsi:type="basic:PartStack" xmi:id="_lLHJoNtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partstack.1"/>
+          <children xsi:type="basic:PartStack" xmi:id="_lLHJoNtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partstack.1">
+            <children xsi:type="basic:Part" xmi:id="_qRL30N8nEeaQgqy8xSORpg" elementId="org.eclipse.chemclipse.ui.service.swt.part.demo2chart" contributionURI="bundleclass://org.eclipse.chemclipse.ui.service.swt/org.eclipse.chemclipse.ui.service.swt.parts.Demo2ChartPart" label="Demo 2 Chart"/>
+          </children>
         </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_j7xBoNtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partsashcontainer.2" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_loZikNtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partstack.2"/>

@@ -51,6 +51,8 @@ public class LineChart extends ScrollableChart {
 			lineSeries.setSymbolSize(lineSeriesData.getSymbolSize());
 			lineSeries.setLineColor(lineSeriesData.getLineColor());
 			lineSeries.setLineWidth(lineSeriesData.getLineWidth());
+			lineSeries.enableStack(lineSeriesData.isEnableStack());
+			lineSeries.enableStep(lineSeriesData.isEnableStep());
 		}
 		//
 		baseChart.suspendUpdate(false);
@@ -73,23 +75,26 @@ public class LineChart extends ScrollableChart {
 		yAxisPrimary.getTitle().setText("Intensity");
 		yAxisPrimary.setPosition(Position.Primary);
 		yAxisPrimary.getTick().setFormat(ValueFormat.getDecimalFormatEnglish("0.0#E0"));
-		//
-		// int idxAxis1 = axisSet.createXAxis();
-		// xAxis1 = axisSet.getXAxis(idxAxis1);
-		// xAxis1.getTitle().setText("TOP");
-		// xAxis1.setPosition(Position.Secondary);
-		//
-		// int idxAxis2 = axisSet.createXAxis();
-		// xAxis2 = axisSet.getXAxis(idxAxis2);
-		// xAxis2.getTitle().setText("BOTTOM2");
-		// xAxis2.setPosition(Position.Secondary);
-		//
-		// int idyAxis1 = axisSet.createYAxis();
-		// yAxis1 = axisSet.getYAxis(idyAxis1);
-		// yAxis1.getTitle().setText("RIGHT");
-		// yAxis1.setPosition(Position.Secondary);
-		// yAxis1.getTick().setFormat(ValueFormat.getDecimalFormatEnglish("0.0##"));
-		//
+		yAxisPrimary.enableLogScale(true); // TODO
+		yAxisPrimary.enableCategory(false);
+		; // TODO
+			//
+			// int idxAxis1 = axisSet.createXAxis();
+			// xAxis1 = axisSet.getXAxis(idxAxis1);
+			// xAxis1.getTitle().setText("TOP");
+			// xAxis1.setPosition(Position.Secondary);
+			//
+			// int idxAxis2 = axisSet.createXAxis();
+			// xAxis2 = axisSet.getXAxis(idxAxis2);
+			// xAxis2.getTitle().setText("BOTTOM2");
+			// xAxis2.setPosition(Position.Secondary);
+			//
+			// int idyAxis1 = axisSet.createYAxis();
+			// yAxis1 = axisSet.getYAxis(idyAxis1);
+			// yAxis1.getTitle().setText("RIGHT");
+			// yAxis1.setPosition(Position.Secondary);
+			// yAxis1.getTick().setFormat(ValueFormat.getDecimalFormatEnglish("0.0##"));
+			//
 		setColors();
 		setVisibility();
 		baseChart.suspendUpdate(false);

@@ -21,6 +21,8 @@ public class LineSeriesData extends AbstractSeriesData implements ILineSeriesDat
 	private int symbolSize;
 	private Color lineColor;
 	private int lineWidth;
+	private boolean enableStack;
+	private boolean enableStep;
 
 	@Override
 	public boolean isEnableArea() {
@@ -80,5 +82,29 @@ public class LineSeriesData extends AbstractSeriesData implements ILineSeriesDat
 	public void setLineWidth(int lineWidth) {
 
 		this.lineWidth = lineWidth;
+	}
+
+	@Override
+	public boolean isEnableStack() {
+
+		return enableStack;
+	}
+
+	@Override
+	public void setEnableStack(boolean enableStack) {
+
+		this.enableStack = enableStack;
+	}
+
+	@Override
+	public boolean isEnableStep() {
+
+		return enableStep;
+	}
+
+	@Override
+	public void setEnableStep(boolean enableStep) {
+
+		this.enableStep = enableStep;
 	}
 }

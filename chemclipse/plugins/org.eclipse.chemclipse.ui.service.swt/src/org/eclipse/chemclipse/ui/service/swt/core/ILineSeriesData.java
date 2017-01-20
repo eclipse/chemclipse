@@ -35,4 +35,12 @@ public interface ILineSeriesData extends ISeriesData {
 	int getLineWidth();
 
 	void setLineWidth(int lineWidth);
+
+	boolean isEnableStack();
+
+	void setEnableStack(boolean enableStack);
+
+	boolean isEnableStep();
+
+	void setEnableStep(boolean enableStep);
 }

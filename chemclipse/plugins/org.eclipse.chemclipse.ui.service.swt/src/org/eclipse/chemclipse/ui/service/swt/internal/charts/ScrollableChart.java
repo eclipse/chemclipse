@@ -174,7 +174,7 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 			 * Horizontal
 			 */
 			int selectionY = (int)(baseChart.getMaxY() - baseChart.getMinY());
-			int incrementY = selectionY / 1000;
+			int incrementY = selectionY; // / 1000;
 			incrementY = (incrementY < 1) ? 1 : incrementY;
 			sliderVertical.setMinimum((int)baseChart.getMinY());
 			sliderVertical.setMaximum((int)baseChart.getMaxY());
@@ -182,7 +182,7 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 			sliderVertical.setSelection(selectionY);
 			//
 			int selectionX = (int)(baseChart.getMaxX() - baseChart.getMinX());
-			int incrementX = selectionX / 1000;
+			int incrementX = selectionX; // / 1000;
 			incrementX = (incrementX < 1) ? 1 : incrementX;
 			sliderHorizontal.setMinimum((int)baseChart.getMinX());
 			sliderHorizontal.setMaximum((int)baseChart.getMaxX());
@@ -193,7 +193,7 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 			 * Vertical
 			 */
 			int selectionY = (int)(baseChart.getMaxX() - baseChart.getMinX());
-			int incrementY = selectionY / 1000;
+			int incrementY = selectionY; // / 1000;
 			incrementY = (incrementY < 1) ? 1 : incrementY;
 			sliderVertical.setMinimum((int)baseChart.getMinX());
 			sliderVertical.setMaximum((int)baseChart.getMaxX());
@@ -201,7 +201,7 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 			sliderVertical.setSelection(selectionY);
 			//
 			int selectionX = (int)(baseChart.getMaxY() - baseChart.getMinY());
-			int incrementX = selectionX / 1000;
+			int incrementX = selectionX; // / 1000;
 			incrementX = (incrementX < 1) ? 1 : incrementX;
 			sliderHorizontal.setMinimum((int)baseChart.getMinY());
 			sliderHorizontal.setMaximum((int)baseChart.getMaxY());
