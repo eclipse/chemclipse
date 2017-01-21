@@ -26,7 +26,7 @@ import org.swtchart.ISeries.SeriesType;
 import org.swtchart.ISeriesSet;
 import org.swtchart.Range;
 
-public class BaseChart extends Chart implements PaintListener, IEventHandler {
+public class BaseChart extends Chart implements PaintListener, IEventHandler, IDataCoordinates {
 
 	private static final long DELTA_CLICK_TIME = 100;
 	/*
@@ -38,6 +38,8 @@ public class BaseChart extends Chart implements PaintListener, IEventHandler {
 	private UserSelection userSelection;
 	private long clickTime;
 	//
+	private double lengthX;
+	private double lengthY;
 	private double minX;
 	private double maxX;
 	private double minY;
@@ -115,6 +117,8 @@ public class BaseChart extends Chart implements PaintListener, IEventHandler {
 		double minY = Arrays.stream(series.getYSeries()).min().getAsDouble();
 		double maxY = Arrays.stream(series.getXSeries()).max().getAsDouble();
 		//
+		this.lengthX = (this.lengthX > xSeries.length) ? this.lengthX : xSeries.length;
+		this.lengthY = (this.lengthY > ySeries.length) ? this.lengthY : ySeries.length;
 		this.minX = (this.minX < minX) ? this.minX : minX;
 		this.maxX = (this.maxX > maxX) ? this.maxX : maxX;
 		this.minY = (this.minY < minY) ? this.minY : minY;
@@ -134,21 +138,37 @@ public class BaseChart extends Chart implements PaintListener, IEventHandler {
 		redraw();
 	}
 
+	@Override
+	public double getLengthX() {
+
+		return lengthX;
+	}
+
+	@Override
+	public double getLengthY() {
+
+		return lengthY;
+	}
+
+	@Override
 	public double getMinX() {
 
 		return minX;
 	}
 
+	@Override
 	public double getMaxX() {
 
 		return maxX;
 	}
 
+	@Override
 	public double getMinY() {
 
 		return minY;
 	}
 
+	@Override
 	public double getMaxY() {
 
 		return maxY;

@@ -15,8 +15,6 @@ import org.eclipse.chemclipse.ui.service.swt.core.ChartSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -178,7 +176,7 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 			 * Horizontal
 			 */
 			int selectionY = (int)(baseChart.getMaxY() - baseChart.getMinY());
-			int incrementY = selectionY; // / 1000;
+			int incrementY = (int)(selectionY / baseChart.getLengthY());
 			incrementY = (incrementY < 1) ? 1 : incrementY;
 			sliderVertical.setMinimum((int)baseChart.getMinY());
 			sliderVertical.setMaximum((int)baseChart.getMaxY());
@@ -187,7 +185,7 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 			sliderVertical.setThumb(selectionY);
 			//
 			int selectionX = (int)(baseChart.getMaxX() - baseChart.getMinX());
-			int incrementX = selectionX; // / 1000;
+			int incrementX = (int)(selectionX / baseChart.getLengthX());
 			incrementX = (incrementX < 1) ? 1 : incrementX;
 			sliderHorizontal.setMinimum((int)baseChart.getMinX());
 			sliderHorizontal.setMaximum((int)baseChart.getMaxX());
@@ -199,7 +197,7 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 			 * Vertical
 			 */
 			int selectionY = (int)(baseChart.getMaxX() - baseChart.getMinX());
-			int incrementY = selectionY; // / 1000;
+			int incrementY = (int)(selectionY / baseChart.getLengthY());
 			incrementY = (incrementY < 1) ? 1 : incrementY;
 			sliderVertical.setMinimum((int)baseChart.getMinX());
 			sliderVertical.setMaximum((int)baseChart.getMaxX());
@@ -208,7 +206,7 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 			sliderVertical.setThumb(selectionY);
 			//
 			int selectionX = (int)(baseChart.getMaxY() - baseChart.getMinY());
-			int incrementX = selectionX; // / 1000;
+			int incrementX = (int)(selectionX / baseChart.getLengthX());
 			incrementX = (incrementX < 1) ? 1 : incrementX;
 			sliderHorizontal.setMinimum((int)baseChart.getMinY());
 			sliderHorizontal.setMaximum((int)baseChart.getMaxY());
@@ -253,10 +251,10 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 		gridData.horizontalSpan = 2;
 		sliderHorizontal.setLayoutData(gridData);
 		sliderHorizontal.setVisible(true);
-		sliderHorizontal.addSelectionListener(new SelectionAdapter() {
+		sliderHorizontal.addListener(SWT.Selection, new Listener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void handleEvent(Event event) {
 
 				IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
 				IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
