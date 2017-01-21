@@ -103,10 +103,6 @@
 <repository location="http://download.eclipse.org/ease/update/release"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.ease.python.jython.feature.feature.group" version="0.0.0"/>
-<repository location="https://dl.bintray.com/pontesegger/ease-jython/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.knime.features.base.filehandling.feature.group" version="0.0.0"/>
 <unit id="org.knime.features.xml.feature.group" version="0.0.0"/>
 <unit id="org.knime.features.ext.itemset.feature.group" version="0.0.0"/>
@@ -182,16 +178,16 @@
 <repository location="http://update.knime.org/analytics-platform/3.1/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.fx.ide.converter.feature.feature.group" version="2.1.0.201508240705"/>
-<unit id="org.eclipse.fx.ide.css.feature.feature.group" version="2.1.0.201508240705"/>
-<unit id="org.eclipse.fx.ide.pde.feature.feature.group" version="2.1.0.201508240705"/>
-<unit id="org.eclipse.fx.ide.fxml.feature.feature.group" version="2.1.0.201508240705"/>
-<unit id="org.eclipse.fx.ide.fxgraph.feature.feature.group" version="2.1.0.201508240705"/>
-<unit id="org.eclipse.fx.ide.rrobot.feature.feature.group" version="2.1.0.201508240705"/>
-<unit id="org.eclipse.fx.ide.l10n.feature.feature.group" version="2.1.0.201508240705"/>
-<unit id="org.eclipse.fx.ide.feature.feature.group" version="2.1.0.201508240705"/>
-<unit id="org.eclipse.fx.ide.ldef.feature.feature.group" version="2.1.0.201508240705"/>
-<unit id="org.eclipse.fx.ide.basic.feature.feature.group" version="2.1.0.201508240705"/>
+<unit id="org.eclipse.fx.ide.converter.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.css.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.pde.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.fxml.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.fxgraph.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.rrobot.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.l10n.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.ldef.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.fx.ide.basic.feature.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/efxclipse/updates-released/2.1.0/site"/>
 </location>
 </locations>
