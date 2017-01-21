@@ -11,25 +11,45 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.core;
 
-public class LineSeriesData implements ILineSeriesData {
+public class SeriesData implements ISeriesData {
 
-	private ISeriesData seriesData;
-	private ILineSeriesSettings lineSeriesSettings;
+	private double[] xSeries;
+	private double[] ySeries;
+	private String id;
 
-	public LineSeriesData(ISeriesData seriesData) {
-		this.seriesData = seriesData;
-		this.lineSeriesSettings = new LineSeriesSettings();
+	@Override
+	public double[] getXSeries() {
+
+		return xSeries;
 	}
 
 	@Override
-	public ISeriesData getSeriesData() {
+	public void setXSeries(double[] xSeries) {
 
-		return seriesData;
+		this.xSeries = xSeries;
 	}
 
 	@Override
-	public ILineSeriesSettings getLineSeriesSettings() {
+	public double[] getYSeries() {
 
-		return lineSeriesSettings;
+		return ySeries;
+	}
+
+	@Override
+	public void setYSeries(double[] ySeries) {
+
+		this.ySeries = ySeries;
+	}
+
+	@Override
+	public String getId() {
+
+		return id;
+	}
+
+	@Override
+	public void setId(String id) {
+
+		this.id = id;
 	}
 }

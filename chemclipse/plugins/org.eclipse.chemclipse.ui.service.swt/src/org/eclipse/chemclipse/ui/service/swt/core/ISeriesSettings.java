@@ -11,45 +11,5 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.core;
 
-public abstract class AbstractSeriesData implements ISeriesData {
-
-	private double[] xSeries;
-	private double[] ySeries;
-	private String id;
-
-	@Override
-	public double[] getXSeries() {
-
-		return xSeries;
-	}
-
-	@Override
-	public void setXSeries(double[] xSeries) {
-
-		this.xSeries = xSeries;
-	}
-
-	@Override
-	public double[] getYSeries() {
-
-		return ySeries;
-	}
-
-	@Override
-	public void setYSeries(double[] ySeries) {
-
-		this.ySeries = ySeries;
-	}
-
-	@Override
-	public String getId() {
-
-		return id;
-	}
-
-	@Override
-	public void setId(String id) {
-
-		this.id = id;
-	}
+public interface ISeriesSettings {
 }

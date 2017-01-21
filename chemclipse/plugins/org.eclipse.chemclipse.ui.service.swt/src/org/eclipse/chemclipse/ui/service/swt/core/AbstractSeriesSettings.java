@@ -11,25 +11,5 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.core;
 
-public class LineSeriesData implements ILineSeriesData {
-
-	private ISeriesData seriesData;
-	private ILineSeriesSettings lineSeriesSettings;
-
-	public LineSeriesData(ISeriesData seriesData) {
-		this.seriesData = seriesData;
-		this.lineSeriesSettings = new LineSeriesSettings();
-	}
-
-	@Override
-	public ISeriesData getSeriesData() {
-
-		return seriesData;
-	}
-
-	@Override
-	public ILineSeriesSettings getLineSeriesSettings() {
-
-		return lineSeriesSettings;
-	}
+public abstract class AbstractSeriesSettings implements ISeriesSettings {
 }

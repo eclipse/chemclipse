@@ -122,7 +122,9 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 			int selectionX = (int)(xAxis.getRange().upper - xAxis.getRange().lower);
 			if((baseChart.getOrientation() == SWT.HORIZONTAL)) {
 				sliderHorizontal.setSelection(selectionX);
+				sliderHorizontal.setThumb(selectionX);
 			} else {
+				sliderVertical.setSelection(selectionX);
 				sliderVertical.setSelection(selectionX);
 			}
 		}
@@ -131,8 +133,10 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 			int selectionY = (int)(yAxis.getRange().upper - yAxis.getRange().lower);
 			if((baseChart.getOrientation() == SWT.HORIZONTAL)) {
 				sliderVertical.setSelection(selectionY);
+				sliderVertical.setSelection(selectionY);
 			} else {
 				sliderHorizontal.setSelection(selectionY);
+				sliderHorizontal.setThumb(selectionY);
 			}
 		}
 	}
@@ -180,6 +184,7 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 			sliderVertical.setMaximum((int)baseChart.getMaxY());
 			sliderVertical.setIncrement(incrementY);
 			sliderVertical.setSelection(selectionY);
+			sliderVertical.setThumb(selectionY);
 			//
 			int selectionX = (int)(baseChart.getMaxX() - baseChart.getMinX());
 			int incrementX = selectionX; // / 1000;
@@ -188,6 +193,7 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 			sliderHorizontal.setMaximum((int)baseChart.getMaxX());
 			sliderHorizontal.setPageIncrement(incrementX);
 			sliderHorizontal.setSelection(selectionX);
+			sliderHorizontal.setThumb(selectionX);
 		} else {
 			/*
 			 * Vertical
@@ -199,6 +205,7 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 			sliderVertical.setMaximum((int)baseChart.getMaxX());
 			sliderVertical.setPageIncrement(incrementY);
 			sliderVertical.setSelection(selectionY);
+			sliderVertical.setThumb(selectionY);
 			//
 			int selectionX = (int)(baseChart.getMaxY() - baseChart.getMinY());
 			int incrementX = selectionX; // / 1000;
@@ -207,6 +214,7 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 			sliderHorizontal.setMaximum((int)baseChart.getMaxY());
 			sliderHorizontal.setPageIncrement(incrementX);
 			sliderHorizontal.setSelection(selectionX);
+			sliderHorizontal.setThumb(selectionX);
 		}
 	}
 

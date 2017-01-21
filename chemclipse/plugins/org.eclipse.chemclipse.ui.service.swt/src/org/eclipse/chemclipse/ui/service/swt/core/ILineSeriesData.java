@@ -11,36 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.core;
 
-import org.eclipse.swt.graphics.Color;
-import org.swtchart.ILineSeries.PlotSymbolType;
+public interface ILineSeriesData {
 
-public interface ILineSeriesData extends ISeriesData {
+	ISeriesData getSeriesData();
 
-	boolean isEnableArea();
-
-	void setEnableArea(boolean enableArea);
-
-	PlotSymbolType getSymbolType();
-
-	void setSymbolType(PlotSymbolType symbolType);
-
-	int getSymbolSize();
-
-	void setSymbolSize(int symbolSize);
-
-	Color getLineColor();
-
-	void setLineColor(Color lineColor);
-
-	int getLineWidth();
-
-	void setLineWidth(int lineWidth);
-
-	boolean isEnableStack();
-
-	void setEnableStack(boolean enableStack);
-
-	boolean isEnableStep();
-
-	void setEnableStep(boolean enableStep);
+	ILineSeriesSettings getLineSeriesSettings();
 }

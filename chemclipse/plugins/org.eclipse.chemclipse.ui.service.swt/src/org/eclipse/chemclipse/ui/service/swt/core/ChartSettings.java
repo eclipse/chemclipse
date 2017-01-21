@@ -29,6 +29,7 @@ public class ChartSettings {
 	private Color backgroundInPlotArea;
 
 	public ChartSettings() {
+		//
 		verticalSliderVisible = false;
 		horizontalSliderVisible = true;
 		//

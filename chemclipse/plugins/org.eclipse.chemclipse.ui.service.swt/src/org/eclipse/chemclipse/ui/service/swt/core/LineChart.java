@@ -45,14 +45,18 @@ public class LineChart extends ScrollableChart {
 		baseChart.suspendUpdate(true);
 		//
 		for(ILineSeriesData lineSeriesData : lineSeriesDataList) {
-			ILineSeries lineSeries = (ILineSeries)createSeries(SeriesType.LINE, lineSeriesData.getXSeries(), lineSeriesData.getYSeries(), lineSeriesData.getId());
-			lineSeries.enableArea(lineSeriesData.isEnableArea());
-			lineSeries.setSymbolType(lineSeriesData.getSymbolType());
-			lineSeries.setSymbolSize(lineSeriesData.getSymbolSize());
-			lineSeries.setLineColor(lineSeriesData.getLineColor());
-			lineSeries.setLineWidth(lineSeriesData.getLineWidth());
-			lineSeries.enableStack(lineSeriesData.isEnableStack());
-			lineSeries.enableStep(lineSeriesData.isEnableStep());
+			//
+			ISeriesData seriesData = lineSeriesData.getSeriesData();
+			ILineSeries lineSeries = (ILineSeries)createSeries(SeriesType.LINE, seriesData.getXSeries(), seriesData.getYSeries(), seriesData.getId());
+			//
+			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+			lineSeries.enableArea(lineSeriesSettings.isEnableArea());
+			lineSeries.setSymbolType(lineSeriesSettings.getSymbolType());
+			lineSeries.setSymbolSize(lineSeriesSettings.getSymbolSize());
+			lineSeries.setLineColor(lineSeriesSettings.getLineColor());
+			lineSeries.setLineWidth(lineSeriesSettings.getLineWidth());
+			lineSeries.enableStack(lineSeriesSettings.isEnableStack());
+			lineSeries.enableStep(lineSeriesSettings.isEnableStep());
 		}
 		//
 		baseChart.suspendUpdate(false);
