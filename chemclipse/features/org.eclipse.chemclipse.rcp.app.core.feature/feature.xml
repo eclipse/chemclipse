@@ -78,10 +78,6 @@ http://www.eclipse.org/legal/epl-v10.html
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.ecf.filetransfer.feature"
-         version="5.0.0.v20160817-1024"/>
-
-   <includes
          id="org.eclipse.ecf.filetransfer.httpclient4.feature"
          version="0.0.0"/>
 
