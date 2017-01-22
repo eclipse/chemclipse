@@ -20,9 +20,6 @@
 <unit id="org.eclipse.birt.chart.cshelp.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.birt.cshelp.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.jpt.jpa.eclipselink.feature.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/releases/oxygen"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.ecf.filetransfer.httpclient4.ssl.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="0.0.0"/>
@@ -30,7 +27,7 @@
 <unit id="org.eclipse.ecf.filetransfer.httpclient4.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.ecf.core.ssl.feature.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/rt/ecf/3.13.4/site.p2"/>
+<repository location="http://download.eclipse.org/releases/oxygen"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.apache.log4j" version="0.0.0"/>
