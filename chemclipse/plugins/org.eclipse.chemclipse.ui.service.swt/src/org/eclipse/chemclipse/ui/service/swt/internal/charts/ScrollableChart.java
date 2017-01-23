@@ -11,10 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
-import org.eclipse.chemclipse.ui.service.swt.core.ChartSettings;
+import org.eclipse.chemclipse.ui.service.swt.core.IChartSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -27,7 +26,7 @@ import org.swtchart.ISeries;
 import org.swtchart.ISeries.SeriesType;
 import org.swtchart.Range;
 
-public class ScrollableChart extends Composite implements Listener, PaintListener, IEventHandler {
+public class ScrollableChart extends Composite implements IEventHandler {
 
 	private Slider sliderVertical;
 	private Slider sliderHorizontal;
@@ -38,7 +37,7 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 		initialize();
 	}
 
-	public void applySettings(ChartSettings chartSettings) {
+	public void applySettings(IChartSettings chartSettings) {
 
 		sliderVertical.setVisible(chartSettings.isVerticalSliderVisible());
 		sliderHorizontal.setVisible(chartSettings.isHorizontalSliderVisible());
@@ -48,6 +47,9 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 		baseChart.getTitle().setVisible(chartSettings.isTitleVisible());
 		baseChart.setBackground(chartSettings.getBackground());
 		baseChart.setBackgroundInPlotArea(chartSettings.getBackgroundInPlotArea());
+		baseChart.enableCompress(chartSettings.isEnableCompress());
+		baseChart.setUseZeroX(chartSettings.isUseZeroX());
+		baseChart.setUseZeroY(chartSettings.isUseZeroY());
 	}
 
 	public BaseChart getBaseChart() {
@@ -71,7 +73,6 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 	@Override
 	public void handleEvent(Event event) {
 
-		baseChart.handleEvent(event);
 		switch(event.type) {
 			case SWT.KeyDown:
 				handleKeyDownEvent(event);
@@ -105,16 +106,20 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 	@Override
 	public void handleMouseMoveEvent(Event event) {
 
+		baseChart.handleMouseMoveEvent(event);
 	}
 
 	@Override
 	public void handleMouseDownEvent(Event event) {
 
+		baseChart.handleMouseDownEvent(event);
 	}
 
 	@Override
 	public void handleMouseUpEvent(Event event) {
 
+		baseChart.handleMouseUpEvent(event);
+		//
 		IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
 		if(xAxis != null) {
 			int selectionX = (int)(xAxis.getRange().upper - xAxis.getRange().lower);
@@ -142,31 +147,37 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 	@Override
 	public void handleMouseWheel(Event event) {
 
+		baseChart.handleMouseWheel(event);
 	}
 
 	@Override
 	public void handleMouseDoubleClick(Event event) {
 
+		baseChart.handleMouseDoubleClick(event);
 	}
 
 	@Override
 	public void handleKeyDownEvent(Event event) {
 
+		baseChart.handleKeyDownEvent(event);
 	}
 
 	@Override
 	public void handleKeyUpEvent(Event event) {
 
+		baseChart.handleKeyUpEvent(event);
 	}
 
 	@Override
 	public void handleSelectionEvent(Event event) {
 
+		baseChart.handleSelectionEvent(event);
 	}
 
 	@Override
 	public void paintControl(PaintEvent e) {
 
+		baseChart.paintControl(e);
 	}
 
 	private void resetSlider() {
@@ -232,7 +243,6 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 		 */
 		baseChart = new BaseChart(composite, SWT.NONE);
 		baseChart.setLayoutData(new GridData(GridData.FILL_BOTH));
-		//
 		Composite plotArea = baseChart.getPlotArea();
 		plotArea.addListener(SWT.KeyDown, this);
 		plotArea.addListener(SWT.KeyUp, this);
@@ -264,11 +274,11 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 					Range range = new Range(min, max);
 					if((baseChart.getOrientation() == SWT.HORIZONTAL)) {
 						xAxis.setRange(range);
-						baseChart.adjustMinRange(xAxis);
+						baseChart.adjustMinMaxRange(xAxis);
 						baseChart.redraw();
 					} else {
 						yAxis.setRange(range);
-						baseChart.adjustMinRange(xAxis);
+						baseChart.adjustMinMaxRange(xAxis);
 						baseChart.redraw();
 					}
 				}

@@ -42,9 +42,10 @@ public class LineSeriesSettings extends AbstractSeriesSettings implements ILineS
 	}
 
 	@Override
-	public void setEnableArea(boolean enableArea) {
+	public ILineSeriesSettings setEnableArea(boolean enableArea) {
 
 		this.enableArea = enableArea;
+		return this;
 	}
 
 	@Override
@@ -54,9 +55,10 @@ public class LineSeriesSettings extends AbstractSeriesSettings implements ILineS
 	}
 
 	@Override
-	public void setSymbolType(PlotSymbolType symbolType) {
+	public ILineSeriesSettings setSymbolType(PlotSymbolType symbolType) {
 
 		this.symbolType = symbolType;
+		return this;
 	}
 
 	@Override
@@ -66,9 +68,10 @@ public class LineSeriesSettings extends AbstractSeriesSettings implements ILineS
 	}
 
 	@Override
-	public void setSymbolSize(int symbolSize) {
+	public ILineSeriesSettings setSymbolSize(int symbolSize) {
 
 		this.symbolSize = symbolSize;
+		return this;
 	}
 
 	@Override
@@ -78,9 +81,10 @@ public class LineSeriesSettings extends AbstractSeriesSettings implements ILineS
 	}
 
 	@Override
-	public void setLineColor(Color lineColor) {
+	public ILineSeriesSettings setLineColor(Color lineColor) {
 
 		this.lineColor = lineColor;
+		return this;
 	}
 
 	@Override
@@ -90,9 +94,10 @@ public class LineSeriesSettings extends AbstractSeriesSettings implements ILineS
 	}
 
 	@Override
-	public void setLineWidth(int lineWidth) {
+	public ILineSeriesSettings setLineWidth(int lineWidth) {
 
 		this.lineWidth = lineWidth;
+		return this;
 	}
 
 	@Override
@@ -102,9 +107,10 @@ public class LineSeriesSettings extends AbstractSeriesSettings implements ILineS
 	}
 
 	@Override
-	public void setEnableStack(boolean enableStack) {
+	public ILineSeriesSettings setEnableStack(boolean enableStack) {
 
 		this.enableStack = enableStack;
+		return this;
 	}
 
 	@Override
@@ -114,8 +120,9 @@ public class LineSeriesSettings extends AbstractSeriesSettings implements ILineS
 	}
 
 	@Override
-	public void setEnableStep(boolean enableStep) {
+	public ILineSeriesSettings setEnableStep(boolean enableStep) {
 
 		this.enableStep = enableStep;
+		return this;
 	}
 }

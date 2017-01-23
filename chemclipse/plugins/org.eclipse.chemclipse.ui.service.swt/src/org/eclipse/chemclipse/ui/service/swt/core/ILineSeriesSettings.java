@@ -18,29 +18,29 @@ public interface ILineSeriesSettings extends ISeriesSettings {
 
 	boolean isEnableArea();
 
-	void setEnableArea(boolean enableArea);
+	ILineSeriesSettings setEnableArea(boolean enableArea);
 
 	PlotSymbolType getSymbolType();
 
-	void setSymbolType(PlotSymbolType symbolType);
+	ILineSeriesSettings setSymbolType(PlotSymbolType symbolType);
 
 	int getSymbolSize();
 
-	void setSymbolSize(int symbolSize);
+	ILineSeriesSettings setSymbolSize(int symbolSize);
 
 	Color getLineColor();
 
-	void setLineColor(Color lineColor);
+	ILineSeriesSettings setLineColor(Color lineColor);
 
 	int getLineWidth();
 
-	void setLineWidth(int lineWidth);
+	ILineSeriesSettings setLineWidth(int lineWidth);
 
 	boolean isEnableStack();
 
-	void setEnableStack(boolean enableStack);
+	ILineSeriesSettings setEnableStack(boolean enableStack);
 
 	boolean isEnableStep();
 
-	void setEnableStep(boolean enableStep);
+	ILineSeriesSettings setEnableStep(boolean enableStep);
 }

@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 
-public interface IEventHandler {
+public interface IEventHandler extends Listener, PaintListener {
 
 	void handleMouseMoveEvent(Event event);
 

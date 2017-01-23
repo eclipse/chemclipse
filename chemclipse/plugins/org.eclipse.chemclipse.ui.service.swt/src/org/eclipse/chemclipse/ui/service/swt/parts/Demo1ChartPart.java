@@ -30,6 +30,8 @@ public class Demo1ChartPart {
 	public void postConstruct() {
 
 		chart = new Demo1Chart(parent, SWT.BORDER);
+		chart.adjustRange();
+		chart.redraw();
 	}
 
 	@PreDestroy

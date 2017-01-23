@@ -15,11 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.ui.service.swt.core.ChartSettings;
+import org.eclipse.chemclipse.ui.service.swt.core.IChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.core.ILineSeriesData;
+import org.eclipse.chemclipse.ui.service.swt.core.ILineSeriesSettings;
 import org.eclipse.chemclipse.ui.service.swt.core.ISeriesData;
 import org.eclipse.chemclipse.ui.service.swt.core.LineChart;
 import org.eclipse.chemclipse.ui.service.swt.core.LineSeriesData;
 import org.eclipse.chemclipse.ui.service.swt.core.SeriesData;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 public class Demo1Chart extends LineChart {
@@ -29,7 +32,14 @@ public class Demo1Chart extends LineChart {
 		/*
 		 * Chart Settings
 		 */
-		applySettings(new ChartSettings());
+		IChartSettings chartSettings = new ChartSettings();
+		chartSettings //
+				.setOrientation(SWT.HORIZONTAL) //
+				.setHorizontalSliderVisible(true) //
+				.setVerticalSliderVisible(true) //
+				.setUseZeroX(true) //
+				.setUseZeroY(false);
+		applySettings(chartSettings);
 		/*
 		 * Create series.
 		 */
@@ -38,7 +48,11 @@ public class Demo1Chart extends LineChart {
 		seriesData.setXSeries(SeriesConverter.getXSeries());
 		seriesData.setYSeries(SeriesConverter.getYSeries());
 		seriesData.setId("Demo");
-		lineSeriesDataList.add(new LineSeriesData(seriesData));
+		//
+		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
+		ILineSeriesSettings lineSerieSettings = lineSeriesData.getLineSeriesSettings();
+		lineSerieSettings.setEnableArea(true);
+		lineSeriesDataList.add(lineSeriesData);
 		/*
 		 * Set series.
 		 */

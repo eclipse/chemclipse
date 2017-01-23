@@ -11,7 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
+import org.swtchart.IAxis;
+import org.swtchart.ISeries;
+import org.swtchart.ISeries.SeriesType;
+
 public interface IDataCoordinates {
+
+	boolean isUseZeroY();
+
+	void setUseZeroY(boolean useZeroY);
+
+	boolean isUseZeroX();
+
+	void setUseZeroX(boolean useZeroX);
 
 	double getLengthX();
 
@@ -24,4 +36,22 @@ public interface IDataCoordinates {
 	double getMinY();
 
 	double getMaxY();
+
+	/**
+	 * SeriesType.LINE or SeriesType.BAR
+	 * 
+	 * @param seriesType
+	 * @param xSeries
+	 * @param ySeries
+	 * @param id
+	 * @return
+	 */
+	ISeries createSeries(SeriesType seriesType, double[] xSeries, double[] ySeries, String id);
+
+	/**
+	 * Adjust the axis to its allowed/constrained values.
+	 * 
+	 * @param axis
+	 */
+	void adjustMinMaxRange(IAxis axis);
 }
