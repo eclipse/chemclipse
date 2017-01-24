@@ -67,7 +67,7 @@ public class ScrollableChart extends Composite implements IEventHandler {
 
 	public void adjustRange() {
 
-		baseChart.adjustRange();
+		baseChart.adjustRange(true);
 		resetSlider();
 	}
 

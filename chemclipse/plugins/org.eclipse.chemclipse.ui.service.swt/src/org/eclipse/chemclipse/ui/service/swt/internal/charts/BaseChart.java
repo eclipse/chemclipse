@@ -16,7 +16,6 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.swtchart.IAxis;
-import org.swtchart.Range;
 
 public class BaseChart extends AbstractCoordinatedChart {
 
@@ -90,13 +89,15 @@ public class BaseChart extends AbstractCoordinatedChart {
 					int xStop = userSelection.getStopX();
 					int yStart = userSelection.getStartY();
 					int yStop = userSelection.getStopY();
+					IAxis xAxis = getAxisSet().getXAxis(0);
+					IAxis yAxis = getAxisSet().getYAxis(0);
 					//
 					if((getOrientation() == SWT.HORIZONTAL)) {
-						setRange(xStart, xStop, getAxisSet().getXAxis(0));
-						setRange(yStart, yStop, getAxisSet().getYAxis(0));
+						setRange(xAxis, xStart, xStop, true);
+						setRange(yAxis, yStart, yStop, true);
 					} else {
-						setRange(xStart, xStop, getAxisSet().getYAxis(0));
-						setRange(yStart, yStop, getAxisSet().getXAxis(0));
+						setRange(xAxis, yStart, yStop, true);
+						setRange(yAxis, xStart, xStop, true);
 					}
 				}
 			}
@@ -108,34 +109,7 @@ public class BaseChart extends AbstractCoordinatedChart {
 	@Override
 	public void handleMouseDoubleClick(Event event) {
 
-		adjustRange();
+		adjustRange(true);
 		redraw();
-	}
-
-	/**
-	 * Adjusts the range of all axes and validates the min/max ranges.
-	 */
-	public void adjustRange() {
-
-		getAxisSet().adjustRange();
-		adjustMinMaxRange(getAxisSet().getXAxis(0));
-		adjustMinMaxRange(getAxisSet().getYAxis(0));
-	}
-
-	/**
-	 * Sets and adjusts the range.
-	 * 
-	 * @param start
-	 * @param stop
-	 * @param axis
-	 */
-	private void setRange(int start, int stop, IAxis axis) {
-
-		if(axis != null && Math.abs(stop - start) > 0) {
-			double min = axis.getDataCoordinate(Math.min(start, stop));
-			double max = axis.getDataCoordinate(Math.max(start, stop));
-			axis.setRange(new Range(min, max));
-			adjustMinMaxRange(axis);
-		}
 	}
 }
