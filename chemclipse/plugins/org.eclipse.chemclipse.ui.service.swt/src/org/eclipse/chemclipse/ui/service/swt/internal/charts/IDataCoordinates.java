@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
+import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
 import org.swtchart.IAxis;
 import org.swtchart.ISeries;
 import org.swtchart.ISeries.SeriesType;
@@ -25,9 +26,7 @@ public interface IDataCoordinates {
 
 	void setUseZeroX(boolean useZeroX);
 
-	double getLengthX();
-
-	double getLengthY();
+	double getLength();
 
 	double getMinX();
 
@@ -44,9 +43,10 @@ public interface IDataCoordinates {
 	 * @param xSeries
 	 * @param ySeries
 	 * @param id
-	 * @return
+	 * @return ISeries
+	 * @throws SeriesException
 	 */
-	ISeries createSeries(SeriesType seriesType, double[] xSeries, double[] ySeries, String id);
+	ISeries createSeries(SeriesType seriesType, double[] xSeries, double[] ySeries, String id) throws SeriesException;
 
 	/**
 	 * Adjust the axis to its allowed/constrained values.

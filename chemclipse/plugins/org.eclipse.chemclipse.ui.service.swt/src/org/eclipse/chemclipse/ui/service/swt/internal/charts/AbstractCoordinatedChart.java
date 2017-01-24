@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
 import java.util.Arrays;
 
+import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
 import org.eclipse.swt.widgets.Composite;
 import org.swtchart.IAxis;
 import org.swtchart.IAxis.Direction;
@@ -25,8 +26,7 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 
 	private boolean useZeroY;
 	private boolean useZeroX;
-	private double lengthX;
-	private double lengthY;
+	private double length;
 	private double minX;
 	private double maxX;
 	private double minY;
@@ -34,6 +34,16 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 
 	public AbstractCoordinatedChart(Composite parent, int style) {
 		super(parent, style);
+		/*
+		 * Min/Max values will be set dynamically via Math.min and Math.max.
+		 * Using the default double value 0 could lead to errors when using
+		 * Math.min(...), hence initialize the values with the lowest/highest value.
+		 */
+		length = 0;
+		minX = Double.MAX_VALUE;
+		maxX = Double.MIN_VALUE;
+		minY = Double.MAX_VALUE;
+		maxY = Double.MIN_VALUE;
 	}
 
 	@Override
@@ -61,15 +71,9 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 	}
 
 	@Override
-	public double getLengthX() {
+	public double getLength() {
 
-		return lengthX;
-	}
-
-	@Override
-	public double getLengthY() {
-
-		return lengthY;
+		return length;
 	}
 
 	@Override
@@ -97,26 +101,29 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 	}
 
 	@Override
-	public ISeries createSeries(SeriesType seriesType, double[] xSeries, double[] ySeries, String id) {
+	public ISeries createSeries(SeriesType seriesType, double[] xSeries, double[] ySeries, String id) throws SeriesException {
 
-		ISeriesSet seriesSet = getSeriesSet();
-		ISeries series = seriesSet.createSeries(seriesType, id);
-		series.setXSeries(xSeries);
-		series.setYSeries(ySeries);
-		//
-		double seriesMinX = Arrays.stream(series.getXSeries()).min().getAsDouble();
-		double seriesMaxX = Arrays.stream(series.getXSeries()).max().getAsDouble();
-		double seriesMinY = Arrays.stream(series.getYSeries()).min().getAsDouble();
-		double seriesMaxY = Arrays.stream(series.getXSeries()).max().getAsDouble();
-		//
-		lengthX = Math.max(lengthX, xSeries.length);
-		lengthY = Math.max(lengthY, ySeries.length);
-		minX = Math.min(minX, seriesMinX);
-		maxX = Math.max(maxX, seriesMaxX);
-		minY = Math.min(minY, seriesMinY);
-		maxY = Math.max(maxY, seriesMaxY);
-		//
-		return series;
+		if(xSeries.length == ySeries.length) {
+			ISeriesSet seriesSet = getSeriesSet();
+			ISeries series = seriesSet.createSeries(seriesType, id);
+			series.setXSeries(xSeries);
+			series.setYSeries(ySeries);
+			//
+			double seriesMinX = Arrays.stream(series.getXSeries()).min().getAsDouble();
+			double seriesMaxX = Arrays.stream(series.getXSeries()).max().getAsDouble();
+			double seriesMinY = Arrays.stream(series.getYSeries()).min().getAsDouble();
+			double seriesMaxY = Arrays.stream(series.getYSeries()).max().getAsDouble();
+			//
+			length = Math.max(length, xSeries.length);
+			minX = Math.min(minX, seriesMinX);
+			maxX = Math.max(maxX, seriesMaxX);
+			minY = Math.min(minY, seriesMinY);
+			maxY = Math.max(maxY, seriesMaxY);
+			//
+			return series;
+		} else {
+			throw new SeriesException("The length of x and y series differs.");
+		}
 	}
 
 	@Override

@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
 import org.eclipse.chemclipse.ui.service.swt.core.IChartSettings;
+import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -57,7 +58,7 @@ public class ScrollableChart extends Composite implements IEventHandler {
 		return baseChart;
 	}
 
-	public ISeries createSeries(SeriesType seriesType, double[] xSeries, double[] ySeries, String id) {
+	public ISeries createSeries(SeriesType seriesType, double[] xSeries, double[] ySeries, String id) throws SeriesException {
 
 		ISeries series = baseChart.createSeries(seriesType, xSeries, ySeries, id);
 		resetSlider();
@@ -187,7 +188,7 @@ public class ScrollableChart extends Composite implements IEventHandler {
 			 * Horizontal
 			 */
 			int selectionY = (int)(baseChart.getMaxY() - baseChart.getMinY());
-			int incrementY = (int)(selectionY / baseChart.getLengthY());
+			int incrementY = (int)(selectionY / baseChart.getLength());
 			incrementY = (incrementY < 1) ? 1 : incrementY;
 			sliderVertical.setMinimum((int)baseChart.getMinY());
 			sliderVertical.setMaximum((int)baseChart.getMaxY());
@@ -196,7 +197,7 @@ public class ScrollableChart extends Composite implements IEventHandler {
 			sliderVertical.setThumb(selectionY);
 			//
 			int selectionX = (int)(baseChart.getMaxX() - baseChart.getMinX());
-			int incrementX = (int)(selectionX / baseChart.getLengthX());
+			int incrementX = (int)(selectionX / baseChart.getLength());
 			incrementX = (incrementX < 1) ? 1 : incrementX;
 			sliderHorizontal.setMinimum((int)baseChart.getMinX());
 			sliderHorizontal.setMaximum((int)baseChart.getMaxX());
@@ -208,7 +209,7 @@ public class ScrollableChart extends Composite implements IEventHandler {
 			 * Vertical
 			 */
 			int selectionY = (int)(baseChart.getMaxX() - baseChart.getMinX());
-			int incrementY = (int)(selectionY / baseChart.getLengthY());
+			int incrementY = (int)(selectionY / baseChart.getLength());
 			incrementY = (incrementY < 1) ? 1 : incrementY;
 			sliderVertical.setMinimum((int)baseChart.getMinX());
 			sliderVertical.setMaximum((int)baseChart.getMaxX());
@@ -217,7 +218,7 @@ public class ScrollableChart extends Composite implements IEventHandler {
 			sliderVertical.setThumb(selectionY);
 			//
 			int selectionX = (int)(baseChart.getMaxY() - baseChart.getMinY());
-			int incrementX = (int)(selectionX / baseChart.getLengthX());
+			int incrementX = (int)(selectionX / baseChart.getLength());
 			incrementX = (incrementX < 1) ? 1 : incrementX;
 			sliderHorizontal.setMinimum((int)baseChart.getMinY());
 			sliderHorizontal.setMaximum((int)baseChart.getMaxY());

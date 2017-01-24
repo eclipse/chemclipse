@@ -34,11 +34,11 @@ public class Demo2Chart extends LineChart {
 		 */
 		IChartSettings chartSettings = new ChartSettings();
 		chartSettings //
-				.setOrientation(SWT.VERTICAL) //
+				.setOrientation(SWT.HORIZONTAL) //
 				.setHorizontalSliderVisible(true) //
 				.setVerticalSliderVisible(true) //
-				.setUseZeroX(true) //
-				.setUseZeroY(true);
+				.setUseZeroX(false) //
+				.setUseZeroY(false);
 		applySettings(chartSettings);
 		/*
 		 * Create series.

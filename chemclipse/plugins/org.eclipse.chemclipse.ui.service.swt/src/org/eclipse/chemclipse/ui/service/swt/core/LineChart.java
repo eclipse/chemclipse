@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
 import org.eclipse.chemclipse.ui.service.swt.internal.charts.BaseChart;
 import org.eclipse.chemclipse.ui.service.swt.internal.charts.ScrollableChart;
 import org.eclipse.swt.graphics.Color;
@@ -48,25 +49,27 @@ public class LineChart extends ScrollableChart {
 		baseChart.suspendUpdate(true);
 		for(ILineSeriesData lineSeriesData : lineSeriesDataList) {
 			/*
-			 * Get the series data.
+			 * Get the series data and apply the settings.
 			 */
-			ISeriesData seriesData = lineSeriesData.getSeriesData();
-			ILineSeries lineSeries = (ILineSeries)createSeries(SeriesType.LINE, seriesData.getXSeries(), seriesData.getYSeries(), seriesData.getId());
-			/*
-			 * Apply the settings.
-			 */
-			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
-			lineSeries.enableArea(lineSeriesSettings.isEnableArea());
-			lineSeries.setSymbolType(lineSeriesSettings.getSymbolType());
-			lineSeries.setSymbolSize(lineSeriesSettings.getSymbolSize());
-			lineSeries.setLineColor(lineSeriesSettings.getLineColor());
-			lineSeries.setLineWidth(lineSeriesSettings.getLineWidth());
-			lineSeries.enableStack(lineSeriesSettings.isEnableStack());
-			lineSeries.enableStep(lineSeriesSettings.isEnableStep());
+			try {
+				ISeriesData seriesData = lineSeriesData.getSeriesData();
+				ILineSeries lineSeries = (ILineSeries)createSeries(SeriesType.LINE, seriesData.getXSeries(), seriesData.getYSeries(), seriesData.getId());
+				//
+				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+				lineSeries.enableArea(lineSeriesSettings.isEnableArea());
+				lineSeries.setSymbolType(lineSeriesSettings.getSymbolType());
+				lineSeries.setSymbolSize(lineSeriesSettings.getSymbolSize());
+				lineSeries.setLineColor(lineSeriesSettings.getLineColor());
+				lineSeries.setLineWidth(lineSeriesSettings.getLineWidth());
+				lineSeries.enableStack(lineSeriesSettings.isEnableStack());
+				lineSeries.enableStep(lineSeriesSettings.isEnableStep());
+			} catch(SeriesException e) {
+				//
+			}
 		}
 		baseChart.suspendUpdate(false);
 		adjustRange();
-		redraw();
+		baseChart.redraw();
 	}
 
 	private void initialize() {

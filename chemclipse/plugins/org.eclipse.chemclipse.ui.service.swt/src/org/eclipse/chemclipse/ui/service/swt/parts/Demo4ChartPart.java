@@ -15,21 +15,21 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.ui.service.swt.impl.Demo1Chart;
+import org.eclipse.chemclipse.ui.service.swt.impl.Demo4Chart;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class Demo1ChartPart {
+public class Demo4ChartPart {
 
 	@Inject
 	private Composite parent;
-	private Demo1Chart chart;
+	private Demo4Chart chart;
 
 	@PostConstruct
 	public void postConstruct() {
 
-		chart = new Demo1Chart(parent, SWT.BORDER);
+		chart = new Demo4Chart(parent, SWT.BORDER);
 	}
 
 	@PreDestroy
