@@ -27,7 +27,7 @@ import org.swtchart.ISeries;
 import org.swtchart.ISeries.SeriesType;
 import org.swtchart.Range;
 
-public class ScrollableChart extends Composite implements IEventHandler {
+public class ScrollableChart extends Composite implements IScrollableChart, IEventHandler {
 
 	private Slider sliderVertical;
 	private Slider sliderHorizontal;
@@ -38,6 +38,7 @@ public class ScrollableChart extends Composite implements IEventHandler {
 		initialize();
 	}
 
+	@Override
 	public void applySettings(IChartSettings chartSettings) {
 
 		sliderVertical.setVisible(chartSettings.isVerticalSliderVisible());
@@ -53,11 +54,13 @@ public class ScrollableChart extends Composite implements IEventHandler {
 		baseChart.setUseZeroY(chartSettings.isUseZeroY());
 	}
 
+	@Override
 	public BaseChart getBaseChart() {
 
 		return baseChart;
 	}
 
+	@Override
 	public ISeries createSeries(SeriesType seriesType, double[] xSeries, double[] ySeries, String id) throws SeriesException {
 
 		ISeries series = baseChart.createSeries(seriesType, xSeries, ySeries, id);
@@ -65,9 +68,17 @@ public class ScrollableChart extends Composite implements IEventHandler {
 		return series;
 	}
 
-	public void adjustRange() {
+	@Override
+	public void deleteSeries(String id) {
 
-		baseChart.adjustRange(true);
+		baseChart.deleteSeries(id);
+		resetSlider();
+	}
+
+	@Override
+	public void adjustRange(boolean adjustMinMax) {
+
+		baseChart.adjustRange(adjustMinMax);
 		resetSlider();
 	}
 
@@ -122,26 +133,21 @@ public class ScrollableChart extends Composite implements IEventHandler {
 		baseChart.handleMouseUpEvent(event);
 		//
 		IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
-		if(xAxis != null) {
-			int selectionX = (int)(xAxis.getRange().upper - xAxis.getRange().lower);
-			if((baseChart.getOrientation() == SWT.HORIZONTAL)) {
-				sliderHorizontal.setSelection(selectionX);
-				sliderHorizontal.setThumb(selectionX);
-			} else {
-				sliderVertical.setSelection(selectionX);
-				sliderVertical.setSelection(selectionX);
-			}
-		}
 		IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
-		if(yAxis != null) {
+		//
+		if(xAxis != null && yAxis != null) {
+			/*
+			 * Take care of Horizontal or Vertical orientation.
+			 */
+			int selectionX = (int)(xAxis.getRange().upper - xAxis.getRange().lower);
 			int selectionY = (int)(yAxis.getRange().upper - yAxis.getRange().lower);
-			if((baseChart.getOrientation() == SWT.HORIZONTAL)) {
-				sliderVertical.setSelection(selectionY);
-				sliderVertical.setSelection(selectionY);
-			} else {
-				sliderHorizontal.setSelection(selectionY);
-				sliderHorizontal.setThumb(selectionY);
-			}
+			//
+			boolean isHorizontal = isOrientationHorizontal();
+			//
+			sliderHorizontal.setSelection((isHorizontal) ? selectionX : selectionY);
+			sliderHorizontal.setThumb((isHorizontal) ? selectionX : selectionY);
+			sliderVertical.setSelection((isHorizontal) ? selectionY : selectionX);
+			sliderVertical.setSelection((isHorizontal) ? selectionY : selectionX);
 		}
 	}
 
@@ -181,53 +187,6 @@ public class ScrollableChart extends Composite implements IEventHandler {
 		baseChart.paintControl(e);
 	}
 
-	private void resetSlider() {
-
-		if((baseChart.getOrientation() == SWT.HORIZONTAL)) {
-			/*
-			 * Horizontal
-			 */
-			int selectionY = (int)(baseChart.getMaxY() - baseChart.getMinY());
-			int incrementY = (int)(selectionY / baseChart.getLength());
-			incrementY = (incrementY < 1) ? 1 : incrementY;
-			sliderVertical.setMinimum((int)baseChart.getMinY());
-			sliderVertical.setMaximum((int)baseChart.getMaxY());
-			sliderVertical.setIncrement(incrementY);
-			sliderVertical.setSelection(selectionY);
-			sliderVertical.setThumb(selectionY);
-			//
-			int selectionX = (int)(baseChart.getMaxX() - baseChart.getMinX());
-			int incrementX = (int)(selectionX / baseChart.getLength());
-			incrementX = (incrementX < 1) ? 1 : incrementX;
-			sliderHorizontal.setMinimum((int)baseChart.getMinX());
-			sliderHorizontal.setMaximum((int)baseChart.getMaxX());
-			sliderHorizontal.setPageIncrement(incrementX);
-			sliderHorizontal.setSelection(selectionX);
-			sliderHorizontal.setThumb(selectionX);
-		} else {
-			/*
-			 * Vertical
-			 */
-			int selectionY = (int)(baseChart.getMaxX() - baseChart.getMinX());
-			int incrementY = (int)(selectionY / baseChart.getLength());
-			incrementY = (incrementY < 1) ? 1 : incrementY;
-			sliderVertical.setMinimum((int)baseChart.getMinX());
-			sliderVertical.setMaximum((int)baseChart.getMaxX());
-			sliderVertical.setPageIncrement(incrementY);
-			sliderVertical.setSelection(selectionY);
-			sliderVertical.setThumb(selectionY);
-			//
-			int selectionX = (int)(baseChart.getMaxY() - baseChart.getMinY());
-			int incrementX = (int)(selectionX / baseChart.getLength());
-			incrementX = (incrementX < 1) ? 1 : incrementX;
-			sliderHorizontal.setMinimum((int)baseChart.getMinY());
-			sliderHorizontal.setMaximum((int)baseChart.getMaxY());
-			sliderHorizontal.setPageIncrement(incrementX);
-			sliderHorizontal.setSelection(selectionX);
-			sliderHorizontal.setThumb(selectionX);
-		}
-	}
-
 	private void initialize() {
 
 		this.setLayout(new FillLayout());
@@ -239,6 +198,27 @@ public class ScrollableChart extends Composite implements IEventHandler {
 		sliderVertical = new Slider(composite, SWT.VERTICAL);
 		sliderVertical.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		sliderVertical.setVisible(true);
+		sliderVertical.addListener(SWT.Selection, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
+				IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
+				//
+				if(xAxis != null && yAxis != null) {
+					Range range = calculateShiftedRange(yAxis.getRange(), sliderVertical.getSelection());
+					if(isOrientationHorizontal()) {
+						yAxis.setRange(range);
+						baseChart.adjustMinMaxRange(yAxis);
+					} else {
+						xAxis.setRange(range);
+						baseChart.adjustMinMaxRange(xAxis);
+					}
+					baseChart.redraw();
+				}
+			}
+		});
 		/*
 		 * Chart
 		 */
@@ -269,21 +249,70 @@ public class ScrollableChart extends Composite implements IEventHandler {
 
 				IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
 				IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
-				if(xAxis != null) {
-					double min = sliderHorizontal.getSelection();
-					double max = sliderHorizontal.getSelection() + (xAxis.getRange().upper - xAxis.getRange().lower);
-					Range range = new Range(min, max);
-					if((baseChart.getOrientation() == SWT.HORIZONTAL)) {
+				//
+				if(xAxis != null && yAxis != null) {
+					Range range = calculateShiftedRange(xAxis.getRange(), sliderHorizontal.getSelection());
+					if(isOrientationHorizontal()) {
 						xAxis.setRange(range);
 						baseChart.adjustMinMaxRange(xAxis);
-						baseChart.redraw();
 					} else {
 						yAxis.setRange(range);
-						baseChart.adjustMinMaxRange(xAxis);
-						baseChart.redraw();
+						baseChart.adjustMinMaxRange(yAxis);
 					}
+					baseChart.redraw();
 				}
 			}
 		});
+	}
+
+	private void resetSlider() {
+
+		int minX = (int)(baseChart.getMinX());
+		int maxX = (int)(baseChart.getMaxX());
+		int selectionX = maxX - minX;
+		int incrementX = calculateIncrement(selectionX, baseChart.getLength());
+		//
+		int minY = (int)(baseChart.getMinY());
+		int maxY = (int)(baseChart.getMaxY());
+		int selectionY = maxY - minY;
+		int incrementY = calculateIncrement(selectionY, baseChart.getLength());
+		/*
+		 * Take care of Horizontal or Vertical orientation.
+		 */
+		boolean isHorizontal = isOrientationHorizontal();
+		//
+		sliderVertical.setMinimum((isHorizontal) ? minY : minX);
+		sliderVertical.setMaximum((isHorizontal) ? maxY : maxX);
+		sliderVertical.setSelection((isHorizontal) ? minY : minX);
+		sliderVertical.setIncrement((isHorizontal) ? incrementY : incrementX);
+		sliderVertical.setThumb((isHorizontal) ? selectionY : selectionX);
+		//
+		sliderHorizontal.setMinimum((isHorizontal) ? minX : minY);
+		sliderHorizontal.setMaximum((isHorizontal) ? maxX : maxY);
+		sliderHorizontal.setSelection((isHorizontal) ? minX : minY);
+		sliderHorizontal.setPageIncrement((isHorizontal) ? incrementX : incrementY);
+		sliderHorizontal.setThumb((isHorizontal) ? selectionX : selectionY);
+	}
+
+	private boolean isOrientationHorizontal() {
+
+		return (baseChart.getOrientation() == SWT.HORIZONTAL) ? true : false;
+	}
+
+	private int calculateIncrement(double selection, double length) {
+
+		if(length == 0) {
+			return 0;
+		} else {
+			int increment = (int)(selection / length);
+			return (increment < 1) ? 1 : increment;
+		}
+	}
+
+	private Range calculateShiftedRange(Range range, int selection) {
+
+		double min = selection;
+		double max = selection + (range.upper - range.lower);
+		return new Range(min, max);
 	}
 }

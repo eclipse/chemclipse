@@ -68,7 +68,7 @@ public class LineChart extends ScrollableChart {
 			}
 		}
 		baseChart.suspendUpdate(false);
-		adjustRange();
+		adjustRange(true);
 		baseChart.redraw();
 	}
 
