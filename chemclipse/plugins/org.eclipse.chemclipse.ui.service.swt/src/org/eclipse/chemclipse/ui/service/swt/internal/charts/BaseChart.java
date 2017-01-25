@@ -50,6 +50,41 @@ public class BaseChart extends AbstractCoordinatedChart {
 	}
 
 	@Override
+	public void handleUserSelection(Event event) {
+
+		int minSelectedWidth;
+		int deltaWidth;
+		//
+		if((getOrientation() == SWT.HORIZONTAL)) {
+			minSelectedWidth = getPlotArea().getBounds().width / MIN_SELECTION_PERCENTAGE;
+			deltaWidth = Math.abs(userSelection.getStartX() - event.x);
+		} else {
+			minSelectedWidth = getPlotArea().getBounds().height / MIN_SELECTION_PERCENTAGE;
+			deltaWidth = Math.abs(userSelection.getStartY() - event.y);
+		}
+		//
+		if(deltaWidth >= minSelectedWidth) {
+			//
+			int xStart = userSelection.getStartX();
+			int xStop = userSelection.getStopX();
+			int yStart = userSelection.getStartY();
+			int yStop = userSelection.getStopY();
+			IAxis xAxis = getAxisSet().getXAxis(0);
+			IAxis yAxis = getAxisSet().getYAxis(0);
+			//
+			if((getOrientation() == SWT.HORIZONTAL)) {
+				setRange(xAxis, xStart, xStop, true);
+				setRange(yAxis, yStart, yStop, true);
+			} else {
+				setRange(xAxis, yStart, yStop, true);
+				setRange(yAxis, xStart, xStop, true);
+			}
+		}
+		userSelection.reset();
+		redraw();
+	}
+
+	@Override
 	public void handleMouseMoveEvent(Event event) {
 
 		userSelection.setStopCoordinate(event.x, event.y);
@@ -71,38 +106,8 @@ public class BaseChart extends AbstractCoordinatedChart {
 		if(event.button == 1) {
 			long deltaTime = System.currentTimeMillis() - clickStartTime;
 			if(deltaTime >= DELTA_CLICK_TIME) {
-				//
-				int minSelectedWidth;
-				int deltaWidth;
-				//
-				if((getOrientation() == SWT.HORIZONTAL)) {
-					minSelectedWidth = getPlotArea().getBounds().width / MIN_SELECTION_PERCENTAGE;
-					deltaWidth = Math.abs(userSelection.getStartX() - event.x);
-				} else {
-					minSelectedWidth = getPlotArea().getBounds().height / MIN_SELECTION_PERCENTAGE;
-					deltaWidth = Math.abs(userSelection.getStartY() - event.y);
-				}
-				//
-				if(deltaWidth >= minSelectedWidth) {
-					//
-					int xStart = userSelection.getStartX();
-					int xStop = userSelection.getStopX();
-					int yStart = userSelection.getStartY();
-					int yStop = userSelection.getStopY();
-					IAxis xAxis = getAxisSet().getXAxis(0);
-					IAxis yAxis = getAxisSet().getYAxis(0);
-					//
-					if((getOrientation() == SWT.HORIZONTAL)) {
-						setRange(xAxis, xStart, xStop, true);
-						setRange(yAxis, yStart, yStop, true);
-					} else {
-						setRange(xAxis, yStart, yStop, true);
-						setRange(yAxis, xStart, xStop, true);
-					}
-				}
+				handleUserSelection(event);
 			}
-			userSelection.reset();
-			redraw();
 		}
 	}
 

@@ -83,6 +83,32 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 	}
 
 	@Override
+	public void handleUserSelection(Event event) {
+
+		baseChart.handleUserSelection(event);
+		//
+		IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
+		IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
+		//
+		if(xAxis != null && yAxis != null) {
+			/*
+			 * Take care of Horizontal or Vertical orientation.
+			 */
+			int minX = (int)xAxis.getRange().lower;
+			int minY = (int)yAxis.getRange().lower;
+			int thumbX = (int)(xAxis.getRange().upper - xAxis.getRange().lower);
+			int thumbY = (int)(yAxis.getRange().upper - yAxis.getRange().lower);
+			//
+			boolean isHorizontal = isOrientationHorizontal();
+			//
+			sliderVertical.setSelection((isHorizontal) ? minY : minX);
+			sliderVertical.setThumb((isHorizontal) ? thumbY : thumbX);
+			sliderHorizontal.setSelection((isHorizontal) ? minX : minY);
+			sliderHorizontal.setThumb((isHorizontal) ? thumbX : thumbY);
+		}
+	}
+
+	@Override
 	public void handleEvent(Event event) {
 
 		switch(event.type) {
@@ -110,8 +136,6 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 			case SWT.Selection:
 				handleSelectionEvent(event);
 				break;
-			default:
-				break;
 		}
 	}
 
@@ -131,24 +155,6 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 	public void handleMouseUpEvent(Event event) {
 
 		baseChart.handleMouseUpEvent(event);
-		//
-		IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
-		IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
-		//
-		if(xAxis != null && yAxis != null) {
-			/*
-			 * Take care of Horizontal or Vertical orientation.
-			 */
-			int selectionX = (int)(xAxis.getRange().upper - xAxis.getRange().lower);
-			int selectionY = (int)(yAxis.getRange().upper - yAxis.getRange().lower);
-			//
-			boolean isHorizontal = isOrientationHorizontal();
-			//
-			sliderHorizontal.setSelection((isHorizontal) ? selectionX : selectionY);
-			sliderHorizontal.setThumb((isHorizontal) ? selectionX : selectionY);
-			sliderVertical.setSelection((isHorizontal) ? selectionY : selectionX);
-			sliderVertical.setSelection((isHorizontal) ? selectionY : selectionX);
-		}
 	}
 
 	@Override
@@ -269,13 +275,13 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 
 		int minX = (int)(baseChart.getMinX());
 		int maxX = (int)(baseChart.getMaxX());
-		int selectionX = maxX - minX;
-		int incrementX = calculateIncrement(selectionX, baseChart.getLength());
+		int thumbX = maxX - minX;
+		int incrementX = calculateIncrement(thumbX, baseChart.getLength());
 		//
 		int minY = (int)(baseChart.getMinY());
 		int maxY = (int)(baseChart.getMaxY());
-		int selectionY = maxY - minY;
-		int incrementY = calculateIncrement(selectionY, baseChart.getLength());
+		int thumbY = maxY - minY;
+		int incrementY = calculateIncrement(thumbY, baseChart.getLength());
 		/*
 		 * Take care of Horizontal or Vertical orientation.
 		 */
@@ -285,13 +291,13 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 		sliderVertical.setMaximum((isHorizontal) ? maxY : maxX);
 		sliderVertical.setSelection((isHorizontal) ? minY : minX);
 		sliderVertical.setIncrement((isHorizontal) ? incrementY : incrementX);
-		sliderVertical.setThumb((isHorizontal) ? selectionY : selectionX);
+		sliderVertical.setThumb((isHorizontal) ? thumbY : thumbX);
 		//
 		sliderHorizontal.setMinimum((isHorizontal) ? minX : minY);
 		sliderHorizontal.setMaximum((isHorizontal) ? maxX : maxY);
 		sliderHorizontal.setSelection((isHorizontal) ? minX : minY);
 		sliderHorizontal.setPageIncrement((isHorizontal) ? incrementX : incrementY);
-		sliderHorizontal.setThumb((isHorizontal) ? selectionX : selectionY);
+		sliderHorizontal.setThumb((isHorizontal) ? thumbX : thumbY);
 	}
 
 	private boolean isOrientationHorizontal() {

@@ -24,6 +24,11 @@ public abstract class AbstractHandledChart extends Chart implements IEventHandle
 	}
 
 	@Override
+	public void handleUserSelection(Event event) {
+
+	}
+
+	@Override
 	public void handleEvent(Event event) {
 
 		super.handleEvent(event);
@@ -51,8 +56,6 @@ public abstract class AbstractHandledChart extends Chart implements IEventHandle
 				break;
 			case SWT.Selection:
 				handleSelectionEvent(event);
-				break;
-			default:
 				break;
 		}
 	}
