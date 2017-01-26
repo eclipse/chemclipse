@@ -82,6 +82,7 @@ public class UserSelection {
 
 	public void setStopCoordinate(int stopX, int stopY) {
 
+		active = true;
 		this.stopX = stopX;
 		this.stopY = stopY;
 	}

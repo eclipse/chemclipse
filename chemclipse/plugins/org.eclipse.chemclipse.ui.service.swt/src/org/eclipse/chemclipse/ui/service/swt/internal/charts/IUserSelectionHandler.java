@@ -11,25 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 
-public interface IEventHandler extends Listener, PaintListener, IUserSelectionHandler {
+public interface IUserSelectionHandler {
 
-	void handleMouseMoveEvent(Event event);
-
-	void handleMouseDownEvent(Event event);
-
-	void handleMouseUpEvent(Event event);
-
-	void handleMouseWheel(Event event);
-
-	void handleMouseDoubleClick(Event event);
-
-	void handleKeyDownEvent(Event event);
-
-	void handleKeyUpEvent(Event event);
-
-	void handleSelectionEvent(Event event);
+	void handleUserSelection(Event event);
 }

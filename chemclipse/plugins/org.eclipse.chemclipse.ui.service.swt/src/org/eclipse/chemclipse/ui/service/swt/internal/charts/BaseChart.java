@@ -27,6 +27,7 @@ public class BaseChart extends AbstractCoordinatedChart {
 	private static final long DELTA_CLICK_TIME = 100;
 	//
 	private UserSelection userSelection;
+	private IUserSelectionHandler userSelectionHandler;
 	private long clickStartTime;
 
 	public BaseChart(Composite parent, int style) {
@@ -34,24 +35,15 @@ public class BaseChart extends AbstractCoordinatedChart {
 		userSelection = new UserSelection();
 	}
 
-	@Override
-	public void paintControl(PaintEvent e) {
+	protected void setUserSelectionHandler(IUserSelectionHandler userSelectionHandler) {
 
-		if(userSelection.isActive()) {
-			/*
-			 * Draw the rectangle of the user selection.
-			 */
-			int xMin = Math.min(userSelection.getStartX(), userSelection.getStopX());
-			int xMax = Math.max(userSelection.getStartX(), userSelection.getStopX());
-			int yMin = Math.min(userSelection.getStartY(), userSelection.getStopY());
-			int yMax = Math.max(userSelection.getStartY(), userSelection.getStopY());
-			e.gc.drawRectangle(xMin, yMin, xMax - xMin, yMax - yMin);
-		}
+		this.userSelectionHandler = userSelectionHandler;
 	}
 
 	@Override
 	public void handleUserSelection(Event event) {
 
+		// TODO Optimize
 		int minSelectedWidth;
 		int deltaWidth;
 		//
@@ -80,15 +72,41 @@ public class BaseChart extends AbstractCoordinatedChart {
 				setRange(yAxis, xStart, xStop, true);
 			}
 		}
+		/*
+		 * Handle the user selection.
+		 */
+		if(userSelectionHandler != null) {
+			userSelectionHandler.handleUserSelection(event);
+		}
+		//
 		userSelection.reset();
 		redraw();
 	}
 
 	@Override
+	public void paintControl(PaintEvent e) {
+
+		if(userSelection.isActive()) {
+			/*
+			 * Draw the rectangle of the user selection.
+			 */
+			int xMin = Math.min(userSelection.getStartX(), userSelection.getStopX());
+			int xMax = Math.max(userSelection.getStartX(), userSelection.getStopX());
+			int yMin = Math.min(userSelection.getStartY(), userSelection.getStopY());
+			int yMax = Math.max(userSelection.getStartY(), userSelection.getStopY());
+			e.gc.drawRectangle(xMin, yMin, xMax - xMin, yMax - yMin);
+		}
+	}
+
+	@Override
 	public void handleMouseMoveEvent(Event event) {
 
-		userSelection.setStopCoordinate(event.x, event.y);
-		redraw();
+		if(event.stateMask == 524288) {
+			userSelection.setStopCoordinate(event.x, event.y);
+			redraw();
+		} else {
+			userSelection.setActive(false);
+		}
 	}
 
 	@Override
@@ -106,6 +124,7 @@ public class BaseChart extends AbstractCoordinatedChart {
 		if(event.button == 1) {
 			long deltaTime = System.currentTimeMillis() - clickStartTime;
 			if(deltaTime >= DELTA_CLICK_TIME) {
+				// TODO Optimize
 				handleUserSelection(event);
 			}
 		}
