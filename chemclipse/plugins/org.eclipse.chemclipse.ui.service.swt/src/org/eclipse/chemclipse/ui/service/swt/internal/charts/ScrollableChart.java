@@ -209,38 +209,7 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 			@Override
 			public void handleUserSelection(Event event) {
 
-				IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
-				IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
-				//
-				if(xAxis != null && yAxis != null) {
-					/*
-					 * Take care of Horizontal or Vertical orientation.
-					 */
-					int minX = (int)baseChart.getMinX();
-					int maxX = (int)baseChart.getMaxX();
-					int minY = (int)baseChart.getMinY();
-					int maxY = (int)baseChart.getMaxY();
-					//
-					int minSelectionX = (int)xAxis.getRange().lower;
-					int maxSelectionX = (int)xAxis.getRange().upper;
-					int thumbSelectionX = (int)(maxSelectionX - minSelectionX);
-					//
-					int minSelectionY = (int)yAxis.getRange().lower;
-					int maxSelectionY = (int)yAxis.getRange().upper;
-					int thumbSelectionY = (int)(maxSelectionY - minSelectionY);
-					//
-					boolean isHorizontal = isOrientationHorizontal();
-					//
-					sliderVertical.setMinimum((isHorizontal) ? minY : minX);
-					sliderVertical.setMaximum((isHorizontal) ? maxY : maxX);
-					sliderVertical.setThumb((isHorizontal) ? thumbSelectionY : thumbSelectionX);
-					sliderVertical.setSelection((isHorizontal) ? minSelectionY : minSelectionX);
-					//
-					sliderHorizontal.setMinimum((isHorizontal) ? minX : minY);
-					sliderHorizontal.setMaximum((isHorizontal) ? maxX : maxY);
-					sliderHorizontal.setThumb((isHorizontal) ? thumbSelectionX : thumbSelectionY);
-					sliderHorizontal.setSelection((isHorizontal) ? minSelectionX : minSelectionY);
-				}
+				setSliderSelection(false);
 			}
 		});
 		//
@@ -287,31 +256,54 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 
 	private void resetSlider() {
 
-		int minX = (int)(baseChart.getMinX());
-		int maxX = (int)(baseChart.getMaxX());
-		int thumbX = maxX - minX;
-		int incrementX = calculateIncrement(thumbX, baseChart.getLength());
+		setSliderSelection(true);
+	}
+
+	private void setSliderSelection(boolean calculateIncrement) {
+
+		IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
+		IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
 		//
-		int minY = (int)(baseChart.getMinY());
-		int maxY = (int)(baseChart.getMaxY());
-		int thumbY = maxY - minY;
-		int incrementY = calculateIncrement(thumbY, baseChart.getLength());
-		/*
-		 * Take care of Horizontal or Vertical orientation.
-		 */
-		boolean isHorizontal = isOrientationHorizontal();
-		//
-		sliderVertical.setMinimum((isHorizontal) ? minY : minX);
-		sliderVertical.setMaximum((isHorizontal) ? maxY : maxX);
-		sliderVertical.setIncrement((isHorizontal) ? incrementY : incrementX);
-		sliderVertical.setThumb((isHorizontal) ? thumbY : thumbX);
-		sliderVertical.setSelection((isHorizontal) ? minY : minX);
-		//
-		sliderHorizontal.setMinimum((isHorizontal) ? minX : minY);
-		sliderHorizontal.setMaximum((isHorizontal) ? maxX : maxY);
-		sliderHorizontal.setPageIncrement((isHorizontal) ? incrementX : incrementY);
-		sliderHorizontal.setThumb((isHorizontal) ? thumbX : thumbY);
-		sliderHorizontal.setSelection((isHorizontal) ? minX : minY);
+		if(xAxis != null && yAxis != null) {
+			/*
+			 * Take care of Horizontal or Vertical orientation.
+			 */
+			int minX = (int)baseChart.getMinX();
+			int maxX = (int)baseChart.getMaxX();
+			int minY = (int)baseChart.getMinY();
+			int maxY = (int)baseChart.getMaxY();
+			//
+			int minSelectionX = (int)xAxis.getRange().lower;
+			int maxSelectionX = (int)xAxis.getRange().upper;
+			int thumbSelectionX = (int)(maxSelectionX - minSelectionX);
+			//
+			int minSelectionY = (int)yAxis.getRange().lower;
+			int maxSelectionY = (int)yAxis.getRange().upper;
+			int thumbSelectionY = (int)(maxSelectionY - minSelectionY);
+			//
+			boolean isHorizontal = isOrientationHorizontal();
+			//
+			sliderVertical.setMinimum((isHorizontal) ? minY : minX);
+			sliderVertical.setMaximum((isHorizontal) ? maxY : maxX);
+			sliderVertical.setThumb((isHorizontal) ? thumbSelectionY : thumbSelectionX);
+			sliderVertical.setSelection((isHorizontal) ? minSelectionY : minSelectionX);
+			//
+			sliderHorizontal.setMinimum((isHorizontal) ? minX : minY);
+			sliderHorizontal.setMaximum((isHorizontal) ? maxX : maxY);
+			sliderHorizontal.setThumb((isHorizontal) ? thumbSelectionX : thumbSelectionY);
+			sliderHorizontal.setSelection((isHorizontal) ? minSelectionX : minSelectionY);
+			/*
+			 * Calculate the increment.
+			 */
+			if(calculateIncrement) {
+				int thumbX = maxX - minX;
+				int thumbY = maxY - minY;
+				int incrementX = calculateIncrement(thumbX, baseChart.getLength());
+				int incrementY = calculateIncrement(thumbY, baseChart.getLength());
+				sliderVertical.setIncrement((isHorizontal) ? incrementY : incrementX);
+				sliderHorizontal.setPageIncrement((isHorizontal) ? incrementX : incrementY);
+			}
+		}
 	}
 
 	private boolean isOrientationHorizontal() {
