@@ -9,27 +9,19 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.core;
+package org.eclipse.chemclipse.ui.service.swt.charts;
 
-public class LineSeriesData implements ILineSeriesData {
+public interface ISeriesSettings {
 
-	private ISeriesData seriesData;
-	private ILineSeriesSettings lineSeriesSettings;
+	String getDescription();
 
-	public LineSeriesData(ISeriesData seriesData) {
-		this.seriesData = seriesData;
-		this.lineSeriesSettings = new LineSeriesSettings();
-	}
+	void setDescription(String description);
 
-	@Override
-	public ISeriesData getSeriesData() {
+	boolean isVisible();
 
-		return seriesData;
-	}
+	void setVisible(boolean visible);
 
-	@Override
-	public ILineSeriesSettings getLineSeriesSettings() {
+	boolean isVisibleInLegend();
 
-		return lineSeriesSettings;
-	}
+	void setVisibleInLegend(boolean visibleInLegend);
 }

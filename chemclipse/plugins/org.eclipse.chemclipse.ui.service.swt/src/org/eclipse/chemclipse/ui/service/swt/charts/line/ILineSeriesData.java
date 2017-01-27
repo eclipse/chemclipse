@@ -9,7 +9,11 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.core;
+package org.eclipse.chemclipse.ui.service.swt.charts.line;
 
-public abstract class AbstractSeriesSettings implements ISeriesSettings {
+import org.eclipse.chemclipse.ui.service.swt.charts.IChartSeriesData;
+
+public interface ILineSeriesData extends IChartSeriesData {
+
+	ILineSeriesSettings getLineSeriesSettings();
 }

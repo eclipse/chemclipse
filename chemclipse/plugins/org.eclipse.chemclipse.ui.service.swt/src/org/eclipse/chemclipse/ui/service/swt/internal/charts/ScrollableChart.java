@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
-import org.eclipse.chemclipse.ui.service.swt.core.IChartSettings;
+import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;

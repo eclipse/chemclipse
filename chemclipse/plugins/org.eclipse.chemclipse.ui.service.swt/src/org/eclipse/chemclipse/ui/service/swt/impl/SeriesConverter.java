@@ -15,28 +15,33 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.eclipse.chemclipse.ui.service.swt.charts.ISeriesData;
+import org.eclipse.chemclipse.ui.service.swt.charts.SeriesData;
+
 public class SeriesConverter {
 
-	public static double[] getXSeries() {
+	public static final String LINE_SERIES_1 = "LineSeries1";
+	public static final String BAR_SERIES_1 = "BarSeries1";
+	public static final String BAR_SERIES_2 = "BarSeries2";
 
-		return getSeries("xSeries", 30799);
-	}
+	public static ISeriesData getSeries(String fileName) {
 
-	public static double[] getYSeries() {
-
-		return getSeries("ySeries", 30799);
-	}
-
-	private static double[] getSeries(String fileName, int size) {
-
-		double[] series = new double[size];
+		ISeriesData seriesData = new SeriesData();
+		//
+		int size = getNumberOfLines(fileName);
+		double[] xSeries = new double[size];
+		double[] ySeries = new double[size];
+		//
 		BufferedReader bufferedReader = null;
 		try {
 			String line;
 			int i = 0;
 			bufferedReader = new BufferedReader(new InputStreamReader(SeriesConverter.class.getResourceAsStream(fileName)));
 			while((line = bufferedReader.readLine()) != null) {
-				series[i++] = Double.parseDouble(line.trim());
+				String[] values = line.split("\t");
+				xSeries[i] = Double.parseDouble(values[0].trim());
+				ySeries[i] = Double.parseDouble(values[1].trim());
+				i++;
 			}
 		} catch(Exception e) {
 			//
@@ -49,6 +54,31 @@ public class SeriesConverter {
 				}
 			}
 		}
-		return series;
+		seriesData.setXSeries(xSeries);
+		seriesData.setYSeries(ySeries);
+		return seriesData;
+	}
+
+	private static int getNumberOfLines(String fileName) {
+
+		int i = 0;
+		BufferedReader bufferedReader = null;
+		try {
+			bufferedReader = new BufferedReader(new InputStreamReader(SeriesConverter.class.getResourceAsStream(fileName)));
+			while((bufferedReader.readLine()) != null) {
+				i++;
+			}
+		} catch(Exception e) {
+			//
+		} finally {
+			if(bufferedReader != null) {
+				try {
+					bufferedReader.close();
+				} catch(IOException e) {
+					//
+				}
+			}
+		}
+		return i;
 	}
 }

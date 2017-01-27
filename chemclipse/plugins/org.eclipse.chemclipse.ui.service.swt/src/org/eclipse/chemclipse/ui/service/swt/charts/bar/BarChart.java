@@ -9,12 +9,13 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.core;
+package org.eclipse.chemclipse.ui.service.swt.charts.bar;
 
 import java.util.List;
 
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ui.service.swt.charts.ISeriesData;
 import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
 import org.eclipse.chemclipse.ui.service.swt.internal.charts.BaseChart;
 import org.eclipse.chemclipse.ui.service.swt.internal.charts.ScrollableChart;
@@ -23,10 +24,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.swtchart.IAxis;
 import org.swtchart.IAxis.Position;
 import org.swtchart.IAxisSet;
-import org.swtchart.ILineSeries;
+import org.swtchart.IBarSeries;
 import org.swtchart.ISeries.SeriesType;
 
-public class LineChart extends ScrollableChart {
+public class BarChart extends ScrollableChart {
 
 	private IAxis xAxisPrimary;
 	private IAxis yAxisPrimary;
@@ -35,34 +36,34 @@ public class LineChart extends ScrollableChart {
 	// private IAxis xAxis2;
 	// private IAxis yAxis1;
 
-	public LineChart(Composite parent, int style) {
+	public BarChart(Composite parent, int style) {
 		super(parent, style);
 		initialize();
 	}
 
-	public void addSeriesData(List<ILineSeriesData> lineSeriesDataList) {
+	public void addSeriesData(List<IBarSeriesData> barSeriesDataList) {
 
 		/*
 		 * Suspend the update when adding new data to improve the performance.
 		 */
 		BaseChart baseChart = getBaseChart();
 		baseChart.suspendUpdate(true);
-		for(ILineSeriesData lineSeriesData : lineSeriesDataList) {
+		for(IBarSeriesData barSeriesData : barSeriesDataList) {
 			/*
 			 * Get the series data and apply the settings.
 			 */
 			try {
-				ISeriesData seriesData = lineSeriesData.getSeriesData();
-				ILineSeries lineSeries = (ILineSeries)createSeries(SeriesType.LINE, seriesData.getXSeries(), seriesData.getYSeries(), seriesData.getId());
+				ISeriesData seriesData = barSeriesData.getSeriesData();
+				IBarSeries barSeries = (IBarSeries)createSeries(SeriesType.BAR, seriesData.getXSeries(), seriesData.getYSeries(), seriesData.getId());
 				//
-				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
-				lineSeries.enableArea(lineSeriesSettings.isEnableArea());
-				lineSeries.setSymbolType(lineSeriesSettings.getSymbolType());
-				lineSeries.setSymbolSize(lineSeriesSettings.getSymbolSize());
-				lineSeries.setLineColor(lineSeriesSettings.getLineColor());
-				lineSeries.setLineWidth(lineSeriesSettings.getLineWidth());
-				lineSeries.enableStack(lineSeriesSettings.isEnableStack());
-				lineSeries.enableStep(lineSeriesSettings.isEnableStep());
+				IBarSeriesSettings barSeriesSettings = barSeriesData.getBarSeriesSettings();
+				barSeries.setDescription(barSeriesSettings.getDescription());
+				barSeries.setVisible(barSeriesSettings.isVisible());
+				barSeries.setVisibleInLegend(barSeriesSettings.isVisibleInLegend());
+				barSeries.setBarColor(barSeriesSettings.getBarColor());
+				barSeries.setBarPadding(barSeriesSettings.getBarPadding());
+				barSeries.setBarWidth(barSeriesSettings.getBarWidth());
+				barSeries.setBarWidthStyle(barSeriesSettings.getBarWidthStyle());
 			} catch(SeriesException e) {
 				//
 			}
@@ -79,7 +80,7 @@ public class LineChart extends ScrollableChart {
 		IAxisSet axisSet = baseChart.getAxisSet();
 		//
 		xAxisPrimary = axisSet.getXAxis(0);
-		xAxisPrimary.getTitle().setText("Retention Time (milliseconds)");
+		xAxisPrimary.getTitle().setText("m/z");
 		xAxisPrimary.setPosition(Position.Primary);
 		xAxisPrimary.getTick().setFormat(ValueFormat.getDecimalFormatEnglish("0.0##"));
 		//

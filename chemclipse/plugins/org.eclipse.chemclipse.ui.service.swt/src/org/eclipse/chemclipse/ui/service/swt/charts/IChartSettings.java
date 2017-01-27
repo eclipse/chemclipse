@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.core;
+package org.eclipse.chemclipse.ui.service.swt.charts;
 
 import org.eclipse.swt.graphics.Color;
 

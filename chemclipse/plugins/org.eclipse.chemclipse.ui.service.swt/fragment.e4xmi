@@ -6,6 +6,7 @@
         <children xsi:type="basic:PartSashContainer" xmi:id="_jl3qINtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partsashcontainer.1" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_k3zzINtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partstack.0">
             <children xsi:type="basic:Part" xmi:id="_JE20INtpEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.part.basechart" contributionURI="bundleclass://org.eclipse.chemclipse.ui.service.swt/org.eclipse.chemclipse.ui.service.swt.parts.Demo1ChartPart" label="Demo 1 Chart"/>
+            <children xsi:type="basic:Part" xmi:id="_uSY70OSrEea-l6yWfxa36w" elementId="org.eclipse.chemclipse.ui.service.swt.part.demo5chart" contributionURI="bundleclass://org.eclipse.chemclipse.ui.service.swt/org.eclipse.chemclipse.ui.service.swt.parts.Demo5ChartPart" label="Demo 5 Chart"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_lLHJoNtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partstack.1">
             <children xsi:type="basic:Part" xmi:id="_qRL30N8nEeaQgqy8xSORpg" elementId="org.eclipse.chemclipse.ui.service.swt.part.demo2chart" contributionURI="bundleclass://org.eclipse.chemclipse.ui.service.swt/org.eclipse.chemclipse.ui.service.swt.parts.Demo2ChartPart" label="Demo 2 Chart"/>

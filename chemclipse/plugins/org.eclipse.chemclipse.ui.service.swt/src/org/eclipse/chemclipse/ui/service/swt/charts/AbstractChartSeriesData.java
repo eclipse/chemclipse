@@ -9,19 +9,18 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.core;
+package org.eclipse.chemclipse.ui.service.swt.charts;
 
-public interface ISeriesData {
+public abstract class AbstractChartSeriesData {
 
-	double[] getXSeries();
+	private ISeriesData seriesData;
 
-	void setXSeries(double[] xSeries);
+	public AbstractChartSeriesData(ISeriesData seriesData) {
+		this.seriesData = seriesData;
+	}
 
-	double[] getYSeries();
+	public ISeriesData getSeriesData() {
 
-	void setYSeries(double[] ySeries);
-
-	String getId();
-
-	void setId(String id);
+		return seriesData;
+	}
 }

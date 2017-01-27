@@ -17,16 +17,16 @@ import java.util.List;
 import org.eclipse.chemclipse.ui.service.swt.charts.ChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.ISeriesData;
-import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesData;
-import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesSettings;
-import org.eclipse.chemclipse.ui.service.swt.charts.line.LineChart;
-import org.eclipse.chemclipse.ui.service.swt.charts.line.LineSeriesData;
+import org.eclipse.chemclipse.ui.service.swt.charts.bar.BarChart;
+import org.eclipse.chemclipse.ui.service.swt.charts.bar.BarSeriesData;
+import org.eclipse.chemclipse.ui.service.swt.charts.bar.IBarSeriesData;
+import org.eclipse.chemclipse.ui.service.swt.charts.bar.IBarSeriesSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class Demo2Chart extends LineChart {
+public class Demo5Chart extends BarChart {
 
-	public Demo2Chart(Composite parent, int style) {
+	public Demo5Chart(Composite parent, int style) {
 		super(parent, style);
 		/*
 		 * Chart Settings
@@ -42,17 +42,17 @@ public class Demo2Chart extends LineChart {
 		/*
 		 * Create series.
 		 */
-		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-		ISeriesData seriesData = SeriesConverter.getSeries(SeriesConverter.LINE_SERIES_1);
+		List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
+		ISeriesData seriesData = SeriesConverter.getSeries(SeriesConverter.BAR_SERIES_1);
 		seriesData.setId("Demo");
 		//
-		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-		ILineSeriesSettings lineSerieSettings = lineSeriesData.getLineSeriesSettings();
-		lineSerieSettings.setEnableArea(false);
-		lineSeriesDataList.add(lineSeriesData);
+		IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
+		IBarSeriesSettings barSeriesSettings = barSeriesData.getBarSeriesSettings();
+		barSeriesSettings.setDescription("");
+		barSeriesDataList.add(barSeriesData);
 		/*
 		 * Set series.
 		 */
-		addSeriesData(lineSeriesDataList);
+		addSeriesData(barSeriesDataList);
 	}
 }

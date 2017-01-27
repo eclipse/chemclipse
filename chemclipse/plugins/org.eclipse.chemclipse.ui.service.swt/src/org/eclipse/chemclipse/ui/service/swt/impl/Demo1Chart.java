@@ -14,14 +14,13 @@ package org.eclipse.chemclipse.ui.service.swt.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.ui.service.swt.core.ChartSettings;
-import org.eclipse.chemclipse.ui.service.swt.core.IChartSettings;
-import org.eclipse.chemclipse.ui.service.swt.core.ILineSeriesData;
-import org.eclipse.chemclipse.ui.service.swt.core.ILineSeriesSettings;
-import org.eclipse.chemclipse.ui.service.swt.core.ISeriesData;
-import org.eclipse.chemclipse.ui.service.swt.core.LineChart;
-import org.eclipse.chemclipse.ui.service.swt.core.LineSeriesData;
-import org.eclipse.chemclipse.ui.service.swt.core.SeriesData;
+import org.eclipse.chemclipse.ui.service.swt.charts.ChartSettings;
+import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
+import org.eclipse.chemclipse.ui.service.swt.charts.ISeriesData;
+import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesData;
+import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesSettings;
+import org.eclipse.chemclipse.ui.service.swt.charts.line.LineChart;
+import org.eclipse.chemclipse.ui.service.swt.charts.line.LineSeriesData;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
@@ -44,9 +43,7 @@ public class Demo1Chart extends LineChart {
 		 * Create series.
 		 */
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-		ISeriesData seriesData = new SeriesData();
-		seriesData.setXSeries(SeriesConverter.getXSeries());
-		seriesData.setYSeries(SeriesConverter.getYSeries());
+		ISeriesData seriesData = SeriesConverter.getSeries(SeriesConverter.LINE_SERIES_1);
 		seriesData.setId("Demo");
 		//
 		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
