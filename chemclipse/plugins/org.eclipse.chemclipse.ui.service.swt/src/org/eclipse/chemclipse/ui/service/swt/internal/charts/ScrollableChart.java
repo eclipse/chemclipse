@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
-import org.eclipse.chemclipse.ui.service.swt.core.ChartSettings;
+import org.eclipse.chemclipse.ui.service.swt.core.IChartSettings;
+import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -27,7 +27,7 @@ import org.swtchart.ISeries;
 import org.swtchart.ISeries.SeriesType;
 import org.swtchart.Range;
 
-public class ScrollableChart extends Composite implements Listener, PaintListener, IEventHandler {
+public class ScrollableChart extends Composite implements IScrollableChart, IEventHandler {
 
 	private Slider sliderVertical;
 	private Slider sliderHorizontal;
@@ -38,7 +38,8 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 		initialize();
 	}
 
-	public void applySettings(ChartSettings chartSettings) {
+	@Override
+	public void applySettings(IChartSettings chartSettings) {
 
 		sliderVertical.setVisible(chartSettings.isVerticalSliderVisible());
 		sliderHorizontal.setVisible(chartSettings.isHorizontalSliderVisible());
@@ -48,30 +49,42 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 		baseChart.getTitle().setVisible(chartSettings.isTitleVisible());
 		baseChart.setBackground(chartSettings.getBackground());
 		baseChart.setBackgroundInPlotArea(chartSettings.getBackgroundInPlotArea());
+		baseChart.enableCompress(chartSettings.isEnableCompress());
+		baseChart.setUseZeroX(chartSettings.isUseZeroX());
+		baseChart.setUseZeroY(chartSettings.isUseZeroY());
 	}
 
+	@Override
 	public BaseChart getBaseChart() {
 
 		return baseChart;
 	}
 
-	public ISeries createSeries(SeriesType seriesType, double[] xSeries, double[] ySeries, String id) {
+	@Override
+	public ISeries createSeries(SeriesType seriesType, double[] xSeries, double[] ySeries, String id) throws SeriesException {
 
 		ISeries series = baseChart.createSeries(seriesType, xSeries, ySeries, id);
 		resetSlider();
 		return series;
 	}
 
-	public void adjustRange() {
+	@Override
+	public void deleteSeries(String id) {
 
-		baseChart.adjustRange();
+		baseChart.deleteSeries(id);
+		resetSlider();
+	}
+
+	@Override
+	public void adjustRange(boolean adjustMinMax) {
+
+		baseChart.adjustRange(adjustMinMax);
 		resetSlider();
 	}
 
 	@Override
 	public void handleEvent(Event event) {
 
-		baseChart.handleEvent(event);
 		switch(event.type) {
 			case SWT.KeyDown:
 				handleKeyDownEvent(event);
@@ -97,123 +110,61 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 			case SWT.Selection:
 				handleSelectionEvent(event);
 				break;
-			default:
-				break;
 		}
 	}
 
 	@Override
 	public void handleMouseMoveEvent(Event event) {
 
+		baseChart.handleMouseMoveEvent(event);
 	}
 
 	@Override
 	public void handleMouseDownEvent(Event event) {
 
+		baseChart.handleMouseDownEvent(event);
 	}
 
 	@Override
 	public void handleMouseUpEvent(Event event) {
 
-		IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
-		if(xAxis != null) {
-			int selectionX = (int)(xAxis.getRange().upper - xAxis.getRange().lower);
-			if((baseChart.getOrientation() == SWT.HORIZONTAL)) {
-				sliderHorizontal.setSelection(selectionX);
-				sliderHorizontal.setThumb(selectionX);
-			} else {
-				sliderVertical.setSelection(selectionX);
-				sliderVertical.setSelection(selectionX);
-			}
-		}
-		IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
-		if(yAxis != null) {
-			int selectionY = (int)(yAxis.getRange().upper - yAxis.getRange().lower);
-			if((baseChart.getOrientation() == SWT.HORIZONTAL)) {
-				sliderVertical.setSelection(selectionY);
-				sliderVertical.setSelection(selectionY);
-			} else {
-				sliderHorizontal.setSelection(selectionY);
-				sliderHorizontal.setThumb(selectionY);
-			}
-		}
+		baseChart.handleMouseUpEvent(event);
 	}
 
 	@Override
 	public void handleMouseWheel(Event event) {
 
+		baseChart.handleMouseWheel(event);
 	}
 
 	@Override
 	public void handleMouseDoubleClick(Event event) {
 
+		baseChart.handleMouseDoubleClick(event);
 	}
 
 	@Override
 	public void handleKeyDownEvent(Event event) {
 
+		baseChart.handleKeyDownEvent(event);
 	}
 
 	@Override
 	public void handleKeyUpEvent(Event event) {
 
+		baseChart.handleKeyUpEvent(event);
 	}
 
 	@Override
 	public void handleSelectionEvent(Event event) {
 
+		baseChart.handleSelectionEvent(event);
 	}
 
 	@Override
 	public void paintControl(PaintEvent e) {
 
-	}
-
-	private void resetSlider() {
-
-		if((baseChart.getOrientation() == SWT.HORIZONTAL)) {
-			/*
-			 * Horizontal
-			 */
-			int selectionY = (int)(baseChart.getMaxY() - baseChart.getMinY());
-			int incrementY = (int)(selectionY / baseChart.getLengthY());
-			incrementY = (incrementY < 1) ? 1 : incrementY;
-			sliderVertical.setMinimum((int)baseChart.getMinY());
-			sliderVertical.setMaximum((int)baseChart.getMaxY());
-			sliderVertical.setIncrement(incrementY);
-			sliderVertical.setSelection(selectionY);
-			sliderVertical.setThumb(selectionY);
-			//
-			int selectionX = (int)(baseChart.getMaxX() - baseChart.getMinX());
-			int incrementX = (int)(selectionX / baseChart.getLengthX());
-			incrementX = (incrementX < 1) ? 1 : incrementX;
-			sliderHorizontal.setMinimum((int)baseChart.getMinX());
-			sliderHorizontal.setMaximum((int)baseChart.getMaxX());
-			sliderHorizontal.setPageIncrement(incrementX);
-			sliderHorizontal.setSelection(selectionX);
-			sliderHorizontal.setThumb(selectionX);
-		} else {
-			/*
-			 * Vertical
-			 */
-			int selectionY = (int)(baseChart.getMaxX() - baseChart.getMinX());
-			int incrementY = (int)(selectionY / baseChart.getLengthY());
-			incrementY = (incrementY < 1) ? 1 : incrementY;
-			sliderVertical.setMinimum((int)baseChart.getMinX());
-			sliderVertical.setMaximum((int)baseChart.getMaxX());
-			sliderVertical.setPageIncrement(incrementY);
-			sliderVertical.setSelection(selectionY);
-			sliderVertical.setThumb(selectionY);
-			//
-			int selectionX = (int)(baseChart.getMaxY() - baseChart.getMinY());
-			int incrementX = (int)(selectionX / baseChart.getLengthX());
-			incrementX = (incrementX < 1) ? 1 : incrementX;
-			sliderHorizontal.setMinimum((int)baseChart.getMinY());
-			sliderHorizontal.setMaximum((int)baseChart.getMaxY());
-			sliderHorizontal.setPageIncrement(incrementX);
-			sliderHorizontal.setSelection(selectionX);
-			sliderHorizontal.setThumb(selectionX);
-		}
+		baseChart.paintControl(e);
 	}
 
 	private void initialize() {
@@ -227,11 +178,40 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 		sliderVertical = new Slider(composite, SWT.VERTICAL);
 		sliderVertical.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		sliderVertical.setVisible(true);
+		sliderVertical.addListener(SWT.Selection, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
+				IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
+				//
+				if(xAxis != null && yAxis != null) {
+					Range range = calculateShiftedRange(yAxis.getRange(), sliderVertical);
+					if(isOrientationHorizontal()) {
+						yAxis.setRange(range);
+						baseChart.adjustMinMaxRange(yAxis);
+					} else {
+						xAxis.setRange(range);
+						baseChart.adjustMinMaxRange(xAxis);
+					}
+					baseChart.redraw();
+				}
+			}
+		});
 		/*
 		 * Chart
 		 */
 		baseChart = new BaseChart(composite, SWT.NONE);
 		baseChart.setLayoutData(new GridData(GridData.FILL_BOTH));
+		baseChart.addCustomSelectionHandler(new ICustomSelectionHandler() {
+
+			@Override
+			public void handleUserSelection(Event event) {
+
+				setSliderSelection(false);
+			}
+		});
 		//
 		Composite plotArea = baseChart.getPlotArea();
 		plotArea.addListener(SWT.KeyDown, this);
@@ -258,21 +238,96 @@ public class ScrollableChart extends Composite implements Listener, PaintListene
 
 				IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
 				IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
-				if(xAxis != null) {
-					double min = sliderHorizontal.getSelection();
-					double max = sliderHorizontal.getSelection() + (xAxis.getRange().upper - xAxis.getRange().lower);
-					Range range = new Range(min, max);
-					if((baseChart.getOrientation() == SWT.HORIZONTAL)) {
+				//
+				if(xAxis != null && yAxis != null) {
+					Range range = calculateShiftedRange(xAxis.getRange(), sliderHorizontal);
+					if(isOrientationHorizontal()) {
 						xAxis.setRange(range);
-						baseChart.adjustMinRange(xAxis);
-						baseChart.redraw();
+						baseChart.adjustMinMaxRange(xAxis);
 					} else {
 						yAxis.setRange(range);
-						baseChart.adjustMinRange(xAxis);
-						baseChart.redraw();
+						baseChart.adjustMinMaxRange(yAxis);
 					}
+					baseChart.redraw();
 				}
 			}
 		});
+	}
+
+	private void resetSlider() {
+
+		setSliderSelection(true);
+	}
+
+	private void setSliderSelection(boolean calculateIncrement) {
+
+		IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
+		IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
+		//
+		if(xAxis != null && yAxis != null) {
+			/*
+			 * Take care of Horizontal or Vertical orientation.
+			 */
+			int minX = (int)baseChart.getMinX();
+			int maxX = (int)baseChart.getMaxX();
+			int minY = (int)baseChart.getMinY();
+			int maxY = (int)baseChart.getMaxY();
+			//
+			int minSelectionX = (int)xAxis.getRange().lower;
+			int maxSelectionX = (int)xAxis.getRange().upper;
+			int thumbSelectionX = (int)(maxSelectionX - minSelectionX);
+			//
+			int minSelectionY = (int)yAxis.getRange().lower;
+			int maxSelectionY = (int)yAxis.getRange().upper;
+			int thumbSelectionY = (int)(maxSelectionY - minSelectionY);
+			//
+			boolean isHorizontal = isOrientationHorizontal();
+			//
+			sliderVertical.setMinimum((isHorizontal) ? minY : minX);
+			sliderVertical.setMaximum((isHorizontal) ? maxY : maxX);
+			sliderVertical.setThumb((isHorizontal) ? thumbSelectionY : thumbSelectionX);
+			sliderVertical.setSelection((isHorizontal) ? minSelectionY : minSelectionX);
+			//
+			sliderHorizontal.setMinimum((isHorizontal) ? minX : minY);
+			sliderHorizontal.setMaximum((isHorizontal) ? maxX : maxY);
+			sliderHorizontal.setThumb((isHorizontal) ? thumbSelectionX : thumbSelectionY);
+			sliderHorizontal.setSelection((isHorizontal) ? minSelectionX : minSelectionY);
+			/*
+			 * Calculate the increment.
+			 */
+			if(calculateIncrement) {
+				int thumbX = maxX - minX;
+				int thumbY = maxY - minY;
+				int incrementX = calculateIncrement(thumbX, baseChart.getLength());
+				int incrementY = calculateIncrement(thumbY, baseChart.getLength());
+				sliderVertical.setIncrement((isHorizontal) ? incrementY : incrementX);
+				sliderHorizontal.setPageIncrement((isHorizontal) ? incrementX : incrementY);
+			}
+		}
+	}
+
+	private boolean isOrientationHorizontal() {
+
+		return (baseChart.getOrientation() == SWT.HORIZONTAL) ? true : false;
+	}
+
+	private int calculateIncrement(double selection, double length) {
+
+		if(length == 0) {
+			return 0;
+		} else {
+			int increment = (int)(selection / length);
+			return (increment < 1) ? 1 : increment;
+		}
+	}
+
+	private Range calculateShiftedRange(Range range, Slider slider) {
+
+		int selection = slider.getSelection();
+		double min = selection;
+		double max = selection + (range.upper - range.lower);
+		Range adjustedRange = new Range(min, max);
+		//
+		return adjustedRange;
 	}
 }

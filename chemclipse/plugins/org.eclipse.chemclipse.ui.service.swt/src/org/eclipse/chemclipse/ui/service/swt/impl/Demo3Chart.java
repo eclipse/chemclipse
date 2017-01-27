@@ -25,16 +25,16 @@ import org.eclipse.chemclipse.ui.service.swt.core.SeriesData;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class Demo1Chart extends LineChart {
+public class Demo3Chart extends LineChart {
 
-	public Demo1Chart(Composite parent, int style) {
+	public Demo3Chart(Composite parent, int style) {
 		super(parent, style);
 		/*
 		 * Chart Settings
 		 */
 		IChartSettings chartSettings = new ChartSettings();
 		chartSettings //
-				.setOrientation(SWT.HORIZONTAL) //
+				.setOrientation(SWT.VERTICAL) //
 				.setHorizontalSliderVisible(true) //
 				.setVerticalSliderVisible(true) //
 				.setUseZeroX(true) //

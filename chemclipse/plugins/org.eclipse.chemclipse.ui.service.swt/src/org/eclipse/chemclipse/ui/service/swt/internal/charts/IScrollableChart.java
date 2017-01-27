@@ -11,25 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
-import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
+import org.eclipse.chemclipse.ui.service.swt.core.IChartSettings;
+import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
+import org.swtchart.ISeries;
+import org.swtchart.ISeries.SeriesType;
 
-public interface IEventHandler extends Listener, PaintListener {
+public interface IScrollableChart {
 
-	void handleMouseMoveEvent(Event event);
+	void applySettings(IChartSettings chartSettings);
 
-	void handleMouseDownEvent(Event event);
+	BaseChart getBaseChart();
 
-	void handleMouseUpEvent(Event event);
+	ISeries createSeries(SeriesType seriesType, double[] xSeries, double[] ySeries, String id) throws SeriesException;
 
-	void handleMouseWheel(Event event);
+	void deleteSeries(String id);
 
-	void handleMouseDoubleClick(Event event);
-
-	void handleKeyDownEvent(Event event);
-
-	void handleKeyUpEvent(Event event);
-
-	void handleSelectionEvent(Event event);
+	void adjustRange(boolean adjustMinMax);
 }

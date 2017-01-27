@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
 import org.eclipse.chemclipse.ui.service.swt.internal.charts.BaseChart;
 import org.eclipse.chemclipse.ui.service.swt.internal.charts.ScrollableChart;
 import org.eclipse.swt.graphics.Color;
@@ -41,32 +42,39 @@ public class LineChart extends ScrollableChart {
 
 	public void addSeriesData(List<ILineSeriesData> lineSeriesDataList) {
 
+		/*
+		 * Suspend the update when adding new data to improve the performance.
+		 */
 		BaseChart baseChart = getBaseChart();
 		baseChart.suspendUpdate(true);
-		//
 		for(ILineSeriesData lineSeriesData : lineSeriesDataList) {
-			//
-			ISeriesData seriesData = lineSeriesData.getSeriesData();
-			ILineSeries lineSeries = (ILineSeries)createSeries(SeriesType.LINE, seriesData.getXSeries(), seriesData.getYSeries(), seriesData.getId());
-			//
-			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
-			lineSeries.enableArea(lineSeriesSettings.isEnableArea());
-			lineSeries.setSymbolType(lineSeriesSettings.getSymbolType());
-			lineSeries.setSymbolSize(lineSeriesSettings.getSymbolSize());
-			lineSeries.setLineColor(lineSeriesSettings.getLineColor());
-			lineSeries.setLineWidth(lineSeriesSettings.getLineWidth());
-			lineSeries.enableStack(lineSeriesSettings.isEnableStack());
-			lineSeries.enableStep(lineSeriesSettings.isEnableStep());
+			/*
+			 * Get the series data and apply the settings.
+			 */
+			try {
+				ISeriesData seriesData = lineSeriesData.getSeriesData();
+				ILineSeries lineSeries = (ILineSeries)createSeries(SeriesType.LINE, seriesData.getXSeries(), seriesData.getYSeries(), seriesData.getId());
+				//
+				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+				lineSeries.enableArea(lineSeriesSettings.isEnableArea());
+				lineSeries.setSymbolType(lineSeriesSettings.getSymbolType());
+				lineSeries.setSymbolSize(lineSeriesSettings.getSymbolSize());
+				lineSeries.setLineColor(lineSeriesSettings.getLineColor());
+				lineSeries.setLineWidth(lineSeriesSettings.getLineWidth());
+				lineSeries.enableStack(lineSeriesSettings.isEnableStack());
+				lineSeries.enableStep(lineSeriesSettings.isEnableStep());
+			} catch(SeriesException e) {
+				//
+			}
 		}
-		//
 		baseChart.suspendUpdate(false);
-		baseChart.adjustRange();
+		adjustRange(true);
+		baseChart.redraw();
 	}
 
 	private void initialize() {
 
 		BaseChart baseChart = getBaseChart();
-		baseChart.enableCompress(true);
 		baseChart.suspendUpdate(true);
 		IAxisSet axisSet = baseChart.getAxisSet();
 		//
@@ -79,26 +87,26 @@ public class LineChart extends ScrollableChart {
 		yAxisPrimary.getTitle().setText("Intensity");
 		yAxisPrimary.setPosition(Position.Primary);
 		yAxisPrimary.getTick().setFormat(ValueFormat.getDecimalFormatEnglish("0.0#E0"));
-		yAxisPrimary.enableLogScale(true); // TODO
+		yAxisPrimary.enableLogScale(false); // TODO
 		yAxisPrimary.enableCategory(false);
-		; // TODO
-			//
-			// int idxAxis1 = axisSet.createXAxis();
-			// xAxis1 = axisSet.getXAxis(idxAxis1);
-			// xAxis1.getTitle().setText("TOP");
-			// xAxis1.setPosition(Position.Secondary);
-			//
-			// int idxAxis2 = axisSet.createXAxis();
-			// xAxis2 = axisSet.getXAxis(idxAxis2);
-			// xAxis2.getTitle().setText("BOTTOM2");
-			// xAxis2.setPosition(Position.Secondary);
-			//
-			// int idyAxis1 = axisSet.createYAxis();
-			// yAxis1 = axisSet.getYAxis(idyAxis1);
-			// yAxis1.getTitle().setText("RIGHT");
-			// yAxis1.setPosition(Position.Secondary);
-			// yAxis1.getTick().setFormat(ValueFormat.getDecimalFormatEnglish("0.0##"));
-			//
+		// TODO
+		//
+		// int idxAxis1 = axisSet.createXAxis();
+		// xAxis1 = axisSet.getXAxis(idxAxis1);
+		// xAxis1.getTitle().setText("TOP");
+		// xAxis1.setPosition(Position.Secondary);
+		//
+		// int idxAxis2 = axisSet.createXAxis();
+		// xAxis2 = axisSet.getXAxis(idxAxis2);
+		// xAxis2.getTitle().setText("BOTTOM2");
+		// xAxis2.setPosition(Position.Secondary);
+		//
+		// int idyAxis1 = axisSet.createYAxis();
+		// yAxis1 = axisSet.getYAxis(idyAxis1);
+		// yAxis1.getTitle().setText("RIGHT");
+		// yAxis1.setPosition(Position.Secondary);
+		// yAxis1.getTick().setFormat(ValueFormat.getDecimalFormatEnglish("0.0##"));
+		//
 		setColors();
 		setVisibility();
 		baseChart.suspendUpdate(false);

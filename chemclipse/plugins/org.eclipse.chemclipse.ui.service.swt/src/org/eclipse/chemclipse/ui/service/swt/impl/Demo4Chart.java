@@ -25,25 +25,26 @@ import org.eclipse.chemclipse.ui.service.swt.core.SeriesData;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class Demo1Chart extends LineChart {
+public class Demo4Chart extends LineChart {
 
-	public Demo1Chart(Composite parent, int style) {
+	public Demo4Chart(Composite parent, int style) {
 		super(parent, style);
 		/*
 		 * Chart Settings
 		 */
 		IChartSettings chartSettings = new ChartSettings();
 		chartSettings //
-				.setOrientation(SWT.HORIZONTAL) //
+				.setOrientation(SWT.VERTICAL) //
 				.setHorizontalSliderVisible(true) //
 				.setVerticalSliderVisible(true) //
-				.setUseZeroX(true) //
-				.setUseZeroY(true);
+				.setUseZeroX(false) //
+				.setUseZeroY(false);
 		applySettings(chartSettings);
 		/*
 		 * Create series.
 		 */
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+		//
 		ISeriesData seriesData = new SeriesData();
 		seriesData.setXSeries(SeriesConverter.getXSeries());
 		seriesData.setYSeries(SeriesConverter.getYSeries());
@@ -51,7 +52,7 @@ public class Demo1Chart extends LineChart {
 		//
 		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
 		ILineSeriesSettings lineSerieSettings = lineSeriesData.getLineSeriesSettings();
-		lineSerieSettings.setEnableArea(true);
+		lineSerieSettings.setEnableArea(false);
 		lineSeriesDataList.add(lineSeriesData);
 		/*
 		 * Set series.
