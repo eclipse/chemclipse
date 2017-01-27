@@ -27,7 +27,7 @@ import org.swtchart.ISeries;
 import org.swtchart.ISeries.SeriesType;
 import org.swtchart.Range;
 
-public class ScrollableChart extends Composite implements IScrollableChart, IEventHandler {
+public class ScrollableChart extends Composite implements IScrollableChart, IEventHandler, IExtendedChart {
 
 	private Slider sliderVertical;
 	private Slider sliderHorizontal;
@@ -73,6 +73,13 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 
 		baseChart.deleteSeries(id);
 		resetSlider();
+	}
+
+	@Override
+	public void setRange(String axis, double start, double stop) {
+
+		baseChart.setRange(axis, start, stop);
+		setSliderSelection(false);
 	}
 
 	@Override

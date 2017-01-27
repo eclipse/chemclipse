@@ -17,12 +17,13 @@ import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
 import org.eclipse.swt.widgets.Composite;
 import org.swtchart.IAxis;
 import org.swtchart.IAxis.Direction;
+import org.swtchart.IAxisSet;
 import org.swtchart.ISeries;
 import org.swtchart.ISeries.SeriesType;
 import org.swtchart.ISeriesSet;
 import org.swtchart.Range;
 
-public abstract class AbstractCoordinatedChart extends AbstractHandledChart implements IDataCoordinates {
+public abstract class AbstractCoordinatedChart extends AbstractHandledChart implements IDataCoordinates, IExtendedChart {
 
 	private boolean useZeroY;
 	private boolean useZeroX;
@@ -92,46 +93,6 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 	}
 
 	@Override
-	public ISeries createSeries(SeriesType seriesType, double[] xSeries, double[] ySeries, String id) throws SeriesException {
-
-		if(xSeries.length == ySeries.length) {
-			ISeriesSet seriesSet = getSeriesSet();
-			ISeries series = seriesSet.createSeries(seriesType, id);
-			series.setXSeries(xSeries);
-			series.setYSeries(ySeries);
-			calculateCoordinates(series);
-			return series;
-		} else {
-			throw new SeriesException("The length of x and y series differs.");
-		}
-	}
-
-	@Override
-	public void deleteSeries(String id) {
-
-		ISeriesSet seriesSet = getSeriesSet();
-		if(seriesSet.getSeries(id) != null) {
-			resetCoordinates();
-			seriesSet.deleteSeries(id);
-			for(ISeries series : seriesSet.getSeries()) {
-				calculateCoordinates(series);
-			}
-		}
-	}
-
-	@Override
-	public void adjustRange(boolean adjustMinMax) {
-
-		if(!isUpdateSuspended()) {
-			getAxisSet().adjustRange();
-			if(adjustMinMax) {
-				adjustMinMaxRange(getAxisSet().getXAxis(0));
-				adjustMinMaxRange(getAxisSet().getYAxis(0));
-			}
-		}
-	}
-
-	@Override
 	public void setRange(IAxis axis, int xStart, int xStop, boolean adjustMinMax) {
 
 		if(axis != null && Math.abs(xStop - xStart) > 0 && !isUpdateSuspended()) {
@@ -186,6 +147,54 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 			 * Adjust the range.
 			 */
 			axis.setRange(range);
+		}
+	}
+
+	@Override
+	public ISeries createSeries(SeriesType seriesType, double[] xSeries, double[] ySeries, String id) throws SeriesException {
+
+		if(xSeries.length == ySeries.length) {
+			ISeriesSet seriesSet = getSeriesSet();
+			ISeries series = seriesSet.createSeries(seriesType, id);
+			series.setXSeries(xSeries);
+			series.setYSeries(ySeries);
+			calculateCoordinates(series);
+			return series;
+		} else {
+			throw new SeriesException("The length of x and y series differs.");
+		}
+	}
+
+	@Override
+	public void deleteSeries(String id) {
+
+		ISeriesSet seriesSet = getSeriesSet();
+		if(seriesSet.getSeries(id) != null) {
+			resetCoordinates();
+			seriesSet.deleteSeries(id);
+			for(ISeries series : seriesSet.getSeries()) {
+				calculateCoordinates(series);
+			}
+		}
+	}
+
+	@Override
+	public void setRange(String axis, double start, double stop) {
+
+		IAxisSet axisSet = getAxisSet();
+		IAxis selectedAxis = (axis.equals(IExtendedChart.X_AXIS)) ? axisSet.getXAxis(0) : axisSet.getYAxis(0);
+		setRange(selectedAxis, start, stop, true);
+	}
+
+	@Override
+	public void adjustRange(boolean adjustMinMax) {
+
+		if(!isUpdateSuspended()) {
+			getAxisSet().adjustRange();
+			if(adjustMinMax) {
+				adjustMinMaxRange(getAxisSet().getXAxis(0));
+				adjustMinMaxRange(getAxisSet().getYAxis(0));
+			}
 		}
 	}
 

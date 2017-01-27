@@ -12,19 +12,10 @@
 package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
 import org.eclipse.chemclipse.ui.service.swt.core.IChartSettings;
-import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
-import org.swtchart.ISeries;
-import org.swtchart.ISeries.SeriesType;
 
 public interface IScrollableChart {
 
 	void applySettings(IChartSettings chartSettings);
 
 	BaseChart getBaseChart();
-
-	ISeries createSeries(SeriesType seriesType, double[] xSeries, double[] ySeries, String id) throws SeriesException;
-
-	void deleteSeries(String id);
-
-	void adjustRange(boolean adjustMinMax);
 }
