@@ -132,7 +132,7 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 									/*
 									 * Set the arrow cursor.
 									 */
-									if(display != null) {
+									if(display != null && display.getCursorControl() != null) {
 										display.getCursorControl().setCursor(display.getSystemCursor(SWT.CURSOR_ARROW));
 									}
 								}
@@ -272,8 +272,8 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 	private void updatePeaksInList(IChromatogramSelectionMSD chromatogramSelection, boolean forceReload) {
 
 		/*
-		 * Don't reload the peak list if it still has been loaded.
-		 * Take care, if there is none or only one peak selected!
+		 * Don't reload the peak list if it still has been loaded. Take care, if
+		 * there is none or only one peak selected!
 		 */
 		List<IChromatogramPeakMSD> peakList = chromatogramSelection.getChromatogramMSD().getPeaks(chromatogramSelection);
 		int size = peakList.size();
@@ -319,8 +319,9 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 			} else {
 				if(forceReload) {
 					/*
-					 * Checking the retention indices could be too time consuming.
-					 * But otherwise, changes of RI will be not detected.
+					 * Checking the retention indices could be too time
+					 * consuming. But otherwise, changes of RI will be not
+					 * detected.
 					 */
 					if(checkReloadRetetionIndices(peakList, forceReload)) {
 						retentionIndexSum = getSumRetentionIndices(peakList);
@@ -359,8 +360,9 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 			} else {
 				if(forceReload) {
 					/*
-					 * Checking the retention indices could be too time consuming.
-					 * But otherwise, changes of RI will be not detected.
+					 * Checking the retention indices could be too time
+					 * consuming. But otherwise, changes of RI will be not
+					 * detected.
 					 */
 					if(checkReloadRetetionIndices(peakList, forceReload)) {
 						retentionIndexSum = getSumRetentionIndices(peakList);
@@ -546,8 +548,8 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 			 */
 		} else {
 			/*
-			 * First peak of the selection: move left
-			 * Last peak of the selection: move right
+			 * First peak of the selection: move left Last peak of the
+			 * selection: move right
 			 */
 			if(peaksSelection.get(0).equals(selectedPeak)) {
 				ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.LEFT, 5);
