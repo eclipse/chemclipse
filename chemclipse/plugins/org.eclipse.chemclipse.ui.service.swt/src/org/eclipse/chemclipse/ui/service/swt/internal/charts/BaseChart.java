@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -27,60 +30,23 @@ public class BaseChart extends AbstractCoordinatedChart {
 	private static final long DELTA_CLICK_TIME = 100;
 	//
 	private UserSelection userSelection;
-	private IUserSelectionHandler userSelectionHandler;
+	private List<ICustomSelectionHandler> customSelectionHandlers;
 	private long clickStartTime;
 
 	public BaseChart(Composite parent, int style) {
 		super(parent, style);
 		userSelection = new UserSelection();
+		customSelectionHandlers = new ArrayList<ICustomSelectionHandler>();
 	}
 
-	protected void setUserSelectionHandler(IUserSelectionHandler userSelectionHandler) {
+	public boolean addCustomSelectionHandler(ICustomSelectionHandler customSelectionHandler) {
 
-		this.userSelectionHandler = userSelectionHandler;
+		return customSelectionHandlers.add(customSelectionHandler);
 	}
 
-	@Override
-	public void handleUserSelection(Event event) {
+	public boolean removeCustomSelectionHandler(ICustomSelectionHandler customSelectionHandler) {
 
-		// TODO Optimize
-		int minSelectedWidth;
-		int deltaWidth;
-		//
-		if((getOrientation() == SWT.HORIZONTAL)) {
-			minSelectedWidth = getPlotArea().getBounds().width / MIN_SELECTION_PERCENTAGE;
-			deltaWidth = Math.abs(userSelection.getStartX() - event.x);
-		} else {
-			minSelectedWidth = getPlotArea().getBounds().height / MIN_SELECTION_PERCENTAGE;
-			deltaWidth = Math.abs(userSelection.getStartY() - event.y);
-		}
-		//
-		if(deltaWidth >= minSelectedWidth) {
-			//
-			int xStart = userSelection.getStartX();
-			int xStop = userSelection.getStopX();
-			int yStart = userSelection.getStartY();
-			int yStop = userSelection.getStopY();
-			IAxis xAxis = getAxisSet().getXAxis(0);
-			IAxis yAxis = getAxisSet().getYAxis(0);
-			//
-			if((getOrientation() == SWT.HORIZONTAL)) {
-				setRange(xAxis, xStart, xStop, true);
-				setRange(yAxis, yStart, yStop, true);
-			} else {
-				setRange(xAxis, yStart, yStop, true);
-				setRange(yAxis, xStart, xStop, true);
-			}
-		}
-		/*
-		 * Handle the user selection.
-		 */
-		if(userSelectionHandler != null) {
-			userSelectionHandler.handleUserSelection(event);
-		}
-		//
-		userSelection.reset();
-		redraw();
+		return customSelectionHandlers.remove(customSelectionHandler);
 	}
 
 	@Override
@@ -101,11 +67,9 @@ public class BaseChart extends AbstractCoordinatedChart {
 	@Override
 	public void handleMouseMoveEvent(Event event) {
 
-		if(event.stateMask == 524288) {
+		if(event.stateMask == SWT.BUTTON1) {
 			userSelection.setStopCoordinate(event.x, event.y);
 			redraw();
-		} else {
-			userSelection.setActive(false);
 		}
 	}
 
@@ -124,7 +88,6 @@ public class BaseChart extends AbstractCoordinatedChart {
 		if(event.button == 1) {
 			long deltaTime = System.currentTimeMillis() - clickStartTime;
 			if(deltaTime >= DELTA_CLICK_TIME) {
-				// TODO Optimize
 				handleUserSelection(event);
 			}
 		}
@@ -134,6 +97,62 @@ public class BaseChart extends AbstractCoordinatedChart {
 	public void handleMouseDoubleClick(Event event) {
 
 		adjustRange(true);
+		fireUpdateCustomSelectionHandlers(event);
 		redraw();
+	}
+
+	private void handleUserSelection(Event event) {
+
+		int minSelectedWidth;
+		int deltaWidth;
+		//
+		if((getOrientation() == SWT.HORIZONTAL)) {
+			minSelectedWidth = getPlotArea().getBounds().width / MIN_SELECTION_PERCENTAGE;
+			deltaWidth = Math.abs(userSelection.getStartX() - event.x);
+		} else {
+			minSelectedWidth = getPlotArea().getBounds().height / MIN_SELECTION_PERCENTAGE;
+			deltaWidth = Math.abs(userSelection.getStartY() - event.y);
+		}
+		/*
+		 * Prevent accidential zooming.
+		 */
+		if(deltaWidth >= minSelectedWidth) {
+			//
+			int xStart = userSelection.getStartX();
+			int xStop = userSelection.getStopX();
+			int yStart = userSelection.getStartY();
+			int yStop = userSelection.getStopY();
+			IAxis xAxis = getAxisSet().getXAxis(0);
+			IAxis yAxis = getAxisSet().getYAxis(0);
+			//
+			if((getOrientation() == SWT.HORIZONTAL)) {
+				setRange(xAxis, xStart, xStop, true);
+				setRange(yAxis, yStart, yStop, true);
+			} else {
+				setRange(xAxis, yStart, yStop, true);
+				setRange(yAxis, xStart, xStop, true);
+			}
+			//
+			fireUpdateCustomSelectionHandlers(event);
+			/*
+			 * Reset the current selection and redraw the chart.
+			 */
+			userSelection.reset();
+			redraw();
+		}
+	}
+
+	private void fireUpdateCustomSelectionHandlers(Event event) {
+
+		/*
+		 * Handle the custom user selection handlers.
+		 */
+		for(ICustomSelectionHandler customSelectionHandler : customSelectionHandlers) {
+			try {
+				customSelectionHandler.handleUserSelection(event);
+			} catch(Exception e) {
+				System.out.println(e);
+			}
+		}
 	}
 }

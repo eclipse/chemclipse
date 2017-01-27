@@ -24,11 +24,6 @@ public abstract class AbstractHandledChart extends Chart implements IEventHandle
 	}
 
 	@Override
-	public void handleUserSelection(Event event) {
-
-	}
-
-	@Override
 	public void handleEvent(Event event) {
 
 		super.handleEvent(event);

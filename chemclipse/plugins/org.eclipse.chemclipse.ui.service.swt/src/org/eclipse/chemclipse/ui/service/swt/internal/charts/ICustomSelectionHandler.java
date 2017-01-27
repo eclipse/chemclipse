@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
 import org.eclipse.swt.widgets.Event;
 
-public interface IUserSelectionHandler {
+public interface ICustomSelectionHandler {
 
 	void handleUserSelection(Event event);
 }

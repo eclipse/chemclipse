@@ -73,13 +73,26 @@ public class UserSelection {
 		this.stopY = stopY;
 	}
 
+	/**
+	 * Sets the start coordinate, but don't activates the selection.
+	 * An activation could lead to unwanted drawings of the rectangle.
+	 * 
+	 * @param startX
+	 * @param startY
+	 */
 	public void setStartCoordinate(int startX, int startY) {
 
-		active = true;
+		active = false;
 		this.startX = startX;
 		this.startY = startY;
 	}
 
+	/**
+	 * Sets the stop coordinate and activates the selection.
+	 * 
+	 * @param stopX
+	 * @param stopY
+	 */
 	public void setStopCoordinate(int stopX, int stopY) {
 
 		active = true;

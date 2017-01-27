@@ -15,7 +15,7 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
-public interface IEventHandler extends Listener, PaintListener, IUserSelectionHandler {
+public interface IEventHandler extends Listener, PaintListener {
 
 	void handleMouseMoveEvent(Event event);
 

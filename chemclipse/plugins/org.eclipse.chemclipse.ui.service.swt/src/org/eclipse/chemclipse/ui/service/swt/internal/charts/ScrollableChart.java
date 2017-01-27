@@ -32,13 +32,6 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 	private Slider sliderVertical;
 	private Slider sliderHorizontal;
 	private BaseChart baseChart;
-	/*
-	 * The slider selection is not minY : minX.
-	 * Instead it is the opposite, cause SWTChart displays
-	 * the data BOTTOM to TOP.
-	 */
-	private static final int VERTICAL_START_POSITION_BOTTOM = 0;
-	private int verticalStartPosition;
 
 	public ScrollableChart(Composite parent, int style) {
 		super(parent, style);
@@ -87,38 +80,6 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 
 		baseChart.adjustRange(adjustMinMax);
 		resetSlider();
-	}
-
-	@Override
-	public void handleUserSelection(Event event) {
-
-		IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
-		IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
-		//
-		if(xAxis != null && yAxis != null) {
-			/*
-			 * Take care of Horizontal or Vertical orientation.
-			 */
-			int minX = (int)xAxis.getRange().lower;
-			int minY = (int)yAxis.getRange().lower;
-			int maxX = (int)xAxis.getRange().upper;
-			int maxY = (int)yAxis.getRange().upper;
-			int thumbX = (int)(maxX - minX);
-			int thumbY = (int)(maxY - minY);
-			//
-			boolean isHorizontal = isOrientationHorizontal();
-			//
-			if(verticalStartPosition == VERTICAL_START_POSITION_BOTTOM) {
-				sliderVertical.setSelection((isHorizontal) ? maxY : maxX);
-			} else {
-				sliderVertical.setSelection((isHorizontal) ? minY : minX);
-			}
-			sliderVertical.setThumb((isHorizontal) ? thumbY : thumbX);
-			sliderHorizontal.setSelection((isHorizontal) ? minX : minY);
-			sliderHorizontal.setThumb((isHorizontal) ? thumbX : thumbY);
-			//
-			redraw();
-		}
 	}
 
 	@Override
@@ -211,8 +172,6 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 		this.setLayout(new FillLayout());
 		Composite composite = new Composite(this, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
-		//
-		verticalStartPosition = VERTICAL_START_POSITION_BOTTOM;
 		/*
 		 * Slider Vertical
 		 */
@@ -245,7 +204,34 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 		 */
 		baseChart = new BaseChart(composite, SWT.NONE);
 		baseChart.setLayoutData(new GridData(GridData.FILL_BOTH));
-		baseChart.setUserSelectionHandler(this);
+		baseChart.addCustomSelectionHandler(new ICustomSelectionHandler() {
+
+			@Override
+			public void handleUserSelection(Event event) {
+
+				IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
+				IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
+				//
+				if(xAxis != null && yAxis != null) {
+					/*
+					 * Take care of Horizontal or Vertical orientation.
+					 */
+					int minX = (int)xAxis.getRange().lower;
+					int minY = (int)yAxis.getRange().lower;
+					int maxX = (int)xAxis.getRange().upper;
+					int maxY = (int)yAxis.getRange().upper;
+					int thumbX = (int)(maxX - minX);
+					int thumbY = (int)(maxY - minY);
+					//
+					boolean isHorizontal = isOrientationHorizontal();
+					//
+					sliderVertical.setSelection((isHorizontal) ? minY : minX);
+					sliderVertical.setThumb((isHorizontal) ? thumbY : thumbX);
+					sliderHorizontal.setSelection((isHorizontal) ? minX : minY);
+					sliderHorizontal.setThumb((isHorizontal) ? thumbX : thumbY);
+				}
+			}
+		});
 		//
 		Composite plotArea = baseChart.getPlotArea();
 		plotArea.addListener(SWT.KeyDown, this);
@@ -308,11 +294,7 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 		sliderVertical.setMaximum((isHorizontal) ? maxY : maxX);
 		sliderVertical.setIncrement((isHorizontal) ? incrementY : incrementX);
 		sliderVertical.setThumb((isHorizontal) ? thumbY : thumbX);
-		if(verticalStartPosition == VERTICAL_START_POSITION_BOTTOM) {
-			sliderVertical.setSelection((isHorizontal) ? maxY : maxX);
-		} else {
-			sliderVertical.setSelection((isHorizontal) ? minY : minX);
-		}
+		sliderVertical.setSelection((isHorizontal) ? minY : minX);
 		//
 		sliderHorizontal.setMinimum((isHorizontal) ? minX : minY);
 		sliderHorizontal.setMaximum((isHorizontal) ? maxX : maxY);
@@ -338,24 +320,11 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 
 	private Range calculateShiftedRange(Range range, Slider slider) {
 
-		Range adjustedRange;
 		int selection = slider.getSelection();
 		double min = selection;
 		double max = selection + (range.upper - range.lower);
+		Range adjustedRange = new Range(min, max);
 		//
-		if(slider == sliderHorizontal) {
-			adjustedRange = new Range(min, max);
-		} else if(slider == sliderVertical) {
-			if(verticalStartPosition == VERTICAL_START_POSITION_BOTTOM) {
-				min = selection - (range.upper - range.lower);
-				max = selection;
-				adjustedRange = new Range(min, max);
-			} else {
-				adjustedRange = new Range(min, max);
-			}
-		} else {
-			adjustedRange = range;
-		}
 		return adjustedRange;
 	}
 }
