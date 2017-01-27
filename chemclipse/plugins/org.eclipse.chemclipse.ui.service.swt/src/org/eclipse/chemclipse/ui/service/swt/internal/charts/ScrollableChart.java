@@ -216,19 +216,30 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 					/*
 					 * Take care of Horizontal or Vertical orientation.
 					 */
-					int minX = (int)xAxis.getRange().lower;
-					int minY = (int)yAxis.getRange().lower;
-					int maxX = (int)xAxis.getRange().upper;
-					int maxY = (int)yAxis.getRange().upper;
-					int thumbX = (int)(maxX - minX);
-					int thumbY = (int)(maxY - minY);
+					int minX = (int)baseChart.getMinX();
+					int maxX = (int)baseChart.getMaxX();
+					int minY = (int)baseChart.getMinY();
+					int maxY = (int)baseChart.getMaxY();
+					//
+					int minSelectionX = (int)xAxis.getRange().lower;
+					int maxSelectionX = (int)xAxis.getRange().upper;
+					int thumbSelectionX = (int)(maxSelectionX - minSelectionX);
+					//
+					int minSelectionY = (int)yAxis.getRange().lower;
+					int maxSelectionY = (int)yAxis.getRange().upper;
+					int thumbSelectionY = (int)(maxSelectionY - minSelectionY);
 					//
 					boolean isHorizontal = isOrientationHorizontal();
 					//
-					sliderVertical.setSelection((isHorizontal) ? minY : minX);
-					sliderVertical.setThumb((isHorizontal) ? thumbY : thumbX);
-					sliderHorizontal.setSelection((isHorizontal) ? minX : minY);
-					sliderHorizontal.setThumb((isHorizontal) ? thumbX : thumbY);
+					sliderVertical.setMinimum((isHorizontal) ? minY : minX);
+					sliderVertical.setMaximum((isHorizontal) ? maxY : maxX);
+					sliderVertical.setThumb((isHorizontal) ? thumbSelectionY : thumbSelectionX);
+					sliderVertical.setSelection((isHorizontal) ? minSelectionY : minSelectionX);
+					//
+					sliderHorizontal.setMinimum((isHorizontal) ? minX : minY);
+					sliderHorizontal.setMaximum((isHorizontal) ? maxX : maxY);
+					sliderHorizontal.setThumb((isHorizontal) ? thumbSelectionX : thumbSelectionY);
+					sliderHorizontal.setSelection((isHorizontal) ? minSelectionX : minSelectionY);
 				}
 			}
 		});
