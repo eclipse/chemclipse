@@ -177,6 +177,7 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 		 */
 		sliderVertical = new Slider(composite, SWT.VERTICAL);
 		sliderVertical.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+		sliderVertical.setOrientation(SWT.RIGHT_TO_LEFT); // Doesn't work in vertical style?
 		sliderVertical.setVisible(true);
 		sliderVertical.addListener(SWT.Selection, new Listener() {
 
@@ -230,6 +231,7 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		sliderHorizontal.setLayoutData(gridData);
+		sliderHorizontal.setOrientation(SWT.LEFT_TO_RIGHT);
 		sliderHorizontal.setVisible(true);
 		sliderHorizontal.addListener(SWT.Selection, new Listener() {
 
@@ -325,9 +327,7 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 
 		int selection = slider.getSelection();
 		double min = selection;
-		double max = selection + (range.upper - range.lower);
-		Range adjustedRange = new Range(min, max);
-		//
-		return adjustedRange;
+		double max = (range.upper - range.lower) + selection;
+		return new Range(min, max);
 	}
 }

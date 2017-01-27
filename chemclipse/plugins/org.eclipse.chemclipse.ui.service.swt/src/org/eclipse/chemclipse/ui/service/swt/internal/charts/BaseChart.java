@@ -132,11 +132,11 @@ public class BaseChart extends AbstractCoordinatedChart {
 				setRange(xAxis, yStart, yStop, true);
 				setRange(yAxis, xStart, xStop, true);
 			}
-			//
-			fireUpdateCustomSelectionHandlers(event);
 			/*
+			 * Inform all registered handlers.
 			 * Reset the current selection and redraw the chart.
 			 */
+			fireUpdateCustomSelectionHandlers(event);
 			userSelection.reset();
 			redraw();
 		}
