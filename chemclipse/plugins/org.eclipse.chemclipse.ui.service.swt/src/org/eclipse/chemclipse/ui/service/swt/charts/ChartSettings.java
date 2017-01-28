@@ -33,7 +33,7 @@ public class ChartSettings implements IChartSettings {
 
 	public ChartSettings() {
 		//
-		verticalSliderVisible = false;
+		verticalSliderVisible = false; // https://bugs.eclipse.org/bugs/show_bug.cgi?id=511257
 		horizontalSliderVisible = true;
 		//
 		Display display = Display.getCurrent();
@@ -56,7 +56,14 @@ public class ChartSettings implements IChartSettings {
 	@Override
 	public IChartSettings setVerticalSliderVisible(boolean verticalSliderVisible) {
 
-		this.verticalSliderVisible = verticalSliderVisible;
+		/*
+		 * There is a bug when using the SWT.RIGHT_TO_LEFT orientation.
+		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=511257
+		 * That's why the vertical slider is not visible yet.
+		 */
+		// this.verticalSliderVisible = verticalSliderVisible;
+		this.verticalSliderVisible = false;
+		System.out.println("Can't set vertical slider true, see: https://bugs.eclipse.org/bugs/show_bug.cgi?id=511257");
 		return this;
 	}
 

@@ -184,7 +184,7 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 		 */
 		sliderVertical = new Slider(composite, SWT.VERTICAL);
 		sliderVertical.setLayoutData(new GridData(GridData.FILL_VERTICAL));
-		sliderVertical.setOrientation(SWT.RIGHT_TO_LEFT); // Doesn't work in vertical style?
+		sliderVertical.setOrientation(SWT.RIGHT_TO_LEFT); // See Bug #511257
 		sliderVertical.setVisible(true);
 		sliderVertical.addListener(SWT.Selection, new Listener() {
 
