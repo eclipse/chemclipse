@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
+import org.eclipse.chemclipse.ui.service.swt.charts.IAxisSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -23,6 +25,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Slider;
 import org.swtchart.IAxis;
+import org.swtchart.IAxisSet;
 import org.swtchart.ISeries;
 import org.swtchart.ISeries.SeriesType;
 import org.swtchart.Range;
@@ -41,8 +44,20 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 	@Override
 	public void applySettings(IChartSettings chartSettings) {
 
+		baseChart.suspendUpdate(true);
+		//
 		sliderVertical.setVisible(chartSettings.isVerticalSliderVisible());
 		sliderHorizontal.setVisible(chartSettings.isHorizontalSliderVisible());
+		//
+		baseChart.getTitle().setForeground(getBackground());
+		baseChart.getTitle().setText(chartSettings.getTitle());
+		baseChart.getTitle().setVisible(("".equals(chartSettings.getTitle())) ? false : true);
+		//
+		IAxisSet axisSet = baseChart.getAxisSet();
+		IAxis xAxisPrimary = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
+		setAxisSettings(xAxisPrimary, chartSettings.getPrimaryAxisSettingsX());
+		IAxis yAxisPrimary = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
+		setAxisSettings(yAxisPrimary, chartSettings.getPrimaryAxisSettingsY());
 		//
 		baseChart.setOrientation(chartSettings.getOrientation());
 		baseChart.getLegend().setVisible(chartSettings.isLegendVisible());
@@ -52,6 +67,8 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 		baseChart.enableCompress(chartSettings.isEnableCompress());
 		baseChart.setUseZeroX(chartSettings.isUseZeroX());
 		baseChart.setUseZeroY(chartSettings.isUseZeroY());
+		//
+		baseChart.suspendUpdate(false);
 	}
 
 	@Override
@@ -191,8 +208,8 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 			@Override
 			public void handleEvent(Event event) {
 
-				IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
-				IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
+				IAxis xAxis = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
+				IAxis yAxis = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
 				//
 				if(xAxis != null && yAxis != null) {
 					Range range = calculateShiftedRange(yAxis.getRange(), sliderVertical);
@@ -245,8 +262,8 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 			@Override
 			public void handleEvent(Event event) {
 
-				IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
-				IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
+				IAxis xAxis = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
+				IAxis yAxis = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
 				//
 				if(xAxis != null && yAxis != null) {
 					Range range = calculateShiftedRange(xAxis.getRange(), sliderHorizontal);
@@ -270,8 +287,8 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 
 	private void setSliderSelection(boolean calculateIncrement) {
 
-		IAxis xAxis = baseChart.getAxisSet().getXAxis(0);
-		IAxis yAxis = baseChart.getAxisSet().getYAxis(0);
+		IAxis xAxis = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
+		IAxis yAxis = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
 		//
 		if(xAxis != null && yAxis != null) {
 			/*
@@ -336,5 +353,22 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 		double min = selection;
 		double max = (range.upper - range.lower) + selection;
 		return new Range(min, max);
+	}
+
+	private void setAxisSettings(IAxis axis, IAxisSettings axisSettings) {
+
+		if(axis != null && axisSettings != null) {
+			axis.getTitle().setText(axisSettings.getTitle());
+			axis.getTick().setFormat(axisSettings.getDecimalFormat());
+			axis.enableLogScale(axisSettings.isEnableLogScale());
+			axis.enableCategory(axisSettings.isEnableCategory());
+			Color color = axisSettings.getColor();
+			if(color != null) {
+				axis.getTitle().setForeground(color);
+				axis.getTick().setForeground(color);
+			}
+			axis.getTitle().setVisible(axisSettings.isVisible());
+			axis.getTick().setVisible(axisSettings.isVisible());
+		}
 	}
 }

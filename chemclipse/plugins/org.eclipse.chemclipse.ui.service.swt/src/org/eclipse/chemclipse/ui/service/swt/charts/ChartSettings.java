@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.charts;
 
+import org.eclipse.chemclipse.ui.service.swt.internal.charts.BaseChart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
@@ -22,6 +23,11 @@ public class ChartSettings implements IChartSettings {
 	/*
 	 * Chart
 	 */
+	private String title;
+	//
+	private IPrimaryAxisSettings primaryAxisSettingsX;
+	private IPrimaryAxisSettings primaryAxisSettingsY;
+	//
 	private int orientation;
 	private boolean legendVisible;
 	private boolean titleVisible;
@@ -35,6 +41,11 @@ public class ChartSettings implements IChartSettings {
 		//
 		verticalSliderVisible = false; // https://bugs.eclipse.org/bugs/show_bug.cgi?id=511257
 		horizontalSliderVisible = true;
+		//
+		title = "";
+		//
+		primaryAxisSettingsX = new PrimaryAxisSettings(BaseChart.DEFAULT_TITLE_X_AXIS);
+		primaryAxisSettingsY = new PrimaryAxisSettings(BaseChart.DEFAULT_TITLE_Y_AXIS);
 		//
 		Display display = Display.getCurrent();
 		orientation = SWT.HORIZONTAL;
@@ -78,6 +89,34 @@ public class ChartSettings implements IChartSettings {
 
 		this.horizontalSliderVisible = horizontalSliderVisible;
 		return this;
+	}
+
+	@Override
+	public String getTitle() {
+
+		return title;
+	}
+
+	@Override
+	public void setTitle(String title) {
+
+		if(title != null) {
+			this.title = title;
+		} else {
+			this.title = "";
+		}
+	}
+
+	@Override
+	public IPrimaryAxisSettings getPrimaryAxisSettingsX() {
+
+		return primaryAxisSettingsX;
+	}
+
+	@Override
+	public IPrimaryAxisSettings getPrimaryAxisSettingsY() {
+
+		return primaryAxisSettingsY;
 	}
 
 	@Override

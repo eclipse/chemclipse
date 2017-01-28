@@ -23,6 +23,14 @@ public interface IChartSettings {
 
 	IChartSettings setHorizontalSliderVisible(boolean horizontalSliderVisible);
 
+	String getTitle();
+
+	void setTitle(String title);
+
+	IPrimaryAxisSettings getPrimaryAxisSettingsX();
+
+	IPrimaryAxisSettings getPrimaryAxisSettingsY();
+
 	int getOrientation();
 
 	/**

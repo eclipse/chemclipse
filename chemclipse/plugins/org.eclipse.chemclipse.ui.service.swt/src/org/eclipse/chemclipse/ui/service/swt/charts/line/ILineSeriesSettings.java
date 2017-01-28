@@ -32,6 +32,19 @@ public interface ILineSeriesSettings extends ISeriesSettings {
 
 	PlotSymbolType getSymbolType();
 
+	/**
+	 * PlotSymbolType.CIRCLE
+	 * PlotSymbolType.SQUARE
+	 * PlotSymbolType.DIAMOND
+	 * PlotSymbolType.TRIANGLE
+	 * PlotSymbolType.INVERTED_TRIANGLE
+	 * PlotSymbolType.CROSS
+	 * PlotSymbolType.PLUS
+	 * PlotSymbolType.NONE
+	 * 
+	 * @param symbolType
+	 * @return
+	 */
 	ILineSeriesSettings setSymbolType(PlotSymbolType symbolType);
 
 	int getSymbolSize();

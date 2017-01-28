@@ -182,7 +182,7 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 	public void setRange(String axis, double start, double stop) {
 
 		IAxisSet axisSet = getAxisSet();
-		IAxis selectedAxis = (axis.equals(IExtendedChart.X_AXIS)) ? axisSet.getXAxis(0) : axisSet.getYAxis(0);
+		IAxis selectedAxis = (axis.equals(IExtendedChart.X_AXIS)) ? axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS) : axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
 		setRange(selectedAxis, start, stop, true);
 	}
 
@@ -192,8 +192,8 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 		if(!isUpdateSuspended()) {
 			getAxisSet().adjustRange();
 			if(adjustMinMax) {
-				adjustMinMaxRange(getAxisSet().getXAxis(0));
-				adjustMinMaxRange(getAxisSet().getYAxis(0));
+				adjustMinMaxRange(getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS));
+				adjustMinMaxRange(getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS));
 			}
 		}
 	}
