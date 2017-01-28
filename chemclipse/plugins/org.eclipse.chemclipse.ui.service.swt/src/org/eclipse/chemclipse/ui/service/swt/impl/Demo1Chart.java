@@ -23,6 +23,8 @@ import org.eclipse.chemclipse.ui.service.swt.charts.ISecondaryAxisSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.ISeriesData;
 import org.eclipse.chemclipse.ui.service.swt.charts.SecondaryAxisSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.converter.MillisecondsToMinuteConverter;
+import org.eclipse.chemclipse.ui.service.swt.charts.converter.MillisecondsToScanNumberConverter;
+import org.eclipse.chemclipse.ui.service.swt.charts.converter.RelativeIntensityConverter;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesData;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.LineChart;
@@ -58,11 +60,27 @@ public class Demo1Chart extends LineChart {
 		primaryAxisSettingsY.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0.0#E0"));
 		primaryAxisSettingsY.setColor(Colors.BLACK);
 		//
-		ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings("Minutes", new MillisecondsToMinuteConverter());
-		secondaryAxisSettingsX.setPosition(Position.Primary);
-		secondaryAxisSettingsX.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0.00"));
-		secondaryAxisSettingsX.setColor(Colors.BLACK);
-		chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
+		try {
+			ISecondaryAxisSettings secondaryAxisSettingsX1 = new SecondaryAxisSettings("Scan Number", new MillisecondsToScanNumberConverter(50, 50));
+			secondaryAxisSettingsX1.setPosition(Position.Primary);
+			secondaryAxisSettingsX1.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0"));
+			secondaryAxisSettingsX1.setColor(Colors.BLACK);
+			chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX1);
+		} catch(Exception e) {
+			System.out.println(e);
+		}
+		//
+		ISecondaryAxisSettings secondaryAxisSettingsX2 = new SecondaryAxisSettings("Minutes", new MillisecondsToMinuteConverter());
+		secondaryAxisSettingsX2.setPosition(Position.Primary);
+		secondaryAxisSettingsX2.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0.00"));
+		secondaryAxisSettingsX2.setColor(Colors.BLACK);
+		chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX2);
+		//
+		ISecondaryAxisSettings secondaryAxisSettingsY1 = new SecondaryAxisSettings("Relative Intensity [%]", new RelativeIntensityConverter());
+		secondaryAxisSettingsY1.setPosition(Position.Secondary);
+		secondaryAxisSettingsY1.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0.00"));
+		secondaryAxisSettingsY1.setColor(Colors.BLACK);
+		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY1);
 		//
 		applySettings(chartSettings);
 		/*

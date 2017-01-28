@@ -117,6 +117,18 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 	}
 
 	@Override
+	public void adjustSecondaryXAxes() {
+
+		baseChart.adjustSecondaryXAxes();
+	}
+
+	@Override
+	public void adjustSecondaryYAxes() {
+
+		baseChart.adjustSecondaryYAxes();
+	}
+
+	@Override
 	public void handleEvent(Event event) {
 
 		switch(event.type) {
@@ -226,9 +238,11 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 					if(isOrientationHorizontal()) {
 						yAxis.setRange(range);
 						baseChart.adjustMinMaxRange(yAxis);
+						adjustSecondaryYAxes();
 					} else {
 						xAxis.setRange(range);
 						baseChart.adjustMinMaxRange(xAxis);
+						adjustSecondaryXAxes();
 					}
 					baseChart.redraw();
 				}
@@ -280,9 +294,11 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 					if(isOrientationHorizontal()) {
 						xAxis.setRange(range);
 						baseChart.adjustMinMaxRange(xAxis);
+						adjustSecondaryXAxes();
 					} else {
 						yAxis.setRange(range);
 						baseChart.adjustMinMaxRange(yAxis);
+						adjustSecondaryYAxes();
 					}
 					baseChart.redraw();
 				}

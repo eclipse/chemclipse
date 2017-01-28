@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
 import org.swtchart.IAxis;
 
-public interface IDataCoordinates {
+public interface IRangeSupport {
 
 	boolean isUseZeroY();
 
@@ -22,16 +22,6 @@ public interface IDataCoordinates {
 	boolean isUseZeroX();
 
 	void setUseZeroX(boolean useZeroX);
-
-	double getLength();
-
-	double getMinX();
-
-	double getMaxX();
-
-	double getMinY();
-
-	double getMaxY();
 
 	/**
 	 * Sets the range, based on the start and stop coordinates of the composite.

@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.ui.service.swt.charts.IAxisScaleConverter;
+import org.eclipse.chemclipse.ui.service.swt.charts.IChartDataCoordinates;
 import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
 import org.eclipse.swt.widgets.Composite;
 import org.swtchart.IAxis;
@@ -26,7 +27,7 @@ import org.swtchart.ISeries.SeriesType;
 import org.swtchart.ISeriesSet;
 import org.swtchart.Range;
 
-public abstract class AbstractCoordinatedChart extends AbstractHandledChart implements IDataCoordinates, IExtendedChart {
+public abstract class AbstractExtendedChart extends AbstractHandledChart implements IChartDataCoordinates, IRangeSupport, IExtendedChart {
 
 	private boolean useZeroY;
 	private boolean useZeroX;
@@ -38,7 +39,7 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 	private Map<Integer, IAxisScaleConverter> xAxisScaleConverterMap;
 	private Map<Integer, IAxisScaleConverter> yAxisScaleConverterMap;
 
-	public AbstractCoordinatedChart(Composite parent, int style) {
+	public AbstractExtendedChart(Composite parent, int style) {
 		super(parent, style);
 		xAxisScaleConverterMap = new HashMap<Integer, IAxisScaleConverter>();
 		yAxisScaleConverterMap = new HashMap<Integer, IAxisScaleConverter>();
@@ -223,7 +224,8 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 		}
 	}
 
-	private void adjustSecondaryXAxes() {
+	@Override
+	public void adjustSecondaryXAxes() {
 
 		IAxisSet axisSet = getAxisSet();
 		IAxis xAxis = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
@@ -233,6 +235,7 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 				IAxis axis = axisSet.getXAxis(id);
 				IAxisScaleConverter axisScaleConverter = xAxisScaleConverterMap.get(id);
 				if(axis != null && axisScaleConverter != null) {
+					axisScaleConverter.setChartDataCoordinates(this);
 					double start = axisScaleConverter.getConvertedUnit(range.lower);
 					double end = axisScaleConverter.getConvertedUnit(range.upper);
 					Range adjustedRange = new Range(start, end);
@@ -242,7 +245,8 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 		}
 	}
 
-	private void adjustSecondaryYAxes() {
+	@Override
+	public void adjustSecondaryYAxes() {
 
 		IAxisSet axisSet = getAxisSet();
 		IAxis yAxis = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
@@ -252,6 +256,7 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 				IAxis axis = axisSet.getYAxis(id);
 				IAxisScaleConverter axisScaleConverter = yAxisScaleConverterMap.get(id);
 				if(axis != null && axisScaleConverter != null) {
+					axisScaleConverter.setChartDataCoordinates(this);
 					double start = axisScaleConverter.getConvertedUnit(range.lower);
 					double end = axisScaleConverter.getConvertedUnit(range.upper);
 					Range adjustedRange = new Range(start, end);

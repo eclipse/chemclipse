@@ -11,22 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.charts;
 
-public interface IAxisScaleConverter {
+public abstract class AbstractAxisScaleConverter implements IAxisScaleConverter {
 
-	/**
-	 * May be null if not set correctly.
-	 * 
-	 * @return {@link IChartDataCoordinates}
-	 */
-	IChartDataCoordinates getChartDataCoordinates();
+	private IChartDataCoordinates dataCoordinates;
 
-	/**
-	 * The data coordinates are set by the base chart.
-	 * There is no need to set them manually.
-	 * 
-	 * @param chartDataCoordinates
-	 */
-	void setChartDataCoordinates(IChartDataCoordinates chartDataCoordinates);
+	@Override
+	public IChartDataCoordinates getChartDataCoordinates() {
 
-	double getConvertedUnit(double unit);
+		return dataCoordinates;
+	}
+
+	@Override
+	public void setChartDataCoordinates(IChartDataCoordinates dataCoordinates) {
+
+		this.dataCoordinates = dataCoordinates;
+	}
 }

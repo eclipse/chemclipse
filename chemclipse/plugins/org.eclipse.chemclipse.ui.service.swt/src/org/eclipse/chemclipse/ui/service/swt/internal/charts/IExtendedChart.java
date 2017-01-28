@@ -60,4 +60,14 @@ public interface IExtendedChart {
 	 * @param adjustMinMax
 	 */
 	void adjustRange(boolean adjustMinMax);
+
+	/**
+	 * Adjusts all secondary x axes, based on range of the primary x axis.
+	 */
+	void adjustSecondaryXAxes();
+
+	/**
+	 * Adjusts all secondary y axes, based on range of the primary y axis.
+	 */
+	void adjustSecondaryYAxes();
 }

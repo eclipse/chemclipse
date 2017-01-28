@@ -13,12 +13,21 @@ package org.eclipse.chemclipse.ui.service.swt.charts.converter;
 
 import org.eclipse.chemclipse.ui.service.swt.charts.AbstractAxisScaleConverter;
 import org.eclipse.chemclipse.ui.service.swt.charts.IAxisScaleConverter;
+import org.eclipse.chemclipse.ui.service.swt.charts.IChartDataCoordinates;
 
-public class MillisecondsToMinuteConverter extends AbstractAxisScaleConverter implements IAxisScaleConverter {
+public class RelativeIntensityConverter extends AbstractAxisScaleConverter implements IAxisScaleConverter {
 
 	@Override
 	public double getConvertedUnit(double unit) {
 
-		return unit / 60000.0d;
+		IChartDataCoordinates chartDataCoordinates = getChartDataCoordinates();
+		double convertedUnit = unit;
+		if(chartDataCoordinates != null) {
+			double delta = chartDataCoordinates.getMaxY() - chartDataCoordinates.getMinY();
+			if(delta != 0) {
+				convertedUnit = (100.0d / delta) * unit;
+			}
+		}
+		return convertedUnit;
 	}
 }

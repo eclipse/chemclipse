@@ -11,22 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.charts;
 
-public interface IAxisScaleConverter {
+public interface IChartDataCoordinates {
 
-	/**
-	 * May be null if not set correctly.
-	 * 
-	 * @return {@link IChartDataCoordinates}
-	 */
-	IChartDataCoordinates getChartDataCoordinates();
+	double getLength();
 
-	/**
-	 * The data coordinates are set by the base chart.
-	 * There is no need to set them manually.
-	 * 
-	 * @param chartDataCoordinates
-	 */
-	void setChartDataCoordinates(IChartDataCoordinates chartDataCoordinates);
+	double getMinX();
 
-	double getConvertedUnit(double unit);
+	double getMaxX();
+
+	double getMinY();
+
+	double getMaxY();
 }

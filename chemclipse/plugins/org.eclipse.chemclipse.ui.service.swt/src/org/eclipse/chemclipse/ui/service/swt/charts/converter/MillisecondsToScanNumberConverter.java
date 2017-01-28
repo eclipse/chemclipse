@@ -14,11 +14,35 @@ package org.eclipse.chemclipse.ui.service.swt.charts.converter;
 import org.eclipse.chemclipse.ui.service.swt.charts.AbstractAxisScaleConverter;
 import org.eclipse.chemclipse.ui.service.swt.charts.IAxisScaleConverter;
 
-public class MillisecondsToMinuteConverter extends AbstractAxisScaleConverter implements IAxisScaleConverter {
+public class MillisecondsToScanNumberConverter extends AbstractAxisScaleConverter implements IAxisScaleConverter {
+
+	private int scanDelay;
+	private int scanInterval;
+
+	/**
+	 * 
+	 * @param scanDelay
+	 * @param scanInterval
+	 */
+	public MillisecondsToScanNumberConverter(int scanDelay, int scanInterval) throws Exception {
+		/*
+		 * Validations.
+		 */
+		if(scanDelay < 0) {
+			throw new Exception("The scan delay must be >= 0.");
+		}
+		//
+		if(scanInterval <= 0) {
+			throw new Exception("The scan interval must be > 0.");
+		}
+		//
+		this.scanDelay = scanDelay;
+		this.scanInterval = scanInterval;
+	}
 
 	@Override
 	public double getConvertedUnit(double unit) {
 
-		return unit / 60000.0d;
+		return (int)((unit - scanDelay) / scanInterval) + 1;
 	}
 }

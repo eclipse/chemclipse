@@ -15,6 +15,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.ui.service.swt.charts.IChartDataCoordinates;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -23,7 +24,7 @@ import org.swtchart.IAxis;
 import org.swtchart.IAxis.Position;
 import org.swtchart.IAxisSet;
 
-public class BaseChart extends AbstractCoordinatedChart {
+public class BaseChart extends AbstractExtendedChart implements IChartDataCoordinates, IRangeSupport, IExtendedChart {
 
 	public static final int ID_PRIMARY_X_AXIS = 0;
 	public static final int ID_PRIMARY_Y_AXIS = 0;
