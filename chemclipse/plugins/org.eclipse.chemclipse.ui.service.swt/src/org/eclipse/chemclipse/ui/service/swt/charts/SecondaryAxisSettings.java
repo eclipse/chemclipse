@@ -13,27 +13,16 @@ package org.eclipse.chemclipse.ui.service.swt.charts;
 
 public class SecondaryAxisSettings extends AbstractAxisSettings implements ISecondaryAxisSettings {
 
-	private String identifier;
+	private IAxisScaleConverter axisScaleConverter;
 
-	public SecondaryAxisSettings(String title, String id) {
+	public SecondaryAxisSettings(String title, IAxisScaleConverter axisScaleConverter) {
 		super(title);
+		this.axisScaleConverter = axisScaleConverter;
 	}
 
 	@Override
-	public String getIdentifier() {
+	public IAxisScaleConverter getAxisScaleConverter() {
 
-		return identifier;
-	}
-
-	@Override
-	public void setIdentifier(String identifier) {
-
-		this.identifier = identifier;
-	}
-
-	@Override
-	public double getConversion(double value) {
-
-		return 0;
+		return axisScaleConverter;
 	}
 }

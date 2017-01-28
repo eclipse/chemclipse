@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ui.service.swt.charts;
 import java.text.DecimalFormat;
 
 import org.eclipse.swt.graphics.Color;
+import org.swtchart.IAxis.Position;
 
 public interface IAxisSettings {
 
@@ -25,12 +26,6 @@ public interface IAxisSettings {
 
 	void setDecimalFormat(DecimalFormat decimalFormat);
 
-	boolean isEnableLogScale();
-
-	void setEnableLogScale(boolean enableLogScale);
-
-	boolean isEnableCategory();
-
 	Color getColor();
 
 	void setColor(Color color);
@@ -38,4 +33,8 @@ public interface IAxisSettings {
 	boolean isVisible();
 
 	void setVisible(boolean visible);
+
+	Position getPosition();
+
+	void setPosition(Position position);
 }

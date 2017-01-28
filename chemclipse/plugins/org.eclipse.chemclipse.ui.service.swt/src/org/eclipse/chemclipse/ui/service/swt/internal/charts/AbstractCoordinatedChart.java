@@ -12,7 +12,10 @@
 package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.eclipse.chemclipse.ui.service.swt.charts.IAxisScaleConverter;
 import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
 import org.eclipse.swt.widgets.Composite;
 import org.swtchart.IAxis;
@@ -32,9 +35,13 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 	private double maxX;
 	private double minY;
 	private double maxY;
+	private Map<Integer, IAxisScaleConverter> xAxisScaleConverterMap;
+	private Map<Integer, IAxisScaleConverter> yAxisScaleConverterMap;
 
 	public AbstractCoordinatedChart(Composite parent, int style) {
 		super(parent, style);
+		xAxisScaleConverterMap = new HashMap<Integer, IAxisScaleConverter>();
+		yAxisScaleConverterMap = new HashMap<Integer, IAxisScaleConverter>();
 		resetCoordinates();
 	}
 
@@ -92,16 +99,23 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 		return maxY;
 	}
 
+	public Map<Integer, IAxisScaleConverter> getXAxisScaleConverterMap() {
+
+		return xAxisScaleConverterMap;
+	}
+
+	public Map<Integer, IAxisScaleConverter> getYAxisScaleConverterMap() {
+
+		return yAxisScaleConverterMap;
+	}
+
 	@Override
 	public void setRange(IAxis axis, int xStart, int xStop, boolean adjustMinMax) {
 
 		if(axis != null && Math.abs(xStop - xStart) > 0 && !isUpdateSuspended()) {
-			double min = axis.getDataCoordinate(Math.min(xStart, xStop));
-			double max = axis.getDataCoordinate(Math.max(xStart, xStop));
-			axis.setRange(new Range(min, max));
-			if(adjustMinMax) {
-				adjustMinMaxRange(axis);
-			}
+			double start = axis.getDataCoordinate(Math.min(xStart, xStop));
+			double stop = axis.getDataCoordinate(Math.max(xStart, xStop));
+			setRange(axis, start, stop, adjustMinMax);
 		}
 	}
 
@@ -113,6 +127,12 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 			axis.setRange(new Range(min, max));
 			if(adjustMinMax) {
 				adjustMinMaxRange(axis);
+			}
+			//
+			if(axis.getDirection() == Direction.X) {
+				adjustSecondaryXAxes();
+			} else if(axis.getDirection() == Direction.Y) {
+				adjustSecondaryYAxes();
 			}
 		}
 	}
@@ -194,6 +214,49 @@ public abstract class AbstractCoordinatedChart extends AbstractHandledChart impl
 			if(adjustMinMax) {
 				adjustMinMaxRange(getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS));
 				adjustMinMaxRange(getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS));
+			}
+			/*
+			 * Adjust the secondary axes.
+			 */
+			adjustSecondaryXAxes();
+			adjustSecondaryYAxes();
+		}
+	}
+
+	private void adjustSecondaryXAxes() {
+
+		IAxisSet axisSet = getAxisSet();
+		IAxis xAxis = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
+		Range range = xAxis.getRange();
+		for(int id : axisSet.getXAxisIds()) {
+			if(id != BaseChart.ID_PRIMARY_X_AXIS) {
+				IAxis axis = axisSet.getXAxis(id);
+				IAxisScaleConverter axisScaleConverter = xAxisScaleConverterMap.get(id);
+				if(axis != null && axisScaleConverter != null) {
+					double start = axisScaleConverter.getConvertedUnit(range.lower);
+					double end = axisScaleConverter.getConvertedUnit(range.upper);
+					Range adjustedRange = new Range(start, end);
+					axis.setRange(adjustedRange);
+				}
+			}
+		}
+	}
+
+	private void adjustSecondaryYAxes() {
+
+		IAxisSet axisSet = getAxisSet();
+		IAxis yAxis = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
+		Range range = yAxis.getRange();
+		for(int id : axisSet.getYAxisIds()) {
+			if(id != BaseChart.ID_PRIMARY_Y_AXIS) {
+				IAxis axis = axisSet.getYAxis(id);
+				IAxisScaleConverter axisScaleConverter = yAxisScaleConverterMap.get(id);
+				if(axis != null && axisScaleConverter != null) {
+					double start = axisScaleConverter.getConvertedUnit(range.lower);
+					double end = axisScaleConverter.getConvertedUnit(range.upper);
+					Range adjustedRange = new Range(start, end);
+					axis.setRange(adjustedRange);
+				}
 			}
 		}
 	}

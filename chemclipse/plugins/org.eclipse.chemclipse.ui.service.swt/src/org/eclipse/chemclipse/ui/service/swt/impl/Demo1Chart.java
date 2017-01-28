@@ -19,13 +19,17 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ui.service.swt.charts.ChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.IPrimaryAxisSettings;
+import org.eclipse.chemclipse.ui.service.swt.charts.ISecondaryAxisSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.ISeriesData;
+import org.eclipse.chemclipse.ui.service.swt.charts.SecondaryAxisSettings;
+import org.eclipse.chemclipse.ui.service.swt.charts.converter.MillisecondsToMinuteConverter;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesData;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.LineChart;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.LineSeriesData;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.swtchart.IAxis.Position;
 
 public class Demo1Chart extends LineChart {
 
@@ -46,11 +50,19 @@ public class Demo1Chart extends LineChart {
 		primaryAxisSettingsX.setTitle("Retention Time (milliseconds)");
 		primaryAxisSettingsX.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0.0##"));
 		primaryAxisSettingsX.setColor(Colors.BLACK);
+		primaryAxisSettingsX.setPosition(Position.Secondary);
+		primaryAxisSettingsX.setVisible(false);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle("Intensity");
 		primaryAxisSettingsY.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0.0#E0"));
 		primaryAxisSettingsY.setColor(Colors.BLACK);
+		//
+		ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings("Minutes", new MillisecondsToMinuteConverter());
+		secondaryAxisSettingsX.setPosition(Position.Primary);
+		secondaryAxisSettingsX.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0.00"));
+		secondaryAxisSettingsX.setColor(Colors.BLACK);
+		chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 		//
 		applySettings(chartSettings);
 		/*

@@ -16,22 +16,22 @@ import java.text.DecimalFormat;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
+import org.swtchart.IAxis.Position;
 
 public abstract class AbstractAxisSettings implements IAxisSettings {
 
 	private String title;
 	private DecimalFormat decimalFormat;
-	private boolean enableLogScale;
-	private boolean enableCategory;
 	private Color color;
 	private boolean visible;
+	private Position position;
 
 	public AbstractAxisSettings(String title) {
 		this.title = title;
 		decimalFormat = new DecimalFormat();
-		enableLogScale = false;
 		color = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 		visible = true;
+		position = Position.Primary;
 	}
 
 	@Override
@@ -59,24 +59,6 @@ public abstract class AbstractAxisSettings implements IAxisSettings {
 	}
 
 	@Override
-	public boolean isEnableLogScale() {
-
-		return enableLogScale;
-	}
-
-	@Override
-	public void setEnableLogScale(boolean enableLogScale) {
-
-		this.enableLogScale = enableLogScale;
-	}
-
-	@Override
-	public boolean isEnableCategory() {
-
-		return enableCategory;
-	}
-
-	@Override
 	public Color getColor() {
 
 		return color;
@@ -98,5 +80,17 @@ public abstract class AbstractAxisSettings implements IAxisSettings {
 	public void setVisible(boolean visible) {
 
 		this.visible = visible;
+	}
+
+	@Override
+	public Position getPosition() {
+
+		return position;
+	}
+
+	@Override
+	public void setPosition(Position position) {
+
+		this.position = position;
 	}
 }

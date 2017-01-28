@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
 import org.eclipse.chemclipse.ui.service.swt.charts.IAxisSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
+import org.eclipse.chemclipse.ui.service.swt.charts.IPrimaryAxisSettings;
+import org.eclipse.chemclipse.ui.service.swt.charts.ISecondaryAxisSettings;
 import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
@@ -25,6 +27,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Slider;
 import org.swtchart.IAxis;
+import org.swtchart.IAxis.Direction;
 import org.swtchart.IAxisSet;
 import org.swtchart.ISeries;
 import org.swtchart.ISeries.SeriesType;
@@ -52,12 +55,19 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 		baseChart.getTitle().setForeground(getBackground());
 		baseChart.getTitle().setText(chartSettings.getTitle());
 		baseChart.getTitle().setVisible(("".equals(chartSettings.getTitle())) ? false : true);
-		//
+		/*
+		 * Primary axes
+		 */
 		IAxisSet axisSet = baseChart.getAxisSet();
 		IAxis xAxisPrimary = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
 		setAxisSettings(xAxisPrimary, chartSettings.getPrimaryAxisSettingsX());
 		IAxis yAxisPrimary = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
 		setAxisSettings(yAxisPrimary, chartSettings.getPrimaryAxisSettingsY());
+		/*
+		 * Secondary axes
+		 */
+		addSecondaryAxesX(axisSet, chartSettings);
+		addSecondaryAxesY(axisSet, chartSettings);
 		//
 		baseChart.setOrientation(chartSettings.getOrientation());
 		baseChart.getLegend().setVisible(chartSettings.isLegendVisible());
@@ -355,20 +365,70 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 		return new Range(min, max);
 	}
 
+	private void addSecondaryAxesX(IAxisSet axisSet, IChartSettings chartSettings) {
+
+		for(int id : axisSet.getXAxisIds()) {
+			if(id != BaseChart.ID_PRIMARY_X_AXIS) {
+				axisSet.deleteXAxis(id);
+			}
+		}
+		baseChart.getXAxisScaleConverterMap().clear();
+		//
+		for(ISecondaryAxisSettings secondaryAxisSettings : chartSettings.getSecondaryAxisSettingsListX()) {
+			int xAxisId = axisSet.createXAxis();
+			IAxis xAxisSecondary = axisSet.getXAxis(xAxisId);
+			setAxisSettings(xAxisSecondary, secondaryAxisSettings);
+			baseChart.getXAxisScaleConverterMap().put(xAxisId, secondaryAxisSettings.getAxisScaleConverter());
+		}
+	}
+
+	private void addSecondaryAxesY(IAxisSet axisSet, IChartSettings chartSettings) {
+
+		for(int id : axisSet.getYAxisIds()) {
+			if(id != BaseChart.ID_PRIMARY_Y_AXIS) {
+				axisSet.deleteYAxis(id);
+			}
+		}
+		baseChart.getYAxisScaleConverterMap().clear();
+		//
+		for(ISecondaryAxisSettings secondaryAxisSettings : chartSettings.getSecondaryAxisSettingsListY()) {
+			int yAxisId = axisSet.createYAxis();
+			IAxis yAxisSecondary = axisSet.getYAxis(yAxisId);
+			setAxisSettings(yAxisSecondary, secondaryAxisSettings);
+			baseChart.getYAxisScaleConverterMap().put(yAxisId, secondaryAxisSettings.getAxisScaleConverter());
+		}
+	}
+
 	private void setAxisSettings(IAxis axis, IAxisSettings axisSettings) {
 
 		if(axis != null && axisSettings != null) {
 			axis.getTitle().setText(axisSettings.getTitle());
 			axis.getTick().setFormat(axisSettings.getDecimalFormat());
-			axis.enableLogScale(axisSettings.isEnableLogScale());
-			axis.enableCategory(axisSettings.isEnableCategory());
+			axis.getTitle().setVisible(axisSettings.isVisible());
+			axis.getTick().setVisible(axisSettings.isVisible());
+			axis.setPosition(axisSettings.getPosition());
+			/*
+			 * Set the color on demand.
+			 */
 			Color color = axisSettings.getColor();
 			if(color != null) {
 				axis.getTitle().setForeground(color);
 				axis.getTick().setForeground(color);
 			}
-			axis.getTitle().setVisible(axisSettings.isVisible());
-			axis.getTick().setVisible(axisSettings.isVisible());
+			/*
+			 * Apply primary axis specific settings.
+			 */
+			if(axisSettings instanceof IPrimaryAxisSettings) {
+				IPrimaryAxisSettings primaryAxisSettings = (IPrimaryAxisSettings)axisSettings;
+				axis.enableLogScale(primaryAxisSettings.isEnableLogScale());
+				/*
+				 * Category is only valid for the X-Axis.
+				 */
+				if(axis.getDirection() == Direction.X) {
+					axis.enableCategory(primaryAxisSettings.isEnableCategory());
+					axis.setCategorySeries(primaryAxisSettings.getCategorySeries());
+				}
+			}
 		}
 	}
 }

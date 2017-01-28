@@ -55,6 +55,8 @@ public class BaseChart extends AbstractCoordinatedChart {
 		xAxisPrimary.getTick().setFormat(new DecimalFormat());
 		xAxisPrimary.enableLogScale(false);
 		xAxisPrimary.enableCategory(false);
+		xAxisPrimary.enableCategory(false);
+		xAxisPrimary.setCategorySeries(new String[]{});
 		//
 		IAxis yAxisPrimary = axisSet.getYAxis(ID_PRIMARY_Y_AXIS);
 		yAxisPrimary.getTitle().setText(DEFAULT_TITLE_Y_AXIS);
@@ -139,7 +141,7 @@ public class BaseChart extends AbstractCoordinatedChart {
 			deltaWidth = Math.abs(userSelection.getStartY() - event.y);
 		}
 		/*
-		 * Prevent accidential zooming.
+		 * Prevent accidental zooming.
 		 */
 		if(deltaWidth >= minSelectedWidth) {
 			//

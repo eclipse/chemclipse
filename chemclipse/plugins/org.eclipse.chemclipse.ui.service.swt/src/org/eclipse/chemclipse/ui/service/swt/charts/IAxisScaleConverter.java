@@ -11,27 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.charts;
 
-public interface IPrimaryAxisSettings extends IAxisSettings {
+public interface IAxisScaleConverter {
 
-	boolean isEnableLogScale();
-
-	void setEnableLogScale(boolean enableLogScale);
-
-	boolean isEnableCategory();
-
-	/**
-	 * Only works for X-Axis.
-	 * 
-	 * @param enableCategory
-	 */
-	void setEnableCategory(boolean enableCategory);
-
-	String[] getCategorySeries();
-
-	/**
-	 * Only works for X-Axis.
-	 * 
-	 * @param categorySeries
-	 */
-	void setCategorySeries(String[] categorySeries);
+	double getConvertedUnit(double unit);
 }

@@ -11,11 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.charts;
 
-public interface ISecondaryAxisSettings {
+public interface ISecondaryAxisSettings extends IAxisSettings {
 
-	String getIdentifier();
-
-	void setIdentifier(String identifier);
-
-	double getConversion(double value);
+	IAxisScaleConverter getAxisScaleConverter();
 }

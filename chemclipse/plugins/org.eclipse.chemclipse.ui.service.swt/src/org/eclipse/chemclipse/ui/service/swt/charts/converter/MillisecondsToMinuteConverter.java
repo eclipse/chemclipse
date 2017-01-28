@@ -9,29 +9,15 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.charts;
+package org.eclipse.chemclipse.ui.service.swt.charts.converter;
 
-public interface IPrimaryAxisSettings extends IAxisSettings {
+import org.eclipse.chemclipse.ui.service.swt.charts.IAxisScaleConverter;
 
-	boolean isEnableLogScale();
+public class MillisecondsToMinuteConverter implements IAxisScaleConverter {
 
-	void setEnableLogScale(boolean enableLogScale);
+	@Override
+	public double getConvertedUnit(double unit) {
 
-	boolean isEnableCategory();
-
-	/**
-	 * Only works for X-Axis.
-	 * 
-	 * @param enableCategory
-	 */
-	void setEnableCategory(boolean enableCategory);
-
-	String[] getCategorySeries();
-
-	/**
-	 * Only works for X-Axis.
-	 * 
-	 * @param categorySeries
-	 */
-	void setCategorySeries(String[] categorySeries);
+		return unit / 60000.0d;
+	}
 }

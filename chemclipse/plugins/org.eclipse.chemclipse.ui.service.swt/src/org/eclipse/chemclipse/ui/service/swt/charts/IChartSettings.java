@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.charts;
 
+import java.util.List;
+
 import org.eclipse.swt.graphics.Color;
 
 public interface IChartSettings {
@@ -30,6 +32,10 @@ public interface IChartSettings {
 	IPrimaryAxisSettings getPrimaryAxisSettingsX();
 
 	IPrimaryAxisSettings getPrimaryAxisSettingsY();
+
+	List<ISecondaryAxisSettings> getSecondaryAxisSettingsListX();
+
+	List<ISecondaryAxisSettings> getSecondaryAxisSettingsListY();
 
 	int getOrientation();
 

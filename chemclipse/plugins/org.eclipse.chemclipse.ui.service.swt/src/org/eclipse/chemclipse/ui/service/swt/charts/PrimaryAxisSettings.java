@@ -13,7 +13,50 @@ package org.eclipse.chemclipse.ui.service.swt.charts;
 
 public class PrimaryAxisSettings extends AbstractAxisSettings implements IPrimaryAxisSettings {
 
+	private boolean enableLogScale;
+	private boolean enableCategory;
+	private String[] categorySeries;
+
 	public PrimaryAxisSettings(String title) {
 		super(title);
+		enableLogScale = false;
+		enableCategory = false;
+		categorySeries = new String[]{};
+	}
+
+	@Override
+	public boolean isEnableLogScale() {
+
+		return enableLogScale;
+	}
+
+	@Override
+	public void setEnableLogScale(boolean enableLogScale) {
+
+		this.enableLogScale = enableLogScale;
+	}
+
+	@Override
+	public boolean isEnableCategory() {
+
+		return enableCategory;
+	}
+
+	@Override
+	public void setEnableCategory(boolean enableCategory) {
+
+		this.enableCategory = enableCategory;
+	}
+
+	@Override
+	public String[] getCategorySeries() {
+
+		return categorySeries;
+	}
+
+	@Override
+	public void setCategorySeries(String[] categorySeries) {
+
+		this.categorySeries = categorySeries;
 	}
 }

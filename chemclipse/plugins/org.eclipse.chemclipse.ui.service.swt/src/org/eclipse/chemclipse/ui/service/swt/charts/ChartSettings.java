@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.charts;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.chemclipse.ui.service.swt.internal.charts.BaseChart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -27,6 +30,8 @@ public class ChartSettings implements IChartSettings {
 	//
 	private IPrimaryAxisSettings primaryAxisSettingsX;
 	private IPrimaryAxisSettings primaryAxisSettingsY;
+	private List<ISecondaryAxisSettings> secondaryAxisSettingsListX;
+	private List<ISecondaryAxisSettings> secondaryAxisSettingsListY;
 	//
 	private int orientation;
 	private boolean legendVisible;
@@ -46,6 +51,8 @@ public class ChartSettings implements IChartSettings {
 		//
 		primaryAxisSettingsX = new PrimaryAxisSettings(BaseChart.DEFAULT_TITLE_X_AXIS);
 		primaryAxisSettingsY = new PrimaryAxisSettings(BaseChart.DEFAULT_TITLE_Y_AXIS);
+		secondaryAxisSettingsListX = new ArrayList<ISecondaryAxisSettings>();
+		secondaryAxisSettingsListY = new ArrayList<ISecondaryAxisSettings>();
 		//
 		Display display = Display.getCurrent();
 		orientation = SWT.HORIZONTAL;
@@ -117,6 +124,18 @@ public class ChartSettings implements IChartSettings {
 	public IPrimaryAxisSettings getPrimaryAxisSettingsY() {
 
 		return primaryAxisSettingsY;
+	}
+
+	@Override
+	public List<ISecondaryAxisSettings> getSecondaryAxisSettingsListX() {
+
+		return secondaryAxisSettingsListX;
+	}
+
+	@Override
+	public List<ISecondaryAxisSettings> getSecondaryAxisSettingsListY() {
+
+		return secondaryAxisSettingsListY;
 	}
 
 	@Override
