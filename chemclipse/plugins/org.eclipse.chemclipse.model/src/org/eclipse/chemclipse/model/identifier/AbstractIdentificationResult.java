@@ -11,15 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public abstract class AbstractIdentificationResult implements IIdentificationResult {
 
-	private Set<IIdentificationTarget> entries;
+	private List<IIdentificationTarget> entries;
 
 	public AbstractIdentificationResult() {
-		entries = new HashSet<IIdentificationTarget>();
+		entries = new ArrayList<>();
 	}
 
 	@Override
@@ -70,7 +71,7 @@ public abstract class AbstractIdentificationResult implements IIdentificationRes
 	}
 
 	@Override
-	public Set<IIdentificationTarget> getIdentificationEntries() {
+	public Collection<IIdentificationTarget> getIdentificationEntries() {
 
 		return entries;
 	}

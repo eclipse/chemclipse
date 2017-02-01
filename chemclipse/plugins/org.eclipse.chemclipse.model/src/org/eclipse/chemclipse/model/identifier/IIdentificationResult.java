@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
-import java.util.Set;
+import java.util.Collection;
 
 public interface IIdentificationResult {
 
@@ -41,5 +41,5 @@ public interface IIdentificationResult {
 	 */
 	IIdentificationTarget getBestHit();
 
-	Set<IIdentificationTarget> getIdentificationEntries();
+	Collection<IIdentificationTarget> getIdentificationEntries();
 }
