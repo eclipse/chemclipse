@@ -78,7 +78,7 @@ public class Chromatogram_19_Test extends TestCase {
 		chromatogram.addTarget(entry2);
 		chromatogram.addTarget(entry1);
 		List<IChromatogramTargetMSD> targets = chromatogram.getTargets();
-		assertEquals("Size", 2, targets.size());
+		assertEquals("Size", 3, targets.size());
 	}
 
 	public void testTargets_3() {
@@ -88,7 +88,7 @@ public class Chromatogram_19_Test extends TestCase {
 		chromatogram.addTarget(entry1);
 		chromatogram.removeTarget(entry1);
 		List<IChromatogramTargetMSD> targets = chromatogram.getTargets();
-		assertEquals("Size", 1, targets.size());
+		assertEquals("Size", 2, targets.size());
 	}
 
 	public void testTargets_4() {
