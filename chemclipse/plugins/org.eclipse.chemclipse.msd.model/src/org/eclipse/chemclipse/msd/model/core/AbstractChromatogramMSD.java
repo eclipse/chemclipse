@@ -14,9 +14,7 @@ package org.eclipse.chemclipse.msd.model.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseCalculator;
@@ -70,14 +68,14 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 	public static int DEFAULT_SEGMENT_WIDTH = 10;
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramMSD.class);
 	private List<IChromatogramPeakMSD> peaks;
-	private Set<IChromatogramTargetMSD> targets;
+	private List<IChromatogramTargetMSD> targets;
 	private IIonTransitionSettings ionTransitionSettings;
 	private INoiseCalculator noiseCalculator;
 	private ImmutableZeroIon immutableZeroIon;
 
 	public AbstractChromatogramMSD() {
 		peaks = new ArrayList<IChromatogramPeakMSD>();
-		targets = new LinkedHashSet<IChromatogramTargetMSD>();
+		targets = new ArrayList<IChromatogramTargetMSD>();
 		ionTransitionSettings = new IonTransitionSettings();
 		int segmentWidth = DEFAULT_SEGMENT_WIDTH;
 		try {
@@ -415,8 +413,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 	@Override
 	public List<IChromatogramTargetMSD> getTargets() {
 
-		// targets is stored in a set
-		return Collections.unmodifiableList(new ArrayList<IChromatogramTargetMSD>(targets));
+		return Collections.unmodifiableList(targets);
 	}
 
 	// -----------------------------------------------IChromatogramTargetsMSD
