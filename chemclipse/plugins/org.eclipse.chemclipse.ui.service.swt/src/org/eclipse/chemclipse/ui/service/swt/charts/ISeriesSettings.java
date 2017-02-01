@@ -9,19 +9,19 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.core;
+package org.eclipse.chemclipse.ui.service.swt.charts;
 
-public interface ISeriesData {
+public interface ISeriesSettings {
 
-	double[] getXSeries();
+	String getDescription();
 
-	void setXSeries(double[] xSeries);
+	void setDescription(String description);
 
-	double[] getYSeries();
+	boolean isVisible();
 
-	void setYSeries(double[] ySeries);
+	void setVisible(boolean visible);
 
-	String getId();
+	boolean isVisibleInLegend();
 
-	void setId(String id);
+	void setVisibleInLegend(boolean visibleInLegend);
 }

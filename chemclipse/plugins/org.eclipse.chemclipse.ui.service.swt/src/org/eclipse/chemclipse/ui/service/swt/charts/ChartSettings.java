@@ -9,8 +9,12 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.core;
+package org.eclipse.chemclipse.ui.service.swt.charts;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.chemclipse.ui.service.swt.internal.charts.BaseChart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
@@ -22,6 +26,13 @@ public class ChartSettings implements IChartSettings {
 	/*
 	 * Chart
 	 */
+	private String title;
+	//
+	private IPrimaryAxisSettings primaryAxisSettingsX;
+	private IPrimaryAxisSettings primaryAxisSettingsY;
+	private List<ISecondaryAxisSettings> secondaryAxisSettingsListX;
+	private List<ISecondaryAxisSettings> secondaryAxisSettingsListY;
+	//
 	private int orientation;
 	private boolean legendVisible;
 	private boolean titleVisible;
@@ -33,8 +44,15 @@ public class ChartSettings implements IChartSettings {
 
 	public ChartSettings() {
 		//
-		verticalSliderVisible = false;
+		verticalSliderVisible = false; // https://bugs.eclipse.org/bugs/show_bug.cgi?id=511257
 		horizontalSliderVisible = true;
+		//
+		title = "";
+		//
+		primaryAxisSettingsX = new PrimaryAxisSettings(BaseChart.DEFAULT_TITLE_X_AXIS);
+		primaryAxisSettingsY = new PrimaryAxisSettings(BaseChart.DEFAULT_TITLE_Y_AXIS);
+		secondaryAxisSettingsListX = new ArrayList<ISecondaryAxisSettings>();
+		secondaryAxisSettingsListY = new ArrayList<ISecondaryAxisSettings>();
 		//
 		Display display = Display.getCurrent();
 		orientation = SWT.HORIZONTAL;
@@ -56,7 +74,14 @@ public class ChartSettings implements IChartSettings {
 	@Override
 	public IChartSettings setVerticalSliderVisible(boolean verticalSliderVisible) {
 
-		this.verticalSliderVisible = verticalSliderVisible;
+		/*
+		 * There is a bug when using the SWT.RIGHT_TO_LEFT orientation.
+		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=511257
+		 * That's why the vertical slider is not visible yet.
+		 */
+		// this.verticalSliderVisible = verticalSliderVisible;
+		this.verticalSliderVisible = false;
+		System.out.println("Can't set vertical slider true, see: https://bugs.eclipse.org/bugs/show_bug.cgi?id=511257");
 		return this;
 	}
 
@@ -71,6 +96,46 @@ public class ChartSettings implements IChartSettings {
 
 		this.horizontalSliderVisible = horizontalSliderVisible;
 		return this;
+	}
+
+	@Override
+	public String getTitle() {
+
+		return title;
+	}
+
+	@Override
+	public void setTitle(String title) {
+
+		if(title != null) {
+			this.title = title;
+		} else {
+			this.title = "";
+		}
+	}
+
+	@Override
+	public IPrimaryAxisSettings getPrimaryAxisSettingsX() {
+
+		return primaryAxisSettingsX;
+	}
+
+	@Override
+	public IPrimaryAxisSettings getPrimaryAxisSettingsY() {
+
+		return primaryAxisSettingsY;
+	}
+
+	@Override
+	public List<ISecondaryAxisSettings> getSecondaryAxisSettingsListX() {
+
+		return secondaryAxisSettingsListX;
+	}
+
+	@Override
+	public List<ISecondaryAxisSettings> getSecondaryAxisSettingsListY() {
+
+		return secondaryAxisSettingsListY;
 	}
 
 	@Override

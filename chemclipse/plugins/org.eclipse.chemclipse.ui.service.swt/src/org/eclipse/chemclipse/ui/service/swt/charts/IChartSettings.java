@@ -9,7 +9,9 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.core;
+package org.eclipse.chemclipse.ui.service.swt.charts;
+
+import java.util.List;
 
 import org.eclipse.swt.graphics.Color;
 
@@ -22,6 +24,18 @@ public interface IChartSettings {
 	boolean isHorizontalSliderVisible();
 
 	IChartSettings setHorizontalSliderVisible(boolean horizontalSliderVisible);
+
+	String getTitle();
+
+	void setTitle(String title);
+
+	IPrimaryAxisSettings getPrimaryAxisSettingsX();
+
+	IPrimaryAxisSettings getPrimaryAxisSettingsY();
+
+	List<ISecondaryAxisSettings> getSecondaryAxisSettingsListX();
+
+	List<ISecondaryAxisSettings> getSecondaryAxisSettingsListY();
 
 	int getOrientation();
 

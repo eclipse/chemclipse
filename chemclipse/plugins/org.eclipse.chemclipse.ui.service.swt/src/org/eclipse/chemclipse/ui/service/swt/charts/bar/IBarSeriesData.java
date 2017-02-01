@@ -9,13 +9,11 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.internal.charts;
+package org.eclipse.chemclipse.ui.service.swt.charts.bar;
 
-import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
+import org.eclipse.chemclipse.ui.service.swt.charts.IChartSeriesData;
 
-public interface IScrollableChart {
+public interface IBarSeriesData extends IChartSeriesData {
 
-	void applySettings(IChartSettings chartSettings);
-
-	BaseChart getBaseChart();
+	IBarSeriesSettings getBarSeriesSettings();
 }

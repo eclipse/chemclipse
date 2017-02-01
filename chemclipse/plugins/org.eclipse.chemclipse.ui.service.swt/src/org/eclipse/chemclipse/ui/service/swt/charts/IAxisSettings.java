@@ -9,13 +9,32 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.internal.charts;
+package org.eclipse.chemclipse.ui.service.swt.charts;
 
-import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
+import java.text.DecimalFormat;
 
-public interface IScrollableChart {
+import org.eclipse.swt.graphics.Color;
+import org.swtchart.IAxis.Position;
 
-	void applySettings(IChartSettings chartSettings);
+public interface IAxisSettings {
 
-	BaseChart getBaseChart();
+	String getTitle();
+
+	void setTitle(String title);
+
+	DecimalFormat getDecimalFormat();
+
+	void setDecimalFormat(DecimalFormat decimalFormat);
+
+	Color getColor();
+
+	void setColor(Color color);
+
+	boolean isVisible();
+
+	void setVisible(boolean visible);
+
+	Position getPosition();
+
+	void setPosition(Position position);
 }

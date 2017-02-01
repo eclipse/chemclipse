@@ -9,13 +9,29 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.internal.charts;
+package org.eclipse.chemclipse.ui.service.swt.charts;
 
-import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
+public interface IPrimaryAxisSettings extends IAxisSettings {
 
-public interface IScrollableChart {
+	boolean isEnableLogScale();
 
-	void applySettings(IChartSettings chartSettings);
+	void setEnableLogScale(boolean enableLogScale);
 
-	BaseChart getBaseChart();
+	boolean isEnableCategory();
+
+	/**
+	 * Only works for X-Axis.
+	 * 
+	 * @param enableCategory
+	 */
+	void setEnableCategory(boolean enableCategory);
+
+	String[] getCategorySeries();
+
+	/**
+	 * Only works for X-Axis.
+	 * 
+	 * @param categorySeries
+	 */
+	void setCategorySeries(String[] categorySeries);
 }

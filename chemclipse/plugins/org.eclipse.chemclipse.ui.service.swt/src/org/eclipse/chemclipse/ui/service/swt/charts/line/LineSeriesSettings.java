@@ -9,14 +9,17 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.core;
+package org.eclipse.chemclipse.ui.service.swt.charts.line;
 
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ui.service.swt.charts.AbstractSeriesSettings;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.swtchart.ILineSeries.PlotSymbolType;
 
 public class LineSeriesSettings extends AbstractSeriesSettings implements ILineSeriesSettings {
 
+	private int antialias;
 	private boolean enableArea;
 	private PlotSymbolType symbolType;
 	private int symbolSize;
@@ -26,6 +29,7 @@ public class LineSeriesSettings extends AbstractSeriesSettings implements ILineS
 	private boolean enableStep;
 
 	public LineSeriesSettings() {
+		antialias = SWT.DEFAULT;
 		enableArea = true;
 		symbolType = PlotSymbolType.NONE;
 		symbolSize = 8;
@@ -33,6 +37,18 @@ public class LineSeriesSettings extends AbstractSeriesSettings implements ILineS
 		lineWidth = 1;
 		enableStack = false;
 		enableStep = false;
+	}
+
+	@Override
+	public int getAntialias() {
+
+		return antialias;
+	}
+
+	@Override
+	public void setAntialias(int antialias) {
+
+		this.antialias = antialias;
 	}
 
 	@Override

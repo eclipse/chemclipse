@@ -9,27 +9,21 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.core;
+package org.eclipse.chemclipse.ui.service.swt.charts;
 
-public class LineSeriesData implements ILineSeriesData {
+public abstract class AbstractAxisScaleConverter implements IAxisScaleConverter {
 
-	private ISeriesData seriesData;
-	private ILineSeriesSettings lineSeriesSettings;
+	private IChartDataCoordinates dataCoordinates;
 
-	public LineSeriesData(ISeriesData seriesData) {
-		this.seriesData = seriesData;
-		this.lineSeriesSettings = new LineSeriesSettings();
+	@Override
+	public IChartDataCoordinates getChartDataCoordinates() {
+
+		return dataCoordinates;
 	}
 
 	@Override
-	public ISeriesData getSeriesData() {
+	public void setChartDataCoordinates(IChartDataCoordinates dataCoordinates) {
 
-		return seriesData;
-	}
-
-	@Override
-	public ILineSeriesSettings getLineSeriesSettings() {
-
-		return lineSeriesSettings;
+		this.dataCoordinates = dataCoordinates;
 	}
 }

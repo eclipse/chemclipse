@@ -9,13 +9,18 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.internal.charts;
+package org.eclipse.chemclipse.ui.service.swt.charts;
 
-import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
+public abstract class AbstractChartSeriesData {
 
-public interface IScrollableChart {
+	private ISeriesData seriesData;
 
-	void applySettings(IChartSettings chartSettings);
+	public AbstractChartSeriesData(ISeriesData seriesData) {
+		this.seriesData = seriesData;
+	}
 
-	BaseChart getBaseChart();
+	public ISeriesData getSeriesData() {
+
+		return seriesData;
+	}
 }

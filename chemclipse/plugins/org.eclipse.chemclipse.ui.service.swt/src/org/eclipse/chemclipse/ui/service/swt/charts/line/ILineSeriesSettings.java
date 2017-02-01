@@ -9,12 +9,22 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.core;
+package org.eclipse.chemclipse.ui.service.swt.charts.line;
 
+import org.eclipse.chemclipse.ui.service.swt.charts.ISeriesSettings;
 import org.eclipse.swt.graphics.Color;
 import org.swtchart.ILineSeries.PlotSymbolType;
 
 public interface ILineSeriesSettings extends ISeriesSettings {
+
+	int getAntialias();
+
+	/**
+	 * SWT.DEFAULT, SWT.ON, SWT.OFF
+	 * 
+	 * @param antialias
+	 */
+	void setAntialias(int antialias);
 
 	boolean isEnableArea();
 
@@ -22,6 +32,19 @@ public interface ILineSeriesSettings extends ISeriesSettings {
 
 	PlotSymbolType getSymbolType();
 
+	/**
+	 * PlotSymbolType.CIRCLE
+	 * PlotSymbolType.SQUARE
+	 * PlotSymbolType.DIAMOND
+	 * PlotSymbolType.TRIANGLE
+	 * PlotSymbolType.INVERTED_TRIANGLE
+	 * PlotSymbolType.CROSS
+	 * PlotSymbolType.PLUS
+	 * PlotSymbolType.NONE
+	 * 
+	 * @param symbolType
+	 * @return
+	 */
 	ILineSeriesSettings setSymbolType(PlotSymbolType symbolType);
 
 	int getSymbolSize();

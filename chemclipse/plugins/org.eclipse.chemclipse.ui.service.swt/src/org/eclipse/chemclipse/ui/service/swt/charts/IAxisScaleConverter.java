@@ -9,11 +9,24 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.core;
+package org.eclipse.chemclipse.ui.service.swt.charts;
 
-public interface ILineSeriesData {
+public interface IAxisScaleConverter {
 
-	ISeriesData getSeriesData();
+	/**
+	 * May be null if not set correctly.
+	 * 
+	 * @return {@link IChartDataCoordinates}
+	 */
+	IChartDataCoordinates getChartDataCoordinates();
 
-	ILineSeriesSettings getLineSeriesSettings();
+	/**
+	 * The data coordinates are set by the base chart.
+	 * There is no need to set them manually.
+	 * 
+	 * @param chartDataCoordinates
+	 */
+	void setChartDataCoordinates(IChartDataCoordinates chartDataCoordinates);
+
+	double getConvertedUnit(double unit);
 }

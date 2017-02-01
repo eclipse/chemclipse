@@ -9,13 +9,16 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.internal.charts;
+package org.eclipse.chemclipse.ui.service.swt.charts.converter;
 
-import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
+import org.eclipse.chemclipse.ui.service.swt.charts.AbstractAxisScaleConverter;
+import org.eclipse.chemclipse.ui.service.swt.charts.IAxisScaleConverter;
 
-public interface IScrollableChart {
+public class MillisecondsToMinuteConverter extends AbstractAxisScaleConverter implements IAxisScaleConverter {
 
-	void applySettings(IChartSettings chartSettings);
+	@Override
+	public double getConvertedUnit(double unit) {
 
-	BaseChart getBaseChart();
+		return unit / 60000.0d;
+	}
 }

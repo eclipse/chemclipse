@@ -9,13 +9,20 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.internal.charts;
+package org.eclipse.chemclipse.ui.service.swt.charts;
 
-import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
+public class SecondaryAxisSettings extends AbstractAxisSettings implements ISecondaryAxisSettings {
 
-public interface IScrollableChart {
+	private IAxisScaleConverter axisScaleConverter;
 
-	void applySettings(IChartSettings chartSettings);
+	public SecondaryAxisSettings(String title, IAxisScaleConverter axisScaleConverter) {
+		super(title);
+		this.axisScaleConverter = axisScaleConverter;
+	}
 
-	BaseChart getBaseChart();
+	@Override
+	public IAxisScaleConverter getAxisScaleConverter() {
+
+		return axisScaleConverter;
+	}
 }
