@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.ui.service.swt.charts.SeriesData;
 public class SeriesConverter {
 
 	public static final String LINE_SERIES_1 = "LineSeries1";
+	public static final String LINE_SERIES_2 = "LineSeries2";
 	public static final String BAR_SERIES_1 = "BarSeries1";
 	public static final String BAR_SERIES_2 = "BarSeries2";
 
