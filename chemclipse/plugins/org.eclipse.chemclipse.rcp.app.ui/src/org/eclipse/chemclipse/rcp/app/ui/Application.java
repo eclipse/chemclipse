@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui;
 
-import org.eclipse.chemclipse.rcp.app.ui.internal.support.ApplicationSupport;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.swt.widgets.Display;
@@ -30,8 +29,22 @@ public class Application implements IApplication {
 	 */
 	public Object start(IApplicationContext context) {
 
-		ApplicationSupport applicationSupport = new ApplicationSupport();
-		return applicationSupport.start(context);
+		/*
+		 * The Apache CLI seems to prevent that RCPTT works properly.
+		 * I've disabled the functionality to see if RCPTT works with the standard start cycle.
+		 */
+		// ApplicationSupport applicationSupport = new ApplicationSupport();
+		// return applicationSupport.start(context);
+		Display display = PlatformUI.createDisplay();
+		try {
+			int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor());
+			if(returnCode == PlatformUI.RETURN_RESTART) {
+				return IApplication.EXIT_RESTART;
+			}
+			return IApplication.EXIT_OK;
+		} finally {
+			display.dispose();
+		}
 	}
 
 	/*
