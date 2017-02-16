@@ -34,9 +34,9 @@ import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
-public class ApplicationSupport {
+public class ApplicationSupportCLI {
 
-	private static final Logger logger = Logger.getLogger(ApplicationSupport.class);
+	private static final Logger logger = Logger.getLogger(ApplicationSupportCLI.class);
 	//
 	private IExtensionRegistry registry;
 	private IConfigurationElement[] elements;
@@ -59,7 +59,7 @@ public class ApplicationSupport {
 	private static final String OPTION_ATTRIBUTE_DESCRIPTION = "description";
 	private static final String EXECUTABLE_EXTENSION_NAME = "processor";
 
-	public ApplicationSupport() {
+	public ApplicationSupportCLI() {
 		registry = Platform.getExtensionRegistry();
 		elements = registry.getConfigurationElementsFor(EXTENSION_POINT);
 		logger.info("Command Line Processor Options");

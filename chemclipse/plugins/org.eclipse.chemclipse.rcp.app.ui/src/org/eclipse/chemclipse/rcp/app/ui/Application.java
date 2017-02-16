@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui;
 
+import java.util.Properties;
+
+import org.eclipse.chemclipse.rcp.app.ui.internal.support.ApplicationSupportCLI;
+import org.eclipse.chemclipse.rcp.app.ui.internal.support.ApplicationSupportDefault;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.swt.widgets.Display;
@@ -23,27 +27,38 @@ import org.eclipse.ui.PlatformUI;
 public class Application implements IApplication {
 
 	/*
+	 * See VM arguments in the product configuration.
+	 */
+	private static final String D_ENABLE_CLI_SUPPORT = "enable.cli.support";
+
+	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.
 	 * IApplicationContext)
 	 */
 	public Object start(IApplicationContext context) {
 
+		boolean enableCLISupport = false;
 		/*
-		 * The Apache CLI seems to prevent that RCPTT works properly.
-		 * I've disabled the functionality to see if RCPTT works with the standard start cycle.
+		 * Get the setting.
 		 */
-		// ApplicationSupport applicationSupport = new ApplicationSupport();
-		// return applicationSupport.start(context);
-		Display display = PlatformUI.createDisplay();
-		try {
-			int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor());
-			if(returnCode == PlatformUI.RETURN_RESTART) {
-				return IApplication.EXIT_RESTART;
-			}
-			return IApplication.EXIT_OK;
-		} finally {
-			display.dispose();
+		Properties properties = System.getProperties();
+		Object object = properties.get(D_ENABLE_CLI_SUPPORT);
+		if(object != null && object instanceof String) {
+			enableCLISupport = Boolean.parseBoolean((String)object);
+		}
+		/*
+		 * When using the Apache CLI option, RCPTT doesn't work properly.
+		 * In most cases, it's not needed so it is disabled by default.
+		 * It can be enabled by modifying the -D option in the *.ini file.
+		 * -Denable.cli.support=true
+		 */
+		if(enableCLISupport) {
+			ApplicationSupportCLI applicationSupport = new ApplicationSupportCLI();
+			return applicationSupport.start(context);
+		} else {
+			ApplicationSupportDefault applicationSupport = new ApplicationSupportDefault();
+			return applicationSupport.start(context);
 		}
 	}
 
