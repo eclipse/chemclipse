@@ -82,16 +82,20 @@ public class CreateSnapshotHandler {
 
 	private Image getImage(Composite composite) {
 
-		GC gc = null;
 		Image image = null;
-		Display display = Display.getCurrent();
-		try {
-			gc = new GC(composite);
-			image = new Image(display, composite.getBounds());
-			gc.copyArea(image, 0, 0);
-		} finally {
-			if(gc != null) {
-				gc.dispose();
+		//
+		if(composite != null && composite.getParent() != null) {
+			Display display = Display.getCurrent();
+			Composite compositeParent = composite.getParent();
+			GC gc = null;
+			try {
+				gc = new GC(compositeParent);
+				image = new Image(display, compositeParent.getBounds());
+				gc.copyArea(image, 0, 0);
+			} finally {
+				if(gc != null) {
+					gc.dispose();
+				}
 			}
 		}
 		return image;
