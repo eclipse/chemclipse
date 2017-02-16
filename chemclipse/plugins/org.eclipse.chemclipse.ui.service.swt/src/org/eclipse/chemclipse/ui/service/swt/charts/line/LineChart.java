@@ -50,6 +50,7 @@ public class LineChart extends ScrollableChart {
 				lineSeries.enableArea(lineSeriesSettings.isEnableArea());
 				lineSeries.setSymbolType(lineSeriesSettings.getSymbolType());
 				lineSeries.setSymbolSize(lineSeriesSettings.getSymbolSize());
+				lineSeries.setSymbolColor(lineSeriesSettings.getSymbolColor());
 				lineSeries.setLineColor(lineSeriesSettings.getLineColor());
 				lineSeries.setLineWidth(lineSeriesSettings.getLineWidth());
 				lineSeries.enableStack(lineSeriesSettings.isEnableStack());

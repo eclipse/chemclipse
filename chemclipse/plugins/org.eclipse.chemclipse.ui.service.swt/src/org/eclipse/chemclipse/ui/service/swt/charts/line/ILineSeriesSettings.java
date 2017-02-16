@@ -11,11 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.charts.line;
 
-import org.eclipse.chemclipse.ui.service.swt.charts.ISeriesSettings;
+import org.eclipse.chemclipse.ui.service.swt.charts.IPointSeriesSettings;
 import org.eclipse.swt.graphics.Color;
-import org.swtchart.ILineSeries.PlotSymbolType;
 
-public interface ILineSeriesSettings extends ISeriesSettings {
+public interface ILineSeriesSettings extends IPointSeriesSettings {
 
 	int getAntialias();
 
@@ -28,42 +27,21 @@ public interface ILineSeriesSettings extends ISeriesSettings {
 
 	boolean isEnableArea();
 
-	ILineSeriesSettings setEnableArea(boolean enableArea);
-
-	PlotSymbolType getSymbolType();
-
-	/**
-	 * PlotSymbolType.CIRCLE
-	 * PlotSymbolType.SQUARE
-	 * PlotSymbolType.DIAMOND
-	 * PlotSymbolType.TRIANGLE
-	 * PlotSymbolType.INVERTED_TRIANGLE
-	 * PlotSymbolType.CROSS
-	 * PlotSymbolType.PLUS
-	 * PlotSymbolType.NONE
-	 * 
-	 * @param symbolType
-	 * @return
-	 */
-	ILineSeriesSettings setSymbolType(PlotSymbolType symbolType);
-
-	int getSymbolSize();
-
-	ILineSeriesSettings setSymbolSize(int symbolSize);
+	void setEnableArea(boolean enableArea);
 
 	Color getLineColor();
 
-	ILineSeriesSettings setLineColor(Color lineColor);
+	void setLineColor(Color lineColor);
 
 	int getLineWidth();
 
-	ILineSeriesSettings setLineWidth(int lineWidth);
+	void setLineWidth(int lineWidth);
 
 	boolean isEnableStack();
 
-	ILineSeriesSettings setEnableStack(boolean enableStack);
+	void setEnableStack(boolean enableStack);
 
 	boolean isEnableStep();
 
-	ILineSeriesSettings setEnableStep(boolean enableStep);
+	void setEnableStep(boolean enableStep);
 }

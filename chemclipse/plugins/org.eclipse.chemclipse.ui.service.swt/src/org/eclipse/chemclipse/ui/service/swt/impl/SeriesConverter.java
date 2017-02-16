@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.ui.service.swt.impl;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.chemclipse.ui.service.swt.charts.ISeriesData;
 import org.eclipse.chemclipse.ui.service.swt.charts.SeriesData;
@@ -58,6 +60,11 @@ public class SeriesConverter {
 		seriesData.setXSeries(xSeries);
 		seriesData.setYSeries(ySeries);
 		return seriesData;
+	}
+
+	public static List<ISeriesData> getScatterSeries(String fileName) {
+
+		return new ArrayList<ISeriesData>();
 	}
 
 	private static int getNumberOfLines(String fileName) {

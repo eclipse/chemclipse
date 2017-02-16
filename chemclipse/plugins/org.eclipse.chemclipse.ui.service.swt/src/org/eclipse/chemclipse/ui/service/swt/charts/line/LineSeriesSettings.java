@@ -12,17 +12,14 @@
 package org.eclipse.chemclipse.ui.service.swt.charts.line;
 
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ui.service.swt.charts.AbstractSeriesSettings;
+import org.eclipse.chemclipse.ui.service.swt.charts.AbstractPointSeriesSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.swtchart.ILineSeries.PlotSymbolType;
 
-public class LineSeriesSettings extends AbstractSeriesSettings implements ILineSeriesSettings {
+public class LineSeriesSettings extends AbstractPointSeriesSettings implements ILineSeriesSettings {
 
 	private int antialias;
 	private boolean enableArea;
-	private PlotSymbolType symbolType;
-	private int symbolSize;
 	private Color lineColor;
 	private int lineWidth;
 	private boolean enableStack;
@@ -31,8 +28,6 @@ public class LineSeriesSettings extends AbstractSeriesSettings implements ILineS
 	public LineSeriesSettings() {
 		antialias = SWT.DEFAULT;
 		enableArea = true;
-		symbolType = PlotSymbolType.NONE;
-		symbolSize = 8;
 		lineColor = Colors.RED;
 		lineWidth = 1;
 		enableStack = false;
@@ -58,36 +53,9 @@ public class LineSeriesSettings extends AbstractSeriesSettings implements ILineS
 	}
 
 	@Override
-	public ILineSeriesSettings setEnableArea(boolean enableArea) {
+	public void setEnableArea(boolean enableArea) {
 
 		this.enableArea = enableArea;
-		return this;
-	}
-
-	@Override
-	public PlotSymbolType getSymbolType() {
-
-		return symbolType;
-	}
-
-	@Override
-	public ILineSeriesSettings setSymbolType(PlotSymbolType symbolType) {
-
-		this.symbolType = symbolType;
-		return this;
-	}
-
-	@Override
-	public int getSymbolSize() {
-
-		return symbolSize;
-	}
-
-	@Override
-	public ILineSeriesSettings setSymbolSize(int symbolSize) {
-
-		this.symbolSize = symbolSize;
-		return this;
 	}
 
 	@Override
@@ -97,10 +65,9 @@ public class LineSeriesSettings extends AbstractSeriesSettings implements ILineS
 	}
 
 	@Override
-	public ILineSeriesSettings setLineColor(Color lineColor) {
+	public void setLineColor(Color lineColor) {
 
 		this.lineColor = lineColor;
-		return this;
 	}
 
 	@Override
@@ -110,10 +77,9 @@ public class LineSeriesSettings extends AbstractSeriesSettings implements ILineS
 	}
 
 	@Override
-	public ILineSeriesSettings setLineWidth(int lineWidth) {
+	public void setLineWidth(int lineWidth) {
 
 		this.lineWidth = lineWidth;
-		return this;
 	}
 
 	@Override
@@ -123,10 +89,9 @@ public class LineSeriesSettings extends AbstractSeriesSettings implements ILineS
 	}
 
 	@Override
-	public ILineSeriesSettings setEnableStack(boolean enableStack) {
+	public void setEnableStack(boolean enableStack) {
 
 		this.enableStack = enableStack;
-		return this;
 	}
 
 	@Override
@@ -136,9 +101,8 @@ public class LineSeriesSettings extends AbstractSeriesSettings implements ILineS
 	}
 
 	@Override
-	public ILineSeriesSettings setEnableStep(boolean enableStep) {
+	public void setEnableStep(boolean enableStep) {
 
 		this.enableStep = enableStep;
-		return this;
 	}
 }
