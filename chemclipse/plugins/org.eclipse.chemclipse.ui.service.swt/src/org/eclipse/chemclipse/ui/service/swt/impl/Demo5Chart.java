@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.ui.service.swt.charts.bar.IBarSeriesSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class Demo5Chart extends BarChart {
+public class Demo5Chart extends BarChart implements IChart {
 
 	public Demo5Chart(Composite parent, int style) {
 		super(parent, style);

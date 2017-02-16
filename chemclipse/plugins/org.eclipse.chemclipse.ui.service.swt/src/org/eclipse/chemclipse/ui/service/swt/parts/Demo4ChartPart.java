@@ -16,6 +16,7 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.ui.service.swt.impl.Demo4Chart;
+import org.eclipse.chemclipse.ui.service.swt.impl.IChart;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -24,7 +25,7 @@ public class Demo4ChartPart {
 
 	@Inject
 	private Composite parent;
-	private Demo4Chart chart;
+	private IChart chart;
 
 	@PostConstruct
 	public void postConstruct() {

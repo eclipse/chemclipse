@@ -32,35 +32,37 @@ public class LineChart extends ScrollableChart {
 		/*
 		 * Suspend the update when adding new data to improve the performance.
 		 */
-		BaseChart baseChart = getBaseChart();
-		baseChart.suspendUpdate(true);
-		for(ILineSeriesData lineSeriesData : lineSeriesDataList) {
-			/*
-			 * Get the series data and apply the settings.
-			 */
-			try {
-				ISeriesData seriesData = lineSeriesData.getSeriesData();
-				ILineSeries lineSeries = (ILineSeries)createSeries(SeriesType.LINE, seriesData.getXSeries(), seriesData.getYSeries(), seriesData.getId());
-				//
-				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
-				lineSeries.setDescription(lineSeriesSettings.getDescription());
-				lineSeries.setVisible(lineSeriesSettings.isVisible());
-				lineSeries.setVisibleInLegend(lineSeriesSettings.isVisibleInLegend());
-				lineSeries.setAntialias(lineSeriesSettings.getAntialias());
-				lineSeries.enableArea(lineSeriesSettings.isEnableArea());
-				lineSeries.setSymbolType(lineSeriesSettings.getSymbolType());
-				lineSeries.setSymbolSize(lineSeriesSettings.getSymbolSize());
-				lineSeries.setSymbolColor(lineSeriesSettings.getSymbolColor());
-				lineSeries.setLineColor(lineSeriesSettings.getLineColor());
-				lineSeries.setLineWidth(lineSeriesSettings.getLineWidth());
-				lineSeries.enableStack(lineSeriesSettings.isEnableStack());
-				lineSeries.enableStep(lineSeriesSettings.isEnableStep());
-			} catch(SeriesException e) {
-				//
+		if(lineSeriesDataList != null && lineSeriesDataList.size() > 0) {
+			BaseChart baseChart = getBaseChart();
+			baseChart.suspendUpdate(true);
+			for(ILineSeriesData lineSeriesData : lineSeriesDataList) {
+				/*
+				 * Get the series data and apply the settings.
+				 */
+				try {
+					ISeriesData seriesData = lineSeriesData.getSeriesData();
+					ILineSeries lineSeries = (ILineSeries)createSeries(SeriesType.LINE, seriesData.getXSeries(), seriesData.getYSeries(), seriesData.getId());
+					//
+					ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+					lineSeries.setDescription(lineSeriesSettings.getDescription());
+					lineSeries.setVisible(lineSeriesSettings.isVisible());
+					lineSeries.setVisibleInLegend(lineSeriesSettings.isVisibleInLegend());
+					lineSeries.setAntialias(lineSeriesSettings.getAntialias());
+					lineSeries.enableArea(lineSeriesSettings.isEnableArea());
+					lineSeries.setSymbolType(lineSeriesSettings.getSymbolType());
+					lineSeries.setSymbolSize(lineSeriesSettings.getSymbolSize());
+					lineSeries.setSymbolColor(lineSeriesSettings.getSymbolColor());
+					lineSeries.setLineColor(lineSeriesSettings.getLineColor());
+					lineSeries.setLineWidth(lineSeriesSettings.getLineWidth());
+					lineSeries.enableStack(lineSeriesSettings.isEnableStack());
+					lineSeries.enableStep(lineSeriesSettings.isEnableStep());
+				} catch(SeriesException e) {
+					//
+				}
 			}
+			baseChart.suspendUpdate(false);
+			adjustRange(true);
+			baseChart.redraw();
 		}
-		baseChart.suspendUpdate(false);
-		adjustRange(true);
-		baseChart.redraw();
 	}
 }

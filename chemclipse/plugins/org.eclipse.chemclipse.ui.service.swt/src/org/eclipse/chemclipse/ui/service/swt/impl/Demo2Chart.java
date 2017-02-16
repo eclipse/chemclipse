@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.ui.service.swt.charts.line.LineSeriesData;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class Demo2Chart extends LineChart {
+public class Demo2Chart extends LineChart implements IChart {
 
 	public Demo2Chart(Composite parent, int style) {
 		super(parent, style);

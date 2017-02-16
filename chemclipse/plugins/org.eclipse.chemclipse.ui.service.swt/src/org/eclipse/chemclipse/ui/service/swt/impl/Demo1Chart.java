@@ -33,7 +33,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.swtchart.IAxis.Position;
 
-public class Demo1Chart extends LineChart {
+public class Demo1Chart extends LineChart implements IChart {
 
 	public Demo1Chart(Composite parent, int style) {
 		super(parent, style);

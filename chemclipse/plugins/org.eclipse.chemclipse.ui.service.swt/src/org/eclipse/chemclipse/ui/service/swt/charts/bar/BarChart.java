@@ -32,30 +32,32 @@ public class BarChart extends ScrollableChart {
 		/*
 		 * Suspend the update when adding new data to improve the performance.
 		 */
-		BaseChart baseChart = getBaseChart();
-		baseChart.suspendUpdate(true);
-		for(IBarSeriesData barSeriesData : barSeriesDataList) {
-			/*
-			 * Get the series data and apply the settings.
-			 */
-			try {
-				ISeriesData seriesData = barSeriesData.getSeriesData();
-				IBarSeries barSeries = (IBarSeries)createSeries(SeriesType.BAR, seriesData.getXSeries(), seriesData.getYSeries(), seriesData.getId());
-				//
-				IBarSeriesSettings barSeriesSettings = barSeriesData.getBarSeriesSettings();
-				barSeries.setDescription(barSeriesSettings.getDescription());
-				barSeries.setVisible(barSeriesSettings.isVisible());
-				barSeries.setVisibleInLegend(barSeriesSettings.isVisibleInLegend());
-				barSeries.setBarColor(barSeriesSettings.getBarColor());
-				barSeries.setBarPadding(barSeriesSettings.getBarPadding());
-				barSeries.setBarWidth(barSeriesSettings.getBarWidth());
-				barSeries.setBarWidthStyle(barSeriesSettings.getBarWidthStyle());
-			} catch(SeriesException e) {
-				//
+		if(barSeriesDataList != null && barSeriesDataList.size() > 0) {
+			BaseChart baseChart = getBaseChart();
+			baseChart.suspendUpdate(true);
+			for(IBarSeriesData barSeriesData : barSeriesDataList) {
+				/*
+				 * Get the series data and apply the settings.
+				 */
+				try {
+					ISeriesData seriesData = barSeriesData.getSeriesData();
+					IBarSeries barSeries = (IBarSeries)createSeries(SeriesType.BAR, seriesData.getXSeries(), seriesData.getYSeries(), seriesData.getId());
+					//
+					IBarSeriesSettings barSeriesSettings = barSeriesData.getBarSeriesSettings();
+					barSeries.setDescription(barSeriesSettings.getDescription());
+					barSeries.setVisible(barSeriesSettings.isVisible());
+					barSeries.setVisibleInLegend(barSeriesSettings.isVisibleInLegend());
+					barSeries.setBarColor(barSeriesSettings.getBarColor());
+					barSeries.setBarPadding(barSeriesSettings.getBarPadding());
+					barSeries.setBarWidth(barSeriesSettings.getBarWidth());
+					barSeries.setBarWidthStyle(barSeriesSettings.getBarWidthStyle());
+				} catch(SeriesException e) {
+					//
+				}
 			}
+			baseChart.suspendUpdate(false);
+			adjustRange(true);
+			baseChart.redraw();
 		}
-		baseChart.suspendUpdate(false);
-		adjustRange(true);
-		baseChart.redraw();
 	}
 }

@@ -26,6 +26,7 @@ public class SeriesConverter {
 	public static final String LINE_SERIES_2 = "LineSeries2";
 	public static final String BAR_SERIES_1 = "BarSeries1";
 	public static final String BAR_SERIES_2 = "BarSeries2";
+	public static final String SCATTER_SERIES_1 = "ScatterSeries1";
 
 	public static ISeriesData getSeries(String fileName) {
 
@@ -64,7 +65,32 @@ public class SeriesConverter {
 
 	public static List<ISeriesData> getScatterSeries(String fileName) {
 
-		return new ArrayList<ISeriesData>();
+		List<ISeriesData> scatterSeriesList = new ArrayList<ISeriesData>();
+		//
+		BufferedReader bufferedReader = null;
+		try {
+			String line;
+			bufferedReader = new BufferedReader(new InputStreamReader(SeriesConverter.class.getResourceAsStream(fileName)));
+			while((line = bufferedReader.readLine()) != null) {
+				String[] values = line.split("\t");
+				ISeriesData seriesData = new SeriesData();
+				seriesData.setId(values[0].trim());
+				seriesData.setXSeries(new double[]{Double.parseDouble(values[1].trim())});
+				seriesData.setYSeries(new double[]{Double.parseDouble(values[2].trim())});
+				scatterSeriesList.add(seriesData);
+			}
+		} catch(Exception e) {
+			//
+		} finally {
+			if(bufferedReader != null) {
+				try {
+					bufferedReader.close();
+				} catch(IOException e) {
+					//
+				}
+			}
+		}
+		return scatterSeriesList;
 	}
 
 	private static int getNumberOfLines(String fileName) {

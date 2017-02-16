@@ -33,31 +33,33 @@ public class ScatterChart extends ScrollableChart {
 		/*
 		 * Suspend the update when adding new data to improve the performance.
 		 */
-		BaseChart baseChart = getBaseChart();
-		baseChart.suspendUpdate(true);
-		for(IScatterSeriesData scatterSeriesData : scatterSeriesDataList) {
-			/*
-			 * Get the series data and apply the settings.
-			 */
-			try {
-				ISeriesData seriesData = scatterSeriesData.getSeriesData();
-				ILineSeries scatterSeries = (ILineSeries)createSeries(SeriesType.LINE, seriesData.getXSeries(), seriesData.getYSeries(), seriesData.getId());
-				//
-				IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();
-				scatterSeries.setDescription(scatterSeriesSettings.getDescription());
-				scatterSeries.setVisible(scatterSeriesSettings.isVisible());
-				scatterSeries.setVisibleInLegend(scatterSeriesSettings.isVisibleInLegend());
-				scatterSeries.enableArea(false);
-				scatterSeries.setSymbolType(scatterSeriesSettings.getSymbolType());
-				scatterSeries.setSymbolSize(scatterSeriesSettings.getSymbolSize());
-				scatterSeries.setSymbolColor(scatterSeriesSettings.getSymbolColor());
-				scatterSeries.setLineStyle(LineStyle.NONE);
-			} catch(SeriesException e) {
-				//
+		if(scatterSeriesDataList != null && scatterSeriesDataList.size() > 0) {
+			BaseChart baseChart = getBaseChart();
+			baseChart.suspendUpdate(true);
+			for(IScatterSeriesData scatterSeriesData : scatterSeriesDataList) {
+				/*
+				 * Get the series data and apply the settings.
+				 */
+				try {
+					ISeriesData seriesData = scatterSeriesData.getSeriesData();
+					ILineSeries scatterSeries = (ILineSeries)createSeries(SeriesType.LINE, seriesData.getXSeries(), seriesData.getYSeries(), seriesData.getId());
+					//
+					IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();
+					scatterSeries.setDescription(scatterSeriesSettings.getDescription());
+					scatterSeries.setVisible(scatterSeriesSettings.isVisible());
+					scatterSeries.setVisibleInLegend(scatterSeriesSettings.isVisibleInLegend());
+					scatterSeries.enableArea(false);
+					scatterSeries.setSymbolType(scatterSeriesSettings.getSymbolType());
+					scatterSeries.setSymbolSize(scatterSeriesSettings.getSymbolSize());
+					scatterSeries.setSymbolColor(scatterSeriesSettings.getSymbolColor());
+					scatterSeries.setLineStyle(LineStyle.NONE);
+				} catch(SeriesException e) {
+					//
+				}
 			}
+			baseChart.suspendUpdate(false);
+			adjustRange(true);
+			baseChart.redraw();
 		}
-		baseChart.suspendUpdate(false);
-		adjustRange(true);
-		baseChart.redraw();
 	}
 }
