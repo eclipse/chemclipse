@@ -15,6 +15,8 @@ import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
 
 public interface IScrollableChart {
 
+	IChartSettings getChartSettings();
+
 	void applySettings(IChartSettings chartSettings);
 
 	BaseChart getBaseChart();

@@ -23,10 +23,10 @@ public class ChartSettings implements IChartSettings {
 
 	private boolean verticalSliderVisible;
 	private boolean horizontalSliderVisible;
-	/*
-	 * Chart
-	 */
+	//
 	private String title;
+	private boolean titleVisible;
+	private Color titleColor;
 	//
 	private IPrimaryAxisSettings primaryAxisSettingsX;
 	private IPrimaryAxisSettings primaryAxisSettingsY;
@@ -35,7 +35,6 @@ public class ChartSettings implements IChartSettings {
 	//
 	private int orientation;
 	private boolean legendVisible;
-	private boolean titleVisible;
 	private Color background;
 	private Color backgroundInPlotArea;
 	private boolean enableCompress;
@@ -44,20 +43,28 @@ public class ChartSettings implements IChartSettings {
 
 	public ChartSettings() {
 		//
+		Display display = Display.getCurrent();
+		/*
+		 * Set the chart.
+		 */
 		verticalSliderVisible = false; // https://bugs.eclipse.org/bugs/show_bug.cgi?id=511257
 		horizontalSliderVisible = true;
-		//
-		title = "";
+		/*
+		 * If the title is empty, it won't be displayed.
+		 * To display a space on top of the chart, a default
+		 * title is set and WHITE is used to hide it.
+		 */
+		title = "Chart Title";
+		titleVisible = true;
+		titleColor = display.getSystemColor(SWT.COLOR_WHITE);
 		//
 		primaryAxisSettingsX = new PrimaryAxisSettings(BaseChart.DEFAULT_TITLE_X_AXIS);
 		primaryAxisSettingsY = new PrimaryAxisSettings(BaseChart.DEFAULT_TITLE_Y_AXIS);
 		secondaryAxisSettingsListX = new ArrayList<ISecondaryAxisSettings>();
 		secondaryAxisSettingsListY = new ArrayList<ISecondaryAxisSettings>();
 		//
-		Display display = Display.getCurrent();
 		orientation = SWT.HORIZONTAL;
 		legendVisible = false;
-		titleVisible = false;
 		background = display.getSystemColor(SWT.COLOR_WHITE);
 		backgroundInPlotArea = display.getSystemColor(SWT.COLOR_WHITE);
 		enableCompress = true;
@@ -72,7 +79,7 @@ public class ChartSettings implements IChartSettings {
 	}
 
 	@Override
-	public IChartSettings setVerticalSliderVisible(boolean verticalSliderVisible) {
+	public void setVerticalSliderVisible(boolean verticalSliderVisible) {
 
 		/*
 		 * There is a bug when using the SWT.RIGHT_TO_LEFT orientation.
@@ -82,7 +89,6 @@ public class ChartSettings implements IChartSettings {
 		// this.verticalSliderVisible = verticalSliderVisible;
 		this.verticalSliderVisible = false;
 		System.out.println("Can't set vertical slider true, see: https://bugs.eclipse.org/bugs/show_bug.cgi?id=511257");
-		return this;
 	}
 
 	@Override
@@ -92,10 +98,9 @@ public class ChartSettings implements IChartSettings {
 	}
 
 	@Override
-	public IChartSettings setHorizontalSliderVisible(boolean horizontalSliderVisible) {
+	public void setHorizontalSliderVisible(boolean horizontalSliderVisible) {
 
 		this.horizontalSliderVisible = horizontalSliderVisible;
-		return this;
 	}
 
 	@Override
@@ -112,6 +117,30 @@ public class ChartSettings implements IChartSettings {
 		} else {
 			this.title = "";
 		}
+	}
+
+	@Override
+	public boolean isTitleVisible() {
+
+		return titleVisible;
+	}
+
+	@Override
+	public void setTitleVisible(boolean titleVisible) {
+
+		this.titleVisible = titleVisible;
+	}
+
+	@Override
+	public Color getTitleColor() {
+
+		return titleColor;
+	}
+
+	@Override
+	public void setTitleColor(Color titleColor) {
+
+		this.titleColor = titleColor;
 	}
 
 	@Override
@@ -151,10 +180,9 @@ public class ChartSettings implements IChartSettings {
 	 * @param orientation
 	 */
 	@Override
-	public IChartSettings setOrientation(int orientation) {
+	public void setOrientation(int orientation) {
 
 		this.orientation = orientation;
-		return this;
 	}
 
 	@Override
@@ -164,23 +192,9 @@ public class ChartSettings implements IChartSettings {
 	}
 
 	@Override
-	public IChartSettings setLegendVisible(boolean legendVisible) {
+	public void setLegendVisible(boolean legendVisible) {
 
 		this.legendVisible = legendVisible;
-		return this;
-	}
-
-	@Override
-	public boolean isTitleVisible() {
-
-		return titleVisible;
-	}
-
-	@Override
-	public IChartSettings setTitleVisible(boolean titleVisible) {
-
-		this.titleVisible = titleVisible;
-		return this;
 	}
 
 	@Override
@@ -190,10 +204,9 @@ public class ChartSettings implements IChartSettings {
 	}
 
 	@Override
-	public IChartSettings setBackground(Color background) {
+	public void setBackground(Color background) {
 
 		this.background = background;
-		return this;
 	}
 
 	@Override
@@ -203,10 +216,9 @@ public class ChartSettings implements IChartSettings {
 	}
 
 	@Override
-	public IChartSettings setBackgroundInPlotArea(Color backgroundInPlotArea) {
+	public void setBackgroundInPlotArea(Color backgroundInPlotArea) {
 
 		this.backgroundInPlotArea = backgroundInPlotArea;
-		return this;
 	}
 
 	@Override
@@ -216,10 +228,9 @@ public class ChartSettings implements IChartSettings {
 	}
 
 	@Override
-	public IChartSettings setEnableCompress(boolean enableCompress) {
+	public void setEnableCompress(boolean enableCompress) {
 
 		this.enableCompress = enableCompress;
-		return this;
 	}
 
 	@Override
@@ -229,10 +240,9 @@ public class ChartSettings implements IChartSettings {
 	}
 
 	@Override
-	public IChartSettings setUseZeroY(boolean useZeroY) {
+	public void setUseZeroY(boolean useZeroY) {
 
 		this.useZeroY = useZeroY;
-		return this;
 	}
 
 	@Override
@@ -242,9 +252,8 @@ public class ChartSettings implements IChartSettings {
 	}
 
 	@Override
-	public IChartSettings setUseZeroX(boolean useZeroX) {
+	public void setUseZeroX(boolean useZeroX) {
 
 		this.useZeroX = useZeroX;
-		return this;
 	}
 }

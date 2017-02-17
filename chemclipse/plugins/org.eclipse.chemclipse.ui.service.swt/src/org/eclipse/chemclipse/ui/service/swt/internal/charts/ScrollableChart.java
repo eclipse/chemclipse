@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.internal.charts;
 
+import org.eclipse.chemclipse.ui.service.swt.charts.ChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.IAxisSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.IPrimaryAxisSettings;
@@ -31,30 +32,43 @@ import org.swtchart.IAxis.Direction;
 import org.swtchart.IAxisSet;
 import org.swtchart.ISeries;
 import org.swtchart.ISeries.SeriesType;
+import org.swtchart.ISeriesSet;
 import org.swtchart.Range;
 
 public class ScrollableChart extends Composite implements IScrollableChart, IEventHandler, IExtendedChart {
 
 	private Slider sliderVertical;
 	private Slider sliderHorizontal;
+	private IChartSettings chartSettings;
 	private BaseChart baseChart;
 
 	public ScrollableChart(Composite parent, int style) {
 		super(parent, style);
+		chartSettings = new ChartSettings();
 		initialize();
+	}
+
+	@Override
+	public IChartSettings getChartSettings() {
+
+		return chartSettings;
 	}
 
 	@Override
 	public void applySettings(IChartSettings chartSettings) {
 
+		/*
+		 * Assign the settings instance and apply the settings.
+		 */
+		this.chartSettings = chartSettings;
 		baseChart.suspendUpdate(true);
 		//
 		sliderVertical.setVisible(chartSettings.isVerticalSliderVisible());
 		sliderHorizontal.setVisible(chartSettings.isHorizontalSliderVisible());
 		//
-		baseChart.getTitle().setForeground(getBackground());
 		baseChart.getTitle().setText(chartSettings.getTitle());
-		baseChart.getTitle().setVisible(("".equals(chartSettings.getTitle())) ? false : true);
+		baseChart.getTitle().setVisible(chartSettings.isTitleVisible());
+		baseChart.getTitle().setForeground(chartSettings.getTitleColor());
 		/*
 		 * Primary axes
 		 */
@@ -71,7 +85,6 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 		//
 		baseChart.setOrientation(chartSettings.getOrientation());
 		baseChart.getLegend().setVisible(chartSettings.isLegendVisible());
-		baseChart.getTitle().setVisible(chartSettings.isTitleVisible());
 		baseChart.setBackground(chartSettings.getBackground());
 		baseChart.setBackgroundInPlotArea(chartSettings.getBackgroundInPlotArea());
 		baseChart.enableCompress(chartSettings.isEnableCompress());
@@ -79,6 +92,11 @@ public class ScrollableChart extends Composite implements IScrollableChart, IEve
 		baseChart.setUseZeroY(chartSettings.isUseZeroY());
 		//
 		baseChart.suspendUpdate(false);
+		ISeriesSet seriesSet = baseChart.getSeriesSet();
+		if(seriesSet.getSeries().length > 0) {
+			adjustRange(true);
+			baseChart.redraw();
+		}
 	}
 
 	@Override

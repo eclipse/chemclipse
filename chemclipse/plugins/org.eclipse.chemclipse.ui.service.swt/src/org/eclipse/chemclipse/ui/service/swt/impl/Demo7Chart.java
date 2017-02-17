@@ -36,10 +36,10 @@ public class Demo7Chart extends PCAChart implements IChart {
 	private int SYMBOL_SIZE = 8;
 
 	public Demo7Chart(Composite parent, int style) {
-		super(parent, style);
 		/*
 		 * Create series.
 		 */
+		super(parent, style);
 		List<ISeriesData> scatterSeriesList = SeriesConverter.getScatterSeries(SeriesConverter.SCATTER_SERIES_1);
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<IScatterSeriesData>();
 		//
@@ -52,7 +52,6 @@ public class Demo7Chart extends PCAChart implements IChart {
 			double x = seriesData.getXSeries()[0];
 			double y = seriesData.getYSeries()[0];
 			scatterSeriesSettings.setSymbolSize(SYMBOL_SIZE);
-			setSymbolSize(SYMBOL_SIZE);
 			//
 			if(x > 0 && y > 0) {
 				scatterSeriesSettings.setSymbolColor(COLOR_RED);

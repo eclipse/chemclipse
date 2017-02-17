@@ -19,15 +19,23 @@ public interface IChartSettings {
 
 	boolean isVerticalSliderVisible();
 
-	IChartSettings setVerticalSliderVisible(boolean verticalSliderVisible);
+	void setVerticalSliderVisible(boolean verticalSliderVisible);
 
 	boolean isHorizontalSliderVisible();
 
-	IChartSettings setHorizontalSliderVisible(boolean horizontalSliderVisible);
+	void setHorizontalSliderVisible(boolean horizontalSliderVisible);
 
 	String getTitle();
 
 	void setTitle(String title);
+
+	boolean isTitleVisible();
+
+	void setTitleVisible(boolean titleVisible);
+
+	Color getTitleColor();
+
+	void setTitleColor(Color titleColor);
 
 	IPrimaryAxisSettings getPrimaryAxisSettingsX();
 
@@ -45,27 +53,23 @@ public interface IChartSettings {
 	 * 
 	 * @param orientation
 	 */
-	IChartSettings setOrientation(int orientation);
+	void setOrientation(int orientation);
 
 	boolean isLegendVisible();
 
-	IChartSettings setLegendVisible(boolean legendVisible);
-
-	boolean isTitleVisible();
-
-	IChartSettings setTitleVisible(boolean titleVisible);
+	void setLegendVisible(boolean legendVisible);
 
 	Color getBackground();
 
-	IChartSettings setBackground(Color background);
+	void setBackground(Color background);
 
 	Color getBackgroundInPlotArea();
 
-	IChartSettings setBackgroundInPlotArea(Color backgroundInPlotArea);
+	void setBackgroundInPlotArea(Color backgroundInPlotArea);
 
 	boolean isEnableCompress();
 
-	IChartSettings setEnableCompress(boolean enableCompress);
+	void setEnableCompress(boolean enableCompress);
 
 	boolean isUseZeroY();
 
@@ -75,7 +79,7 @@ public interface IChartSettings {
 	 * 
 	 * @param useZeroY
 	 */
-	IChartSettings setUseZeroY(boolean useZeroY);
+	void setUseZeroY(boolean useZeroY);
 
 	boolean isUseZeroX();
 
@@ -85,5 +89,5 @@ public interface IChartSettings {
 	 * 
 	 * @param useZeroX
 	 */
-	IChartSettings setUseZeroX(boolean useZeroX);
+	void setUseZeroX(boolean useZeroX);
 }

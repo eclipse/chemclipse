@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.ui.service.swt.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.ui.service.swt.charts.ChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.ISeriesData;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesData;
@@ -31,13 +30,12 @@ public class Demo4Chart extends LineChart implements IChart {
 		/*
 		 * Chart Settings
 		 */
-		IChartSettings chartSettings = new ChartSettings();
-		chartSettings //
-				.setOrientation(SWT.VERTICAL) //
-				.setHorizontalSliderVisible(true) //
-				.setVerticalSliderVisible(true) //
-				.setUseZeroX(false) //
-				.setUseZeroY(false);
+		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setOrientation(SWT.VERTICAL);
+		chartSettings.setHorizontalSliderVisible(true);
+		chartSettings.setVerticalSliderVisible(true);
+		chartSettings.setUseZeroX(false);
+		chartSettings.setUseZeroY(false);
 		applySettings(chartSettings);
 		/*
 		 * Create series.

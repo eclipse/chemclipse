@@ -16,7 +16,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ui.service.swt.charts.ChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.IPrimaryAxisSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.ISeriesData;
@@ -34,13 +33,12 @@ public class Demo5Chart extends BarChart implements IChart {
 		/*
 		 * Chart Settings
 		 */
-		IChartSettings chartSettings = new ChartSettings();
-		chartSettings //
-				.setOrientation(SWT.HORIZONTAL) //
-				.setHorizontalSliderVisible(true) //
-				.setVerticalSliderVisible(true) //
-				.setUseZeroX(false) //
-				.setUseZeroY(false);
+		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setOrientation(SWT.HORIZONTAL);
+		chartSettings.setHorizontalSliderVisible(true);
+		chartSettings.setVerticalSliderVisible(true);
+		chartSettings.setUseZeroX(false);
+		chartSettings.setUseZeroY(false);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle("m/z");

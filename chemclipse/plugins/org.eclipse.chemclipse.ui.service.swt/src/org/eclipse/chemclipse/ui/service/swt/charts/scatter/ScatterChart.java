@@ -34,6 +34,9 @@ public class ScatterChart extends ScrollableChart {
 		 * Suspend the update when adding new data to improve the performance.
 		 */
 		if(scatterSeriesDataList != null && scatterSeriesDataList.size() > 0) {
+			/*
+			 * Set the data.
+			 */
 			BaseChart baseChart = getBaseChart();
 			baseChart.suspendUpdate(true);
 			for(IScatterSeriesData scatterSeriesData : scatterSeriesDataList) {
