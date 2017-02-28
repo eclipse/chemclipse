@@ -37,13 +37,15 @@ public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor
 	@Override
 	public IExtractedIonSignals getExtractedIonSignals(float startIon, float stopIon) {
 
-		IExtractedIonSignals signals = new ExtractedIonSignals(chromatogram.getNumberOfScans(), chromatogram);
+		IExtractedIonSignals signals = new ExtractedIonSignals(getNumberOfScansWithIons(chromatogram), chromatogram);
 		IExtractedIonSignal extractedIonSignal;
 		for(IScan scan : chromatogram.getScans()) {
 			if(scan instanceof IVendorMassSpectrum) {
-				IVendorMassSpectrum ms = (IVendorMassSpectrum)scan;
-				extractedIonSignal = ms.getExtractedIonSignal(startIon, stopIon);
-				signals.add(extractedIonSignal);
+				IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scan;
+				if(massSpectrum.getNumberOfIons() > 0) {
+					extractedIonSignal = massSpectrum.getExtractedIonSignal(startIon, stopIon);
+					signals.add(extractedIonSignal);
+				}
 			}
 		}
 		return signals;
@@ -52,13 +54,15 @@ public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor
 	@Override
 	public IExtractedIonSignals getExtractedIonSignals() {
 
-		IExtractedIonSignals signals = new ExtractedIonSignals(chromatogram.getNumberOfScans(), chromatogram);
+		IExtractedIonSignals signals = new ExtractedIonSignals(getNumberOfScansWithIons(chromatogram), chromatogram);
 		IExtractedIonSignal extractedIonSignal;
 		for(IScan scan : chromatogram.getScans()) {
 			if(scan instanceof IVendorMassSpectrum) {
-				IVendorMassSpectrum ms = (IVendorMassSpectrum)scan;
-				extractedIonSignal = ms.getExtractedIonSignal();
-				signals.add(extractedIonSignal);
+				IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scan;
+				if(massSpectrum.getNumberOfIons() > 0) {
+					extractedIonSignal = massSpectrum.getExtractedIonSignal();
+					signals.add(extractedIonSignal);
+				}
 			}
 		}
 		return signals;
@@ -86,15 +90,36 @@ public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor
 			startScan = stopScan;
 			stopScan = tmp;
 		}
-		if(startScan < 1 && stopScan > chromatogram.getNumberOfScans()) {
+		if(startScan < 1 && stopScan > getNumberOfScansWithIons(chromatogram)) {
 			return new ExtractedIonSignals(0, chromatogram);
 		}
-		IVendorMassSpectrum supplierMassSpectrum;
+		IVendorMassSpectrum massSpectrum;
 		IExtractedIonSignals extractedIonSignals = new ExtractedIonSignals(startScan, stopScan, chromatogram);
 		for(int scan = startScan; scan <= stopScan; scan++) {
-			supplierMassSpectrum = chromatogram.getSupplierScan(scan);
-			extractedIonSignals.add(supplierMassSpectrum.getExtractedIonSignal());
+			massSpectrum = chromatogram.getSupplierScan(scan);
+			if(massSpectrum.getNumberOfIons() > 0) {
+				extractedIonSignals.add(massSpectrum.getExtractedIonSignal());
+			}
 		}
 		return extractedIonSignals;
+	}
+
+	/**
+	 * 
+	 * @param chromatogram
+	 * @return int
+	 */
+	private int getNumberOfScansWithIons(IChromatogramMSD chromatogram) {
+
+		int counter = 0;
+		for(IScan scan : chromatogram.getScans()) {
+			if(scan instanceof IVendorMassSpectrum) {
+				IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scan;
+				if(massSpectrum.getNumberOfIons() > 0) {
+					counter++;
+				}
+			}
+		}
+		return counter;
 	}
 }
