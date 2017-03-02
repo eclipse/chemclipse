@@ -40,7 +40,7 @@ public class Demo7Chart extends PCAChart implements IChart {
 		 * Create series.
 		 */
 		super(parent, style);
-		List<ISeriesData> scatterSeriesList = SeriesConverter.getScatterSeries(SeriesConverter.SCATTER_SERIES_1);
+		List<ISeriesData> scatterSeriesList = SeriesConverter.getSeriesScatter(SeriesConverter.SCATTER_SERIES_1);
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<IScatterSeriesData>();
 		//
 		for(ISeriesData seriesData : scatterSeriesList) {

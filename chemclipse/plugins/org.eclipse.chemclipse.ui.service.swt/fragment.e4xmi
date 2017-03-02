@@ -20,6 +20,7 @@
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_l8imkNtoEeaJesxyMKbrbQ" elementId="org.eclipse.chemclipse.ui.service.swt.partstack.3">
             <children xsi:type="basic:Part" xmi:id="_oobTYOIeEeamxdyRU02Ipg" elementId="org.eclipse.chemclipse.ui.service.swt.part.demo4chart" contributionURI="bundleclass://org.eclipse.chemclipse.ui.service.swt/org.eclipse.chemclipse.ui.service.swt.parts.Demo4ChartPart" label="Demo 4 Chart"/>
+            <children xsi:type="basic:Part" xmi:id="_rfI1EP9aEeaVn-nkbkaWoQ" elementId="org.eclipse.chemclipse.ui.service.swt.part.demo8part" contributionURI="bundleclass://org.eclipse.chemclipse.ui.service.swt/org.eclipse.chemclipse.ui.service.swt.parts.Demo8ChartPart" label="Demo 8 Part"/>
           </children>
         </children>
       </children>

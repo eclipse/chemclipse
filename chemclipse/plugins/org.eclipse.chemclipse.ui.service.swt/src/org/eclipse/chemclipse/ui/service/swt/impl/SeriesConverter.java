@@ -24,14 +24,13 @@ public class SeriesConverter {
 
 	public static final String LINE_SERIES_1 = "LineSeries1";
 	public static final String LINE_SERIES_2 = "LineSeries2";
+	public static final String LINE_SERIES_3 = "LineSeries3";
 	public static final String BAR_SERIES_1 = "BarSeries1";
 	public static final String BAR_SERIES_2 = "BarSeries2";
 	public static final String SCATTER_SERIES_1 = "ScatterSeries1";
 
-	public static ISeriesData getSeries(String fileName) {
+	public static ISeriesData getSeriesXY(String fileName) {
 
-		ISeriesData seriesData = new SeriesData();
-		//
 		int size = getNumberOfLines(fileName);
 		double[] xSeries = new double[size];
 		double[] ySeries = new double[size];
@@ -58,12 +57,41 @@ public class SeriesConverter {
 				}
 			}
 		}
-		seriesData.setXSeries(xSeries);
-		seriesData.setYSeries(ySeries);
+		//
+		ISeriesData seriesData = new SeriesData(xSeries, ySeries, fileName);
 		return seriesData;
 	}
 
-	public static List<ISeriesData> getScatterSeries(String fileName) {
+	public static ISeriesData getSeriesFromY(String fileName) {
+
+		int size = getNumberOfLines(fileName);
+		double[] ySeries = new double[size];
+		//
+		BufferedReader bufferedReader = null;
+		try {
+			String line;
+			int i = 0;
+			bufferedReader = new BufferedReader(new InputStreamReader(SeriesConverter.class.getResourceAsStream(fileName)));
+			while((line = bufferedReader.readLine()) != null) {
+				ySeries[i++] = Double.parseDouble(line.trim());
+			}
+		} catch(Exception e) {
+			//
+		} finally {
+			if(bufferedReader != null) {
+				try {
+					bufferedReader.close();
+				} catch(IOException e) {
+					//
+				}
+			}
+		}
+		//
+		ISeriesData seriesData = new SeriesData(ySeries, fileName);
+		return seriesData;
+	}
+
+	public static List<ISeriesData> getSeriesScatter(String fileName) {
 
 		List<ISeriesData> scatterSeriesList = new ArrayList<ISeriesData>();
 		//
@@ -73,10 +101,10 @@ public class SeriesConverter {
 			bufferedReader = new BufferedReader(new InputStreamReader(SeriesConverter.class.getResourceAsStream(fileName)));
 			while((line = bufferedReader.readLine()) != null) {
 				String[] values = line.split("\t");
-				ISeriesData seriesData = new SeriesData();
-				seriesData.setId(values[0].trim());
-				seriesData.setXSeries(new double[]{Double.parseDouble(values[1].trim())});
-				seriesData.setYSeries(new double[]{Double.parseDouble(values[2].trim())});
+				String id = values[0].trim();
+				double[] xSeries = new double[]{Double.parseDouble(values[1].trim())};
+				double[] ySeries = new double[]{Double.parseDouble(values[2].trim())};
+				ISeriesData seriesData = new SeriesData(xSeries, ySeries, id);
 				scatterSeriesList.add(seriesData);
 			}
 		} catch(Exception e) {

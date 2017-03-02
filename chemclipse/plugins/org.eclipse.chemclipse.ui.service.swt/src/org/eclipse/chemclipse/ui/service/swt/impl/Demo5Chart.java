@@ -54,8 +54,7 @@ public class Demo5Chart extends BarChart implements IChart {
 		 * Create series.
 		 */
 		List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
-		ISeriesData seriesData = SeriesConverter.getSeries(SeriesConverter.BAR_SERIES_1);
-		seriesData.setId("Demo");
+		ISeriesData seriesData = SeriesConverter.getSeriesXY(SeriesConverter.BAR_SERIES_1);
 		//
 		IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
 		IBarSeriesSettings barSeriesSettings = barSeriesData.getBarSeriesSettings();

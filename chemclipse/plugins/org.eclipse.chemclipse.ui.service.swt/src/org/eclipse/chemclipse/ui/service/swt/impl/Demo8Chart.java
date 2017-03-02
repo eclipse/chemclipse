@@ -16,12 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.IPrimaryAxisSettings;
-import org.eclipse.chemclipse.ui.service.swt.charts.ISecondaryAxisSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.ISeriesData;
-import org.eclipse.chemclipse.ui.service.swt.charts.SecondaryAxisSettings;
-import org.eclipse.chemclipse.ui.service.swt.charts.converter.MillisecondsToMinuteConverter;
-import org.eclipse.chemclipse.ui.service.swt.charts.converter.MillisecondsToScanNumberConverter;
-import org.eclipse.chemclipse.ui.service.swt.charts.converter.RelativeIntensityConverter;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesData;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.LineChart;
@@ -29,11 +24,10 @@ import org.eclipse.chemclipse.ui.service.swt.charts.line.LineSeriesData;
 import org.eclipse.chemclipse.ui.service.swt.internal.charts.ColorFormatSupport;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.swtchart.IAxis.Position;
 
-public class Demo1Chart extends LineChart implements IChart {
+public class Demo8Chart extends LineChart implements IChart {
 
-	public Demo1Chart(Composite parent, int style) {
+	public Demo8Chart(Composite parent, int style) {
 		super(parent, style);
 		/*
 		 * Chart Settings
@@ -44,51 +38,28 @@ public class Demo1Chart extends LineChart implements IChart {
 		chartSettings.setVerticalSliderVisible(true);
 		chartSettings.setUseZeroX(true);
 		chartSettings.setUseZeroY(true);
+		applySettings(chartSettings);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
-		primaryAxisSettingsX.setTitle("Retention Time (milliseconds)");
-		primaryAxisSettingsX.setDecimalFormat(ColorFormatSupport.decimalFormatVariable);
+		primaryAxisSettingsX.setTitle("f1 (ppm)");
+		primaryAxisSettingsX.setDecimalFormat(ColorFormatSupport.decimalFormatInteger);
 		primaryAxisSettingsX.setColor(ColorFormatSupport.COLOR_BLACK);
-		primaryAxisSettingsX.setPosition(Position.Secondary);
-		primaryAxisSettingsX.setVisible(false);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle("Intensity");
 		primaryAxisSettingsY.setDecimalFormat(ColorFormatSupport.decimalFormatScientific);
 		primaryAxisSettingsY.setColor(ColorFormatSupport.COLOR_BLACK);
 		//
-		try {
-			ISecondaryAxisSettings secondaryAxisSettingsX1 = new SecondaryAxisSettings("Scan Number", new MillisecondsToScanNumberConverter(50, 50));
-			secondaryAxisSettingsX1.setPosition(Position.Primary);
-			secondaryAxisSettingsX1.setDecimalFormat(ColorFormatSupport.decimalFormatInteger);
-			secondaryAxisSettingsX1.setColor(ColorFormatSupport.COLOR_BLACK);
-			chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX1);
-		} catch(Exception e) {
-			System.out.println(e);
-		}
-		//
-		ISecondaryAxisSettings secondaryAxisSettingsX2 = new SecondaryAxisSettings("Minutes", new MillisecondsToMinuteConverter());
-		secondaryAxisSettingsX2.setPosition(Position.Primary);
-		secondaryAxisSettingsX2.setDecimalFormat(ColorFormatSupport.decimalFormatFixed);
-		secondaryAxisSettingsX2.setColor(ColorFormatSupport.COLOR_BLACK);
-		chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX2);
-		//
-		ISecondaryAxisSettings secondaryAxisSettingsY1 = new SecondaryAxisSettings("Relative Intensity [%]", new RelativeIntensityConverter());
-		secondaryAxisSettingsY1.setPosition(Position.Secondary);
-		secondaryAxisSettingsY1.setDecimalFormat(ColorFormatSupport.decimalFormatFixed);
-		secondaryAxisSettingsY1.setColor(ColorFormatSupport.COLOR_BLACK);
-		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY1);
-		//
 		applySettings(chartSettings);
 		/*
 		 * Create series.
 		 */
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-		ISeriesData seriesData = SeriesConverter.getSeriesXY(SeriesConverter.LINE_SERIES_1);
+		ISeriesData seriesData = SeriesConverter.getSeriesFromY(SeriesConverter.LINE_SERIES_3);
 		//
 		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
 		ILineSeriesSettings lineSerieSettings = lineSeriesData.getLineSeriesSettings();
-		lineSerieSettings.setEnableArea(true);
+		lineSerieSettings.setEnableArea(false);
 		lineSeriesDataList.add(lineSeriesData);
 		/*
 		 * Set series.
