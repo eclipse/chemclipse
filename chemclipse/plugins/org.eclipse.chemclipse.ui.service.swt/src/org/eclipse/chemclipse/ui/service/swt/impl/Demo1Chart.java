@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.ui.service.swt.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.IPrimaryAxisSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.ISecondaryAxisSettings;
@@ -28,6 +26,7 @@ import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesData;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.LineChart;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.LineSeriesData;
+import org.eclipse.chemclipse.ui.service.swt.internal.charts.ColorFormatSupport;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.swtchart.IAxis.Position;
@@ -48,21 +47,21 @@ public class Demo1Chart extends LineChart implements IChart {
 		//
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle("Retention Time (milliseconds)");
-		primaryAxisSettingsX.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0.0##"));
-		primaryAxisSettingsX.setColor(Colors.BLACK);
+		primaryAxisSettingsX.setDecimalFormat(ColorFormatSupport.decimalFormatVariable);
+		primaryAxisSettingsX.setColor(ColorFormatSupport.COLOR_BLACK);
 		primaryAxisSettingsX.setPosition(Position.Secondary);
 		primaryAxisSettingsX.setVisible(false);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle("Intensity");
-		primaryAxisSettingsY.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0.0#E0"));
-		primaryAxisSettingsY.setColor(Colors.BLACK);
+		primaryAxisSettingsY.setDecimalFormat(ColorFormatSupport.decimalFormatScientific);
+		primaryAxisSettingsY.setColor(ColorFormatSupport.COLOR_BLACK);
 		//
 		try {
 			ISecondaryAxisSettings secondaryAxisSettingsX1 = new SecondaryAxisSettings("Scan Number", new MillisecondsToScanNumberConverter(50, 50));
 			secondaryAxisSettingsX1.setPosition(Position.Primary);
-			secondaryAxisSettingsX1.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0"));
-			secondaryAxisSettingsX1.setColor(Colors.BLACK);
+			secondaryAxisSettingsX1.setDecimalFormat(ColorFormatSupport.decimalFormatInteger);
+			secondaryAxisSettingsX1.setColor(ColorFormatSupport.COLOR_BLACK);
 			chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX1);
 		} catch(Exception e) {
 			System.out.println(e);
@@ -70,14 +69,14 @@ public class Demo1Chart extends LineChart implements IChart {
 		//
 		ISecondaryAxisSettings secondaryAxisSettingsX2 = new SecondaryAxisSettings("Minutes", new MillisecondsToMinuteConverter());
 		secondaryAxisSettingsX2.setPosition(Position.Primary);
-		secondaryAxisSettingsX2.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0.00"));
-		secondaryAxisSettingsX2.setColor(Colors.BLACK);
+		secondaryAxisSettingsX2.setDecimalFormat(ColorFormatSupport.decimalFormatFixed);
+		secondaryAxisSettingsX2.setColor(ColorFormatSupport.COLOR_BLACK);
 		chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX2);
 		//
 		ISecondaryAxisSettings secondaryAxisSettingsY1 = new SecondaryAxisSettings("Relative Intensity [%]", new RelativeIntensityConverter());
 		secondaryAxisSettingsY1.setPosition(Position.Secondary);
-		secondaryAxisSettingsY1.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0.00"));
-		secondaryAxisSettingsY1.setColor(Colors.BLACK);
+		secondaryAxisSettingsY1.setDecimalFormat(ColorFormatSupport.decimalFormatFixed);
+		secondaryAxisSettingsY1.setColor(ColorFormatSupport.COLOR_BLACK);
 		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY1);
 		//
 		applySettings(chartSettings);

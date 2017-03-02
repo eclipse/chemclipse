@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.charts;
 
-import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ui.service.swt.internal.charts.ColorFormatSupport;
 import org.eclipse.swt.graphics.Color;
 import org.swtchart.ILineSeries.PlotSymbolType;
 
@@ -24,7 +24,7 @@ public abstract class AbstractPointSeriesSettings extends AbstractSeriesSettings
 	public AbstractPointSeriesSettings() {
 		symbolType = PlotSymbolType.NONE;
 		symbolSize = 8;
-		symbolColor = Colors.BLACK;
+		symbolColor = ColorFormatSupport.COLOR_BLACK;
 	}
 
 	@Override

@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.charts.bar;
 
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ui.service.swt.charts.AbstractSeriesSettings;
+import org.eclipse.chemclipse.ui.service.swt.internal.charts.ColorFormatSupport;
 import org.eclipse.swt.graphics.Color;
 import org.swtchart.IBarSeries.BarWidthStyle;
 
@@ -24,7 +24,7 @@ public class BarSeriesSettings extends AbstractSeriesSettings implements IBarSer
 	private BarWidthStyle barWidthStyle;
 
 	public BarSeriesSettings() {
-		barColor = Colors.RED;
+		barColor = ColorFormatSupport.COLOR_RED;
 		barPadding = 20;
 		barWidth = 1;
 		barWidthStyle = BarWidthStyle.FIXED;

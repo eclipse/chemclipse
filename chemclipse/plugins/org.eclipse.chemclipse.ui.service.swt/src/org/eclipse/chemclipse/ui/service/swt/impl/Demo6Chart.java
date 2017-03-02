@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.ui.service.swt.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.IPrimaryAxisSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.ISeriesData;
@@ -23,6 +21,7 @@ import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesData;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.LineChart;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.LineSeriesData;
+import org.eclipse.chemclipse.ui.service.swt.internal.charts.ColorFormatSupport;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
@@ -42,13 +41,13 @@ public class Demo6Chart extends LineChart implements IChart {
 		//
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle("Time");
-		primaryAxisSettingsX.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0.0##"));
-		primaryAxisSettingsX.setColor(Colors.BLACK);
+		primaryAxisSettingsX.setDecimalFormat(ColorFormatSupport.decimalFormatVariable);
+		primaryAxisSettingsX.setColor(ColorFormatSupport.COLOR_BLACK);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle("Intensity");
-		primaryAxisSettingsY.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0.0#E0"));
-		primaryAxisSettingsY.setColor(Colors.BLACK);
+		primaryAxisSettingsY.setDecimalFormat(ColorFormatSupport.decimalFormatVariable);
+		primaryAxisSettingsY.setColor(ColorFormatSupport.COLOR_BLACK);
 		//
 		applySettings(chartSettings);
 		/*
