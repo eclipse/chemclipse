@@ -4,7 +4,6 @@
   <imports xsi:type="basic:Part" xmi:id="_Cg85IFM4EeKO4dM54-DH7g" elementId="org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart"/>
   <imports xsi:type="advanced:Area" xmi:id="_KodscJUbEeK9SdEQujNeFg" elementId="org.eclipse.chemclipse.rcp.app.ui.editor"/>
   <imports xsi:type="basic:Part" xmi:id="_t0KrsNNuEeOGVsF3IvlSBg" elementId="org.eclipse.chemclipse.ux.extension.ui.part.baselineAndChromatogramView"/>
-  <imports xsi:type="basic:Part" xmi:id="_aqjNINOHEeOGVsF3IvlSBg" elementId="org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.views.integrationResultView"/>
   <imports xsi:type="basic:Part" xmi:id="_bPFNQI0OEeWqFMLk2l0O1w" elementId="org.eclipse.chemclipse.ux.extension.ui.part.editHistory"/>
   <imports xsi:type="basic:Part" xmi:id="_w2cAcLC3EeaEvIJF6SXnIQ" elementId="org.eclipse.chemclipse.ux.extension.ui.part.peaklistquantitations"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_-LkR0FEJEeK_26wVgj44vg" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
@@ -42,7 +41,6 @@
             <children xsi:type="basic:PartStack" xmi:id="_Oxp1wFM4EeKO4dM54-DH7g" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.partstack.2">
               <children xsi:type="advanced:Placeholder" xmi:id="_U8sxANKsEeONsNJ7n41rvA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.placeholder.6" ref="_D03GUNKsEeONsNJ7n41rvA"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_PkdywFM4EeKO4dM54-DH7g" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.placeholder.3" ref="_BJ_GMFM4EeKO4dM54-DH7g"/>
-              <children xsi:type="advanced:Placeholder" xmi:id="_zrx18NOHEeOGVsF3IvlSBg" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.placeholder.8" ref="_aqjNINOHEeOGVsF3IvlSBg"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_pSS2AKrVEeSzIJcLjxpOWA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.placeholder.9" ref="_QKBKAKrVEeSzIJcLjxpOWA"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_y_Ct4IldEeWYgNsSWgddrw" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.placeholder.10" ref="_ocbDsIldEeWYgNsSWgddrw"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_mU1ngFbyEeapVpEa6JcP6w" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.placeholder.14" ref="_cFbNMFbyEeapVpEa6JcP6w"/>
