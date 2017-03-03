@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.ui.service.swt.charts;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.ui.service.swt.internal.charts.BaseChart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;

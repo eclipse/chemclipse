@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.internal.charts;
+package org.eclipse.chemclipse.ui.service.swt.charts;
 
 import org.swtchart.IAxis;
 

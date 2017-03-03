@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.ui.service.swt.charts.line;
 
 import org.eclipse.chemclipse.ui.service.swt.charts.AbstractPointSeriesSettings;
-import org.eclipse.chemclipse.ui.service.swt.internal.charts.ColorFormatSupport;
+import org.eclipse.chemclipse.ui.service.swt.charts.ColorFormatSupport;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 

@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ui.service.swt.charts;
 
-import org.eclipse.chemclipse.ui.service.swt.internal.charts.ColorFormatSupport;
 import org.eclipse.swt.graphics.Color;
 import org.swtchart.ILineSeries.PlotSymbolType;
 

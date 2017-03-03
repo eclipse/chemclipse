@@ -13,3 +13,10 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.annotation
+Export-Package: org.eclipse.chemclipse.ui.service.swt.charts,
+ org.eclipse.chemclipse.ui.service.swt.charts.bar,
+ org.eclipse.chemclipse.ui.service.swt.charts.custom,
+ org.eclipse.chemclipse.ui.service.swt.charts.line,
+ org.eclipse.chemclipse.ui.service.swt.charts.scatter,
+ org.eclipse.chemclipse.ui.service.swt.exceptions,
+ org.eclipse.chemclipse.ui.service.swt.impl

@@ -9,15 +9,11 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.internal.charts;
+package org.eclipse.chemclipse.ui.service.swt.charts;
 
-import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
+import org.eclipse.swt.widgets.Event;
 
-public interface IScrollableChart {
+public interface ICustomSelectionHandler {
 
-	IChartSettings getChartSettings();
-
-	void applySettings(IChartSettings chartSettings);
-
-	BaseChart getBaseChart();
+	void handleUserSelection(Event event);
 }

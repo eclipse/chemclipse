@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ui.service.swt.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.ui.service.swt.charts.ColorFormatSupport;
 import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.IPrimaryAxisSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.ISecondaryAxisSettings;
@@ -26,7 +27,6 @@ import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesData;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.ILineSeriesSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.LineChart;
 import org.eclipse.chemclipse.ui.service.swt.charts.line.LineSeriesData;
-import org.eclipse.chemclipse.ui.service.swt.internal.charts.ColorFormatSupport;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.swtchart.IAxis.Position;

@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.ui.service.swt.charts.bar;
 
 import org.eclipse.chemclipse.ui.service.swt.charts.AbstractSeriesSettings;
-import org.eclipse.chemclipse.ui.service.swt.internal.charts.ColorFormatSupport;
+import org.eclipse.chemclipse.ui.service.swt.charts.ColorFormatSupport;
 import org.eclipse.swt.graphics.Color;
 import org.swtchart.IBarSeries.BarWidthStyle;
 

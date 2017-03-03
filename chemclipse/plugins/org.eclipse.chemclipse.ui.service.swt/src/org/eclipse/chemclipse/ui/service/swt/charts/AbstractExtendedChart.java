@@ -9,14 +9,12 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.internal.charts;
+package org.eclipse.chemclipse.ui.service.swt.charts;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.ui.service.swt.charts.IAxisScaleConverter;
-import org.eclipse.chemclipse.ui.service.swt.charts.IChartDataCoordinates;
 import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
 import org.eclipse.swt.widgets.Composite;
 import org.swtchart.IAxis;

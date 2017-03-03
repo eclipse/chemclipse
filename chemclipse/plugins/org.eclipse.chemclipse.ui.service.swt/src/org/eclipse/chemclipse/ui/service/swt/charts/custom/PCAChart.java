@@ -16,6 +16,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.List;
 import java.util.Locale;
 
+import org.eclipse.chemclipse.ui.service.swt.charts.BaseChart;
 import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.IPrimaryAxisSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.ISecondaryAxisSettings;
@@ -23,7 +24,6 @@ import org.eclipse.chemclipse.ui.service.swt.charts.SecondaryAxisSettings;
 import org.eclipse.chemclipse.ui.service.swt.charts.converter.PassThroughConverter;
 import org.eclipse.chemclipse.ui.service.swt.charts.scatter.IScatterSeriesData;
 import org.eclipse.chemclipse.ui.service.swt.charts.scatter.ScatterChart;
-import org.eclipse.chemclipse.ui.service.swt.internal.charts.BaseChart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;

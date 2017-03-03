@@ -9,13 +9,8 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.internal.charts;
+package org.eclipse.chemclipse.ui.service.swt.charts;
 
-import org.eclipse.chemclipse.ui.service.swt.charts.ChartSettings;
-import org.eclipse.chemclipse.ui.service.swt.charts.IAxisSettings;
-import org.eclipse.chemclipse.ui.service.swt.charts.IChartSettings;
-import org.eclipse.chemclipse.ui.service.swt.charts.IPrimaryAxisSettings;
-import org.eclipse.chemclipse.ui.service.swt.charts.ISecondaryAxisSettings;
 import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;

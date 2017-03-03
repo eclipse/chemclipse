@@ -13,10 +13,10 @@ package org.eclipse.chemclipse.ui.service.swt.charts.line;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.ui.service.swt.charts.BaseChart;
 import org.eclipse.chemclipse.ui.service.swt.charts.ISeriesData;
+import org.eclipse.chemclipse.ui.service.swt.charts.ScrollableChart;
 import org.eclipse.chemclipse.ui.service.swt.exceptions.SeriesException;
-import org.eclipse.chemclipse.ui.service.swt.internal.charts.BaseChart;
-import org.eclipse.chemclipse.ui.service.swt.internal.charts.ScrollableChart;
 import org.eclipse.swt.widgets.Composite;
 import org.swtchart.ILineSeries;
 import org.swtchart.ISeries.SeriesType;

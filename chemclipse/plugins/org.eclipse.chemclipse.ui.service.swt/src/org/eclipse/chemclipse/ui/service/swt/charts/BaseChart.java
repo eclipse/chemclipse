@@ -9,13 +9,12 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ui.service.swt.internal.charts;
+package org.eclipse.chemclipse.ui.service.swt.charts;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.ui.service.swt.charts.IChartDataCoordinates;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.widgets.Composite;
