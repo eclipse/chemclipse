@@ -141,6 +141,10 @@
     <module>../../plugins/org.eclipse.chemclipse.ux.extension.wsd.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.ux.extension.xxd.ui</module>
     <!--
+	Service SWT will be moved to Eclipse EAVP soon.
+    -->
+    <module>../../plugins/org.eclipse.chemclipse.ui.service.swt</module>
+    <!--
 	JUnit Tests        
     -->
     <module>../../plugins/org.eclipse.chemclipse.logging.fragment.test</module>
