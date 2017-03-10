@@ -145,20 +145,29 @@ echo "Start changing the version."
 echo ""
 
 #
-# Change MANIFEST.MF, pom.xml, feature.xml, site.xml, *.product files.
+# Change MANIFEST.MF files.
 #
 echo "Change MANIFEST.MF files"
   change_version $(find "$workspace" -type f -name MANIFEST.MF)
 echo ""
 
+#
+# Change pom.xml files.
+#
 echo "Change pom.xml files"
   change_version $(find "$workspace" -type f -name pom.xml)
 echo ""
 
+#
+# Change feature.xml files.
+#
 echo "Change feature.xml files"
   change_version $(find "$workspace" -type f -name feature.xml)
 echo ""
 
+#
+# Change *.product files.
+#
 echo "Change *.product files"
   change_version $(find "$workspace" -type f -name *product)
 echo ""
