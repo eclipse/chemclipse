@@ -13,9 +13,9 @@
 #*******************************************************************************
 
 #
-# The actual version, e.g. 0.5.0
+# The actual version, e.g. 0.8.0
 #
-echo -n "Please enter the actual version (0.6.0): "
+echo -n "Please enter the actual version (0.8.0): "
 read actual_version
 if [ -z $actual_version ]; then
   echo "No valid actual version."
@@ -23,9 +23,9 @@ if [ -z $actual_version ]; then
 fi
 
 #
-# The new version, e.g. 0.6.0
+# The new version, e.g. 0.8.0
 #
-echo -n "Please enter a new version (0.7.0): "
+echo -n "Please enter a new version (0.8.0): "
 read new_version
 if [ -z $new_version ]; then
   echo "No valid new version."
@@ -47,7 +47,7 @@ fi
 # pom.xml
 #
 # Replaces a version tag, commonly in pom.xml files.
-# <version>0.0.1-SNAPSHOT</version>
+# <version>0.8.0-SNAPSHOT</version>
 #
 function replace_version_tag {
 
@@ -61,7 +61,7 @@ function replace_version_tag {
 # MANIFEST.MF
 #
 # Replaces the bundle version.
-# bundle-version="0.0.1"
+# bundle-version="0.8.0"
 #
 function replace_bundle_version {
 
@@ -75,7 +75,7 @@ function replace_bundle_version {
 # MANIFEST.MF
 #
 # Replaces the manifest bundle version.
-# Bundle-Version: 0.0.1.qualifier
+# Bundle-Version: 0.8.0.qualifier
 #
 function replace_manifest_bundle_version {
 
@@ -89,7 +89,7 @@ function replace_manifest_bundle_version {
 # feature.xml
 #
 # Replaces the version.
-# version="0.0.1.qualifier"
+# version="0.8.0.qualifier"
 #
 function replace_feature_version {
 
@@ -103,7 +103,7 @@ function replace_feature_version {
 # *.product
 #
 # Replaces the version.
-# version="0.0.1"
+# version="0.8.0"
 #
 function replace_version {
 
