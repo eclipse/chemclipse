@@ -54,7 +54,7 @@ public class HighPassMassSpectrumFilter extends AbstractMassSpectrumFilter {
 			int numberHighest = xpassMassSpectrumFilterSettings.getNumberHighest();
 			//
 			for(IScanMSD massSpectrum : massSpectra) {
-				List<IIon> ions = massSpectrum.getIons();
+				List<IIon> ions = new ArrayList<>(massSpectrum.getIons());
 				Collections.sort(ions, new IonAbundanceComparator(SortOrder.DESC));
 				List<IIon> ionsToRemove = new ArrayList<IIon>();
 				int counter = 0;

@@ -54,7 +54,7 @@ public class LowPassMassSpectrumFilter extends AbstractMassSpectrumFilter {
 			int numberLowest = xpassMassSpectrumFilterSettings.getNumberLowest();
 			//
 			for(IScanMSD massSpectrum : massSpectra) {
-				List<IIon> ions = massSpectrum.getIons();
+				List<IIon> ions = new ArrayList<>(massSpectrum.getIons());
 				Collections.sort(ions, new IonAbundanceComparator(SortOrder.ASC));
 				List<IIon> ionsToRemove = new ArrayList<IIon>();
 				int counter = 0;
