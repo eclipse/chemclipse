@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.editors;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.internal.runnables.BatchProcessRunnable;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -241,6 +239,7 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 		imageHyperlink.setLayoutData(gridData);
 		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
 
+			@Override
 			public void linkActivated(HyperlinkEvent e) {
 
 				editorPart.setActivePage(BatchProcessJobEditor.INPUT_FILES_PAGE);
@@ -267,6 +266,7 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 		imageHyperlink.setLayoutData(gridData);
 		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
 
+			@Override
 			public void linkActivated(HyperlinkEvent e) {
 
 				editorPart.setActivePage(BatchProcessJobEditor.PROCESS_ENTRIES_PAGE);
@@ -293,6 +293,7 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 		imageHyperlink.setLayoutData(gridData);
 		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
 
+			@Override
 			public void linkActivated(HyperlinkEvent e) {
 
 				editorPart.setActivePage(BatchProcessJobEditor.OUTPUT_FILES_PAGE);
@@ -319,6 +320,7 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 		imageHyperlink.setLayoutData(gridData);
 		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
 
+			@Override
 			public void linkActivated(HyperlinkEvent e) {
 
 				editorPart.setActivePage(BatchProcessJobEditor.REPORT_ENTRIES_PAGE);
@@ -344,6 +346,7 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 		imageHyperlink.setLayoutData(gridData);
 		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
 
+			@Override
 			public void linkActivated(HyperlinkEvent e) {
 
 				/*
@@ -372,10 +375,8 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 						 * Refresh the workspace
 						 */
 						refreshWorkspace(path);
-					} catch(InvocationTargetException ex) {
-						logger.warn(ex);
-					} catch(InterruptedException ex) {
-						logger.warn(ex);
+					} catch(Exception ex) {
+						logger.error(ex.getLocalizedMessage(), ex);
 					}
 				}
 			}
