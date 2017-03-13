@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -388,7 +389,7 @@ public class ChromatogramReport {
 		 * Print the highest m/z abundance values
 		 */
 		IPeakMassSpectrum peakMassSpectrum = peakModel.getPeakMassSpectrum();
-		List<IIon> ions = peakMassSpectrum.getIons();
+		List<IIon> ions = new ArrayList<>(peakMassSpectrum.getIons());
 		/*
 		 * Check how many ions shall be printed.
 		 */
