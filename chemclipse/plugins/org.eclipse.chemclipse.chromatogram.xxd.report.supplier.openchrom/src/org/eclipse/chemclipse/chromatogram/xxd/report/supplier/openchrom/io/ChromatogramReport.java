@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -160,7 +161,7 @@ public class ChromatogramReport {
 		/*
 		 * Print
 		 */
-		List<IChromatogramPeakMSD> peaks = chromatogram.getPeaks();
+		List<IChromatogramPeakMSD> peaks = new ArrayList<IChromatogramPeakMSD>(chromatogram.getPeaks());
 		Collections.sort(peaks, chromatogramPeakRTComparator);
 		//
 		printWriter.println("");
@@ -224,7 +225,7 @@ public class ChromatogramReport {
 		/*
 		 * Print
 		 */
-		List<IChromatogramPeakCSD> peaks = chromatogram.getPeaks();
+		List<IChromatogramPeakCSD> peaks = new ArrayList<IChromatogramPeakCSD>(chromatogram.getPeaks());
 		Collections.sort(peaks, chromatogramPeakCSDComparator);
 		//
 		printWriter.println("");
@@ -396,7 +397,7 @@ public class ChromatogramReport {
 		 * Print the highest m/z abundance values
 		 */
 		IPeakMassSpectrum peakMassSpectrum = peakModel.getPeakMassSpectrum();
-		List<IIon> ions = peakMassSpectrum.getIons();
+		List<IIon> ions = new ArrayList<IIon>(peakMassSpectrum.getIons());
 		/*
 		 * Check how many ions shall be printed.
 		 */
