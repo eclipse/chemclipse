@@ -42,7 +42,7 @@ public class FilterSupplier {
 	private void applySnipTransition(IScanMSD massSpectrum, int iterations, double magnificationFactor, IProgressMonitor monitor) {
 
 		int extraValues = 6; // Leading and tailing extra values.
-		List<IIon> ions = massSpectrum.getIons();
+		List<IIon> ions = new ArrayList<>(massSpectrum.getIons());
 		Collections.sort(ions, new IonValueComparator());
 		float[] intensityValues = getIntensityValues(ions, extraValues);
 		/*
