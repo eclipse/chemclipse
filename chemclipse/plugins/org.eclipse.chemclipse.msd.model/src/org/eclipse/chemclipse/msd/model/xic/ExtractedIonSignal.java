@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.xic;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -67,6 +68,7 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 	}
 
 	public ExtractedIonSignal(List<IIon> ions) {
+		ions = new ArrayList<>(ions);
 		if(ions != null && ions.size() > 0) {
 			Collections.sort(ions, new IonValueComparator());
 			this.startIon = AbstractIon.getIon(ions.get(0).getIon());

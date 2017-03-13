@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.support;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -145,6 +146,7 @@ public class TargetBuilder {
 
 	private ILibraryInformation getLibraryInformationUnknown(List<IIon> ions) {
 
+		ions = new ArrayList<>(ions);
 		ILibraryInformation libraryInformation = new LibraryInformation();
 		Collections.sort(ions, ionAbundanceComparator);
 		StringBuilder builder = new StringBuilder();
