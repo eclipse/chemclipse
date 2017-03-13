@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.msd.model.core;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -713,6 +714,10 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	public void setOptimizedMassSpectrum(IScanMSD optimizedMassSpectrum) {
 
 		this.optimizedMassSpectrum = optimizedMassSpectrum;
+	}
+	
+	protected void setIons(Collection<? extends IIon> ions){
+		this.ionsList = new ArrayList<>(ions);
 	}
 
 	@Override

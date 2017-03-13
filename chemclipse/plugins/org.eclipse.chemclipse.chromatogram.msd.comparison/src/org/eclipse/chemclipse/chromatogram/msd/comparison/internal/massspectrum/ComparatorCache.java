@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.internal.massspectrum;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -109,7 +110,7 @@ public class ComparatorCache {
 		/*
 		 * Extract the list of n top ions.
 		 */
-		List<IIon> ions = massSpectrum.getIons();
+		List<IIon> ions = new ArrayList<>(massSpectrum.getIons());
 		Collections.sort(ions, ionAbundanceComparator);
 		Set<Integer> topIons = new HashSet<Integer>();
 		int size = (ions.size() < NUMBER_TOP_IONS) ? ions.size() : NUMBER_TOP_IONS;
