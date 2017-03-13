@@ -96,7 +96,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	public AbstractScanMSD(IScanMSD templateScan) {
 		super(templateScan);
 		init();
-		this.ionsList = templateScan.getIons();
+		this.ionsList = new ArrayList<>(templateScan.getIons());
 		this.isNormalized = templateScan.isNormalized();
 		this.normalizationBase = templateScan.getNormalizationBase();
 		this.optimizedMassSpectrum = templateScan.getOptimizedMassSpectrum();
