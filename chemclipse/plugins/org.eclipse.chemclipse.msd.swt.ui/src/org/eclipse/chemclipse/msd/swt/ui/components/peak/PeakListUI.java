@@ -355,6 +355,7 @@ public class PeakListUI {
 	private String getName(List<IPeakTarget> targets) {
 
 		String name = "peak is not identified yet";
+		targets = new ArrayList<>(targets);
 		Collections.sort(targets, targetExtendedComparator);
 		if(targets.size() >= 1) {
 			name = targets.get(0).getLibraryInformation().getName();

@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.support;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -37,6 +38,7 @@ public class PeakQuantitationsExtractor {
 			/*
 			 * Sort peak list by retention time.
 			 */
+			peaks = new ArrayList<>(peaks);
 			Collections.sort(peaks, chromatogramPeakRetentionTimeComparator);
 			//
 			Set<String> quantitationColumns = new HashSet<String>();
