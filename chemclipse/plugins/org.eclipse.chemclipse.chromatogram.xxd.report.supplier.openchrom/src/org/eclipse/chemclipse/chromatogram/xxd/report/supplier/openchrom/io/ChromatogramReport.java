@@ -153,7 +153,7 @@ public class ChromatogramReport {
 		/*
 		 * Print
 		 */
-		List<IChromatogramPeakMSD> peaks = chromatogram.getPeaks();
+		List<IChromatogramPeakMSD> peaks = new ArrayList<>(chromatogram.getPeaks());
 		Collections.sort(peaks, new ChromatogramPeakRetentionTimeComparator(SortOrder.ASC));
 		//
 		printWriter.println("");
@@ -217,7 +217,7 @@ public class ChromatogramReport {
 		/*
 		 * Print
 		 */
-		List<IChromatogramPeakCSD> peaks = chromatogram.getPeaks();
+		List<IChromatogramPeakCSD> peaks = new ArrayList<>(chromatogram.getPeaks());
 		Collections.sort(peaks, new ChromatogramPeakCSDComparator(SortOrder.ASC));
 		//
 		printWriter.println("");
