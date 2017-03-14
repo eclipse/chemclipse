@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.csd.ui.views;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -405,8 +406,8 @@ public class PeakListCSDView extends AbstractChromatogramSelectionCSDView {
 		 * TODO refactor Editor CSD, MSD, WSD and peak list view!
 		 */
 		IChromatogramCSD chromatogramCSD = chromatogramSelection.getChromatogramCSD();
-		List<IChromatogramPeakCSD> peaks = chromatogramCSD.getPeaks();
-		List<IChromatogramPeakCSD> peaksSelection = chromatogramCSD.getPeaks(chromatogramSelection);
+		List<IChromatogramPeakCSD> peaks = new ArrayList<>(chromatogramCSD.getPeaks());
+		List<IChromatogramPeakCSD> peaksSelection = new ArrayList<>(chromatogramCSD.getPeaks(chromatogramSelection));
 		Collections.sort(peaks, chromatogramPeakComparator);
 		Collections.sort(peaksSelection, chromatogramPeakComparator);
 		//
