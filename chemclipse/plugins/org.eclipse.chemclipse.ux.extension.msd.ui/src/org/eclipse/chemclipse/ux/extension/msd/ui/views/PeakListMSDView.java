@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.views;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -537,8 +538,8 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 		 * TODO refactor Editor CSD, MSD, WSD and peak list view!
 		 */
 		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogramMSD();
-		List<IChromatogramPeakMSD> peaks = chromatogramMSD.getPeaks();
-		List<IChromatogramPeakMSD> peaksSelection = chromatogramMSD.getPeaks(chromatogramSelection);
+		List<IChromatogramPeakMSD> peaks = new ArrayList<>(chromatogramMSD.getPeaks());
+		List<IChromatogramPeakMSD> peaksSelection = new ArrayList<>(chromatogramMSD.getPeaks(chromatogramSelection));
 		Collections.sort(peaks, chromatogramPeakComparator);
 		Collections.sort(peaksSelection, chromatogramPeakComparator);
 		//
