@@ -187,7 +187,7 @@ public abstract class AbstractWriter {
 			/*
 			 * Scan/Chromatogram MS
 			 */
-			List<IMassSpectrumTarget> targets = massSpectrum.getTargets();
+			List<IMassSpectrumTarget> targets = new ArrayList<>(massSpectrum.getTargets());
 			Collections.sort(targets, targetExtendedComparator);
 			if(targets.size() >= 1) {
 				identificationTarget = targets.get(0);
