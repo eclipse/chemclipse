@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.swt.ui.components.chromatogram;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -322,8 +323,8 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 		 * TODO refactor Editor CSD, MSD, WSD and peak list view!
 		 */
 		IChromatogramCSD chromatogramCSD = chromatogramSelection.getChromatogramCSD();
-		List<IChromatogramPeakCSD> peaks = chromatogramCSD.getPeaks();
-		List<IChromatogramPeakCSD> peaksSelection = chromatogramCSD.getPeaks(chromatogramSelection);
+		List<IChromatogramPeakCSD> peaks = new ArrayList<>(chromatogramCSD.getPeaks());
+		List<IChromatogramPeakCSD> peaksSelection = new ArrayList<>(chromatogramCSD.getPeaks(chromatogramSelection));
 		Collections.sort(peaks, chromatogramPeakComparator);
 		Collections.sort(peaksSelection, chromatogramPeakComparator);
 		//
