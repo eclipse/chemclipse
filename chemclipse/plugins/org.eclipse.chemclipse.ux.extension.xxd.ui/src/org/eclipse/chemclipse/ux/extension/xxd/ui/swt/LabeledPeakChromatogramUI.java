@@ -255,7 +255,7 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 				 * cause printing the labels depends on the position
 				 * in the list.
 				 */
-				List<IMassSpectrumTarget> massSpectrumTargets = scanMSD.getTargets();
+				List<IMassSpectrumTarget> massSpectrumTargets = new ArrayList<>(scanMSD.getTargets());
 				if(massSpectrumTargets.size() == 0) {
 					labels.add("");
 				} else {

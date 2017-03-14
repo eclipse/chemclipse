@@ -73,10 +73,10 @@ public class PeakTableTargetComparator extends AbstractRecordTableComparator imp
 			List<IPeakTarget> peakTargets2 = null;
 			if(peak1 instanceof IPeakMSD) {
 				IPeakMSD peakMSD = (IPeakMSD)peak2;
-				peakTargets2 = peakMSD.getTargets();
+				peakTargets2 = new ArrayList<>(peakMSD.getTargets());
 			} else if(peak2 instanceof IPeakCSD) {
 				IPeakCSD peakCSD = (IPeakCSD)peak2;
-				peakTargets2 = peakCSD.getTargets();
+				peakTargets2 = new ArrayList<>(peakCSD.getTargets());
 			}
 			//
 			String peakTarget2 = "";
