@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -182,6 +183,7 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 	private ILibraryInformation getLibraryInformation(List<IMassSpectrumTarget> targets) {
 
 		ILibraryInformation libraryInformation = null;
+		targets = new ArrayList<>(targets);
 		Collections.sort(targets, targetExtendedComparator);
 		if(targets.size() >= 1) {
 			libraryInformation = targets.get(0).getLibraryInformation();

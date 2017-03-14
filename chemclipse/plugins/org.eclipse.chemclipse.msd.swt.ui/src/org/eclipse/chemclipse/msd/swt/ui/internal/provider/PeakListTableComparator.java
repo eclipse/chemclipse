@@ -116,6 +116,7 @@ public class PeakListTableComparator extends AbstractRecordTableComparator imple
 	private ILibraryInformation getLibraryInformation(List<IPeakTarget> targets) {
 
 		ILibraryInformation libraryInformation = null;
+		targets = new ArrayList<>(targets);
 		Collections.sort(targets, targetExtendedComparator);
 		if(targets.size() >= 1) {
 			libraryInformation = targets.get(0).getLibraryInformation();
