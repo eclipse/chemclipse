@@ -274,6 +274,10 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 
 		return Collections.unmodifiableList(ionsList);
 	}
+	
+	public void clearIons(){
+		this.ionsList.clear();
+	}
 
 	@Override
 	public float getTotalSignal(IMarkedIons excludedIons) {
