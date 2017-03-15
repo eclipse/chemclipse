@@ -195,10 +195,15 @@ public abstract class AbstractExtendedEditorPage implements IExtendedEditorPage 
 
 	protected Composite createClient(Section section) {
 
+		return createClient(section, 1);
+	}
+
+	protected Composite createClient(Section section, int numColumns) {
+
 		Composite client = toolkit.createComposite(section, SWT.WRAP);
 		//
 		GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 1;
+		gridLayout.numColumns = numColumns;
 		gridLayout.marginWidth = 2;
 		gridLayout.marginHeight = 2;
 		gridLayout.marginTop = 10;
