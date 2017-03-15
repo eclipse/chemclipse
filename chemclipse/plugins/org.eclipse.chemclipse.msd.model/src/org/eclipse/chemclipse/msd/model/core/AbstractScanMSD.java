@@ -274,8 +274,9 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 
 		return Collections.unmodifiableList(ionsList);
 	}
-	
-	public void clearIons(){
+
+	public void clearIons() {
+
 		this.ionsList.clear();
 	}
 
@@ -719,8 +720,9 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 
 		this.optimizedMassSpectrum = optimizedMassSpectrum;
 	}
-	
-	protected void setIons(Collection<? extends IIon> ions){
+
+	protected void setIons(Collection<? extends IIon> ions) {
+
 		this.ionsList = new ArrayList<>(ions);
 	}
 
