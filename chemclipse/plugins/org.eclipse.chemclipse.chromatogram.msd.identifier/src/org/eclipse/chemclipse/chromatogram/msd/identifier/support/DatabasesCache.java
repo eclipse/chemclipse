@@ -194,7 +194,7 @@ public class DatabasesCache {
 		IMassSpectrumImportConverterProcessingInfo infoConvert = MassSpectrumConverter.convert(file, monitor);
 		IMassSpectra massSpectraDatabase = infoConvert.getMassSpectra();
 		/*
-		 * Add the datababse to databases.
+		 * Add the database to databases.
 		 */
 		String databaseName = file.getName();
 		massSpectraDatabases.put(databaseName, massSpectraDatabase);
