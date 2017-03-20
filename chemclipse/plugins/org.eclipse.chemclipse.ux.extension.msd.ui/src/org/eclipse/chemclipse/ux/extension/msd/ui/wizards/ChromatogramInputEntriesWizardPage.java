@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Composite;
 
 public class ChromatogramInputEntriesWizardPage extends WizardPage {
 
-	// private static final Logger logger = Logger.getLogger(ChromatogramInputEntriesWizardPage.class);
 	private ChromatogramInputEntriesUI content;
 	private final IChromatogramWizardElements chromatogramWizardElements;
 

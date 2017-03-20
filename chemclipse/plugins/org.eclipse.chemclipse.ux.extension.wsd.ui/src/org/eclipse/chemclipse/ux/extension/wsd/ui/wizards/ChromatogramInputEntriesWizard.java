@@ -18,12 +18,22 @@ public class ChromatogramInputEntriesWizard extends Wizard {
 
 	private ChromatogramInputEntriesWizardPage inputEntriesPage;
 	private IChromatogramWizardElements chromatogramWizardElements;
+	//
+	private String title;
+	private String description;
 
 	public ChromatogramInputEntriesWizard(IChromatogramWizardElements chromatogramWizardElements) {
+		//
+		this(chromatogramWizardElements, "", "");
+	}
+
+	public ChromatogramInputEntriesWizard(IChromatogramWizardElements chromatogramWizardElements, String title, String description) {
 		//
 		super();
 		setNeedsProgressMonitor(true);
 		this.chromatogramWizardElements = chromatogramWizardElements;
+		this.title = (title == null) ? "" : title;
+		this.description = (description == null) ? "" : description;
 	}
 
 	@Override
@@ -35,7 +45,11 @@ public class ChromatogramInputEntriesWizard extends Wizard {
 	@Override
 	public void addPages() {
 
-		inputEntriesPage = new ChromatogramInputEntriesWizardPage(chromatogramWizardElements);
+		if(title.equals("") && description.equals("")) {
+			inputEntriesPage = new ChromatogramInputEntriesWizardPage(chromatogramWizardElements);
+		} else {
+			inputEntriesPage = new ChromatogramInputEntriesWizardPage(chromatogramWizardElements, title, description);
+		}
 		addPage(inputEntriesPage);
 	}
 }
