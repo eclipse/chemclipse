@@ -68,11 +68,19 @@ public class ChromatogramReport {
 	private PeakQuantitationsExtractor peakQuantitationsExtractor;
 	private DecimalFormat decimalFormat;
 	private DateFormat dateFormat;
+	//
+	private IonAbundanceComparator ionAbundanceComparator;
+	private ChromatogramPeakRetentionTimeComparator chromatogramPeakRTComparator;
+	private ChromatogramPeakCSDComparator chromatogramPeakCSDComparator;
 
 	public ChromatogramReport() {
 		peakQuantitationsExtractor = new PeakQuantitationsExtractor();
 		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0####");
 		dateFormat = ValueFormat.getDateFormatEnglish();
+		//
+		ionAbundanceComparator = new IonAbundanceComparator(SortOrder.DESC);
+		chromatogramPeakRTComparator = new ChromatogramPeakRetentionTimeComparator(SortOrder.ASC);
+		chromatogramPeakCSDComparator = new ChromatogramPeakCSDComparator(SortOrder.ASC);
 	}
 
 	public void generate(File file, boolean append, List<IChromatogram> chromatograms, IChemClipseChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) throws IOException {
@@ -153,8 +161,8 @@ public class ChromatogramReport {
 		/*
 		 * Print
 		 */
-		List<IChromatogramPeakMSD> peaks = new ArrayList<>(chromatogram.getPeaks());
-		Collections.sort(peaks, new ChromatogramPeakRetentionTimeComparator(SortOrder.ASC));
+		List<IChromatogramPeakMSD> peaks = new ArrayList<IChromatogramPeakMSD>(chromatogram.getPeaks());
+		Collections.sort(peaks, chromatogramPeakRTComparator);
 		//
 		printWriter.println("");
 		printWriter.println("NAME: " + chromatogram.getName());
@@ -217,8 +225,8 @@ public class ChromatogramReport {
 		/*
 		 * Print
 		 */
-		List<IChromatogramPeakCSD> peaks = new ArrayList<>(chromatogram.getPeaks());
-		Collections.sort(peaks, new ChromatogramPeakCSDComparator(SortOrder.ASC));
+		List<IChromatogramPeakCSD> peaks = new ArrayList<IChromatogramPeakCSD>(chromatogram.getPeaks());
+		Collections.sort(peaks, chromatogramPeakCSDComparator);
 		//
 		printWriter.println("");
 		printWriter.println("NAME: " + chromatogram.getName());
@@ -389,12 +397,12 @@ public class ChromatogramReport {
 		 * Print the highest m/z abundance values
 		 */
 		IPeakMassSpectrum peakMassSpectrum = peakModel.getPeakMassSpectrum();
-		List<IIon> ions = new ArrayList<>(peakMassSpectrum.getIons());
+		List<IIon> ions = new ArrayList<IIon>(peakMassSpectrum.getIons());
 		/*
 		 * Check how many ions shall be printed.
 		 */
 		int numberOfIonsToPrint = (ions.size() < NUMBER_OF_IONS_TO_PRINT) ? ions.size() : NUMBER_OF_IONS_TO_PRINT;
-		Collections.sort(ions, new IonAbundanceComparator(SortOrder.DESC));
+		Collections.sort(ions, ionAbundanceComparator);
 		StringBuilder builder = new StringBuilder();
 		for(int i = 0; i < numberOfIonsToPrint; i++) {
 			IIon ion = ions.get(i);
