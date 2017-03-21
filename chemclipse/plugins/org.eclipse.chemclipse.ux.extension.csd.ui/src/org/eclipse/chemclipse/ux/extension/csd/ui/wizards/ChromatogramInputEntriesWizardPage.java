@@ -32,8 +32,11 @@ import org.eclipse.swt.widgets.Composite;
 public class ChromatogramInputEntriesWizardPage extends WizardPage {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramInputEntriesWizardPage.class);
+	//
 	private TreeViewer chromatogramViewer;
-	private IChromatogramWizardElements chromatogramWizardElements;
+	//
+	private final IChromatogramWizardElements chromatogramWizardElements;
+	private final String expandToDirectoryPath;
 
 	public ChromatogramInputEntriesWizardPage(IChromatogramWizardElements chromatogramWizardElements) {
 		//
@@ -42,10 +45,16 @@ public class ChromatogramInputEntriesWizardPage extends WizardPage {
 
 	public ChromatogramInputEntriesWizardPage(IChromatogramWizardElements chromatogramWizardElements, String title, String description) {
 		//
+		this(chromatogramWizardElements, title, description, "");
+	}
+
+	public ChromatogramInputEntriesWizardPage(IChromatogramWizardElements chromatogramWizardElements, String title, String description, String expandToDirectoryPath) {
+		//
 		super(ChromatogramInputEntriesWizardPage.class.getName());
 		setTitle(title);
 		setDescription(description);
 		this.chromatogramWizardElements = chromatogramWizardElements;
+		this.expandToDirectoryPath = expandToDirectoryPath;
 	}
 
 	/**
@@ -87,7 +96,11 @@ public class ChromatogramInputEntriesWizardPage extends WizardPage {
 				}
 			}
 		});
-		TreeViewerFilesystemSupport.retrieveAndSetLocalFileSystem(chromatogramViewer);
+		/*
+		 * Load the content asynchronously.
+		 * To expand the tree, the element or tree path needs to be set here.
+		 */
+		TreeViewerFilesystemSupport.retrieveAndSetLocalFileSystem(chromatogramViewer, expandToDirectoryPath);
 		/*
 		 * Set the control.
 		 */

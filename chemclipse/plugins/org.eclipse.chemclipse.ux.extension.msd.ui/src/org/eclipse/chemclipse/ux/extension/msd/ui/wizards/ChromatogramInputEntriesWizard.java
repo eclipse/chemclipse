@@ -21,7 +21,7 @@ public class ChromatogramInputEntriesWizard extends Wizard {
 	//
 	private String title;
 	private String description;
-	private String directoryPath;
+	private String expandToDirectoryPath;
 
 	public ChromatogramInputEntriesWizard(IChromatogramWizardElements chromatogramWizardElements) {
 		//
@@ -30,11 +30,17 @@ public class ChromatogramInputEntriesWizard extends Wizard {
 
 	public ChromatogramInputEntriesWizard(IChromatogramWizardElements chromatogramWizardElements, String title, String description) {
 		//
+		this(chromatogramWizardElements, title, description, "");
+	}
+
+	public ChromatogramInputEntriesWizard(IChromatogramWizardElements chromatogramWizardElements, String title, String description, String expandToDirectoryPath) {
+		//
 		super();
 		setNeedsProgressMonitor(true);
 		this.chromatogramWizardElements = chromatogramWizardElements;
-		this.directoryPath = (directoryPath == null) ? "" : directoryPath;
 		this.title = (title == null) ? "" : title;
+		this.description = (description == null) ? "" : description;
+		this.expandToDirectoryPath = (expandToDirectoryPath == null) ? "" : expandToDirectoryPath;
 	}
 
 	@Override
@@ -49,9 +55,8 @@ public class ChromatogramInputEntriesWizard extends Wizard {
 		if(title.equals("") && description.equals("")) {
 			inputEntriesPage = new ChromatogramInputEntriesWizardPage(chromatogramWizardElements);
 		} else {
-			inputEntriesPage = new ChromatogramInputEntriesWizardPage(chromatogramWizardElements, title, description);
+			inputEntriesPage = new ChromatogramInputEntriesWizardPage(chromatogramWizardElements, title, description, expandToDirectoryPath);
 		}
-		inputEntriesPage.expandTree(directoryPath);
 		addPage(inputEntriesPage);
 	}
 }

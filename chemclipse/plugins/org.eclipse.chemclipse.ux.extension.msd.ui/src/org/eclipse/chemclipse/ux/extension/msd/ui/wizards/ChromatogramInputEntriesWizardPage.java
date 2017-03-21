@@ -20,8 +20,10 @@ import org.eclipse.swt.widgets.Composite;
 
 public class ChromatogramInputEntriesWizardPage extends WizardPage {
 
-	private ChromatogramInputEntriesUI content;
+	private ChromatogramInputEntriesUI chromatogramInputEntriesUI;
+	//
 	private final IChromatogramWizardElements chromatogramWizardElements;
+	private final String expandToDirectoryPath;
 
 	public ChromatogramInputEntriesWizardPage(IChromatogramWizardElements chromatogramWizardElements) {
 		//
@@ -30,10 +32,16 @@ public class ChromatogramInputEntriesWizardPage extends WizardPage {
 
 	public ChromatogramInputEntriesWizardPage(IChromatogramWizardElements chromatogramWizardElements, String title, String description) {
 		//
+		this(chromatogramWizardElements, title, description, "");
+	}
+
+	public ChromatogramInputEntriesWizardPage(IChromatogramWizardElements chromatogramWizardElements, String title, String description, String expandToDirectoryPath) {
+		//
 		super(ChromatogramInputEntriesWizardPage.class.getName());
 		setTitle(title);
 		setDescription(description);
 		this.chromatogramWizardElements = chromatogramWizardElements;
+		this.expandToDirectoryPath = expandToDirectoryPath;
 	}
 
 	@Override
@@ -41,7 +49,8 @@ public class ChromatogramInputEntriesWizardPage extends WizardPage {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());
-		content = new ChromatogramInputEntriesUI(composite, SWT.NONE).setChromatogramWizardElements(chromatogramWizardElements);
+		chromatogramInputEntriesUI = new ChromatogramInputEntriesUI(composite, SWT.NONE, expandToDirectoryPath);
+		chromatogramInputEntriesUI.setChromatogramWizardElements(chromatogramWizardElements);
 		setControl(composite);
 	}
 
@@ -52,6 +61,6 @@ public class ChromatogramInputEntriesWizardPage extends WizardPage {
 	 */
 	public void expandTree(String directoryPath) {
 
-		content.expandTree(directoryPath);
+		chromatogramInputEntriesUI.expandTree(directoryPath);
 	}
 }

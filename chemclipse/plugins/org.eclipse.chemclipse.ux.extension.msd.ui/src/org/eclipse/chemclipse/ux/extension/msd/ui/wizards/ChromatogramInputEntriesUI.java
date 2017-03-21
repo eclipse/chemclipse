@@ -30,12 +30,18 @@ import org.eclipse.swt.widgets.Composite;
 public class ChromatogramInputEntriesUI extends Composite {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramInputEntriesUI.class);
+	//
 	private TreeViewer chromatogramViewer;
 	private IChromatogramWizardElements chromatogramWizardElements = new ChromatogramWizardElements();
 
 	public ChromatogramInputEntriesUI(Composite parent, int style) {
+		this(parent, style, "");
+	}
+
+	public ChromatogramInputEntriesUI(Composite parent, int style, String expandToDirectoryPath) {
 		super(parent, style);
 		setLayout(new FillLayout());
+		//
 		chromatogramViewer = new TreeViewer(this, SWT.MULTI);
 		chromatogramViewer.setLabelProvider(new ChromatogramFileExplorerLabelProvider(ChromatogramSupport.getInstanceIdentifier()));
 		chromatogramViewer.setContentProvider(new ChromatogramFileExplorerContentProvider(ChromatogramSupport.getInstanceIdentifier()));
@@ -52,7 +58,11 @@ public class ChromatogramInputEntriesUI extends Composite {
 				}
 			}
 		});
-		TreeViewerFilesystemSupport.retrieveAndSetLocalFileSystem(chromatogramViewer);
+		/*
+		 * Load the content asynchronously.
+		 * To expand the tree, the element or tree path needs to be set here.
+		 */
+		TreeViewerFilesystemSupport.retrieveAndSetLocalFileSystem(chromatogramViewer, expandToDirectoryPath);
 	}
 
 	public File getCurrentDirectory() {
@@ -72,6 +82,9 @@ public class ChromatogramInputEntriesUI extends Composite {
 
 	/**
 	 * The given directory will be expanded if available.
+	 * Note, that the tree content is set asynchronously. The content must be available
+	 * when setting the directory path. Rather use the constructor to ensure that the
+	 * tree is expanded correctly.
 	 * 
 	 * @param directoryPath
 	 */
