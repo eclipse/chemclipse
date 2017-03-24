@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.support.ui.provider;
 
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -24,6 +25,8 @@ public class ListContentProvider implements IStructuredContentProvider {
 
 		if(inputElement instanceof List) {
 			return ((List)inputElement).toArray();
+		} else if(inputElement instanceof Set) {
+			return ((Set)inputElement).toArray();
 		}
 		return null;
 	}
