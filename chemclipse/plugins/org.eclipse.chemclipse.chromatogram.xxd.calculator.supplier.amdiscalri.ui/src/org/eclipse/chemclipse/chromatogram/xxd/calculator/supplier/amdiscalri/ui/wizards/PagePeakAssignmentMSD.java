@@ -32,7 +32,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.LibraryMassSpectrumComparisonUI;
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumComparisonUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -64,7 +64,7 @@ public class PagePeakAssignmentMSD extends AbstractExtendedWizardPage {
 	//
 	private IRetentionIndexWizardElements wizardElements;
 	private PeakTableRetentionIndexViewerUI peakTableViewerUI;
-	private LibraryMassSpectrumComparisonUI libraryMassSpectrumComparisonUI;
+	private MassSpectrumComparisonUI libraryMassSpectrumComparisonUI;
 	private PeakTargetsViewerUI targetsViewerUI;
 	private Button buttonPrevious;
 	private Text textCurrentIndexName;
@@ -240,7 +240,7 @@ public class PagePeakAssignmentMSD extends AbstractExtendedWizardPage {
 		gridData.horizontalSpan = 3;
 		parent.setLayoutData(gridData);
 		parent.setLayout(new FillLayout());
-		libraryMassSpectrumComparisonUI = new LibraryMassSpectrumComparisonUI(parent, SWT.NONE, MassValueDisplayPrecision.NOMINAL);
+		libraryMassSpectrumComparisonUI = new MassSpectrumComparisonUI(parent, SWT.NONE, MassValueDisplayPrecision.NOMINAL, "UNKNOWN", "LIBRARY");
 	}
 
 	private void createTargetSpinnerField(Composite composite) {
