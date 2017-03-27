@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2017 Lablicate GmbH.
- * 
- * All rights reserved.
- * This program and the accompanying materials are made available under the
- * terms of the Eclipse Public License v1.0 which accompanies this distribution,
- * and is available at http://www.eclipse.org/legal/epl-v10.html
+ * Copyright (c) 2017 Lablicate GmbH.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
@@ -25,30 +25,25 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.osgi.service.event.EventHandler;
 
-public class MassSpectrumLibraryStackView extends AbstractMassSpectrumLibraryView {
+public class MassSpectrumStackPart extends AbstractMassSpectrumComparisonPart {
 
 	@Inject
 	private Composite parent;
-	//
-	private MassSpectrumStackUI libraryMassSpectrumStackUI;
+	private MassSpectrumStackUI massSpectrumStackUI;
 
 	@Inject
-	public MassSpectrumLibraryStackView(MPart part, EPartService partService, IEventBroker eventBroker) {
-		super(part, partService, eventBroker);
+	public MassSpectrumStackPart(EPartService partService, MPart part, IEventBroker eventBroker, EventHandler eventHandler) {
+		super(partService, part, eventBroker, eventHandler);
 	}
 
 	@PostConstruct
 	private void createControl() {
 
 		parent.setLayout(new FillLayout());
-		libraryMassSpectrumStackUI = new MassSpectrumStackUI(parent, SWT.NONE, MassValueDisplayPrecision.NOMINAL, "UNKNOWN", "LIBRARY");
-	}
-
-	@Focus
-	public void setFocus() {
-
-		libraryMassSpectrumStackUI.setFocus();
+		massSpectrumStackUI = new MassSpectrumStackUI(parent, SWT.BORDER, MassValueDisplayPrecision.NOMINAL, "REFERENCE", "COMPARISON");
+		subscribe();
 	}
 
 	@PreDestroy
@@ -57,9 +52,20 @@ public class MassSpectrumLibraryStackView extends AbstractMassSpectrumLibraryVie
 		unsubscribe();
 	}
 
-	@Override
-	public void update(IScanMSD unknownMassSpectrum, IScanMSD libraryMassSpectrum, boolean forceReload) {
+	@Focus
+	public void setFocus() {
 
-		libraryMassSpectrumStackUI.update(unknownMassSpectrum, libraryMassSpectrum, true);
+		massSpectrumStackUI.setFocus();
+		update();
+	}
+
+	@Override
+	public void update() {
+
+		if(doUpdate()) {
+			IScanMSD referenceMassSpectrum = getReferenceMassSpectrum();
+			IScanMSD comparisonMassSpectrum = getComparisonMassSpectrum();
+			massSpectrumStackUI.update(referenceMassSpectrum, comparisonMassSpectrum, true);
+		}
 	}
 }

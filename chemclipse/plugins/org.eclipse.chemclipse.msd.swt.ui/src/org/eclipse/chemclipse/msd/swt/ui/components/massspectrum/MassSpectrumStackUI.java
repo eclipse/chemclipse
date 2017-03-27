@@ -24,25 +24,31 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class LibraryMassSpectrumStackUI extends Composite {
+public class MassSpectrumStackUI extends Composite {
 
-	private static final Logger logger = Logger.getLogger(LibraryMassSpectrumStackUI.class);
+	private static final Logger logger = Logger.getLogger(MassSpectrumStackUI.class);
 	//
-	private StackedMassSpectrumUI stackedMassSpectrumUnknown;
-	private StackedMassSpectrumUI stackedMassSpectrumLibrary;
+	private StackedMassSpectrumUI stackedMassSpectrumReference;
+	private StackedMassSpectrumUI stackedMassSpectrumComparison;
 	//
 	private DecimalFormat decimalFormat;
 	private MassValueDisplayPrecision massValueDisplayPrecision;
 	//
+	private String labelReference = "";
+	private String labelComparison = "";
+	//
 	public static final int MAX_LENGTH_NAME = 20;
 
-	public LibraryMassSpectrumStackUI(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
+	public MassSpectrumStackUI(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision, String labelReference, String labelComparison) {
 		super(parent, style);
 		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 		/*
 		 * Mass spectrum type, nominal or accurate
 		 */
 		this.massValueDisplayPrecision = massValueDisplayPrecision;
+		this.labelReference = labelReference;
+		this.labelComparison = labelComparison;
+		//
 		initialize(parent);
 	}
 
@@ -52,42 +58,42 @@ public class LibraryMassSpectrumStackUI extends Composite {
 		Composite composite = new Composite(this, SWT.FILL);
 		composite.setLayout(new FillLayout(SWT.VERTICAL));
 		//
-		stackedMassSpectrumUnknown = new StackedMassSpectrumUI(composite, SWT.FILL, massValueDisplayPrecision);
-		stackedMassSpectrumLibrary = new StackedMassSpectrumUI(composite, SWT.FILL, massValueDisplayPrecision);
-		stackedMassSpectrumUnknown.setOtherStackedMassSpectrumUI(stackedMassSpectrumLibrary);
-		stackedMassSpectrumLibrary.setOtherStackedMassSpectrumUI(stackedMassSpectrumUnknown);
+		stackedMassSpectrumReference = new StackedMassSpectrumUI(composite, SWT.FILL, massValueDisplayPrecision);
+		stackedMassSpectrumComparison = new StackedMassSpectrumUI(composite, SWT.FILL, massValueDisplayPrecision);
+		stackedMassSpectrumReference.setOtherStackedMassSpectrumUI(stackedMassSpectrumComparison);
+		stackedMassSpectrumComparison.setOtherStackedMassSpectrumUI(stackedMassSpectrumReference);
 	}
 
-	public void update(IScanMSD unknownMassSpectrum, IScanMSD libraryMassSpectrum, boolean forceReload) {
+	public void update(IScanMSD referenceMassSpectrum, IScanMSD comparisonMassSpectrum, boolean forceReload) {
 
-		if(unknownMassSpectrum != null && libraryMassSpectrum != null) {
+		if(referenceMassSpectrum != null && comparisonMassSpectrum != null) {
 			try {
-				IScanMSD unknownMassSpectrumCopy = unknownMassSpectrum.makeDeepCopy().normalize(1000.0f);
-				IScanMSD libraryMassSpectrumCopy = libraryMassSpectrum.makeDeepCopy().normalize(1000.0f);
+				IScanMSD referenceMassSpectrumCopy = referenceMassSpectrum.makeDeepCopy().normalize(1000.0f);
+				IScanMSD comparisonMassSpectrumCopy = comparisonMassSpectrum.makeDeepCopy().normalize(1000.0f);
 				//
-				IExtractedIonSignal unknownMS = unknownMassSpectrumCopy.getExtractedIonSignal();
-				IExtractedIonSignal libraryMS = libraryMassSpectrumCopy.getExtractedIonSignal();
+				IExtractedIonSignal unknownMS = referenceMassSpectrumCopy.getExtractedIonSignal();
+				IExtractedIonSignal libraryMS = comparisonMassSpectrumCopy.getExtractedIonSignal();
 				int startMZ = ((unknownMS.getStartIon() < libraryMS.getStartIon()) ? unknownMS.getStartIon() : libraryMS.getStartIon()) - 1;
 				int stopMZ = ((unknownMS.getStopIon() > libraryMS.getStopIon()) ? unknownMS.getStopIon() : libraryMS.getStopIon()) + 1;
-				stackedMassSpectrumUnknown.setFixedAxisRangeX(startMZ, stopMZ);
-				stackedMassSpectrumLibrary.setFixedAxisRangeX(startMZ, stopMZ);
+				stackedMassSpectrumReference.setFixedAxisRangeX(startMZ, stopMZ);
+				stackedMassSpectrumComparison.setFixedAxisRangeX(startMZ, stopMZ);
 				//
-				setMassSpectrumLabel(unknownMassSpectrumCopy, libraryMassSpectrumCopy);
-				stackedMassSpectrumUnknown.update(unknownMassSpectrumCopy, forceReload);
-				stackedMassSpectrumLibrary.update(libraryMassSpectrumCopy, forceReload);
+				setMassSpectrumLabel(referenceMassSpectrumCopy, comparisonMassSpectrumCopy);
+				stackedMassSpectrumReference.update(referenceMassSpectrumCopy, forceReload);
+				stackedMassSpectrumComparison.update(comparisonMassSpectrumCopy, forceReload);
 			} catch(CloneNotSupportedException e) {
 				logger.warn(e);
 			}
 		} else {
-			stackedMassSpectrumUnknown.update(null, true);
-			stackedMassSpectrumLibrary.update(null, true);
+			stackedMassSpectrumReference.update(null, true);
+			stackedMassSpectrumComparison.update(null, true);
 		}
 	}
 
 	private void setMassSpectrumLabel(IScanMSD unknownMassSpectrum, IScanMSD libraryMassSpectrum) {
 
-		setMassSpectrumLabel(unknownMassSpectrum, "UNKNOWN MS = ", stackedMassSpectrumUnknown);
-		setMassSpectrumLabel(libraryMassSpectrum, "LIBRARY MS = ", stackedMassSpectrumLibrary);
+		setMassSpectrumLabel(unknownMassSpectrum, labelReference + " MS = ", stackedMassSpectrumReference);
+		setMassSpectrumLabel(libraryMassSpectrum, labelComparison + " MS = ", stackedMassSpectrumComparison);
 	}
 
 	private void setMassSpectrumLabel(IScanMSD massSpectrum, String title, StackedMassSpectrumUI stackedMassSpectrumUI) {

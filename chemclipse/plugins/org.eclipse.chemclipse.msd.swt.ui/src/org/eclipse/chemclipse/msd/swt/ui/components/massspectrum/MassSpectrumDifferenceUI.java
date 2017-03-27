@@ -32,9 +32,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-public class LibraryMassSpectrumDifferenceUI extends Composite {
+public class MassSpectrumDifferenceUI extends Composite {
 
-	private static final Logger logger = Logger.getLogger(LibraryMassSpectrumDifferenceUI.class);
+	private static final Logger logger = Logger.getLogger(MassSpectrumDifferenceUI.class);
 	//
 	private Label infoLabelPositive;
 	private SimpleMirroredMassSpectrumUI mirroredMassSpectrumUI;
@@ -42,14 +42,20 @@ public class LibraryMassSpectrumDifferenceUI extends Composite {
 	//
 	private DecimalFormat decimalFormat;
 	private MassValueDisplayPrecision massValueDisplayPrecision;
+	//
+	private String labelReference = "";
+	private String labelComparison = "";
 
-	public LibraryMassSpectrumDifferenceUI(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
+	public MassSpectrumDifferenceUI(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision, String labelReference, String labelComparison) {
 		super(parent, style);
 		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0####");
 		/*
 		 * Mass spectrum type, nominal or accurate
 		 */
 		this.massValueDisplayPrecision = massValueDisplayPrecision;
+		this.labelReference = labelReference;
+		this.labelComparison = labelComparison;
+		//
 		initialize(parent);
 	}
 
@@ -84,16 +90,16 @@ public class LibraryMassSpectrumDifferenceUI extends Composite {
 				IScanMSD differenceMassSpectrumPositive = unknownMassSpectrum.makeDeepCopy().normalize(1000.0f);
 				IScanMSD differenceMassSpectrumNegative = libraryMassSpectrum.makeDeepCopy().normalize(1000.0f);
 				//
-				IExtractedIonSignal extractedIonSignalUnknown = differenceMassSpectrumPositive.getExtractedIonSignal();
-				IExtractedIonSignal extractedIonSignalLibrary = differenceMassSpectrumNegative.getExtractedIonSignal();
-				int startIon = (extractedIonSignalUnknown.getStartIon() < extractedIonSignalLibrary.getStartIon()) ? extractedIonSignalUnknown.getStartIon() : extractedIonSignalLibrary.getStartIon();
-				int stopIon = (extractedIonSignalUnknown.getStopIon() > extractedIonSignalLibrary.getStopIon()) ? extractedIonSignalUnknown.getStopIon() : extractedIonSignalLibrary.getStopIon();
+				IExtractedIonSignal extractedIonSignalReference = differenceMassSpectrumPositive.getExtractedIonSignal();
+				IExtractedIonSignal extractedIonSignalComparison = differenceMassSpectrumNegative.getExtractedIonSignal();
+				int startIon = (extractedIonSignalReference.getStartIon() < extractedIonSignalComparison.getStartIon()) ? extractedIonSignalReference.getStartIon() : extractedIonSignalComparison.getStartIon();
+				int stopIon = (extractedIonSignalReference.getStopIon() > extractedIonSignalComparison.getStopIon()) ? extractedIonSignalReference.getStopIon() : extractedIonSignalComparison.getStopIon();
 				//
-				differenceMassSpectrumPositive.getIons().clear();
-				differenceMassSpectrumNegative.getIons().clear();
+				differenceMassSpectrumPositive.removeAllIons();
+				differenceMassSpectrumNegative.removeAllIons();
 				//
 				for(int ion = startIon; ion <= stopIon; ion++) {
-					float abundance = extractedIonSignalUnknown.getAbundance(ion) - extractedIonSignalLibrary.getAbundance(ion);
+					float abundance = extractedIonSignalReference.getAbundance(ion) - extractedIonSignalComparison.getAbundance(ion);
 					if(abundance < 0) {
 						abundance *= -1;
 						differenceMassSpectrumNegative.addIon(getIon(ion, abundance));
@@ -127,8 +133,8 @@ public class LibraryMassSpectrumDifferenceUI extends Composite {
 
 	private void setMassSpectrumLabel(IScanMSD differenceMassSpectrumPositive, IScanMSD differenceMassSpectrumNegative) {
 
-		setMassSpectrumLabel(differenceMassSpectrumPositive, "(+) [U-L] UNKNOWN MS = ", infoLabelPositive);
-		setMassSpectrumLabel(differenceMassSpectrumNegative, "(-) [U-L] LIBRARY MS = ", infoLabelNegative);
+		setMassSpectrumLabel(differenceMassSpectrumPositive, "(+) " + labelReference + " MS = ", infoLabelPositive);
+		setMassSpectrumLabel(differenceMassSpectrumNegative, "(-) " + labelComparison + " MS = ", infoLabelNegative);
 	}
 
 	private void setMassSpectrumLabel(IScanMSD massSpectrum, String title, Label label) {

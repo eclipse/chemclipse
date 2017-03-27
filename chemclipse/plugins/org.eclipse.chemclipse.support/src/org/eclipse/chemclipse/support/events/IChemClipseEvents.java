@@ -86,6 +86,10 @@ public interface IChemClipseEvents {
 	String TOPIC_LIBRARY_MSD_UNLOAD_SELECTION = "library/msd/unload/selection";
 	String TOPIC_SCAN_MSD_UPDATE_SELECTION = "scan/msd/update/selection";
 	String TOPIC_PEAK_MSD_UPDATE_SELECTION = "peak/msd/update/selection";
+	//
+	String TOPIC_SCAN_MSD_UPDATE_COMPARISON = "scan/msd/update/comparison";
+	String PROPERTY_REFERENCE_MS = "referenceMS";
+	String PROPERTY_COMPARISON_MS = "comparisonMS";
 	/*
 	 * Detector: CSD (conductivity selective)
 	 */

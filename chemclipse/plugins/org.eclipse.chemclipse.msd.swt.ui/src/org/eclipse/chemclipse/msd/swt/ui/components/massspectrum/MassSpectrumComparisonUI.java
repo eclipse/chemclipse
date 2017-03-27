@@ -27,24 +27,30 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-public class LibraryMassSpectrumComparisonUI extends Composite {
+public class MassSpectrumComparisonUI extends Composite {
 
-	private static final Logger logger = Logger.getLogger(LibraryMassSpectrumComparisonUI.class);
+	private static final Logger logger = Logger.getLogger(MassSpectrumComparisonUI.class);
 	//
-	private Label infoLabelUnknown;
+	private Label infoLabelReference;
 	private SimpleMirroredMassSpectrumUI mirroredMassSpectrumUI;
-	private Label infoLabelLibrary;
+	private Label infoLabelComparison;
 	//
 	private DecimalFormat decimalFormat;
 	private MassValueDisplayPrecision massValueDisplayPrecision;
+	//
+	private String labelReference = "";
+	private String labelComparison = "";
 
-	public LibraryMassSpectrumComparisonUI(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision) {
+	public MassSpectrumComparisonUI(Composite parent, int style, MassValueDisplayPrecision massValueDisplayPrecision, String labelReference, String labelComparison) {
 		super(parent, style);
 		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0####");
 		/*
 		 * Mass spectrum type, nominal or accurate
 		 */
 		this.massValueDisplayPrecision = massValueDisplayPrecision;
+		this.labelReference = labelReference;
+		this.labelComparison = labelComparison;
+		//
 		initialize(parent);
 	}
 
@@ -57,9 +63,9 @@ public class LibraryMassSpectrumComparisonUI extends Composite {
 		layout.numColumns = 1;
 		composite.setLayout(layout);
 		//
-		infoLabelUnknown = new Label(composite, SWT.NONE);
-		infoLabelUnknown.setText("");
-		infoLabelUnknown.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		infoLabelReference = new Label(composite, SWT.NONE);
+		infoLabelReference.setText("");
+		infoLabelReference.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		mirroredMassSpectrumUI = new SimpleMirroredMassSpectrumUI(composite, SWT.FILL | SWT.BORDER, massValueDisplayPrecision);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
@@ -67,20 +73,20 @@ public class LibraryMassSpectrumComparisonUI extends Composite {
 		gridData.grabExcessVerticalSpace = true;
 		mirroredMassSpectrumUI.setLayoutData(gridData);
 		//
-		infoLabelLibrary = new Label(composite, SWT.NONE);
-		infoLabelLibrary.setText("");
-		infoLabelLibrary.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		infoLabelComparison = new Label(composite, SWT.NONE);
+		infoLabelComparison.setText("");
+		infoLabelComparison.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
-	public void update(IScanMSD unknownMassSpectrum, IScanMSD libraryMassSpectrum, boolean forceReload) {
+	public void update(IScanMSD referenceMassSpectrum, IScanMSD comparisonMassSpectrum, boolean forceReload) {
 
-		if(unknownMassSpectrum != null && libraryMassSpectrum != null) {
+		if(referenceMassSpectrum != null && comparisonMassSpectrum != null) {
 			try {
-				IScanMSD unknownMassSpectrumCopy = unknownMassSpectrum.makeDeepCopy().normalize(1000.0f);
-				IScanMSD libraryMassSpectrumCopy = libraryMassSpectrum.makeDeepCopy().normalize(1000.0f);
+				IScanMSD referenceMassSpectrumCopy = referenceMassSpectrum.makeDeepCopy().normalize(1000.0f);
+				IScanMSD comparisonMassSpectrumCopy = comparisonMassSpectrum.makeDeepCopy().normalize(1000.0f);
 				//
-				setMassSpectrumLabel(unknownMassSpectrumCopy, libraryMassSpectrumCopy);
-				mirroredMassSpectrumUI.update(unknownMassSpectrumCopy, libraryMassSpectrumCopy, forceReload);
+				setMassSpectrumLabel(referenceMassSpectrumCopy, comparisonMassSpectrumCopy);
+				mirroredMassSpectrumUI.update(referenceMassSpectrumCopy, comparisonMassSpectrumCopy, forceReload);
 			} catch(CloneNotSupportedException e) {
 				logger.warn(e);
 			}
@@ -89,10 +95,10 @@ public class LibraryMassSpectrumComparisonUI extends Composite {
 		}
 	}
 
-	private void setMassSpectrumLabel(IScanMSD unknownMassSpectrum, IScanMSD libraryMassSpectrum) {
+	private void setMassSpectrumLabel(IScanMSD referenceMassSpectrum, IScanMSD comparisonMassSpectrum) {
 
-		setMassSpectrumLabel(unknownMassSpectrum, "UNKNOWN MS = ", infoLabelUnknown);
-		setMassSpectrumLabel(libraryMassSpectrum, "LIBRARY MS = ", infoLabelLibrary);
+		setMassSpectrumLabel(referenceMassSpectrum, labelReference + " MS = ", infoLabelReference);
+		setMassSpectrumLabel(comparisonMassSpectrum, labelComparison + " MS = ", infoLabelComparison);
 	}
 
 	private void setMassSpectrumLabel(IScanMSD massSpectrum, String title, Label label) {

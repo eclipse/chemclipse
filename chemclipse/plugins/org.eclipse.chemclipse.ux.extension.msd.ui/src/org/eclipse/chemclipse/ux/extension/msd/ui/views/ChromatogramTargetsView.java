@@ -80,7 +80,6 @@ public class ChromatogramTargetsView extends AbstractTargetsView {
 				public void handleEvent(Event event) {
 
 					chromatogramSelection = (IChromatogramSelectionMSD)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-					event.getProperty(IChemClipseEvents.PROPERTY_FORCE_RELOAD);
 					boolean forceReload = (Boolean)event.getProperty(IChemClipseEvents.PROPERTY_FORCE_RELOAD);
 					update(chromatogramSelection, forceReload);
 				}

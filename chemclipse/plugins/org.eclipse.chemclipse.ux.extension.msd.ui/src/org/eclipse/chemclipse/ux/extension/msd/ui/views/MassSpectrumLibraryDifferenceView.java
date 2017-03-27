@@ -16,7 +16,7 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.LibraryMassSpectrumDifferenceUI;
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumDifferenceUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -31,7 +31,7 @@ public class MassSpectrumLibraryDifferenceView extends AbstractMassSpectrumLibra
 	@Inject
 	private Composite parent;
 	//
-	private LibraryMassSpectrumDifferenceUI libraryMassSpectrumDifferenceUI;
+	private MassSpectrumDifferenceUI libraryMassSpectrumDifferenceUI;
 
 	@Inject
 	public MassSpectrumLibraryDifferenceView(MPart part, EPartService partService, IEventBroker eventBroker) {
@@ -42,7 +42,7 @@ public class MassSpectrumLibraryDifferenceView extends AbstractMassSpectrumLibra
 	private void createControl() {
 
 		parent.setLayout(new FillLayout());
-		libraryMassSpectrumDifferenceUI = new LibraryMassSpectrumDifferenceUI(parent, SWT.NONE, MassValueDisplayPrecision.NOMINAL);
+		libraryMassSpectrumDifferenceUI = new MassSpectrumDifferenceUI(parent, SWT.NONE, MassValueDisplayPrecision.NOMINAL, "[U-L] UNKNOWN", "[U-L] LIBRARY");
 	}
 
 	@Focus
