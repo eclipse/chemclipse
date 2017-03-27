@@ -72,6 +72,9 @@ public abstract class AbstractRuntimeSupport implements IRuntimeSupport {
 	@Override
 	public int getSleepMillisecondsBeforeExecuteRunCommand() {
 
-		return 1000; // Wait 1 second before starting the application
+		/*
+		 * Wait 3 second before starting the application.
+		 */
+		return 3000;
 	}
 }
