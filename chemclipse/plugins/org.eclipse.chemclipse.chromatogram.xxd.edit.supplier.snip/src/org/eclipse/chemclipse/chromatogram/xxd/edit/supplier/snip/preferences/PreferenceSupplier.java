@@ -14,10 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
-
 import org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.settings.IBaselineDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.ISnipBaselineDetectorSettings;
@@ -28,13 +24,16 @@ import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.SnipM
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.SnipPeakFilterSettings;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_ITERATIONS = "iterations";
 	public static final int DEF_ITERATIONS = 100;
 	public static final int MIN_ITERATIONS = 5;
-	public static final int MAX_ITERATIONS = 200;
+	public static final int MAX_ITERATIONS = 2000;
 	public static final String P_WINDOW_SIZE = "windowSize";
 	public static final String DEF_WINDOW_SIZE = WindowSize.SCANS_7.toString();
 	public static final String P_MAGNIFICATION_FACTOR = "magnificationFactor";

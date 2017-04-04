@@ -15,12 +15,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonValueComparator;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class FilterSupplier {
 
@@ -53,7 +52,10 @@ public class FilterSupplier {
 		/*
 		 * Subtract the values.
 		 */
-		applySnipBaselineToSubtractIons(ions, intensityValues, extraValues, magnificationFactor);
+		List<IIon> ionsToRemove = applySnipBaselineToSubtractIons(ions, intensityValues, extraValues, magnificationFactor);
+		for(IIon ion : ionsToRemove) {
+			massSpectrum.removeIon(ion);
+		}
 	}
 
 	private float[] getIntensityValues(List<IIon> ions, int extraValues) {
@@ -82,7 +84,7 @@ public class FilterSupplier {
 		return intensityValues;
 	}
 
-	private void applySnipBaselineToSubtractIons(List<IIon> ions, float[] intensityValues, int extraValues, double magnificationFactor) {
+	private List<IIon> applySnipBaselineToSubtractIons(List<IIon> ions, float[] intensityValues, int extraValues, double magnificationFactor) {
 
 		List<IIon> ionsToRemove = new ArrayList<IIon>();
 		int counter = 0;
@@ -120,6 +122,6 @@ public class FilterSupplier {
 		/*
 		 * Delete the ions that have been marked to be removed.
 		 */
-		ions.removeAll(ionsToRemove);
+		return ionsToRemove;
 	}
 }
