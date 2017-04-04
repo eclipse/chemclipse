@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.AbstractMassSpectrumFilter;
 import org.eclipse.chemclipse.chromatogram.msd.filter.processing.IMassSpectrumFilterProcessingInfo;
@@ -32,6 +30,7 @@ import org.eclipse.chemclipse.msd.model.core.comparator.IonAbundanceComparator;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class LowPassMassSpectrumFilter extends AbstractMassSpectrumFilter {
 
@@ -64,8 +63,12 @@ public class LowPassMassSpectrumFilter extends AbstractMassSpectrumFilter {
 					}
 					counter++;
 				}
-				//
-				ions.removeAll(ionsToRemove);
+				/*
+				 * Remove the ions.
+				 */
+				for(IIon ion : ionsToRemove) {
+					massSpectrum.removeIon(ion);
+				}
 			}
 			//
 			processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, DESCRIPTION, "The mass spectrum has been optimized successfully."));
