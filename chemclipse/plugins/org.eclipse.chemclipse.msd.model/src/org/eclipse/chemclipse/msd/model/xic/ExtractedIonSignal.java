@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.msd.model.xic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -199,8 +200,13 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 	@Override
 	public float getNthHighestIntensity(int n) {
 
-		System.out.println("TODO + JUNIT");
-		return 0;
+		if(n <= 0 || n > abundanceValues.length) {
+			return 0;
+		} else {
+			float[] values = Arrays.copyOf(abundanceValues, abundanceValues.length);
+			Arrays.sort(values);
+			return values[values.length - n];
+		}
 	}
 
 	@Override
