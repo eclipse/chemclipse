@@ -89,7 +89,6 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 		}
 	}
 
-	// --------------------------------------------IExtractedIonSignal
 	@Override
 	public void setAbundance(IIon ion, boolean removePreviousAbundance) {
 
@@ -198,9 +197,23 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 	}
 
 	@Override
+	public float getNthHighestIntensity(int n) {
+
+		System.out.println("TODO + JUNIT");
+		return 0;
+	}
+
+	@Override
 	public float getMinIntensity() {
 
 		return Calculations.getMin(abundanceValues);
+	}
+
+	@Override
+	public float getMeanIntensity() {
+
+		System.out.println("JUNIT");
+		return Calculations.getMean(abundanceValues);
 	}
 
 	@Override

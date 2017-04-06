@@ -105,6 +105,20 @@ public interface IExtractedIonSignal {
 	float getMinIntensity();
 
 	/**
+	 * Returns nth highest intensity.
+	 * 
+	 * @return float
+	 */
+	float getNthHighestIntensity(int n);
+
+	/**
+	 * Returns the mean intensity.
+	 * 
+	 * @return float
+	 */
+	float getMeanIntensity();
+
+	/**
 	 * Returns the median intensity.
 	 * 
 	 * @return float
