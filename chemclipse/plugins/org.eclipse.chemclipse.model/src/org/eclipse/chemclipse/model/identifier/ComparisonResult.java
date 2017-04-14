@@ -41,7 +41,7 @@ public class ComparisonResult extends AbstractComparisonResult implements ICompa
 
 	public static ComparisonResult createNoMatchComparisonResult() {
 
-		return new ComparisonResult(FACTOR_NO_MATCH, FACTOR_NO_MATCH, FACTOR_NO_MATCH, FACTOR_NO_MATCH).setMatch(false);
+		return null;
 	}
 
 	public static ComparisonResult createBestMatchComparisonResult() {
