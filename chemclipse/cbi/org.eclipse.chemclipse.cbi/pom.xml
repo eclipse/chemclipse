@@ -140,6 +140,7 @@
     <module>../../plugins/org.eclipse.chemclipse.ux.extension.csd.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.ux.extension.wsd.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.ux.extension.xxd.ui</module>
+    <module>../../plugins/org.eclipse.chemclipse.ux.fx</module>
     <!--
 	Service SWT will be moved to Eclipse EAVP soon.
     -->

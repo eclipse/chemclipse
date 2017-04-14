@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: FX UI Components
+Bundle-SymbolicName: org.eclipse.chemclipse.ux.fx
+Bundle-Version: 1.2.0.qualifier
+Bundle-Activator: org.eclipse.chemclipse.ux.fx.Activator
+Bundle-Vendor: Lablicate GmbH
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: org.osgi.framework;version="1.3.0"
+Bundle-ActivationPolicy: lazy
