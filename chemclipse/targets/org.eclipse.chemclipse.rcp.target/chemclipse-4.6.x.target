@@ -143,7 +143,6 @@
 <unit id="org.knime.features.json.feature.group" version="0.0.0"/>
 <unit id="org.knime.features.virtual.feature.group" version="0.0.0"/>
 <unit id="org.knime.features.ext.r.feature.group" version="0.0.0"/>
-<unit id="org.knime.features.ext.xulrunner.feature.group" version="0.0.0"/>
 <unit id="org.knime.features.optimization.feature.group" version="0.0.0"/>
 <unit id="com.knime.features.licenses.feature.group" version="0.0.0"/>
 <unit id="org.knime.features.ext.perl.feature.group" version="0.0.0"/>
