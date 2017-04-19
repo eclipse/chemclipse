@@ -38,7 +38,7 @@ public class PropertiesUtil {
 		properties.setProperty("log4j.appender.ChemClipseConsoleAppender.layout", "org.apache.log4j.PatternLayout");
 		// properties.setProperty("log4j.appender.ChemClipseConsoleAppender.layout.ConversionPattern",
 		// "%d{ISO8601} %-5p [%t] %c{3}:%L %m%n");
-		properties.setProperty("log4j.appender.ChemClipseConsoleAppender.layout.ConversionPattern", "%t %-5p %C{2}.%M (%F:%L) %m%n");
+		properties.setProperty("log4j.appender.ChemClipseConsoleAppender.layout.ConversionPattern", "%-5p %t %C{2}.%M (%F:%L) %m%n");
 		/*
 		 * Log to a file.
 		 */
