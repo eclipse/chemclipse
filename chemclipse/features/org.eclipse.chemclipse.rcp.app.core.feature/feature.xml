@@ -97,6 +97,14 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.eclipse.fx.runtime.min.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.ecf.filetransfer.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.platform"
+         version="0.0.0"/>
+
    <plugin
          id="com.ibm.icu"
          download-size="0"
@@ -1587,5 +1595,25 @@ http://www.eclipse.org/legal/epl-v10.html
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="javax.transaction"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="javax.xml.rpc"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="javax.xml.soap"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>
