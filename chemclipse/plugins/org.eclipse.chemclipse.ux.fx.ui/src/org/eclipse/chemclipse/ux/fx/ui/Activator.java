@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2017 Lablicate GmbH.
+ *
+ * All rights reserved.
+ *
+ * Contributors:
+ * Dr. Alexander Kerner - initial API and implementation
+ *******************************************************************************/
 package org.eclipse.chemclipse.ux.fx.ui;
 
 import org.osgi.framework.BundleActivator;
@@ -16,7 +24,8 @@ public class Activator implements BundleActivator {
 	 * (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
-	public void start(BundleContext bundleContext) throws Exception {
+	@Override
+	public void start(final BundleContext bundleContext) throws Exception {
 
 		Activator.context = bundleContext;
 	}
@@ -25,7 +34,8 @@ public class Activator implements BundleActivator {
 	 * (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
-	public void stop(BundleContext bundleContext) throws Exception {
+	@Override
+	public void stop(final BundleContext bundleContext) throws Exception {
 
 		Activator.context = null;
 	}
