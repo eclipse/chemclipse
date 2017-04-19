@@ -6,7 +6,7 @@
     <artifactId>org.eclipse.chemclipse.plugins.parent</artifactId>
     <version>BUILD-VERSION</version>
   </parent>
-  <artifactId>org.eclipse.chemclipse.ux.fx</artifactId>
+  <artifactId>org.eclipse.chemclipse.ux.fx.ui</artifactId>
   <packaging>eclipse-plugin</packaging>
   <version>1.2.0-SNAPSHOT</version>
 </project>

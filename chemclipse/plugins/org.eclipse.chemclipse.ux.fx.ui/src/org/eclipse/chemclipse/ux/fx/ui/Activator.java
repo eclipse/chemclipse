@@ -1,4 +1,4 @@
-package org.eclipse.chemclipse.ux.fx;
+package org.eclipse.chemclipse.ux.fx.ui;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
