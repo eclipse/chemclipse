@@ -20,7 +20,7 @@ public class PeakMSD extends AbstractPeakMSD implements IPeakMSD {
 	/**
 	 * Renew the UUID on change.
 	 */
-	private static final long serialVersionUID = 8841007450906820774L;
+	private static final long serialVersionUID = -4063467647065431825L;
 
 	public PeakMSD(IPeakModelMSD peakModel, String modelDescription) throws IllegalArgumentException {
 		super(peakModel, modelDescription);
@@ -28,5 +28,17 @@ public class PeakMSD extends AbstractPeakMSD implements IPeakMSD {
 
 	public PeakMSD(IPeakModelMSD peakModel) throws IllegalArgumentException {
 		super(peakModel);
+	}
+
+	public PeakMSD(IPeakMSD template) {
+		this(template.getPeakModel());
+		setActiveForAnalysis(template.isActiveForAnalysis());
+		setDetectorDescription(template.getDetectorDescription());
+		setIntegratedArea(template.getIntegrationEntries(), template.getIntegratorDescription());
+		setIntegratorDescription(template.getIntegratorDescription());
+		setModelDescription(template.getModelDescription());
+		setPeakType(template.getPeakType());
+		setQuantifierDescription(template.getQuantifierDescription());
+		setSuggestedNumberOfComponents(template.getSuggestedNumberOfComponents());
 	}
 }
