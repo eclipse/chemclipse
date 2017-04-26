@@ -47,7 +47,10 @@ public class ProcessingInfoViewSupport {
 		/*
 		 * Info error message.
 		 */
-		Display.getDefault().asyncExec(new Runnable() {
+		Display display = Display.getDefault();
+		Shell shell = display.getActiveShell();
+		//
+		display.asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
@@ -56,7 +59,6 @@ public class ProcessingInfoViewSupport {
 				 * Show the message box.
 				 */
 				if(processingInfo != null && processingInfo.hasErrorMessages()) {
-					Shell shell = Display.getCurrent().getActiveShell();
 					if(shell != null) {
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
 						messageBox.setText(TITLE);
@@ -66,11 +68,9 @@ public class ProcessingInfoViewSupport {
 				}
 				/*
 				 * Update the info view.
-				 */
-				updateProcessingInfoView(processingInfo);
-				/*
 				 * Focus the view.
 				 */
+				updateProcessingInfoView(processingInfo);
 				if(focusProcessingInfoView) {
 					/*
 					 * Focus this part.
