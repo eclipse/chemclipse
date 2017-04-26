@@ -22,10 +22,10 @@ import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter.MagicN
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter.MagicNumberMatcherMSD;
-import org.eclipse.chemclipse.rcp.app.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.editors.AbstractExtendedEditorPage;
 import org.eclipse.chemclipse.support.ui.editors.IExtendedEditorPage;
 import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
