@@ -22,7 +22,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 
 import org.eclipse.chemclipse.rcp.app.ui.Activator;
-import org.eclipse.chemclipse.rcp.app.ui.support.UpdateSiteSupport;
+import org.eclipse.chemclipse.support.ui.p2.UpdateSiteSupport;
 
 public class AdditionalUpdateSitesPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
