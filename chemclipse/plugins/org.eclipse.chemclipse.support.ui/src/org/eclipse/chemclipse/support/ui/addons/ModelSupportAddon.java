@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.rcp.app.ui.addons;
+package org.eclipse.chemclipse.support.ui.addons;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,11 +20,14 @@ import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.ui.MUIElement;
+import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspectiveStack;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 
 public class ModelSupportAddon {
 
@@ -100,6 +103,41 @@ public class ModelSupportAddon {
 			return perspectiveName;
 		} else {
 			return "";
+		}
+	}
+
+	/**
+	 * Try to load the perspective.
+	 * 
+	 * @param perspectiveId
+	 */
+	public static void changePerspective(String perspectiveId) {
+
+		if(mApplication != null && eModelService != null && ePartService != null) {
+			MUIElement element = eModelService.find(perspectiveId, mApplication);
+			if(element instanceof MPerspective) {
+				MPerspective perspective = (MPerspective)element;
+				ePartService.switchPerspective(perspective);
+			}
+		}
+	}
+
+	/**
+	 * Load and show the part.
+	 * 
+	 * @param partId
+	 */
+	public static void focusPart(String partId) {
+
+		if(mApplication != null && eModelService != null && ePartService != null) {
+			MUIElement element = eModelService.find(partId, mApplication);
+			if(element instanceof MPart) {
+				MPart part = (MPart)element;
+				if(!ePartService.getParts().contains(part)) {
+					ePartService.createPart(part.getElementId());
+				}
+				ePartService.showPart(part, PartState.ACTIVATE);
+			}
 		}
 	}
 }

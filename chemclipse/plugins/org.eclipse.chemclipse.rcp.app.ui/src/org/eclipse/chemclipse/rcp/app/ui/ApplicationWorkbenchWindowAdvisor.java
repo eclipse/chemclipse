@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui;
 
-import org.eclipse.chemclipse.rcp.app.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;

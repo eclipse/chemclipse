@@ -16,11 +16,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.rcp.app.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.rcp.app.ui.dialogs.PerspectiveChooserDialog;
 import org.eclipse.chemclipse.rcp.app.ui.dialogs.PerspectiveSwitcherDialog;
 import org.eclipse.chemclipse.rcp.app.ui.internal.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.rcp.app.ui.switcher.PerspectiveSwitcher;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
