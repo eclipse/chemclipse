@@ -30,7 +30,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.app.compilation.marketplace.ui.Activator;
-import org.eclipse.chemclipse.rcp.app.ui.support.UpdateSiteSupport;
+import org.eclipse.chemclipse.support.ui.p2.UpdateSiteSupport;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 
