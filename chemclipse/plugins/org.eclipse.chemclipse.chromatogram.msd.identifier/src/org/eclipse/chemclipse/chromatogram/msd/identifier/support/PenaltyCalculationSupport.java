@@ -41,7 +41,7 @@ public class PenaltyCalculationSupport {
 			if(maxPenalty < IComparisonResult.MIN_ALLOWED_PENALTY || maxPenalty > IComparisonResult.MAX_ALLOWED_PENALTY) {
 				throw new IllegalArgumentException();
 			}
-			runRetentionIndexCheck(unknown, reference);
+			// runRetentionIndexCheck(unknown, reference);
 			return calculatePenalty(unknown.getRetentionIndex(), reference.getRetentionIndex(), retentionIndexWindow, penaltyCalculationLevelFactor, maxPenalty);
 		} catch(final Exception e) {
 			e.printStackTrace();
