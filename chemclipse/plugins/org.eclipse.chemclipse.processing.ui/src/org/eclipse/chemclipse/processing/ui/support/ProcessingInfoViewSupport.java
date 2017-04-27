@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.processing.ui.support;
 
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart;
-import org.eclipse.chemclipse.support.ui.addons.PerspectivePartSwitcherAddon;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -47,7 +47,8 @@ public class ProcessingInfoViewSupport {
 		/*
 		 * Info error message.
 		 */
-		Display.getDefault().asyncExec(new Runnable() {
+		Display display = Display.getDefault();
+		display.asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
@@ -56,7 +57,8 @@ public class ProcessingInfoViewSupport {
 				 * Show the message box.
 				 */
 				if(processingInfo != null && processingInfo.hasErrorMessages()) {
-					Shell shell = Display.getCurrent().getActiveShell();
+					//
+					Shell shell = getShell(display);
 					if(shell != null) {
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
 						messageBox.setText(TITLE);
@@ -66,20 +68,30 @@ public class ProcessingInfoViewSupport {
 				}
 				/*
 				 * Update the info view.
-				 */
-				updateProcessingInfoView(processingInfo);
-				/*
 				 * Focus the view.
 				 */
+				updateProcessingInfoView(processingInfo);
 				if(focusProcessingInfoView) {
 					/*
 					 * Focus this part.
 					 * Use the ProcessingInfoPart.ID in the Application.e4xmi
 					 */
-					PerspectivePartSwitcherAddon.focusPart(ProcessingInfoPart.ID);
+					ModelSupportAddon.focusPart(ProcessingInfoPart.ID);
 				}
 			}
 		});
+	}
+
+	private static Shell getShell(Display display) {
+
+		Shell shell = null;
+		try {
+			shell = display.getActiveShell();
+		} catch(Exception e) {
+			System.out.println(e);
+		}
+		//
+		return shell;
 	}
 
 	/**

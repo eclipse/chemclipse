@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.rcp.app.ui.support;
+package org.eclipse.chemclipse.support.ui.p2;
 
 import java.net.URI;
 import java.net.URISyntaxException;

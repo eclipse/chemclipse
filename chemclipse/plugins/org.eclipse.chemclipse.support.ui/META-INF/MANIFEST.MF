@@ -22,7 +22,18 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.e4.core.di;bundle-version="1.4.0",
  org.eclipse.osgi.services;bundle-version="3.4.0",
  org.eclipse.core.filesystem;bundle-version="1.4.100",
- org.eclipse.ui.forms;bundle-version="3.6.200"
+ org.eclipse.ui.forms;bundle-version="3.6.200",
+ org.eclipse.equinox.p2.ui.sdk;bundle-version="1.0.100",
+ org.eclipse.equinox.p2.ui.sdk.scheduler;bundle-version="1.1.0",
+ org.eclipse.equinox.p2.updatechecker;bundle-version="1.1.0",
+ org.eclipse.equinox.p2.ui;bundle-version="1.0.100",
+ org.eclipse.equinox.p2.discovery;bundle-version="1.0.100",
+ org.eclipse.equinox.p2.discovery.compatibility;bundle-version="1.0.1",
+ org.eclipse.equinox.p2.ui.discovery;bundle-version="1.0.0",
+ org.eclipse.equinox.p2.operations;bundle-version="2.1.0",
+ org.eclipse.equinox.p2.repository;bundle-version="2.1.0",
+ org.eclipse.equinox.p2.core;bundle-version="2.1.0",
+ org.eclipse.equinox.p2.metadata;bundle-version="2.1.0" 
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.support.ui.activator,
@@ -30,11 +41,13 @@ Export-Package: org.eclipse.chemclipse.support.ui.activator,
  org.eclipse.chemclipse.support.ui.editors,
  org.eclipse.chemclipse.support.ui.listener,
  org.eclipse.chemclipse.support.ui.notifier,
+ org.eclipse.chemclipse.support.ui.p2,
  org.eclipse.chemclipse.support.ui.parts,
  org.eclipse.chemclipse.support.ui.preferences,
  org.eclipse.chemclipse.support.ui.preferences.editors,
  org.eclipse.chemclipse.support.ui.preferences.fieldeditors,
  org.eclipse.chemclipse.support.ui.provider,
  org.eclipse.chemclipse.support.ui.swt,
- org.eclipse.chemclipse.support.ui.wizards
+ org.eclipse.chemclipse.support.ui.wizards,
+ org.eclipse.chemclipse.support.ui.workbench
 Import-Package: javax.annotation;version="1.1.0"
