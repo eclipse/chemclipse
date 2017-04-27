@@ -48,8 +48,6 @@ public class ProcessingInfoViewSupport {
 		 * Info error message.
 		 */
 		Display display = Display.getDefault();
-		Shell shell = display.getActiveShell();
-		//
 		display.asyncExec(new Runnable() {
 
 			@Override
@@ -59,6 +57,8 @@ public class ProcessingInfoViewSupport {
 				 * Show the message box.
 				 */
 				if(processingInfo != null && processingInfo.hasErrorMessages()) {
+					//
+					Shell shell = getShell(display);
 					if(shell != null) {
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
 						messageBox.setText(TITLE);
@@ -80,6 +80,18 @@ public class ProcessingInfoViewSupport {
 				}
 			}
 		});
+	}
+
+	private static Shell getShell(Display display) {
+
+		Shell shell = null;
+		try {
+			shell = display.getActiveShell();
+		} catch(Exception e) {
+			System.out.println(e);
+		}
+		//
+		return shell;
 	}
 
 	/**
