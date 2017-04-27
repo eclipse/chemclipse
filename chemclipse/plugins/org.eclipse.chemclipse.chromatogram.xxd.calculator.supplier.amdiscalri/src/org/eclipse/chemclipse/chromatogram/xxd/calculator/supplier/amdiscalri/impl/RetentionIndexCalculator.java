@@ -13,9 +13,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.i
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,22 +94,22 @@ public class RetentionIndexCalculator {
 				 */
 				try {
 					String[] values = line.split(DELIMITER);
-					if(values.length >= 5) {
+					if(values.length == 5) {
 						int retentionTime = (int)(Double.parseDouble(values[0]) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 						float retentionIndex = Float.parseFloat(values[1]);
 						String peakName = values[4].trim();
 						IRetentionIndexEntry retentionIndexEntry = new RetentionIndexEntry(retentionTime, retentionIndex, peakName);
 						retentionIndices.put(retentionTime, retentionIndexEntry);
+					} else {
+						throw new IOException("Unexpected column count: " + Arrays.asList(values).toString());
 					}
 				} catch(NumberFormatException e) {
 					logger.warn(e);
 				}
 			}
 			bufferedReader.close();
-		} catch(FileNotFoundException e) {
-			logger.warn(e);
 		} catch(IOException e) {
-			logger.warn(e);
+			logger.error(e);
 		}
 		//
 		return retentionIndices;
