@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Exports Chromatograms to Microsoft Excel 2007."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.excel.converter.ChromatogramExportConverter"
+            fileExtension=".xlsx"
+            filterName="Excel Chromatogram (*.xlsx)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.excel"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.excel.converter.ChromatogramImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.excel.converter.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.msd.converter.supplier.excel.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>
