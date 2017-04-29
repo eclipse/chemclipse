@@ -1,0 +1,15 @@
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.csv.fragment.test/bin/
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.csv.ui.fragment.test/bin/
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.csv.ui/bin/
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.csv/bin/
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.csv.fragment.test/chemclipse.log
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.csv.fragment.test/chemclipse.log*
+chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.csv.updateSite/artifacts.jar
+chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.csv.updateSite/content.jar
+chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.csv.updateSite/features/
+chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.csv.updateSite/plugins/
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.csv.fragment.test/testData/files/export/Test.csv
+chemclipse/features/org.eclipse.chemclipse.msd.converter.supplier.csv.feature/target/
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.csv.ui/target/
+chemclipse/plugins/org.eclipse.chemclipse.msd.converter.supplier.csv/target/
+chemclipse/sites/org.eclipse.chemclipse.msd.converter.supplier.csv.updateSite/target/
