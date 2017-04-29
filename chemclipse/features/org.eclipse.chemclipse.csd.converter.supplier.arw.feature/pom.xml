@@ -4,7 +4,7 @@
 
   <parent>
     <groupId>org.eclipse.chemclipse</groupId>
-    <artifactId>net.openchrom.features.parent</artifactId>
+    <artifactId>org.eclipse.chemclipse.features.parent</artifactId>
     <version>BUILD-VERSION</version>
   </parent>
 
