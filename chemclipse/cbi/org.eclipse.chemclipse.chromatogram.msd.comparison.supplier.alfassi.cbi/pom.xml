@@ -13,7 +13,7 @@
   <!--
 	ARTIFACT
   -->
-  <groupId>net.openchrom</groupId>
+  <groupId>org.eclipse.chemclipse</groupId>
   <artifactId>parent</artifactId>
   <packaging>pom</packaging>
   <!--
