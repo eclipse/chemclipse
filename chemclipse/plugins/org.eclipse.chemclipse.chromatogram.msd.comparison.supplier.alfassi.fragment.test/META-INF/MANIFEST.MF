@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test Fragment
+Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.fragment.test
+Bundle-Version: 1.2.0.qualifier
+Fragment-Host: org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi;bundle-version="1.2.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.junit;bundle-version="4.11.0"
+Bundle-Vendor: OpenChrom
