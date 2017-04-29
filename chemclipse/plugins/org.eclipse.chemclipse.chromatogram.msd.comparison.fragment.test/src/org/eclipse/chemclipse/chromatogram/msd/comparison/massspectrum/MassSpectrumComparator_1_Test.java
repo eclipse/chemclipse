@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.exceptions.NoMassSpectrumComparatorAvailableException;
-import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparatorSupport;
-import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparisonSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
 
 import junit.framework.TestCase;
 
@@ -68,7 +65,7 @@ public class MassSpectrumComparator_1_Test extends TestCase {
 		List<String> ids = support.getAvailableComparatorIds();
 		String[] rcs = new String[4];
 		rcs[0] = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos";
-		rcs[1] = "net.openchrom.chromatogram.msd.comparison.supplier.alfassi.geometric";
+		rcs[1] = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.geometric";
 		rcs[2] = "net.openchrom.chromatogram.msd.comparison.supplier.pbm";
 		for(String id : ids) {
 			for(String rc : rcs) {
@@ -127,7 +124,7 @@ public class MassSpectrumComparator_1_Test extends TestCase {
 
 		String comparatorName = "Alfassi Geometric Distance";
 		String description = "This comparator calculates the similarity between two mass spectra with the alfassi geomtric distance algorithm.";
-		String id = "net.openchrom.chromatogram.msd.comparison.supplier.alfassi.geometric";
+		String id = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.geometric";
 		IMassSpectrumComparisonSupplier supplier = support.getMassSpectrumComparisonSupplier(id);
 		assertEquals("ComparatorName", comparatorName, supplier.getComparatorName());
 		assertEquals("Description", description, supplier.getDescription());

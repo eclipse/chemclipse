@@ -192,7 +192,7 @@
 <unit id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.feature.feature.group" version="0.8.0.201703022346"/>
 <unit id="org.chromulan.system.control.feature.feature.group" version="1.2.0.201703022347"/>
 <unit id="org.python.pydev.feature.feature.group" version="5.5.0.201701191708"/>
-<unit id="net.openchrom.csd.converter.supplier.arw.feature.feature.group" version="1.2.0.201703022318"/>
+<unit id="org.eclipse.chemclipse.csd.converter.supplier.arw.feature.feature.group" version="1.2.0.201703022318"/>
 <unit id="org.eclipse.chemclipse.msd.converter.supplier.mzml.feature.feature.group" version="0.8.0.201703022336"/>
 <unit id="net.openchrom.chromatogram.msd.process.supplier.groovy.feature.feature.group" version="1.2.0.201703030008"/>
 <unit id="net.openchrom.rcp.compilation.community.product.id" version="1.2.0.201703030020"/>
@@ -220,7 +220,7 @@
 <unit id="org.eclipse.help.feature.group" version="2.2.1.v20161124-1400"/>
 <unit id="net.openchrom.thirdpartylibraries.supercsv.feature.feature.group" version="2.4.0.v2017"/>
 <unit id="net.openchrom.thirdpartylibraries.opsin.feature.feature.group" version="1.5.0.v2017"/>
-<unit id="net.openchrom.chromatogram.msd.comparison.supplier.alfassi.feature.feature.group" version="1.2.0.201703022317"/>
+<unit id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.feature.feature.group" version="1.2.0.201703022317"/>
 <unit id="net.openchrom.msd.converter.supplier.finnigan.element.feature.feature.group" version="1.2.0.201703022330"/>
 <unit id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.feature.feature.group" version="0.8.0.201703022328"/>
 <unit id="cn.edu.xmu.tidems.control.feature.feature.group" version="1.2.0.201703022349"/>
