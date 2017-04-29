@@ -62,7 +62,7 @@ public class BaselineDetector_1_Test extends TestCase {
 		int count = 0;
 		List<String> ids = support.getAvailableDetectorIds();
 		String[] rcs = new String[1];
-		rcs[0] = "net.openchrom.chromatogram.xxd.baseline.detector.supplier.tic";
+		rcs[0] = "org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic";
 		for(String id : ids) {
 			for(String rc : rcs) {
 				if(id.equals(rc)) {
@@ -109,7 +109,7 @@ public class BaselineDetector_1_Test extends TestCase {
 
 		String comparatorName = "Threshold (TIC) Baseline Detector";
 		String description = "This baseline detector calculator sets the baseline by the lowest TIC value.";
-		String id = "net.openchrom.chromatogram.xxd.baseline.detector.supplier.tic";
+		String id = "org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic";
 		IBaselineDetectorSupplier supplier = support.getBaselineDetectorSupplier(id);
 		assertEquals("DetectorName", comparatorName, supplier.getDetectorName());
 		assertEquals("Description", description, supplier.getDescription());

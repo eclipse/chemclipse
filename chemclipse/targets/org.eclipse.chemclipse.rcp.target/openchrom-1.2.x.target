@@ -325,7 +325,7 @@
 <unit id="net.openchrom.msd.converter.supplier.excel.feature.feature.group" version="1.2.0.201703022325"/>
 <unit id="net.openchrom.csd.converter.supplier.shimadzu.gcd.feature.feature.group" version="1.2.0.201703022345"/>
 <unit id="net.openchrom.msd.converter.supplier.agilent.hp.feature.feature.group" version="1.2.0.201703022317"/>
-<unit id="net.openchrom.chromatogram.xxd.baseline.detector.supplier.tic.feature.feature.group" version="1.2.0.201703022319"/>
+<unit id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.feature.feature.group" version="1.2.0.201703022319"/>
 <unit id="net.openchrom.msd.converter.supplier.shimadzu.qgd.feature.feature.group" version="1.2.0.201703022344"/>
 <unit id="net.openchrom.chromatogram.xxd.process.supplier.workflows.feature.feature.group" version="1.2.0.201703022355"/>
 <unit id="org.eclipse.chemclipse.rcp.app.compilation.core.feature.feature.group" version="0.8.0.201703030010"/>
