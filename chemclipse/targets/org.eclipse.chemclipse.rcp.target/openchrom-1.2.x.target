@@ -274,7 +274,7 @@
 <unit id="net.openchrom.csd.converter.supplier.masshunter.feature.feature.group" version="1.2.0.201703022334"/>
 <unit id="net.openchrom.csd.converter.supplier.varian.feature.feature.group" version="1.2.0.201703022348"/>
 <unit id="org.eclipse.equinox.p2.rcp.feature.feature.group" version="1.2.201.v20161124-1529"/>
-<unit id="net.openchrom.xxd.converter.supplier.ascii.feature.feature.group" version="1.2.0.201703022318"/>
+<unit id="org.eclipse.chemclipse.xxd.converter.supplier.ascii.feature.feature.group" version="1.2.0.201703022318"/>
 <unit id="org.eclipse.fx.runtime.min.feature.feature.group" version="2.4.0.201605100504"/>
 <unit id="net.openchrom.thirdpartylibraries.pdfbox.feature.feature.group" version="2.0.4.v2017"/>
 <unit id="org.eclipse.chemclipse.msd.converter.supplier.openchromx.feature.feature.group" version="0.8.0.201703022321"/>
