@@ -232,7 +232,7 @@
 <unit id="net.openchrom.msd.converter.supplier.absciex.feature.feature.group" version="1.2.0.201703022315"/>
 <unit id="org.eclipse.chemclipse.rcp.app.compilation.base.feature.feature.group" version="0.8.0.201703030010"/>
 <unit id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.feature.feature.group" version="0.8.0.201703022338"/>
-<unit id="net.openchrom.msd.converter.supplier.csv.feature.feature.group" version="1.2.0.201703022325"/>
+<unit id="org.eclipse.chemclipse.msd.converter.supplier.csv.feature.feature.group" version="1.2.0.201703022325"/>
 <unit id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.feature.feature.group" version="0.8.0.201703022347"/>
 <unit id="net.openchrom.msd.converter.supplier.cms.feature.feature.group" version="1.2.0.201703022322"/>
 <unit id="net.openchrom.thirdpartylibraries.javassist.feature.feature.group" version="3.20.0.v2017"/>
@@ -314,7 +314,7 @@
 <unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="1.1.0.v20160823-2221"/>
 <unit id="org.eclipse.chemclipse.rcp.app.compilation.marketplace.feature.feature.group" version="0.8.0.201703030010"/>
 <unit id="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.feature.feature.group" version="0.8.0.201703030004"/>
-<unit id="net.openchrom.xxd.converter.supplier.gson.feature.feature.group" version="1.2.0.201703022332"/>
+<unit id="org.eclipse.chemclipse.xxd.converter.supplier.gson.feature.feature.group" version="1.2.0.201703022332"/>
 <unit id="org.eclipse.chemclipse.msd.converter.supplier.massbank.feature.feature.group" version="0.8.0.201703022324"/>
 <unit id="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.feature.feature.group" version="0.8.0.201703030000"/>
 <unit id="net.openchrom.xxd.converter.supplier.dataapex.feature.feature.group" version="1.2.0.201703022323"/>
@@ -322,7 +322,7 @@
 <unit id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.feature.feature.group" version="0.8.0.201703022326"/>
 <unit id="org.eclipse.nebula.visualization.feature.feature.group" version="1.0.0.201702281340"/>
 <unit id="net.openchrom.msd.converter.supplier.varian.sms.feature.feature.group" version="1.2.0.201703022348"/>
-<unit id="net.openchrom.msd.converter.supplier.excel.feature.feature.group" version="1.2.0.201703022325"/>
+<unit id="org.eclipse.chemclipse.msd.converter.supplier.excel.feature.feature.group" version="1.2.0.201703022325"/>
 <unit id="net.openchrom.csd.converter.supplier.shimadzu.gcd.feature.feature.group" version="1.2.0.201703022345"/>
 <unit id="net.openchrom.msd.converter.supplier.agilent.hp.feature.feature.group" version="1.2.0.201703022317"/>
 <unit id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.feature.feature.group" version="1.2.0.201703022319"/>
