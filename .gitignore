@@ -1,0 +1,14 @@
+chemclipse/plugins/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.fragment.test/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.msd.classifier.supplier.molpeak/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.fragment.test/bin/*
+chemclipse/sites/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.updateSite/artifacts.jar
+chemclipse/sites/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.updateSite/content.jar
+chemclipse/sites/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.updateSite/features/
+chemclipse/sites/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.updateSite/plugins/
+chemclipse/plugins/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.fragment.test/chemclipse.log
+chemclipse/features/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.feature/target/
+chemclipse/plugins/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui/target/
+chemclipse/plugins/org.eclipse.chemclipse.msd.classifier.supplier.molpeak/target/
+chemclipse/sites/org.eclipse.chemclipse.msd.classifier.supplier.molpeak.updateSite/target/
+chemclipse/plugins/org.eclipse.chemclipse.msd.classifier.supplier.molpeak/*.ucls
