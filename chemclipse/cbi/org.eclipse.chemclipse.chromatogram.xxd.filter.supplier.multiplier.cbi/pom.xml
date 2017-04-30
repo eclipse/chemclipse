@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <!--
+	PARENT
+  -->
+  <parent>
+    <groupId>org.eclipse.chemclipse</groupId>
+    <artifactId>master</artifactId>
+    <version>BUILD-VERSION</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+  <!--
+	ARTIFACT
+  -->
+  <groupId>org.eclipse.chemclipse</groupId>
+  <artifactId>parent</artifactId>
+  <packaging>pom</packaging>
+  <!--
+	DESCRIPTION
+  --> 
+  <name>OpenChrom Filter Multiplier</name>
+  <description>
+	The OpenChrom filter multiplier extends the functionality of the OpenChrom Rich Client Platform (RCP).
+  </description>
+  <!--
+	LICENSES
+  -->
+  <licenses>
+    <license>
+      <name>EPL v1.0</name>
+      <url>http://www.eclipse.org/legal/epl-v10.html</url>
+    </license> 
+  </licenses>
+  <!--
+	DEVELOPERS
+  -->
+  <developers>
+    <developer>
+      <id>janosbinder</id>
+      <name>Janos Binder</name>
+      <email>janos.binder [at] openchrom.net</email>
+      <timezone>+1</timezone>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+  </developers>
+  <!--
+	MODULES
+  -->
+  <modules>
+    <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier</module>
+    <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.ui</module>
+    <module>../../features/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.feature</module>
+    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.fragment.test</module>-->
+  </modules>
+</project>
