@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_a0zC0EBFEeK0gP2jP6E--g">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_pWCpQEBGEeK0gP2jP6E--g" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_qcfT8EBGEeK0gP2jP6E--g" elementId="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.command.detect" commandName="AMDIS"/>
+    <elements xsi:type="commands:Command" xmi:id="_Bfhk0ImpEeOCgKUt7Hy1sg" elementId="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.command.importELUFile" commandName="Import ELU File"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_vzM58EBGEeK0gP2jP6E--g" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_xMPJcEBGEeK0gP2jP6E--g" elementId="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.handler.detect" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.handlers.DetectorHandler" command="_qcfT8EBGEeK0gP2jP6E--g"/>
+    <elements xsi:type="commands:Handler" xmi:id="_HJznEImpEeOCgKUt7Hy1sg" elementId="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.handler.importELUFile" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui/org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.handlers.DetectorByFileHandler" command="_Bfhk0ImpEeOCgKUt7Hy1sg"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_1dmQ8EBGEeK0gP2jP6E--g" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.peakdetectors">
+    <elements xsi:type="menu:Menu" xmi:id="_gJ3VUJF3EeOUEOyI9Hz-qg" elementId="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.menu.amdis" label="AMDIS">
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_YX8zQCaJEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_3IaM8EBGEeK0gP2jP6E--g" elementId="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.handledmenuitem.detect" label="Deconvolute Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/deconvolution.gif" command="_qcfT8EBGEeK0gP2jP6E--g"/>
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_NVPOkImpEeOCgKUt7Hy1sg" elementId="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.handledmenuitem.readELUFile" label="Import ELU File" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/deconvolutionELU.gif" command="_Bfhk0ImpEeOCgKUt7Hy1sg"/>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>
