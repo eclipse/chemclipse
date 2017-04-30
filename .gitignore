@@ -1,0 +1,15 @@
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.fragment.test/chemclipse.log
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.fragment.test/*.log
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.fragment.test/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.ui/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.ui.fragment.test/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.patternresolver.fragment.i18n/bin/*
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.updateSite/artifacts.jar
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.updateSite/content.jar
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.updateSite/features/*
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.updateSite/plugins/*
+chemclipse/features/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.feature/target/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.ui/target/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover/target/
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.updateSite/target/

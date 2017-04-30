@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <!--
+	PARENT
+  -->
+  <parent>
+    <groupId>org.eclipse.chemclipse</groupId>
+    <artifactId>master</artifactId>
+    <version>BUILD-VERSION</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+  <!--
+	ARTIFACT
+  -->
+  <groupId>org.eclipse.chemclipse</groupId>
+  <artifactId>parent</artifactId>
+  <packaging>pom</packaging>
+  <!--
+	DESCRIPTION
+  --> 
+  <name>OpenChrom Mass Scan Remover Plug-in</name>
+  <description>
+	The OpenChrom ion remover plug-in offers a solution to remove scans of chromatogram. It extends the functionality of the OpenChrom Rich Client Platform (RCP).
+  </description>
+  <url>http://www.openchrom.net/plugins/filter/scanremover</url>
+  <!--
+	LICENSES
+  -->
+  <licenses>
+    <license>
+      <name>EPL v1.0</name>
+      <url>http://www.eclipse.org/legal/epl-v10.html</url>
+    </license> 
+  </licenses>
+  <!--
+	DEVELOPERS
+  -->
+  <developers>
+    <developer>
+      <id>eselmeister</id>
+      <name>Philip Wenig</name>
+      <email>philip.wenig [at] openchrom.net</email>
+      <timezone>+1</timezone>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+  </developers>
+  <!--
+	MODULES
+  -->
+  <modules>
+    <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover</module>
+    <module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.ui</module>
+    <module>../../features/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.feature</module>
+    <!--<module>../../plugins/org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.fragment.test</module>-->
+  </modules>
+</project>
