@@ -1,0 +1,14 @@
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.fragment.test/chemclipse.log
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.fragment.test/*.log
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.fragment.test/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.fragment.test/bin/*
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.site/artifacts.jar
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.site/content.jar
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.site/features/*
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.site/plugins/*
+chemclipse/features/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.feature/target/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui/target/
+chemclipse/plugins/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows/target/
+chemclipse/sites/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.updateSite/target/

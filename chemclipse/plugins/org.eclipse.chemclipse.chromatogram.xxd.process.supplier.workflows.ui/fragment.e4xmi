@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_wakLMOniEeW0usXcEwjpZw">
+  <imports xsi:type="basic:Part" xmi:id="_NzTzQDSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.ui.navigator.ProjectExplorer"/>
+  <imports xsi:type="advanced:Area" xmi:id="_PbkxkDSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.rcp.app.ui.editor"/>
+  <imports xsi:type="basic:Part" xmi:id="_kx0WYDSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.massspectrumlibrarycomparison"/>
+  <imports xsi:type="basic:Part" xmi:id="_thL6QDSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.differencelibrarycomparison"/>
+  <imports xsi:type="basic:Part" xmi:id="_we62sDSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumTargetsView"/>
+  <imports xsi:type="basic:Part" xmi:id="_5y3VADSZEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.simpleNominalMassSpectrumIonListView"/>
+  <imports xsi:type="basic:Part" xmi:id="_vonZEDa-EeaElr7i2TPzQA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectraIdentifiedList"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_pgssMOnpEeW0usXcEwjpZw" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_rgG_MOnpEeW0usXcEwjpZw" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.command.singleChromatogramEvaluationWizard" commandName="Single Chromatogram Evaluation (Wizard)"/>
+    <elements xsi:type="commands:Command" xmi:id="_TESEICvBEeaU8utKPKf5-A" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.command.sampleQuantReport" commandName="Sample Quant Report"/>
+    <elements xsi:type="commands:Command" xmi:id="_CzhAQD7ZEeaZw7wlcv9jBg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.command.singlechromatogramevaluationselection" commandName="Single Chromatogram Evaluation (Selection)"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_v3PXgOnpEeW0usXcEwjpZw" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_xdj1EOnpEeW0usXcEwjpZw" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.handler.singleChromatogramEvaluationWizard" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.handlers.ChromatogramEvaluationWizardHandler" command="_rgG_MOnpEeW0usXcEwjpZw"/>
+    <elements xsi:type="commands:Handler" xmi:id="_aMxJwCvBEeaU8utKPKf5-A" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.handler.sampleQuantReport" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.handlers.SampleQuantReportHandler" command="_TESEICvBEeaU8utKPKf5-A"/>
+    <elements xsi:type="commands:Handler" xmi:id="_Gx9LwD7ZEeaZw7wlcv9jBg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.handler.singlechromatogramevaluationselection" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.handlers.ChromatogramEvaluationSelectionHandler" command="_CzhAQD7ZEeaZw7wlcv9jBg"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_9qR0IOnqEeW0usXcEwjpZw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.process">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_jJa7sCvBEeaU8utKPKf5-A" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.handledmenuitem.samplequantreport" label="Sample Quant Report" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/quantitationResults.gif" command="_TESEICvBEeaU8utKPKf5-A"/>
+    <elements xsi:type="menu:Menu" xmi:id="_GFdkED7XEeaZw7wlcv9jBg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.menu.chromatogramEvaluation" label="Single  Chromatogram Evaluation">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_CiKwIOnrEeW0usXcEwjpZw" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.handledmenuitem.singlechromatogramevaluationwizard" label="Evaluation Wizard" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif" command="_rgG_MOnpEeW0usXcEwjpZw"/>
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_LA7toD7ZEeaZw7wlcv9jBg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.handledmenuitem.singlechromatogramevaluationselection" label="Chromatogram Selection" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif" command="_CzhAQD7ZEeaZw7wlcv9jBg">
+        <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_OaPLwD7ZEeaZw7wlcv9jBg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
+      </children>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Rwk6EDSUEeaE3ZO2A9JPpQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
+    <elements xsi:type="advanced:Perspective" xmi:id="_THS1YDSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.perspective.samplequantitationworkflow" label="Sample Quantitation Workflow" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peak.gif">
+      <children xsi:type="basic:PartSashContainer" xmi:id="_Z6Zg4DSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.partsashcontainer.0">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_bwlmcDSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.partsashcontainer.1" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_eTeZ8DSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.partstack.3" containerData="2500" selectedElement="_gfxSYDSUEeaE3ZO2A9JPpQ">
+            <children xsi:type="advanced:Placeholder" xmi:id="_gfxSYDSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.placeholder.1" ref="_NzTzQDSUEeaE3ZO2A9JPpQ"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_ylbvgDa-EeaElr7i2TPzQA" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.placeholder.5" ref="_vonZEDa-EeaElr7i2TPzQA"/>
+          </children>
+          <children xsi:type="advanced:Placeholder" xmi:id="_fDxOcDSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.ui.editorss" ref="_PbkxkDSUEeaE3ZO2A9JPpQ"/>
+        </children>
+        <children xsi:type="basic:PartSashContainer" xmi:id="_cFBlYDSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.partsashcontainer.2" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_dZGcYDSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.partstack.0" selectedElement="_xDY1sDSUEeaE3ZO2A9JPpQ">
+            <children xsi:type="advanced:Placeholder" xmi:id="_xDY1sDSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.placeholder.2" ref="_kx0WYDSUEeaE3ZO2A9JPpQ"/>
+          </children>
+          <children xsi:type="basic:PartStack" xmi:id="_dp5RcDSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.partstack.1" selectedElement="_96JTcDSZEeaE3ZO2A9JPpQ">
+            <children xsi:type="advanced:Placeholder" xmi:id="_96JTcDSZEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.placeholder.0" ref="_5y3VADSZEeaE3ZO2A9JPpQ"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_yYdLMDSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.placeholder.3" ref="_thL6QDSUEeaE3ZO2A9JPpQ"/>
+          </children>
+          <children xsi:type="basic:PartStack" xmi:id="_d9HvcDSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.partstack.2" selectedElement="_zdWWsDSUEeaE3ZO2A9JPpQ">
+            <children xsi:type="advanced:Placeholder" xmi:id="_zdWWsDSUEeaE3ZO2A9JPpQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.placeholder.4" ref="_we62sDSUEeaE3ZO2A9JPpQ"/>
+          </children>
+        </children>
+      </children>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>

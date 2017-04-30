@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+
+   <extension
+         id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.fragment"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.editors.EditorChromatogramEvaluation"
+            extensions="scr"
+            icon="icons/16x16/report.gif"
+            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.editors.editorChromatogramEvaluation"
+            name="Single Chromatogram Evaluation">
+      </editor>
+      <editor
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.editors.EditorSampleQuant"
+            extensions="sqr"
+            icon="icons/16x16/report.gif"
+            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.editors.editorSampleQuant"
+            name="Sample Quant Report">
+      </editor>  
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+      		category="org.eclipse.chemclipse.chromatogram.msd.process.ui.preferences.processPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.preferencePage"
+            name="Workflow Preferences">
+      </page>
+      <page
+      		category="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.PreferencePageSampleQuant"
+            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.preferencePageSampleQuant"
+            name="Sample Quant">
+      </page>    
+      <page
+      		category="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.PreferencePageEvaluation"
+            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.preferencePageEvaluation"
+            name="Single Chromatogram Evaluation">
+      </page>               
+   </extension>   
+</plugin>
