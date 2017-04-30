@@ -283,7 +283,7 @@
 <unit id="org.eclipse.chemclipse.msd.converter.supplier.svg.feature.feature.group" version="0.8.0.201703022321"/>
 <unit id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.feature.feature.group" version="0.8.0.201703022346"/>
 <unit id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.feature.feature.group" version="0.8.0.201703022329"/>
-<unit id="net.openchrom.chromatogram.msd.peak.detector.supplier.amdis.feature.feature.group" version="1.2.0.201703022341"/>
+<unit id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.feature.feature.group" version="1.2.0.201703022341"/>
 <unit id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.feature.feature.group" version="0.8.0.201703022340"/>
 <unit id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.feature.feature.group" version="0.8.0.201703022339"/>
 <unit id="net.openchrom.msd.converter.supplier.mgf.feature.feature.group" version="1.2.0.201703022335"/>
@@ -308,7 +308,7 @@
 <unit id="net.openchrom.thirdpartylibraries.netcdf.feature.feature.group" version="4.3.19.v2017"/>
 <unit id="net.openchrom.csd.converter.supplier.cdf.feature.feature.group" version="0.8.0.201703022338"/>
 <unit id="net.openchrom.msd.converter.supplier.finnigan.icis.feature.feature.group" version="1.2.0.201703022330"/>
-<unit id="net.openchrom.chromatogram.msd.identifier.supplier.nist.feature.feature.group" version="1.2.0.201703022332"/>
+<unit id="org.eclipse.chemclipse.msd.identifier.supplier.nist.feature.feature.group" version="1.2.0.201703022332"/>
 <unit id="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.feature.feature.group" version="1.2.0.201703022335"/>
 <unit id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.feature.feature.group" version="1.2.0.201703022344"/>
 <unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="1.1.0.v20160823-2221"/>
