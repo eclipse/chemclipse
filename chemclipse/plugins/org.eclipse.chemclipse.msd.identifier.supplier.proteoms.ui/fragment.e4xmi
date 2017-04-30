@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_ZEJl4ADBEeaqLYsVFw9cmQ">
+  <imports xsi:type="basic:Part" xmi:id="_hMrM4Ab7EeafbOgG6Htenw" elementId="org.eclipse.ui.navigator.ProjectExplorer"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_cfedQADBEeaqLYsVFw9cmQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
+    <elements xsi:type="advanced:Perspective" xmi:id="_hd9JcADBEeaqLYsVFw9cmQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.perspective.proteoms" selectedElement="_mFgjYADBEeaqLYsVFw9cmQ" label="Proteoms" iconURI="platform:/plugin/org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui/icons/16x16/demo.gif">
+      <children xsi:type="basic:PartSashContainer" xmi:id="_mFgjYADBEeaqLYsVFw9cmQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.partsashcontainer.0" containerData="" horizontal="true">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_qM4BYADBEeaqLYsVFw9cmQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.partsashcontainer.1" containerData="7500">
+          <children xsi:type="basic:PartStack" xmi:id="_kSX8YADCEeaqLYsVFw9cmQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.partstack.0">
+            <children xsi:type="advanced:Placeholder" xmi:id="_lHBscADCEeaqLYsVFw9cmQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.placeholder.0" ref="_vj9a0ADBEeaqLYsVFw9cmQ"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_ojPx0Ab7EeafbOgG6Htenw" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.placeholder.4" ref="_hMrM4Ab7EeafbOgG6Htenw"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_sMDZACcPEea9NNtaq4BsIQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.placeholder.5" ref="_phlzUCcOEea9NNtaq4BsIQ"/>
+          </children>
+          <children xsi:type="basic:PartStack" xmi:id="_kwMg0ADCEeaqLYsVFw9cmQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.partstack.1">
+            <children xsi:type="advanced:Placeholder" xmi:id="_ru-Q0ADCEeaqLYsVFw9cmQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.placeholder.1" ref="_WLkZwADCEeaqLYsVFw9cmQ"/>
+          </children>
+        </children>
+        <children xsi:type="basic:PartSashContainer" xmi:id="_qid24ADBEeaqLYsVFw9cmQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.partsashcontainer.2" containerData="2500">
+          <children xsi:type="basic:PartStack" xmi:id="_sHYw0ADCEeaqLYsVFw9cmQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.partstack.2" containerData="7500">
+            <children xsi:type="advanced:Placeholder" xmi:id="_sumh0ADCEeaqLYsVFw9cmQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.placeholder.2" ref="_V5GwwADCEeaqLYsVFw9cmQ"/>
+          </children>
+          <children xsi:type="basic:PartStack" xmi:id="_sZUOUADCEeaqLYsVFw9cmQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.partstack.3" containerData="2500">
+            <children xsi:type="advanced:Placeholder" xmi:id="_tVHvQADCEeaqLYsVFw9cmQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.placeholder.3" ref="_VmpHwADCEeaqLYsVFw9cmQ"/>
+          </children>
+        </children>
+      </children>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_uI1goADBEeaqLYsVFw9cmQ" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
+    <elements xsi:type="basic:Part" xmi:id="_vj9a0ADBEeaqLYsVFw9cmQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.part.proteomspectra" contributionURI="bundleclass://org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui/org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.parts.ProteomSpectraPart" label="Proteom Spectra" iconURI="platform:/plugin/org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui/icons/16x16/demo.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_VmpHwADCEeaqLYsVFw9cmQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.part.proteompeptideanalyzer" contributionURI="bundleclass://org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui/org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.parts.ProteomPeptideAnalyzerPart" label="Proteom Peptide Analyzer" iconURI="platform:/plugin/org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui/icons/16x16/demo.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_V5GwwADCEeaqLYsVFw9cmQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.part.proteompeaks" contributionURI="bundleclass://org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui/org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.parts.ProteomPeaksPart" label="Proteom Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui/icons/16x16/demo.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_WLkZwADCEeaqLYsVFw9cmQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.part.proteomspectrum" contributionURI="bundleclass://org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui/org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.parts.ProteomSpectrumPart" label="Proteom Spectrum" iconURI="platform:/plugin/org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui/icons/16x16/demo.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_phlzUCcOEea9NNtaq4BsIQ" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.part.proteomsprojectexplorer" contributionURI="bundleclass://org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui/org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.parts.ProjectExplorerPart" label="Proteoms Project Explorer" iconURI="platform:/plugin/org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui/icons/16x16/demo.gif">
+      <menus xmi:id="_yza6ECfJEea5XP_NKderJg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.menu.1" label="Menu">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_1r7YQCfJEea5XP_NKderJg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.handledmenuitem.meni222" label="Meni222" iconURI="platform:/plugin/org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui/icons/sample.gif" command="_Nz7TACfKEea5XP_NKderJg"/>
+      </menus>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_fefS8CkMEeaPSYYESO_Dnw" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_Nz7TACfKEea5XP_NKderJg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.command.proteoms" commandName="Proteoms"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_h1sa4CkMEeaPSYYESO_Dnw" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_TlGncCfKEea5XP_NKderJg" elementId="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.handler.0" contributionURI="bundleclass://org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui/org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.parts.MyMenuCommand" command="_Nz7TACfKEea5XP_NKderJg"/>
+  </fragments>
+</fragment:ModelFragments>
