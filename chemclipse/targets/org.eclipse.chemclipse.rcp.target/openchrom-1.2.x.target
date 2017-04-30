@@ -179,11 +179,11 @@
 <unit id="net.openchrom.thirdpartylibraries.barcode4j.feature.feature.group" version="2.1.0.v2017"/>
 <unit id="org.eclipse.ease.feature.feature.group" version="0.4.0.I201611181551"/>
 <unit id="net.openchrom.thirdpartylibraries.orientdb.feature.feature.group" version="2.1.16.v2017"/>
-<unit id="net.openchrom.chromatogram.xxd.filter.supplier.meannormalizer.feature.feature.group" version="1.2.0.201703022327"/>
+<unit id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer.feature.feature.group" version="1.2.0.201703022327"/>
 <unit id="net.openchrom.chromatogram.msd.identifier.supplier.cdk.feature.feature.group" version="0.8.0.201703022339"/>
 <unit id="net.openchrom.msd.converter.supplier.finnigan.raw.feature.feature.group" version="1.2.0.201703022331"/>
 <unit id="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.feature.feature.group" version="0.8.0.201703022325"/>
-<unit id="net.openchrom.chromatogram.xxd.filter.supplier.multiplier.feature.feature.group" version="1.2.0.201703022328"/>
+<unit id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.feature.feature.group" version="1.2.0.201703022328"/>
 <unit id="net.openchrom.thirdpartylibraries.biojava.feature.feature.group" version="4.2.4.v2017"/>
 <unit id="org.eclipse.chemclipse.msd.converter.supplier.mzdata.feature.feature.group" version="0.8.0.201703022325"/>
 <unit id="net.openchrom.msd.converter.supplier.vg.feature.feature.group" version="1.2.0.201703022349"/>
@@ -201,7 +201,7 @@
 <unit id="org.eclipse.ease.ui.feature.feature.group" version="0.4.0.I201701130652"/>
 <unit id="net.openchrom.thirdpartylibraries.jython.feature.feature.group" version="2.7.0.v2017"/>
 <unit id="net.openchrom.msd.converter.supplier.masshunter.feature.feature.group" version="1.2.0.201703022334"/>
-<unit id="net.openchrom.chromatogram.xxd.filter.supplier.normalizer.feature.feature.group" version="1.2.0.201703022328"/>
+<unit id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.feature.feature.group" version="1.2.0.201703022328"/>
 <unit id="org.eclipse.equinox.p2.user.ui.feature.group" version="2.2.201.v20161124-1529"/>
 <unit id="net.openchrom.msd.converter.supplier.waters.feature.feature.group" version="1.2.0.201703022349"/>
 <unit id="org.eclipse.e4.rcp.feature.group" version="1.5.2.v20161122-1740"/>
@@ -268,7 +268,7 @@
 <unit id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.feature.feature.group" version="0.8.0.201703022326"/>
 <unit id="org.eclipse.emf.ecore.feature.group" version="2.12.0.v20160420-0247"/>
 <unit id="net.openchrom.thirdpartylibraries.jna.feature.feature.group" version="4.2.2.v2017"/>
-<unit id="net.openchrom.chromatogram.xxd.filter.supplier.unitsumnormalizer.feature.feature.group" version="1.2.0.201703022329"/>
+<unit id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.feature.feature.group" version="1.2.0.201703022329"/>
 <unit id="net.openchrom.wsd.converter.supplier.absciex.feature.feature.group" version="1.2.0.201703022315"/>
 <unit id="org.eclipse.ease.python.feature.feature.group" version="0.3.0.I201604141107"/>
 <unit id="net.openchrom.csd.converter.supplier.masshunter.feature.feature.group" version="1.2.0.201703022334"/>
@@ -310,7 +310,7 @@
 <unit id="net.openchrom.msd.converter.supplier.finnigan.icis.feature.feature.group" version="1.2.0.201703022330"/>
 <unit id="net.openchrom.chromatogram.msd.identifier.supplier.nist.feature.feature.group" version="1.2.0.201703022332"/>
 <unit id="net.openchrom.msd.classifier.supplier.molpeak.feature.feature.group" version="1.2.0.201703022335"/>
-<unit id="net.openchrom.chromatogram.xxd.filter.supplier.scanremover.feature.feature.group" version="1.2.0.201703022344"/>
+<unit id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.feature.feature.group" version="1.2.0.201703022344"/>
 <unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="1.1.0.v20160823-2221"/>
 <unit id="org.eclipse.chemclipse.rcp.app.compilation.marketplace.feature.feature.group" version="0.8.0.201703030010"/>
 <unit id="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.feature.feature.group" version="0.8.0.201703030004"/>
@@ -344,7 +344,7 @@
 <unit id="net.openchrom.msd.process.supplier.cms.feature.feature.group" version="1.2.0.201703022352"/>
 <unit id="org.eclipse.rcp.feature.group" version="4.6.2.v20161124-1400"/>
 <unit id="net.openchrom.xxd.converter.supplier.massfinder.feature.feature.group" version="1.2.0.201703022351"/>
-<unit id="net.openchrom.chromatogram.xxd.filter.supplier.mediannormalizer.feature.feature.group" version="1.2.0.201703022327"/>
+<unit id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer.feature.feature.group" version="1.2.0.201703022327"/>
 <unit id="org.eclipse.jdt.feature.group" version="3.12.2.v20161124-1400"/>
 <unit id="net.openchrom.csd.converter.supplier.finnigan.dat.feature.feature.group" version="1.2.0.201703022330"/>
 <unit id="org.eclipse.chemclipse.msd.converter.supplier.amdis.feature.feature.group" version="0.8.0.201703022318"/>
