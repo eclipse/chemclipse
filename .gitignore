@@ -1,0 +1,13 @@
+chemclipse/plugins/org.eclipse.chemclipse.msd.identifier.supplier.nist.fragment.test/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.msd.identifier.supplier.nist.ui/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.msd.identifier.supplier.nist/bin/*
+chemclipse/plugins/org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.fragment.test/bin/*
+chemclipse/sites/org.eclipse.chemclipse.msd.identifier.supplier.nist.updateSite/artifacts.jar
+chemclipse/sites/org.eclipse.chemclipse.msd.identifier.supplier.nist.updateSite/content.jar
+chemclipse/sites/org.eclipse.chemclipse.msd.identifier.supplier.nist.updateSite/features/
+chemclipse/sites/org.eclipse.chemclipse.msd.identifier.supplier.nist.updateSite/plugins/
+chemclipse/plugins/org.eclipse.chemclipse.msd.identifier.supplier.nist.fragment.test/chemclipse.log
+chemclipse/features/org.eclipse.chemclipse.msd.identifier.supplier.nist.feature/target/
+chemclipse/plugins/org.eclipse.chemclipse.msd.identifier.supplier.nist.ui/target/
+chemclipse/plugins/org.eclipse.chemclipse.msd.identifier.supplier.nist/target/
+chemclipse/sites/org.eclipse.chemclipse.msd.identifier.supplier.nist.updateSite/target/
