@@ -241,7 +241,7 @@
 <unit id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.feature.feature.group" version="0.8.0.201703022351"/>
 <unit id="org.eclipse.chemclipse.thirdpartylibraries.ejml.feature.feature.group" version="0.29.0.v2017"/>
 <unit id="net.openchrom.rcp.compilation.community.converter.feature.feature.group" version="1.2.0.201703030020"/>
-<unit id="net.openchrom.msd.identifier.supplier.proteoms.feature.feature.group" version="1.2.0.201703030001"/>
+<unit id="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.feature.feature.group" version="1.2.0.201703030001"/>
 <unit id="net.openchrom.msd.converter.supplier.shimadzu.lcd.feature.feature.group" version="1.2.0.201703022346"/>
 <unit id="org.eclipse.nebula.widgets.nattable.core.feature.feature.group" version="1.4.0.201606011907"/>
 <unit id="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.feature.feature.group" version="0.8.0.201703022342"/>
@@ -259,7 +259,7 @@
 <unit id="org.eclipse.chemclipse.msd.converter.supplier.mz5.feature.feature.group" version="0.8.0.201703022324"/>
 <unit id="net.openchrom.chromatogram.msd.comparison.supplier.pbm.feature.feature.group" version="1.2.0.201703022323"/>
 <unit id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.feature.feature.group" version="0.8.0.201703022326"/>
-<unit id="net.openchrom.msd.identifier.supplier.triplequad.feature.feature.group" version="1.2.0.201703022347"/>
+<unit id="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.feature.feature.group" version="1.2.0.201703022347"/>
 <unit id="net.openchrom.thirdpartylibraries.concurrentlinkedhashmap.feature.feature.group" version="1.4.1.v2017"/>
 <unit id="net.openchrom.thirdpartylibraries.lzf.feature.feature.group" version="1.0.4.v2017"/>
 <unit id="net.openchrom.msd.converter.supplier.finnigan.its40.feature.feature.group" version="1.2.0.201703022331"/>
@@ -287,7 +287,7 @@
 <unit id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.feature.feature.group" version="0.8.0.201703022340"/>
 <unit id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.feature.feature.group" version="0.8.0.201703022339"/>
 <unit id="net.openchrom.msd.converter.supplier.mgf.feature.feature.group" version="1.2.0.201703022335"/>
-<unit id="net.openchrom.msd.converter.supplier.zip.feature.feature.group" version="1.2.0.201703022350"/>
+<unit id="org.eclipse.chemclipse.xxd.converter.supplier.zip.feature.feature.group" version="1.2.0.201703022350"/>
 <unit id="org.eclipse.chemclipse.msd.converter.supplier.animl.feature.feature.group" version="0.8.0.201703022323"/>
 <unit id="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.manual.feature.feature.group" version="0.8.0.201703022333"/>
 <unit id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.feature.feature.group" version="0.8.0.201703022323"/>
@@ -309,7 +309,7 @@
 <unit id="net.openchrom.csd.converter.supplier.cdf.feature.feature.group" version="0.8.0.201703022338"/>
 <unit id="net.openchrom.msd.converter.supplier.finnigan.icis.feature.feature.group" version="1.2.0.201703022330"/>
 <unit id="net.openchrom.chromatogram.msd.identifier.supplier.nist.feature.feature.group" version="1.2.0.201703022332"/>
-<unit id="net.openchrom.msd.classifier.supplier.molpeak.feature.feature.group" version="1.2.0.201703022335"/>
+<unit id="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.feature.feature.group" version="1.2.0.201703022335"/>
 <unit id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.feature.feature.group" version="1.2.0.201703022344"/>
 <unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="1.1.0.v20160823-2221"/>
 <unit id="org.eclipse.chemclipse.rcp.app.compilation.marketplace.feature.feature.group" version="0.8.0.201703030010"/>
@@ -327,7 +327,7 @@
 <unit id="net.openchrom.msd.converter.supplier.agilent.hp.feature.feature.group" version="1.2.0.201703022317"/>
 <unit id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.feature.feature.group" version="1.2.0.201703022319"/>
 <unit id="net.openchrom.msd.converter.supplier.shimadzu.qgd.feature.feature.group" version="1.2.0.201703022344"/>
-<unit id="net.openchrom.chromatogram.xxd.process.supplier.workflows.feature.feature.group" version="1.2.0.201703022355"/>
+<unit id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.feature.feature.group" version="1.2.0.201703022355"/>
 <unit id="org.eclipse.chemclipse.rcp.app.compilation.core.feature.feature.group" version="0.8.0.201703030010"/>
 <unit id="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.feature.feature.group" version="0.8.0.201703022347"/>
 <unit id="net.openchrom.rcp.compilation.community.extras.feature.feature.group" version="1.2.0.201703030020"/>
