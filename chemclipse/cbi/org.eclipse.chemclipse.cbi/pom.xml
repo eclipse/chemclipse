@@ -52,10 +52,6 @@
   -->
   <modules>
     <!--
-	Targets
-    -->
-    <module>../../targets/org.eclipse.chemclipse.rcp.target</module>
-    <!--
 	Plug-ins
     -->
     <module>../../plugins/org.eclipse.chemclipse.rcp.app.test</module>
