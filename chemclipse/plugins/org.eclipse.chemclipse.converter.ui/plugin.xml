@@ -10,5 +10,11 @@
             name="Converter">
       </page>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="org.eclipse.chemclipse.converter.ui.sequenceReportExtractorCategory"
+            name="Sequence/Report Extractor">
+      </category>
+   </extension>     
 </plugin>
