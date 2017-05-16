@@ -88,5 +88,5 @@ fi
 echo "Start git project commit"
   active=$(pwd)
     # Go to the workspace area.
-  commit_projects $(find ../../.. -type d -maxdepth 1)
+  commit_projects $(find ../../../../../ -type d -maxdepth 1)
 echo "finished"

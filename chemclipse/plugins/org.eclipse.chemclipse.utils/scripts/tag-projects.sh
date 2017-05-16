@@ -51,5 +51,5 @@ function tag_projects {
 echo "Start git project tagging"
   active=$(pwd)
   # Go to the workspace area.
-  tag_projects $(find ../../../ -maxdepth 1 -type d)
+  tag_projects $(find ../../../../../ -maxdepth 1 -type d)
 echo "finished"

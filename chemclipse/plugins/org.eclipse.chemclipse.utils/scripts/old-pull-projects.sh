@@ -65,5 +65,5 @@ done
 echo "Start git project pull"
   active=$(pwd)
    # Go to the workspace area.
-  pull_projects $(find ../../.. -maxdepth 1 -type d)
+  pull_projects $(find ../../../../../ -maxdepth 1 -type d)
 echo "finished"

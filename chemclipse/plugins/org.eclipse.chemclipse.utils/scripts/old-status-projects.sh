@@ -78,6 +78,6 @@ function status_projects {
 echo "Start git project status"
   active=$(pwd)
     # Go to the workspace area.
-  status_projects $(find ../../.. -maxdepth 1 -type d)
+  status_projects $(find ../../../../../ -maxdepth 1 -type d)
   rm /tmp/git_status_delta
 echo "finished"

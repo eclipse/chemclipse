@@ -35,5 +35,5 @@ function reset_projects {
 echo "Start git project reset"
   active=$(pwd)
     # Go to the workspace area.
-  reset_projects $(find ../../../ -type d -maxdepth 1)
+  reset_projects $(find ../../../../../ -type d -maxdepth 1)
 echo "finished"

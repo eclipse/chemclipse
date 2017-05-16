@@ -52,7 +52,7 @@ echo "Start git project diff"
   export -f diff_project
   export DIFF_SCRIPT_GIT_FLAGS
   export diff_script_active
-  for git_project in $(find ../../.. -maxdepth 1 -type d); do
+  for git_project in $(find ../../../../../ -maxdepth 1 -type d); do
     diff_project $git_project
   done
 echo "finished"

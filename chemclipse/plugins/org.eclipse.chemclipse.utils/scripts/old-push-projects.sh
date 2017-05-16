@@ -66,5 +66,5 @@ done
 echo "Start git project push"
   active=$(pwd)
     # Go to the workspace area.
-  push_projects $(find ../../.. -maxdepth 1 -type d)
+  push_projects $(find ../../../../../ -maxdepth 1 -type d)
 echo "finished"

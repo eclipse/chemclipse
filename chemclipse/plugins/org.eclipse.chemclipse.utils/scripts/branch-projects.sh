@@ -39,5 +39,5 @@ function branch_projects {
 echo "Start git project branch"
   active=$(pwd)
   # Go to the workspace area.
-  branch_projects $(find ../../../ -maxdepth 1 -type d)
+  branch_projects $(find ../../../../../ -maxdepth 1 -type d)
 echo "finished"

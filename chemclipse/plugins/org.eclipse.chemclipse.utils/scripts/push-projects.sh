@@ -69,6 +69,6 @@ echo "Start git project push"
     done
   else
     # one can play with parallel --bar or --progress but it looks ugly
-    find ../../.. -maxdepth 1 -type d | parallel push_project :::: -
+    find ../../../../../ -maxdepth 1 -type d | parallel push_project :::: -
   fi
 echo "finished"

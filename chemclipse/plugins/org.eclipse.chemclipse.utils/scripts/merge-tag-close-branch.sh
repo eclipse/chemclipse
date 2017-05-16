@@ -40,5 +40,5 @@ function merge_projects {
 echo "Start"
 	active=$(pwd)
 	# ../../../ go to workspace area.
-	merge_projects $(find ../../../ -type d -maxdepth 1)
+	merge_projects $(find ../../../../../ -type d -maxdepth 1)
 echo "Finished"
