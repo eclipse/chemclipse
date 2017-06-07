@@ -40,8 +40,8 @@ public class ProcessingInfoUI {
 	private TableViewer tableViewer;
 	private ProcessingInfoTableComparator processingInfoTableComparator;
 	private Clipboard clipboard;
-	private String[] titles = {"Type", "Description", "Message", "Date"};
-	private int bounds[] = {100, 100, 100, 100};
+	private String[] titles = {"Type", "Description", "Message", "Date", "Proposed Solution"};
+	private int bounds[] = {100, 100, 100, 100, 100};
 	//
 	private static final String DELIMITER = "\t";
 

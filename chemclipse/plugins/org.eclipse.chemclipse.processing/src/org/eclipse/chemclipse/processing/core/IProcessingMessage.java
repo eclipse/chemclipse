@@ -44,16 +44,16 @@ public interface IProcessingMessage {
 	String getMessage();
 
 	/**
-	 * Set a solution.
+	 * Set a proposed solution.
 	 * 
-	 * @param solution
+	 * @param proposedSolution
 	 */
-	void setSolution(String solution);
+	void setProposedSolution(String proposedSolution);
 
 	/**
 	 * Get the proposed solution.
 	 * 
 	 * @return
 	 */
-	String getSolution();
+	String getProposedSolution();
 }

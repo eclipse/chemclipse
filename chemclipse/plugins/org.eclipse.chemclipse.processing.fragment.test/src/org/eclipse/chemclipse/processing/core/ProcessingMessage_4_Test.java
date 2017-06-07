@@ -33,20 +33,20 @@ public class ProcessingMessage_4_Test extends TestCase {
 
 		processingMessage = new ProcessingMessage(MessageType.INFO, "Test", "Everything is ok.", "");
 		assertEquals(MessageType.INFO, processingMessage.getMessageType());
-		assertEquals("", processingMessage.getSolution());
+		assertEquals("", processingMessage.getProposedSolution());
 	}
 
 	public void testGetMessageType_2() {
 
 		processingMessage = new ProcessingMessage(MessageType.WARN, "Test", "The area is out of range.", "Please adjust the area.");
 		assertEquals(MessageType.WARN, processingMessage.getMessageType());
-		assertEquals("Please adjust the area.", processingMessage.getSolution());
+		assertEquals("Please adjust the area.", processingMessage.getProposedSolution());
 	}
 
 	public void testGetMessageType_3() {
 
 		processingMessage = new ProcessingMessage(MessageType.ERROR, "Test", "The area is 0.", "Please re-evaluate the data.");
 		assertEquals(MessageType.ERROR, processingMessage.getMessageType());
-		assertEquals("Please re-evaluate the data.", processingMessage.getSolution());
+		assertEquals("Please re-evaluate the data.", processingMessage.getProposedSolution());
 	}
 }

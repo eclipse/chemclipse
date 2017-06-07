@@ -50,12 +50,30 @@ public interface IProcessingInfo {
 	void addWarnMessage(String description, String message);
 
 	/**
+	 * Adds a warn message to the processing info.
+	 * 
+	 * @param description
+	 * @param message
+	 * @param proposedSolution
+	 */
+	void addWarnMessage(String description, String message, String proposedSolution);
+
+	/**
 	 * Adds an error message to the processing info.
 	 * 
 	 * @param description
 	 * @param message
 	 */
 	void addErrorMessage(String description, String message);
+
+	/**
+	 * Adds an error message to the processing info.
+	 * 
+	 * @param description
+	 * @param message
+	 * @param proposedSolution
+	 */
+	void addErrorMessage(String description, String message, String proposedSolution);
 
 	/**
 	 * Returns the list of messages.

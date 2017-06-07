@@ -60,14 +60,26 @@ public abstract class AbstractProcessingInfo implements IProcessingInfo {
 	@Override
 	public void addWarnMessage(String description, String message) {
 
-		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.WARN, description, message);
+		addWarnMessage(description, message, "");
+	}
+
+	@Override
+	public void addWarnMessage(String description, String message, String proposedSolution) {
+
+		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.WARN, description, message, proposedSolution);
 		addMessage(processingMessage);
 	}
 
 	@Override
 	public void addErrorMessage(String description, String message) {
 
-		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, description, message);
+		addErrorMessage(description, message, "");
+	}
+
+	@Override
+	public void addErrorMessage(String description, String message, String proposedSolution) {
+
+		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, description, message, proposedSolution);
 		addMessage(processingMessage);
 	}
 

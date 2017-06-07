@@ -38,6 +38,9 @@ public class ProcessingInfoTableComparator extends AbstractRecordTableComparator
 				case 3: // Date
 					sortOrder = (int)(message2.getDate().getTime() - message1.getDate().getTime());
 					break;
+				case 4: // Proposed Solution
+					sortOrder = message2.getProposedSolution().compareTo(message1.getProposedSolution());
+					break;
 				default:
 					sortOrder = 0;
 			}

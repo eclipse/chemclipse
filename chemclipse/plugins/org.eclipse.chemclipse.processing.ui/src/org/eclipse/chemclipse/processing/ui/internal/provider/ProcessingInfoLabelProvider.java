@@ -67,6 +67,9 @@ public class ProcessingInfoLabelProvider extends LabelProvider implements ITable
 				case 3: // Date
 					text = message.getDate().toString();
 					break;
+				case 4: // Solution
+					text = message.getProposedSolution();
+					break;
 				default:
 					text = "n.v.";
 			}
