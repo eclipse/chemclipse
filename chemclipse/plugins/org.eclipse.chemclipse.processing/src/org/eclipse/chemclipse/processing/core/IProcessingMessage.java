@@ -42,4 +42,18 @@ public interface IProcessingMessage {
 	 * @return String
 	 */
 	String getMessage();
+
+	/**
+	 * Set a solution.
+	 * 
+	 * @param solution
+	 */
+	void setSolution(String solution);
+
+	/**
+	 * Get the proposed solution.
+	 * 
+	 * @return
+	 */
+	String getSolution();
 }

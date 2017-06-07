@@ -19,8 +19,16 @@ public abstract class AbstractProcessingMessage implements IProcessingMessage {
 	private Date date;
 	private String description = "Description was null.";
 	private String message = "Message was null.";
+	private String solution = "";
 
 	public AbstractProcessingMessage(MessageType messageType, String description, String message) {
+		this(messageType, description, message, "");
+	}
+
+	public AbstractProcessingMessage(MessageType messageType, String description, String message, String solution) {
+		/*
+		 * New Date.
+		 */
 		date = new Date();
 		/*
 		 * MessageType
@@ -39,6 +47,12 @@ public abstract class AbstractProcessingMessage implements IProcessingMessage {
 		 */
 		if(message != null) {
 			this.message = message;
+		}
+		/*
+		 * Solution
+		 */
+		if(solution != null) {
+			this.solution = solution;
 		}
 	}
 
@@ -67,6 +81,18 @@ public abstract class AbstractProcessingMessage implements IProcessingMessage {
 	}
 
 	@Override
+	public void setSolution(String solution) {
+
+		this.solution = solution;
+	}
+
+	@Override
+	public String getSolution() {
+
+		return solution;
+	}
+
+	@Override
 	public String toString() {
 
 		StringBuilder builder = new StringBuilder();
@@ -79,6 +105,8 @@ public abstract class AbstractProcessingMessage implements IProcessingMessage {
 		builder.append("description=" + description);
 		builder.append(",");
 		builder.append("message=" + message);
+		builder.append(",");
+		builder.append("solution=" + solution);
 		builder.append("]");
 		return builder.toString();
 	}

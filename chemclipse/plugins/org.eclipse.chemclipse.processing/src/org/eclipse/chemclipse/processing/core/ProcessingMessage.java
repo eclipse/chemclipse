@@ -16,4 +16,8 @@ public class ProcessingMessage extends AbstractProcessingMessage implements IPro
 	public ProcessingMessage(MessageType messageType, String description, String message) {
 		super(messageType, description, message);
 	}
+
+	public ProcessingMessage(MessageType messageType, String description, String message, String solution) {
+		super(messageType, description, message, solution);
+	}
 }
