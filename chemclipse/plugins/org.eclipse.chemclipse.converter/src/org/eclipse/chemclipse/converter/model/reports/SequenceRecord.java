@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.converter.model.reports;
 
 public class SequenceRecord implements ISequenceRecord {
 
-	private String substance;
-	private String method;
+	private String substance = "";
+	private String method = "";
 
 	@Override
 	public String getSubstance() {
