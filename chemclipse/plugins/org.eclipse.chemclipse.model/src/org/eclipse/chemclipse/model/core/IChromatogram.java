@@ -53,6 +53,13 @@ public interface IChromatogram extends IChromatogramOverview, IAdaptable, IChrom
 	void addScan(IScan scan);
 
 	/**
+	 * Adds the scans to the chromatogram.
+	 * 
+	 * @param scans
+	 */
+	void addScans(List<IScan> scans);
+
+	/**
 	 * Returns the scan with the given scan number from the chromatogram. If the
 	 * retention times should be recalculated, call
 	 * chromatogram.recalculateRetentionTimes().<br/>
