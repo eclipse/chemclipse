@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2010, 2017 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
  * the Eclipse Public License v1.0 which accompanies this distribution, and is
  * available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -16,12 +16,12 @@ public class ComparisonResult extends AbstractComparisonResult implements ICompa
 	/**
 	 * Renew the UUID on change.
 	 */
-	private static final long serialVersionUID = -1880511926278090160L;
+	private static final long serialVersionUID = 6897854010927446632L;
 	private static ComparisonResult COMPARISON_RESULT_NO_MATCH = null;
 
 	/**
 	 * Constructs the result.
-	 * 
+	 *
 	 * @param matchQuality
 	 * @param reverseMatchQuality
 	 */
@@ -43,13 +43,13 @@ public class ComparisonResult extends AbstractComparisonResult implements ICompa
 	public static ComparisonResult createNoMatchComparisonResult() {
 
 		if(COMPARISON_RESULT_NO_MATCH == null) {
-			COMPARISON_RESULT_NO_MATCH = new ComparisonResult(FACTOR_NO_MATCH, FACTOR_NO_MATCH, FACTOR_NO_MATCH, FACTOR_NO_MATCH);
+			COMPARISON_RESULT_NO_MATCH = new ComparisonResult(FACTOR_NO_MATCH, FACTOR_NO_MATCH, FACTOR_NO_MATCH, FACTOR_NO_MATCH).setMatch(false);
 		}
 		return COMPARISON_RESULT_NO_MATCH;
 	}
 
 	public static ComparisonResult createBestMatchComparisonResult() {
 
-		return new ComparisonResult(FACTOR_BEST_MATCH, FACTOR_BEST_MATCH, FACTOR_BEST_MATCH, FACTOR_BEST_MATCH).setMatch(false);
+		return new ComparisonResult(FACTOR_BEST_MATCH, FACTOR_BEST_MATCH, FACTOR_BEST_MATCH, FACTOR_BEST_MATCH).setMatch(true);
 	}
 }
