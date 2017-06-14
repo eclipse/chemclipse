@@ -23,14 +23,17 @@ public class ReaderHelper {
 
 	public String getVersion(File file) throws IOException {
 
-		DataInputStream dataInputStream;
 		FileInputStream fileInputStream = new FileInputStream(file);
 		ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(fileInputStream));
-		//
-		dataInputStream = getDataInputStream(zipInputStream, IFormat.FILE_VERSION);
-		String version = readString(dataInputStream);
+		String version = getVersion(zipInputStream);
 		zipInputStream.close();
-		//
+		return version;
+	}
+
+	public String getVersion(ZipInputStream zipInputStream) throws IOException {
+
+		DataInputStream dataInputStream = getDataInputStream(zipInputStream, IFormat.FILE_VERSION);
+		String version = readString(dataInputStream);
 		return version;
 	}
 

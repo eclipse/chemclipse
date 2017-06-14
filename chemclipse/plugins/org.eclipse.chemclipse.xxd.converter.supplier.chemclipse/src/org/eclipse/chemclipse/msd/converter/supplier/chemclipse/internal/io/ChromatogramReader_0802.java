@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
@@ -43,7 +44,7 @@ import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.model.targets.PeakTarget;
-import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
+import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.IChromatogramMSDZipReader;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorScan;
@@ -79,7 +80,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class ChromatogramReader_0802 extends AbstractChromatogramReader implements IChromatogramMSDReader {
+public class ChromatogramReader_0802 extends AbstractChromatogramReader implements IChromatogramMSDZipReader {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramReader_0802.class);
 
@@ -114,6 +115,12 @@ public class ChromatogramReader_0802 extends AbstractChromatogramReader implemen
 		}
 		//
 		return chromatogramOverview;
+	}
+
+	@Override
+	public IChromatogramMSD read(ZipInputStream zipInputStream, IProgressMonitor monitor) throws IOException {
+
+		return null;
 	}
 
 	private IChromatogramMSD readFromZipFile(ZipFile zipFile, File file, IProgressMonitor monitor) throws IOException {

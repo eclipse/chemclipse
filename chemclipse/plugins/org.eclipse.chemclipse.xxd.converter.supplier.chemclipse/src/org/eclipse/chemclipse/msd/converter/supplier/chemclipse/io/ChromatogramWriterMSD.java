@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.zip.ZipOutputStream;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
@@ -38,13 +39,26 @@ import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramWriterMSD extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
+public class ChromatogramWriterMSD extends AbstractChromatogramWriter implements IChromatogramMSDWriter, IChromatogramMSDZipWriter {
 
 	@Override
 	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
+		IChromatogramMSDZipWriter chromatogramWriter = getChromatogramWriter(chromatogram, monitor);
+		chromatogramWriter.writeChromatogram(file, chromatogram, monitor);
+	}
+
+	@Override
+	public void writeChromatogram(ZipOutputStream zipOutputStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		IChromatogramMSDZipWriter chromatogramWriter = getChromatogramWriter(chromatogram, monitor);
+		chromatogramWriter.writeChromatogram(zipOutputStream, chromatogram, monitor);
+	}
+
+	private IChromatogramMSDZipWriter getChromatogramWriter(IChromatogramMSD chromatogram, IProgressMonitor monitor) {
+
 		String versionSave = PreferenceSupplier.getVersionSave();
-		IChromatogramMSDWriter chromatogramWriter;
+		IChromatogramMSDZipWriter chromatogramWriter;
 		/*
 		 * Check the requested version of the file to be exported.
 		 * TODO Optimize
@@ -84,6 +98,6 @@ public class ChromatogramWriterMSD extends AbstractChromatogramWriter implements
 		 * Load all scan proxies before exporting the file.
 		 */
 		chromatogram.enforceLoadScanProxies(monitor);
-		chromatogramWriter.writeChromatogram(file, chromatogram, monitor);
+		return chromatogramWriter;
 	}
 }

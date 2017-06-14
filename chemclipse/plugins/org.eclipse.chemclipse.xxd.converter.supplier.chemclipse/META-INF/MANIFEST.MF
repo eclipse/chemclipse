@@ -23,6 +23,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter,
  org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter,
+ org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io,
  org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter,
  org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences,
  org.eclipse.chemclipse.xxd.converter.supplier.io.exception

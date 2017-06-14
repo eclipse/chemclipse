@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.zip.ZipInputStream;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
@@ -22,7 +23,6 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDReader;
-import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramReader_0701;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramReader_0801;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramReader_0802;
@@ -52,7 +52,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
-public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader implements IChromatogramMSDReader {
+public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader implements IChromatogramMSDZipReader {
 
 	@Override
 	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -65,39 +65,7 @@ public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader impleme
 		 * the *.ocb format.
 		 * TODO Optimize
 		 */
-		IChromatogramMSDReader chromatogramReader = null;
-		if(version.equals(IFormat.VERSION_0701)) {
-			chromatogramReader = new ChromatogramReader_0701();
-		} else if(version.equals(IFormat.VERSION_0801)) {
-			chromatogramReader = new ChromatogramReader_0801();
-		} else if(version.equals(IFormat.VERSION_0802)) {
-			chromatogramReader = new ChromatogramReader_0802();
-		} else if(version.equals(IFormat.VERSION_0803)) {
-			chromatogramReader = new ChromatogramReader_0803();
-		} else if(version.equals(IFormat.VERSION_0901)) {
-			chromatogramReader = new ChromatogramReader_0901();
-		} else if(version.equals(IFormat.VERSION_0902)) {
-			chromatogramReader = new ChromatogramReader_0902();
-		} else if(version.equals(IFormat.VERSION_0903)) {
-			chromatogramReader = new ChromatogramReader_0903();
-		} else if(version.equals(IFormat.VERSION_1001)) {
-			chromatogramReader = new ChromatogramReader_1001();
-		} else if(version.equals(IFormat.VERSION_1002)) {
-			chromatogramReader = new ChromatogramReader_1002();
-		} else if(version.equals(IFormat.VERSION_1003)) {
-			chromatogramReader = new ChromatogramReader_1003();
-		} else if(version.equals(IFormat.VERSION_1004)) {
-			chromatogramReader = new ChromatogramReader_1004();
-		} else if(version.equals(IFormat.VERSION_1005)) {
-			chromatogramReader = new ChromatogramReader_1005();
-		} else if(version.equals(IFormat.VERSION_1006)) {
-			chromatogramReader = new ChromatogramReader_1006();
-		} else if(version.equals(IFormat.VERSION_1007)) {
-			chromatogramReader = new ChromatogramReader_1007();
-		} else if(version.equals(IFormat.VERSION_1100)) {
-			chromatogramReader = new ChromatogramReader_1100();
-		}
-		//
+		IChromatogramMSDZipReader chromatogramReader = getChromatogramReader(version);
 		if(chromatogramReader != null) {
 			try {
 				chromatogramOverview = chromatogramReader.readOverview(file, monitor);
@@ -120,39 +88,7 @@ public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader impleme
 		 * It's used to support older versions of
 		 * the *.ocb format.
 		 */
-		IChromatogramMSDReader chromatogramReader = null;
-		if(version.equals(IFormat.VERSION_0701)) {
-			chromatogramReader = new ChromatogramReader_0701();
-		} else if(version.equals(IFormat.VERSION_0801)) {
-			chromatogramReader = new ChromatogramReader_0801();
-		} else if(version.equals(IFormat.VERSION_0802)) {
-			chromatogramReader = new ChromatogramReader_0802();
-		} else if(version.equals(IFormat.VERSION_0803)) {
-			chromatogramReader = new ChromatogramReader_0803();
-		} else if(version.equals(IFormat.VERSION_0901)) {
-			chromatogramReader = new ChromatogramReader_0901();
-		} else if(version.equals(IFormat.VERSION_0902)) {
-			chromatogramReader = new ChromatogramReader_0902();
-		} else if(version.equals(IFormat.VERSION_0903)) {
-			chromatogramReader = new ChromatogramReader_0903();
-		} else if(version.equals(IFormat.VERSION_1001)) {
-			chromatogramReader = new ChromatogramReader_1001();
-		} else if(version.equals(IFormat.VERSION_1002)) {
-			chromatogramReader = new ChromatogramReader_1002();
-		} else if(version.equals(IFormat.VERSION_1003)) {
-			chromatogramReader = new ChromatogramReader_1003();
-		} else if(version.equals(IFormat.VERSION_1004)) {
-			chromatogramReader = new ChromatogramReader_1004();
-		} else if(version.equals(IFormat.VERSION_1005)) {
-			chromatogramReader = new ChromatogramReader_1005();
-		} else if(version.equals(IFormat.VERSION_1006)) {
-			chromatogramReader = new ChromatogramReader_1006();
-		} else if(version.equals(IFormat.VERSION_1007)) {
-			chromatogramReader = new ChromatogramReader_1007();
-		} else if(version.equals(IFormat.VERSION_1100)) {
-			chromatogramReader = new ChromatogramReader_1100();
-		}
-		//
+		IChromatogramMSDZipReader chromatogramReader = getChromatogramReader(version);
 		if(chromatogramReader != null) {
 			try {
 				chromatogramMSD = chromatogramReader.read(file, monitor);
@@ -194,6 +130,62 @@ public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader impleme
 		}
 		//
 		return chromatogramMSD;
+	}
+
+	@Override
+	public IChromatogramMSD read(ZipInputStream zipInputStream, IProgressMonitor monitor) throws IOException {
+
+		IChromatogramMSDZipReader chromatogramReader = null;
+		IChromatogramMSD chromatogramMSD = null;
+		ReaderHelper readerHelper = new ReaderHelper();
+		//
+		String version = readerHelper.getVersion(zipInputStream);
+		chromatogramReader = getChromatogramReader(version);
+		//
+		if(chromatogramReader != null) {
+			chromatogramMSD = chromatogramReader.read(zipInputStream, monitor);
+		}
+		//
+		return chromatogramMSD;
+	}
+
+	private IChromatogramMSDZipReader getChromatogramReader(String version) {
+
+		IChromatogramMSDZipReader chromatogramReader = null;
+		//
+		if(version.equals(IFormat.VERSION_0701)) {
+			chromatogramReader = new ChromatogramReader_0701();
+		} else if(version.equals(IFormat.VERSION_0801)) {
+			chromatogramReader = new ChromatogramReader_0801();
+		} else if(version.equals(IFormat.VERSION_0802)) {
+			chromatogramReader = new ChromatogramReader_0802();
+		} else if(version.equals(IFormat.VERSION_0803)) {
+			chromatogramReader = new ChromatogramReader_0803();
+		} else if(version.equals(IFormat.VERSION_0901)) {
+			chromatogramReader = new ChromatogramReader_0901();
+		} else if(version.equals(IFormat.VERSION_0902)) {
+			chromatogramReader = new ChromatogramReader_0902();
+		} else if(version.equals(IFormat.VERSION_0903)) {
+			chromatogramReader = new ChromatogramReader_0903();
+		} else if(version.equals(IFormat.VERSION_1001)) {
+			chromatogramReader = new ChromatogramReader_1001();
+		} else if(version.equals(IFormat.VERSION_1002)) {
+			chromatogramReader = new ChromatogramReader_1002();
+		} else if(version.equals(IFormat.VERSION_1003)) {
+			chromatogramReader = new ChromatogramReader_1003();
+		} else if(version.equals(IFormat.VERSION_1004)) {
+			chromatogramReader = new ChromatogramReader_1004();
+		} else if(version.equals(IFormat.VERSION_1005)) {
+			chromatogramReader = new ChromatogramReader_1005();
+		} else if(version.equals(IFormat.VERSION_1006)) {
+			chromatogramReader = new ChromatogramReader_1006();
+		} else if(version.equals(IFormat.VERSION_1007)) {
+			chromatogramReader = new ChromatogramReader_1007();
+		} else if(version.equals(IFormat.VERSION_1100)) {
+			chromatogramReader = new ChromatogramReader_1100();
+		}
+		//
+		return chromatogramReader;
 	}
 
 	private IChromatogramMSD createChromatogramMSDFromFID(double mz, File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {

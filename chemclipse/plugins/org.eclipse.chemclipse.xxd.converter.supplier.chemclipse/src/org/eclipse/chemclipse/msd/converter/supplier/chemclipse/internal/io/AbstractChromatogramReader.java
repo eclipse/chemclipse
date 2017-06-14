@@ -17,11 +17,32 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
 
 public abstract class AbstractChromatogramReader extends AbstractChromatogramMSDReader implements IChromatogramMSDReader {
+
+	/**
+	 * Object = ZipFile or ZipInputStream
+	 * May return null;
+	 * 
+	 * @param object
+	 * @param entryName
+	 * @return {@link DataInputStream}
+	 * @throws IOException
+	 */
+	public DataInputStream getDataInputStream(Object object, String entryName) throws IOException {
+
+		if(object instanceof ZipFile) {
+			return getDataInputStream((ZipFile)object, entryName);
+		} else if(object instanceof ZipInputStream) {
+			return getDataInputStream((ZipInputStream)object, entryName);
+		} else {
+			return null;
+		}
+	}
 
 	public DataInputStream getDataInputStream(ZipFile zipFile, String entryName) throws IOException {
 
@@ -35,6 +56,23 @@ public abstract class AbstractChromatogramReader extends AbstractChromatogramMSD
 				String name = zipEntry.getName();
 				if(name.equals(entryName)) {
 					return new DataInputStream(new BufferedInputStream(zipFile.getInputStream(zipEntry)));
+				}
+			}
+		}
+		throw new IOException("There could be found no entry given with the name: " + entryName);
+	}
+
+	public DataInputStream getDataInputStream(ZipInputStream zipInputStream, String entryName) throws IOException {
+
+		ZipEntry zipEntry;
+		while((zipEntry = zipInputStream.getNextEntry()) != null) {
+			/*
+			 * Check each file.
+			 */
+			if(!zipEntry.isDirectory()) {
+				String name = zipEntry.getName();
+				if(name.equals(entryName)) {
+					return new DataInputStream(zipInputStream);
 				}
 			}
 		}

@@ -36,7 +36,7 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
+import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.IChromatogramMSDZipWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
@@ -64,7 +64,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
+public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implements IChromatogramMSDZipWriter {
 
 	@Override
 	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
@@ -78,16 +78,22 @@ public class ChromatogramWriter_1100 extends AbstractChromatogramWriter implemen
 		zipOutputStream.setLevel(PreferenceSupplier.getCompressionLevel());
 		zipOutputStream.setMethod(IFormat.METHOD);
 		/*
-		 * Write the data
+		 * Write the data.
 		 */
-		writeVersion(zipOutputStream, monitor);
-		writeOverviewFolder(zipOutputStream, chromatogram, monitor);
-		writeChromatogramFolder(zipOutputStream, chromatogram, monitor);
+		writeChromatogram(zipOutputStream, chromatogram, monitor);
 		/*
 		 * Flush and close the output stream.
 		 */
 		zipOutputStream.flush();
 		zipOutputStream.close();
+	}
+
+	@Override
+	public void writeChromatogram(ZipOutputStream zipOutputStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		writeVersion(zipOutputStream, monitor);
+		writeOverviewFolder(zipOutputStream, chromatogram, monitor);
+		writeChromatogramFolder(zipOutputStream, chromatogram, monitor);
 	}
 
 	private void writeVersion(ZipOutputStream zipOutputStream, IProgressMonitor monitor) throws IOException {
