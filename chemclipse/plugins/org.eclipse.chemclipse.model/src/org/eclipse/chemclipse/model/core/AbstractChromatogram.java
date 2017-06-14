@@ -487,6 +487,14 @@ public abstract class AbstractChromatogram implements IChromatogram {
 	}
 
 	@Override
+	public void addScans(List<IScan> scans) {
+
+		for(IScan scan : scans) {
+			addScan(scan);
+		}
+	}
+
+	@Override
 	public IScan getScan(int scan) {
 
 		int position = scan;
