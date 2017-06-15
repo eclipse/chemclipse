@@ -27,4 +27,3 @@ Export-Package: org.eclipse.chemclipse.csd.converter.supplier.chemclipse.convert
  org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter,
  org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences,
  org.eclipse.chemclipse.xxd.converter.supplier.io.exception
-Import-Package: cn.edu.xmu.tidems.control.devices.eisource.preferences
