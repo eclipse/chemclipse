@@ -1,20 +1,17 @@
 /*******************************************************************************
  * Copyright (c) 2013, 2017 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Daniel Mariano, Rafael Aguayo - additional functionality and UI improvements
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
-import java.util.Map;
-
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.thirdpartylibraries.swtchart.ext.InteractiveChartExtended;
@@ -34,89 +31,29 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.swtchart.IBarSeries;
 import org.swtchart.ICustomPaintListener;
-import org.swtchart.ILineSeries;
-import org.swtchart.ILineSeries.PlotSymbolType;
 import org.swtchart.IPlotArea;
 import org.swtchart.ISeries;
 import org.swtchart.ISeries.SeriesType;
 import org.swtchart.ISeriesSet;
-import org.swtchart.LineStyle;
 import org.swtchart.Range;
 
 public class ErrorResiduePage {
 
 	private Color COLOR_BLACK = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
-	private Color COLOR_WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
 	private Color COLOR_RED = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
-	//
-	private int SYMBOL_SIZE = 8;
+	private Color COLOR_WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
+	private InteractiveChartExtended errorResidueChart;
 	//
 	private PcaEditor pcaEditor;
-	private InteractiveChartExtended errorResidueChart;
+	//
+	private int SYMBOL_SIZE = 8;
 
 	public ErrorResiduePage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
 		this.pcaEditor = pcaEditor;
 		initialize(tabFolder, formToolkit);
-	}
-
-	public void update() {
-
-		if(errorResidueChart != null) {
-			/*
-			 * Delete all other series.
-			 */
-			IPcaResults pcaResults = pcaEditor.getPcaResults();
-			ISeriesSet seriesSet = errorResidueChart.getSeriesSet();
-			ISeries[] series = seriesSet.getSeries();
-			for(ISeries serie : series) {
-				seriesSet.deleteSeries(serie.getId());
-			}
-			String[] fileNames = new String[pcaResults.getPcaResultMap().entrySet().size()];
-			int count = 0;
-			/*
-			 * Data
-			 */
-			double[] errorResidue = new double[pcaResults.getPcaResultMap().size()];
-			int counter = 0;
-			errorResidueChart.getAxisSet().getXAxis(0).getTitle().setText("Sample Names");
-			errorResidueChart.getAxisSet().getYAxis(0).getTitle().setText("Error Values(10^-6)");
-			for(ISample key : pcaResults.getPcaResultMap().keySet()) {
-				IPcaResult temp = pcaResults.getPcaResultMap().get(key);
-				// Done to better display error values
-				errorResidue[counter] = temp.getErrorMemberShip() * Math.pow(10, 6);
-				counter++;
-			}
-			//
-			for(Map.Entry<ISample, IPcaResult> entry : pcaResults.getPcaResultMap().entrySet()) {
-				/*
-				 * Create the series.
-				 */
-				String name = entry.getKey().getName();
-				fileNames[count] = name;
-				count++;
-			}
-			ILineSeries scatterSeries = (ILineSeries)errorResidueChart.getSeriesSet().createSeries(SeriesType.LINE, "Samples");
-			scatterSeries.setLineStyle(LineStyle.NONE);
-			scatterSeries.setSymbolSize(SYMBOL_SIZE);
-			double[] xSeries = new double[fileNames.length];
-			for(int i = 0; i < fileNames.length; i++) {
-				xSeries[i] = i + 1;
-			}
-			scatterSeries.setYSeries(errorResidue);
-			scatterSeries.setXSeries(xSeries);
-			/*
-			 * Set the color.
-			 */
-			scatterSeries.setSymbolColor(COLOR_RED);
-			scatterSeries.setSymbolType(PlotSymbolType.DIAMOND);
-			errorResidueChart.getAxisSet().getXAxis(0).setCategorySeries(fileNames);
-			errorResidueChart.getAxisSet().getXAxis(0).enableCategory(true);
-			errorResidueChart.getAxisSet().adjustRange();
-			errorResidueChart.redraw();
-			errorResidueChart.update();
-		}
 	}
 
 	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
@@ -184,6 +121,12 @@ public class ErrorResiduePage {
 		plotArea.addCustomPaintListener(new ICustomPaintListener() {
 
 			@Override
+			public boolean drawBehindSeries() {
+
+				return false;
+			}
+
+			@Override
 			public void paintControl(PaintEvent e) {
 
 				Range xRange = errorResidueChart.getAxisSet().getXAxes()[0].getRange();
@@ -218,17 +161,17 @@ public class ErrorResiduePage {
 					e.gc.drawLine(0, yHeight, width, yHeight); // Horizontal line through zero
 				}
 			}
+		});
+		/*
+		 * Plot the series name above the entry.
+		 */
+		plotArea.addCustomPaintListener(new ICustomPaintListener() {
 
 			@Override
 			public boolean drawBehindSeries() {
 
 				return false;
 			}
-		});
-		/*
-		 * Plot the series name above the entry.
-		 */
-		plotArea.addCustomPaintListener(new ICustomPaintListener() {
 
 			@Override
 			public void paintControl(PaintEvent e) {
@@ -246,14 +189,61 @@ public class ErrorResiduePage {
 					e.gc.drawText("", (int)(point.x - labelSize.x / 2.0d), (int)(point.y - labelSize.y - SYMBOL_SIZE / 2.0d), true);
 				}
 			}
-
-			@Override
-			public boolean drawBehindSeries() {
-
-				return false;
-			}
 		});
 		//
 		tabItem.setControl(composite);
+	}
+
+	public void update() {
+
+		if(errorResidueChart != null) {
+			/*
+			 * Delete all other series.
+			 */
+			IPcaResults pcaResults = pcaEditor.getPcaResults();
+			ISeriesSet seriesSet = errorResidueChart.getSeriesSet();
+			ISeries[] series = seriesSet.getSeries();
+			for(ISeries serie : series) {
+				seriesSet.deleteSeries(serie.getId());
+			}
+			String[] fileNames = new String[pcaResults.getSampleList().size()];
+			int count = 0;
+			/*
+			 * Data
+			 */
+			double[] errorResidue = new double[pcaResults.getSampleList().size()];
+			int counter = 0;
+			errorResidueChart.getAxisSet().getXAxis(0).getTitle().setText("Sample Names");
+			errorResidueChart.getAxisSet().getYAxis(0).getTitle().setText("Error Values(10^-6)");
+			for(ISample sample : pcaResults.getSampleList()) {
+				// Done to better display error values
+				errorResidue[counter] = sample.getPcaResult().getErrorMemberShip() * Math.pow(10, 6);
+				counter++;
+			}
+			//
+			for(ISample sample : pcaResults.getSampleList()) {
+				/*
+				 * Create the series.
+				 */
+				String name = sample.getName();
+				fileNames[count] = name;
+				count++;
+			}
+			IBarSeries scatterSeries = (IBarSeries)errorResidueChart.getSeriesSet().createSeries(SeriesType.BAR, "Samples");
+			double[] xSeries = new double[fileNames.length];
+			for(int i = 0; i < fileNames.length; i++) {
+				xSeries[i] = i + 1;
+			}
+			scatterSeries.setYSeries(errorResidue);
+			scatterSeries.setXSeries(xSeries);
+			/*
+			 * Set the color.
+			 */
+			errorResidueChart.getAxisSet().getXAxis(0).setCategorySeries(fileNames);
+			errorResidueChart.getAxisSet().getXAxis(0).enableCategory(true);
+			errorResidueChart.getAxisSet().adjustRange();
+			errorResidueChart.redraw();
+			errorResidueChart.update();
+		}
 	}
 }

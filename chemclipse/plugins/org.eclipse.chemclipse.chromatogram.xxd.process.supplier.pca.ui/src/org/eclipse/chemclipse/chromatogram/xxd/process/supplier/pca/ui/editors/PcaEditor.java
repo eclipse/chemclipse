@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2013, 2017 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Daniel Mariano, Rafael Aguayo - additional functionality and UI improvements
@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ResultE
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.PeakListNatTablePage;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.ReEvaluateRunnable;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -47,41 +48,42 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class PcaEditor {
 
-	public static final String ID = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.pcaEditor";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor";
 	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif";
-	public static final String TOOLTIP = "PCA Editor";
+	public static final String ID = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.pcaEditor";
 	//
 	private static final Logger logger = Logger.getLogger(PcaEditor.class);
+	public static final String TOOLTIP = "PCA Editor";
+	@Inject
+	private MApplication application;
+	@Inject
+	private MDirtyable dirtyable;
+	private ErrorResiduePage errorResiduePage;
+	//
+	private File exportFile;
+	private FormToolkit formToolkit;
+	private InputFilesPage inputFilesPage;
+	@Inject
+	private EModelService modelService;
+	private PeakListNatTablePage natTablePage;
+	/*
+	 * Pages
+	 */
+	private OverviewPage overviewPage;
+	private List<Object> pages;
 	/*
 	 * Injected member in constructor
 	 */
 	@Inject
 	private MPart part;
-	@Inject
-	private MDirtyable dirtyable;
-	@Inject
-	private MApplication application;
-	@Inject
-	private EModelService modelService;
+	private IPcaResults pcaResults;
+	private PeakListIntensityTablePage peakListIntensityTablePage;
+	private ScorePlot3dPage scorePlot3dPage;
+	private ScorePlotPage scorePlotPage;
 	/*
 	 * Showing additional info in tabs.
 	 */
 	private TabFolder tabFolder;
-	private FormToolkit formToolkit;
-	/*
-	 * Pages
-	 */
-	private OverviewPage overviewPage;
-	private InputFilesPage inputFilesPage;
-	private PeakListIntensityTablePage peakListIntensityTablePage;
-	private ScorePlotPage scorePlotPage;
-	private ErrorResiduePage errorResiduePage;
-	private ScorePlot3dPage scorePlot3dPage;
-	private List<Object> pages;
-	//
-	private File exportFile;
-	private IPcaResults pcaResults;
 
 	public PcaEditor() {
 		//
@@ -95,10 +97,23 @@ public class PcaEditor {
 		createPages(parent);
 	}
 
-	@Focus
-	public void setFocus() {
+	private void createPages(Composite parent) {
 
-		tabFolder.setFocus();
+		part.setLabel("PCA");
+		tabFolder = new TabFolder(parent, SWT.BOTTOM);
+		//
+		pages.add(overviewPage = new OverviewPage(this, tabFolder, formToolkit));
+		pages.add(inputFilesPage = new InputFilesPage(this, tabFolder, formToolkit));
+		pages.add(peakListIntensityTablePage = new PeakListIntensityTablePage(this, tabFolder, formToolkit));
+		pages.add(scorePlotPage = new ScorePlotPage(this, tabFolder, formToolkit));
+		pages.add(errorResiduePage = new ErrorResiduePage(this, tabFolder, formToolkit));
+		pages.add(scorePlot3dPage = new ScorePlot3dPage(this, tabFolder, formToolkit));
+		pages.add(natTablePage = new PeakListNatTablePage(this, tabFolder, formToolkit));
+	}
+
+	public IPcaResults getPcaResults() {
+
+		return pcaResults;
 	}
 
 	@PreDestroy
@@ -132,38 +147,43 @@ public class PcaEditor {
 		System.gc();
 	}
 
-	@Persist
-	public void save() {
+	public void reEvaluatePcaCalculation() {
 
-		if(exportFile == null) {
-			FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
-			fileDialog.setText("Save PCA results");
-			fileDialog.setOverwrite(true);
-			fileDialog.setFileName("PCA-Results.txt");
-			fileDialog.setFilterExtensions(new String[]{"*.txt"});
-			fileDialog.setFilterNames(new String[]{"ASCII PCA reports"});
-			String pathname = fileDialog.open();
-			if(pathname != null) {
-				exportFile = new File(pathname);
-			}
-		}
+		dirtyable.setDirty(true);
 		/*
-		 * Check that there is a valid file.
+		 * Get the settings.
 		 */
-		if(exportFile != null) {
-			try {
-				ResultExport resultExport = new ResultExport();
-				resultExport.exportToTextFile(exportFile, pcaResults);
-				dirtyable.setDirty(false);
-			} catch(FileNotFoundException e) {
-				logger.warn(e);
-			}
+		pcaResults.setRetentionTimeWindow(overviewPage.getRetentionTimeWindow());
+		pcaResults.setNumberOfPrincipleComponents(overviewPage.getNumberOfPrincipleComponents());
+		pcaResults.setExtractionType(overviewPage.getExtractionType());
+		/*
+		 * Run the process.
+		 */
+		ReEvaluateRunnable runnable = new ReEvaluateRunnable(pcaResults);
+		ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		try {
+			/*
+			 * Calculate the results and show the score plot page.
+			 */
+			monitor.run(true, true, runnable);
+			pcaResults = runnable.getPcaResults();
+			reloadCalculation();
+			showScorePlotPage();
+		} catch(InvocationTargetException e) {
+			logger.warn(e);
+			logger.warn(e.getCause());
+		} catch(InterruptedException e) {
+			logger.warn(e);
 		}
 	}
 
-	public IPcaResults getPcaResults() {
+	private void reloadCalculation() {
 
-		return pcaResults;
+		peakListIntensityTablePage.update();
+		scorePlotPage.update();
+		errorResiduePage.update();
+		scorePlot3dPage.update();
+		natTablePage.update();
 	}
 
 	public void runPcaCalculation() {
@@ -197,34 +217,39 @@ public class PcaEditor {
 		}
 	}
 
-	public void reEvaluatePcaCalculation() {
+	@Persist
+	public void save() {
 
-		dirtyable.setDirty(true);
-		/*
-		 * Get the settings.
-		 */
-		pcaResults.setRetentionTimeWindow(overviewPage.getRetentionTimeWindow());
-		pcaResults.setNumberOfPrincipleComponents(overviewPage.getNumberOfPrincipleComponents());
-		pcaResults.setExtractionType(overviewPage.getExtractionType());
-		/*
-		 * Run the process.
-		 */
-		ReEvaluateRunnable runnable = new ReEvaluateRunnable(pcaResults);
-		ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-		try {
-			/*
-			 * Calculate the results and show the score plot page.
-			 */
-			monitor.run(true, true, runnable);
-			pcaResults = runnable.getPcaResults();
-			reloadCalculation();
-			showScorePlotPage();
-		} catch(InvocationTargetException e) {
-			logger.warn(e);
-			logger.warn(e.getCause());
-		} catch(InterruptedException e) {
-			logger.warn(e);
+		if(exportFile == null) {
+			FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
+			fileDialog.setText("Save PCA results");
+			fileDialog.setOverwrite(true);
+			fileDialog.setFileName("PCA-Results.txt");
+			fileDialog.setFilterExtensions(new String[]{"*.txt"});
+			fileDialog.setFilterNames(new String[]{"ASCII PCA reports"});
+			String pathname = fileDialog.open();
+			if(pathname != null) {
+				exportFile = new File(pathname);
+			}
 		}
+		/*
+		 * Check that there is a valid file.
+		 */
+		if(exportFile != null) {
+			try {
+				ResultExport resultExport = new ResultExport();
+				resultExport.exportToTextFile(exportFile, pcaResults);
+				dirtyable.setDirty(false);
+			} catch(FileNotFoundException e) {
+				logger.warn(e);
+			}
+		}
+	}
+
+	@Focus
+	public void setFocus() {
+
+		tabFolder.setFocus();
 	}
 
 	public void showInputFilesPage() {
@@ -247,26 +272,5 @@ public class PcaEditor {
 			}
 		}
 		tabFolder.setSelection(pageIndex);
-	}
-
-	private void createPages(Composite parent) {
-
-		part.setLabel("PCA");
-		tabFolder = new TabFolder(parent, SWT.BOTTOM);
-		//
-		pages.add(overviewPage = new OverviewPage(this, tabFolder, formToolkit));
-		pages.add(inputFilesPage = new InputFilesPage(this, tabFolder, formToolkit));
-		pages.add(peakListIntensityTablePage = new PeakListIntensityTablePage(this, tabFolder, formToolkit));
-		pages.add(scorePlotPage = new ScorePlotPage(this, tabFolder, formToolkit));
-		pages.add(errorResiduePage = new ErrorResiduePage(this, tabFolder, formToolkit));
-		pages.add(scorePlot3dPage = new ScorePlot3dPage(this, tabFolder, formToolkit));
-	}
-
-	private void reloadCalculation() {
-
-		peakListIntensityTablePage.update();
-		scorePlotPage.update();
-		errorResiduePage.update();
-		scorePlot3dPage.update();
 	}
 }

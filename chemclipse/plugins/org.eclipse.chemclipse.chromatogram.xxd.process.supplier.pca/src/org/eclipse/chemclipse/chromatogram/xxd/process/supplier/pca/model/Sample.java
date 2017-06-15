@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -13,30 +13,15 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 public class Sample implements ISample {
 
+	private String groupName;
 	private String name;
+	private IPcaResult pcaResult;
 	private boolean selected;
 
 	public Sample(String name) {
 		this.name = name;
 		this.selected = true;
-	}
-
-	@Override
-	public String getName() {
-
-		return name;
-	}
-
-	@Override
-	public boolean isSelected() {
-
-		return selected;
-	}
-
-	@Override
-	public void setSelected(boolean selected) {
-
-		this.selected = selected;
+		this.pcaResult = new PcaResult();
 	}
 
 	@Override
@@ -56,9 +41,45 @@ public class Sample implements ISample {
 	}
 
 	@Override
+	public String getGroupName() {
+
+		return groupName;
+	}
+
+	@Override
+	public String getName() {
+
+		return name;
+	}
+
+	@Override
+	public IPcaResult getPcaResult() {
+
+		return this.pcaResult;
+	}
+
+	@Override
 	public int hashCode() {
 
 		return name.hashCode();
+	}
+
+	@Override
+	public boolean isSelected() {
+
+		return selected;
+	}
+
+	@Override
+	public void setGroupName(String groupName) {
+
+		this.groupName = groupName;
+	}
+
+	@Override
+	public void setSelected(boolean selected) {
+
+		this.selected = selected;
 	}
 
 	@Override

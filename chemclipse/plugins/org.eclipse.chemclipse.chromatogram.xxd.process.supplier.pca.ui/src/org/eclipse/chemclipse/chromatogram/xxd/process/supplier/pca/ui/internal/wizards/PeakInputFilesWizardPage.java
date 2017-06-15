@@ -1,16 +1,18 @@
 /*******************************************************************************
  * Copyright (c) 2011, 2017 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
+import org.eclipse.chemclipse.ux.extension.msd.ui.provider.PeakFileExplorerContentProvider;
+import org.eclipse.chemclipse.ux.extension.msd.ui.provider.PeakFileExplorerLabelProvider;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -19,12 +21,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import org.eclipse.chemclipse.ux.extension.msd.ui.provider.PeakFileExplorerContentProvider;
-import org.eclipse.chemclipse.ux.extension.msd.ui.provider.PeakFileExplorerLabelProvider;
-
 /**
  * @author Dr. Philip Wenig
- * 
+ *
  */
 public class PeakInputFilesWizardPage extends WizardPage {
 
@@ -37,16 +36,6 @@ public class PeakInputFilesWizardPage extends WizardPage {
 		super(pageName);
 		setTitle("Peak Input Files");
 		setDescription("This wizard lets you select several peak input files.");
-	}
-
-	/**
-	 * Returns the chromatogram viewer selection.
-	 * 
-	 * @return
-	 */
-	public ISelection getSelection() {
-
-		return peakFileViewer.getSelection();
 	}
 
 	@Override
@@ -65,5 +54,15 @@ public class PeakInputFilesWizardPage extends WizardPage {
 		 * Set the control.
 		 */
 		setControl(composite);
+	}
+
+	/**
+	 * Returns the chromatogram viewer selection.
+	 *
+	 * @return
+	 */
+	public ISelection getSelection() {
+
+		return peakFileViewer.getSelection();
 	}
 }

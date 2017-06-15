@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -16,8 +16,8 @@ import java.util.List;
 
 public class Slopes implements ISlopes {
 
-	private List<Float> slopes;
 	private List<Integer> retentionTimes;
+	private List<Float> slopes;
 
 	public Slopes() {
 		slopes = new ArrayList<Float>();
@@ -25,15 +25,9 @@ public class Slopes implements ISlopes {
 	}
 
 	@Override
-	public void setSlopes(List<Float> slopes) {
+	public List<Integer> getRetentionTimes() {
 
-		this.slopes = slopes;
-	}
-
-	@Override
-	public void setRetentionTimes(List<Integer> retentionTimes) {
-
-		this.retentionTimes = retentionTimes;
+		return this.retentionTimes;
 	}
 
 	@Override
@@ -43,8 +37,14 @@ public class Slopes implements ISlopes {
 	}
 
 	@Override
-	public List<Integer> getRetentionTimes() {
+	public void setRetentionTimes(List<Integer> retentionTimes) {
 
-		return this.retentionTimes;
+		this.retentionTimes = retentionTimes;
+	}
+
+	@Override
+	public void setSlopes(List<Float> slopes) {
+
+		this.slopes = slopes;
 	}
 }

@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -15,14 +15,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
 public class ResultExport {
@@ -38,7 +37,7 @@ public class ResultExport {
 
 		PrintWriter printWriter = new PrintWriter(file);
 		if(pcaResults != null) {
-			Set<Map.Entry<ISample, IPcaResult>> entrySet = pcaResults.getPcaResultMap().entrySet();
+			List<ISample> samples = pcaResults.getSampleList();
 			/*
 			 * Header
 			 */
@@ -56,7 +55,7 @@ public class ResultExport {
 			printWriter.println("Input Files");
 			printWriter.println("-------------------------------------");
 			for(IDataInputEntry entry : pcaResults.getDataInputEntries()) {
-				printWriter.print(entry.getName());
+				printWriter.print(entry.getFileName());
 				printWriter.print(TAB);
 				printWriter.println(entry.getInputFile());
 			}
@@ -65,7 +64,7 @@ public class ResultExport {
 			printWriter.println("Extracted Retention Times (Minutes)");
 			printWriter.println("-------------------------------------");
 			for(int retentionTime : pcaResults.getExtractedRetentionTimes()) {
-				printWriter.println(decimalFormat.format(retentionTime / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+				printWriter.println(decimalFormat.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 			}
 			printWriter.println("");
 			printWriter.println("-------------------------------------");
@@ -74,17 +73,18 @@ public class ResultExport {
 			printWriter.print("Filename");
 			printWriter.print(TAB);
 			for(int retentionTime : pcaResults.getExtractedRetentionTimes()) {
-				printWriter.print(decimalFormat.format(retentionTime / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+				printWriter.print(decimalFormat.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 				printWriter.print(TAB);
 			}
 			printWriter.println("");
 			/*
 			 * Data
 			 */
-			for(Map.Entry<ISample, IPcaResult> entry : entrySet) {
-				printWriter.print(entry.getKey().getName());
+			for(ISample result : samples) {
+				String name = result.getName();
+				IPcaResult pcaResult = result.getPcaResult();
+				printWriter.print(name);
 				printWriter.print(TAB);
-				IPcaResult pcaResult = entry.getValue();
 				double[] sampleData = pcaResult.getSampleData();
 				for(double data : sampleData) {
 					printWriter.print(decimalFormat.format(data));
@@ -105,12 +105,12 @@ public class ResultExport {
 			}
 			printWriter.println("");
 			//
-			for(Map.Entry<ISample, IPcaResult> entry : entrySet) {
+			for(ISample result : samples) {
 				/*
 				 * Print the PCs
 				 */
-				String name = entry.getKey().getName();
-				IPcaResult pcaResult = entry.getValue();
+				String name = result.getName();
+				IPcaResult pcaResult = result.getPcaResult();
 				double[] eigenSpace = pcaResult.getEigenSpace();
 				printWriter.print(name);
 				printWriter.print(TAB);

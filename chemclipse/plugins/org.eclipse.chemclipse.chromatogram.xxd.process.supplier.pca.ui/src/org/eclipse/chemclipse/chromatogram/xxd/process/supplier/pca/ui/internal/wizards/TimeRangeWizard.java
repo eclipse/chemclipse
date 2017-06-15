@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Daniel Mariano - initial API and implementation
  * Dr. Philip Wenig - minor improvements
@@ -16,8 +16,8 @@ import org.eclipse.jface.wizard.Wizard;
 
 public class TimeRangeWizard extends Wizard {
 
-	protected TimeRangeWizardPage timeRangeWizardPage;
 	public String textRetentionTimeRange;
+	protected TimeRangeWizardPage timeRangeWizardPage;
 
 	public TimeRangeWizard() {
 		super();
@@ -25,23 +25,10 @@ public class TimeRangeWizard extends Wizard {
 	}
 
 	@Override
-	public String getWindowTitle() {
-
-		return "Peak Intensity Table";
-	}
-
-	@Override
 	public void addPages() {
 
 		timeRangeWizardPage = new TimeRangeWizardPage();
 		addPage(timeRangeWizardPage);
-	}
-
-	@Override
-	public boolean performFinish() {
-
-		textRetentionTimeRange = timeRangeWizardPage.getTextRetentionTimeRange();
-		return true;
 	}
 
 	/*
@@ -58,5 +45,18 @@ public class TimeRangeWizard extends Wizard {
 	public String getTextOne() {
 
 		return textRetentionTimeRange;
+	}
+
+	@Override
+	public String getWindowTitle() {
+
+		return "Peak Intensity Table";
+	}
+
+	@Override
+	public boolean performFinish() {
+
+		textRetentionTimeRange = timeRangeWizardPage.getTextRetentionTimeRange();
+		return true;
 	}
 }

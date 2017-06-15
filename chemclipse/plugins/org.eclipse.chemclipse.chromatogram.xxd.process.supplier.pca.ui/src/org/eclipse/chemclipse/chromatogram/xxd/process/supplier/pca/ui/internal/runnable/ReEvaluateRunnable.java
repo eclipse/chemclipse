@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2016, 2017 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -26,6 +26,11 @@ public class ReEvaluateRunnable implements IRunnableWithProgress {
 		this.pcaResults = pcaResults;
 	}
 
+	public IPcaResults getPcaResults() {
+
+		return pcaResults;
+	}
+
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
@@ -34,10 +39,5 @@ public class ReEvaluateRunnable implements IRunnableWithProgress {
 		 */
 		PrincipleComponentProcessor principleComponentProcessor = new PrincipleComponentProcessor();
 		pcaResults = principleComponentProcessor.reEvaluate(pcaResults);
-	}
-
-	public IPcaResults getPcaResults() {
-
-		return pcaResults;
 	}
 }

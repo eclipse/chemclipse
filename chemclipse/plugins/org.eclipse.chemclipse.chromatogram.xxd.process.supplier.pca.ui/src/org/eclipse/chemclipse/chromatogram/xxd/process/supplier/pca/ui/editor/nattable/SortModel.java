@@ -1,0 +1,160 @@
+/*******************************************************************************
+ * Copyright (c) 2017 Jan Holy.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Jan Holy - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.nebula.widgets.nattable.sort.ISortModel;
+import org.eclipse.nebula.widgets.nattable.sort.SortDirectionEnum;
+
+public class SortModel implements ISortModel {
+
+	private boolean isSorted;
+	private SortDirectionEnum sortDirection;
+	private int sortedColumn;
+	private List<Integer> sortedRow;
+	private TableData tableData;
+
+	public SortModel(TableData tableData) {
+		this.tableData = tableData;
+		this.sortedRow = new ArrayList<>();
+		sortDirection = SortDirectionEnum.NONE;
+	}
+
+	@Override
+	public void clear() {
+
+		for(int i = 0; i < sortedRow.size(); i++) {
+			sortedRow.set(i, i);
+		}
+		sortDirection = SortDirectionEnum.NONE;
+		isSorted = false;
+	}
+
+	@Override
+	public Comparator<?> getColumnComparator(int columnIndex) {
+
+		return null;
+	}
+
+	@Override
+	public List<Comparator> getComparatorsForColumnIndex(int columnIndex) {
+
+		return null;
+	}
+
+	public List<Integer> getOrderRow() {
+
+		return sortedRow;
+	}
+
+	@Override
+	public SortDirectionEnum getSortDirection(int columnIndex) {
+
+		if(isSorted && columnIndex == sortedColumn) {
+			return sortDirection;
+		}
+		return SortDirectionEnum.NONE;
+	}
+
+	@Override
+	public List<Integer> getSortedColumnIndexes() {
+
+		List<Integer> sortedColumnIndexes = new ArrayList<>();
+		if(isSorted) {
+			sortedColumnIndexes.add(sortedColumn);
+		}
+		return sortedColumnIndexes;
+	}
+
+	@Override
+	public int getSortOrder(int columnIndex) {
+
+		return 0;
+	}
+
+	@Override
+	public boolean isColumnIndexSorted(int columnIndex) {
+
+		if(isSorted && columnIndex == sortedColumn) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void sort(int columnIndex, SortDirectionEnum sortDirection, boolean accumulate) {
+
+		clear();
+		if(sortDirection.equals(SortDirectionEnum.NONE)) {
+			/*
+			 * remove sorting
+			 */
+			clear();
+		} else {
+			/*
+			 * Set direction of sorting
+			 */
+			int direction = 1;
+			switch(sortDirection) {
+				case ASC:
+					direction = 1;
+					break;
+				case DESC:
+					direction = -1;
+			}
+			final int setDirection = direction;
+			if(columnIndex == AbstractPcaResulDataProvider.COLUMN_INDEX_RETENTION_TIMES) {
+				/*
+				 * sort by retention time
+				 */
+				for(int i = 0; i < sortedRow.size(); i++) {
+					sortedRow.set(i, i);
+				}
+				// reverse sorting
+				if(direction == -1) {
+					Collections.reverse(sortedRow);
+				}
+			} else {
+				/*
+				 * sort by abundance
+				 */
+				ISample sample = tableData.getSamples().get(columnIndex - AbstractPcaResulDataProvider.NUMER_OF_DESCRIPTION_COLUMN);
+				final double[] sampleData = sample.getPcaResult().getSampleData();
+				sortedRow.sort((i, j) -> {
+					return setDirection * Double.compare(sampleData[i], sampleData[j]);
+				});
+			}
+			this.isSorted = true;
+		}
+		this.sortDirection = sortDirection;
+		this.sortedColumn = columnIndex;
+	}
+
+	/**
+	 * call this method after data in object tableData has been changed
+	 */
+	public void update() {
+
+		int numberOfRow = tableData.getRetentionTimes().size();
+		sortedRow.clear();
+		for(int i = 0; i < numberOfRow; i++) {
+			sortedRow.add(i);
+		}
+		sortDirection = SortDirectionEnum.NONE;
+		isSorted = false;
+	}
+}

@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2013, 2017 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Daniel Mariano, Rafael Aguayo - additional functionality and UI improvements
@@ -21,8 +21,11 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PeakInputFilesWizard;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.TableEditor;
+import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -37,6 +40,8 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
@@ -46,11 +51,11 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 public class InputFilesPage {
 
 	private static final String FILES = "Input Files: ";
-	//
-	private PcaEditor pcaEditor;
-	private Table inputFilesTable;
 	private Label countFiles;
-	private List<IDataInputEntry> dataInputEntries;;
+	private List<IDataInputEntry> dataInputEntries;
+	private Table inputFilesTable;
+	//
+	private PcaEditor pcaEditor;;
 
 	public InputFilesPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
@@ -59,31 +64,73 @@ public class InputFilesPage {
 		initialize(tabFolder, formToolkit);
 	}
 
-	public List<IDataInputEntry> getDataInputEntries() {
+	/**
+	 * Add the selected peak files to the input files list.
+	 *
+	 * @param selectedChromatograms
+	 */
+	private void addEntries(List<String> selectedFiles) {
 
-		return dataInputEntries;
+		IDataInputEntry inputEntry;
+		for(String inputFile : selectedFiles) {
+			inputEntry = new DataInputEntry(inputFile);
+			dataInputEntries.add(inputEntry);
+		}
 	}
 
-	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
+	/**
+	 * Creates the add button.
+	 *
+	 * @param client
+	 * @param editorPart
+	 */
+	private void createAddButton(Composite client, GridData gridData, FormToolkit formToolkit) {
 
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Data Input Files");
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new FillLayout());
-		/*
-		 * Forms API
-		 */
-		formToolkit = new FormToolkit(composite.getDisplay());
-		ScrolledForm scrolledForm = formToolkit.createScrolledForm(composite);
-		Composite scrolledFormComposite = scrolledForm.getBody();
-		scrolledFormComposite.setLayout(new TableWrapLayout());
-		scrolledForm.setText("Input File Editor");
-		/*
-		 * Create the section.
-		 */
-		createInputFilesSection(scrolledFormComposite, formToolkit);
+		Button add;
+		add = formToolkit.createButton(client, "Add", SWT.PUSH);
+		add.setLayoutData(gridData);
+		add.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				super.widgetSelected(e);
+				PeakInputFilesWizard inputWizard = new PeakInputFilesWizard();
+				BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getCurrent().getActiveShell(), inputWizard);
+				wizardDialog.create();
+				int returnCode = wizardDialog.open();
+				/*
+				 * If OK
+				 */
+				if(returnCode == Window.OK) {
+					/*
+					 * Get the list of selected chromatograms.
+					 */
+					List<String> selectedPeakFiles = inputWizard.getSelectedPeakFiles();
+					if(selectedPeakFiles.size() > 0) {
+						/*
+						 * If it contains at least 1 element, add it to the input files list.
+						 */
+						addEntries(selectedPeakFiles);
+						reloadInputFilesTable();
+					}
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the action buttons.
+	 *
+	 * @param client
+	 */
+	private void createButtons(Composite client, FormToolkit formToolkit) {
+
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_BEGINNING);
 		//
-		tabItem.setControl(composite);
+		createAddButton(client, gridData, formToolkit);
+		createRemoveButton(client, gridData, formToolkit);
+		createProcessButton(client, gridData, formToolkit);
 	}
 
 	private void createInputFilesSection(Composite parent, FormToolkit formToolkit) {
@@ -94,7 +141,7 @@ public class InputFilesPage {
 		/*
 		 * Section
 		 */
-		section = formToolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
+		section = formToolkit.createSection(parent, Section.DESCRIPTION | ExpandableComposite.TITLE_BAR);
 		section.setText("Input files");
 		section.setDescription("Select the files to process. Use the add and remove buttons as needed. Click Run PCA to process the files. ");
 		section.marginWidth = 5;
@@ -133,83 +180,38 @@ public class InputFilesPage {
 	}
 
 	/**
-	 * Creates the table.
-	 * 
+	 * Creates the file count labels.
+	 *
 	 * @param client
 	 */
-	private void createTable(Composite client, FormToolkit formToolkit) {
+	private void createLabels(Composite client, FormToolkit formToolkit) {
 
-		GridData gridData;
-		inputFilesTable = formToolkit.createTable(client, SWT.MULTI);
-		gridData = new GridData(GridData.FILL_BOTH);
-		gridData.heightHint = 400;
-		// gridData.widthHint = 150;
-		gridData.widthHint = 100;
-		gridData.verticalSpan = 5;
-		// gridData.verticalSpan = 3;
-		inputFilesTable.setLayoutData(gridData);
-		inputFilesTable.setHeaderVisible(true);
-		inputFilesTable.setLinesVisible(true);
+		countFiles = formToolkit.createLabel(client, FILES + "0", SWT.NONE);
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+		gridData.horizontalSpan = 2;
+		countFiles.setLayoutData(gridData);
 	}
 
-	/**
-	 * Create the action buttons.
-	 * 
-	 * @param client
-	 */
-	private void createButtons(Composite client, FormToolkit formToolkit) {
+	private void createProcessButton(Composite client, GridData gridData, FormToolkit formToolkit) {
 
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_BEGINNING);
-		//
-		createAddButton(client, gridData, formToolkit);
-		createRemoveButton(client, gridData, formToolkit);
-		createProcessButton(client, gridData, formToolkit);
-	}
-
-	/**
-	 * Creates the add button.
-	 * 
-	 * @param client
-	 * @param editorPart
-	 */
-	private void createAddButton(Composite client, GridData gridData, FormToolkit formToolkit) {
-
-		Button add;
-		add = formToolkit.createButton(client, "Add", SWT.PUSH);
-		add.setLayoutData(gridData);
-		add.addSelectionListener(new SelectionAdapter() {
+		Button process;
+		process = formToolkit.createButton(client, "Run PCA", SWT.PUSH);
+		process.setLayoutData(gridData);
+		process.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImageProvider.SIZE_16x16));
+		process.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				super.widgetSelected(e);
-				PeakInputFilesWizard inputWizard = new PeakInputFilesWizard();
-				BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getCurrent().getActiveShell(), inputWizard);
-				wizardDialog.create();
-				int returnCode = wizardDialog.open();
-				/*
-				 * If OK
-				 */
-				if(returnCode == WizardDialog.OK) {
-					/*
-					 * Get the list of selected chromatograms.
-					 */
-					List<String> selectedPeakFiles = inputWizard.getSelectedPeakFiles();
-					if(selectedPeakFiles.size() > 0) {
-						/*
-						 * If it contains at least 1 element, add it to the input files list.
-						 */
-						addEntries(selectedPeakFiles);
-						reloadInputFilesTable();
-					}
-				}
+				pcaEditor.runPcaCalculation();
 			}
 		});
 	}
 
 	/**
 	 * Create the remove button.
-	 * 
+	 *
 	 * @param client
 	 * @param editorPart
 	 */
@@ -229,41 +231,119 @@ public class InputFilesPage {
 		});
 	}
 
-	private void createProcessButton(Composite client, GridData gridData, FormToolkit formToolkit) {
+	/**
+	 * Creates the table.
+	 *
+	 * @param client
+	 */
+	private void createTable(Composite client, FormToolkit formToolkit) {
 
-		Button process;
-		process = formToolkit.createButton(client, "Run PCA", SWT.PUSH);
-		process.setLayoutData(gridData);
-		process.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
-		process.addSelectionListener(new SelectionAdapter() {
+		GridData gridData;
+		inputFilesTable = formToolkit.createTable(client, SWT.MULTI);
+		gridData = new GridData(GridData.FILL_BOTH);
+		gridData.heightHint = 400;
+		// gridData.widthHint = 150;
+		gridData.widthHint = 100;
+		gridData.verticalSpan = 5;
+		// gridData.verticalSpan = 3;
+		inputFilesTable.setLayoutData(gridData);
+		inputFilesTable.setHeaderVisible(true);
+		inputFilesTable.setLinesVisible(true);
+	}
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
+	public List<IDataInputEntry> getDataInputEntries() {
 
-				super.widgetSelected(e);
-				pcaEditor.runPcaCalculation();
-			}
-		});
+		return dataInputEntries;
+	}
+
+	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
+
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText("Data Input Files");
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayout(new FillLayout());
+		/*
+		 * Forms API
+		 */
+		formToolkit = new FormToolkit(composite.getDisplay());
+		ScrolledForm scrolledForm = formToolkit.createScrolledForm(composite);
+		Composite scrolledFormComposite = scrolledForm.getBody();
+		scrolledFormComposite.setLayout(new TableWrapLayout());
+		scrolledForm.setText("Input File Editor");
+		/*
+		 * Create the section.
+		 */
+		createInputFilesSection(scrolledFormComposite, formToolkit);
+		//
+		tabItem.setControl(composite);
+	}
+
+	private void redrawCountFiles(List<IDataInputEntry> inputEntries) {
+
+		countFiles.setText(FILES + Integer.toString(inputEntries.size()));
 	}
 
 	/**
-	 * Add the selected peak files to the input files list.
-	 * 
-	 * @param selectedChromatograms
+	 * Reload the table.
 	 */
-	private void addEntries(List<String> selectedFiles) {
+	private void reloadInputFilesTable() {
 
-		IDataInputEntry inputEntry;
-		for(String inputFile : selectedFiles) {
-			inputEntry = new DataInputEntry(inputFile);
-			dataInputEntries.add(inputEntry);
+		if(inputFilesTable != null) {
+			/*
+			 * Remove all entries.
+			 */
+			inputFilesTable.removeAll();
+			/*
+			 * Header
+			 */
+			String[] titles = {"Filename", "Group", "Path"};
+			for(int i = 0; i < titles.length; i++) {
+				TableColumn column = new TableColumn(inputFilesTable, SWT.NONE);
+				column.setText(titles[i]);
+			}
+			/*
+			 * Data
+			 */
+			for(IDataInputEntry entry : dataInputEntries) {
+				TableItem item = new TableItem(inputFilesTable, SWT.NONE);
+				item.setText(0, entry.getFileName());
+				item.setText(1, "");
+				item.setText(2, entry.getInputFile());
+				TableEditor editor = new TableEditor(inputFilesTable);
+				editor.horizontalAlignment = SWT.LEFT;
+				editor.grabHorizontal = true;
+				final Text text = new Text(inputFilesTable, SWT.NONE);
+				text.setEnabled(true);
+				text.addModifyListener((ModifyEvent e) -> {
+					String groupName = text.getText();
+					if(groupName != null) {
+						groupName = groupName.trim();
+						if(groupName.isEmpty()) {
+							entry.setGroupName(null);
+						} else {
+							entry.setGroupName(groupName);
+						}
+					}
+				});
+				editor.setEditor(text, item, 1);
+			}
+			/*
+			 * Pack to make the entries visible.
+			 */
+			for(int i = 0; i < titles.length; i++) {
+				inputFilesTable.getColumn(i).pack();
+			}
+			/*
+			 * Set the count label information.
+			 */
+			redrawCountFiles(dataInputEntries);
 		}
 	}
 
 	/**
 	 * Remove the given entries.
 	 * The table need not to be reloaded.
-	 * 
+	 *
 	 * @param indices
 	 */
 	private void removeEntries(int[] indices) {
@@ -288,62 +368,5 @@ public class InputFilesPage {
 			counter++;
 		}
 		redrawCountFiles(dataInputEntries);
-	}
-
-	/**
-	 * Creates the file count labels.
-	 * 
-	 * @param client
-	 */
-	private void createLabels(Composite client, FormToolkit formToolkit) {
-
-		countFiles = formToolkit.createLabel(client, FILES + "0", SWT.NONE);
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
-		gridData.horizontalSpan = 2;
-		countFiles.setLayoutData(gridData);
-	}
-
-	/**
-	 * Reload the table.
-	 */
-	private void reloadInputFilesTable() {
-
-		if(inputFilesTable != null) {
-			/*
-			 * Remove all entries.
-			 */
-			inputFilesTable.removeAll();
-			/*
-			 * Header
-			 */
-			String[] titles = {"Filename", "Path"};
-			for(int i = 0; i < titles.length; i++) {
-				TableColumn column = new TableColumn(inputFilesTable, SWT.NONE);
-				column.setText(titles[i]);
-			}
-			/*
-			 * Data
-			 */
-			for(IDataInputEntry entry : dataInputEntries) {
-				TableItem item = new TableItem(inputFilesTable, SWT.NONE);
-				item.setText(0, entry.getName());
-				item.setText(1, entry.getInputFile());
-			}
-			/*
-			 * Pack to make the entries visible.
-			 */
-			for(int i = 0; i < titles.length; i++) {
-				inputFilesTable.getColumn(i).pack();
-			}
-			/*
-			 * Set the count label information.
-			 */
-			redrawCountFiles(dataInputEntries);
-		}
-	}
-
-	private void redrawCountFiles(List<IDataInputEntry> inputEntries) {
-
-		countFiles.setText(FILES + Integer.toString(inputEntries.size()));
 	}
 }

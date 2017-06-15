@@ -1,11 +1,11 @@
 /*******************************************************************************
  * Copyright (c) 2013, 2017 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Rafael Aguayo - initial API and implementation
@@ -15,7 +15,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
@@ -23,8 +22,9 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaRe
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.TimeRangeWizard;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
@@ -50,12 +51,12 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
 public class PeakListIntensityTablePage {
 
-	private PcaEditor pcaEditor;
 	private int currentNumberOfPeaks;
-	private Label tableHeader;
-	private Table peakListIntensityTable;
 	//
 	private NumberFormat numberFormat;
+	private PcaEditor pcaEditor;
+	private Table peakListIntensityTable;
+	private Label tableHeader;
 
 	public PeakListIntensityTablePage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
@@ -63,6 +64,170 @@ public class PeakListIntensityTablePage {
 		//
 		this.pcaEditor = pcaEditor;
 		initialize(tabFolder, formToolkit);
+	}
+
+	private void createButtonForPeakListTable(Composite client, FormToolkit formToolkit) {
+
+		GridData gridData = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
+		createReevaluateButton(client, gridData, formToolkit);
+	}
+
+	/**
+	 * Creates the peak intensity table labels.
+	 *
+	 * @param client
+	 */
+	private void createPeakIntensityTableLabels(Composite client, FormToolkit formToolkit) {
+
+		tableHeader = formToolkit.createLabel(client, "Peaks: " + " \t\tStart Peak: " + " \t End Peak: ", SWT.NONE);
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+		gridData.horizontalSpan = 2;
+		tableHeader.setLayoutData(gridData);
+	}
+
+	private void createPeakListIntensityTableSection(Composite parent, FormToolkit formToolkit) {
+
+		Section section;
+		Composite client;
+		GridLayout layout;
+		/*
+		 * Section
+		 */
+		section = formToolkit.createSection(parent, Section.DESCRIPTION | ExpandableComposite.TITLE_BAR);
+		section.setText("Peak Intensity Table");
+		section.setDescription("Click on the Times box to specify a certain timerange to display\n" + "Click on any time column header to delete the corresponding column\n\n" + "Click on any filename(not the checkboxes) to exclude/include that specific file in table\n" + "The checkboxes currently show what files are included\n\n" + "Click on the Re-Evaluate Button to recalcuate score plot and error chart\n");
+		section.marginWidth = 5;
+		section.marginHeight = 5;
+		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
+		/*
+		 * Set the layout for the client.
+		 */
+		client = formToolkit.createComposite(section, SWT.WRAP);
+		layout = new GridLayout();
+		layout.numColumns = 1;
+		layout.marginWidth = 2;
+		layout.marginHeight = 2;
+		client.setLayout(layout);
+		createButtonForPeakListTable(client, formToolkit);
+		createPeakIntensityTableLabels(client, formToolkit);
+		GridData gridData;
+		peakListIntensityTable = formToolkit.createTable(client, SWT.MULTI | SWT.VIRTUAL | SWT.CHECK);
+		gridData = new GridData(GridData.FILL_BOTH);
+		gridData.heightHint = 300;
+		gridData.widthHint = 100;
+		gridData.verticalSpan = 3;
+		peakListIntensityTable.setLayoutData(gridData);
+		peakListIntensityTable.setHeaderVisible(true);
+		peakListIntensityTable.setLinesVisible(true);
+		peakListIntensityTable.addListener(SWT.MouseDoubleClick, new Listener() {
+
+			@Override
+			public void handleEvent(org.eclipse.swt.widgets.Event event) {
+
+				TableItem[] selection = peakListIntensityTable.getSelection();
+				for(int i = 0; i < selection.length; i++) {
+					selection[i].dispose();
+				}
+			}
+		});
+		peakListIntensityTable.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+
+				IPcaResults pcaResults = pcaEditor.getPcaResults();
+				List<IDataInputEntry> dataInputEntries = pcaResults.getDataInputEntries();
+				//
+				TableItem item = (TableItem)event.item;
+				String filename = item.getText();
+				List<ISample> samples = pcaResults.getSampleList();
+				for(ISample result : samples) {
+					if(result.getName().equals(filename)) {
+						if(result.isSelected()) {
+							result.setSelected(false);
+							item.setChecked(false);
+							for(IDataInputEntry entry : dataInputEntries) {
+								/*
+								 * TODO: Check if there are other file types to consider. Only works when dealing with ocb files for now
+								 */
+								if(entry.getFileName().equals(result.getName() + ".ocb")) {
+									dataInputEntries.remove(entry);
+								}
+							}
+							return;
+						} else {
+							result.setSelected(true);
+							item.setChecked(true);
+							/*
+							 * TODO: Check if there are other file types to consider. Only works when dealing with ocb files for now
+							 */
+							DataInputEntry inputEntry = new DataInputEntry(result.getName() + ".ocb");
+							dataInputEntries.add(inputEntry);
+							return;
+						}
+					}
+				}
+			}
+		});
+		/*
+		 * Add the client to the section and paint flat borders.
+		 */
+		section.setClient(client);
+		formToolkit.paintBordersFor(client);
+	}
+
+	private void createReevaluateButton(Composite client, GridData gridData, FormToolkit formToolkit) {
+
+		Button reevaluate = formToolkit.createButton(client, "Re-Evaluate", SWT.PUSH);
+		reevaluate.setLayoutData(gridData);
+		reevaluate.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				super.widgetSelected(e);
+				pcaEditor.reEvaluatePcaCalculation();
+			}
+		});
+	}
+
+	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
+
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText("Data Table");
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayout(new FillLayout());
+		/*
+		 * Forms API
+		 */
+		formToolkit = new FormToolkit(composite.getDisplay());
+		ScrolledForm scrolledForm = formToolkit.createScrolledForm(composite);
+		Composite scrolledFormComposite = scrolledForm.getBody();
+		scrolledFormComposite.setLayout(new TableWrapLayout());
+		scrolledForm.setText("Peak Intensity Table Editor");
+		createPeakListIntensityTableSection(scrolledFormComposite, formToolkit);
+		tabItem.setControl(composite);
+	}
+
+	private void redrawTableHeader(int numPeaks, String startPoint, String endPoint) {
+
+		IPcaResults pcaResults = pcaEditor.getPcaResults();
+		if(pcaResults != null) {
+			int inputEntriesSize = pcaResults.getDataInputEntries().size();
+			if(pcaResults.getExtractionType() == 0) {
+				/*
+				 * Peaks
+				 */
+				tableHeader.setText(Integer.toString(inputEntriesSize) + "\t\tPeaks: " + numPeaks + " \t\tStart Peak: " + startPoint + "\t\tEnd Peak: " + endPoint);
+			} else {
+				/*
+				 * Scans
+				 */
+				tableHeader.setText(Integer.toString(inputEntriesSize) + "\t\tScans: " + numPeaks + " \t\tStart Scan: " + startPoint + "\t\tEnd Scan: " + endPoint);
+			}
+		} else {
+			tableHeader.setText("No data available.");
+		}
 	}
 
 	public void update() {
@@ -90,7 +255,7 @@ public class PeakListIntensityTablePage {
 			List<String> titleList = new ArrayList<String>();
 			titleList.add("Times");
 			for(int retentionTime : pcaResults.getExtractedRetentionTimes()) {
-				titleList.add(numberFormat.format(retentionTime / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+				titleList.add(numberFormat.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 			}
 			final String[] titles = titleList.toArray(new String[titleList.size()]);
 			currentNumberOfPeaks = titles.length - 1;
@@ -101,6 +266,7 @@ public class PeakListIntensityTablePage {
 			 */
 			filenameColumn.addSelectionListener(new SelectionAdapter() {
 
+				@Override
 				public void widgetSelected(SelectionEvent event) {
 
 					/*
@@ -113,7 +279,7 @@ public class PeakListIntensityTablePage {
 					/*
 					 * If timerange entered
 					 */
-					if(returnCode == WizardDialog.OK) {
+					if(returnCode == Window.OK) {
 						System.out.println("Ok pressed");
 						int split = range.indexOf("-");
 						double startRange = Double.parseDouble(range.substring(0, split));
@@ -159,6 +325,7 @@ public class PeakListIntensityTablePage {
 				column.setText(titles[i]);
 				column.addSelectionListener(new SelectionAdapter() {
 
+					@Override
 					public void widgetSelected(SelectionEvent event) {
 
 						column.dispose();
@@ -171,14 +338,14 @@ public class PeakListIntensityTablePage {
 			/*
 			 * Data
 			 */
-			for(Map.Entry<ISample, IPcaResult> entry : pcaResults.getPcaResultMap().entrySet()) {
+			for(ISample sample : pcaResults.getSampleList()) {
 				int index = 0;
 				TableItem item = new TableItem(peakListIntensityTable, SWT.NONE);
-				if(entry.getKey().isSelected()) {
+				if(sample.isSelected()) {
 					item.setChecked(true);
 				}
-				item.setText(index++, entry.getKey().getName());
-				IPcaResult pcaResult = entry.getValue();
+				item.setText(index++, sample.getName());
+				IPcaResult pcaResult = sample.getPcaResult();
 				double[] sampleData = pcaResult.getSampleData();
 				for(double data : sampleData) {
 					item.setText(index++, numberFormat.format(data));
@@ -194,167 +361,5 @@ public class PeakListIntensityTablePage {
 			peakEndPoint = titles[titles.length - 1];
 			redrawTableHeader(currentNumberOfPeaks, peakStartPoint, peakEndPoint);
 		}
-	}
-
-	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
-
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Data Table");
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new FillLayout());
-		/*
-		 * Forms API
-		 */
-		formToolkit = new FormToolkit(composite.getDisplay());
-		ScrolledForm scrolledForm = formToolkit.createScrolledForm(composite);
-		Composite scrolledFormComposite = scrolledForm.getBody();
-		scrolledFormComposite.setLayout(new TableWrapLayout());
-		scrolledForm.setText("Peak Intensity Table Editor");
-		createPeakListIntensityTableSection(scrolledFormComposite, formToolkit);
-		tabItem.setControl(composite);
-	}
-
-	private void createPeakListIntensityTableSection(Composite parent, FormToolkit formToolkit) {
-
-		Section section;
-		Composite client;
-		GridLayout layout;
-		/*
-		 * Section
-		 */
-		section = formToolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
-		section.setText("Peak Intensity Table");
-		section.setDescription("Click on the Times box to specify a certain timerange to display\n" + "Click on any time column header to delete the corresponding column\n\n" + "Click on any filename(not the checkboxes) to exclude/include that specific file in table\n" + "The checkboxes currently show what files are included\n\n" + "Click on the Re-Evaluate Button to recalcuate score plot and error chart\n");
-		section.marginWidth = 5;
-		section.marginHeight = 5;
-		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
-		/*
-		 * Set the layout for the client.
-		 */
-		client = formToolkit.createComposite(section, SWT.WRAP);
-		layout = new GridLayout();
-		layout.numColumns = 1;
-		layout.marginWidth = 2;
-		layout.marginHeight = 2;
-		client.setLayout(layout);
-		createButtonForPeakListTable(client, formToolkit);
-		createPeakIntensityTableLabels(client, formToolkit);
-		GridData gridData;
-		peakListIntensityTable = formToolkit.createTable(client, SWT.MULTI | SWT.VIRTUAL | SWT.CHECK);
-		gridData = new GridData(GridData.FILL_BOTH);
-		gridData.heightHint = 300;
-		gridData.widthHint = 100;
-		gridData.verticalSpan = 3;
-		peakListIntensityTable.setLayoutData(gridData);
-		peakListIntensityTable.setHeaderVisible(true);
-		peakListIntensityTable.setLinesVisible(true);
-		peakListIntensityTable.addListener(SWT.MouseDoubleClick, new Listener() {
-
-			@Override
-			public void handleEvent(org.eclipse.swt.widgets.Event event) {
-
-				TableItem[] selection = peakListIntensityTable.getSelection();
-				for(int i = 0; i < selection.length; i++) {
-					selection[i].dispose();
-				}
-			}
-		});
-		peakListIntensityTable.addSelectionListener(new SelectionAdapter() {
-
-			public void widgetSelected(SelectionEvent event) {
-
-				IPcaResults pcaResults = pcaEditor.getPcaResults();
-				List<IDataInputEntry> dataInputEntries = pcaResults.getDataInputEntries();
-				//
-				TableItem item = (TableItem)event.item;
-				String filename = item.getText();
-				Map<ISample, IPcaResult> resultMap = pcaResults.getPcaResultMap();
-				for(ISample key : resultMap.keySet()) {
-					if(key.getName().equals(filename)) {
-						if(key.isSelected()) {
-							key.setSelected(false);
-							item.setChecked(false);
-							for(IDataInputEntry entry : dataInputEntries) {
-								/*
-								 * TODO: Check if there are other file types to consider. Only works when dealing with ocb files for now
-								 */
-								if(entry.getName().equals(key.getName() + ".ocb")) {
-									dataInputEntries.remove(entry);
-								}
-							}
-							return;
-						} else {
-							key.setSelected(true);
-							item.setChecked(true);
-							/*
-							 * TODO: Check if there are other file types to consider. Only works when dealing with ocb files for now
-							 */
-							DataInputEntry inputEntry = new DataInputEntry(key.getName() + ".ocb");
-							dataInputEntries.add(inputEntry);
-							return;
-						}
-					}
-				}
-			}
-		});
-		/*
-		 * Add the client to the section and paint flat borders.
-		 */
-		section.setClient(client);
-		formToolkit.paintBordersFor(client);
-	}
-
-	private void createButtonForPeakListTable(Composite client, FormToolkit formToolkit) {
-
-		GridData gridData = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
-		createReevaluateButton(client, gridData, formToolkit);
-	}
-
-	/**
-	 * Creates the peak intensity table labels.
-	 * 
-	 * @param client
-	 */
-	private void createPeakIntensityTableLabels(Composite client, FormToolkit formToolkit) {
-
-		tableHeader = formToolkit.createLabel(client, "Peaks: " + " \t\tStart Peak: " + " \t End Peak: ", SWT.NONE);
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
-		gridData.horizontalSpan = 2;
-		tableHeader.setLayoutData(gridData);
-	}
-
-	private void redrawTableHeader(int numPeaks, String startPoint, String endPoint) {
-
-		IPcaResults pcaResults = pcaEditor.getPcaResults();
-		if(pcaResults != null) {
-			int inputEntriesSize = pcaResults.getDataInputEntries().size();
-			if(pcaResults.getExtractionType() == 0) {
-				/*
-				 * Peaks
-				 */
-				tableHeader.setText(Integer.toString(inputEntriesSize) + "\t\tPeaks: " + numPeaks + " \t\tStart Peak: " + startPoint + "\t\tEnd Peak: " + endPoint);
-			} else {
-				/*
-				 * Scans
-				 */
-				tableHeader.setText(Integer.toString(inputEntriesSize) + "\t\tScans: " + numPeaks + " \t\tStart Scan: " + startPoint + "\t\tEnd Scan: " + endPoint);
-			}
-		} else {
-			tableHeader.setText("No data available.");
-		}
-	}
-
-	private void createReevaluateButton(Composite client, GridData gridData, FormToolkit formToolkit) {
-
-		Button reevaluate = formToolkit.createButton(client, "Re-Evaluate", SWT.PUSH);
-		reevaluate.setLayoutData(gridData);
-		reevaluate.addSelectionListener(new SelectionAdapter() {
-
-			public void widgetSelected(SelectionEvent e) {
-
-				super.widgetSelected(e);
-				pcaEditor.reEvaluatePcaCalculation();
-			}
-		});
 	}
 }

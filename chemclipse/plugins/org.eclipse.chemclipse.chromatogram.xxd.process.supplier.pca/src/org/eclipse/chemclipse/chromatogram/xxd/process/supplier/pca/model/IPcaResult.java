@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
@@ -15,23 +15,23 @@ import org.eclipse.chemclipse.model.core.IPeaks;
 
 public interface IPcaResult {
 
-	ISlopes getSlopes();
-
-	void setSlopes(ISlopes slopes);
-
-	IPeaks getPeaks();
-
-	void setPeaks(IPeaks peaks);
-
-	double[] getSampleData();
-
-	void setSampleData(double[] sampleData);
-
 	double[] getEigenSpace();
-
-	void setEigenSpace(double[] eigenSpace);
 
 	double getErrorMemberShip();
 
+	IPeaks getPeaks();
+
+	double[] getSampleData();
+
+	ISlopes getSlopes();
+
+	void setEigenSpace(double[] eigenSpace);
+
 	void setErrorMemberShip(double errorMemberShip);
+
+	void setPeaks(IPeaks peaks);
+
+	void setSampleData(double[] sampleData);
+
+	void setSlopes(ISlopes slopes);
 }

@@ -1,18 +1,16 @@
 /*******************************************************************************
  * Copyright (c) 2013, 2017 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Daniel Mariano, Rafael Aguayo - additional functionality and UI improvements
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
-
-import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
@@ -49,30 +47,24 @@ import org.swtchart.Range;
 public class ScorePlotPage {
 
 	private Color COLOR_BLACK = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
-	private Color COLOR_WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
-	private Color COLOR_RED = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 	private Color COLOR_BLUE = Display.getCurrent().getSystemColor(SWT.COLOR_BLUE);
-	private Color COLOR_MAGENTA = Display.getCurrent().getSystemColor(SWT.COLOR_MAGENTA);
 	private Color COLOR_CYAN = Display.getCurrent().getSystemColor(SWT.COLOR_CYAN);
 	private Color COLOR_GRAY = Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
-	//
-	private int SYMBOL_SIZE = 8;
+	private Color COLOR_MAGENTA = Display.getCurrent().getSystemColor(SWT.COLOR_MAGENTA);
+	private Color COLOR_RED = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+	private Color COLOR_WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
 	//
 	private PcaEditor pcaEditor;
 	private InteractiveChartExtended scorePlotChart;
 	private Spinner spinnerPCx;
 	private Spinner spinnerPCy;
+	//
+	private int SYMBOL_SIZE = 8;
 
 	public ScorePlotPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
 		this.pcaEditor = pcaEditor;
 		initialize(tabFolder, formToolkit);
-	}
-
-	public void update() {
-
-		updateSpinnerPCMaxima();
-		reloadScorePlotChart();
 	}
 
 	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
@@ -154,6 +146,12 @@ public class ScorePlotPage {
 		plotArea.addCustomPaintListener(new ICustomPaintListener() {
 
 			@Override
+			public boolean drawBehindSeries() {
+
+				return false;
+			}
+
+			@Override
 			public void paintControl(PaintEvent e) {
 
 				Range xRange = scorePlotChart.getAxisSet().getXAxes()[0].getRange();
@@ -188,17 +186,17 @@ public class ScorePlotPage {
 					e.gc.drawLine(0, yHeight, width, yHeight); // Horizontal line through zero
 				}
 			}
+		});
+		/*
+		 * Plot the series name above the entry.
+		 */
+		plotArea.addCustomPaintListener(new ICustomPaintListener() {
 
 			@Override
 			public boolean drawBehindSeries() {
 
 				return false;
 			}
-		});
-		/*
-		 * Plot the series name above the entry.
-		 */
-		plotArea.addCustomPaintListener(new ICustomPaintListener() {
 
 			@Override
 			public void paintControl(PaintEvent e) {
@@ -216,26 +214,9 @@ public class ScorePlotPage {
 					e.gc.drawText(label, (int)(point.x - labelSize.x / 2.0d), (int)(point.y - labelSize.y - SYMBOL_SIZE / 2.0d), true);
 				}
 			}
-
-			@Override
-			public boolean drawBehindSeries() {
-
-				return false;
-			}
 		});
 		//
 		tabItem.setControl(composite);
-	}
-
-	private void updateSpinnerPCMaxima() {
-
-		IPcaResults pcaResults = pcaEditor.getPcaResults();
-		if(pcaResults != null) {
-			spinnerPCx.setMaximum(pcaResults.getNumberOfPrincipleComponents());
-			spinnerPCx.setSelection(1); // PC1
-			spinnerPCy.setMaximum(pcaResults.getNumberOfPrincipleComponents());
-			spinnerPCy.setSelection(2); // PC2
-		}
 	}
 
 	private void reloadScorePlotChart() {
@@ -250,22 +231,22 @@ public class ScorePlotPage {
 			for(ISeries serie : series) {
 				seriesSet.deleteSeries(serie.getId());
 			}
-			String[] fileNames = new String[pcaResults.getPcaResultMap().entrySet().size()];
+			String[] fileNames = new String[pcaResults.getSampleList().size()];
 			int count = 0;
 			/*
 			 * Data
 			 */
-			for(Map.Entry<ISample, IPcaResult> entry : pcaResults.getPcaResultMap().entrySet()) {
+			for(ISample sample : pcaResults.getSampleList()) {
 				/*
 				 * Create the series.
 				 */
-				String name = entry.getKey().getName();
+				String name = sample.getName();
 				fileNames[count] = name;
 				ILineSeries scatterSeries = (ILineSeries)scorePlotChart.getSeriesSet().createSeries(SeriesType.LINE, name);
 				scatterSeries.setLineStyle(LineStyle.NONE);
 				scatterSeries.setSymbolSize(SYMBOL_SIZE);
 				//
-				IPcaResult pcaResult = entry.getValue();
+				IPcaResult pcaResult = sample.getPcaResult();
 				double[] eigenSpace = pcaResult.getEigenSpace();
 				/*
 				 * Note.
@@ -303,6 +284,23 @@ public class ScorePlotPage {
 			scorePlotChart.getAxisSet().adjustRange();
 			scorePlotChart.redraw();
 			scorePlotChart.update();
+		}
+	}
+
+	public void update() {
+
+		updateSpinnerPCMaxima();
+		reloadScorePlotChart();
+	}
+
+	private void updateSpinnerPCMaxima() {
+
+		IPcaResults pcaResults = pcaEditor.getPcaResults();
+		if(pcaResults != null) {
+			spinnerPCx.setMaximum(pcaResults.getNumberOfPrincipleComponents());
+			spinnerPCx.setSelection(1); // PC1
+			spinnerPCy.setMaximum(pcaResults.getNumberOfPrincipleComponents());
+			spinnerPCy.setSelection(2); // PC2
 		}
 	}
 }
