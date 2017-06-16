@@ -27,7 +27,6 @@ public class Group implements ISample {
 	private String name;
 	private IPcaResult pcaResult;
 
-	
 	public Group(String name) {
 		isSelected = true;
 		this.name = name;

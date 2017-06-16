@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IPcaResults {
 
@@ -28,6 +29,8 @@ public interface IPcaResults {
 	int getRetentionTimeWindow();
 
 	List<ISample> getSampleList();
+
+	Map<ISample, IPcaResult> getPcaResultMap();
 
 	void setBasisVectors(List<double[]> basisVectors);
 

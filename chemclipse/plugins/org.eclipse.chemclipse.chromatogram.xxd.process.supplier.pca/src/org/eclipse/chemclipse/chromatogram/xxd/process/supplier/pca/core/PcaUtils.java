@@ -62,8 +62,7 @@ public class PcaUtils {
 		}
 		return names;
 	}
-	
-	
+
 	public static int getNumberOfGroupNames(List<ISample> samples) {
 
 		return getGroupNames(samples).size();

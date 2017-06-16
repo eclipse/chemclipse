@@ -12,7 +12,9 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PcaResults implements IPcaResults {
 
@@ -24,6 +26,7 @@ public class PcaResults implements IPcaResults {
 	private int numberOfPrincipleComponents;
 	private List<ISample> pcaResultList;
 	private int retentionTimeWindow;
+	private Map<ISample, IPcaResult> pcaResultMap;
 
 	public PcaResults() {
 		this(new ArrayList<IDataInputEntry>());
@@ -32,6 +35,7 @@ public class PcaResults implements IPcaResults {
 	public PcaResults(List<IDataInputEntry> dataInputEntries) {
 		this.dataInputEntries = dataInputEntries;
 		pcaResultList = new ArrayList<ISample>();
+		pcaResultMap = new HashMap<ISample, IPcaResult>();
 	}
 
 	@Override
@@ -74,6 +78,12 @@ public class PcaResults implements IPcaResults {
 	public List<ISample> getSampleList() {
 
 		return pcaResultList;
+	}
+
+	@Override
+	public Map<ISample, IPcaResult> getPcaResultMap() {
+
+		return pcaResultMap;
 	}
 
 	@Override
