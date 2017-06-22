@@ -19,6 +19,7 @@ public class ExportSettings {
 	private File sinkDirectory;
 	private boolean exportSequences = true;
 	private boolean exportReports = true;
+	private boolean exportBatches = true;
 
 	public File getSourceDirectory() {
 
@@ -58,5 +59,15 @@ public class ExportSettings {
 	public void setExportReports(boolean exportReports) {
 
 		this.exportReports = exportReports;
+	}
+
+	public boolean isExportBatches() {
+
+		return exportBatches;
+	}
+
+	public void setExportBatches(boolean exportBatches) {
+
+		this.exportBatches = exportBatches;
 	}
 }
