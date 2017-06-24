@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.List;
-import java.util.Map;
 
 public interface IPcaResults {
 
@@ -24,9 +23,9 @@ public interface IPcaResults {
 
 	int getExtractionType();
 
-	int getNumberOfPrincipleComponents();
+	List<IGroup> getGroupList();
 
-	Map<ISample, IPcaResult> getPcaResultMap();
+	int getNumberOfPrincipleComponents();
 
 	int getRetentionTimeWindow();
 
