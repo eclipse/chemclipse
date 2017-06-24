@@ -26,11 +26,11 @@ public interface IPcaResults {
 
 	int getNumberOfPrincipleComponents();
 
+	Map<ISample, IPcaResult> getPcaResultMap();
+
 	int getRetentionTimeWindow();
 
 	List<ISample> getSampleList();
-
-	Map<ISample, IPcaResult> getPcaResultMap();
 
 	void setBasisVectors(List<double[]> basisVectors);
 

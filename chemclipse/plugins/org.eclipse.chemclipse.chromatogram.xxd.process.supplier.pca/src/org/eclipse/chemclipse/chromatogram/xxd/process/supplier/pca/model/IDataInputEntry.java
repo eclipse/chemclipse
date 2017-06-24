@@ -15,7 +15,7 @@ public interface IDataInputEntry {
 
 	/**
 	 * Return the name of input file with extension
-	 * 
+	 *
 	 * @return
 	 */
 	String getFileName();
