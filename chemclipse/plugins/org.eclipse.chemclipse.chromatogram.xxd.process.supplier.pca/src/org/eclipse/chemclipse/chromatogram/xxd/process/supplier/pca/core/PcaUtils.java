@@ -23,9 +23,9 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Group;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Group;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 
@@ -34,14 +34,27 @@ public class PcaUtils {
 	/**
 	 *
 	 * @param samples
-	 * @return all group which list of samples contains, if some group name is null Set can contains also null value
+	 * @return all group which list of samples contains, if some group name is null Set contains also null value
 	 */
 	public static Set<String> getGroupNames(List<ISample> samples) {
+
+		return getGroupNames(samples, false);
+	}
+
+	/**
+	 *
+	 * @param sample
+	 * @param onlySelected
+	 * @return all group which list of samples contains, if some group name is null Set contains also null value
+	 */
+	public static Set<String> getGroupNames(List<ISample> samples, boolean onlySelected) {
 
 		Set<String> groupNames = new HashSet<>();
 		for(ISample sample : samples) {
 			String groupName = sample.getGroupName();
-			groupNames.add(groupName);
+			if(!onlySelected || sample.isSelected()) {
+				groupNames.add(groupName);
+			}
 		}
 		return groupNames;
 	}

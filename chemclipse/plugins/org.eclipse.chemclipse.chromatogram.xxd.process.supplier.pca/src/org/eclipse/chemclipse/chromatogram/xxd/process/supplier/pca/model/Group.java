@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * this class contains means of samples which contain same group name
- * 
+ *
  * @author Jan Holy
  *
  */
@@ -76,7 +76,7 @@ public class Group implements ISample {
 	/**
 	 * Set values in PcaResult. Values are set as mean of samples which contain same group name as this object
 	 * You have to set group name before calling this method
-	 * 
+	 *
 	 * @param sammples
 	 */
 	public void setPcaResult(List<ISample> samples) {

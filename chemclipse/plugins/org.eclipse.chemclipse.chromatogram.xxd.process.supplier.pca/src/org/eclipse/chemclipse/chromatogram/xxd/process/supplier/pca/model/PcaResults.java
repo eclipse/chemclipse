@@ -25,8 +25,8 @@ public class PcaResults implements IPcaResults {
 	private int extractionType;
 	private int numberOfPrincipleComponents;
 	private List<ISample> pcaResultList;
-	private int retentionTimeWindow;
 	private Map<ISample, IPcaResult> pcaResultMap;
+	private int retentionTimeWindow;
 
 	public PcaResults() {
 		this(new ArrayList<IDataInputEntry>());
@@ -69,6 +69,12 @@ public class PcaResults implements IPcaResults {
 	}
 
 	@Override
+	public Map<ISample, IPcaResult> getPcaResultMap() {
+
+		return pcaResultMap;
+	}
+
+	@Override
 	public int getRetentionTimeWindow() {
 
 		return retentionTimeWindow;
@@ -78,12 +84,6 @@ public class PcaResults implements IPcaResults {
 	public List<ISample> getSampleList() {
 
 		return pcaResultList;
-	}
-
-	@Override
-	public Map<ISample, IPcaResult> getPcaResultMap() {
-
-		return pcaResultMap;
 	}
 
 	@Override
