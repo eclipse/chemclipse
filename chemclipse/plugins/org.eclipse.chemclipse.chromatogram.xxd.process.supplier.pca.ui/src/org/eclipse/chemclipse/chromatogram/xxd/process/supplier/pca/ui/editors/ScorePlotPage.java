@@ -12,9 +12,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
+import java.util.Map;
+import java.util.Set;
+
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.PcaColorGroup;
 import org.eclipse.chemclipse.thirdpartylibraries.swtchart.ext.InteractiveChartExtended;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
@@ -47,11 +52,6 @@ import org.swtchart.Range;
 public class ScorePlotPage {
 
 	private Color COLOR_BLACK = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
-	private Color COLOR_BLUE = Display.getCurrent().getSystemColor(SWT.COLOR_BLUE);
-	private Color COLOR_CYAN = Display.getCurrent().getSystemColor(SWT.COLOR_CYAN);
-	private Color COLOR_GRAY = Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
-	private Color COLOR_MAGENTA = Display.getCurrent().getSystemColor(SWT.COLOR_MAGENTA);
-	private Color COLOR_RED = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 	private Color COLOR_WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
 	//
 	private PcaEditor pcaEditor;
@@ -234,6 +234,11 @@ public class ScorePlotPage {
 			String[] fileNames = new String[pcaResults.getSampleList().size()];
 			int count = 0;
 			/*
+			 * get color
+			 */
+			Set<String> groupNames = PcaUtils.getGroupNames(pcaResults.getSampleList());
+			Map<String, Color> colors = PcaColorGroup.getColorSWT(groupNames);
+			/*
 			 * Data
 			 */
 			for(ISample sample : pcaResults.getSampleList()) {
@@ -265,21 +270,17 @@ public class ScorePlotPage {
 				 * Set the color.
 				 */
 				if(x > 0 && y > 0) {
-					scatterSeries.setSymbolColor(COLOR_RED);
 					scatterSeries.setSymbolType(PlotSymbolType.SQUARE);
 				} else if(x > 0 && y < 0) {
-					scatterSeries.setSymbolColor(COLOR_BLUE);
 					scatterSeries.setSymbolType(PlotSymbolType.TRIANGLE);
 				} else if(x < 0 && y > 0) {
-					scatterSeries.setSymbolColor(COLOR_MAGENTA);
 					scatterSeries.setSymbolType(PlotSymbolType.DIAMOND);
 				} else if(x < 0 && y < 0) {
-					scatterSeries.setSymbolColor(COLOR_CYAN);
 					scatterSeries.setSymbolType(PlotSymbolType.INVERTED_TRIANGLE);
 				} else {
-					scatterSeries.setSymbolColor(COLOR_GRAY);
 					scatterSeries.setSymbolType(PlotSymbolType.CIRCLE);
 				}
+				scatterSeries.setSymbolColor(colors.get(sample.getGroupName()));
 			}
 			scorePlotChart.getAxisSet().adjustRange();
 			scorePlotChart.redraw();
