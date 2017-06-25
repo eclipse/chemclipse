@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d;
 
 import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.support.text.ValueFormat;
@@ -40,6 +41,7 @@ public class Axes {
 	private double lengthZ;
 	private double lineSpacing;
 	final private Group mainGroup = new Group();
+	private double maxNumberLine;
 	private double maxX;
 	private double maxY;
 	private double maxZ;
@@ -53,6 +55,7 @@ public class Axes {
 	public Axes(Chart3DData chart3dData) {
 		this.data = chart3dData;
 		widthCorn = 4;
+		maxNumberLine = 10;
 		cornMaterial.setDiffuseColor(Color.BLACK);
 		cornMaterial.setSpecularColor(Color.BLACK.brighter());
 		/*
@@ -62,7 +65,6 @@ public class Axes {
 		gridaxisMaterial.setSpecularColor(Color.GRAY.brighter());
 		planeMaterial.setDiffuseColor(Color.LIGHTGRAY);
 		planeMaterial.setSpecularColor(Color.LIGHTGRAY.brighter());
-		lineSpacing = 100;
 		tickLenght = 20;
 		lableDistance = 40;
 		lableDistanceNameAxis = 100;
@@ -297,6 +299,10 @@ public class Axes {
 
 	public void update() {
 
+		double absMaximum = Arrays.stream(new double[]{data.getMinX(), data.getMaxX(), data.getMinY(), data.getMaxY(), data.getMinZ(), data.getMaxZ()}).map(d -> Math.abs(d)).max().getAsDouble();
+		double numberDigits = Math.floor(Math.log10(absMaximum));
+		double round = Math.pow(10, numberDigits);
+		lineSpacing = (Math.round(absMaximum / round) * round) / maxNumberLine;
 		BiFunction<Double, Double, Double> getAbsMax = (min, max) -> {
 			double absMax = (Math.abs(min) > Math.abs(max) ? Math.abs(min) : Math.abs(max));
 			return Math.ceil(absMax / lineSpacing) * lineSpacing;
@@ -307,9 +313,9 @@ public class Axes {
 		this.minX = -this.maxX;
 		this.minY = -this.maxY;
 		this.minZ = -this.maxZ;
-		this.lengthX = Math.abs(maxX - minX);
-		this.lengthY = Math.abs(maxY - minY);
-		this.lengthZ = Math.abs(maxZ - minZ);
+		this.lengthX = Math.abs(this.maxX - this.minX);
+		this.lengthY = Math.abs(this.maxY - this.minY);
+		this.lengthZ = Math.abs(this.maxZ - this.minZ);
 		mainGroup.getChildren().clear();
 		mainGroup.getChildren().addAll(createXYPlane(), createYZPlane(), createXZPlane(), createCorns(), createXLabels(), createYLabels(), createZLanels());
 	}
