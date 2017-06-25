@@ -213,7 +213,7 @@ public class Axes {
 		labelAxis.setTranslateZ(lableDistanceNameAxis);
 		group.getChildren().add(labelAxis);
 		for(double i = minY + lineSpacingScaled; i < maxY; i += lineSpacingScaled) {
-			Label label = new Label(format.format(i));
+			Label label = new Label(format.format(i / data.getScale()));
 			label.setTranslateY(i);
 			label.setTranslateX(-lableDistance);
 			label.setTranslateZ(lableDistance);
@@ -251,7 +251,7 @@ public class Axes {
 		labelAxis.setTranslateX(lableDistanceNameAxis);
 		group.getChildren().add(labelAxis);
 		for(double i = minZ + lineSpacingScaled; i < maxZ; i += lineSpacingScaled) {
-			Label label = new Label(format.format(i));
+			Label label = new Label(format.format(i / data.getScale()));
 			label.setTranslateZ(i);
 			label.setTranslateY(-lableDistance);
 			label.setTranslateX(lableDistance);
