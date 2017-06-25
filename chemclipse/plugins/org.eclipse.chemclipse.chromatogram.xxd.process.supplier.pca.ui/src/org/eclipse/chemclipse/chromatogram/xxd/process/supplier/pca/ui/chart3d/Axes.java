@@ -39,7 +39,7 @@ public class Axes {
 	private double lengthX;
 	private double lengthY;
 	private double lengthZ;
-	private double lineSpacing;
+	private double lineSpacingScaled;
 	final private Group mainGroup = new Group();
 	private double maxNumberLine;
 	private double maxX;
@@ -54,7 +54,6 @@ public class Axes {
 
 	public Axes(Chart3DData chart3dData) {
 		this.data = chart3dData;
-		widthCorn = 4;
 		maxNumberLine = 10;
 		cornMaterial.setDiffuseColor(Color.BLACK);
 		cornMaterial.setSpecularColor(Color.BLACK.brighter());
@@ -65,9 +64,13 @@ public class Axes {
 		gridaxisMaterial.setSpecularColor(Color.GRAY.brighter());
 		planeMaterial.setDiffuseColor(Color.LIGHTGRAY);
 		planeMaterial.setSpecularColor(Color.LIGHTGRAY.brighter());
-		tickLenght = 20;
-		lableDistance = 40;
+		/*
+		 * set fix size
+		 */
+		tickLenght = 40;
+		lableDistance = 60;
 		lableDistanceNameAxis = 100;
+		widthCorn = 4;
 	}
 
 	public Group createAxes() {
@@ -145,10 +148,10 @@ public class Axes {
 		double finishX = sizeH / 2;
 		double startY = -sizeV / 2;
 		double finishY = sizeV / 2;
-		for(double x = startX; x <= finishX; x += lineSpacing) {
+		for(double x = startX; x <= finishX; x += lineSpacingScaled) {
 			group.getChildren().add(createGridLine(new Point3D(x, startY, 0), new Point3D(x, finishY, 0)));
 		}
-		for(double y = startY; y <= finishY; y += lineSpacing) {
+		for(double y = startY; y <= finishY; y += lineSpacingScaled) {
 			group.getChildren().add(createGridLine(new Point3D(startX, y, 0), new Point3D(finishX, y, 0)));
 		}
 		return group;
@@ -157,16 +160,20 @@ public class Axes {
 	private Group createXLabels() {
 
 		Group group = new Group();
-		String name = data.getLabelX();
-		Label labelName = new Label(name);
-		labelName.setTranslateY(-lableDistanceNameAxis);
-		labelName.setTranslateZ(lableDistanceNameAxis);
-		group.getChildren().add(labelName);
-		for(double i = minX + lineSpacing; i < maxX; i += lineSpacing) {
-			Label label = new Label(format.format(i));
+		String nameAxis = data.getLabelAxisX();
+		Label labelAxis = new Label(nameAxis);
+		labelAxis.setTranslateY(-lableDistanceNameAxis);
+		labelAxis.setTranslateZ(lableDistanceNameAxis);
+		labelAxis.setRotationAxis(Rotate.X_AXIS);
+		labelAxis.setRotate(-180);
+		group.getChildren().add(labelAxis);
+		for(double i = minX + lineSpacingScaled; i < maxX; i += lineSpacingScaled) {
+			Label label = new Label(format.format(i / data.getScale()));
 			label.setTranslateX(i);
 			label.setTranslateY(-lableDistance);
 			label.setTranslateZ(lableDistance);
+			label.setRotationAxis(Rotate.X_AXIS);
+			label.setRotate(-180);
 			Node tick = createGridLine(new Point3D(i, 0, -tickLenght / 2), new Point3D(i, 0, tickLenght / 2));
 			group.getChildren().add(tick);
 			group.getChildren().add(label);
@@ -196,18 +203,22 @@ public class Axes {
 	private Group createYLabels() {
 
 		Group group = new Group();
-		String name = data.getLabelY();
-		Label labelName = new Label(name);
-		labelName.setRotationAxis(Rotate.Z_AXIS);
-		labelName.setRotate(-90);
-		labelName.setTranslateX(-lableDistanceNameAxis);
-		labelName.setTranslateZ(lableDistanceNameAxis);
-		group.getChildren().add(labelName);
-		for(double i = minY + lineSpacing; i < maxY; i += lineSpacing) {
+		String axisName = data.getLabelAxisY();
+		Label labelAxis = new Label(axisName);
+		labelAxis.setRotationAxis(Rotate.X_AXIS);
+		labelAxis.setRotate(-180);
+		labelAxis.setRotationAxis(Rotate.Z_AXIS);
+		labelAxis.setRotate(-90);
+		labelAxis.setTranslateX(-lableDistanceNameAxis);
+		labelAxis.setTranslateZ(lableDistanceNameAxis);
+		group.getChildren().add(labelAxis);
+		for(double i = minY + lineSpacingScaled; i < maxY; i += lineSpacingScaled) {
 			Label label = new Label(format.format(i));
 			label.setTranslateY(i);
 			label.setTranslateX(-lableDistance);
 			label.setTranslateZ(lableDistance);
+			label.setRotationAxis(Rotate.X_AXIS);
+			label.setRotate(-180);
 			Node tick = createGridLine(new Point3D(0, i, -tickLenght / 2), new Point3D(0, i, tickLenght / 2));
 			group.getChildren().add(tick);
 			group.getChildren().add(label);
@@ -230,18 +241,22 @@ public class Axes {
 	private Group createZLanels() {
 
 		Group group = new Group();
-		String name = data.getLabelZ();
-		Label labelName = new Label(name);
-		labelName.setRotationAxis(Rotate.Y_AXIS);
-		labelName.setRotate(-90);
-		labelName.setTranslateY(-lableDistanceNameAxis);
-		labelName.setTranslateX(lableDistanceNameAxis);
-		group.getChildren().add(labelName);
-		for(double i = minZ + lineSpacing; i < maxZ; i += lineSpacing) {
+		String nameAxis = data.getLabelAxisZ();
+		Label labelAxis = new Label(nameAxis);
+		labelAxis.setRotationAxis(Rotate.X_AXIS);
+		labelAxis.setRotate(-180);
+		labelAxis.setRotationAxis(Rotate.Y_AXIS);
+		labelAxis.setRotate(-90);
+		labelAxis.setTranslateY(-lableDistanceNameAxis);
+		labelAxis.setTranslateX(lableDistanceNameAxis);
+		group.getChildren().add(labelAxis);
+		for(double i = minZ + lineSpacingScaled; i < maxZ; i += lineSpacingScaled) {
 			Label label = new Label(format.format(i));
 			label.setTranslateZ(i);
 			label.setTranslateY(-lableDistance);
 			label.setTranslateX(lableDistance);
+			label.setRotationAxis(Rotate.X_AXIS);
+			label.setRotate(-180);
 			Node tick = createGridLine(new Point3D(-tickLenght / 2, 0, i), new Point3D(tickLenght / 2, 0, i));
 			group.getChildren().add(tick);
 			group.getChildren().add(label);
@@ -299,17 +314,18 @@ public class Axes {
 
 	public void update() {
 
-		double absMaximum = Arrays.stream(new double[]{data.getMinX(), data.getMaxX(), data.getMinY(), data.getMaxY(), data.getMinZ(), data.getMaxZ()}).map(d -> Math.abs(d)).max().getAsDouble();
+		double absMaximum = Arrays.stream(new double[]{data.getMinX(false), data.getMaxX(false), data.getMinY(false), data.getMaxY(false), data.getMinZ(false), data.getMaxZ(false)}).map(d -> Math.abs(d)).max().getAsDouble();
 		double numberDigits = Math.floor(Math.log10(absMaximum));
 		double round = Math.pow(10, numberDigits);
-		lineSpacing = (Math.round(absMaximum / round) * round) / maxNumberLine;
+		double lineSpacing = (((Math.round(absMaximum / round) * round) / maxNumberLine));
+		lineSpacingScaled = lineSpacing * data.getScale();
 		BiFunction<Double, Double, Double> getAbsMax = (min, max) -> {
 			double absMax = (Math.abs(min) > Math.abs(max) ? Math.abs(min) : Math.abs(max));
-			return Math.ceil(absMax / lineSpacing) * lineSpacing;
+			return Math.ceil(absMax / lineSpacingScaled) * lineSpacingScaled;
 		};
-		this.maxX = getAbsMax.apply(data.getMinX(), data.getMaxX()) + lineSpacing;
-		this.maxY = getAbsMax.apply(data.getMinY(), data.getMaxY()) + lineSpacing;
-		this.maxZ = getAbsMax.apply(data.getMinZ(), data.getMaxZ()) + lineSpacing;
+		this.maxX = getAbsMax.apply(data.getMinX(true), data.getMaxX(true)) + lineSpacingScaled;
+		this.maxY = getAbsMax.apply(data.getMinY(true), data.getMaxY(true)) + lineSpacingScaled;
+		this.maxZ = getAbsMax.apply(data.getMinZ(true), data.getMaxZ(true)) + lineSpacingScaled;
 		this.minX = -this.maxX;
 		this.minY = -this.maxY;
 		this.minZ = -this.maxZ;

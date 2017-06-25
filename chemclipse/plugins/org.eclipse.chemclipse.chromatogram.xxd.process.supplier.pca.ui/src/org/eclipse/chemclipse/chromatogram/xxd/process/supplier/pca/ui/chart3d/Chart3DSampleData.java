@@ -22,6 +22,7 @@ public class Chart3DSampleData {
 	private int pcaY;
 	private int pcaZ;
 	private ISample sample;
+	private double scale;
 
 	public Chart3DSampleData(ISample sample, int pcaX, int pcaY, int pcaZ, Color color) {
 		this.sample = sample;
@@ -41,9 +42,10 @@ public class Chart3DSampleData {
 		return pcaX;
 	}
 
-	public double getPcaXData() {
+	public double getPcaXData(boolean isScaled) {
 
-		return ((pcaX > 0) ? new Double(sample.getPcaResult().getEigenSpace()[pcaX - 1]) : new Double(0));
+		double d = ((pcaX > 0) ? new Double(sample.getPcaResult().getEigenSpace()[pcaX - 1]) : new Double(0));
+		return (isScaled ? d * scale : d);
 	}
 
 	public int getPcaY() {
@@ -51,9 +53,10 @@ public class Chart3DSampleData {
 		return pcaY;
 	}
 
-	public double getPcaYData() {
+	public double getPcaYData(boolean isScaled) {
 
-		return ((pcaY > 0) ? new Double(sample.getPcaResult().getEigenSpace()[pcaY - 1]) : new Double(0));
+		double d = ((pcaY > 0) ? new Double(sample.getPcaResult().getEigenSpace()[pcaY - 1]) : new Double(0));
+		return (isScaled ? d * scale : d);
 	}
 
 	public int getPcaZ() {
@@ -61,13 +64,24 @@ public class Chart3DSampleData {
 		return pcaZ;
 	}
 
-	public double getPcaZData() {
+	public double getPcaZData(boolean isScaled) {
 
-		return ((pcaZ > 0) ? new Double(sample.getPcaResult().getEigenSpace()[pcaZ - 1]) : new Double(0));
+		double d = ((pcaZ > 0) ? new Double(sample.getPcaResult().getEigenSpace()[pcaZ - 1]) : new Double(0));
+		return (isScaled ? d * scale : d);
 	}
 
 	public ISample getSample() {
 
 		return sample;
+	}
+
+	public double getScale() {
+
+		return scale;
+	}
+
+	public void setScale(double scale) {
+
+		this.scale = scale;
 	}
 }
