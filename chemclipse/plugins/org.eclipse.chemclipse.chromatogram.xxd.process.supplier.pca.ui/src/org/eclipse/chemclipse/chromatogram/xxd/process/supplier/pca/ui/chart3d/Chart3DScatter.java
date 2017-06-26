@@ -48,18 +48,15 @@ public class Chart3DScatter {
 		List<Chart3DSampleData> data = this.data.getData();
 		for(Chart3DSampleData d : data) {
 			Color color = d.getColor();
-			double x = d.getPcaXData();
-			double y = d.getPcaYData();
-			double z = d.getPcaZData();
 			String name = d.getSample().getName();
 			/*
 			 * create sphere
 			 */
 			Sphere sphere = new Sphere();
-			sphere.setTranslateX(x);
-			sphere.setTranslateY(y);
+			sphere.setTranslateX(d.getPcaXData(true));
+			sphere.setTranslateY(d.getPcaYData(true));
+			sphere.setTranslateZ(d.getPcaZData(true));
 			sphere.setRadius(radius);
-			sphere.setTranslateZ(z);
 			/*
 			 * set material
 			 */
@@ -73,25 +70,25 @@ public class Chart3DScatter {
 			StringBuilder sb = new StringBuilder();
 			sb.append(name);
 			sb.append('\n');
-			String labelX = this.data.getLabelX();
+			String labelX = this.data.getLabelAxisX();
 			if(!labelX.isEmpty()) {
 				sb.append(labelX);
 				sb.append(" = ");
-				sb.append(format.format(x));
+				sb.append(format.format(d.getPcaXData(false)));
 				sb.append("; ");
 			}
-			String labelY = this.data.getLabelY();
+			String labelY = this.data.getLabelAxisY();
 			if(!labelY.isEmpty()) {
 				sb.append(labelY);
 				sb.append(" = ");
-				sb.append(format.format(y));
+				sb.append(format.format(d.getPcaYData(false)));
 				sb.append("; ");
 			}
-			String labelZ = this.data.getLabelZ();
+			String labelZ = this.data.getLabelAxisZ();
 			if(!labelZ.isEmpty()) {
 				sb.append(labelZ);
 				sb.append(" = ");
-				sb.append(format.format(z));
+				sb.append(format.format(d.getPcaZData(false)));
 				sb.append("; ");
 			}
 			Tooltip t = new Tooltip(sb.toString());

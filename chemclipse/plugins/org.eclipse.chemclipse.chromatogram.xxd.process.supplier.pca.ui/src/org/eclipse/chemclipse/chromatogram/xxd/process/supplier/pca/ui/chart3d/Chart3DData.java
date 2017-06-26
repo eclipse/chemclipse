@@ -42,12 +42,14 @@ public class Chart3DData {
 	private int pcaX;
 	private int pcaY;
 	private int pcaZ;
+	private double scale;
 
 	public Chart3DData(PcaEditor pcaEditor) {
 		this.pcaEditor = pcaEditor;
+		scale = 1.0;
 	}
 
-	private String createAxisName(int componentNumber) {
+	private String createAxisLabel(int componentNumber) {
 
 		if(componentNumber > 0) {
 			return "PCA " + componentNumber;
@@ -66,49 +68,49 @@ public class Chart3DData {
 		return groups;
 	}
 
-	public String getLabelX() {
+	public String getLabelAxisX() {
 
-		return createAxisName(pcaX);
+		return createAxisLabel(pcaX);
 	}
 
-	public String getLabelY() {
+	public String getLabelAxisY() {
 
-		return createAxisName(pcaY);
+		return createAxisLabel(pcaY);
 	}
 
-	public String getLabelZ() {
+	public String getLabelAxisZ() {
 
-		return createAxisName(pcaZ);
+		return createAxisLabel(pcaZ);
 	}
 
-	public double getMaxX() {
+	public double getMaxX(boolean isScaled) {
 
-		return maxX;
+		return isScaled ? maxX * scale : maxX;
 	}
 
-	public double getMaxY() {
+	public double getMaxY(boolean isScaled) {
 
-		return maxY;
+		return isScaled ? maxY * scale : maxY;
 	}
 
-	public double getMaxZ() {
+	public double getMaxZ(boolean isScaled) {
 
-		return maxZ;
+		return isScaled ? maxZ * scale : maxZ;
 	}
 
-	public double getMinX() {
+	public double getMinX(boolean isScaled) {
 
-		return minX;
+		return isScaled ? minX * scale : minX;
 	}
 
-	public double getMinY() {
+	public double getMinY(boolean isScaled) {
 
-		return minY;
+		return isScaled ? minY * scale : minY;
 	}
 
-	public double getMinZ() {
+	public double getMinZ(boolean isScaled) {
 
-		return minZ;
+		return isScaled ? minZ * scale : minZ;
 	}
 
 	public int getPcaX() {
@@ -126,9 +128,26 @@ public class Chart3DData {
 		return pcaZ;
 	}
 
+	public double getScale() {
+
+		return scale;
+	}
+
 	public boolean isEmpty() {
 
 		return isEmpty;
+	}
+
+	public void setScale(double scale) {
+
+		data.forEach(d -> d.setScale(scale));
+		this.scale = scale;
+	}
+
+	public void setScalePoint(int point) {
+
+		double maxDis = Math.max(Math.abs(maxX - minX), Math.max(Math.abs(maxY - minY), Math.abs(maxZ - minZ)));
+		setScale(point / maxDis);
 	}
 
 	public void update(int pcaX, int pcaY, int pcaZ) {
@@ -185,12 +204,19 @@ public class Chart3DData {
 						data.add(new Chart3DSampleData(sample, pcaX, pcaY, pcaZ, color));
 					}
 				}
-				minX = data.stream().min((d1, d2) -> Double.compare(d1.getPcaXData(), d2.getPcaXData())).get().getPcaXData();
-				minY = data.stream().min((d1, d2) -> Double.compare(d1.getPcaYData(), d2.getPcaYData())).get().getPcaYData();
-				minZ = data.stream().min((d1, d2) -> Double.compare(d1.getPcaZData(), d2.getPcaZData())).get().getPcaZData();
-				maxY = data.stream().max((d1, d2) -> Double.compare(d1.getPcaYData(), d2.getPcaYData())).get().getPcaYData();
-				maxX = data.stream().max((d1, d2) -> Double.compare(d1.getPcaXData(), d2.getPcaXData())).get().getPcaXData();
-				maxZ = data.stream().max((d1, d2) -> Double.compare(d1.getPcaZData(), d2.getPcaZData())).get().getPcaZData();
+				/*
+				 * set min and max
+				 */
+				minX = data.stream().min((d1, d2) -> Double.compare(d1.getPcaXData(false), d2.getPcaXData(false))).get().getPcaXData(false);
+				minY = data.stream().min((d1, d2) -> Double.compare(d1.getPcaYData(false), d2.getPcaYData(false))).get().getPcaYData(false);
+				minZ = data.stream().min((d1, d2) -> Double.compare(d1.getPcaZData(false), d2.getPcaZData(false))).get().getPcaZData(false);
+				maxY = data.stream().max((d1, d2) -> Double.compare(d1.getPcaYData(false), d2.getPcaYData(false))).get().getPcaYData(false);
+				maxX = data.stream().max((d1, d2) -> Double.compare(d1.getPcaXData(false), d2.getPcaXData(false))).get().getPcaXData(false);
+				maxZ = data.stream().max((d1, d2) -> Double.compare(d1.getPcaZData(false), d2.getPcaZData(false))).get().getPcaZData(false);
+				/*
+				 * update scale
+				 */
+				setScalePoint(1000);
 			}
 		}
 	}
