@@ -42,7 +42,6 @@ import org.swtchart.Range;
 public class ErrorResiduePage {
 
 	private Color COLOR_BLACK = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
-	private Color COLOR_RED = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 	private Color COLOR_WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
 	private InteractiveChartExtended errorResidueChart;
 	//

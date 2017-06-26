@@ -24,10 +24,14 @@ public class ChartLegend {
 	private Chart3DData data;
 	private double radius = 5;
 	private final VBox vbox = new VBox();
-	private double verticalSpace = 5;
 
 	public ChartLegend(Chart3DData chart3dData) {
 		this.data = chart3dData;
+		vbox.setMinWidth(120);
+		Label legend = new Label("Legend:");
+		vbox.setStyle("-fx-padding: 10;");
+		vbox.setSpacing(5);
+		vbox.getChildren().add(legend);
 	}
 
 	public VBox getLegend() {
@@ -38,7 +42,6 @@ public class ChartLegend {
 	public void update() {
 
 		vbox.getChildren().clear();
-		vbox.setSpacing(verticalSpace);
 		Label legend = new Label("Legend:");
 		vbox.getChildren().add(legend);
 		Iterator<Entry<String, Color>> it = data.getGroup().entrySet().iterator();

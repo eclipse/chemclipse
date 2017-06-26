@@ -31,7 +31,6 @@ public class Chart3DData {
 
 	final private List<Chart3DSampleData> data = new ArrayList<>();
 	private Map<String, Color> groups = new LinkedHashMap<>();
-	private boolean isEmpty = false;
 	private double maxX;
 	private double maxY;
 	private double maxZ;
@@ -135,7 +134,7 @@ public class Chart3DData {
 
 	public boolean isEmpty() {
 
-		return isEmpty;
+		return data.isEmpty();
 	}
 
 	public void setScale(double scale) {
@@ -156,7 +155,6 @@ public class Chart3DData {
 		 * clear data
 		 */
 		data.clear();
-		isEmpty = true;
 		minX = 0;
 		minY = 0;
 		minZ = 0;
@@ -197,7 +195,6 @@ public class Chart3DData {
 				/*
 				 * update data
 				 */
-				isEmpty = false;
 				for(ISample sample : samples) {
 					if(sample.isSelected()) {
 						Color color = groupNameColore.get(sample.getGroupName());

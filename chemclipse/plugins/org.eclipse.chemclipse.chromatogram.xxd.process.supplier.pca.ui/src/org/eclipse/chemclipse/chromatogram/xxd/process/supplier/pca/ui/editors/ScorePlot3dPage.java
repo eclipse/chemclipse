@@ -50,25 +50,29 @@ public class ScorePlot3dPage {
 	private Chart3DScatter scatter;
 
 	public ScorePlot3dPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
-		initialize(tabFolder, formToolkit);
 		data = new Chart3DData(pcaEditor);
-		axes = new Axes(data);
-		scatter = new Chart3DScatter(data);
-		legend = new ChartLegend(data);
+		initialize(tabFolder, formToolkit);
+		initScene();
 	}
 
 	private void createScene() {
 
-		PerspectiveCamera camera = new PerspectiveCamera(true);
 		Group root = new Group();
 		AmbientLight ambientlight = new AmbientLight();
 		Group mainGroup = new Group();
+		/*
+		 * set camera
+		 */
+		PerspectiveCamera camera = new PerspectiveCamera(true);
+		camera.setTranslateZ(-4000);
+		camera.setNearClip(0.01);
+		camera.setFarClip(100000.0);
 		root.getChildren().addAll(mainGroup, ambientlight, camera);
+		data.update(1, 2, 3);
 		if(!data.isEmpty()) {
 			/*
 			 * update data
 			 */
-			data.update(1, 2, 3);
 			legend.update();
 			axes.update();
 			scatter.update();
@@ -79,12 +83,6 @@ public class ScorePlot3dPage {
 			objects.getChildren().addAll(scatter.getScarter(), axes.createAxes());
 			Rotate rotate = new Rotate(180, 0, 0, 0, Rotate.X_AXIS);
 			objects.getTransforms().add(rotate);
-			/*
-			 * set camera
-			 */
-			camera.setTranslateZ(-4000);
-			camera.setNearClip(0.01);
-			camera.setFarClip(100000.0);
 			mainGroup.getChildren().add(objects);
 		}
 		Point sizeScene = fxCanvas.getParent().getSize();
@@ -131,6 +129,14 @@ public class ScorePlot3dPage {
 		 */
 		parent.addListener(SWT.Resize, (event) -> createScene());
 		tabItem.setControl(composite);
+	}
+
+	private void initScene() {
+
+		axes = new Axes(data);
+		scatter = new Chart3DScatter(data);
+		legend = new ChartLegend(data);
+		createScene();
 	}
 
 	public void makeZoomable(SubScene scene, Group group) {

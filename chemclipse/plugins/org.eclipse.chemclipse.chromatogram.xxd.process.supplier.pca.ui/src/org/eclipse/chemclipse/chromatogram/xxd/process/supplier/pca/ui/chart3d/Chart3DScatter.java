@@ -112,6 +112,7 @@ public class Chart3DScatter {
 
 					material.setDiffuseColor(color);
 					material.setSpecularColor(color);
+					t.hide();
 				}
 			});
 			mainGroup.getChildren().addAll(sphere);
