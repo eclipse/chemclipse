@@ -21,6 +21,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
@@ -649,6 +650,12 @@ public class PrincipleComponentProcessor {
 			pcaResults.setBasisVectors(basisVectors);
 			setEigenSpaceAndErrorValues(principleComponentAnalysis, pcaScanMap, pcaResults);
 		}
+		/*
+		 * insert groups
+		 */
+		List<ISample> samples = pcaResults.getSampleList();
+		List<IGroup> groups = PcaUtils.createGroup(samples);
+		pcaResults.getGroupList().addAll(groups);
 		/*
 		 * Return result.
 		 */

@@ -20,7 +20,7 @@ import java.util.List;
  * @author Jan Holy
  *
  */
-public class Group implements ISample {
+public class Group implements IGroup {
 
 	private String groupName;
 	private boolean isSelected;
@@ -63,22 +63,14 @@ public class Group implements ISample {
 		this.groupName = groupName;
 	}
 
-	/**
-	 * @link {@link #setPcaResult(List)}
-	 * @param pcaResults
-	 */
+	@Override
 	public void setPcaResult(IPcaResults pcaResults) {
 
 		List<ISample> sammples = pcaResults.getSampleList();
 		setPcaResult(sammples);
 	}
 
-	/**
-	 * Set values in PcaResult. Values are set as mean of samples which contain same group name as this object
-	 * You have to set group name before calling this method
-	 *
-	 * @param sammples
-	 */
+	@Override
 	public void setPcaResult(List<ISample> samples) {
 
 		if(groupName == null) {

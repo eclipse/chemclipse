@@ -60,11 +60,14 @@ public class TableData {
 		this.samples.clear();
 		retentionTimes.clear();
 		/*
-		 * copy data and insert object SampleGroupMean and sort this object by group
+		 * copy data and insert object ISample and IGroup and sort this object by group name
 		 */
-		List<ISample> newSamples = PcaUtils.insertGroup(pcaResults.getSampleList());
-		PcaUtils.sortSampleListByGroup(newSamples);
-		this.samples.addAll(newSamples);
+		samples.addAll(pcaResults.getSampleList());
+		samples.addAll(pcaResults.getGroupList());
+		PcaUtils.sortSampleListByGroup(samples);
+		/*
+		 * set retention time
+		 */
 		retentionTimes.addAll(pcaEditor.getPcaResults().getExtractedRetentionTimes());
 	}
 }

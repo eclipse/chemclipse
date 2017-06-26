@@ -24,12 +24,30 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Group;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 
 public class PcaUtils {
+
+	public static List<IGroup> createGroup(List<ISample> samples) {
+
+		List<ISample> newSamples = new ArrayList<>(samples);
+		List<IGroup> groups = new ArrayList<>();
+		Set<String> groupNames = getGroupNames(newSamples);
+		for(Iterator<String> iterator = groupNames.iterator(); iterator.hasNext();) {
+			String groupName = iterator.next();
+			if(groupName != null) {
+				Group group = new Group("mean");
+				group.setGroupName(groupName);
+				group.setPcaResult(newSamples);
+				groups.add(group);
+			}
+		}
+		return groups;
+	}
 
 	/**
 	 *
@@ -125,22 +143,6 @@ public class PcaUtils {
 			}
 		}
 		return peaksAtInterval;
-	}
-
-	public static List<ISample> insertGroup(List<ISample> samples) {
-
-		List<ISample> newSamples = new ArrayList<>(samples);
-		Set<String> groupNames = getGroupNames(newSamples);
-		for(Iterator<String> iterator = groupNames.iterator(); iterator.hasNext();) {
-			String groupName = iterator.next();
-			if(groupName != null) {
-				Group group = new Group("mean");
-				group.setGroupName(groupName);
-				group.setPcaResult(newSamples);
-				newSamples.add(0, group);
-			}
-		}
-		return newSamples;
 	}
 
 	public static void sortSampleListByErrorMemberShip(List<ISample> samples) {

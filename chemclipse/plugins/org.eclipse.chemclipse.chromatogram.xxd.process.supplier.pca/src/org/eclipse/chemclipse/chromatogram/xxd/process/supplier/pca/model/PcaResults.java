@@ -12,9 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PcaResults implements IPcaResults {
 
@@ -23,9 +21,9 @@ public class PcaResults implements IPcaResults {
 	//
 	private List<Integer> extractedRetentionTimes;
 	private int extractionType;
+	private List<IGroup> groups;
 	private int numberOfPrincipleComponents;
 	private List<ISample> pcaResultList;
-	private Map<ISample, IPcaResult> pcaResultMap;
 	private int retentionTimeWindow;
 
 	public PcaResults() {
@@ -35,7 +33,7 @@ public class PcaResults implements IPcaResults {
 	public PcaResults(List<IDataInputEntry> dataInputEntries) {
 		this.dataInputEntries = dataInputEntries;
 		pcaResultList = new ArrayList<ISample>();
-		pcaResultMap = new HashMap<ISample, IPcaResult>();
+		groups = new ArrayList<>();
 	}
 
 	@Override
@@ -63,15 +61,15 @@ public class PcaResults implements IPcaResults {
 	}
 
 	@Override
-	public int getNumberOfPrincipleComponents() {
+	public List<IGroup> getGroupList() {
 
-		return numberOfPrincipleComponents;
+		return groups;
 	}
 
 	@Override
-	public Map<ISample, IPcaResult> getPcaResultMap() {
+	public int getNumberOfPrincipleComponents() {
 
-		return pcaResultMap;
+		return numberOfPrincipleComponents;
 	}
 
 	@Override
