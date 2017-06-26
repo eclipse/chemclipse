@@ -182,7 +182,7 @@ public class Messages {
 				if(line.startsWith(COMMENT)) {
 					continue;
 				} else {
-					String[] message = line.split(DELIMITER);
+					String[] message = line.split(DELIMITER, 2);
 					if(message.length == 2) {
 						String key = message[0].trim();
 						String value = message[1].trim();
