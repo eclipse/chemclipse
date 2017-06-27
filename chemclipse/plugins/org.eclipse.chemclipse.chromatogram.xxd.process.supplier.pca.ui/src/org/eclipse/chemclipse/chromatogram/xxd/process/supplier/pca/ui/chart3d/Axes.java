@@ -18,12 +18,14 @@ import java.util.function.BiFunction;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
 import javafx.geometry.Point3D;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
@@ -39,6 +41,7 @@ public class Axes {
 	private double lengthX;
 	private double lengthY;
 	private double lengthZ;
+	private double lineSpacing;
 	private double lineSpacingScaled;
 	final private Group mainGroup = new Group();
 	private double maxNumberLine;
@@ -68,8 +71,8 @@ public class Axes {
 		 * set fix size
 		 */
 		tickLenght = 40;
-		lableDistance = 60;
-		lableDistanceNameAxis = 100;
+		lableDistance = 70;
+		lableDistanceNameAxis = 200;
 		widthCorn = 4;
 	}
 
@@ -161,20 +164,21 @@ public class Axes {
 
 		Group group = new Group();
 		String nameAxis = data.getLabelAxisX();
-		Label labelAxis = new Label(nameAxis);
-		labelAxis.setTranslateY(-lableDistanceNameAxis);
-		labelAxis.setTranslateZ(lableDistanceNameAxis);
-		labelAxis.setRotationAxis(Rotate.X_AXIS);
-		labelAxis.setRotate(-180);
-		group.getChildren().add(labelAxis);
-		for(double i = minX + lineSpacingScaled; i < maxX; i += lineSpacingScaled) {
-			Label label = new Label(format.format(i / data.getScale()));
-			label.setTranslateX(i);
-			label.setTranslateY(-lableDistance);
-			label.setTranslateZ(lableDistance);
-			label.setRotationAxis(Rotate.X_AXIS);
-			label.setRotate(-180);
-			Node tick = createGridLine(new Point3D(i, 0, -tickLenght / 2), new Point3D(i, 0, tickLenght / 2));
+		Label name = new Label(nameAxis);
+		name.setTranslateZ(lableDistanceNameAxis);
+		name.setRotationAxis(Rotate.X_AXIS);
+		name.setRotate(90);
+		setLabelStyleAxis(name);
+		group.getChildren().add(name);
+		for(int i = (int)(minX / lineSpacingScaled) + 1; i < (int)(maxX / lineSpacingScaled); i++) {
+			Label label = new Label(format.format(i * lineSpacing));
+			setLabelStyle(label);
+			Rotate xRotate = new Rotate(90, 0, 0, 0, Rotate.X_AXIS);
+			Rotate yRotate = new Rotate(90, 0, 0, 0, Rotate.Y_AXIS);
+			label.getTransforms().addAll(yRotate, xRotate);
+			label.setTranslateX(i * lineSpacingScaled);
+			label.setTranslateZ(2 * lableDistance);
+			Node tick = createGridLine(new Point3D(i * lineSpacingScaled, 0, -tickLenght / 2), new Point3D(i * lineSpacingScaled, 0, tickLenght / 2));
 			group.getChildren().add(tick);
 			group.getChildren().add(label);
 		}
@@ -204,22 +208,22 @@ public class Axes {
 
 		Group group = new Group();
 		String axisName = data.getLabelAxisY();
-		Label labelAxis = new Label(axisName);
-		labelAxis.setRotationAxis(Rotate.X_AXIS);
-		labelAxis.setRotate(-180);
-		labelAxis.setRotationAxis(Rotate.Z_AXIS);
-		labelAxis.setRotate(-90);
-		labelAxis.setTranslateX(-lableDistanceNameAxis);
-		labelAxis.setTranslateZ(lableDistanceNameAxis);
-		group.getChildren().add(labelAxis);
-		for(double i = minY + lineSpacingScaled; i < maxY; i += lineSpacingScaled) {
-			Label label = new Label(format.format(i / data.getScale()));
-			label.setTranslateY(i);
-			label.setTranslateX(-lableDistance);
-			label.setTranslateZ(lableDistance);
-			label.setRotationAxis(Rotate.X_AXIS);
-			label.setRotate(-180);
-			Node tick = createGridLine(new Point3D(0, i, -tickLenght / 2), new Point3D(0, i, tickLenght / 2));
+		Label name = new Label(axisName);
+		Rotate zRotateAxis = new Rotate(-90, 0, 0, 0, Rotate.Z_AXIS);
+		Rotate yRotateAxis = new Rotate(-90, 0, 0, 0, Rotate.Y_AXIS);
+		name.getTransforms().addAll(yRotateAxis, zRotateAxis);
+		name.setTranslateZ(lableDistanceNameAxis);
+		setLabelStyleAxis(name);
+		group.getChildren().add(name);
+		for(int i = (int)(minY / lineSpacingScaled) + 1; i < (int)(maxY / lineSpacingScaled); i++) {
+			Label label = new Label(format.format(i * lineSpacing));
+			setLabelStyle(label);
+			Rotate xRotate = new Rotate(180, 0, 0, 0, Rotate.X_AXIS);
+			Rotate yRotate = new Rotate(90, 0, 0, 0, Rotate.Y_AXIS);
+			label.getTransforms().addAll(yRotate, xRotate);
+			label.setTranslateY(i * lineSpacingScaled);
+			label.setTranslateZ(2 * lableDistance);
+			Node tick = createGridLine(new Point3D(0, i * lineSpacingScaled, -tickLenght / 2), new Point3D(0, i * lineSpacingScaled, tickLenght / 2));
 			group.getChildren().add(tick);
 			group.getChildren().add(label);
 		}
@@ -242,22 +246,21 @@ public class Axes {
 
 		Group group = new Group();
 		String nameAxis = data.getLabelAxisZ();
-		Label labelAxis = new Label(nameAxis);
-		labelAxis.setRotationAxis(Rotate.X_AXIS);
-		labelAxis.setRotate(-180);
-		labelAxis.setRotationAxis(Rotate.Y_AXIS);
-		labelAxis.setRotate(-90);
-		labelAxis.setTranslateY(-lableDistanceNameAxis);
-		labelAxis.setTranslateX(lableDistanceNameAxis);
-		group.getChildren().add(labelAxis);
-		for(double i = minZ + lineSpacingScaled; i < maxZ; i += lineSpacingScaled) {
-			Label label = new Label(format.format(i / data.getScale()));
-			label.setTranslateZ(i);
-			label.setTranslateY(-lableDistance);
-			label.setTranslateX(lableDistance);
+		Label name = new Label(nameAxis);
+		Rotate yRotateAxis = new Rotate(90, 0, 0, 0, Rotate.Y_AXIS);
+		Rotate zRotateAxis = new Rotate(-90, 0, 0, 0, Rotate.Z_AXIS);
+		name.getTransforms().addAll(zRotateAxis, yRotateAxis);
+		name.setTranslateX(lableDistanceNameAxis);
+		setLabelStyleAxis(name);
+		group.getChildren().add(name);
+		for(int i = (int)(minZ / lineSpacingScaled) + 1; i < (int)(maxZ / lineSpacingScaled); i++) {
+			Label label = new Label(format.format(i * lineSpacing));
+			setLabelStyle(label);
 			label.setRotationAxis(Rotate.X_AXIS);
-			label.setRotate(-180);
-			Node tick = createGridLine(new Point3D(-tickLenght / 2, 0, i), new Point3D(tickLenght / 2, 0, i));
+			label.setRotate(90);
+			label.setTranslateZ(i * lineSpacingScaled);
+			label.setTranslateX(lableDistance);
+			Node tick = createGridLine(new Point3D(-tickLenght / 2, 0, i * lineSpacingScaled), new Point3D(tickLenght / 2, 0, i * lineSpacingScaled));
 			group.getChildren().add(tick);
 			group.getChildren().add(label);
 		}
@@ -312,12 +315,23 @@ public class Axes {
 		return minZ;
 	}
 
+	private void setLabelStyle(Label label) {
+
+		label.setAlignment(Pos.CENTER);
+		label.setFont(new Font("Arial", 35));
+	}
+
+	private void setLabelStyleAxis(Label label) {
+
+		label.setFont(new Font("Arial", 50));
+	}
+
 	public void update() {
 
 		double absMaximum = Arrays.stream(new double[]{data.getMinX(false), data.getMaxX(false), data.getMinY(false), data.getMaxY(false), data.getMinZ(false), data.getMaxZ(false)}).map(d -> Math.abs(d)).max().getAsDouble();
 		double numberDigits = Math.floor(Math.log10(absMaximum));
 		double round = Math.pow(10, numberDigits);
-		double lineSpacing = (((Math.round(absMaximum / round) * round) / maxNumberLine));
+		lineSpacing = (((Math.round(absMaximum / round) * round) / maxNumberLine));
 		lineSpacingScaled = lineSpacing * data.getScale();
 		BiFunction<Double, Double, Double> getAbsMax = (min, max) -> {
 			double absMax = (Math.abs(min) > Math.abs(max) ? Math.abs(min) : Math.abs(max));
