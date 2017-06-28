@@ -31,13 +31,14 @@ import org.osgi.framework.Bundle;
  */
 public class Messages {
 
+	public static final String NO_ENTRY = "n.a."; // $NON-NLS-1$
+	//
 	private static final Logger logger = Logger.getLogger(Messages.class);
 	/*
 	 * Model: bundle.properties -> ISO-8859-1 : To enable a wide range of languages.
 	 * UI: bundle.properties -> ISO-8859-1 : Otherwise the *.e4xmi doesn't show the entries correctly.
 	 */
 	private Map<String, String> messageMap;
-	private static final String NO_ENTRY = "n.a."; // $NON-NLS-1$
 	private static final String COMMENT = "#"; // $NON-NLS-1$
 	private static final String DELIMITER = "="; // $NON-NLS-1$
 	private static final String CHARSET = "UTF-8"; // "ISO-8859-1", "UTF-8" -> determine automatically
@@ -181,7 +182,7 @@ public class Messages {
 				if(line.startsWith(COMMENT)) {
 					continue;
 				} else {
-					String[] message = line.split(DELIMITER);
+					String[] message = line.split(DELIMITER, 2);
 					if(message.length == 2) {
 						String key = message[0].trim();
 						String value = message[1].trim();

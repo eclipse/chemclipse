@@ -25,12 +25,16 @@ public class SupportPreferences implements IPreferenceSupplier {
 	public static final boolean DEF_CHROMATOGRAM_OPERATION_IS_UNDOABLE = true;
 	public static final String P_APPLICATION_LANGUAGE = "applicationLanguage";
 	public static final String DEF_APPLICATION_LANGUAGE = "";
+	//
+	public static final String LANGUAGE_AUTODETECT = "";
+	public static final String LANGUAGE_EN_GB = "en_GB";
+	public static final String LANGUAGE_DE_DE = "de_DE";
 	/*
 	 * No Selection. Use the language of the system.
 	 * de (ISO 639)
 	 * DE (ISO 3166)
 	 */
-	public static final String[][] AVAILABLE_LANGUAGES = new String[][]{{"Autodetect", ""}, {"English", "en_GB"}, {"German", "de_DE"}};
+	public static final String[][] AVAILABLE_LANGUAGES = new String[][]{{"Autodetect", LANGUAGE_AUTODETECT}, {"English", LANGUAGE_EN_GB}, {"German", LANGUAGE_DE_DE}};
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
