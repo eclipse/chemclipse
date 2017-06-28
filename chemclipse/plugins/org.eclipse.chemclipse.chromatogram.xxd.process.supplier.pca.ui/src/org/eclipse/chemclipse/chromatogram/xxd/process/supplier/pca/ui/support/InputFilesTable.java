@@ -24,22 +24,22 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class InputFilesTable {
 
 	private List<IDataInputEntry> dataInputEntries = new ArrayList<>();
+	private List<Text> groupNames = new ArrayList<>();
 	private Table table;
 	private List<TableEditor> tableEditors = new ArrayList<>();
 
-	public InputFilesTable(Composite composite, FormToolkit formToolkit) {
-		createTable(composite, formToolkit);
+	public InputFilesTable(Composite composite) {
+		createTable(composite);
 	}
 
-	private void createTable(Composite client, FormToolkit formToolkit) {
+	private void createTable(Composite client) {
 
 		GridData gridData;
-		table = formToolkit.createTable(client, SWT.MULTI);
+		table = new Table(client, SWT.MULTI | SWT.BORDER);
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.heightHint = 400;
 		// gridData.widthHint = 150;
@@ -66,13 +66,18 @@ public class InputFilesTable {
 			 * Remove all entries.
 			 */
 			table.removeAll();
+			table.clearAll();
 			/*
-			 * dispose all Editors
+			 * dispose editors and text
 			 */
 			for(TableEditor editor : tableEditors) {
 				editor.dispose();
 			}
 			tableEditors.clear();
+			for(Text text : groupNames) {
+				text.dispose();
+			}
+			groupNames.clear();
 			/*
 			 * Header
 			 */
@@ -86,28 +91,43 @@ public class InputFilesTable {
 			 */
 			for(int i = 1; i < dataInputEntries.size(); i++) {
 				IDataInputEntry entry = dataInputEntries.get(i);
+				/*
+				 * set file name column
+				 */
 				TableItem item = new TableItem(table, SWT.NONE);
 				item.setText(0, entry.getFileName());
-				item.setText(1, "");
-				item.setText(2, entry.getInputFile());
+				/*
+				 * set group name column
+				 */
 				TableEditor editor = new TableEditor(table);
 				editor.horizontalAlignment = SWT.LEFT;
 				editor.grabHorizontal = true;
 				final Text text = new Text(table, SWT.NONE);
+				String groupName = entry.getGroupName();
+				if(groupName == null) {
+					text.setText("");
+				} else {
+					text.setText(groupName);
+				}
 				text.setEnabled(true);
 				text.addModifyListener((ModifyEvent e) -> {
-					String groupName = text.getText();
-					if(groupName != null) {
-						groupName = groupName.trim();
-						if(groupName.isEmpty()) {
+					String gN = text.getText();
+					if(gN != null) {
+						gN = gN.trim();
+						if(gN.isEmpty()) {
 							entry.setGroupName(null);
 						} else {
-							entry.setGroupName(groupName);
+							entry.setGroupName(gN);
 						}
 					}
 				});
 				editor.setEditor(text, item, 1);
 				tableEditors.add(editor);
+				groupNames.add(text);
+				/*
+				 * set file path
+				 */
+				item.setText(2, entry.getInputFile());
 			}
 			/*
 			 * Pack to make the entries visible.
@@ -115,6 +135,7 @@ public class InputFilesTable {
 			for(int i = 0; i < titles.length; i++) {
 				table.getColumn(i).pack();
 			}
+			table.layout(true);
 		}
 	}
 
@@ -129,16 +150,6 @@ public class InputFilesTable {
 		if(indices == null || indices.length == 0) {
 			return;
 		}
-		/*
-		 * Dispose table editors
-		 */
-		/*
-		 * Remove the entries from the table.
-		 */
-		table.remove(indices);
-		/*
-		 * Remove the entries from the batchProcessJob instance.
-		 */
 		int counter = 0;
 		for(int index : indices) {
 			/*
@@ -146,9 +157,8 @@ public class InputFilesTable {
 			 */
 			index -= counter;
 			dataInputEntries.remove(index);
-			tableEditors.get(index).dispose();
-			tableEditors.remove(index);
 			counter++;
 		}
+		reload();
 	}
 }

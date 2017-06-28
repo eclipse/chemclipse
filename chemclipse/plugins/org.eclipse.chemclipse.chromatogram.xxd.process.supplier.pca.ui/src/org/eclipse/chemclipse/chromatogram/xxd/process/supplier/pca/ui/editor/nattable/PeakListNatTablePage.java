@@ -54,7 +54,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.ui.forms.widgets.TableWrapData;
 
 public class PeakListNatTablePage {
 
@@ -213,7 +216,19 @@ public class PeakListNatTablePage {
 		panel.setLayout(new GridLayout());
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(panel);
 		Composite parent = new Composite(panel, SWT.NONE);
-		createPeakListIntensityTableSection(parent);
+		Section section;
+		/*
+		 * Section
+		 */
+		section = formToolkit.createSection(parent, Section.DESCRIPTION | ExpandableComposite.TITLE_BAR);
+		section.setText("Peak Intensity Table");
+		section.marginWidth = 5;
+		section.marginHeight = 5;
+		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
+		/*
+		 * Set the layout for the client.
+		 */
+		createPeakListIntensityTableSection(section);
 		tabItem.setControl(panel);
 	}
 

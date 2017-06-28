@@ -14,10 +14,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PeakInputFilesWizard;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.DataInputFromPeakFilesWizard;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.InputFilesTable;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -56,13 +55,6 @@ public class InputFilesPage {
 		initialize(tabFolder, formToolkit);
 	}
 
-	private void addEntries(List<String> selectedPeakFiles) {
-
-		for(String selectedPeakFile : selectedPeakFiles) {
-			inputFilesTable.getDataInputEntries().add(new DataInputEntry(selectedPeakFile));
-		}
-	}
-
 	/**
 	 * Creates the add button.
 	 *
@@ -80,7 +72,7 @@ public class InputFilesPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				super.widgetSelected(e);
-				PeakInputFilesWizard inputWizard = new PeakInputFilesWizard();
+				DataInputFromPeakFilesWizard inputWizard = new DataInputFromPeakFilesWizard();
 				BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getCurrent().getActiveShell(), inputWizard);
 				wizardDialog.create();
 				int returnCode = wizardDialog.open();
@@ -91,12 +83,11 @@ public class InputFilesPage {
 					/*
 					 * Get the list of selected chromatograms.
 					 */
-					List<String> selectedPeakFiles = inputWizard.getSelectedPeakFiles();
-					if(selectedPeakFiles.size() > 0) {
+					if(inputWizard.getSelectedPeakFiles().size() > 0) {
 						/*
 						 * If it contains at least 1 element, add it to the input files list.
 						 */
-						addEntries(selectedPeakFiles);
+						inputFilesTable.getDataInputEntries().addAll(inputWizard.getSelectedPeakFiles());
 						inputFilesTable.reload();
 						redrawCountFiles();
 					}
@@ -129,7 +120,7 @@ public class InputFilesPage {
 		 */
 		section = formToolkit.createSection(parent, Section.DESCRIPTION | ExpandableComposite.TITLE_BAR);
 		section.setText("Input files");
-		section.setDescription("Select the files to process. Use the add and remove buttons as needed. Click Run PCA to process the files. ");
+		section.setDescription("Select the files to process. Use the add and remove buttons as needed. To edit group name click on cell. Click Run PCA to process the files. ");
 		section.marginWidth = 5;
 		section.marginHeight = 5;
 		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
@@ -155,7 +146,7 @@ public class InputFilesPage {
 		/*
 		 * Creates the table and the action buttons.
 		 */
-		createTable(client, formToolkit);
+		createTable(client);
 		createButtons(client, formToolkit);
 		createLabels(client, formToolkit);
 		/*
@@ -218,9 +209,9 @@ public class InputFilesPage {
 		});
 	}
 
-	private void createTable(Composite client, FormToolkit formToolkit) {
+	private void createTable(Composite client) {
 
-		this.inputFilesTable = new InputFilesTable(client, formToolkit);
+		this.inputFilesTable = new InputFilesTable(client);
 	}
 
 	public List<IDataInputEntry> getDataInputEntries() {
