@@ -24,8 +24,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.TableEditor;
-import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -37,10 +35,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
@@ -52,14 +46,21 @@ public class InputFilesPage {
 
 	private static final String FILES = "Input Files: ";
 	private Label countFiles;
+	private InputFilesTable inputFilesTable;
 	//
 	private PcaEditor pcaEditor;
-	private InputFilesTable inputFilesTable;
 
 	public InputFilesPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
 		this.pcaEditor = pcaEditor;
 		initialize(tabFolder, formToolkit);
+	}
+
+	private void addEntries(List<String> selectedPeakFiles) {
+
+		for(String selectedPeakFile : selectedPeakFiles) {
+			inputFilesTable.getDataInputEntries().add(new DataInputEntry(selectedPeakFile));
+		}
 	}
 
 	/**
@@ -102,13 +103,6 @@ public class InputFilesPage {
 				}
 			}
 		});
-	}
-
-	private void addEntries(List<String> selectedPeakFiles) {
-
-		for(String selectedPeakFile : selectedPeakFiles) {
-			inputFilesTable.getDataInputEntries().add(new DataInputEntry(selectedPeakFile));
-		}
 	}
 
 	/**
@@ -171,11 +165,6 @@ public class InputFilesPage {
 		formToolkit.paintBordersFor(client);
 	}
 
-	private void createTable(Composite client, FormToolkit formToolkit) {
-
-		this.inputFilesTable = new InputFilesTable(client, formToolkit);
-	}
-
 	/**
 	 * Creates the file count labels.
 	 *
@@ -228,7 +217,12 @@ public class InputFilesPage {
 			}
 		});
 	}
-	
+
+	private void createTable(Composite client, FormToolkit formToolkit) {
+
+		this.inputFilesTable = new InputFilesTable(client, formToolkit);
+	}
+
 	public List<IDataInputEntry> getDataInputEntries() {
 
 		return inputFilesTable.getDataInputEntries();
