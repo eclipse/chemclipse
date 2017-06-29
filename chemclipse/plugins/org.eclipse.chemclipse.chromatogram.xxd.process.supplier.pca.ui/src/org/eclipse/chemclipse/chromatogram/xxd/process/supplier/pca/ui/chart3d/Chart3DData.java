@@ -38,9 +38,9 @@ public class Chart3DData {
 	private double minY;
 	private double minZ;
 	private PcaEditor pcaEditor;
-	private int pcaX;
-	private int pcaY;
-	private int pcaZ;
+	private int pcX;
+	private int pcY;
+	private int pcZ;
 	private double scale;
 
 	public Chart3DData(PcaEditor pcaEditor) {
@@ -51,7 +51,7 @@ public class Chart3DData {
 	private String createAxisLabel(int componentNumber) {
 
 		if(componentNumber > 0) {
-			return "PCA " + componentNumber;
+			return "PC " + componentNumber;
 		} else {
 			return "";
 		}
@@ -69,17 +69,17 @@ public class Chart3DData {
 
 	public String getLabelAxisX() {
 
-		return createAxisLabel(pcaX);
+		return createAxisLabel(pcX);
 	}
 
 	public String getLabelAxisY() {
 
-		return createAxisLabel(pcaY);
+		return createAxisLabel(pcY);
 	}
 
 	public String getLabelAxisZ() {
 
-		return createAxisLabel(pcaZ);
+		return createAxisLabel(pcZ);
 	}
 
 	public double getMaxX(boolean isScaled) {
@@ -112,19 +112,19 @@ public class Chart3DData {
 		return isScaled ? minZ * scale : minZ;
 	}
 
-	public int getPcaX() {
+	public int getPCX() {
 
-		return pcaX;
+		return pcX;
 	}
 
-	public int getPcaY() {
+	public int getPCY() {
 
-		return pcaY;
+		return pcY;
 	}
 
-	public int getPcaZ() {
+	public int getPCZ() {
 
-		return pcaZ;
+		return pcZ;
 	}
 
 	public double getScale() {
@@ -143,13 +143,13 @@ public class Chart3DData {
 		this.scale = scale;
 	}
 
-	public void setScalePoint(int point) {
+	public void setScale(int point) {
 
 		double maxDis = Math.max(Math.abs(maxX - minX), Math.max(Math.abs(maxY - minY), Math.abs(maxZ - minZ)));
 		setScale(point / maxDis);
 	}
 
-	public void update(int pcaX, int pcaY, int pcaZ) {
+	public void update(int pcX, int pcY, int pcZ, int scale) {
 
 		/*
 		 * clear data
@@ -164,9 +164,9 @@ public class Chart3DData {
 		/*
 		 * set principal component
 		 */
-		this.pcaX = pcaX;
-		this.pcaY = pcaY;
-		this.pcaZ = pcaZ;
+		this.pcX = pcX;
+		this.pcY = pcY;
+		this.pcZ = pcZ;
 		IPcaResults results = pcaEditor.getPcaResults();
 		if(results != null) {
 			List<ISample> samples = results.getSampleList();
@@ -198,7 +198,7 @@ public class Chart3DData {
 				for(ISample sample : samples) {
 					if(sample.isSelected()) {
 						Color color = groupNameColore.get(sample.getGroupName());
-						data.add(new Chart3DSampleData(sample, pcaX, pcaY, pcaZ, color));
+						data.add(new Chart3DSampleData(sample, pcX, pcY, pcZ, color));
 					}
 				}
 				/*
@@ -213,7 +213,7 @@ public class Chart3DData {
 				/*
 				 * update scale
 				 */
-				setScalePoint(1000);
+				setScale(scale);
 			}
 		}
 	}
