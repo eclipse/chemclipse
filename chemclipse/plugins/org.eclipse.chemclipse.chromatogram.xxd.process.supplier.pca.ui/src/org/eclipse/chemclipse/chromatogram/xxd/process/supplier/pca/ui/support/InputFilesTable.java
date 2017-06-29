@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
@@ -28,12 +28,27 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class InputFilesTable {
 
-	private Table table;
 	private List<IDataInputEntry> dataInputEntries = new ArrayList<>();
+	private Table table;
 	private List<TableEditor> tableEditors = new ArrayList<>();
 
 	public InputFilesTable(Composite composite, FormToolkit formToolkit) {
 		createTable(composite, formToolkit);
+	}
+
+	private void createTable(Composite client, FormToolkit formToolkit) {
+
+		GridData gridData;
+		table = formToolkit.createTable(client, SWT.MULTI);
+		gridData = new GridData(GridData.FILL_BOTH);
+		gridData.heightHint = 400;
+		// gridData.widthHint = 150;
+		gridData.widthHint = 100;
+		gridData.verticalSpan = 5;
+		// gridData.verticalSpan = 3;
+		table.setLayoutData(gridData);
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
 	}
 
 	public List<IDataInputEntry> getDataInputEntries() {
@@ -57,7 +72,6 @@ public class InputFilesTable {
 			for(TableEditor editor : tableEditors) {
 				editor.dispose();
 			}
-			
 			tableEditors.clear();
 			/*
 			 * Header
@@ -70,8 +84,8 @@ public class InputFilesTable {
 			/*
 			 * Data
 			 */
-			for(int i = 1; i<dataInputEntries.size();i++) {
-				IDataInputEntry entry  = dataInputEntries.get(i);
+			for(int i = 1; i < dataInputEntries.size(); i++) {
+				IDataInputEntry entry = dataInputEntries.get(i);
 				TableItem item = new TableItem(table, SWT.NONE);
 				item.setText(0, entry.getFileName());
 				item.setText(1, "");
@@ -107,7 +121,7 @@ public class InputFilesTable {
 	/**
 	 * Remove the given entries, which are selected
 	 * The table need not to be reloaded.
-	 * 
+	 *
 	 */
 	public void removeSelection() {
 
@@ -118,7 +132,6 @@ public class InputFilesTable {
 		/*
 		 * Dispose table editors
 		 */
-		
 		/*
 		 * Remove the entries from the table.
 		 */
@@ -136,22 +149,6 @@ public class InputFilesTable {
 			tableEditors.get(index).dispose();
 			tableEditors.remove(index);
 			counter++;
-			
 		}
-	}
-
-	private void createTable(Composite client, FormToolkit formToolkit) {
-
-		GridData gridData;
-		table = formToolkit.createTable(client, SWT.MULTI);
-		gridData = new GridData(GridData.FILL_BOTH);
-		gridData.heightHint = 400;
-		// gridData.widthHint = 150;
-		gridData.widthHint = 100;
-		gridData.verticalSpan = 5;
-		// gridData.verticalSpan = 3;
-		table.setLayoutData(gridData);
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
 	}
 }
