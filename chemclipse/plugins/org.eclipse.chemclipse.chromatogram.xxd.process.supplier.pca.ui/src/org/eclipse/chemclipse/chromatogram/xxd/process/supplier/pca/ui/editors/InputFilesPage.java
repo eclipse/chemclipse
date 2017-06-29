@@ -12,13 +12,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PeakInputFilesWizard;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.InputFilesTable;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
@@ -52,30 +52,14 @@ public class InputFilesPage {
 
 	private static final String FILES = "Input Files: ";
 	private Label countFiles;
-	private List<IDataInputEntry> dataInputEntries;
-	private Table inputFilesTable;
 	//
-	private PcaEditor pcaEditor;;
+	private PcaEditor pcaEditor;
+	private InputFilesTable inputFilesTable;
 
 	public InputFilesPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
 		this.pcaEditor = pcaEditor;
-		dataInputEntries = new ArrayList<IDataInputEntry>();
 		initialize(tabFolder, formToolkit);
-	}
-
-	/**
-	 * Add the selected peak files to the input files list.
-	 *
-	 * @param selectedChromatograms
-	 */
-	private void addEntries(List<String> selectedFiles) {
-
-		IDataInputEntry inputEntry;
-		for(String inputFile : selectedFiles) {
-			inputEntry = new DataInputEntry(inputFile);
-			dataInputEntries.add(inputEntry);
-		}
 	}
 
 	/**
@@ -112,11 +96,19 @@ public class InputFilesPage {
 						 * If it contains at least 1 element, add it to the input files list.
 						 */
 						addEntries(selectedPeakFiles);
-						reloadInputFilesTable();
+						inputFilesTable.reload();
+						redrawCountFiles();
 					}
 				}
 			}
 		});
+	}
+
+	private void addEntries(List<String> selectedPeakFiles) {
+
+		for(String selectedPeakFile : selectedPeakFiles) {
+			inputFilesTable.getDataInputEntries().add(new DataInputEntry(selectedPeakFile));
+		}
 	}
 
 	/**
@@ -179,6 +171,11 @@ public class InputFilesPage {
 		formToolkit.paintBordersFor(client);
 	}
 
+	private void createTable(Composite client, FormToolkit formToolkit) {
+
+		this.inputFilesTable = new InputFilesTable(client, formToolkit);
+	}
+
 	/**
 	 * Creates the file count labels.
 	 *
@@ -226,34 +223,15 @@ public class InputFilesPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				super.widgetSelected(e);
-				removeEntries(inputFilesTable.getSelectionIndices());
+				inputFilesTable.removeSelection();
+				redrawCountFiles();
 			}
 		});
 	}
-
-	/**
-	 * Creates the table.
-	 *
-	 * @param client
-	 */
-	private void createTable(Composite client, FormToolkit formToolkit) {
-
-		GridData gridData;
-		inputFilesTable = formToolkit.createTable(client, SWT.MULTI);
-		gridData = new GridData(GridData.FILL_BOTH);
-		gridData.heightHint = 400;
-		// gridData.widthHint = 150;
-		gridData.widthHint = 100;
-		gridData.verticalSpan = 5;
-		// gridData.verticalSpan = 3;
-		inputFilesTable.setLayoutData(gridData);
-		inputFilesTable.setHeaderVisible(true);
-		inputFilesTable.setLinesVisible(true);
-	}
-
+	
 	public List<IDataInputEntry> getDataInputEntries() {
 
-		return dataInputEntries;
+		return inputFilesTable.getDataInputEntries();
 	}
 
 	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
@@ -278,95 +256,8 @@ public class InputFilesPage {
 		tabItem.setControl(composite);
 	}
 
-	private void redrawCountFiles(List<IDataInputEntry> inputEntries) {
+	private void redrawCountFiles() {
 
-		countFiles.setText(FILES + Integer.toString(inputEntries.size()));
-	}
-
-	/**
-	 * Reload the table.
-	 */
-	private void reloadInputFilesTable() {
-
-		if(inputFilesTable != null) {
-			/*
-			 * Remove all entries.
-			 */
-			inputFilesTable.removeAll();
-			/*
-			 * Header
-			 */
-			String[] titles = {"Filename", "Group", "Path"};
-			for(int i = 0; i < titles.length; i++) {
-				TableColumn column = new TableColumn(inputFilesTable, SWT.NONE);
-				column.setText(titles[i]);
-			}
-			/*
-			 * Data
-			 */
-			for(IDataInputEntry entry : dataInputEntries) {
-				TableItem item = new TableItem(inputFilesTable, SWT.NONE);
-				item.setText(0, entry.getFileName());
-				item.setText(1, "");
-				item.setText(2, entry.getInputFile());
-				TableEditor editor = new TableEditor(inputFilesTable);
-				editor.horizontalAlignment = SWT.LEFT;
-				editor.grabHorizontal = true;
-				final Text text = new Text(inputFilesTable, SWT.NONE);
-				text.setEnabled(true);
-				text.addModifyListener((ModifyEvent e) -> {
-					String groupName = text.getText();
-					if(groupName != null) {
-						groupName = groupName.trim();
-						if(groupName.isEmpty()) {
-							entry.setGroupName(null);
-						} else {
-							entry.setGroupName(groupName);
-						}
-					}
-				});
-				editor.setEditor(text, item, 1);
-			}
-			/*
-			 * Pack to make the entries visible.
-			 */
-			for(int i = 0; i < titles.length; i++) {
-				inputFilesTable.getColumn(i).pack();
-			}
-			/*
-			 * Set the count label information.
-			 */
-			redrawCountFiles(dataInputEntries);
-		}
-	}
-
-	/**
-	 * Remove the given entries.
-	 * The table need not to be reloaded.
-	 *
-	 * @param indices
-	 */
-	private void removeEntries(int[] indices) {
-
-		if(indices == null || indices.length == 0) {
-			return;
-		}
-		/*
-		 * Remove the entries from the table.
-		 */
-		inputFilesTable.remove(indices);
-		/*
-		 * Remove the entries from the batchProcessJob instance.
-		 */
-		int counter = 0;
-		for(int index : indices) {
-			/*
-			 * Decrease the index and increase the counter to remove the correct entries.
-			 */
-			index -= counter;
-			dataInputEntries.remove(index);
-			counter++;
-		}
-		redrawCountFiles(dataInputEntries);
+		countFiles.setText(FILES + Integer.toString(inputFilesTable.getDataInputEntries().size()));
 	}
 }
