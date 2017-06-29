@@ -27,17 +27,20 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import javafx.embed.swt.FXCanvas;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
 
 public class ScorePlot3dPage {
@@ -66,9 +69,9 @@ public class ScorePlot3dPage {
 		PerspectiveCamera camera = new PerspectiveCamera(true);
 		camera.setTranslateZ(-4000);
 		camera.setNearClip(0.01);
-		camera.setFarClip(100000.0);
+		camera.setFarClip(10000.0);
 		root.getChildren().addAll(mainGroup, ambientlight, camera);
-		data.update(1, 2, 3);
+		data.update(1, 2, 3, 800);
 		if(!data.isEmpty()) {
 			/*
 			 * update data
@@ -85,15 +88,23 @@ public class ScorePlot3dPage {
 			objects.getTransforms().add(rotate);
 			mainGroup.getChildren().add(objects);
 		}
-		Point sizeScene = fxCanvas.getParent().getSize();
 		/*
-		 * legend
+		 * built header
+		 */
+		BorderPane borderPane = new BorderPane();
+		Label label = new Label("PCA Score plot");
+		label.setAlignment(Pos.CENTER);
+		label.setFont(new Font("Arial", 20));
+		borderPane.setCenter(label);
+		/*
+		 * built legend
 		 */
 		VBox boxLegend = legend.getLegend();
 		/*
 		 * build central subscene, which contains chart
 		 */
-		SubScene mainScene = new SubScene(root, sizeScene.x - boxLegend.getWidth(), sizeScene.y, true, SceneAntialiasing.BALANCED);
+		Point sizeScene = fxCanvas.getParent().getSize();
+		SubScene mainScene = new SubScene(root, sizeScene.x - boxLegend.getWidth(), sizeScene.y - borderPane.getHeight(), true, SceneAntialiasing.BALANCED);
 		mainScene.setFill(Color.WHITE);
 		mainScene.setCamera(camera);
 		makeZoomable(mainScene, mainGroup);
@@ -101,7 +112,7 @@ public class ScorePlot3dPage {
 		/*
 		 * create scene
 		 */
-		BorderPane pane = new BorderPane(mainScene, null, boxLegend, null, null);
+		BorderPane pane = new BorderPane(mainScene, borderPane, boxLegend, null, null);
 		Scene scene = new Scene(pane, sizeScene.x, sizeScene.y);
 		fxCanvas.setScene(scene);
 		pane.setCenter(mainScene);
@@ -182,7 +193,13 @@ public class ScorePlot3dPage {
 					if(event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
 						double pitchRotate = xRotate.getAngle() + (mouseYnew - mouseYold) / rotateModifier;
 						xRotate.setAngle(pitchRotate);
-						double yawRotate = yRotate.getAngle() - (mouseXnew - mouseXold) / rotateModifier;
+						double yawRotate;
+						double a = Math.abs((pitchRotate % 360));
+						if(a < 90 || a > 270) {
+							yawRotate = yRotate.getAngle() - (mouseXnew - mouseXold) / rotateModifier;
+						} else {
+							yawRotate = yRotate.getAngle() + (mouseXnew - mouseXold) / rotateModifier;
+						}
 						yRotate.setAngle(yawRotate);
 					}
 					mouseXold = mouseXnew;
