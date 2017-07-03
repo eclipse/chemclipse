@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.converter.io.reports;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 
 import org.eclipse.chemclipse.converter.model.reports.IFileAttributes;
@@ -22,7 +24,11 @@ public abstract class AbstractFileAttributeReader {
 
 	public void setFileAttributes(File file, IFileAttributes fileAttributes) throws IOException {
 
-		BasicFileAttributes basicFileAttributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+		/*
+		 * file.toPath() seems to make problems under Windows.
+		 */
+		Path path = Paths.get(file.toURI());
+		BasicFileAttributes basicFileAttributes = Files.readAttributes(path, BasicFileAttributes.class);
 		fileAttributes.setFileName(file.getName());
 		fileAttributes.setCanonicalPath(file.getCanonicalPath());
 		fileAttributes.setCreationTime(basicFileAttributes.creationTime().toMillis());
