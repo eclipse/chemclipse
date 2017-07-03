@@ -18,7 +18,6 @@ import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
-import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.columnChooser.command.DisplayColumnChooserCommandHandler;
 import org.eclipse.nebula.widgets.nattable.config.ConfigRegistry;
@@ -49,23 +48,19 @@ import org.eclipse.nebula.widgets.nattable.sort.config.SingleClickSortConfigurat
 import org.eclipse.nebula.widgets.nattable.ui.menu.AbstractHeaderMenuConfiguration;
 import org.eclipse.nebula.widgets.nattable.ui.menu.PopupMenuBuilder;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-public class PeakListNatTablePage {
+public class PeakListNatTable {
 
 	private ColumnGroupHeaderLayer columnGroupHeaderLayer;
 	private NatTable natTable;
 	private SortModel sortModel;
 	private TableData tableData;
 
-	public PeakListNatTablePage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
+	public PeakListNatTable(PcaEditor pcaEditor, Composite parent, FormToolkit formToolkit) {
 		tableData = new TableData(pcaEditor);
-		initialize(tabFolder, formToolkit);
+		createPeakListIntensityTableSection(parent);
 	}
 
 	/**
@@ -73,8 +68,6 @@ public class PeakListNatTablePage {
 	 */
 	private void createPeakListIntensityTableSection(Composite parent) {
 
-		parent.setLayout(new GridLayout());
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(parent);
 		sortModel = new SortModel(tableData);
 		final PcaResulDataProvider dataProvider = new PcaResulDataProvider(tableData, sortModel);
 		final DataLayer bodyDataLayer = new DataLayer(dataProvider);
@@ -156,7 +149,6 @@ public class PeakListNatTablePage {
 				}
 			}
 		});
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(natTable);
 	}
 
 	/**
@@ -205,16 +197,9 @@ public class PeakListNatTablePage {
 		}
 	}
 
-	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
+	public NatTable getNatTable() {
 
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("NatTable");
-		Composite panel = new Composite(tabFolder, SWT.NONE);
-		panel.setLayout(new GridLayout());
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(panel);
-		Composite parent = new Composite(panel, SWT.NONE);
-		createPeakListIntensityTableSection(parent);
-		tabItem.setControl(panel);
+		return natTable;
 	}
 
 	public void update() {
