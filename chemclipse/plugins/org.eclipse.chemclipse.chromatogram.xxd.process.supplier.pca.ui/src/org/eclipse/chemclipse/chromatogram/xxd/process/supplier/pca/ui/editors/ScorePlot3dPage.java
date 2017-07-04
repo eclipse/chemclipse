@@ -13,204 +13,123 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d.Axes;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d.Chart3DData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d.Chart3DScatter;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d.ChartLegend;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d.ScorePlot3d;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import javafx.embed.swt.FXCanvas;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.AmbientLight;
-import javafx.scene.Group;
-import javafx.scene.PerspectiveCamera;
-import javafx.scene.Scene;
-import javafx.scene.SceneAntialiasing;
-import javafx.scene.SubScene;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.transform.Rotate;
-
 public class ScorePlot3dPage {
 
-	private Axes axes;
-	private Chart3DData data;
-	private FXCanvas fxCanvas;
-	private ChartLegend legend;
-	private final double rotateModifier = 10;
-	private Chart3DScatter scatter;
+	private PcaEditor pcaEditor;
+	private ScorePlot3d scorePlot3d;
+	private Spinner spinnerPCx;
+	private Spinner spinnerPCy;
+	private Spinner spinnerPCz;
 
 	public ScorePlot3dPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
-		data = new Chart3DData(pcaEditor);
+		this.pcaEditor = pcaEditor;
 		initialize(tabFolder, formToolkit);
-		initScene();
-	}
-
-	private void createScene() {
-
-		Group root = new Group();
-		AmbientLight ambientlight = new AmbientLight();
-		Group mainGroup = new Group();
-		/*
-		 * set camera
-		 */
-		PerspectiveCamera camera = new PerspectiveCamera(true);
-		camera.setTranslateZ(-4000);
-		camera.setNearClip(0.01);
-		camera.setFarClip(10000.0);
-		root.getChildren().addAll(mainGroup, ambientlight, camera);
-		data.update(1, 2, 3, 800);
-		if(!data.isEmpty()) {
-			/*
-			 * update data
-			 */
-			legend.update();
-			axes.update();
-			scatter.update();
-			/*
-			 * rotate chart
-			 */
-			Group objects = new Group();
-			objects.getChildren().addAll(scatter.getScarter(), axes.createAxes());
-			Rotate rotate = new Rotate(180, 0, 0, 0, Rotate.X_AXIS);
-			objects.getTransforms().add(rotate);
-			mainGroup.getChildren().add(objects);
-		}
-		/*
-		 * built header
-		 */
-		BorderPane borderPane = new BorderPane();
-		Label label = new Label("PCA Score plot");
-		label.setAlignment(Pos.CENTER);
-		label.setFont(new Font("Arial", 20));
-		borderPane.setCenter(label);
-		/*
-		 * built legend
-		 */
-		VBox boxLegend = legend.getLegend();
-		/*
-		 * build central subscene, which contains chart
-		 */
-		Point sizeScene = fxCanvas.getParent().getSize();
-		SubScene mainScene = new SubScene(root, sizeScene.x - boxLegend.getWidth(), sizeScene.y - borderPane.getHeight(), true, SceneAntialiasing.BALANCED);
-		mainScene.setFill(Color.WHITE);
-		mainScene.setCamera(camera);
-		makeZoomable(mainScene, mainGroup);
-		mousePressedOrMoved(mainScene, mainGroup);
-		/*
-		 * create scene
-		 */
-		BorderPane pane = new BorderPane(mainScene, borderPane, boxLegend, null, null);
-		Scene scene = new Scene(pane, sizeScene.x, sizeScene.y);
-		fxCanvas.setScene(scene);
-		pane.setCenter(mainScene);
-		/*
-		 * adjust size composite
-		 */
-		fxCanvas.getParent().layout(true);
 	}
 
 	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
 
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("3D View");
+		tabItem.setText("3D Score Plot");
+		//
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new FillLayout());
+		//
 		Composite parent = new Composite(composite, SWT.NONE);
-		FillLayout fillLayout = new FillLayout();
-		parent.setLayout(fillLayout);
+		parent.setLayout(new GridLayout(1, true));
+		parent.setLayoutData(GridData.FILL_BOTH);
 		/*
-		 * JavaFX
+		 * Selection of the plotted PCs
 		 */
-		fxCanvas = new FXCanvas(parent, SWT.NONE);
+		Composite spinnerComposite = new Composite(parent, SWT.NONE);
+		spinnerComposite.setLayout(new GridLayout(7, false));
+		spinnerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		Label label;
+		GridData gridData = new GridData();
+		gridData.widthHint = 50;
+		gridData.heightHint = 20;
+		//
+		label = new Label(spinnerComposite, SWT.NONE);
+		label.setText("PC X-Axis: ");
+		spinnerPCx = new Spinner(spinnerComposite, SWT.NONE);
+		spinnerPCx.setMinimum(1);
+		spinnerPCx.setMaximum(1);
+		spinnerPCx.setIncrement(1);
+		spinnerPCx.setLayoutData(gridData);
+		//
+		label = new Label(spinnerComposite, SWT.NONE);
+		label.setText(" PC Y-Axis: ");
+		spinnerPCy = new Spinner(spinnerComposite, SWT.NONE);
+		spinnerPCy.setMinimum(1);
+		spinnerPCy.setMaximum(1);
+		spinnerPCy.setIncrement(1);
+		spinnerPCy.setLayoutData(gridData);
+		//
+		label = new Label(spinnerComposite, SWT.NONE);
+		label.setText(" PC Z-Axis: ");
+		spinnerPCz = new Spinner(spinnerComposite, SWT.NONE);
+		spinnerPCz.setMinimum(1);
+		spinnerPCz.setMaximum(1);
+		spinnerPCz.setIncrement(1);
+		spinnerPCz.setLayoutData(gridData);
+		//
+		Button button = new Button(spinnerComposite, SWT.PUSH);
+		button.setText("Reload Score Plot");
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				updatePC();
+			}
+		});
 		/*
-		 * update scene after resize
+		 * Plot the PCA chart.
 		 */
-		parent.addListener(SWT.Resize, (event) -> createScene());
+		Composite chartComposite = new Composite(parent, SWT.NONE);
+		chartComposite.setLayout(new GridLayout(1, true));
+		chartComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		scorePlot3d = new ScorePlot3d(pcaEditor, chartComposite, formToolkit);
 		tabItem.setControl(composite);
-	}
-
-	private void initScene() {
-
-		axes = new Axes(data);
-		scatter = new Chart3DScatter(data);
-		legend = new ChartLegend(data);
-		createScene();
-	}
-
-	public void makeZoomable(SubScene scene, Group group) {
-
-		final double MAX_SCALE = 200000.0;
-		final double MIN_SCALE = 0.1;
-		scene.addEventFilter(ScrollEvent.ANY, new EventHandler<ScrollEvent>() {
-
-			@Override
-			public void handle(ScrollEvent event) {
-
-				double delta = 1.2;
-				double scale = group.getScaleX();
-				if(event.getDeltaY() < 0) {
-					scale /= delta;
-				} else {
-					scale *= delta;
-				}
-				scale = (scale < MAX_SCALE ? scale : MAX_SCALE);
-				scale = (MIN_SCALE < scale ? scale : MIN_SCALE);
-				group.setScaleX(scale);
-				group.setScaleY(scale);
-			}
-		});
-	}
-
-	private void mousePressedOrMoved(SubScene sceneRoot, Group group) {
-
-		Rotate xRotate = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
-		Rotate yRotate = new Rotate(0, 0, 0, 0, Rotate.Y_AXIS);
-		group.getTransforms().addAll(xRotate, yRotate);
-		sceneRoot.addEventFilter(MouseEvent.ANY, new EventHandler<MouseEvent>() {
-
-			private double mouseXold = 0;
-			private double mouseYold = 0;
-
-			@Override
-			public void handle(MouseEvent event) {
-
-				if(event.getEventType() == MouseEvent.MOUSE_PRESSED || event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-					double mouseXnew = event.getSceneX();
-					double mouseYnew = event.getSceneY();
-					if(event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-						double pitchRotate = xRotate.getAngle() + (mouseYnew - mouseYold) / rotateModifier;
-						xRotate.setAngle(pitchRotate);
-						double yawRotate;
-						double a = Math.abs((pitchRotate % 360));
-						if(a < 90 || a > 270) {
-							yawRotate = yRotate.getAngle() - (mouseXnew - mouseXold) / rotateModifier;
-						} else {
-							yawRotate = yRotate.getAngle() + (mouseXnew - mouseXold) / rotateModifier;
-						}
-						yRotate.setAngle(yawRotate);
-					}
-					mouseXold = mouseXnew;
-					mouseYold = mouseYnew;
-				}
-			}
-		});
 	}
 
 	public void update() {
 
-		createScene();
+		updateSpinnerPCMaxima();
+		updatePC();
+	}
+
+	private void updatePC() {
+
+		scorePlot3d.update(spinnerPCx.getSelection(), spinnerPCy.getSelection(), spinnerPCz.getSelection());
+	}
+
+	private void updateSpinnerPCMaxima() {
+
+		IPcaResults pcaResults = pcaEditor.getPcaResults();
+		if(pcaResults != null) {
+			spinnerPCx.setMaximum(pcaResults.getNumberOfPrincipleComponents());
+			spinnerPCx.setSelection(1); // PC1
+			spinnerPCy.setMaximum(pcaResults.getNumberOfPrincipleComponents());
+			spinnerPCy.setSelection(2); // PC2
+			spinnerPCz.setMaximum(pcaResults.getNumberOfPrincipleComponents());
+			spinnerPCz.setSelection(3); // PC3
+		}
 	}
 }

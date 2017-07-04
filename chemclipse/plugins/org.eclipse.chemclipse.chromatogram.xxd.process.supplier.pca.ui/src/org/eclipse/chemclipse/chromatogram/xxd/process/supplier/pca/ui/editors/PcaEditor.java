@@ -26,7 +26,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ResultE
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.PeakListNatTablePage;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.ReEvaluateRunnable;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -65,7 +64,6 @@ public class PcaEditor {
 	private InputFilesPage inputFilesPage;
 	@Inject
 	private EModelService modelService;
-	private PeakListNatTablePage natTablePage;
 	/*
 	 * Pages
 	 */
@@ -108,7 +106,6 @@ public class PcaEditor {
 		pages.add(scorePlotPage = new ScorePlotPage(this, tabFolder, formToolkit));
 		pages.add(errorResiduePage = new ErrorResiduePage(this, tabFolder, formToolkit));
 		pages.add(scorePlot3dPage = new ScorePlot3dPage(this, tabFolder, formToolkit));
-		pages.add(natTablePage = new PeakListNatTablePage(this, tabFolder, formToolkit));
 	}
 
 	public IPcaResults getPcaResults() {
@@ -183,7 +180,6 @@ public class PcaEditor {
 		scorePlotPage.update();
 		errorResiduePage.update();
 		scorePlot3dPage.update();
-		natTablePage.update();
 	}
 
 	public void runPcaCalculation() {

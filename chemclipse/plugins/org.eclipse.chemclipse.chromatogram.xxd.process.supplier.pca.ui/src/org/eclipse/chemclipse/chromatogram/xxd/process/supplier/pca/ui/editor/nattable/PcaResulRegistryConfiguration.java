@@ -43,5 +43,6 @@ public class PcaResulRegistryConfiguration extends AbstractRegistryConfiguration
 		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
 				format, DisplayMode.NORMAL, //
 				PcaResultLabelProvider.COLUMN_LABEL_RETENTION_TIMES);
+		//
 	}
 }
