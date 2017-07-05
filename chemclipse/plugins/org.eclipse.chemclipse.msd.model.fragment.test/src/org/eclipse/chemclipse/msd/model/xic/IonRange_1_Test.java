@@ -52,7 +52,7 @@ public class IonRange_1_Test extends TestCase {
 	public void testSetup_3() {
 
 		ionRange = new IonRange(0, 5);
-		assertEquals("startIon", IIonRange.MIN_Ion, ionRange.getStartIon());
+		assertEquals("startIon", IIonRange.MIN_ION, ionRange.getStartIon());
 		assertEquals("stopIon", 5, ionRange.getStopIon());
 	}
 
@@ -62,22 +62,22 @@ public class IonRange_1_Test extends TestCase {
 		assertEquals("startIon", 1, ionRange.getStartIon());
 		// Why MIN_Ion? Because 1 is greater than 0 so the values will be
 		// swapped. 0 is now the startIon.
-		assertEquals("stopIon", IIonRange.MIN_Ion, ionRange.getStopIon());
+		assertEquals("stopIon", IIonRange.MIN_ION, ionRange.getStopIon());
 	}
 
 	public void testSetup_5() {
 
-		ionRange = new IonRange(IIonRange.MAX_Ion + 1, 5);
+		ionRange = new IonRange(IIonRange.MAX_ION + 1, 5);
 		assertEquals("startIon", 5, ionRange.getStartIon());
 		// Why MAX_Ion? Because MAX_Ion+1 is greater than 5 so the values will be
 		// swapped. 5 is now the startIon.
-		assertEquals("stopIon", IIonRange.MAX_Ion, ionRange.getStopIon());
+		assertEquals("stopIon", IIonRange.MAX_ION, ionRange.getStopIon());
 	}
 
 	public void testSetup_6() {
 
-		ionRange = new IonRange(1, IIonRange.MAX_Ion + 1);
+		ionRange = new IonRange(1, IIonRange.MAX_ION + 1);
 		assertEquals("startIon", 1, ionRange.getStartIon());
-		assertEquals("stopIon", IIonRange.MAX_Ion, ionRange.getStopIon());
+		assertEquals("stopIon", IIonRange.MAX_ION, ionRange.getStopIon());
 	}
 }

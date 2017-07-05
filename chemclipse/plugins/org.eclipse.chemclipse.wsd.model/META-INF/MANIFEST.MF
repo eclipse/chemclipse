@@ -16,9 +16,12 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.model;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.chemclipse.wsd.model.core,
+Export-Package: org.eclipse.chemclipse.wsd.model.comparator,
+ org.eclipse.chemclipse.wsd.model.core,
+ org.eclipse.chemclipse.wsd.model.core.exceptions,
  org.eclipse.chemclipse.wsd.model.core.implementation,
  org.eclipse.chemclipse.wsd.model.core.selection,
  org.eclipse.chemclipse.wsd.model.core.support,
- org.eclipse.chemclipse.wsd.model.notifier
+ org.eclipse.chemclipse.wsd.model.notifier,
+ org.eclipse.chemclipse.wsd.model.xwc
 Import-Package: javax.annotation;version="1.1.0"
