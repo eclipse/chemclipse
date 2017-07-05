@@ -24,9 +24,6 @@ public abstract class AbstractFileAttributeReader {
 
 	public void setFileAttributes(File file, IFileAttributes fileAttributes) throws IOException {
 
-		/*
-		 * file.toPath() seems to make problems under Windows.
-		 */
 		Path path = Paths.get(file.toURI());
 		BasicFileAttributes basicFileAttributes = Files.readAttributes(path, BasicFileAttributes.class);
 		fileAttributes.setFileName(file.getName());
