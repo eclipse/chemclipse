@@ -27,10 +27,10 @@ public class PcaResulRegistryConfiguration extends AbstractRegistryConfiguration
 	@Override
 	public void configureRegistry(IConfigRegistry configRegistry) {
 
-		setSelectionBox(configRegistry);
+		setFormatCell(configRegistry);
 	}
 
-	private void setSelectionBox(IConfigRegistry configRegistry) {
+	private void setFormatCell(IConfigRegistry configRegistry) {
 
 		// Set format for sample data
 		DefaultDoubleDisplayConverter format = new DefaultDoubleDisplayConverter();
