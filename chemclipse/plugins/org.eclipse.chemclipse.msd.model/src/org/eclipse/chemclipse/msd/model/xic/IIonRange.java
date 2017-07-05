@@ -19,8 +19,8 @@ package org.eclipse.chemclipse.msd.model.xic;
  */
 public interface IIonRange {
 
-	int MIN_Ion = 1;
-	int MAX_Ion = 65535;
+	int MIN_ION = 1;
+	int MAX_ION = 65535;
 
 	/**
 	 * Returns the start mass over charge value (ion).

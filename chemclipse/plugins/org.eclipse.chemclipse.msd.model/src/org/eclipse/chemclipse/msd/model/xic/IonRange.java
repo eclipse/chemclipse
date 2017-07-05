@@ -37,11 +37,11 @@ public class IonRange implements IIonRange {
 			startIon = stopIon;
 			stopIon = tmp;
 		}
-		if(startIon < MIN_Ion || startIon > MAX_Ion) {
-			startIon = MIN_Ion;
+		if(startIon < MIN_ION || startIon > MAX_ION) {
+			startIon = MIN_ION;
 		}
-		if(stopIon > MAX_Ion || stopIon < MIN_Ion) {
-			stopIon = MAX_Ion;
+		if(stopIon > MAX_ION || stopIon < MIN_ION) {
+			stopIon = MAX_ION;
 		}
 		this.startIon = startIon;
 		this.stopIon = stopIon;
