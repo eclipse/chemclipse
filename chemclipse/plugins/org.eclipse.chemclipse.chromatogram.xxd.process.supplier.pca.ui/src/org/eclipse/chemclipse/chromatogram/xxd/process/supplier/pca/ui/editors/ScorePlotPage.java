@@ -231,22 +231,22 @@ public class ScorePlotPage {
 			for(ISeries serie : series) {
 				seriesSet.deleteSeries(serie.getId());
 			}
-			String[] fileNames = new String[pcaResults.getSampleList().size()];
-			int count = 0;
 			/*
 			 * get color
 			 */
-			Set<String> groupNames = PcaUtils.getGroupNames(pcaResults.getSampleList());
+			Set<String> groupNames = PcaUtils.getGroupNames(pcaResults.getSampleList(), false);
 			Map<String, Color> colors = PcaColorGroup.getColorSWT(groupNames);
 			/*
 			 * Data
 			 */
 			for(ISample sample : pcaResults.getSampleList()) {
+				if(!sample.isSelected()) {
+					continue;
+				}
 				/*
 				 * Create the series.
 				 */
 				String name = sample.getName();
-				fileNames[count] = name;
 				ILineSeries scatterSeries = (ILineSeries)scorePlotChart.getSeriesSet().createSeries(SeriesType.LINE, name);
 				scatterSeries.setLineStyle(LineStyle.NONE);
 				scatterSeries.setSymbolSize(SYMBOL_SIZE);
@@ -291,6 +291,11 @@ public class ScorePlotPage {
 	public void update() {
 
 		updateSpinnerPCMaxima();
+		reloadScorePlotChart();
+	}
+
+	public void updateSelection() {
+
 		reloadScorePlotChart();
 	}
 

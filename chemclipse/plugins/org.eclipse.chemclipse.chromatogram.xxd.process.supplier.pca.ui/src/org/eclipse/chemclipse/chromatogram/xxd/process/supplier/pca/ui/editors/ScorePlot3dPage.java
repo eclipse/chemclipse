@@ -120,6 +120,11 @@ public class ScorePlot3dPage {
 		scorePlot3d.update(spinnerPCx.getSelection(), spinnerPCy.getSelection(), spinnerPCz.getSelection());
 	}
 
+	public void updateSelection() {
+
+		scorePlot3d.updateSelection();
+	}
+
 	private void updateSpinnerPCMaxima() {
 
 		IPcaResults pcaResults = pcaEditor.getPcaResults();

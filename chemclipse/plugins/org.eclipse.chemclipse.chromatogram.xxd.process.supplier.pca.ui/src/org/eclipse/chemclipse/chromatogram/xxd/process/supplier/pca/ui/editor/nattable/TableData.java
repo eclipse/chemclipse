@@ -64,6 +64,7 @@ public class TableData {
 		 */
 		samples.addAll(pcaResults.getSampleList());
 		samples.addAll(pcaResults.getGroupList());
+		PcaUtils.sortSampleListByName(samples);
 		PcaUtils.sortSampleListByGroup(samples);
 		/*
 		 * set retention time

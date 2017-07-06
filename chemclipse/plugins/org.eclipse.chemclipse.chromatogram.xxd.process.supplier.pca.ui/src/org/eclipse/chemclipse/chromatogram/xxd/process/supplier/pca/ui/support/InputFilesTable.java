@@ -89,7 +89,7 @@ public class InputFilesTable {
 			/*
 			 * Data
 			 */
-			for(int i = 1; i < dataInputEntries.size(); i++) {
+			for(int i = 0; i < dataInputEntries.size(); i++) {
 				IDataInputEntry entry = dataInputEntries.get(i);
 				/*
 				 * set file name column

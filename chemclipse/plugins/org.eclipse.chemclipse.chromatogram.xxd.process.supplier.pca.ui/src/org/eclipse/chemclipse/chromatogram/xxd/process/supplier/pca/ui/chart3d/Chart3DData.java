@@ -170,17 +170,11 @@ public class Chart3DData {
 		IPcaResults results = pcaEditor.getPcaResults();
 		if(results != null) {
 			List<ISample> samples = results.getSampleList();
-			int numeberSelectedSamples = 0;
-			for(ISample sample : samples) {
-				if(sample.isSelected()) {
-					numeberSelectedSamples++;
-				}
-			}
-			if(numeberSelectedSamples > 0) {
+			if(!samples.isEmpty()) {
 				/*
 				 *
 				 */
-				Set<String> groupNames = PcaUtils.getGroupNames(samples, true);
+				Set<String> groupNames = PcaUtils.getGroupNames(samples, false);
 				Map<String, Color> groupNameColore = PcaColorGroup.getColorJavaFx(groupNames);
 				Iterator<Entry<String, Color>> it = groupNameColore.entrySet().iterator();
 				groups.clear();
@@ -196,10 +190,8 @@ public class Chart3DData {
 				 * update data
 				 */
 				for(ISample sample : samples) {
-					if(sample.isSelected()) {
-						Color color = groupNameColore.get(sample.getGroupName());
-						data.add(new Chart3DSampleData(sample, pcX, pcY, pcZ, color));
-					}
+					Color color = groupNameColore.get(sample.getGroupName());
+					data.add(new Chart3DSampleData(sample, pcX, pcY, pcZ, color));
 				}
 				/*
 				 * set min and max

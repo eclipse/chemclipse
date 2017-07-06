@@ -38,7 +38,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.chemclipse.swt.ui,
  org.apache.poi;bundle-version="3.9.0",
  org.apache.poi.ooxml;bundle-version="3.9.0",
- org.apache.poi.ooxml.schemas;bundle-version="3.9.0"
+ org.apache.poi.ooxml.schemas;bundle-version="3.9.0",
+ org.apache.commons.lang3
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: javafx.scene.paint;version="2.2.0",

@@ -18,7 +18,9 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -27,10 +29,23 @@ import javafx.scene.shape.Sphere;
 
 public class Chart3DScatter {
 
+	private class UpdateSelectionEvent extends Event {
+
+		/**
+		 *
+		 */
+		private static final long serialVersionUID = -2717902232561677870L;
+
+		public UpdateSelectionEvent() {
+			super(SELECTION_UPDATE);
+		}
+	}
+
 	private Chart3DData data;
 	final private NumberFormat format = ValueFormat.getNumberFormatEnglish();
 	private final Group mainGroup = new Group();
 	private double radius;
+	private EventType<UpdateSelectionEvent> SELECTION_UPDATE = new EventType<>("SELECTION_UPDATE");
 
 	public Chart3DScatter(Chart3DData chart3dData) {
 		this.data = chart3dData;
@@ -115,7 +130,16 @@ public class Chart3DScatter {
 					t.hide();
 				}
 			});
+			sphere.addEventFilter(SELECTION_UPDATE, event -> sphere.setVisible(d.getSample().isSelected()));
 			mainGroup.getChildren().addAll(sphere);
+		}
+		updateSelection();
+	}
+
+	public void updateSelection() {
+
+		for(Node node : mainGroup.getChildren()) {
+			node.fireEvent(new UpdateSelectionEvent());
 		}
 	}
 }
