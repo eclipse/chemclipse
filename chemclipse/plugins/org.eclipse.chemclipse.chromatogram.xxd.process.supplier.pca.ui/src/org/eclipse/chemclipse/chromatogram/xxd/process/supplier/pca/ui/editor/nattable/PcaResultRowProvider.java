@@ -11,10 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable;
 
-public class PcaResultRowProvider extends AbstractPcaResulDataProvider {
+import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 
-	public PcaResultRowProvider(TableData dataTable) {
-		super(dataTable);
+public class PcaResultRowProvider implements IDataProvider {
+
+	private TableProvider tableProvider;
+
+	public PcaResultRowProvider(TableProvider tableProvider) {
+		this.tableProvider = tableProvider;
 	}
 
 	@Override
@@ -27,6 +31,12 @@ public class PcaResultRowProvider extends AbstractPcaResulDataProvider {
 	public Object getDataValue(int columnIndex, int rowIndex) {
 
 		return rowIndex;
+	}
+
+	@Override
+	public int getRowCount() {
+
+		return tableProvider.getRowCount();
 	}
 
 	@Override

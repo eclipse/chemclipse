@@ -26,12 +26,12 @@ public class SortModel implements ISortModel {
 	private SortDirectionEnum sortDirection;
 	private int sortedColumn;
 	private List<Integer> sortedRow;
-	private TableData tableData;
+	private TableProvider tableProvider;
 
-	public SortModel(TableData tableData) {
-		this.tableData = tableData;
+	public SortModel(TableProvider tableProvider) {
 		this.sortedRow = new ArrayList<>();
 		sortDirection = SortDirectionEnum.NONE;
+		this.tableProvider = tableProvider;
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class SortModel implements ISortModel {
 					direction = -1;
 			}
 			final int setDirection = direction;
-			if(columnIndex == AbstractPcaResulDataProvider.COLUMN_INDEX_RETENTION_TIMES) {
+			if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
 				/*
 				 * sort by retention time
 				 */
@@ -132,7 +132,7 @@ public class SortModel implements ISortModel {
 				/*
 				 * sort by abundance
 				 */
-				ISample sample = tableData.getSamples().get(columnIndex - AbstractPcaResulDataProvider.NUMER_OF_DESCRIPTION_COLUMN);
+				ISample sample = tableProvider.getDataTable().getSamples().get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
 				final double[] sampleData = sample.getPcaResult().getSampleData();
 				sortedRow.sort((i, j) -> {
 					return setDirection * Double.compare(sampleData[i], sampleData[j]);
@@ -149,7 +149,7 @@ public class SortModel implements ISortModel {
 	 */
 	public void update() {
 
-		int numberOfRow = tableData.getRetentionTimes().size();
+		int numberOfRow = tableProvider.getDataTable().getRetentionTimes().size();
 		sortedRow.clear();
 		for(int i = 0; i < numberOfRow; i++) {
 			sortedRow.add(i);

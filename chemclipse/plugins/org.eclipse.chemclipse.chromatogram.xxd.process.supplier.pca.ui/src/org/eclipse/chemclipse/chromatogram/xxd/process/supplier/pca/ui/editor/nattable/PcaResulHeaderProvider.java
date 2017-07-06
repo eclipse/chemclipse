@@ -11,19 +11,29 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable;
 
-public class PcaResulHeaderProvider extends AbstractPcaResulDataProvider {
+import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 
-	public PcaResulHeaderProvider(TableData dataTable) {
-		super(dataTable);
+public class PcaResulHeaderProvider implements IDataProvider {
+
+	private TableProvider tableProvider;
+
+	public PcaResulHeaderProvider(TableProvider tableProvider) {
+		this.tableProvider = tableProvider;
+	}
+
+	@Override
+	public int getColumnCount() {
+
+		return tableProvider.getColumnCount();
 	}
 
 	@Override
 	public Object getDataValue(int columnIndex, int rowIndex) {
 
-		if(columnIndex == COLUMN_INDEX_RETENTION_TIMES) {
+		if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
 			return "reten. time";
 		} else {
-			return getDataTable().getSamples().get(columnIndex - NUMER_OF_DESCRIPTION_COLUMN).getName();
+			return tableProvider.getDataTable().getSamples().get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN).getName();
 		}
 	}
 
