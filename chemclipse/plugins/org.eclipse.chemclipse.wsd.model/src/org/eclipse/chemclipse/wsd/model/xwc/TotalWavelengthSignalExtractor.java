@@ -60,8 +60,8 @@ public class TotalWavelengthSignalExtractor extends TotalScanSignalExtractor imp
 		ITotalScanSignals signals = new TotalScanSignals(startScan, stopScan, chromatogram);
 		for(int scan = startScan; scan <= stopScan; scan++) {
 			IScanWSD scanWSD = chromatogram.getSupplierScan(scan);
-			ITotalScanSignal totalIonSignal = new TotalScanSignal(scanWSD.getRetentionTime(), scanWSD.getRetentionIndex(), scanWSD.getTotalSignal());
-			signals.add(totalIonSignal);
+			ITotalScanSignal totalWavelengthSignal = new TotalScanSignal(scanWSD.getRetentionTime(), scanWSD.getRetentionIndex(), scanWSD.getTotalSignal());
+			signals.add(totalWavelengthSignal);
 		}
 		return signals;
 	}

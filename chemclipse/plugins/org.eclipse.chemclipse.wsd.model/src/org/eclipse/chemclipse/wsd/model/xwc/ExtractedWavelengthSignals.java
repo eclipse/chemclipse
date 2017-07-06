@@ -87,7 +87,6 @@ public class ExtractedWavelengthSignals implements IExtractedWavelengthSignals {
 		this.chromatogram = chromatogram;
 	}
 
-	// ---------------------------------------------IExtractedIonSignals
 	@Override
 	public IChromatogramWSD getChromatogram() {
 
@@ -95,22 +94,22 @@ public class ExtractedWavelengthSignals implements IExtractedWavelengthSignals {
 	}
 
 	@Override
-	public void add(IExtractedWavelengthSignal extractedIonSignal) {
+	public void add(IExtractedWavelengthSignal extractedWavelengthSignal) {
 
-		signals.add(extractedIonSignal);
-		setStartWavelength(extractedIonSignal.getStartWavelength());
-		setStopWavelength(extractedIonSignal.getStopWavelength());
+		signals.add(extractedWavelengthSignal);
+		setStartWavelength(extractedWavelengthSignal.getStartWavelength());
+		setStopWavelength(extractedWavelengthSignal.getStopWavelength());
 	}
 
 	@Override
-	public void add(int ion, float abundance, int retentionTime, boolean removePreviousAbundance) {
+	public void add(int wavlength, float abundance, int retentionTime, boolean removePreviousAbundance) {
 
-		IExtractedWavelengthSignal extractedIonSignal;
+		IExtractedWavelengthSignal extractedWavelengthSignal;
 		try {
 			int scan = findClosestScan(retentionTime);
 			if(scan > 0) {
-				extractedIonSignal = getExtractedWavelengthSignal(scan);
-				extractedIonSignal.setAbundance(ion, abundance, removePreviousAbundance);
+				extractedWavelengthSignal = getExtractedWavelengthSignal(scan);
+				extractedWavelengthSignal.setAbundance(wavlength, abundance, removePreviousAbundance);
 			}
 		} catch(ChromatogramIsNullException e) {
 			logger.warn(e);
@@ -143,12 +142,12 @@ public class ExtractedWavelengthSignals implements IExtractedWavelengthSignals {
 	@Override
 	public IScanWSD getScan(int scan) {
 
-		IExtractedWavelengthSignal extractedIonSignal;
+		IExtractedWavelengthSignal extractedWavelengthSignal;
 		/*
 		 * Retrieve the extracted ion signal.
 		 */
 		try {
-			extractedIonSignal = getExtractedWavelengthSignal(scan);
+			extractedWavelengthSignal = getExtractedWavelengthSignal(scan);
 		} catch(NoExtractedWavelengthSignalStoredException e) {
 			logger.warn(e);
 			return null;
@@ -158,13 +157,13 @@ public class ExtractedWavelengthSignals implements IExtractedWavelengthSignals {
 		scanWSD.setParentChromatogram(getChromatogram());
 		IScanSignalWSD scanSignalWSD;
 		float abundance;
-		int startIon = extractedIonSignal.getStartWavelength();
-		int stopIon = extractedIonSignal.getStopWavelength();
+		int startWavelength = extractedWavelengthSignal.getStartWavelength();
+		int stopWavelength = extractedWavelengthSignal.getStopWavelength();
 		//
-		for(int ion = startIon; ion <= stopIon; ion++) {
-			abundance = extractedIonSignal.getAbundance(ion);
+		for(int wavelength = startWavelength; wavelength <= stopWavelength; wavelength++) {
+			abundance = extractedWavelengthSignal.getAbundance(wavelength);
 			if(abundance > 0.0f) {
-				scanSignalWSD = new ScanSignalWSD(ion, abundance);
+				scanSignalWSD = new ScanSignalWSD(wavelength, abundance);
 				scanWSD.addScanSignal(scanSignalWSD);
 			}
 		}
@@ -233,28 +232,28 @@ public class ExtractedWavelengthSignals implements IExtractedWavelengthSignals {
 			startScan = 0;
 			stopScan = 0;
 		}
-		IExtractedWavelengthSignal extractedIonSignal;
-		ITotalScanSignal totalIonSignal;
+		IExtractedWavelengthSignal extractedWavelengthSignal;
+		ITotalScanSignal totalWavelengthSignal;
 		ITotalScanSignals totalIonSignals = new TotalScanSignals(startScan, stopScan, getChromatogram());
 		int retentionTime;
 		float retentionIndex;
 		float signal;
 		for(int scan = startScan; scan <= stopScan; scan++) {
 			try {
-				extractedIonSignal = getExtractedWavelengthSignal(scan);
-				retentionTime = extractedIonSignal.getRetentionTime();
-				retentionIndex = extractedIonSignal.getRetentionIndex();
+				extractedWavelengthSignal = getExtractedWavelengthSignal(scan);
+				retentionTime = extractedWavelengthSignal.getRetentionTime();
+				retentionIndex = extractedWavelengthSignal.getRetentionIndex();
 				// TIC
 				if(wavelength == (int)IScanSignalWSD.TIC_SIGNAL) {
-					signal = extractedIonSignal.getTotalSignal();
+					signal = extractedWavelengthSignal.getTotalSignal();
 				} else { // XIC
-					signal = extractedIonSignal.getAbundance(wavelength);
+					signal = extractedWavelengthSignal.getAbundance(wavelength);
 				}
 				/*
 				 * Add the total ion signal to the total ion signal list.
 				 */
-				totalIonSignal = new TotalScanSignal(retentionTime, retentionIndex, signal);
-				totalIonSignals.add(totalIonSignal);
+				totalWavelengthSignal = new TotalScanSignal(retentionTime, retentionIndex, signal);
+				totalIonSignals.add(totalWavelengthSignal);
 			} catch(NoExtractedWavelengthSignalStoredException e) {
 				logger.warn(e);
 			}
@@ -265,21 +264,16 @@ public class ExtractedWavelengthSignals implements IExtractedWavelengthSignals {
 	@Override
 	public IExtractedWavelengthSignals makeDeepCopyWithoutSignals() {
 
-		IExtractedWavelengthSignals extractedIonSignals = new ExtractedWavelengthSignals(startScan, stopScan, chromatogram);
-		IExtractedWavelengthSignal extractedIonSignal;
-		/*
-		 * Iterates through all extracted ion signals and creates a new
-		 * extracted ion signal, but without ions.<br/> The freshly
-		 * created extracted ion signal will be stored in a new
-		 * IExtractedIonSignals instance.
-		 */
+		IExtractedWavelengthSignals extractedWavelengthSignals = new ExtractedWavelengthSignals(startScan, stopScan, chromatogram);
+		IExtractedWavelengthSignal extractedWavelengthSignal;
+		//
 		for(IExtractedWavelengthSignal signal : signals) {
-			extractedIonSignal = new ExtractedWavelengthSignal(signal.getStartWavelength(), signal.getStopWavelength());
-			extractedIonSignal.setRetentionTime(signal.getRetentionTime());
-			extractedIonSignal.setRetentionIndex(signal.getRetentionIndex());
-			extractedIonSignals.add(extractedIonSignal);
+			extractedWavelengthSignal = new ExtractedWavelengthSignal(signal.getStartWavelength(), signal.getStopWavelength());
+			extractedWavelengthSignal.setRetentionTime(signal.getRetentionTime());
+			extractedWavelengthSignal.setRetentionIndex(signal.getRetentionIndex());
+			extractedWavelengthSignals.add(extractedWavelengthSignal);
 		}
-		return extractedIonSignals;
+		return extractedWavelengthSignals;
 	}
 
 	private void setStartWavelength(int wavelength) {

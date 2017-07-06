@@ -23,7 +23,7 @@ public interface IExtractedWavelengthSignals {
 
 	IChromatogramWSD getChromatogram();
 
-	void add(IExtractedWavelengthSignal extractedIonSignal);
+	void add(IExtractedWavelengthSignal extractedWavelengthSignal);
 
 	void add(int wavelength, float abundance, int retentionTime, boolean removePreviousAbundance);
 

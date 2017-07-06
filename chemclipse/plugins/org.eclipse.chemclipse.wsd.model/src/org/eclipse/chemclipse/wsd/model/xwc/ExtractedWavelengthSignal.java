@@ -87,9 +87,9 @@ public class ExtractedWavelengthSignal implements IExtractedWavelengthSignal {
 	public void setAbundance(IScanSignalWSD scanSignal, boolean removePreviousAbundance) {
 
 		if(removePreviousAbundance) {
-			int ionActual = AbstractScanSignalWSD.getWavelength(scanSignal.getWavelength());
-			if(isValidIon(ionActual)) {
-				int position = ionActual - startWavelength;
+			int wavelengthActual = AbstractScanSignalWSD.getWavelength(scanSignal.getWavelength());
+			if(isValidWavelength(wavelengthActual)) {
+				int position = wavelengthActual - startWavelength;
 				abundanceValues[position] = scanSignal.getAbundance();
 			}
 		} else {
@@ -100,9 +100,9 @@ public class ExtractedWavelengthSignal implements IExtractedWavelengthSignal {
 	@Override
 	public void setAbundance(IScanSignalWSD scanSignal) {
 
-		int ionActual = AbstractScanSignalWSD.getWavelength(scanSignal.getWavelength());
-		if(isValidIon(ionActual)) {
-			int position = ionActual - startWavelength;
+		int wavelengthActual = AbstractScanSignalWSD.getWavelength(scanSignal.getWavelength());
+		if(isValidWavelength(wavelengthActual)) {
+			int position = wavelengthActual - startWavelength;
 			abundanceValues[position] += scanSignal.getAbundance();
 		}
 	}
@@ -130,10 +130,10 @@ public class ExtractedWavelengthSignal implements IExtractedWavelengthSignal {
 	}
 
 	@Override
-	public float getAbundance(int ion) {
+	public float getAbundance(int wavelength) {
 
-		if(isValidIon(ion)) {
-			int position = ion - startWavelength;
+		if(isValidWavelength(wavelength)) {
+			int position = wavelength - startWavelength;
 			return abundanceValues[position];
 		}
 		return 0;
@@ -264,8 +264,8 @@ public class ExtractedWavelengthSignal implements IExtractedWavelengthSignal {
 	@Override
 	public IWavelengthRange getWavelengthRange() {
 
-		IWavelengthRange ionRange = new WavelengthRange(startWavelength, stopWavelength);
-		return ionRange;
+		IWavelengthRange wavelengthRange = new WavelengthRange(startWavelength, stopWavelength);
+		return wavelengthRange;
 	}
 
 	@Override
@@ -288,7 +288,7 @@ public class ExtractedWavelengthSignal implements IExtractedWavelengthSignal {
 		}
 	}
 
-	private boolean isValidIon(int ion) {
+	private boolean isValidWavelength(int wavelength) {
 
 		/*
 		 * If the array has not been created return false.
@@ -300,7 +300,7 @@ public class ExtractedWavelengthSignal implements IExtractedWavelengthSignal {
 		 * Check if the value is out of the valid range.<br/> If yes, return
 		 * false.
 		 */
-		if(ion < startWavelength || ion > stopWavelength) {
+		if(wavelength < startWavelength || wavelength > stopWavelength) {
 			return false;
 		}
 		/*
@@ -321,11 +321,11 @@ public class ExtractedWavelengthSignal implements IExtractedWavelengthSignal {
 		if(this.getClass() != otherObject.getClass()) {
 			return false;
 		}
-		ExtractedWavelengthSignal extractedIonSignal = (ExtractedWavelengthSignal)otherObject;
-		return startWavelength == extractedIonSignal.startWavelength && //
-				stopWavelength == extractedIonSignal.stopWavelength && //
-				getNumberOfWavelengthValues() == extractedIonSignal.getNumberOfWavelengthValues() && //
-				getTotalSignal() == extractedIonSignal.getTotalSignal();
+		ExtractedWavelengthSignal extractedWavelengthSignal = (ExtractedWavelengthSignal)otherObject;
+		return startWavelength == extractedWavelengthSignal.startWavelength && //
+				stopWavelength == extractedWavelengthSignal.stopWavelength && //
+				getNumberOfWavelengthValues() == extractedWavelengthSignal.getNumberOfWavelengthValues() && //
+				getTotalSignal() == extractedWavelengthSignal.getTotalSignal();
 	}
 
 	@Override
@@ -343,9 +343,9 @@ public class ExtractedWavelengthSignal implements IExtractedWavelengthSignal {
 		StringBuilder builder = new StringBuilder();
 		builder.append(getClass().getName());
 		builder.append("[");
-		builder.append("startIon=" + startWavelength);
+		builder.append("startWavelength=" + startWavelength);
 		builder.append(",");
-		builder.append("stopIon=" + stopWavelength);
+		builder.append("stopWavelength=" + stopWavelength);
 		builder.append(",");
 		builder.append("numberOfWavelengthValues=" + getNumberOfWavelengthValues());
 		builder.append(",");

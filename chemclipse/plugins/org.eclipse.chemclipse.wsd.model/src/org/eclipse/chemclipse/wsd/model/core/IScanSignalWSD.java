@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.wsd.model.core;
 
 public interface IScanSignalWSD {
 
-	int TIC_SIGNAL = 0;
+	double TIC_SIGNAL = 0;
 
 	/**
 	 * Returns the wavelength in nanometer (nm) scale.

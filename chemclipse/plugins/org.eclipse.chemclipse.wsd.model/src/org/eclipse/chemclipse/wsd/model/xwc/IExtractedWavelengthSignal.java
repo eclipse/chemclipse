@@ -19,9 +19,9 @@ public interface IExtractedWavelengthSignal {
 
 	void setAbundance(IScanSignalWSD scanSignal);
 
-	void setAbundance(int ion, float abundance);
+	void setAbundance(int wavelength, float abundance);
 
-	void setAbundance(int ion, float abundance, boolean removePreviousAbundance);
+	void setAbundance(int wavelength, float abundance, boolean removePreviousAbundance);
 
 	float getAbundance(int wavelength);
 
