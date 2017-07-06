@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.wsd.model.core;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 
 public interface IScanWSD extends IScan {
 
@@ -24,4 +25,12 @@ public interface IScanWSD extends IScan {
 	List<IScanSignalWSD> getScanSignals();
 
 	void removeScanSignal(int scan);
+
+	IExtractedWavelengthSignal getExtractedWavelengthSignal();
+
+	IExtractedWavelengthSignal getExtractedWavelengthSignal(double startIon, double stopIon);
+
+	boolean hasScanSignals();
+
+	IWavelengthBounds getWavelengthBounds();
 }

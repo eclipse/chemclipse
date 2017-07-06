@@ -12,9 +12,15 @@
 package org.eclipse.chemclipse.wsd.model.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.AbstractScan;
+import org.eclipse.chemclipse.wsd.model.comparator.WavelengthCombinedComparator;
+import org.eclipse.chemclipse.wsd.model.comparator.WavelengthComparatorMode;
+import org.eclipse.chemclipse.wsd.model.xwc.ExtractedWavelengthSignal;
+import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 
 public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 
@@ -66,5 +72,57 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	@Override
 	public void adjustTotalSignal(float totalSignal) {
 
+	}
+
+	@Override
+	public IExtractedWavelengthSignal getExtractedWavelengthSignal() {
+
+		if(hasScanSignals()) {
+			IWavelengthBounds bounds = getWavelengthBounds();
+			double startWavelength = bounds.getLowestWavelength().getWavelength();
+			double stopWavelength = bounds.getHighestWavelength().getWavelength();
+			return getExtractedWavelengthSignal(startWavelength, stopWavelength);
+		} else {
+			return new ExtractedWavelengthSignal(0, 0);
+		}
+	}
+
+	@Override
+	public IExtractedWavelengthSignal getExtractedWavelengthSignal(double startWavelength, double stopWavelength) {
+
+		ExtractedWavelengthSignal extractedWavelengthSignal;
+		if(hasScanSignals()) {
+			extractedWavelengthSignal = new ExtractedWavelengthSignal(startWavelength, stopWavelength);
+			for(IScanSignalWSD scanSignal : getScanSignals()) {
+				extractedWavelengthSignal.setAbundance(scanSignal);
+			}
+			return extractedWavelengthSignal;
+		} else {
+			return new ExtractedWavelengthSignal(0, 0);
+		}
+	}
+
+	@Override
+	public boolean hasScanSignals() {
+
+		if(scans.size() == 0) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public IWavelengthBounds getWavelengthBounds() {
+
+		IScanSignalWSD lowest = null;
+		IScanSignalWSD highest = null;
+		if(hasScanSignals()) {
+			Comparator<IScanSignalWSD> comparator = new WavelengthCombinedComparator(WavelengthComparatorMode.WAVELENGTH_FIRST);
+			lowest = Collections.min(scans, comparator);
+			highest = Collections.max(scans, comparator);
+			return new WavelengthBounds(lowest, highest);
+		} else {
+			return null;
+		}
 	}
 }

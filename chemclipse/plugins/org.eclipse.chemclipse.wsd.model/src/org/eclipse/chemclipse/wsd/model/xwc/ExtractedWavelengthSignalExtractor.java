@@ -11,31 +11,115 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.xwc;
 
+import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 
 public class ExtractedWavelengthSignalExtractor implements IExtractedWavelengthSignalExtractor {
 
+	private IChromatogramWSD chromatogram;
+
+	/**
+	 * All values will be extracted from IChromatogram.
+	 * 
+	 * @param chromatogram
+	 * @throws ChromatogramIsNullException
+	 */
+	public ExtractedWavelengthSignalExtractor(IChromatogramWSD chromatogram) throws ChromatogramIsNullException {
+		if(chromatogram == null) {
+			throw new ChromatogramIsNullException();
+		}
+		this.chromatogram = chromatogram;
+	}
+
 	@Override
 	public IExtractedWavelengthSignals getExtractedWavelengthSignals(float startWavelength, float stopWavelength) {
 
-		return null;
+		IExtractedWavelengthSignals signals = new ExtractedWavelengthSignals(getNumberOfScansWithWavelengths(chromatogram), chromatogram);
+		IExtractedWavelengthSignal extractedIonSignal;
+		for(IScan scan : chromatogram.getScans()) {
+			if(scan instanceof IScanWSD) {
+				IScanWSD scanWSD = (IScanWSD)scan;
+				if(scanWSD.getScanSignals().size() > 0) {
+					extractedIonSignal = scanWSD.getExtractedWavelengthSignal(startWavelength, stopWavelength);
+					signals.add(extractedIonSignal);
+				}
+			}
+		}
+		return signals;
 	}
 
 	@Override
 	public IExtractedWavelengthSignals getExtractedWavelengthSignals() {
 
-		return null;
+		IExtractedWavelengthSignals signals = new ExtractedWavelengthSignals(getNumberOfScansWithWavelengths(chromatogram), chromatogram);
+		IExtractedWavelengthSignal extractedIonSignal;
+		for(IScan scan : chromatogram.getScans()) {
+			if(scan instanceof IScanWSD) {
+				IScanWSD scanWSD = (IScanWSD)scan;
+				if(scanWSD.getScanSignals().size() > 0) {
+					extractedIonSignal = scanWSD.getExtractedWavelengthSignal();
+					signals.add(extractedIonSignal);
+				}
+			}
+		}
+		return signals;
 	}
 
 	@Override
 	public IExtractedWavelengthSignals getExtractedWavelengthSignals(IChromatogramSelectionWSD chromatogramSelection) {
 
-		return null;
+		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() != chromatogram) {
+			return new ExtractedWavelengthSignals(0, chromatogram);
+		}
+		/*
+		 * Get the start and stop scan.
+		 */
+		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
+		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
+		return getExtractedWavelengthSignals(startScan, stopScan);
 	}
 
 	@Override
 	public IExtractedWavelengthSignals getExtractedWavelengthSignals(int startScan, int stopScan) {
 
-		return null;
+		if(startScan > stopScan) {
+			int tmp = startScan;
+			startScan = stopScan;
+			stopScan = tmp;
+		}
+		if(startScan < 1 && stopScan > getNumberOfScansWithWavelengths(chromatogram)) {
+			return new ExtractedWavelengthSignals(0, chromatogram);
+		}
+		IScanWSD scanWSD;
+		IExtractedWavelengthSignals extractedIonSignals = new ExtractedWavelengthSignals(startScan, stopScan, chromatogram);
+		for(int scan = startScan; scan <= stopScan; scan++) {
+			scanWSD = chromatogram.getSupplierScan(scan);
+			if(scanWSD.getScanSignals().size() > 0) {
+				extractedIonSignals.add(scanWSD.getExtractedWavelengthSignal());
+			}
+		}
+		return extractedIonSignals;
+	}
+
+	/**
+	 * 
+	 * @param chromatogram
+	 * @return int
+	 */
+	private int getNumberOfScansWithWavelengths(IChromatogramWSD chromatogram) {
+
+		int counter = 0;
+		for(IScan scan : chromatogram.getScans()) {
+			if(scan instanceof IScanWSD) {
+				IScanWSD scanWSD = (IScanWSD)scan;
+				if(scanWSD.getScanSignals().size() > 0) {
+					counter++;
+				}
+			}
+		}
+		return counter;
 	}
 }
