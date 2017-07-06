@@ -245,4 +245,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_EXPAND_ALL = "expand_all.gif";
 	String IMAGE_COLLAPSE_ALL = "collapse_all.gif";
 	String IMAGE_SEARCH = "search.gif";
+	String IMAGE_EVALUATE = "evaluate.gif";
+	String IMAGE_EVALUATED = "evaluated.gif";
 }
