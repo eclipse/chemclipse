@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.wsd.model.xwc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -288,6 +290,20 @@ public class ExtractedWavelengthSignals implements IExtractedWavelengthSignals {
 		if(wavelength > stopWavelength) {
 			stopWavelength = wavelength;
 		}
+	}
+
+	@Override
+	public Set<Integer> getUsedWavelenghts() {
+
+		Set<Integer> usedWavelenghts = new TreeSet<Integer>();
+		for(IExtractedWavelengthSignal signal : signals) {
+			for(int wavelength = signal.getStartWavelength(); wavelength <= signal.getStopWavelength(); wavelength++) {
+				if(signal.getAbundance(wavelength) != 0) {
+					usedWavelenghts.add(wavelength);
+				}
+			}
+		}
+		return usedWavelenghts;
 	}
 
 	/**

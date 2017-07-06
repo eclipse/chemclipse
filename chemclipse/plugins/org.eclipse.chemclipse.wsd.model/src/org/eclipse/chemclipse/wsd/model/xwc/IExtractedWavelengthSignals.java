@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.wsd.model.xwc;
 
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.support.IScanRange;
@@ -52,4 +53,6 @@ public interface IExtractedWavelengthSignals {
 	int getStopScan();
 
 	IExtractedWavelengthSignals makeDeepCopyWithoutSignals();
+
+	Set<Integer> getUsedWavelenghts();
 }

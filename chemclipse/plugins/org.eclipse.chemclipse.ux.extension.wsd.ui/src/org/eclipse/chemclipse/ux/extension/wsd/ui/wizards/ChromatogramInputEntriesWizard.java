@@ -33,7 +33,7 @@ public class ChromatogramInputEntriesWizard extends Wizard {
 		this(chromatogramWizardElements, title, description, "");
 	}
 
-	public ChromatogramInputEntriesWizard(IChromatogramWizardElements chromatogramWizardElements, String title, String description, String directoryPath) {
+	public ChromatogramInputEntriesWizard(IChromatogramWizardElements chromatogramWizardElements, String title, String description, String expandToDirectoryPath) {
 		//
 		super();
 		setNeedsProgressMonitor(true);
