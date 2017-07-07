@@ -145,10 +145,15 @@ public class PcaUtils {
 		return peaksAtInterval;
 	}
 
-	public static void sortSampleListByErrorMemberShip(List<ISample> samples) {
+	public static void sortSampleListByErrorMemberShip(List<ISample> samples, boolean inverse) {
 
+		int i = 1;
+		if(inverse) {
+			i = -1;
+		}
+		final int inv = i;
 		Comparator<ISample> comparator = (arg0, arg1) -> {
-			return Double.compare(arg0.getPcaResult().getErrorMemberShip(), arg1.getPcaResult().getErrorMemberShip());
+			return inv * Double.compare(arg0.getPcaResult().getErrorMemberShip(), arg1.getPcaResult().getErrorMemberShip());
 		};
 		Collections.sort(samples, comparator);
 	}
