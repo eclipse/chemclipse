@@ -370,7 +370,7 @@ public class ErrorResidueBarChart {
 			} else if(displayData == DISPLAY_GROUPS) {
 				data.addAll(pcaResults.getGroupList());
 			}
-			groupColor = PcaColorGroup.getColorJavaFx(PcaUtils.getGroupNames(pcaResults.getSampleList(), true));
+			groupColor = PcaColorGroup.getColorJavaFx(PcaUtils.getGroupNames(pcaResults.getSampleList(), false));
 		}
 		/*
 		 * sort data
@@ -382,10 +382,18 @@ public class ErrorResidueBarChart {
 		createScene();
 	}
 
+	public void updateSelection() {
+
+		updateSeries();
+	}
+
 	private void updateSeries() {
 
 		series.getData().clear();
 		for(ISample sample : data) {
+			if(!sample.isSelected()) {
+				continue;
+			}
 			String name = null;
 			/*
 			 * set name displayed on x-axis

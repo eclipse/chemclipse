@@ -198,4 +198,9 @@ public class ScorePlot3d {
 		this.pcZ = pcZ;
 		createScene();
 	}
+
+	public void updateSelection() {
+
+		scatter.updateSelection();
+	}
 }

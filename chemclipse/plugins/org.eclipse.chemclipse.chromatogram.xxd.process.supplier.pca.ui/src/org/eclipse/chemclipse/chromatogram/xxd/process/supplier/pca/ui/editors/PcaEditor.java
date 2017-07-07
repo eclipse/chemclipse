@@ -269,4 +269,11 @@ public class PcaEditor {
 		}
 		tabFolder.setSelection(pageIndex);
 	}
+
+	public void updateSelection() {
+
+		scorePlotPage.updateSelection();
+		errorResiduePage.updateSelection();
+		scorePlot3dPage.updateSelection();
+	}
 }
