@@ -13,34 +13,49 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.n
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 
-public abstract class AbstractPcaResulDataProvider implements IDataProvider {
+public class TableProvider {
 
-	final public static int COLUMN_INDEX_RETENTION_TIMES = 0;
+	public static final int COLUMN_INDEX_RETENTION_TIMES = 0;
+	public static final String COLUMN_LABEL_GROUP_DATA = "COLUMN_GROUP_DATA";
+	public static final String COLUMN_LABEL_RETENTION_TIMES = "COLUMN_RETENTION_TIMES";
+	public static final String COLUMN_LABEL_SAMPLE_DATA = "COLUMN_SAMPLE_DATA";
 	/**
 	 * number of column which is used to describe sample data
 	 */
 	final public static int NUMER_OF_DESCRIPTION_COLUMN = 1;
 	private TableData dataTable;
 
-	public AbstractPcaResulDataProvider(TableData dataTable) {
+	public TableProvider(TableData dataTable) {
 		this.dataTable = dataTable;
 	}
 
-	@Override
 	public int getColumnCount() {
 
 		return dataTable.getSamples().size() + NUMER_OF_DESCRIPTION_COLUMN;
 	}
 
-	protected TableData getDataTable() {
+	public String getColumnLable(int columnIndex) {
+
+		if(columnIndex == COLUMN_INDEX_RETENTION_TIMES) {
+			return COLUMN_LABEL_RETENTION_TIMES;
+		} else {
+			ISample sample = getDataTable().getSamples().get(columnIndex - NUMER_OF_DESCRIPTION_COLUMN);
+			if(sample instanceof IGroup) {
+				return COLUMN_LABEL_GROUP_DATA;
+			} else {
+				return COLUMN_LABEL_SAMPLE_DATA;
+			}
+		}
+	}
+
+	public TableData getDataTable() {
 
 		return dataTable;
 	}
 
-	@Override
 	public int getRowCount() {
 
 		List<ISample> samples = dataTable.getSamples();

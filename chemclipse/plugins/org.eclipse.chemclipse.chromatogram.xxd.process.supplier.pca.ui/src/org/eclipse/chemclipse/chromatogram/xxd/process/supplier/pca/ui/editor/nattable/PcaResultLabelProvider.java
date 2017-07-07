@@ -19,28 +19,25 @@ import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelProvider;
 
 public class PcaResultLabelProvider implements IConfigLabelProvider {
 
-	public static final String COLUMN_LABEL_DATA = "COLUMN_DATA";
-	public static final String COLUMN_LABEL_RETENTION_TIMES = "COLUMN_NAME";
+	private TableProvider tableProvider;
 
-	public PcaResultLabelProvider() {
+	public PcaResultLabelProvider(TableProvider tableProvider) {
+		this.tableProvider = tableProvider;
 	}
 
 	@Override
 	public void accumulateConfigLabels(LabelStack configLabels, int columnPosition, int rowPosition) {
 
-		if(columnPosition == AbstractPcaResulDataProvider.COLUMN_INDEX_RETENTION_TIMES) {
-			configLabels.addLabel(COLUMN_LABEL_RETENTION_TIMES);
-		} else {
-			configLabels.addLabel(COLUMN_LABEL_DATA);
-		}
+		configLabels.addLabel(tableProvider.getColumnLable(columnPosition));
 	}
 
 	@Override
 	public Collection<String> getProvidedLabels() {
 
 		Collection<String> result = new HashSet<String>();
-		result.add(COLUMN_LABEL_DATA);
-		result.add(COLUMN_LABEL_RETENTION_TIMES);
+		result.add(TableProvider.COLUMN_LABEL_GROUP_DATA);
+		result.add(TableProvider.COLUMN_LABEL_RETENTION_TIMES);
+		result.add(TableProvider.COLUMN_LABEL_SAMPLE_DATA);
 		return result;
 	}
 }

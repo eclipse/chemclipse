@@ -9,14 +9,12 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Daniel Mariano, Rafael Aguayo - additional functionality and UI improvements
- * Jan Holy - initial API and implementation 
+ * Jan Holy - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.errorresidue.ErrorResidueBarChart;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -74,20 +72,10 @@ public class ErrorResiduePage {
 		//
 		Button button = new Button(propertiesComposite, SWT.PUSH);
 		button.setText(" Reload Bar Plot ");
-		button.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				errorResidueChart.setDisplayData(comboDisplay.getSelectionIndex());
-				errorResidueChart.setSortType(comboSortData.getSelectionIndex());
-				errorResidueChart.update();
-			}
+		button.addListener(SWT.Selection, e -> {
+			errorResidueChart.setDisplayData(comboDisplay.getSelectionIndex());
+			errorResidueChart.setSortType(comboSortData.getSelectionIndex());
+			errorResidueChart.update();
 		});
 		/*
 		 * Plot the Error residue chart.

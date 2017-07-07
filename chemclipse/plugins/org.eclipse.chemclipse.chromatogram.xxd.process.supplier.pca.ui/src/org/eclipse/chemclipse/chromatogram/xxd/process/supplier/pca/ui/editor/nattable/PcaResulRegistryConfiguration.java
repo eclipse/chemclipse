@@ -37,12 +37,14 @@ public class PcaResulRegistryConfiguration extends AbstractRegistryConfiguration
 		format.setNumberFormat(ValueFormat.getNumberFormatEnglish());
 		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
 				format, DisplayMode.NORMAL, //
-				PcaResultLabelProvider.COLUMN_LABEL_DATA);
-		format.setNumberFormat(ValueFormat.getNumberFormatEnglish());
+				TableProvider.COLUMN_LABEL_GROUP_DATA);
+		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
+				format, DisplayMode.NORMAL, //
+				TableProvider.COLUMN_LABEL_SAMPLE_DATA);
 		// Set format for retention times
 		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
 				format, DisplayMode.NORMAL, //
-				PcaResultLabelProvider.COLUMN_LABEL_RETENTION_TIMES);
+				TableProvider.COLUMN_LABEL_RETENTION_TIMES);
 		//
 	}
 }

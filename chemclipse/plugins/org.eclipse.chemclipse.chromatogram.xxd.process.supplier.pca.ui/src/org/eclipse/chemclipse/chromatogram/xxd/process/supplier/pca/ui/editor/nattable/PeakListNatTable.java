@@ -17,6 +17,8 @@ import java.util.SortedMap;
 import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportDataSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.columnChooser.command.DisplayColumnChooserCommandHandler;
@@ -54,12 +56,15 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 public class PeakListNatTable {
 
 	private ColumnGroupHeaderLayer columnGroupHeaderLayer;
+	private ExportData exportData;
 	private NatTable natTable;
 	private SortModel sortModel;
 	private TableData tableData;
+	private TableProvider tableProvider;
 
 	public PeakListNatTable(PcaEditor pcaEditor, Composite parent, FormToolkit formToolkit) {
 		tableData = new TableData(pcaEditor);
+		tableProvider = new TableProvider(tableData);
 		createPeakListIntensityTableSection(parent);
 	}
 
@@ -68,10 +73,10 @@ public class PeakListNatTable {
 	 */
 	private void createPeakListIntensityTableSection(Composite parent) {
 
-		sortModel = new SortModel(tableData);
-		final PcaResulDataProvider dataProvider = new PcaResulDataProvider(tableData, sortModel);
+		sortModel = new SortModel(tableProvider);
+		final PcaResulDataProvider dataProvider = new PcaResulDataProvider(tableProvider, sortModel);
 		final DataLayer bodyDataLayer = new DataLayer(dataProvider);
-		bodyDataLayer.setConfigLabelAccumulator(new PcaResultLabelProvider());
+		bodyDataLayer.setConfigLabelAccumulator(new PcaResultLabelProvider(tableProvider));
 		final RowHideShowLayer rowHideShowLayer = new RowHideShowLayer(bodyDataLayer);
 		final ColumnHideShowLayer columnHideShowLayer = new ColumnHideShowLayer(rowHideShowLayer);
 		ColumnGroupModel columnGroupModel = new ColumnGroupModel();
@@ -83,7 +88,7 @@ public class PeakListNatTable {
 		/*
 		 * build the column header layer
 		 */
-		IDataProvider columnHeaderDataProvider = new PcaResulHeaderProvider(tableData);
+		PcaResulHeaderProvider columnHeaderDataProvider = new PcaResulHeaderProvider(tableProvider);
 		DataLayer columnHeaderDataLayer = new DefaultColumnHeaderDataLayer(columnHeaderDataProvider);
 		ColumnHeaderLayer columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, compositeFreezeLayer, selectionLayer);
 		SortHeaderLayer<?> sortHeaderLayer = new SortHeaderLayer<>(columnHeaderLayer, sortModel);
@@ -91,7 +96,7 @@ public class PeakListNatTable {
 		/*
 		 * build the row header layer
 		 */
-		IDataProvider rowHeaderDataProvider = new PcaResultRowProvider(tableData);
+		IDataProvider rowHeaderDataProvider = new PcaResultRowProvider(tableProvider);
 		DataLayer rowHeaderDataLayer = new DefaultRowHeaderDataLayer(rowHeaderDataProvider);
 		ILayer rowHeaderLayer = new RowHeaderLayer(rowHeaderDataLayer, compositeFreezeLayer, selectionLayer);
 		/*
@@ -144,11 +149,12 @@ public class PeakListNatTable {
 				/*
 				 * freeze first column, this column contains retention times
 				 */
-				if(!columnHideShowLayer.isColumnIndexHidden(AbstractPcaResulDataProvider.COLUMN_INDEX_RETENTION_TIMES)) {
+				if(!columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_RETENTION_TIMES)) {
 					compositeFreezeLayer.doCommand(new FreezeColumnCommand(compositeFreezeLayer, 0, false, true));
 				}
 			}
 		});
+		exportData = new ExportData(new ExportDataSupplier(tableProvider, dataProvider, columnHeaderDataProvider, columnGroupModel));
 	}
 
 	/**
@@ -184,17 +190,22 @@ public class PeakListNatTable {
 				int pos1 = entry.getKey();
 				String name1 = entry.getValue();
 				if(name0 != null) {
-					int[] ar = columnInOneGroup.apply(pos0 + AbstractPcaResulDataProvider.NUMER_OF_DESCRIPTION_COLUMN, pos1 + AbstractPcaResulDataProvider.NUMER_OF_DESCRIPTION_COLUMN);
+					int[] ar = columnInOneGroup.apply(pos0 + TableProvider.NUMER_OF_DESCRIPTION_COLUMN, pos1 + TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
 					columnGroupHeaderLayer.addColumnsIndexesToGroup(name0, ar);
 				}
 				name0 = name1;
 				pos0 = pos1;
 			}
 			if(name0 != null) {
-				int[] ar = columnInOneGroup.apply(pos0 + AbstractPcaResulDataProvider.NUMER_OF_DESCRIPTION_COLUMN, tableData.getSamples().size() + AbstractPcaResulDataProvider.NUMER_OF_DESCRIPTION_COLUMN);
+				int[] ar = columnInOneGroup.apply(pos0 + TableProvider.NUMER_OF_DESCRIPTION_COLUMN, tableData.getSamples().size() + TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
 				columnGroupHeaderLayer.addColumnsIndexesToGroup(name0, ar);
 			}
 		}
+	}
+
+	public ExportData getExporter() {
+
+		return exportData;
 	}
 
 	public NatTable getNatTable() {
