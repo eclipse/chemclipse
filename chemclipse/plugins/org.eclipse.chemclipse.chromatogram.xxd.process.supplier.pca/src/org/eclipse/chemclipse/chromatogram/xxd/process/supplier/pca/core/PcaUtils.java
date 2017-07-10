@@ -24,6 +24,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Group;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
@@ -73,6 +74,16 @@ public class PcaUtils {
 			if(!onlySelected || sample.isSelected()) {
 				groupNames.add(groupName);
 			}
+		}
+		return groupNames;
+	}
+
+	public static Set<String> getGroupNamesFromEntry(List<IDataInputEntry> inputEntries) {
+
+		Set<String> groupNames = new HashSet<>();
+		for(IDataInputEntry inputEntry : inputEntries) {
+			String groupName = inputEntry.getGroupName();
+			groupNames.add(groupName);
 		}
 		return groupNames;
 	}
