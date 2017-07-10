@@ -42,6 +42,9 @@ public class PcaResulDataProvider implements IDataProvider {
 		if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
 			int retentionTime = tableProvider.getDataTable().getRetentionTimes().get(sortRowIndex);
 			return retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
+		} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAKS_NAMES) {
+			String peaksNames = tableProvider.getDataTable().getPeaksNames().get(sortRowIndex);
+			return peaksNames;
 		} else {
 			List<ISample> samples = tableProvider.getDataTable().getSamples();
 			ISample sample = samples.get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);

@@ -146,11 +146,21 @@ public class PeakListNatTable {
 			@Override
 			public void handleLayerEvent(ILayerEvent event) {
 
+				int num = 0;
 				/*
 				 * freeze first column, this column contains retention times
 				 */
 				if(!columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_RETENTION_TIMES)) {
-					compositeFreezeLayer.doCommand(new FreezeColumnCommand(compositeFreezeLayer, 0, false, true));
+					num++;
+				}
+				/*
+				 * freeze first column, this column contains names of peaks
+				 */
+				if(!columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_PEAKS_NAMES)) {
+					num++;
+				}
+				if(num > 0) {
+					compositeFreezeLayer.doCommand(new FreezeColumnCommand(compositeFreezeLayer, num - 1, false, true));
 				}
 			}
 		});

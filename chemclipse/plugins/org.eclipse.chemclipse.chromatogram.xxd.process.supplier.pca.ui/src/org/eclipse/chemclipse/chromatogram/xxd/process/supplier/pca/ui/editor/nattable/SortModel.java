@@ -99,12 +99,7 @@ public class SortModel implements ISortModel {
 	public void sort(int columnIndex, SortDirectionEnum sortDirection, boolean accumulate) {
 
 		clear();
-		if(sortDirection.equals(SortDirectionEnum.NONE)) {
-			/*
-			 * remove sorting
-			 */
-			clear();
-		} else {
+		if(!sortDirection.equals(SortDirectionEnum.NONE)) {
 			/*
 			 * Set direction of sorting
 			 */
@@ -128,6 +123,11 @@ public class SortModel implements ISortModel {
 				if(direction == -1) {
 					Collections.reverse(sortedRow);
 				}
+			} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAKS_NAMES) {
+				List<String> peaksNames = tableProvider.getDataTable().getPeaksNames();
+				sortedRow.sort((i, j) -> {
+					return setDirection * peaksNames.get(i).compareTo(peaksNames.get(j));
+				});
 			} else {
 				/*
 				 * sort by abundance
