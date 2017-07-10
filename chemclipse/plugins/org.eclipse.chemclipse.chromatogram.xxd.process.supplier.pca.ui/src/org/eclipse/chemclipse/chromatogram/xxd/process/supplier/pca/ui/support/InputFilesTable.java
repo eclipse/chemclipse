@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
@@ -96,6 +97,7 @@ public class InputFilesTable {
 			/*
 			 * Data
 			 */
+			Map<String, Color> groupColorMap = PcaColorGroup.getColorSWT(PcaUtils.getGroupNamesFromEntry(dataInputEntries));
 			for(int i = 0; i < dataInputEntries.size(); i++) {
 				IDataInputEntry entry = dataInputEntries.get(i);
 				TableItem item = new TableItem(table, SWT.NONE);
@@ -107,7 +109,7 @@ public class InputFilesTable {
 				/*
 				 * set group color
 				 */
-				setGroupColor(item, entry.getGroupName());
+				setGroupColor(item, entry.getGroupName(), groupColorMap);
 				/*
 				 * set group name column
 				 */
@@ -181,16 +183,17 @@ public class InputFilesTable {
 
 	private void setGroupColor() {
 
+		Map<String, Color> groupColorMap = PcaColorGroup.getColorSWT(PcaUtils.getGroupNamesFromEntry(dataInputEntries));
 		TableItem[] items = table.getItems();
 		for(TableItem item : items) {
 			IDataInputEntry entry = (IDataInputEntry)item.getData();
-			setGroupColor(item, entry.getGroupName());
+			setGroupColor(item, entry.getGroupName(), groupColorMap);
 		}
 	}
 
-	private void setGroupColor(TableItem item, String name) {
+	private void setGroupColor(TableItem item, String name, Map<String, Color> mapGroupColor) {
 
-		Color color = PcaColorGroup.getColorSWT(PcaUtils.getGroupNamesFromEntry(dataInputEntries)).get(name);
+		Color color = mapGroupColor.get(name);
 		int len = 16;
 		Image image = new Image(Display.getCurrent(), len, len);
 		GC gc = new GC(image);
