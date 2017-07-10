@@ -16,6 +16,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.PeakListNatTable;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.TableProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportData;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -25,10 +26,12 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -44,6 +47,24 @@ public class PeakListIntensityTablePage {
 	public PeakListIntensityTablePage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		this.pcaEditor = pcaEditor;
 		initialize(tabFolder, formToolkit);
+	}
+
+	private void createNormalizationButton(Composite parent, FormToolkit formToolkit) {
+
+		Composite composite = new Composite(parent, SWT.None);
+		composite.setLayout(new RowLayout());
+		Label label = new Label(composite, SWT.None);
+		label.setText("Normalization: ");
+		Button button = new Button(composite, SWT.RADIO);
+		button.setText("None");
+		button.addListener(SWT.Selection, (e) -> peakListIntensityTable.setDataNormalization(TableProvider.NORMALIZATION_NONE));
+		button.setSelection(true);
+		button = new Button(composite, SWT.RADIO);
+		button.setText("Row");
+		button.addListener(SWT.Selection, (e) -> peakListIntensityTable.setDataNormalization(TableProvider.NORMALIZATION_ROW));
+		button = new Button(composite, SWT.RADIO);
+		button.setText("Column");
+		button.addListener(SWT.Selection, (e) -> peakListIntensityTable.setDataNormalization(TableProvider.NORMALIZATION_COLUMN));
 	}
 
 	private void createPeakListIntensityTableSection(Composite parent, FormToolkit formToolkit) {
@@ -67,6 +88,7 @@ public class PeakListIntensityTablePage {
 		layout.marginWidth = 2;
 		layout.marginHeight = 2;
 		client.setLayout(layout);
+		createNormalizationButton(client, formToolkit);
 		createTable(client, formToolkit);
 		section.setClient(client);
 		formToolkit.paintBordersFor(client);

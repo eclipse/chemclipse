@@ -22,14 +22,19 @@ public class TableProvider {
 	public static final String COLUMN_LABEL_GROUP_DATA = "COLUMN_GROUP_DATA";
 	public static final String COLUMN_LABEL_RETENTION_TIMES = "COLUMN_RETENTION_TIMES";
 	public static final String COLUMN_LABEL_SAMPLE_DATA = "COLUMN_SAMPLE_DATA";
+	public static final String NORMALIZATION_COLUMN = "column normalization";
+	public static final String NORMALIZATION_NONE = "none normalization";
+	public static final String NORMALIZATION_ROW = "row normalization";
 	/**
 	 * number of column which is used to describe sample data
 	 */
 	final public static int NUMER_OF_DESCRIPTION_COLUMN = 1;
 	private TableData dataTable;
+	private String normalization;
 
 	public TableProvider(TableData dataTable) {
 		this.dataTable = dataTable;
+		this.normalization = NORMALIZATION_NONE;
 	}
 
 	public int getColumnCount() {
@@ -56,6 +61,11 @@ public class TableProvider {
 		return dataTable;
 	}
 
+	public String getNormalizationData() {
+
+		return normalization;
+	}
+
 	public int getRowCount() {
 
 		List<ISample> samples = dataTable.getSamples();
@@ -63,5 +73,16 @@ public class TableProvider {
 			return samples.get(0).getPcaResult().getSampleData().length;
 		}
 		return 0;
+	}
+
+	public void setNormalizationData(String normalizationData) {
+
+		if(normalizationData.equals(NORMALIZATION_NONE) //
+				|| normalizationData.equals(NORMALIZATION_COLUMN) //
+				|| normalizationData.equals(NORMALIZATION_ROW)) {
+			this.normalization = normalizationData;
+		} else {
+			throw new RuntimeException("Undefine format cell");
+		}
 	}
 }

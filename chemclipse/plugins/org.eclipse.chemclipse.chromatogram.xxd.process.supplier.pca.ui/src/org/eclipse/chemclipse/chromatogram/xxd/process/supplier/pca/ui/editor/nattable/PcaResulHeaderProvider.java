@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 
 public class PcaResulHeaderProvider implements IDataProvider {
@@ -33,7 +35,16 @@ public class PcaResulHeaderProvider implements IDataProvider {
 		if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
 			return "reten. time";
 		} else {
-			return tableProvider.getDataTable().getSamples().get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN).getName();
+			ISample sample = tableProvider.getDataTable().getSamples().get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
+			if(sample instanceof IGroup) {
+				if(tableProvider.getNormalizationData().equals(TableProvider.NORMALIZATION_ROW)) {
+					return "Total";
+				} else {
+					return "Mean";
+				}
+			} else {
+				return sample.getName();
+			}
 		}
 	}
 

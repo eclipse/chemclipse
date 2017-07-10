@@ -136,7 +136,7 @@ public class PeakListNatTable {
 			}
 		});
 		natTable.addConfiguration(new SingleClickSortConfiguration());
-		natTable.addConfiguration(new PcaResulRegistryConfiguration());
+		natTable.addConfiguration(new PcaResulRegistryConfiguration(tableProvider));
 		natTable.configure();
 		/*
 		 * Freeze column dynamically
@@ -211,6 +211,13 @@ public class PeakListNatTable {
 	public NatTable getNatTable() {
 
 		return natTable;
+	}
+
+	public void setDataNormalization(String normalization) {
+
+		tableProvider.setNormalizationData(normalization);
+		natTable.configure();
+		natTable.refresh();
 	}
 
 	public void update() {
