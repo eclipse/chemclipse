@@ -14,21 +14,21 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Group;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
+import org.eclipse.chemclipse.model.targets.IPeakTarget;
 
 public class PcaUtils {
 
@@ -77,6 +77,16 @@ public class PcaUtils {
 		return groupNames;
 	}
 
+	public static Set<String> getGroupNamesFromEntry(List<IDataInputEntry> inputEntries) {
+
+		Set<String> groupNames = new HashSet<>();
+		for(IDataInputEntry inputEntry : inputEntries) {
+			String groupName = inputEntry.getGroupName();
+			groupNames.add(groupName);
+		}
+		return groupNames;
+	}
+
 	/**
 	 *
 	 * @param samples
@@ -99,26 +109,7 @@ public class PcaUtils {
 		return getGroupNames(samples).size();
 	}
 
-	public static Map<Integer, List<IPeak>> getPeaksAtInterval(IPcaResults pcaResults) {
-
-		List<ISample> samples = pcaResults.getSampleList();
-		List<Integer> retentionTimes = pcaResults.getExtractedRetentionTimes();
-		final Map<Integer, List<IPeak>> result = new HashMap<>();
-		for(Integer retentionTime : retentionTimes) {
-			result.put(retentionTime, new ArrayList<>());
-		}
-		for(ISample sample : samples) {
-			Map<Integer, List<IPeak>> peaks = getPeaksAtIntervals(retentionTimes, sample);
-			Iterator<Integer> iter = peaks.keySet().iterator();
-			while(iter.hasNext()) {
-				Integer key = iter.next();
-				result.get(key).addAll(peaks.get(key));
-			}
-		}
-		return result;
-	}
-
-	public static List<IPeak> getPeaksAtInterval(IPeaks peaks, int leftRetentionTimeBound, int rightRetentionTimeBound) {
+	public static List<IPeak> getPeaks(IPeaks peaks, int leftRetentionTimeBound, int rightRetentionTimeBound) {
 
 		List<IPeak> peakInInterval = new ArrayList<>();
 		for(IPeak peak : peaks.getPeaks()) {
@@ -130,19 +121,37 @@ public class PcaUtils {
 		return peakInInterval;
 	}
 
-	public static Map<Integer, List<IPeak>> getPeaksAtIntervals(List<Integer> retentionTime, ISample sample) {
+	public static List<IPeak> getPeaks(ISample sample, int leftRetentionTimeBound, int rightRetentionTimeBound) {
 
-		Map<Integer, List<IPeak>> peaksAtInterval = new HashMap<>();
 		IPeaks peaks = sample.getPcaResult().getPeaks();
 		if(peaks != null) {
-			int leftRetentionTimeBound = 0;
-			for(int i = 0; i < retentionTime.size(); i++) {
-				List<IPeak> peakAtInterval = getPeaksAtInterval(peaks, leftRetentionTimeBound, retentionTime.get(i));
-				peaksAtInterval.put(retentionTime.get(i), peakAtInterval);
-				leftRetentionTimeBound = retentionTime.get(i);
-			}
+			return getPeaks(peaks, leftRetentionTimeBound, rightRetentionTimeBound);
 		}
-		return peaksAtInterval;
+		return null;
+	}
+
+	public static List<TreeSet<String>> getPeaksNames(List<Integer> retentionTime, List<ISample> samples) {
+
+		List<TreeSet<String>> map = new ArrayList<>(retentionTime.size());
+		for(int i = 0; i < retentionTime.size(); i++) {
+			map.add(new TreeSet<>());
+		}
+		int leftRetentionTimeBound = 0;
+		int rightRetentionTimeBound = 0;
+		for(int j = 0; j < retentionTime.size(); j++) {
+			rightRetentionTimeBound = retentionTime.get(j);
+			for(ISample sample : samples) {
+				List<IPeak> peakList = getPeaks(sample, leftRetentionTimeBound, rightRetentionTimeBound);
+				for(IPeak peak : peakList) {
+					List<IPeakTarget> target = peak.getTargets();
+					if(!target.isEmpty()) {
+						map.get(j).add(target.get(0).getLibraryInformation().getName());
+					}
+				}
+			}
+			leftRetentionTimeBound = rightRetentionTimeBound;
+		}
+		return map;
 	}
 
 	public static void sortSampleListByErrorMemberShip(List<ISample> samples, boolean inverse) {

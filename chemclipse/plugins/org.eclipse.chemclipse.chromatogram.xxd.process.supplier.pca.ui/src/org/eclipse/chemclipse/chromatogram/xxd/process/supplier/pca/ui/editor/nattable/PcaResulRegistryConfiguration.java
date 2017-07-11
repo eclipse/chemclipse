@@ -19,7 +19,10 @@ import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.CellConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.data.convert.DefaultDoubleDisplayConverter;
+import org.eclipse.nebula.widgets.nattable.style.CellStyleAttributes;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
+import org.eclipse.nebula.widgets.nattable.style.HorizontalAlignmentEnum;
+import org.eclipse.nebula.widgets.nattable.style.Style;
 
 public class PcaResulRegistryConfiguration extends AbstractRegistryConfiguration {
 
@@ -65,8 +68,15 @@ public class PcaResulRegistryConfiguration extends AbstractRegistryConfiguration
 		}
 		// Set format for retention times
 		DefaultDoubleDisplayConverter formatRetTime = new DefaultDoubleDisplayConverter();
+		formatRetTime.setNumberFormat(ValueFormat.getNumberFormatEnglish());
 		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
 				formatRetTime, DisplayMode.NORMAL, //
 				TableProvider.COLUMN_LABEL_RETENTION_TIMES);
+		// Set style for compound
+		Style style = new Style();
+		style.setAttributeValue(CellStyleAttributes.HORIZONTAL_ALIGNMENT, HorizontalAlignmentEnum.LEFT);
+		configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, //
+				style, DisplayMode.NORMAL, //
+				TableProvider.COLUMN_LABEL_PEAKS_NAMES);
 	}
 }

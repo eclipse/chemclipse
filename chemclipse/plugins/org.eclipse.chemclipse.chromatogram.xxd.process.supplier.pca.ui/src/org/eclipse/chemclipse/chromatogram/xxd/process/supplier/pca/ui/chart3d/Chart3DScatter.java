@@ -41,11 +41,11 @@ public class Chart3DScatter {
 		}
 	}
 
+	static private EventType<UpdateSelectionEvent> SELECTION_UPDATE = new EventType<>("SELECTION_UPDATE");
 	private Chart3DData data;
 	final private NumberFormat format = ValueFormat.getNumberFormatEnglish();
 	private final Group mainGroup = new Group();
 	private double radius;
-	private EventType<UpdateSelectionEvent> SELECTION_UPDATE = new EventType<>("SELECTION_UPDATE");
 
 	public Chart3DScatter(Chart3DData chart3dData) {
 		this.data = chart3dData;
