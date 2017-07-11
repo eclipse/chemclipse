@@ -82,7 +82,7 @@ public class ScorePlotPage {
 		 * Selection of the plotted PCs
 		 */
 		Composite spinnerComposite = new Composite(parent, SWT.NONE);
-		spinnerComposite.setLayout(new GridLayout(5, false));
+		spinnerComposite.setLayout(new GridLayout(6, false));
 		spinnerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		Label label;
@@ -116,10 +116,15 @@ public class ScorePlotPage {
 				reloadScorePlotChart();
 			}
 		});
+		button = new Button(spinnerComposite, SWT.PUSH);
+		button.setText(" Select samples");
+		button.addListener(SWT.Selection, e -> {
+			pcaEditor.openSamplesSelectionDialog();
+		});
 		/*
 		 * Plot the PCA chart.
 		 */
-		Composite chartComposite = new Composite(parent, SWT.NONE);
+		Composite chartComposite = new Composite(parent, SWT.BORDER);
 		chartComposite.setLayout(new GridLayout(1, true));
 		chartComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//

@@ -52,6 +52,7 @@ public class SamplesSelectionTree {
 		 * clear all
 		 */
 		tree.clearAll(true);
+		tree.removeAll();
 		samples.clear();
 		/*
 		 * insert and sort samples
@@ -82,6 +83,7 @@ public class SamplesSelectionTree {
 			treeItem = new TreeItem(groupTreeItem, SWT.None);
 			setSampleTreeItem(sample, treeItem);
 			isSelectSample = isSelectSample || sample.isSelected();
+			groupTreeItem.setExpanded(true);
 			while(it.hasNext()) {
 				sample = it.next();
 				if(ObjectUtils.compare(sample.getGroupName(), groupName) == 0) {
