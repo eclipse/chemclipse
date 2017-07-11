@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.CellConfigAttributes;
@@ -20,8 +23,11 @@ import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 
 public class PcaResulRegistryConfiguration extends AbstractRegistryConfiguration {
 
-	public PcaResulRegistryConfiguration() {
+	private TableProvider provider;
+
+	public PcaResulRegistryConfiguration(TableProvider provider) {
 		super();
+		this.provider = provider;
 	}
 
 	@Override
@@ -33,18 +39,34 @@ public class PcaResulRegistryConfiguration extends AbstractRegistryConfiguration
 	private void setFormatCell(IConfigRegistry configRegistry) {
 
 		// Set format for sample data
-		DefaultDoubleDisplayConverter format = new DefaultDoubleDisplayConverter();
-		format.setNumberFormat(ValueFormat.getNumberFormatEnglish());
-		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
-				format, DisplayMode.NORMAL, //
-				TableProvider.COLUMN_LABEL_GROUP_DATA);
-		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
-				format, DisplayMode.NORMAL, //
-				TableProvider.COLUMN_LABEL_SAMPLE_DATA);
+		String norm = provider.getNormalizationData();
+		configRegistry.unregisterConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, DisplayMode.NORMAL, TableProvider.COLUMN_LABEL_GROUP_DATA);
+		configRegistry.unregisterConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, DisplayMode.NORMAL, TableProvider.COLUMN_LABEL_SAMPLE_DATA);
+		if(norm.equals(TableProvider.NORMALIZATION_NONE)) {
+			DefaultDoubleDisplayConverter format = new DefaultDoubleDisplayConverter();
+			format.setNumberFormat(ValueFormat.getNumberFormatEnglish());
+			configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
+					format, DisplayMode.NORMAL, //
+					TableProvider.COLUMN_LABEL_GROUP_DATA);
+			configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
+					format, DisplayMode.NORMAL, //
+					TableProvider.COLUMN_LABEL_SAMPLE_DATA);
+		} else if(norm.equals(TableProvider.NORMALIZATION_COLUMN) || norm.equals(TableProvider.NORMALIZATION_ROW)) {
+			NumberFormat percentFormat = NumberFormat.getPercentInstance(Locale.US);
+			percentFormat.setMaximumFractionDigits(3);
+			DefaultDoubleDisplayConverter format = new DefaultDoubleDisplayConverter();
+			format.setNumberFormat(percentFormat);
+			configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
+					format, DisplayMode.NORMAL, //
+					TableProvider.COLUMN_LABEL_GROUP_DATA);
+			configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
+					format, DisplayMode.NORMAL, //
+					TableProvider.COLUMN_LABEL_SAMPLE_DATA);
+		}
 		// Set format for retention times
+		DefaultDoubleDisplayConverter formatRetTime = new DefaultDoubleDisplayConverter();
 		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
-				format, DisplayMode.NORMAL, //
+				formatRetTime, DisplayMode.NORMAL, //
 				TableProvider.COLUMN_LABEL_RETENTION_TIMES);
-		//
 	}
 }

@@ -27,9 +27,9 @@ public class Group implements IGroup {
 	private String name;
 	private IPcaResult pcaResult;
 
-	public Group(String name) {
+	public Group() {
 		isSelected = true;
-		this.name = name;
+		this.name = "Group";
 		this.pcaResult = new PcaResult();
 	}
 

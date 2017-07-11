@@ -40,7 +40,7 @@ public class PcaUtils {
 		for(Iterator<String> iterator = groupNames.iterator(); iterator.hasNext();) {
 			String groupName = iterator.next();
 			if(groupName != null) {
-				Group group = new Group("mean");
+				Group group = new Group();
 				group.setGroupName(groupName);
 				group.setPcaResult(newSamples);
 				groups.add(group);
