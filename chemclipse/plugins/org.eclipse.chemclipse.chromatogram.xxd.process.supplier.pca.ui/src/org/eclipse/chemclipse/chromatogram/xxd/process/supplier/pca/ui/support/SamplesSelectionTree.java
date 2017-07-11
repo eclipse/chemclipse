@@ -74,6 +74,11 @@ public class SamplesSelectionTree {
 			ISample sample = it.next();
 			groupTreeItem = new TreeItem(tree, SWT.None);
 			groupName = sample.getGroupName();
+			if(groupName != null) {
+				groupTreeItem.setText(groupName);
+			} else {
+				groupTreeItem.setText("----");
+			}
 			treeItem = new TreeItem(groupTreeItem, SWT.None);
 			setSampleTreeItem(sample, treeItem);
 			isSelectSample = isSelectSample || sample.isSelected();
@@ -90,12 +95,12 @@ public class SamplesSelectionTree {
 					 */
 					groupTreeItem = new TreeItem(tree, SWT.None);
 					isSelectSample = false;
+					groupName = sample.getGroupName();
 					if(groupName != null) {
 						groupTreeItem.setText(groupName);
 					} else {
 						groupTreeItem.setText("----");
 					}
-					groupName = sample.getGroupName();
 					treeItem = new TreeItem(groupTreeItem, SWT.None);
 					setSampleTreeItem(sample, treeItem);
 					isSelectSample = isSelectSample || sample.isSelected();
