@@ -29,6 +29,7 @@ public class Colors {
 	public static final Color GREEN = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
 	public static final Color GRAY = Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
 	public static final Color DARK_GRAY = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY);
+	public static final Color CYAN = Display.getCurrent().getSystemColor(SWT.COLOR_CYAN);
 	public static final Color DARK_CYAN = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_CYAN);
 	public static final Color DARK_YELLOW = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_YELLOW);
 	public static final Color DARK_GREEN = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN);
