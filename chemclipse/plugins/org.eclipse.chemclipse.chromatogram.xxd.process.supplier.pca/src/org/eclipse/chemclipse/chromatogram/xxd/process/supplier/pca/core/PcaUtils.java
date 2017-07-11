@@ -142,10 +142,12 @@ public class PcaUtils {
 			rightRetentionTimeBound = retentionTime.get(j);
 			for(ISample sample : samples) {
 				List<IPeak> peakList = getPeaks(sample, leftRetentionTimeBound, rightRetentionTimeBound);
-				for(IPeak peak : peakList) {
-					List<IPeakTarget> target = peak.getTargets();
-					if(!target.isEmpty()) {
-						map.get(j).add(target.get(0).getLibraryInformation().getName());
+				if(peakList != null) {
+					for(IPeak peak : peakList) {
+						List<IPeakTarget> target = peak.getTargets();
+						if(!target.isEmpty()) {
+							map.get(j).add(target.get(0).getLibraryInformation().getName());
+						}
 					}
 				}
 			}
