@@ -85,10 +85,10 @@ public class ErrorResiduePage {
 		/*
 		 * Plot the Error residue chart.
 		 */
-		Composite chartComposite = new Composite(parent, SWT.NONE);
+		Composite chartComposite = new Composite(parent, SWT.BORDER);
 		chartComposite.setLayout(new GridLayout(1, true));
 		chartComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		errorResidueChart = new ErrorResidueBarChart(pcaEditor, chartComposite, formToolkit);
+		errorResidueChart = new ErrorResidueBarChart(pcaEditor, chartComposite, new GridData(GridData.FILL_BOTH));
 		tabItem.setControl(composite);
 	}
 

@@ -51,7 +51,6 @@ import org.eclipse.nebula.widgets.nattable.ui.menu.AbstractHeaderMenuConfigurati
 import org.eclipse.nebula.widgets.nattable.ui.menu.PopupMenuBuilder;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class PeakListNatTable {
 
@@ -62,16 +61,16 @@ public class PeakListNatTable {
 	private TableData tableData;
 	private TableProvider tableProvider;
 
-	public PeakListNatTable(PcaEditor pcaEditor, Composite parent, FormToolkit formToolkit) {
+	public PeakListNatTable(PcaEditor pcaEditor, Composite parent, Object layoutData) {
 		tableData = new TableData(pcaEditor);
 		tableProvider = new TableProvider(tableData);
-		createPeakListIntensityTableSection(parent);
+		createPeakListIntensityTableSection(parent, layoutData);
 	}
 
 	/**
 	 * Create peak List intensity table
 	 */
-	private void createPeakListIntensityTableSection(Composite parent) {
+	private void createPeakListIntensityTableSection(Composite parent, Object layoutData) {
 
 		sortModel = new SortModel(tableProvider);
 		final PcaResulDataProvider dataProvider = new PcaResulDataProvider(tableProvider, sortModel);
@@ -110,6 +109,7 @@ public class PeakListNatTable {
 		 */
 		GridLayer gridLayer = new GridLayer(compositeFreezeLayer, columnGroupHeaderLayer, rowHeaderLayer, cornerLayer);
 		natTable = new NatTable(parent, gridLayer, false);
+		natTable.setLayoutData(layoutData);
 		final ConfigRegistry configRegistry = new ConfigRegistry();
 		natTable.setConfigRegistry(configRegistry);
 		natTable.addConfiguration(new DefaultNatTableStyleConfiguration());
@@ -216,11 +216,6 @@ public class PeakListNatTable {
 	public ExportData getExporter() {
 
 		return exportData;
-	}
-
-	public NatTable getNatTable() {
-
-		return natTable;
 	}
 
 	public void setDataNormalization(String normalization) {

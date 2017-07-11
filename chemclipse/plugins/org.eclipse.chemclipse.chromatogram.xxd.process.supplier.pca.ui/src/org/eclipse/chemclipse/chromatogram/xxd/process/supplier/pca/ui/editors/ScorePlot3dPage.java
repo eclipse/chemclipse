@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d.S
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -47,10 +46,7 @@ public class ScorePlot3dPage {
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("3D Score Plot");
 		//
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new FillLayout());
-		//
-		Composite parent = new Composite(composite, SWT.NONE);
+		Composite parent = new Composite(tabFolder, SWT.NONE);
 		parent.setLayout(new GridLayout(1, true));
 		parent.setLayoutData(GridData.FILL_BOTH);
 		/*
@@ -62,8 +58,6 @@ public class ScorePlot3dPage {
 		//
 		Label label;
 		GridData gridData = new GridData();
-		gridData.widthHint = 50;
-		gridData.heightHint = 20;
 		//
 		label = new Label(spinnerComposite, SWT.NONE);
 		label.setText("PC X-Axis: ");
@@ -109,9 +103,10 @@ public class ScorePlot3dPage {
 		 */
 		Composite chartComposite = new Composite(parent, SWT.BORDER);
 		chartComposite.setLayout(new GridLayout(1, true));
-		chartComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		scorePlot3d = new ScorePlot3d(pcaEditor, chartComposite, formToolkit);
-		tabItem.setControl(composite);
+		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		chartComposite.setLayoutData(gridData);
+		scorePlot3d = new ScorePlot3d(pcaEditor, chartComposite, new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0));
+		tabItem.setControl(parent);
 	}
 
 	public void update() {

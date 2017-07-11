@@ -19,25 +19,20 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.na
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.TableProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportData;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.eclipse.ui.forms.widgets.Section;
 
 public class PeakListIntensityTablePage {
 
@@ -49,79 +44,22 @@ public class PeakListIntensityTablePage {
 		initialize(tabFolder, formToolkit);
 	}
 
-	private void createNormalizationButton(Composite parent, FormToolkit formToolkit) {
+	private void createButtonArea(Composite client) {
 
-		Composite composite = new Composite(parent, SWT.None);
-		composite.setLayout(new RowLayout());
-		Label label = new Label(composite, SWT.None);
-		label.setText("Normalization: ");
-		Button button = new Button(composite, SWT.RADIO);
-		button.setText("None");
-		button.addListener(SWT.Selection, (e) -> peakListIntensityTable.setDataNormalization(TableProvider.NORMALIZATION_NONE));
-		button.setSelection(true);
-		button = new Button(composite, SWT.RADIO);
-		button.setText("Row");
-		button.addListener(SWT.Selection, (e) -> peakListIntensityTable.setDataNormalization(TableProvider.NORMALIZATION_ROW));
-		button = new Button(composite, SWT.RADIO);
-		button.setText("Column");
-		button.addListener(SWT.Selection, (e) -> peakListIntensityTable.setDataNormalization(TableProvider.NORMALIZATION_COLUMN));
+		Composite parent = new Composite(client, SWT.None);
+		parent.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, false, true));
+		parent.setLayout(new FillLayout(SWT.VERTICAL));
+		createNormalizationButton(parent);
+		createExportDataSection(parent);
 	}
 
-	private void createPeakListIntensityTableSection(Composite parent, FormToolkit formToolkit) {
+	private void createExportDataSection(Composite parent) {
 
-		Composite client;
-		GridLayout layout;
-		/*
-		 * Section
-		 */
-		Section section = formToolkit.createSection(parent, Section.DESCRIPTION | ExpandableComposite.TITLE_BAR);
-		section.setText("Peak Intensity Table");
-		section.marginWidth = 5;
-		section.marginHeight = 5;
-		section.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		/*
-		 * Set the layout for the client.
-		 */
-		client = formToolkit.createComposite(section, SWT.WRAP);
-		layout = new GridLayout();
-		layout.numColumns = 1;
-		layout.marginWidth = 2;
-		layout.marginHeight = 2;
-		client.setLayout(layout);
-		createNormalizationButton(client, formToolkit);
-		createTable(client, formToolkit);
-		section.setClient(client);
-		formToolkit.paintBordersFor(client);
-	}
-
-	private void createProcessDataSection(Composite parent, FormToolkit formToolkit) {
-
-		Composite client;
-		GridLayout layout;
-		/*
-		 * Section
-		 */
-		Section section = formToolkit.createSection(parent, Section.DESCRIPTION | ExpandableComposite.TITLE_BAR);
-		section.setText("Export data");
-		section.marginWidth = 5;
-		section.marginHeight = 5;
-		section.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		/*
-		 * Set the layout for the client.
-		 */
-		client = formToolkit.createComposite(section, SWT.WRAP);
-		layout = new GridLayout();
-		layout.numColumns = 3;
-		layout.marginWidth = 2;
-		layout.marginHeight = 2;
-		client.setLayout(layout);
-		section.setClient(client);
-		formToolkit.paintBordersFor(client);
-		/*
-		 * create export button
-		 */
+		Group client = new Group(parent, SWT.None);
+		client.setLayout(new FillLayout(SWT.VERTICAL));
+		client.setText("Export");
 		Button button = new Button(client, SWT.CHECK);
-		button.setText("Export means group");
+		button.setText("Export Means");
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -133,7 +71,7 @@ public class PeakListIntensityTablePage {
 		});
 		button.setSelection(true);
 		button = new Button(client, SWT.CHECK);
-		button.setText("Export samples");
+		button.setText("Export Samples");
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -145,18 +83,30 @@ public class PeakListIntensityTablePage {
 		});
 		button.setSelection(true);
 		button = new Button(client, SWT.Selection);
-		button.setText(" Export as ");
+		button.setText("Export");
 		button.addListener(SWT.Selection, e -> exportTableDialog());
 	}
 
-	private void createTable(Composite client, FormToolkit formToolkit) {
+	private void createNormalizationButton(Composite parent) {
 
-		Composite composite = new Composite(client, SWT.NONE);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		composite.setLayout(new GridLayout(1, false));
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(composite);
-		peakListIntensityTable = new PeakListNatTable(pcaEditor, composite, formToolkit);
-		peakListIntensityTable.getNatTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		Group client = new Group(parent, SWT.NONE);
+		client.setLayout(new FillLayout(SWT.VERTICAL));
+		client.setText("Normalization");
+		Button button = new Button(client, SWT.RADIO);
+		button.setText("None");
+		button.addListener(SWT.Selection, (e) -> peakListIntensityTable.setDataNormalization(TableProvider.NORMALIZATION_NONE));
+		button.setSelection(true);
+		button = new Button(client, SWT.RADIO);
+		button.setText("Row");
+		button.addListener(SWT.Selection, (e) -> peakListIntensityTable.setDataNormalization(TableProvider.NORMALIZATION_ROW));
+		button = new Button(client, SWT.RADIO);
+		button.setText("Column");
+		button.addListener(SWT.Selection, (e) -> peakListIntensityTable.setDataNormalization(TableProvider.NORMALIZATION_COLUMN));
+	}
+
+	private void createTable(Composite client) {
+
+		peakListIntensityTable = new PeakListNatTable(pcaEditor, client, new GridData(SWT.FILL, SWT.FILL, true, true));
 	}
 
 	private void exportTableDialog() {
@@ -194,15 +144,16 @@ public class PeakListIntensityTablePage {
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new FillLayout());
 		/*
-		 * Forms API
+		 * Set the layout for the client.
 		 */
-		formToolkit = new FormToolkit(composite.getDisplay());
-		ScrolledForm scrolledForm = formToolkit.createScrolledForm(composite);
-		Composite scrolledFormComposite = scrolledForm.getBody();
-		scrolledFormComposite.setLayout(new GridLayout(1, false));
-		scrolledForm.setText("Peak Intensity Table Editor");
-		createPeakListIntensityTableSection(scrolledFormComposite, formToolkit);
-		createProcessDataSection(scrolledFormComposite, formToolkit);
+		Composite client = new Composite(composite, SWT.NONE);
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		layout.marginWidth = 2;
+		layout.marginHeight = 2;
+		client.setLayout(layout);
+		createTable(client);
+		createButtonArea(client);
 		tabItem.setControl(composite);
 	}
 
