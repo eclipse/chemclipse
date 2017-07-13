@@ -14,7 +14,6 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.errorresidue.ErrorResidueBarChart;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.SamplesSelectionTree;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -22,8 +21,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -83,11 +80,7 @@ public class ErrorResiduePage {
 		button = new Button(propertiesComposite, SWT.PUSH);
 		button.setText(" Select samples");
 		button.addListener(SWT.Selection, e -> {
-			Shell shell = new Shell(Display.getCurrent());
-			shell.setLayout(new FillLayout());
-			new SamplesSelectionTree(pcaEditor, shell);
-			shell.pack();
-			shell.open();
+			pcaEditor.openSamplesSelectionDialog();
 		});
 		/*
 		 * Plot the Error residue chart.

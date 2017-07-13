@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaRe
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.ReEvaluateRunnable;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.SamplesSelectionDialog;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.ui.di.Focus;
@@ -76,6 +77,7 @@ public class PcaEditor {
 	private MPart part;
 	private IPcaResults pcaResults;
 	private PeakListIntensityTablePage peakListIntensityTablePage;
+	private SamplesSelectionDialog samplesSelectionDialog;
 	private ScorePlot3dPage scorePlot3dPage;
 	private ScorePlotPage scorePlotPage;
 	/*
@@ -87,6 +89,7 @@ public class PcaEditor {
 		//
 		pcaResults = new PcaResults(); // Default empty
 		pages = new ArrayList<Object>();
+		samplesSelectionDialog = new SamplesSelectionDialog(this);
 	}
 
 	@PostConstruct
@@ -111,6 +114,11 @@ public class PcaEditor {
 	public IPcaResults getPcaResults() {
 
 		return pcaResults;
+	}
+
+	public void openSamplesSelectionDialog() {
+
+		samplesSelectionDialog.open();
 	}
 
 	@PreDestroy
@@ -180,6 +188,7 @@ public class PcaEditor {
 		scorePlotPage.update();
 		errorResiduePage.update();
 		scorePlot3dPage.update();
+		samplesSelectionDialog.update();
 	}
 
 	public void runPcaCalculation() {
