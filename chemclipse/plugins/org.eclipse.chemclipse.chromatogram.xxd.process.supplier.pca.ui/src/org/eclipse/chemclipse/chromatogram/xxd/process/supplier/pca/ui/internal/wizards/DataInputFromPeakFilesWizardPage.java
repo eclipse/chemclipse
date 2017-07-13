@@ -81,6 +81,11 @@ public class DataInputFromPeakFilesWizardPage extends WizardPage {
 		button.addListener(SWT.Selection, (event) -> addFiles());
 		button.setText(" Select input files ");
 		inputFilesTable = new InputFilesTable(composite);
+		gridData = new GridData(GridData.FILL_BOTH);
+		gridData.heightHint = 400;
+		gridData.widthHint = 100;
+		gridData.verticalSpan = 5;
+		inputFilesTable.getTable().setLayoutData(gridData);
 		setControl(composite);
 	}
 

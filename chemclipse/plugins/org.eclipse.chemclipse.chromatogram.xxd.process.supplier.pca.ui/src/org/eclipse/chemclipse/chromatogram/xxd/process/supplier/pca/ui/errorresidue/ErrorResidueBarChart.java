@@ -29,7 +29,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.sun.javafx.charts.Legend;
 
@@ -72,11 +71,12 @@ public class ErrorResidueBarChart {
 	private XYChart.Series<String, Number> series = new XYChart.Series<>();
 	private int sortType;
 
-	public ErrorResidueBarChart(PcaEditor pcaEditor, Composite parent, FormToolkit formToolkit) {
+	public ErrorResidueBarChart(PcaEditor pcaEditor, Composite parent, Object layoutData) {
 		/*
 		 * JavaFX init
 		 */
 		fxCanvas = new FXCanvas(parent, SWT.NONE);
+		fxCanvas.setLayoutData(layoutData);
 		parent.addListener(SWT.Resize, (event) -> update());
 		this.pcaEditor = pcaEditor;
 		this.displayData = DISPLAY_SAMPLES;
@@ -166,7 +166,11 @@ public class ErrorResidueBarChart {
 	private Axis<String> getXAxis() {
 
 		CategoryAxis xAxis = new CategoryAxis();
-		xAxis.setLabel("Sample Names");
+		if(displayData == DISPLAY_SAMPLES) {
+			xAxis.setLabel("Sample Names");
+		} else {
+			xAxis.setLabel("Group Names");
+		}
 		return xAxis;
 	}
 

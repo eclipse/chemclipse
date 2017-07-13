@@ -15,7 +15,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.P
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import javafx.embed.swt.FXCanvas;
 import javafx.event.EventHandler;
@@ -47,11 +46,12 @@ public class ScorePlot3d {
 	private final double rotateModifier = 10;
 	private Chart3DScatter scatter;
 
-	public ScorePlot3d(PcaEditor pcaEditor, Composite parent, FormToolkit formToolkit) {
+	public ScorePlot3d(PcaEditor pcaEditor, Composite parent, Object dataLayout) {
 		/*
 		 * JavaFX init
 		 */
-		fxCanvas = new FXCanvas(parent, SWT.NONE);
+		fxCanvas = new FXCanvas(parent, SWT.None);
+		fxCanvas.setLayoutData(dataLayout);
 		data = new Chart3DData(pcaEditor);
 		axes = new Axes(data);
 		scatter = new Chart3DScatter(data);

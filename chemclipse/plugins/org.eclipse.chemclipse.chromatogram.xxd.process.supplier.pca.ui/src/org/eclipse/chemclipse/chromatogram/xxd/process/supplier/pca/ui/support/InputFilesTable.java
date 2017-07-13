@@ -25,7 +25,6 @@ import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
@@ -46,15 +45,7 @@ public class InputFilesTable {
 
 	private void createTable(Composite client) {
 
-		GridData gridData;
 		table = new Table(client, SWT.MULTI | SWT.BORDER);
-		gridData = new GridData(GridData.FILL_BOTH);
-		gridData.heightHint = 400;
-		// gridData.widthHint = 150;
-		gridData.widthHint = 100;
-		gridData.verticalSpan = 5;
-		// gridData.verticalSpan = 3;
-		table.setLayoutData(gridData);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 	}
@@ -62,6 +53,11 @@ public class InputFilesTable {
 	public List<IDataInputEntry> getDataInputEntries() {
 
 		return dataInputEntries;
+	}
+
+	public Table getTable() {
+
+		return table;
 	}
 
 	/**

@@ -34,12 +34,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.forms.widgets.TableWrapData;
-import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
 public class InputFilesPage {
 
@@ -52,7 +48,7 @@ public class InputFilesPage {
 	public InputFilesPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
 		this.pcaEditor = pcaEditor;
-		initialize(tabFolder, formToolkit);
+		initialize(tabFolder);
 	}
 
 	/**
@@ -61,10 +57,11 @@ public class InputFilesPage {
 	 * @param client
 	 * @param editorPart
 	 */
-	private void createAddButton(Composite client, GridData gridData, FormToolkit formToolkit) {
+	private void createAddButton(Composite client, GridData gridData) {
 
 		Button add;
-		add = formToolkit.createButton(client, "Add", SWT.PUSH);
+		add = new Button(client, SWT.PUSH);
+		add.setText("Add");
 		add.setLayoutData(gridData);
 		add.addSelectionListener(new SelectionAdapter() {
 
@@ -101,59 +98,30 @@ public class InputFilesPage {
 	 *
 	 * @param client
 	 */
-	private void createButtons(Composite client, FormToolkit formToolkit) {
+	private void createButtons(Composite client) {
 
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_BEGINNING);
 		//
-		createAddButton(client, gridData, formToolkit);
-		createRemoveButton(client, gridData, formToolkit);
-		createProcessButton(client, gridData, formToolkit);
+		createAddButton(client, gridData);
+		createRemoveButton(client, gridData);
+		createProcessButton(client, gridData);
 	}
 
-	private void createInputFilesSection(Composite parent, FormToolkit formToolkit) {
+	private void createInputFilesSection(Composite parent) {
 
-		Section section;
-		Composite client;
-		GridLayout layout;
-		/*
-		 * Section
-		 */
-		section = formToolkit.createSection(parent, Section.DESCRIPTION | ExpandableComposite.TITLE_BAR);
-		section.setText("Input files");
-		section.setDescription("Select the files to process. Use the add and remove buttons as needed. To edit group name click on cell. Click Run PCA to process the files. ");
-		section.marginWidth = 5;
-		section.marginHeight = 5;
-		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
-		/*
-		 * Set the layout for the client.
-		 */
-		client = formToolkit.createComposite(section, SWT.WRAP);
-		layout = new GridLayout();
+		Composite client = new Composite(parent, SWT.None);
+		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
-		layout.marginWidth = 2;
-		layout.marginHeight = 2;
+		layout.marginWidth = 10;
+		layout.marginHeight = 10;
 		client.setLayout(layout);
-		Label label;
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalIndent = 20;
-		gridData.heightHint = 30;
-		gridData.horizontalSpan = 2;
-		/*
-		 * Label II
-		 */
-		label = formToolkit.createLabel(client, "");
-		label.setLayoutData(gridData);
 		/*
 		 * Creates the table and the action buttons.
 		 */
 		createTable(client);
-		createButtons(client, formToolkit);
-		createLabels(client, formToolkit);
-		/*
-		 * Add the client to the section and paint flat borders.
-		 */
-		section.setClient(client);
-		formToolkit.paintBordersFor(client);
+		createButtons(client);
+		createLabels(client);
+		client.pack();
 	}
 
 	/**
@@ -161,18 +129,20 @@ public class InputFilesPage {
 	 *
 	 * @param client
 	 */
-	private void createLabels(Composite client, FormToolkit formToolkit) {
+	private void createLabels(Composite client) {
 
-		countFiles = formToolkit.createLabel(client, FILES + "0", SWT.NONE);
+		countFiles = new Label(client, SWT.NONE);
+		countFiles.setText(FILES + "0");
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 		gridData.horizontalSpan = 2;
 		countFiles.setLayoutData(gridData);
 	}
 
-	private void createProcessButton(Composite client, GridData gridData, FormToolkit formToolkit) {
+	private void createProcessButton(Composite client, GridData gridData) {
 
 		Button process;
-		process = formToolkit.createButton(client, "Run PCA", SWT.PUSH);
+		process = new Button(client, SWT.PUSH);
+		process.setText("Run PCA");
 		process.setLayoutData(gridData);
 		process.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImageProvider.SIZE_16x16));
 		process.addSelectionListener(new SelectionAdapter() {
@@ -192,10 +162,11 @@ public class InputFilesPage {
 	 * @param client
 	 * @param editorPart
 	 */
-	private void createRemoveButton(Composite client, GridData gridData, FormToolkit formToolkit) {
+	private void createRemoveButton(Composite client, GridData gridData) {
 
 		Button remove;
-		remove = formToolkit.createButton(client, "Remove", SWT.PUSH);
+		remove = new Button(client, SWT.PUSH);
+		remove.setText("Remove");
 		remove.setLayoutData(gridData);
 		remove.addSelectionListener(new SelectionAdapter() {
 
@@ -212,6 +183,13 @@ public class InputFilesPage {
 	private void createTable(Composite client) {
 
 		this.inputFilesTable = new InputFilesTable(client);
+		Table table = inputFilesTable.getTable();
+		GridData gridData;
+		gridData = new GridData(GridData.FILL_BOTH);
+		gridData.heightHint = 400;
+		gridData.widthHint = 100;
+		gridData.verticalSpan = 5;
+		table.setLayoutData(gridData);
 	}
 
 	public List<IDataInputEntry> getDataInputEntries() {
@@ -219,24 +197,16 @@ public class InputFilesPage {
 		return inputFilesTable.getDataInputEntries();
 	}
 
-	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
+	private void initialize(TabFolder tabFolder) {
 
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Data Input Files");
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new FillLayout());
 		/*
-		 * Forms API
-		 */
-		formToolkit = new FormToolkit(composite.getDisplay());
-		ScrolledForm scrolledForm = formToolkit.createScrolledForm(composite);
-		Composite scrolledFormComposite = scrolledForm.getBody();
-		scrolledFormComposite.setLayout(new TableWrapLayout());
-		scrolledForm.setText("Input File Editor");
-		/*
 		 * Create the section.
 		 */
-		createInputFilesSection(scrolledFormComposite, formToolkit);
+		createInputFilesSection(composite);
 		//
 		tabItem.setControl(composite);
 	}
