@@ -247,4 +247,5 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SEARCH = "search.gif";
 	String IMAGE_EVALUATE = "evaluate.gif";
 	String IMAGE_EVALUATED = "evaluated.gif";
+	String IMAGE_VALIDATE = "validate.gif";
 }
