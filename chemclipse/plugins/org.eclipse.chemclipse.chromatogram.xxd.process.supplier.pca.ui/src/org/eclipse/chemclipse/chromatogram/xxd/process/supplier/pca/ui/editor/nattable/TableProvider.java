@@ -74,7 +74,7 @@ public class TableProvider {
 
 		List<ISample> samples = dataTable.getSamples();
 		if(!samples.isEmpty()) {
-			return samples.get(0).getPcaResult().getSampleData().length;
+			return samples.get(0).getSampleData().size();
 		}
 		return 0;
 	}

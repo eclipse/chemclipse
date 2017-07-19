@@ -22,6 +22,7 @@ public class PcaResults implements IPcaResults {
 	private List<Integer> extractedRetentionTimes;
 	private int extractionType;
 	private List<IGroup> groups;
+	private List<Boolean> isSelectedReatentionTimes;
 	private int numberOfPrincipleComponents;
 	private List<ISample> pcaResultList;
 	private int retentionTimeWindow;
@@ -85,6 +86,12 @@ public class PcaResults implements IPcaResults {
 	}
 
 	@Override
+	public List<Boolean> isSelectedRetentionTimes() {
+
+		return isSelectedReatentionTimes;
+	}
+
+	@Override
 	public void setBasisVectors(List<double[]> basisVectors) {
 
 		this.basisVectors = basisVectors;
@@ -112,5 +119,11 @@ public class PcaResults implements IPcaResults {
 	public void setRetentionTimeWindow(int retentionTimeWindow) {
 
 		this.retentionTimeWindow = retentionTimeWindow;
+	}
+
+	@Override
+	public void setSelectedRetentionTimes(List<Boolean> isSelectedReatentionTimes) {
+
+		this.isSelectedReatentionTimes = isSelectedReatentionTimes;
 	}
 }

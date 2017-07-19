@@ -11,5 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-public interface IGroup extends ISample {
+import java.util.Set;
+
+import org.eclipse.chemclipse.model.core.IPeak;
+
+public interface ISampleData {
+
+	double getData();
+
+	double getNormalizeData();
+
+	Set<IPeak> getPeaks();
+
+	void setNormalizedData(double normalizedData);
+
+	void setPeaks(Set<IPeak> peaks);
 }

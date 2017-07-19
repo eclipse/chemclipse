@@ -13,15 +13,17 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
@@ -43,6 +45,7 @@ import org.eclipse.chemclipse.numeric.statistics.Calculations;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.ejml.example.PrincipalComponentAnalysis;
+import org.python.google.common.collect.TreeMultimap;
 
 public class PrincipleComponentProcessor {
 
@@ -68,6 +71,17 @@ public class PrincipleComponentProcessor {
 			}
 		}
 		return retentionTimeCondensed;
+	}
+
+	private List<Integer> calculateCondensedRetentionTimes(Map<String, Map<Integer, IPeak>> extractPeaks) {
+
+		Set<Integer> rententionTimes = new TreeSet<>();
+		for(Map.Entry<String, Map<Integer, IPeak>> extractPeak : extractPeaks.entrySet()) {
+			for(Integer retentionTime : extractPeak.getValue().keySet()) {
+				rententionTimes.add(retentionTime);
+			}
+		}
+		return new ArrayList<>(rententionTimes);
 	}
 
 	/**
@@ -173,6 +187,104 @@ public class PrincipleComponentProcessor {
 			}
 		}
 		return collectedRetentionTimes;
+	}
+
+	private Map<String, Map<Integer, IPeak>> exctractPcaPeakMap(Map<String, IPeaks> peakMap, int retentionTimeWindow) {
+
+		Map<String, TreeMap<Integer, IPeak>> pcaPeakRetetntionTimeMap = new HashMap<>();
+		Map<String, Map<Integer, IPeak>> pcaPeakRetetntionTimeMaxMap = new HashMap<>();
+		int totalCountPeak = 0;
+		for(Map.Entry<String, IPeaks> peakEnry : peakMap.entrySet()) {
+			String name = peakEnry.getKey();
+			IPeaks peaks = peakEnry.getValue();
+			TreeMap<Integer, IPeak> peakTree = new TreeMap<>();
+			for(IPeak peak : peaks.getPeaks()) {
+				int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
+				peakTree.put(retentionTime, peak);
+			}
+			totalCountPeak += peakTree.size();
+			pcaPeakRetetntionTimeMap.put(name, peakTree);
+		}
+		while(totalCountPeak != 0) {
+			Map<Integer, Double> peakSum = new HashMap<>();
+			for(TreeMap<Integer, IPeak> peaks : pcaPeakRetetntionTimeMap.values()) {
+				for(IPeak peak : peaks.values()) {
+					int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
+					for(int i = retentionTime - retentionTimeWindow; i <= retentionTime + retentionTimeWindow; i++) {
+						int dis = Math.abs(i - retentionTime);
+						double value = 1.0 / ((dis + 1) * (dis + 1));
+						Double actualValue = peakSum.get(i);
+						if(actualValue == null) {
+							peakSum.put(i, value);
+						} else {
+							peakSum.put(i, value + actualValue);
+						}
+					}
+				}
+			}
+			TreeMultimap<Double, Integer> tree = TreeMultimap.create((o1, o2) -> Double.compare(o2, o1), (o1, o2) -> Integer.compare(o1, o2));
+			peakSum.forEach((k, v) -> {
+				if(!(v < 1)) {
+					tree.put(v, k);
+				}
+			});
+			Iterator<Map.Entry<Double, Collection<Integer>>> it = tree.asMap().entrySet().iterator();
+			TreeSet<Integer> map = new TreeSet<>();
+			while(it.hasNext() && (totalCountPeak != 0)) {
+				Map.Entry<Double, Collection<Integer>> entry = it.next();
+				Collection<Integer> retentionTimesMax = entry.getValue();
+				for(Integer retentionTimeMax : retentionTimesMax) {
+					Integer colosest = getClosest(map, retentionTimeMax);
+					if(colosest != null) {
+						if(Math.abs(colosest - retentionTimeMax) < (2 * retentionTimeWindow)) {
+							continue;
+						}
+					}
+					map.add(retentionTimeMax);
+					for(Map.Entry<String, TreeMap<Integer, IPeak>> pcaPeakRetetntionTime : pcaPeakRetetntionTimeMap.entrySet()) {
+						TreeMap<Integer, IPeak> peakTree = pcaPeakRetetntionTime.getValue();
+						String name = pcaPeakRetetntionTime.getKey();
+						IPeak peakClosest = getClosestPeak(peakTree, retentionTimeMax);
+						if(peakClosest != null) {
+							int peakRetentionTime = peakClosest.getPeakModel().getRetentionTimeAtPeakMaximum();
+							int dist = Math.abs(retentionTimeMax - peakRetentionTime);
+							if(dist <= retentionTimeWindow) {
+								totalCountPeak--;
+								peakTree.remove(peakRetentionTime);
+								Map<Integer, IPeak> extractPeaks = pcaPeakRetetntionTimeMaxMap.get(name);
+								if(extractPeaks == null) {
+									extractPeaks = new HashMap<>();
+									extractPeaks.put(retentionTimeMax, peakClosest);
+									pcaPeakRetetntionTimeMaxMap.put(name, extractPeaks);
+								} else {
+									extractPeaks.put(retentionTimeMax, peakClosest);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return pcaPeakRetetntionTimeMaxMap;
+	}
+
+	Map<String, double[]> exctractPcaPeakMap(Map<String, Map<Integer, IPeak>> extractPeaks, List<Integer> rententionTimes) {
+
+		Map<String, double[]> peaksMap = new HashMap<>();
+		for(Map.Entry<String, Map<Integer, IPeak>> entry : extractPeaks.entrySet()) {
+			String name = entry.getKey();
+			Map<Integer, IPeak> peaks = entry.getValue();
+			double[] samples = new double[rententionTimes.size()];
+			for(int i = 0; i < rententionTimes.size(); i++) {
+				int retentionTime = rententionTimes.get(i);
+				IPeak peak = peaks.get(retentionTime);
+				if(peak != null) {
+					samples[i] = peak.getIntegratedArea();
+				}
+			}
+			peaksMap.put(name, samples);
+		}
+		return peaksMap;
 	}
 
 	/**
@@ -422,6 +534,42 @@ public class PrincipleComponentProcessor {
 		return basisVectors;
 	}
 
+	private Integer getClosest(TreeSet<Integer> peakTree, int retentionTime) {
+
+		Integer peakRetentionTimeCeil = peakTree.ceiling(retentionTime);
+		Integer peakRetentionTimeFlour = peakTree.floor(retentionTime);
+		if(peakRetentionTimeCeil != null && peakRetentionTimeFlour != null) {
+			if((peakRetentionTimeCeil - retentionTime) < (retentionTime - peakRetentionTimeFlour)) {
+				return peakRetentionTimeCeil;
+			} else {
+				return peakRetentionTimeFlour;
+			}
+		} else if(peakRetentionTimeCeil != null) {
+			return peakRetentionTimeCeil;
+		} else if(peakRetentionTimeFlour != null) {
+			return peakRetentionTimeFlour;
+		}
+		return null;
+	}
+
+	private IPeak getClosestPeak(TreeMap<Integer, IPeak> peakTree, int retentionTime) {
+
+		Map.Entry<Integer, IPeak> peakRetentionTimeCeil = peakTree.ceilingEntry(retentionTime);
+		Map.Entry<Integer, IPeak> peakRetentionTimeFlour = peakTree.floorEntry(retentionTime);
+		if(peakRetentionTimeCeil != null && peakRetentionTimeFlour != null) {
+			if((peakRetentionTimeCeil.getKey() - retentionTime) < (retentionTime - peakRetentionTimeFlour.getKey())) {
+				return peakRetentionTimeCeil.getValue();
+			} else {
+				return peakRetentionTimeFlour.getValue();
+			}
+		} else if(peakRetentionTimeCeil != null) {
+			return peakRetentionTimeCeil.getValue();
+		} else if(peakRetentionTimeFlour != null) {
+			return peakRetentionTimeFlour.getValue();
+		}
+		return null;
+	}
+
 	/**
 	 * Initializes the PCA analysis.
 	 *
@@ -585,7 +733,7 @@ public class PrincipleComponentProcessor {
 		 * 1 = Scans
 		 * I've changed to 0 by default for a showcase.
 		 */
-		if(extractionType < 0 || extractionType > 1) {
+		if(extractionType < 0 || extractionType > 2) {
 			extractionType = 0;
 		}
 		List<IDataInputEntry> dataInputEntries = removeFileSameName(dataInputEntriesAll);
@@ -617,7 +765,7 @@ public class PrincipleComponentProcessor {
 			int sampleSize = extractedRetentionTimes.size();
 			pcaResults.setExtractedRetentionTimes(extractedRetentionTimes);
 			Map<String, double[]> pcaPeakMap = extractPcaPeakMap(peakMap, extractedRetentionTimes, retentionTimeWindow);
-			normalizeIntensityValues(pcaPeakMap);
+			// normalizeIntensityValues(pcaPeakMap);
 			/*
 			 * Run PCA
 			 */
@@ -649,13 +797,29 @@ public class PrincipleComponentProcessor {
 			List<double[]> basisVectors = getBasisVectors(principleComponentAnalysis, numberOfPrincipleComponents);
 			pcaResults.setBasisVectors(basisVectors);
 			setEigenSpaceAndErrorValues(principleComponentAnalysis, pcaScanMap, pcaResults);
+		} else if(extractionType == 2) {
+			/*
+			 * Read Peaks and prepare intensity values.
+			 */
+			monitor.subTask("Extract peak values");
+			Map<String, IPeaks> peakMap = extractPeaks(inputFiles, monitor);
+			monitor.subTask("Prepare peak values");
+			preparePcaResults(peakMap, pcaResults);
+			Map<String, Map<Integer, IPeak>> extractPeaks = exctractPcaPeakMap(peakMap, retentionTimeWindow);
+			List<Integer> extractedRetentionTimes = calculateCondensedRetentionTimes(extractPeaks);
+			int sampleSize = extractedRetentionTimes.size();
+			pcaResults.setExtractedRetentionTimes(extractedRetentionTimes);
+			Map<String, double[]> pcaPeakMap = exctractPcaPeakMap(extractPeaks, extractedRetentionTimes);
+			normalizeIntensityValues(pcaPeakMap);
+			/*
+			 * Run PCA
+			 */
+			monitor.subTask("Run PCA");
+			PrincipalComponentAnalysis principleComponentAnalysis = initializePCA(pcaPeakMap, sampleSize, numberOfPrincipleComponents);
+			List<double[]> basisVectors = getBasisVectors(principleComponentAnalysis, numberOfPrincipleComponents);
+			pcaResults.setBasisVectors(basisVectors);
+			setEigenSpaceAndErrorValues(principleComponentAnalysis, pcaPeakMap, pcaResults);
 		}
-		/*
-		 * insert groups
-		 */
-		List<ISample> samples = pcaResults.getSampleList();
-		List<IGroup> groups = PcaUtils.createGroup(samples);
-		pcaResults.getGroupList().addAll(groups);
 		/*
 		 * Return result.
 		 */

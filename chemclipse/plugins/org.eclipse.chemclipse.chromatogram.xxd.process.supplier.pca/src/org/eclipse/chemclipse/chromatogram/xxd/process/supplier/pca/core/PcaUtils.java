@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
@@ -24,30 +23,12 @@ import java.util.TreeSet;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Group;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 
 public class PcaUtils {
-
-	public static List<IGroup> createGroup(List<ISample> samples) {
-
-		List<ISample> newSamples = new ArrayList<>(samples);
-		List<IGroup> groups = new ArrayList<>();
-		Set<String> groupNames = getGroupNames(newSamples);
-		for(Iterator<String> iterator = groupNames.iterator(); iterator.hasNext();) {
-			String groupName = iterator.next();
-			if(groupName != null) {
-				Group group = new Group();
-				group.setGroupName(groupName);
-				group.setPcaResult(newSamples);
-				groups.add(group);
-			}
-		}
-		return groups;
-	}
 
 	/**
 	 *
@@ -121,37 +102,27 @@ public class PcaUtils {
 		return peakInInterval;
 	}
 
-	public static List<IPeak> getPeaks(ISample sample, int leftRetentionTimeBound, int rightRetentionTimeBound) {
+	public static List<TreeSet<String>> getPeaksNames(List<ISample> samples) {
 
-		IPeaks peaks = sample.getPcaResult().getPeaks();
-		if(peaks != null) {
-			return getPeaks(peaks, leftRetentionTimeBound, rightRetentionTimeBound);
-		}
-		return null;
-	}
-
-	public static List<TreeSet<String>> getPeaksNames(List<Integer> retentionTime, List<ISample> samples) {
-
-		List<TreeSet<String>> map = new ArrayList<>(retentionTime.size());
-		for(int i = 0; i < retentionTime.size(); i++) {
-			map.add(new TreeSet<>());
-		}
-		int leftRetentionTimeBound = 0;
-		int rightRetentionTimeBound = 0;
-		for(int j = 0; j < retentionTime.size(); j++) {
-			rightRetentionTimeBound = retentionTime.get(j);
-			for(ISample sample : samples) {
-				List<IPeak> peakList = getPeaks(sample, leftRetentionTimeBound, rightRetentionTimeBound);
-				if(peakList != null) {
-					for(IPeak peak : peakList) {
-						List<IPeakTarget> target = peak.getTargets();
-						if(!target.isEmpty()) {
-							map.get(j).add(target.get(0).getLibraryInformation().getName());
+		List<TreeSet<String>> map = new ArrayList<>();
+		if(!samples.isEmpty()) {
+			int lenght = samples.get(0).getSampleData().size();
+			for(int i = 0; i < lenght; i++) {
+				map.add(new TreeSet<>());
+			}
+			for(int j = 0; j < lenght; j++) {
+				for(ISample sample : samples) {
+					Set<IPeak> peakList = sample.getSampleData().get(j).getPeaks();
+					if(peakList != null) {
+						for(IPeak peak : peakList) {
+							List<IPeakTarget> target = peak.getTargets();
+							if(!target.isEmpty()) {
+								map.get(j).add(target.get(0).getLibraryInformation().getName());
+							}
 						}
 					}
 				}
 			}
-			leftRetentionTimeBound = rightRetentionTimeBound;
 		}
 		return map;
 	}

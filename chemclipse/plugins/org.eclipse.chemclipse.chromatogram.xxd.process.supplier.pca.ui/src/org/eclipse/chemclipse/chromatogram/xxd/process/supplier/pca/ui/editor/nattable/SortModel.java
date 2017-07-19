@@ -17,6 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.nebula.widgets.nattable.sort.ISortModel;
 import org.eclipse.nebula.widgets.nattable.sort.SortDirectionEnum;
 
@@ -133,9 +134,9 @@ public class SortModel implements ISortModel {
 				 * sort by abundance
 				 */
 				ISample sample = tableProvider.getDataTable().getSamples().get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
-				final double[] sampleData = sample.getPcaResult().getSampleData();
+				List<ISampleData> sampleData = sample.getSampleData();
 				sortedRow.sort((i, j) -> {
-					return setDirection * Double.compare(sampleData[i], sampleData[j]);
+					return setDirection * Double.compare(sampleData.get(i).getNormalizeData(), sampleData.get(j).getNormalizeData());
 				});
 			}
 			this.isSorted = true;

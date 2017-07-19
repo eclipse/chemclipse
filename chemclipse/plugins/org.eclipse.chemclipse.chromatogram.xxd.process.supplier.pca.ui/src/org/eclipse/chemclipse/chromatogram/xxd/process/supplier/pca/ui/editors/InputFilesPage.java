@@ -151,6 +151,7 @@ public class InputFilesPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				super.widgetSelected(e);
+				pcaEditor.extractData();
 				pcaEditor.runPcaCalculation();
 			}
 		});

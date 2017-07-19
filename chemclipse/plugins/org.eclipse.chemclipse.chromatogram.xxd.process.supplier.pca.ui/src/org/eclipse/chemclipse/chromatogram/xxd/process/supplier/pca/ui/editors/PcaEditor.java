@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ResultE
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.ExtractDataRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.ReEvaluateRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.SamplesSelectionDialog;
@@ -65,6 +66,7 @@ public class PcaEditor {
 	private InputFilesPage inputFilesPage;
 	@Inject
 	private EModelService modelService;
+	private NormalizationPage normalizationPage;
 	/*
 	 * Pages
 	 */
@@ -105,10 +107,33 @@ public class PcaEditor {
 		//
 		pages.add(overviewPage = new OverviewPage(this, tabFolder, formToolkit));
 		pages.add(inputFilesPage = new InputFilesPage(this, tabFolder, formToolkit));
+		pages.add(normalizationPage = new NormalizationPage(this, tabFolder, formToolkit));
 		pages.add(peakListIntensityTablePage = new PeakListIntensityTablePage(this, tabFolder, formToolkit));
 		pages.add(scorePlotPage = new ScorePlotPage(this, tabFolder, formToolkit));
 		pages.add(errorResiduePage = new ErrorResiduePage(this, tabFolder, formToolkit));
 		pages.add(scorePlot3dPage = new ScorePlot3dPage(this, tabFolder, formToolkit));
+	}
+
+	public void extractData() {
+
+		int retentionTimeWindow = overviewPage.getRetentionTimeWindow();
+		overviewPage.getExtractionType();
+		List<IDataInputEntry> dataInputEntries = inputFilesPage.getDataInputEntries();
+		ExtractDataRunnable runnable = new ExtractDataRunnable(dataInputEntries, retentionTimeWindow, IPcaResults.EXTRACT_PEAK);
+		ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		try {
+			/*
+			 * Calculate the results and show the score plot page.
+			 */
+			monitor.run(true, true, runnable);
+			pcaResults = runnable.getPcaResults();
+			reloadExtractData();
+		} catch(InvocationTargetException e) {
+			logger.warn(e);
+			logger.warn(e.getCause());
+		} catch(InterruptedException e) {
+			logger.warn(e);
+		}
 	}
 
 	public IPcaResults getPcaResults() {
@@ -184,34 +209,32 @@ public class PcaEditor {
 
 	private void reloadCalculation() {
 
-		peakListIntensityTablePage.update();
 		scorePlotPage.update();
 		errorResiduePage.update();
 		scorePlot3dPage.update();
 		samplesSelectionDialog.update();
 	}
 
+	private void reloadExtractData() {
+
+		peakListIntensityTablePage.update();
+	}
+
 	public void runPcaCalculation() {
 
-		dirtyable.setDirty(true);
-		/*
-		 * Get the settings.
-		 */
-		int retentionTimeWindow = overviewPage.getRetentionTimeWindow();
 		int numberOfPrincipleComponents = overviewPage.getNumberOfPrincipleComponents();
-		int extractionType = overviewPage.getExtractionType();
-		List<IDataInputEntry> dataInputEntries = inputFilesPage.getDataInputEntries();
+		IPcaResults pcaResults = this.pcaResults;
+		dirtyable.setDirty(true);
 		/*
 		 * Run the process.
 		 */
-		PcaRunnable runnable = new PcaRunnable(dataInputEntries, retentionTimeWindow, numberOfPrincipleComponents, extractionType);
+		PcaRunnable runnable = new PcaRunnable(pcaResults, numberOfPrincipleComponents);
 		ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 		try {
 			/*
 			 * Calculate the results and show the score plot page.
 			 */
 			monitor.run(true, true, runnable);
-			pcaResults = runnable.getPcaResults();
 			reloadCalculation();
 			showScorePlotPage();
 		} catch(InvocationTargetException e) {

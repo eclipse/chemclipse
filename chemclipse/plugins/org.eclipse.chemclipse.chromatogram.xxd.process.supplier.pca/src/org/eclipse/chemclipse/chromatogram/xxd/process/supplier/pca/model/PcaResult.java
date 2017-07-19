@@ -17,9 +17,14 @@ public class PcaResult implements IPcaResult {
 
 	private double[] eigenSpace;
 	private double errorMemberShip;
+	private boolean isDisplayed;
 	private IPeaks peaks;
 	private double[] sampleData;
 	private ISlopes slopes;
+
+	public PcaResult() {
+		isDisplayed = true;
+	}
 
 	@Override
 	public double[] getEigenSpace() {
@@ -49,6 +54,18 @@ public class PcaResult implements IPcaResult {
 	public ISlopes getSlopes() {
 
 		return slopes;
+	}
+
+	@Override
+	public boolean isDisplayed() {
+
+		return isDisplayed;
+	}
+
+	@Override
+	public void setDisplayed(boolean displayed) {
+
+		this.isDisplayed = displayed;
 	}
 
 	@Override

@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import java.util.List;
+
 public interface ISample {
 
 	String getGroupName();
@@ -18,6 +20,8 @@ public interface ISample {
 	String getName();
 
 	IPcaResult getPcaResult();
+
+	List<ISampleData> getSampleData();
 
 	boolean isSelected();
 

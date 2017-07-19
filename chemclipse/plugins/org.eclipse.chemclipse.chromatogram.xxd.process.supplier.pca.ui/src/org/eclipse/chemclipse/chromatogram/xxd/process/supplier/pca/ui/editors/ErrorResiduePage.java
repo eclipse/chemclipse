@@ -101,6 +101,7 @@ public class ErrorResiduePage {
 
 	public void updateSelection() {
 
-		errorResidueChart.updateSelection();
+		errorResidueChart.update();
+		;
 	}
 }
