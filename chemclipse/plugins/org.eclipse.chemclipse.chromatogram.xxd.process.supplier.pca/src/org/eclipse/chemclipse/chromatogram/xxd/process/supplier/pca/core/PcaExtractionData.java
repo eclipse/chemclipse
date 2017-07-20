@@ -268,8 +268,13 @@ public class PcaExtractionData {
 			/*
 			 * Store the extracted abundance.
 			 */
-			ISampleData sampleData = new SampleData(abundance);
-			sampleData.setPeaks(setPeaks);
+			ISampleData sampleData;
+			if(Double.compare(0, abundance) != 0) {
+				sampleData = new SampleData(abundance);
+				sampleData.setPeaks(setPeaks);
+			} else {
+				sampleData = new SampleData();
+			}
 			sampleDataList.add(sampleData);
 		}
 		return sampleDataList;
@@ -479,7 +484,7 @@ public class PcaExtractionData {
 					sampleData.setPeaks(peaks);
 					sample.getSampleData().add(sampleData);
 				} else {
-					ISampleData sampleData = new SampleData(0);
+					ISampleData sampleData = new SampleData();
 					sample.getSampleData().add(sampleData);
 				}
 			}

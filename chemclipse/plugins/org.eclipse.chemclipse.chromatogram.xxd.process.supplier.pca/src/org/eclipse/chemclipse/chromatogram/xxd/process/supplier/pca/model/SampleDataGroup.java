@@ -45,13 +45,13 @@ public class SampleDataGroup implements ISampleData {
 	}
 
 	@Override
-	public double getNormalizeData() {
+	public double getNormalizedData() {
 
 		double sum = 0;
 		int count = 0;
 		for(ISample sample : samples) {
 			if(sample.isSelected()) {
-				sum += sample.getSampleData().get(order).getNormalizeData();
+				sum += sample.getSampleData().get(order).getNormalizedData();
 				count++;
 			}
 		}
@@ -66,6 +66,17 @@ public class SampleDataGroup implements ISampleData {
 	public Set<IPeak> getPeaks() {
 
 		return null;
+	}
+
+	@Override
+	public boolean isEmpty() {
+
+		for(ISample sample : samples) {
+			if(sample.isSelected() && !sample.getSampleData().get(order).isEmpty()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override

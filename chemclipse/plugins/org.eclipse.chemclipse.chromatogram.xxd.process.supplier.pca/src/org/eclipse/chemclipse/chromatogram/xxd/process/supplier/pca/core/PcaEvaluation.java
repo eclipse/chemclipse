@@ -42,7 +42,7 @@ public class PcaEvaluation {
 				int j = 0;
 				for(int i = 0; i < data.size(); i++) {
 					if(isSelected.get(i)) {
-						selectedSampleData[j] = data.get(i).getNormalizeData();
+						selectedSampleData[j] = data.get(i).getNormalizedData();
 						j++;
 					}
 				}

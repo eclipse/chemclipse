@@ -19,9 +19,11 @@ public interface ISampleData {
 
 	double getData();
 
-	double getNormalizeData();
+	double getNormalizedData();
 
 	Set<IPeak> getPeaks();
+
+	boolean isEmpty();
 
 	void setNormalizedData(double normalizedData);
 
