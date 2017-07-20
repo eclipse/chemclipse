@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.DoubleStream;
+import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
@@ -54,7 +54,7 @@ public class PcaNormalizationData {
 		for(ISample sample : pcaResults.getSampleList()) {
 			final double mean = getCenteringValue(sample);
 			final double deviation = getStandartDeviation(sample);
-			sample.getSampleData().forEach(d -> {
+			sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> {
 				double data = transformation.apply(d.getData());
 				double normData = 0;
 				if(deviation != 0) {
@@ -75,12 +75,12 @@ public class PcaNormalizationData {
 		List<ISampleData> sampleData = sample.getSampleData();
 		switch(centering) {
 			case CENTERING_MEAN:
-				return sampleData.stream().mapToDouble(s -> transformation.apply(s.getData())).summaryStatistics().getAverage();
+				return sampleData.stream().filter(d -> !d.isEmpty()).mapToDouble(s -> transformation.apply(s.getData())).summaryStatistics().getAverage();
 			case CENTERING_MEDIAN:
-				DoubleStream doubleStream = sampleData.stream().mapToDouble(s -> transformation.apply(s.getData())).sorted();
-				int lenght = sampleData.size();
-				double median = lenght % 2 == 0 ? doubleStream.skip(lenght / 2 - 1).limit(2).average().getAsDouble() // even
-						: doubleStream.skip(lenght / 2).findFirst().getAsDouble(); //
+				List<Double> data = sampleData.stream().filter(d -> !d.isEmpty()).mapToDouble(s -> transformation.apply(s.getData())).sorted().boxed().collect(Collectors.toList());
+				int lenght = data.size();
+				double median = lenght % 2 == 0 ? (data.get(lenght / 2 - 1) + data.get(lenght / 2)) / 2.0 // even
+						: data.get(lenght / 2); //
 				return median;
 			case CENTERING_NONE:
 				return 0;
@@ -91,12 +91,12 @@ public class PcaNormalizationData {
 
 	private double getMax(ISample sample) {
 
-		return sample.getSampleData().stream().mapToDouble(s -> transformation.apply(s.getData())).summaryStatistics().getMax();
+		return sample.getSampleData().stream().filter(d -> !d.isEmpty()).mapToDouble(s -> transformation.apply(s.getData())).summaryStatistics().getMax();
 	}
 
 	private double getMin(ISample sample) {
 
-		return sample.getSampleData().stream().mapToDouble(s -> transformation.apply(s.getData())).summaryStatistics().getMin();
+		return sample.getSampleData().stream().filter(d -> !d.isEmpty()).mapToDouble(s -> transformation.apply(s.getData())).summaryStatistics().getMin();
 	}
 
 	public String getScalingType() {
@@ -120,7 +120,7 @@ public class PcaNormalizationData {
 		int count = sampleData.size();
 		if(count > 1) {
 			final double mean = getCenteringValue(sample);
-			double sum = sampleData.stream().mapToDouble(d -> {
+			double sum = sampleData.stream().filter(d -> !d.isEmpty()).mapToDouble(d -> {
 				double data = transformation.apply(d.getData());
 				return (data - mean) * (data - mean);
 			}).sum();
@@ -133,7 +133,7 @@ public class PcaNormalizationData {
 
 		for(ISample sample : pcaResults.getSampleList()) {
 			final double mean = getCenteringValue(sample);
-			sample.getSampleData().forEach(d -> {
+			sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> {
 				double data = transformation.apply(d.getData());
 				double normData = 0;
 				if(mean != 0) {
@@ -149,7 +149,7 @@ public class PcaNormalizationData {
 		pcaResults.getSampleList().forEach(s -> {
 			final double mean = getCenteringValue(s);
 			final double max = getMax(s);
-			s.getSampleData().forEach(d -> {
+			s.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> {
 				double data = transformation.apply(d.getData());
 				double normData = 0;
 				if(max != 0) {
@@ -192,7 +192,7 @@ public class PcaNormalizationData {
 		for(ISample sample : pcaResults.getSampleList()) {
 			final double mean = getCenteringValue(sample);
 			final double deviationSqrt = Math.sqrt(getStandartDeviation(sample));
-			sample.getSampleData().forEach(d -> {
+			sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> {
 				double data = transformation.apply(d.getData());
 				double normData = 0;
 				if(deviationSqrt != 0) {
@@ -209,7 +209,7 @@ public class PcaNormalizationData {
 			final double mean = getCenteringValue(s);
 			final double max = getMax(s);
 			final double min = getMin(s);
-			s.getSampleData().forEach(d -> {
+			s.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> {
 				double data = transformation.apply(d.getData());
 				double normData = 0;
 				if(max != min) {
@@ -224,7 +224,7 @@ public class PcaNormalizationData {
 
 		for(ISample sample : pcaResults.getSampleList()) {
 			final double mean = getCenteringValue(sample);
-			sample.getSampleData().forEach(d -> {
+			sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> {
 				double data = transformation.apply(d.getData());
 				double normData = data - mean;
 				d.setNormalizedData(normData);
@@ -242,7 +242,7 @@ public class PcaNormalizationData {
 	public void setRawData(IPcaResults pcaResults) {
 
 		for(ISample sample : pcaResults.getSampleList()) {
-			sample.getSampleData().forEach(d -> {
+			sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> {
 				double data = d.getData();
 				d.setNormalizedData(data);
 			});
@@ -285,7 +285,7 @@ public class PcaNormalizationData {
 		for(ISample sample : pcaResults.getSampleList()) {
 			final double mean = getCenteringValue(sample);
 			final double variace = getVariance(sample);
-			sample.getSampleData().forEach(d -> {
+			sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> {
 				double data = transformation.apply(d.getData());
 				double normData = (data - mean) / variace * mean;
 				d.setNormalizedData(normData);

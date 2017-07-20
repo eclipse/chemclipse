@@ -18,12 +18,20 @@ import org.eclipse.chemclipse.model.core.IPeak;
 public class SampleData implements ISampleData {
 
 	private double data;
+	private boolean isEmpty;
 	private double normalizedData;
 	private Set<IPeak> peaks;
+
+	public SampleData() {
+		this.data = 0.0;
+		this.normalizedData = 0.0;
+		this.isEmpty = true;
+	}
 
 	public SampleData(double data) {
 		this.data = data;
 		this.normalizedData = data;
+		this.isEmpty = false;
 	}
 
 	@Override
@@ -33,7 +41,7 @@ public class SampleData implements ISampleData {
 	}
 
 	@Override
-	public double getNormalizeData() {
+	public double getNormalizedData() {
 
 		return normalizedData;
 	}
@@ -42,6 +50,12 @@ public class SampleData implements ISampleData {
 	public Set<IPeak> getPeaks() {
 
 		return peaks;
+	}
+
+	@Override
+	public boolean isEmpty() {
+
+		return isEmpty;
 	}
 
 	@Override

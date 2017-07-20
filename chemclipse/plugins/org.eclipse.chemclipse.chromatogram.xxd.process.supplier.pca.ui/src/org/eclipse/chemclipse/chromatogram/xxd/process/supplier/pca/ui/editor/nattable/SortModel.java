@@ -136,7 +136,7 @@ public class SortModel implements ISortModel {
 				ISample sample = tableProvider.getDataTable().getSamples().get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
 				List<ISampleData> sampleData = sample.getSampleData();
 				sortedRow.sort((i, j) -> {
-					return setDirection * Double.compare(sampleData.get(i).getNormalizeData(), sampleData.get(j).getNormalizeData());
+					return setDirection * Double.compare(sampleData.get(i).getNormalizedData(), sampleData.get(j).getNormalizedData());
 				});
 			}
 			this.isSorted = true;
