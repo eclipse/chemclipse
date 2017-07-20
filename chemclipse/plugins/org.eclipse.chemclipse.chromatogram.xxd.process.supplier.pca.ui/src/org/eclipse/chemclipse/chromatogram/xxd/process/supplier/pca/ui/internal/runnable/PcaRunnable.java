@@ -8,45 +8,31 @@
  *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Jan Holy - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PrincipleComponentProcessor;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaEvaluation;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class PcaRunnable implements IRunnableWithProgress {
 
-	private List<IDataInputEntry> dataInputEntries;
-	private int extractionType;
 	private int numberOfPrincipleComponents;
 	private IPcaResults pcaResults;
-	private int retentionTimeWindow;
 
-	public PcaRunnable(List<IDataInputEntry> dataInputEntries, int retentionTimeWindow, int numberOfPrincipleComponents, int exType) {
-		this.dataInputEntries = dataInputEntries;
-		this.retentionTimeWindow = retentionTimeWindow;
+	public PcaRunnable(IPcaResults pcaResults, int numberOfPrincipleComponents) {
 		this.numberOfPrincipleComponents = numberOfPrincipleComponents;
-		this.extractionType = exType;
-	}
-
-	public IPcaResults getPcaResults() {
-
-		return pcaResults;
+		this.pcaResults = pcaResults;
 	}
 
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		/*
-		 * Extraction type argument 0 for peaks, 1 for scans
-		 */
-		PrincipleComponentProcessor principleComponentProcessor = new PrincipleComponentProcessor();
-		pcaResults = principleComponentProcessor.process(dataInputEntries, retentionTimeWindow, numberOfPrincipleComponents, monitor, extractionType);
+		PcaEvaluation pcaEvaluation = new PcaEvaluation();
+		pcaEvaluation.process(pcaResults, numberOfPrincipleComponents, monitor);
 	}
 }

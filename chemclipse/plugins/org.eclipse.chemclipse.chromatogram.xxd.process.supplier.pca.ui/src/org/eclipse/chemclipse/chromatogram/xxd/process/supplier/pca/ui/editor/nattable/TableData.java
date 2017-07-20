@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
@@ -71,8 +72,8 @@ public class TableData {
 		/*
 		 * copy data and insert object ISample and IGroup and sort this object by group name
 		 */
-		samples.addAll(pcaResults.getSampleList());
-		samples.addAll(pcaResults.getGroupList());
+		samples.addAll(pcaResults.getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toList()));
+		samples.addAll(pcaResults.getGroupList().stream().filter(s -> s.isSelected()).collect(Collectors.toList()));
 		PcaUtils.sortSampleListByName(samples);
 		PcaUtils.sortSampleListByGroup(samples);
 		/*
@@ -83,7 +84,7 @@ public class TableData {
 		 * Set peaks names
 		 */
 		peaksNames.clear();
-		List<TreeSet<String>> names = PcaUtils.getPeaksNames(pcaResults.getExtractedRetentionTimes(), pcaResults.getSampleList());
+		List<TreeSet<String>> names = PcaUtils.getPeaksNames(pcaResults.getSampleList());
 		for(int i = 0; i < names.size(); i++) {
 			StringBuilder builder = new StringBuilder("");
 			TreeSet<String> set = names.get(i);

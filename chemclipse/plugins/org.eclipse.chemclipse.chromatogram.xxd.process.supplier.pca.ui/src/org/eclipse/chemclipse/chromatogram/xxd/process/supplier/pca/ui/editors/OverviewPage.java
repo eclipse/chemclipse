@@ -120,7 +120,7 @@ public class OverviewPage {
 				if(button.getText().equals("Peaks")) {
 					extractionType = 0;
 				} else {
-					extractionType = 1;
+					extractionType = 2;
 				}
 			};
 		};

@@ -26,11 +26,19 @@ public class Group implements IGroup {
 	private boolean isSelected;
 	private String name;
 	private IPcaResult pcaResult;
+	private List<ISampleData> sampleData;
 
-	public Group() {
+	public Group(List<ISample> samples) {
 		isSelected = true;
 		this.name = "Group";
 		this.pcaResult = new PcaResult();
+		this.sampleData = new ArrayList<>();
+		if(!samples.isEmpty()) {
+			int countData = samples.get(0).getSampleData().size();
+			for(int i = 0; i < countData; i++) {
+				sampleData.add(new SampleDataGroup(samples, i));
+			}
+		}
 	}
 
 	@Override
@@ -52,6 +60,12 @@ public class Group implements IGroup {
 	}
 
 	@Override
+	public List<ISampleData> getSampleData() {
+
+		return sampleData;
+	}
+
+	@Override
 	public boolean isSelected() {
 
 		return isSelected;
@@ -61,80 +75,6 @@ public class Group implements IGroup {
 	public void setGroupName(String groupName) {
 
 		this.groupName = groupName;
-	}
-
-	@Override
-	public void setPcaResult(IPcaResults pcaResults) {
-
-		List<ISample> sammples = pcaResults.getSampleList();
-		setPcaResult(sammples);
-	}
-
-	@Override
-	public void setPcaResult(List<ISample> samples) {
-
-		if(groupName == null) {
-			throw new NullPointerException("Group name is null");
-		}
-		/*
-		 * select sample which contains same group name
-		 */
-		List<ISample> samplesSameGroup = new ArrayList<>();
-		for(ISample sample : samples) {
-			if(groupName.equals(sample.getGroupName())) {
-				samplesSameGroup.add(sample);
-			}
-		}
-		if(samplesSameGroup.isEmpty()) {
-			return;
-		}
-		IPcaResult firstResult = samplesSameGroup.get(0).getPcaResult();
-		/*
-		 * Calculate mean for eigen space
-		 */
-		double[] esf = firstResult.getEigenSpace();
-		if(esf != null) {
-			double[] eigenSpace = new double[esf.length];
-			for(ISample sample : samplesSameGroup) {
-				double[] es = sample.getPcaResult().getEigenSpace();
-				for(int i = 0; i < es.length; i++) {
-					eigenSpace[i] += es[i];
-				}
-				for(int i = 0; i < eigenSpace.length; i++) {
-					eigenSpace[i] /= samplesSameGroup.size();
-				}
-			}
-			pcaResult.setEigenSpace(firstResult.getEigenSpace());
-		}
-		/*
-		 * Calculate mean for sample data
-		 */
-		double[] sdf = firstResult.getSampleData();
-		if(sdf != null) {
-			double[] sampleData = new double[sdf.length];
-			for(ISample sample : samplesSameGroup) {
-				for(int i = 0; i < sampleData.length; i++) {
-					double[] sd = sample.getPcaResult().getSampleData();
-					if(sd != null) {
-						sampleData[i] += sd[i];
-					}
-				}
-			}
-			for(int i = 0; i < sampleData.length; i++) {
-				sampleData[i] /= samplesSameGroup.size();
-			}
-			pcaResult.setSampleData(sampleData);
-		}
-		/*
-		 * calculate mean for error
-		 */
-		double error = 0;
-		for(ISample sample : samplesSameGroup) {
-			error += sample.getPcaResult().getErrorMemberShip();
-		}
-		error /= samplesSameGroup.size();
-		pcaResult.setErrorMemberShip(error);
-		pcaResult.setSlopes(new Slopes());
 	}
 
 	@Override

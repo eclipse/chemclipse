@@ -25,6 +25,10 @@ public interface IPcaResult {
 
 	ISlopes getSlopes();
 
+	boolean isDisplayed();
+
+	void setDisplayed(boolean displayed);
+
 	void setEigenSpace(double[] eigenSpace);
 
 	void setErrorMemberShip(double errorMemberShip);

@@ -20,8 +20,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
@@ -366,14 +368,8 @@ public class ErrorResidueBarChart {
 		groupColor = null;
 		IPcaResults pcaResults = pcaEditor.getPcaResults();
 		if(pcaResults != null) {
-			/*
-			 * select data to display samples or groups
-			 */
-			if(displayData == DISPLAY_SAMPLES) {
-				data.addAll(pcaResults.getSampleList());
-			} else if(displayData == DISPLAY_GROUPS) {
-				data.addAll(pcaResults.getGroupList());
-			}
+			pcaResults.getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toCollection(() -> data));
+			pcaResults.getGroupList().stream().filter(s -> s.isSelected()).collect(Collectors.toCollection(() -> data));
 			groupColor = PcaColorGroup.getColorJavaFx(PcaUtils.getGroupNames(pcaResults.getSampleList(), false));
 		}
 		/*
@@ -395,7 +391,10 @@ public class ErrorResidueBarChart {
 
 		series.getData().clear();
 		for(ISample sample : data) {
-			if(!sample.isSelected()) {
+			if(!sample.getPcaResult().isDisplayed()) {
+				continue;
+			}
+			if((sample instanceof IGroup) != (displayData == DISPLAY_GROUPS)) {
 				continue;
 			}
 			String name = null;

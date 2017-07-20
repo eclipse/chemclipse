@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
@@ -31,38 +32,14 @@ public class SamplesSelectionTree {
 
 	private PcaEditor pcaEditor;
 	private List<ISample> samples = new ArrayList<>();
-	private Tree tree;
 
-	public SamplesSelectionTree(PcaEditor pcaEditor, Composite parent) {
+	public SamplesSelectionTree(PcaEditor pcaEditor) {
 		this.pcaEditor = pcaEditor;
-		this.tree = new Tree(parent, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL);
-		update();
 	}
 
-	private void setSampleTreeItem(ISample sample, TreeItem item) {
+	public void create(Composite parent) {
 
-		item.setChecked(sample.isSelected());
-		item.setText(sample.getName());
-		item.setData(sample);
-	}
-
-	public void update() {
-
-		/*
-		 * clear all
-		 */
-		tree.clearAll(true);
-		tree.removeAll();
-		samples.clear();
-		/*
-		 * insert and sort samples
-		 */
-		IPcaResults results = pcaEditor.getPcaResults();
-		if(results != null) {
-			samples.addAll(results.getSampleList());
-			PcaUtils.sortSampleListByName(samples);
-			PcaUtils.sortSampleListByGroup(samples);
-		}
+		Tree tree = new Tree(parent, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL);
 		TreeItem groupTreeItem;
 		String groupName;
 		boolean isSelectSample = false;
@@ -82,14 +59,14 @@ public class SamplesSelectionTree {
 			}
 			treeItem = new TreeItem(groupTreeItem, SWT.None);
 			setSampleTreeItem(sample, treeItem);
-			isSelectSample = isSelectSample || sample.isSelected();
+			isSelectSample = isSelectSample || sample.getPcaResult().isDisplayed();
 			groupTreeItem.setExpanded(true);
 			while(it.hasNext()) {
 				sample = it.next();
 				if(ObjectUtils.compare(sample.getGroupName(), groupName) == 0) {
 					treeItem = new TreeItem(groupTreeItem, SWT.None);
 					setSampleTreeItem(sample, treeItem);
-					isSelectSample = isSelectSample || sample.isSelected();
+					isSelectSample = isSelectSample || sample.getPcaResult().isDisplayed();
 				} else {
 					groupTreeItem.setChecked(isSelectSample);
 					/*
@@ -105,7 +82,7 @@ public class SamplesSelectionTree {
 					}
 					treeItem = new TreeItem(groupTreeItem, SWT.None);
 					setSampleTreeItem(sample, treeItem);
-					isSelectSample = isSelectSample || sample.isSelected();
+					isSelectSample = isSelectSample || sample.getPcaResult().isDisplayed();
 				}
 			}
 			groupTreeItem.setChecked(isSelectSample);
@@ -128,7 +105,7 @@ public class SamplesSelectionTree {
 				 */
 				ISample sample = (ISample)item.getData();
 				if(sample != null) {
-					sample.setSelected(isChecked);
+					sample.getPcaResult().setDisplayed(isChecked);
 				}
 				/*
 				 * set children are checked according to selected item
@@ -138,7 +115,7 @@ public class SamplesSelectionTree {
 					treeItem.setChecked(isChecked);
 					sample = (ISample)treeItem.getData();
 					if(sample != null) {
-						sample.setSelected(isChecked);
+						sample.getPcaResult().setDisplayed(isChecked);
 					}
 				}
 				/*
@@ -151,7 +128,7 @@ public class SamplesSelectionTree {
 					for(TreeItem sib : sibs) {
 						sample = (ISample)sib.getData();
 						if(sample != null) {
-							checkParentItem = checkParentItem || sample.isSelected();
+							checkParentItem = checkParentItem || sample.getPcaResult().isDisplayed();
 						}
 						parentItem.setChecked(checkParentItem);
 					}
@@ -162,5 +139,29 @@ public class SamplesSelectionTree {
 				pcaEditor.updateSelection();
 			}
 		});
+	}
+
+	private void setSampleTreeItem(ISample sample, TreeItem item) {
+
+		item.setChecked(sample.getPcaResult().isDisplayed());
+		item.setText(sample.getName());
+		item.setData(sample);
+	}
+
+	public void update() {
+
+		/*
+		 * clear all
+		 */
+		samples.clear();
+		/*
+		 * insert and sort samples
+		 */
+		IPcaResults results = pcaEditor.getPcaResults();
+		if(results != null) {
+			results.getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toCollection(() -> samples));
+			PcaUtils.sortSampleListByName(samples);
+			PcaUtils.sortSampleListByGroup(samples);
+		}
 	}
 }

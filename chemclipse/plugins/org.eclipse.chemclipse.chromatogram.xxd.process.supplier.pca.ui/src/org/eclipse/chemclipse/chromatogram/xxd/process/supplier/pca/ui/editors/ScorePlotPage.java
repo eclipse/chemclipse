@@ -12,8 +12,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
@@ -53,8 +56,10 @@ public class ScorePlotPage {
 
 	private Color COLOR_BLACK = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 	private Color COLOR_WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
+	Map<String, Color> colors;
 	//
 	private PcaEditor pcaEditor;
+	private List<ISample> samples = new ArrayList<>();
 	private InteractiveChartExtended scorePlotChart;
 	private Spinner spinnerPCx;
 	private Spinner spinnerPCy;
@@ -230,22 +235,16 @@ public class ScorePlotPage {
 			/*
 			 * Delete all other series.
 			 */
-			IPcaResults pcaResults = pcaEditor.getPcaResults();
 			ISeriesSet seriesSet = scorePlotChart.getSeriesSet();
 			ISeries[] series = seriesSet.getSeries();
 			for(ISeries serie : series) {
 				seriesSet.deleteSeries(serie.getId());
 			}
 			/*
-			 * get color
-			 */
-			Set<String> groupNames = PcaUtils.getGroupNames(pcaResults.getSampleList(), false);
-			Map<String, Color> colors = PcaColorGroup.getColorSWT(groupNames);
-			/*
 			 * Data
 			 */
-			for(ISample sample : pcaResults.getSampleList()) {
-				if(!sample.isSelected()) {
+			for(ISample sample : samples) {
+				if(!sample.getPcaResult().isDisplayed()) {
 					continue;
 				}
 				/*
@@ -296,6 +295,13 @@ public class ScorePlotPage {
 	public void update() {
 
 		updateSpinnerPCMaxima();
+		IPcaResults results = pcaEditor.getPcaResults();
+		if(results != null) {
+			samples.clear();
+			results.getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toCollection(() -> samples));
+			Set<String> groupNames = PcaUtils.getGroupNames(results.getSampleList(), false);
+			colors = PcaColorGroup.getColorSWT(groupNames);
+		}
 		reloadScorePlotChart();
 	}
 

@@ -130,7 +130,7 @@ public class Chart3DScatter {
 					t.hide();
 				}
 			});
-			sphere.addEventFilter(SELECTION_UPDATE, event -> sphere.setVisible(d.getSample().isSelected()));
+			sphere.addEventFilter(SELECTION_UPDATE, event -> sphere.setVisible(d.getSample().getPcaResult().isDisplayed()));
 			mainGroup.getChildren().addAll(sphere);
 		}
 		updateSelection();

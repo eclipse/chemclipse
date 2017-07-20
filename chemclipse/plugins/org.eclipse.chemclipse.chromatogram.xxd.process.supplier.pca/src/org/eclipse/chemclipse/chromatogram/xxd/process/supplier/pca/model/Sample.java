@@ -11,17 +11,22 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Sample implements ISample {
 
 	private String groupName;
 	private String name;
 	private IPcaResult pcaResult;
+	private List<ISampleData> sampleData;
 	private boolean selected;
 
 	public Sample(String name) {
 		this.name = name;
 		this.selected = true;
 		this.pcaResult = new PcaResult();
+		this.sampleData = new ArrayList<>();
 	}
 
 	@Override
@@ -56,6 +61,12 @@ public class Sample implements ISample {
 	public IPcaResult getPcaResult() {
 
 		return this.pcaResult;
+	}
+
+	@Override
+	public List<ISampleData> getSampleData() {
+
+		return sampleData;
 	}
 
 	@Override

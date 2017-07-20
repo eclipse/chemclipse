@@ -15,6 +15,9 @@ import java.util.List;
 
 public interface IPcaResults {
 
+	int EXTRACT_PEAK = 0;
+	int EXTRACT_PEAK_CUMULATION = 1;
+
 	List<double[]> getBasisVectors();
 
 	List<IDataInputEntry> getDataInputEntries();
@@ -31,6 +34,8 @@ public interface IPcaResults {
 
 	List<ISample> getSampleList();
 
+	List<Boolean> isSelectedRetentionTimes();
+
 	void setBasisVectors(List<double[]> basisVectors);
 
 	void setExtractedRetentionTimes(List<Integer> extractedRetentionTimes);
@@ -40,4 +45,6 @@ public interface IPcaResults {
 	void setNumberOfPrincipleComponents(int numberOfPrincipleComponents);
 
 	void setRetentionTimeWindow(int retentionTimeWindow);
+
+	void setSelectedRetentionTimes(List<Boolean> isSelectedReatentionTime);
 }
