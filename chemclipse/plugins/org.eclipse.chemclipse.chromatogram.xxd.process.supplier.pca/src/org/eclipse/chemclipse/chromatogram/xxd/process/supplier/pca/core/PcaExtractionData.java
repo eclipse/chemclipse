@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,8 +42,6 @@ import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
 import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.python.google.common.collect.SortedSetMultimap;
-import org.python.google.common.collect.TreeMultimap;
 
 public class PcaExtractionData {
 
@@ -180,8 +179,8 @@ public class PcaExtractionData {
 			pcaPeakRetentionTime.put(name, peakTree);
 		}
 		while(totalCountPeak != 0) {
-			SortedSetMultimap<Double, Integer> weightRetentionTime = setWeightRetentionTimes(pcaPeakRetentionTime, retentionTimeWindow);
-			Iterator<Map.Entry<Double, Collection<Integer>>> it = weightRetentionTime.asMap().entrySet().iterator();
+			SortedMap<Double, Collection<Integer>> weightRetentionTime = setWeightRetentionTimes(pcaPeakRetentionTime, retentionTimeWindow);
+			Iterator<Map.Entry<Double, Collection<Integer>>> it = weightRetentionTime.entrySet().iterator();
 			TreeSet<Integer> condenseRetentionTimes = new TreeSet<>();
 			while(it.hasNext() && (totalCountPeak != 0)) {
 				Map.Entry<Double, Collection<Integer>> entry = it.next();
@@ -500,7 +499,7 @@ public class PcaExtractionData {
 		}
 	}
 
-	private SortedSetMultimap<Double, Integer> setWeightRetentionTimes(Map<String, TreeMap<Integer, IPeak>> pcaPeakRetetntionTimeMap, int retentionTimeWindow) {
+	private SortedMap<Double, Collection<Integer>> setWeightRetentionTimes(Map<String, TreeMap<Integer, IPeak>> pcaPeakRetetntionTimeMap, int retentionTimeWindow) {
 
 		Map<Integer, Double> peakSum = new HashMap<>();
 		int step = 1;
@@ -523,12 +522,19 @@ public class PcaExtractionData {
 				}
 			}
 		}
-		TreeMultimap<Double, Integer> tree = TreeMultimap.create((o1, o2) -> Double.compare(o2, o1), (o1, o2) -> Integer.compare(o1, o2));
+		SortedMap<Double, Collection<Integer>> sortedWeightRetentionTimes = new TreeMap<>((o1, o2) -> -Double.compare(o1, o2));
 		peakSum.forEach((k, v) -> {
 			if(!(v < 1)) {
-				tree.put(v, k);
+				Collection<Integer> retentionTimes = sortedWeightRetentionTimes.get(v);
+				if(retentionTimes == null) {
+					retentionTimes = new LinkedList<>();
+					retentionTimes.add(k);
+					sortedWeightRetentionTimes.put(v, retentionTimes);
+				} else {
+					retentionTimes.add(k);
+				}
 			}
 		});
-		return tree;
+		return sortedWeightRetentionTimes;
 	}
 }
