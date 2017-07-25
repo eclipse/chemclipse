@@ -57,7 +57,7 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
  * [...]<br/>
  * 
  * @author eselmeister
- * @author <a href="mailto:alex.kerner.24@googlemail.com">Alexander Kerner</a>
+ * @author Alexander Kerner
  * @see AbstractChromatogramMSD
  */
 public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNormalizable, IMassSpectrumTargets, IIonProvider {
