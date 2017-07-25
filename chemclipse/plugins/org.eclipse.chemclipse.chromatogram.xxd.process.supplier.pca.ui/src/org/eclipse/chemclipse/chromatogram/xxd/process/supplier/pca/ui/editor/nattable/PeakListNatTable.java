@@ -159,6 +159,9 @@ public class PeakListNatTable {
 				if(!columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_PEAKS_NAMES)) {
 					num++;
 				}
+				if(!columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_SELECTED)) {
+					num++;
+				}
 				if(num > 0) {
 					compositeFreezeLayer.doCommand(new FreezeColumnCommand(compositeFreezeLayer, num - 1, false, true));
 				}

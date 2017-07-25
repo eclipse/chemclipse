@@ -37,7 +37,9 @@ public class PcaResulDataProvider implements IDataProvider {
 	public Object getDataValue(int columnIndex, int rowIndex) {
 
 		int sortRowIndex = sortModel.getOrderRow().get(rowIndex);
-		if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
+		if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
+			return tableProvider.getDataTable().isSelectedRetentionTimes().get(sortRowIndex);
+		} else if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
 			int retentionTime = tableProvider.getDataTable().getRetentionTimes().get(sortRowIndex);
 			return retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
 		} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAKS_NAMES) {
@@ -70,5 +72,9 @@ public class PcaResulDataProvider implements IDataProvider {
 	@Override
 	public void setDataValue(int columnIndex, int rowIndex, Object newValue) {
 
+		int sortRowIndex = sortModel.getOrderRow().get(rowIndex);
+		if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
+			tableProvider.getDataTable().isSelectedRetentionTimes().set(sortRowIndex, (boolean)newValue);
+		}
 	}
 }

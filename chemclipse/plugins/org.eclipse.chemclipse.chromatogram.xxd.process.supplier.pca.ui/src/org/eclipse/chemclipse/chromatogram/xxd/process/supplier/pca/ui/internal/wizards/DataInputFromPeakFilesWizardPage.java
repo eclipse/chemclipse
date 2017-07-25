@@ -80,7 +80,7 @@ public class DataInputFromPeakFilesWizardPage extends WizardPage {
 		Button button = new Button(composite, SWT.PUSH);
 		button.addListener(SWT.Selection, (event) -> addFiles());
 		button.setText(" Select input files ");
-		inputFilesTable = new InputFilesTable(composite);
+		inputFilesTable = new InputFilesTable(composite, null);
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.heightHint = 400;
 		gridData.widthHint = 100;

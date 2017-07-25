@@ -183,7 +183,7 @@ public class InputFilesPage {
 
 	private void createTable(Composite client) {
 
-		this.inputFilesTable = new InputFilesTable(client);
+		this.inputFilesTable = new InputFilesTable(client, null);
 		Table table = inputFilesTable.getTable();
 		GridData gridData;
 		gridData = new GridData(GridData.FILL_BOTH);

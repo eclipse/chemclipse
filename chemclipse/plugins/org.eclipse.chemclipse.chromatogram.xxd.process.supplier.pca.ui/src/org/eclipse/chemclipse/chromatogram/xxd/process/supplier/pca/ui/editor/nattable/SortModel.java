@@ -113,7 +113,10 @@ public class SortModel implements ISortModel {
 					direction = -1;
 			}
 			final int setDirection = direction;
-			if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
+			if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
+				List<Boolean> isSelected = tableProvider.getDataTable().isSelectedRetentionTimes();
+				sortedRow.sort((i, j) -> setDirection * Boolean.compare(isSelected.get(i), isSelected.get(j)));
+			} else if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
 				/*
 				 * sort by retention time
 				 */

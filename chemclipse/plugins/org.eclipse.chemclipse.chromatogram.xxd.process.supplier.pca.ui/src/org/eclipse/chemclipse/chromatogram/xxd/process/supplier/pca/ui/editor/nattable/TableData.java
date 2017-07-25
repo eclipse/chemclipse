@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.P
 
 public class TableData {
 
+	private List<Boolean> isSelectedRetentionTimes;
 	private PcaEditor pcaEditor;
 	private List<String> peaksNames;
 	private List<Integer> retentionTimes;
@@ -32,7 +33,6 @@ public class TableData {
 	public TableData(PcaEditor pcaEditor) {
 		this.pcaEditor = pcaEditor;
 		samples = new ArrayList<>();
-		retentionTimes = new ArrayList<>();
 		peaksNames = new ArrayList<>();
 	}
 
@@ -58,6 +58,11 @@ public class TableData {
 		return samples;
 	}
 
+	public List<Boolean> isSelectedRetentionTimes() {
+
+		return isSelectedRetentionTimes;
+	}
+
 	public void update() {
 
 		IPcaResults pcaResults = pcaEditor.getPcaResults();
@@ -68,7 +73,7 @@ public class TableData {
 		 * remove old data
 		 */
 		this.samples.clear();
-		retentionTimes.clear();
+		isSelectedRetentionTimes = pcaResults.isSelectedRetentionTimes();
 		/*
 		 * copy data and insert object ISample and IGroup and sort this object by group name
 		 */
@@ -79,7 +84,7 @@ public class TableData {
 		/*
 		 * set retention time
 		 */
-		retentionTimes.addAll(pcaEditor.getPcaResults().getExtractedRetentionTimes());
+		retentionTimes = pcaResults.getExtractedRetentionTimes();
 		/*
 		 * Set peaks names
 		 */
