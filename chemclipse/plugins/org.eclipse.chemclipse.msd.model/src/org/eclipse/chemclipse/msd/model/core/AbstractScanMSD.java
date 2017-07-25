@@ -120,6 +120,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		targets = new HashSet<IMassSpectrumTarget>();
 		try {
 			immutableZeroIon = new ImmutableZeroIon();
+			// TODO: in case of exception, immutableZeroIon will be null
 		} catch(AbundanceLimitExceededException | IonLimitExceededException e) {
 			logger.warn(e);
 		}
