@@ -93,12 +93,15 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 		ExtractedWavelengthSignal extractedWavelengthSignal;
 		if(hasScanSignals()) {
 			extractedWavelengthSignal = new ExtractedWavelengthSignal(startWavelength, stopWavelength);
+			extractedWavelengthSignal.setRetentionTime(getRetentionTime());
 			for(IScanSignalWSD scanSignal : getScanSignals()) {
 				extractedWavelengthSignal.setAbundance(scanSignal);
 			}
 			return extractedWavelengthSignal;
 		} else {
-			return new ExtractedWavelengthSignal(0, 0);
+			extractedWavelengthSignal = new ExtractedWavelengthSignal(0, 0);
+			extractedWavelengthSignal.setRetentionTime(getRetentionTime());
+			return extractedWavelengthSignal;
 		}
 	}
 

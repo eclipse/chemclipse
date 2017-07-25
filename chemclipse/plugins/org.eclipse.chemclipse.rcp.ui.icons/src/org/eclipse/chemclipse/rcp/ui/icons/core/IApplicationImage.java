@@ -248,4 +248,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_EVALUATE = "evaluate.gif";
 	String IMAGE_EVALUATED = "evaluated.gif";
 	String IMAGE_VALIDATE = "validate.gif";
+	String IMAGE_SKIP = "skip.gif";
+	String IMAGE_SKIPPED = "skipped.gif";
 }
