@@ -39,6 +39,7 @@ public class PcaResultLabelProvider implements IConfigLabelProvider {
 		result.add(TableProvider.COLUMN_LABEL_RETENTION_TIMES);
 		result.add(TableProvider.COLUMN_LABEL_SAMPLE_DATA);
 		result.add(TableProvider.COLUMN_LABEL_PEAKS_NAMES);
+		result.add(TableProvider.COLUMN_LABEL_SELECTED);
 		return result;
 	}
 }

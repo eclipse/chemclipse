@@ -39,15 +39,16 @@ public class InputFilesTable {
 	private Table table;
 	private List<TableEditor> tableEditors = new ArrayList<>();
 
-	public InputFilesTable(Composite composite) {
-		createTable(composite);
+	public InputFilesTable(Composite composite, Object layoutData) {
+		createTable(composite, layoutData);
 	}
 
-	private void createTable(Composite client) {
+	private void createTable(Composite client, Object layoutData) {
 
 		table = new Table(client, SWT.MULTI | SWT.BORDER);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
+		table.setLayoutData(layoutData);
 	}
 
 	public List<IDataInputEntry> getDataInputEntries() {

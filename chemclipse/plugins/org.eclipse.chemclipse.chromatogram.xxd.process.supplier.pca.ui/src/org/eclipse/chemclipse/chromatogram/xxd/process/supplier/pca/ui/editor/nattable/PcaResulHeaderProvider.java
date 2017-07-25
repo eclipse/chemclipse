@@ -32,7 +32,9 @@ public class PcaResulHeaderProvider implements IDataProvider {
 	@Override
 	public Object getDataValue(int columnIndex, int rowIndex) {
 
-		if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
+		if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
+			return "";
+		} else if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
 			return "reten. time";
 		} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAKS_NAMES) {
 			return "Compound";

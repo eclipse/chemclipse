@@ -18,7 +18,12 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.CellConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
+import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.data.convert.DefaultBooleanDisplayConverter;
 import org.eclipse.nebula.widgets.nattable.data.convert.DefaultDoubleDisplayConverter;
+import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
+import org.eclipse.nebula.widgets.nattable.edit.editor.CheckBoxCellEditor;
+import org.eclipse.nebula.widgets.nattable.painter.cell.CheckBoxPainter;
 import org.eclipse.nebula.widgets.nattable.style.CellStyleAttributes;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.nebula.widgets.nattable.style.HorizontalAlignmentEnum;
@@ -78,5 +83,22 @@ public class PcaResulRegistryConfiguration extends AbstractRegistryConfiguration
 		configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, //
 				style, DisplayMode.NORMAL, //
 				TableProvider.COLUMN_LABEL_PEAKS_NAMES);
+		//
+		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
+				new DefaultBooleanDisplayConverter(), //
+				DisplayMode.NORMAL, //
+				TableProvider.COLUMN_LABEL_SELECTED);
+		configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_PAINTER, //
+				new CheckBoxPainter(), //
+				DisplayMode.NORMAL, //
+				TableProvider.COLUMN_LABEL_SELECTED);
+		// configure editing
+		configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITABLE_RULE, //
+				IEditableRule.ALWAYS_EDITABLE, //
+				TableProvider.COLUMN_LABEL_SELECTED);
+		configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, //
+				new CheckBoxCellEditor(), //
+				DisplayMode.NORMAL, //
+				TableProvider.COLUMN_LABEL_SELECTED);
 	}
 }

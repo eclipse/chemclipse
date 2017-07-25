@@ -14,8 +14,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.thirdpartylibraries.ejml;bundle-version="0.29.0",
  org.eclipse.chemclipse.numeric;bundle-version="0.8.0",
  org.eclipse.chemclipse.support;bundle-version="0.8.0",
- net.openchrom.thirdpartylibraries.jython
+ net.openchrom.thirdpartylibraries.jython,
+ org.eclipse.chemclipse.thirdpartylibraries.apache.commons.math
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model

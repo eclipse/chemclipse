@@ -62,6 +62,7 @@ public class PcaEditor {
 	private ErrorResiduePage errorResiduePage;
 	//
 	private File exportFile;
+	private FiltersPage filtersPage;
 	private FormToolkit formToolkit;
 	private InputFilesPage inputFilesPage;
 	@Inject
@@ -108,6 +109,7 @@ public class PcaEditor {
 		pages.add(overviewPage = new OverviewPage(this, tabFolder, formToolkit));
 		pages.add(inputFilesPage = new InputFilesPage(this, tabFolder, formToolkit));
 		pages.add(normalizationPage = new NormalizationPage(this, tabFolder, formToolkit));
+		pages.add(filtersPage = new FiltersPage(this, tabFolder, formToolkit));
 		pages.add(peakListIntensityTablePage = new PeakListIntensityTablePage(this, tabFolder, formToolkit));
 		pages.add(scorePlotPage = new ScorePlotPage(this, tabFolder, formToolkit));
 		pages.add(errorResiduePage = new ErrorResiduePage(this, tabFolder, formToolkit));

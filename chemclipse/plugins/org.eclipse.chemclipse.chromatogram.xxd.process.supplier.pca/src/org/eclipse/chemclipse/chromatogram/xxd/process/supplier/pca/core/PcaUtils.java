@@ -14,12 +14,15 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Group;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
@@ -125,6 +128,21 @@ public class PcaUtils {
 			}
 		}
 		return map;
+	}
+
+	public static Map<String, Set<ISample>> getSamplesByGroupName(List<ISample> samples, boolean containsNullGroupName, boolean onlySelected) {
+
+		Map<String, Set<ISample>> samplesByGroupName = new HashMap<>();
+		Set<String> groupNames = getGroupNames(samples, onlySelected);
+		for(String groupName : groupNames) {
+			if(groupName != null || containsNullGroupName) {
+				Set<ISample> samplesIdenticalGroupName = samples.stream().filter(s -> (Comparator.nullsFirst(String::compareTo).compare(groupName, s.getGroupName()) == 0) && s.isSelected()).collect(Collectors.toSet());
+				if(!samplesIdenticalGroupName.isEmpty()) {
+					samplesByGroupName.put(groupName, samplesIdenticalGroupName);
+				}
+			}
+		}
+		return samplesByGroupName;
 	}
 
 	public static void sortSampleListByErrorMemberShip(List<ISample> samples, boolean inverse) {
