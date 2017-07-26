@@ -13,14 +13,12 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
@@ -45,7 +43,6 @@ import org.eclipse.chemclipse.numeric.statistics.Calculations;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.ejml.example.PrincipalComponentAnalysis;
-import org.python.google.common.collect.TreeMultimap;
 
 public class PrincipleComponentProcessor {
 
@@ -191,81 +188,7 @@ public class PrincipleComponentProcessor {
 
 	private Map<String, Map<Integer, IPeak>> exctractPcaPeakMap(Map<String, IPeaks> peakMap, int retentionTimeWindow) {
 
-		Map<String, TreeMap<Integer, IPeak>> pcaPeakRetetntionTimeMap = new HashMap<>();
-		Map<String, Map<Integer, IPeak>> pcaPeakRetetntionTimeMaxMap = new HashMap<>();
-		int totalCountPeak = 0;
-		for(Map.Entry<String, IPeaks> peakEnry : peakMap.entrySet()) {
-			String name = peakEnry.getKey();
-			IPeaks peaks = peakEnry.getValue();
-			TreeMap<Integer, IPeak> peakTree = new TreeMap<>();
-			for(IPeak peak : peaks.getPeaks()) {
-				int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
-				peakTree.put(retentionTime, peak);
-			}
-			totalCountPeak += peakTree.size();
-			pcaPeakRetetntionTimeMap.put(name, peakTree);
-		}
-		while(totalCountPeak != 0) {
-			Map<Integer, Double> peakSum = new HashMap<>();
-			for(TreeMap<Integer, IPeak> peaks : pcaPeakRetetntionTimeMap.values()) {
-				for(IPeak peak : peaks.values()) {
-					int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
-					for(int i = retentionTime - retentionTimeWindow; i <= retentionTime + retentionTimeWindow; i++) {
-						int dis = Math.abs(i - retentionTime);
-						double value = 1.0 / ((dis + 1) * (dis + 1));
-						Double actualValue = peakSum.get(i);
-						if(actualValue == null) {
-							peakSum.put(i, value);
-						} else {
-							peakSum.put(i, value + actualValue);
-						}
-					}
-				}
-			}
-			TreeMultimap<Double, Integer> tree = TreeMultimap.create((o1, o2) -> Double.compare(o2, o1), (o1, o2) -> Integer.compare(o1, o2));
-			peakSum.forEach((k, v) -> {
-				if(!(v < 1)) {
-					tree.put(v, k);
-				}
-			});
-			Iterator<Map.Entry<Double, Collection<Integer>>> it = tree.asMap().entrySet().iterator();
-			TreeSet<Integer> map = new TreeSet<>();
-			while(it.hasNext() && (totalCountPeak != 0)) {
-				Map.Entry<Double, Collection<Integer>> entry = it.next();
-				Collection<Integer> retentionTimesMax = entry.getValue();
-				for(Integer retentionTimeMax : retentionTimesMax) {
-					Integer colosest = getClosest(map, retentionTimeMax);
-					if(colosest != null) {
-						if(Math.abs(colosest - retentionTimeMax) < (2 * retentionTimeWindow)) {
-							continue;
-						}
-					}
-					map.add(retentionTimeMax);
-					for(Map.Entry<String, TreeMap<Integer, IPeak>> pcaPeakRetetntionTime : pcaPeakRetetntionTimeMap.entrySet()) {
-						TreeMap<Integer, IPeak> peakTree = pcaPeakRetetntionTime.getValue();
-						String name = pcaPeakRetetntionTime.getKey();
-						IPeak peakClosest = getClosestPeak(peakTree, retentionTimeMax);
-						if(peakClosest != null) {
-							int peakRetentionTime = peakClosest.getPeakModel().getRetentionTimeAtPeakMaximum();
-							int dist = Math.abs(retentionTimeMax - peakRetentionTime);
-							if(dist <= retentionTimeWindow) {
-								totalCountPeak--;
-								peakTree.remove(peakRetentionTime);
-								Map<Integer, IPeak> extractPeaks = pcaPeakRetetntionTimeMaxMap.get(name);
-								if(extractPeaks == null) {
-									extractPeaks = new HashMap<>();
-									extractPeaks.put(retentionTimeMax, peakClosest);
-									pcaPeakRetetntionTimeMaxMap.put(name, extractPeaks);
-								} else {
-									extractPeaks.put(retentionTimeMax, peakClosest);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		return pcaPeakRetetntionTimeMaxMap;
+		return null;
 	}
 
 	Map<String, double[]> exctractPcaPeakMap(Map<String, Map<Integer, IPeak>> extractPeaks, List<Integer> rententionTimes) {
@@ -532,42 +455,6 @@ public class PrincipleComponentProcessor {
 			basisVectors.add(basisVector);
 		}
 		return basisVectors;
-	}
-
-	private Integer getClosest(TreeSet<Integer> peakTree, int retentionTime) {
-
-		Integer peakRetentionTimeCeil = peakTree.ceiling(retentionTime);
-		Integer peakRetentionTimeFlour = peakTree.floor(retentionTime);
-		if(peakRetentionTimeCeil != null && peakRetentionTimeFlour != null) {
-			if((peakRetentionTimeCeil - retentionTime) < (retentionTime - peakRetentionTimeFlour)) {
-				return peakRetentionTimeCeil;
-			} else {
-				return peakRetentionTimeFlour;
-			}
-		} else if(peakRetentionTimeCeil != null) {
-			return peakRetentionTimeCeil;
-		} else if(peakRetentionTimeFlour != null) {
-			return peakRetentionTimeFlour;
-		}
-		return null;
-	}
-
-	private IPeak getClosestPeak(TreeMap<Integer, IPeak> peakTree, int retentionTime) {
-
-		Map.Entry<Integer, IPeak> peakRetentionTimeCeil = peakTree.ceilingEntry(retentionTime);
-		Map.Entry<Integer, IPeak> peakRetentionTimeFlour = peakTree.floorEntry(retentionTime);
-		if(peakRetentionTimeCeil != null && peakRetentionTimeFlour != null) {
-			if((peakRetentionTimeCeil.getKey() - retentionTime) < (retentionTime - peakRetentionTimeFlour.getKey())) {
-				return peakRetentionTimeCeil.getValue();
-			} else {
-				return peakRetentionTimeFlour.getValue();
-			}
-		} else if(peakRetentionTimeCeil != null) {
-			return peakRetentionTimeCeil.getValue();
-		} else if(peakRetentionTimeFlour != null) {
-			return peakRetentionTimeFlour.getValue();
-		}
-		return null;
 	}
 
 	/**
