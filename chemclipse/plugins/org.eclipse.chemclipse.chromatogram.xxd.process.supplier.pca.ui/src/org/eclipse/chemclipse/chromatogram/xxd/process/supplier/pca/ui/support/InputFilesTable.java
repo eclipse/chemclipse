@@ -114,6 +114,7 @@ public class InputFilesTable {
 				editor.horizontalAlignment = SWT.LEFT;
 				editor.grabHorizontal = true;
 				final Text text = new Text(table, SWT.NONE);
+				text.setBackground(null);
 				String groupName = entry.getGroupName();
 				if(groupName == null) {
 					text.setText("");
