@@ -11,155 +11,253 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 
+import java.net.URL;
+
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData.Centering;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData.Normalization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData.Transformation;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.TableEditor;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 public class NormalizationDataTables {
 
+	private PcaNormalizationData pcaNormalizationData;
 	private Table tableCentering;
 	private Table tableScaling;
 	private Table tableTransformation;
 
 	public NormalizationDataTables(Composite composite, Object layoutData) {
+		this(composite, layoutData, new PcaNormalizationData());
+	}
+
+	public NormalizationDataTables(Composite composite, Object layoutData, PcaNormalizationData pcaNormalizationData) {
+		this.pcaNormalizationData = pcaNormalizationData;
 		initialize(composite, layoutData);
 	}
 
-	public String getCentering() {
+	private Table createColumnCentering(Table table, Centering selectedCentering) {
 
-		return (String)tableCentering.getData();
+		table.clearAll();
+		table.removeAll();
+		String[] titles = {"Select Centering Type"};
+		for(int i = 0; i < titles.length; i++) {
+			TableColumn column = new TableColumn(table, SWT.NONE);
+			column.setText(titles[i]);
+		}
+		String[] description = new String[]{};
+		setTableRow(table, "Mean certering", "center_mean.jpg", //
+				description, Centering.MEAN, Centering.MEAN.equals(selectedCentering));
+		description = new String[]{};
+		setTableRow(table, "Meadin cetering", "center_median.jpg", //
+				description, Centering.MEDIAN, Centering.MEDIAN.equals(selectedCentering));
+		for(int i = 0; i < titles.length; i++) {
+			table.getColumn(i).pack();
+		}
+		return table;
 	}
 
-	public String getScaling() {
+	private void createColumnsDataNormalization(Table table, Normalization selectedNormalization) {
 
-		return (String)tableScaling.getData();
+		table.clearAll();
+		table.removeAll();
+		String[] titles = {"Select Normalization type"};
+		for(int i = 0; i < titles.length; i++) {
+			TableColumn column = new TableColumn(table, SWT.NONE);
+			column.setText(titles[i]);
+		}
+		String[] description = new String[]{};
+		setTableRow(table, "Only transformation or \n without transsformation,\n if transformation is set as \"Without transformation\" ", "norm_trans.jpg", //
+				description, Normalization.TRANSFORMING, Normalization.TRANSFORMING.equals(selectedNormalization));
+		description = new String[]{};
+		setTableRow(table, "Only centering", "norm_center.jpg", //
+				description, Normalization.CENTERING, Normalization.CENTERING.equals(selectedNormalization));
+		description = new String[]{};
+		setTableRow(table, "Autoscaling", "norm_scal_auto.jpg", //
+				description, Normalization.SCALING_AUTO, Normalization.SCALING_AUTO.equals(selectedNormalization));
+		description = new String[]{};
+		setTableRow(table, "Range scaling", "norm_scal_range.jpg", //
+				description, Normalization.SCALING_RANGE, Normalization.SCALING_RANGE.equals(selectedNormalization));
+		description = new String[]{};
+		setTableRow(table, "Pareto scaling", "norm_scal_pareto.jpg", //
+				description, Normalization.SCALING_PARETO, Normalization.SCALING_PARETO.equals(selectedNormalization));
+		description = new String[]{};
+		setTableRow(table, "Vast scaling", "norm_scal_vast.jpg", //
+				description, Normalization.SCALING_VAST, Normalization.SCALING_VAST.equals(selectedNormalization));
+		description = new String[]{};
+		setTableRow(table, "Level scaling", "norm_scal_level.jpg", //
+				description, Normalization.SCALING_LEVEL, Normalization.SCALING_LEVEL.equals(selectedNormalization));
+		description = new String[]{};
+		setTableRow(table, "Maximum scaling", "norm_scal_max.jpg", //
+				description, Normalization.SCALING_MAXIMUM, Normalization.SCALING_MAXIMUM.equals(selectedNormalization));
+		for(int i = 0; i < titles.length; i++) {
+			table.getColumn(i).pack();
+		}
 	}
 
-	public String getTransformation() {
+	private Table createColumnsDataTransformation(Table table, Transformation selecetedTransformation) {
 
-		return (String)tableTransformation.getData();
+		table.clearAll();
+		table.removeAll();
+		String[] titles = {"Select Transformation Type"};
+		for(int i = 0; i < titles.length; i++) {
+			TableColumn column = new TableColumn(table, SWT.NONE);
+			column.setText(titles[i]);
+		}
+		String[] description = new String[]{};
+		setTableRow(table, "Without transformation", "trans_none.jpg", //
+				description, Transformation.NONE, Transformation.NONE.equals(selecetedTransformation));
+		description = new String[]{};
+		setTableRow(table, "Log transformation", "trans_log.jpg", //
+				description, Transformation.LOG10, Transformation.LOG10.equals(selecetedTransformation));
+		description = new String[]{};
+		setTableRow(table, "Power transformationn", "trans_power.jpg", //
+				description, Transformation.POWER, Transformation.POWER.equals(selecetedTransformation));
+		for(int i = 0; i < titles.length; i++) {
+			table.getColumn(i).pack();
+		}
+		return table;
 	}
 
-	void initialize(Composite composite, Object layoutData) {
+	public PcaNormalizationData getPcaNormalizationData() {
 
-		Composite parent = new Composite(composite, SWT.NONE);
-		parent.setLayoutData(layoutData);
-		parent.setLayout(new GridLayout(1, true));
-		tableTransformation = tableDataTransformation(parent);
+		return pcaNormalizationData;
+	}
+
+	void initialize(Composite parent, Object layoutData) {
+
+		ScrolledComposite sc = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+		sc.setLayoutData(layoutData);
+		Composite comoposite = new Composite(sc, SWT.NONE);
+		comoposite.setLayout(new GridLayout(1, true));
+		tableTransformation = tableDataTransformation(comoposite);
 		tableTransformation.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		tableCentering = tableDataCentering(parent);
+		tableCentering = tableDataCentering(comoposite);
 		tableCentering.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		tableScaling = tableDataScaling(parent);
+		tableScaling = tableDataNormalization(comoposite);
 		tableScaling.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		sc.setContent(comoposite);
+		sc.setExpandHorizontal(true);
+		sc.setExpandVertical(true);
+		sc.setMinSize(comoposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
-	private TableItem setTableRow(Table table, String[] columnData, Object data) {
+	public void setPcaNormalizationData(PcaNormalizationData pcaNormalizationData) {
 
-		return setTableRow(table, columnData, data, false);
+		this.pcaNormalizationData = pcaNormalizationData;
+		update();
 	}
 
-	private TableItem setTableRow(Table table, String[] columnData, Object data, boolean isSelected) {
+	private TableItem setTableRow(Table table, String name, String mathFormula, String[] description, Object data, boolean isSelected) {
 
 		TableItem item = new TableItem(table, SWT.NONE);
-		TableEditor editor = new TableEditor(table);
-		editor.horizontalAlignment = SWT.LEFT;
-		editor.grabHorizontal = true;
-		Button button = new Button(table, SWT.RADIO);
-		button.addListener(SWT.Selection, e -> {
-			if(button.getSelection()) {
-				table.setData(data);
-			}
-		});
-		editor.setEditor(button, item, 0);
-		for(int i = 0; i < columnData.length; i++) {
-			item.setText(i + 1, columnData[i]);
+		item.setText(0, name);
+		Bundle bundle = FrameworkUtil.getBundle(getClass());
+		final URL fullPathString = FileLocator.find(bundle, new Path("img/norm_tab/" + mathFormula), null);
+		ImageDescriptor imageDesc = ImageDescriptor.createFromURL(fullPathString);
+		Image image = imageDesc.createImage();
+		item.setImage(0, image);
+		for(int i = 0; i < description.length; i++) {
+			item.setText(i + 1, description[i]);
 		}
-		item.setData(data);
+		;
 		if(isSelected) {
-			button.setSelection(isSelected);
 			table.setData(data);
+			item.setChecked(true);
 		}
 		return item;
 	}
 
 	private Table tableDataCentering(Composite parent) {
 
-		Table table = new Table(parent, SWT.BORDER | SWT.HIDE_SELECTION);
+		Table table = new Table(parent, SWT.BORDER | SWT.CHECK);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		String[] titles = {"", "Type"};
-		for(int i = 0; i < titles.length; i++) {
-			TableColumn column = new TableColumn(table, SWT.NONE);
-			column.setText(titles[i]);
-		}
-		String[] centering = new String[]{"Without certering"};
-		setTableRow(table, centering, PcaNormalizationData.CENTERING_NONE);
-		centering = new String[]{"Mean certering"};
-		setTableRow(table, centering, PcaNormalizationData.CENTERING_MEAN, true);
-		centering = new String[]{"Meadin cetering"};
-		setTableRow(table, centering, PcaNormalizationData.CENTERING_MEDIAN);
-		for(int i = 0; i < titles.length; i++) {
-			table.getColumn(i).pack();
-		}
+		createColumnCentering(table, pcaNormalizationData.getCentering());
+		table.addListener(SWT.Selection, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				if(event.detail != SWT.CHECK) {
+					return;
+				}
+				for(int i = 0; i < table.getItemCount(); i++) {
+					table.getItem(i).setChecked(false);
+				}
+				TableItem item = (TableItem)event.item;
+				item.setChecked(true);
+			}
+		});
 		return table;
 	}
 
-	private Table tableDataScaling(Composite parent) {
+	private Table tableDataNormalization(Composite parent) {
 
-		Table table = new Table(parent, SWT.BORDER | SWT.HIDE_SELECTION);
+		Table table = new Table(parent, SWT.BORDER | SWT.CHECK);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		String[] titles = {"", "Type"};
-		for(int i = 0; i < titles.length; i++) {
-			TableColumn column = new TableColumn(table, SWT.NONE);
-			column.setText(titles[i]);
-		}
-		String[] scaling = new String[]{"Without Scaling"};
-		setTableRow(table, scaling, PcaNormalizationData.SCALING_NONE);
-		scaling = new String[]{"Autoscaling"};
-		setTableRow(table, scaling, PcaNormalizationData.SCALING_AUTO, true);
-		scaling = new String[]{"Range scaling"};
-		setTableRow(table, scaling, PcaNormalizationData.SCALING_RANGE);
-		scaling = new String[]{"Pareto scaling"};
-		setTableRow(table, scaling, PcaNormalizationData.SCALING_PARETO);
-		scaling = new String[]{"Vast scaling"};
-		setTableRow(table, scaling, PcaNormalizationData.SCALING_VAST);
-		scaling = new String[]{"Level scaling"};
-		setTableRow(table, scaling, PcaNormalizationData.SCALING_LEVEL);
-		scaling = new String[]{"Maximum scaling"};
-		setTableRow(table, scaling, PcaNormalizationData.SCALING_MAXIMUM);
-		for(int i = 0; i < titles.length; i++) {
-			table.getColumn(i).pack();
-		}
+		createColumnsDataNormalization(table, pcaNormalizationData.getNorlamalizationType());
+		table.addListener(SWT.Selection, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				if(event.detail != SWT.CHECK) {
+					return;
+				}
+				for(int i = 0; i < table.getItemCount(); i++) {
+					table.getItem(i).setChecked(false);
+				}
+				TableItem item = (TableItem)event.item;
+				item.setChecked(true);
+			}
+		});
 		return table;
 	}
 
 	private Table tableDataTransformation(Composite parent) {
 
-		Table table = new Table(parent, SWT.BORDER | SWT.HIDE_SELECTION);
+		Table table = new Table(parent, SWT.BORDER | SWT.CHECK);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		String[] titles = {"", "Type"};
-		for(int i = 0; i < titles.length; i++) {
-			TableColumn column = new TableColumn(table, SWT.NONE);
-			column.setText(titles[i]);
-		}
-		String[] transformation = new String[]{"Without transformation"};
-		setTableRow(table, transformation, PcaNormalizationData.TRANSFORMATION_NONE, true);
-		transformation = new String[]{"Log transformation"};
-		setTableRow(table, transformation, PcaNormalizationData.TRANSFORMATION_LOG10);
-		transformation = new String[]{"Power transformationn"};
-		setTableRow(table, transformation, PcaNormalizationData.TRANSFORMATION_POWER);
-		for(int i = 0; i < titles.length; i++) {
-			table.getColumn(i).pack();
-		}
+		createColumnsDataTransformation(table, pcaNormalizationData.getTransformationType());
+		table.addListener(SWT.Selection, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				if(event.detail != SWT.CHECK) {
+					return;
+				}
+				for(int i = 0; i < table.getItemCount(); i++) {
+					table.getItem(i).setChecked(false);
+				}
+				TableItem item = (TableItem)event.item;
+				item.setChecked(true);
+			}
+		});
 		return table;
+	}
+
+	public void update() {
+
+		createColumnCentering(tableCentering, pcaNormalizationData.getCentering());
+		createColumnsDataNormalization(tableScaling, pcaNormalizationData.getNorlamalizationType());
+		createColumnsDataTransformation(tableTransformation, pcaNormalizationData.getTransformationType());
 	}
 }
