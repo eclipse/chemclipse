@@ -48,15 +48,8 @@ public class NormalizationPage {
 		button.setText("Normalize data");
 		button.addListener(SWT.Selection, e -> {
 			IPcaResults pcaResults = pcaEditor.getPcaResults();
-			if(pcaResults != null) {
-				String scaling = normalizationDataTables.getScaling();
-				String transformation = normalizationDataTables.getTransformation();
-				String centering = normalizationDataTables.getCentering();
-				normalizationData.setCentering(centering);
-				normalizationData.setScalingType(scaling);
-				normalizationData.setTransformation(transformation);
-				normalizationData.normalize(pcaResults);
-			}
+			PcaNormalizationData pcaNormalizationData = normalizationDataTables.getPcaNormalizationData();
+			pcaNormalizationData.normalize(pcaResults);
 		});
 		button = new Button(composite, SWT.PUSH);
 		button.setText("Reset data");
