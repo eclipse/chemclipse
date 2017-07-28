@@ -86,7 +86,7 @@ public class InputFilesTable {
 			/*
 			 * Header
 			 */
-			String[] titles = {"Filename", "color", "Group", "Path"};
+			String[] titles = {"Filename", "Color", "Group", "Path"};
 			for(int i = 0; i < titles.length; i++) {
 				TableColumn column = new TableColumn(table, SWT.NONE);
 				column.setText(titles[i]);
@@ -94,6 +94,9 @@ public class InputFilesTable {
 			/*
 			 * Data
 			 */
+			Color backgroundNormal = Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);
+			Color backgroundGray = Display.getCurrent().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
+			//
 			Map<String, Color> groupColorMap = PcaColorGroup.getColorSWT(PcaUtils.getGroupNamesFromEntry(dataInputEntries));
 			for(int i = 0; i < dataInputEntries.size(); i++) {
 				IDataInputEntry entry = dataInputEntries.get(i);
@@ -113,8 +116,8 @@ public class InputFilesTable {
 				TableEditor editor = new TableEditor(table);
 				editor.horizontalAlignment = SWT.LEFT;
 				editor.grabHorizontal = true;
-				final Text text = new Text(table, SWT.NONE);
-				text.setBackground(null);
+				Text text = new Text(table, SWT.BORDER);
+				text.setBackground((i % 2 == 0) ? backgroundGray : backgroundNormal);
 				String groupName = entry.getGroupName();
 				if(groupName == null) {
 					text.setText("");
