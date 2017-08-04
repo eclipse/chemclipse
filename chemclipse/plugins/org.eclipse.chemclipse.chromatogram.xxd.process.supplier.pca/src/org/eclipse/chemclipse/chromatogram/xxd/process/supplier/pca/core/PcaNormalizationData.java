@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaNormalizationData {
 
@@ -45,7 +46,7 @@ public class PcaNormalizationData {
 		this.transformation = transformationNone;
 		this.transfromationType = Transformation.NONE;
 		centering = Centering.MEAN;
-		norlamalizationType = Normalization.SCALING_AUTO;
+		norlamalizationType = Normalization.TRANSFORMING;
 	}
 
 	private void autoscaling(IPcaResults pcaResults) {
@@ -169,7 +170,23 @@ public class PcaNormalizationData {
 		});
 	}
 
-	public void normalize(IPcaResults pcaResults) {
+	private void paretoScaling(IPcaResults pcaResults) {
+
+		for(ISample sample : pcaResults.getSampleList()) {
+			final double mean = getCenteringValue(sample);
+			final double deviationSqrt = Math.sqrt(getStandartDeviation(sample));
+			sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> {
+				double data = transformation.apply(d.getData());
+				double normData = 0;
+				if(deviationSqrt != 0) {
+					normData = (data - mean) / deviationSqrt;
+				}
+				d.setNormalizedData(normData);
+			});
+		}
+	}
+
+	public void process(IPcaResults pcaResults, IProgressMonitor monitor) {
 
 		switch(norlamalizationType) {
 			case SCALING_AUTO:
@@ -199,22 +216,6 @@ public class PcaNormalizationData {
 		}
 	}
 
-	private void paretoScaling(IPcaResults pcaResults) {
-
-		for(ISample sample : pcaResults.getSampleList()) {
-			final double mean = getCenteringValue(sample);
-			final double deviationSqrt = Math.sqrt(getStandartDeviation(sample));
-			sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> {
-				double data = transformation.apply(d.getData());
-				double normData = 0;
-				if(deviationSqrt != 0) {
-					normData = (data - mean) / deviationSqrt;
-				}
-				d.setNormalizedData(normData);
-			});
-		}
-	}
-
 	private void rangeScaling(IPcaResults pcaResults) {
 
 		pcaResults.getSampleList().forEach(s -> {
@@ -237,7 +238,7 @@ public class PcaNormalizationData {
 		this.centering = centering;
 	}
 
-	public void setNorlamalizationType(Normalization norlamalizationType) {
+	public void setNormalizationType(Normalization norlamalizationType) {
 
 		this.norlamalizationType = norlamalizationType;
 	}

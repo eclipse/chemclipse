@@ -52,7 +52,7 @@ public class AnovaFilter implements IFilter {
 				categoryData.add(summaryStatistics);
 			}
 			double pValue = oneWayAnova.anovaPValue(categoryData, true);
-			selection.add(!(pValue < alpha));
+			selection.add((pValue < alpha));
 		}
 		return selection;
 	}

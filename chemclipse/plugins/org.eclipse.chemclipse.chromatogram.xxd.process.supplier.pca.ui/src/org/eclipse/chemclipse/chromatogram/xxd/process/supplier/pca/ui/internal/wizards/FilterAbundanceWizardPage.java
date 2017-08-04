@@ -77,6 +77,6 @@ public class FilterAbundanceWizardPage extends WizardPage {
 		GridDataFactory.swtDefaults().grab(true, false).align(SWT.FILL, SWT.BEGINNING).applyTo(text);
 		ISWTObservableValue txtSecondAttributeObservable = WidgetProperties.text(SWT.Modify).observe(text);
 		dbc.bindValue(txtSecondAttributeObservable, observeLimitValue);
-		setControl(parent);
+		setControl(composite);
 	}
 }

@@ -36,6 +36,7 @@ import org.osgi.framework.FrameworkUtil;
 
 public class NormalizationDataTables {
 
+	private final int COLUMNS_WIDTH = 500;
 	private PcaNormalizationData pcaNormalizationData;
 	private Table tableCentering;
 	private Table tableScaling;
@@ -54,20 +55,13 @@ public class NormalizationDataTables {
 
 		table.clearAll();
 		table.removeAll();
-		String[] titles = {"Select Centering Type"};
-		for(int i = 0; i < titles.length; i++) {
-			TableColumn column = new TableColumn(table, SWT.NONE);
-			column.setText(titles[i]);
-		}
 		String[] description = new String[]{};
 		setTableRow(table, "Mean certering", "center_mean.jpg", //
 				description, Centering.MEAN, Centering.MEAN.equals(selectedCentering));
 		description = new String[]{};
-		setTableRow(table, "Meadin cetering", "center_median.jpg", //
+		setTableRow(table, "Median cetering", "center_median.jpg", //
 				description, Centering.MEDIAN, Centering.MEDIAN.equals(selectedCentering));
-		for(int i = 0; i < titles.length; i++) {
-			table.getColumn(i).pack();
-		}
+		table.getColumn(0).setWidth(COLUMNS_WIDTH);
 		return table;
 	}
 
@@ -75,16 +69,11 @@ public class NormalizationDataTables {
 
 		table.clearAll();
 		table.removeAll();
-		String[] titles = {"Select Normalization type"};
-		for(int i = 0; i < titles.length; i++) {
-			TableColumn column = new TableColumn(table, SWT.NONE);
-			column.setText(titles[i]);
-		}
 		String[] description = new String[]{};
-		setTableRow(table, "Only transformation or \n without transsformation,\n if transformation is set as \"Without transformation\" ", "norm_trans.jpg", //
+		setTableRow(table, "Only Transformation or \n without transformation,\n if transformation is set as \n\"Without transformation\" ", "norm_trans.jpg", //
 				description, Normalization.TRANSFORMING, Normalization.TRANSFORMING.equals(selectedNormalization));
 		description = new String[]{};
-		setTableRow(table, "Only centering", "norm_center.jpg", //
+		setTableRow(table, "Only Centering", "norm_center.jpg", //
 				description, Normalization.CENTERING, Normalization.CENTERING.equals(selectedNormalization));
 		description = new String[]{};
 		setTableRow(table, "Autoscaling", "norm_scal_auto.jpg", //
@@ -104,20 +93,13 @@ public class NormalizationDataTables {
 		description = new String[]{};
 		setTableRow(table, "Maximum scaling", "norm_scal_max.jpg", //
 				description, Normalization.SCALING_MAXIMUM, Normalization.SCALING_MAXIMUM.equals(selectedNormalization));
-		for(int i = 0; i < titles.length; i++) {
-			table.getColumn(i).pack();
-		}
+		table.getColumn(0).setWidth(COLUMNS_WIDTH);
 	}
 
 	private Table createColumnsDataTransformation(Table table, Transformation selecetedTransformation) {
 
 		table.clearAll();
 		table.removeAll();
-		String[] titles = {"Select Transformation Type"};
-		for(int i = 0; i < titles.length; i++) {
-			TableColumn column = new TableColumn(table, SWT.NONE);
-			column.setText(titles[i]);
-		}
 		String[] description = new String[]{};
 		setTableRow(table, "Without transformation", "trans_none.jpg", //
 				description, Transformation.NONE, Transformation.NONE.equals(selecetedTransformation));
@@ -125,11 +107,9 @@ public class NormalizationDataTables {
 		setTableRow(table, "Log transformation", "trans_log.jpg", //
 				description, Transformation.LOG10, Transformation.LOG10.equals(selecetedTransformation));
 		description = new String[]{};
-		setTableRow(table, "Power transformationn", "trans_power.jpg", //
+		setTableRow(table, "Power transformation", "trans_power.jpg", //
 				description, Transformation.POWER, Transformation.POWER.equals(selecetedTransformation));
-		for(int i = 0; i < titles.length; i++) {
-			table.getColumn(i).pack();
-		}
+		table.getColumn(0).setWidth(COLUMNS_WIDTH);
 		return table;
 	}
 
@@ -159,7 +139,6 @@ public class NormalizationDataTables {
 	public void setPcaNormalizationData(PcaNormalizationData pcaNormalizationData) {
 
 		this.pcaNormalizationData = pcaNormalizationData;
-		update();
 	}
 
 	private TableItem setTableRow(Table table, String name, String mathFormula, String[] description, Object data, boolean isSelected) {
@@ -174,7 +153,7 @@ public class NormalizationDataTables {
 		for(int i = 0; i < description.length; i++) {
 			item.setText(i + 1, description[i]);
 		}
-		;
+		item.setData(data);
 		if(isSelected) {
 			table.setData(data);
 			item.setChecked(true);
@@ -187,6 +166,11 @@ public class NormalizationDataTables {
 		Table table = new Table(parent, SWT.BORDER | SWT.CHECK);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
+		String[] titles = {"Select Centering Type"};
+		for(int i = 0; i < titles.length; i++) {
+			TableColumn column = new TableColumn(table, SWT.NONE);
+			column.setText(titles[i]);
+		}
 		createColumnCentering(table, pcaNormalizationData.getCentering());
 		table.addListener(SWT.Selection, new Listener() {
 
@@ -201,6 +185,7 @@ public class NormalizationDataTables {
 				}
 				TableItem item = (TableItem)event.item;
 				item.setChecked(true);
+				pcaNormalizationData.setCentering((Centering)item.getData());
 			}
 		});
 		return table;
@@ -211,6 +196,11 @@ public class NormalizationDataTables {
 		Table table = new Table(parent, SWT.BORDER | SWT.CHECK);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
+		String[] titles = {"Select Normalization type"};
+		for(int i = 0; i < titles.length; i++) {
+			TableColumn column = new TableColumn(table, SWT.NONE);
+			column.setText(titles[i]);
+		}
 		createColumnsDataNormalization(table, pcaNormalizationData.getNorlamalizationType());
 		table.addListener(SWT.Selection, new Listener() {
 
@@ -225,6 +215,7 @@ public class NormalizationDataTables {
 				}
 				TableItem item = (TableItem)event.item;
 				item.setChecked(true);
+				pcaNormalizationData.setNormalizationType((Normalization)item.getData());
 			}
 		});
 		return table;
@@ -235,6 +226,11 @@ public class NormalizationDataTables {
 		Table table = new Table(parent, SWT.BORDER | SWT.CHECK);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
+		String[] titles = {"Select Transformation Type"};
+		for(int i = 0; i < titles.length; i++) {
+			TableColumn column = new TableColumn(table, SWT.NONE);
+			column.setText(titles[i]);
+		}
 		createColumnsDataTransformation(table, pcaNormalizationData.getTransformationType());
 		table.addListener(SWT.Selection, new Listener() {
 
@@ -249,6 +245,7 @@ public class NormalizationDataTables {
 				}
 				TableItem item = (TableItem)event.item;
 				item.setChecked(true);
+				pcaNormalizationData.setTransformationType((Transformation)item.getData());
 			}
 		});
 		return table;

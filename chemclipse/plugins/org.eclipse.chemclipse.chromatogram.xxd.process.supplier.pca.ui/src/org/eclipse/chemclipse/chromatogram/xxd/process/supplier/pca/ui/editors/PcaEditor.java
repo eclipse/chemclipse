@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Daniel Mariano, Rafael Aguayo - additional functionality and UI improvements
+ * Jan Holy - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
@@ -23,12 +24,6 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ResultExport;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.ExtractDataRunnable;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaRunnable;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.ReEvaluateRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.SamplesSelectionDialog;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
@@ -39,7 +34,6 @@ import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -47,7 +41,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-public class PcaEditor {
+public class PcaEditor extends AbstractPcaEditor {
 
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor";
 	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif";
@@ -64,13 +58,12 @@ public class PcaEditor {
 	private File exportFile;
 	private FiltersPage filtersPage;
 	private FormToolkit formToolkit;
-	private InputFilesPage inputFilesPage;
 	@Inject
 	private EModelService modelService;
-	private NormalizationPage normalizationPage;
 	/*
 	 * Pages
 	 */
+	private NormalizationPage normalizationPage;
 	private OverviewPage overviewPage;
 	private List<Object> pages;
 	/*
@@ -78,8 +71,8 @@ public class PcaEditor {
 	 */
 	@Inject
 	private MPart part;
-	private IPcaResults pcaResults;
 	private PeakListIntensityTablePage peakListIntensityTablePage;
+	private SamplesOverviewPage samplesOverviewPage;
 	private SamplesSelectionDialog samplesSelectionDialog;
 	private ScorePlot3dPage scorePlot3dPage;
 	private ScorePlotPage scorePlotPage;
@@ -90,7 +83,6 @@ public class PcaEditor {
 
 	public PcaEditor() {
 		//
-		pcaResults = new PcaResults(); // Default empty
 		pages = new ArrayList<Object>();
 		samplesSelectionDialog = new SamplesSelectionDialog(this);
 	}
@@ -107,7 +99,7 @@ public class PcaEditor {
 		tabFolder = new TabFolder(parent, SWT.BOTTOM);
 		//
 		pages.add(overviewPage = new OverviewPage(this, tabFolder, formToolkit));
-		pages.add(inputFilesPage = new InputFilesPage(this, tabFolder, formToolkit));
+		pages.add(samplesOverviewPage = new SamplesOverviewPage(this, tabFolder, formToolkit));
 		pages.add(normalizationPage = new NormalizationPage(this, tabFolder, formToolkit));
 		pages.add(filtersPage = new FiltersPage(this, tabFolder, formToolkit));
 		pages.add(peakListIntensityTablePage = new PeakListIntensityTablePage(this, tabFolder, formToolkit));
@@ -116,36 +108,24 @@ public class PcaEditor {
 		pages.add(scorePlot3dPage = new ScorePlot3dPage(this, tabFolder, formToolkit));
 	}
 
-	public void extractData() {
+	public void openSamplesSelectionDialog() {
 
-		int retentionTimeWindow = overviewPage.getRetentionTimeWindow();
-		overviewPage.getExtractionType();
-		List<IDataInputEntry> dataInputEntries = inputFilesPage.getDataInputEntries();
-		ExtractDataRunnable runnable = new ExtractDataRunnable(dataInputEntries, retentionTimeWindow, IPcaResults.EXTRACT_PEAK);
-		ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		samplesSelectionDialog.open();
+	}
+
+	@Override
+	public void openWizardPcaPeakInputs() {
+
 		try {
-			/*
-			 * Calculate the results and show the score plot page.
-			 */
-			monitor.run(true, true, runnable);
-			pcaResults = runnable.getPcaResults();
-			reloadExtractData();
+			super.openWizardPcaPeakInputs();
+			updateData();
+			updateViews();
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
 			logger.warn(e.getCause());
 		} catch(InterruptedException e) {
 			logger.warn(e);
 		}
-	}
-
-	public IPcaResults getPcaResults() {
-
-		return pcaResults;
-	}
-
-	public void openSamplesSelectionDialog() {
-
-		samplesSelectionDialog.open();
 	}
 
 	@PreDestroy
@@ -179,27 +159,12 @@ public class PcaEditor {
 		System.gc();
 	}
 
+	@Override
 	public void reEvaluatePcaCalculation() {
 
-		dirtyable.setDirty(true);
-		/*
-		 * Get the settings.
-		 */
-		pcaResults.setRetentionTimeWindow(overviewPage.getRetentionTimeWindow());
-		pcaResults.setNumberOfPrincipleComponents(overviewPage.getNumberOfPrincipleComponents());
-		pcaResults.setExtractionType(overviewPage.getExtractionType());
-		/*
-		 * Run the process.
-		 */
-		ReEvaluateRunnable runnable = new ReEvaluateRunnable(pcaResults);
-		ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 		try {
-			/*
-			 * Calculate the results and show the score plot page.
-			 */
-			monitor.run(true, true, runnable);
-			pcaResults = runnable.getPcaResults();
-			reloadCalculation();
+			super.reEvaluatePcaCalculation();
+			updateViews();
 			showScorePlotPage();
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
@@ -209,42 +174,18 @@ public class PcaEditor {
 		}
 	}
 
-	private void reloadCalculation() {
+	@Override
+	public void reFiltrationData() {
 
-		scorePlotPage.update();
-		errorResiduePage.update();
-		scorePlot3dPage.update();
-		samplesSelectionDialog.update();
+		super.reFiltrationData();
+		updateData();
 	}
 
-	private void reloadExtractData() {
+	@Override
+	public void reNormalizationData() {
 
-		peakListIntensityTablePage.update();
-	}
-
-	public void runPcaCalculation() {
-
-		int numberOfPrincipleComponents = overviewPage.getNumberOfPrincipleComponents();
-		IPcaResults pcaResults = this.pcaResults;
-		dirtyable.setDirty(true);
-		/*
-		 * Run the process.
-		 */
-		PcaRunnable runnable = new PcaRunnable(pcaResults, numberOfPrincipleComponents);
-		ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-		try {
-			/*
-			 * Calculate the results and show the score plot page.
-			 */
-			monitor.run(true, true, runnable);
-			reloadCalculation();
-			showScorePlotPage();
-		} catch(InvocationTargetException e) {
-			logger.warn(e);
-			logger.warn(e.getCause());
-		} catch(InterruptedException e) {
-			logger.warn(e);
-		}
+		super.reNormalizationData();
+		updateData();
 	}
 
 	@Persist
@@ -268,7 +209,7 @@ public class PcaEditor {
 		if(exportFile != null) {
 			try {
 				ResultExport resultExport = new ResultExport();
-				resultExport.exportToTextFile(exportFile, pcaResults);
+				resultExport.exportToTextFile(exportFile, getPcaResults().get());
 				dirtyable.setDirty(false);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
@@ -282,11 +223,11 @@ public class PcaEditor {
 		tabFolder.setFocus();
 	}
 
-	public void showInputFilesPage() {
+	public void showSamplesOverviewPagePage() {
 
 		int pageIndex = 0;
 		for(int index = 0; index < pages.size(); index++) {
-			if(pages.get(index) == inputFilesPage) {
+			if(pages.get(index) == samplesOverviewPage) {
 				pageIndex = index;
 			}
 		}
@@ -304,10 +245,27 @@ public class PcaEditor {
 		tabFolder.setSelection(pageIndex);
 	}
 
+	public void updateData() {
+
+		overviewPage.update();
+		samplesOverviewPage.update();
+		normalizationPage.update();
+		filtersPage.update();
+		peakListIntensityTablePage.update();
+	}
+
 	public void updateSelection() {
 
 		scorePlotPage.updateSelection();
 		errorResiduePage.updateSelection();
 		scorePlot3dPage.updateSelection();
+	}
+
+	private void updateViews() {
+
+		scorePlotPage.update();
+		errorResiduePage.update();
+		scorePlot3dPage.update();
+		samplesSelectionDialog.update();
 	}
 }

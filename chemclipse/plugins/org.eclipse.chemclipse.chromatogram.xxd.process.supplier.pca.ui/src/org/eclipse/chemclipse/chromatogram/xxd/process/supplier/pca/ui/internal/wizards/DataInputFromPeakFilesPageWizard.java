@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.I
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -27,15 +28,16 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class DataInputFromPeakFilesWizardPage extends WizardPage {
+public class DataInputFromPeakFilesPageWizard extends WizardPage {
 
 	private InputFilesTable inputFilesTable;
 	private Text textGroupName;
 
-	public DataInputFromPeakFilesWizardPage(String pageName) {
+	public DataInputFromPeakFilesPageWizard(String pageName) {
 		super(pageName);
 		setTitle("Peak Input Files");
 		setDescription("This wizard lets you select peak input files and set bulk group name.");
+		setPageComplete(false);
 	}
 
 	private void addFiles() {
@@ -54,7 +56,8 @@ public class DataInputFromPeakFilesWizardPage extends WizardPage {
 				}
 				inputFilesTable.getDataInputEntries().add(dataInputEntry);
 			}
-			inputFilesTable.reload();
+			inputFilesTable.update();
+			setPageComplete(!inputFilesTable.getDataInputEntries().isEmpty());
 		}
 	}
 
@@ -77,15 +80,24 @@ public class DataInputFromPeakFilesWizardPage extends WizardPage {
 		label.setText("Set group name (optional)");
 		textGroupName = new Text(composite, SWT.BORDER);
 		textGroupName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		Button button = new Button(composite, SWT.PUSH);
-		button.addListener(SWT.Selection, (event) -> addFiles());
-		button.setText(" Select input files ");
-		inputFilesTable = new InputFilesTable(composite, null);
+		label = new Label(composite, SWT.None);
+		label.setText(" Select input files ");
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.heightHint = 400;
 		gridData.widthHint = 100;
 		gridData.verticalSpan = 5;
-		inputFilesTable.getTable().setLayoutData(gridData);
+		inputFilesTable = new InputFilesTable(composite, gridData);
+		Composite compositeButtonTable = new Composite(composite, SWT.NONE);
+		compositeButtonTable.setLayout(new FillLayout());
+		Button button = new Button(compositeButtonTable, SWT.PUSH);
+		button.addListener(SWT.Selection, (event) -> addFiles());
+		button.setText("Add");
+		button = new Button(compositeButtonTable, SWT.PUSH);
+		button.addListener(SWT.Selection, (event) -> {
+			inputFilesTable.removeSelection();
+			setPageComplete(!inputFilesTable.getDataInputEntries().isEmpty());
+		});
+		button.setText("Remove");
 		setControl(composite);
 	}
 

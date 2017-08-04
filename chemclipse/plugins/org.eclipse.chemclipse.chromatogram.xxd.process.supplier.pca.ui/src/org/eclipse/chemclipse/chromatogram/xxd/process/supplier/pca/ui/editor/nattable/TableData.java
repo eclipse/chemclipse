@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.n
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -24,16 +25,14 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.P
 
 public class TableData {
 
-	private List<Boolean> isSelectedRetentionTimes;
+	private List<Boolean> isSelectedRetentionTimes = new ArrayList<>();
 	private PcaEditor pcaEditor;
-	private List<String> peaksNames;
-	private List<Integer> retentionTimes;
-	private List<ISample> samples;
+	private List<String> peaksNames = new ArrayList<>();
+	private List<Integer> retentionTimes = new ArrayList<>();
+	private List<ISample> samples = new ArrayList<>();
 
 	public TableData(PcaEditor pcaEditor) {
 		this.pcaEditor = pcaEditor;
-		samples = new ArrayList<>();
-		peaksNames = new ArrayList<>();
 	}
 
 	public List<String> getPeaksNames() {
@@ -65,10 +64,11 @@ public class TableData {
 
 	public void update() {
 
-		IPcaResults pcaResults = pcaEditor.getPcaResults();
-		if(pcaResults == null) {
+		Optional<IPcaResults> result = pcaEditor.getPcaResults();
+		if(!result.isPresent()) {
 			return;
 		}
+		IPcaResults pcaResults = result.get();
 		/*
 		 * remove old data
 		 */

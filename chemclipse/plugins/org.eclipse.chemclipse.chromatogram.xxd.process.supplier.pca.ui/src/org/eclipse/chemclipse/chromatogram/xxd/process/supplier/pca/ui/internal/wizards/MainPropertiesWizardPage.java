@@ -11,34 +11,33 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.AnovaFilter;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
-import org.eclipse.core.databinding.beans.PojoProperties;
 import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.validation.ValidationStatus;
-import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
-import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
-public class FilterAnovaWizardPage extends WizardPage {
+public class MainPropertiesWizardPage extends WizardPage {
 
-	final private DataBindingContext dbc = new DataBindingContext();
-	private IObservableValue<Double> observeAlfa;
+	private DataBindingContext dbc = new DataBindingContext();
+	private IObservableValue<Integer> numerOfComponents = new WritableValue<>();
+	private IObservableValue<Integer> retentionTimeWindow = new WritableValue<>();
 
-	protected FilterAnovaWizardPage(AnovaFilter anovaFilter) {
-		super("ANOVA Filter");
-		setTitle("One-way analysis of variance filter");
-		setDescription("ANOVA filter works just with selected sampels, which are in group (contains group name)");
-		observeAlfa = PojoProperties.value(AnovaFilter.class, "alpha", Double.class).observe(anovaFilter);
+	protected MainPropertiesWizardPage(String pageName) {
+		super(pageName);
+		numerOfComponents.setValue(3);
+		retentionTimeWindow.setValue(200);
 	}
 
 	@Override
@@ -48,29 +47,43 @@ public class FilterAnovaWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new GridLayout(1, true));
 		Label label = new Label(composite, SWT.None);
-		label.setText("Select row in data table whose p-value is less than value (in %)");
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
+		label.setText("Retention Time Windows (ms)");
 		Text text = new Text(composite, SWT.None);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(text);
-		ISWTObservableValue targetObservableValue = WidgetProperties.text(SWT.Modify).observe(text);
-		UpdateValueStrategy targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
+		UpdateValueStrategy targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Integer.class, o1 -> {
 			try {
-				return Double.parseDouble((String)o1) / 100.0;
+				return Integer.parseInt((String)o1);
 			} catch(NumberFormatException e) {
 			}
 			return null;
 		}));
 		targetToModel.setBeforeSetValidator(o1 -> {
-			if(o1 instanceof Double) {
-				Double d = (Double)o1;
-				if(d <= 1 && d >= 0) {
+			if(o1 instanceof Integer) {
+				Integer i = (Integer)o1;
+				if(i > 0) {
 					return ValidationStatus.ok();
 				}
 			}
-			return ValidationStatus.error("error");
+			return ValidationStatus.error("Warning The value must be positive value");
 		});
-		UpdateValueStrategy modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString(((Double)o1) * 100.0)));
-		dbc.bindValue(targetObservableValue, observeAlfa, targetToModel, modelToTarget);
+		UpdateValueStrategy modelToTarget = UpdateValueStrategy.create(IConverter.create(Integer.class, String.class, o1 -> Integer.toString(((Integer)o1))));
+		dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(text), retentionTimeWindow, targetToModel, modelToTarget);
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		label = new Label(composite, SWT.None);
+		label.setText("Number of principal components");
+		Spinner spinner = new Spinner(composite, SWT.NONE);
+		spinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		spinner.setMinimum(3);
+		dbc.bindValue(WidgetProperties.selection().observe(spinner), numerOfComponents);
 		setControl(composite);
+	}
+
+	public int getNumerOfComponents() {
+
+		return numerOfComponents.getValue();
+	}
+
+	public int getRetentionTimeWindow() {
+
+		return retentionTimeWindow.getValue();
 	}
 }

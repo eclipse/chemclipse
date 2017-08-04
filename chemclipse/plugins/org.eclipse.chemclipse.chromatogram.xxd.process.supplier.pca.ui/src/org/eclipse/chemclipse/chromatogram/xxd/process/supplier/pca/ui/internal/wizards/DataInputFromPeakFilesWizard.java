@@ -18,7 +18,7 @@ import org.eclipse.jface.wizard.Wizard;
 
 public class DataInputFromPeakFilesWizard extends Wizard {
 
-	private DataInputFromPeakFilesWizardPage inputEntriesPage;
+	private DataInputFromPeakFilesPageWizard inputEntriesPage;
 
 	public DataInputFromPeakFilesWizard() {
 		super();
@@ -27,7 +27,7 @@ public class DataInputFromPeakFilesWizard extends Wizard {
 	@Override
 	public void addPages() {
 
-		inputEntriesPage = new DataInputFromPeakFilesWizardPage("Input Peak Files");
+		inputEntriesPage = new DataInputFromPeakFilesPageWizard("Input Peak Files");
 		addPage(inputEntriesPage);
 	}
 

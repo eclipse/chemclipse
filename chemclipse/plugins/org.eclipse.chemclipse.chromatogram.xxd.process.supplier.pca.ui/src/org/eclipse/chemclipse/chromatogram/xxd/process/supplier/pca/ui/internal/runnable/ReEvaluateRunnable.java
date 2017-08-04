@@ -13,22 +13,19 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PrincipleComponentProcessor;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaEvaluation;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class ReEvaluateRunnable implements IRunnableWithProgress {
 
+	private int numberOfPrincipleComponents;
 	private IPcaResults pcaResults;
 
-	public ReEvaluateRunnable(IPcaResults pcaResults) {
+	public ReEvaluateRunnable(IPcaResults pcaResults, int numberOfPrincipleComponents) {
 		this.pcaResults = pcaResults;
-	}
-
-	public IPcaResults getPcaResults() {
-
-		return pcaResults;
+		this.numberOfPrincipleComponents = numberOfPrincipleComponents;
 	}
 
 	@Override
@@ -37,7 +34,7 @@ public class ReEvaluateRunnable implements IRunnableWithProgress {
 		/*
 		 * Extraction type argument 0 for peaks, 1 for scans
 		 */
-		PrincipleComponentProcessor principleComponentProcessor = new PrincipleComponentProcessor();
-		pcaResults = principleComponentProcessor.reEvaluate(pcaResults);
+		PcaEvaluation pcaEvaluation = new PcaEvaluation();
+		pcaResults = pcaEvaluation.process(pcaResults, numberOfPrincipleComponents, monitor);
 	}
 }

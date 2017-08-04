@@ -15,11 +15,13 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
@@ -68,7 +70,7 @@ public class ErrorResidueBarChart {
 	private List<ISample> data = new ArrayList<>();
 	private int displayData;
 	private FXCanvas fxCanvas;
-	private Map<String, Color> groupColor;
+	private Map<String, Color> groupColor = new HashMap<>();
 	private PcaEditor pcaEditor;
 	private XYChart.Series<String, Number> series = new XYChart.Series<>();
 	private int sortType;
@@ -365,12 +367,12 @@ public class ErrorResidueBarChart {
 		 * update data
 		 */
 		data.clear();
-		groupColor = null;
-		IPcaResults pcaResults = pcaEditor.getPcaResults();
-		if(pcaResults != null) {
-			pcaResults.getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toCollection(() -> data));
-			pcaResults.getGroupList().stream().filter(s -> s.isSelected()).collect(Collectors.toCollection(() -> data));
-			groupColor = PcaColorGroup.getColorJavaFx(PcaUtils.getGroupNames(pcaResults.getSampleList(), false));
+		groupColor.clear();
+		Optional<IPcaResults> pcaResults = pcaEditor.getPcaResults();
+		if(pcaResults.isPresent()) {
+			pcaResults.get().getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toCollection(() -> data));
+			pcaResults.get().getGroupList().stream().filter(s -> s.isSelected()).collect(Collectors.toCollection(() -> data));
+			groupColor = PcaColorGroup.getColorJavaFx(PcaUtils.getGroupNames(pcaResults.get().getSampleList(), false));
 		}
 		/*
 		 * sort data

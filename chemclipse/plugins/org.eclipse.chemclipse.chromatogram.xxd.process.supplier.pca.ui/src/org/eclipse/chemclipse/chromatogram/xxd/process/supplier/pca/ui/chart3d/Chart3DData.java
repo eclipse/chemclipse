@@ -17,7 +17,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
@@ -167,9 +169,9 @@ public class Chart3DData {
 		this.pcX = pcX;
 		this.pcY = pcY;
 		this.pcZ = pcZ;
-		IPcaResults results = pcaEditor.getPcaResults();
-		if(results != null) {
-			List<ISample> samples = results.getSampleList();
+		Optional<IPcaResults> results = pcaEditor.getPcaResults();
+		if(results.isPresent()) {
+			List<ISample> samples = results.get().getSampleList().stream().filter(ISample::isSelected).collect(Collectors.toList());
 			if(!samples.isEmpty()) {
 				/*
 				 *

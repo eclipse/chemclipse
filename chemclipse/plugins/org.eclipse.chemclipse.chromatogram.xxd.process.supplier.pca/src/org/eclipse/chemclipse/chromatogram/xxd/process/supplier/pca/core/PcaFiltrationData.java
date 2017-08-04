@@ -11,22 +11,40 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaFiltrationData {
 
-	public void process(IPcaResults pcaResults, boolean reset, List<Boolean>... filters) {
+	private List<IFilter> filters;
 
+	public PcaFiltrationData() {
+		filters = new ArrayList<>();
+	}
+
+	public List<IFilter> getFilters() {
+
+		return filters;
+	}
+
+	public void process(IPcaResults pcaResults, boolean resetSelectedRetentionTimes, IProgressMonitor monitor) {
+
+		List<ISample> samples = pcaResults.getSampleList();
 		List<Boolean> selectedRetentionTimes = pcaResults.isSelectedRetentionTimes();
-		if(reset) {
-			selectedRetentionTimes.forEach(e -> e = false);
+		if(resetSelectedRetentionTimes) {
+			selectedRetentionTimes.forEach(e -> e = true);
 		}
-		for(List<Boolean> filter : filters) {
-			for(int i = 0; i < selectedRetentionTimes.size(); i++) {
-				Boolean selectedRetentionTime = selectedRetentionTimes.get(i);
-				selectedRetentionTimes.set(i, selectedRetentionTime & filter.get(i));
+		if(filters != null && !filters.isEmpty()) {
+			for(int i = 0; i < filters.size(); i++) {
+				List<Boolean> result = filters.get(i).filter(samples);
+				for(int j = 0; j < result.size(); j++) {
+					selectedRetentionTimes.set(j, selectedRetentionTimes.get(j) && result.get(j));
+				}
 			}
 		}
 	}

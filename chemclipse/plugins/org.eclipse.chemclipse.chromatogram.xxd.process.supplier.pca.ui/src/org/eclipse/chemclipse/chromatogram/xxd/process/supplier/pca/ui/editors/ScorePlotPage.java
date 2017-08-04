@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -294,12 +295,12 @@ public class ScorePlotPage {
 
 	public void update() {
 
-		updateSpinnerPCMaxima();
-		IPcaResults results = pcaEditor.getPcaResults();
-		if(results != null) {
+		Optional<IPcaResults> results = pcaEditor.getPcaResults();
+		if(results.isPresent()) {
 			samples.clear();
-			results.getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toCollection(() -> samples));
-			Set<String> groupNames = PcaUtils.getGroupNames(results.getSampleList(), false);
+			updateSpinnerPCMaxima(results.get().getNumberOfPrincipleComponents());
+			results.get().getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toCollection(() -> samples));
+			Set<String> groupNames = PcaUtils.getGroupNames(results.get().getSampleList(), false);
 			colors = PcaColorGroup.getColorSWT(groupNames);
 		}
 		reloadScorePlotChart();
@@ -310,14 +311,11 @@ public class ScorePlotPage {
 		reloadScorePlotChart();
 	}
 
-	private void updateSpinnerPCMaxima() {
+	private void updateSpinnerPCMaxima(int numberOfPrincipleComponents) {
 
-		IPcaResults pcaResults = pcaEditor.getPcaResults();
-		if(pcaResults != null) {
-			spinnerPCx.setMaximum(pcaResults.getNumberOfPrincipleComponents());
-			spinnerPCx.setSelection(1); // PC1
-			spinnerPCy.setMaximum(pcaResults.getNumberOfPrincipleComponents());
-			spinnerPCy.setSelection(2); // PC2
-		}
+		spinnerPCx.setMaximum(numberOfPrincipleComponents);
+		spinnerPCx.setSelection(1); // PC1
+		spinnerPCy.setMaximum(numberOfPrincipleComponents);
+		spinnerPCy.setSelection(2); // PC2
 	}
 }

@@ -12,24 +12,21 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
-import org.eclipse.chemclipse.logging.core.Logger;
+import java.util.Optional;
+
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -42,8 +39,6 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
 public class OverviewPage {
 
-	private static final int DEFAULT_RETENTION_TIME_WINDOW = 200;
-	private static final Logger logger = Logger.getLogger(OverviewPage.class);
 	/*
 	 * ExtractionType - 0 for peaks, 1 for scans
 	 */
@@ -51,7 +46,6 @@ public class OverviewPage {
 	//
 	private PcaEditor pcaEditor;
 	private Spinner principleComponentSpinner;
-	private Text retentionTimeWindowText;
 
 	public OverviewPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
@@ -66,13 +60,12 @@ public class OverviewPage {
 	 */
 	private void createExecuteSection(Composite parent, FormToolkit formToolkit) {
 
-		Label label;
 		/*
 		 * Section
 		 */
 		Section section = formToolkit.createSection(parent, Section.DESCRIPTION | ExpandableComposite.TITLE_BAR);
 		section.setText("Evaluation");
-		section.setDescription("Run the PCA evaluation after the entries have been edited.");
+		section.setDescription("Start the PCA by using the wizard:\n");
 		section.marginWidth = 5;
 		section.marginHeight = 5;
 		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
@@ -91,71 +84,12 @@ public class OverviewPage {
 		/*
 		 * Input files section.
 		 */
-		label = formToolkit.createLabel(client, "Select the input chromatograms:\n");
-		label.setLayoutData(gridData);
-		createInputFilesPageHyperlink(client, gridData, formToolkit);
+		createWizardHyperlink(client, gridData, formToolkit);
 		/*
 		 * Add the client to the section and paint flat borders.
 		 */
 		section.setClient(client);
 		formToolkit.paintBordersFor(client);
-	}
-
-	private void createExtractionTypeButtons(Composite client, FormToolkit formToolkit) {
-
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		gridData.heightHint = 30;
-		/*
-		 * Extraction type radio buttons.
-		 */
-		Label radioLabels = formToolkit.createLabel(client, "Select the extraction type:");
-		radioLabels.setLayoutData(gridData);
-		SelectionListener selectionListener = new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-
-				Button button = ((Button)event.widget);
-				if(button.getText().equals("Peaks")) {
-					extractionType = 0;
-				} else {
-					extractionType = 2;
-				}
-			};
-		};
-		Button[] radioButtons = new Button[2];
-		//
-		radioButtons[0] = new Button(client, SWT.RADIO);
-		radioButtons[0].setSelection(true);
-		radioButtons[0].setText("Peaks");
-		radioButtons[0].setLayoutData(gridData);
-		radioButtons[0].addSelectionListener(selectionListener);
-		//
-		radioButtons[1] = new Button(client, SWT.RADIO);
-		radioButtons[1].setText("Scans");
-		radioButtons[1].setLayoutData(gridData);
-		radioButtons[1].addSelectionListener(selectionListener);
-	}
-
-	private void createInputFilesPageHyperlink(Composite client, GridData gridData, FormToolkit formToolkit) {
-
-		ImageHyperlink imageHyperlink;
-		/*
-		 * Settings
-		 */
-		imageHyperlink = formToolkit.createImageHyperlink(client, SWT.NONE);
-		imageHyperlink.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16));
-		imageHyperlink.setText("Data Input Files");
-		imageHyperlink.setLayoutData(gridData);
-		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
-
-			@Override
-			public void linkActivated(HyperlinkEvent e) {
-
-				pcaEditor.showInputFilesPage();
-			}
-		});
 	}
 
 	private void createPrincipleComponentSpinner(Composite client, FormToolkit formToolkit) {
@@ -166,7 +100,7 @@ public class OverviewPage {
 		principleComponentSpinner.setMinimum(3);
 		principleComponentSpinner.setMaximum(10);
 		principleComponentSpinner.setIncrement(1);
-		//
+		principleComponentSpinner.addListener(SWT.Selection, e -> pcaEditor.setNumberOfPrincipleComponents(principleComponentSpinner.getSelection()));
 		GridData gridData = new GridData();
 		gridData.widthHint = 50;
 		gridData.heightHint = 20;
@@ -176,14 +110,14 @@ public class OverviewPage {
 	/**
 	 * Creates the properties section.
 	 */
-	private void createPropertiesSection(Composite parent, FormToolkit formToolkit) {
+	private void createReEvaluateSection(Composite parent, FormToolkit formToolkit) {
 
 		/*
 		 * Section
 		 */
 		Section section = formToolkit.createSection(parent, Section.DESCRIPTION | ExpandableComposite.TITLE_BAR);
-		section.setText("Properties");
-		section.setDescription("Use the properties to define the retention time window and the number of components.");
+		section.setText("Re-evaluation");
+		section.setDescription("Use the properties to define  the number of components.");
 		section.marginWidth = 5;
 		section.marginHeight = 5;
 		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
@@ -204,25 +138,50 @@ public class OverviewPage {
 		/*
 		 * Settings
 		 */
-		createRetentionTimeWindowText(client, formToolkit);
 		createPrincipleComponentSpinner(client, formToolkit);
-		createExtractionTypeButtons(client, formToolkit);
-		/*
-		 * Add the client to the section and paint flat borders.
-		 */
+		createReEvaluationHyperlink(client, gridData, formToolkit);
 		section.setClient(client);
 		formToolkit.paintBordersFor(client);
 	}
 
-	private void createRetentionTimeWindowText(Composite client, FormToolkit formToolkit) {
+	private void createReEvaluationHyperlink(Composite client, GridData gridData, FormToolkit formToolkit) {
 
-		formToolkit.createLabel(client, "Retention Time Window (milliseconds)");
-		//
-		retentionTimeWindowText = formToolkit.createText(client, Integer.toString(DEFAULT_RETENTION_TIME_WINDOW), SWT.NONE);
-		//
-		GridData gridData = new GridData();
-		gridData.widthHint = 300;
-		retentionTimeWindowText.setLayoutData(gridData);
+		ImageHyperlink imageHyperlink;
+		/*
+		 * Settings
+		 */
+		imageHyperlink = formToolkit.createImageHyperlink(client, SWT.NONE);
+		imageHyperlink.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16));
+		imageHyperlink.setText("Reevaluate");
+		imageHyperlink.setLayoutData(gridData);
+		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
+
+			@Override
+			public void linkActivated(HyperlinkEvent e) {
+
+				pcaEditor.reEvaluatePcaCalculation();
+			}
+		});
+	}
+
+	private void createWizardHyperlink(Composite client, GridData gridData, FormToolkit formToolkit) {
+
+		ImageHyperlink imageHyperlink;
+		/*
+		 * Settings
+		 */
+		imageHyperlink = formToolkit.createImageHyperlink(client, SWT.NONE);
+		imageHyperlink.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16));
+		imageHyperlink.setText("Run Wizard");
+		imageHyperlink.setLayoutData(gridData);
+		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
+
+			@Override
+			public void linkActivated(HyperlinkEvent e) {
+
+				pcaEditor.openWizardPcaPeakInputs();
+			}
+		});
 	}
 
 	public int getExtractionType() {
@@ -233,17 +192,6 @@ public class OverviewPage {
 	public int getNumberOfPrincipleComponents() {
 
 		return principleComponentSpinner.getSelection();
-	}
-
-	public int getRetentionTimeWindow() {
-
-		int retentionTimeWindow = DEFAULT_RETENTION_TIME_WINDOW;
-		try {
-			retentionTimeWindow = Integer.parseInt(retentionTimeWindowText.getText().trim());
-		} catch(NumberFormatException e) {
-			logger.warn(e);
-		}
-		return retentionTimeWindow;
 	}
 
 	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
@@ -264,9 +212,17 @@ public class OverviewPage {
 		/*
 		 * Add the sections
 		 */
-		createPropertiesSection(scrolledFormComposite, formToolkit);
 		createExecuteSection(scrolledFormComposite, formToolkit);
+		createReEvaluateSection(scrolledFormComposite, formToolkit);
 		//
 		tabItem.setControl(composite);
+	}
+
+	public void update() {
+
+		Optional<IPcaResults> pcaResults = pcaEditor.getPcaResults();
+		if(pcaResults.isPresent()) {
+			principleComponentSpinner.setSelection(pcaResults.get().getNumberOfPrincipleComponents());
+		}
 	}
 }

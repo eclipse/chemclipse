@@ -36,6 +36,11 @@ public class AbundanceFilter implements IFilter {
 
 	public AbundanceFilter() {
 		onlySelected = true;
+		comparator = gt;
+		filterType = ALL_VALUE;
+		limitType = LIMIT_GREATER_THEN;
+		limitValue = 0;
+		onlySelected = true;
 	}
 
 	@Override

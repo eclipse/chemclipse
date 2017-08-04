@@ -45,6 +45,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaExtractionData {
 
+	public static final int EXTRACT_PEAK = 0;
+	public static final int EXTRACT_PEAK_CUMULATION = 1;
+	private List<IDataInputEntry> dataInputEntriesAll;
+	private int extractionType;
+	private int retentionTimeWindow;
+
+	public PcaExtractionData(List<IDataInputEntry> dataInputEntriesAll, int retentionTimeWindow, int extractionType) {
+		this.retentionTimeWindow = retentionTimeWindow;
+		this.dataInputEntriesAll = dataInputEntriesAll;
+		this.extractionType = extractionType;
+	}
+
 	/**
 	 * Calculates the condensed retention time.
 	 *
@@ -412,7 +424,7 @@ public class PcaExtractionData {
 		}
 	}
 
-	public IPcaResults proccess(List<IDataInputEntry> dataInputEntriesAll, int retentionTimeWindow, IProgressMonitor monitor, int extractionType) {
+	public IPcaResults proccess(IProgressMonitor monitor) {
 
 		List<IDataInputEntry> dataInputEntries = removeFileSameName(dataInputEntriesAll);
 		/*
@@ -420,18 +432,18 @@ public class PcaExtractionData {
 		 */
 		IPcaResults pcaResults = new PcaResults(dataInputEntries);
 		pcaResults.setRetentionTimeWindow(retentionTimeWindow);
-		if(!(extractionType == IPcaResults.EXTRACT_PEAK || extractionType == IPcaResults.EXTRACT_PEAK_CUMULATION)) {
-			extractionType = IPcaResults.EXTRACT_PEAK;
+		if(!(extractionType == EXTRACT_PEAK || extractionType == EXTRACT_PEAK_CUMULATION)) {
+			extractionType = EXTRACT_PEAK;
 		}
 		pcaResults.setExtractionType(extractionType);
 		/*
 		 * Extract data
 		 */
 		switch(extractionType) {
-			case IPcaResults.EXTRACT_PEAK:
+			case EXTRACT_PEAK:
 				extractPeakData(pcaResults, retentionTimeWindow, monitor);
 				break;
-			case IPcaResults.EXTRACT_PEAK_CUMULATION:
+			case EXTRACT_PEAK_CUMULATION:
 				extractPeakDataCumulation(pcaResults, retentionTimeWindow, monitor);
 				break;
 		}

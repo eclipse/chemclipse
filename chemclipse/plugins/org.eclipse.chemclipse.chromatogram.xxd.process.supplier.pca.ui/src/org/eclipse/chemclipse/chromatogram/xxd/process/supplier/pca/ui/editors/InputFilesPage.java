@@ -13,8 +13,10 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.DataInputFromPeakFilesWizard;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.InputFilesTable;
@@ -34,7 +36,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class InputFilesPage {
@@ -85,7 +86,6 @@ public class InputFilesPage {
 						 * If it contains at least 1 element, add it to the input files list.
 						 */
 						inputFilesTable.getDataInputEntries().addAll(inputWizard.getSelectedPeakFiles());
-						inputFilesTable.reload();
 						redrawCountFiles();
 					}
 				}
@@ -151,8 +151,6 @@ public class InputFilesPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				super.widgetSelected(e);
-				pcaEditor.extractData();
-				pcaEditor.runPcaCalculation();
 			}
 		});
 	}
@@ -177,25 +175,19 @@ public class InputFilesPage {
 				super.widgetSelected(e);
 				inputFilesTable.removeSelection();
 				redrawCountFiles();
+				inputFilesTable.update();
 			}
 		});
 	}
 
 	private void createTable(Composite client) {
 
-		this.inputFilesTable = new InputFilesTable(client, null);
-		Table table = inputFilesTable.getTable();
 		GridData gridData;
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.heightHint = 400;
 		gridData.widthHint = 100;
 		gridData.verticalSpan = 5;
-		table.setLayoutData(gridData);
-	}
-
-	public List<IDataInputEntry> getDataInputEntries() {
-
-		return inputFilesTable.getDataInputEntries();
+		this.inputFilesTable = new InputFilesTable(client, gridData);
 	}
 
 	private void initialize(TabFolder tabFolder) {
@@ -215,5 +207,16 @@ public class InputFilesPage {
 	private void redrawCountFiles() {
 
 		countFiles.setText(FILES + Integer.toString(inputFilesTable.getDataInputEntries().size()));
+	}
+
+	public void update() {
+
+		Optional<IPcaResults> pcaResults = pcaEditor.getPcaResults();
+		if(pcaResults.isPresent()) {
+			List<IDataInputEntry> inputs = pcaResults.get().getDataInputEntries();
+			inputFilesTable.getDataInputEntries().clear();
+			inputFilesTable.getDataInputEntries().addAll(inputs);
+			inputFilesTable.update();
+		}
 	}
 }

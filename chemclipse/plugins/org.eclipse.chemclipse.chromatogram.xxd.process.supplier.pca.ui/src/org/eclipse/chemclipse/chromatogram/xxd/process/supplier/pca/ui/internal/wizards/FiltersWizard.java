@@ -14,11 +14,13 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.AbundanceFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.AnovaFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.CVFilter;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.EmptyDataFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter;
 import org.eclipse.jface.wizard.Wizard;
 
 public class FiltersWizard extends Wizard {
 
+	final protected static int FITERS_EMPTY_DATA = 4;
 	final protected static int FITERS_TYPE_ABUNDANCE = 3;
 	final protected static int FITERS_TYPE_ANOVA = 1;
 	final protected static int FITERS_TYPE_CV = 2;
@@ -53,6 +55,9 @@ public class FiltersWizard extends Wizard {
 				break;
 			case FiltersWizard.FITERS_TYPE_ABUNDANCE:
 				filter = new AbundanceFilter();
+				break;
+			case FiltersWizard.FITERS_EMPTY_DATA:
+				filter = new EmptyDataFilter();
 				break;
 		}
 		return filter;

@@ -15,23 +15,40 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaEvaluation;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-public class PcaRunnable implements IRunnableWithProgress {
+public class PcaPeaksInputRunnable implements IRunnableWithProgress {
 
 	private int numberOfPrincipleComponents;
+	private PcaExtractionData pcaExtractionData;
+	private PcaFiltrationData pcaFiltrationData;
+	private PcaNormalizationData pcaNormalizationData;
 	private IPcaResults pcaResults;
 
-	public PcaRunnable(IPcaResults pcaResults, int numberOfPrincipleComponents) {
+	public PcaPeaksInputRunnable(PcaExtractionData pcaExtractionData, PcaFiltrationData pcaFiltrationData, PcaNormalizationData pcaNormalizationData, int numberOfPrincipleComponents) {
+		this.pcaExtractionData = pcaExtractionData;
+		this.pcaFiltrationData = pcaFiltrationData;
+		this.pcaNormalizationData = pcaNormalizationData;
+		this.pcaNormalizationData = pcaNormalizationData;
 		this.numberOfPrincipleComponents = numberOfPrincipleComponents;
-		this.pcaResults = pcaResults;
+	}
+
+	public IPcaResults getPcaResults() {
+
+		return pcaResults;
 	}
 
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
+		pcaResults = pcaExtractionData.proccess(monitor);
+		pcaNormalizationData.process(pcaResults, monitor);
+		pcaFiltrationData.process(pcaResults, true, monitor);
 		PcaEvaluation pcaEvaluation = new PcaEvaluation();
 		pcaEvaluation.process(pcaResults, numberOfPrincipleComponents, monitor);
 	}

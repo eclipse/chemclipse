@@ -72,6 +72,6 @@ public class FilterCVWizardPage extends WizardPage {
 		});
 		UpdateValueStrategy modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString(((Double)o1) * 100.0)));
 		dbc.bindValue(targetObservableValue, observeAlfa, targetToModel, modelToTarget);
-		setControl(parent);
+		setControl(composite);
 	}
 }

@@ -11,8 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
+import java.util.Optional;
+
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.NormalizationDataTables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -21,13 +22,14 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class NormalizationPage {
 
-	private PcaNormalizationData normalizationData;
+	private Composite composite;
 	private NormalizationDataTables normalizationDataTables;
 	//
 	private PcaEditor pcaEditor;
@@ -35,8 +37,8 @@ public class NormalizationPage {
 	public NormalizationPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
 		this.pcaEditor = pcaEditor;
-		this.normalizationData = new PcaNormalizationData();
 		initialize(tabFolder, formToolkit);
+		disableAll();
 	}
 
 	private void createButton(Composite parent) {
@@ -47,17 +49,7 @@ public class NormalizationPage {
 		Button button = new Button(composite, SWT.PUSH);
 		button.setText("Normalize data");
 		button.addListener(SWT.Selection, e -> {
-			IPcaResults pcaResults = pcaEditor.getPcaResults();
-			PcaNormalizationData pcaNormalizationData = normalizationDataTables.getPcaNormalizationData();
-			pcaNormalizationData.normalize(pcaResults);
-		});
-		button = new Button(composite, SWT.PUSH);
-		button.setText("Reset data");
-		button.addListener(SWT.Selection, e -> {
-			IPcaResults pcaResults = pcaEditor.getPcaResults();
-			if(pcaResults != null) {
-				normalizationData.setRawData(pcaResults);
-			}
+			pcaEditor.reNormalizationData();
 		});
 	}
 
@@ -73,13 +65,23 @@ public class NormalizationPage {
 		normalizationDataTables = new NormalizationDataTables(compositeNormalizationTables, null);
 	}
 
+	private void disableAll() {
+
+		setEnable(composite, false);
+	}
+
+	private void enableAll() {
+
+		setEnable(composite, true);
+	}
+
 	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
 
 		//
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Data Normalization");
 		//
-		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new FillLayout());
 		//
 		Composite parent = new Composite(composite, SWT.NONE);
@@ -89,7 +91,26 @@ public class NormalizationPage {
 		tabItem.setControl(composite);
 	}
 
+	private void setEnable(Composite parent, boolean enable) {
+
+		for(Control control : parent.getChildren()) {
+			if(control instanceof Composite) {
+				Composite composite = (Composite)control;
+				setEnable(composite, enable);
+			}
+			control.setEnabled(enable);
+		}
+	}
+
 	public void update() {
 
+		Optional<PcaNormalizationData> normalizationData = pcaEditor.getPcaNormalizationData();
+		if(normalizationData.isPresent()) {
+			enableAll();
+			normalizationDataTables.setPcaNormalizationData(normalizationData.get());
+			normalizationDataTables.update();
+		} else {
+			disableAll();
+		}
 	}
 }

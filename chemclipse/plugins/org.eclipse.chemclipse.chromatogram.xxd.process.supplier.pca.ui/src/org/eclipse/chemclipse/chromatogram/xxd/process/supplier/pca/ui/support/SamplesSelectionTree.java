@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -157,9 +158,9 @@ public class SamplesSelectionTree {
 		/*
 		 * insert and sort samples
 		 */
-		IPcaResults results = pcaEditor.getPcaResults();
-		if(results != null) {
-			results.getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toCollection(() -> samples));
+		Optional<IPcaResults> results = pcaEditor.getPcaResults();
+		if(results.isPresent()) {
+			results.get().getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toCollection(() -> samples));
 			PcaUtils.sortSampleListByName(samples);
 			PcaUtils.sortSampleListByGroup(samples);
 		}

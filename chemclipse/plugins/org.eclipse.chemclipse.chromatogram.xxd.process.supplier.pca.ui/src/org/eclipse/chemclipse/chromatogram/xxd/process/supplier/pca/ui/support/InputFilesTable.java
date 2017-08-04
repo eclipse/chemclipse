@@ -12,16 +12,23 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.PcaColorGroup;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.TableEditor;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -29,26 +36,125 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 
 public class InputFilesTable {
 
 	private List<IDataInputEntry> dataInputEntries = new ArrayList<>();
-	private List<Text> groupNames = new ArrayList<>();
-	private Table table;
-	private List<TableEditor> tableEditors = new ArrayList<>();
+	private Map<String, Color> mapGroupColor;
+	private TableViewer tableViewer;
 
 	public InputFilesTable(Composite composite, Object layoutData) {
 		createTable(composite, layoutData);
 	}
 
+	private void createColumns() {
+
+		String[] titles = {"Filename", "Group", "Path"};
+		int[] bounds = {100, 100, 100};
+		// first column is for the first name
+		TableViewerColumn col = createTableViewerColumn(titles[0], bounds[0], 0);
+		col.setLabelProvider(new ColumnLabelProvider() {
+
+			@Override
+			public Image getImage(Object element) {
+
+				IDataInputEntry inputData = (IDataInputEntry)element;
+				return getGroupColor(inputData.getGroupName());
+			}
+
+			@Override
+			public String getText(Object element) {
+
+				IDataInputEntry inputData = (IDataInputEntry)element;
+				return inputData.getFileName();
+			}
+		});
+		col = createTableViewerColumn(titles[1], bounds[1], 1);
+		col.setLabelProvider(new CellLabelProvider() {
+
+			@Override
+			public void update(ViewerCell cell) {
+
+				IDataInputEntry input = (IDataInputEntry)cell.getElement();
+				String text = input.getGroupName() != null ? input.getGroupName() : "";
+				cell.setText(text);
+			}
+		});
+		col.setEditingSupport(new EditingSupport(tableViewer) {
+
+			private TextCellEditor editor = new TextCellEditor(tableViewer.getTable());
+
+			@Override
+			protected boolean canEdit(Object element) {
+
+				return true;
+			}
+
+			@Override
+			protected CellEditor getCellEditor(Object element) {
+
+				return editor;
+			}
+
+			@Override
+			protected Object getValue(Object element) {
+
+				IDataInputEntry inputData = (IDataInputEntry)element;
+				String groupName = inputData.getGroupName();
+				if(groupName == null) {
+					return "";
+				} else {
+					return groupName;
+				}
+			}
+
+			@Override
+			protected void setValue(Object element, Object value) {
+
+				IDataInputEntry inputData = (IDataInputEntry)element;
+				String groupName = (String)value;
+				groupName = groupName.trim();
+				if(!groupName.isEmpty()) {
+					inputData.setGroupName(groupName);
+				} else {
+					inputData.setGroupName(null);
+				}
+				update();
+			}
+		});
+		col = createTableViewerColumn(titles[2], bounds[2], 2);
+		col.setLabelProvider(new ColumnLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				IDataInputEntry inputData = (IDataInputEntry)element;
+				return inputData.getInputFile();
+			}
+		});
+	}
+
 	private void createTable(Composite client, Object layoutData) {
 
-		table = new Table(client, SWT.MULTI | SWT.BORDER);
+		Table table = new Table(client, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		table.setLayoutData(layoutData);
+		tableViewer = new TableViewer(table);
+		tableViewer.setContentProvider(new ArrayContentProvider());
+		tableViewer.setInput(dataInputEntries);
+		createColumns();
+	}
+
+	private TableViewerColumn createTableViewerColumn(String title, int bound, final int colNumber) {
+
+		final TableViewerColumn viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		final TableColumn column = viewerColumn.getColumn();
+		column.setText(title);
+		column.setWidth(bound);
+		column.setResizable(true);
+		column.setMoveable(true);
+		return viewerColumn;
 	}
 
 	public List<IDataInputEntry> getDataInputEntries() {
@@ -56,104 +162,16 @@ public class InputFilesTable {
 		return dataInputEntries;
 	}
 
-	public Table getTable() {
+	private Image getGroupColor(String groupName) {
 
-		return table;
-	}
-
-	/**
-	 * Reload the table.
-	 */
-	public void reload() {
-
-		if(table != null) {
-			/*
-			 * Remove all entries.
-			 */
-			table.removeAll();
-			table.clearAll();
-			/*
-			 * dispose editors and text
-			 */
-			for(TableEditor editor : tableEditors) {
-				editor.dispose();
-			}
-			tableEditors.clear();
-			for(Text text : groupNames) {
-				text.dispose();
-			}
-			groupNames.clear();
-			/*
-			 * Header
-			 */
-			String[] titles = {"Filename", "color", "Group", "Path"};
-			for(int i = 0; i < titles.length; i++) {
-				TableColumn column = new TableColumn(table, SWT.NONE);
-				column.setText(titles[i]);
-			}
-			/*
-			 * Data
-			 */
-			Map<String, Color> groupColorMap = PcaColorGroup.getColorSWT(PcaUtils.getGroupNamesFromEntry(dataInputEntries));
-			for(int i = 0; i < dataInputEntries.size(); i++) {
-				IDataInputEntry entry = dataInputEntries.get(i);
-				TableItem item = new TableItem(table, SWT.NONE);
-				item.setData(entry);
-				/*
-				 * set file name column
-				 */
-				item.setText(0, entry.getFileName());
-				/*
-				 * set group color
-				 */
-				setGroupColor(item, entry.getGroupName(), groupColorMap);
-				/*
-				 * set group name column
-				 */
-				TableEditor editor = new TableEditor(table);
-				editor.horizontalAlignment = SWT.LEFT;
-				editor.grabHorizontal = true;
-				final Text text = new Text(table, SWT.NONE);
-				text.setBackground(null);
-				String groupName = entry.getGroupName();
-				if(groupName == null) {
-					text.setText("");
-				} else {
-					text.setText(groupName);
-				}
-				text.setEnabled(true);
-				text.addFocusListener(new FocusListener() {
-
-					@Override
-					public void focusGained(FocusEvent e) {
-
-					}
-
-					@Override
-					public void focusLost(FocusEvent e) {
-
-						String gN = text.getText().trim();
-						String setGroupName = (gN.isEmpty() ? null : gN);
-						entry.setGroupName(setGroupName);
-						setGroupColor();
-					}
-				});
-				editor.setEditor(text, item, 2);
-				tableEditors.add(editor);
-				groupNames.add(text);
-				/*
-				 * set file path
-				 */
-				item.setText(3, entry.getInputFile());
-			}
-			/*
-			 * Pack to make the entries visible.
-			 */
-			for(int i = 0; i < titles.length; i++) {
-				table.getColumn(i).pack();
-			}
-			table.layout(true);
-		}
+		Color color = mapGroupColor.get(groupName);
+		int len = 16;
+		Image image = new Image(Display.getCurrent(), len, len);
+		GC gc = new GC(image);
+		gc.setBackground(color);
+		gc.fillRectangle(0, 0, len, len);
+		gc.dispose();
+		return image;
 	}
 
 	/**
@@ -163,41 +181,25 @@ public class InputFilesTable {
 	 */
 	public void removeSelection() {
 
-		int[] indices = table.getSelectionIndices();
-		if(indices == null || indices.length == 0) {
-			return;
+		Iterator it = tableViewer.getStructuredSelection().iterator();
+		while(it.hasNext()) {
+			IDataInputEntry input = (IDataInputEntry)it.next();
+			dataInputEntries.remove(input);
 		}
-		int counter = 0;
-		for(int index : indices) {
-			/*
-			 * Decrease the index and increase the counter to remove the correct entries.
-			 */
-			index -= counter;
-			dataInputEntries.remove(index);
-			counter++;
-		}
-		reload();
+		update();
 	}
 
-	private void setGroupColor() {
+	public void update() {
 
-		Map<String, Color> groupColorMap = PcaColorGroup.getColorSWT(PcaUtils.getGroupNamesFromEntry(dataInputEntries));
-		TableItem[] items = table.getItems();
-		for(TableItem item : items) {
-			IDataInputEntry entry = (IDataInputEntry)item.getData();
-			setGroupColor(item, entry.getGroupName(), groupColorMap);
+		updateColorMap();
+		tableViewer.refresh();
+		for(TableColumn column : tableViewer.getTable().getColumns()) {
+			column.pack();
 		}
 	}
 
-	private void setGroupColor(TableItem item, String name, Map<String, Color> mapGroupColor) {
+	private void updateColorMap() {
 
-		Color color = mapGroupColor.get(name);
-		int len = 16;
-		Image image = new Image(Display.getCurrent(), len, len);
-		GC gc = new GC(image);
-		gc.setBackground(color);
-		gc.fillRectangle(0, 0, len, len);
-		gc.dispose();
-		item.setImage(1, image);
+		mapGroupColor = PcaColorGroup.getColorSWT(PcaUtils.getGroupNamesFromEntry(dataInputEntries));
 	}
 }

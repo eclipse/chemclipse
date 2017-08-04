@@ -52,7 +52,7 @@ public class CVFilter implements IFilter {
 			boolean b = categoryData.stream().parallel().allMatch(s -> {
 				double m = Math.abs(s.getMean());
 				double v = s.getVariance();
-				if(m == 0.0) {
+				if(m != 0.0) {
 					return (v / m) < alpha;
 				} else {
 					return (v == 0.0) ? true : false;

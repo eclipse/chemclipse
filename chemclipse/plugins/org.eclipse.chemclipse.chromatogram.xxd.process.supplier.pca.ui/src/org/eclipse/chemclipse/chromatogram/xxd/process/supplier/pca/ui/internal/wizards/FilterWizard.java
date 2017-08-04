@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.AbundanceFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.AnovaFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.CVFilter;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.EmptyDataFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter;
 import org.eclipse.jface.wizard.Wizard;
 
@@ -35,6 +36,8 @@ public class FilterWizard extends Wizard {
 			addPage(new FilterCVWizardPage((CVFilter)filter));
 		} else if(filter instanceof AbundanceFilter) {
 			addPage(new FilterAbundanceWizardPage((AbundanceFilter)filter));
+		} else if(filter instanceof EmptyDataFilter) {
+			addPage(new FilterEmptyDataWizardPage((EmptyDataFilter)filter));
 		}
 	}
 

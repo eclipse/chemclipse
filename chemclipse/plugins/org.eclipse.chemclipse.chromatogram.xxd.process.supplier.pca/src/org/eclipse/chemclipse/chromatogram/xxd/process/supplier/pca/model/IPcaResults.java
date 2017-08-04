@@ -15,9 +15,6 @@ import java.util.List;
 
 public interface IPcaResults {
 
-	int EXTRACT_PEAK = 0;
-	int EXTRACT_PEAK_CUMULATION = 1;
-
 	List<double[]> getBasisVectors();
 
 	List<IDataInputEntry> getDataInputEntries();

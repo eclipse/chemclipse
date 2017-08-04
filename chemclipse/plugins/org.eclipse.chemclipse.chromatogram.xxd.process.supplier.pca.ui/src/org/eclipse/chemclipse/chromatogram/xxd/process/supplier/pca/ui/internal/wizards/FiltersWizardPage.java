@@ -48,8 +48,12 @@ public class FiltersWizardPage extends WizardPage {
 		button.addListener(SWT.Selection, (e) -> filterType = FiltersWizard.FITERS_TYPE_CV);
 		button = new Button(composite, SWT.RADIO);
 		button.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
-		button.setText("Intensity Filter");
+		button.setText("Abundance Filter");
 		button.addListener(SWT.Selection, (e) -> filterType = FiltersWizard.FITERS_TYPE_ABUNDANCE);
+		button = new Button(composite, SWT.RADIO);
+		button.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
+		button.setText("Empty Data Filter");
+		button.addListener(SWT.Selection, (e) -> filterType = FiltersWizard.FITERS_EMPTY_DATA);
 		setControl(composite);
 	}
 

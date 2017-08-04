@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
+import java.util.Optional;
+
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d.ScorePlot3d;
 import org.eclipse.swt.SWT;
@@ -127,13 +129,14 @@ public class ScorePlot3dPage {
 
 	private void updateSpinnerPCMaxima() {
 
-		IPcaResults pcaResults = pcaEditor.getPcaResults();
-		if(pcaResults != null) {
-			spinnerPCx.setMaximum(pcaResults.getNumberOfPrincipleComponents());
+		Optional<IPcaResults> pcaResults = pcaEditor.getPcaResults();
+		if(pcaResults.isPresent()) {
+			int numberOfPrincipleComponents = pcaResults.get().getNumberOfPrincipleComponents();
+			spinnerPCx.setMaximum(numberOfPrincipleComponents);
 			spinnerPCx.setSelection(1); // PC1
-			spinnerPCy.setMaximum(pcaResults.getNumberOfPrincipleComponents());
+			spinnerPCy.setMaximum(numberOfPrincipleComponents);
 			spinnerPCy.setSelection(2); // PC2
-			spinnerPCz.setMaximum(pcaResults.getNumberOfPrincipleComponents());
+			spinnerPCz.setMaximum(numberOfPrincipleComponents);
 			spinnerPCz.setSelection(3); // PC3
 		}
 	}

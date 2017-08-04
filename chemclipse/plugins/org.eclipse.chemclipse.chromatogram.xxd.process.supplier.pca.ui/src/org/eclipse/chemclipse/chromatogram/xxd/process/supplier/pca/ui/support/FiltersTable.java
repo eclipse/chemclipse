@@ -11,20 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.FilterWizard;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.FiltersWizard;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
@@ -33,64 +29,21 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class FiltersTable {
 
-	private List<IFilter> filters;
+	private PcaFiltrationData pcaFiltrationData;
 	private Table table;
 
 	public FiltersTable(Composite parent, Object layoutData) {
-		this(parent, layoutData, new ArrayList<>());
+		this(parent, layoutData, new PcaFiltrationData());
 	}
 
-	public FiltersTable(Composite parent, Object layoutData, List<IFilter> filters) {
-		this.filters = filters;
-		Composite composite = new Composite(parent, SWT.None);
-		composite.setLayoutData(layoutData);
-		composite.setLayout(new GridLayout(2, false));
-		createTable(composite, new GridData(GridData.FILL_BOTH));
-		Composite compositeButtons = new Composite(composite, SWT.None);
-		compositeButtons.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_BEGINNING));
-		compositeButtons.setLayout(new FillLayout(SWT.VERTICAL | SWT.BEGINNING));
-		createButtons(compositeButtons);
+	public FiltersTable(Composite parent, Object layoutData, PcaFiltrationData pcaFiltrationData) {
+		this.pcaFiltrationData = pcaFiltrationData;
+		createTable(parent, layoutData);
 	}
 
-	private void createButtons(Composite parent) {
+	public void createNewFilter() {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("Add");
-		button.addListener(SWT.Selection, e -> {
-			createNewFilter();
-		});
-		button = new Button(parent, SWT.PUSH);
-		button.setText("Remove");
-		button.addListener(SWT.Selection, e -> {
-			Arrays.stream(table.getSelection()).forEach(i -> filters.remove(i.getData()));
-			reload();
-		});
-		button = new Button(parent, SWT.PUSH);
-		button.setText("Move Up");
-		button.addListener(SWT.Selection, e -> {
-			int i = table.getSelectionIndex();
-			if(i > 0) {
-				IFilter temp = filters.get(i);
-				filters.set(i, filters.get(i - 1));
-				filters.set(i - 1, temp);
-				reload();
-			}
-		});
-		button = new Button(parent, SWT.PUSH);
-		button.setText("Move Down");
-		button.addListener(SWT.Selection, e -> {
-			int i = table.getSelectionIndex();
-			if(i < (filters.size() - 1)) {
-				IFilter temp = filters.get(i);
-				filters.set(i, filters.get(i + 1));
-				filters.set(i + 1, temp);
-				reload();
-			}
-		});
-	}
-
-	private void createNewFilter() {
-
+		List<IFilter> filters = pcaFiltrationData.getFilters();
 		FiltersWizard filtersWizard = new FiltersWizard();
 		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getCurrent().getActiveShell(), filtersWizard);
 		if(Window.OK == wizardDialog.open()) {
@@ -100,7 +53,7 @@ public class FiltersTable {
 				wizardDialog = new BatchProcessWizardDialog(Display.getCurrent().getActiveShell(), filterWizard);
 				if(Window.OK == wizardDialog.open()) {
 					filters.add(filter);
-					reload();
+					update();
 				}
 			}
 		}
@@ -115,38 +68,74 @@ public class FiltersTable {
 		table.addListener(SWT.MouseDoubleClick, e -> {
 			int i = table.getSelectionIndex();
 			if(i >= 0) {
-				IFilter filter = filters.get(i);
+				IFilter filter = pcaFiltrationData.getFilters().get(i);
 				FilterWizard filterWizard = new FilterWizard(filter);
 				BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getCurrent().getActiveShell(), filterWizard);
 				wizardDialog.open();
-				reload();
+				update();
 			}
 		});
-		reload();
-	}
-
-	public List<IFilter> getFilters() {
-
-		return filters;
-	}
-
-	public void reload() {
-
-		table.clearAll();
-		table.removeAll();
 		String[] columns = new String[]{"Name", "Description"};
 		for(int i = 0; i < columns.length; i++) {
 			TableColumn tableColumn = new TableColumn(table, SWT.None);
 			tableColumn.setText(columns[i]);
 		}
+		update();
+	}
+
+	public PcaFiltrationData getPcaFiltrationData() {
+
+		return pcaFiltrationData;
+	}
+
+	public void moveDownSelectedFilter() {
+
+		List<IFilter> filters = pcaFiltrationData.getFilters();
+		int i = table.getSelectionIndex();
+		if(i > -1 && i < (filters.size() - 1)) {
+			IFilter temp = filters.get(i);
+			filters.set(i, filters.get(i + 1));
+			filters.set(i + 1, temp);
+			update();
+		}
+	}
+
+	public void moveUpSelectedFilter() {
+
+		List<IFilter> filters = pcaFiltrationData.getFilters();
+		int i = table.getSelectionIndex();
+		if(i > 0) {
+			IFilter temp = filters.get(i);
+			filters.set(i, filters.get(i - 1));
+			filters.set(i - 1, temp);
+			update();
+		}
+	}
+
+	public void remveSelectedFilters() {
+
+		Arrays.stream(table.getSelection()).forEach(i -> pcaFiltrationData.getFilters().remove(i.getData()));
+		update();
+	}
+
+	public void setPcaFiltrationData(PcaFiltrationData pcaFiltrationData) {
+
+		this.pcaFiltrationData = pcaFiltrationData;
+	}
+
+	public void update() {
+
+		List<IFilter> filters = pcaFiltrationData.getFilters();
+		table.removeAll();
+		table.clearAll();
 		for(int i = 0; i < filters.size(); i++) {
 			TableItem tableItem = new TableItem(table, SWT.NONE);
 			IFilter filter = filters.get(i);
-			tableItem.setData(filter);
 			tableItem.setText(0, filter.getName());
 			tableItem.setText(1, filter.getDescription());
+			tableItem.setData(filter);
 		}
-		for(int i = 0; i < columns.length; i++) {
+		for(int i = 0; i < table.getColumns().length; i++) {
 			table.getColumn(i).pack();
 		}
 	}
