@@ -56,10 +56,10 @@ public class NormalizationDataTables {
 		table.clearAll();
 		table.removeAll();
 		String[] description = new String[]{};
-		setTableRow(table, "Mean certering", "center_mean.jpg", //
+		setTableRow(table, "Mean centering", "center_mean.jpg", //
 				description, Centering.MEAN, Centering.MEAN.equals(selectedCentering));
 		description = new String[]{};
-		setTableRow(table, "Median cetering", "center_median.jpg", //
+		setTableRow(table, "Median centering", "center_median.jpg", //
 				description, Centering.MEDIAN, Centering.MEDIAN.equals(selectedCentering));
 		table.getColumn(0).setWidth(COLUMNS_WIDTH);
 		return table;
