@@ -26,6 +26,8 @@ import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Group;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
@@ -143,6 +145,20 @@ public class PcaUtils {
 			}
 		}
 		return samplesByGroupName;
+	}
+
+	public static void setGroups(IPcaResults pcaResults, boolean onlySelected) {
+
+		Set<String> groupNames = PcaUtils.getGroupNames(pcaResults.getSampleList(), onlySelected);
+		pcaResults.getGroupList().clear();
+		groupNames.forEach(groupName -> {
+			if(groupName != null) {
+				List<ISample> samplesSomeGroupName = pcaResults.getSampleList().stream().filter(s -> groupName.equals(s.getGroupName())).collect(Collectors.toList());
+				IGroup group = new Group(samplesSomeGroupName);
+				group.setGroupName(groupName);
+				pcaResults.getGroupList().add(group);
+			}
+		});
 	}
 
 	public static void sortSampleListByErrorMemberShip(List<ISample> samples, boolean inverse) {

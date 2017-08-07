@@ -25,11 +25,8 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Group;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
@@ -458,15 +455,7 @@ public class PcaExtractionData {
 		/*
 		 * create Groups
 		 */
-		Set<String> groupNames = PcaUtils.getGroupNames(pcaResults.getSampleList());
-		groupNames.forEach(groupName -> {
-			if(groupName != null) {
-				List<ISample> samplesSomeGroupName = pcaResults.getSampleList().stream().filter(s -> groupName.equals(s.getGroupName())).collect(Collectors.toList());
-				IGroup group = new Group(samplesSomeGroupName);
-				group.setGroupName(groupName);
-				pcaResults.getGroupList().add(group);
-			}
-		});
+		PcaUtils.setGroups(pcaResults, true);
 		return pcaResults;
 	}
 

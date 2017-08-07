@@ -17,6 +17,7 @@ import java.util.Optional;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaPeaksInputRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.ReEvaluateRunnable;
@@ -33,7 +34,6 @@ public abstract class AbstractPcaEditor {
 	private Optional<PcaFiltrationData> pcaFiltrationData = Optional.empty();
 	private Optional<PcaNormalizationData> pcaNormalizationData = Optional.empty();
 	private Optional<IPcaResults> pcaResults = Optional.empty();
-	private Optional<Integer> retentionTimeWindow = Optional.of(200);
 
 	public AbstractPcaEditor() {
 	}
@@ -56,11 +56,6 @@ public abstract class AbstractPcaEditor {
 	public Optional<IPcaResults> getPcaResults() {
 
 		return pcaResults;
-	}
-
-	public Optional<Integer> getRetentionTimeWindow() {
-
-		return retentionTimeWindow;
 	}
 
 	protected void openWizardPcaPeakInputs() throws InvocationTargetException, InterruptedException {
@@ -113,5 +108,10 @@ public abstract class AbstractPcaEditor {
 	public void setNumberOfPrincipleComponents(int numberOfPrincipleComponents) {
 
 		this.numberOfPrincipleComponents = Optional.of(numberOfPrincipleComponents);
+	}
+
+	protected void updataGroupNames() {
+
+		PcaUtils.setGroups(getPcaResults().get(), true);
 	}
 }

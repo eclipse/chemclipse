@@ -245,7 +245,13 @@ public class PcaEditor extends AbstractPcaEditor {
 		tabFolder.setSelection(pageIndex);
 	}
 
-	public void updateData() {
+	public void updataSamples() {
+
+		super.updataGroupNames();
+		updateData();
+	}
+
+	private void updateData() {
 
 		overviewPage.update();
 		samplesOverviewPage.update();
@@ -263,6 +269,7 @@ public class PcaEditor extends AbstractPcaEditor {
 
 	private void updateViews() {
 
+		samplesOverviewPage.update();
 		scorePlotPage.update();
 		errorResiduePage.update();
 		scorePlot3dPage.update();
