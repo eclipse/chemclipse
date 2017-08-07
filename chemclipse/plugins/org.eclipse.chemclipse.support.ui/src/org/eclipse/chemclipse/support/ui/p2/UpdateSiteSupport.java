@@ -50,9 +50,9 @@ public class UpdateSiteSupport {
 	public void addDefaultProvisioningRepositories() {
 
 		Map<String, String> updateSites = new HashMap<String, String>();
-		updateSites.put("Mars", "http://download.eclipse.org/releases/mars");
-		updateSites.put("The Eclipse Project Updates", "http://download.eclipse.org/eclipse/updates/4.5");
-		updateSites.put("Eclipse Orbit", "http://download.eclipse.org/tools/orbit/downloads/drops/R20160221192158/repository");
+		updateSites.put("Neon", "http://download.eclipse.org/releases/neon");
+		updateSites.put("The Eclipse Project Updates", "http://download.eclipse.org/eclipse/updates/4.6");
+		updateSites.put("Eclipse Orbit", "http://download.eclipse.org/tools/orbit/downloads/drops/R20160520211859/repository");
 		/*
 		 * Add the additional p2 repositories.
 		 */
