@@ -68,7 +68,10 @@ public class FiltersPage {
 		button.addListener(SWT.Selection, e -> filtersTable.createNewFilter());
 		button = new Button(buttonComposite, SWT.PUSH);
 		button.setText("Remove");
-		button.addListener(SWT.Selection, e -> filtersTable.remveSelectedFilters());
+		button.addListener(SWT.Selection, e -> filtersTable.removeSelectedFilters());
+		button = new Button(buttonComposite, SWT.PUSH);
+		button.setText("Remove All");
+		button.addListener(SWT.Selection, e -> filtersTable.removeAllFilters());
 		button = new Button(buttonComposite, SWT.PUSH);
 		button.setText("Move Up");
 		button.addListener(SWT.Selection, e -> filtersTable.moveUpSelectedFilter());
@@ -76,10 +79,13 @@ public class FiltersPage {
 		button.setText("Move Down");
 		button.addListener(SWT.Selection, e -> filtersTable.moveDownSelectedFilter());
 		button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Use Filter");
+		button.setText("Use Filters");
 		button.addListener(SWT.Selection, e -> {
 			pcaEditor.reFiltrationData();
 		});
+		button = new Button(buttonComposite, SWT.PUSH);
+		button.setText("Reset Filters");
+		button.addListener(SWT.Selection, e -> pcaEditor.selectAllData());
 		disableAll();
 		tabItem.setControl(composite);
 	}

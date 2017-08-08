@@ -105,6 +105,11 @@ public abstract class AbstractPcaEditor {
 		pcaNormalizationData.get().process(pcaResults.get(), new NullProgressMonitor());
 	}
 
+	protected void selectAllData() {
+
+		pcaFiltrationData.get().selectAll(pcaResults.get());
+	}
+
 	public void setNumberOfPrincipleComponents(int numberOfPrincipleComponents) {
 
 		this.numberOfPrincipleComponents = Optional.of(numberOfPrincipleComponents);

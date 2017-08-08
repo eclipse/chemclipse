@@ -217,6 +217,13 @@ public class PcaEditor extends AbstractPcaEditor {
 		}
 	}
 
+	@Override
+	public void selectAllData() {
+
+		super.selectAllData();
+		updateData();
+	}
+
 	@Focus
 	public void setFocus() {
 

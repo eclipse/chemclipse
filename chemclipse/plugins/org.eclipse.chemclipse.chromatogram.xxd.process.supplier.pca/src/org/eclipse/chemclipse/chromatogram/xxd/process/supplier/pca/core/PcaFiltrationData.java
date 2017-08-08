@@ -35,7 +35,9 @@ public class PcaFiltrationData {
 
 		List<Boolean> selectedRetentionTimes = pcaResults.isSelectedRetentionTimes();
 		if(resetSelectedRetentionTimes) {
-			selectedRetentionTimes.forEach(e -> e = true);
+			for(int i = 0; i < selectedRetentionTimes.size(); i++) {
+				selectedRetentionTimes.set(i, true);
+			}
 		}
 		if(filters != null && !filters.isEmpty()) {
 			for(int i = 0; i < filters.size(); i++) {
@@ -44,6 +46,14 @@ public class PcaFiltrationData {
 					selectedRetentionTimes.set(j, selectedRetentionTimes.get(j) && result.get(j));
 				}
 			}
+		}
+	}
+
+	public void selectAll(IPcaResults pcaResults) {
+
+		List<Boolean> selectedRetentionTimes = pcaResults.isSelectedRetentionTimes();
+		for(int i = 0; i < selectedRetentionTimes.size(); i++) {
+			selectedRetentionTimes.set(i, true);
 		}
 	}
 }

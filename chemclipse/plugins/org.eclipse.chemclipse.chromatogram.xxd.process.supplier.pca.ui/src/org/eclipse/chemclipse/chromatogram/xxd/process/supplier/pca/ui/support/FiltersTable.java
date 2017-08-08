@@ -112,7 +112,13 @@ public class FiltersTable {
 		}
 	}
 
-	public void remveSelectedFilters() {
+	public void removeAllFilters() {
+
+		pcaFiltrationData.getFilters().clear();
+		update();
+	}
+
+	public void removeSelectedFilters() {
 
 		Arrays.stream(table.getSelection()).forEach(i -> pcaFiltrationData.getFilters().remove(i.getData()));
 		update();
