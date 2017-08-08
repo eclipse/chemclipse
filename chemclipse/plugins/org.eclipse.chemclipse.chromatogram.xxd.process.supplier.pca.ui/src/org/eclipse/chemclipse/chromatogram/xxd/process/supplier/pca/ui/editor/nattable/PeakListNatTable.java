@@ -280,14 +280,17 @@ public class PeakListNatTable {
 	private void hideCompoundColumn() {
 
 		boolean isEmpty = !tableData.getPeaksNames().stream().anyMatch(s -> s != null && !s.isEmpty());
+		boolean isHidden = columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_PEAK_NAMES);
 		List<Integer> peakNamesColumn = new ArrayList<>();
 		peakNamesColumn.add(TableProvider.COLUMN_INDEX_PEAK_NAMES);
 		if(isEmpty) {
-			if(columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_PEAK_NAMES)) {
+			if(!isHidden) {
 				columnHideShowLayer.hideColumnPositions(peakNamesColumn);
 			}
 		} else {
-			columnHideShowLayer.showColumnIndexes(peakNamesColumn);
+			if(isHidden) {
+				columnHideShowLayer.showColumnIndexes(peakNamesColumn);
+			}
 		}
 	}
 
