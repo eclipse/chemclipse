@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtil
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportDataSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
+import org.eclipse.jface.window.DefaultToolTip;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.columnChooser.command.DisplayColumnChooserCommandHandler;
 import org.eclipse.nebula.widgets.nattable.config.ConfigRegistry;
@@ -45,6 +46,7 @@ import org.eclipse.nebula.widgets.nattable.hideshow.RowHideShowLayer;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.ILayer;
 import org.eclipse.nebula.widgets.nattable.layer.ILayerListener;
+import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.nebula.widgets.nattable.layer.event.ColumnStructuralChangeEvent;
 import org.eclipse.nebula.widgets.nattable.layer.event.ILayerEvent;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
@@ -53,12 +55,15 @@ import org.eclipse.nebula.widgets.nattable.sort.config.SingleClickSortConfigurat
 import org.eclipse.nebula.widgets.nattable.ui.menu.AbstractHeaderMenuConfiguration;
 import org.eclipse.nebula.widgets.nattable.ui.menu.PopupMenuBuilder;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 
 public class PeakListNatTable {
 
 	private ColumnGroupHeaderLayer columnGroupHeaderLayer;
 	private ColumnHideShowLayer columnHideShowLayer;
+	private PcaResulDataProvider dataProvider;
 	private ExportData exportData;
 	private NatTable natTable;
 	private SortModel sortModel;
@@ -71,13 +76,50 @@ public class PeakListNatTable {
 		createPeakListIntensityTableSection(parent, layoutData);
 	}
 
+	private void attachToolTip() {
+
+		DefaultToolTip toolTip = new DefaultToolTip(natTable) {
+
+			@Override
+			protected String getText(Event event) {
+
+				int col = natTable.getColumnPositionByX(event.x);
+				int row = natTable.getRowPositionByY(event.y);
+				if(col > 0) {
+					ILayerCell cell = natTable.getCellByPosition(col, row);
+					final int rowIndex = cell.getRowIndex();
+					final int columnIndex = cell.getColumnIndex();
+					if(row < 2) {
+						if(columnIndex >= TableProvider.NUMER_OF_DESCRIPTION_COLUMN) {
+							return tableData.getSamples().get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN).getName();
+						}
+					} else {
+						return dataProvider.getDataValue(columnIndex, rowIndex).toString();
+					}
+				}
+				return null;
+			}
+
+			@Override
+			protected Object getToolTipArea(Event event) {
+
+				int col = natTable.getColumnPositionByX(event.x);
+				int row = natTable.getRowPositionByY(event.y);
+				return new Point(col, row);
+			}
+		};
+		toolTip.setPopupDelay(500);
+		toolTip.activate();
+		toolTip.setShift(new Point(10, 10));
+	}
+
 	/**
 	 * Create peak List intensity table
 	 */
 	private void createPeakListIntensityTableSection(Composite parent, Object layoutData) {
 
 		sortModel = new SortModel(tableProvider);
-		final PcaResulDataProvider dataProvider = new PcaResulDataProvider(tableProvider, sortModel);
+		dataProvider = new PcaResulDataProvider(tableProvider, sortModel);
 		DataLayer bodyDataLayer = new DataLayer(dataProvider);
 		bodyDataLayer.setConfigLabelAccumulator(new PcaResultLabelProvider(tableProvider));
 		final RowHideShowLayer rowHideShowLayer = new RowHideShowLayer(bodyDataLayer);
@@ -175,6 +217,7 @@ public class PeakListNatTable {
 			}
 		});
 		exportData = new ExportData(new ExportDataSupplier(tableProvider, dataProvider, columnHeaderDataProvider, columnGroupModel));
+		attachToolTip();
 	}
 
 	/**
