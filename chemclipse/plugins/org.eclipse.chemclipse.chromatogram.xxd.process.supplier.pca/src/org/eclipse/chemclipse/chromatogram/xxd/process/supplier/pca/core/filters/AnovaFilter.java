@@ -20,6 +20,7 @@ import java.util.Set;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.apache.commons.math3.stat.inference.OneWayAnova;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 
 public class AnovaFilter implements IFilter {
@@ -34,13 +35,13 @@ public class AnovaFilter implements IFilter {
 	}
 
 	@Override
-	public List<Boolean> filter(List<ISample> samples) {
+	public List<Boolean> filter(IPcaResults pcaResults) {
 
-		int len = samples.get(0).getSampleData().size();
+		List<ISample> samples = pcaResults.getSampleList();
 		List<Boolean> selection = new ArrayList<>();
 		Map<String, Set<ISample>> samplesByGroupName = PcaUtils.getSamplesByGroupName(samples, false, onlySelected);
 		Collection<Set<ISample>> collection = samplesByGroupName.values();
-		for(int i = 0; i < len; i++) {
+		for(int i = 0; i < samples.get(0).getSampleData().size(); i++) {
 			OneWayAnova oneWayAnova = new OneWayAnova();
 			Collection<SummaryStatistics> categoryData = new ArrayList<>();
 			for(Set<ISample> set : collection) {

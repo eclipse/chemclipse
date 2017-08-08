@@ -16,14 +16,16 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.CVFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.EmptyDataFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.RetentionTimeFilter;
 import org.eclipse.jface.wizard.Wizard;
 
 public class FiltersWizard extends Wizard {
 
-	final protected static int FITERS_EMPTY_DATA = 4;
-	final protected static int FITERS_TYPE_ABUNDANCE = 3;
-	final protected static int FITERS_TYPE_ANOVA = 1;
-	final protected static int FITERS_TYPE_CV = 2;
+	final protected static int FITER_EMPTY_DATA = 4;
+	final protected static int FITER_TYPE_ABUNDANCE = 3;
+	final protected static int FITER_TYPE_ANOVA = 1;
+	final protected static int FITER_TYPE_CV = 2;
+	final protected static int FITER_TYPE_RETENTION_TIME = 5;
 	private IFilter filter;
 	private FiltersWizardPage filtersWizardPage;
 
@@ -47,18 +49,20 @@ public class FiltersWizard extends Wizard {
 
 		IFilter filter = null;
 		switch(filtersWizardPage.getFilterType()) {
-			case FiltersWizard.FITERS_TYPE_ANOVA:
+			case FiltersWizard.FITER_TYPE_ANOVA:
 				filter = new AnovaFilter();
 				break;
-			case FiltersWizard.FITERS_TYPE_CV:
+			case FiltersWizard.FITER_TYPE_CV:
 				filter = new CVFilter();
 				break;
-			case FiltersWizard.FITERS_TYPE_ABUNDANCE:
+			case FiltersWizard.FITER_TYPE_ABUNDANCE:
 				filter = new AbundanceFilter();
 				break;
-			case FiltersWizard.FITERS_EMPTY_DATA:
+			case FiltersWizard.FITER_EMPTY_DATA:
 				filter = new EmptyDataFilter();
 				break;
+			case FiltersWizard.FITER_TYPE_RETENTION_TIME:
+				filter = new RetentionTimeFilter();
 		}
 		return filter;
 	}

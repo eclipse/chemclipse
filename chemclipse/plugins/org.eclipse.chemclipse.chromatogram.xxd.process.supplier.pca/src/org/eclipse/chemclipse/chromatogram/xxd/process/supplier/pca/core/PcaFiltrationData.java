@@ -16,7 +16,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaFiltrationData {
@@ -34,14 +33,13 @@ public class PcaFiltrationData {
 
 	public void process(IPcaResults pcaResults, boolean resetSelectedRetentionTimes, IProgressMonitor monitor) {
 
-		List<ISample> samples = pcaResults.getSampleList();
 		List<Boolean> selectedRetentionTimes = pcaResults.isSelectedRetentionTimes();
 		if(resetSelectedRetentionTimes) {
 			selectedRetentionTimes.forEach(e -> e = true);
 		}
 		if(filters != null && !filters.isEmpty()) {
 			for(int i = 0; i < filters.size(); i++) {
-				List<Boolean> result = filters.get(i).filter(samples);
+				List<Boolean> result = filters.get(i).filter(pcaResults);
 				for(int j = 0; j < result.size(); j++) {
 					selectedRetentionTimes.set(j, selectedRetentionTimes.get(j) && result.get(j));
 				}

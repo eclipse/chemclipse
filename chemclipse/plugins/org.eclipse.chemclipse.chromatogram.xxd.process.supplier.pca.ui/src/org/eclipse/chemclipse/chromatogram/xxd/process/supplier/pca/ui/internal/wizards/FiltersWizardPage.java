@@ -40,20 +40,24 @@ public class FiltersWizardPage extends WizardPage {
 		button.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
 		button.setText("ANOVA Filter");
 		button.setSelection(true);
-		filterType = FiltersWizard.FITERS_TYPE_ANOVA;
-		button.addListener(SWT.Selection, (e) -> filterType = FiltersWizard.FITERS_TYPE_ANOVA);
+		filterType = FiltersWizard.FITER_TYPE_ANOVA;
+		button.addListener(SWT.Selection, (e) -> filterType = FiltersWizard.FITER_TYPE_ANOVA);
 		button = new Button(composite, SWT.RADIO);
 		button.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
 		button.setText("CV Filter");
-		button.addListener(SWT.Selection, (e) -> filterType = FiltersWizard.FITERS_TYPE_CV);
+		button.addListener(SWT.Selection, (e) -> filterType = FiltersWizard.FITER_TYPE_CV);
 		button = new Button(composite, SWT.RADIO);
 		button.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
 		button.setText("Abundance Filter");
-		button.addListener(SWT.Selection, (e) -> filterType = FiltersWizard.FITERS_TYPE_ABUNDANCE);
+		button.addListener(SWT.Selection, (e) -> filterType = FiltersWizard.FITER_TYPE_ABUNDANCE);
+		button = new Button(composite, SWT.RADIO);
+		button.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
+		button.setText("Retention Time filter");
+		button.addListener(SWT.Selection, (e) -> filterType = FiltersWizard.FITER_TYPE_RETENTION_TIME);
 		button = new Button(composite, SWT.RADIO);
 		button.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
 		button.setText("Empty Data Filter");
-		button.addListener(SWT.Selection, (e) -> filterType = FiltersWizard.FITERS_EMPTY_DATA);
+		button.addListener(SWT.Selection, (e) -> filterType = FiltersWizard.FITER_EMPTY_DATA);
 		setControl(composite);
 	}
 
@@ -65,9 +69,6 @@ public class FiltersWizardPage extends WizardPage {
 	@Override
 	public boolean isPageComplete() {
 
-		if(filterType == FiltersWizard.FITERS_TYPE_ANOVA || filterType == FiltersWizard.FITERS_TYPE_CV || filterType == FiltersWizard.FITERS_TYPE_ABUNDANCE) {
-			return true;
-		}
-		return false;
+		return true;
 	}
 }
