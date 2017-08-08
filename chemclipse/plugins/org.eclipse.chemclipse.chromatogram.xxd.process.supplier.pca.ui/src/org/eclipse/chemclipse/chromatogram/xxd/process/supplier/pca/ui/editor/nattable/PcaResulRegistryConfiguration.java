@@ -94,7 +94,7 @@ public class PcaResulRegistryConfiguration extends AbstractRegistryConfiguration
 				TableProvider.COLUMN_LABEL_SELECTED);
 		// configure editing
 		configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITABLE_RULE, //
-				IEditableRule.ALWAYS_EDITABLE, DisplayMode.EDIT, //
+				IEditableRule.ALWAYS_EDITABLE, DisplayMode.NORMAL, //
 				TableProvider.COLUMN_LABEL_SELECTED);
 		configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, //
 				new CheckBoxCellEditor(), //

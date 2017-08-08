@@ -43,6 +43,7 @@ import org.eclipse.nebula.widgets.nattable.hideshow.RowHideShowLayer;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.ILayer;
 import org.eclipse.nebula.widgets.nattable.layer.ILayerListener;
+import org.eclipse.nebula.widgets.nattable.layer.event.ColumnStructuralChangeEvent;
 import org.eclipse.nebula.widgets.nattable.layer.event.ILayerEvent;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.sort.SortHeaderLayer;
@@ -146,6 +147,9 @@ public class PeakListNatTable {
 			@Override
 			public void handleLayerEvent(ILayerEvent event) {
 
+				if(!(event instanceof ColumnStructuralChangeEvent)) {
+					return;
+				}
 				int num = 0;
 				/*
 				 * freeze first column, this column contains retention times
