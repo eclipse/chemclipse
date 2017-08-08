@@ -283,7 +283,9 @@ public class PeakListNatTable {
 		List<Integer> peakNamesColumn = new ArrayList<>();
 		peakNamesColumn.add(TableProvider.COLUMN_INDEX_PEAK_NAMES);
 		if(isEmpty) {
-			columnHideShowLayer.hideColumnPositions(peakNamesColumn);
+			if(columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_PEAK_NAMES)) {
+				columnHideShowLayer.hideColumnPositions(peakNamesColumn);
+			}
 		} else {
 			columnHideShowLayer.showColumnIndexes(peakNamesColumn);
 		}

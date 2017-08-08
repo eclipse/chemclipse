@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable;
 
-import java.util.List;
-
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 
@@ -76,11 +74,7 @@ public class TableProvider {
 
 	public int getRowCount() {
 
-		List<ISample> samples = dataTable.getSamples();
-		if(!samples.isEmpty()) {
-			return samples.get(0).getSampleData().size();
-		}
-		return 0;
+		return dataTable.getRetentionTimes().size();
 	}
 
 	public void setNormalizationData(String normalizationData) {
