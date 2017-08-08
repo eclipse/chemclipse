@@ -127,7 +127,7 @@ public class SortModel implements ISortModel {
 				if(direction == -1) {
 					Collections.reverse(sortedRow);
 				}
-			} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAKS_NAMES) {
+			} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAK_NAMES) {
 				List<String> peaksNames = tableProvider.getDataTable().getPeaksNames();
 				sortedRow.sort((i, j) -> {
 					return setDirection * peaksNames.get(i).compareTo(peaksNames.get(j));

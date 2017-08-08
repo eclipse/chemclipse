@@ -36,7 +36,7 @@ public class PcaResulHeaderProvider implements IDataProvider {
 			return "";
 		} else if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
 			return "reten. time";
-		} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAKS_NAMES) {
+		} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAK_NAMES) {
 			return "Compound";
 		} else {
 			ISample sample = tableProvider.getDataTable().getSamples().get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);

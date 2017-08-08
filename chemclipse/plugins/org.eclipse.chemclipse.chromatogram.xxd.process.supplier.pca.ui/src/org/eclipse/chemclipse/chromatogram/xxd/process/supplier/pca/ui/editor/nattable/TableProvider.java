@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 
 public class TableProvider {
 
-	public static final int COLUMN_INDEX_PEAKS_NAMES = 2;
+	public static final int COLUMN_INDEX_PEAK_NAMES = 2;
 	public static final int COLUMN_INDEX_RETENTION_TIMES = 1;
 	public static final int COLUMN_INDEX_SELECTED = 0;
 	public static final String COLUMN_LABEL_GROUP_DATA = "COLUMN_GROUP_DATA";
@@ -52,7 +52,7 @@ public class TableProvider {
 			return COLUMN_LABEL_SELECTED;
 		} else if(columnIndex == COLUMN_INDEX_RETENTION_TIMES) {
 			return COLUMN_LABEL_RETENTION_TIMES;
-		} else if(columnIndex == COLUMN_INDEX_PEAKS_NAMES) {
+		} else if(columnIndex == COLUMN_INDEX_PEAK_NAMES) {
 			return COLUMN_LABEL_PEAKS_NAMES;
 		} else {
 			ISample sample = getDataTable().getSamples().get(columnIndex - NUMER_OF_DESCRIPTION_COLUMN);

@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.function.BiFunction;
@@ -56,6 +58,7 @@ import org.eclipse.swt.widgets.Composite;
 public class PeakListNatTable {
 
 	private ColumnGroupHeaderLayer columnGroupHeaderLayer;
+	private ColumnHideShowLayer columnHideShowLayer;
 	private ExportData exportData;
 	private NatTable natTable;
 	private SortModel sortModel;
@@ -75,13 +78,13 @@ public class PeakListNatTable {
 
 		sortModel = new SortModel(tableProvider);
 		final PcaResulDataProvider dataProvider = new PcaResulDataProvider(tableProvider, sortModel);
-		final DataLayer bodyDataLayer = new DataLayer(dataProvider);
+		DataLayer bodyDataLayer = new DataLayer(dataProvider);
 		bodyDataLayer.setConfigLabelAccumulator(new PcaResultLabelProvider(tableProvider));
 		final RowHideShowLayer rowHideShowLayer = new RowHideShowLayer(bodyDataLayer);
-		final ColumnHideShowLayer columnHideShowLayer = new ColumnHideShowLayer(rowHideShowLayer);
+		columnHideShowLayer = new ColumnHideShowLayer(rowHideShowLayer);
 		ColumnGroupModel columnGroupModel = new ColumnGroupModel();
 		ColumnGroupExpandCollapseLayer columnGroupExpandCollapseLayer = new ColumnGroupExpandCollapseLayer(columnHideShowLayer, columnGroupModel, columnGroupModel);
-		final SelectionLayer selectionLayer = new SelectionLayer(columnGroupExpandCollapseLayer);
+		SelectionLayer selectionLayer = new SelectionLayer(columnGroupExpandCollapseLayer);
 		final ViewportLayer viewportLayer = new ViewportLayer(selectionLayer);
 		final FreezeLayer freezeLayer = new FreezeLayer(selectionLayer);
 		final CompositeFreezeLayer compositeFreezeLayer = new CompositeFreezeLayer(freezeLayer, viewportLayer, selectionLayer);
@@ -160,7 +163,7 @@ public class PeakListNatTable {
 				/*
 				 * freeze first column, this column contains names of peaks
 				 */
-				if(!columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_PEAKS_NAMES)) {
+				if(!columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_PEAK_NAMES)) {
 					num++;
 				}
 				if(!columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_SELECTED)) {
@@ -225,6 +228,18 @@ public class PeakListNatTable {
 		return exportData;
 	}
 
+	private void hideCompoundColumn() {
+
+		boolean isEmpty = !tableData.getPeaksNames().stream().anyMatch(s -> s != null && !s.isEmpty());
+		List<Integer> peakNamesColumn = new ArrayList<>();
+		peakNamesColumn.add(TableProvider.COLUMN_INDEX_PEAK_NAMES);
+		if(isEmpty) {
+			columnHideShowLayer.hideColumnPositions(peakNamesColumn);
+		} else {
+			columnHideShowLayer.showColumnIndexes(peakNamesColumn);
+		}
+	}
+
 	public void setDataNormalization(String normalization) {
 
 		tableProvider.setNormalizationData(normalization);
@@ -237,6 +252,7 @@ public class PeakListNatTable {
 		tableData.update();
 		sortModel.update();
 		generateGroup();
+		hideCompoundColumn();
 		natTable.refresh();
 	}
 }
