@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.support.text.ValueFormat;
@@ -34,7 +37,7 @@ public class Axes {
 	private boolean addPlane = false;
 	final private PhongMaterial cornMaterial = new PhongMaterial();
 	private Chart3DData data;
-	final private NumberFormat format = ValueFormat.getNumberFormatEnglish();
+	private NumberFormat format;
 	final private PhongMaterial gridaxisMaterial = new PhongMaterial();
 	private double lableDistance;
 	private double lableDistanceNameAxis;
@@ -347,6 +350,11 @@ public class Axes {
 		this.lengthY = Math.abs(this.maxY - this.minY);
 		this.lengthZ = Math.abs(this.maxZ - this.minZ);
 		mainGroup.getChildren().clear();
+		if(Math.abs(numberDigits) > 4) {
+			format = new DecimalFormat("#.##E0", new DecimalFormatSymbols(Locale.US));
+		} else {
+			format = ValueFormat.getNumberFormatEnglish();
+		}
 		mainGroup.getChildren().addAll(createXYPlane(), createYZPlane(), createXZPlane(), createCorns(), createXLabels(), createYLabels(), createZLanels());
 	}
 }

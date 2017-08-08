@@ -52,6 +52,7 @@ import org.eclipse.nebula.widgets.nattable.layer.event.ILayerEvent;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.sort.SortHeaderLayer;
 import org.eclipse.nebula.widgets.nattable.sort.config.SingleClickSortConfiguration;
+import org.eclipse.nebula.widgets.nattable.tree.command.TreeCollapseAllCommand;
 import org.eclipse.nebula.widgets.nattable.ui.menu.AbstractHeaderMenuConfiguration;
 import org.eclipse.nebula.widgets.nattable.ui.menu.PopupMenuBuilder;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
@@ -111,6 +112,11 @@ public class PeakListNatTable {
 		toolTip.setPopupDelay(500);
 		toolTip.activate();
 		toolTip.setShift(new Point(10, 10));
+	}
+
+	public void collapseAllColumns() {
+
+		natTable.doCommand(new TreeCollapseAllCommand());
 	}
 
 	/**
