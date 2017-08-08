@@ -225,10 +225,6 @@ public class SamplesOverviewPage {
 		table.setLayoutData(gridData);
 		tableSamples = new CheckboxTableViewer(table);
 		tableSamples.setContentProvider(new ArrayContentProvider());
-		tableSamples.addCheckStateListener(event -> {
-			((ISample)event.getElement()).setSelected(event.getChecked());
-			redrawSamplesSelectedCount();
-		});
 		tableSamples.addSelectionChangedListener(event -> {
 			IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 			if(!selection.isEmpty()) {
@@ -284,11 +280,11 @@ public class SamplesOverviewPage {
 		buttonComposite.setLayout(new FillLayout(SWT.VERTICAL));
 		Button button = new Button(buttonComposite, SWT.PUSH);
 		button.setText("Update");
-		button.addListener(SWT.Selection, e -> updateGroupNames());
+		button.addListener(SWT.Selection, e -> updateSamples());
 		tabItem.setControl(composite);
 		button = new Button(buttonComposite, SWT.PUSH);
 		button.setText("Reset");
-		button.addListener(SWT.Selection, e -> resetGroupNames());
+		button.addListener(SWT.Selection, e -> resetSamples());
 	}
 
 	private void redrawSamplesSelectedCount() {
@@ -297,9 +293,12 @@ public class SamplesOverviewPage {
 		countSelectedSamples.setText("Selected: " + selected + " from " + pcaResults.getSampleList().size() + " samples");
 	}
 
-	private void resetGroupNames() {
+	private void resetSamples() {
 
-		pcaResults.getSampleList().forEach(s -> groupNames.put(s, s.getGroupName()));
+		pcaResults.getSampleList().forEach(s -> {
+			tableSamples.setChecked(s, s.isSelected());
+			groupNames.put(s, s.getGroupName());
+		});
 		updateTableTableSamples();
 	}
 
@@ -425,18 +424,25 @@ public class SamplesOverviewPage {
 		mapGroupColor = PcaColorGroup.getColorSWT(groupNames.values().stream().collect(Collectors.toSet()));
 	}
 
-	private void updateGroupNames() {
-
-		pcaResults.getSampleList().forEach(s -> s.setGroupName(groupNames.get(s)));
-		pcaEditor.updataSamples();
-	}
-
 	private void updateOverviewTable() {
 
 		for(TableColumn column : tableOverview.getColumns()) {
 			column.pack();
 		}
 		tableOverview.redraw();
+	}
+
+	private void updateSamples() {
+
+		pcaResults.getSampleList().forEach(s -> {
+			s.setGroupName(groupNames.get(s));
+			s.setSelected(false);
+		});
+		Object[] checkedSamples = tableSamples.getCheckedElements();
+		for(Object checkedSample : checkedSamples) {
+			((ISample)checkedSample).setSelected(true);
+		}
+		pcaEditor.updataSamples();
 	}
 
 	private void updateTableTableSamples() {
