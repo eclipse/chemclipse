@@ -139,7 +139,17 @@ public class SortModel implements ISortModel {
 				ISample sample = tableProvider.getDataTable().getSamples().get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
 				List<ISampleData> sampleData = sample.getSampleData();
 				sortedRow.sort((i, j) -> {
-					return setDirection * Double.compare(sampleData.get(i).getNormalizedData(), sampleData.get(j).getNormalizedData());
+					ISampleData sampleDataA = sampleData.get(i);
+					ISampleData sampleDataB = sampleData.get(j);
+					if(!sampleDataA.isEmpty() && !sampleDataB.isEmpty()) {
+						return setDirection * Double.compare(sampleDataA.getNormalizedData(), sampleDataB.getNormalizedData());
+					} else if(!sampleDataA.isEmpty()) {
+						return setDirection;
+					} else if(!sampleDataB.isEmpty()) {
+						return -setDirection;
+					} else {
+						return 0;
+					}
 				});
 			}
 			this.isSorted = true;
