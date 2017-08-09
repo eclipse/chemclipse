@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.filter.core.chromatogram;
 
+import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
+
 public class ChromatogramFilterSupplier implements IChromatogramFilterSupplier {
 
 	private String id = "";
 	private String description = "";
 	private String filterName = "";
+	private Class<? extends IChromatogramFilterSettings> filterSettingsClass;
 
 	@Override
 	public String getDescription() {
@@ -70,6 +73,17 @@ public class ChromatogramFilterSupplier implements IChromatogramFilterSupplier {
 		if(id != null) {
 			this.id = id;
 		}
+	}
+
+	@Override
+	public Class<? extends IChromatogramFilterSettings> getFilterSettingsClass() {
+
+		return this.filterSettingsClass;
+	}
+
+	protected void setFilterSettingsClass(Class<? extends IChromatogramFilterSettings> filterSettingsClass) {
+
+		this.filterSettingsClass = filterSettingsClass;
 	}
 
 	// ------------------------------------hashCode, equals, toString

@@ -33,6 +33,7 @@ public class ChromatogramFilter {
 	private static final String DESCRIPTION = "description";
 	private static final String FILTER_NAME = "filterName";
 	private static final String FILTER = "filter";
+	private static final String FILTER_SETTINGS = "filterSettings";
 	//
 	private static final String PROCESSING_DESCRIPTION = "Chromatogram Filter";
 	private static final String NO_CHROMATOGRAM_FILTER_AVAILABLE = "There is no chromatogram filter available.";
@@ -106,6 +107,16 @@ public class ChromatogramFilter {
 			supplier.setId(element.getAttribute(ID));
 			supplier.setDescription(element.getAttribute(DESCRIPTION));
 			supplier.setFilterName(element.getAttribute(FILTER_NAME));
+			if(element.getAttribute(FILTER_SETTINGS) != null) {
+				try {
+					IChromatogramFilterSettings instance = (IChromatogramFilterSettings)element.createExecutableExtension(FILTER_SETTINGS);
+					supplier.setFilterSettingsClass(instance.getClass());
+				} catch(CoreException e) {
+					logger.warn(e);
+					// settings class is optional, set null instead
+					supplier.setFilterSettingsClass(null);
+				}
+			}
 			filterSupport.add(supplier);
 		}
 		return filterSupport;

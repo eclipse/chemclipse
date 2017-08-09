@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.filter.core.chromatogram;
 
+import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
+
 public interface IChromatogramFilterSupplier {
 
 	/**
@@ -34,4 +36,11 @@ public interface IChromatogramFilterSupplier {
 	 * @return String
 	 */
 	String getFilterName();
+
+	/**
+	 * TODO: either returns a bean-like class or with annotations ..., with a public default constructor, ... or returns <code>null</code> if no filter settings are associated
+	 * 
+	 * @return
+	 */
+	Class<? extends IChromatogramFilterSettings> getFilterSettingsClass();
 }
