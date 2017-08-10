@@ -34,6 +34,7 @@ import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -114,18 +115,63 @@ public class PcaEditor extends AbstractPcaEditor {
 	}
 
 	@Override
-	public void openWizardPcaPeakInputs() {
+	public int openWizardPcaDerivedScansInput() {
 
+		int status = Window.CANCEL;
 		try {
-			super.openWizardPcaPeakInputs();
-			updateData();
-			updateViews();
+			status = super.openWizardPcaDerivedScansInput();
+			if(status == Window.OK) {
+				updateData();
+				updateViews();
+				showScorePlotPage();
+			}
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
 			logger.warn(e.getCause());
 		} catch(InterruptedException e) {
 			logger.warn(e);
 		}
+		return status;
+	}
+
+	@Override
+	public int openWizardPcaPeaksInput() {
+
+		int status = Window.CANCEL;
+		try {
+			status = super.openWizardPcaPeaksInput();
+			if(status == Window.OK) {
+				updateData();
+				updateViews();
+				showScorePlotPage();
+			}
+		} catch(InvocationTargetException e) {
+			logger.warn(e);
+			logger.warn(e.getCause());
+		} catch(InterruptedException e) {
+			logger.warn(e);
+		}
+		return status;
+	}
+
+	@Override
+	public int openWizardPcaScansInput() {
+
+		int status = Window.CANCEL;
+		try {
+			status = super.openWizardPcaScansInput();
+			if(status == Window.OK) {
+				updateData();
+				updateViews();
+				showScorePlotPage();
+			}
+		} catch(InvocationTargetException e) {
+			logger.warn(e);
+			logger.warn(e.getCause());
+		} catch(InterruptedException e) {
+			logger.warn(e);
+		}
+		return status;
 	}
 
 	@PreDestroy

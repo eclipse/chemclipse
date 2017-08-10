@@ -15,32 +15,19 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.InputFilesTable;
 import org.eclipse.jface.window.Window;
-import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 
-public class DataInputFromPeakFilesPageWizard extends WizardPage {
-
-	private InputFilesTable inputFilesTable;
-	private Text textGroupName;
+public class DataInputFromPeakFilesPageWizard extends DataInputPageWizard {
 
 	public DataInputFromPeakFilesPageWizard(String pageName) {
 		super(pageName);
 		setTitle("Peak Input Files");
 		setDescription("This wizard lets you select peak input files and set bulk group name.");
-		setPageComplete(false);
 	}
 
-	private void addFiles() {
+	@Override
+	protected void addFiles() {
 
 		PeakInputFilesWizard inputWizard = new PeakInputFilesWizard();
 		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getCurrent().getActiveShell(), inputWizard);
@@ -50,59 +37,13 @@ public class DataInputFromPeakFilesPageWizard extends WizardPage {
 			List<String> selectedPeakFiles = inputWizard.getSelectedPeakFiles();
 			for(String selectedPeakFile : selectedPeakFiles) {
 				IDataInputEntry dataInputEntry = new DataInputEntry(selectedPeakFile);
-				String groupName = textGroupName.getText().trim();
+				String groupName = getGroupName().trim();
 				if(!groupName.isEmpty()) {
 					dataInputEntry.setGroupName(groupName);
 				}
-				inputFilesTable.getDataInputEntries().add(dataInputEntry);
+				getDataInputEntries().add(dataInputEntry);
 			}
-			inputFilesTable.update();
-			setPageComplete(!inputFilesTable.getDataInputEntries().isEmpty());
 		}
-	}
-
-	@Override
-	public void createControl(Composite parent) {
-
-		GridLayout gridLayout;
-		GridData gridData;
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout());
-		gridLayout = new GridLayout();
-		gridLayout.numColumns = 1;
-		composite.setLayout(gridLayout);
-		/*
-		 * Select the process entry.
-		 */
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.heightHint = 30;
-		Label label = new Label(composite, SWT.NONE);
-		label.setText("Set group name (optional)");
-		textGroupName = new Text(composite, SWT.BORDER);
-		textGroupName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		label = new Label(composite, SWT.None);
-		label.setText(" Select input files ");
-		gridData = new GridData(GridData.FILL_BOTH);
-		gridData.heightHint = 400;
-		gridData.widthHint = 100;
-		gridData.verticalSpan = 5;
-		inputFilesTable = new InputFilesTable(composite, gridData);
-		Composite compositeButtonTable = new Composite(composite, SWT.NONE);
-		compositeButtonTable.setLayout(new FillLayout());
-		Button button = new Button(compositeButtonTable, SWT.PUSH);
-		button.addListener(SWT.Selection, (event) -> addFiles());
-		button.setText("Add");
-		button = new Button(compositeButtonTable, SWT.PUSH);
-		button.addListener(SWT.Selection, (event) -> {
-			inputFilesTable.removeSelection();
-			setPageComplete(!inputFilesTable.getDataInputEntries().isEmpty());
-		});
-		button.setText("Remove");
-		setControl(composite);
-	}
-
-	public List<IDataInputEntry> getDataInputEntries() {
-
-		return inputFilesTable.getDataInputEntries();
+		updata();
 	}
 }

@@ -14,23 +14,23 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionPeaks;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionDerivedScans;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.jface.wizard.Wizard;
 
-public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
+public class PcaDerivedScansInputWizard extends Wizard implements IPcaInputWizard {
 
 	private DataInputFromPeakFilesPageWizard dataInputFromPeakFilesPage;
 	private FiltrationDataWizardPage filtrationDataPage;
-	private MainPropertiesPeaksInputWizardPage mainPropertiesPage;
+	private MainPropertiesDerivedScansInputWizardPage mainPropertiesPage;
 	private NormalizationDataWizardPage normalizationDataPage;
-	private PcaExtractionPeaks pcaExtractionData;
+	private IDataExtraction pcaExtractionData;
 
-	public PcaPeaksInputWizard() {
+	public PcaDerivedScansInputWizard() {
 		super();
-		mainPropertiesPage = new MainPropertiesPeaksInputWizardPage("MainProperites");
+		mainPropertiesPage = new MainPropertiesDerivedScansInputWizardPage("MainProperites");
 		dataInputFromPeakFilesPage = new DataInputFromPeakFilesPageWizard("DataInputFiles");
 		normalizationDataPage = new NormalizationDataWizardPage("NormalizationData");
 		filtrationDataPage = new FiltrationDataWizardPage("FiltrationData");
@@ -74,7 +74,7 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 
 		List<IDataInputEntry> dataInputs = dataInputFromPeakFilesPage.getDataInputEntries();
 		int retentionTimeWindow = mainPropertiesPage.getRetentionTimeWindow();
-		pcaExtractionData = new PcaExtractionPeaks(dataInputs, retentionTimeWindow, IDataExtraction.EXTRACT_PEAK);
+		pcaExtractionData = new PcaExtractionDerivedScans(dataInputs, retentionTimeWindow);
 		return true;
 	}
 }

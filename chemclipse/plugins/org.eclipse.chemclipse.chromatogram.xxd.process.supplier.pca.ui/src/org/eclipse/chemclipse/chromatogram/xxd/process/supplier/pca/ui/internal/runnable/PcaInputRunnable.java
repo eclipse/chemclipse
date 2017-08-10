@@ -14,23 +14,23 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaEvaluation;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-public class PcaPeaksInputRunnable implements IRunnableWithProgress {
+public class PcaInputRunnable implements IRunnableWithProgress {
 
 	private int numberOfPrincipleComponents;
-	private PcaExtractionData pcaExtractionData;
+	private IDataExtraction pcaExtractionData;
 	private PcaFiltrationData pcaFiltrationData;
 	private PcaNormalizationData pcaNormalizationData;
 	private IPcaResults pcaResults;
 
-	public PcaPeaksInputRunnable(PcaExtractionData pcaExtractionData, PcaFiltrationData pcaFiltrationData, PcaNormalizationData pcaNormalizationData, int numberOfPrincipleComponents) {
+	public PcaInputRunnable(IDataExtraction pcaExtractionData, PcaFiltrationData pcaFiltrationData, PcaNormalizationData pcaNormalizationData, int numberOfPrincipleComponents) {
 		this.pcaExtractionData = pcaExtractionData;
 		this.pcaFiltrationData = pcaFiltrationData;
 		this.pcaNormalizationData = pcaNormalizationData;
@@ -46,7 +46,8 @@ public class PcaPeaksInputRunnable implements IRunnableWithProgress {
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		pcaResults = pcaExtractionData.proccess(monitor);
+		pcaResults = pcaExtractionData.process(monitor);
+		System.out.println("size: " + pcaResults.getExtractedRetentionTimes().size());
 		pcaNormalizationData.process(pcaResults, monitor);
 		pcaFiltrationData.process(pcaResults, true, monitor);
 		PcaEvaluation pcaEvaluation = new PcaEvaluation();

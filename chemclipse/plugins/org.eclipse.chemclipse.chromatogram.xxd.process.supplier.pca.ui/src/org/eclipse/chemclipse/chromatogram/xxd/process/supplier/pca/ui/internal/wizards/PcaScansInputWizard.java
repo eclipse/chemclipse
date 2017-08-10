@@ -14,23 +14,23 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionPeaks;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionScans;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.jface.wizard.Wizard;
 
-public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
+public class PcaScansInputWizard extends Wizard implements IPcaInputWizard {
 
 	private DataInputFromPeakFilesPageWizard dataInputFromPeakFilesPage;
 	private FiltrationDataWizardPage filtrationDataPage;
-	private MainPropertiesPeaksInputWizardPage mainPropertiesPage;
+	private MainPropertiesScansInputWizardPage mainPropertiesPage;
 	private NormalizationDataWizardPage normalizationDataPage;
-	private PcaExtractionPeaks pcaExtractionData;
+	private PcaExtractionScans pcaExtractionData;
 
-	public PcaPeaksInputWizard() {
+	public PcaScansInputWizard() {
 		super();
-		mainPropertiesPage = new MainPropertiesPeaksInputWizardPage("MainProperites");
+		mainPropertiesPage = new MainPropertiesScansInputWizardPage("MainProperites");
 		dataInputFromPeakFilesPage = new DataInputFromPeakFilesPageWizard("DataInputFiles");
 		normalizationDataPage = new NormalizationDataWizardPage("NormalizationData");
 		filtrationDataPage = new FiltrationDataWizardPage("FiltrationData");
@@ -74,7 +74,9 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 
 		List<IDataInputEntry> dataInputs = dataInputFromPeakFilesPage.getDataInputEntries();
 		int retentionTimeWindow = mainPropertiesPage.getRetentionTimeWindow();
-		pcaExtractionData = new PcaExtractionPeaks(dataInputs, retentionTimeWindow, IDataExtraction.EXTRACT_PEAK);
+		boolean useDefoultProperties = mainPropertiesPage.isUseDefoultProperties();
+		int extractionType = mainPropertiesPage.getExtractionType();
+		pcaExtractionData = new PcaExtractionScans(retentionTimeWindow, dataInputs, extractionType, useDefoultProperties);
 		return true;
 	}
 }

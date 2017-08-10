@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.conversion.IConverter;
@@ -23,21 +24,26 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
-public class MainPropertiesWizardPage extends WizardPage {
+public class MainPropertiesScansInputWizardPage extends WizardPage {
 
 	private DataBindingContext dbc = new DataBindingContext();
+	private int extractionType;
 	private IObservableValue<Integer> numerOfComponents = new WritableValue<>();
 	private IObservableValue<Integer> retentionTimeWindow = new WritableValue<>();
+	private boolean useDefoultProperties;
 
-	protected MainPropertiesWizardPage(String pageName) {
+	protected MainPropertiesScansInputWizardPage(String pageName) {
 		super(pageName);
 		numerOfComponents.setValue(3);
-		retentionTimeWindow.setValue(200);
+		retentionTimeWindow.setValue(1000);
+		extractionType = IDataExtraction.CLOSEST_SCAN;
+		useDefoultProperties = true;
 	}
 
 	@Override
@@ -46,6 +52,17 @@ public class MainPropertiesWizardPage extends WizardPage {
 		WizardPageSupport.create(this, dbc);
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new GridLayout(1, true));
+		Button button = new Button(composite, SWT.CHECK);
+		button.setText("Use defaout properties if it is possible \n (chromatogram have same start retention time \n and same scan interval)");
+		button.setSelection(true);
+		button.addListener(SWT.Selection, e -> useDefoultProperties = ((Button)e.item).getSelection());
+		button = new Button(composite, SWT.RADIO);
+		button.setText("Select the closest scan");
+		button.setSelection(true);
+		button.addListener(SWT.Selection, e -> extractionType = IDataExtraction.CLOSEST_SCAN);
+		button = new Button(composite, SWT.RADIO);
+		button.setText("Interpolate scan");
+		button.addListener(SWT.Selection, e -> extractionType = IDataExtraction.LINEAR_INTERPOLATION_SCAN);
 		Label label = new Label(composite, SWT.None);
 		label.setText("Retention Time Windows (ms)");
 		Text text = new Text(composite, SWT.None);
@@ -77,6 +94,11 @@ public class MainPropertiesWizardPage extends WizardPage {
 		setControl(composite);
 	}
 
+	public int getExtractionType() {
+
+		return extractionType;
+	}
+
 	public int getNumerOfComponents() {
 
 		return numerOfComponents.getValue();
@@ -85,5 +107,10 @@ public class MainPropertiesWizardPage extends WizardPage {
 	public int getRetentionTimeWindow() {
 
 		return retentionTimeWindow.getValue();
+	}
+
+	public boolean isUseDefoultProperties() {
+
+		return useDefoultProperties;
 	}
 }

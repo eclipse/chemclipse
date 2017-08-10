@@ -78,13 +78,21 @@ public class OverviewPage {
 		layout.marginWidth = 2;
 		layout.marginHeight = 2;
 		client.setLayout(layout);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalIndent = 20;
-		gridData.heightHint = 30;
 		/*
 		 * Input files section.
 		 */
-		createWizardHyperlink(client, gridData, formToolkit);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalIndent = 20;
+		gridData.heightHint = 30;
+		createWizardPeaksInputHyperlink(client, gridData, formToolkit);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalIndent = 20;
+		gridData.heightHint = 30;
+		createWizardScansInputHyperlink(client, gridData, formToolkit);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalIndent = 20;
+		gridData.heightHint = 30;
+		createWizardDerivesScansInputHyperlink(client, gridData, formToolkit);
 		/*
 		 * Add the client to the section and paint flat borders.
 		 */
@@ -164,7 +172,7 @@ public class OverviewPage {
 		});
 	}
 
-	private void createWizardHyperlink(Composite client, GridData gridData, FormToolkit formToolkit) {
+	private void createWizardDerivesScansInputHyperlink(Composite client, GridData gridData, FormToolkit formToolkit) {
 
 		ImageHyperlink imageHyperlink;
 		/*
@@ -172,14 +180,54 @@ public class OverviewPage {
 		 */
 		imageHyperlink = formToolkit.createImageHyperlink(client, SWT.NONE);
 		imageHyperlink.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16));
-		imageHyperlink.setText("Run Wizard");
+		imageHyperlink.setText("Run Wizard (Derived scans input)");
 		imageHyperlink.setLayoutData(gridData);
 		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
 
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
 
-				pcaEditor.openWizardPcaPeakInputs();
+				pcaEditor.openWizardPcaDerivedScansInput();
+			}
+		});
+	}
+
+	private void createWizardPeaksInputHyperlink(Composite client, GridData gridData, FormToolkit formToolkit) {
+
+		ImageHyperlink imageHyperlink;
+		/*
+		 * Settings
+		 */
+		imageHyperlink = formToolkit.createImageHyperlink(client, SWT.NONE);
+		imageHyperlink.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16));
+		imageHyperlink.setText("Run Wizard (Peaks input)");
+		imageHyperlink.setLayoutData(gridData);
+		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
+
+			@Override
+			public void linkActivated(HyperlinkEvent e) {
+
+				pcaEditor.openWizardPcaPeaksInput();
+			}
+		});
+	}
+
+	private void createWizardScansInputHyperlink(Composite client, GridData gridData, FormToolkit formToolkit) {
+
+		ImageHyperlink imageHyperlink;
+		/*
+		 * Settings
+		 */
+		imageHyperlink = formToolkit.createImageHyperlink(client, SWT.NONE);
+		imageHyperlink.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16));
+		imageHyperlink.setText("Run Wizard (Scans input)");
+		imageHyperlink.setLayoutData(gridData);
+		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
+
+			@Override
+			public void linkActivated(HyperlinkEvent e) {
+
+				pcaEditor.openWizardPcaScansInput();
 			}
 		});
 	}

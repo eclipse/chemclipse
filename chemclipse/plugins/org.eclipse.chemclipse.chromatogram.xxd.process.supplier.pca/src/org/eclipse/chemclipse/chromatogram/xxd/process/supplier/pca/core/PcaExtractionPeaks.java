@@ -40,15 +40,13 @@ import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverter
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PcaExtractionData {
+public class PcaExtractionPeaks implements IDataExtraction {
 
-	public static final int EXTRACT_PEAK = 0;
-	public static final int EXTRACT_PEAK_CUMULATION = 1;
 	private List<IDataInputEntry> dataInputEntriesAll;
 	private int extractionType;
 	private int retentionTimeWindow;
 
-	public PcaExtractionData(List<IDataInputEntry> dataInputEntriesAll, int retentionTimeWindow, int extractionType) {
+	public PcaExtractionPeaks(List<IDataInputEntry> dataInputEntriesAll, int retentionTimeWindow, int extractionType) {
 		this.retentionTimeWindow = retentionTimeWindow;
 		this.dataInputEntriesAll = dataInputEntriesAll;
 		this.extractionType = extractionType;
@@ -321,6 +319,7 @@ public class PcaExtractionData {
 		List<Integer> extractedRetentionTimes = calculateCondensedRetentionTimes(extractPeaks);
 		pcaResults.setExtractedRetentionTimes(extractedRetentionTimes);
 		setExtractData(extractPeaks, pcaResults);
+		pcaResults.setExtractionType(extractionType);
 		return pcaResults;
 	}
 
@@ -421,9 +420,10 @@ public class PcaExtractionData {
 		}
 	}
 
-	public IPcaResults proccess(IProgressMonitor monitor) {
+	@Override
+	public IPcaResults process(IProgressMonitor monitor) {
 
-		List<IDataInputEntry> dataInputEntries = removeFileSameName(dataInputEntriesAll);
+		List<IDataInputEntry> dataInputEntries = IDataExtraction.removeFileSameName(dataInputEntriesAll);
 		/*
 		 * Initialize PCA Results
 		 */
@@ -447,25 +447,12 @@ public class PcaExtractionData {
 		/*
 		 * Set selected retention Time
 		 */
-		List<Boolean> selectedRetentionTime = new ArrayList<>();
-		for(int i = 0; i < pcaResults.getExtractedRetentionTimes().size(); i++) {
-			selectedRetentionTime.add(new Boolean(true));
-		}
-		pcaResults.setSelectedRetentionTimes(selectedRetentionTime);
+		IDataExtraction.setSelectedRetentionTime(pcaResults);
 		/*
 		 * create Groups
 		 */
-		PcaUtils.setGroups(pcaResults, true);
+		IDataExtraction.createGroup(pcaResults);
 		return pcaResults;
-	}
-
-	private List<IDataInputEntry> removeFileSameName(List<IDataInputEntry> entries) {
-
-		Map<String, IDataInputEntry> uniqueNames = new HashMap<>();
-		entries.forEach((input -> {
-			uniqueNames.put(input.getName(), input);
-		}));
-		return new ArrayList<>(uniqueNames.values());
 	}
 
 	private void setExtractData(Map<String, SortedMap<Integer, IPeak>> extractData, IPcaResults pcaResults) {
