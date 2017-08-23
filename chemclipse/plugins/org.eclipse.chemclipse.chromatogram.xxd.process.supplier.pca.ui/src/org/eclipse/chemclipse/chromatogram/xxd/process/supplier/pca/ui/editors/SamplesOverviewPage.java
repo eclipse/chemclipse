@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
@@ -51,7 +52,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -62,15 +65,18 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class SamplesOverviewPage {
 
+	private Combo comboSelectData;
 	private Label countSelectedSamples;
 	private HashMap<ISample, String> groupNames = new HashMap<>();
+	private Composite mainComposite;
 	private Map<String, Color> mapGroupColor = new HashMap<>();
 	private NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
-	final private String[] overviewType = new String[]{"pca", "data", "normlized data", "peaks"};
+	final private String[] overviewType = new String[]{"PCA", "Data", "Normlized data", "Peaks"};
 	private int overviewTypeSelection = -1;
 	private PcaEditor pcaEditor;
 	private IPcaResults pcaResults;
 	private ISample selectedSample;
+	private Label selectedSampleLable;
 	private Table tableOverview;
 	private CheckboxTableViewer tableSamples;
 
@@ -171,7 +177,14 @@ public class SamplesOverviewPage {
 		countSelectedSamples = new Label(client, SWT.NONE);
 		countSelectedSamples.setText("Selected: 0 from 0 samples.");
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
-		gridData.horizontalSpan = 2;
+		countSelectedSamples.setLayoutData(gridData);
+	}
+
+	private void createLableSelectedSample(Composite client) {
+
+		selectedSampleLable = new Label(client, SWT.NONE);
+		selectedSampleLable.setText("Selected Sample:");
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 		countSelectedSamples.setLayoutData(gridData);
 	}
 
@@ -197,19 +210,20 @@ public class SamplesOverviewPage {
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		composite.setLayout(new GridLayout(1, false));
-		Combo combo = new Combo(composite, SWT.READ_ONLY);
+		comboSelectData = new Combo(composite, SWT.READ_ONLY);
 		for(String name : overviewType) {
-			combo.add(name);
+			comboSelectData.add(name);
 		}
-		combo.addListener(SWT.Selection, e -> {
-			overviewTypeSelection = combo.getSelectionIndex();
+		comboSelectData.addListener(SWT.Selection, e -> {
+			overviewTypeSelection = comboSelectData.getSelectionIndex();
 			selectDataTableOverview(true);
 		});
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboSelectData.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		tableOverview = new Table(composite, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		tableOverview.setHeaderVisible(true);
 		tableOverview.setLinesVisible(true);
 		tableOverview.setLayoutData(new GridData(GridData.FILL_BOTH));
+		createLableSelectedSample(composite);
 	}
 
 	private void createTableSamples(Composite client) {
@@ -219,7 +233,7 @@ public class SamplesOverviewPage {
 		gridData.heightHint = 400;
 		gridData.widthHint = 100;
 		gridData.verticalSpan = 5;
-		Table table = new Table(client, SWT.CHECK | SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		Table table = new Table(client, SWT.CHECK | SWT.SINGLE | SWT.BORDER | SWT.FULL_SELECTION);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		table.setLayoutData(gridData);
@@ -228,8 +242,13 @@ public class SamplesOverviewPage {
 		tableSamples.addSelectionChangedListener(event -> {
 			IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 			if(!selection.isEmpty()) {
-				selectedSample = ((ISample)selection.getFirstElement());
-				selectDataTableOverview(false);
+				ISample sample = ((ISample)selection.getFirstElement());
+				if(sample != null && sample != selectedSample) {
+					selectedSample = sample;
+					selectDataTableOverview(false);
+					selectedSampleLable.setText("Selected Sample: " + selectedSample.getName());
+					selectedSampleLable.getParent().layout();
+				}
 			}
 		});
 		createColumnsTableSamples();
@@ -262,29 +281,36 @@ public class SamplesOverviewPage {
 
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Samples Overview");
-		Composite composite = new Composite(tabFolder, SWT.None);
-		composite.setLayout(new GridLayout(3, false));
+		mainComposite = new Composite(tabFolder, SWT.None);
+		mainComposite.setLayout(new GridLayout(3, false));
 		/*
 		 * Create the section.
 		 */
-		createOverviewSamples(composite);
+		createOverviewSamples(mainComposite);
 		/*
 		 * create sample overview
 		 */
-		createOverviewSection(composite);
+		createOverviewSection(mainComposite);
 		/*
 		 * create button area
 		 */
-		Composite buttonComposite = new Composite(composite, SWT.None);
+		Composite buttonComposite = new Composite(mainComposite, SWT.None);
 		buttonComposite.setLayoutData(new GridData(SWT.CENTER, SWT.BEGINNING, false, true));
 		buttonComposite.setLayout(new FillLayout(SWT.VERTICAL));
 		Button button = new Button(buttonComposite, SWT.PUSH);
+		button.setText("Select All");
+		button.addListener(SWT.Selection, e -> tableSamples.setAllChecked(true));
+		button = new Button(buttonComposite, SWT.PUSH);
+		button.setText("Deselect All");
+		button.addListener(SWT.Selection, e -> tableSamples.setAllChecked(false));
+		button = new Button(buttonComposite, SWT.PUSH);
 		button.setText("Update");
 		button.addListener(SWT.Selection, e -> updateSamples());
-		tabItem.setControl(composite);
 		button = new Button(buttonComposite, SWT.PUSH);
 		button.setText("Reset");
 		button.addListener(SWT.Selection, e -> resetSamples());
+		setEnable(mainComposite, false);
+		tabItem.setControl(mainComposite);
 	}
 
 	private void redrawSamplesSelectedCount() {
@@ -326,7 +352,7 @@ public class SamplesOverviewPage {
 		tableOverview.clearAll();
 		tableOverview.removeAll();
 		if(updateColumns) {
-			createColumnsTableOverview(new String[]{"ret.time", "Data"});
+			createColumnsTableOverview(new String[]{"Retention Time (Mintes)", "Data"});
 		}
 		if(selectedSample != null) {
 			List<ISampleData> sampleData = selectedSample.getSampleData();
@@ -361,7 +387,7 @@ public class SamplesOverviewPage {
 		tableOverview.clearAll();
 		tableOverview.removeAll();
 		if(updateColumns) {
-			createColumnsTableOverview(new String[]{"ret.time at Max", "Peak integrator area", "Peaks Name"});
+			createColumnsTableOverview(new String[]{"Reten.time at Max (Minutes)", "Peak Integrator Area", "Peaks Name"});
 		}
 		if(selectedSample != null) {
 			IPeaks peaks = selectedSample.getPcaResult().getPeaks();
@@ -390,7 +416,7 @@ public class SamplesOverviewPage {
 		tableOverview.clearAll();
 		tableOverview.removeAll();
 		if(updateColumns) {
-			createColumnsTableOverview(new String[]{"ret.time", "Data"});
+			createColumnsTableOverview(new String[]{"Retention Time (Mintes)", "Data"});
 		}
 		if(selectedSample != null) {
 			List<ISampleData> sampleData = selectedSample.getSampleData();
@@ -402,6 +428,17 @@ public class SamplesOverviewPage {
 		}
 	}
 
+	private void setEnable(Composite parent, boolean enable) {
+
+		for(Control control : parent.getChildren()) {
+			if(control instanceof Composite) {
+				Composite composite = (Composite)control;
+				setEnable(composite, enable);
+			}
+			control.setEnabled(enable);
+		}
+	}
+
 	public void update() {
 
 		Optional<IPcaResults> pcaResults = pcaEditor.getPcaResults();
@@ -410,12 +447,20 @@ public class SamplesOverviewPage {
 			List<ISample> samples = this.pcaResults.getSampleList();
 			groupNames.clear();
 			samples.forEach(s -> groupNames.put(s, s.getGroupName()));
+			PcaUtils.sortSampleListByName(samples);
 			updateColorMap();
 			tableSamples.setInput(samples);
 			updateTableTableSamples();
 			pcaResults.get().getSampleList().forEach(s -> tableSamples.setChecked(s, s.isSelected()));
 			redrawSamplesSelectedCount();
 			selectDataTableOverview(false);
+			tableSamples.getTable().select(0);
+			tableSamples.getTable().notifyListeners(SWT.Selection, new Event());
+			comboSelectData.select(0);
+			comboSelectData.notifyListeners(SWT.Selection, new Event());
+			setEnable(mainComposite, true);
+		} else {
+			setEnable(mainComposite, false);
 		}
 	}
 
