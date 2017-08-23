@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -27,10 +26,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.linear.Array2DRowRealMatrix;
-import org.apache.commons.math3.linear.BlockRealMatrix;
 import org.apache.commons.math3.stat.correlation.Covariance;
-import org.ejml.interfaces.decomposition.EigenDecomposition;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Group;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
@@ -42,8 +38,60 @@ import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.factory.DecompositionFactory;
+import org.ejml.interfaces.decomposition.EigenDecomposition;
 
 public class PcaUtils {
+
+	public static Map<String, double[]> extractData(IPcaResults pcaResults) {
+
+		Map<String, double[]> selectedSamples = new HashMap<>();
+		List<Boolean> isSelected = pcaResults.isSelectedRetentionTimes();
+		int numSelected = (int)isSelected.stream().filter(b -> b).count();
+		for(ISample sample : pcaResults.getSampleList()) {
+			double[] selectedSampleData = null;
+			if(sample.isSelected()) {
+				List<ISampleData> data = sample.getSampleData();
+				selectedSampleData = new double[numSelected];
+				int j = 0;
+				for(int i = 0; i < data.size(); i++) {
+					if(isSelected.get(i)) {
+						selectedSampleData[j] = data.get(i).getNormalizedData();
+						j++;
+					}
+				}
+				selectedSamples.put(sample.getName(), selectedSampleData);
+			}
+			sample.getPcaResult().setSampleData(selectedSampleData);
+		}
+		return selectedSamples;
+	}
+
+	public static RealMatrix getCovarianceMatrix(IPcaResults pcaResults) {
+
+		Map<String, double[]> data = extractData(pcaResults);
+		double[][] array = new double[data.size()][];
+		Iterator<double[]> it = data.values().iterator();
+		int i = 0;
+		while(it.hasNext()) {
+			double[] ds = it.next();
+			array[i] = ds;
+			i++;
+		}
+		Covariance covariance = new Covariance(array);
+		return covariance.getCovarianceMatrix();
+	}
+
+	public static double[] getEigenValuesCovarianceMatrix(IPcaResults pcaResults) {
+
+		RealMatrix covarianceMatrix = getCovarianceMatrix(pcaResults);
+		EigenDecomposition<DenseMatrix64F> eigenDecomposition = DecompositionFactory.eig(covarianceMatrix.getColumnDimension(), false, true);
+		eigenDecomposition.decompose(new DenseMatrix64F(covarianceMatrix.getData()));
+		double[] eigenvalues = new double[eigenDecomposition.getNumberOfEigenvalues()];
+		for(int i = 0; i < eigenvalues.length; i++) {
+			eigenvalues[i] = eigenDecomposition.getEigenvalue(i).real;
+		}
+		return eigenvalues;
+	}
 
 	/**
 	 *
@@ -214,57 +262,6 @@ public class PcaUtils {
 			return name0.compareTo(name1);
 		};
 		Collections.sort(samples, comparator);
-	}
-
-	public static RealMatrix getCovarianceMatrix(IPcaResults pcaResults) {
-
-		Map<String, double[]> data = extractData(pcaResults);
-		double[][] array = new double[data.size()][];
-		Iterator<double[]> it = data.values().iterator();
-		int i = 0;
-		while(it.hasNext()) {
-			double[] ds = (double[])it.next();
-			array[i] = ds;
-			i++;
-		}
-		Covariance covariance = new Covariance(array);
-		return covariance.getCovarianceMatrix();
-	}
-
-	public static double[] getEigenValuesCovarianceMatrix(IPcaResults pcaResults) {
-
-		RealMatrix covarianceMatrix = getCovarianceMatrix(pcaResults);
-		EigenDecomposition<DenseMatrix64F> eigenDecomposition = DecompositionFactory.eig(covarianceMatrix.getColumnDimension(), false, true);
-		eigenDecomposition.decompose(new DenseMatrix64F(covarianceMatrix.getData()));
-		double[] eigenvalues = new double[eigenDecomposition.getNumberOfEigenvalues()];
-		for(int i = 0; i < eigenvalues.length; i++) {
-			eigenvalues[i] = eigenDecomposition.getEigenvalue(i).real;
-		}
-		return eigenvalues;
-	}
-
-	public static Map<String, double[]> extractData(IPcaResults pcaResults) {
-
-		Map<String, double[]> selectedSamples = new HashMap<>();
-		List<Boolean> isSelected = pcaResults.isSelectedRetentionTimes();
-		int numSelected = (int)isSelected.stream().filter(b -> b).count();
-		for(ISample sample : pcaResults.getSampleList()) {
-			double[] selectedSampleData = null;
-			if(sample.isSelected()) {
-				List<ISampleData> data = sample.getSampleData();
-				selectedSampleData = new double[numSelected];
-				int j = 0;
-				for(int i = 0; i < data.size(); i++) {
-					if(isSelected.get(i)) {
-						selectedSampleData[j] = data.get(i).getNormalizedData();
-						j++;
-					}
-				}
-				selectedSamples.put(sample.getName(), selectedSampleData);
-			}
-			sample.getPcaResult().setSampleData(selectedSampleData);
-		}
-		return selectedSamples;
 	}
 
 	public static void sortSampleListByName(List<ISample> samples) {

@@ -14,21 +14,25 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.EmptyDataFilter;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 public class FilterEmptyDataWizardPage extends WizardPage {
 
 	protected FilterEmptyDataWizardPage(EmptyDataFilter emptyDataFilter) {
-		super("Empty Data");
+		super("Empty data filter");
+		setTitle("Empty Data Filter");
+		setDescription("Select rows, which contain just not-empty data");
 	}
 
 	@Override
 	public void createControl(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.None);
+		composite.setLayout(new GridLayout(1, false));
 		Label label = new Label(composite, SWT.None);
-		label.setText("Select just filter, which contran just not empty data");
+		label.setText("This filter is without parameters.");
 		setControl(composite);
 	}
 }

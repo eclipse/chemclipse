@@ -266,17 +266,17 @@ public class PcaEditor extends AbstractPcaEditor {
 		}
 	}
 
-	@Override
-	public void selectAllData() {
-
-		super.selectAllData();
-		updateData();
-	}
-
 	@Focus
 	public void setFocus() {
 
 		tabFolder.setFocus();
+	}
+
+	@Override
+	public void setSelectAllData(boolean selection) {
+
+		super.setSelectAllData(selection);
+		updateData();
 	}
 
 	public void showSamplesOverviewPagePage() {

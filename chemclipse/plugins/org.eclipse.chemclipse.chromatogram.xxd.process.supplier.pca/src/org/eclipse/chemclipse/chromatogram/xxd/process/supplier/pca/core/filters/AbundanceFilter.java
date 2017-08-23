@@ -24,8 +24,8 @@ public class AbundanceFilter implements IFilter {
 
 	final static public int ALL_VALUE = 0;
 	final static public int ANY_VALUE = 1;
-	final static public int LIMIT_GREATER_THEN = 0;
-	final static public int LIMIT_LESS_THEN = 1;
+	final static public int LIMIT_GREATER_THAN = 0;
+	final static public int LIMIT_LESS_THAN = 1;
 	private Function<Double, Boolean> comparator;
 	private int filterType;
 	private Function<Double, Boolean> gt = d -> d > this.limitValue;
@@ -34,12 +34,13 @@ public class AbundanceFilter implements IFilter {
 	private Function<Double, Boolean> lt = d -> d < this.limitValue;
 	final private String name = "Abundance filter";
 	private boolean onlySelected;
+	private String selectionResult = "";
 
 	public AbundanceFilter() {
 		onlySelected = true;
 		comparator = gt;
 		filterType = ALL_VALUE;
-		limitType = LIMIT_GREATER_THEN;
+		limitType = LIMIT_GREATER_THAN;
 		limitValue = 0;
 		onlySelected = true;
 	}
@@ -60,13 +61,26 @@ public class AbundanceFilter implements IFilter {
 			}
 			selection.add(b);
 		}
+		selectionResult = getNumberSelectedRow(selection);
 		return selection;
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "";
+		StringBuilder sb = new StringBuilder();
+		if(filterType == ALL_VALUE) {
+			sb.append("All values in row have to be");
+		} else {
+			sb.append("At least one value in row has to be");
+		}
+		if(limitType == LIMIT_GREATER_THAN) {
+			sb.append(" greater than ");
+		} else {
+			sb.append(" less than ");
+		}
+		sb.append(limitValue);
+		return sb.toString();
 	}
 
 	public int getFilterType() {
@@ -91,6 +105,12 @@ public class AbundanceFilter implements IFilter {
 	}
 
 	@Override
+	public String getSelectionResult() {
+
+		return selectionResult;
+	}
+
+	@Override
 	public boolean isOnlySelected() {
 
 		return onlySelected;
@@ -106,10 +126,10 @@ public class AbundanceFilter implements IFilter {
 	public void setlimitType(int limitType) {
 
 		switch(limitType) {
-			case LIMIT_GREATER_THEN:
+			case LIMIT_GREATER_THAN:
 				comparator = gt;
 				break;
-			case LIMIT_LESS_THEN:
+			case LIMIT_LESS_THAN:
 				comparator = lt;
 				break;
 			default:

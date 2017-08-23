@@ -13,9 +13,12 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.AbundanceFilter;
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoProperties;
+import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.SelectObservableValue;
+import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
@@ -73,10 +76,24 @@ public class FilterAbundanceWizardPage extends WizardPage {
 		combo.select(0);
 		ISWTObservableValue comboLimitType = WidgetProperties.singleSelectionIndex().observe(combo);
 		dbc.bindValue(comboLimitType, observableLimitType);
-		Text text = new Text(compareComposite, SWT.None);
+		Text text = new Text(compareComposite, SWT.BORDER);
 		GridDataFactory.swtDefaults().grab(true, false).align(SWT.FILL, SWT.BEGINNING).applyTo(text);
 		ISWTObservableValue txtSecondAttributeObservable = WidgetProperties.text(SWT.Modify).observe(text);
-		dbc.bindValue(txtSecondAttributeObservable, observeLimitValue);
+		UpdateValueStrategy targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
+			try {
+				return Double.parseDouble((String)o1);
+			} catch(NumberFormatException e) {
+			}
+			return null;
+		}));
+		targetToModel.setBeforeSetValidator(o1 -> {
+			if(o1 instanceof Double) {
+				return ValidationStatus.ok();
+			}
+			return ValidationStatus.error("Error");
+		});
+		UpdateValueStrategy modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString((Double)o1)));
+		dbc.bindValue(txtSecondAttributeObservable, observeLimitValue, targetToModel, modelToTarget);
 		setControl(composite);
 	}
 }

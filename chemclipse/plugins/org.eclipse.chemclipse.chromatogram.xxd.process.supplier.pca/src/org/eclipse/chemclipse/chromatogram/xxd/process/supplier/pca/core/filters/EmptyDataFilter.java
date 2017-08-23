@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 public class EmptyDataFilter implements IFilter {
 
 	private boolean onlySelected;
+	private String selectionResult = "";
 
 	public EmptyDataFilter() {
 		onlySelected = true;
@@ -31,11 +32,12 @@ public class EmptyDataFilter implements IFilter {
 
 		List<ISample> selectedSamples = pcaResults.getSampleList().stream().filter(s -> s.isSelected() || !onlySelected).collect(Collectors.toList());
 		List<Boolean> selection = new ArrayList<>();
-		for(int i = 0; i < selectedSamples.get(0).getSampleData().size(); i++) {
+		for(int i = 0; i < pcaResults.isSelectedRetentionTimes().size(); i++) {
 			final int index = i;
 			boolean b = selectedSamples.stream().map(s -> s.getSampleData().get(index)).allMatch(d -> !d.isEmpty());
 			selection.add(b);
 		}
+		selectionResult = getNumberSelectedRow(selection);
 		return selection;
 	}
 
@@ -49,6 +51,12 @@ public class EmptyDataFilter implements IFilter {
 	public String getName() {
 
 		return "Empty Data";
+	}
+
+	@Override
+	public String getSelectionResult() {
+
+		return selectionResult;
 	}
 
 	@Override

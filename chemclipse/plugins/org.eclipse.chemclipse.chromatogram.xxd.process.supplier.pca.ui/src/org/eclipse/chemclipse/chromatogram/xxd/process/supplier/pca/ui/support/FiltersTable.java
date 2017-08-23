@@ -75,7 +75,7 @@ public class FiltersTable {
 				update();
 			}
 		});
-		String[] columns = new String[]{"Name", "Description"};
+		String[] columns = new String[]{"Name", "Description", "Number of selected row or error"};
 		for(int i = 0; i < columns.length; i++) {
 			TableColumn tableColumn = new TableColumn(table, SWT.None);
 			tableColumn.setText(columns[i]);
@@ -139,6 +139,7 @@ public class FiltersTable {
 			IFilter filter = filters.get(i);
 			tableItem.setText(0, filter.getName());
 			tableItem.setText(1, filter.getDescription());
+			tableItem.setText(2, filter.getSelectionResult());
 			tableItem.setData(filter);
 		}
 		for(int i = 0; i < table.getColumns().length; i++) {

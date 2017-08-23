@@ -27,6 +27,7 @@ public class CVFilter implements IFilter {
 	private double alpha;
 	final private String name = "CV filter";
 	private boolean onlySelected;
+	private String selectionResult = "";
 
 	public CVFilter() {
 		this.onlySelected = true;
@@ -38,29 +39,36 @@ public class CVFilter implements IFilter {
 
 		List<ISample> samples = pcaResults.getSampleList();
 		List<Boolean> selection = new ArrayList<>();
-		Map<String, Set<ISample>> samplesByGroupName = PcaUtils.getSamplesByGroupName(samples, false, onlySelected);
-		Collection<Set<ISample>> collection = samplesByGroupName.values();
-		for(int i = 0; i < samples.get(0).getSampleData().size(); i++) {
-			Collection<SummaryStatistics> categoryData = new ArrayList<>();
-			for(Set<ISample> set : collection) {
-				SummaryStatistics summaryStatistics = new SummaryStatistics();
-				for(ISample sample : set) {
-					double d = sample.getSampleData().get(i).getNormalizedData();
-					summaryStatistics.addValue(d);
-				}
-				categoryData.add(summaryStatistics);
-			}
-			boolean b = categoryData.stream().parallel().allMatch(s -> {
-				double m = Math.abs(s.getMean());
-				double v = s.getVariance();
-				if(m != 0.0) {
-					return (v / m) < alpha;
-				} else {
-					return (v == 0.0) ? true : false;
-				}
-			});
-			selection.add(b);
+		List<Boolean> selectedRetentionTimes = pcaResults.isSelectedRetentionTimes();
+		for(int i = 0; i < selectedRetentionTimes.size(); i++) {
+			selection.add(false);
 		}
+		Map<String, Set<ISample>> samplesByGroupNameMap = PcaUtils.getSamplesByGroupName(samples, false, onlySelected);
+		Collection<Set<ISample>> samplesByGroupName = samplesByGroupNameMap.values();
+		if(!samplesByGroupName.isEmpty()) {
+			for(int i = 0; i < selectedRetentionTimes.size(); i++) {
+				Collection<SummaryStatistics> categoryData = new ArrayList<>();
+				for(Set<ISample> set : samplesByGroupName) {
+					SummaryStatistics summaryStatistics = new SummaryStatistics();
+					for(ISample sample : set) {
+						double d = sample.getSampleData().get(i).getNormalizedData();
+						summaryStatistics.addValue(d);
+					}
+					categoryData.add(summaryStatistics);
+				}
+				boolean result = categoryData.stream().parallel().allMatch(s -> {
+					double m = Math.abs(s.getMean());
+					double d = s.getStandardDeviation();
+					if(m != 0.0) {
+						return (d / m) < alpha;
+					} else {
+						return (d == 0.0) ? true : false;
+					}
+				});
+				selection.set(i, result);
+			}
+		}
+		selectionResult = getNumberSelectedRow(selection);
 		return selection;
 	}
 
@@ -72,13 +80,19 @@ public class CVFilter implements IFilter {
 	@Override
 	public String getDescription() {
 
-		return "";
+		return "Noise for each group is less than " + alpha * 100 + "%";
 	}
 
 	@Override
 	public String getName() {
 
 		return name;
+	}
+
+	@Override
+	public String getSelectionResult() {
+
+		return selectionResult;
 	}
 
 	@Override

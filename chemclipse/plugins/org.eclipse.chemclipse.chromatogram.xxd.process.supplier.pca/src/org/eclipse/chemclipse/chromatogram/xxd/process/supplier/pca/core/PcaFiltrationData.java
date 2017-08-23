@@ -49,11 +49,11 @@ public class PcaFiltrationData {
 		}
 	}
 
-	public void selectAll(IPcaResults pcaResults) {
+	public void setSelectAllRow(IPcaResults pcaResults, boolean selection) {
 
 		List<Boolean> selectedRetentionTimes = pcaResults.isSelectedRetentionTimes();
 		for(int i = 0; i < selectedRetentionTimes.size(); i++) {
-			selectedRetentionTimes.set(i, true);
+			selectedRetentionTimes.set(i, selection);
 		}
 	}
 }

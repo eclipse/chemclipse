@@ -59,6 +59,7 @@ public class FilterRetentionTimeWizardPage extends WizardPage {
 
 	public FilterRetentionTimeWizardPage(RetentionTimeFilter retentionTimeFilter) {
 		super("Retention time filter");
+		setTitle("Retention Time Filter");
 		this.retentionTimeFilter = retentionTimeFilter;
 		observeBegin.setValue(0.0);
 		observeFinish.setValue(1.0);

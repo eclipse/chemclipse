@@ -35,13 +35,14 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 	private DataBindingContext dbc = new DataBindingContext();
 	private int extractionType;
 	private IObservableValue<Integer> numerOfComponents = new WritableValue<>();
-	private IObservableValue<Integer> retentionTimeWindow = new WritableValue<>();
+	private IObservableValue<Double> retentionTimeWindow = new WritableValue<>();
 	private boolean useDefoultProperties;
 
 	protected MainPropertiesScansInputWizardPage(String pageName) {
 		super(pageName);
+		setTitle("Set Main Parameters");
 		numerOfComponents.setValue(3);
-		retentionTimeWindow.setValue(1000);
+		retentionTimeWindow.setValue(1.0);
 		extractionType = IDataExtraction.CLOSEST_SCAN;
 		useDefoultProperties = true;
 	}
@@ -64,25 +65,25 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 		button.setText("Interpolate scan");
 		button.addListener(SWT.Selection, e -> extractionType = IDataExtraction.LINEAR_INTERPOLATION_SCAN);
 		Label label = new Label(composite, SWT.None);
-		label.setText("Retention Time Windows (ms)");
+		label.setText("Retention Time Windows (s)");
 		Text text = new Text(composite, SWT.None);
-		UpdateValueStrategy targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Integer.class, o1 -> {
+		UpdateValueStrategy targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
 			try {
-				return Integer.parseInt((String)o1);
+				return Double.parseDouble((String)o1);
 			} catch(NumberFormatException e) {
 			}
 			return null;
 		}));
 		targetToModel.setBeforeSetValidator(o1 -> {
-			if(o1 instanceof Integer) {
-				Integer i = (Integer)o1;
+			if(o1 instanceof Double) {
+				Double i = (Double)o1;
 				if(i > 0) {
 					return ValidationStatus.ok();
 				}
 			}
 			return ValidationStatus.error("Warning The value must be positive value");
 		});
-		UpdateValueStrategy modelToTarget = UpdateValueStrategy.create(IConverter.create(Integer.class, String.class, o1 -> Integer.toString(((Integer)o1))));
+		UpdateValueStrategy modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString(((Double)o1))));
 		dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(text), retentionTimeWindow, targetToModel, modelToTarget);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		label = new Label(composite, SWT.None);
@@ -106,7 +107,7 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 
 	public int getRetentionTimeWindow() {
 
-		return retentionTimeWindow.getValue();
+		return (int)Math.round(retentionTimeWindow.getValue() * 1000);
 	}
 
 	public boolean isUseDefoultProperties() {

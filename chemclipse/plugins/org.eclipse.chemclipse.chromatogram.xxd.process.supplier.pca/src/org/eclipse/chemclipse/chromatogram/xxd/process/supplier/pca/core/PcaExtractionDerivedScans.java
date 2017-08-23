@@ -39,7 +39,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class PcaExtractionDerivedScans implements IDataExtraction {
 
 	private static final Logger logger = Logger.getLogger(PrincipleComponentProcessor.class);
-	private static final double NORMALIZATION_FACTOR = 1000;
 	private List<IDataInputEntry> dataInputEntriesAll;
 	private int retentionTimeWindow;
 

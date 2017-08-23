@@ -28,6 +28,7 @@ public class AnovaFilter implements IFilter {
 	private double alpha;
 	final private String name = "Anova filter";
 	private boolean onlySelected;
+	private String selectionResult = "";
 
 	public AnovaFilter() {
 		alpha = 0.05;
@@ -38,22 +39,31 @@ public class AnovaFilter implements IFilter {
 	public List<Boolean> filter(IPcaResults pcaResults) {
 
 		List<ISample> samples = pcaResults.getSampleList();
-		List<Boolean> selection = new ArrayList<>();
-		Map<String, Set<ISample>> samplesByGroupName = PcaUtils.getSamplesByGroupName(samples, false, onlySelected);
-		Collection<Set<ISample>> collection = samplesByGroupName.values();
-		for(int i = 0; i < samples.get(0).getSampleData().size(); i++) {
-			OneWayAnova oneWayAnova = new OneWayAnova();
-			Collection<SummaryStatistics> categoryData = new ArrayList<>();
-			for(Set<ISample> set : collection) {
-				SummaryStatistics summaryStatistics = new SummaryStatistics();
-				for(ISample sample : set) {
-					double d = sample.getSampleData().get(i).getNormalizedData();
-					summaryStatistics.addValue(d);
+		List<Boolean> selectedRetentionTimes = pcaResults.isSelectedRetentionTimes();
+		List<Boolean> selection = new ArrayList<>(selectedRetentionTimes.size());
+		for(int i = 0; i < selectedRetentionTimes.size(); i++) {
+			selection.add(false);
+		}
+		Map<String, Set<ISample>> samplesByGroupNameMap = PcaUtils.getSamplesByGroupName(samples, false, onlySelected);
+		Collection<Set<ISample>> samplesByGroupName = samplesByGroupNameMap.values();
+		try {
+			for(int i = 0; i < selection.size(); i++) {
+				OneWayAnova oneWayAnova = new OneWayAnova();
+				Collection<SummaryStatistics> categoryData = new ArrayList<>();
+				for(Set<ISample> group : samplesByGroupName) {
+					SummaryStatistics summaryStatistics = new SummaryStatistics();
+					for(ISample sample : group) {
+						double d = sample.getSampleData().get(i).getNormalizedData();
+						summaryStatistics.addValue(d);
+					}
+					categoryData.add(summaryStatistics);
 				}
-				categoryData.add(summaryStatistics);
+				double pValue = oneWayAnova.anovaPValue(categoryData, true);
+				selection.set(i, (pValue < alpha));
 			}
-			double pValue = oneWayAnova.anovaPValue(categoryData, true);
-			selection.add((pValue < alpha));
+			selectionResult = getNumberSelectedRow(selection);
+		} catch(Exception e) {
+			selectionResult = getErrorMessage(e.getMessage());
 		}
 		return selection;
 	}
@@ -66,13 +76,19 @@ public class AnovaFilter implements IFilter {
 	@Override
 	public String getDescription() {
 
-		return "";
+		return "P-Value is less then " + alpha * 100 + "%";
 	}
 
 	@Override
 	public String getName() {
 
 		return name;
+	}
+
+	@Override
+	public String getSelectionResult() {
+
+		return selectionResult;
 	}
 
 	@Override

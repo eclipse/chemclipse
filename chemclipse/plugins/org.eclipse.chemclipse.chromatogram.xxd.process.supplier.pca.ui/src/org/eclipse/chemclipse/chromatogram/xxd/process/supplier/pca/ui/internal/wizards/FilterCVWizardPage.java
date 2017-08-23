@@ -36,7 +36,7 @@ public class FilterCVWizardPage extends WizardPage {
 
 	protected FilterCVWizardPage(CVFilter cvFilter) {
 		super("CV filter");
-		setTitle("Coefficient of Variation filter for noise reduction");
+		setTitle("Coefficient of Variation Filter for Noise Reduction");
 		setDescription("CV filter works just with selected samples, which are in group (contains group name)");
 		observeAlfa = PojoProperties.value(CVFilter.class, "alpha", Double.class).observe(cvFilter);
 	}
@@ -51,7 +51,7 @@ public class FilterCVWizardPage extends WizardPage {
 		Label label = new Label(composite, SWT.None);
 		label.setText("Select a row in a data table whose noise for each group is less than the value (in %)");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
-		Text text = new Text(composite, SWT.None);
+		Text text = new Text(composite, SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(text);
 		ISWTObservableValue targetObservableValue = WidgetProperties.text(SWT.Modify).observe(text);
 		UpdateValueStrategy targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {

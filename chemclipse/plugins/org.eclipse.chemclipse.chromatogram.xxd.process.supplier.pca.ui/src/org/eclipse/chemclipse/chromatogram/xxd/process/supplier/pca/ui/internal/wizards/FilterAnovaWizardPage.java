@@ -36,7 +36,7 @@ public class FilterAnovaWizardPage extends WizardPage {
 
 	protected FilterAnovaWizardPage(AnovaFilter anovaFilter) {
 		super("ANOVA Filter");
-		setTitle("One-way analysis of variance filter");
+		setTitle("One-way Analysis of Variance Filter");
 		setDescription("ANOVA filter works just with selected sampels, which are in group (contains group name)");
 		observeAlfa = PojoProperties.value(AnovaFilter.class, "alpha", Double.class).observe(anovaFilter);
 	}
@@ -50,7 +50,7 @@ public class FilterAnovaWizardPage extends WizardPage {
 		Label label = new Label(composite, SWT.None);
 		label.setText("Select row in data table whose p-value is less than value (in %)");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
-		Text text = new Text(composite, SWT.None);
+		Text text = new Text(composite, SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(text);
 		ISWTObservableValue targetObservableValue = WidgetProperties.text(SWT.Modify).observe(text);
 		UpdateValueStrategy targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {

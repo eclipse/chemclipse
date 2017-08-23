@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 
 public class RetentionTimeFilter implements IFilter {
 
@@ -23,6 +24,7 @@ public class RetentionTimeFilter implements IFilter {
 	private int filtrationType;
 	private List<int[]> intervals;
 	private boolean onlySelected;
+	private String selectionResult = "";
 
 	public RetentionTimeFilter() {
 		onlySelected = true;
@@ -34,7 +36,7 @@ public class RetentionTimeFilter implements IFilter {
 	public List<Boolean> filter(IPcaResults pcaResults) {
 
 		List<Integer> retentionTime = pcaResults.getExtractedRetentionTimes();
-		List<Boolean> filter = new ArrayList<>(retentionTime.size());
+		List<Boolean> selection = new ArrayList<>(retentionTime.size());
 		boolean set;
 		if(SELECT_INTERVAL == filtrationType) {
 			set = true;
@@ -42,7 +44,7 @@ public class RetentionTimeFilter implements IFilter {
 			set = false;
 		}
 		for(int i = 0; i < retentionTime.size(); i++) {
-			filter.add(!set);
+			selection.add(!set);
 		}
 		for(int[] interval : intervals) {
 			int begin = interval[0];
@@ -50,17 +52,31 @@ public class RetentionTimeFilter implements IFilter {
 			for(int i = 0; i < retentionTime.size(); i++) {
 				int ret = retentionTime.get(i);
 				if(ret >= begin && ret <= finish) {
-					filter.set(i, set);
+					selection.set(i, set);
 				}
 			}
 		}
-		return filter;
+		selectionResult = getNumberSelectedRow(selection);
+		return selection;
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "";
+		StringBuilder sb = new StringBuilder();
+		if(filtrationType == SELECT_INTERVAL) {
+			sb.append("Selected intervals: ");
+		} else {
+			sb.append("Deselected intevals: ");
+		}
+		for(int i = 0; i < intervals.size(); i++) {
+			sb.append("[");
+			sb.append(Double.toString(intervals.get(i)[0] / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+			sb.append(", ");
+			sb.append(Double.toString(intervals.get(i)[1] / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+			sb.append("] ");
+		}
+		return sb.toString();
 	}
 
 	public int getFiltrationType() {
@@ -77,6 +93,12 @@ public class RetentionTimeFilter implements IFilter {
 	public String getName() {
 
 		return "Retention time filter";
+	}
+
+	@Override
+	public String getSelectionResult() {
+
+		return selectionResult;
 	}
 
 	@Override

@@ -84,8 +84,11 @@ public class FiltersPage {
 			pcaEditor.reFiltrationData();
 		});
 		button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Reset Filters");
-		button.addListener(SWT.Selection, e -> pcaEditor.selectAllData());
+		button.setText("Select All Row");
+		button.addListener(SWT.Selection, e -> pcaEditor.setSelectAllData(true));
+		button = new Button(buttonComposite, SWT.PUSH);
+		button.setText("Deselect All Row");
+		button.addListener(SWT.Selection, e -> pcaEditor.setSelectAllData(false));
 		disableAll();
 		tabItem.setControl(composite);
 	}

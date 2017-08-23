@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
@@ -21,7 +22,20 @@ public interface IFilter {
 
 	String getDescription();
 
+	default String getErrorMessage(String messagge) {
+
+		return "Error: " + messagge;
+	}
+
 	String getName();
+
+	default String getNumberSelectedRow(Collection<Boolean> selection) {
+
+		long countSelectedData = selection.stream().filter(b -> b).count();
+		return Long.toString(countSelectedData);
+	}
+
+	String getSelectionResult();
 
 	boolean isOnlySelected();
 
