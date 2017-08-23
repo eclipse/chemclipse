@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.EigenvaluesCovarianceMatrixTable;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
@@ -23,7 +24,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -53,6 +55,36 @@ public class OverviewPage {
 		initialize(tabFolder, formToolkit);
 	}
 
+	private void createEigenvaluesHyperlink(Composite client, GridData gridData, FormToolkit formToolkit) {
+
+		ImageHyperlink imageHyperlink;
+		/*
+		 * Settings
+		 */
+		imageHyperlink = formToolkit.createImageHyperlink(client, SWT.NONE);
+		imageHyperlink.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16));
+		imageHyperlink.setText("Display Eigenvalues table (Experimental)");
+		imageHyperlink.setLayoutData(gridData);
+		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
+
+			@Override
+			public void linkActivated(HyperlinkEvent e) {
+
+				if(pcaEditor.getPcaResults().isPresent()) {
+					Shell shell = new Shell(Display.getCurrent(), SWT.DIALOG_TRIM | SWT.RESIZE);
+					shell.setLayout(new FillLayout());
+					Runnable thread = () -> {
+						EigenvaluesCovarianceMatrixTable eigenvaluesCovarianceMatrixTable = new EigenvaluesCovarianceMatrixTable(shell, null);
+						shell.open();
+						eigenvaluesCovarianceMatrixTable.update(pcaEditor.getPcaResults().get(), 0.01);
+						shell.pack();
+					};
+					Display.getCurrent().asyncExec(thread);
+				}
+			}
+		});
+	}
+
 	/**
 	 * Creates the run section.
 	 *
@@ -64,7 +96,7 @@ public class OverviewPage {
 		 * Section
 		 */
 		Section section = formToolkit.createSection(parent, Section.DESCRIPTION | ExpandableComposite.TITLE_BAR);
-		section.setText("Evaluation");
+		section.setText("Data Selection");
 		section.setDescription("Start the PCA by using the wizard:\n");
 		section.marginWidth = 5;
 		section.marginHeight = 5;
@@ -100,19 +132,48 @@ public class OverviewPage {
 		formToolkit.paintBordersFor(client);
 	}
 
-	private void createPrincipleComponentSpinner(Composite client, FormToolkit formToolkit) {
+	private void createOthersSection(Composite parent, FormToolkit formToolkit) {
 
-		formToolkit.createLabel(client, "Number of Principle Components");
-		//
-		principleComponentSpinner = new Spinner(client, SWT.NONE);
+		/*
+		 * Section
+		 */
+		Section section = formToolkit.createSection(parent, Section.DESCRIPTION | ExpandableComposite.TITLE_BAR);
+		section.setText("Others");
+		section.setDescription("\n");
+		section.marginWidth = 5;
+		section.marginHeight = 5;
+		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
+		/*
+		 * Client
+		 */
+		Composite client = formToolkit.createComposite(section, SWT.WRAP);
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 1;
+		layout.marginWidth = 2;
+		layout.marginHeight = 2;
+		client.setLayout(layout);
+		/*
+		 * Others
+		 */
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalIndent = 20;
+		gridData.heightHint = 30;
+		createEigenvaluesHyperlink(client, gridData, formToolkit);
+		section.setClient(client);
+		formToolkit.paintBordersFor(client);
+	}
+
+	private void createPrincipleComponentSpinner(Composite client, GridData gridData, FormToolkit formToolkit) {
+
+		Composite composite = new Composite(client, SWT.None);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(2, false));
+		formToolkit.createLabel(composite, "Number of Principle Components");
+		principleComponentSpinner = new Spinner(composite, SWT.NONE);
 		principleComponentSpinner.setMinimum(3);
 		principleComponentSpinner.setMaximum(10);
 		principleComponentSpinner.setIncrement(1);
 		principleComponentSpinner.addListener(SWT.Selection, e -> pcaEditor.setNumberOfPrincipleComponents(principleComponentSpinner.getSelection()));
-		GridData gridData = new GridData();
-		gridData.widthHint = 50;
-		gridData.heightHint = 20;
-		principleComponentSpinner.setLayoutData(gridData);
 	}
 
 	/**
@@ -125,7 +186,7 @@ public class OverviewPage {
 		 */
 		Section section = formToolkit.createSection(parent, Section.DESCRIPTION | ExpandableComposite.TITLE_BAR);
 		section.setText("Re-evaluation");
-		section.setDescription("Use the properties to define  the number of components.");
+		section.setDescription("Use the properties to define  the number of components.\n");
 		section.marginWidth = 5;
 		section.marginHeight = 5;
 		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
@@ -134,19 +195,20 @@ public class OverviewPage {
 		 */
 		Composite client = formToolkit.createComposite(section, SWT.WRAP);
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
+		layout.numColumns = 1;
 		layout.marginWidth = 2;
 		layout.marginHeight = 2;
 		client.setLayout(layout);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		gridData.grabExcessHorizontalSpace = true;
-		Label label = formToolkit.createLabel(client, "Select the PCA settings:");
-		label.setLayoutData(gridData);
 		/*
 		 * Settings
 		 */
-		createPrincipleComponentSpinner(client, formToolkit);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalIndent = 20;
+		gridData.heightHint = 30;
+		createPrincipleComponentSpinner(client, gridData, formToolkit);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalIndent = 20;
+		gridData.heightHint = 30;
 		createReEvaluationHyperlink(client, gridData, formToolkit);
 		section.setClient(client);
 		formToolkit.paintBordersFor(client);
@@ -160,14 +222,16 @@ public class OverviewPage {
 		 */
 		imageHyperlink = formToolkit.createImageHyperlink(client, SWT.NONE);
 		imageHyperlink.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16));
-		imageHyperlink.setText("Reevaluate");
+		imageHyperlink.setText("Re-evaluate");
 		imageHyperlink.setLayoutData(gridData);
 		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
 
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
 
-				pcaEditor.reEvaluatePcaCalculation();
+				if(pcaEditor.getPcaResults().isPresent()) {
+					pcaEditor.reEvaluatePcaCalculation();
+				}
 			}
 		});
 	}
@@ -262,6 +326,7 @@ public class OverviewPage {
 		 */
 		createExecuteSection(scrolledFormComposite, formToolkit);
 		createReEvaluateSection(scrolledFormComposite, formToolkit);
+		createOthersSection(scrolledFormComposite, formToolkit);
 		//
 		tabItem.setControl(composite);
 	}
