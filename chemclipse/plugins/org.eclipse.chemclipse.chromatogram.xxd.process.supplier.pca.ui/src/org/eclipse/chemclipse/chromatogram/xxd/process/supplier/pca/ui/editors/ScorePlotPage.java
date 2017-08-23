@@ -58,6 +58,7 @@ public class ScorePlotPage {
 	private Color COLOR_BLACK = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 	private Color COLOR_WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
 	private Map<String, Color> colors;
+	private boolean drawLabels = true;
 	//
 	private PcaEditor pcaEditor;
 	private List<ISample> samples = new ArrayList<>();
@@ -88,7 +89,7 @@ public class ScorePlotPage {
 		 * Selection of the plotted PCs
 		 */
 		Composite spinnerComposite = new Composite(parent, SWT.NONE);
-		spinnerComposite.setLayout(new GridLayout(6, false));
+		spinnerComposite.setLayout(new GridLayout(7, false));
 		spinnerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		Label label;
@@ -122,8 +123,15 @@ public class ScorePlotPage {
 				reloadScorePlotChart();
 			}
 		});
+		button = new Button(spinnerComposite, SWT.CHECK);
+		button.setText("Display Labels");
+		button.addListener(SWT.Selection, e -> {
+			drawLabels = ((Button)e.widget).getSelection();
+			scorePlotChart.redraw();
+		});
+		button.setSelection(drawLabels);
 		button = new Button(spinnerComposite, SWT.PUSH);
-		button.setText(" Select samples");
+		button.setText("Select Samples");
 		button.addListener(SWT.Selection, e -> {
 			pcaEditor.openSamplesSelectionDialog();
 		});
@@ -212,17 +220,19 @@ public class ScorePlotPage {
 			@Override
 			public void paintControl(PaintEvent e) {
 
-				ISeriesSet seriesSet = scorePlotChart.getSeriesSet();
-				ISeries[] series = seriesSet.getSeries();
-				for(ISeries serie : series) {
-					String label = serie.getId();
-					Point point = serie.getPixelCoordinates(0);
-					/*
-					 * Draw the label
-					 */
-					Point labelSize = e.gc.textExtent(label);
-					e.gc.setForeground(COLOR_BLACK);
-					e.gc.drawText(label, (int)(point.x - labelSize.x / 2.0d), (int)(point.y - labelSize.y - SYMBOL_SIZE / 2.0d), true);
+				if(drawLabels) {
+					ISeriesSet seriesSet = scorePlotChart.getSeriesSet();
+					ISeries[] series = seriesSet.getSeries();
+					for(ISeries serie : series) {
+						String label = serie.getId();
+						Point point = serie.getPixelCoordinates(0);
+						/*
+						 * Draw the label
+						 */
+						Point labelSize = e.gc.textExtent(label);
+						e.gc.setForeground(COLOR_BLACK);
+						e.gc.drawText(label, (int)(point.x - labelSize.x / 2.0d), (int)(point.y - labelSize.y - SYMBOL_SIZE / 2.0d), true);
+					}
 				}
 			}
 		});

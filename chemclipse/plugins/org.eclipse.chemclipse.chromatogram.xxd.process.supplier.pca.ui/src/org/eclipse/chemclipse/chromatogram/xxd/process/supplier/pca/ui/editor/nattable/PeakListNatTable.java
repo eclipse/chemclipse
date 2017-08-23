@@ -194,11 +194,12 @@ public class PeakListNatTable {
 		 * Freeze column dynamically
 		 */
 		columnHideShowLayer.addLayerListener(new ILayerListener() {
+
 			int freezeColumns = -1;
+
 			@Override
 			public void handleLayerEvent(ILayerEvent event) {
 
-				
 				int num = 0;
 				/*
 				 * freeze first column, this column contains retention times
@@ -221,7 +222,6 @@ public class PeakListNatTable {
 						freezeColumns = num;
 					}
 				}
-				
 			}
 		});
 		exportData = new ExportData(new ExportDataSupplier(tableProvider, dataProvider, columnHeaderDataProvider, columnGroupModel));

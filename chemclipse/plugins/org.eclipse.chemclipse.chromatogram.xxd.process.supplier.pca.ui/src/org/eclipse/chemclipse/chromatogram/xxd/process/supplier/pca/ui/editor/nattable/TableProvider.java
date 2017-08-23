@@ -66,5 +66,4 @@ public class TableProvider {
 
 		return dataTable.getRetentionTimes().size();
 	}
-
 }

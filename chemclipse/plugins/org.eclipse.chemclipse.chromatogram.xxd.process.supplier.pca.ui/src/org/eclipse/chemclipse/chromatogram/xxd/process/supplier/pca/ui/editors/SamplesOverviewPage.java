@@ -374,10 +374,12 @@ public class SamplesOverviewPage {
 		if(selectedSample != null) {
 			IPcaResult pcaResult = selectedSample.getPcaResult();
 			double[] eigenSapace = pcaResult.getEigenSpace();
-			for(int i = 0; i < eigenSapace.length; i++) {
-				TableItem tableItem = new TableItem(tableOverview, SWT.NONE);
-				tableItem.setText(0, "PC " + (i + 1));
-				tableItem.setText(1, Double.toString(eigenSapace[i]));
+			if(eigenSapace != null) {
+				for(int i = 0; i < eigenSapace.length; i++) {
+					TableItem tableItem = new TableItem(tableOverview, SWT.NONE);
+					tableItem.setText(0, "PC " + (i + 1));
+					tableItem.setText(1, Double.toString(eigenSapace[i]));
+				}
 			}
 		}
 	}

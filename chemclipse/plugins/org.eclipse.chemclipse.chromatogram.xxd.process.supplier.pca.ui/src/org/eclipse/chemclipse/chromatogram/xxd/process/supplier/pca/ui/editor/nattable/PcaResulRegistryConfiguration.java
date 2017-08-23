@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable;
 
-import java.text.NumberFormat;
-import java.util.Locale;
-
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.CellConfigAttributes;
@@ -31,11 +28,8 @@ import org.eclipse.nebula.widgets.nattable.style.Style;
 
 public class PcaResulRegistryConfiguration extends AbstractRegistryConfiguration {
 
-	private TableProvider provider;
-
 	public PcaResulRegistryConfiguration(TableProvider provider) {
 		super();
-		this.provider = provider;
 	}
 
 	@Override

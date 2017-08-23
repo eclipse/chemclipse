@@ -16,7 +16,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 import java.io.IOException;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.PeakListNatTable;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.TableProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportData;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -85,7 +84,6 @@ public class PeakListIntensityTablePage {
 		button.setText("Export");
 		button.addListener(SWT.Selection, e -> exportTableDialog());
 	}
-
 
 	private void createTable(Composite client) {
 
