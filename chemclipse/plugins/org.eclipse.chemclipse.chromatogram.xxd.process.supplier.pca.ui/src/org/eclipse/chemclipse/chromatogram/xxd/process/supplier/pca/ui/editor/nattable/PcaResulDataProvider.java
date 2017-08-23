@@ -49,17 +49,7 @@ public class PcaResulDataProvider implements IDataProvider {
 			List<ISample> samples = tableProvider.getDataTable().getSamples();
 			ISample sample = samples.get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
 			double sampleData = sample.getSampleData().get(sortRowIndex).getNormalizedData();
-			String normalization = tableProvider.getNormalizationData();
-			switch(normalization) {
-				case TableProvider.NORMALIZATION_NONE:
-					return sampleData;
-				case TableProvider.NORMALIZATION_ROW:
-					return 0;
-				case TableProvider.NORMALIZATION_COLUMN:
-					return sampleData / sample.getSampleData().stream().mapToDouble(s -> s.getNormalizedData()).sum();
-				default:
-					throw new RuntimeException("Undefine format cell");
-			}
+			return sampleData;
 		}
 	}
 

@@ -49,7 +49,6 @@ public class PeakListIntensityTablePage {
 		Composite parent = new Composite(client, SWT.None);
 		parent.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, false, true));
 		parent.setLayout(new FillLayout(SWT.VERTICAL));
-		createNormalizationButton(parent);
 		createExportDataSection(parent);
 	}
 
@@ -87,22 +86,6 @@ public class PeakListIntensityTablePage {
 		button.addListener(SWT.Selection, e -> exportTableDialog());
 	}
 
-	private void createNormalizationButton(Composite parent) {
-
-		Group client = new Group(parent, SWT.NONE);
-		client.setLayout(new FillLayout(SWT.VERTICAL));
-		client.setText("Normalization");
-		Button button = new Button(client, SWT.RADIO);
-		button.setText("None");
-		button.addListener(SWT.Selection, (e) -> peakListIntensityTable.setDataNormalization(TableProvider.NORMALIZATION_NONE));
-		button.setSelection(true);
-		button = new Button(client, SWT.RADIO);
-		button.setText("Row");
-		button.addListener(SWT.Selection, (e) -> peakListIntensityTable.setDataNormalization(TableProvider.NORMALIZATION_ROW));
-		button = new Button(client, SWT.RADIO);
-		button.setText("Column");
-		button.addListener(SWT.Selection, (e) -> peakListIntensityTable.setDataNormalization(TableProvider.NORMALIZATION_COLUMN));
-	}
 
 	private void createTable(Composite client) {
 

@@ -194,13 +194,11 @@ public class PeakListNatTable {
 		 * Freeze column dynamically
 		 */
 		columnHideShowLayer.addLayerListener(new ILayerListener() {
-
+			int freezeColumns = -1;
 			@Override
 			public void handleLayerEvent(ILayerEvent event) {
 
-				if(!(event instanceof ColumnStructuralChangeEvent)) {
-					return;
-				}
+				
 				int num = 0;
 				/*
 				 * freeze first column, this column contains retention times
@@ -217,9 +215,13 @@ public class PeakListNatTable {
 				if(!columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_SELECTED)) {
 					num++;
 				}
-				if(num > 0) {
-					compositeFreezeLayer.doCommand(new FreezeColumnCommand(compositeFreezeLayer, num - 1, false, true));
+				if((event instanceof ColumnStructuralChangeEvent) || freezeColumns != num) {
+					if(num > 0) {
+						compositeFreezeLayer.doCommand(new FreezeColumnCommand(compositeFreezeLayer, num - 1, false, true));
+						freezeColumns = num;
+					}
 				}
+				
 			}
 		});
 		exportData = new ExportData(new ExportDataSupplier(tableProvider, dataProvider, columnHeaderDataProvider, columnGroupModel));
@@ -292,13 +294,6 @@ public class PeakListNatTable {
 				columnHideShowLayer.showColumnIndexes(peakNamesColumn);
 			}
 		}
-	}
-
-	public void setDataNormalization(String normalization) {
-
-		tableProvider.setNormalizationData(normalization);
-		natTable.configure();
-		natTable.refresh();
 	}
 
 	public void update() {

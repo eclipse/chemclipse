@@ -165,7 +165,7 @@ public class PcaUtils {
 		return peakInInterval;
 	}
 
-	public static List<TreeSet<String>> getPeaksNames(List<ISample> samples) {
+	public static List<TreeSet<String>> getPeaksNames(List<ISample> samples, boolean onlySelected) {
 
 		List<TreeSet<String>> map = new ArrayList<>();
 		if(!samples.isEmpty()) {
@@ -175,12 +175,14 @@ public class PcaUtils {
 			}
 			for(int j = 0; j < lenght; j++) {
 				for(ISample sample : samples) {
-					Set<IPeak> peakList = sample.getSampleData().get(j).getPeaks();
-					if(peakList != null) {
-						for(IPeak peak : peakList) {
-							List<IPeakTarget> target = peak.getTargets();
-							if(!target.isEmpty()) {
-								map.get(j).add(target.get(0).getLibraryInformation().getName());
+					if(sample.isSelected() || !onlySelected) {
+						Set<IPeak> peakList = sample.getSampleData().get(j).getPeaks();
+						if(peakList != null) {
+							for(IPeak peak : peakList) {
+								List<IPeakTarget> target = peak.getTargets();
+								if(!target.isEmpty()) {
+									map.get(j).add(target.get(0).getLibraryInformation().getName());
+								}
 							}
 						}
 					}

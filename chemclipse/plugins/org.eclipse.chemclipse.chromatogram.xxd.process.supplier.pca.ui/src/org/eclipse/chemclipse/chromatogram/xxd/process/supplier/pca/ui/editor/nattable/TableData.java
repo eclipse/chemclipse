@@ -89,7 +89,7 @@ public class TableData {
 		 * Set peaks names
 		 */
 		peaksNames.clear();
-		List<TreeSet<String>> names = PcaUtils.getPeaksNames(pcaResults.getSampleList());
+		List<TreeSet<String>> names = PcaUtils.getPeaksNames(pcaResults.getSampleList(),true);
 		for(int i = 0; i < names.size(); i++) {
 			StringBuilder builder = new StringBuilder("");
 			TreeSet<String> set = names.get(i);

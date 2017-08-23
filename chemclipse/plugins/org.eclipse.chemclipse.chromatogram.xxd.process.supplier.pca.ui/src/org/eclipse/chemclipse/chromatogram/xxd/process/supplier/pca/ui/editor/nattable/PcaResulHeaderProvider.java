@@ -41,11 +41,7 @@ public class PcaResulHeaderProvider implements IDataProvider {
 		} else {
 			ISample sample = tableProvider.getDataTable().getSamples().get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
 			if(sample instanceof IGroup) {
-				if(tableProvider.getNormalizationData().equals(TableProvider.NORMALIZATION_ROW)) {
-					return "Total";
-				} else {
-					return "Mean";
-				}
+				return "Mean";
 			} else {
 				return sample.getName();
 			}

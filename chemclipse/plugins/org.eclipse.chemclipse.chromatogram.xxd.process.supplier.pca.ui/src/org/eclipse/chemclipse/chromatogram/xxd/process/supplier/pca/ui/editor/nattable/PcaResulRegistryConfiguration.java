@@ -47,30 +47,16 @@ public class PcaResulRegistryConfiguration extends AbstractRegistryConfiguration
 	private void setFormatCell(IConfigRegistry configRegistry) {
 
 		// Set format for sample data
-		String norm = provider.getNormalizationData();
 		configRegistry.unregisterConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, DisplayMode.NORMAL, TableProvider.COLUMN_LABEL_GROUP_DATA);
 		configRegistry.unregisterConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, DisplayMode.NORMAL, TableProvider.COLUMN_LABEL_SAMPLE_DATA);
-		if(norm.equals(TableProvider.NORMALIZATION_NONE)) {
-			DefaultDoubleDisplayConverter format = new DefaultDoubleDisplayConverter();
-			format.setNumberFormat(ValueFormat.getNumberFormatEnglish());
-			configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
-					format, DisplayMode.NORMAL, //
-					TableProvider.COLUMN_LABEL_GROUP_DATA);
-			configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
-					format, DisplayMode.NORMAL, //
-					TableProvider.COLUMN_LABEL_SAMPLE_DATA);
-		} else if(norm.equals(TableProvider.NORMALIZATION_COLUMN) || norm.equals(TableProvider.NORMALIZATION_ROW)) {
-			NumberFormat percentFormat = NumberFormat.getPercentInstance(Locale.US);
-			percentFormat.setMaximumFractionDigits(3);
-			DefaultDoubleDisplayConverter format = new DefaultDoubleDisplayConverter();
-			format.setNumberFormat(percentFormat);
-			configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
-					format, DisplayMode.NORMAL, //
-					TableProvider.COLUMN_LABEL_GROUP_DATA);
-			configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
-					format, DisplayMode.NORMAL, //
-					TableProvider.COLUMN_LABEL_SAMPLE_DATA);
-		}
+		DefaultDoubleDisplayConverter format = new DefaultDoubleDisplayConverter();
+		format.setNumberFormat(ValueFormat.getNumberFormatEnglish());
+		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
+				format, DisplayMode.NORMAL, //
+				TableProvider.COLUMN_LABEL_GROUP_DATA);
+		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
+				format, DisplayMode.NORMAL, //
+				TableProvider.COLUMN_LABEL_SAMPLE_DATA);
 		// Set format for retention times
 		DefaultDoubleDisplayConverter formatRetTime = new DefaultDoubleDisplayConverter();
 		formatRetTime.setNumberFormat(ValueFormat.getNumberFormatEnglish());
