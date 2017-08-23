@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.conversion.IConverter;
@@ -32,12 +33,13 @@ public class MainPropertiesPeaksInputWizardPage extends WizardPage {
 
 	private DataBindingContext dbc = new DataBindingContext();
 	private IObservableValue<Integer> numerOfComponents = new WritableValue<>();
-	private IObservableValue<Integer> retentionTimeWindow = new WritableValue<>();
+	private IObservableValue<Double> retentionTimeWindow = new WritableValue<>();
 
 	protected MainPropertiesPeaksInputWizardPage(String pageName) {
 		super(pageName);
+		setTitle("Set Main Parameters");
 		numerOfComponents.setValue(3);
-		retentionTimeWindow.setValue(200);
+		retentionTimeWindow.setValue(0.1);
 	}
 
 	@Override
@@ -47,30 +49,30 @@ public class MainPropertiesPeaksInputWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new GridLayout(1, true));
 		Label label = new Label(composite, SWT.None);
-		label.setText("Retention Time Windows (ms)");
-		Text text = new Text(composite, SWT.None);
-		UpdateValueStrategy targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Integer.class, o1 -> {
+		label.setText("Retention Time Windows (min)");
+		Text text = new Text(composite, SWT.BORDER);
+		UpdateValueStrategy targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
 			try {
-				return Integer.parseInt((String)o1);
+				return Double.parseDouble((String)o1);
 			} catch(NumberFormatException e) {
 			}
 			return null;
 		}));
 		targetToModel.setBeforeSetValidator(o1 -> {
-			if(o1 instanceof Integer) {
-				Integer i = (Integer)o1;
+			if(o1 instanceof Double) {
+				Double i = (Double)o1;
 				if(i > 0) {
 					return ValidationStatus.ok();
 				}
 			}
 			return ValidationStatus.error("Warning The value must be positive value");
 		});
-		UpdateValueStrategy modelToTarget = UpdateValueStrategy.create(IConverter.create(Integer.class, String.class, o1 -> Integer.toString(((Integer)o1))));
+		UpdateValueStrategy modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString(((Double)o1))));
 		dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(text), retentionTimeWindow, targetToModel, modelToTarget);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		label = new Label(composite, SWT.None);
 		label.setText("Number of principal components");
-		Spinner spinner = new Spinner(composite, SWT.NONE);
+		Spinner spinner = new Spinner(composite, SWT.BORDER);
 		spinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		spinner.setMinimum(3);
 		dbc.bindValue(WidgetProperties.selection().observe(spinner), numerOfComponents);
@@ -84,6 +86,6 @@ public class MainPropertiesPeaksInputWizardPage extends WizardPage {
 
 	public int getRetentionTimeWindow() {
 
-		return retentionTimeWindow.getValue();
+		return (int)Math.round(retentionTimeWindow.getValue() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 	}
 }
