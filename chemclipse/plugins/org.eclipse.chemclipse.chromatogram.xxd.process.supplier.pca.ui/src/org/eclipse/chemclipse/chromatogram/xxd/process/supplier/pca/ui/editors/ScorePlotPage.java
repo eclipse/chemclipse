@@ -57,7 +57,7 @@ public class ScorePlotPage {
 
 	private Color COLOR_BLACK = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 	private Color COLOR_WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
-	Map<String, Color> colors;
+	private Map<String, Color> colors;
 	//
 	private PcaEditor pcaEditor;
 	private List<ISample> samples = new ArrayList<>();

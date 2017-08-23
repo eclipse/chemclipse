@@ -59,6 +59,8 @@ public class PcaEditor extends AbstractPcaEditor {
 	private File exportFile;
 	private FiltersPage filtersPage;
 	private FormToolkit formToolkit;
+	@SuppressWarnings("unused")
+	private LoadingPlotPage loadingPlotPage;
 	@Inject
 	private EModelService modelService;
 	/*
@@ -107,6 +109,7 @@ public class PcaEditor extends AbstractPcaEditor {
 		pages.add(scorePlotPage = new ScorePlotPage(this, tabFolder, formToolkit));
 		pages.add(errorResiduePage = new ErrorResiduePage(this, tabFolder, formToolkit));
 		pages.add(scorePlot3dPage = new ScorePlot3dPage(this, tabFolder, formToolkit));
+		pages.add(loadingPlotPage = new LoadingPlotPage(this, tabFolder, formToolkit));
 	}
 
 	public void openSamplesSelectionDialog() {
