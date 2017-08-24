@@ -28,11 +28,11 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.na
 public class ExportData {
 
 	public static final String DEF_CSV_SEPARATOR = "\t";
-	public static final String DEF_FILE_NAME = "peak_intensity";
+	public static final String DEF_FILE_NAME = "data";
 	private ExportDataSupplier data;
 	private boolean exportGroupMeans;
 	private boolean exportSamples;
-	private String SHEET_NAME = "Peak intensity";
+	private String SHEET_NAME = "data";
 
 	public ExportData(ExportDataSupplier exportDataSupplier) {
 		this.data = exportDataSupplier;
