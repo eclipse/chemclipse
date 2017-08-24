@@ -42,7 +42,6 @@ public class FilterAbundanceWizardPage extends WizardPage {
 	protected FilterAbundanceWizardPage(AbundanceFilter abundanceFilter) {
 		super("Abundance Filter");
 		setTitle("Abundance Filter");
-		setDescription("Abundance filter works wiht all seleted samples");
 		observableLimitType = PojoProperties.value(AbundanceFilter.class, "limitType", Integer.class).observe(abundanceFilter);
 		observeLimitValue = PojoProperties.value(AbundanceFilter.class, "limitValue", Double.class).observe(abundanceFilter);
 		observableFilterType = PojoProperties.value(AbundanceFilter.class, "filterType", Integer.class).observe(abundanceFilter);
@@ -55,24 +54,23 @@ public class FilterAbundanceWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new GridLayout(1, false));
 		Label label = new Label(composite, SWT.None);
-		label.setText("Select row in data table wholes abundance for");
+		label.setText("Select row in data table under the condition");
 		SelectObservableValue<Integer> selectedRadioButtonObservable = new SelectObservableValue<>();
 		Button button = new Button(composite, SWT.RADIO);
-		button.setText("All value");
+		button.setText("All value in row are");
 		button.setSelection(true);
 		selectedRadioButtonObservable.addOption(AbundanceFilter.ALL_VALUE, WidgetProperties.selection().observe(button));
 		button = new Button(composite, SWT.RADIO);
-		button.setText("Any value");
+		button.setText("At least one value  in row is");
 		selectedRadioButtonObservable.addOption(AbundanceFilter.ANY_VALUE, WidgetProperties.selection().observe(button));
 		dbc.bindValue(selectedRadioButtonObservable, observableFilterType);
 		Composite compareComposite = new Composite(composite, SWT.None);
 		GridDataFactory.swtDefaults().grab(true, false).align(SWT.FILL, SWT.CENTER).applyTo(compareComposite);
 		compareComposite.setLayout(new GridLayout(3, false));
 		label = new Label(compareComposite, SWT.None);
-		label.setText("is");
 		Combo combo = new Combo(compareComposite, SWT.READ_ONLY);
-		combo.add("greater then");
-		combo.add("less then");
+		combo.add("greater than");
+		combo.add("less than");
 		combo.select(0);
 		ISWTObservableValue comboLimitType = WidgetProperties.singleSelectionIndex().observe(combo);
 		dbc.bindValue(comboLimitType, observableLimitType);

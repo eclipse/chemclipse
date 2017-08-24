@@ -76,7 +76,7 @@ public class FilterRetentionTimeWizardPage extends WizardPage {
 
 	private void createColumns() {
 
-		String[] titles = {"Begin", "End"};
+		String[] titles = {"Minimum", "Maximum"};
 		int[] bounds = {50, 50};
 		TableViewerColumn col = createTableViewerColumn(titles[0], bounds[0]);
 		col.setLabelProvider(new CellLabelProvider() {
@@ -119,7 +119,10 @@ public class FilterRetentionTimeWizardPage extends WizardPage {
 		button.addListener(SWT.Selection, e -> retentionTimeFilter.setFiltrationType(RetentionTimeFilter.DESELECT_INTERVAL));
 		button.setSelection(filterType == RetentionTimeFilter.DESELECT_INTERVAL);
 		Label label = new Label(composite, SWT.None);
-		label.setText("Set begin interval");
+		label.setText("Set time interval parametrs:");
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
+		label = new Label(composite, SWT.None);
+		label.setText("Time is greater than or equal to");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
 		Text text = new Text(composite, SWT.None);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(text);
@@ -149,7 +152,7 @@ public class FilterRetentionTimeWizardPage extends WizardPage {
 		}));
 		dbc.bindValue(targetObservableValue, observeBegin, targetToModel, modelToTarget);
 		label = new Label(composite, SWT.None);
-		label.setText("Set finish interval");
+		label.setText("Time is less than or equal to");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
 		text = new Text(composite, SWT.None);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(text);
