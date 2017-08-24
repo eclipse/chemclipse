@@ -224,7 +224,7 @@ public class LoadingPlotPage {
 		 * Selection of the plotted PCs
 		 */
 		Composite spinnerComposite = new Composite(parent, SWT.NONE);
-		spinnerComposite.setLayout(new GridLayout(6, false));
+		spinnerComposite.setLayout(new GridLayout(7, false));
 		spinnerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		Label label;
@@ -257,6 +257,9 @@ public class LoadingPlotPage {
 			loadingPlotChart.redraw();
 		});
 		button = new Button(spinnerComposite, SWT.PUSH);
+		button.setText("Reload Loading Plot");
+		button.addListener(SWT.Selection, e -> reloadLoadingPlotChart());
+		button = new Button(spinnerComposite, SWT.PUSH);
 		button.setText("Load data");
 		button.addListener(SWT.Selection, e -> update());
 		button.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, true, 1, 1));
@@ -272,7 +275,7 @@ public class LoadingPlotPage {
 		tabItem.setControl(composite);
 	}
 
-	private void reloadScorePlotChart() {
+	private void reloadLoadingPlotChart() {
 
 		if(loadingPlotChart != null) {
 			/*
@@ -316,7 +319,7 @@ public class LoadingPlotPage {
 			for(int i = 0; i < extractedRetentionTimes.size(); i++) {
 				loadingPlotChart.getSeriesSet().createSeries(SeriesType.LINE, extractedRetentionTimes.get(i));
 			}
-			reloadScorePlotChart();
+			reloadLoadingPlotChart();
 			updateTable();
 		}
 	}
