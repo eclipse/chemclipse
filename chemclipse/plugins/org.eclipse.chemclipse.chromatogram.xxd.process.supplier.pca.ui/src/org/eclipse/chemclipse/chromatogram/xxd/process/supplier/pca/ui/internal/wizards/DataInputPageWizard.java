@@ -27,6 +27,8 @@ import org.eclipse.swt.widgets.Text;
 
 public abstract class DataInputPageWizard extends WizardPage {
 
+	private static final String FILES = "Input Files: ";
+	private Label countFiles;
 	private InputFilesTable inputFilesTable;
 	private Text textGroupName;
 
@@ -63,6 +65,10 @@ public abstract class DataInputPageWizard extends WizardPage {
 		gridData.widthHint = 100;
 		gridData.verticalSpan = 5;
 		inputFilesTable = new InputFilesTable(composite, gridData);
+		countFiles = new Label(composite, SWT.NONE);
+		countFiles.setText(FILES + "0");
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+		countFiles.setLayoutData(gridData);
 		Composite compositeButtonTable = new Composite(composite, SWT.NONE);
 		compositeButtonTable.setLayout(new FillLayout());
 		Button button = new Button(compositeButtonTable, SWT.PUSH);
@@ -71,7 +77,7 @@ public abstract class DataInputPageWizard extends WizardPage {
 		button = new Button(compositeButtonTable, SWT.PUSH);
 		button.addListener(SWT.Selection, (event) -> {
 			inputFilesTable.removeSelection();
-			setPageComplete(!inputFilesTable.getDataInputEntries().isEmpty());
+			update();
 		});
 		button.setText("Remove");
 		setControl(composite);
@@ -87,9 +93,15 @@ public abstract class DataInputPageWizard extends WizardPage {
 		return textGroupName.getText();
 	}
 
-	protected void updata() {
+	private void redrawCountFiles() {
+
+		countFiles.setText(FILES + Integer.toString(inputFilesTable.getDataInputEntries().size()));
+	}
+
+	protected void update() {
 
 		inputFilesTable.update();
+		redrawCountFiles();
 		setPageComplete(!inputFilesTable.getDataInputEntries().isEmpty());
 	}
 }

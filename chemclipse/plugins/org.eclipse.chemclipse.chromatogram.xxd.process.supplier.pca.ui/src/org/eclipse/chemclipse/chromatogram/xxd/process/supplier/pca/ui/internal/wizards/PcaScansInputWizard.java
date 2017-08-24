@@ -76,7 +76,8 @@ public class PcaScansInputWizard extends Wizard implements IPcaInputWizard {
 		int retentionTimeWindow = mainPropertiesPage.getRetentionTimeWindow();
 		boolean useDefoultProperties = mainPropertiesPage.isUseDefoultProperties();
 		int extractionType = mainPropertiesPage.getExtractionType();
-		pcaExtractionData = new PcaExtractionScans(retentionTimeWindow, dataInputs, extractionType, useDefoultProperties);
+		int maximalNumberScans = mainPropertiesPage.getMaximalNumberScans();
+		pcaExtractionData = new PcaExtractionScans(retentionTimeWindow, maximalNumberScans, dataInputs, extractionType, useDefoultProperties);
 		return true;
 	}
 }

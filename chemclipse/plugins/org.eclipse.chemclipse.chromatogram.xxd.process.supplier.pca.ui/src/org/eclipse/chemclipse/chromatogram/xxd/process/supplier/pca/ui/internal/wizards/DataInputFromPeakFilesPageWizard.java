@@ -44,6 +44,6 @@ public class DataInputFromPeakFilesPageWizard extends DataInputPageWizard {
 				getDataInputEntries().add(dataInputEntry);
 			}
 		}
-		updata();
+		update();
 	}
 }

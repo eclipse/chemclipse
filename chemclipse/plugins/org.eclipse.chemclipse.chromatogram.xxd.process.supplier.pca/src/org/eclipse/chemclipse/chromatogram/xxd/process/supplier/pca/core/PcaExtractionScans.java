@@ -43,17 +43,18 @@ public class PcaExtractionScans implements IDataExtraction {
 	private List<IDataInputEntry> dataInputEntriesAll;
 	private int endRetentionTimeMin;
 	private int extractionType;
-	final private int MAX_SIZE = 9000;
+	private int maximalNumberScans;
 	private int retentionTimeWindow;
 	private int scanInterval;
 	private boolean similarChromatogram; // chromatograms have to have some retention time in first scan and same scan interval
 	private boolean useDefoultProperties;
 
-	public PcaExtractionScans(int retentionTimeWindow, List<IDataInputEntry> dataInputEntries, int extractionType, boolean useDefoultProperties) {
+	public PcaExtractionScans(int retentionTimeWindow, int maximalNumberScans, List<IDataInputEntry> dataInputEntries, int extractionType, boolean useDefoultProperties) {
 		this.retentionTimeWindow = retentionTimeWindow;
 		this.dataInputEntriesAll = dataInputEntries;
 		this.extractionType = extractionType;
 		this.useDefoultProperties = useDefoultProperties;
+		this.maximalNumberScans = maximalNumberScans;
 	}
 
 	private Map<String, TreeMap<Integer, Float>> extractScans(List<IDataInputEntry> inputFiles, IProgressMonitor monitor) {
@@ -137,7 +138,7 @@ public class PcaExtractionScans implements IDataExtraction {
 			}
 			UnivariateFunction fun = interpolator.interpolate(retetnionTime, scanValues);
 			for(int i = beginRetentionTimeMax; i <= endRetentionTimeMin; i += retentionTimeWindow) {
-				Double value = fun.value(i);
+				double value = fun.value(i);
 				ISampleData d = new SampleData(value);
 				data.add(d);
 			}
@@ -172,8 +173,8 @@ public class PcaExtractionScans implements IDataExtraction {
 			this.retentionTimeWindow = this.scanInterval;
 		}
 		int size = ((endRetentionTimeMin - beginRetentionTimeMax) / retentionTimeWindow);
-		if(size > MAX_SIZE) {
-			retentionTimeWindow = (endRetentionTimeMin - beginRetentionTimeMax) / MAX_SIZE;
+		if(size > maximalNumberScans) {
+			retentionTimeWindow = (endRetentionTimeMin - beginRetentionTimeMax) / maximalNumberScans;
 			similarChromatogram = false;
 		}
 		endRetentionTimeMin = ((endRetentionTimeMin - beginRetentionTimeMax) / retentionTimeWindow) * retentionTimeWindow;

@@ -34,6 +34,7 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 
 	private DataBindingContext dbc = new DataBindingContext();
 	private int extractionType;
+	private IObservableValue<Integer> maximalNumberScans = new WritableValue<>();
 	private IObservableValue<Integer> numerOfComponents = new WritableValue<>();
 	private IObservableValue<Double> retentionTimeWindow = new WritableValue<>();
 	private boolean useDefoultProperties;
@@ -43,6 +44,7 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 		setTitle("Set Main Parameters");
 		numerOfComponents.setValue(3);
 		retentionTimeWindow.setValue(1.0);
+		maximalNumberScans.setValue(5000);
 		extractionType = IDataExtraction.CLOSEST_SCAN;
 		useDefoultProperties = true;
 	}
@@ -54,9 +56,11 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new GridLayout(1, true));
 		Button button = new Button(composite, SWT.CHECK);
-		button.setText("Use defaout properties if it is possible \n (chromatogram have same start retention time \n and same scan interval)");
+		button.setText("Use default properties if it is possible (chromatogram have same start retention time and same scan interval)");
 		button.setSelection(true);
-		button.addListener(SWT.Selection, e -> useDefoultProperties = ((Button)e.item).getSelection());
+		button.addListener(SWT.Selection, e -> useDefoultProperties = ((Button)e.widget).getSelection());
+		Label label = new Label(composite, SWT.None);
+		label.setText("Retention Time Windows will be set according to scan interval");
 		button = new Button(composite, SWT.RADIO);
 		button.setText("Select the closest scan");
 		button.setSelection(true);
@@ -64,9 +68,9 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 		button = new Button(composite, SWT.RADIO);
 		button.setText("Interpolate scan");
 		button.addListener(SWT.Selection, e -> extractionType = IDataExtraction.LINEAR_INTERPOLATION_SCAN);
-		Label label = new Label(composite, SWT.None);
+		label = new Label(composite, SWT.None);
 		label.setText("Retention Time Windows (s)");
-		Text text = new Text(composite, SWT.None);
+		Text text = new Text(composite, SWT.BORDER);
 		UpdateValueStrategy targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
 			try {
 				return Double.parseDouble((String)o1);
@@ -88,16 +92,29 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		label = new Label(composite, SWT.None);
 		label.setText("Number of principal components");
-		Spinner spinner = new Spinner(composite, SWT.NONE);
+		Spinner spinner = new Spinner(composite, SWT.BORDER);
 		spinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		spinner.setMinimum(3);
 		dbc.bindValue(WidgetProperties.selection().observe(spinner), numerOfComponents);
+		label = new Label(composite, SWT.None);
+		label.setText("Maximal number of scans");
+		spinner = new Spinner(composite, SWT.BORDER);
+		spinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		spinner.setMinimum(1);
+		spinner.setIncrement(1000);
+		spinner.setMaximum(Integer.MAX_VALUE);
+		dbc.bindValue(WidgetProperties.selection().observe(spinner), maximalNumberScans);
 		setControl(composite);
 	}
 
 	public int getExtractionType() {
 
 		return extractionType;
+	}
+
+	public int getMaximalNumberScans() {
+
+		return maximalNumberScans.getValue();
 	}
 
 	public int getNumerOfComponents() {

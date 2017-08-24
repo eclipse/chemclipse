@@ -47,7 +47,6 @@ public class PcaInputRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		pcaResults = pcaExtractionData.process(monitor);
-		System.out.println("size: " + pcaResults.getExtractedRetentionTimes().size());
 		pcaNormalizationData.process(pcaResults, monitor);
 		pcaFiltrationData.process(pcaResults, true, monitor);
 		PcaEvaluation pcaEvaluation = new PcaEvaluation();
