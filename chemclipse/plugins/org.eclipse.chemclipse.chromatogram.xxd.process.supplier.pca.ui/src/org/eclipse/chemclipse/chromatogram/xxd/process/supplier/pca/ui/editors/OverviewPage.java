@@ -159,6 +159,10 @@ public class OverviewPage {
 		gridData.horizontalIndent = 20;
 		gridData.heightHint = 30;
 		createEigenvaluesHyperlink(client, gridData, formToolkit);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalIndent = 20;
+		gridData.heightHint = 30;
+		createSavePCAResultHyperlink(client, gridData, formToolkit);
 		section.setClient(client);
 		formToolkit.paintBordersFor(client);
 	}
@@ -231,6 +235,25 @@ public class OverviewPage {
 
 				if(pcaEditor.getPcaResults().isPresent()) {
 					pcaEditor.reEvaluatePcaCalculation();
+				}
+			}
+		});
+	}
+
+	private void createSavePCAResultHyperlink(Composite client, GridData gridData, FormToolkit formToolkit) {
+
+		ImageHyperlink imageHyperlink;
+		imageHyperlink = formToolkit.createImageHyperlink(client, SWT.NONE);
+		imageHyperlink.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16));
+		imageHyperlink.setText("Save PCA results");
+		imageHyperlink.setLayoutData(gridData);
+		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
+
+			@Override
+			public void linkActivated(HyperlinkEvent e) {
+
+				if(pcaEditor.getPcaResults().isPresent()) {
+					pcaEditor.save();
 				}
 			}
 		});

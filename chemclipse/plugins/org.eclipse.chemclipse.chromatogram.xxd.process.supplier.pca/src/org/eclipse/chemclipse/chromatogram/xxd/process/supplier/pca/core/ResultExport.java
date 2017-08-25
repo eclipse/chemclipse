@@ -63,8 +63,11 @@ public class ResultExport {
 			printWriter.println("-------------------------------------");
 			printWriter.println("Extracted Retention Times (Minutes)");
 			printWriter.println("-------------------------------------");
-			for(int retentionTime : pcaResults.getExtractedRetentionTimes()) {
-				printWriter.println(decimalFormat.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+			for(int i = 0; i < pcaResults.getExtractedRetentionTimes().size(); i++) {
+				if(pcaResults.isSelectedRetentionTimes().get(i)) {
+					double retentionTime = pcaResults.getExtractedRetentionTimes().get(i);
+					printWriter.println(decimalFormat.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+				}
 			}
 			printWriter.println("");
 			printWriter.println("-------------------------------------");
@@ -72,9 +75,12 @@ public class ResultExport {
 			printWriter.println("-------------------------------------");
 			printWriter.print("Filename");
 			printWriter.print(TAB);
-			for(int retentionTime : pcaResults.getExtractedRetentionTimes()) {
-				printWriter.print(decimalFormat.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
-				printWriter.print(TAB);
+			for(int i = 0; i < pcaResults.getExtractedRetentionTimes().size(); i++) {
+				if(pcaResults.isSelectedRetentionTimes().get(i)) {
+					double retentionTime = pcaResults.getExtractedRetentionTimes().get(i);
+					printWriter.print(decimalFormat.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+					printWriter.print(TAB);
+				}
 			}
 			printWriter.println("");
 			/*

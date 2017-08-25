@@ -56,7 +56,6 @@ public class PcaEditor extends AbstractPcaEditor {
 	private MDirtyable dirtyable;
 	private ErrorResiduePage errorResiduePage;
 	//
-	private File exportFile;
 	private FiltersPage filtersPage;
 	private FormToolkit formToolkit;
 	@SuppressWarnings("unused")
@@ -127,6 +126,7 @@ public class PcaEditor extends AbstractPcaEditor {
 				updateData();
 				updateViews();
 				showScorePlotPage();
+				dirtyable.setDirty(true);
 			}
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
@@ -147,6 +147,7 @@ public class PcaEditor extends AbstractPcaEditor {
 				updateData();
 				updateViews();
 				showScorePlotPage();
+				dirtyable.setDirty(true);
 			}
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
@@ -167,6 +168,7 @@ public class PcaEditor extends AbstractPcaEditor {
 				updateData();
 				updateViews();
 				showScorePlotPage();
+				dirtyable.setDirty(true);
 			}
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
@@ -215,6 +217,7 @@ public class PcaEditor extends AbstractPcaEditor {
 			super.reEvaluatePcaCalculation();
 			updateViews();
 			showScorePlotPage();
+			dirtyable.setDirty(true);
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
 			logger.warn(e.getCause());
@@ -240,17 +243,16 @@ public class PcaEditor extends AbstractPcaEditor {
 	@Persist
 	public void save() {
 
-		if(exportFile == null) {
-			FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
-			fileDialog.setText("Save PCA results");
-			fileDialog.setOverwrite(true);
-			fileDialog.setFileName("PCA-Results.txt");
-			fileDialog.setFilterExtensions(new String[]{"*.txt"});
-			fileDialog.setFilterNames(new String[]{"ASCII PCA reports"});
-			String pathname = fileDialog.open();
-			if(pathname != null) {
-				exportFile = new File(pathname);
-			}
+		File exportFile = null;
+		FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
+		fileDialog.setText("Save PCA results");
+		fileDialog.setOverwrite(true);
+		fileDialog.setFileName("PCA-Results.txt");
+		fileDialog.setFilterExtensions(new String[]{"*.txt"});
+		fileDialog.setFilterNames(new String[]{"ASCII PCA reports"});
+		String pathname = fileDialog.open();
+		if(pathname != null) {
+			exportFile = new File(pathname);
 		}
 		/*
 		 * Check that there is a valid file.
