@@ -199,6 +199,12 @@ public class LoadingPlotPage {
 		TableColumn column = new TableColumn(table, SWT.None);
 		column.setText("Ret.Time(min)");
 		column.setWidth(150);
+		column = new TableColumn(table, SWT.None);
+		column.setText("PC X");
+		column.setWidth(80);
+		column = new TableColumn(table, SWT.None);
+		column.setText("PC Y");
+		column.setWidth(80);
 		table.addListener(SWT.Selection, e -> {
 			TableItem[] selection = table.getSelection();
 			Set<String> selectedItems = new HashSet<>();
@@ -258,9 +264,12 @@ public class LoadingPlotPage {
 		});
 		button = new Button(spinnerComposite, SWT.PUSH);
 		button.setText("Reload Loading Plot");
-		button.addListener(SWT.Selection, e -> reloadLoadingPlotChart());
+		button.addListener(SWT.Selection, e -> {
+			reloadLoadingPlotChart();
+			updateTable();
+		});
 		button = new Button(spinnerComposite, SWT.PUSH);
-		button.setText("Load data");
+		button.setText("Load Data");
 		button.addListener(SWT.Selection, e -> update());
 		button.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, true, 1, 1));
 		/*
@@ -349,11 +358,21 @@ public class LoadingPlotPage {
 
 		table.clearAll();
 		table.removeAll();
+		int pcx = spinnerPCx.getSelection();
+		int pcy = spinnerPCy.getSelection();
+		double[] vectorX = basisVectors.get(pcx - 1);
+		double[] vectorY = basisVectors.get(pcy - 1);
+		table.getColumn(1).setText("PC " + pcx);
+		table.getColumn(2).setText("PC " + pcy);
 		for(int i = 0; i < extractedRetentionTimes.size(); i++) {
 			TableItem tableItem = new TableItem(table, SWT.None);
-			tableItem.setText(extractedRetentionTimes.get(i));
 			tableItem.setData(extractedRetentionTimes.get(i));
+			tableItem.setText(0,extractedRetentionTimes.get(i));
+			tableItem.setText(1,Double.toString(vectorX[i]));
+			tableItem.setText(2,Double.toString(vectorY[i]));
+			
 		}
+		table.getColumn(0).pack();
 		table.selectAll();
 	}
 }
