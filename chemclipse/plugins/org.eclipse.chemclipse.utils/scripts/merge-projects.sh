@@ -20,10 +20,11 @@ function merge_project {
 	parentDir=${path##*/}
 	if [[ $parentDir != "eavp" && $parentDir != "scripts" && $parentDir != "External" && $parentDir != ".recommenders" && $parentDir != "workspace" && $parentDir != ".metadata" ]]; then
 		#echo $parentDir
-		if [[ ${parentDir:0:23} == "org.eclipse.chemclipse." ]]; then		
+		if [[ ${parentDir:0:23} != "org.eclipse.chemclipse." ]]; then		
 			echo 'Merge Project: '$parentDir
 			#git checkout master
 			#git merge --no-ff develop
+			#git pull
 			#git push origin master
 			#git checkout develop
 		fi
