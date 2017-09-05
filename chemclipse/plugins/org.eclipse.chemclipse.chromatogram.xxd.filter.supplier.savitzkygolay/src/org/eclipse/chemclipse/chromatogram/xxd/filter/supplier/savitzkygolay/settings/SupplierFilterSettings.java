@@ -13,10 +13,17 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.se
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
 
+	@JsonProperty(value = "Derivative", defaultValue = "0")
+	@JsonPropertyDescription(value = "Derivative Description")
 	private int derivative;
+	@JsonProperty(value = "Order", defaultValue = "2")
 	private int order;
+	@JsonProperty(value = "Width", defaultValue = "5")
 	private int width;
 
 	@Override
