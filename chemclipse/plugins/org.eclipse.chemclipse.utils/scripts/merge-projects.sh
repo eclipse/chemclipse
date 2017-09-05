@@ -14,27 +14,31 @@
 
 function merge_project {
 
-  echo 'git merge project: '$1
-  cd $1
-  #git checkout master
-  #git merge --no-ff develop
-  #git push origin master
-  #git checkout develop
-  cd $active
+	#echo 'git merge project: '$1
+	cd $1
+	path=$(pwd)
+	parentDir=${path##*/}
+	if [[ $parentDir != "eavp" && $parentDir != "scripts" && $parentDir != "External" && $parentDir != ".recommenders" && $parentDir != "workspace" && $parentDir != ".metadata" ]]; then
+		echo 'Merge Project: '$parentDir
+		#git checkout master
+		#git merge --no-ff develop
+		#git push origin master
+		#git checkout develop
+	fi
+	cd $active
 }
 
 function merge_projects {
   
-  while [ $1 ]; do
-    merge_project $1
-    shift
-  done
+	while [ $1 ]; do
+		merge_project $1
+		shift
+	done
 
-  echo "done"
+	echo "done"
 }
 
 echo "Start git project merge"
-  active=$(pwd)
-  # ../../../ go to workspace area.
-  merge_projects $(find ../../../../../ -type d -maxdepth 1)
+	active=$(pwd)
+	merge_projects $(find ../../../../../ -type d -maxdepth 1)
 echo "finished"
