@@ -91,13 +91,21 @@ public class RetentionIndexCalculator {
 			while((line = bufferedReader.readLine()) != null) {
 				/*
 				 * 10.214 1600.0 100 981 Hexadecane
+				 * see: AMDIS - User Guide
+				 * https://www.nist.gov/sites/default/files/documents/srd/AMDISMan.pdf
 				 */
 				try {
 					String[] values = line.split(DELIMITER);
-					if(values.length == 5) {
-						int retentionTime = (int)(Double.parseDouble(values[0]) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
-						float retentionIndex = Float.parseFloat(values[1]);
-						String peakName = values[4].trim();
+					if(values.length >= 5) {
+						int retentionTime = (int)(Double.parseDouble(values[0]) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR); // Retention Time: 1.908
+						float retentionIndex = Float.parseFloat(values[1]); // Retention Index: 600.0
+						// values[2] ... Net - the computed Net value
+						// values[3] ... S/N - the computed "S/N (total)" value
+						String peakName = values[4].trim(); // C6
+						for(int i = 5; i < values.length; i++) {
+							peakName += " " + values[i];
+						}
+						//
 						IRetentionIndexEntry retentionIndexEntry = new RetentionIndexEntry(retentionTime, retentionIndex, peakName);
 						retentionIndices.put(retentionTime, retentionIndexEntry);
 					} else {
