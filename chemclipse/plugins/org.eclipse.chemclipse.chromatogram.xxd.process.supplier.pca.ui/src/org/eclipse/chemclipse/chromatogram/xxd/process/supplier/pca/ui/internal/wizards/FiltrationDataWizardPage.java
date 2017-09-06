@@ -27,6 +27,8 @@ public class FiltrationDataWizardPage extends WizardPage {
 
 	protected FiltrationDataWizardPage(String pageName) {
 		super(pageName);
+		setTitle("Add filter which select data");
+		setDescription("Filters can be also added later on in the process in Data Filtration page");
 		pcaFiltrationData = new PcaFiltrationData();
 	}
 
@@ -39,16 +41,16 @@ public class FiltrationDataWizardPage extends WizardPage {
 		Composite compositeButtons = new Composite(composite, SWT.None);
 		compositeButtons.setLayout(new FillLayout());
 		Button button = new Button(compositeButtons, SWT.PUSH);
-		button.setText("Add");
+		button.setText("Create New Filter");
 		button.addListener(SWT.Selection, e -> filtersTable.createNewFilter());
 		button = new Button(compositeButtons, SWT.PUSH);
-		button.setText("Remove");
+		button.setText("Remove Selected Filters");
 		button.addListener(SWT.Selection, e -> filtersTable.removeSelectedFilters());
 		button = new Button(compositeButtons, SWT.PUSH);
-		button.setText("Move Up");
+		button.setText("Move Up Selected Filter");
 		button.addListener(SWT.Selection, e -> filtersTable.moveUpSelectedFilter());
 		button = new Button(compositeButtons, SWT.PUSH);
-		button.setText("Move Down");
+		button.setText("Move Down Selected Filter");
 		button.addListener(SWT.Selection, e -> filtersTable.moveDownSelectedFilter());
 		setControl(composite);
 	}
