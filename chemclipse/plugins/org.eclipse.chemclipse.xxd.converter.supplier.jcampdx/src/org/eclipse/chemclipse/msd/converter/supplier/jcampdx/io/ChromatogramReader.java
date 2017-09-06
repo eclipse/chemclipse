@@ -45,6 +45,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramReader extends AbstractChromatogramMSDReader {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramReader.class);
+	//
+	private static final String HEADER_MASSFINDER_3 = "##PROGRAM=MassFinder3";
+	private static final String HEADER_MASSFINDER_4 = "##PROGRAM=MassFinder4";
 	private static final String HEADER_MARKER = "##";
 	private static final String HEADER_TITLE = "##TITLE=";
 	private static final String HEADER_PROGRAM = "##PROGRAM=";
@@ -92,6 +95,9 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 		/*
 		 * Parse each line
 		 */
+		boolean adjustTotalSignal = false;
+		float totalSignalFromFile = 0.0f;
+		//
 		while((line = bufferedReader.readLine()) != null) {
 			/*
 			 * Each scan starts with the marker:
@@ -115,17 +121,25 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 				 * Store an existing scan.
 				 */
 				if(massSpectrum != null) {
+					if(adjustTotalSignal && totalSignalFromFile != 0.0d) {
+						massSpectrum.adjustTotalSignal(totalSignalFromFile);
+					}
 					chromatogram.addScan(massSpectrum);
 				}
 				/*
 				 * Create a new scan.
 				 */
 				massSpectrum = new VendorScan();
+				totalSignalFromFile = 0.0f;
 				readIons = false;
 				/*
 				 * Read the next line.
 				 */
 				continue;
+			} else if(line.startsWith(HEADER_MASSFINDER_3)) {
+				adjustTotalSignal = true;
+			} else if(line.startsWith(HEADER_MASSFINDER_4)) {
+				adjustTotalSignal = false;
 			}
 			/*
 			 * Read the scan data.
@@ -138,6 +152,9 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 				if(line.startsWith(RETENTION_TIME_MARKER) || line.startsWith(TIME_MARKER)) {
 					retentionTime = getRetentionTime(line);
 					massSpectrum.setRetentionTime(retentionTime);
+				} else if(line.startsWith(TIC_MARKER)) {
+					String value = line.replace(TIC_MARKER, "").trim();
+					totalSignalFromFile = Float.parseFloat(value);
 				} else if(line.startsWith(NAME_MARKER)) {
 					/*
 					 * Try to get the identification.
@@ -202,6 +219,9 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader {
 		 * Add the last scan.
 		 */
 		if(massSpectrum != null) {
+			if(adjustTotalSignal && totalSignalFromFile != 0.0d) {
+				massSpectrum.adjustTotalSignal(totalSignalFromFile);
+			}
 			chromatogram.addScan(massSpectrum);
 		}
 		/*
