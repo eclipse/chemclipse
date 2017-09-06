@@ -144,6 +144,7 @@ public class FiltersTable {
 		}
 		for(int i = 0; i < table.getColumns().length; i++) {
 			table.getColumn(i).pack();
+			table.getColumn(i).setWidth(table.getColumn(i).getWidth() + 20);
 		}
 	}
 }

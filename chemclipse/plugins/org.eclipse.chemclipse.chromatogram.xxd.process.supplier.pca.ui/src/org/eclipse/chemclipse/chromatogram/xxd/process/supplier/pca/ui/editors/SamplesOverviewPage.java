@@ -71,7 +71,7 @@ public class SamplesOverviewPage {
 	private Composite mainComposite;
 	private Map<String, Color> mapGroupColor = new HashMap<>();
 	private NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
-	final private String[] overviewType = new String[]{"PCA", "Data", "Normlized data", "Peaks"};
+	final private String[] overviewType = new String[]{"PCA", "Raw Data", "Modified data", "Peaks"};
 	private int overviewTypeSelection = -1;
 	private PcaEditor pcaEditor;
 	private IPcaResults pcaResults;
@@ -162,7 +162,7 @@ public class SamplesOverviewPage {
 				groupName = groupName.trim();
 				groupName = groupName.isEmpty() ? null : groupName;
 				groupNames.put(sample, groupName);
-				updateTableTableSamples();
+				updateTableSamples();
 			}
 		});
 	}
@@ -325,7 +325,7 @@ public class SamplesOverviewPage {
 			tableSamples.setChecked(s, s.isSelected());
 			groupNames.put(s, s.getGroupName());
 		});
-		updateTableTableSamples();
+		updateTableSamples();
 	}
 
 	private void selectDataTableOverview(boolean updateColumns) {
@@ -352,7 +352,7 @@ public class SamplesOverviewPage {
 		tableOverview.clearAll();
 		tableOverview.removeAll();
 		if(updateColumns) {
-			createColumnsTableOverview(new String[]{"Retention Time (Mintes)", "Data"});
+			createColumnsTableOverview(new String[]{"Retention Time at Maximum (Minutes)", "Data"});
 		}
 		if(selectedSample != null) {
 			List<ISampleData> sampleData = selectedSample.getSampleData();
@@ -369,7 +369,7 @@ public class SamplesOverviewPage {
 		tableOverview.clearAll();
 		tableOverview.removeAll();
 		if(updateColumns) {
-			createColumnsTableOverview(new String[]{"", ""});
+			createColumnsTableOverview(new String[]{"Principle Component", "Value"});
 		}
 		if(selectedSample != null) {
 			IPcaResult pcaResult = selectedSample.getPcaResult();
@@ -389,7 +389,7 @@ public class SamplesOverviewPage {
 		tableOverview.clearAll();
 		tableOverview.removeAll();
 		if(updateColumns) {
-			createColumnsTableOverview(new String[]{"Reten.time at Max (Minutes)", "Peak Integrator Area", "Peaks Name"});
+			createColumnsTableOverview(new String[]{"Retention Time at Maximum (Minutes)", "Integrator Area", "Peak Name"});
 		}
 		if(selectedSample != null) {
 			IPeaks peaks = selectedSample.getPcaResult().getPeaks();
@@ -452,7 +452,7 @@ public class SamplesOverviewPage {
 			PcaUtils.sortSampleListByName(samples);
 			updateColorMap();
 			tableSamples.setInput(samples);
-			updateTableTableSamples();
+			updateTableSamples();
 			pcaResults.get().getSampleList().forEach(s -> tableSamples.setChecked(s, s.isSelected()));
 			redrawSamplesSelectedCount();
 			selectDataTableOverview(false);
@@ -475,6 +475,7 @@ public class SamplesOverviewPage {
 
 		for(TableColumn column : tableOverview.getColumns()) {
 			column.pack();
+			column.setWidth(column.getWidth() + 20);
 		}
 		tableOverview.redraw();
 	}
@@ -492,12 +493,19 @@ public class SamplesOverviewPage {
 		pcaEditor.updataSamples();
 	}
 
-	private void updateTableTableSamples() {
+	private void updateTableSamples() {
 
 		updateColorMap();
-		for(TableColumn column : tableSamples.getTable().getColumns()) {
-			column.pack();
+		TableColumn column = tableSamples.getTable().getColumn(0);
+		column.pack();
+		column.setWidth(column.getWidth() + 20);
+		column = tableSamples.getTable().getColumn(1);
+		column.pack();
+		int width = column.getWidth() + 20;
+		if(width < 150) {
+			width = 150;
 		}
+		column.setWidth(width);
 		tableSamples.refresh();
 	}
 }
