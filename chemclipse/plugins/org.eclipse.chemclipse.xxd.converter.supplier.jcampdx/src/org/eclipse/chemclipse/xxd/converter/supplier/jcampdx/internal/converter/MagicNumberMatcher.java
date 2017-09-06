@@ -23,9 +23,14 @@ public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IM
 
 		boolean isValidFormat = false;
 		try {
-			file = SpecificationValidator.validateSpecification(file);
+			file = SpecificationValidator.validateSpecification(file, "JDX");
 			if(file.exists()) {
 				return true;
+			} else {
+				file = SpecificationValidator.validateSpecification(file, "JDL");
+				if(file.exists()) {
+					return true;
+				}
 			}
 		} catch(Exception e) {
 			// Print no exception.

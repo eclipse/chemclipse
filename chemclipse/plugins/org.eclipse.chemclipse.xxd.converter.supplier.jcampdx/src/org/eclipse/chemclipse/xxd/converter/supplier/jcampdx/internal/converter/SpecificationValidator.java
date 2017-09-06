@@ -29,7 +29,7 @@ public class SpecificationValidator {
 	 * 
 	 * @param file
 	 */
-	public static File validateSpecification(File file) {
+	public static File validateSpecification(File file, String extension) {
 
 		if(file == null) {
 			return null;
@@ -38,14 +38,15 @@ public class SpecificationValidator {
 		 * Validate
 		 */
 		File validFile;
+		extension = extension.toUpperCase();
 		String path = file.getAbsolutePath().toUpperCase();
 		if(file.isDirectory()) {
-			validFile = new File(file.getAbsolutePath() + File.separator + "CHROMATOGRAM.JDX");
+			validFile = new File(file.getAbsolutePath() + File.separator + "CHROMATOGRAM." + extension);
 		} else {
 			if(path.endsWith(".")) {
-				validFile = new File(file.getAbsolutePath() + "JDX");
-			} else if(!path.endsWith(".JDX")) {
-				validFile = new File(file.getAbsolutePath() + ".JDX");
+				validFile = new File(file.getAbsolutePath() + extension);
+			} else if(!path.endsWith("." + extension)) {
+				validFile = new File(file.getAbsolutePath() + "." + extension);
 			} else {
 				validFile = file;
 			}

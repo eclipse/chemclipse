@@ -45,10 +45,16 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 	private static final String HEADER_MARKER = "##";
 	private static final String HEADER_TITLE = "##TITLE=";
 	private static final String HEADER_VERSION = "##VERSION=";
+	private static final String HEADER_PROGRAM_MASSFINDER_3 = "##PROGRAM=MassFinder3";
+	private static final String HEADER_PROGRAM_MASSFINDER_193 = "##PROGRAM=MassFinder 1.93";
 	private static final String RETENTION_TIME_MARKER = "##RETENTION_TIME=";
 	private static final String RETENTION_INDEX_MARKER = "##$RETENTION INDEX=";
+	private static final String RETENTION_INDEX = "##RI=";
 	private static final String CAS_REGISTRY_NO = "##CAS REGISTRY NO=";
 	private static final String CAS_NAME = "##CAS NAME=";
+	private static final String CAS = "##CAS=";
+	private static final String COMMENT = "##COMMENT=";
+	private static final String FORMULA = "##FORMULA=";
 	private static final String MOL_WEIGHT = "##MW=";
 	private static final String MOL_FORM = "##MOLFORM=";
 	private static final String TIME_MARKER = "##TIME=";
@@ -147,14 +153,26 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 					int retentionTime = getRetentionTime(line);
 					massSpectrum.setRetentionTime(retentionTime);
 				} else if(line.startsWith(RETENTION_INDEX_MARKER)) {
-					float retentionIndex = getRetentionIndex(line);
+					float retentionIndex = getRetentionIndex(line, RETENTION_INDEX_MARKER);
+					massSpectrum.setRetentionIndex(retentionIndex);
+				} else if(line.startsWith(RETENTION_INDEX)) {
+					float retentionIndex = getRetentionIndex(line, RETENTION_INDEX);
 					massSpectrum.setRetentionIndex(retentionIndex);
 				} else if(line.startsWith(CAS_REGISTRY_NO)) {
 					String casNumber = line.replace(CAS_REGISTRY_NO, "").trim();
 					massSpectrum.getLibraryInformation().setCasNumber(casNumber);
+				} else if(line.startsWith(COMMENT)) {
+					String comment = line.replace(COMMENT, "").trim();
+					massSpectrum.getLibraryInformation().setComments(comment);
+				} else if(line.startsWith(FORMULA)) {
+					String formula = line.replace(FORMULA, "").trim();
+					massSpectrum.getLibraryInformation().setFormula(formula);
 				} else if(line.startsWith(CAS_NAME)) {
 					String name = line.replace(CAS_NAME, "").trim();
 					extractNameAndReferenceIdentifier(massSpectrum, name, referenceIdentifierMarker, referenceIdentifierPrefix);
+				} else if(line.startsWith(CAS)) {
+					String casNumber = line.replace(CAS, "").trim();
+					massSpectrum.getLibraryInformation().setCasNumber(casNumber);
 				} else if(line.startsWith(MOL_WEIGHT)) {
 					double molWeight = getMolWeight(line);
 					massSpectrum.getLibraryInformation().setMolWeight(molWeight);
@@ -244,12 +262,12 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 		return retentionTime;
 	}
 
-	private float getRetentionIndex(String line) {
+	private float getRetentionIndex(String line, String marker) {
 
 		float retentionIndex = 0;
 		try {
-			if(line.startsWith(RETENTION_INDEX_MARKER)) {
-				String value = line.replace(RETENTION_INDEX_MARKER, "").trim();
+			if(line.startsWith(marker)) {
+				String value = line.replace(marker, "").trim();
 				retentionIndex = (float)(Double.parseDouble(value));
 			}
 		} catch(NumberFormatException e) {
@@ -284,7 +302,7 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 		bufferedReader.close();
 		fileReader.close();
 		//
-		if(line.startsWith(HEADER_TITLE) || line.startsWith(HEADER_VERSION)) {
+		if(line.startsWith(HEADER_TITLE) || line.startsWith(HEADER_VERSION) || line.startsWith(HEADER_PROGRAM_MASSFINDER_193) || line.startsWith(HEADER_PROGRAM_MASSFINDER_3)) {
 			return true;
 		} else {
 			return false;

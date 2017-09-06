@@ -28,9 +28,9 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.internal.converter.SpecificationValidator;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class MassSpectrumImportConverter extends AbstractMassSpectrumImportConverter {
+public class MassSpectrumImportConverterJDX extends AbstractMassSpectrumImportConverter {
 
-	private static final Logger logger = Logger.getLogger(MassSpectrumImportConverter.class);
+	private static final Logger logger = Logger.getLogger(MassSpectrumImportConverterJDX.class);
 	private static final String DESCRIPTION = "JCAMP-DX Library";
 
 	@Override
@@ -45,7 +45,7 @@ public class MassSpectrumImportConverter extends AbstractMassSpectrumImportConve
 			processingInfo.addMessages(processingInfoValidate);
 		} else {
 			try {
-				file = SpecificationValidator.validateSpecification(file);
+				file = SpecificationValidator.validateSpecification(file, "JDX");
 				IMassSpectraReader massSpectraReader = new MassSpectraReader();
 				IMassSpectra massSpectra = massSpectraReader.read(file, monitor);
 				processingInfo.setMassSpectra(massSpectra);

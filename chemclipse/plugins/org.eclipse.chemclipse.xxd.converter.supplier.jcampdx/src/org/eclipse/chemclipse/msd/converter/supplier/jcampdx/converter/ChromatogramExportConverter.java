@@ -38,7 +38,7 @@ public class ChromatogramExportConverter extends AbstractChromatogramMSDExportCo
 		/*
 		 * Validate the file.
 		 */
-		file = SpecificationValidator.validateSpecification(file);
+		file = SpecificationValidator.validateSpecification(file, "JDX");
 		IProcessingInfo processingInfoValidate = super.validate(file);
 		/*
 		 * Don't process if errors have occurred.

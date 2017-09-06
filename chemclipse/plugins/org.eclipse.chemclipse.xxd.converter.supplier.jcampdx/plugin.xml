@@ -22,12 +22,25 @@
             exportConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.MassSpectrumExportConverter"
             fileExtension=".jdx"
             filterName="JCAMP-DX Library (*.jdx)"
-            id="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.library"
-            importConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.MassSpectrumImportConverter"
+            id="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.library.jdx"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.MassSpectrumImportConverterJDX"
             isExportable="false"
             isImportable="true">
       </MassSpectrumSupplier>
-   </extension>      
+   </extension>    
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.massSpectrumSupplier">
+      <MassSpectrumSupplier
+            description="Reads JDL library."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.MassSpectrumExportConverter"
+            fileExtension=".jdl"
+            filterName="JDL Library (*.jdl)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.library.jdl"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.MassSpectrumImportConverterJDX"
+            isExportable="false"
+            isImportable="true">
+      </MassSpectrumSupplier>
+   </extension>         
    <extension
          point="org.eclipse.chemclipse.csd.converter.chromatogramSupplier">
       <ChromatogramSupplier

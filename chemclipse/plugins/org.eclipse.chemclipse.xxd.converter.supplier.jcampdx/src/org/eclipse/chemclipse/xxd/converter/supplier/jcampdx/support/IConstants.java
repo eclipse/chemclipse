@@ -15,7 +15,7 @@ public interface IConstants {
 
 	String CONVERTER_ID_CSD = "org.eclipse.chemclipse.csd.converter.supplier.jcampdx";
 	String CONVERTER_ID_MSD = "org.eclipse.chemclipse.msd.converter.supplier.jcampdx";
-	String CONVERTER_ID_MSD_LIBRARY = "org.eclipse.chemclipse.msd.converter.supplier.jcampdx.library";
+	String CONVERTER_ID_MSD_LIBRARY = "org.eclipse.chemclipse.msd.converter.supplier.jcampdx.library.jdx";
 	//
 	String IMPORT_CHROMATOGRAM = "Import JCAMP-DX Chromatogram";
 	String IMPORT_CHROMATOGRAM_OVERVIEW = "Import JCAMP-DX Overview";

@@ -48,7 +48,7 @@ public class ChromatogramImportConverter extends AbstractChromatogramCSDImportCo
 			/*
 			 * Read the chromatogram.
 			 */
-			file = SpecificationValidator.validateSpecification(file);
+			file = SpecificationValidator.validateSpecification(file, "JDX");
 			IChromatogramCSDReader reader = new ChromatogramReader();
 			monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 			try {
@@ -76,7 +76,7 @@ public class ChromatogramImportConverter extends AbstractChromatogramCSDImportCo
 			/*
 			 * Read the chromatogram overview.
 			 */
-			file = SpecificationValidator.validateSpecification(file);
+			file = SpecificationValidator.validateSpecification(file, "JDX");
 			IChromatogramCSDReader reader = new ChromatogramReader();
 			monitor.subTask(IConstants.IMPORT_CHROMATOGRAM_OVERVIEW);
 			try {
