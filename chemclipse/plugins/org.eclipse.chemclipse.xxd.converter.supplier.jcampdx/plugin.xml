@@ -36,7 +36,7 @@
             fileExtension=".jdl"
             filterName="JDL Library (*.jdl)"
             id="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.library.jdl"
-            importConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.MassSpectrumImportConverterJDX"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.MassSpectrumImportConverterJDL"
             isExportable="false"
             isImportable="true">
       </MassSpectrumSupplier>
