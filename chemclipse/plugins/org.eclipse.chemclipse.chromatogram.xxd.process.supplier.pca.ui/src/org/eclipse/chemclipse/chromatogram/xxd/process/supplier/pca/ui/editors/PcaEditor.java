@@ -332,5 +332,6 @@ public class PcaEditor extends AbstractPcaEditor {
 		errorResiduePage.update();
 		scorePlot3dPage.update();
 		samplesSelectionDialog.update();
+		loadingPlotPage.update();
 	}
 }

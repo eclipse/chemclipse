@@ -11,8 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,17 +22,46 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtil
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
 import org.eclipse.eavp.service.swtchart.scattercharts.IScatterSeriesData;
 import org.eclipse.eavp.service.swtchart.scattercharts.IScatterSeriesSettings;
 import org.eclipse.eavp.service.swtchart.scattercharts.ScatterSeriesData;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
 import org.swtchart.ILineSeries.PlotSymbolType;
 
 public class SeriesConverter {
 
-	private static int SYMBOL_SIZE = 8;
+	private static NumberFormat nf = NumberFormat.getInstance(Locale.US);
+	private static int SYMBOL_SIZE_LOADING_PLOT = 4;
+	private static int SYMBOL_SIZE_SCORE_PLOT = 8;
+
+	public static List<IScatterSeriesData> basisVectorsToSeries(IPcaResults pcaResults, int pcX, int pcY) {
+
+		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
+		List<String> extractedRetentionTimes = new ArrayList<>();
+		for(int i = 0; i < pcaResults.getExtractedRetentionTimes().size(); i++) {
+			if(pcaResults.isSelectedRetentionTimes().get(i)) {
+				extractedRetentionTimes.add(nf.format(pcaResults.getExtractedRetentionTimes().get(i) / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+			}
+		}
+		for(int i = 0; i < extractedRetentionTimes.size(); i++) {
+			String name = extractedRetentionTimes.get(i);
+			double x = pcaResults.getBasisVectors().get(pcX)[i];
+			double y = pcaResults.getBasisVectors().get(pcY)[i];
+			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
+			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
+			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();
+			scatterSeriesSettings.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
+			scatterSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
+			scatterSeriesSettings.setSymbolSize(SYMBOL_SIZE_LOADING_PLOT);
+			scatterSeriesDataList.add(scatterSeriesData);
+		}
+		return scatterSeriesDataList;
+	}
 
 	public static List<IScatterSeriesData> sampleToSeries(IPcaResults pcaResults, int pcX, int pcY) {
 
@@ -71,7 +102,7 @@ public class SeriesConverter {
 			} else {
 				scatterSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
 			}
-			scatterSeriesSettings.setSymbolSize(SYMBOL_SIZE);
+			scatterSeriesSettings.setSymbolSize(SYMBOL_SIZE_SCORE_PLOT);
 			scatterSeriesSettings.setSymbolColor(colors.get(sample.getGroupName()));
 			scatterSeriesDataList.add(scatterSeriesData);
 		}
