@@ -367,10 +367,9 @@ public class LoadingPlotPage {
 		for(int i = 0; i < extractedRetentionTimes.size(); i++) {
 			TableItem tableItem = new TableItem(table, SWT.None);
 			tableItem.setData(extractedRetentionTimes.get(i));
-			tableItem.setText(0,extractedRetentionTimes.get(i));
-			tableItem.setText(1,Double.toString(vectorX[i]));
-			tableItem.setText(2,Double.toString(vectorY[i]));
-			
+			tableItem.setText(0, extractedRetentionTimes.get(i));
+			tableItem.setText(1, Double.toString(vectorX[i]));
+			tableItem.setText(2, Double.toString(vectorY[i]));
 		}
 		table.getColumn(0).pack();
 		table.selectAll();

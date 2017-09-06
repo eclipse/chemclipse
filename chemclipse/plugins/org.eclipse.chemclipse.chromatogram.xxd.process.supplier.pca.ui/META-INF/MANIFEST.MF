@@ -44,7 +44,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.databinding,
  org.eclipse.core.databinding.beans,
  org.eclipse.core.databinding.property,
- org.eclipse.jface.databinding
+ org.eclipse.jface.databinding,
+ org.eclipse.eavp.service.swtchart;bundle-version="0.7.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: javafx.scene.paint;version="2.2.0",
