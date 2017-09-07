@@ -28,6 +28,10 @@ import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
  */
 public class ChromatogramSelection extends AbstractChromatogramSelection implements IChromatogramSelection {
 
+	/**
+	 * Renew this UUID on change.
+	 */
+	private static final long serialVersionUID = -1530240422469646381L;
 	private static final Logger logger = Logger.getLogger(ChromatogramSelection.class);
 
 	public ChromatogramSelection(IChromatogram chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {

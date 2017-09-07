@@ -17,6 +17,10 @@ import org.eclipse.chemclipse.numeric.core.Point;
 
 public abstract class AbstractChromatogramSelection implements IChromatogramSelection {
 
+	/**
+	 * Renew this UUID on change.
+	 */
+	private static final long serialVersionUID = -4663012287216101211L;
 	private IChromatogram chromatogram;
 	private int startRetentionTime;
 	private int stopRetentionTime;
