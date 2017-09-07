@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData;
 import org.eclipse.jface.wizard.IWizard;
 
 public interface IPcaInputWizard extends IWizard {
@@ -24,5 +24,5 @@ public interface IPcaInputWizard extends IWizard {
 
 	PcaFiltrationData getPcaFiltrationData();
 
-	PcaNormalizationData getPcaNormalizationData();
+	PcaScalingData getPcaScalingData();
 }

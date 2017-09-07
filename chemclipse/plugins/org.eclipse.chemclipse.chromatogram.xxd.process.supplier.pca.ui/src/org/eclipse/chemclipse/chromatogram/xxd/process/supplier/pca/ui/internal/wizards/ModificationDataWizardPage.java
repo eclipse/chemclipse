@@ -11,21 +11,21 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.NormalizationDataTables;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.ScalingDataTables;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class NormalizationDataWizardPage extends WizardPage {
+public class ModificationDataWizardPage extends WizardPage {
 
-	private PcaNormalizationData pcaNormalizationData;
+	private PcaScalingData pcaScalingData;
 
-	protected NormalizationDataWizardPage(String pageName) {
+	protected ModificationDataWizardPage(String pageName) {
 		super(pageName);
-		pcaNormalizationData = new PcaNormalizationData();
+		pcaScalingData = new PcaScalingData(false);
 	}
 
 	@Override
@@ -34,12 +34,12 @@ public class NormalizationDataWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new GridLayout(1, false));
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		new NormalizationDataTables(composite, gridData, pcaNormalizationData);
+		new ScalingDataTables(composite, gridData, pcaScalingData);
 		setControl(composite);
 	}
 
-	public PcaNormalizationData getPcaNormalizationData() {
+	public PcaScalingData getPcaScalingData() {
 
-		return pcaNormalizationData;
+		return pcaScalingData;
 	}
 }

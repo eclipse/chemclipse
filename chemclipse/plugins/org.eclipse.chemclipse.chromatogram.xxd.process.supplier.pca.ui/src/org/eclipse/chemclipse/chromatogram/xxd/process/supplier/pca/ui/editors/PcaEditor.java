@@ -58,14 +58,13 @@ public class PcaEditor extends AbstractPcaEditor {
 	//
 	private FiltersPage filtersPage;
 	private FormToolkit formToolkit;
-	@SuppressWarnings("unused")
 	private LoadingPlotPage loadingPlotPage;
 	@Inject
 	private EModelService modelService;
 	/*
 	 * Pages
 	 */
-	private NormalizationPage normalizationPage;
+	private ModificationPage modificationPage;
 	private OverviewPage overviewPage;
 	private List<Object> pages;
 	/*
@@ -102,7 +101,7 @@ public class PcaEditor extends AbstractPcaEditor {
 		//
 		pages.add(overviewPage = new OverviewPage(this, tabFolder, formToolkit));
 		pages.add(samplesOverviewPage = new SamplesOverviewPage(this, tabFolder, formToolkit));
-		pages.add(normalizationPage = new NormalizationPage(this, tabFolder, formToolkit));
+		pages.add(modificationPage = new ModificationPage(this, tabFolder, formToolkit));
 		pages.add(filtersPage = new FiltersPage(this, tabFolder, formToolkit));
 		pages.add(peakListIntensityTablePage = new PeakListIntensityTablePage(this, tabFolder, formToolkit));
 		pages.add(scorePlotPage = new ScorePlotPage(this, tabFolder, formToolkit));
@@ -234,9 +233,9 @@ public class PcaEditor extends AbstractPcaEditor {
 	}
 
 	@Override
-	public void reNormalizationData() {
+	public void reModifyData() {
 
-		super.reNormalizationData();
+		super.reModifyData();
 		updateData();
 	}
 
@@ -313,7 +312,7 @@ public class PcaEditor extends AbstractPcaEditor {
 
 		overviewPage.update();
 		samplesOverviewPage.update();
-		normalizationPage.update();
+		modificationPage.update();
 		filtersPage.update();
 		peakListIntensityTablePage.update();
 	}

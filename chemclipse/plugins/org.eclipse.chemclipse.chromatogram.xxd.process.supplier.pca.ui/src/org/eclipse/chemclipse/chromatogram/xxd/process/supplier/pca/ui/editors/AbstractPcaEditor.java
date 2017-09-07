@@ -15,8 +15,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataModification;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaInputRunnable;
@@ -35,8 +36,8 @@ public abstract class AbstractPcaEditor {
 
 	private Optional<Integer> numberOfPrincipleComponents = Optional.of(3);
 	private Optional<PcaFiltrationData> pcaFiltrationData = Optional.empty();
-	private Optional<PcaNormalizationData> pcaNormalizationData = Optional.empty();
 	private Optional<IPcaResults> pcaResults = Optional.empty();
+	private Optional<PcaScalingData> pcaScalingData = Optional.empty();
 
 	public AbstractPcaEditor() {
 	}
@@ -51,14 +52,14 @@ public abstract class AbstractPcaEditor {
 		return pcaFiltrationData;
 	}
 
-	public Optional<PcaNormalizationData> getPcaNormalizationData() {
-
-		return pcaNormalizationData;
-	}
-
 	public Optional<IPcaResults> getPcaResults() {
 
 		return pcaResults;
+	}
+
+	public Optional<PcaScalingData> getPcaScalingData() {
+
+		return pcaScalingData;
 	}
 
 	protected int openWizardPcaDerivedScansInput() throws InvocationTargetException, InterruptedException {
@@ -72,20 +73,20 @@ public abstract class AbstractPcaEditor {
 		int status = wizardDialog.open();
 		if(status == Window.OK) {
 			PcaFiltrationData pcaFiltrationData = wizard.getPcaFiltrationData();
-			PcaNormalizationData pcaNormalizationData = wizard.getPcaNormalizationData();
+			PcaScalingData pcaScalingData = wizard.getPcaScalingData();
 			IDataExtraction pcaExtractionData = wizard.getPcaExtractionData();
 			int numberOfPrincipleComponents = wizard.getNumerOfComponents();
 			/*
 			 * Run the process.
 			 */
-			PcaInputRunnable runnable = new PcaInputRunnable(pcaExtractionData, pcaFiltrationData, pcaNormalizationData, numberOfPrincipleComponents);
+			PcaInputRunnable runnable = new PcaInputRunnable(pcaExtractionData, pcaFiltrationData, pcaScalingData, numberOfPrincipleComponents);
 			ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 			/*
 			 * Calculate the results and show the score plot page.
 			 */
 			monitor.run(true, true, runnable);
 			this.pcaFiltrationData = Optional.of(pcaFiltrationData);
-			this.pcaNormalizationData = Optional.of(pcaNormalizationData);
+			this.pcaScalingData = Optional.of(pcaScalingData);
 			this.pcaResults = Optional.of(runnable.getPcaResults());
 			this.numberOfPrincipleComponents = Optional.of(numberOfPrincipleComponents);
 		}
@@ -119,9 +120,10 @@ public abstract class AbstractPcaEditor {
 		pcaFiltrationData.get().process(pcaResults.get(), true, new NullProgressMonitor());
 	}
 
-	protected void reNormalizationData() {
+	protected void reModifyData() {
 
-		pcaNormalizationData.get().process(pcaResults.get(), new NullProgressMonitor());
+		IDataModification.resetData(pcaResults.get());
+		pcaScalingData.get().process(pcaResults.get(), new NullProgressMonitor());
 	}
 
 	public void setNumberOfPrincipleComponents(int numberOfPrincipleComponents) {

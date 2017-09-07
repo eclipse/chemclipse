@@ -13,20 +13,23 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 
 import java.net.URL;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData.Centering;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData.Normalization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData.Transformation;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData.Centering;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData.Scaling;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData.Transformation;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -34,20 +37,21 @@ import org.eclipse.swt.widgets.TableItem;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-public class NormalizationDataTables {
+public class ScalingDataTables {
 
 	private final int COLUMNS_WIDTH = 500;
-	private PcaNormalizationData pcaNormalizationData;
+	private Button enableScaling;
+	private PcaScalingData pcaScalingData;
 	private Table tableCentering;
 	private Table tableScaling;
 	private Table tableTransformation;
 
-	public NormalizationDataTables(Composite composite, Object layoutData) {
-		this(composite, layoutData, new PcaNormalizationData());
+	public ScalingDataTables(Composite composite, Object layoutData) {
+		this(composite, layoutData, new PcaScalingData(false));
 	}
 
-	public NormalizationDataTables(Composite composite, Object layoutData, PcaNormalizationData pcaNormalizationData) {
-		this.pcaNormalizationData = pcaNormalizationData;
+	public ScalingDataTables(Composite composite, Object layoutData, PcaScalingData pcaNormalizationData) {
+		this.pcaScalingData = pcaNormalizationData;
 		initialize(composite, layoutData);
 	}
 
@@ -65,34 +69,26 @@ public class NormalizationDataTables {
 		return table;
 	}
 
-	private void createColumnsDataNormalization(Table table, Normalization selectedNormalization) {
+	private void createColumnsDataNormalization(Table table, Scaling selectedNormalization) {
 
 		table.clearAll();
 		table.removeAll();
 		String[] description = new String[]{};
-		setTableRow(table, "Only Transformation or \n without transformation,\n if transformation is set as \n\"Without transformation\" ", "norm_trans.jpg", //
-				description, Normalization.TRANSFORMING, Normalization.TRANSFORMING.equals(selectedNormalization));
-		description = new String[]{};
-		setTableRow(table, "Only Centering", "norm_center.jpg", //
-				description, Normalization.CENTERING, Normalization.CENTERING.equals(selectedNormalization));
 		description = new String[]{};
 		setTableRow(table, "Autoscaling", "norm_scal_auto.jpg", //
-				description, Normalization.SCALING_AUTO, Normalization.SCALING_AUTO.equals(selectedNormalization));
+				description, Scaling.SCALING_AUTO, Scaling.SCALING_AUTO.equals(selectedNormalization));
 		description = new String[]{};
 		setTableRow(table, "Range scaling", "norm_scal_range.jpg", //
-				description, Normalization.SCALING_RANGE, Normalization.SCALING_RANGE.equals(selectedNormalization));
+				description, Scaling.SCALING_RANGE, Scaling.SCALING_RANGE.equals(selectedNormalization));
 		description = new String[]{};
 		setTableRow(table, "Pareto scaling", "norm_scal_pareto.jpg", //
-				description, Normalization.SCALING_PARETO, Normalization.SCALING_PARETO.equals(selectedNormalization));
+				description, Scaling.SCALING_PARETO, Scaling.SCALING_PARETO.equals(selectedNormalization));
 		description = new String[]{};
 		setTableRow(table, "Vast scaling", "norm_scal_vast.jpg", //
-				description, Normalization.SCALING_VAST, Normalization.SCALING_VAST.equals(selectedNormalization));
+				description, Scaling.SCALING_VAST, Scaling.SCALING_VAST.equals(selectedNormalization));
 		description = new String[]{};
 		setTableRow(table, "Level scaling", "norm_scal_level.jpg", //
-				description, Normalization.SCALING_LEVEL, Normalization.SCALING_LEVEL.equals(selectedNormalization));
-		description = new String[]{};
-		setTableRow(table, "Maximum scaling", "norm_scal_max.jpg", //
-				description, Normalization.SCALING_MAXIMUM, Normalization.SCALING_MAXIMUM.equals(selectedNormalization));
+				description, Scaling.SCALING_LEVEL, Scaling.SCALING_LEVEL.equals(selectedNormalization));
 		table.getColumn(0).setWidth(COLUMNS_WIDTH);
 	}
 
@@ -113,32 +109,63 @@ public class NormalizationDataTables {
 		return table;
 	}
 
-	public PcaNormalizationData getPcaNormalizationData() {
+	public PcaScalingData getPcaScalingData() {
 
-		return pcaNormalizationData;
+		return pcaScalingData;
 	}
 
 	void initialize(Composite parent, Object layoutData) {
 
-		ScrolledComposite sc = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
-		sc.setLayoutData(layoutData);
-		Composite comoposite = new Composite(sc, SWT.NONE);
+		Group group = new Group(parent, SWT.None);
+		group.setText("Scaling");
+		group.setLayout(new FillLayout());
+		group.setLayoutData(layoutData);
+		ScrolledComposite scrolledComposite = new ScrolledComposite(group, SWT.H_SCROLL | SWT.V_SCROLL);
+		Composite comoposite = new Composite(scrolledComposite, SWT.NONE);
 		comoposite.setLayout(new GridLayout(1, true));
+		enableScaling = new Button(comoposite, SWT.CHECK);
+		enableScaling.setText("Scaling data");
+		enableScaling.addListener(SWT.Selection, e -> {
+			boolean selection = ((Button)e.widget).getSelection();
+			pcaScalingData.setEnableModificationData(selection);
+			setEnableTable(selection);
+		});
+		enableScaling.setSelection(pcaScalingData.isEnableModificationData());
 		tableTransformation = tableDataTransformation(comoposite);
 		tableTransformation.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		tableCentering = tableDataCentering(comoposite);
 		tableCentering.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		tableScaling = tableDataNormalization(comoposite);
 		tableScaling.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		sc.setContent(comoposite);
-		sc.setExpandHorizontal(true);
-		sc.setExpandVertical(true);
-		sc.setMinSize(comoposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		scrolledComposite.setContent(comoposite);
+		scrolledComposite.setExpandHorizontal(true);
+		scrolledComposite.setExpandVertical(true);
+		scrolledComposite.setMinSize(comoposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		setEnableTable(pcaScalingData.isEnableModificationData());
 	}
 
-	public void setPcaNormalizationData(PcaNormalizationData pcaNormalizationData) {
+	public void setEnable(boolean enabled) {
 
-		this.pcaNormalizationData = pcaNormalizationData;
+		setEnableTable(enabled);
+		enableScaling.setEnabled(enabled);
+	}
+
+	private void setEnableTable(boolean enabled) {
+
+		if(enableScaling.getSelection()) {
+			tableCentering.setEnabled(enabled);
+			tableScaling.setEnabled(enabled);
+			tableTransformation.setEnabled(enabled);
+		} else {
+			tableCentering.setEnabled(false);
+			tableScaling.setEnabled(false);
+			tableTransformation.setEnabled(false);
+		}
+	}
+
+	public void setPcaNormalizationData(PcaScalingData pcaScalingData) {
+
+		this.pcaScalingData = pcaScalingData;
 	}
 
 	private TableItem setTableRow(Table table, String name, String mathFormula, String[] description, Object data, boolean isSelected) {
@@ -171,7 +198,7 @@ public class NormalizationDataTables {
 			TableColumn column = new TableColumn(table, SWT.NONE);
 			column.setText(titles[i]);
 		}
-		createColumnCentering(table, pcaNormalizationData.getCentering());
+		createColumnCentering(table, pcaScalingData.getCentering());
 		table.addListener(SWT.Selection, new Listener() {
 
 			@Override
@@ -185,7 +212,7 @@ public class NormalizationDataTables {
 				}
 				TableItem item = (TableItem)event.item;
 				item.setChecked(true);
-				pcaNormalizationData.setCentering((Centering)item.getData());
+				pcaScalingData.setCentering((Centering)item.getData());
 			}
 		});
 		return table;
@@ -201,7 +228,7 @@ public class NormalizationDataTables {
 			TableColumn column = new TableColumn(table, SWT.NONE);
 			column.setText(titles[i]);
 		}
-		createColumnsDataNormalization(table, pcaNormalizationData.getNorlamalizationType());
+		createColumnsDataNormalization(table, pcaScalingData.getScalingType());
 		table.addListener(SWT.Selection, new Listener() {
 
 			@Override
@@ -215,7 +242,7 @@ public class NormalizationDataTables {
 				}
 				TableItem item = (TableItem)event.item;
 				item.setChecked(true);
-				pcaNormalizationData.setNormalizationType((Normalization)item.getData());
+				pcaScalingData.setScalingType((Scaling)item.getData());
 			}
 		});
 		return table;
@@ -231,7 +258,7 @@ public class NormalizationDataTables {
 			TableColumn column = new TableColumn(table, SWT.NONE);
 			column.setText(titles[i]);
 		}
-		createColumnsDataTransformation(table, pcaNormalizationData.getTransformationType());
+		createColumnsDataTransformation(table, pcaScalingData.getTransformationType());
 		table.addListener(SWT.Selection, new Listener() {
 
 			@Override
@@ -245,7 +272,7 @@ public class NormalizationDataTables {
 				}
 				TableItem item = (TableItem)event.item;
 				item.setChecked(true);
-				pcaNormalizationData.setTransformationType((Transformation)item.getData());
+				pcaScalingData.setTransformationType((Transformation)item.getData());
 			}
 		});
 		return table;
@@ -253,8 +280,11 @@ public class NormalizationDataTables {
 
 	public void update() {
 
-		createColumnCentering(tableCentering, pcaNormalizationData.getCentering());
-		createColumnsDataNormalization(tableScaling, pcaNormalizationData.getNorlamalizationType());
-		createColumnsDataTransformation(tableTransformation, pcaNormalizationData.getTransformationType());
+		boolean modificationData = pcaScalingData.isEnableModificationData();
+		enableScaling.setSelection(modificationData);
+		setEnableTable(modificationData);
+		createColumnCentering(tableCentering, pcaScalingData.getCentering());
+		createColumnsDataNormalization(tableScaling, pcaScalingData.getScalingType());
+		createColumnsDataTransformation(tableTransformation, pcaScalingData.getTransformationType());
 	}
 }

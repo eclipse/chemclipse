@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
 import java.util.Optional;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.NormalizationDataTables;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.ScalingDataTables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
@@ -22,19 +22,19 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-public class NormalizationPage {
+public class ModificationPage {
 
 	private Composite composite;
-	private NormalizationDataTables normalizationDataTables;
 	//
 	private PcaEditor pcaEditor;
+	private Button scalingData;
+	private ScalingDataTables scalingDataTables;
 
-	public NormalizationPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
+	public ModificationPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
 		this.pcaEditor = pcaEditor;
 		initialize(tabFolder, formToolkit);
@@ -46,10 +46,11 @@ public class NormalizationPage {
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayoutData(new GridData(SWT.CENTER, SWT.BEGINNING, false, true));
 		composite.setLayout(new FillLayout(SWT.VERTICAL));
-		Button button = new Button(composite, SWT.PUSH);
-		button.setText("Normalize data");
-		button.addListener(SWT.Selection, e -> {
-			pcaEditor.reNormalizationData();
+		scalingData = new Button(composite, SWT.PUSH);
+		scalingData.setText("Scaling Data");
+		scalingData.addListener(SWT.Selection, e -> {
+			pcaEditor.reModifyData();
+			;
 		});
 	}
 
@@ -62,24 +63,24 @@ public class NormalizationPage {
 		Composite compositeNormalizationTables = new Composite(scrollNormalizationTables, SWT.NONE);
 		scrollNormalizationTables.setContent(compositeNormalizationTables);
 		compositeNormalizationTables.setLayout(new FillLayout());
-		normalizationDataTables = new NormalizationDataTables(compositeNormalizationTables, null);
+		scalingDataTables = new ScalingDataTables(compositeNormalizationTables, null);
 	}
 
 	private void disableAll() {
 
-		setEnable(composite, false);
+		setEnable(false);
 	}
 
 	private void enableAll() {
 
-		setEnable(composite, true);
+		setEnable(true);
 	}
 
 	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
 
 		//
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Data Normalization");
+		tabItem.setText("Data Modification");
 		//
 		composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new FillLayout());
@@ -91,24 +92,19 @@ public class NormalizationPage {
 		tabItem.setControl(composite);
 	}
 
-	private void setEnable(Composite parent, boolean enable) {
+	private void setEnable(boolean enabled) {
 
-		for(Control control : parent.getChildren()) {
-			if(control instanceof Composite) {
-				Composite composite = (Composite)control;
-				setEnable(composite, enable);
-			}
-			control.setEnabled(enable);
-		}
+		scalingDataTables.setEnable(enabled);
+		scalingData.setEnabled(enabled);
 	}
 
 	public void update() {
 
-		Optional<PcaNormalizationData> normalizationData = pcaEditor.getPcaNormalizationData();
+		Optional<PcaScalingData> normalizationData = pcaEditor.getPcaScalingData();
 		if(normalizationData.isPresent()) {
 			enableAll();
-			normalizationDataTables.setPcaNormalizationData(normalizationData.get());
-			normalizationDataTables.update();
+			scalingDataTables.setPcaNormalizationData(normalizationData.get());
+			scalingDataTables.update();
 		} else {
 			disableAll();
 		}

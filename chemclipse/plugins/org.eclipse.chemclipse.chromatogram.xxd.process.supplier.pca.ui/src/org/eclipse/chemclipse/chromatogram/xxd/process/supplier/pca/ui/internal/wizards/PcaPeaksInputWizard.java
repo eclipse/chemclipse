@@ -16,7 +16,7 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionPeaks;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.jface.wizard.Wizard;
 
@@ -25,14 +25,14 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 	private DataInputFromPeakFilesPageWizard dataInputFromPeakFilesPage;
 	private FiltrationDataWizardPage filtrationDataPage;
 	private MainPropertiesPeaksInputWizardPage mainPropertiesPage;
-	private NormalizationDataWizardPage normalizationDataPage;
+	private ModificationDataWizardPage modificationDataWizardPage;
 	private PcaExtractionPeaks pcaExtractionData;
 
 	public PcaPeaksInputWizard() {
 		super();
 		mainPropertiesPage = new MainPropertiesPeaksInputWizardPage("MainProperites");
 		dataInputFromPeakFilesPage = new DataInputFromPeakFilesPageWizard("DataInputFiles");
-		normalizationDataPage = new NormalizationDataWizardPage("NormalizationData");
+		modificationDataWizardPage = new ModificationDataWizardPage("NormalizationData");
 		filtrationDataPage = new FiltrationDataWizardPage("FiltrationData");
 	}
 
@@ -41,7 +41,7 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 
 		addPage(mainPropertiesPage);
 		addPage(dataInputFromPeakFilesPage);
-		addPage(normalizationDataPage);
+		addPage(modificationDataWizardPage);
 		addPage(filtrationDataPage);
 	}
 
@@ -64,9 +64,9 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 	}
 
 	@Override
-	public PcaNormalizationData getPcaNormalizationData() {
+	public PcaScalingData getPcaScalingData() {
 
-		return normalizationDataPage.getPcaNormalizationData();
+		return modificationDataWizardPage.getPcaScalingData();
 	}
 
 	@Override

@@ -17,7 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaEvaluation;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaNormalizationData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -27,14 +27,13 @@ public class PcaInputRunnable implements IRunnableWithProgress {
 	private int numberOfPrincipleComponents;
 	private IDataExtraction pcaExtractionData;
 	private PcaFiltrationData pcaFiltrationData;
-	private PcaNormalizationData pcaNormalizationData;
 	private IPcaResults pcaResults;
+	private PcaScalingData pcaScalingData;
 
-	public PcaInputRunnable(IDataExtraction pcaExtractionData, PcaFiltrationData pcaFiltrationData, PcaNormalizationData pcaNormalizationData, int numberOfPrincipleComponents) {
+	public PcaInputRunnable(IDataExtraction pcaExtractionData, PcaFiltrationData pcaFiltrationData, PcaScalingData pcaScalingData, int numberOfPrincipleComponents) {
 		this.pcaExtractionData = pcaExtractionData;
 		this.pcaFiltrationData = pcaFiltrationData;
-		this.pcaNormalizationData = pcaNormalizationData;
-		this.pcaNormalizationData = pcaNormalizationData;
+		this.pcaScalingData = pcaScalingData;
 		this.numberOfPrincipleComponents = numberOfPrincipleComponents;
 	}
 
@@ -47,7 +46,7 @@ public class PcaInputRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		pcaResults = pcaExtractionData.process(monitor);
-		pcaNormalizationData.process(pcaResults, monitor);
+		pcaScalingData.process(pcaResults, monitor);
 		pcaFiltrationData.process(pcaResults, true, monitor);
 		PcaEvaluation pcaEvaluation = new PcaEvaluation();
 		pcaEvaluation.process(pcaResults, numberOfPrincipleComponents, monitor);
