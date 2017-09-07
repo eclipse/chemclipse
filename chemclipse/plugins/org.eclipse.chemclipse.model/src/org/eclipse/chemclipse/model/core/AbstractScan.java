@@ -17,7 +17,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.Platform;
 
-public abstract class AbstractScan implements IScan {
+public abstract class AbstractScan extends AbstractSignal implements IScan {
 
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or
@@ -67,6 +67,18 @@ public abstract class AbstractScan implements IScan {
 		this.cycleNumber = templateScan.getCycleNumber();
 		this.identifier = templateScan.getIdentifier();
 		this.isDirty = templateScan.isDirty();
+	}
+
+	@Override
+	public double getX() {
+
+		return retentionTime;
+	}
+
+	@Override
+	public double getY() {
+
+		return getTotalSignal();
 	}
 
 	@Override
@@ -263,7 +275,6 @@ public abstract class AbstractScan implements IScan {
 		}
 	}
 
-	// -----------------------------IAdaptable
 	@Override
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Object getAdapter(Class adapter) {
@@ -271,7 +282,6 @@ public abstract class AbstractScan implements IScan {
 		return Platform.getAdapterManager().getAdapter(this, adapter);
 	}
 
-	// -----------------------------equals, hashCode, toString
 	@Override
 	public boolean equals(Object otherObject) {
 

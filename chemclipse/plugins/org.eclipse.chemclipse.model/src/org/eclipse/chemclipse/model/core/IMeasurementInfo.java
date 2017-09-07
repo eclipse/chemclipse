@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.model.core;
 import java.util.Date;
 import java.util.Map;
 
-public interface IChromatogramInfo {
+public interface IMeasurementInfo {
 
 	/**
 	 * Returns the operator.

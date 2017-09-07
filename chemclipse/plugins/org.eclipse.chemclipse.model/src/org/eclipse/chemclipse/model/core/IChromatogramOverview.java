@@ -21,7 +21,7 @@ import java.io.File;
  * 
  * @author eselmeister
  */
-public interface IChromatogramOverview extends IChromatogramInfo {
+public interface IChromatogramOverview extends IMeasurementInfo {
 
 	double MINUTE_CORRELATION_FACTOR = 60000.0d; // 1ms * 1000 = 1s; 1s * 60 = 1min
 

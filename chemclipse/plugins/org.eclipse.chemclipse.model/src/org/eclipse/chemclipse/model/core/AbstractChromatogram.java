@@ -52,7 +52,7 @@ import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SafeRunner;
 
-public abstract class AbstractChromatogram implements IChromatogram {
+public abstract class AbstractChromatogram extends AbstractMeasurement implements IChromatogram {
 
 	private static final Logger logger = Logger.getLogger(AbstractChromatogram.class);
 	//
