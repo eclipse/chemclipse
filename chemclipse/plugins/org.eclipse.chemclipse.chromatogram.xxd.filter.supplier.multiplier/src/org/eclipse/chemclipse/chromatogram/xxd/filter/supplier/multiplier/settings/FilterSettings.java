@@ -13,8 +13,13 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.setti
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 public class FilterSettings extends AbstractChromatogramFilterSettings implements IFilterSettings {
 
+	@JsonProperty(value = "Multiplier", defaultValue = "10")
+	@JsonPropertyDescription(value = "The factor to multiply the signals.")
 	private float multiplier;
 
 	@Override
