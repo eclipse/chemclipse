@@ -11,11 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers;
 
-import javax.inject.Inject;
+
 import javax.inject.Named;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
@@ -28,19 +30,11 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 
 public class CreatePcaEvaluation {
 
-	@Inject
-	private MApplication application;
-	@Inject
-	private EModelService modelService;
-	@Inject
-	private EPartService partService;
+	public static void createPart(ISamples samples) {
 
-	@Execute
-	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
-
-		/*
-		 * Get the editor part stack.
-		 */
+		MApplication application = ModelSupportAddon.getApplication();
+		EModelService modelService = ModelSupportAddon.getModelService();
+		EPartService partService = ModelSupportAddon.getPartService();
 		MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
 		/*
 		 * Create the input part and prepare it.
@@ -52,10 +46,17 @@ public class CreatePcaEvaluation {
 		inputPart.setIconURI(PcaEditor.ICON_URI);
 		inputPart.setTooltip(PcaEditor.TOOLTIP);
 		inputPart.setCloseable(true);
+		inputPart.setObject(samples);
 		/*
 		 * Add it to the stack and show it.
 		 */
 		partStack.getChildren().add(inputPart);
 		partService.showPart(inputPart, PartState.ACTIVATE);
+	}
+
+	@Execute
+	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
+
+		createPart(null);
 	}
 }

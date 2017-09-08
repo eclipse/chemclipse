@@ -49,8 +49,7 @@ public class ModificationPage {
 		scalingData = new Button(composite, SWT.PUSH);
 		scalingData.setText("Scaling Data");
 		scalingData.addListener(SWT.Selection, e -> {
-			pcaEditor.reModifyData();
-			;
+			pcaEditor.modifyData();
 		});
 	}
 

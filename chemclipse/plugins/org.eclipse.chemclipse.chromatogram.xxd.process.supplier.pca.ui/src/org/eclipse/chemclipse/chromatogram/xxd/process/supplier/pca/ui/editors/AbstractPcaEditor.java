@@ -76,6 +76,18 @@ public abstract class AbstractPcaEditor {
 
 		return samples;
 	}
+	
+	protected void evaluateSamples(ISamples samples) throws InvocationTargetException, InterruptedException{
+		
+		
+		int numberOfPrincComp = numberOfPrincipleComponents.get();
+		ReEvaluateRunnable runnable = new ReEvaluateRunnable(samples, numberOfPrincComp);
+		ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		monitor.run(true, false, runnable);
+		this.evaluateSamples(samples);
+		this.pcaResults = Optional.of(runnable.getPcaResults());
+		
+	}
 
 	private int openWizardPcaInput(IPcaInputWizard wizard) throws InvocationTargetException, InterruptedException {
 
@@ -133,7 +145,7 @@ public abstract class AbstractPcaEditor {
 		pcaFiltrationData.get().process(samples.get(), true, new NullProgressMonitor());
 	}
 
-	protected void reModifyData() {
+	protected void modifyData() {
 
 		IDataModification.resetData(samples.get());
 		pcaScalingData.get().process(samples.get(), new NullProgressMonitor());

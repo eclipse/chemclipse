@@ -24,6 +24,7 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ResultExport;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.SamplesSelectionDialog;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
@@ -92,6 +93,29 @@ public class PcaEditor extends AbstractPcaEditor {
 	private void createControl(Composite parent) {
 
 		createPages(parent);
+		Object object = part.getObject();
+		if(object instanceof ISamples) {
+			ISamples samples = (ISamples)object;
+			try {
+				evaluateSamples(samples);
+				updateResults();
+				showScorePlotPage();
+				dirtyable.setDirty(true);
+			} catch(InvocationTargetException e) {
+				logger.warn(e);
+				logger.warn(e.getCause());
+			} catch(InterruptedException e) {
+				logger.warn(e);
+			}
+		}
+		
+	}
+	
+	
+	@Override
+	protected void evaluateSamples(ISamples samples) throws InvocationTargetException, InterruptedException {
+	
+		super.evaluateSamples(samples);
 	}
 
 	private void createPages(Composite parent) {
@@ -212,9 +236,9 @@ public class PcaEditor extends AbstractPcaEditor {
 	}
 
 	@Override
-	public void reModifyData() {
+	public void modifyData() {
 
-		super.reModifyData();
+		super.modifyData();
 		updateSamples();
 	}
 
