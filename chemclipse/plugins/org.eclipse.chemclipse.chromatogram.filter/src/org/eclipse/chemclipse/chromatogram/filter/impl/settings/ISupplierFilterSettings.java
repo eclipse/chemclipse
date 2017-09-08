@@ -15,11 +15,11 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSe
 
 public interface ISupplierFilterSettings extends IChromatogramFilterSettings {
 
-	int getStartRetentionTime();
+	double getStartRetentionTimeMinutes();
 
-	void setStartRetentionTime(int startRetentionTime);
+	void setStartRetentionTimeMinutes(double startRetentionTimeMinutes);
 
-	int getStopRetentionTime();
+	double getStopRetentionTimeMinutes();
 
-	void setStopRetentionTime(int stopRetentionTime);
+	void setStopRetentionTimeMinutes(double stopRetentionTimeMinutes);
 }

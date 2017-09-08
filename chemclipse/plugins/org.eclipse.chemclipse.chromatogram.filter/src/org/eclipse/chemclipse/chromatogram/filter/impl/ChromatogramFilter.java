@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResul
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
+import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -42,8 +43,8 @@ public class ChromatogramFilter extends AbstractChromatogramFilter implements IC
 			supplierFilterSettings = PreferenceSupplier.getSupplierFilterSettings();
 		}
 		//
-		chromatogramSelection.setStartRetentionTime(supplierFilterSettings.getStartRetentionTime());
-		chromatogramSelection.setStopRetentionTime(supplierFilterSettings.getStopRetentionTime());
+		chromatogramSelection.setStartRetentionTime((int)(supplierFilterSettings.getStartRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+		chromatogramSelection.setStopRetentionTime((int)(supplierFilterSettings.getStopRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
 		IChromatogramFilterResult chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "Chromatogram Selection applied");
 		processingInfo.setChromatogramFilterResult(chromatogramFilterResult);
 		return processingInfo;

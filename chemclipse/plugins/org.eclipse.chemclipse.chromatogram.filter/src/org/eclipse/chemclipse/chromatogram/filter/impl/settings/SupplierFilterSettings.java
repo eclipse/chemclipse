@@ -18,34 +18,34 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
 
-	@JsonProperty(value = "Start RT", defaultValue = "0")
-	@JsonPropertyDescription(value = "Start Retention Time (Milliseconds)")
-	private int startRetentionTime;
-	@JsonProperty(value = "Stop RT", defaultValue = "0")
-	@JsonPropertyDescription(value = "Stop Retention Time (Milliseconds)")
-	private int stopRetentionTime;
+	@JsonProperty(value = "Start RT (Minutes)", defaultValue = "1")
+	@JsonPropertyDescription(value = "Start Retention Time (Minutes)")
+	private double startRetentionTimeMinutes;
+	@JsonProperty(value = "Stop RT (Minutes)", defaultValue = "10")
+	@JsonPropertyDescription(value = "Stop Retention Time (Minutes)")
+	private double stopRetentionTimeMinutes;
 
 	@Override
-	public int getStartRetentionTime() {
+	public double getStartRetentionTimeMinutes() {
 
-		return startRetentionTime;
+		return startRetentionTimeMinutes;
 	}
 
 	@Override
-	public void setStartRetentionTime(int startRetentionTime) {
+	public void setStartRetentionTimeMinutes(double startRetentionTimeMinutes) {
 
-		this.startRetentionTime = startRetentionTime;
+		this.startRetentionTimeMinutes = startRetentionTimeMinutes;
 	}
 
 	@Override
-	public int getStopRetentionTime() {
+	public double getStopRetentionTimeMinutes() {
 
-		return stopRetentionTime;
+		return stopRetentionTimeMinutes;
 	}
 
 	@Override
-	public void setStopRetentionTime(int stopRetentionTime) {
+	public void setStopRetentionTimeMinutes(double stopRetentionTimeMinutes) {
 
-		this.stopRetentionTime = stopRetentionTime;
+		this.stopRetentionTimeMinutes = stopRetentionTimeMinutes;
 	}
 }

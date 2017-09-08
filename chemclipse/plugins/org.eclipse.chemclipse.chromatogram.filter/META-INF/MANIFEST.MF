@@ -15,6 +15,9 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.chromatogram.filter.core.chromatogram,
  org.eclipse.chemclipse.chromatogram.filter.exceptions,
+ org.eclipse.chemclipse.chromatogram.filter.impl,
+ org.eclipse.chemclipse.chromatogram.filter.impl.preferences,
+ org.eclipse.chemclipse.chromatogram.filter.impl.settings,
  org.eclipse.chemclipse.chromatogram.filter.processing,
  org.eclipse.chemclipse.chromatogram.filter.result,
  org.eclipse.chemclipse.chromatogram.filter.settings

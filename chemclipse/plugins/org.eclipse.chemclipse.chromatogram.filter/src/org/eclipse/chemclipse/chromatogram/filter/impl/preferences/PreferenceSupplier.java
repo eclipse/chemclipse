@@ -24,10 +24,13 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	public static final String P_START_RETENTION_TIME = "startRetentionTime";
-	public static final int DEF_START_RETENTION_TIME = 1;
-	public static final String P_STOP_RETENTION_TIME = "stopRetentionTime";
-	public static final int DEF_STOP_RETENTION_TIME = 1;
+	public static final double MIN_RETENTION_TIME_MINUTES = 0.0d;
+	public static final double MAX_RETENTION_TIME_MINUTES = Double.MAX_VALUE;
+	//
+	public static final String P_START_RETENTION_TIME_MINUTES = "startRetentionTimeMinutes";
+	public static final double DEF_START_RETENTION_TIME_MINUTES = 1;
+	public static final String P_STOP_RETENTION_TIME_MINUTES = "stopRetentionTimeMinutes";
+	public static final double DEF_STOP_RETENTION_TIME_MINUTES = 10;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -55,8 +58,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_START_RETENTION_TIME, Integer.toString(DEF_START_RETENTION_TIME));
-		defaultValues.put(P_STOP_RETENTION_TIME, Integer.toString(DEF_STOP_RETENTION_TIME));
+		defaultValues.put(P_START_RETENTION_TIME_MINUTES, Double.toString(DEF_START_RETENTION_TIME_MINUTES));
+		defaultValues.put(P_STOP_RETENTION_TIME_MINUTES, Double.toString(DEF_STOP_RETENTION_TIME_MINUTES));
 		return defaultValues;
 	}
 
@@ -70,8 +73,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ISupplierFilterSettings filterSettings = new SupplierFilterSettings();
-		filterSettings.setStartRetentionTime(preferences.getInt(P_START_RETENTION_TIME, DEF_START_RETENTION_TIME));
-		filterSettings.setStartRetentionTime(preferences.getInt(P_STOP_RETENTION_TIME, DEF_STOP_RETENTION_TIME));
+		filterSettings.setStartRetentionTimeMinutes(preferences.getDouble(P_START_RETENTION_TIME_MINUTES, DEF_START_RETENTION_TIME_MINUTES));
+		filterSettings.setStartRetentionTimeMinutes(preferences.getDouble(P_STOP_RETENTION_TIME_MINUTES, DEF_STOP_RETENTION_TIME_MINUTES));
 		return filterSettings;
 	}
 }

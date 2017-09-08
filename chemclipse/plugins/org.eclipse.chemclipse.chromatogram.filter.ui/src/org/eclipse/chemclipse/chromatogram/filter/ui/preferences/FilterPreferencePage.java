@@ -11,11 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.filter.ui.preferences;
 
+import org.eclipse.chemclipse.chromatogram.filter.impl.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.filter.ui.Activator;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-
-import org.eclipse.chemclipse.chromatogram.filter.ui.Activator;
 
 public class FilterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -32,6 +34,9 @@ public class FilterPreferencePage extends FieldEditorPreferencePage implements I
 	 */
 	public void createFieldEditors() {
 
+		addField(new LabelFieldEditor("Chromatogram Selection Filter", getFieldEditorParent()));
+		addField(new DoubleFieldEditor(PreferenceSupplier.P_START_RETENTION_TIME_MINUTES, "Start Retention Time (Minutes)", PreferenceSupplier.MIN_RETENTION_TIME_MINUTES, PreferenceSupplier.MAX_RETENTION_TIME_MINUTES, getFieldEditorParent()));
+		addField(new DoubleFieldEditor(PreferenceSupplier.P_STOP_RETENTION_TIME_MINUTES, "Stop Retention Time (Minutes)", PreferenceSupplier.MIN_RETENTION_TIME_MINUTES, PreferenceSupplier.MAX_RETENTION_TIME_MINUTES, getFieldEditorParent()));
 	}
 
 	/*
