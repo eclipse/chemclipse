@@ -108,14 +108,6 @@ public class PcaEditor extends AbstractPcaEditor {
 				logger.warn(e);
 			}
 		}
-		
-	}
-	
-	
-	@Override
-	protected void evaluateSamples(ISamples samples) throws InvocationTargetException, InterruptedException {
-	
-		super.evaluateSamples(samples);
 	}
 
 	private void createPages(Composite parent) {
@@ -132,6 +124,19 @@ public class PcaEditor extends AbstractPcaEditor {
 		pages.add(errorResiduePage = new ErrorResiduePage(this, tabFolder, formToolkit));
 		pages.add(scorePlot3dPage = new ScorePlot3dPage(this, tabFolder, formToolkit));
 		pages.add(loadingPlotPage = new LoadingPlotPage(this, tabFolder, formToolkit));
+	}
+
+	@Override
+	protected void evaluateSamples(ISamples samples) throws InvocationTargetException, InterruptedException {
+
+		super.evaluateSamples(samples);
+	}
+
+	@Override
+	public void modifyData() {
+
+		super.modifyData();
+		updateSamples();
 	}
 
 	public void openSamplesSelectionDialog() {
@@ -232,13 +237,6 @@ public class PcaEditor extends AbstractPcaEditor {
 	public void reFiltrationData() {
 
 		super.reFiltrationData();
-		updateSamples();
-	}
-
-	@Override
-	public void modifyData() {
-
-		super.modifyData();
 		updateSamples();
 	}
 

@@ -23,15 +23,13 @@ import java.util.List;
 public class Group implements IGroup {
 
 	private String groupName;
-	private boolean isSelected;
 	private String name;
-	private IPcaResult pcaResult;
 	private List<ISampleData> sampleData;
+	private List<ISample> samples;
 
 	public Group(List<ISample> samples) {
-		isSelected = true;
+		this.samples = samples;
 		this.name = "Group";
-		this.pcaResult = new PcaResult();
 		this.sampleData = new ArrayList<>();
 		if(!samples.isEmpty()) {
 			int countData = samples.get(0).getSampleData().size();
@@ -60,9 +58,15 @@ public class Group implements IGroup {
 	}
 
 	@Override
+	public List<ISample> getSamples() {
+
+		return samples;
+	}
+
+	@Override
 	public boolean isSelected() {
 
-		return isSelected;
+		return !samples.isEmpty();
 	}
 
 	@Override
@@ -74,6 +78,5 @@ public class Group implements IGroup {
 	@Override
 	public void setSelected(boolean selected) {
 
-		this.isSelected = selected;
 	}
 }

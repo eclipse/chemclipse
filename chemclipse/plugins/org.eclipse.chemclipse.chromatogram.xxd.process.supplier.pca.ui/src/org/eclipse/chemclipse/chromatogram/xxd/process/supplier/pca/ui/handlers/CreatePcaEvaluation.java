@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers;
 
-
 import javax.inject.Named;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;

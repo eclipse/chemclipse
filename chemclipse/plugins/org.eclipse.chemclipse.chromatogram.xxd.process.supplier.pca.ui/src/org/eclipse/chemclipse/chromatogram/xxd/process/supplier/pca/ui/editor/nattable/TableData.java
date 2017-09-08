@@ -26,7 +26,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.P
 
 public class TableData {
 
-	private List<Boolean> isSelectedRetentionTimes = new ArrayList<>();
 	private PcaEditor pcaEditor;
 	private List<String> peaksNames = new ArrayList<>();
 	private List<IRetentionTime> retentionTimes = new ArrayList<>();

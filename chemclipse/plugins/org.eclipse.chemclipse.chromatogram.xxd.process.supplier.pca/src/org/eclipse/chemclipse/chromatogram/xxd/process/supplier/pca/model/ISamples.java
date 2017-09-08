@@ -12,10 +12,28 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 
 public interface ISamples {
 
-	void createGroups();
+	default void createGroups() {
+
+		List<ISample> samples = getSampleList();
+		Set<String> groupNames = PcaUtils.getGroupNames(getSampleList(), true);
+		List<IGroup> groups = getGroupList();
+		groups.clear();
+		groupNames.forEach(groupName -> {
+			if(groupName != null) {
+				List<ISample> samplesSomeGroupName = samples.stream().filter(s -> groupName.equals(s.getGroupName()) && s.isSelected()).collect(Collectors.toList());
+				IGroup group = new Group(samplesSomeGroupName);
+				group.setGroupName(groupName);
+				groups.add(group);
+			}
+		});
+	}
 
 	List<IRetentionTime> getExtractedRetentionTimes();
 

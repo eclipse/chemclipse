@@ -30,12 +30,9 @@ public class SampleDataGroup implements ISampleData {
 	public double getData() {
 
 		double sum = 0;
-		int count = 0;
+		int count = samples.size();
 		for(ISample sample : samples) {
-			if(sample.isSelected()) {
-				sum += sample.getSampleData().get(order).getData();
-				count++;
-			}
+			sum += sample.getSampleData().get(order).getData();
 		}
 		if(count != 0) {
 			return sum / count;
@@ -48,12 +45,9 @@ public class SampleDataGroup implements ISampleData {
 	public double getModifiedData() {
 
 		double sum = 0;
-		int count = 0;
+		int count = samples.size();
 		for(ISample sample : samples) {
-			if(sample.isSelected()) {
-				sum += sample.getSampleData().get(order).getModifiedData();
-				count++;
-			}
+			sum += sample.getSampleData().get(order).getModifiedData();
 		}
 		if(count != 0) {
 			return sum / count;
@@ -71,12 +65,7 @@ public class SampleDataGroup implements ISampleData {
 	@Override
 	public boolean isEmpty() {
 
-		for(ISample sample : samples) {
-			if(sample.isSelected() && !sample.getSampleData().get(order).isEmpty()) {
-				return false;
-			}
-		}
-		return true;
+		return samples.isEmpty();
 	}
 
 	@Override

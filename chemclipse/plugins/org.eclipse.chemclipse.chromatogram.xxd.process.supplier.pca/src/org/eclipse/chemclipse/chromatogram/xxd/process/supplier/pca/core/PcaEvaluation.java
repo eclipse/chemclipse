@@ -34,9 +34,9 @@ import org.ejml.example.PrincipalComponentAnalysis;
 
 public class PcaEvaluation {
 
-	private Map<String, double[]> extractData(ISamples samples) {
+	private Map<ISample, double[]> extractData(ISamples samples) {
 
-		Map<String, double[]> selectedSamples = new HashMap<>();
+		Map<ISample, double[]> selectedSamples = new HashMap<>();
 		List<IRetentionTime> retentionTimes = samples.getExtractedRetentionTimes();
 		int numSelected = (int)retentionTimes.stream().filter(r -> r.isSelected()).count();
 		for(ISample sample : samples.getSampleList()) {
@@ -51,7 +51,7 @@ public class PcaEvaluation {
 						j++;
 					}
 				}
-				selectedSamples.put(sample.getName(), selectedSampleData);
+				selectedSamples.put(sample, selectedSampleData);
 			}
 		}
 		return selectedSamples;
@@ -70,9 +70,9 @@ public class PcaEvaluation {
 		return basisVectors;
 	}
 
-	private int getSampleSize(Map<String, double[]> extractData) {
+	private int getSampleSize(Map<ISample, double[]> extractData) {
 
-		Iterator<Map.Entry<String, double[]>> it = extractData.entrySet().iterator();
+		Iterator<Map.Entry<ISample, double[]>> it = extractData.entrySet().iterator();
 		if(it.hasNext()) {
 			return it.next().getValue().length;
 		}
@@ -88,7 +88,7 @@ public class PcaEvaluation {
 	 * @param numberOfPrincipleComponents
 	 * @return PrincipleComponentAnalysis
 	 */
-	private PrincipalComponentAnalysis initializePCA(Map<String, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipleComponents) {
+	private PrincipalComponentAnalysis initializePCA(Map<ISample, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipleComponents) {
 
 		/*
 		 * Initialize the PCA analysis.
@@ -99,7 +99,7 @@ public class PcaEvaluation {
 		/*
 		 * Add the samples.
 		 */
-		for(Map.Entry<String, double[]> entry : pcaPeakMap.entrySet()) {
+		for(Map.Entry<ISample, double[]> entry : pcaPeakMap.entrySet()) {
 			double[] sampleData = entry.getValue();
 			principleComponentAnalysis.addSample(sampleData);
 		}
@@ -114,7 +114,7 @@ public class PcaEvaluation {
 
 		monitor.subTask("Run PCA");
 		IPcaResults pcaResults = new PcaResults();
-		Map<String, double[]> extractData = extractData(samples);
+		Map<ISample, double[]> extractData = extractData(samples);
 		setRetentionTime(pcaResults, samples);
 		int sampleSize = getSampleSize(extractData);
 		PrincipalComponentAnalysis principleComponentAnalysis = initializePCA(extractData, sampleSize, numberOfPrincipleComponents);
@@ -126,20 +126,20 @@ public class PcaEvaluation {
 		return pcaResults;
 	}
 
-	private void setEigenSpaceAndErrorValues(PrincipalComponentAnalysis principleComponentAnalysis, Map<String, double[]> pcaPeakMap, IPcaResults pcaResults) {
+	private void setEigenSpaceAndErrorValues(PrincipalComponentAnalysis principleComponentAnalysis, Map<ISample, double[]> pcaPeakMap, IPcaResults pcaResults) {
 
 		/*
 		 * Set the eigen space and error membership values.
 		 */
 		List<IPcaResult> resultsList = new ArrayList<>();
-		for(Entry<String, double[]> entry : pcaPeakMap.entrySet()) {
+		for(Entry<ISample, double[]> entry : pcaPeakMap.entrySet()) {
 			double[] sampleData = entry.getValue();
 			double[] eigenSpace = null;
-			String sampleName = entry.getKey();
+			ISample sample = entry.getKey();
 			double errorMemberShip = Double.NaN;
 			IPcaResult pcaResult = new PcaResult();
-			pcaResult.setName(sampleName);
-			sampleData = pcaPeakMap.get(sampleName);
+			pcaResult.setName(sample.getName());
+			pcaResult.setGroupName(sample.getGroupName());
 			eigenSpace = principleComponentAnalysis.sampleToEigenSpace(sampleData);
 			errorMemberShip = principleComponentAnalysis.errorMembership(sampleData);
 			pcaResult.setSampleData(sampleData);
@@ -153,9 +153,13 @@ public class PcaEvaluation {
 
 	private void setGroups(IPcaResults pcaResults, ISamples samples) {
 
+		List<IPcaResult> pcaResultGroups = new ArrayList<>();
 		for(IGroup group : samples.getGroupList()) {
-			String groupName = group.getGroupName();
 			IPcaResult pcaResultGroup = new PcaResult();
+			String groupName = group.getGroupName();
+			String name = group.getName();
+			pcaResultGroup.setGroupName(groupName);
+			pcaResultGroup.setName(name);
 			List<IPcaResult> pcaResultsList = pcaResults.getPcaResultList().stream().filter(r -> groupName.equals(r.getGroupName())).collect(Collectors.toList());
 			if(!pcaResultsList.isEmpty()) {
 				int lentsampleData = pcaResultsList.get(0).getSampleData().length;
@@ -185,8 +189,9 @@ public class PcaEvaluation {
 				pcaResultGroup.setEigenSpace(null);
 				pcaResultGroup.setErrorMemberShip(Double.NaN);
 			}
-			pcaResults.getPcaResultGroupsList().add(pcaResultGroup);
+			pcaResultGroups.add(pcaResultGroup);
 		}
+		pcaResults.setPcaResultGroupsList(pcaResultGroups);
 	}
 
 	private void setRetentionTime(IPcaResults pcaResults, ISamples samples) {

@@ -23,6 +23,7 @@ public class Sample implements ISample {
 
 	public Sample(IDataInputEntry dataInputEntry) {
 		this.name = dataInputEntry.getName();
+		this.groupName = dataInputEntry.getGroupName();
 	}
 
 	public Sample(String name) {

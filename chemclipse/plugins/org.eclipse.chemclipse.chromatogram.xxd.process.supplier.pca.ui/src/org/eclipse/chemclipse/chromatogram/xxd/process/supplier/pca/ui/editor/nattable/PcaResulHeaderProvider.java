@@ -35,7 +35,7 @@ public class PcaResulHeaderProvider implements IDataProvider {
 		if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
 			return "";
 		} else if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
-			return "reten. time";
+			return "Retention Time (minutes)";
 		} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAK_NAMES) {
 			return "Compound";
 		} else {

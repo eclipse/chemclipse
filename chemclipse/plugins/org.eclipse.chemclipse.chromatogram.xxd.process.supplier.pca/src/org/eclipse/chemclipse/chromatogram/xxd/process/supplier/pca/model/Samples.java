@@ -17,11 +17,13 @@ import java.util.List;
 public class Samples extends AbstractSamples {
 
 	private List<IRetentionTime> extractedRetentionTimes;
+	private List<IGroup> groups;
 	private List<ISample> samples;
 
 	public Samples() {
 		samples = new ArrayList<>();
 		extractedRetentionTimes = new ArrayList<>();
+		groups = new ArrayList<>();
 	}
 
 	public Samples(List<IDataInputEntry> dataInputEntries) {
@@ -33,6 +35,12 @@ public class Samples extends AbstractSamples {
 	public List<IRetentionTime> getExtractedRetentionTimes() {
 
 		return extractedRetentionTimes;
+	}
+
+	@Override
+	public List<IGroup> getGroupList() {
+
+		return groups;
 	}
 
 	@Override
