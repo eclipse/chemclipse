@@ -17,31 +17,21 @@ public interface IPcaResults {
 
 	List<double[]> getBasisVectors();
 
-	List<IDataInputEntry> getDataInputEntries();
-
 	List<Integer> getExtractedRetentionTimes();
-
-	int getExtractionType();
-
-	List<IGroup> getGroupList();
 
 	int getNumberOfPrincipleComponents();
 
-	int getRetentionTimeWindow();
+	List<IPcaResult> getPcaResultGroupsList();
 
-	List<ISample> getSampleList();
-
-	List<Boolean> isSelectedRetentionTimes();
+	List<IPcaResult> getPcaResultList();
 
 	void setBasisVectors(List<double[]> basisVectors);
 
 	void setExtractedRetentionTimes(List<Integer> extractedRetentionTimes);
 
-	void setExtractionType(int extractionType);
-
 	void setNumberOfPrincipleComponents(int numberOfPrincipleComponents);
 
-	void setRetentionTimeWindow(int retentionTimeWindow);
+	void setPcaResultGroupsList(List<IPcaResult> pcaResultGroupsList);
 
-	void setSelectedRetentionTimes(List<Boolean> isSelectedReatentionTime);
+	void setPcaResultList(List<IPcaResult> pcaResultList);
 }

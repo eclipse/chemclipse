@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.n
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 
 public class PcaResulDataProvider implements IDataProvider {
@@ -38,17 +37,16 @@ public class PcaResulDataProvider implements IDataProvider {
 
 		int sortRowIndex = sortModel.getOrderRow().get(rowIndex);
 		if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
-			return tableProvider.getDataTable().isSelectedRetentionTimes().get(sortRowIndex);
+			return tableProvider.getDataTable().getRetentionTimes().get(sortRowIndex).isSelected();
 		} else if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
-			int retentionTime = tableProvider.getDataTable().getRetentionTimes().get(sortRowIndex);
-			return retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
+			return tableProvider.getDataTable().getRetentionTimes().get(sortRowIndex).getRetentionTimeMinutes();
 		} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAK_NAMES) {
 			String peaksNames = tableProvider.getDataTable().getPeaksNames().get(sortRowIndex);
 			return peaksNames;
 		} else {
 			List<ISample> samples = tableProvider.getDataTable().getSamples();
 			ISample sample = samples.get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
-			double sampleData = sample.getSampleData().get(sortRowIndex).getNormalizedData();
+			double sampleData = sample.getSampleData().get(sortRowIndex).getModifiedData();
 			return sampleData;
 		}
 	}
@@ -64,7 +62,7 @@ public class PcaResulDataProvider implements IDataProvider {
 
 		int sortRowIndex = sortModel.getOrderRow().get(rowIndex);
 		if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
-			tableProvider.getDataTable().isSelectedRetentionTimes().set(sortRowIndex, (boolean)newValue);
+			tableProvider.getDataTable().getRetentionTimes().get(sortRowIndex).setSelected((boolean)newValue);
 		}
 	}
 }

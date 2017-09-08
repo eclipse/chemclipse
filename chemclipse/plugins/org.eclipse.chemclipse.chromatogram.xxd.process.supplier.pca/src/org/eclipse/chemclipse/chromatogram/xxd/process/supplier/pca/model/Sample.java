@@ -18,15 +18,15 @@ public class Sample implements ISample {
 
 	private String groupName;
 	private String name;
-	private IPcaResult pcaResult;
-	private List<ISampleData> sampleData;
-	private boolean selected;
+	private List<ISampleData> sampleData = new ArrayList<>();;
+	private boolean selected = true;
+
+	public Sample(IDataInputEntry dataInputEntry) {
+		this.name = dataInputEntry.getName();
+	}
 
 	public Sample(String name) {
 		this.name = name;
-		this.selected = true;
-		this.pcaResult = new PcaResult();
-		this.sampleData = new ArrayList<>();
 	}
 
 	@Override
@@ -55,12 +55,6 @@ public class Sample implements ISample {
 	public String getName() {
 
 		return name;
-	}
-
-	@Override
-	public IPcaResult getPcaResult() {
-
-		return this.pcaResult;
 	}
 
 	@Override

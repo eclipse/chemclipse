@@ -11,30 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PcaResults implements IPcaResults {
 
 	private List<double[]> basisVectors;
-	private List<IDataInputEntry> dataInputEntries;
-	//
 	private List<Integer> extractedRetentionTimes;
-	private int extractionType;
-	private List<IGroup> groups;
-	private List<Boolean> isSelectedReatentionTimes;
+	//
 	private int numberOfPrincipleComponents;
-	private List<ISample> pcaResultList;
-	private int retentionTimeWindow;
+	private List<IPcaResult> pcaResultGroupsList;
+	private List<IPcaResult> pcaResultList;
 
 	public PcaResults() {
-		this(new ArrayList<IDataInputEntry>());
-	}
-
-	public PcaResults(List<IDataInputEntry> dataInputEntries) {
-		this.dataInputEntries = dataInputEntries;
-		pcaResultList = new ArrayList<ISample>();
-		groups = new ArrayList<>();
 	}
 
 	@Override
@@ -44,27 +32,9 @@ public class PcaResults implements IPcaResults {
 	}
 
 	@Override
-	public List<IDataInputEntry> getDataInputEntries() {
-
-		return dataInputEntries;
-	}
-
-	@Override
 	public List<Integer> getExtractedRetentionTimes() {
 
 		return extractedRetentionTimes;
-	}
-
-	@Override
-	public int getExtractionType() {
-
-		return extractionType;
-	}
-
-	@Override
-	public List<IGroup> getGroupList() {
-
-		return groups;
 	}
 
 	@Override
@@ -74,21 +44,15 @@ public class PcaResults implements IPcaResults {
 	}
 
 	@Override
-	public int getRetentionTimeWindow() {
+	public List<IPcaResult> getPcaResultGroupsList() {
 
-		return retentionTimeWindow;
+		return pcaResultGroupsList;
 	}
 
 	@Override
-	public List<ISample> getSampleList() {
+	public List<IPcaResult> getPcaResultList() {
 
 		return pcaResultList;
-	}
-
-	@Override
-	public List<Boolean> isSelectedRetentionTimes() {
-
-		return isSelectedReatentionTimes;
 	}
 
 	@Override
@@ -104,26 +68,20 @@ public class PcaResults implements IPcaResults {
 	}
 
 	@Override
-	public void setExtractionType(int extractionType) {
-
-		this.extractionType = extractionType;
-	}
-
-	@Override
 	public void setNumberOfPrincipleComponents(int numberOfPrincipleComponents) {
 
 		this.numberOfPrincipleComponents = numberOfPrincipleComponents;
 	}
 
 	@Override
-	public void setRetentionTimeWindow(int retentionTimeWindow) {
+	public void setPcaResultGroupsList(List<IPcaResult> pcaResultGroupsList) {
 
-		this.retentionTimeWindow = retentionTimeWindow;
+		this.pcaResultGroupsList = pcaResultGroupsList;
 	}
 
 	@Override
-	public void setSelectedRetentionTimes(List<Boolean> isSelectedReatentionTimes) {
+	public void setPcaResultList(List<IPcaResult> pcaResultList) {
 
-		this.isSelectedReatentionTimes = isSelectedReatentionTimes;
+		this.pcaResultList = pcaResultList;
 	}
 }

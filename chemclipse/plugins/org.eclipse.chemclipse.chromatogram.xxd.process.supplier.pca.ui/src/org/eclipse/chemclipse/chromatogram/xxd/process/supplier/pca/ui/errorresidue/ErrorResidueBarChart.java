@@ -22,12 +22,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.PcaColorGroup;
 import org.eclipse.swt.SWT;
@@ -67,7 +65,7 @@ public class ErrorResidueBarChart {
 	final static public int SORT_BY_ERROR_RESIDUES = 1;
 	final static public int SORT_BY_GROUP_NAME = 0;
 	final static public int SORT_BY_NAME = 2;
-	private List<ISample> data = new ArrayList<>();
+	private List<IPcaResult> data = new ArrayList<>();
 	private int displayData;
 	private FXCanvas fxCanvas;
 	private Map<String, Color> groupColor = new HashMap<>();
@@ -91,9 +89,9 @@ public class ErrorResidueBarChart {
 	/**
 	 * set color bar according to group name
 	 */
-	private String barStyle(ISample sample) {
+	private String barStyle(IPcaResult pcaResult) {
 
-		Color c = groupColor.get(sample.getGroupName());
+		Color c = groupColor.get(pcaResult.getGroupName());
 		StringBuilder sb = new StringBuilder();
 		sb.append("-fx-bar-fill: rgb(");
 		sb.append((int)(255 * c.getRed()));
@@ -347,14 +345,14 @@ public class ErrorResidueBarChart {
 
 		switch(sortType) {
 			case SORT_BY_GROUP_NAME:
-				PcaUtils.sortSampleListByErrorMemberShip(data, true);
-				PcaUtils.sortSampleListByGroup(data);
+				PcaUtils.sortPcaResultsListByErrorMemberShip(data, true);
+				PcaUtils.sortPcaResultsByGroup(data);
 				break;
 			case SORT_BY_ERROR_RESIDUES:
-				PcaUtils.sortSampleListByErrorMemberShip(data, true);
+				PcaUtils.sortPcaResultsListByErrorMemberShip(data, true);
 				break;
 			case SORT_BY_NAME:
-				PcaUtils.sortSampleListByName(data);
+				PcaUtils.sortPcaResultsByName(data);
 				break;
 			default:
 				break;
@@ -370,9 +368,12 @@ public class ErrorResidueBarChart {
 		groupColor.clear();
 		Optional<IPcaResults> pcaResults = pcaEditor.getPcaResults();
 		if(pcaResults.isPresent()) {
-			pcaResults.get().getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toCollection(() -> data));
-			pcaResults.get().getGroupList().stream().filter(s -> s.isSelected()).collect(Collectors.toCollection(() -> data));
-			groupColor = PcaColorGroup.getColorJavaFx(PcaUtils.getGroupNames(pcaResults.get().getSampleList(), false));
+			if(displayData == DISPLAY_SAMPLES) {
+				data.addAll(pcaResults.get().getPcaResultList());
+			} else {
+				data.addAll(pcaResults.get().getPcaResultGroupsList());
+			}
+			groupColor = PcaColorGroup.getColorJavaFx(PcaUtils.getGroupNames(pcaResults.get()));
 		}
 		/*
 		 * sort data
@@ -392,11 +393,8 @@ public class ErrorResidueBarChart {
 	private void updateSeries() {
 
 		series.getData().clear();
-		for(ISample sample : data) {
-			if(!sample.getPcaResult().isDisplayed()) {
-				continue;
-			}
-			if((sample instanceof IGroup) != (displayData == DISPLAY_GROUPS)) {
+		for(IPcaResult pcaResult : data) {
+			if(!pcaResult.isDisplayed()) {
 				continue;
 			}
 			String name = null;
@@ -404,12 +402,12 @@ public class ErrorResidueBarChart {
 			 * set name displayed on x-axis
 			 */
 			if(DISPLAY_GROUPS == displayData) {
-				name = sample.getGroupName();
+				name = pcaResult.getGroupName();
 			} else {
-				name = sample.getName();
+				name = pcaResult.getName();
 			}
 			final String tooltipName = name;
-			XYChart.Data<String, Number> d = new XYChart.Data<>(name, sample.getPcaResult().getErrorMemberShip());
+			XYChart.Data<String, Number> d = new XYChart.Data<>(name, pcaResult.getErrorMemberShip());
 			/*
 			 * set bar color and add tooltip
 			 */
@@ -419,14 +417,14 @@ public class ErrorResidueBarChart {
 				public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
 
 					if(node != null) {
-						node.setStyle(barStyle(sample));
+						node.setStyle(barStyle(pcaResult));
 						DecimalFormat format = new DecimalFormat("#.###E0", new DecimalFormatSymbols(Locale.US));
-						Tooltip t = new Tooltip(tooltipName + '\n' + format.format(sample.getPcaResult().getErrorMemberShip()));
+						Tooltip t = new Tooltip(tooltipName + '\n' + format.format(pcaResult.getErrorMemberShip()));
 						Tooltip.install(node, t);
 					}
 				}
 			});
-			d.setExtraValue(sample);
+			d.setExtraValue(pcaResult);
 			series.getData().add(d);
 		}
 	}

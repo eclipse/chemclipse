@@ -19,8 +19,9 @@ import java.util.Set;
 
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 
 public class CVFilter implements IFilter {
 
@@ -35,23 +36,23 @@ public class CVFilter implements IFilter {
 	}
 
 	@Override
-	public List<Boolean> filter(IPcaResults pcaResults) {
+	public List<Boolean> filter(ISamples samples) {
 
-		List<ISample> samples = pcaResults.getSampleList();
+		List<ISample> samplesList = samples.getSampleList();
 		List<Boolean> selection = new ArrayList<>();
-		List<Boolean> selectedRetentionTimes = pcaResults.isSelectedRetentionTimes();
-		for(int i = 0; i < selectedRetentionTimes.size(); i++) {
+		List<IRetentionTime> retentionTimes = samples.getExtractedRetentionTimes();
+		for(int i = 0; i < retentionTimes.size(); i++) {
 			selection.add(false);
 		}
-		Map<String, Set<ISample>> samplesByGroupNameMap = PcaUtils.getSamplesByGroupName(samples, false, onlySelected);
+		Map<String, Set<ISample>> samplesByGroupNameMap = PcaUtils.getSamplesByGroupName(samplesList, false, onlySelected);
 		Collection<Set<ISample>> samplesByGroupName = samplesByGroupNameMap.values();
 		if(!samplesByGroupName.isEmpty()) {
-			for(int i = 0; i < selectedRetentionTimes.size(); i++) {
+			for(int i = 0; i < retentionTimes.size(); i++) {
 				Collection<SummaryStatistics> categoryData = new ArrayList<>();
 				for(Set<ISample> set : samplesByGroupName) {
 					SummaryStatistics summaryStatistics = new SummaryStatistics();
 					for(ISample sample : set) {
-						double d = sample.getSampleData().get(i).getNormalizedData();
+						double d = sample.getSampleData().get(i).getModifiedData();
 						summaryStatistics.addValue(d);
 					}
 					categoryData.add(summaryStatistics);

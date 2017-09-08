@@ -13,13 +13,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
 import java.text.NumberFormat;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.TreeMap;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
@@ -27,10 +25,10 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaRe
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.PcaColorGroup;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -75,6 +73,7 @@ public class SamplesOverviewPage {
 	private int overviewTypeSelection = -1;
 	private PcaEditor pcaEditor;
 	private IPcaResults pcaResults;
+	private ISamples samples;
 	private ISample selectedSample;
 	private Label selectedSampleLable;
 	private Table tableOverview;
@@ -305,7 +304,7 @@ public class SamplesOverviewPage {
 		button.addListener(SWT.Selection, e -> tableSamples.setAllChecked(false));
 		button = new Button(buttonComposite, SWT.PUSH);
 		button.setText("Update");
-		button.addListener(SWT.Selection, e -> updateSamples());
+		button.addListener(SWT.Selection, e -> update());
 		button = new Button(buttonComposite, SWT.PUSH);
 		button.setText("Reset");
 		button.addListener(SWT.Selection, e -> resetSamples());
@@ -315,13 +314,13 @@ public class SamplesOverviewPage {
 
 	private void redrawSamplesSelectedCount() {
 
-		long selected = pcaResults.getSampleList().stream().filter(ISample::isSelected).count();
-		countSelectedSamples.setText("Selected: " + selected + " from " + pcaResults.getSampleList().size() + " samples");
+		long selected = samples.getSampleList().stream().filter(ISample::isSelected).count();
+		countSelectedSamples.setText("Selected: " + selected + " from " + samples.getSampleList().size() + " samples");
 	}
 
 	private void resetSamples() {
 
-		pcaResults.getSampleList().forEach(s -> {
+		samples.getSampleList().forEach(s -> {
 			tableSamples.setChecked(s, s.isSelected());
 			groupNames.put(s, s.getGroupName());
 		});
@@ -358,8 +357,8 @@ public class SamplesOverviewPage {
 			List<ISampleData> sampleData = selectedSample.getSampleData();
 			for(int i = 0; i < sampleData.size(); i++) {
 				TableItem tableItem = new TableItem(tableOverview, SWT.NONE);
-				tableItem.setText(0, nf.format(pcaResults.getExtractedRetentionTimes().get(i) / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
-				tableItem.setText(1, Double.toString(sampleData.get(i).getNormalizedData()));
+				tableItem.setText(0, nf.format(samples.getExtractedRetentionTimes().get(i).getRetentionTimeMinutes()));
+				tableItem.setText(1, Double.toString(sampleData.get(i).getModifiedData()));
 			}
 		}
 	}
@@ -371,14 +370,16 @@ public class SamplesOverviewPage {
 		if(updateColumns) {
 			createColumnsTableOverview(new String[]{"Principle Component", "Value"});
 		}
-		if(selectedSample != null) {
-			IPcaResult pcaResult = selectedSample.getPcaResult();
-			double[] eigenSapace = pcaResult.getEigenSpace();
-			if(eigenSapace != null) {
-				for(int i = 0; i < eigenSapace.length; i++) {
-					TableItem tableItem = new TableItem(tableOverview, SWT.NONE);
-					tableItem.setText(0, "PC " + (i + 1));
-					tableItem.setText(1, Double.toString(eigenSapace[i]));
+		if(selectedSample != null && pcaResults != null) {
+			Optional<IPcaResult> pcaResult = pcaResults.getPcaResultList().stream().filter(r -> r.getName().equals(selectedSample.getName())).findAny();
+			if(pcaResult.isPresent()) {
+				double[] eigenSapace = pcaResult.get().getEigenSpace();
+				if(eigenSapace != null) {
+					for(int i = 0; i < eigenSapace.length; i++) {
+						TableItem tableItem = new TableItem(tableOverview, SWT.NONE);
+						tableItem.setText(0, "PC " + (i + 1));
+						tableItem.setText(1, Double.toString(eigenSapace[i]));
+					}
 				}
 			}
 		}
@@ -392,21 +393,18 @@ public class SamplesOverviewPage {
 			createColumnsTableOverview(new String[]{"Retention Time at Maximum (Minutes)", "Integrator Area", "Peak Name"});
 		}
 		if(selectedSample != null) {
-			IPeaks peaks = selectedSample.getPcaResult().getPeaks();
-			if(peaks != null) {
-				Map<Integer, IPeak> sortedPeaks = new TreeMap<>();
-				peaks.getPeaks().forEach(p -> sortedPeaks.put(p.getPeakModel().getRetentionTimeAtPeakMaximum(), p));
-				Iterator<Entry<Integer, IPeak>> it = sortedPeaks.entrySet().iterator();
-				while(it.hasNext()) {
-					Map.Entry<Integer, IPeak> entry = it.next();
-					int retentionTime = entry.getKey();
-					IPeak peak = entry.getValue();
-					TableItem tableItem = new TableItem(tableOverview, SWT.NONE);
-					tableItem.setText(0, Integer.toString(retentionTime));
-					tableItem.setText(1, Double.toString(peak.getIntegratedArea()));
-					List<IPeakTarget> targets = peak.getTargets();
-					if(!targets.isEmpty()) {
-						tableItem.setText(2, targets.get(0).getLibraryInformation().getName());
+			for(int i = 0; i < selectedSample.getSampleData().size(); i++) {
+				ISampleData data = selectedSample.getSampleData().get(i);
+				Set<IPeak> peaks = data.getPeaks();
+				if(peaks != null) {
+					for(IPeak peak : peaks) {
+						TableItem tableItem = new TableItem(tableOverview, SWT.NONE);
+						tableItem.setText(0, nf.format(peak.getPeakModel().getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+						tableItem.setText(1, Double.toString(peak.getIntegratedArea()));
+						List<IPeakTarget> targets = peak.getTargets();
+						if(!targets.isEmpty()) {
+							tableItem.setText(2, targets.get(0).getLibraryInformation().getName());
+						}
 					}
 				}
 			}
@@ -424,7 +422,7 @@ public class SamplesOverviewPage {
 			List<ISampleData> sampleData = selectedSample.getSampleData();
 			for(int i = 0; i < sampleData.size(); i++) {
 				TableItem tableItem = new TableItem(tableOverview, SWT.NONE);
-				tableItem.setText(0, nf.format(pcaResults.getExtractedRetentionTimes().get(i) / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+				tableItem.setText(0, nf.format(samples.getExtractedRetentionTimes().get(i).getRetentionTimeMinutes()));
 				tableItem.setText(1, Double.toString(sampleData.get(i).getData()));
 			}
 		}
@@ -441,29 +439,17 @@ public class SamplesOverviewPage {
 		}
 	}
 
-	public void update() {
+	private void update() {
 
-		Optional<IPcaResults> pcaResults = pcaEditor.getPcaResults();
-		if(pcaResults.isPresent()) {
-			this.pcaResults = pcaResults.get();
-			List<ISample> samples = this.pcaResults.getSampleList();
-			groupNames.clear();
-			samples.forEach(s -> groupNames.put(s, s.getGroupName()));
-			PcaUtils.sortSampleListByName(samples);
-			updateColorMap();
-			tableSamples.setInput(samples);
-			updateTableSamples();
-			pcaResults.get().getSampleList().forEach(s -> tableSamples.setChecked(s, s.isSelected()));
-			redrawSamplesSelectedCount();
-			selectDataTableOverview(false);
-			tableSamples.getTable().select(0);
-			tableSamples.getTable().notifyListeners(SWT.Selection, new Event());
-			comboSelectData.select(0);
-			comboSelectData.notifyListeners(SWT.Selection, new Event());
-			setEnable(mainComposite, true);
-		} else {
-			setEnable(mainComposite, false);
+		samples.getSampleList().forEach(s -> {
+			s.setGroupName(groupNames.get(s));
+			s.setSelected(false);
+		});
+		Object[] checkedSamples = tableSamples.getCheckedElements();
+		for(Object checkedSample : checkedSamples) {
+			((ISample)checkedSample).setSelected(true);
 		}
+		pcaEditor.updataSamples();
 	}
 
 	private void updateColorMap() {
@@ -480,17 +466,42 @@ public class SamplesOverviewPage {
 		tableOverview.redraw();
 	}
 
-	private void updateSamples() {
+	public void updateResult() {
 
-		pcaResults.getSampleList().forEach(s -> {
-			s.setGroupName(groupNames.get(s));
-			s.setSelected(false);
-		});
-		Object[] checkedSamples = tableSamples.getCheckedElements();
-		for(Object checkedSample : checkedSamples) {
-			((ISample)checkedSample).setSelected(true);
+		Optional<IPcaResults> pcaResult = pcaEditor.getPcaResults();
+		if(pcaResult.isPresent()) {
+			this.pcaResults = pcaResult.get();
+			redrawSamplesSelectedCount();
+			selectDataTableOverview(true);
+			tableSamples.getTable().select(0);
+			tableSamples.getTable().notifyListeners(SWT.Selection, new Event());
+			comboSelectData.select(0);
+			comboSelectData.notifyListeners(SWT.Selection, new Event());
+			setEnable(mainComposite, true);
 		}
-		pcaEditor.updataSamples();
+	}
+
+	public void updateSamples() {
+
+		Optional<ISamples> samples = pcaEditor.getSamples();
+		if(samples.isPresent()) {
+			this.samples = samples.get();
+			List<ISample> samplesList = this.samples.getSampleList();
+			groupNames.clear();
+			samplesList.forEach(s -> groupNames.put(s, s.getGroupName()));
+			PcaUtils.sortSampleListByName(samplesList);
+			updateColorMap();
+			tableSamples.setInput(samplesList);
+			updateTableSamples();
+			samples.get().getSampleList().forEach(s -> tableSamples.setChecked(s, s.isSelected()));
+			redrawSamplesSelectedCount();
+			selectDataTableOverview(true);
+			tableSamples.getTable().select(0);
+			tableSamples.getTable().notifyListeners(SWT.Selection, new Event());
+			comboSelectData.select(1);
+			comboSelectData.notifyListeners(SWT.Selection, new Event());
+			setEnable(mainComposite, true);
+		}
 	}
 
 	private void updateTableSamples() {

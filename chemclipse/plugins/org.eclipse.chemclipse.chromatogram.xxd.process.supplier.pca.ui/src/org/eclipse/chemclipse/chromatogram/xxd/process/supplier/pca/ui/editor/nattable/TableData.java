@@ -19,8 +19,9 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
 
 public class TableData {
@@ -28,7 +29,7 @@ public class TableData {
 	private List<Boolean> isSelectedRetentionTimes = new ArrayList<>();
 	private PcaEditor pcaEditor;
 	private List<String> peaksNames = new ArrayList<>();
-	private List<Integer> retentionTimes = new ArrayList<>();
+	private List<IRetentionTime> retentionTimes = new ArrayList<>();
 	private List<ISample> samples = new ArrayList<>();
 
 	public TableData(PcaEditor pcaEditor) {
@@ -44,7 +45,7 @@ public class TableData {
 	 *
 	 * @return retention times
 	 */
-	public List<Integer> getRetentionTimes() {
+	public List<IRetentionTime> getRetentionTimes() {
 
 		return retentionTimes;
 	}
@@ -57,39 +58,33 @@ public class TableData {
 		return samples;
 	}
 
-	public List<Boolean> isSelectedRetentionTimes() {
-
-		return isSelectedRetentionTimes;
-	}
-
 	public void update() {
 
-		Optional<IPcaResults> result = pcaEditor.getPcaResults();
+		Optional<ISamples> result = pcaEditor.getSamples();
 		if(!result.isPresent()) {
 			return;
 		}
-		IPcaResults pcaResults = result.get();
+		ISamples resultSamples = result.get();
 		/*
 		 * remove old data
 		 */
-		this.samples.clear();
-		isSelectedRetentionTimes = pcaResults.isSelectedRetentionTimes();
+		samples.clear();
 		/*
 		 * copy data and insert object ISample and IGroup and sort this object by group name
 		 */
-		samples.addAll(pcaResults.getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toList()));
-		samples.addAll(pcaResults.getGroupList().stream().filter(s -> s.isSelected()).collect(Collectors.toList()));
+		samples.addAll(resultSamples.getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toList()));
+		samples.addAll(resultSamples.getGroupList().stream().filter(s -> s.isSelected()).collect(Collectors.toList()));
 		PcaUtils.sortSampleListByName(samples);
 		PcaUtils.sortSampleListByGroup(samples);
 		/*
 		 * set retention time
 		 */
-		retentionTimes = pcaResults.getExtractedRetentionTimes();
+		retentionTimes = resultSamples.getExtractedRetentionTimes();
 		/*
 		 * Set peaks names
 		 */
 		peaksNames.clear();
-		List<TreeSet<String>> names = PcaUtils.getPeaksNames(pcaResults.getSampleList(), true);
+		List<TreeSet<String>> names = PcaUtils.getPeaksNames(resultSamples.getSampleList(), true);
 		for(int i = 0; i < names.size(); i++) {
 			StringBuilder builder = new StringBuilder("");
 			TreeSet<String> set = names.get(i);

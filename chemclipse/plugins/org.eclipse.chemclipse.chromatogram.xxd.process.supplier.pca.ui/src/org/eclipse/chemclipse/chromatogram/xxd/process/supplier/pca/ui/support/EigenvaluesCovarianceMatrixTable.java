@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
@@ -40,16 +40,16 @@ public class EigenvaluesCovarianceMatrixTable {
 		}
 	}
 
-	public void update(IPcaResults pcaResults, double minProportion) {
+	public void update(ISamples samples, double minProportion) {
 
-		update(pcaResults, Integer.MAX_VALUE, minProportion);
+		update(samples, Integer.MAX_VALUE, minProportion);
 	}
 
-	public void update(IPcaResults pcaResults, int maxEigenvalues, double minProportion) {
+	public void update(ISamples samples, int maxEigenvalues, double minProportion) {
 
 		table.clearAll();
 		table.removeAll();
-		double[] eigenvalues = PcaUtils.getEigenValuesCovarianceMatrix(pcaResults);
+		double[] eigenvalues = PcaUtils.getEigenValuesCovarianceMatrix(samples);
 		double sum = Arrays.stream(eigenvalues).sum();
 		double comul = 0;
 		for(int i = 0; i < eigenvalues.length && i < maxEigenvalues; i++) {

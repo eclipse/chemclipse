@@ -19,11 +19,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.PcaColorGroup;
 
@@ -171,12 +170,12 @@ public class Chart3DData {
 		this.pcZ = pcZ;
 		Optional<IPcaResults> results = pcaEditor.getPcaResults();
 		if(results.isPresent()) {
-			List<ISample> samples = results.get().getSampleList().stream().filter(ISample::isSelected).collect(Collectors.toList());
-			if(!samples.isEmpty()) {
+			List<IPcaResult> pcaResults = results.get().getPcaResultList();
+			if(!pcaResults.isEmpty()) {
 				/*
 				 *
 				 */
-				Set<String> groupNames = PcaUtils.getGroupNames(samples, false);
+				Set<String> groupNames = PcaUtils.getGroupNames(pcaResults);
 				Map<String, Color> groupNameColore = PcaColorGroup.getColorJavaFx(groupNames);
 				Iterator<Entry<String, Color>> it = groupNameColore.entrySet().iterator();
 				groups.clear();
@@ -191,9 +190,9 @@ public class Chart3DData {
 				/*
 				 * update data
 				 */
-				for(ISample sample : samples) {
-					Color color = groupNameColore.get(sample.getGroupName());
-					data.add(new Chart3DSampleData(sample, pcX, pcY, pcZ, color));
+				for(IPcaResult pcaResul : pcaResults) {
+					Color color = groupNameColore.get(pcaResul.getGroupName());
+					data.add(new Chart3DSampleData(pcaResul, pcX, pcY, pcZ, color));
 				}
 				/*
 				 * set min and max

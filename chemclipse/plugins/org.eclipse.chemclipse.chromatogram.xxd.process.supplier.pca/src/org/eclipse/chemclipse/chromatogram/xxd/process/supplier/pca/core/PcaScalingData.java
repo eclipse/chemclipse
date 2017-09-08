@@ -16,9 +16,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaScalingData implements IDataModification {
@@ -54,23 +55,23 @@ public class PcaScalingData implements IDataModification {
 		this.enableModificationData = enableModificationData;
 	}
 
-	private void autoScaling(IPcaResults pcaResults, boolean onlySeleted) {
+	private void autoScaling(ISamples samples, boolean onlySeleted) {
 
 		// fix it
-		List<Integer> retentionTime = pcaResults.getExtractedRetentionTimes();
-		List<ISample> samples = pcaResults.getSampleList();
+		List<IRetentionTime> retentionTime = samples.getExtractedRetentionTimes();
+		List<ISample> samplesList = samples.getSampleList();
 		for(int i = 0; i < retentionTime.size(); i++) {
-			final double mean = getCenteringValue(samples, i, onlySeleted);
-			final double deviation = getStandartDeviation(samples, i, onlySeleted);
-			for(ISample sample : samples) {
+			final double mean = getCenteringValue(samplesList, i, onlySeleted);
+			final double deviation = getStandartDeviation(samplesList, i, onlySeleted);
+			for(ISample sample : samplesList) {
 				ISampleData sampleData = sample.getSampleData().get(i);
 				if(!sampleData.isEmpty() && (sample.isSelected() || !onlySeleted)) {
-					double data = sampleData.getNormalizedData();
+					double data = sampleData.getModifiedData();
 					double scaleData = 0;
 					if(deviation != 0) {
 						scaleData = (data - mean) / deviation;
 					}
-					sampleData.setNormalizedData(scaleData);
+					sampleData.setModifiedData(scaleData);
 				}
 			}
 		}
@@ -150,40 +151,40 @@ public class PcaScalingData implements IDataModification {
 		return onlySelected;
 	}
 
-	private void levelScaling(IPcaResults pcaResults, boolean onlySeleted) {
+	private void levelScaling(ISamples samples, boolean onlySeleted) {
 
-		List<Integer> retentionTime = pcaResults.getExtractedRetentionTimes();
-		List<ISample> samples = pcaResults.getSampleList();
+		List<IRetentionTime> retentionTime = samples.getExtractedRetentionTimes();
+		List<ISample> samplesList = samples.getSampleList();
 		for(int i = 0; i < retentionTime.size(); i++) {
-			final double mean = getCenteringValue(samples, i, onlySeleted);
-			final double deviation = getStandartDeviation(samples, i, onlySeleted);
-			for(ISample sample : samples) {
+			final double mean = getCenteringValue(samplesList, i, onlySeleted);
+			final double deviation = getStandartDeviation(samplesList, i, onlySeleted);
+			for(ISample sample : samplesList) {
 				ISampleData sampleData = sample.getSampleData().get(i);
 				if(!sampleData.isEmpty() && (sample.isSelected() || !onlySeleted)) {
-					double data = sampleData.getNormalizedData();
+					double data = sampleData.getModifiedData();
 					if(deviation != 0) {
 						double scaleData = (data - mean) / mean;
-						sampleData.setNormalizedData(scaleData);
+						sampleData.setModifiedData(scaleData);
 					}
 				}
 			}
 		}
 	}
 
-	private void paretoScaling(IPcaResults pcaResults, boolean onlySeleted) {
+	private void paretoScaling(ISamples samples, boolean onlySeleted) {
 
-		List<Integer> retentionTime = pcaResults.getExtractedRetentionTimes();
-		List<ISample> samples = pcaResults.getSampleList();
+		List<IRetentionTime> retentionTime = samples.getExtractedRetentionTimes();
+		List<ISample> samplesList = samples.getSampleList();
 		for(int i = 0; i < retentionTime.size(); i++) {
-			final double mean = getCenteringValue(samples, i, onlySeleted);
-			final double deviationSqrt = Math.sqrt(getStandartDeviation(samples, i, onlySeleted));
-			for(ISample sample : samples) {
+			final double mean = getCenteringValue(samplesList, i, onlySeleted);
+			final double deviationSqrt = Math.sqrt(getStandartDeviation(samplesList, i, onlySeleted));
+			for(ISample sample : samplesList) {
 				ISampleData sampleData = sample.getSampleData().get(i);
 				if(!sampleData.isEmpty() && (sample.isSelected() || !onlySeleted)) {
-					double data = sampleData.getNormalizedData();
+					double data = sampleData.getModifiedData();
 					if(deviationSqrt != 0) {
 						double scaleData = (data - mean) / deviationSqrt;
-						sampleData.setNormalizedData(scaleData);
+						sampleData.setModifiedData(scaleData);
 					}
 				}
 			}
@@ -191,44 +192,44 @@ public class PcaScalingData implements IDataModification {
 	}
 
 	@Override
-	public void process(IPcaResults pcaResults, IProgressMonitor monitor) {
+	public void process(ISamples samples, IProgressMonitor monitor) {
 
 		if(enableModificationData) {
 			switch(scalingType) {
 				case SCALING_AUTO:
-					autoScaling(pcaResults, onlySelected);
+					autoScaling(samples, onlySelected);
 					break;
 				case SCALING_LEVEL:
-					levelScaling(pcaResults, onlySelected);
+					levelScaling(samples, onlySelected);
 					break;
 				case SCALING_PARETO:
-					paretoScaling(pcaResults, onlySelected);
+					paretoScaling(samples, onlySelected);
 					break;
 				case SCALING_RANGE:
-					rangeScaling(pcaResults, onlySelected);
+					rangeScaling(samples, onlySelected);
 					break;
 				case SCALING_VAST:
-					vastscaling(pcaResults, onlySelected);
+					vastscaling(samples, onlySelected);
 					break;
 			}
 		}
 	}
 
-	private void rangeScaling(IPcaResults pcaResults, boolean onlySeleted) {
+	private void rangeScaling(ISamples samples, boolean onlySeleted) {
 
-		List<Integer> retentionTime = pcaResults.getExtractedRetentionTimes();
-		List<ISample> samples = pcaResults.getSampleList();
+		List<IRetentionTime> retentionTime = samples.getExtractedRetentionTimes();
+		List<ISample> samplesList = samples.getSampleList();
 		for(int i = 0; i < retentionTime.size(); i++) {
-			final double mean = getCenteringValue(samples, i, onlySeleted);
-			final double max = getMax(samples, i, onlySeleted);
-			final double min = getMin(samples, i, onlySeleted);
-			for(ISample sample : samples) {
+			final double mean = getCenteringValue(samplesList, i, onlySeleted);
+			final double max = getMax(samplesList, i, onlySeleted);
+			final double min = getMin(samplesList, i, onlySeleted);
+			for(ISample sample : samplesList) {
 				ISampleData sampleData = sample.getSampleData().get(i);
 				if(!sampleData.isEmpty() && (sample.isSelected() || !onlySeleted)) {
-					double data = sampleData.getNormalizedData();
+					double data = sampleData.getModifiedData();
 					if(max != min) {
 						double scaleData = (data - mean) / (max - min);
-						sampleData.setNormalizedData(scaleData);
+						sampleData.setModifiedData(scaleData);
 					}
 				}
 			}
@@ -273,20 +274,20 @@ public class PcaScalingData implements IDataModification {
 		this.transfromationType = transformation;
 	}
 
-	private void vastscaling(IPcaResults pcaResults, boolean onlySeleted) {
+	private void vastscaling(ISamples samples, boolean onlySeleted) {
 
-		List<Integer> retentionTime = pcaResults.getExtractedRetentionTimes();
-		List<ISample> samples = pcaResults.getSampleList();
+		List<IRetentionTime> retentionTime = samples.getExtractedRetentionTimes();
+		List<ISample> samplesList = samples.getSampleList();
 		for(int i = 0; i < retentionTime.size(); i++) {
-			final double mean = getCenteringValue(samples, i, onlySeleted);
-			final double variace = getVariance(samples, i, onlySeleted);
-			for(ISample sample : samples) {
+			final double mean = getCenteringValue(samplesList, i, onlySeleted);
+			final double variace = getVariance(samplesList, i, onlySeleted);
+			for(ISample sample : samplesList) {
 				ISampleData sampleData = sample.getSampleData().get(i);
 				if(!sampleData.isEmpty() && (sample.isSelected() || !onlySeleted)) {
-					double data = sampleData.getNormalizedData();
+					double data = sampleData.getModifiedData();
 					if(variace != 0) {
 						double scaleData = ((data - mean) / variace) * mean;
-						sampleData.setNormalizedData(scaleData);
+						sampleData.setModifiedData(scaleData);
 					}
 				}
 			}

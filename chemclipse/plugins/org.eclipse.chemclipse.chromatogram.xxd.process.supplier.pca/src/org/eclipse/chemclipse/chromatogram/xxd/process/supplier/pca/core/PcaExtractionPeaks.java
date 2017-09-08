@@ -27,12 +27,12 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.SampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
@@ -306,38 +306,33 @@ public class PcaExtractionPeaks implements IDataExtraction {
 		return pcaPeakMap;
 	}
 
-	private IPcaResults extractPeakData(IPcaResults pcaResults, int retentionTimeWindow, IProgressMonitor monitor) {
+	private void extractPeakData(ISamples samples, int retentionTimeWindow, IProgressMonitor monitor) {
 
 		/*
 		 * Extract data
 		 */
 		monitor.subTask("Extract peak values");
-		Map<String, IPeaks> peakMap = extractPeaks(pcaResults.getDataInputEntries(), monitor);
+		Map<String, IPeaks> peakMap = extractPeaks(dataInputEntriesAll, monitor);
 		monitor.subTask("Prepare peak values");
-		preparePcaResults(peakMap, pcaResults);
 		Map<String, SortedMap<Integer, IPeak>> extractPeaks = exctractPcaPeakMap(peakMap, retentionTimeWindow);
 		List<Integer> extractedRetentionTimes = calculateCondensedRetentionTimes(extractPeaks);
-		pcaResults.setExtractedRetentionTimes(extractedRetentionTimes);
-		setExtractData(extractPeaks, pcaResults);
-		pcaResults.setExtractionType(extractionType);
-		return pcaResults;
+		samples.getExtractedRetentionTimes().addAll(IRetentionTime.create(extractedRetentionTimes));
+		setExtractData(extractPeaks, samples);
 	}
 
-	private IPcaResults extractPeakDataCumulation(IPcaResults pcaResults, int retentionTimeWindow, IProgressMonitor monitor) {
+	private void extractPeakDataCumulation(ISamples samples, int retentionTimeWindow, IProgressMonitor monitor) {
 
 		/*
 		 * Extract data
 		 */
 		monitor.subTask("Extract peak values");
-		Map<String, IPeaks> peakMap = extractPeaks(pcaResults.getDataInputEntries(), monitor);
+		Map<String, IPeaks> peakMap = extractPeaks(dataInputEntriesAll, monitor);
 		monitor.subTask("Prepare peak values");
-		preparePcaResults(peakMap, pcaResults);
 		SortedSet<Integer> collectedRetentionTimes = collectRetentionTimes(peakMap);
 		List<Integer> extractedRetentionTimes = calculateCondensedRetentionTimes(collectedRetentionTimes, retentionTimeWindow);
-		pcaResults.setExtractedRetentionTimes(extractedRetentionTimes);
 		Map<String, List<ISampleData>> pcaPeakMap = extractPcaPeakMap(peakMap, extractedRetentionTimes, retentionTimeWindow);
-		setExtractDataList(pcaPeakMap, pcaResults);
-		return pcaResults;
+		setExtractDataList(pcaPeakMap, samples);
+		samples.getExtractedRetentionTimes().addAll(IRetentionTime.create(extractedRetentionTimes));
 	}
 
 	private Map<String, IPeaks> extractPeaks(List<IDataInputEntry> peakinpitFiles, IProgressMonitor monitor) {
@@ -394,75 +389,42 @@ public class PcaExtractionPeaks implements IDataExtraction {
 		return null;
 	}
 
-	/**
-	 * Sets the initial PCA result map.
-	 *
-	 * @param peakMap
-	 * @param pcaResults
-	 */
-	private void preparePcaResults(Map<String, IPeaks> peakMap, IPcaResults pcaResults) {
-
-		List<ISample> samples = pcaResults.getSampleList();
-		List<IDataInputEntry> dataInputEntry = pcaResults.getDataInputEntries();
-		samples.clear();
-		for(Map.Entry<String, IPeaks> entry : peakMap.entrySet()) {
-			/*
-			 * PCA result
-			 */
-			final ISample sample = new Sample(entry.getKey());
-			dataInputEntry.forEach((input) -> {
-				if(input.getName().equals(entry.getKey())) {
-					sample.setGroupName(input.getGroupName());
-				}
-			});
-			sample.getPcaResult().setPeaks(entry.getValue());
-			samples.add(sample);
-		}
-	}
-
 	@Override
-	public IPcaResults process(IProgressMonitor monitor) {
+	public ISamples process(IProgressMonitor monitor) {
 
-		List<IDataInputEntry> dataInputEntries = IDataExtraction.removeFileSameName(dataInputEntriesAll);
 		/*
 		 * Initialize PCA Results
 		 */
-		IPcaResults pcaResults = new PcaResults(dataInputEntries);
-		pcaResults.setRetentionTimeWindow(retentionTimeWindow);
+		ISamples samples = new Samples(dataInputEntriesAll);
 		if(!(extractionType == EXTRACT_PEAK || extractionType == EXTRACT_PEAK_CUMULATION)) {
 			extractionType = EXTRACT_PEAK;
 		}
-		pcaResults.setExtractionType(extractionType);
 		/*
 		 * Extract data
 		 */
 		switch(extractionType) {
 			case EXTRACT_PEAK:
-				extractPeakData(pcaResults, retentionTimeWindow, monitor);
+				extractPeakData(samples, retentionTimeWindow, monitor);
 				break;
 			case EXTRACT_PEAK_CUMULATION:
-				extractPeakDataCumulation(pcaResults, retentionTimeWindow, monitor);
+				extractPeakDataCumulation(samples, retentionTimeWindow, monitor);
 				break;
 		}
 		/*
-		 * Set selected retention Time
-		 */
-		IDataExtraction.setSelectedRetentionTime(pcaResults);
-		/*
 		 * create Groups
 		 */
-		IDataExtraction.createGroup(pcaResults);
-		return pcaResults;
+		samples.createGroups();
+		return samples;
 	}
 
-	private void setExtractData(Map<String, SortedMap<Integer, IPeak>> extractData, IPcaResults pcaResults) {
+	private void setExtractData(Map<String, SortedMap<Integer, IPeak>> extractData, ISamples samples) {
 
-		List<Integer> extractedRetentionTimes = pcaResults.getExtractedRetentionTimes();
-		for(ISample sample : pcaResults.getSampleList()) {
-			Iterator<Integer> it = extractedRetentionTimes.iterator();
+		List<IRetentionTime> extractedRetentionTimes = samples.getExtractedRetentionTimes();
+		for(ISample sample : samples.getSampleList()) {
+			Iterator<IRetentionTime> it = extractedRetentionTimes.iterator();
 			SortedMap<Integer, IPeak> extractPeak = extractData.get(sample.getName());
 			while(it.hasNext()) {
-				int retentionTime = it.next();
+				int retentionTime = it.next().getRetentionTime();
 				IPeak peak = extractPeak.get(retentionTime);
 				if(peak != null) {
 					ISampleData sampleData = new SampleData(peak.getIntegratedArea());
@@ -478,9 +440,9 @@ public class PcaExtractionPeaks implements IDataExtraction {
 		}
 	}
 
-	private void setExtractDataList(Map<String, List<ISampleData>> extractData, IPcaResults pcaResults) {
+	private void setExtractDataList(Map<String, List<ISampleData>> extractData, ISamples samples) {
 
-		for(ISample sample : pcaResults.getSampleList()) {
+		for(ISample sample : samples.getSampleList()) {
 			String name = sample.getName();
 			List<ISampleData> sampleData = extractData.get(name);
 			sample.getSampleData().addAll(sampleData);

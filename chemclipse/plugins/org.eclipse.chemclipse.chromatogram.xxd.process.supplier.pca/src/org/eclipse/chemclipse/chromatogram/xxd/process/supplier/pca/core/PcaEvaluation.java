@@ -17,38 +17,42 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.ejml.example.PrincipalComponentAnalysis;
 
 public class PcaEvaluation {
 
-	private Map<String, double[]> extractData(IPcaResults pcaResults) {
+	private Map<String, double[]> extractData(ISamples samples) {
 
 		Map<String, double[]> selectedSamples = new HashMap<>();
-		List<Boolean> isSelected = pcaResults.isSelectedRetentionTimes();
-		int numSelected = (int)isSelected.stream().filter(b -> b).count();
-		for(ISample sample : pcaResults.getSampleList()) {
+		List<IRetentionTime> retentionTimes = samples.getExtractedRetentionTimes();
+		int numSelected = (int)retentionTimes.stream().filter(r -> r.isSelected()).count();
+		for(ISample sample : samples.getSampleList()) {
 			double[] selectedSampleData = null;
 			if(sample.isSelected()) {
 				List<ISampleData> data = sample.getSampleData();
 				selectedSampleData = new double[numSelected];
 				int j = 0;
 				for(int i = 0; i < data.size(); i++) {
-					if(isSelected.get(i)) {
-						selectedSampleData[j] = data.get(i).getNormalizedData();
+					if(retentionTimes.get(i).isSelected()) {
+						selectedSampleData[j] = data.get(i).getModifiedData();
 						j++;
 					}
 				}
 				selectedSamples.put(sample.getName(), selectedSampleData);
 			}
-			sample.getPcaResult().setSampleData(selectedSampleData);
 		}
 		return selectedSamples;
 	}
@@ -106,17 +110,19 @@ public class PcaEvaluation {
 		return principleComponentAnalysis;
 	}
 
-	public IPcaResults process(IPcaResults pcaResults, int numberOfPrincipleComponents, IProgressMonitor monitor) {
+	public IPcaResults process(ISamples samples, int numberOfPrincipleComponents, IProgressMonitor monitor) {
 
 		monitor.subTask("Run PCA");
-		Map<String, double[]> extractData = extractData(pcaResults);
+		IPcaResults pcaResults = new PcaResults();
+		Map<String, double[]> extractData = extractData(samples);
+		setRetentionTime(pcaResults, samples);
 		int sampleSize = getSampleSize(extractData);
 		PrincipalComponentAnalysis principleComponentAnalysis = initializePCA(extractData, sampleSize, numberOfPrincipleComponents);
 		List<double[]> basisVectors = getBasisVectors(principleComponentAnalysis, numberOfPrincipleComponents);
 		pcaResults.setBasisVectors(basisVectors);
 		setEigenSpaceAndErrorValues(principleComponentAnalysis, extractData, pcaResults);
 		pcaResults.setNumberOfPrincipleComponents(numberOfPrincipleComponents);
-		setGroups(pcaResults);
+		setGroups(pcaResults, samples);
 		return pcaResults;
 	}
 
@@ -125,57 +131,72 @@ public class PcaEvaluation {
 		/*
 		 * Set the eigen space and error membership values.
 		 */
-		List<ISample> samples = pcaResults.getSampleList();
-		for(ISample sample : samples) {
-			IPcaResult result = sample.getPcaResult();
-			double[] sampleData = null;
+		List<IPcaResult> resultsList = new ArrayList<>();
+		for(Entry<String, double[]> entry : pcaPeakMap.entrySet()) {
+			double[] sampleData = entry.getValue();
 			double[] eigenSpace = null;
+			String sampleName = entry.getKey();
 			double errorMemberShip = Double.NaN;
-			if(sample.isSelected()) {
-				String sampleName = sample.getName();
-				sampleData = pcaPeakMap.get(sampleName);
-				eigenSpace = principleComponentAnalysis.sampleToEigenSpace(sampleData);
-				errorMemberShip = principleComponentAnalysis.errorMembership(sampleData);
-			}
-			result.setSampleData(sampleData);
-			result.setEigenSpace(eigenSpace);
-			result.setErrorMemberShip(errorMemberShip);
+			IPcaResult pcaResult = new PcaResult();
+			pcaResult.setName(sampleName);
+			sampleData = pcaPeakMap.get(sampleName);
+			eigenSpace = principleComponentAnalysis.sampleToEigenSpace(sampleData);
+			errorMemberShip = principleComponentAnalysis.errorMembership(sampleData);
+			pcaResult.setSampleData(sampleData);
+			pcaResult.setEigenSpace(eigenSpace);
+			pcaResult.setErrorMemberShip(errorMemberShip);
+			pcaResult.setSampleData(sampleData);
+			resultsList.add(pcaResult);
 		}
+		pcaResults.setPcaResultList(resultsList);
 	}
 
-	private void setGroups(IPcaResults pcaResults) {
+	private void setGroups(IPcaResults pcaResults, ISamples samples) {
 
-		for(IGroup group : pcaResults.getGroupList()) {
+		for(IGroup group : samples.getGroupList()) {
 			String groupName = group.getGroupName();
-			List<ISample> samples = pcaResults.getSampleList().stream().filter(s -> s.isSelected() && groupName.equals(s.getGroupName())).collect(Collectors.toList());
-			if(!samples.isEmpty()) {
-				int lentsampleData = samples.get(0).getPcaResult().getSampleData().length;
+			IPcaResult pcaResultGroup = new PcaResult();
+			List<IPcaResult> pcaResultsList = pcaResults.getPcaResultList().stream().filter(r -> groupName.equals(r.getGroupName())).collect(Collectors.toList());
+			if(!pcaResultsList.isEmpty()) {
+				int lentsampleData = pcaResultsList.get(0).getSampleData().length;
 				double[] sampleData = new double[lentsampleData];
-				samples.stream().map(s -> s.getPcaResult().getSampleData()) //
+				pcaResultsList.stream().map(s -> s.getSampleData()) //
 						.forEach(d -> {
 							for(int i = 0; i < lentsampleData; i++) {
 								sampleData[i] += d[i];
 							}
 						});
-				Arrays.stream(sampleData).forEach(d -> d = d / samples.size());
-				group.getPcaResult().setSampleData(sampleData);
-				int lentEigenSpance = samples.get(0).getPcaResult().getEigenSpace().length;
+				Arrays.stream(sampleData).forEach(d -> d = d / pcaResultsList.size());
+				pcaResultGroup.setSampleData(sampleData);
+				int lentEigenSpance = pcaResultsList.get(0).getEigenSpace().length;
 				double[] eigenSpace = new double[lentEigenSpance];
-				samples.stream().map(s -> s.getPcaResult().getEigenSpace())//
+				pcaResultsList.stream().map(r -> r.getEigenSpace())//
 						.forEach(d -> {
 							for(int i = 0; i < lentEigenSpance; i++) {
 								eigenSpace[i] += d[i];
 							}
 						});
-				Arrays.stream(eigenSpace).forEach(d -> d = d / samples.size());
-				group.getPcaResult().setEigenSpace(eigenSpace);
-				double errorMemberShip = samples.stream().mapToDouble(s -> s.getPcaResult().getErrorMemberShip()).sum() / samples.size();
-				group.getPcaResult().setErrorMemberShip(errorMemberShip);
+				Arrays.stream(eigenSpace).forEach(d -> d = d / pcaResultsList.size());
+				pcaResultGroup.setEigenSpace(eigenSpace);
+				double errorMemberShip = pcaResultsList.stream().mapToDouble(s -> s.getErrorMemberShip()).sum() / pcaResultsList.size();
+				pcaResultGroup.setErrorMemberShip(errorMemberShip);
 			} else {
-				group.getPcaResult().setSampleData(null);
-				group.getPcaResult().setEigenSpace(null);
-				group.getPcaResult().setErrorMemberShip(Double.NaN);
+				pcaResultGroup.setSampleData(null);
+				pcaResultGroup.setEigenSpace(null);
+				pcaResultGroup.setErrorMemberShip(Double.NaN);
+			}
+			pcaResults.getPcaResultGroupsList().add(pcaResultGroup);
+		}
+	}
+
+	private void setRetentionTime(IPcaResults pcaResults, ISamples samples) {
+
+		List<Integer> retTime = new ArrayList<>();
+		for(int i = 0; i < samples.getExtractedRetentionTimes().size(); i++) {
+			if(samples.getExtractedRetentionTimes().get(i).isSelected()) {
+				retTime.add(new Integer(samples.getExtractedRetentionTimes().get(i).getRetentionTime()));
 			}
 		}
+		pcaResults.setExtractedRetentionTimes(retTime);
 	}
 }

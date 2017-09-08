@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2017 Lablicate GmbH.
+ * Copyright (c) 2017 Jan Holy.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,19 +7,19 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Jan Holy - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.List;
 
-public interface ISlopes {
+public interface ISamples {
 
-	List<Integer> getRetentionTimes();
+	void createGroups();
 
-	List<Float> getSlopes();
+	List<IRetentionTime> getExtractedRetentionTimes();
 
-	void setRetentionTimes(List<Integer> retentionTimes);
+	List<IGroup> getGroupList();
 
-	void setSlopes(List<Float> slopes);
+	List<ISample> getSampleList();
 }

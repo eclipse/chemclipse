@@ -76,7 +76,7 @@ public class OverviewPage {
 					Runnable thread = () -> {
 						EigenvaluesCovarianceMatrixTable eigenvaluesCovarianceMatrixTable = new EigenvaluesCovarianceMatrixTable(shell, null);
 						shell.open();
-						eigenvaluesCovarianceMatrixTable.update(pcaEditor.getPcaResults().get(), 0.01);
+						eigenvaluesCovarianceMatrixTable.update(pcaEditor.getSamples().get(), 0.01);
 						shell.pack();
 					};
 					Display.getCurrent().asyncExec(thread);
@@ -121,10 +121,6 @@ public class OverviewPage {
 		gridData.horizontalIndent = 20;
 		gridData.heightHint = 30;
 		createWizardScansInputHyperlink(client, gridData, formToolkit);
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalIndent = 20;
-		gridData.heightHint = 30;
-		createWizardDerivesScansInputHyperlink(client, gridData, formToolkit);
 		/*
 		 * Add the client to the section and paint flat borders.
 		 */
@@ -255,26 +251,6 @@ public class OverviewPage {
 				if(pcaEditor.getPcaResults().isPresent()) {
 					pcaEditor.save();
 				}
-			}
-		});
-	}
-
-	private void createWizardDerivesScansInputHyperlink(Composite client, GridData gridData, FormToolkit formToolkit) {
-
-		ImageHyperlink imageHyperlink;
-		/*
-		 * Settings
-		 */
-		imageHyperlink = formToolkit.createImageHyperlink(client, SWT.NONE);
-		imageHyperlink.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16));
-		imageHyperlink.setText("Run Wizard (Derived scans input)");
-		imageHyperlink.setLayoutData(gridData);
-		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
-
-			@Override
-			public void linkActivated(HyperlinkEvent e) {
-
-				pcaEditor.openWizardPcaDerivedScansInput();
 			}
 		});
 	}

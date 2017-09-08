@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 
 public class EmptyDataFilter implements IFilter {
 
@@ -28,11 +28,11 @@ public class EmptyDataFilter implements IFilter {
 	}
 
 	@Override
-	public List<Boolean> filter(IPcaResults pcaResults) {
+	public List<Boolean> filter(ISamples samples) {
 
-		List<ISample> selectedSamples = pcaResults.getSampleList().stream().filter(s -> s.isSelected() || !onlySelected).collect(Collectors.toList());
+		List<ISample> selectedSamples = samples.getSampleList().stream().filter(s -> s.isSelected() || !onlySelected).collect(Collectors.toList());
 		List<Boolean> selection = new ArrayList<>();
-		for(int i = 0; i < pcaResults.isSelectedRetentionTimes().size(); i++) {
+		for(int i = 0; i < samples.getExtractedRetentionTimes().size(); i++) {
 			final int index = i;
 			boolean b = selectedSamples.stream().map(s -> s.getSampleData().get(index)).allMatch(d -> !d.isEmpty());
 			selection.add(b);

@@ -41,7 +41,7 @@ public class SampleData implements ISampleData {
 	}
 
 	@Override
-	public double getNormalizedData() {
+	public double getModifiedData() {
 
 		return normalizedData;
 	}
@@ -59,7 +59,7 @@ public class SampleData implements ISampleData {
 	}
 
 	@Override
-	public void setNormalizedData(double normalizedData) {
+	public void setModifiedData(double normalizedData) {
 
 		this.normalizedData = normalizedData;
 	}

@@ -20,7 +20,6 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
@@ -33,11 +32,10 @@ public class ResultExport {
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
-	public void exportToTextFile(File file, IPcaResults pcaResults) throws FileNotFoundException {
+	public void exportToTextFile(File file, IPcaResults pcaResults, List<IDataInputEntry> dataInputEntries) throws FileNotFoundException {
 
 		PrintWriter printWriter = new PrintWriter(file);
 		if(pcaResults != null) {
-			List<ISample> samples = pcaResults.getSampleList();
 			/*
 			 * Header
 			 */
@@ -47,14 +45,11 @@ public class ResultExport {
 			printWriter.print("Number of principle components:");
 			printWriter.print(TAB);
 			printWriter.println(pcaResults.getNumberOfPrincipleComponents());
-			printWriter.print("Retention time window:");
-			printWriter.print(TAB);
-			printWriter.println(pcaResults.getRetentionTimeWindow());
 			printWriter.println("");
 			printWriter.println("-------------------------------------");
 			printWriter.println("Input Files");
 			printWriter.println("-------------------------------------");
-			for(IDataInputEntry entry : pcaResults.getDataInputEntries()) {
+			for(IDataInputEntry entry : dataInputEntries) {
 				printWriter.print(entry.getFileName());
 				printWriter.print(TAB);
 				printWriter.println(entry.getInputFile());
@@ -64,31 +59,26 @@ public class ResultExport {
 			printWriter.println("Extracted Retention Times (Minutes)");
 			printWriter.println("-------------------------------------");
 			for(int i = 0; i < pcaResults.getExtractedRetentionTimes().size(); i++) {
-				if(pcaResults.isSelectedRetentionTimes().get(i)) {
-					double retentionTime = pcaResults.getExtractedRetentionTimes().get(i);
-					printWriter.println(decimalFormat.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
-				}
+				double retentionTime = pcaResults.getExtractedRetentionTimes().get(i);
+				printWriter.println(decimalFormat.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 			}
 			printWriter.println("");
 			printWriter.println("-------------------------------------");
-			printWriter.println("Peak Intensity Table");
+			printWriter.println("Input Data Table");
 			printWriter.println("-------------------------------------");
 			printWriter.print("Filename");
 			printWriter.print(TAB);
 			for(int i = 0; i < pcaResults.getExtractedRetentionTimes().size(); i++) {
-				if(pcaResults.isSelectedRetentionTimes().get(i)) {
-					double retentionTime = pcaResults.getExtractedRetentionTimes().get(i);
-					printWriter.print(decimalFormat.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
-					printWriter.print(TAB);
-				}
+				double retentionTime = pcaResults.getExtractedRetentionTimes().get(i);
+				printWriter.print(decimalFormat.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+				printWriter.print(TAB);
 			}
 			printWriter.println("");
 			/*
 			 * Data
 			 */
-			for(ISample result : samples) {
-				String name = result.getName();
-				IPcaResult pcaResult = result.getPcaResult();
+			for(IPcaResult pcaResult : pcaResults.getPcaResultList()) {
+				String name = pcaResult.getName();
 				printWriter.print(name);
 				printWriter.print(TAB);
 				double[] sampleData = pcaResult.getSampleData();
@@ -111,12 +101,11 @@ public class ResultExport {
 			}
 			printWriter.println("");
 			//
-			for(ISample result : samples) {
+			for(IPcaResult pcaResult : pcaResults.getPcaResultList()) {
 				/*
 				 * Print the PCs
 				 */
-				String name = result.getName();
-				IPcaResult pcaResult = result.getPcaResult();
+				String name = pcaResult.getName();
 				double[] eigenSpace = pcaResult.getEigenSpace();
 				printWriter.print(name);
 				printWriter.print(TAB);

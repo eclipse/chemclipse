@@ -29,10 +29,12 @@ import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.stat.correlation.Covariance;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Group;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
@@ -42,33 +44,32 @@ import org.ejml.interfaces.decomposition.EigenDecomposition;
 
 public class PcaUtils {
 
-	public static Map<String, double[]> extractData(IPcaResults pcaResults) {
+	public static Map<String, double[]> extractData(ISamples samples) {
 
 		Map<String, double[]> selectedSamples = new HashMap<>();
-		List<Boolean> isSelected = pcaResults.isSelectedRetentionTimes();
-		int numSelected = (int)isSelected.stream().filter(b -> b).count();
-		for(ISample sample : pcaResults.getSampleList()) {
+		List<IRetentionTime> retentionTimes = samples.getExtractedRetentionTimes();
+		int numSelected = (int)retentionTimes.stream().filter(r -> r.isSelected()).count();
+		for(ISample sample : samples.getSampleList()) {
 			double[] selectedSampleData = null;
 			if(sample.isSelected()) {
 				List<ISampleData> data = sample.getSampleData();
 				selectedSampleData = new double[numSelected];
 				int j = 0;
 				for(int i = 0; i < data.size(); i++) {
-					if(isSelected.get(i)) {
-						selectedSampleData[j] = data.get(i).getNormalizedData();
+					if(retentionTimes.get(i).isSelected()) {
+						selectedSampleData[j] = data.get(i).getModifiedData();
 						j++;
 					}
 				}
 				selectedSamples.put(sample.getName(), selectedSampleData);
 			}
-			sample.getPcaResult().setSampleData(selectedSampleData);
 		}
 		return selectedSamples;
 	}
 
-	public static RealMatrix getCovarianceMatrix(IPcaResults pcaResults) {
+	public static RealMatrix getCovarianceMatrix(ISamples samples) {
 
-		Map<String, double[]> data = extractData(pcaResults);
+		Map<String, double[]> data = extractData(samples);
 		double[][] array = new double[data.size()][];
 		Iterator<double[]> it = data.values().iterator();
 		int i = 0;
@@ -81,9 +82,9 @@ public class PcaUtils {
 		return covariance.getCovarianceMatrix();
 	}
 
-	public static double[] getEigenValuesCovarianceMatrix(IPcaResults pcaResults) {
+	public static double[] getEigenValuesCovarianceMatrix(ISamples samples) {
 
-		RealMatrix covarianceMatrix = getCovarianceMatrix(pcaResults);
+		RealMatrix covarianceMatrix = getCovarianceMatrix(samples);
 		EigenDecomposition<DenseMatrix64F> eigenDecomposition = DecompositionFactory.eig(covarianceMatrix.getColumnDimension(), false, true);
 		eigenDecomposition.decompose(new DenseMatrix64F(covarianceMatrix.getData()));
 		double[] eigenvalues = new double[eigenDecomposition.getNumberOfEigenvalues()];
@@ -93,14 +94,24 @@ public class PcaUtils {
 		return eigenvalues;
 	}
 
-	/**
-	 *
-	 * @param samples
-	 * @return all group which list of samples contains, if some group name is null Set contains also null value
-	 */
-	public static Set<String> getGroupNames(List<ISample> samples) {
+	public static Set<String> getGroupNames(IPcaResults pcaResults) {
 
-		return getGroupNames(samples, false);
+		Set<String> groupNames = new HashSet<>();
+		for(IPcaResult pcaResult : pcaResults.getPcaResultList()) {
+			String groupName = pcaResult.getGroupName();
+			groupNames.add(groupName);
+		}
+		return groupNames;
+	}
+
+	public static Set<String> getGroupNames(List<IPcaResult> pcaResults) {
+
+		Set<String> groupNames = new HashSet<>();
+		for(IPcaResult pcaResult : pcaResults) {
+			String groupName = pcaResult.getGroupName();
+			groupNames.add(groupName);
+		}
+		return groupNames;
 	}
 
 	/**
@@ -146,11 +157,6 @@ public class PcaUtils {
 			}
 		}
 		return names;
-	}
-
-	public static int getNumberOfGroupNames(List<ISample> samples) {
-
-		return getGroupNames(samples).size();
 	}
 
 	public static List<IPeak> getPeaks(IPeaks peaks, int leftRetentionTimeBound, int rightRetentionTimeBound) {
@@ -207,31 +213,52 @@ public class PcaUtils {
 		return samplesByGroupName;
 	}
 
-	public static void setGroups(IPcaResults pcaResults, boolean onlySelected) {
+	public static void sortPcaResultsByGroup(List<IPcaResult> pcaResults) {
 
-		Set<String> groupNames = PcaUtils.getGroupNames(pcaResults.getSampleList(), onlySelected);
-		pcaResults.getGroupList().clear();
-		groupNames.forEach(groupName -> {
-			if(groupName != null) {
-				List<ISample> samplesSomeGroupName = pcaResults.getSampleList().stream().filter(s -> groupName.equals(s.getGroupName())).collect(Collectors.toList());
-				IGroup group = new Group(samplesSomeGroupName);
-				group.setGroupName(groupName);
-				pcaResults.getGroupList().add(group);
+		Comparator<IPcaResult> comparator = (arg0, arg1) -> {
+			String name0 = arg0.getGroupName();
+			String name1 = arg1.getGroupName();
+			if(name0 == null && name1 == null) {
+				return 0;
 			}
-		});
+			if(name0 != null && name1 == null) {
+				return 1;
+			}
+			if(name0 == null && name1 != null) {
+				return -1;
+			}
+			if(name0.equals(name1)) {
+				if(arg0 instanceof Group) {
+					return -1;
+				}
+				if(arg1 instanceof Group) {
+					return 1;
+				}
+			}
+			return name0.compareTo(name1);
+		};
+		Collections.sort(pcaResults, comparator);
 	}
 
-	public static void sortSampleListByErrorMemberShip(List<ISample> samples, boolean inverse) {
+	public static void sortPcaResultsByName(List<IPcaResult> samples) {
+
+		Comparator<IPcaResult> comparator = (arg0, arg1) -> {
+			return arg0.getName().compareTo(arg1.getName());
+		};
+		Collections.sort(samples, comparator);
+	}
+
+	public static void sortPcaResultsListByErrorMemberShip(List<IPcaResult> pcaResults, boolean inverse) {
 
 		int i = 1;
 		if(inverse) {
 			i = -1;
 		}
 		final int inv = i;
-		Comparator<ISample> comparator = (arg0, arg1) -> {
-			return inv * Double.compare(arg0.getPcaResult().getErrorMemberShip(), arg1.getPcaResult().getErrorMemberShip());
+		Comparator<IPcaResult> comparator = (arg0, arg1) -> {
+			return inv * Double.compare(arg0.getErrorMemberShip(), arg1.getErrorMemberShip());
 		};
-		Collections.sort(samples, comparator);
+		Collections.sort(pcaResults, comparator);
 	}
 
 	/**

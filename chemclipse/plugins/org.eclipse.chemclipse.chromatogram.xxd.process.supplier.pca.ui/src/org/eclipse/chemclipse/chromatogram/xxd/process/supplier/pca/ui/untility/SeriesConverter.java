@@ -21,7 +21,6 @@ import java.util.Set;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
@@ -42,14 +41,9 @@ public class SeriesConverter {
 	public static List<IScatterSeriesData> basisVectorsToSeries(IPcaResults pcaResults, int pcX, int pcY) {
 
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
-		List<String> extractedRetentionTimes = new ArrayList<>();
-		for(int i = 0; i < pcaResults.getExtractedRetentionTimes().size(); i++) {
-			if(pcaResults.isSelectedRetentionTimes().get(i)) {
-				extractedRetentionTimes.add(nf.format(pcaResults.getExtractedRetentionTimes().get(i) / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
-			}
-		}
+		List<Integer> extractedRetentionTimes = pcaResults.getExtractedRetentionTimes();
 		for(int i = 0; i < extractedRetentionTimes.size(); i++) {
-			String name = extractedRetentionTimes.get(i);
+			String name = nf.format(extractedRetentionTimes.get(i) / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 			double x = pcaResults.getBasisVectors().get(pcX)[i];
 			double y = pcaResults.getBasisVectors().get(pcY)[i];
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
@@ -65,23 +59,17 @@ public class SeriesConverter {
 
 	public static List<IScatterSeriesData> sampleToSeries(IPcaResults pcaResults, int pcX, int pcY) {
 
-		return sampleToSeries(pcaResults.getSampleList(), pcX, pcY);
-	}
-
-	public static List<IScatterSeriesData> sampleToSeries(List<ISample> samples, int pcX, int pcY) {
-
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<IScatterSeriesData>();
-		Set<String> groupNames = PcaUtils.getGroupNames(samples, false);
+		Set<String> groupNames = PcaUtils.getGroupNames(pcaResults);
 		Map<String, Color> colors = PcaColorGroup.getColorSWT(groupNames);
-		for(ISample sample : samples) {
-			if(!sample.isSelected() || !sample.getPcaResult().isDisplayed()) {
+		for(IPcaResult pcaResult : pcaResults.getPcaResultList()) {
+			if(!pcaResult.isDisplayed()) {
 				continue;
 			}
 			/*
 			 * Create the series.
 			 */
-			String name = sample.getName();
-			IPcaResult pcaResult = sample.getPcaResult();
+			String name = pcaResult.getName();
 			double[] eigenSpace = pcaResult.getEigenSpace();
 			double x = eigenSpace[pcX - 1]; // e.g. 0 = PC1
 			double y = eigenSpace[pcY - 1]; // e.g. 1 = PC2
@@ -103,7 +91,7 @@ public class SeriesConverter {
 				scatterSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
 			}
 			scatterSeriesSettings.setSymbolSize(SYMBOL_SIZE_SCORE_PLOT);
-			scatterSeriesSettings.setSymbolColor(colors.get(sample.getGroupName()));
+			scatterSeriesSettings.setSymbolColor(colors.get(pcaResult.getGroupName()));
 			scatterSeriesDataList.add(scatterSeriesData);
 		}
 		return scatterSeriesDataList;

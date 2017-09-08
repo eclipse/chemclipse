@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaFiltrationData {
@@ -31,29 +32,27 @@ public class PcaFiltrationData {
 		return filters;
 	}
 
-	public void process(IPcaResults pcaResults, boolean resetSelectedRetentionTimes, IProgressMonitor monitor) {
+	public void process(ISamples samples, boolean resetSelectedRetentionTimes, IProgressMonitor monitor) {
 
-		List<Boolean> selectedRetentionTimes = pcaResults.isSelectedRetentionTimes();
+		List<IRetentionTime> retentionTimes = samples.getExtractedRetentionTimes();
 		if(resetSelectedRetentionTimes) {
-			for(int i = 0; i < selectedRetentionTimes.size(); i++) {
-				selectedRetentionTimes.set(i, true);
-			}
+			setSelectAllRow(samples, true);
 		}
 		if(filters != null && !filters.isEmpty()) {
 			for(int i = 0; i < filters.size(); i++) {
-				List<Boolean> result = filters.get(i).filter(pcaResults);
+				List<Boolean> result = filters.get(i).filter(samples);
 				for(int j = 0; j < result.size(); j++) {
-					selectedRetentionTimes.set(j, selectedRetentionTimes.get(j) && result.get(j));
+					retentionTimes.get(j).setSelected(retentionTimes.get(j).isSelected() && result.get(j));
 				}
 			}
 		}
 	}
 
-	public void setSelectAllRow(IPcaResults pcaResults, boolean selection) {
+	public void setSelectAllRow(ISamples samples, boolean selection) {
 
-		List<Boolean> selectedRetentionTimes = pcaResults.isSelectedRetentionTimes();
-		for(int i = 0; i < selectedRetentionTimes.size(); i++) {
-			selectedRetentionTimes.set(i, selection);
+		List<IRetentionTime> retentionTimes = samples.getExtractedRetentionTimes();
+		for(int i = 0; i < retentionTimes.size(); i++) {
+			retentionTimes.get(i).setSelected(selection);
 		}
 	}
 }

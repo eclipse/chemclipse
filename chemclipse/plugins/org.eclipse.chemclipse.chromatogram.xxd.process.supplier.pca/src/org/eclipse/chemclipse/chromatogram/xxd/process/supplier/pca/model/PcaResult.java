@@ -11,16 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import org.eclipse.chemclipse.model.core.IPeaks;
-
 public class PcaResult implements IPcaResult {
 
 	private double[] eigenSpace;
 	private double errorMemberShip;
+	private String groupName;
 	private boolean isDisplayed;
-	private IPeaks peaks;
+	private String name;
 	private double[] sampleData;
-	private ISlopes slopes;
 
 	public PcaResult() {
 		isDisplayed = true;
@@ -39,21 +37,21 @@ public class PcaResult implements IPcaResult {
 	}
 
 	@Override
-	public IPeaks getPeaks() {
+	public String getGroupName() {
 
-		return peaks;
+		return groupName;
+	}
+
+	@Override
+	public String getName() {
+
+		return name;
 	}
 
 	@Override
 	public double[] getSampleData() {
 
 		return sampleData;
-	}
-
-	@Override
-	public ISlopes getSlopes() {
-
-		return slopes;
 	}
 
 	@Override
@@ -81,20 +79,20 @@ public class PcaResult implements IPcaResult {
 	}
 
 	@Override
-	public void setPeaks(IPeaks peaks) {
+	public void setGroupName(String groupName) {
 
-		this.peaks = peaks;
+		this.groupName = groupName;
+	}
+
+	@Override
+	public void setName(String name) {
+
+		this.name = name;
 	}
 
 	@Override
 	public void setSampleData(double[] sampleData) {
 
 		this.sampleData = sampleData;
-	}
-
-	@Override
-	public void setSlopes(ISlopes slopes) {
-
-		this.slopes = slopes;
 	}
 }

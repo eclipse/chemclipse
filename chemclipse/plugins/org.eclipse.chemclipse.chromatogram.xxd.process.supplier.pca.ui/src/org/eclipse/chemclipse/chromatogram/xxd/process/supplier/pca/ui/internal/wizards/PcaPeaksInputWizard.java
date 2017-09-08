@@ -46,6 +46,12 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 	}
 
 	@Override
+	public List<IDataInputEntry> getDataInputEntries() {
+
+		return dataInputFromPeakFilesPage.getUniqueDataInputEnties();
+	}
+
+	@Override
 	public int getNumerOfComponents() {
 
 		return mainPropertiesPage.getNumerOfComponents();
@@ -72,7 +78,7 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 	@Override
 	public boolean performFinish() {
 
-		List<IDataInputEntry> dataInputs = dataInputFromPeakFilesPage.getDataInputEntries();
+		List<IDataInputEntry> dataInputs = getDataInputEntries();
 		int retentionTimeWindow = mainPropertiesPage.getRetentionTimeWindow();
 		pcaExtractionData = new PcaExtractionPeaks(dataInputs, retentionTimeWindow, IDataExtraction.EXTRACT_PEAK);
 		return true;

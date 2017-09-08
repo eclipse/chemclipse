@@ -15,12 +15,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -32,7 +31,7 @@ import org.eclipse.swt.widgets.TreeItem;
 public class SamplesSelectionTree {
 
 	private PcaEditor pcaEditor;
-	private List<ISample> samples = new ArrayList<>();
+	private List<IPcaResult> pcaResults = new ArrayList<>();
 
 	public SamplesSelectionTree(PcaEditor pcaEditor) {
 		this.pcaEditor = pcaEditor;
@@ -45,29 +44,29 @@ public class SamplesSelectionTree {
 		String groupName;
 		boolean isSelectSample = false;
 		TreeItem treeItem;
-		Iterator<ISample> it = samples.iterator();
+		Iterator<IPcaResult> it = pcaResults.iterator();
 		if(it.hasNext()) {
 			/*
 			 * set first branch, which contains group name
 			 */
-			ISample sample = it.next();
+			IPcaResult pcaResult = it.next();
 			groupTreeItem = new TreeItem(tree, SWT.None);
-			groupName = sample.getGroupName();
+			groupName = pcaResult.getGroupName();
 			if(groupName != null) {
 				groupTreeItem.setText(groupName);
 			} else {
 				groupTreeItem.setText("----");
 			}
 			treeItem = new TreeItem(groupTreeItem, SWT.None);
-			setSampleTreeItem(sample, treeItem);
-			isSelectSample = isSelectSample || sample.getPcaResult().isDisplayed();
+			setSampleTreeItem(pcaResult, treeItem);
+			isSelectSample = isSelectSample || pcaResult.isDisplayed();
 			groupTreeItem.setExpanded(true);
 			while(it.hasNext()) {
-				sample = it.next();
-				if(ObjectUtils.compare(sample.getGroupName(), groupName) == 0) {
+				pcaResult = it.next();
+				if(ObjectUtils.compare(pcaResult.getGroupName(), groupName) == 0) {
 					treeItem = new TreeItem(groupTreeItem, SWT.None);
-					setSampleTreeItem(sample, treeItem);
-					isSelectSample = isSelectSample || sample.getPcaResult().isDisplayed();
+					setSampleTreeItem(pcaResult, treeItem);
+					isSelectSample = isSelectSample || pcaResult.isDisplayed();
 				} else {
 					groupTreeItem.setChecked(isSelectSample);
 					/*
@@ -75,15 +74,15 @@ public class SamplesSelectionTree {
 					 */
 					groupTreeItem = new TreeItem(tree, SWT.None);
 					isSelectSample = false;
-					groupName = sample.getGroupName();
+					groupName = pcaResult.getGroupName();
 					if(groupName != null) {
 						groupTreeItem.setText(groupName);
 					} else {
 						groupTreeItem.setText("----");
 					}
 					treeItem = new TreeItem(groupTreeItem, SWT.None);
-					setSampleTreeItem(sample, treeItem);
-					isSelectSample = isSelectSample || sample.getPcaResult().isDisplayed();
+					setSampleTreeItem(pcaResult, treeItem);
+					isSelectSample = isSelectSample || pcaResult.isDisplayed();
 				}
 			}
 			groupTreeItem.setChecked(isSelectSample);
@@ -104,9 +103,9 @@ public class SamplesSelectionTree {
 				/*
 				 * set selected item
 				 */
-				ISample sample = (ISample)item.getData();
-				if(sample != null) {
-					sample.getPcaResult().setDisplayed(isChecked);
+				IPcaResult pcaResult = (IPcaResult)item.getData();
+				if(pcaResult != null) {
+					pcaResult.setDisplayed(isChecked);
 				}
 				/*
 				 * set children are checked according to selected item
@@ -114,9 +113,9 @@ public class SamplesSelectionTree {
 				TreeItem[] children = item.getItems();
 				for(TreeItem treeItem : children) {
 					treeItem.setChecked(isChecked);
-					sample = (ISample)treeItem.getData();
-					if(sample != null) {
-						sample.getPcaResult().setDisplayed(isChecked);
+					pcaResult = (IPcaResult)treeItem.getData();
+					if(pcaResult != null) {
+						pcaResult.setDisplayed(isChecked);
 					}
 				}
 				/*
@@ -127,9 +126,9 @@ public class SamplesSelectionTree {
 					TreeItem[] sibs = parentItem.getItems();
 					boolean checkParentItem = false;
 					for(TreeItem sib : sibs) {
-						sample = (ISample)sib.getData();
-						if(sample != null) {
-							checkParentItem = checkParentItem || sample.getPcaResult().isDisplayed();
+						pcaResult = (IPcaResult)sib.getData();
+						if(pcaResult != null) {
+							checkParentItem = checkParentItem || pcaResult.isDisplayed();
 						}
 						parentItem.setChecked(checkParentItem);
 					}
@@ -142,11 +141,11 @@ public class SamplesSelectionTree {
 		});
 	}
 
-	private void setSampleTreeItem(ISample sample, TreeItem item) {
+	private void setSampleTreeItem(IPcaResult pcaResult, TreeItem item) {
 
-		item.setChecked(sample.getPcaResult().isDisplayed());
-		item.setText(sample.getName());
-		item.setData(sample);
+		item.setChecked(pcaResult.isDisplayed());
+		item.setText(pcaResult.getName());
+		item.setData(pcaResult);
 	}
 
 	public void update() {
@@ -154,15 +153,15 @@ public class SamplesSelectionTree {
 		/*
 		 * clear all
 		 */
-		samples.clear();
+		pcaResults.clear();
 		/*
 		 * insert and sort samples
 		 */
 		Optional<IPcaResults> results = pcaEditor.getPcaResults();
 		if(results.isPresent()) {
-			results.get().getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toCollection(() -> samples));
-			PcaUtils.sortSampleListByName(samples);
-			PcaUtils.sortSampleListByGroup(samples);
+			pcaResults.addAll(results.get().getPcaResultList());
+			PcaUtils.sortPcaResultsByName(pcaResults);
+			PcaUtils.sortPcaResultsByGroup(pcaResults);
 		}
 	}
 }

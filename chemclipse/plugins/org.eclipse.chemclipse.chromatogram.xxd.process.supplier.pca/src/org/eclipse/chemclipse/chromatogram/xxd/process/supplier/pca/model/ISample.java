@@ -19,8 +19,6 @@ public interface ISample {
 
 	String getName();
 
-	IPcaResult getPcaResult();
-
 	List<ISampleData> getSampleData();
 
 	boolean isSelected();

@@ -45,13 +45,13 @@ public class SampleDataGroup implements ISampleData {
 	}
 
 	@Override
-	public double getNormalizedData() {
+	public double getModifiedData() {
 
 		double sum = 0;
 		int count = 0;
 		for(ISample sample : samples) {
 			if(sample.isSelected()) {
-				sum += sample.getSampleData().get(order).getNormalizedData();
+				sum += sample.getSampleData().get(order).getModifiedData();
 				count++;
 			}
 		}
@@ -80,7 +80,7 @@ public class SampleDataGroup implements ISampleData {
 	}
 
 	@Override
-	public void setNormalizedData(double normalizedData) {
+	public void setModifiedData(double normalizedData) {
 
 	}
 

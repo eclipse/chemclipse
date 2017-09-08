@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaEval
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -29,6 +30,7 @@ public class PcaInputRunnable implements IRunnableWithProgress {
 	private PcaFiltrationData pcaFiltrationData;
 	private IPcaResults pcaResults;
 	private PcaScalingData pcaScalingData;
+	private ISamples samples;
 
 	public PcaInputRunnable(IDataExtraction pcaExtractionData, PcaFiltrationData pcaFiltrationData, PcaScalingData pcaScalingData, int numberOfPrincipleComponents) {
 		this.pcaExtractionData = pcaExtractionData;
@@ -42,13 +44,18 @@ public class PcaInputRunnable implements IRunnableWithProgress {
 		return pcaResults;
 	}
 
+	public ISamples getSamples() {
+
+		return samples;
+	}
+
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		pcaResults = pcaExtractionData.process(monitor);
-		pcaScalingData.process(pcaResults, monitor);
-		pcaFiltrationData.process(pcaResults, true, monitor);
+		samples = pcaExtractionData.process(monitor);
+		pcaScalingData.process(samples, monitor);
+		pcaFiltrationData.process(samples, true, monitor);
 		PcaEvaluation pcaEvaluation = new PcaEvaluation();
-		pcaEvaluation.process(pcaResults, numberOfPrincipleComponents, monitor);
+		pcaResults = pcaEvaluation.process(samples, numberOfPrincipleComponents, monitor);
 	}
 }

@@ -11,21 +11,21 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 
 import javafx.scene.paint.Color;
 
 public class Chart3DSampleData {
 
 	private Color color;
+	private IPcaResult pcaResul;
 	private int pcaX;
 	private int pcaY;
 	private int pcaZ;
-	private ISample sample;
 	private double scale;
 
-	public Chart3DSampleData(ISample sample, int pcaX, int pcaY, int pcaZ, Color color) {
-		this.sample = sample;
+	public Chart3DSampleData(IPcaResult pcaResul, int pcaX, int pcaY, int pcaZ, Color color) {
+		this.pcaResul = pcaResul;
 		this.pcaX = pcaX;
 		this.pcaY = pcaY;
 		this.pcaZ = pcaZ;
@@ -37,6 +37,11 @@ public class Chart3DSampleData {
 		return color;
 	}
 
+	public IPcaResult getPcaResul() {
+
+		return pcaResul;
+	}
+
 	public int getPcaX() {
 
 		return pcaX;
@@ -44,7 +49,7 @@ public class Chart3DSampleData {
 
 	public double getPcaXData(boolean isScaled) {
 
-		double d = ((pcaX > 0) ? new Double(sample.getPcaResult().getEigenSpace()[pcaX - 1]) : new Double(0));
+		double d = ((pcaX > 0) ? new Double(pcaResul.getEigenSpace()[pcaX - 1]) : new Double(0));
 		return (isScaled ? d * scale : d);
 	}
 
@@ -55,7 +60,7 @@ public class Chart3DSampleData {
 
 	public double getPcaYData(boolean isScaled) {
 
-		double d = ((pcaY > 0) ? new Double(sample.getPcaResult().getEigenSpace()[pcaY - 1]) : new Double(0));
+		double d = ((pcaY > 0) ? new Double(pcaResul.getEigenSpace()[pcaY - 1]) : new Double(0));
 		return (isScaled ? d * scale : d);
 	}
 
@@ -66,13 +71,8 @@ public class Chart3DSampleData {
 
 	public double getPcaZData(boolean isScaled) {
 
-		double d = ((pcaZ > 0) ? new Double(sample.getPcaResult().getEigenSpace()[pcaZ - 1]) : new Double(0));
+		double d = ((pcaZ > 0) ? new Double(pcaResul.getEigenSpace()[pcaZ - 1]) : new Double(0));
 		return (isScaled ? d * scale : d);
-	}
-
-	public ISample getSample() {
-
-		return sample;
 	}
 
 	public double getScale() {

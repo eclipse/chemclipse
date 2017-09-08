@@ -116,35 +116,14 @@ public class PcaEditor extends AbstractPcaEditor {
 	}
 
 	@Override
-	public int openWizardPcaDerivedScansInput() {
-
-		int status = Window.CANCEL;
-		try {
-			status = super.openWizardPcaDerivedScansInput();
-			if(status == Window.OK) {
-				updateData();
-				updateViews();
-				showScorePlotPage();
-				dirtyable.setDirty(true);
-			}
-		} catch(InvocationTargetException e) {
-			logger.warn(e);
-			logger.warn(e.getCause());
-		} catch(InterruptedException e) {
-			logger.warn(e);
-		}
-		return status;
-	}
-
-	@Override
 	public int openWizardPcaPeaksInput() {
 
 		int status = Window.CANCEL;
 		try {
 			status = super.openWizardPcaPeaksInput();
 			if(status == Window.OK) {
-				updateData();
-				updateViews();
+				updateSamples();
+				updateResults();
 				showScorePlotPage();
 				dirtyable.setDirty(true);
 			}
@@ -164,8 +143,8 @@ public class PcaEditor extends AbstractPcaEditor {
 		try {
 			status = super.openWizardPcaScansInput();
 			if(status == Window.OK) {
-				updateData();
-				updateViews();
+				updateSamples();
+				updateResults();
 				showScorePlotPage();
 				dirtyable.setDirty(true);
 			}
@@ -214,7 +193,7 @@ public class PcaEditor extends AbstractPcaEditor {
 
 		try {
 			super.reEvaluatePcaCalculation();
-			updateViews();
+			updateResults();
 			showScorePlotPage();
 			dirtyable.setDirty(true);
 		} catch(InvocationTargetException e) {
@@ -229,14 +208,14 @@ public class PcaEditor extends AbstractPcaEditor {
 	public void reFiltrationData() {
 
 		super.reFiltrationData();
-		updateData();
+		updateSamples();
 	}
 
 	@Override
 	public void reModifyData() {
 
 		super.reModifyData();
-		updateData();
+		updateSamples();
 	}
 
 	@Persist
@@ -259,7 +238,7 @@ public class PcaEditor extends AbstractPcaEditor {
 		if(exportFile != null) {
 			try {
 				ResultExport resultExport = new ResultExport();
-				resultExport.exportToTextFile(exportFile, getPcaResults().get());
+				resultExport.exportToTextFile(exportFile, getPcaResults().get(), getDataInputEntries());
 				dirtyable.setDirty(false);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
@@ -277,7 +256,7 @@ public class PcaEditor extends AbstractPcaEditor {
 	public void setSelectAllData(boolean selection) {
 
 		super.setSelectAllData(selection);
-		updateData();
+		updateSamples();
 	}
 
 	public void showSamplesOverviewPagePage() {
@@ -305,13 +284,23 @@ public class PcaEditor extends AbstractPcaEditor {
 	public void updataSamples() {
 
 		super.updataGroupNames();
-		updateData();
+		updateSamples();
 	}
 
-	private void updateData() {
+	private void updateResults() {
+
+		samplesOverviewPage.updateResult();
+		scorePlotPage.update();
+		errorResiduePage.update();
+		scorePlot3dPage.update();
+		samplesSelectionDialog.update();
+		loadingPlotPage.update();
+	}
+
+	private void updateSamples() {
 
 		overviewPage.update();
-		samplesOverviewPage.update();
+		samplesOverviewPage.updateSamples();
 		modificationPage.update();
 		filtersPage.update();
 		peakListIntensityTablePage.update();
@@ -322,15 +311,5 @@ public class PcaEditor extends AbstractPcaEditor {
 		scorePlotPage.updateSelection();
 		errorResiduePage.updateSelection();
 		scorePlot3dPage.updateSelection();
-	}
-
-	private void updateViews() {
-
-		samplesOverviewPage.update();
-		scorePlotPage.update();
-		errorResiduePage.update();
-		scorePlot3dPage.update();
-		samplesSelectionDialog.update();
-		loadingPlotPage.update();
 	}
 }

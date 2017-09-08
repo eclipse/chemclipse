@@ -11,19 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import org.eclipse.chemclipse.model.core.IPeaks;
-
 public interface IPcaResult {
 
 	double[] getEigenSpace();
 
 	double getErrorMemberShip();
 
-	IPeaks getPeaks();
+	String getGroupName();
+
+	String getName();
 
 	double[] getSampleData();
-
-	ISlopes getSlopes();
 
 	boolean isDisplayed();
 
@@ -33,9 +31,9 @@ public interface IPcaResult {
 
 	void setErrorMemberShip(double errorMemberShip);
 
-	void setPeaks(IPeaks peaks);
+	void setGroupName(String groupName);
+
+	void setName(String name);
 
 	void setSampleData(double[] sampleData);
-
-	void setSlopes(ISlopes slopes);
 }

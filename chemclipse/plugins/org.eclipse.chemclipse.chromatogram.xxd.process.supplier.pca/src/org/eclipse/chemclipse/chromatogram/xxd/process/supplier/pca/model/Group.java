@@ -54,12 +54,6 @@ public class Group implements IGroup {
 	}
 
 	@Override
-	public IPcaResult getPcaResult() {
-
-		return pcaResult;
-	}
-
-	@Override
 	public List<ISampleData> getSampleData() {
 
 		return sampleData;

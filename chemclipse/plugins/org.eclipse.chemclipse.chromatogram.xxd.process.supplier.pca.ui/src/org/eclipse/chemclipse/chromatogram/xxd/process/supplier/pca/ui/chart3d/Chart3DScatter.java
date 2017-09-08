@@ -63,7 +63,7 @@ public class Chart3DScatter {
 		List<Chart3DSampleData> data = this.data.getData();
 		for(Chart3DSampleData d : data) {
 			Color color = d.getColor();
-			String name = d.getSample().getName();
+			String name = d.getPcaResul().getName();
 			/*
 			 * create sphere
 			 */
@@ -130,7 +130,7 @@ public class Chart3DScatter {
 					t.hide();
 				}
 			});
-			sphere.addEventFilter(SELECTION_UPDATE, event -> sphere.setVisible(d.getSample().getPcaResult().isDisplayed()));
+			sphere.addEventFilter(SELECTION_UPDATE, event -> sphere.setVisible(d.getPcaResul().isDisplayed()));
 			mainGroup.getChildren().addAll(sphere);
 		}
 		updateSelection();

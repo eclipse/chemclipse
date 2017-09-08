@@ -19,13 +19,13 @@ public interface ISampleData {
 
 	double getData();
 
-	double getNormalizedData();
+	double getModifiedData();
 
 	Set<IPeak> getPeaks();
 
 	boolean isEmpty();
 
-	void setNormalizedData(double normalizedData);
+	void setModifiedData(double normalizedData);
 
 	void setPeaks(Set<IPeak> peaks);
 }

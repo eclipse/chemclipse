@@ -14,11 +14,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filter
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 
 public interface IFilter {
 
-	List<Boolean> filter(IPcaResults pcaResults);
+	List<Boolean> filter(ISamples samples);
 
 	String getDescription();
 

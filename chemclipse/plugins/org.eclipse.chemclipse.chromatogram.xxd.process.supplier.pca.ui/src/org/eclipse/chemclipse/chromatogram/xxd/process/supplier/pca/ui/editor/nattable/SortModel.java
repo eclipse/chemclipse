@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.nebula.widgets.nattable.sort.ISortModel;
@@ -114,8 +115,8 @@ public class SortModel implements ISortModel {
 			}
 			final int setDirection = direction;
 			if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
-				List<Boolean> isSelected = tableProvider.getDataTable().isSelectedRetentionTimes();
-				sortedRow.sort((i, j) -> setDirection * Boolean.compare(isSelected.get(i), isSelected.get(j)));
+				List<IRetentionTime> retentionTimes = tableProvider.getDataTable().getRetentionTimes();
+				sortedRow.sort((i, j) -> setDirection * Boolean.compare(retentionTimes.get(i).isSelected(), retentionTimes.get(j).isSelected()));
 			} else if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
 				/*
 				 * sort by retention time
@@ -142,7 +143,7 @@ public class SortModel implements ISortModel {
 					ISampleData sampleDataA = sampleData.get(i);
 					ISampleData sampleDataB = sampleData.get(j);
 					if(!sampleDataA.isEmpty() && !sampleDataB.isEmpty()) {
-						return setDirection * Double.compare(sampleDataA.getNormalizedData(), sampleDataB.getNormalizedData());
+						return setDirection * Double.compare(sampleDataA.getModifiedData(), sampleDataB.getModifiedData());
 					} else if(!sampleDataA.isEmpty()) {
 						return setDirection;
 					} else if(!sampleDataB.isEmpty()) {

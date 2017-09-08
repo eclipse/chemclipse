@@ -12,19 +12,21 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataModification;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaInputRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.ReEvaluateRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.IPcaInputWizard;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PcaDerivedScansInputWizard;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PcaPeaksInputWizard;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PcaScansInputWizard;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -34,12 +36,20 @@ import org.eclipse.swt.widgets.Display;
 
 public abstract class AbstractPcaEditor {
 
+	private List<IDataInputEntry> dataInputEntries;
 	private Optional<Integer> numberOfPrincipleComponents = Optional.of(3);
 	private Optional<PcaFiltrationData> pcaFiltrationData = Optional.empty();
 	private Optional<IPcaResults> pcaResults = Optional.empty();
 	private Optional<PcaScalingData> pcaScalingData = Optional.empty();
+	private Optional<ISamples> samples = Optional.empty();
 
 	public AbstractPcaEditor() {
+		dataInputEntries = new ArrayList<>();
+	}
+
+	public List<IDataInputEntry> getDataInputEntries() {
+
+		return dataInputEntries;
 	}
 
 	public Optional<Integer> getNumberOfPrincipleComponents() {
@@ -62,9 +72,9 @@ public abstract class AbstractPcaEditor {
 		return pcaScalingData;
 	}
 
-	protected int openWizardPcaDerivedScansInput() throws InvocationTargetException, InterruptedException {
+	public Optional<ISamples> getSamples() {
 
-		return openWizardPcaInput(new PcaDerivedScansInputWizard());
+		return samples;
 	}
 
 	private int openWizardPcaInput(IPcaInputWizard wizard) throws InvocationTargetException, InterruptedException {
@@ -88,7 +98,10 @@ public abstract class AbstractPcaEditor {
 			this.pcaFiltrationData = Optional.of(pcaFiltrationData);
 			this.pcaScalingData = Optional.of(pcaScalingData);
 			this.pcaResults = Optional.of(runnable.getPcaResults());
+			this.samples = Optional.of(runnable.getSamples());
 			this.numberOfPrincipleComponents = Optional.of(numberOfPrincipleComponents);
+			this.dataInputEntries.clear();
+			this.dataInputEntries.addAll(wizard.getDataInputEntries());
 		}
 		return status;
 	}
@@ -108,22 +121,22 @@ public abstract class AbstractPcaEditor {
 		/*
 		 * Run the process.
 		 */
-		IPcaResults results = pcaResults.get();
 		int numberOfPrincComp = numberOfPrincipleComponents.get();
-		ReEvaluateRunnable runnable = new ReEvaluateRunnable(results, numberOfPrincComp);
+		ReEvaluateRunnable runnable = new ReEvaluateRunnable(samples.get(), numberOfPrincComp);
 		ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-		monitor.run(true, true, runnable);
+		monitor.run(true, false, runnable);
+		this.pcaResults = Optional.of(runnable.getPcaResults());
 	}
 
 	protected void reFiltrationData() {
 
-		pcaFiltrationData.get().process(pcaResults.get(), true, new NullProgressMonitor());
+		pcaFiltrationData.get().process(samples.get(), true, new NullProgressMonitor());
 	}
 
 	protected void reModifyData() {
 
-		IDataModification.resetData(pcaResults.get());
-		pcaScalingData.get().process(pcaResults.get(), new NullProgressMonitor());
+		IDataModification.resetData(samples.get());
+		pcaScalingData.get().process(samples.get(), new NullProgressMonitor());
 	}
 
 	public void setNumberOfPrincipleComponents(int numberOfPrincipleComponents) {
@@ -133,11 +146,11 @@ public abstract class AbstractPcaEditor {
 
 	protected void setSelectAllData(boolean selection) {
 
-		pcaFiltrationData.get().setSelectAllRow(pcaResults.get(), selection);
+		pcaFiltrationData.get().setSelectAllRow(samples.get(), selection);
 	}
 
 	protected void updataGroupNames() {
 
-		PcaUtils.setGroups(getPcaResults().get(), true);
+		samples.get().createGroups();
 	}
 }

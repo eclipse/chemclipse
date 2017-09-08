@@ -14,7 +14,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filter
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 
 public class RetentionTimeFilter implements IFilter {
@@ -33,9 +34,9 @@ public class RetentionTimeFilter implements IFilter {
 	}
 
 	@Override
-	public List<Boolean> filter(IPcaResults pcaResults) {
+	public List<Boolean> filter(ISamples samples) {
 
-		List<Integer> retentionTime = pcaResults.getExtractedRetentionTimes();
+		List<IRetentionTime> retentionTime = samples.getExtractedRetentionTimes();
 		List<Boolean> selection = new ArrayList<>(retentionTime.size());
 		boolean set;
 		if(SELECT_INTERVAL == filtrationType) {
@@ -50,7 +51,7 @@ public class RetentionTimeFilter implements IFilter {
 			int begin = interval[0];
 			int finish = interval[1];
 			for(int i = 0; i < retentionTime.size(); i++) {
-				int ret = retentionTime.get(i);
+				int ret = retentionTime.get(i).getRetentionTime();
 				if(ret >= begin && ret <= finish) {
 					selection.set(i, set);
 				}

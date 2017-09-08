@@ -11,18 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IDataModification {
 
-	static void resetData(IPcaResults pcaResults) {
+	static void resetData(ISamples samples) {
 
-		for(ISample sample : pcaResults.getSampleList()) {
+		for(ISample sample : samples.getSampleList()) {
 			sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> {
 				double data = d.getData();
-				d.setNormalizedData(data);
+				d.setModifiedData(data);
 			});
 		}
 	}
@@ -31,7 +31,7 @@ public interface IDataModification {
 
 	boolean isOnlySelected();
 
-	void process(IPcaResults pcaResults, IProgressMonitor monitor);
+	void process(ISamples samples, IProgressMonitor monitor);
 
 	void setEnableModificationData(boolean enable);
 

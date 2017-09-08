@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.InputFilesTable;
@@ -83,14 +86,22 @@ public abstract class DataInputPageWizard extends WizardPage {
 		setControl(composite);
 	}
 
-	public List<IDataInputEntry> getDataInputEntries() {
+	protected List<IDataInputEntry> getDataInputEntries() {
 
 		return inputFilesTable.getDataInputEntries();
 	}
 
-	public String getGroupName() {
+	protected String getGroupName() {
 
 		return textGroupName.getText();
+	}
+
+	public List<IDataInputEntry> getUniqueDataInputEnties() {
+
+		List<IDataInputEntry> inputs = inputFilesTable.getDataInputEntries();
+		Map<String, IDataInputEntry> uniqueInputs = new HashMap<>();
+		inputs.forEach(e -> uniqueInputs.put(e.getName(), e));
+		return new ArrayList<>(uniqueInputs.values());
 	}
 
 	private void redrawCountFiles() {
