@@ -277,7 +277,7 @@ public class PcaExtractionPeaks implements IDataExtraction {
 			ISampleData sampleData;
 			if(Double.compare(0, abundance) != 0) {
 				sampleData = new SampleData(abundance);
-				sampleData.setPeaks(setPeaks);
+				sampleData.getPeaks().addAll(setPeaks);
 			} else {
 				sampleData = new SampleData();
 			}
@@ -428,9 +428,7 @@ public class PcaExtractionPeaks implements IDataExtraction {
 				IPeak peak = extractPeak.get(retentionTime);
 				if(peak != null) {
 					ISampleData sampleData = new SampleData(peak.getIntegratedArea());
-					Set<IPeak> peaks = new HashSet<>(1);
-					peaks.add(peak);
-					sampleData.setPeaks(peaks);
+					sampleData.getPeaks().add(peak);
 					sample.getSampleData().add(sampleData);
 				} else {
 					ISampleData sampleData = new SampleData();

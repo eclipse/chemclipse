@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -26,12 +27,14 @@ public class SampleData implements ISampleData {
 		this.data = 0.0;
 		this.normalizedData = 0.0;
 		this.isEmpty = true;
+		peaks = new HashSet<>();
 	}
 
 	public SampleData(double data) {
 		this.data = data;
 		this.normalizedData = data;
 		this.isEmpty = false;
+		peaks = new HashSet<>();
 	}
 
 	@Override
@@ -64,9 +67,4 @@ public class SampleData implements ISampleData {
 		this.normalizedData = normalizedData;
 	}
 
-	@Override
-	public void setPeaks(Set<IPeak> peaks) {
-
-		this.peaks = peaks;
-	}
 }
