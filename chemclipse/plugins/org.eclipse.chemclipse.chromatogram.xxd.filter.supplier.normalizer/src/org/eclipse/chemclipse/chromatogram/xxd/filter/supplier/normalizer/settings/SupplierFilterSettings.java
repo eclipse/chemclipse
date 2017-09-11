@@ -13,8 +13,13 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.setti
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
 
+	@JsonProperty(value = "Normalization Base", defaultValue = "1000")
+	@JsonPropertyDescription(value = "Use this value to normalize the chromatogram.")
 	private float normalizationBase = ISupplierFilterSettings.DEFAULT_NORMALIZATION_BASE;
 
 	@Override
