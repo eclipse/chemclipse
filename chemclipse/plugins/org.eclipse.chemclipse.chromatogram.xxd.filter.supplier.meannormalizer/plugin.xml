@@ -7,6 +7,7 @@
             description="This filter mean normalizes all signals of a chromatogram."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer.core.ChromatogramFilter"
             filterName="Mean Normalizer"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer.settings.SupplierFilterSettings"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer">
       </ChromatogramFilterSupplier>
    </extension>
