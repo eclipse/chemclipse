@@ -7,6 +7,7 @@
             description="This filters enables to remove the baseline from the chromatogram."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.core.ChromatogramFilter"
             filterName="Chromatogram Baseline Subtract Filter"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.settings.FilterSettings"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract">
       </ChromatogramFilterSupplier>
    </extension>
