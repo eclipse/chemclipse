@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.setti
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 
-public interface IFilterSettings extends IChromatogramFilterSettings {
+public interface ISupplierFilterSettings extends IChromatogramFilterSettings {
 
 	float getMultiplier();
 

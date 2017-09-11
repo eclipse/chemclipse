@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramF
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class FilterSettings extends AbstractChromatogramFilterSettings implements IFilterSettings {
+public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
 
 	@JsonProperty(value = "Multiplier", defaultValue = "10")
 	@JsonPropertyDescription(value = "The factor to multiply the signals.")

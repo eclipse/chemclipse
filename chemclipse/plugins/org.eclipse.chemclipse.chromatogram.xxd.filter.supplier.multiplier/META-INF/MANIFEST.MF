@@ -17,5 +17,6 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.core,
  org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.exceptions,
- org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.preferences
+ org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.preferences,
+ org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings
 Bundle-Vendor: OpenChrom

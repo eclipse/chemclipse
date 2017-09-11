@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.IFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.CalculationException;
@@ -74,8 +74,8 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 		/*
 		 * Get the excluded ions instance.
 		 */
-		if(chromatogramFilterSettings instanceof IFilterSettings) {
-			IFilterSettings settings = (IFilterSettings)chromatogramFilterSettings;
+		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
+			ISupplierFilterSettings settings = (ISupplierFilterSettings)chromatogramFilterSettings;
 			multiplier = settings.getMultiplier();
 		}
 		return multiplier;

@@ -16,8 +16,8 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.FilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.IFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -73,7 +73,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static IChromatogramFilterSettings getChromatogramFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		IFilterSettings chromatogramFilterSettings = new FilterSettings();
+		ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
 		chromatogramFilterSettings.setMultiplier(preferences.getFloat(P_MULTIPLIER, DEF_MULTIPLIER));
 		return chromatogramFilterSettings;
 	}
