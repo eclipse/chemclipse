@@ -13,8 +13,13 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalize
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
 
+	@JsonProperty(value = "Multiplication Factor", defaultValue = "1")
+	@JsonPropertyDescription(value = "Set the multiplication factor.")
 	private float multiplicationFactor;
 
 	@Override
