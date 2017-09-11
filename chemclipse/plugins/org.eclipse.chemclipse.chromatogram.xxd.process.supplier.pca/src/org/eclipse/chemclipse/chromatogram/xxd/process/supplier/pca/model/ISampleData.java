@@ -27,5 +27,4 @@ public interface ISampleData {
 
 	void setModifiedData(double normalizedData);
 
-	void setPeaks(Set<IPeak> peaks);
 }

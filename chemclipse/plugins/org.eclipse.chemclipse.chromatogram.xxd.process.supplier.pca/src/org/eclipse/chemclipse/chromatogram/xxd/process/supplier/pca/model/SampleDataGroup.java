@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,10 +21,12 @@ public class SampleDataGroup implements ISampleData {
 
 	private int order;
 	private List<ISample> samples;
+	private Set<IPeak> peaks;
 
 	public SampleDataGroup(List<ISample> samples, int order) {
 		this.samples = samples;
 		this.order = order;
+		this.peaks = new HashSet<>();
 	}
 
 	@Override
@@ -59,7 +62,7 @@ public class SampleDataGroup implements ISampleData {
 	@Override
 	public Set<IPeak> getPeaks() {
 
-		return null;
+		return peaks;
 	}
 
 	@Override
@@ -73,8 +76,4 @@ public class SampleDataGroup implements ISampleData {
 
 	}
 
-	@Override
-	public void setPeaks(Set<IPeak> peaks) {
-
-	}
 }
