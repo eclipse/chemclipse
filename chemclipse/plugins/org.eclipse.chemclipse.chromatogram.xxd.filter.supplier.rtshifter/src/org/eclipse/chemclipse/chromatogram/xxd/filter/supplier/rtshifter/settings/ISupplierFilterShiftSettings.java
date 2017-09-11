@@ -17,5 +17,9 @@ public interface ISupplierFilterShiftSettings extends IChromatogramFilterSetting
 
 	int getMillisecondsToShift();
 
+	void setMillisecondsToShift(int millisecondsToShift);
+
 	boolean isShiftAllScans();
+
+	void setShiftAllScans(boolean shiftAllScans);
 }
