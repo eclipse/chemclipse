@@ -7,6 +7,7 @@
             description="This filter enables to remove a series of scans."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.core.ChromatogramFilterRemover"
             filterName="Scan Remover Filter"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.SupplierFilterSettings"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover">
       </ChromatogramFilterSupplier>
       <ChromatogramFilterSupplier
