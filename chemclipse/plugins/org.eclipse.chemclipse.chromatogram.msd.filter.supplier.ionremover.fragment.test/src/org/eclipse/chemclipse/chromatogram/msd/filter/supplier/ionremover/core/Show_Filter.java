@@ -34,6 +34,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -91,7 +92,7 @@ public class Show_Filter extends ChromatogramImporterTestCase {
 		 * Filter Background
 		 */
 		ISupplierFilterSettings rFilterSettings = new SupplierFilterSettings();
-		excludedIons = rFilterSettings.getIonsToRemove();
+		excludedIons = new MarkedIons(rFilterSettings.getIonsToRemove());
 		excludedIons.add(new MarkedIon(28));
 		excludedIons.add(new MarkedIon(32));
 		excludedIons.add(new MarkedIon(207));
@@ -145,7 +146,7 @@ public class Show_Filter extends ChromatogramImporterTestCase {
 		 * Filter Background
 		 */
 		ISupplierFilterSettings rFilterSettings = new SupplierFilterSettings();
-		excludedIons = rFilterSettings.getIonsToRemove();
+		excludedIons = new MarkedIons(rFilterSettings.getIonsToRemove());
 		excludedIons.add(new MarkedIon(28));
 		excludedIons.add(new MarkedIon(32));
 		excludedIons.add(new MarkedIon(207));

@@ -16,6 +16,7 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settin
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class MFRemoverFilter_1_ITest extends ChromatogramImporterTestCase {
@@ -30,7 +31,7 @@ public class MFRemoverFilter_1_ITest extends ChromatogramImporterTestCase {
 		super.setUp();
 		chromatogramFilter = new ChromatogramFilter();
 		chromatogramFilterSettings = new SupplierFilterSettings();
-		excludedIons = chromatogramFilterSettings.getIonsToRemove();
+		excludedIons = new MarkedIons(chromatogramFilterSettings.getIonsToRemove());
 		excludedIons.add(new MarkedIon(28));
 		excludedIons.add(new MarkedIon(32));
 		excludedIons.add(new MarkedIon(207));

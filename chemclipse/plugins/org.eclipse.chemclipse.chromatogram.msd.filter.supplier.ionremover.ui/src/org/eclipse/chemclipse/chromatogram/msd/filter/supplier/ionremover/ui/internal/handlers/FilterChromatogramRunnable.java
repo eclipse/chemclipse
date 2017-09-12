@@ -12,18 +12,11 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.internal.handlers;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -44,39 +37,11 @@ public class FilterChromatogramRunnable extends AbstractChromatogramProcessor im
 	public void execute(IProgressMonitor monitor) {
 
 		if(getChromatogramSelection() instanceof IChromatogramSelectionMSD) {
-			IChromatogramSelectionMSD chromatogramSelection = (IChromatogramSelectionMSD)getChromatogramSelection();
-			/*
-			 * The filter settings.
-			 */
-			ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
-			IMarkedIons excludedIons = chromatogramFilterSettings.getIonsToRemove();
-			/*
-			 * Check whether to use the ions, stored in the settings or to
-			 * use the ions stored in each's chromatogram options page
-			 * (excluded ions).
-			 */
-			Set<Integer> ions = new HashSet<Integer>();
-			if(PreferenceSupplier.useSettings()) {
-				ions = PreferenceSupplier.getIons();
-			} else {
-				/*
-				 * Try to retrieve the ions, the user has set in the
-				 * chromatogram option page.
-				 */
-				if(chromatogramSelection != null) {
-					ions = chromatogramSelection.getExcludedIons().getIonsNominal();
-				}
-			}
-			/*
-			 * Set the ions that will be removed.
-			 */
-			for(int ion : ions) {
-				excludedIons.add(new MarkedIon(ion));
-			}
 			/*
 			 * Apply the filter.
 			 */
-			final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, chromatogramFilterSettings, FILTER_ID, monitor);
+			IChromatogramSelectionMSD chromatogramSelection = (IChromatogramSelectionMSD)getChromatogramSelection();
+			final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, FILTER_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 		}
 	}

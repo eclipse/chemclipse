@@ -12,14 +12,10 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings;
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 
 public interface ISupplierFilterSettings extends IChromatogramFilterSettings {
 
-	/**
-	 * Returns the ions instance.
-	 * 
-	 * @return {@link IMarkedIons}
-	 */
-	IMarkedIons getIonsToRemove();
+	String getIonsToRemove();
+
+	void setIonsToRemove(String ionsToRemove);
 }

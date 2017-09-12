@@ -14,11 +14,9 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.pr
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.ui.Activator;
 import org.eclipse.chemclipse.support.ui.preferences.editors.IonListEditor;
-
-import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -36,12 +34,6 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public void createFieldEditors() {
 
 		addField(new IonListEditor(PreferenceSupplier.P_IONS_TO_REMOVE, "Remove ions", getFieldEditorParent()));
-		/*
-		 * "Use the ions stored in the settings,\n" +
-		 * "otherwise the excluded ions, stored in\n" +
-		 * "each chromatograms option page, will be taken."
-		 */
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_SETTINGS, "Use the ions stored in the settings.", getFieldEditorParent()));
 	}
 
 	/*

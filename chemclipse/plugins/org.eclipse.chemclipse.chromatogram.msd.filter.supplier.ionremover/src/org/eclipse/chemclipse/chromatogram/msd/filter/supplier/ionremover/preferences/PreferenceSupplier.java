@@ -19,17 +19,16 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSe
 import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.IIonRemoverMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.IIonRemoverPeakFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ISupplierFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.IonRemoverMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.IonRemoverPeakFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.IonListUtil;
-
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -37,9 +36,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_IONS_TO_REMOVE = "ionsToRemove";
-	public static final String P_USE_SETTINGS = "useSettings";
 	public static final String DEF_IONS_TO_REMOVE = "18;28;84;207";
-	public static final boolean DEF_USE_SETTINGS = true;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -68,7 +65,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE);
-		defaultValues.put(P_USE_SETTINGS, Boolean.toString(DEF_USE_SETTINGS));
 		return defaultValues;
 	}
 
@@ -86,11 +82,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static IChromatogramFilterSettings getChromatogramFilterSettings() {
 
 		ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
-		/*
-		 * Set the ions that shall be removed in every case.
-		 */
-		IMarkedIons ionsToRemove = chromatogramFilterSettings.getIonsToRemove();
-		PreferenceSupplier.setMarkedIons(ionsToRemove, getIons(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		chromatogramFilterSettings.setIonsToRemove(preferences.get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
 		return chromatogramFilterSettings;
 	}
 
@@ -144,18 +137,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		IonListUtil ionListUtil = new IonListUtil();
 		String preferenceEntry = preferences.get(preference, def);
 		return ionListUtil.getIons(preferenceEntry);
-	}
-
-	/**
-	 * Returns whether to use the settings or the chromatogram multi-page
-	 * (excluded ion) settings.
-	 * 
-	 * @return
-	 */
-	public static boolean useSettings() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_USE_SETTINGS, DEF_USE_SETTINGS);
 	}
 
 	/**

@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
@@ -62,7 +63,6 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 	}
 
-	// ----------------------------private methods
 	private void setFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
 
 		/*
@@ -70,7 +70,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 		 */
 		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
 			ISupplierFilterSettings settings = (ISupplierFilterSettings)chromatogramFilterSettings;
-			this.ionsToRemove = settings.getIonsToRemove();
+			this.ionsToRemove = new MarkedIons(settings.getIonsToRemove());
 		}
 	}
 
@@ -106,5 +106,4 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 			supplierMassSpectrum.removeIons(ionsToRemove);
 		}
 	}
-	// ----------------------------private methods
 }
