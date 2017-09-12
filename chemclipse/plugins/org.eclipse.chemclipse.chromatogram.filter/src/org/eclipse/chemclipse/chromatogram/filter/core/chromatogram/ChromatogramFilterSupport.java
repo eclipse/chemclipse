@@ -111,12 +111,10 @@ public class ChromatogramFilterSupport implements IChromatogramFilterSupport {
 		}
 	}
 
-	// -------------------------------------private methods
 	private void areChromatogramFiltersStored() throws NoChromatogramFilterSupplierAvailableException {
 
 		if(suppliers.size() < 1) {
 			throw new NoChromatogramFilterSupplierAvailableException();
 		}
 	}
-	// -------------------------------------private methods
 }

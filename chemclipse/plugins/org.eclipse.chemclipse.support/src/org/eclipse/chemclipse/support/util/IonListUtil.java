@@ -72,11 +72,11 @@ public class IonListUtil {
 	/**
 	 * E.g. preferenceEntry = "18;28;84;207" to 18 28 84 207
 	 */
-	public Set<Integer> getIons(String preferenceEntry) {
+	public Set<Integer> getIons(String stringList) {
 
 		Set<Integer> ions = new HashSet<Integer>();
-		if(preferenceEntry != "") {
-			String[] items = parseString(preferenceEntry);
+		if(stringList != "") {
+			String[] items = parseString(stringList);
 			if(items.length > 0) {
 				Integer ion;
 				for(String item : items) {

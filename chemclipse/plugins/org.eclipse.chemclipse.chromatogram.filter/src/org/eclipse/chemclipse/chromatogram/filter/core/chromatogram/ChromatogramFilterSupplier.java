@@ -86,7 +86,6 @@ public class ChromatogramFilterSupplier implements IChromatogramFilterSupplier {
 		this.filterSettingsClass = filterSettingsClass;
 	}
 
-	// ------------------------------------hashCode, equals, toString
 	@Override
 	public boolean equals(Object other) {
 
@@ -123,5 +122,4 @@ public class ChromatogramFilterSupplier implements IChromatogramFilterSupplier {
 		builder.append("]");
 		return builder.toString();
 	}
-	// ------------------------------------hashCode, equals, toString
 }
