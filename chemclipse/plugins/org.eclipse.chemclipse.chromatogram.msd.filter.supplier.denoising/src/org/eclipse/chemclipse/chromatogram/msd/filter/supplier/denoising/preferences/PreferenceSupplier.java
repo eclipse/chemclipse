@@ -17,26 +17,24 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
-import org.eclipse.core.runtime.preferences.InstanceScope;
-
-import org.eclipse.chemclipse.model.support.SegmentWidth;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.SupplierFilterSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.support.SegmentWidth;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_IONS_TO_REMOVE = "ionsToRemove";
 	public static final String P_IONS_TO_PRESERVE = "ionsToPreserve";
 	public static final String P_SEGMENT_WIDTH = "segmentWidth";
-	public static final String P_USE_CHROMATOGRAM_SPECIFIC_IONS = "useChromatogramSpecificIons";
 	public static final String P_ADJUST_THRESHOLD_TRANSITIONS = "adjustThresholdTransitions";
 	public static final String DEF_IONS_TO_REMOVE = "18;28;84;207";
 	public static final String DEF_IONS_TO_PRESERVE = "103;104";
@@ -74,7 +72,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE);
 		defaultValues.put(P_IONS_TO_PRESERVE, DEF_IONS_TO_PRESERVE);
 		defaultValues.put(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH);
-		defaultValues.put(P_USE_CHROMATOGRAM_SPECIFIC_IONS, Boolean.toString(DEF_USE_CHROMATOGRAM_SPECIFIC_IONS));
 		defaultValues.put(P_ADJUST_THRESHOLD_TRANSITIONS, Boolean.toString(DEF_ADJUST_THRESHOLD_TRANSITIONS));
 		return defaultValues;
 	}
@@ -100,21 +97,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		 */
 		chromatogramFilterSettings.setAdjustThresholdTransitions(preferences.getBoolean(P_ADJUST_THRESHOLD_TRANSITIONS, DEF_ADJUST_THRESHOLD_TRANSITIONS));
 		chromatogramFilterSettings.setNumberOfUsedIonsForCoefficient(1);
-		/*
-		 * Set the ions that shall be removed in every case.
-		 */
-		IMarkedIons ionsToRemove = chromatogramFilterSettings.getIonsToRemove();
-		PreferenceSupplier.setMarkedIons(ionsToRemove, getIons(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
-		/*
-		 * Set the ions that shall be preserved in every case.
-		 */
-		IMarkedIons ionsToPreserve = chromatogramFilterSettings.getIonsToPreserve();
-		PreferenceSupplier.setMarkedIons(ionsToPreserve, getIons(P_IONS_TO_PRESERVE, DEF_IONS_TO_PRESERVE));
-		/*
-		 * Set the segment width.
-		 */
-		SegmentWidth segmentWidth = SegmentWidth.valueOf(preferences.get(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
-		chromatogramFilterSettings.setSegmentWidth(segmentWidth);
+		chromatogramFilterSettings.setIonsToRemove(preferences.get(P_IONS_TO_REMOVE, DEF_IONS_TO_REMOVE));
+		chromatogramFilterSettings.setIonsToPreserve(preferences.get(P_IONS_TO_PRESERVE, DEF_IONS_TO_PRESERVE));
+		chromatogramFilterSettings.setSegmentWidth(preferences.get(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
 		return chromatogramFilterSettings;
 	}
 
@@ -214,18 +199,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getBoolean(P_ADJUST_THRESHOLD_TRANSITIONS, DEF_ADJUST_THRESHOLD_TRANSITIONS);
-	}
-
-	/**
-	 * Returns whether to use the settings or the chromatogram multi-page
-	 * (selected, excluded ions).
-	 * 
-	 * @return boolean
-	 */
-	public static boolean useChromatogramSpecificIons() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_USE_CHROMATOGRAM_SPECIFIC_IONS, DEF_USE_CHROMATOGRAM_SPECIFIC_IONS);
 	}
 
 	/**

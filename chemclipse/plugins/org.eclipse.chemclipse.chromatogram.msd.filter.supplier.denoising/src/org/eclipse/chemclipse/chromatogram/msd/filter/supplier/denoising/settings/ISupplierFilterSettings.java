@@ -11,66 +11,27 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings;
 
-import org.eclipse.chemclipse.model.support.SegmentWidth;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 
 public interface ISupplierFilterSettings extends IChromatogramFilterSettings {
 
-	/**
-	 * Returns the ions that should be removed in all cases.
-	 * 
-	 * @return {@link IMarkedIons}
-	 */
-	IMarkedIons getIonsToRemove();
+	String getIonsToRemove();
 
-	/**
-	 * Returns the ions which shall be preserved while calculating the
-	 * noise mass spectrum.
-	 * 
-	 * @return {@link IMarkedIons}
-	 */
-	IMarkedIons getIonsToPreserve();
+	void setIonsToRemove(String ionsToRemove);
 
-	/**
-	 * Returns whether threshold transition adjustment shall be used or not.
-	 * 
-	 * @return
-	 */
-	boolean getAdjustThresholdTransitions();
+	String getIonsToPreserve();
 
-	/**
-	 * Sets whether threshold transition adjustment shall be used or not.
-	 * 
-	 * @param adjustThresholdTransitions
-	 */
+	void setIonsToPreserve(String ionsToPreserve);
+
+	boolean isAdjustThresholdTransitions();
+
 	void setAdjustThresholdTransitions(boolean adjustThresholdTransitions);
 
-	/**
-	 * Returns the number of used ions for the calculation of the
-	 * coefficient.
-	 * 
-	 * @return
-	 */
 	int getNumberOfUsedIonsForCoefficient();
 
-	/**
-	 * Sets the number of used ions for the calculation of the
-	 * coefficient.
-	 */
 	void setNumberOfUsedIonsForCoefficient(int numberOfUsedIonsForCoefficient);
 
-	/**
-	 * Returns the segment width enum.
-	 * 
-	 * @return {@link SegmentWidth}
-	 */
-	SegmentWidth getSegmentWidth();
+	String getSegmentWidth();
 
-	/**
-	 * Sets the segment width enum.
-	 * 
-	 * @param segmentWidth
-	 */
-	void setSegmentWidth(SegmentWidth segmentWidth);
+	void setSegmentWidth(String segmentWidth);
 }

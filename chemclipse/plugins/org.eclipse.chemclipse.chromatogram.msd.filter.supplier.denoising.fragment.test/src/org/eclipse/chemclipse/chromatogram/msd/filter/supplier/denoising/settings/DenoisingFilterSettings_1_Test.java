@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings;
 
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
+
 import junit.framework.TestCase;
 
 public class DenoisingFilterSettings_1_Test extends TestCase {
@@ -38,7 +40,7 @@ public class DenoisingFilterSettings_1_Test extends TestCase {
 
 	public void testGetIonsToRemove_2() {
 
-		assertEquals("IonsToRemove Size", 0, settings.getIonsToRemove().getIonsNominal().size());
+		assertEquals("IonsToRemove Size", 0, new MarkedIons(settings.getIonsToRemove()).getIonsNominal().size());
 	}
 
 	public void testGetIonsToPreserve_1() {
@@ -48,18 +50,18 @@ public class DenoisingFilterSettings_1_Test extends TestCase {
 
 	public void testGetIonsToPreserve_2() {
 
-		assertEquals("IonsToPreserve Size", 0, settings.getIonsToPreserve().getIonsNominal().size());
+		assertEquals("IonsToPreserve Size", 0, new MarkedIons(settings.getIonsToPreserve()).getIonsNominal().size());
 	}
 
 	public void testGetAdjustThresholdTransitions_1() {
 
-		assertTrue(settings.getAdjustThresholdTransitions());
+		assertTrue(settings.isAdjustThresholdTransitions());
 	}
 
 	public void testGetAdjustThresholdTransitions_2() {
 
 		settings.setAdjustThresholdTransitions(false);
-		assertFalse(settings.getAdjustThresholdTransitions());
+		assertFalse(settings.isAdjustThresholdTransitions());
 	}
 
 	public void testGetNumberOfUsedIonsForCoefficient_1() {

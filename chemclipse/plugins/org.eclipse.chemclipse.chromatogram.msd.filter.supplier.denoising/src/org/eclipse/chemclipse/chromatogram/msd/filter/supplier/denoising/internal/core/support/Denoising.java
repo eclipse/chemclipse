@@ -377,8 +377,6 @@ public class Denoising {
 			 * Calculate the start and stop scans for each segment and the noise
 			 * mass spectra. And extract the relevant noise mass spectra.
 			 */
-			System.out.println(segment);
-			//
 			segmentNoiseMassSpectra = new ArrayList<ICombinedMassSpectrum>();
 			currentNoiseSegment = noiseSegments.get(segment);
 			segmentNoiseMassSpectra.add(currentNoiseSegment.getNoiseMassSpectrum());

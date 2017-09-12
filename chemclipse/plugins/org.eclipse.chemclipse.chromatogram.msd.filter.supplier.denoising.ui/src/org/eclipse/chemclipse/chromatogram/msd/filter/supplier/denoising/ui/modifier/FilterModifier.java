@@ -17,16 +17,12 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.result.IDenoisingFilterResult;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.ISupplierFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.internal.preferences.IDenoisingEvents;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -51,47 +47,8 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 
 		if(getChromatogramSelection() instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelection = (IChromatogramSelectionMSD)getChromatogramSelection();
-			/*
-			 * The filter settings.
-			 */
-			ISupplierFilterSettings chromatogramFilterSettings = new SupplierFilterSettings();
-			/*
-			 * Set the ions that shall be removed in every case.
-			 */
-			IMarkedIons ionsToRemove = chromatogramFilterSettings.getIonsToRemove();
-			if(PreferenceSupplier.useChromatogramSpecificIons()) {
-				PreferenceSupplier.setMarkedIons(ionsToRemove, chromatogramSelection.getSelectedIons().getIonsNominal());
-			} else {
-				PreferenceSupplier.setMarkedIons(ionsToRemove, PreferenceSupplier.getIonsToRemove());
-			}
-			/*
-			 * Set the ions that shall be preserved in every case.
-			 */
-			IMarkedIons ionsToPreserve = chromatogramFilterSettings.getIonsToPreserve();
-			if(PreferenceSupplier.useChromatogramSpecificIons()) {
-				PreferenceSupplier.setMarkedIons(ionsToPreserve, chromatogramSelection.getExcludedIons().getIonsNominal());
-			} else {
-				PreferenceSupplier.setMarkedIons(ionsToPreserve, PreferenceSupplier.getIonsToPreserve());
-			}
-			/*
-			 * Adjust Threshold transitions.
-			 */
-			chromatogramFilterSettings.setAdjustThresholdTransitions(PreferenceSupplier.adjustThresholdTransitions());
-			/*
-			 * The number of used highest ions to calculate the
-			 * correlation factor.
-			 */
-			// chromatogramFilterSettings.setNumberOfUsedIonsForCoefficient(PreferenceSupplier.getNumberOfUsedIonsForCoefficient());
-			chromatogramFilterSettings.setNumberOfUsedIonsForCoefficient(1);
-			/*
-			 * Set the segment width.
-			 */
-			chromatogramFilterSettings.setSegmentWidth(PreferenceSupplier.getSegmentWidth());
-			/*
-			 * Apply the filter and show the view.
-			 */
 			try {
-				final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, chromatogramFilterSettings, FILTER_ID, monitor);
+				final IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, FILTER_ID, monitor);
 				IChromatogramFilterResult result = processingInfo.getChromatogramFilterResult();
 				if(result instanceof IDenoisingFilterResult) {
 					final IDenoisingFilterResult denoisingResult = (IDenoisingFilterResult)result;

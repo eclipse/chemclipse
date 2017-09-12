@@ -11,41 +11,55 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings;
 
-import org.eclipse.chemclipse.model.support.SegmentWidth;
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class SupplierFilterSettings extends AbstractChromatogramFilterSettings implements ISupplierFilterSettings {
 
-	private IMarkedIons ionsToRemove;
-	private IMarkedIons ionsToPreserve;
-	private boolean adjustThresholdTransitions;
-	private int numberOfUsedIonsForCoefficient;
-	private SegmentWidth segmentWidth;
-
-	public SupplierFilterSettings() {
-		ionsToRemove = new MarkedIons();
-		ionsToPreserve = new MarkedIons();
-		adjustThresholdTransitions = true;
-		numberOfUsedIonsForCoefficient = 1;
-		segmentWidth = SegmentWidth.WIDTH_13;
-	}
+	@JsonProperty(value = "Ions To Remove", defaultValue = "18;28;84;207")
+	@JsonPropertyDescription(value = "List the ions to remove, separated by a white space.")
+	private String ionsToRemove = "18;28;84;207";
+	@JsonProperty(value = "Ions To Preserve", defaultValue = "103;104")
+	@JsonPropertyDescription(value = "List the ions to preserve, separated by a white space.")
+	private String ionsToPreserve = "103;104";
+	@JsonProperty(value = "Adjust Threshold Transitions", defaultValue = "true")
+	@JsonPropertyDescription(value = "Adjust zero threshold transitions.")
+	private boolean adjustThresholdTransitions = true;
+	@JsonProperty(value = "Number Used Ions For Coefficient", defaultValue = "1")
+	@JsonPropertyDescription(value = "The number of used ions for coefficient calculation.")
+	private int numberOfUsedIonsForCoefficient = 1;
+	@JsonProperty(value = "Segment Width", defaultValue = "13")
+	@JsonPropertyDescription(value = "The used segment width: 5, 7, 9, 11, 13, 15, 17, 19")
+	private String segmentWidth = "13";
 
 	@Override
-	public IMarkedIons getIonsToRemove() {
+	public String getIonsToRemove() {
 
 		return ionsToRemove;
 	}
 
 	@Override
-	public IMarkedIons getIonsToPreserve() {
+	public void setIonsToRemove(String ionsToRemove) {
+
+		this.ionsToRemove = ionsToRemove;
+	}
+
+	@Override
+	public String getIonsToPreserve() {
 
 		return ionsToPreserve;
 	}
 
 	@Override
-	public boolean getAdjustThresholdTransitions() {
+	public void setIonsToPreserve(String ionsToPreserve) {
+
+		this.ionsToPreserve = ionsToPreserve;
+	}
+
+	@Override
+	public boolean isAdjustThresholdTransitions() {
 
 		return adjustThresholdTransitions;
 	}
@@ -73,16 +87,14 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 	}
 
 	@Override
-	public SegmentWidth getSegmentWidth() {
+	public String getSegmentWidth() {
 
 		return segmentWidth;
 	}
 
 	@Override
-	public void setSegmentWidth(SegmentWidth segmentWidth) {
+	public void setSegmentWidth(String segmentWidth) {
 
-		if(segmentWidth != null) {
-			this.segmentWidth = segmentWidth;
-		}
+		this.segmentWidth = segmentWidth;
 	}
 }

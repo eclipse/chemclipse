@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.model.support.SegmentWidth;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
@@ -69,7 +70,6 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 	}
 
-	// ----------------------------private methods
 	private void setFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
 
 		/*
@@ -77,32 +77,11 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 		 */
 		if(chromatogramFilterSettings instanceof ISupplierFilterSettings) {
 			ISupplierFilterSettings settings = (ISupplierFilterSettings)chromatogramFilterSettings;
-			/*
-			 * Remove the given ions in all cases.
-			 */
-			IMarkedIons ionsToRemove = settings.getIonsToRemove();
-			if(ionsToRemove != null) {
-				this.ionsToRemove = ionsToRemove;
-			}
-			/*
-			 * Preserve the given ions in all cases.
-			 */
-			IMarkedIons ionsToPreserve = settings.getIonsToPreserve();
-			if(ionsToPreserve != null) {
-				this.ionsToPreserve = ionsToPreserve;
-			}
-			/*
-			 * Adjust threshold transitions.
-			 */
-			adjustThresholdTransitions = settings.getAdjustThresholdTransitions();
-			/*
-			 * Number of ions for coefficient.
-			 */
+			ionsToRemove = new MarkedIons(settings.getIonsToRemove());
+			ionsToPreserve = new MarkedIons(settings.getIonsToPreserve());
+			adjustThresholdTransitions = settings.isAdjustThresholdTransitions();
 			numberOfUsedIonsForCoefficient = settings.getNumberOfUsedIonsForCoefficient();
-			/*
-			 * SegmentWidth
-			 */
-			segmentWidth = settings.getSegmentWidth();
+			segmentWidth = SegmentWidth.valueOf(settings.getSegmentWidth());
 		}
 	}
 }
