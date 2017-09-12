@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.setting
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
-public class RetentionTimeStretcher {
+public class RetentionTimeStretcher extends AbstractRetentionTimeModifier {
 
 	/*
 	 * Use only static methods.
@@ -40,5 +40,7 @@ public class RetentionTimeStretcher {
 			chromatogram.setScanInterval(scanInterval);
 			chromatogram.recalculateRetentionTimes();
 		}
+		//
+		adjustScanDelayAndRetentionTimeRange(chromatogramSelection);
 	}
 }

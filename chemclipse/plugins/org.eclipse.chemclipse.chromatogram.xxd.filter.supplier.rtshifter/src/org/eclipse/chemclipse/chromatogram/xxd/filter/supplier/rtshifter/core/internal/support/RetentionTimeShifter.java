@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
-public class RetentionTimeShifter {
+public class RetentionTimeShifter extends AbstractRetentionTimeModifier {
 
 	/*
 	 * Use only static methods.
@@ -36,7 +36,7 @@ public class RetentionTimeShifter {
 		//
 		List<Integer> scansToRemove = adjustRetentionTimesAndReturnScansToRemove(chromatogramSelection, supplierFilterSettings);
 		removeMarkedScans(chromatogramSelection, scansToRemove);
-		setScanDelay(chromatogramSelection);
+		adjustScanDelayAndRetentionTimeRange(chromatogramSelection);
 	}
 
 	private static List<Integer> adjustRetentionTimesAndReturnScansToRemove(IChromatogramSelection chromatogramSelection, ISupplierFilterShiftSettings supplierFilterSettings) {
@@ -112,17 +112,6 @@ public class RetentionTimeShifter {
 			counter++;
 		}
 		return chromatogram;
-	}
-
-	private static void setScanDelay(IChromatogramSelection chromatogramSelection) throws FilterException {
-
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-		if(chromatogram.getNumberOfScans() <= 0) {
-			throw new FilterException("There is no scan available.");
-		}
-		IScan scanRecord = chromatogram.getScan(1);
-		int scanDelay = scanRecord.getRetentionTime();
-		chromatogram.setScanDelay(scanDelay);
 	}
 
 	private static int calculateNewRetentionTime(IScan scanRecord, int millisecondToShift) {
