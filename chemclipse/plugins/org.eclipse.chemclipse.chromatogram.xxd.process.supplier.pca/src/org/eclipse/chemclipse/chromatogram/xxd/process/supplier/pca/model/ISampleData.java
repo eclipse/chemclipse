@@ -26,5 +26,4 @@ public interface ISampleData {
 	boolean isEmpty();
 
 	void setModifiedData(double normalizedData);
-
 }

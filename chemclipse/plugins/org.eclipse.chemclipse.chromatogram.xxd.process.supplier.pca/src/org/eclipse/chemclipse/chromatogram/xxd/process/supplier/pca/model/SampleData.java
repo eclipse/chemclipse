@@ -66,5 +66,4 @@ public class SampleData implements ISampleData {
 
 		this.normalizedData = normalizedData;
 	}
-
 }

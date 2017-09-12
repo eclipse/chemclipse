@@ -75,5 +75,4 @@ public class SampleDataGroup implements ISampleData {
 	public void setModifiedData(double normalizedData) {
 
 	}
-
 }
