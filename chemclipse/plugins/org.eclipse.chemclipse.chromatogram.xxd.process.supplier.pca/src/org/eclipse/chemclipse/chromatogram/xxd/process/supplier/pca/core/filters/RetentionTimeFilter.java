@@ -93,7 +93,7 @@ public class RetentionTimeFilter implements IFilter {
 	@Override
 	public String getName() {
 
-		return "Retention time filter";
+		return "Retention time intervals filter";
 	}
 
 	@Override

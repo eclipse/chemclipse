@@ -303,12 +303,6 @@ public class PcaEditor extends AbstractPcaEditor {
 		tabFolder.setSelection(pageIndex);
 	}
 
-	public void updataSamples() {
-
-		super.updataGroupNames();
-		updateSamples();
-	}
-
 	private void updateResults() {
 
 		samplesOverviewPage.updateResult();
@@ -319,8 +313,9 @@ public class PcaEditor extends AbstractPcaEditor {
 		loadingPlotPage.update();
 	}
 
-	private void updateSamples() {
+	public void updateSamples() {
 
+		super.updataGroupNames();
 		overviewPage.update();
 		samplesOverviewPage.updateSamples();
 		modificationPage.update();

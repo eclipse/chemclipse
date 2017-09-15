@@ -52,7 +52,7 @@ public class FiltersWizardPage extends WizardPage {
 		button.addListener(SWT.Selection, (e) -> filterType = FiltersWizard.FITER_TYPE_ABUNDANCE);
 		button = new Button(composite, SWT.RADIO);
 		button.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
-		button.setText("Retention Time Filter");
+		button.setText("Retention Time Intervals Filter");
 		button.addListener(SWT.Selection, (e) -> filterType = FiltersWizard.FITER_TYPE_RETENTION_TIME);
 		button = new Button(composite, SWT.RADIO);
 		button.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));

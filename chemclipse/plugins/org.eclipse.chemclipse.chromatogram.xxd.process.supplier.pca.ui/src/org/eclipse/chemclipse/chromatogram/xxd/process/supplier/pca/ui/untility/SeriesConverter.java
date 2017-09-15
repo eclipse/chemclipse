@@ -38,14 +38,16 @@ public class SeriesConverter {
 	private static int SYMBOL_SIZE_LOADING_PLOT = 4;
 	private static int SYMBOL_SIZE_SCORE_PLOT = 8;
 
-	public static List<IScatterSeriesData> basisVectorsToSeries(IPcaResults pcaResults, int pcX, int pcY) {
+	public static List<IScatterSeriesData> basisVectorsToSeries(IPcaResults pcaResults, int pcX, int pcY, Map<String, Integer> extractedValues) {
 
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
 		List<Integer> extractedRetentionTimes = pcaResults.getExtractedRetentionTimes();
 		for(int i = 0; i < extractedRetentionTimes.size(); i++) {
-			String name = nf.format(extractedRetentionTimes.get(i) / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
-			double x = pcaResults.getBasisVectors().get(pcX)[i];
-			double y = pcaResults.getBasisVectors().get(pcY)[i];
+			Integer value = extractedRetentionTimes.get(i);
+			String name = nf.format(value / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+			extractedValues.put(name, value);
+			double x = pcaResults.getBasisVectors().get(pcX - 1)[i];
+			double y = pcaResults.getBasisVectors().get(pcY - 1)[i];
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();

@@ -449,7 +449,7 @@ public class SamplesOverviewPage {
 		for(Object checkedSample : checkedSamples) {
 			((ISample)checkedSample).setSelected(true);
 		}
-		pcaEditor.updataSamples();
+		pcaEditor.updateSamples();
 	}
 
 	private void updateColorMap() {

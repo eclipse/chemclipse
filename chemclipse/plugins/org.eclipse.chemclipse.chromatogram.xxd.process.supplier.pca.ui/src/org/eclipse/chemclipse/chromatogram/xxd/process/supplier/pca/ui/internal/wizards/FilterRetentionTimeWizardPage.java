@@ -193,18 +193,11 @@ public class FilterRetentionTimeWizardPage extends WizardPage {
 				}
 			}
 		});
-		Table table = new Table(composite, SWT.MULTI | SWT.FULL_SELECTION);
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
-		tableViewer = new TableViewer(table);
-		tableViewer.setContentProvider(new ArrayContentProvider());
-		tableViewer.setInput(retentionTimeFilter.getIntervals());
 		Composite buttonComposite = new Composite(composite, SWT.None);
 		GridDataFactory.fillDefaults().grab(false, false).align(SWT.BEGINNING, SWT.BEGINNING).applyTo(buttonComposite);
 		buttonComposite.setLayout(new FillLayout());
 		button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Add");
+		button.setText("Add Interval to Table");
 		button.addListener(SWT.Selection, e -> addFilterRetentionTimeInterval());
 		// Create a boolean observable, which depends on the ok status
 		AggregateValidationStatus aggregateValidationStatus = new AggregateValidationStatus(dbc.getBindings(), AggregateValidationStatus.MAX_SEVERITY);
@@ -213,9 +206,16 @@ public class FilterRetentionTimeWizardPage extends WizardPage {
 		// bind the enablement of the finish button to the validation
 		dbc.bindValue(buttonEnabledObservable, isValidationOk);
 		button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Remove");
+		button.setText("Remove Selected Intervals");
 		button.addListener(SWT.Selection, e -> removeFilterRetentionTimeInterval());
+		Table table = new Table(composite, SWT.MULTI | SWT.FULL_SELECTION);
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
+		GridDataFactory.fillDefaults().grab(true, true).minSize(200, 300).applyTo(table);
+		tableViewer = new TableViewer(table);
 		createColumns();
+		tableViewer.setContentProvider(new ArrayContentProvider());
+		tableViewer.setInput(retentionTimeFilter.getIntervals());
 		updateTable();
 		setControl(composite);
 	}

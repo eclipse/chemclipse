@@ -16,6 +16,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.CVFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.EmptyDataFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.RetentionTime2Filter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.RetentionTimeFilter;
 import org.eclipse.jface.wizard.Wizard;
 
@@ -41,6 +42,8 @@ public class FilterWizard extends Wizard {
 			addPage(new FilterEmptyDataWizardPage((EmptyDataFilter)filter));
 		} else if(filter instanceof RetentionTimeFilter) {
 			addPage(new FilterRetentionTimeWizardPage((RetentionTimeFilter)filter));
+		} else if(filter instanceof RetentionTime2Filter) {
+			addPage(new FilterRetentionTime2WizardPage((RetentionTime2Filter)filter));
 		}
 	}
 

@@ -20,8 +20,8 @@ import org.eclipse.chemclipse.model.core.IPeak;
 public class SampleDataGroup implements ISampleData {
 
 	private int order;
-	private List<ISample> samples;
 	private Set<IPeak> peaks;
+	private List<ISample> samples;
 
 	public SampleDataGroup(List<ISample> samples, int order) {
 		this.samples = samples;
