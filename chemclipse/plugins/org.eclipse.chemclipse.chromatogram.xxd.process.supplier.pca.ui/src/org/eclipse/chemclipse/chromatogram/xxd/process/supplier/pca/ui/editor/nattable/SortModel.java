@@ -131,8 +131,9 @@ public class SortModel implements ISortModel {
 				}
 			} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAK_NAMES) {
 				List<String> peaksNames = tableProvider.getDataTable().getRetentionTimes().stream().map(r -> r.getDescription()).collect(Collectors.toList());
+				Comparator<String> nullSafeStringComparator = Comparator.nullsFirst(String::compareTo);
 				sortedRow.sort((i, j) -> {
-					return setDirection * peaksNames.get(i).compareTo(peaksNames.get(j));
+					return setDirection * nullSafeStringComparator.compare(peaksNames.get(i), peaksNames.get(j));
 				});
 			} else {
 				/*
