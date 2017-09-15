@@ -15,12 +15,24 @@ import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 
 public class RetentionTime implements IRetentionTime {
 
+	private String description;
 	private boolean isSelected;
 	private int retentioTime;
 
 	public RetentionTime(int retentioTime) {
 		this.retentioTime = retentioTime;
 		isSelected = true;
+	}
+
+	public RetentionTime(int retentioTime, String description) {
+		this(retentioTime);
+		this.description = description;
+	}
+
+	@Override
+	public String getDescription() {
+
+		return description;
 	}
 
 	@Override
@@ -39,6 +51,12 @@ public class RetentionTime implements IRetentionTime {
 	public boolean isSelected() {
 
 		return isSelected;
+	}
+
+	@Override
+	public void setDescription(String description) {
+
+		this.description = description;
 	}
 
 	@Override

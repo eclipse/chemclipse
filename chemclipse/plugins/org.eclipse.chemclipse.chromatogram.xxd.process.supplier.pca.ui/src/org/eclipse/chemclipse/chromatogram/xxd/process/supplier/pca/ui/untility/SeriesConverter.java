@@ -21,7 +21,7 @@ import java.util.Set;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
 import org.eclipse.eavp.service.swtchart.scattercharts.IScatterSeriesData;
@@ -41,11 +41,37 @@ public class SeriesConverter {
 	public static List<IScatterSeriesData> basisVectorsToSeries(IPcaResults pcaResults, int pcX, int pcY, Map<String, Integer> extractedValues) {
 
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
-		List<Integer> extractedRetentionTimes = pcaResults.getExtractedRetentionTimes();
+		List<IRetentionTime> extractedRetentionTimes = pcaResults.getExtractedRetentionTimes();
 		for(int i = 0; i < extractedRetentionTimes.size(); i++) {
-			Integer value = extractedRetentionTimes.get(i);
-			String name = nf.format(value / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
-			extractedValues.put(name, value);
+			String name = nf.format(extractedRetentionTimes.get(i).getRetentionTimeMinutes());
+			extractedValues.put(name, extractedRetentionTimes.get(i).getRetentionTime());
+			double x = pcaResults.getBasisVectors().get(pcX - 1)[i];
+			double y = pcaResults.getBasisVectors().get(pcY - 1)[i];
+			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
+			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
+			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();
+			scatterSeriesSettings.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
+			scatterSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
+			scatterSeriesSettings.setSymbolSize(SYMBOL_SIZE_LOADING_PLOT);
+			scatterSeriesDataList.add(scatterSeriesData);
+		}
+		return scatterSeriesDataList;
+	}
+
+	public static List<IScatterSeriesData> basisVectorsToSeriesDescription(IPcaResults pcaResults, int pcX, int pcY, Map<String, Integer> extractedValues) {
+
+		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
+		List<IRetentionTime> extractedRetentionTimes = pcaResults.getExtractedRetentionTimes();
+		for(int i = 0; i < extractedRetentionTimes.size(); i++) {
+			IRetentionTime retentionTime = extractedRetentionTimes.get(i);
+			String description = retentionTime.getDescription();
+			String name = null;
+			if(description == null || description.isEmpty()) {
+				name = nf.format(extractedRetentionTimes.get(i).getRetentionTimeMinutes());
+			} else {
+				name = description;
+			}
+			extractedValues.put(name, extractedRetentionTimes.get(i).getRetentionTime());
 			double x = pcaResults.getBasisVectors().get(pcX - 1)[i];
 			double y = pcaResults.getBasisVectors().get(pcY - 1)[i];
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);

@@ -41,7 +41,7 @@ public class PcaResulDataProvider implements IDataProvider {
 		} else if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
 			return tableProvider.getDataTable().getRetentionTimes().get(sortRowIndex).getRetentionTimeMinutes();
 		} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAK_NAMES) {
-			String peaksNames = tableProvider.getDataTable().getPeaksNames().get(sortRowIndex);
+			String peaksNames = tableProvider.getDataTable().getRetentionTimes().get(sortRowIndex).getDescription();
 			return peaksNames;
 		} else {
 			List<ISample> samples = tableProvider.getDataTable().getSamples();

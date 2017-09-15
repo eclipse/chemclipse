@@ -17,7 +17,7 @@ public interface IPcaResults {
 
 	List<double[]> getBasisVectors();
 
-	List<Integer> getExtractedRetentionTimes();
+	List<IRetentionTime> getExtractedRetentionTimes();
 
 	int getNumberOfPrincipleComponents();
 
@@ -27,7 +27,7 @@ public interface IPcaResults {
 
 	void setBasisVectors(List<double[]> basisVectors);
 
-	void setExtractedRetentionTimes(List<Integer> extractedRetentionTimes);
+	void setExtractedRetentionTimes(List<IRetentionTime> extractedRetentionTimes);
 
 	void setNumberOfPrincipleComponents(int numberOfPrincipleComponents);
 

@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.RetentionTime;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.ejml.example.PrincipalComponentAnalysis;
 
@@ -196,12 +197,18 @@ public class PcaEvaluation {
 
 	private void setRetentionTime(IPcaResults pcaResults, ISamples samples) {
 
-		List<Integer> retTime = new ArrayList<>();
+		List<IRetentionTime> retentionTimes = new ArrayList<>();
 		for(int i = 0; i < samples.getExtractedRetentionTimes().size(); i++) {
 			if(samples.getExtractedRetentionTimes().get(i).isSelected()) {
-				retTime.add(new Integer(samples.getExtractedRetentionTimes().get(i).getRetentionTime()));
+				int retentionTime = samples.getExtractedRetentionTimes().get(i).getRetentionTime();
+				String description = samples.getExtractedRetentionTimes().get(i).getDescription();
+				if(description != null && !description.isEmpty()) {
+					retentionTimes.add(new RetentionTime(retentionTime, description));
+				} else {
+					retentionTimes.add(new RetentionTime(retentionTime));
+				}
 			}
 		}
-		pcaResults.setExtractedRetentionTimes(retTime);
+		pcaResults.setExtractedRetentionTimes(retentionTimes);
 	}
 }

@@ -20,7 +20,6 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
 public class ResultExport {
@@ -59,8 +58,8 @@ public class ResultExport {
 			printWriter.println("Extracted Retention Times (Minutes)");
 			printWriter.println("-------------------------------------");
 			for(int i = 0; i < pcaResults.getExtractedRetentionTimes().size(); i++) {
-				double retentionTime = pcaResults.getExtractedRetentionTimes().get(i);
-				printWriter.println(decimalFormat.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+				double retentionTime = pcaResults.getExtractedRetentionTimes().get(i).getRetentionTimeMinutes();
+				printWriter.println(decimalFormat.format(retentionTime));
 			}
 			printWriter.println("");
 			printWriter.println("-------------------------------------");
@@ -69,8 +68,8 @@ public class ResultExport {
 			printWriter.print("Filename");
 			printWriter.print(TAB);
 			for(int i = 0; i < pcaResults.getExtractedRetentionTimes().size(); i++) {
-				double retentionTime = pcaResults.getExtractedRetentionTimes().get(i);
-				printWriter.print(decimalFormat.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+				double retentionTime = pcaResults.getExtractedRetentionTimes().get(i).getRetentionTimeMinutes();
+				printWriter.print(decimalFormat.format(retentionTime));
 				printWriter.print(TAB);
 			}
 			printWriter.println("");

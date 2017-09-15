@@ -47,7 +47,7 @@ public class LoadingPlotPage {
 	private LoadingPlot loadingPlot;
 	//
 	private PcaEditor pcaEditor;
-	final private SortedSet<String> selectedData = new TreeSet<>((o1, o2) -> Double.compare(Double.parseDouble(o1), Double.parseDouble(o2)));
+	final private SortedSet<String> selectedData = new TreeSet<>();
 	private Table selectedDataTable;
 	private Spinner spinnerPCx;
 	private Spinner spinnerPCy;
@@ -164,7 +164,7 @@ public class LoadingPlotPage {
 		 * Selection of the plotted PCs
 		 */
 		Composite spinnerComposite = new Composite(parent, SWT.NONE);
-		spinnerComposite.setLayout(new GridLayout(7, false));
+		spinnerComposite.setLayout(new GridLayout(9, false));
 		spinnerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		Label label;
@@ -187,7 +187,18 @@ public class LoadingPlotPage {
 		spinnerPCy.setMaximum(1);
 		spinnerPCy.setIncrement(1);
 		spinnerPCy.setLayoutData(gridData);
-		Button button = new Button(spinnerComposite, SWT.PUSH);
+		Button button = new Button(spinnerComposite, SWT.RADIO);
+		button.setText("Display Retention Times");
+		button.addListener(SWT.Selection, e -> {
+			loadingPlot.setLabelsType(LoadingPlot.LABELS_RETENTION_TIME_MINUTES);
+		});
+		button.setSelection(true);
+		button = new Button(spinnerComposite, SWT.RADIO);
+		button.setText("Display Description");
+		button.addListener(SWT.Selection, e -> {
+			loadingPlot.setLabelsType(LoadingPlot.LABELS_DESCRIPTION);
+		});
+		button = new Button(spinnerComposite, SWT.PUSH);
 		button.setText("Reload Loading Plot");
 		button.addListener(SWT.Selection, e -> loadingPlot.update(getPCX(), getPCY()));
 		//

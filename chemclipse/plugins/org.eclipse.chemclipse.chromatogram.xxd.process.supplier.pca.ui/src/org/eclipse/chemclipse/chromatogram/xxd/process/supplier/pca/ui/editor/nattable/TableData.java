@@ -12,10 +12,8 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
@@ -27,17 +25,11 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.P
 public class TableData {
 
 	private PcaEditor pcaEditor;
-	private List<String> peaksNames = new ArrayList<>();
 	private List<IRetentionTime> retentionTimes = new ArrayList<>();
 	private List<ISample> samples = new ArrayList<>();
 
 	public TableData(PcaEditor pcaEditor) {
 		this.pcaEditor = pcaEditor;
-	}
-
-	public List<String> getPeaksNames() {
-
-		return peaksNames;
 	}
 
 	/**
@@ -82,19 +74,5 @@ public class TableData {
 		/*
 		 * Set peaks names
 		 */
-		peaksNames.clear();
-		List<TreeSet<String>> names = PcaUtils.getPeaksNames(resultSamples.getSampleList(), true);
-		for(int i = 0; i < names.size(); i++) {
-			StringBuilder builder = new StringBuilder("");
-			TreeSet<String> set = names.get(i);
-			for(Iterator<String> iterator = set.iterator(); iterator.hasNext();) {
-				String name = iterator.next();
-				builder.append(name);
-				if(iterator.hasNext()) {
-					builder.append("; ");
-				}
-			}
-			peaksNames.add(builder.toString());
-		}
 	}
 }

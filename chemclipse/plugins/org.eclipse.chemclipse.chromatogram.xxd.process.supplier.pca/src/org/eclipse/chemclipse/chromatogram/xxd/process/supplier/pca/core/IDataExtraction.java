@@ -11,7 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IDataExtraction {
@@ -22,4 +29,31 @@ public interface IDataExtraction {
 	int LINEAR_INTERPOLATION_SCAN = 3;
 
 	ISamples process(IProgressMonitor monitor);
+
+	default void setRetentionTimeDescription(ISamples samples) {
+
+		for(int i = 0; i < samples.getExtractedRetentionTimes().size(); i++) {
+			final int j = i;
+			final Set<String> peakNames = new HashSet<>();
+			samples.getSampleList().stream().map(s -> s.getSampleData()).map(d -> d.get(j).getPeaks()).forEach(peaks -> {
+				for(IPeak peak : peaks) {
+					List<IPeakTarget> targets = peak.getTargets();
+					if(!targets.isEmpty()) {
+						peakNames.add(targets.get(0).getLibraryInformation().getName());
+					}
+				}
+			});
+			if(!peakNames.isEmpty()) {
+				StringBuilder sb = new StringBuilder();
+				Iterator<String> it = peakNames.iterator();
+				while(it.hasNext()) {
+					sb.append(it.next());
+					if(it.hasNext()) {
+						sb.append(", ");
+					}
+				}
+				samples.getExtractedRetentionTimes().get(i).setDescription(sb.toString());
+			}
+		}
+	}
 }

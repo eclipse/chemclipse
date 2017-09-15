@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
@@ -129,7 +130,7 @@ public class SortModel implements ISortModel {
 					Collections.reverse(sortedRow);
 				}
 			} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAK_NAMES) {
-				List<String> peaksNames = tableProvider.getDataTable().getPeaksNames();
+				List<String> peaksNames = tableProvider.getDataTable().getRetentionTimes().stream().map(r -> r.getDescription()).collect(Collectors.toList());
 				sortedRow.sort((i, j) -> {
 					return setDirection * peaksNames.get(i).compareTo(peaksNames.get(j));
 				});

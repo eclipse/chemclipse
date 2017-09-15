@@ -32,8 +32,11 @@ import org.swtchart.ISeries;
 
 public class LoadingPlot extends PCA2DPlot {
 
+	final public static int LABELS_DESCRIPTION = 2;
+	final public static int LABELS_RETENTION_TIME_MINUTES = 1;
 	final private Set<String> actualSelection = new HashSet<>();
 	final private Map<String, Integer> extractedValues = new HashMap<>();
+	private int labelsType = LABELS_RETENTION_TIME_MINUTES;
 	private LoadingPlotPage loadingPlotPage;
 	private IPcaResults pcaResults;
 	private int pcX;
@@ -54,6 +57,11 @@ public class LoadingPlot extends PCA2DPlot {
 		return extractedValues;
 	}
 
+	public int getLabelsType() {
+
+		return labelsType;
+	}
+
 	@Override
 	public void handleMouseUpEvent(Event event) {
 
@@ -71,6 +79,13 @@ public class LoadingPlot extends PCA2DPlot {
 		}
 	}
 
+	public void setLabelsType(int labelsType) {
+
+		if(labelsType == LABELS_DESCRIPTION || labelsType == LABELS_RETENTION_TIME_MINUTES) {
+			this.labelsType = labelsType;
+		}
+	}
+
 	@Override
 	public void update() {
 
@@ -79,7 +94,12 @@ public class LoadingPlot extends PCA2DPlot {
 		extractedValues.clear();
 		actualSelection.clear();
 		if(pcaResults != null) {
-			List<IScatterSeriesData> series = SeriesConverter.basisVectorsToSeries(pcaResults, pcX, pcY, extractedValues);
+			List<IScatterSeriesData> series;
+			if(labelsType == LABELS_RETENTION_TIME_MINUTES) {
+				series = SeriesConverter.basisVectorsToSeries(pcaResults, pcX, pcY, extractedValues);
+			} else {
+				series = SeriesConverter.basisVectorsToSeriesDescription(pcaResults, pcX, pcY, extractedValues);
+			}
 			for(IScatterSeriesData seriesData : series) {
 				String id = seriesData.getSeriesData().getId();
 				if(loadingPlotPage.getSelectedData().contains(id)) {

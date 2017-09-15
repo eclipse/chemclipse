@@ -414,6 +414,7 @@ public class PcaExtractionPeaks implements IDataExtraction {
 		 * create Groups
 		 */
 		samples.createGroups();
+		setRetentionTimeDescription(samples);
 		return samples;
 	}
 

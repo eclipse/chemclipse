@@ -31,11 +31,15 @@ public interface IRetentionTime extends Comparable<IRetentionTime> {
 		return Integer.compare(getRetentionTime(), o.getRetentionTime());
 	}
 
+	String getDescription();
+
 	int getRetentionTime();
 
 	double getRetentionTimeMinutes();
 
 	boolean isSelected();
+
+	void setDescription(String description);
 
 	void setSelected(boolean selected);
 }
