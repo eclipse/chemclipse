@@ -264,10 +264,12 @@ public class ErrorResidueBarChart {
 			public void handle(final MouseEvent event) {
 
 				final double x = event.getX();
-				rect.setX(Math.min(x, mouseAnchor.get().getX()));
-				rect.setY(chart.getLayoutY());
-				rect.setWidth(Math.abs(x - mouseAnchor.get().getX()));
-				rect.setHeight(chart.getHeight());
+				if(mouseAnchor.isNotNull().get()) {
+					rect.setX(Math.min(x, mouseAnchor.get().getX()));
+					rect.setY(chart.getLayoutY());
+					rect.setWidth(Math.abs(x - mouseAnchor.get().getX()));
+					rect.setHeight(chart.getHeight());
+				}
 			}
 		});
 		/*
@@ -284,50 +286,49 @@ public class ErrorResidueBarChart {
 				/*
 				 * refuse click
 				 */
-				if(maxx - minx < 2) {
-					return;
-				}
-				/*
-				 * select x-Axis
-				 */
-				CategoryAxis axisX = (CategoryAxis)chart.getXAxis();
-				/*
-				 * get first and last selected bar in chart
-				 */
-				ObservableList<Axis.TickMark<String>> list = axisX.getTickMarks();
-				double minMarkPostion = Double.POSITIVE_INFINITY;
-				int minMarkIndex = -1;
-				double maxMarkPostion = Double.POSITIVE_INFINITY;
-				int maxMarkIndex = -1;
-				int i = 0;
-				for(Axis.TickMark<String> mark : list) {
-					double markPostion = mark.getPosition();
+				if((maxx - minx) > 2) {
 					/*
-					 * get index first selected bar
+					 * select x-Axis
 					 */
-					if(Math.abs(markPostion - minx) < Math.abs(minMarkPostion - minx) && markPostion - minx > 0) {
-						minMarkPostion = markPostion;
-						minMarkIndex = i;
+					CategoryAxis axisX = (CategoryAxis)chart.getXAxis();
+					/*
+					 * get first and last selected bar in chart
+					 */
+					ObservableList<Axis.TickMark<String>> list = axisX.getTickMarks();
+					double minMarkPostion = Double.POSITIVE_INFINITY;
+					int minMarkIndex = -1;
+					double maxMarkPostion = Double.POSITIVE_INFINITY;
+					int maxMarkIndex = -1;
+					int i = 0;
+					for(Axis.TickMark<String> mark : list) {
+						double markPostion = mark.getPosition();
+						/*
+						 * get index first selected bar
+						 */
+						if(Math.abs(markPostion - minx) < Math.abs(minMarkPostion - minx) && markPostion - minx > 0) {
+							minMarkPostion = markPostion;
+							minMarkIndex = i;
+						}
+						/*
+						 * get index last selected bar
+						 */
+						if(Math.abs(markPostion - maxx) < Math.abs(maxMarkPostion - maxx) && maxx - markPostion > 0) {
+							maxMarkPostion = markPostion;
+							maxMarkIndex = i;
+						}
+						i++;
 					}
 					/*
-					 * get index last selected bar
+					 * Remove the unselected date by index
 					 */
-					if(Math.abs(markPostion - maxx) < Math.abs(maxMarkPostion - maxx) && maxx - markPostion > 0) {
-						maxMarkPostion = markPostion;
-						maxMarkIndex = i;
-					}
-					i++;
-				}
-				/*
-				 * Remove the unselected date by index
-				 */
-				if(!(minMarkIndex == -1 || maxMarkIndex == -1)) {
-					final Iterator<XYChart.Series<String, Number>> it = chart.getData().iterator();
-					while(it.hasNext()) {
-						final XYChart.Series<String, Number> s = it.next();
-						for(int j = s.getData().size() - 1; j >= 0; j--) {
-							if(j > maxMarkIndex || j < minMarkIndex) {
-								s.getData().remove(j);
+					if(!(minMarkIndex == -1 || maxMarkIndex == -1)) {
+						final Iterator<XYChart.Series<String, Number>> it = chart.getData().iterator();
+						while(it.hasNext()) {
+							final XYChart.Series<String, Number> s = it.next();
+							for(int j = s.getData().size() - 1; j >= 0; j--) {
+								if(j > maxMarkIndex || j < minMarkIndex) {
+									s.getData().remove(j);
+								}
 							}
 						}
 					}
