@@ -9,17 +9,17 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.views;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import javax.inject.Inject;
 
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class ViewFocusHelper {
+public class TaskQuickAccessPart {
 
 	@Inject
-	public ViewFocusHelper(Composite parent) {
+	public TaskQuickAccessPart(Composite parent) {
 		initialize(parent);
 	}
 
