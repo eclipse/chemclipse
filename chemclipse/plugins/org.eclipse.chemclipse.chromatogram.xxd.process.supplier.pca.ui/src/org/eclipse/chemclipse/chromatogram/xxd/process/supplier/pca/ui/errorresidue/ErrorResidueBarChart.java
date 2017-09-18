@@ -153,6 +153,7 @@ public class ErrorResidueBarChart {
 		Scene scene = new Scene(pane, p.x, p.y);
 		fxCanvas.setScene(scene);
 		fxCanvas.getParent().layout(true);
+		fxCanvas.addListener(SWT.MouseUp, e -> bc.fireEvent(new MouseEvent(MouseEvent.MOUSE_RELEASED, 0, 0, 0, 0, null, 0, false, false, false, false, false, false, false, false, false, false, null)));
 	}
 
 	public int getDisplayData() {
