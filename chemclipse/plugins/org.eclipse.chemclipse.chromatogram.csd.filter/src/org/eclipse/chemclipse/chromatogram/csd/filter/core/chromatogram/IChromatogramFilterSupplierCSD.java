@@ -11,36 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
+import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilterSupplier;
 
-public interface IChromatogramFilterSupplierCSD {
-
-	/**
-	 * The id of the extension point: e.g.
-	 * (org.eclipse.chemclipse.chromatogram.csd.filter.supplier.backgroundRemover)
-	 * 
-	 * @return String
-	 */
-	String getId();
-
-	/**
-	 * A short description of the functionality of the extension point.
-	 * 
-	 * @return String
-	 */
-	String getDescription();
-
-	/**
-	 * The filter name that can be shown in a list box dialogue.
-	 * 
-	 * @return String
-	 */
-	String getFilterName();
-
-	/**
-	 * TODO: either returns a bean-like class or with annotations ..., with a public default constructor, ... or returns <code>null</code> if no filter settings are associated
-	 * 
-	 * @return
-	 */
-	Class<? extends IChromatogramFilterSettings> getFilterSettingsClass();
+public interface IChromatogramFilterSupplierCSD extends IChromatogramFilterSupplier {
 }

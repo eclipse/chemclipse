@@ -14,11 +14,8 @@ package org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.csd.filter.exceptions.NoChromatogramFilterSupplierAvailableException;
+import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoChromatogramFilterSupplierAvailableException;
 
-/**
- * @author eselmeister
- */
 public class ChromatogramFilterSupportCSD implements IChromatogramFilterSupportCSD {
 
 	private List<IChromatogramFilterSupplierCSD> suppliers;

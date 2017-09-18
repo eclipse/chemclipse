@@ -13,9 +13,9 @@ package org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram;
 
 import java.util.List;
 
-import junit.framework.TestCase;
+import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoChromatogramFilterSupplierAvailableException;
 
-import org.eclipse.chemclipse.chromatogram.csd.filter.exceptions.NoChromatogramFilterSupplierAvailableException;
+import junit.framework.TestCase;
 
 public class ChromatogramFilterSupport_1_Test extends TestCase {
 
