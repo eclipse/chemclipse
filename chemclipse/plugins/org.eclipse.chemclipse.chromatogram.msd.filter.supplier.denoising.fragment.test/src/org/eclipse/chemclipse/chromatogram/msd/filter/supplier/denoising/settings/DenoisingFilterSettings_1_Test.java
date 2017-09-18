@@ -40,7 +40,7 @@ public class DenoisingFilterSettings_1_Test extends TestCase {
 
 	public void testGetIonsToRemove_2() {
 
-		assertEquals("IonsToRemove Size", 0, new MarkedIons(settings.getIonsToRemove()).getIonsNominal().size());
+		assertEquals("IonsToRemove Size", 4, new MarkedIons(settings.getIonsToRemove()).getIonsNominal().size());
 	}
 
 	public void testGetIonsToPreserve_1() {
@@ -50,7 +50,7 @@ public class DenoisingFilterSettings_1_Test extends TestCase {
 
 	public void testGetIonsToPreserve_2() {
 
-		assertEquals("IonsToPreserve Size", 0, new MarkedIons(settings.getIonsToPreserve()).getIonsNominal().size());
+		assertEquals("IonsToPreserve Size", 2, new MarkedIons(settings.getIonsToPreserve()).getIonsNominal().size());
 	}
 
 	public void testGetAdjustThresholdTransitions_1() {
