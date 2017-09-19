@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.csd.ui.editors.ChromatogramEditorCSD;
 import org.eclipse.chemclipse.ux.extension.msd.ui.editors.ChromatogramEditorMSD;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.editors.ChromatogramEditorWSD;
@@ -44,6 +45,11 @@ public class ChromatogramOverlayPart {
 	@Inject
 	private EPartService partService;
 	private ChromatogramChart chromatogramChart;
+	private IColorScheme colorScheme;
+
+	public ChromatogramOverlayPart() {
+		colorScheme = Colors.getColorScheme(Colors.COLOR_SCHEME_PUBLICATION);
+	}
 
 	@PostConstruct
 	public void createComposite(Composite parent) {
@@ -77,7 +83,8 @@ public class ChromatogramOverlayPart {
 				ISeriesData seriesData = new SeriesData(xSeries, ySeries, seriesId);
 				ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
 				ILineSeriesSettings lineSerieSettings = lineSeriesData.getLineSeriesSettings();
-				lineSerieSettings.setLineColor(Colors.RED);
+				lineSerieSettings.setLineColor(colorScheme.getColor());
+				colorScheme.incrementColor();
 				lineSerieSettings.setEnableArea(false);
 				lineSeriesDataList.add(lineSeriesData);
 				chromatogramChart.addSeriesData(lineSeriesDataList, LineChart.MEDIUM_COMPRESSION);

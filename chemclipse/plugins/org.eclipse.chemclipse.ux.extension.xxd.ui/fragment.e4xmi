@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_RvTHsKuDEeSKQ7OYnQVHjQ">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:basic_1="http://www.eclipse.org/ui/2010/UIModel/application/descriptor/basic" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_RvTHsKuDEeSKQ7OYnQVHjQ">
   <imports xsi:type="advanced:Area" xmi:id="_qjvtkCskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.rcp.app.ui.editor"/>
   <imports xsi:type="basic:Part" xmi:id="_e2-fQCs2Eea9JYQkIDiHKQ" elementId="org.eclipse.ui.navigator.ProjectExplorer"/>
   <imports xsi:type="basic:Part" xmi:id="_hAOqwCs2Eea9JYQkIDiHKQ" elementId="org.eclipse.ui.console.ConsoleView"/>
@@ -15,7 +15,6 @@
     <elements xsi:type="basic:Part" xmi:id="_4O7WACvmEeaU8utKPKf5-A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramHeader" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.views.ChromatogramHeaderView" label="Chromatogram Header" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverview.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_9qZQcCv3EeaU8utKPKf5-A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.taskQuickAccessPart" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.TaskQuickAccessPart" label="Task QuickAccess" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverview.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_IKn6AE9PEea2h67Ksldq6g" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.labeledpeakchromatogram" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.views.LabeledPeakChromatogramView" label="Labeled Peak &amp; Scan Chromatogram" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif"/>
-    <elements xsi:type="basic:Part" xmi:id="_bv05IJyCEeeji_DxGAzFtg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramOverlayPart" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ChromatogramOverlayPart" label="Chromatogram Overlay" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverlay.gif"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_lUKRoKuHEeSKQ7OYnQVHjQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.partstack.chromatogramOverlay" positionInList="before:org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.chromatogramOverlaySelectedIons">
     <elements xsi:type="advanced:Placeholder" xmi:id="_T5VH8BTOEeW6yZo_81fQOw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.chromatogramOverlaySubtract" ref="_MIwuoBTOEeW6yZo_81fQOw"/>
@@ -46,14 +45,13 @@
           </children>
         </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_rvP3ECyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.4" containerData="3670" selectedElement="_v9YrcCyHEeakko_bfjza1A" horizontal="true">
-          <children xsi:type="basic:PartStack" xmi:id="_v9YrcCyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.0">
+          <children xsi:type="basic:PartStack" xmi:id="_v9YrcCyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.bottom.left">
             <children xsi:type="advanced:Placeholder" xmi:id="_6Zv8oCyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.6" ref="_5dOqACyHEeakko_bfjza1A"/>
-            <children xsi:type="advanced:Placeholder" xmi:id="_kx8Z4JyCEeeji_DxGAzFtg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.0" ref="_bv05IJyCEeeji_DxGAzFtg"/>
           </children>
-          <children xsi:type="basic:PartStack" xmi:id="_wRFDgCyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.1">
+          <children xsi:type="basic:PartStack" xmi:id="_wRFDgCyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.bottom.center">
             <children xsi:type="advanced:Placeholder" xmi:id="_7-OnICyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.7" ref="_hAOqwCs2Eea9JYQkIDiHKQ"/>
           </children>
-          <children xsi:type="basic:PartStack" xmi:id="_wjm98CyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.2">
+          <children xsi:type="basic:PartStack" xmi:id="_wjm98CyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.bottom.right">
             <children xsi:type="advanced:Placeholder" xmi:id="_9p3CgCyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.8" ref="_fXQxQCyIEeakko_bfjza1A"/>
           </children>
         </children>
@@ -62,5 +60,8 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_fhpq0E9PEea2h67Ksldq6g" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.partstack.chromatogramOverlay" positionInList="after:org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.chromatogramOverlaySelectedIons">
     <elements xsi:type="advanced:Placeholder" xmi:id="_P8Z0QE9PEea2h67Ksldq6g" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.10" ref="_IKn6AE9PEea2h67Ksldq6g"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_2yQBwJ0_Eee_5ZW_PnglkQ" featurename="descriptors" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
+    <elements xsi:type="basic_1:PartDescriptor" xmi:id="_ErRAAJ1AEee_5ZW_PnglkQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramOverlayPartDescriptor" label="Chromatogram Overlay" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverlay.gif" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ChromatogramOverlayPart"/>
   </fragments>
 </fragment:ModelFragments>
