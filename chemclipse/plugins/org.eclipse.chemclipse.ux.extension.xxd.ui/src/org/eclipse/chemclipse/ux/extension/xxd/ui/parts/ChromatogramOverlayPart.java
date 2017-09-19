@@ -21,6 +21,8 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.csd.ui.editors.ChromatogramEditorCSD;
@@ -38,6 +40,12 @@ import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
 import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 public class ChromatogramOverlayPart {
@@ -54,7 +62,89 @@ public class ChromatogramOverlayPart {
 	@PostConstruct
 	public void createComposite(Composite parent) {
 
+		parent.setLayout(new GridLayout(1, true));
+		createButtonsToolbar(parent);
+		createChromatogramChart(parent);
+	}
+
+	private void createButtonsToolbar(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		composite.setLayout(new GridLayout(2, false));
+		//
+		Composite compositeLeft = new Composite(composite, SWT.NONE);
+		GridData gridDataLeft = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataLeft.horizontalAlignment = SWT.BEGINNING;
+		compositeLeft.setLayoutData(gridDataLeft);
+		compositeLeft.setLayout(new GridLayout(2, false));
+		//
+		Composite compositeRight = new Composite(composite, SWT.NONE);
+		GridData gridDataRight = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataRight.horizontalAlignment = SWT.END;
+		compositeRight.setLayoutData(gridDataRight);
+		compositeRight.setLayout(new GridLayout(2, false));
+		//
+		createDisplayTypeCombo(compositeLeft);
+		createHighlightSeriesCombo(compositeLeft);
+		createResetButton(compositeRight);
+		createSettingsButton(compositeRight);
+	}
+
+	private void createDisplayTypeCombo(Composite parent) {
+
+		Combo combo = new Combo(parent, SWT.PUSH);
+		combo.setToolTipText("Set the display type");
+		combo.setText("");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.setItems(new String[]{"TIC", "BPC", "Mirrored"});
+		combo.select(0);
+	}
+
+	private void createHighlightSeriesCombo(Composite parent) {
+
+		Combo combo = new Combo(parent, SWT.PUSH);
+		combo.setToolTipText("Highlight the selected series");
+		combo.setText("");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.setItems(new String[]{"Chromatogram 1", "Chromatogram 2", "Chromatogram 3"});
+		combo.select(0);
+	}
+
+	private void createResetButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Reset the display");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createSettingsButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Open the Settings");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createChromatogramChart(Composite parent) {
+
 		chromatogramChart = new ChromatogramChart(parent, SWT.NONE);
+		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Chart Settings
 		 */
