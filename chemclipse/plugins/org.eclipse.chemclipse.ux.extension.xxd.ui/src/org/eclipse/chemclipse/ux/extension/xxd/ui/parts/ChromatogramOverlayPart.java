@@ -21,6 +21,8 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.IIon;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -97,7 +99,7 @@ public class ChromatogramOverlayPart {
 		combo.setToolTipText("Set the display type");
 		combo.setText("");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		combo.setItems(new String[]{"TIC", "BPC", "Mirrored"});
+		combo.setItems(new String[]{"TIC", "TIC+BPC", "Mirrored"});
 		combo.select(0);
 	}
 
@@ -107,7 +109,7 @@ public class ChromatogramOverlayPart {
 		combo.setToolTipText("Highlight the selected series");
 		combo.setText("");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		combo.setItems(new String[]{"Chromatogram 1", "Chromatogram 2", "Chromatogram 3"});
+		combo.setItems(new String[]{"002.D", "003.D"});
 		combo.select(0);
 	}
 
@@ -150,6 +152,7 @@ public class ChromatogramOverlayPart {
 		 */
 		IChartSettings chartSettings = chromatogramChart.getChartSettings();
 		chartSettings.setCreateMenu(true);
+		chartSettings.setEnableRangeSelector(true);
 		chromatogramChart.applySettings(chartSettings);
 	}
 
@@ -158,28 +161,54 @@ public class ChromatogramOverlayPart {
 
 		List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections();
 		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
-			String seriesId = chromatogramSelection.getChromatogram().getName();
-			if(!chromatogramChart.getBaseChart().isSeriesContained(seriesId)) {
-				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-				List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-				double[] xSeries = new double[chromatogram.getNumberOfScans()];
-				double[] ySeries = new double[chromatogram.getNumberOfScans()];
-				int index = 0;
-				for(IScan scan : chromatogram.getScans()) {
-					xSeries[index] = scan.getRetentionTime();
-					ySeries[index] = scan.getTotalSignal();
-					index++;
-				}
-				ISeriesData seriesData = new SeriesData(xSeries, ySeries, seriesId);
-				ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-				ILineSeriesSettings lineSerieSettings = lineSeriesData.getLineSeriesSettings();
-				lineSerieSettings.setLineColor(colorScheme.getColor());
-				colorScheme.incrementColor();
-				lineSerieSettings.setEnableArea(false);
-				lineSeriesDataList.add(lineSeriesData);
-				chromatogramChart.addSeriesData(lineSeriesDataList, LineChart.MEDIUM_COMPRESSION);
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			String seriesId = chromatogram.getName();
+			/*
+			 * TIC
+			 */
+			String seriesIdTic = seriesId + "TIC";
+			if(!chromatogramChart.getBaseChart().isSeriesContained(seriesIdTic)) {
+				addDataSeries(chromatogram, seriesIdTic, false);
+			}
+			/*
+			 * BPC
+			 */
+			String seriesIdBpc = seriesId + "BPC";
+			if(!chromatogramChart.getBaseChart().isSeriesContained(seriesIdBpc)) {
+				addDataSeries(chromatogram, seriesIdBpc, true);
 			}
 		}
+	}
+
+	private void addDataSeries(IChromatogram chromatogram, String seriesId, boolean bpc) {
+
+		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+		double[] xSeries = new double[chromatogram.getNumberOfScans()];
+		double[] ySeries = new double[chromatogram.getNumberOfScans()];
+		int index = 0;
+		for(IScan scan : chromatogram.getScans()) {
+			xSeries[index] = scan.getRetentionTime();
+			if(bpc && scan instanceof IScanMSD) {
+				IScanMSD scanMSD = (IScanMSD)scan;
+				IIon ion = scanMSD.getHighestAbundance();
+				if(ion != null) {
+					ySeries[index] = ion.getAbundance();
+				} else {
+					ySeries[index] = scan.getTotalSignal();
+				}
+			} else {
+				ySeries[index] = scan.getTotalSignal();
+			}
+			index++;
+		}
+		ISeriesData seriesData = new SeriesData(xSeries, ySeries, seriesId);
+		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
+		ILineSeriesSettings lineSerieSettings = lineSeriesData.getLineSeriesSettings();
+		lineSerieSettings.setLineColor(colorScheme.getColor());
+		colorScheme.incrementColor();
+		lineSerieSettings.setEnableArea(false);
+		lineSeriesDataList.add(lineSeriesData);
+		chromatogramChart.addSeriesData(lineSeriesDataList, LineChart.MEDIUM_COMPRESSION);
 	}
 
 	private List<IChromatogramSelection> getChromatogramSelections() {
