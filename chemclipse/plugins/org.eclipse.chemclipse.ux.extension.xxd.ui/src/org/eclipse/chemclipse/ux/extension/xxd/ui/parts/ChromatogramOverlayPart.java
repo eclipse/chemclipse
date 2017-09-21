@@ -68,6 +68,10 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	private static final String OVERLAY_TYPE_TIC = "TIC";
 	private static final String OVERLAY_TYPE_BPC = "BPC";
 	private static final String OVERLAY_TYPE_CONCATENATOR = "+";
+	private static final String ESCAPE_CONCATENATOR = "\\";
+	private static final String EDITOR_TAB = "_EditorTab#";
+	private static final String OVERLAY_START_MARKER = "_(";
+	private static final String OVERLAY_STOP_MARKER = ")";
 	//
 	private static final String SELECTED_SERIES_NONE = "None";
 	//
@@ -246,19 +250,16 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		for(int i = 0; i < chromatogramSelections.size(); i++) {
 			IChromatogramSelection chromatogramSelection = chromatogramSelections.get(i);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			String chromatogramName = chromatogram.getName() + "_#" + (i + 1);
+			String chromatogramName = chromatogram.getName() + EDITOR_TAB + (i + 1);
 			/*
-			 * Which series shall be displayed?
+			 * Select which series shall be displayed.
 			 */
-			Color color = colorScheme.getColor();
-			colorScheme.incrementColor();
-			//
-			String[] overlayTypes = comboOverlayType.getText().trim().split("\\" + OVERLAY_TYPE_CONCATENATOR); // Escape the "+"
+			String[] overlayTypes = comboOverlayType.getText().trim().split(ESCAPE_CONCATENATOR + OVERLAY_TYPE_CONCATENATOR);
 			for(String overlayType : overlayTypes) {
-				String seriesId = chromatogramName + "_(" + overlayType + ")";
+				String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + OVERLAY_STOP_MARKER;
 				availableSeriesIds.add(seriesId);
 				if(!baseChart.isSeriesContained(seriesId)) {
-					lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, color));
+					lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType));
 				}
 			}
 		}
@@ -289,11 +290,12 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		comboSelectedSeries.setText(SELECTED_SERIES_NONE);
 	}
 
-	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, String overlayType, Color color) {
+	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, String overlayType) {
 
 		double[] xSeries = new double[chromatogram.getNumberOfScans()];
 		double[] ySeries = new double[chromatogram.getNumberOfScans()];
 		LineStyle lineStyle = getLineStyle(overlayType);
+		Color color = getSeriesColor(seriesId, overlayType);
 		/*
 		 * Get the data.
 		 */
@@ -319,6 +321,13 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		lineSeriesSettingsHighlight.setLineWidth(2);
 		//
 		return lineSeriesData;
+	}
+
+	private Color getSeriesColor(String seriesId, String overlayType) {
+
+		Color color = colorScheme.getColor();
+		colorScheme.incrementColor();
+		return color;
 	}
 
 	private double getIntensity(IScan scan, String overlayType) {
