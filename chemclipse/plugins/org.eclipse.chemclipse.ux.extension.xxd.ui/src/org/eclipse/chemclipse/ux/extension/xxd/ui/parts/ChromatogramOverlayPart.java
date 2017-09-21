@@ -237,12 +237,12 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		Set<String> selectedSeriesIds = new HashSet<String>();
 		//
 		BaseChart baseChart = chromatogramChart.getBaseChart();
-		baseChart.suspendUpdate(true);
+		// baseChart.suspendUpdate(true);
 		//
 		for(int i = 0; i < chromatogramSelections.size(); i++) {
 			IChromatogramSelection chromatogramSelection = chromatogramSelections.get(i);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			String chromatogramName = chromatogram.getName() + "-" + i;
+			String chromatogramName = chromatogram.getName() + "-" + (i + 1);
 			/*
 			 * Which series shall be displayed?
 			 */
@@ -278,7 +278,8 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		comboSelectedSeries.setItems(items);
 		comboSelectedSeries.select(0);
 		//
-		baseChart.suspendUpdate(true);
+		// baseChart.suspendUpdate(true);
+		baseChart.redraw();
 		chromatogramChart.redraw();
 	}
 
@@ -298,13 +299,16 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		} else {
 			lineStyle = LineStyle.DOT;
 		}
-		//
+		/*
+		 * Get the data.
+		 */
 		int index = 0;
 		for(IScan scan : chromatogram.getScans()) {
-			xSeries[index] = scan.getRetentionTime();
 			/*
-			 * Get the intensity.
+			 * Get the retention time and intensity.
 			 */
+			xSeries[index] = scan.getRetentionTime();
+			//
 			if(overlayType.equals(OVERLAY_TYPE_TIC)) {
 				/*
 				 * TIC
