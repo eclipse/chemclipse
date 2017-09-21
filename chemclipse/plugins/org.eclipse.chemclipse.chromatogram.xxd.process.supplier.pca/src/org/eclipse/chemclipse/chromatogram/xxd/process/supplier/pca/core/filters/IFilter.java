@@ -14,9 +14,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filter
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IPreprocessing;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 
-public interface IFilter {
+public interface IFilter extends IPreprocessing {
 
 	List<Boolean> filter(ISamples samples);
 
@@ -37,7 +39,19 @@ public interface IFilter {
 
 	String getSelectionResult();
 
+	@Override
 	boolean isOnlySelected();
 
+	@Override
+	default void process(ISamples samples) {
+
+		List<Boolean> result = filter(samples);
+		List<IRetentionTime> retentionTimes = samples.getExtractedRetentionTimes();
+		for(int j = 0; j < result.size(); j++) {
+			retentionTimes.get(j).setSelected(retentionTimes.get(j).isSelected() && result.get(j));
+		}
+	}
+
+	@Override
 	void setOnlySelected(boolean onlySelected);
 }

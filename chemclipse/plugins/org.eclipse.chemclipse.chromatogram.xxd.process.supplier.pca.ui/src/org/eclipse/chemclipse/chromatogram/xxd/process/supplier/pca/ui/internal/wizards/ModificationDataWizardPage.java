@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.ScalingDataTables;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.DataPreprocessing;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -34,7 +34,7 @@ public class ModificationDataWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new GridLayout(1, false));
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		new ScalingDataTables(composite, gridData, pcaScalingData);
+		new DataPreprocessing(composite, gridData, pcaScalingData);
 		setControl(composite);
 	}
 

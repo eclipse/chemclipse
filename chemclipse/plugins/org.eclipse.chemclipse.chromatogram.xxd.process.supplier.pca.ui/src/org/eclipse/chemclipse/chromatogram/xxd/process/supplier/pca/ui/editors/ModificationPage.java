@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.ScalingDataTables;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.DataPreprocessing;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
@@ -32,13 +32,12 @@ public class ModificationPage {
 	//
 	private PcaEditor pcaEditor;
 	private Button scalingData;
-	private ScalingDataTables scalingDataTables;
+	private DataPreprocessing dataPreprocessing;
 
 	public ModificationPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
 		this.pcaEditor = pcaEditor;
 		initialize(tabFolder, formToolkit);
-		disableAll();
 	}
 
 	private void createButton(Composite parent) {
@@ -62,17 +61,7 @@ public class ModificationPage {
 		Composite compositeNormalizationTables = new Composite(scrollNormalizationTables, SWT.NONE);
 		scrollNormalizationTables.setContent(compositeNormalizationTables);
 		compositeNormalizationTables.setLayout(new FillLayout());
-		scalingDataTables = new ScalingDataTables(compositeNormalizationTables, null);
-	}
-
-	private void disableAll() {
-
-		setEnable(false);
-	}
-
-	private void enableAll() {
-
-		setEnable(true);
+		dataPreprocessing = new DataPreprocessing(compositeNormalizationTables, null);
 	}
 
 	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
@@ -91,21 +80,12 @@ public class ModificationPage {
 		tabItem.setControl(composite);
 	}
 
-	private void setEnable(boolean enabled) {
-
-		scalingDataTables.setEnable(enabled);
-		scalingData.setEnabled(enabled);
-	}
-
 	public void update() {
 
 		Optional<PcaScalingData> normalizationData = pcaEditor.getPcaScalingData();
 		if(normalizationData.isPresent()) {
-			enableAll();
-			scalingDataTables.setPcaNormalizationData(normalizationData.get());
-			scalingDataTables.update();
+			dataPreprocessing.update();
 		} else {
-			disableAll();
 		}
 	}
 }

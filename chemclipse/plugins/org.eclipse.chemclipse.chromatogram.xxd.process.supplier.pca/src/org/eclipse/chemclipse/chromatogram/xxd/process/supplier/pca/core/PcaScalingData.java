@@ -11,132 +11,34 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
-
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaScalingData implements IDataModification {
 
-	public enum Centering {
-		MEAN, MEDIAN;
-	}
-
-	public enum Scaling {
-		SCALING_AUTO, SCALING_LEVEL, SCALING_PARETO, SCALING_RANGE, SCALING_VAST
-	}
-
-	public enum Transformation {
-		LOG10, NONE, POWER
-	}
-
-	private Centering centering;
+	private IPreprocessing centering;
 	private boolean enableModificationData;
 	private boolean onlySelected;
-	private Scaling scalingType;
-	private Function<Double, Double> transformation;
-	private Function<Double, Double> transformationNone = d -> d;
-	private Function<Double, Double> transfromationLog10 = d -> 10.0 * Math.log10(Math.abs(d));
-	private Function<Double, Double> transfromationPower = d -> Math.sqrt(Math.abs(d));
-	private Transformation transfromationType;
+	private IPreprocessing scaling;
+	private IPreprocessing transformation;
 
 	public PcaScalingData(boolean enableModificationData) {
-		this.transformation = transformationNone;
-		this.transfromationType = Transformation.NONE;
-		centering = Centering.MEAN;
-		scalingType = Scaling.SCALING_AUTO;
-		onlySelected = true;
-		this.enableModificationData = enableModificationData;
 	}
 
-	private void autoScaling(ISamples samples, boolean onlySeleted) {
-
-		// fix it
-		List<IRetentionTime> retentionTime = samples.getExtractedRetentionTimes();
-		List<ISample> samplesList = samples.getSampleList();
-		for(int i = 0; i < retentionTime.size(); i++) {
-			final double mean = getCenteringValue(samplesList, i, onlySeleted);
-			final double deviation = getStandartDeviation(samplesList, i, onlySeleted);
-			for(ISample sample : samplesList) {
-				ISampleData sampleData = sample.getSampleData().get(i);
-				if(!sampleData.isEmpty() && (sample.isSelected() || !onlySeleted)) {
-					double data = sampleData.getModifiedData();
-					double scaleData = 0;
-					if(deviation != 0) {
-						scaleData = (data - mean) / deviation;
-					}
-					sampleData.setModifiedData(scaleData);
-				}
-			}
-		}
-	}
-
-	public Centering getCentering() {
+	public IPreprocessing getCentering() {
 
 		return centering;
 	}
 
-	private double getCenteringValue(List<ISample> sample, int position, boolean onlySelected) {
+	public IPreprocessing getScaling() {
 
-		DoubleStream selectedData = sample.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(position)).filter(d -> !d.isEmpty()).mapToDouble(d -> d.getData());
-		switch(centering) {
-			case MEAN:
-				return selectedData.summaryStatistics().getAverage();
-			case MEDIAN:
-				List<Double> data = selectedData.sorted().boxed().collect(Collectors.toList());
-				int lenght = data.size();
-				double median = lenght % 2 == 0 ? (data.get(lenght / 2 - 1) + data.get(lenght / 2)) / 2.0 // even
-						: data.get(lenght / 2); //
-				return median;
-			default:
-				throw new RuntimeException("undefine centering");
-		}
+		return scaling;
 	}
 
-	private double getMax(List<ISample> samples, int index, boolean onlySelected) {
+	public IPreprocessing getTransformation() {
 
-		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).filter(d -> !d.isEmpty()).mapToDouble(s -> transformation.apply(s.getData())).summaryStatistics().getMax();
-	}
-
-	private double getMin(List<ISample> samples, int index, boolean onlySelected) {
-
-		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).filter(d -> !d.isEmpty()).mapToDouble(s -> transformation.apply(s.getData())).summaryStatistics().getMin();
-	}
-
-	public Scaling getScalingType() {
-
-		return scalingType;
-	}
-
-	private double getStandartDeviation(List<ISample> samples, int position, boolean onlySelected) {
-
-		return Math.sqrt(Math.abs(getVariance(samples, position, onlySelected)));
-	}
-
-	public Transformation getTransformationType() {
-
-		return transfromationType;
-	}
-
-	private double getVariance(List<ISample> samples, int position, boolean onlySelected) {
-
-		List<ISampleData> sampleData = samples.stream().filter(s -> s.isSelected() || onlySelected).map(s -> s.getSampleData().get(position)).collect(Collectors.toList());
-		int count = sampleData.size();
-		if(count > 1) {
-			final double mean = getCenteringValue(samples, position, onlySelected);
-			double sum = sampleData.stream().filter(d -> !d.isEmpty()).mapToDouble(d -> {
-				double data = transformation.apply(d.getData());
-				return (data - mean) * (data - mean);
-			}).sum();
-			return sum / (count - 1);
-		}
-		return 0;
+		return transformation;
 	}
 
 	@Override
@@ -151,92 +53,26 @@ public class PcaScalingData implements IDataModification {
 		return onlySelected;
 	}
 
-	private void levelScaling(ISamples samples, boolean onlySeleted) {
-
-		List<IRetentionTime> retentionTime = samples.getExtractedRetentionTimes();
-		List<ISample> samplesList = samples.getSampleList();
-		for(int i = 0; i < retentionTime.size(); i++) {
-			final double mean = getCenteringValue(samplesList, i, onlySeleted);
-			final double deviation = getStandartDeviation(samplesList, i, onlySeleted);
-			for(ISample sample : samplesList) {
-				ISampleData sampleData = sample.getSampleData().get(i);
-				if(!sampleData.isEmpty() && (sample.isSelected() || !onlySeleted)) {
-					double data = sampleData.getModifiedData();
-					if(deviation != 0) {
-						double scaleData = (data - mean) / mean;
-						sampleData.setModifiedData(scaleData);
-					}
-				}
-			}
-		}
-	}
-
-	private void paretoScaling(ISamples samples, boolean onlySeleted) {
-
-		List<IRetentionTime> retentionTime = samples.getExtractedRetentionTimes();
-		List<ISample> samplesList = samples.getSampleList();
-		for(int i = 0; i < retentionTime.size(); i++) {
-			final double mean = getCenteringValue(samplesList, i, onlySeleted);
-			final double deviationSqrt = Math.sqrt(getStandartDeviation(samplesList, i, onlySeleted));
-			for(ISample sample : samplesList) {
-				ISampleData sampleData = sample.getSampleData().get(i);
-				if(!sampleData.isEmpty() && (sample.isSelected() || !onlySeleted)) {
-					double data = sampleData.getModifiedData();
-					if(deviationSqrt != 0) {
-						double scaleData = (data - mean) / deviationSqrt;
-						sampleData.setModifiedData(scaleData);
-					}
-				}
-			}
-		}
-	}
-
 	@Override
 	public void process(ISamples samples, IProgressMonitor monitor) {
 
 		if(enableModificationData) {
-			switch(scalingType) {
-				case SCALING_AUTO:
-					autoScaling(samples, onlySelected);
-					break;
-				case SCALING_LEVEL:
-					levelScaling(samples, onlySelected);
-					break;
-				case SCALING_PARETO:
-					paretoScaling(samples, onlySelected);
-					break;
-				case SCALING_RANGE:
-					rangeScaling(samples, onlySelected);
-					break;
-				case SCALING_VAST:
-					vastscaling(samples, onlySelected);
-					break;
+			if(transformation != null) {
+				transformation.setOnlySelected(onlySelected);
+				transformation.process(samples);
+			}
+			if(centering != null) {
+				centering.setOnlySelected(onlySelected);
+				centering.process(samples);
+			}
+			if(scaling != null) {
+				scaling.setOnlySelected(onlySelected);
+				scaling.process(samples);
 			}
 		}
 	}
 
-	private void rangeScaling(ISamples samples, boolean onlySeleted) {
-
-		List<IRetentionTime> retentionTime = samples.getExtractedRetentionTimes();
-		List<ISample> samplesList = samples.getSampleList();
-		for(int i = 0; i < retentionTime.size(); i++) {
-			final double mean = getCenteringValue(samplesList, i, onlySeleted);
-			final double max = getMax(samplesList, i, onlySeleted);
-			final double min = getMin(samplesList, i, onlySeleted);
-			for(ISample sample : samplesList) {
-				ISampleData sampleData = sample.getSampleData().get(i);
-				if(!sampleData.isEmpty() && (sample.isSelected() || !onlySeleted)) {
-					double data = sampleData.getModifiedData();
-					if(max != min) {
-						double scaleData = (data - mean) / (max - min);
-						sampleData.setModifiedData(scaleData);
-					}
-				}
-			}
-		}
-	}
-
-	public void setCentering(Centering centering) {
+	public void setCentering(IPreprocessing centering) {
 
 		this.centering = centering;
 	}
@@ -253,44 +89,13 @@ public class PcaScalingData implements IDataModification {
 		this.onlySelected = onlySelected;
 	}
 
-	public void setScalingType(Scaling scalingType) {
+	public void setScaling(IPreprocessing scaling) {
 
-		this.scalingType = scalingType;
+		this.scaling = scaling;
 	}
 
-	public void setTransformationType(Transformation transformation) {
+	public void setTransformation(IPreprocessing transformation) {
 
-		switch(transformation) {
-			case NONE:
-				this.transformation = transformationNone;
-				break;
-			case LOG10:
-				this.transformation = transfromationLog10;
-				break;
-			case POWER:
-				this.transformation = transfromationPower;
-				break;
-		}
-		this.transfromationType = transformation;
-	}
-
-	private void vastscaling(ISamples samples, boolean onlySeleted) {
-
-		List<IRetentionTime> retentionTime = samples.getExtractedRetentionTimes();
-		List<ISample> samplesList = samples.getSampleList();
-		for(int i = 0; i < retentionTime.size(); i++) {
-			final double mean = getCenteringValue(samplesList, i, onlySeleted);
-			final double variace = getVariance(samplesList, i, onlySeleted);
-			for(ISample sample : samplesList) {
-				ISampleData sampleData = sample.getSampleData().get(i);
-				if(!sampleData.isEmpty() && (sample.isSelected() || !onlySeleted)) {
-					double data = sampleData.getModifiedData();
-					if(variace != 0) {
-						double scaleData = ((data - mean) / variace) * mean;
-						sampleData.setModifiedData(scaleData);
-					}
-				}
-			}
-		}
+		this.transformation = transformation;
 	}
 }
