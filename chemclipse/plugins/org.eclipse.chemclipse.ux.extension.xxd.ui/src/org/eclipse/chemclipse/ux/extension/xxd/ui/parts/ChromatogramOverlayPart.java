@@ -67,7 +67,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	//
 	private static final String OVERLAY_TYPE_TIC = "TIC";
 	private static final String OVERLAY_TYPE_BPC = "BPC";
-	private static final String OVERLAY_TYPE_CONCATENATOR = "_";
+	private static final String OVERLAY_TYPE_CONCATENATOR = "+";
 	//
 	private static final String SELECTED_SERIES_NONE = "None";
 	//
@@ -134,6 +134,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				refreshUpdateOverlayChart();
 			}
 		});
 	}
@@ -154,6 +155,10 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				BaseChart baseChart = chromatogramChart.getBaseChart();
+				baseChart.resetSeriesSettings();
+				baseChart.selectSeries(comboSelectedSeries.getText().trim());
+				baseChart.redraw();
 			}
 		});
 	}
@@ -234,71 +239,61 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	private void refreshUpdateOverlayChart() {
 
 		List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(partService);
-		Set<String> selectedSeriesIds = new HashSet<String>();
-		//
+		Set<String> availableSeriesIds = new HashSet<String>();
 		BaseChart baseChart = chromatogramChart.getBaseChart();
-		// baseChart.suspendUpdate(true);
 		//
+		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 		for(int i = 0; i < chromatogramSelections.size(); i++) {
 			IChromatogramSelection chromatogramSelection = chromatogramSelections.get(i);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			String chromatogramName = chromatogram.getName() + "-" + (i + 1);
+			String chromatogramName = chromatogram.getName() + "_#" + (i + 1);
 			/*
 			 * Which series shall be displayed?
 			 */
 			Color color = colorScheme.getColor();
 			colorScheme.incrementColor();
 			//
-			String[] overlayTypes = comboOverlayType.getText().trim().split(OVERLAY_TYPE_CONCATENATOR);
+			String[] overlayTypes = comboOverlayType.getText().trim().split("\\" + OVERLAY_TYPE_CONCATENATOR); // Escape the "+"
 			for(String overlayType : overlayTypes) {
 				String seriesId = chromatogramName + "_(" + overlayType + ")";
+				availableSeriesIds.add(seriesId);
 				if(!baseChart.isSeriesContained(seriesId)) {
-					//
-					addDataSeries(chromatogram, seriesId, overlayType, color);
-					selectedSeriesIds.add(seriesId);
+					lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, color));
 				}
 			}
 		}
 		/*
-		 * Delete non-selected series.
+		 * Add the selected series
+		 */
+		chromatogramChart.addSeriesData(lineSeriesDataList, LineChart.MEDIUM_COMPRESSION);
+		/*
+		 * Delete non-available series.
 		 */
 		for(ISeries series : baseChart.getSeriesSet().getSeries()) {
 			String seriesId = series.getId();
-			if(!selectedSeriesIds.contains(seriesId)) {
+			if(!availableSeriesIds.contains(seriesId)) {
 				baseChart.deleteSeries(seriesId);
 			}
 		}
-		//
-		String[] items = new String[selectedSeriesIds.size() + 1];
+		/*
+		 * Reset the selected series selection.
+		 */
+		baseChart.resetSeriesSettings();
+		String[] items = new String[availableSeriesIds.size() + 1];
 		items[0] = SELECTED_SERIES_NONE;
 		int index = 1;
-		for(String seriesId : selectedSeriesIds) {
+		for(String seriesId : availableSeriesIds) {
 			items[index++] = seriesId;
 		}
 		comboSelectedSeries.setItems(items);
-		comboSelectedSeries.select(0);
-		//
-		// baseChart.suspendUpdate(true);
-		baseChart.redraw();
-		chromatogramChart.redraw();
+		comboSelectedSeries.setText(SELECTED_SERIES_NONE);
 	}
 
-	private void addDataSeries(IChromatogram chromatogram, String seriesId, String overlayType, Color color) {
+	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, String overlayType, Color color) {
 
-		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 		double[] xSeries = new double[chromatogram.getNumberOfScans()];
 		double[] ySeries = new double[chromatogram.getNumberOfScans()];
-		/*
-		 * Get the line style.
-		 */
-		LineStyle lineStyle;
-		if(overlayType.equals(OVERLAY_TYPE_TIC)) {
-			lineStyle = LineStyle.SOLID;
-		} else if(overlayType.equals(OVERLAY_TYPE_BPC)) {
-			lineStyle = LineStyle.DASH;
-		} else {
-			lineStyle = LineStyle.DOT;
-		}
+		LineStyle lineStyle = getLineStyle(overlayType);
 		/*
 		 * Get the data.
 		 */
@@ -308,33 +303,58 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			 * Get the retention time and intensity.
 			 */
 			xSeries[index] = scan.getRetentionTime();
-			//
-			if(overlayType.equals(OVERLAY_TYPE_TIC)) {
-				/*
-				 * TIC
-				 */
-				ySeries[index] = scan.getTotalSignal();
-			} else if(overlayType.equals(OVERLAY_TYPE_BPC)) {
-				/*
-				 * BPC
-				 */
-				if(scan instanceof IScanMSD) {
-					IScanMSD scanMSD = (IScanMSD)scan;
-					IIon ion = scanMSD.getHighestAbundance();
-					if(ion != null) {
-						ySeries[index] = ion.getAbundance();
-					}
-				}
-			}
+			ySeries[index] = getIntensity(scan, overlayType);
 			index++;
 		}
+		/*
+		 * Add the series.
+		 */
 		ISeriesData seriesData = new SeriesData(xSeries, ySeries, seriesId);
 		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
 		ILineSeriesSettings lineSerieSettings = lineSeriesData.getLineSeriesSettings();
 		lineSerieSettings.setLineColor(color);
 		lineSerieSettings.setLineStyle(lineStyle);
 		lineSerieSettings.setEnableArea(false);
-		lineSeriesDataList.add(lineSeriesData);
-		chromatogramChart.addSeriesData(lineSeriesDataList, LineChart.MEDIUM_COMPRESSION);
+		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSerieSettings.getSeriesSettingsHighlight();
+		lineSeriesSettingsHighlight.setLineWidth(2);
+		//
+		return lineSeriesData;
+	}
+
+	private double getIntensity(IScan scan, String overlayType) {
+
+		double intensity = 0.0d;
+		if(overlayType.equals(OVERLAY_TYPE_TIC)) {
+			/*
+			 * TIC
+			 */
+			intensity = scan.getTotalSignal();
+		} else if(overlayType.equals(OVERLAY_TYPE_BPC)) {
+			/*
+			 * BPC
+			 */
+			if(scan instanceof IScanMSD) {
+				IScanMSD scanMSD = (IScanMSD)scan;
+				IIon ion = scanMSD.getHighestAbundance();
+				if(ion != null) {
+					intensity = ion.getAbundance();
+				}
+			}
+		}
+		//
+		return intensity;
+	}
+
+	private LineStyle getLineStyle(String overlayType) {
+
+		LineStyle lineStyle;
+		if(overlayType.equals(OVERLAY_TYPE_TIC)) {
+			lineStyle = LineStyle.SOLID;
+		} else if(overlayType.equals(OVERLAY_TYPE_BPC)) {
+			lineStyle = LineStyle.DASH;
+		} else {
+			lineStyle = LineStyle.DOT;
+		}
+		return lineStyle;
 	}
 }
