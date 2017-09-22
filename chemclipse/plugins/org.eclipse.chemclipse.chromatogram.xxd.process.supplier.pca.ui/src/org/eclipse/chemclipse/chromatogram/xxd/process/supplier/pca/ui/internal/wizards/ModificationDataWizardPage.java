@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.DataPreprocessing;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.DataPreprocessingSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -21,11 +21,12 @@ import org.eclipse.swt.widgets.Composite;
 
 public class ModificationDataWizardPage extends WizardPage {
 
-	private PcaScalingData pcaScalingData;
+	private DataPreprocessingSelection dataPreprocessingSelection;
+	private PcaPreprocessingData pcaPreprocessingData;
 
 	protected ModificationDataWizardPage(String pageName) {
 		super(pageName);
-		pcaScalingData = new PcaScalingData(false);
+		pcaPreprocessingData = new PcaPreprocessingData();
 	}
 
 	@Override
@@ -34,12 +35,12 @@ public class ModificationDataWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new GridLayout(1, false));
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		new DataPreprocessing(composite, gridData, pcaScalingData);
+		dataPreprocessingSelection = new DataPreprocessingSelection(composite, gridData, pcaPreprocessingData);
 		setControl(composite);
 	}
 
-	public PcaScalingData getPcaScalingData() {
+	public PcaPreprocessingData getPcaPreprocessingData() {
 
-		return pcaScalingData;
+		return pcaPreprocessingData;
 	}
 }

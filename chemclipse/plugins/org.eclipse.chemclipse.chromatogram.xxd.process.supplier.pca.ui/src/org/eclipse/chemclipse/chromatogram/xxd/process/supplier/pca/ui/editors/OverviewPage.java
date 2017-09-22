@@ -70,7 +70,7 @@ public class OverviewPage {
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
 
-				if(pcaEditor.getPcaResults().isPresent()) {
+				if(pcaEditor.getSamples().isPresent()) {
 					Shell shell = new Shell(Display.getCurrent(), SWT.DIALOG_TRIM | SWT.RESIZE);
 					shell.setLayout(new FillLayout());
 					Runnable thread = () -> {

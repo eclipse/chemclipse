@@ -48,7 +48,7 @@ public class RetentionTime2Filter implements IFilter {
 				seletions.set(i, !set.contains(time));
 			}
 		}
-		selectionResult = getNumberSelectedRow(seletions);
+		selectionResult = IFilter.getNumberSelectedRow(seletions);
 		return seletions;
 	}
 

@@ -20,22 +20,18 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 
 public interface IFilter extends IPreprocessing {
 
-	List<Boolean> filter(ISamples samples);
-
-	String getDescription();
-
-	default String getErrorMessage(String messagge) {
+	static String getErrorMessage(String messagge) {
 
 		return "Error: " + messagge;
 	}
 
-	String getName();
-
-	default String getNumberSelectedRow(Collection<Boolean> selection) {
+	static String getNumberSelectedRow(Collection<Boolean> selection) {
 
 		long countSelectedData = selection.stream().filter(b -> b).count();
 		return Long.toString(countSelectedData);
 	}
+
+	List<Boolean> filter(ISamples samples);
 
 	String getSelectionResult();
 

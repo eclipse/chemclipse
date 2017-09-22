@@ -18,15 +18,14 @@ import java.util.stream.DoubleStream;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 
-public abstract class AbstractCentering extends AbstractPreprocessing {
-
-	private boolean onlySelected = true;
+public abstract class AbstractCentering extends AbstractPreprocessing implements ICentering {
 
 	public AbstractCentering() {
 	}
 
 	protected double getCenteringValue(List<ISample> sample, int position, int type) {
 
+		boolean onlySelected = isOnlySelected();
 		DoubleStream selectedData = sample.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(position)).filter(d -> !d.isEmpty()).mapToDouble(d -> d.getModifiedData());
 		switch(type) {
 			case 1:
@@ -49,6 +48,7 @@ public abstract class AbstractCentering extends AbstractPreprocessing {
 
 	protected double getVariance(List<ISample> samples, int position, int type) {
 
+		boolean onlySelected = isOnlySelected();
 		List<ISampleData> sampleData = samples.stream().filter(s -> s.isSelected() || onlySelected).map(s -> s.getSampleData().get(position)).collect(Collectors.toList());
 		int count = sampleData.size();
 		if(count > 1) {
@@ -60,17 +60,5 @@ public abstract class AbstractCentering extends AbstractPreprocessing {
 			return sum / (count - 1);
 		}
 		return 0;
-	}
-
-	@Override
-	public boolean isOnlySelected() {
-
-		return onlySelected;
-	}
-
-	@Override
-	public void setOnlySelected(boolean onlySelected) {
-
-		this.onlySelected = onlySelected;
 	}
 }

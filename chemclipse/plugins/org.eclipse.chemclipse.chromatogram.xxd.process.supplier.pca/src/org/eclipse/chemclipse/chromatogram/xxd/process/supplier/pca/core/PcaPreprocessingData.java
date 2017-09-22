@@ -11,32 +11,34 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IPreprocessing;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.ICentering;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.INormalization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.ITransformation;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PcaScalingData implements IDataModification {
+public class PcaPreprocessingData implements IDataModification {
 
-	private IPreprocessing centering;
-	private boolean enableModificationData;
+	private ICentering centeringScaling;
+	private boolean enableModificationData = true;
+	private INormalization normalization;
 	private boolean onlySelected;
-	private IPreprocessing scaling;
-	private IPreprocessing transformation;
+	private ITransformation transformation;
 
-	public PcaScalingData(boolean enableModificationData) {
+	public PcaPreprocessingData() {
 	}
 
-	public IPreprocessing getCentering() {
+	public ICentering getCenteringScaling() {
 
-		return centering;
+		return centeringScaling;
 	}
 
-	public IPreprocessing getScaling() {
+	public INormalization getNormalization() {
 
-		return scaling;
+		return normalization;
 	}
 
-	public IPreprocessing getTransformation() {
+	public ITransformation getTransformation() {
 
 		return transformation;
 	}
@@ -57,24 +59,24 @@ public class PcaScalingData implements IDataModification {
 	public void process(ISamples samples, IProgressMonitor monitor) {
 
 		if(enableModificationData) {
+			if(normalization != null) {
+				normalization.setOnlySelected(onlySelected);
+				normalization.process(samples);
+			}
 			if(transformation != null) {
 				transformation.setOnlySelected(onlySelected);
 				transformation.process(samples);
 			}
-			if(centering != null) {
-				centering.setOnlySelected(onlySelected);
-				centering.process(samples);
-			}
-			if(scaling != null) {
-				scaling.setOnlySelected(onlySelected);
-				scaling.process(samples);
+			if(centeringScaling != null) {
+				centeringScaling.setOnlySelected(onlySelected);
+				centeringScaling.process(samples);
 			}
 		}
 	}
 
-	public void setCentering(IPreprocessing centering) {
+	public void setCenteringScaling(ICentering centeringScaling) {
 
-		this.centering = centering;
+		this.centeringScaling = centeringScaling;
 	}
 
 	@Override
@@ -83,18 +85,18 @@ public class PcaScalingData implements IDataModification {
 		enableModificationData = enable;
 	}
 
+	public void setNormalization(INormalization normalization) {
+
+		this.normalization = normalization;
+	}
+
 	@Override
 	public void setOnlySelected(boolean onlySelected) {
 
 		this.onlySelected = onlySelected;
 	}
 
-	public void setScaling(IPreprocessing scaling) {
-
-		this.scaling = scaling;
-	}
-
-	public void setTransformation(IPreprocessing transformation) {
+	public void setTransformation(ITransformation transformation) {
 
 		this.transformation = transformation;
 	}

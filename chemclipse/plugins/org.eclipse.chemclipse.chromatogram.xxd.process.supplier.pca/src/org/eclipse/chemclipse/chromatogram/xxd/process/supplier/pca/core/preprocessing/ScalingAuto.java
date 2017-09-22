@@ -25,6 +25,18 @@ public class ScalingAuto extends AbstaractScaling {
 	}
 
 	@Override
+	public String getDescription() {
+
+		return "";
+	}
+
+	@Override
+	public String getName() {
+
+		return "AutoScaling";
+	}
+
+	@Override
 	public void process(ISamples samples) {
 
 		boolean onlySeleted = isOnlySelected();

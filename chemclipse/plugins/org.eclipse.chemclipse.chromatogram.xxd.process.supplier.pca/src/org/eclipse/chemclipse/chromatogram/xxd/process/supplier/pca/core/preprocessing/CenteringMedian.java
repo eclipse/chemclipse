@@ -20,6 +20,18 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 public class CenteringMedian extends AbstractCentering {
 
 	@Override
+	public String getDescription() {
+
+		return "";
+	}
+
+	@Override
+	public String getName() {
+
+		return "Median Centering";
+	}
+
+	@Override
 	public void process(ISamples samples) {
 
 		List<IRetentionTime> retenitionTimes = samples.getExtractedRetentionTimes();
@@ -28,7 +40,9 @@ public class CenteringMedian extends AbstractCentering {
 			final int j = i;
 			samples.getSampleList().stream().forEach(s -> {
 				ISampleData data = s.getSampleData().get(j);
-				data.setModifiedData(data.getModifiedData() - value);
+				if(!data.isEmpty()) {
+					data.setModifiedData(data.getModifiedData() - value);
+				}
 			});
 		}
 	}

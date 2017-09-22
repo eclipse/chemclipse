@@ -62,9 +62,9 @@ public class AnovaFilter implements IFilter {
 				double pValue = oneWayAnova.anovaPValue(categoryData, true);
 				selection.set(i, (pValue < alpha));
 			}
-			selectionResult = getNumberSelectedRow(selection);
+			selectionResult = IFilter.getNumberSelectedRow(selection);
 		} catch(Exception e) {
-			selectionResult = getErrorMessage(e.getMessage());
+			selectionResult = IFilter.getErrorMessage(e.getMessage());
 		}
 		return selection;
 	}

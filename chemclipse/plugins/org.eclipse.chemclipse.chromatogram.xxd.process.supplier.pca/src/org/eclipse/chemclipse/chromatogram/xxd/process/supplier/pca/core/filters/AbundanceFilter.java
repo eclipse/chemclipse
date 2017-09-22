@@ -61,7 +61,7 @@ public class AbundanceFilter implements IFilter {
 			}
 			selection.add(b);
 		}
-		selectionResult = getNumberSelectedRow(selection);
+		selectionResult = IFilter.getNumberSelectedRow(selection);
 		return selection;
 	}
 

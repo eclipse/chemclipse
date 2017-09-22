@@ -25,6 +25,18 @@ public class ScalingVast extends AbstaractScaling {
 	}
 
 	@Override
+	public String getDescription() {
+
+		return "";
+	}
+
+	@Override
+	public String getName() {
+
+		return "Vast Scaling";
+	}
+
+	@Override
 	public void process(ISamples samples) {
 
 		boolean onlySelected = isOnlySelected();

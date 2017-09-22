@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
 import java.util.Optional;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.DataPreprocessing;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.DataPreprocessingSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
@@ -26,15 +26,15 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-public class ModificationPage {
+public class PreprocessingPage {
 
 	private Composite composite;
+	private DataPreprocessingSelection dataPreprocessing;
 	//
 	private PcaEditor pcaEditor;
 	private Button scalingData;
-	private DataPreprocessing dataPreprocessing;
 
-	public ModificationPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
+	public PreprocessingPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
 		this.pcaEditor = pcaEditor;
 		initialize(tabFolder, formToolkit);
@@ -46,10 +46,11 @@ public class ModificationPage {
 		composite.setLayoutData(new GridData(SWT.CENTER, SWT.BEGINNING, false, true));
 		composite.setLayout(new FillLayout(SWT.VERTICAL));
 		scalingData = new Button(composite, SWT.PUSH);
-		scalingData.setText("Scaling Data");
+		scalingData.setText("Preprocess Data");
 		scalingData.addListener(SWT.Selection, e -> {
 			pcaEditor.modifyData();
 		});
+		scalingData.setEnabled(false);
 	}
 
 	private void createTables(Composite parent) {
@@ -61,14 +62,14 @@ public class ModificationPage {
 		Composite compositeNormalizationTables = new Composite(scrollNormalizationTables, SWT.NONE);
 		scrollNormalizationTables.setContent(compositeNormalizationTables);
 		compositeNormalizationTables.setLayout(new FillLayout());
-		dataPreprocessing = new DataPreprocessing(compositeNormalizationTables, null);
+		dataPreprocessing = new DataPreprocessingSelection(compositeNormalizationTables, null);
 	}
 
 	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
 
 		//
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Data Modification");
+		tabItem.setText("Data Preprocessoring");
 		//
 		composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayout(new FillLayout());
@@ -82,10 +83,12 @@ public class ModificationPage {
 
 	public void update() {
 
-		Optional<PcaScalingData> normalizationData = pcaEditor.getPcaScalingData();
+		Optional<PcaPreprocessingData> normalizationData = pcaEditor.getPcaPreprocessingData();
 		if(normalizationData.isPresent()) {
-			dataPreprocessing.update();
+			dataPreprocessing.update(normalizationData.get());
+			scalingData.setEnabled(true);
 		} else {
+			scalingData.setEnabled(false);
 		}
 	}
 }

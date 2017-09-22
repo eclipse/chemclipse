@@ -69,7 +69,7 @@ public class CVFilter implements IFilter {
 				selection.set(i, result);
 			}
 		}
-		selectionResult = getNumberSelectedRow(selection);
+		selectionResult = IFilter.getNumberSelectedRow(selection);
 		return selection;
 	}
 

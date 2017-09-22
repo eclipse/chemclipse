@@ -25,6 +25,18 @@ public class ScalingLevel extends AbstaractScaling {
 	}
 
 	@Override
+	public String getDescription() {
+
+		return "";
+	}
+
+	@Override
+	public String getName() {
+
+		return "Level Scaling";
+	}
+
+	@Override
 	public void process(ISamples samples) {
 
 		boolean onlySeleted = isOnlySelected();

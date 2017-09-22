@@ -16,7 +16,7 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionPeaks;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaScalingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.jface.wizard.Wizard;
 
@@ -70,9 +70,9 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 	}
 
 	@Override
-	public PcaScalingData getPcaScalingData() {
+	public PcaPreprocessingData getPcaPreprocessingData() {
 
-		return modificationDataWizardPage.getPcaScalingData();
+		return modificationDataWizardPage.getPcaPreprocessingData();
 	}
 
 	@Override

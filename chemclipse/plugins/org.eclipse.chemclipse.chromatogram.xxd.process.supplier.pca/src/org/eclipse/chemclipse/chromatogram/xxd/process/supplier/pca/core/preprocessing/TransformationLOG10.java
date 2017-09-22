@@ -11,18 +11,31 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 
-public class TransformationLOG10 extends AbstractPreprocessing {
+public class TransformationLOG10 extends AbstractPreprocessing implements ITransformation {
+
+	@Override
+	public String getDescription() {
+
+		return "";
+	}
+
+	@Override
+	public String getName() {
+
+		return "Decadic logarithm transformation";
+	}
 
 	@Override
 	public void process(ISamples samples) {
 
-		samples.getSampleList().stream().filter(ISample::isSelected).forEach(s -> {
+		samples.getSampleList().stream().filter(s -> s.isSelected() || !isOnlySelected()).forEach(s -> {
 			for(ISampleData data : s.getSampleData()) {
-				data.setModifiedData(10.0 * Math.log10(data.getModifiedData()));
+				if(!data.isEmpty()) {
+					data.setModifiedData(10.0 * Math.log10(data.getModifiedData()));
+				}
 			}
 		});
 	}

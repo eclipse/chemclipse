@@ -24,6 +24,12 @@ public class ScalingRange extends AbstaractScaling {
 		super(centeringType);
 	}
 
+	@Override
+	public String getDescription() {
+
+		return "";
+	}
+
 	private double getMax(List<ISample> samples, int index) {
 
 		boolean onlySelected = isOnlySelected();
@@ -34,6 +40,12 @@ public class ScalingRange extends AbstaractScaling {
 
 		boolean onlySelected = isOnlySelected();
 		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).filter(d -> !d.isEmpty()).mapToDouble(s -> s.getModifiedData()).summaryStatistics().getMin();
+	}
+
+	@Override
+	public String getName() {
+
+		return "Range scaling";
 	}
 
 	@Override

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing;
 
-public abstract class AbstaractScaling extends AbstractCentering {
+public abstract class AbstaractScaling extends AbstractCentering implements IScaling {
 
 	private int centeringType;
 
@@ -19,11 +19,13 @@ public abstract class AbstaractScaling extends AbstractCentering {
 		this.centeringType = centeringType;
 	}
 
+	@Override
 	public int getCenteringType() {
 
 		return centeringType;
 	}
 
+	@Override
 	public void setCenteringType(int centeringType) {
 
 		this.centeringType = centeringType;

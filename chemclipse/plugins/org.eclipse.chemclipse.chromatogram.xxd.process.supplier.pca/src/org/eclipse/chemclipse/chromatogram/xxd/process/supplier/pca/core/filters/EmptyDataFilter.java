@@ -37,7 +37,7 @@ public class EmptyDataFilter implements IFilter {
 			boolean b = selectedSamples.stream().map(s -> s.getSampleData().get(index)).allMatch(d -> !d.isEmpty());
 			selection.add(b);
 		}
-		selectionResult = getNumberSelectedRow(selection);
+		selectionResult = IFilter.getNumberSelectedRow(selection);
 		return selection;
 	}
 

@@ -11,10 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 
-public class TransformationPower extends AbstractPreprocessing implements ITransformation {
+public class Normalization2Norm implements INormalization {
+
+	private boolean isOnlySelected;
 
 	@Override
 	public String getDescription() {
@@ -25,18 +27,31 @@ public class TransformationPower extends AbstractPreprocessing implements ITrans
 	@Override
 	public String getName() {
 
-		return "Power Transformation";
+		return "Normalization 2-norm";
+	}
+
+	@Override
+	public boolean isOnlySelected() {
+
+		return isOnlySelected;
 	}
 
 	@Override
 	public void process(ISamples samples) {
 
-		samples.getSampleList().stream().filter(s -> s.isSelected() || !isOnlySelected()).forEach(s -> {
-			for(ISampleData data : s.getSampleData()) {
-				if(!data.isEmpty()) {
-					data.setModifiedData(Math.sqrt(Math.abs(data.getModifiedData())));
+		for(ISample sample : samples.getSampleList()) {
+			if(sample.isSelected() || !isOnlySelected) {
+				double sum = Math.sqrt(sample.getSampleData().stream().filter(d -> !d.isEmpty()).mapToDouble(d -> d.getModifiedData() * d.getModifiedData()).sum());
+				if(sum != 0) {
+					sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> d.setModifiedData(d.getModifiedData() / sum));
 				}
 			}
-		});
+		}
+	}
+
+	@Override
+	public void setOnlySelected(boolean onlySelected) {
+
+		this.isOnlySelected = onlySelected;
 	}
 }

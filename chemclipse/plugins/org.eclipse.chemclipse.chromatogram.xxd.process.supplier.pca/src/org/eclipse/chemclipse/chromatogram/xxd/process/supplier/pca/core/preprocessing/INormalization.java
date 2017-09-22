@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Jan Holy
+ * Copyright (c) 2017 Jan Holy.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,17 +11,5 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
-
-public interface IPreprocessing {
-
-	String getDescription();
-
-	String getName();
-
-	boolean isOnlySelected();
-
-	void process(ISamples samples);
-
-	void setOnlySelected(boolean onlySelected);
+public interface INormalization extends IPreprocessing {
 }

@@ -62,10 +62,6 @@ public class PcaEditor extends AbstractPcaEditor {
 	private LoadingPlotPage loadingPlotPage;
 	@Inject
 	private EModelService modelService;
-	/*
-	 * Pages
-	 */
-	private ModificationPage modificationPage;
 	private OverviewPage overviewPage;
 	private List<Object> pages;
 	/*
@@ -74,6 +70,10 @@ public class PcaEditor extends AbstractPcaEditor {
 	@Inject
 	private MPart part;
 	private PeakListIntensityTablePage peakListIntensityTablePage;
+	/*
+	 * Pages
+	 */
+	private PreprocessingPage preprocessingPage;
 	private SamplesOverviewPage samplesOverviewPage;
 	private SamplesSelectionDialog samplesSelectionDialog;
 	private ScorePlot3dPage scorePlot3dPage;
@@ -97,6 +97,8 @@ public class PcaEditor extends AbstractPcaEditor {
 		if(object instanceof ISamples) {
 			ISamples samples = (ISamples)object;
 			try {
+				setSamples(samples);
+				updateSamples();
 				evaluateSamples(samples);
 				updateResults();
 				showScorePlotPage();
@@ -117,7 +119,7 @@ public class PcaEditor extends AbstractPcaEditor {
 		//
 		pages.add(overviewPage = new OverviewPage(this, tabFolder, formToolkit));
 		pages.add(samplesOverviewPage = new SamplesOverviewPage(this, tabFolder, formToolkit));
-		pages.add(modificationPage = new ModificationPage(this, tabFolder, formToolkit));
+		pages.add(preprocessingPage = new PreprocessingPage(this, tabFolder, formToolkit));
 		pages.add(filtersPage = new FiltersPage(this, tabFolder, formToolkit));
 		pages.add(peakListIntensityTablePage = new PeakListIntensityTablePage(this, tabFolder, formToolkit));
 		pages.add(scorePlotPage = new ScorePlotPage(this, tabFolder, formToolkit));
@@ -318,7 +320,7 @@ public class PcaEditor extends AbstractPcaEditor {
 		super.updataGroupNames();
 		overviewPage.update();
 		samplesOverviewPage.updateSamples();
-		modificationPage.update();
+		preprocessingPage.update();
 		filtersPage.update();
 		peakListIntensityTablePage.update();
 	}
