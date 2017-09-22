@@ -86,7 +86,7 @@ public class LoadingPlotPage {
 			List<Integer> values = new ArrayList<>();
 			for(TableItem item : selectedDataTable.getItems()) {
 				Object data = item.getData();
-				values.add(loadingPlot.getExtractedValues().get(data));
+				values.add(loadingPlot.getExtractedValues().get(data).getRetentionTime());
 			}
 			if(!values.isEmpty()) {
 				Collections.sort(values);

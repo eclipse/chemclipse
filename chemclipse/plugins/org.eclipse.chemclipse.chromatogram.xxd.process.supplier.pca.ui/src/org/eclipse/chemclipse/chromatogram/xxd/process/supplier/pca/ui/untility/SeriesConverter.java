@@ -38,13 +38,13 @@ public class SeriesConverter {
 	private static int SYMBOL_SIZE_LOADING_PLOT = 4;
 	private static int SYMBOL_SIZE_SCORE_PLOT = 8;
 
-	public static List<IScatterSeriesData> basisVectorsToSeries(IPcaResults pcaResults, int pcX, int pcY, Map<String, Integer> extractedValues) {
+	public static List<IScatterSeriesData> basisVectorsToSeries(IPcaResults pcaResults, int pcX, int pcY, Map<String, IRetentionTime> extractedValues) {
 
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
 		List<IRetentionTime> extractedRetentionTimes = pcaResults.getExtractedRetentionTimes();
 		for(int i = 0; i < extractedRetentionTimes.size(); i++) {
 			String name = nf.format(extractedRetentionTimes.get(i).getRetentionTimeMinutes());
-			extractedValues.put(name, extractedRetentionTimes.get(i).getRetentionTime());
+			extractedValues.put(name, extractedRetentionTimes.get(i));
 			double x = pcaResults.getBasisVectors().get(pcX - 1)[i];
 			double y = pcaResults.getBasisVectors().get(pcY - 1)[i];
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
@@ -58,7 +58,7 @@ public class SeriesConverter {
 		return scatterSeriesDataList;
 	}
 
-	public static List<IScatterSeriesData> basisVectorsToSeriesDescription(IPcaResults pcaResults, int pcX, int pcY, Map<String, Integer> extractedValues) {
+	public static List<IScatterSeriesData> basisVectorsToSeriesDescription(IPcaResults pcaResults, int pcX, int pcY, Map<String, IRetentionTime> extractedValues) {
 
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
 		List<IRetentionTime> extractedRetentionTimes = pcaResults.getExtractedRetentionTimes();
@@ -71,7 +71,7 @@ public class SeriesConverter {
 			} else {
 				name = description;
 			}
-			extractedValues.put(name, extractedRetentionTimes.get(i).getRetentionTime());
+			extractedValues.put(name, extractedRetentionTimes.get(i));
 			double x = pcaResults.getBasisVectors().get(pcX - 1)[i];
 			double y = pcaResults.getBasisVectors().get(pcY - 1)[i];
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
