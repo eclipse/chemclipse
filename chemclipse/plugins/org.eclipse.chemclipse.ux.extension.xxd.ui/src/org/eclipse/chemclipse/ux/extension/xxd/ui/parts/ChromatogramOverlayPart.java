@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,13 +22,17 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
@@ -56,18 +62,23 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Text;
 import org.swtchart.ISeries;
 import org.swtchart.LineStyle;
 
 public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSupport {
 
+	private static final Logger logger = Logger.getLogger(ChromatogramOverlayPart.class);
 	@Inject
 	private EPartService partService;
 	//
-	private static final String OVERLAY_TYPE_TIC = "TIC";
-	private static final String OVERLAY_TYPE_BPC = "BPC";
+	private static final String OVERLAY_TYPE_TIC = "TIC"; // Total Intensity Chromatogram
+	private static final String OVERLAY_TYPE_BPC = "BPC"; // Base Peak Chromatogram
+	private static final String OVERLAY_TYPE_XIC = "XIC"; // Extracted Ion Chromatogram
+	private static final String OVERLAY_TYPE_SIC = "SIC"; // Selected Ion Chromatogram
 	private static final String OVERLAY_TYPE_CONCATENATOR = "+";
 	private static final String ESCAPE_CONCATENATOR = "\\";
+	private static final String SELECTED_IONS_CONCATENATOR = " ";
 	private static final String EDITOR_TAB = "_EditorTab#";
 	private static final String OVERLAY_START_MARKER = "_(";
 	private static final String OVERLAY_STOP_MARKER = ")";
@@ -81,6 +92,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	private String[] overlayTypes;
 	private Combo comboOverlayType;
 	private Combo comboSelectedSeries;
+	private Text textSelectedIons;
 
 	public ChromatogramOverlayPart() {
 		colorScheme = Colors.getColorScheme(Colors.COLOR_SCHEME_PUBLICATION);
@@ -88,7 +100,11 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		overlayTypes = new String[]{//
 				OVERLAY_TYPE_TIC, //
 				OVERLAY_TYPE_BPC, //
-				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_BPC//
+				OVERLAY_TYPE_XIC, //
+				OVERLAY_TYPE_SIC, //
+				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_BPC, //
+				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_XIC, //
+				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_SIC //
 		};
 	}
 
@@ -111,7 +127,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		gridDataLeft.horizontalAlignment = SWT.BEGINNING;
 		gridDataLeft.grabExcessHorizontalSpace = true;
 		compositeLeft.setLayoutData(gridDataLeft);
-		compositeLeft.setLayout(new GridLayout(2, false));
+		compositeLeft.setLayout(new GridLayout(3, false));
 		//
 		Composite compositeRight = new Composite(composite, SWT.NONE);
 		GridData gridDataRight = new GridData(GridData.FILL_HORIZONTAL);
@@ -121,6 +137,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		//
 		createDisplayTypeCombo(compositeLeft);
 		createHighlightSeriesCombo(compositeLeft);
+		createTextSelectedIons(compositeLeft);
 		//
 		createResetButton(compositeRight);
 		createSettingsButton(compositeRight);
@@ -169,6 +186,16 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				baseChart.redraw();
 			}
 		});
+	}
+
+	private void createTextSelectedIons(Composite parent) {
+
+		textSelectedIons = new Text(parent, SWT.BORDER);
+		textSelectedIons.setText("");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.minimumWidth = 350;
+		gridData.grabExcessHorizontalSpace = true;
+		textSelectedIons.setLayoutData(gridData);
 	}
 
 	private void createResetButton(Composite parent) {
@@ -250,6 +277,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(partService);
 		Set<String> availableSeriesIds = new HashSet<String>();
 		BaseChart baseChart = chromatogramChart.getBaseChart();
+		List<Integer> ions = getSelectedIons();
 		//
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 		for(int i = 0; i < chromatogramSelections.size(); i++) {
@@ -262,10 +290,28 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			String[] overlayTypes = comboOverlayType.getText().trim().split(ESCAPE_CONCATENATOR + OVERLAY_TYPE_CONCATENATOR);
 			for(String overlayType : overlayTypes) {
 				Color color = getSeriesColor(chromatogramName);
-				String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + OVERLAY_STOP_MARKER;
-				availableSeriesIds.add(seriesId);
-				if(!baseChart.isSeriesContained(seriesId)) {
-					lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, color));
+				if(overlayType.equals(OVERLAY_TYPE_SIC)) {
+					for(int ion : ions) {
+						/*
+						 * SIC
+						 */
+						String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + "-" + ion + OVERLAY_STOP_MARKER;
+						availableSeriesIds.add(seriesId);
+						if(!baseChart.isSeriesContained(seriesId)) {
+							List<Integer> sic = new ArrayList<Integer>();
+							sic.add(ion);
+							lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, color, sic));
+						}
+					}
+				} else {
+					/*
+					 * TIC, BPC, XIC
+					 */
+					String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + OVERLAY_STOP_MARKER;
+					availableSeriesIds.add(seriesId);
+					if(!baseChart.isSeriesContained(seriesId)) {
+						lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, color, ions));
+					}
 				}
 			}
 		}
@@ -296,6 +342,22 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		comboSelectedSeries.setText(SELECTED_SERIES_NONE);
 	}
 
+	private List<Integer> getSelectedIons() {
+
+		DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
+		List<Integer> selectedIons = new ArrayList<Integer>();
+		String[] ions = textSelectedIons.getText().trim().split(SELECTED_IONS_CONCATENATOR);
+		for(String ion : ions) {
+			try {
+				selectedIons.add(AbstractIon.getIon(decimalFormat.parse(ion).doubleValue()));
+			} catch(ParseException e) {
+				logger.warn(e);
+			}
+		}
+		//
+		return selectedIons;
+	}
+
 	private Color getSeriesColor(String chromatogramName) {
 
 		Color color = usedColors.get(chromatogramName);
@@ -307,7 +369,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		return color;
 	}
 
-	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, String overlayType, Color color) {
+	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, String overlayType, Color color, List<Integer> ions) {
 
 		double[] xSeries = new double[chromatogram.getNumberOfScans()];
 		double[] ySeries = new double[chromatogram.getNumberOfScans()];
@@ -321,7 +383,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			 * Get the retention time and intensity.
 			 */
 			xSeries[index] = scan.getRetentionTime();
-			ySeries[index] = getIntensity(scan, overlayType);
+			ySeries[index] = getIntensity(scan, overlayType, ions);
 			index++;
 		}
 		/*
@@ -339,7 +401,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		return lineSeriesData;
 	}
 
-	private double getIntensity(IScan scan, String overlayType) {
+	private double getIntensity(IScan scan, String overlayType, List<Integer> ions) {
 
 		double intensity = 0.0d;
 		if(overlayType.equals(OVERLAY_TYPE_TIC)) {
@@ -358,6 +420,17 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 					intensity = ion.getAbundance();
 				}
 			}
+		} else if(overlayType.equals(OVERLAY_TYPE_XIC) || overlayType.equals(OVERLAY_TYPE_SIC)) {
+			/*
+			 * XIC, SIC
+			 */
+			if(scan instanceof IScanMSD) {
+				IScanMSD scanMSD = (IScanMSD)scan;
+				IExtractedIonSignal extractedIonSignal = scanMSD.getExtractedIonSignal();
+				for(int ion : ions) {
+					intensity += extractedIonSignal.getAbundance(ion);
+				}
+			}
 		}
 		//
 		return intensity;
@@ -370,6 +443,10 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			lineStyle = LineStyle.SOLID;
 		} else if(overlayType.equals(OVERLAY_TYPE_BPC)) {
 			lineStyle = LineStyle.DASH;
+		} else if(overlayType.equals(OVERLAY_TYPE_XIC)) {
+			lineStyle = LineStyle.DASHDOT;
+		} else if(overlayType.equals(OVERLAY_TYPE_SIC)) {
+			lineStyle = LineStyle.DASHDOTDOT;
 		} else {
 			lineStyle = LineStyle.DOT;
 		}
