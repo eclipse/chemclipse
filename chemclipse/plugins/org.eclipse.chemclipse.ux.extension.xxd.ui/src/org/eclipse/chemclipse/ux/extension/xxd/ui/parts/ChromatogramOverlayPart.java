@@ -428,6 +428,8 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		chartSettings.setEnableRangeSelector(true);
 		chartSettings.setSupportDataShift(true);
 		chromatogramChart.applySettings(chartSettings);
+		//
+		setComboAxisItems();
 	}
 
 	@Focus
@@ -637,6 +639,41 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			lineStyle = LineStyle.DOT;
 		}
 		return lineStyle;
+	}
+
+	public void setComboAxisItems() {
+
+		/*
+		 * X Axes
+		 */
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		String[] axisLabelsX = baseChart.getAxisLabels(IExtendedChart.X_AXIS);
+		comboScaleX.setItems(axisLabelsX);
+		if(axisLabelsX.length > 0) {
+			int selectedIndex = 1; // "Minutes"
+			if(selectedIndex >= 0 && selectedIndex < axisLabelsX.length) {
+				comboScaleX.select(selectedIndex);
+				textShiftX.setText("0.5");
+			} else {
+				comboScaleX.select(0); // Milliseconds
+				textShiftX.setText("10000");
+			}
+		}
+		/*
+		 * Y Axes
+		 */
+		String[] axisLabelsY = baseChart.getAxisLabels(IExtendedChart.Y_AXIS);
+		comboScaleY.setItems(axisLabelsY);
+		if(axisLabelsY.length > 0) {
+			int selectedIndex = 1; // "Relative Intensity [%]"
+			if(selectedIndex >= 0 && selectedIndex < axisLabelsY.length) {
+				comboScaleY.select(selectedIndex);
+				textShiftY.setText("1.2");
+			} else {
+				comboScaleY.select(0); // Intensity
+				textShiftY.setText("100000");
+			}
+		}
 	}
 
 	private double getShift(String axis) {
