@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
@@ -149,7 +150,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		comboOverlayType.setToolTipText("Seelect the overlay type");
 		comboOverlayType.setText("");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.minimumWidth = 350;
+		gridData.minimumWidth = 150;
 		gridData.grabExcessHorizontalSpace = true;
 		comboOverlayType.setLayoutData(gridData);
 		comboOverlayType.setItems(overlayTypes);
@@ -291,21 +292,34 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			for(String overlayType : overlayTypes) {
 				Color color = getSeriesColor(chromatogramName);
 				if(overlayType.equals(OVERLAY_TYPE_SIC)) {
-					for(int ion : ions) {
-						/*
-						 * SIC
-						 */
-						String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + "-" + ion + OVERLAY_STOP_MARKER;
+					/*
+					 * SIC
+					 */
+					if(chromatogram instanceof IChromatogramMSD) {
+						for(int ion : ions) {
+							String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + "-" + ion + OVERLAY_STOP_MARKER;
+							availableSeriesIds.add(seriesId);
+							if(!baseChart.isSeriesContained(seriesId)) {
+								List<Integer> sic = new ArrayList<Integer>();
+								sic.add(ion);
+								lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, color, sic));
+							}
+						}
+					}
+				} else if(overlayType.equals(OVERLAY_TYPE_BPC) || overlayType.equals(OVERLAY_TYPE_XIC)) {
+					/*
+					 * BPC, XIC
+					 */
+					if(chromatogram instanceof IChromatogramMSD) {
+						String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + OVERLAY_STOP_MARKER;
 						availableSeriesIds.add(seriesId);
 						if(!baseChart.isSeriesContained(seriesId)) {
-							List<Integer> sic = new ArrayList<Integer>();
-							sic.add(ion);
-							lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, color, sic));
+							lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, color, ions));
 						}
 					}
 				} else {
 					/*
-					 * TIC, BPC, XIC
+					 * TIC
 					 */
 					String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + OVERLAY_STOP_MARKER;
 					availableSeriesIds.add(seriesId);
