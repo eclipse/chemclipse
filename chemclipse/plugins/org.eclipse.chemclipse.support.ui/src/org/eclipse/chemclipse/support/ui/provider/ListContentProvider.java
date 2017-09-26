@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.provider;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -27,6 +28,8 @@ public class ListContentProvider implements IStructuredContentProvider {
 			return ((List)inputElement).toArray();
 		} else if(inputElement instanceof Set) {
 			return ((Set)inputElement).toArray();
+		} else if(inputElement instanceof Collection) {
+			return ((Collection)inputElement).toArray();
 		}
 		return null;
 	}
