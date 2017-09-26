@@ -19,12 +19,20 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IReten
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PcaFiltrationData {
+public class PcaFiltrationData implements IDataModification {
 
 	private List<IFilter> filters;
+	private boolean onlySelected = true;
+	private boolean resetSelectedRetentionTimes;
 
 	public PcaFiltrationData() {
 		filters = new ArrayList<>();
+	}
+
+	@Override
+	public boolean availableModification() {
+
+		return !filters.isEmpty();
 	}
 
 	public List<IFilter> getFilters() {
@@ -32,7 +40,19 @@ public class PcaFiltrationData {
 		return filters;
 	}
 
-	public void process(ISamples samples, boolean resetSelectedRetentionTimes, IProgressMonitor monitor) {
+	@Override
+	public boolean isOnlySelected() {
+
+		return onlySelected;
+	}
+
+	public boolean isResetSelectedRetentionTimes() {
+
+		return resetSelectedRetentionTimes;
+	}
+
+	@Override
+	public void process(ISamples samples, IProgressMonitor monitor) {
 
 		List<IRetentionTime> retentionTimes = samples.getExtractedRetentionTimes();
 		if(resetSelectedRetentionTimes) {
@@ -40,12 +60,24 @@ public class PcaFiltrationData {
 		}
 		if(filters != null && !filters.isEmpty()) {
 			for(int i = 0; i < filters.size(); i++) {
+				filters.get(i).setOnlySelected(onlySelected);
 				List<Boolean> result = filters.get(i).filter(samples);
 				for(int j = 0; j < result.size(); j++) {
 					retentionTimes.get(j).setSelected(retentionTimes.get(j).isSelected() && result.get(j));
 				}
 			}
 		}
+	}
+
+	@Override
+	public void setOnlySelected(boolean onlySelected) {
+
+		this.onlySelected = onlySelected;
+	}
+
+	public void setResetSelectedRetentionTimes(boolean resetSelectedRetentionTimes) {
+
+		this.resetSelectedRetentionTimes = resetSelectedRetentionTimes;
 	}
 
 	public void setSelectAllRow(ISamples samples, boolean selection) {

@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.FiltersTable;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -81,14 +82,21 @@ public class FiltersPage {
 		button = new Button(buttonComposite, SWT.PUSH);
 		button.setText("Apply Filters");
 		button.addListener(SWT.Selection, e -> {
-			pcaEditor.reFiltrationData();
+			pcaEditor.getPcaFiltrationData().get().process(pcaEditor.getSamples().get(), new NullProgressMonitor());
+			pcaEditor.updateFilters();
 		});
 		button = new Button(buttonComposite, SWT.PUSH);
 		button.setText("Select All Data (All Row in Data Table)");
-		button.addListener(SWT.Selection, e -> pcaEditor.setSelectAllData(true));
+		button.addListener(SWT.Selection, e -> {
+			pcaEditor.getPcaFiltrationData().get().setSelectAllRow(pcaEditor.getSamples().get(), true);
+			pcaEditor.updateFilters();
+		});
 		button = new Button(buttonComposite, SWT.PUSH);
 		button.setText("Deselect All Data (All Row in Data Table)");
-		button.addListener(SWT.Selection, e -> pcaEditor.setSelectAllData(false));
+		button.addListener(SWT.Selection, e -> {
+			pcaEditor.getPcaFiltrationData().get().setSelectAllRow(pcaEditor.getSamples().get(), false);
+			pcaEditor.updateFilters();
+		});
 		disableAll();
 		tabItem.setControl(composite);
 	}

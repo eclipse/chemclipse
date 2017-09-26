@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.DataPreprocessingSelection;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
@@ -48,7 +49,8 @@ public class PreprocessingPage {
 		scalingData = new Button(composite, SWT.PUSH);
 		scalingData.setText("Preprocess Data");
 		scalingData.addListener(SWT.Selection, e -> {
-			pcaEditor.modifyData();
+			pcaEditor.getPcaPreprocessingData().get().process(pcaEditor.getSamples().get(), new NullProgressMonitor());
+			pcaEditor.updatePreprocessoring();
 		});
 		scalingData.setEnabled(false);
 	}

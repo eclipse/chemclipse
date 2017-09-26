@@ -25,6 +25,8 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ResultExport;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.PCAWorkflow;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.PCAWorkflows;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.SamplesSelectionDialog;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
@@ -37,6 +39,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
@@ -69,6 +72,7 @@ public class PcaEditor extends AbstractPcaEditor {
 	 */
 	@Inject
 	private MPart part;
+	private PCAWorkflows pcaWorkflows;
 	private PeakListIntensityTablePage peakListIntensityTablePage;
 	/*
 	 * Pages
@@ -87,22 +91,36 @@ public class PcaEditor extends AbstractPcaEditor {
 		//
 		pages = new ArrayList<Object>();
 		samplesSelectionDialog = new SamplesSelectionDialog(this);
+		pcaWorkflows = new PCAWorkflows();
+	}
+
+	@Override
+	public void addNewFilter() {
+
+		if(getPcaFiltrationData().get().availableModification() && pcaWorkflows.getStatusFilters() != PCAWorkflow.STATUS_ERROR) {
+			pcaWorkflows.setStatusFilters(PCAWorkflow.STATUS_WARNING);
+		}
+		filtersPage.update();
 	}
 
 	@PostConstruct
 	private void createControl(Composite parent) {
 
-		createPages(parent);
+		part.setLabel("PCA");
+		Composite composite = new Composite(parent, SWT.None);
+		composite.setLayout(new FillLayout(SWT.VERTICAL));
+		createPages(composite);
 		Object object = part.getObject();
 		if(object instanceof ISamples) {
 			ISamples samples = (ISamples)object;
 			try {
 				setSamples(samples);
 				updateSamples();
-				evaluateSamples(samples);
+				super.reEvaluatePcaCalculation();
 				updateResults();
 				showScorePlotPage();
 				dirtyable.setDirty(true);
+				setErrors();
 			} catch(InvocationTargetException e) {
 				logger.warn(e);
 				logger.warn(e.getCause());
@@ -114,9 +132,7 @@ public class PcaEditor extends AbstractPcaEditor {
 
 	private void createPages(Composite parent) {
 
-		part.setLabel("PCA");
 		tabFolder = new TabFolder(parent, SWT.BOTTOM);
-		//
 		pages.add(overviewPage = new OverviewPage(this, tabFolder, formToolkit));
 		pages.add(samplesOverviewPage = new SamplesOverviewPage(this, tabFolder, formToolkit));
 		pages.add(preprocessingPage = new PreprocessingPage(this, tabFolder, formToolkit));
@@ -128,17 +144,9 @@ public class PcaEditor extends AbstractPcaEditor {
 		pages.add(loadingPlotPage = new LoadingPlotPage(this, tabFolder, formToolkit));
 	}
 
-	@Override
-	protected void evaluateSamples(ISamples samples) throws InvocationTargetException, InterruptedException {
+	PCAWorkflow getNewPCAWorkflow(Composite parent, Object layoutData, PcaEditor pcaEditor) {
 
-		super.evaluateSamples(samples);
-	}
-
-	@Override
-	public void modifyData() {
-
-		super.modifyData();
-		updateSamples();
+		return pcaWorkflows.getNewPCAWorkflow(parent, layoutData, pcaEditor);
 	}
 
 	public void openSamplesSelectionDialog() {
@@ -159,9 +167,11 @@ public class PcaEditor extends AbstractPcaEditor {
 				dirtyable.setDirty(true);
 			}
 		} catch(InvocationTargetException e) {
+			setErrors();
 			logger.warn(e);
 			logger.warn(e.getCause());
 		} catch(InterruptedException e) {
+			setErrors();
 			logger.warn(e);
 		}
 		return status;
@@ -180,9 +190,11 @@ public class PcaEditor extends AbstractPcaEditor {
 				dirtyable.setDirty(true);
 			}
 		} catch(InvocationTargetException e) {
+			setErrors();
 			logger.warn(e);
 			logger.warn(e.getCause());
 		} catch(InterruptedException e) {
+			setErrors();
 			logger.warn(e);
 		}
 		return status;
@@ -224,22 +236,16 @@ public class PcaEditor extends AbstractPcaEditor {
 
 		try {
 			super.reEvaluatePcaCalculation();
-			updateResults();
 			showScorePlotPage();
 			dirtyable.setDirty(true);
 		} catch(InvocationTargetException e) {
+			setErrors();
 			logger.warn(e);
 			logger.warn(e.getCause());
 		} catch(InterruptedException e) {
+			setErrors();
 			logger.warn(e);
 		}
-	}
-
-	@Override
-	public void reFiltrationData() {
-
-		super.reFiltrationData();
-		updateSamples();
 	}
 
 	@Persist
@@ -270,28 +276,47 @@ public class PcaEditor extends AbstractPcaEditor {
 		}
 	}
 
+	private void setErrors() {
+
+		pcaWorkflows.setStatuses(PCAWorkflow.STATUS_EMPTY);
+		pcaWorkflows.setStatusOverview(PCAWorkflow.STATUS_ERROR);
+	}
+
 	@Focus
 	public void setFocus() {
 
 		tabFolder.setFocus();
 	}
 
-	@Override
-	public void setSelectAllData(boolean selection) {
+	public void showFiltersPage() {
 
-		super.setSelectAllData(selection);
-		updateSamples();
+		showPage(filtersPage);
 	}
 
-	public void showSamplesOverviewPagePage() {
+	public void showOverviewPage() {
+
+		showPage(overviewPage);
+	}
+
+	private void showPage(Object page) {
 
 		int pageIndex = 0;
 		for(int index = 0; index < pages.size(); index++) {
-			if(pages.get(index) == samplesOverviewPage) {
+			if(pages.get(index) == page) {
 				pageIndex = index;
 			}
 		}
 		tabFolder.setSelection(pageIndex);
+	}
+
+	public void showPreprocessingPage() {
+
+		showPage(preprocessingPage);
+	}
+
+	public void showSamplesOverviewPage() {
+
+		showPage(samplesOverviewPage);
 	}
 
 	public void showScorePlotPage() {
@@ -305,7 +330,37 @@ public class PcaEditor extends AbstractPcaEditor {
 		tabFolder.setSelection(pageIndex);
 	}
 
-	private void updateResults() {
+	@Override
+	public void updateFilters() {
+
+		overviewPage.update();
+		if(pcaWorkflows.getStatusOverview() != PCAWorkflow.STATUS_ERROR) {
+			pcaWorkflows.setStatusOverview(PCAWorkflow.STATUS_EMPTY);
+		}
+		if(pcaWorkflows.getStatusFilters() != PCAWorkflow.STATUS_ERROR) {
+			pcaWorkflows.setStatusFilters(PCAWorkflow.STATUS_OK);
+		}
+		peakListIntensityTablePage.update();
+	}
+
+	@Override
+	public void updatePreprocessoring() {
+
+		overviewPage.update();
+		filtersPage.update();
+		if(pcaWorkflows.getStatusOverview() != PCAWorkflow.STATUS_ERROR) {
+			pcaWorkflows.setStatusOverview(PCAWorkflow.STATUS_EMPTY);
+		}
+		if(pcaWorkflows.getStatusPreprocessing() != PCAWorkflow.STATUS_ERROR) {
+			pcaWorkflows.setStatusPreprocessing(PCAWorkflow.STATUS_OK);
+		}
+		if(getPcaFiltrationData().get().availableModification() && pcaWorkflows.getStatusFilters() != PCAWorkflow.STATUS_ERROR) {
+			pcaWorkflows.setStatusFilters(PCAWorkflow.STATUS_WARNING);
+		}
+	}
+
+	@Override
+	protected void updateResults() {
 
 		samplesOverviewPage.updateResult();
 		scorePlotPage.update();
@@ -313,15 +368,30 @@ public class PcaEditor extends AbstractPcaEditor {
 		scorePlot3dPage.update();
 		samplesSelectionDialog.update();
 		loadingPlotPage.update();
+		pcaWorkflows.setStatuses(PCAWorkflow.STATUS_OK);
 	}
 
+	@Override
 	public void updateSamples() {
 
-		super.updataGroupNames();
 		overviewPage.update();
+		if(pcaWorkflows.getStatusFilters() != PCAWorkflow.STATUS_ERROR) {
+			pcaWorkflows.setStatusOverview(PCAWorkflow.STATUS_EMPTY);
+		}
+		//
 		samplesOverviewPage.updateSamples();
+		if(getPcaPreprocessingData().get().availableModification() && pcaWorkflows.getStatusSampleOverview() != PCAWorkflow.STATUS_ERROR) {
+			pcaWorkflows.setStatusSamplesOverview(PCAWorkflow.STATUS_OK);
+		}
 		preprocessingPage.update();
+		if(getPcaPreprocessingData().get().availableModification() && pcaWorkflows.getStatusPreprocessing() != PCAWorkflow.STATUS_ERROR) {
+			pcaWorkflows.setStatusPreprocessing(PCAWorkflow.STATUS_WARNING);
+		}
+		//
 		filtersPage.update();
+		if(getPcaFiltrationData().get().availableModification() && pcaWorkflows.getStatusFilters() != PCAWorkflow.STATUS_ERROR) {
+			pcaWorkflows.setStatusFilters(PCAWorkflow.STATUS_WARNING);
+		}
 		peakListIntensityTablePage.update();
 	}
 

@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataModification;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
@@ -29,7 +28,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.IPcaInputWizard;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PcaPeaksInputWizard;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PcaScansInputWizard;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
@@ -47,15 +45,7 @@ public abstract class AbstractPcaEditor {
 		dataInputEntries = new ArrayList<>();
 	}
 
-	protected void evaluateSamples(ISamples samples) throws InvocationTargetException, InterruptedException {
-
-		int numberOfPrincComp = numberOfPrincipleComponents.get();
-		ReEvaluateRunnable runnable = new ReEvaluateRunnable(samples, numberOfPrincComp);
-		ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-		monitor.run(true, false, runnable);
-		this.evaluateSamples(samples);
-		this.pcaResults = Optional.of(runnable.getPcaResults());
-	}
+	protected abstract void addNewFilter();
 
 	public List<IDataInputEntry> getDataInputEntries() {
 
@@ -85,12 +75,6 @@ public abstract class AbstractPcaEditor {
 	public Optional<ISamples> getSamples() {
 
 		return samples;
-	}
-
-	protected void modifyData() {
-
-		IDataModification.resetData(samples.get());
-		pcaPreprocessingData.get().process(samples.get(), new NullProgressMonitor());
 	}
 
 	private int openWizardPcaInput(IPcaInputWizard wizard) throws InvocationTargetException, InterruptedException {
@@ -142,11 +126,7 @@ public abstract class AbstractPcaEditor {
 		ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 		monitor.run(true, false, runnable);
 		this.pcaResults = Optional.of(runnable.getPcaResults());
-	}
-
-	protected void reFiltrationData() {
-
-		pcaFiltrationData.get().process(samples.get(), true, new NullProgressMonitor());
+		updateResults();
 	}
 
 	public void setNumberOfPrincipleComponents(int numberOfPrincipleComponents) {
@@ -161,13 +141,11 @@ public abstract class AbstractPcaEditor {
 		this.pcaPreprocessingData = Optional.of(new PcaPreprocessingData());
 	}
 
-	protected void setSelectAllData(boolean selection) {
+	protected abstract void updateFilters();
 
-		pcaFiltrationData.get().setSelectAllRow(samples.get(), selection);
-	}
+	protected abstract void updatePreprocessoring();
 
-	protected void updataGroupNames() {
+	protected abstract void updateResults();
 
-		samples.get().createGroups();
-	}
+	protected abstract void updateSamples();
 }

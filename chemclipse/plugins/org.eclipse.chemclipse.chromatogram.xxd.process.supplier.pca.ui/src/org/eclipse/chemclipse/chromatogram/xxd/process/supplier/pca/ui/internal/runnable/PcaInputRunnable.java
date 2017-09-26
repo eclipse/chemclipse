@@ -54,7 +54,7 @@ public class PcaInputRunnable implements IRunnableWithProgress {
 
 		samples = pcaExtractionData.process(monitor);
 		pcaPreprocessingData.process(samples, monitor);
-		pcaFiltrationData.process(samples, true, monitor);
+		pcaFiltrationData.process(samples, monitor);
 		PcaEvaluation pcaEvaluation = new PcaEvaluation();
 		pcaResults = pcaEvaluation.process(samples, numberOfPrincipleComponents, monitor);
 	}

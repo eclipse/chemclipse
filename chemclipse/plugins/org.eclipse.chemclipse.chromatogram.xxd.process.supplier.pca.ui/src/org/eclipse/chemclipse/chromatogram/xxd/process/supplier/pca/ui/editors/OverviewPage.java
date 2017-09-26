@@ -309,7 +309,11 @@ public class OverviewPage {
 
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Overview");
-		Composite composite = new Composite(tabFolder, SWT.NONE);
+		Composite parent = new Composite(tabFolder, SWT.None);
+		parent.setLayout(new GridLayout());
+		pcaEditor.getNewPCAWorkflow(parent, new GridData(GridData.FILL_HORIZONTAL), pcaEditor);
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		composite.setLayout(new FillLayout());
 		/*
 		 * Forms API
@@ -327,7 +331,7 @@ public class OverviewPage {
 		createReEvaluateSection(scrolledFormComposite, formToolkit);
 		createOthersSection(scrolledFormComposite, formToolkit);
 		//
-		tabItem.setControl(composite);
+		tabItem.setControl(parent);
 	}
 
 	public void update() {
