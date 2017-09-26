@@ -144,7 +144,7 @@ public class PcaEditor extends AbstractPcaEditor {
 		pages.add(loadingPlotPage = new LoadingPlotPage(this, tabFolder, formToolkit));
 	}
 
-	PCAWorkflow getNewPCAWorkflow(Composite parent, Object layoutData, PcaEditor pcaEditor) {
+	public PCAWorkflow getNewPCAWorkflow(Composite parent, Object layoutData, PcaEditor pcaEditor) {
 
 		return pcaWorkflows.getNewPCAWorkflow(parent, layoutData, pcaEditor);
 	}
@@ -286,6 +286,11 @@ public class PcaEditor extends AbstractPcaEditor {
 	public void setFocus() {
 
 		tabFolder.setFocus();
+	}
+
+	public void showDataTable() {
+
+		showPage(peakListIntensityTablePage);
 	}
 
 	public void showFiltersPage() {

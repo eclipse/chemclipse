@@ -280,7 +280,11 @@ public class SamplesOverviewPage {
 
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Samples Overview");
-		mainComposite = new Composite(tabFolder, SWT.None);
+		Composite composite = new Composite(tabFolder, SWT.None);
+		composite.setLayout(new GridLayout(1, false));
+		pcaEditor.getNewPCAWorkflow(composite, null, pcaEditor);
+		mainComposite = new Composite(composite, SWT.None);
+		mainComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		mainComposite.setLayout(new GridLayout(3, false));
 		/*
 		 * Create the section.
@@ -309,7 +313,7 @@ public class SamplesOverviewPage {
 		button.setText("Reset");
 		button.addListener(SWT.Selection, e -> resetSamples());
 		setEnable(mainComposite, false);
-		tabItem.setControl(mainComposite);
+		tabItem.setControl(composite);
 	}
 
 	private void redrawSamplesSelectedCount() {

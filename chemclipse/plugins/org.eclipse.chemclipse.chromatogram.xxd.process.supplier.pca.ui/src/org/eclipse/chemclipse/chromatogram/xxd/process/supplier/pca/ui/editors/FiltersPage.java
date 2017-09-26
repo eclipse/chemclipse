@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.FiltersTable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
@@ -23,19 +24,74 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.ui.forms.events.HyperlinkAdapter;
+import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ImageHyperlink;
 
 public class FiltersPage {
 
 	private Composite composite;
+	private Label countSelectedRow;
 	private FiltersTable filtersTable;
+	final private String MANUAL_SELECTION = "You can select/deselect rows manually and check results in page Data Table.";
 	private PcaEditor pcaEditor;
 
 	public FiltersPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		this.pcaEditor = pcaEditor;
 		initialize(tabFolder);
+	}
+
+	private void applyFilters() {
+
+		pcaEditor.getPcaFiltrationData().get().process(pcaEditor.getSamples().get(), new NullProgressMonitor());
+		pcaEditor.updateFilters();
+		updateLabelTotalSelection();
+	}
+
+	private void createButton(Composite parent) {
+
+		Composite buttonComposite = new Composite(parent, SWT.None);
+		buttonComposite.setLayoutData(new GridData(SWT.CENTER, SWT.BEGINNING, false, true));
+		buttonComposite.setLayout(new FillLayout(SWT.VERTICAL));
+		Button button = new Button(buttonComposite, SWT.PUSH);
+		button.setText("Apply Filters");
+		button.addListener(SWT.Selection, e -> {
+			applyFilters();
+		});
+		button = new Button(buttonComposite, SWT.PUSH);
+		button.setText("Create New Filter");
+		button.addListener(SWT.Selection, e -> {
+			filtersTable.createNewFilter();
+			applyFilters();
+		});
+		button = new Button(buttonComposite, SWT.PUSH);
+		button.setText("Remove Selected Filters");
+		button.addListener(SWT.Selection, e -> {
+			filtersTable.removeSelectedFilters();
+			applyFilters();
+		});
+		button = new Button(buttonComposite, SWT.PUSH);
+		button.setText("Remove All Filters");
+		button.addListener(SWT.Selection, e -> {
+			filtersTable.removeAllFilters();
+			applyFilters();
+		});
+		button = new Button(buttonComposite, SWT.PUSH);
+		button.setText("Select All (All Row in Data Table)");
+		button.addListener(SWT.Selection, e -> {
+			pcaEditor.getPcaFiltrationData().get().setSelectAllRow(pcaEditor.getSamples().get(), true);
+			applyFilters();
+		});
+		button = new Button(buttonComposite, SWT.PUSH);
+		button.setText("Deselect All (All Row in Data Table)");
+		button.addListener(SWT.Selection, e -> {
+			pcaEditor.getPcaFiltrationData().get().setSelectAllRow(pcaEditor.getSamples().get(), false);
+			applyFilters();
+		});
 	}
 
 	private void disableAll() {
@@ -52,7 +108,11 @@ public class FiltersPage {
 
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Data Filtration");
-		composite = new Composite(tabFolder, SWT.None);
+		Composite parent = new Composite(tabFolder, SWT.None);
+		parent.setLayout(new GridLayout(1, false));
+		pcaEditor.getNewPCAWorkflow(parent, null, pcaEditor);
+		composite = new Composite(parent, SWT.None);
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		composite.setLayout(new GridLayout(2, false));
 		/*
 		 * Create the section.
@@ -61,44 +121,24 @@ public class FiltersPage {
 		/*
 		 * create button area
 		 */
-		Composite buttonComposite = new Composite(composite, SWT.None);
-		buttonComposite.setLayoutData(new GridData(SWT.CENTER, SWT.BEGINNING, false, true));
-		buttonComposite.setLayout(new FillLayout(SWT.VERTICAL));
-		Button button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Create New Filter");
-		button.addListener(SWT.Selection, e -> filtersTable.createNewFilter());
-		button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Remove Selected Filters");
-		button.addListener(SWT.Selection, e -> filtersTable.removeSelectedFilters());
-		button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Remove All Filters");
-		button.addListener(SWT.Selection, e -> filtersTable.removeAllFilters());
-		button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Move Up Selected Filter");
-		button.addListener(SWT.Selection, e -> filtersTable.moveUpSelectedFilter());
-		button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Move Down Selected Filter");
-		button.addListener(SWT.Selection, e -> filtersTable.moveDownSelectedFilter());
-		button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Apply Filters");
-		button.addListener(SWT.Selection, e -> {
-			pcaEditor.getPcaFiltrationData().get().process(pcaEditor.getSamples().get(), new NullProgressMonitor());
-			pcaEditor.updateFilters();
-		});
-		button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Select All Data (All Row in Data Table)");
-		button.addListener(SWT.Selection, e -> {
-			pcaEditor.getPcaFiltrationData().get().setSelectAllRow(pcaEditor.getSamples().get(), true);
-			pcaEditor.updateFilters();
-		});
-		button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Deselect All Data (All Row in Data Table)");
-		button.addListener(SWT.Selection, e -> {
-			pcaEditor.getPcaFiltrationData().get().setSelectAllRow(pcaEditor.getSamples().get(), false);
-			pcaEditor.updateFilters();
+		createButton(composite);
+		/*
+		 *
+		 */
+		countSelectedRow = new Label(composite, SWT.None);
+		updateLabelTotalSelection();
+		ImageHyperlink imageHyperlink = new ImageHyperlink(parent, SWT.None);
+		imageHyperlink.setText(MANUAL_SELECTION);
+		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
+
+			@Override
+			public void linkActivated(HyperlinkEvent e) {
+
+				pcaEditor.showDataTable();
+			}
 		});
 		disableAll();
-		tabItem.setControl(composite);
+		tabItem.setControl(parent);
 	}
 
 	private void setEnable(Composite parent, boolean enable) {
@@ -122,5 +162,14 @@ public class FiltersPage {
 		} else {
 			disableAll();
 		}
+	}
+
+	private void updateLabelTotalSelection() {
+
+		long count = 0;
+		if(pcaEditor.getSamples().isPresent()) {
+			count = pcaEditor.getSamples().get().getExtractedRetentionTimes().stream().filter(IRetentionTime::isSelected).count();
+		}
+		countSelectedRow.setText("It will be selected " + count + " rows");
 	}
 }

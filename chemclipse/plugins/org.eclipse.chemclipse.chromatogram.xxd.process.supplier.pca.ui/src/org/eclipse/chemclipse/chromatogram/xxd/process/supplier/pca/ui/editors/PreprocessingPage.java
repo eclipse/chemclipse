@@ -29,7 +29,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class PreprocessingPage {
 
-	private Composite composite;
 	private DataPreprocessingSelection dataPreprocessing;
 	//
 	private PcaEditor pcaEditor;
@@ -73,14 +72,16 @@ public class PreprocessingPage {
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Data Preprocessoring");
 		//
-		composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new FillLayout());
+		Composite parent = new Composite(tabFolder, SWT.NONE);
+		parent.setLayout(new GridLayout(1, false));
+		pcaEditor.getNewPCAWorkflow(parent, null, pcaEditor);
 		//
-		Composite parent = new Composite(composite, SWT.NONE);
-		parent.setLayout(new GridLayout(2, false));
-		createTables(parent);
-		createButton(parent);
-		tabItem.setControl(composite);
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		composite.setLayout(new GridLayout(2, false));
+		createTables(composite);
+		createButton(composite);
+		tabItem.setControl(parent);
 	}
 
 	public void update() {
