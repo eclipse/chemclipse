@@ -23,6 +23,7 @@ import org.eclipse.jface.wizard.Wizard;
 public class FilterWizard extends Wizard {
 
 	private IFilter filter;
+	private IFilterWizardPage filterWizardPage;
 
 	public FilterWizard(IFilter filter) {
 		super();
@@ -33,23 +34,24 @@ public class FilterWizard extends Wizard {
 	public void addPages() {
 
 		if(filter instanceof AnovaFilter) {
-			addPage(new FilterAnovaWizardPage((AnovaFilter)filter));
+			addPage(filterWizardPage = new FilterAnovaWizardPage((AnovaFilter)filter));
 		} else if(filter instanceof CVFilter) {
-			addPage(new FilterCVWizardPage((CVFilter)filter));
+			addPage(filterWizardPage = new FilterCVWizardPage((CVFilter)filter));
 		} else if(filter instanceof AbundanceFilter) {
-			addPage(new FilterAbundanceWizardPage((AbundanceFilter)filter));
+			addPage(filterWizardPage = new FilterAbundanceWizardPage((AbundanceFilter)filter));
 		} else if(filter instanceof EmptyDataFilter) {
-			addPage(new FilterEmptyDataWizardPage((EmptyDataFilter)filter));
+			addPage(filterWizardPage = new FilterEmptyDataWizardPage((EmptyDataFilter)filter));
 		} else if(filter instanceof RetentionTimeFilter) {
-			addPage(new FilterRetentionTimeWizardPage((RetentionTimeFilter)filter));
+			addPage(filterWizardPage = new FilterRetentionTimeWizardPage((RetentionTimeFilter)filter));
 		} else if(filter instanceof RetentionTime2Filter) {
-			addPage(new FilterRetentionTime2WizardPage((RetentionTime2Filter)filter));
+			addPage(filterWizardPage = new FilterRetentionTime2WizardPage((RetentionTime2Filter)filter));
 		}
 	}
 
 	@Override
 	public boolean performFinish() {
 
+		filterWizardPage.update();
 		return true;
 	}
 }

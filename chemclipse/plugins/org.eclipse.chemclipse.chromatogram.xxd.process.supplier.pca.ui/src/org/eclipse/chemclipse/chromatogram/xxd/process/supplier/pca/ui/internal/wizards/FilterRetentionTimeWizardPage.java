@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.RetentionTimeFilter;
@@ -48,9 +49,11 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
-public class FilterRetentionTimeWizardPage extends WizardPage {
+public class FilterRetentionTimeWizardPage extends WizardPage implements IFilterWizardPage {
 
 	private DataBindingContext dbc = new DataBindingContext();
+	private int filterType;
+	private List<int[]> intervals;
 	private NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
 	private IObservableValue<Double> observeBegin = new WritableValue<>();
 	private IObservableValue<Double> observeFinish = new WritableValue<>();
@@ -58,25 +61,27 @@ public class FilterRetentionTimeWizardPage extends WizardPage {
 	private TableViewer tableViewer;
 
 	public FilterRetentionTimeWizardPage(RetentionTimeFilter retentionTimeFilter) {
-		super("Retention time filter");
-		setTitle("Retention Time Filter");
+		super("Retention time interval filter");
+		setTitle("Retention Time Interval Filter");
+		this.filterType = retentionTimeFilter.getFiltrationType();
+		this.intervals = retentionTimeFilter.copyInterval();
 		this.retentionTimeFilter = retentionTimeFilter;
 		observeBegin.setValue(0.0);
-		observeFinish.setValue(1.0);
+		observeFinish.setValue(10.0);
 	}
 
 	private void addFilterRetentionTimeInterval() {
 
 		int begin = (int)(observeBegin.getValue() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 		int finish = (int)(observeFinish.getValue() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
-		retentionTimeFilter.getIntervals().add(new int[]{begin, finish});
-		setPageComplete(!retentionTimeFilter.getIntervals().isEmpty());
+		intervals.add(new int[]{begin, finish});
+		setPageComplete(!intervals.isEmpty());
 		updateTable();
 	}
 
 	private void createColumns() {
 
-		String[] titles = {"Minimum", "Maximum"};
+		String[] titles = {"Start Time (Mintes)", "End Time (Mintes)"};
 		int[] bounds = {50, 50};
 		TableViewerColumn col = createTableViewerColumn(titles[0], bounds[0]);
 		col.setLabelProvider(new CellLabelProvider() {
@@ -105,26 +110,25 @@ public class FilterRetentionTimeWizardPage extends WizardPage {
 	@Override
 	public void createControl(Composite parent) {
 
-		int filterType = retentionTimeFilter.getFiltrationType();
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new GridLayout(1, false));
 		Button button = new Button(composite, SWT.RADIO);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(button);
 		button.setText("Select intervals");
-		button.addListener(SWT.Selection, e -> retentionTimeFilter.setFiltrationType(RetentionTimeFilter.SELECT_INTERVAL));
+		button.addListener(SWT.Selection, e -> filterType = RetentionTimeFilter.SELECT_INTERVAL);
 		button.setSelection(filterType == RetentionTimeFilter.SELECT_INTERVAL);
 		button = new Button(composite, SWT.RADIO);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(button);
 		button.setText("Deselect intervals");
-		button.addListener(SWT.Selection, e -> retentionTimeFilter.setFiltrationType(RetentionTimeFilter.DESELECT_INTERVAL));
+		button.addListener(SWT.Selection, e -> filterType = RetentionTimeFilter.DESELECT_INTERVAL);
 		button.setSelection(filterType == RetentionTimeFilter.DESELECT_INTERVAL);
 		Label label = new Label(composite, SWT.None);
 		label.setText("Set time interval parametrs:");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
 		label = new Label(composite, SWT.None);
-		label.setText("Time is greater than or equal to");
+		label.setText("Start Time of Interval (minutes)");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
-		Text text = new Text(composite, SWT.None);
+		Text text = new Text(composite, SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(text);
 		ISWTObservableValue targetObservableValue = WidgetProperties.text(SWT.Modify).observe(text);
 		UpdateValueStrategy targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
@@ -152,9 +156,9 @@ public class FilterRetentionTimeWizardPage extends WizardPage {
 		}));
 		dbc.bindValue(targetObservableValue, observeBegin, targetToModel, modelToTarget);
 		label = new Label(composite, SWT.None);
-		label.setText("Time is less than or equal to");
+		label.setText("End Time of Interval (minutes)");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
-		text = new Text(composite, SWT.None);
+		text = new Text(composite, SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(text);
 		targetObservableValue = WidgetProperties.text(SWT.Modify).observe(text);
 		targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
@@ -215,7 +219,7 @@ public class FilterRetentionTimeWizardPage extends WizardPage {
 		tableViewer = new TableViewer(table);
 		createColumns();
 		tableViewer.setContentProvider(new ArrayContentProvider());
-		tableViewer.setInput(retentionTimeFilter.getIntervals());
+		tableViewer.setInput(intervals);
 		updateTable();
 		setControl(composite);
 	}
@@ -237,10 +241,19 @@ public class FilterRetentionTimeWizardPage extends WizardPage {
 		Iterator<?> it = selection.iterator();
 		while(it.hasNext()) {
 			int[] sel = (int[])it.next();
-			retentionTimeFilter.getIntervals().remove(sel);
+			intervals.remove(sel);
 		}
-		setPageComplete(!retentionTimeFilter.getIntervals().isEmpty());
+		setPageComplete(!intervals.isEmpty());
 		updateTable();
+	}
+
+	@Override
+	public void update() {
+
+		List<int[]> intervals = this.retentionTimeFilter.getIntervals();
+		intervals.clear();
+		intervals.addAll(this.intervals);
+		retentionTimeFilter.setFiltrationType(filterType);
 	}
 
 	private void updateTable() {

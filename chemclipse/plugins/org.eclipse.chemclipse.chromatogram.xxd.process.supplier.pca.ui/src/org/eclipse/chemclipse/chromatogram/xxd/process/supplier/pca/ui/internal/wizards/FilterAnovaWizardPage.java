@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class FilterAnovaWizardPage extends WizardPage {
+public class FilterAnovaWizardPage extends WizardPage implements IFilterWizardPage {
 
 	final private DataBindingContext dbc = new DataBindingContext();
 	private IObservableValue<Double> observeAlfa;
@@ -53,14 +53,15 @@ public class FilterAnovaWizardPage extends WizardPage {
 		Text text = new Text(composite, SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(text);
 		ISWTObservableValue targetObservableValue = WidgetProperties.text(SWT.Modify).observe(text);
-		UpdateValueStrategy targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
+		UpdateValueStrategy targetToModel = new UpdateValueStrategy(UpdateValueStrategy.POLICY_CONVERT);
+		targetToModel.setConverter(IConverter.create(String.class, Double.class, o1 -> {
 			try {
 				return Double.parseDouble((String)o1) / 100.0;
 			} catch(NumberFormatException e) {
 			}
 			return null;
 		}));
-		targetToModel.setBeforeSetValidator(o1 -> {
+		targetToModel.setAfterConvertValidator(o1 -> {
 			if(o1 instanceof Double) {
 				Double d = (Double)o1;
 				if(d <= 1 && d >= 0) {
@@ -72,5 +73,11 @@ public class FilterAnovaWizardPage extends WizardPage {
 		UpdateValueStrategy modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString(((Double)o1) * 100.0)));
 		dbc.bindValue(targetObservableValue, observeAlfa, targetToModel, modelToTarget);
 		setControl(composite);
+	}
+
+	@Override
+	public void update() {
+
+		dbc.updateModels();
 	}
 }

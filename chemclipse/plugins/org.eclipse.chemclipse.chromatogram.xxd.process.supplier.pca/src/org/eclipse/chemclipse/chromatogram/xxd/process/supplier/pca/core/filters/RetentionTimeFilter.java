@@ -33,6 +33,15 @@ public class RetentionTimeFilter implements IFilter {
 		intervals = new ArrayList<>();
 	}
 
+	public List<int[]> copyInterval() {
+
+		List<int[]> newIntervals = new ArrayList<>();
+		for(int i = 0; i < intervals.size(); i++) {
+			newIntervals.add(new int[]{intervals.get(i)[0], intervals.get(i)[1]});
+		}
+		return newIntervals;
+	}
+
 	@Override
 	public List<Boolean> filter(ISamples samples) {
 

@@ -12,20 +12,21 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 
 public class RetentionTime2Filter implements IFilter {
 
 	private boolean inverse;
 	private boolean onlySelected = true;
-	private List<Integer> retentionTimes;
+	private List<IRetentionTime> retentionTimes;
 	private String selectionResult = "";
 
-	public RetentionTime2Filter(List<Integer> retentionTimes, boolean inverse) {
+	public RetentionTime2Filter(List<IRetentionTime> retentionTimes, boolean inverse) {
 		this.retentionTimes = new ArrayList<>(retentionTimes);
 		this.inverse = inverse;
 	}
@@ -39,7 +40,7 @@ public class RetentionTime2Filter implements IFilter {
 		for(int i = 0; i < size; i++) {
 			seletions.add(selected);
 		}
-		Set<Integer> set = new HashSet<>(retentionTimes);
+		Set<Integer> set = retentionTimes.stream().map(r -> r.getRetentionTime()).collect(Collectors.toSet());
 		for(int i = 0; i < size; i++) {
 			int time = samples.getExtractedRetentionTimes().get(i).getRetentionTime();
 			if(inverse) {
@@ -68,7 +69,7 @@ public class RetentionTime2Filter implements IFilter {
 		return "Retention time filter";
 	}
 
-	public List<Integer> getRetentionTimes() {
+	public List<IRetentionTime> getRetentionTimes() {
 
 		return retentionTimes;
 	}

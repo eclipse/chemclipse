@@ -23,7 +23,7 @@ public class PcaFiltrationData implements IDataModification {
 
 	private List<IFilter> filters;
 	private boolean onlySelected = true;
-	private boolean resetSelectedRetentionTimes;
+	private boolean resetSelectedRetentionTimes = true;
 
 	public PcaFiltrationData() {
 		filters = new ArrayList<>();
@@ -80,7 +80,7 @@ public class PcaFiltrationData implements IDataModification {
 		this.resetSelectedRetentionTimes = resetSelectedRetentionTimes;
 	}
 
-	public void setSelectAllRow(ISamples samples, boolean selection) {
+	private void setSelectAllRow(ISamples samples, boolean selection) {
 
 		List<IRetentionTime> retentionTimes = samples.getExtractedRetentionTimes();
 		for(int i = 0; i < retentionTimes.size(); i++) {

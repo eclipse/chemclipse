@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class FilterAbundanceWizardPage extends WizardPage {
+public class FilterAbundanceWizardPage extends WizardPage implements IFilterWizardPage {
 
 	final private DataBindingContext dbc = new DataBindingContext();
 	private IObservableValue<Integer> observableFilterType;
@@ -63,7 +63,7 @@ public class FilterAbundanceWizardPage extends WizardPage {
 		button = new Button(composite, SWT.RADIO);
 		button.setText("At least one value  in row is");
 		selectedRadioButtonObservable.addOption(AbundanceFilter.ANY_VALUE, WidgetProperties.selection().observe(button));
-		dbc.bindValue(selectedRadioButtonObservable, observableFilterType);
+		dbc.bindValue(selectedRadioButtonObservable, observableFilterType, new UpdateValueStrategy(UpdateValueStrategy.POLICY_CONVERT), null);
 		Composite compareComposite = new Composite(composite, SWT.None);
 		GridDataFactory.swtDefaults().grab(true, false).align(SWT.FILL, SWT.CENTER).applyTo(compareComposite);
 		compareComposite.setLayout(new GridLayout(3, false));
@@ -73,18 +73,19 @@ public class FilterAbundanceWizardPage extends WizardPage {
 		combo.add("less than");
 		combo.select(0);
 		ISWTObservableValue comboLimitType = WidgetProperties.singleSelectionIndex().observe(combo);
-		dbc.bindValue(comboLimitType, observableLimitType);
+		dbc.bindValue(comboLimitType, observableLimitType, new UpdateValueStrategy(UpdateValueStrategy.POLICY_CONVERT), null);
 		Text text = new Text(compareComposite, SWT.BORDER);
 		GridDataFactory.swtDefaults().grab(true, false).align(SWT.FILL, SWT.BEGINNING).applyTo(text);
 		ISWTObservableValue txtSecondAttributeObservable = WidgetProperties.text(SWT.Modify).observe(text);
-		UpdateValueStrategy targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
+		UpdateValueStrategy targetToModel = new UpdateValueStrategy(UpdateValueStrategy.POLICY_CONVERT);
+		targetToModel.setConverter(IConverter.create(String.class, Double.class, o1 -> {
 			try {
 				return Double.parseDouble((String)o1);
 			} catch(NumberFormatException e) {
 			}
 			return null;
 		}));
-		targetToModel.setBeforeSetValidator(o1 -> {
+		targetToModel.setAfterConvertValidator(o1 -> {
 			if(o1 instanceof Double) {
 				return ValidationStatus.ok();
 			}
@@ -93,5 +94,11 @@ public class FilterAbundanceWizardPage extends WizardPage {
 		UpdateValueStrategy modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString((Double)o1)));
 		dbc.bindValue(txtSecondAttributeObservable, observeLimitValue, targetToModel, modelToTarget);
 		setControl(composite);
+	}
+
+	@Override
+	public void update() {
+
+		dbc.updateModels();
 	}
 }

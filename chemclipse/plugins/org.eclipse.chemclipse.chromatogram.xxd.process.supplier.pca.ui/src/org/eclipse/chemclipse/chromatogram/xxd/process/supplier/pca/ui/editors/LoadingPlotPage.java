@@ -24,6 +24,7 @@ import java.util.TreeSet;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.RetentionTime2Filter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.LoadingPlot;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -83,14 +84,14 @@ public class LoadingPlotPage {
 
 		if(pcaEditor.getPcaFiltrationData().isPresent()) {
 			PcaFiltrationData pcaFiltrationData = pcaEditor.getPcaFiltrationData().get();
-			List<Integer> values = new ArrayList<>();
+			List<IRetentionTime> values = new ArrayList<>();
 			for(TableItem item : selectedDataTable.getItems()) {
 				Object data = item.getData();
-				values.add(loadingPlot.getExtractedValues().get(data).getRetentionTime());
+				values.add(loadingPlot.getExtractedValues().get(data));
 			}
 			if(!values.isEmpty()) {
 				Collections.sort(values);
-				pcaFiltrationData.getFilters().add(new RetentionTime2Filter(values, false));
+				pcaFiltrationData.getFilters().add(new RetentionTime2Filter(IRetentionTime.copy(values), false));
 				pcaEditor.updateSamples();
 				removeSelection();
 			}

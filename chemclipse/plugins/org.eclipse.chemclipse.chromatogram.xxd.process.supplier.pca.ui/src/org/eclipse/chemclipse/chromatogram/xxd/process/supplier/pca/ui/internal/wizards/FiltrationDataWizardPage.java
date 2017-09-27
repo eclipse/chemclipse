@@ -46,12 +46,6 @@ public class FiltrationDataWizardPage extends WizardPage {
 		button = new Button(compositeButtons, SWT.PUSH);
 		button.setText("Remove Selected Filters");
 		button.addListener(SWT.Selection, e -> filtersTable.removeSelectedFilters());
-		button = new Button(compositeButtons, SWT.PUSH);
-		button.setText("Move Up Selected Filter");
-		button.addListener(SWT.Selection, e -> filtersTable.moveUpSelectedFilter());
-		button = new Button(compositeButtons, SWT.PUSH);
-		button.setText("Move Down Selected Filter");
-		button.addListener(SWT.Selection, e -> filtersTable.moveDownSelectedFilter());
 		setControl(composite);
 	}
 

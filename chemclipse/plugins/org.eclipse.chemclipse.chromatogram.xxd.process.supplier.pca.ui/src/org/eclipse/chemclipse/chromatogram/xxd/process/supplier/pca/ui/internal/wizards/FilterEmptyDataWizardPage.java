@@ -18,7 +18,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-public class FilterEmptyDataWizardPage extends WizardPage {
+public class FilterEmptyDataWizardPage extends WizardPage implements IFilterWizardPage {
 
 	protected FilterEmptyDataWizardPage(EmptyDataFilter emptyDataFilter) {
 		super("Empty data filter");
@@ -34,5 +34,10 @@ public class FilterEmptyDataWizardPage extends WizardPage {
 		Label label = new Label(composite, SWT.None);
 		label.setText("This filter is without parameters.");
 		setControl(composite);
+	}
+
+	@Override
+	public void update() {
+
 	}
 }

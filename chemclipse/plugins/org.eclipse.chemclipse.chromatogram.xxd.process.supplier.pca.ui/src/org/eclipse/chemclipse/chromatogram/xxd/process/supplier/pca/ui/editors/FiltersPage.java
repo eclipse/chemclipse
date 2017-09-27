@@ -50,6 +50,7 @@ public class FiltersPage {
 		pcaEditor.getPcaFiltrationData().get().process(pcaEditor.getSamples().get(), new NullProgressMonitor());
 		pcaEditor.updateFilters();
 		updateLabelTotalSelection();
+		filtersTable.update();
 	}
 
 	private void createButton(Composite parent) {
@@ -78,18 +79,6 @@ public class FiltersPage {
 		button.setText("Remove All Filters");
 		button.addListener(SWT.Selection, e -> {
 			filtersTable.removeAllFilters();
-			applyFilters();
-		});
-		button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Select All (All Row in Data Table)");
-		button.addListener(SWT.Selection, e -> {
-			pcaEditor.getPcaFiltrationData().get().setSelectAllRow(pcaEditor.getSamples().get(), true);
-			applyFilters();
-		});
-		button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Deselect All (All Row in Data Table)");
-		button.addListener(SWT.Selection, e -> {
-			pcaEditor.getPcaFiltrationData().get().setSelectAllRow(pcaEditor.getSamples().get(), false);
 			applyFilters();
 		});
 	}
@@ -159,6 +148,7 @@ public class FiltersPage {
 			enableAll();
 			filtersTable.setPcaFiltrationData(pcaFiltrationData.get());
 			filtersTable.update();
+			updateLabelTotalSelection();
 		} else {
 			disableAll();
 		}
@@ -171,5 +161,6 @@ public class FiltersPage {
 			count = pcaEditor.getSamples().get().getExtractedRetentionTimes().stream().filter(IRetentionTime::isSelected).count();
 		}
 		countSelectedRow.setText("It will be selected " + count + " rows");
+		countSelectedRow.getParent().layout();
 	}
 }

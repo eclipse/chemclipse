@@ -24,6 +24,17 @@ public interface IRetentionTime extends Comparable<IRetentionTime> {
 		}
 		return retentionTimesList;
 	}
+	
+	static List<IRetentionTime> copy(List<IRetentionTime> retentionTimes){
+		List<IRetentionTime> newRetentionTimes = new ArrayList<>();
+		for(int i = 0; i < retentionTimes.size(); i++) {
+			IRetentionTime retentionTime = retentionTimes.get(i);
+			IRetentionTime newRetentionTime = new RetentionTime(retentionTime.getRetentionTime(), retentionTime.getDescription());
+			newRetentionTime.setSelected(retentionTime.isSelected());
+			newRetentionTimes.add(newRetentionTime);
+		}
+		return newRetentionTimes;
+	}
 
 	@Override
 	default int compareTo(IRetentionTime o) {
@@ -42,4 +53,5 @@ public interface IRetentionTime extends Comparable<IRetentionTime> {
 	void setDescription(String description);
 
 	void setSelected(boolean selected);
+	
 }
