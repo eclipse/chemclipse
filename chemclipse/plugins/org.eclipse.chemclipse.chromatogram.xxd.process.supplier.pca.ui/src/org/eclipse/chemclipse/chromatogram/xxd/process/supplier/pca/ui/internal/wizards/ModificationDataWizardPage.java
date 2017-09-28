@@ -21,11 +21,12 @@ import org.eclipse.swt.widgets.Composite;
 
 public class ModificationDataWizardPage extends WizardPage {
 
-	private DataPreprocessingSelection dataPreprocessingSelection;
 	private PcaPreprocessingData pcaPreprocessingData;
 
 	protected ModificationDataWizardPage(String pageName) {
 		super(pageName);
+		setTitle("Preprocess Data");
+		setDescription("Data can be also preprocessed later in the process in Data Preprocessing page");
 		pcaPreprocessingData = new PcaPreprocessingData();
 	}
 
@@ -35,7 +36,7 @@ public class ModificationDataWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new GridLayout(1, false));
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		dataPreprocessingSelection = new DataPreprocessingSelection(composite, gridData, pcaPreprocessingData);
+		new DataPreprocessingSelection(composite, gridData, pcaPreprocessingData);
 		setControl(composite);
 	}
 

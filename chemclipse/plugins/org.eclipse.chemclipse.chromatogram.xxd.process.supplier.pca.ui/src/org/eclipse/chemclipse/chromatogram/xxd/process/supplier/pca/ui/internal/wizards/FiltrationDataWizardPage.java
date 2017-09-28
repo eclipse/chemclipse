@@ -27,8 +27,8 @@ public class FiltrationDataWizardPage extends WizardPage {
 
 	protected FiltrationDataWizardPage(String pageName) {
 		super(pageName);
-		setTitle("Add filter which select data");
-		setDescription("Filters can be also added later on in the process in Data Filtration page");
+		setTitle("Add Filters");
+		setDescription("Filters can be also added later in the process in Data Filtration page");
 		pcaFiltrationData = new PcaFiltrationData();
 	}
 

@@ -70,7 +70,7 @@ public class PreprocessingPage {
 
 		//
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Data Preprocessoring");
+		tabItem.setText("Data Preprocessing");
 		//
 		Composite parent = new Composite(tabFolder, SWT.NONE);
 		parent.setLayout(new GridLayout(1, false));
