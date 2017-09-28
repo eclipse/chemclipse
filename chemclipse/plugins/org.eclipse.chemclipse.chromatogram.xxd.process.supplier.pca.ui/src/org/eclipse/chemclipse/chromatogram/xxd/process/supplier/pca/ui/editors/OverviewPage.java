@@ -287,7 +287,7 @@ public class OverviewPage {
 		 */
 		imageHyperlink = formToolkit.createImageHyperlink(client, SWT.NONE);
 		imageHyperlink.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16));
-		imageHyperlink.setText("Run Wizard (Scans input)");
+		imageHyperlink.setText("Run Wizard (Total ion current input)");
 		imageHyperlink.setLayoutData(gridData);
 		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
 

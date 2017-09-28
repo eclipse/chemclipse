@@ -20,18 +20,18 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPrep
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.jface.wizard.Wizard;
 
-public class PcaScansInputWizard extends Wizard implements IPcaInputWizard {
+public class PcaChromatogramsMSDInputWizard extends Wizard implements IPcaInputWizard {
 
-	private DataInputFromPeakFilesPageWizard dataInputFromPeakFilesPage;
+	private DataInputFromChromatogramMSDFilesPageWizard dataInputFromScanFilesPage;
 	private FiltrationDataWizardPage filtrationDataPage;
 	private MainPropertiesScansInputWizardPage mainPropertiesPage;
 	private ModificationDataWizardPage modificationDataWizardPage;
 	private PcaExtractionScans pcaExtractionData;
 
-	public PcaScansInputWizard() {
+	public PcaChromatogramsMSDInputWizard() {
 		super();
 		mainPropertiesPage = new MainPropertiesScansInputWizardPage("MainProperites");
-		dataInputFromPeakFilesPage = new DataInputFromPeakFilesPageWizard("DataInputFiles");
+		dataInputFromScanFilesPage = new DataInputFromChromatogramMSDFilesPageWizard("DataInputFiles");
 		modificationDataWizardPage = new ModificationDataWizardPage("NormalizationData");
 		filtrationDataPage = new FiltrationDataWizardPage("FiltrationData");
 	}
@@ -40,7 +40,7 @@ public class PcaScansInputWizard extends Wizard implements IPcaInputWizard {
 	public void addPages() {
 
 		addPage(mainPropertiesPage);
-		addPage(dataInputFromPeakFilesPage);
+		addPage(dataInputFromScanFilesPage);
 		addPage(modificationDataWizardPage);
 		addPage(filtrationDataPage);
 	}
@@ -48,7 +48,7 @@ public class PcaScansInputWizard extends Wizard implements IPcaInputWizard {
 	@Override
 	public List<IDataInputEntry> getDataInputEntries() {
 
-		return dataInputFromPeakFilesPage.getUniqueDataInputEnties();
+		return dataInputFromScanFilesPage.getUniqueDataInputEnties();
 	}
 
 	@Override

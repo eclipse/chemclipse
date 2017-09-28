@@ -26,8 +26,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.ReEvaluateRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.IPcaInputWizard;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PcaChromatogramsMSDInputWizard;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PcaPeaksInputWizard;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PcaScansInputWizard;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
@@ -112,7 +112,7 @@ public abstract class AbstractPcaEditor {
 
 	protected int openWizardPcaScansInput() throws InvocationTargetException, InterruptedException {
 
-		return openWizardPcaInput(new PcaScansInputWizard());
+		return openWizardPcaInput(new PcaChromatogramsMSDInputWizard());
 	}
 
 	protected void reEvaluatePcaCalculation() throws InvocationTargetException, InterruptedException {
