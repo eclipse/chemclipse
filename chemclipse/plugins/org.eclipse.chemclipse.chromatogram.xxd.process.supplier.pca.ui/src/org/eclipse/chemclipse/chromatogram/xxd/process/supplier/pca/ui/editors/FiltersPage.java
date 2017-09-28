@@ -114,7 +114,7 @@ public class FiltersPage {
 		/*
 		 *
 		 */
-		countSelectedRow = new Label(composite, SWT.None);
+		countSelectedRow = new Label(parent, SWT.None);
 		updateLabelTotalSelection();
 		ImageHyperlink imageHyperlink = new ImageHyperlink(parent, SWT.None);
 		imageHyperlink.setText(MANUAL_SELECTION);

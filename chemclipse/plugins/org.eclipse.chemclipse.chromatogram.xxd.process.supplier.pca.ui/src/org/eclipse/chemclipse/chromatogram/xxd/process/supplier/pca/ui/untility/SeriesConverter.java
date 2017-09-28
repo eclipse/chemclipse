@@ -53,6 +53,8 @@ public class SeriesConverter {
 			scatterSeriesSettings.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
 			scatterSeriesSettings.setSymbolSize(SYMBOL_SIZE_LOADING_PLOT);
+			IScatterSeriesSettings scatterSeriesSettingsHighlight = (IScatterSeriesSettings)scatterSeriesSettings.getSeriesSettingsHighlight();
+			scatterSeriesSettingsHighlight.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
 			scatterSeriesDataList.add(scatterSeriesData);
 		}
 		return scatterSeriesDataList;
@@ -80,6 +82,8 @@ public class SeriesConverter {
 			scatterSeriesSettings.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
 			scatterSeriesSettings.setSymbolSize(SYMBOL_SIZE_LOADING_PLOT);
+			IScatterSeriesSettings scatterSeriesSettingsHighlight = (IScatterSeriesSettings)scatterSeriesSettings.getSeriesSettingsHighlight();
+			scatterSeriesSettingsHighlight.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
 			scatterSeriesDataList.add(scatterSeriesData);
 		}
 		return scatterSeriesDataList;

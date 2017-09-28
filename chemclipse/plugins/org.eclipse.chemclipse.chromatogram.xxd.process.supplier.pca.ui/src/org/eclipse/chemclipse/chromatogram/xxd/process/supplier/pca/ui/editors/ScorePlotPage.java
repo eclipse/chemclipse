@@ -127,6 +127,8 @@ public class ScorePlotPage {
 		if(results.isPresent()) {
 			updateSpinnerPCMaxima(results.get().getNumberOfPrincipleComponents());
 			scorePlot.update(results.get(), getPCX(), getPCY());
+		} else {
+			scorePlot.deleteSeries();
 		}
 	}
 

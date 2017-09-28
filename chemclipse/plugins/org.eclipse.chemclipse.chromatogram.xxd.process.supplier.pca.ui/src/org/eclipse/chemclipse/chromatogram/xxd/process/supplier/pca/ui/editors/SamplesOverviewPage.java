@@ -184,7 +184,7 @@ public class SamplesOverviewPage {
 		selectedSampleLable = new Label(client, SWT.NONE);
 		selectedSampleLable.setText("Selected Sample:");
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
-		countSelectedSamples.setLayoutData(gridData);
+		selectedSampleLable.setLayoutData(gridData);
 	}
 
 	private void createOverviewSamples(Composite parent) {
@@ -200,7 +200,14 @@ public class SamplesOverviewPage {
 		 * Creates the table and the action buttons.
 		 */
 		createTableSamples(client);
-		createLabelSamplesSelection(client);
+		Composite comositeButtons = new Composite(client, SWT.None);
+		comositeButtons.setLayout(new GridLayout(2, false));
+		Button button = new Button(comositeButtons, SWT.PUSH);
+		button.setText("Select All");
+		button.addListener(SWT.Selection, e -> tableSamples.setAllChecked(true));
+		button = new Button(comositeButtons, SWT.PUSH);
+		button.setText("Deselect All");
+		button.addListener(SWT.Selection, e -> tableSamples.setAllChecked(false));
 		client.pack();
 	}
 
@@ -301,18 +308,13 @@ public class SamplesOverviewPage {
 		buttonComposite.setLayoutData(new GridData(SWT.CENTER, SWT.BEGINNING, false, true));
 		buttonComposite.setLayout(new FillLayout(SWT.VERTICAL));
 		Button button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Select All");
-		button.addListener(SWT.Selection, e -> tableSamples.setAllChecked(true));
-		button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Deselect All");
-		button.addListener(SWT.Selection, e -> tableSamples.setAllChecked(false));
-		button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Update");
+		button.setText("Update Changes");
 		button.addListener(SWT.Selection, e -> update());
 		button = new Button(buttonComposite, SWT.PUSH);
-		button.setText("Reset");
+		button.setText("Cancel Changes");
 		button.addListener(SWT.Selection, e -> resetSamples());
 		setEnable(mainComposite, false);
+		createLabelSamplesSelection(composite);
 		tabItem.setControl(composite);
 	}
 

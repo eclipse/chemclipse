@@ -64,25 +64,25 @@ public class PCAWorkflow {
 			Image image;
 			switch(status) {
 				case STATUS_EMPTY:
-					status = STATUS_EMPTY;
+					this.status = STATUS_EMPTY;
 					image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_EMPTY, IApplicationImageProvider.SIZE_16x16);
 					imageHyperlink.setImage(image);
 					imageHyperlink.setToolTipText(emptyToolTip);
 					break;
 				case STATUS_OK:
-					status = STATUS_OK;
+					this.status = STATUS_OK;
 					image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_OK, IApplicationImageProvider.SIZE_16x16);
 					imageHyperlink.setImage(image);
 					imageHyperlink.setToolTipText(okToolTip);
 					break;
 				case STATUS_ERROR:
-					status = STATUS_ERROR;
+					this.status = STATUS_ERROR;
 					image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_ERROR, IApplicationImageProvider.SIZE_16x16);
 					imageHyperlink.setImage(image);
 					imageHyperlink.setToolTipText(errorToolTip);
 					break;
 				case STATUS_WARNING:
-					status = STATUS_WARNING;
+					this.status = STATUS_WARNING;
 					image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_WARN, IApplicationImageProvider.SIZE_16x16);
 					imageHyperlink.setImage(image);
 					imageHyperlink.setToolTipText(warningToolTip);

@@ -15,10 +15,12 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers.CreatePcaEvaluation;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.EigenvaluesCovarianceMatrixTable;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -229,7 +231,7 @@ public class OverviewPage {
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
 
-				if(pcaEditor.getPcaResults().isPresent()) {
+				if(pcaEditor.getSamples().isPresent()) {
 					pcaEditor.reEvaluatePcaCalculation();
 				}
 			}
@@ -249,7 +251,7 @@ public class OverviewPage {
 			public void linkActivated(HyperlinkEvent e) {
 
 				if(pcaEditor.getPcaResults().isPresent()) {
-					pcaEditor.save();
+					CreatePcaEvaluation.createPart(pcaEditor.getSamples().get());
 				}
 			}
 		});
@@ -270,7 +272,9 @@ public class OverviewPage {
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
 
-				pcaEditor.openWizardPcaPeaksInput();
+				if(pcaEditor.openWizardPcaPeaksInput() == Window.OK) {
+					pcaEditor.reEvaluatePcaCalculation();
+				}
 			}
 		});
 	}
@@ -290,7 +294,9 @@ public class OverviewPage {
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
 
-				pcaEditor.openWizardPcaScansInput();
+				if(pcaEditor.openWizardPcaScansInput() == Window.OK) {
+					pcaEditor.reEvaluatePcaCalculation();
+				}
 			}
 		});
 	}

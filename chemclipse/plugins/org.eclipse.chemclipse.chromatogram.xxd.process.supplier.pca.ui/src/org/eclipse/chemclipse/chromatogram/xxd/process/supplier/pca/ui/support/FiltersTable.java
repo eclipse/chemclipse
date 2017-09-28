@@ -45,12 +45,13 @@ public class FiltersTable {
 
 		List<IFilter> filters = pcaFiltrationData.getFilters();
 		FiltersWizard filtersWizard = new FiltersWizard();
-		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getCurrent().getActiveShell(), filtersWizard);
+		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getDefault().getActiveShell(), filtersWizard);
 		if(Window.OK == wizardDialog.open()) {
 			IFilter filter = filtersWizard.getFilterType();
 			if(filter != null) {
 				FilterWizard filterWizard = new FilterWizard(filter);
-				wizardDialog = new BatchProcessWizardDialog(Display.getCurrent().getActiveShell(), filterWizard);
+				wizardDialog = new BatchProcessWizardDialog(Display.getDefault().getActiveShell(), filterWizard);
+				wizardDialog.setMinimumPageSize(300, 600);
 				if(Window.OK == wizardDialog.open()) {
 					filters.add(filter);
 					update();

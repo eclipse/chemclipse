@@ -113,20 +113,9 @@ public class PcaEditor extends AbstractPcaEditor {
 		Object object = part.getObject();
 		if(object instanceof ISamples) {
 			ISamples samples = (ISamples)object;
-			try {
-				setSamples(samples);
-				updateSamples();
-				super.reEvaluatePcaCalculation();
-				updateResults();
-				showScorePlotPage();
-				dirtyable.setDirty(true);
-				setErrors();
-			} catch(InvocationTargetException e) {
-				logger.warn(e);
-				logger.warn(e.getCause());
-			} catch(InterruptedException e) {
-				logger.warn(e);
-			}
+			setSamples(samples);
+			updateSamples();
+			reEvaluatePcaCalculation();
 		}
 	}
 
@@ -162,16 +151,13 @@ public class PcaEditor extends AbstractPcaEditor {
 			status = super.openWizardPcaPeaksInput();
 			if(status == Window.OK) {
 				updateSamples();
-				updateResults();
-				showScorePlotPage();
-				dirtyable.setDirty(true);
 			}
 		} catch(InvocationTargetException e) {
-			setErrors();
+			setExtractDataError();
 			logger.warn(e);
 			logger.warn(e.getCause());
 		} catch(InterruptedException e) {
-			setErrors();
+			setExtractDataError();
 			logger.warn(e);
 		}
 		return status;
@@ -185,16 +171,13 @@ public class PcaEditor extends AbstractPcaEditor {
 			status = super.openWizardPcaScansInput();
 			if(status == Window.OK) {
 				updateSamples();
-				updateResults();
-				showScorePlotPage();
-				dirtyable.setDirty(true);
 			}
 		} catch(InvocationTargetException e) {
-			setErrors();
+			setExtractDataError();
 			logger.warn(e);
 			logger.warn(e.getCause());
 		} catch(InterruptedException e) {
-			setErrors();
+			setExtractDataError();
 			logger.warn(e);
 		}
 		return status;
@@ -239,11 +222,11 @@ public class PcaEditor extends AbstractPcaEditor {
 			showScorePlotPage();
 			dirtyable.setDirty(true);
 		} catch(InvocationTargetException e) {
-			setErrors();
+			setRunPCADataError();
 			logger.warn(e);
 			logger.warn(e.getCause());
 		} catch(InterruptedException e) {
-			setErrors();
+			setRunPCADataError();
 			logger.warn(e);
 		}
 	}
@@ -276,7 +259,7 @@ public class PcaEditor extends AbstractPcaEditor {
 		}
 	}
 
-	private void setErrors() {
+	private void setExtractDataError() {
 
 		pcaWorkflows.setStatuses(PCAWorkflow.STATUS_EMPTY);
 		pcaWorkflows.setStatusOverview(PCAWorkflow.STATUS_ERROR);
@@ -286,6 +269,12 @@ public class PcaEditor extends AbstractPcaEditor {
 	public void setFocus() {
 
 		tabFolder.setFocus();
+	}
+
+	private void setRunPCADataError() {
+
+		pcaWorkflows.setStatuses(PCAWorkflow.STATUS_ERROR);
+		pcaWorkflows.setStatusOverview(PCAWorkflow.STATUS_EMPTY);
 	}
 
 	public void showDataTable() {

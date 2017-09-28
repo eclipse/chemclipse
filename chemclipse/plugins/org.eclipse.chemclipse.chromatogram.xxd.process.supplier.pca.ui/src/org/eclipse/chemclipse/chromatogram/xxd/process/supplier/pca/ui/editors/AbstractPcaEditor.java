@@ -89,7 +89,7 @@ public abstract class AbstractPcaEditor {
 			/*
 			 * Run the process.
 			 */
-			PcaInputRunnable runnable = new PcaInputRunnable(pcaExtractionData, pcaFiltrationData, pcaPreprocessingData, numberOfPrincipleComponents);
+			PcaInputRunnable runnable = new PcaInputRunnable(pcaExtractionData, pcaFiltrationData, pcaPreprocessingData);
 			ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 			/*
 			 * Calculate the results and show the score plot page.
@@ -97,7 +97,6 @@ public abstract class AbstractPcaEditor {
 			monitor.run(true, true, runnable);
 			this.pcaFiltrationData = Optional.of(pcaFiltrationData);
 			this.pcaPreprocessingData = Optional.of(pcaPreprocessingData);
-			this.pcaResults = Optional.of(runnable.getPcaResults());
 			this.samples = Optional.of(runnable.getSamples());
 			this.numberOfPrincipleComponents = Optional.of(numberOfPrincipleComponents);
 			this.dataInputEntries.clear();
@@ -121,12 +120,18 @@ public abstract class AbstractPcaEditor {
 		/*
 		 * Run the process.
 		 */
-		int numberOfPrincComp = numberOfPrincipleComponents.get();
-		ReEvaluateRunnable runnable = new ReEvaluateRunnable(samples.get(), numberOfPrincComp);
-		ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-		monitor.run(true, false, runnable);
-		this.pcaResults = Optional.of(runnable.getPcaResults());
-		updateResults();
+		try {
+			int numberOfPrincComp = numberOfPrincipleComponents.get();
+			ReEvaluateRunnable runnable = new ReEvaluateRunnable(samples.get(), numberOfPrincComp);
+			ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+			monitor.run(true, false, runnable);
+			this.pcaResults = Optional.of(runnable.getPcaResults());
+		} catch(Exception e) {
+			this.pcaResults = Optional.empty();
+			throw e;
+		} finally {
+			updateResults();
+		}
 	}
 
 	public void setNumberOfPrincipleComponents(int numberOfPrincipleComponents) {
