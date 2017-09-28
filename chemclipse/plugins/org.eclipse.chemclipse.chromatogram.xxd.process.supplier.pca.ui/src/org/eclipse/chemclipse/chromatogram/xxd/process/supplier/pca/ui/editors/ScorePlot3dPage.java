@@ -92,7 +92,7 @@ public class ScorePlot3dPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				updatePC();
+				update();
 			}
 		});
 		button = new Button(spinnerComposite, SWT.PUSH);
@@ -107,19 +107,19 @@ public class ScorePlot3dPage {
 		chartComposite.setLayout(new GridLayout(1, true));
 		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		chartComposite.setLayoutData(gridData);
-		scorePlot3d = new ScorePlot3d(pcaEditor, chartComposite, new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0));
+		scorePlot3d = new ScorePlot3d(chartComposite, new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0));
 		tabItem.setControl(parent);
 	}
 
 	public void update() {
 
-		updateSpinnerPCMaxima();
-		updatePC();
-	}
-
-	private void updatePC() {
-
-		scorePlot3d.update(spinnerPCx.getSelection(), spinnerPCy.getSelection(), spinnerPCz.getSelection());
+		Optional<IPcaResults> pcaResults = pcaEditor.getPcaResults();
+		if(pcaResults.isPresent()) {
+			updateSpinnerPCMaxima(pcaResults.get().getNumberOfPrincipleComponents());
+			scorePlot3d.update(pcaResults.get(), spinnerPCx.getSelection(), spinnerPCy.getSelection(), spinnerPCz.getSelection());
+		} else {
+			scorePlot3d.removeData();
+		}
 	}
 
 	public void updateSelection() {
@@ -127,17 +127,13 @@ public class ScorePlot3dPage {
 		scorePlot3d.updateSelection();
 	}
 
-	private void updateSpinnerPCMaxima() {
+	private void updateSpinnerPCMaxima(int numberOfPrincipleComponents) {
 
-		Optional<IPcaResults> pcaResults = pcaEditor.getPcaResults();
-		if(pcaResults.isPresent()) {
-			int numberOfPrincipleComponents = pcaResults.get().getNumberOfPrincipleComponents();
-			spinnerPCx.setMaximum(numberOfPrincipleComponents);
-			spinnerPCx.setSelection(1); // PC1
-			spinnerPCy.setMaximum(numberOfPrincipleComponents);
-			spinnerPCy.setSelection(2); // PC2
-			spinnerPCz.setMaximum(numberOfPrincipleComponents);
-			spinnerPCz.setSelection(3); // PC3
-		}
+		spinnerPCx.setMaximum(numberOfPrincipleComponents);
+		spinnerPCx.setSelection(1); // PC1
+		spinnerPCy.setMaximum(numberOfPrincipleComponents);
+		spinnerPCy.setSelection(2); // PC2
+		spinnerPCz.setMaximum(numberOfPrincipleComponents);
+		spinnerPCz.setSelection(3); // PC3
 	}
 }

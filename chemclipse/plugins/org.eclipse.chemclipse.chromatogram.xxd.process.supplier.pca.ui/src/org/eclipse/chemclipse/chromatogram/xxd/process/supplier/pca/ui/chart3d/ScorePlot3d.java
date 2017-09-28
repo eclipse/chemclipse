@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -40,19 +40,16 @@ public class ScorePlot3d {
 	private Chart3DData data;
 	private FXCanvas fxCanvas;
 	private ChartLegend legend;
-	private int pcX;
-	private int pcY;
-	private int pcZ;
 	private final double rotateModifier = 10;
 	private Chart3DScatter scatter;
 
-	public ScorePlot3d(PcaEditor pcaEditor, Composite parent, Object dataLayout) {
+	public ScorePlot3d(Composite parent, Object dataLayout) {
 		/*
 		 * JavaFX init
 		 */
 		fxCanvas = new FXCanvas(parent, SWT.None);
 		fxCanvas.setLayoutData(dataLayout);
-		data = new Chart3DData(pcaEditor);
+		data = new Chart3DData();
 		axes = new Axes(data);
 		scatter = new Chart3DScatter(data);
 		legend = new ChartLegend(data);
@@ -76,7 +73,6 @@ public class ScorePlot3d {
 		camera.setNearClip(0.01);
 		camera.setFarClip(10000.0);
 		root.getChildren().addAll(mainGroup, ambientlight, camera);
-		data.update(pcX, pcY, pcZ, 800);
 		if(!data.isEmpty()) {
 			/*
 			 * update data
@@ -186,16 +182,15 @@ public class ScorePlot3d {
 		});
 	}
 
-	public void update() {
+	public void removeData() {
 
-		update(1, 2, 3);
+		data.removeData();
+		createScene();
 	}
 
-	public void update(int pcX, int pcY, int pcZ) {
+	public void update(IPcaResults pcaResults, int pcX, int pcY, int pcZ) {
 
-		this.pcX = pcX;
-		this.pcY = pcY;
-		this.pcZ = pcZ;
+		data.update(pcaResults, pcX, pcY, pcZ, 800);
 		createScene();
 	}
 

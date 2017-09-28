@@ -225,7 +225,7 @@ public class SamplesOverviewPage {
 			selectDataTableOverview(true);
 		});
 		comboSelectData.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		tableOverview = new Table(composite, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		tableOverview = new Table(composite, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL);
 		tableOverview.setHeaderVisible(true);
 		tableOverview.setLinesVisible(true);
 		tableOverview.setLayoutData(new GridData(GridData.FILL_BOTH));

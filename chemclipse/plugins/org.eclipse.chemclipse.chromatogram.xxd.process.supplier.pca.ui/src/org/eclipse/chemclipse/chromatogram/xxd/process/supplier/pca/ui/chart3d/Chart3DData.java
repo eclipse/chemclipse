@@ -17,13 +17,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.PcaColorGroup;
 
 import javafx.scene.paint.Color;
@@ -38,14 +36,12 @@ public class Chart3DData {
 	private double minX;
 	private double minY;
 	private double minZ;
-	private PcaEditor pcaEditor;
 	private int pcX;
 	private int pcY;
 	private int pcZ;
 	private double scale;
 
-	public Chart3DData(PcaEditor pcaEditor) {
-		this.pcaEditor = pcaEditor;
+	public Chart3DData() {
 		scale = 1.0;
 	}
 
@@ -138,6 +134,21 @@ public class Chart3DData {
 		return data.isEmpty();
 	}
 
+	void removeData() {
+
+		/*
+		 * clear data
+		 */
+		groups.clear();
+		data.clear();
+		minX = 0;
+		minY = 0;
+		minZ = 0;
+		maxX = 0;
+		maxY = 0;
+		maxZ = 0;
+	}
+
 	public void setScale(double scale) {
 
 		data.forEach(d -> d.setScale(scale));
@@ -150,64 +161,48 @@ public class Chart3DData {
 		setScale(point / maxDis);
 	}
 
-	public void update(int pcX, int pcY, int pcZ, int scale) {
+	public void update(IPcaResults pcaResults, int pcX, int pcY, int pcZ, int scale) {
 
-		/*
-		 * clear data
-		 */
-		data.clear();
-		minX = 0;
-		minY = 0;
-		minZ = 0;
-		maxX = 0;
-		maxY = 0;
-		maxZ = 0;
+		removeData();
 		/*
 		 * set principal component
 		 */
 		this.pcX = pcX;
 		this.pcY = pcY;
 		this.pcZ = pcZ;
-		Optional<IPcaResults> results = pcaEditor.getPcaResults();
-		if(results.isPresent()) {
-			List<IPcaResult> pcaResults = results.get().getPcaResultList();
-			if(!pcaResults.isEmpty()) {
-				/*
-				 *
-				 */
-				Set<String> groupNames = PcaUtils.getGroupNames(pcaResults);
-				Map<String, Color> groupNameColore = PcaColorGroup.getColorJavaFx(groupNames);
-				Iterator<Entry<String, Color>> it = groupNameColore.entrySet().iterator();
-				groups.clear();
-				while(it.hasNext()) {
-					Map.Entry<String, Color> entry = it.next();
-					if(entry.getKey() == null) {
-						groups.put("------", entry.getValue());
-					} else {
-						groups.put(entry.getKey(), entry.getValue());
-					}
-				}
-				/*
-				 * update data
-				 */
-				for(IPcaResult pcaResul : pcaResults) {
-					Color color = groupNameColore.get(pcaResul.getGroupName());
-					data.add(new Chart3DSampleData(pcaResul, pcX, pcY, pcZ, color));
-				}
-				/*
-				 * set min and max
-				 */
-				minX = data.stream().min((d1, d2) -> Double.compare(d1.getPcaXData(false), d2.getPcaXData(false))).get().getPcaXData(false);
-				minY = data.stream().min((d1, d2) -> Double.compare(d1.getPcaYData(false), d2.getPcaYData(false))).get().getPcaYData(false);
-				minZ = data.stream().min((d1, d2) -> Double.compare(d1.getPcaZData(false), d2.getPcaZData(false))).get().getPcaZData(false);
-				maxY = data.stream().max((d1, d2) -> Double.compare(d1.getPcaYData(false), d2.getPcaYData(false))).get().getPcaYData(false);
-				maxX = data.stream().max((d1, d2) -> Double.compare(d1.getPcaXData(false), d2.getPcaXData(false))).get().getPcaXData(false);
-				maxZ = data.stream().max((d1, d2) -> Double.compare(d1.getPcaZData(false), d2.getPcaZData(false))).get().getPcaZData(false);
-				/*
-				 * update scale
-				 */
-				setScale(scale);
+		/*
+		 *
+		 */
+		Set<String> groupNames = PcaUtils.getGroupNames(pcaResults.getPcaResultList());
+		Map<String, Color> groupNameColore = PcaColorGroup.getColorJavaFx(groupNames);
+		Iterator<Entry<String, Color>> it = groupNameColore.entrySet().iterator();
+		while(it.hasNext()) {
+			Map.Entry<String, Color> entry = it.next();
+			if(entry.getKey() == null) {
+				groups.put("------", entry.getValue());
+			} else {
+				groups.put(entry.getKey(), entry.getValue());
 			}
 		}
+		/*
+		 * update data
+		 */
+		for(IPcaResult pcaResul : pcaResults.getPcaResultList()) {
+			Color color = groupNameColore.get(pcaResul.getGroupName());
+			data.add(new Chart3DSampleData(pcaResul, pcX, pcY, pcZ, color));
+		}
+		/*
+		 * set min and max
+		 */
+		minX = data.stream().min((d1, d2) -> Double.compare(d1.getPcaXData(false), d2.getPcaXData(false))).get().getPcaXData(false);
+		minY = data.stream().min((d1, d2) -> Double.compare(d1.getPcaYData(false), d2.getPcaYData(false))).get().getPcaYData(false);
+		minZ = data.stream().min((d1, d2) -> Double.compare(d1.getPcaZData(false), d2.getPcaZData(false))).get().getPcaZData(false);
+		maxY = data.stream().max((d1, d2) -> Double.compare(d1.getPcaYData(false), d2.getPcaYData(false))).get().getPcaYData(false);
+		maxX = data.stream().max((d1, d2) -> Double.compare(d1.getPcaXData(false), d2.getPcaXData(false))).get().getPcaXData(false);
+		maxZ = data.stream().max((d1, d2) -> Double.compare(d1.getPcaZData(false), d2.getPcaZData(false))).get().getPcaZData(false);
+		/*
+		 * update scale
+		 */
+		setScale(scale);
 	}
 }

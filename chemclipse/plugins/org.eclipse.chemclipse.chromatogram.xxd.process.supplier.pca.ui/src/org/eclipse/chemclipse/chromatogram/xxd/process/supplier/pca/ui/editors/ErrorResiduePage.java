@@ -75,7 +75,7 @@ public class ErrorResiduePage {
 		button.addListener(SWT.Selection, e -> {
 			errorResidueChart.setDisplayData(comboDisplay.getSelectionIndex());
 			errorResidueChart.setSortType(comboSortData.getSelectionIndex());
-			errorResidueChart.update();
+			update();
 		});
 		button = new Button(propertiesComposite, SWT.PUSH);
 		button.setText(" Select samples");
@@ -88,20 +88,25 @@ public class ErrorResiduePage {
 		Composite chartComposite = new Composite(parent, SWT.BORDER);
 		chartComposite.setLayout(new GridLayout(1, true));
 		chartComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		errorResidueChart = new ErrorResidueBarChart(pcaEditor, chartComposite, new GridData(GridData.FILL_BOTH));
+		errorResidueChart = new ErrorResidueBarChart(chartComposite, new GridData(GridData.FILL_BOTH));
 		tabItem.setControl(composite);
 	}
 
 	public void update() {
 
-		errorResidueChart.update();
-		comboDisplay.select(0);
-		comboSortData.select(0);
+		if(pcaEditor.getPcaResults().isPresent()) {
+			errorResidueChart.update(pcaEditor.getPcaResults().get());
+			comboDisplay.select(0);
+			comboSortData.select(0);
+		} else {
+			errorResidueChart.removeData();
+		}
 	}
 
 	public void updateSelection() {
 
-		errorResidueChart.update();
-		;
+		if(pcaEditor.getPcaResults().isPresent()) {
+			errorResidueChart.updateSelection();
+		}
 	}
 }

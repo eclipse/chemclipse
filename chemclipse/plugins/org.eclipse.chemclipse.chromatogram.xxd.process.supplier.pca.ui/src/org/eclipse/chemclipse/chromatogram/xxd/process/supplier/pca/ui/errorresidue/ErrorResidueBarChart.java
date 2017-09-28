@@ -21,12 +21,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.PcaColorGroup;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -69,21 +67,18 @@ public class ErrorResidueBarChart {
 	private int displayData;
 	private FXCanvas fxCanvas;
 	private Map<String, Color> groupColor = new HashMap<>();
-	private PcaEditor pcaEditor;
 	private XYChart.Series<String, Number> series = new XYChart.Series<>();
 	private int sortType;
 
-	public ErrorResidueBarChart(PcaEditor pcaEditor, Composite parent, Object layoutData) {
+	public ErrorResidueBarChart(Composite parent, Object layoutData) {
 		/*
 		 * JavaFX init
 		 */
 		fxCanvas = new FXCanvas(parent, SWT.NONE);
 		fxCanvas.setLayoutData(layoutData);
-		parent.addListener(SWT.Resize, (event) -> update());
-		this.pcaEditor = pcaEditor;
+		// parent.addListener(SWT.Resize, (event) -> update());
 		this.displayData = DISPLAY_SAMPLES;
 		this.sortType = SORT_BY_GROUP_NAME;
-		update();
 	}
 
 	/**
@@ -204,6 +199,13 @@ public class ErrorResidueBarChart {
 			}
 		});
 		return yAxis;
+	}
+
+	public void removeData() {
+
+		data.clear();
+		groupColor.clear();
+		createScene();
 	}
 
 	/**
@@ -361,22 +363,18 @@ public class ErrorResidueBarChart {
 		}
 	}
 
-	public void update() {
+	public void update(IPcaResults pcaResults) {
 
 		/*
 		 * update data
 		 */
-		data.clear();
-		groupColor.clear();
-		Optional<IPcaResults> pcaResults = pcaEditor.getPcaResults();
-		if(pcaResults.isPresent()) {
-			if(displayData == DISPLAY_SAMPLES) {
-				data.addAll(pcaResults.get().getPcaResultList());
-			} else {
-				data.addAll(pcaResults.get().getPcaResultGroupsList());
-			}
-			groupColor = PcaColorGroup.getColorJavaFx(PcaUtils.getGroupNames(pcaResults.get()));
+		removeData();
+		if(displayData == DISPLAY_SAMPLES) {
+			data.addAll(pcaResults.getPcaResultList());
+		} else {
+			data.addAll(pcaResults.getPcaResultGroupsList());
 		}
+		groupColor = PcaColorGroup.getColorJavaFx(PcaUtils.getGroupNames(pcaResults));
 		/*
 		 * sort data
 		 */
