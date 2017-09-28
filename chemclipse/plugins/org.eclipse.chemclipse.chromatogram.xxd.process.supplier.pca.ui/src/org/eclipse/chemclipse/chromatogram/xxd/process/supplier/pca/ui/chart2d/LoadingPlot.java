@@ -136,17 +136,16 @@ public class LoadingPlot extends PCA2DPlot {
 
 	public void update(IPcaResults pcaResults, int pcX, int pcY) {
 
-		if(pcaResults != null) {
-			List<IScatterSeriesData> series;
-			if(labelsType == LABELS_RETENTION_TIME_MINUTES) {
-				series = SeriesConverter.basisVectorsToSeries(pcaResults, pcX, pcY, extractedValues);
-			} else {
-				series = SeriesConverter.basisVectorsToSeriesDescription(pcaResults, pcX, pcY, extractedValues);
-			}
-			deleteSeries();
-			addSeriesData(series);
-			update(pcX, pcY);
+		List<IScatterSeriesData> series;
+		if(labelsType == LABELS_RETENTION_TIME_MINUTES) {
+			series = SeriesConverter.basisVectorsToSeries(pcaResults, pcX, pcY, extractedValues);
+		} else {
+			series = SeriesConverter.basisVectorsToSeriesDescription(pcaResults, pcX, pcY, extractedValues);
 		}
+		deleteSeries();
+		addSeriesData(series);
+		update(pcX, pcY);
+		updateSelection();
 	}
 
 	private void updateSelection() {
