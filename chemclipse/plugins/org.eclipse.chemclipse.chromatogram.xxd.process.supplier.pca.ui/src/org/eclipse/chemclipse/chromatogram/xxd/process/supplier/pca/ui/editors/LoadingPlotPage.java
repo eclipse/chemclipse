@@ -15,11 +15,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.RetentionTime2Filter;
@@ -32,24 +29,22 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.forms.events.HyperlinkAdapter;
+import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ImageHyperlink;
 
 public class LoadingPlotPage {
 
-	private Table actualSelectionTable;
 	//
 	private LoadingPlot loadingPlot;
 	//
 	private PcaEditor pcaEditor;
-	final private SortedSet<String> selectedData = new TreeSet<>();
-	private Table selectedDataTable;
 	private Spinner spinnerPCx;
 	private Spinner spinnerPCy;
 
@@ -62,22 +57,47 @@ public class LoadingPlotPage {
 
 	private void addDataToSelection() {
 
-		selectedDataTable.clearAll();
-		selectedDataTable.removeAll();
-		for(TableItem item : actualSelectionTable.getItems()) {
-			selectedData.add((String)item.getData());
+		for(String selection : loadingPlot.getActualSelection()) {
+			loadingPlot.getBaseChart().selectSeries(selection);
 		}
-		Iterator<String> it = selectedData.iterator();
-		while(it.hasNext()) {
-			String retentionTime = it.next();
-			TableItem tableItem = new TableItem(selectedDataTable, SWT.NONE);
-			tableItem.setText(0, retentionTime);
-			tableItem.setData(retentionTime);
-		}
-		removeAcutalSelection();
-		loadingPlot.getActualSelection().clear();
-		updateSelection();
-		loadingPlot.update();
+		loadingPlot.getBaseChart().redraw();
+	}
+
+	private void createButtonsArea(Composite parent, Object layoutData) {
+
+		Group composite = new Group(parent, SWT.None);
+		composite.setLayoutData(layoutData);
+		composite.setLayout(new GridLayout());
+		composite.setText("Create new retention times filter");
+		Button button = new Button(composite, SWT.None);
+		button.setText("Select Displayed Retention Times");
+		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		button.addListener(SWT.Selection, e -> addDataToSelection());
+		button = new Button(composite, SWT.None);
+		button.setText("Deselect Displayed Retention Times");
+		button.addListener(SWT.Selection, e -> removeDataFromSelection());
+		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Label lable = new Label(composite, SWT.None);
+		lable.setText("You can also select/deselect \n retention times manually using doubleclick");
+		button = new Button(composite, SWT.None);
+		button.setText("Cancel Selection");
+		button.addListener(SWT.Selection, e -> removeSelection());
+		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		button = new Button(composite, SWT.None);
+		button.setText("Create Filter");
+		button.addListener(SWT.Selection, e -> createFilter());
+		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		ImageHyperlink imageHyperlink = new ImageHyperlink(composite, SWT.None);
+		imageHyperlink.setText("You can find created filter in page \n Data Filtration");
+		imageHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
+
+			@Override
+			public void linkActivated(HyperlinkEvent e) {
+
+				pcaEditor.showFiltersPage();
+			}
+		});
+		imageHyperlink.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
 	private void createFilter() {
@@ -85,9 +105,8 @@ public class LoadingPlotPage {
 		if(pcaEditor.getPcaFiltrationData().isPresent()) {
 			PcaFiltrationData pcaFiltrationData = pcaEditor.getPcaFiltrationData().get();
 			List<IRetentionTime> values = new ArrayList<>();
-			for(TableItem item : selectedDataTable.getItems()) {
-				Object data = item.getData();
-				values.add(loadingPlot.getExtractedValues().get(data));
+			for(String item : loadingPlot.getBaseChart().getSelectedSeriesIds()) {
+				values.add(loadingPlot.getExtractedValues().get(item));
 			}
 			if(!values.isEmpty()) {
 				Collections.sort(values);
@@ -98,43 +117,6 @@ public class LoadingPlotPage {
 		}
 	}
 
-	private void createTables(Composite parent, Object layoutData) {
-
-		Composite composite = new Composite(parent, SWT.None);
-		composite.setLayoutData(layoutData);
-		composite.setLayout(new GridLayout());
-		actualSelectionTable = new Table(composite, SWT.BORDER);
-		actualSelectionTable.setHeaderVisible(true);
-		actualSelectionTable.setLinesVisible(true);
-		actualSelectionTable.setLayoutData(new GridData(GridData.FILL_BOTH));
-		TableColumn tableColumn = new TableColumn(actualSelectionTable, SWT.None);
-		tableColumn.setText("Retention Time (Minutes)");
-		tableColumn.setWidth(200);
-		Button button = new Button(composite, SWT.None);
-		button.setText("Add to selected list");
-		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		button.addListener(SWT.Selection, e -> addDataToSelection());
-		button = new Button(composite, SWT.None);
-		button.setText("Remove from selected list");
-		button.addListener(SWT.Selection, e -> removeDataFromSelection());
-		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		selectedDataTable = new Table(composite, SWT.BORDER);
-		selectedDataTable.setHeaderVisible(true);
-		selectedDataTable.setLinesVisible(true);
-		selectedDataTable.setLayoutData(new GridData(GridData.FILL_BOTH));
-		button = new Button(composite, SWT.None);
-		button.setText("Remove selection");
-		button.addListener(SWT.Selection, e -> removeSelection());
-		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		button = new Button(composite, SWT.None);
-		button.setText("Create Filter");
-		button.addListener(SWT.Selection, e -> createFilter());
-		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		tableColumn = new TableColumn(selectedDataTable, SWT.None);
-		tableColumn.setText("Retention Time (Minutes)");
-		tableColumn.setWidth(200);
-	}
-
 	private int getPCX() {
 
 		return spinnerPCx.getSelection();
@@ -143,11 +125,6 @@ public class LoadingPlotPage {
 	private int getPCY() {
 
 		return spinnerPCy.getSelection();
-	}
-
-	public SortedSet<String> getSelectedData() {
-
-		return selectedData;
 	}
 
 	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
@@ -201,7 +178,11 @@ public class LoadingPlotPage {
 		});
 		button = new Button(spinnerComposite, SWT.PUSH);
 		button.setText("Reload Loading Plot");
-		button.addListener(SWT.Selection, e -> loadingPlot.update(getPCX(), getPCY()));
+		button.addListener(SWT.Selection, e -> {
+			if(pcaEditor.getPcaResults().isPresent()) {
+				loadingPlot.update(pcaEditor.getPcaResults().get(), getPCX(), getPCY());
+			}
+		});
 		//
 		/*
 		 * Plot the PCA chart.
@@ -214,44 +195,21 @@ public class LoadingPlotPage {
 		chartComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		loadingPlot = new LoadingPlot(chartComposite, this);
 		loadingPlot.setLayoutData(new GridData(GridData.FILL_BOTH));
-		createTables(body, new GridData(GridData.FILL_VERTICAL));
+		createButtonsArea(body, new GridData(GridData.FILL_VERTICAL));
 		//
 		tabItem.setControl(composite);
 	}
 
-	private void removeAcutalSelection() {
-
-		actualSelectionTable.clearAll();
-		actualSelectionTable.removeAll();
-	}
-
 	private void removeDataFromSelection() {
 
-		selectedDataTable.clearAll();
-		selectedDataTable.removeAll();
-		for(TableItem item : actualSelectionTable.getItems()) {
-			selectedData.remove(item.getData());
-		}
-		Iterator<String> it = selectedData.iterator();
-		while(it.hasNext()) {
-			String retentionTime = it.next();
-			TableItem tableItem = new TableItem(selectedDataTable, SWT.NONE);
-			tableItem.setText(0, retentionTime);
-			tableItem.setData(retentionTime);
-		}
-		removeAcutalSelection();
-		loadingPlot.getActualSelection().clear();
-		updateSelection();
-		loadingPlot.update();
+		loadingPlot.deselect(loadingPlot.getActualSelection());
 	}
 
 	private void removeSelection() {
 
-		removeAcutalSelection();
-		selectedDataTable.clearAll();
-		selectedDataTable.removeAll();
-		selectedData.clear();
-		loadingPlot.update();
+		loadingPlot.getBaseChart().resetSeriesSettings();
+		loadingPlot.getActualSelection().clear();
+		loadingPlot.getBaseChart().redraw();
 	}
 
 	public void update() {
@@ -261,17 +219,8 @@ public class LoadingPlotPage {
 			updateSpinnerPCMaxima(results.get().getNumberOfPrincipleComponents());
 			removeSelection();
 			loadingPlot.update(results.get(), getPCX(), getPCY());
-		}
-	}
-
-	public void updateSelection() {
-
-		actualSelectionTable.clearAll();
-		actualSelectionTable.removeAll();
-		for(String time : loadingPlot.getActualSelection()) {
-			TableItem tableItem = new TableItem(actualSelectionTable, SWT.NONE);
-			tableItem.setText(0, time);
-			tableItem.setData(time);
+		} else {
+			loadingPlot.deleteSeries();
 		}
 	}
 
