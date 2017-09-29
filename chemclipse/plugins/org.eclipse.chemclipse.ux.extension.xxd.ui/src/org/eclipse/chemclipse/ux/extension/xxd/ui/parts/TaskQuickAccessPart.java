@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MUIElement;
+import org.eclipse.e4.ui.model.application.ui.advanced.MArea;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
@@ -29,6 +30,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
+@SuppressWarnings("unused")
 public class TaskQuickAccessPart {
 
 	@Inject
@@ -76,10 +78,10 @@ public class TaskQuickAccessPart {
 				MPart part = getPart(PARTDESCRIPTOR_CHROMATOGRAM_OVERLAY, PARTSTACK_BOTTOM_LEFT);
 				togglePartVisibility(part);
 				boolean isPartVisible = isPartVisible(part);
-				setPartStackVisibility(PARTSTACK_FILES, !isPartVisible);
-				setPartStackVisibility(PARTSTACK_OVERVIEW, !isPartVisible);
+				// setPartStackVisibility(PARTSTACK_FILES, !isPartVisible);
+				// setPartStackVisibility(PARTSTACK_OVERVIEW, !isPartVisible);
 				setPartStackVisibility(PARTSTACK_BOTTOM_CENTER, !isPartVisible);
-				setPartStackVisibility(PARTSTACK_BOTTOM_RIGHT, !isPartVisible);
+				// setPartStackVisibility(PARTSTACK_BOTTOM_RIGHT, !isPartVisible);
 				// setAreaVisibility(AREA, !isPartVisible);
 			}
 		});
@@ -136,11 +138,12 @@ public class TaskQuickAccessPart {
 			partStack.setVisible(visible);
 		}
 	}
-	// private void setAreaVisibility(String areaId, boolean visible) {
-	//
-	// MArea area = (MArea)modelService.find(areaId, application);
-	// if(area != null) {
-	// area.setVisible(visible);
-	// }
-	// }
+
+	private void setAreaVisibility(String areaId, boolean visible) {
+
+		MArea area = (MArea)modelService.find(areaId, application);
+		if(area != null) {
+			area.setVisible(visible);
+		}
+	}
 }

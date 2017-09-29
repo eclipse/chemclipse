@@ -168,7 +168,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		//
 		createDisplayTypeCombo(compositeLeft);
 		createHighlightSeriesCombo(compositeLeft);
-		createTextSelectedIons(compositeLeft);
+		createComboSelectedIons(compositeLeft);
 		createTextShiftX(compositeLeft);
 		createComboScaleX(compositeLeft);
 		createButtonLeft(compositeLeft);
@@ -180,6 +180,8 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		//
 		createResetButton(compositeRight);
 		createSettingsButton(compositeRight);
+		//
+		enableSelectedIonsCombo();
 	}
 
 	private void createDisplayTypeCombo(Composite parent) {
@@ -198,6 +200,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				enableSelectedIonsCombo();
 				refreshUpdateOverlayChart();
 			}
 		});
@@ -209,7 +212,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		comboSelectedSeries.setToolTipText("Highlight the selected series");
 		comboSelectedSeries.setText("");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.minimumWidth = 350;
+		gridData.minimumWidth = 250;
 		gridData.grabExcessHorizontalSpace = true;
 		comboSelectedSeries.setLayoutData(gridData);
 		comboSelectedSeries.setItems(new String[]{SELECTED_SERIES_NONE});
@@ -227,14 +230,14 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		});
 	}
 
-	private void createTextSelectedIons(Composite parent) {
+	private void createComboSelectedIons(Composite parent) {
 
 		comboSelectedIons = new Combo(parent, SWT.NONE);
 		comboSelectedIons.setToolTipText("Select the overlay ions.");
 		comboSelectedIons.setItems(selectedIons);
 		comboSelectedIons.setText(SELECTED_IONS_DEFAULT);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.minimumWidth = 350;
+		gridData.minimumWidth = 250;
 		gridData.grabExcessHorizontalSpace = true;
 		comboSelectedIons.setLayoutData(gridData);
 		comboSelectedIons.addSelectionListener(new SelectionAdapter() {
@@ -242,9 +245,34 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				BaseChart baseChart = chromatogramChart.getBaseChart();
+				/*
+				 * Get the ids.
+				 */
+				List<String> seriesIds = new ArrayList<String>();
+				for(ISeries series : baseChart.getSeriesSet().getSeries()) {
+					seriesIds.add(series.getId());
+				}
+				/*
+				 * Remove the ids.
+				 */
+				for(String seriesId : seriesIds) {
+					baseChart.deleteSeries(seriesId);
+				}
+				//
 				refreshUpdateOverlayChart();
 			}
 		});
+	}
+
+	private void enableSelectedIonsCombo() {
+
+		String overlayType = comboOverlayType.getText().trim();
+		if(overlayType.contains(OVERLAY_TYPE_XIC) || overlayType.contains(OVERLAY_TYPE_SIC)) {
+			comboSelectedIons.setEnabled(true);
+		} else {
+			comboSelectedIons.setEnabled(false);
+		}
 	}
 
 	private void createTextShiftX(Composite parent) {
@@ -326,7 +354,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Move Up");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -346,7 +374,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Move Down");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override

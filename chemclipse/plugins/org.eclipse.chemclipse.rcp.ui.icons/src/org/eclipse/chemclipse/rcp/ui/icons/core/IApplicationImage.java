@@ -214,6 +214,9 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_PLUS = "plus.gif";
 	String IMAGE_MINUS = "minus.gif";
 	//
+	String IMAGE_ARROW_DOWN_2 = "arrow_down_2.gif";
+	String IMAGE_ARROW_UP_2 = "arrow_up_2.gif";
+	//
 	String IMAGE_ARROW_DOWN = "arrow_down.gif";
 	String IMAGE_ARROW_UP = "arrow_up.gif";
 	String IMAGE_ARROW_EQUAL = "arrow_equal.gif";
