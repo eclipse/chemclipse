@@ -184,7 +184,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 
 	private void createDisplayTypeCombo(Composite parent) {
 
-		comboOverlayType = new Combo(parent, SWT.NONE);
+		comboOverlayType = new Combo(parent, SWT.READ_ONLY);
 		comboOverlayType.setToolTipText("Select the overlay type");
 		comboOverlayType.setText("");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -205,7 +205,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 
 	private void createHighlightSeriesCombo(Composite parent) {
 
-		comboSelectedSeries = new Combo(parent, SWT.NONE);
+		comboSelectedSeries = new Combo(parent, SWT.READ_ONLY);
 		comboSelectedSeries.setToolTipText("Highlight the selected series");
 		comboSelectedSeries.setText("");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);

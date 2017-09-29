@@ -38,12 +38,15 @@ public class TaskQuickAccessPart {
 	@Inject
 	private EPartService partService;
 	//
+	// private String AREA = "org.eclipse.chemclipse.rcp.app.ui.editor";
+	//
 	private String PARTDESCRIPTOR_CHROMATOGRAM_OVERLAY = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramOverlayPartDescriptor";
-	// private String PARTSTACK_FILES = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.files";
-	// private String PARTSTACK_OVERVIEW = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.overview";
+	//
+	private String PARTSTACK_FILES = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.files";
+	private String PARTSTACK_OVERVIEW = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.overview";
 	private String PARTSTACK_BOTTOM_LEFT = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.bottom.left";
-	// private String PARTSTACK_BOTTOM_CENTER = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.bottom.center";
-	// private String PARTSTACK_BOTTOM_RIGHT = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.bottom.right";
+	private String PARTSTACK_BOTTOM_CENTER = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.bottom.center";
+	private String PARTSTACK_BOTTOM_RIGHT = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.bottom.right";
 
 	@Inject
 	public TaskQuickAccessPart(Composite parent) {
@@ -70,12 +73,19 @@ public class TaskQuickAccessPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				togglePart(PARTDESCRIPTOR_CHROMATOGRAM_OVERLAY, PARTSTACK_BOTTOM_LEFT);
+				MPart part = getPart(PARTDESCRIPTOR_CHROMATOGRAM_OVERLAY, PARTSTACK_BOTTOM_LEFT);
+				togglePartVisibility(part);
+				boolean isPartVisible = isPartVisible(part);
+				setPartStackVisibility(PARTSTACK_FILES, !isPartVisible);
+				setPartStackVisibility(PARTSTACK_OVERVIEW, !isPartVisible);
+				setPartStackVisibility(PARTSTACK_BOTTOM_CENTER, !isPartVisible);
+				setPartStackVisibility(PARTSTACK_BOTTOM_RIGHT, !isPartVisible);
+				// setAreaVisibility(AREA, !isPartVisible);
 			}
 		});
 	}
 
-	public void togglePart(String partId, String partStackId) {
+	private MPart getPart(String partId, String partStackId) {
 
 		MPart part = null;
 		MUIElement element = modelService.find(partId, application);
@@ -93,25 +103,44 @@ public class TaskQuickAccessPart {
 			partStack.getChildren().add(part);
 		}
 		//
-		togglePart(part);
+		return part;
 	}
 
-	private void togglePart(MPart part) {
+	private void togglePartVisibility(MPart part) {
 
 		if(part != null) {
-			if(partService.isPartVisible(part)) {
+			if(isPartVisible(part)) {
 				partService.hidePart(part);
 			} else {
 				partService.showPart(part, PartState.ACTIVATE);
 			}
 		}
 	}
+
+	private boolean isPartVisible(MPart part) {
+
+		if(part != null) {
+			if(partService.isPartVisible(part)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
+
+	private void setPartStackVisibility(String partStackId, boolean visible) {
+
+		MPartStack partStack = (MPartStack)modelService.find(partStackId, application);
+		if(partStack != null) {
+			partStack.setVisible(visible);
+		}
+	}
+	// private void setAreaVisibility(String areaId, boolean visible) {
 	//
-	/*
-	 * private void maximizePartStack() {
-	 * MPartStack partStack = (MPartStack)modelService.find(partStackId, application);
-	 * partStack.getTags().add(IPresentationEngine.MINIMIZED);
-	 * partStack.getTags().add(IPresentationEngine.MAXIMIZED);
-	 * }
-	 */
+	// MArea area = (MArea)modelService.find(areaId, application);
+	// if(area != null) {
+	// area.setVisible(visible);
+	// }
+	// }
 }
