@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.LoadingPlot;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.ComponentsSelector;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -31,7 +32,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
@@ -41,12 +41,11 @@ import org.eclipse.ui.forms.widgets.ImageHyperlink;
 
 public class LoadingPlotPage {
 
+	private ComponentsSelector componentsSelector;
 	//
 	private LoadingPlot loadingPlot;
 	//
 	private PcaEditor pcaEditor;
-	private Spinner spinnerPCx;
-	private Spinner spinnerPCy;
 
 	public LoadingPlotPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
@@ -119,12 +118,12 @@ public class LoadingPlotPage {
 
 	private int getPCX() {
 
-		return spinnerPCx.getSelection();
+		return componentsSelector.getX();
 	}
 
 	private int getPCY() {
 
-		return spinnerPCy.getSelection();
+		return componentsSelector.getY();
 	}
 
 	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
@@ -142,29 +141,8 @@ public class LoadingPlotPage {
 		 * Selection of the plotted PCs
 		 */
 		Composite spinnerComposite = new Composite(parent, SWT.NONE);
-		spinnerComposite.setLayout(new GridLayout(9, false));
-		spinnerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		Label label;
-		GridData gridData = new GridData();
-		gridData.widthHint = 50;
-		gridData.heightHint = 20;
-		//
-		label = new Label(spinnerComposite, SWT.NONE);
-		label.setText("PC X-Axis: ");
-		spinnerPCx = new Spinner(spinnerComposite, SWT.NONE);
-		spinnerPCx.setMinimum(1);
-		spinnerPCx.setMaximum(1);
-		spinnerPCx.setIncrement(1);
-		spinnerPCx.setLayoutData(gridData);
-		//
-		label = new Label(spinnerComposite, SWT.NONE);
-		label.setText(" PC Y-Axis: ");
-		spinnerPCy = new Spinner(spinnerComposite, SWT.NONE);
-		spinnerPCy.setMinimum(1);
-		spinnerPCy.setMaximum(1);
-		spinnerPCy.setIncrement(1);
-		spinnerPCy.setLayoutData(gridData);
+		spinnerComposite.setLayout(new GridLayout(4, false));
+		componentsSelector = new ComponentsSelector(spinnerComposite, null);
 		Button button = new Button(spinnerComposite, SWT.RADIO);
 		button.setText("Display Retention Times");
 		button.addListener(SWT.Selection, e -> {
@@ -216,19 +194,11 @@ public class LoadingPlotPage {
 
 		Optional<IPcaResults> results = pcaEditor.getPcaResults();
 		if(results.isPresent()) {
-			updateSpinnerPCMaxima(results.get().getNumberOfPrincipleComponents());
+			componentsSelector.update(results.get());
 			removeSelection();
 			loadingPlot.update(results.get(), getPCX(), getPCY());
 		} else {
 			loadingPlot.deleteSeries();
 		}
-	}
-
-	private void updateSpinnerPCMaxima(int numberOfPrincipleComponents) {
-
-		spinnerPCx.setMaximum(numberOfPrincipleComponents);
-		spinnerPCx.setSelection(1); // PC1
-		spinnerPCy.setMaximum(numberOfPrincipleComponents);
-		spinnerPCy.setSelection(2); // PC2
 	}
 }

@@ -45,7 +45,12 @@ public class SeriesConverter {
 		for(int i = 0; i < extractedRetentionTimes.size(); i++) {
 			String name = nf.format(extractedRetentionTimes.get(i).getRetentionTimeMinutes());
 			extractedValues.put(name, extractedRetentionTimes.get(i));
-			double x = pcaResults.getBasisVectors().get(pcX - 1)[i];
+			double x = 0;
+			if(pcX != 0) {
+				x = pcaResults.getBasisVectors().get(pcX - 1)[i];
+			} else {
+				x = i;
+			}
 			double y = pcaResults.getBasisVectors().get(pcY - 1)[i];
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
@@ -74,7 +79,12 @@ public class SeriesConverter {
 				name = description;
 			}
 			extractedValues.put(name, extractedRetentionTimes.get(i));
-			double x = pcaResults.getBasisVectors().get(pcX - 1)[i];
+			double x = 0;
+			if(pcX != 0) {
+				x = pcaResults.getBasisVectors().get(pcX - 1)[i];
+			} else {
+				x = i;
+			}
 			double y = pcaResults.getBasisVectors().get(pcY - 1)[i];
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
@@ -94,7 +104,8 @@ public class SeriesConverter {
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<IScatterSeriesData>();
 		Set<String> groupNames = PcaUtils.getGroupNames(pcaResults);
 		Map<String, Color> colors = PcaColorGroup.getColorSWT(groupNames);
-		for(IPcaResult pcaResult : pcaResults.getPcaResultList()) {
+		for(int i = 0; i < pcaResults.getPcaResultList().size(); i++) {
+			IPcaResult pcaResult = pcaResults.getPcaResultList().get(i);
 			if(!pcaResult.isDisplayed()) {
 				continue;
 			}
@@ -103,7 +114,12 @@ public class SeriesConverter {
 			 */
 			String name = pcaResult.getName();
 			double[] eigenSpace = pcaResult.getEigenSpace();
-			double x = eigenSpace[pcX - 1]; // e.g. 0 = PC1
+			double x = 0;
+			if(pcX != 0) {
+				x = eigenSpace[pcX - 1]; // e.g. 0 = PC1
+			} else {
+				x = i;
+			}
 			double y = eigenSpace[pcY - 1]; // e.g. 1 = PC2
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
 			/*
@@ -111,17 +127,7 @@ public class SeriesConverter {
 			 */
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();
-			if(x > 0 && y > 0) {
-				scatterSeriesSettings.setSymbolType(PlotSymbolType.SQUARE);
-			} else if(x > 0 && y < 0) {
-				scatterSeriesSettings.setSymbolType(PlotSymbolType.TRIANGLE);
-			} else if(x < 0 && y > 0) {
-				scatterSeriesSettings.setSymbolType(PlotSymbolType.DIAMOND);
-			} else if(x < 0 && y < 0) {
-				scatterSeriesSettings.setSymbolType(PlotSymbolType.INVERTED_TRIANGLE);
-			} else {
-				scatterSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
-			}
+			scatterSeriesSettings.setSymbolType(PlotSymbolType.SQUARE);
 			scatterSeriesSettings.setSymbolSize(SYMBOL_SIZE_SCORE_PLOT);
 			scatterSeriesSettings.setSymbolColor(colors.get(pcaResult.getGroupName()));
 			scatterSeriesDataList.add(scatterSeriesData);

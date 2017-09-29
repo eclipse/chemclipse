@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Daniel Mariano, Rafael Aguayo - additional functionality and UI improvements
+ * Jan Holy - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.ScorePlot;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.ComponentsSelector;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -24,34 +26,21 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class ScorePlotPage {
 
+	private ComponentsSelector componentsSelector;
 	//
 	private PcaEditor pcaEditor;
 	private ScorePlot scorePlot;
-	private Spinner spinnerPCx;
-	private Spinner spinnerPCy;
 
 	public ScorePlotPage(PcaEditor pcaEditor, TabFolder tabFolder, FormToolkit formToolkit) {
 		//
 		this.pcaEditor = pcaEditor;
 		initialize(tabFolder, formToolkit);
-	}
-
-	private int getPCX() {
-
-		return spinnerPCx.getSelection();
-	}
-
-	private int getPCY() {
-
-		return spinnerPCy.getSelection();
 	}
 
 	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
@@ -69,29 +58,9 @@ public class ScorePlotPage {
 		 * Selection of the plotted PCs
 		 */
 		Composite spinnerComposite = new Composite(parent, SWT.NONE);
-		spinnerComposite.setLayout(new GridLayout(7, false));
-		spinnerComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		spinnerComposite.setLayout(new GridLayout(3, false));
+		componentsSelector = new ComponentsSelector(spinnerComposite, null);
 		//
-		Label label;
-		GridData gridData = new GridData();
-		gridData.widthHint = 50;
-		gridData.heightHint = 20;
-		//
-		label = new Label(spinnerComposite, SWT.NONE);
-		label.setText("PC X-Axis: ");
-		spinnerPCx = new Spinner(spinnerComposite, SWT.NONE);
-		spinnerPCx.setMinimum(1);
-		spinnerPCx.setMaximum(1);
-		spinnerPCx.setIncrement(1);
-		spinnerPCx.setLayoutData(gridData);
-		//
-		label = new Label(spinnerComposite, SWT.NONE);
-		label.setText(" PC Y-Axis: ");
-		spinnerPCy = new Spinner(spinnerComposite, SWT.NONE);
-		spinnerPCy.setMinimum(1);
-		spinnerPCy.setMaximum(1);
-		spinnerPCy.setIncrement(1);
-		spinnerPCy.setLayoutData(gridData);
 		//
 		Button button = new Button(spinnerComposite, SWT.PUSH);
 		button.setText("Reload Score Plot");
@@ -100,7 +69,7 @@ public class ScorePlotPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				scorePlot.update(getPCX(), getPCY());
+				updateSelection();
 			}
 		});
 		button = new Button(spinnerComposite, SWT.PUSH);
@@ -125,8 +94,8 @@ public class ScorePlotPage {
 
 		Optional<IPcaResults> results = pcaEditor.getPcaResults();
 		if(results.isPresent()) {
-			updateSpinnerPCMaxima(results.get().getNumberOfPrincipleComponents());
-			scorePlot.update(results.get(), getPCX(), getPCY());
+			componentsSelector.update(results.get());
+			scorePlot.update(results.get(), componentsSelector.getX(), componentsSelector.getY());
 		} else {
 			scorePlot.deleteSeries();
 		}
@@ -134,14 +103,8 @@ public class ScorePlotPage {
 
 	public void updateSelection() {
 
-		scorePlot.update(getPCX(), getPCY());
-	}
-
-	private void updateSpinnerPCMaxima(int numberOfPrincipleComponents) {
-
-		spinnerPCx.setMaximum(numberOfPrincipleComponents);
-		spinnerPCx.setSelection(1); // PC1
-		spinnerPCy.setMaximum(numberOfPrincipleComponents);
-		spinnerPCy.setSelection(2); // PC2
+		if(pcaEditor.getPcaResults().isPresent()) {
+			scorePlot.update(pcaEditor.getPcaResults().get(), componentsSelector.getX(), componentsSelector.getY());
+		}
 	}
 }

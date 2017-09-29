@@ -101,8 +101,14 @@ public abstract class PCA2DPlot extends ScatterChart {
 
 	public void update(int pcX, int pcY) {
 
-		getChartSettings().getPrimaryAxisSettingsX().setTitle("PC" + pcX);
+		if(pcX != 0) {
+			getChartSettings().getPrimaryAxisSettingsX().setTitle("PC" + pcX);
+		} else {
+			getChartSettings().getPrimaryAxisSettingsX().setTitle("Number");
+		}
 		getChartSettings().getPrimaryAxisSettingsY().setTitle("PC" + pcY);
+		applySettings(getChartSettings());
 		update();
+		getBaseChart().redraw();
 	}
 }
