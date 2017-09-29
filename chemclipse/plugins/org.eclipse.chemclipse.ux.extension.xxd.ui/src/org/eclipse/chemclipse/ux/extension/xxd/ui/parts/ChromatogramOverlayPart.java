@@ -95,6 +95,9 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	private static final String SELECTED_IONS_SOLVENT_TAILING = "Solvent Tailing";
 	private static final String SELECTED_IONS_COLUMN_BLEED = "Column Bleed";
 	//
+	private static final String DISPLAY_MODUS_NORMAL = "Normal";
+	private static final String DISPLAY_MODUS_MIRRORED = "Mirrored";
+	//
 	private ChromatogramChart chromatogramChart;
 	private IColorScheme colorScheme;
 	private Map<String, Color> usedColors;
@@ -102,8 +105,10 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	//
 	private String[] overlayTypes;
 	private String[] selectedIons;
+	private String[] displayModi;
 	private Combo comboOverlayType;
 	private Combo comboSelectedSeries;
+	private Combo comboDisplayModus;
 	private Combo comboSelectedIons;
 	private Text textShiftX;
 	private Combo comboScaleX;
@@ -129,6 +134,11 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				SELECTED_IONS_FAME, //
 				SELECTED_IONS_SOLVENT_TAILING, //
 				SELECTED_IONS_COLUMN_BLEED //
+		};
+		//
+		displayModi = new String[]{//
+				DISPLAY_MODUS_NORMAL, //
+				DISPLAY_MODUS_MIRRORED //
 		};
 		//
 		selectedIonsMap = new HashMap<String, String>();
@@ -158,7 +168,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		gridDataLeft.horizontalAlignment = SWT.BEGINNING;
 		gridDataLeft.grabExcessHorizontalSpace = true;
 		compositeLeft.setLayoutData(gridDataLeft);
-		compositeLeft.setLayout(new GridLayout(11, false));
+		compositeLeft.setLayout(new GridLayout(12, false));
 		//
 		Composite compositeRight = new Composite(composite, SWT.NONE);
 		GridData gridDataRight = new GridData(GridData.FILL_HORIZONTAL);
@@ -167,8 +177,9 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		compositeRight.setLayout(new GridLayout(2, false));
 		//
 		createDisplayTypeCombo(compositeLeft);
-		createHighlightSeriesCombo(compositeLeft);
-		createComboSelectedIons(compositeLeft);
+		createSelectedSeriesCombo(compositeLeft);
+		createDisplayModusCombo(compositeLeft);
+		createSelectedIonsCombo(compositeLeft);
 		createTextShiftX(compositeLeft);
 		createComboScaleX(compositeLeft);
 		createButtonLeft(compositeLeft);
@@ -182,6 +193,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		createSettingsButton(compositeRight);
 		//
 		enableSelectedIonsCombo();
+		enableDisplayModusCombo();
 	}
 
 	private void createDisplayTypeCombo(Composite parent) {
@@ -206,7 +218,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		});
 	}
 
-	private void createHighlightSeriesCombo(Composite parent) {
+	private void createSelectedSeriesCombo(Composite parent) {
 
 		comboSelectedSeries = new Combo(parent, SWT.READ_ONLY);
 		comboSelectedSeries.setToolTipText("Highlight the selected series");
@@ -222,6 +234,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				enableDisplayModusCombo();
 				BaseChart baseChart = chromatogramChart.getBaseChart();
 				baseChart.resetSeriesSettings();
 				baseChart.selectSeries(comboSelectedSeries.getText().trim());
@@ -230,7 +243,27 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		});
 	}
 
-	private void createComboSelectedIons(Composite parent) {
+	private void createDisplayModusCombo(Composite parent) {
+
+		comboDisplayModus = new Combo(parent, SWT.READ_ONLY);
+		comboDisplayModus.setToolTipText("Select the display modus.");
+		comboDisplayModus.setItems(displayModi);
+		comboDisplayModus.setText(DISPLAY_MODUS_NORMAL);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.minimumWidth = 150;
+		gridData.grabExcessHorizontalSpace = true;
+		comboDisplayModus.setLayoutData(gridData);
+		comboDisplayModus.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				// TODO
+			}
+		});
+	}
+
+	private void createSelectedIonsCombo(Composite parent) {
 
 		comboSelectedIons = new Combo(parent, SWT.NONE);
 		comboSelectedIons.setToolTipText("Select the overlay ions.");
@@ -245,34 +278,10 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				BaseChart baseChart = chromatogramChart.getBaseChart();
-				/*
-				 * Get the ids.
-				 */
-				List<String> seriesIds = new ArrayList<String>();
-				for(ISeries series : baseChart.getSeriesSet().getSeries()) {
-					seriesIds.add(series.getId());
-				}
-				/*
-				 * Remove the ids.
-				 */
-				for(String seriesId : seriesIds) {
-					baseChart.deleteSeries(seriesId);
-				}
-				//
+				chromatogramChart.deleteSeries();
 				refreshUpdateOverlayChart();
 			}
 		});
-	}
-
-	private void enableSelectedIonsCombo() {
-
-		String overlayType = comboOverlayType.getText().trim();
-		if(overlayType.contains(OVERLAY_TYPE_XIC) || overlayType.contains(OVERLAY_TYPE_SIC)) {
-			comboSelectedIons.setEnabled(true);
-		} else {
-			comboSelectedIons.setEnabled(false);
-		}
 	}
 
 	private void createTextShiftX(Composite parent) {
@@ -436,6 +445,26 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				}
 			}
 		});
+	}
+
+	private void enableSelectedIonsCombo() {
+
+		String overlayType = comboOverlayType.getText().trim();
+		if(overlayType.contains(OVERLAY_TYPE_XIC) || overlayType.contains(OVERLAY_TYPE_SIC)) {
+			comboSelectedIons.setEnabled(true);
+		} else {
+			comboSelectedIons.setEnabled(false);
+		}
+	}
+
+	private void enableDisplayModusCombo() {
+
+		String selectedSeries = comboSelectedSeries.getText().trim();
+		if(selectedSeries.equals(SELECTED_SERIES_NONE)) {
+			comboDisplayModus.setEnabled(false);
+		} else {
+			comboDisplayModus.setEnabled(true);
+		}
 	}
 
 	private void applyOverlaySettings() {

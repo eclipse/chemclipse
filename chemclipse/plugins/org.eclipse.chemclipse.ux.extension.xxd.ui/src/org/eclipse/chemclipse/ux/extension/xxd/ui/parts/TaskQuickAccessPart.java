@@ -80,7 +80,7 @@ public class TaskQuickAccessPart {
 				boolean isPartVisible = isPartVisible(part);
 				// setPartStackVisibility(PARTSTACK_FILES, !isPartVisible);
 				// setPartStackVisibility(PARTSTACK_OVERVIEW, !isPartVisible);
-				setPartStackVisibility(PARTSTACK_BOTTOM_CENTER, !isPartVisible);
+				// setPartStackVisibility(PARTSTACK_BOTTOM_CENTER, !isPartVisible);
 				// setPartStackVisibility(PARTSTACK_BOTTOM_RIGHT, !isPartVisible);
 				// setAreaVisibility(AREA, !isPartVisible);
 			}
