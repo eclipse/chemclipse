@@ -65,7 +65,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -82,6 +81,9 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	private static final String OVERLAY_TYPE_BPC = "BPC"; // Base Peak Chromatogram
 	private static final String OVERLAY_TYPE_XIC = "XIC"; // Extracted Ion Chromatogram
 	private static final String OVERLAY_TYPE_SIC = "SIC"; // Selected Ion Chromatogram
+	private static final String OVERLAY_TYPE_TSC = "TSC"; // Total Substracted Chromatogram
+	// private static final String OVERLAY_TYPE_SRM = "SRM"; // Single Reaction Monitoring
+	// private static final String OVERLAY_TYPE_MRM = "MRM"; // Single Reaction Monitoring
 	private static final String OVERLAY_TYPE_CONCATENATOR = "+";
 	private static final String ESCAPE_CONCATENATOR = "\\";
 	private static final String SELECTED_IONS_CONCATENATOR = " ";
@@ -104,6 +106,12 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	private IColorScheme colorScheme;
 	private Map<String, Color> usedColors;
 	private Map<String, String> selectedIonsMap;
+	//
+	private Composite compositeToolbar;
+	private Composite compositeType;
+	private Composite compositeIons;
+	private Composite compositeShift;
+	private Composite compositeStatus;
 	//
 	private String[] overlayTypes;
 	private String[] selectedIons;
@@ -130,10 +138,11 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				OVERLAY_TYPE_BPC, //
 				OVERLAY_TYPE_XIC, //
 				OVERLAY_TYPE_SIC, //
+				OVERLAY_TYPE_TSC, //
 				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_BPC, //
 				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_XIC, //
-				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_SIC //
-		};
+				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_SIC, //
+				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_TSC};
 		//
 		selectedIons = new String[]{//
 				SELECTED_IONS_HYDROCARBONS, //
@@ -163,53 +172,60 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		createButtonsToolbar(parent);
 		createChromatogramChart(parent);
 		//
-		enableSelectedIonsModus();
-		enableDisplayAndShiftModus();
+		modifySelectedIonsModus();
+		modifyDisplayAndShiftModus();
 		modifyDataStatusLabel();
 	}
 
 	private void createButtonsToolbar(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(2, false));
+		compositeToolbar = new Composite(parent, SWT.NONE);
+		compositeToolbar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		compositeToolbar.setLayout(new GridLayout(4, false));
 		//
-		Composite compositeLeft = new Composite(composite, SWT.NONE);
-		GridData gridDataLeft = new GridData(GridData.FILL_HORIZONTAL);
-		gridDataLeft.horizontalAlignment = SWT.BEGINNING;
-		gridDataLeft.grabExcessHorizontalSpace = true;
-		compositeLeft.setLayoutData(gridDataLeft);
-		compositeLeft.setLayout(new GridLayout(12, false));
+		compositeType = new Composite(compositeToolbar, SWT.NONE);
+		GridData gridDataType = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataType.grabExcessHorizontalSpace = true;
+		compositeType.setLayoutData(gridDataType);
+		compositeType.setLayout(new GridLayout(2, false));
 		//
-		Composite compositeRight = new Composite(composite, SWT.NONE);
-		GridData gridDataRight = new GridData(GridData.FILL_HORIZONTAL);
-		gridDataRight.horizontalAlignment = SWT.END;
-		compositeRight.setLayoutData(gridDataRight);
-		compositeRight.setLayout(new GridLayout(3, false));
+		compositeIons = new Composite(compositeToolbar, SWT.NONE);
+		compositeIons.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		compositeIons.setLayout(new GridLayout(1, false));
+		//
+		compositeShift = new Composite(compositeToolbar, SWT.NONE);
+		compositeShift.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		compositeShift.setLayout(new GridLayout(9, false));
+		//
+		compositeStatus = new Composite(compositeToolbar, SWT.NONE);
+		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataStatus.horizontalAlignment = SWT.END;
+		compositeStatus.setLayoutData(gridDataStatus);
+		compositeStatus.setLayout(new GridLayout(3, false));
 		/*
-		 * Left Part
+		 * Parts
 		 */
-		createDisplayTypeCombo(compositeLeft);
-		createSelectedSeriesCombo(compositeLeft);
-		createDisplayModusCombo(compositeLeft);
-		createSelectedIonsCombo(compositeLeft);
-		createTextShiftX(compositeLeft);
-		createComboScaleX(compositeLeft);
-		createButtonLeft(compositeLeft);
-		createButtonRight(compositeLeft);
-		createTextShiftY(compositeLeft);
-		createComboScaleY(compositeLeft);
-		createButtonUp(compositeLeft);
-		createButtonDown(compositeLeft);
-		/*
-		 * Right Part
-		 */
-		createDataStatusLabel(compositeRight);
-		createResetButton(compositeRight);
-		createSettingsButton(compositeRight);
+		createOverlayTypeCombo(compositeType);
+		createSelectedSeriesCombo(compositeType);
+		//
+		createSelectedIonsCombo(compositeIons);
+		//
+		createDisplayModusCombo(compositeShift);
+		createTextShiftX(compositeShift);
+		createComboScaleX(compositeShift);
+		createButtonLeft(compositeShift);
+		createButtonRight(compositeShift);
+		createTextShiftY(compositeShift);
+		createComboScaleY(compositeShift);
+		createButtonUp(compositeShift);
+		createButtonDown(compositeShift);
+		//
+		createDataStatusLabel(compositeStatus);
+		createResetButton(compositeStatus);
+		createSettingsButton(compositeStatus);
 	}
 
-	private void createDisplayTypeCombo(Composite parent) {
+	private void createOverlayTypeCombo(Composite parent) {
 
 		comboOverlayType = new Combo(parent, SWT.READ_ONLY);
 		comboOverlayType.setToolTipText("Select the overlay type");
@@ -225,7 +241,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				enableSelectedIonsModus();
+				modifySelectedIonsModus();
 				refreshUpdateOverlayChart();
 			}
 		});
@@ -247,11 +263,12 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				enableDisplayAndShiftModus();
 				BaseChart baseChart = chromatogramChart.getBaseChart();
 				baseChart.resetSeriesSettings();
 				baseChart.selectSeries(comboSelectedSeries.getText().trim());
 				baseChart.redraw();
+				//
+				modifyDisplayAndShiftModus();
 			}
 		});
 	}
@@ -430,6 +447,9 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				usedColors.clear();
 				chromatogramChart.deleteSeries();
 				refreshUpdateOverlayChart();
+				modifySelectedIonsModus();
+				modifyDisplayAndShiftModus();
+				modifyDataStatusLabel();
 			}
 		});
 	}
@@ -440,7 +460,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		labelDataStatus.setToolTipText("Indicates whether the data has been modified or not.");
 		labelDataStatus.setText("");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.widthHint = 80;
+		gridData.widthHint = 120;
 		labelDataStatus.setLayoutData(gridData);
 	}
 
@@ -474,39 +494,45 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		});
 	}
 
-	private void enableSelectedIonsModus() {
+	private void modifySelectedIonsModus() {
 
 		String overlayType = comboOverlayType.getText().trim();
-		boolean displayWidgets = (overlayType.contains(OVERLAY_TYPE_XIC) || overlayType.contains(OVERLAY_TYPE_SIC));
+		boolean enabled = (overlayType.contains(OVERLAY_TYPE_XIC) || overlayType.contains(OVERLAY_TYPE_SIC) || overlayType.contains(OVERLAY_TYPE_TSC));
 		//
-		updateLayout(comboSelectedIons, displayWidgets);
-		//
-		// comboOverlayType.getParent().layout(false);
+		comboSelectedIons.setEnabled(enabled);
 	}
 
-	private void enableDisplayAndShiftModus() {
+	private void modifyDisplayAndShiftModus() {
 
 		String selectedSeries = comboSelectedSeries.getText().trim();
-		boolean displayWidgets = !selectedSeries.equals(SELECTED_SERIES_NONE);
+		boolean visible = !selectedSeries.equals(SELECTED_SERIES_NONE);
 		//
-		updateLayout(comboDisplayModus, displayWidgets);
-		updateLayout(textShiftX, displayWidgets);
-		updateLayout(comboScaleX, displayWidgets);
-		updateLayout(buttonShiftLeft, displayWidgets);
-		updateLayout(buttonShiftRight, displayWidgets);
-		updateLayout(textShiftY, displayWidgets);
-		updateLayout(comboScaleY, displayWidgets);
-		updateLayout(buttonShiftUp, displayWidgets);
-		updateLayout(buttonShiftDown, displayWidgets);
-		//
-		// comboSelectedSeries.getParent().layout(false);
+		comboDisplayModus.setVisible(visible);
+		textShiftX.setVisible(visible);
+		comboScaleX.setVisible(visible);
+		buttonShiftLeft.setVisible(visible);
+		buttonShiftRight.setVisible(visible);
+		textShiftY.setVisible(visible);
+		comboScaleY.setVisible(visible);
+		buttonShiftUp.setVisible(visible);
+		buttonShiftDown.setVisible(visible);
+		excludeComposite(compositeShift, visible);
 	}
 
-	private void updateLayout(Control widget, boolean visible) {
+	private void excludeComposite(Composite composite, boolean visible) {
 
-		// GridData gridData = (GridData)widget.getLayoutData();
-		// gridData.exclude = visible;
-		widget.setVisible(visible);
+		/*
+		 * Modify the composite.
+		 */
+		GridData gridDataComposite = (GridData)composite.getLayoutData();
+		gridDataComposite.exclude = !visible;
+		//
+		GridData gridDataType = (GridData)compositeType.getLayoutData();
+		gridDataType.horizontalSpan += (visible) ? -1 : 1;
+		//
+		Composite parent = compositeToolbar;
+		parent.layout(false);
+		parent.redraw();
 	}
 
 	private void modifyDataStatusLabel() {
@@ -524,6 +550,10 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 
 		comboOverlayType.select(0);
 		comboSelectedSeries.select(0);
+		//
+		modifySelectedIonsModus();
+		modifyDisplayAndShiftModus();
+		modifyDataStatusLabel();
 	}
 
 	private void createChromatogramChart(Composite parent) {
@@ -582,9 +612,9 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 							}
 						}
 					}
-				} else if(overlayType.equals(OVERLAY_TYPE_BPC) || overlayType.equals(OVERLAY_TYPE_XIC)) {
+				} else if(overlayType.equals(OVERLAY_TYPE_BPC) || overlayType.equals(OVERLAY_TYPE_XIC) || overlayType.equals(OVERLAY_TYPE_TSC)) {
 					/*
-					 * BPC, XIC
+					 * BPC, XIC, TSC
 					 */
 					if(chromatogram instanceof IChromatogramMSD) {
 						String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + OVERLAY_STOP_MARKER;
@@ -733,6 +763,18 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 					intensity += extractedIonSignal.getAbundance(ion);
 				}
 			}
+		} else if(overlayType.equals(OVERLAY_TYPE_TSC)) {
+			/*
+			 * TSC
+			 */
+			if(scan instanceof IScanMSD) {
+				IScanMSD scanMSD = (IScanMSD)scan;
+				IExtractedIonSignal extractedIonSignal = scanMSD.getExtractedIonSignal();
+				intensity = scanMSD.getTotalSignal();
+				for(int ion : ions) {
+					intensity -= extractedIonSignal.getAbundance(ion);
+				}
+			}
 		}
 		//
 		return intensity;
@@ -746,9 +788,11 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		} else if(overlayType.equals(OVERLAY_TYPE_BPC)) {
 			lineStyle = LineStyle.DASH;
 		} else if(overlayType.equals(OVERLAY_TYPE_XIC)) {
-			lineStyle = LineStyle.DASHDOT;
+			lineStyle = LineStyle.DASH;
 		} else if(overlayType.equals(OVERLAY_TYPE_SIC)) {
-			lineStyle = LineStyle.DASHDOTDOT;
+			lineStyle = LineStyle.DASH;
+		} else if(overlayType.equals(OVERLAY_TYPE_TSC)) {
+			lineStyle = LineStyle.DASH;
 		} else {
 			lineStyle = LineStyle.DOT;
 		}
