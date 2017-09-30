@@ -536,6 +536,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		IChartSettings chartSettings = chromatogramChart.getChartSettings();
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableRangeSelector(true);
+		chartSettings.setShowRangeSelectorInitially(false);
 		chartSettings.setSupportDataShift(true);
 		chromatogramChart.applySettings(chartSettings);
 		//
