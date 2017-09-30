@@ -105,7 +105,9 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	private ChromatogramChart chromatogramChart;
 	private IColorScheme colorScheme;
 	private Map<String, Color> usedColors;
+	private IColorScheme colorSchemeSic;
 	private Map<String, String> selectedIonsMap;
+	private Set<String> mirroredSeries;
 	//
 	private Composite compositeToolbar;
 	private Composite compositeType;
@@ -133,6 +135,9 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	public ChromatogramOverlayPart() {
 		colorScheme = Colors.getColorScheme(Colors.COLOR_SCHEME_PUBLICATION);
 		usedColors = new HashMap<String, Color>();
+		//
+		colorSchemeSic = Colors.getColorScheme(Colors.COLOR_SCHEME_HIGH_CONTRAST);
+		//
 		overlayTypes = new String[]{//
 				OVERLAY_TYPE_TIC, //
 				OVERLAY_TYPE_BPC, //
@@ -163,6 +168,8 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		selectedIonsMap.put(SELECTED_IONS_FAME, "79 81");
 		selectedIonsMap.put(SELECTED_IONS_SOLVENT_TAILING, "84");
 		selectedIonsMap.put(SELECTED_IONS_COLUMN_BLEED, "207");
+		//
+		mirroredSeries = new HashSet<String>();
 	}
 
 	@PostConstruct
@@ -288,7 +295,38 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				// TODO
+				BaseChart baseChart = chromatogramChart.getBaseChart();
+				String displayModus = comboDisplayModus.getText().trim();
+				String selectedSeriesId = comboSelectedSeries.getText().trim();
+				//
+				if(displayModus.equals(DISPLAY_MODUS_MIRRORED)) {
+					/*
+					 * Mirror
+					 */
+					IChartSettings chartSettings = chromatogramChart.getChartSettings();
+					chartSettings.getRangeRestriction().setZeroY(false);
+					chromatogramChart.applySettings(chartSettings);
+					//
+					if(!mirroredSeries.contains(selectedSeriesId)) {
+						baseChart.multiplySeriesY(selectedSeriesId, -1.0d);
+						mirroredSeries.add(selectedSeriesId);
+					}
+				} else {
+					/*
+					 * Normal
+					 */
+					if(mirroredSeries.contains(selectedSeriesId)) {
+						baseChart.multiplySeriesY(selectedSeriesId, -1.0d);
+						mirroredSeries.remove(selectedSeriesId);
+					}
+					//
+					IChartSettings chartSettings = chromatogramChart.getChartSettings();
+					chartSettings.getRangeRestriction().setZeroY((mirroredSeries.size() == 0) ? true : false);
+					chromatogramChart.applySettings(chartSettings);
+				}
+				//
+				chromatogramChart.adjustRange(true);
+				chromatogramChart.redraw();
 			}
 		});
 	}
@@ -596,7 +634,6 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			 */
 			String[] overlayTypes = comboOverlayType.getText().trim().split(ESCAPE_CONCATENATOR + OVERLAY_TYPE_CONCATENATOR);
 			for(String overlayType : overlayTypes) {
-				Color color = getSeriesColor(chromatogramName);
 				if(overlayType.equals(OVERLAY_TYPE_SIC)) {
 					/*
 					 * SIC
@@ -608,6 +645,8 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 							if(!baseChart.isSeriesContained(seriesId)) {
 								List<Integer> sic = new ArrayList<Integer>();
 								sic.add(ion);
+								Color color = colorSchemeSic.getColor();
+								colorSchemeSic.incrementColor();
 								lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, color, sic));
 							}
 						}
@@ -617,6 +656,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 					 * BPC, XIC, TSC
 					 */
 					if(chromatogram instanceof IChromatogramMSD) {
+						Color color = getSeriesColor(chromatogramName);
 						String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + OVERLAY_STOP_MARKER;
 						availableSeriesIds.add(seriesId);
 						if(!baseChart.isSeriesContained(seriesId)) {
@@ -627,6 +667,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 					/*
 					 * TIC
 					 */
+					Color color = getSeriesColor(chromatogramName);
 					String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + OVERLAY_STOP_MARKER;
 					availableSeriesIds.add(seriesId);
 					if(!baseChart.isSeriesContained(seriesId)) {
