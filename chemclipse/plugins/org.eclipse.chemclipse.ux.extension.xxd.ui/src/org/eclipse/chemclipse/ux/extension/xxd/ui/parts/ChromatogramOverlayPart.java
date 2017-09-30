@@ -65,7 +65,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.swtchart.ISeries;
 import org.swtchart.LineStyle;
@@ -112,8 +114,13 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	private Combo comboSelectedIons;
 	private Text textShiftX;
 	private Combo comboScaleX;
+	private Button buttonShiftLeft;
+	private Button buttonShiftRight;
 	private Text textShiftY;
 	private Combo comboScaleY;
+	private Button buttonShiftUp;
+	private Button buttonShiftDown;
+	private Label labelDataStatus;
 
 	public ChromatogramOverlayPart() {
 		colorScheme = Colors.getColorScheme(Colors.COLOR_SCHEME_PUBLICATION);
@@ -155,6 +162,10 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		parent.setLayout(new GridLayout(1, true));
 		createButtonsToolbar(parent);
 		createChromatogramChart(parent);
+		//
+		enableSelectedIonsModus();
+		enableDisplayAndShiftModus();
+		modifyDataStatusLabel();
 	}
 
 	private void createButtonsToolbar(Composite parent) {
@@ -174,8 +185,10 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		GridData gridDataRight = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataRight.horizontalAlignment = SWT.END;
 		compositeRight.setLayoutData(gridDataRight);
-		compositeRight.setLayout(new GridLayout(2, false));
-		//
+		compositeRight.setLayout(new GridLayout(3, false));
+		/*
+		 * Left Part
+		 */
 		createDisplayTypeCombo(compositeLeft);
 		createSelectedSeriesCombo(compositeLeft);
 		createDisplayModusCombo(compositeLeft);
@@ -188,12 +201,12 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		createComboScaleY(compositeLeft);
 		createButtonUp(compositeLeft);
 		createButtonDown(compositeLeft);
-		//
+		/*
+		 * Right Part
+		 */
+		createDataStatusLabel(compositeRight);
 		createResetButton(compositeRight);
 		createSettingsButton(compositeRight);
-		//
-		enableSelectedIonsCombo();
-		enableDisplayModusCombo();
 	}
 
 	private void createDisplayTypeCombo(Composite parent) {
@@ -212,7 +225,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				enableSelectedIonsCombo();
+				enableSelectedIonsModus();
 				refreshUpdateOverlayChart();
 			}
 		});
@@ -234,7 +247,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				enableDisplayModusCombo();
+				enableDisplayAndShiftModus();
 				BaseChart baseChart = chromatogramChart.getBaseChart();
 				baseChart.resetSeriesSettings();
 				baseChart.selectSeries(comboSelectedSeries.getText().trim());
@@ -303,11 +316,11 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 
 	private void createButtonLeft(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Move Left");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_BACKWARD, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		buttonShiftLeft = new Button(parent, SWT.PUSH);
+		buttonShiftLeft.setToolTipText("Move Left");
+		buttonShiftLeft.setText("");
+		buttonShiftLeft.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_BACKWARD, IApplicationImage.SIZE_16x16));
+		buttonShiftLeft.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -317,17 +330,18 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				String selectedSeriesId = comboSelectedSeries.getText().trim();
 				baseChart.shiftSeries(selectedSeriesId, shiftX, 0.0d);
 				baseChart.redraw();
+				modifyDataStatusLabel();
 			}
 		});
 	}
 
 	private void createButtonRight(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Move Right");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_FORWARD, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		buttonShiftRight = new Button(parent, SWT.PUSH);
+		buttonShiftRight.setToolTipText("Move Right");
+		buttonShiftRight.setText("");
+		buttonShiftRight.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_FORWARD, IApplicationImage.SIZE_16x16));
+		buttonShiftRight.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -337,6 +351,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				String selectedSeriesId = comboSelectedSeries.getText().trim();
 				baseChart.shiftSeries(selectedSeriesId, shiftX, 0.0d);
 				baseChart.redraw();
+				modifyDataStatusLabel();
 			}
 		});
 	}
@@ -360,11 +375,11 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 
 	private void createButtonUp(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Move Up");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		buttonShiftUp = new Button(parent, SWT.PUSH);
+		buttonShiftUp.setToolTipText("Move Up");
+		buttonShiftUp.setText("");
+		buttonShiftUp.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImage.SIZE_16x16));
+		buttonShiftUp.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -374,17 +389,18 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				String selectedSeriesId = comboSelectedSeries.getText().trim();
 				baseChart.shiftSeries(selectedSeriesId, 0.0d, shiftY);
 				baseChart.redraw();
+				modifyDataStatusLabel();
 			}
 		});
 	}
 
 	private void createButtonDown(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Move Down");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		buttonShiftDown = new Button(parent, SWT.PUSH);
+		buttonShiftDown.setToolTipText("Move Down");
+		buttonShiftDown.setText("");
+		buttonShiftDown.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImage.SIZE_16x16));
+		buttonShiftDown.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -394,6 +410,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				String selectedSeriesId = comboSelectedSeries.getText().trim();
 				baseChart.shiftSeries(selectedSeriesId, 0.0d, shiftY);
 				baseChart.redraw();
+				modifyDataStatusLabel();
 			}
 		});
 	}
@@ -415,6 +432,16 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				refreshUpdateOverlayChart();
 			}
 		});
+	}
+
+	private void createDataStatusLabel(Composite parent) {
+
+		labelDataStatus = new Label(parent, SWT.NONE);
+		labelDataStatus.setToolTipText("Indicates whether the data has been modified or not.");
+		labelDataStatus.setText("");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.widthHint = 80;
+		labelDataStatus.setLayoutData(gridData);
 	}
 
 	private void createSettingsButton(Composite parent) {
@@ -447,23 +474,49 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		});
 	}
 
-	private void enableSelectedIonsCombo() {
+	private void enableSelectedIonsModus() {
 
 		String overlayType = comboOverlayType.getText().trim();
-		if(overlayType.contains(OVERLAY_TYPE_XIC) || overlayType.contains(OVERLAY_TYPE_SIC)) {
-			comboSelectedIons.setEnabled(true);
-		} else {
-			comboSelectedIons.setEnabled(false);
-		}
+		boolean displayWidgets = (overlayType.contains(OVERLAY_TYPE_XIC) || overlayType.contains(OVERLAY_TYPE_SIC));
+		//
+		updateLayout(comboSelectedIons, displayWidgets);
+		//
+		// comboOverlayType.getParent().layout(false);
 	}
 
-	private void enableDisplayModusCombo() {
+	private void enableDisplayAndShiftModus() {
 
 		String selectedSeries = comboSelectedSeries.getText().trim();
-		if(selectedSeries.equals(SELECTED_SERIES_NONE)) {
-			comboDisplayModus.setEnabled(false);
+		boolean displayWidgets = !selectedSeries.equals(SELECTED_SERIES_NONE);
+		//
+		updateLayout(comboDisplayModus, displayWidgets);
+		updateLayout(textShiftX, displayWidgets);
+		updateLayout(comboScaleX, displayWidgets);
+		updateLayout(buttonShiftLeft, displayWidgets);
+		updateLayout(buttonShiftRight, displayWidgets);
+		updateLayout(textShiftY, displayWidgets);
+		updateLayout(comboScaleY, displayWidgets);
+		updateLayout(buttonShiftUp, displayWidgets);
+		updateLayout(buttonShiftDown, displayWidgets);
+		//
+		// comboSelectedSeries.getParent().layout(false);
+	}
+
+	private void updateLayout(Control widget, boolean visible) {
+
+		// GridData gridData = (GridData)widget.getLayoutData();
+		// gridData.exclude = visible;
+		widget.setVisible(visible);
+	}
+
+	private void modifyDataStatusLabel() {
+
+		if(chromatogramChart.getBaseChart().isDataShifted()) {
+			labelDataStatus.setText("Shifted Data");
+			labelDataStatus.setBackground(Colors.YELLOW);
 		} else {
-			comboDisplayModus.setEnabled(true);
+			labelDataStatus.setText("");
+			labelDataStatus.setBackground(null);
 		}
 	}
 
@@ -574,8 +627,11 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		for(String seriesId : availableSeriesIds) {
 			items[index++] = seriesId;
 		}
+		//
 		comboSelectedSeries.setItems(items);
 		comboSelectedSeries.setText(SELECTED_SERIES_NONE);
+		//
+		modifyDataStatusLabel();
 	}
 
 	private List<Integer> getSelectedIons() {
