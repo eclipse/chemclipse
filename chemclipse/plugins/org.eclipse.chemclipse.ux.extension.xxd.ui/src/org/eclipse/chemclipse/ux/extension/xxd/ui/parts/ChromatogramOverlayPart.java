@@ -45,6 +45,7 @@ import org.eclipse.eavp.service.swtchart.core.IAxisScaleConverter;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.core.IExtendedChart;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
+import org.eclipse.eavp.service.swtchart.core.ISeriesModificationListener;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
 import org.eclipse.eavp.service.swtchart.customcharts.ChromatogramChart;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
@@ -181,7 +182,6 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		//
 		modifySelectedIonsModus();
 		modifyDisplayAndShiftModus();
-		modifyDataStatusLabel();
 	}
 
 	private void createButtonsToolbar(Composite parent) {
@@ -308,7 +308,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 					chromatogramChart.applySettings(chartSettings);
 					//
 					if(!mirroredSeries.contains(selectedSeriesId)) {
-						baseChart.multiplySeriesY(selectedSeriesId, -1.0d);
+						baseChart.multiplySeries(selectedSeriesId, IExtendedChart.Y_AXIS, -1.0d);
 						mirroredSeries.add(selectedSeriesId);
 					}
 				} else {
@@ -316,7 +316,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 					 * Normal
 					 */
 					if(mirroredSeries.contains(selectedSeriesId)) {
-						baseChart.multiplySeriesY(selectedSeriesId, -1.0d);
+						baseChart.multiplySeries(selectedSeriesId, IExtendedChart.Y_AXIS, -1.0d);
 						mirroredSeries.remove(selectedSeriesId);
 					}
 					//
@@ -385,7 +385,6 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				String selectedSeriesId = comboSelectedSeries.getText().trim();
 				baseChart.shiftSeries(selectedSeriesId, shiftX, 0.0d);
 				baseChart.redraw();
-				modifyDataStatusLabel();
 			}
 		});
 	}
@@ -406,7 +405,6 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				String selectedSeriesId = comboSelectedSeries.getText().trim();
 				baseChart.shiftSeries(selectedSeriesId, shiftX, 0.0d);
 				baseChart.redraw();
-				modifyDataStatusLabel();
 			}
 		});
 	}
@@ -444,7 +442,6 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				String selectedSeriesId = comboSelectedSeries.getText().trim();
 				baseChart.shiftSeries(selectedSeriesId, 0.0d, shiftY);
 				baseChart.redraw();
-				modifyDataStatusLabel();
 			}
 		});
 	}
@@ -465,9 +462,18 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				String selectedSeriesId = comboSelectedSeries.getText().trim();
 				baseChart.shiftSeries(selectedSeriesId, 0.0d, shiftY);
 				baseChart.redraw();
-				modifyDataStatusLabel();
 			}
 		});
+	}
+
+	private void createDataStatusLabel(Composite parent) {
+
+		labelDataStatus = new Label(parent, SWT.NONE);
+		labelDataStatus.setToolTipText("Indicates whether the data has been modified or not.");
+		labelDataStatus.setText("");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.widthHint = 120;
+		labelDataStatus.setLayoutData(gridData);
 	}
 
 	private void createResetButton(Composite parent) {
@@ -481,25 +487,9 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				colorScheme.reset();
-				usedColors.clear();
-				chromatogramChart.deleteSeries();
-				refreshUpdateOverlayChart();
-				modifySelectedIonsModus();
-				modifyDisplayAndShiftModus();
-				modifyDataStatusLabel();
+				applyOverlaySettings();
 			}
 		});
-	}
-
-	private void createDataStatusLabel(Composite parent) {
-
-		labelDataStatus = new Label(parent, SWT.NONE);
-		labelDataStatus.setToolTipText("Indicates whether the data has been modified or not.");
-		labelDataStatus.setText("");
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.widthHint = 120;
-		labelDataStatus.setLayoutData(gridData);
 	}
 
 	private void createSettingsButton(Composite parent) {
@@ -566,7 +556,9 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		gridDataComposite.exclude = !visible;
 		//
 		GridData gridDataType = (GridData)compositeType.getLayoutData();
-		gridDataType.horizontalSpan += (visible) ? -1 : 1;
+		gridDataType.horizontalSpan = (visible) ? 1 : 2;
+		//
+		System.out.println("HS: " + gridDataType.horizontalSpan);
 		//
 		Composite parent = compositeToolbar;
 		parent.layout(false);
@@ -586,6 +578,11 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 
 	private void applyOverlaySettings() {
 
+		colorScheme.reset();
+		usedColors.clear();
+		chromatogramChart.deleteSeries();
+		refreshUpdateOverlayChart();
+		//
 		comboOverlayType.select(0);
 		comboSelectedSeries.select(0);
 		//
@@ -607,6 +604,15 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		chartSettings.setShowRangeSelectorInitially(false);
 		chartSettings.setSupportDataShift(true);
 		chromatogramChart.applySettings(chartSettings);
+		//
+		chromatogramChart.getBaseChart().addSeriesModificationListener(new ISeriesModificationListener() {
+
+			@Override
+			public void handleSeriesModificationEvent() {
+
+				modifyDataStatusLabel();
+			}
+		});
 		//
 		setComboAxisItems();
 	}
