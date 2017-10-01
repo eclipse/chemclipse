@@ -103,16 +103,18 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	private static final String DISPLAY_MODUS_NORMAL = "Normal";
 	private static final String DISPLAY_MODUS_MIRRORED = "Mirrored";
 	//
-	private ChromatogramChart chromatogramChart;
-	private IColorScheme colorScheme;
-	private Map<String, Color> usedColors;
-	private IColorScheme colorSchemeSic;
+	private IColorScheme colorSchemeNormal;
+	private Map<String, Color> usedColorsNormal;
+	private IColorScheme colorSchemeSIC;
+	private Map<String, Color> usedColorsSIC;
+	//
 	private Map<String, String> selectedIonsMap;
 	private Set<String> mirroredSeries;
 	//
+	private ChromatogramChart chromatogramChart;
 	private Composite compositeToolbar;
 	private Composite compositeType;
-	private Composite compositeIons;
+	private Composite compositeSelectedIons;
 	private Composite compositeShift;
 	private Composite compositeStatus;
 	//
@@ -134,10 +136,10 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	private Label labelDataStatus;
 
 	public ChromatogramOverlayPart() {
-		colorScheme = Colors.getColorScheme(Colors.COLOR_SCHEME_PUBLICATION);
-		usedColors = new HashMap<String, Color>();
-		//
-		colorSchemeSic = Colors.getColorScheme(Colors.COLOR_SCHEME_HIGH_CONTRAST);
+		colorSchemeNormal = Colors.getColorScheme(Colors.COLOR_SCHEME_PUBLICATION);
+		usedColorsNormal = new HashMap<String, Color>();
+		colorSchemeSIC = Colors.getColorScheme(Colors.COLOR_SCHEME_HIGH_CONTRAST);
+		usedColorsSIC = new HashMap<String, Color>();
 		//
 		overlayTypes = new String[]{//
 				OVERLAY_TYPE_TIC, //
@@ -180,8 +182,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		createButtonsToolbar(parent);
 		createChromatogramChart(parent);
 		//
-		modifySelectedIonsModus();
-		modifyDisplayAndShiftModus();
+		modifyToolbarComposites();
 	}
 
 	private void createButtonsToolbar(Composite parent) {
@@ -196,9 +197,9 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		compositeType.setLayoutData(gridDataType);
 		compositeType.setLayout(new GridLayout(2, false));
 		//
-		compositeIons = new Composite(compositeToolbar, SWT.NONE);
-		compositeIons.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		compositeIons.setLayout(new GridLayout(1, false));
+		compositeSelectedIons = new Composite(compositeToolbar, SWT.NONE);
+		compositeSelectedIons.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		compositeSelectedIons.setLayout(new GridLayout(1, false));
 		//
 		compositeShift = new Composite(compositeToolbar, SWT.NONE);
 		compositeShift.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -215,7 +216,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		createOverlayTypeCombo(compositeType);
 		createSelectedSeriesCombo(compositeType);
 		//
-		createSelectedIonsCombo(compositeIons);
+		createSelectedIonsCombo(compositeSelectedIons);
 		//
 		createDisplayModusCombo(compositeShift);
 		createTextShiftX(compositeShift);
@@ -248,7 +249,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				modifySelectedIonsModus();
+				modifyToolbarComposites();
 				refreshUpdateOverlayChart();
 			}
 		});
@@ -274,8 +275,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				baseChart.resetSeriesSettings();
 				baseChart.selectSeries(comboSelectedSeries.getText().trim());
 				baseChart.redraw();
-				//
-				modifyDisplayAndShiftModus();
+				modifyToolbarComposites();
 			}
 		});
 	}
@@ -522,43 +522,36 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		});
 	}
 
-	private void modifySelectedIonsModus() {
-
-		String overlayType = comboOverlayType.getText().trim();
-		boolean enabled = (overlayType.contains(OVERLAY_TYPE_XIC) || overlayType.contains(OVERLAY_TYPE_SIC) || overlayType.contains(OVERLAY_TYPE_TSC));
-		//
-		comboSelectedIons.setEnabled(enabled);
-	}
-
-	private void modifyDisplayAndShiftModus() {
-
-		String selectedSeries = comboSelectedSeries.getText().trim();
-		boolean visible = !selectedSeries.equals(SELECTED_SERIES_NONE);
-		//
-		comboDisplayModus.setVisible(visible);
-		textShiftX.setVisible(visible);
-		comboScaleX.setVisible(visible);
-		buttonShiftLeft.setVisible(visible);
-		buttonShiftRight.setVisible(visible);
-		textShiftY.setVisible(visible);
-		comboScaleY.setVisible(visible);
-		buttonShiftUp.setVisible(visible);
-		buttonShiftDown.setVisible(visible);
-		excludeComposite(compositeShift, visible);
-	}
-
-	private void excludeComposite(Composite composite, boolean visible) {
+	private void modifyToolbarComposites() {
 
 		/*
-		 * Modify the composite.
+		 * Overlay Type
 		 */
-		GridData gridDataComposite = (GridData)composite.getLayoutData();
-		gridDataComposite.exclude = !visible;
-		//
+		String overlayType = comboOverlayType.getText().trim();
+		boolean enableOverlayType = (overlayType.contains(OVERLAY_TYPE_XIC) || overlayType.contains(OVERLAY_TYPE_SIC) || overlayType.contains(OVERLAY_TYPE_TSC));
+		comboSelectedIons.setEnabled(enableOverlayType);
+		/*
+		 * Selected Series
+		 */
+		String selectedSeries = comboSelectedSeries.getText().trim();
+		boolean visibleSelectedSeries = !selectedSeries.equals(SELECTED_SERIES_NONE);
+		comboDisplayModus.setVisible(visibleSelectedSeries);
+		textShiftX.setVisible(visibleSelectedSeries);
+		comboScaleX.setVisible(visibleSelectedSeries);
+		buttonShiftLeft.setVisible(visibleSelectedSeries);
+		buttonShiftRight.setVisible(visibleSelectedSeries);
+		textShiftY.setVisible(visibleSelectedSeries);
+		comboScaleY.setVisible(visibleSelectedSeries);
+		buttonShiftUp.setVisible(visibleSelectedSeries);
+		buttonShiftDown.setVisible(visibleSelectedSeries);
+		GridData gridDataCompositeShift = (GridData)compositeShift.getLayoutData();
+		gridDataCompositeShift.exclude = !visibleSelectedSeries;
+		/*
+		 * Horizontal Span Composite Type
+		 */
+		int horizontalSpan = (visibleSelectedSeries) ? 1 : 2;
 		GridData gridDataType = (GridData)compositeType.getLayoutData();
-		gridDataType.horizontalSpan = (visible) ? 1 : 2;
-		//
-		System.out.println("HS: " + gridDataType.horizontalSpan);
+		gridDataType.horizontalSpan = horizontalSpan;
 		//
 		Composite parent = compositeToolbar;
 		parent.layout(false);
@@ -578,17 +571,20 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 
 	private void applyOverlaySettings() {
 
-		colorScheme.reset();
-		usedColors.clear();
+		resetColorMaps();
 		chromatogramChart.deleteSeries();
 		refreshUpdateOverlayChart();
 		//
-		comboOverlayType.select(0);
-		comboSelectedSeries.select(0);
-		//
-		modifySelectedIonsModus();
-		modifyDisplayAndShiftModus();
+		modifyToolbarComposites();
 		modifyDataStatusLabel();
+	}
+
+	private void resetColorMaps() {
+
+		colorSchemeNormal.reset();
+		usedColorsNormal.clear();
+		colorSchemeSIC.reset();
+		usedColorsSIC.clear();
 	}
 
 	private void createChromatogramChart(Composite parent) {
@@ -647,12 +643,11 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 					if(chromatogram instanceof IChromatogramMSD) {
 						for(int ion : ions) {
 							String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + "-" + ion + OVERLAY_STOP_MARKER;
+							Color color = getSeriesColor(seriesId, overlayType);
 							availableSeriesIds.add(seriesId);
 							if(!baseChart.isSeriesContained(seriesId)) {
 								List<Integer> sic = new ArrayList<Integer>();
 								sic.add(ion);
-								Color color = colorSchemeSic.getColor();
-								colorSchemeSic.incrementColor();
 								lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, color, sic));
 							}
 						}
@@ -662,7 +657,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 					 * BPC, XIC, TSC
 					 */
 					if(chromatogram instanceof IChromatogramMSD) {
-						Color color = getSeriesColor(chromatogramName);
+						Color color = getSeriesColor(chromatogramName, overlayType);
 						String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + OVERLAY_STOP_MARKER;
 						availableSeriesIds.add(seriesId);
 						if(!baseChart.isSeriesContained(seriesId)) {
@@ -673,7 +668,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 					/*
 					 * TIC
 					 */
-					Color color = getSeriesColor(chromatogramName);
+					Color color = getSeriesColor(chromatogramName, overlayType);
 					String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + OVERLAY_STOP_MARKER;
 					availableSeriesIds.add(seriesId);
 					if(!baseChart.isSeriesContained(seriesId)) {
@@ -710,6 +705,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		comboSelectedSeries.setText(SELECTED_SERIES_NONE);
 		//
 		modifyDataStatusLabel();
+		chromatogramChart.adjustRange(true);
 	}
 
 	private List<Integer> getSelectedIons() {
@@ -737,13 +733,29 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		return selectedIons;
 	}
 
-	private Color getSeriesColor(String chromatogramName) {
+	private Color getSeriesColor(String seriesId, String overlayType) {
 
-		Color color = usedColors.get(chromatogramName);
-		if(color == null) {
-			color = colorScheme.getColor();
-			colorScheme.incrementColor();
-			usedColors.put(chromatogramName, color);
+		Color color;
+		if(OVERLAY_TYPE_SIC.equals(overlayType)) {
+			/*
+			 * SIC
+			 */
+			color = usedColorsSIC.get(seriesId);
+			if(color == null) {
+				color = colorSchemeSIC.getColor();
+				colorSchemeSIC.incrementColor();
+				usedColorsSIC.put(seriesId, color);
+			}
+		} else {
+			/*
+			 * Normal
+			 */
+			color = usedColorsNormal.get(seriesId);
+			if(color == null) {
+				color = colorSchemeNormal.getColor();
+				colorSchemeNormal.incrementColor();
+				usedColorsNormal.put(seriesId, color);
+			}
 		}
 		return color;
 	}
