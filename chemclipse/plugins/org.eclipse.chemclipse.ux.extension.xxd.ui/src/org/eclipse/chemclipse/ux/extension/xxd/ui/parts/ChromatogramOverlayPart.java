@@ -606,7 +606,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		 * Update the layout
 		 */
 		Composite parent = compositeToolbar.getParent();
-		parent.layout(false);
+		parent.layout(true);
 		parent.redraw();
 	}
 
