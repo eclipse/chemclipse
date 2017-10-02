@@ -80,6 +80,16 @@
                </appInfo>
             </annotation>
          </attribute>
+         <attribute name="identifierSettings" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettings"/>
+               </appInfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

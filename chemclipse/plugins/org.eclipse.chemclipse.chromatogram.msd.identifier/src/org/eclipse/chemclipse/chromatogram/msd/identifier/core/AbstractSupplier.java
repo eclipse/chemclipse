@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.core;
 
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettings;
+
 public abstract class AbstractSupplier implements ISupplierSetter {
 
 	private String id = "";
 	private String description = "";
 	private String identifierName = "";
+	private Class<? extends IIdentifierSettings> identifierSettingsClass;
 
 	public String getId() {
 
@@ -54,6 +57,17 @@ public abstract class AbstractSupplier implements ISupplierSetter {
 		if(identifierName != null) {
 			this.identifierName = identifierName;
 		}
+	}
+
+	@Override
+	public Class<? extends IIdentifierSettings> getIdentifierSettingsClass() {
+
+		return this.identifierSettingsClass;
+	}
+
+	public void setIdentifierSettingsClass(Class<? extends IIdentifierSettings> identifierSettingsClass) {
+
+		this.identifierSettingsClass = identifierSettingsClass;
 	}
 
 	// -----------------------------------------------equals, hashCode, toString

@@ -13,22 +13,22 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.peak;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.identifier.core.Identifier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IPeakIdentifierProcessingInfo;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.PeakIdentifierProcessingInfo;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.processing.core.IProcessingMessage;
+import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-
-import org.eclipse.chemclipse.chromatogram.msd.identifier.core.Identifier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IPeakIdentifierProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.PeakIdentifierProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettings;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 
 /**
  * Use the methods of this class to identify the mass spectrum of a peak.<br/>
@@ -153,6 +153,16 @@ public class PeakIdentifier {
 			supplier.setId(element.getAttribute(Identifier.ID));
 			supplier.setDescription(element.getAttribute(Identifier.DESCRIPTION));
 			supplier.setIdentifierName(element.getAttribute(Identifier.IDENTIFIER_NAME));
+			if(element.getAttribute(Identifier.IDENTIFIER_SETTINGS) != null) {
+				try {
+					IIdentifierSettings instance = (IIdentifierSettings)element.createExecutableExtension(Identifier.IDENTIFIER_SETTINGS);
+					supplier.setIdentifierSettingsClass(instance.getClass());
+				} catch(CoreException e) {
+					logger.warn(e);
+					// settings class is optional, set null instead
+					supplier.setIdentifierSettingsClass(null);
+				}
+			}
 			identifierSupport.add(supplier);
 		}
 		return identifierSupport;
