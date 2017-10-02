@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks;
 
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
+
 public class PeakIntegratorSupplier implements IPeakIntegratorSupplier {
 
 	private String id = "";
 	private String description = "";
 	private String integratorName = "";
+	private Class<? extends IPeakIntegrationSettings> peakIntegrationSettingsClass;
 
 	@Override
 	public String getId() {
@@ -70,6 +73,17 @@ public class PeakIntegratorSupplier implements IPeakIntegratorSupplier {
 		if(integratorName != null) {
 			this.integratorName = integratorName;
 		}
+	}
+
+	@Override
+	public Class<? extends IPeakIntegrationSettings> getPeakIntegrationSettingsClass() {
+
+		return this.peakIntegrationSettingsClass;
+	}
+
+	public void setPeakIntegrationSettingsClass(Class<? extends IPeakIntegrationSettings> peakIntegrationSettingsClass) {
+
+		this.peakIntegrationSettingsClass = peakIntegrationSettingsClass;
 	}
 
 	// ------------------------------------hashCode, equals, toString

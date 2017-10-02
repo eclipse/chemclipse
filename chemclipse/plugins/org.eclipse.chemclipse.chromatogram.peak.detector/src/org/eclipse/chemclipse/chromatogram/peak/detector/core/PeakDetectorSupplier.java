@@ -11,13 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.peak.detector.core;
 
-import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupplier;
+import org.eclipse.chemclipse.chromatogram.peak.detector.settings.IPeakDetectorSettings;
 
 public class PeakDetectorSupplier implements IPeakDetectorSupplier {
 
 	private String id = "";
 	private String description = "";
 	private String peakDetectorName = "";
+	private Class<? extends IPeakDetectorSettings> peakDetectorSettingsClass;
 
 	public PeakDetectorSupplier(String id, String description, String peakDetectorName) {
 		setId(id);
@@ -78,6 +79,17 @@ public class PeakDetectorSupplier implements IPeakDetectorSupplier {
 		if(peakDetectorName != null) {
 			this.peakDetectorName = peakDetectorName;
 		}
+	}
+
+	@Override
+	public Class<? extends IPeakDetectorSettings> getPeakDetectorSettingsClass() {
+
+		return this.peakDetectorSettingsClass;
+	}
+
+	public void setPeakDetectorSettingsClass(Class<? extends IPeakDetectorSettings> peakDetectorSettingsClass) {
+
+		this.peakDetectorSettingsClass = peakDetectorSettingsClass;
 	}
 
 	// ------------------------------------hashCode, equals, toString

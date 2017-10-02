@@ -80,6 +80,16 @@
                </appInfo>
             </annotation>
          </attribute>
+         <attribute name="integratorSettings" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":IPeakIntegrationSettings"/>
+               </appInfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

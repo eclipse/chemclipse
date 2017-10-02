@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetec
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupport;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.PeakDetectorSupplier;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.PeakDetectorSupport;
+import org.eclipse.chemclipse.chromatogram.peak.detector.settings.IPeakDetectorSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
@@ -41,8 +42,6 @@ import org.eclipse.core.runtime.Platform;
  * <br/>
  * Everyone can offer a peak detection method by using the extension point given
  * by this plugin.
- * 
- * @author eselmeister
  */
 public class PeakDetectorMSD {
 
@@ -55,6 +54,7 @@ public class PeakDetectorMSD {
 	private static final String DESCRIPTION = "description";
 	private static final String PEAK_DETECTOR_NAME = "peakDetectorName";
 	private static final String PEAK_DETECTOR = "peakDetector";
+	private static final String PEAK_DETECTOR_SETTINGS = "peakDetectorSettings";
 	/*
 	 * Processing Info
 	 */
@@ -128,6 +128,16 @@ public class PeakDetectorMSD {
 			String description = element.getAttribute(DESCRIPTION);
 			String peakDetectorName = element.getAttribute(PEAK_DETECTOR_NAME);
 			supplier = new PeakDetectorSupplier(id, description, peakDetectorName);
+			if(element.getAttribute(PEAK_DETECTOR_SETTINGS) != null) {
+				try {
+					IPeakDetectorSettings instance = (IPeakDetectorSettings)element.createExecutableExtension(PEAK_DETECTOR_SETTINGS);
+					supplier.setPeakDetectorSettingsClass(instance.getClass());
+				} catch(CoreException e) {
+					logger.warn(e);
+					// settings class is optional, set null instead
+					supplier.setPeakDetectorSettingsClass(null);
+				}
+			}
 			peakDetectorSupport.add(supplier);
 		}
 		return peakDetectorSupport;

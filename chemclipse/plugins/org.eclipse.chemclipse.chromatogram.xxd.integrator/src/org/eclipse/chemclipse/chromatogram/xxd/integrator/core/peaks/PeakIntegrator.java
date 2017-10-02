@@ -13,21 +13,20 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.IPeakIntegratorProcessingInfo;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.PeakIntegratorProcessingInfo;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.processing.core.IProcessingMessage;
+import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-
-import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.IPeakIntegratorProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.processing.PeakIntegratorProcessingInfo;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 
 /**
  * This plugin offers an extension point to add several peak integrators.<br/>
@@ -56,6 +55,8 @@ public class PeakIntegrator {
 	private static final String DESCRIPTION = "description";
 	private static final String INTEGRATOR_NAME = "integratorName";
 	private static final String INTEGRATOR = "integrator";
+	private static final String INTEGRATOR_SETTINGS = "integratorSettings";
+	//
 	private static final String NO_INTEGRATOR_AVAILABLE = "There is no peak integrator available.";
 
 	/**
@@ -183,6 +184,16 @@ public class PeakIntegrator {
 			supplier.setId(element.getAttribute(ID));
 			supplier.setDescription(element.getAttribute(DESCRIPTION));
 			supplier.setIntegratorName(element.getAttribute(INTEGRATOR_NAME));
+			if(element.getAttribute(INTEGRATOR_SETTINGS) != null) {
+				try {
+					IPeakIntegrationSettings instance = (IPeakIntegrationSettings)element.createExecutableExtension(INTEGRATOR_SETTINGS);
+					supplier.setPeakIntegrationSettingsClass(instance.getClass());
+				} catch(CoreException e) {
+					logger.warn(e);
+					// settings class is optional, set null instead
+					supplier.setPeakIntegrationSettingsClass(null);
+				}
+			}
 			integratorSupport.add(supplier);
 		}
 		return integratorSupport;
