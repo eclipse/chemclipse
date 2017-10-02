@@ -11,13 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings;
 
-import java.util.List;
-
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractMassSpectrumIdentifierSettings;
 
 public class VendorMassSpectrumIdentifierSettings extends AbstractMassSpectrumIdentifierSettings implements IVendorMassSpectrumIdentifierSettings {
 
-	private List<String> massSpectraFiles;
+	private String massSpectraFiles = "";
 	private boolean usePreOptimization;
 	private double thresholdPreOptimization;
 	private int numberOfTargets;
@@ -27,13 +25,13 @@ public class VendorMassSpectrumIdentifierSettings extends AbstractMassSpectrumId
 	private String alternateIdentifierId = "";
 
 	@Override
-	public List<String> getMassSpectraFiles() {
+	public String getMassSpectraFiles() {
 
 		return massSpectraFiles;
 	}
 
 	@Override
-	public void setMassSpectraFiles(List<String> massSpectraFiles) {
+	public void setMassSpectraFiles(String massSpectraFiles) {
 
 		this.massSpectraFiles = massSpectraFiles;
 	}

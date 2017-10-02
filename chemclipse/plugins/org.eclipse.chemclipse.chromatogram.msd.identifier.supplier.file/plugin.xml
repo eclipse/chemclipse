@@ -7,7 +7,8 @@
             description="This plugin uses a file library to identify peaks."
             id="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.peak"
             identifier="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.PeakIdentifier"
-            identifierName="File MS Identifier">
+            identifierName="File MS Identifier"
+            identifierSettings="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorPeakIdentifierSettings">
       </PeakIdentificationSupplier>
    </extension>
    <extension

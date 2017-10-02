@@ -42,6 +42,7 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectr
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
+import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class FileIdentifier {
@@ -77,7 +78,8 @@ public class FileIdentifier {
 		/*
 		 * Try to identify the mass spectra.
 		 */
-		Map<String, IMassSpectra> databases = databasesCache.getDatabases(fileIdentifierSettings.getMassSpectraFiles(), monitor);
+		FileListUtil fileListUtil = new FileListUtil();
+		Map<String, IMassSpectra> databases = databasesCache.getDatabases(fileListUtil.getFiles(fileIdentifierSettings.getMassSpectraFiles()), monitor);
 		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
 			compareMassSpectraAgainstDatabase(massSpectra, fileIdentifierSettings, identifier, database, monitor);
 		}
@@ -122,7 +124,8 @@ public class FileIdentifier {
 		/*
 		 * Load the mass spectra database only if the raw file or its content has changed.
 		 */
-		Map<String, IMassSpectra> databases = databasesCache.getDatabases(peakIdentifierSettings.getMassSpectraFiles(), monitor);
+		FileListUtil fileListUtil = new FileListUtil();
+		Map<String, IMassSpectra> databases = databasesCache.getDatabases(fileListUtil.getFiles(peakIdentifierSettings.getMassSpectraFiles()), monitor);
 		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
 			comparePeaksAgainstDatabase(peakIdentifierSettings, peaks, identifier, database, monitor);
 		}

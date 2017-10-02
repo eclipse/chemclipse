@@ -122,10 +122,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static IVendorMassSpectrumIdentifierSettings getMassSpectrumIdentifierSettings() {
 
-		FileListUtil fileListUtil = new FileListUtil();
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		IVendorMassSpectrumIdentifierSettings settings = new VendorMassSpectrumIdentifierSettings();
-		settings.setMassSpectraFiles(fileListUtil.getFiles(preferences.get(P_MASS_SPECTRA_FILES, DEF_MASS_SPECTRA_FILES)));
+		settings.setMassSpectraFiles(preferences.get(P_MASS_SPECTRA_FILES, DEF_MASS_SPECTRA_FILES));
 		settings.setUsePreOptimization(preferences.getBoolean(P_USE_PRE_OPTIMIZATION, DEF_USE_PRE_OPTIMIZATION));
 		settings.setThresholdPreOptimization(preferences.getDouble(P_THRESHOLD_PRE_OPTIMIZATION, DEF_THRESHOLD_PRE_OPTIMIZATION));
 		settings.setMassSpectrumComparatorId(preferences.get(P_MASS_SPECTRUM_COMPARATOR_ID, DEF_MASS_SPECTRUM_COMPARATOR_ID));
@@ -145,10 +144,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static IVendorPeakIdentifierSettings getPeakIdentifierSettings() {
 
-		FileListUtil fileListUtil = new FileListUtil();
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		IVendorPeakIdentifierSettings settings = new VendorPeakIdentifierSettings();
-		settings.setMassSpectraFiles(fileListUtil.getFiles(preferences.get(P_MASS_SPECTRA_FILES, DEF_MASS_SPECTRA_FILES)));
+		settings.setMassSpectraFiles(preferences.get(P_MASS_SPECTRA_FILES, DEF_MASS_SPECTRA_FILES));
 		settings.setUsePreOptimization(preferences.getBoolean(P_USE_PRE_OPTIMIZATION, DEF_USE_PRE_OPTIMIZATION));
 		settings.setThresholdPreOptimization(preferences.getDouble(P_THRESHOLD_PRE_OPTIMIZATION, DEF_THRESHOLD_PRE_OPTIMIZATION));
 		settings.setMassSpectrumComparatorId(preferences.get(P_MASS_SPECTRUM_COMPARATOR_ID, DEF_MASS_SPECTRUM_COMPARATOR_ID));
