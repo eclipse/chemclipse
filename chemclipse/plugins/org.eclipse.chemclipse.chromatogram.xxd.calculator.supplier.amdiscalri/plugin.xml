@@ -30,7 +30,8 @@
             description="This identifier tries to identify alkanes."
             id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.peak"
             identifier="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.PeakIdentifier"
-            identifierName="Alkane Identifier">
+            identifierName="Alkane Identifier"
+            identifierSettings="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.VendorPeakIdentifierSettings">
       </PeakIdentificationSupplier>
    </extension>
    <extension
