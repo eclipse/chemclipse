@@ -31,7 +31,7 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 	@JsonPropertyDescription(value = "The number of used ions for coefficient calculation.")
 	private int numberOfUsedIonsForCoefficient = 1;
 	@JsonProperty(value = "Segment Width", defaultValue = "13")
-	@JsonPropertyDescription(value = "The used segment width: 5, 7, 9, 11, 13, 15, 17, 19")
+	@JsonPropertyDescription(value = "The used segment width: 5, 7, 9, ..., 19")
 	private String segmentWidth = "13";
 
 	@Override
