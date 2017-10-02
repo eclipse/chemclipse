@@ -46,6 +46,7 @@ import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.core.IExtendedChart;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.ISeriesModificationListener;
+import org.eclipse.eavp.service.swtchart.core.ISeriesSelectionListener;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
 import org.eclipse.eavp.service.swtchart.customcharts.ChromatogramChart;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
@@ -92,7 +93,6 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	private static final String OVERLAY_START_MARKER = "_(";
 	private static final String OVERLAY_STOP_MARKER = ")";
 	//
-	private static final String SELECTED_SERIES_NONE = "None";
 	private static final String SELECTED_IONS_DEFAULT = "18 28 32 84 207";
 	private static final String SELECTED_IONS_HYDROCARBONS = "Hydrocarbons";
 	private static final String SELECTED_IONS_FATTY_ACIDS = "Fatty Acids";
@@ -264,7 +264,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		gridData.minimumWidth = 250;
 		gridData.grabExcessHorizontalSpace = true;
 		comboSelectedSeries.setLayoutData(gridData);
-		comboSelectedSeries.setItems(new String[]{SELECTED_SERIES_NONE});
+		comboSelectedSeries.setItems(new String[]{BaseChart.SELECTED_SERIES_NONE});
 		comboSelectedSeries.select(0);
 		comboSelectedSeries.addSelectionListener(new SelectionAdapter() {
 
@@ -534,7 +534,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		 * Selected Series
 		 */
 		String selectedSeries = comboSelectedSeries.getText().trim();
-		boolean visibleSelectedSeries = !selectedSeries.equals(SELECTED_SERIES_NONE);
+		boolean visibleSelectedSeries = !selectedSeries.equals(BaseChart.SELECTED_SERIES_NONE);
 		comboDisplayModus.setVisible(visibleSelectedSeries);
 		textShiftX.setVisible(visibleSelectedSeries);
 		comboScaleX.setVisible(visibleSelectedSeries);
@@ -601,12 +601,23 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		chartSettings.setSupportDataShift(true);
 		chromatogramChart.applySettings(chartSettings);
 		//
-		chromatogramChart.getBaseChart().addSeriesModificationListener(new ISeriesModificationListener() {
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		baseChart.addSeriesModificationListener(new ISeriesModificationListener() {
 
 			@Override
 			public void handleSeriesModificationEvent() {
 
 				modifyDataStatusLabel();
+			}
+		});
+		//
+		baseChart.addSeriesSelectionListener(new ISeriesSelectionListener() {
+
+			@Override
+			public void handleSeriesSelectionEvent(String seriedId) {
+
+				comboSelectedSeries.setText(seriedId);
+				modifyToolbarComposites();
 			}
 		});
 		//
@@ -695,14 +706,14 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		 */
 		baseChart.resetSeriesSettings();
 		String[] items = new String[availableSeriesIds.size() + 1];
-		items[0] = SELECTED_SERIES_NONE;
+		items[0] = BaseChart.SELECTED_SERIES_NONE;
 		int index = 1;
 		for(String seriesId : availableSeriesIds) {
 			items[index++] = seriesId;
 		}
 		//
 		comboSelectedSeries.setItems(items);
-		comboSelectedSeries.setText(SELECTED_SERIES_NONE);
+		comboSelectedSeries.setText(BaseChart.SELECTED_SERIES_NONE);
 		//
 		modifyDataStatusLabel();
 		chromatogramChart.adjustRange(true);
