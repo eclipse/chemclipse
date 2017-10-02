@@ -86,12 +86,19 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	private static final String OVERLAY_TYPE_TSC = "TSC"; // Total Substracted Chromatogram
 	// private static final String OVERLAY_TYPE_SRM = "SRM"; // Single Reaction Monitoring
 	// private static final String OVERLAY_TYPE_MRM = "MRM"; // Single Reaction Monitoring
+	//
+	private static final String DERIVATIVE_NONE = "--";
+	private static final String DERIVATIVE_FIRST = "1st";
+	private static final String DERIVATIVE_SECOND = "2nd";
+	private static final String DERIVATIVE_THIRD = "3rd";
+	//
 	private static final String OVERLAY_TYPE_CONCATENATOR = "+";
 	private static final String ESCAPE_CONCATENATOR = "\\";
 	private static final String SELECTED_IONS_CONCATENATOR = " ";
 	private static final String EDITOR_TAB = "_EditorTab#";
 	private static final String OVERLAY_START_MARKER = "_(";
 	private static final String OVERLAY_STOP_MARKER = ")";
+	private static final String DELIMITER_ION_DERIVATIVE = ",";
 	//
 	private static final String SELECTED_IONS_DEFAULT = "18 28 32 84 207";
 	private static final String SELECTED_IONS_HYDROCARBONS = "Hydrocarbons";
@@ -112,6 +119,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	private Set<String> mirroredSeries;
 	//
 	private ChromatogramChart chromatogramChart;
+	//
 	private Composite compositeToolbar;
 	private Composite compositeType;
 	private Composite compositeSelectedIons;
@@ -119,9 +127,11 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	private Composite compositeStatus;
 	//
 	private String[] overlayTypes;
+	private String[] derivativeTypes;
 	private String[] selectedIons;
 	private String[] displayModi;
 	private Combo comboOverlayType;
+	private Combo comboDerivativeType;
 	private Combo comboSelectedSeries;
 	private Combo comboDisplayModus;
 	private Combo comboSelectedIons;
@@ -136,6 +146,9 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	private Label labelDataStatus;
 
 	public ChromatogramOverlayPart() {
+		/*
+		 * Colors
+		 */
 		colorSchemeNormal = Colors.getColorScheme(Colors.COLOR_SCHEME_PUBLICATION);
 		usedColorsNormal = new HashMap<String, Color>();
 		colorSchemeSIC = Colors.getColorScheme(Colors.COLOR_SCHEME_HIGH_CONTRAST);
@@ -151,6 +164,12 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_XIC, //
 				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_SIC, //
 				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_TSC};
+		//
+		derivativeTypes = new String[]{//
+				DERIVATIVE_NONE, //
+				DERIVATIVE_FIRST, //
+				DERIVATIVE_SECOND, //
+				DERIVATIVE_THIRD};
 		//
 		selectedIons = new String[]{//
 				SELECTED_IONS_HYDROCARBONS, //
@@ -195,7 +214,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		GridData gridDataType = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataType.grabExcessHorizontalSpace = true;
 		compositeType.setLayoutData(gridDataType);
-		compositeType.setLayout(new GridLayout(2, false));
+		compositeType.setLayout(new GridLayout(3, false));
 		//
 		compositeSelectedIons = new Composite(compositeToolbar, SWT.NONE);
 		compositeSelectedIons.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -214,6 +233,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		 * Parts
 		 */
 		createOverlayTypeCombo(compositeType);
+		createDerivativeTypeCombo(compositeType);
 		createSelectedSeriesCombo(compositeType);
 		//
 		createSelectedIonsCombo(compositeSelectedIons);
@@ -237,7 +257,6 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 
 		comboOverlayType = new Combo(parent, SWT.READ_ONLY);
 		comboOverlayType.setToolTipText("Select the overlay type");
-		comboOverlayType.setText("");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.minimumWidth = 150;
 		gridData.grabExcessHorizontalSpace = true;
@@ -255,11 +274,40 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		});
 	}
 
+	private void createDerivativeTypeCombo(Composite parent) {
+
+		comboDerivativeType = new Combo(parent, SWT.READ_ONLY);
+		comboDerivativeType.setToolTipText("Select the derivative type");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.minimumWidth = 60;
+		gridData.grabExcessHorizontalSpace = true;
+		comboDerivativeType.setLayoutData(gridData);
+		comboDerivativeType.setItems(derivativeTypes);
+		comboDerivativeType.select(0);
+		comboDerivativeType.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IChartSettings chartSettings = chromatogramChart.getChartSettings();
+				String derivativeType = comboDerivativeType.getText();
+				if(DERIVATIVE_NONE.equals(derivativeType)) {
+					if(comboDisplayModus.getText().equals(DISPLAY_MODUS_NORMAL)) {
+						chartSettings.getRangeRestriction().setZeroY(false);
+					}
+				} else {
+					chartSettings.getRangeRestriction().setZeroY(false);
+				}
+				chromatogramChart.applySettings(chartSettings);
+				refreshUpdateOverlayChart();
+			}
+		});
+	}
+
 	private void createSelectedSeriesCombo(Composite parent) {
 
 		comboSelectedSeries = new Combo(parent, SWT.READ_ONLY);
 		comboSelectedSeries.setToolTipText("Highlight the selected series");
-		comboSelectedSeries.setText("");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.minimumWidth = 250;
 		gridData.grabExcessHorizontalSpace = true;
@@ -271,9 +319,10 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				String selectedSeriesId = comboSelectedSeries.getText().trim();
 				BaseChart baseChart = chromatogramChart.getBaseChart();
 				baseChart.resetSeriesSettings();
-				baseChart.selectSeries(comboSelectedSeries.getText().trim());
+				baseChart.selectSeries(selectedSeriesId);
 				baseChart.redraw();
 				modifyToolbarComposites();
 			}
@@ -298,14 +347,14 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				BaseChart baseChart = chromatogramChart.getBaseChart();
 				String displayModus = comboDisplayModus.getText().trim();
 				String selectedSeriesId = comboSelectedSeries.getText().trim();
+				String derivativeType = comboDerivativeType.getText();
+				IChartSettings chartSettings = chromatogramChart.getChartSettings();
 				//
 				if(displayModus.equals(DISPLAY_MODUS_MIRRORED)) {
 					/*
 					 * Mirror
 					 */
-					IChartSettings chartSettings = chromatogramChart.getChartSettings();
 					chartSettings.getRangeRestriction().setZeroY(false);
-					chromatogramChart.applySettings(chartSettings);
 					//
 					if(!mirroredSeries.contains(selectedSeriesId)) {
 						baseChart.multiplySeries(selectedSeriesId, IExtendedChart.Y_AXIS, -1.0d);
@@ -320,11 +369,14 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 						mirroredSeries.remove(selectedSeriesId);
 					}
 					//
-					IChartSettings chartSettings = chromatogramChart.getChartSettings();
-					chartSettings.getRangeRestriction().setZeroY((mirroredSeries.size() == 0) ? true : false);
-					chromatogramChart.applySettings(chartSettings);
+					if(mirroredSeries.size() == 0 && DERIVATIVE_NONE.equals(derivativeType)) {
+						chartSettings.getRangeRestriction().setZeroY(true);
+					} else {
+						chartSettings.getRangeRestriction().setZeroY(false);
+					}
 				}
 				//
+				chromatogramChart.applySettings(chartSettings);
 				chromatogramChart.adjustRange(true);
 				chromatogramChart.redraw();
 			}
@@ -338,7 +390,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		comboSelectedIons.setItems(selectedIons);
 		comboSelectedIons.setText(SELECTED_IONS_DEFAULT);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.minimumWidth = 250;
+		gridData.minimumWidth = 150;
 		gridData.grabExcessHorizontalSpace = true;
 		comboSelectedIons.setLayoutData(gridData);
 		comboSelectedIons.addSelectionListener(new SelectionAdapter() {
@@ -646,6 +698,8 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			 * Select which series shall be displayed.
 			 */
 			String[] overlayTypes = comboOverlayType.getText().trim().split(ESCAPE_CONCATENATOR + OVERLAY_TYPE_CONCATENATOR);
+			String derivativeType = comboDerivativeType.getText().trim();
+			//
 			for(String overlayType : overlayTypes) {
 				if(overlayType.equals(OVERLAY_TYPE_SIC)) {
 					/*
@@ -653,37 +707,41 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 					 */
 					if(chromatogram instanceof IChromatogramMSD) {
 						for(int ion : ions) {
-							String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + "-" + ion + OVERLAY_STOP_MARKER;
+							//
+							String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + DELIMITER_ION_DERIVATIVE + derivativeType + DELIMITER_ION_DERIVATIVE + ion + OVERLAY_STOP_MARKER;
 							Color color = getSeriesColor(seriesId, overlayType);
+							//
 							availableSeriesIds.add(seriesId);
 							if(!baseChart.isSeriesContained(seriesId)) {
 								List<Integer> sic = new ArrayList<Integer>();
 								sic.add(ion);
-								lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, color, sic));
+								lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, sic));
 							}
 						}
 					}
-				} else if(overlayType.equals(OVERLAY_TYPE_BPC) || overlayType.equals(OVERLAY_TYPE_XIC) || overlayType.equals(OVERLAY_TYPE_TSC)) {
-					/*
-					 * BPC, XIC, TSC
-					 */
-					if(chromatogram instanceof IChromatogramMSD) {
-						Color color = getSeriesColor(chromatogramName, overlayType);
-						String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + OVERLAY_STOP_MARKER;
+				} else {
+					//
+					String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + DELIMITER_ION_DERIVATIVE + derivativeType + OVERLAY_STOP_MARKER;
+					Color color = getSeriesColor(chromatogramName, overlayType);
+					//
+					if(overlayType.equals(OVERLAY_TYPE_BPC) || overlayType.equals(OVERLAY_TYPE_XIC) || overlayType.equals(OVERLAY_TYPE_TSC)) {
+						/*
+						 * BPC, XIC, TSC
+						 */
+						if(chromatogram instanceof IChromatogramMSD) {
+							availableSeriesIds.add(seriesId);
+							if(!baseChart.isSeriesContained(seriesId)) {
+								lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, ions));
+							}
+						}
+					} else {
+						/*
+						 * TIC
+						 */
 						availableSeriesIds.add(seriesId);
 						if(!baseChart.isSeriesContained(seriesId)) {
-							lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, color, ions));
+							lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, ions));
 						}
-					}
-				} else {
-					/*
-					 * TIC
-					 */
-					Color color = getSeriesColor(chromatogramName, overlayType);
-					String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + OVERLAY_STOP_MARKER;
-					availableSeriesIds.add(seriesId);
-					if(!baseChart.isSeriesContained(seriesId)) {
-						lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, color, ions));
 					}
 				}
 			}
@@ -771,7 +829,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		return color;
 	}
 
-	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, String overlayType, Color color, List<Integer> ions) {
+	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions) {
 
 		double[] xSeries = new double[chromatogram.getNumberOfScans()];
 		double[] ySeries = new double[chromatogram.getNumberOfScans()];
@@ -785,8 +843,15 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			 * Get the retention time and intensity.
 			 */
 			xSeries[index] = scan.getRetentionTime();
-			ySeries[index] = getIntensity(scan, overlayType, ions);
+			ySeries[index] = getIntensity(scan, overlayType, derivativeType, ions);
 			index++;
+		}
+		/*
+		 * Calculate a derivative?
+		 */
+		int derivatives = getNumberOfDerivatives(derivativeType);
+		for(int i = 1; i <= derivatives; i++) {
+			ySeries = calculateDerivate(ySeries);
 		}
 		/*
 		 * Add the series.
@@ -803,7 +868,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		return lineSeriesData;
 	}
 
-	private double getIntensity(IScan scan, String overlayType, List<Integer> ions) {
+	private double getIntensity(IScan scan, String overlayType, String derivativeType, List<Integer> ions) {
 
 		double intensity = 0.0d;
 		if(overlayType.equals(OVERLAY_TYPE_TIC)) {
@@ -848,6 +913,36 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		}
 		//
 		return intensity;
+	}
+
+	private int getNumberOfDerivatives(String derivativeType) {
+
+		int derivatives;
+		switch(derivativeType) {
+			case DERIVATIVE_FIRST:
+				derivatives = 1;
+				break;
+			case DERIVATIVE_SECOND:
+				derivatives = 2;
+				break;
+			case DERIVATIVE_THIRD:
+				derivatives = 3;
+				break;
+			default:
+				derivatives = 0;
+				break;
+		}
+		return derivatives;
+	}
+
+	private double[] calculateDerivate(double[] values) {
+
+		int size = values.length;
+		double[] derivative = new double[size];
+		for(int i = 1; i < size; i++) {
+			derivative[i] = values[i] - values[i - 1];
+		}
+		return derivative;
 	}
 
 	private LineStyle getLineStyle(String overlayType) {
