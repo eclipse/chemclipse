@@ -71,10 +71,10 @@ public class AlkanePatternDetectorMSD {
 				chromatogramMSD.removeAllPeaks();
 				PeakDetectorMSD peakDetectorMSD = new PeakDetectorMSD();
 				IFirstDerivativePeakDetectorMSDSettings peakDetectorSettings = new FirstDerivativePeakDetectorMSDSettings();
-				peakDetectorSettings.setThreshold(Threshold.LOW);
+				peakDetectorSettings.setThreshold(Threshold.LOW.toString());
 				peakDetectorSettings.setIncludeBackground(false);
 				peakDetectorSettings.setMinimumSignalToNoiseRatio(50.0f);
-				peakDetectorSettings.setMovingAverageWindowSize(WindowSize.SCANS_5);
+				peakDetectorSettings.setWindowSize(WindowSize.SCANS_5.toString());
 				peakDetectorMSD.detect(chromatogramSelectionMSD, peakDetectorSettings, monitor);
 				/*
 				 * Peak integrator
