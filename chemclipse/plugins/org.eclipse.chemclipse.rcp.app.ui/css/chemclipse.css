@@ -21,10 +21,11 @@
 }
 
 .MTrimmedWindow.topLevel { 
-	margin-top:24px;
+	margin-top:8px;
 	margin-bottom:2px;
 	margin-left:12px;
 	margin-right:12px;
+	background-color:#FFFFFF;
 }
 
 .MPartStack {
