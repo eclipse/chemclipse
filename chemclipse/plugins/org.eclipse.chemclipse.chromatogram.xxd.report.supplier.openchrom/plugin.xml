@@ -9,7 +9,8 @@
             fileName="OpenChromReport"
             id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.chromatogramReportASCII"
             reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.core.ChromatogramReportGenerator"
-            reportName="OpenChrom Report (*.txt)">
+            reportName="OpenChrom Report (*.txt)"
+            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ChemClipseChromatogramReportSettings">
       </ChromatogramReportSupplier>
    </extension>
    <extension
