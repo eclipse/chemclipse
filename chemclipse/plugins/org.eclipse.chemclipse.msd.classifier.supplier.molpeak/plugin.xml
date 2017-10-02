@@ -7,7 +7,8 @@
             description="This is a base peak identifier."
             id="org.eclipse.chemclipse.msd.identifier.supplier.basepeak.peak"
             identifier="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core.PeakIdentifier"
-            identifierName="BasePeak Peak Identifier">
+            identifierName="BasePeak Peak Identifier"
+            identifierSettings="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.VendorPeakIdentifierSettings">
       </PeakIdentificationSupplier>
    </extension>
    <extension
