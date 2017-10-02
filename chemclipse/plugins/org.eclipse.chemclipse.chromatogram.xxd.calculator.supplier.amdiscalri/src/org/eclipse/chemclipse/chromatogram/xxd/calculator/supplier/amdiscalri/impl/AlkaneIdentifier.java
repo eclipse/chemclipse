@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.IMassSpectraIdentifierProcessingInfo;
@@ -33,6 +32,7 @@ import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
+import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class AlkaneIdentifier {
@@ -40,14 +40,14 @@ public class AlkaneIdentifier {
 	public static final String IDENTIFIER = "Alkane Identifier";
 	//
 	private static final String MASS_SPECTRUM_COMPARATOR_ID = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos";
-	private List<String> massSpectraFiles;
+	private String massSpectraFiles;
 	private DatabasesCache databasesCache;
 
 	public AlkaneIdentifier() {
 		//
-		massSpectraFiles = new ArrayList<String>();
-		massSpectraFiles.add(getDatabase());
-		databasesCache = new DatabasesCache(massSpectraFiles);
+		FileListUtil fileListUtil = new FileListUtil();
+		massSpectraFiles = getDatabase();
+		databasesCache = new DatabasesCache(fileListUtil.getFiles(massSpectraFiles));
 	}
 
 	public static String getDatabase() {
