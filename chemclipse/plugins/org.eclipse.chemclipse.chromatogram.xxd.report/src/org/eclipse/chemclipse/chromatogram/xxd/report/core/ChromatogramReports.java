@@ -16,18 +16,17 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
-
-import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.chromatogram.xxd.report.chromatogram.IChromatogramReportGenerator;
 import org.eclipse.chemclipse.chromatogram.xxd.report.processing.ChromatogramReportProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.report.processing.IChromatogramReportProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramReportSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 
 public class ChromatogramReports {
 
@@ -42,6 +41,7 @@ public class ChromatogramReports {
 	public static final String FILE_EXTENSION = "fileExtension";
 	public static final String FILE_NAME = "fileName";
 	public static final String REPORT_GENERATOR = "reportGenerator";
+	public static final String REPORT_SETTINGS = "reportSettings";
 
 	/**
 	 * This class has only static methods.
@@ -131,6 +131,16 @@ public class ChromatogramReports {
 				supplier.setFileExtension(element.getAttribute(FILE_EXTENSION));
 				supplier.setFileName(element.getAttribute(FILE_NAME));
 				supplier.setFilterName(element.getAttribute(FILTER_NAME));
+				if(element.getAttribute(REPORT_SETTINGS) != null) {
+					try {
+						IChromatogramReportSettings instance = (IChromatogramReportSettings)element.createExecutableExtension(REPORT_SETTINGS);
+						supplier.setChromatogramReportSettingsClass(instance.getClass());
+					} catch(CoreException e) {
+						logger.warn(e);
+						// settings class is optional, set null instead
+						supplier.setChromatogramReportSettingsClass(null);
+					}
+				}
 				chromatogramReportSupport.add(supplier);
 			}
 		}

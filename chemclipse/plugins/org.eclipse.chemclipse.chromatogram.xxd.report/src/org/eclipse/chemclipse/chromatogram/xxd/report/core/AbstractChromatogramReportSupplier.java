@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.report.core;
 
+import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramReportSettings;
+
 public class AbstractChromatogramReportSupplier implements IChromatogramReportSupplierSetter {
 
 	private String id = "";
@@ -18,6 +20,7 @@ public class AbstractChromatogramReportSupplier implements IChromatogramReportSu
 	private String filterName = "";
 	private String fileExtension = "";
 	private String fileName = "";
+	private Class<? extends IChromatogramReportSettings> chromatogramReportSettingsClass;
 
 	@Override
 	public String getId() {
@@ -90,6 +93,17 @@ public class AbstractChromatogramReportSupplier implements IChromatogramReportSu
 		if(fileName != null) {
 			this.fileName = fileName;
 		}
+	}
+
+	@Override
+	public Class<? extends IChromatogramReportSettings> getChromatogramReportSettingsClass() {
+
+		return this.chromatogramReportSettingsClass;
+	}
+
+	protected void setChromatogramReportSettingsClass(Class<? extends IChromatogramReportSettings> chromatogramReportSettingsClass) {
+
+		this.chromatogramReportSettingsClass = chromatogramReportSettingsClass;
 	}
 
 	// -----------------------------------------------equals, hashCode, toString

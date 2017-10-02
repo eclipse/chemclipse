@@ -101,6 +101,16 @@ The value must not contain unallowed file system characters like: \/:*?&quot;&lt
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="reportSettings" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramReportSettings"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
