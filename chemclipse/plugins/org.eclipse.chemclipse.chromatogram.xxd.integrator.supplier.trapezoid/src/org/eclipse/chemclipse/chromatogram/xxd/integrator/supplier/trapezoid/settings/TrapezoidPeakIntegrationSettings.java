@@ -13,8 +13,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.se
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.PeakIntegrationSettings;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class TrapezoidPeakIntegrationSettings extends PeakIntegrationSettings implements ITrapezoidPeakIntegrationSettings {
 
+	@JsonProperty(value = "Include Background", defaultValue = "false")
 	private boolean includeBackground = false;
 
 	@Override
