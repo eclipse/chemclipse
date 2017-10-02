@@ -71,7 +71,7 @@ public class BasePeakIdentifier {
 	private static final IMassSpectra references = getStandardsMassSpectra();
 	private static final IScanMSD syringyl = getSyringyl();
 	//
-	private List<String> massSpectraFiles;
+	private String massSpectraFiles;
 	static {
 		Integer[] syringyl = {149, 154, 167, 181, 182, 192, 194, 208, 210};
 		Integer[] guaiacyl = {109, 123, 136, 137, 138, 140, 150, 151, 152, 162, 164, 168, 178,};
@@ -93,8 +93,7 @@ public class BasePeakIdentifier {
 
 	public BasePeakIdentifier() {
 		targetBuilder = new TargetBuilder();
-		massSpectraFiles = new ArrayList<String>();
-		massSpectraFiles.add(PathResolver.getAbsolutePath(PathResolver.GERBER_ET_AL_2012));
+		massSpectraFiles = PathResolver.getAbsolutePath(PathResolver.GERBER_ET_AL_2012);
 	}
 
 	public void identifyPeaks(List<IPeakMSD> peaks, IBasePeakSettings settings, IProgressMonitor monitor) {
