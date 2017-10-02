@@ -13,20 +13,18 @@ package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderi
 
 import java.io.File;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
+import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNotBeNullException;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.TestPathHelper;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.FirstDerivativePeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.IFirstDerivativePeakDetectorMSDSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.Threshold;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNotBeNullException;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.TestPathHelper;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core.PeakDetectorMSD;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.FirstDerivativePeakDetectorMSDSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.IFirstDerivativePeakDetectorMSDSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.Threshold;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -70,28 +68,28 @@ public class FirstDerivativePeakDetector_1_ITest extends TestCase {
 
 	public void testDetect_2() throws ChromatogramIsNullException, ValueMustNotBeNullException {
 
-		peakDetectorSettings.setThreshold(Threshold.OFF);
+		peakDetectorSettings.setThreshold(Threshold.OFF.toString());
 		peakDetector.detect(chromatogramSelection, peakDetectorSettings, new NullProgressMonitor());
 		assertEquals("Peaks", 208, chromatogram.getNumberOfPeaks());
 	}
 
 	public void testDetect_3() throws ChromatogramIsNullException, ValueMustNotBeNullException {
 
-		peakDetectorSettings.setThreshold(Threshold.LOW);
+		peakDetectorSettings.setThreshold(Threshold.LOW.toString());
 		peakDetector.detect(chromatogramSelection, peakDetectorSettings, new NullProgressMonitor());
 		assertEquals("Peaks", 185, chromatogram.getNumberOfPeaks());
 	}
 
 	public void testDetect_4() throws ChromatogramIsNullException, ValueMustNotBeNullException {
 
-		peakDetectorSettings.setThreshold(Threshold.MEDIUM);
+		peakDetectorSettings.setThreshold(Threshold.MEDIUM.toString());
 		peakDetector.detect(chromatogramSelection, peakDetectorSettings, new NullProgressMonitor());
 		assertEquals("Peaks", 83, chromatogram.getNumberOfPeaks());
 	}
 
 	public void testDetect_5() throws ChromatogramIsNullException, ValueMustNotBeNullException {
 
-		peakDetectorSettings.setThreshold(Threshold.HIGH);
+		peakDetectorSettings.setThreshold(Threshold.HIGH.toString());
 		peakDetector.detect(chromatogramSelection, peakDetectorSettings, new NullProgressMonitor());
 		assertEquals("Peaks", 4, chromatogram.getNumberOfPeaks());
 	}

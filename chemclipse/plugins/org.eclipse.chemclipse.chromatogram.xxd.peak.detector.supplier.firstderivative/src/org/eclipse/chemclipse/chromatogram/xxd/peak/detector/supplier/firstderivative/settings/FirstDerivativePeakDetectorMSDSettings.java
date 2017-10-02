@@ -14,32 +14,32 @@ package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderi
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorMSDSettings;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
-/**
- * @author eselmeister
- */
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 public class FirstDerivativePeakDetectorMSDSettings extends AbstractPeakDetectorMSDSettings implements IFirstDerivativePeakDetectorMSDSettings {
 
-	private Threshold threshold = IFirstDerivativePeakDetectorMSDSettings.INITIAL_THRESHOLD;
+	@JsonProperty(value = "Threshold", defaultValue = "3")
+	@JsonPropertyDescription(value = "Threshold (Off -> High): 1, 2, 3, 4")
+	private String threshold = Threshold.MEDIUM.toString();
+	@JsonProperty(value = "Include Background", defaultValue = "false")
 	private boolean includeBackground = false;
+	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0")
 	private float minimumSignalToNoiseRatio;
-	private WindowSize windowSize;
-
-	public FirstDerivativePeakDetectorMSDSettings() {
-		windowSize = WindowSize.SCANS_5;
-	}
+	@JsonProperty(value = "Window Size", defaultValue = "5")
+	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
+	private String windowSize = WindowSize.SCANS_5.toString();
 
 	@Override
-	public Threshold getThreshold() {
+	public String getThreshold() {
 
 		return threshold;
 	}
 
 	@Override
-	public void setThreshold(Threshold threshold) {
+	public void setThreshold(String threshold) {
 
-		if(threshold != null) {
-			this.threshold = threshold;
-		}
+		this.threshold = threshold;
 	}
 
 	@Override
@@ -67,13 +67,13 @@ public class FirstDerivativePeakDetectorMSDSettings extends AbstractPeakDetector
 	}
 
 	@Override
-	public WindowSize getMovingAverageWindowSize() {
+	public String getWindowSize() {
 
 		return windowSize;
 	}
 
 	@Override
-	public void setMovingAverageWindowSize(WindowSize windowSize) {
+	public void setWindowSize(String windowSize) {
 
 		this.windowSize = windowSize;
 	}

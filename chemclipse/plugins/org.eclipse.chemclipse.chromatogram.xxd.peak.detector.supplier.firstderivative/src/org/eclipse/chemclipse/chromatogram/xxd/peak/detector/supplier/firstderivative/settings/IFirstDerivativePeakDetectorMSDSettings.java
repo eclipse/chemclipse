@@ -12,36 +12,15 @@
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
-/**
- * @author eselmeister
- */
 public interface IFirstDerivativePeakDetectorMSDSettings extends IPeakDetectorMSDSettings {
 
 	Threshold INITIAL_THRESHOLD = Threshold.MEDIUM;
 
-	/**
-	 * Return the threshold.
-	 * 
-	 * @return {@link Threshold}
-	 */
-	Threshold getThreshold();
+	String getThreshold();
 
-	/**
-	 * Set the threshold.
-	 * 
-	 * @param threshold
-	 */
-	void setThreshold(Threshold threshold);
+	void setThreshold(String threshold);
 
-	/*
-	 * Initial Area Reject Initial Peak Width Shoulder Detection Area Reject
-	 * Baseline All Valleys On Baseline All Valleys Off Tangent Skim
-	 * RTE Data Point Sampling Smoothing, DetectionFiltering (Scans 5,7,9)
-	 * StartThreshold, StopThreshold Peak Location (Top, Centroid) Baseline
-	 * reset, Baseline drop else tangent, Tangent drop else baseline
-	 */
 	/**
 	 * If false, VB or BV will be calculated.
 	 * If true, VV will be used.
@@ -50,11 +29,6 @@ public interface IFirstDerivativePeakDetectorMSDSettings extends IPeakDetectorMS
 	 */
 	boolean isIncludeBackground();
 
-	/**
-	 * Set the include background parameter.
-	 * 
-	 * @param includeBackground
-	 */
 	void setIncludeBackground(boolean includeBackground);
 
 	/**
@@ -64,14 +38,9 @@ public interface IFirstDerivativePeakDetectorMSDSettings extends IPeakDetectorMS
 	 */
 	float getMinimumSignalToNoiseRatio();
 
-	/**
-	 * Set the in S/N value for adding peaks.
-	 * 
-	 * @param minimumSignalToNoiseRatio
-	 */
 	void setMinimumSignalToNoiseRatio(float minimumSignalToNoiseRatio);
 
-	WindowSize getMovingAverageWindowSize();
+	String getWindowSize();
 
-	void setMovingAverageWindowSize(WindowSize windowSize);
+	void setWindowSize(String windowSize);
 }
