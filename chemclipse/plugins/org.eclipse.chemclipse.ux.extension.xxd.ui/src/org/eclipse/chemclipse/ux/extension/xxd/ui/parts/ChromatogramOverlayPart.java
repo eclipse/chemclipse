@@ -208,35 +208,43 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 
 		compositeToolbar = new Composite(parent, SWT.NONE);
 		compositeToolbar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		compositeToolbar.setLayout(new GridLayout(4, false));
-		//
+		compositeToolbar.setLayout(new GridLayout(3, false));
+		/*
+		 * 1st row
+		 */
 		compositeType = new Composite(compositeToolbar, SWT.NONE);
 		GridData gridDataType = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataType.grabExcessHorizontalSpace = true;
 		compositeType.setLayoutData(gridDataType);
 		compositeType.setLayout(new GridLayout(3, false));
 		//
+		createOverlayTypeCombo(compositeType);
+		createDerivativeTypeCombo(compositeType);
+		createSelectedSeriesCombo(compositeType);
+		//
 		compositeSelectedIons = new Composite(compositeToolbar, SWT.NONE);
 		compositeSelectedIons.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		compositeSelectedIons.setLayout(new GridLayout(1, false));
 		//
-		compositeShift = new Composite(compositeToolbar, SWT.NONE);
-		compositeShift.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		compositeShift.setLayout(new GridLayout(9, false));
+		createSelectedIonsCombo(compositeSelectedIons);
 		//
 		compositeStatus = new Composite(compositeToolbar, SWT.NONE);
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		compositeStatus.setLayoutData(gridDataStatus);
 		compositeStatus.setLayout(new GridLayout(3, false));
-		/*
-		 * Parts
-		 */
-		createOverlayTypeCombo(compositeType);
-		createDerivativeTypeCombo(compositeType);
-		createSelectedSeriesCombo(compositeType);
 		//
-		createSelectedIonsCombo(compositeSelectedIons);
+		createDataStatusLabel(compositeStatus);
+		createResetButton(compositeStatus);
+		createSettingsButton(compositeStatus);
+		/*
+		 * 2nd row
+		 */
+		compositeShift = new Composite(compositeToolbar, SWT.NONE);
+		GridData gridDataShift = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataShift.horizontalSpan = 3;
+		compositeShift.setLayoutData(gridDataShift);
+		compositeShift.setLayout(new GridLayout(9, false));
 		//
 		createDisplayModusCombo(compositeShift);
 		createTextShiftX(compositeShift);
@@ -247,10 +255,6 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		createComboScaleY(compositeShift);
 		createButtonUp(compositeShift);
 		createButtonDown(compositeShift);
-		//
-		createDataStatusLabel(compositeStatus);
-		createResetButton(compositeStatus);
-		createSettingsButton(compositeStatus);
 	}
 
 	private void createOverlayTypeCombo(Composite parent) {
@@ -599,13 +603,9 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		GridData gridDataCompositeShift = (GridData)compositeShift.getLayoutData();
 		gridDataCompositeShift.exclude = !visibleSelectedSeries;
 		/*
-		 * Horizontal Span Composite Type
+		 * Update the layout
 		 */
-		int horizontalSpan = (visibleSelectedSeries) ? 1 : 2;
-		GridData gridDataType = (GridData)compositeType.getLayoutData();
-		gridDataType.horizontalSpan = horizontalSpan;
-		//
-		Composite parent = compositeToolbar;
+		Composite parent = compositeToolbar.getParent();
 		parent.layout(false);
 		parent.redraw();
 	}
