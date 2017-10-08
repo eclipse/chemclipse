@@ -253,4 +253,5 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_VALIDATE = "validate.gif";
 	String IMAGE_SKIP = "skip.gif";
 	String IMAGE_SKIPPED = "skipped.gif";
+	String IMAGE_TAG = "tag.gif";
 }
