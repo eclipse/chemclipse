@@ -73,7 +73,9 @@ public abstract class PCA2DPlot extends ScatterChart {
 		rangeRestriction.setZeroX(false);
 		rangeRestriction.setZeroY(false);
 		rangeRestriction.setRestrictZoom(false);
-		rangeRestriction.setFactorExtend(0.25d);
+		rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.RELATIVE);
+		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
+		rangeRestriction.setExtend(0.25d);
 		chartSettings.setShowAxisZeroMarker(true);
 		chartSettings.setColorAxisZeroMarker(COLOR_BLACK);
 		chartSettings.setShowSeriesLabelMarker(true);
