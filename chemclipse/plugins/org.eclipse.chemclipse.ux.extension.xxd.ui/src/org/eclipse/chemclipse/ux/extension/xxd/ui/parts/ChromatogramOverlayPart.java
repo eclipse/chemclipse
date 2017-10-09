@@ -59,6 +59,8 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -404,6 +406,17 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 
 				chromatogramChart.deleteSeries();
 				refreshUpdateOverlayChart();
+			}
+		});
+		comboSelectedIons.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				if(e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
+					chromatogramChart.deleteSeries();
+					refreshUpdateOverlayChart();
+				}
 			}
 		});
 	}
