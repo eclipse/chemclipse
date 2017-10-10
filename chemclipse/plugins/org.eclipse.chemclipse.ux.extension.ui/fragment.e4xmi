@@ -113,7 +113,7 @@
       </children>
     </elements>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_O4wL0ENPEeaHxO-Ahlk0cA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.main" positionInList="after:org.eclipse.chemclipse.ux.extension.ui.menu.process">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_O4wL0ENPEeaHxO-Ahlk0cA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.main" positionInList="after:org.eclipse.chemclipse.ux.extension.ui.menu">
     <elements xsi:type="menu:Menu" xmi:id="_mMBv8ENNEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.spectra.menu" label="Spectrum" mnemonics="">
       <children xsi:type="menu:HandledMenuItem" xmi:id="_18bRIENOEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.infoSpectra" label="Info" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif" command="_F7hAgENOEeaHxO-Ahlk0cA"/>
     </elements>
