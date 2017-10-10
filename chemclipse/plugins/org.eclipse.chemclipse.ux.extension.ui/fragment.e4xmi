@@ -72,8 +72,6 @@
       <children xsi:type="menu:Menu" xmi:id="_j0o20JVkEeK9SdEQujNeFg" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.quantifier" label="Quantifier">
         <children xsi:type="menu:MenuSeparator" xmi:id="_U9T_gMIBEeKzppesdjCSCQ" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.quantifier.separator.misc"/>
       </children>
-      <children xsi:type="menu:MenuSeparator" xmi:id="_HYosIDL_EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.8"/>
-      <children xsi:type="menu:Menu" xmi:id="_9qTloDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.process" label="Processors"/>
       <children xsi:type="menu:MenuSeparator" xmi:id="_K5F7IDL_EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.9"/>
       <children xsi:type="menu:Menu" xmi:id="_AxvQoDL_EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.reports" label="Reports"/>
       <children xsi:type="menu:MenuSeparator" xmi:id="_OxxwkExJEeOWprdBMj2r0w" elementId="org.eclipse.chemclipse.ux.extension.ui.menuseparator.chromatogram.separator.10"/>
@@ -115,7 +113,7 @@
       </children>
     </elements>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_O4wL0ENPEeaHxO-Ahlk0cA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.main" positionInList="after:org.eclipse.chemclipse.ux.extension.ui.menu">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_O4wL0ENPEeaHxO-Ahlk0cA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.main" positionInList="after:org.eclipse.chemclipse.ux.extension.ui.menu.process">
     <elements xsi:type="menu:Menu" xmi:id="_mMBv8ENNEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.spectra.menu" label="Spectrum" mnemonics="">
       <children xsi:type="menu:HandledMenuItem" xmi:id="_18bRIENOEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.infoSpectra" label="Info" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif" command="_F7hAgENOEeaHxO-Ahlk0cA"/>
     </elements>
@@ -124,5 +122,8 @@
     <elements xsi:type="menu:Menu" xmi:id="_OE3pEE8xEeWZpNQ-SxTOqA" elementId="org.eclipse.chemclipse.ux.extension.ui.controls.menu" label="Controls">
       <children xsi:type="menu:HandledMenuItem" xmi:id="_8trigENOEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.infoControls" label="Info" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif" command="_JZm4AENOEeaHxO-Ahlk0cA"/>
     </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_9O66YK1-EeeOj_frlqyeaw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.main" positionInList="after:org.eclipse.chemclipse.ux.extension.ui.menu">
+    <elements xsi:type="menu:Menu" xmi:id="_9qTloDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.process" label="Processors"/>
   </fragments>
 </fragment:ModelFragments>
