@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   viewBox="0 0 128 128"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="DataAnalysis.svg"
+   inkscape:export-filename="DataAnalysis.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.2962449"
+     inkscape:cx="-60.325944"
+     inkscape:cy="40.154222"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1920"
+     inkscape:window-height="1056"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-924.36216)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.25693321px;line-height:125%;font-family:Arial;-inkscape-font-specification:Arial;letter-spacing:0px;word-spacing:0px;fill:#990000;fill-opacity:1;stroke:none"
+       x="-1.7714509"
+       y="1080.9006"
+       id="text3757-2"
+       sodipodi:linespacing="125%"
+       transform="scale(0.98635301,1.0138358)"><tspan
+         sodipodi:role="line"
+         id="tspan3759-2"
+         x="-1.7714509"
+         y="1080.9006"
+         style="font-weight:bold;-inkscape-font-specification:'Arial Bold';fill:#990000;fill-opacity:1">Data Analysis</tspan></text>
+    <path
+       style="fill:none;stroke:#056464;stroke-width:10.11930275;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 0.7734715,1016.6019 c 0,0 38.2836635,5.922 48.6448735,-1.602 10.361213,-7.5239 9.515791,-39.14354 14.811654,-45.94574 5.295862,-6.80217 8.352034,44.82364 17.534704,36.49844 9.18267,-8.3254 7.319143,-47.42136 14.643874,-47.64625 7.324723,-0.22492 8.246563,28.46299 12.099813,40.52225 4.19432,13.1266 17.34084,6.9527 17.34084,6.9527"
+       id="path3761-7"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="czzzzsc" />
+  </g>
+</svg>

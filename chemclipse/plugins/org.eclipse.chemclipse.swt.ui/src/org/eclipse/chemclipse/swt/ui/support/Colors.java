@@ -12,7 +12,9 @@
 package org.eclipse.chemclipse.swt.ui.support;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.swt.SWT;
@@ -74,6 +76,10 @@ public class Colors {
 	public static final String COLOR_SCHEME_PUBLICATION = "Publication";
 	private static final RGB[] colorIdsGradientPublication = new RGB[]{new RGB(255, 0, 0), new RGB(0, 255, 0), new RGB(0, 0, 255), new RGB(150, 0, 0), new RGB(0, 150, 0), new RGB(0, 0, 150)};
 	private static List<Color> colorsGradientPublication;
+	/*
+	 * Variable Colors
+	 */
+	private static Map<RGB, Color> colorMap;
 	/**
 	 * Creates a color array.
 	 */
@@ -129,6 +135,23 @@ public class Colors {
 		}
 	}
 
+	public static Color getColor(RGB rgb) {
+
+		Color color = colorMap.get(rgb);
+		if(color == null) {
+			Display display = Display.getDefault();
+			color = new Color(display, rgb);
+			colorMap.put(rgb, color);
+		}
+		return color;
+	}
+
+	public static Color getColor(int red, int green, int blue) {
+
+		RGB rgb = new RGB(red, green, blue);
+		return getColor(rgb);
+	}
+
 	// ----------------------------------------------private methods
 	/**
 	 * Creates a color array by given size.<br/>
@@ -139,17 +162,18 @@ public class Colors {
 	 */
 	private static void initializeColors() {
 
+		Display display = Display.getDefault();
 		/*
 		 * In this case, we use system colors. We do not need to dispose them.
 		 * If you use own colors, dispose them, if not needed any more.
 		 */
-		Display display = Display.getCurrent();
+		colorMap = new HashMap<RGB, Color>();
 		/*
 		 * RED GRADIENT
 		 */
 		colorsGradientRed = new ArrayList<Color>();
 		for(int colorId : colorIdsGradientRed) {
-			Color color = new Color(display, colorId, 0, 0);
+			Color color = getColor(colorId, 0, 0);
 			colorsGradientRed.add(color);
 		}
 		/*
@@ -165,7 +189,7 @@ public class Colors {
 		 */
 		colorsGradientRedContrast = new ArrayList<Color>();
 		for(int colorId : colorIdsGradientRedContrast) {
-			Color color = new Color(display, colorId, 0, 0);
+			Color color = getColor(colorId, 0, 0);
 			colorsGradientRedContrast.add(color);
 		}
 		/*
@@ -181,7 +205,7 @@ public class Colors {
 		 */
 		colorsGradientPublication = new ArrayList<Color>();
 		for(RGB rgb : colorIdsGradientPublication) {
-			Color color = new Color(display, rgb);
+			Color color = getColor(rgb);
 			colorsGradientPublication.add(color);
 		}
 	}

@@ -254,4 +254,14 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SKIP = "skip.gif";
 	String IMAGE_SKIPPED = "skipped.gif";
 	String IMAGE_TAG = "tag.gif";
+	/*
+	 * PICTOGRAM
+	 */
+	String PICTOGRAM_DATA_ANALYSIS = "DataAnalysis.png";
+	String PICTOGRAM_DEMO = "Demo.png";
+	String PICTOGRAM_LOGGING = "Logging.png";
+	String PICTOGRAM_QUANT = "Quant.png";
+	String PICTOGRAM_MSD = "MSD.png";
+	String PICTOGRAM_CSD = "CSD.png";
+	String PICTOGRAM_WSD = "WSD.png";
 }
