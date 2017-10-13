@@ -244,9 +244,10 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		compositeStatus.setLayoutData(gridDataStatus);
-		compositeStatus.setLayout(new GridLayout(3, false));
+		compositeStatus.setLayout(new GridLayout(4, false));
 		//
 		createDataStatusLabel(compositeStatus);
+		createToggleChartLegendButton(compositeStatus);
 		createResetButton(compositeStatus);
 		createSettingsButton(compositeStatus);
 		/*
@@ -555,6 +556,21 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		labelDataStatus.setLayoutData(gridData);
 	}
 
+	private void createToggleChartLegendButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the chart legend");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				chromatogramChart.toggleSeriesLegendVisibility();
+			}
+		});
+	}
+
 	private void createResetButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
@@ -726,6 +742,8 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		Set<String> availableSeriesIds = new HashSet<String>();
 		BaseChart baseChart = chromatogramChart.getBaseChart();
 		List<Integer> ions = getSelectedIons();
+		//
+		comboDisplayModus.setText(DISPLAY_MODUS_NORMAL);
 		//
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 		for(int i = 0; i < chromatogramSelections.size(); i++) {
