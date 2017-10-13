@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.css.swt.CSSSWTConstants;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MUIElement;
@@ -53,7 +52,7 @@ public class WelcomeView {
 	private static final String PERSPECTIVE_DATA_ANALYSIS = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main";
 	private static final String PERSPECTIVE_QUANTITATION = "org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.perspective";
 	private static final String PERSPECTIVE_LOGGING = "org.eclipse.chemclipse.logging.ui.perspective.main";
-	private static final String PERSPECTIVE_MSD = "org.eclipse.chemclipse.ux.extension.msd.ui.perspective.main";
+	private static final String PERSPECTIVE_MSD = "org.eclipse.chemclipse.chromatogram.msd.perspective.ui.perspective.main";
 	private static final String PERSPECTIVE_CSD = "org.eclipse.chemclipse.ux.extension.csd.ui.perspective.main";
 	private static final String PERSPECTIVE_WSD = "org.eclipse.chemclipse.ux.extension.wsd.ui.perspective.main";
 	//
@@ -193,7 +192,8 @@ public class WelcomeView {
 		parent.setLayout(new FillLayout());
 		//
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setData(CSSSWTConstants.CSS_ID_KEY, CSS_ID);
+		// composite.setData(CSSSWTConstants.CSS_ID_KEY, CSS_ID);
+		composite.setBackground(Colors.WHITE);
 		composite.setLayout(new GridLayout(4, false));
 		//
 		createContent(composite);
@@ -233,6 +233,7 @@ public class WelcomeView {
 		Composite composite = new Composite(parent, SWT.BORDER);
 		composite.setToolTipText(tooltip);
 		composite.setBackground(color);
+		// composite.setData(CSSSWTConstants.CSS_ID_KEY, CSS_ID);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = horizontalSpan;
 		gridData.verticalSpan = verticalSpan;
