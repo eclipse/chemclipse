@@ -37,6 +37,8 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -55,6 +57,7 @@ import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
 import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -146,15 +149,22 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 	private Button buttonShiftUp;
 	private Button buttonShiftDown;
 	private Label labelDataStatus;
+	//
+	private LineStyle lineStyleTIC;
+	private LineStyle lineStyleBPC;
+	private LineStyle lineStyleXIC;
+	private LineStyle lineStyleSIC;
+	private LineStyle lineStyleTSC;
+	private LineStyle lineStyleDefault;
 
 	public ChromatogramOverlayPart() {
 		/*
 		 * Colors
 		 */
-		colorSchemeNormal = Colors.getColorScheme(Colors.COLOR_SCHEME_PUBLICATION);
 		usedColorsNormal = new HashMap<String, Color>();
-		colorSchemeSIC = Colors.getColorScheme(Colors.COLOR_SCHEME_HIGH_CONTRAST);
 		usedColorsSIC = new HashMap<String, Color>();
+		applyUserSettings();
+		resetColorMaps();
 		//
 		overlayTypes = new String[]{//
 				OVERLAY_TYPE_TIC, //
@@ -582,6 +592,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
+						applyUserSettings();
 						applyOverlaySettings();
 					} catch(Exception e1) {
 						MessageDialog.openError(Display.getDefault().getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
@@ -642,6 +653,20 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		//
 		modifyToolbarComposites();
 		modifyDataStatusLabel();
+	}
+
+	private void applyUserSettings() {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_OVERLAY_NORMAL));
+		colorSchemeSIC = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_OVERLAY_SIC));
+		//
+		lineStyleTIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_OVERLAY_TIC));
+		lineStyleBPC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_OVERLAY_BPC));
+		lineStyleXIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_OVERLAY_XIC));
+		lineStyleSIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_OVERLAY_SIC));
+		lineStyleTSC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_OVERLAY_TSC));
+		lineStyleDefault = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_OVERLAY_DEFAULT));
 	}
 
 	private void resetColorMaps() {
@@ -962,17 +987,17 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 
 		LineStyle lineStyle;
 		if(overlayType.equals(OVERLAY_TYPE_TIC)) {
-			lineStyle = LineStyle.SOLID;
+			lineStyle = lineStyleTIC;
 		} else if(overlayType.equals(OVERLAY_TYPE_BPC)) {
-			lineStyle = LineStyle.DASH;
+			lineStyle = lineStyleBPC;
 		} else if(overlayType.equals(OVERLAY_TYPE_XIC)) {
-			lineStyle = LineStyle.DASH;
+			lineStyle = lineStyleXIC;
 		} else if(overlayType.equals(OVERLAY_TYPE_SIC)) {
-			lineStyle = LineStyle.DASH;
+			lineStyle = lineStyleSIC;
 		} else if(overlayType.equals(OVERLAY_TYPE_TSC)) {
-			lineStyle = LineStyle.DASH;
+			lineStyle = lineStyleTSC;
 		} else {
-			lineStyle = LineStyle.DOT;
+			lineStyle = lineStyleDefault;
 		}
 		return lineStyle;
 	}

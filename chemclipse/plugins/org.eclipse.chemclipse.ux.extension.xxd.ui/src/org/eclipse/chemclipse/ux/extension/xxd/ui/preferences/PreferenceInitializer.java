@@ -11,12 +11,22 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
+import org.eclipse.jface.preference.IPreferenceStore;
 
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	public void initializeDefaultPreferences() {
 
-		// IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_OVERLAY_NORMAL, PreferenceConstants.DEF_COLOR_SCHEME_OVERLAY_NORMAL);
+		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_OVERLAY_SIC, PreferenceConstants.DEF_COLOR_SCHEME_OVERLAY_SIC);
+		store.setDefault(PreferenceConstants.P_LINE_STYLE_OVERLAY_TIC, PreferenceConstants.DEF_LINE_STYLE_OVERLAY_TIC);
+		store.setDefault(PreferenceConstants.P_LINE_STYLE_OVERLAY_BPC, PreferenceConstants.DEF_LINE_STYLE_OVERLAY_BPC);
+		store.setDefault(PreferenceConstants.P_LINE_STYLE_OVERLAY_XIC, PreferenceConstants.DEF_LINE_STYLE_OVERLAY_XIC);
+		store.setDefault(PreferenceConstants.P_LINE_STYLE_OVERLAY_SIC, PreferenceConstants.DEF_LINE_STYLE_OVERLAY_SIC);
+		store.setDefault(PreferenceConstants.P_LINE_STYLE_OVERLAY_TSC, PreferenceConstants.DEF_LINE_STYLE_OVERLAY_TSC);
+		store.setDefault(PreferenceConstants.P_LINE_STYLE_OVERLAY_DEFAULT, PreferenceConstants.DEF_LINE_STYLE_OVERLAY_DEFAULT);
 	}
 }
