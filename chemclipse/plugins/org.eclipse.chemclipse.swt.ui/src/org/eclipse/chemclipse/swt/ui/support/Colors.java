@@ -152,6 +152,28 @@ public class Colors {
 		return getColor(rgb);
 	}
 
+	/*
+	 * 0,0,0
+	 * or
+	 * 255,255,255
+	 * ...
+	 */
+	public static Color getColor(String rgb) {
+
+		try {
+			/*
+			 * Assume that there are 3 values.
+			 */
+			String[] values = rgb.split(",");
+			int red = Integer.parseInt(values[0]);
+			int green = Integer.parseInt(values[1]);
+			int blue = Integer.parseInt(values[2]);
+			return getColor(new RGB(red, green, blue));
+		} catch(Exception e) {
+			return WHITE;
+		}
+	}
+
 	// ----------------------------------------------private methods
 	/**
 	 * Creates a color array by given size.<br/>
