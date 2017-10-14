@@ -48,8 +48,8 @@ import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.core.IExtendedChart;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.ISeriesModificationListener;
-import org.eclipse.eavp.service.swtchart.core.ISeriesSelectionListener;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
+import org.eclipse.eavp.service.swtchart.core.SeriesStatusAdapter;
 import org.eclipse.eavp.service.swtchart.customcharts.ChromatogramChart;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
@@ -717,7 +717,7 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 			}
 		});
 		//
-		baseChart.addSeriesSelectionListener(new ISeriesSelectionListener() {
+		baseChart.addSeriesStatusListener(new SeriesStatusAdapter() {
 
 			@Override
 			public void handleSeriesSelectionEvent(String seriedId) {
