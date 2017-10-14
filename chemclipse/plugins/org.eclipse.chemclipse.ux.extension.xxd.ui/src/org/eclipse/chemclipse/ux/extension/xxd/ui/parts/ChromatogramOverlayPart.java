@@ -720,9 +720,9 @@ public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSuppor
 		baseChart.addSeriesStatusListener(new SeriesStatusAdapter() {
 
 			@Override
-			public void handleSeriesSelectionEvent(String seriedId) {
+			public void handleSeriesSelectionEvent(String seriesId) {
 
-				comboSelectedSeries.setText(seriedId);
+				comboSelectedSeries.setText(seriesId);
 				modifyToolbarComposites();
 			}
 		});
