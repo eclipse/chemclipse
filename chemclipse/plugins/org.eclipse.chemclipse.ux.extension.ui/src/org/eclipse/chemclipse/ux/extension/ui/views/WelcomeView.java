@@ -45,6 +45,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 @SuppressWarnings("restriction")
 public class WelcomeView {
@@ -238,7 +239,7 @@ public class WelcomeView {
 		gridData.horizontalSpan = horizontalSpan;
 		gridData.verticalSpan = verticalSpan;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, true));
+		composite.setLayout(new GridLayout(2, true));
 		composite.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -255,35 +256,32 @@ public class WelcomeView {
 				selectionHandler.handleEvent();
 			}
 		});
+		// composite.addMouseMoveListener(new MouseMoveListener() {
 		//
-		Label labelImage = new Label(composite, SWT.CENTER);
+		// @Override
+		// public void mouseMove(MouseEvent e) {
+		//
+		// composite.setBackground(Colors.CYAN);
+		// }
+		// });
+		//
+		Label labelImage = new Label(composite, SWT.NONE);
 		labelImage.setToolTipText(tooltip);
 		labelImage.setImage(image);
-		labelImage.setLayoutData(getGridDataImage());
-		labelImage.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-
-				selectionHandler.handleEvent();
-			}
-		});
-		labelImage.addKeyListener(new KeyAdapter() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-				selectionHandler.handleEvent();
-			}
-		});
+		labelImage.setLayoutData(getGridData(SWT.END));
+		//
+		Text textDescription = new Text(composite, SWT.NONE);
+		textDescription.setBackground(color);
+		textDescription.setText(tooltip);
+		textDescription.setLayoutData(getGridData(SWT.BEGINNING));
 		//
 		return composite;
 	}
 
-	private GridData getGridDataImage() {
+	private GridData getGridData(int horizontalAlignment) {
 
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.horizontalAlignment = SWT.CENTER;
+		gridData.horizontalAlignment = horizontalAlignment;
 		gridData.verticalAlignment = SWT.CENTER;
 		return gridData;
 	}
