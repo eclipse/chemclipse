@@ -38,6 +38,7 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractChromatogramEditorPartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
 import org.eclipse.e4.ui.di.Focus;
@@ -78,7 +79,7 @@ import org.eclipse.swt.widgets.Text;
 import org.swtchart.ISeries;
 import org.swtchart.LineStyle;
 
-public class ChromatogramOverlayPart extends AbstractMeasurementEditorPartSupport {
+public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSupport {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramOverlayPart.class);
 	@Inject

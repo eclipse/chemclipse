@@ -9,18 +9,15 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
-import javax.annotation.PostConstruct;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
+public interface IChromatogramUpdateSupport {
 
-public class ChromatogramOverviewPart {
+	void updateChromatogram(IChromatogramOverview chromatogramOverview);
 
-	@PostConstruct
-	public void createComposite(Composite parent) {
+	boolean doUpdate(IChromatogramOverview chromatogramOverview);
 
-		parent.setLayout(new GridLayout(1, true));
-	}
+	IChromatogramOverview getChromatogramOverview();
 }

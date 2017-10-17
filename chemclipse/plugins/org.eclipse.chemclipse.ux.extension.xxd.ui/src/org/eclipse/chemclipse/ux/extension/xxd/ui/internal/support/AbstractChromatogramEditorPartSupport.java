@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.ux.extension.wsd.ui.editors.ChromatogramEditorWSD;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
-public abstract class AbstractMeasurementEditorPartSupport {
+public abstract class AbstractChromatogramEditorPartSupport {
 
 	public List<IChromatogramSelection> getChromatogramSelections(EPartService partService) {
 
