@@ -92,18 +92,37 @@ public class ModelSupportAddon {
 		return ePartService.saveAll(true);
 	}
 
+	public static String getActivePerspectiveId() {
+
+		MPerspective perspective = getActiveMPerspective();
+		if(perspective != null) {
+			return perspective.getElementId();
+		} else {
+			return "";
+		}
+	}
+
 	public static String getActivePerspective() {
 
-		List<MPerspectiveStack> perspectiveStacks = eModelService.findElements(mApplication, null, MPerspectiveStack.class, null);
-		if(perspectiveStacks.size() > 0) {
-			MPerspectiveStack perspectiveStack = perspectiveStacks.get(0);
-			String perspectiveName = perspectiveStack.getSelectedElement().getLabel();
+		MPerspective perspective = getActiveMPerspective();
+		if(perspective != null) {
+			String perspectiveName = perspective.getLabel();
 			perspectiveName = perspectiveName.replaceAll("<", "");
 			perspectiveName = perspectiveName.replaceAll(">", "");
 			return perspectiveName;
 		} else {
 			return "";
 		}
+	}
+
+	private static MPerspective getActiveMPerspective() {
+
+		List<MPerspectiveStack> perspectiveStacks = eModelService.findElements(mApplication, null, MPerspectiveStack.class, null);
+		if(perspectiveStacks.size() > 0) {
+			MPerspectiveStack perspectiveStack = perspectiveStacks.get(0);
+			return perspectiveStack.getSelectedElement();
+		}
+		return null;
 	}
 
 	/**

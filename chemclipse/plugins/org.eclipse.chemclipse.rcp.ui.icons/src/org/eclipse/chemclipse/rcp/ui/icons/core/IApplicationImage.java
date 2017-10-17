@@ -254,6 +254,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SKIP = "skip.gif";
 	String IMAGE_SKIPPED = "skipped.gif";
 	String IMAGE_TAG = "tag.gif";
+	String IMAGE_CHROMATOGRAM_OVERVIEW = "chromatogramOverview.gif";
 	/*
 	 * PICTOGRAM
 	 */

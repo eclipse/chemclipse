@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.views;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +20,10 @@ import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSupplierFileExplo
 import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
 import org.eclipse.swt.widgets.Composite;
 
-public class SupplierFileExplorer extends AbstractSupplierFileExplorer {
+public class SupplierFileExplorerPart extends AbstractSupplierFileExplorer {
 
 	@Inject
-	public SupplierFileExplorer(Composite parent) {
+	public SupplierFileExplorerPart(Composite parent) {
 		super(parent, getChromatogramEditorSupport());
 	}
 
