@@ -13,13 +13,16 @@ package org.eclipse.chemclipse.ux.extension.ui.views;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.ui.swt.ISelectionHandler;
+import org.eclipse.chemclipse.ux.extension.ui.swt.WelcomeTile;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -33,21 +36,15 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 
-@SuppressWarnings("restriction")
 public class WelcomeView {
 
 	private static final String PERSPECTIVE_DATA_ANALYSIS = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main";
@@ -57,7 +54,7 @@ public class WelcomeView {
 	private static final String PERSPECTIVE_CSD = "org.eclipse.chemclipse.ux.extension.csd.ui.perspective.main";
 	private static final String PERSPECTIVE_WSD = "org.eclipse.chemclipse.ux.extension.wsd.ui.perspective.main";
 	//
-	private static final String CSS_ID = "org-eclipse-chemclipse-ux-extension-ui-views-welcomeview-background";
+	// private static final String CSS_ID = "org-eclipse-chemclipse-ux-extension-ui-views-welcomeview-background";
 	/*
 	 * Context and services
 	 */
@@ -72,12 +69,7 @@ public class WelcomeView {
 	/*
 	 * Main
 	 */
-	private Composite compositeDataAnalysis;
-
-	private interface ISelectionHandler {
-
-		public void handleEvent();
-	}
+	private List<WelcomeTile> welcomeTiles;
 
 	private class Component1 implements ISelectionHandler {
 
@@ -179,13 +171,13 @@ public class WelcomeView {
 
 	@Inject
 	public WelcomeView(Composite parent) {
+		welcomeTiles = new ArrayList<WelcomeTile>();
 		initializeContent(parent);
 	}
 
 	@Focus
 	public void setFocus() {
 
-		compositeDataAnalysis.setFocus();
 	}
 
 	private void initializeContent(Composite parent) {
@@ -194,7 +186,7 @@ public class WelcomeView {
 		//
 		Composite composite = new Composite(parent, SWT.NONE);
 		// composite.setData(CSSSWTConstants.CSS_ID_KEY, CSS_ID);
-		composite.setBackground(Colors.WHITE);
+		// composite.setBackground(Colors.WHITE);
 		composite.setLayout(new GridLayout(4, false));
 		//
 		createContent(composite);
@@ -209,81 +201,55 @@ public class WelcomeView {
 		parent.setBackgroundMode(SWT.INHERIT_FORCE);
 		//
 		Image imageDataAnalysis = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_DATA_ANALYSIS, IApplicationImage.SIZE_128x128);
-		Image imageQuant = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_QUANT, IApplicationImage.SIZE_128x128);
-		Image imageLogging = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_LOGGING, IApplicationImage.SIZE_128x128);
-		Image imageDemo = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_DEMO, IApplicationImage.SIZE_128x128);
-		Image imageMSD = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_MSD, IApplicationImage.SIZE_128x128);
-		Image imageCSD = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_CSD, IApplicationImage.SIZE_128x128);
-		Image imageWSD = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_WSD, IApplicationImage.SIZE_128x128);
 		//
-		Color color1 = Colors.getColor(74, 142, 142);
-		Color color2 = Colors.getColor(151, 189, 189);
-		Color color3 = Colors.getColor(204, 222, 222);
+		WelcomeTile composite1 = new WelcomeTile(parent, SWT.NONE);
+		WelcomeTile composite2 = new WelcomeTile(parent, SWT.NONE);
+		WelcomeTile composite3 = new WelcomeTile(parent, SWT.NONE);
+		WelcomeTile composite4 = new WelcomeTile(parent, SWT.NONE);
+		WelcomeTile composite5 = new WelcomeTile(parent, SWT.NONE);
+		WelcomeTile composite6 = new WelcomeTile(parent, SWT.NONE);
+		WelcomeTile composite7 = new WelcomeTile(parent, SWT.NONE);
 		//
-		compositeDataAnalysis = createComposite(parent, new Component1(), "Data Analysis", imageDataAnalysis, color2, 2, 2);
-		createComposite(parent, new Component2(), "Quantitation", imageQuant, color3, 1, 1);
-		createComposite(parent, new Component3(), "Logging", imageLogging, color3, 1, 1);
-		createComposite(parent, new Component4(), "Demo", imageDemo, color2, 2, 1);
-		createComposite(parent, new Component5(), "MSD", imageMSD, color1, 2, 1);
-		createComposite(parent, new Component6(), "CSD", imageCSD, color1, 1, 1);
-		createComposite(parent, new Component7(), "WSD", imageWSD, color1, 1, 1);
+		initializeTile(composite1, 2, 2, new Component1(), imageDataAnalysis, "Data Analysis", "This is the main perspective. Most of the work is performed here.");
+		initializeTile(composite2, 1, 1, new Component2(), null, "Quantitation", "Used for ISTD and ESTD quantitation");
+		initializeTile(composite3, 1, 1, new Component3(), null, "Logging", "Have a look at the log files.");
+		initializeTile(composite4, 2, 1, new Component4(), null, "Demo", "Load a demo chromatogram.");
+		initializeTile(composite5, 2, 1, new Component5(), null, "MSD", "Mass Selective Detector (Quadrupole, IonTrap, TandenMS, HighRes)");
+		initializeTile(composite6, 1, 1, new Component6(), null, "CSD", "Current Selective Detector (FID, PPD, ...)");
+		initializeTile(composite7, 1, 1, new Component7(), null, "WSD", "Wavelength Selective Detector (UV/Vis, VWD, DAD)");
 	}
 
-	private Composite createComposite(Composite parent, ISelectionHandler selectionHandler, String tooltip, Image image, Color color, int horizontalSpan, int verticalSpan) {
+	private void initializeTile(WelcomeTile welcomeTile, int horizontalSpan, int verticalSpan, ISelectionHandler selectionHandler, Image image, String section, String description) {
 
-		Composite composite = new Composite(parent, SWT.BORDER);
-		composite.setToolTipText(tooltip);
-		composite.setBackground(color);
-		// composite.setData(CSSSWTConstants.CSS_ID_KEY, CSS_ID);
+		welcomeTiles.add(welcomeTile);
+		//
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = horizontalSpan;
 		gridData.verticalSpan = verticalSpan;
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(2, true));
-		composite.addMouseListener(new MouseAdapter() {
+		welcomeTile.setLayoutData(gridData);
+		//
+		welcomeTile.setSelectionHandler(selectionHandler);
+		welcomeTile.setContent(image, section, description);
+		//
+		welcomeTile.addMouseMoveListener(new MouseMoveListener() {
 
 			@Override
-			public void mouseUp(MouseEvent e) {
+			public void mouseMove(MouseEvent e) {
 
-				selectionHandler.handleEvent();
+				highlightComposite(welcomeTile);
 			}
 		});
-		composite.addKeyListener(new KeyAdapter() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-				selectionHandler.handleEvent();
-			}
-		});
-		// composite.addMouseMoveListener(new MouseMoveListener() {
-		//
-		// @Override
-		// public void mouseMove(MouseEvent e) {
-		//
-		// composite.setBackground(Colors.CYAN);
-		// }
-		// });
-		//
-		Label labelImage = new Label(composite, SWT.NONE);
-		labelImage.setToolTipText(tooltip);
-		labelImage.setImage(image);
-		labelImage.setLayoutData(getGridData(SWT.END));
-		//
-		Text textDescription = new Text(composite, SWT.NONE);
-		textDescription.setBackground(color);
-		textDescription.setText(tooltip);
-		textDescription.setLayoutData(getGridData(SWT.BEGINNING));
-		//
-		return composite;
 	}
 
-	private GridData getGridData(int horizontalAlignment) {
+	private void highlightComposite(WelcomeTile welcomeTileHighlight) {
 
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.horizontalAlignment = horizontalAlignment;
-		gridData.verticalAlignment = SWT.CENTER;
-		return gridData;
+		for(WelcomeTile welcomeTile : welcomeTiles) {
+			if(welcomeTile == welcomeTileHighlight) {
+				welcomeTile.setActive();
+			} else {
+				welcomeTile.setInactive();
+			}
+		}
 	}
 
 	/**
