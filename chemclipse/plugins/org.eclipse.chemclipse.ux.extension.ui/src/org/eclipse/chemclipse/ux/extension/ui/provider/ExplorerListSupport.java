@@ -22,17 +22,17 @@ public class ExplorerListSupport {
 	private ExplorerListSupport() {
 	}
 
-	public static List<IChromatogramIdentifier> getChromatogramIdentifierList(IChromatogramIdentifier chromatogramIdentifier) {
+	public static List<ISupplierFileIdentifier> getSupplierFileIdentifierList(ISupplierFileIdentifier supplierFileIdentifier) {
 
-		List<IChromatogramIdentifier> list = new ArrayList<IChromatogramIdentifier>();
-		list.add(chromatogramIdentifier);
+		List<ISupplierFileIdentifier> list = new ArrayList<ISupplierFileIdentifier>();
+		list.add(supplierFileIdentifier);
 		return list;
 	}
 
-	public static List<IChromatogramEditorSupport> getChromatogramEditorSupportList(IChromatogramEditorSupport chromatogramEditorSupport) {
+	public static List<ISupplierFileEditorSupport> getChromatogramEditorSupportList(ISupplierFileEditorSupport supplierEditorSupport) {
 
-		List<IChromatogramEditorSupport> list = new ArrayList<IChromatogramEditorSupport>();
-		list.add(chromatogramEditorSupport);
+		List<ISupplierFileEditorSupport> list = new ArrayList<ISupplierFileEditorSupport>();
+		list.add(supplierEditorSupport);
 		return list;
 	}
 }

@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.converter.core.AbstractConverterSupport;
 import org.eclipse.chemclipse.converter.core.IConverterSupport;
 import org.eclipse.chemclipse.converter.core.ISupplier;
 
-public abstract class AbstractChromatogramIdentifier implements IChromatogramIdentifier {
+public abstract class AbstractChromatogramIdentifier implements ISupplierFileIdentifier {
 
 	private List<ISupplier> suppliers;
 	private Map<String, String> regularExpressions;
@@ -31,7 +31,7 @@ public abstract class AbstractChromatogramIdentifier implements IChromatogramIde
 	}
 
 	@Override
-	public boolean isChromatogram(File file) {
+	public boolean isSupplierFile(File file) {
 
 		String extension = file.toString().toLowerCase();
 		String supplierExtension;
@@ -91,7 +91,7 @@ public abstract class AbstractChromatogramIdentifier implements IChromatogramIde
 	}
 
 	@Override
-	public boolean isChromatogramDirectory(File file) {
+	public boolean isSupplierFileDirectory(File file) {
 
 		String directory = file.toString().toUpperCase();
 		String directoryExtension;

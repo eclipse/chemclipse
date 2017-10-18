@@ -12,17 +12,17 @@
 package org.eclipse.chemclipse.ux.extension.msd.ui.support;
 
 import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramIdentifier;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
 
 public class ChromatogramSupport {
 
-	private static IChromatogramIdentifier chromatogramIdentifier;
+	private static ISupplierFileIdentifier chromatogramIdentifier;
 	private static IChromatogramEditorSupport chromatogramEditorSupport;
 
 	private ChromatogramSupport() {
 	}
 
-	public static IChromatogramIdentifier getInstanceIdentifier() {
+	public static ISupplierFileIdentifier getInstanceIdentifier() {
 
 		if(chromatogramIdentifier == null) {
 			chromatogramIdentifier = new ChromatogramIdentifier();

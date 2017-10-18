@@ -43,7 +43,7 @@ public class ChromatogramEditorSupport extends AbstractChromatogramEditorSupport
 		/*
 		 * Check that the selected file or directory is a valid chromatogram.
 		 */
-		if(isChromatogram(file) || isChromatogramDirectory(file)) {
+		if(isSupplierFile(file) || isSupplierFileDirectory(file)) {
 			this.modelService = modelService;
 			this.application = application;
 			this.partService = partService;
@@ -66,7 +66,7 @@ public class ChromatogramEditorSupport extends AbstractChromatogramEditorSupport
 		/*
 		 * Check that the selected file or directory is a valid chromatogram.
 		 */
-		if(isChromatogram(file) || isChromatogramDirectory(file)) {
+		if(isSupplierFile(file) || isSupplierFileDirectory(file)) {
 			/*
 			 * Push an event
 			 * IChromatogramEvents.PROPERTY_CHROMATOGRAM_OVERVIEW_FILE

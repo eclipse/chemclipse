@@ -16,16 +16,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ChromatogramFileExplorerContentProvider extends FileExplorerContentProvider {
+public class SupplierFileExplorerContentProvider extends FileExplorerContentProvider {
 
-	private List<? extends IChromatogramIdentifier> chromatogramIdentifierList;
+	private List<? extends ISupplierFileIdentifier> supplierFileIdentifierList;
 
-	public ChromatogramFileExplorerContentProvider(IChromatogramIdentifier chromatogramIdentifier) {
-		this(ExplorerListSupport.getChromatogramIdentifierList(chromatogramIdentifier));
+	public SupplierFileExplorerContentProvider(ISupplierFileIdentifier supplierFileIdentifier) {
+		this(ExplorerListSupport.getSupplierFileIdentifierList(supplierFileIdentifier));
 	}
 
-	public ChromatogramFileExplorerContentProvider(List<? extends IChromatogramIdentifier> chromatogramIdentifierList) {
-		this.chromatogramIdentifierList = chromatogramIdentifierList;
+	public SupplierFileExplorerContentProvider(List<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
+		this.supplierFileIdentifierList = supplierFileIdentifierList;
 	}
 
 	@Override
@@ -55,8 +55,8 @@ public class ChromatogramFileExplorerContentProvider extends FileExplorerContent
 							/*
 							 * Add MSD, CSD, WSD ... files.
 							 */
-							for(IChromatogramIdentifier chromatogramIdentifier : chromatogramIdentifierList) {
-								if(chromatogramIdentifier.isChromatogram(file)) {
+							for(ISupplierFileIdentifier chromatogramIdentifier : supplierFileIdentifierList) {
+								if(chromatogramIdentifier.isSupplierFile(file)) {
 									if(chromatogramIdentifier.isMatchMagicNumber(file)) {
 										files.add(file);
 									}

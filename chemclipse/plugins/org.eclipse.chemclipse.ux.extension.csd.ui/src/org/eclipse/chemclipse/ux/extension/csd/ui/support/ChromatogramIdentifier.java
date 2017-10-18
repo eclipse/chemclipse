@@ -13,9 +13,9 @@ package org.eclipse.chemclipse.ux.extension.csd.ui.support;
 
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractChromatogramIdentifier;
-import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramIdentifier;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
 
-public class ChromatogramIdentifier extends AbstractChromatogramIdentifier implements IChromatogramIdentifier {
+public class ChromatogramIdentifier extends AbstractChromatogramIdentifier implements ISupplierFileIdentifier {
 
 	public ChromatogramIdentifier() {
 		super(ChromatogramConverterCSD.getChromatogramConverterSupport().getSupplier());

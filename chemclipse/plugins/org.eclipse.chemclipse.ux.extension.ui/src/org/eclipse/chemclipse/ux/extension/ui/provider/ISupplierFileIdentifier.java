@@ -13,11 +13,16 @@ package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
 
-public interface IChromatogramIdentifier {
+public interface ISupplierFileIdentifier {
 
 	String TYPE_MSD = "MSD";
 	String TYPE_CSD = "CSD";
 	String TYPE_WSD = "WSD";
+	String TYPE_NMR = "NMR";
+	String TYPE_DATABASE_MSD = "DATABASE_MSD";
+	String TYPE_DATABASE_CSD = "DATABASE_CSD";
+	String TYPE_DATABASE_WSD = "DATABASE_WSD";
+	String TYPE_DATABASE_NMR = "DATABASE_NMR";
 
 	/**
 	 * Returns the identifier type.
@@ -27,20 +32,20 @@ public interface IChromatogramIdentifier {
 	String getType();
 
 	/**
-	 * Check whether the file is a supplied chromatogram or not.
+	 * Check whether the file is a supplied file type or not.
 	 * 
 	 * @param file
 	 * @return boolean
 	 */
-	boolean isChromatogram(File file);
+	boolean isSupplierFile(File file);
 
 	/**
-	 * Check whether the file is a supplied chromatogram directory or not.
+	 * Check whether the file is a supplied file type directory or not.
 	 * 
 	 * @param file
 	 * @return boolean
 	 */
-	boolean isChromatogramDirectory(File file);
+	boolean isSupplierFileDirectory(File file);
 
 	/**
 	 * Try to match the magic number of the file format.

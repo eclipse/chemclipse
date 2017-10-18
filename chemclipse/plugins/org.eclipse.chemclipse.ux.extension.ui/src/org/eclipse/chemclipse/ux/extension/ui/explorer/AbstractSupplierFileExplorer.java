@@ -22,10 +22,10 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerContentProvider;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerLabelProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ExplorerListSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
+import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerContentProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerLabelProvider;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -62,7 +62,7 @@ public abstract class AbstractSupplierFileExplorer {
 	private MApplication application;
 	//
 	private File lastClickedFile;
-	private List<IChromatogramEditorSupport> chromatogramEditorSupportList;
+	private List<ISupplierFileEditorSupport> supplierFileEditorSupportList;
 	//
 	private TabItem drivesTab;
 	private TreeViewer drivesTreeViewer;
@@ -73,16 +73,16 @@ public abstract class AbstractSupplierFileExplorer {
 	private TreeViewer userLocationTreeViewer;
 	private TabItem userLocationTab;
 
-	public AbstractSupplierFileExplorer(Composite parent, IChromatogramEditorSupport chromatogramEditorSupport) {
-		this(parent, ExplorerListSupport.getChromatogramEditorSupportList(chromatogramEditorSupport));
+	public AbstractSupplierFileExplorer(Composite parent, ISupplierFileEditorSupport supplierFileEditorSupport) {
+		this(parent, ExplorerListSupport.getChromatogramEditorSupportList(supplierFileEditorSupport));
 	}
 
-	public AbstractSupplierFileExplorer(Composite parent, List<IChromatogramEditorSupport> chromatogramEditorSupportList) {
+	public AbstractSupplierFileExplorer(Composite parent, List<ISupplierFileEditorSupport> supplierFileEditorSupportList) {
 		/*
 		 * The supplier editor support list is used to show
 		 * the preview and open the editor on demand.
 		 */
-		this.chromatogramEditorSupportList = chromatogramEditorSupportList;
+		this.supplierFileEditorSupportList = supplierFileEditorSupportList;
 		/*
 		 * Create the tree viewer.
 		 */
@@ -184,8 +184,8 @@ public abstract class AbstractSupplierFileExplorer {
 	private TreeViewer createTreeViewer(Composite parent) {
 
 		TreeViewer treeViewer = new TreeViewer(parent, SWT.NONE);
-		treeViewer.setContentProvider(new ChromatogramFileExplorerContentProvider(chromatogramEditorSupportList));
-		treeViewer.setLabelProvider(new ChromatogramFileExplorerLabelProvider(chromatogramEditorSupportList));
+		treeViewer.setContentProvider(new SupplierFileExplorerContentProvider(supplierFileEditorSupportList));
+		treeViewer.setLabelProvider(new SupplierFileExplorerLabelProvider(supplierFileEditorSupportList));
 		/*
 		 * Register single (selection changed)/double click listener here.<br/>
 		 * OK, it's not the best way, but it still works at beginning.
@@ -239,12 +239,12 @@ public abstract class AbstractSupplierFileExplorer {
 			if(isNewFile(file)) {
 				boolean isSupported = false;
 				exitloop:
-				for(IChromatogramEditorSupport chromatogramEditorSupport : chromatogramEditorSupportList) {
-					if(chromatogramEditorSupport.isMatchMagicNumber(file)) {
+				for(ISupplierFileEditorSupport supplierFileEditorSupport : supplierFileEditorSupportList) {
+					if(supplierFileEditorSupport.isMatchMagicNumber(file)) {
 						/*
 						 * Show the first overview only.
 						 */
-						chromatogramEditorSupport.openOverview(file, eventBroker);
+						supplierFileEditorSupport.openOverview(file, eventBroker);
 						isSupported = true;
 						break exitloop;
 					}
@@ -260,13 +260,13 @@ public abstract class AbstractSupplierFileExplorer {
 	private void openEditor(File file) {
 
 		if(file != null) {
-			for(IChromatogramEditorSupport chromatogramEditorSupport : chromatogramEditorSupportList) {
+			for(ISupplierFileEditorSupport supplierFileEditorSupport : supplierFileEditorSupportList) {
 				/*
 				 * Open the supplier file.
 				 */
-				if(chromatogramEditorSupport.isMatchMagicNumber(file)) {
+				if(supplierFileEditorSupport.isMatchMagicNumber(file)) {
 					saveDirectoryPath(file);
-					chromatogramEditorSupport.openEditor(file, modelService, application, partService);
+					supplierFileEditorSupport.openEditor(file, modelService, application, partService);
 				}
 			}
 		}

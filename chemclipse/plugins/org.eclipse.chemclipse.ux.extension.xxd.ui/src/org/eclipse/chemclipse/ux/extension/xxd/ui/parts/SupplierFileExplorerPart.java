@@ -17,19 +17,19 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSupplierFileExplorer;
-import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.swt.widgets.Composite;
 
 public class SupplierFileExplorerPart extends AbstractSupplierFileExplorer {
 
 	@Inject
 	public SupplierFileExplorerPart(Composite parent) {
-		super(parent, getChromatogramEditorSupport());
+		super(parent, getSupplierFileEditorSupport());
 	}
 
-	public static List<IChromatogramEditorSupport> getChromatogramEditorSupport() {
+	public static List<ISupplierFileEditorSupport> getSupplierFileEditorSupport() {
 
-		List<IChromatogramEditorSupport> list = new ArrayList<IChromatogramEditorSupport>();
+		List<ISupplierFileEditorSupport> list = new ArrayList<ISupplierFileEditorSupport>();
 		list.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport.getInstanceEditorSupport());
 		list.add(org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport.getInstanceEditorSupport());
 		list.add(org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramSupport.getInstanceEditorSupport());

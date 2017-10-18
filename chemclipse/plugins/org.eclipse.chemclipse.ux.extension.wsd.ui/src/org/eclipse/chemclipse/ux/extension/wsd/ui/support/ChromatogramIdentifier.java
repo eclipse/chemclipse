@@ -12,10 +12,10 @@
 package org.eclipse.chemclipse.ux.extension.wsd.ui.support;
 
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractChromatogramIdentifier;
-import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramIdentifier;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 
-public class ChromatogramIdentifier extends AbstractChromatogramIdentifier implements IChromatogramIdentifier {
+public class ChromatogramIdentifier extends AbstractChromatogramIdentifier implements ISupplierFileIdentifier {
 
 	public ChromatogramIdentifier() {
 		super(ChromatogramConverterWSD.getChromatogramConverterSupport().getSupplier());

@@ -17,8 +17,8 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 import org.eclipse.chemclipse.support.ui.wizards.TreeViewerFilesystemSupport;
 import org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerContentProvider;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerLabelProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerContentProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -81,8 +81,8 @@ public class ChromatogramInputEntriesWizardPage extends WizardPage {
 		 * Chromatogram Tree Viewer
 		 */
 		chromatogramViewer = new TreeViewer(composite, SWT.MULTI);
-		chromatogramViewer.setLabelProvider(new ChromatogramFileExplorerLabelProvider(ChromatogramSupport.getInstanceIdentifier()));
-		chromatogramViewer.setContentProvider(new ChromatogramFileExplorerContentProvider(ChromatogramSupport.getInstanceIdentifier()));
+		chromatogramViewer.setLabelProvider(new SupplierFileExplorerLabelProvider(ChromatogramSupport.getInstanceIdentifier()));
+		chromatogramViewer.setContentProvider(new SupplierFileExplorerContentProvider(ChromatogramSupport.getInstanceIdentifier()));
 		chromatogramViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2017 Lablicate GmbH.
+ * Copyright (c) 2017 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,14 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.provider;
 
-import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import java.io.File;
+
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
-public interface IChromatogramEditorSupport extends ISupplierFileEditorSupport, ISupplierFileIdentifier {
+public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 
 	/**
 	 * Opens the editor.
@@ -28,13 +28,13 @@ public interface IChromatogramEditorSupport extends ISupplierFileEditorSupport, 
 	 * @param application
 	 * @param partService
 	 */
-	void openEditor(IChromatogram chromatogram, EModelService modelService, MApplication application, EPartService partService);
+	void openEditor(final File file, EModelService modelService, MApplication application, EPartService partService);
 
 	/**
-	 * Opens the chromatogram in overview mode.
+	 * Opens the overview.
 	 * 
-	 * @param chromatogramOverview
+	 * @param file
 	 * @param eventBroker
 	 */
-	void openOverview(IChromatogramOverview chromatogramOverview, IEventBroker eventBroker);
+	void openOverview(final File file, IEventBroker eventBroker);
 }

@@ -22,16 +22,16 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.navigator.IDescriptionProvider;
 
-public class ChromatogramFileExplorerLabelProvider extends LabelProvider implements ILabelProvider, IDescriptionProvider {
+public class SupplierFileExplorerLabelProvider extends LabelProvider implements ILabelProvider, IDescriptionProvider {
 
-	private List<? extends IChromatogramIdentifier> chromatogramIdentifierList;
+	private List<? extends ISupplierFileIdentifier> supplierFileIdentifierList;
 
-	public ChromatogramFileExplorerLabelProvider(IChromatogramIdentifier chromatogramIdentifier) {
-		this(ExplorerListSupport.getChromatogramIdentifierList(chromatogramIdentifier));
+	public SupplierFileExplorerLabelProvider(ISupplierFileIdentifier supplierFileIdentifier) {
+		this(ExplorerListSupport.getSupplierFileIdentifierList(supplierFileIdentifier));
 	}
 
-	public ChromatogramFileExplorerLabelProvider(List<? extends IChromatogramIdentifier> chromatogramIdentifierList) {
-		this.chromatogramIdentifierList = chromatogramIdentifierList;
+	public SupplierFileExplorerLabelProvider(List<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
+		this.supplierFileIdentifierList = supplierFileIdentifierList;
 	}
 
 	@Override
@@ -64,18 +64,17 @@ public class ChromatogramFileExplorerLabelProvider extends LabelProvider impleme
 			} else {
 				if(file.isDirectory()) {
 					/*
-					 * Check if the directory could be a registered
-					 * chromatogram.
+					 * Check if the directory could be a registered file type.
 					 */
 					boolean isNormalDirectory = true;
 					exitloop:
-					for(IChromatogramIdentifier chromatogramIdentifier : chromatogramIdentifierList) {
-						if(chromatogramIdentifier.isChromatogramDirectory(file)) {
+					for(ISupplierFileIdentifier supplierFileIdentifier : supplierFileIdentifierList) {
+						if(supplierFileIdentifier.isSupplierFileDirectory(file)) {
 							/*
 							 * Check and validate.
 							 */
-							if(chromatogramIdentifier.isMatchMagicNumber(file)) {
-								descriptor = getImageDescriptor(chromatogramIdentifier, file);
+							if(supplierFileIdentifier.isMatchMagicNumber(file)) {
+								descriptor = getImageDescriptor(supplierFileIdentifier, file);
 								if(descriptor != null) {
 									isNormalDirectory = false;
 									break exitloop;
@@ -91,17 +90,17 @@ public class ChromatogramFileExplorerLabelProvider extends LabelProvider impleme
 					}
 				} else {
 					/*
-					 * Check if the file could be a registered chromatogram.
+					 * Check if the file could be a registered supplier file.
 					 */
 					boolean isNormalFile = true;
 					exitloop:
-					for(IChromatogramIdentifier chromatogramIdentifier : chromatogramIdentifierList) {
-						if(chromatogramIdentifier.isChromatogram(file)) {
+					for(ISupplierFileIdentifier supplierFileIdentifier : supplierFileIdentifierList) {
+						if(supplierFileIdentifier.isSupplierFile(file)) {
 							/*
 							 * Check and validate.
 							 */
-							if(chromatogramIdentifier.isMatchMagicNumber(file)) {
-								descriptor = getImageDescriptor(chromatogramIdentifier, file);
+							if(supplierFileIdentifier.isMatchMagicNumber(file)) {
+								descriptor = getImageDescriptor(supplierFileIdentifier, file);
 								if(descriptor != null) {
 									isNormalFile = false;
 									break exitloop;
@@ -123,21 +122,27 @@ public class ChromatogramFileExplorerLabelProvider extends LabelProvider impleme
 		return null;
 	}
 
-	private ImageDescriptor getImageDescriptor(IChromatogramIdentifier chromatogramIdentifier, File file) {
+	private ImageDescriptor getImageDescriptor(ISupplierFileIdentifier supplierFileIdentifier, File file) {
 
 		ImageDescriptor descriptor = null;
-		if(chromatogramIdentifier != null) {
-			switch(chromatogramIdentifier.getType()) {
-				case IChromatogramIdentifier.TYPE_MSD:
+		if(supplierFileIdentifier != null) {
+			switch(supplierFileIdentifier.getType()) {
+				case ISupplierFileIdentifier.TYPE_MSD:
 					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_MSD, IApplicationImage.SIZE_16x16);
 					break;
-				case IChromatogramIdentifier.TYPE_CSD:
+				case ISupplierFileIdentifier.TYPE_DATABASE_MSD:
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImage.SIZE_16x16);
+					break;
+				case ISupplierFileIdentifier.TYPE_CSD:
 					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_CSD, IApplicationImage.SIZE_16x16);
 					break;
-				case IChromatogramIdentifier.TYPE_WSD:
+				case ISupplierFileIdentifier.TYPE_WSD:
 					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_WSD, IApplicationImage.SIZE_16x16);
 					break;
 				default:
+					/*
+					 * Default
+					 */
 					if(file.isDirectory()) {
 						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16);
 					} else if(file.isFile()) {

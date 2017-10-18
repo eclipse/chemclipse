@@ -21,8 +21,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerContentProvider;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerLabelProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerContentProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerLabelProvider;
 
 public class RawFileSelectionWizardPage extends WizardPage {
 
@@ -51,8 +51,8 @@ public class RawFileSelectionWizardPage extends WizardPage {
 		 * Chromatogram Tree Viewer
 		 */
 		chromatogramViewer = new TreeViewer(composite, SWT.MULTI);
-		chromatogramViewer.setLabelProvider(new ChromatogramFileExplorerLabelProvider(ChromatogramSupport.getInstanceIdentifier()));
-		chromatogramViewer.setContentProvider(new ChromatogramFileExplorerContentProvider(ChromatogramSupport.getInstanceIdentifier()));
+		chromatogramViewer.setLabelProvider(new SupplierFileExplorerLabelProvider(ChromatogramSupport.getInstanceIdentifier()));
+		chromatogramViewer.setContentProvider(new SupplierFileExplorerContentProvider(ChromatogramSupport.getInstanceIdentifier()));
 		chromatogramViewer.setInput(EFS.getLocalFileSystem());
 		/*
 		 * Set the control.
