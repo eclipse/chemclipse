@@ -12,8 +12,8 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerContentProvider;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerLabelProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerContentProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerLabelProvider;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -48,8 +48,8 @@ public class ChromatogramMSDInputFilesWizardPage extends WizardPage {
 		 * Chromatogram Tree Viewer
 		 */
 		chromatogramViewer = new TreeViewer(composite, SWT.MULTI);
-		chromatogramViewer.setLabelProvider(new ChromatogramFileExplorerLabelProvider(ChromatogramSupport.getInstanceIdentifier()));
-		chromatogramViewer.setContentProvider(new ChromatogramFileExplorerContentProvider(ChromatogramSupport.getInstanceIdentifier()));
+		chromatogramViewer.setLabelProvider(new SupplierFileExplorerLabelProvider(ChromatogramSupport.getInstanceIdentifier()));
+		chromatogramViewer.setContentProvider(new SupplierFileExplorerContentProvider(ChromatogramSupport.getInstanceIdentifier()));
 		chromatogramViewer.setInput(EFS.getLocalFileSystem());
 		/*
 		 * Set the control.
