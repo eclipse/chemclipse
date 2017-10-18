@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerContentProvider;
@@ -101,7 +102,31 @@ public abstract class AbstractSupplierFileExplorer {
 		drivesTab.setText("Drives");
 		drivesTreeViewer = createTreeViewer(tabFolder);
 		drivesTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-		setTreeViewerContent(drivesTreeViewer, EFS.getLocalFileSystem());
+		if(OperatingSystemUtils.isWindows()) {
+			/*
+			 * Windows, try to get C:\\
+			 */
+			File root = null;
+			exitloop:
+			for(File file : File.listRoots()) {
+				if(file.getAbsolutePath().startsWith("C:")) {
+					root = file;
+					break exitloop;
+				}
+			}
+			/*
+			 * Show at least the home directory, if C:\\ was not found.
+			 */
+			if(root == null) {
+				root = new File(UserManagement.getUserHome());
+			}
+			setTreeViewerContent(drivesTreeViewer, root);
+		} else {
+			/*
+			 * Mac OS X, Linux
+			 */
+			setTreeViewerContent(drivesTreeViewer, EFS.getLocalFileSystem());
+		}
 		drivesTab.setControl(drivesTreeViewer.getControl());
 	}
 
