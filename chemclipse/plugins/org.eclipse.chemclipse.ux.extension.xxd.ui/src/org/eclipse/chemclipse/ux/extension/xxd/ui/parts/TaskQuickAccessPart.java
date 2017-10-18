@@ -26,6 +26,9 @@ import org.eclipse.swt.widgets.Composite;
 
 public class TaskQuickAccessPart {
 
+	private Button buttonOverlayTask;
+	private Button buttonOverviewTask;
+
 	@Inject
 	public TaskQuickAccessPart(Composite parent) {
 		initialize(parent);
@@ -56,11 +59,11 @@ public class TaskQuickAccessPart {
 
 	private void createButtonOverlayTask(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Toggle the overlay modus");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERLAY, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		buttonOverlayTask = new Button(parent, SWT.PUSH);
+		buttonOverlayTask.setText("");
+		buttonOverlayTask.setToolTipText("Toggle the overlay modus");
+		buttonOverlayTask.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERLAY_ACTIVE, IApplicationImage.SIZE_16x16));
+		buttonOverlayTask.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -69,18 +72,22 @@ public class TaskQuickAccessPart {
 				 * Chromatogram Overview
 				 */
 				MPart part = PartSupport.getPart(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERLAY, PartSupport.PARTSTACK_BOTTOM_LEFT);
-				PartSupport.togglePartVisibility(part, PartSupport.PARTSTACK_BOTTOM_LEFT);
+				if(PartSupport.togglePartVisibility(part, PartSupport.PARTSTACK_BOTTOM_LEFT)) {
+					buttonOverlayTask.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERLAY_VISIBLE, IApplicationImage.SIZE_16x16));
+				} else {
+					buttonOverlayTask.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERLAY_ACTIVE, IApplicationImage.SIZE_16x16));
+				}
 			}
 		});
 	}
 
 	private void createButtonOverviewTask(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Toggle the overview modus");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERVIEW, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		buttonOverviewTask = new Button(parent, SWT.PUSH);
+		buttonOverviewTask.setText("");
+		buttonOverviewTask.setToolTipText("Toggle the overview modus");
+		buttonOverviewTask.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERVIEW_ACTIVE, IApplicationImage.SIZE_16x16));
+		buttonOverviewTask.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -90,15 +97,16 @@ public class TaskQuickAccessPart {
 				 */
 				PartSupport.setPartStackVisibility(PartSupport.PARTSTACK_OVERVIEW, true);
 				/*
-				 * Chromatogram Header
+				 * Chromatogram Header, Chromatogram Overview
 				 */
 				MPart chromatogramHeaderPart = PartSupport.getPart(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEADER, PartSupport.PARTSTACK_OVERVIEW);
 				PartSupport.togglePartVisibility(chromatogramHeaderPart, PartSupport.PARTSTACK_OVERVIEW);
-				/*
-				 * Chromatogram Overview
-				 */
 				MPart chromatogramOverviewPart = PartSupport.getPart(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW, PartSupport.PARTSTACK_OVERVIEW);
-				PartSupport.togglePartVisibility(chromatogramOverviewPart, PartSupport.PARTSTACK_OVERVIEW);
+				if(PartSupport.togglePartVisibility(chromatogramOverviewPart, PartSupport.PARTSTACK_OVERVIEW)) {
+					buttonOverviewTask.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERVIEW_VISIBLE, IApplicationImage.SIZE_16x16));
+				} else {
+					buttonOverviewTask.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERVIEW_ACTIVE, IApplicationImage.SIZE_16x16));
+				}
 			}
 		});
 	}

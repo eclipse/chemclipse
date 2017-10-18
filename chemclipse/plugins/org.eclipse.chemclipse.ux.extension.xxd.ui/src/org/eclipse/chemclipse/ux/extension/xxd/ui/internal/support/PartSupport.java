@@ -64,8 +64,16 @@ public class PartSupport {
 		return part;
 	}
 
-	public static void togglePartVisibility(MPart part, String partStackId) {
+	/***
+	 * Returns true if the part is visible after running the method.
+	 * 
+	 * @param part
+	 * @param partStackId
+	 * @return boolean
+	 */
+	public static boolean togglePartVisibility(MPart part, String partStackId) {
 
+		boolean isVisible = false;
 		if(part != null) {
 			if(part.isVisible()) {
 				part.setVisible(false);
@@ -73,8 +81,10 @@ public class PartSupport {
 			} else {
 				part.setVisible(true);
 				partService.showPart(part, PartState.ACTIVATE);
+				isVisible = true;
 			}
 		}
+		return isVisible;
 	}
 
 	public static boolean isChildrenOfPartStack(MPartStack partStack, String elementId) {

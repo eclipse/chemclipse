@@ -254,15 +254,12 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SKIP = "skip.gif";
 	String IMAGE_SKIPPED = "skipped.gif";
 	String IMAGE_TAG = "tag.gif";
-	String IMAGE_CHROMATOGRAM_OVERVIEW = "chromatogramOverview.gif";
 	/*
-	 * PICTOGRAM
+	 * PICTOGRAM and Data Analysis Perspective
 	 */
 	String PICTOGRAM_DATA_ANALYSIS = "DataAnalysis.png";
-	String PICTOGRAM_DEMO = "Demo.png";
-	String PICTOGRAM_LOGGING = "Logging.png";
-	String PICTOGRAM_QUANT = "Quant.png";
-	String PICTOGRAM_MSD = "MSD.png";
-	String PICTOGRAM_CSD = "CSD.png";
-	String PICTOGRAM_WSD = "WSD.png";
+	String IMAGE_CHROMATOGRAM_OVERLAY_ACTIVE = "chromatogramOverlayActive.gif";
+	String IMAGE_CHROMATOGRAM_OVERLAY_VISIBLE = "chromatogramOverlayVisible.gif";
+	String IMAGE_CHROMATOGRAM_OVERVIEW_ACTIVE = "chromatogramOverviewActive.gif";
+	String IMAGE_CHROMATOGRAM_OVERVIEW_VISIBLE = "chromatogramOverviewVisible.gif";
 }
