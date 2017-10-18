@@ -18,6 +18,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ChromatogramFileExplorerContentProvider;
@@ -211,6 +212,7 @@ public abstract class AbstractSupplierFileExplorer {
 			 * Supplier files can be stored also as a directory.
 			 */
 			if(isNewFile(file)) {
+				boolean isSupported = false;
 				exitloop:
 				for(IChromatogramEditorSupport chromatogramEditorSupport : chromatogramEditorSupportList) {
 					if(chromatogramEditorSupport.isMatchMagicNumber(file)) {
@@ -218,8 +220,13 @@ public abstract class AbstractSupplierFileExplorer {
 						 * Show the first overview only.
 						 */
 						chromatogramEditorSupport.openOverview(file, eventBroker);
+						isSupported = true;
 						break exitloop;
 					}
+				}
+				//
+				if(!isSupported) {
+					eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE, file);
 				}
 			}
 		}

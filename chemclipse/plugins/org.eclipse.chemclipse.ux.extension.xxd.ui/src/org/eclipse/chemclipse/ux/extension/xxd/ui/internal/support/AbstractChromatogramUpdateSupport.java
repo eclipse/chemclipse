@@ -40,14 +40,15 @@ import org.osgi.service.event.EventHandler;
 public abstract class AbstractChromatogramUpdateSupport implements IChromatogramUpdateSupport {
 
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramUpdateSupport.class);
+	/*
+	 * The chromatogram overview is shared by all extending classes.
+	 */
+	private static IChromatogramOverview chromatogramOverview;
 	//
 	private EPartService partService = ModelSupportAddon.getPartService();
 	private IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-	private MPart part;
-	//
-	private IChromatogramOverview chromatogramOverview;
-	//
 	private List<EventHandler> registeredEventHandler;
+	private MPart part;
 
 	public AbstractChromatogramUpdateSupport(MPart part) {
 		registeredEventHandler = new ArrayList<EventHandler>();
@@ -84,21 +85,13 @@ public abstract class AbstractChromatogramUpdateSupport implements IChromatogram
 	private void registerEventBroker(IEventBroker eventBroker) {
 
 		if(eventBroker != null) {
-			EventHandler eventHandler;
-			//
-			eventHandler = registerEventHandlerFile(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_MSD_RAWFILE, IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE);
-			registeredEventHandler.add(eventHandler);
-			eventHandler = registerEventHandlerFile(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_CSD_RAWFILE, IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE);
-			registeredEventHandler.add(eventHandler);
-			eventHandler = registerEventHandlerFile(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_WSD_RAWFILE, IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE);
-			registeredEventHandler.add(eventHandler);
-			//
-			eventHandler = registerEventHandlerInstance(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_MSD_OVERVIEW, IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_OVERVIEW);
-			registeredEventHandler.add(eventHandler);
-			eventHandler = registerEventHandlerInstance(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_CSD_OVERVIEW, IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_OVERVIEW);
-			registeredEventHandler.add(eventHandler);
-			eventHandler = registerEventHandlerInstance(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_WSD_OVERVIEW, IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_OVERVIEW);
-			registeredEventHandler.add(eventHandler);
+			registeredEventHandler.add(registerEventHandlerFile(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_MSD_RAWFILE, IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE));
+			registeredEventHandler.add(registerEventHandlerFile(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_CSD_RAWFILE, IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE));
+			registeredEventHandler.add(registerEventHandlerFile(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_WSD_RAWFILE, IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE));
+			registeredEventHandler.add(registerEventHandlerFile(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_XXD_RAWFILE, IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE));
+			registeredEventHandler.add(registerEventHandlerInstance(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_MSD_OVERVIEW, IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_OVERVIEW));
+			registeredEventHandler.add(registerEventHandlerInstance(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_CSD_OVERVIEW, IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_OVERVIEW));
+			registeredEventHandler.add(registerEventHandlerInstance(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_WSD_OVERVIEW, IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_OVERVIEW));
 		}
 	}
 
@@ -109,9 +102,13 @@ public abstract class AbstractChromatogramUpdateSupport implements IChromatogram
 			public void handleEvent(Event event) {
 
 				try {
-					Object object = event.getProperty(property);
-					if(object instanceof File) {
-						setChromatogram((File)object, topic);
+					if(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE.equals(topic)) {
+						setChromatogramOverview(null);
+					} else {
+						Object object = event.getProperty(property);
+						if(object instanceof File) {
+							setChromatogram((File)object, topic);
+						}
 					}
 				} catch(Exception e) {
 					logger.warn(e);
@@ -172,9 +169,9 @@ public abstract class AbstractChromatogramUpdateSupport implements IChromatogram
 		}
 	}
 
-	public void setChromatogramOverview(IChromatogramOverview chromatogramOverview) {
+	public void setChromatogramOverview(IChromatogramOverview overview) {
 
-		this.chromatogramOverview = chromatogramOverview;
+		chromatogramOverview = overview;
 		updateChromatogram(chromatogramOverview);
 	}
 }

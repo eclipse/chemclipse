@@ -24,6 +24,7 @@ public interface IChemClipseEvents {
 	String PROPERTY_CHROMATOGRAM_MSD_RAWFILE = IEventBroker.DATA; // File
 	String PROPERTY_CHROMATOGRAM_CSD_RAWFILE = IEventBroker.DATA; // File
 	String PROPERTY_CHROMATOGRAM_WSD_RAWFILE = IEventBroker.DATA; // File
+	String PROPERTY_CHROMATOGRAM_XXD_RAWFILE = IEventBroker.DATA; // File
 	//
 	String PROPERTY_CHROMATOGRAM_MSD_OVERVIEW = IEventBroker.DATA; // IChromatogramOverview - no map
 	String PROPERTY_CHROMATOGRAM_CSD_OVERVIEW = IEventBroker.DATA; // IChromatogramOverview - no map
@@ -64,6 +65,7 @@ public interface IChemClipseEvents {
 	String TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE = "chromatogram/msd/update/rawfile";
 	String TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE = "chromatogram/csd/update/rawfile";
 	String TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE = "chromatogram/wsd/update/rawfile";
+	String TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE = "chromatogram/xxd/update/none";
 	/*
 	 * UNLOAD
 	 * Close the chromatogram editor.
