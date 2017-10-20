@@ -25,15 +25,11 @@ import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter.MagicN
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.editors.AbstractExtendedEditorPage;
 import org.eclipse.chemclipse.support.ui.editors.IExtendedEditorPage;
 import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter.MagicNumberMatcherWSD;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -177,10 +173,7 @@ public class PageChromatogram extends AbstractExtendedEditorPage implements IExt
 				 */
 				IChromatogramEditorSupport chromatogramEditorSupport = getChromatogramEditorSupport(file);
 				if(chromatogramEditorSupport != null) {
-					EModelService eModelService = ModelSupportAddon.getModelService();
-					MApplication mApplication = ModelSupportAddon.getApplication();
-					EPartService ePartService = ModelSupportAddon.getPartService();
-					chromatogramEditorSupport.openEditor(file, eModelService, mApplication, ePartService);
+					chromatogramEditorSupport.openEditor(file);
 				}
 			}
 		});
