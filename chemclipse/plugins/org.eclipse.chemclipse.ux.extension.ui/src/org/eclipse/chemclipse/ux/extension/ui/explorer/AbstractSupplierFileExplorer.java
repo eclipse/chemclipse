@@ -29,9 +29,6 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerLabel
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -53,13 +50,7 @@ import org.eclipse.swt.widgets.TabItem;
 public abstract class AbstractSupplierFileExplorer {
 
 	@Inject
-	private EPartService partService;
-	@Inject
 	private IEventBroker eventBroker;
-	@Inject
-	private EModelService modelService;
-	@Inject
-	private MApplication application;
 	//
 	private File lastClickedFile;
 	private List<ISupplierFileEditorSupport> supplierFileEditorSupportList;
@@ -244,7 +235,7 @@ public abstract class AbstractSupplierFileExplorer {
 						/*
 						 * Show the first overview only.
 						 */
-						supplierFileEditorSupport.openOverview(file, eventBroker);
+						supplierFileEditorSupport.openOverview(file);
 						isSupported = true;
 						break exitloop;
 					}
@@ -266,7 +257,7 @@ public abstract class AbstractSupplierFileExplorer {
 				 */
 				if(supplierFileEditorSupport.isMatchMagicNumber(file)) {
 					saveDirectoryPath(file);
-					supplierFileEditorSupport.openEditor(file, modelService, application, partService);
+					supplierFileEditorSupport.openEditor(file);
 				}
 			}
 		}

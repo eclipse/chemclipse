@@ -465,7 +465,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 			if(referencedChromatogramDialog.open() == Window.OK) {
 				List<IChromatogram> selectedChromatograms = referencedChromatogramDialog.getSelectedChromatograms();
 				for(IChromatogram chromatogram : selectedChromatograms) {
-					ChromatogramSupport.getInstanceEditorSupport().openEditor(chromatogram, modelService, application, partService);
+					ChromatogramSupport.getInstanceEditorSupport().openEditor(chromatogram);
 				}
 			}
 		}
@@ -721,7 +721,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 				/*
 				 * Opens the overview.
 				 */
-				ChromatogramSupport.getInstanceEditorSupport().openOverview(chromatogram, eventBroker);
+				ChromatogramSupport.getInstanceEditorSupport().openOverview(chromatogram);
 			}
 
 			@Override
@@ -735,7 +735,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 				/*
 				 * Opens the editor.
 				 */
-				ChromatogramSupport.getInstanceEditorSupport().openEditor(chromatogram, modelService, application, partService);
+				ChromatogramSupport.getInstanceEditorSupport().openEditor(chromatogram);
 			}
 		});
 	}

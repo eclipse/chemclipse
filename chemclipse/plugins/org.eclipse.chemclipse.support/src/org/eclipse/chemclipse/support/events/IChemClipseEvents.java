@@ -83,6 +83,7 @@ public interface IChemClipseEvents {
 	String TOPIC_CHROMATOGRAM_MSD_UPDATE_PEAK = "chromatogram/msd/update/peak";
 	String TOPIC_CHROMATOGRAM_MSD_UPDATE_PEAKS = "chromatogram/msd/update/peaks";
 	String TOPIC_CHROMATOGRAM_MSD_UPDATE_MASSSPECTRUM = "chromatogram/msd/update/massspectrum";
+	String TOPIC_CHROMATOGRAM_MSD_UPDATE_MASSSPECTRA = "chromatogram/msd/update/massspectra";
 	String TOPIC_CHROMATOGRAM_MSD_UPDATE_ION_SELECTION = "chromatogram/msd/update/ionselection";
 	String TOPIC_LIBRARY_MSD_UPDATE_SELECTION = "library/msd/update/selection";
 	String TOPIC_LIBRARY_MSD_UNLOAD_SELECTION = "library/msd/unload/selection";

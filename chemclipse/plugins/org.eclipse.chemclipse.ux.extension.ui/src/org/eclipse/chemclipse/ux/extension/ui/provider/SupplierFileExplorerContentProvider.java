@@ -46,8 +46,8 @@ public class SupplierFileExplorerContentProvider extends FileExplorerContentProv
 				for(File file : fileList) {
 					if(!file.isHidden()) {
 						/*
-						 * Check if the file is a chromatogram.
-						 * Do not list other files than chromatograms.
+						 * Check if the file is a chromatogram/database.
+						 * Do not list other files than chromatograms/databases.
 						 */
 						if(file.isDirectory()) {
 							files.add(file);
@@ -55,9 +55,10 @@ public class SupplierFileExplorerContentProvider extends FileExplorerContentProv
 							/*
 							 * Add MSD, CSD, WSD ... files.
 							 */
-							for(ISupplierFileIdentifier chromatogramIdentifier : supplierFileIdentifierList) {
-								if(chromatogramIdentifier.isSupplierFile(file)) {
-									if(chromatogramIdentifier.isMatchMagicNumber(file)) {
+							for(ISupplierFileIdentifier supplierFileIdentifier : supplierFileIdentifierList) {
+								if(supplierFileIdentifier.isSupplierFile(file)) {
+									System.out.println(file + "\t" + supplierFileIdentifier.getType());
+									if(supplierFileIdentifier.isMatchMagicNumber(file)) {
 										files.add(file);
 									}
 								}

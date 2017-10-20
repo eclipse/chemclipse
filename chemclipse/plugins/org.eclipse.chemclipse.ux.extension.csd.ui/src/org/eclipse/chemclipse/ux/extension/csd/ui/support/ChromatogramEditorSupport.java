@@ -17,16 +17,14 @@ import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCS
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.csd.ui.editors.ChromatogramEditorCSD;
 import org.eclipse.chemclipse.ux.extension.csd.ui.internal.support.ChromatogramIdentifier;
-import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractChromatogramEditorSupport;
+import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
-public class ChromatogramEditorSupport extends AbstractChromatogramEditorSupport implements IChromatogramEditorSupport {
+public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport implements IChromatogramEditorSupport {
 
 	public ChromatogramEditorSupport() {
 		super(ChromatogramConverterCSD.getChromatogramConverterSupport().getSupplier());
@@ -39,30 +37,24 @@ public class ChromatogramEditorSupport extends AbstractChromatogramEditorSupport
 	}
 
 	@Override
-	public void openEditor(final File file, EModelService modelService, MApplication application, EPartService partService) {
+	public void openEditor(final File file) {
 
 		/*
 		 * Check that the selected file or directory is a valid chromatogram.
 		 */
 		if(ChromatogramIdentifier.isChromatogram(file) || ChromatogramIdentifier.isChromatogramDirectory(file)) {
-			this.modelService = modelService;
-			this.application = application;
-			this.partService = partService;
 			openEditor(file, null, ChromatogramEditorCSD.ID, ChromatogramEditorCSD.CONTRIBUTION_URI, ChromatogramEditorCSD.ICON_URI, ChromatogramEditorCSD.TOOLTIP);
 		}
 	}
 
 	@Override
-	public void openEditor(IChromatogram chromatogram, EModelService modelService, MApplication application, EPartService partService) {
+	public void openEditor(IChromatogram chromatogram) {
 
-		this.modelService = modelService;
-		this.application = application;
-		this.partService = partService;
 		openEditor(null, chromatogram, ChromatogramEditorCSD.ID, ChromatogramEditorCSD.CONTRIBUTION_URI, ChromatogramEditorCSD.ICON_URI, ChromatogramEditorCSD.TOOLTIP);
 	}
 
 	@Override
-	public void openOverview(final File file, IEventBroker eventBroker) {
+	public void openOverview(final File file) {
 
 		/*
 		 * Check that the selected file or directory is a valid chromatogram.
@@ -72,13 +64,15 @@ public class ChromatogramEditorSupport extends AbstractChromatogramEditorSupport
 			 * Push an event
 			 * IChromatogramEvents.PROPERTY_CHROMATOGRAM_OVERVIEW_FILE
 			 */
+			IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 			eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE, file);
 		}
 	}
 
 	@Override
-	public void openOverview(IChromatogramOverview chromatogramOverview, IEventBroker eventBroker) {
+	public void openOverview(IChromatogramOverview chromatogramOverview) {
 
+		IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 		eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_OVERVIEW, chromatogramOverview);
 	}
 }

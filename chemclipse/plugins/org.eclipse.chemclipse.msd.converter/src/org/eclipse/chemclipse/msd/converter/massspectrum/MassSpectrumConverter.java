@@ -14,24 +14,24 @@ package org.eclipse.chemclipse.msd.converter.massspectrum;
 import java.io.File;
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
-
 import org.eclipse.chemclipse.converter.core.Converter;
+import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.MassSpectrumExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.MassSpectrumImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 
 /**
  * This class offers several methods to import and export mass spectra.<br/>
@@ -306,10 +306,25 @@ public class MassSpectrumConverter {
 				supplier.setFilterName(element.getAttribute(Converter.FILTER_NAME));
 				supplier.setExportable(Boolean.valueOf(element.getAttribute(Converter.IS_EXPORTABLE)));
 				supplier.setImportable(Boolean.valueOf(element.getAttribute(Converter.IS_IMPORTABLE)));
+				supplier.setMagicNumberMatcher(getMagicNumberMatcher(element));
 				massSpectrumConverterSupport.add(supplier);
 			}
 		}
 		return massSpectrumConverterSupport;
+	}
+
+	/*
+	 * This method may return null.
+	 */
+	private static IMagicNumberMatcher getMagicNumberMatcher(IConfigurationElement element) {
+
+		IMagicNumberMatcher magicNumberMatcher;
+		try {
+			magicNumberMatcher = (IMagicNumberMatcher)element.createExecutableExtension(Converter.IMPORT_MAGIC_NUMBER_MATCHER);
+		} catch(Exception e) {
+			magicNumberMatcher = null;
+		}
+		return magicNumberMatcher;
 	}
 
 	// ---------------------------------------------ConverterMethods

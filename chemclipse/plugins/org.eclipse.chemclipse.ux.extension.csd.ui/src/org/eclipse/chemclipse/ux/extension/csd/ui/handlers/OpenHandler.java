@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.ux.extension.csd.ui.handlers;
 import java.io.File;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
@@ -22,21 +21,11 @@ import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 import org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport;
 import org.eclipse.chemclipse.ux.extension.csd.ui.wizards.ChromatogramInputEntriesWizard;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.services.IServiceConstants;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 
 public class OpenHandler {
-
-	@Inject
-	private EPartService partService;
-	@Inject
-	private EModelService modelService;
-	@Inject
-	private MApplication application;
 
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
@@ -59,7 +48,7 @@ public class OpenHandler {
 				 */
 				for(String chromatogram : selectedChromatograms) {
 					File file = new File(chromatogram);
-					ChromatogramSupport.getInstanceEditorSupport().openEditor(file, modelService, application, partService);
+					ChromatogramSupport.getInstanceEditorSupport().openEditor(file);
 				}
 			}
 		}

@@ -20,12 +20,12 @@ import org.eclipse.chemclipse.converter.core.AbstractConverterSupport;
 import org.eclipse.chemclipse.converter.core.IConverterSupport;
 import org.eclipse.chemclipse.converter.core.ISupplier;
 
-public abstract class AbstractChromatogramIdentifier implements ISupplierFileIdentifier {
+public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
 
 	private List<ISupplier> suppliers;
 	private Map<String, String> regularExpressions;
 
-	public AbstractChromatogramIdentifier(List<ISupplier> suppliers) {
+	public AbstractSupplierFileIdentifier(List<ISupplier> suppliers) {
 		this.suppliers = suppliers;
 		regularExpressions = new HashMap<String, String>();
 	}
@@ -37,6 +37,7 @@ public abstract class AbstractChromatogramIdentifier implements ISupplierFileIde
 		String supplierExtension;
 		/*
 		 * All directories are stored in upper cases.
+		 * See plugin.xml
 		 */
 		if(file.isDirectory()) {
 			return false;

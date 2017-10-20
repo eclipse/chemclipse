@@ -57,7 +57,6 @@ import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.window.Window;
@@ -109,8 +108,6 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 	private MApplication application;
 	@Inject
 	private EModelService modelService;
-	@Inject
-	private EPartService partService;
 	/*
 	 * Decimal format to print values.
 	 */
@@ -444,7 +441,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 			if(referencedChromatogramDialog.open() == Window.OK) {
 				List<IChromatogram> selectedChromatograms = referencedChromatogramDialog.getSelectedChromatograms();
 				for(IChromatogram chromatogram : selectedChromatograms) {
-					ChromatogramSupport.getInstanceEditorSupport().openEditor(chromatogram, modelService, application, partService);
+					ChromatogramSupport.getInstanceEditorSupport().openEditor(chromatogram);
 				}
 			}
 		}
@@ -676,7 +673,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 				/*
 				 * Opens the overview.
 				 */
-				ChromatogramSupport.getInstanceEditorSupport().openOverview(chromatogram, eventBroker);
+				ChromatogramSupport.getInstanceEditorSupport().openOverview(chromatogram);
 			}
 
 			@Override
@@ -690,7 +687,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 				/*
 				 * Opens the editor.
 				 */
-				ChromatogramSupport.getInstanceEditorSupport().openEditor(chromatogram, modelService, application, partService);
+				ChromatogramSupport.getInstanceEditorSupport().openEditor(chromatogram);
 			}
 		});
 	}

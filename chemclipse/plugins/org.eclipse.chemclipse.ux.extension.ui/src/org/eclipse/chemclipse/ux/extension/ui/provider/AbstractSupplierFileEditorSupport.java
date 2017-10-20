@@ -11,12 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.provider;
 
-import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import java.util.List;
 
-public interface IChromatogramEditorSupport extends ISupplierFileEditorSupport, ISupplierFileIdentifier {
+import org.eclipse.chemclipse.converter.core.ISupplier;
 
-	void openEditor(IChromatogram chromatogram);
+public abstract class AbstractSupplierFileEditorSupport extends AbstractSupplierFileIdentifier implements ISupplierFileEditorSupport {
 
-	void openOverview(IChromatogramOverview chromatogramOverview);
+	public AbstractSupplierFileEditorSupport(List<ISupplier> suppliers) {
+		super(suppliers);
+	}
 }
