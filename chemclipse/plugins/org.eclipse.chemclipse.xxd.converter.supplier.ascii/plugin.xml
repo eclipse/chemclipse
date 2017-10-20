@@ -10,6 +10,7 @@
             filterName="ASCII Mass Spectra (*.ascii)"
             id="org.eclipse.chemclipse.msd.converter.supplier.ascii"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.ascii.core.MassSpectrumImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.ascii.io.MagicNumberMatcher"
             isExportable="false"
             isImportable="true">
       </MassSpectrumSupplier>
