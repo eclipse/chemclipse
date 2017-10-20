@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.internal.converter.SpecificationValidator;
 
-public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
+public class MagicNumberMatcherChromatogram extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
 
 	@Override
 	public boolean checkFileFormat(File file) {
