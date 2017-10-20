@@ -10,7 +10,7 @@
             filterName="JCAMP-DX Chromatogram (*.JDX)"
             id="org.eclipse.chemclipse.msd.converter.supplier.jcampdx"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.ChromatogramImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.internal.converter.MagicNumberMatcher"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io.MagicNumberMatcherChromatogram"
             isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>
@@ -24,6 +24,7 @@
             filterName="JCAMP-DX Library (*.jdx)"
             id="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.library.jdx"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.MassSpectrumImportConverterJDX"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io.MagicNumberMatcherMassSpectrum"
             isExportable="false"
             isImportable="true">
       </MassSpectrumSupplier>
@@ -37,6 +38,7 @@
             filterName="JDL Library (*.jdl)"
             id="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.library.jdl"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.converter.MassSpectrumImportConverterJDL"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io.MagicNumberMatcherMassSpectrum"
             isExportable="false"
             isImportable="true">
       </MassSpectrumSupplier>
@@ -50,7 +52,7 @@
             filterName="JCAMP-DX Chromatogram (*.JDX)"
             id="org.eclipse.chemclipse.csd.converter.supplier.jcampdx"
             importConverter="org.eclipse.chemclipse.csd.converter.supplier.jcampdx.converter.ChromatogramImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.internal.converter.MagicNumberMatcher"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io.MagicNumberMatcherChromatogram"
             isExportable="false"
             isImportable="true">
       </ChromatogramSupplier>

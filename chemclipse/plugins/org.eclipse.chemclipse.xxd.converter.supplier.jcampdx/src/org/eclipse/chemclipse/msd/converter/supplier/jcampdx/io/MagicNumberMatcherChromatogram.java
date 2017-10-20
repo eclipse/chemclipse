@@ -9,14 +9,15 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.internal.converter;
+package org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io;
 
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.internal.converter.SpecificationValidator;
 
-public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
+public class MagicNumberMatcherChromatogram extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
 
 	@Override
 	public boolean checkFileFormat(File file) {
