@@ -10,6 +10,7 @@
             filterName="MassBank Mass Spectrum (*.txt)"
             id="org.eclipse.chemclipse.msd.converter.supplier.massbank"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.massbank.converter.MassBankImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.massbank.converter.MagicNumberMatcher"
             isExportable="false"
             isImportable="true">
       </MassSpectrumSupplier>
