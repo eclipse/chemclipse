@@ -57,7 +57,6 @@ public class SupplierFileExplorerContentProvider extends FileExplorerContentProv
 							 */
 							for(ISupplierFileIdentifier supplierFileIdentifier : supplierFileIdentifierList) {
 								if(supplierFileIdentifier.isSupplierFile(file)) {
-									System.out.println(file + "\t" + supplierFileIdentifier.getType());
 									if(supplierFileIdentifier.isMatchMagicNumber(file)) {
 										files.add(file);
 									}
