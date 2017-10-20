@@ -10,6 +10,7 @@
             filterName="AMDIS Mass Spectra (*.msl)"
             id="org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msl"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLMassSpectrumImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
       </MassSpectrumSupplier>
@@ -20,6 +21,7 @@
             filterName="NIST Text (*.msp)"
             id="org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msp"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MSPMassSpectrumImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
       </MassSpectrumSupplier>
