@@ -24,8 +24,9 @@ public interface IRetentionTime extends Comparable<IRetentionTime> {
 		}
 		return retentionTimesList;
 	}
-	
-	static List<IRetentionTime> copy(List<IRetentionTime> retentionTimes){
+
+	static List<IRetentionTime> copy(List<IRetentionTime> retentionTimes) {
+
 		List<IRetentionTime> newRetentionTimes = new ArrayList<>();
 		for(int i = 0; i < retentionTimes.size(); i++) {
 			IRetentionTime retentionTime = retentionTimes.get(i);
@@ -53,5 +54,4 @@ public interface IRetentionTime extends Comparable<IRetentionTime> {
 	void setDescription(String description);
 
 	void setSelected(boolean selected);
-	
 }
