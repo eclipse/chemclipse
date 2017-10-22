@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -20,17 +23,18 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 public class TaskQuickAccessPart {
 
-	private Button buttonOverlayTask;
-	private Button buttonOverviewTask;
+	private Map<String, String> partMap;
 
 	@Inject
 	public TaskQuickAccessPart(Composite parent) {
+		partMap = new HashMap<String, String>();
 		initialize(parent);
 	}
 
@@ -40,10 +44,120 @@ public class TaskQuickAccessPart {
 		 * Add buttons here to focus specialized views.
 		 */
 		parent.setLayout(new RowLayout());
-		createButtonOverlayTask(parent);
-		createButtonOverviewTask(parent);
+		//
+		createOverlayTask(parent);
+		createOverviewTask(parent);
+		createSelectedScansTask(parent);
+		createSelectedPeaksTask(parent);
 		//
 		initializeParts();
+	}
+
+	private void createOverlayTask(Composite parent) {
+
+		String partId_1 = PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERLAY;
+		partMap.put(partId_1, PartSupport.PARTSTACK_BOTTOM_LEFT);
+		//
+		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERLAY_ACTIVE, IApplicationImage.SIZE_16x16);
+		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERLAY_DEFAULT, IApplicationImage.SIZE_16x16);
+		//
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Toggle the overlay modus");
+		button.setImage(imageDefault);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				togglePartVisibility(button, partId_1, imageActive, imageDefault);
+			}
+		});
+	}
+
+	private void createOverviewTask(Composite parent) {
+
+		String partId_1 = PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEADER;
+		partMap.put(partId_1, PartSupport.PARTSTACK_OVERVIEW);
+		String partId_2 = PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW;
+		partMap.put(partId_2, PartSupport.PARTSTACK_OVERVIEW);
+		//
+		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERVIEW_ACTIVE, IApplicationImage.SIZE_16x16);
+		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERVIEW_DEFAULT, IApplicationImage.SIZE_16x16);
+		//
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Toggle the overview modus");
+		button.setImage(imageDefault);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				/*
+				 * Show the part stack on demand. It's hidden by default.
+				 */
+				String partStackId = partMap.get(partId_1);
+				PartSupport.setPartStackVisibility(partStackId, true);
+				togglePartVisibility(button, partId_1, imageActive, imageDefault);
+				togglePartVisibility(button, partId_2, imageActive, imageDefault);
+			}
+		});
+	}
+
+	private void createSelectedScansTask(Composite parent) {
+
+		String partId_1 = PartSupport.PARTDESCRIPTOR_SELECTED_SCANS;
+		partMap.put(partId_1, PartSupport.PARTSTACK_BOTTOM_CENTER);
+		//
+		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_SCAN, IApplicationImage.SIZE_16x16);
+		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_SCAN, IApplicationImage.SIZE_16x16);
+		//
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Toggle the selected scan(s) modus");
+		button.setImage(imageDefault);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				togglePartVisibility(button, partId_1, imageActive, imageDefault);
+			}
+		});
+	}
+
+	private void createSelectedPeaksTask(Composite parent) {
+
+		String partId_1 = PartSupport.PARTDESCRIPTOR_SELECTED_PEAKS;
+		partMap.put(partId_1, PartSupport.PARTSTACK_BOTTOM_CENTER);
+		//
+		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_PEAK, IApplicationImage.SIZE_16x16);
+		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_PEAK, IApplicationImage.SIZE_16x16);
+		//
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Toggle the selected peak(s) modus");
+		button.setImage(imageDefault);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				togglePartVisibility(button, partId_1, imageActive, imageDefault);
+			}
+		});
+	}
+
+	private void togglePartVisibility(Button button, String partId, Image imageActive, Image imageDefault) {
+
+		String partStackId = partMap.get(partId);
+		MPart part = PartSupport.getPart(partId, partStackId);
+		if(PartSupport.togglePartVisibility(part, partStackId)) {
+			button.setImage(imageActive);
+		} else {
+			button.setImage(imageDefault);
+		}
 	}
 
 	private void initializeParts() {
@@ -52,62 +166,8 @@ public class TaskQuickAccessPart {
 		 * It's important to set the initial visibility of the parts.
 		 * Otherwise, PartSupport.togglePartVisibility won't work as expected.
 		 */
-		PartSupport.setPartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERLAY, PartSupport.PARTSTACK_BOTTOM_LEFT, false);
-		PartSupport.setPartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEADER, PartSupport.PARTSTACK_OVERVIEW, false);
-		PartSupport.setPartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW, PartSupport.PARTSTACK_OVERVIEW, false);
-	}
-
-	private void createButtonOverlayTask(Composite parent) {
-
-		buttonOverlayTask = new Button(parent, SWT.PUSH);
-		buttonOverlayTask.setText("");
-		buttonOverlayTask.setToolTipText("Toggle the overlay modus");
-		buttonOverlayTask.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERLAY_ACTIVE, IApplicationImage.SIZE_16x16));
-		buttonOverlayTask.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				/*
-				 * Chromatogram Overview
-				 */
-				MPart part = PartSupport.getPart(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERLAY, PartSupport.PARTSTACK_BOTTOM_LEFT);
-				if(PartSupport.togglePartVisibility(part, PartSupport.PARTSTACK_BOTTOM_LEFT)) {
-					buttonOverlayTask.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERLAY_VISIBLE, IApplicationImage.SIZE_16x16));
-				} else {
-					buttonOverlayTask.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERLAY_ACTIVE, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
-	}
-
-	private void createButtonOverviewTask(Composite parent) {
-
-		buttonOverviewTask = new Button(parent, SWT.PUSH);
-		buttonOverviewTask.setText("");
-		buttonOverviewTask.setToolTipText("Toggle the overview modus");
-		buttonOverviewTask.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERVIEW_ACTIVE, IApplicationImage.SIZE_16x16));
-		buttonOverviewTask.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				/*
-				 * Show the part stack on demand.
-				 */
-				PartSupport.setPartStackVisibility(PartSupport.PARTSTACK_OVERVIEW, true);
-				/*
-				 * Chromatogram Header, Chromatogram Overview
-				 */
-				MPart chromatogramHeaderPart = PartSupport.getPart(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEADER, PartSupport.PARTSTACK_OVERVIEW);
-				PartSupport.togglePartVisibility(chromatogramHeaderPart, PartSupport.PARTSTACK_OVERVIEW);
-				MPart chromatogramOverviewPart = PartSupport.getPart(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW, PartSupport.PARTSTACK_OVERVIEW);
-				if(PartSupport.togglePartVisibility(chromatogramOverviewPart, PartSupport.PARTSTACK_OVERVIEW)) {
-					buttonOverviewTask.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERVIEW_VISIBLE, IApplicationImage.SIZE_16x16));
-				} else {
-					buttonOverviewTask.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERVIEW_ACTIVE, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
+		for(Map.Entry<String, String> part : partMap.entrySet()) {
+			PartSupport.setPartVisibility(part.getKey(), part.getValue(), false);
+		}
 	}
 }

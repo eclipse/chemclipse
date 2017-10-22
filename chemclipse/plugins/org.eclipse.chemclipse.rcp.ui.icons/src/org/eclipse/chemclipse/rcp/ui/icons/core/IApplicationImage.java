@@ -258,8 +258,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	 * PICTOGRAM and Data Analysis Perspective
 	 */
 	String PICTOGRAM_DATA_ANALYSIS = "DataAnalysis.png";
+	String IMAGE_CHROMATOGRAM_OVERLAY_DEFAULT = "chromatogramOverlayDefault.gif";
 	String IMAGE_CHROMATOGRAM_OVERLAY_ACTIVE = "chromatogramOverlayActive.gif";
-	String IMAGE_CHROMATOGRAM_OVERLAY_VISIBLE = "chromatogramOverlayVisible.gif";
+	String IMAGE_CHROMATOGRAM_OVERVIEW_DEFAULT = "chromatogramOverviewDefault.gif";
 	String IMAGE_CHROMATOGRAM_OVERVIEW_ACTIVE = "chromatogramOverviewActive.gif";
-	String IMAGE_CHROMATOGRAM_OVERVIEW_VISIBLE = "chromatogramOverviewVisible.gif";
 }
