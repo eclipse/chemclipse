@@ -26,13 +26,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-public class SelectedScansPart {
+public class PartToolbarTemplate {
 
 	private Composite toolbarSettings;
 	private Composite toolbarEdit;
 
 	@Inject
-	public SelectedScansPart(Composite parent, MPart part) {
+	public PartToolbarTemplate(Composite parent, MPart part) {
 		initialize(parent);
 	}
 

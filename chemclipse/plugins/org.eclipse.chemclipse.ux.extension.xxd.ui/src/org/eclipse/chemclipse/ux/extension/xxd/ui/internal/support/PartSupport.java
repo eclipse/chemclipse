@@ -21,6 +21,8 @@ import org.eclipse.e4.ui.model.application.ui.basic.MStackElement;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Composite;
 
 public class PartSupport {
 
@@ -154,5 +156,16 @@ public class PartSupport {
 		if(area != null) {
 			area.setVisible(visible);
 		}
+	}
+
+	public static void toggleToolbarVisibility(Composite toolbar) {
+
+		boolean isVisible = toolbar.isVisible();
+		toolbar.setVisible(!isVisible);
+		GridData gridData = (GridData)toolbar.getLayoutData();
+		gridData.exclude = isVisible;
+		Composite parent = toolbar.getParent();
+		parent.layout(true);
+		parent.redraw();
 	}
 }
