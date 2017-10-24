@@ -26,13 +26,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-public class PartToolbarTemplate {
+public class Template_PartToolbar {
 
 	private Composite toolbarSettings;
 	private Composite toolbarEdit;
 
 	@Inject
-	public PartToolbarTemplate(Composite parent, MPart part) {
+	public Template_PartToolbar(Composite parent, MPart part) {
 		initialize(parent);
 	}
 

@@ -39,6 +39,7 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractChromatogramEditorPartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlaySupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
 import org.eclipse.e4.ui.di.Focus;
@@ -85,26 +86,10 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 	@Inject
 	private EPartService partService;
 	//
-	private static final String OVERLAY_TYPE_TIC = "TIC"; // Total Intensity Chromatogram
-	private static final String OVERLAY_TYPE_BPC = "BPC"; // Base Peak Chromatogram
-	private static final String OVERLAY_TYPE_XIC = "XIC"; // Extracted Ion Chromatogram
-	private static final String OVERLAY_TYPE_SIC = "SIC"; // Selected Ion Chromatogram
-	private static final String OVERLAY_TYPE_TSC = "TSC"; // Total Substracted Chromatogram
-	// private static final String OVERLAY_TYPE_SRM = "SRM"; // Single Reaction Monitoring
-	// private static final String OVERLAY_TYPE_MRM = "MRM"; // Single Reaction Monitoring
-	//
 	private static final String DERIVATIVE_NONE = "--";
 	private static final String DERIVATIVE_FIRST = "1st";
 	private static final String DERIVATIVE_SECOND = "2nd";
 	private static final String DERIVATIVE_THIRD = "3rd";
-	//
-	private static final String OVERLAY_TYPE_CONCATENATOR = "+";
-	private static final String ESCAPE_CONCATENATOR = "\\";
-	private static final String SELECTED_IONS_CONCATENATOR = " ";
-	private static final String EDITOR_TAB = "_EditorTab#";
-	private static final String OVERLAY_START_MARKER = "_(";
-	private static final String OVERLAY_STOP_MARKER = ")";
-	private static final String DELIMITER_ION_DERIVATIVE = ",";
 	//
 	private static final String SELECTED_IONS_DEFAULT = "18 28 32 84 207";
 	private static final String SELECTED_IONS_HYDROCARBONS = "Hydrocarbons";
@@ -167,16 +152,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		applyUserSettings();
 		resetColorMaps();
 		//
-		overlayTypes = new String[]{//
-				OVERLAY_TYPE_TIC, //
-				OVERLAY_TYPE_BPC, //
-				OVERLAY_TYPE_XIC, //
-				OVERLAY_TYPE_SIC, //
-				OVERLAY_TYPE_TSC, //
-				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_BPC, //
-				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_XIC, //
-				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_SIC, //
-				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_TSC};
+		overlayTypes = OverlaySupport.getOverlayTypes();
 		//
 		derivativeTypes = new String[]{//
 				DERIVATIVE_NONE, //
@@ -625,7 +601,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		 * Overlay Type
 		 */
 		String overlayType = comboOverlayType.getText().trim();
-		boolean enableOverlayType = (overlayType.contains(OVERLAY_TYPE_XIC) || overlayType.contains(OVERLAY_TYPE_SIC) || overlayType.contains(OVERLAY_TYPE_TSC));
+		boolean enableOverlayType = (overlayType.contains(OverlaySupport.OVERLAY_TYPE_XIC) || overlayType.contains(OverlaySupport.OVERLAY_TYPE_SIC) || overlayType.contains(OverlaySupport.OVERLAY_TYPE_TSC));
 		comboSelectedIons.setEnabled(enableOverlayType);
 		/*
 		 * Selected Series
@@ -750,22 +726,22 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		for(int i = 0; i < chromatogramSelections.size(); i++) {
 			IChromatogramSelection chromatogramSelection = chromatogramSelections.get(i);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			String chromatogramName = chromatogram.getName() + EDITOR_TAB + (i + 1);
+			String chromatogramName = chromatogram.getName() + OverlaySupport.EDITOR_TAB + (i + 1);
 			/*
 			 * Select which series shall be displayed.
 			 */
-			String[] overlayTypes = comboOverlayType.getText().trim().split(ESCAPE_CONCATENATOR + OVERLAY_TYPE_CONCATENATOR);
+			String[] overlayTypes = comboOverlayType.getText().trim().split(OverlaySupport.ESCAPE_CONCATENATOR + OverlaySupport.OVERLAY_TYPE_CONCATENATOR);
 			String derivativeType = comboDerivativeType.getText().trim();
 			//
 			for(String overlayType : overlayTypes) {
-				if(overlayType.equals(OVERLAY_TYPE_SIC)) {
+				if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_SIC)) {
 					/*
 					 * SIC
 					 */
 					if(chromatogram instanceof IChromatogramMSD) {
 						for(int ion : ions) {
 							//
-							String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + DELIMITER_ION_DERIVATIVE + derivativeType + DELIMITER_ION_DERIVATIVE + ion + OVERLAY_STOP_MARKER;
+							String seriesId = chromatogramName + OverlaySupport.OVERLAY_START_MARKER + overlayType + OverlaySupport.DELIMITER_ION_DERIVATIVE + derivativeType + OverlaySupport.DELIMITER_ION_DERIVATIVE + ion + OverlaySupport.OVERLAY_STOP_MARKER;
 							Color color = getSeriesColor(seriesId, overlayType);
 							//
 							availableSeriesIds.add(seriesId);
@@ -778,10 +754,10 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 					}
 				} else {
 					//
-					String seriesId = chromatogramName + OVERLAY_START_MARKER + overlayType + DELIMITER_ION_DERIVATIVE + derivativeType + OVERLAY_STOP_MARKER;
+					String seriesId = chromatogramName + OverlaySupport.OVERLAY_START_MARKER + overlayType + OverlaySupport.DELIMITER_ION_DERIVATIVE + derivativeType + OverlaySupport.OVERLAY_STOP_MARKER;
 					Color color = getSeriesColor(chromatogramName, overlayType);
 					//
-					if(overlayType.equals(OVERLAY_TYPE_BPC) || overlayType.equals(OVERLAY_TYPE_XIC) || overlayType.equals(OVERLAY_TYPE_TSC)) {
+					if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_BPC) || overlayType.equals(OverlaySupport.OVERLAY_TYPE_XIC) || overlayType.equals(OverlaySupport.OVERLAY_TYPE_TSC)) {
 						/*
 						 * BPC, XIC, TSC
 						 */
@@ -847,7 +823,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 			ionsText = comboText;
 		}
 		//
-		String[] ions = ionsText.split(SELECTED_IONS_CONCATENATOR);
+		String[] ions = ionsText.split(OverlaySupport.SELECTED_IONS_CONCATENATOR);
 		for(String ion : ions) {
 			try {
 				selectedIons.add(AbstractIon.getIon(decimalFormat.parse(ion).doubleValue()));
@@ -862,7 +838,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 	private Color getSeriesColor(String seriesId, String overlayType) {
 
 		Color color;
-		if(OVERLAY_TYPE_SIC.equals(overlayType)) {
+		if(OverlaySupport.OVERLAY_TYPE_SIC.equals(overlayType)) {
 			/*
 			 * SIC
 			 */
@@ -928,12 +904,12 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 	private double getIntensity(IScan scan, String overlayType, String derivativeType, List<Integer> ions) {
 
 		double intensity = 0.0d;
-		if(overlayType.equals(OVERLAY_TYPE_TIC)) {
+		if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_TIC)) {
 			/*
 			 * TIC
 			 */
 			intensity = scan.getTotalSignal();
-		} else if(overlayType.equals(OVERLAY_TYPE_BPC)) {
+		} else if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_BPC)) {
 			/*
 			 * BPC
 			 */
@@ -944,7 +920,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 					intensity = ion.getAbundance();
 				}
 			}
-		} else if(overlayType.equals(OVERLAY_TYPE_XIC) || overlayType.equals(OVERLAY_TYPE_SIC)) {
+		} else if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_XIC) || overlayType.equals(OverlaySupport.OVERLAY_TYPE_SIC)) {
 			/*
 			 * XIC, SIC
 			 */
@@ -955,7 +931,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 					intensity += extractedIonSignal.getAbundance(ion);
 				}
 			}
-		} else if(overlayType.equals(OVERLAY_TYPE_TSC)) {
+		} else if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_TSC)) {
 			/*
 			 * TSC
 			 */
@@ -1005,15 +981,15 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 	private LineStyle getLineStyle(String overlayType) {
 
 		LineStyle lineStyle;
-		if(overlayType.equals(OVERLAY_TYPE_TIC)) {
+		if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_TIC)) {
 			lineStyle = lineStyleTIC;
-		} else if(overlayType.equals(OVERLAY_TYPE_BPC)) {
+		} else if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_BPC)) {
 			lineStyle = lineStyleBPC;
-		} else if(overlayType.equals(OVERLAY_TYPE_XIC)) {
+		} else if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_XIC)) {
 			lineStyle = lineStyleXIC;
-		} else if(overlayType.equals(OVERLAY_TYPE_SIC)) {
+		} else if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_SIC)) {
 			lineStyle = lineStyleSIC;
-		} else if(overlayType.equals(OVERLAY_TYPE_TSC)) {
+		} else if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_TSC)) {
 			lineStyle = lineStyleTSC;
 		} else {
 			lineStyle = lineStyleDefault;
