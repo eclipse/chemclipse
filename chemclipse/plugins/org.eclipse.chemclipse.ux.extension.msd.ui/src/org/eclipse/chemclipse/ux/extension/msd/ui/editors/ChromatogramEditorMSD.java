@@ -205,6 +205,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 		//
 		IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 		eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, null);
+		eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, null);
 		/*
 		 * Remove the actual editor to be not in the updatee list anymore.
 		 */

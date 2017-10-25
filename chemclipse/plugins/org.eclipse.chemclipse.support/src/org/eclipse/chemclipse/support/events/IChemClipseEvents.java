@@ -49,6 +49,7 @@ public interface IChemClipseEvents {
 	//
 	String PROPERTY_SELECTED_ION = IEventBroker.DATA; // double ion
 	String PROPERTY_SELECTED_SCAN = IEventBroker.DATA; // IScan
+	String PROPERTY_SELECTED_PEAK = IEventBroker.DATA; // IPeak
 	//
 	String PROPERTY_FORCE_RELOAD = "ForceReload";
 	String PROPERTY_PROCESSING_INFO = IEventBroker.DATA;

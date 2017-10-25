@@ -26,6 +26,8 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.swt.ui.converter.SeriesConverterMSD;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.swt.ui.converter.SeriesConverter;
 import org.eclipse.chemclipse.swt.ui.exceptions.NoIdentifiedScansAvailableException;
 import org.eclipse.chemclipse.swt.ui.exceptions.NoPeaksAvailableException;
@@ -37,6 +39,7 @@ import org.eclipse.chemclipse.swt.ui.series.Series;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.Offset;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
@@ -321,11 +324,12 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 		/*
 		 * Get the peak
 		 */
+		IChromatogramPeakMSD selectedPeak = null;
 		IChromatogramSelection storedChromatogramSelection = getChromatogramSelection();
 		if(storedChromatogramSelection instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelection = (IChromatogramSelectionMSD)storedChromatogramSelection;
 			int retentionTime = getRetentionTime(x);
-			IChromatogramPeakMSD selectedPeak = chromatogramSelection.getChromatogramMSD().getPeak(retentionTime);
+			selectedPeak = chromatogramSelection.getChromatogramMSD().getPeak(retentionTime);
 			if(selectedPeak != null) {
 				/*
 				 * Fire an update.
@@ -337,6 +341,9 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 				chromatogramSelection.update(true);
 			}
 		}
+		//
+		IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+		eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, selectedPeak);
 	}
 
 	private void adjustChromatogramSelection(IChromatogramPeakMSD selectedPeak, IChromatogramSelectionMSD chromatogramSelection) {
