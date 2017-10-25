@@ -158,10 +158,11 @@ public class PartSupport {
 		}
 	}
 
-	public static void toggleToolbarVisibility(Composite toolbar) {
+	public static boolean toggleToolbarVisibility(Composite toolbar) {
 
-		boolean visible = toolbar.isVisible();
-		setToolbarVisibility(toolbar, !visible);
+		boolean visible = !toolbar.isVisible();
+		setToolbarVisibility(toolbar, visible);
+		return visible;
 	}
 
 	public static void setToolbarVisibility(Composite toolbar, boolean visible) {
