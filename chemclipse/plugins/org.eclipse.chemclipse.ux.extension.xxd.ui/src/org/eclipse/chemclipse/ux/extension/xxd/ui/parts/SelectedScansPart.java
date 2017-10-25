@@ -31,6 +31,7 @@ import org.eclipse.eavp.service.swtchart.barcharts.IBarSeriesData;
 import org.eclipse.eavp.service.swtchart.barcharts.IBarSeriesSettings;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
+import org.eclipse.eavp.service.swtchart.core.RangeRestriction;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
 import org.eclipse.eavp.service.swtchart.customcharts.MassSpectrumChart;
 import org.eclipse.eavp.service.swtchart.customcharts.MassSpectrumChart.LabelOption;
@@ -56,12 +57,14 @@ public class SelectedScansPart extends AbstractScanUpdateSupport implements ISca
 	@Focus
 	public void setFocus() {
 
+		updateScan(getScan());
 		massSpectrumChart.setFocus();
 	}
 
 	@Override
 	public void updateScan(IScan scan) {
 
+		massSpectrumChart.deleteSeries();
 		if(scan instanceof IScanMSD) {
 			List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
 			ISeriesData seriesData = getSeriesData((IScanMSD)scan);
@@ -70,8 +73,6 @@ public class SelectedScansPart extends AbstractScanUpdateSupport implements ISca
 			barSeriesSettings.setDescription("");
 			barSeriesDataList.add(barSeriesData);
 			massSpectrumChart.addSeriesData(barSeriesDataList);
-		} else {
-			massSpectrumChart.deleteSeries();
 		}
 	}
 
@@ -172,6 +173,9 @@ public class SelectedScansPart extends AbstractScanUpdateSupport implements ISca
 		 */
 		IChartSettings chartSettings = massSpectrumChart.getChartSettings();
 		chartSettings.setCreateMenu(true);
+		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
+		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
+		rangeRestriction.setExtendMaxY(0.2d);
 		massSpectrumChart.applySettings(chartSettings);
 		/*
 		 * Additional settings

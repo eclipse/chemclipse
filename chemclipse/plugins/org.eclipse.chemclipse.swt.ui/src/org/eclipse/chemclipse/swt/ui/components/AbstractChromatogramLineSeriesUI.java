@@ -434,6 +434,10 @@ public abstract class AbstractChromatogramLineSeriesUI extends AbstractLineSerie
 		 * Set and fire an update.
 		 */
 		IScan selectedScan = chromatogramSelection.getChromatogram().getScan(scanNumber);
+		//
+		IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+		eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, selectedScan);
+		//
 		if(selectedScan != null) {
 			/*
 			 * The selection should slide with the selected scans.

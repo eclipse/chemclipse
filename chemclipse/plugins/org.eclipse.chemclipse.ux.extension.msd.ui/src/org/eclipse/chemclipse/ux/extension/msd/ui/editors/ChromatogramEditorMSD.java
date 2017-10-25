@@ -45,6 +45,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.IonTransitionCheckBoxEditingSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.IonTransitionContentProvider;
@@ -201,6 +202,9 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 	private void preDestroy() {
 
 		unsubscribe();
+		//
+		IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+		eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, null);
 		/*
 		 * Remove the actual editor to be not in the updatee list anymore.
 		 */
