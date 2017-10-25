@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class OverlaySupport {
 
 	/*
@@ -33,6 +36,21 @@ public class OverlaySupport {
 	public static final String OVERLAY_START_MARKER = "_(";
 	public static final String OVERLAY_STOP_MARKER = ")";
 	public static final String DELIMITER_ION_DERIVATIVE = ",";
+	//
+	public static final String DERIVATIVE_NONE = "--";
+	public static final String DERIVATIVE_FIRST = "1st";
+	public static final String DERIVATIVE_SECOND = "2nd";
+	public static final String DERIVATIVE_THIRD = "3rd";
+	//
+	public static final String SELECTED_IONS_DEFAULT = "18 28 32 84 207";
+	public static final String SELECTED_IONS_HYDROCARBONS = "Hydrocarbons";
+	public static final String SELECTED_IONS_FATTY_ACIDS = "Fatty Acids";
+	public static final String SELECTED_IONS_FAME = "FAME";
+	public static final String SELECTED_IONS_SOLVENT_TAILING = "Solvent Tailing";
+	public static final String SELECTED_IONS_COLUMN_BLEED = "Column Bleed";
+	//
+	public static final String DISPLAY_MODUS_NORMAL = "Normal";
+	public static final String DISPLAY_MODUS_MIRRORED = "Mirrored";
 
 	public static String[] getOverlayTypes() {
 
@@ -46,5 +64,43 @@ public class OverlaySupport {
 				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_XIC, //
 				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_SIC, //
 				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_TSC};
+	}
+
+	public static String[] getDerivativeTypes() {
+
+		return new String[]{//
+				DERIVATIVE_NONE, //
+				DERIVATIVE_FIRST, //
+				DERIVATIVE_SECOND, //
+				DERIVATIVE_THIRD};
+	}
+
+	public static String[] getSelectedIons() {
+
+		return new String[]{//
+				SELECTED_IONS_HYDROCARBONS, //
+				SELECTED_IONS_FATTY_ACIDS, //
+				SELECTED_IONS_FAME, //
+				SELECTED_IONS_SOLVENT_TAILING, //
+				SELECTED_IONS_COLUMN_BLEED};
+	}
+
+	public static String[] getDisplayModi() {
+
+		return new String[]{//
+				DISPLAY_MODUS_NORMAL, //
+				DISPLAY_MODUS_MIRRORED //
+		};
+	}
+
+	public static Map<String, String> getSelectedIonsMap() {
+
+		Map<String, String> selectedIonsMap = new HashMap<String, String>();
+		selectedIonsMap.put(SELECTED_IONS_HYDROCARBONS, "57 71 85");
+		selectedIonsMap.put(SELECTED_IONS_FATTY_ACIDS, "74 84");
+		selectedIonsMap.put(SELECTED_IONS_FAME, "79 81");
+		selectedIonsMap.put(SELECTED_IONS_SOLVENT_TAILING, "84");
+		selectedIonsMap.put(SELECTED_IONS_COLUMN_BLEED, "207");
+		return selectedIonsMap;
 	}
 }

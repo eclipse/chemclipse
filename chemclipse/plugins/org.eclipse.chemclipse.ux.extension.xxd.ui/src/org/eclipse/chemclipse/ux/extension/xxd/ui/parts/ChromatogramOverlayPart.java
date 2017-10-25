@@ -86,21 +86,6 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 	@Inject
 	private EPartService partService;
 	//
-	private static final String DERIVATIVE_NONE = "--";
-	private static final String DERIVATIVE_FIRST = "1st";
-	private static final String DERIVATIVE_SECOND = "2nd";
-	private static final String DERIVATIVE_THIRD = "3rd";
-	//
-	private static final String SELECTED_IONS_DEFAULT = "18 28 32 84 207";
-	private static final String SELECTED_IONS_HYDROCARBONS = "Hydrocarbons";
-	private static final String SELECTED_IONS_FATTY_ACIDS = "Fatty Acids";
-	private static final String SELECTED_IONS_FAME = "FAME";
-	private static final String SELECTED_IONS_SOLVENT_TAILING = "Solvent Tailing";
-	private static final String SELECTED_IONS_COLUMN_BLEED = "Column Bleed";
-	//
-	private static final String DISPLAY_MODUS_NORMAL = "Normal";
-	private static final String DISPLAY_MODUS_MIRRORED = "Mirrored";
-	//
 	private IColorScheme colorSchemeNormal;
 	private Map<String, Color> usedColorsNormal;
 	private IColorScheme colorSchemeSIC;
@@ -153,32 +138,10 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		resetColorMaps();
 		//
 		overlayTypes = OverlaySupport.getOverlayTypes();
-		//
-		derivativeTypes = new String[]{//
-				DERIVATIVE_NONE, //
-				DERIVATIVE_FIRST, //
-				DERIVATIVE_SECOND, //
-				DERIVATIVE_THIRD};
-		//
-		selectedIons = new String[]{//
-				SELECTED_IONS_HYDROCARBONS, //
-				SELECTED_IONS_FATTY_ACIDS, //
-				SELECTED_IONS_FAME, //
-				SELECTED_IONS_SOLVENT_TAILING, //
-				SELECTED_IONS_COLUMN_BLEED //
-		};
-		//
-		displayModi = new String[]{//
-				DISPLAY_MODUS_NORMAL, //
-				DISPLAY_MODUS_MIRRORED //
-		};
-		//
-		selectedIonsMap = new HashMap<String, String>();
-		selectedIonsMap.put(SELECTED_IONS_HYDROCARBONS, "57 71 85");
-		selectedIonsMap.put(SELECTED_IONS_FATTY_ACIDS, "74 84");
-		selectedIonsMap.put(SELECTED_IONS_FAME, "79 81");
-		selectedIonsMap.put(SELECTED_IONS_SOLVENT_TAILING, "84");
-		selectedIonsMap.put(SELECTED_IONS_COLUMN_BLEED, "207");
+		derivativeTypes = OverlaySupport.getDerivativeTypes();
+		selectedIons = OverlaySupport.getSelectedIons();
+		displayModi = OverlaySupport.getDisplayModi();
+		selectedIonsMap = OverlaySupport.getSelectedIonsMap();
 		//
 		mirroredSeries = new HashSet<String>();
 	}
@@ -285,8 +248,8 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 
 				IChartSettings chartSettings = chromatogramChart.getChartSettings();
 				String derivativeType = comboDerivativeType.getText();
-				if(DERIVATIVE_NONE.equals(derivativeType)) {
-					if(comboDisplayModus.getText().equals(DISPLAY_MODUS_NORMAL)) {
+				if(OverlaySupport.DERIVATIVE_NONE.equals(derivativeType)) {
+					if(comboDisplayModus.getText().equals(OverlaySupport.DISPLAY_MODUS_NORMAL)) {
 						chartSettings.getRangeRestriction().setZeroY(false);
 					}
 				} else {
@@ -328,7 +291,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		comboDisplayModus = new Combo(parent, SWT.READ_ONLY);
 		comboDisplayModus.setToolTipText("Select the display modus.");
 		comboDisplayModus.setItems(displayModi);
-		comboDisplayModus.setText(DISPLAY_MODUS_NORMAL);
+		comboDisplayModus.setText(OverlaySupport.DISPLAY_MODUS_NORMAL);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.minimumWidth = 150;
 		gridData.grabExcessHorizontalSpace = true;
@@ -344,7 +307,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 				String derivativeType = comboDerivativeType.getText();
 				IChartSettings chartSettings = chromatogramChart.getChartSettings();
 				//
-				if(displayModus.equals(DISPLAY_MODUS_MIRRORED)) {
+				if(displayModus.equals(OverlaySupport.DISPLAY_MODUS_MIRRORED)) {
 					/*
 					 * Mirror
 					 */
@@ -363,7 +326,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 						mirroredSeries.remove(selectedSeriesId);
 					}
 					//
-					if(mirroredSeries.size() == 0 && DERIVATIVE_NONE.equals(derivativeType)) {
+					if(mirroredSeries.size() == 0 && OverlaySupport.DERIVATIVE_NONE.equals(derivativeType)) {
 						chartSettings.getRangeRestriction().setZeroY(true);
 					} else {
 						chartSettings.getRangeRestriction().setZeroY(false);
@@ -382,7 +345,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		comboSelectedIons = new Combo(parent, SWT.NONE);
 		comboSelectedIons.setToolTipText("Select the overlay ions.");
 		comboSelectedIons.setItems(selectedIons);
-		comboSelectedIons.setText(SELECTED_IONS_DEFAULT);
+		comboSelectedIons.setText(OverlaySupport.SELECTED_IONS_DEFAULT);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.minimumWidth = 150;
 		gridData.grabExcessHorizontalSpace = true;
@@ -720,7 +683,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		BaseChart baseChart = chromatogramChart.getBaseChart();
 		List<Integer> ions = getSelectedIons();
 		//
-		comboDisplayModus.setText(DISPLAY_MODUS_NORMAL);
+		comboDisplayModus.setText(OverlaySupport.DISPLAY_MODUS_NORMAL);
 		//
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 		for(int i = 0; i < chromatogramSelections.size(); i++) {
@@ -952,13 +915,13 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 
 		int derivatives;
 		switch(derivativeType) {
-			case DERIVATIVE_FIRST:
+			case OverlaySupport.DERIVATIVE_FIRST:
 				derivatives = 1;
 				break;
-			case DERIVATIVE_SECOND:
+			case OverlaySupport.DERIVATIVE_SECOND:
 				derivatives = 2;
 				break;
-			case DERIVATIVE_THIRD:
+			case OverlaySupport.DERIVATIVE_THIRD:
 				derivatives = 3;
 				break;
 			default:
