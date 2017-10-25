@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -25,22 +24,15 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractChromatogramEditorPartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlaySupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -48,18 +40,13 @@ import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.core.IAxisScaleConverter;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.core.IExtendedChart;
-import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.ISeriesModificationListener;
-import org.eclipse.eavp.service.swtchart.core.SeriesData;
 import org.eclipse.eavp.service.swtchart.core.SeriesStatusAdapter;
 import org.eclipse.eavp.service.swtchart.customcharts.ChromatogramChart;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
-import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
-import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -78,18 +65,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.swtchart.ISeries;
-import org.swtchart.LineStyle;
 
 public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSupport {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramOverlayPart.class);
 	@Inject
 	private EPartService partService;
-	//
-	private IColorScheme colorSchemeNormal;
-	private Map<String, Color> usedColorsNormal;
-	private IColorScheme colorSchemeSIC;
-	private Map<String, Color> usedColorsSIC;
 	//
 	private Set<String> mirroredSeries;
 	//
@@ -116,26 +97,10 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 	private Button buttonShiftDown;
 	private Label labelDataStatus;
 	//
-	private LineStyle lineStyleTIC;
-	private LineStyle lineStyleBPC;
-	private LineStyle lineStyleXIC;
-	private LineStyle lineStyleSIC;
-	private LineStyle lineStyleTSC;
-	private LineStyle lineStyleDefault;
-	//
 	private OverlaySupport overlaySupport;
 
 	public ChromatogramOverlayPart() {
-		/*
-		 * Colors
-		 */
-		usedColorsNormal = new HashMap<String, Color>();
-		usedColorsSIC = new HashMap<String, Color>();
-		applyUserSettings();
-		resetColorMaps();
-		//
 		overlaySupport = new OverlaySupport();
-		//
 		mirroredSeries = new HashSet<String>();
 	}
 
@@ -148,6 +113,13 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		//
 		modifyToolbarComposites();
 	}
+	
+	@Focus
+	public void setFocus() {
+
+		refreshUpdateOverlayChart();
+	}
+
 
 	private void createButtonsToolbar(Composite parent) {
 
@@ -541,7 +513,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
-						applyUserSettings();
+						overlaySupport.loadUserSettings();
 						applyOverlaySettings();
 					} catch(Exception e1) {
 						MessageDialog.openError(Display.getDefault().getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
@@ -596,34 +568,12 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 
 	private void applyOverlaySettings() {
 
-		resetColorMaps();
+		overlaySupport.resetColorMaps();
 		chromatogramChart.deleteSeries();
 		refreshUpdateOverlayChart();
 		//
 		modifyToolbarComposites();
 		modifyDataStatusLabel();
-	}
-
-	private void applyUserSettings() {
-
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_OVERLAY_NORMAL));
-		colorSchemeSIC = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_OVERLAY_SIC));
-		//
-		lineStyleTIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_OVERLAY_TIC));
-		lineStyleBPC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_OVERLAY_BPC));
-		lineStyleXIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_OVERLAY_XIC));
-		lineStyleSIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_OVERLAY_SIC));
-		lineStyleTSC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_OVERLAY_TSC));
-		lineStyleDefault = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_OVERLAY_DEFAULT));
-	}
-
-	private void resetColorMaps() {
-
-		colorSchemeNormal.reset();
-		usedColorsNormal.clear();
-		colorSchemeSIC.reset();
-		usedColorsSIC.clear();
 	}
 
 	private void createChromatogramChart(Composite parent) {
@@ -663,12 +613,6 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		setComboAxisItems();
 	}
 
-	@Focus
-	public void setFocus() {
-
-		refreshUpdateOverlayChart();
-	}
-
 	private void refreshUpdateOverlayChart() {
 
 		List<IChromatogramSelection> chromatogramSelections = getChromatogramSelections(partService);
@@ -698,20 +642,20 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 						for(int ion : ions) {
 							//
 							String seriesId = chromatogramName + OverlaySupport.OVERLAY_START_MARKER + overlayType + OverlaySupport.DELIMITER_ION_DERIVATIVE + derivativeType + OverlaySupport.DELIMITER_ION_DERIVATIVE + ion + OverlaySupport.OVERLAY_STOP_MARKER;
-							Color color = getSeriesColor(seriesId, overlayType);
+							Color color = overlaySupport.getSeriesColor(seriesId, overlayType);
 							//
 							availableSeriesIds.add(seriesId);
 							if(!baseChart.isSeriesContained(seriesId)) {
 								List<Integer> sic = new ArrayList<Integer>();
 								sic.add(ion);
-								lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, sic));
+								lineSeriesDataList.add(overlaySupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, sic));
 							}
 						}
 					}
 				} else {
 					//
 					String seriesId = chromatogramName + OverlaySupport.OVERLAY_START_MARKER + overlayType + OverlaySupport.DELIMITER_ION_DERIVATIVE + derivativeType + OverlaySupport.OVERLAY_STOP_MARKER;
-					Color color = getSeriesColor(chromatogramName, overlayType);
+					Color color = overlaySupport.getSeriesColor(chromatogramName, overlayType);
 					//
 					if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_BPC) || overlayType.equals(OverlaySupport.OVERLAY_TYPE_XIC) || overlayType.equals(OverlaySupport.OVERLAY_TYPE_TSC)) {
 						/*
@@ -720,7 +664,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 						if(chromatogram instanceof IChromatogramMSD) {
 							availableSeriesIds.add(seriesId);
 							if(!baseChart.isSeriesContained(seriesId)) {
-								lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, ions));
+								lineSeriesDataList.add(overlaySupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, ions));
 							}
 						}
 					} else {
@@ -729,7 +673,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 						 */
 						availableSeriesIds.add(seriesId);
 						if(!baseChart.isSeriesContained(seriesId)) {
-							lineSeriesDataList.add(getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, ions));
+							lineSeriesDataList.add(overlaySupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, ions));
 						}
 					}
 				}
@@ -790,168 +734,6 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		}
 		//
 		return selectedIons;
-	}
-
-	private Color getSeriesColor(String seriesId, String overlayType) {
-
-		Color color;
-		if(OverlaySupport.OVERLAY_TYPE_SIC.equals(overlayType)) {
-			/*
-			 * SIC
-			 */
-			color = usedColorsSIC.get(seriesId);
-			if(color == null) {
-				color = colorSchemeSIC.getColor();
-				colorSchemeSIC.incrementColor();
-				usedColorsSIC.put(seriesId, color);
-			}
-		} else {
-			/*
-			 * Normal
-			 */
-			color = usedColorsNormal.get(seriesId);
-			if(color == null) {
-				color = colorSchemeNormal.getColor();
-				colorSchemeNormal.incrementColor();
-				usedColorsNormal.put(seriesId, color);
-			}
-		}
-		return color;
-	}
-
-	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions) {
-
-		double[] xSeries = new double[chromatogram.getNumberOfScans()];
-		double[] ySeries = new double[chromatogram.getNumberOfScans()];
-		LineStyle lineStyle = getLineStyle(overlayType);
-		/*
-		 * Get the data.
-		 */
-		int index = 0;
-		for(IScan scan : chromatogram.getScans()) {
-			/*
-			 * Get the retention time and intensity.
-			 */
-			xSeries[index] = scan.getRetentionTime();
-			ySeries[index] = getIntensity(scan, overlayType, derivativeType, ions);
-			index++;
-		}
-		/*
-		 * Calculate a derivative?
-		 */
-		int derivatives = getNumberOfDerivatives(derivativeType);
-		for(int i = 1; i <= derivatives; i++) {
-			ySeries = calculateDerivate(ySeries);
-		}
-		/*
-		 * Add the series.
-		 */
-		ISeriesData seriesData = new SeriesData(xSeries, ySeries, seriesId);
-		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-		ILineSeriesSettings lineSerieSettings = lineSeriesData.getLineSeriesSettings();
-		lineSerieSettings.setLineColor(color);
-		lineSerieSettings.setLineStyle(lineStyle);
-		lineSerieSettings.setEnableArea(false);
-		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSerieSettings.getSeriesSettingsHighlight();
-		lineSeriesSettingsHighlight.setLineWidth(2);
-		//
-		return lineSeriesData;
-	}
-
-	private double getIntensity(IScan scan, String overlayType, String derivativeType, List<Integer> ions) {
-
-		double intensity = 0.0d;
-		if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_TIC)) {
-			/*
-			 * TIC
-			 */
-			intensity = scan.getTotalSignal();
-		} else if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_BPC)) {
-			/*
-			 * BPC
-			 */
-			if(scan instanceof IScanMSD) {
-				IScanMSD scanMSD = (IScanMSD)scan;
-				IIon ion = scanMSD.getHighestAbundance();
-				if(ion != null) {
-					intensity = ion.getAbundance();
-				}
-			}
-		} else if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_XIC) || overlayType.equals(OverlaySupport.OVERLAY_TYPE_SIC)) {
-			/*
-			 * XIC, SIC
-			 */
-			if(scan instanceof IScanMSD) {
-				IScanMSD scanMSD = (IScanMSD)scan;
-				IExtractedIonSignal extractedIonSignal = scanMSD.getExtractedIonSignal();
-				for(int ion : ions) {
-					intensity += extractedIonSignal.getAbundance(ion);
-				}
-			}
-		} else if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_TSC)) {
-			/*
-			 * TSC
-			 */
-			if(scan instanceof IScanMSD) {
-				IScanMSD scanMSD = (IScanMSD)scan;
-				IExtractedIonSignal extractedIonSignal = scanMSD.getExtractedIonSignal();
-				intensity = scanMSD.getTotalSignal();
-				for(int ion : ions) {
-					intensity -= extractedIonSignal.getAbundance(ion);
-				}
-			}
-		}
-		//
-		return intensity;
-	}
-
-	private int getNumberOfDerivatives(String derivativeType) {
-
-		int derivatives;
-		switch(derivativeType) {
-			case OverlaySupport.DERIVATIVE_FIRST:
-				derivatives = 1;
-				break;
-			case OverlaySupport.DERIVATIVE_SECOND:
-				derivatives = 2;
-				break;
-			case OverlaySupport.DERIVATIVE_THIRD:
-				derivatives = 3;
-				break;
-			default:
-				derivatives = 0;
-				break;
-		}
-		return derivatives;
-	}
-
-	private double[] calculateDerivate(double[] values) {
-
-		int size = values.length;
-		double[] derivative = new double[size];
-		for(int i = 1; i < size; i++) {
-			derivative[i] = values[i] - values[i - 1];
-		}
-		return derivative;
-	}
-
-	private LineStyle getLineStyle(String overlayType) {
-
-		LineStyle lineStyle;
-		if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_TIC)) {
-			lineStyle = lineStyleTIC;
-		} else if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_BPC)) {
-			lineStyle = lineStyleBPC;
-		} else if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_XIC)) {
-			lineStyle = lineStyleXIC;
-		} else if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_SIC)) {
-			lineStyle = lineStyleSIC;
-		} else if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_TSC)) {
-			lineStyle = lineStyleTSC;
-		} else {
-			lineStyle = lineStyleDefault;
-		}
-		return lineStyle;
 	}
 
 	public void setComboAxisItems() {
