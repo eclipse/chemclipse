@@ -110,8 +110,8 @@ public class TaskQuickAccessPart {
 		String partId_1 = PartSupport.PARTDESCRIPTOR_SELECTED_SCANS;
 		partMap.put(partId_1, PartSupport.PARTSTACK_BOTTOM_CENTER);
 		//
-		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_SCAN, IApplicationImage.SIZE_16x16);
-		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_SCAN, IApplicationImage.SIZE_16x16);
+		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_SCANS_ACTIVE, IApplicationImage.SIZE_16x16);
+		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_SCANS_DEFAULT, IApplicationImage.SIZE_16x16);
 		//
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -132,8 +132,8 @@ public class TaskQuickAccessPart {
 		String partId_1 = PartSupport.PARTDESCRIPTOR_SELECTED_PEAKS;
 		partMap.put(partId_1, PartSupport.PARTSTACK_BOTTOM_CENTER);
 		//
-		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_PEAK, IApplicationImage.SIZE_16x16);
-		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_PEAK, IApplicationImage.SIZE_16x16);
+		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_PEAKS_ACTIVE, IApplicationImage.SIZE_16x16);
+		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_PEAKS_DEFAULT, IApplicationImage.SIZE_16x16);
 		//
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");

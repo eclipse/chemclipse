@@ -262,6 +262,10 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_CHROMATOGRAM_OVERLAY_ACTIVE = "chromatogramOverlayActive.gif";
 	String IMAGE_CHROMATOGRAM_OVERVIEW_DEFAULT = "chromatogramOverviewDefault.gif";
 	String IMAGE_CHROMATOGRAM_OVERVIEW_ACTIVE = "chromatogramOverviewActive.gif";
+	String IMAGE_SELECTED_SCANS_DEFAULT = "selectedScansDefault.gif";
+	String IMAGE_SELECTED_SCANS_ACTIVE = "selectedScansActive.gif";
+	String IMAGE_SELECTED_PEAKS_DEFAULT = "selectedPeaksDefault.gif";
+	String IMAGE_SELECTED_PEAKS_ACTIVE = "selectedPeaksActive.gif";
 	String IMAGE_TOOLBAR_ACTIVE = "toolbar_active.gif";
 	String IMAGE_TOOLBAR_INACTIVE = "toolbar_inactive.gif";
 }
