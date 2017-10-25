@@ -51,10 +51,45 @@ public class OverlaySupport {
 	//
 	public static final String DISPLAY_MODUS_NORMAL = "Normal";
 	public static final String DISPLAY_MODUS_MIRRORED = "Mirrored";
+	//
+	private String[] overlayTypes;
+	private String[] derivativeTypes;
+	private String[] selectedIons;
+	private String[] displayModi;
+	private Map<String, String> selectedIonsMap;
 
-	public static String[] getOverlayTypes() {
+	public OverlaySupport() {
+		initialize();
+	}
 
-		return new String[]{//
+	public String[] getOverlayTypes() {
+
+		return overlayTypes;
+	}
+
+	public String[] getDerivativeTypes() {
+
+		return derivativeTypes;
+	}
+
+	public String[] getSelectedIons() {
+
+		return selectedIons;
+	}
+
+	public String[] getDisplayModi() {
+
+		return displayModi;
+	}
+
+	public Map<String, String> getSelectedIonsMap() {
+
+		return selectedIonsMap;
+	}
+
+	private void initialize() {
+
+		overlayTypes = new String[]{//
 				OVERLAY_TYPE_TIC, //
 				OVERLAY_TYPE_BPC, //
 				OVERLAY_TYPE_XIC, //
@@ -64,43 +99,30 @@ public class OverlaySupport {
 				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_XIC, //
 				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_SIC, //
 				OVERLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + OVERLAY_TYPE_TSC};
-	}
-
-	public static String[] getDerivativeTypes() {
-
-		return new String[]{//
+		//
+		derivativeTypes = new String[]{//
 				DERIVATIVE_NONE, //
 				DERIVATIVE_FIRST, //
 				DERIVATIVE_SECOND, //
 				DERIVATIVE_THIRD};
-	}
-
-	public static String[] getSelectedIons() {
-
-		return new String[]{//
+		//
+		selectedIons = new String[]{//
 				SELECTED_IONS_HYDROCARBONS, //
 				SELECTED_IONS_FATTY_ACIDS, //
 				SELECTED_IONS_FAME, //
 				SELECTED_IONS_SOLVENT_TAILING, //
 				SELECTED_IONS_COLUMN_BLEED};
-	}
-
-	public static String[] getDisplayModi() {
-
-		return new String[]{//
+		//
+		displayModi = new String[]{//
 				DISPLAY_MODUS_NORMAL, //
 				DISPLAY_MODUS_MIRRORED //
 		};
-	}
-
-	public static Map<String, String> getSelectedIonsMap() {
-
-		Map<String, String> selectedIonsMap = new HashMap<String, String>();
+		//
+		selectedIonsMap = new HashMap<String, String>();
 		selectedIonsMap.put(SELECTED_IONS_HYDROCARBONS, "57 71 85");
 		selectedIonsMap.put(SELECTED_IONS_FATTY_ACIDS, "74 84");
 		selectedIonsMap.put(SELECTED_IONS_FAME, "79 81");
 		selectedIonsMap.put(SELECTED_IONS_SOLVENT_TAILING, "84");
 		selectedIonsMap.put(SELECTED_IONS_COLUMN_BLEED, "207");
-		return selectedIonsMap;
 	}
 }

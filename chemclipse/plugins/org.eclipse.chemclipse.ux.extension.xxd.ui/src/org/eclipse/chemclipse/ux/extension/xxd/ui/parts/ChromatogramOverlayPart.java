@@ -91,7 +91,6 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 	private IColorScheme colorSchemeSIC;
 	private Map<String, Color> usedColorsSIC;
 	//
-	private Map<String, String> selectedIonsMap;
 	private Set<String> mirroredSeries;
 	//
 	private ChromatogramChart chromatogramChart;
@@ -102,10 +101,6 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 	private Composite compositeShift;
 	private Composite compositeStatus;
 	//
-	private String[] overlayTypes;
-	private String[] derivativeTypes;
-	private String[] selectedIons;
-	private String[] displayModi;
 	private Combo comboOverlayType;
 	private Combo comboDerivativeType;
 	private Combo comboSelectedSeries;
@@ -127,6 +122,8 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 	private LineStyle lineStyleSIC;
 	private LineStyle lineStyleTSC;
 	private LineStyle lineStyleDefault;
+	//
+	private OverlaySupport overlaySupport;
 
 	public ChromatogramOverlayPart() {
 		/*
@@ -137,11 +134,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		applyUserSettings();
 		resetColorMaps();
 		//
-		overlayTypes = OverlaySupport.getOverlayTypes();
-		derivativeTypes = OverlaySupport.getDerivativeTypes();
-		selectedIons = OverlaySupport.getSelectedIons();
-		displayModi = OverlaySupport.getDisplayModi();
-		selectedIonsMap = OverlaySupport.getSelectedIonsMap();
+		overlaySupport = new OverlaySupport();
 		//
 		mirroredSeries = new HashSet<String>();
 	}
@@ -218,7 +211,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		gridData.minimumWidth = 150;
 		gridData.grabExcessHorizontalSpace = true;
 		comboOverlayType.setLayoutData(gridData);
-		comboOverlayType.setItems(overlayTypes);
+		comboOverlayType.setItems(overlaySupport.getOverlayTypes());
 		comboOverlayType.select(0);
 		comboOverlayType.addSelectionListener(new SelectionAdapter() {
 
@@ -239,7 +232,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		gridData.minimumWidth = 60;
 		gridData.grabExcessHorizontalSpace = true;
 		comboDerivativeType.setLayoutData(gridData);
-		comboDerivativeType.setItems(derivativeTypes);
+		comboDerivativeType.setItems(overlaySupport.getDerivativeTypes());
 		comboDerivativeType.select(0);
 		comboDerivativeType.addSelectionListener(new SelectionAdapter() {
 
@@ -290,7 +283,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 
 		comboDisplayModus = new Combo(parent, SWT.READ_ONLY);
 		comboDisplayModus.setToolTipText("Select the display modus.");
-		comboDisplayModus.setItems(displayModi);
+		comboDisplayModus.setItems(overlaySupport.getDisplayModi());
 		comboDisplayModus.setText(OverlaySupport.DISPLAY_MODUS_NORMAL);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.minimumWidth = 150;
@@ -344,7 +337,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 
 		comboSelectedIons = new Combo(parent, SWT.NONE);
 		comboSelectedIons.setToolTipText("Select the overlay ions.");
-		comboSelectedIons.setItems(selectedIons);
+		comboSelectedIons.setItems(overlaySupport.getSelectedIons());
 		comboSelectedIons.setText(OverlaySupport.SELECTED_IONS_DEFAULT);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.minimumWidth = 150;
@@ -778,6 +771,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 		List<Integer> selectedIons = new ArrayList<Integer>();
 		//
+		Map<String, String> selectedIonsMap = overlaySupport.getSelectedIonsMap();
 		String comboText = comboSelectedIons.getText().trim();
 		String ionsText = "";
 		if(selectedIonsMap.containsKey(comboSelectedIons.getText().trim())) {
