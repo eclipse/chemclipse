@@ -75,10 +75,9 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 	//
 	private Set<String> mirroredSeries;
 	//
-	private ChromatogramChart chromatogramChart;
-	//
 	private Composite toolbarType;
 	private Composite toolbarShift;
+	private ChromatogramChart chromatogramChart;
 	//
 	private Combo comboOverlayType;
 	private Combo comboDerivativeType;
@@ -613,7 +612,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 
 	private void createChromatogramChart(Composite parent) {
 
-		chromatogramChart = new ChromatogramChart(parent, SWT.NONE);
+		chromatogramChart = new ChromatogramChart(parent, SWT.BORDER);
 		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Chart Settings

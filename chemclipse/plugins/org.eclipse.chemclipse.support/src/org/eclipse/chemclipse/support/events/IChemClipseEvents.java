@@ -48,6 +48,7 @@ public interface IChemClipseEvents {
 	String PROPERTY_PEAKS_CSD = "PeaksCSD"; // IPeaksCSD
 	//
 	String PROPERTY_SELECTED_ION = IEventBroker.DATA; // double ion
+	String PROPERTY_SELECTED_SCAN = IEventBroker.DATA; // IScan
 	//
 	String PROPERTY_FORCE_RELOAD = "ForceReload";
 	String PROPERTY_PROCESSING_INFO = IEventBroker.DATA;
@@ -71,7 +72,9 @@ public interface IChemClipseEvents {
 	 * Close the chromatogram editor.
 	 */
 	String TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION = "chromatogram/xxd/unload/chromatogramselection";
+	String TOPIC_SCAN_XXD_UPDATE_SELECTION = "scan/xxd/update/selection";
 	String TOPIC_SCAN_XXD_UNLOAD_SELECTION = "scan/xxd/unload/selection";
+	String TOPIC_PEAK_XXD_UPDATE_SELECTION = "peak/xxd/update/selection";
 	String TOPIC_PEAK_XXD_UNLOAD_SELECTION = "peak/xxd/unload/selection";
 	/*
 	 * Detector: MSD

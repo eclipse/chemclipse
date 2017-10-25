@@ -33,26 +33,21 @@ import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWS
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-public abstract class AbstractChromatogramUpdateSupport implements IChromatogramUpdateSupport {
+public abstract class AbstractChromatogramUpdateSupport extends AbstractUpdateSupport implements IChromatogramUpdateSupport {
 
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramUpdateSupport.class);
-	/*
-	 * The chromatogram overview is shared by all extending classes.
-	 */
+	//
 	private static IChromatogramOverview chromatogramOverview;
 	//
-	private EPartService partService = ModelSupportAddon.getPartService();
 	private IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 	private List<EventHandler> registeredEventHandler;
-	private MPart part;
 
 	public AbstractChromatogramUpdateSupport(MPart part) {
+		super(part);
 		registeredEventHandler = new ArrayList<EventHandler>();
-		this.part = part;
 		registerEventBroker(eventBroker);
 	}
 
@@ -60,16 +55,6 @@ public abstract class AbstractChromatogramUpdateSupport implements IChromatogram
 	public IChromatogramOverview getChromatogramOverview() {
 
 		return chromatogramOverview;
-	}
-
-	@Override
-	public boolean doUpdate(IChromatogramOverview chromatogramOverview) {
-
-		if(partService.isPartVisible(part)) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	@PreDestroy
@@ -108,6 +93,8 @@ public abstract class AbstractChromatogramUpdateSupport implements IChromatogram
 						Object object = event.getProperty(property);
 						if(object instanceof File) {
 							setChromatogram((File)object, topic);
+						} else {
+							setChromatogramOverview(null);
 						}
 					}
 				} catch(Exception e) {
@@ -143,7 +130,7 @@ public abstract class AbstractChromatogramUpdateSupport implements IChromatogram
 
 	private void setChromatogram(File file, String topic) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException {
 
-		if(partService.isPartVisible(part)) {
+		if(doUpdate()) {
 			IChromatogramOverviewImportConverterProcessingInfo processingInfo = null;
 			switch(topic) {
 				case IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE:

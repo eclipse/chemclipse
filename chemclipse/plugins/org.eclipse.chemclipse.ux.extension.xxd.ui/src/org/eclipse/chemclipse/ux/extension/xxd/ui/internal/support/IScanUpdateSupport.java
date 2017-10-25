@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IScan;
 
-public interface IChromatogramUpdateSupport extends IUpdateSupport {
+public interface IScanUpdateSupport extends IUpdateSupport {
 
-	void updateChromatogram(IChromatogramOverview chromatogramOverview);
+	void updateScan(IScan scan);
 
-	IChromatogramOverview getChromatogramOverview();
+	IScan getScan();
 }

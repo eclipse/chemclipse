@@ -20,12 +20,15 @@ import org.eclipse.chemclipse.model.notifier.IChromatogramSelectionUpdateNotifie
 import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.MoveDirection;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.series.ChromatogramRange;
 import org.eclipse.chemclipse.swt.ui.series.IChromatogramRange;
 import org.eclipse.chemclipse.swt.ui.series.ISeriesSetter;
 import org.eclipse.chemclipse.swt.ui.support.ChartUtil;
 import org.eclipse.chemclipse.swt.ui.support.IAxisTitles;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
@@ -495,6 +498,9 @@ public abstract class AbstractChromatogramLineSeriesUI extends AbstractLineSerie
 		IScan selectedScan = chromatogramSelection.getChromatogram().getScan(scan);
 		chromatogramSelection.setSelectedScan(selectedScan, false);
 		chromatogramSelection.update(true);
+		//
+		IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+		eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, selectedScan);
 	}
 
 	/**

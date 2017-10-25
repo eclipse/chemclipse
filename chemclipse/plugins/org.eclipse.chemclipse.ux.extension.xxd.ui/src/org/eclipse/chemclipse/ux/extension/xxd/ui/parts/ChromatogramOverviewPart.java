@@ -58,7 +58,7 @@ public class ChromatogramOverviewPart extends AbstractChromatogramUpdateSupport 
 	@Override
 	public void updateChromatogram(IChromatogramOverview chromatogramOverview) {
 
-		if(doUpdate(chromatogramOverview)) {
+		if(doUpdate()) {
 			chromatogramOverviewChart.deleteSeries();
 			if(chromatogramOverview != null) {
 				/*
