@@ -65,8 +65,8 @@ public class SelectedScansPart {
 	private Composite createToolbarSettings(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridDataStatus);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
 		composite.setVisible(false);
 		//
@@ -78,8 +78,8 @@ public class SelectedScansPart {
 	private Composite createToolbarEdit(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridDataStatus);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(3, false));
 		composite.setVisible(false);
 		//

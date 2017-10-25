@@ -53,9 +53,9 @@ public class Template_PartToolbar {
 	private void createToolbarMain(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
-		gridDataStatus.horizontalAlignment = SWT.END;
-		composite.setLayoutData(gridDataStatus);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = SWT.END;
+		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(2, false));
 		//
 		createButtonToggleToolbarSettings(composite);
@@ -65,8 +65,8 @@ public class Template_PartToolbar {
 	private Composite createToolbarSettings(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridDataStatus);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
 		composite.setVisible(false);
 		//

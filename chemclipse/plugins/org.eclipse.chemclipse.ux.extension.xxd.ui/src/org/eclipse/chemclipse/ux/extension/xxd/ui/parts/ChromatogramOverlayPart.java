@@ -33,6 +33,7 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractChromatogramEditorPartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlaySupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -76,11 +77,8 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 	//
 	private ChromatogramChart chromatogramChart;
 	//
-	private Composite compositeToolbar;
-	private Composite compositeType;
-	private Composite compositeSelectedIons;
-	private Composite compositeShift;
-	private Composite compositeStatus;
+	private Composite toolbarType;
+	private Composite toolbarShift;
 	//
 	private Combo comboOverlayType;
 	private Combo comboDerivativeType;
@@ -108,71 +106,75 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 	public void createComposite(Composite parent) {
 
 		parent.setLayout(new GridLayout(1, true));
-		createButtonsToolbar(parent);
-		createChromatogramChart(parent);
 		//
-		modifyToolbarComposites();
+		createToolbarMain(parent);
+		toolbarType = createToolbarType(parent);
+		toolbarShift = createToolbarShift(parent);
+		createChromatogramChart(parent);
+		/*
+		 * Hide both toolbars initially.
+		 * Enable/disable widgets.
+		 */
+		PartSupport.setToolbarVisibility(toolbarType, false);
+		PartSupport.setToolbarVisibility(toolbarShift, false);
+		modifyWidgetStatus();
 	}
-	
+
 	@Focus
 	public void setFocus() {
 
 		refreshUpdateOverlayChart();
 	}
 
+	private void createToolbarMain(Composite parent) {
 
-	private void createButtonsToolbar(Composite parent) {
-
-		compositeToolbar = new Composite(parent, SWT.NONE);
-		compositeToolbar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		compositeToolbar.setLayout(new GridLayout(3, false));
-		/*
-		 * 1st row
-		 */
-		compositeType = new Composite(compositeToolbar, SWT.NONE);
-		GridData gridDataType = new GridData(GridData.FILL_HORIZONTAL);
-		gridDataType.grabExcessHorizontalSpace = true;
-		compositeType.setLayoutData(gridDataType);
-		compositeType.setLayout(new GridLayout(3, false));
-		//
-		createOverlayTypeCombo(compositeType);
-		createDerivativeTypeCombo(compositeType);
-		createSelectedSeriesCombo(compositeType);
-		//
-		compositeSelectedIons = new Composite(compositeToolbar, SWT.NONE);
-		compositeSelectedIons.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		compositeSelectedIons.setLayout(new GridLayout(1, false));
-		//
-		createSelectedIonsCombo(compositeSelectedIons);
-		//
-		compositeStatus = new Composite(compositeToolbar, SWT.NONE);
+		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
-		compositeStatus.setLayoutData(gridDataStatus);
-		compositeStatus.setLayout(new GridLayout(4, false));
+		composite.setLayoutData(gridDataStatus);
+		composite.setLayout(new GridLayout(6, false));
 		//
-		createDataStatusLabel(compositeStatus);
-		createToggleChartLegendButton(compositeStatus);
-		createResetButton(compositeStatus);
-		createSettingsButton(compositeStatus);
-		/*
-		 * 2nd row
-		 */
-		compositeShift = new Composite(compositeToolbar, SWT.NONE);
-		GridData gridDataShift = new GridData(GridData.FILL_HORIZONTAL);
-		gridDataShift.horizontalSpan = 3;
-		compositeShift.setLayoutData(gridDataShift);
-		compositeShift.setLayout(new GridLayout(9, false));
+		createDataStatusLabel(composite);
+		createButtonToggleToolbarType(composite);
+		createButtonToggleToolbarShift(composite);
+		createToggleChartLegendButton(composite);
+		createResetButton(composite);
+		createSettingsButton(composite);
+	}
+
+	private Composite createToolbarType(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(5, false));
 		//
-		createDisplayModusCombo(compositeShift);
-		createTextShiftX(compositeShift);
-		createComboScaleX(compositeShift);
-		createButtonLeft(compositeShift);
-		createButtonRight(compositeShift);
-		createTextShiftY(compositeShift);
-		createComboScaleY(compositeShift);
-		createButtonUp(compositeShift);
-		createButtonDown(compositeShift);
+		createOverlayTypeCombo(composite);
+		createDerivativeTypeCombo(composite);
+		createSelectedSeriesCombo(composite);
+		createDisplayModusCombo(composite);
+		createSelectedIonsCombo(composite);
+		//
+		return composite;
+	}
+
+	private Composite createToolbarShift(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(8, false));
+		//
+		createTextShiftX(composite);
+		createComboScaleX(composite);
+		createButtonLeft(composite);
+		createButtonRight(composite);
+		createTextShiftY(composite);
+		createComboScaleY(composite);
+		createButtonUp(composite);
+		createButtonDown(composite);
+		//
+		return composite;
 	}
 
 	private void createOverlayTypeCombo(Composite parent) {
@@ -190,7 +192,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				modifyToolbarComposites();
+				modifyWidgetStatus();
 				refreshUpdateOverlayChart();
 			}
 		});
@@ -246,7 +248,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 				baseChart.resetSeriesSettings();
 				baseChart.selectSeries(selectedSeriesId);
 				baseChart.redraw();
-				modifyToolbarComposites();
+				modifyWidgetStatus();
 			}
 		});
 	}
@@ -461,6 +463,38 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		labelDataStatus.setLayoutData(gridData);
 	}
 
+	private void createButtonToggleToolbarType(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle type toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				PartSupport.toggleToolbarVisibility(toolbarType);
+			}
+		});
+	}
+
+	private void createButtonToggleToolbarShift(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle shift toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				PartSupport.toggleToolbarVisibility(toolbarShift);
+			}
+		});
+	}
+
 	private void createToggleChartLegendButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
@@ -523,38 +557,6 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		});
 	}
 
-	private void modifyToolbarComposites() {
-
-		/*
-		 * Overlay Type
-		 */
-		String overlayType = comboOverlayType.getText().trim();
-		boolean enableOverlayType = (overlayType.contains(OverlaySupport.OVERLAY_TYPE_XIC) || overlayType.contains(OverlaySupport.OVERLAY_TYPE_SIC) || overlayType.contains(OverlaySupport.OVERLAY_TYPE_TSC));
-		comboSelectedIons.setEnabled(enableOverlayType);
-		/*
-		 * Selected Series
-		 */
-		String selectedSeries = comboSelectedSeries.getText().trim();
-		boolean visibleSelectedSeries = !selectedSeries.equals(BaseChart.SELECTED_SERIES_NONE);
-		comboDisplayModus.setVisible(visibleSelectedSeries);
-		textShiftX.setVisible(visibleSelectedSeries);
-		comboScaleX.setVisible(visibleSelectedSeries);
-		buttonShiftLeft.setVisible(visibleSelectedSeries);
-		buttonShiftRight.setVisible(visibleSelectedSeries);
-		textShiftY.setVisible(visibleSelectedSeries);
-		comboScaleY.setVisible(visibleSelectedSeries);
-		buttonShiftUp.setVisible(visibleSelectedSeries);
-		buttonShiftDown.setVisible(visibleSelectedSeries);
-		GridData gridDataCompositeShift = (GridData)compositeShift.getLayoutData();
-		gridDataCompositeShift.exclude = !visibleSelectedSeries;
-		/*
-		 * Update the layout
-		 */
-		Composite parent = compositeToolbar.getParent();
-		parent.layout(true);
-		parent.redraw();
-	}
-
 	private void modifyDataStatusLabel() {
 
 		if(chromatogramChart.getBaseChart().isDataShifted()) {
@@ -566,13 +568,36 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		}
 	}
 
+	private void modifyWidgetStatus() {
+
+		/*
+		 * Overlay Type
+		 */
+		String overlayType = comboOverlayType.getText().trim();
+		boolean enableOverlayType = (overlayType.contains(OverlaySupport.OVERLAY_TYPE_XIC) || overlayType.contains(OverlaySupport.OVERLAY_TYPE_SIC) || overlayType.contains(OverlaySupport.OVERLAY_TYPE_TSC));
+		comboSelectedIons.setEnabled(enableOverlayType);
+		/*
+		 * Selected Series
+		 */
+		String selectedSeries = comboSelectedSeries.getText().trim();
+		boolean isSeriesSelected = !selectedSeries.equals(BaseChart.SELECTED_SERIES_NONE);
+		comboDisplayModus.setEnabled(isSeriesSelected);
+		textShiftX.setEnabled(isSeriesSelected);
+		comboScaleX.setEnabled(isSeriesSelected);
+		buttonShiftLeft.setEnabled(isSeriesSelected);
+		buttonShiftRight.setEnabled(isSeriesSelected);
+		textShiftY.setEnabled(isSeriesSelected);
+		comboScaleY.setEnabled(isSeriesSelected);
+		buttonShiftUp.setEnabled(isSeriesSelected);
+		buttonShiftDown.setEnabled(isSeriesSelected);
+	}
+
 	private void applyOverlaySettings() {
 
 		overlaySupport.resetColorMaps();
 		chromatogramChart.deleteSeries();
 		refreshUpdateOverlayChart();
-		//
-		modifyToolbarComposites();
+		modifyWidgetStatus();
 		modifyDataStatusLabel();
 	}
 
@@ -606,7 +631,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 			public void handleSeriesSelectionEvent(String seriesId) {
 
 				comboSelectedSeries.setText(seriesId);
-				modifyToolbarComposites();
+				modifyWidgetStatus();
 			}
 		});
 		//

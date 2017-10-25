@@ -160,10 +160,15 @@ public class PartSupport {
 
 	public static void toggleToolbarVisibility(Composite toolbar) {
 
-		boolean isVisible = toolbar.isVisible();
-		toolbar.setVisible(!isVisible);
+		boolean visible = toolbar.isVisible();
+		setToolbarVisibility(toolbar, !visible);
+	}
+
+	public static void setToolbarVisibility(Composite toolbar, boolean visible) {
+
+		toolbar.setVisible(visible);
 		GridData gridData = (GridData)toolbar.getLayoutData();
-		gridData.exclude = isVisible;
+		gridData.exclude = !visible;
 		Composite parent = toolbar.getParent();
 		parent.layout(true);
 		parent.redraw();
