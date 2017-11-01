@@ -101,7 +101,7 @@ public class Template_PartToolbar {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.toggleToolbarVisibility(toolbarSettings);
+				PartSupport.toggleCompositeVisibility(toolbarSettings);
 			}
 		});
 	}
@@ -117,7 +117,7 @@ public class Template_PartToolbar {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.toggleToolbarVisibility(toolbarEdit);
+				PartSupport.toggleCompositeVisibility(toolbarEdit);
 			}
 		});
 	}

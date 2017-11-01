@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

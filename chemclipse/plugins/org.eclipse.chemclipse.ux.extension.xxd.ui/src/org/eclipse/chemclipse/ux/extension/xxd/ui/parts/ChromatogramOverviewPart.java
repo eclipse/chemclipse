@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ChromatogramOverviewChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractChromatogramUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IChromatogramUpdateSupport;
 import org.eclipse.e4.ui.di.Focus;

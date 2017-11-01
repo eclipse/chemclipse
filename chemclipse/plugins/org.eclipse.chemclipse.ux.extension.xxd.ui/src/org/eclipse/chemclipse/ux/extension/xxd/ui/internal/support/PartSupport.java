@@ -158,19 +158,19 @@ public class PartSupport {
 		}
 	}
 
-	public static boolean toggleToolbarVisibility(Composite toolbar) {
+	public static boolean toggleCompositeVisibility(Composite composite) {
 
-		boolean visible = !toolbar.isVisible();
-		setToolbarVisibility(toolbar, visible);
+		boolean visible = !composite.isVisible();
+		setCompositeVisibility(composite, visible);
 		return visible;
 	}
 
-	public static void setToolbarVisibility(Composite toolbar, boolean visible) {
+	public static void setCompositeVisibility(Composite composite, boolean visible) {
 
-		toolbar.setVisible(visible);
-		GridData gridData = (GridData)toolbar.getLayoutData();
+		composite.setVisible(visible);
+		GridData gridData = (GridData)composite.getLayoutData();
 		gridData.exclude = !visible;
-		Composite parent = toolbar.getParent();
+		Composite parent = composite.getParent();
 		parent.layout(true);
 		parent.redraw();
 	}

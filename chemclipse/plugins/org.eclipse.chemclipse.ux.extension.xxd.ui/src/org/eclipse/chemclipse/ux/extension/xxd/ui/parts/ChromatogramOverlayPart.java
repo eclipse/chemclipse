@@ -114,8 +114,8 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 		 * Hide both toolbars initially.
 		 * Enable/disable widgets.
 		 */
-		PartSupport.setToolbarVisibility(toolbarType, false);
-		PartSupport.setToolbarVisibility(toolbarShift, false);
+		PartSupport.setCompositeVisibility(toolbarType, false);
+		PartSupport.setCompositeVisibility(toolbarShift, false);
 		modifyWidgetStatus();
 	}
 
@@ -473,7 +473,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean visible = PartSupport.toggleToolbarVisibility(toolbarType);
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarType);
 				if(visible) {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TOOLBAR_ACTIVE, IApplicationImage.SIZE_16x16));
 				} else {
@@ -494,7 +494,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean visible = PartSupport.toggleToolbarVisibility(toolbarShift);
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarShift);
 				if(visible) {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TOOLBAR_ACTIVE, IApplicationImage.SIZE_16x16));
 				} else {

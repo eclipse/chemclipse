@@ -16,26 +16,26 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.DataType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ScanChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractScanUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IScanUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
+import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.eavp.service.swtchart.barcharts.BarSeriesData;
 import org.eclipse.eavp.service.swtchart.barcharts.IBarSeriesData;
-import org.eclipse.eavp.service.swtchart.barcharts.IBarSeriesSettings;
-import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
-import org.eclipse.eavp.service.swtchart.core.RangeRestriction;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
-import org.eclipse.eavp.service.swtchart.customcharts.MassSpectrumChart;
-import org.eclipse.eavp.service.swtchart.customcharts.MassSpectrumChart.LabelOption;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -53,7 +53,7 @@ import org.eclipse.swt.widgets.Display;
 public class SelectedScansPart extends AbstractScanUpdateSupport implements IScanUpdateSupport {
 
 	private Composite toolbarSettings;
-	private MassSpectrumChart massSpectrumChart;
+	private ScanChart scanChart;
 
 	@Inject
 	public SelectedScansPart(Composite parent, MPart part) {
@@ -65,36 +65,67 @@ public class SelectedScansPart extends AbstractScanUpdateSupport implements ISca
 	public void setFocus() {
 
 		updateScan(getScan());
-		massSpectrumChart.setFocus();
 	}
 
 	@Override
 	public void updateScan(IScan scan) {
 
-		massSpectrumChart.deleteSeries();
+		List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
+		ISeriesData seriesData = getSeriesData(scan);
+		IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
+		barSeriesDataList.add(barSeriesData);
+		//
 		if(scan instanceof IScanMSD) {
-			List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
-			ISeriesData seriesData = getSeriesData((IScanMSD)scan);
-			IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
-			IBarSeriesSettings barSeriesSettings = barSeriesData.getBarSeriesSettings();
-			barSeriesSettings.setDescription("");
-			barSeriesDataList.add(barSeriesData);
-			massSpectrumChart.addSeriesData(barSeriesDataList);
+			scanChart.setDataType(DataType.MSD);
+		} else if(scan instanceof IScanCSD) {
+			scanChart.setDataType(DataType.CSD);
+		} else if(scan instanceof IScanWSD) {
+			scanChart.setDataType(DataType.WSD);
 		}
+		//
+		scanChart.addSeriesData(barSeriesDataList);
 	}
 
-	private ISeriesData getSeriesData(IScanMSD scanMSD) {
+	private ISeriesData getSeriesData(IScan scan) {
 
-		String id = "Scan MSD";
-		List<IIon> ions = scanMSD.getIons();
-		int size = ions.size();
-		double[] xSeries = new double[size];
-		double[] ySeries = new double[size];
-		int index = 0;
-		for(IIon ion : ions) {
-			xSeries[index] = ion.getIon();
-			ySeries[index] = ion.getAbundance();
-			index++;
+		double[] xSeries;
+		double[] ySeries;
+		String id = "Scan " + scan.getScanNumber();
+		//
+		if(scan instanceof IScanMSD) {
+			id += " (MSD)";
+			IScanMSD scanMSD = (IScanMSD)scan;
+			List<IIon> ions = scanMSD.getIons();
+			int size = ions.size();
+			xSeries = new double[size];
+			ySeries = new double[size];
+			int index = 0;
+			for(IIon ion : ions) {
+				xSeries[index] = ion.getIon();
+				ySeries[index] = ion.getAbundance();
+				index++;
+			}
+		} else if(scan instanceof IScanCSD) {
+			id += " (CSD)";
+			IScanCSD scanCSD = (IScanCSD)scan;
+			xSeries = new double[]{scanCSD.getRetentionTime()};
+			ySeries = new double[]{scanCSD.getTotalSignal()};
+		} else if(scan instanceof IScanWSD) {
+			id += " (WSD)";
+			IScanWSD scanWSD = (IScanWSD)scan;
+			List<IScanSignalWSD> scanSignalsWSD = scanWSD.getScanSignals();
+			int size = scanSignalsWSD.size();
+			xSeries = new double[size];
+			ySeries = new double[size];
+			int index = 0;
+			for(IScanSignalWSD scanSignalWSD : scanSignalsWSD) {
+				xSeries[index] = scanSignalWSD.getWavelength();
+				ySeries[index] = scanSignalWSD.getAbundance();
+				index++;
+			}
+		} else {
+			xSeries = new double[0];
+			ySeries = new double[0];
 		}
 		//
 		return new SeriesData(xSeries, ySeries, id);
@@ -108,7 +139,7 @@ public class SelectedScansPart extends AbstractScanUpdateSupport implements ISca
 		toolbarSettings = createToolbarSettings(parent);
 		createScanChart(parent);
 		//
-		PartSupport.setToolbarVisibility(toolbarSettings, false);
+		PartSupport.setCompositeVisibility(toolbarSettings, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -149,7 +180,7 @@ public class SelectedScansPart extends AbstractScanUpdateSupport implements ISca
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean visible = PartSupport.toggleToolbarVisibility(toolbarSettings);
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarSettings);
 				if(visible) {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TOOLBAR_ACTIVE, IApplicationImage.SIZE_16x16));
 				} else {
@@ -169,7 +200,7 @@ public class SelectedScansPart extends AbstractScanUpdateSupport implements ISca
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				massSpectrumChart.toggleSeriesLegendVisibility();
+				scanChart.toggleSeriesLegendVisibility();
 			}
 		});
 	}
@@ -237,22 +268,7 @@ public class SelectedScansPart extends AbstractScanUpdateSupport implements ISca
 
 	private void createScanChart(Composite parent) {
 
-		massSpectrumChart = new MassSpectrumChart(parent, SWT.BORDER);
-		massSpectrumChart.setLayoutData(new GridData(GridData.FILL_BOTH));
-		/*
-		 * Chart Settings
-		 */
-		IChartSettings chartSettings = massSpectrumChart.getChartSettings();
-		chartSettings.setCreateMenu(true);
-		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
-		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
-		rangeRestriction.setExtendMaxY(0.2d);
-		massSpectrumChart.applySettings(chartSettings);
-		/*
-		 * Additional settings
-		 */
-		massSpectrumChart.setNumberOfHighestIntensitiesToLabel(5);
-		massSpectrumChart.setLabelOption(LabelOption.NOMIMAL);
-		massSpectrumChart.setCustomLabels(null);
+		scanChart = new ScanChart(parent, SWT.BORDER);
+		scanChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 }

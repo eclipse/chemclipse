@@ -108,7 +108,7 @@ public class SelectedPeaksPart extends AbstractPeakUpdateSupport implements IPea
 		toolbarSettings = createToolbarSettings(parent);
 		createScanChart(parent);
 		//
-		PartSupport.setToolbarVisibility(toolbarSettings, false);
+		PartSupport.setCompositeVisibility(toolbarSettings, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -149,7 +149,7 @@ public class SelectedPeaksPart extends AbstractPeakUpdateSupport implements IPea
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean visible = PartSupport.toggleToolbarVisibility(toolbarSettings);
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarSettings);
 				if(visible) {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TOOLBAR_ACTIVE, IApplicationImage.SIZE_16x16));
 				} else {
