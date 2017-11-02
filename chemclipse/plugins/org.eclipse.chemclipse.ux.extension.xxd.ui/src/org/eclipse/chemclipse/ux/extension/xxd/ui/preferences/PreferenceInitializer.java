@@ -20,6 +20,12 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		/*
+		 * General
+		 */
+		/*
+		 * Overlay
+		 */
 		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_OVERLAY_NORMAL, PreferenceConstants.DEF_COLOR_SCHEME_OVERLAY_NORMAL);
 		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_OVERLAY_SIC, PreferenceConstants.DEF_COLOR_SCHEME_OVERLAY_SIC);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_OVERLAY_TIC, PreferenceConstants.DEF_LINE_STYLE_OVERLAY_TIC);
@@ -28,5 +34,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_OVERLAY_SIC, PreferenceConstants.DEF_LINE_STYLE_OVERLAY_SIC);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_OVERLAY_TSC, PreferenceConstants.DEF_LINE_STYLE_OVERLAY_TSC);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_OVERLAY_DEFAULT, PreferenceConstants.DEF_LINE_STYLE_OVERLAY_DEFAULT);
+		/*
+		 * Selected Scan
+		 */
+		/*
+		 * Selected Peak
+		 */
 	}
 }

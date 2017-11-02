@@ -34,7 +34,7 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractChromatogramEditorPartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlaySupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
@@ -546,7 +546,7 @@ public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSuppo
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePage = new PreferencePage();
+				IPreferencePage preferencePage = new PreferencePageOverlay();
 				preferencePage.setTitle("Overlay Settings");
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));

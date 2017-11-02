@@ -33,6 +33,7 @@ import org.eclipse.eavp.service.swtchart.core.SecondaryAxisSettings;
 import org.eclipse.eavp.service.swtchart.customcharts.MassSpectrumChart.LabelOption;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -46,9 +47,62 @@ public class ScanChart extends BarChart {
 	private static final DecimalFormat DEFAULT_DECIMAL_FORMAT = new DecimalFormat();
 	//
 	private int numberOfHighestIntensitiesToLabel = 5;
-	private BarSeriesIntensityComparator barSeriesIntensityComparator = new BarSeriesIntensityComparator();
+	private BarSeriesYComparator barSeriesIntensityComparator = new BarSeriesYComparator();
 	private LabelOption labelOption = LabelOption.EXACT;
 	private Map<Double, String> customLabels = new HashMap<Double, String>();
+	private LabelPaintListener labelPaintListener = new LabelPaintListener(true);
+	private Map<String, Font> fonts = new HashMap<String, Font>();
+	private String fontId; // is initialized on use
+
+	private class LabelPaintListener implements ICustomPaintListener {
+
+		private boolean useX;
+
+		/**
+		 * If true, the x value will be used. Otherwise, the y value.
+		 * 
+		 * @param useX
+		 */
+		public LabelPaintListener(boolean useX) {
+			this.useX = useX;
+		}
+
+		@Override
+		public void paintControl(PaintEvent e) {
+
+			List<BarSeriesValue> barSeriesValues = getBarSeriesValuesList();
+			Collections.sort(barSeriesValues, barSeriesIntensityComparator);
+			int barSeriesSize = barSeriesValues.size();
+			int limit;
+			/*
+			 * Positive
+			 */
+			limit = numberOfHighestIntensitiesToLabel;
+			for(int i = 0; i < limit; i++) {
+				if(i < barSeriesSize) {
+					BarSeriesValue barSeriesValue = barSeriesValues.get(i);
+					printLabel(barSeriesValue, useX, e);
+				}
+			}
+			/*
+			 * Negative
+			 */
+			limit = barSeriesValues.size() - numberOfHighestIntensitiesToLabel;
+			limit = (limit < 0) ? 0 : limit;
+			for(int i = barSeriesValues.size() - 1; i >= limit; i--) {
+				BarSeriesValue barSeriesValue = barSeriesValues.get(i);
+				if(barSeriesValue.getY() < 0) {
+					printLabel(barSeriesValue, useX, e);
+				}
+			}
+		}
+
+		@Override
+		public boolean drawBehindSeries() {
+
+			return false;
+		}
+	}
 
 	public ScanChart() {
 		super();
@@ -58,6 +112,15 @@ public class ScanChart extends BarChart {
 	public ScanChart(Composite parent, int style) {
 		super(parent, style);
 		setDataType(DataType.MSD);
+	}
+
+	@Override
+	public void dispose() {
+
+		for(Font font : fonts.values()) {
+			font.dispose();
+		}
+		super.dispose();
 	}
 
 	public void setNumberOfHighestIntensitiesToLabel(int numberOfHighestIntensitiesToLabel) {
@@ -85,6 +148,15 @@ public class ScanChart extends BarChart {
 
 	public void setDataType(DataType dataType) {
 
+		String name = "Ubuntu";
+		int height = 11;
+		int style = SWT.NORMAL;
+		fontId = name + height + style;
+		if(!fonts.containsKey(fontId)) {
+			Font font = new Font(Display.getDefault(), name, height, style);
+			fonts.put(fontId, font);
+		}
+		//
 		deleteSeries();
 		customLabels.clear();
 		//
@@ -92,20 +164,25 @@ public class ScanChart extends BarChart {
 		chartSettings.setCreateMenu(true);
 		//
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
-		rangeRestriction.setZeroX(false);
-		rangeRestriction.setZeroY(false);
+		chartSettings.getRangeRestriction().setForceZeroMinY(false);
+		rangeRestriction.setRestrictZoom(true);
 		rangeRestriction.setRestrictZoom(true);
 		rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.ABSOLUTE);
 		rangeRestriction.setExtendMinX(2.0d);
 		rangeRestriction.setExtendMaxX(2.0d);
 		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
-		rangeRestriction.setExtendMaxY(0.1d);
+		rangeRestriction.setExtendMinY(0.0d);
+		rangeRestriction.setExtendMaxY(0.25d);
 		//
 		switch(dataType) {
 			case MSD:
 				setDataTypeMSD(chartSettings);
 				break;
 			case CSD:
+				chartSettings.getRangeRestriction().setForceZeroMinY(true);
+				rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.RELATIVE);
+				rangeRestriction.setExtendMinX(0.1d);
+				rangeRestriction.setExtendMaxX(0.1d);
 				setDataTypeCSD(chartSettings);
 				break;
 			case WSD:
@@ -184,53 +261,21 @@ public class ScanChart extends BarChart {
 
 		/*
 		 * Plot the series name above the entry.
+		 * Remove and re-add it. There is no way to check if the label
+		 * paint listener is already registered.
 		 */
 		IPlotArea plotArea = (IPlotArea)getBaseChart().getPlotArea();
-		plotArea.addCustomPaintListener(new ICustomPaintListener() {
-
-			@Override
-			public void paintControl(PaintEvent e) {
-
-				List<BarSeriesValue> barSeriesValues = getBarSeriesValuesList();
-				Collections.sort(barSeriesValues, barSeriesIntensityComparator);
-				int barSeriesSize = barSeriesValues.size();
-				int limit;
-				/*
-				 * Positive
-				 */
-				limit = numberOfHighestIntensitiesToLabel;
-				for(int i = 0; i < limit; i++) {
-					if(i < barSeriesSize) {
-						BarSeriesValue barSeriesValue = barSeriesValues.get(i);
-						printLabel(barSeriesValue, e);
-					}
-				}
-				/*
-				 * Negative
-				 */
-				limit = barSeriesValues.size() - numberOfHighestIntensitiesToLabel;
-				limit = (limit < 0) ? 0 : limit;
-				for(int i = barSeriesValues.size() - 1; i >= limit; i--) {
-					BarSeriesValue barSeriesValue = barSeriesValues.get(i);
-					if(barSeriesValue.getIntensity() < 0) {
-						printLabel(barSeriesValue, e);
-					}
-				}
-			}
-
-			@Override
-			public boolean drawBehindSeries() {
-
-				return false;
-			}
-		});
+		plotArea.removeCustomPaintListener(labelPaintListener);
+		plotArea.addCustomPaintListener(labelPaintListener);
 	}
 
-	private void printLabel(BarSeriesValue barSeriesValue, PaintEvent e) {
+	private void printLabel(BarSeriesValue barSeriesValue, boolean useX, PaintEvent e) {
 
+		Font currentFont = e.gc.getFont();
+		e.gc.setFont(fonts.get(fontId));
 		Point point = barSeriesValue.getPoint();
-		String label = getLabel(barSeriesValue.getValue());
-		boolean negative = (barSeriesValue.getIntensity() < 0) ? true : false;
+		String label = (useX) ? getLabel(barSeriesValue.getX()) : getLabel(barSeriesValue.getY());
+		boolean negative = (barSeriesValue.getY() < 0) ? true : false;
 		Point labelSize = e.gc.textExtent(label);
 		int x = (int)(point.x + 0.5d - labelSize.x / 2.0d);
 		int y = point.y;
@@ -238,6 +283,7 @@ public class ScanChart extends BarChart {
 			y = point.y - labelSize.y;
 		}
 		e.gc.drawText(label, x, y, true);
+		e.gc.setFont(currentFont);
 	}
 
 	private String getLabel(double value) {

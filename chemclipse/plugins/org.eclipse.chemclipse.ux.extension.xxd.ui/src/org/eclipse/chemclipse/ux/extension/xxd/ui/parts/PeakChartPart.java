@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractPeakUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IPeakUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSelectedPeak;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
@@ -47,13 +47,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-public class SelectedPeaksPart extends AbstractPeakUpdateSupport implements IPeakUpdateSupport {
+public class PeakChartPart extends AbstractPeakUpdateSupport implements IPeakUpdateSupport {
 
 	private Composite toolbarSettings;
 	private ChromatogramChart peakChart;
 
 	@Inject
-	public SelectedPeaksPart(Composite parent, MPart part) {
+	public PeakChartPart(Composite parent, MPart part) {
 		super(part);
 		initialize(parent);
 	}
@@ -201,8 +201,8 @@ public class SelectedPeaksPart extends AbstractPeakUpdateSupport implements IPea
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePage = new PreferencePage();
-				preferencePage.setTitle("Overlay Settings");
+				IPreferencePage preferencePage = new PreferencePageSelectedPeak();
+				preferencePage.setTitle("Peak Settings");
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
 				//

@@ -15,24 +15,24 @@ import org.eclipse.swt.graphics.Point;
 
 public class BarSeriesValue {
 
-	private double value;
-	private double intensity;
+	private double x;
+	private double y;
 	private Point point;
 
-	public BarSeriesValue(double value, double intensity, Point point) {
-		this.value = value;
-		this.intensity = intensity;
+	public BarSeriesValue(double x, double y, Point point) {
+		this.x = x;
+		this.y = y;
 		this.point = point;
 	}
 
-	public double getValue() {
+	public double getX() {
 
-		return value;
+		return x;
 	}
 
-	public double getIntensity() {
+	public double getY() {
 
-		return intensity;
+		return y;
 	}
 
 	public Point getPoint() {

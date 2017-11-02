@@ -14,4 +14,31 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            name="UI Settings">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageOverlay"
+            name="Overlay">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSelectedScan"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageSelectedScan"
+            name="Selected Scan">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSelectedPeak"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageSelectedPeak"
+            name="Selected Peak">
+      </page>                  
+   </extension>   
 </plugin>

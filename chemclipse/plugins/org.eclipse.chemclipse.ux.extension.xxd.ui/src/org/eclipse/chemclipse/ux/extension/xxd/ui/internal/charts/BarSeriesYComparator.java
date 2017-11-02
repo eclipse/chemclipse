@@ -13,11 +13,11 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts;
 
 import java.util.Comparator;
 
-public class BarSeriesIntensityComparator implements Comparator<BarSeriesValue> {
+public class BarSeriesYComparator implements Comparator<BarSeriesValue> {
 
 	@Override
 	public int compare(BarSeriesValue barSeriesIon1, BarSeriesValue barSeriesIon2) {
 
-		return Double.compare(barSeriesIon2.getIntensity(), barSeriesIon1.getIntensity());
+		return Double.compare(barSeriesIon2.getY(), barSeriesIon1.getY());
 	}
 }

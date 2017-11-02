@@ -16,6 +16,12 @@ import org.swtchart.LineStyle;
 
 public class PreferenceConstants {
 
+	/*
+	 * General
+	 */
+	/*
+	 * Overlay
+	 */
 	public static final String P_COLOR_SCHEME_OVERLAY_NORMAL = "colorSchemeOverlayNormal";
 	public static final String DEF_COLOR_SCHEME_OVERLAY_NORMAL = Colors.COLOR_SCHEME_RED;
 	public static final String P_COLOR_SCHEME_OVERLAY_SIC = "colorSchemeOverlaySIC";
@@ -33,4 +39,10 @@ public class PreferenceConstants {
 	public static final String DEF_LINE_STYLE_OVERLAY_TSC = LineStyle.SOLID.toString();
 	public static final String P_LINE_STYLE_OVERLAY_DEFAULT = "lineStyleOverlayDefault";
 	public static final String DEF_LINE_STYLE_OVERLAY_DEFAULT = LineStyle.SOLID.toString();
+	/*
+	 * Selected Scan
+	 */
+	/*
+	 * Selected Peak
+	 */
 }

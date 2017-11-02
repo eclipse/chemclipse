@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ScanChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractScanUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IScanUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSelectedScan;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.e4.ui.di.Focus;
@@ -50,13 +50,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-public class SelectedScansPart extends AbstractScanUpdateSupport implements IScanUpdateSupport {
+public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpdateSupport {
 
 	private Composite toolbarSettings;
 	private ScanChart scanChart;
 
 	@Inject
-	public SelectedScansPart(Composite parent, MPart part) {
+	public ScanChartPart(Composite parent, MPart part) {
 		super(part);
 		initialize(parent);
 	}
@@ -70,20 +70,23 @@ public class SelectedScansPart extends AbstractScanUpdateSupport implements ISca
 	@Override
 	public void updateScan(IScan scan) {
 
-		List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
-		ISeriesData seriesData = getSeriesData(scan);
-		IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
-		barSeriesDataList.add(barSeriesData);
-		//
-		if(scan instanceof IScanMSD) {
-			scanChart.setDataType(DataType.MSD);
-		} else if(scan instanceof IScanCSD) {
-			scanChart.setDataType(DataType.CSD);
-		} else if(scan instanceof IScanWSD) {
-			scanChart.setDataType(DataType.WSD);
+		if(scan != null) {
+			List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
+			ISeriesData seriesData = getSeriesData(scan);
+			IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
+			barSeriesDataList.add(barSeriesData);
+			//
+			if(scan instanceof IScanMSD) {
+				scanChart.setDataType(DataType.MSD);
+			} else if(scan instanceof IScanCSD) {
+				scanChart.setDataType(DataType.CSD);
+			} else if(scan instanceof IScanWSD) {
+				scanChart.setDataType(DataType.WSD);
+			}
+			scanChart.addSeriesData(barSeriesDataList);
+		} else {
+			scanChart.deleteSeries();
 		}
-		//
-		scanChart.addSeriesData(barSeriesDataList);
 	}
 
 	private ISeriesData getSeriesData(IScan scan) {
@@ -93,7 +96,6 @@ public class SelectedScansPart extends AbstractScanUpdateSupport implements ISca
 		String id = "Scan " + scan.getScanNumber();
 		//
 		if(scan instanceof IScanMSD) {
-			id += " (MSD)";
 			IScanMSD scanMSD = (IScanMSD)scan;
 			List<IIon> ions = scanMSD.getIons();
 			int size = ions.size();
@@ -106,12 +108,10 @@ public class SelectedScansPart extends AbstractScanUpdateSupport implements ISca
 				index++;
 			}
 		} else if(scan instanceof IScanCSD) {
-			id += " (CSD)";
 			IScanCSD scanCSD = (IScanCSD)scan;
 			xSeries = new double[]{scanCSD.getRetentionTime()};
 			ySeries = new double[]{scanCSD.getTotalSignal()};
 		} else if(scan instanceof IScanWSD) {
-			id += " (WSD)";
 			IScanWSD scanWSD = (IScanWSD)scan;
 			List<IScanSignalWSD> scanSignalsWSD = scanWSD.getScanSignals();
 			int size = scanSignalsWSD.size();
@@ -232,8 +232,8 @@ public class SelectedScansPart extends AbstractScanUpdateSupport implements ISca
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePage = new PreferencePage();
-				preferencePage.setTitle("Overlay Settings");
+				IPreferencePage preferencePage = new PreferencePageSelectedScan();
+				preferencePage.setTitle("Scan Settings");
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
 				//
