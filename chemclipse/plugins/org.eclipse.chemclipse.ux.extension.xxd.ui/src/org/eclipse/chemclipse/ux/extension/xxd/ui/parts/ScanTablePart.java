@@ -14,24 +14,23 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumIonsListUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractScanUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IScanUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
 public class ScanTablePart extends AbstractScanUpdateSupport implements IScanUpdateSupport {
 
-	private Composite toolbarSettings;
+	private Label labelScan;
+	private MassSpectrumIonsListUI massSpectrumIonsListUI;
 
 	@Inject
 	public ScanTablePart(Composite parent, MPart part) {
@@ -47,68 +46,38 @@ public class ScanTablePart extends AbstractScanUpdateSupport implements IScanUpd
 	@Override
 	public void updateScan(IScan scan) {
 
+		labelScan.setText(ScanSupport.getScanLabel(scan));
+		if(scan instanceof IScanMSD) {
+			IScanMSD scanMSD = (IScanMSD)scan;
+			massSpectrumIonsListUI.update(scanMSD, true);
+		} else {
+			massSpectrumIonsListUI.clear();
+		}
 	}
 
 	private void initialize(Composite parent) {
 
 		parent.setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
-		toolbarSettings = createToolbarSettings(parent);
+		createToolbarInfo(parent);
+		createTable(parent);
 	}
 
-	private void createToolbarMain(Composite parent) {
-
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.END;
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
-		//
-		createButtonToggleToolbarSettings(composite);
-	}
-
-	private Composite createToolbarSettings(Composite parent) {
+	private void createToolbarInfo(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
-		composite.setVisible(false);
 		//
-		createButton(composite);
-		//
-		return composite;
+		labelScan = new Label(composite, SWT.NONE);
+		labelScan.setText("");
+		labelScan.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
-	private void createButtonToggleToolbarSettings(Composite parent) {
+	private void createTable(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle settings toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				PartSupport.toggleCompositeVisibility(toolbarSettings);
-			}
-		});
-	}
-
-	private void createButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Tooltip");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
+		massSpectrumIonsListUI = new MassSpectrumIonsListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		massSpectrumIonsListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 }

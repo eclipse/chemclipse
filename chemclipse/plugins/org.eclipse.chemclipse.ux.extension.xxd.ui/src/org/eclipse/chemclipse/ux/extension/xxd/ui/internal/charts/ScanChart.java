@@ -22,15 +22,21 @@ import java.util.Map;
 
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToMinuteConverter;
 import org.eclipse.eavp.service.swtchart.axisconverter.RelativeIntensityConverter;
-import org.eclipse.eavp.service.swtchart.barcharts.BarChart;
+import org.eclipse.eavp.service.swtchart.barcharts.IBarSeriesData;
+import org.eclipse.eavp.service.swtchart.barcharts.IBarSeriesSettings;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.core.IAxisSettings;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.core.IPrimaryAxisSettings;
 import org.eclipse.eavp.service.swtchart.core.ISecondaryAxisSettings;
+import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.RangeRestriction;
+import org.eclipse.eavp.service.swtchart.core.ScrollableChart;
 import org.eclipse.eavp.service.swtchart.core.SecondaryAxisSettings;
 import org.eclipse.eavp.service.swtchart.customcharts.MassSpectrumChart.LabelOption;
+import org.eclipse.eavp.service.swtchart.exceptions.SeriesException;
+import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
+import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Font;
@@ -38,19 +44,26 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.swtchart.IAxis.Position;
+import org.swtchart.IBarSeries;
+import org.swtchart.IBarSeries.BarWidthStyle;
 import org.swtchart.ICustomPaintListener;
+import org.swtchart.ILineSeries;
 import org.swtchart.IPlotArea;
 import org.swtchart.ISeries;
 
-public class ScanChart extends BarChart {
+public class ScanChart extends ScrollableChart {
 
 	private static final DecimalFormat DEFAULT_DECIMAL_FORMAT = new DecimalFormat();
+	//
+	private static final int LENGTH_HINT_DATA_POINTS = 5000;
+	private static final int COMPRESS_TO_LENGTH = Integer.MAX_VALUE;
 	//
 	private int numberOfHighestIntensitiesToLabel = 5;
 	private BarSeriesYComparator barSeriesIntensityComparator = new BarSeriesYComparator();
 	private LabelOption labelOption = LabelOption.EXACT;
 	private Map<Double, String> customLabels = new HashMap<Double, String>();
-	private LabelPaintListener labelPaintListener = new LabelPaintListener(true);
+	private LabelPaintListener labelPaintListenerX = new LabelPaintListener(true);
+	private LabelPaintListener labelPaintListenerY = new LabelPaintListener(false);
 	private Map<String, Font> fonts = new HashMap<String, Font>();
 	private String fontId; // is initialized on use
 
@@ -114,6 +127,72 @@ public class ScanChart extends BarChart {
 		setDataType(DataType.MSD);
 	}
 
+	public void addBarSeriesData(List<IBarSeriesData> barSeriesDataList) {
+
+		/*
+		 * Suspend the update when adding new data to improve the performance.
+		 */
+		if(barSeriesDataList != null && barSeriesDataList.size() > 0) {
+			BaseChart baseChart = getBaseChart();
+			baseChart.suspendUpdate(true);
+			for(IBarSeriesData barSeriesData : barSeriesDataList) {
+				/*
+				 * Get the series data and apply the settings.
+				 */
+				try {
+					ISeriesData seriesData = barSeriesData.getSeriesData();
+					ISeriesData optimizedSeriesData = calculateSeries(seriesData, COMPRESS_TO_LENGTH);
+					IBarSeriesSettings barSeriesSettings = barSeriesData.getBarSeriesSettings();
+					barSeriesSettings.getSeriesSettingsHighlight(); // Initialize
+					IBarSeries barSeries = (IBarSeries)createSeries(optimizedSeriesData, barSeriesSettings);
+					baseChart.applyBarSeriesSettings(barSeries, barSeriesSettings);
+					/*
+					 * Automatically use stretched if it is a large data set.
+					 */
+					if(isLargeDataSet(optimizedSeriesData.getXSeries(), optimizedSeriesData.getYSeries(), LENGTH_HINT_DATA_POINTS)) {
+						barSeries.setBarWidthStyle(BarWidthStyle.STRETCHED);
+					} else {
+						barSeries.setBarWidthStyle(barSeriesSettings.getBarWidthStyle());
+					}
+				} catch(SeriesException e) {
+					//
+				}
+			}
+			baseChart.suspendUpdate(false);
+			adjustRange(true);
+			baseChart.redraw();
+		}
+	}
+
+	public void addLineSeriesData(List<ILineSeriesData> lineSeriesDataList) {
+
+		/*
+		 * Suspend the update when adding new data to improve the performance.
+		 */
+		if(lineSeriesDataList != null && lineSeriesDataList.size() > 0) {
+			BaseChart baseChart = getBaseChart();
+			baseChart.suspendUpdate(true);
+			for(ILineSeriesData lineSeriesData : lineSeriesDataList) {
+				/*
+				 * Get the series data and apply the settings.
+				 */
+				try {
+					ISeriesData seriesData = lineSeriesData.getSeriesData();
+					ISeriesData optimizedSeriesData = calculateSeries(seriesData, COMPRESS_TO_LENGTH);
+					ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+					lineSeriesSettings.getSeriesSettingsHighlight(); // Initialize
+					ILineSeries lineSeries = (ILineSeries)createSeries(optimizedSeriesData, lineSeriesSettings);
+					baseChart.applyLineSeriesSettings(lineSeries, lineSeriesSettings);
+				} catch(SeriesException e) {
+					//
+				}
+			}
+			baseChart.suspendUpdate(false);
+			adjustRange(true);
+			baseChart.redraw();
+		}
+	}
+
 	@Override
 	public void dispose() {
 
@@ -174,11 +253,14 @@ public class ScanChart extends BarChart {
 		rangeRestriction.setExtendMinY(0.0d);
 		rangeRestriction.setExtendMaxY(0.25d);
 		//
+		LabelPaintListener labelPaintListener = labelPaintListenerX;
+		//
 		switch(dataType) {
 			case MSD:
 				setDataTypeMSD(chartSettings);
 				break;
 			case CSD:
+				labelPaintListener = labelPaintListenerY;
 				chartSettings.getRangeRestriction().setForceZeroMinY(true);
 				rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.RELATIVE);
 				rangeRestriction.setExtendMinX(0.1d);
@@ -194,14 +276,14 @@ public class ScanChart extends BarChart {
 		}
 		//
 		applySettings(chartSettings);
-		addSeriesLabelMarker();
+		addSeriesLabelMarker(labelPaintListener);
 	}
 
 	private void setDataTypeMSD(IChartSettings chartSettings) {
 
 		setPrimaryAxisSet(chartSettings, "m/z", true, "Intensity");
 		clearSecondaryAxes(chartSettings);
-		addSecondaryAxisY(chartSettings, "Relative Intensity [%]");
+		addSecondaryAxisY(chartSettings, "Intensity [%]");
 	}
 
 	private void setDataTypeCSD(IChartSettings chartSettings) {
@@ -209,14 +291,14 @@ public class ScanChart extends BarChart {
 		setPrimaryAxisSet(chartSettings, "Retention Time [ms]", false, "Current");
 		clearSecondaryAxes(chartSettings);
 		addSecondaryAxisX(chartSettings, "Minutes");
-		addSecondaryAxisY(chartSettings, "Relative Current [%]");
+		addSecondaryAxisY(chartSettings, "Current [%]");
 	}
 
 	private void setDataTypeWSD(IChartSettings chartSettings) {
 
 		setPrimaryAxisSet(chartSettings, "wavelength [nm]", true, "Intensity");
 		clearSecondaryAxes(chartSettings);
-		addSecondaryAxisY(chartSettings, "Relative Intensity [%]");
+		addSecondaryAxisY(chartSettings, "Intensity [%]");
 	}
 
 	private void clearSecondaryAxes(IChartSettings chartSettings) {
@@ -257,7 +339,7 @@ public class ScanChart extends BarChart {
 		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 	}
 
-	private void addSeriesLabelMarker() {
+	private void addSeriesLabelMarker(LabelPaintListener labelPaintListener) {
 
 		/*
 		 * Plot the series name above the entry.
@@ -265,7 +347,8 @@ public class ScanChart extends BarChart {
 		 * paint listener is already registered.
 		 */
 		IPlotArea plotArea = (IPlotArea)getBaseChart().getPlotArea();
-		plotArea.removeCustomPaintListener(labelPaintListener);
+		plotArea.removeCustomPaintListener(labelPaintListenerX);
+		plotArea.removeCustomPaintListener(labelPaintListenerY);
 		plotArea.addCustomPaintListener(labelPaintListener);
 	}
 
