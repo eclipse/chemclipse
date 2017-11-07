@@ -11,23 +11,21 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.editors;
 
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.notifier.PeakSelectionUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.peak.PeakListUI;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 /**
  * @author Dr. Philip Wenig
@@ -150,29 +148,6 @@ public class PeakIdentificationResultsPage implements IMultiEditorPage {
 						PeakSelectionUpdateNotifier.fireUpdateChange(peakMSD, true);
 					}
 				}
-			}
-		});
-		/*
-		 * Copy and Paste of the table content.
-		 */
-		tableViewer.getTable().addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-				/*
-				 * The selected content will be placed to the clipboard if the
-				 * user is using "Function + c". "Function-Key" 262144
-				 * (stateMask) + "c" 99 (keyCode)
-				 */
-				if(e.keyCode == 99 && e.stateMask == 262144) {
-					tableViewer.copyToClipboard(peakListUI.getTitles());
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-
 			}
 		});
 	}
