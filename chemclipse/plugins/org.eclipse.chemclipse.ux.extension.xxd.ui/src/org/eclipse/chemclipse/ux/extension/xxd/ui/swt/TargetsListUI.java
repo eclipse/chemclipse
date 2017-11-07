@@ -20,13 +20,55 @@ import org.eclipse.swt.widgets.Composite;
 public class TargetsListUI extends ExtendedTableViewer {
 
 	private static final String VERIFIED_MANUALLY = "Verified (manually)";
-	private String[] titles = {VERIFIED_MANUALLY, "Rating", "Name", "CAS", "Match Factor", "Reverse Factor", "Match Factor Direct", "Reverse Factor Direct", "Probability", "Formula", "SMILES", "InChI", "Mol Weight", "Advise", "Identifier", "Miscellaneous", "Comments", "Database", "Contributor", "Reference ID"};
-	private int bounds[] = {30, 30, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
+	//
+	private static final String[] TITLES = { //
+			VERIFIED_MANUALLY, //
+			"Rating", //
+			"Name", //
+			"CAS", //
+			"Match Factor", //
+			"Reverse Factor", //
+			"Match Factor Direct", //
+			"Reverse Factor Direct", //
+			"Probability", //
+			"Formula", //
+			"SMILES", //
+			"InChI", //
+			"Mol Weight", //
+			"Advise", //
+			"Identifier", //
+			"Miscellaneous", //
+			"Comments", //
+			"Database", //
+			"Contributor", //
+			"Reference ID"//
+	};
+	private static final int[] BOUNDS = { //
+			30, //
+			30, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100 //
+	};
 
 	public TargetsListUI(Composite parent, int style) {
 		super(parent, style);
 		createColumns();
-		addCopyToClipboardListener(titles);
 	}
 
 	public void clear() {
@@ -36,7 +78,7 @@ public class TargetsListUI extends ExtendedTableViewer {
 
 	private void createColumns() {
 
-		createColumns(titles, bounds);
+		createColumns(TITLES, BOUNDS);
 		//
 		setLabelProvider(new TargetsLabelProvider());
 		setContentProvider(new ListContentProvider());

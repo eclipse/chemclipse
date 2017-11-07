@@ -22,28 +22,25 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
+import org.eclipse.chemclipse.support.ui.menu.ITableMenuCategories;
+import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsLabelProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsTableComparator;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsViewEditingSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -76,26 +73,13 @@ public abstract class AbstractTargetsView {
 		tableViewer.createColumns(titles, bounds);
 		tableViewer.setContentProvider(contentProvider);
 		tableViewer.setLabelProvider(new TargetsLabelProvider());
-		targetsTableComparator = new TargetsTableComparator();
-		tableViewer.setComparator(targetsTableComparator);
-		setEditingSupport();
-		/*
-		 * Copy and event broker actions.
-		 */
-		tableViewer.getControl().addKeyListener(new KeyAdapter() {
+		ITableSettings tableSettings = tableViewer.getTableSettings();
+		tableSettings.addKeyEventProcessor(new IKeyEventProcessor() {
 
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void handleEvent(ExtendedTableViewer extendedTableViewer, KeyEvent e) {
 
-				if(e.keyCode == 99 && e.stateMask == 262144) {
-					/*
-					 * The selected content will be placed to the clipboard if
-					 * the user is using "Function + c". "Function-Key" 262144
-					 * (stateMask) + "c" 99 (keyCode)
-					 */
-					tableViewer.copyToClipboard(titles);
-					//
-				} else if(e.keyCode == 127 && e.stateMask == 0) {
+				if(e.keyCode == 127 && e.stateMask == 0) {
 					/*
 					 * Press "DEL" button.
 					 */
@@ -110,6 +94,48 @@ public abstract class AbstractTargetsView {
 				}
 			}
 		});
+		tableSettings.addMenuEntry(new ITableMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Delete Selected Targets";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return ITableMenuCategories.STANDARD_OPERATION;
+			}
+
+			@Override
+			public void execute(ExtendedTableViewer extendedTableViewer) {
+
+				deleteSelectedTargets();
+			}
+		});
+		tableSettings.addMenuEntry(new ITableMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Manully Verify Selected Targets";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return ITableMenuCategories.STANDARD_OPERATION;
+			}
+
+			@Override
+			public void execute(ExtendedTableViewer extendedTableViewer) {
+
+				manuallyVerifySelectedTargets();
+			}
+		});
+		tableViewer.applySettings(tableSettings);
+		//
 		tableViewer.getControl().addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -118,7 +144,10 @@ public abstract class AbstractTargetsView {
 				propagateSelectedTarget();
 			}
 		});
-		initContextMenu();
+		//
+		targetsTableComparator = new TargetsTableComparator();
+		tableViewer.setComparator(targetsTableComparator);
+		setEditingSupport();
 	}
 
 	public TableViewer getTableViewer() {
@@ -162,77 +191,6 @@ public abstract class AbstractTargetsView {
 		tableViewer.refresh();
 		targetsTableComparator.setDirection(1 - sortOrder); // toggle sort order
 		targetsTableComparator.setColumn(column);
-	}
-
-	private void initContextMenu() {
-
-		MenuManager menuManager = new MenuManager("#PopUpMenu", "org.eclipse.chemclipse.chromatogram.msd.ui.perspective.internal.views.targetsView.popup");
-		menuManager.setRemoveAllWhenShown(true);
-		/*
-		 * Copy to clipboard
-		 */
-		menuManager.addMenuListener(new IMenuListener() {
-
-			@Override
-			public void menuAboutToShow(IMenuManager manager) {
-
-				IAction action = new Action() {
-
-					@Override
-					public void run() {
-
-						super.run();
-						tableViewer.copyToClipboard(titles);
-					}
-				};
-				action.setText("Copy selection to clipboard");
-				manager.add(action);
-			}
-		});
-		/*
-		 * Delete selected targets
-		 */
-		menuManager.addMenuListener(new IMenuListener() {
-
-			@Override
-			public void menuAboutToShow(IMenuManager manager) {
-
-				IAction action = new Action() {
-
-					@Override
-					public void run() {
-
-						super.run();
-						deleteSelectedTargets();
-					}
-				};
-				action.setText("Delete selected targets");
-				manager.add(action);
-			}
-		});
-		/*
-		 * Manuall Verify Selected Targets
-		 */
-		menuManager.addMenuListener(new IMenuListener() {
-
-			@Override
-			public void menuAboutToShow(IMenuManager manager) {
-
-				IAction action = new Action() {
-
-					@Override
-					public void run() {
-
-						super.run();
-						manuallyVerifySelectedTargets();
-					}
-				};
-				action.setText("Verify selected targets (CTRL+I)");
-				manager.add(action);
-			}
-		});
-		Menu menu = menuManager.createContextMenu(tableViewer.getControl());
-		tableViewer.getControl().setMenu(menu);
 	}
 
 	/**

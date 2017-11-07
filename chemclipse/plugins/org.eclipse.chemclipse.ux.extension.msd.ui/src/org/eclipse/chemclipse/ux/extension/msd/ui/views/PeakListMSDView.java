@@ -158,7 +158,7 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 					 * the user is using "Function + c". "Function-Key" 262144
 					 * (stateMask) + "c" 99 (keyCode)
 					 */
-					peakListUI.getTableViewer().copyToClipboard(peakListUI.getTitles());
+					// peakListUI.getTableViewer().copyToClipboard(peakListUI.getTitles());
 					//
 				} else if(e.keyCode == 127 && e.stateMask == 0) {
 					/*
@@ -436,7 +436,7 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 					public void run() {
 
 						super.run();
-						peakListUI.getTableViewer().copyToClipboard(peakListUI.getTitles());
+						// peakListUI.getTableViewer().copyToClipboard(peakListUI.getTitles());
 					}
 				};
 				action.setText("Copy selection to clipboard");

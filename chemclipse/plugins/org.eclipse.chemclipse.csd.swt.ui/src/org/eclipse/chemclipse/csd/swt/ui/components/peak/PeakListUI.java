@@ -14,13 +14,6 @@ package org.eclipse.chemclipse.csd.swt.ui.components.peak;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
@@ -30,6 +23,11 @@ import org.eclipse.chemclipse.csd.swt.ui.internal.provider.PeakListLabelProvider
 import org.eclipse.chemclipse.csd.swt.ui.internal.provider.PeakListTableComparator;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 
 public class PeakListUI {
 
@@ -53,24 +51,6 @@ public class PeakListUI {
 		 */
 		peakListTableComparator = new PeakListTableComparator();
 		tableViewer.setComparator(peakListTableComparator);
-		/*
-		 * Copy and Paste of the table content.
-		 */
-		tableViewer.getTable().addKeyListener(new KeyAdapter() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-				/*
-				 * The selected content will be placed to the clipboard if the
-				 * user is using "Function + c". "Function-Key" 262144
-				 * (stateMask) + "c" 99 (keyCode)
-				 */
-				if(e.keyCode == 99 && e.stateMask == 262144) {
-					tableViewer.copyToClipboard(titles);
-				}
-			}
-		});
 	}
 
 	public void setFocus() {

@@ -11,24 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.swt;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.internal.provider.ChromatogramIntegrationResultsContentProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.internal.provider.ChromatogramIntegrationResultsLabelProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.internal.provider.ChromatogramIntegrationResultsTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
 
 public class ChromatogramIntegrationResultsUI extends Composite {
 
@@ -72,60 +64,10 @@ public class ChromatogramIntegrationResultsUI extends Composite {
 		tableViewer.getTable().setLayoutData(gridData);
 		tableViewer.setContentProvider(new ChromatogramIntegrationResultsContentProvider());
 		tableViewer.setLabelProvider(new ChromatogramIntegrationResultsLabelProvider());
-		tableViewer.getTable().addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-				/*
-				 * The selected content will be placed to the clipboard if the
-				 * user is using "Function + c". "Function-Key" 262144
-				 * (stateMask) + "c" 99 (keyCode)
-				 */
-				if(e.keyCode == 99 && e.stateMask == 262144) {
-					tableViewer.copyToClipboard(titles);
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-
-			}
-		});
 		/*
 		 * Sorting the table.
 		 */
 		integrationResultTableComparator = new ChromatogramIntegrationResultsTableComparator();
 		tableViewer.setComparator(integrationResultTableComparator);
-		initContextMenu();
-	}
-
-	/*
-	 * Initialize a context menu.
-	 */
-	private void initContextMenu() {
-
-		MenuManager menuManager = new MenuManager("#PopUpMenu", POPUP_MENU_ID);
-		menuManager.setRemoveAllWhenShown(true);
-		menuManager.addMenuListener(new IMenuListener() {
-
-			@Override
-			public void menuAboutToShow(IMenuManager manager) {
-
-				IAction action = new Action() {
-
-					@Override
-					public void run() {
-
-						super.run();
-						tableViewer.copyToClipboard(titles);
-					}
-				};
-				action.setText("Copy selection to clipboard");
-				manager.add(action);
-			}
-		});
-		Menu menu = menuManager.createContextMenu(tableViewer.getTable());
-		tableViewer.getTable().setMenu(menu);
 	}
 }

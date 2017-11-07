@@ -69,6 +69,5 @@ public class PeakQuantitationListUI extends ExtendedTableViewer {
 		setLabelProvider(new PeakQuantitationListLabelProvider());
 		setContentProvider(new ListContentProvider());
 		setComparator(new PeakQuantitationListTableComparator());
-		addCopyToClipboardListener(titles);
 	}
 }

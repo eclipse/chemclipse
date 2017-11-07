@@ -26,7 +26,6 @@ public class ChromtogramScanInfoUI extends ExtendedTableViewer {
 	public ChromtogramScanInfoUI(Composite parent, int style) {
 		super(parent, style);
 		createColumns();
-		addCopyToClipboardListener(titles);
 	}
 
 	public void update(IChromatogramSelectionMSD chromatogramSelectionMSD, boolean forceReload) {

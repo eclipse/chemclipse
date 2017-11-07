@@ -24,7 +24,6 @@ import org.eclipse.chemclipse.wsd.swt.ui.internal.provider.MarkedWavelengthsChoo
 import org.eclipse.chemclipse.wsd.swt.ui.internal.provider.MarkedWavelengthsChooserLabelProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -157,24 +156,6 @@ public class MarkedWavelengthsChooser {
 		if(markedWavelengths != null) {
 			tableViewer.setInput(markedWavelengths);
 		}
-		/*
-		 * Copy and Paste of the table content.
-		 */
-		tableViewer.getTable().addKeyListener(new KeyAdapter() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-				/*
-				 * The selected content will be placed to the clipboard if the
-				 * user is using "Function + c". "Function-Key" 262144
-				 * (stateMask) + "c" 99 (keyCode)
-				 */
-				if(e.keyCode == 99 && e.stateMask == 262144) {
-					tableViewer.copyToClipboard(titles);
-				}
-			}
-		});
 		/*
 		 * Add Ion Text
 		 */

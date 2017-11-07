@@ -7,170 +7,103 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
+ * Dr. Philip Wenig - initial API and implementation
  * Dr. Janos Binder - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.swt;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
+import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
+import org.eclipse.chemclipse.support.ui.menu.TableMenuEntryComparator;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.dnd.Clipboard;
-import org.eclipse.swt.dnd.TextTransfer;
-import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 
-public class ExtendedTableViewer extends TableViewer {
+public class ExtendedTableViewer extends TableViewer implements IExtendedTableViewer {
 
-	private Clipboard clipboard;
-	private final String DELIMITER = "\t";
-	private final String COPY_TO_CLIPBOARD = "Copy selection to clipboard";
-	private final String POPUP_MENU_ID = "org.eclipse.chemclipse.swt.ui.viewers.extendedTableViewer.popup";
+	private static final String MENU_TEXT = "Table PopUp Menu";
+	//
+	private ITableSettings tableSettings;
 	private List<TableViewerColumn> tableViewerColumns;
+	private Map<String, Set<ITableMenuEntry>> categoryMenuEntriesMap;
+	private Map<String, ITableMenuEntry> menuEntryMap;
+	private Map<String, MenuManager> menuManagerMap;
+	private Set<KeyListener> userDefinedKeyListeners;
 
 	public ExtendedTableViewer(Composite parent) {
 		this(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		clipboard = new Clipboard(Display.getDefault());
-		tableViewerColumns = new ArrayList<TableViewerColumn>();
 	}
 
 	public ExtendedTableViewer(Composite parent, int style) {
 		super(parent, style);
-		clipboard = new Clipboard(Display.getDefault());
+		tableSettings = new TableSettings();
 		tableViewerColumns = new ArrayList<TableViewerColumn>();
+		categoryMenuEntriesMap = new HashMap<String, Set<ITableMenuEntry>>();
+		menuEntryMap = new HashMap<String, ITableMenuEntry>();
+		menuManagerMap = new HashMap<String, MenuManager>();
+		userDefinedKeyListeners = new HashSet<KeyListener>();
+		applySettings(tableSettings);
 	}
 
-	public void addCopyToClipboardListener(final String[] titles) {
+	@Override
+	public ITableSettings getTableSettings() {
 
-		this.getTable().addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-				/*
-				 * The selected content will be placed to the clipboard if the
-				 * user is using "Function + c". "Function-Key" 262144
-				 * (stateMask) + "c" 99 (keyCode)
-				 */
-				if(e.stateMask == SWT.CTRL && e.keyCode == 'c') {
-					copyToClipboard(titles);
-				}
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-
-			}
-		});
-		initContextMenu(titles);
+		return tableSettings;
 	}
 
-	private void initContextMenu(final String[] titles) {
+	@Override
+	public void applySettings(ITableSettings tableSettings) {
 
-		MenuManager menuManager = new MenuManager("#PopUpMenu", POPUP_MENU_ID);
-		final Table table = this.getTable();
-		menuManager.setRemoveAllWhenShown(true);
-		menuManager.addMenuListener(new IMenuListener() {
-
-			@Override
-			public void menuAboutToShow(IMenuManager manager) {
-
-				IAction action = new Action() {
-
-					@Override
-					public void run() {
-
-						super.run();
-						copyToClipboard(titles);
-					}
-				};
-				action.setText(COPY_TO_CLIPBOARD);
-				manager.add(action);
-			}
-		});
-		Menu menu = menuManager.createContextMenu(table);
-		table.setMenu(menu);
-	}
-
-	/**
-	 * Copies the actual selection to the clipboard.
-	 */
-	public void copyToClipboard(final String[] titles) {
-
-		StringBuilder builder = new StringBuilder();
-		int size = titles.length;
 		/*
-		 * Header
+		 * Add the key listeners.
 		 */
-		for(String title : titles) {
-			builder.append(title);
-			builder.append(DELIMITER);
+		createKeyListener();
+		/*
+		 * Create the menu if requested.
+		 */
+		if(tableSettings.isCreateMenu()) {
+			createPopupMenu();
+		} else {
+			Menu menu = getTable().getMenu();
+			if(menu != null) {
+				getTable().setMenu(null);
+				menu.dispose();
+			}
 		}
-		builder.append(OperatingSystemUtils.getLineDelimiter());
-		/*
-		 * Copy the selected items.
-		 */
-		TableItem selection;
-		Table table = this.getTable();
-		for(int index : table.getSelectionIndices()) {
-			/*
-			 * Get the nth selected item.
-			 */
-			selection = table.getItem(index);
-			/*
-			 * Dump all elements of the item, e.g. RT, Abundance, ... .
-			 */
-			for(int columnIndex = 0; columnIndex < size; columnIndex++) {
-				builder.append(selection.getText(columnIndex));
-				builder.append(DELIMITER);
-			}
-			builder.append(OperatingSystemUtils.getLineDelimiter());
-		}
-		/*
-		 * If the builder is empty, give a note that items needs to be selected.
-		 */
-		if(builder.length() == 0) {
-			builder.append("Please select one or more entries in the list.");
-			builder.append(OperatingSystemUtils.getLineDelimiter());
-		}
-		/*
-		 * Transfer the selected text (items) to the clipboard.
-		 */
-		TextTransfer textTransfer = TextTransfer.getInstance();
-		Object[] data = new Object[]{builder.toString()};
-		Transfer[] dataTypes = new Transfer[]{textTransfer};
-		clipboard.setContents(data, dataTypes);
 	}
 
-	/**
-	 * Creates the columns for the peak table.
-	 * 
-	 * @param tableViewer
-	 */
-	public void createColumns(final String[] titles, final int[] bounds) {
+	@Override
+	public void createColumns(String[] titles, int[] bounds) {
 
-		final Table table = this.getTable();
 		/*
 		 * Clear the table and all existing columns.
 		 */
+		Table table = getTable();
 		table.setRedraw(false);
 		tableViewerColumns.clear();
 		table.clearAll();
@@ -231,6 +164,146 @@ public class ExtendedTableViewer extends TableViewer {
 
 	public List<TableViewerColumn> getTableViewerColumns() {
 
-		return tableViewerColumns;
+		return Collections.unmodifiableList(tableViewerColumns);
+	}
+
+	private void createKeyListener() {
+
+		/*
+		 * Remove existing listeners.
+		 */
+		Table table = getTable();
+		for(KeyListener keyListener : userDefinedKeyListeners) {
+			table.removeKeyListener(keyListener);
+		}
+		userDefinedKeyListeners.clear();
+		/*
+		 * Add new listeners.
+		 */
+		ExtendedTableViewer extendedTableViewer = this;
+		for(IKeyEventProcessor keyEventProcessor : tableSettings.getKeyEventProcessors()) {
+			KeyListener keyListener = new KeyAdapter() {
+
+				@Override
+				public void keyReleased(KeyEvent e) {
+
+					keyEventProcessor.handleEvent(extendedTableViewer, e);
+				}
+			};
+			table.addKeyListener(keyListener);
+			userDefinedKeyListeners.add(keyListener);
+		}
+	}
+
+	private void createPopupMenu() {
+
+		/*
+		 * Clear the existing entries.
+		 */
+		Table table = getTable();
+		table.setMenu(null);
+		//
+		categoryMenuEntriesMap.clear();
+		menuEntryMap.clear();
+		menuManagerMap.clear();
+		//
+		String menuId = getClass().getCanonicalName();
+		MenuManager menuManager = new MenuManager(MENU_TEXT, menuId);
+		menuManager.setRemoveAllWhenShown(true); // Seems to remove sub menus. Solution needed!
+		//
+		addMenuItemsFromChartSettings();
+		createMenuItems(menuManager);
+		//
+		Menu menu = menuManager.createContextMenu(table);
+		table.setMenu(menu);
+	}
+
+	private void addMenuItemsFromChartSettings() {
+
+		for(ITableMenuEntry menuEntry : tableSettings.getMenuEntries()) {
+			addMenuEntry(menuEntry);
+		}
+	}
+
+	private void addMenuEntry(ITableMenuEntry menuEntry) {
+
+		if(menuEntry != null) {
+			String category = menuEntry.getCategory();
+			Set<ITableMenuEntry> menuEntries = categoryMenuEntriesMap.get(category);
+			/*
+			 * Create set if not existent.
+			 */
+			if(menuEntries == null) {
+				menuEntries = new HashSet<ITableMenuEntry>();
+				categoryMenuEntriesMap.put(category, menuEntries);
+			}
+			/*
+			 * Add the entry.
+			 */
+			menuEntries.add(menuEntry);
+			menuEntryMap.put(menuEntry.getName(), menuEntry);
+		}
+	}
+
+	private void createMenuItems(MenuManager menuManager) {
+
+		List<String> categories = new ArrayList<String>(categoryMenuEntriesMap.keySet());
+		Collections.sort(categories);
+		Iterator<String> iterator = categories.iterator();
+		while(iterator.hasNext()) {
+			String category = iterator.next();
+			createMenuCategory(menuManager, category, categoryMenuEntriesMap.get(category));
+			if(iterator.hasNext()) {
+				menuManager.add(new Separator());
+			}
+		}
+	}
+
+	private void createMenuCategory(MenuManager menuManager, String category, Set<ITableMenuEntry> tableMenuEntries) {
+
+		List<ITableMenuEntry> menuEntries = new ArrayList<ITableMenuEntry>(tableMenuEntries);
+		Collections.sort(menuEntries, new TableMenuEntryComparator());
+		//
+		for(ITableMenuEntry menuEntry : menuEntries) {
+			menuManager.addMenuListener(new IMenuListener() {
+
+				@Override
+				public void menuAboutToShow(IMenuManager manager) {
+
+					if("".equals(category)) {
+						/*
+						 * Top level
+						 */
+						manager.add(getAction(menuEntry));
+					} else {
+						/*
+						 * Sub menu
+						 */
+						MenuManager subMenu = menuManagerMap.get(category);
+						if(subMenu == null) {
+							subMenu = new MenuManager(category, null);
+							menuManagerMap.put(category, subMenu);
+							manager.add(subMenu);
+						}
+						subMenu.add(getAction(menuEntry));
+					}
+				}
+			});
+		}
+	}
+
+	private IAction getAction(ITableMenuEntry menuEntry) {
+
+		ExtendedTableViewer extendedTableViewer = this;
+		IAction action = new Action() {
+
+			@Override
+			public void run() {
+
+				menuEntry.execute(extendedTableViewer);
+			}
+		};
+		action.setText(menuEntry.getName());
+		return action;
 	}
 }

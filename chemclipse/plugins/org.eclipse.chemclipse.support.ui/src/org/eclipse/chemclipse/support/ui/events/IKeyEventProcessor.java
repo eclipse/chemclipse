@@ -9,10 +9,12 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts;
+package org.eclipse.chemclipse.support.ui.events;
 
-public enum DataType {
-	MSD, // mass spectrometric data
-	CSD, // current selective data
-	WSD // wavelength selective data
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.swt.events.KeyEvent;
+
+public interface IKeyEventProcessor {
+
+	void handleEvent(ExtendedTableViewer extendedTableViewer, KeyEvent e);
 }
