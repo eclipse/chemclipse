@@ -20,8 +20,6 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -45,24 +43,6 @@ public abstract class AbstractTableViewerUI {
 		tableViewer.setContentProvider(contentProvider);
 		tableViewer.setLabelProvider(labelProvider);
 		tableViewer.setComparator(viewerTableComparator);
-		/*
-		 * Copy the table content.
-		 */
-		tableViewer.getTable().addKeyListener(new KeyAdapter() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-				if(e.keyCode == 99 && e.stateMask == 262144) {
-					/*
-					 * The selected content will be placed to the clipboard if
-					 * the user is using "Function + c". "Function-Key" 262144
-					 * (stateMask) + "c" 99 (keyCode)
-					 */
-					tableViewer.copyToClipboard(titles);
-				}
-			}
-		});
 	}
 
 	public TableViewer getTableViewer() {
