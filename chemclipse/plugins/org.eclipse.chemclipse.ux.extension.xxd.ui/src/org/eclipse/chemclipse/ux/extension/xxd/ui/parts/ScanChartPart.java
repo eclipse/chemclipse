@@ -85,7 +85,7 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 		if(scan != null) {
 			//
 			if(scan instanceof IScanMSD) {
-				scanChart.setDataType(DataType.MSD);
+				scanChart.setDataType(DataType.MSD_NOMINAL);
 				boolean isProfileType = false;
 				if(scan instanceof IRegularMassSpectrum) {
 					IRegularMassSpectrum massSpectrum = (IRegularMassSpectrum)scan;

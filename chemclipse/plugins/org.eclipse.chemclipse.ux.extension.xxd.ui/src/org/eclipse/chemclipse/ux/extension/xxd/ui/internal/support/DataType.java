@@ -12,7 +12,9 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
 public enum DataType {
-	MSD, // mass spectrometric data
+	MSD_NOMINAL, // Quadrupole, Ion Trap
+	MSD_TANDEM, // MS/MS
+	MSD_HIGHRES, // Orbitrap, TOF
 	CSD, // current selective data
 	WSD // wavelength selective data
 }

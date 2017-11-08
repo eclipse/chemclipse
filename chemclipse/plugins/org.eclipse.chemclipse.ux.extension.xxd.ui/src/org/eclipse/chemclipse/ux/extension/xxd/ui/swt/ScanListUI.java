@@ -11,60 +11,33 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.chemclipse.csd.model.core.IScanCSD;
+import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.NominalMSDLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.NominalMSDTableComparator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanTableComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.widgets.Composite;
 
 public class ScanListUI extends ExtendedTableViewer {
 
-	private static final String[] TITLES_MSD = { //
-			"m/z", //
-			"abundance", //
-			"parent m/z", //
-			"parent resolution", //
-			"daughter m/z", //
-			"daughter resolution", //
-			"collision energy" //
-	};
-	private static final int[] BOUNDS_MSD = { //
-			100, //
-			100, //
-			120, //
-			120, //
-			120, //
-			120, //
-			120 //
-	};
-	private static final String[] TITLES_CSD = { //
-			"retention time (Minutes)", //
-			"abundance" //
-	};
-	private static final int[] BOUNDS_CSD = { //
-			150, //
-			150 //
-	};
-	private static final String[] TITLES_WSD = { //
-			"wavelength", //
-			"abundance" //
-	};
-	private static final int[] BOUNDS_WSD = { //
-			150, //
-			150 //
-	};
-	//
-	private ITableLabelProvider labelProvider;
-	private ViewerComparator viewerComparator;
+	private Map<DataType, ITableLabelProvider> labelProviderMap;
+	private Map<DataType, ViewerComparator> viewerComparatorMap;
 
 	public ScanListUI(Composite parent, int style) {
 		super(parent, style);
-		labelProvider = new NominalMSDLabelProvider();
-		viewerComparator = new NominalMSDTableComparator();
-		setDataType(DataType.MSD);
+		labelProviderMap = new HashMap<DataType, ITableLabelProvider>();
+		viewerComparatorMap = new HashMap<DataType, ViewerComparator>();
 	}
 
 	public void clear() {
@@ -72,30 +45,122 @@ public class ScanListUI extends ExtendedTableViewer {
 		setInput(null);
 	}
 
-	public void setDataType(DataType dataType) {
+	public void setInput(IScan scan) {
 
-		switch(dataType) {
-			case MSD:
-				setDataTypeColumns(TITLES_MSD, BOUNDS_MSD, labelProvider, viewerComparator);
-				break;
-			case CSD:
-				setDataTypeColumns(TITLES_CSD, BOUNDS_CSD, labelProvider, viewerComparator);
-				break;
-			case WSD:
-				setDataTypeColumns(TITLES_WSD, BOUNDS_WSD, labelProvider, viewerComparator);
-				break;
-			default:
-				setDataTypeColumns(TITLES_MSD, BOUNDS_MSD, labelProvider, viewerComparator);
-				break;
+		if(scan instanceof IScanMSD) {
+			/*
+			 * MSD
+			 */
+			IScanMSD scanMSD = (IScanMSD)scan;
+			if(scanMSD.isTandemMS()) {
+				setColumns(DataType.MSD_TANDEM);
+				setInput(scanMSD.getIons());
+			} else {
+				setColumns(DataType.MSD_HIGHRES);
+				setInput(scanMSD.getIons());
+			}
+		} else if(scan instanceof IScanCSD) {
+			/*
+			 * CSD
+			 */
+			setColumns(DataType.CSD);
+			IScanCSD scanCSD = (IScanCSD)scan;
+			List<IScanCSD> list = new ArrayList<IScanCSD>();
+			list.add(scanCSD);
+			setInput(list);
+		} else if(scan instanceof IScanWSD) {
+			/*
+			 * WSD
+			 */
+			setColumns(DataType.WSD);
+			IScanWSD scanWSD = (IScanWSD)scan;
+			setInput(scanWSD.getScanSignals());
+		} else {
+			clear();
 		}
 	}
 
-	private void setDataTypeColumns(String[] titles, int[] bounds, ITableLabelProvider labelProvider, ViewerComparator viewerComparator) {
+	private void setColumns(DataType dataType) {
 
+		String[] titles = getTitles(dataType);
+		int[] bounds = getBounds(dataType);
+		ITableLabelProvider labelProvider = getTableLabelProvider(dataType);
+		ViewerComparator viewerComparator = getViewerComparator(dataType);
+		//
 		createColumns(titles, bounds);
 		//
 		setLabelProvider(labelProvider);
 		setContentProvider(new ListContentProvider());
 		setComparator(viewerComparator);
+	}
+
+	private String[] getTitles(DataType dataType) {
+
+		String[] titles;
+		switch(dataType) {
+			case MSD_NOMINAL:
+				titles = ScanLabelProvider.TITLES_MSD_NOMINAL;
+				break;
+			case MSD_TANDEM:
+				titles = ScanLabelProvider.TITLES_MSD_TANDEM;
+				break;
+			case MSD_HIGHRES:
+				titles = ScanLabelProvider.TITLES_MSD_HIGHRES;
+				break;
+			case CSD:
+				titles = ScanLabelProvider.TITLES_CSD;
+				break;
+			case WSD:
+				titles = ScanLabelProvider.TITLES_WSD;
+				break;
+			default:
+				titles = ScanLabelProvider.TITLES_EMPTY;
+		}
+		return titles;
+	}
+
+	private int[] getBounds(DataType dataType) {
+
+		int[] bounds;
+		switch(dataType) {
+			case MSD_NOMINAL:
+				bounds = ScanLabelProvider.BOUNDS_MSD_NOMINAL;
+				break;
+			case MSD_TANDEM:
+				bounds = ScanLabelProvider.BOUNDS_MSD_TANDEM;
+				break;
+			case MSD_HIGHRES:
+				bounds = ScanLabelProvider.BOUNDS_MSD_HIGHRES;
+				break;
+			case CSD:
+				bounds = ScanLabelProvider.BOUNDS_CSD;
+				break;
+			case WSD:
+				bounds = ScanLabelProvider.BOUNDS_WSD;
+				break;
+			default:
+				bounds = ScanLabelProvider.BOUNDS_EMPTY;
+		}
+		return bounds;
+	}
+
+	private ITableLabelProvider getTableLabelProvider(DataType dataType) {
+
+		ITableLabelProvider tableLableProvider = labelProviderMap.get(dataType);
+		if(tableLableProvider == null) {
+			tableLableProvider = new ScanLabelProvider(dataType);
+			labelProviderMap.put(dataType, tableLableProvider);
+		}
+		return tableLableProvider;
+	}
+
+	private ViewerComparator getViewerComparator(DataType dataType) {
+
+		ViewerComparator viewerComparator = viewerComparatorMap.get(dataType);
+		if(viewerComparator == null) {
+			viewerComparator = new ScanTableComparator(dataType);
+			viewerComparatorMap.put(dataType, viewerComparator);
+		}
+		return viewerComparator;
 	}
 }

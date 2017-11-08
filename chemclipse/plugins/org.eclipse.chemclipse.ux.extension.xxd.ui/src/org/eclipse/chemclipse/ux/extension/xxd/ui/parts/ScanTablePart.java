@@ -13,15 +13,11 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractScanUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IScanUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ScanListUI;
-import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
@@ -50,18 +46,7 @@ public class ScanTablePart extends AbstractScanUpdateSupport implements IScanUpd
 	public void updateScan(IScan scan) {
 
 		labelScan.setText(ScanSupport.getScanLabel(scan));
-		if(scan instanceof IScanMSD) {
-			scanListUI.setDataType(DataType.MSD);
-			scanListUI.setInput(((IScanMSD)scan).getIons());
-		} else if(scan instanceof IScanCSD) {
-			scanListUI.setDataType(DataType.CSD);
-			// scanListUI.setInput(((IScanCSD)scan).);
-		} else if(scan instanceof IScanWSD) {
-			scanListUI.setDataType(DataType.WSD);
-			// targetsListUI.setInput(((IScanWSD)scan).getTargets()); // TODO
-		} else {
-			scanListUI.clear();
-		}
+		scanListUI.setInput(scan);
 	}
 
 	private void initialize(Composite parent) {

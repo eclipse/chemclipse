@@ -347,4 +347,11 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	 * @return boolean
 	 */
 	boolean isMeasurementSIM();
+
+	/**
+	 * Returns true if the mass spectrum contains ion transitions.
+	 * 
+	 * @return boolean
+	 */
+	boolean isTandemMS();
 }

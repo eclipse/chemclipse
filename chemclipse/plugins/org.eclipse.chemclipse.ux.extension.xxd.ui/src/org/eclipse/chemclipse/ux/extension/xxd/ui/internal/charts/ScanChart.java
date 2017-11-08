@@ -120,12 +120,12 @@ public class ScanChart extends ScrollableChart {
 
 	public ScanChart() {
 		super();
-		setDataType(DataType.MSD);
+		setDataType(DataType.MSD_NOMINAL);
 	}
 
 	public ScanChart(Composite parent, int style) {
 		super(parent, style);
-		setDataType(DataType.MSD);
+		setDataType(DataType.MSD_NOMINAL);
 	}
 
 	public void addBarSeriesData(List<IBarSeriesData> barSeriesDataList) {
@@ -257,7 +257,9 @@ public class ScanChart extends ScrollableChart {
 		LabelPaintListener labelPaintListener = labelPaintListenerX;
 		//
 		switch(dataType) {
-			case MSD:
+			case MSD_NOMINAL:
+			case MSD_TANDEM:
+			case MSD_HIGHRES:
 				setDataTypeMSD(chartSettings);
 				break;
 			case CSD:
