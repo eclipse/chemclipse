@@ -55,9 +55,9 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 
 	public ScanLabelProvider(DataType dataType) {
 		this.dataType = dataType;
-		decimalFormatNominalMSD = ValueFormat.getDecimalFormatEnglish("0");
+		decimalFormatNominalMSD = ValueFormat.getDecimalFormatEnglish("0.0");
 		decimalFormatTandemMSD = ValueFormat.getDecimalFormatEnglish("0.0");
-		decimalFormatHighResMSD = ValueFormat.getDecimalFormatEnglish("0.0#####");
+		decimalFormatHighResMSD = ValueFormat.getDecimalFormatEnglish("0.000###");
 		decimalFormatCSD = ValueFormat.getDecimalFormatEnglish("0.0000");
 		decimalFormatWSD = ValueFormat.getDecimalFormatEnglish("0.0");
 		decimalFormatIntensity = ValueFormat.getDecimalFormatEnglish("0.0###");

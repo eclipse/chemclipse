@@ -743,6 +743,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		}
 	}
 
+	// TODO JUnit
 	@Override
 	public boolean isTandemMS() {
 
@@ -752,6 +753,34 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			}
 		}
 		return false;
+	}
+
+	// TODO JUnit
+	@Override
+	public boolean isHighResolutionMS() {
+
+		if(ionsList.size() > 3000) {
+			return true;
+		} else {
+			int counterNominal = 0;
+			int counterHighRes = 0;
+			//
+			for(IIon ion : ionsList) {
+				String[] parts = Double.toString(ion.getIon()).split("\\.");
+				if(parts[1].length() <= 1) {
+					counterNominal++;
+					if(counterNominal >= 5) {
+						return false;
+					}
+				} else {
+					counterHighRes++;
+					if(counterHighRes >= 5) {
+						return true;
+					}
+				}
+			}
+			return true;
+		}
 	}
 
 	@Override

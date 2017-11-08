@@ -354,4 +354,11 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	 * @return boolean
 	 */
 	boolean isTandemMS();
+
+	/**
+	 * Returns true if the mass spectrum contains high resolution data.
+	 * 
+	 * @return boolean
+	 */
+	boolean isHighResolutionMS();
 }

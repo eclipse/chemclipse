@@ -38,6 +38,7 @@ public class ScanListUI extends ExtendedTableViewer {
 		super(parent, style);
 		labelProviderMap = new HashMap<DataType, ITableLabelProvider>();
 		viewerComparatorMap = new HashMap<DataType, ViewerComparator>();
+		setColumns(DataType.MSD_NOMINAL);
 	}
 
 	public void clear() {
@@ -54,11 +55,14 @@ public class ScanListUI extends ExtendedTableViewer {
 			IScanMSD scanMSD = (IScanMSD)scan;
 			if(scanMSD.isTandemMS()) {
 				setColumns(DataType.MSD_TANDEM);
-				setInput(scanMSD.getIons());
 			} else {
-				setColumns(DataType.MSD_HIGHRES);
-				setInput(scanMSD.getIons());
+				if(scanMSD.isHighResolutionMS()) {
+					setColumns(DataType.MSD_HIGHRES);
+				} else {
+					setColumns(DataType.MSD_NOMINAL);
+				}
 			}
+			setInput(scanMSD.getIons());
 		} else if(scan instanceof IScanCSD) {
 			/*
 			 * CSD
