@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.csd.ui.editors.ChromatogramEditorCSD;
-import org.eclipse.chemclipse.ux.extension.csd.ui.internal.support.ChromatogramIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -42,7 +41,7 @@ public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport
 		/*
 		 * Check that the selected file or directory is a valid chromatogram.
 		 */
-		if(ChromatogramIdentifier.isChromatogram(file) || ChromatogramIdentifier.isChromatogramDirectory(file)) {
+		if(isSupplierFile(file) || isSupplierFileDirectory(file)) {
 			openEditor(file, null, ChromatogramEditorCSD.ID, ChromatogramEditorCSD.CONTRIBUTION_URI, ChromatogramEditorCSD.ICON_URI, ChromatogramEditorCSD.TOOLTIP);
 		}
 	}
@@ -59,7 +58,7 @@ public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport
 		/*
 		 * Check that the selected file or directory is a valid chromatogram.
 		 */
-		if(ChromatogramIdentifier.isChromatogram(file) || ChromatogramIdentifier.isChromatogramDirectory(file)) {
+		if(isSupplierFile(file) || isSupplierFileDirectory(file)) {
 			/*
 			 * Push an event
 			 * IChromatogramEvents.PROPERTY_CHROMATOGRAM_OVERVIEW_FILE
