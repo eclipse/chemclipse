@@ -743,43 +743,62 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		}
 	}
 
-	// TODO JUnit
 	@Override
 	public boolean isTandemMS() {
 
+		int limit = 30;
+		int counter = 0;
 		for(IIon ion : ionsList) {
-			if(ion.getIonTransition() != null) {
+			if(ion.getIonTransition() != null || counter >= limit) {
 				return true;
 			}
+			counter++;
 		}
 		return false;
 	}
 
-	// TODO JUnit
 	@Override
 	public boolean isHighResolutionMS() {
 
 		if(ionsList.size() > 3000) {
 			return true;
 		} else {
+			/*
+			 * Detailed check.
+			 */
 			int counterNominal = 0;
 			int counterHighRes = 0;
+			int size = ionsList.size();
+			int limit = 10;
 			//
-			for(IIon ion : ionsList) {
-				String[] parts = Double.toString(ion.getIon()).split("\\.");
-				if(parts[1].length() <= 1) {
-					counterNominal++;
-					if(counterNominal >= 5) {
-						return false;
+			if(size <= limit) {
+				/*
+				 * Check all
+				 */
+				for(IIon ion : ionsList) {
+					String[] parts = Double.toString(ion.getIon()).split("\\.");
+					if(parts[1].length() <= 1) {
+						counterNominal++;
+					} else {
+						counterHighRes++;
 					}
-				} else {
-					counterHighRes++;
-					if(counterHighRes >= 5) {
-						return true;
+				}
+			} else {
+				int modulo = size / 10;
+				for(int i = 0; i < ionsList.size(); i++) {
+					if(i % modulo == 0) {
+						IIon ion = ionsList.get(i);
+						String[] parts = Double.toString(ion.getIon()).split("\\.");
+						if(parts[1].length() <= 1) {
+							counterNominal++;
+						} else {
+							counterHighRes++;
+						}
 					}
 				}
 			}
-			return true;
+			//
+			return counterHighRes > counterNominal ? true : false;
 		}
 	}
 
