@@ -746,13 +746,12 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	@Override
 	public boolean isTandemMS() {
 
-		int limit = 30;
-		int counter = 0;
-		for(IIon ion : ionsList) {
-			if(ion.getIonTransition() != null || counter >= limit) {
+		int limit = (ionsList.size() > 30) ? 30 : ionsList.size();
+		for(int i = 0; i < limit; i++) {
+			IIon ion = ionsList.get(i);
+			if(ion.getIonTransition() != null) {
 				return true;
 			}
-			counter++;
 		}
 		return false;
 	}
