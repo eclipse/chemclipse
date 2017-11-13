@@ -14,9 +14,10 @@ package org.eclipse.chemclipse.wsd.model.core;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.wsd.model.core.identifier.scan.IScanTargetsWSD;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 
-public interface IScanWSD extends IScan {
+public interface IScanWSD extends IScan, IScanTargetsWSD {
 
 	IScanSignalWSD getScanSignal(int scan);
 

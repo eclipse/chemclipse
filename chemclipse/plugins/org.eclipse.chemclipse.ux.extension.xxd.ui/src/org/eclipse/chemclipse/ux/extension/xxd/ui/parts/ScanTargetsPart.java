@@ -55,7 +55,7 @@ public class ScanTargetsPart extends AbstractScanUpdateSupport implements IScanU
 		} else if(scan instanceof IScanCSD) {
 			targetsListUI.setInput(((IScanCSD)scan).getTargets());
 		} else if(scan instanceof IScanWSD) {
-			// targetsListUI.setInput(((IScanWSD)scan).getTargets()); // TODO
+			targetsListUI.setInput(((IScanWSD)scan).getTargets());
 		} else {
 			targetsListUI.clear();
 		}
