@@ -78,7 +78,7 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectru
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.implementation.ChromatogramTarget;
+import org.eclipse.chemclipse.msd.model.implementation.ChromatogramTargetMSD;
 import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
@@ -619,7 +619,7 @@ public class ChromatogramReader_1005 extends AbstractChromatogramReader implemen
 			libraryInformation.setMolWeight(molWeight);
 			IChromatogramComparisonResult comparisonResult = new ChromatogramComparisonResult(matchFactor, reverseMatchFactor, 0.0f, 0.0f, probability);
 			try {
-				IChromatogramTargetMSD identificationEntry = new ChromatogramTarget(libraryInformation, comparisonResult);
+				IChromatogramTargetMSD identificationEntry = new ChromatogramTargetMSD(libraryInformation, comparisonResult);
 				identificationEntry.setIdentifier(identifier);
 				chromatogram.addTarget(identificationEntry);
 			} catch(ReferenceMustNotBeNullException e) {
