@@ -11,12 +11,24 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.wsd.model.core.identifier.chromatogram.IChromatogramTargetWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 
 public abstract class AbstractChromatogramWSD extends AbstractChromatogram implements IChromatogramWSD {
+
+	private Set<IChromatogramTargetWSD> targets;
+
+	public AbstractChromatogramWSD() {
+		targets = new HashSet<IChromatogramTargetWSD>();
+	}
 
 	@Override
 	public IScanWSD getSupplierScan(int scan) {
@@ -40,5 +52,38 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram imple
 		if(chromatogramSelection instanceof ChromatogramSelectionWSD) {
 			((ChromatogramSelectionWSD)chromatogramSelection).update(true);
 		}
+	}
+
+	@Override
+	public void addTarget(IChromatogramTargetWSD chromatogramTarget) {
+
+		if(chromatogramTarget != null) {
+			targets.add(chromatogramTarget);
+		}
+	}
+
+	@Override
+	public void removeTarget(IChromatogramTargetWSD chromatogramTarget) {
+
+		targets.remove(chromatogramTarget);
+	}
+
+	@Override
+	public void removeTargets(List<IChromatogramTargetWSD> targetsToRemove) {
+
+		targets.removeAll(targetsToRemove);
+	}
+
+	@Override
+	public void removeAllTargets() {
+
+		targets.clear();
+	}
+
+	@Override
+	public List<IChromatogramTargetWSD> getTargets() {
+
+		List<IChromatogramTargetWSD> targetList = new ArrayList<IChromatogramTargetWSD>(targets);
+		return targetList;
 	}
 }

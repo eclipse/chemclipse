@@ -174,7 +174,6 @@ public abstract class AbstractChromatogramCSD extends AbstractChromatogram imple
 	}
 
 	// -----------------------------------------------------------do, undo, redo
-	// -----------------------------------------------IIntegration
 	@Override
 	public double getPeakIntegratedArea() {
 
@@ -185,7 +184,6 @@ public abstract class AbstractChromatogramCSD extends AbstractChromatogram imple
 		return integratedArea;
 	}
 
-	// -----------------------------------------------IChromatogramTargetsFID
 	@Override
 	public void addTarget(IChromatogramTargetCSD chromatogramTarget) {
 
@@ -218,5 +216,4 @@ public abstract class AbstractChromatogramCSD extends AbstractChromatogram imple
 		List<IChromatogramTargetCSD> targetList = new ArrayList<IChromatogramTargetCSD>(targets);
 		return targetList;
 	}
-	// -----------------------------------------------IChromatogramTargetsFID
 }

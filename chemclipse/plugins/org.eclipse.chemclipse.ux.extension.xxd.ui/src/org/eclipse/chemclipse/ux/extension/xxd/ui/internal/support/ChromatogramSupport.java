@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2017 Lablicate GmbH.
- * 
+ * Copyright (c) 2017 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,19 +9,22 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.wsd.model.core;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.wsd.model.core.identifier.chromatogram.IChromatogramTargetsWSD;
 
-public interface IChromatogramWSD extends IChromatogram, IChromatogramTargetsWSD {
+public class ChromatogramSupport {
 
-	/**
-	 * Returns a supplier scan or null, if no supplier
-	 * spectrum is stored.
-	 * 
-	 * @param scan
-	 * @return {@link IScanWSD}
-	 */
-	IScanWSD getSupplierScan(int scan);
+	private ChromatogramSupport() {
+	}
+
+	public static String getChromatogramLabel(IChromatogram chromatogram) {
+
+		StringBuilder builder = new StringBuilder();
+		if(chromatogram != null) {
+			builder.append("Chromatogram: ");
+			builder.append(chromatogram.getName());
+		}
+		return builder.toString();
+	}
 }
