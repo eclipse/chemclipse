@@ -11,35 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ScanChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractScanUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IScanUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSelectedScan;
-import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
-import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.eavp.service.swtchart.barcharts.BarSeriesData;
-import org.eclipse.eavp.service.swtchart.barcharts.IBarSeriesData;
-import org.eclipse.eavp.service.swtchart.core.ISeriesData;
-import org.eclipse.eavp.service.swtchart.core.SeriesData;
-import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
-import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -82,94 +66,7 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 	public void updateScan(IScan scan) {
 
 		labelScanNormal.setText(ScanSupport.getScanLabel(scan));
-		if(scan != null) {
-			//
-			if(scan instanceof IScanMSD) {
-				scanChart.setDataType(DataType.MSD_NOMINAL);
-				boolean isProfileType = false;
-				if(scan instanceof IRegularMassSpectrum) {
-					IRegularMassSpectrum massSpectrum = (IRegularMassSpectrum)scan;
-					if(massSpectrum.getMassSpectrumType() == 1) {
-						isProfileType = true;
-					}
-				}
-				//
-				if(isProfileType) {
-					scanChart.addLineSeriesData(getLineSeriesDataList(scan));
-				} else {
-					scanChart.addBarSeriesData(getBarSeriesDataList(scan));
-				}
-				//
-			} else if(scan instanceof IScanCSD) {
-				scanChart.setDataType(DataType.CSD);
-				scanChart.addBarSeriesData(getBarSeriesDataList(scan));
-			} else if(scan instanceof IScanWSD) {
-				scanChart.setDataType(DataType.WSD);
-				scanChart.addBarSeriesData(getBarSeriesDataList(scan));
-			}
-		} else {
-			scanChart.deleteSeries();
-		}
-	}
-
-	private List<IBarSeriesData> getBarSeriesDataList(IScan scan) {
-
-		List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
-		ISeriesData seriesData = getSeriesData(scan);
-		IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
-		barSeriesDataList.add(barSeriesData);
-		return barSeriesDataList;
-	}
-
-	private List<ILineSeriesData> getLineSeriesDataList(IScan scan) {
-
-		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-		ISeriesData seriesData = getSeriesData(scan);
-		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-		lineSeriesDataList.add(lineSeriesData);
-		return lineSeriesDataList;
-	}
-
-	private ISeriesData getSeriesData(IScan scan) {
-
-		double[] xSeries;
-		double[] ySeries;
-		String id = "Scan " + scan.getScanNumber();
-		//
-		if(scan instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)scan;
-			List<IIon> ions = scanMSD.getIons();
-			int size = ions.size();
-			xSeries = new double[size];
-			ySeries = new double[size];
-			int index = 0;
-			for(IIon ion : ions) {
-				xSeries[index] = ion.getIon();
-				ySeries[index] = ion.getAbundance();
-				index++;
-			}
-		} else if(scan instanceof IScanCSD) {
-			IScanCSD scanCSD = (IScanCSD)scan;
-			xSeries = new double[]{scanCSD.getRetentionTime()};
-			ySeries = new double[]{scanCSD.getTotalSignal()};
-		} else if(scan instanceof IScanWSD) {
-			IScanWSD scanWSD = (IScanWSD)scan;
-			List<IScanSignalWSD> scanSignalsWSD = scanWSD.getScanSignals();
-			int size = scanSignalsWSD.size();
-			xSeries = new double[size];
-			ySeries = new double[size];
-			int index = 0;
-			for(IScanSignalWSD scanSignalWSD : scanSignalsWSD) {
-				xSeries[index] = scanSignalWSD.getWavelength();
-				ySeries[index] = scanSignalWSD.getAbundance();
-				index++;
-			}
-		} else {
-			xSeries = new double[0];
-			ySeries = new double[0];
-		}
-		//
-		return new SeriesData(xSeries, ySeries, id);
+		scanChart.setInput(scan);
 	}
 
 	private void initialize(Composite parent) {

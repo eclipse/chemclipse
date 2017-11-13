@@ -20,9 +20,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.eclipse.chemclipse.csd.model.core.IScanCSD;
+import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.msd.model.core.IIon;
+import org.eclipse.chemclipse.msd.model.core.IIonTransition;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
+import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToMinuteConverter;
 import org.eclipse.eavp.service.swtchart.axisconverter.RelativeIntensityConverter;
+import org.eclipse.eavp.service.swtchart.barcharts.BarSeriesData;
 import org.eclipse.eavp.service.swtchart.barcharts.IBarSeriesData;
 import org.eclipse.eavp.service.swtchart.barcharts.IBarSeriesSettings;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
@@ -34,10 +44,12 @@ import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.RangeRestriction;
 import org.eclipse.eavp.service.swtchart.core.ScrollableChart;
 import org.eclipse.eavp.service.swtchart.core.SecondaryAxisSettings;
+import org.eclipse.eavp.service.swtchart.core.SeriesData;
 import org.eclipse.eavp.service.swtchart.customcharts.MassSpectrumChart.LabelOption;
 import org.eclipse.eavp.service.swtchart.exceptions.SeriesException;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
+import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Font;
@@ -54,14 +66,15 @@ import org.swtchart.ISeries;
 
 public class ScanChart extends ScrollableChart {
 
-	private static final DecimalFormat DEFAULT_DECIMAL_FORMAT = new DecimalFormat();
-	//
 	private static final int LENGTH_HINT_DATA_POINTS = 5000;
 	private static final int COMPRESS_TO_LENGTH = Integer.MAX_VALUE;
 	//
 	private int numberOfHighestIntensitiesToLabel = 5;
-	private BarSeriesYComparator barSeriesIntensityComparator = new BarSeriesYComparator();
 	private LabelOption labelOption = LabelOption.EXACT;
+	private DecimalFormat defaultDecimalFormat = ValueFormat.getDecimalFormatEnglish();
+	private DecimalFormat decimalFormatQ3 = ValueFormat.getDecimalFormatEnglish("0.0");
+	//
+	private BarSeriesYComparator barSeriesIntensityComparator = new BarSeriesYComparator();
 	private Map<Double, String> customLabels = new HashMap<Double, String>();
 	private LabelPaintListener labelPaintListenerX = new LabelPaintListener(true);
 	private LabelPaintListener labelPaintListenerY = new LabelPaintListener(false);
@@ -128,7 +141,135 @@ public class ScanChart extends ScrollableChart {
 		setDataType(DataType.MSD_NOMINAL);
 	}
 
-	public void addBarSeriesData(List<IBarSeriesData> barSeriesDataList) {
+	public void setInput(IScan scan) {
+
+		if(scan != null) {
+			if(scan instanceof IScanMSD) {
+				/*
+				 * MSD
+				 */
+				IScanMSD scanMSD = (IScanMSD)scan;
+				boolean isProfileType = false;
+				//
+				if(scanMSD.isTandemMS()) {
+					setDataType(DataType.MSD_TANDEM);
+					customLabels.clear();
+					for(IIon ion : scanMSD.getIons()) {
+						IIonTransition ionTransition = ion.getIonTransition();
+						if(ionTransition != null) {
+							customLabels.put(ion.getIon(), ionTransition.getQ1Ion() + " > " + decimalFormatQ3.format(ion.getIon()) + " @" + (int)ionTransition.getCollisionEnergy());
+						} else {
+							customLabels.put(ion.getIon(), Double.toString(ion.getIon()));
+						}
+					}
+				} else {
+					if(scanMSD.isHighResolutionMS()) {
+						setDataType(DataType.MSD_HIGHRES);
+						if(scan instanceof IRegularMassSpectrum) {
+							IRegularMassSpectrum massSpectrum = (IRegularMassSpectrum)scan;
+							if(massSpectrum.getMassSpectrumType() == 1) {
+								isProfileType = true;
+							}
+						}
+					} else {
+						setDataType(DataType.MSD_NOMINAL);
+					}
+				}
+				//
+				if(isProfileType) {
+					addLineSeriesData(getLineSeriesDataList(scan));
+				} else {
+					addBarSeriesData(getBarSeriesDataList(scan));
+				}
+				//
+			} else if(scan instanceof IScanCSD) {
+				/*
+				 * CSD
+				 */
+				setDataType(DataType.CSD);
+				addBarSeriesData(getBarSeriesDataList(scan));
+			} else if(scan instanceof IScanWSD) {
+				/*
+				 * WSD
+				 */
+				setDataType(DataType.WSD);
+				addBarSeriesData(getBarSeriesDataList(scan));
+			}
+		} else {
+			deleteSeries();
+		}
+	}
+
+	@Override
+	public void dispose() {
+
+		for(Font font : fonts.values()) {
+			font.dispose();
+		}
+		super.dispose();
+	}
+
+	private List<IBarSeriesData> getBarSeriesDataList(IScan scan) {
+
+		List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
+		ISeriesData seriesData = getSeriesData(scan);
+		IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
+		barSeriesDataList.add(barSeriesData);
+		return barSeriesDataList;
+	}
+
+	private List<ILineSeriesData> getLineSeriesDataList(IScan scan) {
+
+		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+		ISeriesData seriesData = getSeriesData(scan);
+		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
+		lineSeriesDataList.add(lineSeriesData);
+		return lineSeriesDataList;
+	}
+
+	private ISeriesData getSeriesData(IScan scan) {
+
+		double[] xSeries;
+		double[] ySeries;
+		String id = "Scan " + scan.getScanNumber();
+		//
+		if(scan instanceof IScanMSD) {
+			IScanMSD scanMSD = (IScanMSD)scan;
+			List<IIon> ions = scanMSD.getIons();
+			int size = ions.size();
+			xSeries = new double[size];
+			ySeries = new double[size];
+			int index = 0;
+			for(IIon ion : ions) {
+				xSeries[index] = ion.getIon();
+				ySeries[index] = ion.getAbundance();
+				index++;
+			}
+		} else if(scan instanceof IScanCSD) {
+			IScanCSD scanCSD = (IScanCSD)scan;
+			xSeries = new double[]{scanCSD.getRetentionTime()};
+			ySeries = new double[]{scanCSD.getTotalSignal()};
+		} else if(scan instanceof IScanWSD) {
+			IScanWSD scanWSD = (IScanWSD)scan;
+			List<IScanSignalWSD> scanSignalsWSD = scanWSD.getScanSignals();
+			int size = scanSignalsWSD.size();
+			xSeries = new double[size];
+			ySeries = new double[size];
+			int index = 0;
+			for(IScanSignalWSD scanSignalWSD : scanSignalsWSD) {
+				xSeries[index] = scanSignalWSD.getWavelength();
+				ySeries[index] = scanSignalWSD.getAbundance();
+				index++;
+			}
+		} else {
+			xSeries = new double[0];
+			ySeries = new double[0];
+		}
+		//
+		return new SeriesData(xSeries, ySeries, id);
+	}
+
+	private void addBarSeriesData(List<IBarSeriesData> barSeriesDataList) {
 
 		/*
 		 * Suspend the update when adding new data to improve the performance.
@@ -165,7 +306,7 @@ public class ScanChart extends ScrollableChart {
 		}
 	}
 
-	public void addLineSeriesData(List<ILineSeriesData> lineSeriesDataList) {
+	private void addLineSeriesData(List<ILineSeriesData> lineSeriesDataList) {
 
 		/*
 		 * Suspend the update when adding new data to improve the performance.
@@ -194,15 +335,6 @@ public class ScanChart extends ScrollableChart {
 		}
 	}
 
-	@Override
-	public void dispose() {
-
-		for(Font font : fonts.values()) {
-			font.dispose();
-		}
-		super.dispose();
-	}
-
 	public void setNumberOfHighestIntensitiesToLabel(int numberOfHighestIntensitiesToLabel) {
 
 		if(numberOfHighestIntensitiesToLabel >= 0) {
@@ -212,21 +344,7 @@ public class ScanChart extends ScrollableChart {
 		}
 	}
 
-	public void setLabelOption(LabelOption labelOption) {
-
-		this.labelOption = labelOption;
-	}
-
-	public void setCustomLabels(Map<Double, String> customLabels) {
-
-		if(customLabels != null) {
-			this.customLabels = customLabels;
-		} else {
-			this.customLabels.clear();
-		}
-	}
-
-	public void setDataType(DataType dataType) {
+	private void setDataType(DataType dataType) {
 
 		String name = "Ubuntu";
 		int height = 11;
@@ -258,8 +376,15 @@ public class ScanChart extends ScrollableChart {
 		//
 		switch(dataType) {
 			case MSD_NOMINAL:
+				labelOption = LabelOption.NOMIMAL;
+				setDataTypeMSD(chartSettings);
+				break;
 			case MSD_TANDEM:
+				labelOption = LabelOption.CUSTOM;
+				setDataTypeMSD(chartSettings);
+				break;
 			case MSD_HIGHRES:
+				labelOption = LabelOption.EXACT;
 				setDataTypeMSD(chartSettings);
 				break;
 			case CSD:
@@ -268,12 +393,15 @@ public class ScanChart extends ScrollableChart {
 				rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.RELATIVE);
 				rangeRestriction.setExtendMinX(0.1d);
 				rangeRestriction.setExtendMaxX(0.1d);
+				labelOption = LabelOption.NOMIMAL;
 				setDataTypeCSD(chartSettings);
 				break;
 			case WSD:
+				labelOption = LabelOption.NOMIMAL;
 				setDataTypeWSD(chartSettings);
 				break;
 			default:
+				labelOption = LabelOption.NOMIMAL;
 				setDataTypeMSD(chartSettings);
 				break;
 		}
@@ -425,7 +553,7 @@ public class ScanChart extends ScrollableChart {
 		if(axisSettings != null) {
 			return axisSettings.getDecimalFormat();
 		} else {
-			return DEFAULT_DECIMAL_FORMAT;
+			return defaultDecimalFormat;
 		}
 	}
 }
