@@ -36,6 +36,7 @@ public class Activator implements BundleActivator {
 		System.out.println("ScanWSD - wavelength int -> double");
 		System.out.println("Alex - Compound Class + Identification");
 		System.out.println("ScanWSD - Targets");
+		System.out.println("ChromatogramWSD - Targets");
 	}
 
 	/*
