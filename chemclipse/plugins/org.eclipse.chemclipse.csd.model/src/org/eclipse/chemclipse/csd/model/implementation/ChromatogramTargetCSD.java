@@ -9,26 +9,22 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.model.implementation;
+package org.eclipse.chemclipse.csd.model.implementation;
 
+import org.eclipse.chemclipse.csd.model.core.identifier.chromatogram.AbstractChromatogramTargetCSD;
+import org.eclipse.chemclipse.csd.model.core.identifier.chromatogram.IChromatogramTargetCSD;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.AbstractChromatogramTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
 
-/**
- * This is the default implementation of IChromatogramTarget.<br/>
- * Use it for example to identify a chromatogram.
- */
-public class ChromatogramTarget extends AbstractChromatogramTargetMSD implements IChromatogramTargetMSD {
+public class ChromatogramTargetCSD extends AbstractChromatogramTargetCSD implements IChromatogramTargetCSD {
 
 	/**
 	 * Renew the UUID on change.
 	 */
-	private static final long serialVersionUID = 1062244239962986610L;
+	private static final long serialVersionUID = -1889531531534498366L;
 
-	public ChromatogramTarget(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
+	public ChromatogramTargetCSD(ILibraryInformation libraryInformation, IComparisonResult comparisonResult) throws ReferenceMustNotBeNullException {
 		super(libraryInformation, comparisonResult);
 	}
 }

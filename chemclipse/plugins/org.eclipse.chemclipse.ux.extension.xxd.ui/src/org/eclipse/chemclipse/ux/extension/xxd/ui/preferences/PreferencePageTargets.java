@@ -12,20 +12,22 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class PreferencePageSelectedPeak extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferencePageTargets extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public PreferencePageSelectedPeak() {
+	public PreferencePageTargets() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Selected Peak");
+		setDescription("Targets");
 	}
 
 	public void createFieldEditors() {
 
+		addField(new BooleanFieldEditor(PreferenceConstants.P_CRAWL_EXISTING_TARGETS, "Crawl existing targets", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

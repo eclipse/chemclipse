@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractScanU
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IScanUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSelectedScan;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -204,7 +204,7 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePage = new PreferencePageSelectedScan();
+				IPreferencePage preferencePage = new PreferencePageScans();
 				preferencePage.setTitle("Scan Settings");
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));

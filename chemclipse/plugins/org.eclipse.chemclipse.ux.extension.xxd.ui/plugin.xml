@@ -30,15 +30,21 @@
       </page>
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
-            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSelectedScan"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageSelectedScan"
-            name="Selected Scan">
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageScans"
+            name="Scans">
       </page>
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
-            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSelectedPeak"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageSelectedPeak"
-            name="Selected Peak">
-      </page>                  
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaks"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePagePeaks"
+            name="Peaks">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTargets"
+            name="Targets">
+      </page>                     
    </extension>   
 </plugin>

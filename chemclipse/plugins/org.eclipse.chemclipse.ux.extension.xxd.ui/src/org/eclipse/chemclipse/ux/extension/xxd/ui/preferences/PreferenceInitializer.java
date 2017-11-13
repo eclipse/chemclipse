@@ -35,10 +35,14 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_OVERLAY_TSC, PreferenceConstants.DEF_LINE_STYLE_OVERLAY_TSC);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_OVERLAY_DEFAULT, PreferenceConstants.DEF_LINE_STYLE_OVERLAY_DEFAULT);
 		/*
-		 * Selected Scan
+		 * Scans
 		 */
 		/*
-		 * Selected Peak
+		 * Peaks
 		 */
+		/*
+		 * Targets
+		 */
+		store.setDefault(PreferenceConstants.P_CRAWL_EXISTING_TARGETS, PreferenceConstants.DEF_CRAWL_EXISTING_TARGETS);
 	}
 }

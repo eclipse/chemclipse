@@ -37,9 +37,9 @@ public class Chromatogram_19_Test extends TestCase {
 		chromatogram = new ChromatogramMSD();
 		libraryInformation = new LibraryInformation();
 		comparisonResult = new ComparisonResult(0.8f, 0.95f, 0.0f, 0.0f);
-		entry1 = new ChromatogramTarget(libraryInformation, comparisonResult);
+		entry1 = new ChromatogramTargetMSD(libraryInformation, comparisonResult);
 		entry1.setIdentifier("Test-Tools");
-		entry2 = new ChromatogramTarget(libraryInformation, comparisonResult);
+		entry2 = new ChromatogramTargetMSD(libraryInformation, comparisonResult);
 		entry2.setIdentifier("DB-Tools");
 	}
 

@@ -40,9 +40,14 @@ public class PreferenceConstants {
 	public static final String P_LINE_STYLE_OVERLAY_DEFAULT = "lineStyleOverlayDefault";
 	public static final String DEF_LINE_STYLE_OVERLAY_DEFAULT = LineStyle.SOLID.toString();
 	/*
-	 * Selected Scan
+	 * Scans
 	 */
 	/*
-	 * Selected Peak
+	 * Peaks
 	 */
+	/*
+	 * Targets
+	 */
+	public static final String P_CRAWL_EXISTING_TARGETS = "crawlExistingTargets";
+	public static final boolean DEF_CRAWL_EXISTING_TARGETS = true;
 }

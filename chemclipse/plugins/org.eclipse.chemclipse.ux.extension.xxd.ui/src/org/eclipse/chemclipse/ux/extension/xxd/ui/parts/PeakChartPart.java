@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractPeakUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IPeakUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSelectedPeak;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaks;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
@@ -201,7 +201,7 @@ public class PeakChartPart extends AbstractPeakUpdateSupport implements IPeakUpd
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePage = new PreferencePageSelectedPeak();
+				IPreferencePage preferencePage = new PreferencePagePeaks();
 				preferencePage.setTitle("Peak Settings");
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));

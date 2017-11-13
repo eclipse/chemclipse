@@ -16,12 +16,12 @@ import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class PreferencePageSelectedScan extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferencePageScans extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public PreferencePageSelectedScan() {
+	public PreferencePageScans() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Selected Scan");
+		setDescription("Scans");
 	}
 
 	public void createFieldEditors() {
