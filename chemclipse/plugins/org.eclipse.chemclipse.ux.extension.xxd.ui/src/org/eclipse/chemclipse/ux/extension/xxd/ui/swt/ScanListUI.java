@@ -41,11 +41,6 @@ public class ScanListUI extends ExtendedTableViewer {
 		setColumns(DataType.MSD_NOMINAL);
 	}
 
-	public void clear() {
-
-		setInput(null);
-	}
-
 	public void setInput(IScan scan) {
 
 		if(scan instanceof IScanMSD) {
@@ -80,7 +75,7 @@ public class ScanListUI extends ExtendedTableViewer {
 			IScanWSD scanWSD = (IScanWSD)scan;
 			setInput(scanWSD.getScanSignals());
 		} else {
-			clear();
+			super.setInput(null);
 		}
 	}
 

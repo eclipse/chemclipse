@@ -14,5 +14,5 @@ package org.eclipse.chemclipse.support.ui.menu;
 public interface ITableMenuCategories {
 
 	String STANDARD_OPERATION = ""; // Must be empty to be placed on the main menu level.
-	String EXPORT_CONVERTER = "Export Table Selection"; // Problems with sub menus at the moment. They are only displayed once.
+	String EXPORT_CONVERTER = "Export Table Selection";
 }

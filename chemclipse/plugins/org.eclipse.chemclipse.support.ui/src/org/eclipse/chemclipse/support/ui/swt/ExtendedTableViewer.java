@@ -40,6 +40,8 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -68,6 +70,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		menuManagerMap = new HashMap<String, MenuManager>();
 		userDefinedKeyListeners = new HashSet<KeyListener>();
 		applySettings(tableSettings);
+		registerMenuListener();
 	}
 
 	@Override
@@ -83,18 +86,29 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		 * Add the key listeners.
 		 */
 		createKeyListener();
-		/*
-		 * Create the menu if requested.
-		 */
-		if(tableSettings.isCreateMenu()) {
-			createPopupMenu();
-		} else {
-			Menu menu = getTable().getMenu();
-			if(menu != null) {
-				getTable().setMenu(null);
-				menu.dispose();
+	}
+
+	private void registerMenuListener() {
+
+		getTable().addListener(SWT.MenuDetect, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				/*
+				 * Create the menu if requested.
+				 */
+				if(tableSettings.isCreateMenu()) {
+					createPopupMenu();
+				} else {
+					Menu menu = getTable().getMenu();
+					if(menu != null) {
+						getTable().setMenu(null);
+						menu.dispose();
+					}
+				}
 			}
-		}
+		});
 	}
 
 	@Override

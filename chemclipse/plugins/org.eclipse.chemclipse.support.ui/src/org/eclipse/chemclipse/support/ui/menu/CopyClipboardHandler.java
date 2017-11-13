@@ -23,7 +23,7 @@ public class CopyClipboardHandler extends AbstractTableMenuEntry implements ITab
 	@Override
 	public String getCategory() {
 
-		return ITableMenuCategories.STANDARD_OPERATION;
+		return ITableMenuCategories.EXPORT_CONVERTER;
 	}
 
 	@Override
