@@ -183,7 +183,7 @@ public class ExtendedTargetsUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle edit toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DISABLED, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -194,7 +194,7 @@ public class ExtendedTargetsUI {
 					setComboSubstanceNameItems();
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DISABLED, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				}
 			}
 		});

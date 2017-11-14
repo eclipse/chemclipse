@@ -24,10 +24,10 @@ import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
-import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToMinuteConverter;
@@ -71,6 +71,7 @@ public class ScanChart extends ScrollableChart {
 	//
 	private int numberOfHighestIntensitiesToLabel = 5;
 	private LabelOption labelOption = LabelOption.EXACT;
+	private SignalType signalType = SignalType.CENTROID;
 	private DecimalFormat defaultDecimalFormat = ValueFormat.getDecimalFormatEnglish();
 	private DecimalFormat decimalFormatQ3 = ValueFormat.getDecimalFormatEnglish("0.0");
 	//
@@ -134,11 +135,13 @@ public class ScanChart extends ScrollableChart {
 	public ScanChart() {
 		super();
 		setDataType(DataType.MSD_NOMINAL);
+		setSignalType(SignalType.CENTROID);
 	}
 
 	public ScanChart(Composite parent, int style) {
 		super(parent, style);
 		setDataType(DataType.MSD_NOMINAL);
+		setSignalType(SignalType.CENTROID);
 	}
 
 	public void setInput(IScan scan) {
@@ -149,8 +152,6 @@ public class ScanChart extends ScrollableChart {
 				 * MSD
 				 */
 				IScanMSD scanMSD = (IScanMSD)scan;
-				boolean isProfileType = false;
-				//
 				if(scanMSD.isTandemMS()) {
 					setDataType(DataType.MSD_TANDEM);
 					customLabels.clear();
@@ -165,18 +166,12 @@ public class ScanChart extends ScrollableChart {
 				} else {
 					if(scanMSD.isHighResolutionMS()) {
 						setDataType(DataType.MSD_HIGHRES);
-						if(scan instanceof IRegularMassSpectrum) {
-							IRegularMassSpectrum massSpectrum = (IRegularMassSpectrum)scan;
-							if(massSpectrum.getMassSpectrumType() == 1) {
-								isProfileType = true;
-							}
-						}
 					} else {
 						setDataType(DataType.MSD_NOMINAL);
 					}
 				}
 				//
-				if(isProfileType) {
+				if(signalType.equals(SignalType.PROFILE)) {
 					addLineSeriesData(getLineSeriesDataList(scan));
 				} else {
 					addBarSeriesData(getBarSeriesDataList(scan));
@@ -207,6 +202,79 @@ public class ScanChart extends ScrollableChart {
 			font.dispose();
 		}
 		super.dispose();
+	}
+
+	public void setSignalType(SignalType signalType) {
+
+		this.signalType = signalType;
+	}
+
+	public void setDataType(DataType dataType) {
+
+		String name = "Ubuntu";
+		int height = 11;
+		int style = SWT.NORMAL;
+		fontId = name + height + style;
+		if(!fonts.containsKey(fontId)) {
+			Font font = new Font(Display.getDefault(), name, height, style);
+			fonts.put(fontId, font);
+		}
+		//
+		setNumberOfHighestIntensitiesToLabel(5);
+		//
+		deleteSeries();
+		customLabels.clear();
+		//
+		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setCreateMenu(true);
+		//
+		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
+		chartSettings.getRangeRestriction().setForceZeroMinY(false);
+		rangeRestriction.setRestrictZoom(true);
+		rangeRestriction.setRestrictZoom(true);
+		rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.ABSOLUTE);
+		rangeRestriction.setExtendMinX(2.0d);
+		rangeRestriction.setExtendMaxX(2.0d);
+		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
+		rangeRestriction.setExtendMinY(0.0d);
+		rangeRestriction.setExtendMaxY(0.25d);
+		//
+		LabelPaintListener labelPaintListener = labelPaintListenerX;
+		//
+		switch(dataType) {
+			case MSD_NOMINAL:
+				labelOption = LabelOption.NOMIMAL;
+				setDataTypeMSD(chartSettings);
+				break;
+			case MSD_TANDEM:
+				labelOption = LabelOption.CUSTOM;
+				setDataTypeMSD(chartSettings);
+				break;
+			case MSD_HIGHRES:
+				labelOption = LabelOption.EXACT;
+				setDataTypeMSD(chartSettings);
+				break;
+			case CSD:
+				labelPaintListener = labelPaintListenerY;
+				chartSettings.getRangeRestriction().setForceZeroMinY(true);
+				rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.RELATIVE);
+				rangeRestriction.setExtendMinX(0.1d);
+				rangeRestriction.setExtendMaxX(0.1d);
+				labelOption = LabelOption.NOMIMAL;
+				setDataTypeCSD(chartSettings);
+				break;
+			case WSD:
+				labelOption = LabelOption.NOMIMAL;
+				setDataTypeWSD(chartSettings);
+				break;
+			default:
+				labelOption = LabelOption.NOMIMAL;
+				setDataTypeMSD(chartSettings);
+				break;
+		}
+		//
+		applySettings(chartSettings);
+		addSeriesLabelMarker(labelPaintListener);
 	}
 
 	private List<IBarSeriesData> getBarSeriesDataList(IScan scan) {
@@ -335,79 +403,13 @@ public class ScanChart extends ScrollableChart {
 		}
 	}
 
-	public void setNumberOfHighestIntensitiesToLabel(int numberOfHighestIntensitiesToLabel) {
+	private void setNumberOfHighestIntensitiesToLabel(int numberOfHighestIntensitiesToLabel) {
 
 		if(numberOfHighestIntensitiesToLabel >= 0) {
 			this.numberOfHighestIntensitiesToLabel = numberOfHighestIntensitiesToLabel;
 		} else {
 			this.numberOfHighestIntensitiesToLabel = 0;
 		}
-	}
-
-	private void setDataType(DataType dataType) {
-
-		String name = "Ubuntu";
-		int height = 11;
-		int style = SWT.NORMAL;
-		fontId = name + height + style;
-		if(!fonts.containsKey(fontId)) {
-			Font font = new Font(Display.getDefault(), name, height, style);
-			fonts.put(fontId, font);
-		}
-		//
-		deleteSeries();
-		customLabels.clear();
-		//
-		IChartSettings chartSettings = getChartSettings();
-		chartSettings.setCreateMenu(true);
-		//
-		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
-		chartSettings.getRangeRestriction().setForceZeroMinY(false);
-		rangeRestriction.setRestrictZoom(true);
-		rangeRestriction.setRestrictZoom(true);
-		rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.ABSOLUTE);
-		rangeRestriction.setExtendMinX(2.0d);
-		rangeRestriction.setExtendMaxX(2.0d);
-		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
-		rangeRestriction.setExtendMinY(0.0d);
-		rangeRestriction.setExtendMaxY(0.25d);
-		//
-		LabelPaintListener labelPaintListener = labelPaintListenerX;
-		//
-		switch(dataType) {
-			case MSD_NOMINAL:
-				labelOption = LabelOption.NOMIMAL;
-				setDataTypeMSD(chartSettings);
-				break;
-			case MSD_TANDEM:
-				labelOption = LabelOption.CUSTOM;
-				setDataTypeMSD(chartSettings);
-				break;
-			case MSD_HIGHRES:
-				labelOption = LabelOption.EXACT;
-				setDataTypeMSD(chartSettings);
-				break;
-			case CSD:
-				labelPaintListener = labelPaintListenerY;
-				chartSettings.getRangeRestriction().setForceZeroMinY(true);
-				rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.RELATIVE);
-				rangeRestriction.setExtendMinX(0.1d);
-				rangeRestriction.setExtendMaxX(0.1d);
-				labelOption = LabelOption.NOMIMAL;
-				setDataTypeCSD(chartSettings);
-				break;
-			case WSD:
-				labelOption = LabelOption.NOMIMAL;
-				setDataTypeWSD(chartSettings);
-				break;
-			default:
-				labelOption = LabelOption.NOMIMAL;
-				setDataTypeMSD(chartSettings);
-				break;
-		}
-		//
-		applySettings(chartSettings);
-		addSeriesLabelMarker(labelPaintListener);
 	}
 
 	private void setDataTypeMSD(IChartSettings chartSettings) {
