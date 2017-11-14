@@ -48,6 +48,8 @@ public class PreferenceConstants {
 	/*
 	 * Targets
 	 */
-	public static final String P_CRAWL_EXISTING_TARGETS = "crawlExistingTargets";
-	public static final boolean DEF_CRAWL_EXISTING_TARGETS = true;
+	public static final String P_USE_TARGET_LIST = "useTargetList";
+	public static final boolean DEF_USE_TARGET_LIST = true;
+	public static final String P_TARGET_LIST = "targetList";
+	public static final String DEF_TARGET_LIST = "";
 }

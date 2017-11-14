@@ -11,15 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.List;
+
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsLabelProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsTableComparator;
+import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsViewEditingSupport;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.widgets.Composite;
 
 public class TargetsListUI extends ExtendedTableViewer {
 
 	private static final String VERIFIED_MANUALLY = "Verified (manually)";
+	private TargetsTableComparator targetsTableComparator;
 	//
 	private static final String[] TITLES = { //
 			VERIFIED_MANUALLY, //
@@ -68,6 +73,7 @@ public class TargetsListUI extends ExtendedTableViewer {
 
 	public TargetsListUI(Composite parent, int style) {
 		super(parent, style);
+		targetsTableComparator = new TargetsTableComparator();
 		createColumns();
 	}
 
@@ -76,12 +82,34 @@ public class TargetsListUI extends ExtendedTableViewer {
 		setInput(null);
 	}
 
+	public void sortTable() {
+
+		targetsTableComparator.setColumn(0);
+		targetsTableComparator.setDirection(TargetsTableComparator.DESCENDING);
+		refresh();
+	}
+
 	private void createColumns() {
 
+		targetsTableComparator = new TargetsTableComparator();
+		//
 		createColumns(TITLES, BOUNDS);
 		//
 		setLabelProvider(new TargetsLabelProvider());
 		setContentProvider(new ListContentProvider());
 		setComparator(new TargetsTableComparator());
+		setEditingSupport();
+	}
+
+	private void setEditingSupport() {
+
+		List<TableViewerColumn> tableViewerColumns = getTableViewerColumns();
+		for(int i = 0; i < tableViewerColumns.size(); i++) {
+			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);
+			String label = tableViewerColumn.getColumn().getText();
+			if(label.equals(VERIFIED_MANUALLY)) {
+				tableViewerColumn.setEditingSupport(new TargetsViewEditingSupport(this));
+			}
+		}
 	}
 }

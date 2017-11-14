@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
+import org.eclipse.chemclipse.support.ui.preferences.editors.TargetListEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -27,7 +28,8 @@ public class PreferencePageTargets extends FieldEditorPreferencePage implements 
 
 	public void createFieldEditors() {
 
-		addField(new BooleanFieldEditor(PreferenceConstants.P_CRAWL_EXISTING_TARGETS, "Crawl existing targets", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_USE_TARGET_LIST, "Use Target List", getFieldEditorParent()));
+		addField(new TargetListEditor(PreferenceConstants.P_TARGET_LIST, "Targets", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

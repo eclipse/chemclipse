@@ -43,6 +43,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		/*
 		 * Targets
 		 */
-		store.setDefault(PreferenceConstants.P_CRAWL_EXISTING_TARGETS, PreferenceConstants.DEF_CRAWL_EXISTING_TARGETS);
+		store.setDefault(PreferenceConstants.P_USE_TARGET_LIST, PreferenceConstants.DEF_USE_TARGET_LIST);
+		store.setDefault(PreferenceConstants.P_TARGET_LIST, PreferenceConstants.DEF_TARGET_LIST);
 	}
 }

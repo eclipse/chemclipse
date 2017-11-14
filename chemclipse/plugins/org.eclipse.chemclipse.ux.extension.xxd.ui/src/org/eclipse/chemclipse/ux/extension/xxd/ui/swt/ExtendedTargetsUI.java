@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.csd.model.implementation.ScanTargetCSD;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
@@ -37,15 +38,19 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectru
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramTargetMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
-import org.eclipse.chemclipse.support.ui.menu.ITableMenuCategories;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
+import org.eclipse.chemclipse.support.util.TargetListUtil;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
@@ -53,10 +58,12 @@ import org.eclipse.chemclipse.wsd.model.core.identifier.chromatogram.IChromatogr
 import org.eclipse.chemclipse.wsd.model.core.identifier.scan.IScanTargetWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ChromatogramTargetWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanTargetWSD;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -72,16 +79,21 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 
 public class ExtendedTargetsUI {
 
+	private static final String MENU_CATEGORY_TARGETS = "Targets";
+	private static final int KEY_CODE_I = 105;
+	//
 	private Label labelInfo;
 	private Composite toolbarInfo;
 	private Composite toolbarEdit;
 	private Combo comboSubstanceName;
-	private Text textCasNumber;
 	private TargetsListUI targetsListUI;
+	//
+	private TargetListUtil targetListUtil;
 	/*
 	 * IScan,
 	 * IPeak,
@@ -91,6 +103,7 @@ public class ExtendedTargetsUI {
 
 	@Inject
 	public ExtendedTargetsUI(Composite parent, MPart part) {
+		targetListUtil = new TargetListUtil();
 		initialize(parent);
 	}
 
@@ -117,6 +130,8 @@ public class ExtendedTargetsUI {
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, false);
 		PartSupport.setCompositeVisibility(toolbarEdit, false);
+		//
+		applySettings();
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -168,6 +183,7 @@ public class ExtendedTargetsUI {
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarEdit);
 				if(visible) {
+					setComboSubstanceNameItems();
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				} else {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DISABLED, IApplicationImage.SIZE_16x16));
@@ -227,10 +243,9 @@ public class ExtendedTargetsUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(3, false));
 		//
 		createComboSubstance(composite);
-		createTextCasNumber(composite);
 		createButtonAdd(composite);
 		createButtonDelete(composite);
 		//
@@ -242,16 +257,7 @@ public class ExtendedTargetsUI {
 		comboSubstanceName = new Combo(parent, SWT.NONE);
 		comboSubstanceName.setToolTipText("Substance Name");
 		comboSubstanceName.setText("");
-		// comboSubstanceName.setItems(new String[]{"Phenol", "Styrol", "Benzol"}); // Settings
 		comboSubstanceName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-	}
-
-	private void createTextCasNumber(Composite parent) {
-
-		textCasNumber = new Text(parent, SWT.BORDER);
-		textCasNumber.setToolTipText("CAS Number (can be empty)");
-		textCasNumber.setText("");
-		textCasNumber.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
 	private void createButtonAdd(Composite parent) {
@@ -293,7 +299,9 @@ public class ExtendedTargetsUI {
 		 */
 		ITableSettings tableSettings = targetsListUI.getTableSettings();
 		addDeleteMenuEntry(tableSettings);
-		addDeleteKeyEventProcessor(tableSettings);
+		addVerifyTargetsMenuEntry(tableSettings);
+		addUnverifyTargetsMenuEntry(tableSettings);
+		addKeyEventProcessors(tableSettings);
 		targetsListUI.applySettings(tableSettings);
 	}
 
@@ -310,7 +318,7 @@ public class ExtendedTargetsUI {
 			@Override
 			public String getCategory() {
 
-				return ITableMenuCategories.STANDARD_OPERATION;
+				return MENU_CATEGORY_TARGETS;
 			}
 
 			@Override
@@ -321,22 +329,123 @@ public class ExtendedTargetsUI {
 		});
 	}
 
-	private void addDeleteKeyEventProcessor(ITableSettings tableSettings) {
+	private void addVerifyTargetsMenuEntry(ITableSettings tableSettings) {
+
+		tableSettings.addMenuEntry(new ITableMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Verify Target(s)";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return MENU_CATEGORY_TARGETS;
+			}
+
+			@Override
+			public void execute(ExtendedTableViewer extendedTableViewer) {
+
+				verifyTargets(true);
+			}
+		});
+	}
+
+	private void addUnverifyTargetsMenuEntry(ITableSettings tableSettings) {
+
+		tableSettings.addMenuEntry(new ITableMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Unverify Target(s)";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return MENU_CATEGORY_TARGETS;
+			}
+
+			@Override
+			public void execute(ExtendedTableViewer extendedTableViewer) {
+
+				verifyTargets(false);
+			}
+		});
+	}
+
+	private void addKeyEventProcessors(ITableSettings tableSettings) {
 
 		tableSettings.addKeyEventProcessor(new IKeyEventProcessor() {
 
 			@Override
 			public void handleEvent(ExtendedTableViewer extendedTableViewer, KeyEvent e) {
 
-				if(e.keyCode == SWT.DEL) {
+				if(e.keyCode == SWT.DEL) { // DEL
 					deleteTargets();
+				} else if(e.keyCode == KEY_CODE_I && e.stateMask == SWT.CTRL) {
+					if((e.stateMask & SWT.ALT) == SWT.ALT) {
+						verifyTargets(false); // CTRL + ALT + I
+					} else {
+						verifyTargets(true); // CTRL + I
+					}
+				} else {
+					propagateTarget();
 				}
 			}
 		});
 	}
 
+	@SuppressWarnings("rawtypes")
+	private void verifyTargets(boolean verified) {
+
+		Iterator iterator = targetsListUI.getStructuredSelection().iterator();
+		while(iterator.hasNext()) {
+			Object object = iterator.next();
+			if(object instanceof IIdentificationTarget) {
+				IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
+				identificationTarget.setManuallyVerified(verified);
+			}
+		}
+		updateTargets();
+	}
+
+	private void propagateTarget() {
+
+		Table table = targetsListUI.getTable();
+		int index = table.getSelectionIndex();
+		if(index >= 0) {
+			TableItem tableItem = table.getItem(index);
+			Object object = tableItem.getData();
+			if(object instanceof IIdentificationTarget) {
+				IIdentificationTarget target = (IIdentificationTarget)object;
+				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+				eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
+			}
+		}
+	}
+
 	private void applySettings() {
 
+		setComboSubstanceNameItems();
+	}
+
+	private void setComboSubstanceNameItems() {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		boolean useTargetList = preferenceStore.getBoolean(PreferenceConstants.P_USE_TARGET_LIST);
+		//
+		String[] items;
+		if(useTargetList) {
+			items = targetListUtil.parseString(preferenceStore.getString(PreferenceConstants.P_TARGET_LIST));
+		} else {
+			items = new String[]{};
+		}
+		//
+		comboSubstanceName.setItems(items);
 	}
 
 	private void updateTargets() {
@@ -372,6 +481,8 @@ public class ExtendedTargetsUI {
 		} else {
 			targetsListUI.clear();
 		}
+		//
+		targetsListUI.sortTable();
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -419,12 +530,14 @@ public class ExtendedTargetsUI {
 			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)object;
 			chromatogramWSD.removeTarget((IChromatogramTargetWSD)target);
 		}
+		/*
+		 * Don't do an table update here, cause this method could be called several times in a loop.
+		 */
 	}
 
 	private void addTarget() {
 
 		String substanceName = comboSubstanceName.getText().trim();
-		String casNumber = textCasNumber.getText().trim();
 		//
 		if("".equals(substanceName)) {
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Add Target", "The substance name must be not empty.");
@@ -434,7 +547,6 @@ public class ExtendedTargetsUI {
 			 */
 			ILibraryInformation libraryInformation = new LibraryInformation();
 			libraryInformation.setName(substanceName);
-			libraryInformation.setCasNumber(casNumber);
 			IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
 			//
 			if(object instanceof IScanMSD) {
@@ -461,8 +573,6 @@ public class ExtendedTargetsUI {
 			}
 			//
 			comboSubstanceName.setText("");
-			textCasNumber.setText("");
-			//
 			update(object);
 		}
 	}
