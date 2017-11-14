@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
@@ -70,8 +71,6 @@ public class ScanChart extends ScrollableChart {
 	private static final int COMPRESS_TO_LENGTH = Integer.MAX_VALUE;
 	//
 	private int numberOfHighestIntensitiesToLabel = 5;
-	private LabelOption labelOption = LabelOption.EXACT;
-	private SignalType signalType = SignalType.CENTROID;
 	private DecimalFormat defaultDecimalFormat = ValueFormat.getDecimalFormatEnglish();
 	private DecimalFormat decimalFormatQ3 = ValueFormat.getDecimalFormatEnglish("0.0");
 	//
@@ -80,7 +79,13 @@ public class ScanChart extends ScrollableChart {
 	private LabelPaintListener labelPaintListenerX = new LabelPaintListener(true);
 	private LabelPaintListener labelPaintListenerY = new LabelPaintListener(false);
 	private Map<String, Font> fonts = new HashMap<String, Font>();
-	private String fontId; // is initialized on use
+	/*
+	 * Initialized on use.
+	 */
+	private String fontId;
+	private LabelOption labelOption;
+	private DataType dataType;
+	private SignalType signalType;
 
 	private class LabelPaintListener implements ICustomPaintListener {
 
@@ -134,64 +139,35 @@ public class ScanChart extends ScrollableChart {
 
 	public ScanChart() {
 		super();
-		setDataType(DataType.MSD_NOMINAL);
-		setSignalType(SignalType.CENTROID);
+		setDefaultDataAndSignalType();
 	}
 
 	public ScanChart(Composite parent, int style) {
 		super(parent, style);
-		setDataType(DataType.MSD_NOMINAL);
-		setSignalType(SignalType.CENTROID);
+		setDefaultDataAndSignalType();
 	}
 
 	public void setInput(IScan scan) {
 
+		customLabels.clear();
+		deleteSeries();
+		//
 		if(scan != null) {
-			if(scan instanceof IScanMSD) {
-				/*
-				 * MSD
-				 */
-				IScanMSD scanMSD = (IScanMSD)scan;
-				if(scanMSD.isTandemMS()) {
-					setDataType(DataType.MSD_TANDEM);
-					customLabels.clear();
-					for(IIon ion : scanMSD.getIons()) {
-						IIonTransition ionTransition = ion.getIonTransition();
-						if(ionTransition != null) {
-							customLabels.put(ion.getIon(), ionTransition.getQ1Ion() + " > " + decimalFormatQ3.format(ion.getIon()) + " @" + (int)ionTransition.getCollisionEnergy());
-						} else {
-							customLabels.put(ion.getIon(), Double.toString(ion.getIon()));
-						}
-					}
-				} else {
-					if(scanMSD.isHighResolutionMS()) {
-						setDataType(DataType.MSD_HIGHRES);
-					} else {
-						setDataType(DataType.MSD_NOMINAL);
-					}
-				}
-				//
-				if(signalType.equals(SignalType.PROFILE)) {
-					addLineSeriesData(getLineSeriesDataList(scan));
-				} else {
-					addBarSeriesData(getBarSeriesDataList(scan));
-				}
-				//
-			} else if(scan instanceof IScanCSD) {
-				/*
-				 * CSD
-				 */
-				setDataType(DataType.CSD);
-				addBarSeriesData(getBarSeriesDataList(scan));
-			} else if(scan instanceof IScanWSD) {
-				/*
-				 * WSD
-				 */
-				setDataType(DataType.WSD);
+			/*
+			 * Set the chart data.
+			 */
+			extractCustomLabels(scan);
+			DataType usedDataType = determineDataType(scan);
+			SignalType usedSignalType = determineSignalType(scan);
+			//
+			modifyChart(usedDataType);
+			determineLabelOption(usedDataType);
+			//
+			if(usedSignalType.equals(SignalType.PROFILE)) {
+				addLineSeriesData(getLineSeriesDataList(scan));
+			} else {
 				addBarSeriesData(getBarSeriesDataList(scan));
 			}
-		} else {
-			deleteSeries();
 		}
 	}
 
@@ -204,12 +180,120 @@ public class ScanChart extends ScrollableChart {
 		super.dispose();
 	}
 
+	public void setDataType(DataType dataType) {
+
+		this.dataType = dataType;
+	}
+
 	public void setSignalType(SignalType signalType) {
 
 		this.signalType = signalType;
 	}
 
-	public void setDataType(DataType dataType) {
+	private void setDefaultDataAndSignalType() {
+
+		dataType = DataType.AUTO_DETECT;
+		signalType = SignalType.AUTO_DETECT;
+		modifyChart(DataType.MSD_NOMINAL);
+	}
+
+	private DataType determineDataType(IScan scan) {
+
+		DataType usedDataType;
+		if(dataType.equals(DataType.AUTO_DETECT)) {
+			if(scan instanceof IScanMSD) {
+				/*
+				 * MSD
+				 */
+				IScanMSD scanMSD = (IScanMSD)scan;
+				if(scanMSD.isTandemMS()) {
+					usedDataType = DataType.MSD_TANDEM;
+				} else {
+					if(scanMSD.isHighResolutionMS()) {
+						usedDataType = DataType.MSD_HIGHRES;
+					} else {
+						usedDataType = DataType.MSD_NOMINAL;
+					}
+				}
+			} else if(scan instanceof IScanCSD) {
+				usedDataType = DataType.CSD;
+			} else if(scan instanceof IScanWSD) {
+				usedDataType = DataType.WSD;
+			} else {
+				usedDataType = DataType.MSD_NOMINAL;
+			}
+		} else {
+			usedDataType = dataType;
+		}
+		return usedDataType;
+	}
+
+	private SignalType determineSignalType(IScan scan) {
+
+		SignalType usedSignalType;
+		if(signalType.equals(SignalType.AUTO_DETECT)) {
+			/*
+			 * Default is centroid.
+			 */
+			usedSignalType = SignalType.CENTROID;
+			if(scan instanceof IRegularMassSpectrum) {
+				IRegularMassSpectrum massSpectrum = (IRegularMassSpectrum)scan;
+				if(massSpectrum.getMassSpectrumType() == 1) {
+					usedSignalType = SignalType.PROFILE;
+				}
+			}
+		} else {
+			usedSignalType = signalType;
+		}
+		//
+		return usedSignalType;
+	}
+
+	private void determineLabelOption(DataType dataType) {
+
+		switch(dataType) {
+			case MSD_NOMINAL:
+				labelOption = LabelOption.NOMIMAL;
+				break;
+			case MSD_TANDEM:
+				labelOption = LabelOption.CUSTOM;
+				break;
+			case MSD_HIGHRES:
+				labelOption = LabelOption.EXACT;
+				break;
+			case CSD:
+				labelOption = LabelOption.NOMIMAL;
+				break;
+			case WSD:
+				labelOption = LabelOption.NOMIMAL;
+				break;
+			default:
+				labelOption = LabelOption.NOMIMAL;
+				break;
+		}
+	}
+
+	private void extractCustomLabels(IScan scan) {
+
+		if(scan instanceof IScanMSD) {
+			/*
+			 * MSD
+			 */
+			IScanMSD scanMSD = (IScanMSD)scan;
+			if(scanMSD.isTandemMS()) {
+				for(IIon ion : scanMSD.getIons()) {
+					IIonTransition ionTransition = ion.getIonTransition();
+					if(ionTransition != null) {
+						customLabels.put(ion.getIon(), ionTransition.getQ1Ion() + " > " + decimalFormatQ3.format(ion.getIon()) + " @" + (int)ionTransition.getCollisionEnergy());
+					} else {
+						customLabels.put(ion.getIon(), Double.toString(ion.getIon()));
+					}
+				}
+			}
+		}
+	}
+
+	private void modifyChart(DataType dataType) {
 
 		String name = "Ubuntu";
 		int height = 11;
@@ -220,10 +304,7 @@ public class ScanChart extends ScrollableChart {
 			fonts.put(fontId, font);
 		}
 		//
-		setNumberOfHighestIntensitiesToLabel(5);
-		//
-		deleteSeries();
-		customLabels.clear();
+		numberOfHighestIntensitiesToLabel = 5;
 		//
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.setCreateMenu(true);
@@ -243,15 +324,12 @@ public class ScanChart extends ScrollableChart {
 		//
 		switch(dataType) {
 			case MSD_NOMINAL:
-				labelOption = LabelOption.NOMIMAL;
 				setDataTypeMSD(chartSettings);
 				break;
 			case MSD_TANDEM:
-				labelOption = LabelOption.CUSTOM;
 				setDataTypeMSD(chartSettings);
 				break;
 			case MSD_HIGHRES:
-				labelOption = LabelOption.EXACT;
 				setDataTypeMSD(chartSettings);
 				break;
 			case CSD:
@@ -260,15 +338,12 @@ public class ScanChart extends ScrollableChart {
 				rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.RELATIVE);
 				rangeRestriction.setExtendMinX(0.1d);
 				rangeRestriction.setExtendMaxX(0.1d);
-				labelOption = LabelOption.NOMIMAL;
 				setDataTypeCSD(chartSettings);
 				break;
 			case WSD:
-				labelOption = LabelOption.NOMIMAL;
 				setDataTypeWSD(chartSettings);
 				break;
 			default:
-				labelOption = LabelOption.NOMIMAL;
 				setDataTypeMSD(chartSettings);
 				break;
 		}
@@ -400,15 +475,6 @@ public class ScanChart extends ScrollableChart {
 			baseChart.suspendUpdate(false);
 			adjustRange(true);
 			baseChart.redraw();
-		}
-	}
-
-	private void setNumberOfHighestIntensitiesToLabel(int numberOfHighestIntensitiesToLabel) {
-
-		if(numberOfHighestIntensitiesToLabel >= 0) {
-			this.numberOfHighestIntensitiesToLabel = numberOfHighestIntensitiesToLabel;
-		} else {
-			this.numberOfHighestIntensitiesToLabel = 0;
 		}
 	}
 

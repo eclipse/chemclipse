@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
 public enum DataType {
+	AUTO_DETECT, // Auto-Detect
 	MSD_NOMINAL, // Quadrupole, Ion Trap
 	MSD_TANDEM, // MS/MS
 	MSD_HIGHRES, // Orbitrap, TOF

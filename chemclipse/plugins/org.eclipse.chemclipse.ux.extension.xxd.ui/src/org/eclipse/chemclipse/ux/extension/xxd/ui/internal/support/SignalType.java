@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
 public enum SignalType {
+	AUTO_DETECT, //
 	CENTROID, //
 	PROFILE
 }
