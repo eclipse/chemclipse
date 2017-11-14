@@ -19,7 +19,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.internal.support.ISubtractFilterEvents;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.support.ISubtractFilterEvents;
 
 public class ClearSessionSubtractMassSpectrumHandler {
 

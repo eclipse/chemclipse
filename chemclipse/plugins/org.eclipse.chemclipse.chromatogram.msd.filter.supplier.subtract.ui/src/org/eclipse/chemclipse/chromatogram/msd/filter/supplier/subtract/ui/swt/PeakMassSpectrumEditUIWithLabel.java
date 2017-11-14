@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.IPeakFilterSuppo
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.PeakFilter;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.FilterSupport;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.internal.support.ISubtractFilterEvents;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.support.ISubtractFilterEvents;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierSupport;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifier;

@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.internal.support;
+package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.support;
 
 import org.eclipse.e4.core.services.events.IEventBroker;
 
