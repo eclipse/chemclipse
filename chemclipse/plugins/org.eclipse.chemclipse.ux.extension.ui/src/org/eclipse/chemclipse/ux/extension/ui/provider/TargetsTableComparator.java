@@ -23,9 +23,6 @@ public class TargetsTableComparator extends AbstractRecordTableComparator implem
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
-		/*
-		 * SYNCHRONIZE: TargetsLabelProvider
-		 */
 		int sortOrder = 0;
 		if(e1 instanceof IIdentificationTarget && e2 instanceof IIdentificationTarget) {
 			//

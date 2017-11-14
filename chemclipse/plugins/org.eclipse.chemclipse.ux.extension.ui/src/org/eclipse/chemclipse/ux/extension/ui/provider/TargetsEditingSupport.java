@@ -16,15 +16,22 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TextCellEditor;
 
-public class TargetsViewEditingSupport extends EditingSupport {
+public class TargetsEditingSupport extends EditingSupport {
 
-	private CheckboxCellEditor cellEditor;
+	private CellEditor cellEditor;
 	private TableViewer tableViewer;
+	private String column;
 
-	public TargetsViewEditingSupport(TableViewer tableViewer) {
+	public TargetsEditingSupport(TableViewer tableViewer, String column) {
 		super(tableViewer);
-		this.cellEditor = new CheckboxCellEditor(tableViewer.getTable());
+		this.column = column;
+		if(column.equals(TargetsLabelProvider.VERIFIED_MANUALLY)) {
+			this.cellEditor = new CheckboxCellEditor(tableViewer.getTable());
+		} else {
+			this.cellEditor = new TextCellEditor(tableViewer.getTable());
+		}
 		this.tableViewer = tableViewer;
 	}
 
@@ -45,7 +52,16 @@ public class TargetsViewEditingSupport extends EditingSupport {
 
 		if(element instanceof IIdentificationTarget) {
 			IIdentificationTarget identificationTarget = (IIdentificationTarget)element;
-			return identificationTarget.isManuallyVerified();
+			switch(column) {
+				case TargetsLabelProvider.VERIFIED_MANUALLY:
+					return identificationTarget.isManuallyVerified();
+				case TargetsLabelProvider.NAME:
+					return identificationTarget.getLibraryInformation().getName();
+				case TargetsLabelProvider.CAS:
+					return identificationTarget.getLibraryInformation().getCasNumber();
+				case TargetsLabelProvider.COMMENTS:
+					return identificationTarget.getLibraryInformation().getComments();
+			}
 		}
 		return false;
 	}
@@ -55,7 +71,20 @@ public class TargetsViewEditingSupport extends EditingSupport {
 
 		if(element instanceof IIdentificationTarget) {
 			IIdentificationTarget identificationTarget = (IIdentificationTarget)element;
-			identificationTarget.setManuallyVerified((boolean)value);
+			switch(column) {
+				case TargetsLabelProvider.VERIFIED_MANUALLY:
+					identificationTarget.setManuallyVerified((boolean)value);
+					break;
+				case TargetsLabelProvider.NAME:
+					identificationTarget.getLibraryInformation().setName((String)value);
+					break;
+				case TargetsLabelProvider.CAS:
+					identificationTarget.getLibraryInformation().setCasNumber((String)value);
+					break;
+				case TargetsLabelProvider.COMMENTS:
+					identificationTarget.getLibraryInformation().setComments((String)value);
+					break;
+			}
 			tableViewer.refresh();
 		}
 	}

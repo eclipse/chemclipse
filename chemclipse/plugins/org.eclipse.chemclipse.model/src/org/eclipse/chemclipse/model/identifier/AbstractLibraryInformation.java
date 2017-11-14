@@ -37,7 +37,6 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	private String hit;
 	private String classification;
 
-	// -----------------------------------------------ILibraryInformation
 	public AbstractLibraryInformation() {
 		synonyms = new HashSet<String>();
 	}
@@ -230,8 +229,6 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 		this.classification = classification;
 	}
 
-	// -----------------------------------------------ILibraryInformation
-	// -------------------------------equals, hashCode, toString
 	@Override
 	public boolean equals(Object other) {
 
@@ -274,5 +271,4 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 		builder.append("]");
 		return builder.toString();
 	}
-	// -------------------------------equals, hashCode, toString
 }

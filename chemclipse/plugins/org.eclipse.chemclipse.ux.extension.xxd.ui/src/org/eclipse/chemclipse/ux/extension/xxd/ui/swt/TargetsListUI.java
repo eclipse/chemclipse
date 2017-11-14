@@ -15,61 +15,15 @@ import java.util.List;
 
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsEditingSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsLabelProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsTableComparator;
-import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsViewEditingSupport;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.widgets.Composite;
 
 public class TargetsListUI extends ExtendedTableViewer {
 
-	private static final String VERIFIED_MANUALLY = "Verified (manually)";
 	private TargetsTableComparator targetsTableComparator;
-	//
-	private static final String[] TITLES = { //
-			VERIFIED_MANUALLY, //
-			"Rating", //
-			"Name", //
-			"CAS", //
-			"Match Factor", //
-			"Reverse Factor", //
-			"Match Factor Direct", //
-			"Reverse Factor Direct", //
-			"Probability", //
-			"Formula", //
-			"SMILES", //
-			"InChI", //
-			"Mol Weight", //
-			"Advise", //
-			"Identifier", //
-			"Miscellaneous", //
-			"Comments", //
-			"Database", //
-			"Contributor", //
-			"Reference ID"//
-	};
-	private static final int[] BOUNDS = { //
-			30, //
-			30, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100 //
-	};
 
 	public TargetsListUI(Composite parent, int style) {
 		super(parent, style);
@@ -84,20 +38,25 @@ public class TargetsListUI extends ExtendedTableViewer {
 
 	public void sortTable() {
 
-		targetsTableComparator.setColumn(0);
-		targetsTableComparator.setDirection(TargetsTableComparator.DESCENDING);
+		int column = 0;
+		int sortOrder = TargetsTableComparator.DESCENDING;
+		//
+		targetsTableComparator.setColumn(column);
+		targetsTableComparator.setDirection(sortOrder);
 		refresh();
+		targetsTableComparator.setDirection(1 - sortOrder);
+		targetsTableComparator.setColumn(column);
 	}
 
 	private void createColumns() {
 
-		targetsTableComparator = new TargetsTableComparator();
+		createColumns(TargetsLabelProvider.TITLES, TargetsLabelProvider.BOUNDS);
 		//
-		createColumns(TITLES, BOUNDS);
+		targetsTableComparator = new TargetsTableComparator();
 		//
 		setLabelProvider(new TargetsLabelProvider());
 		setContentProvider(new ListContentProvider());
-		setComparator(new TargetsTableComparator());
+		setComparator(targetsTableComparator);
 		setEditingSupport();
 	}
 
@@ -107,8 +66,14 @@ public class TargetsListUI extends ExtendedTableViewer {
 		for(int i = 0; i < tableViewerColumns.size(); i++) {
 			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);
 			String label = tableViewerColumn.getColumn().getText();
-			if(label.equals(VERIFIED_MANUALLY)) {
-				tableViewerColumn.setEditingSupport(new TargetsViewEditingSupport(this));
+			if(label.equals(TargetsLabelProvider.VERIFIED_MANUALLY)) {
+				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
+			} else if(label.equals(TargetsLabelProvider.NAME)) {
+				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
+			} else if(label.equals(TargetsLabelProvider.CAS)) {
+				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
+			} else if(label.equals(TargetsLabelProvider.COMMENTS)) {
+				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
 			}
 		}
 	}

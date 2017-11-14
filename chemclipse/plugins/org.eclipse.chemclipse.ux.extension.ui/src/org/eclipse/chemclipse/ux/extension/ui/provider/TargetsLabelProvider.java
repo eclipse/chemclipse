@@ -23,6 +23,55 @@ import org.eclipse.swt.graphics.Image;
 
 public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 
+	public static final String VERIFIED_MANUALLY = "Verified (manually)";
+	public static final String NAME = "Name";
+	public static final String CAS = "CAS";
+	public static final String COMMENTS = "Comments";
+	public static final String[] TITLES = { //
+			VERIFIED_MANUALLY, //
+			"Rating", //
+			NAME, //
+			CAS, //
+			"Match Factor", //
+			"Reverse Factor", //
+			"Match Factor Direct", //
+			"Reverse Factor Direct", //
+			"Probability", //
+			"Formula", //
+			"SMILES", //
+			"InChI", //
+			"Mol Weight", //
+			"Advise", //
+			"Identifier", //
+			"Miscellaneous", //
+			COMMENTS, //
+			"Database", //
+			"Contributor", //
+			"Reference ID"//
+	};
+	public static final int[] BOUNDS = { //
+			30, //
+			30, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100, //
+			100 //
+	};
+
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
 
@@ -71,9 +120,9 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
 		if(element instanceof IIdentificationTarget) {
-			IIdentificationTarget identificationEntry = (IIdentificationTarget)element;
-			ILibraryInformation libraryInformation = identificationEntry.getLibraryInformation();
-			IComparisonResult comparisonResult = identificationEntry.getComparisonResult();
+			IIdentificationTarget identificationTarget = (IIdentificationTarget)element;
+			ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
+			IComparisonResult comparisonResult = identificationTarget.getComparisonResult();
 			switch(columnIndex) {
 				case 0:
 					text = "";
@@ -118,7 +167,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 					text = comparisonResult.getAdvise();
 					break;
 				case 14: // Identifier
-					text = identificationEntry.getIdentifier();
+					text = identificationTarget.getIdentifier();
 					break;
 				case 15: // Miscellaneous
 					text = libraryInformation.getMiscellaneous();

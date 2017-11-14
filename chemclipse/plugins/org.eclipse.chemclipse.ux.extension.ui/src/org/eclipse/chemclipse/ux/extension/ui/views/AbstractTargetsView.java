@@ -27,9 +27,9 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuCategories;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
+import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsEditingSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsLabelProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsTableComparator;
-import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsViewEditingSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -347,7 +347,7 @@ public abstract class AbstractTargetsView {
 			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);
 			String label = tableViewerColumn.getColumn().getText();
 			if(label.equals(VERIFIED_MANUALLY)) {
-				tableViewerColumn.setEditingSupport(new TargetsViewEditingSupport(tableViewer));
+				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(tableViewer, label));
 			}
 		}
 	}

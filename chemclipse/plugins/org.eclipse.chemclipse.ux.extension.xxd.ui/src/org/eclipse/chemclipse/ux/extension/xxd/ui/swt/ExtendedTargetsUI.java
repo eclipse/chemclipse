@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -31,6 +33,7 @@ import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.model.targets.ITarget;
 import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
@@ -68,7 +71,10 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -84,6 +90,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class ExtendedTargetsUI {
 
+	private static final String IDENTIFIER_MANUAL = "Manual";
 	private static final String MENU_CATEGORY_TARGETS = "Targets";
 	private static final int KEY_CODE_I = 105;
 	//
@@ -92,7 +99,6 @@ public class ExtendedTargetsUI {
 	private Composite toolbarEdit;
 	private Combo comboSubstanceName;
 	private TargetsListUI targetsListUI;
-	//
 	private TargetListUtil targetListUtil;
 	/*
 	 * IScan,
@@ -100,10 +106,12 @@ public class ExtendedTargetsUI {
 	 * IChromatogram
 	 */
 	private Object object;
+	private Map<String, Object> map;
 
 	@Inject
 	public ExtendedTargetsUI(Composite parent, MPart part) {
 		targetListUtil = new TargetListUtil();
+		map = new HashMap<String, Object>();
 		initialize(parent);
 	}
 
@@ -258,6 +266,16 @@ public class ExtendedTargetsUI {
 		comboSubstanceName.setToolTipText("Substance Name");
 		comboSubstanceName.setText("");
 		comboSubstanceName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboSubstanceName.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
+					addTarget();
+				}
+			}
+		});
 	}
 
 	private void createButtonAdd(Composite parent) {
@@ -294,6 +312,14 @@ public class ExtendedTargetsUI {
 
 		targetsListUI = new TargetsListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		targetsListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		targetsListUI.getControl().addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+
+				propagateTarget();
+			}
+		});
 		/*
 		 * Add the delete targets support.
 		 */
@@ -336,7 +362,7 @@ public class ExtendedTargetsUI {
 			@Override
 			public String getName() {
 
-				return "Verify Target(s)";
+				return "Verify Target(s) Check";
 			}
 
 			@Override
@@ -360,7 +386,7 @@ public class ExtendedTargetsUI {
 			@Override
 			public String getName() {
 
-				return "Unverify Target(s)";
+				return "Verify Target(s) Uncheck";
 			}
 
 			@Override
@@ -384,13 +410,22 @@ public class ExtendedTargetsUI {
 			@Override
 			public void handleEvent(ExtendedTableViewer extendedTableViewer, KeyEvent e) {
 
-				if(e.keyCode == SWT.DEL) { // DEL
+				if(e.keyCode == SWT.DEL) {
+					/*
+					 * DEL
+					 */
 					deleteTargets();
-				} else if(e.keyCode == KEY_CODE_I && e.stateMask == SWT.CTRL) {
+				} else if(e.keyCode == KEY_CODE_I && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
 					if((e.stateMask & SWT.ALT) == SWT.ALT) {
-						verifyTargets(false); // CTRL + ALT + I
+						/*
+						 * CTRL + ALT + I
+						 */
+						verifyTargets(false);
 					} else {
-						verifyTargets(true); // CTRL + I
+						/*
+						 * CTRL + I
+						 */
+						verifyTargets(true);
 					}
 				} else {
 					propagateTarget();
@@ -421,9 +456,23 @@ public class ExtendedTargetsUI {
 			TableItem tableItem = table.getItem(index);
 			Object object = tableItem.getData();
 			if(object instanceof IIdentificationTarget) {
+				/*
+				 * Fire a target update event.
+				 */
 				IIdentificationTarget target = (IIdentificationTarget)object;
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 				eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
+				/*
+				 * Send the mass spectrum if available.
+				 */
+				IScanMSD massSpectrum = getMassSpectrum();
+				if(massSpectrum != null) {
+					map.clear();
+					IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
+					map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, massSpectrum);
+					map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, identificationTarget);
+					eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+				}
 			}
 		}
 	}
@@ -483,6 +532,11 @@ public class ExtendedTargetsUI {
 		}
 		//
 		targetsListUI.sortTable();
+		Table table = targetsListUI.getTable();
+		if(table.getItemCount() > 0) {
+			table.setSelection(0);
+			propagateTarget();
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -551,29 +605,65 @@ public class ExtendedTargetsUI {
 			//
 			if(object instanceof IScanMSD) {
 				IScanMSD scanMSD = (IScanMSD)object;
-				scanMSD.addTarget(new MassSpectrumTarget(libraryInformation, comparisonResult));
+				MassSpectrumTarget identificationTarget = new MassSpectrumTarget(libraryInformation, comparisonResult);
+				setIdentifier(identificationTarget);
+				scanMSD.addTarget(identificationTarget);
 			} else if(object instanceof IScanCSD) {
 				IScanCSD scanCSD = (IScanCSD)object;
-				scanCSD.addTarget(new ScanTargetCSD(libraryInformation, comparisonResult));
+				ScanTargetCSD identificationTarget = new ScanTargetCSD(libraryInformation, comparisonResult);
+				setIdentifier(identificationTarget);
+				scanCSD.addTarget(identificationTarget);
 			} else if(object instanceof IScanWSD) {
 				IScanWSD scanWSD = (IScanWSD)object;
-				scanWSD.addTarget(new ScanTargetWSD(libraryInformation, comparisonResult));
+				IScanTargetWSD identificationTarget = new ScanTargetWSD(libraryInformation, comparisonResult);
+				setIdentifier(identificationTarget);
+				scanWSD.addTarget(identificationTarget);
 			} else if(object instanceof IPeak) {
 				IPeak peak = (IPeak)object;
-				peak.addTarget(new PeakTarget(libraryInformation, comparisonResult));
+				IPeakTarget identificationTarget = new PeakTarget(libraryInformation, comparisonResult);
+				setIdentifier(identificationTarget);
+				peak.addTarget(identificationTarget);
 			} else if(object instanceof IChromatogramMSD) {
 				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)object;
-				chromatogramMSD.addTarget(new ChromatogramTargetMSD(libraryInformation, comparisonResult));
+				IChromatogramTargetMSD identificationTarget = new ChromatogramTargetMSD(libraryInformation, comparisonResult);
+				setIdentifier(identificationTarget);
+				chromatogramMSD.addTarget(identificationTarget);
 			} else if(object instanceof IChromatogramCSD) {
 				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)object;
-				chromatogramCSD.addTarget(new ChromatogramTargetCSD(libraryInformation, comparisonResult));
+				IChromatogramTargetCSD identificationTarget = new ChromatogramTargetCSD(libraryInformation, comparisonResult);
+				setIdentifier(identificationTarget);
+				chromatogramCSD.addTarget(identificationTarget);
 			} else if(object instanceof IChromatogramWSD) {
 				IChromatogramWSD chromatogramWSD = (IChromatogramWSD)object;
-				chromatogramWSD.addTarget(new ChromatogramTargetWSD(libraryInformation, comparisonResult));
+				IChromatogramTargetWSD identificationTarget = new ChromatogramTargetWSD(libraryInformation, comparisonResult);
+				setIdentifier(identificationTarget);
+				chromatogramWSD.addTarget(identificationTarget);
 			}
 			//
 			comboSubstanceName.setText("");
 			update(object);
 		}
+	}
+
+	/**
+	 * May return null.
+	 * 
+	 * @return IScanMSD
+	 */
+	private IScanMSD getMassSpectrum() {
+
+		if(object instanceof IScanMSD) {
+			return (IScanMSD)object;
+		} else if(object instanceof IPeakMSD) {
+			IPeakMSD peakMSD = (IPeakMSD)object;
+			return peakMSD.getExtractedMassSpectrum();
+		} else {
+			return null;
+		}
+	}
+
+	private void setIdentifier(IIdentificationTarget identificationTarget) {
+
+		identificationTarget.setIdentifier(IDENTIFIER_MANUAL);
 	}
 }
