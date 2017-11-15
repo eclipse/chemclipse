@@ -36,7 +36,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramTargetMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -528,6 +528,7 @@ public class ExtendedTargetsUI {
 			labelInfo.setText(ChromatogramSupport.getChromatogramLabel(chromatogramWSD));
 			targetsListUI.setInput(chromatogramWSD.getTargets());
 		} else {
+			labelInfo.setText("No target data has been selected yet.");
 			targetsListUI.clear();
 		}
 		//
@@ -564,7 +565,7 @@ public class ExtendedTargetsUI {
 
 		if(object instanceof IScanMSD) {
 			IScanMSD scanMSD = (IScanMSD)object;
-			scanMSD.removeTarget((IMassSpectrumTarget)target);
+			scanMSD.removeTarget((IScanTargetMSD)target);
 		} else if(object instanceof IScanCSD) {
 			IScanCSD scanCSD = (IScanCSD)object;
 			scanCSD.removeTarget((IScanTargetCSD)target);

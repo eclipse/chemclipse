@@ -24,6 +24,8 @@ public class ChromatogramSupport {
 		if(chromatogram != null) {
 			builder.append("Chromatogram: ");
 			builder.append(chromatogram.getName());
+		} else {
+			builder.append("No chromatogram has been selected yet.");
 		}
 		return builder.toString();
 	}

@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
@@ -136,7 +136,7 @@ public class MassSpectrumListTableComparator extends AbstractRecordTableComparat
 		return sortOrder;
 	}
 
-	private ILibraryInformation getLibraryInformation(List<IMassSpectrumTarget> targets) {
+	private ILibraryInformation getLibraryInformation(List<IScanTargetMSD> targets) {
 
 		ILibraryInformation libraryInformation = null;
 		targets = new ArrayList<>(targets);

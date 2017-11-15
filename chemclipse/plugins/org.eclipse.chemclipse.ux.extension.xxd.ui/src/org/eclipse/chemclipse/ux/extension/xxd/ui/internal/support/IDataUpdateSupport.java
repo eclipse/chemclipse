@@ -11,11 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
-import org.eclipse.chemclipse.model.core.IScan;
+public interface IDataUpdateSupport extends IUpdateSupport {
 
-public interface IScanUpdateSupport extends IUpdateSupport {
+	void updateObject(Object object);
 
-	void updateScan(IScan scan);
-
-	IScan getScan();
+	Object getObject();
 }

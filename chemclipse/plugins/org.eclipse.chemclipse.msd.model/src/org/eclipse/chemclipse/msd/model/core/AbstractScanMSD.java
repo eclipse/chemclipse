@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.model.core.AbstractScan;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonCombinedComparator;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonComparatorMode;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.IonIsNullException;
@@ -78,7 +78,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	/*
 	 * Targets and referenced mass spectra.
 	 */
-	private Set<IMassSpectrumTarget> targets;
+	private Set<IScanTargetMSD> targets;
 	private IScanMSD optimizedMassSpectrum;
 
 	public AbstractScanMSD() {
@@ -117,7 +117,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		 * class.
 		 */
 		createNewIonList();
-		targets = new HashSet<IMassSpectrumTarget>();
+		targets = new HashSet<IScanTargetMSD>();
 		try {
 			immutableZeroIon = new ImmutableZeroIon();
 			// TODO: in case of exception, immutableZeroIon will be null
@@ -594,7 +594,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	// ------------------------------------------IMassSpectrumTargets
 	// TODO JUnit
 	@Override
-	public void addTarget(IMassSpectrumTarget massSpectrumTarget) {
+	public void addTarget(IScanTargetMSD massSpectrumTarget) {
 
 		if(massSpectrumTarget != null) {
 			enforceLoadScanProxy();
@@ -603,14 +603,14 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	}
 
 	@Override
-	public void removeTarget(IMassSpectrumTarget massSpectrumTarget) {
+	public void removeTarget(IScanTargetMSD massSpectrumTarget) {
 
 		enforceLoadScanProxy();
 		targets.remove(massSpectrumTarget);
 	}
 
 	@Override
-	public void removeTargets(List<IMassSpectrumTarget> targetsToDelete) {
+	public void removeTargets(List<IScanTargetMSD> targetsToDelete) {
 
 		targets.removeAll(targetsToDelete);
 	}
@@ -623,14 +623,13 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	}
 
 	@Override
-	public List<IMassSpectrumTarget> getTargets() {
+	public List<IScanTargetMSD> getTargets() {
 
 		enforceLoadScanProxy();
-		List<IMassSpectrumTarget> targetList = new ArrayList<IMassSpectrumTarget>(targets);
+		List<IScanTargetMSD> targetList = new ArrayList<IScanTargetMSD>(targets);
 		return targetList;
 	}
 
-	// ------------------------------------------IMassSpectrumTargets
 	@Override
 	public boolean hasIons() {
 
@@ -650,7 +649,6 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		 */
 	}
 
-	// -----------------------------IMassSpectrumNormalizable
 	@Override
 	public boolean isNormalized() {
 

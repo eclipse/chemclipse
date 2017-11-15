@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
@@ -55,8 +55,8 @@ public class MassSpectrumListFilter extends ViewerFilter {
 		} else if(element instanceof IScanMSD) {
 			//
 			IScanMSD massSpectrum = (IScanMSD)element;
-			List<IMassSpectrumTarget> massSpectrumTargets = massSpectrum.getTargets();
-			for(IMassSpectrumTarget massSpectrumTarget : massSpectrumTargets) {
+			List<IScanTargetMSD> massSpectrumTargets = massSpectrum.getTargets();
+			for(IScanTargetMSD massSpectrumTarget : massSpectrumTargets) {
 				/*
 				 * Check if the target is an identification entry.
 				 */

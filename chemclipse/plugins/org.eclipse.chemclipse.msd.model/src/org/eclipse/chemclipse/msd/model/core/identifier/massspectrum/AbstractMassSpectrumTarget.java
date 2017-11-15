@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
-public abstract class AbstractMassSpectrumTarget extends AbstractIdentificationTarget implements IMassSpectrumTarget {
+public abstract class AbstractMassSpectrumTarget extends AbstractIdentificationTarget implements IScanTargetMSD {
 
 	/**
 	 * Renew the UUID on change.

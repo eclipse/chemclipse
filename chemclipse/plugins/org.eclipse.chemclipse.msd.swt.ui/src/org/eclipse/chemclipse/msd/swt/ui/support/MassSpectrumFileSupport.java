@@ -28,7 +28,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.msd.swt.ui.Activator;
@@ -117,7 +117,7 @@ public class MassSpectrumFileSupport {
 						 */
 						ILibraryInformation libraryInformation = peakTarget.getLibraryInformation();
 						IComparisonResult comparisonResult = peakTarget.getComparisonResult();
-						IMassSpectrumTarget massSpectrumTarget = new MassSpectrumTarget(libraryInformation, comparisonResult);
+						IScanTargetMSD massSpectrumTarget = new MassSpectrumTarget(libraryInformation, comparisonResult);
 						massSpectrumTarget.setIdentifier(peakTarget.getIdentifier());
 						massSpectrumTarget.setManuallyVerified(peakTarget.isManuallyVerified());
 						massSpectrum.addTarget(massSpectrumTarget);

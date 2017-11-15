@@ -28,6 +28,8 @@ public class PeakSupport {
 
 		StringBuilder builder = new StringBuilder();
 		if(peak != null) {
+			builder.append("Peak");
+			builder.append(" | ");
 			builder.append("Start RT: ");
 			builder.append(decimalFormat.format(peak.getPeakModel().getStartRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 			builder.append(" | ");
@@ -36,6 +38,8 @@ public class PeakSupport {
 			builder.append(" | ");
 			builder.append("Signal: ");
 			builder.append((int)peak.getIntegratedArea());
+		} else {
+			builder.append("No peak has been selected yet.");
 		}
 		return builder.toString();
 	}

@@ -30,7 +30,7 @@ import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonAbundanceComparator;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumLibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
@@ -92,18 +92,18 @@ public class TargetBuilder {
 		}
 	}
 
-	public IMassSpectrumTarget getMassSpectrumTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult, String identifier) {
+	public IScanTargetMSD getMassSpectrumTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult, String identifier) {
 
 		return getMassSpectrumTarget(reference, comparisonResult, identifier, "");
 	}
 
-	public IMassSpectrumTarget getMassSpectrumTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult, String identifier, String database) {
+	public IScanTargetMSD getMassSpectrumTarget(IScanMSD reference, IMassSpectrumComparisonResult comparisonResult, String identifier, String database) {
 
 		ILibraryInformation libraryInformation = new MassSpectrumLibraryInformation();
 		initializeLibraryInformation(libraryInformation, reference);
 		libraryInformation.setDatabase(database);
 		//
-		IMassSpectrumTarget identificationEntry = null;
+		IScanTargetMSD identificationEntry = null;
 		try {
 			identificationEntry = new MassSpectrumTarget(libraryInformation, comparisonResult);
 			identificationEntry.setIdentifier(identifier);
@@ -118,7 +118,7 @@ public class TargetBuilder {
 		try {
 			ILibraryInformation libraryInformation = getLibraryInformationUnknown(unknown.getIons());
 			IComparisonResult comparisonResult = getComparisonResultUnknown();
-			IMassSpectrumTarget massSpectrumTarget = new MassSpectrumTarget(libraryInformation, comparisonResult);
+			IScanTargetMSD massSpectrumTarget = new MassSpectrumTarget(libraryInformation, comparisonResult);
 			massSpectrumTarget.setIdentifier(identifier);
 			unknown.addTarget(massSpectrumTarget);
 		} catch(ReferenceMustNotBeNullException e) {

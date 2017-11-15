@@ -108,7 +108,7 @@ public class TaskQuickAccessPart {
 
 	private void createSelectedScansTask(Composite parent) {
 
-		String partId_1 = PartSupport.PARTDESCRIPTOR_SCAN_TARGETS;
+		String partId_1 = PartSupport.PARTDESCRIPTOR_TARGETS;
 		partMap.put(partId_1, PartSupport.PARTSTACK_BOTTOM_LEFT);
 		//
 		String partId_2 = PartSupport.PARTDESCRIPTOR_SCAN_CHART;

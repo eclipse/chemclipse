@@ -15,6 +15,7 @@ import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
@@ -31,9 +32,15 @@ public class ScanSupport {
 
 		StringBuilder builder = new StringBuilder();
 		if(scan != null) {
-			builder.append("Scan: ");
-			builder.append(scan.getScanNumber());
-			builder.append(" | ");
+			if(scan instanceof IPeakMassSpectrum) {
+				builder.append("Peak Scan");
+				builder.append(" | ");
+			} else {
+				builder.append("Scan: ");
+				builder.append(scan.getScanNumber());
+				builder.append(" | ");
+			}
+			//
 			builder.append("RT: ");
 			builder.append(decimalFormat.format(scan.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 			builder.append(" | ");
@@ -66,6 +73,8 @@ public class ScanSupport {
 					builder.append("optimized");
 				}
 			}
+		} else {
+			builder.append("No scan has been selected yet.");
 		}
 		return builder.toString();
 	}

@@ -13,15 +13,16 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractScanUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IScanUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedScanChartUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
-public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpdateSupport {
+public class ScanChartPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
 	private ExtendedScanChartUI extendedScanChartUI;
 
@@ -34,12 +35,21 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 	@Focus
 	public void setFocus() {
 
-		updateScan(getScan());
+		updateObject(getObject());
 	}
 
 	@Override
-	public void updateScan(IScan scan) {
+	public void updateObject(Object object) {
 
+		IScan scan = null;
+		//
+		if(object instanceof IScan) {
+			scan = (IScan)object;
+		} else if(object instanceof IPeak) {
+			IPeak peak = (IPeak)object;
+			scan = peak.getPeakModel().getPeakMaximum();
+		}
+		//
 		extendedScanChartUI.update(scan);
 	}
 }

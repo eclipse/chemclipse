@@ -35,8 +35,8 @@ public class PartSupport {
 	public static final String PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramOverviewPartDescriptor";
 	public static final String PARTDESCRIPTOR_SCAN_CHART = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanChartPartDescriptor";
 	public static final String PARTDESCRIPTOR_SCAN_TABLE = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanTablePartDescriptor";
-	public static final String PARTDESCRIPTOR_SCAN_TARGETS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanTargetsPartDescriptor";
-	public static final String PARTDESCRIPTOR_PEAK_CHART = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.peakShapeChartPartDescriptor";
+	public static final String PARTDESCRIPTOR_TARGETS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.targetsPartDescriptor";
+	public static final String PARTDESCRIPTOR_PEAK_CHART = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.peakChartPartDescriptor";
 	public static final String PARTDESCRIPTOR_CHROMATOGRAM_TARGETS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramTargetsPartDescriptor";
 	//
 	public static final String PARTSTACK_QUICKACCESS = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.quickaccess";

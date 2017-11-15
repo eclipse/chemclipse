@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuCategories;
@@ -244,7 +244,7 @@ public abstract class AbstractTargetsView {
 				tableViewer.refresh();
 				//
 			} else if(input instanceof IScanMSD) {
-				List<IMassSpectrumTarget> targetsToRemove = getMassSpectrumTargetList(table, indices);
+				List<IScanTargetMSD> targetsToRemove = getMassSpectrumTargetList(table, indices);
 				IScanMSD scan = (IScanMSD)input;
 				scan.removeTargets(targetsToRemove);
 				tableViewer.refresh();
@@ -280,25 +280,25 @@ public abstract class AbstractTargetsView {
 			tableViewer.refresh();
 			//
 		} else if(input instanceof IScanMSD) {
-			List<IMassSpectrumTarget> massSpectrumTargets = getMassSpectrumTargetList(table, indices);
-			for(IMassSpectrumTarget massSpectrumTarget : massSpectrumTargets) {
+			List<IScanTargetMSD> massSpectrumTargets = getMassSpectrumTargetList(table, indices);
+			for(IScanTargetMSD massSpectrumTarget : massSpectrumTargets) {
 				massSpectrumTarget.setManuallyVerified(true);
 			}
 			tableViewer.refresh();
 		}
 	}
 
-	private List<IMassSpectrumTarget> getMassSpectrumTargetList(Table table, int[] indices) {
+	private List<IScanTargetMSD> getMassSpectrumTargetList(Table table, int[] indices) {
 
-		List<IMassSpectrumTarget> targetList = new ArrayList<IMassSpectrumTarget>();
+		List<IScanTargetMSD> targetList = new ArrayList<IScanTargetMSD>();
 		for(int index : indices) {
 			/*
 			 * Get the selected item.
 			 */
 			TableItem tableItem = table.getItem(index);
 			Object object = tableItem.getData();
-			if(object instanceof IMassSpectrumTarget) {
-				IMassSpectrumTarget target = (IMassSpectrumTarget)object;
+			if(object instanceof IScanTargetMSD) {
+				IScanTargetMSD target = (IScanTargetMSD)object;
 				targetList.add(target);
 			}
 		}

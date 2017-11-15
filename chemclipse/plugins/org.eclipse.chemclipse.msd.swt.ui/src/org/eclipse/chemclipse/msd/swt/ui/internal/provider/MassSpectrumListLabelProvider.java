@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
@@ -180,7 +180,7 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 		return text;
 	}
 
-	private ILibraryInformation getLibraryInformation(List<IMassSpectrumTarget> targets) {
+	private ILibraryInformation getLibraryInformation(List<IScanTargetMSD> targets) {
 
 		ILibraryInformation libraryInformation = null;
 		targets = new ArrayList<>(targets);

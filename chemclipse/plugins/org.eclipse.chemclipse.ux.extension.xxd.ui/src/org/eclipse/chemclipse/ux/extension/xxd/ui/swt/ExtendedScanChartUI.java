@@ -90,13 +90,14 @@ public class ExtendedScanChartUI {
 	private Button buttonScanIdentifier;
 	//
 	private IScan scan;
-	private IScanMSD clonedMassSpectrum;
+	private IScanMSD originalScan;
+	private IScanMSD optimizedScan;
 	//
 	private boolean isScanPinned = false;
-	private List<String> massSpectrumFilterIds;
-	private String[] massSpectrumFilterNames;
-	private List<String> massSpectrumIdentifierIds;
-	private String[] massSpectrumIdentifierNames;
+	private List<String> scanFilterIds;
+	private String[] scanFilterNames;
+	private List<String> scanIdentifierIds;
+	private String[] scanIdentifierNames;
 	//
 	private String[] detectorTypesDefault;
 	private String[] detectorTypesMSD;
@@ -122,16 +123,20 @@ public class ExtendedScanChartUI {
 
 	public void update(IScan scan) {
 
-		this.scan = scan;
-		updateScan();
+		if(!isScanPinned) {
+			this.scan = scan;
+			updateScan();
+		}
 	}
 
 	private void updateScan() {
 
-		labelScan.setText(ScanSupport.getScanLabel(scan));
-		enableIdentifierSettings(scan);
-		setDetectorSignalType(scan);
-		scanChart.setInput(scan);
+		if(!isScanPinned) {
+			labelScan.setText(ScanSupport.getScanLabel(scan));
+			enableIdentifierSettings(scan);
+			setDetectorSignalType(scan);
+			scanChart.setInput(scan);
+		}
 	}
 
 	private void initializeSettings() {
@@ -176,11 +181,11 @@ public class ExtendedScanChartUI {
 
 		try {
 			IMassSpectrumFilterSupport massSpectrumFilterSupport = MassSpectrumFilter.getMassSpectrumFilterSupport();
-			massSpectrumFilterIds = massSpectrumFilterSupport.getAvailableFilterIds();
-			massSpectrumFilterNames = massSpectrumFilterSupport.getFilterNames();
+			scanFilterIds = massSpectrumFilterSupport.getAvailableFilterIds();
+			scanFilterNames = massSpectrumFilterSupport.getFilterNames();
 		} catch(NoMassSpectrumFilterSupplierAvailableException e) {
-			massSpectrumFilterIds = new ArrayList<String>();
-			massSpectrumFilterNames = new String[0];
+			scanFilterIds = new ArrayList<String>();
+			scanFilterNames = new String[0];
 		}
 	}
 
@@ -188,11 +193,11 @@ public class ExtendedScanChartUI {
 
 		try {
 			IMassSpectrumIdentifierSupport massSpectrumIdentifierSupport = MassSpectrumIdentifier.getMassSpectrumIdentifierSupport();
-			massSpectrumIdentifierIds = massSpectrumIdentifierSupport.getAvailableIdentifierIds();
-			massSpectrumIdentifierNames = massSpectrumIdentifierSupport.getIdentifierNames();
+			scanIdentifierIds = massSpectrumIdentifierSupport.getAvailableIdentifierIds();
+			scanIdentifierNames = massSpectrumIdentifierSupport.getIdentifierNames();
 		} catch(NoIdentifierAvailableException e) {
-			massSpectrumIdentifierIds = new ArrayList<String>();
-			massSpectrumIdentifierNames = new String[0];
+			scanIdentifierIds = new ArrayList<String>();
+			scanIdentifierNames = new String[0];
 		}
 	}
 
@@ -260,7 +265,7 @@ public class ExtendedScanChartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(clonedMassSpectrum != null) {
+				if(optimizedScan != null) {
 					String viewId = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.part.sessionSubtractMassSpectrum";
 					List<String> views = new ArrayList<String>();
 					views.add(viewId);
@@ -274,7 +279,7 @@ public class ExtendedScanChartUI {
 					 */
 					IScanMSD massSpectrum1 = PreferenceSupplier.getSessionSubtractMassSpectrum();
 					boolean useNormalize = PreferenceSupplier.isUseNormalize();
-					IScanMSD normalizedMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, clonedMassSpectrum, null, useNormalize);
+					IScanMSD normalizedMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, optimizedScan, null, useNormalize);
 					PreferenceSupplier.setSessionSubtractMassSpectrum(normalizedMassSpectrum);
 					/*
 					 * Update all listeners
@@ -291,7 +296,7 @@ public class ExtendedScanChartUI {
 
 		Combo combo = new Combo(parent, SWT.NONE);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		combo.setItems(massSpectrumFilterNames);
+		combo.setItems(scanFilterNames);
 		return combo;
 	}
 
@@ -305,16 +310,16 @@ public class ExtendedScanChartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				int index = comboScanFilter.getSelectionIndex();
-				if(index >= 0 && index < massSpectrumFilterIds.size()) {
-					String filterId = massSpectrumFilterIds.get(index);
-					if(clonedMassSpectrum != null) {
+				if(index >= 0 && index < scanFilterIds.size()) {
+					String filterId = scanFilterIds.get(index);
+					if(optimizedScan != null) {
 						/*
 						 * Clear all identification results and
 						 * then run apply the filter.
 						 */
-						clonedMassSpectrum.getTargets().clear();
-						MassSpectrumFilter.applyFilter(clonedMassSpectrum, filterId, new NullProgressMonitor());
-						updateAfterProcessing();
+						optimizedScan.getTargets().clear();
+						MassSpectrumFilter.applyFilter(optimizedScan, filterId, new NullProgressMonitor());
+						scanChart.setInput(optimizedScan);
 					}
 				}
 			}
@@ -325,7 +330,7 @@ public class ExtendedScanChartUI {
 	private Combo createScanIdentifierCombo(Composite parent) {
 
 		Combo combo = new Combo(parent, SWT.NONE);
-		combo.setItems(massSpectrumIdentifierNames);
+		combo.setItems(scanIdentifierNames);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		return combo;
 	}
@@ -339,54 +344,44 @@ public class ExtendedScanChartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(scan instanceof IScanMSD) {
-					IScanMSD scanMSD = (IScanMSD)scan;
+				if(originalScan != null && optimizedScan != null) {
 					int index = comboScanIdentifier.getSelectionIndex();
-					if(index >= 0 && index < massSpectrumIdentifierIds.size()) {
-						final String identifierId = massSpectrumIdentifierIds.get(index);
-						if(clonedMassSpectrum != null) {
-							IRunnableWithProgress runnable = new IRunnableWithProgress() {
+					if(index >= 0 && index < scanIdentifierIds.size()) {
+						final String identifierId = scanIdentifierIds.get(index);
+						IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
-								@Override
-								public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+							@Override
+							public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-									try {
-										monitor.beginTask("Mass Spectrum Identification", IProgressMonitor.UNKNOWN);
-										MassSpectrumIdentifier.identify(clonedMassSpectrum, identifierId, monitor);
-										scanMSD.setOptimizedMassSpectrum(clonedMassSpectrum);
-										/*
-										 * Update all listeners
-										 */
-										IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-										eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scanMSD.getOptimizedMassSpectrum());
-									} finally {
-										monitor.done();
-									}
+								try {
+									monitor.beginTask("Scan Identification", IProgressMonitor.UNKNOWN);
+									MassSpectrumIdentifier.identify(optimizedScan, identifierId, monitor);
+									originalScan.setOptimizedMassSpectrum(optimizedScan);
+									//
+									IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+									eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, originalScan.getOptimizedMassSpectrum());
+								} finally {
+									monitor.done();
 								}
-							};
-							ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-							try {
-								/*
-								 * Use true, true ... instead of false, true ... if the progress bar
-								 * should be shown in action.
-								 */
-								monitor.run(true, true, runnable);
-							} catch(InvocationTargetException e1) {
-								logger.warn(e1);
-							} catch(InterruptedException e1) {
-								logger.warn(e1);
 							}
+						};
+						ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+						try {
+							/*
+							 * Use true, true ... instead of false, true ... if the progress bar
+							 * should be shown in action.
+							 */
+							monitor.run(true, true, runnable);
+						} catch(InvocationTargetException e1) {
+							logger.warn(e1);
+						} catch(InterruptedException e1) {
+							logger.warn(e1);
 						}
 					}
 				}
 			}
 		});
 		return button;
-	}
-
-	private void updateAfterProcessing() {
-
-		update(clonedMassSpectrum);
 	}
 
 	private void setPinButtonText() {
@@ -571,7 +566,7 @@ public class ExtendedScanChartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				try {
-					MassSpectrumFileSupport.saveMassSpectrum(clonedMassSpectrum);
+					MassSpectrumFileSupport.saveMassSpectrum(optimizedScan);
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
 				}
@@ -638,21 +633,26 @@ public class ExtendedScanChartUI {
 
 		if(scan instanceof IScanMSD) {
 			enableToolbarButtons(true);
+			IScanMSD scanMSD = (IScanMSD)scan;
+			IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
+			if(optimizedMassSpectrum != null) {
+				buttonOptimizedScan.setEnabled(true);
+			} else {
+				buttonOptimizedScan.setEnabled(false);
+			}
+			/*
+			 * Clone
+			 */
 			try {
-				IScanMSD scanMSD = (IScanMSD)scan;
-				IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
-				if(optimizedMassSpectrum != null) {
-					buttonOptimizedScan.setEnabled(true);
-				} else {
-					buttonOptimizedScan.setEnabled(false);
-				}
-				clonedMassSpectrum = scanMSD.makeDeepCopy();
+				originalScan = scanMSD;
+				optimizedScan = originalScan.makeDeepCopy();
 			} catch(CloneNotSupportedException e) {
 				logger.warn(e);
 			}
 		} else {
 			enableToolbarButtons(false);
-			clonedMassSpectrum = null;
+			originalScan = null;
+			optimizedScan = null;
 		}
 	}
 

@@ -26,21 +26,21 @@ public interface IMassSpectrumTargets {
 	 * 
 	 * @param peakTarget
 	 */
-	void addTarget(IMassSpectrumTarget massSpectrumTarget);
+	void addTarget(IScanTargetMSD massSpectrumTarget);
 
 	/**
 	 * Remove a target from the mass spectrum.
 	 * 
 	 * @param peakTarget
 	 */
-	void removeTarget(IMassSpectrumTarget massSpectrumTarget);
+	void removeTarget(IScanTargetMSD massSpectrumTarget);
 
 	/**
 	 * Remove the targets from the mass spectrum
 	 * 
 	 * @param peakTarget
 	 */
-	void removeTargets(List<IMassSpectrumTarget> targetsToDelete);
+	void removeTargets(List<IScanTargetMSD> targetsToDelete);
 
 	/**
 	 * Removes all targets from the mass spectrum.
@@ -52,5 +52,5 @@ public interface IMassSpectrumTargets {
 	 * 
 	 * @return List<IMassSpectrumTarget>
 	 */
-	List<IMassSpectrumTarget> getTargets();
+	List<IScanTargetMSD> getTargets();
 }

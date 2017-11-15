@@ -13,9 +13,10 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractScanUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IScanUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ScanListUI;
 import org.eclipse.e4.ui.di.Focus;
@@ -26,7 +27,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-public class ScanTablePart extends AbstractScanUpdateSupport implements IScanUpdateSupport {
+public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
 	private Label labelScan;
 	private ScanListUI scanListUI;
@@ -40,11 +41,21 @@ public class ScanTablePart extends AbstractScanUpdateSupport implements IScanUpd
 	@Focus
 	public void setFocus() {
 
+		updateObject(getObject());
 	}
 
 	@Override
-	public void updateScan(IScan scan) {
+	public void updateObject(Object object) {
 
+		IScan scan = null;
+		//
+		if(object instanceof IScan) {
+			scan = (IScan)object;
+		} else if(object instanceof IPeak) {
+			IPeak peak = (IPeak)object;
+			scan = peak.getPeakModel().getPeakMaximum();
+		}
+		//
 		labelScan.setText(ScanSupport.getScanLabel(scan));
 		scanListUI.setInput(scan);
 	}

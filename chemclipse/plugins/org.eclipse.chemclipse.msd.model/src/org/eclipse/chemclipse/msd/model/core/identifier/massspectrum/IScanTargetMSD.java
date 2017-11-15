@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.msd.model.core.identifier.massspectrum;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
-public interface IMassSpectrumTarget extends IIdentificationTarget {
+public interface IScanTargetMSD extends IIdentificationTarget {
 
 	/**
 	 * Returns the parent mass spectrum of the actual target.<br/>
