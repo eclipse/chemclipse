@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 
@@ -42,19 +43,29 @@ public class ScanSupport {
 			} else {
 				builder.append(decimalFormat.format(scan.getRetentionIndex()));
 			}
-			builder.append(" | ");
 			//
 			if(scan instanceof IRegularMassSpectrum) {
 				IRegularMassSpectrum massSpectrum = (IRegularMassSpectrum)scan;
+				builder.append(" | ");
 				builder.append("Detector: MS");
 				builder.append(massSpectrum.getMassSpectrometer());
 				builder.append(" | ");
 				builder.append("Type: ");
 				builder.append(massSpectrum.getMassSpectrumTypeDescription());
-				builder.append(" | ");
 			}
+			//
+			builder.append(" | ");
 			builder.append("Signal: ");
 			builder.append((int)scan.getTotalSignal());
+			//
+			if(scan instanceof IScanMSD) {
+				IScanMSD scanMSD = (IScanMSD)scan;
+				IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
+				if(optimizedMassSpectrum != null) {
+					builder.append(" | ");
+					builder.append("optimized");
+				}
+			}
 		}
 		return builder.toString();
 	}

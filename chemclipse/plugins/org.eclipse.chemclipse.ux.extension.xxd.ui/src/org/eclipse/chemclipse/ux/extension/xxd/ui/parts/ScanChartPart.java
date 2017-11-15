@@ -31,11 +31,11 @@ import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ScanChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractScanUpdateSupport;
@@ -77,6 +77,7 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 	private Composite toolbarIdentify;
 	private Label labelScan;
 	private Button buttonSaveScan;
+	private Button buttonOptimizedScan;
 	private ScanChart scanChart;
 	//
 	private Combo comboDetectorType;
@@ -89,7 +90,6 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 	private Combo comboScanIdentifier;
 	private Button buttonScanIdentifier;
 	//
-	private IScanMSD originalMassSpectrum;
 	private IScanMSD clonedMassSpectrum;
 	//
 	private boolean isScanPinned = false;
@@ -111,17 +111,10 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 	@Inject
 	public ScanChartPart(Composite parent, MPart part) {
 		super(part);
-		//
-		detectorTypesDefault = new String[]{DataType.AUTO_DETECT.toString()};
-		detectorTypesMSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.MSD_NOMINAL.toString(), DataType.MSD_TANDEM.toString(), DataType.MSD_HIGHRES.toString()};
-		detectorTypesCSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.CSD.toString()};
-		detectorTypesWSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.WSD.toString()};
-		//
-		signalTypesDefault = new String[]{SignalType.AUTO_DETECT.toString()};
-		signalTypesMSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
-		signalTypesCSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString()};
-		signalTypesWSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
-		//
+		initializeDetectorTypes();
+		initializeSignalTypes();
+		initializeScanFilter();
+		initializeScanIdentifier();
 		initialize(parent);
 	}
 
@@ -144,8 +137,6 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 
 		parent.setLayout(new GridLayout(1, true));
 		//
-		setFilterAndIdentifier();
-		//
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
 		toolbarIdentify = createToolbarIdentify(parent);
@@ -156,11 +147,24 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 		PartSupport.setCompositeVisibility(toolbarIdentify, false);
 	}
 
-	private void setFilterAndIdentifier() {
+	private void initializeDetectorTypes() {
 
-		/*
-		 * Mass Spectrum Filter
-		 */
+		detectorTypesDefault = new String[]{DataType.AUTO_DETECT.toString()};
+		detectorTypesMSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.MSD_NOMINAL.toString(), DataType.MSD_TANDEM.toString(), DataType.MSD_HIGHRES.toString()};
+		detectorTypesCSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.CSD.toString()};
+		detectorTypesWSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.WSD.toString()};
+	}
+
+	private void initializeSignalTypes() {
+
+		signalTypesDefault = new String[]{SignalType.AUTO_DETECT.toString()};
+		signalTypesMSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
+		signalTypesCSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString()};
+		signalTypesWSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
+	}
+
+	private void initializeScanFilter() {
+
 		try {
 			IMassSpectrumFilterSupport massSpectrumFilterSupport = MassSpectrumFilter.getMassSpectrumFilterSupport();
 			massSpectrumFilterIds = massSpectrumFilterSupport.getAvailableFilterIds();
@@ -169,9 +173,10 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 			massSpectrumFilterIds = new ArrayList<String>();
 			massSpectrumFilterNames = new String[0];
 		}
-		/*
-		 * Mass Spectrum Identifier
-		 */
+	}
+
+	private void initializeScanIdentifier() {
+
 		try {
 			IMassSpectrumIdentifierSupport massSpectrumIdentifierSupport = MassSpectrumIdentifier.getMassSpectrumIdentifierSupport();
 			massSpectrumIdentifierIds = massSpectrumIdentifierSupport.getAvailableIdentifierIds();
@@ -188,7 +193,7 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(8, false));
+		composite.setLayout(new GridLayout(9, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		comboDetectorType = createDetectorType(composite);
@@ -197,7 +202,8 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 		createToggleChartLegendButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
-		createSaveButton(composite);
+		buttonSaveScan = createSaveButton(composite);
+		buttonOptimizedScan = createOptimizedScanButton(composite);
 	}
 
 	private Composite createToolbarIdentify(Composite parent) {
@@ -324,36 +330,44 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				int index = comboScanIdentifier.getSelectionIndex();
-				if(index >= 0 && index < massSpectrumIdentifierIds.size()) {
-					final String identifierId = massSpectrumIdentifierIds.get(index);
-					if(clonedMassSpectrum != null) {
-						IRunnableWithProgress runnable = new IRunnableWithProgress() {
+				IScan scan = getScan();
+				if(scan instanceof IScanMSD) {
+					IScanMSD scanMSD = (IScanMSD)scan;
+					int index = comboScanIdentifier.getSelectionIndex();
+					if(index >= 0 && index < massSpectrumIdentifierIds.size()) {
+						final String identifierId = massSpectrumIdentifierIds.get(index);
+						if(clonedMassSpectrum != null) {
+							IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
-							@Override
-							public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+								@Override
+								public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-								try {
-									monitor.beginTask("Mass Spectrum Identification", IProgressMonitor.UNKNOWN);
-									MassSpectrumIdentifier.identify(clonedMassSpectrum, identifierId, monitor);
-									MassSpectrumSelectionUpdateNotifier.fireUpdateChange(clonedMassSpectrum, true);
-									originalMassSpectrum.setOptimizedMassSpectrum(clonedMassSpectrum);
-								} finally {
-									monitor.done();
+									try {
+										monitor.beginTask("Mass Spectrum Identification", IProgressMonitor.UNKNOWN);
+										MassSpectrumIdentifier.identify(clonedMassSpectrum, identifierId, monitor);
+										scanMSD.setOptimizedMassSpectrum(clonedMassSpectrum);
+										/*
+										 * Update all listeners
+										 */
+										IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+										eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scanMSD.getOptimizedMassSpectrum());
+									} finally {
+										monitor.done();
+									}
 								}
+							};
+							ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+							try {
+								/*
+								 * Use true, true ... instead of false, true ... if the progress bar
+								 * should be shown in action.
+								 */
+								monitor.run(true, true, runnable);
+							} catch(InvocationTargetException e1) {
+								logger.warn(e1);
+							} catch(InterruptedException e1) {
+								logger.warn(e1);
 							}
-						};
-						ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-						try {
-							/*
-							 * Use true, true ... instead of false, true ... if the progress bar
-							 * should be shown in action.
-							 */
-							monitor.run(true, true, runnable);
-						} catch(InvocationTargetException e1) {
-							logger.warn(e1);
-						} catch(InterruptedException e1) {
-							logger.warn(e1);
 						}
 					}
 				}
@@ -466,6 +480,7 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 	private void enableToolbarButtons(boolean enabled) {
 
 		buttonSaveScan.setEnabled(enabled);
+		buttonOptimizedScan.setEnabled(enabled);
 		//
 		toolbarIdentify.setEnabled(enabled);
 		buttonPinScan.setEnabled(enabled);
@@ -537,11 +552,12 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 		});
 	}
 
-	private void createSaveButton(Composite parent) {
+	private Button createSaveButton(Composite parent) {
 
-		buttonSaveScan = new Button(parent, SWT.PUSH);
-		buttonSaveScan.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImage.SIZE_16x16));
-		buttonSaveScan.addSelectionListener(new SelectionAdapter() {
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Save the scan.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -553,6 +569,31 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 				}
 			}
 		});
+		return button;
+	}
+
+	private Button createOptimizedScanButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Show optimized scan.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PLUS, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IScan scan = getScan();
+				if(scan instanceof IScanMSD) {
+					IScanMSD scanMSD = (IScanMSD)scan;
+					IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
+					if(optimizedMassSpectrum != null) {
+						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+						eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, optimizedMassSpectrum);
+					}
+				}
+			}
+		});
+		return button;
 	}
 
 	private void reset() {
@@ -592,14 +633,18 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 			enableToolbarButtons(true);
 			try {
 				IScanMSD scanMSD = (IScanMSD)scan;
-				originalMassSpectrum = scanMSD;
+				IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
+				if(optimizedMassSpectrum != null) {
+					buttonOptimizedScan.setEnabled(true);
+				} else {
+					buttonOptimizedScan.setEnabled(false);
+				}
 				clonedMassSpectrum = scanMSD.makeDeepCopy();
 			} catch(CloneNotSupportedException e) {
 				logger.warn(e);
 			}
 		} else {
 			enableToolbarButtons(false);
-			originalMassSpectrum = null;
 			clonedMassSpectrum = null;
 		}
 	}
