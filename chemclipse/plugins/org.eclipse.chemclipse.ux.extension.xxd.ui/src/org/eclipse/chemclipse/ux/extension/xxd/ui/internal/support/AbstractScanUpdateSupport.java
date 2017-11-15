@@ -16,10 +16,13 @@ import java.util.List;
 
 import javax.annotation.PreDestroy;
 
+import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.osgi.service.event.Event;
@@ -59,12 +62,14 @@ public abstract class AbstractScanUpdateSupport extends AbstractUpdateSupport im
 	private void registerEventBroker(IEventBroker eventBroker) {
 
 		if(eventBroker != null) {
-			registeredEventHandler.add(registerEventHandlerFile(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_SCAN, IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION));
-			registeredEventHandler.add(registerEventHandlerFile(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_SCAN, IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION));
+			registeredEventHandler.add(registerScanHandler(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_SCAN, IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION));
+			registeredEventHandler.add(registerScanHandler(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_SCAN, IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION));
+			registeredEventHandler.add(registerEventHandlerFile(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_PEAK, IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION));
+			registeredEventHandler.add(registerEventHandlerFile(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_PEAK, IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION));
 		}
 	}
 
-	private EventHandler registerEventHandlerFile(IEventBroker eventBroker, String property, String topic) {
+	private EventHandler registerScanHandler(IEventBroker eventBroker, String property, String topic) {
 
 		EventHandler eventHandler = new EventHandler() {
 
@@ -77,7 +82,43 @@ public abstract class AbstractScanUpdateSupport extends AbstractUpdateSupport im
 						Object object = event.getProperty(property);
 						if(object instanceof IScan) {
 							setScan((IScan)object);
+						} else {
+							setScan(null);
 						}
+					}
+				} catch(Exception e) {
+					logger.warn(e);
+				}
+			}
+		};
+		eventBroker.subscribe(topic, eventHandler);
+		return eventHandler;
+	}
+
+	private EventHandler registerEventHandlerFile(IEventBroker eventBroker, String property, String topic) {
+
+		EventHandler eventHandler = new EventHandler() {
+
+			public void handleEvent(Event event) {
+
+				try {
+					if(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION.equals(topic)) {
+						setScan(null);
+					} else {
+						Object object = event.getProperty(property);
+						IScan scan = null;
+						if(object instanceof IPeakMSD) {
+							IPeakMSD peakMSD = (IPeakMSD)object;
+							scan = peakMSD.getPeakModel().getPeakMaximum();
+						} else if(object instanceof IPeakCSD) {
+							IPeakCSD peakCSD = (IPeakCSD)object;
+							scan = peakCSD.getPeakModel().getPeakMaximum();
+						} else if(object instanceof IPeakWSD) {
+							IPeakWSD peakWSD = (IPeakWSD)object;
+							scan = peakWSD.getPeakModel().getPeakMaximum();
+						}
+						//
+						setScan(scan);
 					}
 				} catch(Exception e) {
 					logger.warn(e);

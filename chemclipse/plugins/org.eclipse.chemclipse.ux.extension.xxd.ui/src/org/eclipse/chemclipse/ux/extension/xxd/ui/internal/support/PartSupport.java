@@ -36,10 +36,7 @@ public class PartSupport {
 	public static final String PARTDESCRIPTOR_SCAN_CHART = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanChartPartDescriptor";
 	public static final String PARTDESCRIPTOR_SCAN_TABLE = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanTablePartDescriptor";
 	public static final String PARTDESCRIPTOR_SCAN_TARGETS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanTargetsPartDescriptor";
-	public static final String PARTDESCRIPTOR_PEAK_SCAN_CHART = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.peakScanChartPartDescriptor";
-	public static final String PARTDESCRIPTOR_PEAK_SHAPE_CHART = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.peakShapeChartPartDescriptor";
-	public static final String PARTDESCRIPTOR_PEAK_TABLE = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.peakTablePartDescriptor";
-	public static final String PARTDESCRIPTOR_PEAK_TARGETS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.peakTargetsPartDescriptor";
+	public static final String PARTDESCRIPTOR_PEAK_CHART = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.peakShapeChartPartDescriptor";
 	public static final String PARTDESCRIPTOR_CHROMATOGRAM_TARGETS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramTargetsPartDescriptor";
 	//
 	public static final String PARTSTACK_QUICKACCESS = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.quickaccess";

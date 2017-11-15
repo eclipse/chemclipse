@@ -138,14 +138,8 @@ public class TaskQuickAccessPart {
 
 	private void createSelectedPeaksTask(Composite parent) {
 
-		String partId_1 = PartSupport.PARTDESCRIPTOR_PEAK_TARGETS;
-		partMap.put(partId_1, PartSupport.PARTSTACK_BOTTOM_LEFT);
-		//
-		String partId_2 = PartSupport.PARTDESCRIPTOR_PEAK_SCAN_CHART;
-		partMap.put(partId_2, PartSupport.PARTSTACK_BOTTOM_CENTER);
-		//
-		String partId_3 = PartSupport.PARTDESCRIPTOR_PEAK_TABLE;
-		partMap.put(partId_3, PartSupport.PARTSTACK_BOTTOM_RIGHT);
+		String partId_1 = PartSupport.PARTDESCRIPTOR_PEAK_CHART;
+		partMap.put(partId_1, PartSupport.PARTSTACK_BOTTOM_RIGHT);
 		//
 		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_PEAKS_ACTIVE, IApplicationImage.SIZE_16x16);
 		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_PEAKS_DEFAULT, IApplicationImage.SIZE_16x16);
@@ -160,8 +154,6 @@ public class TaskQuickAccessPart {
 			public void widgetSelected(SelectionEvent e) {
 
 				togglePartVisibility(button, partId_1, imageActive, imageDefault);
-				togglePartVisibility(button, partId_2, imageActive, imageDefault);
-				togglePartVisibility(button, partId_3, imageActive, imageDefault);
 			}
 		});
 	}

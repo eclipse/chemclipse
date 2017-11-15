@@ -47,13 +47,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-public class PeakShapeChartPart extends AbstractPeakUpdateSupport implements IPeakUpdateSupport {
+public class PeakChartPart extends AbstractPeakUpdateSupport implements IPeakUpdateSupport {
 
 	private Composite toolbarSettings;
 	private LineChart peakChart;
 
 	@Inject
-	public PeakShapeChartPart(Composite parent, MPart part) {
+	public PeakChartPart(Composite parent, MPart part) {
 		super(part);
 		initialize(parent);
 	}
