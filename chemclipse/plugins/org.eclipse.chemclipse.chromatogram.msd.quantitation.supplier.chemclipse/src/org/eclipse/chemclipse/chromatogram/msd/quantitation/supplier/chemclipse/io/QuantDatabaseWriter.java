@@ -37,7 +37,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntriesMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IConcentrationResponseEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationCompoundMSD;
@@ -234,9 +234,9 @@ public class QuantDatabaseWriter {
 		/*
 		 * Identification Results
 		 */
-		List<IMassSpectrumTarget> massSpectrumTargets = massSpectrum.getTargets();
+		List<IScanTargetMSD> massSpectrumTargets = massSpectrum.getTargets();
 		dataOutputStream.writeInt(massSpectrumTargets.size()); // Number Mass Spectrum Targets
-		for(IMassSpectrumTarget massSpectrumTarget : massSpectrumTargets) {
+		for(IScanTargetMSD massSpectrumTarget : massSpectrumTargets) {
 			if(massSpectrumTarget instanceof IIdentificationTarget) {
 				IIdentificationTarget identificationEntry = massSpectrumTarget;
 				writeIdentificationEntry(dataOutputStream, identificationEntry);
