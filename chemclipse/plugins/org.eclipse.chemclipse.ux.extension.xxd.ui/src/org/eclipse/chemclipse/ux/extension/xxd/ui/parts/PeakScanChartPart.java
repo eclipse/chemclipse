@@ -13,20 +13,24 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractScanUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IScanUpdateSupport;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractPeakUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IPeakUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedScanChartUI;
+import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
-public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpdateSupport {
+public class PeakScanChartPart extends AbstractPeakUpdateSupport implements IPeakUpdateSupport {
 
 	private ExtendedScanChartUI extendedScanChartUI;
 
 	@Inject
-	public ScanChartPart(Composite parent, MPart part) {
+	public PeakScanChartPart(Composite parent, MPart part) {
 		super(part);
 		extendedScanChartUI = new ExtendedScanChartUI(parent, part);
 	}
@@ -34,12 +38,25 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 	@Focus
 	public void setFocus() {
 
-		updateScan(getScan());
+		updatePeak(getPeak());
 	}
 
 	@Override
-	public void updateScan(IScan scan) {
+	public void updatePeak(IPeak peak) {
 
+		IScan scan = null;
+		if(peak != null) {
+			if(peak instanceof IPeakMSD) {
+				IPeakMSD peakMSD = (IPeakMSD)peak;
+				scan = peakMSD.getPeakModel().getPeakMaximum();
+			} else if(peak instanceof IPeakCSD) {
+				IPeakCSD peakCSD = (IPeakCSD)peak;
+				scan = peakCSD.getPeakModel().getPeakMaximum();
+			} else if(peak instanceof IPeakWSD) {
+				IPeakWSD peakWSD = (IPeakWSD)peak;
+				scan = peakWSD.getPeakModel().getPeakMaximum();
+			}
+		}
 		extendedScanChartUI.update(scan);
 	}
 }

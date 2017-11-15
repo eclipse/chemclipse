@@ -27,8 +27,10 @@ import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToMinuteConverter;
@@ -51,6 +53,7 @@ import org.eclipse.eavp.service.swtchart.exceptions.SeriesException;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Font;
@@ -70,7 +73,7 @@ public class ScanChart extends ScrollableChart {
 	private static final int LENGTH_HINT_DATA_POINTS = 5000;
 	private static final int COMPRESS_TO_LENGTH = Integer.MAX_VALUE;
 	//
-	private int numberOfHighestIntensitiesToLabel = 5;
+	private int labelHighestIntensities = 5;
 	private DecimalFormat defaultDecimalFormat = ValueFormat.getDecimalFormatEnglish();
 	private DecimalFormat decimalFormatQ3 = ValueFormat.getDecimalFormatEnglish("0.0");
 	//
@@ -110,7 +113,7 @@ public class ScanChart extends ScrollableChart {
 			/*
 			 * Positive
 			 */
-			limit = numberOfHighestIntensitiesToLabel;
+			limit = labelHighestIntensities;
 			for(int i = 0; i < limit; i++) {
 				if(i < barSeriesSize) {
 					BarSeriesValue barSeriesValue = barSeriesValues.get(i);
@@ -120,7 +123,7 @@ public class ScanChart extends ScrollableChart {
 			/*
 			 * Negative
 			 */
-			limit = barSeriesValues.size() - numberOfHighestIntensitiesToLabel;
+			limit = barSeriesValues.size() - labelHighestIntensities;
 			limit = (limit < 0) ? 0 : limit;
 			for(int i = barSeriesValues.size() - 1; i >= limit; i--) {
 				BarSeriesValue barSeriesValue = barSeriesValues.get(i);
@@ -295,17 +298,22 @@ public class ScanChart extends ScrollableChart {
 
 	private void modifyChart(DataType dataType) {
 
-		String name = "Ubuntu";
-		int height = 11;
-		int style = SWT.NORMAL;
+		/*
+		 * Preferences
+		 */
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		String name = preferenceStore.getString(PreferenceConstants.P_SCAN_LABEL_FONT_NAME);
+		int height = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_FONT_SIZE);
+		int style = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_FONT_STYLE);
 		fontId = name + height + style;
 		if(!fonts.containsKey(fontId)) {
 			Font font = new Font(Display.getDefault(), name, height, style);
 			fonts.put(fontId, font);
 		}
-		//
-		numberOfHighestIntensitiesToLabel = 5;
-		//
+		labelHighestIntensities = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_HIGHEST_INTENSITIES);
+		/*
+		 * Settings
+		 */
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.setCreateMenu(true);
 		//

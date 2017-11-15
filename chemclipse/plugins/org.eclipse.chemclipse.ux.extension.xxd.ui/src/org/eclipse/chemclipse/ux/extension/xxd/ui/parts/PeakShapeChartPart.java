@@ -29,9 +29,9 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
-import org.eclipse.eavp.service.swtchart.customcharts.ChromatogramChart;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
+import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
 import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -47,13 +47,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-public class PeakChartPart extends AbstractPeakUpdateSupport implements IPeakUpdateSupport {
+public class PeakShapeChartPart extends AbstractPeakUpdateSupport implements IPeakUpdateSupport {
 
 	private Composite toolbarSettings;
-	private ChromatogramChart peakChart;
+	private LineChart peakChart;
 
 	@Inject
-	public PeakChartPart(Composite parent, MPart part) {
+	public PeakShapeChartPart(Composite parent, MPart part) {
 		super(part);
 		initialize(parent);
 	}
@@ -106,7 +106,7 @@ public class PeakChartPart extends AbstractPeakUpdateSupport implements IPeakUpd
 		//
 		createToolbarMain(parent);
 		toolbarSettings = createToolbarSettings(parent);
-		createScanChart(parent);
+		createPeakChart(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarSettings, false);
 	}
@@ -235,9 +235,9 @@ public class PeakChartPart extends AbstractPeakUpdateSupport implements IPeakUpd
 		});
 	}
 
-	private void createScanChart(Composite parent) {
+	private void createPeakChart(Composite parent) {
 
-		peakChart = new ChromatogramChart(parent, SWT.BORDER);
+		peakChart = new LineChart(parent, SWT.BORDER);
 		peakChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Chart Settings

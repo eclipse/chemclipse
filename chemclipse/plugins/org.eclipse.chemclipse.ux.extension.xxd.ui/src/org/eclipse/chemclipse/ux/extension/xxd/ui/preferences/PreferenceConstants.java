@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.swt.SWT;
 import org.swtchart.LineStyle;
 
 public class PreferenceConstants {
@@ -42,6 +43,24 @@ public class PreferenceConstants {
 	/*
 	 * Scans
 	 */
+	public static final String P_SCAN_LABEL_FONT_NAME = "scanLabelFontName";
+	public static final String DEF_SCAN_LABEL_FONT_NAME = "Ubuntu";
+	public static final String P_SCAN_LABEL_FONT_SIZE = "scanLabelFontSize";
+	public static final int MIN_SCAN_LABEL_FONT_SIZE = 1;
+	public static final int MAX_SCAN_LABEL_FONT_SIZE = 72;
+	public static final int DEF_SCAN_LABEL_FONT_SIZE = 11;
+	public static final String P_SCAN_LABEL_FONT_STYLE = "scanLabelFontStyle";
+	public static final int DEF_SCAN_LABEL_FONT_STYLE = SWT.NORMAL;
+	public static final String P_SCAN_LABEL_HIGHEST_INTENSITIES = "scanLabelHighestIntensities";
+	public static final int MIN_SCAN_LABEL_HIGHEST_INTENSITIES = 1;
+	public static final int MAX_SCAN_LABEL_HIGHEST_INTENSITIES = 32;
+	public static final int DEF_SCAN_LABEL_HIGHEST_INTENSITIES = 5;
+	//
+	public static String[][] FONT_STYLES = new String[][]{//
+			{"Normal", Integer.toString(SWT.NORMAL)}, //
+			{"Bold", Integer.toString(SWT.BOLD)}, //
+			{"Italic", Integer.toString(SWT.ITALIC)}//
+	};
 	/*
 	 * Peaks
 	 */
