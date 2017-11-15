@@ -17,6 +17,8 @@ import java.util.List;
 import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -24,25 +26,25 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport implements IDataUpdateSupport {
+public abstract class AbstractSubtractUpdateSupport extends AbstractUpdateSupport implements ISubtractUpdateSupport {
 
-	private static final Logger logger = Logger.getLogger(AbstractDataUpdateSupport.class);
+	private static final Logger logger = Logger.getLogger(AbstractSubtractUpdateSupport.class);
 	//
-	private static Object object;
+	private static IScan scan;
 	//
 	private IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 	private List<EventHandler> registeredEventHandler;
 
-	public AbstractDataUpdateSupport(MPart part) {
+	public AbstractSubtractUpdateSupport(MPart part) {
 		super(part);
 		registeredEventHandler = new ArrayList<EventHandler>();
 		registerEventBroker(eventBroker);
 	}
 
 	@Override
-	public Object getObject() {
+	public IScan getScan() {
 
-		return object;
+		return scan;
 	}
 
 	@PreDestroy
@@ -58,10 +60,7 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 	private void registerEventBroker(IEventBroker eventBroker) {
 
 		if(eventBroker != null) {
-			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_SCAN, IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION));
-			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_SCAN, IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION));
-			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_PEAK, IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION));
-			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_PEAK, IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION));
+			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM));
 		}
 	}
 
@@ -72,12 +71,11 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 			public void handleEvent(Event event) {
 
 				try {
-					if(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION.equals(topic) || IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION.equals(topic)) {
-						setObject(null);
-					} else {
-						Object object = event.getProperty(property);
-						setObject(object);
+					IScan scan = null;
+					if(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM.equals(topic)) {
+						scan = PreferenceSupplier.getSessionSubtractMassSpectrum();
 					}
+					setScan(scan);
 				} catch(Exception e) {
 					logger.warn(e);
 				}
@@ -87,9 +85,9 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 		return eventHandler;
 	}
 
-	public void setObject(Object myObject) {
+	public void setScan(IScan myScan) {
 
-		object = myObject;
-		updateObject(object);
+		scan = myScan;
+		updateScan(scan);
 	}
 }

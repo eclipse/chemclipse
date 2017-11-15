@@ -45,6 +45,12 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTargets"
             name="Targets">
-      </page>                     
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageSubtract"
+            name="Subtract">
+      </page>                              
    </extension>   
 </plugin>

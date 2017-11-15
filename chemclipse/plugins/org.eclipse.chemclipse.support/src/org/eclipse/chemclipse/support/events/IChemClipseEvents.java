@@ -134,6 +134,6 @@ public interface IChemClipseEvents {
 	String PROPERTY_EDIT_HISTORY = IEventBroker.DATA; // IEditHistory
 	String TOPIC_EDIT_HISTORY_UPDATE = "edithistory/update"; // $NON-NLS-1$
 	//
-	String PROPERTY_UPDATE = IEventBroker.DATA; // Always true
+	String PROPERTY_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM = IEventBroker.DATA; // Always true
 	String TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM = "filter/supplier/subtract/update/session/subtractmassspectrum";
 }

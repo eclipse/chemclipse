@@ -33,7 +33,7 @@ public class Activator implements BundleActivator {
 
 		Activator.context = bundleContext;
 		PathHelper.cleanStoragePath();
-		PreferenceSupplier.initialize();
+		PreferenceSupplier.loadSessionSubtractMassSpectrum();
 	}
 
 	/*

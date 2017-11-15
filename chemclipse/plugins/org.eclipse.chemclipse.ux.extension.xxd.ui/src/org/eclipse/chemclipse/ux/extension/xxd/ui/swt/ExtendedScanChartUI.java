@@ -31,7 +31,6 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.support.FilterSupport;
 import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -43,6 +42,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ScanChartPart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -240,21 +240,18 @@ public class ExtendedScanChartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(optimizedScan != null) {
-					String viewId = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.part.sessionSubtractMassSpectrum";
-					List<String> views = new ArrayList<String>();
-					views.add(viewId);
-					PerspectiveSwitchHandler.focusViews(views);
 					/*
-					 * Clears the currently used subtract mass spectrum
+					 * Display the subtract mass spectrum.
 					 */
 					PreferenceSupplier.setSessionSubtractMassSpectrum(null);
-					IScanMSD massSpectrum1 = PreferenceSupplier.getSessionSubtractMassSpectrum();
-					boolean useNormalize = PreferenceSupplier.isUseNormalize();
-					IScanMSD normalizedMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, optimizedScan, null, useNormalize);
-					PreferenceSupplier.setSessionSubtractMassSpectrum(normalizedMassSpectrum);
+					IScanMSD massSpectrum1 = null;
+					boolean useNormalize = PreferenceSupplier.isUseNormalizedScan();
+					IScanMSD subtractMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, optimizedScan, null, useNormalize);
+					PreferenceSupplier.setSessionSubtractMassSpectrum(subtractMassSpectrum);
 					/*
 					 * Update all listeners
 					 */
+					PartSupport.showPart(PartSupport.PARTDESCRIPTOR_SUBTRACT_CHART, PartSupport.PARTSTACK_BOTTOM_RIGHT);
 					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 					eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
 				}
@@ -518,10 +515,14 @@ public class ExtendedScanChartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePage = new PreferencePageScans();
-				preferencePage.setTitle("Scan Settings");
+				IPreferencePage preferencePageScans = new PreferencePageScans();
+				preferencePageScans.setTitle("Scan Settings");
+				IPreferencePage preferencePageSubtract = new PreferencePageSubtract();
+				preferencePageSubtract.setTitle("Subtract Settings");
+				//
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
+				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageScans));
+				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSubtract));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
 				preferenceDialog.create();

@@ -11,7 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui;
 
+import java.util.Map;
+
+import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -21,6 +26,7 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
+	private ScopedPreferenceStore preferenceStoreSubtract;
 
 	/**
 	 * The constructor
@@ -36,6 +42,7 @@ public class Activator extends AbstractUIPlugin {
 
 		super.start(context);
 		plugin = this;
+		initializePreferenceStoreSubtract(PreferenceSupplier.INSTANCE());
 	}
 
 	/*
@@ -56,5 +63,24 @@ public class Activator extends AbstractUIPlugin {
 	public static Activator getDefault() {
 
 		return plugin;
+	}
+
+	public ScopedPreferenceStore getPreferenceStoreSubtract() {
+
+		return preferenceStoreSubtract;
+	}
+
+	private void initializePreferenceStoreSubtract(IPreferenceSupplier preferenceSupplier) {
+
+		if(preferenceSupplier != null) {
+			/*
+			 * Set the default values.
+			 */
+			preferenceStoreSubtract = new ScopedPreferenceStore(preferenceSupplier.getScopeContext(), preferenceSupplier.getPreferenceNode());
+			Map<String, String> initializationEntries = preferenceSupplier.getDefaultValues();
+			for(Map.Entry<String, String> entry : initializationEntries.entrySet()) {
+				preferenceStoreSubtract.setDefault(entry.getKey(), entry.getValue());
+			}
+		}
 	}
 }

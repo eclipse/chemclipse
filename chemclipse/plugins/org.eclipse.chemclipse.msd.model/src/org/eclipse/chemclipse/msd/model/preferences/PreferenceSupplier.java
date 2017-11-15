@@ -32,17 +32,17 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_SUBTRACT_MASS_SPECTRUM = "subtractMassSpectrum";
 	public static final String DEF_SUBTRACT_MASS_SPECTRUM = "18:200;28:1000;32:500";
-	public static final String P_USE_NOMINAL_MASSES = "useNominalMasses";
-	public static final String P_USE_NORMALIZE = "useNormalize";
-	public static final boolean DEF_USE_NOMINAL_MASSES = true;
-	public static final boolean DEF_USE_NORMALIZE = false;
+	public static final String P_USE_NOMINAL_MZ = "useNominalMZ";
+	public static final boolean DEF_USE_NOMINAL_MZ = true;
+	public static final String P_USE_NORMALIZED_SCAN = "useNormalizedScan";
+	public static final boolean DEF_USE_NORMALIZED_SCAN = true;
 	//
 	private static final String DELIMITER_ION_ABUNDANCE = ":";
 	private static final String DELIMITER_IONS = ";";
 	/*
 	 * It is the mass spectrum that is used only by the session.
 	 */
-	private static IScanMSD sessionMassSpectrum;
+	private static IScanMSD sessionSubtractMassSpectrum;
 	//
 	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
 	private static IPreferenceSupplier preferenceSupplier;
@@ -72,8 +72,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
-		defaultValues.put(P_USE_NOMINAL_MASSES, Boolean.toString(DEF_USE_NOMINAL_MASSES));
-		defaultValues.put(P_USE_NORMALIZE, Boolean.toString(DEF_USE_NORMALIZE));
+		defaultValues.put(P_USE_NOMINAL_MZ, Boolean.toString(DEF_USE_NOMINAL_MZ));
+		defaultValues.put(P_USE_NORMALIZED_SCAN, Boolean.toString(DEF_USE_NORMALIZED_SCAN));
 		return defaultValues;
 	}
 
@@ -83,14 +83,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	/**
-	 * Loads the stored mass spectrum and sets it as the
-	 * session subtract mass spectrum.
-	 */
-	public static void initialize() {
+	public static void loadSessionSubtractMassSpectrum() {
 
 		IScanMSD massSpectrum = getSubtractMassSpectrum();
 		setSessionSubtractMassSpectrum(massSpectrum);
+	}
+
+	public static void storeSessionSubtractMassSpectrum() {
+
+		setSubtractMassSpectrum(sessionSubtractMassSpectrum);
 	}
 
 	/**
@@ -100,7 +101,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 */
 	public static IScanMSD getSessionSubtractMassSpectrum() {
 
-		return sessionMassSpectrum;
+		return sessionSubtractMassSpectrum;
 	}
 
 	/**
@@ -110,15 +111,22 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 */
 	public static void setSessionSubtractMassSpectrum(IScanMSD normalizedMassSpectrum) {
 
-		sessionMassSpectrum = normalizedMassSpectrum;
+		sessionSubtractMassSpectrum = normalizedMassSpectrum;
 	}
 
-	/**
-	 * Returns the stored mass spectrum that shall be subtracted.
-	 * 
-	 * @return {@link IScanMSD}
-	 */
-	public static IScanMSD getSubtractMassSpectrum() {
+	public static boolean isUseNominalMZ() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_USE_NOMINAL_MZ, DEF_USE_NOMINAL_MZ);
+	}
+
+	public static boolean isUseNormalizedScan() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_USE_NORMALIZED_SCAN, DEF_USE_NORMALIZED_SCAN);
+	}
+
+	private static IScanMSD getSubtractMassSpectrum() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		String value = preferences.get(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
@@ -153,13 +161,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		}
 	}
 
-	/**
-	 * Sets and stores the mass spectrum that shall be subtracted.
-	 * If subtractedMassSpectrum is null, the stored ms will be cleared.
-	 * 
-	 * @param subtractMassSpectrum
-	 */
-	public static void setSubtractMassSpectrum(IScanMSD subtractMassSpectrum) {
+	private static void setSubtractMassSpectrum(IScanMSD subtractMassSpectrum) {
 
 		/*
 		 * If the mass spectrum is null, clear the stored ms.
@@ -177,17 +179,5 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		}
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		preferences.put(P_SUBTRACT_MASS_SPECTRUM, value);
-	}
-
-	public static boolean isUseNominalMasses() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_USE_NOMINAL_MASSES, DEF_USE_NOMINAL_MASSES);
-	}
-
-	public static boolean isUseNormalize() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_USE_NORMALIZE, DEF_USE_NORMALIZE);
 	}
 }
