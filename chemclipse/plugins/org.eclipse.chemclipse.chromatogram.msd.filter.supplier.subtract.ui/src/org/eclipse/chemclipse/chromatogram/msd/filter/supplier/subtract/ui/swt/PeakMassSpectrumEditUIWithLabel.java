@@ -19,9 +19,7 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoPeakFilterSupplierAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.IPeakFilterSupport;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.PeakFilter;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.FilterSupport;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.support.ISubtractFilterEvents;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierSupport;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifier;
@@ -35,12 +33,14 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.msd.model.notifier.IChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.msd.model.notifier.PeakSelectionUpdateNotifier;
+import org.eclipse.chemclipse.msd.model.support.FilterSupport;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
 import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -159,13 +159,13 @@ public class PeakMassSpectrumEditUIWithLabel extends Composite implements IChrom
 					 * Add the selected scan as the subtract mass spectrum.
 					 */
 					IScanMSD sessionSubtractMassSpectrum = PreferenceSupplier.getSessionSubtractMassSpectrum();
-					boolean useNormalize = PreferenceSupplier.isUseNormalize();
+					boolean useNormalize = org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalize();
 					IScanMSD normalizedMassSpectrum = FilterSupport.getCombinedMassSpectrum(sessionSubtractMassSpectrum, chromatogramSelection.getSelectedScan(), null, useNormalize);
 					PreferenceSupplier.setSessionSubtractMassSpectrum(normalizedMassSpectrum);
 					/*
 					 * Update all listeners
 					 */
-					eventBroker.send(ISubtractFilterEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
+					eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
 				}
 			}
 		});

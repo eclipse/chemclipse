@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
-
 public class Activator implements BundleActivator {
 
 	private static BundleContext context;
@@ -32,10 +30,6 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext bundleContext) throws Exception {
 
 		Activator.context = bundleContext;
-		/*
-		 * Sets the session mass spectrum.
-		 */
-		PreferenceSupplier.initialize();
 	}
 
 	/*

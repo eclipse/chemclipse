@@ -47,4 +47,3 @@ Service-Component: OSGI-INF/filterHandlerChromatogram.xml,
  OSGI-INF/filterHandlerAllPeaks.xml,
  OSGI-INF/addSelectedScanToSessionHandler.xml,
  OSGI-INF/addCombinedScansToSessionHandler.xml
-Export-Package: org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.support

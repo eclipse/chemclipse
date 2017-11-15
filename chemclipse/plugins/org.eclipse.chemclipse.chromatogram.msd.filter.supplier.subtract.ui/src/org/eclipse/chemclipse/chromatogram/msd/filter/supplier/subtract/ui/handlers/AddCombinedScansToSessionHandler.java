@@ -13,19 +13,17 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.hand
 
 import javax.inject.Named;
 
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.support.FilterSupport;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
-
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.support.ISubtractFilterEvents;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.FilterSupport;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 
 public class AddCombinedScansToSessionHandler implements EventHandler {
 
@@ -38,7 +36,7 @@ public class AddCombinedScansToSessionHandler implements EventHandler {
 		 * Run the handler.
 		 */
 		if(chromatogramSelection != null) {
-			boolean useNormalize = PreferenceSupplier.isUseNormalize();
+			boolean useNormalize = org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalize();
 			IScanMSD massSpectrum1 = PreferenceSupplier.getSessionSubtractMassSpectrum();
 			IScanMSD massSpectrum2 = FilterSupport.getCombinedMassSpectrum(chromatogramSelection, null, useNormalize);
 			IScanMSD normalizedMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, massSpectrum2, null, useNormalize);
@@ -47,7 +45,7 @@ public class AddCombinedScansToSessionHandler implements EventHandler {
 			/*
 			 * Update all listeners
 			 */
-			eventBroker.send(ISubtractFilterEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
+			eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
 		}
 	}
 

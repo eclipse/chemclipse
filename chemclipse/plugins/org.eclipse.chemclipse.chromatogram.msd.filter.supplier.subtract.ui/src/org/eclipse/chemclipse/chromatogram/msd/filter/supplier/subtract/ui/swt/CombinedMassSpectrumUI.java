@@ -13,11 +13,10 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.swt;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.FilterSupport;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.support.FilterSupport;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
 import org.eclipse.chemclipse.support.text.ValueFormat;
@@ -84,7 +83,7 @@ public class CombinedMassSpectrumUI extends Composite {
 	public void update(IChromatogramSelectionMSD chromatogramSelection, boolean forceReload) {
 
 		if(chromatogramSelection != null) {
-			boolean useNormalize = PreferenceSupplier.isUseNormalize();
+			boolean useNormalize = org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalize();
 			IScanMSD massSpectrum = FilterSupport.getCombinedMassSpectrum(chromatogramSelection, null, useNormalize);
 			setMassSpectrumLabel(chromatogramSelection);
 			simpleMassSpectrumUI.update(massSpectrum, forceReload);

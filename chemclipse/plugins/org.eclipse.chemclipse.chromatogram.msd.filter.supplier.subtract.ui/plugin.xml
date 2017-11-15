@@ -21,12 +21,6 @@
             class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.preferences.preferencePage"
             name="Subtract Filter">
-      </page>
-      <page
-            category="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.preferences.preferencePage"
-            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.preferences.FilterMassSpectrumPreferencePage"
-            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.preferences.filterMassSpectrumPreferencePage"
-            name="Subtract Mass Spectrum">
-      </page>      
+      </page> 
    </extension>
 </plugin>
