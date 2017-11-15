@@ -58,7 +58,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumIdentificationResult;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumIdentificationResults;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumIdentificationResult;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumIdentificationResults;
@@ -775,14 +775,14 @@ public class Identifier {
 	public IMassSpectrumIdentificationResult getMassSpectrumIdentificationResult(IScanMSD massSpectrum, ICompound compound, IVendorMassSpectrumIdentifierSettings massSpectrumIdentifierSettings) {
 
 		int numberOfTargets = massSpectrumIdentifierSettings.getNumberOfTargets();
-		List<IMassSpectrumTarget> massSpectrumTargets = new ArrayList<IMassSpectrumTarget>();
+		List<IScanTargetMSD> massSpectrumTargets = new ArrayList<IScanTargetMSD>();
 		IMassSpectrumIdentificationResult identificationResult = new MassSpectrumIdentificationResult();
 		for(int index = 1; index <= compound.size(); index++) {
 			/*
 			 * The targets shall not be stored in the peak in all cases.
 			 */
 			IHit hit = compound.getHit(index);
-			IMassSpectrumTarget identificationEntry = getMassSpectrumIdentificationEntry(hit, compound);
+			IScanTargetMSD identificationEntry = getMassSpectrumIdentificationEntry(hit, compound);
 			identificationEntry.setIdentifier(IConstants.NIST_IDENTIFIER);
 			if(massSpectrumIdentifierSettings.getStoreTargets()) {
 				massSpectrumTargets.add(identificationEntry);
@@ -807,9 +807,9 @@ public class Identifier {
 	 * @param hit
 	 * @return INistMassSpectrumIdentificationEntry
 	 */
-	public IMassSpectrumTarget getMassSpectrumIdentificationEntry(IHit hit, ICompound compound) {
+	public IScanTargetMSD getMassSpectrumIdentificationEntry(IHit hit, ICompound compound) {
 
-		IMassSpectrumTarget identificationEntry = null;
+		IScanTargetMSD identificationEntry = null;
 		ILibraryInformation libraryInformation;
 		IComparisonResult comparisonResult;
 		/*
