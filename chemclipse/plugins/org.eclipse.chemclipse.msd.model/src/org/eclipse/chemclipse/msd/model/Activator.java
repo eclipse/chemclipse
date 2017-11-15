@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.msd.model;
 
 import org.eclipse.chemclipse.model.versioning.PathHelper;
-
+import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -33,6 +33,7 @@ public class Activator implements BundleActivator {
 
 		Activator.context = bundleContext;
 		PathHelper.cleanStoragePath();
+		PreferenceSupplier.initialize();
 	}
 
 	/*
