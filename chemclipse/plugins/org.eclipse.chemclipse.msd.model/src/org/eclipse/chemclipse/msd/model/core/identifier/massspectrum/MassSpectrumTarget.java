@@ -15,7 +15,7 @@ import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 
-public class MassSpectrumTarget extends AbstractMassSpectrumTarget implements IScanTargetMSD {
+public class MassSpectrumTarget extends AbstractScanTargetMSD implements IScanTargetMSD {
 
 	/**
 	 * Renew the UUID on change.
