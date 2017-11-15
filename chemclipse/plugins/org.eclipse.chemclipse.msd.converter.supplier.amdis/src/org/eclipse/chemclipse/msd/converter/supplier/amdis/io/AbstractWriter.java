@@ -34,7 +34,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
@@ -187,7 +187,7 @@ public abstract class AbstractWriter {
 			/*
 			 * Scan/Chromatogram MS
 			 */
-			List<IMassSpectrumTarget> targets = new ArrayList<>(massSpectrum.getTargets());
+			List<IScanTargetMSD> targets = new ArrayList<>(massSpectrum.getTargets());
 			Collections.sort(targets, targetExtendedComparator);
 			if(targets.size() >= 1) {
 				identificationTarget = targets.get(0);
