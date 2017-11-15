@@ -44,7 +44,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
@@ -376,9 +376,9 @@ public class ChromatogramWriter_1003 extends AbstractChromatogramWriter implemen
 		/*
 		 * Identification Results
 		 */
-		List<IMassSpectrumTarget> massSpectrumTargets = massSpectrum.getTargets();
+		List<IScanTargetMSD> massSpectrumTargets = massSpectrum.getTargets();
 		dataOutputStream.writeInt(massSpectrumTargets.size()); // Number Mass Spectrum Targets
-		for(IMassSpectrumTarget massSpectrumTarget : massSpectrumTargets) {
+		for(IScanTargetMSD massSpectrumTarget : massSpectrumTargets) {
 			if(massSpectrumTarget instanceof IIdentificationTarget) {
 				IIdentificationTarget identificationEntry = massSpectrumTarget;
 				writeIdentificationEntry(dataOutputStream, identificationEntry);
