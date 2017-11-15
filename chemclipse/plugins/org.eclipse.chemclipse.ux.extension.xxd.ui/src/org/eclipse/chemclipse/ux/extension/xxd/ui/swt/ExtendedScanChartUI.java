@@ -79,7 +79,7 @@ public class ExtendedScanChartUI {
 	private Button buttonOptimizedScan;
 	private ScanChart scanChart;
 	//
-	private Combo comboDetectorType;
+	private Combo comboDataType;
 	private Combo comboSignalType;
 	//
 	private Button buttonPinScan;
@@ -98,16 +98,6 @@ public class ExtendedScanChartUI {
 	private String[] scanFilterNames;
 	private List<String> scanIdentifierIds;
 	private String[] scanIdentifierNames;
-	//
-	private String[] detectorTypesDefault;
-	private String[] detectorTypesMSD;
-	private String[] detectorTypesCSD;
-	private String[] detectorTypesWSD;
-	//
-	private String[] signalTypesDefault;
-	private String[] signalTypesMSD;
-	private String[] signalTypesCSD;
-	private String[] signalTypesWSD;
 
 	@Inject
 	public ExtendedScanChartUI(Composite parent, MPart part) {
@@ -141,8 +131,6 @@ public class ExtendedScanChartUI {
 
 	private void initializeSettings() {
 
-		initializeDetectorTypes();
-		initializeSignalTypes();
 		initializeScanFilter();
 		initializeScanIdentifier();
 	}
@@ -159,22 +147,6 @@ public class ExtendedScanChartUI {
 		enableToolbarButtons(false);
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
 		PartSupport.setCompositeVisibility(toolbarIdentify, false);
-	}
-
-	private void initializeDetectorTypes() {
-
-		detectorTypesDefault = new String[]{DataType.AUTO_DETECT.toString()};
-		detectorTypesMSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.MSD_NOMINAL.toString(), DataType.MSD_TANDEM.toString(), DataType.MSD_HIGHRES.toString()};
-		detectorTypesCSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.CSD.toString()};
-		detectorTypesWSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.WSD.toString()};
-	}
-
-	private void initializeSignalTypes() {
-
-		signalTypesDefault = new String[]{SignalType.AUTO_DETECT.toString()};
-		signalTypesMSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
-		signalTypesCSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString()};
-		signalTypesWSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
 	}
 
 	private void initializeScanFilter() {
@@ -210,7 +182,7 @@ public class ExtendedScanChartUI {
 		composite.setLayout(new GridLayout(9, false));
 		//
 		createButtonToggleToolbarInfo(composite);
-		comboDetectorType = createDetectorType(composite);
+		comboDataType = createDataType(composite);
 		comboSignalType = createSignalType(composite);
 		createButtonToggleToolbarIdentify(composite);
 		createToggleChartLegendButton(composite);
@@ -243,6 +215,8 @@ public class ExtendedScanChartUI {
 	private Button createPinButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Pin the scan.");
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -259,6 +233,7 @@ public class ExtendedScanChartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
+		button.setToolTipText("Mark the current scan as background for subtraction.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SUBTRACT_ADD_SELECTED_SCAN, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -295,6 +270,7 @@ public class ExtendedScanChartUI {
 	private Combo createScanFilterCombo(Composite parent) {
 
 		Combo combo = new Combo(parent, SWT.NONE);
+		combo.setToolTipText("Scan Filter");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.setItems(scanFilterNames);
 		return combo;
@@ -304,6 +280,7 @@ public class ExtendedScanChartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Filter");
+		button.setToolTipText("Filter the current scan.");
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -317,6 +294,9 @@ public class ExtendedScanChartUI {
 						 * Clear all identification results and
 						 * then run apply the filter.
 						 */
+						isScanPinned = true;
+						setPinButtonText();
+						//
 						optimizedScan.getTargets().clear();
 						MassSpectrumFilter.applyFilter(optimizedScan, filterId, new NullProgressMonitor());
 						scanChart.setInput(optimizedScan);
@@ -330,6 +310,7 @@ public class ExtendedScanChartUI {
 	private Combo createScanIdentifierCombo(Composite parent) {
 
 		Combo combo = new Combo(parent, SWT.NONE);
+		combo.setToolTipText("Scan Identifier");
 		combo.setItems(scanIdentifierNames);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		return combo;
@@ -339,6 +320,7 @@ public class ExtendedScanChartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Identify");
+		button.setToolTipText("Identify the scan.");
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -347,6 +329,9 @@ public class ExtendedScanChartUI {
 				if(originalScan != null && optimizedScan != null) {
 					int index = comboScanIdentifier.getSelectionIndex();
 					if(index >= 0 && index < scanIdentifierIds.size()) {
+						/*
+						 * Create the runnable.
+						 */
 						final String identifierId = scanIdentifierIds.get(index);
 						IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
@@ -365,13 +350,14 @@ public class ExtendedScanChartUI {
 								}
 							}
 						};
+						/*
+						 * Run the identification.
+						 */
 						ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 						try {
-							/*
-							 * Use true, true ... instead of false, true ... if the progress bar
-							 * should be shown in action.
-							 */
 							monitor.run(true, true, runnable);
+							isScanPinned = false;
+							setPinButtonText();
 						} catch(InvocationTargetException e1) {
 							logger.warn(e1);
 						} catch(InterruptedException e1) {
@@ -394,11 +380,11 @@ public class ExtendedScanChartUI {
 		}
 	}
 
-	private Combo createDetectorType(Composite parent) {
+	private Combo createDataType(Composite parent) {
 
 		Combo combo = new Combo(parent, SWT.READ_ONLY);
-		combo.setToolTipText("Detector Type (MS, MS/MS, FID, DAD, ...)");
-		combo.setItems(detectorTypesDefault);
+		combo.setToolTipText("Data Type (MS, MS/MS, FID, DAD, ...)");
+		combo.setItems(ScanSupport.DATA_TYPES_DEFAULT);
 		combo.select(0);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
@@ -418,7 +404,7 @@ public class ExtendedScanChartUI {
 
 		Combo combo = new Combo(parent, SWT.READ_ONLY);
 		combo.setToolTipText("Signal Type (Centroid: Bar Series, Profile: Line Series)");
-		combo.setItems(signalTypesDefault);
+		combo.setItems(ScanSupport.SIGNAL_TYPES_DEFAULT);
 		combo.select(0);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
@@ -658,43 +644,29 @@ public class ExtendedScanChartUI {
 
 	private void setDetectorSignalType(IScan scan) {
 
-		int indexDetectorType;
-		int indexSignalType;
-		//
 		if(scan instanceof IScanMSD) {
-			indexDetectorType = getSelectionIndex(comboDetectorType, detectorTypesMSD);
-			comboDetectorType.setItems(detectorTypesMSD);
-			indexSignalType = getSelectionIndex(comboSignalType, signalTypesMSD);
-			comboSignalType.setItems(signalTypesMSD);
+			setSelectionIndex(comboDataType, ScanSupport.DATA_TYPES_MSD);
+			setSelectionIndex(comboSignalType, ScanSupport.SIGNAL_TYPES_MSD);
 		} else if(scan instanceof IScanCSD) {
-			indexDetectorType = getSelectionIndex(comboDetectorType, detectorTypesCSD);
-			comboDetectorType.setItems(detectorTypesCSD);
-			indexSignalType = getSelectionIndex(comboSignalType, signalTypesCSD);
-			comboSignalType.setItems(signalTypesCSD);
+			setSelectionIndex(comboDataType, ScanSupport.DATA_TYPES_CSD);
+			setSelectionIndex(comboSignalType, ScanSupport.SIGNAL_TYPES_CSD);
 		} else if(scan instanceof IScanWSD) {
-			indexDetectorType = getSelectionIndex(comboDetectorType, detectorTypesWSD);
-			comboDetectorType.setItems(detectorTypesWSD);
-			indexSignalType = getSelectionIndex(comboSignalType, signalTypesWSD);
-			comboSignalType.setItems(signalTypesWSD);
+			setSelectionIndex(comboDataType, ScanSupport.DATA_TYPES_WSD);
+			setSelectionIndex(comboSignalType, ScanSupport.SIGNAL_TYPES_WSD);
 		} else {
-			indexDetectorType = 0;
-			comboDetectorType.setItems(detectorTypesDefault);
-			indexSignalType = 0;
-			comboSignalType.setItems(signalTypesDefault);
+			comboDataType.setItems(ScanSupport.DATA_TYPES_DEFAULT);
+			comboDataType.select(0);
+			comboSignalType.setItems(ScanSupport.SIGNAL_TYPES_DEFAULT);
+			comboSignalType.select(0);
 		}
 		/*
-		 * Detector Type
+		 * Data / Signal Type
 		 */
-		comboDetectorType.select(indexDetectorType);
-		scanChart.setDataType(DataType.valueOf(comboDetectorType.getText()));
-		/*
-		 * Signal Type
-		 */
-		comboSignalType.select(indexSignalType);
+		scanChart.setDataType(DataType.valueOf(comboDataType.getText()));
 		scanChart.setSignalType(SignalType.valueOf(comboSignalType.getText()));
 	}
 
-	private int getSelectionIndex(Combo combo, String[] items) {
+	private void setSelectionIndex(Combo combo, String[] items) {
 
 		int index;
 		if(combo.getSelectionIndex() == -1) {
@@ -702,6 +674,8 @@ public class ExtendedScanChartUI {
 		} else {
 			index = (combo.getSelectionIndex() < items.length) ? combo.getSelectionIndex() : 0;
 		}
-		return index;
+		//
+		combo.setItems(items);
+		combo.select(index);
 	}
 }

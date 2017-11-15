@@ -136,7 +136,7 @@ public class ExtendedTargetsUI {
 		toolbarEdit = createToolbarEdit(parent);
 		createTargetsTable(parent);
 		//
-		PartSupport.setCompositeVisibility(toolbarInfo, false);
+		PartSupport.setCompositeVisibility(toolbarInfo, true);
 		PartSupport.setCompositeVisibility(toolbarEdit, false);
 		//
 		applySettings();

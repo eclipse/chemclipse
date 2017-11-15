@@ -23,7 +23,17 @@ import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 
 public class ScanSupport {
 
-	private static DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0##");
+	private static DecimalFormat DECIMAL_FORMAT = ValueFormat.getDecimalFormatEnglish("0.0##");
+	//
+	public static final String[] DATA_TYPES_DEFAULT = new String[]{DataType.AUTO_DETECT.toString()};
+	public static final String[] DATA_TYPES_MSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.MSD_NOMINAL.toString(), DataType.MSD_TANDEM.toString(), DataType.MSD_HIGHRES.toString()};
+	public static final String[] DATA_TYPES_CSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.CSD.toString()};
+	public static final String[] DATA_TYPES_WSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.WSD.toString()};
+	//
+	public static final String[] SIGNAL_TYPES_DEFAULT = new String[]{SignalType.AUTO_DETECT.toString()};
+	public static final String[] SIGNAL_TYPES_MSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
+	public static final String[] SIGNAL_TYPES_CSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString()};
+	public static final String[] SIGNAL_TYPES_WSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
 
 	private ScanSupport() {
 	}
@@ -42,13 +52,13 @@ public class ScanSupport {
 			}
 			//
 			builder.append("RT: ");
-			builder.append(decimalFormat.format(scan.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
+			builder.append(DECIMAL_FORMAT.format(scan.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 			builder.append(" | ");
 			builder.append("RI: ");
 			if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
 				builder.append(Integer.toString((int)scan.getRetentionIndex()));
 			} else {
-				builder.append(decimalFormat.format(scan.getRetentionIndex()));
+				builder.append(DECIMAL_FORMAT.format(scan.getRetentionIndex()));
 			}
 			//
 			if(scan instanceof IRegularMassSpectrum) {
