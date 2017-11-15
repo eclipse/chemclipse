@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.hand
 
 import javax.inject.Named;
 
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -24,7 +23,6 @@ public class StoreSessionSubtractMassSpectrumHandler {
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
-		IScanMSD subtractMassSpectrum = PreferenceSupplier.getSessionSubtractMassSpectrum();
-		PreferenceSupplier.setSubtractMassSpectrum(subtractMassSpectrum);
+		PreferenceSupplier.storeSessionSubtractMassSpectrum();
 	}
 }

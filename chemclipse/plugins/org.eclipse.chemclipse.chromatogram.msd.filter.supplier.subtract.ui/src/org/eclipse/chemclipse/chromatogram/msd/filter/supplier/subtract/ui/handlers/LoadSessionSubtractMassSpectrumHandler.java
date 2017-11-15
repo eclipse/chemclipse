@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.hand
 
 import javax.inject.Named;
 
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.e4.core.di.annotations.Execute;
@@ -26,14 +25,7 @@ public class LoadSessionSubtractMassSpectrumHandler {
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part, IEventBroker eventBroker) {
 
-		/*
-		 * Loads stored mass spectrum.
-		 */
-		IScanMSD normalizedMassSpectrum = PreferenceSupplier.getSubtractMassSpectrum();
-		PreferenceSupplier.setSessionSubtractMassSpectrum(normalizedMassSpectrum);
-		/*
-		 * Update all listeners
-		 */
+		PreferenceSupplier.loadSessionSubtractMassSpectrum();
 		eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
 	}
 }

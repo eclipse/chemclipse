@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.hand
 
 import javax.inject.Named;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.services.events.IEventBroker;

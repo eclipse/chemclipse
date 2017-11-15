@@ -67,7 +67,7 @@ public class CombinedMassSpectrumSelectionTableView extends AbstractChromatogram
 		 * selection is not null.
 		 */
 		if(doUpdate(chromatogramSelection)) {
-			boolean useNormalize = org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalize();
+			boolean useNormalize = org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan();
 			IScanMSD massSpectrum = FilterSupport.getCombinedMassSpectrum(chromatogramSelection, null, useNormalize);
 			massSpectrumIonsListUI.update(massSpectrum, true);
 		}

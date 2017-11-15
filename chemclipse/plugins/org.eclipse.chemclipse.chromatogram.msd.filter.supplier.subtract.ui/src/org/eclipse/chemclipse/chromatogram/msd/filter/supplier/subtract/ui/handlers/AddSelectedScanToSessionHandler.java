@@ -13,10 +13,10 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.hand
 
 import javax.inject.Named;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.support.FilterSupport;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.e4.core.di.annotations.Execute;
@@ -42,7 +42,7 @@ public class AddSelectedScanToSessionHandler implements EventHandler {
 			 */
 			IScanMSD massSpectrum1 = PreferenceSupplier.getSessionSubtractMassSpectrum();
 			IVendorMassSpectrum massSpectrum2 = chromatogramSelection.getSelectedScan();
-			boolean useNormalize = org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalize();
+			boolean useNormalize = org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan();
 			IScanMSD normalizedMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, massSpectrum2, null, useNormalize);
 			PreferenceSupplier.setSessionSubtractMassSpectrum(normalizedMassSpectrum);
 			/*

@@ -19,7 +19,6 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoPeakFilterSupplierAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.IPeakFilterSupport;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.PeakFilter;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierSupport;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifier;
@@ -33,6 +32,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.msd.model.notifier.IChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.msd.model.notifier.PeakSelectionUpdateNotifier;
+import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.support.FilterSupport;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
@@ -159,7 +159,7 @@ public class PeakMassSpectrumEditUIWithLabel extends Composite implements IChrom
 					 * Add the selected scan as the subtract mass spectrum.
 					 */
 					IScanMSD sessionSubtractMassSpectrum = PreferenceSupplier.getSessionSubtractMassSpectrum();
-					boolean useNormalize = org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalize();
+					boolean useNormalize = org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan();
 					IScanMSD normalizedMassSpectrum = FilterSupport.getCombinedMassSpectrum(sessionSubtractMassSpectrum, chromatogramSelection.getSelectedScan(), null, useNormalize);
 					PreferenceSupplier.setSessionSubtractMassSpectrum(normalizedMassSpectrum);
 					/*

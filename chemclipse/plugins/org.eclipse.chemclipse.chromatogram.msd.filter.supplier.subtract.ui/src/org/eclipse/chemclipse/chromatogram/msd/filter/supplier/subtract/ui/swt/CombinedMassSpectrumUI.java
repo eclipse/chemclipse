@@ -83,7 +83,7 @@ public class CombinedMassSpectrumUI extends Composite {
 	public void update(IChromatogramSelectionMSD chromatogramSelection, boolean forceReload) {
 
 		if(chromatogramSelection != null) {
-			boolean useNormalize = org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalize();
+			boolean useNormalize = org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan();
 			IScanMSD massSpectrum = FilterSupport.getCombinedMassSpectrum(chromatogramSelection, null, useNormalize);
 			setMassSpectrumLabel(chromatogramSelection);
 			simpleMassSpectrumUI.update(massSpectrum, forceReload);
