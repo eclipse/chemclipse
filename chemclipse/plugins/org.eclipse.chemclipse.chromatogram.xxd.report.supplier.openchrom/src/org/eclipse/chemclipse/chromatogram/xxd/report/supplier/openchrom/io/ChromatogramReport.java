@@ -52,7 +52,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonAbundanceComparator;
 import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
@@ -554,7 +554,7 @@ public class ChromatogramReport {
 			 */
 			for(int i = 1; i <= chromatogram.getNumberOfScans(); i++) {
 				IVendorMassSpectrum massSpectrum = chromatogram.getSupplierScan(i);
-				List<IMassSpectrumTarget> massSpectrumTargets = massSpectrum.getTargets();
+				List<IScanTargetMSD> massSpectrumTargets = massSpectrum.getTargets();
 				if(massSpectrumTargets.size() > 0) {
 					printWriter.println(RESULTS_DELIMITER);
 					printTargetsData(printWriter, massSpectrumTargets, Integer.toString(i), monitor);
@@ -571,7 +571,7 @@ public class ChromatogramReport {
 		exitloop:
 		for(int i = 1; i <= chromatogram.getNumberOfScans(); i++) {
 			IVendorMassSpectrum massSpectrum = chromatogram.getSupplierScan(i);
-			List<IMassSpectrumTarget> massSpectrumTargets = massSpectrum.getTargets();
+			List<IScanTargetMSD> massSpectrumTargets = massSpectrum.getTargets();
 			if(massSpectrumTargets.size() > 0) {
 				scanTargetAvailable = true;
 				break exitloop;
