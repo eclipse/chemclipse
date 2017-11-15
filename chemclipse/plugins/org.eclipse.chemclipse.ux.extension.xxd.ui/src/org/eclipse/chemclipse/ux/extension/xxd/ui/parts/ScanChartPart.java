@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifie
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.IMassSpectrumIdentifierSupport;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.MassSpectrumIdentifier;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -44,6 +45,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -77,20 +79,49 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 	private Button buttonSaveScan;
 	private ScanChart scanChart;
 	//
+	private Combo comboDetectorType;
+	private Combo comboSignalType;
+	//
+	private Button buttonPinScan;
+	private Button buttonSubstractScan;
+	private Combo comboScanFilter;
+	private Button buttonScanFilter;
+	private Combo comboScanIdentifier;
+	private Button buttonScanIdentifier;
+	//
 	private IScanMSD originalMassSpectrum;
 	private IScanMSD clonedMassSpectrum;
-	private Button buttonPinScan;
-	private Combo comboScanFilter;
-	private Combo comboScanIdentifier;
+	//
 	private boolean isScanPinned = false;
 	private List<String> massSpectrumFilterIds;
 	private String[] massSpectrumFilterNames;
 	private List<String> massSpectrumIdentifierIds;
 	private String[] massSpectrumIdentifierNames;
+	//
+	private String[] detectorTypesDefault;
+	private String[] detectorTypesMSD;
+	private String[] detectorTypesCSD;
+	private String[] detectorTypesWSD;
+	//
+	private String[] signalTypesDefault;
+	private String[] signalTypesMSD;
+	private String[] signalTypesCSD;
+	private String[] signalTypesWSD;
 
 	@Inject
 	public ScanChartPart(Composite parent, MPart part) {
 		super(part);
+		//
+		detectorTypesDefault = new String[]{DataType.AUTO_DETECT.toString()};
+		detectorTypesMSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.MSD_NOMINAL.toString(), DataType.MSD_TANDEM.toString(), DataType.MSD_HIGHRES.toString()};
+		detectorTypesCSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.CSD.toString()};
+		detectorTypesWSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.WSD.toString()};
+		//
+		signalTypesDefault = new String[]{SignalType.AUTO_DETECT.toString()};
+		signalTypesMSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
+		signalTypesCSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString()};
+		signalTypesWSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
+		//
 		initialize(parent);
 	}
 
@@ -104,21 +135,8 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 	public void updateScan(IScan scan) {
 
 		labelScan.setText(ScanSupport.getScanLabel(scan));
-		if(scan instanceof IScanMSD) {
-			buttonSaveScan.setEnabled(true);
-			try {
-				IScanMSD scanMSD = (IScanMSD)scan;
-				originalMassSpectrum = scanMSD;
-				clonedMassSpectrum = scanMSD.makeDeepCopy();
-			} catch(CloneNotSupportedException e) {
-				logger.warn(e);
-			}
-			//
-		} else {
-			buttonSaveScan.setEnabled(false);
-			originalMassSpectrum = null;
-			clonedMassSpectrum = null;
-		}
+		enableIdentifierSettings(scan);
+		setDetectorSignalType(scan);
 		scanChart.setInput(scan);
 	}
 
@@ -133,7 +151,7 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 		toolbarIdentify = createToolbarIdentify(parent);
 		createScanChart(parent);
 		//
-		buttonSaveScan.setEnabled(false);
+		enableToolbarButtons(false);
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
 		PartSupport.setCompositeVisibility(toolbarIdentify, false);
 	}
@@ -173,8 +191,8 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 		composite.setLayout(new GridLayout(8, false));
 		//
 		createButtonToggleToolbarInfo(composite);
-		createDetectorType(composite);
-		createSignalType(composite);
+		comboDetectorType = createDetectorType(composite);
+		comboSignalType = createSignalType(composite);
 		createButtonToggleToolbarIdentify(composite);
 		createToggleChartLegendButton(composite);
 		createResetButton(composite);
@@ -190,21 +208,22 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 		composite.setLayout(new GridLayout(6, false));
 		composite.setVisible(false);
 		//
-		createPinButton(composite);
-		createSubstractMassSpectrumButton(composite);
-		createFilterCombo(composite);
-		createFilterButton(composite);
-		createIdentifierCombo(composite);
-		createIdentifierButton(composite);
+		buttonPinScan = createPinButton(composite);
+		buttonSubstractScan = createSubstractScanButton(composite);
+		comboScanFilter = createScanFilterCombo(composite);
+		buttonScanFilter = createScanFilterButton(composite);
+		comboScanIdentifier = createScanIdentifierCombo(composite);
+		buttonScanIdentifier = createScanIdentifierButton(composite);
+		//
+		setPinButtonText();
 		//
 		return composite;
 	}
 
-	private void createPinButton(Composite parent) {
+	private Button createPinButton(Composite parent) {
 
-		buttonPinScan = new Button(parent, SWT.PUSH);
-		setPinButtonText();
-		buttonPinScan.addSelectionListener(new SelectionAdapter() {
+		Button button = new Button(parent, SWT.PUSH);
+		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -213,9 +232,10 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 				setPinButtonText();
 			}
 		});
+		return button;
 	}
 
-	private void createSubstractMassSpectrumButton(Composite parent) {
+	private Button createSubstractScanButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -249,16 +269,18 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 				}
 			}
 		});
+		return button;
 	}
 
-	private void createFilterCombo(Composite parent) {
+	private Combo createScanFilterCombo(Composite parent) {
 
-		comboScanFilter = new Combo(parent, SWT.NONE);
-		comboScanFilter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		comboScanFilter.setItems(massSpectrumFilterNames);
+		Combo combo = new Combo(parent, SWT.NONE);
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.setItems(massSpectrumFilterNames);
+		return combo;
 	}
 
-	private void createFilterButton(Composite parent) {
+	private Button createScanFilterButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Filter");
@@ -282,16 +304,18 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 				}
 			}
 		});
+		return button;
 	}
 
-	private void createIdentifierCombo(Composite parent) {
+	private Combo createScanIdentifierCombo(Composite parent) {
 
-		comboScanIdentifier = new Combo(parent, SWT.NONE);
-		comboScanIdentifier.setItems(massSpectrumIdentifierNames);
-		comboScanIdentifier.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Combo combo = new Combo(parent, SWT.NONE);
+		combo.setItems(massSpectrumIdentifierNames);
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		return combo;
 	}
 
-	private void createIdentifierButton(Composite parent) {
+	private Button createScanIdentifierButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Identify");
@@ -335,6 +359,7 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 				}
 			}
 		});
+		return button;
 	}
 
 	private void updateAfterProcessing() {
@@ -352,11 +377,11 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 		}
 	}
 
-	private void createDetectorType(Composite parent) {
+	private Combo createDetectorType(Composite parent) {
 
 		Combo combo = new Combo(parent, SWT.READ_ONLY);
 		combo.setToolTipText("Detector Type (MS, MS/MS, FID, DAD, ...)");
-		combo.setItems(new String[]{DataType.AUTO_DETECT.toString(), DataType.MSD_NOMINAL.toString(), DataType.MSD_TANDEM.toString(), DataType.MSD_HIGHRES.toString(), DataType.CSD.toString(), DataType.WSD.toString()});
+		combo.setItems(detectorTypesDefault);
 		combo.select(0);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
@@ -365,19 +390,18 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 			public void widgetSelected(SelectionEvent e) {
 
 				String selection = combo.getText();
-				if(!selection.equals(DataType.AUTO_DETECT)) {
-					scanChart.setDataType(DataType.valueOf(selection));
-					scanChart.setInput(getScan());
-				}
+				scanChart.setDataType(DataType.valueOf(selection));
+				scanChart.setInput(getScan());
 			}
 		});
+		return combo;
 	}
 
-	private void createSignalType(Composite parent) {
+	private Combo createSignalType(Composite parent) {
 
 		Combo combo = new Combo(parent, SWT.READ_ONLY);
 		combo.setToolTipText("Signal Type (Centroid: Bar Series, Profile: Line Series)");
-		combo.setItems(new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()});
+		combo.setItems(signalTypesDefault);
 		combo.select(0);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
@@ -386,12 +410,11 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 			public void widgetSelected(SelectionEvent e) {
 
 				String selection = combo.getText();
-				if(!selection.equals(SignalType.AUTO_DETECT.toString())) {
-					scanChart.setSignalType(SignalType.valueOf(selection));
-					scanChart.setInput(getScan());
-				}
+				scanChart.setSignalType(SignalType.valueOf(selection));
+				scanChart.setInput(getScan());
 			}
 		});
+		return combo;
 	}
 
 	private Button createButtonToggleToolbarInfo(Composite parent) {
@@ -420,9 +443,9 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 	private Button createButtonToggleToolbarIdentify(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle edit toolbar.");
+		button.setToolTipText("Toggle identify toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IDENTIFY_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -430,14 +453,27 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarIdentify);
 				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IDENTIFY_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
 				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IDENTIFY_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
 				}
 			}
 		});
 		//
 		return button;
+	}
+
+	private void enableToolbarButtons(boolean enabled) {
+
+		buttonSaveScan.setEnabled(enabled);
+		//
+		toolbarIdentify.setEnabled(enabled);
+		buttonPinScan.setEnabled(enabled);
+		buttonSubstractScan.setEnabled(enabled);
+		comboScanFilter.setEnabled(enabled);
+		buttonScanFilter.setEnabled(enabled);
+		comboScanIdentifier.setEnabled(enabled);
+		buttonScanIdentifier.setEnabled(enabled);
 	}
 
 	private void createToggleChartLegendButton(Composite parent) {
@@ -548,5 +584,72 @@ public class ScanChartPart extends AbstractScanUpdateSupport implements IScanUpd
 
 		scanChart = new ScanChart(parent, SWT.BORDER);
 		scanChart.setLayoutData(new GridData(GridData.FILL_BOTH));
+	}
+
+	private void enableIdentifierSettings(IScan scan) {
+
+		if(scan instanceof IScanMSD) {
+			enableToolbarButtons(true);
+			try {
+				IScanMSD scanMSD = (IScanMSD)scan;
+				originalMassSpectrum = scanMSD;
+				clonedMassSpectrum = scanMSD.makeDeepCopy();
+			} catch(CloneNotSupportedException e) {
+				logger.warn(e);
+			}
+		} else {
+			enableToolbarButtons(false);
+			originalMassSpectrum = null;
+			clonedMassSpectrum = null;
+		}
+	}
+
+	private void setDetectorSignalType(IScan scan) {
+
+		int indexDetectorType;
+		int indexSignalType;
+		//
+		if(scan instanceof IScanMSD) {
+			indexDetectorType = getSelectionIndex(comboDetectorType, detectorTypesMSD);
+			comboDetectorType.setItems(detectorTypesMSD);
+			indexSignalType = getSelectionIndex(comboSignalType, signalTypesMSD);
+			comboSignalType.setItems(signalTypesMSD);
+		} else if(scan instanceof IScanCSD) {
+			indexDetectorType = getSelectionIndex(comboDetectorType, detectorTypesCSD);
+			comboDetectorType.setItems(detectorTypesCSD);
+			indexSignalType = getSelectionIndex(comboSignalType, signalTypesCSD);
+			comboSignalType.setItems(signalTypesCSD);
+		} else if(scan instanceof IScanWSD) {
+			indexDetectorType = getSelectionIndex(comboDetectorType, detectorTypesWSD);
+			comboDetectorType.setItems(detectorTypesWSD);
+			indexSignalType = getSelectionIndex(comboSignalType, signalTypesWSD);
+			comboSignalType.setItems(signalTypesWSD);
+		} else {
+			indexDetectorType = 0;
+			comboDetectorType.setItems(detectorTypesDefault);
+			indexSignalType = 0;
+			comboSignalType.setItems(signalTypesDefault);
+		}
+		/*
+		 * Detector Type
+		 */
+		comboDetectorType.select(indexDetectorType);
+		scanChart.setDataType(DataType.valueOf(comboDetectorType.getText()));
+		/*
+		 * Signal Type
+		 */
+		comboSignalType.select(indexSignalType);
+		scanChart.setSignalType(SignalType.valueOf(comboSignalType.getText()));
+	}
+
+	private int getSelectionIndex(Combo combo, String[] items) {
+
+		int index;
+		if(combo.getSelectionIndex() == -1) {
+			index = 0;
+		} else {
+			index = (combo.getSelectionIndex() < items.length) ? combo.getSelectionIndex() : 0;
+		}
+		return index;
 	}
 }
