@@ -38,7 +38,7 @@ import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumComparisonResult;
-import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IMassSpectrumTarget;
+import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
@@ -87,7 +87,7 @@ public class FileIdentifier {
 		 * Add m/z list on demand if no match was found.
 		 */
 		for(IScanMSD unknown : massSpectra.getList()) {
-			List<IMassSpectrumTarget> massSpectrumTargets = unknown.getTargets();
+			List<IScanTargetMSD> massSpectrumTargets = unknown.getTargets();
 			if(massSpectrumTargets.size() == 0) {
 				if(fileIdentifierSettings.isAddUnknownMzListTarget()) {
 					targetBuilder.setMassSpectrumTargetUnknown(unknown, identifier);
@@ -188,7 +188,7 @@ public class FileIdentifier {
 				return;
 			}
 			//
-			List<IMassSpectrumTarget> massSpectrumTargets = new ArrayList<IMassSpectrumTarget>();
+			List<IScanTargetMSD> massSpectrumTargets = new ArrayList<IScanTargetMSD>();
 			for(int index = 0; index < references.size(); index++) {
 				try {
 					/*
@@ -205,7 +205,7 @@ public class FileIdentifier {
 						/*
 						 * Add the target.
 						 */
-						IMassSpectrumTarget massSpectrumTarget = targetBuilder.getMassSpectrumTarget(reference, comparisonResult, identifier, databaseName);
+						IScanTargetMSD massSpectrumTarget = targetBuilder.getMassSpectrumTarget(reference, comparisonResult, identifier, databaseName);
 						massSpectrumTargets.add(massSpectrumTarget);
 					}
 				} catch(TypeCastException e1) {
