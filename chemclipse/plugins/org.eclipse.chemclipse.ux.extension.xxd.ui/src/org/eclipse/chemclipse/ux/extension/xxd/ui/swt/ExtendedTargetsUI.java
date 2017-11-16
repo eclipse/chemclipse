@@ -265,6 +265,7 @@ public class ExtendedTargetsUI {
 		comboSubstanceName = new Combo(parent, SWT.NONE);
 		comboSubstanceName.setToolTipText("Substance Name");
 		comboSubstanceName.setText("");
+		comboSubstanceName.setToolTipText("Select a target or type in a new substance name.");
 		comboSubstanceName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comboSubstanceName.addKeyListener(new KeyAdapter() {
 
@@ -282,6 +283,7 @@ public class ExtendedTargetsUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
+		button.setToolTipText("Add the target.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -297,6 +299,7 @@ public class ExtendedTargetsUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
+		button.setToolTipText("Delete the selected target(s).");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 

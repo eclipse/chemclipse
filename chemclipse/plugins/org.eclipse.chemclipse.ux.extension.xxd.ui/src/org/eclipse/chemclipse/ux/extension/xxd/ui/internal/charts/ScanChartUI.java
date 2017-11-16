@@ -68,7 +68,7 @@ import org.swtchart.ILineSeries;
 import org.swtchart.IPlotArea;
 import org.swtchart.ISeries;
 
-public class ScanChart extends ScrollableChart {
+public class ScanChartUI extends ScrollableChart {
 
 	private static final int LENGTH_HINT_DATA_POINTS = 5000;
 	private static final int COMPRESS_TO_LENGTH = Integer.MAX_VALUE;
@@ -140,12 +140,12 @@ public class ScanChart extends ScrollableChart {
 		}
 	}
 
-	public ScanChart() {
+	public ScanChartUI() {
 		super();
 		setDefaultDataAndSignalType();
 	}
 
-	public ScanChart(Composite parent, int style) {
+	public ScanChartUI(Composite parent, int style) {
 		super(parent, style);
 		setDefaultDataAndSignalType();
 	}

@@ -27,7 +27,8 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ScanChart;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ScanChartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -46,22 +47,27 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-public class ExtendedSubtractChartUI {
+public class ExtendedSubtractScanUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedScanChartUI.class);
 	//
+	private TabFolder tabFolder;
+	//
 	private IScan scan;
-	private ScanChart scanChart;
+	private ScanChartUI scanChartUI;
+	private ScanListUI scanListUI;
 	//
 	private IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 	private List<EventHandler> registeredEventHandler;
 	private IChromatogramSelectionMSD chromatogramSelectionMSD;
 
 	@Inject
-	public ExtendedSubtractChartUI(Composite parent, MPart part) {
+	public ExtendedSubtractScanUI(Composite parent, MPart part) {
 		initialize(parent);
 		registeredEventHandler = new ArrayList<EventHandler>();
 		registerEventBroker(eventBroker);
@@ -81,7 +87,8 @@ public class ExtendedSubtractChartUI {
 
 	private void updateScan() {
 
-		scanChart.setInput(scan);
+		scanChartUI.setInput(scan);
+		scanListUI.setInput(scan);
 	}
 
 	private void initialize(Composite parent) {
@@ -89,7 +96,7 @@ public class ExtendedSubtractChartUI {
 		parent.setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(parent);
-		createScanChart(parent);
+		createScanTabFolderSection(parent);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -108,10 +115,42 @@ public class ExtendedSubtractChartUI {
 		createSettingsButton(composite);
 	}
 
+	private void createScanTabFolderSection(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		composite.setLayout(new GridLayout(1, true));
+		//
+		tabFolder = new TabFolder(composite, SWT.BOTTOM);
+		tabFolder.setBackground(Colors.WHITE);
+		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		createScanChart(parent);
+		createScanTable(parent);
+	}
+
 	private void createScanChart(Composite parent) {
 
-		scanChart = new ScanChart(parent, SWT.BORDER);
-		scanChart.setLayoutData(new GridData(GridData.FILL_BOTH));
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText("Chart");
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayout(new GridLayout(1, true));
+		tabItem.setControl(composite);
+		//
+		scanChartUI = new ScanChartUI(composite, SWT.BORDER);
+		scanChartUI.setLayoutData(new GridData(GridData.FILL_BOTH));
+	}
+
+	private void createScanTable(Composite parent) {
+
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText("Table");
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayout(new GridLayout(1, true));
+		tabItem.setControl(composite);
+		//
+		scanListUI = new ScanListUI(composite, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		scanListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	private void createAddSelectedScanButton(Composite parent) {

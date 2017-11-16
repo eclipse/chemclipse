@@ -35,7 +35,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ScanChart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ScanChartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
@@ -76,7 +76,7 @@ public class ExtendedScanChartUI {
 	private Label labelScan;
 	private Button buttonSaveScan;
 	private Button buttonOptimizedScan;
-	private ScanChart scanChart;
+	private ScanChartUI scanChartUI;
 	//
 	private Combo comboDataType;
 	private Combo comboSignalType;
@@ -124,7 +124,7 @@ public class ExtendedScanChartUI {
 			labelScan.setText(ScanSupport.getScanLabel(scan));
 			enableIdentifierSettings(scan);
 			setDetectorSignalType(scan);
-			scanChart.setInput(scan);
+			scanChartUI.setInput(scan);
 		}
 	}
 
@@ -251,7 +251,7 @@ public class ExtendedScanChartUI {
 					/*
 					 * Update all listeners
 					 */
-					PartSupport.showPart(PartSupport.PARTDESCRIPTOR_SUBTRACT_CHART, PartSupport.PARTSTACK_BOTTOM_RIGHT);
+					PartSupport.showPart(PartSupport.PARTDESCRIPTOR_SUBTRACT_SCAN, PartSupport.PARTSTACK_BOTTOM_RIGHT);
 					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 					eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
 				}
@@ -292,7 +292,7 @@ public class ExtendedScanChartUI {
 						//
 						optimizedScan.getTargets().clear();
 						MassSpectrumFilter.applyFilter(optimizedScan, filterId, new NullProgressMonitor());
-						scanChart.setInput(optimizedScan);
+						scanChartUI.setInput(optimizedScan);
 					}
 				}
 			}
@@ -386,8 +386,8 @@ public class ExtendedScanChartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				String selection = combo.getText();
-				scanChart.setDataType(DataType.valueOf(selection));
-				scanChart.setInput(scan);
+				scanChartUI.setDataType(DataType.valueOf(selection));
+				scanChartUI.setInput(scan);
 			}
 		});
 		return combo;
@@ -406,8 +406,8 @@ public class ExtendedScanChartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				String selection = combo.getText();
-				scanChart.setSignalType(SignalType.valueOf(selection));
-				scanChart.setInput(scan);
+				scanChartUI.setSignalType(SignalType.valueOf(selection));
+				scanChartUI.setInput(scan);
 			}
 		});
 		return combo;
@@ -483,7 +483,7 @@ public class ExtendedScanChartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				scanChart.toggleSeriesLegendVisibility();
+				scanChartUI.toggleSeriesLegendVisibility();
 			}
 		});
 	}
@@ -608,8 +608,8 @@ public class ExtendedScanChartUI {
 
 	private void createScanChart(Composite parent) {
 
-		scanChart = new ScanChart(parent, SWT.BORDER);
-		scanChart.setLayoutData(new GridData(GridData.FILL_BOTH));
+		scanChartUI = new ScanChartUI(parent, SWT.BORDER);
+		scanChartUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	private void enableIdentifierSettings(IScan scan) {
@@ -659,8 +659,8 @@ public class ExtendedScanChartUI {
 		/*
 		 * Data / Signal Type
 		 */
-		scanChart.setDataType(DataType.valueOf(comboDataType.getText()));
-		scanChart.setSignalType(SignalType.valueOf(comboSignalType.getText()));
+		scanChartUI.setDataType(DataType.valueOf(comboDataType.getText()));
+		scanChartUI.setSignalType(SignalType.valueOf(comboSignalType.getText()));
 	}
 
 	private void setSelectionIndex(Combo combo, String[] items) {

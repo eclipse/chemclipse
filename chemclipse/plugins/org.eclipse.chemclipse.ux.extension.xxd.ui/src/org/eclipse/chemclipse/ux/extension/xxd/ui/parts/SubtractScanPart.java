@@ -16,19 +16,19 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractSubtractUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ISubtractUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedSubtractChartUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedSubtractScanUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
-public class SubtractChartPart extends AbstractSubtractUpdateSupport implements ISubtractUpdateSupport {
+public class SubtractScanPart extends AbstractSubtractUpdateSupport implements ISubtractUpdateSupport {
 
-	private ExtendedSubtractChartUI extendedSubtractChartUI;
+	private ExtendedSubtractScanUI extendedSubtractChartUI;
 
 	@Inject
-	public SubtractChartPart(Composite parent, MPart part) {
+	public SubtractScanPart(Composite parent, MPart part) {
 		super(part);
-		extendedSubtractChartUI = new ExtendedSubtractChartUI(parent, part);
+		extendedSubtractChartUI = new ExtendedSubtractScanUI(parent, part);
 	}
 
 	@Focus

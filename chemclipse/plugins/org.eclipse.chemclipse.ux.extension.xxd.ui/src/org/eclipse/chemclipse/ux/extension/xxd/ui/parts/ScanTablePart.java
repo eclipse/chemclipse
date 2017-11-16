@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
@@ -293,12 +294,74 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		composite.setLayout(new GridLayout(4, false));
 		//
-		Button bt = new Button(composite, SWT.PUSH);
-		bt.setText("Add");
+		createTextX(composite);
+		createTextY(composite);
+		createButtonAdd(composite);
+		createButtonDelete(composite);
 		//
 		return composite;
+	}
+
+	private void createTextX(Composite parent) {
+
+		Text button = new Text(parent, SWT.BORDER);
+		button.setText("");
+		button.setToolTipText("Value X");
+		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createTextY(Composite parent) {
+
+		Text button = new Text(parent, SWT.BORDER);
+		button.setText("");
+		button.setToolTipText("Value Y");
+		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createButtonAdd(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Add the scan signal.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createButtonDelete(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Delete the scan signal.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
 	}
 
 	private void createTable(Composite parent) {
