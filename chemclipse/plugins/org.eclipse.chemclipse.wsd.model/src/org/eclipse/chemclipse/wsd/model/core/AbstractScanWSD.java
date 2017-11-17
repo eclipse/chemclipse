@@ -32,43 +32,49 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	 * methods.
 	 */
 	private static final long serialVersionUID = -8298107894544692691L;
-	private List<IScanSignalWSD> scans;
+	private List<IScanSignalWSD> scanSignals;
 	private Set<IScanTargetWSD> targets;
 
 	public AbstractScanWSD() {
-		scans = new ArrayList<IScanSignalWSD>();
+		scanSignals = new ArrayList<IScanSignalWSD>();
 		targets = new HashSet<IScanTargetWSD>();
 	}
 
 	@Override
 	public IScanSignalWSD getScanSignal(int scan) {
 
-		return scans.get(scan);
+		return scanSignals.get(scan);
 	}
 
 	@Override
 	public void addScanSignal(IScanSignalWSD scanSignalWSD) {
 
-		scans.add(scanSignalWSD);
+		scanSignals.add(scanSignalWSD);
+	}
+
+	@Override
+	public void removeScanSignal(IScanSignalWSD scanSignalWSD) {
+
+		scanSignals.remove(scanSignalWSD);
 	}
 
 	@Override
 	public void removeScanSignal(int scan) {
 
-		scans.remove(scan);
+		scanSignals.remove(scan);
 	}
 
 	@Override
 	public List<IScanSignalWSD> getScanSignals() {
 
-		return scans;
+		return scanSignals;
 	}
 
 	@Override
 	public float getTotalSignal() {
 
 		float totalSignal = 0.0f;
-		for(IScanSignalWSD scan : scans) {
+		for(IScanSignalWSD scan : scanSignals) {
 			totalSignal += scan.getAbundance();
 		}
 		return totalSignal;
@@ -113,7 +119,7 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	@Override
 	public boolean hasScanSignals() {
 
-		if(scans.size() == 0) {
+		if(scanSignals.size() == 0) {
 			return false;
 		}
 		return true;
@@ -126,8 +132,8 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 		IScanSignalWSD highest = null;
 		if(hasScanSignals()) {
 			Comparator<IScanSignalWSD> comparator = new WavelengthCombinedComparator(WavelengthComparatorMode.WAVELENGTH_FIRST);
-			lowest = Collections.min(scans, comparator);
-			highest = Collections.max(scans, comparator);
+			lowest = Collections.min(scanSignals, comparator);
+			highest = Collections.max(scanSignals, comparator);
 			return new WavelengthBounds(lowest, highest);
 		} else {
 			return null;

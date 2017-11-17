@@ -11,24 +11,42 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
+import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.msd.model.core.IIon;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
+import org.eclipse.chemclipse.support.ui.menu.ITableMenuCategories;
+import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ScanListUI;
+import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -38,6 +56,7 @@ import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -46,6 +65,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 
 public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
@@ -380,6 +400,7 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				addSignal();
 			}
 		});
 	}
@@ -395,6 +416,7 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				deleteSignals();
 			}
 		});
 	}
@@ -403,6 +425,54 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 
 		scanListUI = new ScanListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		scanListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		/*
+		 * Add the delete targets support.
+		 */
+		ITableSettings tableSettings = scanListUI.getTableSettings();
+		addDeleteMenuEntry(tableSettings);
+		addKeyEventProcessors(tableSettings);
+		scanListUI.applySettings(tableSettings);
+	}
+
+	private void addDeleteMenuEntry(ITableSettings tableSettings) {
+
+		tableSettings.addMenuEntry(new ITableMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Delete Signal(s)";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return ITableMenuCategories.STANDARD_OPERATION;
+			}
+
+			@Override
+			public void execute(ExtendedTableViewer extendedTableViewer) {
+
+				deleteSignals();
+			}
+		});
+	}
+
+	private void addKeyEventProcessors(ITableSettings tableSettings) {
+
+		tableSettings.addKeyEventProcessor(new IKeyEventProcessor() {
+
+			@Override
+			public void handleEvent(ExtendedTableViewer extendedTableViewer, KeyEvent e) {
+
+				if(e.keyCode == SWT.DEL) {
+					/*
+					 * DEL
+					 */
+					deleteSignals();
+				}
+			}
+		});
 	}
 
 	private void applySettings() {
@@ -413,5 +483,133 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 	private void reset() {
 
 		updateObject();
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void deleteSignals() {
+
+		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		messageBox.setText("Delete Signal(s)");
+		messageBox.setMessage("Would you like to delete the selected signal(s)?");
+		if(messageBox.open() == SWT.YES) {
+			/*
+			 * Delete the signal
+			 */
+			Iterator iterator = scanListUI.getStructuredSelection().iterator();
+			while(iterator.hasNext()) {
+				Object object = iterator.next();
+				deleteSignal(object);
+			}
+			//
+			fireScanUpdate();
+			//
+		}
+	}
+
+	private void deleteSignal(Object signal) {
+
+		if(object instanceof IScanMSD) {
+			IScanMSD scanMSD = (IScanMSD)object;
+			if(signal instanceof IIon) {
+				scanMSD.removeIon((IIon)signal);
+			}
+		} else if(object instanceof IScanCSD) {
+			IScanCSD scanCSD = (IScanCSD)object;
+			scanCSD.adjustTotalSignal(0.0f);
+		} else if(object instanceof IScanWSD) {
+			IScanWSD scanWSD = (IScanWSD)object;
+			if(signal instanceof IScanSignalWSD) {
+				scanWSD.removeScanSignal((IScanSignalWSD)signal);
+			}
+		} else if(object instanceof IPeakMSD) {
+			IPeakMSD peakMSD = (IPeakMSD)object;
+			if(signal instanceof IIon) {
+				peakMSD.getExtractedMassSpectrum().removeIon((IIon)signal);
+			}
+		} else if(object instanceof IPeakCSD) {
+			IPeakCSD peakCSD = (IPeakCSD)object;
+			if(signal instanceof IScanCSD) {
+				IScan scan = peakCSD.getPeakModel().getPeakMaximum();
+				if(scan instanceof IScanCSD) {
+					IScanCSD scanCSD = (IScanCSD)scan;
+					scanCSD.adjustTotalSignal(0);
+				}
+			}
+		} else if(object instanceof IPeakWSD) {
+			IPeakWSD peakWSD = (IPeakWSD)object;
+			if(signal instanceof IScanSignalWSD) {
+				IScan scan = (IScan)peakWSD.getPeakModel().getPeakMaximum();
+				if(scan instanceof IScanWSD) {
+					IScanWSD scanWSD = (IScanWSD)scan;
+					if(signal instanceof IScanSignalWSD) {
+						scanWSD.removeScanSignal((IScanSignalWSD)signal);
+					}
+				}
+			}
+		}
+	}
+
+	private void addSignal() {
+
+		String x = textX.getText().trim();
+		String y = textY.getText().trim();
+		//
+		if("".equals(x) || "".equals(y)) {
+			MessageDialog.openError(Display.getDefault().getActiveShell(), "Add Signal", "The values must be not empty.");
+		} else {
+			try {
+				/*
+				 * Add the signal.
+				 */
+				double valueX = Double.parseDouble(x);
+				float valueY = Float.parseFloat(y);
+				//
+				if(object instanceof IScanMSD) {
+					IScanMSD scanMSD = (IScanMSD)object;
+					scanMSD.addIon(new Ion(valueX, valueY));
+				} else if(object instanceof IScanCSD) {
+					IScanCSD scanCSD = (IScanCSD)object;
+					scanCSD.adjustTotalSignal(valueY);
+				} else if(object instanceof IScanWSD) {
+					IScanWSD scanWSD = (IScanWSD)object;
+					scanWSD.addScanSignal(new ScanSignalWSD(valueX, valueY));
+				} else if(object instanceof IPeakMSD) {
+					IPeakMSD peakMSD = (IPeakMSD)object;
+					peakMSD.getExtractedMassSpectrum().addIon(new Ion(valueX, valueY));
+				} else if(object instanceof IPeakCSD) {
+					IPeakCSD peakCSD = (IPeakCSD)object;
+					IScan scan = peakCSD.getPeakModel().getPeakMaximum();
+					if(scan instanceof IScanCSD) {
+						IScanCSD scanCSD = (IScanCSD)scan;
+						scanCSD.adjustTotalSignal(valueY);
+					}
+				} else if(object instanceof IPeakWSD) {
+					IPeakWSD peakWSD = (IPeakWSD)object;
+					IScan scan = (IScan)peakWSD.getPeakModel().getPeakMaximum();
+					if(scan instanceof IScanWSD) {
+						IScanWSD scanWSD = (IScanWSD)scan;
+						scanWSD.addScanSignal(new ScanSignalWSD(valueX, valueY));
+					}
+				}
+				//
+				fireScanUpdate();
+				//
+			} catch(Exception e) {
+				MessageDialog.openError(Display.getDefault().getActiveShell(), "Add Signal", "Something has gone wrong to add the signal.");
+			}
+		}
+	}
+
+	private void fireScanUpdate() {
+
+		/*
+		 * Fire an update.
+		 */
+		IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+		if(object instanceof IScan) {
+			eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, object);
+		} else if(object instanceof IPeak) {
+			eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, object);
+		}
 	}
 }

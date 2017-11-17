@@ -12,14 +12,28 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
 import org.eclipse.swt.SWT;
 import org.swtchart.LineStyle;
 
 public class PreferenceConstants {
 
 	/*
-	 * General
+	 * General / Task Quick Access
 	 */
+	public static final String P_STACK_POSITION_TARGETS = "stackPositionTargets";
+	public static final String DEF_STACK_POSITION_TARGETS = PartSupport.PARTSTACK_BOTTOM_LEFT;
+	public static final String P_STACK_POSITION_SCAN_CHART = "stackPositionScanChart";
+	public static final String DEF_STACK_POSITION_SCAN_CHART = PartSupport.PARTSTACK_BOTTOM_CENTER;
+	public static final String P_STACK_POSITION_SCAN_TABLE = "stackPositionScanTable";
+	public static final String DEF_STACK_POSITION_SCAN_TABLE = PartSupport.PARTSTACK_BOTTOM_RIGHT;
+	//
+	public static String[][] PART_STACKS = new String[][]{//
+			{"--", PartSupport.PARTSTACK_NONE}, //
+			{"Left", PartSupport.PARTSTACK_BOTTOM_LEFT}, //
+			{"Center", PartSupport.PARTSTACK_BOTTOM_CENTER}, //
+			{"Right", PartSupport.PARTSTACK_BOTTOM_RIGHT}//
+	};
 	/*
 	 * Overlay
 	 */

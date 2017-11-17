@@ -98,6 +98,30 @@ public class ExtendedScanChartUI {
 	private List<String> scanIdentifierIds;
 	private String[] scanIdentifierNames;
 
+	private class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
+
+		private String identifierId;
+
+		public MassSpectrumIdentifierRunnable(String identifierId) {
+			this.identifierId = identifierId;
+		}
+
+		@Override
+		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+			try {
+				monitor.beginTask("Scan Identification", IProgressMonitor.UNKNOWN);
+				MassSpectrumIdentifier.identify(optimizedScan, identifierId, monitor);
+				originalScan.setOptimizedMassSpectrum(optimizedScan);
+				//
+				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, originalScan.getOptimizedMassSpectrum());
+			} finally {
+				monitor.done();
+			}
+		}
+	}
+
 	@Inject
 	public ExtendedScanChartUI(Composite parent, MPart part) {
 		initializeSettings();
@@ -329,37 +353,13 @@ public class ExtendedScanChartUI {
 					int index = comboScanIdentifier.getSelectionIndex();
 					if(index >= 0 && index < scanIdentifierIds.size()) {
 						/*
-						 * Create the runnable.
-						 */
-						final String identifierId = scanIdentifierIds.get(index);
-						IRunnableWithProgress runnable = new IRunnableWithProgress() {
-
-							@Override
-							public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-
-								try {
-									monitor.beginTask("Scan Identification", IProgressMonitor.UNKNOWN);
-									MassSpectrumIdentifier.identify(optimizedScan, identifierId, monitor);
-									originalScan.setOptimizedMassSpectrum(optimizedScan);
-									//
-									IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-									eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, originalScan.getOptimizedMassSpectrum());
-								} finally {
-									monitor.done();
-								}
-							}
-						};
-						/*
 						 * Run the identification.
 						 */
+						String identifierId = scanIdentifierIds.get(index);
+						IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(identifierId);
 						ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 						try {
 							monitor.run(true, true, runnable);
-							/*
-							 * Release the pin status.
-							 */
-							isScanPinned = false;
-							setPinButtonText();
 						} catch(InvocationTargetException e1) {
 							logger.warn(e1);
 						} catch(InterruptedException e1) {
