@@ -59,7 +59,7 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 	private Button buttonOptimizedScan;
 	private ScanListUI scanListUI;
 	//
-	private IScan scan;
+	private Object object;
 
 	@Inject
 	public ScanTablePart(Composite parent, MPart part) {
@@ -70,11 +70,17 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 	@Focus
 	public void setFocus() {
 
-		updateScan();
+		updateObject();
 	}
 
 	@Override
 	public void updateObject(Object object) {
+
+		this.object = object;
+		updateObject();
+	}
+
+	private void updateObject() {
 
 		IScan scan = null;
 		if(object instanceof IScan) {
@@ -83,11 +89,7 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 			IPeak peak = (IPeak)object;
 			scan = peak.getPeakModel().getPeakMaximum();
 		}
-		this.scan = scan;
-	}
-
-	private void updateScan() {
-
+		//
 		labelInfo.setText(ScanSupport.getScanLabel(scan));
 		scanListUI.setInput(scan);
 	}
@@ -111,12 +113,11 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(7, false));
+		composite.setLayout(new GridLayout(6, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		comboDataType = createDataType(composite);
 		createButtonToggleToolbarEdit(composite);
-		createResetButton(composite);
 		buttonSaveScan = createSaveButton(composite);
 		buttonOptimizedScan = createOptimizedScanButton(composite);
 		createSettingsButton(composite);
@@ -186,22 +187,6 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 		return button;
 	}
 
-	private void createResetButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Reset the scan chart.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				reset();
-			}
-		});
-	}
-
 	private Button createSaveButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
@@ -232,8 +217,8 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(scan instanceof IScanMSD) {
-					IScanMSD scanMSD = (IScanMSD)scan;
+				if(object instanceof IScanMSD) {
+					IScanMSD scanMSD = (IScanMSD)object;
 					IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
 					if(optimizedMassSpectrum != null) {
 						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
@@ -370,13 +355,8 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 		scanListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
-	private void reset() {
-
-		updateScan();
-	}
-
 	private void applySettings() {
 
-		updateScan();
+		updateObject();
 	}
 }

@@ -382,7 +382,8 @@ public class ScanChartUI extends ScrollableChart {
 
 		double[] xSeries;
 		double[] ySeries;
-		String id = "Scan " + scan.getScanNumber();
+		String scanNumber = (scan.getScanNumber() > 0 ? Integer.toString(scan.getScanNumber()) : "--");
+		String id = "Scan " + scanNumber;
 		//
 		if(scan instanceof IScanMSD) {
 			IScanMSD scanMSD = (IScanMSD)scan;

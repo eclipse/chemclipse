@@ -266,6 +266,9 @@ public class ExtendedScanChartUI {
 		combo.setToolTipText("Scan Filter");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.setItems(scanFilterNames);
+		if(scanFilterNames.length > 0) {
+			combo.select(0);
+		}
 		return combo;
 	}
 
@@ -305,6 +308,9 @@ public class ExtendedScanChartUI {
 		Combo combo = new Combo(parent, SWT.NONE);
 		combo.setToolTipText("Scan Identifier");
 		combo.setItems(scanIdentifierNames);
+		if(scanIdentifierNames.length > 0) {
+			combo.select(0);
+		}
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		return combo;
 	}
@@ -349,6 +355,9 @@ public class ExtendedScanChartUI {
 						ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 						try {
 							monitor.run(true, true, runnable);
+							/*
+							 * Release the pin status.
+							 */
 							isScanPinned = false;
 							setPinButtonText();
 						} catch(InvocationTargetException e1) {
