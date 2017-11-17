@@ -15,21 +15,20 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ScanListUI;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -44,7 +43,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -57,15 +55,17 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 	private Label labelInfo;
 	private Composite toolbarInfo;
 	private Composite toolbarEdit;
-	private Combo comboDataType;
 	private Button buttonSaveScan;
 	private Button buttonOptimizedScan;
 	private Label labelX;
+	private Text textX;
 	private Label labelY;
+	private Text textY;
 	//
 	private ScanListUI scanListUI;
 	//
 	private Object object;
+	private IScanMSD optimizedMassSpectrum;
 
 	@Inject
 	public ScanTablePart(Composite parent, MPart part) {
@@ -98,12 +98,28 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 		//
 		labelInfo.setText(ScanSupport.getScanLabel(scan));
 		scanListUI.setInput(scan);
-		//
+		/*
+		 * Fields
+		 */
 		List<TableViewerColumn> tableViewerColumns = scanListUI.getTableViewerColumns();
 		if(tableViewerColumns.size() == 2) {
-			labelX.setText(tableViewerColumns.get(0).getColumn().getText());
-			labelY.setText(tableViewerColumns.get(1).getColumn().getText());
+			//
+			String titleX = tableViewerColumns.get(0).getColumn().getText();
+			labelX.setText(titleX + ":");
+			textX.setToolTipText(titleX);
+			//
+			String titleY = tableViewerColumns.get(1).getColumn().getText();
+			labelY.setText(titleY + ":");
+			textY.setToolTipText(titleY);
+			//
+			toolbarEdit.layout(true);
 		}
+		/*
+		 * Optimized Scan
+		 */
+		optimizedMassSpectrum = null;
+		buttonOptimizedScan.setEnabled(ScanSupport.containsOptimizedScan(scan));
+		buttonSaveScan.setEnabled((object instanceof IScanMSD) ? true : false);
 	}
 
 	private void initialize(Composite parent) {
@@ -128,29 +144,11 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 		composite.setLayout(new GridLayout(6, false));
 		//
 		createButtonToggleToolbarInfo(composite);
-		comboDataType = createDataType(composite);
 		createButtonToggleToolbarEdit(composite);
+		createResetButton(composite);
 		buttonSaveScan = createSaveButton(composite);
 		buttonOptimizedScan = createOptimizedScanButton(composite);
 		createSettingsButton(composite);
-	}
-
-	private Combo createDataType(Composite parent) {
-
-		Combo combo = new Combo(parent, SWT.READ_ONLY);
-		combo.setToolTipText("Detector Type (MS, MS/MS, FID, DAD, ...)");
-		combo.setItems(ScanSupport.DATA_TYPES_DEFAULT);
-		combo.select(0);
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		combo.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				String selection = combo.getText();
-			}
-		});
-		return combo;
 	}
 
 	private Button createButtonToggleToolbarInfo(Composite parent) {
@@ -199,6 +197,22 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 		return button;
 	}
 
+	private void createResetButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Reset the scan chart.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				reset();
+			}
+		});
+	}
+
 	private Button createSaveButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
@@ -209,11 +223,19 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				// try {
-				// MassSpectrumFileSupport.saveMassSpectrum(optimizedScan);
-				// } catch(NoConverterAvailableException e1) {
-				// logger.warn(e1);
-				// }
+				try {
+					if(object instanceof IScanMSD) {
+						IScanMSD massSpectrum;
+						if(optimizedMassSpectrum != null) {
+							massSpectrum = optimizedMassSpectrum;
+						} else {
+							massSpectrum = (IScanMSD)object;
+						}
+						MassSpectrumFileSupport.saveMassSpectrum(massSpectrum);
+					}
+				} catch(NoConverterAvailableException e1) {
+					logger.warn(e1);
+				}
 			}
 		});
 		return button;
@@ -231,10 +253,10 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 
 				if(object instanceof IScanMSD) {
 					IScanMSD scanMSD = (IScanMSD)object;
-					IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
+					optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
 					if(optimizedMassSpectrum != null) {
-						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-						eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, optimizedMassSpectrum);
+						scanListUI.setInput(optimizedMassSpectrum);
+						button.setEnabled(false);
 					}
 				}
 			}
@@ -294,9 +316,9 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 		composite.setLayout(new GridLayout(6, false));
 		//
 		labelX = createLabelX(composite);
-		createTextX(composite);
+		textX = createTextX(composite);
 		labelY = createLabelY(composite);
-		createTextY(composite);
+		textY = createTextY(composite);
 		createButtonAdd(composite);
 		createButtonDelete(composite);
 		//
@@ -307,46 +329,44 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 
 		Label label = new Label(parent, SWT.NONE);
 		label.setText("");
-		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		return label;
 	}
 
-	private void createTextX(Composite parent) {
+	private Text createTextX(Composite parent) {
 
-		Text button = new Text(parent, SWT.BORDER);
-		button.setText("");
-		button.setToolTipText("Value X");
-		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		button.addSelectionListener(new SelectionAdapter() {
+		Text text = new Text(parent, SWT.BORDER);
+		text.setText("");
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		text.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 			}
 		});
+		return text;
 	}
 
 	private Label createLabelY(Composite parent) {
 
 		Label label = new Label(parent, SWT.NONE);
 		label.setText("");
-		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		return label;
 	}
 
-	private void createTextY(Composite parent) {
+	private Text createTextY(Composite parent) {
 
-		Text button = new Text(parent, SWT.BORDER);
-		button.setText("");
-		button.setToolTipText("Value Y");
-		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		button.addSelectionListener(new SelectionAdapter() {
+		Text text = new Text(parent, SWT.BORDER);
+		text.setText("");
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		text.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 			}
 		});
+		return text;
 	}
 
 	private void createButtonAdd(Composite parent) {
@@ -386,6 +406,11 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 	}
 
 	private void applySettings() {
+
+		updateObject();
+	}
+
+	private void reset() {
 
 		updateObject();
 	}

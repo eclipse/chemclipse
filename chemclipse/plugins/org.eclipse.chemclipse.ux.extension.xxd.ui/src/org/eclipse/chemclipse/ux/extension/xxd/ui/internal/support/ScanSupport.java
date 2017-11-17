@@ -88,4 +88,19 @@ public class ScanSupport {
 		}
 		return builder.toString();
 	}
+
+	public static boolean containsOptimizedScan(IScan scan) {
+
+		boolean containsOptimizedScan = false;
+		//
+		if(scan instanceof IScanMSD) {
+			IScanMSD scanMSD = (IScanMSD)scan;
+			IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
+			if(optimizedMassSpectrum != null) {
+				containsOptimizedScan = true;
+			}
+		}
+		//
+		return containsOptimizedScan;
+	}
 }
