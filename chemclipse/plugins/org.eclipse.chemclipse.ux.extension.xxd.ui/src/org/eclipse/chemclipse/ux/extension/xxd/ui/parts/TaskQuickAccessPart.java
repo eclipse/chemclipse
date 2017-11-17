@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -122,7 +123,7 @@ public class TaskQuickAccessPart {
 		 * Default part stack position.
 		 */
 		String targetsPartId = PartSupport.PARTDESCRIPTOR_TARGETS;
-		partMap.put(targetsPartId, PreferenceConstants.DEF_STACK_POSITION_TARGETS);
+		// partMap.put(targetsPartId, PreferenceConstants.DEF_STACK_POSITION_TARGETS);
 		//
 		String scanChartPartId = PartSupport.PARTDESCRIPTOR_SCAN_CHART;
 		partMap.put(scanChartPartId, PreferenceConstants.DEF_STACK_POSITION_SCAN_CHART);
@@ -147,8 +148,8 @@ public class TaskQuickAccessPart {
 				 */
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				String targetsPartStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_TARGETS);
-				String scanChartPartStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_TARGETS);
-				String scanTablePartStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_TARGETS);
+				String scanChartPartStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_CHART);
+				String scanTablePartStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_TABLE);
 				//
 				togglePartVisibility(button, targetsPartId, targetsPartStackId, imageActive, imageDefault);
 				togglePartVisibility(button, scanChartPartId, scanChartPartStackId, imageActive, imageDefault);
@@ -234,8 +235,21 @@ public class TaskQuickAccessPart {
 			 * has chosen another than the initial position.
 			 */
 			String defaultPartStackId = partMap.get(partId);
-			if(defaultPartStackId == null || !partStackId.equals(defaultPartStackId)) {
+			if(defaultPartStackId == null) {
+				/*
+				 * Create the part.
+				 */
 				PartSupport.setPartVisibility(partId, partStackId, false);
+				partMap.put(partId, partStackId);
+			} else if(!partStackId.equals(defaultPartStackId)) {
+				/*
+				 * Move the part to another part stack.
+				 */
+				MPart part = PartSupport.getPart(partId, defaultPartStackId);
+				MPartStack defaultPartStack = PartSupport.getPartStack(defaultPartStackId);
+				MPartStack partStack = PartSupport.getPartStack(partStackId);
+				defaultPartStack.getChildren().remove(part);
+				partStack.getChildren().add(part);
 				partMap.put(partId, partStackId);
 			}
 			/*
