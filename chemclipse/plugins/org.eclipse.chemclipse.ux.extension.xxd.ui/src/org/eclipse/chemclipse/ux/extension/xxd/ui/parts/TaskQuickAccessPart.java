@@ -60,18 +60,10 @@ public class TaskQuickAccessPart {
 		createSelectedScansTask(parent);
 		createSelectedPeaksTask(parent);
 		createSettingsTask(parent);
-		//
-		initializeParts();
 	}
 
 	private void createOverviewTask(Composite parent) {
 
-		String partId_1 = PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEADER;
-		partMap.put(partId_1, PartSupport.PARTSTACK_OVERVIEW);
-		//
-		String partId_2 = PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW;
-		partMap.put(partId_2, PartSupport.PARTSTACK_OVERVIEW);
-		//
 		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERVIEW_ACTIVE, IApplicationImage.SIZE_16x16);
 		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERVIEW_DEFAULT, IApplicationImage.SIZE_16x16);
 		//
@@ -87,19 +79,16 @@ public class TaskQuickAccessPart {
 				/*
 				 * Show the part stack on demand. It's hidden by default.
 				 */
-				String partStackId = partMap.get(partId_1);
-				PartSupport.setPartStackVisibility(partStackId, true);
-				togglePartVisibility(button, partId_1, imageActive, imageDefault);
-				togglePartVisibility(button, partId_2, imageActive, imageDefault);
+				PartSupport.setPartStackVisibility(PartSupport.PARTSTACK_OVERVIEW, true);
+				//
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEADER, PartSupport.PARTSTACK_OVERVIEW, imageActive, imageDefault);
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW, PartSupport.PARTSTACK_OVERVIEW, imageActive, imageDefault);
 			}
 		});
 	}
 
 	private void createOverlayTask(Composite parent) {
 
-		String partId_1 = PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERLAY;
-		partMap.put(partId_1, PartSupport.PARTSTACK_BOTTOM_LEFT);
-		//
 		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERLAY_ACTIVE, IApplicationImage.SIZE_16x16);
 		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM_OVERLAY_DEFAULT, IApplicationImage.SIZE_16x16);
 		//
@@ -112,25 +101,15 @@ public class TaskQuickAccessPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				togglePartVisibility(button, partId_1, imageActive, imageDefault);
+				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+				String overlayPartStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY);
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERLAY, overlayPartStackId, imageActive, imageDefault);
 			}
 		});
 	}
 
 	private void createSelectedScansTask(Composite parent) {
 
-		/*
-		 * Default part stack position.
-		 */
-		String targetsPartId = PartSupport.PARTDESCRIPTOR_TARGETS;
-		// partMap.put(targetsPartId, PreferenceConstants.DEF_STACK_POSITION_TARGETS);
-		//
-		String scanChartPartId = PartSupport.PARTDESCRIPTOR_SCAN_CHART;
-		partMap.put(scanChartPartId, PreferenceConstants.DEF_STACK_POSITION_SCAN_CHART);
-		//
-		String scanTablePartId = PartSupport.PARTDESCRIPTOR_SCAN_TABLE;
-		partMap.put(scanTablePartId, PreferenceConstants.DEF_STACK_POSITION_SCAN_TABLE);
-		//
 		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_SCANS_ACTIVE, IApplicationImage.SIZE_16x16);
 		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_SCANS_DEFAULT, IApplicationImage.SIZE_16x16);
 		//
@@ -143,26 +122,20 @@ public class TaskQuickAccessPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				/*
-				 * Selected part stack position.
-				 */
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				String targetsPartStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_TARGETS);
 				String scanChartPartStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_CHART);
 				String scanTablePartStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_TABLE);
 				//
-				togglePartVisibility(button, targetsPartId, targetsPartStackId, imageActive, imageDefault);
-				togglePartVisibility(button, scanChartPartId, scanChartPartStackId, imageActive, imageDefault);
-				togglePartVisibility(button, scanTablePartId, scanTablePartStackId, imageActive, imageDefault);
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_TARGETS, targetsPartStackId, imageActive, imageDefault);
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_SCAN_CHART, scanChartPartStackId, imageActive, imageDefault);
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_SCAN_TABLE, scanTablePartStackId, imageActive, imageDefault);
 			}
 		});
 	}
 
 	private void createSelectedPeaksTask(Composite parent) {
 
-		String partId_1 = PartSupport.PARTDESCRIPTOR_PEAK_CHART;
-		partMap.put(partId_1, PartSupport.PARTSTACK_BOTTOM_RIGHT);
-		//
 		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_PEAKS_ACTIVE, IApplicationImage.SIZE_16x16);
 		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED_PEAKS_DEFAULT, IApplicationImage.SIZE_16x16);
 		//
@@ -175,7 +148,9 @@ public class TaskQuickAccessPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				togglePartVisibility(button, partId_1, imageActive, imageDefault);
+				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+				String peakChartPartStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_CHART);
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_CHART, peakChartPartStackId, imageActive, imageDefault);
 			}
 		});
 	}
@@ -205,53 +180,40 @@ public class TaskQuickAccessPart {
 		});
 	}
 
-	private void initializeParts() {
-
-		/*
-		 * It's important to set the initial visibility of the parts.
-		 * Otherwise, PartSupport.togglePartVisibility won't work as expected.
-		 * Key = PartID
-		 * Value = PartStackID
-		 */
-		for(Map.Entry<String, String> part : partMap.entrySet()) {
-			PartSupport.setPartVisibility(part.getKey(), part.getValue(), false);
-		}
-	}
-
-	private void togglePartVisibility(Button button, String partId, Image imageActive, Image imageDefault) {
-
-		String partStackId = partMap.get(partId);
-		togglePartVisibility(button, partId, partStackId, imageActive, imageDefault);
-	}
-
 	private void togglePartVisibility(Button button, String partId, String partStackId, Image imageActive, Image imageDefault) {
 
-		/*
-		 * Only activate the part if it has been selected by the user.
-		 */
-		if(partStackId != null && !partStackId.equals(PartSupport.PARTSTACK_NONE)) {
+		if(PartSupport.PARTSTACK_NONE.equals(partStackId)) {
+			/*
+			 * Hide the part if it is visible.
+			 */
+			String currentPartStackId = partMap.get(partId);
+			if(currentPartStackId != null) {
+				PartSupport.setPartVisibility(partId, currentPartStackId, false);
+			}
+		} else {
 			/*
 			 * Initialize the part status if the user
 			 * has chosen another than the initial position.
 			 */
-			String defaultPartStackId = partMap.get(partId);
-			if(defaultPartStackId == null) {
+			String currentPartStackId = partMap.get(partId);
+			if(currentPartStackId == null) {
 				/*
-				 * Create the part.
+				 * Initialize the part.
 				 */
 				PartSupport.setPartVisibility(partId, partStackId, false);
-				partMap.put(partId, partStackId);
-			} else if(!partStackId.equals(defaultPartStackId)) {
+			} else {
 				/*
 				 * Move the part to another part stack.
 				 */
-				MPart part = PartSupport.getPart(partId, defaultPartStackId);
-				MPartStack defaultPartStack = PartSupport.getPartStack(defaultPartStackId);
-				MPartStack partStack = PartSupport.getPartStack(partStackId);
-				defaultPartStack.getChildren().remove(part);
-				partStack.getChildren().add(part);
-				partMap.put(partId, partStackId);
+				if(!partStackId.equals(currentPartStackId)) {
+					MPart part = PartSupport.getPart(partId, currentPartStackId);
+					MPartStack defaultPartStack = PartSupport.getPartStack(currentPartStackId);
+					MPartStack partStack = PartSupport.getPartStack(partStackId);
+					defaultPartStack.getChildren().remove(part);
+					partStack.getChildren().add(part);
+				}
 			}
+			partMap.put(partId, partStackId);
 			/*
 			 * Toggle visibility.
 			 */

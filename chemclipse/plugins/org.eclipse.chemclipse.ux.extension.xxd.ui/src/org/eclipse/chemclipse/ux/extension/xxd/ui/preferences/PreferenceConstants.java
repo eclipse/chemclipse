@@ -21,12 +21,16 @@ public class PreferenceConstants {
 	/*
 	 * General / Task Quick Access
 	 */
+	public static final String P_STACK_POSITION_OVERLAY = "stackPositionOverlay";
+	public static final String DEF_STACK_POSITION_OVERLAY = PartSupport.PARTSTACK_BOTTOM_LEFT;
 	public static final String P_STACK_POSITION_TARGETS = "stackPositionTargets";
 	public static final String DEF_STACK_POSITION_TARGETS = PartSupport.PARTSTACK_BOTTOM_LEFT;
 	public static final String P_STACK_POSITION_SCAN_CHART = "stackPositionScanChart";
 	public static final String DEF_STACK_POSITION_SCAN_CHART = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_SCAN_TABLE = "stackPositionScanTable";
 	public static final String DEF_STACK_POSITION_SCAN_TABLE = PartSupport.PARTSTACK_BOTTOM_RIGHT;
+	public static final String P_STACK_POSITION_PEAK_CHART = "stackPositionPeakChart";
+	public static final String DEF_STACK_POSITION_PEAK_CHART = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	//
 	public static String[][] PART_STACKS = new String[][]{//
 			{"--", PartSupport.PARTSTACK_NONE}, //
