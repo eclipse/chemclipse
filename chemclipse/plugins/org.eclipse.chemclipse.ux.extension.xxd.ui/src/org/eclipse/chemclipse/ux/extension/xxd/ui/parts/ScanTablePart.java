@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -35,6 +37,7 @@ import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -57,6 +60,9 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 	private Combo comboDataType;
 	private Button buttonSaveScan;
 	private Button buttonOptimizedScan;
+	private Label labelX;
+	private Label labelY;
+	//
 	private ScanListUI scanListUI;
 	//
 	private Object object;
@@ -92,6 +98,12 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 		//
 		labelInfo.setText(ScanSupport.getScanLabel(scan));
 		scanListUI.setInput(scan);
+		//
+		List<TableViewerColumn> tableViewerColumns = scanListUI.getTableViewerColumns();
+		if(tableViewerColumns.size() == 2) {
+			labelX.setText(tableViewerColumns.get(0).getColumn().getText());
+			labelY.setText(tableViewerColumns.get(1).getColumn().getText());
+		}
 	}
 
 	private void initialize(Composite parent) {
@@ -279,14 +291,24 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(6, false));
 		//
+		labelX = createLabelX(composite);
 		createTextX(composite);
+		labelY = createLabelY(composite);
 		createTextY(composite);
 		createButtonAdd(composite);
 		createButtonDelete(composite);
 		//
 		return composite;
+	}
+
+	private Label createLabelX(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("");
+		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		return label;
 	}
 
 	private void createTextX(Composite parent) {
@@ -302,6 +324,14 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 
 			}
 		});
+	}
+
+	private Label createLabelY(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("");
+		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		return label;
 	}
 
 	private void createTextY(Composite parent) {

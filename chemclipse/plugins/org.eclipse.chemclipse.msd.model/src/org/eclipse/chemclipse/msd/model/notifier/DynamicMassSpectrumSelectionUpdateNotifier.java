@@ -16,10 +16,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.eclipse.e4.core.services.events.IEventBroker;
-
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.e4.core.services.events.IEventBroker;
 
 public class DynamicMassSpectrumSelectionUpdateNotifier implements IMassSpectrumSelectionUpdateNotifier {
 
@@ -42,5 +41,9 @@ public class DynamicMassSpectrumSelectionUpdateNotifier implements IMassSpectrum
 		map.put(IChemClipseEvents.PROPERTY_MASSPECTRUM, massSpectrum);
 		map.put(IChemClipseEvents.PROPERTY_FORCE_RELOAD, forceReload);
 		eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_MASSSPECTRUM, map);
+		/*
+		 * Update new Data Analysis Perspective.
+		 */
+		eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, massSpectrum);
 	}
 }
