@@ -16,37 +16,40 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
 public class RetentionTime2Filter implements IFilter {
 
 	private boolean inverse;
 	private boolean onlySelected = true;
-	private List<IRetentionTime> retentionTimes;
 	private String selectionResult = "";
+	private List<IVariable> variablesSelected;
 
-	public RetentionTime2Filter(List<IRetentionTime> retentionTimes, boolean inverse) {
-		this.retentionTimes = new ArrayList<>(retentionTimes);
+	public RetentionTime2Filter(List<IVariable> variables, boolean inverse) {
+		this.variablesSelected = new ArrayList<>(variables);
 		this.inverse = inverse;
 	}
 
 	@Override
-	public List<Boolean> filter(ISamples samples) {
+	public <V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples) {
 
-		int size = samples.getExtractedRetentionTimes().size();
+		int size = samples.getVariables().size();
 		List<Boolean> seletions = new ArrayList<>(size);
 		boolean selected = !inverse;
 		for(int i = 0; i < size; i++) {
 			seletions.add(selected);
 		}
-		Set<Integer> set = retentionTimes.stream().map(r -> r.getRetentionTime()).collect(Collectors.toSet());
+		List<V> variables = samples.getVariables();
+		Set<Object> set = variables.stream().map(r -> r.getObject()).collect(Collectors.toSet());
 		for(int i = 0; i < size; i++) {
-			int time = samples.getExtractedRetentionTimes().get(i).getRetentionTime();
+			Object object = variables.get(i).getObject();
 			if(inverse) {
-				seletions.set(i, set.contains(time));
+				seletions.set(i, set.contains(object));
 			} else {
-				seletions.set(i, !set.contains(time));
+				seletions.set(i, !set.contains(object));
 			}
 		}
 		selectionResult = IFilter.getNumberSelectedRow(seletions);
@@ -57,9 +60,9 @@ public class RetentionTime2Filter implements IFilter {
 	public String getDescription() {
 
 		if(inverse) {
-			return "Select " + retentionTimes.size() + " retention times.";
+			return "Select " + variablesSelected.size() + " retention times.";
 		} else {
-			return "Deselect " + retentionTimes.size() + " retention times.";
+			return "Deselect " + variablesSelected.size() + " retention times.";
 		}
 	}
 
@@ -69,15 +72,15 @@ public class RetentionTime2Filter implements IFilter {
 		return "Retention time filter";
 	}
 
-	public List<IRetentionTime> getRetentionTimes() {
-
-		return retentionTimes;
-	}
-
 	@Override
 	public String getSelectionResult() {
 
 		return selectionResult;
+	}
+
+	public List<IVariable> getVariables() {
+
+		return variablesSelected;
 	}
 
 	@Override

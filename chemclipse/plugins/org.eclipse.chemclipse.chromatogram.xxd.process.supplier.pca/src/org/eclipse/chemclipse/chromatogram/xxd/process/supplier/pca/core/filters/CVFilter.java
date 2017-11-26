@@ -19,9 +19,10 @@ import java.util.Set;
 
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
 public class CVFilter implements IFilter {
 
@@ -36,22 +37,22 @@ public class CVFilter implements IFilter {
 	}
 
 	@Override
-	public List<Boolean> filter(ISamples samples) {
+	public <V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples) {
 
-		List<ISample> samplesList = samples.getSampleList();
+		List<S> samplesList = samples.getSampleList();
 		List<Boolean> selection = new ArrayList<>();
-		List<IRetentionTime> retentionTimes = samples.getExtractedRetentionTimes();
-		for(int i = 0; i < retentionTimes.size(); i++) {
+		List<V> variables = samples.getVariables();
+		for(int i = 0; i < variables.size(); i++) {
 			selection.add(false);
 		}
-		Map<String, Set<ISample>> samplesByGroupNameMap = PcaUtils.getSamplesByGroupName(samplesList, false, onlySelected);
-		Collection<Set<ISample>> samplesByGroupName = samplesByGroupNameMap.values();
+		Map<String, Set<S>> samplesByGroupNameMap = PcaUtils.getSamplesByGroupName(samplesList, false, onlySelected);
+		Collection<Set<S>> samplesByGroupName = samplesByGroupNameMap.values();
 		if(!samplesByGroupName.isEmpty()) {
-			for(int i = 0; i < retentionTimes.size(); i++) {
+			for(int i = 0; i < variables.size(); i++) {
 				Collection<SummaryStatistics> categoryData = new ArrayList<>();
-				for(Set<ISample> set : samplesByGroupName) {
+				for(Set<S> set : samplesByGroupName) {
 					SummaryStatistics summaryStatistics = new SummaryStatistics();
-					for(ISample sample : set) {
+					for(ISample<?> sample : set) {
 						double d = sample.getSampleData().get(i).getModifiedData();
 						summaryStatistics.addValue(d);
 					}

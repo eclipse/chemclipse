@@ -12,12 +12,13 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.RetentionTime2Filter;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
@@ -37,19 +38,19 @@ public class FilterRetentionTime2WizardPage extends WizardPage implements IFilte
 
 	private NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
 	private RetentionTime2Filter retentionTimeFilter;
-	private List<IRetentionTime> retentionTimes;
 	private TableViewer tableViewer;
+	private List<IVariable> variables;
 
 	public FilterRetentionTime2WizardPage(RetentionTime2Filter retentionTimeFilter) {
 		super("Retention time filter");
 		setTitle("Retention Time Filter");
-		retentionTimes = IRetentionTime.copy(retentionTimeFilter.getRetentionTimes());
+		variables = new ArrayList<>(retentionTimeFilter.getVariables());
 		this.retentionTimeFilter = retentionTimeFilter;
 	}
 
 	private void createColumns() {
 
-		String[] titles = {"Retention Time (Minutes)", "Description"};
+		String[] titles = {"Value", "Description"};
 		int[] bounds = {150, 150};
 		TableViewerColumn col = createTableViewerColumn(titles[0], bounds[0]);
 		col.setLabelProvider(new CellLabelProvider() {
@@ -57,8 +58,8 @@ public class FilterRetentionTime2WizardPage extends WizardPage implements IFilte
 			@Override
 			public void update(ViewerCell cell) {
 
-				IRetentionTime retentionTime = (IRetentionTime)cell.getElement();
-				cell.setText(nf.format(retentionTime.getRetentionTimeMinutes()));
+				IVariable value = (IVariable)cell.getElement();
+				cell.setText(value.getValue());
 			}
 		});
 		col = createTableViewerColumn(titles[1], bounds[1]);
@@ -67,7 +68,7 @@ public class FilterRetentionTime2WizardPage extends WizardPage implements IFilte
 			@Override
 			public void update(ViewerCell cell) {
 
-				IRetentionTime retentionTime = (IRetentionTime)cell.getElement();
+				IVariable retentionTime = (IVariable)cell.getElement();
 				String description = retentionTime.getDescription();
 				if(description != null) {
 					cell.setText(retentionTime.getDescription());
@@ -90,7 +91,7 @@ public class FilterRetentionTime2WizardPage extends WizardPage implements IFilte
 		tableViewer = new TableViewer(table);
 		tableViewer.setContentProvider(new ArrayContentProvider());
 		createColumns();
-		tableViewer.setInput(retentionTimes);
+		tableViewer.setInput(variables);
 		Button button = new Button(composite, SWT.PUSH);
 		button.setText("Remove Selected Retention Times");
 		button.addListener(SWT.Selection, e -> remove());
@@ -114,7 +115,7 @@ public class FilterRetentionTime2WizardPage extends WizardPage implements IFilte
 		IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection();
 		Iterator<?> it = selection.iterator();
 		while(it.hasNext()) {
-			retentionTimes.remove(it.next());
+			variables.remove(it.next());
 		}
 		updateTable();
 	}
@@ -122,9 +123,9 @@ public class FilterRetentionTime2WizardPage extends WizardPage implements IFilte
 	@Override
 	public void update() {
 
-		List<IRetentionTime> retentionTimes = retentionTimeFilter.getRetentionTimes();
-		retentionTimes.clear();
-		retentionTimes.addAll(this.retentionTimes);
+		List<IVariable> variables = retentionTimeFilter.getVariables();
+		variables.clear();
+		variables.addAll(this.variables);
 	}
 
 	private void updateTable() {

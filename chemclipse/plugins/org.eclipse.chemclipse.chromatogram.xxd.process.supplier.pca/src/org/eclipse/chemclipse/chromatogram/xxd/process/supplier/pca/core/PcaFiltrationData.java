@@ -15,8 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaFiltrationData implements IDataModification {
@@ -52,9 +54,9 @@ public class PcaFiltrationData implements IDataModification {
 	}
 
 	@Override
-	public void process(ISamples samples, IProgressMonitor monitor) {
+	public <V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples, IProgressMonitor monitor) {
 
-		List<IRetentionTime> retentionTimes = samples.getExtractedRetentionTimes();
+		List<V> variables = samples.getVariables();
 		if(resetSelectedRetentionTimes) {
 			setSelectAllRow(samples, true);
 		}
@@ -63,7 +65,7 @@ public class PcaFiltrationData implements IDataModification {
 				filters.get(i).setOnlySelected(onlySelected);
 				List<Boolean> result = filters.get(i).filter(samples);
 				for(int j = 0; j < result.size(); j++) {
-					retentionTimes.get(j).setSelected(retentionTimes.get(j).isSelected() && result.get(j));
+					variables.get(j).setSelected(variables.get(j).isSelected() && result.get(j));
 				}
 			}
 		}
@@ -80,11 +82,11 @@ public class PcaFiltrationData implements IDataModification {
 		this.resetSelectedRetentionTimes = resetSelectedRetentionTimes;
 	}
 
-	private void setSelectAllRow(ISamples samples, boolean selection) {
+	private <V extends IVariable, S extends ISample<? extends ISampleData>> void setSelectAllRow(ISamples<V, S> samples, boolean selection) {
 
-		List<IRetentionTime> retentionTimes = samples.getExtractedRetentionTimes();
-		for(int i = 0; i < retentionTimes.size(); i++) {
-			retentionTimes.get(i).setSelected(selection);
+		List<V> variables = samples.getVariables();
+		for(int i = 0; i < variables.size(); i++) {
+			variables.get(i).setSelected(selection);
 		}
 	}
 }

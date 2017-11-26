@@ -24,8 +24,9 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtil
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.SampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.PcaColorGroup;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -65,7 +66,7 @@ public class SamplesOverviewPage {
 
 	private Combo comboSelectData;
 	private Label countSelectedSamples;
-	private HashMap<ISample, String> groupNames = new HashMap<>();
+	private HashMap<ISample<?>, String> groupNames = new HashMap<>();
 	private Composite mainComposite;
 	private Map<String, Color> mapGroupColor = new HashMap<>();
 	private NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
@@ -73,8 +74,8 @@ public class SamplesOverviewPage {
 	private int overviewTypeSelection = -1;
 	private PcaEditor pcaEditor;
 	private IPcaResults pcaResults;
-	private ISamples samples;
-	private ISample selectedSample;
+	private Samples samples;
+	private Sample selectedSample;
 	private Label selectedSampleLable;
 	private Table tableOverview;
 	private CheckboxTableViewer tableSamples;
@@ -109,7 +110,7 @@ public class SamplesOverviewPage {
 			@Override
 			public String getText(Object element) {
 
-				ISample sample = (ISample)element;
+				Sample sample = (Sample)element;
 				return sample.getName();
 			}
 		});
@@ -119,7 +120,7 @@ public class SamplesOverviewPage {
 			@Override
 			public void update(ViewerCell cell) {
 
-				ISample sample = (ISample)cell.getElement();
+				Sample sample = (Sample)cell.getElement();
 				String groupName = groupNames.get(sample);
 				cell.setImage(getGroupColorImage(groupName));
 				cell.setText(groupName != null ? groupName : "");
@@ -144,7 +145,7 @@ public class SamplesOverviewPage {
 			@Override
 			protected Object getValue(Object element) {
 
-				ISample sample = (ISample)element;
+				Sample sample = (Sample)element;
 				String groupName = groupNames.get(sample);
 				if(groupName == null) {
 					return "";
@@ -156,7 +157,7 @@ public class SamplesOverviewPage {
 			@Override
 			protected void setValue(Object element, Object value) {
 
-				ISample sample = (ISample)element;
+				Sample sample = (Sample)element;
 				String groupName = (String)value;
 				groupName = groupName.trim();
 				groupName = groupName.isEmpty() ? null : groupName;
@@ -248,7 +249,7 @@ public class SamplesOverviewPage {
 		tableSamples.addSelectionChangedListener(event -> {
 			IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 			if(!selection.isEmpty()) {
-				ISample sample = ((ISample)selection.getFirstElement());
+				Sample sample = ((Sample)selection.getFirstElement());
 				if(sample != null && sample != selectedSample) {
 					selectedSample = sample;
 					selectDataTableOverview(false);
@@ -360,10 +361,10 @@ public class SamplesOverviewPage {
 			createColumnsTableOverview(new String[]{"Retention Time at Maximum (Minutes)", "Data"});
 		}
 		if(selectedSample != null) {
-			List<ISampleData> sampleData = selectedSample.getSampleData();
+			List<SampleData> sampleData = selectedSample.getSampleData();
 			for(int i = 0; i < sampleData.size(); i++) {
 				TableItem tableItem = new TableItem(tableOverview, SWT.NONE);
-				tableItem.setText(0, nf.format(samples.getExtractedRetentionTimes().get(i).getRetentionTimeMinutes()));
+				tableItem.setText(0, nf.format(samples.getVariables().get(i).getRetentionTimeMinutes()));
 				tableItem.setText(1, Double.toString(sampleData.get(i).getModifiedData()));
 			}
 		}
@@ -400,7 +401,7 @@ public class SamplesOverviewPage {
 		}
 		if(selectedSample != null) {
 			for(int i = 0; i < selectedSample.getSampleData().size(); i++) {
-				ISampleData data = selectedSample.getSampleData().get(i);
+				SampleData data = selectedSample.getSampleData().get(i);
 				Set<IPeak> peaks = data.getPeaks();
 				if(peaks != null) {
 					for(IPeak peak : peaks) {
@@ -425,10 +426,10 @@ public class SamplesOverviewPage {
 			createColumnsTableOverview(new String[]{"Retention Time (Mintes)", "Data"});
 		}
 		if(selectedSample != null) {
-			List<ISampleData> sampleData = selectedSample.getSampleData();
+			List<SampleData> sampleData = selectedSample.getSampleData();
 			for(int i = 0; i < sampleData.size(); i++) {
 				TableItem tableItem = new TableItem(tableOverview, SWT.NONE);
-				tableItem.setText(0, nf.format(samples.getExtractedRetentionTimes().get(i).getRetentionTimeMinutes()));
+				tableItem.setText(0, nf.format(samples.getVariables().get(i).getRetentionTimeMinutes()));
 				tableItem.setText(1, Double.toString(sampleData.get(i).getData()));
 			}
 		}
@@ -453,7 +454,7 @@ public class SamplesOverviewPage {
 		});
 		Object[] checkedSamples = tableSamples.getCheckedElements();
 		for(Object checkedSample : checkedSamples) {
-			((ISample)checkedSample).setSelected(true);
+			((Sample)checkedSample).setSelected(true);
 		}
 		pcaEditor.updateSamples();
 	}
@@ -489,10 +490,10 @@ public class SamplesOverviewPage {
 
 	public void updateSamples() {
 
-		Optional<ISamples> samples = pcaEditor.getSamples();
+		Optional<Samples> samples = null; // = pcaEditor.getSamples();
 		if(samples.isPresent()) {
 			this.samples = samples.get();
-			List<ISample> samplesList = this.samples.getSampleList();
+			List<Sample> samplesList = this.samples.getSampleList();
 			groupNames.clear();
 			samplesList.forEach(s -> groupNames.put(s, s.getGroupName()));
 			PcaUtils.sortSampleListByName(samplesList);

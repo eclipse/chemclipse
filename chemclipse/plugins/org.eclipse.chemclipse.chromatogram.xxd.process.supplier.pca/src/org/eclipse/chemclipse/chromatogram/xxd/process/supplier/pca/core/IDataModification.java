@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IDataModification {
@@ -20,7 +23,7 @@ public interface IDataModification {
 
 	boolean isOnlySelected();
 
-	void process(ISamples samples, IProgressMonitor monitor);
+	<V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples, IProgressMonitor monitor);
 
 	void setOnlySelected(boolean onlySelected);
 }

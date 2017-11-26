@@ -15,7 +15,9 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preproc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.INormalization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.ITransformation;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaPreprocessingData implements IDataModification {
@@ -56,9 +58,9 @@ public class PcaPreprocessingData implements IDataModification {
 	}
 
 	@Override
-	public void process(ISamples samples, IProgressMonitor monitor) {
+	public <V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples, IProgressMonitor monitor) {
 
-		for(ISample sample : samples.getSampleList()) {
+		for(ISample<?> sample : samples.getSampleList()) {
 			sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> {
 				double data = d.getData();
 				d.setModifiedData(data);

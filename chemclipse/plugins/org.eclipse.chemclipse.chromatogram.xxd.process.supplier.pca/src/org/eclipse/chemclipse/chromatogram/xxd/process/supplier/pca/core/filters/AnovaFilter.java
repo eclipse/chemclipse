@@ -20,9 +20,10 @@ import java.util.Set;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.apache.commons.math3.stat.inference.OneWayAnova;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
 public class AnovaFilter implements IFilter {
 
@@ -37,23 +38,23 @@ public class AnovaFilter implements IFilter {
 	}
 
 	@Override
-	public List<Boolean> filter(ISamples samples) {
+	public <V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples) {
 
-		List<ISample> samplesList = samples.getSampleList();
-		List<IRetentionTime> retentionTimes = samples.getExtractedRetentionTimes();
-		List<Boolean> selection = new ArrayList<>(retentionTimes.size());
-		for(int i = 0; i < retentionTimes.size(); i++) {
+		List<S> samplesList = samples.getSampleList();
+		List<V> variables = samples.getVariables();
+		List<Boolean> selection = new ArrayList<>(variables.size());
+		for(int i = 0; i < variables.size(); i++) {
 			selection.add(false);
 		}
-		Map<String, Set<ISample>> samplesByGroupNameMap = PcaUtils.getSamplesByGroupName(samplesList, false, onlySelected);
-		Collection<Set<ISample>> samplesByGroupName = samplesByGroupNameMap.values();
+		Map<String, Set<S>> samplesByGroupNameMap = PcaUtils.getSamplesByGroupName(samplesList, false, onlySelected);
+		Collection<Set<S>> samplesByGroupName = samplesByGroupNameMap.values();
 		try {
 			for(int i = 0; i < selection.size(); i++) {
 				OneWayAnova oneWayAnova = new OneWayAnova();
 				Collection<SummaryStatistics> categoryData = new ArrayList<>();
-				for(Set<ISample> group : samplesByGroupName) {
+				for(Set<S> group : samplesByGroupName) {
 					SummaryStatistics summaryStatistics = new SummaryStatistics();
-					for(ISample sample : group) {
+					for(ISample<?> sample : group) {
 						double d = sample.getSampleData().get(i).getModifiedData();
 						summaryStatistics.addValue(d);
 					}

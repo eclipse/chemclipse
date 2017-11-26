@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.List;
 
-public interface IGroup extends ISample {
+public interface IGroup<S extends ISample<? extends ISampleData>> extends ISample<ISampleDataGroup> {
 
-	List<ISample> getSamples();
+	List<S> getSamples();
 }

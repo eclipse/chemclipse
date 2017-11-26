@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.LoadingPlotPage;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.SeriesConverter;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
@@ -35,7 +35,7 @@ public class LoadingPlot extends PCA2DPlot {
 	final public static int LABELS_DESCRIPTION = 2;
 	final public static int LABELS_RETENTION_TIME_MINUTES = 1;
 	final private Set<String> actualSelection = new HashSet<>();
-	final private Map<String, IRetentionTime> extractedValues = new HashMap<>();
+	final private Map<String, IVariable> extractedValues = new HashMap<>();
 	private int labelsType = LABELS_RETENTION_TIME_MINUTES;
 
 	public LoadingPlot(Composite parent, LoadingPlotPage loadingPlotPage) {
@@ -108,7 +108,7 @@ public class LoadingPlot extends PCA2DPlot {
 		return actualSelection;
 	}
 
-	public Map<String, IRetentionTime> getExtractedValues() {
+	public Map<String, IVariable> getExtractedValues() {
 
 		return extractedValues;
 	}

@@ -12,7 +12,9 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
 public class Normalization1Norm implements INormalization {
 
@@ -37,9 +39,9 @@ public class Normalization1Norm implements INormalization {
 	}
 
 	@Override
-	public void process(ISamples samples) {
+	public <V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples) {
 
-		for(ISample sample : samples.getSampleList()) {
+		for(ISample<?> sample : samples.getSampleList()) {
 			if(sample.isSelected() || !isOnlySelected) {
 				double sum = sample.getSampleData().stream().filter(d -> !d.isEmpty()).mapToDouble(d -> Math.abs(d.getModifiedData())).sum();
 				if(sum != 0) {

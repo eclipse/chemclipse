@@ -13,9 +13,10 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.prepro
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
 public class CenteringMean extends AbstractCentering {
 
@@ -32,10 +33,10 @@ public class CenteringMean extends AbstractCentering {
 	}
 
 	@Override
-	public void process(ISamples samples) {
+	public <V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples) {
 
-		List<IRetentionTime> retenitionTimes = samples.getExtractedRetentionTimes();
-		for(int i = 0; i < retenitionTimes.size(); i++) {
+		List<V> variables = samples.getVariables();
+		for(int i = 0; i < variables.size(); i++) {
 			final double value = getCenteringValue(samples.getSampleList(), i, 1);
 			final int j = i;
 			samples.getSampleList().stream().forEach(s -> {

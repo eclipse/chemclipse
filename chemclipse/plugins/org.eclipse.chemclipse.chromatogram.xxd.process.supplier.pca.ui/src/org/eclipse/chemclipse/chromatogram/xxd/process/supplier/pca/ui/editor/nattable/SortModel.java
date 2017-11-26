@@ -17,9 +17,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.nebula.widgets.nattable.sort.ISortModel;
 import org.eclipse.nebula.widgets.nattable.sort.SortDirectionEnum;
 
@@ -116,8 +116,8 @@ public class SortModel implements ISortModel {
 			}
 			final int setDirection = direction;
 			if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
-				List<IRetentionTime> retentionTimes = tableProvider.getDataTable().getRetentionTimes();
-				sortedRow.sort((i, j) -> setDirection * Boolean.compare(retentionTimes.get(i).isSelected(), retentionTimes.get(j).isSelected()));
+				List<IVariable> variables = tableProvider.getDataTable().getVariables();
+				sortedRow.sort((i, j) -> setDirection * Boolean.compare(variables.get(i).isSelected(), variables.get(j).isSelected()));
 			} else if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
 				/*
 				 * sort by retention time
@@ -130,7 +130,7 @@ public class SortModel implements ISortModel {
 					Collections.reverse(sortedRow);
 				}
 			} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAK_NAMES) {
-				List<String> peaksNames = tableProvider.getDataTable().getRetentionTimes().stream().map(r -> r.getDescription()).collect(Collectors.toList());
+				List<String> peaksNames = tableProvider.getDataTable().getVariables().stream().map(r -> r.getDescription()).collect(Collectors.toList());
 				Comparator<String> nullSafeStringComparator = Comparator.nullsFirst(String::compareTo);
 				sortedRow.sort((i, j) -> {
 					return setDirection * nullSafeStringComparator.compare(peaksNames.get(i), peaksNames.get(j));
@@ -166,7 +166,7 @@ public class SortModel implements ISortModel {
 	 */
 	public void update() {
 
-		int numberOfRow = tableProvider.getDataTable().getRetentionTimes().size();
+		int numberOfRow = tableProvider.getDataTable().getVariables().size();
 		sortedRow.clear();
 		for(int i = 0; i < numberOfRow; i++) {
 			sortedRow.add(i);

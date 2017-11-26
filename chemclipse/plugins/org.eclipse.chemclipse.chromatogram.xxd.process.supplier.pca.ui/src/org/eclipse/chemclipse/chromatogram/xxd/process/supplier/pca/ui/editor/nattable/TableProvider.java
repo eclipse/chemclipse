@@ -64,6 +64,6 @@ public class TableProvider {
 
 	public int getRowCount() {
 
-		return dataTable.getRetentionTimes().size();
+		return dataTable.getVariables().size();
 	}
 }

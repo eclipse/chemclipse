@@ -281,7 +281,7 @@ public class PeakListNatTable {
 
 	private void hideCompoundColumn() {
 
-		boolean isEmpty = !tableData.getRetentionTimes().stream().map(r -> r.getDescription()).anyMatch(s -> s != null && !s.isEmpty());
+		boolean isEmpty = !tableData.getVariables().stream().map(r -> r.getDescription()).anyMatch(s -> s != null && !s.isEmpty());
 		boolean isHidden = columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_PEAK_NAMES);
 		List<Integer> peakNamesColumn = new ArrayList<>();
 		peakNamesColumn.add(TableProvider.COLUMN_INDEX_PEAK_NAMES);

@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -28,11 +28,11 @@ public interface IDataExtraction {
 	int EXTRACT_PEAK_CUMULATION = 1;
 	int LINEAR_INTERPOLATION_SCAN = 3;
 
-	ISamples process(IProgressMonitor monitor);
+	Samples process(IProgressMonitor monitor);
 
-	default void setRetentionTimeDescription(ISamples samples) {
+	default void setRetentionTimeDescription(Samples samples) {
 
-		for(int i = 0; i < samples.getExtractedRetentionTimes().size(); i++) {
+		for(int i = 0; i < samples.getVariables().size(); i++) {
 			final int j = i;
 			final Set<String> peakNames = new HashSet<>();
 			samples.getSampleList().stream().map(s -> s.getSampleData()).map(d -> d.get(j).getPeaks()).forEach(peaks -> {
@@ -52,7 +52,7 @@ public interface IDataExtraction {
 						sb.append(", ");
 					}
 				}
-				samples.getExtractedRetentionTimes().get(i).setDescription(sb.toString());
+				samples.getVariables().get(i).setDescription(sb.toString());
 			}
 		}
 	}

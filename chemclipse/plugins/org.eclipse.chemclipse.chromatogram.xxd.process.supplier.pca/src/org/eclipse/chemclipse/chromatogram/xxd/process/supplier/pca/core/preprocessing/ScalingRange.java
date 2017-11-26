@@ -13,10 +13,10 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.prepro
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
 public class ScalingRange extends AbstaractScaling {
 
@@ -30,13 +30,13 @@ public class ScalingRange extends AbstaractScaling {
 		return "";
 	}
 
-	private double getMax(List<ISample> samples, int index) {
+	private <S extends ISample<? extends ISampleData>> double getMax(List<S> samples, int index) {
 
 		boolean onlySelected = isOnlySelected();
 		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).filter(d -> !d.isEmpty()).mapToDouble(s -> s.getModifiedData()).summaryStatistics().getMax();
 	}
 
-	private double getMin(List<ISample> samples, int index) {
+	private <S extends ISample<? extends ISampleData>> double getMin(List<S> samples, int index) {
 
 		boolean onlySelected = isOnlySelected();
 		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).filter(d -> !d.isEmpty()).mapToDouble(s -> s.getModifiedData()).summaryStatistics().getMin();
@@ -49,17 +49,17 @@ public class ScalingRange extends AbstaractScaling {
 	}
 
 	@Override
-	public void process(ISamples samples) {
+	public <V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples) {
 
 		boolean onlySelected = isOnlySelected();
 		int centeringType = getCenteringType();
-		List<IRetentionTime> retentionTime = samples.getExtractedRetentionTimes();
-		List<ISample> samplesList = samples.getSampleList();
-		for(int i = 0; i < retentionTime.size(); i++) {
+		List<V> variables = samples.getVariables();
+		List<S> samplesList = samples.getSampleList();
+		for(int i = 0; i < variables.size(); i++) {
 			final double mean = getCenteringValue(samplesList, i, centeringType);
 			final double max = getMax(samplesList, i);
 			final double min = getMin(samplesList, i);
-			for(ISample sample : samplesList) {
+			for(ISample<?> sample : samplesList) {
 				ISampleData sampleData = sample.getSampleData().get(i);
 				if(!sampleData.isEmpty() && (sample.isSelected() || !onlySelected)) {
 					double data = sampleData.getModifiedData();

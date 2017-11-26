@@ -134,7 +134,7 @@ public class Chart3DData {
 		return data.isEmpty();
 	}
 
-	void removeData() {
+	public void removeData() {
 
 		/*
 		 * clear data

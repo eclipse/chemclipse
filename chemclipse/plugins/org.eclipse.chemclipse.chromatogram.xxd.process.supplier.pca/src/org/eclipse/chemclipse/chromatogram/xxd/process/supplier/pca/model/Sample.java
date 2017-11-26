@@ -14,11 +14,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Sample implements ISample {
+public class Sample implements ISample<SampleData> {
 
 	private String groupName;
 	private String name;
-	private List<ISampleData> sampleData = new ArrayList<>();;
+	private List<SampleData> sampleData = new ArrayList<>();;
 	private boolean selected = true;
 
 	public Sample(IDataInputEntry dataInputEntry) {
@@ -42,7 +42,7 @@ public class Sample implements ISample {
 		if(getClass() != otherObject.getClass()) {
 			return false;
 		}
-		ISample other = (ISample)otherObject;
+		ISample<?> other = (ISample<?>)otherObject;
 		return name.equals(other.getName());
 	}
 
@@ -59,7 +59,13 @@ public class Sample implements ISample {
 	}
 
 	@Override
-	public List<ISampleData> getSampleData() {
+	public Object getObject() {
+
+		return this;
+	}
+
+	@Override
+	public List<SampleData> getSampleData() {
 
 		return sampleData;
 	}

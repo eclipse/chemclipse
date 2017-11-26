@@ -15,7 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 
 public class RetentionTimeFilter implements IFilter {
@@ -43,24 +46,28 @@ public class RetentionTimeFilter implements IFilter {
 	}
 
 	@Override
-	public List<Boolean> filter(ISamples samples) {
+	public <V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples) {
 
-		List<IRetentionTime> retentionTime = samples.getExtractedRetentionTimes();
-		List<Boolean> selection = new ArrayList<>(retentionTime.size());
+		List<V> variables = samples.getVariables();
+		List<Boolean> selection = new ArrayList<>(variables.size());
 		boolean set;
 		if(SELECT_INTERVAL == filtrationType) {
 			set = true;
 		} else {
 			set = false;
 		}
-		for(int i = 0; i < retentionTime.size(); i++) {
+		// check if list contains retention times
+		for(int i = 0; i < variables.size(); i++) {
 			selection.add(!set);
+		}
+		if(!IFilter.isRetentionTimes(variables)) {
+			return selection;
 		}
 		for(int[] interval : intervals) {
 			int begin = interval[0];
 			int finish = interval[1];
-			for(int i = 0; i < retentionTime.size(); i++) {
-				int ret = retentionTime.get(i).getRetentionTime();
+			for(int i = 0; i < variables.size(); i++) {
+				int ret = ((IRetentionTime)variables.get(i)).getRetentionTime();
 				if(ret >= begin && ret <= finish) {
 					selection.set(i, set);
 				}

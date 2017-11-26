@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Jan Holy.
+ * Copyright (c) 2017 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,5 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-public abstract class AbstractSamples implements ISamples {
+public interface IVariable extends Comparable<IVariable> {
+
+	String getDescription();
+
+	Object getObject();
+
+	String getValue();
+
+	boolean isSelected();
+
+	void setDescription(String description);
+
+	void setSelected(boolean selected);
 }

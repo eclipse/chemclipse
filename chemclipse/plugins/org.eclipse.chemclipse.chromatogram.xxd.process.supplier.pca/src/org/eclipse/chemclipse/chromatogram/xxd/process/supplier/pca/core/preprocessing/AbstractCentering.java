@@ -23,10 +23,10 @@ public abstract class AbstractCentering extends AbstractPreprocessing implements
 	public AbstractCentering() {
 	}
 
-	protected double getCenteringValue(List<ISample> sample, int position, int type) {
+	protected <S extends ISample<? extends ISampleData>> double getCenteringValue(List<S> list, int position, int type) {
 
 		boolean onlySelected = isOnlySelected();
-		DoubleStream selectedData = sample.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(position)).filter(d -> !d.isEmpty()).mapToDouble(d -> d.getModifiedData());
+		DoubleStream selectedData = list.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(position)).filter(d -> !d.isEmpty()).mapToDouble(d -> d.getModifiedData());
 		switch(type) {
 			case 1:
 				return selectedData.summaryStatistics().getAverage();
@@ -41,12 +41,12 @@ public abstract class AbstractCentering extends AbstractPreprocessing implements
 		}
 	}
 
-	protected double getStandartDeviation(List<ISample> samples, int position, int type) {
+	protected <S extends ISample<? extends ISampleData>> double getStandartDeviation(List<S> samples, int position, int type) {
 
 		return Math.sqrt(Math.abs(getVariance(samples, position, type)));
 	}
 
-	protected double getVariance(List<ISample> samples, int position, int type) {
+	protected <S extends ISample<? extends ISampleData>> double getVariance(List<S> samples, int position, int type) {
 
 		boolean onlySelected = isOnlySelected();
 		List<ISampleData> sampleData = samples.stream().filter(s -> s.isSelected() || onlySelected).map(s -> s.getSampleData().get(position)).collect(Collectors.toList());

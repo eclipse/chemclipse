@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.FiltersTable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
@@ -158,7 +158,7 @@ public class FiltersPage {
 
 		long count = 0;
 		if(pcaEditor.getSamples().isPresent()) {
-			count = pcaEditor.getSamples().get().getExtractedRetentionTimes().stream().filter(IRetentionTime::isSelected).count();
+			count = pcaEditor.getSamples().get().getVariables().stream().filter(IVariable::isSelected).count();
 		}
 		countSelectedRow.setText("It will be selected " + count + " rows");
 		countSelectedRow.getParent().layout();

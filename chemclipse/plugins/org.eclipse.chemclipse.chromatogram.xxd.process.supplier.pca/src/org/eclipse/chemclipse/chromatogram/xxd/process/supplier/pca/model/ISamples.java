@@ -11,33 +11,33 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 
-public interface ISamples {
+public interface ISamples<V extends IVariable, S extends ISample<? extends ISampleData>> {
 
 	default void createGroups() {
 
-		List<ISample> samples = getSampleList();
+		List<S> samples = getSampleList();
 		Set<String> groupNames = PcaUtils.getGroupNames(getSampleList(), true);
-		List<IGroup> groups = getGroupList();
-		groups.clear();
+		List<IGroup<S>> groups = new ArrayList<>();
 		groupNames.forEach(groupName -> {
 			if(groupName != null) {
-				List<ISample> samplesSomeGroupName = samples.stream().filter(s -> groupName.equals(s.getGroupName()) && s.isSelected()).collect(Collectors.toList());
-				IGroup group = new Group(samplesSomeGroupName);
+				List<S> samplesSomeGroupName = samples.stream().filter(s -> groupName.equals(s.getGroupName()) && s.isSelected()).collect(Collectors.toList());
+				Group<S> group = new Group<S>(samplesSomeGroupName);
 				group.setGroupName(groupName);
 				groups.add(group);
 			}
 		});
 	}
 
-	List<IRetentionTime> getExtractedRetentionTimes();
+	List<IGroup<S>> getGroupList();
 
-	List<IGroup> getGroupList();
+	List<S> getSampleList();
 
-	List<ISample> getSampleList();
+	List<V> getVariables();
 }

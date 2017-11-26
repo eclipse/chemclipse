@@ -14,16 +14,16 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Samples extends AbstractSamples {
+public class Samples implements ISamples<RetentionTime, Sample> {
 
-	private List<IRetentionTime> extractedRetentionTimes;
-	private List<IGroup> groups;
-	private List<ISample> samples;
+	private List<IGroup<Sample>> groupList;
+	private List<RetentionTime> retentionTimes;
+	private List<Sample> samples;
 
 	public Samples() {
 		samples = new ArrayList<>();
-		extractedRetentionTimes = new ArrayList<>();
-		groups = new ArrayList<>();
+		retentionTimes = new ArrayList<>();
+		groupList = new ArrayList<>();
 	}
 
 	public Samples(List<IDataInputEntry> dataInputEntries) {
@@ -32,20 +32,20 @@ public class Samples extends AbstractSamples {
 	}
 
 	@Override
-	public List<IRetentionTime> getExtractedRetentionTimes() {
+	public List<IGroup<Sample>> getGroupList() {
 
-		return extractedRetentionTimes;
+		return groupList;
 	}
 
 	@Override
-	public List<IGroup> getGroupList() {
-
-		return groups;
-	}
-
-	@Override
-	public List<ISample> getSampleList() {
+	public List<Sample> getSampleList() {
 
 		return samples;
+	}
+
+	@Override
+	public List<RetentionTime> getVariables() {
+
+		return retentionTimes;
 	}
 }

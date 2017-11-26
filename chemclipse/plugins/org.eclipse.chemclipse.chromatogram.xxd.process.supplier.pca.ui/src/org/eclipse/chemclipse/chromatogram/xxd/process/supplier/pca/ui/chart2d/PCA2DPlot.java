@@ -30,10 +30,10 @@ import org.swtchart.IAxis.Position;
 
 public abstract class PCA2DPlot extends ScatterChart {
 
-	//
-	private String chartTitle = "";
 	private Color COLOR_BLACK = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 	private DecimalFormat decimalFormat = new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH));
+	//
+	private String chartTitle = "";
 	private String xAxisTitle = "PC1";
 	private String yAxisTitle = "PC2";
 

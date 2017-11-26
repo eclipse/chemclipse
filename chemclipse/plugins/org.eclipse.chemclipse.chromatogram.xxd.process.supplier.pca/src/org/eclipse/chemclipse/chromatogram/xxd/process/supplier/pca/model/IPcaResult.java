@@ -21,6 +21,8 @@ public interface IPcaResult {
 
 	String getName();
 
+	ISample<?> getSample();
+
 	double[] getSampleData();
 
 	boolean isDisplayed();

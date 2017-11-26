@@ -39,7 +39,7 @@ public abstract class AbstractPcaEditor {
 	private Optional<PcaFiltrationData> pcaFiltrationData = Optional.empty();
 	private Optional<PcaPreprocessingData> pcaPreprocessingData = Optional.empty();
 	private Optional<IPcaResults> pcaResults = Optional.empty();
-	private Optional<ISamples> samples = Optional.empty();
+	private Optional<ISamples<?, ?>> samples = Optional.empty();
 
 	public AbstractPcaEditor() {
 		dataInputEntries = new ArrayList<>();
@@ -72,7 +72,7 @@ public abstract class AbstractPcaEditor {
 		return pcaResults;
 	}
 
-	public Optional<ISamples> getSamples() {
+	public Optional<ISamples<?, ?>> getSamples() {
 
 		return samples;
 	}

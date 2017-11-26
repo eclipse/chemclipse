@@ -37,15 +37,15 @@ public class PcaResulDataProvider implements IDataProvider {
 
 		int sortRowIndex = sortModel.getOrderRow().get(rowIndex);
 		if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
-			return tableProvider.getDataTable().getRetentionTimes().get(sortRowIndex).isSelected();
+			return tableProvider.getDataTable().getVariables().get(sortRowIndex).isSelected();
 		} else if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
-			return tableProvider.getDataTable().getRetentionTimes().get(sortRowIndex).getRetentionTimeMinutes();
+			return tableProvider.getDataTable().getVariables().get(sortRowIndex).getValue();
 		} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAK_NAMES) {
-			String peaksNames = tableProvider.getDataTable().getRetentionTimes().get(sortRowIndex).getDescription();
+			String peaksNames = tableProvider.getDataTable().getVariables().get(sortRowIndex).getDescription();
 			return peaksNames;
 		} else {
-			List<ISample> samples = tableProvider.getDataTable().getSamples();
-			ISample sample = samples.get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
+			List<ISample<?>> samples = tableProvider.getDataTable().getSamples();
+			ISample<?> sample = samples.get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
 			double sampleData = sample.getSampleData().get(sortRowIndex).getModifiedData();
 			return sampleData;
 		}
@@ -62,7 +62,7 @@ public class PcaResulDataProvider implements IDataProvider {
 
 		int sortRowIndex = sortModel.getOrderRow().get(rowIndex);
 		if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
-			tableProvider.getDataTable().getRetentionTimes().get(sortRowIndex).setSelected((boolean)newValue);
+			tableProvider.getDataTable().getVariables().get(sortRowIndex).setSelected((boolean)newValue);
 		}
 	}
 }

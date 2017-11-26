@@ -16,7 +16,7 @@ import java.util.List;
 public class PcaResults implements IPcaResults {
 
 	private List<double[]> basisVectors;
-	private List<IRetentionTime> extractedRetentionTimes;
+	private List<IVariable> extractedVariables;
 	//
 	private int numberOfPrincipleComponents;
 	private List<IPcaResult> pcaResultGroupsList;
@@ -32,9 +32,9 @@ public class PcaResults implements IPcaResults {
 	}
 
 	@Override
-	public List<IRetentionTime> getExtractedRetentionTimes() {
+	public List<IVariable> getExtractedVariables() {
 
-		return extractedRetentionTimes;
+		return extractedVariables;
 	}
 
 	@Override
@@ -62,9 +62,9 @@ public class PcaResults implements IPcaResults {
 	}
 
 	@Override
-	public void setExtractedRetentionTimes(List<IRetentionTime> extractedRetentionTimes) {
+	public void setExtractedVariables(List<IVariable> extractedVariables) {
 
-		this.extractedRetentionTimes = extractedRetentionTimes;
+		this.extractedVariables = extractedVariables;
 	}
 
 	@Override

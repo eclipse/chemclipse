@@ -11,17 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import java.util.Set;
-
-import org.eclipse.chemclipse.model.core.IPeak;
-
 public interface ISampleData {
 
 	double getData();
 
 	double getModifiedData();
-
-	Set<IPeak> getPeaks();
 
 	boolean isEmpty();
 

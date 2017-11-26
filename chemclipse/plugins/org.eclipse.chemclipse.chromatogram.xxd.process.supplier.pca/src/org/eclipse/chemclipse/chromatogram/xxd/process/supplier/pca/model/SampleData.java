@@ -49,7 +49,6 @@ public class SampleData implements ISampleData {
 		return normalizedData;
 	}
 
-	@Override
 	public Set<IPeak> getPeaks() {
 
 		return peaks;

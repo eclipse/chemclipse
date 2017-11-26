@@ -17,45 +17,45 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IRetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
 
 public class TableData {
 
 	private PcaEditor pcaEditor;
-	private List<IRetentionTime> retentionTimes = new ArrayList<>();
-	private List<ISample> samples = new ArrayList<>();
+	private List<ISample<?>> samples = new ArrayList<>();
+	private List<IVariable> variables = new ArrayList<>();
 
 	public TableData(PcaEditor pcaEditor) {
 		this.pcaEditor = pcaEditor;
 	}
 
 	/**
-	 *
-	 * @return retention times
-	 */
-	public List<IRetentionTime> getRetentionTimes() {
-
-		return retentionTimes;
-	}
-
-	/**
 	 * @return sorted samples by groups, this List contains instances of class Group
 	 */
-	public List<ISample> getSamples() {
+	public List<ISample<?>> getSamples() {
 
 		return samples;
 	}
 
+	/**
+	 *
+	 * @return retention times
+	 */
+	public List<IVariable> getVariables() {
+
+		return variables;
+	}
+
 	public void update() {
 
-		Optional<ISamples> result = pcaEditor.getSamples();
+		Optional<ISamples<?, ?>> result = pcaEditor.getSamples();
 		if(!result.isPresent()) {
 			return;
 		}
-		ISamples resultSamples = result.get();
+		ISamples<?, ?> resultSamples = result.get();
 		/*
 		 * remove old data
 		 */
@@ -70,7 +70,7 @@ public class TableData {
 		/*
 		 * set retention time
 		 */
-		retentionTimes = resultSamples.getExtractedRetentionTimes();
+		variables = (List<IVariable>)resultSamples.getVariables();
 		/*
 		 * Set peaks names
 		 */

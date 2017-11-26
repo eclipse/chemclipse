@@ -57,9 +57,9 @@ public class ResultExport {
 			printWriter.println("-------------------------------------");
 			printWriter.println("Extracted Retention Times (Minutes)");
 			printWriter.println("-------------------------------------");
-			for(int i = 0; i < pcaResults.getExtractedRetentionTimes().size(); i++) {
-				double retentionTime = pcaResults.getExtractedRetentionTimes().get(i).getRetentionTimeMinutes();
-				printWriter.println(decimalFormat.format(retentionTime));
+			for(int i = 0; i < pcaResults.getExtractedVariables().size(); i++) {
+				String variable = pcaResults.getExtractedVariables().get(i).getValue();
+				printWriter.println(variable);
 			}
 			printWriter.println("");
 			printWriter.println("-------------------------------------");
@@ -67,9 +67,9 @@ public class ResultExport {
 			printWriter.println("-------------------------------------");
 			printWriter.print("Filename");
 			printWriter.print(TAB);
-			for(int i = 0; i < pcaResults.getExtractedRetentionTimes().size(); i++) {
-				double retentionTime = pcaResults.getExtractedRetentionTimes().get(i).getRetentionTimeMinutes();
-				printWriter.print(decimalFormat.format(retentionTime));
+			for(int i = 0; i < pcaResults.getExtractedVariables().size(); i++) {
+				String variable = pcaResults.getExtractedVariables().get(i).getValue();
+				printWriter.println(variable);
 				printWriter.print(TAB);
 			}
 			printWriter.println("");

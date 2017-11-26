@@ -11,8 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
 public class TransformationPower extends AbstractPreprocessing implements ITransformation {
 
@@ -29,7 +31,7 @@ public class TransformationPower extends AbstractPreprocessing implements ITrans
 	}
 
 	@Override
-	public void process(ISamples samples) {
+	public <V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples) {
 
 		samples.getSampleList().stream().filter(s -> s.isSelected() || !isOnlySelected()).forEach(s -> {
 			for(ISampleData data : s.getSampleData()) {

@@ -20,21 +20,22 @@ import java.util.List;
  * @author Jan Holy
  *
  */
-public class Group implements IGroup {
+public class Group<S extends ISample<? extends ISampleData>> implements IGroup<S> {
 
 	private String groupName;
 	private String name;
-	private List<ISampleData> sampleData;
-	private List<ISample> samples;
+	private List<ISampleDataGroup> sampleData;
+	private List<S> samples;
+	private boolean selected = true;
 
-	public Group(List<ISample> samples) {
-		this.samples = samples;
+	public Group(List<S> samplesSomeGroupName) {
+		this.samples = samplesSomeGroupName;
 		this.name = "Group";
 		this.sampleData = new ArrayList<>();
-		if(!samples.isEmpty()) {
-			int countData = samples.get(0).getSampleData().size();
+		if(!samplesSomeGroupName.isEmpty()) {
+			int countData = samplesSomeGroupName.get(0).getSampleData().size();
 			for(int i = 0; i < countData; i++) {
-				sampleData.add(new SampleDataGroup(samples, i));
+				sampleData.add(new SampleDataGroup<S>(samplesSomeGroupName, i));
 			}
 		}
 	}
@@ -52,13 +53,19 @@ public class Group implements IGroup {
 	}
 
 	@Override
-	public List<ISampleData> getSampleData() {
+	public Object getObject() {
+
+		return this;
+	}
+
+	@Override
+	public List<ISampleDataGroup> getSampleData() {
 
 		return sampleData;
 	}
 
 	@Override
-	public List<ISample> getSamples() {
+	public List<S> getSamples() {
 
 		return samples;
 	}
@@ -66,7 +73,7 @@ public class Group implements IGroup {
 	@Override
 	public boolean isSelected() {
 
-		return !samples.isEmpty();
+		return selected;
 	}
 
 	@Override
@@ -78,5 +85,6 @@ public class Group implements IGroup {
 	@Override
 	public void setSelected(boolean selected) {
 
+		this.selected = selected;
 	}
 }

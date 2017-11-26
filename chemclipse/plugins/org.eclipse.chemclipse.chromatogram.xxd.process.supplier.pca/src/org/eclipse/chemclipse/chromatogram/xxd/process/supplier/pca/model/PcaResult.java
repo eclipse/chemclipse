@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Jan Holy - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
@@ -18,10 +19,12 @@ public class PcaResult implements IPcaResult {
 	private String groupName;
 	private boolean isDisplayed;
 	private String name;
+	private ISample<?> sample;
 	private double[] sampleData;
 
-	public PcaResult() {
+	public PcaResult(ISample<?> sample) {
 		isDisplayed = true;
+		this.sample = sample;
 	}
 
 	@Override
@@ -46,6 +49,12 @@ public class PcaResult implements IPcaResult {
 	public String getName() {
 
 		return name;
+	}
+
+	@Override
+	public ISample<?> getSample() {
+
+		return sample;
 	}
 
 	@Override
