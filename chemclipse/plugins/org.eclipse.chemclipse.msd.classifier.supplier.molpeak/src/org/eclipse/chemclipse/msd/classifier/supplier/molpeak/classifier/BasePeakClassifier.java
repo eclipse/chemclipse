@@ -16,42 +16,37 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.identifier.BasePeakIdentifier;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.model.ILigninRatios;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.model.LigninRatios;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 
 public class BasePeakClassifier {
-
-	private static final String SYRINGYL = "Syringyl";
-	private static final String GUAIACYL = "Guaiacyl";
-	private static final String PHYDROXYPHENYL = "p-Hydroxyphenyl";
-	private static final String CARBOHYDRATE = "Carbohydrate";
 
 	public ILigninRatios calculateLigninRatios(IChromatogramSelectionMSD chromatogramSelection) {
 
 		ILigninRatios ligninRatios = new LigninRatios();
 		//
-		int counterS = 0;
-		int counterG = 0;
-		int counterL = 0;
-		int counterC = 0;
+		double counterS = 0;
+		double counterG = 0;
+		double counterL = 0;
+		double counterC = 0;
 		//
 		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogramMSD();
 		List<IChromatogramPeakMSD> peaks = chromatogramMSD.getPeaks();
 		for(IChromatogramPeakMSD peak : peaks) {
 			for(IPeakTarget peakTarget : peak.getTargets()) {
 				String name = peakTarget.getLibraryInformation().getName();
-				if(name.equals(SYRINGYL)) {
-					counterS += (int)peak.getIntegratedArea();
-				} else if(name.equals(GUAIACYL)) {
-					counterG += (int)peak.getIntegratedArea();
-				} else if(name.equals(PHYDROXYPHENYL)) {
-					counterL += (int)peak.getIntegratedArea();
-				} else if(name.equals(CARBOHYDRATE)) {
-					counterC += (int)peak.getIntegratedArea();
+				if(name.equals(BasePeakIdentifier.SYRINGYL)) {
+					counterS += peak.getIntegratedArea();
+				} else if(name.equals(BasePeakIdentifier.GUAIACYL)) {
+					counterG += peak.getIntegratedArea();
+				} else if(name.equals(BasePeakIdentifier.PHYDROXYPHENYL)) {
+					counterL += peak.getIntegratedArea();
+				} else if(name.equals(BasePeakIdentifier.CARBOHYDRATE)) {
+					counterC += peak.getIntegratedArea();
 				}
 			}
 		}
@@ -59,10 +54,10 @@ public class BasePeakClassifier {
 		double size = counterS + counterG + counterL + counterC;
 		if(size > 0) {
 			Map<String, Double> resultMap = ligninRatios.getResults();
-			resultMap.put(SYRINGYL, counterS / size * 100);
-			resultMap.put(GUAIACYL, counterG / size * 100);
-			resultMap.put(PHYDROXYPHENYL, counterL / size * 100);
-			resultMap.put(CARBOHYDRATE, counterC / size * 100);
+			resultMap.put(BasePeakIdentifier.SYRINGYL, counterS / size * 100);
+			resultMap.put(BasePeakIdentifier.GUAIACYL, counterG / size * 100);
+			resultMap.put(BasePeakIdentifier.PHYDROXYPHENYL, counterL / size * 100);
+			resultMap.put(BasePeakIdentifier.CARBOHYDRATE, counterC / size * 100);
 		}
 		//
 		return ligninRatios;

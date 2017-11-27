@@ -52,13 +52,14 @@ public class BasePeakIdentifier {
 
 	private static final Logger logger = Logger.getLogger(BasePeakIdentifier.class);
 	//
+	public static final String SYRINGYL = "Syringyl";
+	public static final String GUAIACYL = "Guaiacyl";
+	public static final String PHYDROXYPHENYL = "p-Hydroxyphenyl";
+	public static final String CARBOHYDRATE = "Carbohydrate";
+	//
 	private static final String IDENTIFIER = "BASEPEAK-IDENT";
 	private static final String MASS_SPECTRUM_COMPARATOR_ID = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos";
 	//
-	private static final String SYRINGYL = "Syringyl";
-	private static final String GUAIACYL = "Guaiacyl";
-	private static final String PHYDROXYPHENYL = "p-Hydroxyphenyl";
-	private static final String CARBOHYDRATE = "Carbohydrate";
 	// private static final String ESSTOGEERATIO = "S/G Ratio";
 	private static final String NOTFOUND = "Not Found (BasePeak Identifier)";
 	private static final ArrayList<Integer> syringylBaseMZs = new ArrayList<Integer>();

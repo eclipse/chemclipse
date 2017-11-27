@@ -49,8 +49,6 @@ public class BasePeakResultsLabelProvider extends AbstractChemClipseLabelProvide
 				case 1:
 					text = decimalFormat.format(ligninEntry.getValue());
 					break;
-				default:
-					text = "n.v.";
 			}
 		}
 		return text;
