@@ -263,7 +263,8 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 	private void createPages(Composite parent) {
 
 		if(massSpectra != null && massSpectra.getMassSpectrum(1) != null) {
-			part.setLabel(massSpectrumFile.getName());
+			String label = ("".equals(massSpectra.getName())) ? massSpectrumFile.getName() : massSpectra.getName();
+			part.setLabel(label);
 			tabFolder = new TabFolder(parent, SWT.BOTTOM);
 			createMassSpectrumPage();
 		} else {
