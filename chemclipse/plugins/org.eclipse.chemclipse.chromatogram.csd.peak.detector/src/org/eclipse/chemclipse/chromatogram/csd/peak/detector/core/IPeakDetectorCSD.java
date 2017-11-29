@@ -11,12 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.peak.detector.core;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.processing.IPeakDetectorCSDProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.IPeakDetectorCSDSettings;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetector;
+import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNotBeNullException;
+import org.eclipse.chemclipse.chromatogram.peak.detector.settings.IPeakDetectorSettings;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IPeakDetectorCSD extends IPeakDetector {
 
@@ -28,7 +28,7 @@ public interface IPeakDetectorCSD extends IPeakDetector {
 	 * @param monitor
 	 * @throws ValueMustNotBeNullException
 	 */
-	IPeakDetectorCSDProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, IPeakDetectorCSDSettings peakDetectorSettings, IProgressMonitor monitor);
+	IPeakDetectorCSDProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, IPeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor);
 
 	/**
 	 * The same as the other method but without settings.

@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.core;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.IPeakDetectorMSDProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.PeakDetectorMSDProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupport;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.PeakDetectorSupplier;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.PeakDetectorSupport;
@@ -75,7 +74,7 @@ public class PeakDetectorMSD {
 	 * @param monitor
 	 * @return IPeakDetectorProcessingInfo
 	 */
-	public static IPeakDetectorMSDProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorMSDSettings peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
+	public static IPeakDetectorMSDProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettings peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
 
 		IPeakDetectorMSDProcessingInfo processingInfo;
 		IPeakDetectorMSD peakDetector = getPeakDetector(peakDetectorId);
