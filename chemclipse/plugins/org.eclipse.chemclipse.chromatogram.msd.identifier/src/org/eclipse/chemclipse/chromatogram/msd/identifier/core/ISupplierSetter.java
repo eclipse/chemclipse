@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.core;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettings;
-
 public interface ISupplierSetter extends ISupplier {
 
 	/**
@@ -36,11 +34,4 @@ public interface ISupplierSetter extends ISupplier {
 	 * @param identifierName
 	 */
 	void setIdentifierName(final String identifierName);
-
-	/**
-	 * TODO: either returns a bean-like class or with annotations ..., with a public default constructor, ... or returns <code>null</code> if no filter settings are associated
-	 * 
-	 * @return
-	 */
-	Class<? extends IIdentifierSettings> getIdentifierSettingsClass();
 }
