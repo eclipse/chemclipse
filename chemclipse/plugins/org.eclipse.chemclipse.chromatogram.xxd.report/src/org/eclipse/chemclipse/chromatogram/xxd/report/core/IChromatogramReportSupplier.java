@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.report.core;
 
+import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramReportSettings;
+
 public interface IChromatogramReportSupplier {
 
 	/**
@@ -49,4 +51,11 @@ public interface IChromatogramReportSupplier {
 	 * @return String
 	 */
 	String getFileName();
+
+	/**
+	 * TODO: either returns a bean-like class or with annotations ..., with a public default constructor, ... or returns <code>null</code> if no filter settings are associated
+	 * 
+	 * @return
+	 */
+	Class<? extends IChromatogramReportSettings> getChromatogramReportSettingsClass();
 }
