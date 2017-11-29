@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings;
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
+import org.eclipse.chemclipse.model.support.SegmentWidth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -30,9 +31,9 @@ public class SupplierFilterSettings extends AbstractChromatogramFilterSettings i
 	@JsonProperty(value = "Number Used Ions For Coefficient", defaultValue = "1")
 	@JsonPropertyDescription(value = "The number of used ions for coefficient calculation.")
 	private int numberOfUsedIonsForCoefficient = 1;
-	@JsonProperty(value = "Segment Width", defaultValue = "13")
-	@JsonPropertyDescription(value = "The used segment width: 5, 7, 9, ..., 19")
-	private String segmentWidth = "13";
+	@JsonProperty(value = "Segment Width", defaultValue = "WIDTH_13")
+	@JsonPropertyDescription(value = "The used segment width: WIDTH_5, WIDTH_7, WIDTH_9, ..., WIDTH_19")
+	private String segmentWidth = SegmentWidth.WIDTH_13.toString();
 
 	@Override
 	public String getIonsToRemove() {
