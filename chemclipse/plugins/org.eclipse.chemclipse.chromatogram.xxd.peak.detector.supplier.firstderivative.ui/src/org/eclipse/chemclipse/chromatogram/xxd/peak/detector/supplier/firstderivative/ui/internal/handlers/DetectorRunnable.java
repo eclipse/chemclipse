@@ -57,7 +57,7 @@ public class DetectorRunnable implements IRunnableWithProgress {
 				/*
 				 * MSD
 				 */
-				final ChromatogramSelectionMSD chromatogramSelectionMSD = (ChromatogramSelectionMSD)chromatogramSelection;
+				ChromatogramSelectionMSD chromatogramSelectionMSD = (ChromatogramSelectionMSD)chromatogramSelection;
 				IFirstDerivativePeakDetectorMSDSettings peakDetectorSettings = PreferenceSupplier.getPeakDetectorMSDSettings();
 				PeakDetectorMSD.detect(chromatogramSelectionMSD, peakDetectorSettings, PEAK_DETECTOR_MSD_ID, monitor);
 				detectedPeaks = chromatogramSelectionMSD.getChromatogramMSD().getNumberOfPeaks();

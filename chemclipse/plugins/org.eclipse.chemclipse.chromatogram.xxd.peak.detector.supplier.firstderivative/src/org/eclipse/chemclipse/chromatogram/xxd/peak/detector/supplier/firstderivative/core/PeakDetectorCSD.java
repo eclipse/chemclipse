@@ -14,25 +14,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderi
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
-import org.eclipse.chemclipse.csd.model.core.support.PeakBuilderCSD;
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.core.AbstractPeakDetectorCSD;
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.processing.IPeakDetectorCSDProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.processing.PeakDetectorCSDProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.IPeakDetectorCSDSettings;
-import org.eclipse.chemclipse.model.exceptions.PeakException;
-import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
-import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
-import org.eclipse.chemclipse.model.signals.TotalScanSignals;
-import org.eclipse.chemclipse.model.signals.TotalScanSignalsModifier;
-import org.eclipse.chemclipse.model.support.IScanRange;
-import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNotBeNullException;
+import org.eclipse.chemclipse.chromatogram.peak.detector.settings.IPeakDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.RawPeak;
@@ -42,13 +28,27 @@ import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderiv
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlopes;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlopes;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
+import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.csd.model.core.support.PeakBuilderCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.exceptions.PeakException;
+import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
+import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
+import org.eclipse.chemclipse.model.signals.TotalScanSignals;
+import org.eclipse.chemclipse.model.signals.TotalScanSignalsModifier;
+import org.eclipse.chemclipse.model.support.IScanRange;
+import org.eclipse.chemclipse.model.support.ScanRange;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.miscellaneous.Evaluation;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakDetectorCSD extends AbstractPeakDetectorCSD {
 
@@ -63,7 +63,7 @@ public class PeakDetectorCSD extends AbstractPeakDetectorCSD {
 	private WindowSize movingAverageWindow = WindowSize.SCANS_3;
 
 	@Override
-	public IPeakDetectorCSDProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, IPeakDetectorCSDSettings peakDetectorSettings, IProgressMonitor monitor) {
+	public IPeakDetectorCSDProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, IPeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) {
 
 		/*
 		 * Check whether the chromatogram selection is null or not.
@@ -93,7 +93,7 @@ public class PeakDetectorCSD extends AbstractPeakDetectorCSD {
 	/**
 	 * Sets the appropriate threshold value for this extension point.
 	 */
-	private void setThresholdValue(IPeakDetectorCSDSettings peakDetectorSettings) {
+	private void setThresholdValue(IPeakDetectorSettings peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IFirstDerivativePeakDetectorCSDSettings) {
 			IFirstDerivativePeakDetectorCSDSettings firstDerivativePeakDetectorSettings = (IFirstDerivativePeakDetectorCSDSettings)peakDetectorSettings;
@@ -121,7 +121,7 @@ public class PeakDetectorCSD extends AbstractPeakDetectorCSD {
 		}
 	}
 
-	private void setIncludeBackground(IPeakDetectorCSDSettings peakDetectorSettings) {
+	private void setIncludeBackground(IPeakDetectorSettings peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IFirstDerivativePeakDetectorCSDSettings) {
 			IFirstDerivativePeakDetectorCSDSettings firstDerivativePeakDetectorSettings = (IFirstDerivativePeakDetectorCSDSettings)peakDetectorSettings;
@@ -129,7 +129,7 @@ public class PeakDetectorCSD extends AbstractPeakDetectorCSD {
 		}
 	}
 
-	private void setMinimumSignalToNoiseRation(IPeakDetectorCSDSettings peakDetectorSettings) {
+	private void setMinimumSignalToNoiseRation(IPeakDetectorSettings peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IFirstDerivativePeakDetectorCSDSettings) {
 			IFirstDerivativePeakDetectorCSDSettings firstDerivativePeakDetectorSettings = (IFirstDerivativePeakDetectorCSDSettings)peakDetectorSettings;
@@ -137,7 +137,7 @@ public class PeakDetectorCSD extends AbstractPeakDetectorCSD {
 		}
 	}
 
-	private void setMovingAverageWindowSize(IPeakDetectorCSDSettings peakDetectorSettings) {
+	private void setMovingAverageWindowSize(IPeakDetectorSettings peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IFirstDerivativePeakDetectorCSDSettings) {
 			IFirstDerivativePeakDetectorCSDSettings firstDerivativePeakDetectorSettings = (IFirstDerivativePeakDetectorCSDSettings)peakDetectorSettings;

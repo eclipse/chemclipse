@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.IPeakDet
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.PeakDetectorMSDProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNotBeNullException;
+import org.eclipse.chemclipse.chromatogram.peak.detector.settings.IPeakDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.RawPeak;
@@ -70,7 +71,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	private WindowSize movingAverageWindow = WindowSize.SCANS_3;
 
 	@Override
-	public IPeakDetectorMSDProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorMSDSettings peakDetectorSettings, IProgressMonitor monitor) {
+	public IPeakDetectorMSDProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) {
 
 		/*
 		 * Check whether the chromatogram selection is null or not.
@@ -116,7 +117,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 	/**
 	 * Sets the appropriate threshold value for this extension point.
 	 */
-	private void setThresholdValue(IPeakDetectorMSDSettings peakDetectorSettings) {
+	private void setThresholdValue(IPeakDetectorSettings peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IFirstDerivativePeakDetectorMSDSettings) {
 			IFirstDerivativePeakDetectorMSDSettings firstDerivativePeakDetectorSettings = (IFirstDerivativePeakDetectorMSDSettings)peakDetectorSettings;
@@ -144,7 +145,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 		}
 	}
 
-	private void setIncludeBackground(IPeakDetectorMSDSettings peakDetectorSettings) {
+	private void setIncludeBackground(IPeakDetectorSettings peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IFirstDerivativePeakDetectorMSDSettings) {
 			IFirstDerivativePeakDetectorMSDSettings firstDerivativePeakDetectorSettings = (IFirstDerivativePeakDetectorMSDSettings)peakDetectorSettings;
@@ -152,7 +153,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 		}
 	}
 
-	private void setMinimumSignalToNoiseRation(IPeakDetectorMSDSettings peakDetectorSettings) {
+	private void setMinimumSignalToNoiseRation(IPeakDetectorSettings peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IFirstDerivativePeakDetectorMSDSettings) {
 			IFirstDerivativePeakDetectorMSDSettings firstDerivativePeakDetectorSettings = (IFirstDerivativePeakDetectorMSDSettings)peakDetectorSettings;
@@ -160,7 +161,7 @@ public class PeakDetectorMSD extends AbstractPeakDetectorMSD {
 		}
 	}
 
-	private void setMovingAverageWindowSize(IPeakDetectorMSDSettings peakDetectorSettings) {
+	private void setMovingAverageWindowSize(IPeakDetectorSettings peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IFirstDerivativePeakDetectorMSDSettings) {
 			IFirstDerivativePeakDetectorMSDSettings firstDerivativePeakDetectorSettings = (IFirstDerivativePeakDetectorMSDSettings)peakDetectorSettings;
