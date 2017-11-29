@@ -15,8 +15,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -28,6 +26,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.massbank.internal.converter
 import org.eclipse.chemclipse.msd.converter.supplier.massbank.io.MassBankReader;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MassBankImportConverter extends AbstractMassSpectrumImportConverter {
 
@@ -49,7 +48,11 @@ public class MassBankImportConverter extends AbstractMassSpectrumImportConverter
 				file = SpecificationValidator.validateSpecification(file);
 				IMassSpectraReader massSpectraReader = new MassBankReader();
 				IMassSpectra massSpectra = massSpectraReader.read(file, monitor);
-				processingInfo.setMassSpectra(massSpectra);
+				if(massSpectra != null && massSpectra.size() > 0) {
+					processingInfo.setMassSpectra(massSpectra);
+				} else {
+					processingInfo.addErrorMessage(DESCRIPTION, "No mass spectra are stored." + file.getAbsolutePath());
+				}
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, "The file couldn't be found: " + file.getAbsolutePath());
