@@ -96,10 +96,10 @@ public class MassSpectrumLibraryUI extends Composite {
 		initialize();
 	}
 
-	public void update(IMassSpectra massSpectra, boolean forceReload) {
+	public void update(IMassSpectra massSpectra) {
 
 		this.massSpectra = massSpectra;
-		massSpectrumSearchListUI.update(massSpectra, true);
+		massSpectrumSearchListUI.update(massSpectra);
 	}
 
 	private void initialize() {
@@ -205,7 +205,7 @@ public class MassSpectrumLibraryUI extends Composite {
 					if(massSpectraImport != null) {
 						textLibraryPath.setText("");
 						massSpectra.addMassSpectra(massSpectraImport.getList());
-						massSpectrumSearchListUI.update(massSpectra, true);
+						massSpectrumSearchListUI.update(massSpectra);
 					}
 					enableButtonFields(ACTION_INITIALIZE);
 				}
@@ -281,7 +281,7 @@ public class MassSpectrumLibraryUI extends Composite {
 								massSpectra.removeMassSpectrum(massSpectrum);
 							}
 						}
-						massSpectrumSearchListUI.update(massSpectra, true);
+						massSpectrumSearchListUI.update(massSpectra);
 					}
 				}
 			}

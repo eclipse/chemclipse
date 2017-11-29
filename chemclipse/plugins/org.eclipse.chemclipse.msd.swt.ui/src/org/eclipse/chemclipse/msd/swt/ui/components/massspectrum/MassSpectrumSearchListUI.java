@@ -11,11 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.support.ui.swt.IListItemsRemoveListener;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -26,29 +22,24 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
 public class MassSpectrumSearchListUI extends Composite {
 
-	private static final int MAX_SPECTRA_LOAD_COMPLETE = 5000;
-	private static final int SIZE_SEARCH_RESTRICTION = 15000;
+	/*
+	 * Only do a dynamic search when less than the given
+	 * amount of mass spectra is stored. Otherwise, use the search button.
+	 */
+	private static final int SIZE_DYNAMIC_SEARCH_RESTRICTION = 15000;
 	//
 	private Text textSearch;
 	private Button checkboxCaseSensitive;
 	private Label labelInfo;
 	private MassSpectrumListUI massSpectrumListUI;
-	//
-	private int massSpectraSize = 0;
-	private List<IListItemsRemoveListener> listItemRemoveListeners;
 
 	public MassSpectrumSearchListUI(Composite parent, int style) {
 		super(parent, style);
-		listItemRemoveListeners = new ArrayList<IListItemsRemoveListener>();
 		initialize();
 	}
 
@@ -64,34 +55,20 @@ public class MassSpectrumSearchListUI extends Composite {
 		return massSpectrumListUI.getTable().setFocus();
 	}
 
-	public void addListItemsRemoveListener(IListItemsRemoveListener listItemRemoveListener) {
-
-		listItemRemoveListeners.add(listItemRemoveListener);
-	}
-
-	public void removeListItemsRemoveListener(IListItemsRemoveListener listItemRemoveListener) {
-
-		listItemRemoveListeners.remove(listItemRemoveListener);
-	}
-
-	public void update(IMassSpectra massSpectra, boolean forceReload) {
+	public void update(IMassSpectra massSpectra) {
 
 		if(massSpectra != null) {
-			//
-			if(massSpectra.size() > MAX_SPECTRA_LOAD_COMPLETE) {
-				String searchString = "Please use this filter";
-				massSpectrumListUI.setSearchText(searchString, true);
-				textSearch.setText(searchString);
-			}
 			massSpectrumListUI.setInput(massSpectra);
-			massSpectraSize = massSpectra.size();
 			updateLabel();
+		} else {
+			clear();
 		}
 	}
 
 	public void clear() {
 
 		massSpectrumListUI.setInput(null);
+		updateLabel();
 	}
 
 	public TableViewer getTableViewer() {
@@ -112,15 +89,12 @@ public class MassSpectrumSearchListUI extends Composite {
 			@Override
 			public void keyReleased(KeyEvent e) {
 
-				if(massSpectraSize >= SIZE_SEARCH_RESTRICTION) {
-					int length = textSearch.getText().length();
-					if(length == 0) {
-						search();
-					} else if(length >= 5) {
+				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
+					search();
+				} else {
+					if(getItemSize() <= SIZE_DYNAMIC_SEARCH_RESTRICTION) {
 						search();
 					}
-				} else {
-					search();
 				}
 			}
 		});
@@ -153,21 +127,8 @@ public class MassSpectrumSearchListUI extends Composite {
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 3;
 		//
-		massSpectrumListUI = new MassSpectrumListUI(this, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		massSpectrumListUI = new MassSpectrumListUI(this, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.VIRTUAL);
 		massSpectrumListUI.getTable().setLayoutData(gridData);
-		massSpectrumListUI.getControl().addKeyListener(new KeyAdapter() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-				if(e.keyCode == 127 && e.stateMask == 0) {
-					/*
-					 * Press "DEL" button.
-					 */
-					deleteSelectedTargets();
-				}
-			}
-		});
 		/*
 		 * Table
 		 */
@@ -184,46 +145,13 @@ public class MassSpectrumSearchListUI extends Composite {
 		updateLabel();
 	}
 
-	private void deleteSelectedTargets() {
-
-		Shell shell = Display.getCurrent().getActiveShell();
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.YES | SWT.NO | SWT.CANCEL);
-		messageBox.setText("Delete Selected Targets");
-		messageBox.setMessage("Do you really want to delete the selected targets?");
-		int decision = messageBox.open();
-		if(SWT.YES == decision) {
-			/*
-			 * Delete the selected items.
-			 */
-			Table table = massSpectrumListUI.getTable();
-			int[] indices = table.getSelectionIndices();
-			/*
-			 * Delete the selected targets.
-			 */
-			Object input = massSpectrumListUI.getInput();
-			if(input instanceof IMassSpectra) {
-				IMassSpectra massSpectra = (IMassSpectra)input;
-				for(int i : indices) {
-					massSpectra.getMassSpectrum(i + 1).removeAllTargets();
-				}
-			}
-			/*
-			 * Delete targets in table.
-			 */
-			table.remove(indices);
-			fireUpdateListItemsRemoved();
-		}
-	}
-
-	private void fireUpdateListItemsRemoved() {
-
-		for(IListItemsRemoveListener listItemRemoveListener : listItemRemoveListeners) {
-			listItemRemoveListener.update();
-		}
-	}
-
 	private void updateLabel() {
 
-		labelInfo.setText("Mass Spectra: " + massSpectraSize + " (Filtered Mass Spectra: " + massSpectrumListUI.getTable().getItemCount() + " [" + textSearch.getText().trim() + "])");
+		labelInfo.setText("Stored Mass Spectra: " + getItemSize());
+	}
+
+	private int getItemSize() {
+
+		return massSpectrumListUI.getTable().getItemCount();
 	}
 }

@@ -15,18 +15,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.swt.ui.internal.editingsupport.LibraryTextEditingSupport;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListContentProvider;
+import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListContentProviderLazy;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListFilter;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListLabelProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.jface.viewers.ILazyContentProvider;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 public class MassSpectrumListUI extends ExtendedTableViewer {
 
+	private static final Logger logger = Logger.getLogger(MassSpectrumListUI.class);
+	//
 	public static final String NAME = "Name";
 	public static final String RETENTION_TIME = "Retention Time";
 	public static final String RELATIVE_RETENTION_TIME = "Relative Retention Time";
@@ -75,7 +85,13 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 			100 //
 	};
 	//
+	private boolean isVirtualTable = false;
+	//
+	private ITableLabelProvider labelProvider;
+	private IStructuredContentProvider normalContentProvider;
+	private ILazyContentProvider lazyContentProvider;
 	private MassSpectrumListFilter massSpectrumListFilter;
+	private ViewerComparator tableComparator;
 
 	public MassSpectrumListUI(Composite parent) {
 		super(parent);
@@ -84,7 +100,19 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 
 	public MassSpectrumListUI(Composite parent, int style) {
 		super(parent, style);
+		isVirtualTable = ((style & SWT.VIRTUAL) == SWT.VIRTUAL);
 		createColumns();
+	}
+
+	public void setInput(IMassSpectra massSpectra) {
+
+		if(massSpectra != null) {
+			int size = massSpectra.size();
+			boolean massiveData = (size > 15000) ? true : false;
+			setLabelAndContentProviders(massiveData);
+			super.setInput(massSpectra);
+			setItemCount(size);
+		}
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
@@ -97,12 +125,37 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 
 		createColumns(titles, bounds);
 		//
-		setLabelProvider(new MassSpectrumListLabelProvider());
-		setContentProvider(new MassSpectrumListContentProvider());
-		setComparator(new MassSpectrumListTableComparator());
+		labelProvider = new MassSpectrumListLabelProvider();
+		normalContentProvider = new MassSpectrumListContentProvider();
+		lazyContentProvider = new MassSpectrumListContentProviderLazy(this);
+		tableComparator = new MassSpectrumListTableComparator();
+		//
+		setLabelAndContentProviders(isVirtualTable);
 		massSpectrumListFilter = new MassSpectrumListFilter();
 		setFilters(new ViewerFilter[]{massSpectrumListFilter});
 		setEditingSupport();
+	}
+
+	private void setLabelAndContentProviders(boolean massiveData) {
+
+		setLabelProvider(labelProvider);
+		if(massiveData && isVirtualTable) {
+			/*
+			 * Lazy (Virtual)
+			 */
+			logger.info("Lazy (Virtual) Modus");
+			setContentProvider(lazyContentProvider);
+			setUseHashlookup(true);
+			setComparator(null);
+		} else {
+			/*
+			 * Normal
+			 */
+			logger.info("Normal Modus");
+			setContentProvider(normalContentProvider);
+			setUseHashlookup(false);
+			setComparator(tableComparator);
+		}
 	}
 
 	private void setEditingSupport() {

@@ -280,7 +280,7 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Mass Spectra");
 		massSpectrumLibraryUI = new MassSpectrumLibraryUI(tabFolder, SWT.NONE);
-		massSpectrumLibraryUI.update(massSpectra, true);
+		massSpectrumLibraryUI.update(massSpectra);
 		tabItem.setControl(massSpectrumLibraryUI);
 	}
 
@@ -294,6 +294,6 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 
 	private void updateMassSpectrumListUI() {
 
-		massSpectrumLibraryUI.update(massSpectra, true);
+		massSpectrumLibraryUI.update(massSpectra);
 	}
 }
