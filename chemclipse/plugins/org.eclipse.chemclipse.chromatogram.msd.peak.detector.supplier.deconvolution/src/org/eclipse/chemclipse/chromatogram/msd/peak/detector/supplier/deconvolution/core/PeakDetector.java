@@ -23,7 +23,6 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.AbstractPeakDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.IPeakDetectorMSDProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.PeakDetectorMSDProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Derivatives.DerivativesAndNoise;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Derivatives.FirstDerivativeAndNoise;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Derivatives.IDerivativesAndNoise;
@@ -58,6 +57,7 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolut
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.support.IArrayView;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.support.IArraysViewDeconv;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.support.IDeconvHelper;
+import org.eclipse.chemclipse.chromatogram.peak.detector.settings.IPeakDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.RawPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.processor.DurbinWatsonProcessor;
@@ -144,7 +144,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	private int quantityNoiseSegments;
 
 	@Override
-	public IPeakDetectorMSDProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorMSDSettings peakDetectorSettings, IProgressMonitor monitor) {
+	public IPeakDetectorMSDProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) {
 
 		IPeakDetectorMSDProcessingInfo processingInfo = new PeakDetectorMSDProcessingInfo();
 		processingInfo.addMessages(validate(chromatogramSelection, peakDetectorSettings, monitor));
@@ -169,7 +169,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		return null;
 	}
 
-	private void setMinimumSignalToNoise(IPeakDetectorMSDSettings peakDetectorSettings) {
+	private void setMinimumSignalToNoise(IPeakDetectorSettings peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IDeconvolutionPeakDetectorSettings) {
 			IDeconvolutionPeakDetectorSettings deconvolutionPeakDetectorSettings = (IDeconvolutionPeakDetectorSettings)peakDetectorSettings;
@@ -177,7 +177,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		}
 	}
 
-	private void setSensitivityOfDeconvolution(IPeakDetectorMSDSettings peakDetectorSettings) {
+	private void setSensitivityOfDeconvolution(IPeakDetectorSettings peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IDeconvolutionPeakDetectorSettings) {
 			IDeconvolutionPeakDetectorSettings deconvolutionPeakDetectorSettings = (IDeconvolutionPeakDetectorSettings)peakDetectorSettings;
@@ -185,7 +185,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		}
 	}
 
-	private void setMinimumPeakWidth(IPeakDetectorMSDSettings peakDetectorSettings) {
+	private void setMinimumPeakWidth(IPeakDetectorSettings peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IDeconvolutionPeakDetectorSettings) {
 			IDeconvolutionPeakDetectorSettings deconvolutionPeakDetectorSettings = (IDeconvolutionPeakDetectorSettings)peakDetectorSettings;
@@ -193,7 +193,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		}
 	}
 
-	private void setMinimumPeakRising(IPeakDetectorMSDSettings peakDetectorSettings) {
+	private void setMinimumPeakRising(IPeakDetectorSettings peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IDeconvolutionPeakDetectorSettings) {
 			IDeconvolutionPeakDetectorSettings deconvolutionPeakDetectorSettings = (IDeconvolutionPeakDetectorSettings)peakDetectorSettings;
@@ -201,7 +201,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		}
 	}
 
-	private void setBaselineIterations(IPeakDetectorMSDSettings peakDetectorSettings) {
+	private void setBaselineIterations(IPeakDetectorSettings peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IDeconvolutionPeakDetectorSettings) {
 			IDeconvolutionPeakDetectorSettings deconvolutionPeakDetectorSettings = (IDeconvolutionPeakDetectorSettings)peakDetectorSettings;
@@ -209,7 +209,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		}
 	}
 
-	private void setQuantityNoiseSegments(IPeakDetectorMSDSettings peakDetectorSettings) {
+	private void setQuantityNoiseSegments(IPeakDetectorSettings peakDetectorSettings) {
 
 		if(peakDetectorSettings instanceof IDeconvolutionPeakDetectorSettings) {
 			IDeconvolutionPeakDetectorSettings deconvolutionPeakDetectorSettings = (IDeconvolutionPeakDetectorSettings)peakDetectorSettings;
