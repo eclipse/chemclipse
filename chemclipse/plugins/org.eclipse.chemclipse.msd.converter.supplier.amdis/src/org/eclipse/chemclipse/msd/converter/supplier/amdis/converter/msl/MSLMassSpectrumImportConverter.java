@@ -15,10 +15,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.massspectrum.AbstractMassSpectrumImportConverter;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
@@ -26,8 +25,8 @@ import org.eclipse.chemclipse.msd.converter.processing.massspectrum.MassSpectrum
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.SpecificationValidatorMSL;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.MSLReader;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MSLMassSpectrumImportConverter extends AbstractMassSpectrumImportConverter {
 
@@ -49,7 +48,11 @@ public class MSLMassSpectrumImportConverter extends AbstractMassSpectrumImportCo
 				file = SpecificationValidatorMSL.validateSpecification(file);
 				IMassSpectraReader massSpectraReader = new MSLReader();
 				IMassSpectra massSpectra = massSpectraReader.read(file, monitor);
-				processingInfo.setMassSpectra(massSpectra);
+				if(massSpectra != null && massSpectra.size() > 0) {
+					processingInfo.setMassSpectra(massSpectra);
+				} else {
+					processingInfo.addErrorMessage(DESCRIPTION, "No mass spectra are stored." + file.getAbsolutePath());
+				}
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, "The file couldn't be found: " + file.getAbsolutePath());
