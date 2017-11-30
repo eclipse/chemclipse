@@ -73,12 +73,6 @@ public class RetentionTime implements IRetentionTime {
 	}
 
 	@Override
-	public Object getObject() {
-
-		return this;
-	}
-
-	@Override
 	public int getRetentionTime() {
 
 		return retentioTime;

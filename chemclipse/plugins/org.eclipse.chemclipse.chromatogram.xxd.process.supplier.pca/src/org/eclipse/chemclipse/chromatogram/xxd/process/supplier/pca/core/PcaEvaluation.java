@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Variable;
@@ -35,15 +36,15 @@ import org.ejml.example.PrincipalComponentAnalysis;
 
 public class PcaEvaluation {
 
-	private Map<ISample<?>, double[]> extractData(ISamples<?, ?> samples) {
+	private <V extends IVariable, S extends ISample<? extends ISampleData>> Map<ISample<?>, double[]> extractData(ISamples<V, S> samples) {
 
-		Map<ISample<?>, double[]> selectedSamples = new HashMap<>();
-		List<IVariable> retentionTimes = (List<IVariable>)samples.getVariables();
+		Map<ISample<? extends ISampleData>, double[]> selectedSamples = new HashMap<>();
+		List<? extends IVariable> retentionTimes = samples.getVariables();
 		int numSelected = (int)retentionTimes.stream().filter(r -> r.isSelected()).count();
-		for(ISample<?> sample : samples.getSampleList()) {
+		for(ISample<? extends ISampleData> sample : samples.getSampleList()) {
 			double[] selectedSampleData = null;
 			if(sample.isSelected()) {
-				List<ISampleData> data = (List<ISampleData>)sample.getSampleData();
+				List<? extends ISampleData> data = sample.getSampleData();
 				selectedSampleData = new double[numSelected];
 				int j = 0;
 				for(int i = 0; i < data.size(); i++) {
@@ -114,16 +115,16 @@ public class PcaEvaluation {
 	public <V extends IVariable, S extends ISample<? extends ISampleData>> IPcaResults process(ISamples<V, S> samples, int numberOfPrincipleComponents, IProgressMonitor monitor) {
 
 		monitor.subTask("Run PCA");
-		IPcaResults pcaResults = new PcaResults();
+		IPcaResults pcaResults = new PcaResults(samples);
 		Map<ISample<?>, double[]> extractData = extractData(samples);
-		setRetentionTime(pcaResults, samples);
+		setRetentionTime(pcaResults);
 		int sampleSize = getSampleSize(extractData);
 		PrincipalComponentAnalysis principleComponentAnalysis = initializePCA(extractData, sampleSize, numberOfPrincipleComponents);
 		List<double[]> basisVectors = getBasisVectors(principleComponentAnalysis, numberOfPrincipleComponents);
 		pcaResults.setBasisVectors(basisVectors);
 		setEigenSpaceAndErrorValues(principleComponentAnalysis, extractData, pcaResults);
 		pcaResults.setNumberOfPrincipleComponents(numberOfPrincipleComponents);
-		setGroups(pcaResults, samples);
+		setGroups(pcaResults);
 		return pcaResults;
 	}
 
@@ -152,10 +153,10 @@ public class PcaEvaluation {
 		pcaResults.setPcaResultList(resultsList);
 	}
 
-	private void setGroups(IPcaResults pcaResults, ISamples<?, ?> samples) {
+	private void setGroups(IPcaResults pcaResults) {
 
 		List<IPcaResult> pcaResultGroups = new ArrayList<>();
-		for(IGroup<?> group : samples.getGroupList()) {
+		for(IGroup<?> group : pcaResults.getSamples().getGroupList()) {
 			IPcaResult pcaResultGroup = new PcaResult(group);
 			String groupName = group.getGroupName();
 			String name = group.getName();
@@ -195,9 +196,10 @@ public class PcaEvaluation {
 		pcaResults.setPcaResultGroupsList(pcaResultGroups);
 	}
 
-	private void setRetentionTime(IPcaResults pcaResults, ISamples<?, ?> samples) {
+	private void setRetentionTime(IPcaResults pcaResults) {
 
-		List<IVariable> variables = new ArrayList<>();
+		List<IVaribleExtracted> variables = new ArrayList<>();
+		ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples = pcaResults.getSamples();
 		for(int i = 0; i < samples.getVariables().size(); i++) {
 			if(samples.getVariables().get(i).isSelected()) {
 				IVariable variable = samples.getVariables().get(i);

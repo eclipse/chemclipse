@@ -21,7 +21,7 @@ public interface IPcaResult {
 
 	String getName();
 
-	ISample<?> getSample();
+	ISample<? extends ISampleData> getSample();
 
 	double[] getSampleData();
 

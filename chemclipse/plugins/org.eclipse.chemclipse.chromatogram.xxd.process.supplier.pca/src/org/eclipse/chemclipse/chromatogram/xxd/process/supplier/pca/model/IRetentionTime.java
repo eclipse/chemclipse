@@ -13,26 +13,15 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 public interface IRetentionTime extends IVariable {
 
-	/*
-	 * static List<IRetentionTime> create(List<Integer> retentionTimes) {
-	 * List<IRetentionTime> retentionTimesList = new ArrayList<>();
-	 * for(int i = 0; i < retentionTimes.size(); i++) {
-	 * retentionTimesList.add(new RetentionTime(retentionTimes.get(i)));
-	 * }
-	 * return retentionTimesList;
-	 * }
-	 * static List<IRetentionTime> copy(List<IRetentionTime> retentionTimes) {
-	 * List<IRetentionTime> newRetentionTimes = new ArrayList<>();
-	 * for(int i = 0; i < retentionTimes.size(); i++) {
-	 * IRetentionTime retentionTime = retentionTimes.get(i);
-	 * IRetentionTime newRetentionTime = new RetentionTime(retentionTime.getRetentionTime(), retentionTime.getDescription());
-	 * newRetentionTime.setSelected(retentionTime.isSelected());
-	 * newRetentionTimes.add(newRetentionTime);
-	 * }
-	 * return newRetentionTimes;
-	 * }
-	 */
+	String TYPE = "Retention time (min)";
+
 	int getRetentionTime();
 
 	double getRetentionTimeMinutes();
+
+	@Override
+	default String getType() {
+
+		return TYPE;
+	}
 }

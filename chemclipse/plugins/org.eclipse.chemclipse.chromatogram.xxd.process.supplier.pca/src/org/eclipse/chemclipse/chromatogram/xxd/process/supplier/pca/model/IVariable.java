@@ -15,7 +15,7 @@ public interface IVariable extends Comparable<IVariable> {
 
 	String getDescription();
 
-	Object getObject();
+	String getType();
 
 	String getValue();
 

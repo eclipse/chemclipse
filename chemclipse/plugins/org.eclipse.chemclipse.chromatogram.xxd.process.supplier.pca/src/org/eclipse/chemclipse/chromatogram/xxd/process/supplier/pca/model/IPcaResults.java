@@ -17,7 +17,7 @@ public interface IPcaResults {
 
 	List<double[]> getBasisVectors();
 
-	List<IVariable> getExtractedVariables();
+	List<IVaribleExtracted> getExtractedVariables();
 
 	int getNumberOfPrincipleComponents();
 
@@ -25,9 +25,11 @@ public interface IPcaResults {
 
 	List<IPcaResult> getPcaResultList();
 
+	ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> getSamples();
+
 	void setBasisVectors(List<double[]> basisVectors);
 
-	void setExtractedVariables(List<IVariable> extractedVariables);
+	void setExtractedVariables(List<IVaribleExtracted> extractedVariables);
 
 	void setNumberOfPrincipleComponents(int numberOfPrincipleComponents);
 

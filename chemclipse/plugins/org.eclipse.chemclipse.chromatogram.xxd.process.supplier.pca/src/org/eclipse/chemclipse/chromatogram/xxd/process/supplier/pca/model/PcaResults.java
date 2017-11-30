@@ -16,13 +16,15 @@ import java.util.List;
 public class PcaResults implements IPcaResults {
 
 	private List<double[]> basisVectors;
-	private List<IVariable> extractedVariables;
+	private List<IVaribleExtracted> extractedVariables;
 	//
 	private int numberOfPrincipleComponents;
 	private List<IPcaResult> pcaResultGroupsList;
 	private List<IPcaResult> pcaResultList;
+	private ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples;
 
-	public PcaResults() {
+	public PcaResults(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
+		this.samples = samples;
 	}
 
 	@Override
@@ -32,7 +34,7 @@ public class PcaResults implements IPcaResults {
 	}
 
 	@Override
-	public List<IVariable> getExtractedVariables() {
+	public List<IVaribleExtracted> getExtractedVariables() {
 
 		return extractedVariables;
 	}
@@ -56,13 +58,19 @@ public class PcaResults implements IPcaResults {
 	}
 
 	@Override
+	public ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> getSamples() {
+
+		return samples;
+	}
+
+	@Override
 	public void setBasisVectors(List<double[]> basisVectors) {
 
 		this.basisVectors = basisVectors;
 	}
 
 	@Override
-	public void setExtractedVariables(List<IVariable> extractedVariables) {
+	public void setExtractedVariables(List<IVaribleExtracted> extractedVariables) {
 
 		this.extractedVariables = extractedVariables;
 	}

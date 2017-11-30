@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtil
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
 import org.eclipse.eavp.service.swtchart.scattercharts.IScatterSeriesData;
@@ -41,7 +42,7 @@ public class SeriesConverter {
 	public static List<IScatterSeriesData> basisVectorsToSeries(IPcaResults pcaResults, int pcX, int pcY, Map<String, IVariable> extractedValues) {
 
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
-		List<IVariable> variables = pcaResults.getExtractedVariables();
+		List<IVaribleExtracted> variables = pcaResults.getExtractedVariables();
 		for(int i = 0; i < variables.size(); i++) {
 			String name = nf.format(variables.get(i).getValue());
 			extractedValues.put(name, variables.get(i));
@@ -68,7 +69,7 @@ public class SeriesConverter {
 	public static List<IScatterSeriesData> basisVectorsToSeriesDescription(IPcaResults pcaResults, int pcX, int pcY, Map<String, IVariable> extractedValues) {
 
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
-		List<IVariable> variables = pcaResults.getExtractedVariables();
+		List<IVaribleExtracted> variables = pcaResults.getExtractedVariables();
 		for(int i = 0; i < variables.size(); i++) {
 			IVariable retentionTime = variables.get(i);
 			String description = retentionTime.getDescription();

@@ -18,7 +18,8 @@ public class Sample implements ISample<SampleData> {
 
 	private String groupName;
 	private String name;
-	private List<SampleData> sampleData = new ArrayList<>();;
+	private Object object;;
+	private List<SampleData> sampleData = new ArrayList<>();
 	private boolean selected = true;
 
 	public Sample(IDataInputEntry dataInputEntry) {
@@ -61,7 +62,7 @@ public class Sample implements ISample<SampleData> {
 	@Override
 	public Object getObject() {
 
-		return this;
+		return object;
 	}
 
 	@Override
@@ -86,6 +87,12 @@ public class Sample implements ISample<SampleData> {
 	public void setGroupName(String groupName) {
 
 		this.groupName = groupName;
+	}
+
+	@Override
+	public void setObject(Object o) {
+
+		this.object = o;
 	}
 
 	@Override

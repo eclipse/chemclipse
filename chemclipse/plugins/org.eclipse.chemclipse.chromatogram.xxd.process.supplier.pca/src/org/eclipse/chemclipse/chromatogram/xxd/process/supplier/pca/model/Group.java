@@ -24,6 +24,7 @@ public class Group<S extends ISample<? extends ISampleData>> implements IGroup<S
 
 	private String groupName;
 	private String name;
+	private Object object;
 	private List<ISampleDataGroup> sampleData;
 	private List<S> samples;
 	private boolean selected = true;
@@ -55,7 +56,7 @@ public class Group<S extends ISample<? extends ISampleData>> implements IGroup<S
 	@Override
 	public Object getObject() {
 
-		return this;
+		return object;
 	}
 
 	@Override
@@ -80,6 +81,12 @@ public class Group<S extends ISample<? extends ISampleData>> implements IGroup<S
 	public void setGroupName(String groupName) {
 
 		this.groupName = groupName;
+	}
+
+	@Override
+	public void setObject(Object object) {
+
+		this.object = object;
 	}
 
 	@Override

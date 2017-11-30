@@ -50,10 +50,10 @@ public class PcaUtils {
 		Map<String, double[]> selectedSamples = new HashMap<>();
 		List<V> variables = samples.getVariables();
 		int numSelected = (int)variables.stream().filter(r -> r.isSelected()).count();
-		for(ISample<?> sample : samples.getSampleList()) {
+		for(S sample : samples.getSampleList()) {
 			double[] selectedSampleData = null;
 			if(sample.isSelected()) {
-				List<ISampleData> data = (List<ISampleData>)sample.getSampleData();
+				List<? extends ISampleData> data = sample.getSampleData();
 				selectedSampleData = new double[numSelected];
 				int j = 0;
 				for(int i = 0; i < data.size(); i++) {

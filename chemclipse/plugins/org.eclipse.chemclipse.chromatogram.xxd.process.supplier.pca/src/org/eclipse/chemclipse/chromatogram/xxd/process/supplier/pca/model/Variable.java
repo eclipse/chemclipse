@@ -11,9 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-public class Variable implements IVariable {
+public class Variable implements IVaribleExtracted {
 
+	private String description;
 	private boolean isSelected = true;
+	private String type;
+	private String value;
 	private IVariable variable;
 
 	public Variable(IVariable variable) {
@@ -23,25 +26,31 @@ public class Variable implements IVariable {
 	@Override
 	public int compareTo(IVariable o) {
 
-		return variable.compareTo(o);
+		return 0;
 	}
 
 	@Override
 	public String getDescription() {
 
-		return variable.getDescription();
+		return description;
 	}
 
 	@Override
-	public Object getObject() {
+	public String getType() {
 
-		return variable.getObject();
+		return type;
 	}
 
 	@Override
 	public String getValue() {
 
-		return variable.getValue();
+		return value;
+	}
+
+	@Override
+	public IVariable getVariableOrigin() {
+
+		return variable;
 	}
 
 	@Override
@@ -53,7 +62,7 @@ public class Variable implements IVariable {
 	@Override
 	public void setDescription(String description) {
 
-		variable.getDescription();
+		this.description = description;
 	}
 
 	@Override

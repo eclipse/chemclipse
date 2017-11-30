@@ -43,13 +43,13 @@ public class RetentionTime2Filter implements IFilter {
 			seletions.add(selected);
 		}
 		List<V> variables = samples.getVariables();
-		Set<Object> set = variables.stream().map(r -> r.getObject()).collect(Collectors.toSet());
+		Set<IVariable> set = variables.stream().collect(Collectors.toSet());
 		for(int i = 0; i < size; i++) {
-			Object object = variables.get(i).getObject();
+			IVariable variable = variables.get(i);
 			if(inverse) {
-				seletions.set(i, set.contains(object));
+				seletions.set(i, set.contains(variable));
 			} else {
-				seletions.set(i, !set.contains(object));
+				seletions.set(i, !set.contains(variable));
 			}
 		}
 		selectionResult = IFilter.getNumberSelectedRow(seletions);
