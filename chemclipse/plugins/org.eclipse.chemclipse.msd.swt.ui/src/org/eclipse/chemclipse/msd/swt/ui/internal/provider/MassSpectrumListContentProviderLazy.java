@@ -39,6 +39,6 @@ public class MassSpectrumListContentProviderLazy implements ILazyContentProvider
 	@Override
 	public void updateElement(int index) {
 
-		tableViewer.replace(massSpectra.getMassSpectrum(index + 1), index);
+		tableViewer.replace(massSpectra.getList().get(index), index);
 	}
 }

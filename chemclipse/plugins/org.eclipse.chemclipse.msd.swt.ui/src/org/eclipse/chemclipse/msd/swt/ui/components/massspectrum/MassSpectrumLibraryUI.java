@@ -108,22 +108,35 @@ public class MassSpectrumLibraryUI extends Composite {
 		Composite composite = new Composite(this, SWT.NONE);
 		composite.setLayout(new GridLayout(4, false));
 		//
-		createButtonField(composite);
-		createTableField(composite);
+		createButtonSection(composite);
+		createTableSection(composite);
 		//
 		enableButtonFields(ACTION_INITIALIZE);
 	}
 
-	private void createButtonField(Composite composite) {
+	private void createButtonSection(Composite parent) {
 
-		/*
-		 * Spacer Label
-		 */
-		textLibraryPath = new Text(composite, SWT.BORDER);
+		createLibraryImportSection(parent);
+		createLibraryEditSection(parent);
+	}
+
+	private void createLibraryImportSection(Composite parent) {
+
+		createLibraryPathText(parent);
+		createSelectLibraryButton(parent);
+		createMergeLibraryButton(parent);
+	}
+
+	private void createLibraryPathText(Composite parent) {
+
+		textLibraryPath = new Text(parent, SWT.BORDER);
 		textLibraryPath.setText("");
 		textLibraryPath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		buttonSelectLibrary = new Button(composite, SWT.PUSH);
+	}
+
+	private void createSelectLibraryButton(Composite parent) {
+
+		buttonSelectLibrary = new Button(parent, SWT.PUSH);
 		buttonSelectLibrary.setText("Select Library");
 		buttonSelectLibrary.addSelectionListener(new SelectionAdapter() {
 
@@ -163,9 +176,12 @@ public class MassSpectrumLibraryUI extends Composite {
 				}
 			}
 		});
-		//
+	}
+
+	private void createMergeLibraryButton(Composite parent) {
+
 		Shell shell = Display.getCurrent().getActiveShell();
-		buttonMergeLibrary = new Button(composite, SWT.PUSH);
+		buttonMergeLibrary = new Button(parent, SWT.PUSH);
 		buttonMergeLibrary.setText("Merge Library");
 		buttonMergeLibrary.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
 		buttonMergeLibrary.addSelectionListener(new SelectionAdapter() {
@@ -211,16 +227,26 @@ public class MassSpectrumLibraryUI extends Composite {
 				}
 			}
 		});
-		/*
-		 * Buttons
-		 */
-		Composite compositeButtons = new Composite(composite, SWT.NONE);
-		compositeButtons.setLayout(new GridLayout(5, true));
+	}
+
+	private void createLibraryEditSection(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(5, true));
 		GridData gridDataComposite = new GridData();
 		gridDataComposite.horizontalAlignment = SWT.RIGHT;
-		compositeButtons.setLayoutData(gridDataComposite);
+		composite.setLayoutData(gridDataComposite);
 		//
-		buttonEditLibrary = new Button(compositeButtons, SWT.PUSH);
+		createEditLibraryButton(composite);
+		createCancelLibraryButton(composite);
+		createDeleteLibraryButton(composite);
+		createAddLibraryButton(composite);
+		createImportLibraryButton(composite);
+	}
+
+	private void createEditLibraryButton(Composite parent) {
+
+		buttonEditLibrary = new Button(parent, SWT.PUSH);
 		if(org.eclipse.chemclipse.rcp.app.ui.preferences.PreferenceSupplier.isChangePerspectivesAutomatically()) {
 			buttonEditLibrary.setSelection(false);
 			buttonEditLibrary.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DISABLED, IApplicationImage.SIZE_16x16));
@@ -244,8 +270,11 @@ public class MassSpectrumLibraryUI extends Composite {
 				}
 			}
 		});
-		//
-		buttonCancel = new Button(compositeButtons, SWT.PUSH);
+	}
+
+	private void createCancelLibraryButton(Composite parent) {
+
+		buttonCancel = new Button(parent, SWT.PUSH);
 		buttonCancel.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CANCEL, IApplicationImage.SIZE_16x16));
 		buttonCancel.addSelectionListener(new SelectionAdapter() {
 
@@ -255,8 +284,11 @@ public class MassSpectrumLibraryUI extends Composite {
 				enableButtonFields(ACTION_CANCEL);
 			}
 		});
-		//
-		buttonDelete = new Button(compositeButtons, SWT.PUSH);
+	}
+
+	private void createDeleteLibraryButton(Composite parent) {
+
+		buttonDelete = new Button(parent, SWT.PUSH);
 		buttonDelete.setEnabled(false);
 		buttonDelete.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		buttonDelete.addSelectionListener(new SelectionAdapter() {
@@ -286,8 +318,11 @@ public class MassSpectrumLibraryUI extends Composite {
 				}
 			}
 		});
-		//
-		buttonAdd = new Button(compositeButtons, SWT.PUSH);
+	}
+
+	private void createAddLibraryButton(Composite parent) {
+
+		buttonAdd = new Button(parent, SWT.PUSH);
 		buttonAdd.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		buttonAdd.addSelectionListener(new SelectionAdapter() {
 
@@ -323,8 +358,11 @@ public class MassSpectrumLibraryUI extends Composite {
 				}
 			}
 		});
-		//
-		buttonImport = new Button(compositeButtons, SWT.PUSH);
+	}
+
+	private void createImportLibraryButton(Composite parent) {
+
+		buttonImport = new Button(parent, SWT.PUSH);
 		buttonImport.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
 		buttonImport.addSelectionListener(new SelectionAdapter() {
 
@@ -336,9 +374,9 @@ public class MassSpectrumLibraryUI extends Composite {
 		});
 	}
 
-	private void createTableField(Composite composite) {
+	private void createTableSection(Composite parent) {
 
-		Composite compositeTable = new Composite(composite, SWT.NONE);
+		Composite compositeTable = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 4;
 		compositeTable.setLayoutData(gridData);
