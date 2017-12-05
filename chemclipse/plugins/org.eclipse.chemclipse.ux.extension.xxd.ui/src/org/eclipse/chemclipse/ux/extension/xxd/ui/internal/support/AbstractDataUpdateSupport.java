@@ -17,6 +17,7 @@ import java.util.List;
 import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -58,8 +59,15 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 	private void registerEventBroker(IEventBroker eventBroker) {
 
 		if(eventBroker != null) {
+			/*
+			 * TODO optimize to TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION
+			 */
+			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD, IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION));
+			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD, IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION));
+			//
 			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_SCAN, IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION));
 			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_SCAN, IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION));
+			//
 			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_PEAK, IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION));
 			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_PEAK, IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION));
 		}
@@ -72,10 +80,17 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 			public void handleEvent(Event event) {
 
 				try {
-					if(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION.equals(topic) || IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION.equals(topic)) {
+					if(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION.equals(topic) || IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION.equals(topic) || IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION.equals(topic)) {
 						setObject(null);
 					} else {
 						Object object = event.getProperty(property);
+						if(object instanceof IChromatogramSelection) {
+							/*
+							 * TargetsPart etc. handle the chromatogram instead of the selection.
+							 */
+							IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
+							object = chromatogramSelection.getChromatogram();
+						}
 						setObject(object);
 					}
 				} catch(Exception e) {

@@ -31,6 +31,7 @@ public interface IChemClipseEvents {
 	String PROPERTY_CHROMATOGRAM_WSD_OVERVIEW = IEventBroker.DATA; // IChromatogramOverview - no map
 	//
 	String PROPERTY_CHROMATOGRAM_SELECTION = "ChromatogramSelection"; // IChromatogramSelection (MSD, CSD, WSD)
+	String PROPERTY_CHROMATOGRAM_SELECTION_XXD = IEventBroker.DATA; // IChromatogramSelection
 	String PROPERTY_LIBRARY_SELECTION = IEventBroker.DATA; // IMassSpectra
 	String PROPERTY_SCAN_SELECTION = IEventBroker.DATA; // IScanMSD, ...
 	String PROPERTY_PEAK_SELECTION = IEventBroker.DATA; // IPeakMSD, ...
@@ -72,6 +73,7 @@ public interface IChemClipseEvents {
 	 * UNLOAD
 	 * Close the chromatogram editor.
 	 */
+	String TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION = "chromatogram/xxd/load/chromatogramselection";
 	String TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION = "chromatogram/xxd/unload/chromatogramselection";
 	String TOPIC_SCAN_XXD_UPDATE_SELECTION = "scan/xxd/update/selection";
 	String TOPIC_SCAN_XXD_UNLOAD_SELECTION = "scan/xxd/unload/selection";
