@@ -98,6 +98,30 @@ public class ExtendedScanChartUI {
 	private List<String> scanIdentifierIds;
 	private String[] scanIdentifierNames;
 
+	private class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
+
+		private String identifierId;
+
+		public MassSpectrumIdentifierRunnable(String identifierId) {
+			this.identifierId = identifierId;
+		}
+
+		@Override
+		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+			try {
+				monitor.beginTask("Scan Identification", IProgressMonitor.UNKNOWN);
+				MassSpectrumIdentifier.identify(optimizedScan, identifierId, monitor);
+				originalScan.setOptimizedMassSpectrum(optimizedScan);
+				//
+				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, originalScan.getOptimizedMassSpectrum());
+			} finally {
+				monitor.done();
+			}
+		}
+	}
+
 	@Inject
 	public ExtendedScanChartUI(Composite parent, MPart part) {
 		initializeSettings();
@@ -266,6 +290,9 @@ public class ExtendedScanChartUI {
 		combo.setToolTipText("Scan Filter");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.setItems(scanFilterNames);
+		if(scanFilterNames.length > 0) {
+			combo.select(0);
+		}
 		return combo;
 	}
 
@@ -305,6 +332,9 @@ public class ExtendedScanChartUI {
 		Combo combo = new Combo(parent, SWT.NONE);
 		combo.setToolTipText("Scan Identifier");
 		combo.setItems(scanIdentifierNames);
+		if(scanIdentifierNames.length > 0) {
+			combo.select(0);
+		}
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		return combo;
 	}
@@ -323,34 +353,13 @@ public class ExtendedScanChartUI {
 					int index = comboScanIdentifier.getSelectionIndex();
 					if(index >= 0 && index < scanIdentifierIds.size()) {
 						/*
-						 * Create the runnable.
-						 */
-						final String identifierId = scanIdentifierIds.get(index);
-						IRunnableWithProgress runnable = new IRunnableWithProgress() {
-
-							@Override
-							public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-
-								try {
-									monitor.beginTask("Scan Identification", IProgressMonitor.UNKNOWN);
-									MassSpectrumIdentifier.identify(optimizedScan, identifierId, monitor);
-									originalScan.setOptimizedMassSpectrum(optimizedScan);
-									//
-									IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-									eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, originalScan.getOptimizedMassSpectrum());
-								} finally {
-									monitor.done();
-								}
-							}
-						};
-						/*
 						 * Run the identification.
 						 */
+						String identifierId = scanIdentifierIds.get(index);
+						IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(identifierId);
 						ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 						try {
 							monitor.run(true, true, runnable);
-							isScanPinned = false;
-							setPinButtonText();
 						} catch(InvocationTargetException e1) {
 							logger.warn(e1);
 						} catch(InterruptedException e1) {

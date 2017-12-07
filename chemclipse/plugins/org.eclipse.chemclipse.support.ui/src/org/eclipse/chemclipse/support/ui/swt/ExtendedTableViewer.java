@@ -85,6 +85,12 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		/*
 		 * Add the key listeners.
 		 */
+		if(tableSettings == null) {
+			this.tableSettings = new TableSettings();
+		} else {
+			this.tableSettings = tableSettings;
+		}
+		//
 		createKeyListener();
 	}
 

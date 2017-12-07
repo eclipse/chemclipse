@@ -20,7 +20,7 @@ public class ScanSignalWSD extends AbstractScanSignalWSD implements IScanSignalW
 		super();
 	}
 
-	public ScanSignalWSD(int wavelength, float abundance) {
+	public ScanSignalWSD(double wavelength, float abundance) {
 		super();
 		setWavelength(wavelength);
 		setAbundance(abundance);

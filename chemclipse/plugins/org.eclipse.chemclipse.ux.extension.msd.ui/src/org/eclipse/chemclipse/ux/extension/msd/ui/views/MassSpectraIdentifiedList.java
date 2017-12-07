@@ -33,7 +33,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.support.ui.swt.IListItemsRemoveListener;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -155,17 +154,6 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 				}
 			}
 		});
-		/*
-		 * If identification results are deleted, update the chromatogram.
-		 */
-		massSpectrumListUI.addListItemsRemoveListener(new IListItemsRemoveListener() {
-
-			@Override
-			public void update() {
-
-				ChromatogramSelectionMSDUpdateNotifier.fireUpdateChange(chromatogramSelection, true);
-			}
-		});
 	}
 
 	@PreDestroy
@@ -200,7 +188,7 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 		if(doUpdate(chromatogramSelection)) {
 			this.chromatogramSelection = chromatogramSelection;
 			IMassSpectra massSpectra = SeriesConverterMSD.getIdentifiedScans(chromatogramSelection, true);
-			massSpectrumListUI.update(massSpectra, forceReload);
+			massSpectrumListUI.update(massSpectra);
 		}
 	}
 }

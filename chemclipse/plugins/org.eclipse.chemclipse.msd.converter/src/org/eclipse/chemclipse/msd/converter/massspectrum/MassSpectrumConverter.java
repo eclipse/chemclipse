@@ -149,8 +149,6 @@ public class MassSpectrumConverter {
 		return processingInfo;
 	}
 
-	// ------------------------------------convenience-import
-	// ------------------------------------export
 	/**
 	 * Exports the mass spectrum.
 	 * 

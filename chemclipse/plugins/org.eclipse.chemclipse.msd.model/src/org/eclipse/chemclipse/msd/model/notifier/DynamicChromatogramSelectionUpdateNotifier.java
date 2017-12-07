@@ -16,10 +16,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.eclipse.e4.core.services.events.IEventBroker;
-
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.e4.core.services.events.IEventBroker;
 
 public class DynamicChromatogramSelectionUpdateNotifier implements IChromatogramSelectionMSDUpdateNotifier {
 
@@ -41,5 +40,7 @@ public class DynamicChromatogramSelectionUpdateNotifier implements IChromatogram
 		map.put(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION, chromatogramSelection);
 		map.put(IChemClipseEvents.PROPERTY_FORCE_RELOAD, forceReload);
 		eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, map);
+		//
+		eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, chromatogramSelection);
 	}
 }

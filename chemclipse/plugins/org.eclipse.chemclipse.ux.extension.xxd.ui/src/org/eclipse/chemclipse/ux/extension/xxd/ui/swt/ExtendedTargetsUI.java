@@ -547,8 +547,8 @@ public class ExtendedTargetsUI {
 	private void deleteTargets() {
 
 		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText("Delete Targets");
-		messageBox.setMessage("Would you like to delete the selected targets?");
+		messageBox.setText("Delete Target(s)");
+		messageBox.setMessage("Would you like to delete the selected target(s)?");
 		if(messageBox.open() == SWT.YES) {
 			/*
 			 * Delete Target

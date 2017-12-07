@@ -11,16 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.jface.viewers.ILazyContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-
 public class MassSpectrumListContentProviderLazy implements ILazyContentProvider {
 
 	private TableViewer tableViewer;
-	private IScanMSD[] massSpectra;
+	private IMassSpectra massSpectra;
 
 	public MassSpectrumListContentProviderLazy(TableViewer tableViewer) {
 		this.tableViewer = tableViewer;
@@ -34,12 +33,12 @@ public class MassSpectrumListContentProviderLazy implements ILazyContentProvider
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 
-		this.massSpectra = (IScanMSD[])newInput;
+		this.massSpectra = (IMassSpectra)newInput;
 	}
 
 	@Override
 	public void updateElement(int index) {
 
-		tableViewer.replace(massSpectra[index], index);
+		tableViewer.replace(massSpectra.getList().get(index), index);
 	}
 }

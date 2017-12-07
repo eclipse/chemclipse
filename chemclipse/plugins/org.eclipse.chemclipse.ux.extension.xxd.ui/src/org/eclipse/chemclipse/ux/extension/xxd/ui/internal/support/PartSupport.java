@@ -40,6 +40,7 @@ public class PartSupport {
 	public static final String PARTDESCRIPTOR_CHROMATOGRAM_TARGETS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramTargetsPartDescriptor";
 	public static final String PARTDESCRIPTOR_SUBTRACT_SCAN = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.subtractScanPartDescriptor";
 	//
+	public static final String PARTSTACK_NONE = "";
 	public static final String PARTSTACK_QUICKACCESS = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.quickaccess";
 	public static final String PARTSTACK_FILES = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.files";
 	public static final String PARTSTACK_OVERVIEW = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.overview";
