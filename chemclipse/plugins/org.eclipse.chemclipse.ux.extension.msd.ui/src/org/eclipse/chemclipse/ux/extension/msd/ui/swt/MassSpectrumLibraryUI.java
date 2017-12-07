@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
+package org.eclipse.chemclipse.ux.extension.msd.ui.swt;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -35,7 +35,7 @@ import org.eclipse.chemclipse.msd.model.implementation.RegularLibraryMassSpectru
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.msd.swt.ui.components.SearchSupportUI;
-import org.eclipse.chemclipse.msd.swt.ui.internal.runnables.ImportLibraryRunnable;
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -45,6 +45,8 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.ux.extension.msd.ui.internal.runnables.ImportLibraryRunnable;
+import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -140,9 +142,9 @@ public class MassSpectrumLibraryUI extends Composite {
 		toolbarEdit = createToolbarEdit(composite);
 		createLibraryTable(composite);
 		//
-		// PartSupport.setCompositeVisibility(toolbarInfo, true);
-		// PartSupport.setCompositeVisibility(toolbarSearch, false);
-		// PartSupport.setCompositeVisibility(toolbarEdit, false);
+		PartSupport.setCompositeVisibility(toolbarInfo, true);
+		PartSupport.setCompositeVisibility(toolbarSearch, false);
+		PartSupport.setCompositeVisibility(toolbarEdit, false);
 		enableButtonFields(ACTION_INITIALIZE);
 	}
 
@@ -171,12 +173,12 @@ public class MassSpectrumLibraryUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				// boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
-				// if(visible) {
-				// button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				// } else {
-				// button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				// }
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+				}
 			}
 		});
 		//
@@ -194,12 +196,12 @@ public class MassSpectrumLibraryUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				// boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
-				// if(visible) {
-				// button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				// } else {
-				// button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				// }
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarSearch);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+				}
 			}
 		});
 		//
@@ -217,13 +219,12 @@ public class MassSpectrumLibraryUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				// boolean visible = PartSupport.toggleCompositeVisibility(toolbarEdit);
-				// if(visible) {
-				// setComboSubstanceNameItems();
-				// button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
-				// } else {
-				// button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
-				// }
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarEdit);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+				}
 			}
 		});
 		//

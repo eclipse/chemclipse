@@ -30,12 +30,12 @@ import org.eclipse.chemclipse.msd.converter.exceptions.NoMassSpectrumConverterAv
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumLibraryUI;
 import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectraFileSupport;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.MassSpectrumImportRunnable;
+import org.eclipse.chemclipse.ux.extension.msd.ui.swt.MassSpectrumLibraryUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;

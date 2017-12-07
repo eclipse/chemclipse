@@ -25,7 +25,7 @@ import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateNotifier;
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
-import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumSearchListUI;
+import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
 import org.eclipse.chemclipse.msd.swt.ui.converter.SeriesConverterMSD;
 import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
@@ -57,7 +57,7 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 	//
 	@Inject
 	private Composite parent;
-	private MassSpectrumSearchListUI massSpectrumListUI;
+	private MassSpectrumListUI massSpectrumListUI;
 	private IEventBroker eventBroker;
 	private EventHandler eventHandler;
 	//
@@ -121,9 +121,9 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 		/*
 		 * List
 		 */
-		massSpectrumListUI = new MassSpectrumSearchListUI(composite, SWT.NONE);
-		massSpectrumListUI.setLayoutData(new GridData(GridData.FILL_BOTH));
-		massSpectrumListUI.getTableViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+		massSpectrumListUI = new MassSpectrumListUI(composite, SWT.NONE);
+		massSpectrumListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		massSpectrumListUI.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -150,7 +150,7 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 					 * focus there. But when trying to press "DEL", the focus would be on the other views.
 					 * Hence, it needs to be set back to this list.
 					 */
-					massSpectrumListUI.setFocus();
+					massSpectrumListUI.getTable().setFocus();
 				}
 			}
 		});
@@ -165,7 +165,7 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 	@Focus
 	public void setFocus() {
 
-		massSpectrumListUI.setFocus();
+		massSpectrumListUI.getTable().setFocus();
 		update(getChromatogramSelection(), false);
 	}
 
@@ -188,7 +188,7 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 		if(doUpdate(chromatogramSelection)) {
 			this.chromatogramSelection = chromatogramSelection;
 			IMassSpectra massSpectra = SeriesConverterMSD.getIdentifiedScans(chromatogramSelection, true);
-			massSpectrumListUI.update(massSpectra);
+			massSpectrumListUI.setInput(massSpectra);
 		}
 	}
 }
