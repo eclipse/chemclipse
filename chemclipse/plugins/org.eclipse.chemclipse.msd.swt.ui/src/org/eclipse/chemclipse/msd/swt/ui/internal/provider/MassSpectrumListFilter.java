@@ -36,6 +36,11 @@ public class MassSpectrumListFilter extends ViewerFilter {
 	@Override
 	public boolean select(Viewer viewer, Object parentElement, Object element) {
 
+		return matchElement(element);
+	}
+
+	public boolean matchElement(Object element) {
+
 		/*
 		 * Pre-Condition
 		 */
