@@ -39,6 +39,8 @@ import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogr
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramTargetMSD;
+import org.eclipse.chemclipse.msd.swt.ui.components.ISearchListener;
+import org.eclipse.chemclipse.msd.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -48,9 +50,9 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.support.util.TargetListUtil;
+import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -96,6 +98,7 @@ public class ExtendedTargetsUI {
 	//
 	private Label labelInfo;
 	private Composite toolbarInfo;
+	private Composite toolbarSearch;
 	private Composite toolbarEdit;
 	private Combo comboSubstanceName;
 	private TargetsListUI targetsListUI;
@@ -133,10 +136,12 @@ public class ExtendedTargetsUI {
 		//
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
+		toolbarSearch = createToolbarSearch(parent);
 		toolbarEdit = createToolbarEdit(parent);
 		createTargetsTable(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
+		PartSupport.setCompositeVisibility(toolbarSearch, false);
 		PartSupport.setCompositeVisibility(toolbarEdit, false);
 		//
 		applySettings();
@@ -148,9 +153,10 @@ public class ExtendedTargetsUI {
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(4, false));
 		//
 		createButtonToggleToolbarInfo(composite);
+		createButtonToggleToolbarSearch(composite);
 		createButtonToggleToolbarEdit(composite);
 		createSettingsButton(composite);
 	}
@@ -171,6 +177,29 @@ public class ExtendedTargetsUI {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
 				} else {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonToggleToolbarSearch(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle search toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarSearch);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
 				}
 			}
 		});
@@ -244,6 +273,27 @@ public class ExtendedTargetsUI {
 		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		return composite;
+	}
+
+	private Composite createToolbarSearch(Composite parent) {
+
+		SearchSupportUI searchSupportUI = new SearchSupportUI(parent, SWT.NONE);
+		GridLayout gridLayout = new GridLayout(1, true);
+		gridLayout.marginLeft = 0;
+		gridLayout.marginRight = 0;
+		gridLayout.horizontalSpacing = 0;
+		searchSupportUI.setLayout(gridLayout);
+		searchSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		searchSupportUI.setSearchListener(new ISearchListener() {
+
+			@Override
+			public void performSearch(String searchText, boolean caseSensitive) {
+
+				targetsListUI.setSearchText(searchText, caseSensitive);
+			}
+		});
+		//
+		return searchSupportUI;
 	}
 
 	private Composite createToolbarEdit(Composite parent) {

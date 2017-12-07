@@ -33,6 +33,8 @@ import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectru
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.RegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
+import org.eclipse.chemclipse.msd.swt.ui.components.ISearchListener;
+import org.eclipse.chemclipse.msd.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.msd.swt.ui.internal.runnables.ImportLibraryRunnable;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -41,9 +43,15 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.support.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.PreferenceDialog;
+import org.eclipse.jface.preference.PreferenceManager;
+import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -57,6 +65,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -72,16 +81,22 @@ public class MassSpectrumLibraryUI extends Composite {
 	private static final String ACTION_DELETE = "ACTION_DELETE";
 	private static final String ACTION_IMPORT = "ACTION_IMPORT";
 	private static final String ACTION_SELECT = "ACTION_SELECT";
+	private static final String ACTION_ADD = "ACTION_ADD";
 	//
-	private MassSpectrumSearchListUI massSpectrumSearchListUI;
-	private IEventBroker eventBroker;
+	private MassSpectrumListUI massSpectrumListUI;
 	private IComparisonResult comparisonResult;
+	//
+	private Composite toolbarInfo;
+	private Composite toolbarSearch;
+	private Composite toolbarEdit;
+	//
+	private Label labelInfo;
+	private SearchSupportUI searchSupportUI;
 	//
 	private Text textLibraryPath;
 	private Button buttonSelectLibrary;
 	private Button buttonMergeLibrary;
 	//
-	private Button buttonEditLibrary;
 	private Button buttonCancel;
 	private Button buttonDelete;
 	private Button buttonAdd;
@@ -91,40 +106,208 @@ public class MassSpectrumLibraryUI extends Composite {
 
 	public MassSpectrumLibraryUI(Composite parent, int style) {
 		super(parent, style);
-		eventBroker = ModelSupportAddon.getEventBroker();
 		comparisonResult = ComparisonResult.createBestMatchComparisonResult();
-		initialize();
+		createControl();
 	}
 
 	public void update(IMassSpectra massSpectra) {
 
 		this.massSpectra = massSpectra;
-		massSpectrumSearchListUI.update(massSpectra);
+		if(massSpectra != null) {
+			massSpectrumListUI.setInput(massSpectra);
+			updateLabel();
+		} else {
+			clear();
+		}
 	}
 
-	private void initialize() {
+	public void clear() {
 
-		setLayout(new FillLayout());
+		massSpectrumListUI.setInput(null);
+		updateLabel();
+	}
+
+	private void createControl() {
+
+		// setLayout(new GridLayout(1, true)); this
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(1, true));
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
-		createButtonSection(composite);
-		createTableSection(composite);
+		createToolbarMain(composite);
+		toolbarInfo = createToolbarInfo(composite);
+		toolbarSearch = createToolbarSearch(composite);
+		toolbarEdit = createToolbarEdit(composite);
+		createLibraryTable(composite);
 		//
+		// PartSupport.setCompositeVisibility(toolbarInfo, true);
+		// PartSupport.setCompositeVisibility(toolbarSearch, false);
+		// PartSupport.setCompositeVisibility(toolbarEdit, false);
 		enableButtonFields(ACTION_INITIALIZE);
 	}
 
-	private void createButtonSection(Composite parent) {
+	private void createToolbarMain(Composite parent) {
 
-		createLibraryImportSection(parent);
-		createLibraryEditSection(parent);
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataStatus.horizontalAlignment = SWT.END;
+		composite.setLayoutData(gridDataStatus);
+		composite.setLayout(new GridLayout(4, false));
+		//
+		createButtonToggleToolbarInfo(composite);
+		createButtonToggleToolbarSearch(composite);
+		createButtonToggleToolbarEdit(composite);
+		createSettingsButton(composite);
 	}
 
-	private void createLibraryImportSection(Composite parent) {
+	private Button createButtonToggleToolbarInfo(Composite parent) {
 
-		createLibraryPathText(parent);
-		createSelectLibraryButton(parent);
-		createMergeLibraryButton(parent);
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle info toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				// boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
+				// if(visible) {
+				// button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+				// } else {
+				// button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+				// }
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonToggleToolbarSearch(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle search toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				// boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
+				// if(visible) {
+				// button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+				// } else {
+				// button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+				// }
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonToggleToolbarEdit(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle edit toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				// boolean visible = PartSupport.toggleCompositeVisibility(toolbarEdit);
+				// if(visible) {
+				// setComboSubstanceNameItems();
+				// button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+				// } else {
+				// button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+				// }
+			}
+		});
+		//
+		return button;
+	}
+
+	private void createSettingsButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Open the Settings");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IPreferencePage preferencePage = new PreferencePage();
+				preferencePage.setTitle("Target Settings");
+				PreferenceManager preferenceManager = new PreferenceManager();
+				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
+				//
+				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
+				preferenceDialog.create();
+				preferenceDialog.setMessage("Settings");
+				if(preferenceDialog.open() == PreferenceDialog.OK) {
+					try {
+						// applySettings();
+					} catch(Exception e1) {
+						MessageDialog.openError(Display.getDefault().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+					}
+				}
+			}
+		});
+	}
+
+	private Composite createToolbarInfo(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(1, true));
+		//
+		labelInfo = new Label(composite, SWT.NONE);
+		labelInfo.setText("");
+		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		return composite;
+	}
+
+	private Composite createToolbarSearch(Composite parent) {
+
+		searchSupportUI = new SearchSupportUI(parent, SWT.NONE);
+		searchSupportUI.setLayout(new GridLayout(1, true));
+		searchSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		searchSupportUI.setSearchListener(new ISearchListener() {
+
+			@Override
+			public void performSearch(String searchText, boolean caseSensitive) {
+
+				massSpectrumListUI.setSearchText(searchText, caseSensitive);
+				updateLabel();
+			}
+		});
+		//
+		return searchSupportUI;
+	}
+
+	private Composite createToolbarEdit(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(7, false));
+		//
+		createLibraryPathText(composite);
+		createSelectLibraryButton(composite);
+		createMergeLibraryButton(composite);
+		createCancelLibraryButton(composite);
+		createDeleteLibraryButton(composite);
+		createAddLibraryButton(composite);
+		createImportLibraryButton(composite);
+		//
+		return composite;
 	}
 
 	private void createLibraryPathText(Composite parent) {
@@ -221,52 +404,9 @@ public class MassSpectrumLibraryUI extends Composite {
 					if(massSpectraImport != null) {
 						textLibraryPath.setText("");
 						massSpectra.addMassSpectra(massSpectraImport.getList());
-						massSpectrumSearchListUI.update(massSpectra);
+						update(massSpectra);
 					}
 					enableButtonFields(ACTION_INITIALIZE);
-				}
-			}
-		});
-	}
-
-	private void createLibraryEditSection(Composite parent) {
-
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout(5, true));
-		GridData gridDataComposite = new GridData();
-		gridDataComposite.horizontalAlignment = SWT.RIGHT;
-		composite.setLayoutData(gridDataComposite);
-		//
-		createEditLibraryButton(composite);
-		createCancelLibraryButton(composite);
-		createDeleteLibraryButton(composite);
-		createAddLibraryButton(composite);
-		createImportLibraryButton(composite);
-	}
-
-	private void createEditLibraryButton(Composite parent) {
-
-		buttonEditLibrary = new Button(parent, SWT.PUSH);
-		if(org.eclipse.chemclipse.rcp.app.ui.preferences.PreferenceSupplier.isChangePerspectivesAutomatically()) {
-			buttonEditLibrary.setSelection(false);
-			buttonEditLibrary.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DISABLED, IApplicationImage.SIZE_16x16));
-		} else {
-			buttonEditLibrary.setSelection(true);
-			buttonEditLibrary.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
-		}
-		buttonEditLibrary.setToolTipText("Edit Library");
-		buttonEditLibrary.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean selection = org.eclipse.chemclipse.rcp.app.ui.preferences.PreferenceSupplier.isChangePerspectivesAutomatically();
-				org.eclipse.chemclipse.rcp.app.ui.preferences.PreferenceSupplier.setChangePerspectivesAutomatically(!selection);
-				//
-				if(selection) {
-					buttonEditLibrary.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DISABLED, IApplicationImage.SIZE_16x16));
-				} else {
-					buttonEditLibrary.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				}
 			}
 		});
@@ -296,7 +436,7 @@ public class MassSpectrumLibraryUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Table table = massSpectrumSearchListUI.getTableViewer().getTable();
+				Table table = massSpectrumListUI.getTable();
 				int index = table.getSelectionIndex();
 				if(index >= 0) {
 					MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
@@ -313,7 +453,7 @@ public class MassSpectrumLibraryUI extends Composite {
 								massSpectra.removeMassSpectrum(massSpectrum);
 							}
 						}
-						massSpectrumSearchListUI.update(massSpectra);
+						update(massSpectra);
 					}
 				}
 			}
@@ -329,6 +469,8 @@ public class MassSpectrumLibraryUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				enableButtonFields(ACTION_ADD);
+				//
 				MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_INFORMATION | SWT.OK | SWT.CANCEL);
 				messageBox.setText("Add library entry?");
 				messageBox.setMessage("Would you like to add a new library entry?");
@@ -350,12 +492,14 @@ public class MassSpectrumLibraryUI extends Composite {
 						 * Add to library and update the list.
 						 */
 						massSpectra.addMassSpectrum(libraryMassSpectrum);
-						massSpectrumSearchListUI.setSearchSelection(name);
+						searchSupportUI.setSearchText(name);
 						//
 					} catch(Exception e1) {
 						logger.warn(e1);
 					}
 				}
+				//
+				enableButtonFields(ACTION_INITIALIZE);
 			}
 		});
 	}
@@ -374,18 +518,14 @@ public class MassSpectrumLibraryUI extends Composite {
 		});
 	}
 
-	private void createTableSection(Composite parent) {
+	private void createLibraryTable(Composite parent) {
 
-		Composite compositeTable = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.horizontalSpan = 4;
-		compositeTable.setLayoutData(gridData);
-		compositeTable.setLayout(new FillLayout());
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		composite.setLayout(new FillLayout());
 		//
-		Composite compositeInner = new Composite(compositeTable, SWT.NONE);
-		compositeInner.setLayout(new GridLayout(1, true));
-		massSpectrumSearchListUI = new MassSpectrumSearchListUI(compositeInner, SWT.BORDER | SWT.MULTI);
-		massSpectrumSearchListUI.getTableViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+		massSpectrumListUI = new MassSpectrumListUI(composite, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.VIRTUAL);
+		massSpectrumListUI.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -407,6 +547,7 @@ public class MassSpectrumLibraryUI extends Composite {
 					IScanMSD massSpectrum = (IScanMSD)firstElement;
 					MassSpectrumSelectionUpdateNotifier.fireUpdateChange(massSpectrum, true);
 					//
+					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 					IIdentificationTarget identificationTarget = getIdentificationTarget(massSpectrum);
 					eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, identificationTarget);
 					/*
@@ -415,11 +556,11 @@ public class MassSpectrumLibraryUI extends Composite {
 					 * focus there. But when trying to press "DEL", the focus would be on the other views.
 					 * Hence, it needs to be set back to this list.
 					 */
-					massSpectrumSearchListUI.setFocus();
+					massSpectrumListUI.getTable().setFocus();
 				}
 			}
 		});
-		massSpectrumSearchListUI.getTableViewer().getTable().addSelectionListener(new SelectionAdapter() {
+		massSpectrumListUI.getTable().addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -454,11 +595,14 @@ public class MassSpectrumLibraryUI extends Composite {
 				buttonAdd.setEnabled(true);
 				buttonImport.setEnabled(true);
 				//
-				if(massSpectrumSearchListUI.getTableViewer().getTable().getSelectionIndex() >= 0) {
+				if(massSpectrumListUI.getTable().getSelectionIndex() >= 0) {
 					buttonDelete.setEnabled(true);
 				} else {
 					buttonDelete.setEnabled(false);
 				}
+				break;
+			case ACTION_ADD:
+				buttonCancel.setEnabled(true);
 				break;
 		}
 	}
@@ -493,5 +637,15 @@ public class MassSpectrumLibraryUI extends Composite {
 		}
 		//
 		return identificationTarget;
+	}
+
+	private void updateLabel() {
+
+		labelInfo.setText("Stored Mass Spectra: " + getItemSize());
+	}
+
+	private int getItemSize() {
+
+		return massSpectrumListUI.getTable().getItemCount();
 	}
 }

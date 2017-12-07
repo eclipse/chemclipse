@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
+package org.eclipse.chemclipse.ux.extension.ui.support;
 
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.ui.model.application.MApplication;

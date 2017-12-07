@@ -266,21 +266,21 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 			String label = ("".equals(massSpectra.getName())) ? massSpectrumFile.getName() : massSpectra.getName();
 			part.setLabel(label);
 			tabFolder = new TabFolder(parent, SWT.BOTTOM);
-			createMassSpectrumPage();
+			createEditorPage();
 		} else {
 			createErrorMessagePage(parent);
 		}
 	}
 
-	private void createMassSpectrumPage() {
+	private void createEditorPage() {
 
-		/*
-		 * Create the mass spectrum UI.
-		 */
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Mass Spectra");
+		tabItem.setText("Library");
+		//
 		massSpectrumLibraryUI = new MassSpectrumLibraryUI(tabFolder, SWT.NONE);
+		massSpectrumLibraryUI.setLayout(new FillLayout());
 		massSpectrumLibraryUI.update(massSpectra);
+		//
 		tabItem.setControl(massSpectrumLibraryUI);
 	}
 

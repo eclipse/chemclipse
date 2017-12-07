@@ -45,6 +45,8 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 
 	private static final Logger logger = Logger.getLogger(MassSpectrumListUI.class);
 	//
+	private int LIMIT_MASSIVE_DATA = 15000;
+	//
 	public static final String NAME = "Name";
 	public static final String RETENTION_TIME = "Retention Time";
 	public static final String RELATIVE_RETENTION_TIME = "Relative Retention Time";
@@ -150,7 +152,8 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 	public void setSearchText(String searchText, boolean caseSensitive) {
 
 		massSpectrumListFilter.setSearchText(searchText, caseSensitive);
-		if(isVirtualTable()) {
+		//
+		if(isVirtualTable() && isMassiveData(massSpectra)) {
 			/*
 			 * Virtual
 			 */
@@ -196,7 +199,7 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 
 		if(massSpectra != null) {
 			int size = massSpectra.size();
-			boolean massiveData = (size > 15000) ? true : false;
+			boolean massiveData = isMassiveData(massSpectra);
 			super.setInput(null); // Can only enable the hash look up before input has been set
 			setLabelAndContentProviders(massiveData);
 			super.setInput(massSpectra);
@@ -255,6 +258,14 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 				tableViewerColumn.setEditingSupport(new LibraryTextEditingSupport(this, columnLabel));
 			}
 		}
+	}
+
+	private boolean isMassiveData(IMassSpectra massSpectra) {
+
+		if(massSpectra != null) {
+			return (massSpectra.size() > LIMIT_MASSIVE_DATA) ? true : false;
+		}
+		return false;
 	}
 
 	private boolean isVirtualTable() {

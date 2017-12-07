@@ -12,37 +12,21 @@
 package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 
 public class MassSpectrumSearchListUI extends Composite {
 
-	private Text textSearch;
-	private Button checkboxCaseSensitive;
 	private Label labelInfo;
 	private MassSpectrumListUI massSpectrumListUI;
 
 	public MassSpectrumSearchListUI(Composite parent, int style) {
 		super(parent, style);
 		initialize();
-	}
-
-	public void setSearchSelection(String searchString) {
-
-		textSearch.setText(searchString);
-		search();
 	}
 
 	@Override
@@ -74,82 +58,11 @@ public class MassSpectrumSearchListUI extends Composite {
 
 	private void initialize() {
 
-		this.setLayout(new GridLayout(4, false));
+		this.setLayout(new GridLayout(1, false));
 		this.setLayoutData(new GridData(GridData.FILL_BOTH));
-		//
-		createTextSearch(this);
-		createButtonSearch(this);
-		createButtonReset(this);
-		createCheckBoxCaseSensitive(this);
 		//
 		createMassSpectrumTable(this);
 		createLabelInfo(this);
-	}
-
-	private void createTextSearch(Composite parent) {
-
-		textSearch = new Text(parent, SWT.BORDER);
-		textSearch.setText("");
-		textSearch.setToolTipText("Type in the search items.");
-		textSearch.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		textSearch.addKeyListener(new KeyAdapter() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
-					search();
-				}
-			}
-		});
-	}
-
-	private void createButtonSearch(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Search");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				search();
-			}
-		});
-	}
-
-	private void createButtonReset(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Reset");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				textSearch.setText("");
-				search();
-			}
-		});
-	}
-
-	private void createCheckBoxCaseSensitive(Composite parent) {
-
-		checkboxCaseSensitive = new Button(parent, SWT.CHECK);
-		checkboxCaseSensitive.setText("Case sensitive");
-		checkboxCaseSensitive.setSelection(true);
-		checkboxCaseSensitive.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				search();
-			}
-		});
 	}
 
 	private void createMassSpectrumTable(Composite parent) {
@@ -169,14 +82,6 @@ public class MassSpectrumSearchListUI extends Composite {
 		labelInfo = new Label(parent, SWT.NONE);
 		labelInfo.setText("");
 		labelInfo.setLayoutData(gridData);
-	}
-
-	private void search() {
-
-		String searchText = textSearch.getText().trim();
-		boolean caseSensitive = checkboxCaseSensitive.getSelection();
-		massSpectrumListUI.setSearchText(searchText, caseSensitive);
-		updateLabel();
 	}
 
 	private void updateLabel() {

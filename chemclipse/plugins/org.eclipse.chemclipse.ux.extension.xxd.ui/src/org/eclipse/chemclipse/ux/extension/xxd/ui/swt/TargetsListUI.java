@@ -15,20 +15,29 @@ import java.util.List;
 
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.ui.provider.TargetListFilter;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsEditingSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsLabelProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsTableComparator;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
 public class TargetsListUI extends ExtendedTableViewer {
 
 	private TargetsTableComparator targetsTableComparator;
+	private TargetListFilter targetListFilter;
 
 	public TargetsListUI(Composite parent, int style) {
 		super(parent, style);
 		targetsTableComparator = new TargetsTableComparator();
 		createColumns();
+	}
+
+	public void setSearchText(String searchText, boolean caseSensitive) {
+
+		targetListFilter.setSearchText(searchText, caseSensitive);
+		refresh();
 	}
 
 	public void clear() {
@@ -51,12 +60,12 @@ public class TargetsListUI extends ExtendedTableViewer {
 	private void createColumns() {
 
 		createColumns(TargetsLabelProvider.TITLES, TargetsLabelProvider.BOUNDS);
-		//
 		targetsTableComparator = new TargetsTableComparator();
-		//
 		setLabelProvider(new TargetsLabelProvider());
 		setContentProvider(new ListContentProvider());
 		setComparator(targetsTableComparator);
+		targetListFilter = new TargetListFilter();
+		setFilters(new ViewerFilter[]{targetListFilter});
 		setEditingSupport();
 	}
 

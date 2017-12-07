@@ -36,7 +36,7 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuCategories;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ScanTablePart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
