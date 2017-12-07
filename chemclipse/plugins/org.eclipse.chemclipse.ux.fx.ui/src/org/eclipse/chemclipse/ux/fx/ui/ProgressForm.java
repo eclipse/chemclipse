@@ -218,6 +218,7 @@ public class ProgressForm {
 	return dialogStage;
     }
 
+    @Deprecated
     public void showAndRunInBackground(final CheckedRunnable r) {
 
 	showAndRunInBackground(() -> r.run());
