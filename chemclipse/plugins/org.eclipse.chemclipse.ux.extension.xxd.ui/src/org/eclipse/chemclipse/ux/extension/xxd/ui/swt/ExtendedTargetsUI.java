@@ -278,11 +278,6 @@ public class ExtendedTargetsUI {
 	private Composite createToolbarSearch(Composite parent) {
 
 		SearchSupportUI searchSupportUI = new SearchSupportUI(parent, SWT.NONE);
-		GridLayout gridLayout = new GridLayout(1, true);
-		gridLayout.marginLeft = 0;
-		gridLayout.marginRight = 0;
-		gridLayout.horizontalSpacing = 0;
-		searchSupportUI.setLayout(gridLayout);
 		searchSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		searchSupportUI.setSearchListener(new ISearchListener() {
 
