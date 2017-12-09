@@ -24,4 +24,8 @@ public interface IExtendedTableViewer {
 	void createColumns(String[] titles, int[] bounds);
 
 	List<TableViewerColumn> getTableViewerColumns();
+
+	boolean isEditEnabled();
+
+	void setEditEnabled(boolean editEnabled);
 }

@@ -13,9 +13,7 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.swt;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -36,11 +34,9 @@ import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNoti
 import org.eclipse.chemclipse.msd.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.msd.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.preferences.PreferencePage;
@@ -90,7 +86,7 @@ public class MassSpectrumLibraryUI extends Composite {
 	//
 	private Composite toolbarInfo;
 	private Composite toolbarSearch;
-	private Composite toolbarEdit;
+	private Composite toolbarModify;
 	//
 	private Label labelInfo;
 	private SearchSupportUI searchSupportUI;
@@ -139,12 +135,14 @@ public class MassSpectrumLibraryUI extends Composite {
 		createToolbarMain(composite);
 		toolbarInfo = createToolbarInfo(composite);
 		toolbarSearch = createToolbarSearch(composite);
-		toolbarEdit = createToolbarEdit(composite);
-		createLibraryTable(composite);
+		toolbarModify = createToolbarModify(composite);
+		massSpectrumListUI = createLibraryTable(composite);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
 		PartSupport.setCompositeVisibility(toolbarSearch, false);
-		PartSupport.setCompositeVisibility(toolbarEdit, false);
+		PartSupport.setCompositeVisibility(toolbarModify, false);
+		//
+		massSpectrumListUI.setEditEnabled(false);
 		enableButtonFields(ACTION_INITIALIZE);
 	}
 
@@ -155,10 +153,11 @@ public class MassSpectrumLibraryUI extends Composite {
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(5, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		createButtonToggleToolbarSearch(composite);
+		createButtonToggleToolbarModify(composite);
 		createButtonToggleToolbarEdit(composite);
 		createSettingsButton(composite);
 	}
@@ -209,10 +208,10 @@ public class MassSpectrumLibraryUI extends Composite {
 		return button;
 	}
 
-	private Button createButtonToggleToolbarEdit(Composite parent) {
+	private Button createButtonToggleToolbarModify(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle edit toolbar.");
+		button.setToolTipText("Toggle modify toolbar.");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -220,12 +219,32 @@ public class MassSpectrumLibraryUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarEdit);
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarModify);
 				if(visible) {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				} else {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonToggleToolbarEdit(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Enable/disable to edit the table.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean editEnabled = !massSpectrumListUI.isEditEnabled();
+				massSpectrumListUI.setEditEnabled(editEnabled);
+				updateLabel();
 			}
 		});
 		//
@@ -296,7 +315,7 @@ public class MassSpectrumLibraryUI extends Composite {
 		return searchSupportUI;
 	}
 
-	private Composite createToolbarEdit(Composite parent) {
+	private Composite createToolbarModify(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setBackground(Colors.WHITE);
@@ -318,6 +337,7 @@ public class MassSpectrumLibraryUI extends Composite {
 	private void createLibraryPathText(Composite parent) {
 
 		textLibraryPath = new Text(parent, SWT.BORDER);
+		textLibraryPath.setToolTipText("Absolute path to your library.");
 		textLibraryPath.setText("");
 		textLibraryPath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
@@ -325,7 +345,9 @@ public class MassSpectrumLibraryUI extends Composite {
 	private void createSelectLibraryButton(Composite parent) {
 
 		buttonSelectLibrary = new Button(parent, SWT.PUSH);
-		buttonSelectLibrary.setText("Select Library");
+		buttonSelectLibrary.setToolTipText("Select a library");
+		buttonSelectLibrary.setText("");
+		buttonSelectLibrary.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FILE, IApplicationImage.SIZE_16x16));
 		buttonSelectLibrary.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -370,7 +392,8 @@ public class MassSpectrumLibraryUI extends Composite {
 
 		Shell shell = Display.getCurrent().getActiveShell();
 		buttonMergeLibrary = new Button(parent, SWT.PUSH);
-		buttonMergeLibrary.setText("Merge Library");
+		buttonMergeLibrary.setText("");
+		buttonMergeLibrary.setToolTipText("Merge the selected library");
 		buttonMergeLibrary.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
 		buttonMergeLibrary.addSelectionListener(new SelectionAdapter() {
 
@@ -420,6 +443,7 @@ public class MassSpectrumLibraryUI extends Composite {
 	private void createCancelLibraryButton(Composite parent) {
 
 		buttonCancel = new Button(parent, SWT.PUSH);
+		buttonCancel.setToolTipText("Cancel operation");
 		buttonCancel.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CANCEL, IApplicationImage.SIZE_16x16));
 		buttonCancel.addSelectionListener(new SelectionAdapter() {
 
@@ -435,6 +459,8 @@ public class MassSpectrumLibraryUI extends Composite {
 
 		buttonDelete = new Button(parent, SWT.PUSH);
 		buttonDelete.setEnabled(false);
+		buttonDelete.setText("");
+		buttonDelete.setToolTipText("Delete the library entry.");
 		buttonDelete.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		buttonDelete.addSelectionListener(new SelectionAdapter() {
 
@@ -468,6 +494,8 @@ public class MassSpectrumLibraryUI extends Composite {
 	private void createAddLibraryButton(Composite parent) {
 
 		buttonAdd = new Button(parent, SWT.PUSH);
+		buttonAdd.setToolTipText("Add a library entry.");
+		buttonAdd.setText("");
 		buttonAdd.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		buttonAdd.addSelectionListener(new SelectionAdapter() {
 
@@ -512,6 +540,8 @@ public class MassSpectrumLibraryUI extends Composite {
 	private void createImportLibraryButton(Composite parent) {
 
 		buttonImport = new Button(parent, SWT.PUSH);
+		buttonImport.setToolTipText("Import a library.");
+		buttonImport.setText("");
 		buttonImport.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
 		buttonImport.addSelectionListener(new SelectionAdapter() {
 
@@ -523,9 +553,9 @@ public class MassSpectrumLibraryUI extends Composite {
 		});
 	}
 
-	private void createLibraryTable(Composite parent) {
+	private MassSpectrumListUI createLibraryTable(Composite parent) {
 
-		massSpectrumListUI = new MassSpectrumListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.VIRTUAL);
+		MassSpectrumListUI massSpectrumListUI = new MassSpectrumListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.VIRTUAL);
 		massSpectrumListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		massSpectrumListUI.addSelectionChangedListener(new ISelectionChangedListener() {
 
@@ -534,15 +564,6 @@ public class MassSpectrumLibraryUI extends Composite {
 
 				Object firstElement = ((IStructuredSelection)event.getSelection()).getFirstElement();
 				if(firstElement != null && firstElement instanceof IScanMSD) {
-					/*
-					 * Activate the views if the Mass Spectrum Library Perspective is active.
-					 */
-					if(PerspectiveSwitchHandler.isActivePerspective(IPerspectiveAndViewIds.PERSPECTIVE_MS_LIBRARY)) {
-						List<String> viewIds = new ArrayList<String>();
-						viewIds.add(IPerspectiveAndViewIds.VIEW_MASS_SPECTRUM);
-						viewIds.add(IPerspectiveAndViewIds.VIEW_MASS_SPECTRUM_TARGETS);
-						PerspectiveSwitchHandler.focusViews(viewIds);
-					}
 					/*
 					 * Fire an update if an identified scan has been selected.
 					 */
@@ -570,6 +591,8 @@ public class MassSpectrumLibraryUI extends Composite {
 				enableButtonFields(ACTION_SELECT);
 			}
 		});
+		//
+		return massSpectrumListUI;
 	}
 
 	private void enableButtonFields(String action) {
@@ -643,7 +666,8 @@ public class MassSpectrumLibraryUI extends Composite {
 
 	private void updateLabel() {
 
-		labelInfo.setText("Stored Mass Spectra: " + getItemSize());
+		String editInformation = massSpectrumListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
+		labelInfo.setText("Stored Mass Spectra: " + getItemSize() + " - " + editInformation);
 	}
 
 	private int getItemSize() {

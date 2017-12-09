@@ -18,20 +18,20 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 
 public class LibraryTextEditingSupport extends EditingSupport {
 
 	private TextCellEditor cellEditor;
-	private TableViewer tableViewer;
+	private ExtendedTableViewer tableViewer;
 	private String columnLabel;
 	//
 	private DecimalFormat decimalFormat;
 
-	public LibraryTextEditingSupport(TableViewer tableViewer, String columnLabel) {
+	public LibraryTextEditingSupport(ExtendedTableViewer tableViewer, String columnLabel) {
 		super(tableViewer);
 		//
 		this.tableViewer = tableViewer;
@@ -50,7 +50,7 @@ public class LibraryTextEditingSupport extends EditingSupport {
 	@Override
 	protected boolean canEdit(Object element) {
 
-		return true;
+		return tableViewer.isEditEnabled();
 	}
 
 	@Override

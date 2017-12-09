@@ -152,7 +152,6 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 	public void setSearchText(String searchText, boolean caseSensitive) {
 
 		massSpectrumListFilter.setSearchText(searchText, caseSensitive);
-		//
 		if(isVirtualTable() && isMassiveData(massSpectra)) {
 			/*
 			 * Virtual

@@ -12,19 +12,19 @@
 package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 
 public class TargetsEditingSupport extends EditingSupport {
 
 	private CellEditor cellEditor;
-	private TableViewer tableViewer;
+	private ExtendedTableViewer tableViewer;
 	private String column;
 
-	public TargetsEditingSupport(TableViewer tableViewer, String column) {
+	public TargetsEditingSupport(ExtendedTableViewer tableViewer, String column) {
 		super(tableViewer);
 		this.column = column;
 		if(column.equals(TargetsLabelProvider.VERIFIED_MANUALLY)) {
@@ -44,7 +44,11 @@ public class TargetsEditingSupport extends EditingSupport {
 	@Override
 	protected boolean canEdit(Object element) {
 
-		return true;
+		if(column == TargetsLabelProvider.VERIFIED_MANUALLY) {
+			return true;
+		} else {
+			return tableViewer.isEditEnabled();
+		}
 	}
 
 	@Override

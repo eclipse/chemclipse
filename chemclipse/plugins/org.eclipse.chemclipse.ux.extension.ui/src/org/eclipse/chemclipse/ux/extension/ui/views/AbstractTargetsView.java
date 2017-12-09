@@ -341,7 +341,7 @@ public abstract class AbstractTargetsView {
 
 	private void setEditingSupport() {
 
-		TableViewer tableViewer = getTableViewer();
+		ExtendedTableViewer tableViewer = (ExtendedTableViewer)getTableViewer();
 		List<TableViewerColumn> tableViewerColumns = this.tableViewer.getTableViewerColumns();
 		for(int i = 0; i < tableViewerColumns.size(); i++) {
 			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);

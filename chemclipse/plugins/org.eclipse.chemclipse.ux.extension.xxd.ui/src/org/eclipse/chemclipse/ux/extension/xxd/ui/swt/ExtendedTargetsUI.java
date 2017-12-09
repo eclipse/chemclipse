@@ -99,9 +99,9 @@ public class ExtendedTargetsUI {
 	private Label labelInfo;
 	private Composite toolbarInfo;
 	private Composite toolbarSearch;
-	private Composite toolbarEdit;
+	private Composite toolbarModify;
 	private Combo comboSubstanceName;
-	private TargetsListUI targetsListUI;
+	private TargetsListUI targetListUI;
 	private TargetListUtil targetListUtil;
 	/*
 	 * IScan,
@@ -137,13 +137,14 @@ public class ExtendedTargetsUI {
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
 		toolbarSearch = createToolbarSearch(parent);
-		toolbarEdit = createToolbarEdit(parent);
-		createTargetsTable(parent);
+		toolbarModify = createToolbarModify(parent);
+		targetListUI = createTargetTable(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
 		PartSupport.setCompositeVisibility(toolbarSearch, false);
-		PartSupport.setCompositeVisibility(toolbarEdit, false);
+		PartSupport.setCompositeVisibility(toolbarModify, false);
 		//
+		targetListUI.setEditEnabled(false);
 		applySettings();
 	}
 
@@ -153,10 +154,11 @@ public class ExtendedTargetsUI {
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(5, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		createButtonToggleToolbarSearch(composite);
+		createButtonToggleToolbarModify(composite);
 		createButtonToggleToolbarEdit(composite);
 		createSettingsButton(composite);
 	}
@@ -207,10 +209,10 @@ public class ExtendedTargetsUI {
 		return button;
 	}
 
-	private Button createButtonToggleToolbarEdit(Composite parent) {
+	private Button createButtonToggleToolbarModify(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle edit toolbar.");
+		button.setToolTipText("Toggle modify toolbar.");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -218,13 +220,33 @@ public class ExtendedTargetsUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarEdit);
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarModify);
 				if(visible) {
 					setComboSubstanceNameItems();
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				} else {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonToggleToolbarEdit(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Enable/disable to edit the table.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean editEnabled = !targetListUI.isEditEnabled();
+				targetListUI.setEditEnabled(editEnabled);
+				updateLabel();
 			}
 		});
 		//
@@ -284,14 +306,14 @@ public class ExtendedTargetsUI {
 			@Override
 			public void performSearch(String searchText, boolean caseSensitive) {
 
-				targetsListUI.setSearchText(searchText, caseSensitive);
+				targetListUI.setSearchText(searchText, caseSensitive);
 			}
 		});
 		//
 		return searchSupportUI;
 	}
 
-	private Composite createToolbarEdit(Composite parent) {
+	private Composite createToolbarModify(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -356,9 +378,9 @@ public class ExtendedTargetsUI {
 		});
 	}
 
-	private void createTargetsTable(Composite parent) {
+	private TargetsListUI createTargetTable(Composite parent) {
 
-		targetsListUI = new TargetsListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		TargetsListUI targetsListUI = new TargetsListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		targetsListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		targetsListUI.getControl().addMouseListener(new MouseAdapter() {
 
@@ -377,6 +399,8 @@ public class ExtendedTargetsUI {
 		addUnverifyTargetsMenuEntry(tableSettings);
 		addKeyEventProcessors(tableSettings);
 		targetsListUI.applySettings(tableSettings);
+		//
+		return targetsListUI;
 	}
 
 	private void addDeleteMenuEntry(ITableSettings tableSettings) {
@@ -485,7 +509,7 @@ public class ExtendedTargetsUI {
 	@SuppressWarnings("rawtypes")
 	private void verifyTargets(boolean verified) {
 
-		Iterator iterator = targetsListUI.getStructuredSelection().iterator();
+		Iterator iterator = targetListUI.getStructuredSelection().iterator();
 		while(iterator.hasNext()) {
 			Object object = iterator.next();
 			if(object instanceof IIdentificationTarget) {
@@ -498,7 +522,7 @@ public class ExtendedTargetsUI {
 
 	private void propagateTarget() {
 
-		Table table = targetsListUI.getTable();
+		Table table = targetListUI.getTable();
 		int index = table.getSelectionIndex();
 		if(index >= 0) {
 			TableItem tableItem = table.getItem(index);
@@ -547,45 +571,53 @@ public class ExtendedTargetsUI {
 
 	private void updateTargets() {
 
-		if(object instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)object;
-			labelInfo.setText(ScanSupport.getScanLabel(scanMSD));
-			targetsListUI.setInput(scanMSD.getTargets());
-		} else if(object instanceof IScanCSD) {
-			IScanCSD scanCSD = (IScanCSD)object;
-			labelInfo.setText(ScanSupport.getScanLabel(scanCSD));
-			targetsListUI.setInput(scanCSD.getTargets());
-		} else if(object instanceof IScanWSD) {
-			IScanWSD scanWSD = (IScanWSD)object;
-			labelInfo.setText(ScanSupport.getScanLabel(scanWSD));
-			targetsListUI.setInput(scanWSD.getTargets());
-		} else if(object instanceof IPeak) {
-			IPeak peak = (IPeak)object;
-			labelInfo.setText(PeakSupport.getPeakLabel(peak));
-			targetsListUI.setInput(peak.getTargets());
-		} else if(object instanceof IChromatogramMSD) {
-			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)object;
-			labelInfo.setText(ChromatogramSupport.getChromatogramLabel(chromatogramMSD));
-			targetsListUI.setInput(chromatogramMSD.getTargets());
-		} else if(object instanceof IChromatogramCSD) {
-			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)object;
-			labelInfo.setText(ChromatogramSupport.getChromatogramLabel(chromatogramCSD));
-			targetsListUI.setInput(chromatogramCSD.getTargets());
-		} else if(object instanceof IChromatogramWSD) {
-			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)object;
-			labelInfo.setText(ChromatogramSupport.getChromatogramLabel(chromatogramWSD));
-			targetsListUI.setInput(chromatogramWSD.getTargets());
-		} else {
-			labelInfo.setText("No target data has been selected yet.");
-			targetsListUI.clear();
-		}
+		updateLabel();
 		//
-		targetsListUI.sortTable();
-		Table table = targetsListUI.getTable();
+		targetListUI.sortTable();
+		Table table = targetListUI.getTable();
 		if(table.getItemCount() > 0) {
 			table.setSelection(0);
 			propagateTarget();
 		}
+	}
+
+	private void updateLabel() {
+
+		if(object instanceof IScanMSD) {
+			IScanMSD scanMSD = (IScanMSD)object;
+			labelInfo.setText(ScanSupport.getScanLabel(scanMSD));
+			targetListUI.setInput(scanMSD.getTargets());
+		} else if(object instanceof IScanCSD) {
+			IScanCSD scanCSD = (IScanCSD)object;
+			labelInfo.setText(ScanSupport.getScanLabel(scanCSD));
+			targetListUI.setInput(scanCSD.getTargets());
+		} else if(object instanceof IScanWSD) {
+			IScanWSD scanWSD = (IScanWSD)object;
+			labelInfo.setText(ScanSupport.getScanLabel(scanWSD));
+			targetListUI.setInput(scanWSD.getTargets());
+		} else if(object instanceof IPeak) {
+			IPeak peak = (IPeak)object;
+			labelInfo.setText(PeakSupport.getPeakLabel(peak));
+			targetListUI.setInput(peak.getTargets());
+		} else if(object instanceof IChromatogramMSD) {
+			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)object;
+			labelInfo.setText(ChromatogramSupport.getChromatogramLabel(chromatogramMSD));
+			targetListUI.setInput(chromatogramMSD.getTargets());
+		} else if(object instanceof IChromatogramCSD) {
+			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)object;
+			labelInfo.setText(ChromatogramSupport.getChromatogramLabel(chromatogramCSD));
+			targetListUI.setInput(chromatogramCSD.getTargets());
+		} else if(object instanceof IChromatogramWSD) {
+			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)object;
+			labelInfo.setText(ChromatogramSupport.getChromatogramLabel(chromatogramWSD));
+			targetListUI.setInput(chromatogramWSD.getTargets());
+		} else {
+			labelInfo.setText("No target data has been selected yet.");
+			targetListUI.clear();
+		}
+		//
+		String editInformation = targetListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
+		labelInfo.setText(labelInfo.getText() + " - " + editInformation);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -598,7 +630,7 @@ public class ExtendedTargetsUI {
 			/*
 			 * Delete Target
 			 */
-			Iterator iterator = targetsListUI.getStructuredSelection().iterator();
+			Iterator iterator = targetListUI.getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				if(object instanceof ITarget) {

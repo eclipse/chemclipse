@@ -56,6 +56,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	private Map<String, ITableMenuEntry> menuEntryMap;
 	private Map<String, MenuManager> menuManagerMap;
 	private Set<KeyListener> userDefinedKeyListeners;
+	private boolean editEnabled;
 
 	public ExtendedTableViewer(Composite parent) {
 		this(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
@@ -70,6 +71,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		menuManagerMap = new HashMap<String, MenuManager>();
 		userDefinedKeyListeners = new HashSet<KeyListener>();
 		applySettings(tableSettings);
+		editEnabled = true;
 		registerMenuListener();
 	}
 
@@ -185,6 +187,18 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	public List<TableViewerColumn> getTableViewerColumns() {
 
 		return Collections.unmodifiableList(tableViewerColumns);
+	}
+
+	@Override
+	public boolean isEditEnabled() {
+
+		return editEnabled;
+	}
+
+	@Override
+	public void setEditEnabled(boolean editEnabled) {
+
+		this.editEnabled = editEnabled;
 	}
 
 	private void createKeyListener() {
