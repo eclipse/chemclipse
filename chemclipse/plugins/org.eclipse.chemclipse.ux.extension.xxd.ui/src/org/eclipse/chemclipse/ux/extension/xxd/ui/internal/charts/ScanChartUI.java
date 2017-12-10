@@ -74,6 +74,8 @@ public class ScanChartUI extends ScrollableChart {
 	private static final int COMPRESS_TO_LENGTH = Integer.MAX_VALUE;
 	//
 	private int labelHighestIntensities = 5;
+	private boolean addModuloLabels = false;
+	//
 	private DecimalFormat defaultDecimalFormat = ValueFormat.getDecimalFormatEnglish();
 	private DecimalFormat decimalFormatQ3 = ValueFormat.getDecimalFormatEnglish("0.0");
 	//
@@ -108,27 +110,56 @@ public class ScanChartUI extends ScrollableChart {
 
 			List<BarSeriesValue> barSeriesValues = getBarSeriesValuesList();
 			Collections.sort(barSeriesValues, barSeriesIntensityComparator);
-			int barSeriesSize = barSeriesValues.size();
-			int limit;
 			/*
-			 * Positive
+			 * Labels
 			 */
-			limit = labelHighestIntensities;
-			for(int i = 0; i < limit; i++) {
-				if(i < barSeriesSize) {
+			printHighestLabelsNormal(barSeriesValues, e);
+			printHighestLabelsMirrored(barSeriesValues, e);
+		}
+
+		private void printHighestLabelsNormal(List<BarSeriesValue> barSeriesValues, PaintEvent e) {
+
+			int size = barSeriesValues.size();
+			int modulo = size / labelHighestIntensities;
+			int limit = (labelHighestIntensities < size) ? labelHighestIntensities : size;
+			//
+			for(int i = 0; i < size; i++) {
+				if(i < limit) {
 					BarSeriesValue barSeriesValue = barSeriesValues.get(i);
 					printLabel(barSeriesValue, useX, e);
+				} else {
+					if(addModuloLabels) {
+						if(i % modulo == 0) {
+							BarSeriesValue barSeriesValue = barSeriesValues.get(i);
+							printLabel(barSeriesValue, useX, e);
+						}
+					}
 				}
 			}
-			/*
-			 * Negative
-			 */
-			limit = barSeriesValues.size() - labelHighestIntensities;
+		}
+
+		private void printHighestLabelsMirrored(List<BarSeriesValue> barSeriesValues, PaintEvent e) {
+
+			int size = barSeriesValues.size();
+			int limit = size - labelHighestIntensities;
 			limit = (limit < 0) ? 0 : limit;
-			for(int i = barSeriesValues.size() - 1; i >= limit; i--) {
-				BarSeriesValue barSeriesValue = barSeriesValues.get(i);
-				if(barSeriesValue.getY() < 0) {
-					printLabel(barSeriesValue, useX, e);
+			int modulo = size / labelHighestIntensities;
+			//
+			for(int i = size - 1; i >= 0; i--) {
+				if(i >= limit) {
+					BarSeriesValue barSeriesValue = barSeriesValues.get(i);
+					if(barSeriesValue.getY() < 0) {
+						printLabel(barSeriesValue, useX, e);
+					}
+				} else {
+					if(addModuloLabels) {
+						if(i % modulo == 0) {
+							BarSeriesValue barSeriesValue = barSeriesValues.get(i);
+							if(barSeriesValue.getY() < 0) {
+								printLabel(barSeriesValue, useX, e);
+							}
+						}
+					}
 				}
 			}
 		}
@@ -310,7 +341,9 @@ public class ScanChartUI extends ScrollableChart {
 			Font font = new Font(Display.getDefault(), name, height, style);
 			fonts.put(fontId, font);
 		}
+		//
 		labelHighestIntensities = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_HIGHEST_INTENSITIES);
+		addModuloLabels = preferenceStore.getBoolean(PreferenceConstants.P_SCAN_LABEL_MODULO_INTENSITIES);
 		/*
 		 * Settings
 		 */

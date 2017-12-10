@@ -73,6 +73,8 @@ public class PreferenceConstants {
 	public static final int MIN_SCAN_LABEL_HIGHEST_INTENSITIES = 1;
 	public static final int MAX_SCAN_LABEL_HIGHEST_INTENSITIES = 32;
 	public static final int DEF_SCAN_LABEL_HIGHEST_INTENSITIES = 5;
+	public static final String P_SCAN_LABEL_MODULO_INTENSITIES = "scanLabelModuloIntensities";
+	public static final boolean DEF_SCAN_LABEL_MODULO_INTENSITIES = false;
 	//
 	public static String[][] FONT_STYLES = new String[][]{//
 			{"Normal", Integer.toString(SWT.NORMAL)}, //
