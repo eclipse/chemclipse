@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.msd.ui.internal.runnables;
+package org.eclipse.chemclipse.msd.swt.ui.internal.runnables;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -20,12 +20,12 @@ import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-public class ImportLibraryRunnable implements IRunnableWithProgress {
+public class LibraryImportRunnable implements IRunnableWithProgress {
 
 	private File file;
 	private IMassSpectra massSpectra;
 
-	public ImportLibraryRunnable(File file) {
+	public LibraryImportRunnable(File file) {
 		this.file = file;
 	}
 
