@@ -59,9 +59,7 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 	private void registerEventBroker(IEventBroker eventBroker) {
 
 		if(eventBroker != null) {
-			/*
-			 * TODO optimize to TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION
-			 */
+			//
 			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD, IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION));
 			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD, IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION));
 			//

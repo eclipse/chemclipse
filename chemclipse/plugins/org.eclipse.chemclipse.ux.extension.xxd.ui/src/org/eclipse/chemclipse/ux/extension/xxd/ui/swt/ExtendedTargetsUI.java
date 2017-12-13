@@ -266,7 +266,7 @@ public class ExtendedTargetsUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				IPreferencePage preferencePageSWT = new PreferencePageSWT();
-				preferencePageSWT.setTitle("Settings (SWT");
+				preferencePageSWT.setTitle("Settings (SWT)");
 				IPreferencePage preferencePageTargets = new PreferencePageTargets();
 				preferencePageTargets.setTitle("Target Settings");
 				//

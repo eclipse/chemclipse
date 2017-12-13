@@ -40,7 +40,5 @@ public class DynamicChromatogramSelectionUpdateNotifier implements IChromatogram
 		map.put(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION, chromatogramSelection);
 		map.put(IChemClipseEvents.PROPERTY_FORCE_RELOAD, forceReload);
 		eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION, map);
-		//
-		eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, chromatogramSelection);
 	}
 }

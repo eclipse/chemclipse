@@ -194,6 +194,7 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 			 */
 			if(tabFolder.getSelectionIndex() == chromatogramPageIndex && chromatogramSelection != null) {
 				chromatogramSelection.update(false);
+				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, chromatogramSelection);
 			}
 		}
 	}
