@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListConte
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListFilter;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListLabelProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.MassSpectrumListTableComparator;
+import org.eclipse.chemclipse.msd.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -44,8 +45,6 @@ import org.eclipse.swt.widgets.Shell;
 public class MassSpectrumListUI extends ExtendedTableViewer {
 
 	private static final Logger logger = Logger.getLogger(MassSpectrumListUI.class);
-	//
-	private int LIMIT_MASSIVE_DATA = 15000;
 	//
 	public static final String NAME = "Name";
 	public static final String RETENTION_TIME = "Retention Time";
@@ -262,7 +261,8 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 	private boolean isMassiveData(IMassSpectra massSpectra) {
 
 		if(massSpectra != null) {
-			return (massSpectra.size() > LIMIT_MASSIVE_DATA) ? true : false;
+			int limitMassiveData = PreferenceSupplier.getLibraryMSDLimitSorting();
+			return (massSpectra.size() > limitMassiveData) ? true : false;
 		}
 		return false;
 	}

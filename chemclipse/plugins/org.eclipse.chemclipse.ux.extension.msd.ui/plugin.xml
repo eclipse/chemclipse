@@ -22,6 +22,12 @@
             id="org.eclipse.chemclipse.ux.extension.msd.ui.overlayPreferencePage"
             name="MSD Overlay">
       </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.msd.ui.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferencePageMSD"
+            id="org.eclipse.chemclipse.ux.extension.msd.ui.preferencePageMSD"
+            name="Settings (MSD)">
+      </page>      
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

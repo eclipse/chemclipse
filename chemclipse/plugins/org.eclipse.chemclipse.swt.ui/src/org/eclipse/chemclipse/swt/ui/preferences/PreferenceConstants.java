@@ -52,6 +52,9 @@ public class PreferenceConstants {
 	public static final String P_SHOW_AREA_WITHOUT_DECIMALS = "showAreaWithoutDecimals";
 	//
 	public static final String P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION = "moveRetentionTimeOnPeakSelection";
-	//
-	public static final String P_PATH_MASS_SPECTRUM_LIBRARIES = "pathMassSpectrumLibraries";
+	/*
+	 * 
+	 */
+	public static final String P_SEARCH_CASE_SENSITIVE = "searchCaseSensitive";
+	public static final boolean DEF_SEARCH_CASE_SENSITIVE = true;
 }

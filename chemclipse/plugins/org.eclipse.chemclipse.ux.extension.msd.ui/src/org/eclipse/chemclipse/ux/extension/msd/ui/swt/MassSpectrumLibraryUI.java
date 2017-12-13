@@ -22,15 +22,16 @@ import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.MassSpectrumTarget;
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
-import org.eclipse.chemclipse.msd.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.msd.swt.ui.components.LibraryModifySupportUI;
-import org.eclipse.chemclipse.msd.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
+import org.eclipse.chemclipse.msd.swt.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
-import org.eclipse.chemclipse.support.ui.preferences.PreferencePage;
+import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
+import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -55,7 +56,6 @@ import org.eclipse.swt.widgets.Label;
 public class MassSpectrumLibraryUI extends Composite {
 
 	private static final Logger logger = Logger.getLogger(MassSpectrumLibraryUI.class);
-	//
 	//
 	private MassSpectrumListUI massSpectrumListUI;
 	private IComparisonResult comparisonResult;
@@ -216,10 +216,14 @@ public class MassSpectrumLibraryUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePage = new PreferencePage();
-				preferencePage.setTitle("MSD Settings");
+				IPreferencePage preferencePageSWT = new PreferencePageSWT();
+				preferencePageSWT.setTitle("Settings (SWT)");
+				IPreferencePage preferencePageMSD = new PreferencePage();
+				preferencePageMSD.setTitle("Settings (MSD)");
+				//
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
+				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageSWT));
+				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageMSD));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
 				preferenceDialog.create();
@@ -338,8 +342,9 @@ public class MassSpectrumLibraryUI extends Composite {
 
 	private void updateLabel() {
 
+		String filterInformation = "[" + searchSupportUI.getSearchText() + "]";
 		String editInformation = massSpectrumListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
-		labelInfo.setText("Stored Mass Spectra: " + getItemSize() + " - " + editInformation);
+		labelInfo.setText("Mass Spectra: " + getItemSize() + " " + filterInformation + " - " + editInformation);
 	}
 
 	private int getItemSize() {

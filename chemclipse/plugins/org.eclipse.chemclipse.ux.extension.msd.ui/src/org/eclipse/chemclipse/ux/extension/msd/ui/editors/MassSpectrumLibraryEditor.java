@@ -148,10 +148,6 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 		 * Run the export
 		 */
 		try {
-			/*
-			 * True to show the moving progress bar. False, a chromatogram
-			 * should be imported as a whole.
-			 */
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {
 			saveAs();
@@ -162,19 +158,12 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 
 	private void saveMassSpectra(IProgressMonitor monitor, Shell shell) throws NoMassSpectrumConverterAvailableException {
 
-		/*
-		 * Try to save the chromatogram automatically if it is an *.chrom
-		 * type.<br/> If not, show the file save dialog.
-		 */
 		if(massSpectrumFile != null && massSpectra != null && shell != null) {
 			/*
 			 * Convert the mass spectra.
 			 */
 			String converterId = massSpectra.getConverterId();
 			if(converterId != null && !converterId.equals("")) {
-				/*
-				 * Try to save the chromatogram.
-				 */
 				monitor.subTask("Save Mass Spectra");
 				IMassSpectrumExportConverterProcessingInfo processingInfo = MassSpectrumConverter.convert(massSpectrumFile, massSpectra, false, converterId, monitor);
 				try {
@@ -211,10 +200,6 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 	private void loadMassSpectra() {
 
 		try {
-			/*
-			 * Import the chromatogram without showing it on the gui. The GUI
-			 * will take care itself of this action.
-			 */
 			Object object = part.getObject();
 			if(object instanceof String) {
 				File file = new File((String)object);
@@ -227,17 +212,9 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 
 	private void importMassSpectra(File file) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
 
-		/*
-		 * Import the chromatogram here, but do not set to the chromatogram ui,
-		 * as it must be initialized first.
-		 */
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 		MassSpectrumImportRunnable runnable = new MassSpectrumImportRunnable(file, massSpectra);
 		try {
-			/*
-			 * True to show the moving progress bar. False, a chromatogram
-			 * should be imported as a whole.
-			 */
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {
 			logger.warn(e);

@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.swt.ui.components;
+package org.eclipse.chemclipse.swt.ui.components;
 
 public interface ISearchListener {
 

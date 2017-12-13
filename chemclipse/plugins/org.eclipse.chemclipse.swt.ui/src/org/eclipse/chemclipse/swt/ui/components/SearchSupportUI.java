@@ -9,10 +9,11 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.swt.ui.components;
+package org.eclipse.chemclipse.swt.ui.components;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -30,7 +31,6 @@ public class SearchSupportUI extends Composite {
 
 	private Text text;
 	private Button checkbox;
-	//
 	private ISearchListener searchListener;
 
 	public SearchSupportUI(Composite parent, int style) {
@@ -47,6 +47,11 @@ public class SearchSupportUI extends Composite {
 
 		text.setText(searchText);
 		runSearch();
+	}
+
+	public String getSearchText() {
+
+		return text.getText().trim();
 	}
 
 	private void createControl() {
@@ -122,12 +127,13 @@ public class SearchSupportUI extends Composite {
 		checkbox = new Button(parent, SWT.CHECK);
 		checkbox.setBackground(Colors.WHITE);
 		checkbox.setText("Case sensitive");
-		checkbox.setSelection(true);
+		checkbox.setSelection(PreferenceSupplier.isSearchCaseSensitive());
 		checkbox.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				PreferenceSupplier.setSearchCaseSensitive(checkbox.getSelection());
 				runSearch();
 			}
 		});

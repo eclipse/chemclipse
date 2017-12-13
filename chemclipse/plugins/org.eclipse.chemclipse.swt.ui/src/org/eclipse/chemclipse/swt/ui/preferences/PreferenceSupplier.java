@@ -222,16 +222,16 @@ public class PreferenceSupplier {
 		return store.getBoolean(PreferenceConstants.P_SHOW_AXIS_RELATIVE_INTENSITY);
 	}
 
-	public static String getPathMassSpectrumLibraries() {
+	public static boolean isSearchCaseSensitive() {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		return store.getString(PreferenceConstants.P_PATH_MASS_SPECTRUM_LIBRARIES);
+		return store.getBoolean(PreferenceConstants.P_SEARCH_CASE_SENSITIVE);
 	}
 
-	public static void setPathMassSpectrumLibraries(String pathMassSpectrumLibraries) {
+	public static void setSearchCaseSensitive(boolean searchCaseSensitive) {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setValue(PreferenceConstants.P_PATH_MASS_SPECTRUM_LIBRARIES, pathMassSpectrumLibraries);
+		store.setValue(PreferenceConstants.P_SEARCH_CASE_SENSITIVE, searchCaseSensitive);
 	}
 
 	private static Color getColor(String preference) throws NumberFormatException {

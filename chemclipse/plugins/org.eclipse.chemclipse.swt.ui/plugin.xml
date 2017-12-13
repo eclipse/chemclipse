@@ -14,7 +14,13 @@
             class="org.eclipse.chemclipse.swt.ui.preferences.ChromatogramPreferencePage"
             id="org.eclipse.chemclipse.chromatogram.ui.swt.chromatogramPreferencePage"
             name="Specific Chromatogram Settings">
-      </page>      
+      </page>
+      <page
+            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
+            class="org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT"
+            id="org.eclipse.chemclipse.chromatogram.ui.swt.preferencePageSWT"
+            name="Settings (SWT)">
+      </page>            
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

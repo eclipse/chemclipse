@@ -62,6 +62,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		//
 		store.setDefault(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION, true);
 		//
-		store.setDefault(PreferenceConstants.P_PATH_MASS_SPECTRUM_LIBRARIES, "");
+		store.setDefault(PreferenceConstants.P_SEARCH_CASE_SENSITIVE, PreferenceConstants.DEF_SEARCH_CASE_SENSITIVE);
 	}
 }

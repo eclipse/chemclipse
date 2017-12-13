@@ -27,10 +27,11 @@ import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.RegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
 import org.eclipse.chemclipse.msd.swt.ui.internal.runnables.LibraryImportRunnable;
+import org.eclipse.chemclipse.msd.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
@@ -98,6 +99,8 @@ public class LibraryModifySupportUI extends Composite {
 				enableButtonFields(ACTION_SELECT);
 			}
 		});
+		//
+		enableButtonFields(ACTION_INITIALIZE);
 	}
 
 	private void createControl() {
@@ -106,7 +109,7 @@ public class LibraryModifySupportUI extends Composite {
 		//
 		Composite composite = new Composite(this, SWT.NONE);
 		composite.setBackground(Colors.WHITE);
-		GridLayout gridLayout = new GridLayout(7, false);
+		GridLayout gridLayout = new GridLayout(8, false);
 		gridLayout.marginLeft = 0;
 		gridLayout.marginRight = 0;
 		composite.setLayout(gridLayout);
@@ -118,6 +121,7 @@ public class LibraryModifySupportUI extends Composite {
 		createDeleteLibraryButton(composite);
 		createAddLibraryButton(composite);
 		createImportLibraryButton(composite);
+		createResetSearchButton(composite);
 		//
 		enableButtonFields(ACTION_INITIALIZE);
 	}
@@ -221,6 +225,7 @@ public class LibraryModifySupportUI extends Composite {
 						textLibraryPath.setText("");
 						massSpectra.addMassSpectra(massSpectraImport.getList());
 						update(massSpectra);
+						resetSearch();
 					}
 					enableButtonFields(ACTION_INITIALIZE);
 				}
@@ -274,6 +279,7 @@ public class LibraryModifySupportUI extends Composite {
 								}
 							}
 							update(massSpectra);
+							resetSearch();
 						}
 					}
 				}
@@ -344,6 +350,29 @@ public class LibraryModifySupportUI extends Composite {
 				enableButtonFields(ACTION_IMPORT);
 			}
 		});
+	}
+
+	private void createResetSearchButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Reset the search settings.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				resetSearch();
+			}
+		});
+	}
+
+	private void resetSearch() {
+
+		if(searchSupportUI != null) {
+			searchSupportUI.setSearchText("");
+		}
 	}
 
 	private void enableButtonFields(String action) {
