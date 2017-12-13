@@ -50,6 +50,7 @@ import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.support.util.TargetListUtil;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramSupport;
@@ -264,10 +265,14 @@ public class ExtendedTargetsUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePage = new PreferencePageTargets();
-				preferencePage.setTitle("Target Settings");
+				IPreferencePage preferencePageSWT = new PreferencePageSWT();
+				preferencePageSWT.setTitle("Settings (SWT");
+				IPreferencePage preferencePageTargets = new PreferencePageTargets();
+				preferencePageTargets.setTitle("Target Settings");
+				//
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
+				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageTargets));
+				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSWT));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
 				preferenceDialog.create();
