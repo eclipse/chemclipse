@@ -21,15 +21,19 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IVendorPeakIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.VendorPeakIdentifierSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.osgi.service.prefs.BackingStoreException;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
+	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
+	//
 	public static final String P_MASS_SPECTRA_FILES = "massSpectraFiles";
 	public static final String DEF_MASS_SPECTRA_FILES = "";
 	public static final String P_MASS_SPECTRUM_COMPARATOR_ID = "massSpectrumComparatorId";
@@ -169,5 +173,18 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		FileListUtil fileListUtil = new FileListUtil();
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		return fileListUtil.getFiles(preferences.get(P_MASS_SPECTRA_FILES, DEF_MASS_SPECTRA_FILES));
+	}
+
+	public static void setMassSpectraFiles(List<String> massSpectraFiles) {
+
+		try {
+			FileListUtil fileListUtil = new FileListUtil();
+			IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+			String items[] = massSpectraFiles.toArray(new String[massSpectraFiles.size()]);
+			preferences.put(P_MASS_SPECTRA_FILES, fileListUtil.createList(items));
+			preferences.flush();
+		} catch(BackingStoreException e) {
+			logger.warn(e);
+		}
 	}
 }
