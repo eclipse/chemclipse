@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.swt;
 
+import java.io.File;
+
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
@@ -67,6 +69,8 @@ public class MassSpectrumLibraryUI extends Composite {
 	private Label labelInfo;
 	private SearchSupportUI searchSupportUI;
 	private LibraryModifySupportUI libraryModifySupportUI;
+	//
+	private File massSpectrumFile = null;
 
 	public MassSpectrumLibraryUI(Composite parent, int style) {
 		super(parent, style);
@@ -74,8 +78,9 @@ public class MassSpectrumLibraryUI extends Composite {
 		createControl();
 	}
 
-	public void update(IMassSpectra massSpectra) {
+	public void update(File massSpectrumFile, IMassSpectra massSpectra) {
 
+		this.massSpectrumFile = massSpectrumFile;
 		libraryModifySupportUI.update(massSpectra);
 		updateLabel();
 	}
@@ -107,12 +112,14 @@ public class MassSpectrumLibraryUI extends Composite {
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(7, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		createButtonToggleToolbarSearch(composite);
 		createButtonToggleToolbarModify(composite);
 		createButtonToggleToolbarEdit(composite);
+		createButtonAddLibraryToSearch(composite);
+		createButtonRemoveLibraryFromSearch(composite);
 		createSettingsButton(composite);
 	}
 
@@ -199,6 +206,46 @@ public class MassSpectrumLibraryUI extends Composite {
 				boolean editEnabled = !massSpectrumListUI.isEditEnabled();
 				massSpectrumListUI.setEditEnabled(editEnabled);
 				updateLabel();
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonAddLibraryToSearch(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Add the library to the list of searched databases.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+				eventBroker.post(IChemClipseEvents.TOPIC_LIBRARY_MSD_ADD_TO_DB_SEARCH, massSpectrumFile);
+				MessageDialog.openConfirm(Display.getDefault().getActiveShell(), "DB Search", "The library has been added.");
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonRemoveLibraryFromSearch(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Remove the library from the list of searched databases.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_REMOVE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+				eventBroker.post(IChemClipseEvents.TOPIC_LIBRARY_MSD_REMOVE_FROM_DB_SEARCH, massSpectrumFile);
+				MessageDialog.openConfirm(Display.getDefault().getActiveShell(), "DB Search", "The library has been removed.");
 			}
 		});
 		//

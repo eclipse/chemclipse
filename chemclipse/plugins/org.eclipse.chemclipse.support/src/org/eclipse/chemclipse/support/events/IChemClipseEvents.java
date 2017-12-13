@@ -138,4 +138,10 @@ public interface IChemClipseEvents {
 	//
 	String PROPERTY_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM = IEventBroker.DATA; // Always true
 	String TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM = "filter/supplier/subtract/update/session/subtractmassspectrum";
+	/*
+	 * MSD Library
+	 */
+	String PROPERTY_DB_SEARCH_LIBRARY = IEventBroker.DATA; // File
+	String TOPIC_LIBRARY_MSD_ADD_TO_DB_SEARCH = "library/msd/add/dbsearch";
+	String TOPIC_LIBRARY_MSD_REMOVE_FROM_DB_SEARCH = "library/msd/remove/dbsearch";
 }

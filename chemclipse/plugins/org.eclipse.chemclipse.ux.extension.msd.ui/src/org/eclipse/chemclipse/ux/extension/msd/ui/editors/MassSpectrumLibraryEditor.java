@@ -82,8 +82,8 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 	 * Mass spectrum selection and the GUI element.
 	 */
 	private MassSpectrumLibraryUI massSpectrumLibraryUI;
-	private File massSpectrumFile;
-	private IMassSpectra massSpectra;
+	private File massSpectrumFile = null;
+	private IMassSpectra massSpectra = null;
 	/*
 	 * Showing additional info in tabs.
 	 */
@@ -256,7 +256,7 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 		//
 		massSpectrumLibraryUI = new MassSpectrumLibraryUI(tabFolder, SWT.NONE);
 		massSpectrumLibraryUI.setLayout(new FillLayout());
-		massSpectrumLibraryUI.update(massSpectra);
+		updateMassSpectrumListUI();
 		//
 		tabItem.setControl(massSpectrumLibraryUI);
 	}
@@ -271,6 +271,6 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 
 	private void updateMassSpectrumListUI() {
 
-		massSpectrumLibraryUI.update(massSpectra);
+		massSpectrumLibraryUI.update(massSpectrumFile, massSpectra);
 	}
 }
