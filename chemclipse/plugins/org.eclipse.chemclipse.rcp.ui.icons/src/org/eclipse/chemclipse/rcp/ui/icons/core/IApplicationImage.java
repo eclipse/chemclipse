@@ -269,4 +269,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SELECTED_PEAKS_ACTIVE = "selectedPeaksActive.gif";
 	String IMAGE_TOOLBAR_ACTIVE = "toolbar_active.gif";
 	String IMAGE_TOOLBAR_INACTIVE = "toolbar_inactive.gif";
+	String IMAGE_SUBTRACT_SCAN_DEFAULT = "subtractScanDefault.gif";
+	String IMAGE_SUBTRACT_SCAN_ACTIVE = "subtractScanActive.gif";
 }

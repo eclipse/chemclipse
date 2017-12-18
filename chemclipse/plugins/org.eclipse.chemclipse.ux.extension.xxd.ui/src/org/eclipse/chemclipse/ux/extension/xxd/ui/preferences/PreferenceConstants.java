@@ -31,6 +31,8 @@ public class PreferenceConstants {
 	public static final String DEF_STACK_POSITION_SCAN_TABLE = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	public static final String P_STACK_POSITION_PEAK_CHART = "stackPositionPeakChart";
 	public static final String DEF_STACK_POSITION_PEAK_CHART = PartSupport.PARTSTACK_BOTTOM_RIGHT;
+	public static final String P_STACK_POSITION_SUBTRACT_SCAN_PART = "stackPositionPeakChart";
+	public static final String DEF_STACK_POSITION_SUBTRACT_SCAN_PART = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	//
 	public static String[][] PART_STACKS = new String[][]{//
 			{"--", PartSupport.PARTSTACK_NONE}, //
@@ -75,6 +77,8 @@ public class PreferenceConstants {
 	public static final int DEF_SCAN_LABEL_HIGHEST_INTENSITIES = 5;
 	public static final String P_SCAN_LABEL_MODULO_INTENSITIES = "scanLabelModuloIntensities";
 	public static final boolean DEF_SCAN_LABEL_MODULO_INTENSITIES = false;
+	public static final String P_AUTOFOCUS_SUBTRACT_SCAN_PART = "autofocusSubtractScanPart";
+	public static final boolean DEF_AUTOFOCUS_SUBTRACT_SCAN_PART = true;
 	//
 	public static String[][] FONT_STYLES = new String[][]{//
 			{"Normal", Integer.toString(SWT.NORMAL)}, //

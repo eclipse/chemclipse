@@ -59,6 +59,7 @@ public class TaskQuickAccessPart {
 		createOverlayTask(parent);
 		createSelectedScansTask(parent);
 		createSelectedPeaksTask(parent);
+		createSubtractScanTask(parent);
 		createSettingsTask(parent);
 	}
 
@@ -102,8 +103,8 @@ public class TaskQuickAccessPart {
 			public void widgetSelected(SelectionEvent e) {
 
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-				String overlayPartStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERLAY, overlayPartStackId, imageActive, imageDefault);
+				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY);
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERLAY, partStackId, imageActive, imageDefault);
 			}
 		});
 	}
@@ -149,8 +150,29 @@ public class TaskQuickAccessPart {
 			public void widgetSelected(SelectionEvent e) {
 
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-				String peakChartPartStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_CHART);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_CHART, peakChartPartStackId, imageActive, imageDefault);
+				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_CHART);
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_CHART, partStackId, imageActive, imageDefault);
+			}
+		});
+	}
+
+	private void createSubtractScanTask(Composite parent) {
+
+		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SUBTRACT_SCAN_ACTIVE, IApplicationImage.SIZE_16x16);
+		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SUBTRACT_SCAN_DEFAULT, IApplicationImage.SIZE_16x16);
+		//
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Toggle the subtract scan modus");
+		button.setImage(imageDefault);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_CHART);
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_SUBTRACT_SCAN, partStackId, imageActive, imageDefault);
 			}
 		});
 	}

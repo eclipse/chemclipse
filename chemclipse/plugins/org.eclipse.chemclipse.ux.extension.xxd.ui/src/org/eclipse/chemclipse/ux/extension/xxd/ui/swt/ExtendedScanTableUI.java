@@ -85,6 +85,44 @@ public class ExtendedScanTableUI {
 	//
 	private Object object; // IScan or IPeak
 	private IScanMSD optimizedMassSpectrum;
+	//
+	private DeleteMenuEntry deleteMenuEntry;
+	private DeleteKeyEventProcessor deleteKeyEventProcessor;
+
+	private class DeleteMenuEntry implements ITableMenuEntry {
+
+		@Override
+		public String getName() {
+
+			return "Delete Signal(s)";
+		}
+
+		@Override
+		public String getCategory() {
+
+			return ITableMenuCategories.STANDARD_OPERATION;
+		}
+
+		@Override
+		public void execute(ExtendedTableViewer extendedTableViewer) {
+
+			deleteSignals();
+		}
+	}
+
+	private class DeleteKeyEventProcessor implements IKeyEventProcessor {
+
+		@Override
+		public void handleEvent(ExtendedTableViewer extendedTableViewer, KeyEvent e) {
+
+			if(e.keyCode == SWT.DEL) {
+				/*
+				 * DEL
+				 */
+				deleteSignals();
+			}
+		}
+	}
 
 	@Inject
 	public ExtendedScanTableUI(Composite parent) {
@@ -97,9 +135,20 @@ public class ExtendedScanTableUI {
 		updateObject();
 	}
 
-	public void enabledEdit(boolean enabled) {
+	public void enableEditModus(boolean enabled) {
 
-		enableEditModus(enabled);
+		PartSupport.setCompositeVisibility(toolbarEdit, enabled);
+		buttonToggleToolbarEdit.setEnabled(enabled);
+		//
+		ITableSettings tableSettings = scanListUI.getTableSettings();
+		if(enabled) {
+			tableSettings.addMenuEntry(deleteMenuEntry);
+			tableSettings.addKeyEventProcessor(deleteKeyEventProcessor);
+		} else {
+			tableSettings.removeMenuEntry(deleteMenuEntry);
+			tableSettings.removeKeyEventProcessor(deleteKeyEventProcessor);
+		}
+		scanListUI.applySettings(tableSettings);
 	}
 
 	public void update(Object object) {
@@ -149,6 +198,9 @@ public class ExtendedScanTableUI {
 	private void initialize(Composite parent) {
 
 		parent.setLayout(new GridLayout(1, true));
+		//
+		deleteMenuEntry = new DeleteMenuEntry();
+		deleteKeyEventProcessor = new DeleteKeyEventProcessor();
 		//
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
@@ -432,47 +484,6 @@ public class ExtendedScanTableUI {
 		scanListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
-	private void addDeleteMenuEntry(ITableSettings tableSettings) {
-
-		tableSettings.addMenuEntry(new ITableMenuEntry() {
-
-			@Override
-			public String getName() {
-
-				return "Delete Signal(s)";
-			}
-
-			@Override
-			public String getCategory() {
-
-				return ITableMenuCategories.STANDARD_OPERATION;
-			}
-
-			@Override
-			public void execute(ExtendedTableViewer extendedTableViewer) {
-
-				deleteSignals();
-			}
-		});
-	}
-
-	private void addDeleteKeyEventProcessors(ITableSettings tableSettings) {
-
-		tableSettings.addKeyEventProcessor(new IKeyEventProcessor() {
-
-			@Override
-			public void handleEvent(ExtendedTableViewer extendedTableViewer, KeyEvent e) {
-
-				if(e.keyCode == SWT.DEL) {
-					/*
-					 * DEL
-					 */
-					deleteSignals();
-				}
-			}
-		});
-	}
-
 	private void applySettings() {
 
 		updateObject();
@@ -499,6 +510,7 @@ public class ExtendedScanTableUI {
 				deleteSignal(object);
 			}
 			//
+			scanListUI.refresh();
 			fireScanUpdate();
 		}
 	}
@@ -610,18 +622,5 @@ public class ExtendedScanTableUI {
 		} else if(object instanceof IPeak) {
 			eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, object);
 		}
-	}
-
-	private void enableEditModus(boolean enabled) {
-
-		PartSupport.setCompositeVisibility(toolbarEdit, enabled);
-		buttonToggleToolbarEdit.setEnabled(enabled);
-		//
-		ITableSettings tableSettings = scanListUI.getTableSettings();
-		if(enabled) {
-			addDeleteMenuEntry(tableSettings);
-			addDeleteKeyEventProcessors(tableSettings);
-		}
-		scanListUI.applySettings(tableSettings);
 	}
 }

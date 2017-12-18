@@ -32,6 +32,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_SCAN_CHART, "Scan Chart:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_SCAN_TABLE, "Scan Table:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_PEAK_CHART, "Peak Chart:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_SUBTRACT_SCAN_PART, "Subtract Scan:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

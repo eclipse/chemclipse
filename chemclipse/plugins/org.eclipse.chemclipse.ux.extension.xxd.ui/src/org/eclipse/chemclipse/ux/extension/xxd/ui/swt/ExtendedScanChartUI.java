@@ -36,11 +36,13 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ScanChartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ScanChartPart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
@@ -53,6 +55,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -275,7 +278,12 @@ public class ExtendedScanChartUI {
 					/*
 					 * Update all listeners
 					 */
-					PartSupport.showPart(PartSupport.PARTDESCRIPTOR_SUBTRACT_SCAN, PartSupport.PARTSTACK_BOTTOM_RIGHT);
+					IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+					boolean autofocuSubtractScanPart = preferenceStore.getBoolean(PreferenceConstants.P_AUTOFOCUS_SUBTRACT_SCAN_PART);
+					if(autofocuSubtractScanPart) {
+						String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_CHART);
+						PartSupport.showPart(PartSupport.PARTDESCRIPTOR_SUBTRACT_SCAN, partStackId);
+					}
 					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 					eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
 				}

@@ -47,6 +47,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.osgi.service.event.Event;
@@ -160,7 +161,7 @@ public class ExtendedSubtractScanUI {
 		tabItem.setControl(composite);
 		//
 		extendedScanTableUI = new ExtendedScanTableUI(composite);
-		extendedScanTableUI.enabledEdit(true);
+		extendedScanTableUI.enableEditModus(true);
 	}
 
 	private void createAddSelectedScanButton(Composite parent) {
@@ -220,8 +221,13 @@ public class ExtendedSubtractScanUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PreferenceSupplier.setSessionSubtractMassSpectrum(null);
-				eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
+				MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				messageBox.setText("Clear Session");
+				messageBox.setMessage("Would you like to clear the session subtract scan?");
+				if(messageBox.open() == SWT.YES) {
+					PreferenceSupplier.setSessionSubtractMassSpectrum(null);
+					eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
+				}
 			}
 		});
 	}
@@ -236,8 +242,13 @@ public class ExtendedSubtractScanUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PreferenceSupplier.loadSessionSubtractMassSpectrum();
-				eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
+				MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				messageBox.setText("Load Session");
+				messageBox.setMessage("Would you like to load the session subtract scan?");
+				if(messageBox.open() == SWT.YES) {
+					PreferenceSupplier.loadSessionSubtractMassSpectrum();
+					eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
+				}
 			}
 		});
 	}
@@ -253,6 +264,7 @@ public class ExtendedSubtractScanUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				PreferenceSupplier.storeSessionSubtractMassSpectrum();
+				MessageDialog.openInformation(Display.getDefault().getActiveShell(), "Session", "The session subtract scan has been stored successfully.");
 			}
 		});
 	}
