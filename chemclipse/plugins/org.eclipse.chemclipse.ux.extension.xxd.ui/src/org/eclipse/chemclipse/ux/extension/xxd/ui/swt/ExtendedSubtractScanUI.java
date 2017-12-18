@@ -57,10 +57,12 @@ public class ExtendedSubtractScanUI {
 	private static final Logger logger = Logger.getLogger(ExtendedScanChartUI.class);
 	//
 	private TabFolder tabFolder;
+	private static final int INDEX_CHART = 0;
+	private static final int INDEX_TABLE = 1;
 	//
 	private IScan scan;
 	private ScanChartUI scanChartUI;
-	private ScanListUI scanListUI;
+	private ExtendedScanTableUI extendedScanTableUI;
 	//
 	private IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 	private List<EventHandler> registeredEventHandler;
@@ -87,8 +89,7 @@ public class ExtendedSubtractScanUI {
 
 	private void updateScan() {
 
-		scanChartUI.setInput(scan);
-		scanListUI.setInput(scan);
+		updateScanData();
 	}
 
 	private void initialize(Composite parent) {
@@ -124,6 +125,14 @@ public class ExtendedSubtractScanUI {
 		tabFolder = new TabFolder(composite, SWT.BOTTOM);
 		tabFolder.setBackground(Colors.WHITE);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+		tabFolder.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				updateScanData();
+			}
+		});
 		//
 		createScanChart(parent);
 		createScanTable(parent);
@@ -146,11 +155,12 @@ public class ExtendedSubtractScanUI {
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Table");
 		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setBackground(Colors.WHITE);
 		composite.setLayout(new GridLayout(1, true));
 		tabItem.setControl(composite);
 		//
-		scanListUI = new ScanListUI(composite, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		scanListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		extendedScanTableUI = new ExtendedScanTableUI(composite);
+		extendedScanTableUI.enabledEdit(true);
 	}
 
 	private void createAddSelectedScanButton(Composite parent) {
@@ -313,5 +323,17 @@ public class ExtendedSubtractScanUI {
 		};
 		eventBroker.subscribe(topic, eventHandler);
 		return eventHandler;
+	}
+
+	private void updateScanData() {
+
+		switch(tabFolder.getSelectionIndex()) {
+			case INDEX_CHART:
+				scanChartUI.setInput(scan);
+				break;
+			case INDEX_TABLE:
+				extendedScanTableUI.update(scan);
+				break;
+		}
 	}
 }

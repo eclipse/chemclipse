@@ -39,6 +39,8 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 	@Override
 	public void updateObject(Object object) {
 
-		extendedScanTableUI.update(object);
+		if(doUpdate()) {
+			extendedScanTableUI.update(object);
+		}
 	}
 }

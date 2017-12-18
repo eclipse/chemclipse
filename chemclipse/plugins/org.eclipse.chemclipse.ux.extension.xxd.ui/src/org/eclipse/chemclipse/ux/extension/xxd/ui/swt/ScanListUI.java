@@ -17,28 +17,37 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.IonListContentProviderLazy;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanTableComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 public class ScanListUI extends ExtendedTableViewer {
 
+	private static final Logger logger = Logger.getLogger(ScanListUI.class);
+	//
 	private Map<DataType, ITableLabelProvider> labelProviderMap;
 	private Map<DataType, ViewerComparator> viewerComparatorMap;
+	private Map<DataType, IContentProvider> contentProviderMap;
 
 	public ScanListUI(Composite parent, int style) {
 		super(parent, style);
 		labelProviderMap = new HashMap<DataType, ITableLabelProvider>();
 		viewerComparatorMap = new HashMap<DataType, ViewerComparator>();
-		setColumns(DataType.MSD_NOMINAL);
+		contentProviderMap = new HashMap<DataType, IContentProvider>();
+		setLabelAndContentProviders(DataType.MSD_NOMINAL);
 	}
 
 	public void setInput(IScan scan) {
@@ -48,49 +57,71 @@ public class ScanListUI extends ExtendedTableViewer {
 			 * MSD
 			 */
 			IScanMSD scanMSD = (IScanMSD)scan;
+			List<IIon> ions = scanMSD.getIons();
+			int size = ions.size();
+			super.setInput(null); // Can only enable the hash look up before input has been set
+			//
 			if(scanMSD.isTandemMS()) {
-				setColumns(DataType.MSD_TANDEM);
+				setLabelAndContentProviders(DataType.MSD_TANDEM);
 			} else {
 				if(scanMSD.isHighResolutionMS()) {
-					setColumns(DataType.MSD_HIGHRES);
+					setLabelAndContentProviders(DataType.MSD_HIGHRES);
 				} else {
-					setColumns(DataType.MSD_NOMINAL);
+					setLabelAndContentProviders(DataType.MSD_NOMINAL);
 				}
 			}
-			setInput(scanMSD.getIons());
+			//
+			super.setInput(ions);
+			setItemCount(size);
 		} else if(scan instanceof IScanCSD) {
 			/*
 			 * CSD
 			 */
-			setColumns(DataType.CSD);
+			setLabelAndContentProviders(DataType.CSD);
 			IScanCSD scanCSD = (IScanCSD)scan;
 			List<IScanCSD> list = new ArrayList<IScanCSD>();
 			list.add(scanCSD);
-			setInput(list);
+			super.setInput(list);
 		} else if(scan instanceof IScanWSD) {
 			/*
 			 * WSD
 			 */
-			setColumns(DataType.WSD);
+			setLabelAndContentProviders(DataType.WSD);
 			IScanWSD scanWSD = (IScanWSD)scan;
-			setInput(scanWSD.getScanSignals());
+			super.setInput(scanWSD.getScanSignals());
 		} else {
 			super.setInput(null);
 		}
 	}
 
-	private void setColumns(DataType dataType) {
+	private void setLabelAndContentProviders(DataType dataType) {
 
 		String[] titles = getTitles(dataType);
 		int[] bounds = getBounds(dataType);
-		ITableLabelProvider labelProvider = getTableLabelProvider(dataType);
-		ViewerComparator viewerComparator = getViewerComparator(dataType);
-		//
 		createColumns(titles, bounds);
 		//
+		ITableLabelProvider labelProvider = getTableLabelProvider(dataType);
 		setLabelProvider(labelProvider);
-		setContentProvider(new ListContentProvider());
-		setComparator(viewerComparator);
+		//
+		IContentProvider contentProvider = getContentProvider(dataType);
+		if(useVirtualTableSettings(dataType)) {
+			/*
+			 * Lazy (Virtual)
+			 */
+			logger.info("Lazy (Virtual) Modus");
+			setContentProvider(contentProvider);
+			setUseHashlookup(true);
+			setComparator(null);
+		} else {
+			/*
+			 * Normal
+			 */
+			logger.info("Normal Modus");
+			setContentProvider(contentProvider);
+			setUseHashlookup(false);
+			ViewerComparator viewerComparator = getViewerComparator(dataType);
+			setComparator(viewerComparator);
+		}
 	}
 
 	private String[] getTitles(DataType dataType) {
@@ -161,5 +192,29 @@ public class ScanListUI extends ExtendedTableViewer {
 			viewerComparatorMap.put(dataType, viewerComparator);
 		}
 		return viewerComparator;
+	}
+
+	private IContentProvider getContentProvider(DataType dataType) {
+
+		IContentProvider contentProvider = contentProviderMap.get(dataType);
+		if(contentProvider == null) {
+			if(useVirtualTableSettings(dataType)) {
+				contentProvider = new IonListContentProviderLazy(this);
+			} else {
+				contentProvider = new ListContentProvider();
+			}
+			contentProviderMap.put(dataType, contentProvider);
+		}
+		return contentProvider;
+	}
+
+	private boolean useVirtualTableSettings(DataType dataType) {
+
+		return dataType.equals(DataType.MSD_HIGHRES) && isVirtualTable();
+	}
+
+	private boolean isVirtualTable() {
+
+		return ((getTable().getStyle() & SWT.VIRTUAL) == SWT.VIRTUAL);
 	}
 }

@@ -50,6 +50,8 @@ public class ScanChartPart extends AbstractDataUpdateSupport implements IDataUpd
 			scan = peak.getPeakModel().getPeakMaximum();
 		}
 		//
-		extendedScanChartUI.update(scan);
+		if(doUpdate()) {
+			extendedScanChartUI.update(scan);
+		}
 	}
 }

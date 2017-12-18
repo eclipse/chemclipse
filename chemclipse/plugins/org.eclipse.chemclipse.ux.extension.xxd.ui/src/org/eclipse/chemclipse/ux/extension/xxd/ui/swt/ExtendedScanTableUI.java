@@ -73,7 +73,9 @@ public class ExtendedScanTableUI {
 	private Composite toolbarInfo;
 	private Composite toolbarEdit;
 	private Button buttonSaveScan;
+	private Button buttonToggleToolbarEdit;
 	private Button buttonOptimizedScan;
+	//
 	private Label labelX;
 	private Text textX;
 	private Label labelY;
@@ -81,7 +83,7 @@ public class ExtendedScanTableUI {
 	//
 	private ScanListUI scanListUI;
 	//
-	private Object object;
+	private Object object; // IScan or IPeak
 	private IScanMSD optimizedMassSpectrum;
 
 	@Inject
@@ -93,6 +95,11 @@ public class ExtendedScanTableUI {
 	public void setFocus() {
 
 		updateObject();
+	}
+
+	public void enabledEdit(boolean enabled) {
+
+		enableEditModus(enabled);
 	}
 
 	public void update(Object object) {
@@ -117,8 +124,10 @@ public class ExtendedScanTableUI {
 		 * Fields
 		 */
 		List<TableViewerColumn> tableViewerColumns = scanListUI.getTableViewerColumns();
-		if(tableViewerColumns.size() == 2) {
-			//
+		if(tableViewerColumns.size() >= 2) {
+			/*
+			 * Add Signal
+			 */
 			String titleX = tableViewerColumns.get(0).getColumn().getText();
 			labelX.setText(titleX + ":");
 			textX.setToolTipText(titleX);
@@ -147,7 +156,7 @@ public class ExtendedScanTableUI {
 		createTable(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
-		PartSupport.setCompositeVisibility(toolbarEdit, false);
+		enableEditModus(false); // Disable the edit modus by default.
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -159,7 +168,7 @@ public class ExtendedScanTableUI {
 		composite.setLayout(new GridLayout(6, false));
 		//
 		createButtonToggleToolbarInfo(composite);
-		createButtonToggleToolbarEdit(composite);
+		buttonToggleToolbarEdit = createButtonToggleToolbarEdit(composite);
 		createResetButton(composite);
 		buttonSaveScan = createSaveButton(composite);
 		buttonOptimizedScan = createOptimizedScanButton(composite);
@@ -405,7 +414,7 @@ public class ExtendedScanTableUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Delete the scan signal.");
+		button.setToolTipText("Delete the scan signal(s).");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -419,15 +428,8 @@ public class ExtendedScanTableUI {
 
 	private void createTable(Composite parent) {
 
-		scanListUI = new ScanListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		scanListUI = new ScanListUI(parent, SWT.VIRTUAL | SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		scanListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-		/*
-		 * Add the delete targets support.
-		 */
-		ITableSettings tableSettings = scanListUI.getTableSettings();
-		addDeleteMenuEntry(tableSettings);
-		addKeyEventProcessors(tableSettings);
-		scanListUI.applySettings(tableSettings);
 	}
 
 	private void addDeleteMenuEntry(ITableSettings tableSettings) {
@@ -454,7 +456,7 @@ public class ExtendedScanTableUI {
 		});
 	}
 
-	private void addKeyEventProcessors(ITableSettings tableSettings) {
+	private void addDeleteKeyEventProcessors(ITableSettings tableSettings) {
 
 		tableSettings.addKeyEventProcessor(new IKeyEventProcessor() {
 
@@ -498,7 +500,6 @@ public class ExtendedScanTableUI {
 			}
 			//
 			fireScanUpdate();
-			//
 		}
 	}
 
@@ -609,5 +610,18 @@ public class ExtendedScanTableUI {
 		} else if(object instanceof IPeak) {
 			eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, object);
 		}
+	}
+
+	private void enableEditModus(boolean enabled) {
+
+		PartSupport.setCompositeVisibility(toolbarEdit, enabled);
+		buttonToggleToolbarEdit.setEnabled(enabled);
+		//
+		ITableSettings tableSettings = scanListUI.getTableSettings();
+		if(enabled) {
+			addDeleteMenuEntry(tableSettings);
+			addDeleteKeyEventProcessors(tableSettings);
+		}
+		scanListUI.applySettings(tableSettings);
 	}
 }
