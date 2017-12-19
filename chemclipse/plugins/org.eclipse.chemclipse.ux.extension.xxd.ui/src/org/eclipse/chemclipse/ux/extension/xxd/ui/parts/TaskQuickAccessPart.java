@@ -60,6 +60,7 @@ public class TaskQuickAccessPart {
 		createSelectedScansTask(parent);
 		createSelectedPeaksTask(parent);
 		createSubtractScanTask(parent);
+		createCombinedScanTask(parent);
 		createSettingsTask(parent);
 	}
 
@@ -171,8 +172,29 @@ public class TaskQuickAccessPart {
 			public void widgetSelected(SelectionEvent e) {
 
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_CHART);
+				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SUBTRACT_SCAN_PART);
 				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_SUBTRACT_SCAN, partStackId, imageActive, imageDefault);
+			}
+		});
+	}
+
+	private void createCombinedScanTask(Composite parent) {
+
+		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COMBINED_SCAN_ACTIVE, IApplicationImage.SIZE_16x16);
+		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COMBINED_SCAN_DEFAULT, IApplicationImage.SIZE_16x16);
+		//
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Toggle the combined scan modus");
+		button.setImage(imageDefault);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_COMBINED_SCAN_PART);
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_COMBINED_SCAN, partStackId, imageActive, imageDefault);
 			}
 		});
 	}

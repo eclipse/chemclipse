@@ -17,9 +17,6 @@ import java.util.List;
 import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -27,32 +24,25 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-public abstract class AbstractSubtractUpdateSupport extends AbstractUpdateSupport implements ISubtractUpdateSupport {
+public abstract class AbstractChromatogramSelectionUpdateSupport extends AbstractUpdateSupport implements IDataUpdateSupport {
 
-	private static final Logger logger = Logger.getLogger(AbstractSubtractUpdateSupport.class);
+	private static final Logger logger = Logger.getLogger(AbstractChromatogramSelectionUpdateSupport.class);
 	//
-	private static IScanMSD scanMSD;
-	private static IChromatogramSelectionMSD chromatogramSelectionMSD;
+	private static Object object;
 	//
 	private IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 	private List<EventHandler> registeredEventHandler;
 
-	public AbstractSubtractUpdateSupport(MPart part) {
+	public AbstractChromatogramSelectionUpdateSupport(MPart part) {
 		super(part);
 		registeredEventHandler = new ArrayList<EventHandler>();
 		registerEventBroker(eventBroker);
 	}
 
 	@Override
-	public IScanMSD getScanMSD() {
+	public Object getObject() {
 
-		return scanMSD;
-	}
-
-	@Override
-	public IChromatogramSelectionMSD getChromatogramSelectionMSD() {
-
-		return chromatogramSelectionMSD;
+		return object;
 	}
 
 	@PreDestroy
@@ -68,8 +58,9 @@ public abstract class AbstractSubtractUpdateSupport extends AbstractUpdateSuppor
 	private void registerEventBroker(IEventBroker eventBroker) {
 
 		if(eventBroker != null) {
-			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM));
+			//
 			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION, IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION));
+			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD, IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION));
 		}
 	}
 
@@ -80,14 +71,11 @@ public abstract class AbstractSubtractUpdateSupport extends AbstractUpdateSuppor
 			public void handleEvent(Event event) {
 
 				try {
-					if(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM.equals(topic)) {
-						IScanMSD scanMSD = PreferenceSupplier.getSessionSubtractMassSpectrum();
-						setScanMSD(scanMSD);
-					} else if(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION.equals(topic)) {
-						Object object = event.getProperty(property);
-						setChromatogramSelectionMSD((IChromatogramSelectionMSD)object);
+					if(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION.equals(topic)) {
+						setObject(null);
 					} else {
-						setChromatogramSelectionMSD(null);
+						Object object = event.getProperty(property);
+						setObject(object);
 					}
 				} catch(Exception e) {
 					logger.warn(e);
@@ -98,31 +86,17 @@ public abstract class AbstractSubtractUpdateSupport extends AbstractUpdateSuppor
 		return eventHandler;
 	}
 
-	private void setScanMSD(IScanMSD myScanMSD) {
+	public void setObject(Object myObject) {
 
 		/*
 		 * Remember the selection.
 		 */
-		scanMSD = myScanMSD;
+		object = myObject;
 		/*
 		 * Do an update only if the part is visible.
 		 */
 		if(doUpdate()) {
-			updateScanMSD(scanMSD);
-		}
-	}
-
-	private void setChromatogramSelectionMSD(IChromatogramSelectionMSD myChromatogramSelectionMSD) {
-
-		/*
-		 * Remember the selection.
-		 */
-		chromatogramSelectionMSD = myChromatogramSelectionMSD;
-		/*
-		 * Do an update only if the part is visible.
-		 */
-		if(doUpdate()) {
-			updateChromatogramSelectionMSD(myChromatogramSelectionMSD);
+			updateObject(object);
 		}
 	}
 }

@@ -59,22 +59,20 @@ public class ChromatogramOverviewPart extends AbstractChromatogramUpdateSupport 
 	@Override
 	public void updateChromatogram(IChromatogramOverview chromatogramOverview) {
 
-		if(doUpdate()) {
-			chromatogramOverviewChart.deleteSeries();
-			if(chromatogramOverview != null) {
-				/*
-				 * Create series.
-				 */
-				List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-				ISeriesData seriesData = getSeriesData(chromatogramOverview);
-				ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
-				lineSeriesSettings.setEnableArea(false);
-				ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
-				lineSeriesSettingsHighlight.setLineWidth(2);
-				lineSeriesDataList.add(lineSeriesData);
-				chromatogramOverviewChart.addSeriesData(lineSeriesDataList);
-			}
+		chromatogramOverviewChart.deleteSeries();
+		if(chromatogramOverview != null) {
+			/*
+			 * Create series.
+			 */
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			ISeriesData seriesData = getSeriesData(chromatogramOverview);
+			ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
+			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+			lineSeriesSettings.setEnableArea(false);
+			ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
+			lineSeriesSettingsHighlight.setLineWidth(2);
+			lineSeriesDataList.add(lineSeriesData);
+			chromatogramOverviewChart.addSeriesData(lineSeriesDataList);
 		}
 	}
 

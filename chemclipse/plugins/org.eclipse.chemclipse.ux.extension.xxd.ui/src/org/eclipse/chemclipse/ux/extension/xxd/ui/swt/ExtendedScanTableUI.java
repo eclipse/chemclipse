@@ -81,7 +81,7 @@ public class ExtendedScanTableUI {
 	private Label labelY;
 	private Text textY;
 	//
-	private ScanListUI scanListUI;
+	private ScanTableUI scanTableUI;
 	//
 	private Object object; // IScan or IPeak
 	private IScanMSD optimizedMassSpectrum;
@@ -140,7 +140,7 @@ public class ExtendedScanTableUI {
 		PartSupport.setCompositeVisibility(toolbarEdit, enabled);
 		buttonToggleToolbarEdit.setEnabled(enabled);
 		//
-		ITableSettings tableSettings = scanListUI.getTableSettings();
+		ITableSettings tableSettings = scanTableUI.getTableSettings();
 		if(enabled) {
 			tableSettings.addMenuEntry(deleteMenuEntry);
 			tableSettings.addKeyEventProcessor(deleteKeyEventProcessor);
@@ -148,7 +148,7 @@ public class ExtendedScanTableUI {
 			tableSettings.removeMenuEntry(deleteMenuEntry);
 			tableSettings.removeKeyEventProcessor(deleteKeyEventProcessor);
 		}
-		scanListUI.applySettings(tableSettings);
+		scanTableUI.applySettings(tableSettings);
 	}
 
 	public void update(Object object) {
@@ -168,11 +168,11 @@ public class ExtendedScanTableUI {
 		}
 		//
 		labelInfo.setText(ScanSupport.getScanLabel(scan));
-		scanListUI.setInput(scan);
+		scanTableUI.setInput(scan);
 		/*
 		 * Fields
 		 */
-		List<TableViewerColumn> tableViewerColumns = scanListUI.getTableViewerColumns();
+		List<TableViewerColumn> tableViewerColumns = scanTableUI.getTableViewerColumns();
 		if(tableViewerColumns.size() >= 2) {
 			/*
 			 * Add Signal
@@ -331,7 +331,7 @@ public class ExtendedScanTableUI {
 					IScanMSD scanMSD = (IScanMSD)object;
 					optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
 					if(optimizedMassSpectrum != null) {
-						scanListUI.setInput(optimizedMassSpectrum);
+						scanTableUI.setInput(optimizedMassSpectrum);
 						labelInfo.setText(ScanSupport.getScanLabel(optimizedMassSpectrum));
 						button.setEnabled(false);
 					}
@@ -480,8 +480,8 @@ public class ExtendedScanTableUI {
 
 	private void createTable(Composite parent) {
 
-		scanListUI = new ScanListUI(parent, SWT.VIRTUAL | SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		scanListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		scanTableUI = new ScanTableUI(parent, SWT.VIRTUAL | SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		scanTableUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	private void applySettings() {
@@ -504,13 +504,13 @@ public class ExtendedScanTableUI {
 			/*
 			 * Delete the signal
 			 */
-			Iterator iterator = scanListUI.getStructuredSelection().iterator();
+			Iterator iterator = scanTableUI.getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				deleteSignal(object);
 			}
 			//
-			scanListUI.refresh();
+			scanTableUI.refresh();
 			fireScanUpdate();
 		}
 	}

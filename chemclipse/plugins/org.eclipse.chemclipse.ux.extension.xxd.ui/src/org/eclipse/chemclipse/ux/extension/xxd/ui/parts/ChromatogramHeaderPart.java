@@ -57,12 +57,10 @@ public class ChromatogramHeaderPart extends AbstractChromatogramUpdateSupport im
 	@Override
 	public void updateChromatogram(IChromatogramOverview chromatogramOverview) {
 
-		if(doUpdate()) {
-			if(chromatogramOverview != null) {
-				extractHeader(chromatogramOverview);
-			} else {
-				text.setText("");
-			}
+		if(chromatogramOverview != null) {
+			extractHeader(chromatogramOverview);
+		} else {
+			text.setText("");
 		}
 	}
 

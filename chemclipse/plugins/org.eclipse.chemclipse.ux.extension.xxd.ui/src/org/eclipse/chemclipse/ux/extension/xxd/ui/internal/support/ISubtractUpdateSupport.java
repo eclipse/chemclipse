@@ -11,11 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
-import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 
 public interface ISubtractUpdateSupport extends IUpdateSupport {
 
-	void updateScan(IScan scan);
+	void updateScanMSD(IScanMSD scanMSD);
 
-	IScan getScan();
+	IScanMSD getScanMSD();
+
+	void updateChromatogramSelectionMSD(IChromatogramSelectionMSD chromatogramSelectionMSD);
+
+	IChromatogramSelectionMSD getChromatogramSelectionMSD();
 }

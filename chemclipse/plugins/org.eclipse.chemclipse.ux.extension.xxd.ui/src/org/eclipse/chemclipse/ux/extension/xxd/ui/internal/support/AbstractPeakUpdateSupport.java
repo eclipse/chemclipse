@@ -90,7 +90,15 @@ public abstract class AbstractPeakUpdateSupport extends AbstractUpdateSupport im
 
 	public void setPeak(IPeak selectedPeak) {
 
+		/*
+		 * Remember the selection.
+		 */
 		peak = selectedPeak;
-		updatePeak(selectedPeak);
+		/*
+		 * Do an update only if the part is visible.
+		 */
+		if(doUpdate()) {
+			updatePeak(selectedPeak);
+		}
 	}
 }

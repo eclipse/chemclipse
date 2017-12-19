@@ -158,7 +158,15 @@ public abstract class AbstractChromatogramUpdateSupport extends AbstractUpdateSu
 
 	public void setChromatogramOverview(IChromatogramOverview overview) {
 
+		/*
+		 * Remember the selection.
+		 */
 		chromatogramOverview = overview;
-		updateChromatogram(chromatogramOverview);
+		/*
+		 * Do an update only if the part is visible.
+		 */
+		if(doUpdate()) {
+			updateChromatogram(chromatogramOverview);
+		}
 	}
 }

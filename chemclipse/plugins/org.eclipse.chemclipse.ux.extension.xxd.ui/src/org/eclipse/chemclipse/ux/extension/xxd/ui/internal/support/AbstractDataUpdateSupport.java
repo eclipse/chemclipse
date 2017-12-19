@@ -17,7 +17,6 @@ import java.util.List;
 import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -82,13 +81,6 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 						setObject(null);
 					} else {
 						Object object = event.getProperty(property);
-						if(object instanceof IChromatogramSelection) {
-							/*
-							 * TargetsPart etc. handle the chromatogram instead of the selection.
-							 */
-							IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
-							object = chromatogramSelection.getChromatogram();
-						}
 						setObject(object);
 					}
 				} catch(Exception e) {
@@ -102,7 +94,15 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 
 	public void setObject(Object myObject) {
 
+		/*
+		 * Remember the selection.
+		 */
 		object = myObject;
-		updateObject(object);
+		/*
+		 * Do an update only if the part is visible.
+		 */
+		if(doUpdate()) {
+			updateObject(object);
+		}
 	}
 }

@@ -34,15 +34,15 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class ScanListUI extends ExtendedTableViewer {
+public class ScanTableUI extends ExtendedTableViewer {
 
-	private static final Logger logger = Logger.getLogger(ScanListUI.class);
+	private static final Logger logger = Logger.getLogger(ScanTableUI.class);
 	//
 	private Map<DataType, ITableLabelProvider> labelProviderMap;
 	private Map<DataType, ViewerComparator> viewerComparatorMap;
 	private Map<DataType, IContentProvider> contentProviderMap;
 
-	public ScanListUI(Composite parent, int style) {
+	public ScanTableUI(Composite parent, int style) {
 		super(parent, style);
 		labelProviderMap = new HashMap<DataType, ITableLabelProvider>();
 		viewerComparatorMap = new HashMap<DataType, ViewerComparator>();

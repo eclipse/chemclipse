@@ -13,7 +13,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractSubtractUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ISubtractUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedSubtractScanUI;
@@ -34,12 +35,19 @@ public class SubtractScanPart extends AbstractSubtractUpdateSupport implements I
 	@Focus
 	public void setFocus() {
 
-		updateScan(getScan());
+		updateScanMSD(getScanMSD());
+		updateChromatogramSelectionMSD(getChromatogramSelectionMSD());
 	}
 
 	@Override
-	public void updateScan(IScan scan) {
+	public void updateScanMSD(IScanMSD scanMSD) {
 
-		extendedSubtractChartUI.update(scan);
+		extendedSubtractChartUI.update(scanMSD);
+	}
+
+	@Override
+	public void updateChromatogramSelectionMSD(IChromatogramSelectionMSD chromatogramSelectionMSD) {
+
+		extendedSubtractChartUI.update(chromatogramSelectionMSD);
 	}
 }

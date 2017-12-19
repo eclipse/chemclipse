@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedTargetsUI;
@@ -39,6 +40,10 @@ public class TargetsPart extends AbstractDataUpdateSupport implements IDataUpdat
 	@Override
 	public void updateObject(Object object) {
 
+		if(object instanceof IChromatogramSelection) {
+			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
+			object = chromatogramSelection.getChromatogram();
+		}
 		extendedTargetsUI.update(object);
 	}
 }

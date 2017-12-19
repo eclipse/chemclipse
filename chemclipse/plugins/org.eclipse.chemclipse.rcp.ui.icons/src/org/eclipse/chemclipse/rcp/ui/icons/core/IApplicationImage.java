@@ -271,4 +271,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_TOOLBAR_INACTIVE = "toolbar_inactive.gif";
 	String IMAGE_SUBTRACT_SCAN_DEFAULT = "subtractScanDefault.gif";
 	String IMAGE_SUBTRACT_SCAN_ACTIVE = "subtractScanActive.gif";
+	String IMAGE_COMBINED_SCAN_DEFAULT = "combinedScanDefault.gif";
+	String IMAGE_COMBINED_SCAN_ACTIVE = "combinedScanActive.gif";
 }
