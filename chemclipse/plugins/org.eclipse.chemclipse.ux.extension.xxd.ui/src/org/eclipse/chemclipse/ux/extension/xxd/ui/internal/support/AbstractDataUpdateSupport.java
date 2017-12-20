@@ -17,7 +17,6 @@ import java.util.List;
 import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -28,7 +27,8 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 
 	private static final Logger logger = Logger.getLogger(AbstractDataUpdateSupport.class);
 	//
-	private static Object object;
+	private static Object object = null;
+	private static String topic = "";
 	//
 	private IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 	private List<EventHandler> registeredEventHandler;
@@ -36,13 +36,26 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 	public AbstractDataUpdateSupport(MPart part) {
 		super(part);
 		registeredEventHandler = new ArrayList<EventHandler>();
-		registerEventBroker(eventBroker);
+		registerEvents();
+	}
+
+	public void registerEvent(String topic, String property) {
+
+		if(eventBroker != null) {
+			registeredEventHandler.add(registerEventHandler(eventBroker, topic, property));
+		}
 	}
 
 	@Override
 	public Object getObject() {
 
 		return object;
+	}
+
+	@Override
+	public String getTopic() {
+
+		return topic;
 	}
 
 	@PreDestroy
@@ -55,34 +68,15 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 		}
 	}
 
-	private void registerEventBroker(IEventBroker eventBroker) {
-
-		if(eventBroker != null) {
-			//
-			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD, IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION));
-			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD, IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION));
-			//
-			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_SCAN, IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION));
-			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_SCAN, IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION));
-			//
-			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_PEAK, IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION));
-			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_SELECTED_PEAK, IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION));
-		}
-	}
-
-	private EventHandler registerEventHandler(IEventBroker eventBroker, String property, String topic) {
+	private EventHandler registerEventHandler(IEventBroker eventBroker, String topic, String property) {
 
 		EventHandler eventHandler = new EventHandler() {
 
 			public void handleEvent(Event event) {
 
 				try {
-					if(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION.equals(topic) || IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION.equals(topic) || IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION.equals(topic)) {
-						setObject(null);
-					} else {
-						Object object = event.getProperty(property);
-						setObject(object);
-					}
+					Object object = event.getProperty(property);
+					setObject(object, topic);
 				} catch(Exception e) {
 					logger.warn(e);
 				}
@@ -92,17 +86,18 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 		return eventHandler;
 	}
 
-	public void setObject(Object myObject) {
+	public void setObject(Object myObject, String myTopic) {
 
 		/*
 		 * Remember the selection.
 		 */
 		object = myObject;
+		topic = myTopic;
 		/*
 		 * Do an update only if the part is visible.
 		 */
 		if(doUpdate()) {
-			updateObject(object);
+			updateObject(object, topic);
 		}
 	}
 }

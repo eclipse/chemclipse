@@ -20,9 +20,10 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractPeakUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IPeakUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaks;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -47,7 +48,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-public class PeakChartPart extends AbstractPeakUpdateSupport implements IPeakUpdateSupport {
+public class PeakChartPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
 	private Composite toolbarSettings;
 	private LineChart peakChart;
@@ -61,15 +62,22 @@ public class PeakChartPart extends AbstractPeakUpdateSupport implements IPeakUpd
 	@Focus
 	public void setFocus() {
 
-		updatePeak(getPeak());
-		peakChart.setFocus();
+		updateObject(getObject(), getTopic());
 	}
 
 	@Override
-	public void updatePeak(IPeak peak) {
+	public void registerEvents() {
+
+		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
+		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
+	}
+
+	@Override
+	public void updateObject(Object object, String topic) {
 
 		peakChart.deleteSeries();
-		if(peak != null) {
+		if(object instanceof IPeak) {
+			IPeak peak = (IPeak)object;
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			ISeriesData seriesData = getSeriesData(peak);
 			ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);

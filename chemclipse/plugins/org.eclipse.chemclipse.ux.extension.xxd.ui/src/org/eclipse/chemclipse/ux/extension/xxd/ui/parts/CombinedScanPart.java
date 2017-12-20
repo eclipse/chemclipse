@@ -13,14 +13,15 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractChromatogramSelectionUpdateSupport;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedCombinedScanUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
-public class CombinedScanPart extends AbstractChromatogramSelectionUpdateSupport implements IDataUpdateSupport {
+public class CombinedScanPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
 	private ExtendedCombinedScanUI extendedCombinedScanUI;
 
@@ -33,11 +34,18 @@ public class CombinedScanPart extends AbstractChromatogramSelectionUpdateSupport
 	@Focus
 	public void setFocus() {
 
-		updateObject(getObject());
+		updateObject(getObject(), getTopic());
 	}
 
 	@Override
-	public void updateObject(Object object) {
+	public void registerEvents() {
+
+		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
+	}
+
+	@Override
+	public void updateObject(Object object, String topic) {
 
 		extendedCombinedScanUI.update(object);
 	}

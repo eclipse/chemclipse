@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedTargetsUI;
@@ -34,11 +35,22 @@ public class TargetsPart extends AbstractDataUpdateSupport implements IDataUpdat
 	@Focus
 	public void setFocus() {
 
-		updateObject(getObject());
+		updateObject(getObject(), getTopic());
 	}
 
 	@Override
-	public void updateObject(Object object) {
+	public void registerEvents() {
+
+		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
+		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
+		registerEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
+		registerEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
+		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
+		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
+	}
+
+	@Override
+	public void updateObject(Object object, String topic) {
 
 		if(object instanceof IChromatogramSelection) {
 			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;

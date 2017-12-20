@@ -20,15 +20,15 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractChromatogramUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IChromatogramUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractOverviewUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IOverviewUpdateSupport;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-public class ChromatogramHeaderPart extends AbstractChromatogramUpdateSupport implements IChromatogramUpdateSupport {
+public class ChromatogramHeaderPart extends AbstractOverviewUpdateSupport implements IOverviewUpdateSupport {
 
 	private Text text;
 	private SimpleDateFormat dateFormat;
@@ -45,23 +45,22 @@ public class ChromatogramHeaderPart extends AbstractChromatogramUpdateSupport im
 	@Focus
 	public void setFocus() {
 
-		updateChromatogram(getChromatogramOverview());
-		text.setFocus();
-	}
-
-	private void initialize(Composite parent) {
-
-		text = new Text(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		updateObject(getObject(), getTopic());
 	}
 
 	@Override
-	public void updateChromatogram(IChromatogramOverview chromatogramOverview) {
+	public void updateChromatogramOverview(IChromatogramOverview chromatogramOverview) {
 
 		if(chromatogramOverview != null) {
 			extractHeader(chromatogramOverview);
 		} else {
 			text.setText("");
 		}
+	}
+
+	private void initialize(Composite parent) {
+
+		text = new Text(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 	}
 
 	private void extractHeader(IChromatogramOverview chromatogramOverview) {

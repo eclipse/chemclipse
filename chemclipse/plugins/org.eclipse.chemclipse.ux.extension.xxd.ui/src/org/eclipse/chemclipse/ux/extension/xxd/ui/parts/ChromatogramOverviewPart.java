@@ -22,8 +22,8 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ChromatogramOverviewChart;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractChromatogramUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IChromatogramUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractOverviewUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IDataUpdateSupport;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
@@ -34,7 +34,7 @@ import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class ChromatogramOverviewPart extends AbstractChromatogramUpdateSupport implements IChromatogramUpdateSupport {
+public class ChromatogramOverviewPart extends AbstractOverviewUpdateSupport implements IDataUpdateSupport {
 
 	private ChromatogramOverviewChart chromatogramOverviewChart;
 
@@ -47,17 +47,11 @@ public class ChromatogramOverviewPart extends AbstractChromatogramUpdateSupport 
 	@Focus
 	public void setFocus() {
 
-		updateChromatogram(getChromatogramOverview());
-		chromatogramOverviewChart.setFocus();
-	}
-
-	private void initialize(Composite parent) {
-
-		chromatogramOverviewChart = new ChromatogramOverviewChart(parent, SWT.NONE);
+		updateObject(getObject(), getTopic());
 	}
 
 	@Override
-	public void updateChromatogram(IChromatogramOverview chromatogramOverview) {
+	public void updateChromatogramOverview(IChromatogramOverview chromatogramOverview) {
 
 		chromatogramOverviewChart.deleteSeries();
 		if(chromatogramOverview != null) {
@@ -74,6 +68,11 @@ public class ChromatogramOverviewPart extends AbstractChromatogramUpdateSupport 
 			lineSeriesDataList.add(lineSeriesData);
 			chromatogramOverviewChart.addSeriesData(lineSeriesDataList);
 		}
+	}
+
+	private void initialize(Composite parent) {
+
+		chromatogramOverviewChart = new ChromatogramOverviewChart(parent, SWT.NONE);
 	}
 
 	private ISeriesData getSeriesData(IChromatogramOverview chromatogramOverview) {

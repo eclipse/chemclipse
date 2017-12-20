@@ -13,7 +13,11 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
 public interface IDataUpdateSupport extends IUpdateSupport {
 
-	void updateObject(Object object);
+	void registerEvents();
+
+	void updateObject(Object object, String topic);
 
 	Object getObject();
+
+	String getTopic();
 }
