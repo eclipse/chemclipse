@@ -132,11 +132,11 @@ public class ExtendedSubtractScanUI {
 			}
 		});
 		//
-		createScanChart(parent);
-		createScanTable(parent);
+		createScanChart(tabFolder);
+		createScanTable(tabFolder);
 	}
 
-	private void createScanChart(Composite parent) {
+	private void createScanChart(TabFolder tabFolder) {
 
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Chart");
@@ -148,7 +148,7 @@ public class ExtendedSubtractScanUI {
 		scanChartUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
-	private void createScanTable(Composite parent) {
+	private void createScanTable(TabFolder tabFolder) {
 
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Table");

@@ -61,6 +61,7 @@ public class TaskQuickAccessPart {
 		createSelectedPeaksTask(parent);
 		createSubtractScanTask(parent);
 		createCombinedScanTask(parent);
+		createComparisonScanTask(parent);
 		createSettingsTask(parent);
 	}
 
@@ -195,6 +196,27 @@ public class TaskQuickAccessPart {
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_COMBINED_SCAN_PART);
 				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_COMBINED_SCAN, partStackId, imageActive, imageDefault);
+			}
+		});
+	}
+
+	private void createComparisonScanTask(Composite parent) {
+
+		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COMPARISON_SCAN_ACTIVE, IApplicationImage.SIZE_16x16);
+		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COMPARISON_SCAN_DEFAULT, IApplicationImage.SIZE_16x16);
+		//
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Toggle the comparison scan modus");
+		button.setImage(imageDefault);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_COMPARISON_SCAN_PART);
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_COMPARISON_SCAN, partStackId, imageActive, imageDefault);
 			}
 		});
 	}

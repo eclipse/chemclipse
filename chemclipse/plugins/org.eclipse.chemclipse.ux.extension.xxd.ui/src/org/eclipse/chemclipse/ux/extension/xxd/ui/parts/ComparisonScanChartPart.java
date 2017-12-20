@@ -13,21 +13,21 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractChromatogramSelectionUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.IDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedCombinedScanUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedComparisonScanUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
-public class CombinedScanPart extends AbstractChromatogramSelectionUpdateSupport implements IDataUpdateSupport {
+public class ComparisonScanChartPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
-	private ExtendedCombinedScanUI extendedCombinedScanUI;
+	private ExtendedComparisonScanUI extendedComparisonScanUI;
 
 	@Inject
-	public CombinedScanPart(Composite parent, MPart part) {
+	public ComparisonScanChartPart(Composite parent, MPart part) {
 		super(part);
-		extendedCombinedScanUI = new ExtendedCombinedScanUI(parent);
+		extendedComparisonScanUI = new ExtendedComparisonScanUI(parent);
 	}
 
 	@Focus
@@ -39,6 +39,6 @@ public class CombinedScanPart extends AbstractChromatogramSelectionUpdateSupport
 	@Override
 	public void updateObject(Object object) {
 
-		extendedCombinedScanUI.update(object);
+		extendedComparisonScanUI.update(object);
 	}
 }

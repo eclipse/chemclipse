@@ -35,6 +35,8 @@ public class PreferenceConstants {
 	public static final String DEF_STACK_POSITION_SUBTRACT_SCAN_PART = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	public static final String P_STACK_POSITION_COMBINED_SCAN_PART = "stackPositionCombinedScanChart";
 	public static final String DEF_STACK_POSITION_COMBINED_SCAN_PART = PartSupport.PARTSTACK_BOTTOM_CENTER;
+	public static final String P_STACK_POSITION_COMPARISON_SCAN_PART = "stackPositionComparisonScanChart";
+	public static final String DEF_STACK_POSITION_COMPARISON_SCAN_PART = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	//
 	public static String[][] PART_STACKS = new String[][]{//
 			{"--", PartSupport.PARTSTACK_NONE}, //

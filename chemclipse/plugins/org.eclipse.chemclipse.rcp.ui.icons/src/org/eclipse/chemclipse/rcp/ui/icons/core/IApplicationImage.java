@@ -273,4 +273,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SUBTRACT_SCAN_ACTIVE = "subtractScanActive.gif";
 	String IMAGE_COMBINED_SCAN_DEFAULT = "combinedScanDefault.gif";
 	String IMAGE_COMBINED_SCAN_ACTIVE = "combinedScanActive.gif";
+	String IMAGE_COMPARISON_SCAN_DEFAULT = "comparisonScanDefault.gif";
+	String IMAGE_COMPARISON_SCAN_ACTIVE = "comparisonScanActive.gif";
 }

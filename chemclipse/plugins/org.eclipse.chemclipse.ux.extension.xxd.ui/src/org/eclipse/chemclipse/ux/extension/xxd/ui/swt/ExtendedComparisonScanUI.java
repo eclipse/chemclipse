@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.support.FilterSupport;
@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ScanChartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
@@ -45,28 +44,23 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 
-public class ExtendedCombinedScanUI {
+public class ExtendedComparisonScanUI {
 
-	private static final Logger logger = Logger.getLogger(ExtendedCombinedScanUI.class);
+	private static final Logger logger = Logger.getLogger(ExtendedComparisonScanUI.class);
 	//
-	private static final int INDEX_CHART = 0;
-	private static final int INDEX_TABLE = 1;
-	//
-	private Label labelInfo;
-	private Composite toolbarInfo;
-	private TabFolder tabFolder;
+	private Label labelInfoReference;
+	private Composite toolbarInfoReference;
 	private ScanChartUI scanChartUI;
-	private ScanTableUI scanTableUI;
+	private Label labelInfoComparison;
+	private Composite toolbarInfoComparison;
 	//
 	private IScanMSD scanMSD;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 
 	@Inject
-	public ExtendedCombinedScanUI(Composite parent) {
+	public ExtendedComparisonScanUI(Composite parent) {
 		initialize(parent);
 	}
 
@@ -79,19 +73,26 @@ public class ExtendedCombinedScanUI {
 	public void update(Object object) {
 
 		IScanMSD scanMSD = null;
-		if(object instanceof IChromatogramSelectionMSD) {
+		if(object instanceof IScanMSD) {
+			scanMSD = (IScanMSD)object;
+		} else if(object instanceof IPeakMSD) {
+			IPeakMSD peakMSD = (IPeakMSD)object;
+			scanMSD = peakMSD.getExtractedMassSpectrum();
+		} else if(object instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)object;
-			boolean useNormalize = true;
-			scanMSD = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize);
+			scanMSD = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, true);
 		}
-		labelInfo.setText(getCombinedRangeInfo(object));
+		//
+		labelInfoReference.setText("Reference MS");
+		labelInfoComparison.setText("Comparison MS");
+		//
 		this.scanMSD = scanMSD;
 		updateScan();
 	}
 
 	private void updateScan() {
 
-		updateScanData();
+		scanChartUI.setInput(scanMSD);
 	}
 
 	private void initialize(Composite parent) {
@@ -99,10 +100,12 @@ public class ExtendedCombinedScanUI {
 		parent.setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(parent);
-		toolbarInfo = createToolbarInfo(parent);
-		createScanTabFolderSection(parent);
+		toolbarInfoReference = createToolbarInfoReference(parent);
+		createScanChart(parent);
+		toolbarInfoComparison = createToolbarInfoComparison(parent);
 		//
-		PartSupport.setCompositeVisibility(toolbarInfo, true);
+		PartSupport.setCompositeVisibility(toolbarInfoReference, true);
+		PartSupport.setCompositeVisibility(toolbarInfoComparison, true);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -118,71 +121,44 @@ public class ExtendedCombinedScanUI {
 		createSettingsButton(composite);
 	}
 
-	private Composite createToolbarInfo(Composite parent) {
+	private Composite createToolbarInfoReference(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
 		//
-		labelInfo = new Label(composite, SWT.NONE);
-		labelInfo.setText("");
-		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		labelInfoReference = new Label(composite, SWT.NONE);
+		labelInfoReference.setText("");
+		labelInfoReference.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		return composite;
 	}
 
-	private void createScanTabFolderSection(Composite parent) {
+	private void createScanChart(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		composite.setLayout(new GridLayout(1, true));
-		//
-		tabFolder = new TabFolder(composite, SWT.BOTTOM);
-		tabFolder.setBackground(Colors.WHITE);
-		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
-		tabFolder.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				updateScanData();
-			}
-		});
-		//
-		createScanChart(tabFolder);
-		createScanTable(tabFolder);
-	}
-
-	private void createScanChart(TabFolder tabFolder) {
-
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Chart");
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setLayout(new GridLayout(1, true));
-		tabItem.setControl(composite);
-		//
-		scanChartUI = new ScanChartUI(composite, SWT.BORDER);
+		scanChartUI = new ScanChartUI(parent, SWT.BORDER);
 		scanChartUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
-	private void createScanTable(TabFolder tabFolder) {
+	private Composite createToolbarInfoComparison(Composite parent) {
 
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Table");
-		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setBackground(Colors.WHITE);
-		composite.setLayout(new GridLayout(1, true));
-		tabItem.setControl(composite);
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(1, false));
 		//
-		scanTableUI = new ScanTableUI(composite, SWT.VIRTUAL | SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		scanTableUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		labelInfoComparison = new Label(composite, SWT.NONE);
+		labelInfoComparison.setText("");
+		labelInfoComparison.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		return composite;
 	}
 
 	private Button createButtonToggleToolbarInfo(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle info toolbar.");
+		button.setToolTipText("Toggle the reference/comparison info toolbar.");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -190,7 +166,8 @@ public class ExtendedCombinedScanUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
+				PartSupport.toggleCompositeVisibility(toolbarInfoReference);
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfoComparison);
 				if(visible) {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
 				} else {
@@ -261,39 +238,5 @@ public class ExtendedCombinedScanUI {
 	private void applySettings() {
 
 		updateScan();
-	}
-
-	private void updateScanData() {
-
-		switch(tabFolder.getSelectionIndex()) {
-			case INDEX_CHART:
-				scanChartUI.setInput(scanMSD);
-				break;
-			case INDEX_TABLE:
-				scanTableUI.setInput(scanMSD);
-				break;
-		}
-	}
-
-	private String getCombinedRangeInfo(Object object) {
-
-		StringBuilder builder = new StringBuilder();
-		if(object instanceof IChromatogramSelectionMSD) {
-			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)object;
-			int startRetentionTime = chromatogramSelectionMSD.getStartRetentionTime();
-			int stopRetentionTime = chromatogramSelectionMSD.getStopRetentionTime();
-			IChromatogram chromatogram = chromatogramSelectionMSD.getChromatogram();
-			builder.append("Scan range: ");
-			builder.append(chromatogram.getScanNumber(startRetentionTime));
-			builder.append("–");
-			builder.append(chromatogram.getScanNumber(stopRetentionTime));
-			builder.append(" | RT range: ");
-			builder.append(decimalFormat.format((double)startRetentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR));
-			builder.append("–");
-			builder.append(decimalFormat.format((double)stopRetentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR));
-		} else {
-			builder.append("No chromatogram selected.");
-		}
-		return builder.toString();
 	}
 }
