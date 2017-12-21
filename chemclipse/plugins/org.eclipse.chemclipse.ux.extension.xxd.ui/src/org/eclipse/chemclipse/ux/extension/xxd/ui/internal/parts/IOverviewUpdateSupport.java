@@ -9,18 +9,11 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts;
 
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 
-public interface ISubtractUpdateSupport extends IUpdateSupport {
+public interface IOverviewUpdateSupport extends IDataUpdateSupport {
 
-	void updateScanMSD(IScanMSD scanMSD);
-
-	IScanMSD getScanMSD();
-
-	void updateChromatogramSelectionMSD(IChromatogramSelectionMSD chromatogramSelectionMSD);
-
-	IChromatogramSelectionMSD getChromatogramSelectionMSD();
+	void updateChromatogramOverview(IChromatogramOverview chromatogramOverview);
 }

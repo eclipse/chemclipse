@@ -32,7 +32,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractChromatogramEditorPartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.AbstractEditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlaySupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
 import org.eclipse.e4.ui.di.Focus;
@@ -67,7 +67,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.swtchart.ISeries;
 
-public class ChromatogramOverlayPart extends AbstractChromatogramEditorPartSupport {
+public class ChromatogramOverlayPart extends AbstractEditorUpdateSupport {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramOverlayPart.class);
 	@Inject

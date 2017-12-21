@@ -14,15 +14,16 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.AbstractSubtractUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ISubtractUpdateSupport;
+import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.AbstractDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedSubtractScanUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
-public class SubtractScanPart extends AbstractSubtractUpdateSupport implements ISubtractUpdateSupport {
+public class SubtractScanPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
 	private ExtendedSubtractScanUI extendedSubtractChartUI;
 
@@ -35,19 +36,26 @@ public class SubtractScanPart extends AbstractSubtractUpdateSupport implements I
 	@Focus
 	public void setFocus() {
 
-		updateScanMSD(getScanMSD());
-		updateChromatogramSelectionMSD(getChromatogramSelectionMSD());
+		updateObject(getObject(), getTopic());
 	}
 
 	@Override
-	public void updateScanMSD(IScanMSD scanMSD) {
+	public void registerEvents() {
 
-		extendedSubtractChartUI.update(scanMSD);
+		registerEvent(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, IChemClipseEvents.PROPERTY_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM);
+		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
 	}
 
 	@Override
-	public void updateChromatogramSelectionMSD(IChromatogramSelectionMSD chromatogramSelectionMSD) {
+	public void updateObject(Object object, String topic) {
 
-		extendedSubtractChartUI.update(chromatogramSelectionMSD);
+		if(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM.equals(topic)) {
+			IScanMSD scanMSD = PreferenceSupplier.getSessionSubtractMassSpectrum();
+			extendedSubtractChartUI.update(scanMSD);
+		} else if(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION.equals(topic)) {
+			extendedSubtractChartUI.update(object);
+		} else {
+			extendedSubtractChartUI.update(null);
+		}
 	}
 }

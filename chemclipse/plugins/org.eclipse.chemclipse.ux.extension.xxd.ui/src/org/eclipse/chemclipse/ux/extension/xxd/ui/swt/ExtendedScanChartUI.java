@@ -103,9 +103,11 @@ public class ExtendedScanChartUI {
 
 	private class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
 
+		private IScanMSD scanMSD;
 		private String identifierId;
 
-		public MassSpectrumIdentifierRunnable(String identifierId) {
+		public MassSpectrumIdentifierRunnable(IScanMSD scanMSD, String identifierId) {
+			this.scanMSD = scanMSD;
 			this.identifierId = identifierId;
 		}
 
@@ -114,11 +116,7 @@ public class ExtendedScanChartUI {
 
 			try {
 				monitor.beginTask("Scan Identification", IProgressMonitor.UNKNOWN);
-				MassSpectrumIdentifier.identify(optimizedScan, identifierId, monitor);
-				originalScan.setOptimizedMassSpectrum(optimizedScan);
-				//
-				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, originalScan.getOptimizedMassSpectrum());
+				MassSpectrumIdentifier.identify(scanMSD, identifierId, monitor);
 			} finally {
 				monitor.done();
 			}
@@ -307,8 +305,9 @@ public class ExtendedScanChartUI {
 	private Button createScanFilterButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setText("Filter");
-		button.setToolTipText("Filter the current scan.");
+		button.setText("");
+		button.setToolTipText("Filter the currently selected scan.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -350,8 +349,9 @@ public class ExtendedScanChartUI {
 	private Button createScanIdentifierButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setText("Identify");
-		button.setToolTipText("Identify the scan.");
+		button.setText("");
+		button.setToolTipText("Identify the currently selected scan.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -364,15 +364,26 @@ public class ExtendedScanChartUI {
 						 * Run the identification.
 						 */
 						String identifierId = scanIdentifierIds.get(index);
-						IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(identifierId);
+						IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(optimizedScan, identifierId);
 						ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 						try {
 							monitor.run(true, true, runnable);
+							originalScan.setOptimizedMassSpectrum(optimizedScan);
+							Display.getDefault().asyncExec(new Runnable() {
+
+								@Override
+								public void run() {
+
+									IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+									eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, optimizedScan);
+								}
+							});
 						} catch(InvocationTargetException e1) {
 							logger.warn(e1);
 						} catch(InterruptedException e1) {
 							logger.warn(e1);
 						}
+						//
 					}
 				}
 			}
