@@ -131,13 +131,14 @@ public class ChromatogramOverlayPart extends AbstractEditorUpdateSupport {
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(6, false));
+		composite.setLayout(new GridLayout(7, false));
 		//
 		createDataStatusLabel(composite);
 		createButtonToggleToolbarType(composite);
 		createButtonToggleToolbarShift(composite);
 		createToggleChartLegendButton(composite);
 		createResetButton(composite);
+		createButtonPseudo3D(composite);
 		createSettingsButton(composite);
 	}
 
@@ -452,6 +453,42 @@ public class ChromatogramOverlayPart extends AbstractEditorUpdateSupport {
 		});
 	}
 
+	private void createButtonPseudo3D(Composite parent) {
+
+		Button buttonShiftDown = new Button(parent, SWT.PUSH);
+		buttonShiftDown.setToolTipText("Pseudo 3d");
+		buttonShiftDown.setText("");
+		buttonShiftDown.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_3D, IApplicationImage.SIZE_16x16));
+		buttonShiftDown.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				/*
+				 * Reset the chart.
+				 */
+				applyOverlaySettings();
+				/*
+				 * Move equidistant.
+				 */
+				BaseChart baseChart = chromatogramChart.getBaseChart();
+				baseChart.suspendUpdate(true);
+				double shiftX = 0.0d;
+				double shiftY = 0.0d;
+				double deltaX = getShift(IExtendedChart.X_AXIS);
+				double deltaY = getShift(IExtendedChart.Y_AXIS);
+				for(ISeries series : baseChart.getSeriesSet().getSeries()) {
+					shiftX += deltaX;
+					shiftY += deltaY;
+					String seriesId = series.getId();
+					baseChart.shiftSeries(seriesId, shiftX, shiftY);
+				}
+				baseChart.suspendUpdate(false);
+				baseChart.redraw();
+			}
+		});
+	}
+
 	private void createDataStatusLabel(Composite parent) {
 
 		labelDataStatus = new Label(parent, SWT.NONE);
@@ -467,7 +504,7 @@ public class ChromatogramOverlayPart extends AbstractEditorUpdateSupport {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle type toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TOOLBAR_INACTIVE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -475,9 +512,9 @@ public class ChromatogramOverlayPart extends AbstractEditorUpdateSupport {
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarType);
 				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TOOLBAR_ACTIVE, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TOOLBAR_INACTIVE, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				}
 			}
 		});
@@ -488,7 +525,7 @@ public class ChromatogramOverlayPart extends AbstractEditorUpdateSupport {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle shift toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TOOLBAR_INACTIVE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -496,9 +533,9 @@ public class ChromatogramOverlayPart extends AbstractEditorUpdateSupport {
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarShift);
 				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TOOLBAR_ACTIVE, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TOOLBAR_INACTIVE, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				}
 			}
 		});

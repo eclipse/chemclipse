@@ -255,6 +255,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SKIP = "skip.gif";
 	String IMAGE_SKIPPED = "skipped.gif";
 	String IMAGE_TAG = "tag.gif";
+	String IMAGE_3D = "three-dimensional.gif";
 	/*
 	 * PICTOGRAM and Data Analysis Perspective
 	 */
@@ -267,8 +268,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SELECTED_SCANS_ACTIVE = "selectedScansActive.gif";
 	String IMAGE_SELECTED_PEAKS_DEFAULT = "selectedPeaksDefault.gif";
 	String IMAGE_SELECTED_PEAKS_ACTIVE = "selectedPeaksActive.gif";
-	String IMAGE_TOOLBAR_ACTIVE = "toolbar_active.gif";
-	String IMAGE_TOOLBAR_INACTIVE = "toolbar_inactive.gif";
 	String IMAGE_SUBTRACT_SCAN_DEFAULT = "subtractScanDefault.gif";
 	String IMAGE_SUBTRACT_SCAN_ACTIVE = "subtractScanActive.gif";
 	String IMAGE_COMBINED_SCAN_DEFAULT = "combinedScanDefault.gif";
