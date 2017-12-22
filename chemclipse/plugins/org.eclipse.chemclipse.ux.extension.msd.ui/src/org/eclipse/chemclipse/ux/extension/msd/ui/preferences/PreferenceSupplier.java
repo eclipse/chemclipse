@@ -38,6 +38,9 @@ public class PreferenceSupplier {
 	//
 	public static final String P_USE_PROFILE_MASS_SPECTRUM_VIEW = "useProfileMassSpectrumView";
 	public static final boolean DEF_USE_PROFILE_MASS_SPECTRUM_VIEW = false;
+	//
+	public static final String P_PATH_OPEN_CHROMATOGRAMS = "pathOpenChromatograms";
+	public static final String DEF_PATH_OPEN_CHROMATOGRAMS = "";
 
 	/*
 	 * Use only static methods.
@@ -137,5 +140,17 @@ public class PreferenceSupplier {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		return store.getBoolean(P_USE_PROFILE_MASS_SPECTRUM_VIEW);
+	}
+
+	public static String getPathOpenChromatograms() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getString(P_PATH_OPEN_CHROMATOGRAMS);
+	}
+
+	public static void setPathOpenChromatograms(String value) {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.setValue(P_PATH_OPEN_CHROMATOGRAMS, value);
 	}
 }

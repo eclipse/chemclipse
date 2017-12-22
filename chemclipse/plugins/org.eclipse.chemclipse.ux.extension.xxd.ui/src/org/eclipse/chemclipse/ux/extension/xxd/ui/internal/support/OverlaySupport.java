@@ -254,6 +254,30 @@ public class OverlaySupport {
 		lineStyleDefault = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_OVERLAY_DEFAULT));
 	}
 
+	public double getSettingsMinutesShiftX() {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		return preferenceStore.getDouble(PreferenceConstants.P_MINUTES_SHIFT_X);
+	}
+
+	public void setSettingsMinutesShiftX(double value) {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		preferenceStore.setValue(PreferenceConstants.P_MINUTES_SHIFT_X, value);
+	}
+
+	public double getSettingsAbsoluteShiftY() {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		return preferenceStore.getDouble(PreferenceConstants.P_ABSOLUTE_SHIFT_Y);
+	}
+
+	public void setSettingsAbsoluteShiftY(double value) {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		preferenceStore.setValue(PreferenceConstants.P_ABSOLUTE_SHIFT_Y, value);
+	}
+
 	private int getNumberOfDerivatives(String derivativeType) {
 
 		int derivatives;

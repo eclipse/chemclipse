@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2017 Lablicate GmbH.
+ * Copyright (c) 2017 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,26 +12,28 @@
 package org.eclipse.chemclipse.ux.extension.csd.ui.preferences;
 
 import org.eclipse.chemclipse.ux.extension.csd.ui.Activator;
-import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-/**
- * Class used to initialize default preference values.
- */
-public class PreferenceInitializer extends AbstractPreferenceInitializer {
+public class PreferenceSupplier {
+
+	public static final String P_PATH_OPEN_CHROMATOGRAMS = "pathOpenChromatograms";
+	public static final String DEF_PATH_OPEN_CHROMATOGRAMS = "";
 
 	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#
-	 * initializeDefaultPreferences()
+	 * Use only static methods.
 	 */
-	public void initializeDefaultPreferences() {
+	private PreferenceSupplier() {
+	}
+
+	public static String getPathOpenChromatograms() {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		//
-		store.setDefault(PreferenceConstants.P_OVERLAY_X_OFFSET, 0);
-		store.setDefault(PreferenceConstants.P_OVERLAY_Y_OFFSET, 0);
-		//
-		store.setDefault(PreferenceSupplier.P_PATH_OPEN_CHROMATOGRAMS, PreferenceSupplier.DEF_PATH_OPEN_CHROMATOGRAMS);
+		return store.getString(P_PATH_OPEN_CHROMATOGRAMS);
+	}
+
+	public static void setPathOpenChromatograms(String value) {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.setValue(P_PATH_OPEN_CHROMATOGRAMS, value);
 	}
 }

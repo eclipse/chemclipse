@@ -23,6 +23,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
@@ -368,10 +369,11 @@ public class ChromatogramOverlayPart extends AbstractEditorUpdateSupport {
 			public void widgetSelected(SelectionEvent e) {
 
 				BaseChart baseChart = chromatogramChart.getBaseChart();
-				double shiftX = getShift(IExtendedChart.X_AXIS) * -1.0d;
+				double shiftX = getShiftValuePrimary(IExtendedChart.X_AXIS) * -1.0d;
 				String selectedSeriesId = comboSelectedSeries.getText().trim();
 				baseChart.shiftSeries(selectedSeriesId, shiftX, 0.0d);
 				baseChart.redraw();
+				persistShiftXSelection();
 			}
 		});
 	}
@@ -388,12 +390,19 @@ public class ChromatogramOverlayPart extends AbstractEditorUpdateSupport {
 			public void widgetSelected(SelectionEvent e) {
 
 				BaseChart baseChart = chromatogramChart.getBaseChart();
-				double shiftX = getShift(IExtendedChart.X_AXIS);
+				double shiftX = getShiftValuePrimary(IExtendedChart.X_AXIS);
 				String selectedSeriesId = comboSelectedSeries.getText().trim();
 				baseChart.shiftSeries(selectedSeriesId, shiftX, 0.0d);
 				baseChart.redraw();
+				persistShiftXSelection();
 			}
 		});
+	}
+
+	private void persistShiftXSelection() {
+
+		double minutesShiftX = getShiftValuePrimary(IExtendedChart.X_AXIS) / AbstractChromatogram.MINUTE_CORRELATION_FACTOR;
+		overlaySupport.setSettingsMinutesShiftX(minutesShiftX);
 	}
 
 	private void createTextShiftY(Composite parent) {
@@ -425,10 +434,11 @@ public class ChromatogramOverlayPart extends AbstractEditorUpdateSupport {
 			public void widgetSelected(SelectionEvent e) {
 
 				BaseChart baseChart = chromatogramChart.getBaseChart();
-				double shiftY = getShift(IExtendedChart.Y_AXIS);
+				double shiftY = getShiftValuePrimary(IExtendedChart.Y_AXIS);
 				String selectedSeriesId = comboSelectedSeries.getText().trim();
 				baseChart.shiftSeries(selectedSeriesId, 0.0d, shiftY);
 				baseChart.redraw();
+				persistShiftYSelection();
 			}
 		});
 	}
@@ -445,12 +455,19 @@ public class ChromatogramOverlayPart extends AbstractEditorUpdateSupport {
 			public void widgetSelected(SelectionEvent e) {
 
 				BaseChart baseChart = chromatogramChart.getBaseChart();
-				double shiftY = getShift(IExtendedChart.Y_AXIS) * -1.0d;
+				double shiftY = getShiftValuePrimary(IExtendedChart.Y_AXIS) * -1.0d;
 				String selectedSeriesId = comboSelectedSeries.getText().trim();
 				baseChart.shiftSeries(selectedSeriesId, 0.0d, shiftY);
 				baseChart.redraw();
+				persistShiftYSelection();
 			}
 		});
+	}
+
+	private void persistShiftYSelection() {
+
+		double absoluteShiftY = getShiftValuePrimary(IExtendedChart.Y_AXIS);
+		overlaySupport.setSettingsAbsoluteShiftY(absoluteShiftY);
 	}
 
 	private void createButtonPseudo3D(Composite parent) {
@@ -475,8 +492,8 @@ public class ChromatogramOverlayPart extends AbstractEditorUpdateSupport {
 				baseChart.suspendUpdate(true);
 				double shiftX = 0.0d;
 				double shiftY = 0.0d;
-				double deltaX = getShift(IExtendedChart.X_AXIS);
-				double deltaY = getShift(IExtendedChart.Y_AXIS);
+				double deltaX = getShiftValuePrimary(IExtendedChart.X_AXIS);
+				double deltaY = getShiftValuePrimary(IExtendedChart.Y_AXIS);
 				for(ISeries series : baseChart.getSeriesSet().getSeries()) {
 					shiftX += deltaX;
 					shiftY += deltaY;
@@ -816,13 +833,20 @@ public class ChromatogramOverlayPart extends AbstractEditorUpdateSupport {
 		String[] axisLabelsX = baseChart.getAxisLabels(IExtendedChart.X_AXIS);
 		comboScaleX.setItems(axisLabelsX);
 		if(axisLabelsX.length > 0) {
+			/*
+			 * Get the shift value from the settings.
+			 */
+			double minutesShiftX = overlaySupport.getSettingsMinutesShiftX();
 			int selectedIndex = 1; // "Minutes"
+			//
 			if(selectedIndex >= 0 && selectedIndex < axisLabelsX.length) {
+				DecimalFormat decimalFormat = baseChart.getDecimalFormat(IExtendedChart.X_AXIS, selectedIndex);
 				comboScaleX.select(selectedIndex);
-				textShiftX.setText("0.5");
+				textShiftX.setText(decimalFormat.format(minutesShiftX));
 			} else {
+				int millisecondsShiftX = (int)(minutesShiftX * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 				comboScaleX.select(0); // Milliseconds
-				textShiftX.setText("10000");
+				textShiftX.setText(Integer.toString(millisecondsShiftX));
 			}
 		}
 		/*
@@ -831,18 +855,21 @@ public class ChromatogramOverlayPart extends AbstractEditorUpdateSupport {
 		String[] axisLabelsY = baseChart.getAxisLabels(IExtendedChart.Y_AXIS);
 		comboScaleY.setItems(axisLabelsY);
 		if(axisLabelsY.length > 0) {
-			int selectedIndex = 1; // "Relative Intensity [%]"
+			/*
+			 * Get the shift value from the settings.
+			 */
+			double absoluteShiftY = overlaySupport.getSettingsAbsoluteShiftY();
+			int selectedIndex = 0; // Absolute Intensity
+			DecimalFormat decimalFormat = baseChart.getDecimalFormat(IExtendedChart.X_AXIS, selectedIndex);
+			//
 			if(selectedIndex >= 0 && selectedIndex < axisLabelsY.length) {
-				comboScaleY.select(selectedIndex);
-				textShiftY.setText("1.2");
-			} else {
 				comboScaleY.select(0); // Intensity
-				textShiftY.setText("100000");
+				textShiftY.setText(decimalFormat.format(absoluteShiftY));
 			}
 		}
 	}
 
-	private double getShift(String axis) {
+	private double getShiftValuePrimary(String axis) {
 
 		double shiftValue = 0.0d;
 		try {
@@ -851,8 +878,10 @@ public class ChromatogramOverlayPart extends AbstractEditorUpdateSupport {
 			 */
 			BaseChart baseChart = chromatogramChart.getBaseChart();
 			DecimalFormat decimalFormat;
+			/*
+			 * Get the selected axis.
+			 */
 			int selectedAxis;
-			//
 			if(axis.equals(IExtendedChart.X_AXIS)) {
 				selectedAxis = comboScaleX.getSelectionIndex();
 				decimalFormat = baseChart.getDecimalFormat(IExtendedChart.X_AXIS, selectedAxis);
@@ -860,21 +889,23 @@ public class ChromatogramOverlayPart extends AbstractEditorUpdateSupport {
 				selectedAxis = comboScaleY.getSelectionIndex();
 				decimalFormat = baseChart.getDecimalFormat(IExtendedChart.Y_AXIS, selectedAxis);
 			}
-			//
-			double secondaryValue;
+			/*
+			 * Get the value.
+			 */
+			double value;
 			if(axis.equals(IExtendedChart.X_AXIS)) {
-				secondaryValue = decimalFormat.parse(textShiftX.getText().trim()).doubleValue();
+				value = decimalFormat.parse(textShiftX.getText().trim()).doubleValue();
 			} else {
-				secondaryValue = decimalFormat.parse(textShiftY.getText().trim()).doubleValue();
+				value = decimalFormat.parse(textShiftY.getText().trim()).doubleValue();
 			}
 			/*
 			 * Convert the range on demand.
 			 */
 			if(selectedAxis == 0) {
-				shiftValue = secondaryValue;
+				shiftValue = value;
 			} else {
 				IAxisScaleConverter axisScaleConverter = baseChart.getAxisScaleConverter(axis, selectedAxis);
-				shiftValue = axisScaleConverter.convertToPrimaryUnit(secondaryValue);
+				shiftValue = axisScaleConverter.convertToPrimaryUnit(value);
 			}
 		} catch(ParseException e) {
 			System.out.println(e);

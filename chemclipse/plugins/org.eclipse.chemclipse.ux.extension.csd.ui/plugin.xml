@@ -14,7 +14,7 @@
             category="org.eclipse.chemclipse.rcp.app.ui.preferences.overlayPreferencePage"
             class="org.eclipse.chemclipse.ux.extension.csd.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.ux.extension.csd.ui.preferencePage"
-            name="CSD Overlay">
+            name="Current Selective Detector (CSD)">
       </page>
    </extension>
    <extension

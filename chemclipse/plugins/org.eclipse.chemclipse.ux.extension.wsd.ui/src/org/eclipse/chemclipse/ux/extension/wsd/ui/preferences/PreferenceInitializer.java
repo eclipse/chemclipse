@@ -11,10 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.wsd.ui.preferences;
 
+import org.eclipse.chemclipse.ux.extension.wsd.ui.Activator;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
-
-import org.eclipse.chemclipse.ux.extension.wsd.ui.Activator;
 
 /**
  * Class used to initialize default preference values.
@@ -32,5 +31,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		//
 		store.setDefault(PreferenceConstants.P_OVERLAY_X_OFFSET, 0);
 		store.setDefault(PreferenceConstants.P_OVERLAY_Y_OFFSET, 0);
+		//
+		store.setDefault(PreferenceSupplier.P_PATH_OPEN_CHROMATOGRAMS, PreferenceSupplier.DEF_PATH_OPEN_CHROMATOGRAMS);
 	}
 }

@@ -247,7 +247,7 @@
     <elements xsi:type="commands:Command" xmi:id="_c1jrADiBEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.command.deleteAllIdentifications" commandName="Delete All Identifications"/>
     <elements xsi:type="commands:Command" xmi:id="_P7-xUJeIEeKXHuHB-GLIaw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.command.deleteAllQuantitations" commandName="Delete All Quantitations"/>
     <elements xsi:type="commands:Command" xmi:id="_Z3kQsJeIEeKXHuHB-GLIaw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.command.deleteNonQuantifiedPeaks" commandName="Delete NonQuantified Peaks"/>
-    <elements xsi:type="commands:Command" xmi:id="_JewTwL7bEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.command.openChromatogram" commandName="Open Chromatogram (MSD)"/>
+    <elements xsi:type="commands:Command" xmi:id="_JewTwL7bEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.command.openChromatogram" commandName="Open Chromatogram(s) [MSD]"/>
     <elements xsi:type="commands:Command" xmi:id="_R-Nt0D6iEeaZw7wlcv9jBg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.command.resetDatabaseCacheMSD" commandName="Reset Database Cache (MSD)"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Cvu30DhkEeKHL-DfrT7KNQ" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">

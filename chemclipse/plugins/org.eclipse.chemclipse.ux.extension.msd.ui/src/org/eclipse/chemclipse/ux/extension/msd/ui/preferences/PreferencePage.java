@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.preferences;
 
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
@@ -39,6 +41,9 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		integerFieldEditor.setValidRange(PreferenceSupplier.DEF_MAGNIFICATION_FACTOR_MIN, PreferenceSupplier.DEF_MAGNIFICATION_FACTOR_MAX);
 		addField(integerFieldEditor);
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_PROFILE_MASS_SPECTRUM_VIEW, "Use profile mass spectrum view.", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_PATH_OPEN_CHROMATOGRAMS, "Path Chromatogram(s)", getFieldEditorParent()));
 	}
 
 	/*

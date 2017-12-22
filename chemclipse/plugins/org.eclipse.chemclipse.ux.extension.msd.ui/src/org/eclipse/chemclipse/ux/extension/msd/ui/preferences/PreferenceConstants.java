@@ -16,6 +16,9 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.preferences;
  */
 public class PreferenceConstants {
 
+	/*
+	 * TODO REMOVE
+	 */
 	public static final String P_OVERLAY_X_OFFSET = "overlayXOffset";
 	public static final String P_OVERLAY_Y_OFFSET = "overlayYOffset";
 	//

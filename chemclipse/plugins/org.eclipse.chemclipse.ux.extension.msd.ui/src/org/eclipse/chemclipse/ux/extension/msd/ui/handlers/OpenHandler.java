@@ -18,6 +18,7 @@ import javax.inject.Named;
 
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
+import org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport;
 import org.eclipse.chemclipse.ux.extension.msd.ui.wizards.ChromatogramInputEntriesWizard;
 import org.eclipse.e4.core.di.annotations.Execute;
@@ -30,8 +31,9 @@ public class OpenHandler {
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
 
+		String expandToDirectoryPath = PreferenceSupplier.getPathOpenChromatograms();
 		IChromatogramWizardElements chromatogramWizardElements = new ChromatogramWizardElements();
-		ChromatogramInputEntriesWizard inputWizard = new ChromatogramInputEntriesWizard(chromatogramWizardElements);
+		ChromatogramInputEntriesWizard inputWizard = new ChromatogramInputEntriesWizard(chromatogramWizardElements, "Open Chromatogram(s) [MSD]", "You can select one or more chromatograms to be opened.", expandToDirectoryPath);
 		WizardDialog wizardDialog = new WizardDialog(shell, inputWizard);
 		wizardDialog.create();
 		/*
@@ -46,6 +48,9 @@ public class OpenHandler {
 				/*
 				 * If it contains at least 1 element, add it to the input files list.
 				 */
+				String parentDirectory = new File(selectedChromatograms.get(0)).getParentFile().getAbsolutePath();
+				PreferenceSupplier.setPathOpenChromatograms(parentDirectory);
+				//
 				for(String chromatogram : selectedChromatograms) {
 					File file = new File(chromatogram);
 					ChromatogramSupport.getInstanceEditorSupport().openEditor(file);

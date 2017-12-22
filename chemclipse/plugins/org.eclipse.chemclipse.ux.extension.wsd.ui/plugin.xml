@@ -14,7 +14,7 @@
             category="org.eclipse.chemclipse.rcp.app.ui.preferences.overlayPreferencePage"
             class="org.eclipse.chemclipse.ux.extension.wsd.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.ux.extension.wsd.ui.preferencePage"
-            name="WSD Overlay">
+            name="Wavelength Selective Detector (MSD)">
       </page>
    </extension>
    <extension

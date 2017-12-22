@@ -24,17 +24,14 @@ public class ChromatogramInputEntriesWizard extends Wizard {
 	private String expandToDirectoryPath;
 
 	public ChromatogramInputEntriesWizard(IChromatogramWizardElements chromatogramWizardElements) {
-		//
 		this(chromatogramWizardElements, "", "");
 	}
 
 	public ChromatogramInputEntriesWizard(IChromatogramWizardElements chromatogramWizardElements, String title, String description) {
-		//
 		this(chromatogramWizardElements, title, description, "");
 	}
 
 	public ChromatogramInputEntriesWizard(IChromatogramWizardElements chromatogramWizardElements, String title, String description, String expandToDirectoryPath) {
-		//
 		super();
 		setNeedsProgressMonitor(true);
 		this.chromatogramWizardElements = chromatogramWizardElements;

@@ -64,6 +64,11 @@ public class PreferenceConstants {
 	public static final String DEF_LINE_STYLE_OVERLAY_TSC = LineStyle.SOLID.toString();
 	public static final String P_LINE_STYLE_OVERLAY_DEFAULT = "lineStyleOverlayDefault";
 	public static final String DEF_LINE_STYLE_OVERLAY_DEFAULT = LineStyle.SOLID.toString();
+	//
+	public static final String P_MINUTES_SHIFT_X = "minutesShiftX";
+	public static final double DEF_MINUTES_SHIFT_X = 0.5d;
+	public static final String P_ABSOLUTE_SHIFT_Y = "absoluteShiftY";
+	public static final double DEF_ABSOLUTE_SHIFT_Y = 100000.0d;
 	/*
 	 * Scans
 	 */

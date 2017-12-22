@@ -42,6 +42,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_OVERLAY_SIC, PreferenceConstants.DEF_LINE_STYLE_OVERLAY_SIC);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_OVERLAY_TSC, PreferenceConstants.DEF_LINE_STYLE_OVERLAY_TSC);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_OVERLAY_DEFAULT, PreferenceConstants.DEF_LINE_STYLE_OVERLAY_DEFAULT);
+		store.setDefault(PreferenceConstants.P_MINUTES_SHIFT_X, PreferenceConstants.DEF_MINUTES_SHIFT_X);
+		store.setDefault(PreferenceConstants.P_ABSOLUTE_SHIFT_Y, PreferenceConstants.DEF_ABSOLUTE_SHIFT_Y);
 		/*
 		 * Scans
 		 */

@@ -47,7 +47,7 @@
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Q6gHwE3iEeOtxrESNeijsQ" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
-    <elements xsi:type="commands:Command" xmi:id="_ceHfcE3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.command.openChromatogram" commandName="Open Chromatogram (WSD)"/>
+    <elements xsi:type="commands:Command" xmi:id="_ceHfcE3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.command.openChromatogram" commandName="Open Chromatogram(s) [WSD]"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_RMz_wE3iEeOtxrESNeijsQ" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Handler" xmi:id="_hiSj8E3jEeOtxrESNeijsQ" elementId="org.eclipse.chemclipse.ux.extension.wsd.ui.handler.openChromatogram" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.wsd.ui/org.eclipse.chemclipse.ux.extension.wsd.ui.handlers.OpenHandler" command="_ceHfcE3jEeOtxrESNeijsQ"/>
