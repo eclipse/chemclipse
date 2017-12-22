@@ -17,7 +17,10 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.support.FilterSupport;
@@ -25,6 +28,7 @@ import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ScanChartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
@@ -83,16 +87,56 @@ public class ExtendedComparisonScanUI {
 			scanMSD = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, true);
 		}
 		//
-		labelInfoReference.setText("Reference MS");
-		labelInfoComparison.setText("Comparison MS");
-		//
 		this.scanMSD = scanMSD;
+		labelInfoReference.setText(getMassSpectrumLabel(scanMSD, "UNKNOWN MS = "));
+		labelInfoComparison.setText(getMassSpectrumLabel(scanMSD, "LIBRARY MS = "));
+		//
 		updateScan();
 	}
 
 	private void updateScan() {
 
-		scanChartUI.setInput(scanMSD);
+		IScanMSD referenceMassSpectrum = scanMSD;
+		IScanMSD comparisonMassSpectrum = scanMSD; // TODO
+		//
+		if(referenceMassSpectrum != null && comparisonMassSpectrum != null) {
+			try {
+				IScanMSD referenceMassSpectrumCopy = referenceMassSpectrum.makeDeepCopy().normalize(1000.0f);
+				IScanMSD comparisonMassSpectrumCopy = comparisonMassSpectrum.makeDeepCopy().normalize(1000.0f);
+				scanChartUI.setInput(scanMSD);
+			} catch(CloneNotSupportedException e) {
+				logger.warn(e);
+			}
+		} else {
+			scanChartUI.setInput(scanMSD);
+		}
+	}
+
+	private String getMassSpectrumLabel(IScanMSD massSpectrum, String title) {
+
+		StringBuilder builder = new StringBuilder();
+		builder.append(title);
+		if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
+			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
+			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
+			builder.append("NAME: ");
+			builder.append(libraryInformation.getName());
+			builder.append(" | ");
+			builder.append("CAS: ");
+			builder.append(libraryInformation.getCasNumber());
+			builder.append(" | ");
+		}
+		builder.append("RT: ");
+		builder.append(decimalFormat.format(massSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
+		builder.append(" | ");
+		builder.append("RI: ");
+		if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+			builder.append(Integer.toString((int)massSpectrum.getRetentionIndex()));
+		} else {
+			builder.append(decimalFormat.format(massSpectrum.getRetentionIndex()));
+		}
+		//
+		return builder.toString();
 	}
 
 	private void initialize(Composite parent) {

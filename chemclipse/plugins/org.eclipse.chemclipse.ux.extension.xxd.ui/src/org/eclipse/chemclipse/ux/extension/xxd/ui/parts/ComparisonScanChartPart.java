@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.IDataUpdateSupport;
@@ -23,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class ComparisonScanChartPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
+	private static final Logger logger = Logger.getLogger(ComparisonScanChartPart.class);
 	private ExtendedComparisonScanUI extendedComparisonScanUI;
 
 	@Inject
@@ -40,18 +42,30 @@ public class ComparisonScanChartPart extends AbstractDataUpdateSupport implement
 	@Override
 	public void registerEvents() {
 
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
-		registerEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
-		registerEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
-		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
-		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
+		// TODO Multiple Topics
+		// IScanMSD unknownMassSpectrum = (IScanMSD)event.getProperty(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN);
+		// IIdentificationTarget identificationTarget = (IIdentificationTarget)event.getProperty(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY);
+		registerEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN);
 	}
 
 	@Override
 	public void updateObject(Object object, String topic) {
 
+		// get the library comparison entry
 		extendedComparisonScanUI.update(object);
 	}
+	// private void update(IScanMSD unknownMassSpectrum, IIdentificationTarget identificationTarget) {
+	//
+	// if(doUpdate()) {
+	// IRunnableWithProgress runnable = new LibraryServiceRunnable(this, unknownMassSpectrum, identificationTarget);
+	// ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+	// try {
+	// monitor.run(true, true, runnable);
+	// } catch(InvocationTargetException e) {
+	// logger.warn(e);
+	// } catch(InterruptedException e) {
+	// logger.warn(e);
+	// }
+	// }
+	// }
 }
