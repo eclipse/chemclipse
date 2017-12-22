@@ -29,7 +29,6 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ScanChartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -84,6 +83,7 @@ public class ExtendedCombinedScanUI {
 			boolean useNormalize = true;
 			scanMSD = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize);
 		}
+		//
 		labelInfo.setText(getCombinedRangeInfo(object));
 		this.scanMSD = scanMSD;
 		updateScan();
@@ -237,12 +237,9 @@ public class ExtendedCombinedScanUI {
 
 				IPreferencePage preferencePageScans = new PreferencePageScans();
 				preferencePageScans.setTitle("Scan Settings");
-				IPreferencePage preferencePageSubtract = new PreferencePageSubtract();
-				preferencePageSubtract.setTitle("Subtract Settings");
 				//
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageScans));
-				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSubtract));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
 				preferenceDialog.create();
