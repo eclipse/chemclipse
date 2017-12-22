@@ -50,17 +50,19 @@ public class MassSpectrumFileSupport {
 	private MassSpectrumFileSupport() {
 	}
 
+	public static void saveMassSpectrum(IScanMSD massSpectrum) throws NoConverterAvailableException {
+
+		saveMassSpectrum(massSpectrum, "Mass Spectrum");
+	}
+
 	/**
 	 * Opens a file dialog and tries to save the mass spectrum
 	 * 
 	 * @param chromatogram
 	 * @throws NoConverterAvailableException
 	 */
-	public static void saveMassSpectrum(IScanMSD massSpectrum) throws NoConverterAvailableException {
+	public static void saveMassSpectrum(IScanMSD massSpectrum, String fileName) throws NoConverterAvailableException {
 
-		/*
-		 * If the chromatogram is null, exit.
-		 */
 		if(massSpectrum == null) {
 			return;
 		}
@@ -70,12 +72,12 @@ public class MassSpectrumFileSupport {
 		 * Create the dialogue.
 		 */
 		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
-		dialog.setFileName("Mass Spectrum");
+		dialog.setFileName(fileName);
 		dialog.setText("Save Mass Spectrum As");
 		dialog.setOverwrite(true);
 		MassSpectrumConverterSupport converterSupport = MassSpectrumConverter.getMassSpectrumConverterSupport();
 		/*
-		 * Set the filters that allow an export of chromatographic data.
+		 * Set the filters that allow an export of the data.
 		 */
 		String[] filterExtensions = converterSupport.getExportableFilterExtensions();
 		dialog.setFilterExtensions(filterExtensions);

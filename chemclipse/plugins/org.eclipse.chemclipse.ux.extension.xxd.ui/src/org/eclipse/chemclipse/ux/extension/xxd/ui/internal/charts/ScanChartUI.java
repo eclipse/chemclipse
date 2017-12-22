@@ -183,9 +183,7 @@ public class ScanChartUI extends ScrollableChart {
 
 	public void setInput(IScan scan) {
 
-		customLabels.clear();
-		deleteSeries();
-		//
+		prepareChart();
 		if(scan != null) {
 			/*
 			 * Set the chart data.
@@ -198,11 +196,55 @@ public class ScanChartUI extends ScrollableChart {
 			determineLabelOption(usedDataType);
 			//
 			if(usedSignalType.equals(SignalType.PROFILE)) {
-				addLineSeriesData(getLineSeriesDataList(scan));
+				addLineSeriesData(getLineSeriesDataList(scan, false));
 			} else {
-				addBarSeriesData(getBarSeriesDataList(scan));
+				addBarSeriesData(getBarSeriesDataList(scan, false));
 			}
 		}
+	}
+
+	public void setInput(IScan scan1, IScan scan2, boolean mirrored) {
+
+		prepareChart();
+		if(scan1 != null) {
+			/*
+			 * Set the chart data.
+			 */
+			extractCustomLabels(scan1);
+			DataType usedDataType = determineDataType(scan1);
+			SignalType usedSignalType = determineSignalType(scan1);
+			//
+			modifyChart(usedDataType);
+			determineLabelOption(usedDataType);
+			modifyChart(mirrored);
+			//
+			if(usedSignalType.equals(SignalType.PROFILE)) {
+				List<ILineSeriesData> lineSeriesDataList = getLineSeriesDataList(scan1, false);
+				lineSeriesDataList.add(getLineSeriesData(scan2, (mirrored) ? true : false));
+				addLineSeriesData(lineSeriesDataList);
+			} else {
+				List<IBarSeriesData> barSeriesDataList = getBarSeriesDataList(scan1, false);
+				barSeriesDataList.add(getBarSeriesData(scan2, (mirrored) ? true : false));
+				addBarSeriesData(barSeriesDataList);
+			}
+		}
+	}
+
+	private void prepareChart() {
+
+		customLabels.clear();
+		deleteSeries();
+	}
+
+	private void modifyChart(boolean mirrored) {
+
+		IChartSettings chartSettings = getChartSettings();
+		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
+		rangeRestriction.setZeroY((mirrored) ? false : true);
+		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
+		rangeRestriction.setExtendMinY((mirrored) ? -0.25d : 0.0d);
+		rangeRestriction.setExtendMaxY(0.25d);
+		applySettings(chartSettings);
 	}
 
 	@Override
@@ -353,7 +395,6 @@ public class ScanChartUI extends ScrollableChart {
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
 		chartSettings.getRangeRestriction().setForceZeroMinY(false);
 		rangeRestriction.setRestrictZoom(true);
-		rangeRestriction.setRestrictZoom(true);
 		rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.ABSOLUTE);
 		rangeRestriction.setExtendMinX(2.0d);
 		rangeRestriction.setExtendMaxX(2.0d);
@@ -393,25 +434,35 @@ public class ScanChartUI extends ScrollableChart {
 		addSeriesLabelMarker(labelPaintListener);
 	}
 
-	private List<IBarSeriesData> getBarSeriesDataList(IScan scan) {
+	private List<IBarSeriesData> getBarSeriesDataList(IScan scan, boolean mirrored) {
 
 		List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
-		ISeriesData seriesData = getSeriesData(scan);
-		IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
-		barSeriesDataList.add(barSeriesData);
+		barSeriesDataList.add(getBarSeriesData(scan, mirrored));
 		return barSeriesDataList;
 	}
 
-	private List<ILineSeriesData> getLineSeriesDataList(IScan scan) {
+	private IBarSeriesData getBarSeriesData(IScan scan, boolean mirrored) {
+
+		ISeriesData seriesData = getSeriesData(scan, mirrored);
+		IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
+		return barSeriesData;
+	}
+
+	private List<ILineSeriesData> getLineSeriesDataList(IScan scan, boolean mirrored) {
 
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-		ISeriesData seriesData = getSeriesData(scan);
-		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-		lineSeriesDataList.add(lineSeriesData);
+		lineSeriesDataList.add(getLineSeriesData(scan, mirrored));
 		return lineSeriesDataList;
 	}
 
-	private ISeriesData getSeriesData(IScan scan) {
+	private ILineSeriesData getLineSeriesData(IScan scan, boolean mirrored) {
+
+		ISeriesData seriesData = getSeriesData(scan, mirrored);
+		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
+		return lineSeriesData;
+	}
+
+	private ISeriesData getSeriesData(IScan scan, boolean mirrored) {
 
 		double[] xSeries;
 		double[] ySeries;
@@ -427,13 +478,13 @@ public class ScanChartUI extends ScrollableChart {
 			int index = 0;
 			for(IIon ion : ions) {
 				xSeries[index] = ion.getIon();
-				ySeries[index] = ion.getAbundance();
+				ySeries[index] = (mirrored) ? ion.getAbundance() * -1 : ion.getAbundance();
 				index++;
 			}
 		} else if(scan instanceof IScanCSD) {
 			IScanCSD scanCSD = (IScanCSD)scan;
 			xSeries = new double[]{scanCSD.getRetentionTime()};
-			ySeries = new double[]{scanCSD.getTotalSignal()};
+			ySeries = new double[]{(mirrored) ? scanCSD.getTotalSignal() * -1 : scanCSD.getTotalSignal()};
 		} else if(scan instanceof IScanWSD) {
 			IScanWSD scanWSD = (IScanWSD)scan;
 			List<IScanSignalWSD> scanSignalsWSD = scanWSD.getScanSignals();
@@ -443,7 +494,7 @@ public class ScanChartUI extends ScrollableChart {
 			int index = 0;
 			for(IScanSignalWSD scanSignalWSD : scanSignalsWSD) {
 				xSeries[index] = scanSignalWSD.getWavelength();
-				ySeries[index] = scanSignalWSD.getAbundance();
+				ySeries[index] = (mirrored) ? scanSignalWSD.getAbundance() * -1 : scanSignalWSD.getAbundance();
 				index++;
 			}
 		} else {

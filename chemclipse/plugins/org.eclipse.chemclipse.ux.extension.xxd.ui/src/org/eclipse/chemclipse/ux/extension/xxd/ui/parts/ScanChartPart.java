@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -36,7 +38,7 @@ public class ScanChartPart extends AbstractDataUpdateSupport implements IDataUpd
 	@Focus
 	public void setFocus() {
 
-		updateObject(getObject(), getTopic());
+		updateObjects(getObjects(), getTopic());
 	}
 
 	@Override
@@ -51,17 +53,23 @@ public class ScanChartPart extends AbstractDataUpdateSupport implements IDataUpd
 	}
 
 	@Override
-	public void updateObject(Object object, String topic) {
+	public void updateObjects(List<Object> objects, String topic) {
 
-		IScan scan = null;
-		//
-		if(object instanceof IScan) {
-			scan = (IScan)object;
-		} else if(object instanceof IPeak) {
-			IPeak peak = (IPeak)object;
-			scan = peak.getPeakModel().getPeakMaximum();
+		/*
+		 * 0 => because only one property was used to register the event.
+		 */
+		if(objects.size() == 1) {
+			Object object = objects.get(0);
+			IScan scan = null;
+			//
+			if(object instanceof IScan) {
+				scan = (IScan)object;
+			} else if(object instanceof IPeak) {
+				IPeak peak = (IPeak)object;
+				scan = peak.getPeakModel().getPeakMaximum();
+			}
+			//
+			extendedScanChartUI.update(scan);
 		}
-		//
-		extendedScanChartUI.update(scan);
 	}
 }

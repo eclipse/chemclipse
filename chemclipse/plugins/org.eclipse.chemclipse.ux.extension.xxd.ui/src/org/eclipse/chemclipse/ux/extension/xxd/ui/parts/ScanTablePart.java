@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -34,7 +36,7 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 	@Focus
 	public void setFocus() {
 
-		updateObject(getObject(), getTopic());
+		updateObjects(getObjects(), getTopic());
 	}
 
 	@Override
@@ -49,8 +51,14 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 	}
 
 	@Override
-	public void updateObject(Object object, String topic) {
+	public void updateObjects(List<Object> objects, String topic) {
 
-		extendedScanTableUI.update(object);
+		/*
+		 * 0 => because only one property was used to register the event.
+		 */
+		if(objects.size() == 1) {
+			Object object = objects.get(0);
+			extendedScanTableUI.update(object);
+		}
 	}
 }

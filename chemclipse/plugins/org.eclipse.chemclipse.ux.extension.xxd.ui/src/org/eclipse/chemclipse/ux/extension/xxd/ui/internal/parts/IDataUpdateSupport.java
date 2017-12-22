@@ -11,13 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts;
 
+import java.util.List;
+
 public interface IDataUpdateSupport extends IUpdateSupport {
 
 	void registerEvents();
 
-	void updateObject(Object object, String topic);
+	void updateObjects(List<Object> objects, String topic);
 
-	Object getObject();
+	List<Object> getObjects();
 
 	String getTopic();
 }

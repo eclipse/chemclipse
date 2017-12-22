@@ -45,7 +45,7 @@ public class ChromatogramHeaderPart extends AbstractOverviewUpdateSupport implem
 	@Focus
 	public void setFocus() {
 
-		updateObject(getObject(), getTopic());
+		updateObjects(getObjects(), getTopic());
 	}
 
 	@Override

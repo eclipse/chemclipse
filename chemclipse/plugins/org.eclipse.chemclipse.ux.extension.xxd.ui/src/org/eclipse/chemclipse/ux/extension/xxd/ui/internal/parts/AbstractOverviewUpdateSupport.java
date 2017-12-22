@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts;
 
 import java.io.File;
+import java.util.List;
 
 import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramOverviewImportConverterProcessingInfo;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
@@ -45,8 +46,13 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 	}
 
 	@Override
-	public void updateObject(Object object, String topic) {
+	public void updateObjects(List<Object> objects, String topic) {
 
+		/*
+		 * 0 => because only one property was used to register the event.
+		 */
+		Object object = objects.get(0);
+		//
 		if(object instanceof IChromatogramOverview) {
 			IChromatogramOverview chromatogramOverview = (IChromatogramOverview)object;
 			updateChromatogramOverview(chromatogramOverview);

@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -35,7 +37,7 @@ public class TargetsPart extends AbstractDataUpdateSupport implements IDataUpdat
 	@Focus
 	public void setFocus() {
 
-		updateObject(getObject(), getTopic());
+		updateObjects(getObjects(), getTopic());
 	}
 
 	@Override
@@ -50,12 +52,18 @@ public class TargetsPart extends AbstractDataUpdateSupport implements IDataUpdat
 	}
 
 	@Override
-	public void updateObject(Object object, String topic) {
+	public void updateObjects(List<Object> objects, String topic) {
 
-		if(object instanceof IChromatogramSelection) {
-			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
-			object = chromatogramSelection.getChromatogram();
+		/*
+		 * 0 => because only one property was used to register the event.
+		 */
+		if(objects.size() == 1) {
+			Object object = objects.get(0);
+			if(object instanceof IChromatogramSelection) {
+				IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
+				object = chromatogramSelection.getChromatogram();
+			}
+			extendedTargetsUI.update(object);
 		}
-		extendedTargetsUI.update(object);
 	}
 }

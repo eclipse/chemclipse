@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 
 import javax.inject.Inject;
@@ -18,12 +19,10 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.support.FilterSupport;
 import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -31,10 +30,12 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ScanChartUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.LibraryServiceRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
@@ -54,12 +55,13 @@ public class ExtendedComparisonScanUI {
 	private static final Logger logger = Logger.getLogger(ExtendedComparisonScanUI.class);
 	//
 	private Label labelInfoReference;
-	private Composite toolbarInfoReference;
+	private Composite toolbarInfoUnknown;
 	private ScanChartUI scanChartUI;
 	private Label labelInfoComparison;
-	private Composite toolbarInfoComparison;
+	private Composite toolbarInfoReference;
 	//
-	private IScanMSD scanMSD;
+	private IScanMSD unknownMassSpectrum = null;
+	private IScanMSD referenceMassSpectrum = null;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 
@@ -74,41 +76,40 @@ public class ExtendedComparisonScanUI {
 		updateScan();
 	}
 
-	public void update(Object object) {
+	public void update(IScanMSD unknownMassSpectrum, IIdentificationTarget identificationTarget) {
 
-		IScanMSD scanMSD = null;
-		if(object instanceof IScanMSD) {
-			scanMSD = (IScanMSD)object;
-		} else if(object instanceof IPeakMSD) {
-			IPeakMSD peakMSD = (IPeakMSD)object;
-			scanMSD = peakMSD.getExtractedMassSpectrum();
-		} else if(object instanceof IChromatogramSelectionMSD) {
-			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)object;
-			scanMSD = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, true);
+		this.unknownMassSpectrum = unknownMassSpectrum;
+		referenceMassSpectrum = null;
+		//
+		LibraryServiceRunnable runnable = new LibraryServiceRunnable(identificationTarget);
+		ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+		try {
+			monitor.run(true, true, runnable);
+			referenceMassSpectrum = runnable.getLibraryMassSpectrum();
+		} catch(InvocationTargetException e) {
+			logger.warn(e);
+		} catch(InterruptedException e) {
+			logger.warn(e);
 		}
 		//
-		this.scanMSD = scanMSD;
-		labelInfoReference.setText(getMassSpectrumLabel(scanMSD, "UNKNOWN MS = "));
-		labelInfoComparison.setText(getMassSpectrumLabel(scanMSD, "LIBRARY MS = "));
+		labelInfoReference.setText(getMassSpectrumLabel(unknownMassSpectrum, "UNKNOWN MS = "));
+		labelInfoComparison.setText(getMassSpectrumLabel(referenceMassSpectrum, "REFERENCE MS = "));
 		//
 		updateScan();
 	}
 
 	private void updateScan() {
 
-		IScanMSD referenceMassSpectrum = scanMSD;
-		IScanMSD comparisonMassSpectrum = scanMSD; // TODO
-		//
-		if(referenceMassSpectrum != null && comparisonMassSpectrum != null) {
+		if(unknownMassSpectrum != null && referenceMassSpectrum != null) {
 			try {
+				IScanMSD unknownMassSpectrumCopy = unknownMassSpectrum.makeDeepCopy().normalize(1000.0f);
 				IScanMSD referenceMassSpectrumCopy = referenceMassSpectrum.makeDeepCopy().normalize(1000.0f);
-				IScanMSD comparisonMassSpectrumCopy = comparisonMassSpectrum.makeDeepCopy().normalize(1000.0f);
-				scanChartUI.setInput(scanMSD);
+				scanChartUI.setInput(unknownMassSpectrumCopy, referenceMassSpectrumCopy, true);
 			} catch(CloneNotSupportedException e) {
 				logger.warn(e);
 			}
 		} else {
-			scanChartUI.setInput(scanMSD);
+			scanChartUI.setInput(unknownMassSpectrum);
 		}
 	}
 
@@ -116,26 +117,27 @@ public class ExtendedComparisonScanUI {
 
 		StringBuilder builder = new StringBuilder();
 		builder.append(title);
-		if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
-			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
-			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
-			builder.append("NAME: ");
-			builder.append(libraryInformation.getName());
+		if(massSpectrum != null) {
+			if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
+				IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
+				ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
+				builder.append("NAME: ");
+				builder.append(libraryInformation.getName());
+				builder.append(" | ");
+				builder.append("CAS: ");
+				builder.append(libraryInformation.getCasNumber());
+				builder.append(" | ");
+			}
+			builder.append("RT: ");
+			builder.append(decimalFormat.format(massSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 			builder.append(" | ");
-			builder.append("CAS: ");
-			builder.append(libraryInformation.getCasNumber());
-			builder.append(" | ");
+			builder.append("RI: ");
+			if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+				builder.append(Integer.toString((int)massSpectrum.getRetentionIndex()));
+			} else {
+				builder.append(decimalFormat.format(massSpectrum.getRetentionIndex()));
+			}
 		}
-		builder.append("RT: ");
-		builder.append(decimalFormat.format(massSpectrum.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
-		builder.append(" | ");
-		builder.append("RI: ");
-		if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
-			builder.append(Integer.toString((int)massSpectrum.getRetentionIndex()));
-		} else {
-			builder.append(decimalFormat.format(massSpectrum.getRetentionIndex()));
-		}
-		//
 		return builder.toString();
 	}
 
@@ -144,12 +146,12 @@ public class ExtendedComparisonScanUI {
 		parent.setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(parent);
-		toolbarInfoReference = createToolbarInfoReference(parent);
+		toolbarInfoUnknown = createToolbarInfoUnknown(parent);
 		createScanChart(parent);
-		toolbarInfoComparison = createToolbarInfoComparison(parent);
+		toolbarInfoReference = createToolbarInfoReference(parent);
 		//
+		PartSupport.setCompositeVisibility(toolbarInfoUnknown, true);
 		PartSupport.setCompositeVisibility(toolbarInfoReference, true);
-		PartSupport.setCompositeVisibility(toolbarInfoComparison, true);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -165,7 +167,7 @@ public class ExtendedComparisonScanUI {
 		createSettingsButton(composite);
 	}
 
-	private Composite createToolbarInfoReference(Composite parent) {
+	private Composite createToolbarInfoUnknown(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -185,7 +187,7 @@ public class ExtendedComparisonScanUI {
 		scanChartUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
-	private Composite createToolbarInfoComparison(Composite parent) {
+	private Composite createToolbarInfoReference(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -210,8 +212,8 @@ public class ExtendedComparisonScanUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.toggleCompositeVisibility(toolbarInfoReference);
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfoComparison);
+				PartSupport.toggleCompositeVisibility(toolbarInfoUnknown);
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfoReference);
 				if(visible) {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
 				} else {
@@ -226,7 +228,7 @@ public class ExtendedComparisonScanUI {
 	private Button createSaveButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Save the combined scan.");
+		button.setToolTipText("Save both mass spectra.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -234,9 +236,8 @@ public class ExtendedComparisonScanUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				try {
-					if(scanMSD != null) {
-						MassSpectrumFileSupport.saveMassSpectrum(scanMSD);
-					}
+					MassSpectrumFileSupport.saveMassSpectrum(unknownMassSpectrum, "UnknownMS");
+					MassSpectrumFileSupport.saveMassSpectrum(referenceMassSpectrum, "ReferenceMS");
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
 				}

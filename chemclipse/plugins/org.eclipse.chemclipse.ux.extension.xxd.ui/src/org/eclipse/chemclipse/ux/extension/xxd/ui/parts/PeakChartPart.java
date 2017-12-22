@@ -62,7 +62,7 @@ public class PeakChartPart extends AbstractDataUpdateSupport implements IDataUpd
 	@Focus
 	public void setFocus() {
 
-		updateObject(getObject(), getTopic());
+		updateObjects(getObjects(), getTopic());
 	}
 
 	@Override
@@ -73,20 +73,26 @@ public class PeakChartPart extends AbstractDataUpdateSupport implements IDataUpd
 	}
 
 	@Override
-	public void updateObject(Object object, String topic) {
+	public void updateObjects(List<Object> objects, String topic) {
 
-		peakChart.deleteSeries();
-		if(object instanceof IPeak) {
-			IPeak peak = (IPeak)object;
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-			ISeriesData seriesData = getSeriesData(peak);
-			ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
-			lineSeriesSettings.setEnableArea(true);
-			ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
-			lineSeriesSettingsHighlight.setLineWidth(2);
-			lineSeriesDataList.add(lineSeriesData);
-			peakChart.addSeriesData(lineSeriesDataList);
+		/*
+		 * 0 => because only one property was used to register the event.
+		 */
+		if(objects.size() == 1) {
+			Object object = objects.get(0);
+			peakChart.deleteSeries();
+			if(object instanceof IPeak) {
+				IPeak peak = (IPeak)object;
+				List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+				ISeriesData seriesData = getSeriesData(peak);
+				ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
+				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+				lineSeriesSettings.setEnableArea(true);
+				ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
+				lineSeriesSettingsHighlight.setLineWidth(2);
+				lineSeriesDataList.add(lineSeriesData);
+				peakChart.addSeriesData(lineSeriesDataList);
+			}
 		}
 	}
 

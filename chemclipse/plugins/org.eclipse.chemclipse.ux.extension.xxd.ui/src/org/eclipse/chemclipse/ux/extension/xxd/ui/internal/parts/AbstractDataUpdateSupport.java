@@ -27,8 +27,8 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 
 	private static final Logger logger = Logger.getLogger(AbstractDataUpdateSupport.class);
 	//
-	private static Object object = null;
-	private static String topic = "";
+	private List<Object> objects = new ArrayList<Object>();
+	private String topic = "";
 	//
 	private IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 	private List<EventHandler> registeredEventHandler;
@@ -41,15 +41,20 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 
 	public void registerEvent(String topic, String property) {
 
+		registerEvent(topic, new String[]{property});
+	}
+
+	public void registerEvent(String topic, String[] properties) {
+
 		if(eventBroker != null) {
-			registeredEventHandler.add(registerEventHandler(eventBroker, topic, property));
+			registeredEventHandler.add(registerEventHandler(eventBroker, topic, properties));
 		}
 	}
 
 	@Override
-	public Object getObject() {
+	public List<Object> getObjects() {
 
-		return object;
+		return objects;
 	}
 
 	@Override
@@ -68,15 +73,19 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 		}
 	}
 
-	private EventHandler registerEventHandler(IEventBroker eventBroker, String topic, String property) {
+	private EventHandler registerEventHandler(IEventBroker eventBroker, String topic, String[] properties) {
 
 		EventHandler eventHandler = new EventHandler() {
 
 			public void handleEvent(Event event) {
 
 				try {
-					Object object = event.getProperty(property);
-					setObject(object, topic);
+					objects.clear();
+					for(String property : properties) {
+						Object object = event.getProperty(property);
+						objects.add(object);
+					}
+					update(topic);
 				} catch(Exception e) {
 					logger.warn(e);
 				}
@@ -86,18 +95,13 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 		return eventHandler;
 	}
 
-	public void setObject(Object myObject, String myTopic) {
+	private void update(String topic) {
 
-		/*
-		 * Remember the selection.
-		 */
-		object = myObject;
-		topic = myTopic;
 		/*
 		 * Do an update only if the part is visible.
 		 */
 		if(doUpdate()) {
-			updateObject(object, topic);
+			updateObjects(objects, topic);
 		}
 	}
 }
