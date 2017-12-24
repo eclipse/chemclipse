@@ -580,7 +580,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 		 */
 		section = formToolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
 		section.setText("Problem");
-		section.setDescription("There has gone something wrong to open the chromatogram.");
+		section.setDescription("Something went wrong when trying to open this wave-length selective detector (WSD) chromatogram.");
 		section.marginWidth = 5;
 		section.marginHeight = 5;
 		section.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
@@ -597,12 +597,13 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 		 * Labels
 		 */
 		createLabel(client, "The chromatogram couldn't be loaded.", IApplicationImage.IMAGE_WARN);
-		createLabel(client, "Does the selected chromatogram contains data recorded by a flame ionization detector?", IApplicationImage.IMAGE_QUESTION);
+		createLabel(client, "Does the selected chromatogram contain data recorded by an UV/VIS or DAD detector?", IApplicationImage.IMAGE_QUESTION);
 		createLabel(client, "Is the data file corrupted?", IApplicationImage.IMAGE_QUESTION);
 		createLabel(client, "Is an appropriate file format converter installed?", IApplicationImage.IMAGE_QUESTION);
 		createLink(client, "Converters can be installed using the marketplace.", "https://marketplace.openchrom.net");
-		createLabel(client, "Does the converter has a valid license? (Menu -> Window -> Preferences -> Converter)", IApplicationImage.IMAGE_QUESTION);
+		createLabel(client, "Does the converter have a valid license? (Menu -> Window -> Preferences -> Converter)", IApplicationImage.IMAGE_QUESTION);
 		createLink(client, "Create a log-in and retrieve free serial keys.", "https://marketplace.openchrom.net");
+		createLabel(client, "Please note that WSD support is in early stages of development.", IApplicationImage.IMAGE_INFO);
 		/*
 		 * Add the client to the section and paint flat borders.
 		 */
@@ -620,7 +621,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 		 * Section Problem
 		 */
 		section = formToolkit.createSection(parent, Section.DESCRIPTION | Section.TITLE_BAR);
-		section.setText("Further Questions");
+		section.setText("Support");
 		section.setDescription("The developers may have a solution for you.");
 		section.marginWidth = 5;
 		section.marginHeight = 5;
@@ -639,8 +640,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 		 */
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
-		createLabel(client, "MSD data is also supported.", IApplicationImage.IMAGE_INFO);
-		createLink(client, "Please contact the developers, if you have further questions.", "https://www.openchrom.net");
+		createLink(client, "If you have further questions, please don't hesitate to contact us directly.", "https://www.openchrom.net");
 		/*
 		 * Add the client to the section and paint flat borders.
 		 */
