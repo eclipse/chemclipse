@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
@@ -294,7 +295,15 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		}
 		part.setLabel(name);
 		//
-		boolean isProfile = PreferenceSupplier.useProfileMassSpectrumView();
+		boolean isProfile;
+		// auto detect from file type if possible
+		if(massSpectrum instanceof IRegularMassSpectrum) {
+			isProfile = ((IRegularMassSpectrum)massSpectrum).getMassSpectrumType() == 1;
+		}
+		else // backfall to preference
+		{
+			isProfile = PreferenceSupplier.useProfileMassSpectrumView();
+		}
 		AbstractExtendedMassSpectrumUI massSpectrumUI;
 		if(isProfile) {
 			massSpectrumUI = new SimpleContinuousMassSpectrumUI(tabFolder, SWT.NONE, MassValueDisplayPrecision.EXACT);
