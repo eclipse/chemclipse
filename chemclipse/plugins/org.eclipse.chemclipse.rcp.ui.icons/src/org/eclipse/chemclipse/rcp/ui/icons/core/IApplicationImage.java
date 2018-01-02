@@ -110,6 +110,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_MASS_SPECTRUM_FILE_EXPLORER = "massSpectrumFileExplorer.gif";
 	String IMAGE_MASS_SPECTRUM_LIBRARY = "massSpectrumLibrary.gif";
 	String IMAGE_MIRRORED_MASS_SPECTRUM = "mirroredMassSpectrum.gif";
+	String IMAGE_SHIFTED_MASS_SPECTRUM = "shiftedMassSpectrum.gif";
 	String IMAGE_IMPORT = "import.png";
 	String IMAGE_EXPORT = "export.png";
 	String IMAGE_GROOVY_EXECUTE = "groovy_execute.gif";

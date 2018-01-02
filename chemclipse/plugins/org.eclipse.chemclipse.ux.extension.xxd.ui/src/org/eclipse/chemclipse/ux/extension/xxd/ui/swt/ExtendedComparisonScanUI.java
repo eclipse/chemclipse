@@ -65,9 +65,20 @@ public class ExtendedComparisonScanUI {
 	private static final Logger logger = Logger.getLogger(ExtendedComparisonScanUI.class);
 	//
 	private static final float NORMALIZATION_FACTOR = 1000.0f;
+	//
 	private static final String OPTION_UPDATE_SCAN_1 = "UPDATE_SCAN_1";
 	private static final String OPTION_UPDATE_SCAN_2 = "UPDATE_SCAN_2";
 	private static final String OPTION_LIBRARY_SEARCH = "LIBRARY_SEARCH";
+	//
+	private static final String PREFIX_U = "[U]";
+	private static final String PREFIX_R = "[R]";
+	private static final String PREFIX_UR = "[U-R]";
+	private static final String LABEL_UR_NORMAL = "[U,R]";
+	private static final String LABEL_UR_DIFFERENCE = PREFIX_UR;
+	private static final String TITLE_UNKNOWN = "UNKNOWN MS";
+	private static final String TITLE_REFERENCE = "REFERENCE MS";
+	private static final String POSTFIX_NONE = "";
+	private static final String POSTFIX_SHIFTED = " SHIFTED (+1)";
 	//
 	private Label labelInfoReference;
 	private Composite toolbarInfoUnknown;
@@ -80,11 +91,12 @@ public class ExtendedComparisonScanUI {
 	private IScanMSD scan2 = null;
 	//
 	private String displayOption = OPTION_LIBRARY_SEARCH;
-	private boolean displayDifference = true;
+	private boolean displayDifference = false;
 	private boolean displayMirrored = true;
 	private boolean displayShifted = false;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
+	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Inject
 	public ExtendedComparisonScanUI(Composite parent) {
@@ -100,15 +112,21 @@ public class ExtendedComparisonScanUI {
 	public void update(IScanMSD scanMSD) {
 
 		if(displayOption.equals(OPTION_UPDATE_SCAN_1)) {
-			scan1 = scanMSD;
+			try {
+				scan1 = scanMSD.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
+				updateChart();
+			} catch(CloneNotSupportedException e) {
+				logger.warn(e);
+			}
+			updateChart();
 		} else if(displayOption.equals(OPTION_UPDATE_SCAN_2)) {
-			scan2 = scanMSD;
-		} else {
-			scan1 = null;
-			scan2 = null;
+			try {
+				scan2 = scanMSD.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
+				updateChart();
+			} catch(CloneNotSupportedException e) {
+				logger.warn(e);
+			}
 		}
-		//
-		updateChart();
 	}
 
 	public void update(IScanMSD unknownMassSpectrum, IIdentificationTarget identificationTarget) {
@@ -119,7 +137,7 @@ public class ExtendedComparisonScanUI {
 			scan2 = null;
 			//
 			LibraryServiceRunnable runnable = new LibraryServiceRunnable(identificationTarget);
-			ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+			ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
 			try {
 				monitor.run(true, true, runnable);
 				scan1 = unknownMassSpectrum.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
@@ -127,6 +145,7 @@ public class ExtendedComparisonScanUI {
 				if(referenceMassSpectrum != null) {
 					scan2 = referenceMassSpectrum.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
 				}
+				updateChart();
 			} catch(InvocationTargetException e) {
 				logger.warn(e);
 			} catch(InterruptedException e) {
@@ -134,8 +153,6 @@ public class ExtendedComparisonScanUI {
 			} catch(CloneNotSupportedException e) {
 				logger.warn(e);
 			}
-			//
-			updateChart();
 		}
 	}
 
@@ -148,14 +165,15 @@ public class ExtendedComparisonScanUI {
 				updateScanComparisonNormal(displayMirrored, displayShifted);
 			}
 		} else {
-			scanChartUI.setInput(scan1);
+			updateScanNormal();
 		}
 	}
 
 	private void updateScanComparisonNormal(boolean mirrored, boolean shifted) {
 
-		labelInfoReference.setText(getMassSpectrumLabel(scan1, "[U] UNKNOWN MS = "));
-		labelInfoComparison.setText(getMassSpectrumLabel(scan2, "[L] REFERENCE MS = "));
+		labelInfoReference.setText(getMassSpectrumLabel(scan1, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
+		labelInfoComparison.setText(getMassSpectrumLabel(scan2, PREFIX_R, TITLE_REFERENCE, shifted ? POSTFIX_SHIFTED : POSTFIX_NONE));
+		//
 		if(shifted) {
 			IScanMSD scan2Shifted = new ScanMSD();
 			IExtractedIonSignal extractedIonSignalScan2 = scan2.getExtractedIonSignal();
@@ -167,6 +185,7 @@ public class ExtendedComparisonScanUI {
 					scan2Shifted.addIon(getIon(ion + 1, abundance));
 				}
 			}
+			scanChartUI.setInput(scan1, scan2Shifted, mirrored);
 		} else {
 			scanChartUI.setInput(scan1, scan2, mirrored);
 		}
@@ -174,8 +193,8 @@ public class ExtendedComparisonScanUI {
 
 	private void updateScanComparisonDifference(boolean mirrored, boolean shifted) {
 
-		labelInfoReference.setText(getMassSpectrumLabel(scan1, "[U-L] UNKNOWN MS = "));
-		labelInfoComparison.setText(getMassSpectrumLabel(scan2, "[U-L] REFERENCE MS = "));
+		labelInfoReference.setText(getMassSpectrumLabel(scan1, PREFIX_UR, TITLE_UNKNOWN, POSTFIX_NONE));
+		labelInfoComparison.setText(getMassSpectrumLabel(scan2, PREFIX_UR, TITLE_REFERENCE, shifted ? POSTFIX_SHIFTED : POSTFIX_NONE));
 		//
 		IExtractedIonSignal extractedIonSignalReference = scan1.getExtractedIonSignal();
 		IExtractedIonSignal extractedIonSignalComparison = scan2.getExtractedIonSignal();
@@ -202,6 +221,22 @@ public class ExtendedComparisonScanUI {
 		scanChartUI.setInput(scanDifference1, scanDifference2, mirrored);
 	}
 
+	private void updateScanNormal() {
+
+		labelInfoReference.setText("");
+		labelInfoComparison.setText("");
+		//
+		if(scan1 != null) {
+			labelInfoReference.setText(getMassSpectrumLabel(scan1, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
+			scanChartUI.setInput(scan1);
+		} else if(scan2 != null) {
+			labelInfoReference.setText(getMassSpectrumLabel(scan2, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
+			scanChartUI.setInput(scan2);
+		} else {
+			scanChartUI.setInput(null);
+		}
+	}
+
 	private IIon getIon(int mz, float abundance) {
 
 		IIon ion = null;
@@ -215,10 +250,14 @@ public class ExtendedComparisonScanUI {
 		return ion;
 	}
 
-	private String getMassSpectrumLabel(IScanMSD massSpectrum, String title) {
+	private String getMassSpectrumLabel(IScanMSD massSpectrum, String prefix, String title, String postfix) {
 
 		StringBuilder builder = new StringBuilder();
+		builder.append(prefix);
+		builder.append(" ");
 		builder.append(title);
+		builder.append(" = ");
+		//
 		if(massSpectrum != null) {
 			if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
 				IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
@@ -240,6 +279,13 @@ public class ExtendedComparisonScanUI {
 				builder.append(decimalFormat.format(massSpectrum.getRetentionIndex()));
 			}
 		}
+		//
+		if(!"".equals(postfix)) {
+			builder.append(" ");
+			builder.append(postfix);
+			builder.append("*");
+		}
+		//
 		return builder.toString();
 	}
 
@@ -330,7 +376,7 @@ public class ExtendedComparisonScanUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				displayDifference = false;
+				displayOption = OPTION_UPDATE_SCAN_2;
 				updateChart();
 			}
 		});
@@ -343,7 +389,7 @@ public class ExtendedComparisonScanUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				displayDifference = false;
+				displayOption = OPTION_LIBRARY_SEARCH;
 				updateChart();
 			}
 		});
@@ -360,7 +406,7 @@ public class ExtendedComparisonScanUI {
 		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		Button buttonNormalModus = new Button(group, SWT.RADIO);
-		buttonNormalModus.setText("[U,L]");
+		buttonNormalModus.setText(LABEL_UR_NORMAL);
 		buttonNormalModus.setToolTipText("Use the normal modus.");
 		buttonNormalModus.setSelection(!displayDifference);
 		buttonNormalModus.addSelectionListener(new SelectionAdapter() {
@@ -374,7 +420,7 @@ public class ExtendedComparisonScanUI {
 		});
 		//
 		Button buttonDifferenceModus = new Button(group, SWT.RADIO);
-		buttonDifferenceModus.setText("[U-L]");
+		buttonDifferenceModus.setText(LABEL_UR_DIFFERENCE);
 		buttonDifferenceModus.setToolTipText("Use the difference modus.");
 		buttonDifferenceModus.setSelection(displayDifference);
 		buttonDifferenceModus.addSelectionListener(new SelectionAdapter() {
@@ -414,14 +460,14 @@ public class ExtendedComparisonScanUI {
 		Button buttonShifted = new Button(composite, SWT.PUSH);
 		buttonShifted.setText("");
 		buttonShifted.setToolTipText("Set whether the data shall be shifted or not.");
-		buttonShifted.setImage(ApplicationImageFactory.getInstance().getImage(displayShifted ? IApplicationImage.IMAGE_MIRRORED_MASS_SPECTRUM : IApplicationImage.IMAGE_UNPIN_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
+		buttonShifted.setImage(ApplicationImageFactory.getInstance().getImage(displayShifted ? IApplicationImage.IMAGE_SHIFTED_MASS_SPECTRUM : IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
 		buttonShifted.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				displayShifted = !displayShifted;
-				buttonShifted.setImage(ApplicationImageFactory.getInstance().getImage(displayShifted ? IApplicationImage.IMAGE_MIRRORED_MASS_SPECTRUM : IApplicationImage.IMAGE_UNPIN_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
+				buttonShifted.setImage(ApplicationImageFactory.getInstance().getImage(displayShifted ? IApplicationImage.IMAGE_SHIFTED_MASS_SPECTRUM : IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
 				updateChart();
 			}
 		});
@@ -505,7 +551,6 @@ public class ExtendedComparisonScanUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				try {
-					Shell shell = Display.getDefault().getActiveShell();
 					if(scan1 != null) {
 						MassSpectrumFileSupport.saveMassSpectrum(shell, scan1, "UnknownMS");
 					}
@@ -540,14 +585,14 @@ public class ExtendedComparisonScanUI {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageScans));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSubtract));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(Display.getDefault().getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}
