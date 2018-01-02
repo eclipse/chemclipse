@@ -42,7 +42,10 @@ public class ComparisonScanChartPart extends AbstractDataUpdateSupport implement
 	@Focus
 	public void setFocus() {
 
-		updateObjects(getObjects(), getTopic());
+		/*
+		 * Don't update to not load the reference twice.
+		 */
+		// updateObjects(getObjects(), getTopic());
 	}
 
 	@Override

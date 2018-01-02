@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
@@ -56,6 +57,7 @@ import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -196,9 +198,9 @@ public class ScanChartUI extends ScrollableChart {
 			determineLabelOption(usedDataType);
 			//
 			if(usedSignalType.equals(SignalType.PROFILE)) {
-				addLineSeriesData(getLineSeriesDataList(scan, false));
+				addLineSeriesData(getLineSeriesDataList(scan, "", false));
 			} else {
-				addBarSeriesData(getBarSeriesDataList(scan, false));
+				addBarSeriesData(getBarSeriesDataList(scan, "", false));
 			}
 		}
 	}
@@ -218,13 +220,25 @@ public class ScanChartUI extends ScrollableChart {
 			determineLabelOption(usedDataType);
 			modifyChart(mirrored);
 			//
+			String labelScan1 = "scan1";
+			String labelScan2 = "scan2";
+			Color colorScan2 = Colors.BLACK;
+			//
 			if(usedSignalType.equals(SignalType.PROFILE)) {
-				List<ILineSeriesData> lineSeriesDataList = getLineSeriesDataList(scan1, false);
-				lineSeriesDataList.add(getLineSeriesData(scan2, (mirrored) ? true : false));
+				List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+				ILineSeriesData lineSeriesDataScan1 = getLineSeriesData(scan1, labelScan1, false);
+				ILineSeriesData lineSeriesDataScan2 = getLineSeriesData(scan2, labelScan2, mirrored);
+				lineSeriesDataScan2.getLineSeriesSettings().setLineColor(colorScan2);
+				lineSeriesDataList.add(lineSeriesDataScan1);
+				lineSeriesDataList.add(lineSeriesDataScan2);
 				addLineSeriesData(lineSeriesDataList);
 			} else {
-				List<IBarSeriesData> barSeriesDataList = getBarSeriesDataList(scan1, false);
-				barSeriesDataList.add(getBarSeriesData(scan2, (mirrored) ? true : false));
+				List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
+				IBarSeriesData barSeriesDataScan1 = getBarSeriesData(scan1, labelScan1, false);
+				IBarSeriesData barSeriesDataScan2 = getBarSeriesData(scan2, labelScan2, mirrored);
+				barSeriesDataScan2.getBarSeriesSettings().setBarColor(colorScan2);
+				barSeriesDataList.add(barSeriesDataScan1);
+				barSeriesDataList.add(barSeriesDataScan2);
 				addBarSeriesData(barSeriesDataList);
 			}
 		}
@@ -240,9 +254,10 @@ public class ScanChartUI extends ScrollableChart {
 
 		IChartSettings chartSettings = getChartSettings();
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
+		rangeRestriction.setRestrictZoom((mirrored) ? false : true);
 		rangeRestriction.setZeroY((mirrored) ? false : true);
 		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
-		rangeRestriction.setExtendMinY((mirrored) ? -0.25d : 0.0d);
+		rangeRestriction.setExtendMinY((mirrored) ? 0.25d : 0.0d);
 		rangeRestriction.setExtendMaxY(0.25d);
 		applySettings(chartSettings);
 	}
@@ -434,40 +449,43 @@ public class ScanChartUI extends ScrollableChart {
 		addSeriesLabelMarker(labelPaintListener);
 	}
 
-	private List<IBarSeriesData> getBarSeriesDataList(IScan scan, boolean mirrored) {
+	private List<IBarSeriesData> getBarSeriesDataList(IScan scan, String postfix, boolean mirrored) {
 
 		List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
-		barSeriesDataList.add(getBarSeriesData(scan, mirrored));
+		barSeriesDataList.add(getBarSeriesData(scan, postfix, mirrored));
 		return barSeriesDataList;
 	}
 
-	private IBarSeriesData getBarSeriesData(IScan scan, boolean mirrored) {
+	private IBarSeriesData getBarSeriesData(IScan scan, String postfix, boolean mirrored) {
 
-		ISeriesData seriesData = getSeriesData(scan, mirrored);
+		ISeriesData seriesData = getSeriesData(scan, postfix, mirrored);
 		IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
 		return barSeriesData;
 	}
 
-	private List<ILineSeriesData> getLineSeriesDataList(IScan scan, boolean mirrored) {
+	private List<ILineSeriesData> getLineSeriesDataList(IScan scan, String postfix, boolean mirrored) {
 
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-		lineSeriesDataList.add(getLineSeriesData(scan, mirrored));
+		lineSeriesDataList.add(getLineSeriesData(scan, postfix, mirrored));
 		return lineSeriesDataList;
 	}
 
-	private ILineSeriesData getLineSeriesData(IScan scan, boolean mirrored) {
+	private ILineSeriesData getLineSeriesData(IScan scan, String postfix, boolean mirrored) {
 
-		ISeriesData seriesData = getSeriesData(scan, mirrored);
+		ISeriesData seriesData = getSeriesData(scan, postfix, mirrored);
 		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
 		return lineSeriesData;
 	}
 
-	private ISeriesData getSeriesData(IScan scan, boolean mirrored) {
+	private ISeriesData getSeriesData(IScan scan, String postfix, boolean mirrored) {
 
 		double[] xSeries;
 		double[] ySeries;
 		String scanNumber = (scan.getScanNumber() > 0 ? Integer.toString(scan.getScanNumber()) : "--");
 		String id = "Scan " + scanNumber;
+		if(!"".equals(postfix)) {
+			id += " " + postfix;
+		}
 		//
 		if(scan instanceof IScanMSD) {
 			IScanMSD scanMSD = (IScanMSD)scan;
