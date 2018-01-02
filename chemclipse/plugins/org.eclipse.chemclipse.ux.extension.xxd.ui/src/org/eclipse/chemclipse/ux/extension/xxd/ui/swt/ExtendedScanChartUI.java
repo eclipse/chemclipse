@@ -292,7 +292,7 @@ public class ExtendedScanChartUI {
 
 	private Combo createScanFilterCombo(Composite parent) {
 
-		Combo combo = new Combo(parent, SWT.NONE);
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
 		combo.setToolTipText("Scan Filter");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.setItems(scanFilterNames);
@@ -336,7 +336,7 @@ public class ExtendedScanChartUI {
 
 	private Combo createScanIdentifierCombo(Composite parent) {
 
-		Combo combo = new Combo(parent, SWT.NONE);
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
 		combo.setToolTipText("Scan Identifier");
 		combo.setItems(scanIdentifierNames);
 		if(scanIdentifierNames.length > 0) {

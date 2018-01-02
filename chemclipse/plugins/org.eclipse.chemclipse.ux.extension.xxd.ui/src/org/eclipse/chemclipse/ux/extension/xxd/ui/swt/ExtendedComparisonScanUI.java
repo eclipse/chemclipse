@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
+import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -50,9 +51,11 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
@@ -67,9 +70,11 @@ public class ExtendedComparisonScanUI {
 	private ScanChartUI scanChartUI;
 	private Label labelInfoComparison;
 	private Composite toolbarInfoReference;
+	private Composite toolbarDisplay;
 	//
 	private IScanMSD scan1 = null;
 	private IScanMSD scan2 = null;
+	boolean displayDifference = true;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 
@@ -112,7 +117,6 @@ public class ExtendedComparisonScanUI {
 	private void updateScan() {
 
 		if(scan1 != null && scan2 != null) {
-			boolean displayDifference = true;
 			if(displayDifference) {
 				updateScanComparisonDifference(true);
 			} else {
@@ -140,20 +144,20 @@ public class ExtendedComparisonScanUI {
 		int startIon = (extractedIonSignalReference.getStartIon() < extractedIonSignalComparison.getStartIon()) ? extractedIonSignalReference.getStartIon() : extractedIonSignalComparison.getStartIon();
 		int stopIon = (extractedIonSignalReference.getStopIon() > extractedIonSignalComparison.getStopIon()) ? extractedIonSignalReference.getStopIon() : extractedIonSignalComparison.getStopIon();
 		//
-		scan1.removeAllIons();
-		scan2.removeAllIons();
+		IScanMSD scanDifference1 = new ScanMSD();
+		IScanMSD scanDifference2 = new ScanMSD();
 		//
 		for(int ion = startIon; ion <= stopIon; ion++) {
 			float abundance = extractedIonSignalReference.getAbundance(ion) - extractedIonSignalComparison.getAbundance(ion);
 			if(abundance < 0) {
 				abundance *= -1;
-				scan2.addIon(getIon(ion, abundance));
+				scanDifference2.addIon(getIon(ion, abundance));
 			} else {
-				scan1.addIon(getIon(ion, abundance));
+				scanDifference1.addIon(getIon(ion, abundance));
 			}
 		}
 		//
-		scanChartUI.setInput(scan1, scan2, mirrored);
+		scanChartUI.setInput(scanDifference1, scanDifference2, mirrored);
 	}
 
 	private IIon getIon(int mz, float abundance) {
@@ -203,6 +207,7 @@ public class ExtendedComparisonScanUI {
 		//
 		createToolbarMain(parent);
 		toolbarInfoUnknown = createToolbarInfoUnknown(parent);
+		toolbarDisplay = createToolbarDisplay(parent);
 		createScanChart(parent);
 		toolbarInfoReference = createToolbarInfoReference(parent);
 		//
@@ -216,9 +221,10 @@ public class ExtendedComparisonScanUI {
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(4, false));
 		//
 		createButtonToggleToolbarInfo(composite);
+		createButtonToggleToolbarDisplay(composite);
 		createSaveButton(composite);
 		createSettingsButton(composite);
 	}
@@ -234,6 +240,45 @@ public class ExtendedComparisonScanUI {
 		labelInfoReference.setText("");
 		labelInfoReference.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
+		return composite;
+	}
+
+	private Composite createToolbarDisplay(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(1, false));
+		//
+		Group group = new Group(composite, SWT.NONE);
+		group.setLayout(new RowLayout(SWT.HORIZONTAL));
+		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		Button normal = new Button(group, SWT.RADIO);
+		normal.setText("Display Normal");
+		normal.setSelection(!displayDifference);
+		normal.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				displayDifference = false;
+				updateScan();
+			}
+		});
+		//
+		Button difference = new Button(group, SWT.RADIO);
+		difference.setText("Display Difference");
+		difference.setSelection(displayDifference);
+		difference.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				displayDifference = true;
+				updateScan();
+			}
+		});
 		return composite;
 	}
 
@@ -270,6 +315,29 @@ public class ExtendedComparisonScanUI {
 
 				PartSupport.toggleCompositeVisibility(toolbarInfoUnknown);
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfoReference);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonToggleToolbarDisplay(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the display toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarDisplay);
 				if(visible) {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
 				} else {
