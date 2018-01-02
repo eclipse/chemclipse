@@ -80,6 +80,10 @@ public class PreferenceConstants {
 	public static final int DEF_SCAN_LABEL_FONT_SIZE = 11;
 	public static final String P_SCAN_LABEL_FONT_STYLE = "scanLabelFontStyle";
 	public static final int DEF_SCAN_LABEL_FONT_STYLE = SWT.NORMAL;
+	public static final String P_COLOR_SCAN_1 = "colorScan1";
+	public static final String DEF_COLOR_SCAN_1 = "255,0,0";
+	public static final String P_COLOR_SCAN_2 = "colorScan2";
+	public static final String DEF_COLOR_SCAN_2 = "0,0,0";
 	public static final String P_SCAN_LABEL_HIGHEST_INTENSITIES = "scanLabelHighestIntensities";
 	public static final int MIN_SCAN_LABEL_HIGHEST_INTENSITIES = 1;
 	public static final int MAX_SCAN_LABEL_HIGHEST_INTENSITIES = 32;

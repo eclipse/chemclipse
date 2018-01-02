@@ -197,10 +197,21 @@ public class ScanChartUI extends ScrollableChart {
 			modifyChart(usedDataType);
 			determineLabelOption(usedDataType);
 			//
+			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+			Color colorScan1 = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_SCAN_1));
+			//
 			if(usedSignalType.equals(SignalType.PROFILE)) {
-				addLineSeriesData(getLineSeriesDataList(scan, "", false));
+				List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+				ILineSeriesData lineSeriesData = getLineSeriesData(scan, "", false);
+				lineSeriesData.getLineSeriesSettings().setLineColor(colorScan1);
+				lineSeriesDataList.add(lineSeriesData);
+				addLineSeriesData(lineSeriesDataList);
 			} else {
-				addBarSeriesData(getBarSeriesDataList(scan, "", false));
+				List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
+				IBarSeriesData barSeriesData = getBarSeriesData(scan, "", false);
+				barSeriesData.getBarSeriesSettings().setBarColor(colorScan1);
+				barSeriesDataList.add(barSeriesData);
+				addBarSeriesData(barSeriesDataList);
 			}
 		}
 	}
@@ -222,12 +233,15 @@ public class ScanChartUI extends ScrollableChart {
 			//
 			String labelScan1 = "scan1";
 			String labelScan2 = "scan2";
-			Color colorScan2 = Colors.BLACK;
+			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+			Color colorScan1 = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_SCAN_1));
+			Color colorScan2 = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_SCAN_2));
 			//
 			if(usedSignalType.equals(SignalType.PROFILE)) {
 				List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 				ILineSeriesData lineSeriesDataScan1 = getLineSeriesData(scan1, labelScan1, false);
 				ILineSeriesData lineSeriesDataScan2 = getLineSeriesData(scan2, labelScan2, mirrored);
+				lineSeriesDataScan1.getLineSeriesSettings().setLineColor(colorScan1);
 				lineSeriesDataScan2.getLineSeriesSettings().setLineColor(colorScan2);
 				lineSeriesDataList.add(lineSeriesDataScan1);
 				lineSeriesDataList.add(lineSeriesDataScan2);
@@ -236,6 +250,7 @@ public class ScanChartUI extends ScrollableChart {
 				List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
 				IBarSeriesData barSeriesDataScan1 = getBarSeriesData(scan1, labelScan1, false);
 				IBarSeriesData barSeriesDataScan2 = getBarSeriesData(scan2, labelScan2, mirrored);
+				barSeriesDataScan1.getBarSeriesSettings().setBarColor(colorScan1);
 				barSeriesDataScan2.getBarSeriesSettings().setBarColor(colorScan2);
 				barSeriesDataList.add(barSeriesDataScan1);
 				barSeriesDataList.add(barSeriesDataScan2);
@@ -449,25 +464,11 @@ public class ScanChartUI extends ScrollableChart {
 		addSeriesLabelMarker(labelPaintListener);
 	}
 
-	private List<IBarSeriesData> getBarSeriesDataList(IScan scan, String postfix, boolean mirrored) {
-
-		List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
-		barSeriesDataList.add(getBarSeriesData(scan, postfix, mirrored));
-		return barSeriesDataList;
-	}
-
 	private IBarSeriesData getBarSeriesData(IScan scan, String postfix, boolean mirrored) {
 
 		ISeriesData seriesData = getSeriesData(scan, postfix, mirrored);
 		IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
 		return barSeriesData;
-	}
-
-	private List<ILineSeriesData> getLineSeriesDataList(IScan scan, String postfix, boolean mirrored) {
-
-		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-		lineSeriesDataList.add(getLineSeriesData(scan, postfix, mirrored));
-		return lineSeriesDataList;
 	}
 
 	private ILineSeriesData getLineSeriesData(IScan scan, String postfix, boolean mirrored) {
