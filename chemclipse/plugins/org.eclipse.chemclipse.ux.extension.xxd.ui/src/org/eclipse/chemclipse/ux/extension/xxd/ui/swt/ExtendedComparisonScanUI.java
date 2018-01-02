@@ -19,10 +19,15 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.msd.model.implementation.Ion;
+import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -49,10 +54,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 
 public class ExtendedComparisonScanUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedComparisonScanUI.class);
+	//
+	private static final float NORMALIZATION_FACTOR = 1000.0f;
 	//
 	private Label labelInfoReference;
 	private Composite toolbarInfoUnknown;
@@ -60,8 +68,8 @@ public class ExtendedComparisonScanUI {
 	private Label labelInfoComparison;
 	private Composite toolbarInfoReference;
 	//
-	private IScanMSD unknownMassSpectrum = null;
-	private IScanMSD referenceMassSpectrum = null;
+	private IScanMSD scan1 = null;
+	private IScanMSD scan2 = null;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 
@@ -78,39 +86,87 @@ public class ExtendedComparisonScanUI {
 
 	public void update(IScanMSD unknownMassSpectrum, IIdentificationTarget identificationTarget) {
 
-		this.unknownMassSpectrum = unknownMassSpectrum;
-		referenceMassSpectrum = null;
+		scan1 = null;
+		scan2 = null;
 		//
 		LibraryServiceRunnable runnable = new LibraryServiceRunnable(identificationTarget);
 		ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 		try {
 			monitor.run(true, true, runnable);
-			referenceMassSpectrum = runnable.getLibraryMassSpectrum();
+			scan1 = unknownMassSpectrum.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
+			IScanMSD referenceMassSpectrum = runnable.getLibraryMassSpectrum();
+			if(referenceMassSpectrum != null) {
+				scan2 = referenceMassSpectrum.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
+			}
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
 		} catch(InterruptedException e) {
 			logger.warn(e);
+		} catch(CloneNotSupportedException e) {
+			logger.warn(e);
 		}
-		//
-		labelInfoReference.setText(getMassSpectrumLabel(unknownMassSpectrum, "UNKNOWN MS = "));
-		labelInfoComparison.setText(getMassSpectrumLabel(referenceMassSpectrum, "REFERENCE MS = "));
 		//
 		updateScan();
 	}
 
 	private void updateScan() {
 
-		if(unknownMassSpectrum != null && referenceMassSpectrum != null) {
-			try {
-				IScanMSD unknownMassSpectrumCopy = unknownMassSpectrum.makeDeepCopy().normalize(1000.0f);
-				IScanMSD referenceMassSpectrumCopy = referenceMassSpectrum.makeDeepCopy().normalize(1000.0f);
-				scanChartUI.setInput(unknownMassSpectrumCopy, referenceMassSpectrumCopy, true);
-			} catch(CloneNotSupportedException e) {
-				logger.warn(e);
+		if(scan1 != null && scan2 != null) {
+			boolean displayDifference = true;
+			if(displayDifference) {
+				updateScanComparisonDifference(true);
+			} else {
+				updateScanComparisonNormal(true);
 			}
 		} else {
-			scanChartUI.setInput(unknownMassSpectrum);
+			scanChartUI.setInput(scan1);
 		}
+	}
+
+	private void updateScanComparisonNormal(boolean mirrored) {
+
+		labelInfoReference.setText(getMassSpectrumLabel(scan1, "[U] UNKNOWN MS = "));
+		labelInfoComparison.setText(getMassSpectrumLabel(scan2, "[L] REFERENCE MS = "));
+		scanChartUI.setInput(scan1, scan2, mirrored);
+	}
+
+	private void updateScanComparisonDifference(boolean mirrored) {
+
+		labelInfoReference.setText(getMassSpectrumLabel(scan1, "[U-L] UNKNOWN MS = "));
+		labelInfoComparison.setText(getMassSpectrumLabel(scan2, "[U-L] REFERENCE MS = "));
+		//
+		IExtractedIonSignal extractedIonSignalReference = scan1.getExtractedIonSignal();
+		IExtractedIonSignal extractedIonSignalComparison = scan2.getExtractedIonSignal();
+		int startIon = (extractedIonSignalReference.getStartIon() < extractedIonSignalComparison.getStartIon()) ? extractedIonSignalReference.getStartIon() : extractedIonSignalComparison.getStartIon();
+		int stopIon = (extractedIonSignalReference.getStopIon() > extractedIonSignalComparison.getStopIon()) ? extractedIonSignalReference.getStopIon() : extractedIonSignalComparison.getStopIon();
+		//
+		scan1.removeAllIons();
+		scan2.removeAllIons();
+		//
+		for(int ion = startIon; ion <= stopIon; ion++) {
+			float abundance = extractedIonSignalReference.getAbundance(ion) - extractedIonSignalComparison.getAbundance(ion);
+			if(abundance < 0) {
+				abundance *= -1;
+				scan2.addIon(getIon(ion, abundance));
+			} else {
+				scan1.addIon(getIon(ion, abundance));
+			}
+		}
+		//
+		scanChartUI.setInput(scan1, scan2, mirrored);
+	}
+
+	private IIon getIon(int mz, float abundance) {
+
+		IIon ion = null;
+		try {
+			ion = new Ion(mz, abundance);
+		} catch(AbundanceLimitExceededException e) {
+			logger.warn(e);
+		} catch(IonLimitExceededException e) {
+			logger.warn(e);
+		}
+		return ion;
 	}
 
 	private String getMassSpectrumLabel(IScanMSD massSpectrum, String title) {
@@ -236,8 +292,13 @@ public class ExtendedComparisonScanUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				try {
-					MassSpectrumFileSupport.saveMassSpectrum(unknownMassSpectrum, "UnknownMS");
-					MassSpectrumFileSupport.saveMassSpectrum(referenceMassSpectrum, "ReferenceMS");
+					Shell shell = Display.getDefault().getActiveShell();
+					if(scan1 != null) {
+						MassSpectrumFileSupport.saveMassSpectrum(shell, scan1, "UnknownMS");
+					}
+					if(scan2 != null) {
+						MassSpectrumFileSupport.saveMassSpectrum(shell, scan2, "ReferenceMS");
+					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
 				}

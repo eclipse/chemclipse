@@ -55,18 +55,24 @@ public class MassSpectrumFileSupport {
 		saveMassSpectrum(massSpectrum, "Mass Spectrum");
 	}
 
+	public static void saveMassSpectrum(IScanMSD massSpectrum, String fileName) throws NoConverterAvailableException {
+
+		Shell shell = Display.getDefault().getActiveShell();
+		saveMassSpectrum(shell, massSpectrum, fileName);
+	}
+
 	/**
 	 * Opens a file dialog and tries to save the mass spectrum
 	 * 
 	 * @param chromatogram
 	 * @throws NoConverterAvailableException
 	 */
-	public static void saveMassSpectrum(IScanMSD massSpectrum, String fileName) throws NoConverterAvailableException {
+	public static void saveMassSpectrum(Shell shell, IScanMSD massSpectrum, String fileName) throws NoConverterAvailableException {
 
 		if(massSpectrum == null) {
 			return;
 		}
-		Shell shell = Display.getCurrent().getActiveShell();
+		//
 		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		/*
 		 * Create the dialogue.
