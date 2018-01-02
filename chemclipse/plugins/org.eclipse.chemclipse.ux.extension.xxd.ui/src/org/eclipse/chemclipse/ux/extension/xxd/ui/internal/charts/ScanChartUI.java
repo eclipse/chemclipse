@@ -26,12 +26,15 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.comparator.IonValueComparator;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.wsd.model.comparator.WavelengthValueComparator;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToMinuteConverter;
@@ -93,6 +96,9 @@ public class ScanChartUI extends ScrollableChart {
 	private LabelOption labelOption;
 	private DataType dataType;
 	private SignalType signalType;
+	//
+	private IonValueComparator ionValueComparator = new IonValueComparator(SortOrder.ASC);
+	private WavelengthValueComparator wavelengthValueComparator = new WavelengthValueComparator(SortOrder.ASC);
 
 	private class LabelPaintListener implements ICustomPaintListener {
 
@@ -269,7 +275,6 @@ public class ScanChartUI extends ScrollableChart {
 
 		IChartSettings chartSettings = getChartSettings();
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
-		rangeRestriction.setRestrictZoom((mirrored) ? false : true);
 		rangeRestriction.setZeroY((mirrored) ? false : true);
 		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
 		rangeRestriction.setExtendMinY((mirrored) ? 0.25d : 0.0d);
@@ -487,10 +492,16 @@ public class ScanChartUI extends ScrollableChart {
 		if(!"".equals(postfix)) {
 			id += " " + postfix;
 		}
-		//
+		/*
+		 * Sort the scan data, otherwise the line chart could be odd.
+		 */
 		if(scan instanceof IScanMSD) {
+			/*
+			 * MSD
+			 */
 			IScanMSD scanMSD = (IScanMSD)scan;
-			List<IIon> ions = scanMSD.getIons();
+			List<IIon> ions = new ArrayList<IIon>(scanMSD.getIons());
+			Collections.sort(ions, ionValueComparator);
 			int size = ions.size();
 			xSeries = new double[size];
 			ySeries = new double[size];
@@ -501,12 +512,19 @@ public class ScanChartUI extends ScrollableChart {
 				index++;
 			}
 		} else if(scan instanceof IScanCSD) {
+			/*
+			 * CSD
+			 */
 			IScanCSD scanCSD = (IScanCSD)scan;
 			xSeries = new double[]{scanCSD.getRetentionTime()};
 			ySeries = new double[]{(mirrored) ? scanCSD.getTotalSignal() * -1 : scanCSD.getTotalSignal()};
 		} else if(scan instanceof IScanWSD) {
+			/*
+			 * WSD
+			 */
 			IScanWSD scanWSD = (IScanWSD)scan;
-			List<IScanSignalWSD> scanSignalsWSD = scanWSD.getScanSignals();
+			List<IScanSignalWSD> scanSignalsWSD = new ArrayList<IScanSignalWSD>(scanWSD.getScanSignals());
+			Collections.sort(scanSignalsWSD, wavelengthValueComparator);
 			int size = scanSignalsWSD.size();
 			xSeries = new double[size];
 			ySeries = new double[size];

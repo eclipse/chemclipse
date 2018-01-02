@@ -29,7 +29,8 @@ public class ComparisonScanChartPart extends AbstractDataUpdateSupport implement
 
 	private ExtendedComparisonScanUI extendedComparisonScanUI;
 	//
-	private static final int NUMBER_PROPERTIES = 2;
+	private static final int NUMBER_PROPERTIES_1 = 1;
+	private static final int NUMBER_PROPERTIES_2 = 2;
 	private static final int TARGET_MASS_SPECTRUM_UNKNOWN = 0;
 	private static final int TARGET_ENTRY = 1;
 
@@ -51,7 +52,12 @@ public class ComparisonScanChartPart extends AbstractDataUpdateSupport implement
 	@Override
 	public void registerEvents() {
 
-		String[] properties = new String[NUMBER_PROPERTIES];
+		// registerEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
+		// registerEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
+		// registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
+		// registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
+		//
+		String[] properties = new String[NUMBER_PROPERTIES_2];
 		properties[TARGET_MASS_SPECTRUM_UNKNOWN] = IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN;
 		properties[TARGET_ENTRY] = IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY;
 		registerEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, properties);
@@ -60,7 +66,21 @@ public class ComparisonScanChartPart extends AbstractDataUpdateSupport implement
 	@Override
 	public void updateObjects(List<Object> objects, String topic) {
 
-		if(objects.size() == NUMBER_PROPERTIES) {
+		// if(objects.size() == NUMBER_PROPERTIES_1) {
+		// if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION) || topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
+		// extendedComparisonScanUI.update(null);
+		// } else {
+		// Object object = objects.get(0);
+		// if(object instanceof IScanMSD) {
+		// extendedComparisonScanUI.update((IScanMSD)object);
+		// } else if(object instanceof IPeakMSD) {
+		// extendedComparisonScanUI.update(((IPeakMSD)object).getExtractedMassSpectrum());
+		// } else {
+		// extendedComparisonScanUI.update(null);
+		// }
+		// }
+		// }
+		if(objects.size() == NUMBER_PROPERTIES_2) {
 			IScanMSD unknownMassSpectrum = (IScanMSD)objects.get(TARGET_MASS_SPECTRUM_UNKNOWN);
 			IIdentificationTarget identificationTarget = (IIdentificationTarget)objects.get(TARGET_ENTRY);
 			extendedComparisonScanUI.update(unknownMassSpectrum, identificationTarget);
