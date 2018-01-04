@@ -37,4 +37,5 @@ Service-Component: OSGI-INF/detectorHandlerMSD.xml,
  OSGI-INF/detectorHandlerCSD.xml,
  OSGI-INF/detectorHandlerWSD.xml, 
  OSGI-INF/filterHandlerAllPeaks.xml,
- OSGI-INF/filterHandlerSelectedPeak.xml
+ OSGI-INF/filterHandlerSelectedPeak.xml,
+ OSGI-INF/filterHandlerMassSpectrum.xml
