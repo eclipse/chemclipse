@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2017 Dr. Janko Diminic.
+ * Copyright (c) 2016, 2018 Dr. Janko Diminic.
  * 
  * 
  * All rights reserved.
