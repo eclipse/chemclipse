@@ -458,6 +458,7 @@ public class ScanChartUI extends ScrollableChart {
 				setDataTypeCSD(chartSettings);
 				break;
 			case WSD:
+				chartSettings.getRangeRestriction().setForceZeroMinY(true);
 				setDataTypeWSD(chartSettings);
 				break;
 			default:
