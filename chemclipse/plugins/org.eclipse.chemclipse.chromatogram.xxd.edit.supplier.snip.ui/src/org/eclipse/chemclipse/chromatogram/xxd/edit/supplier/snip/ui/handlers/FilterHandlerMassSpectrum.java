@@ -16,6 +16,12 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.inject.Named;
 
+import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.internal.handlers.MassSpectrumFilterRunnable;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.progress.core.InfoType;
+import org.eclipse.chemclipse.progress.core.StatusLineLogger;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -24,15 +30,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
-
-import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.internal.handlers.MassSpectrumFilterRunnable;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.progress.core.InfoType;
-import org.eclipse.chemclipse.progress.core.StatusLineLogger;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.msd.ui.editors.MassSpectrumEditor;
 
 public class FilterHandlerMassSpectrum implements EventHandler {
 
@@ -43,8 +40,6 @@ public class FilterHandlerMassSpectrum implements EventHandler {
 	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
 		if(massSpectrum != null) {
-			//
-			PerspectiveSwitchHandler.focusPerspectiveAndView("net.openchrom.msd.identifier.supplier.opentyper.ui.perspective.opentyper", MassSpectrumEditor.ID);
 			//
 			System.out.println("Test");
 			final Display display = Display.getCurrent();

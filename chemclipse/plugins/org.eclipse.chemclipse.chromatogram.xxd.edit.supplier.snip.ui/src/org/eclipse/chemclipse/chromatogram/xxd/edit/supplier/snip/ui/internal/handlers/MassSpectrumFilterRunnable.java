@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.processing.IMassSpectrumFi
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -27,7 +28,7 @@ import org.eclipse.swt.widgets.Display;
 public class MassSpectrumFilterRunnable implements IRunnableWithProgress {
 
 	private static final String DESCRIPTION = "SNIP Filter Mass Spectrum";
-	private static final String FILTER_ID_SNIP_MS = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.snip.baseline";
+	private static final String FILTER_ID_SNIP_MS = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.snip.massspectrum";
 	private IScanMSD massSpectrum;
 
 	public MassSpectrumFilterRunnable(IScanMSD massSpectrum) {
@@ -62,8 +63,8 @@ public class MassSpectrumFilterRunnable implements IRunnableWithProgress {
 
 			@Override
 			public void run() {
-				// TODO
-				//massSpectrum.update(true);
+
+				MassSpectrumSelectionUpdateNotifier.fireUpdateChange(massSpectrum, true);
 			}
 		});
 	}
