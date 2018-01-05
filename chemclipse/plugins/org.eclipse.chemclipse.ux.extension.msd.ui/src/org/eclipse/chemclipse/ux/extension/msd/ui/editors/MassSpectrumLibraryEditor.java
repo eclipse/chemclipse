@@ -213,7 +213,7 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 	private void importMassSpectra(File file) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
 
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-		MassSpectrumImportRunnable runnable = new MassSpectrumImportRunnable(file, massSpectra);
+		MassSpectrumImportRunnable runnable = new MassSpectrumImportRunnable(file);
 		try {
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {

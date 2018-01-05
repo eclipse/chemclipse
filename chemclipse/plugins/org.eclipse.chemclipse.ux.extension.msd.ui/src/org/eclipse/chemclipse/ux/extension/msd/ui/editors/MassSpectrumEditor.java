@@ -108,11 +108,11 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	@Focus
 	public void setFocus() {
 
-		eventBroker.post(IChemClipseEvents.TOPIC_SCAN_MSD_UPDATE_SELECTION, massSpectra);
 		/*
 		 * Fire an update if a loaded mass spectrum has been selected.
 		 */
 		if(massSpectrum != null) {
+			eventBroker.post(IChemClipseEvents.TOPIC_SCAN_MSD_UPDATE_SELECTION, massSpectrum);
 			MassSpectrumSelectionUpdateNotifier.fireUpdateChange(massSpectrum, true);
 		}
 	}
@@ -248,7 +248,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		 * as it must be initialized first.
 		 */
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-		MassSpectrumImportRunnable runnable = new MassSpectrumImportRunnable(file, massSpectra);
+		MassSpectrumImportRunnable runnable = new MassSpectrumImportRunnable(file);
 		try {
 			/*
 			 * True to show the moving progress bar. False, a chromatogram
@@ -299,8 +299,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		// auto detect from file type if possible
 		if(massSpectrum instanceof IRegularMassSpectrum) {
 			isProfile = ((IRegularMassSpectrum)massSpectrum).getMassSpectrumType() == 1;
-		}
-		else // backfall to preference
+		} else // backfall to preference
 		{
 			isProfile = PreferenceSupplier.useProfileMassSpectrumView();
 		}

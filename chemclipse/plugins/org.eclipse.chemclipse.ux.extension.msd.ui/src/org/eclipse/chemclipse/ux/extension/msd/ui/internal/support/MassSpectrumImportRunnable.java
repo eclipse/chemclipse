@@ -14,11 +14,10 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.internal.support;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.logging.core.Logger;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -28,9 +27,8 @@ public class MassSpectrumImportRunnable implements IRunnableWithProgress {
 	private File file;
 	private IMassSpectra massSpectra;
 
-	public MassSpectrumImportRunnable(File file, IMassSpectra massSpectra) {
+	public MassSpectrumImportRunnable(File file) {
 		this.file = file;
-		this.massSpectra = massSpectra;
 	}
 
 	public IMassSpectra getMassSpectra() {
