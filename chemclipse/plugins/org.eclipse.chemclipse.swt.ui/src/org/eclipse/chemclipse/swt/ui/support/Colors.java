@@ -79,7 +79,9 @@ public class Colors {
 	/*
 	 * Variable Colors
 	 */
-	private static Map<RGB, Color> colorMap;
+	public static final int ALPHA_OPAQUE = 255;
+	public static final int ALPHA_TRANSPARENT = 0;
+	private static Map<Integer, Map<RGB, Color>> colorMap; // Alpha and Colors
 	/**
 	 * Creates a color array.
 	 */
@@ -137,28 +139,57 @@ public class Colors {
 
 	public static Color getColor(RGB rgb) {
 
-		Color color = colorMap.get(rgb);
+		return getColor(rgb, ALPHA_OPAQUE);
+	}
+
+	public static Color getColor(RGB rgb, int alpha) {
+
+		/*
+		 * Get the alpha color map.
+		 */
+		Map<RGB, Color> alphaColors = colorMap.get(alpha);
+		if(alphaColors == null) {
+			alphaColors = new HashMap<RGB, Color>();
+			colorMap.put(alpha, alphaColors);
+		}
+		/*
+		 * Get the color.
+		 */
+		Color color = alphaColors.get(rgb);
 		if(color == null) {
 			Display display = Display.getDefault();
-			color = new Color(display, rgb);
-			colorMap.put(rgb, color);
+			color = new Color(display, rgb, alpha);
+			alphaColors.put(rgb, color);
 		}
+		//
 		return color;
 	}
 
 	public static Color getColor(int red, int green, int blue) {
 
+		return getColor(red, green, blue, ALPHA_OPAQUE);
+	}
+
+	public static Color getColor(int red, int green, int blue, int alpha) {
+
 		RGB rgb = new RGB(red, green, blue);
-		return getColor(rgb);
+		return getColor(rgb, alpha);
+	}
+
+	public static Color getColor(String rgb) {
+
+		return getColor(rgb, ALPHA_OPAQUE);
 	}
 
 	/*
-	 * 0,0,0
+	 * E.g.:
+	 * 0,0,0 and alpha
 	 * or
-	 * 255,255,255
+	 * 255,255,255 and alpha
 	 * ...
+	 * Returns WHITE on exception.
 	 */
-	public static Color getColor(String rgb) {
+	public static Color getColor(String rgb, int alpha) {
 
 		try {
 			/*
@@ -168,7 +199,7 @@ public class Colors {
 			int red = Integer.parseInt(values[0]);
 			int green = Integer.parseInt(values[1]);
 			int blue = Integer.parseInt(values[2]);
-			return getColor(new RGB(red, green, blue));
+			return getColor(new RGB(red, green, blue), alpha);
 		} catch(Exception e) {
 			return WHITE;
 		}
@@ -184,12 +215,12 @@ public class Colors {
 	 */
 	private static void initializeColors() {
 
-		Display display = Display.getDefault();
 		/*
 		 * In this case, we use system colors. We do not need to dispose them.
 		 * If you use own colors, dispose them, if not needed any more.
 		 */
-		colorMap = new HashMap<RGB, Color>();
+		Display display = Display.getDefault();
+		colorMap = new HashMap<Integer, Map<RGB, Color>>();
 		/*
 		 * RED GRADIENT
 		 */
