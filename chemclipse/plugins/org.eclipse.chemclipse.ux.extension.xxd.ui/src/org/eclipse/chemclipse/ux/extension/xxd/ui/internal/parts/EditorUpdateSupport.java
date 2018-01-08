@@ -16,16 +16,18 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.csd.ui.editors.ChromatogramEditorCSD;
 import org.eclipse.chemclipse.ux.extension.msd.ui.editors.ChromatogramEditorMSD;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.editors.ChromatogramEditorWSD;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
-public abstract class AbstractEditorUpdateSupport {
+public class EditorUpdateSupport {
 
-	public List<IChromatogramSelection> getChromatogramSelections(EPartService partService) {
+	public List<IChromatogramSelection> getChromatogramSelections() {
 
+		EPartService partService = ModelSupportAddon.getPartService();
 		List<IChromatogramSelection> chromatogramSelections = new ArrayList<IChromatogramSelection>();
 		if(partService != null) {
 			/*
