@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.support.FilterSupport;
@@ -38,6 +39,7 @@ import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ScanChartUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
@@ -76,10 +78,16 @@ public class ExtendedScanChartUI {
 	//
 	private Composite toolbarInfo;
 	private Composite toolbarIdentify;
+	private Composite toolbarReferences;
+	//
 	private Label labelScan;
 	private Button buttonSaveScan;
 	private Button buttonOptimizedScan;
 	private ScanChartUI scanChartUI;
+	//
+	private Button previousChromatogramScan;
+	private Combo comboChromatograms;
+	private Button nextChromatogramScan;
 	//
 	private Combo comboDataType;
 	private Combo comboSignalType;
@@ -100,6 +108,8 @@ public class ExtendedScanChartUI {
 	private String[] scanFilterNames;
 	private List<String> scanIdentifierIds;
 	private String[] scanIdentifierNames;
+	//
+	private EditorUpdateSupport editorUpdateSupport;
 
 	private class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
 
@@ -146,15 +156,26 @@ public class ExtendedScanChartUI {
 	private void updateScan() {
 
 		if(!isScanPinned) {
-			labelScan.setText(ScanSupport.getScanLabel(scan));
-			enableIdentifierSettings(scan);
-			setDetectorSignalType(scan);
-			scanChartUI.setInput(scan);
+			setScanInfo();
+			setComboChromatogramItems();
+		} else {
+			previousChromatogramScan.setEnabled(false);
+			comboChromatograms.setEnabled(false);
+			nextChromatogramScan.setEnabled(false);
 		}
+	}
+
+	private void setScanInfo() {
+
+		labelScan.setText(ScanSupport.getScanLabel(scan));
+		enableIdentifierSettings(scan);
+		setDetectorSignalType(scan);
+		scanChartUI.setInput(scan);
 	}
 
 	private void initializeSettings() {
 
+		editorUpdateSupport = new EditorUpdateSupport();
 		initializeScanFilter();
 		initializeScanIdentifier();
 	}
@@ -166,11 +187,13 @@ public class ExtendedScanChartUI {
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
 		toolbarIdentify = createToolbarIdentify(parent);
+		toolbarReferences = createToolbarReferences(parent);
 		createScanChart(parent);
 		//
 		enableToolbarButtons(false);
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
 		PartSupport.setCompositeVisibility(toolbarIdentify, false);
+		PartSupport.setCompositeVisibility(toolbarReferences, false);
 	}
 
 	private void initializeScanFilter() {
@@ -203,12 +226,13 @@ public class ExtendedScanChartUI {
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(9, false));
+		composite.setLayout(new GridLayout(10, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		comboDataType = createDataType(composite);
 		comboSignalType = createSignalType(composite);
 		createButtonToggleToolbarIdentify(composite);
+		createButtonToggleToolbarReferences(composite);
 		createToggleChartLegendButton(composite);
 		createResetButton(composite);
 		buttonSaveScan = createSaveButton(composite);
@@ -234,6 +258,89 @@ public class ExtendedScanChartUI {
 		setPinButtonText();
 		//
 		return composite;
+	}
+
+	private Composite createToolbarReferences(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(3, false));
+		composite.setVisible(false);
+		//
+		previousChromatogramScan = createPreviousChromatogramScanButton(composite);
+		comboChromatograms = createChromatogramCombo(composite);
+		nextChromatogramScan = createNextChromatogramScanButton(composite);
+		//
+		return composite;
+	}
+
+	private Button createPreviousChromatogramScanButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Get the scan of the previous chromatogram.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PREVIOUS_YELLOW, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				int index = comboChromatograms.getSelectionIndex() - 1;
+				int minIndex = 0;
+				if(index < minIndex) {
+					index = minIndex;
+				}
+				comboChromatograms.select(index);
+				enablePreviousNextButtons();
+			}
+		});
+		return button;
+	}
+
+	private Combo createChromatogramCombo(Composite parent) {
+
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		combo.setToolTipText("Chromatogram Combo");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				enablePreviousNextButtons();
+			}
+		});
+		return combo;
+	}
+
+	private Button createNextChromatogramScanButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Get the scan of the next chromatogram.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_NEXT_YELLOW, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				int index = comboChromatograms.getSelectionIndex() + 1;
+				int maxIndex = comboChromatograms.getItemCount() - 1;
+				if(index > maxIndex) {
+					index = maxIndex;
+				}
+				comboChromatograms.select(index);
+				enablePreviousNextButtons();
+			}
+		});
+		return button;
+	}
+
+	private void enablePreviousNextButtons() {
+
+		previousChromatogramScan.setEnabled(comboChromatograms.getSelectionIndex() > 0);
+		nextChromatogramScan.setEnabled(comboChromatograms.getSelectionIndex() < comboChromatograms.getItemCount() - 2);
 	}
 
 	private Button createPinButton(Composite parent) {
@@ -487,6 +594,29 @@ public class ExtendedScanChartUI {
 		return button;
 	}
 
+	private Button createButtonToggleToolbarReferences(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle references toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarReferences);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
+				}
+			}
+		});
+		//
+		return button;
+	}
+
 	private void enableToolbarButtons(boolean enabled) {
 
 		buttonSaveScan.setEnabled(enabled);
@@ -702,5 +832,23 @@ public class ExtendedScanChartUI {
 		//
 		combo.setItems(items);
 		combo.select(index);
+	}
+
+	private void setComboChromatogramItems() {
+
+		List<IChromatogramSelection> chromatogramSelections = editorUpdateSupport.getChromatogramSelections();
+		List<String> chromatogramNames = new ArrayList<String>();
+		chromatogramNames.add("");
+		for(IChromatogramSelection chromatogramSelection : chromatogramSelections) {
+			chromatogramNames.add(chromatogramSelection.getChromatogram().getName());
+		}
+		//
+		comboChromatograms.setEnabled(true);
+		String[] items = chromatogramNames.toArray(new String[chromatogramSelections.size()]);
+		comboChromatograms.setItems(items);
+		comboChromatograms.select(0);
+		//
+		previousChromatogramScan.setEnabled(false);
+		nextChromatogramScan.setEnabled(true);
 	}
 }
