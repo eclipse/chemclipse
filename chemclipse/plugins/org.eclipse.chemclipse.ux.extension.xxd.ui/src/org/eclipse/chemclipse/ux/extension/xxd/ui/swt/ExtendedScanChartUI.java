@@ -91,10 +91,10 @@ public class ExtendedScanChartUI {
 	private Button buttonOptimizedScan;
 	private ScanChartUI scanChartUI;
 	//
-	private Button buttonPreviousChromatogramScan;
-	private Text textChromatogramScan;
-	private ComboViewer comboViewerChromatograms;
-	private Button buttonNextChromatogramScan;
+	private Button buttonPreviousReferenceScan;
+	private Text textReferenceScanRetentionTime;
+	private ComboViewer comboViewerReferences;
+	private Button buttonNextReferenceScan;
 	//
 	private Combo comboDataType;
 	private Combo comboSignalType;
@@ -176,14 +176,14 @@ public class ExtendedScanChartUI {
 		 */
 		if(updateMasterRetentionTime) {
 			masterRetentionTime = scan.getRetentionTime();
-			textChromatogramScan.setText(ScanSupport.getRetentionTime(scan));
+			textReferenceScanRetentionTime.setText(ScanSupport.getRetentionTime(scan));
 		}
 		updateMasterRetentionTime = true;
 	}
 
 	private void updateScan() {
 
-		enableChromatogramScanWidgets();
+		enableReferenceScanWidgets();
 		if(!isScanPinned) {
 			setScanInfo();
 			setComboChromatogramItems();
@@ -293,51 +293,43 @@ public class ExtendedScanChartUI {
 		composite.setLayout(new GridLayout(4, false));
 		composite.setVisible(false);
 		//
-		buttonPreviousChromatogramScan = createPreviousChromatogramScanButton(composite);
-		textChromatogramScan = createChromatogramScanText(composite);
-		comboViewerChromatograms = createChromatogramCombo(composite);
-		buttonNextChromatogramScan = createNextChromatogramScanButton(composite);
+		buttonPreviousReferenceScan = createPreviousReferenceScanButton(composite);
+		textReferenceScanRetentionTime = createReferenceScanRetentionTimeText(composite);
+		comboViewerReferences = createReferenceCombo(composite);
+		buttonNextReferenceScan = createNextReferenceScanButton(composite);
 		//
 		return composite;
 	}
 
-	private Button createPreviousChromatogramScanButton(Composite parent) {
+	private Button createPreviousReferenceScanButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Get the scan of the previous chromatogram.");
+		button.setToolTipText("Get the scan of the previous reference.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PREVIOUS_YELLOW, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Combo combo = comboViewerChromatograms.getCombo();
-				int index = combo.getSelectionIndex() - 1;
-				int minIndex = 0;
-				if(index < minIndex) {
-					index = minIndex;
-				}
-				combo.select(index);
-				enableChromatogramScanWidgets();
-				selectChromatogramScan();
+				selectReferenceScan(-1);
 			}
 		});
 		return button;
 	}
 
-	private Text createChromatogramScanText(Composite parent) {
+	private Text createReferenceScanRetentionTimeText(Composite parent) {
 
 		Text text = new Text(parent, SWT.BORDER | SWT.READ_ONLY);
 		text.setText("");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.minimumWidth = 100;
 		text.setLayoutData(gridData);
-		text.setToolTipText("This retention time is used to retrieve the scan of the selected chromatogram.");
+		text.setToolTipText("This retention time is used to retrieve the scan of the selected reference.");
 		return text;
 	}
 
-	private ComboViewer createChromatogramCombo(Composite parent) {
+	private ComboViewer createReferenceCombo(Composite parent) {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		comboViewer.setContentProvider(new ArrayContentProvider());
@@ -355,40 +347,31 @@ public class ExtendedScanChartUI {
 			}
 		});
 		Combo combo = comboViewer.getCombo();
-		combo.setToolTipText("Chromatogram Combo");
+		combo.setToolTipText("Editor References");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				enableChromatogramScanWidgets();
-				selectChromatogramScan();
+				selectReferenceScan(0);
 			}
 		});
 		return comboViewer;
 	}
 
-	private Button createNextChromatogramScanButton(Composite parent) {
+	private Button createNextReferenceScanButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Get the scan of the next chromatogram.");
+		button.setToolTipText("Get the scan of the next reference.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_NEXT_YELLOW, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Combo combo = comboViewerChromatograms.getCombo();
-				int index = combo.getSelectionIndex() + 1;
-				int maxIndex = combo.getItemCount();
-				if(index > maxIndex) {
-					index = maxIndex;
-				}
-				combo.select(index);
-				enableChromatogramScanWidgets();
-				selectChromatogramScan();
+				selectReferenceScan(1);
 			}
 		});
 		return button;
@@ -406,6 +389,7 @@ public class ExtendedScanChartUI {
 
 				isScanPinned = isScanPinned ? false : true;
 				setPinButtonText();
+				enableReferenceScanWidgets();
 			}
 		});
 		return button;
@@ -887,10 +871,10 @@ public class ExtendedScanChartUI {
 
 	private void setComboChromatogramItems() {
 
-		Combo combo = comboViewerChromatograms.getCombo();
+		Combo combo = comboViewerReferences.getCombo();
 		String chromatogramName = combo.getText();
 		List<IChromatogramSelection> chromatogramSelections = editorUpdateSupport.getChromatogramSelections();
-		comboViewerChromatograms.setInput(chromatogramSelections);
+		comboViewerReferences.setInput(chromatogramSelections);
 		/*
 		 * Select the item if it has been already selected before.
 		 */
@@ -907,24 +891,44 @@ public class ExtendedScanChartUI {
 		combo.select(index);
 	}
 
-	private void enableChromatogramScanWidgets() {
+	private void enableReferenceScanWidgets() {
 
 		boolean enable = !isScanPinned;
-		buttonPreviousChromatogramScan.setEnabled(enable);
-		textChromatogramScan.setEnabled(enable);
-		comboViewerChromatograms.getCombo().setEnabled(enable);
-		buttonNextChromatogramScan.setEnabled(enable);
+		buttonPreviousReferenceScan.setEnabled(enable);
+		textReferenceScanRetentionTime.setEnabled(enable);
+		comboViewerReferences.getCombo().setEnabled(enable);
+		buttonNextReferenceScan.setEnabled(enable);
 		//
 		if(enable) {
-			Combo combo = comboViewerChromatograms.getCombo();
-			buttonPreviousChromatogramScan.setEnabled(combo.getSelectionIndex() > 0);
-			buttonNextChromatogramScan.setEnabled(combo.getSelectionIndex() < combo.getItemCount() - 1);
+			Combo combo = comboViewerReferences.getCombo();
+			buttonPreviousReferenceScan.setEnabled(combo.getSelectionIndex() > 0);
+			buttonNextReferenceScan.setEnabled(combo.getSelectionIndex() < combo.getItemCount() - 1);
 		}
 	}
 
-	private void selectChromatogramScan() {
+	private void selectReferenceScan(int moveIndex) {
 
-		IStructuredSelection structuredSelection = comboViewerChromatograms.getStructuredSelection();
+		/*
+		 * Select the combo item.
+		 */
+		Combo combo = comboViewerReferences.getCombo();
+		int index = combo.getSelectionIndex() + moveIndex;
+		//
+		if(moveIndex < 0) {
+			index = (index < 0) ? 0 : index;
+			combo.select(index);
+		} else if(moveIndex > 0) {
+			index = (index > combo.getItemCount()) ? combo.getItemCount() : index;
+			combo.select(index);
+		}
+		/*
+		 * Enable/disable the widgets.
+		 */
+		enableReferenceScanWidgets();
+		/*
+		 * Fire an update.
+		 */
+		IStructuredSelection structuredSelection = comboViewerReferences.getStructuredSelection();
 		Object object = structuredSelection.getFirstElement();
 		if(object instanceof IChromatogramSelection) {
 			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;

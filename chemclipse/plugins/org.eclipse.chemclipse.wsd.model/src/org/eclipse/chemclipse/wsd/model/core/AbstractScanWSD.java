@@ -65,6 +65,12 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	}
 
 	@Override
+	public int getNumberOfScanSignals() {
+
+		return scanSignals.size();
+	}
+
+	@Override
 	public List<IScanSignalWSD> getScanSignals() {
 
 		return Collections.unmodifiableList(scanSignals);

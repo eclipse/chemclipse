@@ -77,6 +77,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 			/*
 			 * CSD
 			 */
+			super.setInput(null);
 			setLabelAndContentProviders(DataType.CSD);
 			IScanCSD scanCSD = (IScanCSD)scan;
 			List<IScanCSD> list = new ArrayList<IScanCSD>();
@@ -86,6 +87,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 			/*
 			 * WSD
 			 */
+			super.setInput(null);
 			setLabelAndContentProviders(DataType.WSD);
 			IScanWSD scanWSD = (IScanWSD)scan;
 			super.setInput(scanWSD.getScanSignals());

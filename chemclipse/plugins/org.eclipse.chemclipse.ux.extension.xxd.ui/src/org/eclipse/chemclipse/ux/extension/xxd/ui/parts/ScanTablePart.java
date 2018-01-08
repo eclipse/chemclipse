@@ -59,6 +59,8 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
 			extendedScanTableUI.update(object);
+		} else {
+			extendedScanTableUI.update(null);
 		}
 	}
 }

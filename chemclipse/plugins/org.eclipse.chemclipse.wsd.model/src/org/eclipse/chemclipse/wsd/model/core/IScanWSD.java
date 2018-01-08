@@ -25,6 +25,8 @@ public interface IScanWSD extends IScan, IScanTargetsWSD {
 
 	void removeScanSignal(IScanSignalWSD scanSignalWSD);
 
+	int getNumberOfScanSignals();
+
 	List<IScanSignalWSD> getScanSignals();
 
 	void removeScanSignal(int scan);

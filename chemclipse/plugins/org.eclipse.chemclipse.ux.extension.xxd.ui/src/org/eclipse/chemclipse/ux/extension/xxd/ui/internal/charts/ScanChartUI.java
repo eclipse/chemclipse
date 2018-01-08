@@ -202,6 +202,7 @@ public class ScanChartUI extends ScrollableChart {
 			//
 			modifyChart(usedDataType);
 			determineLabelOption(usedDataType);
+			modifyChart(scan, null);
 			//
 			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			Color colorScan1 = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_SCAN_1));
@@ -236,6 +237,7 @@ public class ScanChartUI extends ScrollableChart {
 			modifyChart(usedDataType);
 			determineLabelOption(usedDataType);
 			modifyChart(mirrored);
+			modifyChart(scan1, scan2);
 			//
 			String labelScan1 = "scan1";
 			String labelScan2 = "scan2";
@@ -271,11 +273,45 @@ public class ScanChartUI extends ScrollableChart {
 		deleteSeries();
 	}
 
+	private void modifyChart(IScan scan1, IScan scan2) {
+
+		/*
+		 * If only one signal is contained in the scan, then
+		 * zeroY needs to be enabled to display the complete signal.
+		 * Otherwise, it's auto calculated.
+		 */
+		boolean forceZeroY = isForceZeroMinY(scan1);
+		if(!forceZeroY && scan2 != null) {
+			forceZeroY = isForceZeroMinY(scan2);
+		}
+		//
+		IChartSettings chartSettings = getChartSettings();
+		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
+		rangeRestriction.setForceZeroMinY(forceZeroY);
+		applySettings(chartSettings);
+	}
+
+	private boolean isForceZeroMinY(IScan scan) {
+
+		boolean forceZeroY = false;
+		if(scan instanceof IScanMSD) {
+			IScanMSD scanMSD = (IScanMSD)scan;
+			forceZeroY = (scanMSD.getNumberOfIons() == 1) ? true : false;
+		} else if(scan instanceof IScanCSD) {
+			forceZeroY = true; // Only 1 signal contained.
+		} else if(scan instanceof IScanWSD) {
+			IScanWSD scanWSD = (IScanWSD)scan;
+			forceZeroY = (scanWSD.getNumberOfScanSignals() == 1) ? true : false;
+		}
+		return forceZeroY;
+	}
+
 	private void modifyChart(boolean mirrored) {
 
 		IChartSettings chartSettings = getChartSettings();
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
 		rangeRestriction.setZeroY((mirrored) ? false : true);
+		rangeRestriction.setForceZeroMinY((mirrored) ? true : false);
 		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
 		rangeRestriction.setExtendMinY((mirrored) ? 0.25d : 0.0d);
 		rangeRestriction.setExtendMaxY(0.25d);
@@ -428,7 +464,6 @@ public class ScanChartUI extends ScrollableChart {
 		chartSettings.setCreateMenu(true);
 		//
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
-		chartSettings.getRangeRestriction().setForceZeroMinY(false);
 		rangeRestriction.setRestrictZoom(true);
 		rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.ABSOLUTE);
 		rangeRestriction.setExtendMinX(2.0d);
@@ -451,14 +486,12 @@ public class ScanChartUI extends ScrollableChart {
 				break;
 			case CSD:
 				labelPaintListener = labelPaintListenerY;
-				chartSettings.getRangeRestriction().setForceZeroMinY(true);
 				rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.RELATIVE);
 				rangeRestriction.setExtendMinX(0.1d);
 				rangeRestriction.setExtendMaxX(0.1d);
 				setDataTypeCSD(chartSettings);
 				break;
 			case WSD:
-				chartSettings.getRangeRestriction().setForceZeroMinY(true);
 				setDataTypeWSD(chartSettings);
 				break;
 			default:
