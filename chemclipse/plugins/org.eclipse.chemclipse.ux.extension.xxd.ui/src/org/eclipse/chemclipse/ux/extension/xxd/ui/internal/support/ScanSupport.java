@@ -40,6 +40,15 @@ public class ScanSupport {
 	private ScanSupport() {
 	}
 
+	public static String getRetentionTime(IScan scan) {
+
+		if(scan != null) {
+			return decimalFormat.format(scan.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR);
+		} else {
+			return "";
+		}
+	}
+
 	public static String getScanLabel(IScan scan) {
 
 		StringBuilder builder = new StringBuilder();

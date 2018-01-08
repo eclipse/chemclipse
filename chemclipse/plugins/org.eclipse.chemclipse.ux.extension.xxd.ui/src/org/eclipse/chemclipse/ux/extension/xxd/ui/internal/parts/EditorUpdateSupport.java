@@ -33,28 +33,30 @@ public class EditorUpdateSupport {
 			/*
 			 * Get all open chromatogram parts.
 			 */
-			Collection<MPart> parts = partService.getParts();
-			for(MPart part : parts) {
-				if(isChromatogramEditor(part)) {
-					Object object = part.getObject();
-					if(object != null) {
-						/*
-						 * MSD/CSD/WSD
-						 */
-						IChromatogramSelection selection = null;
-						if(object instanceof ChromatogramEditorMSD) {
-							ChromatogramEditorMSD editor = (ChromatogramEditorMSD)object;
-							selection = editor.getChromatogramSelection();
-						} else if(object instanceof ChromatogramEditorCSD) {
-							ChromatogramEditorCSD editor = (ChromatogramEditorCSD)object;
-							selection = editor.getChromatogramSelection();
-						} else if(object instanceof ChromatogramEditorWSD) {
-							ChromatogramEditorWSD editor = (ChromatogramEditorWSD)object;
-							selection = editor.getChromatogramSelection();
-						}
-						//
-						if(selection != null) {
-							chromatogramSelections.add(selection);
+			if(ModelSupportAddon.getApplication().getContext().getActiveChild() != null) {
+				Collection<MPart> parts = partService.getParts();
+				for(MPart part : parts) {
+					if(isChromatogramEditor(part)) {
+						Object object = part.getObject();
+						if(object != null) {
+							/*
+							 * MSD/CSD/WSD
+							 */
+							IChromatogramSelection selection = null;
+							if(object instanceof ChromatogramEditorMSD) {
+								ChromatogramEditorMSD editor = (ChromatogramEditorMSD)object;
+								selection = editor.getChromatogramSelection();
+							} else if(object instanceof ChromatogramEditorCSD) {
+								ChromatogramEditorCSD editor = (ChromatogramEditorCSD)object;
+								selection = editor.getChromatogramSelection();
+							} else if(object instanceof ChromatogramEditorWSD) {
+								ChromatogramEditorWSD editor = (ChromatogramEditorWSD)object;
+								selection = editor.getChromatogramSelection();
+							}
+							//
+							if(selection != null) {
+								chromatogramSelections.add(selection);
+							}
 						}
 					}
 				}
