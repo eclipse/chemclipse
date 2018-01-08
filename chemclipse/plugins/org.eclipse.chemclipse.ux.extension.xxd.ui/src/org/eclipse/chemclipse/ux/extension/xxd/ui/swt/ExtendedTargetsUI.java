@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -101,7 +102,7 @@ public class ExtendedTargetsUI {
 	private Composite toolbarInfo;
 	private Composite toolbarSearch;
 	private Composite toolbarModify;
-	private Combo comboSubstanceName;
+	private Combo comboTargetName;
 	private TargetsListUI targetListUI;
 	private TargetListUtil targetListUtil;
 	/*
@@ -223,7 +224,7 @@ public class ExtendedTargetsUI {
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarModify);
 				if(visible) {
-					setComboSubstanceNameItems();
+					setComboTargetNameItems();
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				} else {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
@@ -325,21 +326,21 @@ public class ExtendedTargetsUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(3, false));
 		//
-		createComboSubstance(composite);
+		createComboTarget(composite);
 		createButtonAdd(composite);
 		createButtonDelete(composite);
 		//
 		return composite;
 	}
 
-	private void createComboSubstance(Composite parent) {
+	private void createComboTarget(Composite parent) {
 
-		comboSubstanceName = new Combo(parent, SWT.NONE);
-		comboSubstanceName.setToolTipText("Substance Name");
-		comboSubstanceName.setText("");
-		comboSubstanceName.setToolTipText("Select a target or type in a new substance name.");
-		comboSubstanceName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		comboSubstanceName.addKeyListener(new KeyAdapter() {
+		comboTargetName = new Combo(parent, SWT.NONE);
+		comboTargetName.setToolTipText("Target Name");
+		comboTargetName.setText("");
+		comboTargetName.setToolTipText("Select a target or type in a new substance name.");
+		comboTargetName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboTargetName.addKeyListener(new KeyAdapter() {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -556,10 +557,10 @@ public class ExtendedTargetsUI {
 
 	private void applySettings() {
 
-		setComboSubstanceNameItems();
+		setComboTargetNameItems();
 	}
 
-	private void setComboSubstanceNameItems() {
+	private void setComboTargetNameItems() {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		boolean useTargetList = preferenceStore.getBoolean(PreferenceConstants.P_USE_TARGET_LIST);
@@ -567,11 +568,12 @@ public class ExtendedTargetsUI {
 		String[] items;
 		if(useTargetList) {
 			items = targetListUtil.parseString(preferenceStore.getString(PreferenceConstants.P_TARGET_LIST));
+			Arrays.sort(items);
 		} else {
 			items = new String[]{};
 		}
 		//
-		comboSubstanceName.setItems(items);
+		comboTargetName.setItems(items);
 	}
 
 	private void updateTargets() {
@@ -677,7 +679,7 @@ public class ExtendedTargetsUI {
 
 	private void addTarget() {
 
-		String substanceName = comboSubstanceName.getText().trim();
+		String substanceName = comboTargetName.getText().trim();
 		//
 		if("".equals(substanceName)) {
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "Add Target", "The substance name must be not empty.");
@@ -726,7 +728,7 @@ public class ExtendedTargetsUI {
 				chromatogramWSD.addTarget(identificationTarget);
 			}
 			//
-			comboSubstanceName.setText("");
+			comboTargetName.setText("");
 			update(object);
 		}
 	}

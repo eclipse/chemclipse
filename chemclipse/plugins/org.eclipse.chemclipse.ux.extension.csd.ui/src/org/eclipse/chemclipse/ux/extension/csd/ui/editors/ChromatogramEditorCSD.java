@@ -44,6 +44,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.csd.ui.internal.support.ChromatogramImportRunnable;
 import org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramFileSupport;
 import org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport;
@@ -176,7 +177,15 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 			 */
 			if(tabFolder.getSelectionIndex() == chromatogramPageIndex && chromatogramSelection != null) {
 				chromatogramSelection.update(false);
-				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, chromatogramSelection);
+				Display.getDefault().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+
+						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+						eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, chromatogramSelection);
+					}
+				});
 			}
 		}
 	}
@@ -192,6 +201,16 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 		if(chromatogramSelection != null) {
 			chromatogramSelection.dispose();
 		}
+		//
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+
+				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION, chromatogramSelection);
+			}
+		});
 		/*
 		 * Remove the editor from the listed parts.
 		 */

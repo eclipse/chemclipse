@@ -87,7 +87,7 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 					}
 					update(topic);
 				} catch(Exception e) {
-					logger.warn(e);
+					logger.warn(e + "\t" + event);
 				}
 			}
 		};

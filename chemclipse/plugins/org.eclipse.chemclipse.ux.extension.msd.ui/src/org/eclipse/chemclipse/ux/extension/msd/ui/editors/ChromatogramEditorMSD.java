@@ -194,7 +194,15 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 			 */
 			if(tabFolder.getSelectionIndex() == chromatogramPageIndex && chromatogramSelection != null) {
 				chromatogramSelection.update(false);
-				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, chromatogramSelection);
+				Display.getDefault().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+
+						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+						eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, chromatogramSelection);
+					}
+				});
 			}
 		}
 	}
@@ -215,6 +223,16 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 			chromatogramSelection.getChromatogram().setUnloaded();
 			chromatogramSelection.dispose();
 		}
+		//
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+
+				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION, chromatogramSelection);
+			}
+		});
 		/*
 		 * Remove the editor from the listed parts.
 		 */
