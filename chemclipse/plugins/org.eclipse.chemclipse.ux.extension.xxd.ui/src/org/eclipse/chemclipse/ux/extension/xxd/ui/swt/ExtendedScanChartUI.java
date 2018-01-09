@@ -157,6 +157,7 @@ public class ExtendedScanChartUI {
 
 	public void update(IScan scan) {
 
+		enableReferenceScanWidgets();
 		if(!isScanPinned) {
 			this.scan = scan;
 			updateMasterRetentionTime();
@@ -174,7 +175,7 @@ public class ExtendedScanChartUI {
 		 * It needs to be enabled after the action is performed to get
 		 * updates if a scan is selected.
 		 */
-		if(updateMasterRetentionTime) {
+		if(updateMasterRetentionTime && scan != null) {
 			masterRetentionTime = scan.getRetentionTime();
 			textReferenceScanRetentionTime.setText(ScanSupport.getRetentionTime(scan));
 		}

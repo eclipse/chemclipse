@@ -11,12 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
 public abstract class AbstractUpdateSupport implements IUpdateSupport {
 
+	private static final Logger logger = Logger.getLogger(AbstractUpdateSupport.class);
+	//
 	private EPartService partService;
 	private MPart part;
 
@@ -28,9 +31,19 @@ public abstract class AbstractUpdateSupport implements IUpdateSupport {
 	@Override
 	public boolean doUpdate() {
 
-		if(partService.isPartVisible(part)) {
-			return true;
-		} else {
+		/*
+		 * Exception "Application does not have an active window"
+		 * is thrown here sometimes.
+		 * Reason?
+		 */
+		try {
+			if(partService.isPartVisible(part)) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch(Exception e) {
+			logger.warn(e);
 			return false;
 		}
 	}

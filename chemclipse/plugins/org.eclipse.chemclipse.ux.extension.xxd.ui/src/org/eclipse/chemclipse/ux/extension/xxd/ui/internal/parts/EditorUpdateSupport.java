@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.csd.ui.editors.ChromatogramEditorCSD;
@@ -25,39 +26,50 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
 public class EditorUpdateSupport {
 
+	private static final Logger logger = Logger.getLogger(EditorUpdateSupport.class);
+
 	public List<IChromatogramSelection> getChromatogramSelections() {
 
+		/*
+		 * Get all open chromatogram parts.
+		 */
 		EPartService partService = ModelSupportAddon.getPartService();
 		List<IChromatogramSelection> chromatogramSelections = new ArrayList<IChromatogramSelection>();
 		if(partService != null) {
 			/*
-			 * Get all open chromatogram parts.
+			 * Exception "Application does not have an active window"
+			 * is thrown here sometimes.
+			 * Reason?
 			 */
-			Collection<MPart> parts = partService.getParts();
-			for(MPart part : parts) {
-				if(isChromatogramEditor(part)) {
-					Object object = part.getObject();
-					if(object != null) {
-						/*
-						 * MSD/CSD/WSD
-						 */
-						IChromatogramSelection selection = null;
-						if(object instanceof ChromatogramEditorMSD) {
-							ChromatogramEditorMSD editor = (ChromatogramEditorMSD)object;
-							selection = editor.getChromatogramSelection();
-						} else if(object instanceof ChromatogramEditorCSD) {
-							ChromatogramEditorCSD editor = (ChromatogramEditorCSD)object;
-							selection = editor.getChromatogramSelection();
-						} else if(object instanceof ChromatogramEditorWSD) {
-							ChromatogramEditorWSD editor = (ChromatogramEditorWSD)object;
-							selection = editor.getChromatogramSelection();
-						}
-						//
-						if(selection != null) {
-							chromatogramSelections.add(selection);
+			try {
+				Collection<MPart> parts = partService.getParts();
+				for(MPart part : parts) {
+					if(isChromatogramEditor(part)) {
+						Object object = part.getObject();
+						if(object != null) {
+							/*
+							 * MSD/CSD/WSD
+							 */
+							IChromatogramSelection selection = null;
+							if(object instanceof ChromatogramEditorMSD) {
+								ChromatogramEditorMSD editor = (ChromatogramEditorMSD)object;
+								selection = editor.getChromatogramSelection();
+							} else if(object instanceof ChromatogramEditorCSD) {
+								ChromatogramEditorCSD editor = (ChromatogramEditorCSD)object;
+								selection = editor.getChromatogramSelection();
+							} else if(object instanceof ChromatogramEditorWSD) {
+								ChromatogramEditorWSD editor = (ChromatogramEditorWSD)object;
+								selection = editor.getChromatogramSelection();
+							}
+							//
+							if(selection != null) {
+								chromatogramSelections.add(selection);
+							}
 						}
 					}
 				}
+			} catch(Exception e) {
+				logger.warn(e);
 			}
 		}
 		/*
