@@ -187,7 +187,7 @@ public class ExtendedScanChartUI {
 		enableReferenceScanWidgets();
 		if(!isScanPinned) {
 			setScanInfo();
-			setComboChromatogramItems();
+			setComboReferenceItems();
 		}
 	}
 
@@ -870,7 +870,7 @@ public class ExtendedScanChartUI {
 		combo.select(index);
 	}
 
-	private void setComboChromatogramItems() {
+	private void setComboReferenceItems() {
 
 		Combo combo = comboViewerReferences.getCombo();
 		String chromatogramName = combo.getText();
@@ -879,7 +879,7 @@ public class ExtendedScanChartUI {
 		/*
 		 * Select the item if it has been already selected before.
 		 */
-		int index = 0;
+		int index = -1;
 		exitloop:
 		for(int i = 0; i < chromatogramSelections.size(); i++) {
 			IChromatogramSelection chromatogramSelection = chromatogramSelections.get(i);
@@ -932,13 +932,24 @@ public class ExtendedScanChartUI {
 		IStructuredSelection structuredSelection = comboViewerReferences.getStructuredSelection();
 		Object object = structuredSelection.getFirstElement();
 		if(object instanceof IChromatogramSelection) {
+			/*
+			 * Get the scan.
+			 */
 			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			int scanNumber = chromatogram.getScanNumber(masterRetentionTime);
 			IScan referenceScan = chromatogram.getScan(scanNumber);
-			IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 			updateMasterRetentionTime = false;
-			eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, referenceScan);
+			//
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+
+					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+					eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, referenceScan);
+				}
+			});
 		}
 	}
 }
