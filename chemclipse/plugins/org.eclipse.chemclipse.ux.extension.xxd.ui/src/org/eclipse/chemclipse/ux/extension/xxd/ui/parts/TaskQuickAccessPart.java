@@ -80,12 +80,12 @@ public class TaskQuickAccessPart {
 			public void widgetSelected(SelectionEvent e) {
 
 				/*
-				 * Show the part stack on demand. It's hidden by default.
+				 * Show the part stack on demand. The default is hidden initially.
 				 */
-				PartSupport.setPartStackVisibility(PartSupport.PARTSTACK_OVERVIEW, true);
-				//
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEADER, PartSupport.PARTSTACK_OVERVIEW, imageActive, imageDefault);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW, PartSupport.PARTSTACK_OVERVIEW, imageActive, imageDefault);
+				String partStackId = PartSupport.PARTSTACK_LEFT_CENTER;
+				PartSupport.setPartStackVisibility(partStackId, true);
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEADER, partStackId, imageActive, imageDefault);
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW, partStackId, imageActive, imageDefault);
 			}
 		});
 	}
@@ -172,8 +172,12 @@ public class TaskQuickAccessPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				/*
+				 * Show the part stack on demand. The default is hidden initially.
+				 */
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SUBTRACT_SCAN_PART);
+				PartSupport.setPartStackVisibility(partStackId, true);
 				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_SUBTRACT_SCAN, partStackId, imageActive, imageDefault);
 			}
 		});
@@ -214,8 +218,12 @@ public class TaskQuickAccessPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				/*
+				 * Show the part stack on demand. The default is hidden initially.
+				 */
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_COMPARISON_SCAN_PART);
+				PartSupport.setPartStackVisibility(partStackId, true);
 				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_COMPARISON_SCAN, partStackId, imageActive, imageDefault);
 			}
 		});

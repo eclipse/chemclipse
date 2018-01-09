@@ -32,17 +32,20 @@ public class PreferenceConstants {
 	public static final String P_STACK_POSITION_PEAK_CHART = "stackPositionPeakChart";
 	public static final String DEF_STACK_POSITION_PEAK_CHART = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	public static final String P_STACK_POSITION_SUBTRACT_SCAN_PART = "stackPositionSubtractScanChart";
-	public static final String DEF_STACK_POSITION_SUBTRACT_SCAN_PART = PartSupport.PARTSTACK_BOTTOM_RIGHT;
+	public static final String DEF_STACK_POSITION_SUBTRACT_SCAN_PART = PartSupport.PARTSTACK_RIGHT_TOP;
 	public static final String P_STACK_POSITION_COMBINED_SCAN_PART = "stackPositionCombinedScanChart";
 	public static final String DEF_STACK_POSITION_COMBINED_SCAN_PART = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_COMPARISON_SCAN_PART = "stackPositionComparisonScanChart";
-	public static final String DEF_STACK_POSITION_COMPARISON_SCAN_PART = PartSupport.PARTSTACK_BOTTOM_RIGHT;
+	public static final String DEF_STACK_POSITION_COMPARISON_SCAN_PART = PartSupport.PARTSTACK_RIGHT_TOP;
 	//
 	public static String[][] PART_STACKS = new String[][]{//
 			{"--", PartSupport.PARTSTACK_NONE}, //
-			{"Left", PartSupport.PARTSTACK_BOTTOM_LEFT}, //
-			{"Center", PartSupport.PARTSTACK_BOTTOM_CENTER}, //
-			{"Right", PartSupport.PARTSTACK_BOTTOM_RIGHT}//
+			{"Left Top", PartSupport.PARTSTACK_LEFT_TOP}, //
+			{"Left Center", PartSupport.PARTSTACK_LEFT_CENTER}, //
+			{"Right Top", PartSupport.PARTSTACK_RIGHT_TOP}, //
+			{"Bottom Left", PartSupport.PARTSTACK_BOTTOM_LEFT}, //
+			{"Bottom Center", PartSupport.PARTSTACK_BOTTOM_CENTER}, //
+			{"Bottom Right", PartSupport.PARTSTACK_BOTTOM_RIGHT}//
 	};
 	/*
 	 * Overlay

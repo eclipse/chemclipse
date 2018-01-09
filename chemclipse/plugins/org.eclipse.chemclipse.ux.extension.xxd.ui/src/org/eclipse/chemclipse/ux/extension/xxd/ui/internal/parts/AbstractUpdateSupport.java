@@ -43,7 +43,7 @@ public abstract class AbstractUpdateSupport implements IUpdateSupport {
 				return false;
 			}
 		} catch(Exception e) {
-			logger.warn(e);
+			logger.warn(e + "\t" + part);
 			return false;
 		}
 	}
