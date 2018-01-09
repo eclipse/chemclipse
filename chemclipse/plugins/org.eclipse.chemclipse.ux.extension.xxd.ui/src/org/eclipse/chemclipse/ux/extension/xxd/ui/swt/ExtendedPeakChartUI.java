@@ -18,8 +18,13 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
+import org.eclipse.chemclipse.numeric.core.IPoint;
+import org.eclipse.chemclipse.numeric.equations.Equations;
+import org.eclipse.chemclipse.numeric.equations.LinearEquation;
+import org.eclipse.chemclipse.numeric.exceptions.SolverException;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.swt.ui.support.Sign;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaks;
 import org.eclipse.e4.ui.di.Focus;
@@ -71,14 +76,33 @@ public class ExtendedPeakChartUI {
 
 		peakChart.deleteSeries();
 		if(peak != null) {
+			ISeriesData seriesData;
+			ILineSeriesData lineSeriesData;
+			ILineSeriesSettings lineSeriesSettings;
+			ILineSeriesSettings lineSeriesSettingsHighlight;
+			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-			ISeriesData seriesData = getSeriesData(peak);
-			ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+			/*
+			 * Peak
+			 */
+			seriesData = getPeakSeriesData(peak);
+			lineSeriesData = new LineSeriesData(seriesData);
+			lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 			lineSeriesSettings.setEnableArea(true);
-			ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
+			lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
 			lineSeriesSettingsHighlight.setLineWidth(2);
 			lineSeriesDataList.add(lineSeriesData);
+			/*
+			 * Increasing Tangent
+			 */
+			// seriesData = getIncreasingInflectionPoints(peak, false, Sign.POSITIVE);
+			// lineSeriesData = new LineSeriesData(seriesData);
+			// lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+			// lineSeriesSettings.setEnableArea(false);
+			// lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
+			// lineSeriesSettingsHighlight.setLineWidth(2);
+			// lineSeriesDataList.add(lineSeriesData);
+			//
 			peakChart.addSeriesData(lineSeriesDataList);
 		}
 	}
@@ -92,24 +116,6 @@ public class ExtendedPeakChartUI {
 		createPeakChart(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarSettings, false);
-	}
-
-	private ISeriesData getSeriesData(IPeak peak) {
-
-		String id = "Peak";
-		IPeakModel peakModel = peak.getPeakModel();
-		List<Integer> retentionTimes = peakModel.getRetentionTimes();
-		int size = retentionTimes.size();
-		double[] xSeries = new double[size];
-		double[] ySeries = new double[size];
-		int index = 0;
-		for(int retentionTime : retentionTimes) {
-			xSeries[index] = retentionTime;
-			ySeries[index] = peakModel.getIntensity(retentionTime);
-			index++;
-		}
-		//
-		return new SeriesData(xSeries, ySeries, id);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -256,5 +262,79 @@ public class ExtendedPeakChartUI {
 	private void applySettings() {
 
 		updatePeak();
+	}
+
+	private ISeriesData getPeakSeriesData(IPeak peak) {
+
+		String id = "Peak";
+		IPeakModel peakModel = peak.getPeakModel();
+		List<Integer> retentionTimes = peakModel.getRetentionTimes();
+		int size = retentionTimes.size();
+		double[] xSeries = new double[size];
+		double[] ySeries = new double[size];
+		int index = 0;
+		for(int retentionTime : retentionTimes) {
+			xSeries[index] = retentionTime;
+			ySeries[index] = peakModel.getIntensity(retentionTime);
+			index++;
+		}
+		//
+		return new SeriesData(xSeries, ySeries, id);
+	}
+
+	private ISeriesData getIncreasingInflectionPoints(IPeak peak, boolean includeBackground, Sign sign) {
+
+		String id = "Increasing Tangent";
+		double[] xSeries = new double[2];
+		double[] ySeries = new double[2];
+		//
+		if(peak != null) {
+			IPeakModel peakModel = peak.getPeakModel();
+			try {
+				IPoint intersection;
+				LinearEquation increasing = peakModel.getIncreasingInflectionPointEquation();
+				LinearEquation decreasing = peakModel.getDecreasingInflectionPointEquation();
+				LinearEquation baseline = peakModel.getPercentageHeightBaselineEquation(0.0f);
+				double x;
+				/*
+				 * Where does the increasing tangent crosses the baseline.
+				 */
+				intersection = Equations.calculateIntersection(increasing, baseline);
+				/*
+				 * Take a look if the retention time (X) is lower than the peaks
+				 * retention time.<br/> If yes, take the peaks start retention
+				 * time, otherwise the values would be 0 by default.
+				 */
+				double startRetentionTime = peakModel.getStartRetentionTime();
+				x = intersection.getX() < startRetentionTime ? startRetentionTime : intersection.getX();
+				xSeries[0] = intersection.getX();
+				if(includeBackground) {
+					ySeries[0] = intersection.getY() + peakModel.getBackgroundAbundance((int)x);
+				} else {
+					ySeries[0] = intersection.getY();
+				}
+				/*
+				 * This is the highest point of the peak, given by the tangents.
+				 */
+				intersection = Equations.calculateIntersection(increasing, decreasing);
+				/*
+				 * Take a look if the retention time (X) is greater than the
+				 * peaks retention time.<br/> If yes, take the peaks stop
+				 * retention time, otherwise the values would be 0 by default.
+				 */
+				double stopRetentionTime = peakModel.getStopRetentionTime();
+				x = intersection.getX() > stopRetentionTime ? stopRetentionTime : intersection.getX();
+				xSeries[1] = intersection.getX();
+				if(includeBackground) {
+					ySeries[1] = intersection.getY() + peakModel.getBackgroundAbundance((int)x);
+				} else {
+					ySeries[1] = intersection.getY();
+				}
+			} catch(SolverException e) {
+				//
+			}
+		}
+		//
+		return new SeriesData(xSeries, ySeries, id);
 	}
 }
