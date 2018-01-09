@@ -32,7 +32,7 @@ public class ScanChartPart extends AbstractDataUpdateSupport implements IDataUpd
 	@Inject
 	public ScanChartPart(Composite parent, MPart part) {
 		super(part);
-		extendedScanChartUI = new ExtendedScanChartUI(parent, part);
+		extendedScanChartUI = new ExtendedScanChartUI(parent);
 	}
 
 	@Focus

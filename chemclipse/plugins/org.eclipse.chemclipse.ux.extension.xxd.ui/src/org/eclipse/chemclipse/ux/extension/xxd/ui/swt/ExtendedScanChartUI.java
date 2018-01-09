@@ -53,7 +53,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -144,7 +143,7 @@ public class ExtendedScanChartUI {
 	}
 
 	@Inject
-	public ExtendedScanChartUI(Composite parent, MPart part) {
+	public ExtendedScanChartUI(Composite parent) {
 		initializeSettings();
 		initialize(parent);
 	}
