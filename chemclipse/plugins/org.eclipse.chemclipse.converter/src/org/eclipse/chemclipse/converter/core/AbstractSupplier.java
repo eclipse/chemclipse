@@ -13,8 +13,12 @@ package org.eclipse.chemclipse.converter.core;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.logging.core.Logger;
+
 public abstract class AbstractSupplier implements ISupplierSetter {
 
+	private static final Logger logger = Logger.getLogger(AbstractSupplier.class);
+	//
 	private String id = "";
 	private String description = "";
 	private String filterName = "";
@@ -78,9 +82,17 @@ public abstract class AbstractSupplier implements ISupplierSetter {
 
 		String extension = fileExtension;
 		if(fileExtension != null) {
-			if(!"".equals(fileExtension)) {
-				extension = fileExtension.startsWith(".") ? fileExtension : "." + fileExtension;
+			/*
+			 * Is this needed?
+			 * The extension points let's one set the file name -> [fileExtension=".r"]
+			 * But there are also binary raw data file, which do not have an extension, e.g. Bruker "fid" for MS and NMR.
+			 */
+			if(!fileExtension.startsWith(".")) {
+				logger.info("The following supplier file extension has no preceding dot: " + fileExtension);
 			}
+			// if(!"".equals(fileExtension)) {
+			// extension = fileExtension.startsWith(".") ? fileExtension : "." + fileExtension;
+			// }
 			this.fileExtension = extension;
 		}
 	}

@@ -46,6 +46,7 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 		 * Check each supplier.
 		 */
 		for(ISupplier supplier : suppliers) {
+			//
 			supplierExtension = supplier.getFileExtension().toLowerCase();
 			if(supplierExtension != "") {
 				if(supplierExtension.contains(IConverterSupport.WILDCARD_NUMBER)) {

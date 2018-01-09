@@ -32,6 +32,7 @@ public class SupplierFileExplorerPart extends AbstractSupplierFileExplorer {
 		List<ISupplierFileEditorSupport> list = new ArrayList<ISupplierFileEditorSupport>();
 		list.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport.getInstanceEditorSupport());
 		list.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.MassSpectrumDatabaseSupport.getInstanceEditorSupport());
+		// list.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.MassSpectrumFileSupport.getInstanceEditorSupport());
 		list.add(org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport.getInstanceEditorSupport());
 		list.add(org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramSupport.getInstanceEditorSupport());
 		return list;

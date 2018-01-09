@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,27 +14,27 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.support;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
 
-public class MassSpectrumDatabaseSupport {
+public class MassSpectrumFileSupport {
 
-	private static ISupplierFileIdentifier massSpectrumDatabaseIdentifier;
-	private static ISupplierFileEditorSupport massSpectrumDatabaseEditorSupport;
+	private static ISupplierFileIdentifier massSpectrumFileIdentifier;
+	private static ISupplierFileEditorSupport massSpectrumFileEditorSupport;
 
-	private MassSpectrumDatabaseSupport() {
+	private MassSpectrumFileSupport() {
 	}
 
 	public static ISupplierFileIdentifier getInstanceIdentifier() {
 
-		if(massSpectrumDatabaseIdentifier == null) {
-			massSpectrumDatabaseIdentifier = new MassSpectrumDatabaseIdentifier();
+		if(massSpectrumFileIdentifier == null) {
+			massSpectrumFileIdentifier = new MassSpectrumFileIdentifier();
 		}
-		return massSpectrumDatabaseIdentifier;
+		return massSpectrumFileIdentifier;
 	}
 
 	public static ISupplierFileEditorSupport getInstanceEditorSupport() {
 
-		if(massSpectrumDatabaseEditorSupport == null) {
-			massSpectrumDatabaseEditorSupport = new MassSpectrumDatabaseEditorSupport();
+		if(massSpectrumFileEditorSupport == null) {
+			massSpectrumFileEditorSupport = new MassSpectrumFileEditorSupport();
 		}
-		return massSpectrumDatabaseEditorSupport;
+		return massSpectrumFileEditorSupport;
 	}
 }
