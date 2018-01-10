@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaks;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
@@ -33,9 +34,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 
 public class ExtendedPeakChartUI {
 
+	private Composite toolbarInfo;
+	private Label labelScan;
 	private Composite toolbarSettings;
 	private PeakChartUI peakChartUI;
 	//
@@ -55,6 +59,7 @@ public class ExtendedPeakChartUI {
 	public void update(IPeak peak) {
 
 		this.peak = peak;
+		labelScan.setText(PeakSupport.getPeakLabel(peak));
 		updatePeak();
 	}
 
@@ -68,9 +73,11 @@ public class ExtendedPeakChartUI {
 		parent.setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(parent);
+		toolbarInfo = createToolbarInfo(parent);
 		toolbarSettings = createToolbarSettings(parent);
 		createPeakChart(parent);
 		//
+		PartSupport.setCompositeVisibility(toolbarInfo, true);
 		PartSupport.setCompositeVisibility(toolbarSettings, false);
 	}
 
@@ -80,12 +87,28 @@ public class ExtendedPeakChartUI {
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(5, false));
 		//
+		createButtonToggleToolbarInfo(composite);
 		createButtonToggleToolbarSettings(composite);
 		createToggleChartLegendButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
+	}
+
+	private Composite createToolbarInfo(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(1, false));
+		composite.setVisible(false);
+		//
+		labelScan = new Label(composite, SWT.NONE);
+		labelScan.setText("");
+		labelScan.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		return composite;
 	}
 
 	private Composite createToolbarSettings(Composite parent) {
@@ -99,6 +122,29 @@ public class ExtendedPeakChartUI {
 		createButton(composite);
 		//
 		return composite;
+	}
+
+	private Button createButtonToggleToolbarInfo(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle info toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+				}
+			}
+		});
+		//
+		return button;
 	}
 
 	private void createButtonToggleToolbarSettings(Composite parent) {
