@@ -12,6 +12,8 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -26,6 +28,9 @@ public class PreferencePagePeaks extends FieldEditorPreferencePage implements IW
 
 	public void createFieldEditors() {
 
+		addField(new BooleanFieldEditor(PreferenceConstants.P_PEAK_INCLUDE_BACKGROUND, "Include Background", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_PEAK_1, "Color Peak 1:", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_PEAK_2, "Color Peak 2:", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

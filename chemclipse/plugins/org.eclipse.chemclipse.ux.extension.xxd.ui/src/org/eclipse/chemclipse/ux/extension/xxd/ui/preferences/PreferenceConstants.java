@@ -104,6 +104,12 @@ public class PreferenceConstants {
 	/*
 	 * Peaks
 	 */
+	public static final String P_PEAK_INCLUDE_BACKGROUND = "peakIncludeBackground";
+	public static final boolean DEF_PEAK_INCLUDE_BACKGROUND = true;
+	public static final String P_COLOR_PEAK_1 = "colorPeak1";
+	public static final String DEF_COLOR_PEAK_1 = "255,0,0";
+	public static final String P_COLOR_PEAK_2 = "colorPeak2";
+	public static final String DEF_COLOR_PEAK_2 = "0,0,0";
 	/*
 	 * Targets
 	 */

@@ -48,9 +48,8 @@ public class PreferencePageScans extends FieldEditorPreferencePage implements IW
 		highestIntensitiesEditor.setValidRange(PreferenceConstants.MIN_SCAN_LABEL_HIGHEST_INTENSITIES, PreferenceConstants.MAX_SCAN_LABEL_HIGHEST_INTENSITIES);
 		addField(highestIntensitiesEditor);
 		//
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SCAN_LABEL_MODULO_INTENSITIES, "Add additional intensity labels.", getFieldEditorParent()));
-		//
-		addField(new BooleanFieldEditor(PreferenceConstants.P_AUTOFOCUS_SUBTRACT_SCAN_PART, "Autofocus subtract scan part.", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SCAN_LABEL_MODULO_INTENSITIES, "Add additional intensity labels", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_AUTOFOCUS_SUBTRACT_SCAN_PART, "Autofocus subtract scan part", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

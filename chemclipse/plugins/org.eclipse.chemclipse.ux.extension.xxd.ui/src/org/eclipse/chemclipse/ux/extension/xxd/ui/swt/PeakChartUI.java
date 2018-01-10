@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.numeric.exceptions.SolverException;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToMinuteConverter;
 import org.eclipse.eavp.service.swtchart.axisconverter.RelativeIntensityConverter;
@@ -80,32 +81,33 @@ public class PeakChartUI extends ScrollableChart {
 		if(peak != null) {
 			//
 			modifyChart(peak);
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-			//
-			boolean includeBackground = true;
-			boolean mirrored = false;
-			//
-			lineSeriesDataList.add(getPeak(peak, includeBackground, mirrored));
-			lineSeriesDataList.add(getIncreasingTangent(peak, includeBackground, mirrored));
-			lineSeriesDataList.add(getDecreasingTangent(peak, includeBackground, mirrored));
-			lineSeriesDataList.add(getPeakPerpendicular(peak, includeBackground, mirrored));
-			lineSeriesDataList.add(getPeakWidth(peak, includeBackground, HEIGHT_50, mirrored, Colors.BLACK));
-			lineSeriesDataList.add(getPeakWidth(peak, includeBackground, HEIGHT_0, mirrored, Colors.BLACK));
-			lineSeriesDataList.add(getPeakWidth(peak, includeBackground, HEIGHT_85, mirrored, Colors.RED));
-			lineSeriesDataList.add(getPeakWidth(peak, includeBackground, HEIGHT_15, mirrored, Colors.RED));
-			if(includeBackground) {
-				lineSeriesDataList.add(getPeakBackground(peak, mirrored));
-			}
-			//
-			addLineSeriesData(lineSeriesDataList);
+			setPeak(peak, "");
 		}
 	}
 
-	public void setInput(IPeak peak1, IPeak peak2, boolean mirrored) {
+	private void setPeak(IPeak peak, String postfix) {
 
-		prepareChart();
-		if(peak1 != null) {
+		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+		//
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		boolean includeBackground = preferenceStore.getBoolean(PreferenceConstants.P_PEAK_INCLUDE_BACKGROUND);
+		boolean mirrored = false;
+		//
+		Color colorPeak1 = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_1));
+		//
+		lineSeriesDataList.add(getPeak(peak, includeBackground, mirrored, colorPeak1, postfix));
+		lineSeriesDataList.add(getIncreasingTangent(peak, includeBackground, mirrored, Colors.BLACK, postfix));
+		lineSeriesDataList.add(getDecreasingTangent(peak, includeBackground, mirrored, Colors.BLACK, postfix));
+		lineSeriesDataList.add(getPeakPerpendicular(peak, includeBackground, mirrored, Colors.BLACK, postfix));
+		lineSeriesDataList.add(getPeakWidth(peak, includeBackground, HEIGHT_50, mirrored, Colors.BLACK, postfix));
+		lineSeriesDataList.add(getPeakWidth(peak, includeBackground, HEIGHT_0, mirrored, Colors.BLACK, postfix));
+		lineSeriesDataList.add(getPeakWidth(peak, includeBackground, HEIGHT_85, mirrored, Colors.RED, postfix));
+		lineSeriesDataList.add(getPeakWidth(peak, includeBackground, HEIGHT_15, mirrored, Colors.RED, postfix));
+		if(includeBackground) {
+			lineSeriesDataList.add(getPeakBackground(peak, mirrored, Colors.BLACK, postfix));
 		}
+		//
+		addLineSeriesData(lineSeriesDataList);
 	}
 
 	private void prepareChart() {
@@ -115,11 +117,6 @@ public class PeakChartUI extends ScrollableChart {
 
 	private void modifyChart() {
 
-		/*
-		 * Preferences
-		 */
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		// String name = preferenceStore.getString(PreferenceConstants.P_SCAN_LABEL_FONT_NAME);
 		/*
 		 * Settings
 		 */
@@ -241,80 +238,56 @@ public class PeakChartUI extends ScrollableChart {
 		}
 	}
 
-	private ILineSeriesData getPeak(IPeak peak, boolean includeBackground, boolean mirrored) {
+	private ILineSeriesData getPeak(IPeak peak, boolean includeBackground, boolean mirrored, Color color, String postfix) {
 
-		ISeriesData seriesData = getPeakSeriesData(peak, includeBackground, mirrored);
-		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
-		lineSeriesSettings.setEnableArea(true);
-		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
-		lineSeriesSettingsHighlight.setLineWidth(2);
-		return lineSeriesData;
+		ISeriesData seriesData = getPeakSeriesData(peak, includeBackground, mirrored, postfix);
+		return getLineSeriesData(seriesData, color, true);
 	}
 
-	private ILineSeriesData getIncreasingTangent(IPeak peak, boolean includeBackground, boolean mirrored) {
+	private ILineSeriesData getIncreasingTangent(IPeak peak, boolean includeBackground, boolean mirrored, Color color, String postfix) {
 
-		ISeriesData seriesData = getIncreasingInflectionData(peak, includeBackground, mirrored);
-		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
-		lineSeriesSettings.setLineColor(Colors.BLACK);
-		lineSeriesSettings.setEnableArea(false);
-		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
-		lineSeriesSettingsHighlight.setLineWidth(2);
-		return lineSeriesData;
+		ISeriesData seriesData = getIncreasingInflectionData(peak, includeBackground, mirrored, postfix);
+		return getLineSeriesData(seriesData, color, false);
 	}
 
-	private ILineSeriesData getDecreasingTangent(IPeak peak, boolean includeBackground, boolean mirrored) {
+	private ILineSeriesData getDecreasingTangent(IPeak peak, boolean includeBackground, boolean mirrored, Color color, String postfix) {
 
-		ISeriesData seriesData = getDecreasingInflectionData(peak, includeBackground, mirrored);
-		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
-		lineSeriesSettings.setLineColor(Colors.BLACK);
-		lineSeriesSettings.setEnableArea(false);
-		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
-		lineSeriesSettingsHighlight.setLineWidth(2);
-		return lineSeriesData;
+		ISeriesData seriesData = getDecreasingInflectionData(peak, includeBackground, mirrored, postfix);
+		return getLineSeriesData(seriesData, color, false);
 	}
 
-	private ILineSeriesData getPeakPerpendicular(IPeak peak, boolean includeBackground, boolean mirrored) {
+	private ILineSeriesData getPeakPerpendicular(IPeak peak, boolean includeBackground, boolean mirrored, Color color, String postfix) {
 
-		ISeriesData seriesData = getPeakPerpendicularData(peak, includeBackground, mirrored);
-		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
-		lineSeriesSettings.setLineColor(Colors.BLACK);
-		lineSeriesSettings.setEnableArea(false);
-		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
-		lineSeriesSettingsHighlight.setLineWidth(2);
-		return lineSeriesData;
+		ISeriesData seriesData = getPeakPerpendicularData(peak, includeBackground, mirrored, postfix);
+		return getLineSeriesData(seriesData, color, false);
 	}
 
-	private ILineSeriesData getPeakWidth(IPeak peak, boolean includeBackground, float height, boolean mirrored, Color color) {
+	private ILineSeriesData getPeakWidth(IPeak peak, boolean includeBackground, float height, boolean mirrored, Color color, String postfix) {
 
-		ISeriesData seriesData = getPeakWidthByInflectionData(peak, includeBackground, height, mirrored);
+		ISeriesData seriesData = getPeakWidthByInflectionData(peak, includeBackground, height, mirrored, postfix);
+		return getLineSeriesData(seriesData, color, false);
+	}
+
+	private ILineSeriesData getPeakBackground(IPeak peak, boolean mirrored, Color color, String postfix) {
+
+		ISeriesData seriesData = getPeakBackgroundData(peak, mirrored, postfix);
+		return getLineSeriesData(seriesData, color, false);
+	}
+
+	private ILineSeriesData getLineSeriesData(ISeriesData seriesData, Color color, boolean enableArea) {
+
 		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
 		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 		lineSeriesSettings.setLineColor(color);
-		lineSeriesSettings.setEnableArea(false);
+		lineSeriesSettings.setEnableArea(enableArea);
 		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
 		lineSeriesSettingsHighlight.setLineWidth(2);
 		return lineSeriesData;
 	}
 
-	private ILineSeriesData getPeakBackground(IPeak peak, boolean mirrored) {
+	private ISeriesData getPeakSeriesData(IPeak peak, boolean includeBackground, boolean mirrored, String postfix) {
 
-		ISeriesData seriesData = getPeakBackgroundData(peak, mirrored);
-		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
-		lineSeriesSettings.setLineColor(Colors.BLACK);
-		lineSeriesSettings.setEnableArea(false);
-		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
-		lineSeriesSettingsHighlight.setLineWidth(2);
-		return lineSeriesData;
-	}
-
-	private ISeriesData getPeakSeriesData(IPeak peak, boolean includeBackground, boolean mirrored) {
-
-		String id = "Peak";
+		String id = "Peak" + postfix;
 		IPeakModel peakModel = peak.getPeakModel();
 		List<Integer> retentionTimes = peakModel.getRetentionTimes();
 		int size = retentionTimes.size();
@@ -340,9 +313,9 @@ public class PeakChartUI extends ScrollableChart {
 		return new SeriesData(xSeries, ySeries, id);
 	}
 
-	private ISeriesData getIncreasingInflectionData(IPeak peak, boolean includeBackground, boolean mirrored) {
+	private ISeriesData getIncreasingInflectionData(IPeak peak, boolean includeBackground, boolean mirrored, String postfix) {
 
-		String id = "Increasing Tangent";
+		String id = "Increasing Tangent" + postfix;
 		double[] xSeries = new double[2];
 		double[] ySeries = new double[2];
 		//
@@ -405,9 +378,9 @@ public class PeakChartUI extends ScrollableChart {
 		return new SeriesData(xSeries, ySeries, id);
 	}
 
-	private ISeriesData getDecreasingInflectionData(IPeak peak, boolean includeBackground, boolean mirrored) {
+	private ISeriesData getDecreasingInflectionData(IPeak peak, boolean includeBackground, boolean mirrored, String postfix) {
 
-		String id = "Decreasing Tangent";
+		String id = "Decreasing Tangent" + postfix;
 		double[] xSeries = new double[2];
 		double[] ySeries = new double[2];
 		//
@@ -436,6 +409,11 @@ public class PeakChartUI extends ScrollableChart {
 				} else {
 					ySeries[0] = intersection.getY();
 				}
+				//
+				//
+				if(mirrored) {
+					ySeries[0] = ySeries[0] * -1;
+				}
 				/*
 				 * This is the highest point of the peak, given by the tangents.
 				 */
@@ -453,6 +431,11 @@ public class PeakChartUI extends ScrollableChart {
 				} else {
 					ySeries[1] = intersection.getY();
 				}
+				//
+				//
+				if(mirrored) {
+					ySeries[1] = ySeries[1] * -1;
+				}
 			} catch(SolverException e) {
 			}
 		}
@@ -460,9 +443,9 @@ public class PeakChartUI extends ScrollableChart {
 		return new SeriesData(xSeries, ySeries, id);
 	}
 
-	private ISeriesData getPeakPerpendicularData(IPeak peak, boolean includeBackground, boolean mirrored) {
+	private ISeriesData getPeakPerpendicularData(IPeak peak, boolean includeBackground, boolean mirrored, String postfix) {
 
-		String id = "Peak Perpendicular";
+		String id = "Peak Perpendicular" + postfix;
 		double[] xSeries = new double[2];
 		double[] ySeries = new double[2];
 		//
@@ -473,6 +456,10 @@ public class PeakChartUI extends ScrollableChart {
 				ySeries[0] = peakModel.getBackgroundAbundance(peakModel.getRetentionTimeAtPeakMaximumByInflectionPoints());
 			} else {
 				ySeries[0] = 0.0d;
+			}
+			//
+			if(mirrored) {
+				ySeries[0] = ySeries[0] * -1;
 			}
 			try {
 				IPoint intersection = Equations.calculateIntersection(peakModel.getIncreasingInflectionPointEquation(), peakModel.getDecreasingInflectionPointEquation());
@@ -488,6 +475,10 @@ public class PeakChartUI extends ScrollableChart {
 				} else {
 					ySeries[1] = intersection.getY();
 				}
+				//
+				if(mirrored) {
+					ySeries[1] = ySeries[1] * -1;
+				}
 			} catch(SolverException e) {
 			}
 		}
@@ -495,9 +486,9 @@ public class PeakChartUI extends ScrollableChart {
 		return new SeriesData(xSeries, ySeries, id);
 	}
 
-	private ISeriesData getPeakWidthByInflectionData(IPeak peak, boolean includeBackground, float height, boolean mirrored) {
+	private ISeriesData getPeakWidthByInflectionData(IPeak peak, boolean includeBackground, float height, boolean mirrored, String postfix) {
 
-		String id = "Peak Width";
+		String id = "Peak Width" + postfix;
 		double[] xSeries = new double[2];
 		double[] ySeries = new double[2];
 		//
@@ -527,6 +518,10 @@ public class PeakChartUI extends ScrollableChart {
 					} else {
 						ySeries[0] = p1.getY();
 					}
+					//
+					if(mirrored) {
+						ySeries[0] = ySeries[0] * -1;
+					}
 					/*
 					 * Take a look if the retention time (X) is greater than the
 					 * peaks retention time.<br/> If yes, take the peaks stop
@@ -545,18 +540,22 @@ public class PeakChartUI extends ScrollableChart {
 					} else {
 						ySeries[1] = p2.getY();
 					}
+					//
+					if(mirrored) {
+						ySeries[1] = ySeries[1] * -1;
+					}
 				} catch(SolverException e) {
 				}
 			}
-			id = "Peak Width at " + decimalFormat.format(height * 100) + "%";
+			id = "Peak" + postfix + " Width at " + decimalFormat.format(height * 100) + "%";
 		}
 		//
 		return new SeriesData(xSeries, ySeries, id);
 	}
 
-	private ISeriesData getPeakBackgroundData(IPeak peak, boolean mirrored) {
+	private ISeriesData getPeakBackgroundData(IPeak peak, boolean mirrored, String postfix) {
 
-		String id = "Peak Background";
+		String id = "Peak Background" + postfix;
 		IPeakModel peakModel = peak.getPeakModel();
 		List<Integer> retentionTimes = peakModel.getRetentionTimes();
 		int size = retentionTimes.size();
@@ -567,6 +566,11 @@ public class PeakChartUI extends ScrollableChart {
 		for(int retentionTime : peakModel.getRetentionTimes()) {
 			xSeries[index] = retentionTime;
 			ySeries[index] = peakModel.getBackgroundAbundance(retentionTime);
+			//
+			if(mirrored) {
+				ySeries[index] = ySeries[index] * -1;
+			}
+			//
 			index++;
 		}
 		//
