@@ -47,7 +47,6 @@ public class PeakQuantitationEntriesUI {
 		/*
 		 * E.g. Scan
 		 */
-		// SWT.VIRTUAL | SWT.FULL_SELECTION
 		tableViewer = new ExtendedTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		tableViewer.createColumns(titles, bounds);
 		tableViewer.setContentProvider(new PeakQuantitationEntriesContentProvider());

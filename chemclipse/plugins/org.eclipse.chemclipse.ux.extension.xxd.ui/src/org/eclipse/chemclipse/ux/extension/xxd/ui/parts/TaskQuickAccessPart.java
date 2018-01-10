@@ -154,9 +154,11 @@ public class TaskQuickAccessPart {
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				String partStackIdChart = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_CHART);
 				String partStackIdDetails = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_DETAILS);
+				String partStackIdQuantitation = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION);
 				//
 				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_CHART, partStackIdChart, imageActive, imageDefault);
 				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_DETAILS, partStackIdDetails, imageActive, imageDefault);
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION, partStackIdQuantitation, imageActive, imageDefault);
 			}
 		});
 	}

@@ -60,7 +60,6 @@ public class TargetsListUI extends ExtendedTableViewer {
 	private void createColumns() {
 
 		createColumns(TargetsLabelProvider.TITLES, TargetsLabelProvider.BOUNDS);
-		targetsTableComparator = new TargetsTableComparator();
 		setLabelProvider(new TargetsLabelProvider());
 		setContentProvider(new ListContentProvider());
 		setComparator(targetsTableComparator);

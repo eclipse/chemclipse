@@ -44,7 +44,7 @@ import org.eclipse.swt.widgets.List;
 public class ExtendedPeakDetailsUI {
 
 	private Composite toolbarInfo;
-	private Label labelScan;
+	private Label labelPeak;
 	//
 	private List list;
 	private Clipboard clipboard;
@@ -69,7 +69,7 @@ public class ExtendedPeakDetailsUI {
 	public void update(IPeak peak) {
 
 		this.peak = peak;
-		labelScan.setText(PeakSupport.getPeakLabel(peak));
+		labelPeak.setText(PeakSupport.getPeakLabel(peak));
 		updatePeak();
 	}
 
@@ -112,9 +112,9 @@ public class ExtendedPeakDetailsUI {
 		composite.setLayout(new GridLayout(1, false));
 		composite.setVisible(false);
 		//
-		labelScan = new Label(composite, SWT.NONE);
-		labelScan.setText("");
-		labelScan.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		labelPeak = new Label(composite, SWT.NONE);
+		labelPeak.setText("");
+		labelPeak.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		return composite;
 	}

@@ -33,6 +33,8 @@ public class PreferenceConstants {
 	public static final String DEF_STACK_POSITION_PEAK_CHART = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	public static final String P_STACK_POSITION_PEAK_DETAILS = "stackPositionPeakDetails";
 	public static final String DEF_STACK_POSITION_PEAK_DETAILS = PartSupport.PARTSTACK_BOTTOM_LEFT;
+	public static final String P_STACK_POSITION_PEAK_QUANTITATION = "stackPositionPeakQuantitation";
+	public static final String DEF_STACK_POSITION_PEAK_QUANTITATION = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_SUBTRACT_SCAN_PART = "stackPositionSubtractScanChart";
 	public static final String DEF_STACK_POSITION_SUBTRACT_SCAN_PART = PartSupport.PARTSTACK_RIGHT_TOP;
 	public static final String P_STACK_POSITION_COMBINED_SCAN_PART = "stackPositionCombinedScanChart";

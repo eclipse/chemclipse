@@ -19,19 +19,19 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.IDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedPeakDetailsUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedPeakQuantitationUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
-public class PeakDetailsPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class PeakQuantitationPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
-	private ExtendedPeakDetailsUI extendedPeakDetailsUI;
+	private ExtendedPeakQuantitationUI extendedPeakQuantitationUI;
 
 	@Inject
-	public PeakDetailsPart(Composite parent, MPart part) {
+	public PeakQuantitationPart(Composite parent, MPart part) {
 		super(part);
-		extendedPeakDetailsUI = new ExtendedPeakDetailsUI(parent);
+		extendedPeakQuantitationUI = new ExtendedPeakQuantitationUI(parent);
 	}
 
 	@Focus
@@ -56,9 +56,9 @@ public class PeakDetailsPart extends AbstractDataUpdateSupport implements IDataU
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
 			if(object instanceof IPeak) {
-				extendedPeakDetailsUI.update((IPeak)object);
+				extendedPeakQuantitationUI.update((IPeak)object);
 			} else {
-				extendedPeakDetailsUI.update(null);
+				extendedPeakQuantitationUI.update(null);
 			}
 		}
 	}
