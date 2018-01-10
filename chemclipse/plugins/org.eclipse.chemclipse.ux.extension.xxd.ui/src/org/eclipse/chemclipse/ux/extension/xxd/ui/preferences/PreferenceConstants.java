@@ -108,12 +108,34 @@ public class PreferenceConstants {
 	/*
 	 * Peaks
 	 */
-	public static final String P_PEAK_INCLUDE_BACKGROUND = "peakIncludeBackground";
-	public static final boolean DEF_PEAK_INCLUDE_BACKGROUND = true;
+	public static final String P_INCLUDE_PEAK_BACKGROUND = "includePeakBackground";
+	public static final boolean DEF_INCLUDE_PEAK_BACKGROUND = true;
+	public static final String P_SHOW_PEAK_BASELINE = "showPeakBaseline";
+	public static final boolean DEF_SHOW_PEAK_BASELINE = true;
+	public static final String P_COLOR_PEAK_BASELINE = "colorPeakBaseline";
+	public static final String DEF_COLOR_PEAK_BASELINE = "0,0,0";
+	public static final String P_SHOW_PEAK = "showPeak";
+	public static final boolean DEF_SHOW_PEAK = true;
 	public static final String P_COLOR_PEAK_1 = "colorPeak1";
 	public static final String DEF_COLOR_PEAK_1 = "255,0,0";
 	public static final String P_COLOR_PEAK_2 = "colorPeak2";
 	public static final String DEF_COLOR_PEAK_2 = "0,0,0";
+	public static final String P_SHOW_PEAK_TANGENTS = "showPeakTangents";
+	public static final boolean DEF_SHOW_PEAK_TANGENTS = true;
+	public static final String P_COLOR_PEAK_TANGENTS = "colorPeakTangents";
+	public static final String DEF_COLOR_PEAK_TANGENTS = "0,0,0";
+	public static final String P_SHOW_PEAK_WIDTH_50 = "showPeakWidth50";
+	public static final boolean DEF_SHOW_PEAK_WIDTH_50 = true;
+	public static final String P_COLOR_PEAK_WIDTH_50 = "colorPeakWidth50";
+	public static final String DEF_COLOR_PEAK_WIDTH_50 = "0,0,0";
+	public static final String P_SHOW_PEAK_WIDTH_0 = "showPeakWidth0";
+	public static final boolean DEF_SHOW_PEAK_WIDTH_0 = false;
+	public static final String P_COLOR_PEAK_WIDTH_0 = "colorPeakWidth0";
+	public static final String DEF_COLOR_PEAK_WIDTH_0 = "0,0,0";
+	public static final String P_SHOW_PEAK_WIDTH_CONDAL_BOSH = "showPeakWidthCondalBosh";
+	public static final boolean DEF_SHOW_PEAK_WIDTH_CONDAL_BOSH = false;
+	public static final String P_COLOR_PEAK_WIDTH_CONDAL_BOSH = "colorPeakWidthCondalBosh";
+	public static final String DEF_COLOR_PEAK_WIDTH_CONDAL_BOSH = "0,0,0";
 	/*
 	 * Targets
 	 */

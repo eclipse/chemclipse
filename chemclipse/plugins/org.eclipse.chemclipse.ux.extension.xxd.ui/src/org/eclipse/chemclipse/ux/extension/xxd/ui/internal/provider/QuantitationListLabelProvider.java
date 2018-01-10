@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-public class PeakQuantitationLabelProvider extends AbstractChemClipseLabelProvider {
+public class QuantitationListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String[] TITLES = { //
 			"Name", //

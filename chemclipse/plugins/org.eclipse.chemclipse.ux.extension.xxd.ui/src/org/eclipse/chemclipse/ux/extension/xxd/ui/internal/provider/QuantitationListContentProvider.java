@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-public class PeakQuantitationContentProvider implements IStructuredContentProvider {
+public class QuantitationListContentProvider implements IStructuredContentProvider {
 
 	@Override
 	public Object[] getElements(Object inputElement) {

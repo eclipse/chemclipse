@@ -39,38 +39,38 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 
-public class ExtendedPeakQuantitationUI {
+public class ExtendedQuantitationListUI {
 
 	private Composite toolbarInfo;
-	private Label labelPeak;
-	private PeakQuantitationListUI peakQuantitationListUI;
+	private Label labelInfo;
+	private QuantitationListUI quantitationListUI;
 	//
 	private IPeak peak;
 
 	@Inject
-	public ExtendedPeakQuantitationUI(Composite parent) {
+	public ExtendedQuantitationListUI(Composite parent) {
 		initialize(parent);
 	}
 
 	@Focus
 	public void setFocus() {
 
-		updatePeak();
+		updateObject();
 	}
 
 	public void update(IPeak peak) {
 
 		this.peak = peak;
-		labelPeak.setText(PeakSupport.getPeakLabel(peak));
-		updatePeak();
+		labelInfo.setText(PeakSupport.getPeakLabel(peak));
+		updateObject();
 	}
 
-	private void updatePeak() {
+	private void updateObject() {
 
 		if(peak != null) {
-			peakQuantitationListUI.setInput(peak);
+			quantitationListUI.setInput(peak);
 		} else {
-			peakQuantitationListUI.clear();
+			quantitationListUI.clear();
 		}
 	}
 
@@ -80,7 +80,7 @@ public class ExtendedPeakQuantitationUI {
 		//
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
-		createPeakQuantitationTable(parent);
+		createQuantitationTable(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
 	}
@@ -104,26 +104,26 @@ public class ExtendedPeakQuantitationUI {
 		composite.setLayout(new GridLayout(1, false));
 		composite.setVisible(false);
 		//
-		labelPeak = new Label(composite, SWT.NONE);
-		labelPeak.setText("");
-		labelPeak.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		labelInfo = new Label(composite, SWT.NONE);
+		labelInfo.setText("");
+		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		return composite;
 	}
 
-	private PeakQuantitationListUI createPeakQuantitationTable(Composite parent) {
+	private QuantitationListUI createQuantitationTable(Composite parent) {
 
-		PeakQuantitationListUI targetsListUI = new PeakQuantitationListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		targetsListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		QuantitationListUI quantitationListUI = new QuantitationListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		quantitationListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Add the delete targets support.
 		 */
-		ITableSettings tableSettings = targetsListUI.getTableSettings();
+		ITableSettings tableSettings = quantitationListUI.getTableSettings();
 		addDeleteMenuEntry(tableSettings);
 		addKeyEventProcessors(tableSettings);
-		targetsListUI.applySettings(tableSettings);
+		quantitationListUI.applySettings(tableSettings);
 		//
-		return targetsListUI;
+		return quantitationListUI;
 	}
 
 	private Button createButtonToggleToolbarInfo(Composite parent) {
@@ -200,7 +200,7 @@ public class ExtendedPeakQuantitationUI {
 			/*
 			 * Delete Quantitation Entry
 			 */
-			Iterator iterator = peakQuantitationListUI.getStructuredSelection().iterator();
+			Iterator iterator = quantitationListUI.getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				if(object instanceof IQuantitationEntry) {
@@ -208,7 +208,7 @@ public class ExtendedPeakQuantitationUI {
 				}
 			}
 			//
-			updatePeak();
+			updateObject();
 		}
 	}
 

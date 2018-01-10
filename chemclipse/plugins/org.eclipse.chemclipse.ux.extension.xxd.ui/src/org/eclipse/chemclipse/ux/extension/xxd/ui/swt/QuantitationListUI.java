@@ -12,18 +12,18 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakQuantitationContentProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakQuantitationLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakQuantitationTableComparator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.QuantitationListContentProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.QuantitationListLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.QuantitationListTableComparator;
 import org.eclipse.swt.widgets.Composite;
 
-public class PeakQuantitationListUI extends ExtendedTableViewer {
+public class QuantitationListUI extends ExtendedTableViewer {
 
-	private PeakQuantitationTableComparator peakQuantitationTableComparator;
+	private QuantitationListTableComparator quantitationListTableComparator;
 
-	public PeakQuantitationListUI(Composite parent, int style) {
+	public QuantitationListUI(Composite parent, int style) {
 		super(parent, style);
-		peakQuantitationTableComparator = new PeakQuantitationTableComparator();
+		quantitationListTableComparator = new QuantitationListTableComparator();
 		createColumns();
 	}
 
@@ -38,10 +38,10 @@ public class PeakQuantitationListUI extends ExtendedTableViewer {
 
 	private void createColumns() {
 
-		createColumns(PeakQuantitationLabelProvider.TITLES, PeakQuantitationLabelProvider.BOUNDS);
-		setLabelProvider(new PeakQuantitationLabelProvider());
-		setContentProvider(new PeakQuantitationContentProvider());
-		setComparator(peakQuantitationTableComparator);
+		createColumns(QuantitationListLabelProvider.TITLES, QuantitationListLabelProvider.BOUNDS);
+		setLabelProvider(new QuantitationListLabelProvider());
+		setContentProvider(new QuantitationListContentProvider());
+		setComparator(quantitationListTableComparator);
 		setEditingSupport();
 	}
 

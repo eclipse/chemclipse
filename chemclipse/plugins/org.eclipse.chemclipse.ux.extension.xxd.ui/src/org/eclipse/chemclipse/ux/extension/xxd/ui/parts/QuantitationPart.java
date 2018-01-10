@@ -19,19 +19,19 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.IDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedPeakQuantitationUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedQuantitationListUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
-public class PeakQuantitationPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class QuantitationPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
-	private ExtendedPeakQuantitationUI extendedPeakQuantitationUI;
+	private ExtendedQuantitationListUI extendedPeakQuantitationListUI;
 
 	@Inject
-	public PeakQuantitationPart(Composite parent, MPart part) {
+	public QuantitationPart(Composite parent, MPart part) {
 		super(part);
-		extendedPeakQuantitationUI = new ExtendedPeakQuantitationUI(parent);
+		extendedPeakQuantitationListUI = new ExtendedQuantitationListUI(parent);
 	}
 
 	@Focus
@@ -54,12 +54,21 @@ public class PeakQuantitationPart extends AbstractDataUpdateSupport implements I
 		 * 0 => because only one property was used to register the event.
 		 */
 		if(objects.size() == 1) {
-			Object object = objects.get(0);
-			if(object instanceof IPeak) {
-				extendedPeakQuantitationUI.update((IPeak)object);
+			IPeak peak;
+			if(isUnloadEvent(topic)) {
+				peak = null;
 			} else {
-				extendedPeakQuantitationUI.update(null);
+				peak = (IPeak)objects.get(0);
 			}
+			extendedPeakQuantitationListUI.update(peak);
 		}
+	}
+
+	private boolean isUnloadEvent(String topic) {
+
+		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION)) {
+			return true;
+		}
+		return false;
 	}
 }
