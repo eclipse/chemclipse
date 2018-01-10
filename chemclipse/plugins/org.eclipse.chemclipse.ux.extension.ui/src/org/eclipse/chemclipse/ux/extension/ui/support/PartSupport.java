@@ -23,6 +23,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 public class PartSupport {
 
@@ -182,8 +183,28 @@ public class PartSupport {
 
 		composite.setVisible(visible);
 		GridData gridData = (GridData)composite.getLayoutData();
-		gridData.exclude = !visible;
+		if(gridData != null) {
+			gridData.exclude = !visible;
+		}
 		Composite parent = composite.getParent();
+		parent.layout(true);
+		parent.redraw();
+	}
+
+	public static void setControlVisibility(Control control, boolean visible) {
+
+		control.setVisible(visible);
+		GridData gridData = (GridData)control.getLayoutData();
+		if(gridData != null) {
+			gridData.exclude = !visible;
+		}
+		//
+		Composite parent = control.getParent();
+		Composite parentParent = parent.getParent();
+		if(parentParent != null) {
+			parent = parentParent;
+		}
+		//
 		parent.layout(true);
 		parent.redraw();
 	}

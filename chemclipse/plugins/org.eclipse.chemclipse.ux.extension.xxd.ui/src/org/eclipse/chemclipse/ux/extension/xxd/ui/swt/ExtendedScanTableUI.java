@@ -88,6 +88,8 @@ public class ExtendedScanTableUI {
 	//
 	private DeleteMenuEntry deleteMenuEntry;
 	private DeleteKeyEventProcessor deleteKeyEventProcessor;
+	//
+	private boolean fireUpdate = true;
 
 	private class DeleteMenuEntry implements ITableMenuEntry {
 
@@ -135,10 +137,21 @@ public class ExtendedScanTableUI {
 		updateObject();
 	}
 
+	/**
+	 * Enable or disable the edit functionality.
+	 * It is disabled by default.
+	 * 
+	 * @param enabled
+	 */
 	public void enableEditModus(boolean enabled) {
 
-		PartSupport.setCompositeVisibility(toolbarEdit, enabled);
+		/*
+		 * Modify the toolbar and show/hide the toolbar edit button.
+		 * Initially, don't show the edit toolbar.
+		 */
+		PartSupport.setCompositeVisibility(toolbarEdit, false);
 		buttonToggleToolbarEdit.setEnabled(enabled);
+		PartSupport.setControlVisibility(buttonToggleToolbarEdit, enabled);
 		//
 		ITableSettings tableSettings = scanTableUI.getTableSettings();
 		if(enabled) {
@@ -149,6 +162,17 @@ public class ExtendedScanTableUI {
 			tableSettings.removeKeyEventProcessor(deleteKeyEventProcessor);
 		}
 		scanTableUI.applySettings(tableSettings);
+	}
+
+	/**
+	 * By default, an update is fired when modifying the scan.
+	 * If this value is set to false, no update will be fired.
+	 * 
+	 * @param fireUpdate
+	 */
+	public void setFireUpdate(boolean fireUpdate) {
+
+		this.fireUpdate = fireUpdate;
 	}
 
 	public void update(Object object) {
@@ -255,6 +279,7 @@ public class ExtendedScanTableUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle edit toolbar.");
 		button.setText("");
+		button.setLayoutData(new GridData()); // GridData is needed to show/hide the control, see: enableEditModus(boolean enabled)
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -616,11 +641,13 @@ public class ExtendedScanTableUI {
 		/*
 		 * Fire an update.
 		 */
-		IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-		if(object instanceof IScan) {
-			eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, object);
-		} else if(object instanceof IPeak) {
-			eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, object);
+		if(fireUpdate) {
+			IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+			if(object instanceof IScan) {
+				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, object);
+			} else if(object instanceof IPeak) {
+				eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, object);
+			}
 		}
 	}
 }

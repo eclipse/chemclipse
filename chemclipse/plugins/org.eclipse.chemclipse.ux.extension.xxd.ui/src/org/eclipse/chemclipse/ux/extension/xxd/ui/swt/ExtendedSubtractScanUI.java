@@ -159,6 +159,7 @@ public class ExtendedSubtractScanUI {
 		//
 		extendedScanTableUI = new ExtendedScanTableUI(composite);
 		extendedScanTableUI.enableEditModus(true);
+		extendedScanTableUI.setFireUpdate(false);
 	}
 
 	private void createAddSelectedScanButton(Composite parent) {
