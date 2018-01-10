@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -24,9 +24,9 @@ import org.eclipse.swt.widgets.Display;
 import org.swtchart.IAxis.Position;
 import org.swtchart.LineStyle;
 
-public class ChromatogramOverviewChart extends LineChart {
+public class OverviewChartUI extends LineChart {
 
-	public ChromatogramOverviewChart(Composite parent, int style) {
+	public OverviewChartUI(Composite parent, int style) {
 		super(parent, style);
 		setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		try {

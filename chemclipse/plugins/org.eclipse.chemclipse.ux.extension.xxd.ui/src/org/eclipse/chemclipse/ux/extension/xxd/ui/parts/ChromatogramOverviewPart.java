@@ -21,9 +21,9 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ChromatogramOverviewChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.AbstractOverviewUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.IDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.OverviewChartUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
@@ -36,7 +36,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class ChromatogramOverviewPart extends AbstractOverviewUpdateSupport implements IDataUpdateSupport {
 
-	private ChromatogramOverviewChart chromatogramOverviewChart;
+	private OverviewChartUI chromatogramOverviewChart;
 
 	@Inject
 	public ChromatogramOverviewPart(Composite parent, MPart part) {
@@ -72,7 +72,7 @@ public class ChromatogramOverviewPart extends AbstractOverviewUpdateSupport impl
 
 	private void initialize(Composite parent) {
 
-		chromatogramOverviewChart = new ChromatogramOverviewChart(parent, SWT.NONE);
+		chromatogramOverviewChart = new OverviewChartUI(parent, SWT.NONE);
 	}
 
 	private ISeriesData getSeriesData(IChromatogramOverview chromatogramOverview) {
