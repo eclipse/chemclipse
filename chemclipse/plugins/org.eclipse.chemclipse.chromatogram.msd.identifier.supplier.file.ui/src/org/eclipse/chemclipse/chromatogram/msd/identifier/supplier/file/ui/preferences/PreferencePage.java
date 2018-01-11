@@ -18,8 +18,8 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.Activ
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
-import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
-import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverterSupport;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
 import org.eclipse.chemclipse.support.ui.preferences.editors.FileListEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
@@ -54,10 +54,10 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		 * Display all available import converter.
 		 */
 		FileListEditor fileListEditor = new FileListEditor(PreferenceSupplier.P_MASS_SPECTRA_FILES, "Load mass spectrum libraries", getFieldEditorParent());
-		MassSpectrumConverterSupport massSpectrumConverterSupport = MassSpectrumConverter.getMassSpectrumConverterSupport();
+		DatabaseConverterSupport databaseConverterSupport = DatabaseConverter.getDatabaseConverterSupport();
 		try {
-			String[] extensions = massSpectrumConverterSupport.getFilterExtensions();
-			String[] names = massSpectrumConverterSupport.getFilterNames();
+			String[] extensions = databaseConverterSupport.getFilterExtensions();
+			String[] names = databaseConverterSupport.getFilterNames();
 			if(extensions.length == names.length) {
 				String[] filterExtensions = new String[extensions.length + 1];
 				String[] filterNames = new String[extensions.length + 1];
