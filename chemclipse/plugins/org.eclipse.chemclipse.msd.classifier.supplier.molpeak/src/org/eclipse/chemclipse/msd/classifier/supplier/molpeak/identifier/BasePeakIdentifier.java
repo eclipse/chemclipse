@@ -32,8 +32,8 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.PathResolver;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IBasePeakSettings;
-import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
+import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -267,7 +267,7 @@ public class BasePeakIdentifier {
 	private static IMassSpectra getStandardsMassSpectra() {
 
 		File file = new File(PathResolver.getAbsolutePath(PathResolver.REFERENCES));
-		IMassSpectrumImportConverterProcessingInfo processingInfo = MassSpectrumConverter.convert(file, new NullProgressMonitor());
+		IDatabaseImportConverterProcessingInfo processingInfo = DatabaseConverter.convert(file, new NullProgressMonitor());
 		IMassSpectra massSpectra = processingInfo.getMassSpectra();
 		return massSpectra;
 	}
