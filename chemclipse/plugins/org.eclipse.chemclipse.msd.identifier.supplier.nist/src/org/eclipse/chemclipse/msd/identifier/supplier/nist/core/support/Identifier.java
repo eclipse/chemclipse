@@ -39,7 +39,7 @@ import org.eclipse.chemclipse.model.identifier.PeakIdentificationResults;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.model.targets.PeakTarget;
-import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Compounds;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.ICompound;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.ICompounds;
@@ -448,7 +448,7 @@ public class Identifier {
 		 */
 		file = new File(nistSupport.getMassSpectraFile());
 		monitor.subTask("Write the peak mass spectra.");
-		MassSpectrumConverter.convert(file, massSpectra, false, MSL_CONVERTER_ID, monitor);
+		DatabaseConverter.convert(file, massSpectra, false, MSL_CONVERTER_ID, monitor);
 		/*
 		 * The AUTOIMP.MSD contains a reference (path) to the FILESPEC.FIL file.
 		 */
@@ -476,7 +476,7 @@ public class Identifier {
 		 * Export the mass spectra (MASSSPECTRA.MSP) file.
 		 */
 		monitor.subTask("Write the peak mass spectra to msp file.");
-		MassSpectrumConverter.convert(file, massSpectra, false, MSP_CONVERTER_ID, monitor);
+		DatabaseConverter.convert(file, massSpectra, false, MSP_CONVERTER_ID, monitor);
 	}
 
 	/**
