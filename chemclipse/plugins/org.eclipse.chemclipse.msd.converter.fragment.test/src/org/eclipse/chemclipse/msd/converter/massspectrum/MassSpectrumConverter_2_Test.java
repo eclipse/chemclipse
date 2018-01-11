@@ -12,6 +12,8 @@
 package org.eclipse.chemclipse.msd.converter.massspectrum;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
 
 import junit.framework.TestCase;
 
@@ -23,13 +25,13 @@ import junit.framework.TestCase;
  */
 public class MassSpectrumConverter_2_Test extends TestCase {
 
-	private MassSpectrumConverterSupport support;
+	private DatabaseConverterSupport support;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		support = MassSpectrumConverter.getMassSpectrumConverterSupport();
+		support = DatabaseConverter.getDatabaseConverterSupport();
 	}
 
 	@Override

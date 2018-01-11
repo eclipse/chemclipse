@@ -18,8 +18,8 @@ import java.util.Date;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
-import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverterSupport;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -145,10 +145,10 @@ public class LibraryModifySupportUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				MassSpectrumConverterSupport massSpectrumConverterSupport = MassSpectrumConverter.getMassSpectrumConverterSupport();
+				DatabaseConverterSupport databaseConverterSupport = DatabaseConverter.getDatabaseConverterSupport();
 				try {
-					String[] extensions = massSpectrumConverterSupport.getFilterExtensions();
-					String[] names = massSpectrumConverterSupport.getFilterNames();
+					String[] extensions = databaseConverterSupport.getFilterExtensions();
+					String[] names = databaseConverterSupport.getFilterNames();
 					if(extensions.length == names.length) {
 						String[] filterExtensions = new String[extensions.length + 1];
 						String[] filterNames = new String[extensions.length + 1];

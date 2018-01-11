@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectru
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class MassSpectrumExportRunnable implements IRunnableWithProgress {
@@ -38,9 +37,6 @@ public class MassSpectrumExportRunnable implements IRunnableWithProgress {
 		this.supplier = supplier;
 	}
 
-	/**
-	 * Returns the written chromatogram file or null.
-	 */
 	public File getData() {
 
 		return data;
@@ -51,7 +47,7 @@ public class MassSpectrumExportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Export Mass Spectra", IProgressMonitor.UNKNOWN);
-			IMassSpectrumExportConverterProcessingInfo processingInfo = MassSpectrumConverter.convert(file, massSpectra, false, supplier.getId(), new SubProgressMonitor(monitor, IProgressMonitor.UNKNOWN));
+			IMassSpectrumExportConverterProcessingInfo processingInfo = MassSpectrumConverter.convert(file, massSpectra, false, supplier.getId(), monitor);
 			try {
 				data = processingInfo.getFile();
 			} catch(TypeCastException e) {

@@ -77,7 +77,7 @@ public class ChromatogramSupplier_1_Test extends TestCase {
 		supplier.setFileExtension(null);
 		assertEquals("fileExtension", "", supplier.getFileExtension());
 		supplier.setFileExtension("MS");
-		assertEquals("fileExtension", ".MS", supplier.getFileExtension());
+		assertEquals("fileExtension", "MS", supplier.getFileExtension());
 		supplier.setFileExtension(".MS");
 		assertEquals("fileExtension", ".MS", supplier.getFileExtension());
 		supplier.setFileExtension("");

@@ -22,8 +22,8 @@ import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
-import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverterSupport;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
@@ -81,7 +81,7 @@ public class MassSpectrumFileSupport {
 		dialog.setFileName(fileName);
 		dialog.setText("Save Mass Spectrum As");
 		dialog.setOverwrite(true);
-		MassSpectrumConverterSupport converterSupport = MassSpectrumConverter.getMassSpectrumConverterSupport();
+		DatabaseConverterSupport converterSupport = DatabaseConverter.getDatabaseConverterSupport();
 		/*
 		 * Set the filters that allow an export of the data.
 		 */
@@ -167,7 +167,7 @@ public class MassSpectrumFileSupport {
 		dialog.setFileName("Mass Spectra");
 		dialog.setText("Save Mass Spectra As");
 		dialog.setOverwrite(true);
-		MassSpectrumConverterSupport converterSupport = MassSpectrumConverter.getMassSpectrumConverterSupport();
+		DatabaseConverterSupport converterSupport = DatabaseConverter.getDatabaseConverterSupport();
 		/*
 		 * Set the filters that allow an export of chromatographic data.
 		 */
@@ -233,7 +233,7 @@ public class MassSpectrumFileSupport {
 	 * @param converterSupport
 	 * @param chromatogram
 	 */
-	private static void validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, MassSpectrumConverterSupport converterSupport, IMassSpectra massSpectra) {
+	private static void validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, DatabaseConverterSupport converterSupport, IMassSpectra massSpectra) {
 
 		File massSpectrumFolder = null;
 		boolean overwrite = dialog.getOverwrite();

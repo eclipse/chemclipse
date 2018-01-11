@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.swt.ui.Activator;
-import org.eclipse.chemclipse.msd.swt.ui.internal.support.MassSpectraExportRunnable;
+import org.eclipse.chemclipse.msd.swt.ui.internal.support.DatabaseExportRunnable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
@@ -103,7 +103,7 @@ public class MassSpectraFileSupport {
 		 * Convert the given chromatogram.
 		 */
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-		MassSpectraExportRunnable runnable = new MassSpectraExportRunnable(file, massSpectra, supplier);
+		DatabaseExportRunnable runnable = new DatabaseExportRunnable(file, massSpectra, supplier);
 		try {
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {
