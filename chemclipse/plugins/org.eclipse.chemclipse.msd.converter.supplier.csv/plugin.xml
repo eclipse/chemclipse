@@ -27,19 +27,19 @@
       </ChromatogramSupplier>      
    </extension>
       <extension
-         point="org.eclipse.chemclipse.msd.converter.massSpectrumSupplier">
-      <MassSpectrumSupplier
+         point="org.eclipse.chemclipse.msd.converter.databaseSupplier">
+      <DatabaseSupplier
             description="Writes mass spectra into character separated value (csv) files."
-            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MassSpectrumExportConverter"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.csv.core.DatabaseExportConverter"
             fileExtension=".csv"
             filterName="CSV Mass Spectrum Peak List (*.csv)"
             id="org.eclipse.chemclipse.msd.converter.supplier.csv"
-            importConverter="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MassSpectrumImportConverter"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.csv.core.DatabaseImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcherChromatogram"
             isExportable="true"
             isImportable="false">
-      </MassSpectrumSupplier>
-      <MassSpectrumSupplier
+      </DatabaseSupplier>
+      <DatabaseSupplier
             description="Writes mass spectra identification values (*.csv)."
             exportConverter="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MassSpectrumIdentificationExportConverter"
             fileExtension=".csv"
@@ -49,7 +49,7 @@
             importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.core.MagicNumberMatcherChromatogram"
             isExportable="true"
             isImportable="false">
-      </MassSpectrumSupplier>      
+      </DatabaseSupplier>      
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

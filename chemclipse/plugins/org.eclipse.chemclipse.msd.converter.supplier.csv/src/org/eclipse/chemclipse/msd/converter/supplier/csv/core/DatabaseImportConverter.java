@@ -13,17 +13,17 @@ package org.eclipse.chemclipse.msd.converter.supplier.csv.core;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.msd.converter.massspectrum.AbstractMassSpectrumImportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.MassSpectrumImportConverterProcessingInfo;
+import org.eclipse.chemclipse.msd.converter.database.AbstractDatabaseImportConverter;
+import org.eclipse.chemclipse.msd.converter.processing.database.DatabaseImportConverterProcessingInfo;
+import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseImportConverterProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class MassSpectrumImportConverter extends AbstractMassSpectrumImportConverter {
+public class DatabaseImportConverter extends AbstractDatabaseImportConverter {
 
 	@Override
-	public IMassSpectrumImportConverterProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IDatabaseImportConverterProcessingInfo convert(File file, IProgressMonitor monitor) {
 
-		IMassSpectrumImportConverterProcessingInfo processingInfo = new MassSpectrumImportConverterProcessingInfo();
+		IDatabaseImportConverterProcessingInfo processingInfo = new DatabaseImportConverterProcessingInfo();
 		processingInfo.addErrorMessage("CSV Mass Spectrum Import", "Mass spectrum import through CSV files isn't implemented yet.");
 		return processingInfo;
 	}
