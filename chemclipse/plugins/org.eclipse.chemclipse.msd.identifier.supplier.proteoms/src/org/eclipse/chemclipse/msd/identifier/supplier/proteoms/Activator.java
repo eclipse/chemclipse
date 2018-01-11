@@ -32,7 +32,7 @@ public class Activator implements BundleActivator {
 
 		Activator.context = bundleContext;
 		// Converter
-		// MassSpectrumConverter.convert(
+		// DatabaseConverter.convert(
 	}
 
 	/*
