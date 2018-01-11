@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,25 +18,25 @@ import java.io.IOException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.converter.database.AbstractDatabaseImportConverter;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
-import org.eclipse.chemclipse.msd.converter.massspectrum.AbstractMassSpectrumImportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.MassSpectrumImportConverterProcessingInfo;
+import org.eclipse.chemclipse.msd.converter.processing.database.DatabaseImportConverterProcessingInfo;
+import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.jcampdx.io.MassSpectraReader;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.jcampdx.internal.converter.SpecificationValidator;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class MassSpectrumImportConverterJDL extends AbstractMassSpectrumImportConverter {
+public class DatabaseImportConverterJDX extends AbstractDatabaseImportConverter {
 
-	private static final Logger logger = Logger.getLogger(MassSpectrumImportConverterJDL.class);
-	private static final String DESCRIPTION = "JDL Library";
+	private static final Logger logger = Logger.getLogger(DatabaseImportConverterJDX.class);
+	private static final String DESCRIPTION = "JCAMP-DX Library";
 
 	@Override
-	public IMassSpectrumImportConverterProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IDatabaseImportConverterProcessingInfo convert(File file, IProgressMonitor monitor) {
 
-		IMassSpectrumImportConverterProcessingInfo processingInfo = new MassSpectrumImportConverterProcessingInfo();
+		IDatabaseImportConverterProcessingInfo processingInfo = new DatabaseImportConverterProcessingInfo();
 		/*
 		 * Checks if the file is null or empty ...
 		 */
@@ -45,7 +45,7 @@ public class MassSpectrumImportConverterJDL extends AbstractMassSpectrumImportCo
 			processingInfo.addMessages(processingInfoValidate);
 		} else {
 			try {
-				file = SpecificationValidator.validateSpecification(file, "JDL");
+				file = SpecificationValidator.validateSpecification(file, "JDX");
 				IMassSpectraReader massSpectraReader = new MassSpectraReader();
 				IMassSpectra massSpectra = massSpectraReader.read(file, monitor);
 				if(massSpectra != null && massSpectra.size() > 0) {
