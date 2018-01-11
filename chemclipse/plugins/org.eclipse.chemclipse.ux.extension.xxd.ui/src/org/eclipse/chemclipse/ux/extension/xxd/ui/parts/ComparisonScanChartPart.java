@@ -47,7 +47,6 @@ public class ComparisonScanChartPart extends AbstractDataUpdateSupport implement
 		/*
 		 * Don't update to not load the reference twice.
 		 */
-		// updateObjects(getObjects(), getTopic());
 	}
 
 	@Override
@@ -69,7 +68,7 @@ public class ComparisonScanChartPart extends AbstractDataUpdateSupport implement
 
 		if(objects.size() == NUMBER_PROPERTIES_1) {
 			/*
-			 * MSD
+			 * MSD (Scan1, Scan2)
 			 */
 			if(isUnloadEvent(topic)) {
 				extendedComparisonScanUI.update(null);

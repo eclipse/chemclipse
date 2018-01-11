@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
@@ -62,6 +63,7 @@ public class ExtendedCombinedScanUI {
 	private IScanMSD scanMSD;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
+	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Inject
 	public ExtendedCombinedScanUI(Composite parent) {
@@ -213,7 +215,7 @@ public class ExtendedCombinedScanUI {
 
 				try {
 					if(scanMSD != null) {
-						MassSpectrumFileSupport.saveMassSpectrum(scanMSD);
+						MassSpectrumFileSupport.saveMassSpectrum(shell, scanMSD, "CombinedScan");
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);

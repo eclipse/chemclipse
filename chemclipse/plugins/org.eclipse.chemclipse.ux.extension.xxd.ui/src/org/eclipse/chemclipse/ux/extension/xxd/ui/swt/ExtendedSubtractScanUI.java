@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
@@ -61,6 +62,7 @@ public class ExtendedSubtractScanUI {
 	//
 	private IScanMSD scanMSD;
 	private IChromatogramSelectionMSD chromatogramSelectionMSD;
+	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Inject
 	public ExtendedSubtractScanUI(Composite parent, MPart part) {
@@ -282,7 +284,7 @@ public class ExtendedSubtractScanUI {
 
 				try {
 					if(scanMSD != null) {
-						MassSpectrumFileSupport.saveMassSpectrum(scanMSD);
+						MassSpectrumFileSupport.saveMassSpectrum(shell, scanMSD, "SubtractMS");
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);

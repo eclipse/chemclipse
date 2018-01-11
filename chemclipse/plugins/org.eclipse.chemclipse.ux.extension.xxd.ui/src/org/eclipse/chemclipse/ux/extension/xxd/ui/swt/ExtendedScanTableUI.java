@@ -63,6 +63,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 public class ExtendedScanTableUI {
@@ -90,6 +91,7 @@ public class ExtendedScanTableUI {
 	private DeleteKeyEventProcessor deleteKeyEventProcessor;
 	//
 	private boolean fireUpdate = true;
+	private Shell shell = Display.getDefault().getActiveShell();
 
 	private class DeleteMenuEntry implements ITableMenuEntry {
 
@@ -216,7 +218,17 @@ public class ExtendedScanTableUI {
 		 */
 		optimizedMassSpectrum = null;
 		buttonOptimizedScan.setEnabled(ScanSupport.containsOptimizedScan(scan));
-		buttonSaveScan.setEnabled((object instanceof IScanMSD) ? true : false);
+		buttonSaveScan.setEnabled(isSaveEnabled());
+	}
+
+	private boolean isSaveEnabled() {
+
+		if(object instanceof IScanMSD) {
+			return true;
+		} else if(object instanceof IPeakMSD) {
+			return true;
+		}
+		return false;
 	}
 
 	private void initialize(Composite parent) {
@@ -326,13 +338,21 @@ public class ExtendedScanTableUI {
 
 				try {
 					if(object instanceof IScanMSD) {
-						IScanMSD massSpectrum;
+						IScanMSD massSpectrum = null;
 						if(optimizedMassSpectrum != null) {
 							massSpectrum = optimizedMassSpectrum;
 						} else {
-							massSpectrum = (IScanMSD)object;
+							if(object instanceof IScanMSD) {
+								massSpectrum = (IScanMSD)object;
+							} else if(object instanceof IPeakMSD) {
+								IPeakMSD peakMSD = (IPeakMSD)object;
+								massSpectrum = peakMSD.getExtractedMassSpectrum();
+							}
 						}
-						MassSpectrumFileSupport.saveMassSpectrum(massSpectrum);
+						//
+						if(massSpectrum != null) {
+							MassSpectrumFileSupport.saveMassSpectrum(shell, massSpectrum, "Scan" + massSpectrum.getScanNumber());
+						}
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);

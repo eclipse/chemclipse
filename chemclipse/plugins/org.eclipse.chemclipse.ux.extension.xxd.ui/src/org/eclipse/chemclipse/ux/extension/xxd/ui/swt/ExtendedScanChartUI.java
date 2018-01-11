@@ -74,6 +74,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 public class ExtendedScanChartUI {
@@ -118,6 +119,7 @@ public class ExtendedScanChartUI {
 	private String[] scanIdentifierNames;
 	//
 	private EditorUpdateSupport editorUpdateSupport;
+	private Shell shell = Display.getDefault().getActiveShell();
 
 	private class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
 
@@ -766,7 +768,13 @@ public class ExtendedScanChartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				try {
-					MassSpectrumFileSupport.saveMassSpectrum(optimizedScan);
+					if(originalScan != null) {
+						MassSpectrumFileSupport.saveMassSpectrum(shell, originalScan, "OriginalScan");
+					}
+					//
+					if(optimizedScan != null) {
+						MassSpectrumFileSupport.saveMassSpectrum(shell, optimizedScan, "OptimizedScan");
+					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
 				}
