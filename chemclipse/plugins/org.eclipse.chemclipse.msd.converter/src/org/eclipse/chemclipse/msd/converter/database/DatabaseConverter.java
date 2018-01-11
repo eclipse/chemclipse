@@ -105,7 +105,7 @@ public class DatabaseConverter {
 	private static IDatabaseImportConverterProcessingInfo getMassSpectra(final File file, IProgressMonitor monitor) {
 
 		IDatabaseImportConverterProcessingInfo processingInfo = new DatabaseImportConverterProcessingInfo();
-		DatabaseConverterSupport converterSupport = getMassSpectrumConverterSupport();
+		DatabaseConverterSupport converterSupport = getDatabaseConverterSupport();
 		try {
 			List<String> availableConverterIds = converterSupport.getAvailableConverterIds(file);
 			for(String converterId : availableConverterIds) {
@@ -276,10 +276,10 @@ public class DatabaseConverter {
 	 * 
 	 * @return ChromatogramConverterSupport
 	 */
-	public static DatabaseConverterSupport getMassSpectrumConverterSupport() {
+	public static DatabaseConverterSupport getDatabaseConverterSupport() {
 
 		DatabaseSupplier supplier;
-		DatabaseConverterSupport massSpectrumConverterSupport = new DatabaseConverterSupport();
+		DatabaseConverterSupport databaseConverterSupport = new DatabaseConverterSupport();
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] extensions = registry.getConfigurationElementsFor(EXTENSION_POINT);
 		for(IConfigurationElement element : extensions) {
@@ -305,10 +305,10 @@ public class DatabaseConverter {
 				supplier.setExportable(Boolean.valueOf(element.getAttribute(Converter.IS_EXPORTABLE)));
 				supplier.setImportable(Boolean.valueOf(element.getAttribute(Converter.IS_IMPORTABLE)));
 				supplier.setMagicNumberMatcher(getMagicNumberMatcher(element));
-				massSpectrumConverterSupport.add(supplier);
+				databaseConverterSupport.add(supplier);
 			}
 		}
-		return massSpectrumConverterSupport;
+		return databaseConverterSupport;
 	}
 
 	/*

@@ -11,19 +11,30 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.support;
 
-import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
-import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileIdentifier;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
 
-public class MassSpectrumDatabaseIdentifier extends AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
+public class DatabaseSupport {
 
-	public MassSpectrumDatabaseIdentifier() {
-		super(MassSpectrumConverter.getMassSpectrumConverterSupport().getSupplier());
+	private static ISupplierFileIdentifier databaseIdentifier;
+	private static ISupplierFileEditorSupport databaseEditorSupport;
+
+	private DatabaseSupport() {
 	}
 
-	@Override
-	public String getType() {
+	public static ISupplierFileIdentifier getInstanceIdentifier() {
 
-		return TYPE_DATABASE_MSD;
+		if(databaseIdentifier == null) {
+			databaseIdentifier = new DatabaseIdentifier();
+		}
+		return databaseIdentifier;
+	}
+
+	public static ISupplierFileEditorSupport getInstanceEditorSupport() {
+
+		if(databaseEditorSupport == null) {
+			databaseEditorSupport = new DatabaseEditorSupport();
+		}
+		return databaseEditorSupport;
 	}
 }

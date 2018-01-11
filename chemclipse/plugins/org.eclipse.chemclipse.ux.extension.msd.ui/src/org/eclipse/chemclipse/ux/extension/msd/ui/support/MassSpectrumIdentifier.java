@@ -15,15 +15,15 @@ import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
 
-public class MassSpectrumFileIdentifier extends AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
+public class MassSpectrumIdentifier extends AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
 
-	public MassSpectrumFileIdentifier() {
+	public MassSpectrumIdentifier() {
 		super(MassSpectrumConverter.getMassSpectrumConverterSupport().getSupplier());
 	}
 
 	@Override
 	public String getType() {
 
-		return TYPE_MSD;
+		return TYPE_FILE_MSD;
 	}
 }

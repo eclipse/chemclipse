@@ -13,18 +13,18 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.support;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
-import org.eclipse.chemclipse.ux.extension.msd.ui.editors.MassSpectrumLibraryEditor;
+import org.eclipse.chemclipse.ux.extension.msd.ui.editors.DatabaseEditor;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
 
-public class MassSpectrumDatabaseEditorSupport extends AbstractSupplierFileEditorSupport implements ISupplierFileEditorSupport {
+public class DatabaseEditorSupport extends AbstractSupplierFileEditorSupport implements ISupplierFileEditorSupport {
 
-	public MassSpectrumDatabaseEditorSupport() {
-		super(MassSpectrumConverter.getMassSpectrumConverterSupport().getSupplier());
+	public DatabaseEditorSupport() {
+		super(DatabaseConverter.getDatabaseConverterSupport().getSupplier());
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class MassSpectrumDatabaseEditorSupport extends AbstractSupplierFileEdito
 		 * Check that the selected file or directory is a valid database.
 		 */
 		if(isSupplierFile(file) || isSupplierFileDirectory(file)) {
-			openEditor(file, null, MassSpectrumLibraryEditor.ID, MassSpectrumLibraryEditor.CONTRIBUTION_URI, MassSpectrumLibraryEditor.ICON_URI, MassSpectrumLibraryEditor.TOOLTIP);
+			openEditor(file, null, DatabaseEditor.ID, DatabaseEditor.CONTRIBUTION_URI, DatabaseEditor.ICON_URI, DatabaseEditor.TOOLTIP);
 		}
 	}
 

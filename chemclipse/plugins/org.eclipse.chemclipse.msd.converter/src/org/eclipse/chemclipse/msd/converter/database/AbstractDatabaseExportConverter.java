@@ -27,7 +27,7 @@ public abstract class AbstractDatabaseExportConverter extends AbstractExportConv
 
 		IDatabaseExportConverterProcessingInfo processingInfo = new DatabaseExportConverterProcessingInfo();
 		if(massSpectrum == null) {
-			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Mass Spectra Export", "The is no mass spectrum to export.");
+			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Database Export", "The is no mass spectrum to export.");
 			processingInfo.addMessage(processingMessage);
 		}
 		return processingInfo;
@@ -38,7 +38,7 @@ public abstract class AbstractDatabaseExportConverter extends AbstractExportConv
 
 		IDatabaseExportConverterProcessingInfo processingInfo = new DatabaseExportConverterProcessingInfo();
 		if(massSpectra == null) {
-			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Mass Spectra Export", "The are no mass spectra to export.");
+			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Database Export", "The are no mass spectra to export.");
 			processingInfo.addMessage(processingMessage);
 		}
 		return processingInfo;

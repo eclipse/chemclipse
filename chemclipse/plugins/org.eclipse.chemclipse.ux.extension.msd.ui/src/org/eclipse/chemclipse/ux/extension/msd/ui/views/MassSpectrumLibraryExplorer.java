@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.wizards.TreeViewerFilesystemSupport;
-import org.eclipse.chemclipse.ux.extension.msd.ui.editors.MassSpectrumLibraryEditor;
+import org.eclipse.chemclipse.ux.extension.msd.ui.editors.DatabaseEditor;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.MassSpectrumIdentifier;
 import org.eclipse.chemclipse.ux.extension.msd.ui.provider.MassSpectrumFileExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.msd.ui.provider.MassSpectrumFileExplorerLabelProvider;
@@ -114,12 +114,12 @@ public class MassSpectrumLibraryExplorer {
 			 * Create the input part and prepare it.
 			 */
 			MPart part = MBasicFactory.INSTANCE.createInputPart();
-			part.setElementId(MassSpectrumLibraryEditor.ID);
-			part.setContributionURI(MassSpectrumLibraryEditor.CONTRIBUTION_URI);
+			part.setElementId(DatabaseEditor.ID);
+			part.setContributionURI(DatabaseEditor.CONTRIBUTION_URI);
 			part.setObject(file.getAbsolutePath());
-			part.setIconURI(MassSpectrumLibraryEditor.ICON_URI);
+			part.setIconURI(DatabaseEditor.ICON_URI);
 			part.setLabel(file.getName());
-			part.setTooltip(MassSpectrumLibraryEditor.TOOLTIP);
+			part.setTooltip(DatabaseEditor.TOOLTIP);
 			part.setCloseable(true);
 			/*
 			 * Add it to the stack and show it.

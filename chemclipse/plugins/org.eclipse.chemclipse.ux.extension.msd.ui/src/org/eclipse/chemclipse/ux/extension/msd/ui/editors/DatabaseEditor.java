@@ -26,15 +26,15 @@ import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.converter.exceptions.NoMassSpectrumConverterAvailableException;
-import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumExportConverterProcessingInfo;
+import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectraFileSupport;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.MassSpectrumImportRunnable;
+import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.DatabaseImportRunnable;
 import org.eclipse.chemclipse.ux.extension.msd.ui.swt.MassSpectrumLibraryUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -57,14 +57,14 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
-public class MassSpectrumLibraryEditor implements IChemClipseEditor {
+public class DatabaseEditor implements IChemClipseEditor {
 
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumLibraryEditor";
-	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.editors.MassSpectrumLibraryEditor";
-	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/massSpectrum.gif";
+	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.editors.DatabaseEditor";
+	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/massSpectrumDatabase.gif";
 	public static final String TOOLTIP = "Mass Spectrum Library - Detector Type: MSD";
 	//
-	private static final Logger logger = Logger.getLogger(MassSpectrumLibraryEditor.class);
+	private static final Logger logger = Logger.getLogger(DatabaseEditor.class);
 	/*
 	 * Injected member in constructor
 	 */
@@ -165,7 +165,7 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 			String converterId = massSpectra.getConverterId();
 			if(converterId != null && !converterId.equals("")) {
 				monitor.subTask("Save Mass Spectra");
-				IMassSpectrumExportConverterProcessingInfo processingInfo = MassSpectrumConverter.convert(massSpectrumFile, massSpectra, false, converterId, monitor);
+				IDatabaseExportConverterProcessingInfo processingInfo = DatabaseConverter.convert(massSpectrumFile, massSpectra, false, converterId, monitor);
 				try {
 					/*
 					 * If no failures have occurred, set the dirty status to
@@ -213,7 +213,7 @@ public class MassSpectrumLibraryEditor implements IChemClipseEditor {
 	private void importMassSpectra(File file) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
 
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-		MassSpectrumImportRunnable runnable = new MassSpectrumImportRunnable(file);
+		DatabaseImportRunnable runnable = new DatabaseImportRunnable(file);
 		try {
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {

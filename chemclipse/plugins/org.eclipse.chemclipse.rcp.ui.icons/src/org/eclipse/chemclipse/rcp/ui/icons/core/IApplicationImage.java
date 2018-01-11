@@ -57,6 +57,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_INFO = "info.gif";
 	String IMAGE_QUESTION = "question.gif";
 	String IMAGE_MASS_SPECTRUM = "massSpectrum.gif";
+	String IMAGE_MASS_SPECTRUM_FILE = "massSpectrumFile.gif";
+	String IMAGE_MASS_SPECTRUM_DATABASE = "massSpectrumDatabase.gif";
 	String IMAGE_TARGETS = "targets.gif";
 	String IMAGE_CREATE_SNAPSHOT = "create_snapshot.png";
 	String IMAGE_PERSPECTIVES = "perspectives.gif";

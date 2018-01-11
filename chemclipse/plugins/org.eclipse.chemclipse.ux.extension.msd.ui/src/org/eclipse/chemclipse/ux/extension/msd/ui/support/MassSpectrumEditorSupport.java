@@ -21,16 +21,16 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEdito
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
 
-public class MassSpectrumFileEditorSupport extends AbstractSupplierFileEditorSupport implements ISupplierFileEditorSupport {
+public class MassSpectrumEditorSupport extends AbstractSupplierFileEditorSupport implements ISupplierFileEditorSupport {
 
-	public MassSpectrumFileEditorSupport() {
+	public MassSpectrumEditorSupport() {
 		super(MassSpectrumConverter.getMassSpectrumConverterSupport().getSupplier());
 	}
 
 	@Override
 	public String getType() {
 
-		return TYPE_MSD;
+		return TYPE_FILE_MSD;
 	}
 
 	@Override

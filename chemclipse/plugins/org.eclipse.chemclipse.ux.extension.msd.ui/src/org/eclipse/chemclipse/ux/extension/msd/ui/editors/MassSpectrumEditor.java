@@ -70,7 +70,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumEditor";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.editors.MassSpectrumEditor";
-	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/massSpectrum.gif";
+	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/massSpectrumFile.gif";
 	public static final String TOOLTIP = "Mass Spectrum - Detector Type: MSD";
 	//
 	private static final Logger logger = Logger.getLogger(MassSpectrumEditor.class);

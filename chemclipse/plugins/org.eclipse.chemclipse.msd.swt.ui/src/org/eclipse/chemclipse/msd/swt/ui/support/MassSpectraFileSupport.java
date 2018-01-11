@@ -18,8 +18,8 @@ import java.util.List;
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
-import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverterSupport;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.swt.ui.Activator;
 import org.eclipse.chemclipse.msd.swt.ui.internal.support.MassSpectraExportRunnable;
@@ -60,7 +60,7 @@ public class MassSpectraFileSupport {
 		dialog.setFileName(massSpectra.getName());
 		dialog.setText("Save Mass Spectra As");
 		dialog.setOverwrite(true);
-		MassSpectrumConverterSupport converterSupport = MassSpectrumConverter.getMassSpectrumConverterSupport();
+		DatabaseConverterSupport converterSupport = DatabaseConverter.getDatabaseConverterSupport();
 		/*
 		 * Set the filters that allow an export of chromatographic data.
 		 */
@@ -129,7 +129,7 @@ public class MassSpectraFileSupport {
 	 * @param converterSupport
 	 * @param chromatogram
 	 */
-	private static void validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, MassSpectrumConverterSupport converterSupport, IMassSpectra massSpectra) {
+	private static void validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, DatabaseConverterSupport converterSupport, IMassSpectra massSpectra) {
 
 		File massSpectrumFolder = null;
 		boolean overwrite = dialog.getOverwrite();
