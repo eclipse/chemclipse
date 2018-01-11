@@ -54,12 +54,22 @@ public class PeakDetailsPart extends AbstractDataUpdateSupport implements IDataU
 		 * 0 => because only one property was used to register the event.
 		 */
 		if(objects.size() == 1) {
-			Object object = objects.get(0);
-			if(object instanceof IPeak) {
-				extendedPeakDetailsUI.update((IPeak)object);
-			} else {
-				extendedPeakDetailsUI.update(null);
+			IPeak peak = null;
+			if(!isUnloadEvent(topic)) {
+				Object object = objects.get(0);
+				if(object instanceof IPeak) {
+					peak = (IPeak)object;
+				}
 			}
+			extendedPeakDetailsUI.update(peak);
 		}
+	}
+
+	private boolean isUnloadEvent(String topic) {
+
+		if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
+			return true;
+		}
+		return false;
 	}
 }

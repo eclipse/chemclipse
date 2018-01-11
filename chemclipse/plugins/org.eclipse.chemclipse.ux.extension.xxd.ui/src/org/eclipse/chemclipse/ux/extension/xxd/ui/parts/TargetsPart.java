@@ -58,10 +58,8 @@ public class TargetsPart extends AbstractDataUpdateSupport implements IDataUpdat
 		 * 0 => because only one property was used to register the event.
 		 */
 		if(objects.size() == 1) {
-			Object object;
-			if(isUnloadEvent(topic)) {
-				object = null;
-			} else {
+			Object object = null;
+			if(!isUnloadEvent(topic)) {
 				object = objects.get(0);
 				if(object instanceof IChromatogramSelection) {
 					IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;

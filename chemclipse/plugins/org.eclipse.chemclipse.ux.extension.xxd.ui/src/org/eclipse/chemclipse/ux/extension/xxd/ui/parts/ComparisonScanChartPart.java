@@ -71,7 +71,7 @@ public class ComparisonScanChartPart extends AbstractDataUpdateSupport implement
 			/*
 			 * MSD
 			 */
-			if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION) || topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
+			if(isUnloadEvent(topic)) {
 				extendedComparisonScanUI.update(null);
 			} else {
 				Object object = objects.get(0);
@@ -91,5 +91,15 @@ public class ComparisonScanChartPart extends AbstractDataUpdateSupport implement
 			IIdentificationTarget identificationTarget = (IIdentificationTarget)objects.get(TARGET_ENTRY);
 			extendedComparisonScanUI.update(unknownMassSpectrum, identificationTarget);
 		}
+	}
+
+	private boolean isUnloadEvent(String topic) {
+
+		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION)) {
+			return true;
+		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -54,10 +54,8 @@ public class QuantitationPart extends AbstractDataUpdateSupport implements IData
 		 * 0 => because only one property was used to register the event.
 		 */
 		if(objects.size() == 1) {
-			IPeak peak;
-			if(isUnloadEvent(topic)) {
-				peak = null;
-			} else {
+			IPeak peak = null;
+			if(!isUnloadEvent(topic)) {
 				peak = (IPeak)objects.get(0);
 			}
 			extendedPeakQuantitationListUI.update(peak);
@@ -66,7 +64,7 @@ public class QuantitationPart extends AbstractDataUpdateSupport implements IData
 
 	private boolean isUnloadEvent(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION)) {
+		if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
 			return true;
 		}
 		return false;

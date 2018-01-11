@@ -57,10 +57,23 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 		 * 0 => because only one property was used to register the event.
 		 */
 		if(objects.size() == 1) {
-			Object object = objects.get(0);
+			Object object = null;
+			if(!isUnloadEvent(topic)) {
+				object = objects.get(0);
+			}
 			extendedScanTableUI.update(object);
-		} else {
-			extendedScanTableUI.update(null);
 		}
+	}
+
+	private boolean isUnloadEvent(String topic) {
+
+		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION)) {
+			return true;
+		} else if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION)) {
+			return true;
+		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
+			return true;
+		}
+		return false;
 	}
 }

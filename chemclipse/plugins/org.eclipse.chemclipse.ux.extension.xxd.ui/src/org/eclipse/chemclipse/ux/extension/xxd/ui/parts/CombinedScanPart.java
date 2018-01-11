@@ -53,8 +53,19 @@ public class CombinedScanPart extends AbstractDataUpdateSupport implements IData
 		 * 0 => because only one property was used to register the event.
 		 */
 		if(objects.size() == 1) {
-			Object object = objects.get(0);
+			Object object = null;
+			if(!isUnloadEvent(topic)) {
+				object = objects.get(0);
+			}
 			extendedCombinedScanUI.update(object);
 		}
+	}
+
+	private boolean isUnloadEvent(String topic) {
+
+		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION)) {
+			return true;
+		}
+		return false;
 	}
 }

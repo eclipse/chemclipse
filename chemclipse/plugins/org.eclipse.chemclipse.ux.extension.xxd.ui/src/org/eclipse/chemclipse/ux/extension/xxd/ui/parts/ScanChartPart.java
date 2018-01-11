@@ -44,8 +44,6 @@ public class ScanChartPart extends AbstractDataUpdateSupport implements IDataUpd
 	@Override
 	public void registerEvents() {
 
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_LOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
 		registerEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
 		registerEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
 		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
@@ -59,17 +57,28 @@ public class ScanChartPart extends AbstractDataUpdateSupport implements IDataUpd
 		 * 0 => because only one property was used to register the event.
 		 */
 		if(objects.size() == 1) {
-			Object object = objects.get(0);
 			IScan scan = null;
-			//
-			if(object instanceof IScan) {
-				scan = (IScan)object;
-			} else if(object instanceof IPeak) {
-				IPeak peak = (IPeak)object;
-				scan = peak.getPeakModel().getPeakMaximum();
+			if(!isUnloadEvent(topic)) {
+				Object object = objects.get(0);
+				if(object instanceof IScan) {
+					scan = (IScan)object;
+				} else if(object instanceof IPeak) {
+					IPeak peak = (IPeak)object;
+					scan = peak.getPeakModel().getPeakMaximum();
+				}
 			}
 			//
 			extendedScanChartUI.update(scan);
 		}
+	}
+
+	private boolean isUnloadEvent(String topic) {
+
+		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION)) {
+			return true;
+		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
+			return true;
+		}
+		return false;
 	}
 }

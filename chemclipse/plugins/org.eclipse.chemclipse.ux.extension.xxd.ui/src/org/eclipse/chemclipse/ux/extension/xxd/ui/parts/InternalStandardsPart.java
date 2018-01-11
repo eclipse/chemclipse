@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,19 +19,19 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.IDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedPeakChartUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedInternalStandardsUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
-public class PeakChartPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class InternalStandardsPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
-	private ExtendedPeakChartUI extendedPeakChartUI;
+	private ExtendedInternalStandardsUI extendedInternalStandardsUI;
 
 	@Inject
-	public PeakChartPart(Composite parent, MPart part) {
+	public InternalStandardsPart(Composite parent, MPart part) {
 		super(part);
-		extendedPeakChartUI = new ExtendedPeakChartUI(parent);
+		extendedInternalStandardsUI = new ExtendedInternalStandardsUI(parent);
 	}
 
 	@Focus
@@ -56,12 +56,9 @@ public class PeakChartPart extends AbstractDataUpdateSupport implements IDataUpd
 		if(objects.size() == 1) {
 			IPeak peak = null;
 			if(!isUnloadEvent(topic)) {
-				Object object = objects.get(0);
-				if(object instanceof IPeak) {
-					peak = (IPeak)object;
-				}
+				peak = (IPeak)objects.get(0);
 			}
-			extendedPeakChartUI.update(peak);
+			extendedInternalStandardsUI.update(peak);
 		}
 	}
 
