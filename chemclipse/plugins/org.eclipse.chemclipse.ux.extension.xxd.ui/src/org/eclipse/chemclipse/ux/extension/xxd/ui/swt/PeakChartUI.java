@@ -90,7 +90,7 @@ public class PeakChartUI extends ScrollableChart {
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 		//
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		boolean includeBackground = preferenceStore.getBoolean(PreferenceConstants.P_INCLUDE_PEAK_BACKGROUND);
+		boolean includeBackground = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAK_BACKGROUND);
 		/*
 		 * Peak
 		 */
@@ -139,6 +139,9 @@ public class PeakChartUI extends ScrollableChart {
 				Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_BASELINE));
 				lineSeriesDataList.add(getPeakBaseline(peak, mirrored, color, postfix));
 			}
+			//
+			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_BACKGROUND));
+			lineSeriesDataList.add(getPeakBackground(peak, mirrored, color, postfix));
 		}
 		//
 		addLineSeriesData(lineSeriesDataList);
@@ -304,8 +307,14 @@ public class PeakChartUI extends ScrollableChart {
 
 	private ILineSeriesData getPeakBaseline(IPeak peak, boolean mirrored, Color color, String postfix) {
 
-		ISeriesData seriesData = getPeakBaselineData(peak, mirrored, postfix);
+		ISeriesData seriesData = getPeakBaselineData(peak, mirrored, "Peak Baseline", postfix);
 		return getLineSeriesData(seriesData, color, false);
+	}
+
+	private ILineSeriesData getPeakBackground(IPeak peak, boolean mirrored, Color color, String postfix) {
+
+		ISeriesData seriesData = getPeakBaselineData(peak, mirrored, "Peak Background", postfix);
+		return getLineSeriesData(seriesData, color, true);
 	}
 
 	private ILineSeriesData getLineSeriesData(ISeriesData seriesData, Color color, boolean enableArea) {
@@ -587,9 +596,9 @@ public class PeakChartUI extends ScrollableChart {
 		return new SeriesData(xSeries, ySeries, id);
 	}
 
-	private ISeriesData getPeakBaselineData(IPeak peak, boolean mirrored, String postfix) {
+	private ISeriesData getPeakBaselineData(IPeak peak, boolean mirrored, String name, String postfix) {
 
-		String id = "Peak Baseline" + postfix;
+		String id = name + postfix;
 		IPeakModel peakModel = peak.getPeakModel();
 		List<Integer> retentionTimes = peakModel.getRetentionTimes();
 		int size = retentionTimes.size();

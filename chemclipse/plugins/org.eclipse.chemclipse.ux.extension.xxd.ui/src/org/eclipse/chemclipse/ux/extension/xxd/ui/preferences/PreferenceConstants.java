@@ -108,8 +108,10 @@ public class PreferenceConstants {
 	/*
 	 * Peaks
 	 */
-	public static final String P_INCLUDE_PEAK_BACKGROUND = "includePeakBackground";
-	public static final boolean DEF_INCLUDE_PEAK_BACKGROUND = true;
+	public static final String P_SHOW_PEAK_BACKGROUND = "showPeakBackground";
+	public static final boolean DEF_SHOW_PEAK_BACKGROUND = true;
+	public static final String P_COLOR_PEAK_BACKGROUND = "colorPeakBackground";
+	public static final String DEF_COLOR_PEAK_BACKGROUND = "0,0,0";
 	public static final String P_SHOW_PEAK_BASELINE = "showPeakBaseline";
 	public static final boolean DEF_SHOW_PEAK_BASELINE = true;
 	public static final String P_COLOR_PEAK_BASELINE = "colorPeakBaseline";

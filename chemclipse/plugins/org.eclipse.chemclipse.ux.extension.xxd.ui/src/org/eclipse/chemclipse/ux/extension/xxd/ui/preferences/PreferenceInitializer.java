@@ -60,7 +60,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		/*
 		 * Peaks
 		 */
-		store.setDefault(PreferenceConstants.P_INCLUDE_PEAK_BACKGROUND, PreferenceConstants.DEF_INCLUDE_PEAK_BACKGROUND);
+		store.setDefault(PreferenceConstants.P_SHOW_PEAK_BACKGROUND, PreferenceConstants.DEF_SHOW_PEAK_BACKGROUND);
+		store.setDefault(PreferenceConstants.P_COLOR_PEAK_BACKGROUND, PreferenceConstants.DEF_COLOR_PEAK_BACKGROUND);
 		store.setDefault(PreferenceConstants.P_SHOW_PEAK_BASELINE, PreferenceConstants.DEF_SHOW_PEAK_BASELINE);
 		store.setDefault(PreferenceConstants.P_COLOR_PEAK_BASELINE, PreferenceConstants.DEF_COLOR_PEAK_BASELINE);
 		store.setDefault(PreferenceConstants.P_SHOW_PEAK, PreferenceConstants.DEF_SHOW_PEAK);
