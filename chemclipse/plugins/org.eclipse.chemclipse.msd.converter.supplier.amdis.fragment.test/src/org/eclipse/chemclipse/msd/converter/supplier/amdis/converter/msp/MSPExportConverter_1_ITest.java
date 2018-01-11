@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.msd.converter.massspectrum.IMassSpectrumExportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumExportConverterProcessingInfo;
+import org.eclipse.chemclipse.msd.converter.database.IDatabaseExportConverter;
+import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -28,7 +28,7 @@ import junit.framework.TestCase;
 
 public class MSPExportConverter_1_ITest extends TestCase {
 
-	private IMassSpectrumExportConverter exportConverter;
+	private IDatabaseExportConverter exportConverter;
 	private File exportFile;
 	private IScanMSD massSpectrum;
 	private IMassSpectra massSpectra;
@@ -37,7 +37,7 @@ public class MSPExportConverter_1_ITest extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		exportConverter = new MSPMassSpectrumExportConverter();
+		exportConverter = new MSPDatabaseExportConverter();
 		exportFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_EXPORT_DB_MSP));
 		massSpectrum = new ScanMSD();
 		massSpectrum.addIon(new Ion(56.3f, 7382.3f));
@@ -59,7 +59,7 @@ public class MSPExportConverter_1_ITest extends TestCase {
 
 	public void testExport_1() {
 
-		IMassSpectrumExportConverterProcessingInfo processingInfo = exportConverter.convert(null, massSpectrum, false, new NullProgressMonitor());
+		IDatabaseExportConverterProcessingInfo processingInfo = exportConverter.convert(null, massSpectrum, false, new NullProgressMonitor());
 		try {
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(TypeCastException e) {
@@ -70,7 +70,7 @@ public class MSPExportConverter_1_ITest extends TestCase {
 	public void testExport_2() {
 
 		massSpectrum = null;
-		IMassSpectrumExportConverterProcessingInfo processingInfo = exportConverter.convert(exportFile, massSpectrum, false, new NullProgressMonitor());
+		IDatabaseExportConverterProcessingInfo processingInfo = exportConverter.convert(exportFile, massSpectrum, false, new NullProgressMonitor());
 		try {
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(TypeCastException e) {
@@ -81,7 +81,7 @@ public class MSPExportConverter_1_ITest extends TestCase {
 	public void testExport_3() {
 
 		massSpectra = null;
-		IMassSpectrumExportConverterProcessingInfo processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
+		IDatabaseExportConverterProcessingInfo processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
 		try {
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(TypeCastException e) {
@@ -93,7 +93,7 @@ public class MSPExportConverter_1_ITest extends TestCase {
 
 		try {
 			exportFile.setWritable(false);
-			IMassSpectrumExportConverterProcessingInfo processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
+			IDatabaseExportConverterProcessingInfo processingInfo = exportConverter.convert(exportFile, massSpectra, false, new NullProgressMonitor());
 			try {
 				assertTrue(processingInfo.hasErrorMessages());
 			} catch(TypeCastException e) {

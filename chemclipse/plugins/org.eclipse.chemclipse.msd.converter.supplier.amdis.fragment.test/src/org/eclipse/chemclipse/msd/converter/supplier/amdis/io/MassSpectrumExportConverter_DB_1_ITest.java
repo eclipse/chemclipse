@@ -15,14 +15,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
+import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.IVendorLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -31,6 +29,7 @@ import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class MassSpectrumExportConverter_DB_1_ITest extends MassSpectrumExportConverterTestCase {
 
@@ -57,7 +56,7 @@ public class MassSpectrumExportConverter_DB_1_ITest extends MassSpectrumExportCo
 			ms.addIon(ion);
 		}
 		exportConverter.convert(exportFile, ms, false, new NullProgressMonitor());
-		IMassSpectrumImportConverterProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
+		IDatabaseImportConverterProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
 		try {
 			massSpectra = processingInfo.getMassSpectra();
 		} catch(TypeCastException e) {

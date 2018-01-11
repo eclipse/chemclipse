@@ -13,12 +13,11 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
-import org.eclipse.chemclipse.msd.converter.massspectrum.IMassSpectrumImportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLMassSpectrumImportConverter;
+import org.eclipse.chemclipse.msd.converter.database.IDatabaseImportConverter;
+import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseImportConverterProcessingInfo;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLDatabaseImportConverter;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -31,14 +30,14 @@ public class MassSpectrumImportConverterTestCase extends TestCase {
 
 	protected File importFile;
 	protected IMassSpectra massSpectra;
-	protected IMassSpectrumImportConverter importConverter;
+	protected IDatabaseImportConverter importConverter;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		importConverter = new MSLMassSpectrumImportConverter();
-		IMassSpectrumImportConverterProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
+		importConverter = new MSLDatabaseImportConverter();
+		IDatabaseImportConverterProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
 		massSpectra = processingInfo.getMassSpectra();
 	}
 

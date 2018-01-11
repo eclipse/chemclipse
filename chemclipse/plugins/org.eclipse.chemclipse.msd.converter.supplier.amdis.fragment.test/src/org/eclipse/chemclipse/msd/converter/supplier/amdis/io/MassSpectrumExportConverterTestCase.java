@@ -13,13 +13,13 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
 import java.io.File;
 
-import junit.framework.TestCase;
-
-import org.eclipse.chemclipse.msd.converter.massspectrum.IMassSpectrumExportConverter;
-import org.eclipse.chemclipse.msd.converter.massspectrum.IMassSpectrumImportConverter;
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLMassSpectrumExportConverter;
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLMassSpectrumImportConverter;
+import org.eclipse.chemclipse.msd.converter.database.IDatabaseExportConverter;
+import org.eclipse.chemclipse.msd.converter.database.IDatabaseImportConverter;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLDatabaseExportConverter;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLDatabaseImportConverter;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+
+import junit.framework.TestCase;
 
 /**
  * Imports a msl file.
@@ -29,17 +29,17 @@ import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 public class MassSpectrumExportConverterTestCase extends TestCase {
 
 	protected File exportFile;
-	protected IMassSpectrumExportConverter exportConverter;
+	protected IDatabaseExportConverter exportConverter;
 	protected File importFile;
 	protected IMassSpectra massSpectra;
-	protected IMassSpectrumImportConverter importConverter;
+	protected IDatabaseImportConverter importConverter;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		exportConverter = new MSLMassSpectrumExportConverter();
-		importConverter = new MSLMassSpectrumImportConverter();
+		exportConverter = new MSLDatabaseExportConverter();
+		importConverter = new MSLDatabaseImportConverter();
 	}
 
 	@Override

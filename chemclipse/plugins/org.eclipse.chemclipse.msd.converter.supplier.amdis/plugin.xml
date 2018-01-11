@@ -2,29 +2,29 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         point="org.eclipse.chemclipse.msd.converter.massSpectrumSupplier">
-      <MassSpectrumSupplier
+         point="org.eclipse.chemclipse.msd.converter.databaseSupplier">
+      <DatabaseSupplier
             description="Reads an writes AMDIS (MSL) mass spectra."
-            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLMassSpectrumExportConverter"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLDatabaseExportConverter"
             fileExtension=".msl"
             filterName="AMDIS Mass Spectra (*.msl)"
             id="org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msl"
-            importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLMassSpectrumImportConverter"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLDatabaseImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
-      </MassSpectrumSupplier>
-      <MassSpectrumSupplier
+      </DatabaseSupplier>
+      <DatabaseSupplier
             description="Reads and writes NIST Text  (MSP) mass spectra."
-            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MSPMassSpectrumExportConverter"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MSPDatabaseExportConverter"
             fileExtension=".msp"
             filterName="NIST Text (*.msp)"
             id="org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msp"
-            importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MSPMassSpectrumImportConverter"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MSPDatabaseImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MagicNumberMatcher"
             isExportable="true"
             isImportable="true">
-      </MassSpectrumSupplier>
+      </DatabaseSupplier>
    </extension>
    <extension
          point="org.eclipse.chemclipse.msd.converter.peakSupplier">

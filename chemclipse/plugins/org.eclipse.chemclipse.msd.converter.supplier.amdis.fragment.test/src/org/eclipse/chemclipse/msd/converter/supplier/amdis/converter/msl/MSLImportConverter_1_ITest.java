@@ -13,25 +13,23 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl;
 
 import java.io.File;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
-import org.eclipse.chemclipse.msd.converter.massspectrum.IMassSpectrumImportConverter;
-import org.eclipse.chemclipse.msd.converter.processing.massspectrum.IMassSpectrumImportConverterProcessingInfo;
+import org.eclipse.chemclipse.msd.converter.database.IDatabaseImportConverter;
+import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseImportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLMassSpectrumImportConverter;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
 public class MSLImportConverter_1_ITest extends TestCase {
 
-	private IMassSpectrumImportConverter importConverter;
+	private IDatabaseImportConverter importConverter;
 	private File importFile;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		importConverter = new MSLMassSpectrumImportConverter();
+		importConverter = new MSLDatabaseImportConverter();
 	}
 
 	@Override
@@ -44,21 +42,21 @@ public class MSLImportConverter_1_ITest extends TestCase {
 	public void testExceptions_1() {
 
 		importFile = null;
-		IMassSpectrumImportConverterProcessingInfo processingInfo = importConverter.convert(null, new NullProgressMonitor());
+		IDatabaseImportConverterProcessingInfo processingInfo = importConverter.convert(null, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 
 	public void testExceptions_2() {
 
 		importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_EMPTY));
-		IMassSpectrumImportConverterProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
+		IDatabaseImportConverterProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 
 	public void testExceptions_3() {
 
 		importFile = new File("nirvana");
-		IMassSpectrumImportConverterProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
+		IDatabaseImportConverterProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 
@@ -67,7 +65,7 @@ public class MSLImportConverter_1_ITest extends TestCase {
 		importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_NOT_READABLE));
 		importFile.setReadable(false);
 		try {
-			IMassSpectrumImportConverterProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
+			IDatabaseImportConverterProcessingInfo processingInfo = importConverter.convert(importFile, new NullProgressMonitor());
 			assertTrue(processingInfo.hasErrorMessages());
 		} finally {
 			importFile.setReadable(true);
