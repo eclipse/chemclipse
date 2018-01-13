@@ -24,7 +24,9 @@ import org.eclipse.chemclipse.csd.model.core.identifier.chromatogram.IChromatogr
 import org.eclipse.chemclipse.csd.model.core.identifier.scan.IScanTargetCSD;
 import org.eclipse.chemclipse.csd.model.implementation.ChromatogramTargetCSD;
 import org.eclipse.chemclipse.csd.model.implementation.ScanTargetCSD;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
@@ -81,6 +83,7 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -98,6 +101,7 @@ public class ExtendedTargetsUI {
 	private static final String MENU_CATEGORY_TARGETS = "Targets";
 	private static final int KEY_CODE_I = 105;
 	//
+	private Label labelTargetOption;
 	private Label labelInfo;
 	private Composite toolbarInfo;
 	private Composite toolbarSearch;
@@ -112,6 +116,8 @@ public class ExtendedTargetsUI {
 	 */
 	private Object object;
 	private Map<String, Object> map;
+	//
+	private boolean showChromatogramTargets = false;
 
 	@Inject
 	public ExtendedTargetsUI(Composite parent, MPart part) {
@@ -128,7 +134,15 @@ public class ExtendedTargetsUI {
 
 	public void update(Object object) {
 
-		this.object = object;
+		if(showChromatogramTargets) {
+			if(object instanceof IChromatogram) {
+				this.object = object;
+			}
+		} else {
+			if(object instanceof IScan || object instanceof IPeak) {
+				this.object = object;
+			}
+		}
 		updateTargets();
 	}
 
@@ -153,16 +167,28 @@ public class ExtendedTargetsUI {
 	private void createToolbarMain(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
-		gridDataStatus.horizontalAlignment = SWT.END;
-		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(5, false));
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = SWT.END;
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(7, false));
 		//
+		createTargetOptionLabel(composite);
 		createButtonToggleToolbarInfo(composite);
+		createButtonToggleOptionTargets(composite);
 		createButtonToggleToolbarSearch(composite);
 		createButtonToggleToolbarModify(composite);
 		createButtonToggleToolbarEdit(composite);
 		createSettingsButton(composite);
+		//
+		updateTargetOptionLabel();
+	}
+
+	private void createTargetOptionLabel(Composite parent) {
+
+		labelTargetOption = new Label(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		labelTargetOption.setLayoutData(gridData);
 	}
 
 	private Button createButtonToggleToolbarInfo(Composite parent) {
@@ -182,6 +208,29 @@ public class ExtendedTargetsUI {
 				} else {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
 				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonToggleOptionTargets(Composite parent) {
+
+		Image imageChromatogram = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16);
+		Image imageScan = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImage.SIZE_16x16);
+		//
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle whether to display chromatogram or scan/peak targets.");
+		button.setText("");
+		button.setImage(showChromatogramTargets ? imageChromatogram : imageScan);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				showChromatogramTargets = !showChromatogramTargets;
+				button.setImage(showChromatogramTargets ? imageChromatogram : imageScan);
+				updateTargetOptionLabel();
 			}
 		});
 		//
@@ -753,5 +802,11 @@ public class ExtendedTargetsUI {
 	private void setIdentifier(IIdentificationTarget identificationTarget) {
 
 		identificationTarget.setIdentifier(IDENTIFIER_MANUAL);
+	}
+
+	private void updateTargetOptionLabel() {
+
+		String text = showChromatogramTargets ? "Chromatogram Targets Active" : "Scan/Peak Targets Active";
+		labelTargetOption.setText(text);
 	}
 }
