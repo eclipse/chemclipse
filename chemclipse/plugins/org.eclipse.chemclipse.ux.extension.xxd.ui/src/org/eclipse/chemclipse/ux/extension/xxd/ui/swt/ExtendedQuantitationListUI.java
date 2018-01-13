@@ -113,7 +113,7 @@ public class ExtendedQuantitationListUI {
 
 	private QuantitationListUI createQuantitationTable(Composite parent) {
 
-		QuantitationListUI quantitationListUI = new QuantitationListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		quantitationListUI = new QuantitationListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		quantitationListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Add the delete targets support.

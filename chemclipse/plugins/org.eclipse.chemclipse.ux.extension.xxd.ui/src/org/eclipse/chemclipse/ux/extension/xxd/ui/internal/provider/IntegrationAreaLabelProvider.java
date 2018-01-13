@@ -13,37 +13,22 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.quantitation.IQuantitationEntryMSD;
+import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-public class QuantitationListLabelProvider extends AbstractChemClipseLabelProvider {
+public class IntegrationAreaLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String[] TITLES = { //
-			"Name", //
-			"Chemical Class", //
-			"Concentration", //
-			"Concentration Unit", //
 			"Area", //
-			"Trace", //
-			"Calibration Method", //
-			"Cross Zero", //
-			"Description" //
-	};
+			"Trace"};
 	public static final int[] BOUNDS = { //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100, //
-			100 //
+			300, //
+			300 //
 	};
 
 	@Override
@@ -61,42 +46,21 @@ public class QuantitationListLabelProvider extends AbstractChemClipseLabelProvid
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IQuantitationEntry) {
-			IQuantitationEntry quantitationEntry = (IQuantitationEntry)element;
+		if(element instanceof IIntegrationEntry) {
+			IIntegrationEntry integrationEntry = (IIntegrationEntry)element;
 			switch(columnIndex) {
 				case 0:
-					text = quantitationEntry.getName();
+					text = decimalFormat.format(integrationEntry.getIntegratedArea());
 					break;
-				case 1:
-					text = quantitationEntry.getChemicalClass();
-					break;
-				case 2:
-					text = decimalFormat.format(quantitationEntry.getConcentration());
-					break;
-				case 3:
-					text = quantitationEntry.getConcentrationUnit();
-					break;
-				case 4:
-					text = decimalFormat.format(quantitationEntry.getArea());
-					break;
-				case 5: // TIC ...
+				case 1: // TIC ...
 					text = AbstractIon.TIC_DESCRIPTION;
-					if(quantitationEntry instanceof IQuantitationEntryMSD) {
-						IQuantitationEntryMSD quantitationEntryMSD = (IQuantitationEntryMSD)element;
-						double ion = quantitationEntryMSD.getIon();
+					if(integrationEntry instanceof IIntegrationEntryMSD) {
+						IIntegrationEntryMSD integrationEntryMSD = (IIntegrationEntryMSD)element;
+						double ion = integrationEntryMSD.getIon();
 						if(ion != AbstractIon.TIC_ION) {
 							text = decimalFormat.format(ion);
 						}
 					}
-					break;
-				case 6:
-					text = quantitationEntry.getCalibrationMethod();
-					break;
-				case 7:
-					text = Boolean.toString(quantitationEntry.getUsedCrossZero());
-					break;
-				case 8:
-					text = quantitationEntry.getDescription();
 					break;
 				default:
 					text = "n.v.";
@@ -107,6 +71,6 @@ public class QuantitationListLabelProvider extends AbstractChemClipseLabelProvid
 
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_QUANTITATION_RESULTS, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INTEGRATION_RESULTS, IApplicationImage.SIZE_16x16);
 	}
 }

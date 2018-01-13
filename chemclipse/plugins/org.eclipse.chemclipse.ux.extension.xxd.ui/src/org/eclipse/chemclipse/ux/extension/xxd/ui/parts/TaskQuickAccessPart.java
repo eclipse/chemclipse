@@ -155,10 +155,12 @@ public class TaskQuickAccessPart {
 				String partStackIdChart = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_CHART);
 				String partStackIdDetails = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_DETAILS);
 				String partStackIdQuantitation = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION);
+				String partStackIdIntegrationArea = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTEGRATION_AREA);
 				//
 				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_CHART, partStackIdChart, imageActive, imageDefault);
 				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_DETAILS, partStackIdDetails, imageActive, imageDefault);
 				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION, partStackIdQuantitation, imageActive, imageDefault);
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_INTEGRATION_AREA, partStackIdIntegrationArea, imageActive, imageDefault);
 			}
 		});
 	}
@@ -227,7 +229,7 @@ public class TaskQuickAccessPart {
 				 * Show the part stack on demand. The default is hidden initially.
 				 */
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_COMPARISON_SCAN_PART);
+				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_COMPARISON_SCAN_CHART);
 				PartSupport.setPartStackVisibility(partStackId, true);
 				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_COMPARISON_SCAN, partStackId, imageActive, imageDefault);
 			}

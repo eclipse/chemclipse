@@ -13,9 +13,13 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -30,7 +34,7 @@ public class ExtendedIntegrationAreaUI {
 
 	private Composite toolbarInfo;
 	private Label labelInfo;
-	private QuantitationListUI quantitationListUI;
+	private IntegrationAreaUI integrationAreaUI;
 	//
 	private Object object;
 
@@ -48,16 +52,22 @@ public class ExtendedIntegrationAreaUI {
 	public void update(Object object) {
 
 		this.object = object;
-		// labelInfo.setText(PeakSupport.getPeakLabel(peak));
+		if(object instanceof IPeak) {
+			labelInfo.setText(PeakSupport.getPeakLabel((IPeak)object));
+		} else if(object instanceof IChromatogram) {
+			labelInfo.setText(ChromatogramSupport.getChromatogramLabel((IChromatogram)object));
+		} else {
+			labelInfo.setText("No data has been selected.");
+		}
 		updateObject();
 	}
 
 	private void updateObject() {
 
 		if(object != null) {
-			quantitationListUI.setInput(object);
+			integrationAreaUI.setInput(object);
 		} else {
-			quantitationListUI.clear();
+			integrationAreaUI.clear();
 		}
 	}
 
@@ -98,11 +108,10 @@ public class ExtendedIntegrationAreaUI {
 		return composite;
 	}
 
-	private QuantitationListUI createQuantitationTable(Composite parent) {
+	private void createQuantitationTable(Composite parent) {
 
-		QuantitationListUI quantitationListUI = new QuantitationListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		quantitationListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-		return quantitationListUI;
+		integrationAreaUI = new IntegrationAreaUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		integrationAreaUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	private Button createButtonToggleToolbarInfo(Composite parent) {
