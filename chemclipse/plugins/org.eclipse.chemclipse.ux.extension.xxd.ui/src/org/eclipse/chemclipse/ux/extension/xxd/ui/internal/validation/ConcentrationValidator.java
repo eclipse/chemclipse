@@ -15,27 +15,41 @@ import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
-public class NameValidator implements IValidator {
+public class ConcentrationValidator implements IValidator {
 
-	private static final String ERROR = "Please enter a correct name.";
+	private static final String ERROR = "Please enter a correct concentration, e.g. 10 mg/L.";
+	private static final String ERROR_VALUE_RANGE = "The concentration must be not <= 0.";
 	//
-	private String name = "";
+	private double concentration = 0.0d;
+	private String unit = "";
 
 	@Override
 	public IStatus validate(Object value) {
 
 		String message = null;
-		this.name = "";
+		this.concentration = 0.0d;
+		this.unit = "";
 		//
 		if(value == null) {
 			message = ERROR;
 		} else {
 			if(value instanceof String) {
 				String text = ((String)value).trim();
-				if(text.length() < 1) {
+				String[] values = text.split(" ");
+				if(values.length != 2) {
 					message = ERROR;
 				} else {
-					this.name = text;
+					try {
+						double concentration = Double.parseDouble(values[0]);
+						if(concentration <= 0.0d) {
+							message = ERROR_VALUE_RANGE;
+						} else {
+							this.concentration = concentration;
+							this.unit = values[1];
+						}
+					} catch(NumberFormatException e) {
+						message = ERROR;
+					}
 				}
 			} else {
 				message = ERROR;
@@ -49,8 +63,13 @@ public class NameValidator implements IValidator {
 		}
 	}
 
-	public String getName() {
+	public double getConcentration() {
 
-		return name;
+		return concentration;
+	}
+
+	public String getUnit() {
+
+		return unit;
 	}
 }

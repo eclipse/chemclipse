@@ -183,7 +183,7 @@ public class ExtendedTargetsUI {
 		createButtonToggleOptionTargets(composite);
 		createButtonToggleToolbarSearch(composite);
 		createButtonToggleToolbarModify(composite);
-		createButtonToggleToolbarEdit(composite);
+		createButtonToggleEditModus(composite);
 		createSettingsButton(composite);
 		//
 		updateTargetOptionLabel();
@@ -290,7 +290,7 @@ public class ExtendedTargetsUI {
 		return button;
 	}
 
-	private Button createButtonToggleToolbarEdit(Composite parent) {
+	private Button createButtonToggleEditModus(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Enable/disable to edit the table.");

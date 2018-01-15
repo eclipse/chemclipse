@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.Iterator;
+
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -19,10 +21,17 @@ import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.InternalStandard;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
+import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.ConcentrationValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.NameValidator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.ResponseFactorValidator;
+import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -41,12 +50,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 public class ExtendedPeakInternalStandardsUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedPeakInternalStandardsUI.class);
+	//
+	private static final String MENU_CATEGORY_ISTD = "Internal Standards";
 	//
 	private static final String ACTION_INITIALIZE = "ACTION_INITIALIZE";
 	private static final String ACTION_CANCEL = "ACTION_CANCEL";
@@ -62,10 +72,15 @@ public class ExtendedPeakInternalStandardsUI {
 	//
 	private Text textName;
 	private Text textConcentration;
-	private Text textConcentrationUnit;
 	private Text textResponseFactor;
-	private Text textChemicalClass;
 	private Button buttonInsert;
+	//
+	private NameValidator nameValidator;
+	private ControlDecoration nameControlDecoration;
+	private ConcentrationValidator concentrationValidator;
+	private ControlDecoration concentrationControlDecoration;
+	private ResponseFactorValidator responseFactorValidator;
+	private ControlDecoration responseFactorControlDecoration;
 	//
 	private Button buttonCancel;
 	private Button buttonAdd;
@@ -73,6 +88,8 @@ public class ExtendedPeakInternalStandardsUI {
 	//
 	private InternalStandardsListUI internalStandardsListUI;
 	private IPeak peak;
+	//
+	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Inject
 	public ExtendedPeakInternalStandardsUI(Composite parent) {
@@ -124,10 +141,11 @@ public class ExtendedPeakInternalStandardsUI {
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(3, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		createButtonToggleToolbarModify(composite);
+		createButtonToggleEditModus(composite);
 	}
 
 	private Composite createToolbarInfo(Composite parent) {
@@ -178,6 +196,7 @@ public class ExtendedPeakInternalStandardsUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				enableButtonFields(ACTION_CANCEL);
+				clearLabelInputErrors();
 				PartSupport.setCompositeVisibility(toolbarAdd, false);
 			}
 		});
@@ -197,17 +216,14 @@ public class ExtendedPeakInternalStandardsUI {
 
 				if(peak != null) {
 					if(peak.getIntegratedArea() == 0) {
-						labelInputErrors.setText("The peak area is 0. Please integrate first.");
-						labelInputErrors.setBackground(Colors.YELLOW);
+						setLabelInputError("The peak area is 0. Please integrate the peak(s) first.");
 					} else {
-						labelInputErrors.setText("");
-						labelInputErrors.setBackground(null);
+						clearLabelInputErrors();
 						enableButtonFields(ACTION_ADD);
 						PartSupport.setCompositeVisibility(toolbarAdd, true);
 					}
 				} else {
-					labelInputErrors.setText("No peak has been selected yet.");
-					labelInputErrors.setBackground(Colors.YELLOW);
+					setLabelInputError("No peak has been selected yet.");
 				}
 			}
 		});
@@ -225,28 +241,7 @@ public class ExtendedPeakInternalStandardsUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(peak != null) {
-					Table table = internalStandardsListUI.getTable();
-					int index = table.getSelectionIndex();
-					if(index >= 0) {
-						MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
-						messageBox.setText("Delete");
-						messageBox.setMessage("Would you like to delete the ISTD(s)?");
-						if(messageBox.open() == SWT.OK) {
-							//
-							enableButtonFields(ACTION_DELETE);
-							TableItem[] tableItems = table.getSelection();
-							for(TableItem tableItem : tableItems) {
-								Object object = tableItem.getData();
-								if(object instanceof IInternalStandard) {
-									IInternalStandard internalStandard = (IInternalStandard)object;
-									peak.removeInternalStandard(internalStandard);
-								}
-							}
-							updatePeak();
-						}
-					}
-				}
+				deleteInternalStandards();
 			}
 		});
 		return button;
@@ -257,20 +252,23 @@ public class ExtendedPeakInternalStandardsUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(10, false));
+		composite.setLayout(new GridLayout(7, false));
 		//
+		createLabelName(composite);
 		createTextName(composite);
-		createLabelContent(composite);
+		createLabelConcentration(composite);
 		createTextConcentration(composite);
-		createLabelConcentrationUnit(composite);
-		createTextConcentrationUnit(composite);
 		createLabelResponseFactor(composite);
 		createTextResponseFactor(composite);
-		createLabelChemicalClass(composite);
-		createTextChemicalClass(composite);
 		buttonInsert = createButtonInsert(composite);
 		//
 		return composite;
+	}
+
+	private void createLabelName(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("Name:");
 	}
 
 	private void createTextName(Composite parent) {
@@ -280,81 +278,66 @@ public class ExtendedPeakInternalStandardsUI {
 		textName.setToolTipText("Name of the internal standard.");
 		textName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		NameValidator nameValidator = new NameValidator();
-		ControlDecoration controlDecoration = new ControlDecoration(textName, SWT.LEFT | SWT.TOP);
-		textName.addVerifyListener(nameValidator);
-		//
+		nameValidator = new NameValidator();
+		nameControlDecoration = new ControlDecoration(textName, SWT.LEFT | SWT.TOP);
 		textName.addKeyListener(new KeyAdapter() {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 
-				IStatus status = nameValidator.validate(textName.getText());
-				if(status.isOK()) {
-					controlDecoration.hide();
-					labelInputErrors.setText("");
-					labelInputErrors.setBackground(null);
-				} else {
-					labelInputErrors.setText(status.getMessage());
-					labelInputErrors.setBackground(Colors.YELLOW);
-					controlDecoration.setImage(FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_CONTENT_PROPOSAL).getImage());
-					controlDecoration.showHoverText("Error");
-					controlDecoration.show();
-				}
+				validate(nameValidator, nameControlDecoration, textName);
 			}
 		});
 	}
 
-	private void createLabelContent(Composite parent) {
+	private void createLabelConcentration(Composite parent) {
 
-		Label labelContent = new Label(parent, SWT.NONE);
-		labelContent.setText("Conc.");
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("Conc.:");
 	}
 
 	private void createTextConcentration(Composite parent) {
 
 		textConcentration = new Text(parent, SWT.BORDER);
 		textConcentration.setText("");
+		textConcentration.setToolTipText("Concentration, e.g. 10 mg/L");
 		textConcentration.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-	}
+		//
+		concentrationValidator = new ConcentrationValidator();
+		concentrationControlDecoration = new ControlDecoration(textConcentration, SWT.LEFT | SWT.TOP);
+		textConcentration.addKeyListener(new KeyAdapter() {
 
-	private void createLabelConcentrationUnit(Composite parent) {
+			@Override
+			public void keyReleased(KeyEvent e) {
 
-		Label labelConcentrationUnit = new Label(parent, SWT.NONE);
-		labelConcentrationUnit.setText("Unit");
-	}
-
-	private void createTextConcentrationUnit(Composite parent) {
-
-		textConcentrationUnit = new Text(parent, SWT.BORDER);
-		textConcentrationUnit.setText("");
-		textConcentrationUnit.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+				validate(concentrationValidator, concentrationControlDecoration, textConcentration);
+			}
+		});
 	}
 
 	private void createLabelResponseFactor(Composite parent) {
 
-		Label labelResponseFactor = new Label(parent, SWT.NONE);
-		labelResponseFactor.setText("RF");
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("RF:");
 	}
 
 	private void createTextResponseFactor(Composite parent) {
 
 		textResponseFactor = new Text(parent, SWT.BORDER);
 		textResponseFactor.setText("1.0");
+		textResponseFactor.setToolTipText("Response Factor");
 		textResponseFactor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-	}
+		//
+		responseFactorValidator = new ResponseFactorValidator();
+		responseFactorControlDecoration = new ControlDecoration(textResponseFactor, SWT.LEFT | SWT.TOP);
+		textResponseFactor.addKeyListener(new KeyAdapter() {
 
-	private void createLabelChemicalClass(Composite parent) {
+			@Override
+			public void keyReleased(KeyEvent e) {
 
-		Label labelChemicalClass = new Label(parent, SWT.NONE);
-		labelChemicalClass.setText("Class");
-	}
-
-	private void createTextChemicalClass(Composite parent) {
-
-		textChemicalClass = new Text(parent, SWT.BORDER);
-		textChemicalClass.setText("");
-		textChemicalClass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+				validate(responseFactorValidator, responseFactorControlDecoration, textResponseFactor);
+			}
+		});
 	}
 
 	private Button createButtonInsert(Composite parent) {
@@ -368,45 +351,7 @@ public class ExtendedPeakInternalStandardsUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Shell shell = Display.getCurrent().getActiveShell();
-				if(peak == null) {
-					MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
-					messageBox.setText("Add Internal Standard (ISTD)");
-					messageBox.setMessage("No peak has been selected.");
-					messageBox.open();
-				} else {
-					try {
-						String name = textName.getText().trim();
-						double concentration = Double.parseDouble(textConcentration.getText().trim());
-						String concentrationUnit = textConcentrationUnit.getText().trim();
-						double responseFactor = Double.parseDouble(textResponseFactor.getText().trim());
-						String chemicalClass = textChemicalClass.getText().trim();
-						IInternalStandard internalStandard = new InternalStandard(name, concentration, concentrationUnit, responseFactor);
-						internalStandard.setChemicalClass(chemicalClass);
-						//
-						if(peak.getInternalStandards().contains(internalStandard)) {
-							MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
-							messageBox.setText("Add Internal Standard (ISTD)");
-							messageBox.setMessage("The Internal Standard (ISTD) exists already.");
-							messageBox.open();
-						} else {
-							peak.addInternalStandard(internalStandard);
-							textName.setText("");
-							textConcentration.setText("");
-							textConcentrationUnit.setText("");
-							textResponseFactor.setText("1.0");
-							textChemicalClass.setText("");
-							enableButtonFields(ACTION_INITIALIZE);
-							updatePeak();
-						}
-					} catch(Exception e1) {
-						logger.warn(e1);
-						MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
-						messageBox.setText("Add Internal Standard (ISTD)");
-						messageBox.setMessage("Please check the content, response factor and unit values.");
-						messageBox.open();
-					}
-				}
+				addInternalStandard();
 			}
 		});
 		//
@@ -466,6 +411,26 @@ public class ExtendedPeakInternalStandardsUI {
 		return button;
 	}
 
+	private Button createButtonToggleEditModus(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Enable/disable to edit the table.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean editEnabled = !internalStandardsListUI.isEditEnabled();
+				internalStandardsListUI.setEditEnabled(editEnabled);
+				updatePeak();
+			}
+		});
+		//
+		return button;
+	}
+
 	private void createInternalStandardsList(Composite parent) {
 
 		internalStandardsListUI = new InternalStandardsListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
@@ -479,6 +444,145 @@ public class ExtendedPeakInternalStandardsUI {
 				enableButtonFields(ACTION_SELECT);
 			}
 		});
+		/*
+		 * Add the delete targets support.
+		 */
+		ITableSettings tableSettings = internalStandardsListUI.getTableSettings();
+		addDeleteMenuEntry(tableSettings);
+		addKeyEventProcessors(tableSettings);
+		internalStandardsListUI.applySettings(tableSettings);
+	}
+
+	private void addDeleteMenuEntry(ITableSettings tableSettings) {
+
+		tableSettings.addMenuEntry(new ITableMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Delete Internal Standard(s)";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return MENU_CATEGORY_ISTD;
+			}
+
+			@Override
+			public void execute(ExtendedTableViewer extendedTableViewer) {
+
+				deleteInternalStandards();
+			}
+		});
+	}
+
+	private void addKeyEventProcessors(ITableSettings tableSettings) {
+
+		tableSettings.addKeyEventProcessor(new IKeyEventProcessor() {
+
+			@Override
+			public void handleEvent(ExtendedTableViewer extendedTableViewer, KeyEvent e) {
+
+				if(e.keyCode == SWT.DEL) {
+					/*
+					 * DEL
+					 */
+					deleteInternalStandards();
+				}
+			}
+		});
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void deleteInternalStandards() {
+
+		if(peak != null) {
+			MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+			messageBox.setText("Delete Internal Standard(s)");
+			messageBox.setMessage("Would you like to delete the selected internal standard(s)?");
+			if(messageBox.open() == SWT.YES) {
+				/*
+				 * Delete ISTD
+				 */
+				enableButtonFields(ACTION_DELETE);
+				Iterator iterator = internalStandardsListUI.getStructuredSelection().iterator();
+				while(iterator.hasNext()) {
+					Object object = iterator.next();
+					if(object instanceof IInternalStandard) {
+						deleteInternalStandard((IInternalStandard)object);
+					}
+				}
+				updatePeak();
+			}
+		}
+	}
+
+	private void deleteInternalStandard(IInternalStandard internalStandard) {
+
+		if(peak != null) {
+			peak.removeInternalStandard(internalStandard);
+		}
+	}
+
+	private void addInternalStandard() {
+
+		if(peak == null) {
+			MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
+			messageBox.setText("Add Internal Standard (ISTD)");
+			messageBox.setMessage("No peak has been selected.");
+			messageBox.open();
+		} else {
+			try {
+				boolean isInputValid = false;
+				String name = "";
+				double concentration = 0.0d;
+				String concentrationUnit = "";
+				double responseFactor = 0.0d;
+				//
+				isInputValid = validate(nameValidator, nameControlDecoration, textName);
+				name = nameValidator.getName();
+				//
+				if(isInputValid) {
+					isInputValid = validate(concentrationValidator, concentrationControlDecoration, textConcentration);
+					concentration = concentrationValidator.getConcentration();
+					concentrationUnit = concentrationValidator.getUnit();
+				}
+				//
+				if(isInputValid) {
+					isInputValid = validate(responseFactorValidator, responseFactorControlDecoration, textResponseFactor);
+					responseFactor = responseFactorValidator.getResponseFactor();
+				}
+				/*
+				 * Add
+				 */
+				if(isInputValid) {
+					String chemicalClass = ""; // Use the edit modus to set it.
+					IInternalStandard internalStandard = new InternalStandard(name, concentration, concentrationUnit, responseFactor);
+					internalStandard.setChemicalClass(chemicalClass);
+					//
+					if(peak.getInternalStandards().contains(internalStandard)) {
+						MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
+						messageBox.setText("Add Internal Standard (ISTD)");
+						messageBox.setMessage("The Internal Standard (ISTD) exists already.");
+						messageBox.open();
+					} else {
+						peak.addInternalStandard(internalStandard);
+						textName.setText("");
+						textConcentration.setText("");
+						textResponseFactor.setText("1.0");
+						enableButtonFields(ACTION_INITIALIZE);
+						updatePeak();
+					}
+				}
+			} catch(Exception e1) {
+				logger.warn(e1);
+				MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
+				messageBox.setText("Add Internal Standard (ISTD)");
+				messageBox.setMessage("Please check the content, response factor and unit values.");
+				messageBox.open();
+			}
+		}
 	}
 
 	private void enableButtonFields(String action) {
@@ -495,9 +599,7 @@ public class ExtendedPeakInternalStandardsUI {
 				buttonCancel.setEnabled(true);
 				textName.setEnabled(true);
 				textConcentration.setEnabled(true);
-				textConcentrationUnit.setEnabled(true);
 				textResponseFactor.setEnabled(true);
-				textChemicalClass.setEnabled(true);
 				buttonInsert.setEnabled(true);
 				break;
 			case ACTION_DELETE:
@@ -524,9 +626,35 @@ public class ExtendedPeakInternalStandardsUI {
 		//
 		textName.setEnabled(enabled);
 		textConcentration.setEnabled(enabled);
-		textConcentrationUnit.setEnabled(enabled);
 		textResponseFactor.setEnabled(enabled);
-		textChemicalClass.setEnabled(enabled);
 		buttonInsert.setEnabled(enabled);
+	}
+
+	private void clearLabelInputErrors() {
+
+		labelInputErrors.setText("");
+		labelInputErrors.setBackground(null);
+	}
+
+	private void setLabelInputError(String message) {
+
+		labelInputErrors.setText(message);
+		labelInputErrors.setBackground(Colors.YELLOW);
+	}
+
+	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Text text) {
+
+		IStatus status = validator.validate(text.getText());
+		if(status.isOK()) {
+			controlDecoration.hide();
+			clearLabelInputErrors();
+			return true;
+		} else {
+			setLabelInputError(status.getMessage());
+			controlDecoration.setImage(FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_CONTENT_PROPOSAL).getImage());
+			controlDecoration.showHoverText("Input Error");
+			controlDecoration.show();
+			return false;
+		}
 	}
 }
