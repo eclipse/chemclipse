@@ -107,6 +107,8 @@ public class ExtendedTargetsUI {
 	private Composite toolbarSearch;
 	private Composite toolbarModify;
 	private Combo comboTargetName;
+	private Button buttonAddTarget;
+	private Button buttonDeleteTarget;
 	private TargetsListUI targetListUI;
 	private TargetListUtil targetListUtil;
 	/*
@@ -137,10 +139,14 @@ public class ExtendedTargetsUI {
 		if(showChromatogramTargets) {
 			if(object instanceof IChromatogram) {
 				this.object = object;
+			} else {
+				this.object = null;
 			}
 		} else {
 			if(object instanceof IScan || object instanceof IPeak) {
 				this.object = object;
+			} else {
+				this.object = null;
 			}
 		}
 		updateTargets();
@@ -375,21 +381,21 @@ public class ExtendedTargetsUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(3, false));
 		//
-		createComboTarget(composite);
-		createButtonAdd(composite);
-		createButtonDelete(composite);
+		comboTargetName = createComboTarget(composite);
+		buttonAddTarget = createButtonAdd(composite);
+		buttonDeleteTarget = createButtonDelete(composite);
 		//
 		return composite;
 	}
 
-	private void createComboTarget(Composite parent) {
+	private Combo createComboTarget(Composite parent) {
 
-		comboTargetName = new Combo(parent, SWT.NONE);
-		comboTargetName.setToolTipText("Target Name");
-		comboTargetName.setText("");
-		comboTargetName.setToolTipText("Select a target or type in a new substance name.");
-		comboTargetName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		comboTargetName.addKeyListener(new KeyAdapter() {
+		Combo combo = new Combo(parent, SWT.NONE);
+		combo.setToolTipText("Target Name");
+		combo.setText("");
+		combo.setToolTipText("Select a target or type in a new substance name.");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addKeyListener(new KeyAdapter() {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -399,9 +405,10 @@ public class ExtendedTargetsUI {
 				}
 			}
 		});
+		return combo;
 	}
 
-	private void createButtonAdd(Composite parent) {
+	private Button createButtonAdd(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -415,9 +422,10 @@ public class ExtendedTargetsUI {
 				addTarget();
 			}
 		});
+		return button;
 	}
 
-	private void createButtonDelete(Composite parent) {
+	private Button createButtonDelete(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -431,6 +439,7 @@ public class ExtendedTargetsUI {
 				deleteTargets();
 			}
 		});
+		return button;
 	}
 
 	private TargetsListUI createTargetTable(Composite parent) {
@@ -628,6 +637,7 @@ public class ExtendedTargetsUI {
 	private void updateTargets() {
 
 		updateLabel();
+		updateWidgets();
 		//
 		targetListUI.sortTable();
 		Table table = targetListUI.getTable();
@@ -674,6 +684,14 @@ public class ExtendedTargetsUI {
 		//
 		String editInformation = targetListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
 		labelInfo.setText(labelInfo.getText() + " - " + editInformation);
+	}
+
+	private void updateWidgets() {
+
+		boolean enabled = (object == null) ? false : true;
+		comboTargetName.setEnabled(enabled);
+		buttonAddTarget.setEnabled(enabled);
+		buttonDeleteTarget.setEnabled(enabled);
 	}
 
 	@SuppressWarnings("rawtypes")
