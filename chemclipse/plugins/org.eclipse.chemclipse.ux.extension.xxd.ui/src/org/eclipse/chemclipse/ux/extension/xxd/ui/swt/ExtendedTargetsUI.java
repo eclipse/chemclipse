@@ -641,14 +641,19 @@ public class ExtendedTargetsUI {
 		Table table = targetListUI.getTable();
 		if(table.getItemCount() > 0) {
 			table.setSelection(0);
-			display.asyncExec(new Runnable() {
+			//
+			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+			boolean propagateTargetOnUpdate = preferenceStore.getBoolean(PreferenceConstants.P_PROPAGATE_TARGET_ON_UPDATE);
+			if(propagateTargetOnUpdate) {
+				display.asyncExec(new Runnable() {
 
-				@Override
-				public void run() {
+					@Override
+					public void run() {
 
-					propagateTarget();
-				}
-			});
+						propagateTarget();
+					}
+				});
+			}
 		}
 	}
 
