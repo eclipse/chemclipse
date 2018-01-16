@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 
 public class ExtendedQuantitationListUI {
 
@@ -46,6 +47,8 @@ public class ExtendedQuantitationListUI {
 	private QuantitationListUI quantitationListUI;
 	//
 	private IPeak peak;
+	//
+	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Inject
 	public ExtendedQuantitationListUI(Composite parent) {
@@ -193,7 +196,7 @@ public class ExtendedQuantitationListUI {
 	@SuppressWarnings("rawtypes")
 	private void deleteQuantitationEntries() {
 
-		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Delete Quantitation Entrie(s)");
 		messageBox.setMessage("Would you like to delete the selected quantitation entrie(s)?");
 		if(messageBox.open() == SWT.YES) {

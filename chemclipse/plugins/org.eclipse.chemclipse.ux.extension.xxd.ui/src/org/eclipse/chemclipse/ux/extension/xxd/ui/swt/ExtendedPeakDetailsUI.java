@@ -52,6 +52,8 @@ public class ExtendedPeakDetailsUI {
 	private StringBuilder stringBuilder;
 	//
 	private IPeak peak;
+	//
+	private Display display = Display.getDefault();
 
 	@Inject
 	public ExtendedPeakDetailsUI(Composite parent) {
@@ -144,7 +146,7 @@ public class ExtendedPeakDetailsUI {
 
 	private void createPeakList(Composite parent) {
 
-		clipboard = new Clipboard(Display.getDefault());
+		clipboard = new Clipboard(display);
 		list = new List(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER);
 		list.setLayoutData(new GridData(GridData.FILL_BOTH));
 		list.addKeyListener(new KeyAdapter() {

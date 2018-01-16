@@ -62,6 +62,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.swtchart.ISeries;
 
@@ -91,6 +92,8 @@ public class ExtendedChromatogramOverlayUI {
 	private EditorUpdateSupport editorUpdateSupport;
 	private OverlaySupport overlaySupport;
 	private Set<String> mirroredSeries;
+	//
+	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Inject
 	public ExtendedChromatogramOverlayUI(Composite parent) {
@@ -601,7 +604,7 @@ public class ExtendedChromatogramOverlayUI {
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
@@ -609,7 +612,7 @@ public class ExtendedChromatogramOverlayUI {
 						overlaySupport.loadUserSettings();
 						applyOverlaySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(Display.getDefault().getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}

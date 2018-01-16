@@ -119,7 +119,8 @@ public class ExtendedScanChartUI {
 	private String[] scanIdentifierNames;
 	//
 	private EditorUpdateSupport editorUpdateSupport;
-	private Shell shell = Display.getDefault().getActiveShell();
+	private Display display = Display.getDefault();
+	private Shell shell = display.getActiveShell();
 
 	private class MassSpectrumIdentifierRunnable implements IRunnableWithProgress {
 
@@ -537,7 +538,7 @@ public class ExtendedScanChartUI {
 						try {
 							monitor.run(true, true, runnable);
 							originalScan.setOptimizedMassSpectrum(optimizedScan);
-							Display.getDefault().asyncExec(new Runnable() {
+							display.asyncExec(new Runnable() {
 
 								@Override
 								public void run() {
@@ -743,14 +744,14 @@ public class ExtendedScanChartUI {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageScans));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSubtract));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(Display.getDefault().getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}
@@ -974,7 +975,7 @@ public class ExtendedScanChartUI {
 			int scanNumber = chromatogram.getScanNumber(masterRetentionTime);
 			IScan referenceScan = chromatogram.getScan(scanNumber);
 			//
-			Display.getDefault().asyncExec(new Runnable() {
+			display.asyncExec(new Runnable() {
 
 				@Override
 				public void run() {

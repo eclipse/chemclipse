@@ -500,7 +500,7 @@ public class ExtendedInternalStandardsUI {
 	private void deleteInternalStandards() {
 
 		if(peak != null) {
-			MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+			MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 			messageBox.setText("Delete Internal Standard(s)");
 			messageBox.setMessage("Would you like to delete the selected internal standard(s)?");
 			if(messageBox.open() == SWT.YES) {

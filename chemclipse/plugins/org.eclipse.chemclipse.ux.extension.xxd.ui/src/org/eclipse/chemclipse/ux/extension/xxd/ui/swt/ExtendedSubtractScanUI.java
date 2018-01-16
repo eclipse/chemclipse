@@ -222,7 +222,7 @@ public class ExtendedSubtractScanUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 				messageBox.setText("Clear Session");
 				messageBox.setMessage("Would you like to clear the session subtract scan?");
 				if(messageBox.open() == SWT.YES) {
@@ -244,7 +244,7 @@ public class ExtendedSubtractScanUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 				messageBox.setText("Load Session");
 				messageBox.setMessage("Would you like to load the session subtract scan?");
 				if(messageBox.open() == SWT.YES) {
@@ -267,7 +267,7 @@ public class ExtendedSubtractScanUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				PreferenceSupplier.storeSessionSubtractMassSpectrum();
-				MessageDialog.openInformation(Display.getDefault().getActiveShell(), "Session", "The session subtract scan has been stored successfully.");
+				MessageDialog.openInformation(shell, "Session", "The session subtract scan has been stored successfully.");
 			}
 		});
 	}
@@ -314,14 +314,14 @@ public class ExtendedSubtractScanUI {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageScans));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSubtract));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(Display.getDefault().getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}

@@ -63,26 +63,60 @@ public class TargetsPart extends AbstractDataUpdateSupport implements IDataUpdat
 		 * 0 => because only one property was used to register the event.
 		 */
 		if(objects.size() == 1) {
-			Object object = null;
-			if(!isUnloadEvent(topic)) {
-				object = objects.get(0);
-				if(object instanceof IChromatogramSelection) {
-					IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
-					object = chromatogramSelection.getChromatogram();
+			if(isChromatogramUnloadEvent(topic)) {
+				extendedTargetsUI.updateChromatogram(null);
+			} else if(isScanOrPeakUnloadEvent(topic)) {
+				extendedTargetsUI.updateScanOrPeak(null);
+			} else {
+				Object object = objects.get(0);
+				if(isChromatogramTopic(topic)) {
+					if(object instanceof IChromatogramSelection) {
+						IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
+						object = chromatogramSelection.getChromatogram();
+						extendedTargetsUI.updateChromatogram(object);
+					}
+				} else if(isScanOrPeakTopic(topic)) {
+					extendedTargetsUI.updateScanOrPeak(object);
 				}
 			}
-			//
-			extendedTargetsUI.update(object);
 		}
 	}
 
-	private boolean isUnloadEvent(String topic) {
+	private boolean isChromatogramUnloadEvent(String topic) {
 
 		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_CHROMATOGRAM_SELECTION)) {
 			return true;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION)) {
+		}
+		return false;
+	}
+
+	private boolean isChromatogramTopic(String topic) {
+
+		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION)) {
+			return true;
+		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION)) {
+			return true;
+		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION)) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isScanOrPeakUnloadEvent(String topic) {
+
+		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION)) {
 			return true;
 		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isScanOrPeakTopic(String topic) {
+
+		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
+			return true;
+		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION)) {
 			return true;
 		}
 		return false;

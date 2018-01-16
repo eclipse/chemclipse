@@ -402,14 +402,14 @@ public class ExtendedScanTableUI {
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(Display.getDefault().getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
+						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the chart settings.");
 					}
 				}
 			}
@@ -542,7 +542,7 @@ public class ExtendedScanTableUI {
 	@SuppressWarnings("rawtypes")
 	private void deleteSignals() {
 
-		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Delete Signal(s)");
 		messageBox.setMessage("Would you like to delete the selected signal(s)?");
 		if(messageBox.open() == SWT.YES) {
@@ -609,7 +609,7 @@ public class ExtendedScanTableUI {
 		String y = textY.getText().trim();
 		//
 		if("".equals(x) || "".equals(y)) {
-			MessageDialog.openError(Display.getDefault().getActiveShell(), "Add Signal", "The values must be not empty.");
+			MessageDialog.openError(shell, "Add Signal", "The values must be not empty.");
 		} else {
 			try {
 				/*
@@ -651,7 +651,7 @@ public class ExtendedScanTableUI {
 				fireScanUpdate();
 				//
 			} catch(Exception e) {
-				MessageDialog.openError(Display.getDefault().getActiveShell(), "Add Signal", "Something has gone wrong to add the signal.");
+				MessageDialog.openError(shell, "Add Signal", "Something has gone wrong to add the signal.");
 			}
 		}
 	}

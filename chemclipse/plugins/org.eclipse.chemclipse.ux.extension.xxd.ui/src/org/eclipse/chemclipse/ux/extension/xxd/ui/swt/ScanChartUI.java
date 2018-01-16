@@ -101,6 +101,8 @@ public class ScanChartUI extends ScrollableChart {
 	//
 	private IonValueComparator ionValueComparator = new IonValueComparator(SortOrder.ASC);
 	private WavelengthValueComparator wavelengthValueComparator = new WavelengthValueComparator(SortOrder.ASC);
+	//
+	private Display display = Display.getDefault();
 
 	private class LabelPaintListener implements ICustomPaintListener {
 
@@ -453,7 +455,7 @@ public class ScanChartUI extends ScrollableChart {
 		int style = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_FONT_STYLE);
 		fontId = name + height + style;
 		if(!fonts.containsKey(fontId)) {
-			Font font = new Font(Display.getDefault(), name, height, style);
+			Font font = new Font(display, name, height, style);
 			fonts.put(fontId, font);
 		}
 		//
@@ -677,13 +679,13 @@ public class ScanChartUI extends ScrollableChart {
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle(xAxisTitle);
 		primaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		primaryAxisSettingsX.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		primaryAxisSettingsX.setColor(display.getSystemColor(SWT.COLOR_BLACK));
 		primaryAxisSettingsX.setVisible(xAxisVisible);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle(yAxisTitle);
 		primaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.0#E0"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		primaryAxisSettingsY.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		primaryAxisSettingsY.setColor(display.getSystemColor(SWT.COLOR_BLACK));
 	}
 
 	private void addSecondaryAxisX(IChartSettings chartSettings, String xAxisTitle) {
@@ -691,7 +693,7 @@ public class ScanChartUI extends ScrollableChart {
 		ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(xAxisTitle, new MillisecondsToMinuteConverter());
 		secondaryAxisSettingsX.setPosition(Position.Primary);
 		secondaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		secondaryAxisSettingsX.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		secondaryAxisSettingsX.setColor(display.getSystemColor(SWT.COLOR_BLACK));
 		chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 	}
 
@@ -700,7 +702,7 @@ public class ScanChartUI extends ScrollableChart {
 		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings(yAxisTitle, new RelativeIntensityConverter(SWT.VERTICAL, true));
 		secondaryAxisSettingsY.setPosition(Position.Secondary);
 		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		secondaryAxisSettingsY.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		secondaryAxisSettingsY.setColor(display.getSystemColor(SWT.COLOR_BLACK));
 		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 	}
 

@@ -37,10 +37,12 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 
 public class TaskQuickAccessPart {
 
 	private Map<String, String> partMap;
+	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Inject
 	public TaskQuickAccessPart(Composite parent) {
@@ -278,7 +280,7 @@ public class TaskQuickAccessPart {
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				preferenceDialog.open();

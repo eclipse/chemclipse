@@ -64,6 +64,7 @@ public class PeakChartUI extends ScrollableChart {
 	private static final float HEIGHT_0 = 0.0f;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0");
+	private Display display = Display.getDefault();
 
 	public PeakChartUI() {
 		super();
@@ -219,13 +220,13 @@ public class PeakChartUI extends ScrollableChart {
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle(xAxisTitle);
 		primaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		primaryAxisSettingsX.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		primaryAxisSettingsX.setColor(display.getSystemColor(SWT.COLOR_BLACK));
 		primaryAxisSettingsX.setVisible(xAxisVisible);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle(yAxisTitle);
 		primaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.0#E0"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		primaryAxisSettingsY.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		primaryAxisSettingsY.setColor(display.getSystemColor(SWT.COLOR_BLACK));
 	}
 
 	private void addSecondaryAxisX(IChartSettings chartSettings, String xAxisTitle) {
@@ -233,7 +234,7 @@ public class PeakChartUI extends ScrollableChart {
 		ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(xAxisTitle, new MillisecondsToMinuteConverter());
 		secondaryAxisSettingsX.setPosition(Position.Primary);
 		secondaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		secondaryAxisSettingsX.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		secondaryAxisSettingsX.setColor(display.getSystemColor(SWT.COLOR_BLACK));
 		chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 	}
 
@@ -242,7 +243,7 @@ public class PeakChartUI extends ScrollableChart {
 		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings(yAxisTitle, new RelativeIntensityConverter(SWT.VERTICAL, true));
 		secondaryAxisSettingsY.setPosition(Position.Secondary);
 		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		secondaryAxisSettingsY.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		secondaryAxisSettingsY.setColor(display.getSystemColor(SWT.COLOR_BLACK));
 		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 	}
 

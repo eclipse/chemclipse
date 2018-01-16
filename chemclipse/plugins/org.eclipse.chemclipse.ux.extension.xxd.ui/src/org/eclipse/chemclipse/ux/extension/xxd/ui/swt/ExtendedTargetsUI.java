@@ -24,9 +24,7 @@ import org.eclipse.chemclipse.csd.model.core.identifier.chromatogram.IChromatogr
 import org.eclipse.chemclipse.csd.model.core.identifier.scan.IScanTargetCSD;
 import org.eclipse.chemclipse.csd.model.implementation.ChromatogramTargetCSD;
 import org.eclipse.chemclipse.csd.model.implementation.ScanTargetCSD;
-import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
@@ -92,6 +90,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
@@ -120,6 +119,8 @@ public class ExtendedTargetsUI {
 	private Map<String, Object> map;
 	//
 	private boolean showChromatogramTargets = false;
+	//
+	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Inject
 	public ExtendedTargetsUI(Composite parent, MPart part) {
@@ -134,22 +135,20 @@ public class ExtendedTargetsUI {
 		updateTargets();
 	}
 
-	public void update(Object object) {
+	public void updateChromatogram(Object object) {
 
 		if(showChromatogramTargets) {
-			if(object instanceof IChromatogram) {
-				this.object = object;
-			} else {
-				this.object = null;
-			}
-		} else {
-			if(object instanceof IScan || object instanceof IPeak) {
-				this.object = object;
-			} else {
-				this.object = null;
-			}
+			this.object = object;
+			updateTargets();
 		}
-		updateTargets();
+	}
+
+	public void updateScanOrPeak(Object object) {
+
+		if(!showChromatogramTargets) {
+			this.object = object;
+			updateTargets();
+		}
 	}
 
 	private void initialize(Composite parent) {
@@ -330,14 +329,14 @@ public class ExtendedTargetsUI {
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageTargets));
 				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSWT));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == PreferenceDialog.OK) {
 					try {
 						applySettings();
 					} catch(Exception e1) {
-						MessageDialog.openError(Display.getDefault().getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+						MessageDialog.openError(shell, "Settings", "Something has gone wrong to apply the settings.");
 					}
 				}
 			}
@@ -697,7 +696,7 @@ public class ExtendedTargetsUI {
 	@SuppressWarnings("rawtypes")
 	private void deleteTargets() {
 
-		MessageBox messageBox = new MessageBox(Display.getDefault().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Delete Target(s)");
 		messageBox.setMessage("Would you like to delete the selected target(s)?");
 		if(messageBox.open() == SWT.YES) {
@@ -749,7 +748,7 @@ public class ExtendedTargetsUI {
 		String substanceName = comboTargetName.getText().trim();
 		//
 		if("".equals(substanceName)) {
-			MessageDialog.openError(Display.getDefault().getActiveShell(), "Add Target", "The substance name must be not empty.");
+			MessageDialog.openError(shell, "Add Target", "The substance name must be not empty.");
 		} else {
 			/*
 			 * Add a new entry.
@@ -796,7 +795,7 @@ public class ExtendedTargetsUI {
 			}
 			//
 			comboTargetName.setText("");
-			update(object);
+			updateTargets();
 		}
 	}
 
