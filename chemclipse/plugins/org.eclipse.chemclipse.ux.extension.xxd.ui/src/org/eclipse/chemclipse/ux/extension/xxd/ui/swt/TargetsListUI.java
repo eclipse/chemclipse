@@ -15,10 +15,10 @@ import java.util.List;
 
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
-import org.eclipse.chemclipse.ux.extension.ui.provider.TargetListFilter;
-import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsEditingSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsLabelProvider;
-import org.eclipse.chemclipse.ux.extension.ui.provider.TargetsTableComparator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetListFilter;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsEditingSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsTableComparator;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
