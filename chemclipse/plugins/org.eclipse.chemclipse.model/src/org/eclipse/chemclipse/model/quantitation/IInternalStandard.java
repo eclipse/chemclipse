@@ -15,6 +15,8 @@ public interface IInternalStandard {
 
 	String getName();
 
+	void setName(String name);
+
 	double getConcentration();
 
 	String getConcentrationUnit();

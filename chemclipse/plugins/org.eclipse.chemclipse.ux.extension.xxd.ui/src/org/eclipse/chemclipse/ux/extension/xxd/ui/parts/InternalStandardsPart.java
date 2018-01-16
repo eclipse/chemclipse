@@ -56,7 +56,10 @@ public class InternalStandardsPart extends AbstractDataUpdateSupport implements 
 		if(objects.size() == 1) {
 			IPeak peak = null;
 			if(!isUnloadEvent(topic)) {
-				peak = (IPeak)objects.get(0);
+				Object object = objects.get(0);
+				if(object instanceof IPeak) {
+					peak = (IPeak)object;
+				}
 			}
 			extendedInternalStandardsUI.update(peak);
 		}

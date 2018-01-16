@@ -26,12 +26,12 @@ import org.eclipse.swt.widgets.Composite;
 
 public class QuantitationPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
-	private ExtendedQuantitationListUI extendedPeakQuantitationListUI;
+	private ExtendedQuantitationListUI extendedQuantitationListUI;
 
 	@Inject
 	public QuantitationPart(Composite parent, MPart part) {
 		super(part);
-		extendedPeakQuantitationListUI = new ExtendedQuantitationListUI(parent);
+		extendedQuantitationListUI = new ExtendedQuantitationListUI(parent);
 	}
 
 	@Focus
@@ -58,7 +58,7 @@ public class QuantitationPart extends AbstractDataUpdateSupport implements IData
 			if(!isUnloadEvent(topic)) {
 				peak = (IPeak)objects.get(0);
 			}
-			extendedPeakQuantitationListUI.update(peak);
+			extendedQuantitationListUI.update(peak);
 		}
 	}
 

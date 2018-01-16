@@ -19,9 +19,28 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-public class InternalStandardListLabelProvider extends AbstractChemClipseLabelProvider {
+public class InternalStandardsLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public InternalStandardListLabelProvider() {
+	public static final String NAME = "Name";
+	public static final String CHEMICAL_CLASS = "Chemical Class";
+	//
+	public static final String[] TITLES = {//
+			NAME, //
+			"Concentration (Conc.)", //
+			"Concentration Unit", //
+			"Response Factor (RF)", //
+			CHEMICAL_CLASS //
+	};
+	//
+	public static final int BOUNDS[] = {//
+			170, //
+			170, //
+			150, //
+			170, //
+			150 //
+	};
+
+	public InternalStandardsLabelProvider() {
 		super("0.0##");
 	}
 

@@ -27,6 +27,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String NAME = "Name";
 	public static final String CAS = "CAS";
 	public static final String COMMENTS = "Comments";
+	//
 	public static final String[] TITLES = { //
 			VERIFIED_MANUALLY, //
 			"Rating", //

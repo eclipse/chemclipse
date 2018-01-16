@@ -16,16 +16,13 @@ import java.util.List;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
-import org.eclipse.chemclipse.ux.extension.ui.provider.InternalStandardEditingSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.InternalStandardListLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.InternalStandardListTableComparator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.InternalStandardEditingSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.InternalStandardsLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.InternalStandardsTableComparator;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.widgets.Composite;
 
 public class InternalStandardsListUI extends ExtendedTableViewer {
-
-	private String[] titles = {"Name", "Concentration (Conc.)", "Concentration Unit", "Response Factor (RF)", "Chemical Class"};
-	private int bounds[] = {170, 170, 150, 170, 150};
 
 	public InternalStandardsListUI(Composite parent) {
 		super(parent);
@@ -49,11 +46,11 @@ public class InternalStandardsListUI extends ExtendedTableViewer {
 
 	private void createColumns() {
 
-		createColumns(titles, bounds);
+		createColumns(InternalStandardsLabelProvider.TITLES, InternalStandardsLabelProvider.BOUNDS);
 		//
-		setLabelProvider(new InternalStandardListLabelProvider());
+		setLabelProvider(new InternalStandardsLabelProvider());
 		setContentProvider(new ListContentProvider());
-		setComparator(new InternalStandardListTableComparator());
+		setComparator(new InternalStandardsTableComparator());
 		setEditingSupport();
 	}
 
@@ -63,7 +60,9 @@ public class InternalStandardsListUI extends ExtendedTableViewer {
 		for(int i = 0; i < tableViewerColumns.size(); i++) {
 			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);
 			String label = tableViewerColumn.getColumn().getText();
-			if(label.equals("Chemical Class")) {
+			if(label.equals(InternalStandardsLabelProvider.NAME)) {
+				tableViewerColumn.setEditingSupport(new InternalStandardEditingSupport(this, label));
+			} else if(label.equals(InternalStandardsLabelProvider.CHEMICAL_CLASS)) {
 				tableViewerColumn.setEditingSupport(new InternalStandardEditingSupport(this, label));
 			}
 		}

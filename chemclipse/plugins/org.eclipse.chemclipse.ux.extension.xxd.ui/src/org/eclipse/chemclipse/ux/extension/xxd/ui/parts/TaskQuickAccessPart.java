@@ -59,6 +59,7 @@ public class TaskQuickAccessPart {
 		createOverlayTask(parent);
 		createSelectedScansTask(parent);
 		createSelectedPeaksTask(parent);
+		createQuantitationTask(parent);
 		createSubtractScanTask(parent);
 		createCombinedScanTask(parent);
 		createComparisonScanTask(parent);
@@ -154,15 +155,35 @@ public class TaskQuickAccessPart {
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				String partStackIdChart = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_CHART);
 				String partStackIdDetails = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_DETAILS);
-				String partStackIdQuantitation = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION);
-				String partStackIdIntegrationArea = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTEGRATION_AREA);
-				String partStackIdPeakISTD = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_ISTD);
 				//
 				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_CHART, partStackIdChart, imageActive, imageDefault);
 				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_DETAILS, partStackIdDetails, imageActive, imageDefault);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION, partStackIdQuantitation, imageActive, imageDefault);
+			}
+		});
+	}
+
+	private void createQuantitationTask(Composite parent) {
+
+		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_QUANTITATION_ACTIVE, IApplicationImage.SIZE_16x16);
+		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_QUANTITATION_DEFAULT, IApplicationImage.SIZE_16x16);
+		//
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Toggle the quantitation modus");
+		button.setImage(imageDefault);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+				String partStackIdQuantitation = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANTITATION);
+				String partStackIdInternalStandards = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTERNAL_STANDARDS);
+				String partStackIdIntegrationArea = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTEGRATION_AREA);
+				//
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_QUANTITATION, partStackIdQuantitation, imageActive, imageDefault);
+				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_INTERNAL_STANDARDS, partStackIdInternalStandards, imageActive, imageDefault);
 				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_INTEGRATION_AREA, partStackIdIntegrationArea, imageActive, imageDefault);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_ISTD, partStackIdPeakISTD, imageActive, imageDefault);
 			}
 		});
 	}

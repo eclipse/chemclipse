@@ -33,18 +33,18 @@ public class PreferenceConstants {
 	public static final String DEF_STACK_POSITION_PEAK_CHART = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	public static final String P_STACK_POSITION_PEAK_DETAILS = "stackPositionPeakDetails";
 	public static final String DEF_STACK_POSITION_PEAK_DETAILS = PartSupport.PARTSTACK_BOTTOM_LEFT;
-	public static final String P_STACK_POSITION_PEAK_QUANTITATION = "stackPositionPeakQuantitation";
-	public static final String DEF_STACK_POSITION_PEAK_QUANTITATION = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_SUBTRACT_SCAN_PART = "stackPositionSubtractScanPart";
 	public static final String DEF_STACK_POSITION_SUBTRACT_SCAN_PART = PartSupport.PARTSTACK_RIGHT_TOP;
 	public static final String P_STACK_POSITION_COMBINED_SCAN_PART = "stackPositionCombinedScanPart";
 	public static final String DEF_STACK_POSITION_COMBINED_SCAN_PART = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_COMPARISON_SCAN_CHART = "stackPositionComparisonScanChart";
 	public static final String DEF_STACK_POSITION_COMPARISON_SCAN_CHART = PartSupport.PARTSTACK_RIGHT_TOP;
+	public static final String P_STACK_POSITION_QUANTITATION = "stackPositionQuantitation";
+	public static final String DEF_STACK_POSITION_QUANTITATION = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_INTEGRATION_AREA = "stackPositionIntegrationArea";
 	public static final String DEF_STACK_POSITION_INTEGRATION_AREA = PartSupport.PARTSTACK_BOTTOM_CENTER;
-	public static final String P_STACK_POSITION_PEAK_ISTD = "stackPositionPeakInternalStandards";
-	public static final String DEF_STACK_POSITION_PEAK_ISTD = PartSupport.PARTSTACK_BOTTOM_RIGHT;
+	public static final String P_STACK_POSITION_INTERNAL_STANDARDS = "stackPositionInternalStandards";
+	public static final String DEF_STACK_POSITION_INTERNAL_STANDARDS = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	//
 	public static String[][] PART_STACKS = new String[][]{//
 			{"--", PartSupport.PARTSTACK_NONE}, //

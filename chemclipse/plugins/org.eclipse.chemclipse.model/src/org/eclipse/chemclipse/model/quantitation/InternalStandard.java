@@ -33,6 +33,16 @@ public class InternalStandard implements IInternalStandard {
 	}
 
 	@Override
+	public void setName(String name) {
+
+		if(name == null) {
+			name = "";
+		} else {
+			this.name = name;
+		}
+	}
+
+	@Override
 	public double getConcentration() {
 
 		return concentration;
@@ -63,43 +73,46 @@ public class InternalStandard implements IInternalStandard {
 	}
 
 	@Override
-	public boolean equals(Object otherObject) {
+	public int hashCode() {
 
-		if(this == otherObject) {
-			return true;
-		}
-		if(otherObject == null) {
-			return false;
-		}
-		if(getClass() != otherObject.getClass()) {
-			return false;
-		}
-		IInternalStandard other = (IInternalStandard)otherObject;
-		return concentration == other.getConcentration() && //
-				concentrationUnit == other.getConcentrationUnit() && //
-				responseFactor == other.getResponseFactor();
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(concentration);
+		result = prime * result + (int)(temp ^ (temp >>> 32));
+		result = prime * result + ((concentrationUnit == null) ? 0 : concentrationUnit.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
 	}
 
 	@Override
-	public int hashCode() {
+	public boolean equals(Object obj) {
 
-		return Double.valueOf(concentration).hashCode() + //
-				concentrationUnit.hashCode() + //
-				Double.valueOf(responseFactor).hashCode();
+		if(this == obj)
+			return true;
+		if(obj == null)
+			return false;
+		if(getClass() != obj.getClass())
+			return false;
+		InternalStandard other = (InternalStandard)obj;
+		if(Double.doubleToLongBits(concentration) != Double.doubleToLongBits(other.concentration))
+			return false;
+		if(concentrationUnit == null) {
+			if(other.concentrationUnit != null)
+				return false;
+		} else if(!concentrationUnit.equals(other.concentrationUnit))
+			return false;
+		if(name == null) {
+			if(other.name != null)
+				return false;
+		} else if(!name.equals(other.name))
+			return false;
+		return true;
 	}
 
 	@Override
 	public String toString() {
 
-		StringBuilder builder = new StringBuilder();
-		builder.append(getClass().getName());
-		builder.append("[");
-		builder.append("concentration=" + concentration);
-		builder.append(",");
-		builder.append("concentrationUnit=" + concentrationUnit);
-		builder.append(",");
-		builder.append("responseFactor=" + responseFactor);
-		builder.append("]");
-		return builder.toString();
+		return "InternalStandard [name=" + name + ", concentration=" + concentration + ", concentrationUnit=" + concentrationUnit + ", responseFactor=" + responseFactor + ", chemicalClass=" + chemicalClass + "]";
 	}
 }

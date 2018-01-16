@@ -9,14 +9,14 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.ui.provider;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
-import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.widgets.TableItem;
 
 public class InternalStandardEditingSupport extends EditingSupport {
 
@@ -46,27 +46,53 @@ public class InternalStandardEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
+		Object object = null;
 		if(element instanceof IInternalStandard) {
 			IInternalStandard internalStandard = (IInternalStandard)element;
 			switch(column) {
-				case "Chemical Class":
-					return internalStandard.getChemicalClass();
+				case InternalStandardsLabelProvider.NAME:
+					object = internalStandard.getName();
+					break;
+				case InternalStandardsLabelProvider.CHEMICAL_CLASS:
+					object = internalStandard.getChemicalClass();
+					break;
 			}
 		}
-		return false;
+		return object;
 	}
 
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof IIdentificationTarget) {
+		if(element instanceof IInternalStandard) {
 			IInternalStandard internalStandard = (IInternalStandard)element;
 			switch(column) {
-				case "Chemical Class":
-					internalStandard.setChemicalClass((String)value);
+				case InternalStandardsLabelProvider.NAME:
+					String name = ((String)value).trim();
+					if(isRenameAllowed(name)) {
+						internalStandard.setName(name);
+					}
+					break;
+				case InternalStandardsLabelProvider.CHEMICAL_CLASS:
+					String chemicalClass = ((String)value).trim();
+					internalStandard.setChemicalClass(chemicalClass);
 					break;
 			}
 			tableViewer.refresh();
 		}
+	}
+
+	private boolean isRenameAllowed(String name) {
+
+		for(TableItem tableItem : tableViewer.getTable().getItems()) {
+			Object object = tableItem.getData();
+			if(object instanceof IInternalStandard) {
+				IInternalStandard internalStandard = (IInternalStandard)object;
+				if(internalStandard.getName().equals(name)) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }
