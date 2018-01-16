@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_0xnVUJVkEeK9SdEQujNeFg">
   <imports xsi:type="basic:Part" xmi:id="_fox1wJ04EeKjCYpkYLlvCg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.peakListView"/>
-  <imports xsi:type="basic:Part" xmi:id="_pRSoIJ04EeKjCYpkYLlvCg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.peakTargetsView"/>
   <imports xsi:type="advanced:Area" xmi:id="_tiuBEJ04EeKjCYpkYLlvCg" elementId="org.eclipse.chemclipse.rcp.app.ui.editor"/>
   <imports xsi:type="basic:Part" xmi:id="_p9kigJ08EeKjCYpkYLlvCg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.simpleNominalMassSpectrumView"/>
   <imports xsi:type="basic:Part" xmi:id="_r-xO4J3kEeKyw-6yHNqBYg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.peakMSDView"/>
@@ -63,7 +62,6 @@
           <children xsi:type="basic:PartSashContainer" xmi:id="_DV8ogJunEeKzNJamIhhW-g" elementId="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.partsashcontainer.3" horizontal="true">
             <children xsi:type="basic:PartStack" xmi:id="_F-UY8JunEeKzNJamIhhW-g" elementId="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.partstack.1">
               <children xsi:type="advanced:Placeholder" xmi:id="_uxb7QJupEeKzNJamIhhW-g" elementId="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.placeholder.3" ref="_lV7qIJupEeKzNJamIhhW-g"/>
-              <children xsi:type="advanced:Placeholder" xmi:id="_wbtAYJ04EeKjCYpkYLlvCg" elementId="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.placeholder.4" ref="_pRSoIJ04EeKjCYpkYLlvCg"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_13sLIJ08EeKjCYpkYLlvCg" elementId="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.placeholder.5" ref="_p9kigJ08EeKjCYpkYLlvCg"/>
               <children xsi:type="advanced:Placeholder" xmi:id="_3z0-wKkQEeKiqMTTUAZMag" elementId="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.placeholder.6" ref="_y8XgkKkQEeKiqMTTUAZMag"/>
             </children>
