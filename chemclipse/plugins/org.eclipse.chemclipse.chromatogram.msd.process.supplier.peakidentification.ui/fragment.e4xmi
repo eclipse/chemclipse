@@ -3,7 +3,6 @@
   <imports xsi:type="advanced:Area" xmi:id="_lyy-YLPpEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.rcp.app.ui.editor"/>
   <imports xsi:type="basic:Part" xmi:id="_5sRDMLPpEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.simpleNominalMassSpectrumView"/>
   <imports xsi:type="basic:Part" xmi:id="_-6HoILPpEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.peakMSDView"/>
-  <imports xsi:type="basic:Part" xmi:id="_A4ZSsLPqEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.peakTargetsView"/>
   <imports xsi:type="basic:Part" xmi:id="_LO07ALPqEeKIeeBeP0URsw" elementId="org.eclipse.ui.navigator.ProjectExplorer"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_tRJCsECPEeKbmYL7tP6V9g" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Command" xmi:id="_vTiYQECPEeKbmYL7tP6V9g" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.command.batchProcess" commandName="Peak Identification Batch Process"/>
@@ -30,9 +29,6 @@
           <children xsi:type="basic:PartSashContainer" xmi:id="_iL8zgLPpEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.partsashcontainer.3" horizontal="true">
             <children xsi:type="basic:PartStack" xmi:id="_jfQ1gLPpEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.partstack.2">
               <children xsi:type="advanced:Placeholder" xmi:id="_dcXCcLPqEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.placeholder.2" ref="_5sRDMLPpEeKIeeBeP0URsw"/>
-            </children>
-            <children xsi:type="basic:PartStack" xmi:id="_j2IdYLPpEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.partstack.3">
-              <children xsi:type="advanced:Placeholder" xmi:id="_dvNF8LPqEeKIeeBeP0URsw" elementId="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.placeholder.3" ref="_A4ZSsLPqEeKIeeBeP0URsw"/>
             </children>
           </children>
         </children>
