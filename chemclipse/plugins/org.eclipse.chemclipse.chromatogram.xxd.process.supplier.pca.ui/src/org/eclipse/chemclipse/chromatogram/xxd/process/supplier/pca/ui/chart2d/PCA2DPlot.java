@@ -13,7 +13,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import org.eclipse.eavp.service.swtchart.axisconverter.PassThroughConverter;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
@@ -24,6 +26,8 @@ import org.eclipse.eavp.service.swtchart.core.SecondaryAxisSettings;
 import org.eclipse.eavp.service.swtchart.scattercharts.ScatterChart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.swtchart.IAxis.Position;
@@ -60,6 +64,32 @@ public abstract class PCA2DPlot extends ScatterChart {
 		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 	}
 
+	public void deselect(Set<String> set) {
+
+		Set<String> selection = new HashSet<>(getBaseChart().getSelectedSeriesIds());
+		for(String id : set) {
+			selection.remove(id);
+		}
+		getBaseChart().resetSeriesSettings();
+		for(String id : selection) {
+			getBaseChart().selectSeries(id);
+		}
+		getBaseChart().redraw();
+	}
+
+	public void deselect(String... set) {
+
+		Set<String> selection = new HashSet<>(getBaseChart().getSelectedSeriesIds());
+		for(String id : set) {
+			selection.remove(id);
+		}
+		getBaseChart().resetSeriesSettings();
+		for(String id : selection) {
+			getBaseChart().selectSeries(id);
+		}
+		getBaseChart().redraw();
+	}
+
 	private void initialize() {
 
 		IChartSettings chartSettings = getChartSettings();
@@ -88,6 +118,15 @@ public abstract class PCA2DPlot extends ScatterChart {
 		applySettings(chartSettings);
 	}
 
+	protected boolean isPointVisible(Point point, Rectangle plotAreaBounds) {
+
+		if(point.x >= 0 && point.x <= plotAreaBounds.width && point.y >= 0 && point.y <= plotAreaBounds.height) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	private void setPrimaryAxisSet(IChartSettings chartSettings) {
 
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
@@ -101,7 +140,7 @@ public abstract class PCA2DPlot extends ScatterChart {
 		primaryAxisSettingsY.setColor(COLOR_BLACK);
 	}
 
-	public void update(int pcX, int pcY) {
+	protected void update(int pcX, int pcY) {
 
 		if(pcX != 0) {
 			getChartSettings().getPrimaryAxisSettingsX().setTitle("PC" + pcX);

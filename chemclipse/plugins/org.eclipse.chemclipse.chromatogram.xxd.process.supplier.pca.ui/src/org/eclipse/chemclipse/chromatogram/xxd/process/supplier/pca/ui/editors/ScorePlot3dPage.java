@@ -115,8 +115,8 @@ public class ScorePlot3dPage {
 
 		Optional<IPcaResults> pcaResults = pcaEditor.getPcaResults();
 		if(pcaResults.isPresent()) {
-			updateSpinnerPCMaxima(pcaResults.get().getNumberOfPrincipleComponents());
-			scorePlot3d.update(pcaResults.get(), spinnerPCx.getSelection(), spinnerPCy.getSelection(), spinnerPCz.getSelection());
+			updateSpinnerPCMaxima(pcaResults.get().getPcaSettings().getNumberOfPrincipleComponents());
+			scorePlot3d.update(pcaResults.get());
 		} else {
 			scorePlot3d.removeData();
 		}

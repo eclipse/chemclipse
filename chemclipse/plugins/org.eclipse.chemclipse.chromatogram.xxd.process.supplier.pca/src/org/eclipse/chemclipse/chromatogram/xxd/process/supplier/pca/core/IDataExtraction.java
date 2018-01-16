@@ -35,9 +35,9 @@ public interface IDataExtraction {
 		for(int i = 0; i < samples.getVariables().size(); i++) {
 			final int j = i;
 			final Set<String> peakNames = new HashSet<>();
-			samples.getSampleList().stream().map(s -> s.getSampleData()).map(d -> d.get(j).getPeaks()).forEach(peaks -> {
-				for(IPeak peak : peaks) {
-					List<IPeakTarget> targets = peak.getTargets();
+			samples.getSampleList().stream().map(s -> s.getSampleData()).map(d -> d.get(j).getPeak()).forEach(peak -> {
+				if(peak.isPresent()) {
+					List<IPeakTarget> targets = peak.get().getTargets();
 					if(!targets.isEmpty()) {
 						peakNames.add(targets.get(0).getLibraryInformation().getName());
 					}

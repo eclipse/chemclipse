@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
@@ -112,19 +113,19 @@ public class PcaEvaluation {
 		return principleComponentAnalysis;
 	}
 
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> IPcaResults process(ISamples<V, S> samples, int numberOfPrincipleComponents, IProgressMonitor monitor) {
+	public <V extends IVariable, S extends ISample<? extends ISampleData>> IPcaResults process(ISamples<V, S> samples, IPcaSettings settings, IProgressMonitor monitor) {
 
 		monitor.subTask("Run PCA");
-		IPcaResults pcaResults = new PcaResults(samples);
+		int numberOfPrincipleComponents = settings.getNumberOfPrincipleComponents();
+		IPcaResults pcaResults = new PcaResults(settings);
 		Map<ISample<?>, double[]> extractData = extractData(samples);
-		setRetentionTime(pcaResults);
+		setRetentionTime(pcaResults, samples);
 		int sampleSize = getSampleSize(extractData);
 		PrincipalComponentAnalysis principleComponentAnalysis = initializePCA(extractData, sampleSize, numberOfPrincipleComponents);
 		List<double[]> basisVectors = getBasisVectors(principleComponentAnalysis, numberOfPrincipleComponents);
 		pcaResults.setBasisVectors(basisVectors);
 		setEigenSpaceAndErrorValues(principleComponentAnalysis, extractData, pcaResults);
-		pcaResults.setNumberOfPrincipleComponents(numberOfPrincipleComponents);
-		setGroups(pcaResults);
+		setGroups(pcaResults, samples);
 		return pcaResults;
 	}
 
@@ -153,10 +154,10 @@ public class PcaEvaluation {
 		pcaResults.setPcaResultList(resultsList);
 	}
 
-	private void setGroups(IPcaResults pcaResults) {
+	private void setGroups(IPcaResults pcaResults, ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
 
 		List<IPcaResult> pcaResultGroups = new ArrayList<>();
-		for(IGroup<?> group : pcaResults.getSamples().getGroupList()) {
+		for(IGroup<?> group : samples.getGroupList()) {
 			IPcaResult pcaResultGroup = new PcaResult(group);
 			String groupName = group.getGroupName();
 			String name = group.getName();
@@ -196,10 +197,9 @@ public class PcaEvaluation {
 		pcaResults.setPcaResultGroupsList(pcaResultGroups);
 	}
 
-	private void setRetentionTime(IPcaResults pcaResults) {
+	private void setRetentionTime(IPcaResults pcaResults, ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
 
 		List<IVaribleExtracted> variables = new ArrayList<>();
-		ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples = pcaResults.getSamples();
 		for(int i = 0; i < samples.getVariables().size(); i++) {
 			if(samples.getVariables().get(i).isSelected()) {
 				IVariable variable = samples.getVariables().get(i);

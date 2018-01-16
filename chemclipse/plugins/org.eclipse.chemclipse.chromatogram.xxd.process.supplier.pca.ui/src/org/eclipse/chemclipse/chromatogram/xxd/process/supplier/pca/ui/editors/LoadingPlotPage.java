@@ -116,16 +116,6 @@ public class LoadingPlotPage {
 		}
 	}
 
-	private int getPCX() {
-
-		return componentsSelector.getX();
-	}
-
-	private int getPCY() {
-
-		return componentsSelector.getY();
-	}
-
 	private void initialize(TabFolder tabFolder, FormToolkit formToolkit) {
 
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
@@ -158,7 +148,7 @@ public class LoadingPlotPage {
 		button.setText("Reload Loading Plot");
 		button.addListener(SWT.Selection, e -> {
 			if(pcaEditor.getPcaResults().isPresent()) {
-				loadingPlot.update(pcaEditor.getPcaResults().get(), getPCX(), getPCY());
+				loadingPlot.update(pcaEditor.getPcaResults().get());
 			}
 		});
 		//
@@ -171,7 +161,7 @@ public class LoadingPlotPage {
 		Composite chartComposite = new Composite(body, SWT.BORDER);
 		chartComposite.setLayout(new GridLayout(1, false));
 		chartComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		loadingPlot = new LoadingPlot(chartComposite, this);
+		loadingPlot = new LoadingPlot(chartComposite);
 		loadingPlot.setLayoutData(new GridData(GridData.FILL_BOTH));
 		createButtonsArea(body, new GridData(GridData.FILL_VERTICAL));
 		//
@@ -196,7 +186,7 @@ public class LoadingPlotPage {
 		if(results.isPresent()) {
 			componentsSelector.update(results.get());
 			removeSelection();
-			loadingPlot.update(results.get(), getPCX(), getPCY());
+			loadingPlot.update(results.get());
 		} else {
 			loadingPlot.deleteSeries();
 		}

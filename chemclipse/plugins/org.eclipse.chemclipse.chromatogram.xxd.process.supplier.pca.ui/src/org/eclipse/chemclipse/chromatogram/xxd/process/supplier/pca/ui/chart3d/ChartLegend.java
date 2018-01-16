@@ -21,17 +21,18 @@ import javafx.scene.shape.Circle;
 
 public class ChartLegend {
 
-	private Chart3DData data;
 	private double radius = 5;
+	private Chart3DSettings setting;
 	private final VBox vbox = new VBox();
 
-	public ChartLegend(Chart3DData chart3dData) {
-		this.data = chart3dData;
+	public ChartLegend(Chart3DSettings settings) {
+		this.setting = settings;
 		vbox.setMinWidth(120);
 		Label legend = new Label("Legend:");
 		vbox.setStyle("-fx-padding: 10;");
 		vbox.setSpacing(5);
 		vbox.getChildren().add(legend);
+		update();
 	}
 
 	public VBox getLegend() {
@@ -39,16 +40,19 @@ public class ChartLegend {
 		return vbox;
 	}
 
-	public void update() {
+	private void update() {
 
 		vbox.getChildren().clear();
 		Label legend = new Label("Legend:");
 		vbox.getChildren().add(legend);
-		Iterator<Entry<String, Color>> it = data.getGroup().entrySet().iterator();
+		Iterator<Entry<String, Color>> it = setting.getGroup().entrySet().iterator();
 		while(it.hasNext()) {
 			Entry<String, Color> entry = it.next();
 			String name = entry.getKey();
 			Color color = entry.getValue();
+			if(name == null) {
+				name = "-----";
+			}
 			Circle circle = new Circle(radius, color);
 			Label label = new Label(name);
 			label.setGraphic(circle);

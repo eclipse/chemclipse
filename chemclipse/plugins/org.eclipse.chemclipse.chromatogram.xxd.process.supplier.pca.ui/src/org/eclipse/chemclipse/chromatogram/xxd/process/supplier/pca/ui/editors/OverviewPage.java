@@ -15,7 +15,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers.CreatePcaEvaluation;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.EigenvaluesCovarianceMatrixTable;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -251,7 +250,6 @@ public class OverviewPage {
 			public void linkActivated(HyperlinkEvent e) {
 
 				if(pcaEditor.getPcaResults().isPresent()) {
-					CreatePcaEvaluation.createPart(pcaEditor.getSamples().get());
 				}
 			}
 		});
@@ -344,7 +342,7 @@ public class OverviewPage {
 
 		Optional<IPcaResults> pcaResults = pcaEditor.getPcaResults();
 		if(pcaResults.isPresent()) {
-			principleComponentSpinner.setSelection(pcaResults.get().getNumberOfPrincipleComponents());
+			principleComponentSpinner.setSelection(pcaResults.get().getPcaSettings().getNumberOfPrincipleComponents());
 		}
 	}
 }

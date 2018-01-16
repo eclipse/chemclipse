@@ -21,12 +21,15 @@ public class Variable implements IVaribleExtracted {
 
 	public Variable(IVariable variable) {
 		this.variable = variable;
+		this.value = variable.getValue();
+		this.type = variable.getType();
+		this.description = variable.getDescription();
 	}
 
 	@Override
 	public int compareTo(IVariable o) {
 
-		return 0;
+		return variable.compareTo(o);
 	}
 
 	@Override

@@ -95,7 +95,7 @@ public class ScorePlotPage {
 		Optional<IPcaResults> results = pcaEditor.getPcaResults();
 		if(results.isPresent()) {
 			componentsSelector.update(results.get());
-			scorePlot.update(results.get(), componentsSelector.getX(), componentsSelector.getY());
+			scorePlot.update(results.get());
 		} else {
 			scorePlot.deleteSeries();
 		}
@@ -104,7 +104,7 @@ public class ScorePlotPage {
 	public void updateSelection() {
 
 		if(pcaEditor.getPcaResults().isPresent()) {
-			scorePlot.update(pcaEditor.getPcaResults().get(), componentsSelector.getX(), componentsSelector.getY());
+			scorePlot.update(pcaEditor.getPcaResults().get());
 		}
 	}
 }

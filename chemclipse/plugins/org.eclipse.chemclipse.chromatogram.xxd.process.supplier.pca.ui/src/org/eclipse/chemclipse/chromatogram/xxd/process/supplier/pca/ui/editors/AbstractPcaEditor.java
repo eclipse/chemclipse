@@ -21,7 +21,11 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFilt
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaInputRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.ReEvaluateRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
@@ -39,7 +43,7 @@ public abstract class AbstractPcaEditor {
 	private Optional<PcaFiltrationData> pcaFiltrationData = Optional.empty();
 	private Optional<PcaPreprocessingData> pcaPreprocessingData = Optional.empty();
 	private Optional<IPcaResults> pcaResults = Optional.empty();
-	private Optional<ISamples<?, ?>> samples = Optional.empty();
+	private Optional<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> samples = Optional.empty();
 
 	public AbstractPcaEditor() {
 		dataInputEntries = new ArrayList<>();
@@ -72,7 +76,7 @@ public abstract class AbstractPcaEditor {
 		return pcaResults;
 	}
 
-	public Optional<ISamples<?, ?>> getSamples() {
+	public Optional<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> getSamples() {
 
 		return samples;
 	}
@@ -122,7 +126,7 @@ public abstract class AbstractPcaEditor {
 		 */
 		try {
 			int numberOfPrincComp = numberOfPrincipleComponents.get();
-			ReEvaluateRunnable runnable = new ReEvaluateRunnable(samples.get(), numberOfPrincComp);
+			ReEvaluateRunnable runnable = new ReEvaluateRunnable(samples.get(), new PcaSettings(numberOfPrincComp));
 			ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 			monitor.run(true, false, runnable);
 			this.pcaResults = Optional.of(runnable.getPcaResults());

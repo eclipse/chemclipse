@@ -16,7 +16,6 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
@@ -36,31 +35,28 @@ public class Axes {
 
 	private boolean addPlane = false;
 	final private PhongMaterial cornMaterial = new PhongMaterial();
-	private Chart3DData data;
 	private NumberFormat format;
 	final private PhongMaterial gridaxisMaterial = new PhongMaterial();
 	private double lableDistance;
 	private double lableDistanceNameAxis;
-	private double lengthX;
-	private double lengthY;
-	private double lengthZ;
-	private double lineSpacing;
-	private double lineSpacingScaled;
 	final private Group mainGroup = new Group();
-	private double maxNumberLine;
-	private double maxX;
-	private double maxY;
-	private double maxZ;
-	private double minX;
-	private double minY;
-	private double minZ;
 	final private PhongMaterial planeMaterial = new PhongMaterial();
+	private Chart3DSettings settings;
 	private double tickLenght;
 	private double widthCorn;
 
-	public Axes(Chart3DData chart3dData) {
-		this.data = chart3dData;
-		maxNumberLine = 10;
+	public Axes(Chart3DSettings settings) {
+		this.settings = settings;
+		double absMaximum = Arrays.stream(new double[]{settings.getMinX(), settings.getMaxX(), settings.getMinY(), settings.getMaxY(), settings.getMinZ(), settings.getMaxZ()}).map(d -> Math.abs(d)).max().getAsDouble();
+		double numberDigits = Math.floor(Math.log10(absMaximum));
+		if(Math.abs(numberDigits) > 4) {
+			format = new DecimalFormat("#.##E0", new DecimalFormatSymbols(Locale.US));
+		} else {
+			format = ValueFormat.getNumberFormatEnglish();
+		}
+		/*
+		 *
+		 */
 		cornMaterial.setDiffuseColor(Color.BLACK);
 		cornMaterial.setSpecularColor(Color.BLACK.brighter());
 		/*
@@ -77,11 +73,7 @@ public class Axes {
 		lableDistance = 70;
 		lableDistanceNameAxis = 200;
 		widthCorn = 4;
-	}
-
-	public Group createAxes() {
-
-		return mainGroup;
+		mainGroup.getChildren().setAll(createXYPlane(), createYZPlane(), createXZPlane(), createCorns(), createXLabels(), createYLabels(), createZLanels());
 	}
 
 	private Node createCorn(double height, Point3D rotation, double rotate, double translationX, double translationY, double translationZ, double lengthening) {
@@ -98,30 +90,31 @@ public class Axes {
 
 	private Group createCorns() {
 
+		double s = settings.getScale();
 		Group group = new Group();
-		Node corn = createCorn(lengthX, Rotate.X_AXIS, 0, 0, minY, minZ, 500);
+		Node corn = createCorn((settings.getAxisXlenght()) * s, Rotate.X_AXIS, 0, 0, settings.getAxisMinY() * s, settings.getAxisMinZ() * s, 500);
 		group.getChildren().add(corn);
-		corn = createCorn(lengthX, Rotate.X_AXIS, 0, 0, maxY, minZ, 0);
+		corn = createCorn((settings.getAxisXlenght()) * s, Rotate.X_AXIS, 0, 0, settings.getAxisMaxY() * s, settings.getAxisMinZ() * s, 0);
 		group.getChildren().add(corn);
-		corn = createCorn(lengthX, Rotate.X_AXIS, 0, 0, minY, maxZ, 0);
+		corn = createCorn((settings.getAxisXlenght()) * s, Rotate.X_AXIS, 0, 0, settings.getAxisMinY() * s, settings.getAxisMaxZ() * s, 0);
 		group.getChildren().add(corn);
-		corn = createCorn(lengthX, Rotate.X_AXIS, 0, 0, maxY, maxZ, 0);
+		corn = createCorn((settings.getAxisXlenght()) * s, Rotate.X_AXIS, 0, 0, settings.getAxisMaxY() * s, settings.getAxisMaxZ() * s, 0);
 		group.getChildren().add(corn);
-		corn = createCorn(lengthY, Rotate.Z_AXIS, 90, minX, 0, minZ, 500);
+		corn = createCorn((settings.getAxisYlenght()) * s, Rotate.Z_AXIS, 90, settings.getAxisMinX() * s, 0, settings.getAxisMinZ() * s, 500);
 		group.getChildren().add(corn);
-		corn = createCorn(lengthY, Rotate.Z_AXIS, 90, maxX, 0, minZ, 0);
+		corn = createCorn((settings.getAxisYlenght()) * s, Rotate.Z_AXIS, 90, settings.getAxisMaxX() * s, 0, settings.getAxisMinZ() * s, 0);
 		group.getChildren().add(corn);
-		corn = createCorn(lengthY, Rotate.Z_AXIS, 90, minX, 0, maxZ, 0);
+		corn = createCorn((settings.getAxisYlenght()) * s, Rotate.Z_AXIS, 90, settings.getAxisMinX() * s, 0, settings.getAxisMaxZ() * s, 0);
 		group.getChildren().add(corn);
-		corn = createCorn(lengthY, Rotate.Z_AXIS, 90, maxX, 0, maxZ, 0);
+		corn = createCorn((settings.getAxisYlenght()) * s, Rotate.Z_AXIS, 90, settings.getAxisMaxX() * s, 0, settings.getAxisMaxZ() * s, 0);
 		group.getChildren().add(corn);
-		corn = createCorn(lengthZ, Rotate.Y_AXIS, 90, minX, minY, 0, 500);
+		corn = createCorn((settings.getAxisZlenght()) * s, Rotate.Y_AXIS, 90, settings.getAxisMinX() * s, settings.getAxisMinY() * s, 0, 500);
 		group.getChildren().add(corn);
-		corn = createCorn(lengthZ, Rotate.Y_AXIS, 90, maxX, minY, 0, 0);
+		corn = createCorn((settings.getAxisZlenght()) * s, Rotate.Y_AXIS, 90, settings.getAxisMaxX() * s, settings.getAxisMinY() * s, 0, 0);
 		group.getChildren().add(corn);
-		corn = createCorn(lengthZ, Rotate.Y_AXIS, 90, minX, maxY, 0, 0);
+		corn = createCorn((settings.getAxisZlenght()) * s, Rotate.Y_AXIS, 90, settings.getAxisMinX() * s, settings.getAxisMaxY() * s, 0, 0);
 		group.getChildren().add(corn);
-		corn = createCorn(lengthZ, Rotate.Y_AXIS, 90, maxX, maxY, 0, 0);
+		corn = createCorn((settings.getAxisZlenght()) * s, Rotate.Y_AXIS, 90, settings.getAxisMaxX() * s, settings.getAxisMaxY() * s, 0, 0);
 		group.getChildren().add(corn);
 		return group;
 	}
@@ -154,6 +147,7 @@ public class Axes {
 		double finishX = sizeH / 2;
 		double startY = -sizeV / 2;
 		double finishY = sizeV / 2;
+		double lineSpacingScaled = settings.getLineSpacing() * settings.getScale();
 		for(double x = startX; x <= finishX; x += lineSpacingScaled) {
 			group.getChildren().add(createGridLine(new Point3D(x, startY, 0), new Point3D(x, finishY, 0)));
 		}
@@ -166,15 +160,20 @@ public class Axes {
 	private Group createXLabels() {
 
 		Group group = new Group();
-		String nameAxis = data.getLabelAxisX();
+		String nameAxis = settings.getLabelAxisX();
 		Label name = new Label(nameAxis);
 		name.setTranslateZ(lableDistanceNameAxis);
 		name.setRotationAxis(Rotate.X_AXIS);
 		name.setRotate(90);
 		setLabelStyleAxis(name);
 		group.getChildren().add(name);
+		double lineSpacingScaled = settings.getLineSpacing() * settings.getScale();
+		double minX = settings.getAxisMinX() * settings.getScale();
+		double maxX = settings.getAxisMaxX() * settings.getScale();
+		double minY = settings.getAxisMinY() * settings.getScale();
+		double maxZ = settings.getAxisMaxZ() * settings.getScale();
 		for(int i = (int)(minX / lineSpacingScaled) + 1; i < (int)(maxX / lineSpacingScaled); i++) {
-			Label label = new Label(format.format(i * lineSpacing));
+			Label label = new Label(format.format(i * settings.getLineSpacing()));
 			setLabelStyle(label);
 			Rotate xRotate = new Rotate(90, 0, 0, 0, Rotate.X_AXIS);
 			Rotate yRotate = new Rotate(90, 0, 0, 0, Rotate.Y_AXIS);
@@ -193,15 +192,15 @@ public class Axes {
 
 	private Group createXYPlane() {
 
-		Group group = createPlane(lengthX, lengthY);
-		group.setTranslateZ(minZ);
+		Group group = createPlane(settings.getAxisXlenght() * settings.getScale(), settings.getAxisYlenght() * settings.getScale());
+		group.setTranslateZ(settings.getAxisMinZ() * settings.getScale());
 		return group;
 	}
 
 	private Group createXZPlane() {
 
-		Group group = createPlane(lengthX, lengthZ);
-		group.setTranslateY(minY);
+		Group group = createPlane(settings.getAxisXlenght() * settings.getScale(), settings.getAxisZlenght() * settings.getScale());
+		group.setTranslateY(settings.getAxisMinY() * settings.getScale());
 		group.setRotationAxis(Rotate.X_AXIS);
 		group.setRotate(90);
 		return group;
@@ -210,7 +209,7 @@ public class Axes {
 	private Group createYLabels() {
 
 		Group group = new Group();
-		String axisName = data.getLabelAxisY();
+		String axisName = settings.getLabelAxisY();
 		Label name = new Label(axisName);
 		Rotate zRotateAxis = new Rotate(-90, 0, 0, 0, Rotate.Z_AXIS);
 		Rotate yRotateAxis = new Rotate(-90, 0, 0, 0, Rotate.Y_AXIS);
@@ -218,8 +217,13 @@ public class Axes {
 		name.setTranslateZ(lableDistanceNameAxis);
 		setLabelStyleAxis(name);
 		group.getChildren().add(name);
+		double minY = settings.getAxisMinY() * settings.getScale();
+		double maxY = settings.getAxisMaxY() * settings.getScale();
+		double maxZ = settings.getAxisMaxZ() * settings.getScale();
+		double minX = settings.getAxisMinX() * settings.getScale();
+		double lineSpacingScaled = settings.getLineSpacing() * settings.getScale();
 		for(int i = (int)(minY / lineSpacingScaled) + 1; i < (int)(maxY / lineSpacingScaled); i++) {
-			Label label = new Label(format.format(i * lineSpacing));
+			Label label = new Label(format.format(i * settings.getLineSpacing()));
 			setLabelStyle(label);
 			Rotate xRotate = new Rotate(180, 0, 0, 0, Rotate.X_AXIS);
 			Rotate yRotate = new Rotate(90, 0, 0, 0, Rotate.Y_AXIS);
@@ -238,8 +242,8 @@ public class Axes {
 
 	private Group createYZPlane() {
 
-		Group group = createPlane(lengthZ, lengthY);
-		group.setTranslateX(minX);
+		Group group = createPlane(settings.getAxisZlenght() * settings.getScale(), settings.getAxisYlenght() * settings.getScale());
+		group.setTranslateX(settings.getAxisMinX() * settings.getScale());
 		group.setRotationAxis(Rotate.Y_AXIS);
 		group.setRotate(90);
 		return group;
@@ -248,7 +252,7 @@ public class Axes {
 	private Group createZLanels() {
 
 		Group group = new Group();
-		String nameAxis = data.getLabelAxisZ();
+		String nameAxis = settings.getLabelAxisZ();
 		Label name = new Label(nameAxis);
 		Rotate yRotateAxis = new Rotate(90, 0, 0, 0, Rotate.Y_AXIS);
 		Rotate zRotateAxis = new Rotate(-90, 0, 0, 0, Rotate.Z_AXIS);
@@ -256,8 +260,13 @@ public class Axes {
 		name.setTranslateX(lableDistanceNameAxis);
 		setLabelStyleAxis(name);
 		group.getChildren().add(name);
+		double minZ = settings.getAxisMinZ() * settings.getScale();
+		double maxZ = settings.getAxisMaxZ() * settings.getScale();
+		double maxX = settings.getAxisMaxX() * settings.getScale();
+		double minY = settings.getAxisMinY() * settings.getScale();
+		double lineSpacingScaled = settings.getLineSpacing() * settings.getScale();
 		for(int i = (int)(minZ / lineSpacingScaled) + 1; i < (int)(maxZ / lineSpacingScaled); i++) {
-			Label label = new Label(format.format(i * lineSpacing));
+			Label label = new Label(format.format(i * settings.getLineSpacing()));
 			setLabelStyle(label);
 			label.setRotationAxis(Rotate.X_AXIS);
 			label.setRotate(90);
@@ -273,49 +282,9 @@ public class Axes {
 		return group;
 	}
 
-	public double getLengthX() {
+	public Group getAxes() {
 
-		return lengthX;
-	}
-
-	public double getLengthY() {
-
-		return lengthY;
-	}
-
-	public double getLengthZ() {
-
-		return lengthZ;
-	}
-
-	public double getMaxX() {
-
-		return maxX;
-	}
-
-	public double getMaxY() {
-
-		return maxY;
-	}
-
-	public double getMaxZ() {
-
-		return maxZ;
-	}
-
-	public double getMinX() {
-
-		return minX;
-	}
-
-	public double getMinY() {
-
-		return minY;
-	}
-
-	public double getMinZ() {
-
-		return minZ;
+		return mainGroup;
 	}
 
 	private void setLabelStyle(Label label) {
@@ -327,34 +296,5 @@ public class Axes {
 	private void setLabelStyleAxis(Label label) {
 
 		label.setFont(new Font("Arial", 50));
-	}
-
-	public void update() {
-
-		double absMaximum = Arrays.stream(new double[]{data.getMinX(false), data.getMaxX(false), data.getMinY(false), data.getMaxY(false), data.getMinZ(false), data.getMaxZ(false)}).map(d -> Math.abs(d)).max().getAsDouble();
-		double numberDigits = Math.floor(Math.log10(absMaximum));
-		double round = Math.pow(10, numberDigits);
-		lineSpacing = (((Math.round(absMaximum / round) * round) / maxNumberLine));
-		lineSpacingScaled = lineSpacing * data.getScale();
-		BiFunction<Double, Double, Double> getAbsMax = (min, max) -> {
-			double absMax = (Math.abs(min) > Math.abs(max) ? Math.abs(min) : Math.abs(max));
-			return Math.ceil(absMax / lineSpacingScaled) * lineSpacingScaled;
-		};
-		this.maxX = getAbsMax.apply(data.getMinX(true), data.getMaxX(true)) + lineSpacingScaled;
-		this.maxY = getAbsMax.apply(data.getMinY(true), data.getMaxY(true)) + lineSpacingScaled;
-		this.maxZ = getAbsMax.apply(data.getMinZ(true), data.getMaxZ(true)) + lineSpacingScaled;
-		this.minX = -this.maxX;
-		this.minY = -this.maxY;
-		this.minZ = -this.maxZ;
-		this.lengthX = Math.abs(this.maxX - this.minX);
-		this.lengthY = Math.abs(this.maxY - this.minY);
-		this.lengthZ = Math.abs(this.maxZ - this.minZ);
-		mainGroup.getChildren().clear();
-		if(Math.abs(numberDigits) > 4) {
-			format = new DecimalFormat("#.##E0", new DecimalFormatSymbols(Locale.US));
-		} else {
-			format = ValueFormat.getNumberFormatEnglish();
-		}
-		mainGroup.getChildren().addAll(createXYPlane(), createYZPlane(), createXZPlane(), createCorns(), createXLabels(), createYLabels(), createZLanels());
 	}
 }

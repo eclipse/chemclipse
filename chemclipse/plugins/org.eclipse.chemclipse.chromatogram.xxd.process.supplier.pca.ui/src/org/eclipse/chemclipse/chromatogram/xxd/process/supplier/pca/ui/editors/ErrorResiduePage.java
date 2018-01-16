@@ -74,7 +74,7 @@ public class ErrorResiduePage {
 		button.setText(" Reload Bar Plot ");
 		button.addListener(SWT.Selection, e -> {
 			errorResidueChart.setDisplayData(comboDisplay.getSelectionIndex());
-			errorResidueChart.setSortType(comboSortData.getSelectionIndex());
+			errorResidueChart.setSortType(comboSortData.getSelectionIndex(), false);
 			update();
 		});
 		button = new Button(propertiesComposite, SWT.PUSH);
@@ -106,7 +106,7 @@ public class ErrorResiduePage {
 	public void updateSelection() {
 
 		if(pcaEditor.getPcaResults().isPresent()) {
-			errorResidueChart.updateSelection();
+			errorResidueChart.update(pcaEditor.getPcaResults().get());
 		}
 	}
 }

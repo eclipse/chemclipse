@@ -15,10 +15,12 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.numeric;bundle-version="0.8.0",
  org.eclipse.chemclipse.support;bundle-version="0.8.0",
  org.eclipse.chemclipse.thirdpartylibraries.apache.commons.math,
- org.eclipse.chemclipse.converter
+ org.eclipse.chemclipse.converter,
+ org.eclipse.chemclipse.ux.fx.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model

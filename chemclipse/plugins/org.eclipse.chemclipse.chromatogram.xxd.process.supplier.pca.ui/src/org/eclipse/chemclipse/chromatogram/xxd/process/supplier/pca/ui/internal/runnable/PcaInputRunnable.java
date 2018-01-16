@@ -17,7 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -26,7 +26,7 @@ public class PcaInputRunnable implements IRunnableWithProgress {
 	private IDataExtraction pcaExtractionData;
 	private PcaFiltrationData pcaFiltrationData;
 	private PcaPreprocessingData pcaPreprocessingData;
-	private ISamples samples;
+	private Samples samples;
 
 	public PcaInputRunnable(IDataExtraction pcaExtractionData, PcaFiltrationData pcaFiltrationData, PcaPreprocessingData pcaPreprocessingData) {
 		this.pcaExtractionData = pcaExtractionData;
@@ -34,7 +34,7 @@ public class PcaInputRunnable implements IRunnableWithProgress {
 		this.pcaPreprocessingData = pcaPreprocessingData;
 	}
 
-	public ISamples getSamples() {
+	public Samples getSamples() {
 
 		return samples;
 	}
@@ -45,5 +45,7 @@ public class PcaInputRunnable implements IRunnableWithProgress {
 		samples = pcaExtractionData.process(monitor);
 		pcaPreprocessingData.process(samples, monitor);
 		pcaFiltrationData.process(samples, monitor);
+		samples.setPcaFiltrationData(pcaFiltrationData);
+		samples.setPcaPreprocessingData(pcaPreprocessingData);
 	}
 }

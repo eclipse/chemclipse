@@ -12,17 +12,24 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.PcaColorGroup;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
+import javafx.collections.ObservableList;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Tooltip;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
@@ -41,15 +48,41 @@ public class Chart3DScatter {
 		}
 	}
 
-	static private EventType<UpdateSelectionEvent> SELECTION_UPDATE = new EventType<>("SELECTION_UPDATE");
-	private Chart3DData data;
+	private static EventType<UpdateSelectionEvent> SELECTION_UPDATE = new EventType<>("SELECTION_UPDATE");
+	private final List<IPcaResult> data = new ArrayList<>();
 	final private NumberFormat format = ValueFormat.getNumberFormatEnglish();
 	private final Group mainGroup = new Group();
 	private double radius;
+	private Chart3DSettings settings;
 
-	public Chart3DScatter(Chart3DData chart3dData) {
-		this.data = chart3dData;
+	public Chart3DScatter(Chart3DSettings settings) {
+		this.settings = settings;
 		this.radius = 15;
+		data.clear();
+		update();
+	}
+
+	public Chart3DScatter(Chart3DSettings settings, IPcaResults pcaResults) {
+		this(settings);
+		data.clear();
+		for(IPcaResult pcaResult : pcaResults.getPcaResultList()) {
+			data.add(pcaResult);
+		}
+		update();
+	}
+
+	private Color getColor(IPcaResult data) {
+
+		Color color = settings.getColorGroup().get(data.getGroupName());
+		if(SelectionManagerSample.getInstance().getSelection().contains(data.getSample())) {
+			return PcaColorGroup.getActualSelectedColor(color);
+		} else {
+			if(data.getSample().isSelected()) {
+				return color;
+			} else {
+				return PcaColorGroup.getUnselectedColor(color);
+			}
+		}
 	}
 
 	public Group getScarter() {
@@ -57,27 +90,29 @@ public class Chart3DScatter {
 		return mainGroup;
 	}
 
-	public void update() {
+	private void update() {
 
-		mainGroup.getChildren().clear();
-		List<Chart3DSampleData> data = this.data.getData();
-		for(Chart3DSampleData d : data) {
-			Color color = d.getColor();
-			String name = d.getPcaResul().getName();
+		double s = settings.getScale();
+		for(IPcaResult d : data) {
+			String name = d.getName();
 			/*
 			 * create sphere
 			 */
 			Sphere sphere = new Sphere();
-			sphere.setTranslateX(d.getPcaXData(true));
-			sphere.setTranslateY(d.getPcaYData(true));
-			sphere.setTranslateZ(d.getPcaZData(true));
+			double pcX = d.getEigenSpace()[settings.getPcX()];
+			double pcY = d.getEigenSpace()[settings.getPcY()];
+			double pcZ = d.getEigenSpace()[settings.getPcZ()];
+			sphere.setTranslateX(pcX * s);
+			sphere.setTranslateY(pcY * s);
+			sphere.setTranslateZ(pcZ * s);
 			sphere.setRadius(radius);
 			/*
 			 * set material
 			 */
 			PhongMaterial material = new PhongMaterial();
-			material.setDiffuseColor(color);
-			material.setSpecularColor(color);
+			Color c = getColor(d);
+			material.setDiffuseColor(c);
+			material.setSpecularColor(c);
 			sphere.setMaterial(material);
 			/*
 			 * add tooltip
@@ -85,25 +120,25 @@ public class Chart3DScatter {
 			StringBuilder sb = new StringBuilder();
 			sb.append(name);
 			sb.append('\n');
-			String labelX = this.data.getLabelAxisX();
+			String labelX = this.settings.getLabelAxisX();
 			if(!labelX.isEmpty()) {
 				sb.append(labelX);
 				sb.append(" = ");
-				sb.append(format.format(d.getPcaXData(false)));
+				sb.append(format.format(pcX));
 				sb.append("; ");
 			}
-			String labelY = this.data.getLabelAxisY();
+			String labelY = this.settings.getLabelAxisY();
 			if(!labelY.isEmpty()) {
 				sb.append(labelY);
 				sb.append(" = ");
-				sb.append(format.format(d.getPcaYData(false)));
+				sb.append(format.format(pcY));
 				sb.append("; ");
 			}
-			String labelZ = this.data.getLabelAxisZ();
+			String labelZ = this.settings.getLabelAxisZ();
 			if(!labelZ.isEmpty()) {
 				sb.append(labelZ);
 				sb.append(" = ");
-				sb.append(format.format(d.getPcaZData(false)));
+				sb.append(format.format(pcZ));
 				sb.append("; ");
 			}
 			Tooltip t = new Tooltip(sb.toString());
@@ -111,26 +146,37 @@ public class Chart3DScatter {
 			/*
 			 * highlight sphere with mouse entered event
 			 */
-			sphere.setOnMouseEntered(new EventHandler<MouseEvent>() {
-
-				@Override
-				public void handle(MouseEvent event) {
-
-					material.setDiffuseColor(color.darker());
-					material.setSpecularColor(color.darker());
+			sphere.setOnMouseEntered(e -> {
+				Color darkerColor = getColor(d).darker();
+				material.setDiffuseColor(darkerColor);
+				material.setSpecularColor(darkerColor);
+			});
+			sphere.setOnMouseExited(e -> {
+				material.setDiffuseColor(getColor(d));
+				material.setSpecularColor(getColor(d));
+				t.hide();
+			});
+			sphere.setOnMouseClicked(e -> {
+				if(e.getButton().equals(MouseButton.PRIMARY)) {
+					if(e.getClickCount() == 2) {
+						if(e.isControlDown()) {
+							d.getSample().setSelected(!d.getSample().isSelected());
+						} else {
+							ObservableList<ISample<? extends ISampleData>> selection = SelectionManagerSample.getInstance().getSelection();
+							if(!selection.contains(d.getSample())) {
+								selection.setAll(d.getSample());
+							} else {
+								selection.remove(d.getSample());
+							}
+						}
+					}
 				}
 			});
-			sphere.setOnMouseExited(new EventHandler<Event>() {
-
-				@Override
-				public void handle(Event event) {
-
-					material.setDiffuseColor(color);
-					material.setSpecularColor(color);
-					t.hide();
-				}
+			sphere.addEventFilter(SELECTION_UPDATE, event -> {
+				material.setDiffuseColor(getColor(d));
+				material.setSpecularColor(getColor(d));
+				sphere.setVisible(d.isDisplayed());
 			});
-			sphere.addEventFilter(SELECTION_UPDATE, event -> sphere.setVisible(d.getPcaResul().isDisplayed()));
 			mainGroup.getChildren().addAll(sphere);
 		}
 		updateSelection();

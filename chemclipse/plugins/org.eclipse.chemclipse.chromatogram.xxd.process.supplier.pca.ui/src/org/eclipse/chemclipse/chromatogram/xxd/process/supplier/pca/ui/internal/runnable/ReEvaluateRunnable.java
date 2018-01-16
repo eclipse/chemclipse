@@ -15,19 +15,23 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaEvaluation;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class ReEvaluateRunnable implements IRunnableWithProgress {
 
-	private int numberOfPrincipleComponents;
 	private IPcaResults pcaResults;
-	private ISamples samples;
+	private ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples;
+	private IPcaSettings settings;
 
-	public ReEvaluateRunnable(ISamples samples, int numberOfPrincipleComponents) {
+	public ReEvaluateRunnable(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples, IPcaSettings settings) {
 		this.samples = samples;
-		this.numberOfPrincipleComponents = numberOfPrincipleComponents;
+		this.settings = settings;
 	}
 
 	public IPcaResults getPcaResults() {
@@ -42,6 +46,6 @@ public class ReEvaluateRunnable implements IRunnableWithProgress {
 		 * Extraction type argument 0 for peaks, 1 for scans
 		 */
 		PcaEvaluation pcaEvaluation = new PcaEvaluation();
-		pcaResults = pcaEvaluation.process(samples, numberOfPrincipleComponents, monitor);
+		pcaResults = pcaEvaluation.process(samples, settings, monitor);
 	}
 }

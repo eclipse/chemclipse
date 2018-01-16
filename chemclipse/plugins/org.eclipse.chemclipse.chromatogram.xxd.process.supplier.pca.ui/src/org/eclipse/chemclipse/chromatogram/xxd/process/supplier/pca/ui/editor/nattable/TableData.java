@@ -13,29 +13,26 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.n
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
 
 public class TableData {
 
-	private PcaEditor pcaEditor;
-	private List<ISample<?>> samples = new ArrayList<>();
-	private List<IVariable> variables = new ArrayList<>();
+	private List<ISample<? extends ISampleData>> samples = new ArrayList<>();
+	private List<? extends IVariable> variables = new ArrayList<>();
 
-	public TableData(PcaEditor pcaEditor) {
-		this.pcaEditor = pcaEditor;
+	public TableData() {
 	}
 
 	/**
 	 * @return sorted samples by groups, this List contains instances of class Group
 	 */
-	public List<ISample<?>> getSamples() {
+	public List<ISample<? extends ISampleData>> getSamples() {
 
 		return samples;
 	}
@@ -44,18 +41,13 @@ public class TableData {
 	 *
 	 * @return retention times
 	 */
-	public List<IVariable> getVariables() {
+	public List<? extends IVariable> getVariables() {
 
 		return variables;
 	}
 
-	public void update() {
+	public void update(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> isamples) {
 
-		Optional<ISamples<?, ?>> result = pcaEditor.getSamples();
-		if(!result.isPresent()) {
-			return;
-		}
-		ISamples<?, ?> resultSamples = result.get();
 		/*
 		 * remove old data
 		 */
@@ -63,14 +55,14 @@ public class TableData {
 		/*
 		 * copy data and insert object ISample and IGroup and sort this object by group name
 		 */
-		samples.addAll(resultSamples.getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toList()));
-		samples.addAll(resultSamples.getGroupList().stream().filter(s -> s.isSelected()).collect(Collectors.toList()));
+		samples.addAll(isamples.getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toList()));
+		samples.addAll(isamples.getGroupList().stream().filter(s -> s.isSelected()).collect(Collectors.toList()));
 		PcaUtils.sortSampleListByName(samples);
 		PcaUtils.sortSampleListByGroup(samples);
 		/*
 		 * set retention time
 		 */
-		variables = (List<IVariable>)resultSamples.getVariables();
+		variables = isamples.getVariables();
 		/*
 		 * Set peaks names
 		 */

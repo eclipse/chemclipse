@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 
 public class PcaColorGroup {
@@ -28,6 +29,21 @@ public class PcaColorGroup {
 	private static float brightness = 1.0f;
 	private static float offsetAngle = 0;
 	private static float saturation = 1.0f;
+
+	public static java.awt.Color getActualSelectedColor(java.awt.Color color) {
+
+		return Color.DARK_GRAY;
+	}
+
+	public static javafx.scene.paint.Color getActualSelectedColor(javafx.scene.paint.Color color) {
+
+		return javafx.scene.paint.Color.DARKGRAY;
+	}
+
+	public static org.eclipse.swt.graphics.Color getActualSelectedColor(org.eclipse.swt.graphics.Color color) {
+
+		return Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY);
+	}
 
 	private static Map<String, java.awt.Color> getColor(Collection<String> names) {
 
@@ -89,5 +105,20 @@ public class PcaColorGroup {
 			colorsSWT.put(entry.getKey(), new org.eclipse.swt.graphics.Color(Display.getDefault(), red, green, blue));
 		}
 		return colorsSWT;
+	}
+
+	public static java.awt.Color getUnselectedColor(java.awt.Color color) {
+
+		return new Color(color.getRed(), color.getGreen(), color.getBlue(), (int)0.5 * 255);
+	}
+
+	public static javafx.scene.paint.Color getUnselectedColor(javafx.scene.paint.Color color) {
+
+		return javafx.scene.paint.Color.color(color.getRed(), color.getGreen(), color.getBlue(), 0.5);
+	}
+
+	public static org.eclipse.swt.graphics.Color getUnselectedColor(org.eclipse.swt.graphics.Color color) {
+
+		return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 	}
 }

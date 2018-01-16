@@ -19,19 +19,15 @@ public interface IPcaResults {
 
 	List<IVaribleExtracted> getExtractedVariables();
 
-	int getNumberOfPrincipleComponents();
-
 	List<IPcaResult> getPcaResultGroupsList();
 
 	List<IPcaResult> getPcaResultList();
 
-	ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> getSamples();
+	IPcaSettings getPcaSettings();
 
 	void setBasisVectors(List<double[]> basisVectors);
 
 	void setExtractedVariables(List<IVaribleExtracted> extractedVariables);
-
-	void setNumberOfPrincipleComponents(int numberOfPrincipleComponents);
 
 	void setPcaResultGroupsList(List<IPcaResult> pcaResultGroupsList);
 

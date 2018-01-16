@@ -17,14 +17,13 @@ public class PcaResults implements IPcaResults {
 
 	private List<double[]> basisVectors;
 	private List<IVaribleExtracted> extractedVariables;
-	//
-	private int numberOfPrincipleComponents;
 	private List<IPcaResult> pcaResultGroupsList;
 	private List<IPcaResult> pcaResultList;
-	private ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples;
+	//
+	private IPcaSettings pcaSettings;
 
-	public PcaResults(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
-		this.samples = samples;
+	public PcaResults(IPcaSettings pcaSettings) {
+		this.pcaSettings = pcaSettings;
 	}
 
 	@Override
@@ -40,12 +39,6 @@ public class PcaResults implements IPcaResults {
 	}
 
 	@Override
-	public int getNumberOfPrincipleComponents() {
-
-		return numberOfPrincipleComponents;
-	}
-
-	@Override
 	public List<IPcaResult> getPcaResultGroupsList() {
 
 		return pcaResultGroupsList;
@@ -58,9 +51,9 @@ public class PcaResults implements IPcaResults {
 	}
 
 	@Override
-	public ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> getSamples() {
+	public IPcaSettings getPcaSettings() {
 
-		return samples;
+		return pcaSettings;
 	}
 
 	@Override
@@ -73,12 +66,6 @@ public class PcaResults implements IPcaResults {
 	public void setExtractedVariables(List<IVaribleExtracted> extractedVariables) {
 
 		this.extractedVariables = extractedVariables;
-	}
-
-	@Override
-	public void setNumberOfPrincipleComponents(int numberOfPrincipleComponents) {
-
-		this.numberOfPrincipleComponents = numberOfPrincipleComponents;
 	}
 
 	@Override

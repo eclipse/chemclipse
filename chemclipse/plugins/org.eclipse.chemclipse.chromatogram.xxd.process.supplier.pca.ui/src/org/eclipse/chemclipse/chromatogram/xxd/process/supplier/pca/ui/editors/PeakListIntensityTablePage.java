@@ -87,7 +87,7 @@ public class PeakListIntensityTablePage {
 
 	private void createTable(Composite client) {
 
-		peakListIntensityTable = new PeakListNatTable(pcaEditor, client, new GridData(SWT.FILL, SWT.FILL, true, true));
+		peakListIntensityTable = new PeakListNatTable(client, new GridData(SWT.FILL, SWT.FILL, true, true));
 	}
 
 	private void exportTableDialog() {
@@ -140,6 +140,8 @@ public class PeakListIntensityTablePage {
 
 	public void update() {
 
-		peakListIntensityTable.update();
+		if(pcaEditor.getSamples().isPresent()) {
+			peakListIntensityTable.update(pcaEditor.getSamples().get());
+		}
 	}
 }

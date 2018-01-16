@@ -13,17 +13,31 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.LoadingPlotPage;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.SeriesConverter;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
+import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.core.ICustomSelectionHandler;
+import org.eclipse.eavp.service.swtchart.events.AbstractHandledEventProcessor;
+import org.eclipse.eavp.service.swtchart.events.IHandledEventProcessor;
+import org.eclipse.eavp.service.swtchart.events.MouseDownEvent;
+import org.eclipse.eavp.service.swtchart.events.MouseMoveCursorEvent;
+import org.eclipse.eavp.service.swtchart.events.MouseMoveSelectionEvent;
+import org.eclipse.eavp.service.swtchart.events.MouseMoveShiftEvent;
+import org.eclipse.eavp.service.swtchart.events.MouseUpEvent;
+import org.eclipse.eavp.service.swtchart.events.ResetSeriesEvent;
+import org.eclipse.eavp.service.swtchart.events.SelectDataPointEvent;
+import org.eclipse.eavp.service.swtchart.events.UndoRedoEvent;
+import org.eclipse.eavp.service.swtchart.events.ZoomEvent;
 import org.eclipse.eavp.service.swtchart.scattercharts.IScatterSeriesData;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
@@ -32,14 +46,60 @@ import org.swtchart.ISeries;
 
 public class LoadingPlot extends PCA2DPlot {
 
+	private class SelectSeriesEvent extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+
+		@Override
+		public int getButton() {
+
+			return BaseChart.BUTTON_LEFT;
+		}
+
+		@Override
+		public int getEvent() {
+
+			return BaseChart.EVENT_MOUSE_DOUBLE_CLICK;
+		}
+
+		@Override
+		public int getStateMask() {
+
+			return SWT.NONE;
+		}
+
+		@Override
+		public void handleEvent(BaseChart baseChart, Event event) {
+
+			String selectedSeriesId = baseChart.getSelectedseriesId(event);
+			if(!selectedSeriesId.equals("")) {
+				IVariable variable = extractedValues.get(selectedSeriesId);
+				if(variable.isSelected()) {
+					variable.setSelected(!variable.isSelected());
+				}
+			}
+		}
+	}
+
 	final public static int LABELS_DESCRIPTION = 2;
 	final public static int LABELS_RETENTION_TIME_MINUTES = 1;
 	final private Set<String> actualSelection = new HashSet<>();
 	final private Map<String, IVariable> extractedValues = new HashMap<>();
 	private int labelsType = LABELS_RETENTION_TIME_MINUTES;
 
-	public LoadingPlot(Composite parent, LoadingPlotPage loadingPlotPage) {
+	public LoadingPlot(Composite parent) {
 		super(parent, "Loading Plot");
+		IChartSettings chartSettings = getChartSettings();
+		chartSettings.clearHandledEventProcessors();
+		chartSettings.addHandledEventProcessor(new SelectSeriesEvent());
+		chartSettings.addHandledEventProcessor(new ResetSeriesEvent());
+		chartSettings.addHandledEventProcessor(new SelectDataPointEvent());
+		chartSettings.addHandledEventProcessor(new ZoomEvent());
+		chartSettings.addHandledEventProcessor(new MouseDownEvent());
+		chartSettings.addHandledEventProcessor(new MouseMoveSelectionEvent());
+		chartSettings.addHandledEventProcessor(new MouseMoveShiftEvent());
+		chartSettings.addHandledEventProcessor(new MouseMoveCursorEvent());
+		chartSettings.addHandledEventProcessor(new MouseUpEvent());
+		chartSettings.addHandledEventProcessor(new UndoRedoEvent());
+		applySettings(chartSettings);
 		getBaseChart().addCustomRangeSelectionHandler(new ICustomSelectionHandler() {
 
 			@Override
@@ -48,59 +108,6 @@ public class LoadingPlot extends PCA2DPlot {
 				updateSelection();
 			}
 		});
-		getBaseChart().addCustomPointSelectionHandler(new ICustomSelectionHandler() {
-
-			@Override
-			public void handleUserSelection(Event event) {
-
-				BaseChart baseChart = getBaseChart();
-				ISeries[] series = baseChart.getSeriesSet().getSeries();
-				// loadingPlot
-				for(ISeries scatterSeries : series) {
-					if(scatterSeries != null) {
-						int size = scatterSeries.getXSeries().length;
-						String id = scatterSeries.getId();
-						for(int i = 0; i < size; i++) {
-							Point point = scatterSeries.getPixelCoordinates(i);
-							if((point.x - event.x) * (point.x - event.x) + (point.y - event.y) * (point.y - event.y) < 16) {
-								if(baseChart.getSelectedSeriesIds().contains(id)) {
-									deselect(id);
-								} else {
-									baseChart.selectSeries(id);
-								}
-							}
-						}
-					}
-				}
-				baseChart.redraw();
-			}
-		});
-	}
-
-	public void deselect(Set<String> set) {
-
-		Set<String> selection = new HashSet<>(getBaseChart().getSelectedSeriesIds());
-		for(String id : set) {
-			selection.remove(id);
-		}
-		getBaseChart().resetSeriesSettings();
-		for(String id : selection) {
-			getBaseChart().selectSeries(id);
-		}
-		getBaseChart().redraw();
-	}
-
-	public void deselect(String... set) {
-
-		Set<String> selection = new HashSet<>(getBaseChart().getSelectedSeriesIds());
-		for(String id : set) {
-			selection.remove(id);
-		}
-		getBaseChart().resetSeriesSettings();
-		for(String id : selection) {
-			getBaseChart().selectSeries(id);
-		}
-		getBaseChart().redraw();
 	}
 
 	public Set<String> getActualSelection() {
@@ -118,15 +125,6 @@ public class LoadingPlot extends PCA2DPlot {
 		return labelsType;
 	}
 
-	private boolean isPointVisible(Point point, Rectangle plotAreaBounds) {
-
-		if(point.x >= 0 && point.x <= plotAreaBounds.width && point.y >= 0 && point.y <= plotAreaBounds.height) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public void setLabelsType(int labelsType) {
 
 		if(labelsType == LABELS_DESCRIPTION || labelsType == LABELS_RETENTION_TIME_MINUTES) {
@@ -134,8 +132,10 @@ public class LoadingPlot extends PCA2DPlot {
 		}
 	}
 
-	public void update(IPcaResults pcaResults, int pcX, int pcY) {
+	public void update(IPcaResults pcaResults) {
 
+		int pcX = pcaResults.getPcaSettings().getPcX();
+		int pcY = pcaResults.getPcaSettings().getPcY();
 		List<IScatterSeriesData> series;
 		if(labelsType == LABELS_RETENTION_TIME_MINUTES) {
 			series = SeriesConverter.basisVectorsToSeries(pcaResults, pcX, pcY, extractedValues);
@@ -144,6 +144,11 @@ public class LoadingPlot extends PCA2DPlot {
 		}
 		deleteSeries();
 		addSeriesData(series);
+		extractedValues.forEach((s, v) -> {
+			if(v.isSelected()) {
+				getBaseChart().selectSeries(s);
+			}
+		});
 		update(pcX, pcY);
 		updateSelection();
 	}
@@ -165,6 +170,18 @@ public class LoadingPlot extends PCA2DPlot {
 						actualSelection.add(id);
 					}
 				}
+			}
+		}
+	}
+
+	public void updateSelectionVariables() {
+
+		getBaseChart().resetSeriesSettings();
+		Iterator<Entry<String, IVariable>> it = extractedValues.entrySet().iterator();
+		while(it.hasNext()) {
+			Entry<String, IVariable> e = it.next();
+			if(!e.getValue().isSelected()) {
+				getBaseChart().selectSeries(e.getKey());
 			}
 		}
 	}

@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers
 
 import javax.inject.Named;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.PCAEditorPart;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.core.di.annotations.Execute;
@@ -29,7 +29,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 
 public class CreatePcaEvaluation {
 
-	public static void createPart(ISamples samples) {
+	public static void createPart() {
 
 		MApplication application = ModelSupportAddon.getApplication();
 		EModelService modelService = ModelSupportAddon.getModelService();
@@ -39,13 +39,12 @@ public class CreatePcaEvaluation {
 		 * Create the input part and prepare it.
 		 */
 		MPart inputPart = MBasicFactory.INSTANCE.createInputPart();
-		inputPart.setElementId(PcaEditor.ID);
-		inputPart.setContributionURI(PcaEditor.CONTRIBUTION_URI);
+		inputPart.setElementId(PCAEditorPart.ID);
+		inputPart.setContributionURI(PCAEditorPart.CONTRIBUTION_URI);
 		inputPart.setLabel("PCA Evaluation");
-		inputPart.setIconURI(PcaEditor.ICON_URI);
+		inputPart.setIconURI(PCAEditorPart.ICON_URI);
 		inputPart.setTooltip(PcaEditor.TOOLTIP);
 		inputPart.setCloseable(true);
-		inputPart.setObject(samples);
 		/*
 		 * Add it to the stack and show it.
 		 */
@@ -56,6 +55,6 @@ public class CreatePcaEvaluation {
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
-		createPart(null);
+		createPart();
 	}
 }

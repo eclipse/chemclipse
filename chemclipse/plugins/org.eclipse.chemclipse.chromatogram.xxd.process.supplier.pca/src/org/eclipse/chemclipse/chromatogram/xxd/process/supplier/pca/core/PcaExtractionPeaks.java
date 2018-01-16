@@ -225,84 +225,7 @@ public class PcaExtractionPeaks implements IDataExtraction {
 		return pcaPeakCondenseRetentionTime;
 	}
 
-	/**
-	 * Returns an array of area values of the peaks.
-	 *
-	 * @param peaks
-	 * @param extractedRetentionTimes
-	 * @param retentionTimeWindow
-	 * @return double[]
-	 */
-	private List<SampleData> extractPcaPeakIntensityValues(IPeaks peaks, List<Integer> extractedRetentionTimes, int retentionTimeWindow) {
 
-		List<SampleData> sampleDataList = new ArrayList<>();
-		int retentionTimeDelta = retentionTimeWindow / 2;
-		/*
-		 * Try to get an intensity value for each extracted retention time.
-		 * If there is no peak, the value will be 0.
-		 */
-		Set<IPeak> setPeaks = new HashSet<>(peaks.getPeaks());
-		for(int extractedRetentionTime : extractedRetentionTimes) {
-			double abundance = 0;
-			int leftRetentionTimeBound = extractedRetentionTime - retentionTimeDelta;
-			int rightRetentionTimeBound = extractedRetentionTime + retentionTimeDelta;
-			/*
-			 * Check each peak.
-			 */
-			Iterator<IPeak> it = setPeaks.iterator();
-			Set<IPeak> peaksAtRetentionTime = new HashSet<>();
-			while(it.hasNext()) {
-				/*
-				 * Try to get the retention time.
-				 */
-				IPeak peak = it.next();
-				if(peak instanceof IPeakMSD) {
-					/*
-					 * The retention time must be in the retention time window.
-					 */
-					IPeakMSD peakMSD = (IPeakMSD)peak;
-					int retentionTime = peakMSD.getPeakModel().getRetentionTimeAtPeakMaximum();
-					if(retentionTime >= leftRetentionTimeBound && retentionTime <= rightRetentionTimeBound) {
-						abundance += peakMSD.getIntegratedArea();
-						it.remove();
-						peaksAtRetentionTime.add(peakMSD);
-					}
-				}
-			}
-			/*
-			 * Store the extracted abundance.
-			 */
-			SampleData sampleData;
-			if(Double.compare(0, abundance) != 0) {
-				sampleData = new SampleData(abundance);
-				sampleData.getPeaks().addAll(setPeaks);
-			} else {
-				sampleData = new SampleData();
-			}
-			sampleDataList.add(sampleData);
-		}
-		return sampleDataList;
-	}
-
-	/**
-	 * Extracts a PCA peak map.
-	 *
-	 * @param peakMap
-	 * @param extractedRetentionTimes
-	 * @param retentionTimeWindow
-	 * @return Map<String, double[]>
-	 */
-	private Map<String, List<SampleData>> extractPcaPeakMap(Map<String, IPeaks> peakMap, List<Integer> extractedRetentionTimes, int retentionTimeWindow) {
-
-		Map<String, List<SampleData>> pcaPeakMap = new HashMap<>();
-		for(Map.Entry<String, IPeaks> peaksEntry : peakMap.entrySet()) {
-			String name = peaksEntry.getKey();
-			IPeaks peaks = peaksEntry.getValue();
-			List<SampleData> sampleData = extractPcaPeakIntensityValues(peaks, extractedRetentionTimes, retentionTimeWindow);
-			pcaPeakMap.put(name, sampleData);
-		}
-		return pcaPeakMap;
-	}
 
 	private void extractPeakData(Samples samples, int retentionTimeWindow, IProgressMonitor monitor) {
 
@@ -318,20 +241,6 @@ public class PcaExtractionPeaks implements IDataExtraction {
 		setExtractData(extractPeaks, samples);
 	}
 
-	private void extractPeakDataCumulation(Samples samples, int retentionTimeWindow, IProgressMonitor monitor) {
-
-		/*
-		 * Extract data
-		 */
-		monitor.subTask("Extract peak values");
-		Map<String, IPeaks> peakMap = extractPeaks(dataInputEntriesAll, monitor);
-		monitor.subTask("Prepare peak values");
-		SortedSet<Integer> collectedRetentionTimes = collectRetentionTimes(peakMap);
-		List<Integer> extractedRetentionTimes = calculateCondensedRetentionTimes(collectedRetentionTimes, retentionTimeWindow);
-		Map<String, List<SampleData>> pcaPeakMap = extractPcaPeakMap(peakMap, extractedRetentionTimes, retentionTimeWindow);
-		setExtractDataList(pcaPeakMap, samples);
-		samples.getVariables().addAll(RetentionTime.create(extractedRetentionTimes));
-	}
 
 	private Map<String, IPeaks> extractPeaks(List<IDataInputEntry> peakinpitFiles, IProgressMonitor monitor) {
 
@@ -404,9 +313,6 @@ public class PcaExtractionPeaks implements IDataExtraction {
 			case EXTRACT_PEAK:
 				extractPeakData(samples, retentionTimeWindow, monitor);
 				break;
-			case EXTRACT_PEAK_CUMULATION:
-				extractPeakDataCumulation(samples, retentionTimeWindow, monitor);
-				break;
 		}
 		/*
 		 * create Groups
@@ -427,7 +333,7 @@ public class PcaExtractionPeaks implements IDataExtraction {
 				IPeak peak = extractPeak.get(retentionTime);
 				if(peak != null) {
 					SampleData sampleData = new SampleData(peak.getIntegratedArea());
-					sampleData.getPeaks().add(peak);
+					sampleData.setPeak(peak);
 					sample.getSampleData().add(sampleData);
 				} else {
 					SampleData sampleData = new SampleData();

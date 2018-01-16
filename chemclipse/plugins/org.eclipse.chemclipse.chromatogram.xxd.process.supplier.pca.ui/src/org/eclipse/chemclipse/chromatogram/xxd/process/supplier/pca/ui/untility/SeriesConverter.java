@@ -11,10 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,7 +33,6 @@ import org.swtchart.ILineSeries.PlotSymbolType;
 
 public class SeriesConverter {
 
-	private static NumberFormat nf = NumberFormat.getInstance(Locale.US);
 	private static int SYMBOL_SIZE_LOADING_PLOT = 4;
 	private static int SYMBOL_SIZE_SCORE_PLOT = 8;
 
@@ -44,7 +41,7 @@ public class SeriesConverter {
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
 		List<IVaribleExtracted> variables = pcaResults.getExtractedVariables();
 		for(int i = 0; i < variables.size(); i++) {
-			String name = nf.format(variables.get(i).getValue());
+			String name = variables.get(i).getValue();
 			extractedValues.put(name, variables.get(i));
 			double x = 0;
 			if(pcX != 0) {
@@ -94,26 +91,28 @@ public class SeriesConverter {
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
 			scatterSeriesSettings.setSymbolSize(SYMBOL_SIZE_LOADING_PLOT);
 			IScatterSeriesSettings scatterSeriesSettingsHighlight = (IScatterSeriesSettings)scatterSeriesSettings.getSeriesSettingsHighlight();
-			scatterSeriesSettingsHighlight.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+			scatterSeriesSettingsHighlight.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
 			scatterSeriesDataList.add(scatterSeriesData);
 		}
 		return scatterSeriesDataList;
 	}
 
-	public static List<IScatterSeriesData> sampleToSeries(IPcaResults pcaResults, int pcX, int pcY) {
+	public static List<IScatterSeriesData> sampleToSeries(IPcaResults pcaResults, int pcX, int pcY, Map<String, IPcaResult> extractedPcaResults) {
 
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<IScatterSeriesData>();
 		Set<String> groupNames = PcaUtils.getGroupNames(pcaResults);
 		Map<String, Color> colors = PcaColorGroup.getColorSWT(groupNames);
+		extractedPcaResults.clear();
 		for(int i = 0; i < pcaResults.getPcaResultList().size(); i++) {
 			IPcaResult pcaResult = pcaResults.getPcaResultList().get(i);
-			if(!pcaResult.isDisplayed()) {
-				continue;
-			}
 			/*
 			 * Create the series.
 			 */
 			String name = pcaResult.getName();
+			extractedPcaResults.put(name, pcaResult);
+			if(!pcaResult.isDisplayed()) {
+				continue;
+			}
 			double[] eigenSpace = pcaResult.getEigenSpace();
 			double x = 0;
 			if(pcX != 0) {
@@ -130,7 +129,14 @@ public class SeriesConverter {
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.SQUARE);
 			scatterSeriesSettings.setSymbolSize(SYMBOL_SIZE_SCORE_PLOT);
-			scatterSeriesSettings.setSymbolColor(colors.get(pcaResult.getGroupName()));
+			Color color = colors.get(pcaResult.getGroupName());
+			if(pcaResult.getSample().isSelected()) {
+				scatterSeriesSettings.setSymbolColor(color);
+			} else {
+				scatterSeriesSettings.setSymbolColor(PcaColorGroup.getUnselectedColor(color));
+			}
+			IScatterSeriesSettings scatterSeriesSettingsHighlight = (IScatterSeriesSettings)scatterSeriesSettings.getSeriesSettingsHighlight();
+			scatterSeriesSettingsHighlight.setSymbolColor(PcaColorGroup.getActualSelectedColor(color));
 			scatterSeriesDataList.add(scatterSeriesData);
 		}
 		return scatterSeriesDataList;

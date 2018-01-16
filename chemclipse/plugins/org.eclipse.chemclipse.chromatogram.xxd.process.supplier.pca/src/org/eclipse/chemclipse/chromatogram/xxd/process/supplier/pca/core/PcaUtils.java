@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -183,13 +184,11 @@ public class PcaUtils {
 			for(int j = 0; j < lenght; j++) {
 				for(Sample sample : samples) {
 					if(sample.isSelected() || !onlySelected) {
-						Set<IPeak> peakList = sample.getSampleData().get(j).getPeaks();
-						if(peakList != null) {
-							for(IPeak peak : peakList) {
-								List<IPeakTarget> target = peak.getTargets();
-								if(!target.isEmpty()) {
-									map.get(j).add(target.get(0).getLibraryInformation().getName());
-								}
+						Optional<IPeak> peak = sample.getSampleData().get(j).getPeak();
+						if(peak.isPresent()) {
+							List<IPeakTarget> target = peak.get().getTargets();
+							if(!target.isEmpty()) {
+								map.get(j).add(target.get(0).getLibraryInformation().getName());
 							}
 						}
 					}

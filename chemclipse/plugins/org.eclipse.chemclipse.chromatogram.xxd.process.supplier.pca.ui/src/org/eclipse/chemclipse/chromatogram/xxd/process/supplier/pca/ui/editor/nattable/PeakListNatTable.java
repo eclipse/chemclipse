@@ -19,9 +19,12 @@ import java.util.SortedMap;
 import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportDataSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
 import org.eclipse.jface.window.DefaultToolTip;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.columnChooser.command.DisplayColumnChooserCommandHandler;
@@ -71,8 +74,8 @@ public class PeakListNatTable {
 	private TableData tableData;
 	private TableProvider tableProvider;
 
-	public PeakListNatTable(PcaEditor pcaEditor, Composite parent, Object layoutData) {
-		tableData = new TableData(pcaEditor);
+	public PeakListNatTable(Composite parent, Object layoutData) {
+		tableData = new TableData();
 		tableProvider = new TableProvider(tableData);
 		createPeakListIntensityTableSection(parent, layoutData);
 	}
@@ -296,9 +299,9 @@ public class PeakListNatTable {
 		}
 	}
 
-	public void update() {
+	public void update(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
 
-		tableData.update();
+		tableData.update(samples);
 		sortModel.update();
 		generateGroup();
 		hideCompoundColumn();

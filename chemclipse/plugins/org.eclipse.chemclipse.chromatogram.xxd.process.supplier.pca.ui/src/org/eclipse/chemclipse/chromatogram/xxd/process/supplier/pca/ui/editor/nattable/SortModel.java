@@ -116,7 +116,7 @@ public class SortModel implements ISortModel {
 			}
 			final int setDirection = direction;
 			if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
-				List<IVariable> variables = tableProvider.getDataTable().getVariables();
+				List<? extends IVariable> variables = tableProvider.getDataTable().getVariables();
 				sortedRow.sort((i, j) -> setDirection * Boolean.compare(variables.get(i).isSelected(), variables.get(j).isSelected()));
 			} else if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
 				/*

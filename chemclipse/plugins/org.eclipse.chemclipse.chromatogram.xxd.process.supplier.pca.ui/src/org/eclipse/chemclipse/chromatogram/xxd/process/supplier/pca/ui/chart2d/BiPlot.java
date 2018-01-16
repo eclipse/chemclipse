@@ -30,7 +30,7 @@ public class BiPlot extends PCA2DPlot {
 
 		if(pcaResults != null) {
 			deleteSeries();
-			addSeriesData(SeriesConverter.sampleToSeries(pcaResults, pcX, pcY));
+			addSeriesData(SeriesConverter.sampleToSeries(pcaResults, pcX, pcY, new HashMap<>()));
 			addSeriesData(SeriesConverter.basisVectorsToSeries(pcaResults, pcX, pcY, new HashMap<>()));
 			super.update(pcX, pcY);
 		}
