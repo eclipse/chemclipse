@@ -120,7 +120,8 @@ public class ExtendedTargetsUI {
 	//
 	private boolean showChromatogramTargets = false;
 	//
-	private Shell shell = Display.getDefault().getActiveShell();
+	private Display display = Display.getDefault();
+	private Shell shell = display.getActiveShell();
 
 	@Inject
 	public ExtendedTargetsUI(Composite parent, MPart part) {
@@ -592,14 +593,9 @@ public class ExtendedTargetsUI {
 			Object object = tableItem.getData();
 			if(object instanceof IIdentificationTarget) {
 				/*
-				 * Fire a target update event.
-				 */
-				IIdentificationTarget target = (IIdentificationTarget)object;
-				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
-				/*
 				 * Send the mass spectrum if available.
 				 */
+				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 				IScanMSD massSpectrum = getMassSpectrum();
 				if(massSpectrum != null) {
 					map.clear();
@@ -607,6 +603,9 @@ public class ExtendedTargetsUI {
 					map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, massSpectrum);
 					map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, identificationTarget);
 					eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+				} else {
+					IIdentificationTarget target = (IIdentificationTarget)object;
+					eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
 				}
 			}
 		}
@@ -642,7 +641,14 @@ public class ExtendedTargetsUI {
 		Table table = targetListUI.getTable();
 		if(table.getItemCount() > 0) {
 			table.setSelection(0);
-			propagateTarget();
+			display.asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+
+					propagateTarget();
+				}
+			});
 		}
 	}
 

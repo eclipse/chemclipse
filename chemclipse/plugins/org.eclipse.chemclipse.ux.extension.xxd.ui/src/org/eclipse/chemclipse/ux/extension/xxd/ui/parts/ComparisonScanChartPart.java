@@ -78,8 +78,6 @@ public class ComparisonScanChartPart extends AbstractDataUpdateSupport implement
 					extendedComparisonScanUI.update((IScanMSD)object);
 				} else if(object instanceof IPeakMSD) {
 					extendedComparisonScanUI.update(((IPeakMSD)object).getExtractedMassSpectrum());
-				} else {
-					extendedComparisonScanUI.update(null);
 				}
 			}
 		} else if(objects.size() == NUMBER_PROPERTIES_2) {
