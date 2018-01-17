@@ -30,6 +30,7 @@ import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -40,14 +41,40 @@ import org.eclipse.swt.widgets.Shell;
 
 public class ExtendedPeakDetectorUI {
 
+	/*
+	 * Detection Types
+	 */
+	private static final String DETECTION_TYPE_BASELINE = "DETECTION_TYPE_BASELINE";
+	private static final String DETECTION_TYPE_SCAN = "DETECTION_TYPE_SCAN";
+	private static final String DETECTION_TYPE_SCAN_BB = DETECTION_TYPE_SCAN + "_BB";
+	private static final String DETECTION_TYPE_SCAN_VV = DETECTION_TYPE_SCAN + "_VV";
+	private static final String DETECTION_TYPE_NONE = "";
+	//
+	private static final char KEY_BASELINE = 'd';
+	private static final char KEY_BB = 'b';
+	private static final char KEY_VV = 'v';
+	/*
+	 * Detection Box
+	 */
+	private static final String DETECTION_BOX_LEFT = "DETECTION_BOX_LEFT";
+	private static final String DETECTION_BOX_RIGHT = "DETECTION_BOX_RIGHT";
+	private static final String DETECTION_BOX_NONE = "DETECTION_BOX_NONE";
+	//
+	private static final int BOX_SNAP_MARKER_WINDOW = 4;
+	private static final int BOX_MAX_DELTA = 1;
+	//
 	private Composite toolbarInfo;
 	private Label labelChromatogram;
-	private Composite toolbarSettings;
+	private Composite toolbarDetect;
 	private PeakChartUI peakChartUI;
 	//
 	private IChromatogramSelection chromatogramSelection;
 	//
 	private Shell shell = Display.getDefault().getActiveShell();
+	//
+	private Cursor defaultCursor;
+	private String detectionType = DETECTION_TYPE_NONE;
+	private String detectionBox = DETECTION_BOX_NONE;
 
 	@Inject
 	public ExtendedPeakDetectorUI(Composite parent) {
@@ -82,11 +109,11 @@ public class ExtendedPeakDetectorUI {
 		//
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
-		toolbarSettings = createToolbarSettings(parent);
+		toolbarDetect = createToolbarDetect(parent);
 		createPeakChart(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
-		PartSupport.setCompositeVisibility(toolbarSettings, false);
+		PartSupport.setCompositeVisibility(toolbarDetect, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -95,12 +122,11 @@ public class ExtendedPeakDetectorUI {
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(4, false));
 		//
 		createButtonToggleToolbarInfo(composite);
-		createButtonToggleToolbarSettings(composite);
+		createButtonToggleToolbarDetect(composite);
 		createToggleChartLegendButton(composite);
-		createResetButton(composite);
 		createSettingsButton(composite);
 	}
 
@@ -119,17 +145,104 @@ public class ExtendedPeakDetectorUI {
 		return composite;
 	}
 
-	private Composite createToolbarSettings(Composite parent) {
+	private Composite createToolbarDetect(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		composite.setLayout(new GridLayout(5, false));
 		composite.setVisible(false);
 		//
-		createButton(composite);
+		createDetectionTypeButton(composite, "Reset", IApplicationImage.IMAGE_RESET, DETECTION_TYPE_NONE);
+		createDetectionTypeButton(composite, "Detection Modus (Baseline) [Key:" + KEY_BASELINE + "]", IApplicationImage.IMAGE_DETECTION_TYPE_BASELINE, DETECTION_TYPE_BASELINE);
+		createDetectionTypeButton(composite, "Detection Modus (BB) [Key:" + KEY_BB + "]", IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_BB, DETECTION_TYPE_SCAN_BB);
+		createDetectionTypeButton(composite, "Detection Modus (VV) [Key:" + KEY_VV + "]", IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_VV, DETECTION_TYPE_SCAN_VV);
+		createAddPeakButton(composite);
 		//
 		return composite;
+	}
+
+	private Button createDetectionTypeButton(Composite parent, String tooltip, String image, String detectionType) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText(tooltip);
+		button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				setDetectionType(detectionType);
+				if(detectionType.equals(DETECTION_TYPE_NONE)) {
+					reset();
+				}
+			}
+		});
+		return button;
+	}
+
+	private Button createAddPeakButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Add the manually detected peak.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				// TODO Add
+			}
+		});
+		return button;
+	}
+
+	private void setDetectionType(String detectionType) {
+
+		setDefaultCursor();
+		resetBaselinePeakSelection();
+		resetScanPeakSelection();
+		//
+		this.detectionType = detectionType;
+		if(detectionType.equals(DETECTION_TYPE_BASELINE)) {
+			this.detectionBox = DETECTION_BOX_NONE;
+		}
+		//
+		if(detectionType.equals(DETECTION_TYPE_NONE)) {
+			setDefaultCursor();
+		} else {
+			setCursor(SWT.CURSOR_CROSS);
+		}
+	}
+
+	private void setCursor(int cursorId) {
+
+		peakChartUI.setCursor(Display.getCurrent().getSystemCursor(cursorId));
+	}
+
+	private void setDefaultCursor() {
+
+		peakChartUI.setCursor(defaultCursor);
+	}
+
+	private void resetBaselinePeakSelection() {
+
+		detectionType = DETECTION_TYPE_NONE;
+		// baselineSelectionPaintListener.reset();
+		// resetSelectedRange();
+		peakChartUI.redraw();
+	}
+
+	private void resetScanPeakSelection() {
+
+		// resetSelectedRange();
+		detectionType = DETECTION_TYPE_NONE;
+		setDefaultCursor();
+		// scanSelectionPaintListener.reset();
+		peakChartUI.redraw();
 	}
 
 	private Button createButtonToggleToolbarInfo(Composite parent) {
@@ -155,10 +268,10 @@ public class ExtendedPeakDetectorUI {
 		return button;
 	}
 
-	private void createButtonToggleToolbarSettings(Composite parent) {
+	private void createButtonToggleToolbarDetect(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle settings toolbar.");
+		button.setToolTipText("Toggle the detector toolbar.");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -166,7 +279,7 @@ public class ExtendedPeakDetectorUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarSettings);
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarDetect);
 				if(visible) {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				} else {
@@ -187,22 +300,6 @@ public class ExtendedPeakDetectorUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				peakChartUI.toggleSeriesLegendVisibility();
-			}
-		});
-	}
-
-	private void createResetButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Reset the chart.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				reset();
 			}
 		});
 	}
@@ -237,21 +334,6 @@ public class ExtendedPeakDetectorUI {
 		});
 	}
 
-	private void createButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Tooltip");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
-	}
-
 	private void createPeakChart(Composite parent) {
 
 		peakChartUI = new PeakChartUI(parent, SWT.BORDER);
@@ -262,6 +344,8 @@ public class ExtendedPeakDetectorUI {
 		IChartSettings chartSettings = peakChartUI.getChartSettings();
 		chartSettings.setCreateMenu(true);
 		peakChartUI.applySettings(chartSettings);
+		//
+		defaultCursor = peakChartUI.getCursor();
 	}
 
 	private void reset() {
