@@ -93,7 +93,10 @@ public class ExtendedChromatogramOverlayUI {
 	private OverlaySupport overlaySupport;
 	private Set<String> mirroredSeries;
 	//
-	private Shell shell = Display.getDefault().getActiveShell();
+	private Display display = Display.getDefault();
+	private Shell shell = display.getActiveShell();
+	//
+	private List<IChromatogramSelection> chromatogramSelections;
 
 	@Inject
 	public ExtendedChromatogramOverlayUI(Composite parent) {
@@ -105,6 +108,7 @@ public class ExtendedChromatogramOverlayUI {
 
 	public void update() {
 
+		chromatogramSelections = editorUpdateSupport.getChromatogramSelections();
 		refreshUpdateOverlayChart();
 	}
 
@@ -702,7 +706,6 @@ public class ExtendedChromatogramOverlayUI {
 
 	private void refreshUpdateOverlayChart() {
 
-		List<IChromatogramSelection> chromatogramSelections = editorUpdateSupport.getChromatogramSelections();
 		Set<String> availableSeriesIds = new HashSet<String>();
 		BaseChart baseChart = chromatogramChart.getBaseChart();
 		List<Integer> ions = getSelectedIons();

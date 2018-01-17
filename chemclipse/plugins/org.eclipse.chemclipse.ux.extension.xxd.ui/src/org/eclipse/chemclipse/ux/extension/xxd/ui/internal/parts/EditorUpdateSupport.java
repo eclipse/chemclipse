@@ -27,19 +27,19 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 public class EditorUpdateSupport {
 
 	private static final Logger logger = Logger.getLogger(EditorUpdateSupport.class);
+	private EPartService partService = ModelSupportAddon.getPartService();
 
 	public List<IChromatogramSelection> getChromatogramSelections() {
 
 		/*
 		 * Get all open chromatogram parts.
 		 */
-		EPartService partService = ModelSupportAddon.getPartService();
 		List<IChromatogramSelection> chromatogramSelections = new ArrayList<IChromatogramSelection>();
 		if(partService != null) {
 			/*
+			 * TODO: Resolve why and when this happens! E.g. Chromatogram Overlay, after closing the preferences dialog.
 			 * Exception "Application does not have an active window"
 			 * is thrown here sometimes.
-			 * Reason?
 			 */
 			try {
 				Collection<MPart> parts = partService.getParts();

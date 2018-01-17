@@ -22,12 +22,11 @@ public abstract class AbstractUpdateSupport implements IUpdateSupport {
 
 	private static final Logger logger = Logger.getLogger(AbstractUpdateSupport.class);
 	//
-	private EPartService partService;
 	private MPart part;
+	private EPartService partService = ModelSupportAddon.getPartService();
 	private MApplication application = ModelSupportAddon.getApplication();
 
 	public AbstractUpdateSupport(MPart part) {
-		this.partService = ModelSupportAddon.getPartService();
 		this.part = part;
 	}
 
@@ -35,9 +34,9 @@ public abstract class AbstractUpdateSupport implements IUpdateSupport {
 	public boolean doUpdate() {
 
 		/*
+		 * TODO: Resolve why and when this happens!
 		 * Exception "Application does not have an active window"
 		 * is thrown here sometimes.
-		 * Reason?
 		 */
 		try {
 			IEclipseContext activeWindowContext = application.getContext().getActiveChild();
