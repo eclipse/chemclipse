@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -18,10 +21,16 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.BaselineSelectionPaintListener;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.ScanSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlaySupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaks;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
+import org.eclipse.eavp.service.swtchart.customcharts.ChromatogramChart;
+import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
+import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -38,6 +47,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.swtchart.IPlotArea;
 
 public class ExtendedPeakDetectorUI {
 
@@ -60,13 +70,16 @@ public class ExtendedPeakDetectorUI {
 	private static final String DETECTION_BOX_RIGHT = "DETECTION_BOX_RIGHT";
 	private static final String DETECTION_BOX_NONE = "DETECTION_BOX_NONE";
 	//
+	private BaselineSelectionPaintListener baselineSelectionPaintListener;
+	private ScanSelectionPaintListener scanSelectionPaintListener;
+	//
 	private static final int BOX_SNAP_MARKER_WINDOW = 4;
 	private static final int BOX_MAX_DELTA = 1;
 	//
 	private Composite toolbarInfo;
 	private Label labelChromatogram;
 	private Composite toolbarDetect;
-	private PeakChartUI peakChartUI;
+	private ChromatogramChart chromatogramChart;
 	//
 	private IChromatogramSelection chromatogramSelection;
 	//
@@ -75,9 +88,12 @@ public class ExtendedPeakDetectorUI {
 	private Cursor defaultCursor;
 	private String detectionType = DETECTION_TYPE_NONE;
 	private String detectionBox = DETECTION_BOX_NONE;
+	//
+	private OverlaySupport overlaySupport;
 
 	@Inject
 	public ExtendedPeakDetectorUI(Composite parent) {
+		overlaySupport = new OverlaySupport();
 		initialize(parent);
 	}
 
@@ -100,7 +116,15 @@ public class ExtendedPeakDetectorUI {
 
 	private void updateChromatogram() {
 
-		peakChartUI.setInput(null);
+		chromatogramChart.deleteSeries();
+		if(chromatogramSelection != null) {
+			String overlayType = OverlaySupport.OVERLAY_TYPE_TIC;
+			String derivativeType = OverlaySupport.DERIVATIVE_NONE;
+			List<Integer> ions = new ArrayList<Integer>();
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			lineSeriesDataList.add(overlaySupport.getLineSeriesData(chromatogramSelection, overlayType, derivativeType, ions));
+			chromatogramChart.addSeriesData(lineSeriesDataList, LineChart.LOW_COMPRESSION);
+		}
 	}
 
 	private void initialize(Composite parent) {
@@ -110,7 +134,7 @@ public class ExtendedPeakDetectorUI {
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
 		toolbarDetect = createToolbarDetect(parent);
-		createPeakChart(parent);
+		createChromatogramChart(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
 		PartSupport.setCompositeVisibility(toolbarDetect, false);
@@ -220,12 +244,12 @@ public class ExtendedPeakDetectorUI {
 
 	private void setCursor(int cursorId) {
 
-		peakChartUI.setCursor(Display.getCurrent().getSystemCursor(cursorId));
+		chromatogramChart.setCursor(Display.getCurrent().getSystemCursor(cursorId));
 	}
 
 	private void setDefaultCursor() {
 
-		peakChartUI.setCursor(defaultCursor);
+		chromatogramChart.setCursor(defaultCursor);
 	}
 
 	private void resetBaselinePeakSelection() {
@@ -233,7 +257,7 @@ public class ExtendedPeakDetectorUI {
 		detectionType = DETECTION_TYPE_NONE;
 		// baselineSelectionPaintListener.reset();
 		// resetSelectedRange();
-		peakChartUI.redraw();
+		chromatogramChart.redraw();
 	}
 
 	private void resetScanPeakSelection() {
@@ -242,7 +266,7 @@ public class ExtendedPeakDetectorUI {
 		detectionType = DETECTION_TYPE_NONE;
 		setDefaultCursor();
 		// scanSelectionPaintListener.reset();
-		peakChartUI.redraw();
+		chromatogramChart.redraw();
 	}
 
 	private Button createButtonToggleToolbarInfo(Composite parent) {
@@ -299,7 +323,7 @@ public class ExtendedPeakDetectorUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				peakChartUI.toggleSeriesLegendVisibility();
+				chromatogramChart.toggleSeriesLegendVisibility();
 			}
 		});
 	}
@@ -334,18 +358,31 @@ public class ExtendedPeakDetectorUI {
 		});
 	}
 
-	private void createPeakChart(Composite parent) {
+	private void createChromatogramChart(Composite parent) {
 
-		peakChartUI = new PeakChartUI(parent, SWT.BORDER);
-		peakChartUI.setLayoutData(new GridData(GridData.FILL_BOTH));
+		chromatogramChart = new ChromatogramChart(parent, SWT.BORDER);
+		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Chart Settings
 		 */
-		IChartSettings chartSettings = peakChartUI.getChartSettings();
+		IChartSettings chartSettings = chromatogramChart.getChartSettings();
 		chartSettings.setCreateMenu(true);
-		peakChartUI.applySettings(chartSettings);
-		//
-		defaultCursor = peakChartUI.getCursor();
+		chartSettings.setEnableRangeSelector(true);
+		chartSettings.setShowRangeSelectorInitially(false);
+		chartSettings.setSupportDataShift(true);
+		chromatogramChart.applySettings(chartSettings);
+		/*
+		 * Get the default cursor.
+		 */
+		defaultCursor = chromatogramChart.getCursor();
+		/*
+		 * Add the paint listeners to draw the selected peak range.
+		 */
+		IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
+		baselineSelectionPaintListener = new BaselineSelectionPaintListener();
+		scanSelectionPaintListener = new ScanSelectionPaintListener();
+		plotArea.addCustomPaintListener(baselineSelectionPaintListener);
+		plotArea.addCustomPaintListener(scanSelectionPaintListener);
 	}
 
 	private void reset() {

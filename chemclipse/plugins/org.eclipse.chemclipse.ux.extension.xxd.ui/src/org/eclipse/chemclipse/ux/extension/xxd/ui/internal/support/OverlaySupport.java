@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
@@ -204,6 +205,55 @@ public class OverlaySupport {
 		return lineSeriesData;
 	}
 
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection, String overlayType, String derivativeType, List<Integer> ions) {
+
+		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		//
+		String seriesId = chromatogram.getName();
+		Color color = getSeriesColor(seriesId, overlayType);
+		//
+		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
+		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
+		int length = stopScan - startScan + 1;
+		//
+		double[] xSeries = new double[length];
+		double[] ySeries = new double[length];
+		LineStyle lineStyle = getLineStyle(overlayType);
+		/*
+		 * Get the data.
+		 */
+		int index = 0;
+		for(int i = startScan; i <= stopScan; i++) {
+			/*
+			 * Get the retention time and intensity.
+			 */
+			IScan scan = chromatogram.getScan(i);
+			xSeries[index] = scan.getRetentionTime();
+			ySeries[index] = getIntensity(scan, overlayType, derivativeType, ions);
+			index++;
+		}
+		/*
+		 * Calculate a derivative?
+		 */
+		int derivatives = getNumberOfDerivatives(derivativeType);
+		for(int i = 1; i <= derivatives; i++) {
+			ySeries = calculateDerivate(ySeries);
+		}
+		/*
+		 * Add the series.
+		 */
+		ISeriesData seriesData = new SeriesData(xSeries, ySeries, seriesId);
+		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
+		ILineSeriesSettings lineSerieSettings = lineSeriesData.getLineSeriesSettings();
+		lineSerieSettings.setLineColor(color);
+		lineSerieSettings.setLineStyle(lineStyle);
+		lineSerieSettings.setEnableArea(false);
+		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSerieSettings.getSeriesSettingsHighlight();
+		lineSeriesSettingsHighlight.setLineWidth(2);
+		//
+		return lineSeriesData;
+	}
+
 	public Color getSeriesColor(String seriesId, String overlayType) {
 
 		Color color;
@@ -254,6 +304,25 @@ public class OverlaySupport {
 		lineStyleDefault = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_OVERLAY_DEFAULT));
 	}
 
+	public LineStyle getLineStyle(String overlayType) {
+
+		LineStyle lineStyle;
+		if(overlayType.equals(OVERLAY_TYPE_TIC)) {
+			lineStyle = lineStyleTIC;
+		} else if(overlayType.equals(OVERLAY_TYPE_BPC)) {
+			lineStyle = lineStyleBPC;
+		} else if(overlayType.equals(OVERLAY_TYPE_XIC)) {
+			lineStyle = lineStyleXIC;
+		} else if(overlayType.equals(OVERLAY_TYPE_SIC)) {
+			lineStyle = lineStyleSIC;
+		} else if(overlayType.equals(OVERLAY_TYPE_TSC)) {
+			lineStyle = lineStyleTSC;
+		} else {
+			lineStyle = lineStyleDefault;
+		}
+		return lineStyle;
+	}
+
 	public double getSettingsMinutesShiftX() {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
@@ -278,7 +347,7 @@ public class OverlaySupport {
 		preferenceStore.setValue(PreferenceConstants.P_ABSOLUTE_SHIFT_Y, value);
 	}
 
-	private int getNumberOfDerivatives(String derivativeType) {
+	public int getNumberOfDerivatives(String derivativeType) {
 
 		int derivatives;
 		switch(derivativeType) {
@@ -298,7 +367,7 @@ public class OverlaySupport {
 		return derivatives;
 	}
 
-	private double[] calculateDerivate(double[] values) {
+	public double[] calculateDerivate(double[] values) {
 
 		int size = values.length;
 		double[] derivative = new double[size];
@@ -306,25 +375,6 @@ public class OverlaySupport {
 			derivative[i] = values[i] - values[i - 1];
 		}
 		return derivative;
-	}
-
-	private LineStyle getLineStyle(String overlayType) {
-
-		LineStyle lineStyle;
-		if(overlayType.equals(OVERLAY_TYPE_TIC)) {
-			lineStyle = lineStyleTIC;
-		} else if(overlayType.equals(OVERLAY_TYPE_BPC)) {
-			lineStyle = lineStyleBPC;
-		} else if(overlayType.equals(OVERLAY_TYPE_XIC)) {
-			lineStyle = lineStyleXIC;
-		} else if(overlayType.equals(OVERLAY_TYPE_SIC)) {
-			lineStyle = lineStyleSIC;
-		} else if(overlayType.equals(OVERLAY_TYPE_TSC)) {
-			lineStyle = lineStyleTSC;
-		} else {
-			lineStyle = lineStyleDefault;
-		}
-		return lineStyle;
 	}
 
 	private void initialize() {
