@@ -16,17 +16,28 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.BaselineSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.ScanSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ManualPeakDetector;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlaySupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaks;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.customcharts.ChromatogramChart;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
@@ -37,9 +48,15 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Cursor;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -47,10 +64,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.swtchart.IAxis;
 import org.swtchart.IPlotArea;
+import org.swtchart.Range;
 
 public class ExtendedPeakDetectorUI {
 
+	private static final Logger logger = Logger.getLogger(ExtendedPeakDetectorUI.class);
 	/*
 	 * Detection Types
 	 */
@@ -88,6 +108,15 @@ public class ExtendedPeakDetectorUI {
 	private Cursor defaultCursor;
 	private String detectionType = DETECTION_TYPE_NONE;
 	private String detectionBox = DETECTION_BOX_NONE;
+	/*
+	 * Baseline Detection Method
+	 */
+	private int xStart;
+	private int yStart;
+	private int xStop;
+	private int yStop;
+	//
+	private int xMoveStart;
 	//
 	private OverlaySupport overlaySupport;
 
@@ -112,6 +141,24 @@ public class ExtendedPeakDetectorUI {
 		}
 		labelChromatogram.setText(ChromatogramSupport.getChromatogramLabel(chromatogram));
 		updateChromatogram();
+	}
+
+	public void setDetectionType(String detectionType) {
+
+		setDefaultCursor();
+		resetBaselinePeakSelection();
+		resetScanPeakSelection();
+		//
+		this.detectionType = detectionType;
+		if(detectionType.equals(DETECTION_TYPE_BASELINE)) {
+			this.detectionBox = DETECTION_BOX_NONE;
+		}
+		//
+		if(detectionType.equals(DETECTION_TYPE_NONE)) {
+			setDefaultCursor();
+		} else {
+			setCursor(SWT.CURSOR_CROSS);
+		}
 	}
 
 	private void updateChromatogram() {
@@ -224,51 +271,6 @@ public class ExtendedPeakDetectorUI {
 		return button;
 	}
 
-	private void setDetectionType(String detectionType) {
-
-		setDefaultCursor();
-		resetBaselinePeakSelection();
-		resetScanPeakSelection();
-		//
-		this.detectionType = detectionType;
-		if(detectionType.equals(DETECTION_TYPE_BASELINE)) {
-			this.detectionBox = DETECTION_BOX_NONE;
-		}
-		//
-		if(detectionType.equals(DETECTION_TYPE_NONE)) {
-			setDefaultCursor();
-		} else {
-			setCursor(SWT.CURSOR_CROSS);
-		}
-	}
-
-	private void setCursor(int cursorId) {
-
-		chromatogramChart.setCursor(Display.getCurrent().getSystemCursor(cursorId));
-	}
-
-	private void setDefaultCursor() {
-
-		chromatogramChart.setCursor(defaultCursor);
-	}
-
-	private void resetBaselinePeakSelection() {
-
-		detectionType = DETECTION_TYPE_NONE;
-		// baselineSelectionPaintListener.reset();
-		// resetSelectedRange();
-		chromatogramChart.redraw();
-	}
-
-	private void resetScanPeakSelection() {
-
-		// resetSelectedRange();
-		detectionType = DETECTION_TYPE_NONE;
-		setDefaultCursor();
-		// scanSelectionPaintListener.reset();
-		chromatogramChart.redraw();
-	}
-
 	private Button createButtonToggleToolbarInfo(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
@@ -363,26 +365,274 @@ public class ExtendedPeakDetectorUI {
 		chromatogramChart = new ChromatogramChart(parent, SWT.BORDER);
 		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
+		 * Get the default cursor.
+		 */
+		defaultCursor = chromatogramChart.getCursor();
+		/*
 		 * Chart Settings
 		 */
 		IChartSettings chartSettings = chromatogramChart.getChartSettings();
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableRangeSelector(true);
 		chartSettings.setShowRangeSelectorInitially(false);
-		chartSettings.setSupportDataShift(true);
+		chartSettings.setSupportDataShift(false);
 		chromatogramChart.applySettings(chartSettings);
-		/*
-		 * Get the default cursor.
-		 */
-		defaultCursor = chromatogramChart.getCursor();
+		//
+		addKeyPressedEvent();
+		addMouseDownEvent();
+		addMouseUpEvent();
+		addMouseMoveEvent();
+		addMouseDoubleClickEvent();
 		/*
 		 * Add the paint listeners to draw the selected peak range.
 		 */
-		IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
+		IPlotArea plotArea = (IPlotArea)getPlotArea();
 		baselineSelectionPaintListener = new BaselineSelectionPaintListener();
 		scanSelectionPaintListener = new ScanSelectionPaintListener();
 		plotArea.addCustomPaintListener(baselineSelectionPaintListener);
 		plotArea.addCustomPaintListener(scanSelectionPaintListener);
+	}
+
+	private void addKeyPressedEvent() {
+
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		baseChart.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+				if(detectionType.equals(DETECTION_TYPE_NONE)) {
+					if(e.keyCode == KEY_BASELINE) {
+						detectionType = DETECTION_TYPE_BASELINE;
+					} else if(e.keyCode == KEY_BB) {
+						detectionType = DETECTION_TYPE_SCAN_BB;
+					} else if(e.keyCode == KEY_VV) {
+						detectionType = DETECTION_TYPE_SCAN_VV;
+					} else {
+						detectionType = DETECTION_TYPE_NONE;
+					}
+				} else if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
+					/*
+					 * Detection Type Scan
+					 */
+					if(e.keyCode == 16777219) {
+						/*
+						 * Arrow left
+						 */
+						if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+							xStart -= 1;
+							redrawScanPeakSelection(true);
+						} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+							xStop -= 1;
+							redrawScanPeakSelection(true);
+						}
+					} else if(e.keyCode == 16777220) {
+						/*
+						 * Arrow right
+						 */
+						if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+							xStart += 1;
+							redrawScanPeakSelection(true);
+						} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+							xStop += 1;
+							redrawScanPeakSelection(true);
+						}
+					} else {
+						super.keyPressed(e);
+					}
+				} else {
+					super.keyPressed(e);
+				}
+			}
+		});
+	}
+
+	private void addMouseDownEvent() {
+
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		baseChart.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+
+				if(detectionType.equals(DETECTION_TYPE_BASELINE) && e.button == 1) {
+					startBaselinePeakSelection(e.x, e.y);
+					setCursor(SWT.CURSOR_CROSS);
+				} else if(detectionType.startsWith(DETECTION_TYPE_SCAN) && e.button == 1) {
+					/*
+					 * Set the move start coordinate.
+					 */
+					if(isLeftMoveSnapMarker(e.x)) {
+						setCursor(SWT.CURSOR_SIZEWE);
+						xMoveStart = e.x;
+						detectionBox = DETECTION_BOX_LEFT;
+					} else if(isRightMoveSnapMarker(e.x)) {
+						setCursor(SWT.CURSOR_SIZEWE);
+						xMoveStart = e.x;
+						detectionBox = DETECTION_BOX_RIGHT;
+					} else {
+						setCursor(SWT.CURSOR_CROSS);
+						detectionBox = DETECTION_BOX_NONE;
+					}
+				} else {
+					super.mouseDown(e);
+				}
+			}
+		});
+	}
+
+	private void addMouseUpEvent() {
+
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		baseChart.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+
+				if(detectionType.equals(DETECTION_TYPE_BASELINE)) {
+					stopBaselinePeakSelection(e.x, e.y);
+					setDefaultCursor();
+				} else if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
+					/*
+					 * Move.
+					 */
+					if(e.button == 1) {
+						/*
+						 * Set the peak.
+						 */
+						setCursor(SWT.CURSOR_CROSS);
+						if(!detectionBox.equals(DETECTION_BOX_NONE)) {
+							/*
+							 * Validate that the snap marker is matched.
+							 */
+							int delta = getDeltaMove(e.x);
+							if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+								xStart += delta;
+								redrawScanPeakSelection(true);
+							} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+								xStop += delta;
+								redrawScanPeakSelection(true);
+							}
+						}
+						/*
+						 * Mark the selected box.
+						 */
+						if(e.count == 1) {
+							detectionBox = getDetectionBox(e.x);
+							redrawScanPeakSelection(false);
+						}
+					}
+				} else {
+					super.mouseUp(e);
+				}
+			}
+		});
+	}
+
+	private void addMouseMoveEvent() {
+
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		baseChart.addMouseMoveListener(new MouseMoveListener() {
+
+			@Override
+			public void mouseMove(MouseEvent e) {
+
+				if(detectionType.equals(DETECTION_TYPE_BASELINE) && e.stateMask == 524288) {
+					trackBaselinePeakSelection(e.x, e.y);
+				} else if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
+					/*
+					 * Mark the mouse
+					 */
+					if(isLeftMoveSnapMarker(e.x)) {
+						setCursor(SWT.CURSOR_SIZEWE);
+					} else if(isRightMoveSnapMarker(e.x)) {
+						setCursor(SWT.CURSOR_SIZEWE);
+					} else {
+						setCursor(SWT.CURSOR_CROSS);
+					}
+					//
+					if(e.stateMask == 524288) {
+						if(!detectionBox.equals(DETECTION_BOX_NONE)) {
+							/*
+							 * Get the move delta.
+							 */
+							int delta = getDeltaMove(e.x);
+							if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+								xStart += delta;
+								redrawScanPeakSelection(false);
+							} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+								xStop += delta;
+								redrawScanPeakSelection(false);
+							}
+						}
+					}
+				} else {
+					System.out.println("MouseMove");
+					// super.mouseMove(e);
+				}
+			}
+		});
+	}
+
+	private void addMouseDoubleClickEvent() {
+
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		baseChart.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+
+				if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
+					//
+					setCursor(SWT.CURSOR_CROSS);
+					if(xStart == 0) {
+						/*
+						 * Get the y coordinate
+						 */
+						int y;
+						//
+						switch(detectionType) {
+							case DETECTION_TYPE_SCAN_BB:
+								y = getPlotArea().getBounds().height;
+								break;
+							case DETECTION_TYPE_SCAN_VV:
+								y = e.y;
+								break;
+							default:
+								y = getPlotArea().getBounds().height;
+						}
+						startScanPeakSelection(e.x, y);
+					} else if(xStart > 0 && xStop == 0) {
+						/*
+						 * Get the y coordinate
+						 */
+						int y;
+						//
+						switch(detectionType) {
+							case DETECTION_TYPE_SCAN_BB:
+								y = getPlotArea().getBounds().height;
+								break;
+							case DETECTION_TYPE_SCAN_VV:
+								y = e.y;
+								break;
+							default:
+								y = getPlotArea().getBounds().height;
+						}
+						stopScanPeakSelection(e.x, y);
+					} else {
+						setDefaultCursor();
+						resetScanPeakSelection();
+					}
+				} else {
+					super.mouseDoubleClick(e);
+				}
+			}
+		});
+	}
+
+	private Composite getPlotArea() {
+
+		return chromatogramChart.getBaseChart().getPlotArea();
 	}
 
 	private void reset() {
@@ -393,5 +643,258 @@ public class ExtendedPeakDetectorUI {
 	private void applySettings() {
 
 		updateChromatogram();
+	}
+
+	private String getDetectionBox(int x) {
+
+		if(xStart > 0) {
+			if(x <= xStart) {
+				return DETECTION_BOX_LEFT;
+			} else {
+				if(xStop > 0) {
+					if(x >= xStop) {
+						return DETECTION_BOX_RIGHT;
+					}
+				}
+			}
+		}
+		return DETECTION_BOX_NONE;
+	}
+
+	private boolean isLeftMoveSnapMarker(int x) {
+
+		if(x > xStart - BOX_SNAP_MARKER_WINDOW && x < xStart + BOX_SNAP_MARKER_WINDOW) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isRightMoveSnapMarker(int x) {
+
+		if(x > xStop - BOX_SNAP_MARKER_WINDOW && x < xStop + BOX_SNAP_MARKER_WINDOW) {
+			return true;
+		}
+		return false;
+	}
+
+	private int getDeltaMove(int x) {
+
+		int delta = x - xMoveStart;
+		if(Math.abs(delta) > BOX_MAX_DELTA) {
+			if(delta < 0) {
+				delta = -BOX_MAX_DELTA;
+			} else {
+				delta = BOX_MAX_DELTA;
+			}
+		}
+		return delta;
+	}
+
+	private void startBaselinePeakSelection(int x, int y) {
+
+		xStart = x;
+		yStart = y;
+		/*
+		 * Set the start point.
+		 */
+		baselineSelectionPaintListener.setX1(xStart);
+		baselineSelectionPaintListener.setY1(yStart);
+	}
+
+	private void stopBaselinePeakSelection(int x, int y) {
+
+		xStop = x;
+		yStop = y;
+		/*
+		 * Extract the selected peak
+		 */
+		extractSelectedPeak();
+		resetBaselinePeakSelection();
+	}
+
+	private void trackBaselinePeakSelection(int x, int y) {
+
+		xStop = x;
+		yStop = y;
+		//
+		baselineSelectionPaintListener.setX1(xStart);
+		baselineSelectionPaintListener.setY1(yStart);
+		baselineSelectionPaintListener.setX2(xStop);
+		baselineSelectionPaintListener.setY2(yStop);
+		redraw();
+	}
+
+	private void resetBaselinePeakSelection() {
+
+		detectionType = DETECTION_TYPE_NONE;
+		baselineSelectionPaintListener.reset();
+		resetSelectedRange();
+		chromatogramChart.redraw();
+	}
+
+	private void startScanPeakSelection(int x, int y) {
+
+		xStart = x;
+		yStart = y;
+		//
+		setCursor(SWT.CURSOR_CROSS);
+		/*
+		 * Set the start point.
+		 */
+		scanSelectionPaintListener.setX1(xStart);
+		scanSelectionPaintListener.setX2(xStop);
+		redraw();
+	}
+
+	private void stopScanPeakSelection(int x, int y) {
+
+		xStop = x;
+		yStop = y;
+		/*
+		 * Set the start point.
+		 */
+		scanSelectionPaintListener.setX1(xStart);
+		scanSelectionPaintListener.setX2(xStop);
+		redraw();
+		/*
+		 * Extract the selected peak
+		 */
+		extractSelectedPeak();
+	}
+
+	private void redrawScanPeakSelection(boolean extractPeak) {
+
+		/*
+		 * Set the start point.
+		 */
+		scanSelectionPaintListener.setX1(xStart);
+		scanSelectionPaintListener.setX2(xStop);
+		if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+			scanSelectionPaintListener.setHighlightBox(ScanSelectionPaintListener.HIGHLIGHT_BOX_LEFT);
+		} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+			scanSelectionPaintListener.setHighlightBox(ScanSelectionPaintListener.HIGHLIGHT_BOX_RIGHT);
+		} else {
+			scanSelectionPaintListener.setHighlightBox(ScanSelectionPaintListener.HIGHLIGHT_BOX_NONE);
+		}
+		//
+		redraw();
+		/*
+		 * Extract the selected peak
+		 */
+		if(extractPeak) {
+			extractSelectedPeak();
+		}
+	}
+
+	private void redraw() {
+
+		chromatogramChart.redraw();
+	}
+
+	private void resetScanPeakSelection() {
+
+		resetSelectedRange();
+		detectionType = DETECTION_TYPE_NONE;
+		setDefaultCursor();
+		scanSelectionPaintListener.reset();
+		chromatogramChart.redraw();
+	}
+
+	/**
+	 * Extracts the selected peak.
+	 * 
+	 * @param xStop
+	 * @param yStop
+	 */
+	private void extractSelectedPeak() {
+
+		/*
+		 * Calculate the rectangle factors.
+		 */
+		Rectangle rectangle = getPlotArea().getBounds();
+		int height = rectangle.height;
+		double factorHeight = 100.0d / height;
+		int width = rectangle.width;
+		double factorWidth = 100.0d / width;
+		/*
+		 * Calculate the percentage heights and widths.
+		 */
+		double percentageStartHeight = (100.0d - (factorHeight * yStart)) / 100.0d;
+		double percentageStopHeight = (100.0d - (factorHeight * yStop)) / 100.0d;
+		double percentageStartWidth = (factorWidth * xStart) / 100.0d;
+		double percentageStopWidth = (factorWidth * xStop) / 100.0d;
+		/*
+		 * Calculate the start and end points.
+		 */
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		IAxis retentionTime = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
+		Range millisecondsRange = retentionTime.getRange();
+		IAxis intensity = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
+		Range abundanceRange = intensity.getRange();
+		/*
+		 * With abundance and retention time.
+		 */
+		double abundanceHeight = abundanceRange.upper - abundanceRange.lower;
+		double millisecondsWidth = millisecondsRange.upper - millisecondsRange.lower;
+		/*
+		 * Peak start and stop abundances and retention times.
+		 */
+		int startRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageStartWidth);
+		int stopRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageStopWidth);
+		float startAbundance = (float)(abundanceRange.lower + abundanceHeight * percentageStartHeight);
+		float stopAbundance = (float)(abundanceRange.lower + abundanceHeight * percentageStopHeight);
+		/*
+		 * Try to detect the peak.
+		 */
+		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+			/*
+			 * Peak Detection MSD
+			 */
+			try {
+				IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
+				ManualPeakDetector manualPeakDetector = new ManualPeakDetector();
+				IChromatogramMSD chromatogram = chromatogramSelectionMSD.getChromatogramMSD();
+				IChromatogramPeakMSD chromatogramPeak = manualPeakDetector.calculatePeak(chromatogram, startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
+				firePeakDetected(chromatogramPeak);
+			} catch(PeakException e) {
+				logger.warn(e);
+			}
+		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+			/*
+			 * Peak Detection FID
+			 */
+			try {
+				IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
+				ManualPeakDetector manualPeakDetector = new ManualPeakDetector();
+				IChromatogramCSD chromatogram = chromatogramSelectionCSD.getChromatogramCSD();
+				IChromatogramPeakCSD chromatogramPeak = manualPeakDetector.calculatePeak(chromatogram, startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
+				firePeakDetected(chromatogramPeak);
+			} catch(PeakException e) {
+				logger.warn(e);
+			}
+		}
+	}
+
+	private void resetSelectedRange() {
+
+		xStart = 0;
+		yStart = 0;
+		xStop = 0;
+		yStop = 0;
+	}
+
+	private void setCursor(int cursorId) {
+
+		chromatogramChart.setCursor(Display.getCurrent().getSystemCursor(cursorId));
+	}
+
+	private void setDefaultCursor() {
+
+		chromatogramChart.setCursor(defaultCursor);
+	}
+
+	private void firePeakDetected(IPeak peak) {
+
+		System.out.println("Enable Peak Plus button");
 	}
 }
