@@ -2,80 +2,67 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.cell.TextFieldTableCell?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="428.0" prefWidth="874.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers.PCAEditorController">
    <children>
-      <BorderPane prefHeight="200.0" prefWidth="771.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane prefHeight="428.0" prefWidth="874.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-            <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-              <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="252.0">
-                     <children>
-                        <BorderPane layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <bottom>
-                              <HBox prefHeight="26.0" prefWidth="237.0" spacing="10.0" BorderPane.alignment="TOP_RIGHT">
-                                 <children>
-                                    <Button fx:id="selectAll" mnemonicParsing="false" text="Select all" />
-                                    <Button fx:id="deselectAll" mnemonicParsing="false" text="Deselect all" />
-                                 </children>
-                              </HBox>
-                           </bottom>
-                           <center>
-                              <TableView fx:id="tableSamples" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                <columns>
-                                    <TableColumn fx:id="sampleSelections" minWidth="7.0" prefWidth="44.0" />
-                                  <TableColumn fx:id="sampleNames" editable="false" prefWidth="93.0" text="Name" />
-                                  <TableColumn fx:id="sampleGroupNam0es" prefWidth="175.0" text="Group Name" />
-                                </columns>
-                              </TableView>
-                           </center>
-                        </BorderPane>
-                     </children>
-                  </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="294.0">
-                     <children>
-                        <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <top>
-                              <ComboBox fx:id="selectTableType" prefHeight="26.0" prefWidth="275.0" BorderPane.alignment="CENTER">
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                                 <BorderPane.margin>
-                                    <Insets bottom="5.0" />
-                                 </BorderPane.margin>
-                              </ComboBox>
-                           </top>
-                           <center>
-                              <TableView fx:id="sampleDescription" BorderPane.alignment="CENTER" />
-                           </center>
-                        </BorderPane>
-                     </children>
-                  </AnchorPane>
-              </items>
-            </SplitPane>
+            <TableView fx:id="cTableSamples" editable="true" onKeyPressed="#handlerKeyPress" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+              <columns>
+                <TableColumn fx:id="cSelections" minWidth="7.0" prefWidth="33.0">
+                	<cellValueFactory>
+						<PropertyValueFactory property="selected" />
+					</cellValueFactory>
+                </TableColumn>
+                <TableColumn editable="false" prefWidth="107.0" text="Name">
+                	<cellValueFactory>
+						<PropertyValueFactory property="name" />
+					</cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="cGroupNames" onEditCommit="#handeChangeGroupName" prefWidth="121.0" text="Group Name">
+                	<cellValueFactory>
+						<PropertyValueFactory property="groupName" />
+					</cellValueFactory>	
+					<cellFactory>
+        				<TextFieldTableCell fx:factory="forTableColumn" />
+    				</cellFactory>
+                </TableColumn>
+                <TableColumn fx:id="cColor" prefWidth="69.0" text="Color">
+                	<cellValueFactory>
+						<PropertyValueFactory property="groupName" />
+					</cellValueFactory>	
+                </TableColumn> 
+              </columns>
+            </TableView>
          </center>
          <right>
             <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="146.0" prefWidth="95.0" spacing="5.0" BorderPane.alignment="TOP_CENTER">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="49.0" prefWidth="100.0" text="Load Peaks&#10;from File" />
-                  <Button mnemonicParsing="false" prefHeight="52.0" prefWidth="101.0" text="Load Scans&#10;from File" />
+                  <Button mnemonicParsing="false" onAction="#handlerLoadPeaks" prefHeight="49.0" prefWidth="100.0" text="Load Peaks&#10;from File" />
+                  <Button mnemonicParsing="false" onAction="#handlerLoadScans" prefHeight="52.0" prefWidth="101.0" text="Load Scans&#10;from File" />
                </children>
-               <BorderPane.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </BorderPane.margin>
             </VBox>
          </right>
          <bottom>
-            <Label fx:id="numberSelectedSamples" BorderPane.alignment="TOP_LEFT" />
+            <HBox prefHeight="25.0" prefWidth="874.0" spacing="10.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#handlerSelectAll" prefHeight="26.0" prefWidth="114.0" text="Select All" />
+                  <Button mnemonicParsing="false" onAction="#handlerDeselectAll" text="Deselect All" />
+                  <Label fx:id="cLabelNumblerSelectedSamples" prefHeight="26.0" prefWidth="210.0" />
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </BorderPane.margin>
+            </HBox>
          </bottom>
       </BorderPane>
    </children>

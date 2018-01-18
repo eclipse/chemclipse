@@ -11,156 +11,322 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.SampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaInputRunnable;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.IPcaInputWizard;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PcaChromatogramsMSDInputWizard;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PcaPeaksInputWizard;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.PcaColorGroup;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Display;
 
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 
 public class PCAEditorController {
 
-	@FXML // fx:id="deselectAll"
-	private Button deselectAll; // Value injected by FXMLLoader
+	@FXML // fx:id="cColor"
+	private TableColumn<Sample, String> cColor; // Value injected by FXMLLoader
+	@FXML // fx:id="cGroupNames"
+	private TableColumn<Sample, String> cGroupNames; // Value injected by FXMLLoader
+	@FXML
+	private Label cLabelNumblerSelectedSamples;
+	@FXML // fx:id="cSelections"
+	private TableColumn<Sample, Boolean> cSelections; // Value injected by FXMLLoader
+	@FXML // fx:id="cTableSamples"
+	private TableView<Sample> cTableSamples; // Value injected by FXMLLoader
+	private Consumer<Samples> inputSamples;
 	@FXML // URL location of the FXML file that was given to the FXMLLoader
 	private URL location;
-	@FXML // fx:id="numberSelectedSamples"
-	private Label numberSelectedSamples; // Value injected by FXMLLoader
+	private Map<String, Color> mapGroupColor = new HashMap<>();
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
-	@FXML // fx:id="sampleDescription"
-	private TableView<?> sampleDescription; // Value injected by FXMLLoader
-	@FXML // fx:id="sampleGroupNam0es"
-	private TableColumn<Sample, String> sampleGroupNam0es; // Value injected by FXMLLoader
-	@FXML // fx:id="sampleNames"
-	private TableColumn<Sample, String> sampleNames; // Value injected by FXMLLoader
-	private Optional<? extends ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> samples;
-	@FXML // fx:id="sampleSelections"
-	private TableColumn<Sample, Boolean> sampleSelections; // Value injected by FXMLLoader
-	@FXML // fx:id="selectAll"
-	private Button selectAll; // Value injected by FXMLLoader
-	@FXML // fx:id="selectTableType"
-	private ComboBox<String> selectTableType; // Value injected by FXMLLoader
-	@FXML // fx:id="tableSamples"
-	private TableView<ISample<? extends ISampleData>> tableSamples; // Value injected by FXMLLoader
-	private Sample actualSelectedSample;
+	private Optional<Samples> samples;
 
 	public PCAEditorController() {
 		samples = Optional.empty();
 	}
 
-	public Optional<? extends ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> getSamples() {
+	public Optional<Samples> getSamples() {
 
 		return samples;
+	}
+
+	public List<Sample> getSelectedSamples() {
+
+		return new ArrayList<>(cTableSamples.getSelectionModel().getSelectedItems());
+	}
+
+	@FXML
+	void handeChangeGroupName(TableColumn.CellEditEvent<Sample, String> event) {
+
+		String newGroupName = event.getNewValue();
+		String oldGroupName = event.getOldValue();
+		Sample sample = event.getRowValue();
+		if(newGroupName != null) {
+			newGroupName = newGroupName.trim();
+			if(!newGroupName.equals(oldGroupName)) {
+				if(!newGroupName.isEmpty()) {
+					sample.setGroupName(newGroupName);
+				} else {
+					sample.setGroupName(null);
+				}
+				updateColorMap();
+			}
+		} else {
+			if(newGroupName != oldGroupName) {
+				sample.setGroupName(newGroupName);
+				updateColorMap();
+			}
+		}
+		cTableSamples.refresh();
+	}
+
+	@FXML
+	void handlerDeselectAll(ActionEvent event) {
+
+		if(samples.isPresent()) {
+			samples.get().getSampleList().forEach(s -> s.setSelected(false));
+		}
+	}
+
+	@FXML
+	void handlerKeyPress(KeyEvent event) {
+
+		if(event.getCode() == KeyCode.ESCAPE) {
+			cTableSamples.getSelectionModel().clearSelection();
+			SelectionManagerSample.getInstance().getSelection().clear();
+		}
+	}
+
+	@FXML
+	void handlerLoadPeaks(ActionEvent event) {
+
+		try {
+			openWizardPcaInput(new PcaPeaksInputWizard());
+		} catch(InvocationTargetException | InterruptedException e) {
+		}
+	}
+
+	@FXML
+	void handlerLoadScans(ActionEvent event) {
+
+		try {
+			openWizardPcaInput(new PcaChromatogramsMSDInputWizard());
+		} catch(InvocationTargetException | InterruptedException e) {
+		}
+	}
+
+	@FXML
+	void handlerSelectAll(ActionEvent event) {
+
+		if(samples.isPresent()) {
+			samples.get().getSampleList().forEach(s -> s.setSelected(true));
+		}
 	}
 
 	@FXML // This method is called by the FXMLLoader when initialization is complete
 	void initialize() {
 
-		assert selectAll != null : "fx:id=\"selectAll\" was not injected: check your FXML file 'PCAEditor.fxml'.";
-		assert deselectAll != null : "fx:id=\"deselectAll\" was not injected: check your FXML file 'PCAEditor.fxml'.";
-		assert tableSamples != null : "fx:id=\"tableSamples\" was not injected: check your FXML file 'PCAEditor.fxml'.";
-		assert sampleSelections != null : "fx:id=\"sampleSelections\" was not injected: check your FXML file 'PCAEditor.fxml'.";
-		assert sampleNames != null : "fx:id=\"sampleNames\" was not injected: check your FXML file 'PCAEditor.fxml'.";
-		assert sampleGroupNam0es != null : "fx:id=\"sampleGroupNam0es\" was not injected: check your FXML file 'PCAEditor.fxml'.";
-		assert selectTableType != null : "fx:id=\"selectTableType\" was not injected: check your FXML file 'PCAEditor.fxml'.";
-		assert sampleDescription != null : "fx:id=\"sampleDescription\" was not injected: check your FXML file 'PCAEditor.fxml'.";
-		assert numberSelectedSamples != null : "fx:id=\"numberSelectedSamples\" was not injected: check your FXML file 'PCAEditor.fxml'.";
-	}
-
-	public void setSamples(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
-
-		this.samples = Optional.of(samples);
-		tableSamples.setItems(FXCollections.observableArrayList(samples.getSampleList()));
-	}
-
-	private void createDataTable() {
-
-		sampleDescription.getColumns().clear();
-		TableColumn<SampleData, Double> col1 = new TableColumn<>("Retention Time");
-		col1.setCellFactory(c -> new TableCell<SampleData, Double>() {
+		assert cTableSamples != null : "fx:id=\"cTableSamples\" was not injected: check your FXML file 'PCAEditor.fxml'.";
+		assert cSelections != null : "fx:id=\"cSelections\" was not injected: check your FXML file 'PCAEditor.fxml'.";
+		assert cColor != null : "fx:id=\"cColor\" was not injected: check your FXML file 'PCAEditor.fxml'.";
+		cSelections.setCellValueFactory(new Callback<CellDataFeatures<Sample, Boolean>, ObservableValue<Boolean>>() {
 
 			@Override
-			public void updateIndex(int i) {
+			public ObservableValue<Boolean> call(CellDataFeatures<Sample, Boolean> param) {
 
-				if(samples.isPresent()) {
+				Sample sample = param.getValue();
+				SimpleBooleanProperty booleanProp = new SimpleBooleanProperty(sample.isSelected());
+				// Note: singleCol.setOnEditCommit(): Not work for
+				// CheckBoxTableCell.
+				// When "Single?" column change.cell
+				booleanProp.addListener(new ChangeListener<Boolean>() {
+
+					@Override
+					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+
+						if(newValue != null) {
+							sample.setSelected(newValue);
+						}
+					}
+				});
+				return booleanProp;
+			}
+		});
+		cSelections.setCellFactory(new Callback<TableColumn<Sample, Boolean>, //
+				TableCell<Sample, Boolean>>() {
+
+			@Override
+			public TableCell<Sample, Boolean> call(TableColumn<Sample, Boolean> p) {
+
+				CheckBoxTableCell<Sample, Boolean> cell = new CheckBoxTableCell<Sample, Boolean>();
+				cell.setAlignment(Pos.CENTER);
+				return cell;
+			}
+		});
+		cColor.setCellFactory(param -> {
+			final TableCell<Sample, String> cell = new TableCell<Sample, String>() {
+
+				final Rectangle r = new Rectangle(20, 20);
+
+				@Override
+				public void updateItem(String item, boolean empty) {
+
+					super.updateItem(item, empty);
+					if(empty) {
+						setGraphic(null);
+						setText(null);
+					} else {
+						Color c = mapGroupColor.get(item);
+						if(c != null) {
+							r.setFill(c);
+							setGraphic(r);
+							setText(null);
+						}
+					}
 				}
 			};
+			cell.setAlignment(Pos.CENTER);
+			return cell;
 		});
-		TableColumn<SampleData, SampleData> rawData = new TableColumn<>("#");
-		rawData.setMinWidth(20);
-		rawData.setCellValueFactory(new Callback<CellDataFeatures<SampleData, SampleData>, ObservableValue<SampleData>>() {
+		cTableSamples.setRowFactory(new Callback<TableView<Sample>, TableRow<Sample>>() {
 
 			@Override
-			public ObservableValue<SampleData> call(CellDataFeatures<SampleData, SampleData> p) {
+			public TableRow<Sample> call(TableView<Sample> tableView2) {
 
-				return new ReadOnlyObjectWrapper<>(p.getValue());
-			}
-		});
-		rawData.setCellFactory(new Callback<TableColumn<SampleData, SampleData>, TableCell<SampleData, SampleData>>() {
-
-			@Override
-			public TableCell<SampleData, SampleData> call(TableColumn<SampleData, SampleData> param) {
-
-				return new TableCell<SampleData, SampleData>() {
+				final TableRow<Sample> row = new TableRow<>();
+				row.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
 
 					@Override
-					protected void updateItem(SampleData item, boolean empty) {
+					public void handle(MouseEvent event) {
 
-						super.updateItem(item, empty);
-						if(this.getTableRow() != null && item != null) {
-							//setText(samples.get().getVariables().get(this.getTableRow().getIndex()));
+						event.getTarget();
+						if(event.getClickCount() == 1) {
+							final int index = row.getIndex();
+							if(index < 0 || index >= cTableSamples.getItems().size()) {
+								cTableSamples.getSelectionModel().clearSelection();
+								SelectionManagerSample.getInstance().getSelection().clear();
+								event.consume();
+							}
 						}
 					}
-				};
+				});
+				return row;
 			}
 		});
-		
-		TableColumn<SampleData, SampleData> data = new TableColumn<>("#");
-		data.setMinWidth(20);
-		data.setCellValueFactory(new Callback<CellDataFeatures<SampleData, SampleData>, ObservableValue<SampleData>>() {
+		cTableSamples.getSelectionModel().getSelectedItems().addListener(new ListChangeListener<Sample>() {
 
 			@Override
-			public ObservableValue<SampleData> call(CellDataFeatures<SampleData, SampleData> p) {
-				
-				return new ReadOnlyObjectWrapper<>(p.getValue());
-			}
-		});
-		data.setCellFactory(new Callback<TableColumn<SampleData, SampleData>, TableCell<SampleData, SampleData>>() {
+			public void onChanged(ListChangeListener.Change<? extends Sample> c) {
 
-			@Override
-			public TableCell<SampleData, SampleData> call(TableColumn<SampleData, SampleData> param) {
-
-				return new TableCell<SampleData, SampleData>() {
-
-					@Override
-					protected void updateItem(SampleData item, boolean empty) {
-
-						super.updateItem(item, empty);
-						if(this.getTableRow() != null && item != null) {
-							setText(this.getTableRow().getIndex() + "");
-						}
+				List<? extends Sample> samples = c.getList();
+				if(!samples.isEmpty()) {
+					Sample s = samples.get(0);
+					if(!SelectionManagerSample.getInstance().getSelection().contains(s)) {
+						SelectionManagerSample.getInstance().getSelection().setAll(s);
 					}
-				};
+				}
 			}
 		});
+		updateNumerSeletedSamples();
+	}
+
+	private int openWizardPcaInput(IPcaInputWizard wizard) throws InvocationTargetException, InterruptedException {
+
+		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getDefault().getActiveShell(), wizard);
+		int status = wizardDialog.open();
+		if(status == Window.OK) {
+			SelectionManagerSamples.getInstance().getElements().remove(samples);
+			SelectionManagerSamples.getInstance().getSelection().clear();
+			PcaFiltrationData pcaFiltrationData = wizard.getPcaFiltrationData();
+			PcaPreprocessingData pcaPreprocessingData = wizard.getPcaPreprocessingData();
+			IDataExtraction pcaExtractionData = wizard.getPcaExtractionData();
+			/*
+			 * Run the process.
+			 */
+			PcaInputRunnable runnable = new PcaInputRunnable(pcaExtractionData, pcaFiltrationData, pcaPreprocessingData);
+			ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+			/*
+			 * Calculate the results and show the score plot page.
+			 */
+			monitor.run(true, true, runnable);
+			this.samples = Optional.of(runnable.getSamples());
+			SelectionManagerSamples.getInstance().getElements().add(samples.get());
+			SelectionManagerSamples.getInstance().getSelection().add(samples.get());
+			updateColorMap();
+			updateNumerSeletedSamples();
+			inputSamples.accept(samples.get());
+			cTableSamples.setItems(FXCollections.observableList(samples.get().getSampleList()));
+		}
+		return status;
+	}
+
+	public void seletedSample(Sample sample) {
+
+		if(!cTableSamples.getSelectionModel().getSelectedItems().contains(sample)) {
+			cTableSamples.getSelectionModel().select(sample);
+			cTableSamples.scrollTo(sample);
+		}
+	}
+
+	public void setSamplesConsumer(Consumer<Samples> consumer) {
+
+		this.inputSamples = consumer;
+	}
+
+	private void updateColorMap() {
+
+		mapGroupColor = PcaColorGroup.getColorJavaFx(samples.get().getSampleList().stream().map(s -> s.getGroupName()).collect(Collectors.toSet()));
+	}
+
+	private void updateNumerSeletedSamples() {
+
+		long selected = 0;
+		int totalSamples = 0;
+		if(samples.isPresent()) {
+			selected = samples.get().getSampleList().stream().filter(s -> s.isSelected()).count();
+			totalSamples = samples.get().getSampleList().size();
+		}
+		cLabelNumblerSelectedSamples.setText("Selected: " + selected + " from " + totalSamples + " samples");
 	}
 }

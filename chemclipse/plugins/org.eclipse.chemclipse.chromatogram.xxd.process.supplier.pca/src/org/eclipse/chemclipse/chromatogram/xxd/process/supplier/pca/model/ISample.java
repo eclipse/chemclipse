@@ -26,7 +26,7 @@ public interface ISample<D extends ISampleData> {
 	boolean isSelected();
 
 	void setGroupName(String groupName);
-
+	
 	void setObject(Object o);
 
 	void setSelected(boolean selected);

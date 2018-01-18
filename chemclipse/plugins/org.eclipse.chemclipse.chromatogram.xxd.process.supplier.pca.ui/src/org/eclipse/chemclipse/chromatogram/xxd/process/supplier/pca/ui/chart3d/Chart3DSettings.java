@@ -119,11 +119,8 @@ public class Chart3DSettings {
 
 	private String createAxisLabel(int componentNumber) {
 
-		if(componentNumber > 0) {
-			return "PC " + componentNumber;
-		} else {
-			return "";
-		}
+		componentNumber++;
+		return "PC " + componentNumber;
 	}
 
 	public double getAxisMaxX() {
