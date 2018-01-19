@@ -37,8 +37,8 @@ public class ScanSelectionPaintListener implements ICustomPaintListener {
 		int height = e.height;
 		e.gc.setForeground(Colors.BLACK);
 		//
-		Pattern patternNormal = new Pattern(e.display, 0, e.height, e.width, e.height, Colors.WHITE, 0x55, Colors.WHITE, 0x55);
-		Pattern patternSelected = new Pattern(e.display, 0, e.height, e.width, e.height, Colors.WHITE, 0xCC, Colors.WHITE, 0xCC);
+		Pattern patternOpaque = new Pattern(e.display, 0, e.height, e.width, e.height, Colors.WHITE, 0x55, Colors.WHITE, 0xFF);
+		Pattern patternSelected = new Pattern(e.display, 0, e.height, e.width, e.height, Colors.WHITE, 0xCC, Colors.WHITE, 0xAA);
 		/*
 		 * Left Box
 		 */
@@ -47,7 +47,7 @@ public class ScanSelectionPaintListener implements ICustomPaintListener {
 			if(highlightBox.equals(HIGHLIGHT_BOX_LEFT)) {
 				e.gc.setBackgroundPattern(patternSelected);
 			} else {
-				e.gc.setBackgroundPattern(patternNormal);
+				e.gc.setBackgroundPattern(patternOpaque);
 			}
 			e.gc.fillRectangle(0, 0, width, height);
 			e.gc.drawLine(x1, 0, x1, height);
@@ -60,7 +60,7 @@ public class ScanSelectionPaintListener implements ICustomPaintListener {
 			if(highlightBox.equals(HIGHLIGHT_BOX_RIGHT)) {
 				e.gc.setBackgroundPattern(patternSelected);
 			} else {
-				e.gc.setBackgroundPattern(patternNormal);
+				e.gc.setBackgroundPattern(patternOpaque);
 			}
 			e.gc.fillRectangle(x2, 0, width, height);
 			e.gc.drawLine(x2, 0, x2, height);
@@ -72,7 +72,7 @@ public class ScanSelectionPaintListener implements ICustomPaintListener {
 		/*
 		 * Dispose the patterns
 		 */
-		patternNormal.dispose();
+		patternOpaque.dispose();
 		patternSelected.dispose();
 	}
 

@@ -159,6 +159,12 @@ public class ExtendedPeakDetectorUI {
 		}
 
 		@Override
+		public int getButton() {
+
+			return BaseChart.BUTTON_LEFT;
+		}
+
+		@Override
 		public int getStateMask() {
 
 			return SWT.NONE;
@@ -180,6 +186,12 @@ public class ExtendedPeakDetectorUI {
 		}
 
 		@Override
+		public int getButton() {
+
+			return BaseChart.BUTTON_LEFT;
+		}
+
+		@Override
 		public int getStateMask() {
 
 			return SWT.NONE;
@@ -194,10 +206,22 @@ public class ExtendedPeakDetectorUI {
 
 	private class MouseMoveEventProcessor extends AbstractHandledEventProcessor implements IHandledEventProcessor {
 
+		private int button;
+
+		public MouseMoveEventProcessor(int button) {
+			this.button = button;
+		}
+
 		@Override
 		public int getEvent() {
 
 			return BaseChart.EVENT_MOUSE_MOVE;
+		}
+
+		@Override
+		public int getButton() {
+
+			return button;
 		}
 
 		@Override
@@ -219,6 +243,12 @@ public class ExtendedPeakDetectorUI {
 		public int getEvent() {
 
 			return BaseChart.EVENT_MOUSE_DOUBLE_CLICK;
+		}
+
+		@Override
+		public int getButton() {
+
+			return BaseChart.BUTTON_LEFT;
 		}
 
 		@Override
@@ -453,13 +483,16 @@ public class ExtendedPeakDetectorUI {
 		chartSettings.setEnableRangeSelector(true);
 		chartSettings.setShowRangeSelectorInitially(false);
 		chartSettings.setSupportDataShift(false);
+		//
 		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(BaseChart.KEY_CODE_d));
 		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(SWT.ARROW_LEFT));
 		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(SWT.ARROW_RIGHT));
 		chartSettings.addHandledEventProcessor(new MouseDownEventProcessor());
 		chartSettings.addHandledEventProcessor(new MouseUpEventProcessor());
-		chartSettings.addHandledEventProcessor(new MouseMoveEventProcessor());
+		chartSettings.addHandledEventProcessor(new MouseMoveEventProcessor(BaseChart.BUTTON_NONE));
+		// chartSettings.addHandledEventProcessor(new MouseMoveEventProcessor(BaseChart.BUTTON_LEFT));
 		chartSettings.addHandledEventProcessor(new MouseDoubleClickEventProcessor());
+		//
 		chromatogramChart.applySettings(chartSettings);
 		/*
 		 * Add the paint listeners to draw the selected peak range.
@@ -515,10 +548,10 @@ public class ExtendedPeakDetectorUI {
 
 	private void handleMouseDownEvent(Event event) {
 
-		if(detectionType.equals(DETECTION_TYPE_BASELINE) && event.button == 1) {
+		if(detectionType.equals(DETECTION_TYPE_BASELINE) && event.button == BaseChart.BUTTON_LEFT) {
 			startBaselinePeakSelection(event.x, event.y);
 			setCursor(SWT.CURSOR_CROSS);
-		} else if(detectionType.startsWith(DETECTION_TYPE_SCAN) && event.button == 1) {
+		} else if(detectionType.startsWith(DETECTION_TYPE_SCAN) && event.button == BaseChart.BUTTON_LEFT) {
 			/*
 			 * Set the move start coordinate.
 			 */
