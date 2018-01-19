@@ -88,9 +88,9 @@ public class ExtendedPeakDetectorUI {
 	private static final String DETECTION_TYPE_SCAN_VV = DETECTION_TYPE_SCAN + "_VV";
 	private static final String DETECTION_TYPE_NONE = "";
 	//
-	private static final char KEY_BASELINE = 'd';
-	private static final char KEY_BB = 'b';
-	private static final char KEY_VV = 'v';
+	private static final char KEY_BASELINE = BaseChart.KEY_CODE_d;
+	private static final char KEY_BB = BaseChart.KEY_CODE_b;
+	private static final char KEY_VV = BaseChart.KEY_CODE_v;
 	/*
 	 * Detection Box
 	 */
@@ -106,9 +106,11 @@ public class ExtendedPeakDetectorUI {
 	//
 	private Composite toolbarInfo;
 	private Label labelChromatogram;
+	private Button buttonAddPeak;
 	private ChromatogramChart chromatogramChart;
 	//
 	private IChromatogramSelection chromatogramSelection;
+	private IPeak peak;
 	//
 	private Shell shell = Display.getDefault().getActiveShell();
 	//
@@ -204,7 +206,7 @@ public class ExtendedPeakDetectorUI {
 		@Override
 		public int getStateMask() {
 
-			return SWT.NONE;
+			return SWT.BUTTON1;
 		}
 
 		@Override
@@ -217,9 +219,11 @@ public class ExtendedPeakDetectorUI {
 	private class MouseMoveEventProcessor extends AbstractHandledEventProcessor implements IHandledEventProcessor {
 
 		private int button;
+		private int stateMask;
 
-		public MouseMoveEventProcessor(int button) {
+		public MouseMoveEventProcessor(int button, int stateMask) {
 			this.button = button;
+			this.stateMask = stateMask;
 		}
 
 		@Override
@@ -237,7 +241,7 @@ public class ExtendedPeakDetectorUI {
 		@Override
 		public int getStateMask() {
 
-			return SWT.NONE;
+			return stateMask;
 		}
 
 		@Override
@@ -283,7 +287,7 @@ public class ExtendedPeakDetectorUI {
 	@Focus
 	public void setFocus() {
 
-		updateChromatogram();
+		updateChromatogramAndPeak();
 	}
 
 	public void update(IChromatogramSelection chromatogramSelection) {
@@ -294,7 +298,9 @@ public class ExtendedPeakDetectorUI {
 			chromatogram = chromatogramSelection.getChromatogram();
 		}
 		labelChromatogram.setText(ChromatogramSupport.getChromatogramLabel(chromatogram));
-		updateChromatogram();
+		this.peak = null;
+		//
+		updateChromatogramAndPeak();
 	}
 
 	public void setDetectionType(String detectionType) {
@@ -315,16 +321,28 @@ public class ExtendedPeakDetectorUI {
 		}
 	}
 
-	private void updateChromatogram() {
+	private void updateChromatogramAndPeak() {
 
 		chromatogramChart.deleteSeries();
+		buttonAddPeak.setEnabled(false);
 		if(chromatogramSelection != null) {
+			/*
+			 * Draw the chromatogram
+			 */
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			//
 			String overlayType = OverlaySupport.OVERLAY_TYPE_TIC;
 			String derivativeType = OverlaySupport.DERIVATIVE_NONE;
 			List<Integer> ions = new ArrayList<Integer>();
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			lineSeriesDataList.add(overlaySupport.getLineSeriesData(chromatogramSelection, overlayType, derivativeType, ions));
 			chromatogramChart.addSeriesData(lineSeriesDataList, LineChart.LOW_COMPRESSION);
+			//
+			if(peak != null) {
+				buttonAddPeak.setEnabled(true);
+				lineSeriesDataList.add(getPeak(peak, Colors.RED));
+				lineSeriesDataList.add(getPeakBackground(peak, Colors.BLACK));
+				chromatogramChart.addSeriesData(lineSeriesDataList, LineChart.LOW_COMPRESSION);
+			}
 		}
 	}
 
@@ -351,7 +369,7 @@ public class ExtendedPeakDetectorUI {
 		createDetectionTypeButton(composite, "Detection Modus (Baseline) [Key:" + KEY_BASELINE + "]", IApplicationImage.IMAGE_DETECTION_TYPE_BASELINE, DETECTION_TYPE_BASELINE);
 		createDetectionTypeButton(composite, "Detection Modus (BB) [Key:" + KEY_BB + "]", IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_BB, DETECTION_TYPE_SCAN_BB);
 		createDetectionTypeButton(composite, "Detection Modus (VV) [Key:" + KEY_VV + "]", IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_VV, DETECTION_TYPE_SCAN_VV);
-		createAddPeakButton(composite);
+		buttonAddPeak = createAddPeakButton(composite);
 		createToggleChartLegendButton(composite);
 		createDetectionTypeButton(composite, "Reset", IApplicationImage.IMAGE_RESET, DETECTION_TYPE_NONE);
 		createSettingsButton(composite);
@@ -459,7 +477,7 @@ public class ExtendedPeakDetectorUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				IPreferencePage preferencePage = new PreferencePagePeaks();
-				preferencePage.setTitle("Chromatogram Settings");
+				preferencePage.setTitle("Peak Settings");
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
 				//
@@ -499,8 +517,8 @@ public class ExtendedPeakDetectorUI {
 		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(SWT.ARROW_RIGHT));
 		chartSettings.addHandledEventProcessor(new MouseDownEventProcessor());
 		chartSettings.addHandledEventProcessor(new MouseUpEventProcessor());
-		chartSettings.addHandledEventProcessor(new MouseMoveEventProcessor(BaseChart.BUTTON_NONE));
-		chartSettings.addHandledEventProcessor(new MouseMoveEventProcessor(BaseChart.BUTTON_LEFT));
+		chartSettings.addHandledEventProcessor(new MouseMoveEventProcessor(BaseChart.BUTTON_NONE, SWT.NONE));
+		chartSettings.addHandledEventProcessor(new MouseMoveEventProcessor(BaseChart.BUTTON_LEFT, SWT.BUTTON1));
 		chartSettings.addHandledEventProcessor(new MouseDoubleClickEventProcessor());
 		//
 		chromatogramChart.applySettings(chartSettings);
@@ -530,7 +548,7 @@ public class ExtendedPeakDetectorUI {
 			/*
 			 * Detection Type Scan
 			 */
-			if(event.keyCode == 16777219) { // SWT.ARROW_LEFT
+			if(event.keyCode == SWT.ARROW_LEFT) {
 				/*
 				 * Arrow left
 				 */
@@ -541,7 +559,7 @@ public class ExtendedPeakDetectorUI {
 					xStop -= 1;
 					redrawScanPeakSelection(true);
 				}
-			} else if(event.keyCode == 16777220) { // SWT.ARROW_RIGHT
+			} else if(event.keyCode == SWT.ARROW_RIGHT) {
 				/*
 				 * Arrow right
 				 */
@@ -620,7 +638,7 @@ public class ExtendedPeakDetectorUI {
 
 	private void handleMouseMoveEvent(Event event) {
 
-		if(detectionType.equals(DETECTION_TYPE_BASELINE) && event.stateMask == 524288) {
+		if(detectionType.equals(DETECTION_TYPE_BASELINE) && event.stateMask == SWT.BUTTON1) {
 			trackBaselinePeakSelection(event.x, event.y);
 		} else if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
 			/*
@@ -634,7 +652,7 @@ public class ExtendedPeakDetectorUI {
 				setCursor(SWT.CURSOR_CROSS);
 			}
 			//
-			if(event.stateMask == 524288) {
+			if(event.stateMask == SWT.BUTTON1) {
 				if(!detectionBox.equals(DETECTION_BOX_NONE)) {
 					/*
 					 * Get the move delta.
@@ -705,12 +723,12 @@ public class ExtendedPeakDetectorUI {
 
 	private void reset() {
 
-		updateChromatogram();
+		updateChromatogramAndPeak();
 	}
 
 	private void applySettings() {
 
-		updateChromatogram();
+		updateChromatogramAndPeak();
 	}
 
 	private String getDetectionBox(int x) {
@@ -856,7 +874,7 @@ public class ExtendedPeakDetectorUI {
 
 	private void redraw() {
 
-		chromatogramChart.redraw();
+		chromatogramChart.getBaseChart().redraw();
 	}
 
 	private void resetScanPeakSelection() {
@@ -963,17 +981,8 @@ public class ExtendedPeakDetectorUI {
 
 	private void firePeakDetected(IPeak peak) {
 
-		if(peak != null) {
-			//
-			chromatogramChart.deleteSeries(ID_PEAK);
-			chromatogramChart.deleteSeries(ID_BACKGROUND);
-			//
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-			lineSeriesDataList.add(getPeak(peak, Colors.RED));
-			lineSeriesDataList.add(getPeakBackground(peak, Colors.BLACK));
-			chromatogramChart.addSeriesData(lineSeriesDataList, LineChart.LOW_COMPRESSION);
-		}
-		System.out.println("Enable Peak Plus button");
+		this.peak = peak;
+		updateChromatogramAndPeak();
 	}
 
 	private ILineSeriesData getPeak(IPeak peak, Color color) {
