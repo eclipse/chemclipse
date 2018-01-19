@@ -40,6 +40,8 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.customcharts.ChromatogramChart;
+import org.eclipse.eavp.service.swtchart.events.AbstractHandledEventProcessor;
+import org.eclipse.eavp.service.swtchart.events.IHandledEventProcessor;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
 import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -48,11 +50,6 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Cursor;
@@ -62,6 +59,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.swtchart.IAxis;
@@ -98,7 +96,6 @@ public class ExtendedPeakDetectorUI {
 	//
 	private Composite toolbarInfo;
 	private Label labelChromatogram;
-	private Composite toolbarDetect;
 	private ChromatogramChart chromatogramChart;
 	//
 	private IChromatogramSelection chromatogramSelection;
@@ -119,6 +116,123 @@ public class ExtendedPeakDetectorUI {
 	private int xMoveStart;
 	//
 	private OverlaySupport overlaySupport;
+
+	private class KeyPressedEventProcessor extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+
+		private int keyCode;
+
+		public KeyPressedEventProcessor(int keyCode) {
+			this.keyCode = keyCode;
+		}
+
+		@Override
+		public int getEvent() {
+
+			return BaseChart.EVENT_KEY_DOWN;
+		}
+
+		@Override
+		public int getButton() {
+
+			return keyCode;
+		}
+
+		@Override
+		public int getStateMask() {
+
+			return SWT.NONE;
+		}
+
+		@Override
+		public void handleEvent(BaseChart baseChart, Event event) {
+
+			handleKeyPressedEvent(event);
+		}
+	}
+
+	private class MouseDownEventProcessor extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+
+		@Override
+		public int getEvent() {
+
+			return BaseChart.EVENT_MOUSE_DOWN;
+		}
+
+		@Override
+		public int getStateMask() {
+
+			return SWT.NONE;
+		}
+
+		@Override
+		public void handleEvent(BaseChart baseChart, Event event) {
+
+			handleMouseDownEvent(event);
+		}
+	}
+
+	private class MouseUpEventProcessor extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+
+		@Override
+		public int getEvent() {
+
+			return BaseChart.EVENT_MOUSE_UP;
+		}
+
+		@Override
+		public int getStateMask() {
+
+			return SWT.NONE;
+		}
+
+		@Override
+		public void handleEvent(BaseChart baseChart, Event event) {
+
+			handleMouseUpEvent(event);
+		}
+	}
+
+	private class MouseMoveEventProcessor extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+
+		@Override
+		public int getEvent() {
+
+			return BaseChart.EVENT_MOUSE_MOVE;
+		}
+
+		@Override
+		public int getStateMask() {
+
+			return SWT.NONE;
+		}
+
+		@Override
+		public void handleEvent(BaseChart baseChart, Event event) {
+
+			handleMouseMoveEvent(event);
+		}
+	}
+
+	private class MouseDoubleClickEventProcessor extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+
+		@Override
+		public int getEvent() {
+
+			return BaseChart.EVENT_MOUSE_DOUBLE_CLICK;
+		}
+
+		@Override
+		public int getStateMask() {
+
+			return SWT.NONE;
+		}
+
+		@Override
+		public void handleEvent(BaseChart baseChart, Event event) {
+
+			handleMouseDoubleClickEvent(event);
+		}
+	}
 
 	@Inject
 	public ExtendedPeakDetectorUI(Composite parent) {
@@ -180,11 +294,9 @@ public class ExtendedPeakDetectorUI {
 		//
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
-		toolbarDetect = createToolbarDetect(parent);
 		createChromatogramChart(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
-		PartSupport.setCompositeVisibility(toolbarDetect, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -193,11 +305,15 @@ public class ExtendedPeakDetectorUI {
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(8, false));
 		//
 		createButtonToggleToolbarInfo(composite);
-		createButtonToggleToolbarDetect(composite);
+		createDetectionTypeButton(composite, "Detection Modus (Baseline) [Key:" + KEY_BASELINE + "]", IApplicationImage.IMAGE_DETECTION_TYPE_BASELINE, DETECTION_TYPE_BASELINE);
+		createDetectionTypeButton(composite, "Detection Modus (BB) [Key:" + KEY_BB + "]", IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_BB, DETECTION_TYPE_SCAN_BB);
+		createDetectionTypeButton(composite, "Detection Modus (VV) [Key:" + KEY_VV + "]", IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_VV, DETECTION_TYPE_SCAN_VV);
+		createAddPeakButton(composite);
 		createToggleChartLegendButton(composite);
+		createDetectionTypeButton(composite, "Reset", IApplicationImage.IMAGE_RESET, DETECTION_TYPE_NONE);
 		createSettingsButton(composite);
 	}
 
@@ -212,24 +328,6 @@ public class ExtendedPeakDetectorUI {
 		labelChromatogram = new Label(composite, SWT.NONE);
 		labelChromatogram.setText("");
 		labelChromatogram.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return composite;
-	}
-
-	private Composite createToolbarDetect(Composite parent) {
-
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.END;
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(5, false));
-		composite.setVisible(false);
-		//
-		createDetectionTypeButton(composite, "Reset", IApplicationImage.IMAGE_RESET, DETECTION_TYPE_NONE);
-		createDetectionTypeButton(composite, "Detection Modus (Baseline) [Key:" + KEY_BASELINE + "]", IApplicationImage.IMAGE_DETECTION_TYPE_BASELINE, DETECTION_TYPE_BASELINE);
-		createDetectionTypeButton(composite, "Detection Modus (BB) [Key:" + KEY_BB + "]", IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_BB, DETECTION_TYPE_SCAN_BB);
-		createDetectionTypeButton(composite, "Detection Modus (VV) [Key:" + KEY_VV + "]", IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_VV, DETECTION_TYPE_SCAN_VV);
-		createAddPeakButton(composite);
 		//
 		return composite;
 	}
@@ -265,7 +363,7 @@ public class ExtendedPeakDetectorUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				// TODO Add
+				// TODO Add the peak
 			}
 		});
 		return button;
@@ -292,27 +390,6 @@ public class ExtendedPeakDetectorUI {
 		});
 		//
 		return button;
-	}
-
-	private void createButtonToggleToolbarDetect(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle the detector toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarDetect);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
 	}
 
 	private void createToggleChartLegendButton(Composite parent) {
@@ -376,13 +453,14 @@ public class ExtendedPeakDetectorUI {
 		chartSettings.setEnableRangeSelector(true);
 		chartSettings.setShowRangeSelectorInitially(false);
 		chartSettings.setSupportDataShift(false);
+		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(BaseChart.KEY_CODE_d));
+		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(SWT.ARROW_LEFT));
+		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(SWT.ARROW_RIGHT));
+		chartSettings.addHandledEventProcessor(new MouseDownEventProcessor());
+		chartSettings.addHandledEventProcessor(new MouseUpEventProcessor());
+		chartSettings.addHandledEventProcessor(new MouseMoveEventProcessor());
+		chartSettings.addHandledEventProcessor(new MouseDoubleClickEventProcessor());
 		chromatogramChart.applySettings(chartSettings);
-		//
-		addKeyPressedEvent();
-		addMouseDownEvent();
-		addMouseUpEvent();
-		addMouseMoveEvent();
-		addMouseDoubleClickEvent();
 		/*
 		 * Add the paint listeners to draw the selected peak range.
 		 */
@@ -393,241 +471,188 @@ public class ExtendedPeakDetectorUI {
 		plotArea.addCustomPaintListener(scanSelectionPaintListener);
 	}
 
-	private void addKeyPressedEvent() {
+	private void handleKeyPressedEvent(Event event) {
 
-		BaseChart baseChart = chromatogramChart.getBaseChart();
-		baseChart.addKeyListener(new KeyAdapter() {
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-
-				if(detectionType.equals(DETECTION_TYPE_NONE)) {
-					if(e.keyCode == KEY_BASELINE) {
-						detectionType = DETECTION_TYPE_BASELINE;
-					} else if(e.keyCode == KEY_BB) {
-						detectionType = DETECTION_TYPE_SCAN_BB;
-					} else if(e.keyCode == KEY_VV) {
-						detectionType = DETECTION_TYPE_SCAN_VV;
-					} else {
-						detectionType = DETECTION_TYPE_NONE;
-					}
-				} else if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
-					/*
-					 * Detection Type Scan
-					 */
-					if(e.keyCode == 16777219) {
-						/*
-						 * Arrow left
-						 */
-						if(detectionBox.equals(DETECTION_BOX_LEFT)) {
-							xStart -= 1;
-							redrawScanPeakSelection(true);
-						} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
-							xStop -= 1;
-							redrawScanPeakSelection(true);
-						}
-					} else if(e.keyCode == 16777220) {
-						/*
-						 * Arrow right
-						 */
-						if(detectionBox.equals(DETECTION_BOX_LEFT)) {
-							xStart += 1;
-							redrawScanPeakSelection(true);
-						} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
-							xStop += 1;
-							redrawScanPeakSelection(true);
-						}
-					} else {
-						super.keyPressed(e);
-					}
-				} else {
-					super.keyPressed(e);
+		if(detectionType.equals(DETECTION_TYPE_NONE)) {
+			if(event.keyCode == KEY_BASELINE) {
+				detectionType = DETECTION_TYPE_BASELINE;
+			} else if(event.keyCode == KEY_BB) {
+				detectionType = DETECTION_TYPE_SCAN_BB;
+			} else if(event.keyCode == KEY_VV) {
+				detectionType = DETECTION_TYPE_SCAN_VV;
+			} else {
+				detectionType = DETECTION_TYPE_NONE;
+			}
+		} else if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
+			/*
+			 * Detection Type Scan
+			 */
+			if((event.keyCode & SWT.ARROW_LEFT) == SWT.ARROW_LEFT) {
+				/*
+				 * Arrow left
+				 */
+				if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+					xStart -= 1;
+					redrawScanPeakSelection(true);
+				} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+					xStop -= 1;
+					redrawScanPeakSelection(true);
+				}
+			} else if((event.keyCode & SWT.ARROW_RIGHT) == SWT.ARROW_RIGHT) {
+				/*
+				 * Arrow right
+				 */
+				if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+					xStart += 1;
+					redrawScanPeakSelection(true);
+				} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+					xStop += 1;
+					redrawScanPeakSelection(true);
 				}
 			}
-		});
+		}
 	}
 
-	private void addMouseDownEvent() {
+	private void handleMouseDownEvent(Event event) {
 
-		BaseChart baseChart = chromatogramChart.getBaseChart();
-		baseChart.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-
-				if(detectionType.equals(DETECTION_TYPE_BASELINE) && e.button == 1) {
-					startBaselinePeakSelection(e.x, e.y);
-					setCursor(SWT.CURSOR_CROSS);
-				} else if(detectionType.startsWith(DETECTION_TYPE_SCAN) && e.button == 1) {
-					/*
-					 * Set the move start coordinate.
-					 */
-					if(isLeftMoveSnapMarker(e.x)) {
-						setCursor(SWT.CURSOR_SIZEWE);
-						xMoveStart = e.x;
-						detectionBox = DETECTION_BOX_LEFT;
-					} else if(isRightMoveSnapMarker(e.x)) {
-						setCursor(SWT.CURSOR_SIZEWE);
-						xMoveStart = e.x;
-						detectionBox = DETECTION_BOX_RIGHT;
-					} else {
-						setCursor(SWT.CURSOR_CROSS);
-						detectionBox = DETECTION_BOX_NONE;
-					}
-				} else {
-					super.mouseDown(e);
-				}
+		if(detectionType.equals(DETECTION_TYPE_BASELINE) && event.button == 1) {
+			startBaselinePeakSelection(event.x, event.y);
+			setCursor(SWT.CURSOR_CROSS);
+		} else if(detectionType.startsWith(DETECTION_TYPE_SCAN) && event.button == 1) {
+			/*
+			 * Set the move start coordinate.
+			 */
+			if(isLeftMoveSnapMarker(event.x)) {
+				setCursor(SWT.CURSOR_SIZEWE);
+				xMoveStart = event.x;
+				detectionBox = DETECTION_BOX_LEFT;
+			} else if(isRightMoveSnapMarker(event.x)) {
+				setCursor(SWT.CURSOR_SIZEWE);
+				xMoveStart = event.x;
+				detectionBox = DETECTION_BOX_RIGHT;
+			} else {
+				setCursor(SWT.CURSOR_CROSS);
+				detectionBox = DETECTION_BOX_NONE;
 			}
-		});
+		}
 	}
 
-	private void addMouseUpEvent() {
+	private void handleMouseUpEvent(Event event) {
 
-		BaseChart baseChart = chromatogramChart.getBaseChart();
-		baseChart.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-
-				if(detectionType.equals(DETECTION_TYPE_BASELINE)) {
-					stopBaselinePeakSelection(e.x, e.y);
-					setDefaultCursor();
-				} else if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
+		if(detectionType.equals(DETECTION_TYPE_BASELINE)) {
+			stopBaselinePeakSelection(event.x, event.y);
+			setDefaultCursor();
+		} else if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
+			/*
+			 * Move.
+			 */
+			if(event.button == 1) {
+				/*
+				 * Set the peak.
+				 */
+				setCursor(SWT.CURSOR_CROSS);
+				if(!detectionBox.equals(DETECTION_BOX_NONE)) {
 					/*
-					 * Move.
+					 * Validate that the snap marker is matched.
 					 */
-					if(e.button == 1) {
-						/*
-						 * Set the peak.
-						 */
-						setCursor(SWT.CURSOR_CROSS);
-						if(!detectionBox.equals(DETECTION_BOX_NONE)) {
-							/*
-							 * Validate that the snap marker is matched.
-							 */
-							int delta = getDeltaMove(e.x);
-							if(detectionBox.equals(DETECTION_BOX_LEFT)) {
-								xStart += delta;
-								redrawScanPeakSelection(true);
-							} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
-								xStop += delta;
-								redrawScanPeakSelection(true);
-							}
-						}
-						/*
-						 * Mark the selected box.
-						 */
-						if(e.count == 1) {
-							detectionBox = getDetectionBox(e.x);
-							redrawScanPeakSelection(false);
-						}
+					int delta = getDeltaMove(event.x);
+					if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+						xStart += delta;
+						redrawScanPeakSelection(true);
+					} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+						xStop += delta;
+						redrawScanPeakSelection(true);
 					}
-				} else {
-					super.mouseUp(e);
+				}
+				/*
+				 * Mark the selected box.
+				 */
+				if(event.count == 1) {
+					detectionBox = getDetectionBox(event.x);
+					redrawScanPeakSelection(false);
 				}
 			}
-		});
+		}
 	}
 
-	private void addMouseMoveEvent() {
+	private void handleMouseMoveEvent(Event event) {
 
-		BaseChart baseChart = chromatogramChart.getBaseChart();
-		baseChart.addMouseMoveListener(new MouseMoveListener() {
-
-			@Override
-			public void mouseMove(MouseEvent e) {
-
-				if(detectionType.equals(DETECTION_TYPE_BASELINE) && e.stateMask == 524288) {
-					trackBaselinePeakSelection(e.x, e.y);
-				} else if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
+		if(detectionType.equals(DETECTION_TYPE_BASELINE) && event.stateMask == 524288) {
+			trackBaselinePeakSelection(event.x, event.y);
+		} else if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
+			/*
+			 * Mark the mouse
+			 */
+			if(isLeftMoveSnapMarker(event.x)) {
+				setCursor(SWT.CURSOR_SIZEWE);
+			} else if(isRightMoveSnapMarker(event.x)) {
+				setCursor(SWT.CURSOR_SIZEWE);
+			} else {
+				setCursor(SWT.CURSOR_CROSS);
+			}
+			//
+			if(event.stateMask == 524288) {
+				if(!detectionBox.equals(DETECTION_BOX_NONE)) {
 					/*
-					 * Mark the mouse
+					 * Get the move delta.
 					 */
-					if(isLeftMoveSnapMarker(e.x)) {
-						setCursor(SWT.CURSOR_SIZEWE);
-					} else if(isRightMoveSnapMarker(e.x)) {
-						setCursor(SWT.CURSOR_SIZEWE);
-					} else {
-						setCursor(SWT.CURSOR_CROSS);
+					int delta = getDeltaMove(event.x);
+					if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+						xStart += delta;
+						redrawScanPeakSelection(false);
+					} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+						xStop += delta;
+						redrawScanPeakSelection(false);
 					}
-					//
-					if(e.stateMask == 524288) {
-						if(!detectionBox.equals(DETECTION_BOX_NONE)) {
-							/*
-							 * Get the move delta.
-							 */
-							int delta = getDeltaMove(e.x);
-							if(detectionBox.equals(DETECTION_BOX_LEFT)) {
-								xStart += delta;
-								redrawScanPeakSelection(false);
-							} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
-								xStop += delta;
-								redrawScanPeakSelection(false);
-							}
-						}
-					}
-				} else {
-					System.out.println("MouseMove");
-					// super.mouseMove(e);
 				}
 			}
-		});
+		}
 	}
 
-	private void addMouseDoubleClickEvent() {
+	private void handleMouseDoubleClickEvent(Event event) {
 
-		BaseChart baseChart = chromatogramChart.getBaseChart();
-		baseChart.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-
-				if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
-					//
-					setCursor(SWT.CURSOR_CROSS);
-					if(xStart == 0) {
-						/*
-						 * Get the y coordinate
-						 */
-						int y;
-						//
-						switch(detectionType) {
-							case DETECTION_TYPE_SCAN_BB:
-								y = getPlotArea().getBounds().height;
-								break;
-							case DETECTION_TYPE_SCAN_VV:
-								y = e.y;
-								break;
-							default:
-								y = getPlotArea().getBounds().height;
-						}
-						startScanPeakSelection(e.x, y);
-					} else if(xStart > 0 && xStop == 0) {
-						/*
-						 * Get the y coordinate
-						 */
-						int y;
-						//
-						switch(detectionType) {
-							case DETECTION_TYPE_SCAN_BB:
-								y = getPlotArea().getBounds().height;
-								break;
-							case DETECTION_TYPE_SCAN_VV:
-								y = e.y;
-								break;
-							default:
-								y = getPlotArea().getBounds().height;
-						}
-						stopScanPeakSelection(e.x, y);
-					} else {
-						setDefaultCursor();
-						resetScanPeakSelection();
-					}
-				} else {
-					super.mouseDoubleClick(e);
+		if(detectionType.startsWith(DETECTION_TYPE_SCAN)) {
+			//
+			setCursor(SWT.CURSOR_CROSS);
+			if(xStart == 0) {
+				/*
+				 * Get the y coordinate
+				 */
+				int y;
+				//
+				switch(detectionType) {
+					case DETECTION_TYPE_SCAN_BB:
+						y = getPlotArea().getBounds().height;
+						break;
+					case DETECTION_TYPE_SCAN_VV:
+						y = event.y;
+						break;
+					default:
+						y = getPlotArea().getBounds().height;
 				}
+				startScanPeakSelection(event.x, y);
+			} else if(xStart > 0 && xStop == 0) {
+				/*
+				 * Get the y coordinate
+				 */
+				int y;
+				//
+				switch(detectionType) {
+					case DETECTION_TYPE_SCAN_BB:
+						y = getPlotArea().getBounds().height;
+						break;
+					case DETECTION_TYPE_SCAN_VV:
+						y = event.y;
+						break;
+					default:
+						y = getPlotArea().getBounds().height;
+				}
+				stopScanPeakSelection(event.x, y);
+			} else {
+				setDefaultCursor();
+				resetScanPeakSelection();
 			}
-		});
+		}
 	}
 
 	private Composite getPlotArea() {
