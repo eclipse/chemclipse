@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -29,6 +30,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.BaselineSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.ScanSelectionPaintListener;
@@ -39,11 +41,15 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeak
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
+import org.eclipse.eavp.service.swtchart.core.ISeriesData;
+import org.eclipse.eavp.service.swtchart.core.SeriesData;
 import org.eclipse.eavp.service.swtchart.customcharts.ChromatogramChart;
 import org.eclipse.eavp.service.swtchart.events.AbstractHandledEventProcessor;
 import org.eclipse.eavp.service.swtchart.events.IHandledEventProcessor;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
+import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
+import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -52,6 +58,7 @@ import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -69,6 +76,9 @@ import org.swtchart.Range;
 public class ExtendedPeakDetectorUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedPeakDetectorUI.class);
+	//
+	private static final String ID_PEAK = "Peak";
+	private static final String ID_BACKGROUND = "Background";
 	/*
 	 * Detection Types
 	 */
@@ -490,7 +500,7 @@ public class ExtendedPeakDetectorUI {
 		chartSettings.addHandledEventProcessor(new MouseDownEventProcessor());
 		chartSettings.addHandledEventProcessor(new MouseUpEventProcessor());
 		chartSettings.addHandledEventProcessor(new MouseMoveEventProcessor(BaseChart.BUTTON_NONE));
-		// chartSettings.addHandledEventProcessor(new MouseMoveEventProcessor(BaseChart.BUTTON_LEFT));
+		chartSettings.addHandledEventProcessor(new MouseMoveEventProcessor(BaseChart.BUTTON_LEFT));
 		chartSettings.addHandledEventProcessor(new MouseDoubleClickEventProcessor());
 		//
 		chromatogramChart.applySettings(chartSettings);
@@ -520,7 +530,7 @@ public class ExtendedPeakDetectorUI {
 			/*
 			 * Detection Type Scan
 			 */
-			if((event.keyCode & SWT.ARROW_LEFT) == SWT.ARROW_LEFT) {
+			if(event.keyCode == 16777219) { // SWT.ARROW_LEFT
 				/*
 				 * Arrow left
 				 */
@@ -531,7 +541,7 @@ public class ExtendedPeakDetectorUI {
 					xStop -= 1;
 					redrawScanPeakSelection(true);
 				}
-			} else if((event.keyCode & SWT.ARROW_RIGHT) == SWT.ARROW_RIGHT) {
+			} else if(event.keyCode == 16777220) { // SWT.ARROW_RIGHT
 				/*
 				 * Arrow right
 				 */
@@ -953,6 +963,79 @@ public class ExtendedPeakDetectorUI {
 
 	private void firePeakDetected(IPeak peak) {
 
+		if(peak != null) {
+			//
+			chromatogramChart.deleteSeries(ID_PEAK);
+			chromatogramChart.deleteSeries(ID_BACKGROUND);
+			//
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			lineSeriesDataList.add(getPeak(peak, Colors.RED));
+			lineSeriesDataList.add(getPeakBackground(peak, Colors.BLACK));
+			chromatogramChart.addSeriesData(lineSeriesDataList, LineChart.LOW_COMPRESSION);
+		}
 		System.out.println("Enable Peak Plus button");
+	}
+
+	private ILineSeriesData getPeak(IPeak peak, Color color) {
+
+		ISeriesData seriesData = getPeakSeriesData(peak);
+		return getLineSeriesData(seriesData, color);
+	}
+
+	private ILineSeriesData getPeakBackground(IPeak peak, Color color) {
+
+		ISeriesData seriesData = getPeakBaselineData(peak);
+		return getLineSeriesData(seriesData, color);
+	}
+
+	private ILineSeriesData getLineSeriesData(ISeriesData seriesData, Color color) {
+
+		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
+		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+		lineSeriesSettings.setLineColor(color);
+		lineSeriesSettings.setEnableArea(true);
+		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
+		lineSeriesSettingsHighlight.setLineWidth(2);
+		return lineSeriesData;
+	}
+
+	private ISeriesData getPeakSeriesData(IPeak peak) {
+
+		String id = ID_PEAK;
+		IPeakModel peakModel = peak.getPeakModel();
+		List<Integer> retentionTimes = peakModel.getRetentionTimes();
+		int size = retentionTimes.size();
+		double[] xSeries = new double[size];
+		double[] ySeries = new double[size];
+		int index = 0;
+		for(int retentionTime : retentionTimes) {
+			//
+			xSeries[index] = retentionTime;
+			ySeries[index] = peakModel.getBackgroundAbundance(retentionTime) + peakModel.getPeakAbundance(retentionTime);
+			//
+			index++;
+		}
+		//
+		return new SeriesData(xSeries, ySeries, id);
+	}
+
+	private ISeriesData getPeakBaselineData(IPeak peak) {
+
+		String id = ID_BACKGROUND;
+		IPeakModel peakModel = peak.getPeakModel();
+		List<Integer> retentionTimes = peakModel.getRetentionTimes();
+		int size = retentionTimes.size();
+		double[] xSeries = new double[size];
+		double[] ySeries = new double[size];
+		//
+		int index = 0;
+		for(int retentionTime : peakModel.getRetentionTimes()) {
+			xSeries[index] = retentionTime;
+			ySeries[index] = peakModel.getBackgroundAbundance(retentionTime);
+			//
+			index++;
+		}
+		//
+		return new SeriesData(xSeries, ySeries, id);
 	}
 }
