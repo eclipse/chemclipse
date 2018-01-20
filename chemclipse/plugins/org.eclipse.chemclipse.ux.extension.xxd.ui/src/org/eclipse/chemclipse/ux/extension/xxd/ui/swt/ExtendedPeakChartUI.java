@@ -41,7 +41,6 @@ public class ExtendedPeakChartUI {
 
 	private Composite toolbarInfo;
 	private Label labelScan;
-	private Composite toolbarSettings;
 	private PeakChartUI peakChartUI;
 	//
 	private IPeak peak;
@@ -77,11 +76,9 @@ public class ExtendedPeakChartUI {
 		//
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
-		toolbarSettings = createToolbarSettings(parent);
 		createPeakChart(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
-		PartSupport.setCompositeVisibility(toolbarSettings, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -90,10 +87,11 @@ public class ExtendedPeakChartUI {
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(6, false));
 		//
 		createButtonToggleToolbarInfo(composite);
-		createButtonToggleToolbarSettings(composite);
+		createPeakBaselineButton(composite);
+		createPeakSplitButton(composite);
 		createToggleChartLegendButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
@@ -110,19 +108,6 @@ public class ExtendedPeakChartUI {
 		labelScan = new Label(composite, SWT.NONE);
 		labelScan.setText("");
 		labelScan.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return composite;
-	}
-
-	private Composite createToolbarSettings(Composite parent) {
-
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
-		composite.setVisible(false);
-		//
-		createButton(composite);
 		//
 		return composite;
 	}
@@ -150,23 +135,34 @@ public class ExtendedPeakChartUI {
 		return button;
 	}
 
-	private void createButtonToggleToolbarSettings(Composite parent) {
+	private void createPeakBaselineButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle settings toolbar.");
+		button.setToolTipText("Use the peak baseline option.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+		button.setEnabled(false);
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DETECTION_TYPE_BASELINE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarSettings);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
-				}
+			}
+		});
+	}
+
+	private void createPeakSplitButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Use the peak split option.");
+		button.setText("");
+		button.setEnabled(false);
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DETECTION_TYPE_SPLIT, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
 			}
 		});
 	}
