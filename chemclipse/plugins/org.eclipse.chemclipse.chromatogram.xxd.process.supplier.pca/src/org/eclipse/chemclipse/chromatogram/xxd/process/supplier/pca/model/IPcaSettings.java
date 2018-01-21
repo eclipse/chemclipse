@@ -11,23 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import javafx.beans.property.IntegerProperty;
+
 public interface IPcaSettings {
 
-	static int validatePrincipalComponent(IPcaResults pcaResults, int pc) {
-
-		return validatePrincipalComponent(pcaResults.getPcaSettings(), pc);
-	}
-
-	static int validatePrincipalComponent(IPcaSettings pcaSettings, int pc) {
-
-		if(pcaSettings.getNumberOfPrincipleComponents() > pc) {
-			return pc;
-		} else {
-			return pcaSettings.getNumberOfPrincipleComponents();
-		}
-	}
-
-	int getNumberOfPrincipleComponents();
+	int getNumberOfPrincipalComponents();
 
 	int getPcX();
 
@@ -35,7 +23,15 @@ public interface IPcaSettings {
 
 	int getPcZ();
 
-	void setNumberOfPrincipleComponents(int numberOfPrincipleComponents);
+	IntegerProperty numberPrincipalCoponentsPropety();
+
+	IntegerProperty pcXProperty();
+
+	IntegerProperty pcYProperty();
+
+	IntegerProperty pcZProperty();
+
+	void setNumberOfPrincipalComponents(int numberOfPrincipleComponents);
 
 	void setPcX(int pcX);
 

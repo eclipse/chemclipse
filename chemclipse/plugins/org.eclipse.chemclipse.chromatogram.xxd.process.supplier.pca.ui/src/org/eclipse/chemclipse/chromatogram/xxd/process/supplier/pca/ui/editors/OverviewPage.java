@@ -342,7 +342,7 @@ public class OverviewPage {
 
 		Optional<IPcaResults> pcaResults = pcaEditor.getPcaResults();
 		if(pcaResults.isPresent()) {
-			principleComponentSpinner.setSelection(pcaResults.get().getPcaSettings().getNumberOfPrincipleComponents());
+			principleComponentSpinner.setSelection(pcaResults.get().getPcaSettings().getNumberOfPrincipalComponents());
 		}
 	}
 }

@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
@@ -30,16 +29,13 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 
 import javafx.collections.ListChangeListener;
 
 public class PreprocessingPart {
 
+	private static Map<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>, PcaPreprocessingData> preprocessings;
 	private DataPreprocessingSelection dataPreprocessing;
-	@Inject
-	private Display display;
-	private Map<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>, PcaPreprocessingData> preprocessings;
 
 	public PreprocessingPart() {
 		synchronized(PreprocessingPart.class) {
@@ -66,12 +62,14 @@ public class PreprocessingPart {
 
 				PcaPreprocessingData pcaPreprocessingData = new PcaPreprocessingData();
 				if(!c.getList().isEmpty()) {
-					pcaPreprocessingData = getPcaPreprocessingData(c.getList().get(0));
+					ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples = c.getList().get(0);
+					pcaPreprocessingData = getPcaPreprocessingData(samples);
+					dataPreprocessing.update(pcaPreprocessingData);
+					dataPreprocessing.setSamples(samples);
+				} else {
+					dataPreprocessing.update(new PcaPreprocessingData());
+					dataPreprocessing.setSamples(null);
 				}
-				final PcaPreprocessingData preprocessingData = pcaPreprocessingData;
-				display.asyncExec(() -> {
-					dataPreprocessing.update(preprocessingData);
-				});
 			}
 		});
 	}
@@ -89,7 +87,9 @@ public class PreprocessingPart {
 		if(SelectionManagerSamples.getInstance().getSelection().isEmpty()) {
 			dataPreprocessing = new DataPreprocessingSelection(compositeNormalizationTables, null);
 		} else {
-			dataPreprocessing = new DataPreprocessingSelection(compositeNormalizationTables, getPcaPreprocessingData(SelectionManagerSamples.getInstance().getSelection().get(0)));
+			ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples = SelectionManagerSamples.getInstance().getSelection().get(0);
+			dataPreprocessing = new DataPreprocessingSelection(compositeNormalizationTables, getPcaPreprocessingData(samples));
+			dataPreprocessing.setSamples(samples);
 		}
 	}
 

@@ -121,7 +121,7 @@ public class BiPlotPage {
 
 		Optional<IPcaResults> results = pcaEditor.getPcaResults();
 		if(results.isPresent()) {
-			updateSpinnerPCMaxima(results.get().getPcaSettings().getNumberOfPrincipleComponents());
+			updateSpinnerPCMaxima(results.get().getPcaSettings().getNumberOfPrincipalComponents());
 			biplot.update(results.get(), getPCX(), getPCY());
 		}
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 jan.
+ * Copyright (c) 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,13 +7,12 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * jan - initial API and implementation
+ * Jan Holy - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,10 +38,6 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -51,7 +46,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -91,9 +85,9 @@ public class PCAEditorController {
 		return samples;
 	}
 
-	public List<Sample> getSelectedSamples() {
+	public Sample getSelectedSamples() {
 
-		return new ArrayList<>(cTableSamples.getSelectionModel().getSelectedItems());
+		return cTableSamples.getSelectionModel().getSelectedItem();
 	}
 
 	@FXML
@@ -127,6 +121,7 @@ public class PCAEditorController {
 		if(samples.isPresent()) {
 			samples.get().getSampleList().forEach(s -> s.setSelected(false));
 		}
+		// cTableSamples.refresh();
 	}
 
 	@FXML
@@ -162,6 +157,7 @@ public class PCAEditorController {
 		if(samples.isPresent()) {
 			samples.get().getSampleList().forEach(s -> s.setSelected(true));
 		}
+		// cTableSamples.refresh();
 	}
 
 	@FXML // This method is called by the FXMLLoader when initialization is complete
@@ -170,29 +166,6 @@ public class PCAEditorController {
 		assert cTableSamples != null : "fx:id=\"cTableSamples\" was not injected: check your FXML file 'PCAEditor.fxml'.";
 		assert cSelections != null : "fx:id=\"cSelections\" was not injected: check your FXML file 'PCAEditor.fxml'.";
 		assert cColor != null : "fx:id=\"cColor\" was not injected: check your FXML file 'PCAEditor.fxml'.";
-		cSelections.setCellValueFactory(new Callback<CellDataFeatures<Sample, Boolean>, ObservableValue<Boolean>>() {
-
-			@Override
-			public ObservableValue<Boolean> call(CellDataFeatures<Sample, Boolean> param) {
-
-				Sample sample = param.getValue();
-				SimpleBooleanProperty booleanProp = new SimpleBooleanProperty(sample.isSelected());
-				// Note: singleCol.setOnEditCommit(): Not work for
-				// CheckBoxTableCell.
-				// When "Single?" column change.cell
-				booleanProp.addListener(new ChangeListener<Boolean>() {
-
-					@Override
-					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-
-						if(newValue != null) {
-							sample.setSelected(newValue);
-						}
-					}
-				});
-				return booleanProp;
-			}
-		});
 		cSelections.setCellFactory(new Callback<TableColumn<Sample, Boolean>, //
 				TableCell<Sample, Boolean>>() {
 
@@ -296,7 +269,7 @@ public class PCAEditorController {
 			updateColorMap();
 			updateNumerSeletedSamples();
 			inputSamples.accept(samples.get());
-			cTableSamples.setItems(FXCollections.observableList(samples.get().getSampleList()));
+			cTableSamples.setItems(samples.get().getSampleList());
 		}
 		return status;
 	}

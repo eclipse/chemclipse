@@ -19,9 +19,5 @@ public interface IRetentionTime extends IVariable {
 
 	double getRetentionTimeMinutes();
 
-	@Override
-	default String getType() {
-
-		return TYPE;
-	}
+	void setRetentioTime(int retentionTime);
 }

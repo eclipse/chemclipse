@@ -16,6 +16,7 @@ import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
@@ -23,6 +24,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.S
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -33,7 +35,14 @@ public class ScorePlot2DPart {
 
 	private ListChangeListener<ISample<? extends ISampleData>> actualSelectionChangeListener;
 	private ChangeListener<IPcaResults> pcaResultChangeLisnter;
+	private IPcaResults pcaResults;
 	private ScorePlot scorePlot;
+	private ListChangeListener<IPcaResult> selectionChangeListener;
+	private Runnable updateSelection = () -> {
+		if(pcaResults != null) {
+			scorePlot.update(pcaResults);
+		}
+	};
 
 	public ScorePlot2DPart() {
 		actualSelectionChangeListener = new ListChangeListener<ISample<? extends ISampleData>>() {
@@ -47,13 +56,26 @@ public class ScorePlot2DPart {
 				}
 			}
 		};
+		selectionChangeListener = new ListChangeListener<IPcaResult>() {
+
+			@Override
+			public void onChanged(javafx.collections.ListChangeListener.Change<? extends IPcaResult> c) {
+
+				Display.getDefault().timerExec(100, updateSelection);
+			}
+		};
 		pcaResultChangeLisnter = new ChangeListener<IPcaResults>() {
 
 			@Override
 			public void changed(ObservableValue<? extends IPcaResults> observable, IPcaResults oldValue, IPcaResults newValue) {
 
+				pcaResults = newValue;
+				if(oldValue != null) {
+					oldValue.getPcaResultList().removeListener(selectionChangeListener);
+				}
 				if(newValue != null) {
 					scorePlot.update(newValue);
+					newValue.getPcaResultList().addListener(selectionChangeListener);
 				} else {
 					scorePlot.deleteSeries();
 				}
@@ -69,8 +91,10 @@ public class ScorePlot2DPart {
 		scorePlot = new ScorePlot(composite);
 		ReadOnlyObjectProperty<IPcaResults> pcaresults = SelectionManagerSamples.getInstance().getActualSelectedPcaResults();
 		pcaresults.addListener(pcaResultChangeLisnter);
-		if(pcaresults.getValue() != null) {
+		this.pcaResults = pcaresults.get();
+		if(this.pcaResults != null) {
 			scorePlot.update(pcaresults.getValue());
+			this.pcaResults.getPcaResultList().addListener(selectionChangeListener);
 		}
 		SelectionManagerSample.getInstance().getSelection().addListener(actualSelectionChangeListener);
 	}
@@ -78,7 +102,11 @@ public class ScorePlot2DPart {
 	@PreDestroy
 	public void preDestroy() {
 
+		Display.getDefault().timerExec(-1, updateSelection);
 		SelectionManagerSample.getInstance().getSelection().removeListener(actualSelectionChangeListener);
 		SelectionManagerSamples.getInstance().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
+		if(pcaResults != null) {
+			this.pcaResults.getPcaResultList().removeListener(selectionChangeListener);
+		}
 	}
 }

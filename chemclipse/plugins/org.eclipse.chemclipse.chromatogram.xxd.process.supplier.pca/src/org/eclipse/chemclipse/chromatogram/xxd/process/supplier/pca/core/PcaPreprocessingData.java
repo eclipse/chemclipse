@@ -78,6 +78,9 @@ public class PcaPreprocessingData implements IDataModification {
 			centeringScaling.setOnlySelected(onlySelected);
 			centeringScaling.process(samples);
 		}
+		for(ISample<?> sample : samples.getSampleList()) {
+			sample.setSampleDataHasBeenChanged();
+		}
 	}
 
 	public void setCenteringScaling(ICentering centeringScaling) {

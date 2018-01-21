@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,78 +19,25 @@ import java.util.List;
  * @author Jan Holy
  *
  */
-public class Group<S extends ISample<? extends ISampleData>> implements IGroup<S> {
+public class Group<S extends ISample<? extends ISampleData>> extends AbstractSample<ISampleDataGroup> implements IGroup<S> {
 
-	private String groupName;
-	private String name;
-	private Object object;
-	private List<ISampleDataGroup> sampleData;
 	private List<S> samples;
-	private boolean selected = true;
 
 	public Group(List<S> samplesSomeGroupName) {
+		super("Group");
 		this.samples = samplesSomeGroupName;
-		this.name = "Group";
-		this.sampleData = new ArrayList<>();
 		if(!samplesSomeGroupName.isEmpty()) {
+			setGroupName(samplesSomeGroupName.get(0).getGroupName());
 			int countData = samplesSomeGroupName.get(0).getSampleData().size();
 			for(int i = 0; i < countData; i++) {
-				sampleData.add(new SampleDataGroup<S>(samplesSomeGroupName, i));
+				getSampleData().add(new SampleDataGroup<S>(samplesSomeGroupName, i));
 			}
 		}
-	}
-
-	@Override
-	public String getGroupName() {
-
-		return groupName;
-	}
-
-	@Override
-	public String getName() {
-
-		return name;
-	}
-
-	@Override
-	public Object getObject() {
-
-		return object;
-	}
-
-	@Override
-	public List<ISampleDataGroup> getSampleData() {
-
-		return sampleData;
 	}
 
 	@Override
 	public List<S> getSamples() {
 
 		return samples;
-	}
-
-	@Override
-	public boolean isSelected() {
-
-		return selected;
-	}
-
-	@Override
-	public void setGroupName(String groupName) {
-
-		this.groupName = groupName;
-	}
-
-	@Override
-	public void setObject(Object object) {
-
-		this.object = object;
-	}
-
-	@Override
-	public void setSelected(boolean selected) {
-
-		this.selected = selected;
 	}
 }

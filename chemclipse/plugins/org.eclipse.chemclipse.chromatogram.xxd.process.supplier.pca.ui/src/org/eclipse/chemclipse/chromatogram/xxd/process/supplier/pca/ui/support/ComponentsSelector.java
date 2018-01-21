@@ -79,7 +79,7 @@ public class ComponentsSelector {
 
 	public void update(IPcaResults pcaResults) {
 
-		int number = pcaResults.getPcaSettings().getNumberOfPrincipleComponents();
+		int number = pcaResults.getPcaSettings().getNumberOfPrincipalComponents();
 		if(number > 0) {
 			setComboX(number);
 			setComboY(number);

@@ -43,7 +43,7 @@ public class ResultExport {
 			printWriter.println("-------------------------------------");
 			printWriter.print("Number of principle components:");
 			printWriter.print(TAB);
-			printWriter.println(pcaResults.getPcaSettings().getNumberOfPrincipleComponents());
+			printWriter.println(pcaResults.getPcaSettings().getNumberOfPrincipalComponents());
 			printWriter.println("");
 			printWriter.println("-------------------------------------");
 			printWriter.println("Input Files");
@@ -94,7 +94,7 @@ public class ResultExport {
 			//
 			printWriter.print("File");
 			printWriter.print(TAB);
-			for(int i = 1; i <= pcaResults.getPcaSettings().getNumberOfPrincipleComponents(); i++) {
+			for(int i = 1; i <= pcaResults.getPcaSettings().getNumberOfPrincipalComponents(); i++) {
 				printWriter.print("PC" + i);
 				printWriter.print(TAB);
 			}

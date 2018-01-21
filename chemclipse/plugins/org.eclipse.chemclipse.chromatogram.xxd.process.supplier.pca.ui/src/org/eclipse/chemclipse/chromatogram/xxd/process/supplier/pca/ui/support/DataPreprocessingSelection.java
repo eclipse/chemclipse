@@ -28,6 +28,11 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preproc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.ScalingVast;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.TransformationLOG10;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.TransformationPower;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -51,6 +56,8 @@ public class DataPreprocessingSelection {
 	private CCombo normalizationCombo;
 	private PcaPreprocessingData pcaPreprocessingData;
 	//
+	private ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples;
+	//
 	private final int SCALING_AUTO = 0;
 	private final int SCALING_LEVEL = 4;
 	private final int SCALING_PARETO = 2;
@@ -65,7 +72,6 @@ public class DataPreprocessingSelection {
 	//
 	private CCombo transformationCombo;
 
-	//
 	public DataPreprocessingSelection(Composite composite, Object layoutData) {
 		this(composite, layoutData, new PcaPreprocessingData());
 	}
@@ -157,6 +163,11 @@ public class DataPreprocessingSelection {
 		transformationCombo.setLayoutData(GridDataFactory.copyData(layoutData));
 	}
 
+	public ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> getSamples() {
+
+		return samples;
+	}
+
 	private void init(Composite parent, Object layoutData) {
 
 		Composite composite = new Composite(parent, SWT.None);
@@ -166,6 +177,11 @@ public class DataPreprocessingSelection {
 		addTransformation(composite, new GridData(GridData.FILL_HORIZONTAL));
 		addCentering(composite, new GridData(GridData.FILL_HORIZONTAL));
 		addScaling(composite, new GridData(GridData.FILL_HORIZONTAL));
+	}
+
+	public void setSamples(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
+
+		this.samples = samples;
 	}
 
 	private void setWidgetsCentering(ICentering centering) {
@@ -323,6 +339,9 @@ public class DataPreprocessingSelection {
 			updateCentering();
 		} else {
 			pcaPreprocessingData.setCenteringScaling(null);
+		}
+		if(samples != null) {
+			pcaPreprocessingData.process(samples, new NullProgressMonitor());
 		}
 	}
 

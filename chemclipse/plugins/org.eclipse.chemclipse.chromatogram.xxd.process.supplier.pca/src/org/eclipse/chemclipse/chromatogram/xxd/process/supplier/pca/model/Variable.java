@@ -11,19 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-public class Variable implements IVaribleExtracted {
+public class Variable extends AbstractVariable implements IVaribleExtracted {
 
-	private String description;
-	private boolean isSelected = true;
-	private String type;
-	private String value;
 	private IVariable variable;
 
 	public Variable(IVariable variable) {
 		this.variable = variable;
-		this.value = variable.getValue();
-		this.type = variable.getType();
-		this.description = variable.getDescription();
+		setValue(variable.getValue());
+		setDescription(variable.getDescription());
+		setType(variable.getType());
+		setDescription(variable.getDescription());
 	}
 
 	@Override
@@ -33,44 +30,8 @@ public class Variable implements IVaribleExtracted {
 	}
 
 	@Override
-	public String getDescription() {
-
-		return description;
-	}
-
-	@Override
-	public String getType() {
-
-		return type;
-	}
-
-	@Override
-	public String getValue() {
-
-		return value;
-	}
-
-	@Override
 	public IVariable getVariableOrigin() {
 
 		return variable;
-	}
-
-	@Override
-	public boolean isSelected() {
-
-		return isSelected;
-	}
-
-	@Override
-	public void setDescription(String description) {
-
-		this.description = description;
-	}
-
-	@Override
-	public void setSelected(boolean selected) {
-
-		isSelected = selected;
 	}
 }

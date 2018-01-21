@@ -107,7 +107,7 @@ public class PCAController {
 			pcy.setMaximum(maxPC);
 			pcz.setMaximum(maxPC);
 			IPcaSettings pcaSettings = new PcaSettings();
-			pcaSettings.setNumberOfPrincipleComponents(maxPC);
+			pcaSettings.setNumberOfPrincipalComponents(maxPC);
 			pcaSettings.setPcX(pcx.getSelection());
 			pcaSettings.setPcY(pcy.getSelection());
 			pcaSettings.setPcZ(pcz.getSelection());

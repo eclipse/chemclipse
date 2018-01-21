@@ -40,9 +40,7 @@ import javafx.collections.ObservableList;
 
 public class ScorePlot extends PCA2DPlot {
 
-	private class SelectSeriesEvent extends AbstractHandledEventProcessor implements IHandledEventProcessor {
-
-		private int hideMask = SWT.CTRL;
+	private class SelectActualSeriesEvent extends AbstractHandledEventProcessor implements IHandledEventProcessor {
 
 		@Override
 		public int getButton() {
@@ -67,21 +65,47 @@ public class ScorePlot extends PCA2DPlot {
 
 			String selectedSeriesId = baseChart.getSelectedseriesId(event);
 			if(!selectedSeriesId.equals("")) {
-				if(((event.stateMask & hideMask) == hideMask)) {
-					ISample<? extends ISampleData> sample = extractedResults.get(selectedSeriesId).getSample();
-					if(sample.isSelected()) {
-						sample.setSelected(false);
-					} else {
-						sample.setSelected(true);
-					}
+				ISample<? extends ISampleData> sample = extractedResults.get(selectedSeriesId).getSample();
+				ObservableList<ISample<? extends ISampleData>> selection = SelectionManagerSample.getInstance().getSelection();
+				if(!selection.contains(sample)) {
+					selection.setAll(sample);
 				} else {
-					ISample<? extends ISampleData> sample = extractedResults.get(selectedSeriesId).getSample();
-					ObservableList<ISample<? extends ISampleData>> selection = SelectionManagerSample.getInstance().getSelection();
-					if(!selection.contains(sample)) {
-						selection.setAll(sample);
-					} else {
-						selection.remove(sample);
-					}
+					selection.remove(sample);
+				}
+			}
+		}
+	}
+
+	private class SelectSeriesEvent extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+
+		@Override
+		public int getButton() {
+
+			return BaseChart.BUTTON_LEFT;
+		}
+
+		@Override
+		public int getEvent() {
+
+			return BaseChart.EVENT_MOUSE_DOUBLE_CLICK;
+		}
+
+		@Override
+		public int getStateMask() {
+
+			return SWT.CTRL;
+		}
+
+		@Override
+		public void handleEvent(BaseChart baseChart, Event event) {
+
+			String selectedSeriesId = baseChart.getSelectedseriesId(event);
+			if(!selectedSeriesId.equals("")) {
+				ISample<? extends ISampleData> sample = extractedResults.get(selectedSeriesId).getSample();
+				if(sample.isSelected()) {
+					sample.setSelected(false);
+				} else {
+					sample.setSelected(true);
 				}
 			}
 		}
@@ -94,6 +118,7 @@ public class ScorePlot extends PCA2DPlot {
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.clearHandledEventProcessors();
 		chartSettings.addHandledEventProcessor(new SelectSeriesEvent());
+		chartSettings.addHandledEventProcessor(new SelectActualSeriesEvent());
 		chartSettings.addHandledEventProcessor(new ResetSeriesEvent());
 		chartSettings.addHandledEventProcessor(new ZoomEvent());
 		chartSettings.addHandledEventProcessor(new MouseDownEvent());
@@ -120,5 +145,6 @@ public class ScorePlot extends PCA2DPlot {
 			}
 		});
 		update(pcaResults.getPcaSettings().getPcX(), pcaResults.getPcaSettings().getPcY());
+		redraw();
 	}
 }

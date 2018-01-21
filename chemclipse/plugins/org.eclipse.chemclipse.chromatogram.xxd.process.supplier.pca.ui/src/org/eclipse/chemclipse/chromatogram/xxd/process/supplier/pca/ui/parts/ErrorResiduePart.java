@@ -16,6 +16,7 @@ import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
@@ -34,14 +35,31 @@ public class ErrorResiduePart {
 	private ListChangeListener<ISample<? extends ISampleData>> actualSelectionChangeListener;
 	private ErrorResidueBarChart errorResidueChart;
 	private ChangeListener<IPcaResults> pcaResultChangeLisnter;
+	private IPcaResults pcaResults;
+	private ListChangeListener<IPcaResult> selectionChangeListener;
 
 	public ErrorResiduePart() {
+		selectionChangeListener = new ListChangeListener<IPcaResult>() {
+
+			@Override
+			public void onChanged(javafx.collections.ListChangeListener.Change<? extends IPcaResult> c) {
+
+				errorResidueChart.updateSelection();
+			}
+		};
 		pcaResultChangeLisnter = new ChangeListener<IPcaResults>() {
 
 			@Override
 			public void changed(ObservableValue<? extends IPcaResults> observable, IPcaResults oldValue, IPcaResults newValue) {
 
+				pcaResults = newValue;
+				if(oldValue != null) {
+					oldValue.getPcaResultList().removeListener(selectionChangeListener);
+					oldValue.getPcaResultGroupsList().removeListener(selectionChangeListener);
+				}
 				if(newValue != null) {
+					newValue.getPcaResultList().addListener(selectionChangeListener);
+					newValue.getPcaResultGroupsList().addListener(selectionChangeListener);
 					errorResidueChart.update(newValue);
 				} else {
 					errorResidueChart.removeData();
@@ -66,8 +84,11 @@ public class ErrorResiduePart {
 		errorResidueChart = new ErrorResidueBarChart(composite, null);
 		ReadOnlyObjectProperty<IPcaResults> pcaresults = SelectionManagerSamples.getInstance().getActualSelectedPcaResults();
 		pcaresults.addListener(pcaResultChangeLisnter);
-		if(pcaresults.getValue() != null) {
+		pcaResults = pcaresults.get();
+		if(pcaResults != null) {
 			errorResidueChart.update(pcaresults.getValue());
+			pcaResults.getPcaResultList().addListener(selectionChangeListener);
+			pcaResults.getPcaResultGroupsList().addListener(selectionChangeListener);
 		}
 		SelectionManagerSample.getInstance().getSelection().addListener(actualSelectionChangeListener);
 	}
@@ -77,5 +98,9 @@ public class ErrorResiduePart {
 
 		SelectionManagerSample.getInstance().getSelection().removeListener(actualSelectionChangeListener);
 		SelectionManagerSamples.getInstance().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
+		if(pcaResults != null) {
+			pcaResults.getPcaResultList().removeListener(selectionChangeListener);
+			pcaResults.getPcaResultGroupsList().removeListener(selectionChangeListener);
+		}
 	}
 }

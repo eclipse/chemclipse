@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 
+import javafx.collections.ObservableList;
+
 public interface ISamples<V extends IVariable, S extends ISample<? extends ISampleData>> {
 
 	default void createGroups() {
@@ -35,9 +37,9 @@ public interface ISamples<V extends IVariable, S extends ISample<? extends ISamp
 		});
 	}
 
-	List<IGroup<S>> getGroupList();
+	ObservableList<IGroup<S>> getGroupList();
 
-	List<S> getSampleList();
+	ObservableList<S> getSampleList();
 
 	List<V> getVariables();
 }

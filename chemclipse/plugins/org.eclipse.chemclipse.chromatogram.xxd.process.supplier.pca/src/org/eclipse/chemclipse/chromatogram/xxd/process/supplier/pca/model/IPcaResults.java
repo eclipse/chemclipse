@@ -13,23 +13,19 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.List;
 
+import javafx.collections.ObservableList;
+
 public interface IPcaResults {
 
 	List<double[]> getBasisVectors();
 
-	List<IVaribleExtracted> getExtractedVariables();
+	ObservableList<IVaribleExtracted> getExtractedVariables();
 
-	List<IPcaResult> getPcaResultGroupsList();
+	ObservableList<IPcaResult> getPcaResultGroupsList();
 
-	List<IPcaResult> getPcaResultList();
+	ObservableList<IPcaResult> getPcaResultList();
 
 	IPcaSettings getPcaSettings();
 
 	void setBasisVectors(List<double[]> basisVectors);
-
-	void setExtractedVariables(List<IVaribleExtracted> extractedVariables);
-
-	void setPcaResultGroupsList(List<IPcaResult> pcaResultGroupsList);
-
-	void setPcaResultList(List<IPcaResult> pcaResultList);
 }

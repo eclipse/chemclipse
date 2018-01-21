@@ -15,37 +15,18 @@ import java.util.Optional;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 
-public class SampleData implements ISampleData {
+public class SampleData extends AbstractSampleData implements ISampleData {
 
-	private double data;
-	private boolean isEmpty;
-	private double normalizedData;
 	private Optional<IPeak> peak;
 
 	public SampleData() {
-		this.data = 0.0;
-		this.normalizedData = 0.0;
-		this.isEmpty = true;
+		super();
 		peak = Optional.empty();
 	}
 
 	public SampleData(double data) {
-		this();
-		this.data = data;
-		this.normalizedData = data;
-		this.isEmpty = false;
-	}
-
-	@Override
-	public double getData() {
-
-		return data;
-	}
-
-	@Override
-	public double getModifiedData() {
-
-		return normalizedData;
+		super(data);
+		peak = Optional.empty();
 	}
 
 	public Optional<IPeak> getPeak() {
@@ -56,17 +37,5 @@ public class SampleData implements ISampleData {
 	public void setPeak(IPeak peak) {
 
 		this.peak = Optional.of(peak);
-	}
-
-	@Override
-	public boolean isEmpty() {
-
-		return isEmpty;
-	}
-
-	@Override
-	public void setModifiedData(double normalizedData) {
-
-		this.normalizedData = normalizedData;
 	}
 }

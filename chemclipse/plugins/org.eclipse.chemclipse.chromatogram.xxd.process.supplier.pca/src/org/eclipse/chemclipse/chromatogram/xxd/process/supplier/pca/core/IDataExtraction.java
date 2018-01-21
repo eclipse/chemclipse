@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
-import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.core.runtime.IProgressMonitor;
 

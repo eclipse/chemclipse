@@ -15,14 +15,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
-import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -35,7 +33,6 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
 import org.eclipse.chemclipse.msd.converter.processing.peak.IPeakImportConverterProcessingInfo;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaExtractionPeaks implements IDataExtraction {
@@ -50,27 +47,6 @@ public class PcaExtractionPeaks implements IDataExtraction {
 		this.extractionType = extractionType;
 	}
 
-	/**
-	 * Calculates the condensed retention time.
-	 *
-	 * @return int
-	 */
-	private int calculateCondensedRetentionTime(List<Integer> retentionTimes) {
-
-		int retentionTimeCondensed = 0;
-		if(retentionTimes != null) {
-			int size = retentionTimes.size();
-			if(size > 0) {
-				int retentionTimeSum = 0;
-				for(Integer rt : retentionTimes) {
-					retentionTimeSum += rt;
-				}
-				retentionTimeCondensed = retentionTimeSum / size;
-			}
-		}
-		return retentionTimeCondensed;
-	}
-
 	private List<Integer> calculateCondensedRetentionTimes(Map<String, SortedMap<Integer, IPeak>> extractPeaks) {
 
 		Set<Integer> rententionTimes = new TreeSet<>();
@@ -80,91 +56,6 @@ public class PcaExtractionPeaks implements IDataExtraction {
 			}
 		}
 		return new ArrayList<>(rententionTimes);
-	}
-
-	/**
-	 * Calculates a list of condensed retention times. The condense factor is given by the retention time window.
-	 *
-	 * @param collectedRetentionTimes
-	 * @return List<Integer>
-	 */
-	private List<Integer> calculateCondensedRetentionTimes(SortedSet<Integer> collectedRetentionTimes, int retentionTimeWindow) {
-
-		List<Integer> extractedRetentionTimes = new ArrayList<Integer>();
-		//
-		int retentionTime;
-		int retentionTimeMarker;
-		List<Integer> retentionTimes = null;
-		//
-		Iterator<Integer> iterator = collectedRetentionTimes.iterator();
-		if(iterator.hasNext()) {
-			/*
-			 * Initialize: Get the first marker.
-			 */
-			retentionTime = iterator.next();
-			retentionTimeMarker = retentionTime + retentionTimeWindow;
-			retentionTimes = new ArrayList<Integer>();
-			retentionTimes.add(retentionTime);
-			/*
-			 * Parse all subsequent retention times.
-			 */
-			while(iterator.hasNext()) {
-				retentionTime = iterator.next();
-				/*
-				 * Check the next retention time.
-				 */
-				if(retentionTime > retentionTimeMarker) {
-					/*
-					 * Condense the retention time list.
-					 */
-					int retentionTimeCondensed = calculateCondensedRetentionTime(retentionTimes);
-					if(retentionTimeCondensed > 0) {
-						extractedRetentionTimes.add(retentionTimeCondensed);
-					}
-					/*
-					 * Initialize the next chunk.
-					 */
-					retentionTimeMarker = retentionTime + retentionTimeWindow;
-					retentionTimes = new ArrayList<Integer>();
-					retentionTimes.add(retentionTime);
-				} else {
-					/*
-					 * Collect the retention time.
-					 */
-					retentionTimes.add(retentionTime);
-				}
-			}
-		}
-		/*
-		 * Add the last condensed retention time.
-		 */
-		int retentionTimeCondensed = calculateCondensedRetentionTime(retentionTimes);
-		if(retentionTimeCondensed > 0) {
-			extractedRetentionTimes.add(retentionTimeCondensed);
-		}
-		return extractedRetentionTimes;
-	}
-
-	/**
-	 * Collects all available retention times.
-	 *
-	 * @param peakMap
-	 * @return SortedSet<Integer>
-	 */
-	private SortedSet<Integer> collectRetentionTimes(Map<String, IPeaks> peakMap) {
-
-		SortedSet<Integer> collectedRetentionTimes = new TreeSet<Integer>();
-		for(Map.Entry<String, IPeaks> peaksEntry : peakMap.entrySet()) {
-			IPeaks peaks = peaksEntry.getValue();
-			for(IPeak peak : peaks.getPeaks()) {
-				if(peak instanceof IPeakMSD) {
-					IPeakMSD peakMSD = (IPeakMSD)peak;
-					int retentionTime = peakMSD.getPeakModel().getRetentionTimeAtPeakMaximum();
-					collectedRetentionTimes.add(retentionTime);
-				}
-			}
-		}
-		return collectedRetentionTimes;
 	}
 
 	private Map<String, SortedMap<Integer, IPeak>> exctractPcaPeakMap(Map<String, IPeaks> peakMap, int retentionTimeWindow) {
@@ -225,8 +116,6 @@ public class PcaExtractionPeaks implements IDataExtraction {
 		return pcaPeakCondenseRetentionTime;
 	}
 
-
-
 	private void extractPeakData(Samples samples, int retentionTimeWindow, IProgressMonitor monitor) {
 
 		/*
@@ -240,7 +129,6 @@ public class PcaExtractionPeaks implements IDataExtraction {
 		samples.getVariables().addAll(RetentionTime.create(extractedRetentionTimes));
 		setExtractData(extractPeaks, samples);
 	}
-
 
 	private Map<String, IPeaks> extractPeaks(List<IDataInputEntry> peakinpitFiles, IProgressMonitor monitor) {
 
@@ -340,15 +228,6 @@ public class PcaExtractionPeaks implements IDataExtraction {
 					sample.getSampleData().add(sampleData);
 				}
 			}
-		}
-	}
-
-	private void setExtractDataList(Map<String, List<SampleData>> extractData, Samples samples) {
-
-		for(Sample sample : samples.getSampleList()) {
-			String name = sample.getName();
-			List<SampleData> sampleData = extractData.get(name);
-			sample.getSampleData().addAll(sampleData);
 		}
 	}
 

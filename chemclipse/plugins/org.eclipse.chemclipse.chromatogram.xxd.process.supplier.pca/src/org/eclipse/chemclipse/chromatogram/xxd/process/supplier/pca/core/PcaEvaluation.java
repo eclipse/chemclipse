@@ -116,7 +116,7 @@ public class PcaEvaluation {
 	public <V extends IVariable, S extends ISample<? extends ISampleData>> IPcaResults process(ISamples<V, S> samples, IPcaSettings settings, IProgressMonitor monitor) {
 
 		monitor.subTask("Run PCA");
-		int numberOfPrincipleComponents = settings.getNumberOfPrincipleComponents();
+		int numberOfPrincipleComponents = settings.getNumberOfPrincipalComponents();
 		IPcaResults pcaResults = new PcaResults(settings);
 		Map<ISample<?>, double[]> extractData = extractData(samples);
 		setRetentionTime(pcaResults, samples);
@@ -151,7 +151,7 @@ public class PcaEvaluation {
 			pcaResult.setSampleData(sampleData);
 			resultsList.add(pcaResult);
 		}
-		pcaResults.setPcaResultList(resultsList);
+		pcaResults.getPcaResultList().setAll(resultsList);
 	}
 
 	private void setGroups(IPcaResults pcaResults, ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
@@ -194,7 +194,7 @@ public class PcaEvaluation {
 			}
 			pcaResultGroups.add(pcaResultGroup);
 		}
-		pcaResults.setPcaResultGroupsList(pcaResultGroups);
+		pcaResults.getPcaResultGroupsList().setAll(pcaResultGroups);
 	}
 
 	private void setRetentionTime(IPcaResults pcaResults, ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
@@ -206,6 +206,6 @@ public class PcaEvaluation {
 				variables.add(new Variable(variable));
 			}
 		}
-		pcaResults.setExtractedVariables(variables);
+		pcaResults.getExtractedVariables().setAll(variables);
 	}
 }

@@ -13,17 +13,23 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.List;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class PcaResults implements IPcaResults {
 
 	private List<double[]> basisVectors;
-	private List<IVaribleExtracted> extractedVariables;
-	private List<IPcaResult> pcaResultGroupsList;
-	private List<IPcaResult> pcaResultList;
+	private ObservableList<IVaribleExtracted> extractedVariables;
+	private ObservableList<IPcaResult> pcaResultGroupsList;
+	private ObservableList<IPcaResult> pcaResultList;
 	//
 	private IPcaSettings pcaSettings;
 
 	public PcaResults(IPcaSettings pcaSettings) {
 		this.pcaSettings = pcaSettings;
+		extractedVariables = FXCollections.observableArrayList(IVaribleExtracted.extractor());
+		pcaResultGroupsList = FXCollections.observableArrayList(IPcaResult.extractor());
+		pcaResultList = FXCollections.observableArrayList(IPcaResult.extractor());
 	}
 
 	@Override
@@ -33,19 +39,19 @@ public class PcaResults implements IPcaResults {
 	}
 
 	@Override
-	public List<IVaribleExtracted> getExtractedVariables() {
+	public ObservableList<IVaribleExtracted> getExtractedVariables() {
 
 		return extractedVariables;
 	}
 
 	@Override
-	public List<IPcaResult> getPcaResultGroupsList() {
+	public ObservableList<IPcaResult> getPcaResultGroupsList() {
 
 		return pcaResultGroupsList;
 	}
 
 	@Override
-	public List<IPcaResult> getPcaResultList() {
+	public ObservableList<IPcaResult> getPcaResultList() {
 
 		return pcaResultList;
 	}
@@ -60,23 +66,5 @@ public class PcaResults implements IPcaResults {
 	public void setBasisVectors(List<double[]> basisVectors) {
 
 		this.basisVectors = basisVectors;
-	}
-
-	@Override
-	public void setExtractedVariables(List<IVaribleExtracted> extractedVariables) {
-
-		this.extractedVariables = extractedVariables;
-	}
-
-	@Override
-	public void setPcaResultGroupsList(List<IPcaResult> pcaResultGroupsList) {
-
-		this.pcaResultGroupsList = pcaResultGroupsList;
-	}
-
-	@Override
-	public void setPcaResultList(List<IPcaResult> pcaResultList) {
-
-		this.pcaResultList = pcaResultList;
 	}
 }

@@ -234,5 +234,6 @@ public class ScorePlot3d {
 	public void updateSelection() {
 
 		scatter.updateSelection();
+		fxCanvas.redraw();
 	}
 }

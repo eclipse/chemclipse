@@ -18,7 +18,7 @@ import java.util.Locale;
 
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 
-public class RetentionTime implements IRetentionTime {
+public class RetentionTime extends AbstractVariable implements IRetentionTime {
 
 	public static List<RetentionTime> create(List<Integer> retentionTimes) {
 
@@ -29,31 +29,19 @@ public class RetentionTime implements IRetentionTime {
 		return retentionTimesList;
 	}
 
-	/*
-	 * static List<IRetentionTime> copy(List<IRetentionTime> retentionTimes) {
-	 * List<IRetentionTime> newRetentionTimes = new ArrayList<>();
-	 * for(int i = 0; i < retentionTimes.size(); i++) {
-	 * IRetentionTime retentionTime = retentionTimes.get(i);
-	 * IRetentionTime newRetentionTime = new RetentionTime(retentionTime.getRetentionTime(), retentionTime.getDescription());
-	 * newRetentionTime.setSelected(retentionTime.isSelected());
-	 * newRetentionTimes.add(newRetentionTime);
-	 * }
-	 * return newRetentionTimes;
-	 * }
-	 */
-	private String description;
-	private boolean isSelected;
 	private NumberFormat nf = NumberFormat.getInstance(Locale.US);
 	private int retentioTime;
 
 	public RetentionTime(int retentioTime) {
+		super();
 		this.retentioTime = retentioTime;
-		isSelected = true;
+		setValue(convertValue());
+		setType(IRetentionTime.TYPE);
 	}
 
 	public RetentionTime(int retentioTime, String description) {
 		this(retentioTime);
-		this.description = description;
+		setDescription(description);
 	}
 
 	@Override
@@ -66,10 +54,9 @@ public class RetentionTime implements IRetentionTime {
 		return 0;
 	}
 
-	@Override
-	public String getDescription() {
+	private String convertValue() {
 
-		return description;
+		return nf.format(getRetentionTimeMinutes());
 	}
 
 	@Override
@@ -85,26 +72,9 @@ public class RetentionTime implements IRetentionTime {
 	}
 
 	@Override
-	public String getValue() {
+	public void setRetentioTime(int retentionTime) {
 
-		return nf.format(getRetentionTimeMinutes());
-	}
-
-	@Override
-	public boolean isSelected() {
-
-		return isSelected;
-	}
-
-	@Override
-	public void setDescription(String description) {
-
-		this.description = description;
-	}
-
-	@Override
-	public void setSelected(boolean selected) {
-
-		this.isSelected = selected;
+		this.retentioTime = retentionTime;
+		setValue(convertValue());
 	}
 }
