@@ -17,7 +17,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Pattern;
 import org.swtchart.ICustomPaintListener;
 
-public class ScanSelectionPaintListener implements ICustomPaintListener {
+public class BoxSelectionPaintListener implements ICustomPaintListener {
 
 	public static final String HIGHLIGHT_BOX_LEFT = "HIGHLIGHT_BOX_LEFT";
 	public static final String HIGHLIGHT_BOX_RIGHT = "HIGHLIGHT_BOX_RIGHT";
@@ -37,8 +37,8 @@ public class ScanSelectionPaintListener implements ICustomPaintListener {
 		int height = e.height;
 		e.gc.setForeground(Colors.BLACK);
 		//
-		Pattern patternOpaque = new Pattern(e.display, 0, e.height, e.width, e.height, Colors.WHITE, 0x55, Colors.WHITE, 0xFF);
-		Pattern patternSelected = new Pattern(e.display, 0, e.height, e.width, e.height, Colors.WHITE, 0xCC, Colors.WHITE, 0xAA);
+		Pattern patternSelected = new Pattern(e.display, 0, e.height, e.width, e.height, Colors.WHITE, 0x44, Colors.WHITE, 0x44);
+		Pattern patternNormal = new Pattern(e.display, 0, e.height, e.width, e.height, Colors.WHITE, 0xDD, Colors.WHITE, 0xDD);
 		/*
 		 * Left Box
 		 */
@@ -47,7 +47,7 @@ public class ScanSelectionPaintListener implements ICustomPaintListener {
 			if(highlightBox.equals(HIGHLIGHT_BOX_LEFT)) {
 				e.gc.setBackgroundPattern(patternSelected);
 			} else {
-				e.gc.setBackgroundPattern(patternOpaque);
+				e.gc.setBackgroundPattern(patternNormal);
 			}
 			e.gc.fillRectangle(0, 0, width, height);
 			e.gc.drawLine(x1, 0, x1, height);
@@ -60,7 +60,7 @@ public class ScanSelectionPaintListener implements ICustomPaintListener {
 			if(highlightBox.equals(HIGHLIGHT_BOX_RIGHT)) {
 				e.gc.setBackgroundPattern(patternSelected);
 			} else {
-				e.gc.setBackgroundPattern(patternOpaque);
+				e.gc.setBackgroundPattern(patternNormal);
 			}
 			e.gc.fillRectangle(x2, 0, width, height);
 			e.gc.drawLine(x2, 0, x2, height);
@@ -72,7 +72,7 @@ public class ScanSelectionPaintListener implements ICustomPaintListener {
 		/*
 		 * Dispose the patterns
 		 */
-		patternOpaque.dispose();
+		patternNormal.dispose();
 		patternSelected.dispose();
 	}
 

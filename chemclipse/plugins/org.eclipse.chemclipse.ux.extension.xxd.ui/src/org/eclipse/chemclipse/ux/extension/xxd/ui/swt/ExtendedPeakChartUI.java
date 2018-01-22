@@ -228,21 +228,6 @@ public class ExtendedPeakChartUI {
 		});
 	}
 
-	private void createButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Tooltip");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
-	}
-
 	private void createPeakChart(Composite parent) {
 
 		peakChartUI = new PeakChartUI(parent, SWT.BORDER);
