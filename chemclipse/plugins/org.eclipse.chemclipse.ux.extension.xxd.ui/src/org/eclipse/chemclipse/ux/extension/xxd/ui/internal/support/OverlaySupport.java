@@ -145,8 +145,10 @@ public class OverlaySupport {
 			if(scan instanceof IScanMSD) {
 				IScanMSD scanMSD = (IScanMSD)scan;
 				IExtractedIonSignal extractedIonSignal = scanMSD.getExtractedIonSignal();
-				for(int ion : ions) {
-					intensity += extractedIonSignal.getAbundance(ion);
+				if(ions != null) {
+					for(int ion : ions) {
+						intensity += extractedIonSignal.getAbundance(ion);
+					}
 				}
 			}
 		} else if(overlayType.equals(OVERLAY_TYPE_TSC)) {
@@ -157,8 +159,10 @@ public class OverlaySupport {
 				IScanMSD scanMSD = (IScanMSD)scan;
 				IExtractedIonSignal extractedIonSignal = scanMSD.getExtractedIonSignal();
 				intensity = scanMSD.getTotalSignal();
-				for(int ion : ions) {
-					intensity -= extractedIonSignal.getAbundance(ion);
+				if(ions != null) {
+					for(int ion : ions) {
+						intensity -= extractedIonSignal.getAbundance(ion);
+					}
 				}
 			}
 		}
@@ -203,6 +207,13 @@ public class OverlaySupport {
 		lineSeriesSettingsHighlight.setLineWidth(2);
 		//
 		return lineSeriesData;
+	}
+
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection) {
+
+		String overlayType = OverlaySupport.OVERLAY_TYPE_TIC;
+		String derivativeType = OverlaySupport.DERIVATIVE_NONE;
+		return getLineSeriesData(chromatogramSelection, overlayType, derivativeType, null);
 	}
 
 	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection, String overlayType, String derivativeType, List<Integer> ions) {

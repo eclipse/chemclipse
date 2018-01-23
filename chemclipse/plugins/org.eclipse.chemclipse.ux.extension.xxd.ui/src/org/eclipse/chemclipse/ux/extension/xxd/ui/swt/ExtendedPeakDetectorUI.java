@@ -24,7 +24,6 @@ import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -36,27 +35,27 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.BaselineSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.BoxSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ManualPeakDetector;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlaySupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaks;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
-import org.eclipse.eavp.service.swtchart.core.ISeriesData;
-import org.eclipse.eavp.service.swtchart.core.SeriesData;
 import org.eclipse.eavp.service.swtchart.customcharts.ChromatogramChart;
 import org.eclipse.eavp.service.swtchart.events.AbstractHandledEventProcessor;
 import org.eclipse.eavp.service.swtchart.events.IHandledEventProcessor;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
-import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
-import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -133,8 +132,9 @@ public class ExtendedPeakDetectorUI {
 	private int yStop;
 	private int xBoxMoveStart;
 	//
+	private OverlaySupport overlaySupport = new OverlaySupport();
+	private PeakSupport peakSupport = new PeakSupport();
 	private Shell shell = Display.getDefault().getActiveShell();
-	private OverlaySupport overlaySupport;
 
 	private class KeyPressedEventProcessor extends AbstractHandledEventProcessor implements IHandledEventProcessor {
 
@@ -273,7 +273,6 @@ public class ExtendedPeakDetectorUI {
 
 	@Inject
 	public ExtendedPeakDetectorUI(Composite parent) {
-		overlaySupport = new OverlaySupport();
 		detectionTypeDescriptions = new HashMap<String, String>();
 		detectionTypeDescriptions.put(DETECTION_TYPE_BASELINE, "Detection Modus (Baseline) [Key:" + KEY_BASELINE + "]");
 		detectionTypeDescriptions.put(DETECTION_TYPE_BOX_BB, "Detection Modus (BB) [Key:" + KEY_BB + "]");
@@ -310,22 +309,28 @@ public class ExtendedPeakDetectorUI {
 		//
 		if(chromatogramSelection != null) {
 			/*
-			 * Draw the chromatogram
+			 * Chromatogram
 			 */
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-			//
-			String overlayType = OverlaySupport.OVERLAY_TYPE_TIC;
-			String derivativeType = OverlaySupport.DERIVATIVE_NONE;
-			List<Integer> ions = new ArrayList<Integer>();
-			lineSeriesDataList.add(overlaySupport.getLineSeriesData(chromatogramSelection, overlayType, derivativeType, ions));
-			chromatogramChart.addSeriesData(lineSeriesDataList, LineChart.LOW_COMPRESSION);
+			lineSeriesDataList.add(overlaySupport.getLineSeriesData(chromatogramSelection));
 			//
 			if(peak != null) {
+				/*
+				 * Peak
+				 */
 				buttonAddPeak.setEnabled(true);
-				lineSeriesDataList.add(getPeak(peak, Colors.RED));
-				lineSeriesDataList.add(getPeakBackground(peak, Colors.BLACK));
-				chromatogramChart.addSeriesData(lineSeriesDataList, LineChart.LOW_COMPRESSION);
+				boolean includeBackground = true;
+				boolean mirrored = false;
+				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+				Color colorPeak = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_1));
+				lineSeriesDataList.add(peakSupport.getPeak(peak, includeBackground, mirrored, colorPeak, ID_PEAK));
+				if(includeBackground) {
+					Color colorBackground = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_BACKGROUND));
+					lineSeriesDataList.add(peakSupport.getPeakBackground(peak, mirrored, colorBackground, ID_BACKGROUND));
+				}
 			}
+			//
+			chromatogramChart.addSeriesData(lineSeriesDataList, LineChart.LOW_COMPRESSION);
 		}
 	}
 
@@ -997,68 +1002,5 @@ public class ExtendedPeakDetectorUI {
 		this.peak = null;
 		setDetectionType(DETECTION_TYPE_NONE);
 		updateChromatogramAndPeak();
-	}
-
-	private ILineSeriesData getPeak(IPeak peak, Color color) {
-
-		ISeriesData seriesData = getPeakSeriesData(peak);
-		return getLineSeriesData(seriesData, color);
-	}
-
-	private ILineSeriesData getPeakBackground(IPeak peak, Color color) {
-
-		ISeriesData seriesData = getPeakBaselineData(peak);
-		return getLineSeriesData(seriesData, color);
-	}
-
-	private ILineSeriesData getLineSeriesData(ISeriesData seriesData, Color color) {
-
-		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
-		lineSeriesSettings.setLineColor(color);
-		lineSeriesSettings.setEnableArea(true);
-		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
-		lineSeriesSettingsHighlight.setLineWidth(2);
-		return lineSeriesData;
-	}
-
-	private ISeriesData getPeakSeriesData(IPeak peak) {
-
-		String id = ID_PEAK;
-		IPeakModel peakModel = peak.getPeakModel();
-		List<Integer> retentionTimes = peakModel.getRetentionTimes();
-		int size = retentionTimes.size();
-		double[] xSeries = new double[size];
-		double[] ySeries = new double[size];
-		int index = 0;
-		for(int retentionTime : retentionTimes) {
-			//
-			xSeries[index] = retentionTime;
-			ySeries[index] = peakModel.getBackgroundAbundance(retentionTime) + peakModel.getPeakAbundance(retentionTime);
-			//
-			index++;
-		}
-		//
-		return new SeriesData(xSeries, ySeries, id);
-	}
-
-	private ISeriesData getPeakBaselineData(IPeak peak) {
-
-		String id = ID_BACKGROUND;
-		IPeakModel peakModel = peak.getPeakModel();
-		List<Integer> retentionTimes = peakModel.getRetentionTimes();
-		int size = retentionTimes.size();
-		double[] xSeries = new double[size];
-		double[] ySeries = new double[size];
-		//
-		int index = 0;
-		for(int retentionTime : peakModel.getRetentionTimes()) {
-			xSeries[index] = retentionTime;
-			ySeries[index] = peakModel.getBackgroundAbundance(retentionTime);
-			//
-			index++;
-		}
-		//
-		return new SeriesData(xSeries, ySeries, id);
 	}
 }
