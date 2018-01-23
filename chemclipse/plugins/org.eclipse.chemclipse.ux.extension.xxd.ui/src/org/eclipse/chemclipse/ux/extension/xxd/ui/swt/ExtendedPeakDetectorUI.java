@@ -91,6 +91,8 @@ public class ExtendedPeakDetectorUI {
 	private static final String DETECTION_TYPE_BOX = "DETECTION_TYPE_BOX";
 	private static final String DETECTION_TYPE_BOX_BB = DETECTION_TYPE_BOX + "_BB";
 	private static final String DETECTION_TYPE_BOX_VV = DETECTION_TYPE_BOX + "_VV";
+	private static final String DETECTION_TYPE_BOX_BV = DETECTION_TYPE_BOX + "_BV";
+	private static final String DETECTION_TYPE_BOX_VB = DETECTION_TYPE_BOX + "_VB";
 	private static final String DETECTION_TYPE_NONE = "";
 	//
 	private Map<String, String> detectionTypeDescriptions;
@@ -98,6 +100,8 @@ public class ExtendedPeakDetectorUI {
 	private static final char KEY_BASELINE = BaseChart.KEY_CODE_d;
 	private static final char KEY_BB = BaseChart.KEY_CODE_b;
 	private static final char KEY_VV = BaseChart.KEY_CODE_v;
+	private static final char KEY_BV = BaseChart.KEY_CODE_n;
+	private static final char KEY_VB = BaseChart.KEY_CODE_c;
 	/*
 	 * Detection Box
 	 */
@@ -114,6 +118,8 @@ public class ExtendedPeakDetectorUI {
 	private Button buttonDetectionTypeBaseline;
 	private Button buttonDetectionTypeBoxBB;
 	private Button buttonDetectionTypeBoxVV;
+	private Button buttonDetectionTypeBoxBV;
+	private Button buttonDetectionTypeBoxVB;
 	private Button buttonAddPeak;
 	private ChromatogramChart chromatogramChart;
 	//
@@ -280,6 +286,8 @@ public class ExtendedPeakDetectorUI {
 		detectionTypeDescriptions.put(DETECTION_TYPE_BASELINE, "Modus (Baseline) [Key:" + KEY_BASELINE + "]");
 		detectionTypeDescriptions.put(DETECTION_TYPE_BOX_BB, "Modus (BB) [Key:" + KEY_BB + "]");
 		detectionTypeDescriptions.put(DETECTION_TYPE_BOX_VV, "Modus (VV) [Key:" + KEY_VV + "]");
+		detectionTypeDescriptions.put(DETECTION_TYPE_BOX_BV, "Modus (BV) [Key:" + KEY_BV + "]");
+		detectionTypeDescriptions.put(DETECTION_TYPE_BOX_VB, "Modus (VB) [Key:" + KEY_VB + "]");
 		detectionTypeDescriptions.put(DETECTION_TYPE_NONE, "");
 		initialize(parent);
 	}
@@ -354,13 +362,15 @@ public class ExtendedPeakDetectorUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(9, false));
+		composite.setLayout(new GridLayout(11, false));
 		//
 		labelDetectionType = createDetectionTypeLabel(composite);
 		createButtonToggleToolbarInfo(composite);
 		buttonDetectionTypeBaseline = createDetectionTypeButton(composite, DETECTION_TYPE_BASELINE, IApplicationImage.IMAGE_DETECTION_TYPE_BASELINE);
 		buttonDetectionTypeBoxBB = createDetectionTypeButton(composite, DETECTION_TYPE_BOX_BB, IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_BB);
 		buttonDetectionTypeBoxVV = createDetectionTypeButton(composite, DETECTION_TYPE_BOX_VV, IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_VV);
+		buttonDetectionTypeBoxBV = createDetectionTypeButton(composite, DETECTION_TYPE_BOX_BV, IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_BV);
+		buttonDetectionTypeBoxVB = createDetectionTypeButton(composite, DETECTION_TYPE_BOX_VB, IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_VB);
 		buttonAddPeak = createAddPeakButton(composite);
 		createToggleChartLegendButton(composite);
 		createDetectionTypeButton(composite, DETECTION_TYPE_NONE, IApplicationImage.IMAGE_RESET);
@@ -565,6 +575,10 @@ public class ExtendedPeakDetectorUI {
 				setDetectionType(DETECTION_TYPE_BOX_BB);
 			} else if(event.keyCode == KEY_VV) {
 				setDetectionType(DETECTION_TYPE_BOX_VV);
+			} else if(event.keyCode == KEY_BV) {
+				setDetectionType(DETECTION_TYPE_BOX_BV);
+			} else if(event.keyCode == KEY_VB) {
+				setDetectionType(DETECTION_TYPE_BOX_VB);
 			}
 		} else if(detectionType.startsWith(DETECTION_TYPE_BOX)) {
 			if(event.keyCode == SWT.ARROW_LEFT) {
@@ -618,6 +632,8 @@ public class ExtendedPeakDetectorUI {
 		buttonDetectionTypeBaseline.setEnabled(enabled);
 		buttonDetectionTypeBoxBB.setEnabled(enabled);
 		buttonDetectionTypeBoxVV.setEnabled(enabled);
+		buttonDetectionTypeBoxBV.setEnabled(enabled);
+		buttonDetectionTypeBoxVB.setEnabled(enabled);
 	}
 
 	private void resetSelectedRange() {
@@ -739,6 +755,12 @@ public class ExtendedPeakDetectorUI {
 					case DETECTION_TYPE_BOX_VV:
 						y = event.y;
 						break;
+					case DETECTION_TYPE_BOX_BV:
+						y = getPlotArea().getBounds().height;
+						break;
+					case DETECTION_TYPE_BOX_VB:
+						y = event.y;
+						break;
 					default:
 						y = getPlotArea().getBounds().height;
 				}
@@ -750,6 +772,12 @@ public class ExtendedPeakDetectorUI {
 						y = getPlotArea().getBounds().height;
 						break;
 					case DETECTION_TYPE_BOX_VV:
+						y = event.y;
+						break;
+					case DETECTION_TYPE_BOX_BV:
+						y = getPlotArea().getBounds().height;
+						break;
+					case DETECTION_TYPE_BOX_VB:
 						y = event.y;
 						break;
 					default:
@@ -863,33 +891,6 @@ public class ExtendedPeakDetectorUI {
 		extractPeak(DETECTION_TYPE_NONE);
 	}
 
-	private void extractPeak(String detectionType) {
-
-		this.peak = extractPeakFromUserSelection(xStart, yStart, xStop, yStop);
-		IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-		eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
-		/*
-		 * Get the selected range.
-		 */
-		BaseChart baseChart = chromatogramChart.getBaseChart();
-		IAxisSet axisSet = baseChart.getAxisSet();
-		IAxis xAxis = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
-		Range xRange = xAxis.getRange();
-		IAxis yAxis = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
-		Range yRange = yAxis.getRange();
-		/*
-		 * Update the chromatogram and peak
-		 */
-		setDetectionType(detectionType);
-		updateChromatogramAndPeak();
-		/*
-		 * Restore the selected range.
-		 */
-		xAxis.setRange(xRange);
-		yAxis.setRange(yRange);
-		redraw();
-	}
-
 	private void startBoxPeakSelection(int x, int y) {
 
 		xStart = x;
@@ -936,6 +937,33 @@ public class ExtendedPeakDetectorUI {
 			extractPeak(DETECTION_TYPE_BOX);
 			enableButtons(DETECTION_TYPE_BOX);
 		}
+	}
+
+	private void extractPeak(String detectionType) {
+
+		this.peak = extractPeakFromUserSelection(xStart, yStart, xStop, yStop);
+		IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+		eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
+		/*
+		 * Get the selected range.
+		 */
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		IAxisSet axisSet = baseChart.getAxisSet();
+		IAxis xAxis = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
+		Range xRange = xAxis.getRange();
+		IAxis yAxis = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
+		Range yRange = yAxis.getRange();
+		/*
+		 * Update the chromatogram and peak
+		 */
+		setDetectionType(detectionType);
+		updateChromatogramAndPeak();
+		/*
+		 * Restore the selected range.
+		 */
+		xAxis.setRange(xRange);
+		yAxis.setRange(yRange);
+		redraw();
 	}
 
 	/**
