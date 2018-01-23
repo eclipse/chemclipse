@@ -112,9 +112,15 @@ public class ExtendedPeakDetectorUI {
 	private static final int BOX_SNAP_MARKER_WINDOW = 4;
 	private static final int BOX_MAX_DELTA = 1;
 	//
+	private static final int STATUS_DETECTION_HINT_NONE = -1;
+	private static final int STATUS_DETECTION_HINT_INACTIVE = 0;
+	private static final int STATUS_DETECTION_HINT_ACTIVE = 1;
+	private static final String MESSAGE_DETECTION_MODUS = "CTRL";
+	//
 	private Composite toolbarInfo;
 	private Label labelChromatogram;
 	private Label labelDetectionType;
+	private Label labelDetectionModus;
 	private Button buttonDetectionTypeBaseline;
 	private Button buttonDetectionTypeBoxBB;
 	private Button buttonDetectionTypeBoxVV;
@@ -306,7 +312,7 @@ public class ExtendedPeakDetectorUI {
 			chromatogram = chromatogramSelection.getChromatogram();
 		}
 		//
-		labelDetectionType.setText("");
+		setDetectionType(DETECTION_TYPE_NONE);
 		labelChromatogram.setText(ChromatogramSupport.getChromatogramLabel(chromatogram));
 		this.peak = null;
 		//
@@ -362,9 +368,10 @@ public class ExtendedPeakDetectorUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(11, false));
+		composite.setLayout(new GridLayout(12, false));
 		//
 		labelDetectionType = createDetectionTypeLabel(composite);
+		labelDetectionModus = createDetectionModusLabel(composite);
 		createButtonToggleToolbarInfo(composite);
 		buttonDetectionTypeBaseline = createDetectionTypeButton(composite, DETECTION_TYPE_BASELINE, IApplicationImage.IMAGE_DETECTION_TYPE_BASELINE);
 		buttonDetectionTypeBoxBB = createDetectionTypeButton(composite, DETECTION_TYPE_BOX_BB, IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_BB);
@@ -383,6 +390,16 @@ public class ExtendedPeakDetectorUI {
 		label.setText("");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
+		label.setLayoutData(gridData);
+		return label;
+	}
+
+	private Label createDetectionModusLabel(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText(MESSAGE_DETECTION_MODUS);
+		GridData gridData = new GridData();
+		gridData.widthHint = 80;
 		label.setLayoutData(gridData);
 		return label;
 	}
@@ -566,41 +583,6 @@ public class ExtendedPeakDetectorUI {
 		plotArea.addCustomPaintListener(boxSelectionPaintListener);
 	}
 
-	private void handleKeyPressedEvent(Event event) {
-
-		if(detectionType.equals(DETECTION_TYPE_NONE)) {
-			if(event.keyCode == KEY_BASELINE) {
-				setDetectionType(DETECTION_TYPE_BASELINE);
-			} else if(event.keyCode == KEY_BB) {
-				setDetectionType(DETECTION_TYPE_BOX_BB);
-			} else if(event.keyCode == KEY_VV) {
-				setDetectionType(DETECTION_TYPE_BOX_VV);
-			} else if(event.keyCode == KEY_BV) {
-				setDetectionType(DETECTION_TYPE_BOX_BV);
-			} else if(event.keyCode == KEY_VB) {
-				setDetectionType(DETECTION_TYPE_BOX_VB);
-			}
-		} else if(detectionType.startsWith(DETECTION_TYPE_BOX)) {
-			if(event.keyCode == SWT.ARROW_LEFT) {
-				if(detectionBox.equals(DETECTION_BOX_LEFT)) {
-					xStart -= 1;
-					redrawBoxPeakSelection(true);
-				} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
-					xStop -= 1;
-					redrawBoxPeakSelection(true);
-				}
-			} else if(event.keyCode == SWT.ARROW_RIGHT) {
-				if(detectionBox.equals(DETECTION_BOX_LEFT)) {
-					xStart += 1;
-					redrawBoxPeakSelection(true);
-				} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
-					xStop += 1;
-					redrawBoxPeakSelection(true);
-				}
-			}
-		}
-	}
-
 	private void setDetectionType(String detectionType) {
 
 		/*
@@ -608,8 +590,15 @@ public class ExtendedPeakDetectorUI {
 		 */
 		this.detectionType = detectionType;
 		if(detectionType.equals(DETECTION_TYPE_NONE)) {
+			setDetectionModusLabel(STATUS_DETECTION_HINT_NONE);
 			setDefaultCursor();
 			resetSelectedRange();
+		} else {
+			if(detectionType.startsWith(DETECTION_TYPE_BOX)) {
+				setDetectionModusLabel(STATUS_DETECTION_HINT_NONE);
+			} else {
+				setDetectionModusLabel(STATUS_DETECTION_HINT_INACTIVE);
+			}
 		}
 		/*
 		 * Conditions
@@ -648,12 +637,49 @@ public class ExtendedPeakDetectorUI {
 		xBoxMoveStart = 0;
 	}
 
+	private void handleKeyPressedEvent(Event event) {
+
+		if(detectionType.equals(DETECTION_TYPE_NONE)) {
+			if(event.keyCode == KEY_BASELINE) {
+				setDetectionType(DETECTION_TYPE_BASELINE);
+			} else if(event.keyCode == KEY_BB) {
+				setDetectionType(DETECTION_TYPE_BOX_BB);
+			} else if(event.keyCode == KEY_VV) {
+				setDetectionType(DETECTION_TYPE_BOX_VV);
+			} else if(event.keyCode == KEY_BV) {
+				setDetectionType(DETECTION_TYPE_BOX_BV);
+			} else if(event.keyCode == KEY_VB) {
+				setDetectionType(DETECTION_TYPE_BOX_VB);
+			}
+		} else if(detectionType.startsWith(DETECTION_TYPE_BOX)) {
+			if(event.keyCode == SWT.ARROW_LEFT) {
+				if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+					xStart -= 1;
+					redrawBoxPeakSelection(true);
+				} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+					xStop -= 1;
+					redrawBoxPeakSelection(true);
+				}
+			} else if(event.keyCode == SWT.ARROW_RIGHT) {
+				if(detectionBox.equals(DETECTION_BOX_LEFT)) {
+					xStart += 1;
+					redrawBoxPeakSelection(true);
+				} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
+					xStop += 1;
+					redrawBoxPeakSelection(true);
+				}
+			}
+		}
+	}
+
 	private void handleMouseDownEvent(Event event) {
 
 		if(detectionType.equals(DETECTION_TYPE_BASELINE)) {
+			setDetectionModusLabel(STATUS_DETECTION_HINT_ACTIVE);
 			startBaselineSelection(event.x, event.y);
 			setCursor(SWT.CURSOR_CROSS);
 		} else if(detectionType.startsWith(DETECTION_TYPE_BOX)) {
+			setDetectionModusLabel(STATUS_DETECTION_HINT_ACTIVE);
 			if(isLeftMoveSnapMarker(event.x)) {
 				setCursor(SWT.CURSOR_SIZEWE);
 				xBoxMoveStart = event.x;
@@ -666,6 +692,8 @@ public class ExtendedPeakDetectorUI {
 				setCursor(SWT.CURSOR_CROSS);
 				detectionBox = DETECTION_BOX_NONE;
 			}
+		} else {
+			setDetectionModusLabel(STATUS_DETECTION_HINT_NONE);
 		}
 	}
 
@@ -729,6 +757,8 @@ public class ExtendedPeakDetectorUI {
 					redrawBoxPeakSelection(false);
 				}
 			}
+		} else {
+			setDetectionModusLabel(STATUS_DETECTION_HINT_NONE);
 		}
 	}
 
@@ -745,6 +775,7 @@ public class ExtendedPeakDetectorUI {
 	private void handleMouseDoubleClickEvent(Event event) {
 
 		if(detectionType.startsWith(DETECTION_TYPE_BOX)) {
+			setDetectionModusLabel(STATUS_DETECTION_HINT_INACTIVE);
 			setCursor(SWT.CURSOR_CROSS);
 			if(xStart == 0) {
 				int y;
@@ -787,6 +818,8 @@ public class ExtendedPeakDetectorUI {
 			} else {
 				setDetectionType(DETECTION_TYPE_NONE);
 			}
+		} else {
+			setDetectionModusLabel(STATUS_DETECTION_HINT_NONE);
 		}
 	}
 
@@ -1049,5 +1082,22 @@ public class ExtendedPeakDetectorUI {
 		this.peak = null;
 		setDetectionType(DETECTION_TYPE_NONE);
 		updateChromatogramAndPeak();
+	}
+
+	private void setDetectionModusLabel(int status) {
+
+		switch(status) {
+			case 0:
+				labelDetectionModus.setText(MESSAGE_DETECTION_MODUS);
+				labelDetectionModus.setBackground(Colors.YELLOW);
+				break;
+			case 1:
+				labelDetectionModus.setText(MESSAGE_DETECTION_MODUS);
+				labelDetectionModus.setBackground(Colors.GREEN);
+				break;
+			default:
+				labelDetectionModus.setText("");
+				labelDetectionModus.setBackground(null);
+		}
 	}
 }
