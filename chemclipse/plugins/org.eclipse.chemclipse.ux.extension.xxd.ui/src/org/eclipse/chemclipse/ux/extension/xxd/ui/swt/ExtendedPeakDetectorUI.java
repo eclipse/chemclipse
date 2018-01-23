@@ -111,6 +111,9 @@ public class ExtendedPeakDetectorUI {
 	private Composite toolbarInfo;
 	private Label labelChromatogram;
 	private Label labelDetectionType;
+	private Button buttonDetectionTypeBaseline;
+	private Button buttonDetectionTypeBoxBB;
+	private Button buttonDetectionTypeBoxVV;
 	private Button buttonAddPeak;
 	private ChromatogramChart chromatogramChart;
 	//
@@ -274,9 +277,9 @@ public class ExtendedPeakDetectorUI {
 	@Inject
 	public ExtendedPeakDetectorUI(Composite parent) {
 		detectionTypeDescriptions = new HashMap<String, String>();
-		detectionTypeDescriptions.put(DETECTION_TYPE_BASELINE, "Detection Modus (Baseline) [Key:" + KEY_BASELINE + "]");
-		detectionTypeDescriptions.put(DETECTION_TYPE_BOX_BB, "Detection Modus (BB) [Key:" + KEY_BB + "]");
-		detectionTypeDescriptions.put(DETECTION_TYPE_BOX_VV, "Detection Modus (VV) [Key:" + KEY_VV + "]");
+		detectionTypeDescriptions.put(DETECTION_TYPE_BASELINE, "Modus (Baseline) [Key:" + KEY_BASELINE + "]");
+		detectionTypeDescriptions.put(DETECTION_TYPE_BOX_BB, "Modus (BB) [Key:" + KEY_BB + "]");
+		detectionTypeDescriptions.put(DETECTION_TYPE_BOX_VV, "Modus (VV) [Key:" + KEY_VV + "]");
 		detectionTypeDescriptions.put(DETECTION_TYPE_NONE, "");
 		initialize(parent);
 	}
@@ -306,6 +309,7 @@ public class ExtendedPeakDetectorUI {
 
 		chromatogramChart.deleteSeries();
 		buttonAddPeak.setEnabled(false);
+		enableButtons(DETECTION_TYPE_NONE);
 		//
 		if(chromatogramSelection != null) {
 			/*
@@ -354,9 +358,9 @@ public class ExtendedPeakDetectorUI {
 		//
 		labelDetectionType = createDetectionTypeLabel(composite);
 		createButtonToggleToolbarInfo(composite);
-		createDetectionTypeButton(composite, DETECTION_TYPE_BASELINE, IApplicationImage.IMAGE_DETECTION_TYPE_BASELINE);
-		createDetectionTypeButton(composite, DETECTION_TYPE_BOX_BB, IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_BB);
-		createDetectionTypeButton(composite, DETECTION_TYPE_BOX_VV, IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_VV);
+		buttonDetectionTypeBaseline = createDetectionTypeButton(composite, DETECTION_TYPE_BASELINE, IApplicationImage.IMAGE_DETECTION_TYPE_BASELINE);
+		buttonDetectionTypeBoxBB = createDetectionTypeButton(composite, DETECTION_TYPE_BOX_BB, IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_BB);
+		buttonDetectionTypeBoxVV = createDetectionTypeButton(composite, DETECTION_TYPE_BOX_VV, IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_VV);
 		buttonAddPeak = createAddPeakButton(composite);
 		createToggleChartLegendButton(composite);
 		createDetectionTypeButton(composite, DETECTION_TYPE_NONE, IApplicationImage.IMAGE_RESET);
@@ -600,11 +604,20 @@ public class ExtendedPeakDetectorUI {
 			this.detectionBox = DETECTION_BOX_NONE;
 		}
 		/*
-		 * Label
+		 * Label / Buttons
 		 */
+		enableButtons(detectionType);
 		if(!detectionType.equals(DETECTION_TYPE_BOX)) {
 			labelDetectionType.setText(detectionTypeDescriptions.get(detectionType));
 		}
+	}
+
+	private void enableButtons(String detectionType) {
+
+		boolean enabled = detectionType.equals(DETECTION_TYPE_NONE);
+		buttonDetectionTypeBaseline.setEnabled(enabled);
+		buttonDetectionTypeBoxBB.setEnabled(enabled);
+		buttonDetectionTypeBoxVV.setEnabled(enabled);
 	}
 
 	private void resetSelectedRange() {
@@ -766,7 +779,7 @@ public class ExtendedPeakDetectorUI {
 
 	private void setCursor(int cursorId) {
 
-		chromatogramChart.setCursor(Display.getCurrent().getSystemCursor(cursorId));
+		chromatogramChart.getBaseChart().setCursor(Display.getCurrent().getSystemCursor(cursorId));
 	}
 
 	private void setDefaultCursor() {
@@ -894,8 +907,11 @@ public class ExtendedPeakDetectorUI {
 			yStop = y;
 			boxSelectionPaintListener.setX1(xStart);
 			boxSelectionPaintListener.setX2(xStop);
+			//
 			redraw();
+			//
 			extractPeak(DETECTION_TYPE_BOX);
+			enableButtons(DETECTION_TYPE_BOX);
 		}
 	}
 
@@ -903,6 +919,7 @@ public class ExtendedPeakDetectorUI {
 
 		boxSelectionPaintListener.setX1(xStart);
 		boxSelectionPaintListener.setX2(xStop);
+		//
 		if(detectionBox.equals(DETECTION_BOX_LEFT)) {
 			boxSelectionPaintListener.setHighlightBox(BoxSelectionPaintListener.HIGHLIGHT_BOX_LEFT);
 		} else if(detectionBox.equals(DETECTION_BOX_RIGHT)) {
@@ -910,12 +927,14 @@ public class ExtendedPeakDetectorUI {
 		} else {
 			boxSelectionPaintListener.setHighlightBox(BoxSelectionPaintListener.HIGHLIGHT_BOX_NONE);
 		}
+		//
 		redraw();
 		/*
 		 * Extract the peak.
 		 */
 		if(extractPeak) {
 			extractPeak(DETECTION_TYPE_BOX);
+			enableButtons(DETECTION_TYPE_BOX);
 		}
 	}
 
