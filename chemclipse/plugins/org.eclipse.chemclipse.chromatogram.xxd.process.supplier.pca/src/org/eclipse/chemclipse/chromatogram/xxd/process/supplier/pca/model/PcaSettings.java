@@ -11,32 +11,50 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
+
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
 
 public class PcaSettings implements IPcaSettings {
 
-	public IntegerProperty numberOfPrincipleComponents;
+	private Map<Consumer<IPcaSettings>, Boolean> listeners = new ConcurrentHashMap<>();
+	public int numberOfPrincipleComponents;
 	private IntegerProperty pcX;
 	private IntegerProperty pcY;
 	private IntegerProperty pcZ;
 
 	public PcaSettings() {
-		this.numberOfPrincipleComponents = new SimpleIntegerProperty(3);
+		this.numberOfPrincipleComponents = 3;
 		this.pcX = new SimpleIntegerProperty(1);
 		this.pcY = new SimpleIntegerProperty(2);
 		this.pcZ = new SimpleIntegerProperty(3);
+		this.pcX.addListener((ChangeListener<Number>)(observable, oldValue, newValue) -> updateLister());
+		this.pcY.addListener((ChangeListener<Number>)(observable, oldValue, newValue) -> updateLister());
+		this.pcZ.addListener((ChangeListener<Number>)(observable, oldValue, newValue) -> updateLister());
 	}
 
 	public PcaSettings(int numberOfPrincipleComponents) {
-		super();
-		this.numberOfPrincipleComponents.set(numberOfPrincipleComponents);
+		this();
+		this.numberOfPrincipleComponents = numberOfPrincipleComponents;
+		setPcX(1);
+		setPcY(1);
+		setPcZ(1);
+	}
+
+	@Override
+	public void addChangeListener(Consumer<IPcaSettings> listener) {
+
+		listeners.put(listener, true);
 	}
 
 	@Override
 	public int getNumberOfPrincipalComponents() {
 
-		return numberOfPrincipleComponents.get();
+		return numberOfPrincipleComponents;
 	}
 
 	@Override
@@ -58,12 +76,6 @@ public class PcaSettings implements IPcaSettings {
 	}
 
 	@Override
-	public IntegerProperty numberPrincipalCoponentsPropety() {
-
-		return numberOfPrincipleComponents;
-	}
-
-	@Override
 	public IntegerProperty pcXProperty() {
 
 		return pcX;
@@ -82,9 +94,9 @@ public class PcaSettings implements IPcaSettings {
 	}
 
 	@Override
-	public void setNumberOfPrincipalComponents(int numberOfPrincipleComponents) {
+	public void removeChangeListener(Consumer<IPcaSettings> listener) {
 
-		this.numberOfPrincipleComponents.set(numberOfPrincipleComponents);
+		listeners.remove(listener);
 	}
 
 	@Override
@@ -103,5 +115,14 @@ public class PcaSettings implements IPcaSettings {
 	public void setPcZ(int pcZ) {
 
 		this.pcZ.set(pcZ);
+	}
+
+	protected void updateLister() {
+
+		synchronized(listeners) {
+			listeners.forEach((e, b) -> {
+				e.accept(this);
+			});
+		}
 	}
 }

@@ -41,5 +41,5 @@ public interface ISamples<V extends IVariable, S extends ISample<? extends ISamp
 
 	ObservableList<S> getSampleList();
 
-	List<V> getVariables();
+	ObservableList<V> getVariables();
 }

@@ -24,9 +24,15 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaria
 public class TableData {
 
 	private List<ISample<? extends ISampleData>> samples = new ArrayList<>();
-	private List<? extends IVariable> variables = new ArrayList<>();
+	private List<IVariable> variables = new ArrayList<>();
 
 	public TableData() {
+	}
+
+	public void clear() {
+
+		samples.clear();
+		variables.clear();
 	}
 
 	/**
@@ -41,7 +47,7 @@ public class TableData {
 	 *
 	 * @return retention times
 	 */
-	public List<? extends IVariable> getVariables() {
+	public List<IVariable> getVariables() {
 
 		return variables;
 	}
@@ -51,6 +57,7 @@ public class TableData {
 		/*
 		 * remove old data
 		 */
+		variables.clear();
 		samples.clear();
 		/*
 		 * copy data and insert object ISample and IGroup and sort this object by group name
@@ -62,7 +69,7 @@ public class TableData {
 		/*
 		 * set retention time
 		 */
-		variables = isamples.getVariables();
+		variables.addAll(isamples.getVariables());
 		/*
 		 * Set peaks names
 		 */

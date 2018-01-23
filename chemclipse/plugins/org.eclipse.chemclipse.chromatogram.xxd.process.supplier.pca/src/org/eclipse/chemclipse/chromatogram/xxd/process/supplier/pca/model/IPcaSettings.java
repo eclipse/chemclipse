@@ -11,9 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import java.util.function.Consumer;
+
 import javafx.beans.property.IntegerProperty;
 
 public interface IPcaSettings {
+
+	void addChangeListener(Consumer<IPcaSettings> listner);
 
 	int getNumberOfPrincipalComponents();
 
@@ -23,15 +27,13 @@ public interface IPcaSettings {
 
 	int getPcZ();
 
-	IntegerProperty numberPrincipalCoponentsPropety();
-
 	IntegerProperty pcXProperty();
 
 	IntegerProperty pcYProperty();
 
 	IntegerProperty pcZProperty();
 
-	void setNumberOfPrincipalComponents(int numberOfPrincipleComponents);
+	void removeChangeListener(Consumer<IPcaSettings> listner);
 
 	void setPcX(int pcX);
 

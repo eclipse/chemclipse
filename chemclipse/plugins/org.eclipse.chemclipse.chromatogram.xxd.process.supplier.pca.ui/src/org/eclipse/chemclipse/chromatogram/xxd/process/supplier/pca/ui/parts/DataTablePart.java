@@ -30,12 +30,13 @@ import javafx.collections.ListChangeListener;
 public class DataTablePart {
 
 	private ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> actualSamples;
+	private Runnable changeSelection;
 	private PeakListNatTable peakListIntensityTable;
-	private Runnable changeSelection = () -> peakListIntensityTable.update(actualSamples);
 	private ListChangeListener<ISample<? extends ISampleData>> sampleChangeListener;
 	private ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> samplesChangeListener;
 
 	public DataTablePart() {
+		changeSelection = () -> peakListIntensityTable.update(actualSamples);
 		samplesChangeListener = new ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>>() {
 
 			@Override
@@ -49,6 +50,8 @@ public class DataTablePart {
 					actualSamples = samples;
 					peakListIntensityTable.update(samples);
 					samples.getSampleList().addListener(sampleChangeListener);
+				} else {
+					peakListIntensityTable.clearTable();
 				}
 			}
 		};

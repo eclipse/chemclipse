@@ -7,11 +7,12 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * jan - initial API and implementation
+ * Jan Holy - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts;
 
 import java.net.URL;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -22,6 +23,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.Sel
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers.PCAEditorController;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.PCAController;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -60,11 +62,14 @@ public class PCAEditorFX {
 			public void onChanged(javafx.collections.ListChangeListener.Change<? extends ISample<? extends ISampleData>> c) {
 
 				if(controller != null) {
-					if(controller.getSamples().isPresent()) {
+					Optional<Samples> samples = controller.getSamples();
+					if(samples.isPresent() && SelectionManagerSamples.getInstance().getSelection().contains(samples.get())) {
 						ObservableList<ISample<? extends ISampleData>> selection = SelectionManagerSample.getInstance().getSelection();
 						if(!selection.isEmpty()) {
 							ISample<? extends ISampleData> s = selection.get(0);
 							controller.seletedSample((Sample)s);
+						} else {
+							controller.removeSelectedSample();
 						}
 					}
 				}
@@ -112,6 +117,14 @@ public class PCAEditorFX {
 	public void preDestroy() {
 
 		SelectionManagerSample.getInstance().getSelection().remove(actualSelectionChangeListener);
+		Optional<Samples> samples = controller.getSamples();
+		if(samples.isPresent()) {
+			boolean contains = SelectionManagerSamples.getInstance().getSelection().remove(samples.get());
+			if(contains) {
+				SelectionManagerSample.getInstance().getSelection().clear();
+			}
+			SelectionManagerSamples.getInstance().getElements().remove(samples.get());
+		}
 	}
 
 	@Focus
@@ -120,8 +133,13 @@ public class PCAEditorFX {
 		fxCanvas.setFocus();
 		if(controller != null) {
 			if(controller.getSamples().isPresent()) {
+				Sample sample = controller.getSelectedSamples();
 				SelectionManagerSamples.getInstance().getSelection().setAll(controller.getSamples().get());
-				SelectionManagerSample.getInstance().getSelection().setAll(controller.getSelectedSamples());
+				if(sample != null) {
+					SelectionManagerSample.getInstance().getSelection().setAll(sample);
+				}
+			} else {
+				SelectionManagerSamples.getInstance().getSelection().clear();
 			}
 		}
 	}

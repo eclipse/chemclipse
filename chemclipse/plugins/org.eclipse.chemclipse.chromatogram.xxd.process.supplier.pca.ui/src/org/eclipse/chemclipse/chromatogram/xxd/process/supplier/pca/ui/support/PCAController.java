@@ -43,6 +43,8 @@ public class PCAController {
 	private Optional<Samples> samples;
 
 	public PCAController(Composite parent, Object layoutData) {
+		samples = Optional.empty();
+		pcaResults = Optional.empty();
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(layoutData);
 		composite.setLayout(new GridLayout(10, false));
@@ -77,7 +79,7 @@ public class PCAController {
 		pcy.setSelection(2);
 		pcy.addModifyListener(e -> {
 			if(pcaResults.isPresent()) {
-				pcaResults.get().getPcaSettings().setPcZ(pcy.getSelection());
+				pcaResults.get().getPcaSettings().setPcY(pcy.getSelection());
 			}
 		});
 		label = new Label(composite, SWT.None);
@@ -89,7 +91,7 @@ public class PCAController {
 		pcz.setMaximum(3);
 		pcz.addModifyListener(e -> {
 			if(pcaResults.isPresent()) {
-				pcaResults.get().getPcaSettings().setPcY(pcz.getSelection());
+				pcaResults.get().getPcaSettings().setPcZ(pcz.getSelection());
 			}
 		});
 	}
@@ -106,8 +108,7 @@ public class PCAController {
 			pcx.setMaximum(maxPC);
 			pcy.setMaximum(maxPC);
 			pcz.setMaximum(maxPC);
-			IPcaSettings pcaSettings = new PcaSettings();
-			pcaSettings.setNumberOfPrincipalComponents(maxPC);
+			IPcaSettings pcaSettings = new PcaSettings(maxPC);
 			pcaSettings.setPcX(pcx.getSelection());
 			pcaSettings.setPcY(pcy.getSelection());
 			pcaSettings.setPcZ(pcz.getSelection());

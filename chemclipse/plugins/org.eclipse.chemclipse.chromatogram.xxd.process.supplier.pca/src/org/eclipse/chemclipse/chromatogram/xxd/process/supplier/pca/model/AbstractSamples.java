@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import java.util.List;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -41,7 +39,7 @@ public abstract class AbstractSamples<V extends IVariable, S extends ISample<? e
 	}
 
 	@Override
-	public List<V> getVariables() {
+	public ObservableList<V> getVariables() {
 
 		return vareables;
 	}

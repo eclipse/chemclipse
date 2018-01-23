@@ -274,6 +274,11 @@ public class PCAEditorController {
 		return status;
 	}
 
+	public void removeSelectedSample() {
+
+		cTableSamples.getSelectionModel().clearSelection();
+	}
+
 	public void seletedSample(Sample sample) {
 
 		if(!cTableSamples.getSelectionModel().getSelectedItems().contains(sample)) {

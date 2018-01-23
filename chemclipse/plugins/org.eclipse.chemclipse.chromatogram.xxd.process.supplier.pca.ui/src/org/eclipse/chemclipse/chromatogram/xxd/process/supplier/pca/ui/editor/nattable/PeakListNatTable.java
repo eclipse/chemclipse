@@ -117,6 +117,12 @@ public class PeakListNatTable {
 		toolTip.setShift(new Point(10, 10));
 	}
 
+	public void clearTable() {
+
+		tableData.clear();
+		natTable.refresh();
+	}
+
 	public void collapseAllColumns() {
 
 		natTable.doCommand(new TreeCollapseAllCommand());

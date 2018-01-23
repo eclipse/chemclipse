@@ -48,6 +48,8 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamples<? ex
 					SelectionManagerSample.getInstance().getSelection().clear();
 					if(!c.getList().isEmpty()) {
 						instance.actualSelectedPcaResults.setValue(instance.pcaResults.get(c.getList().get(0)));
+					} else {
+						instance.actualSelectedPcaResults.setValue(null);
 					}
 				}
 			});

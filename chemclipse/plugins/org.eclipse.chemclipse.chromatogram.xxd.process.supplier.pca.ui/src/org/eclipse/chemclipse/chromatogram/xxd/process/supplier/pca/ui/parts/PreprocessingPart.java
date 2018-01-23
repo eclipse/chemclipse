@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
@@ -36,6 +37,7 @@ public class PreprocessingPart {
 
 	private static Map<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>, PcaPreprocessingData> preprocessings;
 	private DataPreprocessingSelection dataPreprocessing;
+	private ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> samplesChangeListener;
 
 	public PreprocessingPart() {
 		synchronized(PreprocessingPart.class) {
@@ -55,7 +57,7 @@ public class PreprocessingPart {
 				});
 			}
 		}
-		SelectionManagerSamples.getInstance().getSelection().addListener(new ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>>() {
+		samplesChangeListener = new ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>>() {
 
 			@Override
 			public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> c) {
@@ -71,7 +73,7 @@ public class PreprocessingPart {
 					dataPreprocessing.setSamples(null);
 				}
 			}
-		});
+		};
 	}
 
 	@PostConstruct
@@ -91,6 +93,7 @@ public class PreprocessingPart {
 			dataPreprocessing = new DataPreprocessingSelection(compositeNormalizationTables, getPcaPreprocessingData(samples));
 			dataPreprocessing.setSamples(samples);
 		}
+		SelectionManagerSamples.getInstance().getSelection().addListener(samplesChangeListener);
 	}
 
 	private PcaPreprocessingData getPcaPreprocessingData(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
@@ -101,5 +104,11 @@ public class PreprocessingPart {
 		} else {
 			return preprocessings.getOrDefault(samples, new PcaPreprocessingData());
 		}
+	}
+
+	@PreDestroy
+	public void preDestroy() {
+
+		SelectionManagerSamples.getInstance().getSelection().removeListener(samplesChangeListener);
 	}
 }
