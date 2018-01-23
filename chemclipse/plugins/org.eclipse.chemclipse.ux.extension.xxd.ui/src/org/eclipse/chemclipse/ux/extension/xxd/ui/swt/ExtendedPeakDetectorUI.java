@@ -552,7 +552,7 @@ public class ExtendedPeakDetectorUI {
 		/*
 		 * Get the default cursor.
 		 */
-		defaultCursor = chromatogramChart.getCursor();
+		defaultCursor = chromatogramChart.getBaseChart().getCursor();
 		/*
 		 * Chart Settings
 		 */
@@ -561,17 +561,17 @@ public class ExtendedPeakDetectorUI {
 		chartSettings.setEnableRangeSelector(true);
 		chartSettings.setShowRangeSelectorInitially(false);
 		chartSettings.setSupportDataShift(false);
-		//
-		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(BaseChart.KEY_CODE_d));
-		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(BaseChart.KEY_CODE_b));
-		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(BaseChart.KEY_CODE_v));
+		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(KEY_BASELINE));
+		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(KEY_BB));
+		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(KEY_VV));
+		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(KEY_BV));
+		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(KEY_VB));
 		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(SWT.ARROW_LEFT));
 		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(SWT.ARROW_RIGHT));
 		chartSettings.addHandledEventProcessor(new MouseDownEventProcessor());
 		chartSettings.addHandledEventProcessor(new MouseMoveEventProcessor());
 		chartSettings.addHandledEventProcessor(new MouseUpEventProcessor());
 		chartSettings.addHandledEventProcessor(new MouseDoubleClickEventProcessor());
-		//
 		chromatogramChart.applySettings(chartSettings);
 		/*
 		 * Add the paint listeners to draw the selected peak range.
@@ -591,7 +591,7 @@ public class ExtendedPeakDetectorUI {
 		this.detectionType = detectionType;
 		if(detectionType.equals(DETECTION_TYPE_NONE)) {
 			setDetectionModusLabel(STATUS_DETECTION_HINT_NONE);
-			setDefaultCursor();
+			setCursorDefault();
 			resetSelectedRange();
 		} else {
 			if(detectionType.startsWith(DETECTION_TYPE_BOX)) {
@@ -737,7 +737,7 @@ public class ExtendedPeakDetectorUI {
 		if(detectionType.equals(DETECTION_TYPE_BASELINE)) {
 			if(isControlKeyPressed(event)) {
 				stopBaselineSelection(event.x, event.y);
-				setDefaultCursor();
+				setCursorDefault();
 			}
 		} else if(detectionType.startsWith(DETECTION_TYPE_BOX)) {
 			if(event.button == BaseChart.BUTTON_LEFT) {
@@ -843,9 +843,9 @@ public class ExtendedPeakDetectorUI {
 		chromatogramChart.getBaseChart().setCursor(Display.getCurrent().getSystemCursor(cursorId));
 	}
 
-	private void setDefaultCursor() {
+	private void setCursorDefault() {
 
-		chromatogramChart.setCursor(defaultCursor);
+		chromatogramChart.getBaseChart().setCursor(defaultCursor);
 	}
 
 	private String getDetectionBox(int x) {

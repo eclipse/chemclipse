@@ -11,16 +11,33 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IPeakModel;
+import org.eclipse.chemclipse.model.exceptions.PeakException;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ManualPeakDetector;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaks;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
+import org.eclipse.eavp.service.swtchart.events.AbstractHandledEventProcessor;
+import org.eclipse.eavp.service.swtchart.events.IHandledEventProcessor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -29,45 +46,152 @@ import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.swtchart.IAxis;
+import org.swtchart.Range;
 
 public class ExtendedPeakChartUI {
 
+	private static final Logger logger = Logger.getLogger(ExtendedPeakChartUI.class);
+	//
+	private static final String DETECTION_TYPE_TANGENT = "DETECTION_TYPE_TANGENT";
+	private static final String DETECTION_TYPE_PERPENDICULAR = "DETECTION_TYPE_TYPE_PERPENDICULAR";
+	private static final String DETECTION_TYPE_NONE = "";
+	//
+	private Map<String, String> detectionTypeDescriptions;
+	//
+	private static final char KEY_TANGENT = BaseChart.KEY_CODE_t;
+	private static final char KEY_PERPENDICULAR = BaseChart.KEY_CODE_p;
+	//
 	private Composite toolbarInfo;
-	private Label labelScan;
-	private PeakChartUI peakChartUI;
+	private Label labelPeak;
+	private Label labelDetectionType;
+	private Button buttonDetectionTypeTangent;
+	private Button buttonDetectionTypePerpendicular;
+	private Button buttonAddPeak;
+	private PeakChartUI peakChart;
 	//
-	private IPeak peak;
+	private IPeak peak = null;
+	private IPeak peakSplitted1 = null;
+	private IPeak peakSplitted2 = null;
 	//
+	private int xStart;
+	private int xStop;
+	//
+	private String detectionType = DETECTION_TYPE_NONE;
 	private Shell shell = Display.getDefault().getActiveShell();
+
+	private class KeyPressedEventProcessor extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+
+		private int keyCode;
+
+		public KeyPressedEventProcessor(int keyCode) {
+			this.keyCode = keyCode;
+		}
+
+		@Override
+		public int getEvent() {
+
+			return BaseChart.EVENT_KEY_DOWN;
+		}
+
+		@Override
+		public int getButton() {
+
+			return keyCode;
+		}
+
+		@Override
+		public int getStateMask() {
+
+			return SWT.NONE;
+		}
+
+		@Override
+		public void handleEvent(BaseChart baseChart, Event event) {
+
+			handleKeyPressedEvent(event);
+		}
+	}
+
+	private class MouseDoubleClickEventProcessor extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+
+		@Override
+		public int getEvent() {
+
+			return BaseChart.EVENT_MOUSE_DOUBLE_CLICK;
+		}
+
+		@Override
+		public int getButton() {
+
+			return BaseChart.BUTTON_LEFT;
+		}
+
+		@Override
+		public int getStateMask() {
+
+			return SWT.NONE;
+		}
+
+		@Override
+		public void handleEvent(BaseChart baseChart, Event event) {
+
+			handleMouseDoubleClickEvent(event);
+		}
+	}
 
 	@Inject
 	public ExtendedPeakChartUI(Composite parent) {
+		detectionTypeDescriptions = new HashMap<String, String>();
+		detectionTypeDescriptions.put(DETECTION_TYPE_TANGENT, "Modus (Tangent) [Key:" + KEY_TANGENT + "]");
+		detectionTypeDescriptions.put(DETECTION_TYPE_PERPENDICULAR, "Modus (Perpendicular) [Key:" + KEY_PERPENDICULAR + "]");
+		detectionTypeDescriptions.put(DETECTION_TYPE_NONE, "");
 		initialize(parent);
 	}
 
 	@Focus
 	public void setFocus() {
 
-		updatePeak();
+		updatePeaks();
 	}
 
 	public void update(IPeak peak) {
 
 		this.peak = peak;
-		labelScan.setText(PeakSupport.getPeakLabel(peak));
-		updatePeak();
+		this.peakSplitted1 = null;
+		this.peakSplitted2 = null;
+		buttonAddPeak.setEnabled(false);
+		//
+		labelPeak.setText(PeakSupport.getPeakLabel(peak));
+		if(peak instanceof IChromatogramPeakCSD || peak instanceof IChromatogramPeakMSD) {
+			buttonDetectionTypeTangent.setEnabled(true);
+			buttonDetectionTypePerpendicular.setEnabled(true);
+		} else {
+			buttonDetectionTypeTangent.setEnabled(false);
+			buttonDetectionTypePerpendicular.setEnabled(false);
+		}
+		updatePeaks();
 	}
 
-	private void updatePeak() {
+	private void updatePeaks() {
 
-		peakChartUI.setInput(peak);
+		if(peakSplitted1 == null && peakSplitted2 == null) {
+			peakChart.setInput(peak);
+		} else {
+			List<IPeak> peaks = new ArrayList<IPeak>();
+			peaks.add(peakSplitted1);
+			peaks.add(peakSplitted2);
+			peakChart.setInput(peaks);
+		}
 	}
 
 	private void initialize(Composite parent) {
@@ -85,16 +209,27 @@ public class ExtendedPeakChartUI {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
-		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(6, false));
+		composite.setLayout(new GridLayout(8, false));
 		//
+		labelDetectionType = createDetectionTypeLabel(composite);
 		createButtonToggleToolbarInfo(composite);
-		createPeakBaselineButton(composite);
-		createPeakSplitButton(composite);
+		buttonDetectionTypeTangent = createDetectionTypeTangentButton(composite);
+		buttonDetectionTypePerpendicular = createDetectionTypePerpendicularButton(composite);
+		buttonAddPeak = createAddPeakButton(composite);
 		createToggleChartLegendButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
+	}
+
+	private Label createDetectionTypeLabel(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		label.setLayoutData(gridData);
+		return label;
 	}
 
 	private Composite createToolbarInfo(Composite parent) {
@@ -105,9 +240,9 @@ public class ExtendedPeakChartUI {
 		composite.setLayout(new GridLayout(1, false));
 		composite.setVisible(false);
 		//
-		labelScan = new Label(composite, SWT.NONE);
-		labelScan.setText("");
-		labelScan.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		labelPeak = new Label(composite, SWT.NONE);
+		labelPeak.setText("");
+		labelPeak.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		return composite;
 	}
@@ -135,36 +270,112 @@ public class ExtendedPeakChartUI {
 		return button;
 	}
 
-	private void createPeakBaselineButton(Composite parent) {
+	private Button createDetectionTypeTangentButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Use the peak baseline option.");
+		button.setToolTipText("Use Tangent Skim.");
 		button.setText("");
 		button.setEnabled(false);
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DETECTION_TYPE_BASELINE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DETECTION_TYPE_TANGENT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				setDetectionType(DETECTION_TYPE_TANGENT);
 			}
 		});
+		//
+		return button;
 	}
 
-	private void createPeakSplitButton(Composite parent) {
+	private Button createDetectionTypePerpendicularButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Use the peak split option.");
+		button.setToolTipText("Use Perpendicular Drop.");
 		button.setText("");
 		button.setEnabled(false);
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DETECTION_TYPE_SPLIT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DETECTION_TYPE_PERPENDICULAR, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				setDetectionType(DETECTION_TYPE_PERPENDICULAR);
 			}
 		});
+		//
+		return button;
+	}
+
+	private Button createAddPeakButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Add the splitted peaks.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(peak instanceof IChromatogramPeakMSD) {
+					IChromatogramPeakMSD peakMSD = (IChromatogramPeakMSD)peak;
+					IChromatogramMSD chromatogram = peakMSD.getChromatogram();
+					if(chromatogram != null) {
+						addPeaks(chromatogram, peak, peakSplitted1, peakSplitted2);
+						peak = peakSplitted1;
+						peakSplitted1 = null;
+						peakSplitted2 = null;
+						setDetectionType(DETECTION_TYPE_NONE);
+						updatePeaks();
+					}
+				} else if(peak instanceof IChromatogramPeakCSD) {
+					IChromatogramPeakCSD peakCSD = (IChromatogramPeakCSD)peak;
+					IChromatogramCSD chromatogram = peakCSD.getChromatogram();
+					if(chromatogram != null) {
+						addPeaks(chromatogram, peak, peakSplitted1, peakSplitted2);
+						peak = peakSplitted1;
+						peakSplitted1 = null;
+						peakSplitted2 = null;
+						setDetectionType(DETECTION_TYPE_NONE);
+						updatePeaks();
+					}
+				}
+			}
+		});
+		return button;
+	}
+
+	private void addPeaks(IChromatogram chromatogram, IPeak peakOriginal, IPeak peak1, IPeak peak2) {
+
+		if(peak1 != null && peak2 != null) {
+			/*
+			 * Perpendicular Drop
+			 */
+			if(chromatogram instanceof IChromatogramMSD) {
+				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+				chromatogramMSD.removePeak((IChromatogramPeakMSD)peakOriginal);
+				chromatogramMSD.addPeak((IChromatogramPeakMSD)peak1);
+				chromatogramMSD.addPeak((IChromatogramPeakMSD)peak2);
+			} else if(chromatogram instanceof IChromatogramCSD) {
+				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+				chromatogramCSD.removePeak((IChromatogramPeakCSD)peakOriginal);
+				chromatogramCSD.addPeak((IChromatogramPeakCSD)peak1);
+				chromatogramCSD.addPeak((IChromatogramPeakCSD)peak2);
+			}
+		} else if(peak1 != null) {
+			/*
+			 * Tangent Skim
+			 */
+			if(chromatogram instanceof IChromatogramMSD) {
+				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+				chromatogramMSD.addPeak((IChromatogramPeakMSD)peak1);
+			} else if(chromatogram instanceof IChromatogramCSD) {
+				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+				chromatogramCSD.addPeak((IChromatogramPeakCSD)peak1);
+			}
+		}
 	}
 
 	private void createToggleChartLegendButton(Composite parent) {
@@ -177,7 +388,7 @@ public class ExtendedPeakChartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				peakChartUI.toggleSeriesLegendVisibility();
+				peakChart.toggleSeriesLegendVisibility();
 			}
 		});
 	}
@@ -193,6 +404,7 @@ public class ExtendedPeakChartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				setDetectionType(DETECTION_TYPE_NONE);
 				reset();
 			}
 		});
@@ -230,23 +442,206 @@ public class ExtendedPeakChartUI {
 
 	private void createPeakChart(Composite parent) {
 
-		peakChartUI = new PeakChartUI(parent, SWT.BORDER);
-		peakChartUI.setLayoutData(new GridData(GridData.FILL_BOTH));
+		peakChart = new PeakChartUI(parent, SWT.BORDER);
+		peakChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Chart Settings
 		 */
-		IChartSettings chartSettings = peakChartUI.getChartSettings();
+		IChartSettings chartSettings = peakChart.getChartSettings();
 		chartSettings.setCreateMenu(true);
-		peakChartUI.applySettings(chartSettings);
+		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(KEY_TANGENT));
+		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(KEY_PERPENDICULAR));
+		chartSettings.addHandledEventProcessor(new MouseDoubleClickEventProcessor());
+		peakChart.applySettings(chartSettings);
 	}
 
 	private void reset() {
 
-		updatePeak();
+		this.peakSplitted1 = null;
+		this.peakSplitted2 = null;
+		buttonAddPeak.setEnabled(false);
+		updatePeaks();
 	}
 
 	private void applySettings() {
 
-		updatePeak();
+		updatePeaks();
+	}
+
+	private void setDetectionType(String detectionType) {
+
+		/*
+		 * Defaults
+		 */
+		this.detectionType = detectionType;
+		if(detectionType.equals(DETECTION_TYPE_NONE)) {
+			resetSelectedRange();
+		}
+		/*
+		 * Label / Buttons
+		 */
+		enableButtons(detectionType);
+		labelDetectionType.setText(detectionTypeDescriptions.get(detectionType));
+	}
+
+	private void resetSelectedRange() {
+
+		xStart = 0;
+		xStop = 0;
+	}
+
+	private void enableButtons(String detectionType) {
+
+		boolean enabled = detectionType.equals(DETECTION_TYPE_NONE);
+		buttonAddPeak.setEnabled((peakSplitted1 != null || peakSplitted2 != null));
+		buttonDetectionTypeTangent.setEnabled(enabled);
+		buttonDetectionTypePerpendicular.setEnabled(enabled);
+	}
+
+	private void handleKeyPressedEvent(Event event) {
+
+		if(detectionType.equals(DETECTION_TYPE_NONE)) {
+			if(event.keyCode == KEY_TANGENT) {
+				setDetectionType(DETECTION_TYPE_TANGENT);
+			} else if(event.keyCode == KEY_PERPENDICULAR) {
+				setDetectionType(DETECTION_TYPE_PERPENDICULAR);
+			}
+		}
+	}
+
+	private void handleMouseDoubleClickEvent(Event event) {
+
+		if(detectionType.equals(DETECTION_TYPE_TANGENT)) {
+			if(xStart == 0) {
+				xStart = event.x;
+			} else {
+				if(event.x > xStart) {
+					xStop = event.x;
+				} else {
+					xStop = xStart;
+					xStart = event.x;
+				}
+				splitPeak();
+			}
+		} else if(detectionType.equals(DETECTION_TYPE_PERPENDICULAR)) {
+			xStart = event.x;
+			xStop = xStart;
+			splitPeak();
+		}
+	}
+
+	private void splitPeak() {
+
+		if(peak != null) {
+			/*
+			 * Calculate the position.
+			 */
+			Rectangle rectangle = getPlotArea().getBounds();
+			int width = rectangle.width;
+			double factorWidth = 100.0d / width;
+			BaseChart baseChart = peakChart.getBaseChart();
+			IAxis retentionTime = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
+			Range millisecondsRange = retentionTime.getRange();
+			double millisecondsWidth = millisecondsRange.upper - millisecondsRange.lower;
+			//
+			if(xStart == xStop) {
+				/*
+				 * Perpendicular Drop
+				 */
+				int startRetentionTime;
+				int stopRetentionTime;
+				float startAbundance;
+				float stopAbundance;
+				//
+				double percentageDrop = (factorWidth * xStart) / 100.0d;
+				int dropRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageDrop);
+				IPeakModel peakModel = peak.getPeakModel();
+				/*
+				 * Peak 1
+				 */
+				startRetentionTime = peakModel.getStartRetentionTime();
+				stopRetentionTime = dropRetentionTime;
+				startAbundance = peakModel.getBackgroundAbundance(startRetentionTime);
+				stopAbundance = peakModel.getBackgroundAbundance(stopRetentionTime);
+				peakSplitted1 = extractPeakByCoordinates(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
+				/*
+				 * Peak 2
+				 */
+				startRetentionTime = dropRetentionTime;
+				stopRetentionTime = peakModel.getStopRetentionTime();
+				startAbundance = peakModel.getBackgroundAbundance(startRetentionTime);
+				stopAbundance = peakModel.getBackgroundAbundance(stopRetentionTime);
+				peakSplitted2 = extractPeakByCoordinates(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
+				//
+				if(peakSplitted1 != null || peakSplitted2 != null) {
+					buttonAddPeak.setEnabled(true);
+				}
+			} else {
+				/*
+				 * Tangent Skim
+				 */
+				double percentageStartWidth = (factorWidth * xStart) / 100.0d;
+				double percentageStopWidth = (factorWidth * xStop) / 100.0d;
+				int startRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageStartWidth);
+				int stopRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageStopWidth);
+				/*
+				 * Peak
+				 */
+				IPeakModel peakModel = peak.getPeakModel();
+				float startAbundance = peakModel.getBackgroundAbundance(startRetentionTime);
+				float stopAbundance = peakModel.getBackgroundAbundance(stopRetentionTime);
+				peakSplitted1 = extractPeakByCoordinates(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
+				peakSplitted2 = null;
+				//
+				if(peakSplitted1 != null) {
+					buttonAddPeak.setEnabled(true);
+				}
+			}
+		}
+		//
+		setDetectionType(DETECTION_TYPE_NONE);
+		updatePeaks();
+	}
+
+	private IPeak extractPeakByCoordinates(int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance) {
+
+		IPeak peakSplitted = null;
+		//
+		if(peak instanceof IChromatogramPeakMSD) {
+			/*
+			 * Peak Detection MSD
+			 */
+			try {
+				IChromatogramPeakMSD chromatogramPeakMSD = (IChromatogramPeakMSD)peak;
+				if(chromatogramPeakMSD.getChromatogram() != null) {
+					ManualPeakDetector manualPeakDetector = new ManualPeakDetector();
+					IChromatogramMSD chromatogram = chromatogramPeakMSD.getChromatogram();
+					peakSplitted = manualPeakDetector.calculatePeak(chromatogram, startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
+				}
+			} catch(PeakException e) {
+				logger.warn(e);
+			}
+		} else if(peak instanceof IChromatogramPeakCSD) {
+			/*
+			 * Peak Detection FID
+			 */
+			try {
+				IChromatogramPeakCSD chromatogramPeakCSD = (IChromatogramPeakCSD)peak;
+				if(chromatogramPeakCSD.getChromatogram() != null) {
+					ManualPeakDetector manualPeakDetector = new ManualPeakDetector();
+					IChromatogramCSD chromatogram = chromatogramPeakCSD.getChromatogram();
+					peakSplitted = manualPeakDetector.calculatePeak(chromatogram, startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
+				}
+			} catch(PeakException e) {
+				logger.warn(e);
+			}
+		}
+		//
+		return peakSplitted;
+	}
+
+	private Composite getPlotArea() {
+
+		return peakChart.getBaseChart().getPlotArea();
 	}
 }

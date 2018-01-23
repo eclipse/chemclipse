@@ -75,14 +75,32 @@ public class PeakChartUI extends ScrollableChart {
 		if(peak != null) {
 			//
 			modifyChart(peak);
-			setPeak(peak, false, "");
+			List<ILineSeriesData> lineSeriesDataList = getPeakSeriesData(peak, false, "");
+			addLineSeriesData(lineSeriesDataList);
 		}
 	}
 
-	private void setPeak(IPeak peak, boolean mirrored, String postfix) {
+	public void setInput(List<IPeak> peaks) {
+
+		prepareChart();
+		if(peaks != null && peaks.size() >= 1) {
+			//
+			modifyChart(peaks.get(0));
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			for(int i = 0; i < peaks.size(); i++) {
+				IPeak peak = peaks.get(i);
+				if(peak != null) {
+					List<ILineSeriesData> lineSeriesDataListPeak = getPeakSeriesData(peak, false, Integer.toString((i + 1)));
+					lineSeriesDataList.addAll(lineSeriesDataListPeak);
+				}
+			}
+			addLineSeriesData(lineSeriesDataList);
+		}
+	}
+
+	private List<ILineSeriesData> getPeakSeriesData(IPeak peak, boolean mirrored, String postfix) {
 
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-		//
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		boolean includeBackground = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAK_BACKGROUND);
 		/*
@@ -137,8 +155,7 @@ public class PeakChartUI extends ScrollableChart {
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_BACKGROUND));
 			lineSeriesDataList.add(peakSupport.getPeakBackground(peak, mirrored, color, "Peak Background" + postfix));
 		}
-		//
-		addLineSeriesData(lineSeriesDataList);
+		return lineSeriesDataList;
 	}
 
 	private void prepareChart() {
