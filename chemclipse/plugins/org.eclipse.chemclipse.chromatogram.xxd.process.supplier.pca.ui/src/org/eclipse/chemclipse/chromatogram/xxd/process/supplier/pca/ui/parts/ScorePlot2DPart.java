@@ -63,7 +63,7 @@ public class ScorePlot2DPart {
 			@Override
 			public void onChanged(javafx.collections.ListChangeListener.Change<? extends ISample<? extends ISampleData>> c) {
 
-				Display.getDefault().asyncExec(() -> {
+				Display.getDefault().syncExec(() -> {
 					scorePlot.getBaseChart().resetSeriesSettings();
 					if(!c.getList().isEmpty()) {
 						for(Entry<String, IPcaResult> entry : scorePlot.getExtractedResults().entrySet()) {

@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
@@ -40,6 +41,7 @@ import javafx.collections.ListChangeListener;
 public class VariablesFiltrationPart {
 
 	private static Map<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>, PcaFiltrationData> filters;
+	private ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> actualSelectionLisnter;
 	private Label countSelectedRow;
 	@Inject
 	private Display display;
@@ -64,7 +66,7 @@ public class VariablesFiltrationPart {
 				});
 			}
 		}
-		SelectionManagerSamples.getInstance().getSelection().addListener(new ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>>() {
+		actualSelectionLisnter = new ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>>() {
 
 			@Override
 			public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> c) {
@@ -74,12 +76,12 @@ public class VariablesFiltrationPart {
 					pcaFiltrationData = getPcaFiltrationData(c.getList().get(0));
 				}
 				final PcaFiltrationData filtrationData = pcaFiltrationData;
-				display.asyncExec(() -> {
+				display.syncExec(() -> {
 					filtersTable.setPcaFiltrationData(filtrationData);
 					filtersTable.update();
 				});
 			}
-		});
+		};
 	}
 
 	private void applyFilters() {
@@ -147,6 +149,7 @@ public class VariablesFiltrationPart {
 			filtersTable.setPcaFiltrationData(getPcaFiltrationData(SelectionManagerSamples.getInstance().getSelection().get(0)));
 		}
 		updateLabelTotalSelection();
+		SelectionManagerSamples.getInstance().getSelection().addListener(actualSelectionLisnter);
 	}
 
 	private PcaFiltrationData getPcaFiltrationData(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
@@ -157,6 +160,12 @@ public class VariablesFiltrationPart {
 		} else {
 			return filters.getOrDefault(samples, new PcaFiltrationData());
 		}
+	}
+
+	@PreDestroy
+	public void preDestroy() {
+
+		SelectionManagerSamples.getInstance().getSelection().removeListener(actualSelectionLisnter);
 	}
 
 	private void updateLabelTotalSelection() {

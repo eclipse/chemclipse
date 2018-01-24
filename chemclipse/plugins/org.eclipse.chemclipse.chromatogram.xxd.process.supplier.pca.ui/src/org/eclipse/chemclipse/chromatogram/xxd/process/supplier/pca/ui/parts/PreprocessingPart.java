@@ -30,6 +30,7 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 import javafx.collections.ListChangeListener;
 
@@ -63,15 +64,17 @@ public class PreprocessingPart {
 			public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> c) {
 
 				PcaPreprocessingData pcaPreprocessingData = new PcaPreprocessingData();
+				ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples = null;
 				if(!c.getList().isEmpty()) {
-					ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples = c.getList().get(0);
+					samples = c.getList().get(0);
 					pcaPreprocessingData = getPcaPreprocessingData(samples);
-					dataPreprocessing.update(pcaPreprocessingData);
-					dataPreprocessing.setSamples(samples);
-				} else {
-					dataPreprocessing.update(new PcaPreprocessingData());
-					dataPreprocessing.setSamples(null);
 				}
+				final PcaPreprocessingData preprocessingData = pcaPreprocessingData;
+				final ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> s = samples;
+				Display.getDefault().syncExec(() -> {
+					dataPreprocessing.update(preprocessingData);
+					dataPreprocessing.setSamples(s);
+				});
 			}
 		};
 	}

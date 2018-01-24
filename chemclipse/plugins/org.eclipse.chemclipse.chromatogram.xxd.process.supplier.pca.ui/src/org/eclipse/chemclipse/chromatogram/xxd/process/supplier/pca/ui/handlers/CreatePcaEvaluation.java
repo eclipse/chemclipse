@@ -11,10 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers;
 
+import java.util.ArrayList;
+
 import javax.inject.Named;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.PCAEditorPart;
+import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.core.di.annotations.Execute;
@@ -55,6 +58,6 @@ public class CreatePcaEvaluation {
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
-		createPart();
+		PerspectiveSwitchHandler.focusPerspectiveAndView("org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective", new ArrayList<>());
 	}
 }

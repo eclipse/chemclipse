@@ -131,16 +131,14 @@ public class PCAEditorFX {
 	public void setFocus() {
 
 		fxCanvas.setFocus();
-		if(controller != null) {
-			if(controller.getSamples().isPresent()) {
-				Sample sample = controller.getSelectedSamples();
-				SelectionManagerSamples.getInstance().getSelection().setAll(controller.getSamples().get());
-				if(sample != null) {
-					SelectionManagerSample.getInstance().getSelection().setAll(sample);
-				}
-			} else {
-				SelectionManagerSamples.getInstance().getSelection().clear();
+		if(controller != null && controller.getSamples().isPresent()) {
+			Sample sample = controller.getSelectedSamples();
+			SelectionManagerSamples.getInstance().getSelection().setAll(controller.getSamples().get());
+			if(sample != null) {
+				SelectionManagerSample.getInstance().getSelection().setAll(sample);
 			}
+		} else {
+			SelectionManagerSamples.getInstance().getSelection().clear();
 		}
 	}
 }

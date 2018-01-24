@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.L
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -36,11 +37,13 @@ public class LoadingPlotPart {
 			@Override
 			public void changed(ObservableValue<? extends IPcaResults> observable, IPcaResults oldValue, IPcaResults newValue) {
 
-				if(newValue != null) {
-					loadingPlot.update(newValue);
-				} else {
-					loadingPlot.deleteSeries();
-				}
+				Display.getCurrent().syncExec(() -> {
+					if(newValue != null) {
+						loadingPlot.update(newValue);
+					} else {
+						loadingPlot.deleteSeries();
+					}
+				});
 			}
 		};
 	}
