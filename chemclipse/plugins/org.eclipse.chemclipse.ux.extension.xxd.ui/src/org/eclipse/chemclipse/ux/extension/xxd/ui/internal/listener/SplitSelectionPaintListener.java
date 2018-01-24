@@ -14,11 +14,15 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.swtchart.ICustomPaintListener;
 
 public class SplitSelectionPaintListener implements ICustomPaintListener {
 
+	private static final String LABEL_PERPENDICULAR_DROP = "P";
+	private static final String LABEL_TANGENT_SKIM = "T";
+	//
 	private int x1;
 	private int y1;
 	private int x2;
@@ -32,18 +36,32 @@ public class SplitSelectionPaintListener implements ICustomPaintListener {
 		e.gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 		if(x1 == x2) {
 			if(x1 != 0) {
-				e.gc.drawText("D", x1, y1);
+				Point position = getLabelPosition(e, x1, y1, LABEL_PERPENDICULAR_DROP);
+				e.gc.drawText(LABEL_PERPENDICULAR_DROP, position.x, position.y);
+				e.gc.drawLine(x1, y1, x1, e.height);
 			}
 		} else {
 			if(x1 != 0) {
-				e.gc.drawText("B", x1, y1);
+				Point position = getLabelPosition(e, x1, y1, LABEL_TANGENT_SKIM);
+				e.gc.drawText(LABEL_TANGENT_SKIM, position.x, position.y);
+				e.gc.drawLine(x1, y1, x1, e.height);
 			}
 			if(x2 != 0) {
-				e.gc.drawText("E", x2, y2);
+				Point position = getLabelPosition(e, x2, y2, LABEL_TANGENT_SKIM);
+				e.gc.drawText(LABEL_TANGENT_SKIM, position.x, position.y);
+				e.gc.drawLine(x2, y2, x2, e.height);
 			}
 		}
 		e.gc.setForeground(foreground);
 		e.gc.setBackground(background);
+	}
+
+	private Point getLabelPosition(PaintEvent e, int x, int y, String label) {
+
+		Point labelSize = e.gc.textExtent(label);
+		int xPosition = x - (int)(labelSize.x / 2.0d);
+		int yPosition = y - labelSize.y;
+		return new Point(xPosition, yPosition);
 	}
 
 	@Override

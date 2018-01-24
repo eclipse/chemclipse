@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.SplitSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ManualPeakDetector;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaks;
@@ -54,6 +55,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.swtchart.IAxis;
+import org.swtchart.IPlotArea;
 import org.swtchart.Range;
 
 public class ExtendedPeakChartUI {
@@ -80,6 +82,7 @@ public class ExtendedPeakChartUI {
 	private IPeak peak = null; // Original Peak
 	private IPeak peakSplitted1 = null; // #1 after split
 	private IPeak peakSplitted2 = null; // #2 after split
+	private SplitSelectionPaintListener splitSelectionPaintListener;
 	//
 	private int xStart;
 	private int xStop;
@@ -469,6 +472,10 @@ public class ExtendedPeakChartUI {
 		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(KEY_PERPENDICULAR));
 		chartSettings.addHandledEventProcessor(new MouseDoubleClickEventProcessor());
 		peakChart.applySettings(chartSettings);
+		//
+		IPlotArea plotArea = (IPlotArea)getPlotArea();
+		splitSelectionPaintListener = new SplitSelectionPaintListener();
+		plotArea.addCustomPaintListener(splitSelectionPaintListener);
 	}
 
 	private void reset() {
@@ -528,6 +535,8 @@ public class ExtendedPeakChartUI {
 		if(detectionType.equals(DETECTION_TYPE_TANGENT)) {
 			if(xStart == 0) {
 				xStart = event.x;
+				splitSelectionPaintListener.setX1(event.x);
+				splitSelectionPaintListener.setY1(event.y);
 			} else {
 				if(event.x > xStart) {
 					xStop = event.x;
@@ -535,11 +544,17 @@ public class ExtendedPeakChartUI {
 					xStop = xStart;
 					xStart = event.x;
 				}
+				splitSelectionPaintListener.setX2(event.x);
+				splitSelectionPaintListener.setY2(event.y);
 				splitPeak();
 			}
 		} else if(detectionType.equals(DETECTION_TYPE_PERPENDICULAR)) {
 			xStart = event.x;
 			xStop = xStart;
+			splitSelectionPaintListener.setX1(event.x);
+			splitSelectionPaintListener.setY1(event.y);
+			splitSelectionPaintListener.setX2(event.x);
+			splitSelectionPaintListener.setY2(event.y);
 			splitPeak();
 		}
 	}
@@ -702,5 +717,6 @@ public class ExtendedPeakChartUI {
 		this.peakSplitted1 = null;
 		this.peakSplitted2 = null;
 		buttonAddPeak.setEnabled(false);
+		splitSelectionPaintListener.reset();
 	}
 }
