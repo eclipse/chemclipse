@@ -26,12 +26,15 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramSupport;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -39,8 +42,6 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -174,14 +175,19 @@ public class ExtendedPeakListUI {
 
 	private PeakListUI createPeakTable(Composite parent) {
 
-		PeakListUI list = new PeakListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		list.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-		list.getControl().addMouseListener(new MouseAdapter() {
+		PeakListUI peakListUI = new PeakListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		Table table = peakListUI.getTable();
+		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		table.addSelectionListener(new SelectionAdapter() {
 
 			@Override
-			public void mouseUp(MouseEvent e) {
+			public void widgetSelected(SelectionEvent e) {
 
-				System.out.println("TODO");
+				Object object = peakListUI.getStructuredSelection().getFirstElement();
+				if(object instanceof IPeak) {
+					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+					eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, (IPeak)object);
+				}
 			}
 		});
 		/*
@@ -190,7 +196,7 @@ public class ExtendedPeakListUI {
 		// ITableSettings tableSettings = targetsListUI.getTableSettings();
 		// targetsListUI.applySettings(tableSettings);
 		//
-		return list;
+		return peakListUI;
 	}
 
 	private Composite createToolbarInfoBottom(Composite parent) {
