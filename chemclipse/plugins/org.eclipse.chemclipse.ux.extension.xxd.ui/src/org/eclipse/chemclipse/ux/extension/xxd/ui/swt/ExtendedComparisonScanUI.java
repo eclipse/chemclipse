@@ -25,7 +25,7 @@ import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
-import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
+import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -541,10 +541,10 @@ public class ExtendedComparisonScanUI {
 
 				try {
 					if(scan1 != null) {
-						MassSpectrumFileSupport.saveMassSpectrum(shell, scan1, "UnknownMS");
+						DatabaseFileSupport.saveMassSpectrum(shell, scan1, "UnknownMS");
 					}
 					if(scan2 != null) {
-						MassSpectrumFileSupport.saveMassSpectrum(shell, scan2, "ReferenceMS");
+						DatabaseFileSupport.saveMassSpectrum(shell, scan2, "ReferenceMS");
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);

@@ -26,7 +26,7 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
-import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
+import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -351,7 +351,7 @@ public class ExtendedScanTableUI {
 						}
 						//
 						if(massSpectrum != null) {
-							MassSpectrumFileSupport.saveMassSpectrum(shell, massSpectrum, "Scan" + massSpectrum.getScanNumber());
+							DatabaseFileSupport.saveMassSpectrum(shell, massSpectrum, "Scan" + massSpectrum.getScanNumber());
 						}
 					}
 				} catch(NoConverterAvailableException e1) {

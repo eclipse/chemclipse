@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
+import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
@@ -306,8 +306,13 @@ public class ExtendedPeakListUI {
 						IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 						Table table = peakListUI.getTable();
 						int[] indices = table.getSelectionIndices();
-						List<IPeak> peaks = getPeakList(table, indices);
-						MassSpectrumFileSupport.savePeaks(shell, peaks, chromatogram.getName());
+						List<IPeak> peaks;
+						if(indices.length == 0) {
+							peaks = getPeakList(table);
+						} else {
+							peaks = getPeakList(table, indices);
+						}
+						DatabaseFileSupport.savePeaks(shell, peaks, chromatogram.getName());
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
@@ -370,6 +375,18 @@ public class ExtendedPeakListUI {
 	private void reset() {
 
 		updateChromatogramSelection();
+	}
+
+	private List<IPeak> getPeakList(Table table) {
+
+		List<IPeak> peakList = new ArrayList<IPeak>();
+		for(TableItem tableItem : table.getItems()) {
+			Object object = tableItem.getData();
+			if(object instanceof IPeak) {
+				peakList.add((IPeak)object);
+			}
+		}
+		return peakList;
 	}
 
 	private List<IPeak> getPeakList(Table table, int[] indices) {

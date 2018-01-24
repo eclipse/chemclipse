@@ -32,7 +32,7 @@ import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakCheckBoxEditingSu
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakListContentProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakListLabelProvider;
 import org.eclipse.chemclipse.msd.swt.ui.internal.provider.PeakListTableComparator;
-import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
+import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
@@ -183,7 +183,7 @@ public class PeakListUI {
 			Table table = tableViewer.getTable();
 			int[] indices = table.getSelectionIndices();
 			List<IChromatogramPeakMSD> chromatogramPeaks = getChromatogramPeakList(table, indices);
-			MassSpectrumFileSupport.saveMassSpectra(chromatogramPeaks);
+			DatabaseFileSupport.saveMassSpectra(chromatogramPeaks);
 		} catch(NoConverterAvailableException e1) {
 			logger.warn(e1);
 		}
@@ -243,7 +243,7 @@ public class PeakListUI {
 
 				try {
 					List<IChromatogramPeakMSD> chromatogramPeaks = getChromatogramPeakList();
-					MassSpectrumFileSupport.saveMassSpectra(chromatogramPeaks);
+					DatabaseFileSupport.saveMassSpectra(chromatogramPeaks);
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
 				}

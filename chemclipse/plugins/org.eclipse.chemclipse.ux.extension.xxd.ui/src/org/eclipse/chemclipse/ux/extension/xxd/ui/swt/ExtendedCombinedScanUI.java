@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.support.FilterSupport;
-import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
+import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
@@ -215,7 +215,7 @@ public class ExtendedCombinedScanUI {
 
 				try {
 					if(scanMSD != null) {
-						MassSpectrumFileSupport.saveMassSpectrum(shell, scanMSD, "CombinedScan");
+						DatabaseFileSupport.saveMassSpectrum(shell, scanMSD, "CombinedScan");
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);

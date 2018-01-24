@@ -30,7 +30,7 @@ import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.converter.exceptions.NoMassSpectrumConverterAvailableException;
 import org.eclipse.chemclipse.msd.converter.processing.database.IDatabaseExportConverterProcessingInfo;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectraFileSupport;
+import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
@@ -188,7 +188,7 @@ public class DatabaseEditor implements IChemClipseEditor {
 		boolean saveSuccessful = false;
 		if(massSpectra != null) {
 			try {
-				saveSuccessful = MassSpectraFileSupport.saveMassSpectra(massSpectra);
+				saveSuccessful = DatabaseFileSupport.saveMassSpectra(massSpectra);
 				dirtyable.setDirty(!saveSuccessful);
 			} catch(NoConverterAvailableException e) {
 				logger.warn(e);

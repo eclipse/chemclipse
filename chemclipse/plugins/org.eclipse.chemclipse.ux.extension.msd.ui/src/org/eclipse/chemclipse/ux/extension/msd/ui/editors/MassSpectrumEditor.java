@@ -39,7 +39,7 @@ import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.AbstractExtende
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleContinuousMassSpectrumUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
-import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectraFileSupport;
+import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
@@ -215,7 +215,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		boolean saveSuccessful = false;
 		if(massSpectra != null) {
 			try {
-				saveSuccessful = MassSpectraFileSupport.saveMassSpectra(massSpectra);
+				saveSuccessful = MassSpectrumFileSupport.saveMassSpectra(massSpectra);
 				dirtyable.setDirty(!saveSuccessful);
 			} catch(NoConverterAvailableException e) {
 				logger.warn(e);

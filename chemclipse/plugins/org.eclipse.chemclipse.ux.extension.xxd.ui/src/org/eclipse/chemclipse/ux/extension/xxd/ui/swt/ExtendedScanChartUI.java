@@ -32,7 +32,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.support.FilterSupport;
-import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
+import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -770,11 +770,11 @@ public class ExtendedScanChartUI {
 
 				try {
 					if(originalScan != null) {
-						MassSpectrumFileSupport.saveMassSpectrum(shell, originalScan, "OriginalScan");
+						DatabaseFileSupport.saveMassSpectrum(shell, originalScan, "OriginalScan");
 					}
 					//
 					if(optimizedScan != null) {
-						MassSpectrumFileSupport.saveMassSpectrum(shell, optimizedScan, "OptimizedScan");
+						DatabaseFileSupport.saveMassSpectrum(shell, optimizedScan, "OptimizedScan");
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);

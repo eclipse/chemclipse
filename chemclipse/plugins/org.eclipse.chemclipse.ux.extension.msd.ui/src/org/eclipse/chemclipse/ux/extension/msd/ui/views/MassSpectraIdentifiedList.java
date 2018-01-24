@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateN
 import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
 import org.eclipse.chemclipse.msd.swt.ui.converter.SeriesConverterMSD;
-import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
+import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -111,7 +111,7 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 				try {
 					if(chromatogramSelection != null) {
 						IMassSpectra massSpectra = SeriesConverterMSD.getIdentifiedScans(chromatogramSelection, true);
-						MassSpectrumFileSupport.saveMassSpectra(massSpectra);
+						DatabaseFileSupport.saveMassSpectra(massSpectra);
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);

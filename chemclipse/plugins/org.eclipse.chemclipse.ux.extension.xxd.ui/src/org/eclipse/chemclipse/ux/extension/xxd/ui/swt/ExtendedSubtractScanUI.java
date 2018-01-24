@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.support.FilterSupport;
-import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
+import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -284,7 +284,7 @@ public class ExtendedSubtractScanUI {
 
 				try {
 					if(scanMSD != null) {
-						MassSpectrumFileSupport.saveMassSpectrum(shell, scanMSD, "SubtractMS");
+						DatabaseFileSupport.saveMassSpectrum(shell, scanMSD, "SubtractMS");
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
