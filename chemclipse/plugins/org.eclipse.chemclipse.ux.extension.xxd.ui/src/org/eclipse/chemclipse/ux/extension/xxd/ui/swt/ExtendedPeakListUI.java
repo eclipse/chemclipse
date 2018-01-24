@@ -40,6 +40,7 @@ import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -519,11 +520,14 @@ public class ExtendedPeakListUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				IPreferencePage preferencePageChromatogram = new PreferencePageChromatogram();
+				preferencePageChromatogram.setTitle("Chromatogram Settings ");
 				IPreferencePage preferencePageSWT = new PreferencePageSWT();
 				preferencePageSWT.setTitle("Settings (SWT)");
 				//
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageSWT));
+				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageChromatogram));
+				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSWT));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
 				preferenceDialog.create();

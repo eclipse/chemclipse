@@ -30,7 +30,9 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
@@ -126,6 +128,7 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 			IPeak peak = (IPeak)element;
 			IPeakModel peakModel = peak.getPeakModel();
 			ILibraryInformation libraryInformation = getLibraryInformation(new ArrayList<IPeakTarget>(peak.getTargets()));
+			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			//
 			switch(columnIndex) {
 				case 0:
@@ -135,14 +138,16 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 					text = decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 2:
-					if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) { // TODO
+					boolean showRetentionIndexWithoutDecimals = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS);
+					if(showRetentionIndexWithoutDecimals) {
 						text = Integer.toString((int)peakModel.getPeakMaximum().getRetentionIndex());
 					} else {
 						text = decimalFormat.format(peakModel.getPeakMaximum().getRetentionIndex());
 					}
 					break;
 				case 3:
-					if(PreferenceSupplier.showAreaWithoutDecimals()) { // TODO
+					boolean showAreaWithoutDecimals = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_AREA_WITHOUT_DECIMALS);
+					if(showAreaWithoutDecimals) {
 						text = Integer.toString((int)peak.getIntegratedArea());
 					} else {
 						text = decimalFormat.format(peak.getIntegratedArea());

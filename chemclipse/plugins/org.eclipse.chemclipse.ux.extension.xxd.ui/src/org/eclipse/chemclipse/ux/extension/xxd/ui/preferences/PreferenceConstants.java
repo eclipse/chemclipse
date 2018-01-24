@@ -155,4 +155,11 @@ public class PreferenceConstants {
 	public static final String DEF_TARGET_LIST = "";
 	public static final String P_PROPAGATE_TARGET_ON_UPDATE = "propagateTargetOnUpdate";
 	public static final boolean DEF_PROPAGATE_TARGET_ON_UPDATE = false;
+	/*
+	 * Chromatogram
+	 */
+	public static final String P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS = "showRetentionIndexWithoutDecimals";
+	public static final boolean DEF_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS = true;
+	public static final String P_SHOW_AREA_WITHOUT_DECIMALS = "showAreaWithoutDecimals";
+	public static final boolean DEF_SHOW_AREA_WITHOUT_DECIMALS = true;
 }
