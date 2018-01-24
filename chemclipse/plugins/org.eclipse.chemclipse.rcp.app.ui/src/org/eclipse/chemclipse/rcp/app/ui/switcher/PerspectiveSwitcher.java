@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui.switcher;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -44,12 +46,16 @@ public class PerspectiveSwitcher {
 	 */
 	public void changePerspective(String perspectiveId) {
 
-		MUIElement element = modelService.find(perspectiveId, application);
-		if(element instanceof MPerspective) {
-			MPerspective perspective = (MPerspective)element;
-			partService.switchPerspective(perspective);
-			if(eventBroker != null) {
-				eventBroker.send(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, perspective.getLabel());
+		List<MPerspective> pespectives = modelService.findElements(application, null, MPerspective.class, null);
+		for(MPerspective mPerspective : pespectives) {
+			String elementId = mPerspective.getElementId();
+			String elementLabel = mPerspective.getLabel();
+			if(elementId.equals(perspectiveId) || elementId.equals(perspectiveId + "." + elementLabel)) {
+				partService.switchPerspective(mPerspective);
+				if(eventBroker != null) {
+					eventBroker.send(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, elementLabel);
+				}
+				return;
 			}
 		}
 	}
