@@ -60,6 +60,8 @@ public class PcaEvaluation {
 		return selectedSamples;
 	}
 
+	
+	// will implememt more generic version
 	private List<double[]> getBasisVectors(PrincipalComponentAnalysis principleComponentAnalysis, int numberOfPrincipleComponents) {
 
 		/*
