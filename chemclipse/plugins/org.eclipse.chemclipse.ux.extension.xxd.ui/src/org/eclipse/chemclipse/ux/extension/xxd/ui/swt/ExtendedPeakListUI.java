@@ -11,12 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
@@ -24,7 +31,6 @@ import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -44,12 +50,17 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 
 public class ExtendedPeakListUI {
 
+	private static final Logger logger = Logger.getLogger(ExtendedPeakListUI.class);
+	//
 	private Composite toolbarInfoTop;
 	private Composite toolbarInfoBottom;
 	private Composite toolbarSearch;
+	private Button buttonSavePeaks;
 	private Label labelChromatogramName;
 	private Label labelChromatogramInfo;
 	private PeakListUI peakListUI;
@@ -78,6 +89,7 @@ public class ExtendedPeakListUI {
 	private void updateChromatogramSelection() {
 
 		updateLabel();
+		buttonSavePeaks.setEnabled(false);
 		//
 		if(chromatogramSelection == null) {
 			peakListUI.clear();
@@ -86,6 +98,7 @@ public class ExtendedPeakListUI {
 			if(chromatogram instanceof IChromatogramMSD) {
 				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
 				peakListUI.setInput(chromatogramMSD.getPeaks());
+				buttonSavePeaks.setEnabled(true);
 			} else if(chromatogram instanceof IChromatogramCSD) {
 				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
 				peakListUI.setInput(chromatogramCSD.getPeaks());
@@ -118,11 +131,13 @@ public class ExtendedPeakListUI {
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(6, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		createButtonToggleToolbarSearch(composite);
 		createButtonToggleEditModus(composite);
+		createResetButton(composite);
+		buttonSavePeaks = createSaveButton(composite);
 		createSettingsButton(composite);
 	}
 
@@ -260,6 +275,48 @@ public class ExtendedPeakListUI {
 		return button;
 	}
 
+	private void createResetButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Reset the peak list.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				reset();
+			}
+		});
+	}
+
+	private Button createSaveButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Save the peak list.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				try {
+					if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
+						IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+						Table table = peakListUI.getTable();
+						int[] indices = table.getSelectionIndices();
+						List<IPeak> peaks = getPeakList(table, indices);
+						MassSpectrumFileSupport.savePeaks(shell, peaks, chromatogram.getName());
+					}
+				} catch(NoConverterAvailableException e1) {
+					logger.warn(e1);
+				}
+			}
+		});
+		return button;
+	}
+
 	private void createSettingsButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
@@ -273,12 +330,9 @@ public class ExtendedPeakListUI {
 
 				IPreferencePage preferencePageSWT = new PreferencePageSWT();
 				preferencePageSWT.setTitle("Settings (SWT)");
-				IPreferencePage preferencePageTargets = new PreferencePageTargets();
-				preferencePageTargets.setTitle("Target Settings");
 				//
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageTargets));
-				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSWT));
+				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageSWT));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
 				preferenceDialog.create();
@@ -311,5 +365,23 @@ public class ExtendedPeakListUI {
 	private void applySettings() {
 
 		updateChromatogramSelection();
+	}
+
+	private void reset() {
+
+		updateChromatogramSelection();
+	}
+
+	private List<IPeak> getPeakList(Table table, int[] indices) {
+
+		List<IPeak> peakList = new ArrayList<IPeak>();
+		for(int index : indices) {
+			TableItem tableItem = table.getItem(index);
+			Object object = tableItem.getData();
+			if(object instanceof IPeak) {
+				peakList.add((IPeak)object);
+			}
+		}
+		return peakList;
 	}
 }

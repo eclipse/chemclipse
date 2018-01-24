@@ -13,11 +13,13 @@ package org.eclipse.chemclipse.msd.swt.ui.support;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -102,13 +104,30 @@ public class MassSpectrumFileSupport {
 		}
 	}
 
+	public static void savePeaks(Shell shell, List<IPeak> peaks, String fileName) throws NoConverterAvailableException {
+
+		List<IChromatogramPeakMSD> chromatogramPeaks = new ArrayList<IChromatogramPeakMSD>();
+		for(IPeak peak : peaks) {
+			if(peak instanceof IChromatogramPeakMSD) {
+				chromatogramPeaks.add((IChromatogramPeakMSD)peak);
+			}
+		}
+		saveMassSpectra(shell, chromatogramPeaks, fileName);
+	}
+
+	public static void saveMassSpectra(List<IChromatogramPeakMSD> chromatogramPeaks) throws NoConverterAvailableException {
+
+		Shell shell = Display.getDefault().getActiveShell();
+		saveMassSpectra(shell, chromatogramPeaks, "MassSpectra");
+	}
+
 	/**
 	 * Opens a file dialog and tries to save the mass spectra
 	 * 
 	 * @param chromatogram
 	 * @throws NoConverterAvailableException
 	 */
-	public static void saveMassSpectra(List<IChromatogramPeakMSD> chromatogramPeaks) throws NoConverterAvailableException {
+	public static void saveMassSpectra(Shell shell, List<IChromatogramPeakMSD> chromatogramPeaks, String fileName) throws NoConverterAvailableException {
 
 		IMassSpectra massSpectra = new MassSpectra();
 		for(IChromatogramPeakMSD peak : chromatogramPeaks) {
@@ -141,7 +160,13 @@ public class MassSpectrumFileSupport {
 		/*
 		 * Export the mass spectra.
 		 */
-		MassSpectrumFileSupport.saveMassSpectra(massSpectra);
+		MassSpectrumFileSupport.saveMassSpectra(shell, massSpectra, fileName);
+	}
+
+	public static void saveMassSpectra(IMassSpectra massSpectra) throws NoConverterAvailableException {
+
+		Shell shell = Display.getDefault().getActiveShell();
+		saveMassSpectra(shell, massSpectra, "MassSpectra");
 	}
 
 	/**
@@ -150,7 +175,7 @@ public class MassSpectrumFileSupport {
 	 * @param chromatogram
 	 * @throws NoConverterAvailableException
 	 */
-	public static void saveMassSpectra(IMassSpectra massSpectra) throws NoConverterAvailableException {
+	public static void saveMassSpectra(Shell shell, IMassSpectra massSpectra, String fileName) throws NoConverterAvailableException {
 
 		/*
 		 * If the chromatogram is null, exit.
@@ -158,14 +183,13 @@ public class MassSpectrumFileSupport {
 		if(massSpectra == null || massSpectra.size() == 0) {
 			return;
 		}
-		Shell shell = Display.getCurrent().getActiveShell();
 		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		/*
 		 * Create the dialogue.
 		 */
 		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
-		dialog.setFileName("Mass Spectra");
-		dialog.setText("Save Mass Spectra As");
+		dialog.setFileName(fileName);
+		dialog.setText("Save Mass Spectra As...");
 		dialog.setOverwrite(true);
 		DatabaseConverterSupport converterSupport = DatabaseConverter.getDatabaseConverterSupport();
 		/*
@@ -194,7 +218,7 @@ public class MassSpectrumFileSupport {
 	 * @param chromatogram
 	 * @param supplier
 	 */
-	public static void writeFile(final File file, final IMassSpectra massSpectra, final ISupplier supplier) {
+	public static void writeFile(Shell shell, final File file, final IMassSpectra massSpectra, final ISupplier supplier) {
 
 		/*
 		 * If one of these instances is null, no chance to get it running.<br/>
@@ -206,7 +230,7 @@ public class MassSpectrumFileSupport {
 		/*
 		 * Convert the given mass spectrum.
 		 */
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		MassSpectrumExportRunnable runnable = new MassSpectrumExportRunnable(file, massSpectra, supplier);
 		try {
 			dialog.run(true, false, runnable);
@@ -217,7 +241,7 @@ public class MassSpectrumFileSupport {
 		}
 		File data = runnable.getData();
 		if(data == null) {
-			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Save Mass Spectra", "There is not suitable mass spectra converter available.");
+			MessageDialog.openInformation(shell, "Save Mass Spectra", "There is not suitable mass spectra converter available.");
 		}
 	}
 
@@ -342,7 +366,7 @@ public class MassSpectrumFileSupport {
 				/*
 				 * Export the mass spectra.
 				 */
-				writeFile(new File(filename), massSpectra, selectedSupplier);
+				writeFile(shell, new File(filename), massSpectra, selectedSupplier);
 			}
 		}
 	}
