@@ -262,6 +262,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_TAG = "tag.gif";
 	String IMAGE_3D = "three-dimensional.gif";
 	String IMAGE_SCAN_RETENTION_TIME = "scanRetentionTime.gif";
+	String IMAGE_CHART_LEGEND_MARKER = "chartLegendMarker.gif";
 	/*
 	 * PICTOGRAM and Data Analysis Perspective
 	 */

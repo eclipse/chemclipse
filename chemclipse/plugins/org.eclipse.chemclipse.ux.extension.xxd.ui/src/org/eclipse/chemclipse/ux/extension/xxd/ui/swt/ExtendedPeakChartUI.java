@@ -11,9 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -79,9 +77,9 @@ public class ExtendedPeakChartUI {
 	private Button buttonAddPeak;
 	private PeakChartUI peakChart;
 	//
-	private IPeak peak = null;
-	private IPeak peakSplitted1 = null;
-	private IPeak peakSplitted2 = null;
+	private IPeak peak = null; // Original Peak
+	private IPeak peakSplitted1 = null; // #1 after split
+	private IPeak peakSplitted2 = null; // #2 after split
 	//
 	private int xStart;
 	private int xStop;
@@ -167,11 +165,9 @@ public class ExtendedPeakChartUI {
 	public void update(IPeak peak) {
 
 		this.peak = peak;
-		this.peakSplitted1 = null;
-		this.peakSplitted2 = null;
-		buttonAddPeak.setEnabled(false);
-		//
+		resetSplittedPeaks();
 		labelPeak.setText(PeakSupport.getPeakLabel(peak));
+		//
 		if(peak instanceof IChromatogramPeakCSD || peak instanceof IChromatogramPeakMSD) {
 			buttonDetectionTypeTangent.setEnabled(true);
 			buttonDetectionTypePerpendicular.setEnabled(true);
@@ -187,10 +183,7 @@ public class ExtendedPeakChartUI {
 		if(peakSplitted1 == null && peakSplitted2 == null) {
 			peakChart.setInput(peak);
 		} else {
-			List<IPeak> peaks = new ArrayList<IPeak>();
-			peaks.add(peakSplitted1);
-			peaks.add(peakSplitted2);
-			peakChart.setInput(peaks);
+			peakChart.setInput(peakSplitted1, peakSplitted2);
 		}
 	}
 
@@ -210,14 +203,15 @@ public class ExtendedPeakChartUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(8, false));
+		composite.setLayout(new GridLayout(9, false));
 		//
 		labelDetectionType = createDetectionTypeLabel(composite);
 		createButtonToggleToolbarInfo(composite);
 		buttonDetectionTypeTangent = createDetectionTypeTangentButton(composite);
 		buttonDetectionTypePerpendicular = createDetectionTypePerpendicularButton(composite);
 		buttonAddPeak = createAddPeakButton(composite);
-		createToggleChartLegendButton(composite);
+		createToggleChartSeriesLegendButton(composite);
+		createToggleLegendMarkerButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
 	}
@@ -325,8 +319,7 @@ public class ExtendedPeakChartUI {
 					if(chromatogram != null) {
 						addPeaks(chromatogram, peak, peakSplitted1, peakSplitted2);
 						peak = peakSplitted1;
-						peakSplitted1 = null;
-						peakSplitted2 = null;
+						resetSplittedPeaks();
 						setDetectionType(DETECTION_TYPE_NONE);
 						updatePeaks();
 					}
@@ -336,8 +329,7 @@ public class ExtendedPeakChartUI {
 					if(chromatogram != null) {
 						addPeaks(chromatogram, peak, peakSplitted1, peakSplitted2);
 						peak = peakSplitted1;
-						peakSplitted1 = null;
-						peakSplitted2 = null;
+						resetSplittedPeaks();
 						setDetectionType(DETECTION_TYPE_NONE);
 						updatePeaks();
 					}
@@ -349,39 +341,43 @@ public class ExtendedPeakChartUI {
 
 	private void addPeaks(IChromatogram chromatogram, IPeak peakOriginal, IPeak peak1, IPeak peak2) {
 
-		if(peak1 != null && peak2 != null) {
-			/*
-			 * Perpendicular Drop
-			 */
-			if(chromatogram instanceof IChromatogramMSD) {
+		if(peak1 != null || peak2 != null) {
+			removePeakFromChromatogram(chromatogram, peakOriginal);
+			addPeakToChromatogram(chromatogram, peak1);
+			addPeakToChromatogram(chromatogram, peak2);
+		}
+	}
+
+	private void removePeakFromChromatogram(IChromatogram chromatogram, IPeak peak) {
+
+		if(peak != null) {
+			if(chromatogram instanceof IChromatogramMSD && peak instanceof IChromatogramPeakMSD) {
 				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-				chromatogramMSD.removePeak((IChromatogramPeakMSD)peakOriginal);
-				chromatogramMSD.addPeak((IChromatogramPeakMSD)peak1);
-				chromatogramMSD.addPeak((IChromatogramPeakMSD)peak2);
-			} else if(chromatogram instanceof IChromatogramCSD) {
+				chromatogramMSD.removePeak((IChromatogramPeakMSD)peak);
+			} else if(chromatogram instanceof IChromatogramCSD && peak instanceof IChromatogramPeakCSD) {
 				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-				chromatogramCSD.removePeak((IChromatogramPeakCSD)peakOriginal);
-				chromatogramCSD.addPeak((IChromatogramPeakCSD)peak1);
-				chromatogramCSD.addPeak((IChromatogramPeakCSD)peak2);
-			}
-		} else if(peak1 != null) {
-			/*
-			 * Tangent Skim
-			 */
-			if(chromatogram instanceof IChromatogramMSD) {
-				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-				chromatogramMSD.addPeak((IChromatogramPeakMSD)peak1);
-			} else if(chromatogram instanceof IChromatogramCSD) {
-				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-				chromatogramCSD.addPeak((IChromatogramPeakCSD)peak1);
+				chromatogramCSD.removePeak((IChromatogramPeakCSD)peak);
 			}
 		}
 	}
 
-	private void createToggleChartLegendButton(Composite parent) {
+	private void addPeakToChromatogram(IChromatogram chromatogram, IPeak peak) {
+
+		if(peak != null) {
+			if(chromatogram instanceof IChromatogramMSD) {
+				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+				chromatogramMSD.addPeak((IChromatogramPeakMSD)peak);
+			} else if(chromatogram instanceof IChromatogramCSD) {
+				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+				chromatogramCSD.addPeak((IChromatogramPeakCSD)peak);
+			}
+		}
+	}
+
+	private void createToggleChartSeriesLegendButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle the chart legend");
+		button.setToolTipText("Toggle the chart series legend.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -389,6 +385,24 @@ public class ExtendedPeakChartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				peakChart.toggleSeriesLegendVisibility();
+			}
+		});
+	}
+
+	private void createToggleLegendMarkerButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the chart legend marker.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHART_LEGEND_MARKER, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IChartSettings chartSettings = peakChart.getChartSettings();
+				boolean isShowLegendMarker = chartSettings.isShowLegendMarker();
+				chartSettings.setShowLegendMarker(!isShowLegendMarker);
+				peakChart.applySettings(chartSettings);
 			}
 		});
 	}
@@ -449,6 +463,8 @@ public class ExtendedPeakChartUI {
 		 */
 		IChartSettings chartSettings = peakChart.getChartSettings();
 		chartSettings.setCreateMenu(true);
+		chartSettings.setShowPositionMarker(true);
+		chartSettings.setShowLegendMarker(false);
 		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(KEY_TANGENT));
 		chartSettings.addHandledEventProcessor(new KeyPressedEventProcessor(KEY_PERPENDICULAR));
 		chartSettings.addHandledEventProcessor(new MouseDoubleClickEventProcessor());
@@ -457,9 +473,7 @@ public class ExtendedPeakChartUI {
 
 	private void reset() {
 
-		this.peakSplitted1 = null;
-		this.peakSplitted2 = null;
-		buttonAddPeak.setEnabled(false);
+		resetSplittedPeaks();
 		updatePeaks();
 	}
 
@@ -580,18 +594,56 @@ public class ExtendedPeakChartUI {
 				/*
 				 * Tangent Skim
 				 */
+				float startAbundance;
+				float stopAbundance;
+				//
 				double percentageStartWidth = (factorWidth * xStart) / 100.0d;
 				double percentageStopWidth = (factorWidth * xStop) / 100.0d;
-				int startRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageStartWidth);
-				int stopRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageStopWidth);
-				/*
-				 * Peak
-				 */
+				int startRetentionTimeSkim = (int)(millisecondsRange.lower + millisecondsWidth * percentageStartWidth);
+				int stopRetentionTimeSkim = (int)(millisecondsRange.lower + millisecondsWidth * percentageStopWidth);
+				//
 				IPeakModel peakModel = peak.getPeakModel();
-				float startAbundance = peakModel.getBackgroundAbundance(startRetentionTime);
-				float stopAbundance = peakModel.getBackgroundAbundance(stopRetentionTime);
-				peakSplitted1 = extractPeakByCoordinates(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
-				peakSplitted2 = null;
+				int retentionTimeAtMaximum = peakModel.getRetentionTimeAtPeakMaximum();
+				//
+				if(startRetentionTimeSkim < retentionTimeAtMaximum && stopRetentionTimeSkim < retentionTimeAtMaximum) {
+					/*
+					 * Left Skim Peak 1
+					 */
+					startAbundance = peakModel.getBackgroundAbundance(startRetentionTimeSkim);
+					stopAbundance = peakModel.getBackgroundAbundance(stopRetentionTimeSkim);
+					peakSplitted1 = extractPeakByCoordinates(startRetentionTimeSkim, stopRetentionTimeSkim, startAbundance, stopAbundance);
+					/*
+					 * Right Normal Peak 2
+					 */
+					int startRetentionTime = stopRetentionTimeSkim;
+					int stopRetentionTime = peakModel.getStopRetentionTime();
+					startAbundance = peakModel.getBackgroundAbundance(startRetentionTime);
+					stopAbundance = peakModel.getBackgroundAbundance(stopRetentionTime);
+					peakSplitted2 = extractPeakByCoordinates(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
+				} else if(startRetentionTimeSkim > retentionTimeAtMaximum && stopRetentionTimeSkim > retentionTimeAtMaximum) {
+					/*
+					 * Right Skim Peak 1
+					 */
+					startAbundance = peakModel.getBackgroundAbundance(startRetentionTimeSkim);
+					stopAbundance = peakModel.getBackgroundAbundance(stopRetentionTimeSkim);
+					peakSplitted1 = extractPeakByCoordinates(startRetentionTimeSkim, stopRetentionTimeSkim, startAbundance, stopAbundance);
+					/*
+					 * Left Normal Peak 2
+					 */
+					int startRetentionTime = peakModel.getStartRetentionTime();
+					int stopRetentionTime = startRetentionTimeSkim;
+					startAbundance = peakModel.getBackgroundAbundance(startRetentionTime);
+					stopAbundance = peakModel.getBackgroundAbundance(stopRetentionTime);
+					peakSplitted2 = extractPeakByCoordinates(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
+				} else {
+					/*
+					 * Middle Selection
+					 */
+					startAbundance = peakModel.getBackgroundAbundance(startRetentionTimeSkim);
+					stopAbundance = peakModel.getBackgroundAbundance(stopRetentionTimeSkim);
+					peakSplitted1 = extractPeakByCoordinates(startRetentionTimeSkim, stopRetentionTimeSkim, startAbundance, stopAbundance);
+					peakSplitted2 = null;
+				}
 				//
 				if(peakSplitted1 != null) {
 					buttonAddPeak.setEnabled(true);
@@ -643,5 +695,12 @@ public class ExtendedPeakChartUI {
 	private Composite getPlotArea() {
 
 		return peakChart.getBaseChart().getPlotArea();
+	}
+
+	private void resetSplittedPeaks() {
+
+		this.peakSplitted1 = null;
+		this.peakSplitted2 = null;
+		buttonAddPeak.setEnabled(false);
 	}
 }

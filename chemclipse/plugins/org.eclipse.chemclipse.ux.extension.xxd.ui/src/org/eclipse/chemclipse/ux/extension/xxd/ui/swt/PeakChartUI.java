@@ -80,6 +80,19 @@ public class PeakChartUI extends ScrollableChart {
 		}
 	}
 
+	public void setInput(IPeak peak1, IPeak peak2) {
+
+		prepareChart();
+		if(peak1 != null) {
+			//
+			modifyChart(peak1);
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			lineSeriesDataList.addAll(getPeakSeriesData(peak1, false, "Peak1"));
+			lineSeriesDataList.addAll(getPeakSeriesData(peak2, false, "Peak2"));
+			addLineSeriesData(lineSeriesDataList);
+		}
+	}
+
 	public void setInput(List<IPeak> peaks) {
 
 		prepareChart();
