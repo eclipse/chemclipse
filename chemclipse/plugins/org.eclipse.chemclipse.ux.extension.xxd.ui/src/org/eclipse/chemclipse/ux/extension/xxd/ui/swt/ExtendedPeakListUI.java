@@ -12,22 +12,29 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
+import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
@@ -36,12 +43,14 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramS
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -50,6 +59,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -57,6 +67,8 @@ import org.eclipse.swt.widgets.TableItem;
 public class ExtendedPeakListUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedPeakListUI.class);
+	//
+	private static final String MENU_CATEGORY_PEAKS = "Peaks";
 	//
 	private Composite toolbarInfoTop;
 	private Composite toolbarInfoBottom;
@@ -183,20 +195,188 @@ public class ExtendedPeakListUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Object object = peakListUI.getStructuredSelection().getFirstElement();
-				if(object instanceof IPeak) {
-					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-					eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, (IPeak)object);
-				}
+				propagatePeak();
 			}
 		});
 		/*
 		 * Add the delete targets support.
 		 */
-		// ITableSettings tableSettings = targetsListUI.getTableSettings();
-		// targetsListUI.applySettings(tableSettings);
+		ITableSettings tableSettings = peakListUI.getTableSettings();
+		addDeleteMenuEntry(tableSettings);
+		addVerifyTargetsMenuEntry(tableSettings);
+		addUnverifyTargetsMenuEntry(tableSettings);
+		addKeyEventProcessors(tableSettings);
+		peakListUI.applySettings(tableSettings);
 		//
 		return peakListUI;
+	}
+
+	private void addDeleteMenuEntry(ITableSettings tableSettings) {
+
+		tableSettings.addMenuEntry(new ITableMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Delete Peak(s)";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return MENU_CATEGORY_PEAKS;
+			}
+
+			@Override
+			public void execute(ExtendedTableViewer extendedTableViewer) {
+
+				deletePeaks();
+			}
+		});
+	}
+
+	private void addVerifyTargetsMenuEntry(ITableSettings tableSettings) {
+
+		tableSettings.addMenuEntry(new ITableMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Select Peak(s) for Analysis";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return MENU_CATEGORY_PEAKS;
+			}
+
+			@Override
+			public void execute(ExtendedTableViewer extendedTableViewer) {
+
+				setPeaksActiveForAnalysis(true);
+			}
+		});
+	}
+
+	private void addUnverifyTargetsMenuEntry(ITableSettings tableSettings) {
+
+		tableSettings.addMenuEntry(new ITableMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Deselect Peak(s) for Analysis";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return MENU_CATEGORY_PEAKS;
+			}
+
+			@Override
+			public void execute(ExtendedTableViewer extendedTableViewer) {
+
+				setPeaksActiveForAnalysis(false);
+			}
+		});
+	}
+
+	private void addKeyEventProcessors(ITableSettings tableSettings) {
+
+		tableSettings.addKeyEventProcessor(new IKeyEventProcessor() {
+
+			@Override
+			public void handleEvent(ExtendedTableViewer extendedTableViewer, KeyEvent e) {
+
+				if(e.keyCode == SWT.DEL) {
+					/*
+					 * DEL
+					 */
+					deletePeaks();
+				} else if(e.keyCode == BaseChart.KEY_CODE_i && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
+					if((e.stateMask & SWT.ALT) == SWT.ALT) {
+						/*
+						 * CTRL + ALT + I
+						 */
+						setPeaksActiveForAnalysis(false);
+					} else {
+						/*
+						 * CTRL + I
+						 */
+						setPeaksActiveForAnalysis(true);
+					}
+				} else {
+					propagatePeak();
+				}
+			}
+		});
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void deletePeaks() {
+
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		messageBox.setText("Delete Peak(s)");
+		messageBox.setMessage("Would you like to delete the selected peak(s)?");
+		if(messageBox.open() == SWT.YES) {
+			/*
+			 * Delete Target
+			 */
+			Iterator iterator = peakListUI.getStructuredSelection().iterator();
+			while(iterator.hasNext()) {
+				Object object = iterator.next();
+				if(object instanceof IPeak) {
+					deletePeak((IPeak)object);
+				}
+			}
+			updateChromatogramSelection();
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void setPeaksActiveForAnalysis(boolean activeForAnalysis) {
+
+		Iterator iterator = peakListUI.getStructuredSelection().iterator();
+		while(iterator.hasNext()) {
+			Object object = iterator.next();
+			if(object instanceof IPeak) {
+				IPeak peak = (IPeak)object;
+				peak.setActiveForAnalysis(activeForAnalysis);
+			}
+		}
+		updateChromatogramSelection();
+	}
+
+	private void deletePeak(IPeak peak) {
+
+		if(chromatogramSelection != null) {
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			if(chromatogram instanceof IChromatogramMSD && peak instanceof IChromatogramPeakMSD) {
+				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+				chromatogramMSD.removePeak((IChromatogramPeakMSD)peak);
+			} else if(chromatogram instanceof IChromatogramCSD && peak instanceof IChromatogramPeakCSD) {
+				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+				chromatogramCSD.removePeak((IChromatogramPeakCSD)peak);
+			} else if(chromatogram instanceof IChromatogramWSD) {
+				//
+			}
+		}
+	}
+
+	private void propagatePeak() {
+
+		Table table = peakListUI.getTable();
+		int index = table.getSelectionIndex();
+		if(index >= 0) {
+			TableItem tableItem = table.getItem(index);
+			Object object = tableItem.getData();
+			if(object instanceof IPeak) {
+				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+				eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, (IPeak)object);
+			}
+		}
 	}
 
 	private Composite createToolbarInfoBottom(Composite parent) {

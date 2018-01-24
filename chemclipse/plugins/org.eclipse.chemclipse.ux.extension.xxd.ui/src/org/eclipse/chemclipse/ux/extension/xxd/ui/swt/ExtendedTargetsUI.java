@@ -68,6 +68,7 @@ import org.eclipse.chemclipse.wsd.model.core.implementation.ScanTargetWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -98,7 +99,6 @@ public class ExtendedTargetsUI {
 
 	private static final String IDENTIFIER_MANUAL = "Manual";
 	private static final String MENU_CATEGORY_TARGETS = "Targets";
-	private static final int KEY_CODE_I = 105;
 	//
 	private Label labelTargetOption;
 	private Label labelInfo;
@@ -551,7 +551,7 @@ public class ExtendedTargetsUI {
 					 * DEL
 					 */
 					deleteTargets();
-				} else if(e.keyCode == KEY_CODE_I && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
+				} else if(e.keyCode == BaseChart.KEY_CODE_i && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
 					if((e.stateMask & SWT.ALT) == SWT.ALT) {
 						/*
 						 * CTRL + ALT + I
