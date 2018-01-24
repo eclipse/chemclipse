@@ -162,4 +162,6 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS = true;
 	public static final String P_SHOW_AREA_WITHOUT_DECIMALS = "showAreaWithoutDecimals";
 	public static final boolean DEF_SHOW_AREA_WITHOUT_DECIMALS = true;
+	public static final String P_SHOW_PEAKS_IN_SELECTED_RANGE = "showPeaksInSelectedRange";
+	public static final boolean DEF_SHOW_PEAKS_IN_SELECTED_RANGE = true;
 }

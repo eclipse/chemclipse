@@ -20,12 +20,14 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -39,7 +41,9 @@ import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -47,6 +51,7 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -108,20 +113,39 @@ public class ExtendedPeakListUI {
 		if(chromatogramSelection == null) {
 			peakListUI.clear();
 		} else {
+			peakListUI.setInput(getPeaks());
+		}
+	}
+
+	private List<? extends IPeak> getPeaks() {
+
+		List<? extends IPeak> peaks = new ArrayList<IPeak>();
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		boolean showPeaksInSelectedRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE);
+		//
+		if(chromatogramSelection != null) {
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
 				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-				peakListUI.setInput(chromatogramMSD.getPeaks());
+				if(showPeaksInSelectedRange) {
+					peaks = chromatogramMSD.getPeaks((IChromatogramSelectionMSD)chromatogramSelection);
+				} else {
+					peaks = chromatogramMSD.getPeaks();
+				}
 				buttonSavePeaks.setEnabled(true);
 			} else if(chromatogram instanceof IChromatogramCSD) {
 				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-				peakListUI.setInput(chromatogramCSD.getPeaks());
+				if(showPeaksInSelectedRange) {
+					peaks = chromatogramCSD.getPeaks((IChromatogramSelectionCSD)chromatogramSelection);
+				} else {
+					peaks = chromatogramCSD.getPeaks();
+				}
 			} else if(chromatogram instanceof IChromatogramWSD) {
-				peakListUI.clear();
-				// IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
-				// peakListUI.setInput(chromatogramWSD.getPeaks());
+				//
 			}
 		}
+		//
+		return peaks;
 	}
 
 	private void initialize(Composite parent) {
