@@ -33,7 +33,7 @@ import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.support.FilterSupport;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
-import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
+import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -280,7 +280,7 @@ public class PinnedMassSpectrumEditUIWithLabel extends Composite implements IMas
 			public void widgetSelected(SelectionEvent e) {
 
 				try {
-					MassSpectrumFileSupport.saveMassSpectrum(clonedMassSpectrum);
+					DatabaseFileSupport.saveMassSpectrum(clonedMassSpectrum);
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
 				}
