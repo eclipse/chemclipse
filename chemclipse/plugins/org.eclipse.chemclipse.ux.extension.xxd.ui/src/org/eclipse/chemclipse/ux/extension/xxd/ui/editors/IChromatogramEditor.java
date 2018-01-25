@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,14 +9,12 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
-public enum DataType {
-	AUTO_DETECT, // Auto-Detect
-	MSD_NOMINAL, // Quadrupole, Ion Trap
-	MSD_TANDEM, // MS/MS
-	MSD_HIGHRES, // Orbitrap, TOF
-	MSD, // mass selective data
-	CSD, // current selective data
-	WSD // wavelength selective data
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
+
+public interface IChromatogramEditor extends IChemClipseEditor {
+
+	IChromatogramSelection getChromatogramSelection();
 }
