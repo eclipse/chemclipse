@@ -35,9 +35,9 @@ public class SupplierFileExplorerPart extends AbstractSupplierFileExplorer {
 		list.add(org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramSupport.getInstanceEditorSupport());
 		list.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.DatabaseSupport.getInstanceEditorSupport());
 		list.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.MassSpectrumSupport.getInstanceEditorSupport());
-		// list.add(new ChromatogramSupport(DataType.CSD).getInstanceEditorSupport());
-		// list.add(new ChromatogramSupport(DataType.MSD).getInstanceEditorSupport());
-		// list.add(new ChromatogramSupport(DataType.WSD).getInstanceEditorSupport());
+		// list.add(new EditorSupportFactory(DataType.CSD).getInstanceEditorSupport());
+		// list.add(new EditorSupportFactory(DataType.MSD).getInstanceEditorSupport());
+		// list.add(new EditorSupportFactory(DataType.WSD).getInstanceEditorSupport());
 		return list;
 	}
 }

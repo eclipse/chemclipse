@@ -13,11 +13,35 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
 import org.eclipse.swt.SWT;
 import org.swtchart.LineStyle;
 
 public class PreferenceConstants {
 
+	public static String[][] PART_STACKS = new String[][]{//
+			{"--", PartSupport.PARTSTACK_NONE}, //
+			{"Left Top", PartSupport.PARTSTACK_LEFT_TOP}, //
+			{"Left Center", PartSupport.PARTSTACK_LEFT_CENTER}, //
+			{"Right Top", PartSupport.PARTSTACK_RIGHT_TOP}, //
+			{"Bottom Left", PartSupport.PARTSTACK_BOTTOM_LEFT}, //
+			{"Bottom Center", PartSupport.PARTSTACK_BOTTOM_CENTER}, //
+			{"Bottom Right", PartSupport.PARTSTACK_BOTTOM_RIGHT}//
+	};
+	//
+	public static String[][] FONT_STYLES = new String[][]{//
+			{"Normal", Integer.toString(SWT.NORMAL)}, //
+			{"Bold", Integer.toString(SWT.BOLD)}, //
+			{"Italic", Integer.toString(SWT.ITALIC)}//
+	};
+	//
+	public static String[][] COMPRESSION_TYPES = new String[][]{//
+			{LineChart.COMPRESSION_EXTREME, LineChart.COMPRESSION_EXTREME}, //
+			{LineChart.COMPRESSION_HIGH, LineChart.COMPRESSION_HIGH}, //
+			{LineChart.COMPRESSION_MEDIUM, LineChart.COMPRESSION_MEDIUM}, //
+			{LineChart.COMPRESSION_LOW, LineChart.COMPRESSION_LOW}, //
+			{LineChart.COMPRESSION_NONE, LineChart.COMPRESSION_NONE}//
+	};
 	/*
 	 * General / Task Quick Access
 	 */
@@ -49,16 +73,6 @@ public class PreferenceConstants {
 	public static final String DEF_STACK_POSITION_INTEGRATION_AREA = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_INTERNAL_STANDARDS = "stackPositionInternalStandards";
 	public static final String DEF_STACK_POSITION_INTERNAL_STANDARDS = PartSupport.PARTSTACK_BOTTOM_RIGHT;
-	//
-	public static String[][] PART_STACKS = new String[][]{//
-			{"--", PartSupport.PARTSTACK_NONE}, //
-			{"Left Top", PartSupport.PARTSTACK_LEFT_TOP}, //
-			{"Left Center", PartSupport.PARTSTACK_LEFT_CENTER}, //
-			{"Right Top", PartSupport.PARTSTACK_RIGHT_TOP}, //
-			{"Bottom Left", PartSupport.PARTSTACK_BOTTOM_LEFT}, //
-			{"Bottom Center", PartSupport.PARTSTACK_BOTTOM_CENTER}, //
-			{"Bottom Right", PartSupport.PARTSTACK_BOTTOM_RIGHT}//
-	};
 	/*
 	 * Overlay
 	 */
@@ -107,12 +121,6 @@ public class PreferenceConstants {
 	public static final boolean DEF_SCAN_LABEL_MODULO_INTENSITIES = false;
 	public static final String P_AUTOFOCUS_SUBTRACT_SCAN_PART = "autofocusSubtractScanPart";
 	public static final boolean DEF_AUTOFOCUS_SUBTRACT_SCAN_PART = true;
-	//
-	public static String[][] FONT_STYLES = new String[][]{//
-			{"Normal", Integer.toString(SWT.NORMAL)}, //
-			{"Bold", Integer.toString(SWT.BOLD)}, //
-			{"Italic", Integer.toString(SWT.ITALIC)}//
-	};
 	/*
 	 * Peaks
 	 */
@@ -164,4 +172,6 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_AREA_WITHOUT_DECIMALS = true;
 	public static final String P_SHOW_PEAKS_IN_SELECTED_RANGE = "showPeaksInSelectedRange";
 	public static final boolean DEF_SHOW_PEAKS_IN_SELECTED_RANGE = true;
+	public static final String P_CHROMATOGRAM_CHART_COMPRESSION_TYPE = "chartCompressionType";
+	public static final String DEF_CHROMATOGRAM_CHART_COMPRESSION_TYPE = LineChart.COMPRESSION_MEDIUM;
 }

@@ -15,12 +15,12 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSuppor
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 
-public class ChromatogramSupport {
+public class EditorSupportFactory {
 
 	private ISupplierFileIdentifier chromatogramIdentifier;
 	private IChromatogramEditorSupport chromatogramEditorSupport;
 
-	public ChromatogramSupport(DataType dataType) {
+	public EditorSupportFactory(DataType dataType) {
 		chromatogramIdentifier = new ChromatogramIdentifier(dataType);
 		chromatogramEditorSupport = new ChromatogramEditorSupport(dataType);
 	}
