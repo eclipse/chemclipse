@@ -89,6 +89,7 @@ public class ExtendedInternalStandardsUI {
 	private InternalStandardsListUI internalStandardsListUI;
 	private IPeak peak;
 	//
+	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Inject
@@ -111,7 +112,7 @@ public class ExtendedInternalStandardsUI {
 	private void updatePeak() {
 
 		String editInformation = internalStandardsListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
-		labelPeak.setText(PeakDataSupport.getPeakLabel(peak) + " - " + editInformation);
+		labelPeak.setText(peakDataSupport.getPeakLabel(peak) + " - " + editInformation);
 		//
 		if(peak != null) {
 			internalStandardsListUI.setInput(peak.getInternalStandards());

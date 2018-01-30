@@ -120,6 +120,9 @@ public class ExtendedTargetsUI {
 	//
 	private boolean showChromatogramTargets = false;
 	//
+	private PeakDataSupport peakDataSupport = new PeakDataSupport();
+	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
+	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
 
@@ -661,31 +664,31 @@ public class ExtendedTargetsUI {
 
 		if(object instanceof IScanMSD) {
 			IScanMSD scanMSD = (IScanMSD)object;
-			labelInfo.setText(ScanDataSupport.getScanLabel(scanMSD));
+			labelInfo.setText(scanDataSupport.getScanLabel(scanMSD));
 			targetListUI.setInput(scanMSD.getTargets());
 		} else if(object instanceof IScanCSD) {
 			IScanCSD scanCSD = (IScanCSD)object;
-			labelInfo.setText(ScanDataSupport.getScanLabel(scanCSD));
+			labelInfo.setText(scanDataSupport.getScanLabel(scanCSD));
 			targetListUI.setInput(scanCSD.getTargets());
 		} else if(object instanceof IScanWSD) {
 			IScanWSD scanWSD = (IScanWSD)object;
-			labelInfo.setText(ScanDataSupport.getScanLabel(scanWSD));
+			labelInfo.setText(scanDataSupport.getScanLabel(scanWSD));
 			targetListUI.setInput(scanWSD.getTargets());
 		} else if(object instanceof IPeak) {
 			IPeak peak = (IPeak)object;
-			labelInfo.setText(PeakDataSupport.getPeakLabel(peak));
+			labelInfo.setText(peakDataSupport.getPeakLabel(peak));
 			targetListUI.setInput(peak.getTargets());
 		} else if(object instanceof IChromatogramMSD) {
 			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)object;
-			labelInfo.setText(ChromatogramDataSupport.getChromatogramLabel(chromatogramMSD));
+			labelInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogramMSD));
 			targetListUI.setInput(chromatogramMSD.getTargets());
 		} else if(object instanceof IChromatogramCSD) {
 			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)object;
-			labelInfo.setText(ChromatogramDataSupport.getChromatogramLabel(chromatogramCSD));
+			labelInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogramCSD));
 			targetListUI.setInput(chromatogramCSD.getTargets());
 		} else if(object instanceof IChromatogramWSD) {
 			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)object;
-			labelInfo.setText(ChromatogramDataSupport.getChromatogramLabel(chromatogramWSD));
+			labelInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogramWSD));
 			targetListUI.setInput(chromatogramWSD.getTargets());
 		} else {
 			labelInfo.setText("No target data has been selected yet.");

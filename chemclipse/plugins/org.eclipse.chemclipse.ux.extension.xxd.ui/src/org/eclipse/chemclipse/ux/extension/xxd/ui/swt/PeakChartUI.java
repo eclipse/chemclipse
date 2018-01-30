@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToMinuteConverter;
@@ -56,7 +56,7 @@ public class PeakChartUI extends ScrollableChart {
 	private static final float HEIGHT_15 = 0.15f;
 	private static final float HEIGHT_0 = 0.0f;
 	//
-	private PeakDataSupport peakSupport = new PeakDataSupport();
+	private PeakChartSupport peakChartSupport = new PeakChartSupport();
 	private Display display = Display.getDefault();
 
 	public PeakChartUI() {
@@ -121,17 +121,17 @@ public class PeakChartUI extends ScrollableChart {
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAK)) {
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_1));
-			lineSeriesDataList.add(peakSupport.getPeak(peak, includeBackground, mirrored, color, "Peak" + postfix));
+			lineSeriesDataList.add(peakChartSupport.getPeak(peak, includeBackground, mirrored, color, "Peak" + postfix));
 		}
 		/*
 		 * Tangents
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAK_TANGENTS)) {
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_TANGENTS));
-			lineSeriesDataList.add(peakSupport.getIncreasingTangent(peak, includeBackground, mirrored, color, postfix));
-			lineSeriesDataList.add(peakSupport.getDecreasingTangent(peak, includeBackground, mirrored, color, postfix));
+			lineSeriesDataList.add(peakChartSupport.getIncreasingTangent(peak, includeBackground, mirrored, color, postfix));
+			lineSeriesDataList.add(peakChartSupport.getDecreasingTangent(peak, includeBackground, mirrored, color, postfix));
 			if(!includeBackground) {
-				lineSeriesDataList.add(peakSupport.getPeakPerpendicular(peak, includeBackground, mirrored, color, postfix));
+				lineSeriesDataList.add(peakChartSupport.getPeakPerpendicular(peak, includeBackground, mirrored, color, postfix));
 			}
 		}
 		/*
@@ -139,22 +139,22 @@ public class PeakChartUI extends ScrollableChart {
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAK_WIDTH_0)) {
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_WIDTH_0));
-			lineSeriesDataList.add(peakSupport.getPeakWidth(peak, includeBackground, HEIGHT_0, mirrored, color, postfix));
+			lineSeriesDataList.add(peakChartSupport.getPeakWidth(peak, includeBackground, HEIGHT_0, mirrored, color, postfix));
 		}
 		/*
 		 * Width 0%
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAK_WIDTH_50)) {
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_WIDTH_50));
-			lineSeriesDataList.add(peakSupport.getPeakWidth(peak, includeBackground, HEIGHT_50, mirrored, color, postfix));
+			lineSeriesDataList.add(peakChartSupport.getPeakWidth(peak, includeBackground, HEIGHT_50, mirrored, color, postfix));
 		}
 		/*
 		 * Width Condal-Bosh
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAK_WIDTH_CONDAL_BOSH)) {
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_WIDTH_CONDAL_BOSH));
-			lineSeriesDataList.add(peakSupport.getPeakWidth(peak, includeBackground, HEIGHT_85, mirrored, color, postfix));
-			lineSeriesDataList.add(peakSupport.getPeakWidth(peak, includeBackground, HEIGHT_15, mirrored, color, postfix));
+			lineSeriesDataList.add(peakChartSupport.getPeakWidth(peak, includeBackground, HEIGHT_85, mirrored, color, postfix));
+			lineSeriesDataList.add(peakChartSupport.getPeakWidth(peak, includeBackground, HEIGHT_15, mirrored, color, postfix));
 		}
 		/*
 		 * Include Baseline
@@ -162,11 +162,11 @@ public class PeakChartUI extends ScrollableChart {
 		if(includeBackground) {
 			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAK_BASELINE)) {
 				Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_BASELINE));
-				lineSeriesDataList.add(peakSupport.getPeakBaseline(peak, mirrored, color, "Peak Baseline" + postfix));
+				lineSeriesDataList.add(peakChartSupport.getPeakBaseline(peak, mirrored, color, "Peak Baseline" + postfix));
 			}
 			//
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_BACKGROUND));
-			lineSeriesDataList.add(peakSupport.getPeakBackground(peak, mirrored, color, "Peak Background" + postfix));
+			lineSeriesDataList.add(peakChartSupport.getPeakBackground(peak, mirrored, color, "Peak Background" + postfix));
 		}
 		return lineSeriesDataList;
 	}

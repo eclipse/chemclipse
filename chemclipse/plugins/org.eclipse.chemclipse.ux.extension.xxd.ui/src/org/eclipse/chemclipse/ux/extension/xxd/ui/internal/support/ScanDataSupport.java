@@ -25,8 +25,6 @@ import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 
 public class ScanDataSupport {
 
-	private static DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0##");
-	//
 	public static final String[] DATA_TYPES_DEFAULT = new String[]{DataType.AUTO_DETECT.toString()};
 	public static final String[] DATA_TYPES_MSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.MSD_NOMINAL.toString(), DataType.MSD_TANDEM.toString(), DataType.MSD_HIGHRES.toString()};
 	public static final String[] DATA_TYPES_CSD = new String[]{DataType.AUTO_DETECT.toString(), DataType.CSD.toString()};
@@ -36,11 +34,10 @@ public class ScanDataSupport {
 	public static final String[] SIGNAL_TYPES_MSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
 	public static final String[] SIGNAL_TYPES_CSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString()};
 	public static final String[] SIGNAL_TYPES_WSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
+	//
+	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0##");
 
-	private ScanDataSupport() {
-	}
-
-	public static String getRetentionTime(IScan scan) {
+	public String getRetentionTime(IScan scan) {
 
 		if(scan != null) {
 			return decimalFormat.format(scan.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR);
@@ -49,7 +46,7 @@ public class ScanDataSupport {
 		}
 	}
 
-	public static String getScanLabel(IScan scan) {
+	public String getScanLabel(IScan scan) {
 
 		StringBuilder builder = new StringBuilder();
 		if(scan != null) {
@@ -100,7 +97,7 @@ public class ScanDataSupport {
 		return builder.toString();
 	}
 
-	public static String getMassSpectrumLabel(IScanMSD scanMSD, String prefix, String title, String postfix) {
+	public String getMassSpectrumLabel(IScanMSD scanMSD, String prefix, String title, String postfix) {
 
 		StringBuilder builder = new StringBuilder();
 		builder.append(prefix);
@@ -147,7 +144,7 @@ public class ScanDataSupport {
 		return builder.toString();
 	}
 
-	public static boolean containsOptimizedScan(IScan scan) {
+	public boolean containsOptimizedScan(IScan scan) {
 
 		boolean containsOptimizedScan = false;
 		//

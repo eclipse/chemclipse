@@ -33,9 +33,9 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.PeakLabelMarker;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
@@ -79,6 +79,9 @@ public class ExtendedChromatogramUI {
 	private PeakLabelMarker peakLabelMarker;
 	private PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 	//
+	private PeakChartSupport peakChartSupport = new PeakChartSupport();
+	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
+	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Inject
@@ -142,9 +145,7 @@ public class ExtendedChromatogramUI {
 			/*
 			 * Chromatogram TIC
 			 */
-			OverlayChartSupport overlaySupport = new OverlayChartSupport();
-			PeakDataSupport peakSupport = new PeakDataSupport();
-			lineSeriesDataList.add(overlaySupport.getLineSeriesData(chromatogramSelection));
+			lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogramSelection));
 			/*
 			 * Peaks
 			 */
@@ -160,7 +161,7 @@ public class ExtendedChromatogramUI {
 			}
 			//
 			Collections.sort(peaks, peakRetentionTimeComparator);
-			ILineSeriesData peakSeriesData = peakSupport.getPeaks(peaks, true, false, Colors.BLACK, "Peaks");
+			ILineSeriesData peakSeriesData = peakChartSupport.getPeaks(peaks, true, false, Colors.BLACK, "Peaks");
 			ILineSeriesSettings lineSeriesSettings = peakSeriesData.getLineSeriesSettings();
 			lineSeriesSettings.setEnableArea(false);
 			lineSeriesSettings.setLineStyle(LineStyle.NONE);
@@ -413,9 +414,9 @@ public class ExtendedChromatogramUI {
 	private void updateLabel() {
 
 		if(chromatogramSelection != null) {
-			labelChromatogramInfo.setText(ChromatogramDataSupport.getChromatogramLabel(chromatogramSelection.getChromatogram()));
+			labelChromatogramInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogramSelection.getChromatogram()));
 		} else {
-			labelChromatogramInfo.setText(ChromatogramDataSupport.getChromatogramLabel(null));
+			labelChromatogramInfo.setText(chromatogramDataSupport.getChromatogramLabel(null));
 		}
 	}
 

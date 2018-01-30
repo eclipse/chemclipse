@@ -88,6 +88,8 @@ public class ExtendedPeakChartUI {
 	private int xStop;
 	//
 	private String detectionType = DETECTION_TYPE_NONE;
+	//
+	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	private Shell shell = Display.getDefault().getActiveShell();
 
 	private class KeyPressedEventProcessor extends AbstractHandledEventProcessor implements IHandledEventProcessor {
@@ -169,7 +171,7 @@ public class ExtendedPeakChartUI {
 
 		this.peak = peak;
 		resetSplittedPeaks();
-		labelPeak.setText(PeakDataSupport.getPeakLabel(peak));
+		labelPeak.setText(peakDataSupport.getPeakLabel(peak));
 		//
 		if(peak instanceof IChromatogramPeakCSD || peak instanceof IChromatogramPeakMSD) {
 			buttonDetectionTypeTangent.setEnabled(true);

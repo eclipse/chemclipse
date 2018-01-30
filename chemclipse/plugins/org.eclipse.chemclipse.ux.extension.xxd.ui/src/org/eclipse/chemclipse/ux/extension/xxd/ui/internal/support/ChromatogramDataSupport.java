@@ -19,12 +19,9 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 
 public class ChromatogramDataSupport {
 
-	private static DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
+	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 
-	private ChromatogramDataSupport() {
-	}
-
-	public static String getChromatogramLabel(IChromatogram chromatogram) {
+	public String getChromatogramLabel(IChromatogram chromatogram) {
 
 		StringBuilder builder = new StringBuilder();
 		if(chromatogram != null) {
@@ -36,7 +33,7 @@ public class ChromatogramDataSupport {
 		return builder.toString();
 	}
 
-	public static String getChromatogramSelectionLabel(IChromatogramSelection chromatogramSelection) {
+	public String getChromatogramSelectionLabel(IChromatogramSelection chromatogramSelection) {
 
 		StringBuilder builder = new StringBuilder();
 		if(chromatogramSelection != null) {

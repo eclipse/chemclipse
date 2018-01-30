@@ -76,24 +76,6 @@ public class PreferenceConstants {
 	/*
 	 * Overlay
 	 */
-	public static final String P_COLOR_SCHEME_OVERLAY_NORMAL = "colorSchemeOverlayNormal";
-	public static final String DEF_COLOR_SCHEME_OVERLAY_NORMAL = Colors.COLOR_SCHEME_RED;
-	public static final String P_COLOR_SCHEME_OVERLAY_SIC = "colorSchemeOverlaySIC";
-	public static final String DEF_COLOR_SCHEME_OVERLAY_SIC = Colors.COLOR_SCHEME_HIGH_CONTRAST;
-	//
-	public static final String P_LINE_STYLE_OVERLAY_TIC = "lineStyleOverlayTIC";
-	public static final String DEF_LINE_STYLE_OVERLAY_TIC = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_OVERLAY_BPC = "lineStyleOverlayBPC";
-	public static final String DEF_LINE_STYLE_OVERLAY_BPC = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_OVERLAY_XIC = "lineStyleOverlayXIC";
-	public static final String DEF_LINE_STYLE_OVERLAY_XIC = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_OVERLAY_SIC = "lineStyleOverlaySIC";
-	public static final String DEF_LINE_STYLE_OVERLAY_SIC = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_OVERLAY_TSC = "lineStyleOverlayTSC";
-	public static final String DEF_LINE_STYLE_OVERLAY_TSC = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_OVERLAY_DEFAULT = "lineStyleOverlayDefault";
-	public static final String DEF_LINE_STYLE_OVERLAY_DEFAULT = LineStyle.SOLID.toString();
-	//
 	public static final String P_MINUTES_SHIFT_X = "minutesShiftX";
 	public static final double DEF_MINUTES_SHIFT_X = 0.5d;
 	public static final String P_ABSOLUTE_SHIFT_Y = "absoluteShiftY";
@@ -174,4 +156,20 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_PEAKS_IN_SELECTED_RANGE = true;
 	public static final String P_CHROMATOGRAM_CHART_COMPRESSION_TYPE = "chartCompressionType";
 	public static final String DEF_CHROMATOGRAM_CHART_COMPRESSION_TYPE = LineChart.COMPRESSION_MEDIUM;
+	public static final String P_COLOR_SCHEME_DISPLAY_NORMAL = "colorSchemeDisplayNormal";
+	public static final String DEF_COLOR_SCHEME_DISPLAY_NORMAL = Colors.COLOR_SCHEME_RED;
+	public static final String P_COLOR_SCHEME_DISPLAY_SIC = "colorSchemeDisplaySIC";
+	public static final String DEF_COLOR_SCHEME_DISPLAY_SIC = Colors.COLOR_SCHEME_HIGH_CONTRAST;
+	public static final String P_LINE_STYLE_DISPLAY_TIC = "lineStyleDisplayTIC";
+	public static final String DEF_LINE_STYLE_DISPLAY_TIC = LineStyle.SOLID.toString();
+	public static final String P_LINE_STYLE_DISPLAY_BPC = "lineStyleDisplayBPC";
+	public static final String DEF_LINE_STYLE_DISPLAY_BPC = LineStyle.SOLID.toString();
+	public static final String P_LINE_STYLE_DISPLAY_XIC = "lineStyleDisplayXIC";
+	public static final String DEF_LINE_STYLE_DISPLAY_XIC = LineStyle.SOLID.toString();
+	public static final String P_LINE_STYLE_DISPLAY_SIC = "lineStyleDisplaySIC";
+	public static final String DEF_LINE_STYLE_DISPLAY_SIC = LineStyle.SOLID.toString();
+	public static final String P_LINE_STYLE_DISPLAY_TSC = "lineStyleDisplayTSC";
+	public static final String DEF_LINE_STYLE_DISPLAY_TSC = LineStyle.SOLID.toString();
+	public static final String P_LINE_STYLE_DISPLAY_DEFAULT = "lineStyleDisplayDefault";
+	public static final String DEF_LINE_STYLE_DISPLAY_DEFAULT = LineStyle.SOLID.toString();
 }

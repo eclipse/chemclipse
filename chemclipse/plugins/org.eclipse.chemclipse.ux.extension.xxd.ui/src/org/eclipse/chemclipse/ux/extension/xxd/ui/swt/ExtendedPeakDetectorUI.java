@@ -38,10 +38,10 @@ import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.BaselineSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.BoxSelectionPaintListener;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ManualPeakDetector;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaks;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -147,8 +147,9 @@ public class ExtendedPeakDetectorUI {
 	private int yStop;
 	private int xBoxMoveStart;
 	//
-	private OverlayChartSupport overlaySupport = new OverlayChartSupport();
-	private PeakDataSupport peakSupport = new PeakDataSupport();
+	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
+	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
+	private PeakChartSupport peakChartSupport = new PeakChartSupport();
 	private Shell shell = Display.getDefault().getActiveShell();
 
 	private class KeyPressedEventProcessor extends AbstractHandledEventProcessor implements IHandledEventProcessor {
@@ -313,7 +314,7 @@ public class ExtendedPeakDetectorUI {
 		}
 		//
 		setDetectionType(DETECTION_TYPE_NONE);
-		labelChromatogram.setText(ChromatogramDataSupport.getChromatogramLabel(chromatogram));
+		labelChromatogram.setText(chromatogramDataSupport.getChromatogramLabel(chromatogram));
 		this.peak = null;
 		//
 		updateChromatogramAndPeak();
@@ -330,7 +331,7 @@ public class ExtendedPeakDetectorUI {
 			 * Chromatogram
 			 */
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-			lineSeriesDataList.add(overlaySupport.getLineSeriesData(chromatogramSelection));
+			lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogramSelection));
 			//
 			if(peak != null) {
 				/*
@@ -341,10 +342,10 @@ public class ExtendedPeakDetectorUI {
 				boolean mirrored = false;
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				Color colorPeak = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_1));
-				lineSeriesDataList.add(peakSupport.getPeak(peak, includeBackground, mirrored, colorPeak, ID_PEAK));
+				lineSeriesDataList.add(peakChartSupport.getPeak(peak, includeBackground, mirrored, colorPeak, ID_PEAK));
 				if(includeBackground) {
 					Color colorBackground = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_BACKGROUND));
-					lineSeriesDataList.add(peakSupport.getPeakBackground(peak, mirrored, colorBackground, ID_BACKGROUND));
+					lineSeriesDataList.add(peakChartSupport.getPeakBackground(peak, mirrored, colorBackground, ID_BACKGROUND));
 				}
 			}
 			//

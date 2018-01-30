@@ -48,6 +48,7 @@ public class ExtendedQuantitationListUI {
 	//
 	private IPeak peak;
 	//
+	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Inject
@@ -64,7 +65,7 @@ public class ExtendedQuantitationListUI {
 	public void update(IPeak peak) {
 
 		this.peak = peak;
-		labelInfo.setText(PeakDataSupport.getPeakLabel(peak));
+		labelInfo.setText(peakDataSupport.getPeakLabel(peak));
 		updateObject();
 	}
 

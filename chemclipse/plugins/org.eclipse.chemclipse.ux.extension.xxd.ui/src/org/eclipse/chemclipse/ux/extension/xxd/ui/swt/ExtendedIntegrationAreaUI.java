@@ -37,6 +37,9 @@ public class ExtendedIntegrationAreaUI {
 	private IntegrationAreaUI integrationAreaUI;
 	//
 	private Object object;
+	//
+	private PeakDataSupport peakDataSupport = new PeakDataSupport();
+	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 
 	@Inject
 	public ExtendedIntegrationAreaUI(Composite parent) {
@@ -53,9 +56,9 @@ public class ExtendedIntegrationAreaUI {
 
 		this.object = object;
 		if(object instanceof IPeak) {
-			labelInfo.setText(PeakDataSupport.getPeakLabel((IPeak)object));
+			labelInfo.setText(peakDataSupport.getPeakLabel((IPeak)object));
 		} else if(object instanceof IChromatogram) {
-			labelInfo.setText(ChromatogramDataSupport.getChromatogramLabel((IChromatogram)object));
+			labelInfo.setText(chromatogramDataSupport.getChromatogramLabel((IChromatogram)object));
 		} else {
 			labelInfo.setText("No data has been selected.");
 		}

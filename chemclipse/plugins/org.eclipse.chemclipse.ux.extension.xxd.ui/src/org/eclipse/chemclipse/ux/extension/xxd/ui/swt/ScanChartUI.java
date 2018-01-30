@@ -26,22 +26,18 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.comparator.IonValueComparator;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.BarSeriesValue;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.BarSeriesYComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.wsd.model.comparator.WavelengthValueComparator;
-import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToMinuteConverter;
 import org.eclipse.eavp.service.swtchart.axisconverter.RelativeIntensityConverter;
-import org.eclipse.eavp.service.swtchart.barcharts.BarSeriesData;
 import org.eclipse.eavp.service.swtchart.barcharts.IBarSeriesData;
 import org.eclipse.eavp.service.swtchart.barcharts.IBarSeriesSettings;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
@@ -53,12 +49,10 @@ import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.RangeRestriction;
 import org.eclipse.eavp.service.swtchart.core.ScrollableChart;
 import org.eclipse.eavp.service.swtchart.core.SecondaryAxisSettings;
-import org.eclipse.eavp.service.swtchart.core.SeriesData;
 import org.eclipse.eavp.service.swtchart.customcharts.MassSpectrumChart.LabelOption;
 import org.eclipse.eavp.service.swtchart.exceptions.SeriesException;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
-import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
@@ -99,9 +93,7 @@ public class ScanChartUI extends ScrollableChart {
 	private DataType dataType;
 	private SignalType signalType;
 	//
-	private IonValueComparator ionValueComparator = new IonValueComparator(SortOrder.ASC);
-	private WavelengthValueComparator wavelengthValueComparator = new WavelengthValueComparator(SortOrder.ASC);
-	//
+	private ScanChartSupport scanChartSupport = new ScanChartSupport();
 	private Display display = Display.getDefault();
 
 	private class LabelPaintListener implements ICustomPaintListener {
@@ -213,13 +205,13 @@ public class ScanChartUI extends ScrollableChart {
 			//
 			if(usedSignalType.equals(SignalType.PROFILE)) {
 				List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-				ILineSeriesData lineSeriesData = getLineSeriesData(scan, "", false);
+				ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesData(scan, "", false);
 				lineSeriesData.getLineSeriesSettings().setLineColor(colorScan1);
 				lineSeriesDataList.add(lineSeriesData);
 				addLineSeriesData(lineSeriesDataList);
 			} else {
 				List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
-				IBarSeriesData barSeriesData = getBarSeriesData(scan, "", false);
+				IBarSeriesData barSeriesData = scanChartSupport.getBarSeriesData(scan, "", false);
 				barSeriesData.getBarSeriesSettings().setBarColor(colorScan1);
 				barSeriesDataList.add(barSeriesData);
 				addBarSeriesData(barSeriesDataList);
@@ -251,8 +243,8 @@ public class ScanChartUI extends ScrollableChart {
 			//
 			if(usedSignalType.equals(SignalType.PROFILE)) {
 				List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-				ILineSeriesData lineSeriesDataScan1 = getLineSeriesData(scan1, labelScan1, false);
-				ILineSeriesData lineSeriesDataScan2 = getLineSeriesData(scan2, labelScan2, mirrored);
+				ILineSeriesData lineSeriesDataScan1 = scanChartSupport.getLineSeriesData(scan1, labelScan1, false);
+				ILineSeriesData lineSeriesDataScan2 = scanChartSupport.getLineSeriesData(scan2, labelScan2, mirrored);
 				lineSeriesDataScan1.getLineSeriesSettings().setLineColor(colorScan1);
 				lineSeriesDataScan2.getLineSeriesSettings().setLineColor(colorScan2);
 				lineSeriesDataList.add(lineSeriesDataScan1);
@@ -260,8 +252,8 @@ public class ScanChartUI extends ScrollableChart {
 				addLineSeriesData(lineSeriesDataList);
 			} else {
 				List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
-				IBarSeriesData barSeriesDataScan1 = getBarSeriesData(scan1, labelScan1, false);
-				IBarSeriesData barSeriesDataScan2 = getBarSeriesData(scan2, labelScan2, mirrored);
+				IBarSeriesData barSeriesDataScan1 = scanChartSupport.getBarSeriesData(scan1, labelScan1, false);
+				IBarSeriesData barSeriesDataScan2 = scanChartSupport.getBarSeriesData(scan2, labelScan2, mirrored);
 				barSeriesDataScan1.getBarSeriesSettings().setBarColor(colorScan1);
 				barSeriesDataScan2.getBarSeriesSettings().setBarColor(colorScan2);
 				barSeriesDataList.add(barSeriesDataScan1);
@@ -505,79 +497,6 @@ public class ScanChartUI extends ScrollableChart {
 		//
 		applySettings(chartSettings);
 		addSeriesLabelMarker(labelPaintListener);
-	}
-
-	private IBarSeriesData getBarSeriesData(IScan scan, String postfix, boolean mirrored) {
-
-		ISeriesData seriesData = getSeriesData(scan, postfix, mirrored);
-		IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
-		return barSeriesData;
-	}
-
-	private ILineSeriesData getLineSeriesData(IScan scan, String postfix, boolean mirrored) {
-
-		ISeriesData seriesData = getSeriesData(scan, postfix, mirrored);
-		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-		return lineSeriesData;
-	}
-
-	private ISeriesData getSeriesData(IScan scan, String postfix, boolean mirrored) {
-
-		double[] xSeries;
-		double[] ySeries;
-		String scanNumber = (scan.getScanNumber() > 0 ? Integer.toString(scan.getScanNumber()) : "--");
-		String id = "Scan " + scanNumber;
-		if(!"".equals(postfix)) {
-			id += " " + postfix;
-		}
-		/*
-		 * Sort the scan data, otherwise the line chart could be odd.
-		 */
-		if(scan instanceof IScanMSD) {
-			/*
-			 * MSD
-			 */
-			IScanMSD scanMSD = (IScanMSD)scan;
-			List<IIon> ions = new ArrayList<IIon>(scanMSD.getIons());
-			Collections.sort(ions, ionValueComparator);
-			int size = ions.size();
-			xSeries = new double[size];
-			ySeries = new double[size];
-			int index = 0;
-			for(IIon ion : ions) {
-				xSeries[index] = ion.getIon();
-				ySeries[index] = (mirrored) ? ion.getAbundance() * -1 : ion.getAbundance();
-				index++;
-			}
-		} else if(scan instanceof IScanCSD) {
-			/*
-			 * CSD
-			 */
-			IScanCSD scanCSD = (IScanCSD)scan;
-			xSeries = new double[]{scanCSD.getRetentionTime()};
-			ySeries = new double[]{(mirrored) ? scanCSD.getTotalSignal() * -1 : scanCSD.getTotalSignal()};
-		} else if(scan instanceof IScanWSD) {
-			/*
-			 * WSD
-			 */
-			IScanWSD scanWSD = (IScanWSD)scan;
-			List<IScanSignalWSD> scanSignalsWSD = new ArrayList<IScanSignalWSD>(scanWSD.getScanSignals());
-			Collections.sort(scanSignalsWSD, wavelengthValueComparator);
-			int size = scanSignalsWSD.size();
-			xSeries = new double[size];
-			ySeries = new double[size];
-			int index = 0;
-			for(IScanSignalWSD scanSignalWSD : scanSignalsWSD) {
-				xSeries[index] = scanSignalWSD.getWavelength();
-				ySeries[index] = (mirrored) ? scanSignalWSD.getAbundance() * -1 : scanSignalWSD.getAbundance();
-				index++;
-			}
-		} else {
-			xSeries = new double[0];
-			ySeries = new double[0];
-		}
-		//
-		return new SeriesData(xSeries, ySeries, id);
 	}
 
 	private void addBarSeriesData(List<IBarSeriesData> barSeriesDataList) {

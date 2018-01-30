@@ -53,6 +53,7 @@ public class ExtendedPeakDetailsUI {
 	//
 	private IPeak peak;
 	//
+	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	private Display display = Display.getDefault();
 
 	@Inject
@@ -71,7 +72,7 @@ public class ExtendedPeakDetailsUI {
 	public void update(IPeak peak) {
 
 		this.peak = peak;
-		labelPeak.setText(PeakDataSupport.getPeakLabel(peak));
+		labelPeak.setText(peakDataSupport.getPeakLabel(peak));
 		updatePeak();
 	}
 

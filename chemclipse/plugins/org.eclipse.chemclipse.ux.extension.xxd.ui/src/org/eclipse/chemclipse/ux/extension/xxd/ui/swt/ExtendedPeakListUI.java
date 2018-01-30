@@ -85,6 +85,7 @@ public class ExtendedPeakListUI {
 	private PeakListUI peakListUI;
 	private IChromatogramSelection chromatogramSelection;
 	//
+	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
 
@@ -568,12 +569,12 @@ public class ExtendedPeakListUI {
 	private void updateLabel() {
 
 		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() == null) {
-			labelChromatogramName.setText(ChromatogramDataSupport.getChromatogramLabel(null));
+			labelChromatogramName.setText(chromatogramDataSupport.getChromatogramLabel(null));
 			labelChromatogramInfo.setText("");
 		} else {
 			String editInformation = peakListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			String chromatogramLabel = ChromatogramDataSupport.getChromatogramLabel(chromatogram);
+			String chromatogramLabel = chromatogramDataSupport.getChromatogramLabel(chromatogram);
 			labelChromatogramName.setText(chromatogramLabel + " - " + editInformation);
 			labelChromatogramInfo.setText("Number of Peaks: " + chromatogram.getNumberOfPeaks());
 		}

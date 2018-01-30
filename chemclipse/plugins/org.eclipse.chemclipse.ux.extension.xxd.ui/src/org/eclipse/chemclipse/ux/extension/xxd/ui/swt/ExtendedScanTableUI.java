@@ -91,6 +91,8 @@ public class ExtendedScanTableUI {
 	private DeleteKeyEventProcessor deleteKeyEventProcessor;
 	//
 	private boolean fireUpdate = true;
+	//
+	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private Shell shell = Display.getDefault().getActiveShell();
 
 	private class DeleteMenuEntry implements ITableMenuEntry {
@@ -193,7 +195,7 @@ public class ExtendedScanTableUI {
 			scan = peak.getPeakModel().getPeakMaximum();
 		}
 		//
-		labelInfo.setText(ScanDataSupport.getScanLabel(scan));
+		labelInfo.setText(scanDataSupport.getScanLabel(scan));
 		scanTableUI.setInput(scan);
 		/*
 		 * Fields
@@ -217,7 +219,7 @@ public class ExtendedScanTableUI {
 		 * Optimized Scan
 		 */
 		optimizedMassSpectrum = null;
-		buttonOptimizedScan.setEnabled(ScanDataSupport.containsOptimizedScan(scan));
+		buttonOptimizedScan.setEnabled(scanDataSupport.containsOptimizedScan(scan));
 		buttonSaveScan.setEnabled(isSaveEnabled());
 	}
 
@@ -377,7 +379,7 @@ public class ExtendedScanTableUI {
 					optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
 					if(optimizedMassSpectrum != null) {
 						scanTableUI.setInput(optimizedMassSpectrum);
-						labelInfo.setText(ScanDataSupport.getScanLabel(optimizedMassSpectrum));
+						labelInfo.setText(scanDataSupport.getScanLabel(optimizedMassSpectrum));
 						button.setEnabled(false);
 					}
 				}

@@ -118,6 +118,7 @@ public class ExtendedScanChartUI {
 	private List<String> scanIdentifierIds;
 	private String[] scanIdentifierNames;
 	//
+	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private EditorUpdateSupport editorUpdateSupport;
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
@@ -184,7 +185,7 @@ public class ExtendedScanChartUI {
 	private void setMasterRetentionTime() {
 
 		masterRetentionTime = scan.getRetentionTime();
-		textReferenceScanRetentionTime.setText(ScanDataSupport.getRetentionTime(scan));
+		textReferenceScanRetentionTime.setText(scanDataSupport.getRetentionTime(scan));
 	}
 
 	private void updateScan() {
@@ -198,7 +199,7 @@ public class ExtendedScanChartUI {
 
 	private void setScanInfo() {
 
-		labelScan.setText(ScanDataSupport.getScanLabel(scan));
+		labelScan.setText(scanDataSupport.getScanLabel(scan));
 		enableIdentifierSettings(scan);
 		setDetectorSignalType(scan);
 		scanChartUI.setInput(scan);
