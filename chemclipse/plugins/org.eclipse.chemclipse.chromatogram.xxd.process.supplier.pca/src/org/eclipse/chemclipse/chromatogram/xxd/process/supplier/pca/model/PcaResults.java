@@ -45,12 +45,6 @@ public class PcaResults implements IPcaResults {
 	}
 
 	@Override
-	public ObservableList<IPcaResult> getPcaResultGroupsList() {
-
-		return pcaResultGroupsList;
-	}
-
-	@Override
 	public ObservableList<IPcaResult> getPcaResultList() {
 
 		return pcaResultList;

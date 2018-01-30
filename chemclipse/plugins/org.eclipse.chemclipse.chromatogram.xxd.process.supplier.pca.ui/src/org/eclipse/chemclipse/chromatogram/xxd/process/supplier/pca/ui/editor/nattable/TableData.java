@@ -63,7 +63,7 @@ public class TableData {
 		 * copy data and insert object ISample and IGroup and sort this object by group name
 		 */
 		samples.addAll(isamples.getSampleList().stream().filter(s -> s.isSelected()).collect(Collectors.toList()));
-		samples.addAll(isamples.getGroupList().stream().filter(s -> s.isSelected()).collect(Collectors.toList()));
+		// samples.addAll(isamples.getGroupList().stream().filter(s -> s.isSelected()).collect(Collectors.toList()));
 		PcaUtils.sortSampleListByName(samples);
 		PcaUtils.sortSampleListByGroup(samples);
 		/*

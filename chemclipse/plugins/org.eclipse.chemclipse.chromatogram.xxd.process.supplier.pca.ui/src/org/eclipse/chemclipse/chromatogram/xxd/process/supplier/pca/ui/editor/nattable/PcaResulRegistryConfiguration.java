@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.CellConfigAttributes;
@@ -44,13 +48,15 @@ public class PcaResulRegistryConfiguration extends AbstractRegistryConfiguration
 		configRegistry.unregisterConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, DisplayMode.NORMAL, TableProvider.COLUMN_LABEL_GROUP_DATA);
 		configRegistry.unregisterConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, DisplayMode.NORMAL, TableProvider.COLUMN_LABEL_SAMPLE_DATA);
 		DefaultDoubleDisplayConverter format = new DefaultDoubleDisplayConverter();
-		format.setNumberFormat(ValueFormat.getNumberFormatEnglish());
+		DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ENGLISH);
+		symbols.setNaN("#N/A");
+		format.setNumberFormat(new DecimalFormat((ValueFormat.DEFAULT_DECIMAL_PATTERN), symbols));
 		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
 				format, DisplayMode.NORMAL, //
 				TableProvider.COLUMN_LABEL_GROUP_DATA);
 		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
 				format, DisplayMode.NORMAL, //
-				TableProvider.COLUMN_LABEL_SAMPLE_DATA);
+				TableProvider.COLUMN_LABEL_SAMPLE_DATA);/**/
 		// Set format for retention times
 		DefaultDoubleDisplayConverter formatRetTime = new DefaultDoubleDisplayConverter();
 		formatRetTime.setNumberFormat(ValueFormat.getNumberFormatEnglish());

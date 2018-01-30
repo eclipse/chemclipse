@@ -77,7 +77,6 @@ public class DataTablePart {
 		if(!SelectionManagerSamples.getInstance().getSelection().isEmpty()) {
 			actualSamples = SelectionManagerSamples.getInstance().getSelection().get(0);
 			actualSamples.getSampleList().addListener(sampleChangeListener);
-			actualSamples.getGroupList().addListener(sampleChangeListener);
 			peakListIntensityTable.update(actualSamples);
 		}
 	}
@@ -88,7 +87,6 @@ public class DataTablePart {
 		SelectionManagerSamples.getInstance().getSelection().removeListener(samplesChangeListener);
 		if(actualSamples != null) {
 			actualSamples.getSampleList().removeListener(sampleChangeListener);
-			actualSamples.getGroupList().removeListener(sampleChangeListener);
 		}
 	}
 }

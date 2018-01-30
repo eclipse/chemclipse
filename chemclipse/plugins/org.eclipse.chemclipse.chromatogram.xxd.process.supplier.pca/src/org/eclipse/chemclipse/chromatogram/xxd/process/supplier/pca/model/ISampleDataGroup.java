@@ -11,5 +11,5 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-public interface ISampleDataGroup extends ISampleData {
+public interface ISampleDataGroup<S extends ISample<? extends ISampleData>> extends ISampleData {
 }

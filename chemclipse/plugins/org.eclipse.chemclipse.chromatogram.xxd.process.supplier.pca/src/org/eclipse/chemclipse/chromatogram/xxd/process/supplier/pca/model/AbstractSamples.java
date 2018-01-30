@@ -16,20 +16,12 @@ import javafx.collections.ObservableList;
 
 public abstract class AbstractSamples<V extends IVariable, S extends ISample<? extends ISampleData>> implements ISamples<V, S> {
 
-	private ObservableList<IGroup<S>> groupList;
 	private ObservableList<S> samples;
 	private ObservableList<V> vareables;
 
 	public AbstractSamples() {
 		samples = FXCollections.observableArrayList(ISample.extractor());
 		vareables = FXCollections.observableArrayList(IVariable.extractor());
-		groupList = FXCollections.observableArrayList(IGroup.extractor());
-	}
-
-	@Override
-	public ObservableList<IGroup<S>> getGroupList() {
-
-		return groupList;
 	}
 
 	@Override

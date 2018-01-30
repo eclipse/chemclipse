@@ -30,8 +30,8 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 
 public class CreatePcaEvaluation {
 
-	private static final String PCA_PERSPECTIVE = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective";
 	private static final String PCA_EDITOR = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pcaeditor";
+	private static final String PCA_PERSPECTIVE = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective";
 
 	public static void createPart() {
 

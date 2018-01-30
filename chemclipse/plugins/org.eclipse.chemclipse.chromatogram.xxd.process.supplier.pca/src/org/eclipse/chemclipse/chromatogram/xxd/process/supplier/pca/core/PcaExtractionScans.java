@@ -177,10 +177,6 @@ public class PcaExtractionScans implements IDataExtraction {
 					break;
 			}
 		}
-		/*
-		 * create Groups
-		 */
-		samples.createGroups();
 		return samples;
 	}
 

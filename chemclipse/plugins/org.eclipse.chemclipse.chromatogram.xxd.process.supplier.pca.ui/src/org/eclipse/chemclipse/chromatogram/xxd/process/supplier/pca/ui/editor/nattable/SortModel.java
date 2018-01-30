@@ -144,15 +144,7 @@ public class SortModel implements ISortModel {
 				sortedRow.sort((i, j) -> {
 					ISampleData sampleDataA = sampleData.get(i);
 					ISampleData sampleDataB = sampleData.get(j);
-					if(!sampleDataA.isEmpty() && !sampleDataB.isEmpty()) {
-						return setDirection * Double.compare(sampleDataA.getModifiedData(), sampleDataB.getModifiedData());
-					} else if(!sampleDataA.isEmpty()) {
-						return setDirection;
-					} else if(!sampleDataB.isEmpty()) {
-						return -setDirection;
-					} else {
-						return 0;
-					}
+					return setDirection * Double.compare(sampleDataA.getModifiedData(), sampleDataB.getModifiedData());
 				});
 			}
 			this.isSorted = true;
