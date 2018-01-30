@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
-import org.eclipse.chemclipse.model.comparator.ChromatogramPeakRetentionTimeComparator;
+import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
@@ -40,12 +40,12 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 
 	private static final String DELIMITER = ",";
 	//
-	private ChromatogramPeakRetentionTimeComparator chromatogramPeakComparator;
+	private PeakRetentionTimeComparator chromatogramPeakComparator;
 	private TargetExtendedComparator targetExtendedComparator;
 	private DecimalFormat decimalFormat;
 
 	public ChromatogramWriter() {
-		chromatogramPeakComparator = new ChromatogramPeakRetentionTimeComparator(SortOrder.DESC);
+		chromatogramPeakComparator = new PeakRetentionTimeComparator(SortOrder.DESC);
 		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
