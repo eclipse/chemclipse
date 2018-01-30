@@ -113,63 +113,31 @@ public class ChromatogramChartSupport {
 		return color;
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection) {
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection, String seriesId, Color color) {
 
 		String overlayType = DISPLAY_TYPE_TIC;
 		String derivativeType = DERIVATIVE_NONE;
-		return getLineSeriesData(chromatogramSelection, overlayType, derivativeType, null);
+		return getLineSeriesData(chromatogramSelection, seriesId, overlayType, derivativeType, color, null);
+	}
+
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions) {
+
+		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
+		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
+		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, overlayType, derivativeType, color, ions);
 	}
 
 	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions) {
 
-		double[] xSeries = new double[chromatogram.getNumberOfScans()];
-		double[] ySeries = new double[chromatogram.getNumberOfScans()];
-		LineStyle lineStyle = getLineStyle(overlayType);
-		/*
-		 * Get the data.
-		 */
-		int index = 0;
-		for(IScan scan : chromatogram.getScans()) {
-			/*
-			 * Get the retention time and intensity.
-			 */
-			xSeries[index] = scan.getRetentionTime();
-			ySeries[index] = getIntensity(scan, overlayType, derivativeType, ions);
-			index++;
-		}
-		/*
-		 * Calculate a derivative?
-		 */
-		int derivatives = getNumberOfDerivatives(derivativeType);
-		for(int i = 1; i <= derivatives; i++) {
-			ySeries = calculateDerivate(ySeries);
-		}
-		/*
-		 * Add the series.
-		 */
-		ISeriesData seriesData = new SeriesData(xSeries, ySeries, seriesId);
-		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-		ILineSeriesSettings lineSerieSettings = lineSeriesData.getLineSeriesSettings();
-		lineSerieSettings.setLineColor(color);
-		lineSerieSettings.setLineStyle(lineStyle);
-		lineSerieSettings.setEnableArea(false);
-		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSerieSettings.getSeriesSettingsHighlight();
-		lineSeriesSettingsHighlight.setLineWidth(2);
-		//
-		return lineSeriesData;
+		int startScan = 1;
+		int stopScan = chromatogram.getNumberOfScans();
+		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, overlayType, derivativeType, color, ions);
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection, String overlayType, String derivativeType, List<Integer> ions) {
+	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions) {
 
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-		//
-		String seriesId = chromatogram.getName();
-		Color color = getSeriesColor(seriesId, overlayType);
-		//
-		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
-		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
 		int length = stopScan - startScan + 1;
-		//
 		double[] xSeries = new double[length];
 		double[] ySeries = new double[length];
 		LineStyle lineStyle = getLineStyle(overlayType);
@@ -201,7 +169,6 @@ public class ChromatogramChartSupport {
 		ILineSeriesSettings lineSerieSettings = lineSeriesData.getLineSeriesSettings();
 		lineSerieSettings.setLineColor(color);
 		lineSerieSettings.setLineStyle(lineStyle);
-		lineSerieSettings.setEnableArea(false);
 		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSerieSettings.getSeriesSettingsHighlight();
 		lineSeriesSettingsHighlight.setLineWidth(2);
 		//

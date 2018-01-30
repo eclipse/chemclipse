@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
 import org.eclipse.swt.SWT;
+import org.swtchart.ILineSeries.PlotSymbolType;
 import org.swtchart.LineStyle;
 
 public class PreferenceConstants {
@@ -41,6 +42,17 @@ public class PreferenceConstants {
 			{LineChart.COMPRESSION_MEDIUM, LineChart.COMPRESSION_MEDIUM}, //
 			{LineChart.COMPRESSION_LOW, LineChart.COMPRESSION_LOW}, //
 			{LineChart.COMPRESSION_NONE, LineChart.COMPRESSION_NONE}//
+	};
+	//
+	public static String[][] SYMBOL_TYPES = new String[][]{//
+			{"None", PlotSymbolType.NONE.toString()}, //
+			{"Circle", PlotSymbolType.CIRCLE.toString()}, //
+			{"Cross", PlotSymbolType.CROSS.toString()}, //
+			{"Diamond", PlotSymbolType.DIAMOND.toString()}, //
+			{"Inverted Triangle", PlotSymbolType.INVERTED_TRIANGLE.toString()}, //
+			{"Plus", PlotSymbolType.PLUS.toString()}, //
+			{"Square", PlotSymbolType.SQUARE.toString()}, //
+			{"Triangle", PlotSymbolType.TRIANGLE.toString()}//
 	};
 	/*
 	 * General / Task Quick Access
@@ -136,6 +148,16 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_PEAK_WIDTH_CONDAL_BOSH = false;
 	public static final String P_COLOR_PEAK_WIDTH_CONDAL_BOSH = "colorPeakWidthCondalBosh";
 	public static final String DEF_COLOR_PEAK_WIDTH_CONDAL_BOSH = "0,0,0";
+	public static final String P_COLOR_PEAK_DETECTOR_CHROMATOGRAM = "colorPeakDetectorChromatogram";
+	public static final String DEF_COLOR_PEAK_DETECTOR_CHROMATOGRAM = "255,0,0";
+	public static final String P_SHOW_PEAK_DETECTOR_CHROMATOGRAM_AREA = "showPeakDetectorChromatogramArea";
+	public static final boolean DEF_SHOW_PEAK_DETECTOR_CHROMATOGRAM_AREA = false;
+	public static final String P_PEAK_DETECTOR_SCAN_MARKER_SIZE = "showPeakDetectorScanMarkerSize";
+	public static final int DEF_PEAK_DETECTOR_SCAN_MARKER_SIZE = 2;
+	public static final String P_PEAK_DETECTOR_SCAN_MARKER_COLOR = "showPeakDetectorScanMarkerColor";
+	public static final String DEF_PEAK_DETECTOR_SCAN_MARKER_COLOR = "255,0,0";
+	public static final String P_PEAK_DETECTOR_SCAN_MARKER_TYPE = "showPeakDetectorScanMarkerType";
+	public static final String DEF_PEAK_DETECTOR_SCAN_MARKER_TYPE = PlotSymbolType.NONE.toString();
 	/*
 	 * Targets
 	 */

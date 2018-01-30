@@ -52,6 +52,7 @@ import org.eclipse.eavp.service.swtchart.customcharts.ChromatogramChart;
 import org.eclipse.eavp.service.swtchart.events.AbstractHandledEventProcessor;
 import org.eclipse.eavp.service.swtchart.events.IHandledEventProcessor;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
+import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -75,6 +76,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.swtchart.IAxis;
 import org.swtchart.IAxisSet;
+import org.swtchart.ILineSeries.PlotSymbolType;
 import org.swtchart.IPlotArea;
 import org.swtchart.Range;
 
@@ -327,11 +329,25 @@ public class ExtendedPeakDetectorUI {
 		enableButtons(DETECTION_TYPE_NONE);
 		//
 		if(chromatogramSelection != null) {
+			//
+			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			/*
 			 * Chromatogram
 			 */
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-			lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogramSelection));
+			Color colorChromatogram = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_DETECTOR_CHROMATOGRAM));
+			boolean enableAreaChromatogram = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAK_DETECTOR_CHROMATOGRAM_AREA);
+			int scanMarkerSize = preferenceStore.getInt(PreferenceConstants.P_PEAK_DETECTOR_SCAN_MARKER_SIZE);
+			Color scanMarkerColor = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_PEAK_DETECTOR_SCAN_MARKER_COLOR));
+			PlotSymbolType scanMarkerSymbol = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_PEAK_DETECTOR_SCAN_MARKER_TYPE));
+			//
+			ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, "Chromatogram", colorChromatogram);
+			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+			lineSeriesSettings.setEnableArea(enableAreaChromatogram);
+			lineSeriesSettings.setSymbolSize(scanMarkerSize);
+			lineSeriesSettings.setSymbolColor(scanMarkerColor);
+			lineSeriesSettings.setSymbolType(scanMarkerSymbol);
+			lineSeriesDataList.add(lineSeriesData);
 			//
 			if(peak != null) {
 				/*
@@ -340,7 +356,6 @@ public class ExtendedPeakDetectorUI {
 				buttonAddPeak.setEnabled(true);
 				boolean includeBackground = true;
 				boolean mirrored = false;
-				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				Color colorPeak = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_1));
 				lineSeriesDataList.add(peakChartSupport.getPeak(peak, includeBackground, mirrored, colorPeak, ID_PEAK));
 				if(includeBackground) {

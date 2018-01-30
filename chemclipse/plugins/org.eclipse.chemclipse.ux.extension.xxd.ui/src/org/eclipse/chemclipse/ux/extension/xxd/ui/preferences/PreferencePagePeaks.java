@@ -12,9 +12,12 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.eavp.service.swtchart.preferences.PreferenceSupport;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
+import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -43,6 +46,11 @@ public class PreferencePagePeaks extends FieldEditorPreferencePage implements IW
 		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_PEAK_WIDTH_0, "Color Peak Width 0% Height:", getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_PEAK_WIDTH_50, "Color Peak Width 50% Height:", getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_PEAK_WIDTH_CONDAL_BOSH, "Color Peak Width 15% and 85% Height (Condal-Bosh):", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_PEAK_DETECTOR_CHROMATOGRAM, "Color Peak Detector Chromatogram:", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_PEAK_DETECTOR_CHROMATOGRAM_AREA, "Show Peak Detector Chromatogram Area", getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceConstants.P_PEAK_DETECTOR_SCAN_MARKER_SIZE, "Peak Detector Scan Marker Size:", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_PEAK_DETECTOR_SCAN_MARKER_COLOR, "Peak Detector Scan Marker Color:", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_PEAK_DETECTOR_SCAN_MARKER_TYPE, "Peak Detector Scan Marker Type:", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

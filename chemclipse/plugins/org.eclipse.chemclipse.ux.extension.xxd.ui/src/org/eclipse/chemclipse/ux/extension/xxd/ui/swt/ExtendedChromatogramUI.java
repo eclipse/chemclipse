@@ -17,8 +17,17 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram.ChromatogramFilterCSD;
+import org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram.IChromatogramFilterSupportCSD;
+import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilter;
+import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilterSupplier;
+import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilterSupport;
+import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoChromatogramFilterSupplierAvailableException;
+import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
+import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupportMSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -39,12 +48,16 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakChartSupp
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.core.ScrollableChart;
 import org.eclipse.eavp.service.swtchart.customcharts.ChromatogramChart;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
+import org.eclipse.eavp.service.swtchart.menu.AbstractChartMenuEntry;
 import org.eclipse.eavp.service.swtchart.menu.IChartMenuEntry;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -69,6 +82,13 @@ import org.swtchart.LineStyle;
 
 public class ExtendedChromatogramUI {
 
+	private static final Logger logger = Logger.getLogger(ExtendedChromatogramUI.class);
+	//
+	private static final String TYPE_GENERIC = "TYPE_GENERIC";
+	private static final String TYPE_MSD = "TYPE_MSD";
+	private static final String TYPE_CSD = "TYPE_CSD";
+	private static final String TYPE_WSD = "TYPE_WSD";
+	//
 	private Composite toolbarInfo;
 	private Label labelChromatogramInfo;
 	private Composite toolbarReferencedChromatograms;
@@ -77,21 +97,83 @@ public class ExtendedChromatogramUI {
 	//
 	private IChromatogramSelection chromatogramSelection;
 	private PeakLabelMarker peakLabelMarker;
-	private PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 	//
+	private List<IChartMenuEntry> chartMenuEntriesFilter;
+	//
+	private PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 	private PeakChartSupport peakChartSupport = new PeakChartSupport();
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private Shell shell = Display.getDefault().getActiveShell();
 
+	private class FilterMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
+
+		private String name;
+		private String filterId;
+		private String type;
+		private IChromatogramSelection chromatogramSelection;
+
+		public FilterMenuEntry(String name, String filterId, String type, IChromatogramSelection chromatogramSelection) {
+			this.name = name;
+			this.filterId = filterId;
+			this.type = type;
+			this.chromatogramSelection = chromatogramSelection;
+		}
+
+		@Override
+		public String getCategory() {
+
+			return "Filter";
+		}
+
+		@Override
+		public String getName() {
+
+			return name;
+		}
+
+		@Override
+		public void execute(Shell shell, ScrollableChart scrollableChart) {
+
+			if(chromatogramSelection != null) {
+				IProgressMonitor monitor = new NullProgressMonitor();
+				switch(type) {
+					case TYPE_GENERIC:
+						ChromatogramFilter.applyFilter(chromatogramSelection, filterId, monitor);
+						chromatogramSelection.update(false);
+						break;
+					case TYPE_MSD:
+						if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+							IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
+							ChromatogramFilterMSD.applyFilter(chromatogramSelectionMSD, filterId, monitor);
+							chromatogramSelectionMSD.update(false);
+						}
+						break;
+					case TYPE_CSD:
+						if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+							IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
+							ChromatogramFilterCSD.applyFilter(chromatogramSelectionCSD, filterId, monitor);
+							chromatogramSelectionCSD.update(false);
+						}
+						break;
+					case TYPE_WSD:
+						//
+						break;
+				}
+			}
+		}
+	}
+
 	@Inject
 	public ExtendedChromatogramUI(Composite parent) {
+		chartMenuEntriesFilter = new ArrayList<IChartMenuEntry>();
 		initialize(parent);
 	}
 
 	public void updateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
 
 		this.chromatogramSelection = chromatogramSelection;
+		addChartMenuEntriesFilter();
 		updateChromatogramSelection();
 		updateReferencedChromatograms();
 	}
@@ -114,70 +196,163 @@ public class ExtendedChromatogramUI {
 		return false;
 	}
 
+	private void addChartMenuEntriesFilter() {
+
+		IChartSettings chartSettings = chromatogramChart.getChartSettings();
+		cleanChartMenuEntriesFilter(chartSettings);
+		//
+		if(chromatogramSelection != null) {
+			/*
+			 * Generic
+			 */
+			addChartMenuEntriesFilter(chartSettings, ChromatogramFilter.getChromatogramFilterSupport(), TYPE_GENERIC);
+			/*
+			 * Specific
+			 */
+			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+				addChartMenuEntriesFilterMSD(chartSettings, ChromatogramFilterMSD.getChromatogramFilterSupport(), TYPE_MSD);
+			} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+				addChartMenuEntriesFilterCSD(chartSettings, ChromatogramFilterCSD.getChromatogramFilterSupport(), TYPE_CSD);
+			} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+				//
+			}
+		}
+		//
+		chromatogramChart.applySettings(chartSettings);
+	}
+
+	private void addChartMenuEntriesFilter(IChartSettings chartSettings, IChromatogramFilterSupport chromatogramFilterSupport, String type) {
+
+		try {
+			for(String filterId : chromatogramFilterSupport.getAvailableFilterIds()) {
+				IChromatogramFilterSupplier filter = chromatogramFilterSupport.getFilterSupplier(filterId);
+				String name = filter.getFilterName();
+				FilterMenuEntry filterMenuEntry = new FilterMenuEntry(name, filterId, type, chromatogramSelection);
+				chartMenuEntriesFilter.add(filterMenuEntry);
+				chartSettings.addMenuEntry(filterMenuEntry);
+			}
+		} catch(NoChromatogramFilterSupplierAvailableException e) {
+			logger.warn(e);
+		}
+	}
+
+	// TODO Refactor
+	private void addChartMenuEntriesFilterMSD(IChartSettings chartSettings, IChromatogramFilterSupportMSD chromatogramFilterSupport, String type) {
+
+		try {
+			for(String filterId : chromatogramFilterSupport.getAvailableFilterIds()) {
+				IChromatogramFilterSupplier filter = chromatogramFilterSupport.getFilterSupplier(filterId);
+				String name = filter.getFilterName();
+				FilterMenuEntry filterMenuEntry = new FilterMenuEntry(name, filterId, type, chromatogramSelection);
+				chartMenuEntriesFilter.add(filterMenuEntry);
+				chartSettings.addMenuEntry(filterMenuEntry);
+			}
+		} catch(NoChromatogramFilterSupplierAvailableException e) {
+			logger.warn(e);
+		}
+	}
+
+	// TODO Refactor
+	private void addChartMenuEntriesFilterCSD(IChartSettings chartSettings, IChromatogramFilterSupportCSD chromatogramFilterSupport, String type) {
+
+		try {
+			for(String filterId : chromatogramFilterSupport.getAvailableFilterIds()) {
+				IChromatogramFilterSupplier filter = chromatogramFilterSupport.getFilterSupplier(filterId);
+				String name = filter.getFilterName();
+				FilterMenuEntry filterMenuEntry = new FilterMenuEntry(name, filterId, type, chromatogramSelection);
+				chartMenuEntriesFilter.add(filterMenuEntry);
+				chartSettings.addMenuEntry(filterMenuEntry);
+			}
+		} catch(NoChromatogramFilterSupplierAvailableException e) {
+			logger.warn(e);
+		}
+	}
+
+	private void cleanChartMenuEntriesFilter(IChartSettings chartSettings) {
+
+		for(IChartMenuEntry chartMenuEntry : chartMenuEntriesFilter) {
+			chartSettings.removeMenuEntry(chartMenuEntry);
+		}
+		chartMenuEntriesFilter.clear();
+	}
+
 	private void updateChromatogramSelection() {
 
 		updateLabel();
 		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() == null) {
 			chromatogramChart.deleteSeries();
 		} else {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-			int compressionToLength;
-			String compressionType = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_CHART_COMPRESSION_TYPE);
-			switch(compressionType) {
-				case LineChart.COMPRESSION_EXTREME:
-					compressionToLength = LineChart.EXTREME_COMPRESSION;
-					break;
-				case LineChart.COMPRESSION_HIGH:
-					compressionToLength = LineChart.HIGH_COMPRESSION;
-					break;
-				case LineChart.COMPRESSION_MEDIUM:
-					compressionToLength = LineChart.MEDIUM_COMPRESSION;
-					break;
-				case LineChart.COMPRESSION_LOW:
-					compressionToLength = LineChart.LOW_COMPRESSION;
-					break;
-				default:
-					compressionToLength = LineChart.NO_COMPRESSION;
-					break;
-			}
-			/*
-			 * Chromatogram TIC
-			 */
-			lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogramSelection));
-			/*
-			 * Peaks
-			 */
-			List<? extends IPeak> peaks = new ArrayList<IPeak>();
-			if(chromatogram instanceof IChromatogramMSD) {
-				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-				peaks = chromatogramMSD.getPeaks((IChromatogramSelectionMSD)chromatogramSelection);
-			} else if(chromatogram instanceof IChromatogramCSD) {
-				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-				peaks = chromatogramCSD.getPeaks((IChromatogramSelectionCSD)chromatogramSelection);
-			} else if(chromatogram instanceof IChromatogramWSD) {
-				//
-			}
-			//
-			Collections.sort(peaks, peakRetentionTimeComparator);
-			ILineSeriesData peakSeriesData = peakChartSupport.getPeaks(peaks, true, false, Colors.BLACK, "Peaks");
-			ILineSeriesSettings lineSeriesSettings = peakSeriesData.getLineSeriesSettings();
-			lineSeriesSettings.setEnableArea(false);
-			lineSeriesSettings.setLineStyle(LineStyle.NONE);
-			lineSeriesSettings.setSymbolType(PlotSymbolType.INVERTED_TRIANGLE);
-			lineSeriesSettings.setSymbolSize(5);
-			lineSeriesSettings.setLineColor(Colors.GRAY);
-			lineSeriesSettings.setSymbolColor(Colors.DARK_GRAY);
-			lineSeriesDataList.add(peakSeriesData);
-			//
-			IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
-			plotArea.removeCustomPaintListener(peakLabelMarker);
-			peakLabelMarker = new PeakLabelMarker(chromatogramChart.getBaseChart(), 1, peaks);
-			plotArea.addCustomPaintListener(peakLabelMarker);
-			//
-			chromatogramChart.addSeriesData(lineSeriesDataList, compressionToLength);
+			addChromatogramSeriesData();
 		}
+	}
+
+	private void addChromatogramSeriesData() {
+
+		/*
+		 * Show the chromatogram.
+		 */
+		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		ILineSeriesData lineSeriesData;
+		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		/*
+		 * TIC
+		 */
+		lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, "Chromatogram", Colors.RED);
+		lineSeriesData.getLineSeriesSettings().setEnableArea(true);
+		lineSeriesDataList.add(lineSeriesData);
+		/*
+		 * Peaks
+		 */
+		List<? extends IPeak> peaks = new ArrayList<IPeak>();
+		if(chromatogram instanceof IChromatogramMSD) {
+			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+			peaks = chromatogramMSD.getPeaks((IChromatogramSelectionMSD)chromatogramSelection);
+		} else if(chromatogram instanceof IChromatogramCSD) {
+			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+			peaks = chromatogramCSD.getPeaks((IChromatogramSelectionCSD)chromatogramSelection);
+		} else if(chromatogram instanceof IChromatogramWSD) {
+			//
+		}
+		//
+		Collections.sort(peaks, peakRetentionTimeComparator);
+		ILineSeriesData peakSeriesData = peakChartSupport.getPeaks(peaks, true, false, Colors.BLACK, "Peaks");
+		ILineSeriesSettings lineSeriesSettings = peakSeriesData.getLineSeriesSettings();
+		lineSeriesSettings.setEnableArea(false);
+		lineSeriesSettings.setLineStyle(LineStyle.NONE);
+		lineSeriesSettings.setSymbolType(PlotSymbolType.INVERTED_TRIANGLE);
+		lineSeriesSettings.setSymbolSize(5);
+		lineSeriesSettings.setLineColor(Colors.GRAY);
+		lineSeriesSettings.setSymbolColor(Colors.DARK_GRAY);
+		lineSeriesDataList.add(peakSeriesData);
+		//
+		IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
+		plotArea.removeCustomPaintListener(peakLabelMarker);
+		peakLabelMarker = new PeakLabelMarker(chromatogramChart.getBaseChart(), 1, peaks);
+		plotArea.addCustomPaintListener(peakLabelMarker);
+		/*
+		 * Define the compression level.
+		 */
+		int compressionToLength;
+		String compressionType = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_CHART_COMPRESSION_TYPE);
+		switch(compressionType) {
+			case LineChart.COMPRESSION_EXTREME:
+				compressionToLength = LineChart.EXTREME_COMPRESSION;
+				break;
+			case LineChart.COMPRESSION_HIGH:
+				compressionToLength = LineChart.HIGH_COMPRESSION;
+				break;
+			case LineChart.COMPRESSION_MEDIUM:
+				compressionToLength = LineChart.MEDIUM_COMPRESSION;
+				break;
+			case LineChart.COMPRESSION_LOW:
+				compressionToLength = LineChart.LOW_COMPRESSION;
+				break;
+			default:
+				compressionToLength = LineChart.NO_COMPRESSION;
+				break;
+		}
+		chromatogramChart.addSeriesData(lineSeriesDataList, compressionToLength);
 	}
 
 	private void initialize(Composite parent) {
@@ -199,12 +374,13 @@ public class ExtendedChromatogramUI {
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
-		composite.setLayout(new GridLayout(6, false));
+		composite.setLayout(new GridLayout(7, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		createButtonToggleToolbarReferencedChromatograms(composite);
 		createToggleChartSeriesLegendButton(composite);
 		createToggleLegendMarkerButton(composite);
+		createToggleRangeSelectorButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
 	}
@@ -246,29 +422,9 @@ public class ExtendedChromatogramUI {
 		IChartSettings chartSettings = chromatogramChart.getChartSettings();
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableRangeSelector(true);
+		chartSettings.setRangeSelectorDefaultAxisX(1); // Minutes
+		chartSettings.setRangeSelectorDefaultAxisY(1); // Relative Abundance
 		chartSettings.setShowRangeSelectorInitially(false);
-		//
-		chartSettings.addMenuEntry(new IChartMenuEntry() {
-
-			@Override
-			public String getName() {
-
-				return "Savitzky-Golay";
-			}
-
-			@Override
-			public String getCategory() {
-
-				return "Filter";
-			}
-
-			@Override
-			public void execute(Shell shell, ScrollableChart scrollableChart) {
-
-				//
-			}
-		});
-		//
 		chromatogramChart.applySettings(chartSettings);
 	}
 
@@ -347,6 +503,21 @@ public class ExtendedChromatogramUI {
 				boolean isShowLegendMarker = chartSettings.isShowLegendMarker();
 				chartSettings.setShowLegendMarker(!isShowLegendMarker);
 				chromatogramChart.applySettings(chartSettings);
+			}
+		});
+	}
+
+	private void createToggleRangeSelectorButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the chart range selector.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHART_RANGE_SELECTOR, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				chromatogramChart.toggleRangeSelectorVisibility();
 			}
 		});
 	}
