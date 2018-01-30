@@ -12,15 +12,14 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
@@ -57,10 +56,10 @@ public class PcaEvaluation {
 				selectedSamples.put(sample, selectedSampleData);
 			}
 		}
+		setNaNValues(selectedSamples);
 		return selectedSamples;
 	}
 
-	
 	// will implememt more generic version
 	private List<double[]> getBasisVectors(PrincipalComponentAnalysis principleComponentAnalysis, int numberOfPrincipleComponents) {
 
@@ -127,7 +126,7 @@ public class PcaEvaluation {
 		List<double[]> basisVectors = getBasisVectors(principleComponentAnalysis, numberOfPrincipleComponents);
 		pcaResults.setBasisVectors(basisVectors);
 		setEigenSpaceAndErrorValues(principleComponentAnalysis, extractData, pcaResults);
-		setGroups(pcaResults, samples);
+		// setGroups(pcaResults, samples);
 		return pcaResults;
 	}
 
@@ -156,47 +155,28 @@ public class PcaEvaluation {
 		pcaResults.getPcaResultList().setAll(resultsList);
 	}
 
-	private void setGroups(IPcaResults pcaResults, ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
+	private void setNaNValues(Map<ISample<?>, double[]> selectedSamples) {
 
-		List<IPcaResult> pcaResultGroups = new ArrayList<>();
-		for(IGroup<?> group : samples.getGroupList()) {
-			IPcaResult pcaResultGroup = new PcaResult(group);
-			String groupName = group.getGroupName();
-			String name = group.getName();
-			pcaResultGroup.setGroupName(groupName);
-			pcaResultGroup.setName(name);
-			List<IPcaResult> pcaResultsList = pcaResults.getPcaResultList().stream().filter(r -> groupName.equals(r.getGroupName())).collect(Collectors.toList());
-			if(!pcaResultsList.isEmpty()) {
-				int lentsampleData = pcaResultsList.get(0).getSampleData().length;
-				double[] sampleData = new double[lentsampleData];
-				pcaResultsList.stream().map(s -> s.getSampleData()) //
-						.forEach(d -> {
-							for(int i = 0; i < lentsampleData; i++) {
-								sampleData[i] += d[i];
-							}
-						});
-				Arrays.stream(sampleData).forEach(d -> d = d / pcaResultsList.size());
-				pcaResultGroup.setSampleData(sampleData);
-				int lentEigenSpance = pcaResultsList.get(0).getEigenSpace().length;
-				double[] eigenSpace = new double[lentEigenSpance];
-				pcaResultsList.stream().map(r -> r.getEigenSpace())//
-						.forEach(d -> {
-							for(int i = 0; i < lentEigenSpance; i++) {
-								eigenSpace[i] += d[i];
-							}
-						});
-				Arrays.stream(eigenSpace).forEach(d -> d = d / pcaResultsList.size());
-				pcaResultGroup.setEigenSpace(eigenSpace);
-				double errorMemberShip = pcaResultsList.stream().mapToDouble(s -> s.getErrorMemberShip()).sum() / pcaResultsList.size();
-				pcaResultGroup.setErrorMemberShip(errorMemberShip);
-			} else {
-				pcaResultGroup.setSampleData(null);
-				pcaResultGroup.setEigenSpace(null);
-				pcaResultGroup.setErrorMemberShip(Double.NaN);
+		Collection<double[]> values = selectedSamples.values();
+		Optional<double[]> v = values.stream().findFirst();
+		if(v.isPresent()) {
+			for(int i = 0; i < v.get().length; i++) {
+				double sum = 0;
+				int count = 0;
+				for(double[] value : values) {
+					if(!Double.isNaN(value[i])) {
+						sum += value[i];
+						count++;
+					}
+				}
+				double mean = count != 0 ? sum / count : 0;
+				for(double[] value : values) {
+					if(Double.isNaN(value[i])) {
+						value[i] = mean;
+					}
+				}
 			}
-			pcaResultGroups.add(pcaResultGroup);
 		}
-		pcaResults.getPcaResultGroupsList().setAll(pcaResultGroups);
 	}
 
 	private void setRetentionTime(IPcaResults pcaResults, ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {

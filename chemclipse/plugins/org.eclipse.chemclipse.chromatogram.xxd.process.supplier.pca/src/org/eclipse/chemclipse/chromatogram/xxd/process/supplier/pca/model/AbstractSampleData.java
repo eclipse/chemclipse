@@ -14,20 +14,17 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 public class AbstractSampleData implements ISampleData {
 
 	private double data;
-	private boolean isEmpty;
 	private double normalizedData;
 
 	public AbstractSampleData() {
-		this.data = 0.0;
-		this.normalizedData = 0.0;
-		this.isEmpty = true;
+		this.data = Double.NaN;
+		this.normalizedData = Double.NaN;
 	}
 
 	public AbstractSampleData(double data) {
 		this();
 		this.data = data;
 		this.normalizedData = data;
-		this.isEmpty = false;
 	}
 
 	@Override
@@ -40,12 +37,6 @@ public class AbstractSampleData implements ISampleData {
 	public double getModifiedData() {
 
 		return normalizedData;
-	}
-
-	@Override
-	public boolean isEmpty() {
-
-		return isEmpty;
 	}
 
 	@Override

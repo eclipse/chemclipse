@@ -17,7 +17,10 @@ public interface ISampleData {
 
 	double getModifiedData();
 
-	boolean isEmpty();
+	default boolean isEmpty() {
+
+		return Double.isNaN(getData());
+	};
 
 	void setModifiedData(double normalizedData);
 }

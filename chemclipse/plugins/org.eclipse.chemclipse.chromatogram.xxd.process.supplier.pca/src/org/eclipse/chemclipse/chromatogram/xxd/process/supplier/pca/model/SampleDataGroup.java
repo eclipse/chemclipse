@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.List;
 
-public class SampleDataGroup<S extends ISample<? extends ISampleData>> implements ISampleDataGroup {
+public class SampleDataGroup<S extends ISample<? extends ISampleData>> implements ISampleDataGroup<S> {
 
 	private int order;
 	private List<S> samples;
@@ -51,12 +51,6 @@ public class SampleDataGroup<S extends ISample<? extends ISampleData>> implement
 		} else {
 			return 0;
 		}
-	}
-
-	@Override
-	public boolean isEmpty() {
-
-		return samples.isEmpty();
 	}
 
 	@Override

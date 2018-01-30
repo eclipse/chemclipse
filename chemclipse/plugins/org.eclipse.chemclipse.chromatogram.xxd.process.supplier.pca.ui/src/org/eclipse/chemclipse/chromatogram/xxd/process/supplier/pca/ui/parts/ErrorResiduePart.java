@@ -55,11 +55,9 @@ public class ErrorResiduePart {
 				pcaResults = newValue;
 				if(oldValue != null) {
 					oldValue.getPcaResultList().removeListener(selectionChangeListener);
-					oldValue.getPcaResultGroupsList().removeListener(selectionChangeListener);
 				}
 				if(newValue != null) {
 					newValue.getPcaResultList().addListener(selectionChangeListener);
-					newValue.getPcaResultGroupsList().addListener(selectionChangeListener);
 					errorResidueChart.update(newValue);
 				} else {
 					errorResidueChart.removeData();
@@ -88,7 +86,6 @@ public class ErrorResiduePart {
 		if(pcaResults != null) {
 			errorResidueChart.update(pcaresults.getValue());
 			pcaResults.getPcaResultList().addListener(selectionChangeListener);
-			pcaResults.getPcaResultGroupsList().addListener(selectionChangeListener);
 		}
 		SelectionManagerSample.getInstance().getSelection().addListener(actualSelectionChangeListener);
 	}
@@ -100,7 +97,6 @@ public class ErrorResiduePart {
 		SelectionManagerSamples.getInstance().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
 		if(pcaResults != null) {
 			pcaResults.getPcaResultList().removeListener(selectionChangeListener);
-			pcaResults.getPcaResultGroupsList().removeListener(selectionChangeListener);
 		}
 	}
 }

@@ -16,7 +16,7 @@ import java.util.List;
 import javafx.beans.Observable;
 import javafx.util.Callback;
 
-public interface IGroup<S extends ISample<? extends ISampleData>> extends ISample<ISampleDataGroup> {
+public interface IGroup<S extends ISample<? extends ISampleData>> extends ISample<ISampleDataGroup<S>> {
 
 	static <G extends IGroup<? extends ISample<? extends ISampleData>>> Callback<G, Observable[]> extractor() {
 

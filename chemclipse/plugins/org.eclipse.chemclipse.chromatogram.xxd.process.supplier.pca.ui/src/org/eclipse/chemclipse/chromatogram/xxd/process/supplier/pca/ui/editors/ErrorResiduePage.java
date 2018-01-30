@@ -71,12 +71,6 @@ public class ErrorResiduePage {
 		comboSortData.select(0);
 		//
 		Button button = new Button(propertiesComposite, SWT.PUSH);
-		button.setText(" Reload Bar Plot ");
-		button.addListener(SWT.Selection, e -> {
-			errorResidueChart.setDisplayData(comboDisplay.getSelectionIndex());
-			errorResidueChart.setSortType(comboSortData.getSelectionIndex(), false);
-			update();
-		});
 		button = new Button(propertiesComposite, SWT.PUSH);
 		button.setText(" Select samples");
 		button.addListener(SWT.Selection, e -> {

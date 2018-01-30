@@ -59,7 +59,6 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
@@ -71,15 +70,17 @@ import javafx.util.StringConverter;
 
 public class ErrorResidueBarChart {
 
-	final static public int DISPLAY_GROUPS = 1;
-	final static public int DISPLAY_SAMPLES = 0;
+	/*
+	 * final static public int DISPLAY_GROUPS = 1;
+	 * final static public int DISPLAY_SAMPLES = 0;
+	 */
 	final static public int SORT_BY_ERROR_RESIDUES = 1;
 	final static public int SORT_BY_GROUP_NAME = 0;
 	final static public int SORT_BY_NAME = 2;
 	private BarChart<String, Number> bc;
 	private ContextMenu contextMenu;
 	private final List<IPcaResult> data = new ArrayList<>();
-	private int displayData;
+	// private int displayData;
 	private FXCanvas fxCanvas;
 	private final Map<String, Color> groupColor = new HashMap<>();
 	private Optional<IPcaResults> pcaResults = Optional.empty();
@@ -94,7 +95,7 @@ public class ErrorResidueBarChart {
 		fxCanvas = new FXCanvas(parent, SWT.NONE);
 		fxCanvas.setLayoutData(layoutData);
 		// parent.addListener(SWT.Resize, (event) -> update());
-		this.displayData = DISPLAY_SAMPLES;
+		// this.displayData = DISPLAY_SAMPLES;
 		this.sortType = SORT_BY_GROUP_NAME;
 		contextMenu = createContextMenu();
 		createScene();
@@ -155,37 +156,10 @@ public class ErrorResidueBarChart {
 		});
 		itemDisplayLegend.setSelected(showLegend);
 		contextMenu.getItems().add(itemDisplayLegend);
-		SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
-		contextMenu.getItems().add(separatorMenuItem);
-		// switch group/samples
-		ToggleGroup toggleGroup = new ToggleGroup();
-		RadioMenuItem radioDisplay = new RadioMenuItem("Display Samples");
-		radioDisplay.setSelected(DISPLAY_SAMPLES == displayData);
-		radioDisplay.setOnAction(e -> {
-			if(pcaResults.isPresent()) {
-				displayData = DISPLAY_SAMPLES;
-				update(pcaResults.get());
-			}
-		});
-		radioDisplay.setToggleGroup(toggleGroup);
-		contextMenu.getItems().add(radioDisplay);
-		radioDisplay = new RadioMenuItem("Display Groups");
-		radioDisplay.setSelected(DISPLAY_GROUPS == displayData);
-		radioDisplay.setOnAction(e -> {
-			if(pcaResults.isPresent()) {
-				displayData = DISPLAY_GROUPS;
-				update(pcaResults.get());
-			}
-		});
-		radioDisplay.setToggleGroup(toggleGroup);
-		contextMenu.getItems().add(radioDisplay);
 		// sorting
-		separatorMenuItem = new SeparatorMenuItem();
-		contextMenu.getItems().add(separatorMenuItem);
 		Menu itemSort = new Menu("Sort by");
-		separatorMenuItem = new SeparatorMenuItem();
 		RadioMenuItem radioSorting = new RadioMenuItem("Group Name");
-		toggleGroup = new ToggleGroup();
+		ToggleGroup toggleGroup = new ToggleGroup();
 		radioSorting.setOnAction(e -> setSortType(SORT_BY_GROUP_NAME, true));
 		radioSorting.setToggleGroup(toggleGroup);
 		radioSorting.setSelected(SORT_BY_GROUP_NAME == sortType);
@@ -251,11 +225,6 @@ public class ErrorResidueBarChart {
 		fxCanvas.getParent().layout(true);
 	}
 
-	public int getDisplayData() {
-
-		return displayData;
-	}
-
 	private XYChart.Series<String, Number> getSerie() {
 
 		XYChart.Series<String, Number> series = new XYChart.Series<>();
@@ -263,15 +232,7 @@ public class ErrorResidueBarChart {
 			if(!pcaResult.isDisplayed()) {
 				continue;
 			}
-			String name = null;
-			/*
-			 * set name displayed on x-axis
-			 */
-			if(DISPLAY_GROUPS == displayData) {
-				name = pcaResult.getGroupName();
-			} else {
-				name = pcaResult.getName();
-			}
+			String name = pcaResult.getName();
 			final XYChart.Data<String, Number> d = new XYChart.Data<>(name, pcaResult.getErrorMemberShip());
 			/*
 			 * set bar color and add tooltip
@@ -321,11 +282,7 @@ public class ErrorResidueBarChart {
 	private Axis<String> getXAxis() {
 
 		CategoryAxis xAxis = new CategoryAxis();
-		if(displayData == DISPLAY_SAMPLES) {
-			xAxis.setLabel("Sample Names");
-		} else {
-			xAxis.setLabel("Group Names");
-		}
+		xAxis.setLabel("Sample Names");
 		return xAxis;
 	}
 
@@ -369,16 +326,6 @@ public class ErrorResidueBarChart {
 		data.clear();
 		groupColor.clear();
 		createScene();
-	}
-
-	/**
-	 * Use update method to make changes
-	 *
-	 * @param displayData
-	 */
-	public void setDisplayData(int displayData) {
-
-		this.displayData = displayData;
 	}
 
 	/**
@@ -566,12 +513,7 @@ public class ErrorResidueBarChart {
 		 */
 		this.pcaResults = Optional.of(pcaResults);
 		removeData();
-		if(displayData == DISPLAY_SAMPLES) {
-			data.addAll(pcaResults.getPcaResultList());
-		} else {
-			data.addAll(pcaResults.getPcaResultGroupsList());
-		}
-		groupColor.clear();
+		data.addAll(pcaResults.getPcaResultList());
 		groupColor.putAll(PcaColorGroup.getColorJavaFx(PcaUtils.getGroupNames(pcaResults)));
 		/*
 		 * create scene this method support resize windows

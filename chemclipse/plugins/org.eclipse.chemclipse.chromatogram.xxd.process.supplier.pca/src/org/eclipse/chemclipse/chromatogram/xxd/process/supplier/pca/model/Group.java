@@ -19,7 +19,7 @@ import java.util.List;
  * @author Jan Holy
  *
  */
-public class Group<S extends ISample<? extends ISampleData>> extends AbstractSample<ISampleDataGroup> implements IGroup<S> {
+public class Group<S extends ISample<? extends ISampleData>> extends AbstractSample<ISampleDataGroup<S>> implements IGroup<S> {
 
 	private List<S> samples;
 

@@ -21,8 +21,6 @@ public interface IPcaResults {
 
 	ObservableList<IVaribleExtracted> getExtractedVariables();
 
-	ObservableList<IPcaResult> getPcaResultGroupsList();
-
 	ObservableList<IPcaResult> getPcaResultList();
 
 	IPcaSettings getPcaSettings();
