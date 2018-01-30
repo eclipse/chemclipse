@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToMinuteConverter;
@@ -56,7 +56,7 @@ public class PeakChartUI extends ScrollableChart {
 	private static final float HEIGHT_15 = 0.15f;
 	private static final float HEIGHT_0 = 0.0f;
 	//
-	private PeakSupport peakSupport = new PeakSupport();
+	private PeakDataSupport peakSupport = new PeakDataSupport();
 	private Display display = Display.getDefault();
 
 	public PeakChartUI() {

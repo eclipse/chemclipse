@@ -18,8 +18,8 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -53,9 +53,9 @@ public class ExtendedIntegrationAreaUI {
 
 		this.object = object;
 		if(object instanceof IPeak) {
-			labelInfo.setText(PeakSupport.getPeakLabel((IPeak)object));
+			labelInfo.setText(PeakDataSupport.getPeakLabel((IPeak)object));
 		} else if(object instanceof IChromatogram) {
-			labelInfo.setText(ChromatogramSupport.getChromatogramLabel((IChromatogram)object));
+			labelInfo.setText(ChromatogramDataSupport.getChromatogramLabel((IChromatogram)object));
 		} else {
 			labelInfo.setText("No data has been selected.");
 		}
@@ -99,7 +99,6 @@ public class ExtendedIntegrationAreaUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
-		composite.setVisible(false);
 		//
 		labelInfo = new Label(composite, SWT.NONE);
 		labelInfo.setText("");

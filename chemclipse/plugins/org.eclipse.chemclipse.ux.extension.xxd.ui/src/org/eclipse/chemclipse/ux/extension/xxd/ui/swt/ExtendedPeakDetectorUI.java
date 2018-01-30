@@ -38,10 +38,10 @@ import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.BaselineSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.BoxSelectionPaintListener;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ManualPeakDetector;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlaySupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaks;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -147,8 +147,8 @@ public class ExtendedPeakDetectorUI {
 	private int yStop;
 	private int xBoxMoveStart;
 	//
-	private OverlaySupport overlaySupport = new OverlaySupport();
-	private PeakSupport peakSupport = new PeakSupport();
+	private OverlayChartSupport overlaySupport = new OverlayChartSupport();
+	private PeakDataSupport peakSupport = new PeakDataSupport();
 	private Shell shell = Display.getDefault().getActiveShell();
 
 	private class KeyPressedEventProcessor extends AbstractHandledEventProcessor implements IHandledEventProcessor {
@@ -313,7 +313,7 @@ public class ExtendedPeakDetectorUI {
 		}
 		//
 		setDetectionType(DETECTION_TYPE_NONE);
-		labelChromatogram.setText(ChromatogramSupport.getChromatogramLabel(chromatogram));
+		labelChromatogram.setText(ChromatogramDataSupport.getChromatogramLabel(chromatogram));
 		this.peak = null;
 		//
 		updateChromatogramAndPeak();
@@ -410,7 +410,6 @@ public class ExtendedPeakDetectorUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
-		composite.setVisible(false);
 		//
 		labelChromatogram = new Label(composite, SWT.NONE);
 		labelChromatogram.setText("");

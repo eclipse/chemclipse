@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 
-public class ScanSupport {
+public class ScanDataSupport {
 
 	private static DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0##");
 	//
@@ -37,7 +37,7 @@ public class ScanSupport {
 	public static final String[] SIGNAL_TYPES_CSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString()};
 	public static final String[] SIGNAL_TYPES_WSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
 
-	private ScanSupport() {
+	private ScanDataSupport() {
 	}
 
 	public static String getRetentionTime(IScan scan) {

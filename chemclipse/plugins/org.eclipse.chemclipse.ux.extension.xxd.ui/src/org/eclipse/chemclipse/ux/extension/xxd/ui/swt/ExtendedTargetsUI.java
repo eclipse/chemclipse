@@ -54,9 +54,9 @@ import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
@@ -661,31 +661,31 @@ public class ExtendedTargetsUI {
 
 		if(object instanceof IScanMSD) {
 			IScanMSD scanMSD = (IScanMSD)object;
-			labelInfo.setText(ScanSupport.getScanLabel(scanMSD));
+			labelInfo.setText(ScanDataSupport.getScanLabel(scanMSD));
 			targetListUI.setInput(scanMSD.getTargets());
 		} else if(object instanceof IScanCSD) {
 			IScanCSD scanCSD = (IScanCSD)object;
-			labelInfo.setText(ScanSupport.getScanLabel(scanCSD));
+			labelInfo.setText(ScanDataSupport.getScanLabel(scanCSD));
 			targetListUI.setInput(scanCSD.getTargets());
 		} else if(object instanceof IScanWSD) {
 			IScanWSD scanWSD = (IScanWSD)object;
-			labelInfo.setText(ScanSupport.getScanLabel(scanWSD));
+			labelInfo.setText(ScanDataSupport.getScanLabel(scanWSD));
 			targetListUI.setInput(scanWSD.getTargets());
 		} else if(object instanceof IPeak) {
 			IPeak peak = (IPeak)object;
-			labelInfo.setText(PeakSupport.getPeakLabel(peak));
+			labelInfo.setText(PeakDataSupport.getPeakLabel(peak));
 			targetListUI.setInput(peak.getTargets());
 		} else if(object instanceof IChromatogramMSD) {
 			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)object;
-			labelInfo.setText(ChromatogramSupport.getChromatogramLabel(chromatogramMSD));
+			labelInfo.setText(ChromatogramDataSupport.getChromatogramLabel(chromatogramMSD));
 			targetListUI.setInput(chromatogramMSD.getTargets());
 		} else if(object instanceof IChromatogramCSD) {
 			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)object;
-			labelInfo.setText(ChromatogramSupport.getChromatogramLabel(chromatogramCSD));
+			labelInfo.setText(ChromatogramDataSupport.getChromatogramLabel(chromatogramCSD));
 			targetListUI.setInput(chromatogramCSD.getTargets());
 		} else if(object instanceof IChromatogramWSD) {
 			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)object;
-			labelInfo.setText(ChromatogramSupport.getChromatogramLabel(chromatogramWSD));
+			labelInfo.setText(ChromatogramDataSupport.getChromatogramLabel(chromatogramWSD));
 			targetListUI.setInput(chromatogramWSD.getTargets());
 		} else {
 			labelInfo.setText("No target data has been selected yet.");

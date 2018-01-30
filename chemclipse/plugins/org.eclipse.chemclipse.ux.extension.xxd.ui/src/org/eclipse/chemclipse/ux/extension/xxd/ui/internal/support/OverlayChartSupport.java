@@ -34,7 +34,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
 import org.swtchart.LineStyle;
 
-public class OverlaySupport {
+public class OverlayChartSupport {
 
 	/*
 	 * Overlay Type
@@ -90,7 +90,7 @@ public class OverlaySupport {
 	private LineStyle lineStyleTSC;
 	private LineStyle lineStyleDefault;
 
-	public OverlaySupport() {
+	public OverlayChartSupport() {
 		initialize();
 	}
 
@@ -211,8 +211,8 @@ public class OverlaySupport {
 
 	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection) {
 
-		String overlayType = OverlaySupport.OVERLAY_TYPE_TIC;
-		String derivativeType = OverlaySupport.DERIVATIVE_NONE;
+		String overlayType = OverlayChartSupport.OVERLAY_TYPE_TIC;
+		String derivativeType = OverlayChartSupport.DERIVATIVE_NONE;
 		return getLineSeriesData(chromatogramSelection, overlayType, derivativeType, null);
 	}
 
@@ -268,7 +268,7 @@ public class OverlaySupport {
 	public Color getSeriesColor(String seriesId, String overlayType) {
 
 		Color color;
-		if(OverlaySupport.OVERLAY_TYPE_SIC.equals(overlayType)) {
+		if(OverlayChartSupport.OVERLAY_TYPE_SIC.equals(overlayType)) {
 			/*
 			 * SIC
 			 */

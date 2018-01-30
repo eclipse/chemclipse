@@ -31,7 +31,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.LibraryServiceRunnable;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -176,8 +176,8 @@ public class ExtendedComparisonScanUI {
 		IScanMSD scan_1 = (scan1Optimized != null) ? scan1Optimized : scan1;
 		IScanMSD scan_2 = (scan2Optimized != null) ? scan2Optimized : scan2;
 		//
-		labelInfoReference.setText(ScanSupport.getMassSpectrumLabel(scan_1, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
-		labelInfoComparison.setText(ScanSupport.getMassSpectrumLabel(scan_2, PREFIX_R, TITLE_REFERENCE, shifted ? POSTFIX_SHIFTED : POSTFIX_NONE));
+		labelInfoReference.setText(ScanDataSupport.getMassSpectrumLabel(scan_1, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
+		labelInfoComparison.setText(ScanDataSupport.getMassSpectrumLabel(scan_2, PREFIX_R, TITLE_REFERENCE, shifted ? POSTFIX_SHIFTED : POSTFIX_NONE));
 		//
 		if(shifted) {
 			IScanMSD scan2Shifted = new ScanMSD();
@@ -201,8 +201,8 @@ public class ExtendedComparisonScanUI {
 		IScanMSD scan_1 = (scan1Optimized != null) ? scan1Optimized : scan1;
 		IScanMSD scan_2 = (scan2Optimized != null) ? scan2Optimized : scan2;
 		//
-		labelInfoReference.setText(ScanSupport.getMassSpectrumLabel(scan_1, PREFIX_UR, TITLE_UNKNOWN, POSTFIX_NONE));
-		labelInfoComparison.setText(ScanSupport.getMassSpectrumLabel(scan_2, PREFIX_UR, TITLE_REFERENCE, shifted ? POSTFIX_SHIFTED : POSTFIX_NONE));
+		labelInfoReference.setText(ScanDataSupport.getMassSpectrumLabel(scan_1, PREFIX_UR, TITLE_UNKNOWN, POSTFIX_NONE));
+		labelInfoComparison.setText(ScanDataSupport.getMassSpectrumLabel(scan_2, PREFIX_UR, TITLE_REFERENCE, shifted ? POSTFIX_SHIFTED : POSTFIX_NONE));
 		//
 		IExtractedIonSignal extractedIonSignalReference = scan_1.getExtractedIonSignal();
 		IExtractedIonSignal extractedIonSignalComparison = scan_2.getExtractedIonSignal();
@@ -236,11 +236,11 @@ public class ExtendedComparisonScanUI {
 		//
 		if(scan1 != null) {
 			IScanMSD scan_1 = (scan1Optimized != null) ? scan1Optimized : scan1;
-			labelInfoReference.setText(ScanSupport.getMassSpectrumLabel(scan_1, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
+			labelInfoReference.setText(ScanDataSupport.getMassSpectrumLabel(scan_1, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
 			scanChartUI.setInput(scan_1);
 		} else if(scan2 != null) {
 			IScanMSD scan_2 = (scan2Optimized != null) ? scan2Optimized : scan2;
-			labelInfoReference.setText(ScanSupport.getMassSpectrumLabel(scan_2, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
+			labelInfoReference.setText(ScanDataSupport.getMassSpectrumLabel(scan_2, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
 			scanChartUI.setInput(scan_2);
 		} else {
 			scanChartUI.setInput(null);

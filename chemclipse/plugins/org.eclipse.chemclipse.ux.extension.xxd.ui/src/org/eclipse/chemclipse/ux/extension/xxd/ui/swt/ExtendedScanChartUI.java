@@ -41,7 +41,7 @@ import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ScanChartPart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -184,7 +184,7 @@ public class ExtendedScanChartUI {
 	private void setMasterRetentionTime() {
 
 		masterRetentionTime = scan.getRetentionTime();
-		textReferenceScanRetentionTime.setText(ScanSupport.getRetentionTime(scan));
+		textReferenceScanRetentionTime.setText(ScanDataSupport.getRetentionTime(scan));
 	}
 
 	private void updateScan() {
@@ -198,7 +198,7 @@ public class ExtendedScanChartUI {
 
 	private void setScanInfo() {
 
-		labelScan.setText(ScanSupport.getScanLabel(scan));
+		labelScan.setText(ScanDataSupport.getScanLabel(scan));
 		enableIdentifierSettings(scan);
 		setDetectorSignalType(scan);
 		scanChartUI.setInput(scan);
@@ -277,7 +277,6 @@ public class ExtendedScanChartUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(6, false));
-		composite.setVisible(false);
 		//
 		buttonPinScan = createPinButton(composite);
 		buttonSubstractScan = createSubstractScanButton(composite);
@@ -297,7 +296,6 @@ public class ExtendedScanChartUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(5, false));
-		composite.setVisible(false);
 		//
 		buttonPreviousReferenceScan = createPreviousReferenceScanButton(composite);
 		textReferenceScanRetentionTime = createReferenceScanRetentionTimeText(composite);
@@ -574,7 +572,7 @@ public class ExtendedScanChartUI {
 
 		Combo combo = new Combo(parent, SWT.READ_ONLY);
 		combo.setToolTipText("Data Type (MS, MS/MS, FID, DAD, ...)");
-		combo.setItems(ScanSupport.DATA_TYPES_DEFAULT);
+		combo.setItems(ScanDataSupport.DATA_TYPES_DEFAULT);
 		combo.select(0);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
@@ -594,7 +592,7 @@ public class ExtendedScanChartUI {
 
 		Combo combo = new Combo(parent, SWT.READ_ONLY);
 		combo.setToolTipText("Signal Type (Centroid: Bar Series, Profile: Line Series)");
-		combo.setItems(ScanSupport.SIGNAL_TYPES_DEFAULT);
+		combo.setItems(ScanDataSupport.SIGNAL_TYPES_DEFAULT);
 		combo.select(0);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
@@ -823,7 +821,6 @@ public class ExtendedScanChartUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
-		composite.setVisible(false);
 		//
 		labelScan = new Label(composite, SWT.NONE);
 		labelScan.setText("");
@@ -868,18 +865,18 @@ public class ExtendedScanChartUI {
 	private void setDetectorSignalType(IScan scan) {
 
 		if(scan instanceof IScanMSD) {
-			setSelectionIndex(comboDataType, ScanSupport.DATA_TYPES_MSD);
-			setSelectionIndex(comboSignalType, ScanSupport.SIGNAL_TYPES_MSD);
+			setSelectionIndex(comboDataType, ScanDataSupport.DATA_TYPES_MSD);
+			setSelectionIndex(comboSignalType, ScanDataSupport.SIGNAL_TYPES_MSD);
 		} else if(scan instanceof IScanCSD) {
-			setSelectionIndex(comboDataType, ScanSupport.DATA_TYPES_CSD);
-			setSelectionIndex(comboSignalType, ScanSupport.SIGNAL_TYPES_CSD);
+			setSelectionIndex(comboDataType, ScanDataSupport.DATA_TYPES_CSD);
+			setSelectionIndex(comboSignalType, ScanDataSupport.SIGNAL_TYPES_CSD);
 		} else if(scan instanceof IScanWSD) {
-			setSelectionIndex(comboDataType, ScanSupport.DATA_TYPES_WSD);
-			setSelectionIndex(comboSignalType, ScanSupport.SIGNAL_TYPES_WSD);
+			setSelectionIndex(comboDataType, ScanDataSupport.DATA_TYPES_WSD);
+			setSelectionIndex(comboSignalType, ScanDataSupport.SIGNAL_TYPES_WSD);
 		} else {
-			comboDataType.setItems(ScanSupport.DATA_TYPES_DEFAULT);
+			comboDataType.setItems(ScanDataSupport.DATA_TYPES_DEFAULT);
 			comboDataType.select(0);
-			comboSignalType.setItems(ScanSupport.SIGNAL_TYPES_DEFAULT);
+			comboSignalType.setItems(ScanDataSupport.SIGNAL_TYPES_DEFAULT);
 			comboSignalType.select(0);
 		}
 		/*

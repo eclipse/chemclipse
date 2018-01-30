@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
@@ -71,7 +71,7 @@ public class ExtendedPeakDetailsUI {
 	public void update(IPeak peak) {
 
 		this.peak = peak;
-		labelPeak.setText(PeakSupport.getPeakLabel(peak));
+		labelPeak.setText(PeakDataSupport.getPeakLabel(peak));
 		updatePeak();
 	}
 
@@ -112,7 +112,6 @@ public class ExtendedPeakDetailsUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
-		composite.setVisible(false);
 		//
 		labelPeak = new Label(composite, SWT.NONE);
 		labelPeak.setText("");

@@ -42,7 +42,7 @@ import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
@@ -185,7 +185,6 @@ public class ExtendedPeakListUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
-		composite.setVisible(false);
 		//
 		labelChromatogramName = new Label(composite, SWT.NONE);
 		labelChromatogramName.setText("");
@@ -410,7 +409,6 @@ public class ExtendedPeakListUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
-		composite.setVisible(false);
 		//
 		labelChromatogramInfo = new Label(composite, SWT.NONE);
 		labelChromatogramInfo.setText("");
@@ -570,12 +568,12 @@ public class ExtendedPeakListUI {
 	private void updateLabel() {
 
 		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() == null) {
-			labelChromatogramName.setText(ChromatogramSupport.getChromatogramLabel(null));
+			labelChromatogramName.setText(ChromatogramDataSupport.getChromatogramLabel(null));
 			labelChromatogramInfo.setText("");
 		} else {
 			String editInformation = peakListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			String chromatogramLabel = ChromatogramSupport.getChromatogramLabel(chromatogram);
+			String chromatogramLabel = ChromatogramDataSupport.getChromatogramLabel(chromatogram);
 			labelChromatogramName.setText(chromatogramLabel + " - " + editInformation);
 			labelChromatogramInfo.setText("Number of Peaks: " + chromatogram.getNumberOfPeaks());
 		}

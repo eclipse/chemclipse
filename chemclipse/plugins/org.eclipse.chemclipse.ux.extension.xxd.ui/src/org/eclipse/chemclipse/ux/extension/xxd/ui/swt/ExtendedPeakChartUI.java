@@ -30,7 +30,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.SplitSelectionPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ManualPeakDetector;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaks;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
@@ -169,7 +169,7 @@ public class ExtendedPeakChartUI {
 
 		this.peak = peak;
 		resetSplittedPeaks();
-		labelPeak.setText(PeakSupport.getPeakLabel(peak));
+		labelPeak.setText(PeakDataSupport.getPeakLabel(peak));
 		//
 		if(peak instanceof IChromatogramPeakCSD || peak instanceof IChromatogramPeakMSD) {
 			buttonDetectionTypeTangent.setEnabled(true);
@@ -235,7 +235,6 @@ public class ExtendedPeakChartUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
-		composite.setVisible(false);
 		//
 		labelPeak = new Label(composite, SWT.NONE);
 		labelPeak.setText("");

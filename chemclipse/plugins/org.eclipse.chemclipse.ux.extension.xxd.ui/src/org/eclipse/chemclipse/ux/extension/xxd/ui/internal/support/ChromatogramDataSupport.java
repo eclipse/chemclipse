@@ -17,11 +17,11 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
-public class ChromatogramSupport {
+public class ChromatogramDataSupport {
 
 	private static DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 
-	private ChromatogramSupport() {
+	private ChromatogramDataSupport() {
 	}
 
 	public static String getChromatogramLabel(IChromatogram chromatogram) {

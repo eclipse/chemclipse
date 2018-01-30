@@ -33,7 +33,7 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.EditorUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlaySupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.core.IAxisScaleConverter;
@@ -90,7 +90,7 @@ public class ExtendedChromatogramOverlayUI {
 	private Label labelDataStatus;
 	//
 	private EditorUpdateSupport editorUpdateSupport;
-	private OverlaySupport overlaySupport;
+	private OverlayChartSupport overlaySupport;
 	private Set<String> mirroredSeries;
 	//
 	private Display display = Display.getDefault();
@@ -101,7 +101,7 @@ public class ExtendedChromatogramOverlayUI {
 	@Inject
 	public ExtendedChromatogramOverlayUI(Composite parent) {
 		editorUpdateSupport = new EditorUpdateSupport();
-		overlaySupport = new OverlaySupport();
+		overlaySupport = new OverlayChartSupport();
 		mirroredSeries = new HashSet<String>();
 		initialize(parent);
 	}
@@ -219,8 +219,8 @@ public class ExtendedChromatogramOverlayUI {
 
 				IChartSettings chartSettings = chromatogramChart.getChartSettings();
 				String derivativeType = comboDerivativeType.getText();
-				if(OverlaySupport.DERIVATIVE_NONE.equals(derivativeType)) {
-					if(comboDisplayModus.getText().equals(OverlaySupport.DISPLAY_MODUS_NORMAL)) {
+				if(OverlayChartSupport.DERIVATIVE_NONE.equals(derivativeType)) {
+					if(comboDisplayModus.getText().equals(OverlayChartSupport.DISPLAY_MODUS_NORMAL)) {
 						chartSettings.getRangeRestriction().setZeroY(false);
 					}
 				} else {
@@ -262,7 +262,7 @@ public class ExtendedChromatogramOverlayUI {
 		comboDisplayModus = new Combo(parent, SWT.READ_ONLY);
 		comboDisplayModus.setToolTipText("Select the display modus.");
 		comboDisplayModus.setItems(overlaySupport.getDisplayModi());
-		comboDisplayModus.setText(OverlaySupport.DISPLAY_MODUS_NORMAL);
+		comboDisplayModus.setText(OverlayChartSupport.DISPLAY_MODUS_NORMAL);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.minimumWidth = 150;
 		gridData.grabExcessHorizontalSpace = true;
@@ -278,7 +278,7 @@ public class ExtendedChromatogramOverlayUI {
 				String derivativeType = comboDerivativeType.getText();
 				IChartSettings chartSettings = chromatogramChart.getChartSettings();
 				//
-				if(displayModus.equals(OverlaySupport.DISPLAY_MODUS_MIRRORED)) {
+				if(displayModus.equals(OverlayChartSupport.DISPLAY_MODUS_MIRRORED)) {
 					/*
 					 * Mirror
 					 */
@@ -297,7 +297,7 @@ public class ExtendedChromatogramOverlayUI {
 						mirroredSeries.remove(selectedSeriesId);
 					}
 					//
-					if(mirroredSeries.size() == 0 && OverlaySupport.DERIVATIVE_NONE.equals(derivativeType)) {
+					if(mirroredSeries.size() == 0 && OverlayChartSupport.DERIVATIVE_NONE.equals(derivativeType)) {
 						chartSettings.getRangeRestriction().setZeroY(true);
 					} else {
 						chartSettings.getRangeRestriction().setZeroY(false);
@@ -316,7 +316,7 @@ public class ExtendedChromatogramOverlayUI {
 		comboSelectedIons = new Combo(parent, SWT.NONE);
 		comboSelectedIons.setToolTipText("Select the overlay ions.");
 		comboSelectedIons.setItems(overlaySupport.getSelectedIons());
-		comboSelectedIons.setText(OverlaySupport.SELECTED_IONS_DEFAULT);
+		comboSelectedIons.setText(OverlayChartSupport.SELECTED_IONS_DEFAULT);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.minimumWidth = 150;
 		gridData.grabExcessHorizontalSpace = true;
@@ -640,7 +640,7 @@ public class ExtendedChromatogramOverlayUI {
 		 * Overlay Type
 		 */
 		String overlayType = comboOverlayType.getText().trim();
-		boolean enableOverlayType = (overlayType.contains(OverlaySupport.OVERLAY_TYPE_XIC) || overlayType.contains(OverlaySupport.OVERLAY_TYPE_SIC) || overlayType.contains(OverlaySupport.OVERLAY_TYPE_TSC));
+		boolean enableOverlayType = (overlayType.contains(OverlayChartSupport.OVERLAY_TYPE_XIC) || overlayType.contains(OverlayChartSupport.OVERLAY_TYPE_SIC) || overlayType.contains(OverlayChartSupport.OVERLAY_TYPE_TSC));
 		comboSelectedIons.setEnabled(enableOverlayType);
 		/*
 		 * Selected Series
@@ -710,28 +710,28 @@ public class ExtendedChromatogramOverlayUI {
 		BaseChart baseChart = chromatogramChart.getBaseChart();
 		List<Integer> ions = getSelectedIons();
 		//
-		comboDisplayModus.setText(OverlaySupport.DISPLAY_MODUS_NORMAL);
+		comboDisplayModus.setText(OverlayChartSupport.DISPLAY_MODUS_NORMAL);
 		//
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 		for(int i = 0; i < chromatogramSelections.size(); i++) {
 			IChromatogramSelection chromatogramSelection = chromatogramSelections.get(i);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			String chromatogramName = chromatogram.getName() + OverlaySupport.EDITOR_TAB + (i + 1);
+			String chromatogramName = chromatogram.getName() + OverlayChartSupport.EDITOR_TAB + (i + 1);
 			/*
 			 * Select which series shall be displayed.
 			 */
-			String[] overlayTypes = comboOverlayType.getText().trim().split(OverlaySupport.ESCAPE_CONCATENATOR + OverlaySupport.OVERLAY_TYPE_CONCATENATOR);
+			String[] overlayTypes = comboOverlayType.getText().trim().split(OverlayChartSupport.ESCAPE_CONCATENATOR + OverlayChartSupport.OVERLAY_TYPE_CONCATENATOR);
 			String derivativeType = comboDerivativeType.getText().trim();
 			//
 			for(String overlayType : overlayTypes) {
-				if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_SIC)) {
+				if(overlayType.equals(OverlayChartSupport.OVERLAY_TYPE_SIC)) {
 					/*
 					 * SIC
 					 */
 					if(chromatogram instanceof IChromatogramMSD) {
 						for(int ion : ions) {
 							//
-							String seriesId = chromatogramName + OverlaySupport.OVERLAY_START_MARKER + overlayType + OverlaySupport.DELIMITER_ION_DERIVATIVE + derivativeType + OverlaySupport.DELIMITER_ION_DERIVATIVE + ion + OverlaySupport.OVERLAY_STOP_MARKER;
+							String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_ION_DERIVATIVE + derivativeType + OverlayChartSupport.DELIMITER_ION_DERIVATIVE + ion + OverlayChartSupport.OVERLAY_STOP_MARKER;
 							Color color = overlaySupport.getSeriesColor(seriesId, overlayType);
 							//
 							availableSeriesIds.add(seriesId);
@@ -744,10 +744,10 @@ public class ExtendedChromatogramOverlayUI {
 					}
 				} else {
 					//
-					String seriesId = chromatogramName + OverlaySupport.OVERLAY_START_MARKER + overlayType + OverlaySupport.DELIMITER_ION_DERIVATIVE + derivativeType + OverlaySupport.OVERLAY_STOP_MARKER;
+					String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_ION_DERIVATIVE + derivativeType + OverlayChartSupport.OVERLAY_STOP_MARKER;
 					Color color = overlaySupport.getSeriesColor(chromatogramName, overlayType);
 					//
-					if(overlayType.equals(OverlaySupport.OVERLAY_TYPE_BPC) || overlayType.equals(OverlaySupport.OVERLAY_TYPE_XIC) || overlayType.equals(OverlaySupport.OVERLAY_TYPE_TSC)) {
+					if(overlayType.equals(OverlayChartSupport.OVERLAY_TYPE_BPC) || overlayType.equals(OverlayChartSupport.OVERLAY_TYPE_XIC) || overlayType.equals(OverlayChartSupport.OVERLAY_TYPE_TSC)) {
 						/*
 						 * BPC, XIC, TSC
 						 */
@@ -814,7 +814,7 @@ public class ExtendedChromatogramOverlayUI {
 			ionsText = comboText;
 		}
 		//
-		String[] ions = ionsText.split(OverlaySupport.SELECTED_IONS_CONCATENATOR);
+		String[] ions = ionsText.split(OverlayChartSupport.SELECTED_IONS_CONCATENATOR);
 		for(String ion : ions) {
 			try {
 				selectedIons.add(AbstractIon.getIon(decimalFormat.parse(ion).doubleValue()));

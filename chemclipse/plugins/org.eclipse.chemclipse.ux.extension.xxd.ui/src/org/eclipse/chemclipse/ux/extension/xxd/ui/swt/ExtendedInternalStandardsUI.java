@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.ConcentrationValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.NameValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.ResponseFactorValidator;
@@ -111,7 +111,7 @@ public class ExtendedInternalStandardsUI {
 	private void updatePeak() {
 
 		String editInformation = internalStandardsListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
-		labelPeak.setText(PeakSupport.getPeakLabel(peak) + " - " + editInformation);
+		labelPeak.setText(PeakDataSupport.getPeakLabel(peak) + " - " + editInformation);
 		//
 		if(peak != null) {
 			internalStandardsListUI.setInput(peak.getInternalStandards());
@@ -156,7 +156,6 @@ public class ExtendedInternalStandardsUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
-		composite.setVisible(false);
 		//
 		labelPeak = new Label(composite, SWT.NONE);
 		labelPeak.setText("");

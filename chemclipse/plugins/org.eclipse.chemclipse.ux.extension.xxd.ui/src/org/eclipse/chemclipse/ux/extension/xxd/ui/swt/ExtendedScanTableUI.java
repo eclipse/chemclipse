@@ -37,7 +37,7 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ScanTablePart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
@@ -193,7 +193,7 @@ public class ExtendedScanTableUI {
 			scan = peak.getPeakModel().getPeakMaximum();
 		}
 		//
-		labelInfo.setText(ScanSupport.getScanLabel(scan));
+		labelInfo.setText(ScanDataSupport.getScanLabel(scan));
 		scanTableUI.setInput(scan);
 		/*
 		 * Fields
@@ -217,7 +217,7 @@ public class ExtendedScanTableUI {
 		 * Optimized Scan
 		 */
 		optimizedMassSpectrum = null;
-		buttonOptimizedScan.setEnabled(ScanSupport.containsOptimizedScan(scan));
+		buttonOptimizedScan.setEnabled(ScanDataSupport.containsOptimizedScan(scan));
 		buttonSaveScan.setEnabled(isSaveEnabled());
 	}
 
@@ -377,7 +377,7 @@ public class ExtendedScanTableUI {
 					optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
 					if(optimizedMassSpectrum != null) {
 						scanTableUI.setInput(optimizedMassSpectrum);
-						labelInfo.setText(ScanSupport.getScanLabel(optimizedMassSpectrum));
+						labelInfo.setText(ScanDataSupport.getScanLabel(optimizedMassSpectrum));
 						button.setEnabled(false);
 					}
 				}

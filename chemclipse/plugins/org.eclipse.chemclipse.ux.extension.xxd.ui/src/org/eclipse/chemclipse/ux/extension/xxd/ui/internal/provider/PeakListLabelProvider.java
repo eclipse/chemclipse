@@ -28,7 +28,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
@@ -39,7 +39,7 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String ACTIVE_FOR_ANALYSIS = "Active for Analysis";
 	public static final String RT = "RT";
-	private PeakSupport peakSupport = new PeakSupport();
+	private PeakDataSupport peakSupport = new PeakDataSupport();
 	//
 	public static final String[] TITLES = { //
 			ACTIVE_FOR_ANALYSIS, //

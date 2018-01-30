@@ -25,7 +25,7 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -64,7 +64,7 @@ public class ExtendedQuantitationListUI {
 	public void update(IPeak peak) {
 
 		this.peak = peak;
-		labelInfo.setText(PeakSupport.getPeakLabel(peak));
+		labelInfo.setText(PeakDataSupport.getPeakLabel(peak));
 		updateObject();
 	}
 
@@ -105,7 +105,6 @@ public class ExtendedQuantitationListUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
-		composite.setVisible(false);
 		//
 		labelInfo = new Label(composite, SWT.NONE);
 		labelInfo.setText("");

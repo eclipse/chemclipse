@@ -35,13 +35,13 @@ import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.swt.graphics.Color;
 
-public class PeakSupport {
+public class PeakDataSupport {
 
 	private static DecimalFormat decimalFormatRetentionTime = ValueFormat.getDecimalFormatEnglish("0.0##");
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0");
 	private TargetExtendedComparator targetExtendedComparator;
 
-	public PeakSupport() {
+	public PeakDataSupport() {
 		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
 	}
 

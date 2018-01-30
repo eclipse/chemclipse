@@ -33,9 +33,9 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.PeakLabelMarker;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlaySupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
@@ -142,8 +142,8 @@ public class ExtendedChromatogramUI {
 			/*
 			 * Chromatogram TIC
 			 */
-			OverlaySupport overlaySupport = new OverlaySupport();
-			PeakSupport peakSupport = new PeakSupport();
+			OverlayChartSupport overlaySupport = new OverlayChartSupport();
+			PeakDataSupport peakSupport = new PeakDataSupport();
 			lineSeriesDataList.add(overlaySupport.getLineSeriesData(chromatogramSelection));
 			/*
 			 * Peaks
@@ -188,7 +188,7 @@ public class ExtendedChromatogramUI {
 		toolbarReferencedChromatograms = createToolbarReferencedChromatograms(parent);
 		createChromatogramChart(parent);
 		//
-		PartSupport.setCompositeVisibility(toolbarInfo, true);
+		PartSupport.setCompositeVisibility(toolbarInfo, false);
 		PartSupport.setCompositeVisibility(toolbarReferencedChromatograms, false);
 	}
 
@@ -214,7 +214,6 @@ public class ExtendedChromatogramUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
-		composite.setVisible(false);
 		//
 		labelChromatogramInfo = new Label(composite, SWT.NONE);
 		labelChromatogramInfo.setText("");
@@ -229,7 +228,6 @@ public class ExtendedChromatogramUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
-		composite.setVisible(false);
 		//
 		comboReferencedChromatograms = new Combo(composite, SWT.READ_ONLY);
 		comboReferencedChromatograms.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -415,9 +413,9 @@ public class ExtendedChromatogramUI {
 	private void updateLabel() {
 
 		if(chromatogramSelection != null) {
-			labelChromatogramInfo.setText(ChromatogramSupport.getChromatogramLabel(chromatogramSelection.getChromatogram()));
+			labelChromatogramInfo.setText(ChromatogramDataSupport.getChromatogramLabel(chromatogramSelection.getChromatogram()));
 		} else {
-			labelChromatogramInfo.setText(ChromatogramSupport.getChromatogramLabel(null));
+			labelChromatogramInfo.setText(ChromatogramDataSupport.getChromatogramLabel(null));
 		}
 	}
 

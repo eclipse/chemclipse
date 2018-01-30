@@ -21,23 +21,28 @@ import javax.annotation.PreDestroy;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
+import org.eclipse.chemclipse.converter.processing.chromatogram.IChromatogramExportConverterProcessingInfo;
+import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ChromatogramFileSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedChromatogramUI;
+import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -75,9 +80,12 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 
 	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable) {
 		super(part);
+		//
 		this.dataType = dataType;
 		this.part = part;
-		eventBroker = ModelSupportAddon.getEventBroker();
+		this.dirtyable = dirtyable;
+		this.eventBroker = ModelSupportAddon.getEventBroker();
+		//
 		initialize(parent);
 	}
 
@@ -109,6 +117,10 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	@Focus
 	public void setFocus() {
 
+		IChromatogramSelection chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
+		if(chromatogramSelection != null) {
+			chromatogramSelection.update(false);
+		}
 		extendedChromatogramUI.update();
 	}
 
@@ -180,8 +192,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		IChromatogramSelection chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
 		if(chromatogramSelection != null) {
 			try {
-				System.out.println("TODO: Save As...");
-				// saveSuccessful = ChromatogramFileSupport.saveChromatogram(chromatogramSelection.getChromatogram());
+				saveSuccessful = ChromatogramFileSupport.saveChromatogram(shell, chromatogramSelection.getChromatogram(), dataType);
 				dirtyable.setDirty(!saveSuccessful);
 			} catch(Exception e) {
 				logger.warn(e);
@@ -264,12 +275,27 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 			String converterId = chromatogram.getConverterId();
 			if(converterId != null && !converterId.equals("") && chromatogramFile != null) {
 				monitor.subTask("Save Chromatogram");
-				System.out.println("TODO: Save Chromatogram");
-				// IChromatogramExportConverterProcessingInfo processingInfo = ChromatogramConverterMSD.convert(chromatogramFile, chromatogram, converterId, monitor);
-				try {
-					// processingInfo.getFile();
-					dirtyable.setDirty(false);
-				} catch(TypeCastException e) {
+				//
+				IChromatogramExportConverterProcessingInfo processingInfo = null;
+				if(chromatogram instanceof IChromatogramMSD) {
+					IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+					processingInfo = ChromatogramConverterMSD.convert(chromatogramFile, chromatogramMSD, converterId, monitor);
+				} else if(chromatogram instanceof IChromatogramCSD) {
+					IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+					processingInfo = ChromatogramConverterCSD.convert(chromatogramFile, chromatogramCSD, converterId, monitor);
+				} else if(chromatogram instanceof IChromatogramWSD) {
+					IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
+					processingInfo = ChromatogramConverterWSD.convert(chromatogramFile, chromatogramWSD, converterId, monitor);
+				}
+				//
+				if(processingInfo != null) {
+					try {
+						processingInfo.getFile();
+						dirtyable.setDirty(false);
+					} catch(TypeCastException e) {
+						throw new NoChromatogramConverterAvailableException();
+					}
+				} else {
 					throw new NoChromatogramConverterAvailableException();
 				}
 			} else {

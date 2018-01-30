@@ -17,7 +17,7 @@ import java.util.List;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.marker.LabelMarker;
 import org.eclipse.swt.SWT;
@@ -27,7 +27,7 @@ public class PeakLabelMarker extends LabelMarker {
 	public PeakLabelMarker(BaseChart baseChart, int indexSeries, List<? extends IPeak> peaks) {
 		super(baseChart);
 		//
-		PeakSupport peakSupport = new PeakSupport();
+		PeakDataSupport peakSupport = new PeakDataSupport();
 		List<String> labels = new ArrayList<String>();
 		for(IPeak peak : peaks) {
 			ILibraryInformation libraryInformation = peakSupport.getLibraryInformation(new ArrayList<IPeakTarget>(peak.getTargets()));

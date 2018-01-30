@@ -15,6 +15,8 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.BundleContext;
@@ -68,6 +70,12 @@ public class Activator extends AbstractUIPlugin {
 	public ScopedPreferenceStore getPreferenceStoreSubtract() {
 
 		return preferenceStoreSubtract;
+	}
+
+	public String getSettingsPath() {
+
+		Location location = Platform.getUserLocation();
+		return location.getURL().getPath().toString();
 	}
 
 	private void initializePreferenceStoreSubtract(IPreferenceSupplier preferenceSupplier) {
