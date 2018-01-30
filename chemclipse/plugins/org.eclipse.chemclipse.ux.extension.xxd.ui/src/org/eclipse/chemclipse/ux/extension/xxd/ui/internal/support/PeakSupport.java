@@ -12,15 +12,21 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.equations.Equations;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.numeric.exceptions.SolverException;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
@@ -33,6 +39,11 @@ public class PeakSupport {
 
 	private static DecimalFormat decimalFormatRetentionTime = ValueFormat.getDecimalFormatEnglish("0.0##");
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0");
+	private TargetExtendedComparator targetExtendedComparator;
+
+	public PeakSupport() {
+		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
+	}
 
 	public static String getPeakLabel(IPeak peak) {
 
@@ -52,6 +63,23 @@ public class PeakSupport {
 			builder.append("No peak has been selected yet.");
 		}
 		return builder.toString();
+	}
+
+	public ILibraryInformation getLibraryInformation(List<IPeakTarget> targets) {
+
+		ILibraryInformation libraryInformation = null;
+		targets = new ArrayList<IPeakTarget>(targets);
+		Collections.sort(targets, targetExtendedComparator);
+		if(targets.size() >= 1) {
+			libraryInformation = targets.get(0).getLibraryInformation();
+		}
+		return libraryInformation;
+	}
+
+	public ILineSeriesData getPeaks(List<? extends IPeak> peaks, boolean includeBackground, boolean mirrored, Color color, String id) {
+
+		ISeriesData seriesData = getPeakSeriesData(peaks, includeBackground, mirrored, id);
+		return getLineSeriesData(seriesData, color, true);
 	}
 
 	public ILineSeriesData getPeak(IPeak peak, boolean includeBackground, boolean mirrored, Color color, String id) {
@@ -105,6 +133,33 @@ public class PeakSupport {
 		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
 		lineSeriesSettingsHighlight.setLineWidth(2);
 		return lineSeriesData;
+	}
+
+	private ISeriesData getPeakSeriesData(List<? extends IPeak> peaks, boolean includeBackground, boolean mirrored, String id) {
+
+		int size = peaks.size();
+		double[] xSeries = new double[size];
+		double[] ySeries = new double[size];
+		//
+		int index = 0;
+		for(IPeak peak : peaks) {
+			IPeakModel peakModel = peak.getPeakModel();
+			int retentionTime = peakModel.getRetentionTimeAtPeakMaximum();
+			xSeries[index] = retentionTime;
+			if(includeBackground) {
+				ySeries[index] = peakModel.getBackgroundAbundance(retentionTime) + peakModel.getPeakAbundance(retentionTime);
+			} else {
+				ySeries[index] = peakModel.getPeakAbundance(retentionTime);
+			}
+			//
+			if(mirrored) {
+				ySeries[index] = ySeries[index] * -1;
+			}
+			//
+			index++;
+		}
+		//
+		return new SeriesData(xSeries, ySeries, id);
 	}
 
 	private ISeriesData getPeakSeriesData(IPeak peak, boolean includeBackground, boolean mirrored, String id) {

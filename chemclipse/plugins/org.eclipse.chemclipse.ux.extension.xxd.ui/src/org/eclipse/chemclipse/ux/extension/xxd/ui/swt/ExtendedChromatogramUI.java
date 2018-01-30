@@ -12,12 +12,14 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -25,7 +27,9 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.PeakLabelMarker;
@@ -36,9 +40,12 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
+import org.eclipse.eavp.service.swtchart.core.ScrollableChart;
 import org.eclipse.eavp.service.swtchart.customcharts.ChromatogramChart;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
+import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
+import org.eclipse.eavp.service.swtchart.menu.IChartMenuEntry;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -56,6 +63,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.swtchart.ILineSeries.PlotSymbolType;
+import org.swtchart.IPlotArea;
+import org.swtchart.LineStyle;
 
 public class ExtendedChromatogramUI {
 
@@ -67,6 +77,7 @@ public class ExtendedChromatogramUI {
 	//
 	private IChromatogramSelection chromatogramSelection;
 	private PeakLabelMarker peakLabelMarker;
+	private PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 	//
 	private Shell shell = Display.getDefault().getActiveShell();
 
@@ -148,6 +159,21 @@ public class ExtendedChromatogramUI {
 				//
 			}
 			//
+			Collections.sort(peaks, peakRetentionTimeComparator);
+			ILineSeriesData peakSeriesData = peakSupport.getPeaks(peaks, true, false, Colors.BLACK, "Peaks");
+			ILineSeriesSettings lineSeriesSettings = peakSeriesData.getLineSeriesSettings();
+			lineSeriesSettings.setEnableArea(false);
+			lineSeriesSettings.setLineStyle(LineStyle.NONE);
+			lineSeriesSettings.setSymbolType(PlotSymbolType.INVERTED_TRIANGLE);
+			lineSeriesSettings.setSymbolSize(5);
+			lineSeriesSettings.setLineColor(Colors.GRAY);
+			lineSeriesSettings.setSymbolColor(Colors.DARK_GRAY);
+			lineSeriesDataList.add(peakSeriesData);
+			//
+			IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
+			plotArea.removeCustomPaintListener(peakLabelMarker);
+			peakLabelMarker = new PeakLabelMarker(chromatogramChart.getBaseChart(), 1, peaks);
+			plotArea.addCustomPaintListener(peakLabelMarker);
 			//
 			chromatogramChart.addSeriesData(lineSeriesDataList, compressionToLength);
 		}
@@ -222,6 +248,28 @@ public class ExtendedChromatogramUI {
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableRangeSelector(true);
 		chartSettings.setShowRangeSelectorInitially(false);
+		//
+		chartSettings.addMenuEntry(new IChartMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return "Savitzky-Golay";
+			}
+
+			@Override
+			public String getCategory() {
+
+				return "Filter";
+			}
+
+			@Override
+			public void execute(Shell shell, ScrollableChart scrollableChart) {
+
+				//
+			}
+		});
+		//
 		chromatogramChart.applySettings(chartSettings);
 	}
 

@@ -13,11 +13,9 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -28,9 +26,9 @@ import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
@@ -41,6 +39,7 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String ACTIVE_FOR_ANALYSIS = "Active for Analysis";
 	public static final String RT = "RT";
+	private PeakSupport peakSupport = new PeakSupport();
 	//
 	public static final String[] TITLES = { //
 			ACTIVE_FOR_ANALYSIS, //
@@ -75,11 +74,6 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 			100, //
 			100 //
 	};
-	private TargetExtendedComparator targetExtendedComparator;
-
-	public PeakListLabelProvider() {
-		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
-	}
 
 	@Override
 	public Color getBackground(final Object element) {
@@ -127,7 +121,7 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 			//
 			IPeak peak = (IPeak)element;
 			IPeakModel peakModel = peak.getPeakModel();
-			ILibraryInformation libraryInformation = getLibraryInformation(new ArrayList<IPeakTarget>(peak.getTargets()));
+			ILibraryInformation libraryInformation = peakSupport.getLibraryInformation(new ArrayList<IPeakTarget>(peak.getTargets()));
 			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			//
 			switch(columnIndex) {
@@ -213,16 +207,5 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 
 		Image image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
 		return image;
-	}
-
-	private ILibraryInformation getLibraryInformation(List<IPeakTarget> targets) {
-
-		ILibraryInformation libraryInformation = null;
-		targets = new ArrayList<IPeakTarget>(targets);
-		Collections.sort(targets, targetExtendedComparator);
-		if(targets.size() >= 1) {
-			libraryInformation = targets.get(0).getLibraryInformation();
-		}
-		return libraryInformation;
 	}
 }

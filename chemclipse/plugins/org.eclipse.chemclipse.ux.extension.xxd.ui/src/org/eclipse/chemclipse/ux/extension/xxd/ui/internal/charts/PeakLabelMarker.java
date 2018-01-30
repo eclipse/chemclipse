@@ -15,29 +15,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakSupport;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.marker.LabelMarker;
 import org.eclipse.swt.SWT;
-import org.swtchart.IPlotArea;
 
 public class PeakLabelMarker extends LabelMarker {
 
-	public PeakLabelMarker(BaseChart baseChart, int indexSeries, List<IPeak> peaks) {
+	public PeakLabelMarker(BaseChart baseChart, int indexSeries, List<? extends IPeak> peaks) {
 		super(baseChart);
-		IPlotArea plotArea = (IPlotArea)getBaseChart().getPlotArea();
-		LabelMarker labelMarker = new LabelMarker(getBaseChart());
+		//
+		PeakSupport peakSupport = new PeakSupport();
 		List<String> labels = new ArrayList<String>();
-		labels.add("2-Methoxy-4-vinylphenol");
-		labels.add("Ethanone, 1-(2-hydroxy-5-methylphenyl)-");
-		labels.add("4-Hydroxy-2-methylacetophenone");
-		labels.add("Ethanone, 1-(2-hydroxy-5-methylphenyl)-");
-		labels.add("4-Hydroxy-3-methylacetophenone");
-		labels.add("3-Methoxyacetophenone");
-		labels.add("3-Methyl-4-isopropylphenol");
-		labels.add("Phenol, 3,4-dimethoxy-");
-		labels.add("2,4-Dimethoxyphenol");
-		labels.add("3-Amino-2,6-dimethoxypyridine");
-		labelMarker.setLabels(labels, indexSeries, SWT.VERTICAL);
-		plotArea.addCustomPaintListener(labelMarker);
+		for(IPeak peak : peaks) {
+			ILibraryInformation libraryInformation = peakSupport.getLibraryInformation(new ArrayList<IPeakTarget>(peak.getTargets()));
+			String substance = "";
+			if(libraryInformation != null) {
+				substance = libraryInformation.getName();
+			}
+			labels.add(substance);
+		}
+		setLabels(labels, indexSeries, SWT.VERTICAL);
 	}
 }

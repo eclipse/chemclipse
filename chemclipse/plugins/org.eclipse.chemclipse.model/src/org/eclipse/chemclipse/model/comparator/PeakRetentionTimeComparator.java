@@ -16,15 +16,15 @@ import java.util.Comparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 
-public class ChromatogramPeakRetentionTimeComparator implements Comparator<IPeak> {
+public class PeakRetentionTimeComparator implements Comparator<IPeak> {
 
 	private SortOrder sortOrder;
 
-	public ChromatogramPeakRetentionTimeComparator() {
+	public PeakRetentionTimeComparator() {
 		sortOrder = SortOrder.ASC;
 	}
 
-	public ChromatogramPeakRetentionTimeComparator(SortOrder sortOrder) {
+	public PeakRetentionTimeComparator(SortOrder sortOrder) {
 		this.sortOrder = sortOrder;
 	}
 

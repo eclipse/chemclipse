@@ -200,7 +200,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	private void initialize(Composite parent) {
 
 		IChromatogramSelection chromatogramSelection = loadChromatogram();
-		createPages(parent);
+		createEditorPages(parent);
 		extendedChromatogramUI.updateChromatogramSelection(chromatogramSelection);
 		//
 		if(chromatogramSelection != null) {
@@ -278,7 +278,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		}
 	}
 
-	private void createPages(Composite parent) {
+	private void createEditorPages(Composite parent) {
 
 		createChromatogramPage(parent);
 	}

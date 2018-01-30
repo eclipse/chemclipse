@@ -17,17 +17,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.model.comparator.ChromatogramPeakRetentionTimeComparator;
+import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public class PeakQuantitationsExtractor {
 
-	private ChromatogramPeakRetentionTimeComparator chromatogramPeakRetentionTimeComparator;
+	private PeakRetentionTimeComparator chromatogramPeakRetentionTimeComparator;
 
 	public PeakQuantitationsExtractor() {
-		chromatogramPeakRetentionTimeComparator = new ChromatogramPeakRetentionTimeComparator(SortOrder.ASC);
+		chromatogramPeakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 	}
 
 	public PeakQuantitations extract(List<? extends IPeak> peaks) {

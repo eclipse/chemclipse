@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.chemclipse.model.comparator.ChromatogramPeakRetentionTimeComparator;
+import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -61,13 +61,13 @@ public class EditorChromatogramUI extends AbstractEditorChromatogramUI {
 
 	private MouseMoveMarker mouseMoveMarker;
 	private SelectedPositionMarker selectedPositionMarker;
-	private ChromatogramPeakRetentionTimeComparator chromatogramPeakComparator;
+	private PeakRetentionTimeComparator chromatogramPeakComparator;
 
 	public EditorChromatogramUI(Composite parent, int style) {
 		super(parent, style);
 		boolean yMinimumToZero = PreferenceSupplier.showBackgroundInChromatogramEditor();
 		setYMinimumToZero(yMinimumToZero);
-		chromatogramPeakComparator = new ChromatogramPeakRetentionTimeComparator(SortOrder.ASC);
+		chromatogramPeakComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 	}
 
 	@Override

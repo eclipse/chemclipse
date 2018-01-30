@@ -19,7 +19,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.model.comparator.ChromatogramPeakRetentionTimeComparator;
+import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
@@ -68,7 +68,7 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 	private double lastIntegratedArea = 0.0d;
 	private float retentionIndexSum = 0.0f; // initial == 0
 	private IChromatogramSelectionMSD chromatogramSelectionMSDFocused;
-	private ChromatogramPeakRetentionTimeComparator chromatogramPeakComparator;
+	private PeakRetentionTimeComparator chromatogramPeakComparator;
 	/*
 	 * Update the cache if the peaks have been deleted.
 	 */
@@ -77,7 +77,7 @@ public class PeakListMSDView extends AbstractChromatogramSelectionMSDView {
 	@Inject
 	public PeakListMSDView(EPartService partService, MPart part, IEventBroker eventBroker) {
 		super(part, partService, eventBroker);
-		chromatogramPeakComparator = new ChromatogramPeakRetentionTimeComparator(SortOrder.ASC);
+		chromatogramPeakComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 	}
 
 	@PostConstruct
