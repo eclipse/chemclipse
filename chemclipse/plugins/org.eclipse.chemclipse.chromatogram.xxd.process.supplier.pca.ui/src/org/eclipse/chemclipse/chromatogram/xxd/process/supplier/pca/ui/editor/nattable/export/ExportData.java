@@ -16,28 +16,26 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.TableProvider;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 
 public class ExportData {
 
 	public static final String DEF_CSV_SEPARATOR = "\t";
 	public static final String DEF_FILE_NAME = "data";
 	private ExportDataSupplier data;
-	private boolean exportGroupMeans;
-	private boolean exportSamples;
 	private String SHEET_NAME = "data";
 
 	public ExportData(ExportDataSupplier exportDataSupplier) {
 		this.data = exportDataSupplier;
-		exportGroupMeans = true;
-		exportSamples = true;
 	}
 
 	private void createWorkBook(Workbook workbook) {
@@ -47,12 +45,6 @@ public class ExportData {
 			Row row = spreadsheet.createRow(i);
 			int tableColumn = 0;
 			for(int j = 0; j < data.getColumnCount(); j++) {
-				if(!exportGroupMeans && data.getDataType(j).equals(TableProvider.COLUMN_LABEL_GROUP_DATA)) {
-					continue;
-				}
-				if(!exportSamples && data.getDataType(j).equals(TableProvider.COLUMN_LABEL_SAMPLE_DATA)) {
-					continue;
-				}
 				Object d = data.getDataValue(j, i);
 				if(d instanceof Double) {
 					Double value = (Double)d;
@@ -74,28 +66,40 @@ public class ExportData {
 		}
 	}
 
-	public void export(String path) throws IOException {
+	public void exportTableDialog(Display display) {
 
-		String extension = FilenameUtils.getExtension(path);
-		switch(extension) {
-			case "xls":
-				exportToXLS(path);
-				break;
-			case "csv":
-				exportToCSV(path);
-				break;
-			default:
-				exportToXLSX(path);
-				break;
+		FileDialog dialog = new FileDialog(display.getActiveShell(), SWT.SAVE);
+		dialog.setFilterNames(new String[]{"Excel(*.xlsx)", "Excel(97-2003)(*.xls)", "CSV(*.csv)"});
+		dialog.setFilterExtensions(new String[]{"*.xlsx", "*.xls", "*.csv"});
+		dialog.setFileName(ExportData.DEF_FILE_NAME + ".xlsx");
+		dialog.setOverwrite(true);
+		String path = dialog.open();
+		if(path != null) {
+			try {
+				int filterIndex = dialog.getFilterIndex();
+				switch(filterIndex) {
+					case 1:
+						exportToXLS(path);
+						break;
+					case 2:
+						exportToCSV(path);
+						break;
+					default:
+						exportToXLSX(path);
+						break;
+				}
+			} catch(IOException e1) {
+				MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Warning", e1.getMessage());
+			}
 		}
 	}
 
-	public void exportToCSV(String path) throws IOException {
+	private void exportToCSV(String path) throws IOException {
 
 		exportToCSV(path, DEF_CSV_SEPARATOR);
 	}
 
-	public void exportToCSV(String path, String separator) throws IOException {
+	private void exportToCSV(String path, String separator) throws IOException {
 
 		Workbook workbook = new XSSFWorkbook();
 		createWorkBook(workbook);
@@ -127,7 +131,7 @@ public class ExportData {
 		}
 	}
 
-	public void exportToXLS(String path) throws IOException {
+	private void exportToXLS(String path) throws IOException {
 
 		Workbook workbook = new HSSFWorkbook();
 		createWorkBook(workbook);
@@ -136,7 +140,7 @@ public class ExportData {
 		}
 	}
 
-	public void exportToXLSX(String path) throws IOException {
+	private void exportToXLSX(String path) throws IOException {
 
 		Workbook workbook = new XSSFWorkbook();
 		createWorkBook(workbook);
@@ -157,25 +161,5 @@ public class ExportData {
 			path = path + File.pathSeparator + DEF_FILE_NAME + "." + extension;
 		}
 		return new File(path);
-	}
-
-	public boolean isExportGroupMeans() {
-
-		return exportGroupMeans;
-	}
-
-	public boolean isExportSamples() {
-
-		return exportSamples;
-	}
-
-	public void setExportGroupMeans(boolean exportGroupMeans) {
-
-		this.exportGroupMeans = exportGroupMeans;
-	}
-
-	public void setExportSamples(boolean exportSamples) {
-
-		this.exportSamples = exportSamples;
 	}
 }

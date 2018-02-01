@@ -38,7 +38,7 @@ public class PcaResulDataProvider implements IDataProvider {
 		int sortRowIndex = sortModel.getOrderRow().get(rowIndex);
 		if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
 			return tableProvider.getDataTable().getVariables().get(sortRowIndex).isSelected();
-		} else if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
+		} else if(columnIndex == TableProvider.COLUMN_INDEX_VARIABLES) {
 			return tableProvider.getDataTable().getVariables().get(sortRowIndex).getValue();
 		} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAK_NAMES) {
 			String peaksNames = tableProvider.getDataTable().getVariables().get(sortRowIndex).getDescription();

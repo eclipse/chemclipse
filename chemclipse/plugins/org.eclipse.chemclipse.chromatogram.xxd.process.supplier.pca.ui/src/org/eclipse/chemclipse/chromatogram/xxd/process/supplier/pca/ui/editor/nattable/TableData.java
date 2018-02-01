@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.n
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
@@ -41,6 +42,16 @@ public class TableData {
 	public List<ISample<? extends ISampleData>> getSamples() {
 
 		return samples;
+	}
+
+	public String getVariableName() {
+
+		Optional<IVariable> variable = variables.stream().findAny();
+		if(variable.isPresent()) {
+			return variable.get().getType();
+		} else {
+			return "";
+		}
 	}
 
 	/**

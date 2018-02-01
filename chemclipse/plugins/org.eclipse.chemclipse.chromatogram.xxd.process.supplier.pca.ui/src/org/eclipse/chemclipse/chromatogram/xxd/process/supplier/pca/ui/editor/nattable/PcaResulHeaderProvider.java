@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IGroup;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 
@@ -34,17 +33,13 @@ public class PcaResulHeaderProvider implements IDataProvider {
 
 		if(columnIndex == TableProvider.COLUMN_INDEX_SELECTED) {
 			return "";
-		} else if(columnIndex == TableProvider.COLUMN_INDEX_RETENTION_TIMES) {
-			return "Retention Time (minutes)";
+		} else if(columnIndex == TableProvider.COLUMN_INDEX_VARIABLES) {
+			return tableProvider.getDataTable().getVariableName();
 		} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAK_NAMES) {
-			return "Compound";
+			return "Description";
 		} else {
 			ISample sample = tableProvider.getDataTable().getSamples().get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
-			if(sample instanceof IGroup) {
-				return "Mean";
-			} else {
-				return sample.getName();
-			}
+			return sample.getName();
 		}
 	}
 

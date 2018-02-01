@@ -20,7 +20,6 @@ public class PcaResults implements IPcaResults {
 
 	private List<double[]> basisVectors;
 	private ObservableList<IVaribleExtracted> extractedVariables;
-	private ObservableList<IPcaResult> pcaResultGroupsList;
 	private ObservableList<IPcaResult> pcaResultList;
 	//
 	private IPcaSettings pcaSettings;
@@ -28,7 +27,6 @@ public class PcaResults implements IPcaResults {
 	public PcaResults(IPcaSettings pcaSettings) {
 		this.pcaSettings = pcaSettings;
 		extractedVariables = FXCollections.observableArrayList(IVaribleExtracted.extractor());
-		pcaResultGroupsList = FXCollections.observableArrayList(IPcaResult.extractor());
 		pcaResultList = FXCollections.observableArrayList(IPcaResult.extractor());
 	}
 

@@ -93,7 +93,7 @@ public class PreprocessingPart {
 			dataPreprocessing = new DataPreprocessingSelection(compositeNormalizationTables, null);
 		} else {
 			ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples = SelectionManagerSamples.getInstance().getSelection().get(0);
-			dataPreprocessing = new DataPreprocessingSelection(compositeNormalizationTables, getPcaPreprocessingData(samples));
+			dataPreprocessing = new DataPreprocessingSelection(compositeNormalizationTables, null, getPcaPreprocessingData(samples));
 			dataPreprocessing.setSamples(samples);
 		}
 		SelectionManagerSamples.getInstance().getSelection().addListener(samplesChangeListener);

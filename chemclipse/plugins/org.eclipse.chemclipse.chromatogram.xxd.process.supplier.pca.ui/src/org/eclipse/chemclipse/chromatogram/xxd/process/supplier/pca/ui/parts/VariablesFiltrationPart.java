@@ -26,7 +26,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.FiltersTable;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -46,7 +45,9 @@ public class VariablesFiltrationPart {
 	@Inject
 	private Display display;
 	private FiltersTable filtersTable;
-	private ISamples<? extends IVariable, ? extends ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> samples;
+	private Runnable changeSelectionVariables;
+	private ListChangeListener<IVariable> changeVariablesChangeListener;
+	private ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples;
 
 	public VariablesFiltrationPart() {
 		synchronized(VariablesFiltrationPart.class) {
@@ -66,34 +67,40 @@ public class VariablesFiltrationPart {
 				});
 			}
 		}
+		changeSelectionVariables = () -> updateLabelTotalSelection();
+		changeVariablesChangeListener = new ListChangeListener<IVariable>() {
+
+			@Override
+			public void onChanged(javafx.collections.ListChangeListener.Change<? extends IVariable> c) {
+
+				Display.getDefault().timerExec(100, changeSelectionVariables);
+			}
+		};
 		actualSelectionLisnter = new ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>>() {
 
 			@Override
 			public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> c) {
 
 				PcaFiltrationData pcaFiltrationData = new PcaFiltrationData();
+				if(samples != null) {
+					samples.getVariables().removeListener(changeVariablesChangeListener);
+				}
 				if(!c.getList().isEmpty()) {
+					samples = c.getList().get(0);
+					samples.getVariables().addListener(changeVariablesChangeListener);
+					filtersTable.setSamples(samples);
 					pcaFiltrationData = getPcaFiltrationData(c.getList().get(0));
+				} else {
+					samples = null;
 				}
 				final PcaFiltrationData filtrationData = pcaFiltrationData;
 				display.syncExec(() -> {
 					filtersTable.setPcaFiltrationData(filtrationData);
 					filtersTable.update();
+					updateLabelTotalSelection();
 				});
 			}
 		};
-	}
-
-	private void applyFilters() {
-
-		if(samples instanceof Samples) {
-			Samples s = (Samples)samples;
-			s.getPcaFiltrationData().process(samples, new NullProgressMonitor());
-		} else {
-			new PcaFiltrationData();
-		}
-		updateLabelTotalSelection();
-		filtersTable.update();
 	}
 
 	private void createButton(Composite parent) {
@@ -104,26 +111,29 @@ public class VariablesFiltrationPart {
 		Button button = new Button(buttonComposite, SWT.PUSH);
 		button.setText("Apply Filters");
 		button.addListener(SWT.Selection, e -> {
-			applyFilters();
+			filtersTable.updateVariables();
 		});
 		button = new Button(buttonComposite, SWT.PUSH);
 		button.setText("Create New Filter");
 		button.addListener(SWT.Selection, e -> {
 			filtersTable.createNewFilter();
-			applyFilters();
 		});
 		button = new Button(buttonComposite, SWT.PUSH);
 		button.setText("Remove Selected Filters");
 		button.addListener(SWT.Selection, e -> {
 			filtersTable.removeSelectedFilters();
-			applyFilters();
 		});
 		button = new Button(buttonComposite, SWT.PUSH);
 		button.setText("Remove All Filters");
 		button.addListener(SWT.Selection, e -> {
 			filtersTable.removeAllFilters();
-			applyFilters();
 		});
+		button = new Button(buttonComposite, SWT.CHECK);
+		button.setText("Autoupdate");
+		button.addListener(SWT.Selection, e -> {
+			filtersTable.setAutoUpdate(((Button)e.widget).getSelection());
+		});
+		button.setSelection(filtersTable.isAutoUpdate());
 	}
 
 	@PostConstruct
@@ -141,12 +151,12 @@ public class VariablesFiltrationPart {
 		 * create button area
 		 */
 		createButton(composite);
-		/*
-		 *
-		 */
 		countSelectedRow = new Label(parent, SWT.None);
 		if(!SelectionManagerSamples.getInstance().getSelection().isEmpty()) {
-			filtersTable.setPcaFiltrationData(getPcaFiltrationData(SelectionManagerSamples.getInstance().getSelection().get(0)));
+			samples = SelectionManagerSamples.getInstance().getSelection().get(0);
+			samples.getVariables().addListener(changeVariablesChangeListener);
+			filtersTable.setPcaFiltrationData(getPcaFiltrationData(samples));
+			filtersTable.setSamples(samples);
 		}
 		updateLabelTotalSelection();
 		SelectionManagerSamples.getInstance().getSelection().addListener(actualSelectionLisnter);
@@ -166,15 +176,21 @@ public class VariablesFiltrationPart {
 	public void preDestroy() {
 
 		SelectionManagerSamples.getInstance().getSelection().removeListener(actualSelectionLisnter);
+		if(samples != null) {
+			samples.getVariables().removeListener(changeVariablesChangeListener);
+		}
+		Display.getDefault().timerExec(-1, changeSelectionVariables);
 	}
 
 	private void updateLabelTotalSelection() {
 
 		long count = 0;
+		int totalCount = 0;
 		if(samples != null) {
 			count = samples.getVariables().stream().filter(IVariable::isSelected).count();
+			totalCount = samples.getVariables().size();
 		}
-		countSelectedRow.setText("It will be selected " + count + " rows");
+		countSelectedRow.setText("It will be selected " + count + " variables from " + totalCount);
 		countSelectedRow.getParent().layout();
 	}
 }

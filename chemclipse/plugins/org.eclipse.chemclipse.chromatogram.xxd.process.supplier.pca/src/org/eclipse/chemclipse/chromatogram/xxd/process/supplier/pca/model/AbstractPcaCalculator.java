@@ -5,7 +5,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Lorenz Gerber - initial API and implementation
  *******************************************************************************/
@@ -17,18 +17,10 @@ import org.ejml.ops.CommonOps;
 public abstract class AbstractPcaCalculator implements IPcaCalculator {
 
 	protected DenseMatrix64F loadings;
+	protected double mean[];
 	protected int numComps;
 	protected DenseMatrix64F sampleData = new DenseMatrix64F(1, 1);
 	protected int sampleIndex;
-	protected double mean[];
-
-	@Override
-	public void initialize(int numObs, int numVars) {
-
-		sampleData.reshape(numObs, numVars, false);
-		mean = new double[numObs];
-		numComps = -1;
-	}
 
 	@Override
 	public void addObservation(double[] obsData) {
@@ -39,22 +31,14 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 		sampleIndex++;
 	}
 
-	@Override
-	public double[] getScoreVector(int obs) {
+	public double[] applyLoadings(double[] obs) {
 
-		DenseMatrix64F scores = new DenseMatrix64F(1, sampleData.numCols);
-		CommonOps.extract(loadings, obs, obs + 1, 0, sampleData.numCols, scores, 0, 0);
-		return scores.data;
-	}
-
-	@Override
-	public double[] getLoadingVector(int var) {
-
-		if(var < 0 || var >= numComps)
-			throw new IllegalArgumentException("Invalid component");
-		DenseMatrix64F loadingVector = new DenseMatrix64F(1, sampleData.numCols);
-		CommonOps.extract(loadings, var, var + 1, 0, sampleData.numCols, loadingVector, 0, 0);
-		return loadingVector.data;
+		DenseMatrix64F mean = DenseMatrix64F.wrap(sampleData.getNumCols(), 1, this.mean);
+		DenseMatrix64F sample = new DenseMatrix64F(sampleData.getNumCols(), 1, true, obs);
+		DenseMatrix64F rotated = new DenseMatrix64F(numComps, 1);
+		CommonOps.subtract(sample, mean, sample);
+		CommonOps.mult(loadings, sample, rotated);
+		return rotated.data;
 	}
 
 	@Override
@@ -70,14 +54,31 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 		return Math.sqrt(total);
 	}
 
-	public double[] applyLoadings(double[] obs) {
+	@Override
+	public double[] getLoadingVector(int var) {
 
-		DenseMatrix64F mean = DenseMatrix64F.wrap(sampleData.getNumCols(), 1, this.mean);
-		DenseMatrix64F sample = new DenseMatrix64F(sampleData.getNumCols(), 1, true, obs);
-		DenseMatrix64F rotated = new DenseMatrix64F(numComps, 1);
-		CommonOps.subtract(sample, mean, sample);
-		CommonOps.mult(loadings, sample, rotated);
-		return rotated.data;
+		if(var < 0 || var >= numComps) {
+			throw new IllegalArgumentException("Invalid component");
+		}
+		DenseMatrix64F loadingVector = new DenseMatrix64F(1, sampleData.numCols);
+		CommonOps.extract(loadings, var, var + 1, 0, sampleData.numCols, loadingVector, 0, 0);
+		return loadingVector.data;
+	}
+
+	@Override
+	public double[] getScoreVector(int obs) {
+
+		DenseMatrix64F scores = new DenseMatrix64F(1, sampleData.numCols);
+		CommonOps.extract(loadings, obs, obs + 1, 0, sampleData.numCols, scores, 0, 0);
+		return scores.data;
+	}
+
+	@Override
+	public void initialize(int numObs, int numVars) {
+
+		sampleData.reshape(numObs, numVars, false);
+		mean = new double[numObs];
+		numComps = -1;
 	}
 
 	public double[] reproject(double[] scoreVector) {

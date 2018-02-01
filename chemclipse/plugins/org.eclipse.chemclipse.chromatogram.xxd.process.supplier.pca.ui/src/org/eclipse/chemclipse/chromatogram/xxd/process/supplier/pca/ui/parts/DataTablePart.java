@@ -30,13 +30,16 @@ import javafx.collections.ListChangeListener;
 public class DataTablePart {
 
 	private ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> actualSamples;
-	private Runnable changeSelection;
+	private Runnable changeData;
+	private Runnable changeSelectedSample;
 	private PeakListNatTable peakListIntensityTable;
 	private ListChangeListener<ISample<? extends ISampleData>> sampleChangeListener;
 	private ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> samplesChangeListener;
+	private ListChangeListener<IVariable> variableChangeListener;
 
 	public DataTablePart() {
-		changeSelection = () -> peakListIntensityTable.update(actualSamples);
+		changeData = () -> peakListIntensityTable.refreshTable();
+		changeSelectedSample = () -> peakListIntensityTable.update(actualSamples);
 		samplesChangeListener = new ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>>() {
 
 			@Override
@@ -44,11 +47,13 @@ public class DataTablePart {
 
 				if(actualSamples != null) {
 					actualSamples.getSampleList().removeListener(sampleChangeListener);
+					actualSamples.getVariables().removeListener(variableChangeListener);
 				}
 				if(!c.getList().isEmpty()) {
 					ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples = c.getList().get(0);
 					actualSamples = samples;
 					peakListIntensityTable.update(samples);
+					actualSamples.getVariables().addListener(variableChangeListener);
 					samples.getSampleList().addListener(sampleChangeListener);
 				} else {
 					peakListIntensityTable.clearTable();
@@ -61,8 +66,16 @@ public class DataTablePart {
 			public void onChanged(ListChangeListener.Change<? extends ISample<? extends ISampleData>> c) {
 
 				if(!c.getList().isEmpty()) {
-					Display.getDefault().timerExec(100, changeSelection);
+					Display.getDefault().timerExec(100, changeSelectedSample);
 				}
+			}
+		};
+		variableChangeListener = new ListChangeListener<IVariable>() {
+
+			@Override
+			public void onChanged(ListChangeListener.Change<? extends IVariable> c) {
+
+				Display.getDefault().timerExec(100, changeData);
 			}
 		};
 	}
@@ -77,6 +90,7 @@ public class DataTablePart {
 		if(!SelectionManagerSamples.getInstance().getSelection().isEmpty()) {
 			actualSamples = SelectionManagerSamples.getInstance().getSelection().get(0);
 			actualSamples.getSampleList().addListener(sampleChangeListener);
+			actualSamples.getVariables().addListener(variableChangeListener);
 			peakListIntensityTable.update(actualSamples);
 		}
 	}
@@ -87,6 +101,9 @@ public class DataTablePart {
 		SelectionManagerSamples.getInstance().getSelection().removeListener(samplesChangeListener);
 		if(actualSamples != null) {
 			actualSamples.getSampleList().removeListener(sampleChangeListener);
+			actualSamples.getVariables().removeListener(variableChangeListener);
 		}
+		Display.getDefault().timerExec(-1, changeSelectedSample);
+		Display.getDefault().timerExec(-1, changeData);
 	}
 }

@@ -61,18 +61,20 @@ import org.eclipse.nebula.widgets.nattable.ui.menu.PopupMenuBuilder;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 
 public class PeakListNatTable {
 
 	private ColumnGroupHeaderLayer columnGroupHeaderLayer;
+	private PcaResulHeaderProvider columnHeaderDataProvider;
 	private ColumnHideShowLayer columnHideShowLayer;
 	private PcaResulDataProvider dataProvider;
 	private ExportData exportData;
-	private NatTable natTable;
-	private SortModel sortModel;
-	private TableData tableData;
-	private TableProvider tableProvider;
+	NatTable natTable;
+	SortModel sortModel;
+	TableData tableData;
+	TableProvider tableProvider;
 
 	public PeakListNatTable(Composite parent, Object layoutData) {
 		tableData = new TableData();
@@ -93,10 +95,13 @@ public class PeakListNatTable {
 					ILayerCell cell = natTable.getCellByPosition(col, row);
 					final int rowIndex = cell.getRowIndex();
 					final int columnIndex = cell.getColumnIndex();
+					if(TableProvider.COLUMN_INDEX_SELECTED == columnIndex) {
+						long selectedVariables = tableData.getVariables().stream().filter(IVariable::isSelected).count();
+						int total = tableData.getVariables().size();
+						return selectedVariables + " variables from " + total + " is selected";
+					}
 					if(row < 2) {
-						if(columnIndex >= TableProvider.NUMER_OF_DESCRIPTION_COLUMN) {
-							return tableData.getSamples().get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN).getName();
-						}
+						return columnHeaderDataProvider.getDataValue(columnIndex, 0).toString();
 					} else {
 						return dataProvider.getDataValue(columnIndex, rowIndex).toString();
 					}
@@ -148,7 +153,7 @@ public class PeakListNatTable {
 		/*
 		 * build the column header layer
 		 */
-		PcaResulHeaderProvider columnHeaderDataProvider = new PcaResulHeaderProvider(tableProvider);
+		columnHeaderDataProvider = new PcaResulHeaderProvider(tableProvider);
 		DataLayer columnHeaderDataLayer = new DefaultColumnHeaderDataLayer(columnHeaderDataProvider);
 		ColumnHeaderLayer columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, compositeFreezeLayer, selectionLayer);
 		SortHeaderLayer<?> sortHeaderLayer = new SortHeaderLayer<>(columnHeaderLayer, sortModel);
@@ -198,6 +203,7 @@ public class PeakListNatTable {
 		});
 		natTable.addConfiguration(new SingleClickSortConfiguration());
 		natTable.addConfiguration(new PcaResulRegistryConfiguration(tableProvider));
+		natTable.addConfiguration(new BodyMenuConfiguration(this));
 		natTable.configure();
 		/*
 		 * Freeze column dynamically
@@ -213,7 +219,7 @@ public class PeakListNatTable {
 				/*
 				 * freeze first column, this column contains retention times
 				 */
-				if(!columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_RETENTION_TIMES)) {
+				if(!columnHideShowLayer.isColumnIndexHidden(TableProvider.COLUMN_INDEX_VARIABLES)) {
 					num++;
 				}
 				/*
@@ -235,6 +241,12 @@ public class PeakListNatTable {
 		});
 		exportData = new ExportData(new ExportDataSupplier(tableProvider, dataProvider, columnHeaderDataProvider, columnGroupModel));
 		attachToolTip();
+	}
+
+	public void exportTableDialog(Display display) {
+
+		exportData.exportTableDialog(display);
+		;
 	}
 
 	/**
@@ -283,11 +295,6 @@ public class PeakListNatTable {
 		}
 	}
 
-	public ExportData getExporter() {
-
-		return exportData;
-	}
-
 	private void hideCompoundColumn() {
 
 		boolean isEmpty = !tableData.getVariables().stream().map(r -> r.getDescription()).anyMatch(s -> s != null && !s.isEmpty());
@@ -303,6 +310,11 @@ public class PeakListNatTable {
 				columnHideShowLayer.showColumnIndexes(peakNamesColumn);
 			}
 		}
+	}
+
+	public void refreshTable() {
+
+		natTable.refresh();
 	}
 
 	public void update(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {

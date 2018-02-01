@@ -13,14 +13,12 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.SeriesConverter;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
@@ -63,7 +61,7 @@ public class LoadingPlot extends PCA2DPlot {
 		@Override
 		public int getStateMask() {
 
-			return SWT.NONE;
+			return SWT.CTRL;
 		}
 
 		@Override
@@ -71,10 +69,8 @@ public class LoadingPlot extends PCA2DPlot {
 
 			String selectedSeriesId = baseChart.getSelectedseriesId(event);
 			if(!selectedSeriesId.equals("")) {
-				IVariable variable = extractedValues.get(selectedSeriesId);
-				if(variable.isSelected()) {
-					variable.setSelected(!variable.isSelected());
-				}
+				IVaribleExtracted variable = extractedValues.get(selectedSeriesId);
+				variable.getVariableOrigin().setSelected(!variable.getVariableOrigin().isSelected());
 			}
 		}
 	}
@@ -82,7 +78,7 @@ public class LoadingPlot extends PCA2DPlot {
 	final public static int LABELS_DESCRIPTION = 2;
 	final public static int LABELS_RETENTION_TIME_MINUTES = 1;
 	final private Set<String> actualSelection = new HashSet<>();
-	final private Map<String, IVariable> extractedValues = new HashMap<>();
+	final private Map<String, IVaribleExtracted> extractedValues = new HashMap<>();
 	private int labelsType = LABELS_RETENTION_TIME_MINUTES;
 
 	public LoadingPlot(Composite parent) {
@@ -115,7 +111,7 @@ public class LoadingPlot extends PCA2DPlot {
 		return actualSelection;
 	}
 
-	public Map<String, IVariable> getExtractedValues() {
+	public Map<String, IVaribleExtracted> getExtractedValues() {
 
 		return extractedValues;
 	}
@@ -144,11 +140,6 @@ public class LoadingPlot extends PCA2DPlot {
 		}
 		deleteSeries();
 		addSeriesData(series);
-		extractedValues.forEach((s, v) -> {
-			if(v.isSelected()) {
-				getBaseChart().selectSeries(s);
-			}
-		});
 		update(pcX, pcY);
 		updateSelection();
 	}
@@ -170,18 +161,6 @@ public class LoadingPlot extends PCA2DPlot {
 						actualSelection.add(id);
 					}
 				}
-			}
-		}
-	}
-
-	public void updateSelectionVariables() {
-
-		getBaseChart().resetSeriesSettings();
-		Iterator<Entry<String, IVariable>> it = extractedValues.entrySet().iterator();
-		while(it.hasNext()) {
-			Entry<String, IVariable> e = it.next();
-			if(!e.getValue().isSelected()) {
-				getBaseChart().selectSeries(e.getKey());
 			}
 		}
 	}

@@ -13,12 +13,18 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.FilterWizard;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.FiltersWizard;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -29,7 +35,9 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class FiltersTable {
 
+	private boolean autoUpdate;
 	private PcaFiltrationData pcaFiltrationData;
+	private Optional<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> samples;
 	private Table table;
 
 	public FiltersTable(Composite parent, Object layoutData) {
@@ -38,12 +46,19 @@ public class FiltersTable {
 
 	public FiltersTable(Composite parent, Object layoutData, PcaFiltrationData pcaFiltrationData) {
 		this.pcaFiltrationData = pcaFiltrationData;
+		samples = Optional.empty();
 		createTable(parent, layoutData);
+	}
+
+	private void autoUpdateVariables() {
+
+		if(autoUpdate && samples.isPresent()) {
+			pcaFiltrationData.process(samples.get(), new NullProgressMonitor());
+		}
 	}
 
 	public void createNewFilter() {
 
-		List<IFilter> filters = pcaFiltrationData.getFilters();
 		FiltersWizard filtersWizard = new FiltersWizard();
 		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getDefault().getActiveShell(), filtersWizard);
 		if(Window.OK == wizardDialog.open()) {
@@ -53,7 +68,8 @@ public class FiltersTable {
 				wizardDialog = new BatchProcessWizardDialog(Display.getDefault().getActiveShell(), filterWizard);
 				wizardDialog.setMinimumPageSize(300, 600);
 				if(Window.OK == wizardDialog.open()) {
-					filters.add(filter);
+					pcaFiltrationData.getFilters().add(filter);
+					autoUpdateVariables();
 					update();
 				}
 			}
@@ -72,11 +88,13 @@ public class FiltersTable {
 				IFilter filter = pcaFiltrationData.getFilters().get(i);
 				FilterWizard filterWizard = new FilterWizard(filter);
 				BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getCurrent().getActiveShell(), filterWizard);
-				wizardDialog.open();
+				if(Window.OK == wizardDialog.open()) {
+					autoUpdateVariables();
+				}
 				update();
 			}
 		});
-		String[] columns = new String[]{"Name", "Description", "Number of selected row or error"};
+		String[] columns = new String[]{"Name", "Description", "Number of selected variables or error"};
 		for(int i = 0; i < columns.length; i++) {
 			TableColumn tableColumn = new TableColumn(table, SWT.None);
 			tableColumn.setText(columns[i]);
@@ -89,6 +107,11 @@ public class FiltersTable {
 		return pcaFiltrationData;
 	}
 
+	public boolean isAutoUpdate() {
+
+		return autoUpdate;
+	}
+
 	public void moveDownSelectedFilter() {
 
 		List<IFilter> filters = pcaFiltrationData.getFilters();
@@ -97,6 +120,7 @@ public class FiltersTable {
 			IFilter temp = filters.get(i);
 			filters.set(i, filters.get(i + 1));
 			filters.set(i + 1, temp);
+			autoUpdateVariables();
 			update();
 		}
 	}
@@ -109,6 +133,7 @@ public class FiltersTable {
 			IFilter temp = filters.get(i);
 			filters.set(i, filters.get(i - 1));
 			filters.set(i - 1, temp);
+			autoUpdateVariables();
 			update();
 		}
 	}
@@ -116,18 +141,30 @@ public class FiltersTable {
 	public void removeAllFilters() {
 
 		pcaFiltrationData.getFilters().clear();
+		autoUpdateVariables();
 		update();
 	}
 
 	public void removeSelectedFilters() {
 
 		Arrays.stream(table.getSelection()).forEach(i -> pcaFiltrationData.getFilters().remove(i.getData()));
+		autoUpdateVariables();
 		update();
+	}
+
+	public void setAutoUpdate(boolean autoUpdate) {
+
+		this.autoUpdate = autoUpdate;
 	}
 
 	public void setPcaFiltrationData(PcaFiltrationData pcaFiltrationData) {
 
 		this.pcaFiltrationData = pcaFiltrationData;
+	}
+
+	public void setSamples(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
+
+		this.samples = Optional.of(samples);
 	}
 
 	public void update() {
@@ -146,6 +183,14 @@ public class FiltersTable {
 		for(int i = 0; i < table.getColumns().length; i++) {
 			table.getColumn(i).pack();
 			table.getColumn(i).setWidth(table.getColumn(i).getWidth() + 20);
+		}
+	}
+
+	public void updateVariables() {
+
+		if(samples.isPresent()) {
+			pcaFiltrationData.process(samples.get(), new NullProgressMonitor());
+			update();
 		}
 	}
 }

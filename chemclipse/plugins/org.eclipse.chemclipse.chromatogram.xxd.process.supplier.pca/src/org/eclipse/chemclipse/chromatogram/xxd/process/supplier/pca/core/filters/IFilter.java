@@ -52,6 +52,7 @@ public interface IFilter extends IPreprocessing {
 		List<Boolean> result = filter(samples);
 		List<V> variables = samples.getVariables();
 		for(int j = 0; j < result.size(); j++) {
+			System.out.println(variables.get(j).isSelected() + " " + result.get(j));
 			variables.get(j).setSelected(variables.get(j).isSelected() && result.get(j));
 		}
 	}

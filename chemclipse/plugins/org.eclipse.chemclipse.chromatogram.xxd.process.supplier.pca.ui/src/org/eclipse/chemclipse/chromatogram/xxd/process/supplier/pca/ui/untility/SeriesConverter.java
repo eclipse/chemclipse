@@ -36,7 +36,7 @@ public class SeriesConverter {
 	private static int SYMBOL_SIZE_LOADING_PLOT = 4;
 	private static int SYMBOL_SIZE_SCORE_PLOT = 8;
 
-	public static List<IScatterSeriesData> basisVectorsToSeries(IPcaResults pcaResults, int pcX, int pcY, Map<String, IVariable> extractedValues) {
+	public static List<IScatterSeriesData> basisVectorsToSeries(IPcaResults pcaResults, int pcX, int pcY, Map<String, IVaribleExtracted> extractedValues) {
 
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
 		List<IVaribleExtracted> variables = pcaResults.getExtractedVariables();
@@ -53,17 +53,21 @@ public class SeriesConverter {
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();
-			scatterSeriesSettings.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
+			if(variables.get(i).getVariableOrigin().isSelected()) {
+				scatterSeriesSettings.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
+			} else {
+				scatterSeriesSettings.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+			}
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
 			scatterSeriesSettings.setSymbolSize(SYMBOL_SIZE_LOADING_PLOT);
 			IScatterSeriesSettings scatterSeriesSettingsHighlight = (IScatterSeriesSettings)scatterSeriesSettings.getSeriesSettingsHighlight();
-			scatterSeriesSettingsHighlight.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+			scatterSeriesSettingsHighlight.setSymbolColor(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
 			scatterSeriesDataList.add(scatterSeriesData);
 		}
 		return scatterSeriesDataList;
 	}
 
-	public static List<IScatterSeriesData> basisVectorsToSeriesDescription(IPcaResults pcaResults, int pcX, int pcY, Map<String, IVariable> extractedValues) {
+	public static List<IScatterSeriesData> basisVectorsToSeriesDescription(IPcaResults pcaResults, int pcX, int pcY, Map<String, IVaribleExtracted> extractedValues) {
 
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
 		List<IVaribleExtracted> variables = pcaResults.getExtractedVariables();

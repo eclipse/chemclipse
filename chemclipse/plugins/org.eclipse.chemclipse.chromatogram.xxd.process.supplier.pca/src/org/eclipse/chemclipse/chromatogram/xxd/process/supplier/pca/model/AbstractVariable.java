@@ -26,7 +26,7 @@ public abstract class AbstractVariable implements IVariable {
 	public AbstractVariable() {
 		value = new SimpleStringProperty();
 		type = new SimpleStringProperty();
-		selected = new SimpleBooleanProperty();
+		selected = new SimpleBooleanProperty(true);
 		description = new SimpleStringProperty();
 	}
 

@@ -45,15 +45,11 @@ public class PcaResulRegistryConfiguration extends AbstractRegistryConfiguration
 	private void setFormatCell(IConfigRegistry configRegistry) {
 
 		// Set format for sample data
-		configRegistry.unregisterConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, DisplayMode.NORMAL, TableProvider.COLUMN_LABEL_GROUP_DATA);
 		configRegistry.unregisterConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, DisplayMode.NORMAL, TableProvider.COLUMN_LABEL_SAMPLE_DATA);
 		DefaultDoubleDisplayConverter format = new DefaultDoubleDisplayConverter();
 		DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ENGLISH);
 		symbols.setNaN("#N/A");
 		format.setNumberFormat(new DecimalFormat((ValueFormat.DEFAULT_DECIMAL_PATTERN), symbols));
-		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
-				format, DisplayMode.NORMAL, //
-				TableProvider.COLUMN_LABEL_GROUP_DATA);
 		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER, //
 				format, DisplayMode.NORMAL, //
 				TableProvider.COLUMN_LABEL_SAMPLE_DATA);/**/
