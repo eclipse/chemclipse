@@ -25,6 +25,7 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 	private DataInputFromPeakFilesPageWizard dataInputFromPeakFilesPage;
 	private FiltrationDataWizardPage filtrationDataPage;
 	private MainPropertiesPeaksInputWizardPage mainPropertiesPage;
+	private MassSetGroupNamesWizardPage massSetGroupNamesWizardPage;
 	private ModificationDataWizardPage modificationDataWizardPage;
 	private PcaExtractionPeaks pcaExtractionData;
 
@@ -32,6 +33,7 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 		super();
 		mainPropertiesPage = new MainPropertiesPeaksInputWizardPage("MainProperites");
 		dataInputFromPeakFilesPage = new DataInputFromPeakFilesPageWizard("DataInputFiles");
+		massSetGroupNamesWizardPage = new MassSetGroupNamesWizardPage("MassSetGroup");
 		modificationDataWizardPage = new ModificationDataWizardPage("NormalizationData");
 		filtrationDataPage = new FiltrationDataWizardPage("FiltrationData");
 	}
@@ -41,6 +43,7 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 
 		addPage(mainPropertiesPage);
 		addPage(dataInputFromPeakFilesPage);
+		addPage(massSetGroupNamesWizardPage);
 		addPage(modificationDataWizardPage);
 		addPage(filtrationDataPage);
 	}
