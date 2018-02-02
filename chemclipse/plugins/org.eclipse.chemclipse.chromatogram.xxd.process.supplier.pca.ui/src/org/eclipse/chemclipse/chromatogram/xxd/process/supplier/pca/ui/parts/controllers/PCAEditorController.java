@@ -26,6 +26,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFilt
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaInputRunnable;
@@ -39,6 +41,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -58,6 +61,7 @@ import javafx.util.Callback;
 
 public class PCAEditorController {
 
+	private ListChangeListener<ISample<? extends ISampleData>> actualSelectionChangeListener;
 	@FXML // fx:id="cColor"
 	private TableColumn<Sample, String> cColor; // Value injected by FXMLLoader
 	@FXML // fx:id="cGroupNames"
@@ -74,10 +78,35 @@ public class PCAEditorController {
 	private Map<String, Color> mapGroupColor = new HashMap<>();
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
+	private ListChangeListener<ISample<? extends ISampleData>> sampleChangeSelectionListener;
 	private Optional<Samples> samples;
 
 	public PCAEditorController() {
 		samples = Optional.empty();
+		sampleChangeSelectionListener = new ListChangeListener<ISample<? extends ISampleData>>() {
+
+			@Override
+			public void onChanged(javafx.collections.ListChangeListener.Change<? extends ISample<? extends ISampleData>> c) {
+
+				updateNumerSeletedSamples();
+			}
+		};
+		actualSelectionChangeListener = new ListChangeListener<ISample<? extends ISampleData>>() {
+
+			@Override
+			public void onChanged(javafx.collections.ListChangeListener.Change<? extends ISample<? extends ISampleData>> c) {
+
+				if(samples.isPresent() && SelectionManagerSamples.getInstance().getSelection().contains(samples.get())) {
+					ObservableList<ISample<? extends ISampleData>> selection = SelectionManagerSample.getInstance().getSelection();
+					if(!selection.isEmpty()) {
+						ISample<? extends ISampleData> s = selection.get(0);
+						seletedSample((Sample)s);
+					} else {
+						removeSelectedSample();
+					}
+				}
+			}
+		};
 	}
 
 	public Optional<Samples> getSamples() {
@@ -241,6 +270,7 @@ public class PCAEditorController {
 				}
 			}
 		});
+		SelectionManagerSample.getInstance().getSelection().addListener(actualSelectionChangeListener);
 		updateNumerSeletedSamples();
 	}
 
@@ -249,8 +279,6 @@ public class PCAEditorController {
 		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getDefault().getActiveShell(), wizard);
 		int status = wizardDialog.open();
 		if(status == Window.OK) {
-			SelectionManagerSamples.getInstance().getElements().remove(samples);
-			SelectionManagerSamples.getInstance().getSelection().clear();
 			PcaFiltrationData pcaFiltrationData = wizard.getPcaFiltrationData();
 			PcaPreprocessingData pcaPreprocessingData = wizard.getPcaPreprocessingData();
 			IDataExtraction pcaExtractionData = wizard.getPcaExtractionData();
@@ -263,15 +291,15 @@ public class PCAEditorController {
 			 * Calculate the results and show the score plot page.
 			 */
 			monitor.run(true, true, runnable);
-			this.samples = Optional.of(runnable.getSamples());
-			SelectionManagerSamples.getInstance().getElements().add(samples.get());
-			SelectionManagerSamples.getInstance().getSelection().add(samples.get());
-			updateColorMap();
-			updateNumerSeletedSamples();
-			inputSamples.accept(samples.get());
-			cTableSamples.setItems(samples.get().getSampleList());
+			setSamples(runnable.getSamples());
 		}
 		return status;
+	}
+
+	public void preDestroy() {
+
+		setSamples(null);
+		SelectionManagerSample.getInstance().getSelection().remove(actualSelectionChangeListener);
 	}
 
 	public void removeSelectedSample() {
@@ -284,6 +312,28 @@ public class PCAEditorController {
 		if(!cTableSamples.getSelectionModel().getSelectedItems().contains(sample)) {
 			cTableSamples.getSelectionModel().select(sample);
 			cTableSamples.scrollTo(sample);
+		}
+	}
+
+	private void setSamples(Samples newSamples) {
+
+		/*
+		 * Set samples
+		 */
+		if(samples.isPresent()) {
+			SelectionManagerSamples.getInstance().getElements().remove(samples.get());
+			SelectionManagerSamples.getInstance().getSelection().clear();
+			samples.get().getSampleList().removeListener(sampleChangeSelectionListener);
+		}
+		if(newSamples != null) {
+			this.samples = Optional.of(newSamples);
+			SelectionManagerSamples.getInstance().getElements().add(samples.get());
+			SelectionManagerSamples.getInstance().getSelection().add(samples.get());
+			samples.get().getSampleList().addListener(sampleChangeSelectionListener);
+			updateColorMap();
+			updateNumerSeletedSamples();
+			inputSamples.accept(samples.get());
+			cTableSamples.setItems(samples.get().getSampleList());
 		}
 	}
 

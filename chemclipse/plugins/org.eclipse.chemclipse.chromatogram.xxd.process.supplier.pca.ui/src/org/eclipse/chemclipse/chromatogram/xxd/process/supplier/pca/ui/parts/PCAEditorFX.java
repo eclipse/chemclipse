@@ -20,8 +20,6 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers.PCAEditorController;
@@ -34,8 +32,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.embed.swt.FXCanvas;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -45,7 +41,6 @@ import javafx.scene.Scene;
 public class PCAEditorFX {
 
 	private final static Logger logger = Logger.getLogger(PCAEditorFX.class);
-	private ListChangeListener<ISample<? extends ISampleData>> actualSelectionChangeListener;
 	private PCAEditorController controller;
 	/**
 	 * View controller. Will be only available after {@link #createScene(Composite)} was called.
@@ -56,32 +51,12 @@ public class PCAEditorFX {
 	private PCAController pcaController;
 
 	public PCAEditorFX() {
-		actualSelectionChangeListener = new ListChangeListener<ISample<? extends ISampleData>>() {
-
-			@Override
-			public void onChanged(javafx.collections.ListChangeListener.Change<? extends ISample<? extends ISampleData>> c) {
-
-				if(controller != null) {
-					Optional<Samples> samples = controller.getSamples();
-					if(samples.isPresent() && SelectionManagerSamples.getInstance().getSelection().contains(samples.get())) {
-						ObservableList<ISample<? extends ISampleData>> selection = SelectionManagerSample.getInstance().getSelection();
-						if(!selection.isEmpty()) {
-							ISample<? extends ISampleData> s = selection.get(0);
-							controller.seletedSample((Sample)s);
-						} else {
-							controller.removeSelectedSample();
-						}
-					}
-				}
-			}
-		};
 	}
 
 	@PostConstruct
 	public void createControl() {
 
 		init(parent);
-		SelectionManagerSample.getInstance().getSelection().addListener(actualSelectionChangeListener);
 	}
 
 	protected void createScene(final Composite parent) {
@@ -116,7 +91,6 @@ public class PCAEditorFX {
 	@PreDestroy
 	public void preDestroy() {
 
-		SelectionManagerSample.getInstance().getSelection().remove(actualSelectionChangeListener);
 		Optional<Samples> samples = controller.getSamples();
 		if(samples.isPresent()) {
 			boolean contains = SelectionManagerSamples.getInstance().getSelection().remove(samples.get());
@@ -125,6 +99,7 @@ public class PCAEditorFX {
 			}
 			SelectionManagerSamples.getInstance().getElements().remove(samples.get());
 		}
+		controller.preDestroy();
 	}
 
 	@Focus

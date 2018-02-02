@@ -48,7 +48,11 @@ public class ExportData {
 				Object d = data.getDataValue(j, i);
 				if(d instanceof Double) {
 					Double value = (Double)d;
-					row.createCell(tableColumn).setCellValue(value);
+					if(value.isNaN()) {
+						row.createCell(tableColumn);
+					} else {
+						row.createCell(tableColumn).setCellValue(value);
+					}
 				} else if(d instanceof String) {
 					String value = (String)d;
 					row.createCell(tableColumn).setCellValue(value);
@@ -116,6 +120,7 @@ public class ExportData {
 						buffer.append(cell.getBooleanCellValue());
 						break;
 					case Cell.CELL_TYPE_NUMERIC:
+						cell.getNumericCellValue();
 						buffer.append(cell.getNumericCellValue());
 						break;
 					case Cell.CELL_TYPE_STRING:
