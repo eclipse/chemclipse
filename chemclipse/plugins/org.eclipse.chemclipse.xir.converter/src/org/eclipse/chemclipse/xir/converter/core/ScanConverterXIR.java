@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018 pwenig.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,13 +7,10 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
- *******************************************************************************/
-package org.eclipse.chemclipse.model.core;
+ * pwenig - initial API and implementation
+*******************************************************************************/
+package org.eclipse.chemclipse.xir.converter.core;
 
-public interface ISignal {
 
-	public double getX();
-
-	public double getY();
+public class ScanConverterXIR {
 }

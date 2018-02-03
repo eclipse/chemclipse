@@ -9,11 +9,17 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.core;
+package org.eclipse.chemclipse.xir.model.core;
 
-public interface ISignal {
+import org.eclipse.chemclipse.model.core.ISignal;
 
-	public double getX();
+public interface ISignalXIR extends ISignal {
 
-	public double getY();
+	double getWavelength();
+
+	void setWavelength(double wavelength);
+
+	double getIntensity();
+
+	void setIntensity(double intensity);
 }

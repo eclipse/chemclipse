@@ -9,11 +9,13 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.core;
+package org.eclipse.chemclipse.xir.model.core;
 
-public interface ISignal {
+import java.util.Set;
 
-	public double getX();
+public interface IScanXIR extends Set<ISignalXIR> {
 
-	public double getY();
+	double getRotationAngle();
+
+	void setRotationAngle(double rotationAngle);
 }
