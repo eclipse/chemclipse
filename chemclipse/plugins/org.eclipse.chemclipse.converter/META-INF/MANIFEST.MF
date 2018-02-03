@@ -26,4 +26,5 @@ Export-Package: org.eclipse.chemclipse.converter.chromatogram,
  org.eclipse.chemclipse.converter.processing.chromatogram,
  org.eclipse.chemclipse.converter.processing.report,
  org.eclipse.chemclipse.converter.report,
+ org.eclipse.chemclipse.converter.scan,
  org.eclipse.chemclipse.converter.support

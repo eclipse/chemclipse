@@ -11,7 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xir.converter.core;
 
+import java.io.File;
+
 import org.eclipse.chemclipse.converter.core.IImportConverter;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IScanImportConverter extends IImportConverter {
+
+	IProcessingInfo convert(File file, IProgressMonitor monitor);
 }

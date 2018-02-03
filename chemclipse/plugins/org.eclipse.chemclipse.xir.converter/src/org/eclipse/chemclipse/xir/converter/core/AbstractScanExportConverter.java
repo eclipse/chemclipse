@@ -13,5 +13,5 @@ package org.eclipse.chemclipse.xir.converter.core;
 
 import org.eclipse.chemclipse.converter.core.AbstractExportConverter;
 
-public class AbstractScanExportConverter extends AbstractExportConverter implements IScanExportConverter {
+public abstract class AbstractScanExportConverter extends AbstractExportConverter implements IScanExportConverter {
 }

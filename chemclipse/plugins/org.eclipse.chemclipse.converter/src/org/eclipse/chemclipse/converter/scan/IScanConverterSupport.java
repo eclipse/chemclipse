@@ -9,16 +9,9 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xir.converter.core;
+package org.eclipse.chemclipse.converter.scan;
 
-import java.io.File;
+import org.eclipse.chemclipse.converter.core.IConverterSupport;
 
-import org.eclipse.chemclipse.converter.core.IExportConverter;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.xir.model.core.IScanXIR;
-import org.eclipse.core.runtime.IProgressMonitor;
-
-public interface IScanExportConverter extends IExportConverter {
-
-	IProcessingInfo convert(File file, IScanXIR scan, IProgressMonitor monitor);
+public interface IScanConverterSupport extends IConverterSupport {
 }
