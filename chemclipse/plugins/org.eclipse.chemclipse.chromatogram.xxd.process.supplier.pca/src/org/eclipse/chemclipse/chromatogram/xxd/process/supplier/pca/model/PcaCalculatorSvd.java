@@ -21,11 +21,12 @@ public class PcaCalculatorSvd extends AbstractPcaCalculator {
 	@Override
 	public void compute(int numComps) {
 
-		SingularValueDecomposition<DenseMatrix64F> svd = DecompositionFactory.svd(sampleData.numRows, sampleData.numCols, false, true, false);
-		svd.decompose(sampleData);
-		loadings = svd.getV(null, true);
+		setNumComps(numComps);
+		SingularValueDecomposition<DenseMatrix64F> svd = DecompositionFactory.svd(getSampleData().getNumRows(), getSampleData().getNumCols(), false, true, false);
+		svd.decompose(getSampleData());
+		setLoadings(svd.getV(null, true));
 		DenseMatrix64F W = svd.getW(null);
-		SingularOps.descendingOrder(null, false, W, loadings, true);
-		loadings.reshape(numComps, mean.length, true);
+		SingularOps.descendingOrder(null, false, W, getLoadings(), true);
+		getLoadings().reshape(getNumComps(), getMean().length, true);
 	}
 }
