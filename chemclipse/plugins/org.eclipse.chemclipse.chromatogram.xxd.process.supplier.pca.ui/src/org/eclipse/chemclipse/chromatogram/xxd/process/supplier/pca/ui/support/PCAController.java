@@ -14,14 +14,16 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaSettingsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISamplesVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.PcaSettingsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SamplesVisualization;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -35,12 +37,12 @@ import javafx.collections.ObservableList;
 public class PCAController {
 
 	private Spinner numerPrincipalComponents;
-	private Optional<IPcaResults> pcaResults;
+	private Optional<IPcaResultsVisualization> pcaResults;
 	private Spinner pcx;
 	private Spinner pcy;
 	private Spinner pcz;
 	private Button runAnalysis;
-	private Optional<Samples> samples;
+	private Optional<SamplesVisualization> samples;
 
 	public PCAController(Composite parent, Object layoutData) {
 		samples = Optional.empty();
@@ -67,7 +69,7 @@ public class PCAController {
 		pcx.setMaximum(3);
 		pcx.addModifyListener(e -> {
 			if(pcaResults.isPresent()) {
-				pcaResults.get().getPcaSettings().setPcX(pcx.getSelection());
+				pcaResults.get().getPcaSettingsVisualization().setPcX(pcx.getSelection());
 			}
 		});
 		label = new Label(composite, SWT.None);
@@ -79,7 +81,7 @@ public class PCAController {
 		pcy.setSelection(2);
 		pcy.addModifyListener(e -> {
 			if(pcaResults.isPresent()) {
-				pcaResults.get().getPcaSettings().setPcY(pcy.getSelection());
+				pcaResults.get().getPcaSettingsVisualization().setPcY(pcy.getSelection());
 			}
 		});
 		label = new Label(composite, SWT.None);
@@ -91,7 +93,7 @@ public class PCAController {
 		pcz.setMaximum(3);
 		pcz.addModifyListener(e -> {
 			if(pcaResults.isPresent()) {
-				pcaResults.get().getPcaSettings().setPcZ(pcz.getSelection());
+				pcaResults.get().getPcaSettingsVisualization().setPcZ(pcz.getSelection());
 			}
 		});
 	}
@@ -99,8 +101,8 @@ public class PCAController {
 	private void evaluatePCA() {
 
 		if(samples.isPresent()) {
-			ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> s = samples.get();
-			ObservableList<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> el = SelectionManagerSamples.getInstance().getElements();
+			ISamplesVisualization<? extends IVariable, ? extends ISample<? extends ISampleData>> s = samples.get();
+			ObservableList<ISamplesVisualization<? extends IVariable, ? extends ISample<? extends ISampleData>>> el = SelectionManagerSamples.getInstance().getElements();
 			if(!el.contains(s)) {
 				el.add(s);
 			}
@@ -109,25 +111,23 @@ public class PCAController {
 			pcy.setMaximum(maxPC);
 			pcz.setMaximum(maxPC);
 			IPcaSettings pcaSettings = new PcaSettings(maxPC);
-			pcaSettings.setPcX(pcx.getSelection());
-			pcaSettings.setPcY(pcy.getSelection());
-			pcaSettings.setPcZ(pcz.getSelection());
-			IPcaResults results = SelectionManagerSamples.getInstance().evaluatePca(s, pcaSettings, new NullProgressMonitor(), true);
+			IPcaSettingsVisualization pcaSettingsVisualization = new PcaSettingsVisualization(pcx.getSelection(), pcy.getSelection(), pcz.getSelection());
+			IPcaResultsVisualization results = SelectionManagerSamples.getInstance().evaluatePca(s, pcaSettings, pcaSettingsVisualization, new NullProgressMonitor(), true);
 			pcaResults = Optional.of(results);
 		}
 	}
 
-	public Optional<IPcaResults> getPcaResults() {
+	public Optional<IPcaResultsVisualization> getPcaResults() {
 
 		return pcaResults;
 	}
 
-	public Optional<Samples> getSamples() {
+	public Optional<SamplesVisualization> getSamples() {
 
 		return samples;
 	}
 
-	public void setSamples(Samples samples) {
+	public void setSamples(SamplesVisualization samples) {
 
 		this.samples = Optional.of(samples);
 	}

@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.PcaColorGroup;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
@@ -49,7 +49,7 @@ public class Chart3DScatter {
 	}
 
 	private static EventType<UpdateSelectionEvent> SELECTION_UPDATE = new EventType<>("SELECTION_UPDATE");
-	private final List<IPcaResult> data = new ArrayList<>();
+	private final List<IPcaResultVisualization> data = new ArrayList<>();
 	final private NumberFormat format = ValueFormat.getNumberFormatEnglish();
 	private final Group mainGroup = new Group();
 	private double radius;
@@ -62,18 +62,18 @@ public class Chart3DScatter {
 		update();
 	}
 
-	public Chart3DScatter(Chart3DSettings settings, IPcaResults pcaResults) {
+	public Chart3DScatter(Chart3DSettings settings, IPcaResultsVisualization pcaResults) {
 		this(settings);
 		data.clear();
-		for(IPcaResult pcaResult : pcaResults.getPcaResultList()) {
+		for(IPcaResultVisualization pcaResult : pcaResults.getPcaResultList()) {
 			data.add(pcaResult);
 		}
 		update();
 	}
 
-	private Color getColor(IPcaResult data) {
+	private Color getColor(IPcaResultVisualization data) {
 
-		Color color = settings.getColorGroup().get(data.getGroupName());
+		Color color = PcaColorGroup.getSampleColorFX(data);
 		if(SelectionManagerSample.getInstance().getSelection().contains(data.getSample())) {
 			return PcaColorGroup.getActualSelectedColor(color);
 		} else {
@@ -93,7 +93,7 @@ public class Chart3DScatter {
 	private void update() {
 
 		double s = settings.getScale();
-		for(IPcaResult d : data) {
+		for(IPcaResultVisualization d : data) {
 			String name = d.getName();
 			/*
 			 * create sphere

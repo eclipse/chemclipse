@@ -14,13 +14,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PcaEditor;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -30,11 +28,9 @@ import org.eclipse.swt.widgets.TreeItem;
 
 public class SamplesSelectionTree {
 
-	private PcaEditor pcaEditor;
 	private List<IPcaResult> pcaResults = new ArrayList<>();
 
-	public SamplesSelectionTree(PcaEditor pcaEditor) {
-		this.pcaEditor = pcaEditor;
+	public SamplesSelectionTree() {
 	}
 
 	public void create(Composite parent) {
@@ -133,10 +129,6 @@ public class SamplesSelectionTree {
 						parentItem.setChecked(checkParentItem);
 					}
 				}
-				/*
-				 * update editors
-				 */
-				pcaEditor.updateSelection();
 			}
 		});
 	}
@@ -148,7 +140,7 @@ public class SamplesSelectionTree {
 		item.setData(pcaResult);
 	}
 
-	public void update() {
+	public void update(IPcaResultsVisualization resultsVisualization) {
 
 		/*
 		 * clear all
@@ -157,11 +149,8 @@ public class SamplesSelectionTree {
 		/*
 		 * insert and sort samples
 		 */
-		Optional<IPcaResults> results = pcaEditor.getPcaResults();
-		if(results.isPresent()) {
-			pcaResults.addAll(results.get().getPcaResultList());
-			PcaUtils.sortPcaResultsByName(pcaResults);
-			PcaUtils.sortPcaResultsByGroup(pcaResults);
-		}
+		pcaResults.addAll(resultsVisualization.getPcaResultList());
+		PcaUtils.sortPcaResultsByName(pcaResults);
+		PcaUtils.sortPcaResultsByGroup(pcaResults);
 	}
 }

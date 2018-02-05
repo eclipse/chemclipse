@@ -16,12 +16,19 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaEvaluation;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaSettingsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISampleVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISamplesVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IVariableVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.PcaResultsVisualization;
 import org.eclipse.chemclipse.ux.fx.ui.SelectionManagerProto;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -30,7 +37,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
 
-public class SelectionManagerSamples extends SelectionManagerProto<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> {
+public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisualization<? extends IVariable, ? extends ISample<? extends ISampleData>>> {
 
 	private static SelectionManagerSamples instance;
 
@@ -69,8 +76,8 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamples<? ex
 		return instance;
 	}
 
-	private ObjectProperty<IPcaResults> actualSelectedPcaResults;
-	private Map<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>, IPcaResults> pcaResults;
+	private ObjectProperty<IPcaResultsVisualization> actualSelectedPcaResults;
+	private Map<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>, IPcaResultsVisualization> pcaResults;
 
 	private SelectionManagerSamples() {
 		super();
@@ -78,36 +85,41 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamples<? ex
 		actualSelectedPcaResults = new SimpleObjectProperty<>();
 	}
 
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> IPcaResults evaluatePca(ISamples<V, S> samples, IPcaSettings settings, IProgressMonitor monitor) {
+	public <V extends IVariableVisualization, S extends ISampleVisualization<? extends ISampleData>> IPcaResultsVisualization evaluatePca(ISamplesVisualization<V, S> samples, IPcaSettings settings, IPcaSettingsVisualization pcaSettingsVisualization, IProgressMonitor monitor, boolean setSelected) {
+
+		PcaResults results = evaluatePca(samples, settings, monitor);
+		IPcaResultsVisualization pcaResultsVisualization = new PcaResultsVisualization<>(results, pcaSettingsVisualization);
+		samples.getSampleList().forEach(s -> {
+			Optional<IPcaResultVisualization> pcaResultVisualization = pcaResultsVisualization.getPcaResultList().stream().filter(r -> r.getSample() == s).findAny();
+			pcaResultVisualization.get().setColor(s.getColor());
+		});
+		if(!getElements().contains(samples)) {
+			getElements().add(samples);
+		}
+		synchronized(pcaResults) {
+			pcaResults.put(samples, pcaResultsVisualization);
+		}
+		if(setSelected) {
+			actualSelectedPcaResults.setValue(pcaResultsVisualization);
+			if(!getSelection().contains(samples)) {
+				getSelection().setAll(samples);
+			}
+		}
+		return pcaResultsVisualization;
+	}
+
+	private <V extends IVariableVisualization, S extends ISampleVisualization<? extends ISampleData>> PcaResults evaluatePca(ISamplesVisualization<V, S> samples, IPcaSettings settings, IProgressMonitor monitor) {
 
 		PcaEvaluation pcaEvaluation = new PcaEvaluation();
 		return pcaEvaluation.process(samples, settings, monitor);
 	}
 
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> IPcaResults evaluatePca(ISamples<V, S> samples, IPcaSettings settings, IProgressMonitor monitor, boolean setSelected) {
-
-		IPcaResults results = evaluatePca(samples, settings, monitor);
-		if(!getElements().contains(samples)) {
-			getElements().add(samples);
-		}
-		synchronized(pcaResults) {
-			pcaResults.put(samples, results);
-		}
-		if(setSelected) {
-			actualSelectedPcaResults.setValue(results);
-			if(!getSelection().contains(samples)) {
-				getSelection().setAll(samples);
-			}
-		}
-		return results;
-	}
-
-	public ReadOnlyObjectProperty<IPcaResults> getActualSelectedPcaResults() {
+	public ReadOnlyObjectProperty<IPcaResultsVisualization> getActualSelectedPcaResults() {
 
 		return actualSelectedPcaResults;
 	}
 
-	public Optional<IPcaResults> getPcaResults(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
+	public Optional<IPcaResultsVisualization> getPcaResults(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
 
 		synchronized(pcaResults) {
 			return Optional.ofNullable(pcaResults.get(samples));

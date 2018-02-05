@@ -96,7 +96,7 @@ public class PcaUtils {
 		return eigenvalues;
 	}
 
-	public static Set<String> getGroupNames(IPcaResults pcaResults) {
+	public static Set<String> getGroupNames(IPcaResults<?, ?> pcaResults) {
 
 		Set<String> groupNames = new HashSet<>();
 		for(IPcaResult pcaResult : pcaResults.getPcaResultList()) {

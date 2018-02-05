@@ -115,11 +115,11 @@ public class PcaEvaluation {
 		return principleComponentAnalysis;
 	}
 
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> IPcaResults process(ISamples<V, S> samples, IPcaSettings settings, IProgressMonitor monitor) {
+	public <V extends IVariable, S extends ISample<? extends ISampleData>> PcaResults process(ISamples<V, S> samples, IPcaSettings settings, IProgressMonitor monitor) {
 
 		monitor.subTask("Run PCA");
 		int numberOfPrincipleComponents = settings.getNumberOfPrincipalComponents();
-		IPcaResults pcaResults = new PcaResults(settings);
+		PcaResults pcaResults = new PcaResults(settings);
 		Map<ISample<?>, double[]> extractData = extractData(samples);
 		setRetentionTime(pcaResults, samples);
 		int sampleSize = getSampleSize(extractData);

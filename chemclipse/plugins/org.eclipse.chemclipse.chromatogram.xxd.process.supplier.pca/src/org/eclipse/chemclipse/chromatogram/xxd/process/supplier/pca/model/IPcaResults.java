@@ -15,13 +15,13 @@ import java.util.List;
 
 import javafx.collections.ObservableList;
 
-public interface IPcaResults {
+public interface IPcaResults<R extends IPcaResult, V extends IVaribleExtracted> {
 
 	List<double[]> getBasisVectors();
 
-	ObservableList<IVaribleExtracted> getExtractedVariables();
+	ObservableList<V> getExtractedVariables();
 
-	ObservableList<IPcaResult> getPcaResultList();
+	ObservableList<R> getPcaResultList();
 
 	IPcaSettings getPcaSettings();
 

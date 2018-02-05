@@ -37,9 +37,6 @@
     				</cellFactory>
                 </TableColumn>
                 <TableColumn fx:id="cColor" prefWidth="69.0" text="Color">
-                	<cellValueFactory>
-						<PropertyValueFactory property="groupName" />
-					</cellValueFactory>	
                 </TableColumn> 
               </columns>
             </TableView>

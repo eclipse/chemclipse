@@ -13,13 +13,10 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.co
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
@@ -28,8 +25,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.Sel
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SampleVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaInputRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.IPcaInputWizard;
@@ -40,6 +37,8 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -49,6 +48,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -63,23 +63,22 @@ public class PCAEditorController {
 
 	private ListChangeListener<ISample<? extends ISampleData>> actualSelectionChangeListener;
 	@FXML // fx:id="cColor"
-	private TableColumn<Sample, String> cColor; // Value injected by FXMLLoader
+	private TableColumn<SampleVisualization, SampleVisualization> cColor; // Value injected by FXMLLoader
 	@FXML // fx:id="cGroupNames"
-	private TableColumn<Sample, String> cGroupNames; // Value injected by FXMLLoader
+	private TableColumn<SampleVisualization, String> cGroupNames; // Value injected by FXMLLoader
 	@FXML
 	private Label cLabelNumblerSelectedSamples;
 	@FXML // fx:id="cSelections"
-	private TableColumn<Sample, Boolean> cSelections; // Value injected by FXMLLoader
+	private TableColumn<SampleVisualization, Boolean> cSelections; // Value injected by FXMLLoader
 	@FXML // fx:id="cTableSamples"
-	private TableView<Sample> cTableSamples; // Value injected by FXMLLoader
-	private Consumer<Samples> inputSamples;
+	private TableView<SampleVisualization> cTableSamples; // Value injected by FXMLLoader
+	private Consumer<SamplesVisualization> inputSamples;
 	@FXML // URL location of the FXML file that was given to the FXMLLoader
 	private URL location;
-	private Map<String, Color> mapGroupColor = new HashMap<>();
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
 	private ListChangeListener<ISample<? extends ISampleData>> sampleChangeSelectionListener;
-	private Optional<Samples> samples;
+	private Optional<SamplesVisualization> samples;
 
 	public PCAEditorController() {
 		samples = Optional.empty();
@@ -100,7 +99,7 @@ public class PCAEditorController {
 					ObservableList<ISample<? extends ISampleData>> selection = SelectionManagerSample.getInstance().getSelection();
 					if(!selection.isEmpty()) {
 						ISample<? extends ISampleData> s = selection.get(0);
-						seletedSample((Sample)s);
+						seletedSample((SampleVisualization)s);
 					} else {
 						removeSelectedSample();
 					}
@@ -109,22 +108,22 @@ public class PCAEditorController {
 		};
 	}
 
-	public Optional<Samples> getSamples() {
+	public Optional<SamplesVisualization> getSamples() {
 
 		return samples;
 	}
 
-	public Sample getSelectedSamples() {
+	public SampleVisualization getSelectedSamples() {
 
 		return cTableSamples.getSelectionModel().getSelectedItem();
 	}
 
 	@FXML
-	void handeChangeGroupName(TableColumn.CellEditEvent<Sample, String> event) {
+	void handeChangeGroupName(TableColumn.CellEditEvent<SampleVisualization, String> event) {
 
 		String newGroupName = event.getNewValue();
 		String oldGroupName = event.getOldValue();
-		Sample sample = event.getRowValue();
+		SampleVisualization sample = event.getRowValue();
 		if(newGroupName != null) {
 			newGroupName = newGroupName.trim();
 			if(!newGroupName.equals(oldGroupName)) {
@@ -133,12 +132,10 @@ public class PCAEditorController {
 				} else {
 					sample.setGroupName(null);
 				}
-				updateColorMap();
 			}
 		} else {
 			if(newGroupName != oldGroupName) {
 				sample.setGroupName(newGroupName);
-				updateColorMap();
 			}
 		}
 		cTableSamples.refresh();
@@ -195,31 +192,39 @@ public class PCAEditorController {
 		assert cTableSamples != null : "fx:id=\"cTableSamples\" was not injected: check your FXML file 'PCAEditor.fxml'.";
 		assert cSelections != null : "fx:id=\"cSelections\" was not injected: check your FXML file 'PCAEditor.fxml'.";
 		assert cColor != null : "fx:id=\"cColor\" was not injected: check your FXML file 'PCAEditor.fxml'.";
-		cSelections.setCellFactory(new Callback<TableColumn<Sample, Boolean>, //
-				TableCell<Sample, Boolean>>() {
+		cSelections.setCellFactory(new Callback<TableColumn<SampleVisualization, Boolean>, //
+				TableCell<SampleVisualization, Boolean>>() {
 
 			@Override
-			public TableCell<Sample, Boolean> call(TableColumn<Sample, Boolean> p) {
+			public TableCell<SampleVisualization, Boolean> call(TableColumn<SampleVisualization, Boolean> p) {
 
-				CheckBoxTableCell<Sample, Boolean> cell = new CheckBoxTableCell<Sample, Boolean>();
+				CheckBoxTableCell<SampleVisualization, Boolean> cell = new CheckBoxTableCell<SampleVisualization, Boolean>();
 				cell.setAlignment(Pos.CENTER);
 				return cell;
 			}
 		});
+		cColor.setCellValueFactory(new Callback<CellDataFeatures<SampleVisualization, SampleVisualization>, ObservableValue<SampleVisualization>>() {
+
+			@Override
+			public ObservableValue<SampleVisualization> call(CellDataFeatures<SampleVisualization, SampleVisualization> p) {
+
+				return new ReadOnlyObjectWrapper<>(p.getValue());
+			}
+		});
 		cColor.setCellFactory(param -> {
-			final TableCell<Sample, String> cell = new TableCell<Sample, String>() {
+			final TableCell<SampleVisualization, SampleVisualization> cell = new TableCell<SampleVisualization, SampleVisualization>() {
 
 				final Rectangle r = new Rectangle(20, 20);
 
 				@Override
-				public void updateItem(String item, boolean empty) {
+				public void updateItem(SampleVisualization item, boolean empty) {
 
 					super.updateItem(item, empty);
 					if(empty) {
 						setGraphic(null);
 						setText(null);
 					} else {
-						Color c = mapGroupColor.get(item);
+						Color c = PcaColorGroup.getSampleColorFX(item);
 						if(c != null) {
 							r.setFill(c);
 							setGraphic(r);
@@ -231,12 +236,12 @@ public class PCAEditorController {
 			cell.setAlignment(Pos.CENTER);
 			return cell;
 		});
-		cTableSamples.setRowFactory(new Callback<TableView<Sample>, TableRow<Sample>>() {
+		cTableSamples.setRowFactory(new Callback<TableView<SampleVisualization>, TableRow<SampleVisualization>>() {
 
 			@Override
-			public TableRow<Sample> call(TableView<Sample> tableView2) {
+			public TableRow<SampleVisualization> call(TableView<SampleVisualization> tableView2) {
 
-				final TableRow<Sample> row = new TableRow<>();
+				final TableRow<SampleVisualization> row = new TableRow<>();
 				row.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
 
 					@Override
@@ -256,14 +261,14 @@ public class PCAEditorController {
 				return row;
 			}
 		});
-		cTableSamples.getSelectionModel().getSelectedItems().addListener(new ListChangeListener<Sample>() {
+		cTableSamples.getSelectionModel().getSelectedItems().addListener(new ListChangeListener<SampleVisualization>() {
 
 			@Override
-			public void onChanged(ListChangeListener.Change<? extends Sample> c) {
+			public void onChanged(ListChangeListener.Change<? extends SampleVisualization> c) {
 
-				List<? extends Sample> samples = c.getList();
+				List<? extends SampleVisualization> samples = c.getList();
 				if(!samples.isEmpty()) {
-					Sample s = samples.get(0);
+					SampleVisualization s = samples.get(0);
 					if(!SelectionManagerSample.getInstance().getSelection().contains(s)) {
 						SelectionManagerSample.getInstance().getSelection().setAll(s);
 					}
@@ -291,7 +296,7 @@ public class PCAEditorController {
 			 * Calculate the results and show the score plot page.
 			 */
 			monitor.run(true, true, runnable);
-			setSamples(runnable.getSamples());
+			setSamples(new SamplesVisualization(runnable.getSamples()));
 		}
 		return status;
 	}
@@ -307,15 +312,20 @@ public class PCAEditorController {
 		cTableSamples.getSelectionModel().clearSelection();
 	}
 
-	public void seletedSample(Sample sample) {
+	public void seletedSample(SampleVisualization sample) {
 
-		if(!cTableSamples.getSelectionModel().getSelectedItems().contains(sample)) {
-			cTableSamples.getSelectionModel().select(sample);
-			cTableSamples.scrollTo(sample);
+		if(samples.isPresent()) {
+			Optional<SampleVisualization> sampleVisalization = samples.get().getSampleList().stream().filter(s -> s == sample).findAny();
+			if(sampleVisalization.isPresent()) {
+				if(!cTableSamples.getSelectionModel().getSelectedItems().contains(sampleVisalization.get())) {
+					cTableSamples.getSelectionModel().select(sampleVisalization.get());
+					cTableSamples.scrollTo(sampleVisalization.get());
+				}
+			}
 		}
 	}
 
-	private void setSamples(Samples newSamples) {
+	private void setSamples(SamplesVisualization newSamples) {
 
 		/*
 		 * Set samples
@@ -330,21 +340,15 @@ public class PCAEditorController {
 			SelectionManagerSamples.getInstance().getElements().add(samples.get());
 			SelectionManagerSamples.getInstance().getSelection().add(samples.get());
 			samples.get().getSampleList().addListener(sampleChangeSelectionListener);
-			updateColorMap();
 			updateNumerSeletedSamples();
 			inputSamples.accept(samples.get());
 			cTableSamples.setItems(samples.get().getSampleList());
 		}
 	}
 
-	public void setSamplesConsumer(Consumer<Samples> consumer) {
+	public void setSamplesConsumer(Consumer<SamplesVisualization> consumer) {
 
 		this.inputSamples = consumer;
-	}
-
-	private void updateColorMap() {
-
-		mapGroupColor = PcaColorGroup.getColorJavaFx(samples.get().getSampleList().stream().map(s -> s.getGroupName()).collect(Collectors.toSet()));
 	}
 
 	private void updateNumerSeletedSamples() {

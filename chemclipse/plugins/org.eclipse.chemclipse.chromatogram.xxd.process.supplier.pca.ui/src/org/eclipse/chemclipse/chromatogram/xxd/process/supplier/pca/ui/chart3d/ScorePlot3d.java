@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -25,14 +25,10 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
@@ -40,16 +36,12 @@ import javafx.scene.transform.Rotate;
 public class ScorePlot3d {
 
 	private Axes axes;
-	private ContextMenu contextMenu;
 	private FXCanvas fxCanvas;
-	private ChartLegend legend;
 	private final double rotateModifier = 10;
 	private Chart3DScatter scatter;
 	private Chart3DSettings settings;
-	private boolean showLegend;
 
 	public ScorePlot3d(Composite parent, Object dataLayout) {
-		showLegend = false;
 		/*
 		 * JavaFX init
 		 */
@@ -58,16 +50,6 @@ public class ScorePlot3d {
 		settings = new Chart3DSettings(800);
 		axes = new Axes(settings);
 		scatter = new Chart3DScatter(settings);
-		legend = new ChartLegend(settings);
-		contextMenu = new ContextMenu();
-		CheckMenuItem displayLegend = new CheckMenuItem("Display Legend");
-		displayLegend.setSelected(showLegend);
-		displayLegend.setOnAction(e -> {
-			showLegend = ((CheckMenuItem)e.getSource()).isSelected();
-			createScene();
-			createScene();
-		});
-		contextMenu.getItems().add(displayLegend);
 		/*
 		 * update scene after resize
 		 */
@@ -105,45 +87,20 @@ public class ScorePlot3d {
 		label.setFont(new Font("Arial", 20));
 		borderPane.setCenter(label);
 		/*
-		 * built legend
-		 */
-		VBox boxLegend = legend.getLegend();
-		boxLegend.layout();
-		/*
 		 * build central subscene, which contains chart
 		 */
 		Point sizeScene = fxCanvas.getParent().getSize();
 		SubScene mainScene;
-		if(showLegend) {
-			mainScene = new SubScene(root, sizeScene.x - boxLegend.getWidth(), sizeScene.y - borderPane.getHeight(), true, SceneAntialiasing.BALANCED);
-		} else {
-			mainScene = new SubScene(root, sizeScene.x, sizeScene.y - borderPane.getHeight(), true, SceneAntialiasing.BALANCED);
-		}
+		mainScene = new SubScene(root, sizeScene.x, sizeScene.y - borderPane.getHeight(), true, SceneAntialiasing.BALANCED);
 		mainScene.setFill(Color.WHITE);
 		mainScene.setCamera(camera);
 		makeZoomable(mainScene, mainGroup);
 		mousePressedOrMoved(mainScene, mainGroup);
-		mainScene.setOnMousePressed(e -> {
-			if(e.getButton() == null) {
-				return;
-			}
-			if(e.getButton().equals(MouseButton.SECONDARY)) {
-				contextMenu.show(mainScene, e.getScreenX(), e.getScreenY());
-				// updateSeries();
-			}
-			if(e.getButton().equals(MouseButton.PRIMARY)) {
-				contextMenu.hide();
-			}
-		});
 		/*
 		 * create scene
 		 */
 		BorderPane pane;
-		if(showLegend) {
-			pane = new BorderPane(mainScene, borderPane, boxLegend, null, null);
-		} else {
-			pane = new BorderPane(mainScene, borderPane, null, null, null);
-		}
+		pane = new BorderPane(mainScene, borderPane, null, null, null);
 		pane.layout();
 		Scene scene = new Scene(pane, sizeScene.x, sizeScene.y);
 		fxCanvas.setScene(scene);
@@ -220,13 +177,12 @@ public class ScorePlot3d {
 		createScene();
 	}
 
-	public void update(IPcaResults pcaResults) {
+	public void update(IPcaResultsVisualization pcaResults) {
 
 		Chart3DSettings.setSettings(settings, pcaResults, 800);
 		Chart3DSettings.setAxes(settings);
 		axes = new Axes(settings);
 		scatter = new Chart3DScatter(settings, pcaResults);
-		legend = new ChartLegend(settings);
 		createScene();
 		createScene();
 	}

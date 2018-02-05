@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.SeriesConverter;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
@@ -128,10 +128,10 @@ public class LoadingPlot extends PCA2DPlot {
 		}
 	}
 
-	public void update(IPcaResults pcaResults) {
+	public void update(IPcaResultsVisualization pcaResults) {
 
-		int pcX = pcaResults.getPcaSettings().getPcX();
-		int pcY = pcaResults.getPcaSettings().getPcY();
+		int pcX = pcaResults.getPcaSettingsVisualization().getPcX();
+		int pcY = pcaResults.getPcaSettingsVisualization().getPcY();
 		List<IScatterSeriesData> series;
 		if(labelsType == LABELS_RETENTION_TIME_MINUTES) {
 			series = SeriesConverter.basisVectorsToSeries(pcaResults, pcX, pcY, extractedValues);

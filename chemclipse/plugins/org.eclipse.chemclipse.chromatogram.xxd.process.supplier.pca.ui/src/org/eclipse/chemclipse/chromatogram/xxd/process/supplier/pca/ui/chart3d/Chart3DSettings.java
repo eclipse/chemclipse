@@ -12,17 +12,12 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.function.BiFunction;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.PcaColorGroup;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaSettingsVisualization;
 
 import javafx.scene.paint.Color;
 
@@ -47,28 +42,15 @@ public class Chart3DSettings {
 		settings.lineSpacing = lineSpacing;
 	}
 
-	public static void setSettings(Chart3DSettings settings, IPcaResults pcaResults, int scale) {
+	public static void setSettings(Chart3DSettings settings, IPcaResultsVisualization pcaResults, int scale) {
 
-		IPcaSettings pcaSettings = pcaResults.getPcaSettings();
+		IPcaSettingsVisualization pcaSettings = pcaResults.getPcaSettingsVisualization();
 		int pcX = pcaSettings.getPcX() - 1;
 		int pcY = pcaSettings.getPcY() - 1;
 		int pcZ = pcaSettings.getPcZ() - 1;
 		settings.setPcX(pcX);
 		settings.setPcY(pcY);
 		settings.setPcZ(pcZ);
-		Set<String> groupNames = PcaUtils.getGroupNames(pcaResults.getPcaResultList());
-		Map<String, Color> groupNameColore = PcaColorGroup.getColorJavaFx(groupNames);
-		settings.getColorGroup().clear();
-		Iterator<Entry<String, Color>> it = groupNameColore.entrySet().iterator();
-		//
-		while(it.hasNext()) {
-			Map.Entry<String, Color> entry = it.next();
-			if(entry.getKey() == null) {
-				settings.getColorGroup().put("------", entry.getValue());
-			} else {
-				settings.getColorGroup().put(entry.getKey(), entry.getValue());
-			}
-		}
 		/*
 		 * set min and max
 		 */
@@ -79,8 +61,6 @@ public class Chart3DSettings {
 		settings.maxY = pcaResults.getPcaResultList().stream().max((d1, d2) -> Double.compare(d1.getEigenSpace()[pcY], d2.getEigenSpace()[pcY])).get().getEigenSpace()[pcY];
 		settings.maxZ = pcaResults.getPcaResultList().stream().max((d1, d2) -> Double.compare(d1.getEigenSpace()[pcZ], d2.getEigenSpace()[pcZ])).get().getEigenSpace()[pcZ];
 		settings.setScale(scale);
-		settings.getColorGroup().clear();
-		settings.getColorGroup().putAll(groupNameColore);
 	}
 
 	private double axisMaxX;
@@ -166,11 +146,6 @@ public class Chart3DSettings {
 	public double getAxisZlenght() {
 
 		return Math.abs(axisMaxZ - axisMinZ);
-	}
-
-	public Map<String, Color> getColorGroup() {
-
-		return groups;
 	}
 
 	public Map<String, Color> getGroup() {

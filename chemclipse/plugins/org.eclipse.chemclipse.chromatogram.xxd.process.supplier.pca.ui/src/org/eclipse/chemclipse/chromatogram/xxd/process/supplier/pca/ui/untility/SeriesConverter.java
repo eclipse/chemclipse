@@ -14,13 +14,14 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IVariableExtractedVisalization;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
 import org.eclipse.eavp.service.swtchart.scattercharts.IScatterSeriesData;
@@ -36,10 +37,10 @@ public class SeriesConverter {
 	private static int SYMBOL_SIZE_LOADING_PLOT = 4;
 	private static int SYMBOL_SIZE_SCORE_PLOT = 8;
 
-	public static List<IScatterSeriesData> basisVectorsToSeries(IPcaResults pcaResults, int pcX, int pcY, Map<String, IVaribleExtracted> extractedValues) {
+	public static List<IScatterSeriesData> basisVectorsToSeries(IPcaResultsVisualization pcaResults, int pcX, int pcY, Map<String, IVaribleExtracted> extractedValues) {
 
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
-		List<IVaribleExtracted> variables = pcaResults.getExtractedVariables();
+		List<IVariableExtractedVisalization> variables = pcaResults.getExtractedVariables();
 		for(int i = 0; i < variables.size(); i++) {
 			String name = variables.get(i).getValue();
 			extractedValues.put(name, variables.get(i));
@@ -67,10 +68,10 @@ public class SeriesConverter {
 		return scatterSeriesDataList;
 	}
 
-	public static List<IScatterSeriesData> basisVectorsToSeriesDescription(IPcaResults pcaResults, int pcX, int pcY, Map<String, IVaribleExtracted> extractedValues) {
+	public static List<IScatterSeriesData> basisVectorsToSeriesDescription(IPcaResultsVisualization pcaResults, int pcX, int pcY, Map<String, IVaribleExtracted> extractedValues) {
 
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
-		List<IVaribleExtracted> variables = pcaResults.getExtractedVariables();
+		List<IVariableExtractedVisalization> variables = pcaResults.getExtractedVariables();
 		for(int i = 0; i < variables.size(); i++) {
 			IVariable retentionTime = variables.get(i);
 			String description = retentionTime.getDescription();
@@ -101,14 +102,13 @@ public class SeriesConverter {
 		return scatterSeriesDataList;
 	}
 
-	public static List<IScatterSeriesData> sampleToSeries(IPcaResults pcaResults, int pcX, int pcY, Map<String, IPcaResult> extractedPcaResults) {
+	public static List<IScatterSeriesData> sampleToSeries(IPcaResultsVisualization pcaResults, int pcX, int pcY, Map<String, IPcaResult> extractedPcaResults) {
 
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<IScatterSeriesData>();
-		Set<String> groupNames = PcaUtils.getGroupNames(pcaResults);
-		Map<String, Color> colors = PcaColorGroup.getColorSWT(groupNames);
+		PcaUtils.getGroupNames(pcaResults);
 		extractedPcaResults.clear();
 		for(int i = 0; i < pcaResults.getPcaResultList().size(); i++) {
-			IPcaResult pcaResult = pcaResults.getPcaResultList().get(i);
+			IPcaResultVisualization pcaResult = pcaResults.getPcaResultList().get(i);
 			/*
 			 * Create the series.
 			 */
@@ -133,7 +133,7 @@ public class SeriesConverter {
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.SQUARE);
 			scatterSeriesSettings.setSymbolSize(SYMBOL_SIZE_SCORE_PLOT);
-			Color color = colors.get(pcaResult.getGroupName());
+			Color color = PcaColorGroup.getSampleColorSWT(pcaResult);
 			if(pcaResult.getSample().isSelected()) {
 				scatterSeriesSettings.setSymbolColor(color);
 			} else {

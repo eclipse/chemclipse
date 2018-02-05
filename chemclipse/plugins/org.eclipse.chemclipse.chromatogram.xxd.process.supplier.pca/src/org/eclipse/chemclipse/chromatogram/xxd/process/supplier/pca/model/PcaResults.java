@@ -16,7 +16,7 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class PcaResults implements IPcaResults {
+public class PcaResults implements IPcaResults<IPcaResult, IVaribleExtracted> {
 
 	private List<double[]> basisVectors;
 	private ObservableList<IVaribleExtracted> extractedVariables;

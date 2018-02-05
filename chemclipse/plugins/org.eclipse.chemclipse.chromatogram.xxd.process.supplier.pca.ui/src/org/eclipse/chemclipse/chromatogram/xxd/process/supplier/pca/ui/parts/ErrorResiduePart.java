@@ -17,9 +17,9 @@ import javax.annotation.PreDestroy;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.errorresidue.ErrorResidueBarChart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -34,8 +34,8 @@ public class ErrorResiduePart {
 
 	private ListChangeListener<ISample<? extends ISampleData>> actualSelectionChangeListener;
 	private ErrorResidueBarChart errorResidueChart;
-	private ChangeListener<IPcaResults> pcaResultChangeLisnter;
-	private IPcaResults pcaResults;
+	private ChangeListener<IPcaResultsVisualization> pcaResultChangeLisnter;
+	private IPcaResultsVisualization pcaResults;
 	private ListChangeListener<IPcaResult> selectionChangeListener;
 
 	public ErrorResiduePart() {
@@ -47,10 +47,10 @@ public class ErrorResiduePart {
 				errorResidueChart.updateSelection();
 			}
 		};
-		pcaResultChangeLisnter = new ChangeListener<IPcaResults>() {
+		pcaResultChangeLisnter = new ChangeListener<IPcaResultsVisualization>() {
 
 			@Override
-			public void changed(ObservableValue<? extends IPcaResults> observable, IPcaResults oldValue, IPcaResults newValue) {
+			public void changed(ObservableValue<? extends IPcaResultsVisualization> observable, IPcaResultsVisualization oldValue, IPcaResultsVisualization newValue) {
 
 				pcaResults = newValue;
 				if(oldValue != null) {
@@ -80,7 +80,7 @@ public class ErrorResiduePart {
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new FillLayout());
 		errorResidueChart = new ErrorResidueBarChart(composite, null);
-		ReadOnlyObjectProperty<IPcaResults> pcaresults = SelectionManagerSamples.getInstance().getActualSelectedPcaResults();
+		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaresults = SelectionManagerSamples.getInstance().getActualSelectedPcaResults();
 		pcaresults.addListener(pcaResultChangeLisnter);
 		pcaResults = pcaresults.get();
 		if(pcaResults != null) {

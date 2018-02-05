@@ -38,6 +38,11 @@ public interface ISample<D extends ISampleData> {
 
 	boolean isSelected();
 
+	/*
+	 * boolean isSelected(){
+	 * return sampleMode.isSelected();
+	 * }
+	 */
 	StringProperty nameProperty();
 
 	ReadOnlyLongProperty sampleDataHasBeenChangedProperty();

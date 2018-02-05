@@ -17,19 +17,10 @@ import org.ejml.ops.CommonOps;
 public abstract class AbstractPcaCalculator implements IPcaCalculator {
 
 	protected DenseMatrix64F loadings;
+	protected double mean[];
 	protected int numComps;
 	protected DenseMatrix64F sampleData = new DenseMatrix64F(1, 1);
 	protected int sampleIndex;
-	protected double mean[];
-
-	@Override
-	public void initialize(int numObs, int numVars) {
-
-		sampleData.reshape(numObs, numVars, false);
-		mean = new double[numVars];
-		sampleIndex = 0;
-		numComps = -1;
-	}
 
 	@Override
 	public void addObservation(double[] obsData) {
@@ -40,6 +31,7 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 		sampleIndex++;
 	}
 
+	@Override
 	public double[] applyLoadings(double[] obs) {
 
 		DenseMatrix64F mean = DenseMatrix64F.wrap(sampleData.getNumCols(), 1, this.mean);
@@ -63,6 +55,11 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 		return Math.sqrt(total);
 	}
 
+	public DenseMatrix64F getLoadings() {
+
+		return loadings;
+	}
+
 	@Override
 	public double[] getLoadingVector(int var) {
 
@@ -74,12 +71,36 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 		return loadingVector.data;
 	}
 
+	public double[] getMean() {
+
+		return mean;
+	}
+
+	public int getNumComps() {
+
+		return numComps;
+	}
+
+	public DenseMatrix64F getSampleData() {
+
+		return sampleData;
+	}
+
 	@Override
 	public double[] getScoreVector(int obs) {
 
 		DenseMatrix64F scores = new DenseMatrix64F(1, sampleData.numCols);
 		CommonOps.extract(loadings, obs, obs + 1, 0, sampleData.numCols, scores, 0, 0);
 		return scores.data;
+	}
+
+	@Override
+	public void initialize(int numObs, int numVars) {
+
+		sampleData.reshape(numObs, numVars, false);
+		mean = new double[numVars];
+		sampleIndex = 0;
+		numComps = -1;
 	}
 
 	public double[] reproject(double[] scoreVector) {
@@ -92,29 +113,9 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 		return sample.data;
 	}
 
-	public DenseMatrix64F getLoadings() {
-
-		return loadings;
-	}
-
 	public void setLoadings(DenseMatrix64F loadings) {
 
 		this.loadings = loadings;
-	}
-
-	public DenseMatrix64F getSampleData() {
-
-		return sampleData;
-	}
-
-	public double[] getMean() {
-
-		return mean;
-	}
-
-	public int getNumComps() {
-
-		return numComps;
 	}
 
 	public void setNumComps(int numComps) {

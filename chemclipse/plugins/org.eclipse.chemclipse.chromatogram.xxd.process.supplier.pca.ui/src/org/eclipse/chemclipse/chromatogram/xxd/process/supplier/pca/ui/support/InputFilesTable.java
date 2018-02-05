@@ -13,11 +13,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.PcaColorGroup;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CellLabelProvider;
@@ -28,17 +25,12 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
 public class InputFilesTable {
 
-	private Map<String, Color> mapGroupColor;
 	private TableViewer tableViewer;
 
 	public InputFilesTable(Composite composite, Object layoutData) {
@@ -52,13 +44,6 @@ public class InputFilesTable {
 		// first column is for the first name
 		TableViewerColumn col = createTableViewerColumn(titles[0], bounds[0], 0);
 		col.setLabelProvider(new ColumnLabelProvider() {
-
-			@Override
-			public Image getImage(Object element) {
-
-				IDataInputEntry inputData = (IDataInputEntry)element;
-				return getGroupColor(inputData.getGroupName());
-			}
 
 			@Override
 			public String getText(Object element) {
@@ -164,18 +149,6 @@ public class InputFilesTable {
 		return viewerColumn;
 	}
 
-	private Image getGroupColor(String groupName) {
-
-		Color color = mapGroupColor.get(groupName);
-		int len = 16;
-		Image image = new Image(Display.getDefault(), len, len);
-		GC gc = new GC(image);
-		gc.setBackground(color);
-		gc.fillRectangle(0, 0, len, len);
-		gc.dispose();
-		return image;
-	}
-
 	/**
 	 * Remove the given entries, which are selected
 	 * The table need not to be reloaded.
@@ -196,24 +169,14 @@ public class InputFilesTable {
 
 	public void setDataInputEntries(List<IDataInputEntry> dataInputEntries) {
 
-		mapGroupColor = PcaColorGroup.getColorSWT(PcaUtils.getGroupNamesFromEntry(dataInputEntries));
 		tableViewer.setInput(dataInputEntries);
 	}
 
 	public void update() {
 
-		updateColorMap();
 		tableViewer.refresh();
 		for(TableColumn column : tableViewer.getTable().getColumns()) {
 			column.pack();
-		}
-	}
-
-	private void updateColorMap() {
-
-		Object input = tableViewer.getInput();
-		if(input != null) {
-			mapGroupColor = PcaColorGroup.getColorSWT(PcaUtils.getGroupNamesFromEntry((List<IDataInputEntry>)input));
 		}
 	}
 }

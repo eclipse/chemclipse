@@ -16,9 +16,9 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.SeriesConverter;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
@@ -135,16 +135,16 @@ public class ScorePlot extends PCA2DPlot {
 		return extractedResults;
 	}
 
-	public void update(IPcaResults pcaResults) {
+	public void update(IPcaResultsVisualization pcaResults) {
 
 		deleteSeries();
-		addSeriesData(SeriesConverter.sampleToSeries(pcaResults, pcaResults.getPcaSettings().getPcX(), pcaResults.getPcaSettings().getPcY(), extractedResults));
+		addSeriesData(SeriesConverter.sampleToSeries(pcaResults, pcaResults.getPcaSettingsVisualization().getPcX(), pcaResults.getPcaSettingsVisualization().getPcY(), extractedResults));
 		extractedResults.entrySet().forEach(e -> {
 			if(SelectionManagerSample.getInstance().getSelection().contains(e.getValue().getSample())) {
 				getBaseChart().selectSeries(e.getKey());
 			}
 		});
-		update(pcaResults.getPcaSettings().getPcX(), pcaResults.getPcaSettings().getPcY());
+		update(pcaResults.getPcaSettingsVisualization().getPcX(), pcaResults.getPcaSettingsVisualization().getPcY());
 		redraw();
 	}
 }

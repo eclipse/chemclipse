@@ -17,20 +17,18 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IVariableExtractedVisalization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.PcaColorGroup;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -54,7 +52,6 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -79,16 +76,14 @@ public class ErrorResidueBarChart {
 	final static public int SORT_BY_NAME = 2;
 	private BarChart<String, Number> bc;
 	private ContextMenu contextMenu;
-	private final List<IPcaResult> data = new ArrayList<>();
+	private final List<IPcaResultVisualization> data = new ArrayList<>();
 	// private int displayData;
 	private FXCanvas fxCanvas;
-	private final Map<String, Color> groupColor = new HashMap<>();
-	private Optional<IPcaResults> pcaResults = Optional.empty();
-	private boolean showLegend;
+	// private final Map<String, Color> groupColor = new HashMap<>();
+	private Optional<IPcaResults<IPcaResultVisualization, IVariableExtractedVisalization>> pcaResults = Optional.empty();
 	private int sortType;
 
 	public ErrorResidueBarChart(Composite parent, Object layoutData) {
-		showLegend = false;
 		/*
 		 * JavaFX init
 		 */
@@ -104,9 +99,9 @@ public class ErrorResidueBarChart {
 	/**
 	 * set color bar according to group name
 	 */
-	private String barStyle(IPcaResult pcaResult) {
+	private String barStyle(IPcaResultVisualization pcaResult) {
 
-		Color c = groupColor.get(pcaResult.getGroupName());
+		Color c = PcaColorGroup.getSampleColorFX(pcaResult);
 		if(SelectionManagerSample.getInstance().getSelection().contains(pcaResult.getSample())) {
 			c = PcaColorGroup.getActualSelectedColor(c);
 		} else if(!pcaResult.getSample().isSelected()) {
@@ -144,18 +139,6 @@ public class ErrorResidueBarChart {
 			}
 		});
 		contextMenu.getItems().add(itemDisplay);
-		CheckMenuItem itemDisplayLegend = new CheckMenuItem("Display Legend");
-		itemDisplayLegend.setOnAction(e -> {
-			if(((CheckMenuItem)e.getSource()).isSelected()) {
-				showLegend = true;
-				createLegend(bc);
-			} else {
-				showLegend = false;
-				hideLegend(bc);
-			}
-		});
-		itemDisplayLegend.setSelected(showLegend);
-		contextMenu.getItems().add(itemDisplayLegend);
 		// sorting
 		Menu itemSort = new Menu("Sort by");
 		RadioMenuItem radioSorting = new RadioMenuItem("Group Name");
@@ -178,18 +161,6 @@ public class ErrorResidueBarChart {
 		return contextMenu;
 	}
 
-	private void createLegend(BarChart<String, Number> barChart) {
-
-		Legend legend = (Legend)barChart.lookup(".chart-legend");
-		legend.getItems().clear();
-		Iterator<Entry<String, Color>> it = groupColor.entrySet().iterator();
-		while(it.hasNext()) {
-			Entry<String, Color> entry = it.next();
-			Legend.LegendItem li = new Legend.LegendItem(entry.getKey(), new Rectangle(10, 10, entry.getValue()));
-			legend.getItems().add(li);
-		}
-	}
-
 	private void createScene() {
 
 		/*
@@ -197,11 +168,7 @@ public class ErrorResidueBarChart {
 		 */
 		bc = createBarChart();
 		bc.getData().add(getSerie());
-		if(showLegend) {
-			createLegend(bc);
-		} else {
-			hideLegend(bc);
-		}
+		hideLegend(bc);
 		/*
 		 * Initialize rectangle which is used for zooming
 		 */
@@ -228,7 +195,7 @@ public class ErrorResidueBarChart {
 	private XYChart.Series<String, Number> getSerie() {
 
 		XYChart.Series<String, Number> series = new XYChart.Series<>();
-		for(IPcaResult pcaResult : data) {
+		for(IPcaResultVisualization pcaResult : data) {
 			if(!pcaResult.isDisplayed()) {
 				continue;
 			}
@@ -324,7 +291,6 @@ public class ErrorResidueBarChart {
 	public void removeData() {
 
 		data.clear();
-		groupColor.clear();
 		createScene();
 	}
 
@@ -506,7 +472,7 @@ public class ErrorResidueBarChart {
 		}
 	}
 
-	public void update(IPcaResults pcaResults) {
+	public void update(IPcaResults<IPcaResultVisualization, IVariableExtractedVisalization> pcaResults) {
 
 		/*
 		 * update data
@@ -514,7 +480,6 @@ public class ErrorResidueBarChart {
 		this.pcaResults = Optional.of(pcaResults);
 		removeData();
 		data.addAll(pcaResults.getPcaResultList());
-		groupColor.putAll(PcaColorGroup.getColorJavaFx(PcaUtils.getGroupNames(pcaResults)));
 		/*
 		 * create scene this method support resize windows
 		 */
@@ -529,7 +494,7 @@ public class ErrorResidueBarChart {
 			for(XYChart.Data<String, Number> d : s.getData()) {
 				Node n = d.getNode();
 				if(n != null) {
-					n.setStyle(barStyle((IPcaResult)d.getExtraValue()));
+					n.setStyle(barStyle((IPcaResultVisualization)d.getExtraValue()));
 				}
 			}
 		}

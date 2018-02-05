@@ -20,8 +20,8 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SampleVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers.PCAEditorController;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.PCAController;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -91,7 +91,7 @@ public class PCAEditorFX {
 	@PreDestroy
 	public void preDestroy() {
 
-		Optional<Samples> samples = controller.getSamples();
+		Optional<SamplesVisualization> samples = controller.getSamples();
 		if(samples.isPresent()) {
 			boolean contains = SelectionManagerSamples.getInstance().getSelection().remove(samples.get());
 			if(contains) {
@@ -107,7 +107,7 @@ public class PCAEditorFX {
 
 		fxCanvas.setFocus();
 		if(controller != null && controller.getSamples().isPresent()) {
-			Sample sample = controller.getSelectedSamples();
+			SampleVisualization sample = controller.getSelectedSamples();
 			SelectionManagerSamples.getInstance().getSelection().setAll(controller.getSamples().get());
 			if(sample != null) {
 				SelectionManagerSample.getInstance().getSelection().setAll(sample);

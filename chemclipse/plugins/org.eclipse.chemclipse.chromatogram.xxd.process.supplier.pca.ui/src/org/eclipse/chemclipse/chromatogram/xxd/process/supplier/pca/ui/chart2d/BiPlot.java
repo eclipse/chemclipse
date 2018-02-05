@@ -13,13 +13,13 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d;
 
 import java.util.HashMap;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.SeriesConverter;
 import org.eclipse.swt.widgets.Composite;
 
 public class BiPlot extends PCA2DPlot {
 
-	private IPcaResults pcaResults;
+	private IPcaResultsVisualization pcaResults;
 
 	public BiPlot(Composite parent) {
 		super(parent, "Biplot");
@@ -36,7 +36,7 @@ public class BiPlot extends PCA2DPlot {
 		}
 	}
 
-	public void update(IPcaResults pcaResults, int pcX, int pcY) {
+	public void update(IPcaResultsVisualization pcaResults, int pcX, int pcY) {
 
 		if(pcaResults != null) {
 			this.pcaResults = pcaResults;

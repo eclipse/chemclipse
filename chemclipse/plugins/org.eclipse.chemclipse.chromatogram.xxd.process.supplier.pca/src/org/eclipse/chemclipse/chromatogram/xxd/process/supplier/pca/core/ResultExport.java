@@ -31,7 +31,7 @@ public class ResultExport {
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
-	public void exportToTextFile(File file, IPcaResults pcaResults, List<IDataInputEntry> dataInputEntries) throws FileNotFoundException {
+	public void exportToTextFile(File file, IPcaResults<?, ?> pcaResults, List<IDataInputEntry> dataInputEntries) throws FileNotFoundException {
 
 		PrintWriter printWriter = new PrintWriter(file);
 		if(pcaResults != null) {

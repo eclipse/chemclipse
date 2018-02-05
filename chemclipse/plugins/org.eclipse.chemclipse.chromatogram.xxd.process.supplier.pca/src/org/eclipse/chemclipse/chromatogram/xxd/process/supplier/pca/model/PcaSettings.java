@@ -11,118 +11,22 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
-
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-
 public class PcaSettings implements IPcaSettings {
 
-	private Map<Consumer<IPcaSettings>, Boolean> listeners = new ConcurrentHashMap<>();
 	public int numberOfPrincipleComponents;
-	private IntegerProperty pcX;
-	private IntegerProperty pcY;
-	private IntegerProperty pcZ;
 
 	public PcaSettings() {
 		this.numberOfPrincipleComponents = 3;
-		this.pcX = new SimpleIntegerProperty(1);
-		this.pcY = new SimpleIntegerProperty(2);
-		this.pcZ = new SimpleIntegerProperty(3);
-		this.pcX.addListener((ChangeListener<Number>)(observable, oldValue, newValue) -> updateLister());
-		this.pcY.addListener((ChangeListener<Number>)(observable, oldValue, newValue) -> updateLister());
-		this.pcZ.addListener((ChangeListener<Number>)(observable, oldValue, newValue) -> updateLister());
 	}
 
 	public PcaSettings(int numberOfPrincipleComponents) {
 		this();
 		this.numberOfPrincipleComponents = numberOfPrincipleComponents;
-		setPcX(1);
-		setPcY(1);
-		setPcZ(1);
-	}
-
-	@Override
-	public void addChangeListener(Consumer<IPcaSettings> listener) {
-
-		listeners.put(listener, true);
 	}
 
 	@Override
 	public int getNumberOfPrincipalComponents() {
 
 		return numberOfPrincipleComponents;
-	}
-
-	@Override
-	public int getPcX() {
-
-		return this.pcX.get();
-	}
-
-	@Override
-	public int getPcY() {
-
-		return this.pcY.get();
-	}
-
-	@Override
-	public int getPcZ() {
-
-		return this.pcZ.get();
-	}
-
-	@Override
-	public IntegerProperty pcXProperty() {
-
-		return pcX;
-	}
-
-	@Override
-	public IntegerProperty pcYProperty() {
-
-		return pcY;
-	}
-
-	@Override
-	public IntegerProperty pcZProperty() {
-
-		return pcZ;
-	}
-
-	@Override
-	public void removeChangeListener(Consumer<IPcaSettings> listener) {
-
-		listeners.remove(listener);
-	}
-
-	@Override
-	public void setPcX(int pcX) {
-
-		this.pcX.set(pcX);
-	}
-
-	@Override
-	public void setPcY(int pcY) {
-
-		this.pcY.set(pcY);
-	}
-
-	@Override
-	public void setPcZ(int pcZ) {
-
-		this.pcZ.set(pcZ);
-	}
-
-	protected void updateLister() {
-
-		synchronized(listeners) {
-			listeners.forEach((e, b) -> {
-				e.accept(this);
-			});
-		}
 	}
 }

@@ -15,13 +15,13 @@ public interface IPcaCalculator {
 
 	void addObservation(double[] obsData);
 
-	void compute(int numComps);
-
 	double[] applyLoadings(double[] obs);
 
-	double[] getLoadingVector(int var);
+	void compute(int numComps);
 
 	double getErrorMetric(double[] obs);
+
+	double[] getLoadingVector(int var);
 
 	double[] getScoreVector(int obs);
 

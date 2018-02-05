@@ -15,8 +15,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.LoadingPlot;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -31,8 +31,8 @@ import javafx.collections.ListChangeListener;
 public class LoadingPlotPart {
 
 	private LoadingPlot loadingPlot;
-	private ChangeListener<IPcaResults> pcaResultChangeLisnter;
-	private IPcaResults pcaResults;
+	private ChangeListener<IPcaResultsVisualization> pcaResultChangeLisnter;
+	private IPcaResultsVisualization pcaResults;
 	private Runnable updateSelection = () -> {
 		if(pcaResults != null) {
 			loadingPlot.update(pcaResults);
@@ -49,10 +49,10 @@ public class LoadingPlotPart {
 				Display.getDefault().timerExec(100, updateSelection);
 			}
 		};
-		pcaResultChangeLisnter = new ChangeListener<IPcaResults>() {
+		pcaResultChangeLisnter = new ChangeListener<IPcaResultsVisualization>() {
 
 			@Override
-			public void changed(ObservableValue<? extends IPcaResults> observable, IPcaResults oldValue, IPcaResults newValue) {
+			public void changed(ObservableValue<? extends IPcaResultsVisualization> observable, IPcaResultsVisualization oldValue, IPcaResultsVisualization newValue) {
 
 				Display.getCurrent().syncExec(() -> {
 					if(oldValue != null) {
@@ -77,7 +77,7 @@ public class LoadingPlotPart {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());
 		loadingPlot = new LoadingPlot(composite);
-		ReadOnlyObjectProperty<IPcaResults> pcaResults = SelectionManagerSamples.getInstance().getActualSelectedPcaResults();
+		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaResults = SelectionManagerSamples.getInstance().getActualSelectedPcaResults();
 		pcaResults.addListener(pcaResultChangeLisnter);
 		if(pcaResults.isNotNull().get()) {
 			this.pcaResults = pcaResults.get();
