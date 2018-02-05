@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.BarSeriesValue;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.BarSeriesYComparator;
@@ -84,17 +85,16 @@ public class ScanChartUI extends ScrollableChart {
 	private Map<Double, String> customLabels = new HashMap<Double, String>();
 	private LabelPaintListener labelPaintListenerX = new LabelPaintListener(true);
 	private LabelPaintListener labelPaintListenerY = new LabelPaintListener(false);
-	private Map<String, Font> fonts = new HashMap<String, Font>();
 	/*
 	 * Initialized on use.
 	 */
-	private String fontId;
 	private LabelOption labelOption;
 	private DataType dataType;
 	private SignalType signalType;
 	//
 	private ScanChartSupport scanChartSupport = new ScanChartSupport();
 	private Display display = Display.getDefault();
+	private Font font = display.getSystemFont();
 
 	private class LabelPaintListener implements ICustomPaintListener {
 
@@ -314,15 +314,6 @@ public class ScanChartUI extends ScrollableChart {
 		applySettings(chartSettings);
 	}
 
-	@Override
-	public void dispose() {
-
-		for(Font font : fonts.values()) {
-			font.dispose();
-		}
-		super.dispose();
-	}
-
 	public void setDataType(DataType dataType) {
 
 		this.dataType = dataType;
@@ -445,11 +436,7 @@ public class ScanChartUI extends ScrollableChart {
 		String name = preferenceStore.getString(PreferenceConstants.P_SCAN_LABEL_FONT_NAME);
 		int height = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_FONT_SIZE);
 		int style = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_FONT_STYLE);
-		fontId = name + height + style;
-		if(!fonts.containsKey(fontId)) {
-			Font font = new Font(display, name, height, style);
-			fonts.put(fontId, font);
-		}
+		font = Fonts.getFont(name, height, style);
 		//
 		labelHighestIntensities = preferenceStore.getInt(PreferenceConstants.P_SCAN_LABEL_HIGHEST_INTENSITIES);
 		addModuloLabels = preferenceStore.getBoolean(PreferenceConstants.P_SCAN_LABEL_MODULO_INTENSITIES);
@@ -641,7 +628,8 @@ public class ScanChartUI extends ScrollableChart {
 	private void printLabel(BarSeriesValue barSeriesValue, boolean useX, PaintEvent e) {
 
 		Font currentFont = e.gc.getFont();
-		e.gc.setFont(fonts.get(fontId));
+		e.gc.setFont(font);
+		//
 		Point point = barSeriesValue.getPoint();
 		String label = (useX) ? getLabel(barSeriesValue.getX()) : getLabel(barSeriesValue.getY());
 		boolean negative = (barSeriesValue.getY() < 0) ? true : false;
@@ -652,6 +640,7 @@ public class ScanChartUI extends ScrollableChart {
 			y = point.y - labelSize.y;
 		}
 		e.gc.drawText(label, x, y, true);
+		//
 		e.gc.setFont(currentFont);
 	}
 

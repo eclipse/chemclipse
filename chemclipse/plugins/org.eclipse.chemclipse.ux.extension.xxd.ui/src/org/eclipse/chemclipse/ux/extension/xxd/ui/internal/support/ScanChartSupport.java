@@ -50,6 +50,21 @@ public class ScanChartSupport {
 		return lineSeriesData;
 	}
 
+	public ILineSeriesData getLineSeriesDataPoint(IScan scan, boolean mirrored, String seriesId) {
+
+		double[] xSeries = new double[1];
+		double[] ySeries = new double[1];
+		//
+		if(scan != null) {
+			xSeries[0] = scan.getRetentionTime();
+			ySeries[0] = (mirrored) ? scan.getTotalSignal() * -1 : scan.getTotalSignal();
+		}
+		//
+		ISeriesData seriesData = new SeriesData(xSeries, ySeries, seriesId);
+		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
+		return lineSeriesData;
+	}
+
 	private ISeriesData getSeriesData(IScan scan, String postfix, boolean mirrored) {
 
 		double[] xSeries;

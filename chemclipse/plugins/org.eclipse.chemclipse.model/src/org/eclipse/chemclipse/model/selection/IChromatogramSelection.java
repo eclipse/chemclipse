@@ -150,6 +150,8 @@ public interface IChromatogramSelection extends IChromatogramUpdateListener, Ser
 	 */
 	IPeak getSelectedPeak();
 
+	void setSelectedPeak(IPeak selectedPeak);
+
 	boolean isOverlaySelected();
 
 	void setOverlaySelected(boolean overlaySelected);

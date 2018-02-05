@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -113,30 +114,39 @@ public class ChromatogramChartSupport {
 		return color;
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection, String seriesId, Color color) {
+	public ILineSeriesData getLineSeriesDataChromatogram(IChromatogramSelection chromatogramSelection, String seriesId, Color color) {
 
 		String overlayType = DISPLAY_TYPE_TIC;
 		String derivativeType = DERIVATIVE_NONE;
-		return getLineSeriesData(chromatogramSelection, seriesId, overlayType, derivativeType, color, null);
+		return getLineSeriesData(chromatogramSelection, seriesId, overlayType, derivativeType, color, null, false);
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions) {
+	public ILineSeriesData getLineSeriesDataBaseline(IChromatogramSelection chromatogramSelection, String seriesId, Color color) {
+
+		String overlayType = DISPLAY_TYPE_TIC;
+		String derivativeType = DERIVATIVE_NONE;
+		return getLineSeriesData(chromatogramSelection, seriesId, overlayType, derivativeType, color, null, true);
+	}
+
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions, boolean baseline) {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
-		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, overlayType, derivativeType, color, ions);
+		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, overlayType, derivativeType, color, ions, baseline);
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions) {
+	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions, boolean baseline) {
 
 		int startScan = 1;
 		int stopScan = chromatogram.getNumberOfScans();
-		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, overlayType, derivativeType, color, ions);
+		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, overlayType, derivativeType, color, ions, baseline);
 	}
 
-	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions) {
+	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions, boolean baseline) {
 
+		IBaselineModel baselineModel = chromatogram.getBaselineModel();
+		//
 		int length = stopScan - startScan + 1;
 		double[] xSeries = new double[length];
 		double[] ySeries = new double[length];
@@ -150,8 +160,13 @@ public class ChromatogramChartSupport {
 			 * Get the retention time and intensity.
 			 */
 			IScan scan = chromatogram.getScan(i);
-			xSeries[index] = scan.getRetentionTime();
-			ySeries[index] = getIntensity(scan, overlayType, derivativeType, ions);
+			int retentionTime = scan.getRetentionTime();
+			xSeries[index] = retentionTime;
+			if(baseline) {
+				ySeries[index] = baselineModel.getBackgroundAbundance(retentionTime);
+			} else {
+				ySeries[index] = getIntensity(scan, overlayType, ions);
+			}
 			index++;
 		}
 		/*
@@ -175,7 +190,7 @@ public class ChromatogramChartSupport {
 		return lineSeriesData;
 	}
 
-	private double getIntensity(IScan scan, String overlayType, String derivativeType, List<Integer> ions) {
+	private double getIntensity(IScan scan, String overlayType, List<Integer> ions) {
 
 		double intensity = 0.0d;
 		if(overlayType.equals(DISPLAY_TYPE_TIC)) {

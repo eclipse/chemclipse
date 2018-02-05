@@ -341,7 +341,7 @@ public class ExtendedPeakDetectorUI {
 			Color scanMarkerColor = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_PEAK_DETECTOR_SCAN_MARKER_COLOR));
 			PlotSymbolType scanMarkerSymbol = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_PEAK_DETECTOR_SCAN_MARKER_TYPE));
 			//
-			ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, "Chromatogram", colorChromatogram);
+			ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesDataChromatogram(chromatogramSelection, "Chromatogram", colorChromatogram);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 			lineSeriesSettings.setEnableArea(enableAreaChromatogram);
 			lineSeriesSettings.setSymbolSize(scanMarkerSize);

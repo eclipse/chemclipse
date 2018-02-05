@@ -67,13 +67,6 @@ public class ChromatogramSelection extends AbstractChromatogramSelection impleme
 	}
 
 	@Override
-	public IPeak getSelectedPeak() {
-
-		logger.warn("Bad boy - getSelectedPeak(): don't use the ChromatogramSelection implementation");
-		return null;
-	}
-
-	@Override
 	public void setSelectedScan(IScan selectedScan) {
 
 		logger.warn("Bad boy - setSelectedScan(IScan selectedScan): don't use the ChromatogramSelection implementation");
@@ -83,5 +76,18 @@ public class ChromatogramSelection extends AbstractChromatogramSelection impleme
 	public void setSelectedScan(IScan selectedScan, boolean update) {
 
 		logger.warn("Bad boy - setSelectedScan(IScan selectedScan, boolean update): don't use the ChromatogramSelection implementation");
+	}
+
+	@Override
+	public IPeak getSelectedPeak() {
+
+		logger.warn("Bad boy - getSelectedPeak(): don't use the ChromatogramSelection implementation");
+		return null;
+	}
+
+	@Override
+	public void setSelectedPeak(IPeak selectedPeak) {
+
+		logger.warn("Bad boy - setSelectedPeak(IPeak selectedPeak): don't use the ChromatogramSelection implementation");
 	}
 }

@@ -399,7 +399,9 @@ public class ExtendedPeakListUI {
 			Object object = tableItem.getData();
 			if(object instanceof IPeak) {
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, (IPeak)object);
+				IPeak peak = (IPeak)object;
+				chromatogramSelection.setSelectedPeak(peak);
+				eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
 			}
 		}
 	}

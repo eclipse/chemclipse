@@ -27,6 +27,8 @@ import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionWSDUpdateN
 
 public class ChromatogramSelectionWSD extends AbstractChromatogramSelection implements IChromatogramSelectionWSD {
 
+	private static final long serialVersionUID = 6548761643931077446L;
+	//
 	private IScanWSD selectedScan;
 	private IPeak selectedPeak;
 	private IMarkedWavelengths selectedWavelengths;
@@ -152,6 +154,12 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 				ChromatogramSelectionWSDUpdateNotifier.fireUpdateChange(this, false);
 			}
 		}
+	}
+
+	@Override
+	public void setSelectedPeak(IPeak selectedPeak) {
+
+		System.out.println("Implement Peak WSD");
 	}
 
 	@Override

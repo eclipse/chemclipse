@@ -18,12 +18,15 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.csd.model.notifier.ChromatogramSelectionCSDUpdateNotifier;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
 
 public class ChromatogramSelectionCSD extends AbstractChromatogramSelection implements IChromatogramSelectionCSD {
 
+	private static final long serialVersionUID = -2614321209701949490L;
+	//
 	private IScanCSD selectedScan;
 	private IChromatogramPeakCSD selectedPeak;
 
@@ -148,6 +151,14 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection impl
 			if(update) {
 				ChromatogramSelectionCSDUpdateNotifier.fireUpdateChange(this, false);
 			}
+		}
+	}
+
+	@Override
+	public void setSelectedPeak(IPeak selectedPeak) {
+
+		if(selectedPeak instanceof IChromatogramPeakCSD) {
+			setSelectedPeak((IChromatogramPeakCSD)selectedPeak, false);
 		}
 	}
 

@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.msd.model.core.selection;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
@@ -37,6 +38,8 @@ import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateN
  */
 public class ChromatogramSelectionMSD extends AbstractChromatogramSelection implements IChromatogramSelectionMSD {
 
+	private static final long serialVersionUID = -7506022245739815452L;
+	//
 	private IVendorMassSpectrum selectedScan;
 	private IVendorMassSpectrum selectedIdentifiedScan;
 	private IChromatogramPeakMSD selectedPeak;
@@ -240,6 +243,14 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 			if(update) {
 				fireUpdateChange(false);
 			}
+		}
+	}
+
+	@Override
+	public void setSelectedPeak(IPeak selectedPeak) {
+
+		if(selectedPeak instanceof IChromatogramPeakMSD) {
+			setSelectedPeak((IChromatogramPeakMSD)selectedPeak, false);
 		}
 	}
 

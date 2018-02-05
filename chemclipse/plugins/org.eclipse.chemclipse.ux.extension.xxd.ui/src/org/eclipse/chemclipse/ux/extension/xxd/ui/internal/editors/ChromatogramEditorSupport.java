@@ -91,8 +91,8 @@ public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport
 				contributionURI = ChromatogramEditorCSD.CONTRIBUTION_URI;
 				iconURI = ChromatogramEditorCSD.ICON_URI;
 				tooltip = ChromatogramEditorCSD.TOOLTIP;
-				topicUpdateRawfile = IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE;
-				topicUpdateOverview = IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_OVERVIEW;
+				topicUpdateRawfile = IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE;
+				topicUpdateOverview = IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_OVERVIEW;
 				break;
 			case WSD:
 				type = TYPE_WSD;
@@ -100,8 +100,8 @@ public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport
 				contributionURI = ChromatogramEditorWSD.CONTRIBUTION_URI;
 				iconURI = ChromatogramEditorWSD.ICON_URI;
 				tooltip = ChromatogramEditorWSD.TOOLTIP;
-				topicUpdateRawfile = IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE;
-				topicUpdateOverview = IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_OVERVIEW;
+				topicUpdateRawfile = IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE;
+				topicUpdateOverview = IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_OVERVIEW;
 				break;
 			default:
 				type = "";

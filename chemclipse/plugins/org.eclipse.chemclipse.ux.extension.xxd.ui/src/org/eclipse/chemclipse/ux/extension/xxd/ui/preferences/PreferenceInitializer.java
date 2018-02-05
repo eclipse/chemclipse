@@ -97,5 +97,15 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_SIC, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_SIC);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_TSC, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_TSC);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_DEFAULT, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_DEFAULT);
+		store.setDefault(PreferenceConstants.P_COLOR_CHROMATOGRAM, PreferenceConstants.DEF_COLOR_CHROMATOGRAM);
+		store.setDefault(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA, PreferenceConstants.DEF_ENABLE_CHROMATOGRAM_AREA);
+		store.setDefault(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS, PreferenceConstants.DEF_SHOW_CHROMATOGRAM_PEAK_LABELS);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME, PreferenceConstants.DEF_CHROMATOGRAM_PEAK_LABEL_FONT_NAME);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE, PreferenceConstants.DEF_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE, PreferenceConstants.DEF_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE);
+		store.setDefault(PreferenceConstants.P_SHOW_CHROMATOGRAM_BASELINE, PreferenceConstants.DEF_SHOW_CHROMATOGRAM_BASELINE);
+		store.setDefault(PreferenceConstants.P_COLOR_CHROMATOGRAM_BASELINE, PreferenceConstants.DEF_COLOR_CHROMATOGRAM_BASELINE);
+		store.setDefault(PreferenceConstants.P_ENABLE_BASELINE_AREA, PreferenceConstants.DEF_ENABLE_BASELINE_AREA);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE, PreferenceConstants.DEF_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
 	}
 }
