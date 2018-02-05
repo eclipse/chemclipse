@@ -32,15 +32,27 @@ public abstract class DataInputPageWizard extends WizardPage {
 
 	private static final String FILES = "Input Files: ";
 	private Label countFiles;
+	private List<IDataInputEntry> dataInputEntries;
 	private InputFilesTable inputFilesTable;
 	private Text textGroupName;
 
 	public DataInputPageWizard(String pageName) {
 		super(pageName);
+		dataInputEntries = new ArrayList<>();
 		setPageComplete(false);
 	}
 
 	abstract protected void addFiles();
+
+	public void addInputFiles(List<IDataInputEntry> addInput) {
+
+		Map<String, IDataInputEntry> uniqueInputs = new HashMap<>();
+		dataInputEntries.forEach(e -> uniqueInputs.put(e.getName(), e));
+		addInput.forEach(e -> uniqueInputs.put(e.getName(), e));
+		dataInputEntries.clear();
+		dataInputEntries.addAll(uniqueInputs.values());
+		update();
+	}
 
 	@Override
 	public void createControl(Composite parent) {
@@ -68,6 +80,7 @@ public abstract class DataInputPageWizard extends WizardPage {
 		gridData.widthHint = 100;
 		gridData.verticalSpan = 5;
 		inputFilesTable = new InputFilesTable(composite, gridData);
+		inputFilesTable.setDataInputEntries(dataInputEntries);
 		countFiles = new Label(composite, SWT.NONE);
 		countFiles.setText(FILES + "0");
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
@@ -86,11 +99,6 @@ public abstract class DataInputPageWizard extends WizardPage {
 		setControl(composite);
 	}
 
-	protected List<IDataInputEntry> getDataInputEntries() {
-
-		return inputFilesTable.getDataInputEntries();
-	}
-
 	protected String getGroupName() {
 
 		return textGroupName.getText();
@@ -98,21 +106,27 @@ public abstract class DataInputPageWizard extends WizardPage {
 
 	public List<IDataInputEntry> getUniqueDataInputEnties() {
 
-		List<IDataInputEntry> inputs = inputFilesTable.getDataInputEntries();
-		Map<String, IDataInputEntry> uniqueInputs = new HashMap<>();
-		inputs.forEach(e -> uniqueInputs.put(e.getName(), e));
-		return new ArrayList<>(uniqueInputs.values());
+		return dataInputEntries;
 	}
 
 	private void redrawCountFiles() {
 
-		countFiles.setText(FILES + Integer.toString(inputFilesTable.getDataInputEntries().size()));
+		countFiles.setText(FILES + Integer.toString(dataInputEntries.size()));
+	}
+
+	@Override
+	public void setVisible(boolean visible) {
+
+		if(visible) {
+			update();
+		}
+		super.setVisible(visible);
 	}
 
 	protected void update() {
 
 		inputFilesTable.update();
 		redrawCountFiles();
-		setPageComplete(!inputFilesTable.getDataInputEntries().isEmpty());
+		setPageComplete(!dataInputEntries.isEmpty());
 	}
 }

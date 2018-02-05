@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,6 @@ import org.eclipse.swt.widgets.TableColumn;
 
 public class InputFilesTable {
 
-	private List<IDataInputEntry> dataInputEntries = new ArrayList<>();
 	private Map<String, Color> mapGroupColor;
 	private TableViewer tableViewer;
 
@@ -49,8 +47,8 @@ public class InputFilesTable {
 
 	private void createColumns() {
 
-		String[] titles = {"Filename", "Group", "Path"};
-		int[] bounds = {100, 100, 100};
+		String[] titles = {"Name", "Group", "Filename", "Path"};
+		int[] bounds = {100, 100, 100, 100};
 		// first column is for the first name
 		TableViewerColumn col = createTableViewerColumn(titles[0], bounds[0], 0);
 		col.setLabelProvider(new ColumnLabelProvider() {
@@ -66,7 +64,7 @@ public class InputFilesTable {
 			public String getText(Object element) {
 
 				IDataInputEntry inputData = (IDataInputEntry)element;
-				return inputData.getFileName();
+				return inputData.getName();
 			}
 		});
 		col = createTableViewerColumn(titles[1], bounds[1], 1);
@@ -129,6 +127,16 @@ public class InputFilesTable {
 			public String getText(Object element) {
 
 				IDataInputEntry inputData = (IDataInputEntry)element;
+				return inputData.getFileName();
+			}
+		});
+		col = createTableViewerColumn(titles[3], bounds[3], 3);
+		col.setLabelProvider(new ColumnLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				IDataInputEntry inputData = (IDataInputEntry)element;
 				return inputData.getInputFile();
 			}
 		});
@@ -142,7 +150,6 @@ public class InputFilesTable {
 		table.setLayoutData(layoutData);
 		tableViewer = new TableViewer(table);
 		tableViewer.setContentProvider(new ArrayContentProvider());
-		tableViewer.setInput(dataInputEntries);
 		createColumns();
 	}
 
@@ -157,16 +164,11 @@ public class InputFilesTable {
 		return viewerColumn;
 	}
 
-	public List<IDataInputEntry> getDataInputEntries() {
-
-		return dataInputEntries;
-	}
-
 	private Image getGroupColor(String groupName) {
 
 		Color color = mapGroupColor.get(groupName);
 		int len = 16;
-		Image image = new Image(Display.getCurrent(), len, len);
+		Image image = new Image(Display.getDefault(), len, len);
 		GC gc = new GC(image);
 		gc.setBackground(color);
 		gc.fillRectangle(0, 0, len, len);
@@ -181,12 +183,21 @@ public class InputFilesTable {
 	 */
 	public void removeSelection() {
 
-		Iterator it = tableViewer.getStructuredSelection().iterator();
-		while(it.hasNext()) {
-			IDataInputEntry input = (IDataInputEntry)it.next();
-			dataInputEntries.remove(input);
+		Iterator<?> it = tableViewer.getStructuredSelection().iterator();
+		Object object = tableViewer.getInput();
+		if(object instanceof List<?>) {
+			List<?> inputs = (List<?>)object;
+			while(it.hasNext()) {
+				inputs.remove(it.next());
+			}
 		}
 		update();
+	}
+
+	public void setDataInputEntries(List<IDataInputEntry> dataInputEntries) {
+
+		mapGroupColor = PcaColorGroup.getColorSWT(PcaUtils.getGroupNamesFromEntry(dataInputEntries));
+		tableViewer.setInput(dataInputEntries);
 	}
 
 	public void update() {
@@ -200,6 +211,9 @@ public class InputFilesTable {
 
 	private void updateColorMap() {
 
-		mapGroupColor = PcaColorGroup.getColorSWT(PcaUtils.getGroupNamesFromEntry(dataInputEntries));
+		Object input = tableViewer.getInput();
+		if(input != null) {
+			mapGroupColor = PcaColorGroup.getColorSWT(PcaUtils.getGroupNamesFromEntry((List<IDataInputEntry>)input));
+		}
 	}
 }

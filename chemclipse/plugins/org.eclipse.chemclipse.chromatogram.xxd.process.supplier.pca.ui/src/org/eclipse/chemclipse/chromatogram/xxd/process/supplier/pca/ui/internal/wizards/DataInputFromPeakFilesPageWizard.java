@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
@@ -35,14 +36,16 @@ public class DataInputFromPeakFilesPageWizard extends DataInputPageWizard {
 		int returnCode = wizardDialog.open();
 		if(returnCode == Window.OK) {
 			List<String> selectedPeakFiles = inputWizard.getSelectedPeakFiles();
+			List<IDataInputEntry> dataInputEntries = new ArrayList<>();
 			for(String selectedPeakFile : selectedPeakFiles) {
 				IDataInputEntry dataInputEntry = new DataInputEntry(selectedPeakFile);
 				String groupName = getGroupName().trim();
 				if(!groupName.isEmpty()) {
 					dataInputEntry.setGroupName(groupName);
 				}
-				getDataInputEntries().add(dataInputEntry);
+				dataInputEntries.add(dataInputEntry);
 			}
+			addInputFiles(dataInputEntries);
 		}
 		update();
 	}
