@@ -52,12 +52,23 @@ public class ScanChartSupport {
 
 	public ILineSeriesData getLineSeriesDataPoint(IScan scan, boolean mirrored, String seriesId) {
 
-		double[] xSeries = new double[1];
-		double[] ySeries = new double[1];
+		List<IScan> scans = new ArrayList<>();
+		scans.add(scan);
+		return getLineSeriesDataPoint(scans, mirrored, seriesId);
+	}
+
+	public ILineSeriesData getLineSeriesDataPoint(List<IScan> scans, boolean mirrored, String seriesId) {
+
+		double[] xSeries = new double[scans.size()];
+		double[] ySeries = new double[scans.size()];
 		//
-		if(scan != null) {
-			xSeries[0] = scan.getRetentionTime();
-			ySeries[0] = (mirrored) ? scan.getTotalSignal() * -1 : scan.getTotalSignal();
+		int i = 0;
+		for(IScan scan : scans) {
+			if(scan != null) {
+				xSeries[i] = scan.getRetentionTime();
+				ySeries[i] = (mirrored) ? scan.getTotalSignal() * -1 : scan.getTotalSignal();
+			}
+			i++;
 		}
 		//
 		ISeriesData seriesData = new SeriesData(xSeries, ySeries, seriesId);

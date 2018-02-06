@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoChromatogramFilte
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupportMSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
@@ -36,6 +37,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -53,12 +55,15 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanChartSupp
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToScanNumberConverter;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
+import org.eclipse.eavp.service.swtchart.core.ICustomSelectionHandler;
+import org.eclipse.eavp.service.swtchart.core.IExtendedChart;
 import org.eclipse.eavp.service.swtchart.core.ISecondaryAxisSettings;
 import org.eclipse.eavp.service.swtchart.core.RangeRestriction;
 import org.eclipse.eavp.service.swtchart.core.ScrollableChart;
@@ -85,6 +90,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.swtchart.IAxis;
@@ -107,7 +113,7 @@ public class ExtendedChromatogramUI {
 	private static final String TYPE_WSD = "TYPE_WSD";
 	//
 	private static final String SERIES_ID_CHROMATOGRAM = "Chromatogram";
-	private static final String SERIES_ID_BASELINE = "Basline";
+	private static final String SERIES_ID_BASELINE = "Baseline";
 	private static final String SERIES_ID_PEAKS_NORMAL_ACTIVE = "Peak(s) [Active]";
 	private static final String SERIES_ID_PEAKS_NORMAL_INACTIVE = "Peak(s) [Inactive]";
 	private static final String SERIES_ID_PEAKS_ISTD_ACTIVE = "Peak(s) ISTD [Active]";
@@ -116,6 +122,7 @@ public class ExtendedChromatogramUI {
 	private static final String SERIES_ID_SELECTED_PEAK_SHAPE = "Selected Peak Shape";
 	private static final String SERIES_ID_SELECTED_PEAK_BACKGROUND = "Selected Peak Background";
 	private static final String SERIES_ID_SELECTED_SCAN = "Selected Scan";
+	private static final String SERIES_ID_IDENTIFIED_SCANS = "Identified Scans";
 	//
 	private Composite toolbarInfo;
 	private Label labelChromatogramInfo;
@@ -388,6 +395,7 @@ public class ExtendedChromatogramUI {
 		//
 		addChromatogramData(lineSeriesDataList);
 		addPeakData(lineSeriesDataList);
+		// addIdentifiedScansData(lineSeriesDataList);
 		addSelectedPeakData(lineSeriesDataList);
 		addSelectedScanData(lineSeriesDataList);
 		addBaselineData(lineSeriesDataList);
@@ -484,6 +492,53 @@ public class ExtendedChromatogramUI {
 		}
 		//
 		return peaks;
+	}
+
+	private void addIdentifiedScansData(List<ILineSeriesData> lineSeriesDataList) {
+
+		List<IScan> scans = getIdentifiedScans(chromatogramSelection);
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		//
+		ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scans, false, SERIES_ID_IDENTIFIED_SCANS);
+		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+		lineSeriesSettings.setLineStyle(LineStyle.NONE);
+		lineSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
+		lineSeriesSettings.setSymbolSize(3);
+		lineSeriesSettings.setSymbolColor(Colors.DARK_GRAY);
+		lineSeriesDataList.add(lineSeriesData);
+	}
+
+	private List<IScan> getIdentifiedScans(IChromatogramSelection chromatogramSelection) {
+
+		List<IScan> scans = new ArrayList<>();
+		for(IScan scan : chromatogramSelection.getChromatogram().getScans()) {
+			if(scanContainsTargets(scan)) {
+				scans.add(scan);
+			}
+		}
+		return scans;
+	}
+
+	private boolean scanContainsTargets(IScan scan) {
+
+		boolean scanContainsTargets = false;
+		if(scan instanceof IScanMSD) {
+			IScanMSD scanMSD = (IScanMSD)scan;
+			if(scanMSD.getTargets().size() > 0) {
+				scanContainsTargets = true;
+			}
+		} else if(scan instanceof IScanCSD) {
+			IScanCSD scanCSD = (IScanCSD)scan;
+			if(scanCSD.getTargets().size() > 0) {
+				scanContainsTargets = true;
+			}
+		} else if(scan instanceof IScanWSD) {
+			IScanWSD scanWSD = (IScanWSD)scan;
+			if(scanWSD.getTargets().size() > 0) {
+				scanContainsTargets = true;
+			}
+		}
+		return scanContainsTargets;
 	}
 
 	private void addSelectedPeakData(List<ILineSeriesData> lineSeriesDataList) {
@@ -646,6 +701,36 @@ public class ExtendedChromatogramUI {
 
 		chromatogramChart = new ChromatogramChart(parent, SWT.BORDER);
 		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		/*
+		 * Custom Selection Handler
+		 */
+		baseChart.addCustomRangeSelectionHandler(new ICustomSelectionHandler() {
+
+			@Override
+			public void handleUserSelection(Event event) {
+
+				Range rangeX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
+				Range rangeY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
+			}
+		});
+		//
+		baseChart.addCustomPointSelectionHandler(new ICustomSelectionHandler() {
+
+			@Override
+			public void handleUserSelection(Event event) {
+
+				if(chromatogramSelection != null) {
+					IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+					int retentionTime = (int)baseChart.getSelectedPrimaryAxisValue(event.x, IExtendedChart.X_AXIS);
+					int scanNumber = chromatogram.getScanNumber(retentionTime);
+					IScan scan = chromatogram.getScan(scanNumber);
+					if(scan != null) {
+						chromatogramSelection.setSelectedScan(scan, true);
+					}
+				}
+			}
+		});
 		/*
 		 * Chart Settings
 		 */
