@@ -26,6 +26,6 @@ public class VariableExtractedVisualization extends AbstractVariableVisualizatio
 	@Override
 	public IVariable getVariableOrigin() {
 
-		return variable;
+		return variable.getVariableOrigin();
 	}
 }

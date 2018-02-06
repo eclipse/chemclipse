@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.n
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISampleVisualization;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 
 public class PcaResulDataProvider implements IDataProvider {
@@ -44,7 +45,7 @@ public class PcaResulDataProvider implements IDataProvider {
 			String peaksNames = tableProvider.getDataTable().getVariables().get(sortRowIndex).getDescription();
 			return peaksNames;
 		} else {
-			List<ISample<?>> samples = tableProvider.getDataTable().getSamples();
+			List<ISampleVisualization<?>> samples = tableProvider.getDataTable().getSamples();
 			ISample<?> sample = samples.get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
 			double sampleData = sample.getSampleData().get(sortRowIndex).getModifiedData();
 			return sampleData;

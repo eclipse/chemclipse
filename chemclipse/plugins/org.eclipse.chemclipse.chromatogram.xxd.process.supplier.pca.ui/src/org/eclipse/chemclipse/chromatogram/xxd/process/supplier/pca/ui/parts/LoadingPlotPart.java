@@ -15,8 +15,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IVariableExtractedVisalization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.LoadingPlot;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -38,13 +38,13 @@ public class LoadingPlotPart {
 			loadingPlot.update(pcaResults);
 		}
 	};
-	private ListChangeListener<IVaribleExtracted> variableChanger;
+	private ListChangeListener<IVariableExtractedVisalization> variableChanger;
 
 	public LoadingPlotPart() {
-		variableChanger = new ListChangeListener<IVaribleExtracted>() {
+		variableChanger = new ListChangeListener<IVariableExtractedVisalization>() {
 
 			@Override
-			public void onChanged(ListChangeListener.Change<? extends IVaribleExtracted> c) {
+			public void onChanged(ListChangeListener.Change<? extends IVariableExtractedVisalization> c) {
 
 				Display.getDefault().timerExec(100, updateSelection);
 			}

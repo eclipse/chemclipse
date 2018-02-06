@@ -36,7 +36,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
 
-public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisualization<? extends IVariable, ? extends ISample<? extends ISampleData>>> {
+public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> {
 
 	private static SelectionManagerSamples instance;
 

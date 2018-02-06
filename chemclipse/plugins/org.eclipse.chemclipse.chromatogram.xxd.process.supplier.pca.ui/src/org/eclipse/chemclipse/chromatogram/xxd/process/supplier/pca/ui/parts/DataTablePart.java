@@ -17,8 +17,9 @@ import javax.annotation.PreDestroy;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISamplesVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IVariableVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.PeakListNatTable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -29,28 +30,28 @@ import javafx.collections.ListChangeListener;
 
 public class DataTablePart {
 
-	private ISamplesVisualization<? extends IVariable, ? extends ISample<? extends ISampleData>> actualSamples;
+	private ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> actualSamples;
 	private Runnable changeData;
 	private Runnable changeSelectedSample;
 	private PeakListNatTable peakListIntensityTable;
 	private ListChangeListener<ISample<? extends ISampleData>> sampleChangeListener;
-	private ListChangeListener<ISamplesVisualization<? extends IVariable, ? extends ISample<? extends ISampleData>>> samplesChangeListener;
-	private ListChangeListener<IVariable> variableChangeListener;
+	private ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> samplesChangeListener;
+	private ListChangeListener<IVariableVisualization> variableChangeListener;
 
 	public DataTablePart() {
 		changeData = () -> peakListIntensityTable.refreshTable();
 		changeSelectedSample = () -> peakListIntensityTable.update(actualSamples);
-		samplesChangeListener = new ListChangeListener<ISamplesVisualization<? extends IVariable, ? extends ISample<? extends ISampleData>>>() {
+		samplesChangeListener = new ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>>() {
 
 			@Override
-			public void onChanged(ListChangeListener.Change<? extends ISamplesVisualization<? extends IVariable, ? extends ISample<? extends ISampleData>>> c) {
+			public void onChanged(ListChangeListener.Change<? extends ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> c) {
 
 				if(actualSamples != null) {
 					actualSamples.getSampleList().removeListener(sampleChangeListener);
 					actualSamples.getVariables().removeListener(variableChangeListener);
 				}
 				if(!c.getList().isEmpty()) {
-					ISamplesVisualization<? extends IVariable, ? extends ISample<? extends ISampleData>> samples = c.getList().get(0);
+					ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> samples = c.getList().get(0);
 					actualSamples = samples;
 					peakListIntensityTable.update(samples);
 					actualSamples.getVariables().addListener(variableChangeListener);
@@ -70,10 +71,10 @@ public class DataTablePart {
 				}
 			}
 		};
-		variableChangeListener = new ListChangeListener<IVariable>() {
+		variableChangeListener = new ListChangeListener<IVariableVisualization>() {
 
 			@Override
-			public void onChanged(ListChangeListener.Change<? extends IVariable> c) {
+			public void onChanged(ListChangeListener.Change<? extends IVariableVisualization> c) {
 
 				Display.getDefault().timerExec(100, changeData);
 			}

@@ -17,15 +17,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISampleVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISamplesVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IVariableVisualization;
 
 public class TableData {
 
-	private List<ISample<? extends ISampleData>> samples = new ArrayList<>();
-	private List<IVariable> variables = new ArrayList<>();
+	private List<ISampleVisualization<? extends ISampleData>> samples = new ArrayList<>();
+	private List<IVariableVisualization> variables = new ArrayList<>();
 
 	public TableData() {
 	}
@@ -39,14 +39,14 @@ public class TableData {
 	/**
 	 * @return sorted samples by groups, this List contains instances of class Group
 	 */
-	public List<ISample<? extends ISampleData>> getSamples() {
+	public List<ISampleVisualization<? extends ISampleData>> getSamples() {
 
 		return samples;
 	}
 
 	public String getVariableName() {
 
-		Optional<IVariable> variable = variables.stream().findAny();
+		Optional<IVariableVisualization> variable = variables.stream().findAny();
 		if(variable.isPresent()) {
 			return variable.get().getType();
 		} else {
@@ -58,12 +58,12 @@ public class TableData {
 	 *
 	 * @return retention times
 	 */
-	public List<IVariable> getVariables() {
+	public List<IVariableVisualization> getVariables() {
 
 		return variables;
 	}
 
-	public void update(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> isamples) {
+	public void update(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> isamples) {
 
 		/*
 		 * remove old data

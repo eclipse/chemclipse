@@ -11,18 +11,24 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataPreprocessing;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariablesFiltration;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class SamplesVisualization extends AbstractSamplesVisualization<RetentionTimeVisualization, SampleVisualization> {
+public class SamplesVisualization extends AbstractSamplesVisualization<RetentionTimeVisualization, SampleVisualization> implements IDataPreprocessing, IVariablesFiltration {
 
 	private ObservableList<RetentionTimeVisualization> retentionsTimeVisualization;
+	private Samples samples;
 	private ObservableList<SampleVisualization> samplesVisualization;
 
 	public SamplesVisualization(Samples samples) {
 		super(samples);
+		this.samples = samples;
 		samplesVisualization = FXCollections.observableArrayList(ISampleVisualization.extractor());
 		retentionsTimeVisualization = FXCollections.observableArrayList(IVariableVisualization.extractor());
 		samples.getSampleList().forEach(s -> samplesVisualization.add(new SampleVisualization(s)));
@@ -30,14 +36,26 @@ public class SamplesVisualization extends AbstractSamplesVisualization<Retention
 	}
 
 	@Override
+	public PcaFiltrationData getPcaFiltrationData() {
+
+		return samples.getPcaFiltrationData();
+	}
+
+	@Override
+	public PcaPreprocessingData getPcaPreprocessingData() {
+
+		return samples.getPcaPreprocessingData();
+	}
+
+	@Override
 	public ObservableList<SampleVisualization> getSampleList() {
 
-		return FXCollections.unmodifiableObservableList(samplesVisualization);
+		return samplesVisualization;
 	}
 
 	@Override
 	public ObservableList<RetentionTimeVisualization> getVariables() {
 
-		return FXCollections.unmodifiableObservableList(retentionsTimeVisualization);
+		return retentionsTimeVisualization;
 	}
 }

@@ -19,11 +19,14 @@ import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISampleVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISamplesVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IVariableVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.DataPreprocessingSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -38,7 +41,7 @@ public class PreprocessingPart {
 
 	private static Map<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>, PcaPreprocessingData> preprocessings;
 	private DataPreprocessingSelection dataPreprocessing;
-	private ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> samplesChangeListener;
+	private ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> samplesChangeListener;
 
 	public PreprocessingPart() {
 		synchronized(PreprocessingPart.class) {
@@ -58,10 +61,10 @@ public class PreprocessingPart {
 				});
 			}
 		}
-		samplesChangeListener = new ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>>() {
+		samplesChangeListener = new ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>>() {
 
 			@Override
-			public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> c) {
+			public void onChanged(ListChangeListener.Change<? extends ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> c) {
 
 				PcaPreprocessingData pcaPreprocessingData = new PcaPreprocessingData();
 				ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples = null;
@@ -101,11 +104,17 @@ public class PreprocessingPart {
 
 	private PcaPreprocessingData getPcaPreprocessingData(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
 
-		if(samples instanceof Samples) {
-			Samples s = (Samples)samples;
-			return s.getPcaPreprocessingData();
+		if(samples instanceof IDataPreprocessing) {
+			IDataPreprocessing dataPreprocessing = (IDataPreprocessing)samples;
+			return dataPreprocessing.getPcaPreprocessingData();
 		} else {
-			return preprocessings.getOrDefault(samples, new PcaPreprocessingData());
+			if(preprocessings.containsKey(samples)) {
+				return preprocessings.get(samples);
+			} else {
+				PcaPreprocessingData pcaPreprocessingData = new PcaPreprocessingData();
+				preprocessings.put(samples, pcaPreprocessingData);
+				return pcaPreprocessingData;
+			}
 		}
 	}
 

@@ -17,11 +17,12 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.Sel
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaSettingsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISamplesVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IVariableVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.PcaSettingsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SamplesVisualization;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -101,8 +102,8 @@ public class PCAController {
 	private void evaluatePCA() {
 
 		if(samples.isPresent()) {
-			ISamplesVisualization<? extends IVariable, ? extends ISample<? extends ISampleData>> s = samples.get();
-			ObservableList<ISamplesVisualization<? extends IVariable, ? extends ISample<? extends ISampleData>>> el = SelectionManagerSamples.getInstance().getElements();
+			ISamplesVisualization<? extends IVariableVisualization, ? extends ISample<? extends ISampleData>> s = samples.get();
+			ObservableList<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> el = SelectionManagerSamples.getInstance().getElements();
 			if(!el.contains(s)) {
 				el.add(s);
 			}

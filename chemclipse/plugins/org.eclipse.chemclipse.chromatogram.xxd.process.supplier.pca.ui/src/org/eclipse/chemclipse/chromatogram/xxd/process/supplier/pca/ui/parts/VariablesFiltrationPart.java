@@ -24,7 +24,10 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariablesFiltration;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISampleVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISamplesVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IVariableVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.FiltersTable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -40,14 +43,14 @@ import javafx.collections.ListChangeListener;
 public class VariablesFiltrationPart {
 
 	private static Map<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>, PcaFiltrationData> filters;
-	private ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> actualSelectionLisnter;
+	private ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> actualSelectionLisnter;
 	private Label countSelectedRow;
 	@Inject
 	private Display display;
 	private FiltersTable filtersTable;
 	private Runnable changeSelectionVariables;
-	private ListChangeListener<IVariable> changeVariablesChangeListener;
-	private ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples;
+	private ListChangeListener<IVariableVisualization> changeVariablesChangeListener;
+	private ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> samples;
 
 	public VariablesFiltrationPart() {
 		synchronized(VariablesFiltrationPart.class) {
@@ -68,18 +71,18 @@ public class VariablesFiltrationPart {
 			}
 		}
 		changeSelectionVariables = () -> updateLabelTotalSelection();
-		changeVariablesChangeListener = new ListChangeListener<IVariable>() {
+		changeVariablesChangeListener = new ListChangeListener<IVariableVisualization>() {
 
 			@Override
-			public void onChanged(javafx.collections.ListChangeListener.Change<? extends IVariable> c) {
+			public void onChanged(javafx.collections.ListChangeListener.Change<? extends IVariableVisualization> c) {
 
 				Display.getDefault().timerExec(100, changeSelectionVariables);
 			}
 		};
-		actualSelectionLisnter = new ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>>() {
+		actualSelectionLisnter = new ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>>() {
 
 			@Override
-			public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> c) {
+			public void onChanged(ListChangeListener.Change<? extends ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> c) {
 
 				PcaFiltrationData pcaFiltrationData = new PcaFiltrationData();
 				if(samples != null) {
@@ -157,6 +160,7 @@ public class VariablesFiltrationPart {
 			samples.getVariables().addListener(changeVariablesChangeListener);
 			filtersTable.setPcaFiltrationData(getPcaFiltrationData(samples));
 			filtersTable.setSamples(samples);
+			filtersTable.update();
 		}
 		updateLabelTotalSelection();
 		SelectionManagerSamples.getInstance().getSelection().addListener(actualSelectionLisnter);
@@ -164,11 +168,17 @@ public class VariablesFiltrationPart {
 
 	private PcaFiltrationData getPcaFiltrationData(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
 
-		if(samples instanceof Samples) {
-			Samples s = (Samples)samples;
-			return s.getPcaFiltrationData();
+		if(samples instanceof IVariablesFiltration) {
+			IVariablesFiltration variablesFiltration = (IVariablesFiltration)samples;
+			return variablesFiltration.getPcaFiltrationData();
 		} else {
-			return filters.getOrDefault(samples, new PcaFiltrationData());
+			if(filters.containsKey(samples)) {
+				return filters.get(samples);
+			} else {
+				PcaFiltrationData pcaFiltrationData = new PcaFiltrationData();
+				filters.put(samples, pcaFiltrationData);
+				return pcaFiltrationData;
+			}
 		}
 	}
 
