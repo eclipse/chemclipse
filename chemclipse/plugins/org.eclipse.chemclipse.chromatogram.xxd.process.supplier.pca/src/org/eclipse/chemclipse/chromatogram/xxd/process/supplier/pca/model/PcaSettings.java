@@ -13,20 +13,20 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 public class PcaSettings implements IPcaSettings {
 
-	public int numberOfPrincipleComponents;
+	public int numberOfPrincipalComponents;
 
 	public PcaSettings() {
-		this.numberOfPrincipleComponents = 3;
+		this.numberOfPrincipalComponents = 3;
 	}
 
-	public PcaSettings(int numberOfPrincipleComponents) {
+	public PcaSettings(int numberOfPrincipalComponents) {
 		this();
-		this.numberOfPrincipleComponents = numberOfPrincipleComponents;
+		this.numberOfPrincipalComponents = numberOfPrincipalComponents;
 	}
 
 	@Override
 	public int getNumberOfPrincipalComponents() {
 
-		return numberOfPrincipleComponents;
+		return numberOfPrincipalComponents;
 	}
 }

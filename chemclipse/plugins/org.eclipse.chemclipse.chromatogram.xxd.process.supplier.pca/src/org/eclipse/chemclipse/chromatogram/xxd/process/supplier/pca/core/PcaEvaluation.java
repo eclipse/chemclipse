@@ -62,14 +62,14 @@ public class PcaEvaluation {
 		return selectedSamples;
 	}
 
-	private List<double[]> getBasisVectors(IPcaCalculator principleComponentAnalysis, int numberOfPrincipleComponents) {
+	private List<double[]> getBasisVectors(IPcaCalculator principalComponentAnalysis, int numberOfPrincipalComponents) {
 
 		/*
 		 * Print the basis vectors.
 		 */
 		List<double[]> basisVectors = new ArrayList<double[]>();
-		for(int principleComponent = 0; principleComponent < numberOfPrincipleComponents; principleComponent++) {
-			double[] basisVector = principleComponentAnalysis.getLoadingVector(principleComponent);
+		for(int principalComponent = 0; principalComponent < numberOfPrincipalComponents; principalComponent++) {
+			double[] basisVector = principalComponentAnalysis.getLoadingVector(principalComponent);
 			basisVectors.add(basisVector);
 		}
 		return basisVectors;
@@ -90,48 +90,48 @@ public class PcaEvaluation {
 	 * @param pcaPeakMap
 	 * @param numSamples
 	 * @param sampleSize
-	 * @param numberOfPrincipleComponents
-	 * @return PrincipleComponentAnalysis
+	 * @param numberOfPrincipalComponents
+	 * @return PrincipalComponentAnalysis
 	 */
-	private IPcaCalculator initializePCA(Map<ISample<?>, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipleComponents) {
+	private IPcaCalculator initializePCA(Map<ISample<?>, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipalComponents) {
 
 		/*
 		 * Initialize the PCA analysis.
 		 */
 		int numSamples = pcaPeakMap.size();
-		IPcaCalculator principleComponentAnalysis = new PcaCalculatorSvd();
-		principleComponentAnalysis.initialize(numSamples, sampleSize);
+		IPcaCalculator principalComponentAnalysis = new PcaCalculatorSvd();
+		principalComponentAnalysis.initialize(numSamples, sampleSize);
 		/*
 		 * Add the samples.
 		 */
 		for(Map.Entry<ISample<?>, double[]> entry : pcaPeakMap.entrySet()) {
 			double[] sampleData = entry.getValue();
-			principleComponentAnalysis.addObservation(sampleData);
+			principalComponentAnalysis.addObservation(sampleData);
 		}
 		/*
-		 * Compute the basis for the number of principle components.
+		 * Compute the basis for the number of principal components.
 		 */
-		principleComponentAnalysis.compute(numberOfPrincipleComponents);
-		return principleComponentAnalysis;
+		principalComponentAnalysis.compute(numberOfPrincipalComponents);
+		return principalComponentAnalysis;
 	}
 
 	public <V extends IVariable, S extends ISample<? extends ISampleData>> PcaResults process(ISamples<V, S> samples, IPcaSettings settings, IProgressMonitor monitor) {
 
 		monitor.subTask("Run PCA");
-		int numberOfPrincipleComponents = settings.getNumberOfPrincipalComponents();
+		int numberOfPrincipalComponents = settings.getNumberOfPrincipalComponents();
 		PcaResults pcaResults = new PcaResults(settings);
 		Map<ISample<?>, double[]> extractData = extractData(samples);
 		setRetentionTime(pcaResults, samples);
 		int sampleSize = getSampleSize(extractData);
-		IPcaCalculator principleComponentAnalysis = initializePCA(extractData, sampleSize, numberOfPrincipleComponents);
-		List<double[]> basisVectors = getBasisVectors(principleComponentAnalysis, numberOfPrincipleComponents);
+		IPcaCalculator principalComponentAnalysis = initializePCA(extractData, sampleSize, numberOfPrincipalComponents);
+		List<double[]> basisVectors = getBasisVectors(principalComponentAnalysis, numberOfPrincipalComponents);
 		pcaResults.setBasisVectors(basisVectors);
-		setEigenSpaceAndErrorValues(principleComponentAnalysis, extractData, pcaResults);
+		setEigenSpaceAndErrorValues(principalComponentAnalysis, extractData, pcaResults);
 		// setGroups(pcaResults, samples);
 		return pcaResults;
 	}
 
-	private void setEigenSpaceAndErrorValues(IPcaCalculator principleComponentAnalysis, Map<ISample<?>, double[]> pcaPeakMap, IPcaResults pcaResults) {
+	private void setEigenSpaceAndErrorValues(IPcaCalculator principalComponentAnalysis, Map<ISample<?>, double[]> pcaPeakMap, IPcaResults pcaResults) {
 
 		/*
 		 * Set the eigen space and error membership values.
@@ -145,8 +145,8 @@ public class PcaEvaluation {
 			IPcaResult pcaResult = new PcaResult(sample);
 			pcaResult.setName(sample.getName());
 			pcaResult.setGroupName(sample.getGroupName());
-			eigenSpace = principleComponentAnalysis.applyLoadings(sampleData);
-			errorMemberShip = principleComponentAnalysis.getErrorMetric(sampleData);
+			eigenSpace = principalComponentAnalysis.applyLoadings(sampleData);
+			errorMemberShip = principalComponentAnalysis.getErrorMetric(sampleData);
 			pcaResult.setSampleData(sampleData);
 			pcaResult.setEigenSpace(eigenSpace);
 			pcaResult.setErrorMemberShip(errorMemberShip);

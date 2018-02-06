@@ -41,7 +41,7 @@ public class ResultExport {
 			printWriter.println("-------------------------------------");
 			printWriter.println("Settings");
 			printWriter.println("-------------------------------------");
-			printWriter.print("Number of principle components:");
+			printWriter.print("Number of principal components:");
 			printWriter.print(TAB);
 			printWriter.println(pcaResults.getPcaSettings().getNumberOfPrincipalComponents());
 			printWriter.println("");
@@ -89,7 +89,7 @@ public class ResultExport {
 			}
 			printWriter.println("");
 			printWriter.println("-------------------------------------");
-			printWriter.println("Principle Components");
+			printWriter.println("Principal Components");
 			printWriter.println("-------------------------------------");
 			//
 			printWriter.print("File");
