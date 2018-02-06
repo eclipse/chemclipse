@@ -14,9 +14,12 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.co
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
@@ -25,6 +28,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.Sel
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.Coloring;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaInputRunnable;
@@ -37,8 +41,7 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -48,7 +51,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -63,7 +65,7 @@ public class PCAEditorController {
 
 	private ListChangeListener<ISample<? extends ISampleData>> actualSelectionChangeListener;
 	@FXML // fx:id="cColor"
-	private TableColumn<SampleVisualization, SampleVisualization> cColor; // Value injected by FXMLLoader
+	private TableColumn<SampleVisualization, Integer> cColor; // Value injected by FXMLLoader
 	@FXML // fx:id="cGroupNames"
 	private TableColumn<SampleVisualization, String> cGroupNames; // Value injected by FXMLLoader
 	@FXML
@@ -138,7 +140,11 @@ public class PCAEditorController {
 				sample.setGroupName(newGroupName);
 			}
 		}
-		cTableSamples.refresh();
+		if(samples.isPresent()) {
+			Set<String> groupNames = samples.get().getSampleList().stream().map(s -> s.getGroupName()).collect(Collectors.toSet());
+			Map<String, Integer> colors = Coloring.getColorsForGroup(groupNames);
+			samples.get().getSampleList().forEach(s -> s.setColor(colors.get(s.getGroupName())));
+		}
 	}
 
 	@FXML
@@ -203,21 +209,13 @@ public class PCAEditorController {
 				return cell;
 			}
 		});
-		cColor.setCellValueFactory(new Callback<CellDataFeatures<SampleVisualization, SampleVisualization>, ObservableValue<SampleVisualization>>() {
-
-			@Override
-			public ObservableValue<SampleVisualization> call(CellDataFeatures<SampleVisualization, SampleVisualization> p) {
-
-				return new ReadOnlyObjectWrapper<>(p.getValue());
-			}
-		});
 		cColor.setCellFactory(param -> {
-			final TableCell<SampleVisualization, SampleVisualization> cell = new TableCell<SampleVisualization, SampleVisualization>() {
+			final TableCell<SampleVisualization, Integer> cell = new TableCell<SampleVisualization, Integer>() {
 
 				final Rectangle r = new Rectangle(20, 20);
 
 				@Override
-				public void updateItem(SampleVisualization item, boolean empty) {
+				public void updateItem(Integer item, boolean empty) {
 
 					super.updateItem(item, empty);
 					if(empty) {
@@ -342,7 +340,10 @@ public class PCAEditorController {
 			samples.get().getSampleList().addListener(sampleChangeSelectionListener);
 			updateNumerSeletedSamples();
 			inputSamples.accept(samples.get());
-			cTableSamples.setItems(samples.get().getSampleList());
+			cTableSamples.setItems(FXCollections.observableArrayList(samples.get().getSampleList()));
+			Set<String> groupNames = samples.get().getSampleList().stream().map(s -> s.getGroupName()).collect(Collectors.toSet());
+			Map<String, Integer> colors = Coloring.getColorsForGroup(groupNames);
+			samples.get().getSampleList().forEach(s -> s.setColor(colors.get(s.getGroupName())));
 		}
 	}
 

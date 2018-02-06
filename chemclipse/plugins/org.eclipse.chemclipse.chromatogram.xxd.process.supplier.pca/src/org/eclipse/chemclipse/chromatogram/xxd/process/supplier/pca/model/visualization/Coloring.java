@@ -25,11 +25,11 @@ public class Coloring {
 	private static final float offsetAngle = 0;
 	private static final float saturation = 1.0f;
 
-	public static Map<String, Integer> getColor(Collection<String> names) {
+	public static Map<String, Integer> getColorsForGroup(Collection<String> groupNames) {
 
 		Map<String, Integer> colors = new LinkedHashMap<>();
 		SortedSet<String> sortName = new TreeSet<>(Comparator.nullsFirst(Comparator.naturalOrder()));
-		sortName.addAll(names);
+		sortName.addAll(groupNames);
 		Iterator<String> it = sortName.iterator();
 		float angle = 120.0f;
 		float actualAngle = offsetAngle;

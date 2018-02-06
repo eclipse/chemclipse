@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaSettingsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISampleVisualization;
@@ -89,9 +88,9 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisua
 
 		PcaResults results = evaluatePca(samples, settings, monitor);
 		IPcaResultsVisualization pcaResultsVisualization = new PcaResultsVisualization<>(results, pcaSettingsVisualization);
-		samples.getSampleList().forEach(s -> {
-			Optional<IPcaResultVisualization> pcaResultVisualization = pcaResultsVisualization.getPcaResultList().stream().filter(r -> r.getSample() == s).findAny();
-			pcaResultVisualization.get().setColor(s.getColor());
+		pcaResultsVisualization.getPcaResultList().forEach(r -> {
+			Optional<S> sample = samples.getSampleList().stream().filter(s -> r.getSample() == s).findAny();
+			r.copyVisualizationProperties(sample.get());
 		});
 		if(!getElements().contains(samples)) {
 			getElements().add(samples);
