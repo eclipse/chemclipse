@@ -600,15 +600,20 @@ public class ExtendedTargetsUI {
 				 */
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 				IScanMSD massSpectrum = getMassSpectrum();
+				/*
+				 * Send the identification target update to let e.g. the molecule renderer react on an update.
+				 */
+				IIdentificationTarget target = (IIdentificationTarget)object;
+				eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
+				/*
+				 * Send the mass spectrum update, e.g. used by the comparison part.
+				 */
 				if(massSpectrum != null) {
 					map.clear();
 					IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
 					map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, massSpectrum);
 					map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, identificationTarget);
 					eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
-				} else {
-					IIdentificationTarget target = (IIdentificationTarget)object;
-					eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
 				}
 			}
 		}
