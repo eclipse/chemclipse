@@ -121,11 +121,25 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogramSelection, seriesId, overlayType, derivativeType, color, null, false);
 	}
 
+	public ILineSeriesData getLineSeriesDataChromatogram(IChromatogram chromatogram, String seriesId, Color color) {
+
+		String overlayType = DISPLAY_TYPE_TIC;
+		String derivativeType = DERIVATIVE_NONE;
+		return getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, null, false);
+	}
+
 	public ILineSeriesData getLineSeriesDataBaseline(IChromatogramSelection chromatogramSelection, String seriesId, Color color) {
 
 		String overlayType = DISPLAY_TYPE_TIC;
 		String derivativeType = DERIVATIVE_NONE;
 		return getLineSeriesData(chromatogramSelection, seriesId, overlayType, derivativeType, color, null, true);
+	}
+
+	public ILineSeriesData getLineSeriesDataBaseline(IChromatogram chromatogram, String seriesId, Color color) {
+
+		String overlayType = DISPLAY_TYPE_TIC;
+		String derivativeType = DERIVATIVE_NONE;
+		return getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, null, true);
 	}
 
 	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions, boolean baseline) {

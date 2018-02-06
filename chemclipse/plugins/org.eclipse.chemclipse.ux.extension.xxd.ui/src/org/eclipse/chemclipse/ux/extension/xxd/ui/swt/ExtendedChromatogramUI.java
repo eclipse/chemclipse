@@ -42,7 +42,9 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
@@ -59,6 +61,7 @@ import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToScanNumberConverter;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
@@ -139,7 +142,8 @@ public class ExtendedChromatogramUI {
 	private ScanChartSupport scanChartSupport = new ScanChartSupport();
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
-	private Shell shell = Display.getDefault().getActiveShell();
+	private Display display = Display.getDefault();
+	private Shell shell = display.getActiveShell();
 
 	private class FilterMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
 
@@ -209,8 +213,8 @@ public class ExtendedChromatogramUI {
 
 		this.chromatogramSelection = chromatogramSelection;
 		addChartMenuEntriesFilter();
-		updateChromatogramSelection();
 		updateReferencedChromatograms();
+		updateChromatogram();
 	}
 
 	public void update() {
@@ -220,52 +224,22 @@ public class ExtendedChromatogramUI {
 
 	public void updateSelectedScan() {
 
-		/*
-		 * Get the selected range.
-		 */
-		BaseChart baseChart = chromatogramChart.getBaseChart();
-		IAxisSet axisSet = baseChart.getAxisSet();
-		IAxis xAxis = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
-		Range xRange = xAxis.getRange();
-		IAxis yAxis = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
-		Range yRange = yAxis.getRange();
-		//
 		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_SCAN);
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 		addSelectedScanData(lineSeriesDataList);
 		addLineSeriesData(lineSeriesDataList);
-		/*
-		 * Restore the selected range.
-		 */
-		xAxis.setRange(xRange);
-		yAxis.setRange(yRange);
-		baseChart.redraw();
+		adjustChromatogramSelectionRange();
 	}
 
 	public void updateSelectedPeak() {
 
-		/*
-		 * Get the selected range.
-		 */
-		BaseChart baseChart = chromatogramChart.getBaseChart();
-		IAxisSet axisSet = baseChart.getAxisSet();
-		IAxis xAxis = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
-		Range xRange = xAxis.getRange();
-		IAxis yAxis = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
-		Range yRange = yAxis.getRange();
-		//
 		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_MARKER);
 		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_SHAPE);
 		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_BACKGROUND);
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 		addSelectedPeakData(lineSeriesDataList);
 		addLineSeriesData(lineSeriesDataList);
-		/*
-		 * Restore the selected range.
-		 */
-		xAxis.setRange(xRange);
-		yAxis.setRange(yRange);
-		baseChart.redraw();
+		adjustChromatogramSelectionRange();
 	}
 
 	public IChromatogramSelection getChromatogramSelection() {
@@ -361,15 +335,15 @@ public class ExtendedChromatogramUI {
 		chartMenuEntriesFilter.clear();
 	}
 
-	private void updateChromatogramSelection() {
+	private void updateChromatogram() {
 
 		updateLabel();
 		deleteScanNumberSecondaryAxisX();
 		chromatogramChart.deleteSeries();
-		if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
+		if(chromatogramSelection != null) {
 			addjustChromatogramChart();
 			addChromatogramSeriesData();
-			addScanNumberSecondaryAxisX(chromatogramSelection);
+			addScanNumberSecondaryAxisX();
 		}
 	}
 
@@ -395,7 +369,7 @@ public class ExtendedChromatogramUI {
 		//
 		addChromatogramData(lineSeriesDataList);
 		addPeakData(lineSeriesDataList);
-		// addIdentifiedScansData(lineSeriesDataList);
+		addIdentifiedScansData(lineSeriesDataList);
 		addSelectedPeakData(lineSeriesDataList);
 		addSelectedScanData(lineSeriesDataList);
 		addBaselineData(lineSeriesDataList);
@@ -408,7 +382,8 @@ public class ExtendedChromatogramUI {
 		Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM));
 		boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA);
 		//
-		ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesDataChromatogram(chromatogramSelection, SERIES_ID_CHROMATOGRAM, color);
+		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesDataChromatogram(chromatogram, SERIES_ID_CHROMATOGRAM, color);
 		lineSeriesData.getLineSeriesSettings().setEnableArea(enableChromatogramArea);
 		lineSeriesDataList.add(lineSeriesData);
 	}
@@ -483,10 +458,10 @@ public class ExtendedChromatogramUI {
 		List<? extends IPeak> peaks = new ArrayList<IPeak>();
 		if(chromatogram instanceof IChromatogramMSD) {
 			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-			peaks = chromatogramMSD.getPeaks((IChromatogramSelectionMSD)chromatogramSelection);
+			peaks = chromatogramMSD.getPeaks();
 		} else if(chromatogram instanceof IChromatogramCSD) {
 			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-			peaks = chromatogramCSD.getPeaks((IChromatogramSelectionCSD)chromatogramSelection);
+			peaks = chromatogramCSD.getPeaks();
 		} else if(chromatogram instanceof IChromatogramWSD) {
 			//
 		}
@@ -496,24 +471,30 @@ public class ExtendedChromatogramUI {
 
 	private void addIdentifiedScansData(List<ILineSeriesData> lineSeriesDataList) {
 
-		List<IScan> scans = getIdentifiedScans(chromatogramSelection);
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		//
-		ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scans, false, SERIES_ID_IDENTIFIED_SCANS);
-		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
-		lineSeriesSettings.setLineStyle(LineStyle.NONE);
-		lineSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
-		lineSeriesSettings.setSymbolSize(3);
-		lineSeriesSettings.setSymbolColor(Colors.DARK_GRAY);
-		lineSeriesDataList.add(lineSeriesData);
+		List<IScan> scans = getIdentifiedScans();
+		if(scans.size() > 0) {
+			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+			//
+			ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scans, false, SERIES_ID_IDENTIFIED_SCANS);
+			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+			lineSeriesSettings.setLineStyle(LineStyle.NONE);
+			lineSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
+			lineSeriesSettings.setSymbolSize(3);
+			lineSeriesSettings.setSymbolColor(Colors.DARK_GRAY);
+			lineSeriesDataList.add(lineSeriesData);
+			//
+			// TODO ScanLabelMarker
+		}
 	}
 
-	private List<IScan> getIdentifiedScans(IChromatogramSelection chromatogramSelection) {
+	private List<IScan> getIdentifiedScans() {
 
 		List<IScan> scans = new ArrayList<>();
-		for(IScan scan : chromatogramSelection.getChromatogram().getScans()) {
-			if(scanContainsTargets(scan)) {
-				scans.add(scan);
+		if(chromatogramSelection != null) {
+			for(IScan scan : chromatogramSelection.getChromatogram().getScans()) {
+				if(scanContainsTargets(scan)) {
+					scans.add(scan);
+				}
 			}
 		}
 		return scans;
@@ -603,10 +584,11 @@ public class ExtendedChromatogramUI {
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		boolean showChromatogramBaseline = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_BASELINE);
 		//
-		if(showChromatogramBaseline) {
+		if(chromatogramSelection != null && showChromatogramBaseline) {
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_BASELINE));
 			boolean enableBaselineArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_BASELINE_AREA);
-			ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesDataBaseline(chromatogramSelection, SERIES_ID_BASELINE, color);
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesDataBaseline(chromatogram, SERIES_ID_BASELINE, color);
 			lineSeriesData.getLineSeriesSettings().setEnableArea(enableBaselineArea);
 			lineSeriesDataList.add(lineSeriesData);
 		}
@@ -710,8 +692,16 @@ public class ExtendedChromatogramUI {
 			@Override
 			public void handleUserSelection(Event event) {
 
-				Range rangeX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
-				Range rangeY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
+				if(chromatogramSelection != null) {
+					Range rangeX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
+					Range rangeY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
+					//
+					int startRetentionTime = (int)rangeX.lower;
+					int stopRetentionTime = (int)rangeX.upper;
+					float startAbundance = (float)rangeY.lower;
+					float stopAbundance = (float)rangeY.upper;
+					chromatogramSelection.setRanges(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
+				}
 			}
 		});
 		//
@@ -726,7 +716,16 @@ public class ExtendedChromatogramUI {
 					int scanNumber = chromatogram.getScanNumber(retentionTime);
 					IScan scan = chromatogram.getScan(scanNumber);
 					if(scan != null) {
-						chromatogramSelection.setSelectedScan(scan, true);
+						chromatogramSelection.setSelectedScan(scan);
+						display.asyncExec(new Runnable() {
+
+							@Override
+							public void run() {
+
+								IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+								eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
+							}
+						});
 					}
 				}
 			}
@@ -889,12 +888,12 @@ public class ExtendedChromatogramUI {
 
 	private void applySettings() {
 
-		updateChromatogramSelection();
+		updateChromatogram();
 	}
 
 	private void reset() {
 
-		updateChromatogramSelection();
+		updateChromatogram();
 	}
 
 	private void updateLabel() {
@@ -951,7 +950,7 @@ public class ExtendedChromatogramUI {
 		chromatogramChart.applySettings(chartSettings);
 	}
 
-	private void addScanNumberSecondaryAxisX(IChromatogramSelection chromatogramSelection) {
+	private void addScanNumberSecondaryAxisX() {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		boolean showChromatogramScanAxis = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_AXIS);
@@ -978,6 +977,23 @@ public class ExtendedChromatogramUI {
 			chromatogramChart.redraw();
 		} catch(Exception e) {
 			logger.warn(e);
+		}
+	}
+
+	private void adjustChromatogramSelectionRange() {
+
+		if(chromatogramSelection != null) {
+			BaseChart baseChart = chromatogramChart.getBaseChart();
+			IAxisSet axisSet = baseChart.getAxisSet();
+			IAxis xAxis = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
+			IAxis yAxis = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
+			//
+			Range xRange = new Range(chromatogramSelection.getStartRetentionTime(), chromatogramSelection.getStopRetentionTime());
+			Range yRange = new Range(chromatogramSelection.getStartAbundance(), chromatogramSelection.getStopAbundance());
+			//
+			xAxis.setRange(xRange);
+			yAxis.setRange(yRange);
+			chromatogramChart.redraw();
 		}
 	}
 }
