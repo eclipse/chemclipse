@@ -507,11 +507,13 @@ public class ExtendedChromatogramUI {
 			/*
 			 * Peak
 			 */
+			int markerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_SIZE);
+			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE));
 			lineSeriesData = peakChartSupport.getPeak(peak, true, mirrored, colorPeak, SERIES_ID_SELECTED_PEAK_SHAPE);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
-			lineSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
+			lineSeriesSettings.setSymbolType(symbolType);
 			lineSeriesSettings.setSymbolColor(colorPeak);
-			lineSeriesSettings.setSymbolSize(2);
+			lineSeriesSettings.setSymbolSize(markerSize);
 			lineSeriesDataList.add(lineSeriesData);
 			/*
 			 * Background
@@ -526,12 +528,17 @@ public class ExtendedChromatogramUI {
 
 		IScan scan = chromatogramSelection.getSelectedScan();
 		if(scan != null) {
+			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_SCAN));
+			//
+			int markerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE);
+			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE));
 			ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scan, false, SERIES_ID_SELECTED_SCAN);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 			lineSeriesSettings.setLineStyle(LineStyle.NONE);
-			lineSeriesSettings.setSymbolType(PlotSymbolType.CROSS);
-			lineSeriesSettings.setSymbolSize(5);
-			lineSeriesSettings.setSymbolColor(Colors.DARK_RED);
+			lineSeriesSettings.setSymbolType(symbolType);
+			lineSeriesSettings.setSymbolSize(markerSize);
+			lineSeriesSettings.setSymbolColor(color);
 			lineSeriesDataList.add(lineSeriesData);
 		}
 	}

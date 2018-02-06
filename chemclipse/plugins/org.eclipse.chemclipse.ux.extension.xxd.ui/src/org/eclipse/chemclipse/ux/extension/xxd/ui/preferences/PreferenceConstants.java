@@ -200,6 +200,16 @@ public class PreferenceConstants {
 	public static final boolean DEF_ENABLE_CHROMATOGRAM_AREA = true;
 	public static final String P_COLOR_CHROMATOGRAM_SELECTED_PEAK = "colorChromatogramSelectedPeak";
 	public static final String DEF_COLOR_CHROMATOGRAM_SELECTED_PEAK = "128,0,0";
+	public static final String P_CHROMATOGRAM_SELECTED_PEAK_MARKER_SIZE = "showChromatogramSelectedPeakMarkerSize";
+	public static final int DEF_CHROMATOGRAM_SELECTED_PEAK_MARKER_SIZE = 2;
+	public static final String P_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE = "showChromatogramSelectedPeakMarkerType";
+	public static final String DEF_CHROMATOGRAM_SELECTED_PEAK_MARKER_TYPE = PlotSymbolType.CIRCLE.toString();
+	public static final String P_COLOR_CHROMATOGRAM_SELECTED_SCAN = "colorChromatogramSelectedScan";
+	public static final String DEF_COLOR_CHROMATOGRAM_SELECTED_SCAN = "128,0,0";
+	public static final String P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE = "showChromatogramSelectedScanMarkerSize";
+	public static final int DEF_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE = 5;
+	public static final String P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE = "showChromatogramSelectedScanMarkerType";
+	public static final String DEF_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE = PlotSymbolType.CROSS.toString();
 	public static final String P_SHOW_CHROMATOGRAM_PEAK_LABELS = "showChromatogramPeakLabels";
 	public static final boolean DEF_SHOW_CHROMATOGRAM_PEAK_LABELS = true;
 	public static final String P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME = "chromatogramPeakLabelFontName";
