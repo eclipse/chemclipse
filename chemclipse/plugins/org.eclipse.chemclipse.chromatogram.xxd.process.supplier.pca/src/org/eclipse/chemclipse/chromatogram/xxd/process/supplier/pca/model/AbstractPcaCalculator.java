@@ -16,11 +16,11 @@ import org.ejml.ops.CommonOps;
 
 public abstract class AbstractPcaCalculator implements IPcaCalculator {
 
-	protected DenseMatrix64F loadings;
-	protected double mean[];
-	protected int numComps;
-	protected DenseMatrix64F sampleData = new DenseMatrix64F(1, 1);
-	protected int sampleIndex;
+	private DenseMatrix64F loadings;
+	private double mean[];
+	private int numComps;
+	private DenseMatrix64F sampleData = new DenseMatrix64F(1, 1);
+	private int sampleIndex;
 
 	@Override
 	public void addObservation(double[] obsData) {
