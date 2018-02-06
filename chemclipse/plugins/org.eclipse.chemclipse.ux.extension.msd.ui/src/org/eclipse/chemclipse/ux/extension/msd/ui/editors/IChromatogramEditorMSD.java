@@ -12,13 +12,13 @@
 package org.eclipse.chemclipse.ux.extension.msd.ui.editors;
 
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 
 /**
  * @author Dr. Philip Wenig
  * 
  */
-public interface IChromatogramEditorMSD extends IChemClipseEditor {
+public interface IChromatogramEditorMSD extends IChromatogramEditor {
 
 	/**
 	 * Returns an instance of the chromatogram selection.

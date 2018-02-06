@@ -12,9 +12,9 @@
 package org.eclipse.chemclipse.ux.extension.csd.ui.editors;
 
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
-import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 
-public interface IChromatogramEditorCSD extends IChemClipseEditor {
+public interface IChromatogramEditorCSD extends IChromatogramEditor {
 
 	/**
 	 * Returns an instance of the chromatogram selection.

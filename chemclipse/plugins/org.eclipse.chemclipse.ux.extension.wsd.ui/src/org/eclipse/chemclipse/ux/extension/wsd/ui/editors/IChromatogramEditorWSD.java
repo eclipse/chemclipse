@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.wsd.ui.editors;
 
-import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 
-public interface IChromatogramEditorWSD extends IChemClipseEditor {
+public interface IChromatogramEditorWSD extends IChromatogramEditor {
 
 	/**
 	 * Returns an instance of the chromatogram selection.
