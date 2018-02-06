@@ -40,6 +40,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
@@ -55,10 +56,13 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToScanNumberConverter;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
+import org.eclipse.eavp.service.swtchart.core.ISecondaryAxisSettings;
 import org.eclipse.eavp.service.swtchart.core.RangeRestriction;
 import org.eclipse.eavp.service.swtchart.core.ScrollableChart;
+import org.eclipse.eavp.service.swtchart.core.SecondaryAxisSettings;
 import org.eclipse.eavp.service.swtchart.customcharts.ChromatogramChart;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
@@ -84,6 +88,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.swtchart.IAxis;
+import org.swtchart.IAxis.Position;
 import org.swtchart.IAxisSet;
 import org.swtchart.ILineSeries.PlotSymbolType;
 import org.swtchart.IPlotArea;
@@ -93,6 +98,8 @@ import org.swtchart.Range;
 public class ExtendedChromatogramUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedChromatogramUI.class);
+	//
+	private static final String LABEL_SCAN_NUMBER = "Scan Number";
 	//
 	private static final String TYPE_GENERIC = "TYPE_GENERIC";
 	private static final String TYPE_MSD = "TYPE_MSD";
@@ -105,7 +112,8 @@ public class ExtendedChromatogramUI {
 	private static final String SERIES_ID_PEAKS_NORMAL_INACTIVE = "Peak(s) [Inactive]";
 	private static final String SERIES_ID_PEAKS_ISTD_ACTIVE = "Peak(s) ISTD [Active]";
 	private static final String SERIES_ID_PEAKS_ISTD_INACTIVE = "Peak(s) ISTD [Inactive]";
-	private static final String SERIES_ID_SELECTED_PEAK = "Selected Peak";
+	private static final String SERIES_ID_SELECTED_PEAK_MARKER = "Selected Peak Marker";
+	private static final String SERIES_ID_SELECTED_PEAK_SHAPE = "Selected Peak Shape";
 	private static final String SERIES_ID_SELECTED_PEAK_BACKGROUND = "Selected Peak Background";
 	private static final String SERIES_ID_SELECTED_SCAN = "Selected Scan";
 	//
@@ -239,7 +247,8 @@ public class ExtendedChromatogramUI {
 		IAxis yAxis = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
 		Range yRange = yAxis.getRange();
 		//
-		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK);
+		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_MARKER);
+		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_SHAPE);
 		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_BACKGROUND);
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 		addSelectedPeakData(lineSeriesDataList);
@@ -348,10 +357,12 @@ public class ExtendedChromatogramUI {
 	private void updateChromatogramSelection() {
 
 		updateLabel();
+		deleteScanNumberSecondaryAxisX();
 		chromatogramChart.deleteSeries();
 		if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
 			addjustChromatogramChart();
 			addChromatogramSeriesData();
+			addScanNumberSecondaryAxisX(chromatogramSelection);
 		}
 	}
 
@@ -480,13 +491,27 @@ public class ExtendedChromatogramUI {
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		IPeak peak = chromatogramSelection.getSelectedPeak();
 		if(peak != null) {
+			/*
+			 * Settings
+			 */
 			boolean mirrored = false;
 			ILineSeriesData lineSeriesData;
+			Color colorPeak = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_PEAK));
+			/*
+			 * Peak Marker
+			 */
+			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
+			List<IPeak> peaks = new ArrayList<>();
+			peaks.add(peak);
+			addPeaks(lineSeriesDataList, peaks, PlotSymbolType.INVERTED_TRIANGLE, symbolSize, colorPeak, SERIES_ID_SELECTED_PEAK_MARKER);
 			/*
 			 * Peak
 			 */
-			Color colorPeak = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_1));
-			lineSeriesData = peakChartSupport.getPeak(peak, true, mirrored, colorPeak, SERIES_ID_SELECTED_PEAK);
+			lineSeriesData = peakChartSupport.getPeak(peak, true, mirrored, colorPeak, SERIES_ID_SELECTED_PEAK_SHAPE);
+			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+			lineSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
+			lineSeriesSettings.setSymbolColor(colorPeak);
+			lineSeriesSettings.setSymbolSize(2);
 			lineSeriesDataList.add(lineSeriesData);
 			/*
 			 * Background
@@ -810,6 +835,57 @@ public class ExtendedChromatogramUI {
 		comboReferencedChromatograms.setItems(references.toArray(new String[references.size()]));
 		if(showMessage) {
 			comboReferencedChromatograms.select(0);
+		}
+	}
+
+	private void deleteScanNumberSecondaryAxisX() {
+
+		IChartSettings chartSettings = chromatogramChart.getChartSettings();
+		List<ISecondaryAxisSettings> secondaryAxisSettings = chartSettings.getSecondaryAxisSettingsListX();
+		//
+		ISecondaryAxisSettings secondaryAxisScanNumber = null;
+		exitloop:
+		for(ISecondaryAxisSettings secondaryAxis : secondaryAxisSettings) {
+			if(secondaryAxis.getLabel().equals(LABEL_SCAN_NUMBER)) {
+				secondaryAxisScanNumber = secondaryAxis;
+				break exitloop;
+			}
+		}
+		//
+		if(secondaryAxisScanNumber != null) {
+			secondaryAxisSettings.remove(secondaryAxisScanNumber);
+		}
+		//
+		chromatogramChart.applySettings(chartSettings);
+	}
+
+	private void addScanNumberSecondaryAxisX(IChromatogramSelection chromatogramSelection) {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		boolean showChromatogramScanAxis = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_AXIS);
+		//
+		try {
+			deleteScanNumberSecondaryAxisX();
+			IChartSettings chartSettings = chromatogramChart.getChartSettings();
+			if(chromatogramSelection != null && showChromatogramScanAxis) {
+				//
+				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				int scanDelay = chromatogram.getScanDelay();
+				int scanInterval = chromatogram.getScanInterval();
+				//
+				ISecondaryAxisSettings secondaryAxisSettings = new SecondaryAxisSettings(LABEL_SCAN_NUMBER, new MillisecondsToScanNumberConverter(scanDelay, scanInterval));
+				secondaryAxisSettings.setPosition(Position.Secondary);
+				secondaryAxisSettings.setDecimalFormat(ValueFormat.getDecimalFormatEnglish("0"));
+				secondaryAxisSettings.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+				secondaryAxisSettings.setExtraSpaceTitle(0);
+				chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettings);
+			}
+			//
+			chromatogramChart.applySettings(chartSettings);
+			chromatogramChart.adjustRange(true);
+			chromatogramChart.redraw();
+		} catch(Exception e) {
+			logger.warn(e);
 		}
 	}
 }

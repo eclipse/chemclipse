@@ -47,6 +47,7 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 		addField(new ComboFieldEditor(PreferenceConstants.P_LINE_STYLE_DISPLAY_DEFAULT, "Line Style Default:", PreferenceSupport.LINE_STYLES, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM, "Color Chromatogram:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA, "Enable Chromatogram Area", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_PEAK, "Color Chromatogram Selected Peak:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS, "Show Chromatogram Peak Labels", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME, "Font Name:", getFieldEditorParent()));
 		IntegerFieldEditor chromatogramPeakLabelFontSizeEditor = new IntegerFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE, "Chromatogram Peak Label Font Size:", getFieldEditorParent());
@@ -60,6 +61,7 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 		IntegerFieldEditor chromatogramPeakLabelSymbolSizeEditor = new IntegerFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE, "Chromatogram Peak Label Symbol Size:", getFieldEditorParent());
 		chromatogramPeakLabelSymbolSizeEditor.setValidRange(PreferenceConstants.MIN_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE, PreferenceConstants.MAX_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
 		addField(chromatogramPeakLabelSymbolSizeEditor);
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_AXIS, "Show Chromatogram Scan Axis", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

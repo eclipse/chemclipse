@@ -198,6 +198,8 @@ public class PreferenceConstants {
 	public static final String DEF_COLOR_CHROMATOGRAM = "255,0,0";
 	public static final String P_ENABLE_CHROMATOGRAM_AREA = "enableChromatogramArea";
 	public static final boolean DEF_ENABLE_CHROMATOGRAM_AREA = true;
+	public static final String P_COLOR_CHROMATOGRAM_SELECTED_PEAK = "colorChromatogramSelectedPeak";
+	public static final String DEF_COLOR_CHROMATOGRAM_SELECTED_PEAK = "128,0,0";
 	public static final String P_SHOW_CHROMATOGRAM_PEAK_LABELS = "showChromatogramPeakLabels";
 	public static final boolean DEF_SHOW_CHROMATOGRAM_PEAK_LABELS = true;
 	public static final String P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME = "chromatogramPeakLabelFontName";
@@ -218,4 +220,6 @@ public class PreferenceConstants {
 	public static final int MIN_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE = 1;
 	public static final int MAX_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE = 72;
 	public static final int DEF_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE = 5;
+	public static final String P_SHOW_CHROMATOGRAM_SCAN_AXIS = "showChromatogramScanAxis";
+	public static final boolean DEF_SHOW_CHROMATOGRAM_SCAN_AXIS = false;
 }
