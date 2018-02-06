@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.ui.explorer;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -52,17 +53,16 @@ public abstract class AbstractSupplierFileExplorer {
 	@Inject
 	private IEventBroker eventBroker;
 	//
-	private File lastClickedFile;
 	private List<ISupplierFileEditorSupport> supplierFileEditorSupportList;
 	//
-	private TabItem drivesTab;
-	private TreeViewer drivesTreeViewer;
+	private TabItem tabDrives;
+	private TreeViewer treeViewerDrives;
 	//
-	private TreeViewer homeTreeViewer;
-	private TabItem homeTab;
+	private TabItem tabHome;
+	private TreeViewer treeViewerHome;
 	//
-	private TreeViewer userLocationTreeViewer;
-	private TabItem userLocationTab;
+	private TabItem tabUserLocation;
+	private TreeViewer treeViewerUserLocation;
 
 	public AbstractSupplierFileExplorer(Composite parent, ISupplierFileEditorSupport supplierFileEditorSupport) {
 		this(parent, ExplorerListSupport.getChromatogramEditorSupportList(supplierFileEditorSupport));
@@ -89,13 +89,58 @@ public abstract class AbstractSupplierFileExplorer {
 
 	private void createDrivesTreeViewer(TabFolder tabFolder) {
 
-		drivesTab = new TabItem(tabFolder, SWT.NONE);
-		drivesTab.setText("Drives");
-		drivesTreeViewer = createTreeViewer(tabFolder);
-		drivesTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+		tabDrives = new TabItem(tabFolder, SWT.NONE);
+		tabDrives.setText("Drives");
+		//
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		composite.setLayout(new GridLayout());
+		//
+		treeViewerDrives = createTreeViewer(composite);
+		setTreeViewerContent(treeViewerDrives, getDrives());
+		addBatchOpenButton(composite, treeViewerDrives);
+		//
+		tabDrives.setControl(composite);
+	}
+
+	private void createHomeTreeViewer(TabFolder tabFolder) {
+
+		tabHome = new TabItem(tabFolder, SWT.NONE);
+		tabHome.setText("Home");
+		//
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		composite.setLayout(new GridLayout());
+		//
+		treeViewerHome = createTreeViewer(composite);
+		setTreeViewerContent(treeViewerHome, new File(UserManagement.getUserHome()));
+		addBatchOpenButton(composite, treeViewerHome);
+		//
+		tabHome.setControl(composite);
+	}
+
+	private void createUserLocationTreeViewer(TabFolder tabFolder) {
+
+		tabUserLocation = new TabItem(tabFolder, SWT.NONE);
+		tabUserLocation.setText("User Location");
+		//
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		composite.setLayout(new GridLayout());
+		//
+		addUserLocationButton(composite, treeViewerUserLocation);
+		treeViewerUserLocation = createTreeViewer(composite);
+		setTreeViewerContent(treeViewerUserLocation, getUserLocation());
+		addBatchOpenButton(composite, treeViewerUserLocation);
+		//
+		tabUserLocation.setControl(composite);
+	}
+
+	private Object getDrives() {
+
 		if(OperatingSystemUtils.isWindows()) {
 			/*
-			 * Windows, try to get C:\\
+			 * Windows, try to get C:\\ only
 			 */
 			File root = null;
 			exitloop:
@@ -111,70 +156,30 @@ public abstract class AbstractSupplierFileExplorer {
 			if(root == null) {
 				root = new File(UserManagement.getUserHome());
 			}
-			setTreeViewerContent(drivesTreeViewer, root);
+			//
+			return root;
 		} else {
 			/*
-			 * Mac OS X, Linux
+			 * Mac OS X and Linux
 			 */
-			setTreeViewerContent(drivesTreeViewer, EFS.getLocalFileSystem());
+			return EFS.getLocalFileSystem();
 		}
-		drivesTab.setControl(drivesTreeViewer.getControl());
 	}
 
-	private void createHomeTreeViewer(TabFolder tabFolder) {
+	private File getUserLocation() {
 
-		homeTab = new TabItem(tabFolder, SWT.NONE);
-		homeTab.setText("Home");
-		homeTreeViewer = createTreeViewer(tabFolder);
-		homeTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-		setTreeViewerContent(homeTreeViewer, new File(UserManagement.getUserHome()));
-		homeTab.setControl(homeTreeViewer.getControl());
-	}
-
-	private void createUserLocationTreeViewer(TabFolder tabFolder) {
-
-		userLocationTab = new TabItem(tabFolder, SWT.NONE);
-		userLocationTab.setText("User Location");
-		Composite compositeUserLocation = new Composite(tabFolder, SWT.NONE);
-		compositeUserLocation.setLayoutData(new GridData(GridData.FILL_BOTH));
-		compositeUserLocation.setLayout(new GridLayout());
-		//
-		Button buttonSelectUserLocation = new Button(compositeUserLocation, SWT.PUSH);
-		buttonSelectUserLocation.setText("Select User Location");
-		buttonSelectUserLocation.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16));
-		buttonSelectUserLocation.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		buttonSelectUserLocation.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				DirectoryDialog directoryDialog = new DirectoryDialog(Display.getCurrent().getActiveShell(), SWT.READ_ONLY);
-				directoryDialog.setText("Select a directory.");
-				String pathname = directoryDialog.open();
-				if(pathname != null) {
-					File directory = new File(pathname);
-					if(directory.exists()) {
-						userLocationTreeViewer.setInput(directory);
-						PreferenceSupplier.setUserLocationPath(directory.getAbsolutePath());
-					}
-				}
-			}
-		});
-		//
 		String userLocationPath = PreferenceSupplier.getUserLocationPath();
 		File userLocation = new File(userLocationPath);
 		if(!userLocation.exists()) {
 			userLocation = new File(UserManagement.getUserHome());
 		}
-		userLocationTreeViewer = createTreeViewer(compositeUserLocation);
-		userLocationTreeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-		setTreeViewerContent(userLocationTreeViewer, userLocation);
-		userLocationTab.setControl(compositeUserLocation);
+		return userLocation;
 	}
 
 	private TreeViewer createTreeViewer(Composite parent) {
 
-		TreeViewer treeViewer = new TreeViewer(parent, SWT.NONE);
+		TreeViewer treeViewer = new TreeViewer(parent, SWT.MULTI);
+		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
 		treeViewer.setContentProvider(new SupplierFileExplorerContentProvider(supplierFileEditorSupportList));
 		treeViewer.setLabelProvider(new SupplierFileExplorerLabelProvider(supplierFileEditorSupportList));
 		/*
@@ -206,6 +211,57 @@ public abstract class AbstractSupplierFileExplorer {
 		return treeViewer;
 	}
 
+	private void addUserLocationButton(Composite parent, TreeViewer treeViewer) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("Select User Location");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16));
+		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				DirectoryDialog directoryDialog = new DirectoryDialog(Display.getCurrent().getActiveShell(), SWT.READ_ONLY);
+				directoryDialog.setText("Select a directory.");
+				String pathname = directoryDialog.open();
+				if(pathname != null) {
+					File directory = new File(pathname);
+					if(directory.exists()) {
+						treeViewer.setInput(directory);
+						PreferenceSupplier.setUserLocationPath(directory.getAbsolutePath());
+					}
+				}
+			}
+		});
+	}
+
+	private void addBatchOpenButton(Composite parent, TreeViewer treeViewer) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("Open Selected Measurements");
+		button.setToolTipText("Try to open all selected files. Handle with care.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
+		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@SuppressWarnings("rawtypes")
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IStructuredSelection structuredSelection = treeViewer.getStructuredSelection();
+				Iterator iterator = structuredSelection.iterator();
+				while(iterator.hasNext()) {
+					Object object = iterator.next();
+					if(object instanceof File) {
+						File file = (File)object;
+						openEditor(file);
+					}
+				}
+			}
+		});
+	}
+
 	private void openOverview(File file) {
 
 		if(file != null) {
@@ -216,34 +272,32 @@ public abstract class AbstractSupplierFileExplorer {
 			 * specific function via e.g. JNI.
 			 */
 			if(file.isDirectory()) {
-				if(drivesTab.getControl().isVisible()) {
-					drivesTreeViewer.refresh(file);
-				} else if(homeTab.getControl().isVisible()) {
-					homeTreeViewer.refresh(file);
-				} else if(userLocationTab.getControl().isVisible()) {
-					userLocationTreeViewer.refresh(file);
+				if(tabDrives.getControl().isVisible()) {
+					treeViewerDrives.refresh(file);
+				} else if(tabHome.getControl().isVisible()) {
+					treeViewerHome.refresh(file);
+				} else if(tabUserLocation.getControl().isVisible()) {
+					treeViewerUserLocation.refresh(file);
 				}
 			}
 			/*
 			 * Supplier files can be stored also as a directory.
 			 */
-			if(isNewFile(file)) {
-				boolean isSupported = false;
-				exitloop:
-				for(ISupplierFileEditorSupport supplierFileEditorSupport : supplierFileEditorSupportList) {
-					if(supplierFileEditorSupport.isMatchMagicNumber(file)) {
-						/*
-						 * Show the first overview only.
-						 */
-						supplierFileEditorSupport.openOverview(file);
-						isSupported = true;
-						break exitloop;
-					}
+			boolean isSupported = false;
+			exitloop:
+			for(ISupplierFileEditorSupport supplierFileEditorSupport : supplierFileEditorSupportList) {
+				if(supplierFileEditorSupport.isMatchMagicNumber(file)) {
+					/*
+					 * Show the first overview only.
+					 */
+					supplierFileEditorSupport.openOverview(file);
+					isSupported = true;
+					break exitloop;
 				}
-				//
-				if(!isSupported) {
-					eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE, file);
-				}
+			}
+			//
+			if(!isSupported) {
+				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE, file);
 			}
 		}
 	}
@@ -266,25 +320,12 @@ public abstract class AbstractSupplierFileExplorer {
 	@Focus
 	private void setFocus() {
 
-		if(drivesTab.getControl().isVisible()) {
-			drivesTreeViewer.getTree().setFocus();
-		} else if(homeTab.getControl().isVisible()) {
-			homeTreeViewer.getTree().setFocus();
-		} else if(userLocationTab.getControl().isVisible()) {
-			userLocationTreeViewer.getTree().setFocus();
-		}
-	}
-
-	/*
-	 * Checks if the file has already been loaded in overview mode.
-	 */
-	private boolean isNewFile(File file) {
-
-		if(lastClickedFile == null || lastClickedFile != file) {
-			lastClickedFile = file;
-			return true;
-		} else {
-			return false;
+		if(tabDrives.getControl().isVisible()) {
+			treeViewerDrives.getTree().setFocus();
+		} else if(tabHome.getControl().isVisible()) {
+			treeViewerHome.getTree().setFocus();
+		} else if(tabUserLocation.getControl().isVisible()) {
+			treeViewerUserLocation.getTree().setFocus();
 		}
 	}
 
@@ -312,11 +353,11 @@ public abstract class AbstractSupplierFileExplorer {
 		 * Store the specific directory path.
 		 */
 		if(!directoryPath.equals("")) {
-			if(drivesTab.getControl().isVisible()) {
+			if(tabDrives.getControl().isVisible()) {
 				PreferenceSupplier.setSelectedDrivePath(directoryPath);
-			} else if(homeTab.getControl().isVisible()) {
+			} else if(tabHome.getControl().isVisible()) {
 				PreferenceSupplier.setSelectedHomePath(directoryPath);
-			} else if(userLocationTab.getControl().isVisible()) {
+			} else if(tabUserLocation.getControl().isVisible()) {
 				PreferenceSupplier.setSelectedUserLocationPath(directoryPath);
 			}
 		}
@@ -354,11 +395,11 @@ public abstract class AbstractSupplierFileExplorer {
 		 * Get the specific directory path.
 		 */
 		String directoryPath = "";
-		if(treeViewer == drivesTreeViewer) {
+		if(treeViewer == treeViewerDrives) {
 			directoryPath = PreferenceSupplier.getSelectedDrivePath();
-		} else if(treeViewer == homeTreeViewer) {
+		} else if(treeViewer == treeViewerHome) {
 			directoryPath = PreferenceSupplier.getSelectedHomePath();
-		} else if(treeViewer == userLocationTreeViewer) {
+		} else if(treeViewer == treeViewerUserLocation) {
 			directoryPath = PreferenceSupplier.getSelectedUserLocationPath();
 		}
 		//
