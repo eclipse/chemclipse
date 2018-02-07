@@ -313,6 +313,60 @@ public class ExtendedChromatogramUI {
 		}
 	}
 
+	private class SelectionPreviousScanKeyHandler extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+
+		@Override
+		public int getEvent() {
+
+			return BaseChart.EVENT_KEY_UP;
+		}
+
+		@Override
+		public int getButton() {
+
+			return SWT.ARROW_LEFT;
+		}
+
+		@Override
+		public int getStateMask() {
+
+			return SWT.CTRL;
+		}
+
+		@Override
+		public void handleEvent(BaseChart baseChart, Event event) {
+
+			handleControlScanSelection(SWT.ARROW_LEFT);
+		}
+	}
+
+	private class SelectionNextScanKeyHandler extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+
+		@Override
+		public int getEvent() {
+
+			return BaseChart.EVENT_KEY_UP;
+		}
+
+		@Override
+		public int getButton() {
+
+			return SWT.ARROW_RIGHT;
+		}
+
+		@Override
+		public int getStateMask() {
+
+			return SWT.CTRL;
+		}
+
+		@Override
+		public void handleEvent(BaseChart baseChart, Event event) {
+
+			handleControlScanSelection(SWT.ARROW_RIGHT);
+		}
+	}
+
 	private class FilterMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
 
 		private String name;
@@ -930,6 +984,8 @@ public class ExtendedChromatogramUI {
 		chartSettings.addMenuEntry(new ChromatogramResetHandler());
 		chartSettings.addHandledEventProcessor(new ScanSelectionHandler());
 		chartSettings.addHandledEventProcessor(new PeakSelectionHandler());
+		chartSettings.addHandledEventProcessor(new SelectionPreviousScanKeyHandler());
+		chartSettings.addHandledEventProcessor(new SelectionNextScanKeyHandler());
 		//
 		chromatogramChart.applySettings(chartSettings);
 	}
@@ -1186,6 +1242,48 @@ public class ExtendedChromatogramUI {
 			xAxis.setRange(xRange);
 			yAxis.setRange(yRange);
 			chromatogramChart.redraw();
+		}
+	}
+
+	private void handleControlScanSelection(int keyCode) {
+
+		if(chromatogramSelection != null) {
+			/*
+			 * Select the next or previous scan.
+			 */
+			int scanNumber = chromatogramSelection.getSelectedScan().getScanNumber();
+			if(keyCode == SWT.ARROW_RIGHT) {
+				scanNumber++;
+			} else {
+				scanNumber--;
+			}
+			/*
+			 * Set and fire an update.
+			 */
+			IScan selectedScan = chromatogramSelection.getChromatogram().getScan(scanNumber);
+			//
+			IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+			eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, selectedScan);
+			//
+			if(selectedScan != null) {
+				/*
+				 * The selection should slide with the selected scans.
+				 */
+				int scanRetentionTime = selectedScan.getRetentionTime();
+				int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+				int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+				/*
+				 * Left or right slide on demand.
+				 */
+				if(scanRetentionTime <= startRetentionTime) {
+					ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.LEFT, 5);
+				} else if(scanRetentionTime >= stopRetentionTime) {
+					ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.RIGHT, 5);
+				}
+				//
+				chromatogramSelection.setSelectedScan(selectedScan, false);
+				chromatogramSelection.update(true);
+			}
 		}
 	}
 }
