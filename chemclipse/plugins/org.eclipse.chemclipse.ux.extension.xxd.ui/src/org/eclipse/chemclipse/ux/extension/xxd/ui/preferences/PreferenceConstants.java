@@ -248,4 +248,6 @@ public class PreferenceConstants {
 	public static final int DEF_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE = SWT.NORMAL;
 	public static final String P_COLOR_CHROMATOGRAM_SELECTED_SCAN_IDENTIFIED = "colorChromatogramSelectedScanIdentified";
 	public static final String DEF_COLOR_CHROMATOGRAM_SELECTED_SCAN_IDENTIFIED = "128,0,0";
+	public static final String P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION = "moveRetentionTimeOnPeakSelection";
+	public static final boolean DEF_MOVE_RETENTION_TIME_ON_PEAK_SELECTION = true;
 }

@@ -35,7 +35,9 @@ import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.selection.MoveDirection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -72,6 +74,8 @@ import org.eclipse.eavp.service.swtchart.core.RangeRestriction;
 import org.eclipse.eavp.service.swtchart.core.ScrollableChart;
 import org.eclipse.eavp.service.swtchart.core.SecondaryAxisSettings;
 import org.eclipse.eavp.service.swtchart.customcharts.ChromatogramChart;
+import org.eclipse.eavp.service.swtchart.events.AbstractHandledEventProcessor;
+import org.eclipse.eavp.service.swtchart.events.IHandledEventProcessor;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
@@ -185,16 +189,28 @@ public class ExtendedChromatogramUI {
 		}
 	}
 
-	private class ScanSelectionHandler implements ICustomSelectionHandler {
+	private class ScanSelectionHandler extends AbstractHandledEventProcessor implements IHandledEventProcessor {
 
-		private BaseChart baseChart;
+		@Override
+		public int getEvent() {
 
-		public ScanSelectionHandler(BaseChart baseChart) {
-			this.baseChart = baseChart;
+			return BaseChart.EVENT_MOUSE_DOUBLE_CLICK;
 		}
 
 		@Override
-		public void handleUserSelection(Event event) {
+		public int getButton() {
+
+			return BaseChart.BUTTON_LEFT;
+		}
+
+		@Override
+		public int getStateMask() {
+
+			return SWT.NONE;
+		}
+
+		@Override
+		public void handleEvent(BaseChart baseChart, Event event) {
 
 			if(chromatogramSelection != null) {
 				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
@@ -212,6 +228,86 @@ public class ExtendedChromatogramUI {
 							eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
 						}
 					});
+				}
+			}
+		}
+	}
+
+	private class PeakSelectionHandler extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+
+		@Override
+		public int getEvent() {
+
+			return BaseChart.EVENT_MOUSE_DOUBLE_CLICK;
+		}
+
+		@Override
+		public int getButton() {
+
+			return BaseChart.BUTTON_LEFT;
+		}
+
+		@Override
+		public int getStateMask() {
+
+			return SWT.ALT;
+		}
+
+		@Override
+		public void handleEvent(BaseChart baseChart, Event event) {
+
+			if(chromatogramSelection != null) {
+				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				int retentionTime = (int)baseChart.getSelectedPrimaryAxisValue(event.x, IExtendedChart.X_AXIS);
+				IPeak peak = null;
+				if(chromatogram instanceof IChromatogramMSD) {
+					IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+					peak = chromatogramMSD.getPeak(retentionTime);
+				} else if(chromatogram instanceof IChromatogramCSD) {
+					IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+					peak = chromatogramCSD.getPeak(retentionTime);
+				} else if(chromatogram instanceof IChromatogramWSD) {
+					// IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
+					// peak = chromatogramWSD.getPeak(retentionTime);
+				}
+				if(peak != null) {
+					/*
+					 * Fire an update.
+					 */
+					chromatogramSelection.setSelectedPeak(peak);
+					IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+					boolean moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
+					if(moveRetentionTimeOnPeakSelection) {
+						adjustChromatogramSelection(peak, chromatogramSelection);
+					}
+					//
+					chromatogramSelection.update(true);
+					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+					eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
+				}
+			}
+		}
+
+		private void adjustChromatogramSelection(IPeak peak, IChromatogramSelection chromatogramSelection) {
+
+			List<? extends IPeak> peaks = getPeaks();
+			List<? extends IPeak> peaksSelection = new ArrayList<>(getPeaks(chromatogramSelection));
+			Collections.sort(peaks, peakRetentionTimeComparator);
+			Collections.sort(peaksSelection, peakRetentionTimeComparator);
+			//
+			if(peaks.get(0).equals(peak) || peaks.get(peaks.size() - 1).equals(peak)) {
+				/*
+				 * Don't move if it is the first or last peak of the chromatogram.
+				 */
+			} else {
+				/*
+				 * First peak of the selection: move left
+				 * Last peak of the selection: move right
+				 */
+				if(peaksSelection.get(0).equals(peak)) {
+					ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.LEFT, 5);
+				} else if(peaksSelection.get(peaksSelection.size() - 1).equals(peak)) {
+					ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.RIGHT, 5);
 				}
 			}
 		}
@@ -536,16 +632,32 @@ public class ExtendedChromatogramUI {
 
 	private List<? extends IPeak> getPeaks() {
 
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		return getPeaks(null);
+	}
+
+	private List<? extends IPeak> getPeaks(IChromatogramSelection range) {
+
 		List<? extends IPeak> peaks = new ArrayList<IPeak>();
-		if(chromatogram instanceof IChromatogramMSD) {
-			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-			peaks = chromatogramMSD.getPeaks();
-		} else if(chromatogram instanceof IChromatogramCSD) {
-			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-			peaks = chromatogramCSD.getPeaks();
-		} else if(chromatogram instanceof IChromatogramWSD) {
+		if(chromatogramSelection != null) {
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			//
+			if(chromatogram instanceof IChromatogramMSD) {
+				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+				if(range instanceof IChromatogramSelectionMSD) {
+					peaks = chromatogramMSD.getPeaks((IChromatogramSelectionMSD)range);
+				} else {
+					peaks = chromatogramMSD.getPeaks();
+				}
+			} else if(chromatogram instanceof IChromatogramCSD) {
+				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+				if(range instanceof IChromatogramSelectionCSD) {
+					peaks = chromatogramCSD.getPeaks((IChromatogramSelectionCSD)range);
+				} else {
+					peaks = chromatogramCSD.getPeaks();
+				}
+			} else if(chromatogram instanceof IChromatogramWSD) {
+				//
+			}
 		}
 		//
 		return peaks;
@@ -804,7 +916,6 @@ public class ExtendedChromatogramUI {
 		 * Custom Selection Handler
 		 */
 		baseChart.addCustomRangeSelectionHandler(new ChromatogramSelectionHandler(baseChart));
-		baseChart.addCustomPointSelectionHandler(new ScanSelectionHandler(baseChart));
 		/*
 		 * Chart Settings
 		 */
@@ -814,12 +925,11 @@ public class ExtendedChromatogramUI {
 		chartSettings.setRangeSelectorDefaultAxisX(1); // Minutes
 		chartSettings.setRangeSelectorDefaultAxisY(1); // Relative Abundance
 		chartSettings.setShowRangeSelectorInitially(false);
-		/*
-		 * Replace the 1:1 reset menu entry.
-		 */
 		IChartMenuEntry chartMenuEntry = chartSettings.getChartMenuEntry(ResetChartHandler.NAME);
 		chartSettings.removeMenuEntry(chartMenuEntry);
 		chartSettings.addMenuEntry(new ChromatogramResetHandler());
+		chartSettings.addHandledEventProcessor(new ScanSelectionHandler());
+		chartSettings.addHandledEventProcessor(new PeakSelectionHandler());
 		//
 		chromatogramChart.applySettings(chartSettings);
 	}
