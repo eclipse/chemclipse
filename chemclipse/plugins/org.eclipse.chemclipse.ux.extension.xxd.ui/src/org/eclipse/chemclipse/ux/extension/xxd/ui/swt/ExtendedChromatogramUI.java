@@ -1375,7 +1375,14 @@ public class ExtendedChromatogramUI {
 			Range yRange = new Range(chromatogramSelection.getStartAbundance(), chromatogramSelection.getStopAbundance());
 			//
 			xAxis.setRange(xRange);
-			yAxis.setRange(yRange);
+			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+				/*
+				 * TODO Fix also for CSD and WSD!
+				 */
+				System.out.println("Fix settings the y-range in ExtendedChromatogramUI.adjustChromatogramSelectionRange() when doing a redraw.");
+				yAxis.setRange(yRange);
+			}
+			//
 			chromatogramChart.redraw();
 		}
 	}
