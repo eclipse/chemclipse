@@ -121,7 +121,7 @@ public class PCAEditorController {
 	}
 
 	@FXML
-	void handeChangeGroupName(TableColumn.CellEditEvent<SampleVisualization, String> event) {
+	void handlerChangeGroupName(TableColumn.CellEditEvent<SampleVisualization, String> event) {
 
 		String newGroupName = event.getNewValue();
 		String oldGroupName = event.getOldValue();

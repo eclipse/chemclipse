@@ -36,7 +36,7 @@
 								<PropertyValueFactory property="name" />
 							</cellValueFactory>
 						</TableColumn>
-						<TableColumn fx:id="cGroupNames" onEditCommit="#handeChangeGroupName"
+						<TableColumn fx:id="cGroupNames" onEditCommit="#handlerChangeGroupName"
 							prefWidth="121.0" text="Group Name">
 							<cellValueFactory>
 								<PropertyValueFactory property="groupName" />
