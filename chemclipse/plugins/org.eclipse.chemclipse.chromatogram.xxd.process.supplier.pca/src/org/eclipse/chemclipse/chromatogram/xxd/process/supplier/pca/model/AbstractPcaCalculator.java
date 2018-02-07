@@ -17,6 +17,7 @@ import org.ejml.ops.CommonOps;
 public abstract class AbstractPcaCalculator implements IPcaCalculator {
 
 	private DenseMatrix64F loadings;
+	private DenseMatrix64F scores;
 	private double mean[];
 	private int numComps;
 	private DenseMatrix64F sampleData = new DenseMatrix64F(1, 1);
@@ -31,6 +32,11 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 		sampleIndex++;
 	}
 
+	public DenseMatrix64F getScores() {
+
+		return scores;
+	}
+
 	@Override
 	public double[] applyLoadings(double[] obs) {
 
@@ -42,6 +48,14 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 		return rotated.data;
 	}
 
+	/**
+	 * getErrorMetric
+	 * 
+	 * This is currently the implementation for DmodX.
+	 * 
+	 * @param obs
+	 *            observation
+	 */
 	@Override
 	public double getErrorMetric(double[] obs) {
 
@@ -60,6 +74,15 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 		return loadings;
 	}
 
+	/**
+	 * getLoadingVector
+	 * 
+	 * Convenience accessor to extract the loading
+	 * vector of a specific component.
+	 * 
+	 * @param var
+	 *            component to extract the loading from
+	 */
 	@Override
 	public double[] getLoadingVector(int var) {
 

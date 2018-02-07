@@ -93,7 +93,7 @@ public class PcaEvaluation {
 	 * @param numberOfPrincipalComponents
 	 * @return PrincipalComponentAnalysis
 	 */
-	private IPcaCalculator initializePCA(Map<ISample<?>, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipalComponents) {
+	private IPcaCalculator setupPCA(Map<ISample<?>, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipalComponents) {
 
 		/*
 		 * Initialize the PCA analysis.
@@ -111,7 +111,7 @@ public class PcaEvaluation {
 		/*
 		 * Compute the basis for the number of principal components.
 		 */
-		principalComponentAnalysis.compute(numberOfPrincipalComponents);
+		// principalComponentAnalysis.compute(numberOfPrincipalComponents);
 		return principalComponentAnalysis;
 	}
 
@@ -123,9 +123,19 @@ public class PcaEvaluation {
 		Map<ISample<?>, double[]> extractData = extractData(samples);
 		setRetentionTime(pcaResults, samples);
 		int sampleSize = getSampleSize(extractData);
-		IPcaCalculator principalComponentAnalysis = initializePCA(extractData, sampleSize, numberOfPrincipalComponents);
-		List<double[]> basisVectors = getBasisVectors(principalComponentAnalysis, numberOfPrincipalComponents);
-		pcaResults.setBasisVectors(basisVectors);
+		/*
+		 * Prepare PCA Calculation
+		 */
+		IPcaCalculator principalComponentAnalysis = setupPCA(extractData, sampleSize, numberOfPrincipalComponents);
+		/*
+		 * Compute PCA
+		 */
+		principalComponentAnalysis.compute(numberOfPrincipalComponents);
+		/*
+		 * Collect PCA results
+		 */
+		List<double[]> loadingVectors = getBasisVectors(principalComponentAnalysis, numberOfPrincipalComponents);
+		pcaResults.setLoadingVectors(loadingVectors);
 		setEigenSpaceAndErrorValues(principalComponentAnalysis, extractData, pcaResults);
 		// setGroups(pcaResults, samples);
 		return pcaResults;

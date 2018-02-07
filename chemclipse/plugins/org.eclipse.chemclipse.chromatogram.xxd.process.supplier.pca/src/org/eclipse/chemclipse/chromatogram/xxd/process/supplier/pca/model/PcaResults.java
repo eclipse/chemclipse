@@ -18,7 +18,7 @@ import javafx.collections.ObservableList;
 
 public class PcaResults implements IPcaResults<IPcaResult, IVaribleExtracted> {
 
-	private List<double[]> basisVectors;
+	private List<double[]> loadingVectors;
 	private ObservableList<IVaribleExtracted> extractedVariables;
 	private ObservableList<IPcaResult> pcaResultList;
 	//
@@ -33,7 +33,7 @@ public class PcaResults implements IPcaResults<IPcaResult, IVaribleExtracted> {
 	@Override
 	public List<double[]> getBasisVectors() {
 
-		return basisVectors;
+		return loadingVectors;
 	}
 
 	@Override
@@ -55,8 +55,8 @@ public class PcaResults implements IPcaResults<IPcaResult, IVaribleExtracted> {
 	}
 
 	@Override
-	public void setBasisVectors(List<double[]> basisVectors) {
+	public void setLoadingVectors(List<double[]> loadingVectors) {
 
-		this.basisVectors = basisVectors;
+		this.loadingVectors = loadingVectors;
 	}
 }

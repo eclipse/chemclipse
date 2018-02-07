@@ -25,5 +25,5 @@ public interface IPcaResults<R extends IPcaResult, V extends IVaribleExtracted> 
 
 	IPcaSettings getPcaSettings();
 
-	void setBasisVectors(List<double[]> basisVectors);
+	void setLoadingVectors(List<double[]> loadingVectors);
 }
