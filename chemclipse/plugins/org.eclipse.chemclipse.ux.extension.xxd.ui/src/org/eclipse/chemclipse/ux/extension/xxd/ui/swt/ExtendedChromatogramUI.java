@@ -30,17 +30,20 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.Chromato
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupportMSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.MoveDirection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -62,6 +65,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -138,11 +142,12 @@ public class ExtendedChromatogramUI {
 	//
 	private Composite toolbarInfo;
 	private Label labelChromatogramInfo;
-	private Composite toolbarReferencedChromatograms;
-	private Combo comboReferencedChromatograms;
+	private Composite toolbarChromatograms;
+	private Combo comboChromatograms;
 	private ChromatogramChart chromatogramChart;
 	//
-	private IChromatogramSelection chromatogramSelection;
+	private List<IChromatogramSelection> chromatogramSelections = null;
+	private IChromatogramSelection chromatogramSelection = null;
 	private List<IChartMenuEntry> chartMenuEntriesFilter;
 	//
 	private Map<String, IdentificationLabelMarker> peakLabelMarkerMap = new HashMap<String, IdentificationLabelMarker>();
@@ -469,8 +474,11 @@ public class ExtendedChromatogramUI {
 
 		this.chromatogramSelection = chromatogramSelection;
 		addChartMenuEntriesFilter();
-		updateReferencedChromatograms();
 		updateChromatogram();
+		//
+		if(chromatogramSelections == null) {
+			updateChromatogramCombo();
+		}
 	}
 
 	public void update() {
@@ -944,11 +952,11 @@ public class ExtendedChromatogramUI {
 		//
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
-		toolbarReferencedChromatograms = createToolbarReferencedChromatograms(parent);
+		toolbarChromatograms = createToolbarChromatograms(parent);
 		createChromatogramChart(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, false);
-		PartSupport.setCompositeVisibility(toolbarReferencedChromatograms, false);
+		PartSupport.setCompositeVisibility(toolbarChromatograms, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -960,7 +968,7 @@ public class ExtendedChromatogramUI {
 		composite.setLayout(new GridLayout(7, false));
 		//
 		createButtonToggleToolbarInfo(composite);
-		createButtonToggleToolbarReferencedChromatograms(composite);
+		createButtonToggleToolbarChromatograms(composite);
 		createToggleChartSeriesLegendButton(composite);
 		createToggleLegendMarkerButton(composite);
 		createToggleRangeSelectorButton(composite);
@@ -982,17 +990,130 @@ public class ExtendedChromatogramUI {
 		return composite;
 	}
 
-	private Composite createToolbarReferencedChromatograms(Composite parent) {
+	private Composite createToolbarChromatograms(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		composite.setLayout(new GridLayout(3, false));
 		//
-		comboReferencedChromatograms = new Combo(composite, SWT.READ_ONLY);
-		comboReferencedChromatograms.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createButtonSelectPreviousChromatogram(composite);
+		createComboChromatograms(composite);
+		createButtonSelectNextChromatogram(composite);
 		//
 		return composite;
+	}
+
+	private void createButtonSelectPreviousChromatogram(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Select previous chromatogram.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_BACKWARD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				int index = comboChromatograms.getSelectionIndex();
+				index--;
+				index = (index < 0) ? 0 : index;
+				selectChromatogram(index);
+			}
+		});
+	}
+
+	private void createComboChromatograms(Composite parent) {
+
+		comboChromatograms = new Combo(parent, SWT.READ_ONLY);
+		comboChromatograms.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboChromatograms.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(chromatogramSelections != null) {
+					int index = comboChromatograms.getSelectionIndex();
+					selectChromatogram(index);
+				}
+			}
+		});
+	}
+
+	private void createButtonSelectNextChromatogram(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Select next chromatogram.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_FORWARD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				int index = comboChromatograms.getSelectionIndex();
+				index++;
+				index = (index >= comboChromatograms.getItemCount()) ? comboChromatograms.getItemCount() - 1 : index;
+				selectChromatogram(index);
+			}
+		});
+	}
+
+	private void selectChromatogram(int index) {
+
+		comboChromatograms.select(index);
+		IChromatogramSelection chromatogramSelection = chromatogramSelections.get(index);
+		if(chromatogramSelection != null) {
+			updateChromatogramSelection(chromatogramSelection);
+		}
+	}
+
+	private void updateChromatogramCombo() {
+
+		List<String> references = new ArrayList<String>();
+		/*
+		 * Get the original and the referenced data.
+		 */
+		if(chromatogramSelection != null) {
+			/*
+			 * Initialize
+			 */
+			chromatogramSelections = new ArrayList<IChromatogramSelection>();
+			/*
+			 * Original Data
+			 */
+			chromatogramSelections.add(chromatogramSelection);
+			references.add("Original Data");
+			/*
+			 * References
+			 */
+			List<IChromatogram> referencedChromatograms = chromatogramSelection.getChromatogram().getReferencedChromatograms();
+			int i = 1;
+			for(IChromatogram referencedChromatogram : referencedChromatograms) {
+				IChromatogramSelection referencedChromatogramSelection = null;
+				try {
+					if(referencedChromatogram instanceof IChromatogramMSD) {
+						referencedChromatogramSelection = new ChromatogramSelectionMSD(referencedChromatogram);
+					} else if(referencedChromatogram instanceof IChromatogramCSD) {
+						referencedChromatogramSelection = new ChromatogramSelectionCSD(referencedChromatogram);
+					} else if(referencedChromatogram instanceof IChromatogramWSD) {
+						referencedChromatogramSelection = new ChromatogramSelectionWSD(referencedChromatogram);
+					}
+				} catch(ChromatogramIsNullException e) {
+					logger.warn(e);
+				}
+				//
+				chromatogramSelections.add(referencedChromatogramSelection);
+				references.add("Chromatogram Reference #" + i++);
+			}
+		}
+		/*
+		 * Set the items.
+		 */
+		comboChromatograms.setItems(references.toArray(new String[references.size()]));
+		if(references.size() > 0) {
+			comboChromatograms.select(0);
+		}
 	}
 
 	private void createChromatogramChart(Composite parent) {
@@ -1051,10 +1172,10 @@ public class ExtendedChromatogramUI {
 		return button;
 	}
 
-	private Button createButtonToggleToolbarReferencedChromatograms(Composite parent) {
+	private Button createButtonToggleToolbarChromatograms(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle referenced chromatogram toolbar.");
+		button.setToolTipText("Toggle chromatograms toolbar.");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -1062,7 +1183,7 @@ public class ExtendedChromatogramUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarReferencedChromatograms);
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarChromatograms);
 				if(visible) {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
 				} else {
@@ -1188,30 +1309,6 @@ public class ExtendedChromatogramUI {
 			labelChromatogramInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogramSelection.getChromatogram()));
 		} else {
 			labelChromatogramInfo.setText(chromatogramDataSupport.getChromatogramLabel(null));
-		}
-	}
-
-	private void updateReferencedChromatograms() {
-
-		List<String> references = new ArrayList<String>();
-		if(chromatogramSelection != null) {
-			List<IChromatogram> referencedChromatograms = chromatogramSelection.getChromatogram().getReferencedChromatograms();
-			int i = 0;
-			for(IChromatogram chromatogram : referencedChromatograms) {
-				references.add("Chromatogram #" + (i + 1) + " " + chromatogram.getName());
-				i++;
-			}
-		}
-		//
-		boolean showMessage = false;
-		if(references.size() == 0) {
-			references.add("No referenced chromatogram available.");
-			showMessage = true;
-		}
-		//
-		comboReferencedChromatograms.setItems(references.toArray(new String[references.size()]));
-		if(showMessage) {
-			comboReferencedChromatograms.select(0);
 		}
 	}
 
