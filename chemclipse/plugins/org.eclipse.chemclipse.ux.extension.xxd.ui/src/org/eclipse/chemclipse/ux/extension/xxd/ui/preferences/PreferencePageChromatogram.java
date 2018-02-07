@@ -54,19 +54,26 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 		addField(new IntegerFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE, "Chromatogram Selected Scan Marker Size:", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE, "Chromatogram Selected Scan Marker Type:", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS, "Show Chromatogram Peak Labels", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME, "Font Name:", getFieldEditorParent()));
-		IntegerFieldEditor chromatogramPeakLabelFontSizeEditor = new IntegerFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE, "Chromatogram Peak Label Font Size:", getFieldEditorParent());
-		chromatogramPeakLabelFontSizeEditor.setValidRange(PreferenceConstants.MIN_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE, PreferenceConstants.MAX_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE);
-		addField(chromatogramPeakLabelFontSizeEditor);
-		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE, "Font Style:", PreferenceConstants.FONT_STYLES, getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME, "Chromatogram Peak Label Font Name:", getFieldEditorParent()));
+		addField(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE, "Chromatogram Peak Label Font Size:", PreferenceConstants.MIN_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE, PreferenceConstants.MAX_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE);
+		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE, "Chromatogram Peak Label Font Style:", PreferenceConstants.FONT_STYLES, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_CHROMATOGRAM_BASELINE, "Show Chromatogram Baseline", getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_BASELINE, "Color Chromatogram Baseline:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_ENABLE_BASELINE_AREA, "Enable Baseline Area", getFieldEditorParent()));
-		//
-		IntegerFieldEditor chromatogramPeakLabelSymbolSizeEditor = new IntegerFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE, "Chromatogram Peak Label Symbol Size:", getFieldEditorParent());
-		chromatogramPeakLabelSymbolSizeEditor.setValidRange(PreferenceConstants.MIN_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE, PreferenceConstants.MAX_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
-		addField(chromatogramPeakLabelSymbolSizeEditor);
+		addField(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE, "Chromatogram Peak Label Symbol Size:", PreferenceConstants.MIN_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE, PreferenceConstants.MAX_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_AXIS, "Show Chromatogram Scan Axis", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_LABELS, "Show Chromatogram Scan Labels", getFieldEditorParent()));
+		addField(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE, "Chromatogram Scan Label Symbol Size:", PreferenceConstants.MIN_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE, PreferenceConstants.MAX_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
+		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME, "Chromatogram Scan Label Name:", getFieldEditorParent()));
+		addField(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE, "Chromatogram Scan Label Font Size:", PreferenceConstants.MIN_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE, PreferenceConstants.MAX_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE);
+		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE, "Chromatogram Scan Label Font Style:", PreferenceConstants.FONT_STYLES, getFieldEditorParent()));
+	}
+
+	private void addField(String name, String labelText, int min, int max) {
+
+		IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(name, labelText, getFieldEditorParent());
+		integerFieldEditor.setValidRange(min, max);
+		addField(integerFieldEditor);
 	}
 
 	public void init(IWorkbench workbench) {

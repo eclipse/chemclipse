@@ -49,7 +49,7 @@ import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.PeakLabelMarker;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.IdentificationLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakChartSupport;
@@ -136,7 +136,9 @@ public class ExtendedChromatogramUI {
 	private IChromatogramSelection chromatogramSelection;
 	private List<IChartMenuEntry> chartMenuEntriesFilter;
 	//
-	private Map<String, PeakLabelMarker> peakLabelMarkerMap = new HashMap<String, PeakLabelMarker>();
+	private Map<String, IdentificationLabelMarker> peakLabelMarkerMap = new HashMap<String, IdentificationLabelMarker>();
+	private Map<String, IdentificationLabelMarker> scanLabelMarkerMap = new HashMap<String, IdentificationLabelMarker>();
+	//
 	private PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 	private PeakChartSupport peakChartSupport = new PeakChartSupport();
 	private ScanChartSupport scanChartSupport = new ScanChartSupport();
@@ -438,14 +440,14 @@ public class ExtendedChromatogramUI {
 			lineSeriesDataList.add(lineSeriesData);
 			//
 			IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
-			PeakLabelMarker peakLabelMarker = peakLabelMarkerMap.get(seriesId);
+			IdentificationLabelMarker peakLabelMarker = peakLabelMarkerMap.get(seriesId);
 			if(peakLabelMarker != null) {
 				plotArea.removeCustomPaintListener(peakLabelMarker);
 			}
 			//
 			if(showChromatogramPeakLabels) {
 				int indexSeries = lineSeriesDataList.size() - 1;
-				peakLabelMarker = new PeakLabelMarker(chromatogramChart.getBaseChart(), indexSeries, peaks);
+				peakLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, peaks, null);
 				plotArea.addCustomPaintListener(peakLabelMarker);
 				peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 			}
@@ -473,9 +475,41 @@ public class ExtendedChromatogramUI {
 
 		List<IScan> scans = getIdentifiedScans();
 		if(scans.size() > 0) {
+			String seriesId = SERIES_ID_IDENTIFIED_SCANS;
+			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+			boolean showChromatogramScanLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_LABELS);
+			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
+			//
+			ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scans, false, seriesId);
+			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+			lineSeriesSettings.setLineStyle(LineStyle.NONE);
+			lineSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
+			lineSeriesSettings.setSymbolSize(symbolSize);
+			lineSeriesSettings.setSymbolColor(Colors.DARK_GRAY);
+			lineSeriesDataList.add(lineSeriesData);
+			//
+			IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
+			IdentificationLabelMarker scanLabelMarker = scanLabelMarkerMap.get(seriesId);
+			if(scanLabelMarker != null) {
+				plotArea.removeCustomPaintListener(scanLabelMarker);
+			}
+			//
+			if(showChromatogramScanLabels) {
+				int indexSeries = lineSeriesDataList.size() - 1;
+				scanLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, null, scans);
+				plotArea.addCustomPaintListener(scanLabelMarker);
+				scanLabelMarkerMap.put(seriesId, scanLabelMarker);
+			}
+		}
+	}
+
+	private void addSelectedIdentifiedScan(List<ILineSeriesData> lineSeriesDataList) {
+
+		IScan scan = null;
+		if(scan != null) {
 			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			//
-			ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scans, false, SERIES_ID_IDENTIFIED_SCANS);
+			ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesData(scan, "", false);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 			lineSeriesSettings.setLineStyle(LineStyle.NONE);
 			lineSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);

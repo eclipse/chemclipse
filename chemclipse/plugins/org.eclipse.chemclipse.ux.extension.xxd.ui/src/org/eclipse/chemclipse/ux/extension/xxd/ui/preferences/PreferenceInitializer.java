@@ -114,5 +114,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_ENABLE_BASELINE_AREA, PreferenceConstants.DEF_ENABLE_BASELINE_AREA);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE, PreferenceConstants.DEF_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
 		store.setDefault(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_AXIS, PreferenceConstants.DEF_SHOW_CHROMATOGRAM_SCAN_AXIS);
+		store.setDefault(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_LABELS, PreferenceConstants.DEF_SHOW_CHROMATOGRAM_SCAN_LABELS);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE, PreferenceConstants.DEF_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME, PreferenceConstants.DEF_CHROMATOGRAM_SCAN_LABEL_FONT_NAME);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE, PreferenceConstants.DEF_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE, PreferenceConstants.DEF_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE);
 	}
 }

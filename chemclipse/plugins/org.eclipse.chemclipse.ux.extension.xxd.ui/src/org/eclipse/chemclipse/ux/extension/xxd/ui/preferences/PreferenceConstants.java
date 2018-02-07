@@ -232,4 +232,18 @@ public class PreferenceConstants {
 	public static final int DEF_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE = 5;
 	public static final String P_SHOW_CHROMATOGRAM_SCAN_AXIS = "showChromatogramScanAxis";
 	public static final boolean DEF_SHOW_CHROMATOGRAM_SCAN_AXIS = false;
+	public static final String P_SHOW_CHROMATOGRAM_SCAN_LABELS = "showChromatogramScanLabels";
+	public static final boolean DEF_SHOW_CHROMATOGRAM_SCAN_LABELS = true;
+	public static final String P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE = "chromatogramScanLabelSymbolSize";
+	public static final int MIN_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE = 1;
+	public static final int MAX_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE = 72;
+	public static final int DEF_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE = 5;
+	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME = "chromatogramScanLabelFontName";
+	public static final String DEF_CHROMATOGRAM_SCAN_LABEL_FONT_NAME = "Ubuntu";
+	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE = "chromatogramScanLabelFontSize";
+	public static final int MIN_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE = 1;
+	public static final int MAX_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE = 72;
+	public static final int DEF_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE = 11;
+	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE = "chromatogramScanLabelFontStyle";
+	public static final int DEF_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE = SWT.NORMAL;
 }

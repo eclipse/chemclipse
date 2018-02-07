@@ -12,14 +12,20 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 
@@ -36,6 +42,11 @@ public class ScanDataSupport {
 	public static final String[] SIGNAL_TYPES_WSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0##");
+	private TargetExtendedComparator targetExtendedComparator;
+
+	public ScanDataSupport() {
+		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
+	}
 
 	public String getRetentionTime(IScan scan) {
 
@@ -157,5 +168,16 @@ public class ScanDataSupport {
 		}
 		//
 		return containsOptimizedScan;
+	}
+
+	public ILibraryInformation getLibraryInformation(List<? extends IIdentificationTarget> targets) {
+
+		ILibraryInformation libraryInformation = null;
+		targets = new ArrayList<IIdentificationTarget>(targets);
+		Collections.sort(targets, targetExtendedComparator);
+		if(targets.size() >= 1) {
+			libraryInformation = targets.get(0).getLibraryInformation();
+		}
+		return libraryInformation;
 	}
 }
