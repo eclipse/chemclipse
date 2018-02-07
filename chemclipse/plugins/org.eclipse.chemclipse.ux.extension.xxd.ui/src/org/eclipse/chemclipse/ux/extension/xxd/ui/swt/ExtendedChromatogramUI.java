@@ -48,6 +48,7 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -281,7 +282,7 @@ public class ExtendedChromatogramUI {
 						adjustChromatogramSelection(peak, chromatogramSelection);
 					}
 					//
-					chromatogramSelection.update(true);
+					updateSelection();
 					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 					eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
 				}
@@ -313,7 +314,13 @@ public class ExtendedChromatogramUI {
 		}
 	}
 
-	private class SelectionPreviousScanKeyHandler extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+	private class ScanSelectionArrowKeyHandler extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+
+		private int keyCode;
+
+		public ScanSelectionArrowKeyHandler(int keyCode) {
+			this.keyCode = keyCode;
+		}
 
 		@Override
 		public int getEvent() {
@@ -324,7 +331,7 @@ public class ExtendedChromatogramUI {
 		@Override
 		public int getButton() {
 
-			return SWT.ARROW_LEFT;
+			return keyCode;
 		}
 
 		@Override
@@ -336,11 +343,17 @@ public class ExtendedChromatogramUI {
 		@Override
 		public void handleEvent(BaseChart baseChart, Event event) {
 
-			handleControlScanSelection(SWT.ARROW_LEFT);
+			handleControlScanSelection(keyCode);
 		}
 	}
 
-	private class SelectionNextScanKeyHandler extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+	private class ChromatogramMoveArrowKeyHandler extends AbstractHandledEventProcessor implements IHandledEventProcessor {
+
+		private int keyCode;
+
+		public ChromatogramMoveArrowKeyHandler(int keyCode) {
+			this.keyCode = keyCode;
+		}
 
 		@Override
 		public int getEvent() {
@@ -351,19 +364,19 @@ public class ExtendedChromatogramUI {
 		@Override
 		public int getButton() {
 
-			return SWT.ARROW_RIGHT;
+			return keyCode;
 		}
 
 		@Override
 		public int getStateMask() {
 
-			return SWT.CTRL;
+			return SWT.NONE;
 		}
 
 		@Override
 		public void handleEvent(BaseChart baseChart, Event event) {
 
-			handleControlScanSelection(SWT.ARROW_RIGHT);
+			handleArrowMoveWindowSelection(keyCode);
 		}
 	}
 
@@ -984,8 +997,12 @@ public class ExtendedChromatogramUI {
 		chartSettings.addMenuEntry(new ChromatogramResetHandler());
 		chartSettings.addHandledEventProcessor(new ScanSelectionHandler());
 		chartSettings.addHandledEventProcessor(new PeakSelectionHandler());
-		chartSettings.addHandledEventProcessor(new SelectionPreviousScanKeyHandler());
-		chartSettings.addHandledEventProcessor(new SelectionNextScanKeyHandler());
+		chartSettings.addHandledEventProcessor(new ScanSelectionArrowKeyHandler(SWT.ARROW_LEFT));
+		chartSettings.addHandledEventProcessor(new ScanSelectionArrowKeyHandler(SWT.ARROW_RIGHT));
+		chartSettings.addHandledEventProcessor(new ChromatogramMoveArrowKeyHandler(SWT.ARROW_LEFT));
+		chartSettings.addHandledEventProcessor(new ChromatogramMoveArrowKeyHandler(SWT.ARROW_RIGHT));
+		chartSettings.addHandledEventProcessor(new ChromatogramMoveArrowKeyHandler(SWT.ARROW_UP));
+		chartSettings.addHandledEventProcessor(new ChromatogramMoveArrowKeyHandler(SWT.ARROW_DOWN));
 		//
 		chromatogramChart.applySettings(chartSettings);
 	}
@@ -1282,8 +1299,55 @@ public class ExtendedChromatogramUI {
 				}
 				//
 				chromatogramSelection.setSelectedScan(selectedScan, false);
-				chromatogramSelection.update(true);
+				updateSelection();
 			}
+		}
+	}
+
+	private void handleArrowMoveWindowSelection(int keyCode) {
+
+		if(chromatogramSelection != null) {
+			if(keyCode == SWT.ARROW_RIGHT || keyCode == SWT.ARROW_LEFT) {
+				/*
+				 * Left, Right
+				 * (Retention Time)
+				 */
+				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+				boolean useAlternateWindowMoveDirection = preferenceStore.getBoolean(PreferenceConstants.P_ALTERNATE_WINDOW_MOVE_DIRECTION);
+				//
+				if(keyCode == SWT.ARROW_RIGHT) {
+					MoveDirection moveDirection = (useAlternateWindowMoveDirection) ? MoveDirection.LEFT : MoveDirection.RIGHT;
+					ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, moveDirection, 20);
+				} else {
+					MoveDirection moveDirection = (useAlternateWindowMoveDirection) ? MoveDirection.RIGHT : MoveDirection.LEFT;
+					ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, moveDirection, 20);
+				}
+				updateSelection();
+				//
+			} else if(keyCode == SWT.ARROW_UP || keyCode == SWT.ARROW_DOWN) {
+				/*
+				 * Up, Down
+				 * (Abundance)
+				 * Doesn't work if auto adjust signals is enabled.
+				 */
+				float stopAbundance = chromatogramSelection.getStopAbundance();
+				float newStopAbundance;
+				if(PreferenceSupplier.useAlternateWindowMoveDirection()) {
+					newStopAbundance = (keyCode == SWT.ARROW_UP) ? stopAbundance - stopAbundance / 20.0f : stopAbundance + stopAbundance / 20.0f;
+				} else {
+					newStopAbundance = (keyCode == SWT.ARROW_UP) ? stopAbundance + stopAbundance / 20.0f : stopAbundance - stopAbundance / 20.0f;
+				}
+				chromatogramSelection.setRanges(chromatogramSelection.getStartRetentionTime(), chromatogramSelection.getStopRetentionTime(), chromatogramSelection.getStartAbundance(), newStopAbundance);
+				updateSelection();
+			}
+		}
+	}
+
+	private void updateSelection() {
+
+		if(chromatogramSelection != null) {
+			chromatogramSelection.update(true);
+			adjustChromatogramSelectionRange();
 		}
 	}
 }
