@@ -29,6 +29,7 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection impl
 	//
 	private IScanCSD selectedScan;
 	private IChromatogramPeakCSD selectedPeak;
+	private IScan identifiedScan;
 
 	public ChromatogramSelectionCSD(IChromatogram chromatogram) throws ChromatogramIsNullException {
 		this(chromatogram, true);
@@ -199,5 +200,17 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection impl
 		setSelectedScan(selectedScan, false);
 		setSelectedPeak(selectedPeak, false);
 		fireUpdateChange(forceReload);
+	}
+
+	@Override
+	public IScan getSelectedIdentifiedScan() {
+
+		return identifiedScan;
+	}
+
+	@Override
+	public void setSelectedIdentifiedScan(IScan identifiedScan) {
+
+		this.identifiedScan = identifiedScan;
 	}
 }

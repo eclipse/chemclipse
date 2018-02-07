@@ -90,4 +90,17 @@ public class ChromatogramSelection extends AbstractChromatogramSelection impleme
 
 		logger.warn("Bad boy - setSelectedPeak(IPeak selectedPeak): don't use the ChromatogramSelection implementation");
 	}
+
+	@Override
+	public IScan getSelectedIdentifiedScan() {
+
+		logger.warn("Bad boy - getSelectedIdentifiedScan(): don't use the ChromatogramSelection implementation");
+		return null;
+	}
+
+	@Override
+	public void setSelectedIdentifiedScan(IScan identifiedScan) {
+
+		logger.warn("Bad boy - setSelectedIdentifiedScan: don't use the ChromatogramSelection implementation");
+	}
 }

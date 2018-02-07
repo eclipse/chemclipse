@@ -246,4 +246,6 @@ public class PreferenceConstants {
 	public static final int DEF_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE = 11;
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE = "chromatogramScanLabelFontStyle";
 	public static final int DEF_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE = SWT.NORMAL;
+	public static final String P_COLOR_CHROMATOGRAM_SELECTED_SCAN_IDENTIFIED = "colorChromatogramSelectedScanIdentified";
+	public static final String DEF_COLOR_CHROMATOGRAM_SELECTED_SCAN_IDENTIFIED = "128,0,0";
 }

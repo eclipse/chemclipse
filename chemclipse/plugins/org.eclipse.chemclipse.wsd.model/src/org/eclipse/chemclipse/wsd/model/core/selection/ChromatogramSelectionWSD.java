@@ -32,6 +32,7 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 	private IScanWSD selectedScan;
 	private IPeak selectedPeak;
 	private IMarkedWavelengths selectedWavelengths;
+	private IScan identifiedScan;
 
 	public ChromatogramSelectionWSD(IChromatogram chromatogram) throws ChromatogramIsNullException {
 		this(chromatogram, true);
@@ -180,5 +181,17 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection impl
 	public IMarkedWavelengths getSelectedWavelengths() {
 
 		return selectedWavelengths;
+	}
+
+	@Override
+	public IScan getSelectedIdentifiedScan() {
+
+		return identifiedScan;
+	}
+
+	@Override
+	public void setSelectedIdentifiedScan(IScan identifiedScan) {
+
+		this.identifiedScan = identifiedScan;
 	}
 }

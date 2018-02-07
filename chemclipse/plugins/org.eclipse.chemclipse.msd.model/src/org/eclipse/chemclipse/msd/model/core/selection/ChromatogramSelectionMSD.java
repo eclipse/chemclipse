@@ -210,6 +210,14 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 	}
 
 	@Override
+	public void setSelectedIdentifiedScan(IScan identifiedScan) {
+
+		if(identifiedScan instanceof IVendorMassSpectrum) {
+			setSelectedIdentifiedScan((IVendorMassSpectrum)identifiedScan);
+		}
+	}
+
+	@Override
 	public void setSelectedIdentifiedScan(IVendorMassSpectrum selectedIdentifiedScan) {
 
 		/*
@@ -288,8 +296,6 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 		}
 	}
 
-	// ------------------------------------IChromatogramSelectionSetter
-	// ------------------------------------IChromatogramUpdateListener
 	@Override
 	public void update(boolean forceReload) {
 
@@ -299,5 +305,4 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection impl
 		setSelectedPeak(selectedPeak, false);
 		fireUpdateChange(forceReload);
 	}
-	// ------------------------------------IChromatogramUpdateListener
 }

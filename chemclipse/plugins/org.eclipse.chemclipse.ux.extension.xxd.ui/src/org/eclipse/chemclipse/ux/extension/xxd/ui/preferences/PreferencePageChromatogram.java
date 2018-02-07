@@ -67,6 +67,7 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME, "Chromatogram Scan Label Name:", getFieldEditorParent()));
 		addField(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE, "Chromatogram Scan Label Font Size:", PreferenceConstants.MIN_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE, PreferenceConstants.MAX_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE);
 		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE, "Chromatogram Scan Label Font Style:", PreferenceConstants.FONT_STYLES, getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_SCAN_IDENTIFIED, "Color Chromatogram Selected Scan Identified:", getFieldEditorParent()));
 	}
 
 	private void addField(String name, String labelText, int min, int max) {

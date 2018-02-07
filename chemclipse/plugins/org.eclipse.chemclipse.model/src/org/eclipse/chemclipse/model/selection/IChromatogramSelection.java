@@ -152,6 +152,10 @@ public interface IChromatogramSelection extends IChromatogramUpdateListener, Ser
 
 	void setSelectedPeak(IPeak selectedPeak);
 
+	IScan getSelectedIdentifiedScan();
+
+	void setSelectedIdentifiedScan(IScan identifiedScan);
+
 	boolean isOverlaySelected();
 
 	void setOverlaySelected(boolean overlaySelected);
