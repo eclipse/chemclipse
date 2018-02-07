@@ -776,7 +776,18 @@ public class ExtendedChromatogramOverlayUI {
 		/*
 		 * Add the selected series
 		 */
-		chromatogramChart.addSeriesData(lineSeriesDataList, LineChart.MEDIUM_COMPRESSION);
+		int compressionToLength;
+		int size = lineSeriesDataList.size();
+		if(size >= 15) {
+			compressionToLength = LineChart.EXTREME_COMPRESSION;
+		} else if(size >= 10) {
+			compressionToLength = LineChart.HIGH_COMPRESSION;
+		} else if(size >= 5) {
+			compressionToLength = LineChart.MEDIUM_COMPRESSION;
+		} else {
+			compressionToLength = LineChart.LOW_COMPRESSION;
+		}
+		chromatogramChart.addSeriesData(lineSeriesDataList, compressionToLength);
 		/*
 		 * Delete non-available series.
 		 */

@@ -252,4 +252,6 @@ public class PreferenceConstants {
 	public static final boolean DEF_MOVE_RETENTION_TIME_ON_PEAK_SELECTION = true;
 	public static final String P_ALTERNATE_WINDOW_MOVE_DIRECTION = "useAlternateWindowMoveDirection";
 	public static final boolean DEF_ALTERNATE_WINDOW_MOVE_DIRECTION = false;
+	public static final String P_CONDENSE_CYCLE_NUMBER_SCANS = "condenseCycleNumberScans";
+	public static final boolean DEF_CONDENSE_CYCLE_NUMBER_SCANS = true;
 }

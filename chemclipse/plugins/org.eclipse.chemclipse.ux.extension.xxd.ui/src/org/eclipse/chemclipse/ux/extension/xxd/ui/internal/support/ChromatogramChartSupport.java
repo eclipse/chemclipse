@@ -19,6 +19,10 @@ import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
+import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
+import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
+import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
@@ -160,28 +164,61 @@ public class ChromatogramChartSupport {
 	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions, boolean baseline) {
 
 		IBaselineModel baselineModel = chromatogram.getBaselineModel();
-		//
-		int length = stopScan - startScan + 1;
-		double[] xSeries = new double[length];
-		double[] ySeries = new double[length];
 		LineStyle lineStyle = getLineStyle(overlayType);
-		/*
-		 * Get the data.
-		 */
-		int index = 0;
-		for(int i = startScan; i <= stopScan; i++) {
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		boolean condenseCycleNumberScans = preferenceStore.getBoolean(PreferenceConstants.P_CONDENSE_CYCLE_NUMBER_SCANS);
+		//
+		double[] xSeries;
+		double[] ySeries;
+		//
+		if(chromatogram.containsScanCycles() && condenseCycleNumberScans) {
 			/*
-			 * Get the retention time and intensity.
+			 * TandemMS + Cycles
 			 */
-			IScan scan = chromatogram.getScan(i);
-			int retentionTime = scan.getRetentionTime();
-			xSeries[index] = retentionTime;
-			if(baseline) {
-				ySeries[index] = baselineModel.getBackgroundAbundance(retentionTime);
-			} else {
-				ySeries[index] = getIntensity(scan, overlayType, ions);
+			ITotalScanSignalExtractor totalIonSignalExtractor = new TotalScanSignalExtractor(chromatogram);
+			ITotalScanSignals totalScanSignals = totalIonSignalExtractor.getTotalScanSignals(startScan, stopScan, false, condenseCycleNumberScans);
+			//
+			int length = totalScanSignals.size();
+			xSeries = new double[length];
+			ySeries = new double[length];
+			//
+			int index = 0;
+			for(ITotalScanSignal totalScanSignal : totalScanSignals.getTotalScanSignals()) {
+				/*
+				 * Get the retention time and intensity.
+				 */
+				int retentionTime = totalScanSignal.getRetentionTime();
+				xSeries[index] = retentionTime;
+				if(baseline) {
+					ySeries[index] = baselineModel.getBackgroundAbundance(retentionTime);
+				} else {
+					ySeries[index] = totalScanSignal.getTotalSignal();
+				}
+				index++;
 			}
-			index++;
+		} else {
+			/*
+			 * Normal
+			 */
+			int length = stopScan - startScan + 1;
+			xSeries = new double[length];
+			ySeries = new double[length];
+			//
+			int index = 0;
+			for(int i = startScan; i <= stopScan; i++) {
+				/*
+				 * Get the retention time and intensity.
+				 */
+				IScan scan = chromatogram.getScan(i);
+				int retentionTime = scan.getRetentionTime();
+				xSeries[index] = retentionTime;
+				if(baseline) {
+					ySeries[index] = baselineModel.getBackgroundAbundance(retentionTime);
+				} else {
+					ySeries[index] = getIntensity(scan, overlayType, ions);
+				}
+				index++;
+			}
 		}
 		/*
 		 * Calculate a derivative?
@@ -195,10 +232,11 @@ public class ChromatogramChartSupport {
 		 */
 		ISeriesData seriesData = new SeriesData(xSeries, ySeries, seriesId);
 		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-		ILineSeriesSettings lineSerieSettings = lineSeriesData.getLineSeriesSettings();
-		lineSerieSettings.setLineColor(color);
-		lineSerieSettings.setLineStyle(lineStyle);
-		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSerieSettings.getSeriesSettingsHighlight();
+		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+		lineSeriesSettings.setLineColor(color);
+		lineSeriesSettings.setLineStyle(lineStyle);
+		lineSeriesSettings.setEnableArea(false);
+		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
 		lineSeriesSettingsHighlight.setLineWidth(2);
 		//
 		return lineSeriesData;
