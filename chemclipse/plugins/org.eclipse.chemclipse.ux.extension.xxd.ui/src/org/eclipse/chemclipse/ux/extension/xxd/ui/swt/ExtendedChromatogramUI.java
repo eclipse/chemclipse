@@ -77,6 +77,7 @@ import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
 import org.eclipse.eavp.service.swtchart.menu.AbstractChartMenuEntry;
 import org.eclipse.eavp.service.swtchart.menu.IChartMenuEntry;
+import org.eclipse.eavp.service.swtchart.menu.ResetChartHandler;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -146,6 +147,75 @@ public class ExtendedChromatogramUI {
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
+
+	private class ChromatogramResetHandler extends ResetChartHandler {
+
+		@Override
+		public void execute(Shell shell, ScrollableChart scrollableChart) {
+
+			super.execute(shell, scrollableChart);
+			if(chromatogramSelection != null) {
+				chromatogramSelection.reset(true);
+			}
+		}
+	}
+
+	private class ChromatogramSelectionHandler implements ICustomSelectionHandler {
+
+		private BaseChart baseChart;
+
+		public ChromatogramSelectionHandler(BaseChart baseChart) {
+			this.baseChart = baseChart;
+		}
+
+		@Override
+		public void handleUserSelection(Event event) {
+
+			if(chromatogramSelection != null) {
+				Range rangeX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
+				Range rangeY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
+				//
+				int startRetentionTime = (int)rangeX.lower;
+				int stopRetentionTime = (int)rangeX.upper;
+				float startAbundance = (float)rangeY.lower;
+				float stopAbundance = (float)rangeY.upper;
+				chromatogramSelection.setRanges(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
+			}
+		}
+	}
+
+	private class ScanSelectionHandler implements ICustomSelectionHandler {
+
+		private BaseChart baseChart;
+
+		public ScanSelectionHandler(BaseChart baseChart) {
+			this.baseChart = baseChart;
+		}
+
+		@Override
+		public void handleUserSelection(Event event) {
+
+			if(chromatogramSelection != null) {
+				BaseChart baseChart = chromatogramChart.getBaseChart();
+				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				int retentionTime = (int)baseChart.getSelectedPrimaryAxisValue(event.x, IExtendedChart.X_AXIS);
+				int scanNumber = chromatogram.getScanNumber(retentionTime);
+				IScan scan = chromatogram.getScan(scanNumber);
+				if(scan != null) {
+					chromatogramSelection.setSelectedScan(scan);
+					display.asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+
+							IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+							eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
+						}
+					});
+				}
+			}
+		}
+	}
 
 	private class FilterMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
 
@@ -721,49 +791,8 @@ public class ExtendedChromatogramUI {
 		/*
 		 * Custom Selection Handler
 		 */
-		baseChart.addCustomRangeSelectionHandler(new ICustomSelectionHandler() {
-
-			@Override
-			public void handleUserSelection(Event event) {
-
-				if(chromatogramSelection != null) {
-					Range rangeX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
-					Range rangeY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
-					//
-					int startRetentionTime = (int)rangeX.lower;
-					int stopRetentionTime = (int)rangeX.upper;
-					float startAbundance = (float)rangeY.lower;
-					float stopAbundance = (float)rangeY.upper;
-					chromatogramSelection.setRanges(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
-				}
-			}
-		});
-		//
-		baseChart.addCustomPointSelectionHandler(new ICustomSelectionHandler() {
-
-			@Override
-			public void handleUserSelection(Event event) {
-
-				if(chromatogramSelection != null) {
-					IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-					int retentionTime = (int)baseChart.getSelectedPrimaryAxisValue(event.x, IExtendedChart.X_AXIS);
-					int scanNumber = chromatogram.getScanNumber(retentionTime);
-					IScan scan = chromatogram.getScan(scanNumber);
-					if(scan != null) {
-						chromatogramSelection.setSelectedScan(scan);
-						display.asyncExec(new Runnable() {
-
-							@Override
-							public void run() {
-
-								IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-								eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
-							}
-						});
-					}
-				}
-			}
-		});
+		baseChart.addCustomRangeSelectionHandler(new ChromatogramSelectionHandler(baseChart));
+		baseChart.addCustomPointSelectionHandler(new ScanSelectionHandler(baseChart));
 		/*
 		 * Chart Settings
 		 */
@@ -773,6 +802,13 @@ public class ExtendedChromatogramUI {
 		chartSettings.setRangeSelectorDefaultAxisX(1); // Minutes
 		chartSettings.setRangeSelectorDefaultAxisY(1); // Relative Abundance
 		chartSettings.setShowRangeSelectorInitially(false);
+		/*
+		 * Replace the 1:1 reset menu entry.
+		 */
+		IChartMenuEntry chartMenuEntry = chartSettings.getChartMenuEntry(ResetChartHandler.NAME);
+		chartSettings.removeMenuEntry(chartMenuEntry);
+		chartSettings.addMenuEntry(new ChromatogramResetHandler());
+		//
 		chromatogramChart.applySettings(chartSettings);
 	}
 
