@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,7 +64,6 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToScanNumberConverter;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
@@ -84,6 +84,8 @@ import org.eclipse.eavp.service.swtchart.menu.AbstractChartMenuEntry;
 import org.eclipse.eavp.service.swtchart.menu.IChartMenuEntry;
 import org.eclipse.eavp.service.swtchart.menu.ResetChartHandler;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -410,29 +412,48 @@ public class ExtendedChromatogramUI {
 		public void execute(Shell shell, ScrollableChart scrollableChart) {
 
 			if(chromatogramSelection != null) {
-				IProgressMonitor monitor = new NullProgressMonitor();
-				switch(type) {
-					case TYPE_GENERIC:
-						ChromatogramFilter.applyFilter(chromatogramSelection, filterId, monitor);
-						chromatogramSelection.update(false);
-						break;
-					case TYPE_MSD:
-						if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-							IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-							ChromatogramFilterMSD.applyFilter(chromatogramSelectionMSD, filterId, monitor);
-							chromatogramSelectionMSD.update(false);
+				/*
+				 * Create the runnable.
+				 */
+				IRunnableWithProgress runnable = new IRunnableWithProgress() {
+
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						switch(type) {
+							case TYPE_GENERIC:
+								ChromatogramFilter.applyFilter(chromatogramSelection, filterId, monitor);
+								break;
+							case TYPE_MSD:
+								if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+									IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
+									ChromatogramFilterMSD.applyFilter(chromatogramSelectionMSD, filterId, monitor);
+								}
+								break;
+							case TYPE_CSD:
+								if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+									IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
+									ChromatogramFilterCSD.applyFilter(chromatogramSelectionCSD, filterId, monitor);
+								}
+								break;
+							case TYPE_WSD:
+								//
+								break;
 						}
-						break;
-					case TYPE_CSD:
-						if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-							IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
-							ChromatogramFilterCSD.applyFilter(chromatogramSelectionCSD, filterId, monitor);
-							chromatogramSelectionCSD.update(false);
-						}
-						break;
-					case TYPE_WSD:
-						//
-						break;
+					}
+				};
+				/*
+				 * Excecute
+				 */
+				ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
+				try {
+					monitor.run(true, true, runnable);
+					updateChromatogram();
+					updateSelection();
+				} catch(InvocationTargetException e) {
+					logger.warn(e);
+				} catch(InterruptedException e) {
+					logger.warn(e);
 				}
 			}
 		}
@@ -454,7 +475,7 @@ public class ExtendedChromatogramUI {
 
 	public void update() {
 
-		chromatogramChart.update();
+		adjustChromatogramSelectionRange();
 	}
 
 	public void updateSelectedScan() {
