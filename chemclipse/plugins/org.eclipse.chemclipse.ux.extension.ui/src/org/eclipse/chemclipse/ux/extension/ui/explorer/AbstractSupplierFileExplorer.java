@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
@@ -63,6 +64,9 @@ public abstract class AbstractSupplierFileExplorer {
 	//
 	private TabItem tabUserLocation;
 	private TreeViewer treeViewerUserLocation;
+	//
+	private Display display = Display.getDefault();
+	private Shell shell = display.getActiveShell();
 
 	public AbstractSupplierFileExplorer(Composite parent, ISupplierFileEditorSupport supplierFileEditorSupport) {
 		this(parent, ExplorerListSupport.getChromatogramEditorSupportList(supplierFileEditorSupport));
@@ -222,13 +226,13 @@ public abstract class AbstractSupplierFileExplorer {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				DirectoryDialog directoryDialog = new DirectoryDialog(Display.getCurrent().getActiveShell(), SWT.READ_ONLY);
+				DirectoryDialog directoryDialog = new DirectoryDialog(shell, SWT.READ_ONLY);
 				directoryDialog.setText("Select a directory.");
 				String pathname = directoryDialog.open();
 				if(pathname != null) {
 					File directory = new File(pathname);
 					if(directory.exists()) {
-						treeViewer.setInput(directory);
+						setTreeViewerContent(treeViewerUserLocation, directory);
 						PreferenceSupplier.setUserLocationPath(directory.getAbsolutePath());
 					}
 				}
@@ -378,7 +382,7 @@ public abstract class AbstractSupplierFileExplorer {
 
 	private void setTreeViewerContent(TreeViewer treeViewer, Object input) {
 
-		Display.getCurrent().asyncExec(new Runnable() {
+		display.asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
