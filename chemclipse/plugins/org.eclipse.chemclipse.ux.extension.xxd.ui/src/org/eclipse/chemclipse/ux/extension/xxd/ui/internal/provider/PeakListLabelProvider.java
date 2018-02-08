@@ -39,7 +39,8 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String ACTIVE_FOR_ANALYSIS = "Active for Analysis";
 	public static final String RT = "RT";
-	private PeakDataSupport peakSupport = new PeakDataSupport();
+	//
+	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	//
 	public static final String[] TITLES = { //
 			ACTIVE_FOR_ANALYSIS, //
@@ -121,7 +122,7 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 			//
 			IPeak peak = (IPeak)element;
 			IPeakModel peakModel = peak.getPeakModel();
-			ILibraryInformation libraryInformation = peakSupport.getLibraryInformation(new ArrayList<IPeakTarget>(peak.getTargets()));
+			ILibraryInformation libraryInformation = peakDataSupport.getLibraryInformation(new ArrayList<IPeakTarget>(peak.getTargets()));
 			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			//
 			switch(columnIndex) {

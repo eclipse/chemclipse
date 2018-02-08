@@ -98,15 +98,53 @@ public class ChromatogramDataSupport {
 
 	public List<IScan> getIdentifiedScans(IChromatogram chromatogram) {
 
+		return getIdentifiedScans(chromatogram, null);
+	}
+
+	public List<IScan> getIdentifiedScans(IChromatogram chromatogram, IChromatogramSelection selectedRange) {
+
+		int startRetentionTime = 0;
+		int stopRetentionTime = 0;
+		boolean useSelectedRange = false;
+		//
+		if(selectedRange != null) {
+			useSelectedRange = true;
+			startRetentionTime = selectedRange.getStartRetentionTime();
+			stopRetentionTime = selectedRange.getStopRetentionTime();
+		}
+		//
 		List<IScan> scans = new ArrayList<>();
 		if(chromatogram != null) {
 			for(IScan scan : chromatogram.getScans()) {
-				if(scanContainsTargets(scan)) {
-					scans.add(scan);
+				if(useSelectedRange) {
+					/*
+					 * Check the range.
+					 */
+					if(scanIsInSelectedRange(scan, startRetentionTime, stopRetentionTime)) {
+						if(scanContainsTargets(scan)) {
+							scans.add(scan);
+						}
+					}
+				} else {
+					/*
+					 * This is faster than doing the checks.
+					 */
+					if(scanContainsTargets(scan)) {
+						scans.add(scan);
+					}
 				}
 			}
 		}
 		return scans;
+	}
+
+	private boolean scanIsInSelectedRange(IScan scan, int startRetentionTime, int stopRetentionTime) {
+
+		int retentionTime = scan.getRetentionTime();
+		if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
+			return true;
+		}
+		return false;
 	}
 
 	private boolean scanContainsTargets(IScan scan) {
