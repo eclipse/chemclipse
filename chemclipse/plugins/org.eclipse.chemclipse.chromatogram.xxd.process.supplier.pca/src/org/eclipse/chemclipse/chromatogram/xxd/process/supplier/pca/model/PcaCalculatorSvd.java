@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.factory.DecompositionFactory;
 import org.ejml.interfaces.decomposition.SingularValueDecomposition;
+import org.ejml.ops.CommonOps;
 import org.ejml.ops.SingularOps;
 
 public class PcaCalculatorSvd extends AbstractPcaCalculator {
@@ -22,11 +23,32 @@ public class PcaCalculatorSvd extends AbstractPcaCalculator {
 	public void compute(int numComps) {
 
 		setNumComps(numComps);
+		computeLoadings();
+		computeScores();
+	}
+
+	private void computeLoadings() {
+
 		SingularValueDecomposition<DenseMatrix64F> svd = DecompositionFactory.svd(getSampleData().getNumRows(), getSampleData().getNumCols(), false, true, false);
 		svd.decompose(getSampleData());
 		setLoadings(svd.getV(null, true));
 		DenseMatrix64F W = svd.getW(null);
 		SingularOps.descendingOrder(null, false, W, getLoadings(), true);
 		getLoadings().reshape(getNumComps(), getMean().length, true);
+	}
+
+	private void computeScores() {
+
+		double concatMeans[] = new double[getSampleData().getNumRows() * getSampleData().getNumCols()];
+		for(int i = 0; i < getSampleData().getNumRows(); i++) {
+			System.arraycopy(getMean(), 0, concatMeans, i * getSampleData().getNumCols(), getSampleData().getNumCols());
+		}
+		DenseMatrix64F means = DenseMatrix64F.wrap(getSampleData().getNumRows(), getSampleData().getNumCols(), concatMeans);
+		DenseMatrix64F sample = DenseMatrix64F.wrap(getSampleData().getNumRows(), getSampleData().getNumCols(), getSampleData().data);
+		DenseMatrix64F rotated = new DenseMatrix64F(getSampleData().getNumRows(), getNumComps());
+		CommonOps.subtract(sample, means, sample);
+		// DenseMatrix64F loadings = getLoadings();
+		// CommonOps.transpose(loadings);
+		// CommonOps.mult(loadings, sample, rotated);
 	}
 }

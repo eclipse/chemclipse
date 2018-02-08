@@ -37,6 +37,14 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 		return scores;
 	}
 
+	/**
+	 * appplyLoadings
+	 * 
+	 * Observation(/Sample)-wise calculation of score vectors.
+	 * 
+	 * @param obs
+	 *            one observation / sample
+	 */
 	@Override
 	public double[] applyLoadings(double[] obs) {
 
@@ -99,6 +107,7 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 		return mean;
 	}
 
+
 	public int getNumComps() {
 
 		return numComps;
@@ -139,6 +148,11 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 	public void setLoadings(DenseMatrix64F loadings) {
 
 		this.loadings = loadings;
+	}
+
+	public void setScores(DenseMatrix64F scores) {
+
+		this.scores = scores;
 	}
 
 	public void setNumComps(int numComps) {
