@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -152,17 +153,20 @@ public class ChromatogramDataSupport {
 		boolean scanContainsTargets = false;
 		if(scan instanceof IScanMSD) {
 			IScanMSD scanMSD = (IScanMSD)scan;
-			if(scanMSD.getTargets().size() > 0) {
+			List<? extends IIdentificationTarget> targets = scanMSD.getTargets();
+			if(targets != null && targets.size() > 0) {
 				scanContainsTargets = true;
 			}
 		} else if(scan instanceof IScanCSD) {
 			IScanCSD scanCSD = (IScanCSD)scan;
-			if(scanCSD.getTargets().size() > 0) {
+			List<? extends IIdentificationTarget> targets = scanCSD.getTargets();
+			if(targets != null && targets.size() > 0) {
 				scanContainsTargets = true;
 			}
 		} else if(scan instanceof IScanWSD) {
 			IScanWSD scanWSD = (IScanWSD)scan;
-			if(scanWSD.getTargets().size() > 0) {
+			List<? extends IIdentificationTarget> targets = scanWSD.getTargets();
+			if(targets != null && targets.size() > 0) {
 				scanContainsTargets = true;
 			}
 		}

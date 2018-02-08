@@ -490,8 +490,11 @@ public class ExtendedChromatogramUI {
 	public void updateSelectedScan() {
 
 		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_SCAN);
+		chromatogramChart.deleteSeries(SERIES_ID_IDENTIFIED_SCAN_SELECTED);
+		//
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 		addSelectedScanData(lineSeriesDataList);
+		addSelectedIdentifiedScanData(lineSeriesDataList);
 		addLineSeriesData(lineSeriesDataList);
 		adjustChromatogramSelectionRange();
 	}
@@ -501,17 +504,9 @@ public class ExtendedChromatogramUI {
 		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_MARKER);
 		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_SHAPE);
 		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_BACKGROUND);
+		//
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 		addSelectedPeakData(lineSeriesDataList);
-		addLineSeriesData(lineSeriesDataList);
-		adjustChromatogramSelectionRange();
-	}
-
-	public void updateSelectedIdentifiedScan() {
-
-		chromatogramChart.deleteSeries(SERIES_ID_IDENTIFIED_SCAN_SELECTED);
-		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-		addSelectedIdentifiedScanData(lineSeriesDataList);
 		addLineSeriesData(lineSeriesDataList);
 		adjustChromatogramSelectionRange();
 	}

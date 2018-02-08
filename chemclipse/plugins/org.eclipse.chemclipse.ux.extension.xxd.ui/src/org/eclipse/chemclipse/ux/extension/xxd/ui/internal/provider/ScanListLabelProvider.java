@@ -13,6 +13,9 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
+import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
@@ -25,9 +28,6 @@ public class ScanListLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String RETENTION_TIME = "Retention Time";
 	public static final String RELATIVE_RETENTION_TIME = "Relative Retention Time";
 	public static final String RETENTION_INDEX = "Retention Index";
-	public static final String BASE_PEAK = "Base Peak";
-	public static final String BASE_PEAK_ABUNDANCE = "Base Peak Abundance";
-	public static final String NUMBER_OF_IONS = "Number of Ions";
 	public static final String CAS = "CAS";
 	public static final String MW = "MW";
 	public static final String FORMULA = "Formula";
@@ -43,9 +43,6 @@ public class ScanListLabelProvider extends AbstractChemClipseLabelProvider {
 			RETENTION_TIME, //
 			RELATIVE_RETENTION_TIME, //
 			RETENTION_INDEX, //
-			BASE_PEAK, //
-			BASE_PEAK_ABUNDANCE, //
-			NUMBER_OF_IONS, //
 			CAS, //
 			MW, //
 			FORMULA, //
@@ -57,9 +54,6 @@ public class ScanListLabelProvider extends AbstractChemClipseLabelProvider {
 	//
 	public static int[] BOUNDS = {//
 			300, //
-			100, //
-			100, //
-			100, //
 			100, //
 			100, //
 			100, //
@@ -86,6 +80,46 @@ public class ScanListLabelProvider extends AbstractChemClipseLabelProvider {
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
+		if(element instanceof IScan) {
+			IScan scan = (IScan)element;
+			ILibraryInformation libraryInformation = scanDataSupport.getLibraryInformation(scan);
+			//
+			switch(columnIndex) {
+				case 0:
+					text = (libraryInformation != null) ? libraryInformation.getName() : "";
+					break;
+				case 1:
+					text = decimalFormat.format(scan.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+					break;
+				case 2:
+					text = decimalFormat.format(scan.getRelativeRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+					break;
+				case 3:
+					text = decimalFormat.format(scan.getRetentionIndex());
+					break;
+				case 4:
+					text = (libraryInformation != null) ? libraryInformation.getCasNumber() : "";
+					break;
+				case 5:
+					text = (libraryInformation != null) ? decimalFormat.format(libraryInformation.getMolWeight()) : "";
+					break;
+				case 6:
+					text = (libraryInformation != null) ? libraryInformation.getFormula() : "";
+					break;
+				case 7:
+					text = (libraryInformation != null) ? libraryInformation.getSmiles() : "";
+					break;
+				case 8:
+					text = (libraryInformation != null) ? libraryInformation.getInChI() : "";
+					break;
+				case 9:
+					text = (libraryInformation != null) ? libraryInformation.getReferenceIdentifier() : "";
+					break;
+				case 10:
+					text = (libraryInformation != null) ? libraryInformation.getComments() : "";
+					break;
+			}
+		}
 		return text;
 	}
 

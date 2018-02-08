@@ -65,6 +65,8 @@ public class PreferenceConstants {
 	public static final String DEF_STACK_POSITION_SCAN_CHART = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_SCAN_TABLE = "stackPositionScanTable";
 	public static final String DEF_STACK_POSITION_SCAN_TABLE = PartSupport.PARTSTACK_BOTTOM_RIGHT;
+	public static final String P_STACK_POSITION_SCAN_LIST = "stackPositionScanList";
+	public static final String DEF_STACK_POSITION_SCAN_LIST = PartSupport.PARTSTACK_LEFT_TOP;
 	public static final String P_STACK_POSITION_PEAK_CHART = "stackPositionPeakChart";
 	public static final String DEF_STACK_POSITION_PEAK_CHART = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	public static final String P_STACK_POSITION_PEAK_DETAILS = "stackPositionPeakDetails";
@@ -176,6 +178,8 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_AREA_WITHOUT_DECIMALS = true;
 	public static final String P_SHOW_PEAKS_IN_SELECTED_RANGE = "showPeaksInSelectedRange";
 	public static final boolean DEF_SHOW_PEAKS_IN_SELECTED_RANGE = true;
+	public static final String P_SHOW_SCANS_IN_SELECTED_RANGE = "showScansInSelectedRange";
+	public static final boolean DEF_SHOW_SCANS_IN_SELECTED_RANGE = true;
 	public static final String P_CHROMATOGRAM_CHART_COMPRESSION_TYPE = "chartCompressionType";
 	public static final String DEF_CHROMATOGRAM_CHART_COMPRESSION_TYPE = LineChart.COMPRESSION_MEDIUM;
 	public static final String P_COLOR_SCHEME_DISPLAY_NORMAL = "colorSchemeDisplayNormal";

@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.IDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedPeakListUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedScanListUI;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -27,12 +27,12 @@ import org.eclipse.swt.widgets.Composite;
 
 public class ScanListPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
-	private ExtendedPeakListUI extendedPeakListUI;
+	private ExtendedScanListUI extendedScanListUI;
 
 	@Inject
 	public ScanListPart(Composite parent, MPart part) {
 		super(part);
-		extendedPeakListUI = new ExtendedPeakListUI(parent);
+		extendedScanListUI = new ExtendedScanListUI(parent);
 	}
 
 	@Focus
@@ -59,13 +59,13 @@ public class ScanListPart extends AbstractDataUpdateSupport implements IDataUpda
 		 */
 		if(objects.size() == 1) {
 			if(isChromatogramUnloadEvent(topic)) {
-				extendedPeakListUI.updateChromatogramSelection(null);
+				extendedScanListUI.updateChromatogramSelection(null);
 			} else {
 				if(isChromatogramTopic(topic)) {
 					Object object = objects.get(0);
 					if(object instanceof IChromatogramSelection) {
 						IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
-						extendedPeakListUI.updateChromatogramSelection(chromatogramSelection);
+						extendedScanListUI.updateChromatogramSelection(chromatogramSelection);
 					}
 				}
 			}

@@ -20,7 +20,6 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -117,11 +116,11 @@ public class ExtendedScanListUI {
 
 		List<? extends IScan> scans = new ArrayList<IScan>();
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		boolean showPeaksInSelectedRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE);
+		boolean showScansInSelectedRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_IN_SELECTED_RANGE);
 		//
 		if(chromatogramSelection != null) {
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			if(showPeaksInSelectedRange) {
+			if(showScansInSelectedRange) {
 				scans = chromatogramDataSupport.getIdentifiedScans(chromatogram, chromatogramSelection);
 			} else {
 				scans = chromatogramDataSupport.getIdentifiedScans(chromatogram);
@@ -295,11 +294,11 @@ public class ExtendedScanListUI {
 		if(index >= 0) {
 			TableItem tableItem = table.getItem(index);
 			Object object = tableItem.getData();
-			if(object instanceof IPeak) {
+			if(object instanceof IScan) {
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				IPeak peak = (IPeak)object;
-				chromatogramSelection.setSelectedPeak(peak);
-				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, peak);
+				IScan scan = (IScan)object;
+				chromatogramSelection.setSelectedIdentifiedScan(scan);
+				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
 			}
 		}
 	}
