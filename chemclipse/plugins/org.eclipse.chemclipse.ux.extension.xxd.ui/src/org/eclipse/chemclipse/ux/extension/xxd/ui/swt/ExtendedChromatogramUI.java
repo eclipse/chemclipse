@@ -483,6 +483,7 @@ public class ExtendedChromatogramUI {
 
 	public void update() {
 
+		updateChromatogram();
 		adjustChromatogramSelectionRange();
 	}
 
@@ -762,18 +763,29 @@ public class ExtendedChromatogramUI {
 	private void addIdentifiedScansData(List<ILineSeriesData> lineSeriesDataList) {
 
 		String seriesId = SERIES_ID_IDENTIFIED_SCANS;
+		List<IScan> scans = getIdentifiedScans();
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
-		addIdentifiedScansData(lineSeriesDataList, PlotSymbolType.CIRCLE, symbolSize, Colors.DARK_GRAY, seriesId);
+		addIdentifiedScansData(lineSeriesDataList, scans, PlotSymbolType.CIRCLE, symbolSize, Colors.DARK_GRAY, seriesId);
+		//
+		IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
+		IdentificationLabelMarker scanLabelMarker = scanLabelMarkerMap.get(seriesId);
+		if(scanLabelMarker != null) {
+			plotArea.removeCustomPaintListener(scanLabelMarker);
+		}
+		//
+		boolean showChromatogramScanLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_LABELS);
+		if(showChromatogramScanLabels) {
+			int indexSeries = lineSeriesDataList.size() - 1;
+			scanLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, null, scans);
+			plotArea.addCustomPaintListener(scanLabelMarker);
+			scanLabelMarkerMap.put(seriesId, scanLabelMarker);
+		}
 	}
 
-	private void addIdentifiedScansData(List<ILineSeriesData> lineSeriesDataList, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId) {
+	private void addIdentifiedScansData(List<ILineSeriesData> lineSeriesDataList, List<IScan> scans, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId) {
 
-		List<IScan> scans = getIdentifiedScans();
 		if(scans.size() > 0) {
-			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-			boolean showChromatogramScanLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_LABELS);
-			//
 			ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scans, false, seriesId);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
 			lineSeriesSettings.setLineStyle(LineStyle.NONE);
@@ -781,19 +793,6 @@ public class ExtendedChromatogramUI {
 			lineSeriesSettings.setSymbolSize(symbolSize);
 			lineSeriesSettings.setSymbolColor(symbolColor);
 			lineSeriesDataList.add(lineSeriesData);
-			//
-			IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
-			IdentificationLabelMarker scanLabelMarker = scanLabelMarkerMap.get(seriesId);
-			if(scanLabelMarker != null) {
-				plotArea.removeCustomPaintListener(scanLabelMarker);
-			}
-			//
-			if(showChromatogramScanLabels) {
-				int indexSeries = lineSeriesDataList.size() - 1;
-				scanLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, null, scans);
-				plotArea.addCustomPaintListener(scanLabelMarker);
-				scanLabelMarkerMap.put(seriesId, scanLabelMarker);
-			}
 		}
 	}
 
@@ -806,7 +805,9 @@ public class ExtendedChromatogramUI {
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_SCAN_IDENTIFIED));
 				int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
-				addIdentifiedScansData(lineSeriesDataList, PlotSymbolType.CIRCLE, symbolSize, color, seriesId);
+				List<IScan> scans = new ArrayList<>();
+				scans.add(scan);
+				addIdentifiedScansData(lineSeriesDataList, scans, PlotSymbolType.CIRCLE, symbolSize, color, seriesId);
 			}
 		}
 	}
