@@ -58,4 +58,10 @@ public abstract class AbstractScanCSD extends AbstractScan implements IScanCSD {
 		List<IScanTargetCSD> targetList = new ArrayList<IScanTargetCSD>(targets);
 		return targetList;
 	}
+
+	@Override
+	public void removeAllTargets() {
+
+		targets.clear();
+	}
 }

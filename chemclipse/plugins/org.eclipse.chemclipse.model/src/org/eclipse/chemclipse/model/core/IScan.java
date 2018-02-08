@@ -235,4 +235,6 @@ public interface IScan extends ISignal, IAdaptable, IScanSerializable {
 	 * @param totalSignal
 	 */
 	void adjustTotalSignal(float totalSignal);
+
+	void removeAllTargets();
 }

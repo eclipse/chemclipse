@@ -29,7 +29,6 @@ import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoChromatogramFilte
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupportMSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -42,7 +41,6 @@ import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.MoveDirection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -65,7 +63,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanChartSupp
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -298,24 +295,27 @@ public class ExtendedChromatogramUI {
 
 		private void adjustChromatogramSelection(IPeak peak, IChromatogramSelection chromatogramSelection) {
 
-			List<? extends IPeak> peaks = getPeaks();
-			List<? extends IPeak> peaksSelection = new ArrayList<>(getPeaks(chromatogramSelection));
-			Collections.sort(peaks, peakRetentionTimeComparator);
-			Collections.sort(peaksSelection, peakRetentionTimeComparator);
-			//
-			if(peaks.get(0).equals(peak) || peaks.get(peaks.size() - 1).equals(peak)) {
-				/*
-				 * Don't move if it is the first or last peak of the chromatogram.
-				 */
-			} else {
-				/*
-				 * First peak of the selection: move left
-				 * Last peak of the selection: move right
-				 */
-				if(peaksSelection.get(0).equals(peak)) {
-					ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.LEFT, 5);
-				} else if(peaksSelection.get(peaksSelection.size() - 1).equals(peak)) {
-					ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.RIGHT, 5);
+			if(chromatogramSelection != null) {
+				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				List<? extends IPeak> peaks = chromatogramDataSupport.getPeaks(chromatogram);
+				List<? extends IPeak> peaksSelection = new ArrayList<>(chromatogramDataSupport.getPeaks(chromatogram, chromatogramSelection));
+				Collections.sort(peaks, peakRetentionTimeComparator);
+				Collections.sort(peaksSelection, peakRetentionTimeComparator);
+				//
+				if(peaks.get(0).equals(peak) || peaks.get(peaks.size() - 1).equals(peak)) {
+					/*
+					 * Don't move if it is the first or last peak of the chromatogram.
+					 */
+				} else {
+					/*
+					 * First peak of the selection: move left
+					 * Last peak of the selection: move right
+					 */
+					if(peaksSelection.get(0).equals(peak)) {
+						ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.LEFT, 5);
+					} else if(peaksSelection.get(peaksSelection.size() - 1).equals(peak)) {
+						ChromatogramSelectionSupport.moveRetentionTimeWindow(chromatogramSelection, MoveDirection.RIGHT, 5);
+					}
 				}
 			}
 		}
@@ -665,35 +665,38 @@ public class ExtendedChromatogramUI {
 
 	private void addPeakData(List<ILineSeriesData> lineSeriesDataList) {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
-		//
-		List<? extends IPeak> peaks = getPeaks();
-		List<IPeak> peaksActiveNormal = new ArrayList<IPeak>();
-		List<IPeak> peaksInactiveNormal = new ArrayList<IPeak>();
-		List<IPeak> peaksActiveISTD = new ArrayList<IPeak>();
-		List<IPeak> peaksInactiveISTD = new ArrayList<IPeak>();
-		//
-		for(IPeak peak : peaks) {
-			if(peak.getInternalStandards().size() > 0) {
-				if(peak.isActiveForAnalysis()) {
-					peaksActiveISTD.add(peak);
+		if(chromatogramSelection != null) {
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
+			//
+			List<? extends IPeak> peaks = chromatogramDataSupport.getPeaks(chromatogram);
+			List<IPeak> peaksActiveNormal = new ArrayList<IPeak>();
+			List<IPeak> peaksInactiveNormal = new ArrayList<IPeak>();
+			List<IPeak> peaksActiveISTD = new ArrayList<IPeak>();
+			List<IPeak> peaksInactiveISTD = new ArrayList<IPeak>();
+			//
+			for(IPeak peak : peaks) {
+				if(peak.getInternalStandards().size() > 0) {
+					if(peak.isActiveForAnalysis()) {
+						peaksActiveISTD.add(peak);
+					} else {
+						peaksInactiveISTD.add(peak);
+					}
 				} else {
-					peaksInactiveISTD.add(peak);
-				}
-			} else {
-				if(peak.isActiveForAnalysis()) {
-					peaksActiveNormal.add(peak);
-				} else {
-					peaksInactiveNormal.add(peak);
+					if(peak.isActiveForAnalysis()) {
+						peaksActiveNormal.add(peak);
+					} else {
+						peaksInactiveNormal.add(peak);
+					}
 				}
 			}
+			//
+			addPeaks(lineSeriesDataList, peaksActiveNormal, PlotSymbolType.INVERTED_TRIANGLE, symbolSize, Colors.DARK_GRAY, SERIES_ID_PEAKS_NORMAL_ACTIVE);
+			addPeaks(lineSeriesDataList, peaksInactiveNormal, PlotSymbolType.INVERTED_TRIANGLE, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_NORMAL_INACTIVE);
+			addPeaks(lineSeriesDataList, peaksActiveISTD, PlotSymbolType.DIAMOND, symbolSize, Colors.RED, SERIES_ID_PEAKS_ISTD_ACTIVE);
+			addPeaks(lineSeriesDataList, peaksInactiveISTD, PlotSymbolType.DIAMOND, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_ISTD_INACTIVE);
 		}
-		//
-		addPeaks(lineSeriesDataList, peaksActiveNormal, PlotSymbolType.INVERTED_TRIANGLE, symbolSize, Colors.DARK_GRAY, SERIES_ID_PEAKS_NORMAL_ACTIVE);
-		addPeaks(lineSeriesDataList, peaksInactiveNormal, PlotSymbolType.INVERTED_TRIANGLE, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_NORMAL_INACTIVE);
-		addPeaks(lineSeriesDataList, peaksActiveISTD, PlotSymbolType.DIAMOND, symbolSize, Colors.RED, SERIES_ID_PEAKS_ISTD_ACTIVE);
-		addPeaks(lineSeriesDataList, peaksInactiveISTD, PlotSymbolType.DIAMOND, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_ISTD_INACTIVE);
 	}
 
 	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId) {
@@ -727,59 +730,28 @@ public class ExtendedChromatogramUI {
 		}
 	}
 
-	private List<? extends IPeak> getPeaks() {
-
-		return getPeaks(null);
-	}
-
-	private List<? extends IPeak> getPeaks(IChromatogramSelection range) {
-
-		List<? extends IPeak> peaks = new ArrayList<IPeak>();
-		if(chromatogramSelection != null) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			//
-			if(chromatogram instanceof IChromatogramMSD) {
-				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-				if(range instanceof IChromatogramSelectionMSD) {
-					peaks = chromatogramMSD.getPeaks((IChromatogramSelectionMSD)range);
-				} else {
-					peaks = chromatogramMSD.getPeaks();
-				}
-			} else if(chromatogram instanceof IChromatogramCSD) {
-				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-				if(range instanceof IChromatogramSelectionCSD) {
-					peaks = chromatogramCSD.getPeaks((IChromatogramSelectionCSD)range);
-				} else {
-					peaks = chromatogramCSD.getPeaks();
-				}
-			} else if(chromatogram instanceof IChromatogramWSD) {
-				//
-			}
-		}
-		//
-		return peaks;
-	}
-
 	private void addIdentifiedScansData(List<ILineSeriesData> lineSeriesDataList) {
 
-		String seriesId = SERIES_ID_IDENTIFIED_SCANS;
-		List<IScan> scans = getIdentifiedScans();
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
-		addIdentifiedScansData(lineSeriesDataList, scans, PlotSymbolType.CIRCLE, symbolSize, Colors.DARK_GRAY, seriesId);
-		//
-		IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
-		IdentificationLabelMarker scanLabelMarker = scanLabelMarkerMap.get(seriesId);
-		if(scanLabelMarker != null) {
-			plotArea.removeCustomPaintListener(scanLabelMarker);
-		}
-		//
-		boolean showChromatogramScanLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_LABELS);
-		if(showChromatogramScanLabels) {
-			int indexSeries = lineSeriesDataList.size() - 1;
-			scanLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, null, scans);
-			plotArea.addCustomPaintListener(scanLabelMarker);
-			scanLabelMarkerMap.put(seriesId, scanLabelMarker);
+		if(chromatogramSelection != null) {
+			String seriesId = SERIES_ID_IDENTIFIED_SCANS;
+			List<IScan> scans = chromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram());
+			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
+			addIdentifiedScansData(lineSeriesDataList, scans, PlotSymbolType.CIRCLE, symbolSize, Colors.DARK_GRAY, seriesId);
+			//
+			IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
+			IdentificationLabelMarker scanLabelMarker = scanLabelMarkerMap.get(seriesId);
+			if(scanLabelMarker != null) {
+				plotArea.removeCustomPaintListener(scanLabelMarker);
+			}
+			//
+			boolean showChromatogramScanLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_LABELS);
+			if(showChromatogramScanLabels) {
+				int indexSeries = lineSeriesDataList.size() - 1;
+				scanLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, null, scans);
+				plotArea.addCustomPaintListener(scanLabelMarker);
+				scanLabelMarkerMap.put(seriesId, scanLabelMarker);
+			}
 		}
 	}
 
@@ -810,41 +782,6 @@ public class ExtendedChromatogramUI {
 				addIdentifiedScansData(lineSeriesDataList, scans, PlotSymbolType.CIRCLE, symbolSize, color, seriesId);
 			}
 		}
-	}
-
-	private List<IScan> getIdentifiedScans() {
-
-		List<IScan> scans = new ArrayList<>();
-		if(chromatogramSelection != null) {
-			for(IScan scan : chromatogramSelection.getChromatogram().getScans()) {
-				if(scanContainsTargets(scan)) {
-					scans.add(scan);
-				}
-			}
-		}
-		return scans;
-	}
-
-	private boolean scanContainsTargets(IScan scan) {
-
-		boolean scanContainsTargets = false;
-		if(scan instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)scan;
-			if(scanMSD.getTargets().size() > 0) {
-				scanContainsTargets = true;
-			}
-		} else if(scan instanceof IScanCSD) {
-			IScanCSD scanCSD = (IScanCSD)scan;
-			if(scanCSD.getTargets().size() > 0) {
-				scanContainsTargets = true;
-			}
-		} else if(scan instanceof IScanWSD) {
-			IScanWSD scanWSD = (IScanWSD)scan;
-			if(scanWSD.getTargets().size() > 0) {
-				scanContainsTargets = true;
-			}
-		}
-		return scanContainsTargets;
 	}
 
 	private void addSelectedPeakData(List<ILineSeriesData> lineSeriesDataList) {

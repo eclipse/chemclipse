@@ -43,11 +43,6 @@ public interface IMassSpectrumTargets {
 	void removeTargets(List<IScanTargetMSD> targetsToDelete);
 
 	/**
-	 * Removes all targets from the mass spectrum.
-	 */
-	void removeAllTargets();
-
-	/**
 	 * Returns a list of all targets from the actual mass spectrum.
 	 * 
 	 * @return List<IMassSpectrumTarget>

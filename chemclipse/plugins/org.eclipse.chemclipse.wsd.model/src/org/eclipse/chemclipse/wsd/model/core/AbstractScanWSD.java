@@ -172,4 +172,10 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 		List<IScanTargetWSD> targetList = new ArrayList<IScanTargetWSD>(targets);
 		return targetList;
 	}
+
+	@Override
+	public void removeAllTargets() {
+
+		targets.clear();
+	}
 }
