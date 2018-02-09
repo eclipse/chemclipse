@@ -24,6 +24,15 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 	private int sampleIndex;
 
 	@Override
+	public void initialize(int numObs, int numVars) {
+
+		sampleData.reshape(numObs, numVars, false);
+		mean = new double[numVars];
+		sampleIndex = 0;
+		numComps = -1;
+	}
+
+	@Override
 	public void addObservation(double[] obsData) {
 
 		for(int i = 0; i < obsData.length; i++) {
@@ -107,7 +116,6 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 		return mean;
 	}
 
-
 	public int getNumComps() {
 
 		return numComps;
@@ -124,15 +132,6 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 		DenseMatrix64F scores = new DenseMatrix64F(1, sampleData.numCols);
 		CommonOps.extract(loadings, obs, obs + 1, 0, sampleData.numCols, scores, 0, 0);
 		return scores.data;
-	}
-
-	@Override
-	public void initialize(int numObs, int numVars) {
-
-		sampleData.reshape(numObs, numVars, false);
-		mean = new double[numVars];
-		sampleIndex = 0;
-		numComps = -1;
 	}
 
 	public double[] reproject(double[] scoreVector) {

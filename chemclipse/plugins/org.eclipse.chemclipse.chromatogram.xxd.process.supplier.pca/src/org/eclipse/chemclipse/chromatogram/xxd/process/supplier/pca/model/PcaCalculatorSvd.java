@@ -45,10 +45,11 @@ public class PcaCalculatorSvd extends AbstractPcaCalculator {
 		}
 		DenseMatrix64F means = DenseMatrix64F.wrap(getSampleData().getNumRows(), getSampleData().getNumCols(), concatMeans);
 		DenseMatrix64F sample = DenseMatrix64F.wrap(getSampleData().getNumRows(), getSampleData().getNumCols(), getSampleData().data);
-		DenseMatrix64F rotated = new DenseMatrix64F(getSampleData().getNumRows(), getNumComps());
+		DenseMatrix64F rotated = new DenseMatrix64F(getNumComps(), getSampleData().getNumRows());
 		CommonOps.subtract(sample, means, sample);
-		// DenseMatrix64F loadings = getLoadings();
-		// CommonOps.transpose(loadings);
-		// CommonOps.mult(loadings, sample, rotated);
+		DenseMatrix64F loadings = new DenseMatrix64F(getLoadings());
+		CommonOps.transpose(sample);
+		CommonOps.mult(loadings, sample, rotated);
+		setScores(rotated);
 	}
 }
