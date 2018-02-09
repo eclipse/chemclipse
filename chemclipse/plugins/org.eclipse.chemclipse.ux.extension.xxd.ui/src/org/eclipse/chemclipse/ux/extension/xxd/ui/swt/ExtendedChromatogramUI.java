@@ -189,7 +189,7 @@ public class ExtendedChromatogramUI {
 				int stopRetentionTime = (int)rangeX.upper;
 				float startAbundance = (float)rangeY.lower;
 				float stopAbundance = (float)rangeY.upper;
-				chromatogramSelection.setRanges(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
+				setChromatogramSelectionRange(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
 			}
 		}
 	}
@@ -1296,6 +1296,11 @@ public class ExtendedChromatogramUI {
 		}
 	}
 
+	private void setChromatogramSelectionRange(int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance) {
+
+		chromatogramSelection.setRanges(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance, false);
+	}
+
 	private void adjustChromatogramSelectionRange() {
 
 		if(chromatogramSelection != null) {
@@ -1308,15 +1313,10 @@ public class ExtendedChromatogramUI {
 			Range yRange = new Range(chromatogramSelection.getStartAbundance(), chromatogramSelection.getStopAbundance());
 			//
 			xAxis.setRange(xRange);
-			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-				/*
-				 * TODO Fix also for CSD and WSD!
-				 */
-				System.out.println("Fix settings the y-range in ExtendedChromatogramUI.adjustChromatogramSelectionRange() when doing a redraw.");
-				yAxis.setRange(yRange);
-			}
+			yAxis.setRange(yRange);
 			//
 			chromatogramChart.redraw();
+			baseChart.redraw();
 		}
 	}
 
@@ -1395,7 +1395,11 @@ public class ExtendedChromatogramUI {
 				} else {
 					newStopAbundance = (keyCode == SWT.ARROW_UP) ? stopAbundance + stopAbundance / 20.0f : stopAbundance - stopAbundance / 20.0f;
 				}
-				chromatogramSelection.setRanges(chromatogramSelection.getStartRetentionTime(), chromatogramSelection.getStopRetentionTime(), chromatogramSelection.getStartAbundance(), newStopAbundance);
+				//
+				int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+				int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+				float startAbundance = chromatogramSelection.getStartAbundance();
+				setChromatogramSelectionRange(startRetentionTime, stopRetentionTime, startAbundance, newStopAbundance);
 				updateSelection();
 			}
 		}

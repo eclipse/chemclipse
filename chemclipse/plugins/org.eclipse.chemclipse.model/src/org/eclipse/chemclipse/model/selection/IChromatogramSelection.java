@@ -101,6 +101,8 @@ public interface IChromatogramSelection extends IChromatogramUpdateListener, Ser
 	 */
 	void setStopAbundance(float startAbundance);
 
+	void setRanges(int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance);
+
 	/**
 	 * Sets the values and fires an update after validating and setting all
 	 * values.
@@ -110,7 +112,7 @@ public interface IChromatogramSelection extends IChromatogramUpdateListener, Ser
 	 * @param startAbundance
 	 * @param stopAbundance
 	 */
-	void setRanges(int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance);
+	void setRanges(int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance, boolean validate);
 
 	/**
 	 * All listeners will be informed about an update.

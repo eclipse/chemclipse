@@ -134,7 +134,7 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 
 	private void setStartAbundance(float startAbundance, boolean update) {
 
-		if(startAbundance >= 0.0f && startAbundance <= stopAbundance && !Float.isInfinite(startAbundance) && !Float.isNaN(startAbundance)) {
+		if(!Float.isInfinite(startAbundance) && !Float.isNaN(startAbundance)) {
 			this.startAbundance = startAbundance;
 		} else {
 			this.startAbundance = 0.0f;
@@ -161,7 +161,7 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 
 	private void setStopAbundance(float stopAbundance, boolean update) {
 
-		if(stopAbundance >= 0.0f && stopAbundance >= startAbundance && !Float.isInfinite(stopAbundance) && !Float.isNaN(stopAbundance)) {
+		if(!Float.isInfinite(stopAbundance) && !Float.isNaN(stopAbundance)) {
 			this.stopAbundance = stopAbundance;
 		} else {
 			this.stopAbundance = chromatogram.getMaxSignal();
@@ -179,13 +179,18 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 
 		startRetentionTime = chromatogram.getStartRetentionTime();
 		stopRetentionTime = chromatogram.getStopRetentionTime();
-		startAbundance = 0.0f;
+		startAbundance = chromatogram.getMinSignal();
 		stopAbundance = chromatogram.getMaxSignal();
+	}
+
+	public void setRanges(int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance) {
+
+		setRanges(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance, true);
 	}
 
 	// TODO JUnit
 	@Override
-	public void setRanges(int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance) {
+	public void setRanges(int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance, boolean validate) {
 
 		/*
 		 * Set the values first and check them afterwards. Why? Cause sometimes
@@ -196,14 +201,14 @@ public abstract class AbstractChromatogramSelection implements IChromatogramSele
 		this.stopRetentionTime = stopRetentionTime;
 		this.startAbundance = startAbundance;
 		this.stopAbundance = stopAbundance;
-		setStartRetentionTime(startRetentionTime, false);
-		setStopRetentionTime(stopRetentionTime, false);
-		setStartAbundance(startAbundance, false);
-		setStopAbundance(stopAbundance, false);
-		/*
-		 * Inform all listeners about the update.
-		 */
-		update(false);
+		//
+		if(validate) {
+			setStartRetentionTime(startRetentionTime, false);
+			setStopRetentionTime(stopRetentionTime, false);
+			setStartAbundance(startAbundance, false);
+			setStopAbundance(stopAbundance, false);
+			update(false);
+		}
 	}
 
 	@Override
