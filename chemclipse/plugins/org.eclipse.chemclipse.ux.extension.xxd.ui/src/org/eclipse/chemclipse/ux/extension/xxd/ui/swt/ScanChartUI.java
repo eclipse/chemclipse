@@ -92,6 +92,8 @@ public class ScanChartUI extends ScrollableChart {
 	private DataType dataType;
 	private SignalType signalType;
 	//
+	private DecimalFormat decimalFormatNormalIntensity = ValueFormat.getDecimalFormatEnglish("0");
+	private DecimalFormat decimalFormatLowIntensity = ValueFormat.getDecimalFormatEnglish("0.0000");
 	private ScanChartSupport scanChartSupport = new ScanChartSupport();
 	private Display display = Display.getDefault();
 	private Font font = display.getSystemFont();
@@ -649,7 +651,11 @@ public class ScanChartUI extends ScrollableChart {
 		String label;
 		switch(labelOption) {
 			case NOMIMAL:
-				label = Integer.toString((int)value);
+				if(value > -1.0d && value < 0.0d || (value > 0.0d && value < 1.0d)) {
+					label = decimalFormatLowIntensity.format(value);
+				} else {
+					label = decimalFormatNormalIntensity.format(value);
+				}
 				break;
 			case EXACT:
 				DecimalFormat decimalFormat = getDecimalFormatValue();
