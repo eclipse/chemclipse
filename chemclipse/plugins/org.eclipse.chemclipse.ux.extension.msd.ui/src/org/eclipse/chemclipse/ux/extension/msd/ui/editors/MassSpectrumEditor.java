@@ -8,12 +8,15 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - update upon events
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.editors;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -43,6 +46,7 @@ import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.MassSpectrumImportRunnable;
 import org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
@@ -55,6 +59,7 @@ import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
@@ -65,6 +70,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventHandler;
 
 public class MassSpectrumEditor implements IChemClipseEditor {
 
@@ -93,6 +100,10 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	private File massSpectrumFile;
 	private IMassSpectra massSpectra;
 	private IScanMSD massSpectrum;
+	private ArrayList<EventHandler> registeredEventHandler;
+	private AbstractExtendedMassSpectrumUI massSpectrumUI;
+	private List<Object> objects = new ArrayList<Object>();
+	private EPartService partService = ModelSupportAddon.getPartService();
 	/*
 	 * Showing additional info in tabs.
 	 */
@@ -103,6 +114,8 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 
 		loadMassSpectra();
 		createPages(parent);
+		registeredEventHandler = new ArrayList<EventHandler>();
+		registerEvents();
 	}
 
 	@Focus
@@ -163,7 +176,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		 */
 		try {
 			/*
-			 * True to show the moving progress bar. False, a chromatogram
+			 * True to show the moving progress bar. False, a mass spectrum
 			 * should be imported as a whole.
 			 */
 			dialog.run(true, false, runnable);
@@ -179,8 +192,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	private void saveMassSpectra(IProgressMonitor monitor, Shell shell) throws NoMassSpectrumConverterAvailableException {
 
 		/*
-		 * Try to save the chromatogram automatically if it is an *.chrom
-		 * type.<br/> If not, show the file save dialog.
+		 * Try to save the mass spectrum.
 		 */
 		if(massSpectrumFile != null && massSpectra != null && shell != null) {
 			/*
@@ -189,7 +201,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 			String converterId = massSpectra.getConverterId();
 			if(converterId != null && !converterId.equals("")) {
 				/*
-				 * Try to save the chromatogram.
+				 * Try to save the mass spectrum.
 				 */
 				monitor.subTask("Save Mass Spectrum");
 				IMassSpectrumExportConverterProcessingInfo processingInfo = MassSpectrumConverter.convert(massSpectrumFile, massSpectra, false, converterId, monitor);
@@ -228,8 +240,8 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 
 		try {
 			/*
-			 * Import the chromatogram without showing it on the gui. The GUI
-			 * will take care itself of this action.
+			 * Import the mass spectrum without showing it on the user interface.
+			 * The GUI will take care itself of this action.
 			 */
 			Object object = part.getObject();
 			if(object instanceof String) {
@@ -244,14 +256,14 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	private void importMassSpectrum(File file) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
 
 		/*
-		 * Import the chromatogram here, but do not set to the chromatogram ui,
+		 * Import the mass spectrum here, but do not set to the mass spectrum UI,
 		 * as it must be initialized first.
 		 */
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 		MassSpectrumImportRunnable runnable = new MassSpectrumImportRunnable(file);
 		try {
 			/*
-			 * True to show the moving progress bar. False, a chromatogram
+			 * True to show the moving progress bar. False, a mass spectrum
 			 * should be imported as a whole.
 			 */
 			dialog.run(true, false, runnable);
@@ -303,7 +315,6 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		{
 			isProfile = PreferenceSupplier.useProfileMassSpectrumView();
 		}
-		AbstractExtendedMassSpectrumUI massSpectrumUI;
 		if(isProfile) {
 			massSpectrumUI = new SimpleContinuousMassSpectrumUI(tabFolder, SWT.NONE, MassValueDisplayPrecision.EXACT);
 		} else {
@@ -319,5 +330,62 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		composite.setLayout(new FillLayout());
 		Label label = new Label(composite, SWT.NONE);
 		label.setText("The mass spectrum couldn't be loaded.");
+	}
+
+	public void registerEvent(String topic, String property) {
+
+		registerEvent(topic, new String[]{property});
+	}
+
+	public void registerEvent(String topic, String[] properties) {
+
+		if(eventBroker != null) {
+			registeredEventHandler.add(registerEventHandler(eventBroker, topic, properties));
+		}
+	}
+
+	private EventHandler registerEventHandler(IEventBroker eventBroker, String topic, String[] properties) {
+
+		EventHandler eventHandler = new EventHandler() {
+
+			public void handleEvent(Event event) {
+
+				try {
+					objects.clear();
+					for(String property : properties) {
+						Object object = event.getProperty(property);
+						objects.add(object);
+					}
+					update(topic);
+				} catch(Exception e) {
+					logger.warn(e + "\t" + event);
+				}
+			}
+		};
+		eventBroker.subscribe(topic, eventHandler);
+		return eventHandler;
+	}
+
+	private void update(String topic) {
+
+		if(massSpectrumUI.isVisible()) {
+			updateObjects(objects, topic);
+		}
+	}
+
+	public void registerEvents() {
+
+		registerEvent(IChemClipseEvents.TOPIC_SCAN_MSD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SCAN_SELECTION);
+	}
+
+	public void updateObjects(List<Object> objects, String topic) {
+
+		if(objects.size() == 1) {
+			Object object = objects.get(0);
+			if(object instanceof IScanMSD) {
+				IScanMSD massSpectrum = (IScanMSD)object;
+				massSpectrumUI.update(massSpectrum, true);
+			}
+		}
 	}
 }
