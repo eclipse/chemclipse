@@ -24,7 +24,7 @@
       <children xsi:type="menu:HandledMenuItem" xmi:id="_pM6yUGP-EeSlDuFT8RyH7A" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handledmenuitem.filterAllPeaks" label="SNIP Filter All Peaks" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/snipMassSpectrumPeaks.gif" command="_QtWsIGP-EeSlDuFT8RyH7A"/>
     </elements>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Aoa-YPB-Eeev9sLsv2ZXcQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.spectrum.baselinedetectors">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Aoa-YPB-Eeev9sLsv2ZXcQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.spectrum.baselinecorrection">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_sVeJ8PB6Eeev9sLsv2ZXcQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.handledmenuitem.filterMassSpectrum" label="SNIP Filter Mass Spectrum" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/baselineSnip.gif" command="_OlHfkPB6Eeev9sLsv2ZXcQ"/>
   </fragments>
 </fragment:ModelFragments>
