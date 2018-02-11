@@ -1318,6 +1318,7 @@ public class ExtendedChromatogramUI {
 			xAxis.setRange(xRange);
 			yAxis.setRange(yRange);
 			baseChart.adjustSecondaryAxes();
+			chromatogramChart.redraw();
 		}
 	}
 
