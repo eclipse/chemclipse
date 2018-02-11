@@ -132,6 +132,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		if(chromatogramSelection != null) {
 			chromatogramSelection.update(false);
 		}
+		//
 		extendedChromatogramUI.update();
 	}
 

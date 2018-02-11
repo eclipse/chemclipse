@@ -609,6 +609,7 @@ public class ExtendedChromatogramUI {
 		updateLabel();
 		deleteScanNumberSecondaryAxisX();
 		chromatogramChart.deleteSeries();
+		//
 		if(chromatogramSelection != null) {
 			addjustChromatogramChart();
 			addChromatogramSeriesData();
@@ -1299,6 +1300,8 @@ public class ExtendedChromatogramUI {
 	private void setChromatogramSelectionRange(int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance) {
 
 		chromatogramSelection.setRanges(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance, false);
+		chromatogramSelection.update(true);
+		adjustChromatogramSelectionRange();
 	}
 
 	private void adjustChromatogramSelectionRange() {
@@ -1314,9 +1317,7 @@ public class ExtendedChromatogramUI {
 			//
 			xAxis.setRange(xRange);
 			yAxis.setRange(yRange);
-			//
-			chromatogramChart.redraw();
-			baseChart.redraw();
+			baseChart.adjustSecondaryAxes();
 		}
 	}
 
