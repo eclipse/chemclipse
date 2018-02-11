@@ -40,8 +40,6 @@ public class FilterHandlerMassSpectrum implements EventHandler {
 	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
 		if(massSpectrum != null) {
-			//
-			System.out.println("Test");
 			final Display display = Display.getCurrent();
 			StatusLineLogger.setInfo(InfoType.MESSAGE, "Start SNIP Filter");
 			IRunnableWithProgress runnable = new MassSpectrumFilterRunnable(massSpectrum);
@@ -65,7 +63,6 @@ public class FilterHandlerMassSpectrum implements EventHandler {
 	public void handleEvent(Event event) {
 
 		if(event.getTopic().equals(IChemClipseEvents.TOPIC_SCAN_MSD_UPDATE_SELECTION)) {
-			System.out.println("handleEvent"); // TODO: does not fire
 			massSpectrum = (IScanMSD)event.getProperty(IChemClipseEvents.PROPERTY_SCAN_SELECTION);
 		} else {
 			massSpectrum = null;
