@@ -115,7 +115,7 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_O4wL0ENPEeaHxO-Ahlk0cA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.main" positionInList="after:org.eclipse.chemclipse.ux.extension.ui.menu">
     <elements xsi:type="menu:Menu" xmi:id="_mMBv8ENNEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.spectra.menu" label="Spectrum" mnemonics="">
-      <children xsi:type="menu:Menu" xmi:id="_16DXMPB9Eeev9sLsv2ZXcQ" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.spectrum.baselinedetectors" label="Baseline Detectors"/>
+      <children xsi:type="menu:Menu" xmi:id="_16DXMPB9Eeev9sLsv2ZXcQ" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.spectrum.baselinecorrection" label="Baseline Correction"/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_bX07oENPEeaHxO-Ahlk0cA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.main" positionInList="after:org.eclipse.chemclipse.ux.extension.ui.spectra.menu">
