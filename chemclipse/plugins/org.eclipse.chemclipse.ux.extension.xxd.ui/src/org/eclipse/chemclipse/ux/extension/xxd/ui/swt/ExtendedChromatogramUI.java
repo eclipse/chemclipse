@@ -105,9 +105,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.swtchart.IAxis;
 import org.swtchart.IAxis.Position;
-import org.swtchart.IAxisSet;
 import org.swtchart.ILineSeries.PlotSymbolType;
 import org.swtchart.IPlotArea;
 import org.swtchart.LineStyle;
@@ -1307,18 +1305,8 @@ public class ExtendedChromatogramUI {
 	private void adjustChromatogramSelectionRange() {
 
 		if(chromatogramSelection != null) {
-			BaseChart baseChart = chromatogramChart.getBaseChart();
-			IAxisSet axisSet = baseChart.getAxisSet();
-			IAxis xAxis = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
-			IAxis yAxis = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
-			//
-			Range xRange = new Range(chromatogramSelection.getStartRetentionTime(), chromatogramSelection.getStopRetentionTime());
-			Range yRange = new Range(chromatogramSelection.getStartAbundance(), chromatogramSelection.getStopAbundance());
-			//
-			xAxis.setRange(xRange);
-			yAxis.setRange(yRange);
-			baseChart.adjustSecondaryAxes();
-			chromatogramChart.redraw();
+			chromatogramChart.setRange(IExtendedChart.X_AXIS, chromatogramSelection.getStartRetentionTime(), chromatogramSelection.getStopRetentionTime());
+			chromatogramChart.setRange(IExtendedChart.Y_AXIS, chromatogramSelection.getStartAbundance(), chromatogramSelection.getStopAbundance());
 		}
 	}
 
