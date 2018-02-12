@@ -106,7 +106,9 @@ public class PcaEvaluation {
 		 */
 		for(Map.Entry<ISample<?>, double[]> entry : pcaPeakMap.entrySet()) {
 			double[] sampleData = entry.getValue();
+			ISample<?> sampleKey = entry.getKey();
 			principalComponentAnalysis.addObservation(sampleData);
+			principalComponentAnalysis.addObservationKey(sampleKey);
 		}
 		return principalComponentAnalysis;
 	}
@@ -145,16 +147,17 @@ public class PcaEvaluation {
 		List<IPcaResult> resultsList = new ArrayList<>();
 		for(Entry<ISample<?>, double[]> entry : pcaPeakMap.entrySet()) {
 			double[] sampleData = entry.getValue();
-			double[] eigenSpace = null;
+			double[] scoreVector = null;
 			ISample<?> sample = entry.getKey();
 			double errorMemberShip = Double.NaN;
 			IPcaResult pcaResult = new PcaResult(sample);
 			pcaResult.setName(sample.getName());
 			pcaResult.setGroupName(sample.getGroupName());
-			eigenSpace = principalComponentAnalysis.applyLoadings(sampleData);
+			// eigenSpace = principalComponentAnalysis.applyLoadings(sampleData);
+			scoreVector = principalComponentAnalysis.getScoreVector(sample);
 			errorMemberShip = principalComponentAnalysis.getErrorMetric(sampleData);
 			pcaResult.setSampleData(sampleData);
-			pcaResult.setEigenSpace(eigenSpace);
+			pcaResult.setScoreVector(scoreVector);
 			pcaResult.setErrorMemberShip(errorMemberShip);
 			pcaResult.setSampleData(sampleData);
 			resultsList.add(pcaResult);

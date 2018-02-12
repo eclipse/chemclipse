@@ -54,12 +54,12 @@ public class Chart3DSettings {
 		/*
 		 * set min and max
 		 */
-		settings.minX = pcaResults.getPcaResultList().stream().min((d1, d2) -> Double.compare(d1.getEigenSpace()[pcX], d2.getEigenSpace()[pcX])).get().getEigenSpace()[pcX];
-		settings.minY = pcaResults.getPcaResultList().stream().min((d1, d2) -> Double.compare(d1.getEigenSpace()[pcY], d2.getEigenSpace()[pcY])).get().getEigenSpace()[pcY];
-		settings.minZ = pcaResults.getPcaResultList().stream().min((d1, d2) -> Double.compare(d1.getEigenSpace()[pcZ], d2.getEigenSpace()[pcZ])).get().getEigenSpace()[pcZ];
-		settings.maxX = pcaResults.getPcaResultList().stream().max((d1, d2) -> Double.compare(d1.getEigenSpace()[pcX], d2.getEigenSpace()[pcX])).get().getEigenSpace()[pcX];
-		settings.maxY = pcaResults.getPcaResultList().stream().max((d1, d2) -> Double.compare(d1.getEigenSpace()[pcY], d2.getEigenSpace()[pcY])).get().getEigenSpace()[pcY];
-		settings.maxZ = pcaResults.getPcaResultList().stream().max((d1, d2) -> Double.compare(d1.getEigenSpace()[pcZ], d2.getEigenSpace()[pcZ])).get().getEigenSpace()[pcZ];
+		settings.minX = pcaResults.getPcaResultList().stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcX], d2.getScoreVector()[pcX])).get().getScoreVector()[pcX];
+		settings.minY = pcaResults.getPcaResultList().stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcY], d2.getScoreVector()[pcY])).get().getScoreVector()[pcY];
+		settings.minZ = pcaResults.getPcaResultList().stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcZ], d2.getScoreVector()[pcZ])).get().getScoreVector()[pcZ];
+		settings.maxX = pcaResults.getPcaResultList().stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcX], d2.getScoreVector()[pcX])).get().getScoreVector()[pcX];
+		settings.maxY = pcaResults.getPcaResultList().stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcY], d2.getScoreVector()[pcY])).get().getScoreVector()[pcY];
+		settings.maxZ = pcaResults.getPcaResultList().stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcZ], d2.getScoreVector()[pcZ])).get().getScoreVector()[pcZ];
 		settings.setScale(scale);
 	}
 

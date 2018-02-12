@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import java.util.ArrayList;
+
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
 
@@ -21,6 +23,7 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 	private double mean[];
 	private int numComps;
 	private DenseMatrix64F sampleData = new DenseMatrix64F(1, 1);
+	private ArrayList<ISample<?>> sampleKeys = new ArrayList<>();
 	private int sampleIndex;
 
 	@Override
@@ -39,6 +42,11 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 			sampleData.set(sampleIndex, i, obsData[i]);
 		}
 		sampleIndex++;
+	}
+
+	public void addObservationKey(ISample<?> sampleKey) {
+
+		sampleKeys.add(sampleKey);
 	}
 
 	public DenseMatrix64F getScores() {
@@ -127,11 +135,12 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 	}
 
 	@Override
-	public double[] getScoreVector(int obs) {
+	public double[] getScoreVector(ISample<?> sampleId) {
 
-		DenseMatrix64F scores = new DenseMatrix64F(1, sampleData.numCols);
-		CommonOps.extract(loadings, obs, obs + 1, 0, sampleData.numCols, scores, 0, 0);
-		return scores.data;
+		int obs = sampleKeys.indexOf(sampleId);
+		DenseMatrix64F scoreVector = new DenseMatrix64F(numComps, 1);
+		CommonOps.extract(scores, 0, numComps, obs, obs + 1, scoreVector, 0, 0);
+		return scoreVector.data;
 	}
 
 	public double[] reproject(double[] scoreVector) {

@@ -105,7 +105,7 @@ public class ResultExport {
 				 * Print the PCs
 				 */
 				String name = pcaResult.getName();
-				double[] eigenSpace = pcaResult.getEigenSpace();
+				double[] eigenSpace = pcaResult.getScoreVector();
 				printWriter.print(name);
 				printWriter.print(TAB);
 				for(double value : eigenSpace) {

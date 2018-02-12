@@ -21,7 +21,7 @@ public interface IPcaResult {
 		return (IPcaResult r) -> new Observable[]{r.getSample().selectedProperty()};
 	}
 
-	double[] getEigenSpace();
+	double[] getScoreVector();
 
 	double getErrorMemberShip();
 
@@ -37,7 +37,7 @@ public interface IPcaResult {
 
 	void setDisplayed(boolean displayed);
 
-	void setEigenSpace(double[] eigenSpace);
+	void setScoreVector(double[] eigenSpace);
 
 	void setErrorMemberShip(double errorMemberShip);
 

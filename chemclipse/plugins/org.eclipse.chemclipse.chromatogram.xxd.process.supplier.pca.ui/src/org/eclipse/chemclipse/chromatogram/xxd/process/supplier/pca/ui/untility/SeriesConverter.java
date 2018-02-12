@@ -117,7 +117,7 @@ public class SeriesConverter {
 			if(!pcaResult.isDisplayed()) {
 				continue;
 			}
-			double[] eigenSpace = pcaResult.getEigenSpace();
+			double[] eigenSpace = pcaResult.getScoreVector();
 			double x = 0;
 			if(pcX != 0) {
 				x = eigenSpace[pcX - 1]; // e.g. 0 = PC1

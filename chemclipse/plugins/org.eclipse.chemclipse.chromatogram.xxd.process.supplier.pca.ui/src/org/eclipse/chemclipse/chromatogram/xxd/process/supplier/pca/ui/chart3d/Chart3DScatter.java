@@ -99,9 +99,9 @@ public class Chart3DScatter {
 			 * create sphere
 			 */
 			Sphere sphere = new Sphere();
-			double pcX = d.getEigenSpace()[settings.getPcX()];
-			double pcY = d.getEigenSpace()[settings.getPcY()];
-			double pcZ = d.getEigenSpace()[settings.getPcZ()];
+			double pcX = d.getScoreVector()[settings.getPcX()];
+			double pcY = d.getScoreVector()[settings.getPcY()];
+			double pcZ = d.getScoreVector()[settings.getPcZ()];
 			sphere.setTranslateX(pcX * s);
 			sphere.setTranslateY(pcY * s);
 			sphere.setTranslateZ(pcZ * s);

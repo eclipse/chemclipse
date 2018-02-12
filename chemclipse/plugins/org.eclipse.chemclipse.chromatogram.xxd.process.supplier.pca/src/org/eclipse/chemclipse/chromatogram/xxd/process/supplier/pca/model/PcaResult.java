@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 public class PcaResult implements IPcaResult {
 
-	private double[] eigenSpace;
+	private double[] scoreVector;
 	private double errorMemberShip;
 	private String groupName;
 	private boolean isDisplayed;
@@ -28,9 +28,9 @@ public class PcaResult implements IPcaResult {
 	}
 
 	@Override
-	public double[] getEigenSpace() {
+	public double[] getScoreVector() {
 
-		return eigenSpace;
+		return scoreVector;
 	}
 
 	@Override
@@ -76,9 +76,9 @@ public class PcaResult implements IPcaResult {
 	}
 
 	@Override
-	public void setEigenSpace(double[] eigenSpace) {
+	public void setScoreVector(double[] scoreVector) {
 
-		this.eigenSpace = eigenSpace;
+		this.scoreVector = scoreVector;
 	}
 
 	@Override

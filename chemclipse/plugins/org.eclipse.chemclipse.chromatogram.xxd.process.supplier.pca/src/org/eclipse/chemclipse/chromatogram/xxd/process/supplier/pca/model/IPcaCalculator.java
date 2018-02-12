@@ -15,6 +15,8 @@ public interface IPcaCalculator {
 
 	void addObservation(double[] obsData);
 
+	void addObservationKey(ISample<?> sampleKey);
+
 	double[] applyLoadings(double[] obs);
 
 	void compute(int numComps);
@@ -23,7 +25,7 @@ public interface IPcaCalculator {
 
 	double[] getLoadingVector(int var);
 
-	double[] getScoreVector(int obs);
+	double[] getScoreVector(ISample<?> sampleId);
 
 	void initialize(int numObs, int numVars);
 }

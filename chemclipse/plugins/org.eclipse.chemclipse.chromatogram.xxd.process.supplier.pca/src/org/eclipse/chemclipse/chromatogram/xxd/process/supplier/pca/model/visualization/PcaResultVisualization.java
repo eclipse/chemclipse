@@ -42,9 +42,9 @@ public class PcaResultVisualization implements IPcaResultVisualization {
 	}
 
 	@Override
-	public double[] getEigenSpace() {
+	public double[] getScoreVector() {
 
-		return delegator.getEigenSpace();
+		return delegator.getScoreVector();
 	}
 
 	@Override
@@ -96,9 +96,9 @@ public class PcaResultVisualization implements IPcaResultVisualization {
 	}
 
 	@Override
-	public void setEigenSpace(double[] eigenSpace) {
+	public void setScoreVector(double[] scoreVector) {
 
-		delegator.setEigenSpace(eigenSpace);
+		delegator.setScoreVector(scoreVector);
 	}
 
 	@Override
