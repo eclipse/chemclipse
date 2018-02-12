@@ -9,29 +9,16 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xir.model.core;
+package org.eclipse.chemclipse.nmr.model.core;
 
+import java.util.Arrays;
 import java.util.TreeSet;
 
-public class ScanXIR extends TreeSet<ISignalXIR> implements IScanXIR {
+public class ScanNMR extends TreeSet<ISignalNMR> implements IScanNMR {
 
 	private static final long serialVersionUID = 3955396880394067950L;
 	//
-	private double rotationAngle = 0.0d;
 	private double[] rawSignals;
-	private double[] backgroundSignals;
-
-	@Override
-	public double getRotationAngle() {
-
-		return rotationAngle;
-	}
-
-	@Override
-	public void setRotationAngle(double rotationAngle) {
-
-		this.rotationAngle = rotationAngle;
-	}
 
 	@Override
 	public double[] getRawSignals() {
@@ -46,25 +33,11 @@ public class ScanXIR extends TreeSet<ISignalXIR> implements IScanXIR {
 	}
 
 	@Override
-	public double[] getBackgroundSignals() {
-
-		return backgroundSignals;
-	}
-
-	@Override
-	public void setBackgroundSignals(double[] backgroundSignals) {
-
-		this.backgroundSignals = backgroundSignals;
-	}
-
-	@Override
 	public int hashCode() {
 
 		final int prime = 31;
 		int result = super.hashCode();
-		long temp;
-		temp = Double.doubleToLongBits(rotationAngle);
-		result = prime * result + (int)(temp ^ (temp >>> 32));
+		result = prime * result + Arrays.hashCode(rawSignals);
 		return result;
 	}
 
@@ -77,8 +50,8 @@ public class ScanXIR extends TreeSet<ISignalXIR> implements IScanXIR {
 			return false;
 		if(getClass() != obj.getClass())
 			return false;
-		ScanXIR other = (ScanXIR)obj;
-		if(Double.doubleToLongBits(rotationAngle) != Double.doubleToLongBits(other.rotationAngle))
+		ScanNMR other = (ScanNMR)obj;
+		if(!Arrays.equals(rawSignals, other.rawSignals))
 			return false;
 		return true;
 	}
@@ -86,6 +59,6 @@ public class ScanXIR extends TreeSet<ISignalXIR> implements IScanXIR {
 	@Override
 	public String toString() {
 
-		return "ScanXIR [rotationAngle=" + rotationAngle + "]";
+		return "ScanNMR [rawSignals=" + Arrays.toString(rawSignals) + "]";
 	}
 }

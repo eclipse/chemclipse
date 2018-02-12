@@ -9,21 +9,17 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xir.model.core;
+package org.eclipse.chemclipse.nmr.model.core;
 
-import java.util.Set;
+import org.eclipse.chemclipse.model.core.ISignal;
 
-public interface IScanXIR extends Set<ISignalXIR> {
+public interface ISignalNMR extends ISignal {
 
-	double getRotationAngle();
+	double getChemicalShift();
 
-	void setRotationAngle(double rotationAngle);
+	void setChemicalShift(double chemicalShift);
 
-	double[] getRawSignals();
+	double getIntensity();
 
-	void setRawSignals(double[] rawSignals);
-
-	double[] getBackgroundSignals();
-
-	void setBackgroundSignals(double[] backgroundSignals);
+	void setIntensity(double intensity);
 }
