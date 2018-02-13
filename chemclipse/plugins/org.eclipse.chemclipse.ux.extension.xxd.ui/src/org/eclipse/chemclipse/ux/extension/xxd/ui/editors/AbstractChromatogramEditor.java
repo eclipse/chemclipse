@@ -79,15 +79,16 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 	private File chromatogramFile = null;
 	private ExtendedChromatogramUI extendedChromatogramUI;
 	//
-	private Shell shell = Display.getDefault().getActiveShell();
+	private Shell shell;
 
-	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable) {
+	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
 		super(part);
 		//
 		this.dataType = dataType;
 		this.part = part;
 		this.dirtyable = dirtyable;
 		this.eventBroker = ModelSupportAddon.getEventBroker();
+		this.shell = shell;
 		//
 		initialize(parent);
 	}
@@ -176,7 +177,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 				try {
 					monitor.beginTask("Save Chromatogram", IProgressMonitor.UNKNOWN);
 					try {
-						saveChromatogram(monitor, shell);
+						saveChromatogram(monitor);
 					} catch(NoChromatogramConverterAvailableException e) {
 						throw new InvocationTargetException(e);
 					}
@@ -224,22 +225,22 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 
 		IChromatogramSelection chromatogramSelection = loadChromatogram();
 		createEditorPages(parent);
-		extendedChromatogramUI.updateChromatogramSelection(chromatogramSelection);
 		//
 		if(chromatogramSelection != null) {
+			extendedChromatogramUI.updateChromatogramSelection(chromatogramSelection);
 			dirtyable.setDirty(true);
 			chromatogramSelection.update(true);
 		}
 	}
 
-	private IChromatogramSelection loadChromatogram() {
+	private synchronized IChromatogramSelection loadChromatogram() {
 
 		IChromatogramSelection chromatogramSelection = null;
 		try {
 			Object object = part.getObject();
 			if(object instanceof String) {
 				File file = new File((String)object);
-				chromatogramSelection = loadChromatogramSelection(file);
+				chromatogramSelection = loadChromatogramSelection(shell, file);
 			} else {
 				if(object instanceof IChromatogramMSD) {
 					IChromatogramMSD chromatogram = (IChromatogramMSD)object;
@@ -260,9 +261,9 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		return chromatogramSelection;
 	}
 
-	private IChromatogramSelection loadChromatogramSelection(File file) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
+	private IChromatogramSelection loadChromatogramSelection(Shell shell, File file) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
 
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(file, dataType);
 		try {
 			dialog.run(true, false, runnable);
@@ -279,7 +280,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		return chromatogramSelection;
 	}
 
-	private void saveChromatogram(IProgressMonitor monitor, Shell shell) throws NoChromatogramConverterAvailableException {
+	private void saveChromatogram(IProgressMonitor monitor) throws NoChromatogramConverterAvailableException {
 
 		IChromatogramSelection chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
 		if(chromatogramSelection != null && shell != null) {

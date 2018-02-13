@@ -23,13 +23,15 @@ public class BaselineSelectionPaintListener implements ICustomPaintListener {
 	private int y1;
 	private int x2;
 	private int y2;
+	//
+	private Display display = Display.getDefault();
 
 	@Override
 	public void paintControl(PaintEvent e) {
 
 		Color foreground = e.gc.getForeground();
 		Color background = e.gc.getBackground();
-		e.gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		e.gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
 		e.gc.drawLine(x1, y1, x2, y2);
 		e.gc.setForeground(foreground);
 		e.gc.setBackground(background);

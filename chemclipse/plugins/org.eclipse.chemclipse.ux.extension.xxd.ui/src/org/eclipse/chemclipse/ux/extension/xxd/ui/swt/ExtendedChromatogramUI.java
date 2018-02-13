@@ -468,7 +468,7 @@ public class ExtendedChromatogramUI {
 		initialize(parent);
 	}
 
-	public void updateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
+	public synchronized void updateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
 
 		this.chromatogramSelection = chromatogramSelection;
 		addChartMenuEntriesFilter();

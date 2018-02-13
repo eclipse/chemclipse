@@ -533,7 +533,7 @@ public class ExtendedScanChartUI {
 						 */
 						String identifierId = scanIdentifierIds.get(index);
 						IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(optimizedScan, identifierId);
-						ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+						ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
 						try {
 							monitor.run(true, true, runnable);
 							originalScan.setOptimizedMassSpectrum(optimizedScan);

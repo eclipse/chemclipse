@@ -63,6 +63,7 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 	private TargetExtendedComparator targetComparator;
 	//
 	private Transform transform;
+	private Display display = Display.getDefault();
 
 	public LabeledPeakChromatogramUI(Composite parent, int style) {
 		super(parent, style, new AxisTitlesMassScale());
@@ -71,7 +72,7 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 		/*
 		 * Draw the text upright
 		 */
-		transform = new Transform(Display.getCurrent());
+		transform = new Transform(display);
 		transform.rotate(-90);
 	}
 

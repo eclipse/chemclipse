@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 
 public class ChromatogramEditorMSD extends AbstractChromatogramEditor {
 
@@ -24,7 +25,7 @@ public class ChromatogramEditorMSD extends AbstractChromatogramEditor {
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorMSD";
 
 	@Inject
-	public ChromatogramEditorMSD(Composite parent, MPart part, MDirtyable dirtyable) {
-		super(DataType.MSD, parent, part, dirtyable);
+	public ChromatogramEditorMSD(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
+		super(DataType.MSD, parent, part, dirtyable, shell);
 	}
 }

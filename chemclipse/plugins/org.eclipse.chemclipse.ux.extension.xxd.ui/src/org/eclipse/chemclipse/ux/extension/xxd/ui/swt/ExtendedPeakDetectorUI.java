@@ -152,7 +152,8 @@ public class ExtendedPeakDetectorUI {
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private PeakChartSupport peakChartSupport = new PeakChartSupport();
-	private Shell shell = Display.getDefault().getActiveShell();
+	private Display display = Display.getDefault();
+	private Shell shell = display.getActiveShell();
 
 	private class KeyPressedEventProcessor extends AbstractHandledEventProcessor implements IHandledEventProcessor {
 
@@ -855,7 +856,7 @@ public class ExtendedPeakDetectorUI {
 
 	private void setCursor(int cursorId) {
 
-		chromatogramChart.getBaseChart().setCursor(Display.getCurrent().getSystemCursor(cursorId));
+		chromatogramChart.getBaseChart().setCursor(display.getSystemCursor(cursorId));
 	}
 
 	private void setCursorDefault() {

@@ -29,7 +29,6 @@ import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWS
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
@@ -122,7 +121,7 @@ public class ChromatogramFileSupport {
 		//
 		File data = runnable.getData();
 		if(data == null) {
-			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Save Chromatogram", "There is not suitable chromatogram converter available.");
+			MessageDialog.openInformation(shell, "Save Chromatogram", "There is not suitable chromatogram converter available.");
 		}
 	}
 
