@@ -48,18 +48,22 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Import Chromatogram", IProgressMonitor.UNKNOWN);
+			/*
+			 * Don't fire an update.
+			 */
+			boolean fireUpdate = false;
 			switch(dataType) {
 				case MSD_NOMINAL:
 				case MSD_TANDEM:
 				case MSD_HIGHRES:
 				case MSD:
-					chromatogramSelection = new ChromatogramSelectionMSD(ChromatogramConverterMSD.convert(file, monitor).getChromatogram());
+					chromatogramSelection = new ChromatogramSelectionMSD(ChromatogramConverterMSD.convert(file, monitor).getChromatogram(), fireUpdate);
 					break;
 				case CSD:
-					chromatogramSelection = new ChromatogramSelectionCSD(ChromatogramConverterCSD.convert(file, monitor).getChromatogram());
+					chromatogramSelection = new ChromatogramSelectionCSD(ChromatogramConverterCSD.convert(file, monitor).getChromatogram(), fireUpdate);
 					break;
 				case WSD:
-					chromatogramSelection = new ChromatogramSelectionCSD(ChromatogramConverterWSD.convert(file, monitor).getChromatogram());
+					chromatogramSelection = new ChromatogramSelectionCSD(ChromatogramConverterWSD.convert(file, monitor).getChromatogram(), fireUpdate);
 					break;
 				default:
 					// No action

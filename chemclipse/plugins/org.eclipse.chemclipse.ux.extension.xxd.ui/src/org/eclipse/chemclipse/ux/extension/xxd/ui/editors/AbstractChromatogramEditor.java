@@ -239,9 +239,15 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		try {
 			Object object = part.getObject();
 			if(object instanceof String) {
+				/*
+				 * String
+				 */
 				File file = new File((String)object);
-				chromatogramSelection = loadChromatogramSelection(shell, file);
+				chromatogramSelection = loadChromatogramSelection(file);
 			} else {
+				/*
+				 * Already available.
+				 */
 				if(object instanceof IChromatogramMSD) {
 					IChromatogramMSD chromatogram = (IChromatogramMSD)object;
 					chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
@@ -261,7 +267,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		return chromatogramSelection;
 	}
 
-	private IChromatogramSelection loadChromatogramSelection(Shell shell, File file) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
+	private IChromatogramSelection loadChromatogramSelection(File file) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
 
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(file, dataType);
@@ -272,9 +278,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		} catch(InterruptedException e) {
 			logger.warn(e);
 		}
-		/*
-		 * Get the chromatogram.
-		 */
+		//
 		IChromatogramSelection chromatogramSelection = runnable.getChromatogramSelection();
 		chromatogramFile = file;
 		return chromatogramSelection;

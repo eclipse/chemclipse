@@ -258,8 +258,15 @@ public abstract class AbstractSupplierFileExplorer {
 				while(iterator.hasNext()) {
 					Object object = iterator.next();
 					if(object instanceof File) {
-						File file = (File)object;
-						openEditor(file);
+						display.asyncExec(new Runnable() {
+
+							@Override
+							public void run() {
+
+								File file = (File)object;
+								openEditor(file);
+							}
+						});
 					}
 				}
 			}
