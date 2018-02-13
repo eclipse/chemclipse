@@ -225,9 +225,9 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 
 		IChromatogramSelection chromatogramSelection = loadChromatogram();
 		createEditorPages(parent);
+		extendedChromatogramUI.updateChromatogramSelection(chromatogramSelection);
 		//
 		if(chromatogramSelection != null) {
-			extendedChromatogramUI.updateChromatogramSelection(chromatogramSelection);
 			dirtyable.setDirty(true);
 			chromatogramSelection.update(true);
 		}
