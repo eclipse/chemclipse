@@ -12,6 +12,15 @@
       </ChromatogramFilterSupplier>
    </extension>
    <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.massSpectrumFilterSupplier">
+      <MassSpectrumFilterSupplier
+            description="This is a Savitzky-Golay Mass Spectrum optimization filter."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core.MassSpectrumFilter"
+            filterName="Savitzky-Golay MassSpectrum Filter"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.savitzkygolay.massspectrum">
+      </MassSpectrumFilterSupplier>
+   </extension>
+   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceInitializer">

@@ -73,9 +73,29 @@ public class SavitzkyGolayProcessor {
 		return chromatogramFilterResult;
 	}
 
+	public double[] smooth(double[] ticValues, int derivative, int order, int width, IProgressMonitor monitor) {
+
+		return smoothValues(ticValues, derivative, order, width);
+	}
+
+	public double[] smooth(ITotalScanSignals totalScanSignals, int derivative, int order, int width, IProgressMonitor monitor) {
+
+		int size = totalScanSignals.size();
+		double[] ticValues = new double[size];
+		int column = 0;
+		for(ITotalScanSignal signal : totalScanSignals.getTotalScanSignals()) {
+			ticValues[column++] = signal.getTotalSignal();
+		}
+		//
+		return smoothValues(ticValues, derivative, order, width);
+	}
+
 	public double[] smooth(double[] ticValues, ISupplierFilterSettings supplierFilterSettings, IProgressMonitor monitor) {
 
-		return smoothValues(ticValues, supplierFilterSettings);
+		int derivative = supplierFilterSettings.getDerivative();
+		int order = supplierFilterSettings.getOrder();
+		int width = supplierFilterSettings.getWidth();
+		return smoothValues(ticValues, derivative, order, width);
 	}
 
 	public double[] smooth(ITotalScanSignals totalScanSignals, ISupplierFilterSettings supplierFilterSettings, IProgressMonitor monitor) {
@@ -87,14 +107,14 @@ public class SavitzkyGolayProcessor {
 			ticValues[column++] = signal.getTotalSignal();
 		}
 		//
-		return smoothValues(ticValues, supplierFilterSettings);
-	}
-
-	private double[] smoothValues(double[] ticValues, ISupplierFilterSettings supplierFilterSettings) {
-
 		int derivative = supplierFilterSettings.getDerivative();
 		int order = supplierFilterSettings.getOrder();
 		int width = supplierFilterSettings.getWidth();
+		return smoothValues(ticValues, derivative, order, width);
+	}
+
+	private double[] smoothValues(double[] ticValues, int derivative, int order, int width) {
+
 		int p = calculateP(width);
 		//
 		int size = ticValues.length;

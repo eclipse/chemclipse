@@ -15,7 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ISavitzkyGolayMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ISupplierFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.SavitzkyGolayMassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.SupplierFilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -88,5 +90,32 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		filterSettings.setOrder(preferences.getInt(P_ORDER, DEF_ORDER));
 		filterSettings.setWidth(preferences.getInt(P_WIDTH, DEF_WIDTH));
 		return filterSettings;
+	}
+
+	public static ISavitzkyGolayMassSpectrumFilterSettings getMassSpectrumFilterSettings() {
+
+		ISavitzkyGolayMassSpectrumFilterSettings settings = new SavitzkyGolayMassSpectrumFilterSettings();
+		settings.setDerivative(getDerivative());
+		settings.setOrder(getOrder());
+		settings.setWidth(getWidth());
+		return settings;
+	}
+
+	public static int getDerivative() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_DERIVATIVE, DEF_DERIVATIVE);
+	}
+
+	public static int getOrder() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_ORDER, DEF_ORDER);
+	}
+
+	public static int getWidth() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_WIDTH, DEF_WIDTH);
 	}
 }
