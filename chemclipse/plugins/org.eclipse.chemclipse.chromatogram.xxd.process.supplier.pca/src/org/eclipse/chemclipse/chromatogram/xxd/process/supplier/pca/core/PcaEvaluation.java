@@ -30,7 +30,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaCalculatorSvd;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaCalculatorNipals;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Variable;
@@ -99,7 +99,7 @@ public class PcaEvaluation {
 		 * Initialize the PCA analysis.
 		 */
 		int numSamples = pcaPeakMap.size();
-		IPcaCalculator principalComponentAnalysis = new PcaCalculatorSvd();
+		IPcaCalculator principalComponentAnalysis = new PcaCalculatorNipals();
 		principalComponentAnalysis.initialize(numSamples, sampleSize);
 		/*
 		 * Add the samples.

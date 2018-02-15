@@ -20,7 +20,7 @@ public class PcaCalculatorNipals extends AbstractPcaCalculator {
 	@Override
 	public void compute(int numComps) {
 
-		// Prepare data, E, p, t, threshold
+		// Prepare data, E, p, t, threshold, scores, loadings
 		int numberOfSamples = getSampleData().getNumRows();
 		int numberOfVariables = getSampleData().getNumCols();
 		final double threshold = 0.00001;
@@ -32,6 +32,8 @@ public class PcaCalculatorNipals extends AbstractPcaCalculator {
 		DenseMatrix64F t = CommonOps.extract(E, 0, numberOfSamples, 0, 1);
 		DenseMatrix64F pMatrix = new DenseMatrix64F(numberOfVariables, 1);
 		DenseMatrix64F tMatrix = new DenseMatrix64F(numberOfSamples, 1);
+		setLoadings(new DenseMatrix64F(numComps, numberOfVariables));
+		setScores(new DenseMatrix64F(numComps, numberOfSamples));
 		// Iterate over number of components
 		for(int i = 0; i < numComps; i++) {
 			// do.. iterate until threshold reached
@@ -49,7 +51,18 @@ public class PcaCalculatorNipals extends AbstractPcaCalculator {
 				scoreDotNew = CommonOps.dot(t, t);
 			} while(Math.abs(scoreDotOld - scoreDotNew) > threshold);
 			// write scores, loadings of current component
+			DenseMatrix64F t_t = new DenseMatrix64F(1, numberOfSamples);
+			CommonOps.transpose(t, t_t);
+			CommonOps.extract(t_t, 0, 1, 0, numberOfSamples, getScores(), i, 0);
+			DenseMatrix64F p_t = new DenseMatrix64F(1, numberOfVariables);
+			CommonOps.transpose(p, p_t);
+			CommonOps.extract(p_t, 0, 1, 0, numberOfVariables, getLoadings(), i, 0);
+			DenseMatrix64F E_sub = new DenseMatrix64F(numberOfSamples, numberOfVariables);
+			DenseMatrix64F pMatrix_t = new DenseMatrix64F(1, numberOfVariables);
+			// subtract calculated t*p from E
+			CommonOps.transpose(pMatrix, pMatrix_t);
+			CommonOps.mult(tMatrix, pMatrix_t, E_sub);
+			CommonOps.subtractEquals(E, E_sub);
 		}
-		// subtract calculated t*p from E
 	}
 }
