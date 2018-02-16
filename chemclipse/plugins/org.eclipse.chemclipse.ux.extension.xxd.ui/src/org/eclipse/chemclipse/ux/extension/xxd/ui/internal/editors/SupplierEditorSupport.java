@@ -17,21 +17,25 @@ import java.util.List;
 
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
-import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IMeasurement;
+import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorCSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorWSD;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorNMR;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
+import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
 import org.eclipse.e4.core.services.events.IEventBroker;
 
-public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport implements IChromatogramEditorSupport {
+public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport implements ISupplierEditorSupport {
 
 	private String type = "";
 	//
@@ -42,7 +46,7 @@ public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport
 	private String topicUpdateRawfile = "";
 	private String topicUpdateOverview = "";
 
-	public ChromatogramEditorSupport(DataType dataType) {
+	public SupplierEditorSupport(DataType dataType) {
 		super(getSupplier(dataType));
 		initialize(dataType);
 	}
@@ -62,6 +66,12 @@ public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport
 				break;
 			case WSD:
 				supplier = ChromatogramConverterWSD.getChromatogramConverterSupport().getSupplier();
+				break;
+			case XIR:
+				supplier = ScanConverterXIR.getScanConverterSupport().getSupplier();
+				break;
+			case NMR:
+				supplier = ScanConverterNMR.getScanConverterSupport().getSupplier();
 				break;
 			default:
 				// No action
@@ -103,6 +113,24 @@ public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport
 				topicUpdateRawfile = IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE;
 				topicUpdateOverview = IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_OVERVIEW;
 				break;
+			case XIR:
+				type = TYPE_XIR;
+				elementId = ScanEditorXIR.ID;
+				contributionURI = ScanEditorXIR.CONTRIBUTION_URI;
+				iconURI = ScanEditorXIR.ICON_URI;
+				tooltip = ScanEditorXIR.TOOLTIP;
+				topicUpdateRawfile = IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_RAWFILE;
+				topicUpdateOverview = IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_OVERVIEW;
+				break;
+			case NMR:
+				type = TYPE_NMR;
+				elementId = ScanEditorNMR.ID;
+				contributionURI = ScanEditorNMR.CONTRIBUTION_URI;
+				iconURI = ScanEditorNMR.ICON_URI;
+				tooltip = ScanEditorNMR.TOOLTIP;
+				topicUpdateRawfile = IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_RAWFILE;
+				topicUpdateOverview = IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_OVERVIEW;
+				break;
 			default:
 				type = "";
 				elementId = "";
@@ -129,9 +157,9 @@ public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport
 	}
 
 	@Override
-	public void openEditor(IChromatogram chromatogram) {
+	public void openEditor(IMeasurement measurement) {
 
-		openEditor(null, chromatogram, elementId, contributionURI, iconURI, tooltip);
+		openEditor(null, measurement, elementId, contributionURI, iconURI, tooltip);
 	}
 
 	@Override
@@ -144,9 +172,9 @@ public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport
 	}
 
 	@Override
-	public void openOverview(IChromatogramOverview chromatogramOverview) {
+	public void openOverview(IMeasurementInfo measurementInfo) {
 
 		IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-		eventBroker.send(topicUpdateOverview, chromatogramOverview);
+		eventBroker.send(topicUpdateOverview, measurementInfo);
 	}
 }

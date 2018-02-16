@@ -11,12 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.provider;
 
-import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IMeasurement;
+import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 
-public interface IChromatogramEditorSupport extends ISupplierFileEditorSupport, ISupplierFileIdentifier {
+public interface ISupplierEditorSupport extends ISupplierFileEditorSupport, ISupplierFileIdentifier {
 
-	void openEditor(IChromatogram chromatogram);
+	void openEditor(IMeasurement measurement);
 
-	void openOverview(IChromatogramOverview chromatogramOverview);
+	void openOverview(IMeasurementInfo measurementInfo);
 }

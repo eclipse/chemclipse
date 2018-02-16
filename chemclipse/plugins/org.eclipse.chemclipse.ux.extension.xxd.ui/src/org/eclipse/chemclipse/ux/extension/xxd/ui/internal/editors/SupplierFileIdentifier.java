@@ -17,16 +17,18 @@ import java.util.List;
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
+import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
 
-public class ChromatogramIdentifier extends AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
+public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
 
 	private String type = "";
 
-	public ChromatogramIdentifier(DataType dataType) {
+	public SupplierFileIdentifier(DataType dataType) {
 		super(getSupplier(dataType));
 		initialize(dataType);
 	}
@@ -46,6 +48,12 @@ public class ChromatogramIdentifier extends AbstractSupplierFileIdentifier imple
 				break;
 			case WSD:
 				supplier = ChromatogramConverterWSD.getChromatogramConverterSupport().getSupplier();
+				break;
+			case XIR:
+				supplier = ScanConverterXIR.getScanConverterSupport().getSupplier();
+				break;
+			case NMR:
+				supplier = ScanConverterNMR.getScanConverterSupport().getSupplier();
 				break;
 			default:
 				// No action
@@ -68,6 +76,12 @@ public class ChromatogramIdentifier extends AbstractSupplierFileIdentifier imple
 				break;
 			case WSD:
 				type = TYPE_WSD;
+				break;
+			case XIR:
+				type = TYPE_XIR;
+				break;
+			case NMR:
+				type = TYPE_NMR;
 				break;
 			default:
 				type = "";

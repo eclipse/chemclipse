@@ -68,7 +68,10 @@ public interface IChemClipseEvents {
 	String TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE = "chromatogram/msd/update/rawfile";
 	String TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE = "chromatogram/csd/update/rawfile";
 	String TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE = "chromatogram/wsd/update/rawfile";
+	String TOPIC_SCAN_XIR_UPDATE_RAWFILE = "scan/xir/update/rawfile";
+	String TOPIC_SCAN_NMR_UPDATE_RAWFILE = "scan/nmr/update/rawfile";
 	String TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE = "chromatogram/xxd/update/none";
+	String TOPIC_SCAN_XXD_UPDATE_NONE = "scan/xxd/update/none";
 	/*
 	 * UNLOAD
 	 * Close the chromatogram editor.
@@ -127,6 +130,15 @@ public interface IChemClipseEvents {
 	String TOPIC_IDENTIFICATION_TARGET_UPDATE = "identification/target/update";
 	String TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE = "identification/target/update/massspectrum/unknown";
 	String TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_LIBRARY_UPDATE = "identification/target/update/massspectrum/library";
+	/*
+	 * FTIR, NMR
+	 */
+	String TOPIC_SCAN_XIR_UPDATE_OVERVIEW = "scan/xir/update/overview";
+	String TOPIC_SCAN_NMR_UPDATE_OVERVIEW = "scan/nmr/update/overview";
+	String TOPIC_SCAN_XIR_UPDATE_SELECTION = "scan/xir/update/selection";
+	String TOPIC_SCAN_NMR_UPDATE_SELECTION = "scan/nmr/update/selection";
+	String TOPIC_SCAN_XIR_UNLOAD_SELECTION = "scan/xir/unload/selection";
+	String TOPIC_SCAN_NMR_UNLOAD_SELECTION = "scan/nmr/unload/selection";
 	/*
 	 * Converter
 	 */

@@ -14,16 +14,16 @@ package org.eclipse.chemclipse.ux.extension.csd.ui.support;
 import java.io.File;
 
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
-import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IMeasurement;
+import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.csd.ui.editors.ChromatogramEditorCSD;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
 
-public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport implements IChromatogramEditorSupport {
+public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport implements ISupplierEditorSupport {
 
 	public ChromatogramEditorSupport() {
 		super(ChromatogramConverterCSD.getChromatogramConverterSupport().getSupplier());
@@ -47,9 +47,9 @@ public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport
 	}
 
 	@Override
-	public void openEditor(IChromatogram chromatogram) {
+	public void openEditor(IMeasurement measurement) {
 
-		openEditor(null, chromatogram, ChromatogramEditorCSD.ID, ChromatogramEditorCSD.CONTRIBUTION_URI, ChromatogramEditorCSD.ICON_URI, ChromatogramEditorCSD.TOOLTIP);
+		openEditor(null, measurement, ChromatogramEditorCSD.ID, ChromatogramEditorCSD.CONTRIBUTION_URI, ChromatogramEditorCSD.ICON_URI, ChromatogramEditorCSD.TOOLTIP);
 	}
 
 	@Override
@@ -69,9 +69,9 @@ public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport
 	}
 
 	@Override
-	public void openOverview(IChromatogramOverview chromatogramOverview) {
+	public void openOverview(IMeasurementInfo measurementInfo) {
 
 		IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-		eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_OVERVIEW, chromatogramOverview);
+		eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_OVERVIEW, measurementInfo);
 	}
 }

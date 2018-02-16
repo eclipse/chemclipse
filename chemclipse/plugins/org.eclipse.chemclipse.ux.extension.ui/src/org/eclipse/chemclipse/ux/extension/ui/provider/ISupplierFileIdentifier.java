@@ -18,6 +18,7 @@ public interface ISupplierFileIdentifier {
 	String TYPE_MSD = "MSD";
 	String TYPE_CSD = "CSD";
 	String TYPE_WSD = "WSD";
+	String TYPE_XIR = "XIR";
 	String TYPE_NMR = "NMR";
 	String TYPE_DATABASE_MSD = "DATABASE_MSD";
 	String TYPE_DATABASE_CSD = "DATABASE_CSD";

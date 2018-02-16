@@ -11,27 +11,27 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors;
 
-import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 
 public class EditorSupportFactory {
 
-	private ISupplierFileIdentifier chromatogramIdentifier;
-	private IChromatogramEditorSupport chromatogramEditorSupport;
+	private ISupplierFileIdentifier supplierFileIdentifier;
+	private ISupplierEditorSupport supplierEditorSupport;
 
 	public EditorSupportFactory(DataType dataType) {
-		chromatogramIdentifier = new ChromatogramIdentifier(dataType);
-		chromatogramEditorSupport = new ChromatogramEditorSupport(dataType);
+		supplierFileIdentifier = new SupplierFileIdentifier(dataType);
+		supplierEditorSupport = new SupplierEditorSupport(dataType);
 	}
 
 	public ISupplierFileIdentifier getInstanceIdentifier() {
 
-		return chromatogramIdentifier;
+		return supplierFileIdentifier;
 	}
 
-	public IChromatogramEditorSupport getInstanceEditorSupport() {
+	public ISupplierEditorSupport getInstanceEditorSupport() {
 
-		return chromatogramEditorSupport;
+		return supplierEditorSupport;
 	}
 }

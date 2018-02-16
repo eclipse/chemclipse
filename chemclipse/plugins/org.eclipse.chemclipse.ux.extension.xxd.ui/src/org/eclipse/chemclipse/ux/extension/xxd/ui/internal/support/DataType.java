@@ -18,5 +18,7 @@ public enum DataType {
 	MSD_HIGHRES, // Orbitrap, TOF
 	MSD, // mass selective data
 	CSD, // current selective data
-	WSD // wavelength selective data
+	WSD, // wavelength selective data
+	XIR, // Infrared detectors, FTIR, NIR, MIR
+	NMR // Nuclear magnetic resonance
 }

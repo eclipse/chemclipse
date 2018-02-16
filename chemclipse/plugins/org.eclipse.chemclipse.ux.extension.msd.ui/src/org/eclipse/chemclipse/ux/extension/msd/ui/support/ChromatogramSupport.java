@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.support;
 
-import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
 
 public class ChromatogramSupport {
 
 	private static ISupplierFileIdentifier chromatogramIdentifier;
-	private static IChromatogramEditorSupport chromatogramEditorSupport;
+	private static ISupplierEditorSupport chromatogramEditorSupport;
 
 	private ChromatogramSupport() {
 	}
@@ -30,7 +30,7 @@ public class ChromatogramSupport {
 		return chromatogramIdentifier;
 	}
 
-	public static IChromatogramEditorSupport getInstanceEditorSupport() {
+	public static ISupplierEditorSupport getInstanceEditorSupport() {
 
 		if(chromatogramEditorSupport == null) {
 			chromatogramEditorSupport = new ChromatogramEditorSupport();

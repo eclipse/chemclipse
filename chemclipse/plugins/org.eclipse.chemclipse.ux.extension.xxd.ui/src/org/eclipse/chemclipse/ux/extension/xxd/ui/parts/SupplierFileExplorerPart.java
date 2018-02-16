@@ -32,14 +32,13 @@ public class SupplierFileExplorerPart extends AbstractSupplierFileExplorer {
 	public static List<ISupplierFileEditorSupport> getSupplierFileEditorSupport() {
 
 		List<ISupplierFileEditorSupport> list = new ArrayList<ISupplierFileEditorSupport>();
-		// list.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport.getInstanceEditorSupport());
-		// list.add(org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport.getInstanceEditorSupport());
-		// list.add(org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramSupport.getInstanceEditorSupport());
 		list.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.DatabaseSupport.getInstanceEditorSupport());
 		list.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.MassSpectrumSupport.getInstanceEditorSupport());
 		list.add(new EditorSupportFactory(DataType.CSD).getInstanceEditorSupport());
 		list.add(new EditorSupportFactory(DataType.MSD).getInstanceEditorSupport());
 		list.add(new EditorSupportFactory(DataType.WSD).getInstanceEditorSupport());
+		list.add(new EditorSupportFactory(DataType.XIR).getInstanceEditorSupport());
+		list.add(new EditorSupportFactory(DataType.NMR).getInstanceEditorSupport());
 		return list;
 	}
 }
