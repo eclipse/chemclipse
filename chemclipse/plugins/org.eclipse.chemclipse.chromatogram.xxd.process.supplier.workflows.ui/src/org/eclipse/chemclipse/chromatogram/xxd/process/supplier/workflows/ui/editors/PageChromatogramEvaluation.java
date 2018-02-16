@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.support.ui.editors.AbstractExtendedEditorPage;
 import org.eclipse.chemclipse.support.ui.editors.IExtendedEditorPage;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport;
-import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -141,7 +141,7 @@ public class PageChromatogramEvaluation extends AbstractExtendedEditorPage imple
 			public void linkActivated(HyperlinkEvent e) {
 
 				if(chromatogramReport != null) {
-					IChromatogramEditorSupport chromatogramEditorSupport = ChromatogramSupport.getInstanceEditorSupport();
+					ISupplierEditorSupport chromatogramEditorSupport = ChromatogramSupport.getInstanceEditorSupport();
 					File file = new File(chromatogramReport.getChromatogramPath());
 					chromatogramEditorSupport.openEditor(file);
 				}
