@@ -28,10 +28,10 @@ public class PcaCalculatorNipals extends AbstractPcaCalculator {
 		DenseMatrix64F E = getSampleData();
 		double scoreDotOld = 0;
 		double scoreDotNew = 0;
-		DenseMatrix64F p = new DenseMatrix64F(numberOfVariables, 1);
+		DenseMatrix64F p = new DenseMatrix64F(1, numberOfVariables);
 		DenseMatrix64F t = CommonOps.extract(E, 0, numberOfSamples, 0, 1);
-		DenseMatrix64F pMatrix = new DenseMatrix64F(numberOfVariables, 1);
-		DenseMatrix64F tMatrix = new DenseMatrix64F(numberOfSamples, 1);
+		DenseMatrix64F pMatrix = new DenseMatrix64F(1, numberOfVariables);
+		DenseMatrix64F tMatrix = new DenseMatrix64F(1, numberOfSamples);
 		setLoadings(new DenseMatrix64F(numComps, numberOfVariables));
 		setScores(new DenseMatrix64F(numComps, numberOfSamples));
 		// Iterate over number of components
@@ -40,28 +40,27 @@ public class PcaCalculatorNipals extends AbstractPcaCalculator {
 			do {
 				scoreDotOld = scoreDotNew;
 				double tMultiplied = 1 / CommonOps.dot(t, t);
+				tMatrix.reshape(numberOfSamples, 1);
+				t.reshape(numberOfSamples, 1);
 				CommonOps.extract(t, 0, numberOfSamples, 0, 1, tMatrix, 0, 0);
-				DenseMatrix64F E_t = new DenseMatrix64F(numberOfVariables, numberOfSamples);
-				CommonOps.transpose(E, E_t);
-				CommonOps.mult(tMultiplied, E_t, tMatrix, p);
+				tMatrix.reshape(1, numberOfSamples);
+				CommonOps.mult(tMultiplied, tMatrix, E, p);
 				NormOps.normalizeF(p);
 				double pMultiplied = 1 / CommonOps.dot(p, p);
-				CommonOps.extract(p, 0, numberOfVariables, 0, 1, pMatrix, 0, 0);
+				CommonOps.extract(p, 0, 1, 0, numberOfVariables, pMatrix, 0, 0);
+				pMatrix.reshape(numberOfVariables, 1);
 				CommonOps.mult(pMultiplied, E, pMatrix, t);
+				pMatrix.reshape(1, numberOfVariables);
 				scoreDotNew = CommonOps.dot(t, t);
 			} while(Math.abs(scoreDotOld - scoreDotNew) > threshold);
 			// write scores, loadings of current component
-			DenseMatrix64F t_t = new DenseMatrix64F(1, numberOfSamples);
-			CommonOps.transpose(t, t_t);
-			CommonOps.extract(t_t, 0, 1, 0, numberOfSamples, getScores(), i, 0);
-			DenseMatrix64F p_t = new DenseMatrix64F(1, numberOfVariables);
-			CommonOps.transpose(p, p_t);
-			CommonOps.extract(p_t, 0, 1, 0, numberOfVariables, getLoadings(), i, 0);
+			t.reshape(1, numberOfSamples); // currently because scores is wrong defined in results
+			CommonOps.extract(t, 0, 1, 0, numberOfSamples, getScores(), i, 0);
+			CommonOps.extract(p, 0, 1, 0, numberOfVariables, getLoadings(), i, 0);
 			DenseMatrix64F E_sub = new DenseMatrix64F(numberOfSamples, numberOfVariables);
-			DenseMatrix64F pMatrix_t = new DenseMatrix64F(1, numberOfVariables);
 			// subtract calculated t*p from E
-			CommonOps.transpose(pMatrix, pMatrix_t);
-			CommonOps.mult(tMatrix, pMatrix_t, E_sub);
+			tMatrix.reshape(numberOfSamples, 1);
+			CommonOps.mult(tMatrix, pMatrix, E_sub);
 			CommonOps.subtractEquals(E, E_sub);
 		}
 	}
