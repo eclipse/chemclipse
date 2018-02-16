@@ -1,13 +1,14 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Jan Holy - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.core;
 
@@ -16,18 +17,48 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
 
-public abstract class AbstractSupport implements ISupportSetter {
+public abstract class AbstractSupport<S extends ISupplier> implements ISupport {
 
-	private List<ISupplier> suppliers;
+	private List<S> suppliers;
 
 	public AbstractSupport() {
-		suppliers = new ArrayList<ISupplier>();
+		suppliers = new ArrayList<>();
 	}
 
-	@Override
-	public void add(final ISupplier supplier) {
+	public void add(final S supplier) {
 
 		suppliers.add(supplier);
+	}
+
+	// ---------------------------------------------private methods
+	/**
+	 * Check if there are converters stored in the ArrayList<ISupplier>.
+	 *
+	 * @throws NoIdentifierAvailableException
+	 */
+	private void areIdentifiersStored() throws NoIdentifierAvailableException {
+
+		if(suppliers.size() < 1) {
+			throw new NoIdentifierAvailableException();
+		}
+	}
+	// ---------------------------------------------private methods
+
+	@Override
+	public List<String> getAvailableIdentifierIds() throws NoIdentifierAvailableException {
+
+		/*
+		 * Test if the suppliers ArrayList is empty.
+		 */
+		areIdentifiersStored();
+		List<String> availableIdentifiers = new ArrayList<String>();
+		for(S supplier : suppliers) {
+			availableIdentifiers.add(supplier.getId());
+		}
+		if(availableIdentifiers.isEmpty()) {
+			throw new NoIdentifierAvailableException("There is no appropriate identifier available.");
+		}
+		return availableIdentifiers;
 	}
 
 	@Override
@@ -43,7 +74,7 @@ public abstract class AbstractSupport implements ISupportSetter {
 		if(index < 0 || index > suppliers.size() - 1) {
 			throw new NoIdentifierAvailableException("There is no identifier stored.");
 		}
-		ISupplier supplier = suppliers.get(index);
+		S supplier = suppliers.get(index);
 		return supplier.getId();
 	}
 
@@ -59,33 +90,16 @@ public abstract class AbstractSupport implements ISupportSetter {
 		 * names.<br/>
 		 */
 		ArrayList<String> identifierNames = new ArrayList<String>();
-		for(ISupplier supplier : suppliers) {
+		for(S supplier : suppliers) {
 			identifierNames.add(supplier.getIdentifierName());
 		}
 		return identifierNames.toArray(new String[identifierNames.size()]);
 	}
 
 	@Override
-	public List<String> getAvailableIdentifierIds() throws NoIdentifierAvailableException {
+	public S getIdentifierSupplier(String identifierId) throws NoIdentifierAvailableException {
 
-		/*
-		 * Test if the suppliers ArrayList is empty.
-		 */
-		areIdentifiersStored();
-		List<String> availableIdentifiers = new ArrayList<String>();
-		for(ISupplier supplier : suppliers) {
-			availableIdentifiers.add(supplier.getId());
-		}
-		if(availableIdentifiers.isEmpty()) {
-			throw new NoIdentifierAvailableException("There is no appropriate identifier available.");
-		}
-		return availableIdentifiers;
-	}
-
-	@Override
-	public ISupplier getIdentifierSupplier(String identifierId) throws NoIdentifierAvailableException {
-
-		ISupplier identifierSupplier = null;
+		S identifierSupplier = null;
 		/*
 		 * Test if the suppliers ArrayList is empty.
 		 */
@@ -94,7 +108,7 @@ public abstract class AbstractSupport implements ISupportSetter {
 			throw new NoIdentifierAvailableException("There is no identifier supplier available with the following id: " + identifierId + ".");
 		}
 		endsearch:
-		for(ISupplier supplier : suppliers) {
+		for(S supplier : suppliers) {
 			if(supplier.getId().equals(identifierId)) {
 				identifierSupplier = supplier;
 				break endsearch;
@@ -106,18 +120,4 @@ public abstract class AbstractSupport implements ISupportSetter {
 			return identifierSupplier;
 		}
 	}
-
-	// ---------------------------------------------private methods
-	/**
-	 * Check if there are converters stored in the ArrayList<ISupplier>.
-	 * 
-	 * @throws NoIdentifierAvailableException
-	 */
-	private void areIdentifiersStored() throws NoIdentifierAvailableException {
-
-		if(suppliers.size() < 1) {
-			throw new NoIdentifierAvailableException();
-		}
-	}
-	// ---------------------------------------------private methods
 }

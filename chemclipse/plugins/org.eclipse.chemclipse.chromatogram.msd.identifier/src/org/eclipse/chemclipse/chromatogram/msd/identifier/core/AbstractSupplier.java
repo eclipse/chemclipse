@@ -1,74 +1,25 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Jan Holy - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.core;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettings;
 
-public abstract class AbstractSupplier implements ISupplierSetter {
+public abstract class AbstractSupplier<S extends IIdentifierSettings> implements ISupplierSetter {
 
-	private String id = "";
 	private String description = "";
+	private String id = "";
 	private String identifierName = "";
-	private Class<? extends IIdentifierSettings> identifierSettingsClass;
-
-	public String getId() {
-
-		return id;
-	}
-
-	@Override
-	public void setId(final String id) {
-
-		if(id != null) {
-			this.id = id;
-		}
-	}
-
-	public String getDescription() {
-
-		return description;
-	}
-
-	@Override
-	public void setDescription(final String description) {
-
-		if(description != null) {
-			this.description = description;
-		}
-	}
-
-	public String getIdentifierName() {
-
-		return identifierName;
-	}
-
-	@Override
-	public void setIdentifierName(final String identifierName) {
-
-		if(identifierName != null) {
-			this.identifierName = identifierName;
-		}
-	}
-
-	@Override
-	public Class<? extends IIdentifierSettings> getIdentifierSettingsClass() {
-
-		return this.identifierSettingsClass;
-	}
-
-	public void setIdentifierSettingsClass(Class<? extends IIdentifierSettings> identifierSettingsClass) {
-
-		this.identifierSettingsClass = identifierSettingsClass;
-	}
+	private Class<? extends S> identifierSettingsClass;
 
 	// -----------------------------------------------equals, hashCode, toString
 	@Override
@@ -88,9 +39,62 @@ public abstract class AbstractSupplier implements ISupplierSetter {
 	}
 
 	@Override
+	public String getDescription() {
+
+		return description;
+	}
+
+	@Override
+	public String getId() {
+
+		return id;
+	}
+
+	@Override
+	public String getIdentifierName() {
+
+		return identifierName;
+	}
+
+	@Override
+	public Class<? extends S> getIdentifierSettingsClass() {
+
+		return this.identifierSettingsClass;
+	}
+
+	@Override
 	public int hashCode() {
 
 		return id.hashCode() + description.hashCode() + identifierName.hashCode();
+	}
+
+	@Override
+	public void setDescription(final String description) {
+
+		if(description != null) {
+			this.description = description;
+		}
+	}
+
+	@Override
+	public void setId(final String id) {
+
+		if(id != null) {
+			this.id = id;
+		}
+	}
+
+	@Override
+	public void setIdentifierName(final String identifierName) {
+
+		if(identifierName != null) {
+			this.identifierName = identifierName;
+		}
+	}
+
+	public void setIdentifierSettingsClass(Class<? extends S> identifierSettingsClass) {
+
+		this.identifierSettingsClass = identifierSettingsClass;
 	}
 
 	@Override
