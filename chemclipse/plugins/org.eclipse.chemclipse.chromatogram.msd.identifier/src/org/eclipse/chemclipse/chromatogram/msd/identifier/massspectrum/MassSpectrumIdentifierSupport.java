@@ -13,6 +13,13 @@
 package org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.core.AbstractSupport;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
 
 public class MassSpectrumIdentifierSupport extends AbstractSupport<IMassSpectrumIdentifierSupplier> implements IMassSpectrumIdentifierSupport {
+
+	@Override
+	public IMassSpectrumIdentifierSupplier getIdentifierSupplier(String identifierId) throws NoIdentifierAvailableException {
+
+		return getSpecificIdentifierSupplier(identifierId);
+	}
 }

@@ -56,8 +56,7 @@ public abstract class AbstractSupplier<S extends IIdentifierSettings> implements
 		return identifierName;
 	}
 
-	@Override
-	public Class<? extends S> getIdentifierSettingsClass() {
+	protected Class<? extends S> getSpecificIdentifierSettingsClass() {
 
 		return this.identifierSettingsClass;
 	}

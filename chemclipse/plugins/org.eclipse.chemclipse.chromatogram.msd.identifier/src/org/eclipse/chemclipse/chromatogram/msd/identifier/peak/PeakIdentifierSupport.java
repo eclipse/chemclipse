@@ -13,6 +13,13 @@
 package org.eclipse.chemclipse.chromatogram.msd.identifier.peak;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.core.AbstractSupport;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
 
 public class PeakIdentifierSupport extends AbstractSupport<IPeakIdentifierSupplier> implements IPeakIdentifierSupport {
+
+	@Override
+	public IPeakIdentifierSupplier getIdentifierSupplier(String identifierId) throws NoIdentifierAvailableException {
+
+		return getSpecificIdentifierSupplier(identifierId);
+	}
 }

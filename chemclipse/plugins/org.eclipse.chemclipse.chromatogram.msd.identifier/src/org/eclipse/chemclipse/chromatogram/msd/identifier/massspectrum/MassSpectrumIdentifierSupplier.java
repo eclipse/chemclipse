@@ -16,4 +16,10 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.core.AbstractSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
 
 public class MassSpectrumIdentifierSupplier extends AbstractSupplier<IMassSpectrumIdentifierSettings> implements IMassSpectrumIdentifierSupplier {
+
+	@Override
+	public Class<? extends IMassSpectrumIdentifierSettings> getIdentifierSettingsClass() {
+
+		return getSpecificIdentifierSettingsClass();
+	}
 }

@@ -16,4 +16,10 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.core.AbstractSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IChromatogramIdentifierSettings;
 
 public class ChromatogramIdentifierSupplier extends AbstractSupplier<IChromatogramIdentifierSettings> implements IChromatogramIdentifierSupplier {
+
+	@Override
+	public Class<? extends IChromatogramIdentifierSettings> getIdentifierSettingsClass() {
+
+		return getSpecificIdentifierSettingsClass();
+	}
 }

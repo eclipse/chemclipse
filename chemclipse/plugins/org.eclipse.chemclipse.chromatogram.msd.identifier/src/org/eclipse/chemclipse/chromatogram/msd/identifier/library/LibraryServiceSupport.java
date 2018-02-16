@@ -13,6 +13,13 @@
 package org.eclipse.chemclipse.chromatogram.msd.identifier.library;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.core.AbstractSupport;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
 
 public class LibraryServiceSupport extends AbstractSupport<ILibraryServiceSupplier> implements ILibraryServiceSupport {
+
+	@Override
+	public ILibraryServiceSupplier getIdentifierSupplier(String identifierId) throws NoIdentifierAvailableException {
+
+		return getSpecificIdentifierSupplier(identifierId);
+	}
 }

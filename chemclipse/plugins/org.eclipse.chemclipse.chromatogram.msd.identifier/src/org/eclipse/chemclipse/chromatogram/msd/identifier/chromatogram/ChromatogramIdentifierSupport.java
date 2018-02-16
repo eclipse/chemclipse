@@ -13,6 +13,13 @@
 package org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogram;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.core.AbstractSupport;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
 
 public class ChromatogramIdentifierSupport extends AbstractSupport<IChromatogramIdentifierSupplier> implements IChromatogramIdentifierSupport {
+
+	@Override
+	public IChromatogramIdentifierSupplier getIdentifierSupplier(String identifierId) throws NoIdentifierAvailableException {
+
+		return getSpecificIdentifierSupplier(identifierId);
+	}
 }

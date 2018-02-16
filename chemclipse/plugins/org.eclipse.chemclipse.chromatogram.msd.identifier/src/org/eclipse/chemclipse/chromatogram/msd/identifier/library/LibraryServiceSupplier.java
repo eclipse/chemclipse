@@ -16,4 +16,10 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.core.AbstractSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.ILibraryServiceSettings;
 
 public class LibraryServiceSupplier extends AbstractSupplier<ILibraryServiceSettings> implements ILibraryServiceSupplier {
+
+	@Override
+	public Class<? extends ILibraryServiceSettings> getIdentifierSettingsClass() {
+
+		return getSpecificIdentifierSettingsClass();
+	}
 }

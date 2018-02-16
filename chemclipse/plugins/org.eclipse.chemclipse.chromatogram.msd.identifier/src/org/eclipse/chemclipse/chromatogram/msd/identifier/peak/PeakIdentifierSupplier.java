@@ -16,4 +16,10 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.core.AbstractSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettings;
 
 public class PeakIdentifierSupplier extends AbstractSupplier<IPeakIdentifierSettings> implements IPeakIdentifierSupplier {
+
+	@Override
+	public Class<? extends IPeakIdentifierSettings> getIdentifierSettingsClass() {
+
+		return getSpecificIdentifierSettingsClass();
+	}
 }

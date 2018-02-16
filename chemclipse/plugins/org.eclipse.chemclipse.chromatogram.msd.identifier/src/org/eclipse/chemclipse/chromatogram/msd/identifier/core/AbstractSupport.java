@@ -96,8 +96,7 @@ public abstract class AbstractSupport<S extends ISupplier> implements ISupport {
 		return identifierNames.toArray(new String[identifierNames.size()]);
 	}
 
-	@Override
-	public S getIdentifierSupplier(String identifierId) throws NoIdentifierAvailableException {
+	protected S getSpecificIdentifierSupplier(String identifierId) throws NoIdentifierAvailableException {
 
 		S identifierSupplier = null;
 		/*
