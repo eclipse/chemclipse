@@ -153,7 +153,6 @@ public class PcaEvaluation {
 			IPcaResult pcaResult = new PcaResult(sample);
 			pcaResult.setName(sample.getName());
 			pcaResult.setGroupName(sample.getGroupName());
-			// eigenSpace = principalComponentAnalysis.applyLoadings(sampleData);
 			scoreVector = principalComponentAnalysis.getScoreVector(sample);
 			errorMemberShip = principalComponentAnalysis.getErrorMetric(sampleData);
 			pcaResult.setSampleData(sampleData);

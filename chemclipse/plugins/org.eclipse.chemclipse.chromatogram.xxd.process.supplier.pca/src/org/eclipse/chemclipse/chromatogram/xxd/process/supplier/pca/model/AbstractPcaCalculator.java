@@ -138,8 +138,8 @@ public abstract class AbstractPcaCalculator implements IPcaCalculator {
 	public double[] getScoreVector(ISample<?> sampleId) {
 
 		int obs = sampleKeys.indexOf(sampleId);
-		DenseMatrix64F scoreVector = new DenseMatrix64F(numComps, 1);
-		CommonOps.extract(scores, 0, numComps, obs, obs + 1, scoreVector, 0, 0);
+		DenseMatrix64F scoreVector = new DenseMatrix64F(1, numComps);
+		CommonOps.extract(scores, obs, obs + 1, 0, numComps, scoreVector, 0, 0);
 		return scoreVector.data;
 	}
 
