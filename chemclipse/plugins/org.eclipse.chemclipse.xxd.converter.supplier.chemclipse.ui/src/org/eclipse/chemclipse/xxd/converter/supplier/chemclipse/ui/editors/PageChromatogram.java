@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.editors.AbstractExtendedEditorPage;
 import org.eclipse.chemclipse.support.ui.editors.IExtendedEditorPage;
-import org.eclipse.chemclipse.ux.extension.ui.provider.IChromatogramEditorSupport;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter.MagicNumberMatcherWSD;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
@@ -171,7 +171,7 @@ public class PageChromatogram extends AbstractExtendedEditorPage implements IExt
 				/*
 				 * Use the editor to show the file.
 				 */
-				IChromatogramEditorSupport chromatogramEditorSupport = getChromatogramEditorSupport(file);
+				ISupplierEditorSupport chromatogramEditorSupport = getChromatogramEditorSupport(file);
 				if(chromatogramEditorSupport != null) {
 					chromatogramEditorSupport.openEditor(file);
 				}
@@ -180,7 +180,7 @@ public class PageChromatogram extends AbstractExtendedEditorPage implements IExt
 		return imageHyperlink;
 	}
 
-	private IChromatogramEditorSupport getChromatogramEditorSupport(File file) {
+	private ISupplierEditorSupport getChromatogramEditorSupport(File file) {
 
 		if(magicNumberMatcherMSD.checkFileFormat(file)) {
 			/*
