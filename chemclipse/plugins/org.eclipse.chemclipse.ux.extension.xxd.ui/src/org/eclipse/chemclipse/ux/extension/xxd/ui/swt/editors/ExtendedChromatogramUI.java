@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

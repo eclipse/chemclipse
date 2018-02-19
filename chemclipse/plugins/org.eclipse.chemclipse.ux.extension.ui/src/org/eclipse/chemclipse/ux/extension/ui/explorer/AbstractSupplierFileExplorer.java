@@ -69,7 +69,7 @@ public abstract class AbstractSupplierFileExplorer {
 	private Shell shell = display.getActiveShell();
 
 	public AbstractSupplierFileExplorer(Composite parent, ISupplierFileEditorSupport supplierFileEditorSupport) {
-		this(parent, ExplorerListSupport.getChromatogramEditorSupportList(supplierFileEditorSupport));
+		this(parent, ExplorerListSupport.getEditorSupportList(supplierFileEditorSupport));
 	}
 
 	public AbstractSupplierFileExplorer(Composite parent, List<ISupplierFileEditorSupport> supplierFileEditorSupportList) {

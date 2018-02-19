@@ -29,7 +29,7 @@ public class ExplorerListSupport {
 		return list;
 	}
 
-	public static List<ISupplierFileEditorSupport> getChromatogramEditorSupportList(ISupplierFileEditorSupport supplierEditorSupport) {
+	public static List<ISupplierFileEditorSupport> getEditorSupportList(ISupplierFileEditorSupport supplierEditorSupport) {
 
 		List<ISupplierFileEditorSupport> list = new ArrayList<ISupplierFileEditorSupport>();
 		list.add(supplierEditorSupport);

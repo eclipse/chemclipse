@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ui
-Bundle-SymbolicName: org.eclipse.chemclipse.nmr.converter.ui
+Bundle-SymbolicName: org.eclipse.chemclipse.nmr.converter.ui;singleton:=true
 Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.nmr.converter.ui.Activator
 Bundle-Vendor: ChemClipse

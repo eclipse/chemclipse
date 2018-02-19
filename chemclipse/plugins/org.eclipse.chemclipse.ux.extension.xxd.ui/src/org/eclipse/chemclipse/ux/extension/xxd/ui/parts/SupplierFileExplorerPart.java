@@ -37,8 +37,8 @@ public class SupplierFileExplorerPart extends AbstractSupplierFileExplorer {
 		list.add(new EditorSupportFactory(DataType.CSD).getInstanceEditorSupport());
 		list.add(new EditorSupportFactory(DataType.MSD).getInstanceEditorSupport());
 		list.add(new EditorSupportFactory(DataType.WSD).getInstanceEditorSupport());
-		list.add(new EditorSupportFactory(DataType.XIR).getInstanceEditorSupport());
-		list.add(new EditorSupportFactory(DataType.NMR).getInstanceEditorSupport());
+		// list.add(new EditorSupportFactory(DataType.XIR).getInstanceEditorSupport());
+		// list.add(new EditorSupportFactory(DataType.NMR).getInstanceEditorSupport());
 		return list;
 	}
 }

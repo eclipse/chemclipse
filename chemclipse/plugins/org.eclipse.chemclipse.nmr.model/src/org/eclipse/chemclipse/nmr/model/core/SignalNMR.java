@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.nmr.model.core;
 
 import org.eclipse.chemclipse.model.core.AbstractSignal;
 
-public class SignalNMR extends AbstractSignal implements ISignalNMR {
+public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<ISignalNMR> {
 
 	private double chemicalShift = 0.0d;
 	private double intensity = 0.0d;
@@ -94,5 +94,15 @@ public class SignalNMR extends AbstractSignal implements ISignalNMR {
 	public String toString() {
 
 		return "SignalNMR [chemicalShift=" + chemicalShift + ", intensity=" + intensity + "]";
+	}
+
+	@Override
+	public int compareTo(ISignalNMR signalNMR) {
+
+		if(signalNMR != null) {
+			return Double.compare(chemicalShift, signalNMR.getChemicalShift());
+		} else {
+			return 0;
+		}
 	}
 }
