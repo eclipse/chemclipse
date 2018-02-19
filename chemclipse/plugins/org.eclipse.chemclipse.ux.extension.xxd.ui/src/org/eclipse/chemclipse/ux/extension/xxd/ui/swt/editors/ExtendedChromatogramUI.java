@@ -471,11 +471,18 @@ public class ExtendedChromatogramUI {
 	public synchronized void updateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
 
 		this.chromatogramSelection = chromatogramSelection;
-		addChartMenuEntriesFilter();
-		updateChromatogram();
-		//
-		if(chromatogramSelections == null) {
-			updateChromatogramCombo();
+		if(chromatogramSelection != null) {
+			/*
+			 * Filter Entries
+			 */
+			addChartMenuEntriesFilter();
+			updateChromatogram();
+			if(chromatogramSelections == null) {
+				updateChromatogramCombo();
+			}
+		} else {
+			comboChromatograms.setItems(new String[0]);
+			updateChromatogram();
 		}
 	}
 

@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.UserManagement;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerContentProvider;
@@ -52,7 +53,7 @@ import org.eclipse.swt.widgets.TabItem;
 public abstract class AbstractSupplierFileExplorer {
 
 	@Inject
-	private IEventBroker eventBroker;
+	private IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 	//
 	private TabItem tabDrives;
 	private TreeViewer treeViewerDrives;
@@ -319,7 +320,7 @@ public abstract class AbstractSupplierFileExplorer {
 			}
 			//
 			if(!isSupported) {
-				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE, file);
+				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE, null);
 			}
 		}
 	}
