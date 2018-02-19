@@ -44,8 +44,7 @@ public class MassSpectraReaderTest {
 			assertEquals(8.0, spec.getIons().get(0).getAbundance(), 1e-6);
 			assertEquals(4.8659, spec.getIons().get(26).getIon(), 1e-6);
 			assertEquals(3.0, spec.getIons().get(26).getAbundance(), 1e-6);
-		} catch(FileIsNotReadableException | FileIsEmptyException
-				| IOException e) {
+		} catch(IOException e) {
 			logger.warn(e);
 		}
 	}
@@ -66,8 +65,7 @@ public class MassSpectraReaderTest {
 			assertEquals(8.0, spec.getIons().get(0).getAbundance(), 1e-6);
 			assertEquals(4.7944, spec.getIons().get(2).getIon(), 1e-6);
 			assertEquals(0.0, spec.getIons().get(2).getAbundance(), 1e-6);
-		} catch(FileIsNotReadableException | FileIsEmptyException
-				| IOException e) {
+		} catch(IOException e) {
 			logger.warn(e);
 		}
 	}
