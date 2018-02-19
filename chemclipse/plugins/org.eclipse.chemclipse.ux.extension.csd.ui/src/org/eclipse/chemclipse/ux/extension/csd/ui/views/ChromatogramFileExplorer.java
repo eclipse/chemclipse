@@ -11,16 +11,23 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.csd.ui.views;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport;
 import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSupplierFileExplorer;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.swt.widgets.Composite;
 
 public class ChromatogramFileExplorer extends AbstractSupplierFileExplorer {
 
 	@Inject
 	public ChromatogramFileExplorer(Composite parent) {
-		super(parent, ChromatogramSupport.getInstanceEditorSupport());
+		super(parent);
+		List<ISupplierFileEditorSupport> list = new ArrayList<ISupplierFileEditorSupport>();
+		list.add(ChromatogramSupport.getInstanceEditorSupport());
+		setSupplierFileEditorSupportList(list);
 	}
 }
