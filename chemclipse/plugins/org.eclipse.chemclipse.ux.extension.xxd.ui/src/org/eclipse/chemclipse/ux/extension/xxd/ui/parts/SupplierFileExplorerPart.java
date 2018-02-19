@@ -19,12 +19,15 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.EditorSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageFileExplorer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.SupplierFileExplorerUI;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -54,6 +57,7 @@ public class SupplierFileExplorerPart {
 	private void initialize(Composite parent) {
 
 		parent.setLayout(new GridLayout(1, true));
+		parent.setBackground(display.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		//
 		createToolbarMain(parent);
 		createFileExplorerTreeViewer(parent);
@@ -130,15 +134,51 @@ public class SupplierFileExplorerPart {
 
 	public void setSupplierFileEditorSupport() {
 
-		List<ISupplierFileEditorSupport> list = new ArrayList<ISupplierFileEditorSupport>();
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		List<ISupplierFileEditorSupport> editorSupportList = new ArrayList<ISupplierFileEditorSupport>();
+		/*
+		 * MSD
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_MSD)) {
+			editorSupportList.add(new EditorSupportFactory(DataType.MSD).getInstanceEditorSupport());
+		}
+		/*
+		 * MSD Library
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_LIBRARY_MSD)) {
+			editorSupportList.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.DatabaseSupport.getInstanceEditorSupport());
+		}
+		/*
+		 * MSD Scan
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_LIBRARY_MSD)) {
+			editorSupportList.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.MassSpectrumSupport.getInstanceEditorSupport());
+		}
+		/*
+		 * CSD
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_CSD)) {
+			editorSupportList.add(new EditorSupportFactory(DataType.CSD).getInstanceEditorSupport());
+		}
+		/*
+		 * WSD
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_WSD)) {
+			editorSupportList.add(new EditorSupportFactory(DataType.WSD).getInstanceEditorSupport());
+		}
+		/*
+		 * XIR
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_XIR)) {
+			editorSupportList.add(new EditorSupportFactory(DataType.XIR).getInstanceEditorSupport());
+		}
+		/*
+		 * NMR
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_NMR)) {
+			editorSupportList.add(new EditorSupportFactory(DataType.NMR).getInstanceEditorSupport());
+		}
 		//
-		list.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.DatabaseSupport.getInstanceEditorSupport());
-		list.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.MassSpectrumSupport.getInstanceEditorSupport());
-		list.add(new EditorSupportFactory(DataType.CSD).getInstanceEditorSupport());
-		list.add(new EditorSupportFactory(DataType.MSD).getInstanceEditorSupport());
-		list.add(new EditorSupportFactory(DataType.WSD).getInstanceEditorSupport());
-		// list.add(new EditorSupportFactory(DataType.XIR).getInstanceEditorSupport());
-		// list.add(new EditorSupportFactory(DataType.NMR).getInstanceEditorSupport());
-		supplierFileExplorerUI.setSupplierFileEditorSupportList(list);
+		supplierFileExplorerUI.setSupplierFileEditorSupportList(editorSupportList);
 	}
 }
