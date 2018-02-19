@@ -50,6 +50,7 @@ public class PcaCalculatorSvd extends AbstractPcaCalculator {
 		DenseMatrix64F loadings = new DenseMatrix64F(getLoadings());
 		CommonOps.transpose(sample);
 		CommonOps.mult(loadings, sample, rotated);
+		CommonOps.transpose(rotated);
 		setScores(rotated);
 	}
 }

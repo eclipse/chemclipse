@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visual
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SamplesVisualization;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -38,6 +39,7 @@ import javafx.collections.ObservableList;
 public class PCAController {
 
 	private Spinner numerPrincipalComponents;
+	private CCombo pcaAlgo;
 	private Optional<IPcaResultsVisualization> pcaResults;
 	private Spinner pcx;
 	private Spinner pcy;
@@ -61,7 +63,16 @@ public class PCAController {
 		numerPrincipalComponents.setIncrement(1);
 		numerPrincipalComponents.setSelection(3);
 		numerPrincipalComponents.setMaximum(100);
+		// Selection PCA calculation algorithm
 		Label label = new Label(composite, SWT.None);
+		label.setText("Algorithm:");
+		pcaAlgo = new CCombo(composite, SWT.READ_ONLY);
+		pcaAlgo.setBounds(50, 50, 150, 65);
+		String items[] = {"SVD", "Nipals"};
+		pcaAlgo.setItems(items);
+		pcaAlgo.select(1);
+		// Selection Principal Component for X-axis
+		label = new Label(composite, SWT.None);
 		label.setText("PCX:");
 		pcx = new Spinner(composite, SWT.None);
 		pcx.setMinimum(1);
@@ -108,10 +119,11 @@ public class PCAController {
 				el.add(s);
 			}
 			int maxPC = numerPrincipalComponents.getSelection();
+			String pcaAlgorithm = pcaAlgo.getText();
 			pcx.setMaximum(maxPC);
 			pcy.setMaximum(maxPC);
 			pcz.setMaximum(maxPC);
-			IPcaSettings pcaSettings = new PcaSettings(maxPC);
+			IPcaSettings pcaSettings = new PcaSettings(maxPC, pcaAlgorithm);
 			IPcaSettingsVisualization pcaSettingsVisualization = new PcaSettingsVisualization(pcx.getSelection(), pcy.getSelection(), pcz.getSelection());
 			IPcaResultsVisualization results = SelectionManagerSamples.getInstance().evaluatePca(s, pcaSettings, pcaSettingsVisualization, new NullProgressMonitor(), true);
 			pcaResults = Optional.of(results);

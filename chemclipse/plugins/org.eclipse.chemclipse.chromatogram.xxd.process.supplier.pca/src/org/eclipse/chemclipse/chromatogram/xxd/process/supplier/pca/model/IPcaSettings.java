@@ -14,4 +14,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 public interface IPcaSettings {
 
 	int getNumberOfPrincipalComponents();
+
+	String getPcaAlgorithm();
+
+	void setPcaAlgorithm(String pcaAlgo);
 }

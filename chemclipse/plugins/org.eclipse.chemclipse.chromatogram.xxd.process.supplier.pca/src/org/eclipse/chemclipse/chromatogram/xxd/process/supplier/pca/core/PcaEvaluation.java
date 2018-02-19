@@ -31,12 +31,16 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaCalculatorNipals;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaCalculatorSvd;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Variable;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaEvaluation {
+
+	public static final String PCA_ALGO_SVD = "SVD";
+	public static final String PCA_ALGO_NIPALS = "Nipals";
 
 	private <V extends IVariable, S extends ISample<? extends ISampleData>> Map<ISample<?>, double[]> extractData(ISamples<V, S> samples) {
 
@@ -93,13 +97,18 @@ public class PcaEvaluation {
 	 * @param numberOfPrincipalComponents
 	 * @return PrincipalComponentAnalysis
 	 */
-	private IPcaCalculator setupPCA(Map<ISample<?>, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipalComponents) {
+	private IPcaCalculator setupPCA(Map<ISample<?>, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipalComponents, String pcaAlgorithm) {
 
 		/*
 		 * Initialize the PCA analysis.
 		 */
 		int numSamples = pcaPeakMap.size();
-		IPcaCalculator principalComponentAnalysis = new PcaCalculatorNipals();
+		IPcaCalculator principalComponentAnalysis = null;
+		if(pcaAlgorithm.equals(PCA_ALGO_NIPALS)) {
+			principalComponentAnalysis = new PcaCalculatorNipals();
+		} else if(pcaAlgorithm.equals(PCA_ALGO_SVD)) {
+			principalComponentAnalysis = new PcaCalculatorSvd();
+		}
 		principalComponentAnalysis.initialize(numSamples, sampleSize);
 		/*
 		 * Add the samples.
@@ -117,6 +126,7 @@ public class PcaEvaluation {
 
 		monitor.subTask("Run PCA");
 		int numberOfPrincipalComponents = settings.getNumberOfPrincipalComponents();
+		String pcaAlgorithm = settings.getPcaAlgorithm();
 		PcaResults pcaResults = new PcaResults(settings);
 		Map<ISample<?>, double[]> extractData = extractData(samples);
 		setRetentionTime(pcaResults, samples);
@@ -124,7 +134,7 @@ public class PcaEvaluation {
 		/*
 		 * Prepare PCA Calculation
 		 */
-		IPcaCalculator principalComponentAnalysis = setupPCA(extractData, sampleSize, numberOfPrincipalComponents);
+		IPcaCalculator principalComponentAnalysis = setupPCA(extractData, sampleSize, numberOfPrincipalComponents, pcaAlgorithm);
 		/*
 		 * Compute PCA
 		 */
