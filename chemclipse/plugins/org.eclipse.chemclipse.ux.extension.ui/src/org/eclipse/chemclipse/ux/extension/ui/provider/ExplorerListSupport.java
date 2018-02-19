@@ -28,11 +28,4 @@ public class ExplorerListSupport {
 		list.add(supplierFileIdentifier);
 		return list;
 	}
-
-	public static List<ISupplierFileEditorSupport> getChromatogramEditorSupportList(ISupplierFileEditorSupport supplierEditorSupport) {
-
-		List<ISupplierFileEditorSupport> list = new ArrayList<ISupplierFileEditorSupport>();
-		list.add(supplierEditorSupport);
-		return list;
-	}
 }

@@ -142,6 +142,12 @@ public class SupplierFileExplorerLabelProvider extends LabelProvider implements 
 				case ISupplierFileIdentifier.TYPE_WSD:
 					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_WSD, IApplicationImage.SIZE_16x16);
 					break;
+				case ISupplierFileIdentifier.TYPE_NMR:
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SCAN_NMR, IApplicationImage.SIZE_16x16);
+					break;
+				case ISupplierFileIdentifier.TYPE_XIR:
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SCAN_XIR, IApplicationImage.SIZE_16x16);
+					break;
 				default:
 					/*
 					 * Default

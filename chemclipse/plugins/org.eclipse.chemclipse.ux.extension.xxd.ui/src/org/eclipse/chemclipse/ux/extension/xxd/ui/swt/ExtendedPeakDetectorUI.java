@@ -383,8 +383,8 @@ public class ExtendedPeakDetectorUI {
 	private void createToolbarMain(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridDataStatus);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(12, false));
 		//
 		labelDetectionType = createDetectionTypeLabel(composite);

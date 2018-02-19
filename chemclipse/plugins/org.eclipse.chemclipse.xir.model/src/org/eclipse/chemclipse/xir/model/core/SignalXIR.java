@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.xir.model.core;
 
 import org.eclipse.chemclipse.model.core.AbstractSignal;
 
-public class SignalXIR extends AbstractSignal implements ISignalXIR {
+public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<ISignalXIR> {
 
 	private double wavelength = 0.0d; // nm
 	private double intensity = 0.0d;
@@ -94,5 +94,15 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR {
 	public String toString() {
 
 		return "SignalXIR [wavelength=" + wavelength + ", intensity=" + intensity + "]";
+	}
+
+	@Override
+	public int compareTo(ISignalXIR signalXIR) {
+
+		if(signalXIR != null) {
+			return Double.compare(wavelength, signalXIR.getWavelength());
+		} else {
+			return 0;
+		}
 	}
 }

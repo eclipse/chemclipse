@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.ui.explorer;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,8 +23,8 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.UserManagement;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ExplorerListSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerLabelProvider;
@@ -52,9 +53,7 @@ import org.eclipse.swt.widgets.TabItem;
 public abstract class AbstractSupplierFileExplorer {
 
 	@Inject
-	private IEventBroker eventBroker;
-	//
-	private List<ISupplierFileEditorSupport> supplierFileEditorSupportList;
+	private IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 	//
 	private TabItem tabDrives;
 	private TreeViewer treeViewerDrives;
@@ -64,20 +63,15 @@ public abstract class AbstractSupplierFileExplorer {
 	//
 	private TabItem tabUserLocation;
 	private TreeViewer treeViewerUserLocation;
+	/*
+	 * Contains no data initially.
+	 */
+	private List<ISupplierFileEditorSupport> supplierFileEditorSupportList = new ArrayList<ISupplierFileEditorSupport>();
 	//
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
 
-	public AbstractSupplierFileExplorer(Composite parent, ISupplierFileEditorSupport supplierFileEditorSupport) {
-		this(parent, ExplorerListSupport.getChromatogramEditorSupportList(supplierFileEditorSupport));
-	}
-
-	public AbstractSupplierFileExplorer(Composite parent, List<ISupplierFileEditorSupport> supplierFileEditorSupportList) {
-		/*
-		 * The supplier editor support list is used to show
-		 * the preview and open the editor on demand.
-		 */
-		this.supplierFileEditorSupportList = supplierFileEditorSupportList;
+	public AbstractSupplierFileExplorer(Composite parent) {
 		/*
 		 * Create the tree viewer.
 		 */
@@ -89,6 +83,19 @@ public abstract class AbstractSupplierFileExplorer {
 		createDrivesTreeViewer(tabFolder);
 		createHomeTreeViewer(tabFolder);
 		createUserLocationTreeViewer(tabFolder);
+	}
+
+	public void setSupplierFileEditorSupportList(List<ISupplierFileEditorSupport> supplierFileEditorSupportList) {
+
+		this.supplierFileEditorSupportList = supplierFileEditorSupportList;
+		//
+		setTreeViewerProvider(treeViewerDrives);
+		setTreeViewerProvider(treeViewerHome);
+		setTreeViewerProvider(treeViewerUserLocation);
+		//
+		setTreeViewerContent(treeViewerDrives, getDrives());
+		setTreeViewerContent(treeViewerHome, new File(UserManagement.getUserHome()));
+		setTreeViewerContent(treeViewerUserLocation, getUserLocation());
 	}
 
 	private void createDrivesTreeViewer(TabFolder tabFolder) {
@@ -184,8 +191,7 @@ public abstract class AbstractSupplierFileExplorer {
 
 		TreeViewer treeViewer = new TreeViewer(parent, SWT.MULTI);
 		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-		treeViewer.setContentProvider(new SupplierFileExplorerContentProvider(supplierFileEditorSupportList));
-		treeViewer.setLabelProvider(new SupplierFileExplorerLabelProvider(supplierFileEditorSupportList));
+		setTreeViewerProvider(treeViewer);
 		/*
 		 * Register single (selection changed)/double click listener here.<br/>
 		 * OK, it's not the best way, but it still works at beginning.
@@ -213,6 +219,12 @@ public abstract class AbstractSupplierFileExplorer {
 		});
 		//
 		return treeViewer;
+	}
+
+	private void setTreeViewerProvider(TreeViewer treeViewer) {
+
+		treeViewer.setContentProvider(new SupplierFileExplorerContentProvider(supplierFileEditorSupportList));
+		treeViewer.setLabelProvider(new SupplierFileExplorerLabelProvider(supplierFileEditorSupportList));
 	}
 
 	private void addUserLocationButton(Composite parent, TreeViewer treeViewer) {
@@ -308,7 +320,7 @@ public abstract class AbstractSupplierFileExplorer {
 			}
 			//
 			if(!isSupported) {
-				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE, file);
+				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE, null);
 			}
 		}
 	}

@@ -51,6 +51,12 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageSubtract"
             name="Subtract">
-      </page>                              
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageFileExplorer"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageFileExplorer"
+            name="File Explorer">
+      </page>                                         
    </extension>   
 </plugin>

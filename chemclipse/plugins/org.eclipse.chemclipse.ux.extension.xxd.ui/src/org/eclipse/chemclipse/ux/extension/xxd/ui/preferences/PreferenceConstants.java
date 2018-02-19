@@ -258,4 +258,21 @@ public class PreferenceConstants {
 	public static final boolean DEF_ALTERNATE_WINDOW_MOVE_DIRECTION = false;
 	public static final String P_CONDENSE_CYCLE_NUMBER_SCANS = "condenseCycleNumberScans";
 	public static final boolean DEF_CONDENSE_CYCLE_NUMBER_SCANS = true;
+	/*
+	 * File Explorer
+	 */
+	public static final String P_SHOW_DATA_MSD = "showDataMSD";
+	public static final boolean DEF_SHOW_DATA_MSD = true;
+	public static final String P_SHOW_DATA_CSD = "showDataCSD";
+	public static final boolean DEF_SHOW_DATA_CSD = true;
+	public static final String P_SHOW_DATA_WSD = "showDataWSD";
+	public static final boolean DEF_SHOW_DATA_WSD = true;
+	public static final String P_SHOW_LIBRARY_MSD = "showLibraryMSD";
+	public static final boolean DEF_SHOW_LIBRARY_MSD = true;
+	public static final String P_SHOW_SCANS_MSD = "showScansMSD";
+	public static final boolean DEF_SHOW_SCANS_MSD = true;
+	public static final String P_SHOW_DATA_XIR = "showDataXIR";
+	public static final boolean DEF_SHOW_DATA_XIR = false;
+	public static final String P_SHOW_DATA_NMR = "showDataNMR";
+	public static final boolean DEF_SHOW_DATA_NMR = false;
 }

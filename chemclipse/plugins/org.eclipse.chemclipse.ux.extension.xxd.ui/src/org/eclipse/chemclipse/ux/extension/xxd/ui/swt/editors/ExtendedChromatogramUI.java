@@ -9,13 +9,16 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -33,6 +36,7 @@ import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
+import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -134,6 +138,9 @@ public class ExtendedChromatogramUI {
 	private static final String SERIES_ID_SELECTED_SCAN = "Selected Scan";
 	private static final String SERIES_ID_IDENTIFIED_SCANS = "Identified Scans";
 	private static final String SERIES_ID_IDENTIFIED_SCAN_SELECTED = "Identified Scan Selected";
+	//
+	private static final int FIVE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 5);
+	private static final int THREE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 3);
 	//
 	private Composite toolbarInfo;
 	private Label labelChromatogramInfo;
@@ -471,11 +478,19 @@ public class ExtendedChromatogramUI {
 	public synchronized void updateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
 
 		this.chromatogramSelection = chromatogramSelection;
-		addChartMenuEntriesFilter();
-		updateChromatogram();
-		//
-		if(chromatogramSelections == null) {
-			updateChromatogramCombo();
+		if(chromatogramSelection != null) {
+			/*
+			 * Adjust
+			 */
+			adjustMinuteScale();
+			addChartMenuEntriesFilter();
+			updateChromatogram();
+			if(chromatogramSelections == null) {
+				updateChromatogramCombo();
+			}
+		} else {
+			comboChromatograms.setItems(new String[0]);
+			updateChromatogram();
 		}
 	}
 
@@ -520,6 +535,27 @@ public class ExtendedChromatogramUI {
 			return true;
 		}
 		return false;
+	}
+
+	private void adjustMinuteScale() {
+
+		int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+		int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+		int deltaRetentionTime = stopRetentionTime - startRetentionTime + 1;
+		IChartSettings chartSettings = chromatogramChart.getChartSettings();
+		List<ISecondaryAxisSettings> axisSettings = chartSettings.getSecondaryAxisSettingsListX();
+		for(ISecondaryAxisSettings axisSetting : axisSettings) {
+			if(axisSetting.getTitle().equals("Minutes")) {
+				if(deltaRetentionTime >= FIVE_MINUTES) {
+					axisSetting.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
+				} else if(deltaRetentionTime >= THREE_MINUTES) {
+					axisSetting.setDecimalFormat(new DecimalFormat(("0.000"), new DecimalFormatSymbols(Locale.ENGLISH)));
+				} else {
+					axisSetting.setDecimalFormat(new DecimalFormat(("0.0000"), new DecimalFormatSymbols(Locale.ENGLISH)));
+				}
+			}
+		}
+		chromatogramChart.applySettings(chartSettings);
 	}
 
 	private void addChartMenuEntriesFilter() {
@@ -894,9 +930,9 @@ public class ExtendedChromatogramUI {
 	private void createToolbarMain(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
-		gridDataStatus.horizontalAlignment = SWT.END;
-		composite.setLayoutData(gridDataStatus);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = SWT.END;
+		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(7, false));
 		//
 		createButtonToggleToolbarInfo(composite);

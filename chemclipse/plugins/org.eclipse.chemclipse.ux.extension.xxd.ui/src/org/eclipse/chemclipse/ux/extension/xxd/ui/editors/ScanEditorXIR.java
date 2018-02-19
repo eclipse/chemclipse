@@ -11,19 +11,23 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.IDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ScanXIRImportRunnable;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedXIRScanUI;
+import org.eclipse.chemclipse.xir.model.core.IScanXIR;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
@@ -32,7 +36,7 @@ import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.swt.SWT;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -43,7 +47,7 @@ public class ScanEditorXIR extends AbstractDataUpdateSupport implements IChemCli
 	//
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanEditorXIR";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorXIR";
-	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif";
+	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/scan-xir.gif";
 	public static final String TOOLTIP = "FTIR/NIR/MIR Editor";
 	//
 	private MPart part;
@@ -51,14 +55,19 @@ public class ScanEditorXIR extends AbstractDataUpdateSupport implements IChemCli
 	//
 	private IEventBroker eventBroker;
 	//
-	private Composite extendedMeasurementUI;
+	private File scanFile;
+	private ExtendedXIRScanUI extendedScanXIREditorUI;
+	//
+	private Shell shell;
 
-	public ScanEditorXIR(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
+	@Inject
+	public ScanEditorXIR(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
 		super(part);
 		//
 		this.part = part;
 		this.dirtyable = dirtyable;
 		this.eventBroker = ModelSupportAddon.getEventBroker();
+		this.shell = shell;
 		//
 		initialize(parent);
 	}
@@ -76,16 +85,14 @@ public class ScanEditorXIR extends AbstractDataUpdateSupport implements IChemCli
 		 * 0 => because only one property was used to register the event.
 		 */
 		if(objects.size() == 1) {
-			Object object = objects.get(0);
-			extendedMeasurementUI.update();
-			logger.info("Update: " + object);
+			//
 		}
 	}
 
 	@Focus
 	public void setFocus() {
 
-		extendedMeasurementUI.update();
+		//
 	}
 
 	@PreDestroy
@@ -117,6 +124,7 @@ public class ScanEditorXIR extends AbstractDataUpdateSupport implements IChemCli
 	@Persist
 	public void save() {
 
+		System.out.println(scanFile);
 		dirtyable.setDirty(false);
 	}
 
@@ -128,7 +136,44 @@ public class ScanEditorXIR extends AbstractDataUpdateSupport implements IChemCli
 
 	private void initialize(Composite parent) {
 
+		IScanXIR scanXIR = loadScan();
 		createEditorPages(parent);
+		extendedScanXIREditorUI.update(scanXIR);
+	}
+
+	private synchronized IScanXIR loadScan() {
+
+		IScanXIR scanXIR = null;
+		try {
+			Object object = part.getObject();
+			if(object instanceof String) {
+				/*
+				 * String
+				 */
+				File file = new File((String)object);
+				scanXIR = loadScan(file);
+			}
+		} catch(Exception e) {
+			logger.error(e.getLocalizedMessage(), e);
+		}
+		//
+		return scanXIR;
+	}
+
+	private IScanXIR loadScan(File file) {
+
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
+		ScanXIRImportRunnable runnable = new ScanXIRImportRunnable(file);
+		try {
+			dialog.run(true, false, runnable);
+		} catch(InvocationTargetException e) {
+			logger.warn(e);
+		} catch(InterruptedException e) {
+			logger.warn(e);
+		}
+		//
+		scanFile = file;
+		return runnable.getScanXIR();
 	}
 
 	private void createEditorPages(Composite parent) {
@@ -138,7 +183,6 @@ public class ScanEditorXIR extends AbstractDataUpdateSupport implements IChemCli
 
 	private void createScanPage(Composite parent) {
 
-		Composite extendedScanUI = new Composite(parent, SWT.NONE);
-		extendedScanUI.setBackground(Colors.RED);
+		extendedScanXIREditorUI = new ExtendedXIRScanUI(parent);
 	}
 }
