@@ -34,10 +34,9 @@ public class FilterSupplier {
 
 	private void applySavitzkyGolay(IScanMSD massSpectrum, int derivative, int order, int width, IProgressMonitor monitor) {
 
-		int extraValues = 6; // Leading and tailing extra values.
 		List<IIon> ions = new ArrayList<>(massSpectrum.getIons());
 		Collections.sort(ions, new IonValueComparator());
-		double[] intensityValues = getIntensityValues(ions, extraValues);
+		double[] intensityValues = getIntensityValues(ions);
 		SavitzkyGolayProcessor processor = new SavitzkyGolayProcessor();
 		double[] smoothed = processor.smooth(intensityValues, derivative, order, width, monitor);
 		int i = 0;
@@ -51,28 +50,15 @@ public class FilterSupplier {
 		}
 	}
 
-	// TODO: check if extraValues are actually required
-	private double[] getIntensityValues(List<IIon> ions, int extraValues) {
+	private double[] getIntensityValues(List<IIon> ions) {
 
-		double[] intensityValues = new double[ions.size() + extraValues * 2];
+		double[] intensityValues = new double[ions.size()];
 		int counter = 0;
-		/*
-		 * Extra values before.
-		 */
-		for(int i = 0; i < extraValues; i++) {
-			intensityValues[counter++] = 1;
-		}
 		/*
 		 * Data
 		 */
 		for(IIon ion : ions) {
 			intensityValues[counter++] = ion.getAbundance();
-		}
-		/*
-		 * Extra values after.
-		 */
-		for(int i = 0; i < extraValues; i++) {
-			intensityValues[counter++] = 1;
 		}
 		//
 		return intensityValues;
