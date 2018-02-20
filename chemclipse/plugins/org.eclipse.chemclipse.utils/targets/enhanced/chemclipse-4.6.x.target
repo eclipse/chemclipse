@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Eclipse 4.6.x (Neon)" sequenceNumber="426">
+<?pde version="3.8"?><target name="Eclipse 4.6.x (Neon)" sequenceNumber="432">
 <locations>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.python.pydev.feature.feature.group" version="0.0.0"/>
+<repository location="http://pydev.org/updates"/>
+</location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.apache.log4j" version="0.0.0"/>
 <unit id="ch.qos.logback.core" version="0.0.0"/>
@@ -66,10 +70,6 @@
 <repository location="http://download.eclipse.org/releases/neon"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.feature.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/nebula/snapshot"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.widgets.nattable.core.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.nebula.widgets.nattable.extension.glazedlists.feature.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/nattable/releases/1.4.0/repository"/>
@@ -86,6 +86,13 @@
 <unit id="org.eclipse.fx.ide.ldef.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.fx.ide.basic.feature.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/efxclipse/updates-released/2.4.0/site"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.ease.python.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ease.ui.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ease.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.ease.modules.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/ease/update/release"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.knime.features.base.filehandling.feature.group" version="0.0.0"/>
@@ -161,15 +168,8 @@
 <repository location="http://update.knime.org/analytics-platform/3.3/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.python.pydev.feature.feature.group" version="0.0.0"/>
-<repository location="http://pydev.org/updates"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.ease.python.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ease.ui.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ease.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.ease.modules.feature.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/ease/update/release"/>
+<unit id="org.eclipse.nebula.feature.feature.group" version="1.4.0.201711021145"/>
+<repository location="http://download.eclipse.org/nebula/releases/1.4.0"/>
 </location>
 </locations>
 </target>
