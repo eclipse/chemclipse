@@ -19,7 +19,7 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	 */
 	private static final long serialVersionUID = 1295884624032029498L;
 	//
-	private boolean isMatch = true;
+	private boolean isMatch = false;
 	private float matchFactor;
 	private float matchFactorDirect;
 	private float reverseMatchFactor;
