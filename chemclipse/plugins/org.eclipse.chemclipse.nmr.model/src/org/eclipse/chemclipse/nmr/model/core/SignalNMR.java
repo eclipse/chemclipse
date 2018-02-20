@@ -47,9 +47,7 @@ public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<
 	@Override
 	public void setChemicalShift(double chemicalShift) {
 
-		if(chemicalShift >= 0) {
-			this.chemicalShift = chemicalShift;
-		}
+		this.chemicalShift = chemicalShift;
 	}
 
 	@Override
