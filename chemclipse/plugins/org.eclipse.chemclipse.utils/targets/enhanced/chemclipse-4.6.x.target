@@ -168,7 +168,7 @@
 <repository location="http://update.knime.org/analytics-platform/3.3/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.feature.feature.group" version="1.4.0.201711021145"/>
+<unit id="org.eclipse.nebula.feature.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/nebula/releases/1.4.0"/>
 </location>
 </locations>
