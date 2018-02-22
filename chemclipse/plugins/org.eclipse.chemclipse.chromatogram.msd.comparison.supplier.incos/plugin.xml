@@ -7,7 +7,10 @@
             comparatorName="INCOS"
             description="This comparator calculates the similarity between two mass spectra with the incos algorithm."
             id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos"
-            massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.comparator.MassSpectrumComparator">
+            massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos.comparator.MassSpectrumComparator"
+            nominalMS="true"
+            tandemMS="false"
+            highResolutionMS="false">
       </ComparisonSupplier>
    </extension>
 
