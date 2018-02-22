@@ -7,7 +7,10 @@
             comparatorName="Euclidean Distance"
             description="This comparator calculates the similarity between two mass spectra with the Euclidean distance algorithm."
             id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.euclidean"
-            massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator.EuclideanMassSpectrumComparator">
+            massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator.EuclideanMassSpectrumComparator"
+            nominalMS="true"
+            tandemMS="false"
+            highResolutionMS="false">
       </ComparisonSupplier>   
    </extension>
    <extension
@@ -16,7 +19,10 @@
             comparatorName="Cosine"
             description="This comparator calculates the similarity between two mass spectra with the Cosine value."
             id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.cosine"
-            massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator.CosineMassSpectrumComparator">
+            massSpectrumComparator="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.comparator.CosineMassSpectrumComparator"
+            nominalMS="true"
+            tandemMS="false"
+            highResolutionMS="false">
       </ComparisonSupplier>   
    </extension>   
 
