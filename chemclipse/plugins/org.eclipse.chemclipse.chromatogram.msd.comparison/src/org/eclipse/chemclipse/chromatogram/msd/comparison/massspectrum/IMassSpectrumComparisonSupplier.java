@@ -34,4 +34,10 @@ public interface IMassSpectrumComparisonSupplier {
 	 * @return String
 	 */
 	String getComparatorName();
+
+	boolean supportsNominalMS();
+
+	boolean supportsTandemMS();
+
+	boolean supportsHighResolutionMS();
 }

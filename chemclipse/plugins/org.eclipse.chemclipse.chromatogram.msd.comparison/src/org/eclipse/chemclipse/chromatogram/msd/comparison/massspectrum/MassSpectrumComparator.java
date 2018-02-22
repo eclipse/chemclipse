@@ -62,6 +62,9 @@ public class MassSpectrumComparator {
 	private static final String DESCRIPTION = "description";
 	private static final String COMPARATOR_NAME = "comparatorName";
 	private static final String MASS_SPECTRUM_COMPARATOR = "massSpectrumComparator";
+	private static final String SUPPORTS_NOMINAL_MS = "nominalMS";
+	private static final String SUPPORTS_TANDEM_MS = "tandemMS";
+	private static final String SUPPORTS_HIGH_RESOLUTION_MS = "highResolutionMS";
 	//
 	private static ComparatorCache comparatorCache;
 	private static IMassSpectrumComparatorProcessingInfo processingInfoComparisonSkip;
@@ -206,6 +209,9 @@ public class MassSpectrumComparator {
 			supplier.setId(element.getAttribute(ID));
 			supplier.setDescription(element.getAttribute(DESCRIPTION));
 			supplier.setComparatorName(element.getAttribute(COMPARATOR_NAME));
+			supplier.setSupportsNominalMS(Boolean.valueOf(element.getAttribute(SUPPORTS_NOMINAL_MS)));
+			supplier.setSupportsTandemMS(Boolean.valueOf(element.getAttribute(SUPPORTS_TANDEM_MS)));
+			supplier.setSupportsHighResolutionMS(Boolean.valueOf(element.getAttribute(SUPPORTS_HIGH_RESOLUTION_MS)));
 			massSpectrumComparisonSupport.add(supplier);
 		}
 		return massSpectrumComparisonSupport;

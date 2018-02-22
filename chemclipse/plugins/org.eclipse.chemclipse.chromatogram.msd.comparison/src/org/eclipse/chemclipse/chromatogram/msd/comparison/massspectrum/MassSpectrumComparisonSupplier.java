@@ -16,6 +16,9 @@ public class MassSpectrumComparisonSupplier implements IMassSpectrumComparisonSu
 	private String id = "";
 	private String description = "";
 	private String comparatorName = "";
+	private boolean supportsNominalMS = false;
+	private boolean supportsTandemMS = false;
+	private boolean supportsHighResolutionMS = false;
 
 	/**
 	 * Sets the supplier id like
@@ -72,6 +75,39 @@ public class MassSpectrumComparisonSupplier implements IMassSpectrumComparisonSu
 		return comparatorName;
 	}
 
+	@Override
+	public boolean supportsNominalMS() {
+
+		return supportsNominalMS;
+	}
+
+	protected void setSupportsNominalMS(boolean supportsNominalMS) {
+
+		this.supportsNominalMS = supportsNominalMS;
+	}
+
+	@Override
+	public boolean supportsTandemMS() {
+
+		return supportsTandemMS;
+	}
+
+	protected void setSupportsTandemMS(boolean supportsTandemMS) {
+
+		this.supportsTandemMS = supportsTandemMS;
+	}
+
+	@Override
+	public boolean supportsHighResolutionMS() {
+
+		return supportsHighResolutionMS;
+	}
+
+	protected void setSupportsHighResolutionMS(boolean supportsHighResolutionMS) {
+
+		this.supportsHighResolutionMS = supportsHighResolutionMS;
+	}
+
 	// ------------------------------------hashCode, equals, toString
 	@Override
 	public boolean equals(Object other) {
@@ -106,8 +142,13 @@ public class MassSpectrumComparisonSupplier implements IMassSpectrumComparisonSu
 		builder.append("description=" + description);
 		builder.append(",");
 		builder.append("comparatorName=" + comparatorName);
+		builder.append(",");
+		builder.append("supportsNominalMS=" + supportsNominalMS);
+		builder.append(",");
+		builder.append("supportsTandemMS=" + supportsTandemMS);
+		builder.append(",");
+		builder.append("supportsHighResolutionMS=" + supportsHighResolutionMS);
 		builder.append("]");
 		return builder.toString();
 	}
-	// ------------------------------------hashCode, equals, toString
 }
