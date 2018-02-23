@@ -13,10 +13,8 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.core;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.IPeakDetectorMSDProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.PeakDetectorMSDProcessingInfo;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupport;
-import org.eclipse.chemclipse.chromatogram.peak.detector.core.PeakDetectorSupplier;
-import org.eclipse.chemclipse.chromatogram.peak.detector.core.PeakDetectorSupport;
-import org.eclipse.chemclipse.chromatogram.peak.detector.settings.IPeakDetectorSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
@@ -74,7 +72,7 @@ public class PeakDetectorMSD {
 	 * @param monitor
 	 * @return IPeakDetectorProcessingInfo
 	 */
-	public static IPeakDetectorMSDProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettings peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
+	public static IPeakDetectorMSDProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorMSDSettings peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
 
 		IPeakDetectorMSDProcessingInfo processingInfo;
 		IPeakDetectorMSD peakDetector = getPeakDetector(peakDetectorId);
@@ -114,8 +112,8 @@ public class PeakDetectorMSD {
 	// ---------------------------------------------------
 	public static IPeakDetectorSupport getPeakDetectorSupport() {
 
-		PeakDetectorSupplier supplier;
-		PeakDetectorSupport peakDetectorSupport = new PeakDetectorSupport();
+		PeakDetectorMSDSupplier supplier;
+		PeakDetectorMSDSupport peakDetectorSupport = new PeakDetectorMSDSupport();
 		/*
 		 * Search in the extension registry and fill the comparison support
 		 * object with supplier information.
@@ -126,10 +124,10 @@ public class PeakDetectorMSD {
 			String id = element.getAttribute(ID);
 			String description = element.getAttribute(DESCRIPTION);
 			String peakDetectorName = element.getAttribute(PEAK_DETECTOR_NAME);
-			supplier = new PeakDetectorSupplier(id, description, peakDetectorName);
+			supplier = new PeakDetectorMSDSupplier(id, description, peakDetectorName);
 			if(element.getAttribute(PEAK_DETECTOR_SETTINGS) != null) {
 				try {
-					IPeakDetectorSettings instance = (IPeakDetectorSettings)element.createExecutableExtension(PEAK_DETECTOR_SETTINGS);
+					IPeakDetectorMSDSettings instance = (IPeakDetectorMSDSettings)element.createExecutableExtension(PEAK_DETECTOR_SETTINGS);
 					supplier.setPeakDetectorSettingsClass(instance.getClass());
 				} catch(CoreException e) {
 					logger.warn(e);

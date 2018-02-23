@@ -1,26 +1,27 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Jan Holy - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.peak.detector.core;
 
 import org.eclipse.chemclipse.chromatogram.peak.detector.settings.IPeakDetectorSettings;
 
-public class PeakDetectorSupplier implements IPeakDetectorSupplier {
+public abstract class AbstractPeakDetectorSupplier<S extends IPeakDetectorSettings> implements IPeakDetectorSupplier {
 
 	private String id = "";
 	private String description = "";
 	private String peakDetectorName = "";
-	private Class<? extends IPeakDetectorSettings> peakDetectorSettingsClass;
+	private Class<? extends S> peakDetectorSettingsClass;
 
-	public PeakDetectorSupplier(String id, String description, String peakDetectorName) {
+	public AbstractPeakDetectorSupplier(String id, String description, String peakDetectorName) {
 		setId(id);
 		setDescription(description);
 		setPeakDetectorName(peakDetectorName);
@@ -81,13 +82,12 @@ public class PeakDetectorSupplier implements IPeakDetectorSupplier {
 		}
 	}
 
-	@Override
-	public Class<? extends IPeakDetectorSettings> getPeakDetectorSettingsClass() {
+	protected Class<? extends S> getSettingsClass() {
 
 		return this.peakDetectorSettingsClass;
 	}
 
-	public void setPeakDetectorSettingsClass(Class<? extends IPeakDetectorSettings> peakDetectorSettingsClass) {
+	public void setPeakDetectorSettingsClass(Class<? extends S> peakDetectorSettingsClass) {
 
 		this.peakDetectorSettingsClass = peakDetectorSettingsClass;
 	}
@@ -105,7 +105,7 @@ public class PeakDetectorSupplier implements IPeakDetectorSupplier {
 		if(this.getClass() != other.getClass()) {
 			return false;
 		}
-		PeakDetectorSupplier otherSupplier = (PeakDetectorSupplier)other;
+		AbstractPeakDetectorSupplier<?> otherSupplier = (AbstractPeakDetectorSupplier<?>)other;
 		return id.equals(otherSupplier.id) && description.equals(otherSupplier.description) && peakDetectorName.equals(otherSupplier.peakDetectorName);
 	}
 

@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.core;
 
-import org.eclipse.chemclipse.chromatogram.peak.detector.core.PeakDetectorSupplier;
-
 import junit.framework.TestCase;
 
 /**
@@ -20,13 +18,13 @@ import junit.framework.TestCase;
  */
 public class PeakDetectorSupplier_1_Test extends TestCase {
 
-	private PeakDetectorSupplier supplier;
+	private PeakDetectorMSDSupplier supplier;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		supplier = new PeakDetectorSupplier("org.eclipse.chemclipse.test", "This is a description.", "Peak Detector Name");
+		supplier = new PeakDetectorMSDSupplier("org.eclipse.chemclipse.test", "This is a description.", "Peak Detector Name");
 	}
 
 	@Override

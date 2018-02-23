@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.core;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupplier;
-import org.eclipse.chemclipse.chromatogram.peak.detector.core.PeakDetectorSupplier;
-import org.eclipse.chemclipse.chromatogram.peak.detector.core.PeakDetectorSupport;
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.NoPeakDetectorAvailableException;
 
 import junit.framework.TestCase;
@@ -25,15 +23,15 @@ import junit.framework.TestCase;
  */
 public class PeakDetectorSupport_1_Test extends TestCase {
 
-	private PeakDetectorSupport support;
-	private PeakDetectorSupplier supplier;
+	private PeakDetectorMSDSupport support;
+	private PeakDetectorMSDSupplier supplier;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		support = new PeakDetectorSupport();
-		supplier = new PeakDetectorSupplier("net.first.supplier", "Integrator Description", "Peak Detector Name");
+		support = new PeakDetectorMSDSupport();
+		supplier = new PeakDetectorMSDSupplier("net.first.supplier", "Integrator Description", "Peak Detector Name");
 		support.add(supplier);
 	}
 
