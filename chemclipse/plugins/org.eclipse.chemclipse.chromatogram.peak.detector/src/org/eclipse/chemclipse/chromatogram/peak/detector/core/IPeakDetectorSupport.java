@@ -18,13 +18,6 @@ import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.NoPeakDetect
 public interface IPeakDetectorSupport {
 
 	/**
-	 * Adds a peak detector supplier to the list.
-	 * 
-	 * @param supplier
-	 */
-	void add(IPeakDetectorSupplier supplier);
-
-	/**
 	 * Returns the id of the selected peak detector name.<br/>
 	 * The id of the selected filter is used to determine which detector should
 	 * be used to calculate the integration results of the chromatogram.<br/>

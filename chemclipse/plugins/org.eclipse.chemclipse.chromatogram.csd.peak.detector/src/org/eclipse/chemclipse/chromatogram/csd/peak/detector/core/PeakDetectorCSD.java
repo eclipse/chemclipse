@@ -11,23 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.peak.detector.core;
 
+import org.eclipse.chemclipse.chromatogram.csd.peak.detector.processing.IPeakDetectorCSDProcessingInfo;
+import org.eclipse.chemclipse.chromatogram.csd.peak.detector.processing.PeakDetectorCSDProcessingInfo;
+import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.IPeakDetectorCSDSettings;
+import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupport;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.processing.core.IProcessingMessage;
+import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
-import org.eclipse.chemclipse.chromatogram.csd.peak.detector.processing.IPeakDetectorCSDProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.csd.peak.detector.processing.PeakDetectorCSDProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.IPeakDetectorCSDSettings;
-import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupport;
-import org.eclipse.chemclipse.chromatogram.peak.detector.core.PeakDetectorSupplier;
-import org.eclipse.chemclipse.chromatogram.peak.detector.core.PeakDetectorSupport;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.processing.core.MessageType;
-import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 
 public class PeakDetectorCSD {
 
@@ -96,8 +93,8 @@ public class PeakDetectorCSD {
 	// ---------------------------------------------------
 	public static IPeakDetectorSupport getPeakDetectorSupport() {
 
-		PeakDetectorSupplier supplier;
-		PeakDetectorSupport peakDetectorSupport = new PeakDetectorSupport();
+		PeakDetectorCSDSupplier supplier;
+		PeakDetectorCSDSupport peakDetectorSupport = new PeakDetectorCSDSupport();
 		/*
 		 * Search in the extension registry and fill the comparison support
 		 * object with supplier information.
@@ -108,7 +105,7 @@ public class PeakDetectorCSD {
 			String id = element.getAttribute(ID);
 			String description = element.getAttribute(DESCRIPTION);
 			String peakDetectorName = element.getAttribute(PEAK_DETECTOR_NAME);
-			supplier = new PeakDetectorSupplier(id, description, peakDetectorName);
+			supplier = new PeakDetectorCSDSupplier(id, description, peakDetectorName);
 			peakDetectorSupport.add(supplier);
 		}
 		return peakDetectorSupport;

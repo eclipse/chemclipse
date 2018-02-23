@@ -1,36 +1,34 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2018 Lablicate GmbH.
- * 
+ *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Jan Holy - implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.peak.detector.core;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupplier;
-import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupport;
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.NoPeakDetectorAvailableException;
 
 /**
  * @author eselmeister
  */
-public class PeakDetectorSupport implements IPeakDetectorSupport {
+public abstract class AbstractPeakDetectorSupport<S extends IPeakDetectorSupplier> implements IPeakDetectorSupport {
 
-	List<IPeakDetectorSupplier> suppliers;
+	List<S> suppliers;
 
-	public PeakDetectorSupport() {
-		suppliers = new ArrayList<IPeakDetectorSupplier>();
+	public AbstractPeakDetectorSupport() {
+		suppliers = new ArrayList<>();
 	}
 
-	@Override
-	public void add(IPeakDetectorSupplier supplier) {
+	public void add(S supplier) {
 
 		suppliers.add(supplier);
 	}
@@ -49,10 +47,9 @@ public class PeakDetectorSupport implements IPeakDetectorSupport {
 		return availablePeakDetectors;
 	}
 
-	@Override
-	public IPeakDetectorSupplier getPeakDetectorSupplier(String peakDetectorId) throws NoPeakDetectorAvailableException {
+	protected S getSupplier(String peakDetectorId) throws NoPeakDetectorAvailableException {
 
-		IPeakDetectorSupplier peakDetectorSupplier = null;
+		S peakDetectorSupplier = null;
 		/*
 		 * Test if the suppliers ArrayList is empty.
 		 */
@@ -61,7 +58,7 @@ public class PeakDetectorSupport implements IPeakDetectorSupport {
 			throw new NoPeakDetectorAvailableException("There is no peak detector available with the following id: " + peakDetectorId + ".");
 		}
 		endsearch:
-		for(IPeakDetectorSupplier supplier : suppliers) {
+		for(S supplier : suppliers) {
 			if(supplier.getId().equals(peakDetectorId)) {
 				peakDetectorSupplier = supplier;
 				break endsearch;
@@ -116,5 +113,4 @@ public class PeakDetectorSupport implements IPeakDetectorSupport {
 			throw new NoPeakDetectorAvailableException();
 		}
 	}
-	// -------------------------------------private methods
 }
