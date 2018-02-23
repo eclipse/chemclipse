@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.AbstractPeakDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.IPeakDetectorMSDProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.processing.PeakDetectorMSDProcessingInfo;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorMSDSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Derivatives.DerivativesAndNoise;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Derivatives.FirstDerivativeAndNoise;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.deconvolution.Derivatives.IDerivativesAndNoise;
@@ -144,7 +145,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	private int quantityNoiseSegments;
 
 	@Override
-	public IPeakDetectorMSDProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) {
+	public IPeakDetectorMSDProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorMSDSettings peakDetectorSettings, IProgressMonitor monitor) {
 
 		IPeakDetectorMSDProcessingInfo processingInfo = new PeakDetectorMSDProcessingInfo();
 		processingInfo.addMessages(validate(chromatogramSelection, peakDetectorSettings, monitor));
