@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.csd.peak.detector.core;
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.processing.IPeakDetectorCSDProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.processing.PeakDetectorCSDProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.IPeakDetectorCSDSettings;
-import org.eclipse.chemclipse.chromatogram.peak.detector.core.IPeakDetectorSupport;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
@@ -91,7 +90,7 @@ public class PeakDetectorCSD {
 	}
 
 	// ---------------------------------------------------
-	public static IPeakDetectorSupport getPeakDetectorSupport() {
+	public static IPeakDetectorCSDSupport getPeakDetectorSupport() {
 
 		PeakDetectorCSDSupplier supplier;
 		PeakDetectorCSDSupport peakDetectorSupport = new PeakDetectorCSDSupport();
