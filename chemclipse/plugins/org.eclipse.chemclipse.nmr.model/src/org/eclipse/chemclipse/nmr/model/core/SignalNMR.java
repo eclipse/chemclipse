@@ -15,6 +15,8 @@ import org.eclipse.chemclipse.model.core.AbstractSignal;
 
 public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<ISignalNMR> {
 
+	private static final long serialVersionUID = 6450313862258177287L;
+	//
 	private double chemicalShift = 0.0d;
 	private double intensity = 0.0d;
 

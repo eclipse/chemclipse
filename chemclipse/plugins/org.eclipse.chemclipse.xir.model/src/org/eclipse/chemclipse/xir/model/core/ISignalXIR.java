@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xir.model.core;
 
+import java.io.Serializable;
+
 import org.eclipse.chemclipse.model.core.ISignal;
 
-public interface ISignalXIR extends ISignal {
+public interface ISignalXIR extends ISignal, Serializable {
 
 	double getWavelength();
 

@@ -15,6 +15,8 @@ import org.eclipse.chemclipse.model.core.AbstractSignal;
 
 public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<ISignalXIR> {
 
+	private static final long serialVersionUID = -2575735757102126907L;
+	//
 	private double wavelength = 0.0d; // nm
 	private double intensity = 0.0d;
 
