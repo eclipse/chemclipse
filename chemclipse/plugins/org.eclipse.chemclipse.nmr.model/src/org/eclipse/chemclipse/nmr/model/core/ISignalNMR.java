@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
+import java.io.Serializable;
+
 import org.eclipse.chemclipse.model.core.ISignal;
 
-public interface ISignalNMR extends ISignal {
+public interface ISignalNMR extends ISignal, Serializable {
 
 	double getChemicalShift();
 
