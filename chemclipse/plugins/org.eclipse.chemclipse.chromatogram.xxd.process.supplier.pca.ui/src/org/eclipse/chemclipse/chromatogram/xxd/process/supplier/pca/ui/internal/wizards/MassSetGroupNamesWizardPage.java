@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.InputFilesTable;
@@ -142,7 +143,8 @@ public class MassSetGroupNamesWizardPage extends WizardPage {
 				}
 				break;
 			case REGEXP:
-				inputWizard.getDataInputEntries().stream().filter(i -> i.getName().matches(s)).forEach(filterInpfilteruts::add);
+				Pattern p = Pattern.compile(s);
+				inputWizard.getDataInputEntries().stream().filter(i -> p.matcher(i.getName()).find()).forEach(filterInpfilteruts::add);
 				break;
 			default:
 				break;

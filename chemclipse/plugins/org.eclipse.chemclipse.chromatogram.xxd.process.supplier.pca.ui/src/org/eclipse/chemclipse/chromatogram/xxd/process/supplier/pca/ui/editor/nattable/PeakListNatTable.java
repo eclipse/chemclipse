@@ -94,6 +94,9 @@ public class PeakListNatTable {
 				int row = natTable.getRowPositionByY(event.y);
 				if(col > 0) {
 					ILayerCell cell = natTable.getCellByPosition(col, row);
+					if(cell == null) {
+						return "";
+					}
 					final int rowIndex = cell.getRowIndex();
 					final int columnIndex = cell.getColumnIndex();
 					if(TableProvider.COLUMN_INDEX_SELECTED == columnIndex) {
