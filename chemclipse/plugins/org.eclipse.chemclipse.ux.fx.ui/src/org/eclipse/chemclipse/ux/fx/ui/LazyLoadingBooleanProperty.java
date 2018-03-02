@@ -9,17 +9,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.fx.ui;
 
-import java.util.concurrent.ExecutorService;
-
-import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
 public abstract class LazyLoadingBooleanProperty extends SimpleBooleanProperty {
-
-	private static final ExecutorService exe = LazyLoadingThreads.getExecutorService();
 
 	private boolean loaded = false;
 
@@ -67,29 +61,24 @@ public abstract class LazyLoadingBooleanProperty extends SimpleBooleanProperty {
 	@Override
 	public Boolean getValue() {
 		if (!loaded) {
-			Platform.runLater(() -> startLoadingService());
+			startLoadingService();
 		}
 		return super.getValue();
 	}
 
 	protected void startLoadingService() {
 
-		final Service<Boolean> s = new Service<Boolean>() {
+		final Task<Boolean> s = LazyLoadingBooleanProperty.this.createTask();
 
-			@Override
-			protected Task<Boolean> createTask() {
-				return LazyLoadingBooleanProperty.this.createTask();
-			}
-		};
-
-		s.setExecutor(exe);
+		LazyLoadingThreads.getExecutorService().submit(s);
 
 		s.setOnSucceeded(e -> {
+
 			setValue(s.getValue());
-			// System.err.println("Finished");
 			setLoaded(true);
+
 		});
-		s.start();
+		// s.start();
 		// System.err.println("Started");
 	}
 

@@ -9,18 +9,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.fx.ui;
 
-import java.util.concurrent.ExecutorService;
-
-import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
 public abstract class LazyLoadingStringProperty extends SimpleStringProperty {
 
-	private static final ExecutorService exe = LazyLoadingThreads.getExecutorService();
-
-	public static final String DEFAULT_LOADING_STRING = "Thinking..";
+	public static final String DEFAULT_LOADING_STRING = "Loading..";
 
 	private String loadingString = DEFAULT_LOADING_STRING;
 
@@ -49,7 +43,7 @@ public abstract class LazyLoadingStringProperty extends SimpleStringProperty {
 	@Override
 	public String getValue() {
 		if (!loaded) {
-			Platform.runLater(() -> startLoadingService());
+			startLoadingService();
 			return loadingString;
 		}
 		return super.getValue();
@@ -57,27 +51,22 @@ public abstract class LazyLoadingStringProperty extends SimpleStringProperty {
 
 	protected void startLoadingService() {
 
-		final Service<String> s = new Service<String>() {
+		final Task<String> s = LazyLoadingStringProperty.this.createTask();
 
-			@Override
-			protected Task<String> createTask() {
-				return LazyLoadingStringProperty.this.createTask();
-			}
-		};
-
-		s.setExecutor(exe);
+		LazyLoadingThreads.getExecutorService().submit(s);
 
 		s.setOnFailed(e -> {
-			setValue(s.getException().getLocalizedMessage());
 			setLoaded(true);
+			setValue(s.getException().getLocalizedMessage());
+
 		});
 
 		s.setOnSucceeded(e -> {
-			setValue(s.getValue());
-			// System.err.println("Finished");
 			setLoaded(true);
+			setValue(s.getValue());
+
 		});
-		s.start();
+
 		// System.err.println("Started");
 	}
 
