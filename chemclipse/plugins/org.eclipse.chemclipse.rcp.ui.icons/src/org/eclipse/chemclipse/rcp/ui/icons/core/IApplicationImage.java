@@ -286,4 +286,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_COMPARISON_SCAN_ACTIVE = "comparisonScanActive.gif";
 	String IMAGE_QUANTITATION_DEFAULT = "quantitationDefault.gif";
 	String IMAGE_QUANTITATION_ACTIVE = "quantitationActive.gif";
+	//
+	String IMAGE_PROCESS_CONTROL = "processControl.gif";
+	String IMAGE_START_PROCESSING = "startProcessing.gif";
+	String IMAGE_END_PROCESSING = "endProcessing.gif";
 }
