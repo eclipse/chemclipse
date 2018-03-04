@@ -18,8 +18,8 @@ public class ScanXIR extends TreeSet<ISignalXIR> implements IScanXIR {
 	private static final long serialVersionUID = 3955396880394067950L;
 	//
 	private double rotationAngle = 0.0d;
-	private double[] rawSignals;
-	private double[] backgroundSignals;
+	private double[] rawSignals = new double[0];
+	private double[] backgroundSignals = new double[0];
 
 	@Override
 	public double getRotationAngle() {

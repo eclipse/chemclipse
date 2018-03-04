@@ -18,7 +18,7 @@ public class ScanNMR extends TreeSet<ISignalNMR> implements IScanNMR {
 
 	private static final long serialVersionUID = 3955396880394067950L;
 	//
-	private double[] rawSignals;
+	private double[] rawSignals = new double[0];
 
 	@Override
 	public double[] getRawSignals() {
