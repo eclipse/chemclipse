@@ -1205,10 +1205,8 @@ public class ExtendedChromatogramUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IChartSettings chartSettings = chromatogramChart.getChartSettings();
-				boolean isShowLegendMarker = chartSettings.isShowLegendMarker();
-				chartSettings.setShowLegendMarker(!isShowLegendMarker);
-				chromatogramChart.applySettings(chartSettings);
+				chromatogramChart.togglePositionLegendVisibility();
+				chromatogramChart.redraw();
 			}
 		});
 	}
