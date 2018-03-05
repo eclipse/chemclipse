@@ -28,6 +28,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSupport implements IOverviewUpdateSupport {
 
 	private static final Logger logger = Logger.getLogger(AbstractOverviewUpdateSupport.class);
+	private String filePath = "";
 
 	public AbstractOverviewUpdateSupport(MPart part) {
 		super(part);
@@ -60,9 +61,15 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 			}
 		} else if(object instanceof File) {
 			File file = (File)object;
-			IChromatogramOverview chromatogramOverview = getChromatogramOverview(file, topic);
-			if(chromatogramOverview != null) {
-				updateChromatogramOverview(chromatogramOverview);
+			if(!file.getAbsolutePath().equals(filePath)) {
+				/*
+				 * Only load the overview if it is a new file.
+				 */
+				filePath = file.getAbsolutePath();
+				IChromatogramOverview chromatogramOverview = getChromatogramOverview(file, topic);
+				if(chromatogramOverview != null) {
+					updateChromatogramOverview(chromatogramOverview);
+				}
 			}
 		} else {
 			if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE)) {

@@ -15,12 +15,16 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
+import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.core.IPrimaryAxisSettings;
+import org.eclipse.eavp.service.swtchart.core.RangeRestriction;
+import org.eclipse.eavp.service.swtchart.events.IHandledEventProcessor;
 import org.eclipse.eavp.service.swtchart.linecharts.LineChart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.swtchart.IAxis.Position;
 import org.swtchart.LineStyle;
 
@@ -44,8 +48,40 @@ public class OverviewChartUI extends LineChart {
 		chartSettings.setOrientation(SWT.HORIZONTAL);
 		chartSettings.setHorizontalSliderVisible(true);
 		chartSettings.setVerticalSliderVisible(false);
-		chartSettings.getRangeRestriction().setZeroX(true);
-		chartSettings.getRangeRestriction().setZeroY(false);
+		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
+		rangeRestriction.setRestrictZoom(false);
+		rangeRestriction.setZeroX(true);
+		rangeRestriction.setZeroY(false);
+		chartSettings.addHandledEventProcessor(new IHandledEventProcessor() {
+
+			@Override
+			public void handleEvent(BaseChart baseChart, Event event) {
+
+				/*
+				 * Reset the range.
+				 */
+				baseChart.adjustRange(true);
+				baseChart.redraw();
+			}
+
+			@Override
+			public int getStateMask() {
+
+				return SWT.NONE;
+			}
+
+			@Override
+			public int getEvent() {
+
+				return BaseChart.EVENT_MOUSE_DOUBLE_CLICK;
+			}
+
+			@Override
+			public int getButton() {
+
+				return BaseChart.BUTTON_LEFT;
+			}
+		});
 		//
 		setPrimaryAxisSet(chartSettings);
 		applySettings(chartSettings);
