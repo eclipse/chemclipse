@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
 
-public abstract class AbstractPcaCalculator implements IPcaCalculator {
+public abstract class AbstractMultivariateCalculator implements IMultivariateCalculator {
 
 	private DenseMatrix64F loadings;
 	private DenseMatrix64F scores;

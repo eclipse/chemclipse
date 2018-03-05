@@ -15,7 +15,7 @@ import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
 import org.ejml.ops.NormOps;
 
-public class PcaCalculatorNipals extends AbstractPcaCalculator {
+public class PcaCalculatorNipals extends AbstractMultivariateCalculator {
 
 	@Override
 	public void compute(int numComps) {
