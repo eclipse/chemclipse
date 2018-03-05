@@ -46,6 +46,37 @@ public class ChromatogramDataSupport {
 		return builder.toString();
 	}
 
+	public String getChromatogramLabelExtended(IChromatogram chromatogram) {
+
+		StringBuilder builder = new StringBuilder();
+		if(chromatogram != null) {
+			builder.append("Chromatogram: ");
+			builder.append(chromatogram.getName());
+			builder.append(" ");
+			if(chromatogram instanceof IChromatogramMSD) {
+				builder.append("(MSD)");
+			} else if(chromatogram instanceof IChromatogramCSD) {
+				builder.append("(CSD)");
+			} else if(chromatogram instanceof IChromatogramWSD) {
+				builder.append("(WSD)");
+			}
+			String miscInfoSeparated = chromatogram.getMiscInfoSeparated();
+			if("".equals(miscInfoSeparated)) {
+				String miscInfo = chromatogram.getMiscInfo();
+				if(!"".equals(miscInfo)) {
+					builder.append(" | ");
+					builder.append(miscInfo);
+				}
+			} else {
+				builder.append(" | ");
+				builder.append(miscInfoSeparated);
+			}
+		} else {
+			builder.append("No chromatogram has been selected yet.");
+		}
+		return builder.toString();
+	}
+
 	public String getChromatogramSelectionLabel(IChromatogramSelection chromatogramSelection) {
 
 		StringBuilder builder = new StringBuilder();

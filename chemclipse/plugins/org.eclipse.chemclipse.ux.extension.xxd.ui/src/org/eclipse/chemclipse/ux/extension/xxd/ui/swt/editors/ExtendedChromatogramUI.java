@@ -482,7 +482,7 @@ public class ExtendedChromatogramUI {
 			/*
 			 * Adjust
 			 */
-			clearLabels();
+			clearPeakAndScanLabels();
 			adjustMinuteScale();
 			addChartMenuEntriesFilter();
 			updateChromatogram();
@@ -538,7 +538,7 @@ public class ExtendedChromatogramUI {
 		return false;
 	}
 
-	private void clearLabels() {
+	private void clearPeakAndScanLabels() {
 
 		peakLabelMarkerMap.clear();
 		scanLabelMarkerMap.clear();
@@ -1291,9 +1291,9 @@ public class ExtendedChromatogramUI {
 	private void updateLabel() {
 
 		if(chromatogramSelection != null) {
-			labelChromatogramInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogramSelection.getChromatogram()));
+			labelChromatogramInfo.setText(chromatogramDataSupport.getChromatogramLabelExtended(chromatogramSelection.getChromatogram()));
 		} else {
-			labelChromatogramInfo.setText(chromatogramDataSupport.getChromatogramLabel(null));
+			labelChromatogramInfo.setText("");
 		}
 	}
 
