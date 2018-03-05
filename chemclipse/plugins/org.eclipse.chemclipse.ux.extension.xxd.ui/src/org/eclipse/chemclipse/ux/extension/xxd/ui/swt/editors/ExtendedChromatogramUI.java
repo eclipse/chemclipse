@@ -482,6 +482,7 @@ public class ExtendedChromatogramUI {
 			/*
 			 * Adjust
 			 */
+			clearLabels();
 			adjustMinuteScale();
 			addChartMenuEntriesFilter();
 			updateChromatogram();
@@ -535,6 +536,12 @@ public class ExtendedChromatogramUI {
 			return true;
 		}
 		return false;
+	}
+
+	private void clearLabels() {
+
+		peakLabelMarkerMap.clear();
+		scanLabelMarkerMap.clear();
 	}
 
 	private void adjustMinuteScale() {
@@ -747,10 +754,15 @@ public class ExtendedChromatogramUI {
 			//
 			IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
 			IdentificationLabelMarker peakLabelMarker = peakLabelMarkerMap.get(seriesId);
+			/*
+			 * Remove the label marker.
+			 */
 			if(peakLabelMarker != null) {
 				plotArea.removeCustomPaintListener(peakLabelMarker);
 			}
-			//
+			/*
+			 * Add the labels.
+			 */
 			if(showChromatogramPeakLabels) {
 				int indexSeries = lineSeriesDataList.size() - 1;
 				peakLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, peaks, null);
@@ -771,10 +783,15 @@ public class ExtendedChromatogramUI {
 			//
 			IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
 			IdentificationLabelMarker scanLabelMarker = scanLabelMarkerMap.get(seriesId);
+			/*
+			 * Remove the label marker.
+			 */
 			if(scanLabelMarker != null) {
 				plotArea.removeCustomPaintListener(scanLabelMarker);
 			}
-			//
+			/*
+			 * Add the labels.
+			 */
 			boolean showChromatogramScanLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_LABELS);
 			if(showChromatogramScanLabels) {
 				int indexSeries = lineSeriesDataList.size() - 1;
