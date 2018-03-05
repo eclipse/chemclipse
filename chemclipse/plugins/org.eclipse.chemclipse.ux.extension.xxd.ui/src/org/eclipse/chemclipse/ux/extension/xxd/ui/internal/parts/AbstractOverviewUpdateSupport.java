@@ -55,13 +55,19 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 		//
 		if(object instanceof IChromatogramOverview) {
 			IChromatogramOverview chromatogramOverview = (IChromatogramOverview)object;
-			updateChromatogramOverview(chromatogramOverview);
+			if(chromatogramOverview != null) {
+				updateChromatogramOverview(chromatogramOverview);
+			}
 		} else if(object instanceof File) {
 			File file = (File)object;
 			IChromatogramOverview chromatogramOverview = getChromatogramOverview(file, topic);
-			updateChromatogramOverview(chromatogramOverview);
+			if(chromatogramOverview != null) {
+				updateChromatogramOverview(chromatogramOverview);
+			}
 		} else {
-			updateChromatogramOverview(null);
+			if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE)) {
+				updateChromatogramOverview(null);
+			}
 		}
 	}
 
