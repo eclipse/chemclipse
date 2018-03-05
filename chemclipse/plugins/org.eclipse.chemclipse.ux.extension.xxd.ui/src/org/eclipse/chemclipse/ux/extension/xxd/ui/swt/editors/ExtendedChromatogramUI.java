@@ -160,6 +160,9 @@ public class ExtendedChromatogramUI {
 	private ScanChartSupport scanChartSupport = new ScanChartSupport();
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
+	//
+	private boolean suspendUpdate = false;
+	//
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
 
@@ -187,6 +190,9 @@ public class ExtendedChromatogramUI {
 		public void handleUserSelection(Event event) {
 
 			if(chromatogramSelection != null) {
+				/*
+				 * Get the range.
+				 */
 				Range rangeX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
 				Range rangeY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
 				//
@@ -194,6 +200,7 @@ public class ExtendedChromatogramUI {
 				int stopRetentionTime = (int)rangeX.upper;
 				float startAbundance = (float)rangeY.lower;
 				float stopAbundance = (float)rangeY.upper;
+				//
 				setChromatogramSelectionRange(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
 			}
 		}
@@ -497,8 +504,10 @@ public class ExtendedChromatogramUI {
 
 	public void update() {
 
-		updateChromatogram();
-		adjustChromatogramSelectionRange();
+		if(!suspendUpdate) {
+			updateChromatogram();
+			adjustChromatogramSelectionRange();
+		}
 	}
 
 	public void updateSelectedScan() {
@@ -1105,10 +1114,10 @@ public class ExtendedChromatogramUI {
 
 		chromatogramChart = new ChromatogramChart(parent, SWT.BORDER);
 		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));
-		BaseChart baseChart = chromatogramChart.getBaseChart();
 		/*
 		 * Custom Selection Handler
 		 */
+		BaseChart baseChart = chromatogramChart.getBaseChart();
 		baseChart.addCustomRangeSelectionHandler(new ChromatogramSelectionHandler(baseChart));
 		/*
 		 * Chart Settings
@@ -1349,7 +1358,9 @@ public class ExtendedChromatogramUI {
 	private void setChromatogramSelectionRange(int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance) {
 
 		chromatogramSelection.setRanges(startRetentionTime, stopRetentionTime, startAbundance, stopAbundance, false);
+		suspendUpdate = true;
 		chromatogramSelection.update(true);
+		suspendUpdate = false;
 		adjustChromatogramSelectionRange();
 	}
 
