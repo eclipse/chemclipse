@@ -17,7 +17,7 @@ import org.ejml.interfaces.decomposition.SingularValueDecomposition;
 import org.ejml.ops.CommonOps;
 import org.ejml.ops.SingularOps;
 
-public class PcaCalculatorSvd extends AbstractPcaCalculator {
+public class PcaCalculatorSvd extends AbstractMultivariateCalculator {
 
 	@Override
 	public void compute(int numComps) {

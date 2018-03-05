@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IMultivariateCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
@@ -66,7 +66,7 @@ public class PcaEvaluation {
 		return selectedSamples;
 	}
 
-	private List<double[]> getLoadingVectors(IPcaCalculator principalComponentAnalysis, int numberOfPrincipalComponents) {
+	private List<double[]> getLoadingVectors(IMultivariateCalculator principalComponentAnalysis, int numberOfPrincipalComponents) {
 
 		/*
 		 * Print the basis vectors.
@@ -97,13 +97,13 @@ public class PcaEvaluation {
 	 * @param numberOfPrincipalComponents
 	 * @return PrincipalComponentAnalysis
 	 */
-	private IPcaCalculator setupPCA(Map<ISample<?>, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipalComponents, String pcaAlgorithm) {
+	private IMultivariateCalculator setupPCA(Map<ISample<?>, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipalComponents, String pcaAlgorithm) {
 
 		/*
 		 * Initialize the PCA analysis.
 		 */
 		int numSamples = pcaPeakMap.size();
-		IPcaCalculator principalComponentAnalysis = null;
+		IMultivariateCalculator principalComponentAnalysis = null;
 		if(pcaAlgorithm.equals(PCA_ALGO_NIPALS)) {
 			principalComponentAnalysis = new PcaCalculatorNipals();
 		} else if(pcaAlgorithm.equals(PCA_ALGO_SVD)) {
@@ -134,7 +134,7 @@ public class PcaEvaluation {
 		/*
 		 * Prepare PCA Calculation
 		 */
-		IPcaCalculator principalComponentAnalysis = setupPCA(extractData, sampleSize, numberOfPrincipalComponents, pcaAlgorithm);
+		IMultivariateCalculator principalComponentAnalysis = setupPCA(extractData, sampleSize, numberOfPrincipalComponents, pcaAlgorithm);
 		/*
 		 * Compute PCA
 		 */
@@ -149,7 +149,7 @@ public class PcaEvaluation {
 		return pcaResults;
 	}
 
-	private void setEigenSpaceAndErrorValues(IPcaCalculator principalComponentAnalysis, Map<ISample<?>, double[]> pcaPeakMap, IPcaResults pcaResults) {
+	private void setEigenSpaceAndErrorValues(IMultivariateCalculator principalComponentAnalysis, Map<ISample<?>, double[]> pcaPeakMap, IPcaResults pcaResults) {
 
 		/*
 		 * Set the eigen space and error membership values.

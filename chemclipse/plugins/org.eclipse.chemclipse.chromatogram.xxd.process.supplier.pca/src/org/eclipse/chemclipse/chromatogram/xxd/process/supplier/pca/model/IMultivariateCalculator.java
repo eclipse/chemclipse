@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-public interface IPcaCalculator {
+public interface IMultivariateCalculator {
 
 	void addObservation(double[] obsData);
 
