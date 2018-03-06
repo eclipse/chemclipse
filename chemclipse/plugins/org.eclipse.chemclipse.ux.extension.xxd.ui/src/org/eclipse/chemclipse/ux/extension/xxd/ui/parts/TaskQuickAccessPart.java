@@ -50,12 +50,6 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 	public TaskQuickAccessPart(Composite parent, MPart part) {
 		super(part);
 		preferenceStore = Activator.getDefault().getPreferenceStore();
-		/*
-		 * Activate - by default they are hidden.
-		 */
-		PartSupport.setPartStackVisibility(preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_COMPARISON_SCAN_CHART), true);
-		PartSupport.setPartStackVisibility(preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERVIEW), true);
-		//
 		initialize(parent);
 	}
 
@@ -67,10 +61,8 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 	@Override
 	public void registerEvents() {
 
-		registerEvent(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_TRUE, IChemClipseEvents.PROPERTY_TOGGLE_VISIBILITY);
-		registerEvent(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_FALSE, IChemClipseEvents.PROPERTY_TOGGLE_VISIBILITY);
-		registerEvent(IChemClipseEvents.TOPIC_TOGGLE_PARTSTACK_VISIBILITY_TRUE, IChemClipseEvents.PROPERTY_TOGGLE_VISIBILITY);
-		registerEvent(IChemClipseEvents.TOPIC_TOGGLE_PARTSTACK_VISIBILITY_FALSE, IChemClipseEvents.PROPERTY_TOGGLE_VISIBILITY);
+		registerEvent(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_TRUE, IChemClipseEvents.PROPERTY_TOGGLE_PART_VISIBILITY);
+		registerEvent(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_FALSE, IChemClipseEvents.PROPERTY_TOGGLE_PART_VISIBILITY);
 	}
 
 	@Override
@@ -87,10 +79,6 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 					PartSupport.setButtonImage(id, true);
 				} else if(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_FALSE.equals(topic)) {
 					PartSupport.setButtonImage(id, false);
-				} else if(IChemClipseEvents.TOPIC_TOGGLE_PARTSTACK_VISIBILITY_TRUE.equals(topic)) {
-					System.out.println(id + "\t" + true);
-				} else if(IChemClipseEvents.TOPIC_TOGGLE_PARTSTACK_VISIBILITY_FALSE.equals(topic)) {
-					System.out.println(id + "\t" + false);
 				}
 			}
 		}
