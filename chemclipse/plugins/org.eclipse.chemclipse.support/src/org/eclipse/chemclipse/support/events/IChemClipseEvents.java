@@ -158,4 +158,12 @@ public interface IChemClipseEvents {
 	String PROPERTY_DB_SEARCH_LIBRARY = IEventBroker.DATA; // File
 	String TOPIC_LIBRARY_MSD_ADD_TO_DB_SEARCH = "library/msd/add/dbsearch";
 	String TOPIC_LIBRARY_MSD_REMOVE_FROM_DB_SEARCH = "library/msd/remove/dbsearch";
+	/*
+	 * Toggle Part Visibility
+	 */
+	String PROPERTY_TOGGLE_VISIBILITY = IEventBroker.DATA;
+	String TOPIC_TOGGLE_PART_VISIBILITY_TRUE = "toggle/part/visibility/true"; // $NON-NLS-1$
+	String TOPIC_TOGGLE_PART_VISIBILITY_FALSE = "toggle/part/visibility/false"; // $NON-NLS-1$
+	String TOPIC_TOGGLE_PARTSTACK_VISIBILITY_TRUE = "toggle/partstack/visibility/true"; // $NON-NLS-1$
+	String TOPIC_TOGGLE_PARTSTACK_VISIBILITY_FALSE = "toggle/partstack/visibility/false"; // $NON-NLS-1$
 }

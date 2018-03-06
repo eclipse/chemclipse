@@ -11,7 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.support;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MUIElement;
 import org.eclipse.e4.ui.model.application.ui.advanced.MArea;
@@ -61,6 +66,9 @@ public class PartSupport {
 	private static MApplication application = ModelSupportAddon.getApplication();
 	private static EModelService modelService = ModelSupportAddon.getModelService();
 	private static EPartService partService = ModelSupportAddon.getPartService();
+	//
+	private static Map<String, String> partMap = new HashMap<String, String>();
+	private static IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 
 	public static MPart getPart(String partId, String partStackId) {
 
@@ -130,6 +138,19 @@ public class PartSupport {
 		return false;
 	}
 
+	public static boolean isPartVisible(String partId, String partStackId) {
+
+		MPart part = getPart(partId, partStackId);
+		if(part != null) {
+			if(partService.isPartVisible(part)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
+
 	public static void showPart(String partId, String partStackId) {
 
 		MPart part = getPart(partId, partStackId);
@@ -155,14 +176,6 @@ public class PartSupport {
 		MPart part = getPart(partId, partStackId);
 		if(part != null) {
 			part.setVisible(visible);
-		}
-	}
-
-	public static void setPartStackVisibility(String partStackId, boolean visible) {
-
-		MPartStack partStack = getPartStack(partStackId);
-		if(partStack != null) {
-			partStack.setVisible(visible);
 		}
 	}
 
@@ -214,5 +227,77 @@ public class PartSupport {
 		//
 		parent.layout(true);
 		parent.redraw();
+	}
+
+	/**
+	 * Prefer to use this method if you'd like to toggle the part visibility.
+	 * 
+	 * @param partId
+	 * @param partStackId
+	 */
+	public static void togglePartVisibility(String partId, String partStackId) {
+
+		if(PartSupport.PARTSTACK_NONE.equals(partStackId)) {
+			/*
+			 * Hide the part if it is visible.
+			 */
+			String currentPartStackId = partMap.get(partId);
+			if(currentPartStackId != null) {
+				setPartVisibility(partId, currentPartStackId, false);
+			}
+		} else {
+			/*
+			 * Initialize the part status if the user
+			 * has chosen another than the initial position.
+			 */
+			String currentPartStackId = partMap.get(partId);
+			if(currentPartStackId == null) {
+				/*
+				 * Initialize the part.
+				 */
+				setPartVisibility(partId, partStackId, false);
+			} else {
+				/*
+				 * Move the part to another part stack.
+				 */
+				if(!partStackId.equals(currentPartStackId)) {
+					MPart part = PartSupport.getPart(partId, currentPartStackId);
+					MPartStack defaultPartStack = PartSupport.getPartStack(currentPartStackId);
+					MPartStack partStack = PartSupport.getPartStack(partStackId);
+					defaultPartStack.getChildren().remove(part);
+					partStack.getChildren().add(part);
+				}
+			}
+			partMap.put(partId, partStackId);
+			/*
+			 * Toggle visibility and send an event.
+			 * E.g. the icons in the toolbar "TaskQuickAccessPart.java" will be modified.
+			 */
+			MPart part = getPart(partId, partStackId);
+			if(togglePartVisibility(part, partStackId)) {
+				eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_TRUE, partId);
+			} else {
+				eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_FALSE, partId);
+			}
+		}
+	}
+
+	/**
+	 * Prefer to use this method if you'd like to toggle the part stack visibility.
+	 * 
+	 * @param partId
+	 * @param partStackId
+	 */
+	public static void setPartStackVisibility(String partStackId, boolean visible) {
+
+		MPartStack partStack = getPartStack(partStackId);
+		if(partStack != null) {
+			partStack.setVisible(visible);
+			if(visible) {
+				eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PARTSTACK_VISIBILITY_TRUE, partStackId);
+			} else {
+				eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PARTSTACK_VISIBILITY_FALSE, partStackId);
+			}
+		}
 	}
 }

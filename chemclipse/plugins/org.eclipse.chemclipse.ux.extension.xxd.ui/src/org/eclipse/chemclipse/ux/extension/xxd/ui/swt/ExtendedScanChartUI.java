@@ -447,8 +447,15 @@ public class ExtendedScanChartUI {
 					IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 					boolean autofocuSubtractScanPart = preferenceStore.getBoolean(PreferenceConstants.P_AUTOFOCUS_SUBTRACT_SCAN_PART);
 					if(autofocuSubtractScanPart) {
+						/*
+						 * Subtract scan part
+						 */
+						String partId = PartSupport.PARTDESCRIPTOR_SUBTRACT_SCAN;
 						String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_CHART);
-						PartSupport.showPart(PartSupport.PARTDESCRIPTOR_SUBTRACT_SCAN, partStackId);
+						//
+						if(!PartSupport.isPartVisible(partId, partStackId)) {
+							PartSupport.togglePartVisibility(partId, partStackId);
+						}
 					}
 					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 					eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);

@@ -12,18 +12,22 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.AbstractDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
+import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -39,15 +43,58 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-public class TaskQuickAccessPart {
+public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
-	private Map<String, String> partMap;
 	private Shell shell = Display.getDefault().getActiveShell();
+	//
+	private Map<String, Map<Boolean, Map<Button, Image>>> partButtonImageMap;
+	private Map<String, Map<Boolean, Map<Button, Image>>> partStackButtonImageMap;
 
 	@Inject
-	public TaskQuickAccessPart(Composite parent) {
-		partMap = new HashMap<String, String>();
+	public TaskQuickAccessPart(Composite parent, MPart part) {
+		super(part);
+		//
+		partButtonImageMap = new HashMap<String, Map<Boolean, Map<Button, Image>>>();
+		partStackButtonImageMap = new HashMap<String, Map<Boolean, Map<Button, Image>>>();
+		//
 		initialize(parent);
+	}
+
+	@Focus
+	public void setFocus() {
+
+	}
+
+	@Override
+	public void registerEvents() {
+
+		registerEvent(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_TRUE, IChemClipseEvents.PROPERTY_TOGGLE_VISIBILITY);
+		registerEvent(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_FALSE, IChemClipseEvents.PROPERTY_TOGGLE_VISIBILITY);
+		registerEvent(IChemClipseEvents.TOPIC_TOGGLE_PARTSTACK_VISIBILITY_TRUE, IChemClipseEvents.PROPERTY_TOGGLE_VISIBILITY);
+		registerEvent(IChemClipseEvents.TOPIC_TOGGLE_PARTSTACK_VISIBILITY_FALSE, IChemClipseEvents.PROPERTY_TOGGLE_VISIBILITY);
+	}
+
+	@Override
+	public void updateObjects(List<Object> objects, String topic) {
+
+		/*
+		 * 0 => because only one property was used to register the event.
+		 */
+		if(objects.size() == 1) {
+			Object object = objects.get(0);
+			if(object instanceof String) {
+				String id = (String)object;
+				if(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_TRUE.equals(topic)) {
+					setButtonImage(partButtonImageMap, id, true);
+				} else if(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_FALSE.equals(topic)) {
+					setButtonImage(partButtonImageMap, id, false);
+				} else if(IChemClipseEvents.TOPIC_TOGGLE_PARTSTACK_VISIBILITY_FALSE.equals(topic)) {
+					setButtonImage(partStackButtonImageMap, id, true);
+				} else if(IChemClipseEvents.TOPIC_TOGGLE_PARTSTACK_VISIBILITY_FALSE.equals(topic)) {
+					setButtonImage(partStackButtonImageMap, id, false);
+				}
+			}
+		}
 	}
 
 	private void initialize(Composite parent) {
@@ -87,8 +134,9 @@ public class TaskQuickAccessPart {
 				 */
 				String partStackId = PartSupport.PARTSTACK_LEFT_CENTER;
 				PartSupport.setPartStackVisibility(partStackId, true);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEADER, partStackId, imageActive, imageDefault);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW, partStackId, imageActive, imageDefault);
+				addPartStackButtonMappings(partStackId, button, imageActive, imageDefault);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEADER, partStackId);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW, partStackId);
 			}
 		});
 	}
@@ -109,7 +157,8 @@ public class TaskQuickAccessPart {
 
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERLAY, partStackId, imageActive, imageDefault);
+				addPartStackButtonMappings(partStackId, button, imageActive, imageDefault);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERLAY, partStackId);
 			}
 		});
 	}
@@ -129,15 +178,10 @@ public class TaskQuickAccessPart {
 			public void widgetSelected(SelectionEvent e) {
 
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-				String targetsPartStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_TARGETS);
-				String scanChartPartStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_CHART);
-				String scanTablePartStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_TABLE);
-				String scanListPartStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_LIST);
-				//
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_TARGETS, targetsPartStackId, imageActive, imageDefault);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_SCAN_CHART, scanChartPartStackId, imageActive, imageDefault);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_SCAN_TABLE, scanTablePartStackId, imageActive, imageDefault);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_SCAN_LIST, scanListPartStackId, imageActive, imageDefault);
+				addPartButtonMappingsAndToggle(PartSupport.PARTDESCRIPTOR_TARGETS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_TARGETS), button, imageActive, imageDefault);
+				addPartButtonMappingsAndToggle(PartSupport.PARTDESCRIPTOR_SCAN_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_CHART), button, imageActive, imageDefault);
+				addPartButtonMappingsAndToggle(PartSupport.PARTDESCRIPTOR_SCAN_TABLE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_TABLE), button, imageActive, imageDefault);
+				addPartButtonMappingsAndToggle(PartSupport.PARTDESCRIPTOR_SCAN_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_LIST), button, imageActive, imageDefault);
 			}
 		});
 	}
@@ -157,15 +201,10 @@ public class TaskQuickAccessPart {
 			public void widgetSelected(SelectionEvent e) {
 
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-				String partStackIdChart = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_CHART);
-				String partStackIdDetails = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_DETAILS);
-				String partStackIdDetector = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_DETECTOR);
-				String partStackIdList = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_LIST);
-				//
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_CHART, partStackIdChart, imageActive, imageDefault);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_DETAILS, partStackIdDetails, imageActive, imageDefault);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_DETECTOR, partStackIdDetector, imageActive, imageDefault);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_PEAK_LIST, partStackIdList, imageActive, imageDefault);
+				addPartButtonMappingsAndToggle(PartSupport.PARTDESCRIPTOR_PEAK_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_CHART), button, imageActive, imageDefault);
+				addPartButtonMappingsAndToggle(PartSupport.PARTDESCRIPTOR_PEAK_DETAILS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_DETAILS), button, imageActive, imageDefault);
+				addPartButtonMappingsAndToggle(PartSupport.PARTDESCRIPTOR_PEAK_DETECTOR, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_DETECTOR), button, imageActive, imageDefault);
+				addPartButtonMappingsAndToggle(PartSupport.PARTDESCRIPTOR_PEAK_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_LIST), button, imageActive, imageDefault);
 			}
 		});
 	}
@@ -185,13 +224,9 @@ public class TaskQuickAccessPart {
 			public void widgetSelected(SelectionEvent e) {
 
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-				String partStackIdQuantitation = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANTITATION);
-				String partStackIdInternalStandards = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTERNAL_STANDARDS);
-				String partStackIdIntegrationArea = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTEGRATION_AREA);
-				//
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_QUANTITATION, partStackIdQuantitation, imageActive, imageDefault);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_INTERNAL_STANDARDS, partStackIdInternalStandards, imageActive, imageDefault);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_INTEGRATION_AREA, partStackIdIntegrationArea, imageActive, imageDefault);
+				addPartButtonMappingsAndToggle(PartSupport.PARTDESCRIPTOR_QUANTITATION, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANTITATION), button, imageActive, imageDefault);
+				addPartButtonMappingsAndToggle(PartSupport.PARTDESCRIPTOR_INTERNAL_STANDARDS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTERNAL_STANDARDS), button, imageActive, imageDefault);
+				addPartButtonMappingsAndToggle(PartSupport.PARTDESCRIPTOR_INTEGRATION_AREA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTEGRATION_AREA), button, imageActive, imageDefault);
 			}
 		});
 	}
@@ -210,13 +245,8 @@ public class TaskQuickAccessPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				/*
-				 * Show the part stack on demand. The default is hidden initially.
-				 */
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SUBTRACT_SCAN_PART);
-				PartSupport.setPartStackVisibility(partStackId, true);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_SUBTRACT_SCAN, partStackId, imageActive, imageDefault);
+				addPartButtonMappingsAndToggle(PartSupport.PARTDESCRIPTOR_SUBTRACT_SCAN, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SUBTRACT_SCAN_PART), button, imageActive, imageDefault);
 			}
 		});
 	}
@@ -236,8 +266,7 @@ public class TaskQuickAccessPart {
 			public void widgetSelected(SelectionEvent e) {
 
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_COMBINED_SCAN_PART);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_COMBINED_SCAN, partStackId, imageActive, imageDefault);
+				addPartButtonMappingsAndToggle(PartSupport.PARTDESCRIPTOR_COMBINED_SCAN, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_COMBINED_SCAN_PART), button, imageActive, imageDefault);
 			}
 		});
 	}
@@ -261,8 +290,9 @@ public class TaskQuickAccessPart {
 				 */
 				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_COMPARISON_SCAN_CHART);
+				addPartStackButtonMappings(partStackId, button, imageActive, imageDefault);
 				PartSupport.setPartStackVisibility(partStackId, true);
-				togglePartVisibility(button, PartSupport.PARTDESCRIPTOR_COMPARISON_SCAN, partStackId, imageActive, imageDefault);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_COMPARISON_SCAN, partStackId);
 			}
 		});
 	}
@@ -292,48 +322,53 @@ public class TaskQuickAccessPart {
 		});
 	}
 
-	private void togglePartVisibility(Button button, String partId, String partStackId, Image imageActive, Image imageDefault) {
+	private void addPartButtonMappingsAndToggle(String partId, String partStackId, Button button, Image imageActive, Image imageDefault) {
 
-		if(PartSupport.PARTSTACK_NONE.equals(partStackId)) {
-			/*
-			 * Hide the part if it is visible.
-			 */
-			String currentPartStackId = partMap.get(partId);
-			if(currentPartStackId != null) {
-				PartSupport.setPartVisibility(partId, currentPartStackId, false);
-			}
-		} else {
-			/*
-			 * Initialize the part status if the user
-			 * has chosen another than the initial position.
-			 */
-			String currentPartStackId = partMap.get(partId);
-			if(currentPartStackId == null) {
-				/*
-				 * Initialize the part.
-				 */
-				PartSupport.setPartVisibility(partId, partStackId, false);
-			} else {
-				/*
-				 * Move the part to another part stack.
-				 */
-				if(!partStackId.equals(currentPartStackId)) {
-					MPart part = PartSupport.getPart(partId, currentPartStackId);
-					MPartStack defaultPartStack = PartSupport.getPartStack(currentPartStackId);
-					MPartStack partStack = PartSupport.getPartStack(partStackId);
-					defaultPartStack.getChildren().remove(part);
-					partStack.getChildren().add(part);
+		addPartButtonMappings(partStackId, button, imageActive, imageDefault);
+		PartSupport.togglePartVisibility(partId, partStackId);
+	}
+
+	private void addPartButtonMappings(String partStackId, Button button, Image imageActive, Image imageDefault) {
+
+		addButtonMappings(partButtonImageMap, partStackId, button, imageActive, imageDefault);
+	}
+
+	private void addPartStackButtonMappings(String partStackId, Button button, Image imageActive, Image imageDefault) {
+
+		addButtonMappings(partStackButtonImageMap, partStackId, button, imageActive, imageDefault);
+	}
+
+	private void addButtonMappings(Map<String, Map<Boolean, Map<Button, Image>>> buttonImageMap, String partStackId, Button button, Image imageActive, Image imageDefault) {
+
+		HashMap<Boolean, Map<Button, Image>> imageMap = new HashMap<Boolean, Map<Button, Image>>();
+		/*
+		 * Active
+		 */
+		Map<Button, Image> activeMap = new HashMap<Button, Image>();
+		activeMap.put(button, imageActive);
+		imageMap.put(true, activeMap);
+		/*
+		 * Default
+		 */
+		Map<Button, Image> defaultMap = new HashMap<Button, Image>();
+		defaultMap.put(button, imageDefault);
+		imageMap.put(false, defaultMap);
+		//
+		buttonImageMap.put(partStackId, imageMap);
+	}
+
+	private void setButtonImage(Map<String, Map<Boolean, Map<Button, Image>>> buttonImageMap, String id, boolean visible) {
+
+		Map<Boolean, Map<Button, Image>> imageMap = buttonImageMap.get(id);
+		if(imageMap != null) {
+			Map<Button, Image> buttonMap = imageMap.get(visible);
+			if(buttonMap != null) {
+				for(Button button : buttonMap.keySet()) {
+					Image image = buttonMap.get(button);
+					if(image != null) {
+						button.setImage(image);
+					}
 				}
-			}
-			partMap.put(partId, partStackId);
-			/*
-			 * Toggle visibility.
-			 */
-			MPart part = PartSupport.getPart(partId, partStackId);
-			if(PartSupport.togglePartVisibility(part, partStackId)) {
-				button.setImage(imageActive);
-			} else {
-				button.setImage(imageDefault);
 			}
 		}
 	}
