@@ -16,59 +16,72 @@ public abstract class LazyLoadingStringProperty extends SimpleStringProperty {
 
 	public static final String DEFAULT_LOADING_STRING = "Loading..";
 
-	private String loadingString = DEFAULT_LOADING_STRING;
+	// private final String loadingString = DEFAULT_LOADING_STRING;
 
 	private boolean loaded = false;
 
-	public LazyLoadingStringProperty() {
+	public LazyLoadingStringProperty(final String loadingString) {
+		setValue(loadingString);
+	}
 
+	public LazyLoadingStringProperty() {
+		setValue(DEFAULT_LOADING_STRING);
 	}
 
 	public boolean isLoaded() {
 		return loaded;
 	}
 
-	public void setLoaded(final boolean loaded) {
+	protected void setLoaded(final boolean loaded) {
 		this.loaded = loaded;
 	}
 
-	public String getLoadingString() {
-		return loadingString;
-	}
+	/**
+	 * Is called after the background task's finished (success or failure). Override
+	 * if needed. E.g. to bind the value afterwards.
+	 */
+	protected void afterLoaded() {
+		// nothing
 
-	public void setLoadingString(final String loadingString) {
-		this.loadingString = loadingString;
 	}
 
 	@Override
 	public String getValue() {
 		if (!loaded) {
 			startLoadingService();
-			return loadingString;
 		}
 		return super.getValue();
 	}
 
+	/**
+	 * Starts the {@link Task} that will calculate this Property's value in the
+	 * background.
+	 */
 	protected void startLoadingService() {
-
+		setLoaded(true);
 		final Task<String> s = LazyLoadingStringProperty.this.createTask();
 
 		LazyLoadingThreads.getExecutorService().submit(s);
 
 		s.setOnFailed(e -> {
-			setLoaded(true);
 			setValue(s.getException().getLocalizedMessage());
-
+			afterLoaded();
 		});
 
 		s.setOnSucceeded(e -> {
-			setLoaded(true);
 			setValue(s.getValue());
+			afterLoaded();
 
 		});
 
-		// System.err.println("Started");
 	}
 
+	/**
+	 * Returns a {@link Task} that will calculate this Property's value in the
+	 * background.
+	 *
+	 * @return a {@link Task} that will calculate this Property's value in the
+	 *         background.
+	 */
 	protected abstract Task<String> createTask();
 }
