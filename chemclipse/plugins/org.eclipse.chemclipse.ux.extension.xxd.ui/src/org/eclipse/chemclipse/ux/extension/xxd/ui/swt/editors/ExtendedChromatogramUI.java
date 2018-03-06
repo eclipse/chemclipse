@@ -109,6 +109,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.swtchart.IAxis.Position;
 import org.swtchart.ILineSeries.PlotSymbolType;
 import org.swtchart.IPlotArea;
@@ -146,6 +147,7 @@ public class ExtendedChromatogramUI {
 	private Label labelChromatogramInfo;
 	private Composite toolbarChromatograms;
 	private Combo comboChromatograms;
+	private Composite toolbarEdit;
 	private ChromatogramChart chromatogramChart;
 	//
 	private List<IChromatogramSelection> chromatogramSelections = null;
@@ -947,10 +949,12 @@ public class ExtendedChromatogramUI {
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
 		toolbarChromatograms = createToolbarChromatograms(parent);
+		toolbarEdit = createToolbarEdit(parent);
 		createChromatogramChart(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, false);
 		PartSupport.setCompositeVisibility(toolbarChromatograms, false);
+		PartSupport.setCompositeVisibility(toolbarEdit, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -959,10 +963,11 @@ public class ExtendedChromatogramUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(7, false));
+		composite.setLayout(new GridLayout(8, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		createButtonToggleToolbarChromatograms(composite);
+		createButtonToggleToolbarEdit(composite);
 		createToggleChartSeriesLegendButton(composite);
 		createToggleLegendMarkerButton(composite);
 		createToggleRangeSelectorButton(composite);
@@ -996,6 +1001,141 @@ public class ExtendedChromatogramUI {
 		createButtonSelectNextChromatogram(composite);
 		//
 		return composite;
+	}
+
+	private Composite createToolbarEdit(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(10, false));
+		//
+		createComboEditors(composite);
+		createTextTargetDelta(composite);
+		createCheckBoxTargets(composite);
+		createButtonTransferTargets(composite);
+		createVerticalSeparator(composite);
+		createButtonShrinkChromatograms(composite);
+		createButtonAlignChromatograms(composite);
+		createButtonStretchChromatograms(composite);
+		createVerticalSeparator(composite);
+		createButtonSetEditorRanges(composite);
+		//
+		return composite;
+	}
+
+	private void createComboEditors(Composite parent) {
+
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createTextTargetDelta(Composite parent) {
+
+		Text text = new Text(parent, SWT.BORDER);
+		text.setText("0.45");
+		text.setToolTipText("Delta in minutes.");
+		GridData gridData = new GridData();
+		gridData.widthHint = 200;
+		text.setLayoutData(gridData);
+	}
+
+	private void createCheckBoxTargets(Composite parent) {
+
+		Button checkbox = new Button(parent, SWT.CHECK);
+		checkbox.setText("Best Target");
+		checkbox.setSelection(true);
+		checkbox.setToolTipText("Transfer only the best matching target.");
+	}
+
+	private void createButtonTransferTargets(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Transfer the targets");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createButtonShrinkChromatograms(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Shrink the chromatograms");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHRINK_CHROMATOGRAMS, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createButtonAlignChromatograms(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Align the chromatograms");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ALIGN_CHROMATOGRAMS, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createButtonStretchChromatograms(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Stretch the chromatograms");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STRETCH_CHROMATOGRAMS, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createButtonSetEditorRanges(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Set the time range for all editors.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_ADD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createVerticalSeparator(Composite parent) {
+
+		Label label = new Label(parent, SWT.SEPARATOR | SWT.VERTICAL);
+		GridData gridData = new GridData();
+		gridData.heightHint = 35;
+		label.setLayoutData(gridData);
 	}
 
 	private void createButtonSelectPreviousChromatogram(Composite parent) {
@@ -1182,6 +1322,29 @@ public class ExtendedChromatogramUI {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
 				} else {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonToggleToolbarEdit(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle edit toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarEdit);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				}
 			}
 		});
