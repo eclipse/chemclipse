@@ -9,66 +9,21 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.fx.ui;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.concurrent.Task;
-
-public abstract class LazyLoadingStringProperty extends SimpleStringProperty {
+public abstract class LazyLoadingStringProperty extends LazyLoadingProperty<String> {
 
 	public static final String DEFAULT_LOADING_STRING = "Loading..";
 
-	private String loadingString = DEFAULT_LOADING_STRING;
-
-	private boolean loaded = false;
+	public LazyLoadingStringProperty(final String loadingString) {
+		setValue(loadingString);
+	}
 
 	public LazyLoadingStringProperty() {
-
-	}
-
-	public boolean isLoaded() {
-		return loaded;
-	}
-
-	public void setLoaded(final boolean loaded) {
-		this.loaded = loaded;
-	}
-
-	public String getLoadingString() {
-		return loadingString;
-	}
-
-	public void setLoadingString(final String loadingString) {
-		this.loadingString = loadingString;
+		setValue(DEFAULT_LOADING_STRING);
 	}
 
 	@Override
-	public String getValue() {
-		if (!loaded) {
-			startLoadingService();
-			return loadingString;
-		}
-		return super.getValue();
+	protected String getFailedValue(final Throwable t) {
+		return t.getLocalizedMessage();
 	}
 
-	protected void startLoadingService() {
-
-		final Task<String> s = LazyLoadingStringProperty.this.createTask();
-
-		LazyLoadingThreads.getExecutorService().submit(s);
-
-		s.setOnFailed(e -> {
-			setLoaded(true);
-			setValue(s.getException().getLocalizedMessage());
-
-		});
-
-		s.setOnSucceeded(e -> {
-			setLoaded(true);
-			setValue(s.getValue());
-
-		});
-
-		// System.err.println("Started");
-	}
-
-	protected abstract Task<String> createTask();
 }
