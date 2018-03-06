@@ -451,12 +451,12 @@ public class ExtendedScanChartUI {
 						 * Subtract scan part
 						 */
 						String partId = PartSupport.PARTDESCRIPTOR_SUBTRACT_SCAN;
-						String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_CHART);
-						//
+						String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SUBTRACT_SCAN_PART);
 						if(!PartSupport.isPartVisible(partId, partStackId)) {
 							PartSupport.togglePartVisibility(partId, partStackId);
 						}
 					}
+					//
 					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 					eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
 				}

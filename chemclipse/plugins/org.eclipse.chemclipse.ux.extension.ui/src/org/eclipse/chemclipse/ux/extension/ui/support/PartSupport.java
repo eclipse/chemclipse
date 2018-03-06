@@ -26,7 +26,9 @@ import org.eclipse.e4.ui.model.application.ui.basic.MStackElement;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
@@ -68,6 +70,7 @@ public class PartSupport {
 	private static EPartService partService = ModelSupportAddon.getPartService();
 	//
 	private static Map<String, String> partMap = new HashMap<String, String>();
+	private static Map<String, Map<Boolean, Map<Button, Image>>> partImageMap = new HashMap<String, Map<Boolean, Map<Button, Image>>>();
 	private static IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 
 	public static MPart getPart(String partId, String partStackId) {
@@ -235,8 +238,9 @@ public class PartSupport {
 	 * @param partId
 	 * @param partStackId
 	 */
-	public static void togglePartVisibility(String partId, String partStackId) {
+	public static boolean togglePartVisibility(String partId, String partStackId) {
 
+		boolean visible = false;
 		if(PartSupport.PARTSTACK_NONE.equals(partStackId)) {
 			/*
 			 * Hide the part if it is visible.
@@ -274,12 +278,15 @@ public class PartSupport {
 			 * E.g. the icons in the toolbar "TaskQuickAccessPart.java" will be modified.
 			 */
 			MPart part = getPart(partId, partStackId);
-			if(togglePartVisibility(part, partStackId)) {
+			visible = togglePartVisibility(part, partStackId);
+			if(visible) {
 				eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_TRUE, partId);
 			} else {
 				eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_FALSE, partId);
 			}
 		}
+		//
+		return visible;
 	}
 
 	/**
@@ -299,5 +306,45 @@ public class PartSupport {
 				eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PARTSTACK_VISIBILITY_FALSE, partStackId);
 			}
 		}
+	}
+
+	public static void addPartImageMappings(String partId, Button button, Image imageActive, Image imageDefault) {
+
+		addImageMappings(partImageMap, partId, button, imageActive, imageDefault);
+	}
+
+	public static void setButtonImage(String id, boolean visible) {
+
+		Map<Boolean, Map<Button, Image>> imageMap = partImageMap.get(id);
+		if(imageMap != null) {
+			Map<Button, Image> buttonMap = imageMap.get(visible);
+			if(buttonMap != null) {
+				for(Button button : buttonMap.keySet()) {
+					Image image = buttonMap.get(button);
+					if(image != null) {
+						button.setImage(image);
+					}
+				}
+			}
+		}
+	}
+
+	private static void addImageMappings(Map<String, Map<Boolean, Map<Button, Image>>> buttonImageMap, String partId, Button button, Image imageActive, Image imageDefault) {
+
+		HashMap<Boolean, Map<Button, Image>> imageMap = new HashMap<Boolean, Map<Button, Image>>();
+		/*
+		 * Active
+		 */
+		Map<Button, Image> activeMap = new HashMap<Button, Image>();
+		activeMap.put(button, imageActive);
+		imageMap.put(true, activeMap);
+		/*
+		 * Default
+		 */
+		Map<Button, Image> defaultMap = new HashMap<Button, Image>();
+		defaultMap.put(button, imageDefault);
+		imageMap.put(false, defaultMap);
+		//
+		buttonImageMap.put(partId, imageMap);
 	}
 }
