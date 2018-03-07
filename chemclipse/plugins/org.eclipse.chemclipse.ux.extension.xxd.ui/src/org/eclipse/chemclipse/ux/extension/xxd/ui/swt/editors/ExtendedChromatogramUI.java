@@ -116,6 +116,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.swtchart.IAxis.Position;
@@ -1023,7 +1024,7 @@ public class ExtendedChromatogramUI {
 		//
 		createComboTargetTransfer(composite);
 		createTextTargetDelta(composite);
-		createCheckBoxTargets(composite);
+		createCheckBoxTransferTargets(composite);
 		createButtonTransferTargets(composite);
 		createVerticalSeparator(composite);
 		createButtonShrinkChromatograms(composite);
@@ -1039,19 +1040,12 @@ public class ExtendedChromatogramUI {
 
 		comboTargetTransfer = new Combo(parent, SWT.READ_ONLY);
 		comboTargetTransfer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		comboTargetTransfer.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
 	}
 
 	private void createTextTargetDelta(Composite parent) {
 
 		Text text = new Text(parent, SWT.BORDER);
-		text.setText("0.45");
+		text.setText(Double.toString(preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME)));
 		text.setToolTipText("Delta retention time in minutes.");
 		GridData gridData = new GridData();
 		gridData.widthHint = 100;
@@ -1064,7 +1058,9 @@ public class ExtendedChromatogramUI {
 			@Override
 			public void keyReleased(KeyEvent e) {
 
-				validate(retentionTimeValidator, controlDecoration, text);
+				if(validate(retentionTimeValidator, controlDecoration, text)) {
+					preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, retentionTimeValidator.getRetentionTime());
+				}
 			}
 		});
 	}
@@ -1083,12 +1079,20 @@ public class ExtendedChromatogramUI {
 		}
 	}
 
-	private void createCheckBoxTargets(Composite parent) {
+	private void createCheckBoxTransferTargets(Composite parent) {
 
-		Button checkbox = new Button(parent, SWT.CHECK);
-		checkbox.setText("Best Target");
-		checkbox.setSelection(true);
-		checkbox.setToolTipText("Transfer only the best matching target.");
+		Button checkBox = new Button(parent, SWT.CHECK);
+		checkBox.setText("Best Target");
+		checkBox.setSelection(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY));
+		checkBox.setToolTipText("Transfer only the best matching target.");
+		checkBox.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY, checkBox.getSelection());
+			}
+		});
 	}
 
 	private void createButtonTransferTargets(Composite parent) {
@@ -1102,6 +1106,7 @@ public class ExtendedChromatogramUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				transferPeakTargets();
 			}
 		});
 	}
@@ -1192,6 +1197,35 @@ public class ExtendedChromatogramUI {
 					selection.setStopAbundance(stopAbundance);
 				}
 			}
+		}
+	}
+
+	private void transferPeakTargets() {
+
+		int index = comboTargetTransfer.getSelectionIndex();
+		if(index >= 0 && index < editorChromatogramSelections.size()) {
+			IChromatogramSelection selection = editorChromatogramSelections.get(index);
+			if(selection != null && selection != chromatogramSelection) {
+				/*
+				 * Question
+				 */
+				MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				messageBox.setText("Transfer Peak Target(s)");
+				messageBox.setMessage("Would you like to transfer the selected peak target(s) to chromatogram: " + selection.getChromatogram().getName() + "?");
+				if(messageBox.open() == SWT.YES) {
+					/*
+					 * Transfer the peak targets.
+					 */
+					int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+					int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+					int retentionTimeDelta = (int)(preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+					boolean useBestTargetOnly = preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY);
+				}
+			} else {
+				MessageDialog.openWarning(shell, "Transfer Peak Target(s)", "We can't transfer targets to the same chromatogram.");
+			}
+		} else {
+			MessageDialog.openWarning(shell, "Transfer Peak Target(s)", "Please select a chromatogram.");
 		}
 	}
 
