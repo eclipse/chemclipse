@@ -14,7 +14,27 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Task;
 
-public abstract class LazyLoadingProperty<T> extends SimpleObjectProperty<T> {
+public abstract class LazyLoadingObjectProperty<T> extends SimpleObjectProperty<T> {
+
+	public LazyLoadingObjectProperty() {
+		super();
+
+	}
+
+	public LazyLoadingObjectProperty(final Object bean, final String name, final T initialValue) {
+		super(bean, name, initialValue);
+
+	}
+
+	public LazyLoadingObjectProperty(final Object bean, final String name) {
+		super(bean, name);
+
+	}
+
+	public LazyLoadingObjectProperty(final T initialValue) {
+		super(initialValue);
+
+	}
 
 	private boolean loaded = false;
 
@@ -27,7 +47,7 @@ public abstract class LazyLoadingProperty<T> extends SimpleObjectProperty<T> {
 	 * if needed. E.g. to bind the value afterwards.
 	 */
 	protected void afterLoaded() {
-		// nothing
+		addListener(valueChangeListener);
 
 	}
 
@@ -58,10 +78,6 @@ public abstract class LazyLoadingProperty<T> extends SimpleObjectProperty<T> {
 
 	public void setLoaded(final boolean loaded) {
 
-		// the value has been loaded. Trigger callback for write-access from now on.
-		if (!this.loaded && loaded) {
-			addListener(valueChangeListener);
-		}
 		// the loaded property has been reset manually. Remove change listener
 		if (this.loaded && !loaded) {
 			removeListener(valueChangeListener);
@@ -70,13 +86,18 @@ public abstract class LazyLoadingProperty<T> extends SimpleObjectProperty<T> {
 		this.loaded = loaded;
 	}
 
+	@Override
+	public void setValue(final T v) {
+		super.setValue(v);
+	}
+
 	/**
 	 * Starts the {@link Task} that will calculate this Property's value in the
 	 * background.
 	 */
 	protected void startLoadingService() {
 		setLoaded(true);
-		final Task<T> s = LazyLoadingProperty.this.createTask();
+		final Task<T> s = LazyLoadingObjectProperty.this.createTask();
 
 		LazyLoadingThreads.getExecutorService().submit(s);
 
@@ -88,7 +109,6 @@ public abstract class LazyLoadingProperty<T> extends SimpleObjectProperty<T> {
 		s.setOnSucceeded(e -> {
 			setValue(s.getValue());
 			afterLoaded();
-
 		});
 
 	}
