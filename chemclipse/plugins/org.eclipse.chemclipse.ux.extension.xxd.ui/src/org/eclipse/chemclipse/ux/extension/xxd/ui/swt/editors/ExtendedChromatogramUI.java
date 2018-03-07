@@ -531,6 +531,12 @@ public class ExtendedChromatogramUI {
 		}
 	}
 
+	public void updateChromatogramTargetTransferSelections() {
+
+		editorChromatogramSelections = editorUpdateSupport.getChromatogramSelections();
+		updateChromatogramTargetTransferCombo();
+	}
+
 	public void update() {
 
 		if(!suspendUpdate) {
@@ -574,12 +580,6 @@ public class ExtendedChromatogramUI {
 			return true;
 		}
 		return false;
-	}
-
-	private void updateChromatogramTargetTransferSelections() {
-
-		editorChromatogramSelections = editorUpdateSupport.getChromatogramSelections();
-		updateChromatogramTargetTransferCombo();
 	}
 
 	private void clearPeakAndScanLabels() {
@@ -691,8 +691,6 @@ public class ExtendedChromatogramUI {
 
 	private void updateChromatogram() {
 
-		updateChromatogramTargetTransferSelections();
-		//
 		updateLabel();
 		deleteScanNumberSecondaryAxisX();
 		chromatogramChart.deleteSeries();
