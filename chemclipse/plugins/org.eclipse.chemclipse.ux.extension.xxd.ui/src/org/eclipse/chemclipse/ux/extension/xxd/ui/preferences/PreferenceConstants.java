@@ -268,6 +268,12 @@ public class PreferenceConstants {
 	public static final double DEF_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME = 0.5d; // Minutes
 	public static final String P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY = "chromatogramTransferBestTargetOnly";
 	public static final boolean DEF_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY = true;
+	public static final String P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY = "stretchChromatogramMillisecondsScanDelay";
+	public static final int MIN_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY = 0;
+	public static final int MAX_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY = 6000000; // = 100.0 minutes
+	public static final int DEF_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY = 0;
+	public static final String P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH = "stretchChromatogramMillisecondsLength";
+	public static final int DEF_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH = 6000000; // = 100.0 minutes
 	/*
 	 * File Explorer
 	 */

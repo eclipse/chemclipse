@@ -67,6 +67,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.IdentificationLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.EditorUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramLengthModifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakChartSupport;
@@ -155,6 +156,10 @@ public class ExtendedChromatogramUI {
 	private static final String SERIES_ID_SELECTED_SCAN = "Selected Scan";
 	private static final String SERIES_ID_IDENTIFIED_SCANS = "Identified Scans";
 	private static final String SERIES_ID_IDENTIFIED_SCAN_SELECTED = "Identified Scan Selected";
+	//
+	private static final String MODIFY_LENGTH_SHORTEST = "MODIFY_LENGTH_SHORTEST";
+	private static final String MODIFY_LENGTH_SELECTED = "MODIFY_LENGTH_SELECTED";
+	private static final String MODIFY_LENGTH_LONGEST = "MODIFY_LENGTH_LONGEST";
 	//
 	private static final int FIVE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 5);
 	private static final int THREE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 3);
@@ -1123,13 +1128,14 @@ public class ExtendedChromatogramUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Shrink the chromatograms");
+		button.setToolTipText("Shrink the chromatograms to the smallest chromatogram of all open editors.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHRINK_CHROMATOGRAMS, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				modifyChromatogramLength(MODIFY_LENGTH_SHORTEST);
 			}
 		});
 	}
@@ -1138,13 +1144,14 @@ public class ExtendedChromatogramUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Align the chromatograms");
+		button.setToolTipText("Align the chromatograms to the length of the selection.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ALIGN_CHROMATOGRAMS, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				modifyChromatogramLength(MODIFY_LENGTH_SELECTED);
 			}
 		});
 	}
@@ -1153,15 +1160,110 @@ public class ExtendedChromatogramUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Stretch the chromatograms");
+		button.setToolTipText("Stretch the chromatograms to the widest chromatogram of all open editors.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STRETCH_CHROMATOGRAMS, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				modifyChromatogramLength(MODIFY_LENGTH_LONGEST);
 			}
 		});
+	}
+
+	private void modifyChromatogramLength(String modifyLengthType) {
+
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		messageBox.setText("Modify Chromatogram Length");
+		messageBox.setMessage("Would you like to modify the length of all opened chromatograms? Peaks will be deleted.");
+		if(messageBox.open() == SWT.YES) {
+			IChromatogram chromatogram = getChromatogram(modifyLengthType);
+			if(chromatogram != null) {
+				/*
+				 * Settings
+				 */
+				int scanDelay = chromatogram.getScanDelay();
+				int chromatogramLength = chromatogram.getStopRetentionTime();
+				preferenceStore.setValue(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY, scanDelay);
+				preferenceStore.setValue(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH, chromatogramLength);
+				/*
+				 * Modify chromatograms.
+				 */
+				for(IChromatogramSelection chromatogramSelection : editorChromatogramSelections) {
+					/*
+					 * Don't re-align the template chromatogram.
+					 */
+					if(chromatogramSelection.getChromatogram() != chromatogram) {
+						IRunnableWithProgress runnable = new ChromatogramLengthModifier(chromatogramSelection, scanDelay, chromatogramLength);
+						ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
+						try {
+							monitor.run(true, true, runnable);
+						} catch(InvocationTargetException e) {
+							logger.warn(e);
+						} catch(InterruptedException e) {
+							logger.warn(e);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private IChromatogram getChromatogram(String modifyLengthType) {
+
+		IChromatogram chromatogram;
+		switch(modifyLengthType) {
+			case MODIFY_LENGTH_SHORTEST:
+				chromatogram = getShortestChromatogram();
+				break;
+			case MODIFY_LENGTH_SELECTED:
+				chromatogram = chromatogramSelection.getChromatogram();
+				break;
+			case MODIFY_LENGTH_LONGEST:
+				chromatogram = getLongestChromatogram();
+				break;
+			default:
+				chromatogram = null;
+				break;
+		}
+		return chromatogram;
+	}
+
+	/**
+	 * May return null.
+	 * 
+	 * @return IChromatogram
+	 */
+	private IChromatogram getShortestChromatogram() {
+
+		IChromatogram chromatogram = null;
+		int maxRetentionTime = Integer.MAX_VALUE;
+		for(IChromatogramSelection chromatogramSelection : editorChromatogramSelections) {
+			if(chromatogramSelection.getChromatogram().getStopRetentionTime() < maxRetentionTime) {
+				maxRetentionTime = chromatogramSelection.getChromatogram().getStopRetentionTime();
+				chromatogram = chromatogramSelection.getChromatogram();
+			}
+		}
+		return chromatogram;
+	}
+
+	/**
+	 * May return null.
+	 * 
+	 * @return IChromatogram
+	 */
+	private IChromatogram getLongestChromatogram() {
+
+		IChromatogram chromatogram = null;
+		int minRetentionTime = Integer.MIN_VALUE;
+		for(IChromatogramSelection chromatogramSelection : editorChromatogramSelections) {
+			if(chromatogramSelection.getChromatogram().getStopRetentionTime() > minRetentionTime) {
+				minRetentionTime = chromatogramSelection.getChromatogram().getStopRetentionTime();
+				chromatogram = chromatogramSelection.getChromatogram();
+			}
+		}
+		return chromatogram;
 	}
 
 	private void createButtonSetRanges(Composite parent) {

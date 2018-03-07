@@ -129,6 +129,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SET_CHROMATOGRAM_INTENSITY_RANGE, PreferenceConstants.DEF_SET_CHROMATOGRAM_INTENSITY_RANGE);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, PreferenceConstants.DEF_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY, PreferenceConstants.DEF_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY);
+		store.setDefault(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY, PreferenceConstants.DEF_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY);
+		store.setDefault(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH, PreferenceConstants.DEF_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH);
 		/*
 		 * File Explorer
 		 */
