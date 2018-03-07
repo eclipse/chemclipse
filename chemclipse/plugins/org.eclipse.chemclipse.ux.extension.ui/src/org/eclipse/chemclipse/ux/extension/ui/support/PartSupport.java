@@ -12,7 +12,9 @@
 package org.eclipse.chemclipse.ux.extension.ui.support;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
@@ -59,11 +61,13 @@ public class PartSupport {
 	public static final String PARTSTACK_NONE = "";
 	public static final String PARTSTACK_QUICKACCESS = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.quickaccess";
 	public static final String PARTSTACK_LEFT_TOP = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.left.top";
-	public static final String PARTSTACK_LEFT_CENTER = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.left.center";
-	public static final String PARTSTACK_RIGHT_TOP = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.right.top";
+	public static final String PARTSTACK_LEFT_CENTER = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.left.center"; // Default hidden
+	public static final String PARTSTACK_RIGHT_TOP = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.right.top"; // Default hidden
 	public static final String PARTSTACK_BOTTOM_LEFT = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.bottom.left";
 	public static final String PARTSTACK_BOTTOM_CENTER = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.bottom.center";
 	public static final String PARTSTACK_BOTTOM_RIGHT = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.bottom.right";
+	//
+	private static Set<String> hiddenPartStacks = new HashSet<String>();
 	//
 	private static MApplication application = ModelSupportAddon.getApplication();
 	private static EModelService modelService = ModelSupportAddon.getModelService();
@@ -72,6 +76,11 @@ public class PartSupport {
 	private static Map<String, String> partMap = new HashMap<String, String>();
 	private static Map<String, Map<Boolean, Map<Button, Image>>> partImageMap = new HashMap<String, Map<Boolean, Map<Button, Image>>>();
 	private static IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+	//
+	static {
+		hiddenPartStacks.add(PARTSTACK_LEFT_CENTER);
+		hiddenPartStacks.add(PARTSTACK_RIGHT_TOP);
+	}
 
 	public static MPart getPart(String partId, String partStackId) {
 
@@ -274,11 +283,21 @@ public class PartSupport {
 			}
 			partMap.put(partId, partStackId);
 			/*
-			 * Toggle visibility and send an event.
-			 * E.g. the icons in the toolbar "TaskQuickAccessPart.java" will be modified.
+			 * Some part stacks are set hidden initially, see fragment.e4xmi.
+			 * Activate them on demand.
+			 */
+			if(hiddenPartStacks.contains(partStackId)) {
+				setPartStackVisibility(partStackId, true);
+			}
+			/*
+			 * Toggle visibility.
 			 */
 			MPart part = getPart(partId, partStackId);
 			visible = togglePartVisibility(part, partStackId);
+			/*
+			 * Fire an event.
+			 * E.g. the icons in the toolbar "TaskQuickAccessPart.java" will be modified.
+			 */
 			if(visible) {
 				eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_TRUE, partId);
 			} else {
@@ -300,11 +319,6 @@ public class PartSupport {
 		MPartStack partStack = getPartStack(partStackId);
 		if(partStack != null) {
 			partStack.setVisible(visible);
-			if(visible) {
-				eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PARTSTACK_VISIBILITY_TRUE, partStackId);
-			} else {
-				eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PARTSTACK_VISIBILITY_FALSE, partStackId);
-			}
 		}
 	}
 

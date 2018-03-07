@@ -41,9 +41,15 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.implementation.ComparisonResult;
+import org.eclipse.chemclipse.model.implementation.LibraryInformation;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.MoveDirection;
+import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -60,16 +66,22 @@ import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.IdentificationLabelMarker;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.EditorUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramLengthModifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakChartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanChartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.RetentionTimeValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
+import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToScanNumberConverter;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
@@ -90,6 +102,8 @@ import org.eclipse.eavp.service.swtchart.menu.IChartMenuEntry;
 import org.eclipse.eavp.service.swtchart.menu.ResetChartHandler;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -97,6 +111,8 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -108,7 +124,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.swtchart.IAxis.Position;
 import org.swtchart.ILineSeries.PlotSymbolType;
 import org.swtchart.IPlotArea;
@@ -139,6 +157,10 @@ public class ExtendedChromatogramUI {
 	private static final String SERIES_ID_IDENTIFIED_SCANS = "Identified Scans";
 	private static final String SERIES_ID_IDENTIFIED_SCAN_SELECTED = "Identified Scan Selected";
 	//
+	private static final String MODIFY_LENGTH_SHORTEST = "MODIFY_LENGTH_SHORTEST";
+	private static final String MODIFY_LENGTH_SELECTED = "MODIFY_LENGTH_SELECTED";
+	private static final String MODIFY_LENGTH_LONGEST = "MODIFY_LENGTH_LONGEST";
+	//
 	private static final int FIVE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 5);
 	private static final int THREE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 3);
 	//
@@ -146,22 +168,30 @@ public class ExtendedChromatogramUI {
 	private Label labelChromatogramInfo;
 	private Composite toolbarChromatograms;
 	private Combo comboChromatograms;
+	private Composite toolbarEdit;
 	private ChromatogramChart chromatogramChart;
+	private Combo comboTargetTransfer;
 	//
-	private List<IChromatogramSelection> chromatogramSelections = null;
 	private IChromatogramSelection chromatogramSelection = null;
+	private List<IChromatogramSelection> referenceChromatogramSelections = null; // Might be null ... no references.
+	private List<IChromatogramSelection> editorChromatogramSelections = new ArrayList<IChromatogramSelection>(); // Is filled dynamically.
+	//
 	private List<IChartMenuEntry> chartMenuEntriesFilter;
 	//
 	private Map<String, IdentificationLabelMarker> peakLabelMarkerMap = new HashMap<String, IdentificationLabelMarker>();
 	private Map<String, IdentificationLabelMarker> scanLabelMarkerMap = new HashMap<String, IdentificationLabelMarker>();
 	//
 	private PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
+	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 	private PeakChartSupport peakChartSupport = new PeakChartSupport();
 	private ScanChartSupport scanChartSupport = new ScanChartSupport();
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
+	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	//
 	private boolean suspendUpdate = false;
+	//
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
@@ -292,7 +322,6 @@ public class ExtendedChromatogramUI {
 					 * Fire an update.
 					 */
 					chromatogramSelection.setSelectedPeak(peak);
-					IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 					boolean moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
 					if(moveRetentionTimeOnPeakSelection) {
 						adjustChromatogramSelection(peak, chromatogramSelection);
@@ -493,13 +522,19 @@ public class ExtendedChromatogramUI {
 			adjustMinuteScale();
 			addChartMenuEntriesFilter();
 			updateChromatogram();
-			if(chromatogramSelections == null) {
+			if(referenceChromatogramSelections == null) {
 				updateChromatogramCombo();
 			}
 		} else {
 			comboChromatograms.setItems(new String[0]);
 			updateChromatogram();
 		}
+	}
+
+	public void updateChromatogramTargetTransferSelections() {
+
+		editorChromatogramSelections = editorUpdateSupport.getChromatogramSelections();
+		updateChromatogramTargetTransferCombo();
 	}
 
 	public void update() {
@@ -699,7 +734,6 @@ public class ExtendedChromatogramUI {
 
 	private void addChromatogramData(List<ILineSeriesData> lineSeriesDataList) {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM));
 		boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA);
 		//
@@ -713,7 +747,6 @@ public class ExtendedChromatogramUI {
 
 		if(chromatogramSelection != null) {
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
 			//
 			List<? extends IPeak> peaks = chromatogramDataSupport.getPeaks(chromatogram);
@@ -748,7 +781,6 @@ public class ExtendedChromatogramUI {
 	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId) {
 
 		if(peaks.size() > 0) {
-			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			boolean showChromatogramPeakLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS);
 			//
 			Collections.sort(peaks, peakRetentionTimeComparator);
@@ -786,7 +818,6 @@ public class ExtendedChromatogramUI {
 		if(chromatogramSelection != null) {
 			String seriesId = SERIES_ID_IDENTIFIED_SCANS;
 			List<IScan> scans = chromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram());
-			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
 			addIdentifiedScansData(lineSeriesDataList, scans, PlotSymbolType.CIRCLE, symbolSize, Colors.DARK_GRAY, seriesId);
 			//
@@ -830,7 +861,6 @@ public class ExtendedChromatogramUI {
 			IScan scan = chromatogramSelection.getSelectedIdentifiedScan();
 			if(scan != null) {
 				String seriesId = SERIES_ID_IDENTIFIED_SCAN_SELECTED;
-				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_SCAN_IDENTIFIED));
 				int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
 				List<IScan> scans = new ArrayList<>();
@@ -842,7 +872,6 @@ public class ExtendedChromatogramUI {
 
 	private void addSelectedPeakData(List<ILineSeriesData> lineSeriesDataList) {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		IPeak peak = chromatogramSelection.getSelectedPeak();
 		if(peak != null) {
 			/*
@@ -882,9 +911,7 @@ public class ExtendedChromatogramUI {
 
 		IScan scan = chromatogramSelection.getSelectedScan();
 		if(scan != null) {
-			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_SCAN));
-			//
 			int markerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE);
 			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE));
 			ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scan, false, SERIES_ID_SELECTED_SCAN);
@@ -899,7 +926,6 @@ public class ExtendedChromatogramUI {
 
 	private void addBaselineData(List<ILineSeriesData> lineSeriesDataList) {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		boolean showChromatogramBaseline = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_BASELINE);
 		//
 		if(chromatogramSelection != null && showChromatogramBaseline) {
@@ -914,7 +940,6 @@ public class ExtendedChromatogramUI {
 
 	private void addLineSeriesData(List<ILineSeriesData> lineSeriesDataList) {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		/*
 		 * Define the compression level.
 		 */
@@ -947,10 +972,12 @@ public class ExtendedChromatogramUI {
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
 		toolbarChromatograms = createToolbarChromatograms(parent);
+		toolbarEdit = createToolbarEdit(parent);
 		createChromatogramChart(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, false);
 		PartSupport.setCompositeVisibility(toolbarChromatograms, false);
+		PartSupport.setCompositeVisibility(toolbarEdit, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -959,10 +986,11 @@ public class ExtendedChromatogramUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(7, false));
+		composite.setLayout(new GridLayout(8, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		createButtonToggleToolbarChromatograms(composite);
+		createButtonToggleToolbarEdit(composite);
 		createToggleChartSeriesLegendButton(composite);
 		createToggleLegendMarkerButton(composite);
 		createToggleRangeSelectorButton(composite);
@@ -998,6 +1026,363 @@ public class ExtendedChromatogramUI {
 		return composite;
 	}
 
+	private Composite createToolbarEdit(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(10, false));
+		//
+		createComboTargetTransfer(composite);
+		createTextTargetDelta(composite);
+		createCheckBoxTransferTargets(composite);
+		createButtonTransferTargets(composite);
+		createVerticalSeparator(composite);
+		createButtonShrinkChromatograms(composite);
+		createButtonAlignChromatograms(composite);
+		createButtonStretchChromatograms(composite);
+		createVerticalSeparator(composite);
+		createButtonSetRanges(composite);
+		//
+		return composite;
+	}
+
+	private void createComboTargetTransfer(Composite parent) {
+
+		comboTargetTransfer = new Combo(parent, SWT.READ_ONLY);
+		comboTargetTransfer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	}
+
+	private void createTextTargetDelta(Composite parent) {
+
+		Text text = new Text(parent, SWT.BORDER);
+		text.setText(Double.toString(preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME)));
+		text.setToolTipText("Delta retention time in minutes.");
+		GridData gridData = new GridData();
+		gridData.widthHint = 100;
+		text.setLayoutData(gridData);
+		//
+		RetentionTimeValidator retentionTimeValidator = new RetentionTimeValidator();
+		ControlDecoration controlDecoration = new ControlDecoration(text, SWT.LEFT | SWT.TOP);
+		text.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				if(validate(retentionTimeValidator, controlDecoration, text)) {
+					preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, retentionTimeValidator.getRetentionTime());
+				}
+			}
+		});
+	}
+
+	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Text text) {
+
+		IStatus status = validator.validate(text.getText());
+		if(status.isOK()) {
+			controlDecoration.hide();
+			return true;
+		} else {
+			controlDecoration.setImage(FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_CONTENT_PROPOSAL).getImage());
+			controlDecoration.showHoverText(status.getMessage());
+			controlDecoration.show();
+			return false;
+		}
+	}
+
+	private void createCheckBoxTransferTargets(Composite parent) {
+
+		Button checkBox = new Button(parent, SWT.CHECK);
+		checkBox.setText("Best Target Only");
+		checkBox.setSelection(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY));
+		checkBox.setToolTipText("Transfer only the best matching target.");
+		checkBox.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY, checkBox.getSelection());
+			}
+		});
+	}
+
+	private void createButtonTransferTargets(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Transfer the targets from this chromatogram to the selected chromatogram.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				transferPeakTargets();
+			}
+		});
+	}
+
+	private void createButtonShrinkChromatograms(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Shrink the chromatograms to the smallest chromatogram of all open editors.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHRINK_CHROMATOGRAMS, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				modifyChromatogramLength(MODIFY_LENGTH_SHORTEST);
+			}
+		});
+	}
+
+	private void createButtonAlignChromatograms(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Align the chromatograms to the length of the selection.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ALIGN_CHROMATOGRAMS, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				modifyChromatogramLength(MODIFY_LENGTH_SELECTED);
+			}
+		});
+	}
+
+	private void createButtonStretchChromatograms(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Stretch the chromatograms to the widest chromatogram of all open editors.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STRETCH_CHROMATOGRAMS, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				modifyChromatogramLength(MODIFY_LENGTH_LONGEST);
+			}
+		});
+	}
+
+	private void modifyChromatogramLength(String modifyLengthType) {
+
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		messageBox.setText("Modify Chromatogram Length");
+		messageBox.setMessage("Would you like to modify the length of all opened chromatograms? Peaks will be deleted.");
+		if(messageBox.open() == SWT.YES) {
+			IChromatogram chromatogram = getChromatogram(modifyLengthType);
+			if(chromatogram != null) {
+				/*
+				 * Settings
+				 */
+				int scanDelay = chromatogram.getScanDelay();
+				int chromatogramLength = chromatogram.getStopRetentionTime();
+				preferenceStore.setValue(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY, scanDelay);
+				preferenceStore.setValue(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH, chromatogramLength);
+				/*
+				 * Modify chromatograms.
+				 */
+				for(IChromatogramSelection chromatogramSelection : editorChromatogramSelections) {
+					/*
+					 * Don't re-align the template chromatogram.
+					 */
+					if(chromatogramSelection.getChromatogram() != chromatogram) {
+						IRunnableWithProgress runnable = new ChromatogramLengthModifier(chromatogramSelection, scanDelay, chromatogramLength);
+						ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
+						try {
+							monitor.run(true, true, runnable);
+						} catch(InvocationTargetException e) {
+							logger.warn(e);
+						} catch(InterruptedException e) {
+							logger.warn(e);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private IChromatogram getChromatogram(String modifyLengthType) {
+
+		IChromatogram chromatogram;
+		switch(modifyLengthType) {
+			case MODIFY_LENGTH_SHORTEST:
+				chromatogram = getShortestChromatogram();
+				break;
+			case MODIFY_LENGTH_SELECTED:
+				chromatogram = chromatogramSelection.getChromatogram();
+				break;
+			case MODIFY_LENGTH_LONGEST:
+				chromatogram = getLongestChromatogram();
+				break;
+			default:
+				chromatogram = null;
+				break;
+		}
+		return chromatogram;
+	}
+
+	/**
+	 * May return null.
+	 * 
+	 * @return IChromatogram
+	 */
+	private IChromatogram getShortestChromatogram() {
+
+		IChromatogram chromatogram = null;
+		int maxRetentionTime = Integer.MAX_VALUE;
+		for(IChromatogramSelection chromatogramSelection : editorChromatogramSelections) {
+			if(chromatogramSelection.getChromatogram().getStopRetentionTime() < maxRetentionTime) {
+				maxRetentionTime = chromatogramSelection.getChromatogram().getStopRetentionTime();
+				chromatogram = chromatogramSelection.getChromatogram();
+			}
+		}
+		return chromatogram;
+	}
+
+	/**
+	 * May return null.
+	 * 
+	 * @return IChromatogram
+	 */
+	private IChromatogram getLongestChromatogram() {
+
+		IChromatogram chromatogram = null;
+		int minRetentionTime = Integer.MIN_VALUE;
+		for(IChromatogramSelection chromatogramSelection : editorChromatogramSelections) {
+			if(chromatogramSelection.getChromatogram().getStopRetentionTime() > minRetentionTime) {
+				minRetentionTime = chromatogramSelection.getChromatogram().getStopRetentionTime();
+				chromatogram = chromatogramSelection.getChromatogram();
+			}
+		}
+		return chromatogram;
+	}
+
+	private void createButtonSetRanges(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Set the time range for all editors.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_ADD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				setRanges();
+				MessageDialog.openInformation(shell, "Range Selection", "The selected editor range has been set successfully to all opened chromatograms.");
+			}
+		});
+	}
+
+	private void setRanges() {
+
+		int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+		int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+		float startAbundance = chromatogramSelection.getStartAbundance();
+		float stopAbundance = chromatogramSelection.getStopAbundance();
+		boolean setChromatogramIntensityRange = preferenceStore.getBoolean(PreferenceConstants.P_SET_CHROMATOGRAM_INTENSITY_RANGE);
+		/*
+		 * Editor
+		 */
+		for(IChromatogramSelection selection : editorChromatogramSelections) {
+			if(selection != chromatogramSelection) {
+				/*
+				 * Don't fire an update. The next time the selection is on focus,
+				 * the correct range will be loaded.
+				 * selection.fireUpdateChange(true);
+				 */
+				selection.setStartRetentionTime(startRetentionTime);
+				selection.setStopRetentionTime(stopRetentionTime);
+				if(setChromatogramIntensityRange) {
+					selection.setStartAbundance(startAbundance);
+					selection.setStopAbundance(stopAbundance);
+				}
+			}
+		}
+	}
+
+	private void transferPeakTargets() {
+
+		int index = comboTargetTransfer.getSelectionIndex();
+		if(index >= 0 && index < editorChromatogramSelections.size()) {
+			IChromatogramSelection selection = editorChromatogramSelections.get(index);
+			if(selection != null && selection != chromatogramSelection) {
+				/*
+				 * Question
+				 */
+				MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				messageBox.setText("Transfer Peak Target(s)");
+				messageBox.setMessage("Would you like to transfer the selected peak target(s) to chromatogram: " + selection.getChromatogram().getName() + "?");
+				if(messageBox.open() == SWT.YES) {
+					/*
+					 * Transfer the peak targets.
+					 */
+					int retentionTimeDelta = (int)(preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+					boolean useBestTargetOnly = preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY);
+					//
+					List<? extends IPeak> peaksSource = chromatogramDataSupport.getPeaks(chromatogramSelection, true);
+					List<? extends IPeak> peaksSink = chromatogramDataSupport.getPeaks(selection, false);
+					//
+					for(IPeak peakSink : peaksSink) {
+						for(IPeak peakSource : peaksSource) {
+							int retentionTimePeakSink = peakSink.getPeakModel().getRetentionTimeAtPeakMaximum();
+							int retentionTimePeakSource = peakSource.getPeakModel().getRetentionTimeAtPeakMaximum();
+							if(isPeakInFocus(retentionTimePeakSink, retentionTimePeakSource, retentionTimeDelta)) {
+								/*
+								 * Best target or all?
+								 */
+								if(useBestTargetOnly) {
+									IPeakTarget peakTarget = peakDataSupport.getBestPeakTarget(new ArrayList<IPeakTarget>(peakSource.getTargets()));
+									transferPeakTarget(peakTarget, peakSink);
+								} else {
+									for(IPeakTarget peakTarget : peakSource.getTargets()) {
+										transferPeakTarget(peakTarget, peakSink);
+									}
+								}
+							}
+						}
+					}
+				}
+			} else {
+				MessageDialog.openWarning(shell, "Transfer Peak Target(s)", "It's not possible to transfer targets to the same chromatogram.");
+			}
+		} else {
+			MessageDialog.openWarning(shell, "Transfer Peak Target(s)", "Please select a chromatogram.");
+		}
+	}
+
+	private void transferPeakTarget(IPeakTarget peakTarget, IPeak peakSink) {
+
+		ILibraryInformation libraryInformation = new LibraryInformation(peakTarget.getLibraryInformation());
+		IComparisonResult comparisonResult = new ComparisonResult(peakTarget.getComparisonResult());
+		IPeakTarget peakTargetSink = new PeakTarget(libraryInformation, comparisonResult);
+		peakSink.addTarget(peakTargetSink);
+	}
+
+	private boolean isPeakInFocus(int retentionTimePeakSink, int retentionTimePeakSource, int retentionTimeDelta) {
+
+		if(retentionTimePeakSink >= (retentionTimePeakSource - retentionTimeDelta) && retentionTimePeakSink <= (retentionTimePeakSource + retentionTimeDelta)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private void createVerticalSeparator(Composite parent) {
+
+		Label label = new Label(parent, SWT.SEPARATOR | SWT.VERTICAL);
+		GridData gridData = new GridData();
+		gridData.heightHint = 35;
+		label.setLayoutData(gridData);
+	}
+
 	private void createButtonSelectPreviousChromatogram(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
@@ -1026,7 +1411,7 @@ public class ExtendedChromatogramUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(chromatogramSelections != null) {
+				if(referenceChromatogramSelections != null) {
 					int index = comboChromatograms.getSelectionIndex();
 					selectChromatogram(index);
 				}
@@ -1056,7 +1441,7 @@ public class ExtendedChromatogramUI {
 	private void selectChromatogram(int index) {
 
 		comboChromatograms.select(index);
-		IChromatogramSelection chromatogramSelection = chromatogramSelections.get(index);
+		IChromatogramSelection chromatogramSelection = referenceChromatogramSelections.get(index);
 		if(chromatogramSelection != null) {
 			updateChromatogramSelection(chromatogramSelection);
 		}
@@ -1072,11 +1457,11 @@ public class ExtendedChromatogramUI {
 			/*
 			 * Initialize
 			 */
-			chromatogramSelections = new ArrayList<IChromatogramSelection>();
+			referenceChromatogramSelections = new ArrayList<IChromatogramSelection>();
 			/*
 			 * Original Data
 			 */
-			chromatogramSelections.add(chromatogramSelection);
+			referenceChromatogramSelections.add(chromatogramSelection);
 			references.add("Original Data");
 			/*
 			 * References
@@ -1097,7 +1482,7 @@ public class ExtendedChromatogramUI {
 					logger.warn(e);
 				}
 				//
-				chromatogramSelections.add(referencedChromatogramSelection);
+				referenceChromatogramSelections.add(referencedChromatogramSelection);
 				references.add("Chromatogram Reference #" + i++);
 			}
 		}
@@ -1107,6 +1492,22 @@ public class ExtendedChromatogramUI {
 		comboChromatograms.setItems(references.toArray(new String[references.size()]));
 		if(references.size() > 0) {
 			comboChromatograms.select(0);
+		}
+	}
+
+	private void updateChromatogramTargetTransferCombo() {
+
+		List<String> references = new ArrayList<String>();
+		int index = 1;
+		for(IChromatogramSelection chromatogramSelection : editorChromatogramSelections) {
+			references.add(chromatogramSelection.getChromatogram().getName() + " [Tab#: " + index++ + "]");
+		}
+		/*
+		 * Set the items.
+		 */
+		comboTargetTransfer.setItems(references.toArray(new String[references.size()]));
+		if(references.size() > 0) {
+			comboTargetTransfer.select(0);
 		}
 	}
 
@@ -1182,6 +1583,29 @@ public class ExtendedChromatogramUI {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
 				} else {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonToggleToolbarEdit(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle edit toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarEdit);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				}
 			}
 		});
@@ -1327,7 +1751,6 @@ public class ExtendedChromatogramUI {
 
 	private void addScanNumberSecondaryAxisX() {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		boolean showChromatogramScanAxis = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_AXIS);
 		//
 		try {
@@ -1422,7 +1845,6 @@ public class ExtendedChromatogramUI {
 				 * Left, Right
 				 * (Retention Time)
 				 */
-				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				boolean useAlternateWindowMoveDirection = preferenceStore.getBoolean(PreferenceConstants.P_ALTERNATE_WINDOW_MOVE_DIRECTION);
 				//
 				if(keyCode == SWT.ARROW_RIGHT) {

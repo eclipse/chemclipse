@@ -84,7 +84,7 @@ public class PreferenceConstants {
 	public static final String P_STACK_POSITION_COMPARISON_SCAN_CHART = "stackPositionComparisonScanChart";
 	public static final String DEF_STACK_POSITION_COMPARISON_SCAN_CHART = PartSupport.PARTSTACK_RIGHT_TOP;
 	public static final String P_STACK_POSITION_QUANTITATION = "stackPositionQuantitation";
-	public static final String DEF_STACK_POSITION_QUANTITATION = PartSupport.PARTSTACK_BOTTOM_CENTER;
+	public static final String DEF_STACK_POSITION_QUANTITATION = PartSupport.PARTSTACK_RIGHT_TOP;
 	public static final String P_STACK_POSITION_INTEGRATION_AREA = "stackPositionIntegrationArea";
 	public static final String DEF_STACK_POSITION_INTEGRATION_AREA = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_INTERNAL_STANDARDS = "stackPositionInternalStandards";
@@ -260,6 +260,20 @@ public class PreferenceConstants {
 	public static final boolean DEF_ALTERNATE_WINDOW_MOVE_DIRECTION = false;
 	public static final String P_CONDENSE_CYCLE_NUMBER_SCANS = "condenseCycleNumberScans";
 	public static final boolean DEF_CONDENSE_CYCLE_NUMBER_SCANS = true;
+	public static final String P_SET_CHROMATOGRAM_INTENSITY_RANGE = "setChromatogramIntensityRange";
+	public static final boolean DEF_SET_CHROMATOGRAM_INTENSITY_RANGE = false;
+	public static final String P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME = "chromatogramTransferDeltaRetentionTime";
+	public static final double MIN_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME = 0; // Minutes
+	public static final double MAX_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME = Double.MAX_VALUE; // Minutes
+	public static final double DEF_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME = 0.5d; // Minutes
+	public static final String P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY = "chromatogramTransferBestTargetOnly";
+	public static final boolean DEF_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY = true;
+	public static final String P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY = "stretchChromatogramMillisecondsScanDelay";
+	public static final int MIN_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY = 0;
+	public static final int MAX_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY = 6000000; // = 100.0 minutes
+	public static final int DEF_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY = 0;
+	public static final String P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH = "stretchChromatogramMillisecondsLength";
+	public static final int DEF_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH = 6000000; // = 100.0 minutes
 	/*
 	 * File Explorer
 	 */

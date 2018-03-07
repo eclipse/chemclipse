@@ -161,9 +161,7 @@ public interface IChemClipseEvents {
 	/*
 	 * Toggle Part Visibility
 	 */
-	String PROPERTY_TOGGLE_VISIBILITY = IEventBroker.DATA;
+	String PROPERTY_TOGGLE_PART_VISIBILITY = IEventBroker.DATA;
 	String TOPIC_TOGGLE_PART_VISIBILITY_TRUE = "toggle/part/visibility/true"; // $NON-NLS-1$
 	String TOPIC_TOGGLE_PART_VISIBILITY_FALSE = "toggle/part/visibility/false"; // $NON-NLS-1$
-	String TOPIC_TOGGLE_PARTSTACK_VISIBILITY_TRUE = "toggle/partstack/visibility/true"; // $NON-NLS-1$
-	String TOPIC_TOGGLE_PARTSTACK_VISIBILITY_FALSE = "toggle/partstack/visibility/false"; // $NON-NLS-1$
 }

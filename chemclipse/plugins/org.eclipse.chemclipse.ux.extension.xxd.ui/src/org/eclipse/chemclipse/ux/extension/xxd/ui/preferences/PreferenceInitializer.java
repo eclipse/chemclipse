@@ -126,6 +126,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION, PreferenceConstants.DEF_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
 		store.setDefault(PreferenceConstants.P_ALTERNATE_WINDOW_MOVE_DIRECTION, PreferenceConstants.DEF_ALTERNATE_WINDOW_MOVE_DIRECTION);
 		store.setDefault(PreferenceConstants.P_CONDENSE_CYCLE_NUMBER_SCANS, PreferenceConstants.DEF_CONDENSE_CYCLE_NUMBER_SCANS);
+		store.setDefault(PreferenceConstants.P_SET_CHROMATOGRAM_INTENSITY_RANGE, PreferenceConstants.DEF_SET_CHROMATOGRAM_INTENSITY_RANGE);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, PreferenceConstants.DEF_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY, PreferenceConstants.DEF_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY);
+		store.setDefault(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY, PreferenceConstants.DEF_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY);
+		store.setDefault(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH, PreferenceConstants.DEF_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH);
 		/*
 		 * File Explorer
 		 */

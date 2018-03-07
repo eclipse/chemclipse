@@ -20,14 +20,12 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -114,39 +112,15 @@ public class ExtendedPeakListUI {
 		if(chromatogramSelection == null) {
 			peakListUI.clear();
 		} else {
-			peakListUI.setInput(getPeaks());
-		}
-	}
-
-	private List<? extends IPeak> getPeaks() {
-
-		List<? extends IPeak> peaks = new ArrayList<IPeak>();
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		boolean showPeaksInSelectedRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE);
-		//
-		if(chromatogramSelection != null) {
+			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+			boolean showPeaksInSelectedRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE);
+			peakListUI.setInput(chromatogramDataSupport.getPeaks(chromatogramSelection, showPeaksInSelectedRange));
+			//
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
-				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-				if(showPeaksInSelectedRange) {
-					peaks = chromatogramMSD.getPeaks((IChromatogramSelectionMSD)chromatogramSelection);
-				} else {
-					peaks = chromatogramMSD.getPeaks();
-				}
 				buttonSavePeaks.setEnabled(true);
-			} else if(chromatogram instanceof IChromatogramCSD) {
-				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-				if(showPeaksInSelectedRange) {
-					peaks = chromatogramCSD.getPeaks((IChromatogramSelectionCSD)chromatogramSelection);
-				} else {
-					peaks = chromatogramCSD.getPeaks();
-				}
-			} else if(chromatogram instanceof IChromatogramWSD) {
-				//
 			}
 		}
-		//
-		return peaks;
 	}
 
 	private void initialize(Composite parent) {

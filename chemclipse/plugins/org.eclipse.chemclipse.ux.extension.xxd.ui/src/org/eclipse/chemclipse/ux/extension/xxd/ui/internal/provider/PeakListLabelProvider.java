@@ -122,7 +122,7 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 			//
 			IPeak peak = (IPeak)element;
 			IPeakModel peakModel = peak.getPeakModel();
-			ILibraryInformation libraryInformation = peakDataSupport.getLibraryInformation(new ArrayList<IPeakTarget>(peak.getTargets()));
+			ILibraryInformation libraryInformation = peakDataSupport.getBestLibraryInformation(new ArrayList<IPeakTarget>(peak.getTargets()));
 			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			//
 			switch(columnIndex) {

@@ -78,7 +78,7 @@ public class IdentificationLabelMarker extends LabelMarker {
 			//
 			PeakDataSupport peakDataSupport = new PeakDataSupport();
 			for(IPeak peak : peaks) {
-				ILibraryInformation libraryInformation = peakDataSupport.getLibraryInformation(new ArrayList<IPeakTarget>(peak.getTargets()));
+				ILibraryInformation libraryInformation = peakDataSupport.getBestLibraryInformation(new ArrayList<IPeakTarget>(peak.getTargets()));
 				String substance = "";
 				if(libraryInformation != null) {
 					substance = libraryInformation.getName();

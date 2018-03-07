@@ -135,6 +135,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		}
 		//
 		extendedChromatogramUI.update();
+		extendedChromatogramUI.updateChromatogramTargetTransferSelections();
 	}
 
 	@PreDestroy
