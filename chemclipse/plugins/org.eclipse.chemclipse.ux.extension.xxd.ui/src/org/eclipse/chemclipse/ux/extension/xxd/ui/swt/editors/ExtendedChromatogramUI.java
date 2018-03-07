@@ -60,16 +60,20 @@ import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.IdentificationLabelMarker;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanChartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.RetentionTimeValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
+import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.eavp.service.swtchart.axisconverter.MillisecondsToScanNumberConverter;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
@@ -90,6 +94,8 @@ import org.eclipse.eavp.service.swtchart.menu.IChartMenuEntry;
 import org.eclipse.eavp.service.swtchart.menu.ResetChartHandler;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -97,6 +103,8 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -150,6 +158,9 @@ public class ExtendedChromatogramUI {
 	private Composite toolbarEdit;
 	private ChromatogramChart chromatogramChart;
 	//
+	private Combo comboTargetTransfer;
+	private List<IChromatogramSelection> chromatogramTargetTransfer;
+	//
 	private List<IChromatogramSelection> chromatogramSelections = null;
 	private IChromatogramSelection chromatogramSelection = null;
 	private List<IChartMenuEntry> chartMenuEntriesFilter;
@@ -158,6 +169,7 @@ public class ExtendedChromatogramUI {
 	private Map<String, IdentificationLabelMarker> scanLabelMarkerMap = new HashMap<String, IdentificationLabelMarker>();
 	//
 	private PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
+	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 	private PeakChartSupport peakChartSupport = new PeakChartSupport();
 	private ScanChartSupport scanChartSupport = new ScanChartSupport();
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
@@ -549,6 +561,12 @@ public class ExtendedChromatogramUI {
 		return false;
 	}
 
+	private void updateChromatogramTargetTransferSelections() {
+
+		chromatogramTargetTransfer = editorUpdateSupport.getChromatogramSelections();
+		updateChromatogramTargetTransferCombo();
+	}
+
 	private void clearPeakAndScanLabels() {
 
 		peakLabelMarkerMap.clear();
@@ -658,6 +676,8 @@ public class ExtendedChromatogramUI {
 
 	private void updateChromatogram() {
 
+		updateChromatogramTargetTransferSelections();
+		//
 		updateLabel();
 		deleteScanNumberSecondaryAxisX();
 		chromatogramChart.deleteSeries();
@@ -1010,7 +1030,7 @@ public class ExtendedChromatogramUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(10, false));
 		//
-		createComboEditors(composite);
+		createComboTargetTransfer(composite);
 		createTextTargetDelta(composite);
 		createCheckBoxTargets(composite);
 		createButtonTransferTargets(composite);
@@ -1024,11 +1044,11 @@ public class ExtendedChromatogramUI {
 		return composite;
 	}
 
-	private void createComboEditors(Composite parent) {
+	private void createComboTargetTransfer(Composite parent) {
 
-		Combo combo = new Combo(parent, SWT.READ_ONLY);
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		combo.addSelectionListener(new SelectionAdapter() {
+		comboTargetTransfer = new Combo(parent, SWT.READ_ONLY);
+		comboTargetTransfer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboTargetTransfer.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -1041,10 +1061,35 @@ public class ExtendedChromatogramUI {
 
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("0.45");
-		text.setToolTipText("Delta in minutes.");
+		text.setToolTipText("Delta retention time in minutes.");
 		GridData gridData = new GridData();
-		gridData.widthHint = 200;
+		gridData.widthHint = 100;
 		text.setLayoutData(gridData);
+		//
+		RetentionTimeValidator retentionTimeValidator = new RetentionTimeValidator();
+		ControlDecoration controlDecoration = new ControlDecoration(text, SWT.LEFT | SWT.TOP);
+		text.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				validate(retentionTimeValidator, controlDecoration, text);
+			}
+		});
+	}
+
+	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Text text) {
+
+		IStatus status = validator.validate(text.getText());
+		if(status.isOK()) {
+			controlDecoration.hide();
+			return true;
+		} else {
+			controlDecoration.setImage(FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_CONTENT_PROPOSAL).getImage());
+			controlDecoration.showHoverText(status.getMessage());
+			controlDecoration.show();
+			return false;
+		}
 	}
 
 	private void createCheckBoxTargets(Composite parent) {
@@ -1059,7 +1104,7 @@ public class ExtendedChromatogramUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Transfer the targets");
+		button.setToolTipText("Transfer the targets from this chromatogram to the selected chromatogram.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -1247,6 +1292,22 @@ public class ExtendedChromatogramUI {
 		comboChromatograms.setItems(references.toArray(new String[references.size()]));
 		if(references.size() > 0) {
 			comboChromatograms.select(0);
+		}
+	}
+
+	private void updateChromatogramTargetTransferCombo() {
+
+		List<String> references = new ArrayList<String>();
+		int index = 1;
+		for(IChromatogramSelection chromatogramSelection : chromatogramTargetTransfer) {
+			references.add(chromatogramSelection.getChromatogram().getName() + " [Tab#: " + index++ + "]");
+		}
+		/*
+		 * Set the items.
+		 */
+		comboTargetTransfer.setItems(references.toArray(new String[references.size()]));
+		if(references.size() > 0) {
+			comboTargetTransfer.select(0);
 		}
 	}
 
