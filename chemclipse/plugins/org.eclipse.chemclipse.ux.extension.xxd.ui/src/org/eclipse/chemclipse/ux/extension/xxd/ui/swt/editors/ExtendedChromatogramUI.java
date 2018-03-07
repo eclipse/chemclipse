@@ -157,12 +157,12 @@ public class ExtendedChromatogramUI {
 	private Combo comboChromatograms;
 	private Composite toolbarEdit;
 	private ChromatogramChart chromatogramChart;
-	//
 	private Combo comboTargetTransfer;
-	private List<IChromatogramSelection> chromatogramTargetTransfer;
 	//
-	private List<IChromatogramSelection> chromatogramSelections = null;
 	private IChromatogramSelection chromatogramSelection = null;
+	private List<IChromatogramSelection> referenceChromatogramSelections = null; // Might be null ... no references.
+	private List<IChromatogramSelection> editorChromatogramSelections = new ArrayList<IChromatogramSelection>(); // Is filled dynamically.
+	//
 	private List<IChartMenuEntry> chartMenuEntriesFilter;
 	//
 	private Map<String, IdentificationLabelMarker> peakLabelMarkerMap = new HashMap<String, IdentificationLabelMarker>();
@@ -176,6 +176,8 @@ public class ExtendedChromatogramUI {
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	//
 	private boolean suspendUpdate = false;
+	//
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
@@ -306,7 +308,6 @@ public class ExtendedChromatogramUI {
 					 * Fire an update.
 					 */
 					chromatogramSelection.setSelectedPeak(peak);
-					IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 					boolean moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
 					if(moveRetentionTimeOnPeakSelection) {
 						adjustChromatogramSelection(peak, chromatogramSelection);
@@ -507,7 +508,7 @@ public class ExtendedChromatogramUI {
 			adjustMinuteScale();
 			addChartMenuEntriesFilter();
 			updateChromatogram();
-			if(chromatogramSelections == null) {
+			if(referenceChromatogramSelections == null) {
 				updateChromatogramCombo();
 			}
 		} else {
@@ -563,7 +564,7 @@ public class ExtendedChromatogramUI {
 
 	private void updateChromatogramTargetTransferSelections() {
 
-		chromatogramTargetTransfer = editorUpdateSupport.getChromatogramSelections();
+		editorChromatogramSelections = editorUpdateSupport.getChromatogramSelections();
 		updateChromatogramTargetTransferCombo();
 	}
 
@@ -721,7 +722,6 @@ public class ExtendedChromatogramUI {
 
 	private void addChromatogramData(List<ILineSeriesData> lineSeriesDataList) {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM));
 		boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA);
 		//
@@ -735,7 +735,6 @@ public class ExtendedChromatogramUI {
 
 		if(chromatogramSelection != null) {
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
 			//
 			List<? extends IPeak> peaks = chromatogramDataSupport.getPeaks(chromatogram);
@@ -770,7 +769,6 @@ public class ExtendedChromatogramUI {
 	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId) {
 
 		if(peaks.size() > 0) {
-			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			boolean showChromatogramPeakLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS);
 			//
 			Collections.sort(peaks, peakRetentionTimeComparator);
@@ -808,7 +806,6 @@ public class ExtendedChromatogramUI {
 		if(chromatogramSelection != null) {
 			String seriesId = SERIES_ID_IDENTIFIED_SCANS;
 			List<IScan> scans = chromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram());
-			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
 			addIdentifiedScansData(lineSeriesDataList, scans, PlotSymbolType.CIRCLE, symbolSize, Colors.DARK_GRAY, seriesId);
 			//
@@ -852,7 +849,6 @@ public class ExtendedChromatogramUI {
 			IScan scan = chromatogramSelection.getSelectedIdentifiedScan();
 			if(scan != null) {
 				String seriesId = SERIES_ID_IDENTIFIED_SCAN_SELECTED;
-				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_SCAN_IDENTIFIED));
 				int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
 				List<IScan> scans = new ArrayList<>();
@@ -864,7 +860,6 @@ public class ExtendedChromatogramUI {
 
 	private void addSelectedPeakData(List<ILineSeriesData> lineSeriesDataList) {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		IPeak peak = chromatogramSelection.getSelectedPeak();
 		if(peak != null) {
 			/*
@@ -904,9 +899,7 @@ public class ExtendedChromatogramUI {
 
 		IScan scan = chromatogramSelection.getSelectedScan();
 		if(scan != null) {
-			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_SCAN));
-			//
 			int markerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE);
 			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE));
 			ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scan, false, SERIES_ID_SELECTED_SCAN);
@@ -921,7 +914,6 @@ public class ExtendedChromatogramUI {
 
 	private void addBaselineData(List<ILineSeriesData> lineSeriesDataList) {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		boolean showChromatogramBaseline = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_BASELINE);
 		//
 		if(chromatogramSelection != null && showChromatogramBaseline) {
@@ -936,7 +928,6 @@ public class ExtendedChromatogramUI {
 
 	private void addLineSeriesData(List<ILineSeriesData> lineSeriesDataList) {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		/*
 		 * Define the compression level.
 		 */
@@ -1039,7 +1030,7 @@ public class ExtendedChromatogramUI {
 		createButtonAlignChromatograms(composite);
 		createButtonStretchChromatograms(composite);
 		createVerticalSeparator(composite);
-		createButtonSetEditorRanges(composite);
+		createButtonSetRanges(composite);
 		//
 		return composite;
 	}
@@ -1160,7 +1151,7 @@ public class ExtendedChromatogramUI {
 		});
 	}
 
-	private void createButtonSetEditorRanges(Composite parent) {
+	private void createButtonSetRanges(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -1171,8 +1162,55 @@ public class ExtendedChromatogramUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				setRanges();
+				MessageDialog.openInformation(shell, "Range Selection", "The selected editor range has been set successfully to all opened chromatograms.");
 			}
 		});
+	}
+
+	private void setRanges() {
+
+		int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+		int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+		float startAbundance = chromatogramSelection.getStartAbundance();
+		float stopAbundance = chromatogramSelection.getStopAbundance();
+		boolean setChromatogramIntensityRange = preferenceStore.getBoolean(PreferenceConstants.P_SET_CHROMATOGRAM_INTENSITY_RANGE);
+		/*
+		 * Editor
+		 */
+		for(IChromatogramSelection selection : editorChromatogramSelections) {
+			if(selection != chromatogramSelection) {
+				/*
+				 * Don't fire an update. The next time the selection is on focus,
+				 * the correct range will be loaded.
+				 * selection.fireUpdateChange(true);
+				 */
+				selection.setStartRetentionTime(startRetentionTime);
+				selection.setStopRetentionTime(stopRetentionTime);
+				if(setChromatogramIntensityRange) {
+					selection.setStartAbundance(startAbundance);
+					selection.setStopAbundance(stopAbundance);
+				}
+			}
+		}
+		/*
+		 * References
+		 */
+		for(IChromatogramSelection selection : referenceChromatogramSelections) {
+			if(selection != chromatogramSelection) {
+				/*
+				 * Don't fire an update. The next time the selection is on focus,
+				 * the correct range will be loaded.
+				 * selection.fireUpdateChange(true);
+				 */
+				selection.setStartRetentionTime(startRetentionTime);
+				selection.setStopRetentionTime(stopRetentionTime);
+				if(setChromatogramIntensityRange) {
+					selection.setStartAbundance(startAbundance);
+					selection.setStopAbundance(stopAbundance);
+				}
+			}
+		}
 	}
 
 	private void createVerticalSeparator(Composite parent) {
@@ -1211,7 +1249,7 @@ public class ExtendedChromatogramUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(chromatogramSelections != null) {
+				if(referenceChromatogramSelections != null) {
 					int index = comboChromatograms.getSelectionIndex();
 					selectChromatogram(index);
 				}
@@ -1241,7 +1279,7 @@ public class ExtendedChromatogramUI {
 	private void selectChromatogram(int index) {
 
 		comboChromatograms.select(index);
-		IChromatogramSelection chromatogramSelection = chromatogramSelections.get(index);
+		IChromatogramSelection chromatogramSelection = referenceChromatogramSelections.get(index);
 		if(chromatogramSelection != null) {
 			updateChromatogramSelection(chromatogramSelection);
 		}
@@ -1257,11 +1295,11 @@ public class ExtendedChromatogramUI {
 			/*
 			 * Initialize
 			 */
-			chromatogramSelections = new ArrayList<IChromatogramSelection>();
+			referenceChromatogramSelections = new ArrayList<IChromatogramSelection>();
 			/*
 			 * Original Data
 			 */
-			chromatogramSelections.add(chromatogramSelection);
+			referenceChromatogramSelections.add(chromatogramSelection);
 			references.add("Original Data");
 			/*
 			 * References
@@ -1282,7 +1320,7 @@ public class ExtendedChromatogramUI {
 					logger.warn(e);
 				}
 				//
-				chromatogramSelections.add(referencedChromatogramSelection);
+				referenceChromatogramSelections.add(referencedChromatogramSelection);
 				references.add("Chromatogram Reference #" + i++);
 			}
 		}
@@ -1299,7 +1337,7 @@ public class ExtendedChromatogramUI {
 
 		List<String> references = new ArrayList<String>();
 		int index = 1;
-		for(IChromatogramSelection chromatogramSelection : chromatogramTargetTransfer) {
+		for(IChromatogramSelection chromatogramSelection : editorChromatogramSelections) {
 			references.add(chromatogramSelection.getChromatogram().getName() + " [Tab#: " + index++ + "]");
 		}
 		/*
@@ -1551,7 +1589,6 @@ public class ExtendedChromatogramUI {
 
 	private void addScanNumberSecondaryAxisX() {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		boolean showChromatogramScanAxis = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_AXIS);
 		//
 		try {
@@ -1646,7 +1683,6 @@ public class ExtendedChromatogramUI {
 				 * Left, Right
 				 * (Retention Time)
 				 */
-				IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 				boolean useAlternateWindowMoveDirection = preferenceStore.getBoolean(PreferenceConstants.P_ALTERNATE_WINDOW_MOVE_DIRECTION);
 				//
 				if(keyCode == SWT.ARROW_RIGHT) {

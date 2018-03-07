@@ -260,6 +260,8 @@ public class PreferenceConstants {
 	public static final boolean DEF_ALTERNATE_WINDOW_MOVE_DIRECTION = false;
 	public static final String P_CONDENSE_CYCLE_NUMBER_SCANS = "condenseCycleNumberScans";
 	public static final boolean DEF_CONDENSE_CYCLE_NUMBER_SCANS = true;
+	public static final String P_SET_CHROMATOGRAM_INTENSITY_RANGE = "setChromatogramIntensityRange";
+	public static final boolean DEF_SET_CHROMATOGRAM_INTENSITY_RANGE = false;
 	/*
 	 * File Explorer
 	 */
