@@ -1193,24 +1193,6 @@ public class ExtendedChromatogramUI {
 				}
 			}
 		}
-		/*
-		 * References
-		 */
-		for(IChromatogramSelection selection : referenceChromatogramSelections) {
-			if(selection != chromatogramSelection) {
-				/*
-				 * Don't fire an update. The next time the selection is on focus,
-				 * the correct range will be loaded.
-				 * selection.fireUpdateChange(true);
-				 */
-				selection.setStartRetentionTime(startRetentionTime);
-				selection.setStopRetentionTime(stopRetentionTime);
-				if(setChromatogramIntensityRange) {
-					selection.setStartAbundance(startAbundance);
-					selection.setStopAbundance(stopAbundance);
-				}
-			}
-		}
 	}
 
 	private void createVerticalSeparator(Composite parent) {
