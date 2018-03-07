@@ -20,4 +20,12 @@ public class LibraryInformation extends AbstractLibraryInformation implements IL
 	 * Renew the UUID on change.
 	 */
 	private static final long serialVersionUID = -9125906197393207340L;
+
+	public LibraryInformation() {
+		super();
+	}
+
+	public LibraryInformation(ILibraryInformation libraryInformation) {
+		super(libraryInformation);
+	}
 }

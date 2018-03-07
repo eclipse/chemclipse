@@ -43,6 +43,10 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 		}
 	}
 
+	public AbstractComparisonResult(IComparisonResult comparisonResult) {
+		this(comparisonResult.getMatchFactor(), comparisonResult.getReverseMatchFactor(), comparisonResult.getMatchFactorDirect(), comparisonResult.getReverseMatchFactorDirect());
+	}
+
 	@Override
 	public float getPenalty() {
 

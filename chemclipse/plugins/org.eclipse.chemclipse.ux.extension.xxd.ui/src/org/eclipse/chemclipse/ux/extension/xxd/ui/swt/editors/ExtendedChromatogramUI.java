@@ -41,9 +41,15 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.implementation.ComparisonResult;
+import org.eclipse.chemclipse.model.implementation.LibraryInformation;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.MoveDirection;
+import org.eclipse.chemclipse.model.targets.IPeakTarget;
+import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -64,6 +70,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.EditorUpdateSup
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakChartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.RetentionTimeValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -175,6 +182,7 @@ public class ExtendedChromatogramUI {
 	private ScanChartSupport scanChartSupport = new ScanChartSupport();
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
+	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	//
 	private boolean suspendUpdate = false;
 	//
@@ -1082,7 +1090,7 @@ public class ExtendedChromatogramUI {
 	private void createCheckBoxTransferTargets(Composite parent) {
 
 		Button checkBox = new Button(parent, SWT.CHECK);
-		checkBox.setText("Best Target");
+		checkBox.setText("Best Target Only");
 		checkBox.setSelection(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY));
 		checkBox.setToolTipText("Transfer only the best matching target.");
 		checkBox.addSelectionListener(new SelectionAdapter() {
@@ -1216,16 +1224,54 @@ public class ExtendedChromatogramUI {
 					/*
 					 * Transfer the peak targets.
 					 */
-					int startRetentionTime = chromatogramSelection.getStartRetentionTime();
-					int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
 					int retentionTimeDelta = (int)(preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 					boolean useBestTargetOnly = preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY);
+					//
+					List<? extends IPeak> peaksSource = chromatogramDataSupport.getPeaks(chromatogramSelection, true);
+					List<? extends IPeak> peaksSink = chromatogramDataSupport.getPeaks(selection, false);
+					//
+					for(IPeak peakSink : peaksSink) {
+						for(IPeak peakSource : peaksSource) {
+							int retentionTimePeakSink = peakSink.getPeakModel().getRetentionTimeAtPeakMaximum();
+							int retentionTimePeakSource = peakSource.getPeakModel().getRetentionTimeAtPeakMaximum();
+							if(isPeakInFocus(retentionTimePeakSink, retentionTimePeakSource, retentionTimeDelta)) {
+								/*
+								 * Best target or all?
+								 */
+								if(useBestTargetOnly) {
+									IPeakTarget peakTarget = peakDataSupport.getBestPeakTarget(new ArrayList<IPeakTarget>(peakSource.getTargets()));
+									transferPeakTarget(peakTarget, peakSink);
+								} else {
+									for(IPeakTarget peakTarget : peakSource.getTargets()) {
+										transferPeakTarget(peakTarget, peakSink);
+									}
+								}
+							}
+						}
+					}
 				}
 			} else {
-				MessageDialog.openWarning(shell, "Transfer Peak Target(s)", "We can't transfer targets to the same chromatogram.");
+				MessageDialog.openWarning(shell, "Transfer Peak Target(s)", "It's not possible to transfer targets to the same chromatogram.");
 			}
 		} else {
 			MessageDialog.openWarning(shell, "Transfer Peak Target(s)", "Please select a chromatogram.");
+		}
+	}
+
+	private void transferPeakTarget(IPeakTarget peakTarget, IPeak peakSink) {
+
+		ILibraryInformation libraryInformation = new LibraryInformation(peakTarget.getLibraryInformation());
+		IComparisonResult comparisonResult = new ComparisonResult(peakTarget.getComparisonResult());
+		IPeakTarget peakTargetSink = new PeakTarget(libraryInformation, comparisonResult);
+		peakSink.addTarget(peakTargetSink);
+	}
+
+	private boolean isPeakInFocus(int retentionTimePeakSink, int retentionTimePeakSource, int retentionTimeDelta) {
+
+		if(retentionTimePeakSink >= (retentionTimePeakSource - retentionTimeDelta) && retentionTimePeakSink <= (retentionTimePeakSource + retentionTimeDelta)) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 

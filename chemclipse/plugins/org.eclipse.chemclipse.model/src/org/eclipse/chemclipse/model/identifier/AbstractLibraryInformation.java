@@ -41,6 +41,33 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 		synonyms = new HashSet<String>();
 	}
 
+	/**
+	 * Makes a copy of the given library information.
+	 * 
+	 * @param libraryInformation
+	 */
+	public AbstractLibraryInformation(ILibraryInformation libraryInformation) {
+		this();
+		if(libraryInformation != null) {
+			name = libraryInformation.getName();
+			for(String synonym : libraryInformation.getSynonyms()) {
+				synonyms.add(synonym);
+			}
+			casNumber = libraryInformation.getCasNumber();
+			comments = libraryInformation.getComments();
+			referenceIdentifier = libraryInformation.getReferenceIdentifier();
+			miscellaneous = libraryInformation.getMiscellaneous();
+			formula = libraryInformation.getFormula();
+			inChI = libraryInformation.getInChI();
+			smiles = libraryInformation.getSmiles();
+			molWeight = libraryInformation.getMolWeight();
+			database = libraryInformation.getDatabase();
+			contributor = libraryInformation.getContributor();
+			hit = libraryInformation.getHit();
+			classification = libraryInformation.getClassification();
+		}
+	}
+
 	@Override
 	public String getName() {
 

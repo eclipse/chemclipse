@@ -170,6 +170,34 @@ public class ChromatogramDataSupport {
 		return scans;
 	}
 
+	public List<? extends IPeak> getPeaks(IChromatogramSelection chromatogramSelection, boolean extractPeaksInSelectedRange) {
+
+		List<? extends IPeak> peaks = new ArrayList<IPeak>();
+		//
+		if(chromatogramSelection != null) {
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			if(chromatogram instanceof IChromatogramMSD) {
+				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+				if(extractPeaksInSelectedRange) {
+					peaks = chromatogramMSD.getPeaks((IChromatogramSelectionMSD)chromatogramSelection);
+				} else {
+					peaks = chromatogramMSD.getPeaks();
+				}
+			} else if(chromatogram instanceof IChromatogramCSD) {
+				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+				if(extractPeaksInSelectedRange) {
+					peaks = chromatogramCSD.getPeaks((IChromatogramSelectionCSD)chromatogramSelection);
+				} else {
+					peaks = chromatogramCSD.getPeaks();
+				}
+			} else if(chromatogram instanceof IChromatogramWSD) {
+				//
+			}
+		}
+		//
+		return peaks;
+	}
+
 	private boolean scanIsInSelectedRange(IScan scan, int startRetentionTime, int stopRetentionTime) {
 
 		int retentionTime = scan.getRetentionTime();

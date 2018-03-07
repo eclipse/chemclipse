@@ -28,4 +28,8 @@ public class ComparisonResult extends AbstractComparisonResult implements ICompa
 	public ComparisonResult(float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect) {
 		super(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect);
 	}
+
+	public ComparisonResult(IComparisonResult comparisonResult) {
+		super(comparisonResult);
+	}
 }

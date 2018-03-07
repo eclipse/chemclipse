@@ -53,14 +53,24 @@ public class PeakDataSupport {
 		return builder.toString();
 	}
 
-	public ILibraryInformation getLibraryInformation(List<IPeakTarget> targets) {
+	public ILibraryInformation getBestLibraryInformation(List<IPeakTarget> targets) {
 
 		ILibraryInformation libraryInformation = null;
-		targets = new ArrayList<IPeakTarget>(targets);
-		Collections.sort(targets, targetExtendedComparator);
-		if(targets.size() >= 1) {
-			libraryInformation = targets.get(0).getLibraryInformation();
+		IPeakTarget peakTarget = getBestPeakTarget(targets);
+		if(peakTarget != null) {
+			libraryInformation = peakTarget.getLibraryInformation();
 		}
 		return libraryInformation;
+	}
+
+	public IPeakTarget getBestPeakTarget(List<IPeakTarget> targets) {
+
+		IPeakTarget peakTarget = null;
+		List<IPeakTarget> peakTargets = new ArrayList<IPeakTarget>(targets);
+		Collections.sort(peakTargets, targetExtendedComparator);
+		if(targets.size() >= 1) {
+			peakTarget = targets.get(0);
+		}
+		return peakTarget;
 	}
 }
