@@ -221,7 +221,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		return chromatogramSelection;
 	}
 
-	private void initialize(Composite parent) {
+	private synchronized void initialize(Composite parent) {
 
 		IChromatogramSelection chromatogramSelection = loadChromatogram();
 		createEditorPages(parent);
@@ -267,20 +267,24 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		return chromatogramSelection;
 	}
 
-	private IChromatogramSelection loadChromatogramSelection(File file) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
+	private synchronized IChromatogramSelection loadChromatogramSelection(File file) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
 
+		IChromatogramSelection chromatogramSelection = null;
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(file, dataType);
 		try {
-			dialog.run(true, false, runnable);
+			/*
+			 * No fork, otherwise it might crash when loading a chromatogram takes too long.
+			 */
+			dialog.run(false, false, runnable);
+			chromatogramSelection = runnable.getChromatogramSelection();
+			chromatogramFile = file;
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
 		} catch(InterruptedException e) {
 			logger.warn(e);
 		}
 		//
-		IChromatogramSelection chromatogramSelection = runnable.getChromatogramSelection();
-		chromatogramFile = file;
 		return chromatogramSelection;
 	}
 
