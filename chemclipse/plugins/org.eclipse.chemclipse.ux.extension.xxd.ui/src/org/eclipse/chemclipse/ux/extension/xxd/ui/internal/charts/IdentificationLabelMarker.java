@@ -109,13 +109,13 @@ public class IdentificationLabelMarker extends LabelMarker {
 				ILibraryInformation libraryInformation = null;
 				if(scan instanceof IScanMSD) {
 					IScanMSD scanMSD = (IScanMSD)scan;
-					libraryInformation = scanDataSupport.getBestLibraryInformation(scanMSD.getTargets());
+					libraryInformation = scanDataSupport.getBestLibraryInformation(scanMSD);
 				} else if(scan instanceof IScanCSD) {
 					IScanCSD scanCSD = (IScanCSD)scan;
-					libraryInformation = scanDataSupport.getBestLibraryInformation(scanCSD.getTargets());
+					libraryInformation = scanDataSupport.getBestLibraryInformation(scanCSD);
 				} else if(scan instanceof IScanWSD) {
 					IScanWSD scanWSD = (IScanWSD)scan;
-					libraryInformation = scanDataSupport.getBestLibraryInformation(scanWSD.getTargets());
+					libraryInformation = scanDataSupport.getBestLibraryInformation(scanWSD);
 				}
 				//
 				String substance = "";

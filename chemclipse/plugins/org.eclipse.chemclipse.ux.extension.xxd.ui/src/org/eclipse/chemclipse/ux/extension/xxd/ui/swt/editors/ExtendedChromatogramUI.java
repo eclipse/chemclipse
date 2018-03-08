@@ -42,6 +42,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.implementation.ComparisonResult;
 import org.eclipse.chemclipse.model.implementation.LibraryInformation;
@@ -1409,7 +1410,7 @@ public class ExtendedChromatogramUI {
 										 * Best target or all?
 										 */
 										if(useBestTargetOnly) {
-											IPeakTarget peakTarget = peakDataSupport.getBestPeakTarget(new ArrayList<IPeakTarget>(peakSource.getTargets()));
+											IIdentificationTarget peakTarget = peakDataSupport.getBestPeakTarget(peakSource.getTargets());
 											transferPeakTarget(peakTarget, peakSink);
 										} else {
 											for(IPeakTarget peakTarget : peakSource.getTargets()) {
@@ -1434,10 +1435,10 @@ public class ExtendedChromatogramUI {
 		}
 	}
 
-	private void transferPeakTarget(IPeakTarget peakTarget, IPeak peakSink) {
+	private void transferPeakTarget(IIdentificationTarget identificationTargetSource, IPeak peakSink) {
 
-		ILibraryInformation libraryInformation = new LibraryInformation(peakTarget.getLibraryInformation());
-		IComparisonResult comparisonResult = new ComparisonResult(peakTarget.getComparisonResult());
+		ILibraryInformation libraryInformation = new LibraryInformation(identificationTargetSource.getLibraryInformation());
+		IComparisonResult comparisonResult = new ComparisonResult(identificationTargetSource.getComparisonResult());
 		IPeakTarget peakTargetSink = new PeakTarget(libraryInformation, comparisonResult);
 		peakSink.addTarget(peakTargetSink);
 	}
