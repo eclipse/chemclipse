@@ -160,6 +160,7 @@ public class ExtendedChromatogramUI {
 	private static final String MODIFY_LENGTH_SHORTEST = "MODIFY_LENGTH_SHORTEST";
 	private static final String MODIFY_LENGTH_SELECTED = "MODIFY_LENGTH_SELECTED";
 	private static final String MODIFY_LENGTH_LONGEST = "MODIFY_LENGTH_LONGEST";
+	private static final String MODIFY_LENGTH_ADJUST = "MODIFY_LENGTH_ADJUST";
 	//
 	private static final int FIVE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 5);
 	private static final int THREE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 3);
@@ -540,6 +541,7 @@ public class ExtendedChromatogramUI {
 	public void update() {
 
 		if(!suspendUpdate) {
+			updateChromatogramTargetTransferSelections();
 			updateChromatogram();
 			adjustChromatogramSelectionRange();
 		}
@@ -1031,7 +1033,7 @@ public class ExtendedChromatogramUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(10, false));
+		composite.setLayout(new GridLayout(11, false));
 		//
 		createComboTargetTransfer(composite);
 		createTextTargetDelta(composite);
@@ -1041,6 +1043,7 @@ public class ExtendedChromatogramUI {
 		createButtonShrinkChromatograms(composite);
 		createButtonAlignChromatograms(composite);
 		createButtonStretchChromatograms(composite);
+		createButtonAdjustChromatograms(composite);
 		createVerticalSeparator(composite);
 		createButtonSetRanges(composite);
 		//
@@ -1063,12 +1066,17 @@ public class ExtendedChromatogramUI {
 		text.setLayoutData(gridData);
 		//
 		RetentionTimeValidator retentionTimeValidator = new RetentionTimeValidator();
-		ControlDecoration controlDecoration = new ControlDecoration(text, SWT.LEFT | SWT.TOP);
 		text.addKeyListener(new KeyAdapter() {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 
+				/*
+				 * It crashes when the control decoration is created earlier in case
+				 * more than one chromatogram is opened simultaneously via the
+				 * open selected files button in the supplier file explorer.
+				 */
+				ControlDecoration controlDecoration = new ControlDecoration(text, SWT.LEFT | SWT.TOP);
 				if(validate(retentionTimeValidator, controlDecoration, text)) {
 					preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, retentionTimeValidator.getRetentionTime());
 				}
@@ -1170,6 +1178,22 @@ public class ExtendedChromatogramUI {
 		});
 	}
 
+	private void createButtonAdjustChromatograms(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Adjust the chromatograms using the settings");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADJUST_CHROMATOGRAMS, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				modifyChromatogramLength(MODIFY_LENGTH_ADJUST);
+			}
+		});
+	}
+
 	private void modifyChromatogramLength(String modifyLengthType) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
@@ -1181,10 +1205,17 @@ public class ExtendedChromatogramUI {
 				/*
 				 * Settings
 				 */
-				int scanDelay = chromatogram.getScanDelay();
-				int chromatogramLength = chromatogram.getStopRetentionTime();
-				preferenceStore.setValue(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY, scanDelay);
-				preferenceStore.setValue(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH, chromatogramLength);
+				int scanDelay;
+				int chromatogramLength;
+				if(MODIFY_LENGTH_ADJUST.equals(modifyLengthType)) {
+					scanDelay = preferenceStore.getInt(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY);
+					chromatogramLength = preferenceStore.getInt(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH);
+				} else {
+					scanDelay = chromatogram.getScanDelay();
+					chromatogramLength = chromatogram.getStopRetentionTime();
+					preferenceStore.setValue(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY, scanDelay);
+					preferenceStore.setValue(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH, chromatogramLength);
+				}
 				/*
 				 * Modify chromatograms.
 				 */
@@ -1192,7 +1223,7 @@ public class ExtendedChromatogramUI {
 					/*
 					 * Don't re-align the template chromatogram.
 					 */
-					if(chromatogramSelection.getChromatogram() != chromatogram) {
+					if(realignChromatogram(modifyLengthType, chromatogramSelection, chromatogram)) {
 						IRunnableWithProgress runnable = new ChromatogramLengthModifier(chromatogramSelection, scanDelay, chromatogramLength);
 						ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
 						try {
@@ -1208,6 +1239,18 @@ public class ExtendedChromatogramUI {
 		}
 	}
 
+	private boolean realignChromatogram(String modifyLengthType, IChromatogramSelection chromatogramSelection, IChromatogram chromatogram) {
+
+		if(MODIFY_LENGTH_ADJUST.equals(modifyLengthType)) {
+			return true;
+		} else {
+			if(chromatogramSelection.getChromatogram() != chromatogram) {
+				return true;
+			}
+			return false;
+		}
+	}
+
 	private IChromatogram getChromatogram(String modifyLengthType) {
 
 		IChromatogram chromatogram;
@@ -1216,6 +1259,7 @@ public class ExtendedChromatogramUI {
 				chromatogram = getShortestChromatogram();
 				break;
 			case MODIFY_LENGTH_SELECTED:
+			case MODIFY_LENGTH_ADJUST:
 				chromatogram = chromatogramSelection.getChromatogram();
 				break;
 			case MODIFY_LENGTH_LONGEST:
