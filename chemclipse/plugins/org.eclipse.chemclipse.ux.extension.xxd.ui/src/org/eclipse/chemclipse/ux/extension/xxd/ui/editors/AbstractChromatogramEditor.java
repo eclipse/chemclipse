@@ -228,6 +228,16 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		extendedChromatogramUI.updateChromatogramSelection(chromatogramSelection);
 		//
 		if(chromatogramSelection != null) {
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			String type = "";
+			if(chromatogram instanceof IChromatogramMSD) {
+				type = " [MSD]";
+			} else if(chromatogram instanceof IChromatogramCSD) {
+				type = " [CSD]";
+			} else if(chromatogram instanceof IChromatogramWSD) {
+				type = " [WSD]";
+			}
+			part.setLabel(chromatogram.getName() + type);
 			dirtyable.setDirty(true);
 			chromatogramSelection.update(true);
 		}
