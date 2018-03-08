@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IMultivariateCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
@@ -41,14 +42,19 @@ public class PcaEvaluation {
 
 	public static final String PCA_ALGO_SVD = "SVD";
 	public static final String PCA_ALGO_NIPALS = "Nipals";
+	public static final String OPLS_ALGO_NIPALS = "Opls";
 
-	private <V extends IVariable, S extends ISample<? extends ISampleData>> Map<ISample<?>, double[]> extractData(ISamples<V, S> samples) {
+	private <V extends IVariable, S extends ISample<? extends ISampleData>> Map<ISample<?>, double[]> extractData(ISamples<V, S> samples, String algorithm) {
 
 		Map<ISample<? extends ISampleData>, double[]> selectedSamples = new HashMap<>();
 		List<? extends IVariable> retentionTimes = samples.getVariables();
 		int numSelected = (int)retentionTimes.stream().filter(r -> r.isSelected()).count();
+		final List<String> groups = samples.getSampleList().stream().map(s -> s.getGroupName()).collect(Collectors.toList());
 		for(ISample<? extends ISampleData> sample : samples.getSampleList()) {
 			double[] selectedSampleData = null;
+			if(algorithm.equals(OPLS_ALGO_NIPALS)) {
+				// get all group names
+			}
 			if(sample.isSelected()) {
 				List<? extends ISampleData> data = sample.getSampleData();
 				selectedSampleData = new double[numSelected];
@@ -128,7 +134,7 @@ public class PcaEvaluation {
 		int numberOfPrincipalComponents = settings.getNumberOfPrincipalComponents();
 		String pcaAlgorithm = settings.getPcaAlgorithm();
 		PcaResults pcaResults = new PcaResults(settings);
-		Map<ISample<?>, double[]> extractData = extractData(samples);
+		Map<ISample<?>, double[]> extractData = extractData(samples, pcaAlgorithm);
 		setRetentionTime(pcaResults, samples);
 		int sampleSize = getSampleSize(extractData);
 		/*
