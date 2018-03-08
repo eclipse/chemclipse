@@ -25,12 +25,14 @@ import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.IonListContentProviderLazy;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanSignalListFilter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanTableComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
@@ -41,6 +43,8 @@ public class ScanTableUI extends ExtendedTableViewer {
 	private Map<DataType, ITableLabelProvider> labelProviderMap;
 	private Map<DataType, ViewerComparator> viewerComparatorMap;
 	private Map<DataType, IContentProvider> contentProviderMap;
+	//
+	private ScanSignalListFilter scanSignalListFilter;
 
 	public ScanTableUI(Composite parent, int style) {
 		super(parent, style);
@@ -48,6 +52,12 @@ public class ScanTableUI extends ExtendedTableViewer {
 		viewerComparatorMap = new HashMap<DataType, ViewerComparator>();
 		contentProviderMap = new HashMap<DataType, IContentProvider>();
 		setLabelAndContentProviders(DataType.MSD_NOMINAL);
+	}
+
+	public void setSearchText(String searchText, boolean caseSensitive) {
+
+		scanSignalListFilter.setSearchText(searchText, caseSensitive);
+		refresh();
 	}
 
 	public void setInput(IScan scan) {
@@ -124,6 +134,9 @@ public class ScanTableUI extends ExtendedTableViewer {
 			ViewerComparator viewerComparator = getViewerComparator(dataType);
 			setComparator(viewerComparator);
 		}
+		//
+		scanSignalListFilter = new ScanSignalListFilter();
+		setFilters(new ViewerFilter[]{scanSignalListFilter});
 	}
 
 	private String[] getTitles(DataType dataType) {

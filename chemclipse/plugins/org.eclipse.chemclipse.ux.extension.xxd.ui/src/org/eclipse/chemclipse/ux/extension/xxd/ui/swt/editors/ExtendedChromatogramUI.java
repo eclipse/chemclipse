@@ -1066,6 +1066,7 @@ public class ExtendedChromatogramUI {
 
 		comboTargetTransfer = new Combo(parent, SWT.READ_ONLY);
 		comboTargetTransfer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboTargetTransfer.setToolTipText("Select the chromatogram sink for target transfer.");
 	}
 
 	private void createTextTargetDelta(Composite parent) {

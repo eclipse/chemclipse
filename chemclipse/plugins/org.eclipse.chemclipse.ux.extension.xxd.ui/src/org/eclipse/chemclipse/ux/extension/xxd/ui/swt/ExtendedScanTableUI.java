@@ -36,6 +36,8 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuCategories;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
+import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
+import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ScanTablePart;
@@ -73,6 +75,7 @@ public class ExtendedScanTableUI {
 	private Label labelInfo;
 	private Composite toolbarInfo;
 	private Composite toolbarEdit;
+	private Composite toolbarSearch;
 	private Button buttonSaveScan;
 	private Button buttonToggleToolbarEdit;
 	private Button buttonOptimizedScan;
@@ -243,10 +246,12 @@ public class ExtendedScanTableUI {
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
 		toolbarEdit = createToolbarEdit(parent);
+		toolbarSearch = createToolbarSearch(parent);
 		createTable(parent);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
 		enableEditModus(false); // Disable the edit modus by default.
+		PartSupport.setCompositeVisibility(toolbarSearch, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -255,10 +260,11 @@ public class ExtendedScanTableUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(6, false));
+		composite.setLayout(new GridLayout(7, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		buttonToggleToolbarEdit = createButtonToggleToolbarEdit(composite);
+		createButtonToggleToolbarSearch(composite);
 		createResetButton(composite);
 		buttonSaveScan = createSaveButton(composite);
 		buttonOptimizedScan = createOptimizedScanButton(composite);
@@ -305,6 +311,29 @@ public class ExtendedScanTableUI {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 				} else {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonToggleToolbarSearch(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle search toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarSearch);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
 				}
 			}
 		});
@@ -447,6 +476,22 @@ public class ExtendedScanTableUI {
 		createButtonDelete(composite);
 		//
 		return composite;
+	}
+
+	private Composite createToolbarSearch(Composite parent) {
+
+		SearchSupportUI searchSupportUI = new SearchSupportUI(parent, SWT.NONE);
+		searchSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		searchSupportUI.setSearchListener(new ISearchListener() {
+
+			@Override
+			public void performSearch(String searchText, boolean caseSensitive) {
+
+				scanTableUI.setSearchText(searchText, caseSensitive);
+			}
+		});
+		//
+		return searchSupportUI;
 	}
 
 	private Label createLabelX(Composite parent) {
