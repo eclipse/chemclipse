@@ -39,8 +39,12 @@ public class ChromatogramLengthModifier implements IRunnableWithProgress {
 			int scanRange = chromatogram.getNumberOfScans() - 1;
 			if(scanRange > 0) {
 				/*
-				 * Rmeove the peaks, etc.
+				 * Remove the peaks, etc.
 				 */
+				chromatogramSelection.setSelectedPeak(null);
+				chromatogramSelection.setSelectedScan(null);
+				chromatogramSelection.setSelectedIdentifiedScan(null);
+				//
 				chromatogram.getBaselineModel().removeBaseline();
 				chromatogram.removeAllBackgroundIntegrationEntries();
 				chromatogram.removeAllChromatogramIntegrationEntries();

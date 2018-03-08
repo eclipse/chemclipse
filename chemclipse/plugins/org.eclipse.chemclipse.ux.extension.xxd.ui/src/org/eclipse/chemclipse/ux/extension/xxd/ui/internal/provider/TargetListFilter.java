@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.ViewerFilter;
 public class TargetListFilter extends ViewerFilter {
 
 	private String searchText;
+	private String searchTextExtended;
 	private boolean caseSensitive;
 	private LibraryInformationSupport libraryInformationSupport;
 
@@ -28,7 +29,8 @@ public class TargetListFilter extends ViewerFilter {
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
 
-		this.searchText = ".*" + searchText + ".*";
+		this.searchText = searchText;
+		this.searchTextExtended = ".*" + searchText + ".*";
 		this.caseSensitive = caseSensitive;
 	}
 
@@ -44,7 +46,7 @@ public class TargetListFilter extends ViewerFilter {
 		//
 		if(element instanceof IIdentificationTarget) {
 			IIdentificationTarget target = (IIdentificationTarget)element;
-			return libraryInformationSupport.matchSearchText(target.getLibraryInformation(), searchText, caseSensitive);
+			return libraryInformationSupport.matchSearchText(target.getLibraryInformation(), searchTextExtended, caseSensitive);
 		}
 		//
 		return false;

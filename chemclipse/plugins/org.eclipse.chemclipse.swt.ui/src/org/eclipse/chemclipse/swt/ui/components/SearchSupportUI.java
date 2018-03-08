@@ -84,6 +84,11 @@ public class SearchSupportUI extends Composite {
 
 				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
 					runSearch();
+				} else if(text.getText().trim().equals("")) {
+					/*
+					 * Reset when empty.
+					 */
+					runSearch();
 				}
 			}
 		});

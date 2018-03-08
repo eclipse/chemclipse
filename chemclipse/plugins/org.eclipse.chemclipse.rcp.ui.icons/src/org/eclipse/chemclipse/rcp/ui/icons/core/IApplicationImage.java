@@ -36,6 +36,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SHRINK_CHROMATOGRAMS = "shrinkChromatograms.gif";
 	String IMAGE_ALIGN_CHROMATOGRAMS = "alignChromatograms.gif";
 	String IMAGE_STRETCH_CHROMATOGRAMS = "stretchChromatograms.gif";
+	String IMAGE_ADJUST_CHROMATOGRAMS = "adjustChromatograms.gif";
 	//
 	String IMAGE_CHROMATOGRAM = "chromatogram.gif";
 	String IMAGE_CHROMATOGRAM_MSD = "chromatogram-msd.gif";

@@ -82,7 +82,7 @@ public class ScanListLabelProvider extends AbstractChemClipseLabelProvider {
 		String text = "";
 		if(element instanceof IScan) {
 			IScan scan = (IScan)element;
-			ILibraryInformation libraryInformation = scanDataSupport.getLibraryInformation(scan);
+			ILibraryInformation libraryInformation = scanDataSupport.getBestLibraryInformation(scan);
 			//
 			switch(columnIndex) {
 				case 0:

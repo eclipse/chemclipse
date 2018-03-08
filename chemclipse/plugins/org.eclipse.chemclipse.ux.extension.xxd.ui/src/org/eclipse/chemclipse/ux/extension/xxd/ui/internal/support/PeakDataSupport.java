@@ -12,26 +12,19 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
 public class PeakDataSupport {
 
 	private DecimalFormat decimalFormatRetentionTime = ValueFormat.getDecimalFormatEnglish("0.0##");
-	private TargetExtendedComparator targetExtendedComparator;
-
-	public PeakDataSupport() {
-		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
-	}
+	private IdentificationDataSupport identificationDataSupport = new IdentificationDataSupport();
 
 	public String getPeakLabel(IPeak peak) {
 
@@ -55,22 +48,11 @@ public class PeakDataSupport {
 
 	public ILibraryInformation getBestLibraryInformation(List<IPeakTarget> targets) {
 
-		ILibraryInformation libraryInformation = null;
-		IPeakTarget peakTarget = getBestPeakTarget(targets);
-		if(peakTarget != null) {
-			libraryInformation = peakTarget.getLibraryInformation();
-		}
-		return libraryInformation;
+		return identificationDataSupport.getBestLibraryInformation(targets);
 	}
 
-	public IPeakTarget getBestPeakTarget(List<IPeakTarget> targets) {
+	public IIdentificationTarget getBestPeakTarget(List<IPeakTarget> targets) {
 
-		IPeakTarget peakTarget = null;
-		List<IPeakTarget> peakTargets = new ArrayList<IPeakTarget>(targets);
-		Collections.sort(peakTargets, targetExtendedComparator);
-		if(targets.size() >= 1) {
-			peakTarget = targets.get(0);
-		}
-		return peakTarget;
+		return identificationDataSupport.getBestIdentificationTarget(targets);
 	}
 }

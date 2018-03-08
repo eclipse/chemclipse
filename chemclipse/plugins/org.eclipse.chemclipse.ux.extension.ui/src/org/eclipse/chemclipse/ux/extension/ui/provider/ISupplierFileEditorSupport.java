@@ -13,11 +13,14 @@ package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
 
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xir.model.core.IScanXIR;
 import org.eclipse.e4.core.internal.contexts.EclipseContext;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -64,7 +67,15 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 			if(object != null) {
 				part.setObject(object);
 				if(object instanceof IChromatogram) {
-					part.setLabel(((IChromatogram)object).getName());
+					String type = "";
+					if(object instanceof IChromatogramMSD) {
+						type = " [MSD]";
+					} else if(object instanceof IChromatogramCSD) {
+						type = " [CSD]";
+					} else if(object instanceof IChromatogramWSD) {
+						type = " [WSD]";
+					}
+					part.setLabel(((IChromatogram)object).getName() + type);
 				} else if(object instanceof IMassSpectra) {
 					part.setLabel(((IMassSpectra)object).getName());
 				} else if(object instanceof IScanXIR) {
