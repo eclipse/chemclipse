@@ -190,13 +190,13 @@ public class ScanDataSupport {
 		return identificationTargets;
 	}
 
-	public ILibraryInformation getLibraryInformation(IScan scan) {
+	public ILibraryInformation getBestLibraryInformation(IScan scan) {
 
 		List<? extends IIdentificationTarget> identificationTargets = getIdentificationTargets(scan);
-		return getLibraryInformation(identificationTargets);
+		return getBestLibraryInformation(identificationTargets);
 	}
 
-	public ILibraryInformation getLibraryInformation(List<? extends IIdentificationTarget> targets) {
+	public ILibraryInformation getBestLibraryInformation(List<? extends IIdentificationTarget> targets) {
 
 		ILibraryInformation libraryInformation = null;
 		targets = new ArrayList<IIdentificationTarget>(targets);

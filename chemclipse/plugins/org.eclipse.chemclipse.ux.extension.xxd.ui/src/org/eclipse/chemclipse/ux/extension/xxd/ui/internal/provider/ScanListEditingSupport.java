@@ -45,7 +45,7 @@ public class ScanListEditingSupport extends EditingSupport {
 
 		if(column == ScanListLabelProvider.NAME) {
 			if(element instanceof IScan) {
-				ILibraryInformation libraryInformation = scanDataSupport.getLibraryInformation((IScan)element);
+				ILibraryInformation libraryInformation = scanDataSupport.getBestLibraryInformation((IScan)element);
 				return libraryInformation != null;
 			}
 			return true;
@@ -62,7 +62,7 @@ public class ScanListEditingSupport extends EditingSupport {
 			IScan scan = (IScan)element;
 			switch(column) {
 				case ScanListLabelProvider.NAME:
-					ILibraryInformation libraryInformation = scanDataSupport.getLibraryInformation(scan);
+					ILibraryInformation libraryInformation = scanDataSupport.getBestLibraryInformation(scan);
 					return (libraryInformation != null) ? libraryInformation.getName() : "";
 			}
 		}
@@ -76,7 +76,7 @@ public class ScanListEditingSupport extends EditingSupport {
 			IScan scan = (IScan)element;
 			switch(column) {
 				case ScanListLabelProvider.NAME:
-					ILibraryInformation libraryInformation = scanDataSupport.getLibraryInformation(scan);
+					ILibraryInformation libraryInformation = scanDataSupport.getBestLibraryInformation(scan);
 					if(libraryInformation != null) {
 						libraryInformation.setName((String)value);
 					}

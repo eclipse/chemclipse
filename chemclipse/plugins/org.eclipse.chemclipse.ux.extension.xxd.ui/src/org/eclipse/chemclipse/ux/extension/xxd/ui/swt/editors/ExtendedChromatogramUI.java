@@ -519,8 +519,6 @@ public class ExtendedChromatogramUI {
 			/*
 			 * Adjust
 			 */
-			clearPeakAndScanLabels();
-			adjustMinuteScale();
 			addChartMenuEntriesFilter();
 			updateChromatogram();
 			if(referenceChromatogramSelections == null) {
@@ -582,12 +580,6 @@ public class ExtendedChromatogramUI {
 			return true;
 		}
 		return false;
-	}
-
-	private void clearPeakAndScanLabels() {
-
-		peakLabelMarkerMap.clear();
-		scanLabelMarkerMap.clear();
 	}
 
 	private void adjustMinuteScale() {
@@ -694,6 +686,8 @@ public class ExtendedChromatogramUI {
 	private void updateChromatogram() {
 
 		updateLabel();
+		clearPeakAndScanLabels();
+		adjustMinuteScale();
 		deleteScanNumberSecondaryAxisX();
 		chromatogramChart.deleteSeries();
 		//
@@ -701,6 +695,38 @@ public class ExtendedChromatogramUI {
 			addjustChromatogramChart();
 			addChromatogramSeriesData();
 			addScanNumberSecondaryAxisX();
+		}
+	}
+
+	private void clearPeakAndScanLabels() {
+
+		removeIdentificationLabelMarker(peakLabelMarkerMap, SERIES_ID_PEAKS_NORMAL_ACTIVE);
+		removeIdentificationLabelMarker(peakLabelMarkerMap, SERIES_ID_PEAKS_NORMAL_INACTIVE);
+		removeIdentificationLabelMarker(peakLabelMarkerMap, SERIES_ID_PEAKS_ISTD_ACTIVE);
+		removeIdentificationLabelMarker(peakLabelMarkerMap, SERIES_ID_PEAKS_ISTD_INACTIVE);
+		removeIdentificationLabelMarker(scanLabelMarkerMap, SERIES_ID_IDENTIFIED_SCANS);
+		//
+		clearLabelMarker(peakLabelMarkerMap);
+		clearLabelMarker(scanLabelMarkerMap);
+	}
+
+	private void clearLabelMarker(Map<String, IdentificationLabelMarker> markerMap) {
+
+		for(IdentificationLabelMarker identificationLabelMarker : markerMap.values()) {
+			identificationLabelMarker.clear();
+		}
+		markerMap.clear();
+	}
+
+	private void removeIdentificationLabelMarker(Map<String, IdentificationLabelMarker> markerMap, String seriesId) {
+
+		IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
+		IdentificationLabelMarker labelMarker = markerMap.get(seriesId);
+		/*
+		 * Remove the label marker.
+		 */
+		if(labelMarker != null) {
+			plotArea.removeCustomPaintListener(labelMarker);
 		}
 	}
 
@@ -783,7 +809,6 @@ public class ExtendedChromatogramUI {
 	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId) {
 
 		if(peaks.size() > 0) {
-			boolean showChromatogramPeakLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS);
 			//
 			Collections.sort(peaks, peakRetentionTimeComparator);
 			ILineSeriesData lineSeriesData = peakChartSupport.getPeaks(peaks, true, false, symbolColor, seriesId);
@@ -794,21 +819,15 @@ public class ExtendedChromatogramUI {
 			lineSeriesSettings.setSymbolSize(symbolSize);
 			lineSeriesSettings.setSymbolColor(symbolColor);
 			lineSeriesDataList.add(lineSeriesData);
-			//
-			IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
-			IdentificationLabelMarker peakLabelMarker = peakLabelMarkerMap.get(seriesId);
-			/*
-			 * Remove the label marker.
-			 */
-			if(peakLabelMarker != null) {
-				plotArea.removeCustomPaintListener(peakLabelMarker);
-			}
 			/*
 			 * Add the labels.
 			 */
+			removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
+			boolean showChromatogramPeakLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS);
 			if(showChromatogramPeakLabels) {
+				IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
 				int indexSeries = lineSeriesDataList.size() - 1;
-				peakLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, peaks, null);
+				IdentificationLabelMarker peakLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, peaks, null);
 				plotArea.addCustomPaintListener(peakLabelMarker);
 				peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 			}
@@ -822,22 +841,15 @@ public class ExtendedChromatogramUI {
 			List<IScan> scans = chromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram());
 			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
 			addIdentifiedScansData(lineSeriesDataList, scans, PlotSymbolType.CIRCLE, symbolSize, Colors.DARK_GRAY, seriesId);
-			//
-			IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
-			IdentificationLabelMarker scanLabelMarker = scanLabelMarkerMap.get(seriesId);
-			/*
-			 * Remove the label marker.
-			 */
-			if(scanLabelMarker != null) {
-				plotArea.removeCustomPaintListener(scanLabelMarker);
-			}
 			/*
 			 * Add the labels.
 			 */
+			removeIdentificationLabelMarker(scanLabelMarkerMap, seriesId);
 			boolean showChromatogramScanLabels = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_LABELS);
 			if(showChromatogramScanLabels) {
+				IPlotArea plotArea = (IPlotArea)chromatogramChart.getBaseChart().getPlotArea();
 				int indexSeries = lineSeriesDataList.size() - 1;
-				scanLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, null, scans);
+				IdentificationLabelMarker scanLabelMarker = new IdentificationLabelMarker(chromatogramChart.getBaseChart(), indexSeries, null, scans);
 				plotArea.addCustomPaintListener(scanLabelMarker);
 				scanLabelMarkerMap.put(seriesId, scanLabelMarker);
 			}
@@ -1220,9 +1232,6 @@ public class ExtendedChromatogramUI {
 				 * Modify chromatograms.
 				 */
 				for(IChromatogramSelection chromatogramSelection : editorChromatogramSelections) {
-					/*
-					 * Don't re-align the template chromatogram.
-					 */
 					if(realignChromatogram(modifyLengthType, chromatogramSelection, chromatogram)) {
 						IRunnableWithProgress runnable = new ChromatogramLengthModifier(chromatogramSelection, scanDelay, chromatogramLength);
 						ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
@@ -1234,6 +1243,12 @@ public class ExtendedChromatogramUI {
 							logger.warn(e);
 						}
 					}
+					/*
+					 * Refresh the master chromatogram on length change.
+					 */
+					if(!MODIFY_LENGTH_SELECTED.equals(modifyLengthType)) {
+						update();
+					}
 				}
 			}
 		}
@@ -1241,6 +1256,9 @@ public class ExtendedChromatogramUI {
 
 	private boolean realignChromatogram(String modifyLengthType, IChromatogramSelection chromatogramSelection, IChromatogram chromatogram) {
 
+		/*
+		 * Don't re-align the template chromatogram.
+		 */
 		if(MODIFY_LENGTH_ADJUST.equals(modifyLengthType)) {
 			return true;
 		} else {
@@ -1373,25 +1391,38 @@ public class ExtendedChromatogramUI {
 					//
 					List<? extends IPeak> peaksSource = chromatogramDataSupport.getPeaks(chromatogramSelection, true);
 					List<? extends IPeak> peaksSink = chromatogramDataSupport.getPeaks(selection, false);
-					//
-					for(IPeak peakSink : peaksSink) {
-						for(IPeak peakSource : peaksSource) {
-							int retentionTimePeakSink = peakSink.getPeakModel().getRetentionTimeAtPeakMaximum();
-							int retentionTimePeakSource = peakSource.getPeakModel().getRetentionTimeAtPeakMaximum();
-							if(isPeakInFocus(retentionTimePeakSink, retentionTimePeakSource, retentionTimeDelta)) {
-								/*
-								 * Best target or all?
-								 */
-								if(useBestTargetOnly) {
-									IPeakTarget peakTarget = peakDataSupport.getBestPeakTarget(new ArrayList<IPeakTarget>(peakSource.getTargets()));
-									transferPeakTarget(peakTarget, peakSink);
-								} else {
-									for(IPeakTarget peakTarget : peakSource.getTargets()) {
-										transferPeakTarget(peakTarget, peakSink);
+					/*
+					 * Are peaks available?
+					 */
+					if(peaksSource.size() > 0) {
+						if(peaksSink.size() > 0) {
+							/*
+							 * Transfer OK
+							 */
+							for(IPeak peakSink : peaksSink) {
+								for(IPeak peakSource : peaksSource) {
+									int retentionTimePeakSink = peakSink.getPeakModel().getRetentionTimeAtPeakMaximum();
+									int retentionTimePeakSource = peakSource.getPeakModel().getRetentionTimeAtPeakMaximum();
+									if(isPeakInFocus(retentionTimePeakSink, retentionTimePeakSource, retentionTimeDelta)) {
+										/*
+										 * Best target or all?
+										 */
+										if(useBestTargetOnly) {
+											IPeakTarget peakTarget = peakDataSupport.getBestPeakTarget(new ArrayList<IPeakTarget>(peakSource.getTargets()));
+											transferPeakTarget(peakTarget, peakSink);
+										} else {
+											for(IPeakTarget peakTarget : peakSource.getTargets()) {
+												transferPeakTarget(peakTarget, peakSink);
+											}
+										}
 									}
 								}
 							}
+						} else {
+							MessageDialog.openWarning(shell, "Transfer Peak Target(s)", "The sink chromatogram contains no peaks.");
 						}
+					} else {
+						MessageDialog.openWarning(shell, "Transfer Peak Target(s)", "The source chromatogram contains no peaks.");
 					}
 				}
 			} else {

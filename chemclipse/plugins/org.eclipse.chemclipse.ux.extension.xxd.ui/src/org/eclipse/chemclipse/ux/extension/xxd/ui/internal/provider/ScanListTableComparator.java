@@ -29,8 +29,8 @@ public class ScanListTableComparator extends AbstractRecordTableComparator imple
 		if(e1 instanceof IScan && e2 instanceof IScan) {
 			IScan scan1 = (IScan)e1;
 			IScan scan2 = (IScan)e2;
-			ILibraryInformation libraryInformation1 = scanDataSupport.getLibraryInformation(scan1);
-			ILibraryInformation libraryInformation2 = scanDataSupport.getLibraryInformation(scan2);
+			ILibraryInformation libraryInformation1 = scanDataSupport.getBestLibraryInformation(scan1);
+			ILibraryInformation libraryInformation2 = scanDataSupport.getBestLibraryInformation(scan2);
 			//
 			switch(getPropertyIndex()) {
 				case 0:
