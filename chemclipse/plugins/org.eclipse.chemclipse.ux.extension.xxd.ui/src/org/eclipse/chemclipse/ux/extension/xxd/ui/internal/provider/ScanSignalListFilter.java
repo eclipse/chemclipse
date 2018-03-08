@@ -51,16 +51,14 @@ public class ScanSignalListFilter extends ViewerFilter {
 		if(element instanceof IIon) {
 			IIon ion = (IIon)element;
 			IIonTransition ionTransition = ion.getIonTransition();
-			if(Double.toString(ion.getIon()).contains(searchText)) {
-				return true;
-			} else {
-				if(ionTransition != null) {
-					if(Double.toString(ion.getIon()).contains(searchText)) {
-						if(Integer.toString(ionTransition.getQ1Ion()).contains(searchText)) {
-							return true;
-						}
-					}
+			if(ionTransition != null) {
+				if(Double.toString(ionTransition.getQ3Ion()).contains(searchText)) {
+					return true;
+				} else if(Integer.toString(ionTransition.getQ1Ion()).contains(searchText)) {
+					return true;
 				}
+			} else if(Double.toString(ion.getIon()).contains(searchText)) {
+				return true;
 			}
 		} else if(element instanceof IScanCSD) {
 			IScanCSD scanCSD = (IScanCSD)element;
