@@ -11,7 +11,6 @@
 package org.eclipse.chemclipse.ux.fx.ui;
 
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Task;
 
 public abstract class LazyLoadingObjectProperty<T> extends SimpleObjectProperty<T> {
@@ -38,16 +37,11 @@ public abstract class LazyLoadingObjectProperty<T> extends SimpleObjectProperty<
 
 	private boolean loaded = false;
 
-	private final ChangeListener<T> valueChangeListener = (o, ov, nv) -> {
-		valueExternallyUpdated(nv);
-	};
-
 	/**
 	 * Is called after the background task's finished (success or failure). Override
 	 * if needed. E.g. to bind the value afterwards.
 	 */
 	protected void afterLoaded() {
-		addListener(valueChangeListener);
 
 	}
 
@@ -77,18 +71,17 @@ public abstract class LazyLoadingObjectProperty<T> extends SimpleObjectProperty<
 	}
 
 	public void setLoaded(final boolean loaded) {
-
-		// the loaded property has been reset manually. Remove change listener
-		if (this.loaded && !loaded) {
-			removeListener(valueChangeListener);
-		}
-
 		this.loaded = loaded;
 	}
 
 	@Override
 	public void setValue(final T v) {
 		super.setValue(v);
+	}
+
+	@Override
+	public void set(final T newValue) {
+		super.set(newValue);
 	}
 
 	/**
@@ -110,19 +103,6 @@ public abstract class LazyLoadingObjectProperty<T> extends SimpleObjectProperty<
 			setValue(s.getValue());
 			afterLoaded();
 		});
-
-	}
-
-	/**
-	 * Override this callback method to handle external value-change-events
-	 * (not-lazily-loaded). This callback is only called, if the value is updated
-	 * manually, i.e., not via the lazy-loading mechanism.
-	 *
-	 * @param nv
-	 *            the new value
-	 */
-	protected void valueExternallyUpdated(final T nv) {
-		// override if needed
 
 	}
 
