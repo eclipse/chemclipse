@@ -727,34 +727,38 @@ public class ExtendedChromatogramUI {
 				/*
 				 * Create the runnable.
 				 */
-				IRunnableWithProgress runnable = new IRunnableWithProgress() {
+				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				File file = getFileFromFileDialog(chromatogram.getName(), chromatogramReportSupplier);
+				//
+				if(file != null) {
+					IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
-					@Override
-					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+						@Override
+						public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-						switch(type) {
-							case TYPE_GENERIC:
-								IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-								File file = getFileFromFileDialog(chromatogram.getName(), chromatogramReportSupplier);
-								ChromatogramReports.generate(file, false, chromatogram, chromatogramReportSupplier.getId(), monitor);
-								break;
+							switch(type) {
+								case TYPE_GENERIC:
+									ChromatogramReports.generate(file, false, chromatogram, chromatogramReportSupplier.getId(), monitor);
+									break;
+							}
 						}
-					}
-				};
-				/*
-				 * Execute
-				 */
-				processChromatogram(runnable);
+					};
+					/*
+					 * Execute
+					 */
+					processChromatogram(runnable);
+				}
 			}
 		}
 
 		private File getFileFromFileDialog(String defaultFileName, IChromatogramReportSupplier chromatogramReportSupplier) {
 
 			FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+			fileDialog.setOverwrite(true);
 			fileDialog.setText("Report");
 			fileDialog.setFileName(defaultFileName);
 			fileDialog.setFilterExtensions(new String[]{"*" + chromatogramReportSupplier.getFileExtension()});
-			fileDialog.setFilterNames(new String[]{chromatogramReportSupplier.getDescription()});
+			fileDialog.setFilterNames(new String[]{chromatogramReportSupplier.getReportName()});
 			String fileName = fileDialog.open();
 			if(fileName == null || fileName.equals("")) {
 				return null;
