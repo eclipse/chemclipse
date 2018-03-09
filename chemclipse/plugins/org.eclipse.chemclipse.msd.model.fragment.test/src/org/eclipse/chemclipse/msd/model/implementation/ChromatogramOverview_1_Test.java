@@ -151,7 +151,7 @@ public class ChromatogramOverview_1_Test extends TestCase {
 	public void testGetDate_2() {
 
 		chromatogram.setDate(date);
-		assertEquals("date", date, chromatogram.getDate());
+		assertEquals("date", date.toString(), chromatogram.getDate().toString());
 	}
 
 	public void testGetMiscInfo_1() {

@@ -16,5 +16,7 @@ import java.util.List;
 
 public abstract class AbstractMeasurement extends AbstractMeasurementInfo implements IMeasurement, IMeasurementInfo {
 
+	private static final long serialVersionUID = 3213312019738373785L;
+	//
 	private List<ISignal> signals = new ArrayList<ISignal>();
 }

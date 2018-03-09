@@ -23,6 +23,7 @@ public class ValueFormat {
 
 	public static final String DEFAULT_DECIMAL_PATTERN = "0.###"; // $NON-NLS-1$
 	public static final String DEFAULT_DATE_PATTERN = "yyyy/MM/dd"; // $NON-NLS-1$
+	public static final String FULL_DATE_PATTERN = "yyyy/MM/dd HH:mm:ss"; // $NON-NLS-1$
 	//
 	private static Map<String, DecimalFormat> decimalFormatsEnglish = null;
 	private static Map<String, DecimalFormat> decimalFormatsGerman = null;

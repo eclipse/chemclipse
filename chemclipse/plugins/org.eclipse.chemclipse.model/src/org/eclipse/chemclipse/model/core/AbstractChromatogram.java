@@ -22,7 +22,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +33,6 @@ import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.implementation.TripleQuadMethod;
 import org.eclipse.chemclipse.model.notifier.IChromatogramSelectionUpdateNotifier;
-import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.processor.IChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
@@ -54,6 +52,7 @@ import org.eclipse.core.runtime.SafeRunner;
 
 public abstract class AbstractChromatogram extends AbstractMeasurement implements IChromatogram {
 
+	private static final long serialVersionUID = -2540103992883061431L;
 	private static final Logger logger = Logger.getLogger(AbstractChromatogram.class);
 	//
 	private String converterId = "";
@@ -94,21 +93,6 @@ public abstract class AbstractChromatogram extends AbstractMeasurement implement
 	 * Chromatogram results map
 	 */
 	private Map<String, IChromatogramResult> chromatogramResults;
-	/*
-	 * Additional Sample Info
-	 */
-	private String operator = "";
-	private Date date = new Date();
-	private String miscInfo = "";
-	private String miscInfoSeparated = "";
-	private String shortInfo = "";
-	private String detailedInfo = "";
-	private String sampleGroup = "";
-	private String barcode = "";
-	private String barcodeType = "";
-	private double sampleWeight = 0;
-	private String weightUnit = "";
-	private String dataName = "";
 	/*
 	 * Some vendors store several chromatograms in one file.
 	 */
@@ -235,70 +219,6 @@ public abstract class AbstractChromatogram extends AbstractMeasurement implement
 		} else {
 			return DEFAULT_CHROMATOGRAM_NAME;
 		}
-	}
-
-	@Override
-	public String getOperator() {
-
-		return operator;
-	}
-
-	@Override
-	public void setOperator(String operator) {
-
-		this.operator = operator;
-	}
-
-	@Override
-	public Date getDate() {
-
-		return new Date(date.getTime());
-	}
-
-	@Override
-	public void setDate(final Date date) {
-
-		this.date = new Date(date.getTime());
-	}
-
-	@Override
-	public String getMiscInfo() {
-
-		return miscInfo;
-	}
-
-	@Override
-	public void setMiscInfo(String miscInfo) {
-
-		if(miscInfo != null) {
-			String[] values = miscInfo.split(PreferenceSupplier.getMiscSeparator());
-			if(values.length >= 2) {
-				this.miscInfo = values[0];
-				StringBuilder builder = new StringBuilder();
-				for(int i = 1; i < values.length; i++) {
-					builder.append(values[i].trim());
-					builder.append(PreferenceSupplier.getMiscSeparatedDelimiter());
-				}
-				this.miscInfoSeparated = builder.toString().trim();
-			} else {
-				this.miscInfo = miscInfo;
-			}
-		} else {
-			this.miscInfo = "";
-			this.miscInfoSeparated = "";
-		}
-	}
-
-	@Override
-	public String getMiscInfoSeparated() {
-
-		return miscInfoSeparated;
-	}
-
-	@Override
-	public void setMiscInfoSeparated(String miscInfoSeparated) {
-
-		this.miscInfoSeparated = miscInfoSeparated;
 	}
 
 	// TODO optimieren - verbraucht zu viel Prozessorzeit
@@ -810,117 +730,6 @@ public abstract class AbstractChromatogram extends AbstractMeasurement implement
 	public Collection<IChromatogramResult> getChromatogramResults() {
 
 		return chromatogramResults.values();
-	}
-
-	@Override
-	public String getShortInfo() {
-
-		return shortInfo;
-	}
-
-	@Override
-	public void setShortInfo(String shortInfo) {
-
-		if(shortInfo != null) {
-			this.shortInfo = shortInfo;
-		}
-	}
-
-	@Override
-	public String getDetailedInfo() {
-
-		return detailedInfo;
-	}
-
-	@Override
-	public void setDetailedInfo(String detailedInfo) {
-
-		if(detailedInfo != null) {
-			this.detailedInfo = detailedInfo;
-		}
-	}
-
-	@Override
-	public String getSampleGroup() {
-
-		return sampleGroup;
-	}
-
-	@Override
-	public void setSampleGroup(String sampleGroup) {
-
-		if(sampleGroup != null) {
-			this.sampleGroup = sampleGroup;
-		}
-	}
-
-	@Override
-	public String getBarcode() {
-
-		return barcode;
-	}
-
-	@Override
-	public void setBarcode(String barcode) {
-
-		if(barcode != null) {
-			this.barcode = barcode;
-		}
-	}
-
-	@Override
-	public String getBarcodeType() {
-
-		return barcodeType;
-	}
-
-	@Override
-	public void setBarcodeType(String barcodeType) {
-
-		if(barcodeType != null) {
-			this.barcodeType = barcodeType;
-		}
-	}
-
-	@Override
-	public double getSampleWeight() {
-
-		return sampleWeight;
-	}
-
-	public void setSampleWeight(double sampleWeight) {
-
-		if(sampleWeight >= 0) {
-			this.sampleWeight = sampleWeight;
-		}
-	}
-
-	@Override
-	public String getWeightUnit() {
-
-		return weightUnit;
-	}
-
-	@Override
-	public void setWeightUnit(String weightUnit) {
-
-		if(weightUnit != null) {
-			this.weightUnit = weightUnit;
-		}
-	}
-
-	@Override
-	public String getDataName() {
-
-		return dataName;
-	}
-
-	@Override
-	public void setDataName(String dataName) {
-
-		if(dataName != null) {
-			this.dataName = dataName;
-		}
 	}
 
 	@Override

@@ -11,18 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
-public interface IMeasurementInfo {
+public interface IMeasurementInfo extends Serializable {
 
-	Object getHeaderData(String key);
+	String getHeaderData(String key);
 
-	Object getHeaderDataOrDefault(String key, Object defaultValue);
+	String getHeaderDataOrDefault(String key, String defaultValue);
 
 	boolean headerDataContainsKey(String key);
 
-	void putHeaderData(String key, Object value);
+	void putHeaderData(String key, String value);
 
 	void removeHeaderData(String key);
 
@@ -30,122 +31,55 @@ public interface IMeasurementInfo {
 	 * This map is unmodifiable. Please use the
 	 * setValue method to add values.
 	 * 
-	 * @return Map<String, Object>
+	 * @return Map<String, String>
 	 */
-	Map<String, Object> getHeaderDataMap();
+	Map<String, String> getHeaderDataMap();
 
-	/**
-	 * Returns the operator.
-	 * 
-	 * @return String
-	 */
 	String getOperator();
 
 	void setOperator(String operator);
 
-	/**
-	 * Returns the date of operation.
-	 * 
-	 * @return Date
-	 */
 	Date getDate();
 
 	void setDate(Date date);
 
-	/**
-	 * Returns miscellaneous information.
-	 * 
-	 * @return String
-	 */
 	String getMiscInfo();
 
 	void setMiscInfo(String miscInfo);
 
-	/**
-	 * Returns separated miscellaneous information.
-	 * 
-	 * @return String
-	 */
 	String getMiscInfoSeparated();
 
 	void setMiscInfoSeparated(String miscInfoSeparated);
 
-	/**
-	 * Returns the short info, e.g.:
-	 * Sample A
-	 * 
-	 * @return String
-	 */
 	String getShortInfo();
 
 	void setShortInfo(String shortInfo);
 
-	/**
-	 * Returns a detailed info of the sample.
-	 * 
-	 * @return String
-	 */
 	String getDetailedInfo();
 
 	void setDetailedInfo(String detailedInfo);
 
-	/**
-	 * Returns the sample group, e.g.:
-	 * Number 192, Modification A
-	 * 
-	 * @return
-	 */
 	String getSampleGroup();
 
 	void setSampleGroup(String sampleGroup);
 
-	/**
-	 * Returns the barcode.
-	 * 
-	 * @return
-	 */
 	String getBarcode();
 
 	void setBarcode(String barcode);
 
-	/**
-	 * Returns the barcode type, e.g. EAN 128
-	 * 
-	 * @return String
-	 */
 	String getBarcodeType();
 
 	void setBarcodeType(String barcodeType);
 
-	/**
-	 * Returns the sample weight, e.g. 148
-	 * 
-	 * @return double
-	 */
 	double getSampleWeight();
 
 	void setSampleWeight(double sampleWeight);
 
-	/**
-	 * Returns the weight unit, e.g. "µg".
-	 * 
-	 * @return String
-	 */
-	String getWeightUnit();
+	String getSampleWeightUnit();
 
-	void setWeightUnit(String weightUnit);
+	void setSampleWeightUnit(String sampleWeightUnit);
 
-	/**
-	 * This is the name of the contained data, e.g. sample name.
-	 * 
-	 * @return String
-	 */
 	String getDataName();
 
-	/**
-	 * Set the contained sample name.
-	 * 
-	 * @param dataName
-	 */
 	void setDataName(String dataName);
 }
