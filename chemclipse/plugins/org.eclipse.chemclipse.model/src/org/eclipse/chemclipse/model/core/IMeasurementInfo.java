@@ -15,6 +15,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
+import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
+
 public interface IMeasurementInfo extends Serializable {
 
 	String getHeaderData(String key);
@@ -25,7 +27,7 @@ public interface IMeasurementInfo extends Serializable {
 
 	void putHeaderData(String key, String value);
 
-	void removeHeaderData(String key);
+	void removeHeaderData(String key) throws InvalidHeaderModificationException;
 
 	/**
 	 * This map is unmodifiable. Please use the

@@ -59,7 +59,7 @@ public class PreferenceConstants {
 	 */
 	public static final String P_STACK_POSITION_CHROMATOGRAM_OVERVIEW = "stackPositionChromatogramOverview";
 	public static final String DEF_STACK_POSITION_CHROMATOGRAM_OVERVIEW = PartSupport.PARTSTACK_LEFT_CENTER;
-	public static final String P_STACK_POSITION_MEASUREMENT_HEADER = "stackPositionMeasurementHeader";
+	public static final String P_STACK_POSITION_HEADER_DATA = "stackPositionMeasurementHeader";
 	public static final String DEF_STACK_POSITION_MEASUREMENT_HEADER = PartSupport.PARTSTACK_BOTTOM_LEFT;
 	public static final String P_STACK_POSITION_OVERLAY = "stackPositionOverlay";
 	public static final String DEF_STACK_POSITION_OVERLAY = PartSupport.PARTSTACK_BOTTOM_LEFT;

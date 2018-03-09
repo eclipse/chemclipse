@@ -394,7 +394,6 @@ public class ExtendedTargetsUI {
 	private Combo createComboTarget(Composite parent) {
 
 		Combo combo = new Combo(parent, SWT.NONE);
-		combo.setToolTipText("Target Name");
 		combo.setText("");
 		combo.setToolTipText("Select a target or type in a new substance name.");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

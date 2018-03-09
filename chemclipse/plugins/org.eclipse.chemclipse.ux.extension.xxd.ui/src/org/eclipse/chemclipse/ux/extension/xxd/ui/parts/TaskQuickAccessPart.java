@@ -117,12 +117,12 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_MEASUREMENT_HEADER, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_MEASUREMENT_HEADER));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_HEADER_DATA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_HEADER_DATA));
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_OVERVIEW));
 			}
 		});
 		//
-		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_MEASUREMENT_HEADER, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_HEADER_DATA, button, imageActive, imageDefault);
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW, button, imageActive, imageDefault);
 	}
 

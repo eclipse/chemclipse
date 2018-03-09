@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
@@ -36,10 +37,15 @@ public class ChromatogramDataSupport {
 
 	public String getChromatogramLabel(IChromatogram chromatogram) {
 
+		return getChromatogramLabel((IChromatogramOverview)chromatogram);
+	}
+
+	public String getChromatogramLabel(IChromatogramOverview chromatogramOverview) {
+
 		StringBuilder builder = new StringBuilder();
-		if(chromatogram != null) {
+		if(chromatogramOverview != null) {
 			builder.append("Chromatogram: ");
-			builder.append(chromatogram.getName());
+			builder.append(chromatogramOverview.getName());
 		} else {
 			builder.append("No chromatogram has been selected yet.");
 		}

@@ -16,9 +16,12 @@ import java.text.ParseException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
@@ -40,6 +43,7 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 	private static final String SAMPLE_WEIGHT_UNIT = "Sample Weight Unit";
 	private static final String DATA_NAME = "Data Name";
 	//
+	private Set<String> protectKeys;
 	private Map<String, String> headerDataMap;
 	private DateFormat dateFormat = ValueFormat.getDateFormatEnglish(ValueFormat.FULL_DATE_PATTERN);
 
@@ -61,6 +65,8 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 		headerDataMap.put(SAMPLE_WEIGHT, Double.valueOf(0.0d).toString());
 		headerDataMap.put(SAMPLE_WEIGHT_UNIT, "");
 		headerDataMap.put(DATA_NAME, "");
+		//
+		protectKeys = new HashSet<String>(headerDataMap.keySet());
 	}
 
 	@Override
@@ -88,9 +94,13 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 	}
 
 	@Override
-	public void removeHeaderData(String key) {
+	public void removeHeaderData(String key) throws InvalidHeaderModificationException {
 
-		headerDataMap.remove(key);
+		if(protectKeys.contains(key)) {
+			throw new InvalidHeaderModificationException("It's not possible to remove the following key: " + key);
+		} else {
+			headerDataMap.remove(key);
+		}
 	}
 
 	@Override

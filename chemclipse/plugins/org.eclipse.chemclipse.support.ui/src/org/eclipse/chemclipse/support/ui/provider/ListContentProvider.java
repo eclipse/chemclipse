@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.support.ui.provider;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -30,6 +31,8 @@ public class ListContentProvider implements IStructuredContentProvider {
 			return ((Set)inputElement).toArray();
 		} else if(inputElement instanceof Collection) {
 			return ((Collection)inputElement).toArray();
+		} else if(inputElement instanceof Map) {
+			return ((Map)inputElement).entrySet().toArray();
 		}
 		return null;
 	}
