@@ -22,7 +22,10 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifi
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.identifier.BasePeakIdentifier;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IBasePeakSettings;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakIdentifier extends AbstractPeakIdentifier {
@@ -65,5 +68,16 @@ public class PeakIdentifier extends AbstractPeakIdentifier {
 
 		IPeakIdentifierSettings peakIdentifierSettings = PreferenceSupplier.getPeakIdentifierSettings();
 		return identify(peak, peakIdentifierSettings, monitor);
+	}
+
+	@Override
+	public IPeakIdentifierProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelectionMSD, IProgressMonitor monitor) {
+
+		IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogramMSD();
+		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
+		for(IChromatogramPeakMSD chromatogramPeakMSD : chromatogramMSD.getPeaks(chromatogramSelectionMSD)) {
+			peaks.add(chromatogramPeakMSD);
+		}
+		return identify(peaks, monitor);
 	}
 }
