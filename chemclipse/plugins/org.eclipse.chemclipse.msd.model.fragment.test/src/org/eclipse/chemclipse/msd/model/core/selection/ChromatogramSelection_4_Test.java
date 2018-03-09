@@ -12,9 +12,7 @@
 package org.eclipse.chemclipse.msd.model.core.selection;
 
 import org.easymock.EasyMock;
-
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 
 import junit.framework.TestCase;
 
@@ -77,7 +75,7 @@ public class ChromatogramSelection_4_Test extends TestCase {
 	public void testGetStartAbundance_1() {
 
 		selection.setStartAbundance(-0.1f);
-		assertEquals("StartAbundance", 0.0f, selection.getStartAbundance());
+		assertEquals("StartAbundance", -0.1f, selection.getStartAbundance());
 	}
 
 	public void testGetStartAbundance_2() {
