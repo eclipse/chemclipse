@@ -28,14 +28,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-public class ChromatogramHeaderPart extends AbstractOverviewUpdateSupport implements IOverviewUpdateSupport {
+public class MeasurementHeaderPart extends AbstractOverviewUpdateSupport implements IOverviewUpdateSupport {
 
 	private Text text;
 	private SimpleDateFormat dateFormat;
 	private DecimalFormat decimalFormat;
 
 	@Inject
-	public ChromatogramHeaderPart(Composite parent, MPart part) {
+	public MeasurementHeaderPart(Composite parent, MPart part) {
 		super(part);
 		dateFormat = ValueFormat.getDateFormatEnglish();
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
