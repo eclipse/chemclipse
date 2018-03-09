@@ -16,6 +16,24 @@ import java.util.Map;
 
 public interface IMeasurementInfo {
 
+	Object getHeaderData(String key);
+
+	Object getHeaderDataOrDefault(String key, Object defaultValue);
+
+	boolean headerDataContainsKey(String key);
+
+	void putHeaderData(String key, Object value);
+
+	void removeHeaderData(String key);
+
+	/**
+	 * This map is unmodifiable. Please use the
+	 * setValue method to add values.
+	 * 
+	 * @return Map<String, Object>
+	 */
+	Map<String, Object> getHeaderDataMap();
+
 	/**
 	 * Returns the operator.
 	 * 
@@ -51,14 +69,6 @@ public interface IMeasurementInfo {
 	String getMiscInfoSeparated();
 
 	void setMiscInfoSeparated(String miscInfoSeparated);
-
-	/**
-	 * Returns the miscellaneous map to store various
-	 * other values.
-	 * 
-	 * @return Map<String, String>
-	 */
-	Map<String, String> getMiscellaneous();
 
 	/**
 	 * Returns the short info, e.g.:

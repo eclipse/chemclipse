@@ -14,11 +14,7 @@ package org.eclipse.chemclipse.model.core;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractMeasurement implements IMeasurement {
+public abstract class AbstractMeasurement extends AbstractMeasurementInfo implements IMeasurement, IMeasurementInfo {
 
-	private List<ISignal> signals;
-
-	public AbstractMeasurement() {
-		signals = new ArrayList<ISignal>();
-	}
+	private List<ISignal> signals = new ArrayList<ISignal>();
 }

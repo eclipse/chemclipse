@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.implementation;
 
-import java.util.Map;
-
 import org.eclipse.chemclipse.model.core.IChromatogram;
 
 import junit.framework.TestCase;
@@ -37,25 +35,23 @@ public class Chromatogram_6_Test extends TestCase {
 
 	public void test_1() {
 
-		assertNotNull(chromatogram.getMiscellaneous());
+		assertNotNull(chromatogram.getHeaderDataMap());
 	}
 
 	public void test_2() {
 
-		assertEquals(0, chromatogram.getMiscellaneous().size());
+		assertEquals(0, chromatogram.getHeaderDataMap().size());
 	}
 
 	public void test_3() {
 
-		Map<String, String> miscellaneous = chromatogram.getMiscellaneous();
-		chromatogram.getMiscellaneous().put("Test", "This is a test case.");
-		assertEquals("This is a test case.", miscellaneous.get("Test"));
+		chromatogram.putHeaderData("Test", "This is a test case.");
+		assertEquals("This is a test case.", chromatogram.getHeaderData("Test"));
 	}
 
 	public void test_4() {
 
-		chromatogram.getMiscellaneous().put("Test", "This is a test case.");
-		Map<String, String> miscellaneous = chromatogram.getMiscellaneous();
-		assertEquals("This is a test case.", miscellaneous.get("Test"));
+		chromatogram.putHeaderData("Test", "This is a test case.");
+		assertEquals("This is a test case.", chromatogram.getHeaderData("Test"));
 	}
 }

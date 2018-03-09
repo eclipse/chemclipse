@@ -11,5 +11,5 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
-public interface IMeasurement {
+public interface IMeasurement extends IMeasurementInfo {
 }
