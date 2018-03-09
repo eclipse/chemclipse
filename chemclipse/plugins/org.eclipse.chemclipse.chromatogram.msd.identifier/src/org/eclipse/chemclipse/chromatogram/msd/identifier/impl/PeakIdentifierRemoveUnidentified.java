@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.PeakIdentifie
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakIdentifierRemoveUnidentified extends AbstractPeakIdentifier {
@@ -72,5 +73,16 @@ public class PeakIdentifierRemoveUnidentified extends AbstractPeakIdentifier {
 
 		IPeakIdentifierSettings peakIdentifierSettings = new PeakIdentifierSettings();
 		return identify(peaks, peakIdentifierSettings, monitor);
+	}
+
+	@Override
+	public IPeakIdentifierProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelectionMSD, IProgressMonitor monitor) {
+
+		IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogramMSD();
+		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
+		for(IChromatogramPeakMSD chromatogramPeakMSD : chromatogramMSD.getPeaks(chromatogramSelectionMSD)) {
+			peaks.add(chromatogramPeakMSD);
+		}
+		return identify(peaks, monitor);
 	}
 }

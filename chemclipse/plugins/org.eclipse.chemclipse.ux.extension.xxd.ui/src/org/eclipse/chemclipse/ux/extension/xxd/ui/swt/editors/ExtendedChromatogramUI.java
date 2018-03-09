@@ -679,23 +679,11 @@ public class ExtendedChromatogramUI {
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 						switch(type) {
-							case TYPE_GENERIC:
-								ChromatogramFilter.applyFilter(chromatogramSelection, peakIdentifierId, monitor);
-								break;
 							case TYPE_MSD:
 								if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 									IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-									ChromatogramFilterMSD.applyFilter(chromatogramSelectionMSD, peakIdentifierId, monitor);
+									PeakIdentifier.identify(chromatogramSelectionMSD, peakIdentifierId, monitor);
 								}
-								break;
-							case TYPE_CSD:
-								if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-									IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
-									ChromatogramFilterCSD.applyFilter(chromatogramSelectionCSD, peakIdentifierId, monitor);
-								}
-								break;
-							case TYPE_WSD:
-								//
 								break;
 						}
 					}

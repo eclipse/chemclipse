@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.processing.PeakIdentif
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
@@ -207,6 +208,18 @@ public class PeakIdentifier {
 		IPeakIdentifier peakIdentifier = getPeakIdentifier(identifierId);
 		if(peakIdentifier != null) {
 			processingInfo = peakIdentifier.identify(peaks, monitor);
+		} else {
+			processingInfo = getNoIdentifierAvailableProcessingInfo();
+		}
+		return processingInfo;
+	}
+
+	public static IPeakIdentifierProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelectionMSD, String identifierId, IProgressMonitor monitor) {
+
+		IPeakIdentifierProcessingInfo processingInfo;
+		IPeakIdentifier peakIdentifier = getPeakIdentifier(identifierId);
+		if(peakIdentifier != null) {
+			processingInfo = peakIdentifier.identify(chromatogramSelectionMSD, monitor);
 		} else {
 			processingInfo = getNoIdentifierAvailableProcessingInfo();
 		}
