@@ -104,7 +104,7 @@ public class ChromatogramReports {
 	 * 
 	 * @return ChromatogramReportSupplierSupport
 	 */
-	public static ChromatogramReportSupport getChromatogramReportSupplierSupport() {
+	public static IChromatogramReportSupport getChromatogramReportSupplierSupport() {
 
 		ChromatogramReportSupplier supplier;
 		ChromatogramReportSupport chromatogramReportSupport = new ChromatogramReportSupport();

@@ -11,6 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.report.ui.internal.wizards;
 
+import org.eclipse.chemclipse.chromatogram.xxd.report.core.ChromatogramReports;
+import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSupport;
+import org.eclipse.chemclipse.chromatogram.xxd.report.exceptions.NoReportSupplierAvailableException;
+import org.eclipse.chemclipse.chromatogram.xxd.report.model.ChromatogramReportSupplierEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.report.model.IChromatogramReportSupplierEntry;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -27,14 +34,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import org.eclipse.chemclipse.chromatogram.xxd.report.core.ChromatogramReportSupport;
-import org.eclipse.chemclipse.chromatogram.xxd.report.core.ChromatogramReports;
-import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.report.exceptions.NoReportSupplierAvailableException;
-import org.eclipse.chemclipse.chromatogram.xxd.report.model.ChromatogramReportSupplierEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.report.model.IChromatogramReportSupplierEntry;
-import org.eclipse.chemclipse.logging.core.Logger;
-
 /**
  * @author Dr. Philip Wenig
  * 
@@ -44,7 +43,7 @@ public class ChromatogramReportEntriesWizardPage extends WizardPage {
 	private static final Logger logger = Logger.getLogger(ChromatogramReportEntriesWizardPage.class);
 	private Combo chromatogramReportSupplierComboBox;
 	private Text chromatogramReportFolderOrFileTextBox;
-	private ChromatogramReportSupport reportSupport;
+	private IChromatogramReportSupport reportSupport;
 	private boolean appendReports = false;
 	private Button buttonSelectFileOrFolder;
 	private Label label;

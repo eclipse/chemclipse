@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -25,12 +26,30 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram.ChromatogramFilterCSD;
 import org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram.IChromatogramFilterSupportCSD;
+import org.eclipse.chemclipse.chromatogram.csd.peak.detector.core.IPeakDetectorCSDSupplier;
+import org.eclipse.chemclipse.chromatogram.csd.peak.detector.core.IPeakDetectorCSDSupport;
+import org.eclipse.chemclipse.chromatogram.csd.peak.detector.core.PeakDetectorCSD;
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilterSupplier;
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilterSupport;
 import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoChromatogramFilterSupplierAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupportMSD;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.IPeakIdentifierSupport;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.PeakIdentifier;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.IPeakDetectorMSDSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.IPeakDetectorMSDSupport;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.PeakDetectorMSD;
+import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.NoPeakDetectorAvailableException;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.IPeakIntegratorSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.IPeakIntegratorSupport;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegrator;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.NoIntegratorAvailableException;
+import org.eclipse.chemclipse.chromatogram.xxd.report.core.ChromatogramReports;
+import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.report.core.IChromatogramReportSupport;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
@@ -124,6 +143,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -178,7 +198,11 @@ public class ExtendedChromatogramUI {
 	private List<IChromatogramSelection> referenceChromatogramSelections = null; // Might be null ... no references.
 	private List<IChromatogramSelection> editorChromatogramSelections = new ArrayList<IChromatogramSelection>(); // Is filled dynamically.
 	//
-	private List<IChartMenuEntry> chartMenuEntriesFilter;
+	private List<IChartMenuEntry> chartMenuEntriesFilter = new ArrayList<IChartMenuEntry>();
+	private List<IChartMenuEntry> chartMenuEntriesPeakDetectors = new ArrayList<IChartMenuEntry>();
+	private List<IChartMenuEntry> chartMenuEntriesPeakIntegrators = new ArrayList<IChartMenuEntry>();
+	private List<IChartMenuEntry> chartMenuEntriesPeakIdentifier = new ArrayList<IChartMenuEntry>();
+	private List<IChartMenuEntry> chartMenuEntriesReports = new ArrayList<IChartMenuEntry>();
 	//
 	private Map<String, IdentificationLabelMarker> peakLabelMarkerMap = new HashMap<String, IdentificationLabelMarker>();
 	private Map<String, IdentificationLabelMarker> scanLabelMarkerMap = new HashMap<String, IdentificationLabelMarker>();
@@ -491,25 +515,286 @@ public class ExtendedChromatogramUI {
 					}
 				};
 				/*
-				 * Excecute
+				 * Execute
 				 */
-				ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
-				try {
-					monitor.run(true, true, runnable);
-					updateChromatogram();
-					updateSelection();
-				} catch(InvocationTargetException e) {
-					logger.warn(e);
-				} catch(InterruptedException e) {
-					logger.warn(e);
-				}
+				processChromatogram(runnable);
 			}
+		}
+	}
+
+	private class PeakDetectorMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
+
+		private String name;
+		private String peakDetectorId;
+		private String type;
+		private IChromatogramSelection chromatogramSelection;
+
+		public PeakDetectorMenuEntry(String name, String peakDetectorId, String type, IChromatogramSelection chromatogramSelection) {
+			this.name = name;
+			this.peakDetectorId = peakDetectorId;
+			this.type = type;
+			this.chromatogramSelection = chromatogramSelection;
+		}
+
+		@Override
+		public String getCategory() {
+
+			return "Peak Detectors";
+		}
+
+		@Override
+		public String getName() {
+
+			return name;
+		}
+
+		@Override
+		public void execute(Shell shell, ScrollableChart scrollableChart) {
+
+			if(chromatogramSelection != null) {
+				/*
+				 * Create the runnable.
+				 */
+				IRunnableWithProgress runnable = new IRunnableWithProgress() {
+
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						switch(type) {
+							case TYPE_MSD:
+								if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+									IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
+									PeakDetectorMSD.detect(chromatogramSelectionMSD, peakDetectorId, monitor);
+								}
+								break;
+							case TYPE_CSD:
+								if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+									IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
+									PeakDetectorCSD.detect(chromatogramSelectionCSD, peakDetectorId, monitor);
+								}
+								break;
+							case TYPE_WSD:
+								//
+								break;
+						}
+					}
+				};
+				/*
+				 * Execute
+				 */
+				processChromatogram(runnable);
+			}
+		}
+	}
+
+	private class PeakIntegratorMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
+
+		private String name;
+		private String peakIntegratorId;
+		private String type;
+		private IChromatogramSelection chromatogramSelection;
+
+		public PeakIntegratorMenuEntry(String name, String peakIntegratorId, String type, IChromatogramSelection chromatogramSelection) {
+			this.name = name;
+			this.peakIntegratorId = peakIntegratorId;
+			this.type = type;
+			this.chromatogramSelection = chromatogramSelection;
+		}
+
+		@Override
+		public String getCategory() {
+
+			return "Peak Integrators";
+		}
+
+		@Override
+		public String getName() {
+
+			return name;
+		}
+
+		@Override
+		public void execute(Shell shell, ScrollableChart scrollableChart) {
+
+			if(chromatogramSelection != null) {
+				/*
+				 * Create the runnable.
+				 */
+				IRunnableWithProgress runnable = new IRunnableWithProgress() {
+
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						switch(type) {
+							case TYPE_GENERIC:
+								PeakIntegrator.integrate(chromatogramSelection, peakIntegratorId, monitor);
+								break;
+						}
+					}
+				};
+				/*
+				 * Execute
+				 */
+				processChromatogram(runnable);
+			}
+		}
+	}
+
+	private class PeakIdentifierMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
+
+		private String name;
+		private String peakIdentifierId;
+		private String type;
+		private IChromatogramSelection chromatogramSelection;
+
+		public PeakIdentifierMenuEntry(String name, String peakIdentifierId, String type, IChromatogramSelection chromatogramSelection) {
+			this.name = name;
+			this.peakIdentifierId = peakIdentifierId;
+			this.type = type;
+			this.chromatogramSelection = chromatogramSelection;
+		}
+
+		@Override
+		public String getCategory() {
+
+			return "Peak Identifier";
+		}
+
+		@Override
+		public String getName() {
+
+			return name;
+		}
+
+		@Override
+		public void execute(Shell shell, ScrollableChart scrollableChart) {
+
+			if(chromatogramSelection != null) {
+				/*
+				 * Create the runnable.
+				 */
+				IRunnableWithProgress runnable = new IRunnableWithProgress() {
+
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						switch(type) {
+							case TYPE_GENERIC:
+								ChromatogramFilter.applyFilter(chromatogramSelection, peakIdentifierId, monitor);
+								break;
+							case TYPE_MSD:
+								if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+									IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
+									ChromatogramFilterMSD.applyFilter(chromatogramSelectionMSD, peakIdentifierId, monitor);
+								}
+								break;
+							case TYPE_CSD:
+								if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+									IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
+									ChromatogramFilterCSD.applyFilter(chromatogramSelectionCSD, peakIdentifierId, monitor);
+								}
+								break;
+							case TYPE_WSD:
+								//
+								break;
+						}
+					}
+				};
+				/*
+				 * Execute
+				 */
+				processChromatogram(runnable);
+			}
+		}
+	}
+
+	private class ReportMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
+
+		private IChromatogramReportSupplier chromatogramReportSupplier;
+		private String type;
+		private IChromatogramSelection chromatogramSelection;
+
+		public ReportMenuEntry(IChromatogramReportSupplier chromatogramReportSupplier, String type, IChromatogramSelection chromatogramSelection) {
+			this.chromatogramReportSupplier = chromatogramReportSupplier;
+			this.type = type;
+			this.chromatogramSelection = chromatogramSelection;
+		}
+
+		@Override
+		public String getCategory() {
+
+			return "Reports";
+		}
+
+		@Override
+		public String getName() {
+
+			return chromatogramReportSupplier.getReportName();
+		}
+
+		@Override
+		public void execute(Shell shell, ScrollableChart scrollableChart) {
+
+			if(chromatogramSelection != null) {
+				/*
+				 * Create the runnable.
+				 */
+				IRunnableWithProgress runnable = new IRunnableWithProgress() {
+
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						switch(type) {
+							case TYPE_GENERIC:
+								IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+								File file = getFileFromFileDialog(chromatogram.getName(), chromatogramReportSupplier);
+								ChromatogramReports.generate(file, false, chromatogram, chromatogramReportSupplier.getId(), monitor);
+								break;
+						}
+					}
+				};
+				/*
+				 * Execute
+				 */
+				processChromatogram(runnable);
+			}
+		}
+
+		private File getFileFromFileDialog(String defaultFileName, IChromatogramReportSupplier chromatogramReportSupplier) {
+
+			FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+			fileDialog.setText("Report");
+			fileDialog.setFileName(defaultFileName);
+			fileDialog.setFilterExtensions(new String[]{"*" + chromatogramReportSupplier.getFileExtension()});
+			fileDialog.setFilterNames(new String[]{chromatogramReportSupplier.getDescription()});
+			String fileName = fileDialog.open();
+			if(fileName == null || fileName.equals("")) {
+				return null;
+			} else {
+				return new File(fileName);
+			}
+		}
+	}
+
+	private void processChromatogram(IRunnableWithProgress runnable) {
+
+		/*
+		 * Excecute
+		 */
+		ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
+		try {
+			monitor.run(true, true, runnable);
+			updateChromatogram();
+			updateSelection();
+		} catch(InvocationTargetException e) {
+			logger.warn(e);
+		} catch(InterruptedException e) {
+			logger.warn(e);
 		}
 	}
 
 	@Inject
 	public ExtendedChromatogramUI(Composite parent) {
-		chartMenuEntriesFilter = new ArrayList<IChartMenuEntry>();
 		initialize(parent);
 	}
 
@@ -520,7 +805,7 @@ public class ExtendedChromatogramUI {
 			/*
 			 * Adjust
 			 */
-			addChartMenuEntriesFilter();
+			addChartMenuEntries();
 			updateChromatogram();
 			if(referenceChromatogramSelections == null) {
 				updateChromatogramCombo();
@@ -604,23 +889,32 @@ public class ExtendedChromatogramUI {
 		chromatogramChart.applySettings(chartSettings);
 	}
 
+	private void addChartMenuEntries() {
+
+		addChartMenuEntriesFilter();
+		addChartMenuEntriesPeakDetectors();
+		addChartMenuEntriesPeakIntegrators();
+		addChartMenuEntriesPeakIdentifier();
+		addChartMenuEntriesReport();
+	}
+
 	private void addChartMenuEntriesFilter() {
 
 		IChartSettings chartSettings = chromatogramChart.getChartSettings();
-		cleanChartMenuEntriesFilter(chartSettings);
+		cleanChartMenuEntries(chartSettings, chartMenuEntriesFilter);
 		//
 		if(chromatogramSelection != null) {
 			/*
 			 * Generic
 			 */
-			addChartMenuEntriesFilter(chartSettings, ChromatogramFilter.getChromatogramFilterSupport(), TYPE_GENERIC);
+			addChartMenuEntriesFilter(chartSettings);
 			/*
 			 * Specific
 			 */
 			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-				addChartMenuEntriesFilterMSD(chartSettings, ChromatogramFilterMSD.getChromatogramFilterSupport(), TYPE_MSD);
+				addChartMenuEntriesFilterMSD(chartSettings);
 			} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-				addChartMenuEntriesFilterCSD(chartSettings, ChromatogramFilterCSD.getChromatogramFilterSupport(), TYPE_CSD);
+				addChartMenuEntriesFilterCSD(chartSettings);
 			} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
 				//
 			}
@@ -629,13 +923,14 @@ public class ExtendedChromatogramUI {
 		chromatogramChart.applySettings(chartSettings);
 	}
 
-	private void addChartMenuEntriesFilter(IChartSettings chartSettings, IChromatogramFilterSupport chromatogramFilterSupport, String type) {
+	private void addChartMenuEntriesFilter(IChartSettings chartSettings) {
 
 		try {
+			IChromatogramFilterSupport chromatogramFilterSupport = ChromatogramFilter.getChromatogramFilterSupport();
 			for(String filterId : chromatogramFilterSupport.getAvailableFilterIds()) {
 				IChromatogramFilterSupplier filter = chromatogramFilterSupport.getFilterSupplier(filterId);
 				String name = filter.getFilterName();
-				FilterMenuEntry filterMenuEntry = new FilterMenuEntry(name, filterId, type, chromatogramSelection);
+				FilterMenuEntry filterMenuEntry = new FilterMenuEntry(name, filterId, TYPE_GENERIC, chromatogramSelection);
 				chartMenuEntriesFilter.add(filterMenuEntry);
 				chartSettings.addMenuEntry(filterMenuEntry);
 			}
@@ -644,14 +939,14 @@ public class ExtendedChromatogramUI {
 		}
 	}
 
-	// TODO Refactor
-	private void addChartMenuEntriesFilterMSD(IChartSettings chartSettings, IChromatogramFilterSupportMSD chromatogramFilterSupport, String type) {
+	private void addChartMenuEntriesFilterMSD(IChartSettings chartSettings) {
 
 		try {
+			IChromatogramFilterSupportMSD chromatogramFilterSupport = ChromatogramFilterMSD.getChromatogramFilterSupport();
 			for(String filterId : chromatogramFilterSupport.getAvailableFilterIds()) {
 				IChromatogramFilterSupplier filter = chromatogramFilterSupport.getFilterSupplier(filterId);
 				String name = filter.getFilterName();
-				FilterMenuEntry filterMenuEntry = new FilterMenuEntry(name, filterId, type, chromatogramSelection);
+				FilterMenuEntry filterMenuEntry = new FilterMenuEntry(name, filterId, TYPE_MSD, chromatogramSelection);
 				chartMenuEntriesFilter.add(filterMenuEntry);
 				chartSettings.addMenuEntry(filterMenuEntry);
 			}
@@ -660,14 +955,14 @@ public class ExtendedChromatogramUI {
 		}
 	}
 
-	// TODO Refactor
-	private void addChartMenuEntriesFilterCSD(IChartSettings chartSettings, IChromatogramFilterSupportCSD chromatogramFilterSupport, String type) {
+	private void addChartMenuEntriesFilterCSD(IChartSettings chartSettings) {
 
 		try {
+			IChromatogramFilterSupportCSD chromatogramFilterSupport = ChromatogramFilterCSD.getChromatogramFilterSupport();
 			for(String filterId : chromatogramFilterSupport.getAvailableFilterIds()) {
 				IChromatogramFilterSupplier filter = chromatogramFilterSupport.getFilterSupplier(filterId);
 				String name = filter.getFilterName();
-				FilterMenuEntry filterMenuEntry = new FilterMenuEntry(name, filterId, type, chromatogramSelection);
+				FilterMenuEntry filterMenuEntry = new FilterMenuEntry(name, filterId, TYPE_CSD, chromatogramSelection);
 				chartMenuEntriesFilter.add(filterMenuEntry);
 				chartSettings.addMenuEntry(filterMenuEntry);
 			}
@@ -676,12 +971,148 @@ public class ExtendedChromatogramUI {
 		}
 	}
 
-	private void cleanChartMenuEntriesFilter(IChartSettings chartSettings) {
+	private void addChartMenuEntriesPeakDetectors() {
 
-		for(IChartMenuEntry chartMenuEntry : chartMenuEntriesFilter) {
+		IChartSettings chartSettings = chromatogramChart.getChartSettings();
+		cleanChartMenuEntries(chartSettings, chartMenuEntriesPeakDetectors);
+		//
+		if(chromatogramSelection != null) {
+			/*
+			 * Specific
+			 */
+			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+				addChartMenuEntriesPeakDetectorMSD(chartSettings);
+			} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+				addChartMenuEntriesPeakDetectorCSD(chartSettings);
+			} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+				//
+			}
+		}
+		//
+		chromatogramChart.applySettings(chartSettings);
+	}
+
+	private void addChartMenuEntriesPeakDetectorMSD(IChartSettings chartSettings) {
+
+		try {
+			IPeakDetectorMSDSupport peakDetectorSupport = PeakDetectorMSD.getPeakDetectorSupport();
+			for(String peakDetectorId : peakDetectorSupport.getAvailablePeakDetectorIds()) {
+				IPeakDetectorMSDSupplier peakDetecorSupplier = peakDetectorSupport.getPeakDetectorSupplier(peakDetectorId);
+				String name = peakDetecorSupplier.getPeakDetectorName();
+				PeakDetectorMenuEntry menuEntry = new PeakDetectorMenuEntry(name, peakDetectorId, TYPE_MSD, chromatogramSelection);
+				chartMenuEntriesPeakDetectors.add(menuEntry);
+				chartSettings.addMenuEntry(menuEntry);
+			}
+		} catch(NoPeakDetectorAvailableException e) {
+			logger.warn(e);
+		}
+	}
+
+	private void addChartMenuEntriesPeakDetectorCSD(IChartSettings chartSettings) {
+
+		try {
+			IPeakDetectorCSDSupport peakDetectorSupport = PeakDetectorCSD.getPeakDetectorSupport();
+			for(String peakDetectorId : peakDetectorSupport.getAvailablePeakDetectorIds()) {
+				IPeakDetectorCSDSupplier peakDetecorSupplier = peakDetectorSupport.getPeakDetectorSupplier(peakDetectorId);
+				String name = peakDetecorSupplier.getPeakDetectorName();
+				PeakDetectorMenuEntry menuEntry = new PeakDetectorMenuEntry(name, peakDetectorId, TYPE_CSD, chromatogramSelection);
+				chartMenuEntriesPeakDetectors.add(menuEntry);
+				chartSettings.addMenuEntry(menuEntry);
+			}
+		} catch(NoPeakDetectorAvailableException e) {
+			logger.warn(e);
+		}
+	}
+
+	private void addChartMenuEntriesPeakIntegrators() {
+
+		IChartSettings chartSettings = chromatogramChart.getChartSettings();
+		cleanChartMenuEntries(chartSettings, chartMenuEntriesPeakIntegrators);
+		//
+		if(chromatogramSelection != null) {
+			/*
+			 * Generic
+			 */
+			addChartMenuEntriesPeakIntegrator(chartSettings);
+		}
+	}
+
+	private void addChartMenuEntriesPeakIntegrator(IChartSettings chartSettings) {
+
+		try {
+			IPeakIntegratorSupport peakIntegratorSupport = PeakIntegrator.getPeakIntegratorSupport();
+			for(String peakIntegratorId : peakIntegratorSupport.getAvailableIntegratorIds()) {
+				IPeakIntegratorSupplier peakIntegratorSupplier = peakIntegratorSupport.getIntegratorSupplier(peakIntegratorId);
+				String name = peakIntegratorSupplier.getIntegratorName();
+				PeakIntegratorMenuEntry menuEntry = new PeakIntegratorMenuEntry(name, peakIntegratorId, TYPE_GENERIC, chromatogramSelection);
+				chartMenuEntriesPeakIntegrators.add(menuEntry);
+				chartSettings.addMenuEntry(menuEntry);
+			}
+		} catch(NoIntegratorAvailableException e) {
+			logger.warn(e);
+		}
+	}
+
+	private void addChartMenuEntriesPeakIdentifier() {
+
+		IChartSettings chartSettings = chromatogramChart.getChartSettings();
+		cleanChartMenuEntries(chartSettings, chartMenuEntriesPeakIdentifier);
+		//
+		if(chromatogramSelection != null) {
+			/*
+			 * Specific
+			 */
+			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+				addChartMenuEntriesPeakIdentifierMSD(chartSettings);
+			}
+		}
+	}
+
+	private void addChartMenuEntriesPeakIdentifierMSD(IChartSettings chartSettings) {
+
+		try {
+			IPeakIdentifierSupport peakIdentifierSupport = PeakIdentifier.getPeakIdentifierSupport();
+			for(String peakIdentifierId : peakIdentifierSupport.getAvailableIdentifierIds()) {
+				IPeakIdentifierSupplier peakIdentifierSupplier = peakIdentifierSupport.getIdentifierSupplier(peakIdentifierId);
+				String name = peakIdentifierSupplier.getIdentifierName();
+				PeakIdentifierMenuEntry menuEntry = new PeakIdentifierMenuEntry(name, peakIdentifierId, TYPE_MSD, chromatogramSelection);
+				chartMenuEntriesPeakIdentifier.add(menuEntry);
+				chartSettings.addMenuEntry(menuEntry);
+			}
+		} catch(NoIdentifierAvailableException e) {
+			logger.warn(e);
+		}
+	}
+
+	private void addChartMenuEntriesReport() {
+
+		IChartSettings chartSettings = chromatogramChart.getChartSettings();
+		cleanChartMenuEntries(chartSettings, chartMenuEntriesReports);
+		//
+		if(chromatogramSelection != null) {
+			/*
+			 * Generic
+			 */
+			addChartMenuEntriesReport(chartSettings);
+		}
+	}
+
+	private void addChartMenuEntriesReport(IChartSettings chartSettings) {
+
+		IChromatogramReportSupport chromatogramReportSupport = ChromatogramReports.getChromatogramReportSupplierSupport();
+		for(IChromatogramReportSupplier chromatogramReportSupplier : chromatogramReportSupport.getReportSupplier()) {
+			ReportMenuEntry menuEntry = new ReportMenuEntry(chromatogramReportSupplier, TYPE_GENERIC, chromatogramSelection);
+			chartMenuEntriesReports.add(menuEntry);
+			chartSettings.addMenuEntry(menuEntry);
+		}
+	}
+
+	private void cleanChartMenuEntries(IChartSettings chartSettings, List<IChartMenuEntry> chartMenuEntries) {
+
+		for(IChartMenuEntry chartMenuEntry : chartMenuEntries) {
 			chartSettings.removeMenuEntry(chartMenuEntry);
 		}
-		chartMenuEntriesFilter.clear();
+		chartMenuEntries.clear();
 	}
 
 	private void updateChromatogram() {
@@ -1577,7 +2008,17 @@ public class ExtendedChromatogramUI {
 		List<String> references = new ArrayList<String>();
 		int index = 1;
 		for(IChromatogramSelection chromatogramSelection : editorChromatogramSelections) {
-			references.add(chromatogramSelection.getChromatogram().getName() + " [Tab#: " + index++ + "]");
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			String type = "";
+			if(chromatogram instanceof IChromatogramMSD) {
+				type = " [MSD]";
+			} else if(chromatogram instanceof IChromatogramCSD) {
+				type = " [CSD]";
+			} else if(chromatogram instanceof IChromatogramWSD) {
+				type = " [WSD]";
+			}
+			//
+			references.add(chromatogramSelection.getChromatogram().getName() + type + " " + "(Tab#: " + index++ + ")");
 		}
 		/*
 		 * Set the items.

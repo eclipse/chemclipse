@@ -63,7 +63,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.chemclipse.xir.converter;bundle-version="0.8.0",
  org.eclipse.chemclipse.xir.model;bundle-version="0.8.0",
  org.eclipse.chemclipse.nmr.converter;bundle-version="0.8.0",
- org.eclipse.chemclipse.nmr.model;bundle-version="0.8.0"
+ org.eclipse.chemclipse.nmr.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.chromatogram.peak.detector;bundle-version="0.8.0",
+ org.eclipse.chemclipse.chromatogram.csd.peak.detector;bundle-version="0.8.0",
+ org.eclipse.chemclipse.chromatogram.xxd.report;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.annotation;version="1.1.0",
