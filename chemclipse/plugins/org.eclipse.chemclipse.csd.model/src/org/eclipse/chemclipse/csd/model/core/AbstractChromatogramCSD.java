@@ -28,6 +28,8 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
 public abstract class AbstractChromatogramCSD extends AbstractChromatogram implements IChromatogramCSD {
 
+	private static final long serialVersionUID = -1514838958855146167L;
+	//
 	private List<IChromatogramPeakCSD> peaks;
 	private Set<IChromatogramTargetCSD> targets;
 	private INoiseCalculator noiseCalculator;

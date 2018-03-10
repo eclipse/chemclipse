@@ -24,6 +24,8 @@ import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 
 public abstract class AbstractChromatogramWSD extends AbstractChromatogram implements IChromatogramWSD {
 
+	private static final long serialVersionUID = -7048942996283330150L;
+	//
 	private Set<IChromatogramTargetWSD> targets;
 
 	public AbstractChromatogramWSD() {

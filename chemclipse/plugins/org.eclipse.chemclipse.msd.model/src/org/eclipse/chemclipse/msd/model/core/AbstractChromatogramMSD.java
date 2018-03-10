@@ -65,6 +65,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public abstract class AbstractChromatogramMSD extends AbstractChromatogram implements IChromatogramMSD {
 
+	private static final long serialVersionUID = 6481555040060687480L;
+	//
 	public static int DEFAULT_SEGMENT_WIDTH = 10;
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramMSD.class);
 	private List<IChromatogramPeakMSD> peaks;
