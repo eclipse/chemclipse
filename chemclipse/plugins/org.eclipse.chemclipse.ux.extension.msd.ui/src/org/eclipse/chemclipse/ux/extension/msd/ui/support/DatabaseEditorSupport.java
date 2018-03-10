@@ -34,13 +34,19 @@ public class DatabaseEditorSupport extends AbstractSupplierFileEditorSupport imp
 	}
 
 	@Override
-	public void openEditor(final File file) {
+	public void openEditor(File file) {
+
+		openEditor(file, false);
+	}
+
+	@Override
+	public void openEditor(final File file, boolean batch) {
 
 		/*
 		 * Check that the selected file or directory is a valid database.
 		 */
 		if(isSupplierFile(file) || isSupplierFileDirectory(file)) {
-			openEditor(file, null, DatabaseEditor.ID, DatabaseEditor.CONTRIBUTION_URI, DatabaseEditor.ICON_URI, DatabaseEditor.TOOLTIP);
+			openEditor(file, null, DatabaseEditor.ID, DatabaseEditor.CONTRIBUTION_URI, DatabaseEditor.ICON_URI, DatabaseEditor.TOOLTIP, batch);
 		}
 	}
 

@@ -12,6 +12,8 @@
 package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -35,11 +37,21 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 @SuppressWarnings({"restriction"})
 public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 
+	String MAP_FILE = "File";
+	String MAP_BATCH = "Batch";
+
 	void openEditor(final File file);
+
+	void openEditor(final File file, boolean batch);
 
 	void openOverview(final File file);
 
 	default void openEditor(File file, Object object, String elementId, String contributionURI, String iconURI, String tooltip) {
+
+		openEditor(file, object, elementId, contributionURI, iconURI, tooltip, false);
+	}
+
+	default void openEditor(File file, Object object, String elementId, String contributionURI, String iconURI, String tooltip, boolean batch) {
 
 		EModelService modelService = ModelSupportAddon.getModelService();
 		MApplication application = ModelSupportAddon.getApplication();
@@ -88,7 +100,10 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 				part.setLabel("No valid chromatogram/mass spectra data");
 			}
 		} else {
-			part.setObject(file.getAbsolutePath());
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put(MAP_FILE, file.getAbsolutePath());
+			map.put(MAP_BATCH, batch);
+			part.setObject(map);
 			part.setLabel(file.getName());
 		}
 		part.setIconURI(iconURI);

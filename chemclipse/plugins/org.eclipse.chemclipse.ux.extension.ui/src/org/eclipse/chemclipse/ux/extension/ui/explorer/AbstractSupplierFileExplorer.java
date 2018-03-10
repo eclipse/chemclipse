@@ -214,7 +214,7 @@ public abstract class AbstractSupplierFileExplorer {
 			public void doubleClick(DoubleClickEvent event) {
 
 				File file = (File)((IStructuredSelection)event.getSelection()).getFirstElement();
-				openEditor(file);
+				openEditor(file, false);
 			}
 		});
 		//
@@ -276,7 +276,7 @@ public abstract class AbstractSupplierFileExplorer {
 							public void run() {
 
 								File file = (File)object;
-								openEditor(file);
+								openEditor(file, true);
 							}
 						});
 					}
@@ -325,7 +325,7 @@ public abstract class AbstractSupplierFileExplorer {
 		}
 	}
 
-	private void openEditor(File file) {
+	private void openEditor(File file, boolean batch) {
 
 		if(file != null) {
 			for(ISupplierFileEditorSupport supplierFileEditorSupport : supplierFileEditorSupportList) {
@@ -334,7 +334,7 @@ public abstract class AbstractSupplierFileExplorer {
 				 */
 				if(supplierFileEditorSupport.isMatchMagicNumber(file)) {
 					saveDirectoryPath(file);
-					supplierFileEditorSupport.openEditor(file);
+					supplierFileEditorSupport.openEditor(file, batch);
 				}
 			}
 		}

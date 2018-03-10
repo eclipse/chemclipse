@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PreDestroy;
 
@@ -39,6 +40,7 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ChromatogramFileSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.IDataUpdateSupport;
@@ -248,12 +250,15 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		IChromatogramSelection chromatogramSelection = null;
 		try {
 			Object object = part.getObject();
-			if(object instanceof String) {
+			if(object instanceof Map) {
 				/*
 				 * String
 				 */
-				File file = new File((String)object);
-				chromatogramSelection = loadChromatogramSelection(file);
+				@SuppressWarnings("unchecked")
+				Map<String, Object> map = (Map<String, Object>)object;
+				File file = new File((String)map.get(ISupplierFileEditorSupport.MAP_FILE));
+				boolean batch = (boolean)map.get(ISupplierFileEditorSupport.MAP_BATCH);
+				chromatogramSelection = loadChromatogramSelection(file, batch);
 			} else {
 				/*
 				 * Already available.
@@ -277,7 +282,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		return chromatogramSelection;
 	}
 
-	private synchronized IChromatogramSelection loadChromatogramSelection(File file) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
+	private synchronized IChromatogramSelection loadChromatogramSelection(File file, boolean batch) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
 
 		IChromatogramSelection chromatogramSelection = null;
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
@@ -286,7 +291,8 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 			/*
 			 * No fork, otherwise it might crash when loading a chromatogram takes too long.
 			 */
-			dialog.run(false, false, runnable);
+			boolean fork = (batch) ? false : true;
+			dialog.run(fork, false, runnable);
 			chromatogramSelection = runnable.getChromatogramSelection();
 			chromatogramFile = file;
 		} catch(InvocationTargetException e) {
