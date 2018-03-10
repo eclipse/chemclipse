@@ -23,6 +23,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_EDIT = "edit.gif";
 	String IMAGE_EDIT_DISABLED = "edit_disabled.gif";
 	String IMAGE_EDIT_ENTRY = "edit_entry.gif";
+	String IMAGE_EDIT_SHIFT = "editShift.gif";
+	String IMAGE_EDIT_PROFILE = "editProfile.gif";
 	//
 	String IMAGE_EMPTY = "empty.png";
 	String IMAGE_LOGO = "logo.png";

@@ -28,7 +28,7 @@ public class OverlayChartSupport {
 	public static final String OVERLAY_STOP_MARKER = ")";
 	public static final String DELIMITER_ION_DERIVATIVE = ",";
 	//
-	public static final String SELECTED_IONS_DEFAULT = "18 28 32 84 207";
+	public static final String SELECTED_IONS_USERS_CHOICE = "Users Choice";
 	public static final String SELECTED_IONS_HYDROCARBONS = "Hydrocarbons";
 	public static final String SELECTED_IONS_FATTY_ACIDS = "Fatty Acids";
 	public static final String SELECTED_IONS_FAME = "FAME";
@@ -118,6 +118,7 @@ public class OverlayChartSupport {
 				ChromatogramChartSupport.DERIVATIVE_THIRD};
 		//
 		selectedIons = new String[]{//
+				SELECTED_IONS_USERS_CHOICE, //
 				SELECTED_IONS_HYDROCARBONS, //
 				SELECTED_IONS_FATTY_ACIDS, //
 				SELECTED_IONS_FAME, //
