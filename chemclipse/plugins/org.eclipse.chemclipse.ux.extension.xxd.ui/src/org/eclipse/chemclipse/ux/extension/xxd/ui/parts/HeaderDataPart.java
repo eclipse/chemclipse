@@ -41,9 +41,9 @@ public class HeaderDataPart extends AbstractOverviewUpdateSupport implements IOv
 	public void updateChromatogramOverview(IChromatogramOverview chromatogramOverview) {
 
 		if(chromatogramOverview != null) {
-			extendedHeaderDataUI.update(chromatogramOverview);
+			extendedHeaderDataUI.update(chromatogramOverview, false);
 		} else {
-			extendedHeaderDataUI.update(null);
+			extendedHeaderDataUI.update(null, false);
 		}
 	}
 }

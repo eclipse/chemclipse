@@ -46,12 +46,16 @@ public class HeaderDataListUI extends ExtendedTableViewer {
 	public void setInput(IChromatogramOverview chromatogramOverview) {
 
 		this.chromatogramOverview = chromatogramOverview;
-		super.setInput(chromatogramOverview.getHeaderDataMap());
+		if(chromatogramOverview != null) {
+			super.setInput(chromatogramOverview.getHeaderDataMap());
+		} else {
+			clear();
+		}
 	}
 
 	public void clear() {
 
-		setInput(null);
+		super.setInput(null);
 	}
 
 	public void sortTable() {

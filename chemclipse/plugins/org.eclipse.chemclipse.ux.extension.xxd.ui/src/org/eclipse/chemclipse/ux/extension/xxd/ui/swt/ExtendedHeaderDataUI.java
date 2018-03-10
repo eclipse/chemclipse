@@ -55,6 +55,7 @@ public class ExtendedHeaderDataUI {
 	private Composite toolbarInfo;
 	private Composite toolbarSearch;
 	private Composite toolbarModify;
+	private Button buttonToggleEditModus;
 	private Text textHeaderKey;
 	private Text textHeaderValue;
 	private Button buttonAddHeaderEntry;
@@ -63,6 +64,7 @@ public class ExtendedHeaderDataUI {
 	//
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private IChromatogramOverview chromatogramOverview;
+	private boolean editable;
 	//
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
@@ -78,9 +80,10 @@ public class ExtendedHeaderDataUI {
 		updateHeaderData();
 	}
 
-	public void update(IChromatogramOverview chromatogramOverview) {
+	public void update(IChromatogramOverview chromatogramOverview, boolean editable) {
 
 		this.chromatogramOverview = chromatogramOverview;
+		this.editable = editable;
 		updateHeaderData();
 	}
 
@@ -112,7 +115,7 @@ public class ExtendedHeaderDataUI {
 		createButtonToggleToolbarInfo(composite);
 		createButtonToggleToolbarSearch(composite);
 		createButtonToggleToolbarModify(composite);
-		createButtonToggleEditModus(composite);
+		buttonToggleEditModus = createButtonToggleEditModus(composite);
 	}
 
 	private Button createButtonToggleToolbarInfo(Composite parent) {
@@ -341,20 +344,22 @@ public class ExtendedHeaderDataUI {
 
 	private void addHeaderEntry() {
 
-		String key = textHeaderKey.getText().trim();
-		String value = textHeaderValue.getText().trim();
-		//
-		if("".equals(key)) {
-			MessageDialog.openError(shell, HEADER_ENTRY, "The header key must be not empty.");
-		} else if(chromatogramOverview.headerDataContainsKey(key)) {
-			MessageDialog.openError(shell, HEADER_ENTRY, "The header key already exists.");
-		} else if("".equals(value)) {
-			MessageDialog.openError(shell, HEADER_ENTRY, "The header value must be not empty.");
-		} else {
-			chromatogramOverview.putHeaderData(key, value);
-			textHeaderKey.setText("");
-			textHeaderValue.setText("");
-			updateHeaderData();
+		if(chromatogramOverview != null) {
+			String key = textHeaderKey.getText().trim();
+			String value = textHeaderValue.getText().trim();
+			//
+			if("".equals(key)) {
+				MessageDialog.openError(shell, HEADER_ENTRY, "The header key must be not empty.");
+			} else if(chromatogramOverview.headerDataContainsKey(key)) {
+				MessageDialog.openError(shell, HEADER_ENTRY, "The header key already exists.");
+			} else if("".equals(value)) {
+				MessageDialog.openError(shell, HEADER_ENTRY, "The header value must be not empty.");
+			} else {
+				chromatogramOverview.putHeaderData(key, value);
+				textHeaderKey.setText("");
+				textHeaderValue.setText("");
+				updateHeaderData();
+			}
 		}
 	}
 
@@ -368,30 +373,32 @@ public class ExtendedHeaderDataUI {
 			/*
 			 * Delete Target
 			 */
-			Iterator iterator = headerDataListUI.getStructuredSelection().iterator();
-			Set<String> keysNotRemoved = new HashSet<String>();
-			while(iterator.hasNext()) {
-				Object object = iterator.next();
-				if(object instanceof Map.Entry) {
-					if(chromatogramOverview != null) {
-						Map.Entry<String, String> entry = (Map.Entry<String, String>)object;
-						String key = entry.getKey();
-						try {
-							chromatogramOverview.removeHeaderData(key);
-						} catch(InvalidHeaderModificationException e) {
-							keysNotRemoved.add(key);
+			if(chromatogramOverview != null) {
+				Iterator iterator = headerDataListUI.getStructuredSelection().iterator();
+				Set<String> keysNotRemoved = new HashSet<String>();
+				while(iterator.hasNext()) {
+					Object mapObject = iterator.next();
+					if(mapObject instanceof Map.Entry) {
+						if(chromatogramOverview != null) {
+							Map.Entry<String, String> entry = (Map.Entry<String, String>)mapObject;
+							String key = entry.getKey();
+							try {
+								chromatogramOverview.removeHeaderData(key);
+							} catch(InvalidHeaderModificationException e) {
+								keysNotRemoved.add(key);
+							}
 						}
 					}
 				}
+				/*
+				 * Show a message if certain keys couldn't be removed.
+				 */
+				if(keysNotRemoved.size() > 0) {
+					MessageDialog.openWarning(shell, HEADER_ENTRY, "The following keys can't be removed: " + keysNotRemoved);
+				}
+				//
+				updateHeaderData();
 			}
-			/*
-			 * Show a message if certain keys couldn't be removed.
-			 */
-			if(keysNotRemoved.size() > 0) {
-				MessageDialog.openWarning(shell, HEADER_ENTRY, "The following keys can't be removed: " + keysNotRemoved);
-			}
-			//
-			updateHeaderData();
 		}
 	}
 
@@ -408,15 +415,22 @@ public class ExtendedHeaderDataUI {
 
 	private void updateLabel() {
 
-		labelInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogramOverview));
-		headerDataListUI.setInput(chromatogramOverview);
-		String editInformation = headerDataListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
-		labelInfo.setText(labelInfo.getText() + " - " + editInformation);
+		if(chromatogramOverview != null) {
+			labelInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogramOverview));
+			headerDataListUI.setInput(chromatogramOverview);
+			String editInformation = headerDataListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
+			labelInfo.setText(labelInfo.getText() + " - " + editInformation);
+		} else {
+			headerDataListUI.setInput(null);
+			labelInfo.setText(chromatogramDataSupport.getChromatogramLabel(null));
+		}
 	}
 
 	private void updateWidgets() {
 
-		boolean enabled = (chromatogramOverview == null) ? false : true;
+		boolean enabled = editable;
+		//
+		buttonToggleEditModus.setEnabled(enabled);
 		textHeaderKey.setEnabled(enabled);
 		textHeaderValue.setEnabled(enabled);
 		buttonAddHeaderEntry.setEnabled(enabled);
