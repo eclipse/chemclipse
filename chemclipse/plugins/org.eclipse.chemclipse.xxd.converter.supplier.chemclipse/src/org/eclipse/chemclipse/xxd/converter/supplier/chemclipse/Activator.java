@@ -32,7 +32,7 @@ public class Activator implements BundleActivator {
 		Activator.context = bundleContext;
 		System.out.println("Create new *.ocb version. Persist:");
 		System.out.println("Scan - relative retention time");
-		System.out.println("Chromatogram - miscellaneous map");
+		System.out.println("IMeasurementInfo - header data map");
 		System.out.println("ScanWSD - wavelength int -> double");
 		System.out.println("Alex - Compound Class + Identification");
 		System.out.println("ScanWSD - Targets");
