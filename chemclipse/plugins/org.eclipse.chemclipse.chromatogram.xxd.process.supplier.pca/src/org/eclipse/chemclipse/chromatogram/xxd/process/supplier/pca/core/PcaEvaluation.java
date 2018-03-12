@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IMultivariateCalculator;
@@ -49,12 +50,9 @@ public class PcaEvaluation {
 		Map<ISample<? extends ISampleData>, double[]> selectedSamples = new HashMap<>();
 		List<? extends IVariable> retentionTimes = samples.getVariables();
 		int numSelected = (int)retentionTimes.stream().filter(r -> r.isSelected()).count();
-		final List<String> groups = samples.getSampleList().stream().map(s -> s.getGroupName()).collect(Collectors.toList());
+		final Set<String> groups = samples.getSampleList().stream().map(s -> s.getGroupName()).limit(2).collect(Collectors.toSet());
 		for(ISample<? extends ISampleData> sample : samples.getSampleList()) {
 			double[] selectedSampleData = null;
-			if(algorithm.equals(OPLS_ALGO_NIPALS)) {
-				// get all group names
-			}
 			if(sample.isSelected()) {
 				List<? extends ISampleData> data = sample.getSampleData();
 				selectedSampleData = new double[numSelected];
@@ -67,6 +65,11 @@ public class PcaEvaluation {
 				}
 				selectedSamples.put(sample, selectedSampleData);
 			}
+		}
+		if(algorithm.equals(OPLS_ALGO_NIPALS)) {
+			Map<ISample<? extends ISampleData>, double[]> groupSelected = selectedSamples.entrySet().stream().filter(e -> groups.contains(e.getKey().getGroupName())).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+			setNaNValues(groupSelected);
+			return groupSelected;
 		}
 		setNaNValues(selectedSamples);
 		return selectedSamples;
