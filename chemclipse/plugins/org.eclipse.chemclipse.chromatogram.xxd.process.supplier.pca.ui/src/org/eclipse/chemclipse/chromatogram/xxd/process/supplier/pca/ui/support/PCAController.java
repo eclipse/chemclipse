@@ -68,7 +68,7 @@ public class PCAController {
 		label.setText("Algorithm:");
 		pcaAlgo = new CCombo(composite, SWT.READ_ONLY);
 		pcaAlgo.setBounds(50, 50, 150, 65);
-		String items[] = {"SVD", "Nipals"};
+		String items[] = {"SVD", "Nipals", "OPLS"};
 		pcaAlgo.setItems(items);
 		pcaAlgo.select(1);
 		// Selection Principal Component for X-axis

@@ -43,14 +43,14 @@ public class PcaEvaluation {
 
 	public static final String PCA_ALGO_SVD = "SVD";
 	public static final String PCA_ALGO_NIPALS = "Nipals";
-	public static final String OPLS_ALGO_NIPALS = "Opls";
+	public static final String OPLS_ALGO_NIPALS = "OPLS";
 
 	private <V extends IVariable, S extends ISample<? extends ISampleData>> Map<ISample<?>, double[]> extractData(ISamples<V, S> samples, String algorithm) {
 
 		Map<ISample<? extends ISampleData>, double[]> selectedSamples = new HashMap<>();
 		List<? extends IVariable> retentionTimes = samples.getVariables();
 		int numSelected = (int)retentionTimes.stream().filter(r -> r.isSelected()).count();
-		final Set<String> groups = samples.getSampleList().stream().map(s -> s.getGroupName()).limit(2).collect(Collectors.toSet());
+		final Set<String> groups = samples.getSampleList().stream().map(s -> s.getGroupName()).distinct().collect(Collectors.toList()).stream().limit(2).collect(Collectors.toSet());
 		for(ISample<? extends ISampleData> sample : samples.getSampleList()) {
 			double[] selectedSampleData = null;
 			if(sample.isSelected()) {
@@ -113,7 +113,7 @@ public class PcaEvaluation {
 		 */
 		int numSamples = pcaPeakMap.size();
 		IMultivariateCalculator principalComponentAnalysis = null;
-		if(pcaAlgorithm.equals(PCA_ALGO_NIPALS)) {
+		if(pcaAlgorithm.equals(PCA_ALGO_NIPALS) || pcaAlgorithm.equals(OPLS_ALGO_NIPALS)) {
 			principalComponentAnalysis = new PcaCalculatorNipals();
 		} else if(pcaAlgorithm.equals(PCA_ALGO_SVD)) {
 			principalComponentAnalysis = new PcaCalculatorSvd();
