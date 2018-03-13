@@ -252,7 +252,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 			Object object = part.getObject();
 			if(object instanceof Map) {
 				/*
-				 * String
+				 * Map
 				 */
 				@SuppressWarnings("unchecked")
 				Map<String, Object> map = (Map<String, Object>)object;

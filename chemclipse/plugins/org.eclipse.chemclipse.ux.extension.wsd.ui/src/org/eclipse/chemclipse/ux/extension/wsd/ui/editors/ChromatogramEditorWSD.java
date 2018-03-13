@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -37,6 +38,7 @@ import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.ui.dialogs.ReferencedChromatogramDialog;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.internal.support.ChromatogramImportRunnable;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramFileSupport;
 import org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramSupport;
@@ -394,12 +396,15 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 			 * will take care itself of this action.
 			 */
 			Object object = part.getObject();
-			if(object instanceof String) {
+			if(object instanceof Map) {
 				/*
-				 * Try to load the chromatogram from file.
+				 * String
 				 */
-				File file = new File((String)object);
-				importChromatogram(file);
+				@SuppressWarnings("unchecked")
+				Map<String, Object> map = (Map<String, Object>)object;
+				File file = new File((String)map.get(ISupplierFileEditorSupport.MAP_FILE));
+				boolean batch = (boolean)map.get(ISupplierFileEditorSupport.MAP_BATCH);
+				importChromatogram(file, batch);
 			} else if(object instanceof IChromatogramWSD) {
 				IChromatogramWSD chromatogram = (IChromatogramWSD)object;
 				chromatogramSelection = new ChromatogramSelectionWSD(chromatogram);
@@ -420,7 +425,7 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 	 * @throws FileNotFoundException
 	 * @throws ChromatogramIsNullException
 	 */
-	private void importChromatogram(File file) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
+	private void importChromatogram(File file, boolean batch) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
 
 		/*
 		 * Import the chromatogram here, but do not set to the chromatogram ui,
@@ -430,10 +435,10 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 		ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(file, chromatogramSelection);
 		try {
 			/*
-			 * True to show the moving progress bar. False, a chromatogram
-			 * should be imported as a whole.
+			 * No fork, otherwise it might crash when loading the data takes too long.
 			 */
-			dialog.run(true, false, runnable);
+			boolean fork = (batch) ? false : true;
+			dialog.run(fork, false, runnable);
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
 		} catch(InterruptedException e) {

@@ -17,6 +17,7 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -46,10 +47,10 @@ import org.eclipse.chemclipse.msd.swt.ui.support.MassSpectrumFileSupport;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.MassSpectrumImportRunnable;
 import org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -59,7 +60,6 @@ import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
@@ -103,7 +103,6 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 	private ArrayList<EventHandler> registeredEventHandler;
 	private AbstractExtendedMassSpectrumUI massSpectrumUI;
 	private List<Object> objects = new ArrayList<Object>();
-	private EPartService partService = ModelSupportAddon.getPartService();
 	/*
 	 * Showing additional info in tabs.
 	 */
@@ -244,16 +243,22 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 			 * The GUI will take care itself of this action.
 			 */
 			Object object = part.getObject();
-			if(object instanceof String) {
-				File file = new File((String)object);
-				importMassSpectrum(file);
+			if(object instanceof Map) {
+				/*
+				 * String
+				 */
+				@SuppressWarnings("unchecked")
+				Map<String, Object> map = (Map<String, Object>)object;
+				File file = new File((String)map.get(ISupplierFileEditorSupport.MAP_FILE));
+				boolean batch = (boolean)map.get(ISupplierFileEditorSupport.MAP_BATCH);
+				importMassSpectrum(file, batch);
 			}
 		} catch(Exception e) {
 			logger.warn(e);
 		}
 	}
 
-	private void importMassSpectrum(File file) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
+	private void importMassSpectrum(File file, boolean batch) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
 
 		/*
 		 * Import the mass spectrum here, but do not set to the mass spectrum UI,
@@ -263,10 +268,10 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		MassSpectrumImportRunnable runnable = new MassSpectrumImportRunnable(file);
 		try {
 			/*
-			 * True to show the moving progress bar. False, a mass spectrum
-			 * should be imported as a whole.
+			 * No fork, otherwise it might crash when loading the data takes too long.
 			 */
-			dialog.run(true, false, runnable);
+			boolean fork = (batch) ? false : true;
+			dialog.run(fork, false, runnable);
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
 		} catch(InterruptedException e) {

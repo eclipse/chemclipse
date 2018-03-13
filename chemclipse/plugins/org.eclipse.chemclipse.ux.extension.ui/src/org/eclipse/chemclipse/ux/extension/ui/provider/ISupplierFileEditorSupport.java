@@ -100,6 +100,9 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 				part.setLabel("No valid chromatogram/mass spectra data");
 			}
 		} else {
+			/*
+			 * Get the file to load via the map.
+			 */
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(MAP_FILE, file.getAbsolutePath());
 			map.put(MAP_BATCH, batch);

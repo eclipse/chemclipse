@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.msd.ui.editors;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -37,6 +38,7 @@ import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.DatabaseImportRunnable;
 import org.eclipse.chemclipse.ux.extension.msd.ui.swt.MassSpectrumLibraryUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -201,21 +203,31 @@ public class DatabaseEditor implements IChemClipseEditor {
 
 		try {
 			Object object = part.getObject();
-			if(object instanceof String) {
-				File file = new File((String)object);
-				importMassSpectra(file);
+			if(object instanceof Map) {
+				/*
+				 * String
+				 */
+				@SuppressWarnings("unchecked")
+				Map<String, Object> map = (Map<String, Object>)object;
+				File file = new File((String)map.get(ISupplierFileEditorSupport.MAP_FILE));
+				boolean batch = (boolean)map.get(ISupplierFileEditorSupport.MAP_BATCH);
+				importMassSpectra(file, batch);
 			}
 		} catch(Exception e) {
 			logger.warn(e);
 		}
 	}
 
-	private void importMassSpectra(File file) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
+	private void importMassSpectra(File file, boolean batch) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
 
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 		DatabaseImportRunnable runnable = new DatabaseImportRunnable(file);
 		try {
-			dialog.run(true, false, runnable);
+			/*
+			 * No fork, otherwise it might crash when loading the data takes too long.
+			 */
+			boolean fork = (batch) ? false : true;
+			dialog.run(fork, false, runnable);
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
 		} catch(InterruptedException e) {

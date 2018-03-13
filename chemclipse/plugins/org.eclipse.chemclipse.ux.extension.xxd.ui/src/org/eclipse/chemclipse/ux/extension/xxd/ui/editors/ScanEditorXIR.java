@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
@@ -23,6 +24,7 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ScanXIRImportRunnable;
@@ -146,12 +148,15 @@ public class ScanEditorXIR extends AbstractDataUpdateSupport implements IChemCli
 		IScanXIR scanXIR = null;
 		try {
 			Object object = part.getObject();
-			if(object instanceof String) {
+			if(object instanceof Map) {
 				/*
 				 * String
 				 */
-				File file = new File((String)object);
-				scanXIR = loadScan(file);
+				@SuppressWarnings("unchecked")
+				Map<String, Object> map = (Map<String, Object>)object;
+				File file = new File((String)map.get(ISupplierFileEditorSupport.MAP_FILE));
+				boolean batch = (boolean)map.get(ISupplierFileEditorSupport.MAP_BATCH);
+				scanXIR = loadScan(file, batch);
 			}
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
@@ -160,12 +165,16 @@ public class ScanEditorXIR extends AbstractDataUpdateSupport implements IChemCli
 		return scanXIR;
 	}
 
-	private IScanXIR loadScan(File file) {
+	private IScanXIR loadScan(File file, boolean batch) {
 
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		ScanXIRImportRunnable runnable = new ScanXIRImportRunnable(file);
 		try {
-			dialog.run(true, false, runnable);
+			/*
+			 * No fork, otherwise it might crash when loading the data takes too long.
+			 */
+			boolean fork = (batch) ? false : true;
+			dialog.run(fork, false, runnable);
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
 		} catch(InterruptedException e) {
