@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.OplsCalculatorNipals;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaCalculatorNipals;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaCalculatorSvd;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
@@ -113,10 +114,12 @@ public class PcaEvaluation {
 		 */
 		int numSamples = pcaPeakMap.size();
 		IMultivariateCalculator principalComponentAnalysis = null;
-		if(pcaAlgorithm.equals(PCA_ALGO_NIPALS) || pcaAlgorithm.equals(OPLS_ALGO_NIPALS)) {
+		if(pcaAlgorithm.equals(PCA_ALGO_NIPALS)) {
 			principalComponentAnalysis = new PcaCalculatorNipals();
 		} else if(pcaAlgorithm.equals(PCA_ALGO_SVD)) {
 			principalComponentAnalysis = new PcaCalculatorSvd();
+		} else if(pcaAlgorithm.equals(OPLS_ALGO_NIPALS)) {
+			principalComponentAnalysis = new OplsCalculatorNipals();
 		}
 		principalComponentAnalysis.initialize(numSamples, sampleSize);
 		/*
