@@ -24,6 +24,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	private int numComps;
 	private DenseMatrix64F sampleData = new DenseMatrix64F(1, 1);
 	private ArrayList<ISample<?>> sampleKeys = new ArrayList<>();
+	private ArrayList<String> groupNames = new ArrayList<>();
 	private int sampleIndex;
 
 	@Override
@@ -47,6 +48,12 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	public void addObservationKey(ISample<?> sampleKey) {
 
 		sampleKeys.add(sampleKey);
+	}
+
+	@Override
+	public void addGroupName(String groupName) {
+
+		groupNames.add(groupName);
 	}
 
 	public DenseMatrix64F getScores() {

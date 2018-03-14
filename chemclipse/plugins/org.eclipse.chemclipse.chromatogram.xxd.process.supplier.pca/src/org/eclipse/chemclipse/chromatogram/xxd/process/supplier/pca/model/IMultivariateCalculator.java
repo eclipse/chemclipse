@@ -17,6 +17,8 @@ public interface IMultivariateCalculator {
 
 	void addObservationKey(ISample<?> sampleKey);
 
+	void addGroupName(String groupName);
+
 	double[] applyLoadings(double[] obs);
 
 	void compute(int numComps);

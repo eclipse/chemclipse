@@ -130,6 +130,7 @@ public class PcaEvaluation {
 			ISample<?> sampleKey = entry.getKey();
 			principalComponentAnalysis.addObservation(sampleData);
 			principalComponentAnalysis.addObservationKey(sampleKey);
+			principalComponentAnalysis.addGroupName(entry.getKey().getGroupName());
 		}
 		return principalComponentAnalysis;
 	}

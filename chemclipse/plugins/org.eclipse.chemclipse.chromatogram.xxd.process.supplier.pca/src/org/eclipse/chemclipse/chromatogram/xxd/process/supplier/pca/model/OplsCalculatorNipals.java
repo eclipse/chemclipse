@@ -11,15 +11,26 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import org.ejml.data.DenseMatrix64F;
+
 public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 
 	@Override
 	public void compute(int numComps) {
+
+		int numberOfSamples = getSampleData().getNumRows();
+		int numberOfVariables = getSampleData().getNumCols();
 		// T_ortho<-NULL ### NULL vector
+		DenseMatrix64F t_ortho = new DenseMatrix64F(numberOfSamples, numComps - 1);
 		// P_ortho<-NULL ### NULL vector
+		DenseMatrix64F p_ortho = new DenseMatrix64F(numComps - 1, numberOfVariables);
 		// W_ortho<-NULL ### NULL vector
-		//
+		DenseMatrix64F w_ortho = new DenseMatrix64F(numComps - 1, numberOfVariables);
 		// X<-as.matrix(X)
+		DenseMatrix64F X = getSampleData();
+		/*
+		 * Y has to be constructed first from groups as zero/one vector
+		 */
 		// avg_y<-opls_preproc(t(as.matrix(y)),1)$vectors[1,]
 		// y<-t(t(y))
 		//
@@ -111,6 +122,5 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		// opls_result$avg_y <- avg_y
 		//
 		// return(opls_result)
-
 	}
 }
