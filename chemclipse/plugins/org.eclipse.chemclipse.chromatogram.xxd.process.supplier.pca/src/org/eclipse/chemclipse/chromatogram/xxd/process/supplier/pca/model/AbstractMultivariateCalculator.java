@@ -56,6 +56,12 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		groupNames.add(groupName);
 	}
 
+	@Override
+	public ArrayList<String> getGroupNames() {
+
+		return groupNames;
+	}
+
 	public DenseMatrix64F getScores() {
 
 		return scores;

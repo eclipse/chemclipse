@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import java.util.ArrayList;
+
 public interface IMultivariateCalculator {
 
 	void addObservation(double[] obsData);
@@ -28,6 +30,8 @@ public interface IMultivariateCalculator {
 	double[] getLoadingVector(int var);
 
 	double[] getScoreVector(ISample<?> sampleId);
+
+	ArrayList<String> getGroupNames();
 
 	void initialize(int numObs, int numVars);
 }

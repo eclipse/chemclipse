@@ -11,9 +11,29 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+
 import org.ejml.data.DenseMatrix64F;
 
 public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
+
+	public double[] getYVector() {
+
+		HashSet<String> groupNamesSet = new HashSet<>();
+		ArrayList<String> groupNames = getGroupNames();
+		double[] yVector = new double[groupNames.size()];
+		groupNamesSet.addAll(groupNames);
+		List<String> uniqueGroupNames = Arrays.asList(groupNamesSet.toArray(new String[groupNamesSet.size()]));
+		int yIterator = 0;
+		for(String myString : groupNames) {
+			yVector[yIterator] = (double)uniqueGroupNames.indexOf(myString);
+			yIterator++;
+		}
+		return yVector;
+	}
 
 	@Override
 	public void compute(int numComps) {
@@ -31,6 +51,7 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		/*
 		 * Y has to be constructed first from groups as zero/one vector
 		 */
+		DenseMatrix64F y = new DenseMatrix64F(getYVector().length, 1, true, getYVector());
 		// avg_y<-opls_preproc(t(as.matrix(y)),1)$vectors[1,]
 		// y<-t(t(y))
 		//
