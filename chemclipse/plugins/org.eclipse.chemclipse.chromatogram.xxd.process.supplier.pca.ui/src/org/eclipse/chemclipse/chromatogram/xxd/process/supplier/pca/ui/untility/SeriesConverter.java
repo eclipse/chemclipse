@@ -135,7 +135,7 @@ public class SeriesConverter {
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_SCORE_PLOT_2D_SYMBOL_TYPE)));
-			scatterSeriesSettings.setSymbolSize(preferenceStore.getInt(PreferenceConstants.P_SCORE_PLOT_2D_SYMBOL_TYPE));
+			scatterSeriesSettings.setSymbolSize(preferenceStore.getInt(PreferenceConstants.P_SCORE_PLOT_2D_SYMBOL_SIZE));
 			Color color = PcaColorGroup.getSampleColorSWT(pcaResult);
 			if(pcaResult.getSample().isSelected()) {
 				scatterSeriesSettings.setSymbolColor(color);

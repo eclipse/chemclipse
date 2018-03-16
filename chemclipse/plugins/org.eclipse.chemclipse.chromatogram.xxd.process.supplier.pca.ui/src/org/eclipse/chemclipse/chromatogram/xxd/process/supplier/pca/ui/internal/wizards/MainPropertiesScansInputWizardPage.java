@@ -35,14 +35,12 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 	private DataBindingContext dbc = new DataBindingContext();
 	private int extractionType;
 	private IObservableValue<Integer> maximalNumberScans = new WritableValue<>();
-	private IObservableValue<Integer> numerOfComponents = new WritableValue<>();
 	private IObservableValue<Double> retentionTimeWindow = new WritableValue<>();
 	private boolean useDefoultProperties;
 
 	protected MainPropertiesScansInputWizardPage(String pageName) {
 		super(pageName);
 		setTitle("Set Main Parameters");
-		numerOfComponents.setValue(3);
 		retentionTimeWindow.setValue(1.0);
 		maximalNumberScans.setValue(5000);
 		extractionType = IDataExtraction.CLOSEST_SCAN;
@@ -91,14 +89,8 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 		dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(text), retentionTimeWindow, targetToModel, modelToTarget);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		label = new Label(composite, SWT.None);
-		label.setText("Number of principal components");
-		Spinner spinner = new Spinner(composite, SWT.BORDER);
-		spinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		spinner.setMinimum(3);
-		dbc.bindValue(WidgetProperties.selection().observe(spinner), numerOfComponents);
-		label = new Label(composite, SWT.None);
 		label.setText("Maximal number of scans");
-		spinner = new Spinner(composite, SWT.BORDER);
+		Spinner spinner = new Spinner(composite, SWT.BORDER);
 		spinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		spinner.setMinimum(1);
 		spinner.setIncrement(1000);
@@ -115,11 +107,6 @@ public class MainPropertiesScansInputWizardPage extends WizardPage {
 	public int getMaximalNumberScans() {
 
 		return maximalNumberScans.getValue();
-	}
-
-	public int getNumerOfComponents() {
-
-		return numerOfComponents.getValue();
 	}
 
 	public int getRetentionTimeWindow() {

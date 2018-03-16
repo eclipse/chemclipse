@@ -23,8 +23,6 @@ public interface IPcaInputWizard extends IWizard {
 
 	List<IDataInputEntry> getDataInputEntries();
 
-	int getNumerOfComponents();
-
 	IDataExtraction getPcaExtractionData();
 
 	PcaFiltrationData getPcaFiltrationData();

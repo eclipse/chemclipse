@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -20,26 +22,28 @@ import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
 public class MainPropertiesPeaksInputWizardPage extends WizardPage {
 
 	private DataBindingContext dbc = new DataBindingContext();
-	private IObservableValue<Integer> numerOfComponents = new WritableValue<>();
 	private IObservableValue<Double> retentionTimeWindow = new WritableValue<>();
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	protected MainPropertiesPeaksInputWizardPage(String pageName) {
 		super(pageName);
 		setTitle("Set Main Parameters");
-		numerOfComponents.setValue(3);
-		retentionTimeWindow.setValue(0.1);
+		retentionTimeWindow.setValue(preferenceStore.getDouble(PreferenceConstants.P_RETENTION_TIME_WINDOW_PEAKS));
+		retentionTimeWindow.addChangeListener(e -> {
+			preferenceStore.setValue(PreferenceConstants.P_RETENTION_TIME_WINDOW_PEAKS, retentionTimeWindow.getValue());
+		});
 	}
 
 	@Override
@@ -70,18 +74,7 @@ public class MainPropertiesPeaksInputWizardPage extends WizardPage {
 		UpdateValueStrategy modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString(((Double)o1))));
 		dbc.bindValue(WidgetProperties.text(SWT.Modify).observe(text), retentionTimeWindow, targetToModel, modelToTarget);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		label = new Label(composite, SWT.None);
-		label.setText("Number of principal components");
-		Spinner spinner = new Spinner(composite, SWT.BORDER);
-		spinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		spinner.setMinimum(3);
-		dbc.bindValue(WidgetProperties.selection().observe(spinner), numerOfComponents);
 		setControl(composite);
-	}
-
-	public int getNumerOfComponents() {
-
-		return numerOfComponents.getValue();
 	}
 
 	public int getRetentionTimeWindow() {
