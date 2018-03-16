@@ -151,7 +151,7 @@ public class SupplierFileExplorerPart {
 		/*
 		 * MSD Scan
 		 */
-		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_LIBRARY_MSD)) {
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SCANS_MSD)) {
 			editorSupportList.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.MassSpectrumSupport.getInstanceEditorSupport());
 		}
 		/*
