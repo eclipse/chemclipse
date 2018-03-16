@@ -86,12 +86,14 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisua
 
 	public <V extends IVariableVisualization, S extends ISampleVisualization<? extends ISampleData>> IPcaResultsVisualization evaluatePca(ISamplesVisualization<V, S> samples, IPcaSettings settings, IPcaSettingsVisualization pcaSettingsVisualization, IProgressMonitor monitor, boolean setSelected) {
 
+		monitor.setTaskName("Evaluation");
 		PcaResults results = evaluatePca(samples, settings, monitor);
 		IPcaResultsVisualization pcaResultsVisualization = new PcaResultsVisualization<>(results, pcaSettingsVisualization);
 		pcaResultsVisualization.getPcaResultList().forEach(r -> {
 			Optional<S> sample = samples.getSampleList().stream().filter(s -> r.getSample() == s).findAny();
 			r.copyVisualizationProperties(sample.get());
 		});
+		monitor.setTaskName("Add samples");
 		if(!getElements().contains(samples)) {
 			getElements().add(samples);
 		}
@@ -99,8 +101,10 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisua
 			pcaResults.put(samples, pcaResultsVisualization);
 		}
 		if(setSelected) {
+			monitor.setTaskName("Set actual result");
 			actualSelectedPcaResults.setValue(pcaResultsVisualization);
 			if(!getSelection().contains(samples)) {
+				monitor.setTaskName("Set actual selection");
 				getSelection().setAll(samples);
 			}
 		}

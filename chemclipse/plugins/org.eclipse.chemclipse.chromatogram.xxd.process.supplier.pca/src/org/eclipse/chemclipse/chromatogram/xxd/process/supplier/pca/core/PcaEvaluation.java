@@ -42,10 +42,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaEvaluation {
 
-	public static final String PCA_ALGO_SVD = "SVD";
-	public static final String PCA_ALGO_NIPALS = "Nipals";
-	public static final String OPLS_ALGO_NIPALS = "OPLS";
-
 	private <V extends IVariable, S extends ISample<? extends ISampleData>> Map<ISample<?>, double[]> extractData(ISamples<V, S> samples, String algorithm) {
 
 		Map<ISample<? extends ISampleData>, double[]> selectedSamples = new HashMap<>();
@@ -67,7 +63,7 @@ public class PcaEvaluation {
 				selectedSamples.put(sample, selectedSampleData);
 			}
 		}
-		if(algorithm.equals(OPLS_ALGO_NIPALS)) {
+		if(algorithm.equals(IPcaSettings.OPLS_ALGO_NIPALS)) {
 			Map<ISample<? extends ISampleData>, double[]> groupSelected = selectedSamples.entrySet().stream().filter(e -> groups.contains(e.getKey().getGroupName())).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 			setNaNValues(groupSelected);
 			return groupSelected;
@@ -114,11 +110,11 @@ public class PcaEvaluation {
 		 */
 		int numSamples = pcaPeakMap.size();
 		IMultivariateCalculator principalComponentAnalysis = null;
-		if(pcaAlgorithm.equals(PCA_ALGO_NIPALS)) {
+		if(pcaAlgorithm.equals(IPcaSettings.PCA_ALGO_NIPALS)) {
 			principalComponentAnalysis = new PcaCalculatorNipals();
-		} else if(pcaAlgorithm.equals(PCA_ALGO_SVD)) {
+		} else if(pcaAlgorithm.equals(IPcaSettings.PCA_ALGO_SVD)) {
 			principalComponentAnalysis = new PcaCalculatorSvd();
-		} else if(pcaAlgorithm.equals(OPLS_ALGO_NIPALS)) {
+		} else if(pcaAlgorithm.equals(IPcaSettings.OPLS_ALGO_NIPALS)) {
 			principalComponentAnalysis = new OplsCalculatorNipals();
 		}
 		principalComponentAnalysis.initialize(numSamples, sampleSize);

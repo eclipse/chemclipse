@@ -13,6 +13,10 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 public interface IPcaSettings {
 
+	String PCA_ALGO_SVD = "SVD";
+	String PCA_ALGO_NIPALS = "Nipals";
+	String OPLS_ALGO_NIPALS = "OPLS";
+
 	int getNumberOfPrincipalComponents();
 
 	String getPcaAlgorithm();

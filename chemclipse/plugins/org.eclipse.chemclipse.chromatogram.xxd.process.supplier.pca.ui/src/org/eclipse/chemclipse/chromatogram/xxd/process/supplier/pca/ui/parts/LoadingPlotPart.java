@@ -18,8 +18,20 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.Sel
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IVariableExtractedVisalization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.LoadingPlot;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceLoadingPlot2DPage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.PreferenceDialog;
+import org.eclipse.jface.preference.PreferenceManager;
+import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
@@ -33,7 +45,10 @@ public class LoadingPlotPart {
 	private LoadingPlot loadingPlot;
 	private ChangeListener<IPcaResultsVisualization> pcaResultChangeLisnter;
 	private IPcaResultsVisualization pcaResults;
+	private boolean partHasBeenDestroy;
 	private Runnable updateSelection = () -> {
+		if(partHasBeenDestroy)
+			return;
 		if(pcaResults != null) {
 			loadingPlot.update(pcaResults);
 		}
@@ -54,7 +69,9 @@ public class LoadingPlotPart {
 			@Override
 			public void changed(ObservableValue<? extends IPcaResultsVisualization> observable, IPcaResultsVisualization oldValue, IPcaResultsVisualization newValue) {
 
-				Display.getCurrent().syncExec(() -> {
+				Display.getDefault().syncExec(() -> {
+					if(partHasBeenDestroy)
+						return;
 					if(oldValue != null) {
 						oldValue.getExtractedVariables().removeListener(variableChanger);
 					}
@@ -74,9 +91,19 @@ public class LoadingPlotPart {
 	@PostConstruct
 	public void createComposite(Composite parent) {
 
+		partHasBeenDestroy = false;
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new FillLayout());
-		loadingPlot = new LoadingPlot(composite);
+		composite.setLayout(new GridLayout(1, false));
+		Composite buttonsComposite = new Composite(composite, SWT.None);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = SWT.END;
+		buttonsComposite.setLayoutData(gridData);
+		buttonsComposite.setLayout(new GridLayout(1, false));
+		createSettingsButtons(buttonsComposite);
+		Composite loadingPlotComposite = new Composite(composite, SWT.None);
+		loadingPlotComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		loadingPlotComposite.setLayout(new FillLayout());
+		loadingPlot = new LoadingPlot(loadingPlotComposite);
 		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaResults = SelectionManagerSamples.getInstance().getActualSelectedPcaResults();
 		pcaResults.addListener(pcaResultChangeLisnter);
 		if(pcaResults.isNotNull().get()) {
@@ -86,9 +113,41 @@ public class LoadingPlotPart {
 		}
 	}
 
+	private void createSettingsButtons(Composite buttonsComposite) {
+
+		Button button = new Button(buttonsComposite, SWT.PUSH);
+		button.setToolTipText("Open the Settings");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IPreferencePage preferenceLoadingPlot2DPage = new PreferenceLoadingPlot2DPage();
+				preferenceLoadingPlot2DPage.setTitle("Loaing Plot 2D Settings ");
+				//
+				PreferenceManager preferenceManager = new PreferenceManager();
+				preferenceManager.addToRoot(new PreferenceNode("1", preferenceLoadingPlot2DPage));
+				//
+				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
+				preferenceDialog.create();
+				preferenceDialog.setMessage("Settings");
+				if(preferenceDialog.open() == PreferenceDialog.OK) {
+					if(partHasBeenDestroy)
+						return;
+					if(pcaResults != null) {
+						loadingPlot.update(pcaResults);
+					}
+				}
+			}
+		});
+	}
+
 	@PreDestroy
 	public void preDestroy() {
 
+		partHasBeenDestroy = true;
 		SelectionManagerSamples.getInstance().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
 		if(pcaResults != null) {
 			pcaResults.getExtractedVariables().removeListener(variableChanger);

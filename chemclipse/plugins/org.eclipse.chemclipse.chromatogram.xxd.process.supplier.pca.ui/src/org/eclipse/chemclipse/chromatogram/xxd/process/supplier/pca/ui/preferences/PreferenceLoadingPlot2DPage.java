@@ -12,19 +12,19 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
-import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.eavp.service.swtchart.preferences.PreferenceSupport;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferenceLoadingPlot2DPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public PreferencePage() {
+	public PreferenceLoadingPlot2DPage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("PCA Preferences");
+		setDescription("Loading Plot 2D Preferences");
 	}
 
 	@Override
@@ -35,9 +35,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	protected void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceConstants.P_ALGORITHM_TYPE, "Algorithm type:", PreferenceConstants.ALGORITHM_TYPES, getFieldEditorParent()));
-		addIntegerEditor(PreferenceConstants.P_NUMBER_OF_COMPONENTS, "Number of Components", PreferenceConstants.MIN_NUMBER_OF_COMPONENTS, PreferenceConstants.MAX_NUMBER_OF_COMPONENTS);
-		addField(new BooleanFieldEditor(PreferenceConstants.P_AUTO_REEVALUATE, "Reevaluete after change", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_LOADING_PLOT_2D_SYMBOL_TYPE, "Symbol type:", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
+		addIntegerEditor(PreferenceConstants.P_LOADING_PLOT_2D_SYMBOL_SIZE, "Symbol size", PreferenceConstants.MIN_LOADING_PLOT_2D_SYMBOL_SIZE, PreferenceConstants.MAX_LOADING_PLOT_2D_SYMBOL_SIZE);
 	}
 
 	private void addIntegerEditor(String name, String labelText, int min, int max) {
