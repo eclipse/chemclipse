@@ -18,33 +18,54 @@ import java.util.List;
 import java.util.OptionalDouble;
 
 import org.ejml.data.DenseMatrix64F;
+import org.ejml.ops.CommonOps;
 
 public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 
-	private double[] getYVector() {
+	private DenseMatrix64F getYVector() {
 
 		HashSet<String> groupNamesSet = new HashSet<>();
 		ArrayList<String> groupNames = getGroupNames();
-		double[] yVector = new double[groupNames.size()];
+		double[] vector = new double[groupNames.size()];
 		groupNamesSet.addAll(groupNames);
 		List<String> uniqueGroupNames = Arrays.asList(groupNamesSet.toArray(new String[groupNamesSet.size()]));
 		int yIterator = 0;
 		for(String myString : groupNames) {
-			yVector[yIterator] = (double)uniqueGroupNames.indexOf(myString);
+			vector[yIterator] = (double)uniqueGroupNames.indexOf(myString);
 			yIterator++;
 		}
+		DenseMatrix64F yVector = new DenseMatrix64F(groupNames.size(), 1, true, vector);
 		return yVector;
 	}
 
-	private double[] getAvgYVector() {
+	private DenseMatrix64F getAvgYVector() {
 
-		double[] yVector = getYVector();
-		double[] avgYVector = new double[yVector.length];
+		double[] yVector = getYVector().data;
+		double[] avgYData = new double[yVector.length];
 		OptionalDouble avgValue = Arrays.stream(yVector).average();
 		if(avgValue.isPresent()) {
-			Arrays.fill(avgYVector, avgValue.getAsDouble());
+			Arrays.fill(avgYData, avgValue.getAsDouble());
 		}
+		DenseMatrix64F avgYVector = new DenseMatrix64F(yVector.length, 1, true, avgYData);
 		return avgYVector;
+	}
+
+	private DenseMatrix64F getAvgXVector() {
+
+		DenseMatrix64F X = getSampleData();
+		DenseMatrix64F avgOfCols = new DenseMatrix64F(1, getSampleData().getNumCols());
+		CommonOps.sumCols(X, avgOfCols);
+		CommonOps.divide(avgOfCols, getSampleData().getNumRows());
+		return avgOfCols;
+	}
+
+	private DenseMatrix64F getSDXVector() {
+
+		// subtract from each value it's column average
+		// square the obtained difference
+		// sum the columns
+		// take the square root of each value
+		return null;
 	}
 
 	@Override
@@ -56,23 +77,15 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		DenseMatrix64F p_ortho = new DenseMatrix64F(numComps - 1, numberOfVariables);
 		DenseMatrix64F w_ortho = new DenseMatrix64F(numComps - 1, numberOfVariables);
 		DenseMatrix64F X = getSampleData();
-		DenseMatrix64F y = new DenseMatrix64F(getYVector().length, 1, true, getYVector());
-		DenseMatrix64F y_avg = new DenseMatrix64F(getAvgYVector().length, 1, true, getAvgYVector());
-		//
-		// if (preprocess_method==0){
-		// pre_data_vector<-opls_preproc(X,0) ### If statements not finished!
-		//
-		// } else if(preprocess_method==1){
-		// pre_data_vector<-opls_preproc(X,1)
-		//
-		// } else if (preprocess_method==2){
-		// pre_data_vector<-opls_preproc(X,2)
-		// }
-		//
+		DenseMatrix64F y = getYVector();
+		DenseMatrix64F y_avg = getAvgYVector();
+		DenseMatrix64F x_avg = getAvgXVector();
+		DenseMatrix64F x_sd = getSDXVector();
 		// avg_X<-pre_data_vector$vectors[1,]
 		// std_X<-pre_data_vector$vectors[2,]
 		// X<-pre_data_vector$data
 		// Eo_PLS<-X
+		DenseMatrix64F Eo_PLS = getSampleData();
 		//
 		// ##########################################################################
 		// ### Start algorithm
