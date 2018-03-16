@@ -404,6 +404,12 @@ public class ChromatogramEditorCSD implements IChromatogramEditorCSD, IChromatog
 				IChromatogramCSD chromatogram = (IChromatogramCSD)object;
 				chromatogramSelection = new ChromatogramSelectionCSD(chromatogram);
 				chromatogramFile = null;
+			} else if(object instanceof String) {
+				/*
+				 * Legacy ... Deprecated
+				 */
+				File file = new File((String)object);
+				importChromatogram(file, true);
 			}
 		} catch(Exception e) {
 			logger.warn(e);

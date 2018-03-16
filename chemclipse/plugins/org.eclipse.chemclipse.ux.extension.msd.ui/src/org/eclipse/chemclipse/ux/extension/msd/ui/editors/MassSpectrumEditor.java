@@ -252,6 +252,12 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 				File file = new File((String)map.get(ISupplierFileEditorSupport.MAP_FILE));
 				boolean batch = (boolean)map.get(ISupplierFileEditorSupport.MAP_BATCH);
 				importMassSpectrum(file, batch);
+			} else if(object instanceof String) {
+				/*
+				 * Legacy ... Deprecated
+				 */
+				File file = new File((String)object);
+				importMassSpectrum(file, true);
 			}
 		} catch(Exception e) {
 			logger.warn(e);
