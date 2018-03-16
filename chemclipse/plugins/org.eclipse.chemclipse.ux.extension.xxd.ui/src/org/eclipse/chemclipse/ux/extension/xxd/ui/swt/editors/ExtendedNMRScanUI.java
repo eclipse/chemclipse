@@ -49,6 +49,8 @@ public class ExtendedNMRScanUI {
 	//
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
+	//
+	private boolean rawData = false;
 
 	public ExtendedNMRScanUI(Composite parent) {
 		initialize(parent);
@@ -56,27 +58,35 @@ public class ExtendedNMRScanUI {
 
 	public void update(IScanNMR scanNMR) {
 
+		scanChart.modifyChart(rawData);
 		this.scanNMR = scanNMR;
 		updateScan();
 	}
 
 	private void updateScan() {
 
+		scanChart.deleteSeries();
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-		ILineSeriesData lineSeriesData = getLineSeriesData(scanNMR, "NMR");
+		ILineSeriesData lineSeriesData = getLineSeriesData(scanNMR, "NMR", rawData);
 		lineSeriesData.getLineSeriesSettings().setLineColor(Colors.RED);
 		lineSeriesDataList.add(lineSeriesData);
 		scanChart.addSeriesData(lineSeriesDataList);
 	}
 
-	private ILineSeriesData getLineSeriesData(IScanNMR scanNMR, String id) {
+	private ILineSeriesData getLineSeriesData(IScanNMR scanNMR, String id, boolean raw) {
 
-		ISeriesData seriesData = getSeriesData(scanNMR, id);
+		ISeriesData seriesData;
+		if(raw) {
+			seriesData = getSeriesDataRaw(scanNMR, id);
+		} else {
+			seriesData = getSeriesDataProcessed(scanNMR, id);
+		}
+		//
 		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
 		return lineSeriesData;
 	}
 
-	private ISeriesData getSeriesData(IScanNMR scanNMR, String id) {
+	private ISeriesData getSeriesDataProcessed(IScanNMR scanNMR, String id) {
 
 		double[] xSeries;
 		double[] ySeries;
@@ -97,6 +107,19 @@ public class ExtendedNMRScanUI {
 		}
 		//
 		return new SeriesData(xSeries, ySeries, id);
+	}
+
+	private ISeriesData getSeriesDataRaw(IScanNMR scanNMR, String id) {
+
+		double[] ySeries;
+		//
+		if(scanNMR != null) {
+			ySeries = scanNMR.getRawSignals().clone();
+		} else {
+			ySeries = new double[0];
+		}
+		//
+		return new SeriesData(ySeries, id);
 	}
 
 	private void initialize(Composite parent) {
