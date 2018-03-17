@@ -409,6 +409,12 @@ public class ChromatogramEditorWSD implements IChromatogramEditorWSD, IChromatog
 				IChromatogramWSD chromatogram = (IChromatogramWSD)object;
 				chromatogramSelection = new ChromatogramSelectionWSD(chromatogram);
 				chromatogramFile = null;
+			} else if(object instanceof String) {
+				/*
+				 * Legacy ... Deprecated
+				 */
+				File file = new File((String)object);
+				importChromatogram(file, true);
 			}
 		} catch(Exception e) {
 			logger.warn(e);

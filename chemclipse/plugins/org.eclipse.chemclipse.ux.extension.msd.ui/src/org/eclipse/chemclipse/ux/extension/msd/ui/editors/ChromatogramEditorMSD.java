@@ -438,6 +438,12 @@ public class ChromatogramEditorMSD implements IChromatogramEditorMSD, IChromatog
 				IChromatogramMSD chromatogram = (IChromatogramMSD)object;
 				chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 				chromatogramFile = null;
+			} else if(object instanceof String) {
+				/*
+				 * Legacy ... Deprecated
+				 */
+				File file = new File((String)object);
+				importChromatogram(file, true);
 			}
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);

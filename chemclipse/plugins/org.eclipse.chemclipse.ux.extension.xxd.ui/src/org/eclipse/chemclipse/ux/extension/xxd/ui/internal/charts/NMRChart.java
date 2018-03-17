@@ -15,6 +15,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ScanToSecondsConverter;
 import org.eclipse.eavp.service.swtchart.axisconverter.RelativeIntensityConverter;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.core.IPrimaryAxisSettings;
@@ -39,7 +40,62 @@ public class NMRChart extends LineChart {
 		initialize();
 	}
 
+	public void modifyChart(boolean rawData) {
+
+		if(rawData) {
+			modifyRaw();
+		} else {
+			modifyProcessed();
+		}
+	}
+
 	private void initialize() {
+
+		modifyProcessed();
+	}
+
+	private void modifyRaw() {
+
+		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setCreateMenu(true);
+		chartSettings.setOrientation(SWT.HORIZONTAL);
+		chartSettings.setHorizontalSliderVisible(true);
+		chartSettings.setVerticalSliderVisible(false);
+		chartSettings.getRangeRestriction().setZeroX(false);
+		chartSettings.getRangeRestriction().setZeroY(false);
+		//
+		setPrimaryAxisSetRaw(chartSettings);
+		addSecondaryAxisSetRaw(chartSettings);
+		applySettings(chartSettings);
+	}
+
+	private void setPrimaryAxisSetRaw(IChartSettings chartSettings) {
+
+		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
+		primaryAxisSettingsX.setTitle("scan");
+		primaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH)));
+		primaryAxisSettingsX.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		primaryAxisSettingsX.setPosition(Position.Primary);
+		primaryAxisSettingsX.setVisible(false);
+		//
+		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
+		primaryAxisSettingsY.setTitle("Intensity");
+		primaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.0#E0"), new DecimalFormatSymbols(Locale.ENGLISH)));
+		primaryAxisSettingsY.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+	}
+
+	private void addSecondaryAxisSetRaw(IChartSettings chartSettings) {
+
+		chartSettings.getSecondaryAxisSettingsListY().clear();
+		//
+		ISecondaryAxisSettings secondaryAxisSettingsX1 = new SecondaryAxisSettings("t1 (sec)", new ScanToSecondsConverter());
+		secondaryAxisSettingsX1.setPosition(Position.Primary);
+		secondaryAxisSettingsX1.setDecimalFormat(new DecimalFormat(("0"), new DecimalFormatSymbols(Locale.ENGLISH)));
+		secondaryAxisSettingsX1.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX1);
+	}
+
+	private void modifyProcessed() {
 
 		/*
 		 * Chart Settings
@@ -51,12 +107,12 @@ public class NMRChart extends LineChart {
 		chartSettings.getRangeRestriction().setZeroX(true);
 		chartSettings.getRangeRestriction().setZeroY(true);
 		//
-		setPrimaryAxisSet(chartSettings);
-		addSecondaryAxisSet(chartSettings);
+		setPrimaryAxisSetProcessed(chartSettings);
+		addSecondaryAxisSetProcessed(chartSettings);
 		applySettings(chartSettings);
 	}
 
-	private void setPrimaryAxisSet(IChartSettings chartSettings) {
+	private void setPrimaryAxisSetProcessed(IChartSettings chartSettings) {
 
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle("ppm");
@@ -70,8 +126,10 @@ public class NMRChart extends LineChart {
 		primaryAxisSettingsY.setGridLineStyle(LineStyle.NONE);
 	}
 
-	private void addSecondaryAxisSet(IChartSettings chartSettings) {
+	private void addSecondaryAxisSetProcessed(IChartSettings chartSettings) {
 
+		chartSettings.getSecondaryAxisSettingsListY().clear();
+		//
 		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Intensity [%]", new RelativeIntensityConverter(SWT.VERTICAL, true));
 		secondaryAxisSettingsY.setPosition(Position.Secondary);
 		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
