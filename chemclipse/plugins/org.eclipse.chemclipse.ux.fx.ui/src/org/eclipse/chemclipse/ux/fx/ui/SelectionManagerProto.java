@@ -86,7 +86,7 @@ public class SelectionManagerProto<T> {
 	 * provided {@code extractor}.
 	 *
 	 * @param extractor
-	 *            element to Observable[] convertor. Observable objects are listened
+	 *            element to Observable[] converter. Observable objects are listened
 	 *            for changes on the element.
 	 *
 	 * @see FXCollections#observableArrayList(Callback)
