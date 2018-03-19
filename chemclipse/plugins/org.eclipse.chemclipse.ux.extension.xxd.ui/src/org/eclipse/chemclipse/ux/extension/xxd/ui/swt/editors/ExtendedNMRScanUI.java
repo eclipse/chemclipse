@@ -20,12 +20,13 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.NMRChart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ChartNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
+import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -44,7 +45,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class ExtendedNMRScanUI {
 
-	private NMRChart scanChart;
+	private ChartNMR chartNMR;
 	private IScanNMR scanNMR;
 	//
 	private Display display = Display.getDefault();
@@ -58,19 +59,27 @@ public class ExtendedNMRScanUI {
 
 	public void update(IScanNMR scanNMR) {
 
-		scanChart.modifyChart(rawData);
+		chartNMR.modifyChart(rawData);
 		this.scanNMR = scanNMR;
 		updateScan();
 	}
 
 	private void updateScan() {
 
-		scanChart.deleteSeries();
+		chartNMR.deleteSeries();
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 		ILineSeriesData lineSeriesData = getLineSeriesData(scanNMR, "NMR", rawData);
-		lineSeriesData.getLineSeriesSettings().setLineColor(Colors.RED);
+		//
+		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+		lineSeriesSettings.setLineColor(Colors.RED);
+		if(rawData) {
+			lineSeriesSettings.setEnableArea(false);
+		} else {
+			lineSeriesSettings.setEnableArea(true);
+		}
+		//
 		lineSeriesDataList.add(lineSeriesData);
-		scanChart.addSeriesData(lineSeriesDataList);
+		chartNMR.addSeriesData(lineSeriesDataList);
 	}
 
 	private ILineSeriesData getLineSeriesData(IScanNMR scanNMR, String id, boolean raw) {
@@ -136,10 +145,29 @@ public class ExtendedNMRScanUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(3, false));
 		//
+		createRawProcessedButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
+	}
+
+	private void createRawProcessedButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the raw/processed modus");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SCAN_NMR, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				rawData = !rawData;
+				chartNMR.modifyChart(rawData);
+				updateScan();
+			}
+		});
 	}
 
 	private void createResetButton(Composite parent) {
@@ -204,16 +232,16 @@ public class ExtendedNMRScanUI {
 
 	private void createScanChart(Composite parent) {
 
-		scanChart = new NMRChart(parent, SWT.BORDER);
-		scanChart.setLayoutData(new GridData(GridData.FILL_BOTH));
+		chartNMR = new ChartNMR(parent, SWT.BORDER);
+		chartNMR.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Chart Settings
 		 */
-		IChartSettings chartSettings = scanChart.getChartSettings();
+		IChartSettings chartSettings = chartNMR.getChartSettings();
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableRangeSelector(true);
 		chartSettings.setShowRangeSelectorInitially(false);
 		//
-		scanChart.applySettings(chartSettings);
+		chartNMR.applySettings(chartSettings);
 	}
 }

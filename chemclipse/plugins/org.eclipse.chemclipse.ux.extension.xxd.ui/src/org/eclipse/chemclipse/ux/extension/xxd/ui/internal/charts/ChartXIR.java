@@ -27,14 +27,14 @@ import org.eclipse.swt.widgets.Display;
 import org.swtchart.IAxis.Position;
 import org.swtchart.LineStyle;
 
-public class XIRChart extends LineChart {
+public class ChartXIR extends LineChart {
 
-	public XIRChart() {
+	public ChartXIR() {
 		super();
 		initialize();
 	}
 
-	public XIRChart(Composite parent, int style) {
+	public ChartXIR(Composite parent, int style) {
 		super(parent, style);
 		initialize();
 	}

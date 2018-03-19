@@ -28,14 +28,14 @@ import org.eclipse.swt.widgets.Display;
 import org.swtchart.IAxis.Position;
 import org.swtchart.LineStyle;
 
-public class NMRChart extends LineChart {
+public class ChartNMR extends LineChart {
 
-	public NMRChart() {
+	public ChartNMR() {
 		super();
 		initialize();
 	}
 
-	public NMRChart(Composite parent, int style) {
+	public ChartNMR(Composite parent, int style) {
 		super(parent, style);
 		initialize();
 	}
@@ -86,13 +86,23 @@ public class NMRChart extends LineChart {
 
 	private void addSecondaryAxisSetRaw(IChartSettings chartSettings) {
 
-		chartSettings.getSecondaryAxisSettingsListY().clear();
-		//
+		deleteSecondaryAxes(chartSettings);
+		/*
+		 * X
+		 */
 		ISecondaryAxisSettings secondaryAxisSettingsX1 = new SecondaryAxisSettings("t1 (sec)", new ScanToSecondsConverter());
 		secondaryAxisSettingsX1.setPosition(Position.Primary);
 		secondaryAxisSettingsX1.setDecimalFormat(new DecimalFormat(("0"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		secondaryAxisSettingsX1.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 		chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX1);
+		/*
+		 * Y
+		 */
+		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Intensity [%]", new RelativeIntensityConverter(SWT.VERTICAL, true));
+		secondaryAxisSettingsY.setPosition(Position.Secondary);
+		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
+		secondaryAxisSettingsY.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 	}
 
 	private void modifyProcessed() {
@@ -118,6 +128,7 @@ public class NMRChart extends LineChart {
 		primaryAxisSettingsX.setTitle("ppm");
 		primaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		primaryAxisSettingsX.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		primaryAxisSettingsX.setVisible(true);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle("Intensity");
@@ -128,12 +139,20 @@ public class NMRChart extends LineChart {
 
 	private void addSecondaryAxisSetProcessed(IChartSettings chartSettings) {
 
-		chartSettings.getSecondaryAxisSettingsListY().clear();
-		//
+		deleteSecondaryAxes(chartSettings);
+		/*
+		 * Y
+		 */
 		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Intensity [%]", new RelativeIntensityConverter(SWT.VERTICAL, true));
 		secondaryAxisSettingsY.setPosition(Position.Secondary);
 		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		secondaryAxisSettingsY.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
+	}
+
+	private void deleteSecondaryAxes(IChartSettings chartSettings) {
+
+		chartSettings.getSecondaryAxisSettingsListX().clear();
+		chartSettings.getSecondaryAxisSettingsListY().clear();
 	}
 }

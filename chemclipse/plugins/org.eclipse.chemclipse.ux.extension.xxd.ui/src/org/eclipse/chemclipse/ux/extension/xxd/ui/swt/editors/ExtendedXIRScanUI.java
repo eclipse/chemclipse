@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.XIRChart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ChartXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.xir.model.core.IScanXIR;
 import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
@@ -44,7 +44,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class ExtendedXIRScanUI {
 
-	private XIRChart scanChart;
+	private ChartXIR scanChart;
 	private IScanXIR scanXIR;
 	//
 	private Display display = Display.getDefault();
@@ -181,7 +181,7 @@ public class ExtendedXIRScanUI {
 
 	private void createScanChart(Composite parent) {
 
-		scanChart = new XIRChart(parent, SWT.BORDER);
+		scanChart = new ChartXIR(parent, SWT.BORDER);
 		scanChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Chart Settings
