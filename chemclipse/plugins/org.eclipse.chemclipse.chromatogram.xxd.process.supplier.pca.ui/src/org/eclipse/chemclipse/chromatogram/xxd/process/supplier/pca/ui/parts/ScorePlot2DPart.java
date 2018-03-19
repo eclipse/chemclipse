@@ -26,8 +26,20 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visual
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaSettingsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.ScorePlot;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceScorePlot2DPage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.PreferenceDialog;
+import org.eclipse.jface.preference.PreferenceManager;
+import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
@@ -44,7 +56,10 @@ public class ScorePlot2DPart {
 	private ScorePlot scorePlot;
 	private ListChangeListener<IPcaResultVisualization> selectionChangeListener;
 	private Consumer<IPcaSettingsVisualization> settingUpdateListener;
+	private boolean partHasBeenDestroy;
 	private Runnable updateSelection = () -> {
+		if(partHasBeenDestroy)
+			return;
 		if(pcaResults != null) {
 			scorePlot.update(pcaResults);
 		}
@@ -64,7 +79,9 @@ public class ScorePlot2DPart {
 			@Override
 			public void onChanged(javafx.collections.ListChangeListener.Change<? extends ISample<? extends ISampleData>> c) {
 
-				Display.getDefault().syncExec(() -> {
+				Display.getDefault().asyncExec(() -> {
+					if(partHasBeenDestroy)
+						return;
 					scorePlot.getBaseChart().resetSeriesSettings();
 					if(!c.getList().isEmpty()) {
 						for(Entry<String, IPcaResult> entry : scorePlot.getExtractedResults().entrySet()) {
@@ -89,18 +106,22 @@ public class ScorePlot2DPart {
 			@Override
 			public void changed(ObservableValue<? extends IPcaResultsVisualization> observable, IPcaResultsVisualization oldValue, IPcaResultsVisualization newValue) {
 
-				pcaResults = newValue;
-				if(oldValue != null) {
-					oldValue.getPcaResultList().removeListener(selectionChangeListener);
-					oldValue.getPcaSettingsVisualization().removeChangeListener(settingUpdateListener);
-				}
-				if(newValue != null) {
-					scorePlot.update(newValue);
-					newValue.getPcaResultList().addListener(selectionChangeListener);
-					newValue.getPcaSettingsVisualization().addChangeListener(settingUpdateListener);
-				} else {
-					scorePlot.deleteSeries();
-				}
+				Display.getDefault().asyncExec(() -> {
+					if(partHasBeenDestroy)
+						return;
+					pcaResults = newValue;
+					if(oldValue != null) {
+						oldValue.getPcaResultList().removeListener(selectionChangeListener);
+						oldValue.getPcaSettingsVisualization().removeChangeListener(settingUpdateListener);
+					}
+					if(newValue != null) {
+						scorePlot.update(newValue);
+						newValue.getPcaResultList().addListener(selectionChangeListener);
+						newValue.getPcaSettingsVisualization().addChangeListener(settingUpdateListener);
+					} else {
+						scorePlot.deleteSeries();
+					}
+				});
 			}
 		};
 	}
@@ -108,9 +129,19 @@ public class ScorePlot2DPart {
 	@PostConstruct
 	public void createComposite(Composite parent) {
 
+		partHasBeenDestroy = false;
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new FillLayout());
-		scorePlot = new ScorePlot(composite);
+		composite.setLayout(new GridLayout(1, false));
+		Composite buttonsComposite = new Composite(composite, SWT.None);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = SWT.END;
+		buttonsComposite.setLayoutData(gridData);
+		buttonsComposite.setLayout(new GridLayout(1, false));
+		createSettingsButtons(buttonsComposite);
+		Composite scorePlotComposite = new Composite(composite, SWT.None);
+		scorePlotComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		scorePlotComposite.setLayout(new FillLayout());
+		scorePlot = new ScorePlot(scorePlotComposite);
 		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaresults = SelectionManagerSamples.getInstance().getActualSelectedPcaResults();
 		pcaresults.addListener(pcaResultChangeLisnter);
 		this.pcaResults = pcaresults.get();
@@ -122,9 +153,41 @@ public class ScorePlot2DPart {
 		SelectionManagerSample.getInstance().getSelection().addListener(actualSelectionChangeListener);
 	}
 
+	private void createSettingsButtons(Composite buttonsComposite) {
+
+		Button button = new Button(buttonsComposite, SWT.PUSH);
+		button.setToolTipText("Open the Settings");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IPreferencePage preferenceScorePlot2DPage = new PreferenceScorePlot2DPage();
+				preferenceScorePlot2DPage.setTitle("Score Plot 2D Settings ");
+				//
+				PreferenceManager preferenceManager = new PreferenceManager();
+				preferenceManager.addToRoot(new PreferenceNode("1", preferenceScorePlot2DPage));
+				//
+				PreferenceDialog preferenceDialog = new PreferenceDialog(Display.getDefault().getActiveShell(), preferenceManager);
+				preferenceDialog.create();
+				preferenceDialog.setMessage("Settings");
+				if(preferenceDialog.open() == PreferenceDialog.OK) {
+					if(partHasBeenDestroy)
+						return;
+					if(pcaResults != null) {
+						scorePlot.update(pcaResults);
+					}
+				}
+			}
+		});
+	}
+
 	@PreDestroy
 	public void preDestroy() {
 
+		partHasBeenDestroy = true;
 		Display.getDefault().timerExec(-1, updateSelection);
 		SelectionManagerSample.getInstance().getSelection().removeListener(actualSelectionChangeListener);
 		SelectionManagerSamples.getInstance().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);

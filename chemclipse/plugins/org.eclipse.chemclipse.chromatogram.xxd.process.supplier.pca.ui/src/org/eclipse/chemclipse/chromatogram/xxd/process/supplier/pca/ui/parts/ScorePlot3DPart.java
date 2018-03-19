@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d.S
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -41,6 +42,7 @@ public class ScorePlot3DPart {
 	private ScorePlot3d scorePlot3d;
 	private ListChangeListener<IPcaResult> selectionChangeListener;
 	private Consumer<IPcaSettingsVisualization> settingUpdateListener;
+	private boolean partHasBeenDestroy;
 
 	public ScorePlot3DPart() {
 		settingUpdateListener = new Consumer<IPcaSettingsVisualization>() {
@@ -48,7 +50,11 @@ public class ScorePlot3DPart {
 			@Override
 			public void accept(IPcaSettingsVisualization t) {
 
-				scorePlot3d.update(pcaResults);
+				Display.getDefault().syncExec(() -> {
+					if(partHasBeenDestroy)
+						return;
+					scorePlot3d.update(pcaResults);
+				});
 			}
 		};
 		selectionChangeListener = new ListChangeListener<IPcaResult>() {
@@ -56,7 +62,11 @@ public class ScorePlot3DPart {
 			@Override
 			public void onChanged(javafx.collections.ListChangeListener.Change<? extends IPcaResult> c) {
 
-				scorePlot3d.updateSelection();
+				Display.getDefault().syncExec(() -> {
+					if(partHasBeenDestroy)
+						return;
+					scorePlot3d.updateSelection();
+				});
 			}
 		};
 		actualSelectionChangeListener = new ListChangeListener<ISample<? extends ISampleData>>() {
@@ -64,7 +74,11 @@ public class ScorePlot3DPart {
 			@Override
 			public void onChanged(ListChangeListener.Change<? extends ISample<? extends ISampleData>> c) {
 
-				scorePlot3d.updateSelection();
+				Display.getDefault().asyncExec(() -> {
+					if(partHasBeenDestroy)
+						return;
+					scorePlot3d.updateSelection();
+				});
 			}
 		};
 		pcaResultChangeLisnter = new ChangeListener<IPcaResultsVisualization>() {
@@ -72,18 +86,22 @@ public class ScorePlot3DPart {
 			@Override
 			public void changed(ObservableValue<? extends IPcaResultsVisualization> observable, IPcaResultsVisualization oldValue, IPcaResultsVisualization newValue) {
 
-				pcaResults = newValue;
-				if(oldValue != null) {
-					oldValue.getPcaResultList().removeListener(selectionChangeListener);
-					oldValue.getPcaSettingsVisualization().removeChangeListener(settingUpdateListener);
-				}
-				if(newValue != null) {
-					scorePlot3d.update(newValue);
-					pcaResults.getPcaResultList().addListener(selectionChangeListener);
-					pcaResults.getPcaSettingsVisualization().addChangeListener(settingUpdateListener);
-				} else {
-					scorePlot3d.removeData();
-				}
+				Display.getDefault().asyncExec(() -> {
+					if(partHasBeenDestroy)
+						return;
+					pcaResults = newValue;
+					if(oldValue != null) {
+						oldValue.getPcaResultList().removeListener(selectionChangeListener);
+						oldValue.getPcaSettingsVisualization().removeChangeListener(settingUpdateListener);
+					}
+					if(newValue != null) {
+						scorePlot3d.update(newValue);
+						pcaResults.getPcaResultList().addListener(selectionChangeListener);
+						pcaResults.getPcaSettingsVisualization().addChangeListener(settingUpdateListener);
+					} else {
+						scorePlot3d.removeData();
+					}
+				});
 			}
 		};
 	}
@@ -91,6 +109,7 @@ public class ScorePlot3DPart {
 	@PostConstruct
 	public void createComposite(Composite parent) {
 
+		partHasBeenDestroy = false;
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());
 		scorePlot3d = new ScorePlot3d(composite, null);
@@ -108,6 +127,7 @@ public class ScorePlot3DPart {
 	@PreDestroy
 	public void preDestroy() {
 
+		partHasBeenDestroy = true;
 		SelectionManagerSamples.getInstance().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
 		SelectionManagerSample.getInstance().getSelection().removeListener(actualSelectionChangeListener);
 		if(pcaResults != null) {

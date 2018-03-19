@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.errorresi
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -37,6 +38,7 @@ public class ErrorResiduePart {
 	private ChangeListener<IPcaResultsVisualization> pcaResultChangeLisnter;
 	private IPcaResultsVisualization pcaResults;
 	private ListChangeListener<IPcaResult> selectionChangeListener;
+	private boolean partHasBeenDestroy;
 
 	public ErrorResiduePart() {
 		selectionChangeListener = new ListChangeListener<IPcaResult>() {
@@ -44,7 +46,11 @@ public class ErrorResiduePart {
 			@Override
 			public void onChanged(javafx.collections.ListChangeListener.Change<? extends IPcaResult> c) {
 
-				errorResidueChart.updateSelection();
+				Display.getDefault().asyncExec(() -> {
+					if(partHasBeenDestroy)
+						return;
+					errorResidueChart.updateSelection();
+				});
 			}
 		};
 		pcaResultChangeLisnter = new ChangeListener<IPcaResultsVisualization>() {
@@ -52,16 +58,20 @@ public class ErrorResiduePart {
 			@Override
 			public void changed(ObservableValue<? extends IPcaResultsVisualization> observable, IPcaResultsVisualization oldValue, IPcaResultsVisualization newValue) {
 
-				pcaResults = newValue;
-				if(oldValue != null) {
-					oldValue.getPcaResultList().removeListener(selectionChangeListener);
-				}
-				if(newValue != null) {
-					newValue.getPcaResultList().addListener(selectionChangeListener);
-					errorResidueChart.update(newValue);
-				} else {
-					errorResidueChart.removeData();
-				}
+				Display.getDefault().asyncExec(() -> {
+					if(partHasBeenDestroy)
+						return;
+					pcaResults = newValue;
+					if(oldValue != null) {
+						oldValue.getPcaResultList().removeListener(selectionChangeListener);
+					}
+					if(newValue != null) {
+						newValue.getPcaResultList().addListener(selectionChangeListener);
+						errorResidueChart.update(newValue);
+					} else {
+						errorResidueChart.removeData();
+					}
+				});
 			}
 		};
 		actualSelectionChangeListener = new ListChangeListener<ISample<? extends ISampleData>>() {
@@ -69,7 +79,11 @@ public class ErrorResiduePart {
 			@Override
 			public void onChanged(javafx.collections.ListChangeListener.Change<? extends ISample<? extends ISampleData>> c) {
 
-				errorResidueChart.updateSelection();
+				Display.getDefault().asyncExec(() -> {
+					if(partHasBeenDestroy)
+						return;
+					errorResidueChart.updateSelection();
+				});
 			}
 		};
 	}
@@ -93,6 +107,7 @@ public class ErrorResiduePart {
 	@PreDestroy
 	public void preDestroy() {
 
+		partHasBeenDestroy = true;
 		SelectionManagerSample.getInstance().getSelection().removeListener(actualSelectionChangeListener);
 		SelectionManagerSamples.getInstance().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
 		if(pcaResults != null) {
