@@ -55,12 +55,6 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 	}
 
 	@Override
-	public int getNumerOfComponents() {
-
-		return mainPropertiesPage.getNumerOfComponents();
-	}
-
-	@Override
 	public IDataExtraction getPcaExtractionData() {
 
 		return pcaExtractionData;

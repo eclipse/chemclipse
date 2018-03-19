@@ -29,6 +29,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_ALGORITHM_TYPE, PreferenceConstants.DEF_ALGORITHM_TYPE);
 		store.setDefault(PreferenceConstants.P_NUMBER_OF_COMPONENTS, PreferenceConstants.DEF_NUMBER_OF_COMPONENTS);
 		store.setDefault(PreferenceConstants.P_AUTO_REEVALUATE, PreferenceConstants.DEF_AUTO_REEVALUATE);
+		store.setDefault(PreferenceConstants.P_RETENTION_TIME_WINDOW_PEAKS, PreferenceConstants.DEF_RETENTION_TIME_WINDOW_PEAKS);
 		//
 		store.setDefault(PreferenceConstants.P_SCORE_PLOT_2D_SYMBOL_SIZE, PreferenceConstants.DEF_SCORE_PLOT_2D_SYMBOL_SIZE);
 		store.setDefault(PreferenceConstants.P_SCORE_PLOT_2D_SYMBOL_TYPE, PreferenceConstants.DEF_SCORE_PLOT_2D_SYMBOL_TYPE);

@@ -30,6 +30,8 @@ public class PreferenceConstants {
 	public static final int DEF_NUMBER_OF_COMPONENTS = 3;
 	public static final String P_AUTO_REEVALUATE = "autoReevaluate";
 	public static final boolean DEF_AUTO_REEVALUATE = false;
+	public static final String P_RETENTION_TIME_WINDOW_PEAKS = "retentionTimeWindowPeaks";
+	public static final double DEF_RETENTION_TIME_WINDOW_PEAKS = 0.1;
 	// Score Plot general Settings
 	public static final String P_SCORE_PLOT_2D_SYMBOL_SIZE = "scorePlot2dSymbolSize";
 	public static final int DEF_SCORE_PLOT_2D_SYMBOL_SIZE = 6;
