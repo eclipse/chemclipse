@@ -13,6 +13,14 @@ package org.eclipse.chemclipse.ux.fx.ui;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Task;
 
+/**
+ * A {@link SimpleObjectProperty} that lazily loads its value.
+ *
+ * @author Alexander Kerner
+ *
+ * @param <T>
+ *            type of the wrapped Object
+ */
 public abstract class LazyLoadingObjectProperty<T> extends SimpleObjectProperty<T> {
 
 	public LazyLoadingObjectProperty() {
@@ -38,8 +46,8 @@ public abstract class LazyLoadingObjectProperty<T> extends SimpleObjectProperty<
 	private boolean loaded = false;
 
 	/**
-	 * Is called after the background task's finished (success or failure). Override
-	 * if needed. E.g. to bind the value afterwards.
+	 * Called after the background task's finished (success or failure). Override if
+	 * needed. E.g. to bind the value afterwards.
 	 */
 	protected void afterLoaded() {
 
@@ -54,10 +62,21 @@ public abstract class LazyLoadingObjectProperty<T> extends SimpleObjectProperty<
 	 */
 	protected abstract Task<T> createTask();
 
+	/**
+	 * Returns the value that should be set in case of failed loading.
+	 *
+	 * @param t
+	 *            the cause of failure
+	 * @return the value that should be set in case of failed loading
+	 */
 	protected T getFailedValue(final Throwable t) {
 		return null;
 	}
 
+	/**
+	 * Starts the loading task asynchronously (if not already running) and returns
+	 * {@link super#getValue()}.
+	 */
 	@Override
 	public T getValue() {
 		if (!loaded) {
