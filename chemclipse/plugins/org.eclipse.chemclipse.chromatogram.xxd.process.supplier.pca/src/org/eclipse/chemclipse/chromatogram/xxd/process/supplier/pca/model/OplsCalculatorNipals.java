@@ -61,11 +61,20 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 
 	private DenseMatrix64F getSDXVector() {
 
-		// subtract from each value it's column average
-		// square the obtained difference
-		// sum the columns
-		// take the square root of each value
-		return null;
+		DenseMatrix64F X = getSampleData().copy();
+		DenseMatrix64F avgOfCols = getAvgXVector();
+		DenseMatrix64F sdXVector = new DenseMatrix64F(1, getSampleData().getNumCols());
+		for(int i = 0; i < getSampleData().getNumCols(); i++) {
+			for(int j = 0; j < getSampleData().getNumRows(); j++) {
+				X.set(j, i, X.get(j, i) - avgOfCols.get(0, i));
+				X.set(j, i, X.get(j, i) * X.get(j, i));
+			}
+		}
+		CommonOps.sumCols(X, sdXVector);
+		for(int i = 0; i < getSampleData().getNumCols(); i++) {
+			sdXVector.set(0, i, Math.sqrt(sdXVector.get(0, i)));
+		}
+		return sdXVector;
 	}
 
 	@Override
@@ -81,10 +90,6 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		DenseMatrix64F y_avg = getAvgYVector();
 		DenseMatrix64F x_avg = getAvgXVector();
 		DenseMatrix64F x_sd = getSDXVector();
-		// avg_X<-pre_data_vector$vectors[1,]
-		// std_X<-pre_data_vector$vectors[2,]
-		// X<-pre_data_vector$data
-		// Eo_PLS<-X
 		DenseMatrix64F Eo_PLS = getSampleData();
 		//
 		// ##########################################################################
