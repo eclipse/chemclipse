@@ -16,7 +16,10 @@ import org.eclipse.eavp.service.swtchart.core.IAxisScaleConverter;
 
 public class ScanToSecondsConverter extends AbstractAxisScaleConverter implements IAxisScaleConverter {
 
-	private static final double SECOND_CORRELATION_FACTOR = 16383.78d;
+	/*
+	 * NMR
+	 */
+	private static final double SECOND_CORRELATION_FACTOR = 16384.0d;
 
 	@Override
 	public double convertToSecondaryUnit(double primaryValue) {

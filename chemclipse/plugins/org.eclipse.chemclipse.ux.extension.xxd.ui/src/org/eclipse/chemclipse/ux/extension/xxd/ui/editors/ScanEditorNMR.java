@@ -58,7 +58,7 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IChemCli
 	private IEventBroker eventBroker;
 	//
 	private File scanFile;
-	private ExtendedNMRScanUI extendedScanNMREditorUI;
+	private ExtendedNMRScanUI extendedNMRScanUI;
 	//
 	private Shell shell;
 
@@ -140,7 +140,7 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IChemCli
 
 		IScanNMR scanNMR = loadScan();
 		createEditorPages(parent);
-		extendedScanNMREditorUI.update(scanNMR);
+		extendedNMRScanUI.update(scanNMR);
 	}
 
 	private synchronized IScanNMR loadScan() {
@@ -192,6 +192,6 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IChemCli
 
 	private void createScanPage(Composite parent) {
 
-		extendedScanNMREditorUI = new ExtendedNMRScanUI(parent);
+		extendedNMRScanUI = new ExtendedNMRScanUI(parent);
 	}
 }
