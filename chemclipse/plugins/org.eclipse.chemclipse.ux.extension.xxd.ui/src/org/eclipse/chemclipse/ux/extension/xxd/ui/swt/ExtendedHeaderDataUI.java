@@ -30,7 +30,6 @@ import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -70,7 +69,7 @@ public class ExtendedHeaderDataUI {
 	private Shell shell = display.getActiveShell();
 
 	@Inject
-	public ExtendedHeaderDataUI(Composite parent, MPart part) {
+	public ExtendedHeaderDataUI(Composite parent) {
 		initialize(parent);
 	}
 

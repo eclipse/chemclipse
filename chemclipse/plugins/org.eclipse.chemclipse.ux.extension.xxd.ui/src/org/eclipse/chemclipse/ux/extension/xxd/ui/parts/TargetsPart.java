@@ -31,7 +31,7 @@ public class TargetsPart extends AbstractDataUpdateSupport implements IDataUpdat
 	@Inject
 	public TargetsPart(Composite parent, MPart part) {
 		super(part);
-		extendedTargetsUI = new ExtendedTargetsUI(parent, part);
+		extendedTargetsUI = new ExtendedTargetsUI(parent);
 	}
 
 	@Focus

@@ -67,7 +67,6 @@ import org.eclipse.chemclipse.wsd.model.core.implementation.ChromatogramTargetWS
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanTargetWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -127,7 +126,7 @@ public class ExtendedTargetsUI {
 	private Shell shell = display.getActiveShell();
 
 	@Inject
-	public ExtendedTargetsUI(Composite parent, MPart part) {
+	public ExtendedTargetsUI(Composite parent) {
 		targetListUtil = new TargetListUtil();
 		map = new HashMap<String, Object>();
 		initialize(parent);

@@ -28,7 +28,7 @@ public class HeaderDataPart extends AbstractOverviewUpdateSupport implements IOv
 	@Inject
 	public HeaderDataPart(Composite parent, MPart part) {
 		super(part);
-		extendedHeaderDataUI = new ExtendedHeaderDataUI(parent, part);
+		extendedHeaderDataUI = new ExtendedHeaderDataUI(parent);
 	}
 
 	@Focus

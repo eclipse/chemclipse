@@ -265,10 +265,14 @@ public class ExtendedCombinedScanUI {
 
 		switch(tabFolder.getSelectionIndex()) {
 			case INDEX_CHART:
-				scanChartUI.setInput(scanMSD);
+				if(scanChartUI != null) {
+					scanChartUI.setInput(scanMSD);
+				}
 				break;
 			case INDEX_TABLE:
-				scanTableUI.setInput(scanMSD);
+				if(scanTableUI != null) {
+					scanTableUI.setInput(scanMSD);
+				}
 				break;
 		}
 	}
