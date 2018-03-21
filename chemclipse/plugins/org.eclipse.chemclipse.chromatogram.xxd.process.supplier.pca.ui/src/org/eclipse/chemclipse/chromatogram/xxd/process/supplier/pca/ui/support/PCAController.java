@@ -29,8 +29,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visual
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.RetentionTimeVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SamplesVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -93,12 +93,12 @@ public class PCAController {
 		runAnalysis.addListener(SWT.Selection, e -> {
 			evaluatePCA();
 		});
-		int maxPC = preferenceStore.getInt(PreferenceConstants.P_NUMBER_OF_COMPONENTS);
+		int maxPC = preferenceStore.getInt(PreferenceSupplier.P_NUMBER_OF_COMPONENTS);
 		numerPrincipalComponents = new Spinner(composite, SWT.None);
-		numerPrincipalComponents.setMinimum(PreferenceConstants.MIN_NUMBER_OF_COMPONENTS);
+		numerPrincipalComponents.setMinimum(PreferenceSupplier.MIN_NUMBER_OF_COMPONENTS);
 		numerPrincipalComponents.setIncrement(1);
 		numerPrincipalComponents.setSelection(maxPC);
-		numerPrincipalComponents.setMaximum(PreferenceConstants.MAX_NUMBER_OF_COMPONENTS);
+		numerPrincipalComponents.setMaximum(PreferenceSupplier.MAX_NUMBER_OF_COMPONENTS);
 		numerPrincipalComponents.addListener(SWT.Selection, e -> Display.getDefault().timerExec(100, autoreevaluete));
 		// Selection PCA calculation algorithm
 		Label label = new Label(composite, SWT.None);
@@ -107,7 +107,7 @@ public class PCAController {
 		pcaAlgo.setBounds(50, 50, 150, 65);
 		String items[] = {IPcaSettings.PCA_ALGO_SVD, IPcaSettings.PCA_ALGO_NIPALS, IPcaSettings.OPLS_ALGO_NIPALS};
 		pcaAlgo.setItems(items);
-		pcaAlgo.select(Arrays.asList(items).indexOf(preferenceStore.getString(PreferenceConstants.P_ALGORITHM_TYPE)));
+		pcaAlgo.select(Arrays.asList(items).indexOf(preferenceStore.getString(PreferenceSupplier.P_ALGORITHM_TYPE)));
 		pcaAlgo.addListener(SWT.Selection, e -> Display.getDefault().timerExec(100, autoreevaluete));
 		// Selection Principal Component for X-axis
 		label = new Label(composite, SWT.None);
@@ -148,7 +148,7 @@ public class PCAController {
 		});
 		autoReevaluate = new Button(composite, SWT.CHECK);
 		autoReevaluate.setText("Auto reevaluete");
-		autoReevaluate.setSelection(preferenceStore.getBoolean(PreferenceConstants.P_AUTO_REEVALUATE));
+		autoReevaluate.setSelection(preferenceStore.getBoolean(PreferenceSupplier.P_AUTO_REEVALUATE));
 		settings = new Button(composite, SWT.PUSH);
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = GridData.END;

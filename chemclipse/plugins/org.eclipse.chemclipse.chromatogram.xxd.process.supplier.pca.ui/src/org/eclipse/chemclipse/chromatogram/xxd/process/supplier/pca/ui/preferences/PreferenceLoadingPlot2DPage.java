@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.eavp.service.swtchart.preferences.PreferenceSupport;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -35,8 +36,8 @@ public class PreferenceLoadingPlot2DPage extends FieldEditorPreferencePage imple
 	@Override
 	protected void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceConstants.P_LOADING_PLOT_2D_SYMBOL_TYPE, "Symbol type:", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
-		addIntegerEditor(PreferenceConstants.P_LOADING_PLOT_2D_SYMBOL_SIZE, "Symbol size", PreferenceConstants.MIN_LOADING_PLOT_2D_SYMBOL_SIZE, PreferenceConstants.MAX_LOADING_PLOT_2D_SYMBOL_SIZE);
+		addField(new ComboFieldEditor(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_TYPE, "Symbol type:", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
+		addIntegerEditor(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_SIZE, "Symbol size", PreferenceSupplier.MIN_LOADING_PLOT_2D_SYMBOL_SIZE, PreferenceSupplier.MAX_LOADING_PLOT_2D_SYMBOL_SIZE);
 	}
 
 	private void addIntegerEditor(String name, String labelText, int min, int max) {

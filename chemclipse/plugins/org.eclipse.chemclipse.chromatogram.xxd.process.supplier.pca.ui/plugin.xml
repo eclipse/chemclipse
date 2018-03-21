@@ -28,14 +28,12 @@
             class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceScorePlot2DPage"
             id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.preferenceScorePlot2DPage"
             name="Score plot 2D Preferences">
-      </page>  
-      
+      </page>
       <page
       		category="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.preferencePage"
             class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceLoadingPlot2DPage"
             id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.preferenceLoadingPlot2DPage"
             name="Loading plot 2D Preferences">
-      </page>  
-                 
+      </page>         
    </extension>   
 </plugin>

@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.eavp.service.swtchart.preferences.PreferenceSupport;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -24,7 +25,7 @@ public class PreferenceScorePlot2DPage extends FieldEditorPreferencePage impleme
 	public PreferenceScorePlot2DPage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Score Plot 2d Preferences");
+		setDescription("Score Plot 2D Preferences");
 	}
 
 	@Override
@@ -35,8 +36,8 @@ public class PreferenceScorePlot2DPage extends FieldEditorPreferencePage impleme
 	@Override
 	protected void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceConstants.P_SCORE_PLOT_2D_SYMBOL_TYPE, "Symbol type:", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
-		addIntegerEditor(PreferenceConstants.P_SCORE_PLOT_2D_SYMBOL_SIZE, "Symbol size", PreferenceConstants.MIN_SCORE_PLOT_2D_SYMBOL_SIZE, PreferenceConstants.MAX_SCORE_PLOT_2D_SYMBOL_SIZE);
+		addField(new ComboFieldEditor(PreferenceSupplier.P_SCORE_PLOT_2D_SYMBOL_TYPE, "Symbol type:", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
+		addIntegerEditor(PreferenceSupplier.P_SCORE_PLOT_2D_SYMBOL_SIZE, "Symbol size", PreferenceSupplier.MIN_SCORE_PLOT_2D_SYMBOL_SIZE, PreferenceSupplier.MAX_SCORE_PLOT_2D_SYMBOL_SIZE);
 	}
 
 	private void addIntegerEditor(String name, String labelText, int min, int max) {

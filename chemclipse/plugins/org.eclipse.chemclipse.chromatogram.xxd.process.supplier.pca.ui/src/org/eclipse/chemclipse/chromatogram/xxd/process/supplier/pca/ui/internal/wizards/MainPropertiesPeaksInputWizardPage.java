@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -40,9 +40,9 @@ public class MainPropertiesPeaksInputWizardPage extends WizardPage {
 	protected MainPropertiesPeaksInputWizardPage(String pageName) {
 		super(pageName);
 		setTitle("Set Main Parameters");
-		retentionTimeWindow.setValue(preferenceStore.getDouble(PreferenceConstants.P_RETENTION_TIME_WINDOW_PEAKS));
+		retentionTimeWindow.setValue(preferenceStore.getDouble(PreferenceSupplier.P_RETENTION_TIME_WINDOW_PEAKS));
 		retentionTimeWindow.addChangeListener(e -> {
-			preferenceStore.setValue(PreferenceConstants.P_RETENTION_TIME_WINDOW_PEAKS, retentionTimeWindow.getValue());
+			preferenceStore.setValue(PreferenceSupplier.P_RETENTION_TIME_WINDOW_PEAKS, retentionTimeWindow.getValue());
 		});
 	}
 

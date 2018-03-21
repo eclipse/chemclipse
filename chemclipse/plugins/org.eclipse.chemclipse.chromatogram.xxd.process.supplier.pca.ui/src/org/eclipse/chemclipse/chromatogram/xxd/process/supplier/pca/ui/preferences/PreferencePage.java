@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -35,9 +36,9 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	protected void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceConstants.P_ALGORITHM_TYPE, "Algorithm type:", PreferenceConstants.ALGORITHM_TYPES, getFieldEditorParent()));
-		addIntegerEditor(PreferenceConstants.P_NUMBER_OF_COMPONENTS, "Number of Components", PreferenceConstants.MIN_NUMBER_OF_COMPONENTS, PreferenceConstants.MAX_NUMBER_OF_COMPONENTS);
-		addField(new BooleanFieldEditor(PreferenceConstants.P_AUTO_REEVALUATE, "Reevaluete after change", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_ALGORITHM_TYPE, "Algorithm type:", PreferenceSupplier.ALGORITHM_TYPES, getFieldEditorParent()));
+		addIntegerEditor(PreferenceSupplier.P_NUMBER_OF_COMPONENTS, "Number of Components", PreferenceSupplier.MIN_NUMBER_OF_COMPONENTS, PreferenceSupplier.MAX_NUMBER_OF_COMPONENTS);
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_AUTO_REEVALUATE, "Reevaluete after change", getFieldEditorParent()));
 	}
 
 	private void addIntegerEditor(String name, String labelText, int min, int max) {
