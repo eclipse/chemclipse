@@ -16,9 +16,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.chromatogram.xxd.report.chromatogram.AbstractChromatogramReportGenerator;
 import org.eclipse.chemclipse.chromatogram.xxd.report.processing.ChromatogramReportProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.report.processing.IChromatogramReportProcessingInfo;
@@ -28,7 +25,10 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.io.Chro
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IChemClipseChromatogramReportSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramReportGenerator extends AbstractChromatogramReportGenerator {
 
@@ -38,36 +38,36 @@ public class ChromatogramReportGenerator extends AbstractChromatogramReportGener
 	}
 
 	@Override
-	public IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram chromatogram, IChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
+	public IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
 
-		List<IChromatogram> chromatograms = getChromatogramList(chromatogram);
+		List<IChromatogram<? extends IPeak>> chromatograms = getChromatogramList(chromatogram);
 		IChemClipseChromatogramReportSettings settings = getSettings(chromatogramReportSettings);
 		return report(file, append, chromatograms, settings, monitor);
 	}
 
 	@Override
-	public IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram chromatogram, IProgressMonitor monitor) {
+	public IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
 
-		List<IChromatogram> chromatograms = getChromatogramList(chromatogram);
+		List<IChromatogram<? extends IPeak>> chromatograms = getChromatogramList(chromatogram);
 		IChemClipseChromatogramReportSettings settings = getSettings(null);
 		return report(file, append, chromatograms, settings, monitor);
 	}
 
 	@Override
-	public IChromatogramReportProcessingInfo generate(File file, boolean append, List<IChromatogram> chromatograms, IChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
+	public IChromatogramReportProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
 
 		IChemClipseChromatogramReportSettings settings = getSettings(chromatogramReportSettings);
 		return report(file, append, chromatograms, settings, monitor);
 	}
 
 	@Override
-	public IChromatogramReportProcessingInfo generate(File file, boolean append, List<IChromatogram> chromatograms, IProgressMonitor monitor) {
+	public IChromatogramReportProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IProgressMonitor monitor) {
 
 		IChemClipseChromatogramReportSettings settings = getSettings(null);
 		return report(file, append, chromatograms, settings, monitor);
 	}
 
-	private IChromatogramReportProcessingInfo report(File file, boolean append, List<IChromatogram> chromatograms, IChemClipseChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
+	private IChromatogramReportProcessingInfo report(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChemClipseChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
 
 		IChromatogramReportProcessingInfo processingInfo = new ChromatogramReportProcessingInfo();
 		/*
@@ -93,9 +93,9 @@ public class ChromatogramReportGenerator extends AbstractChromatogramReportGener
 		return processingInfo;
 	}
 
-	private List<IChromatogram> getChromatogramList(IChromatogram chromatogram) {
+	private List<IChromatogram<? extends IPeak>> getChromatogramList(IChromatogram<? extends IPeak> chromatogram) {
 
-		List<IChromatogram> chromatograms = new ArrayList<IChromatogram>();
+		List<IChromatogram<? extends IPeak>> chromatograms = new ArrayList<IChromatogram<? extends IPeak>>();
 		chromatograms.add(chromatogram);
 		return chromatograms;
 	}

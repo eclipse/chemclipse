@@ -33,6 +33,7 @@ import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -83,7 +84,7 @@ public class ChromatogramReport {
 		chromatogramPeakCSDComparator = new ChromatogramPeakCSDComparator(SortOrder.ASC);
 	}
 
-	public void generate(File file, boolean append, List<IChromatogram> chromatograms, IChemClipseChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) throws IOException {
+	public void generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChemClipseChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) throws IOException {
 
 		FileWriter fileWriter = new FileWriter(file, append);
 		PrintWriter printWriter = new PrintWriter(fileWriter);
@@ -93,7 +94,7 @@ public class ChromatogramReport {
 		/*
 		 * Print each chromatogram.
 		 */
-		for(IChromatogram chromatogram : chromatograms) {
+		for(IChromatogram<? extends IPeak> chromatogram : chromatograms) {
 			printHeader(printWriter, chromatogram, monitor);
 			if(chromatogram instanceof IChromatogramMSD) {
 				/*
