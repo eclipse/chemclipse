@@ -26,6 +26,7 @@ import org.eclipse.eavp.service.swtchart.core.IChartSettings;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
+import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesSettings;
 import org.eclipse.eavp.service.swtchart.linecharts.LineSeriesData;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -40,12 +41,16 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 public class ExtendedXIRScanUI {
 
-	private ChartXIR scanChart;
+	private ChartXIR chartXIR;
 	private IScanXIR scanXIR;
+	//
+	private Label labelDataInfo;
+	private boolean showRawData = false;
 	//
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
@@ -57,26 +62,57 @@ public class ExtendedXIRScanUI {
 	public void update(IScanXIR scanXIR) {
 
 		this.scanXIR = scanXIR;
+		if(scanXIR != null) {
+			showRawData = (scanXIR.size() > 0) ? false : true;
+		}
+		chartXIR.modifyChart(showRawData);
 		updateScan();
 	}
 
 	private void updateScan() {
 
-		List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
-		ILineSeriesData lineSeriesData = getLineSeriesData(scanXIR, "FTIR");
-		lineSeriesData.getLineSeriesSettings().setLineColor(Colors.RED);
-		lineSeriesDataList.add(lineSeriesData);
-		scanChart.addSeriesData(lineSeriesDataList);
+		chartXIR.deleteSeries();
+		labelDataInfo.setText(showRawData ? "Raw Data" : "Processed Data");
+		//
+		if(scanXIR != null) {
+			/*
+			 * Get the data.
+			 */
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			ILineSeriesData lineSeriesData;
+			ILineSeriesSettings lineSeriesSettings;
+			//
+			if(showRawData) {
+				/*
+				 * Raw and Background Data
+				 */
+				lineSeriesData = new LineSeriesData(getSeriesData(scanXIR, "Raw Signals", true));
+				lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+				lineSeriesSettings.setLineColor(Colors.RED);
+				lineSeriesSettings.setEnableArea(false);
+				lineSeriesDataList.add(lineSeriesData);
+				//
+				lineSeriesData = new LineSeriesData(getSeriesData(scanXIR, "Background Signals", false));
+				lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+				lineSeriesSettings.setLineColor(Colors.BLACK);
+				lineSeriesSettings.setEnableArea(false);
+				lineSeriesDataList.add(lineSeriesData);
+			} else {
+				/*
+				 * Processed Data
+				 */
+				lineSeriesData = new LineSeriesData(getSeriesDataProcessed(scanXIR, "Processed Data"));
+				lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+				lineSeriesSettings.setLineColor(Colors.RED);
+				lineSeriesSettings.setEnableArea(true);
+				lineSeriesDataList.add(lineSeriesData);
+			}
+			//
+			chartXIR.addSeriesData(lineSeriesDataList);
+		}
 	}
 
-	private ILineSeriesData getLineSeriesData(IScanXIR scanXIR, String id) {
-
-		ISeriesData seriesData = getSeriesData(scanXIR, id);
-		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
-		return lineSeriesData;
-	}
-
-	private ISeriesData getSeriesData(IScanXIR scanXIR, String id) {
+	private ISeriesData getSeriesDataProcessed(IScanXIR scanXIR, String id) {
 
 		double[] xSeries;
 		double[] ySeries;
@@ -99,6 +135,23 @@ public class ExtendedXIRScanUI {
 		return new SeriesData(xSeries, ySeries, id);
 	}
 
+	private ISeriesData getSeriesData(IScanXIR scanXIR, String id, boolean raw) {
+
+		double[] ySeries;
+		//
+		if(scanXIR != null) {
+			if(raw) {
+				ySeries = scanXIR.getRawSignals().clone();
+			} else {
+				ySeries = scanXIR.getBackgroundSignals().clone();
+			}
+		} else {
+			ySeries = new double[0];
+		}
+		//
+		return new SeriesData(ySeries, id);
+	}
+
 	private void initialize(Composite parent) {
 
 		parent.setLayout(new GridLayout(1, true));
@@ -111,12 +164,89 @@ public class ExtendedXIRScanUI {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(7, false));
 		//
+		createDataInfoLabel(composite);
+		createRawProcessedButton(composite);
+		createToggleChartSeriesLegendButton(composite);
+		createToggleLegendMarkerButton(composite);
+		createToggleRangeSelectorButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
+	}
+
+	private void createDataInfoLabel(Composite parent) {
+
+		labelDataInfo = new Label(parent, SWT.NONE);
+		labelDataInfo.setText("");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.grabExcessHorizontalSpace = true;
+		labelDataInfo.setLayoutData(gridData);
+	}
+
+	private void createRawProcessedButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the raw/processed modus");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SCAN_XIR, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				showRawData = !showRawData;
+				chartXIR.modifyChart(showRawData);
+				updateScan();
+			}
+		});
+	}
+
+	private void createToggleChartSeriesLegendButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the chart series legend.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				chartXIR.toggleSeriesLegendVisibility();
+			}
+		});
+	}
+
+	private void createToggleLegendMarkerButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the chart legend marker.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHART_LEGEND_MARKER, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				chartXIR.togglePositionLegendVisibility();
+				chartXIR.redraw();
+			}
+		});
+	}
+
+	private void createToggleRangeSelectorButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the chart range selector.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHART_RANGE_SELECTOR, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				chartXIR.toggleRangeSelectorVisibility();
+			}
+		});
 	}
 
 	private void createResetButton(Composite parent) {
@@ -181,16 +311,16 @@ public class ExtendedXIRScanUI {
 
 	private void createScanChart(Composite parent) {
 
-		scanChart = new ChartXIR(parent, SWT.BORDER);
-		scanChart.setLayoutData(new GridData(GridData.FILL_BOTH));
+		chartXIR = new ChartXIR(parent, SWT.BORDER);
+		chartXIR.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Chart Settings
 		 */
-		IChartSettings chartSettings = scanChart.getChartSettings();
+		IChartSettings chartSettings = chartXIR.getChartSettings();
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableRangeSelector(true);
 		chartSettings.setShowRangeSelectorInitially(false);
 		//
-		scanChart.applySettings(chartSettings);
+		chartXIR.applySettings(chartSettings);
 	}
 }

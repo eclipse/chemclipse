@@ -39,7 +39,64 @@ public class ChartXIR extends LineChart {
 		initialize();
 	}
 
+	public void modifyChart(boolean rawData) {
+
+		if(rawData) {
+			modifyRaw();
+		} else {
+			modifyProcessed();
+		}
+	}
+
 	private void initialize() {
+
+		modifyProcessed();
+	}
+
+	private void modifyRaw() {
+
+		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setCreateMenu(true);
+		chartSettings.setOrientation(SWT.HORIZONTAL);
+		chartSettings.setHorizontalSliderVisible(true);
+		chartSettings.setVerticalSliderVisible(false);
+		chartSettings.getRangeRestriction().setZeroX(false);
+		chartSettings.getRangeRestriction().setZeroY(false);
+		//
+		setPrimaryAxisSetRaw(chartSettings);
+		addSecondaryAxisSetRaw(chartSettings);
+		applySettings(chartSettings);
+	}
+
+	private void setPrimaryAxisSetRaw(IChartSettings chartSettings) {
+
+		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
+		primaryAxisSettingsX.setTitle("Mirror Position");
+		primaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH)));
+		primaryAxisSettingsX.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		primaryAxisSettingsX.setPosition(Position.Primary);
+		primaryAxisSettingsX.setVisible(true);
+		//
+		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
+		primaryAxisSettingsY.setTitle("Light measured by detector");
+		primaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.0#E0"), new DecimalFormatSymbols(Locale.ENGLISH)));
+		primaryAxisSettingsY.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+	}
+
+	private void addSecondaryAxisSetRaw(IChartSettings chartSettings) {
+
+		deleteSecondaryAxes(chartSettings);
+		/*
+		 * Y
+		 */
+		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Intensity [%]", new RelativeIntensityConverter(SWT.VERTICAL, true));
+		secondaryAxisSettingsY.setPosition(Position.Secondary);
+		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
+		secondaryAxisSettingsY.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
+	}
+
+	private void modifyProcessed() {
 
 		/*
 		 * Chart Settings
@@ -51,17 +108,18 @@ public class ChartXIR extends LineChart {
 		chartSettings.getRangeRestriction().setZeroX(true);
 		chartSettings.getRangeRestriction().setZeroY(true);
 		//
-		setPrimaryAxisSet(chartSettings);
-		addSecondaryAxisSet(chartSettings);
+		setPrimaryAxisSetProcessed(chartSettings);
+		addSecondaryAxisSetProcessed(chartSettings);
 		applySettings(chartSettings);
 	}
 
-	private void setPrimaryAxisSet(IChartSettings chartSettings) {
+	private void setPrimaryAxisSetProcessed(IChartSettings chartSettings) {
 
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle("Wavelength (nm)");
 		primaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		primaryAxisSettingsX.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		primaryAxisSettingsX.setVisible(true);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle("Intensity");
@@ -70,12 +128,22 @@ public class ChartXIR extends LineChart {
 		primaryAxisSettingsY.setGridLineStyle(LineStyle.NONE);
 	}
 
-	private void addSecondaryAxisSet(IChartSettings chartSettings) {
+	private void addSecondaryAxisSetProcessed(IChartSettings chartSettings) {
 
+		deleteSecondaryAxes(chartSettings);
+		/*
+		 * Y
+		 */
 		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Intensity [%]", new RelativeIntensityConverter(SWT.VERTICAL, true));
 		secondaryAxisSettingsY.setPosition(Position.Secondary);
 		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		secondaryAxisSettingsY.setColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
+	}
+
+	private void deleteSecondaryAxes(IChartSettings chartSettings) {
+
+		chartSettings.getSecondaryAxisSettingsListX().clear();
+		chartSettings.getSecondaryAxisSettingsListY().clear();
 	}
 }

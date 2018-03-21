@@ -156,10 +156,13 @@ public class ExtendedNMRScanUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(7, false));
 		//
 		createDataInfoLabel(composite);
 		createRawProcessedButton(composite);
+		createToggleChartSeriesLegendButton(composite);
+		createToggleLegendMarkerButton(composite);
+		createToggleRangeSelectorButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
 	}
@@ -187,6 +190,52 @@ public class ExtendedNMRScanUI {
 				showRawData = !showRawData;
 				chartNMR.modifyChart(showRawData);
 				updateScan();
+			}
+		});
+	}
+
+	private void createToggleChartSeriesLegendButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the chart series legend.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				chartNMR.toggleSeriesLegendVisibility();
+			}
+		});
+	}
+
+	private void createToggleLegendMarkerButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the chart legend marker.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHART_LEGEND_MARKER, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				chartNMR.togglePositionLegendVisibility();
+				chartNMR.redraw();
+			}
+		});
+	}
+
+	private void createToggleRangeSelectorButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the chart range selector.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHART_RANGE_SELECTOR, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				chartNMR.toggleRangeSelectorVisibility();
 			}
 		});
 	}
