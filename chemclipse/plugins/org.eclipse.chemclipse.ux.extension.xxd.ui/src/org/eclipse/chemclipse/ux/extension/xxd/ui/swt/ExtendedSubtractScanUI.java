@@ -336,10 +336,14 @@ public class ExtendedSubtractScanUI {
 
 		switch(tabFolder.getSelectionIndex()) {
 			case INDEX_CHART:
-				scanChartUI.setInput(scanMSD);
+				if(scanChartUI != null) {
+					scanChartUI.setInput(scanMSD);
+				}
 				break;
 			case INDEX_TABLE:
-				extendedScanTableUI.update(scanMSD);
+				if(extendedScanTableUI != null) {
+					extendedScanTableUI.update(scanMSD);
+				}
 				break;
 		}
 	}
