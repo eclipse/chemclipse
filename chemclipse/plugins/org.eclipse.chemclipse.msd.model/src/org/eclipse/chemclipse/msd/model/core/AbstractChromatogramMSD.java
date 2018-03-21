@@ -28,7 +28,6 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.identifier.chromatogram.IChromatogramTargetMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.DefaultNoiseCalculator;
@@ -63,20 +62,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * 
  * @author eselmeister
  */
-public abstract class AbstractChromatogramMSD extends AbstractChromatogram implements IChromatogramMSD {
+public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChromatogramPeakMSD> implements IChromatogramMSD {
 
 	private static final long serialVersionUID = 6481555040060687480L;
 	//
 	public static int DEFAULT_SEGMENT_WIDTH = 10;
 	private static final Logger logger = Logger.getLogger(AbstractChromatogramMSD.class);
-	private List<IChromatogramPeakMSD> peaks;
 	private List<IChromatogramTargetMSD> targets;
 	private IIonTransitionSettings ionTransitionSettings;
 	private INoiseCalculator noiseCalculator;
 	private ImmutableZeroIon immutableZeroIon;
 
 	public AbstractChromatogramMSD() {
-		peaks = new ArrayList<IChromatogramPeakMSD>();
 		targets = new ArrayList<IChromatogramTargetMSD>();
 		ionTransitionSettings = new IonTransitionSettings();
 		int segmentWidth = DEFAULT_SEGMENT_WIDTH;
@@ -275,104 +272,14 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram imple
 		}
 		return highestIon;
 	}
-
 	// -----------------------------------------------IChromatogram
-	// -----------------------------------------------IChromatogramPeaks
-	@Override
-	public List<IChromatogramPeakMSD> getPeaks() {
-
-		return peaks;
-	}
-
-	// TODO JUnit
-	@Override
-	public List<IChromatogramPeakMSD> getPeaks(IChromatogramSelectionMSD chromatogramSelection) {
-
-		List<IChromatogramPeakMSD> peakList = new ArrayList<IChromatogramPeakMSD>();
-		if(chromatogramSelection != null) {
-			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
-			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
-			int peakRetentionTime;
-			for(IChromatogramPeakMSD peak : peaks) {
-				/*
-				 * Include all peaks which retention time at peak maximum is in
-				 * between start and stop retention time of the selection.
-				 */
-				peakRetentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
-				if(peakRetentionTime >= startRetentionTime && peakRetentionTime <= stopRetentionTime) {
-					peakList.add(peak);
-				}
-			}
-		}
-		return peakList;
-	}
-
-	// TODO JUnit
-	@Override
-	public void addPeak(IChromatogramPeakMSD peak) {
-
-		// TODO peak.getPeakModel().getWidthByInflectionPoints() should be
-		// tested in the peak creation method.
-		/*
-		 * Add the peak only if it not contains a type/instance of the
-		 * peakimport org.eclipse.chemclipse.model.core.IChromatogramPeakMSD;
-		 * (equals).
-		 */
-		if(!peaks.contains(peak) && peak.getPeakModel().getWidthByInflectionPoints() > 0) {
-			peaks.add(peak);
-		}
-	}
-
-	@Override
-	public void removePeak(IChromatogramPeakMSD peak) {
-
-		peaks.remove(peak);
-	}
-
-	@Override
-	public void removePeaks(List<IChromatogramPeakMSD> peaksToDelete) {
-
-		peaks.removeAll(peaksToDelete);
-	}
-
-	@Override
-	public void removeAllPeaks() {
-
-		peaks.clear();
-	}
-
-	@Override
-	public int getNumberOfPeaks() {
-
-		return peaks.size();
-	}
-
-	@Override
-	public IChromatogramPeakMSD getPeak(int retentionTime) {
-
-		/*
-		 * Try to get a peak in the surrounding of the retention time.
-		 */
-		IChromatogramPeakMSD selectedPeak = null;
-		exitloop:
-		for(IChromatogramPeakMSD peak : peaks) {
-			int peakStartRetentionTime = peak.getPeakModel().getStartRetentionTime();
-			int peakStopRetentionTime = peak.getPeakModel().getStopRetentionTime();
-			if(retentionTime >= peakStartRetentionTime && retentionTime <= peakStopRetentionTime) {
-				selectedPeak = peak;
-				break exitloop;
-			}
-		}
-		//
-		return selectedPeak;
-	}
 
 	// -----------------------------------------------IIntegration
 	@Override
 	public double getPeakIntegratedArea() {
 
 		double integratedArea = 0.0d;
-		for(IChromatogramPeakMSD peak : peaks) {
+		for(IChromatogramPeakMSD peak : getPeaks()) {
 			integratedArea += peak.getIntegratedArea();
 		}
 		return integratedArea;

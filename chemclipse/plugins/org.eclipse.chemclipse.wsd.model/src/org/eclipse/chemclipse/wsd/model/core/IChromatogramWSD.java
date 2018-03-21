@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.wsd.model.core;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.wsd.model.core.identifier.chromatogram.IChromatogramTargetsWSD;
 
-public interface IChromatogramWSD extends IChromatogram, IChromatogramTargetsWSD {
+public interface IChromatogramWSD extends IChromatogram<IChromatogramPeakWSD>, IChromatogramTargetsWSD {
 
 	/**
 	 * Returns a supplier scan or null, if no supplier

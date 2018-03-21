@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Why does IChromatogram extends ({@link IChromatogramOverview})?<br/>
  * See the description in ({@link AbstractChromatogramMSD}).
  */
-public interface IChromatogramMSD extends IChromatogram, IChromatogramPeaksMSD, IChromatogramTargetsMSD {
+public interface IChromatogramMSD extends IChromatogram<IChromatogramPeakMSD>, IChromatogramTargetsMSD {
 
 	/**
 	 * Returns a new mass spectrum from the scan with the given scan number from

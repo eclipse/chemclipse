@@ -139,7 +139,7 @@ public class ChromatogramDataSupport {
 		return getIdentifiedScans(chromatogram, null);
 	}
 
-	public List<IScan> getIdentifiedScans(IChromatogram chromatogram, IChromatogramSelection selectedRange) {
+	public List<IScan> getIdentifiedScans(IChromatogram<? extends IPeak> chromatogram, IChromatogramSelection selectedRange) {
 
 		int startRetentionTime = 0;
 		int stopRetentionTime = 0;

@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.processing.IChromatogramRe
 import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramReportSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -49,7 +50,7 @@ public class ChromatogramReports {
 	private ChromatogramReports() {
 	}
 
-	public static IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram chromatogram, IChromatogramReportSettings chromatogramReportSettings, String reportSupplierId, IProgressMonitor monitor) {
+	public static IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IChromatogramReportSettings chromatogramReportSettings, String reportSupplierId, IProgressMonitor monitor) {
 
 		IChromatogramReportProcessingInfo processingInfo;
 		IChromatogramReportGenerator reportGenerator = getChromatogramReportGenerator(reportSupplierId);
@@ -61,7 +62,7 @@ public class ChromatogramReports {
 		return processingInfo;
 	}
 
-	public static IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram chromatogram, String reportSupplierId, IProgressMonitor monitor) {
+	public static IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, String reportSupplierId, IProgressMonitor monitor) {
 
 		IChromatogramReportProcessingInfo processingInfo;
 		IChromatogramReportGenerator reportGenerator = getChromatogramReportGenerator(reportSupplierId);
@@ -73,7 +74,7 @@ public class ChromatogramReports {
 		return processingInfo;
 	}
 
-	public static IChromatogramReportProcessingInfo generate(File file, boolean append, List<IChromatogram> chromatograms, IChromatogramReportSettings chromatogramReportSettings, String reportSupplierId, IProgressMonitor monitor) {
+	public static IChromatogramReportProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings chromatogramReportSettings, String reportSupplierId, IProgressMonitor monitor) {
 
 		IChromatogramReportProcessingInfo processingInfo;
 		IChromatogramReportGenerator reportGenerator = getChromatogramReportGenerator(reportSupplierId);
@@ -85,7 +86,7 @@ public class ChromatogramReports {
 		return processingInfo;
 	}
 
-	public static IChromatogramReportProcessingInfo generate(File file, boolean append, List<IChromatogram> chromatograms, String reportSupplierId, IProgressMonitor monitor) {
+	public static IChromatogramReportProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, String reportSupplierId, IProgressMonitor monitor) {
 
 		IChromatogramReportProcessingInfo processingInfo;
 		IChromatogramReportGenerator reportGenerator = getChromatogramReportGenerator(reportSupplierId);

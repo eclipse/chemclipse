@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.csd.model.core;
 import org.eclipse.chemclipse.csd.model.core.identifier.chromatogram.IChromatogramTargetsCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 
-public interface IChromatogramCSD extends IChromatogram, IChromatogramPeaksCSD, IChromatogramTargetsCSD {
+public interface IChromatogramCSD extends IChromatogram<IChromatogramPeakCSD>, IChromatogramTargetsCSD {
 
 	IScanCSD getSupplierScan(int scan);
 }

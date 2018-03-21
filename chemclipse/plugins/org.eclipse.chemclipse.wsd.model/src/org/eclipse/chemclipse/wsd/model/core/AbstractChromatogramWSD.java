@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.wsd.model.core.identifier.chromatogram.IChromatogramTargetWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 
-public abstract class AbstractChromatogramWSD extends AbstractChromatogram implements IChromatogramWSD {
+public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChromatogramPeakWSD> implements IChromatogramWSD {
 
 	private static final long serialVersionUID = -7048942996283330150L;
 	//

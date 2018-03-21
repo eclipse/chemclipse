@@ -21,21 +21,18 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseCalcul
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.csd.model.core.identifier.chromatogram.IChromatogramTargetCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
-public abstract class AbstractChromatogramCSD extends AbstractChromatogram implements IChromatogramCSD {
+public abstract class AbstractChromatogramCSD extends AbstractChromatogram<IChromatogramPeakCSD> implements IChromatogramCSD {
 
 	private static final long serialVersionUID = -1514838958855146167L;
 	//
-	private List<IChromatogramPeakCSD> peaks;
 	private Set<IChromatogramTargetCSD> targets;
 	private INoiseCalculator noiseCalculator;
 
 	public AbstractChromatogramCSD() {
-		peaks = new ArrayList<IChromatogramPeakCSD>();
 		targets = new HashSet<IChromatogramTargetCSD>();
 		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
 		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
@@ -76,94 +73,6 @@ public abstract class AbstractChromatogramCSD extends AbstractChromatogram imple
 		return null;
 	}
 
-	// -----------------------------------------------------
-	@Override
-	public List<IChromatogramPeakCSD> getPeaks() {
-
-		return peaks;
-	}
-
-	// TODO JUnit
-	@Override
-	public List<IChromatogramPeakCSD> getPeaks(IChromatogramSelectionCSD chromatogramSelection) {
-
-		List<IChromatogramPeakCSD> peakList = new ArrayList<IChromatogramPeakCSD>();
-		if(chromatogramSelection != null) {
-			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
-			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
-			int peakRetentionTime;
-			for(IChromatogramPeakCSD peak : peaks) {
-				/*
-				 * Include all peaks which retention time at peak maximum is in
-				 * between start and stop retention time of the selection.
-				 */
-				peakRetentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
-				if(peakRetentionTime >= startRetentionTime && peakRetentionTime <= stopRetentionTime) {
-					peakList.add(peak);
-				}
-			}
-		}
-		return peakList;
-	}
-
-	// TODO JUnit
-	@Override
-	public void addPeak(IChromatogramPeakCSD peak) {
-
-		/*
-		 * Add the peak only if it not contains a type/instance of the peak
-		 * (equals).
-		 */
-		if(!peaks.contains(peak) && peak.getPeakModel().getWidthByInflectionPoints() > 0) {
-			peaks.add(peak);
-		}
-	}
-
-	@Override
-	public void removePeak(IChromatogramPeakCSD peak) {
-
-		peaks.remove(peak);
-	}
-
-	@Override
-	public void removePeaks(List<IChromatogramPeakCSD> peaksToDelete) {
-
-		peaks.removeAll(peaksToDelete);
-	}
-
-	@Override
-	public void removeAllPeaks() {
-
-		peaks.clear();
-	}
-
-	// TODO JUnit Test
-	@Override
-	public int getNumberOfPeaks() {
-
-		return peaks.size();
-	}
-
-	@Override
-	public IChromatogramPeakCSD getPeak(int retentionTime) {
-
-		/*
-		 * Try to get a peak in the surrounding of the retention time.
-		 */
-		IChromatogramPeakCSD selectedPeak = null;
-		exitloop:
-		for(IChromatogramPeakCSD peak : peaks) {
-			int peakStartRetentionTime = peak.getPeakModel().getStartRetentionTime();
-			int peakStopRetentionTime = peak.getPeakModel().getStopRetentionTime();
-			if(retentionTime >= peakStartRetentionTime && retentionTime <= peakStopRetentionTime) {
-				selectedPeak = peak;
-				break exitloop;
-			}
-		}
-		//
-		return selectedPeak;
-	}
-
 	@Override
 	public void fireUpdate(IChromatogramSelection chromatogramSelection) {
 
@@ -180,7 +89,7 @@ public abstract class AbstractChromatogramCSD extends AbstractChromatogram imple
 	public double getPeakIntegratedArea() {
 
 		double integratedArea = 0.0d;
-		for(IChromatogramPeakCSD peak : peaks) {
+		for(IChromatogramPeakCSD peak : getPeaks()) {
 			integratedArea += peak.getIntegratedArea();
 		}
 		return integratedArea;

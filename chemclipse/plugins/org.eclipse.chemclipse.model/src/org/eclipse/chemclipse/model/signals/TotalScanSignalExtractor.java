@@ -13,13 +13,14 @@ package org.eclipse.chemclipse.model.signals;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
 public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 
-	private IChromatogram chromatogram;
+	private IChromatogram<? extends IPeak> chromatogram;
 
 	/**
 	 * All values will be extracted from IChromatogram.
@@ -27,7 +28,7 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 	 * @param chromatogram
 	 * @throws ChromatogramIsNullException
 	 */
-	public TotalScanSignalExtractor(IChromatogram chromatogram) throws ChromatogramIsNullException {
+	public TotalScanSignalExtractor(IChromatogram<? extends IPeak> chromatogram) throws ChromatogramIsNullException {
 		if(chromatogram == null) {
 			throw new ChromatogramIsNullException();
 		}
@@ -40,6 +41,7 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 	 * @param chromatogramOverview
 	 * @throws ChromatogramIsNullException
 	 */
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public TotalScanSignalExtractor(IChromatogramOverview chromatogramOverview) throws ChromatogramIsNullException {
 		if(chromatogramOverview == null) {
 			throw new ChromatogramIsNullException();
@@ -159,6 +161,7 @@ public class TotalScanSignalExtractor implements ITotalScanSignalExtractor {
 		return getTotalScanSignals(chromatogramSelection, true);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public ITotalScanSignals getTotalScanSignals(IChromatogram chromatogram, boolean validatePositive, boolean condenseCycleNumberScans) {
 

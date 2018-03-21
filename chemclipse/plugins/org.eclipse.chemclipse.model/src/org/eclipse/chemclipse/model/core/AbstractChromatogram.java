@@ -25,7 +25,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.BaselineModel;
@@ -50,7 +52,7 @@ import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SafeRunner;
 
-public abstract class AbstractChromatogram extends AbstractMeasurement implements IChromatogram {
+public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeasurement implements IChromatogram<T> {
 
 	private static final long serialVersionUID = -2540103992883061431L;
 	private static final Logger logger = Logger.getLogger(AbstractChromatogram.class);
@@ -106,6 +108,12 @@ public abstract class AbstractChromatogram extends AbstractMeasurement implement
 	private List<IIntegrationEntry> backgroundIntegrationEntries;
 	//
 	private IMethod method;
+	/*
+	 * This set contains all the peaks of the chromatogram.
+	 * Specific chromatogram implementations might define
+	 * specific peak types, which must extend from IPeak.
+	 */
+	private Set<T> peaks = new TreeSet<T>();
 
 	/**
 	 * Constructs a normal chromatogram.
@@ -732,18 +740,21 @@ public abstract class AbstractChromatogram extends AbstractMeasurement implement
 		return chromatogramResults.values();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List<IChromatogram> getReferencedChromatograms() {
 
 		return referencedChromatograms;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void addReferencedChromatogram(IChromatogram chromatogram) {
 
 		referencedChromatograms.add(chromatogram);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void removeReferencedChromatogram(IChromatogram chromatogram) {
 
@@ -959,17 +970,6 @@ public abstract class AbstractChromatogram extends AbstractMeasurement implement
 	}
 
 	@Override
-	public void removeAllPeaks() {
-
-	}
-
-	@Override
-	public int getNumberOfPeaks() {
-
-		return 0;
-	}
-
-	@Override
 	public void removeAllTargets() {
 
 	}
@@ -1030,9 +1030,93 @@ public abstract class AbstractChromatogram extends AbstractMeasurement implement
 
 		return method;
 	}
-
 	// -----------------------------------------------IChromatogramProcessorSupport
+
+	// -----------------------------------------------IChromatogramPeaks
+	@Override
+	public void removeAllPeaks() {
+
+		peaks.clear();
+	}
+
+	@Override
+	public int getNumberOfPeaks() {
+
+		return peaks.size();
+	}
+
+	@Override
+	public void addPeak(T peak) {
+
+		if(!peaks.contains(peak) && peak.getPeakModel().getWidthByInflectionPoints() > 0) {
+			peaks.add(peak);
+		}
+	}
+
+	@Override
+	public void removePeak(T peak) {
+
+		peaks.remove(peak);
+	}
+
+	@Override
+	public void removePeaks(List<T> peaksToDelete) {
+
+		peaks.removeAll(peaksToDelete);
+	}
+
+	@Override
+	public List<T> getPeaks() {
+
+		return new ArrayList<T>(peaks);
+	}
+
+	// TODO JUnit
+	@Override
+	public List<T> getPeaks(IChromatogramSelection chromatogramSelection) {
+
+		List<T> peakList = new ArrayList<T>();
+		if(chromatogramSelection != null) {
+			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+			int peakRetentionTime;
+			for(T peak : peaks) {
+				/*
+				 * Include all peaks which retention time at peak maximum is in
+				 * between start and stop retention time of the selection.
+				 */
+				peakRetentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
+				if(peakRetentionTime >= startRetentionTime && peakRetentionTime <= stopRetentionTime) {
+					peakList.add(peak);
+				}
+			}
+		}
+		return peakList;
+	}
+
+	@Override
+	public T getPeak(int retentionTime) {
+
+		/*
+		 * Try to get a peak in the surrounding of the retention time.
+		 */
+		T selectedPeak = null;
+		exitloop:
+		for(T peak : peaks) {
+			int peakStartRetentionTime = peak.getPeakModel().getStartRetentionTime();
+			int peakStopRetentionTime = peak.getPeakModel().getStopRetentionTime();
+			if(retentionTime >= peakStartRetentionTime && retentionTime <= peakStopRetentionTime) {
+				selectedPeak = peak;
+				break exitloop;
+			}
+		}
+		//
+		return selectedPeak;
+	}
+	// -----------------------------------------------IChromatogramPeaks
+
 	// ----------------------------hashCode, equals and toString
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(Object otherObject) {
 

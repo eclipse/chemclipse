@@ -299,4 +299,14 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 
 		internalStandards.remove(internalStandard);
 	}
+
+	@Override
+	public int compareTo(IPeak peak) {
+
+		/*
+		 * This method is used to store the peaks in
+		 * AbstractChromatogram<T extends IPeak> in a sorted set.
+		 */
+		return Integer.compare(getPeakModel().getRetentionTimeAtPeakMaximum(), peak.getPeakModel().getRetentionTimeAtPeakMaximum());
+	}
 }

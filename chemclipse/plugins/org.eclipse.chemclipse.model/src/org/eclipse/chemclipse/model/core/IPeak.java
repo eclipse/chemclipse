@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.support.IIntegrationConstraints;
 import org.eclipse.chemclipse.model.targets.IPeakTargets;
 
-public interface IPeak extends IPeakTargets {
+public interface IPeak extends IPeakTargets, Comparable<IPeak> {
 
 	IPeakModel getPeakModel();
 

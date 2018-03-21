@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.model.versioning.IChromatogramVersioning;
 import org.eclipse.chemclipse.support.history.ISupplierEditHistory;
 import org.eclipse.core.runtime.IAdaptable;
 
-public interface IChromatogram extends IMeasurement, IChromatogramOverview, IAdaptable, IChromatogramVersioning, ISupplierEditHistory, IChromatogramBaseline, IUpdater, IChromatogramResultSupport, IChromatogramIntegrationSupport, IChromatogramProcessorSupport {
+public interface IChromatogram<T extends IPeak> extends IMeasurement, IChromatogramOverview, IAdaptable, IChromatogramPeaks<T>, IChromatogramVersioning, ISupplierEditHistory, IChromatogramBaseline, IUpdater, IChromatogramResultSupport, IChromatogramIntegrationSupport, IChromatogramProcessorSupport {
 
 	String DEFAULT_CHROMATOGRAM_NAME = "Chromatogram";
 	int MIN_SCANDELAY = 0;
@@ -163,18 +163,6 @@ public interface IChromatogram extends IMeasurement, IChromatogramOverview, IAda
 	 * @param chromatogram
 	 */
 	void removeReferencedChromatogram(IChromatogram chromatogram);
-
-	/**
-	 * Removes all peaks.
-	 */
-	void removeAllPeaks();
-
-	/**
-	 * Returns the number of peaks.
-	 * 
-	 * @return int
-	 */
-	int getNumberOfPeaks();
 
 	/**
 	 * Removes all targets from the chromatogram.
