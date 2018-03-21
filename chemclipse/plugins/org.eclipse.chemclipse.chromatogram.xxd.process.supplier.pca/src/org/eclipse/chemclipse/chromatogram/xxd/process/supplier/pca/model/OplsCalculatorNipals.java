@@ -90,6 +90,7 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		DenseMatrix64F y_avg = getAvgYVector();
 		DenseMatrix64F x_avg = getAvgXVector();
 		DenseMatrix64F x_sd = getSDXVector();
+		DenseMatrix64F w = new DenseMatrix64F(1, numberOfVariables);
 		DenseMatrix64F Eo_PLS = getSampleData();
 		//
 		// ##########################################################################
@@ -97,6 +98,8 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		// #1
 		// w<-(t(y)%*%X)/as.vector((t(y)%*%y)) ### Dot (scalar) product calculations
 		// w<-t(w)
+		CommonOps.multTransA(y, X, w);
+		System.out.println("matrix calc");
 		// #2
 		// w<-w/as.vector(sqrt(t(w)%*%w)) # Generates vector
 		// ##########################################################################
