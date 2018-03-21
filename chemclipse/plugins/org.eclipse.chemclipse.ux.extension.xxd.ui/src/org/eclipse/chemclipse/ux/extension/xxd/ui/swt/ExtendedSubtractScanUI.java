@@ -30,7 +30,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScan
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -65,7 +64,7 @@ public class ExtendedSubtractScanUI {
 	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Inject
-	public ExtendedSubtractScanUI(Composite parent, MPart part) {
+	public ExtendedSubtractScanUI(Composite parent) {
 		initialize(parent);
 	}
 

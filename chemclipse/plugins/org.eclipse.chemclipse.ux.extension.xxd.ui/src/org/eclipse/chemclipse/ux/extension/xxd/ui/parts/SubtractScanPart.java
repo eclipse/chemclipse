@@ -32,7 +32,7 @@ public class SubtractScanPart extends AbstractDataUpdateSupport implements IData
 	@Inject
 	public SubtractScanPart(Composite parent, MPart part) {
 		super(part);
-		extendedSubtractChartUI = new ExtendedSubtractScanUI(parent, part);
+		extendedSubtractChartUI = new ExtendedSubtractScanUI(parent);
 	}
 
 	@Focus
