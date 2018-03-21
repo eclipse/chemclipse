@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -50,9 +51,10 @@ public class ChromatogramFilter extends AbstractChromatogramFilterCSD {
 		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void applyFilter(IChromatogramSelectionCSD chromatogramSelection) {
 
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
 		float minSignal = chromatogram.getMinSignal();
 		if(minSignal < 0) {
 			float delta = minSignal * -1;
