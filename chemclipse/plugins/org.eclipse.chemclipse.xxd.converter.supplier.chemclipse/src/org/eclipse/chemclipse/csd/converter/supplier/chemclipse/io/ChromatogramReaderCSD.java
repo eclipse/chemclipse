@@ -33,6 +33,7 @@ import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.model.chromatogr
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramReaderMSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
@@ -125,6 +126,7 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 		return chromatogramFID;
 	}
 
+	@SuppressWarnings("unchecked")
 	private IChromatogramCSD createChromatogramFIDFromMSD(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		IChromatogramCSD chromatogramFID = null;
@@ -135,7 +137,7 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 			ChromatogramReaderMSD chromatogramReaderMSD = new ChromatogramReaderMSD();
 			IChromatogramOverview chromatogramOverview = chromatogramReaderMSD.readOverview(file, monitor);
 			if(chromatogramOverview instanceof IChromatogram) {
-				IChromatogram chromatogram = (IChromatogram)chromatogramOverview;
+				IChromatogram<? extends IPeak> chromatogram = (IChromatogram)chromatogramOverview;
 				chromatogramFID = new VendorChromatogram();
 				for(IScan scan : chromatogram.getScans()) {
 					IVendorScan scanFID = new VendorScan(scan.getRetentionTime(), scan.getTotalSignal());
