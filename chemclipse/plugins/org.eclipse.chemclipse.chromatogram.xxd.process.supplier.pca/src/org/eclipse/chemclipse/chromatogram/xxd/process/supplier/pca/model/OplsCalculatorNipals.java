@@ -98,7 +98,10 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		// #1
 		// w<-(t(y)%*%X)/as.vector((t(y)%*%y)) ### Dot (scalar) product calculations
 		// w<-t(w)
+		DenseMatrix64F yy = new DenseMatrix64F(1, 1);
+		CommonOps.multInner(y, yy);
 		CommonOps.multTransA(y, X, w);
+		CommonOps.divide(y.get(0), w);
 		System.out.println("matrix calc");
 		// #2
 		// w<-w/as.vector(sqrt(t(w)%*%w)) # Generates vector
