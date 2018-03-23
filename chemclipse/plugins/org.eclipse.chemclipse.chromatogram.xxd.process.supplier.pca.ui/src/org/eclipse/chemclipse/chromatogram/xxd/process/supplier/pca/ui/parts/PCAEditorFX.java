@@ -19,6 +19,7 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers.CreatePcaEvaluation;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
@@ -28,6 +29,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.con
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.PCAController;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -42,6 +44,11 @@ import javafx.scene.Scene;
 
 public class PCAEditorFX {
 
+	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.PCAEditorFX";
+	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif";
+	public static final String ID = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.PCAEditorFX";
+	public static final String LABEL = "PCA Editor";
+	public static final String TOOL_TIPS = "PCA Editor";
 	private final static Logger logger = Logger.getLogger(PCAEditorFX.class);
 	private PCAEditorController controller;
 	/**
@@ -51,6 +58,8 @@ public class PCAEditorFX {
 	@Inject
 	private Composite parent;
 	private PCAController pcaController;
+	@Inject
+	private MPart part;
 
 	public PCAEditorFX() {
 	}
@@ -70,9 +79,16 @@ public class PCAEditorFX {
 			fXMLLoader.setBuilderFactory(new JavaFXBuilderFactory());
 			final Parent root = fXMLLoader.load(location.openStream());
 			controller = fXMLLoader.getController();
-			controller.setSamplesConsumer(pcaController::setSamples);
+			controller.setSamplesConsumer((s) -> {
+				pcaController.setSamples(s);
+			});
 			final Scene scene = new Scene(root);
 			fxCanvas.setScene(scene);
+			Object object = part.getTransientData().get(CreatePcaEvaluation.DATA_SAMPLES);
+			if(object instanceof ISamplesVisualization) {
+				ISamplesVisualization samples = (ISamplesVisualization)object;
+				controller.setSamples(samples);
+			}
 		} catch(final Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
 		}

@@ -325,7 +325,7 @@ public class PCAEditorController {
 		}
 	}
 
-	private void setSamples(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> newSamples) {
+	public void setSamples(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> newSamples) {
 
 		/*
 		 * Set samples
