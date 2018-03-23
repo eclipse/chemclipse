@@ -188,7 +188,7 @@ public class PCAController {
 				int pcZ = pcy.getSelection();
 				try {
 					monitor.run(false, false, progressMonitor -> {
-						progressMonitor.setTaskName("Inicialization");
+						progressMonitor.setTaskName("Initialization");
 						ISamplesVisualization<? extends IVariableVisualization, ? extends ISample<? extends ISampleData>> s = samples.get();
 						ObservableList<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> el = SelectionManagerSamples.getInstance().getElements();
 						if(!el.contains(s)) {

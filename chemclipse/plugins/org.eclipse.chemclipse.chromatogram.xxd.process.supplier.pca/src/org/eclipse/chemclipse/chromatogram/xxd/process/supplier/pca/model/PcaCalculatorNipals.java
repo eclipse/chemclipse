@@ -37,6 +37,7 @@ public class PcaCalculatorNipals extends AbstractMultivariateCalculator {
 		// Iterate over number of components
 		for(int i = 0; i < numComps; i++) {
 			// do.. iterate until threshold reached
+			int bailOut = 10000;
 			do {
 				scoreDotOld = scoreDotNew;
 				double tMultiplied = 1 / CommonOps.dot(t, t);
@@ -52,7 +53,8 @@ public class PcaCalculatorNipals extends AbstractMultivariateCalculator {
 				CommonOps.mult(pMultiplied, E, pMatrix, t);
 				pMatrix.reshape(1, numberOfVariables);
 				scoreDotNew = CommonOps.dot(t, t);
-			} while(Math.abs(scoreDotOld - scoreDotNew) > threshold);
+				bailOut--;
+			} while(Math.abs(scoreDotOld - scoreDotNew) > threshold && bailOut != 0);
 			// write scores, loadings of current component
 			CommonOps.extract(t, 0, numberOfSamples, 0, 1, getScores(), 0, i);
 			CommonOps.extract(p, 0, 1, 0, numberOfVariables, getLoadings(), i, 0);
