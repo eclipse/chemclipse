@@ -9,7 +9,7 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization;
+package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

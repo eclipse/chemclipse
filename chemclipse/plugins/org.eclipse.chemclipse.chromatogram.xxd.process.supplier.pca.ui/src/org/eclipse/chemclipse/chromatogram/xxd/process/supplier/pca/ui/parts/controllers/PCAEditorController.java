@@ -24,18 +24,20 @@ import java.util.stream.Collectors;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.Coloring;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SampleVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaInputRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.IPcaInputWizard;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PcaChromatogramsMSDInputWizard;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PcaPeaksInputWizard;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.Coloring;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.SamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility.PcaColorGroup;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.window.Window;
@@ -65,22 +67,22 @@ public class PCAEditorController {
 
 	private ListChangeListener<ISample<? extends ISampleData>> actualSelectionChangeListener;
 	@FXML // fx:id="cColor"
-	private TableColumn<SampleVisualization, Integer> cColor; // Value injected by FXMLLoader
+	private TableColumn<ISampleVisualization<? extends ISampleData>, Integer> cColor; // Value injected by FXMLLoader
 	@FXML // fx:id="cGroupNames"
-	private TableColumn<SampleVisualization, String> cGroupNames; // Value injected by FXMLLoader
+	private TableColumn<ISampleVisualization<? extends ISampleData>, String> cGroupNames; // Value injected by FXMLLoader
 	@FXML
 	private Label cLabelNumblerSelectedSamples;
 	@FXML // fx:id="cSelections"
-	private TableColumn<SampleVisualization, Boolean> cSelections; // Value injected by FXMLLoader
+	private TableColumn<ISampleVisualization<? extends ISampleData>, Boolean> cSelections; // Value injected by FXMLLoader
 	@FXML // fx:id="cTableSamples"
-	private TableView<SampleVisualization> cTableSamples; // Value injected by FXMLLoader
-	private Consumer<SamplesVisualization> inputSamples;
+	private TableView<ISampleVisualization<? extends ISampleData>> cTableSamples; // Value injected by FXMLLoader
+	private Consumer<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> inputSamples;
 	@FXML // URL location of the FXML file that was given to the FXMLLoader
 	private URL location;
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
 	private ListChangeListener<ISample<? extends ISampleData>> sampleChangeSelectionListener;
-	private Optional<SamplesVisualization> samples;
+	private Optional<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> samples;
 
 	public PCAEditorController() {
 		samples = Optional.empty();
@@ -101,7 +103,7 @@ public class PCAEditorController {
 					ObservableList<ISample<? extends ISampleData>> selection = SelectionManagerSample.getInstance().getSelection();
 					if(!selection.isEmpty()) {
 						ISample<? extends ISampleData> s = selection.get(0);
-						seletedSample((SampleVisualization)s);
+						seletedSample((ISampleVisualization<? extends ISampleData>)s);
 					} else {
 						removeSelectedSample();
 					}
@@ -110,22 +112,22 @@ public class PCAEditorController {
 		};
 	}
 
-	public Optional<SamplesVisualization> getSamples() {
+	public Optional<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> getSamples() {
 
 		return samples;
 	}
 
-	public SampleVisualization getSelectedSamples() {
+	public ISampleVisualization<? extends ISampleData> getSelectedSamples() {
 
 		return cTableSamples.getSelectionModel().getSelectedItem();
 	}
 
 	@FXML
-	void handlerChangeGroupName(TableColumn.CellEditEvent<SampleVisualization, String> event) {
+	void handlerChangeGroupName(TableColumn.CellEditEvent<ISampleVisualization<? extends ISampleData>, String> event) {
 
 		String newGroupName = event.getNewValue();
 		String oldGroupName = event.getOldValue();
-		SampleVisualization sample = event.getRowValue();
+		ISampleVisualization<? extends ISampleData> sample = event.getRowValue();
 		if(newGroupName != null) {
 			newGroupName = newGroupName.trim();
 			if(!newGroupName.equals(oldGroupName)) {
@@ -198,19 +200,19 @@ public class PCAEditorController {
 		assert cTableSamples != null : "fx:id=\"cTableSamples\" was not injected: check your FXML file 'PCAEditor.fxml'.";
 		assert cSelections != null : "fx:id=\"cSelections\" was not injected: check your FXML file 'PCAEditor.fxml'.";
 		assert cColor != null : "fx:id=\"cColor\" was not injected: check your FXML file 'PCAEditor.fxml'.";
-		cSelections.setCellFactory(new Callback<TableColumn<SampleVisualization, Boolean>, //
-				TableCell<SampleVisualization, Boolean>>() {
+		cSelections.setCellFactory(new Callback<TableColumn<ISampleVisualization<? extends ISampleData>, Boolean>, //
+				TableCell<ISampleVisualization<? extends ISampleData>, Boolean>>() {
 
 			@Override
-			public TableCell<SampleVisualization, Boolean> call(TableColumn<SampleVisualization, Boolean> p) {
+			public TableCell<ISampleVisualization<? extends ISampleData>, Boolean> call(TableColumn<ISampleVisualization<? extends ISampleData>, Boolean> p) {
 
-				CheckBoxTableCell<SampleVisualization, Boolean> cell = new CheckBoxTableCell<SampleVisualization, Boolean>();
+				CheckBoxTableCell<ISampleVisualization<? extends ISampleData>, Boolean> cell = new CheckBoxTableCell<ISampleVisualization<? extends ISampleData>, Boolean>();
 				cell.setAlignment(Pos.CENTER);
 				return cell;
 			}
 		});
 		cColor.setCellFactory(param -> {
-			final TableCell<SampleVisualization, Integer> cell = new TableCell<SampleVisualization, Integer>() {
+			final TableCell<ISampleVisualization<? extends ISampleData>, Integer> cell = new TableCell<ISampleVisualization<? extends ISampleData>, Integer>() {
 
 				final Rectangle r = new Rectangle(20, 20);
 
@@ -234,12 +236,12 @@ public class PCAEditorController {
 			cell.setAlignment(Pos.CENTER);
 			return cell;
 		});
-		cTableSamples.setRowFactory(new Callback<TableView<SampleVisualization>, TableRow<SampleVisualization>>() {
+		cTableSamples.setRowFactory(new Callback<TableView<ISampleVisualization<? extends ISampleData>>, TableRow<ISampleVisualization<? extends ISampleData>>>() {
 
 			@Override
-			public TableRow<SampleVisualization> call(TableView<SampleVisualization> tableView2) {
+			public TableRow<ISampleVisualization<? extends ISampleData>> call(TableView<ISampleVisualization<? extends ISampleData>> tableView2) {
 
-				final TableRow<SampleVisualization> row = new TableRow<>();
+				final TableRow<ISampleVisualization<? extends ISampleData>> row = new TableRow<>();
 				row.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
 
 					@Override
@@ -259,14 +261,14 @@ public class PCAEditorController {
 				return row;
 			}
 		});
-		cTableSamples.getSelectionModel().getSelectedItems().addListener(new ListChangeListener<SampleVisualization>() {
+		cTableSamples.getSelectionModel().getSelectedItems().addListener(new ListChangeListener<ISampleVisualization<? extends ISampleData>>() {
 
 			@Override
-			public void onChanged(ListChangeListener.Change<? extends SampleVisualization> c) {
+			public void onChanged(ListChangeListener.Change<? extends ISampleVisualization<? extends ISampleData>> c) {
 
-				List<? extends SampleVisualization> samples = c.getList();
+				List<? extends ISampleVisualization<? extends ISampleData>> samples = c.getList();
 				if(!samples.isEmpty()) {
-					SampleVisualization s = samples.get(0);
+					ISampleVisualization<? extends ISampleData> s = samples.get(0);
 					if(!SelectionManagerSample.getInstance().getSelection().contains(s)) {
 						SelectionManagerSample.getInstance().getSelection().setAll(s);
 					}
@@ -310,10 +312,10 @@ public class PCAEditorController {
 		cTableSamples.getSelectionModel().clearSelection();
 	}
 
-	public void seletedSample(SampleVisualization sample) {
+	public void seletedSample(ISampleVisualization<? extends ISampleData> sample) {
 
 		if(samples.isPresent()) {
-			Optional<SampleVisualization> sampleVisalization = samples.get().getSampleList().stream().filter(s -> s == sample).findAny();
+			Optional<? extends ISampleVisualization<? extends ISampleData>> sampleVisalization = samples.get().getSampleList().stream().filter(s -> s == sample).findAny();
 			if(sampleVisalization.isPresent()) {
 				if(!cTableSamples.getSelectionModel().getSelectedItems().contains(sampleVisalization.get())) {
 					cTableSamples.getSelectionModel().select(sampleVisalization.get());
@@ -323,7 +325,7 @@ public class PCAEditorController {
 		}
 	}
 
-	private void setSamples(SamplesVisualization newSamples) {
+	private void setSamples(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> newSamples) {
 
 		/*
 		 * Set samples
@@ -347,7 +349,7 @@ public class PCAEditorController {
 		}
 	}
 
-	public void setSamplesConsumer(Consumer<SamplesVisualization> consumer) {
+	public void setSamplesConsumer(Consumer<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> consumer) {
 
 		this.inputSamples = consumer;
 	}

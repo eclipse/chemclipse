@@ -15,22 +15,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Optional;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaSettingsVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISampleVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.ISamplesVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IVariableVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.PcaSettingsVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.RetentionTimeVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SampleVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.PcaSettingsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -66,7 +63,7 @@ public class PCAController {
 	private Spinner pcy;
 	private Spinner pcz;
 	private Button runAnalysis;
-	private Optional<SamplesVisualization> samples;
+	private Optional<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> samples;
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private Button autoReevaluate;
 	private Button settings;
@@ -75,10 +72,10 @@ public class PCAController {
 			evaluatePCA();
 		}
 	};
-	private ListChangeListener<? super SampleVisualization> reevaluationSamplesChangeListener = e -> {
+	private ListChangeListener<? super ISampleVisualization<? extends ISampleData>> reevaluationSamplesChangeListener = e -> {
 		Display.getDefault().timerExec(100, autoreevaluete);
 	};
-	private ListChangeListener<? super RetentionTimeVisualization> reevaluationRetentionTimeChangeListener = e -> {
+	private ListChangeListener<? super IVariableVisualization> reevaluationRetentionTimeChangeListener = e -> {
 		Display.getDefault().timerExec(100, autoreevaluete);
 	};
 
@@ -216,21 +213,21 @@ public class PCAController {
 		return pcaResults;
 	}
 
-	public Optional<SamplesVisualization> getSamples() {
+	public Optional<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> getSamples() {
 
 		return samples;
 	}
 
-	public void setSamples(SamplesVisualization samples) {
+	public void setSamples(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> samples) {
 
 		if(this.samples.isPresent()) {
-			SamplesVisualization samplesVisualizationOld = this.samples.get();
+			ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> samplesVisualizationOld = this.samples.get();
 			samplesVisualizationOld.getSampleList().removeListener(reevaluationSamplesChangeListener);
 			samplesVisualizationOld.getVariables().removeListener(reevaluationRetentionTimeChangeListener);
 		}
 		this.samples = Optional.of(samples);
 		if(this.samples.isPresent()) {
-			SamplesVisualization samplesVisualizationNew = this.samples.get();
+			ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> samplesVisualizationNew = this.samples.get();
 			samplesVisualizationNew.getSampleList().addListener(reevaluationSamplesChangeListener);
 			samplesVisualizationNew.getVariables().addListener(reevaluationRetentionTimeChangeListener);
 		}

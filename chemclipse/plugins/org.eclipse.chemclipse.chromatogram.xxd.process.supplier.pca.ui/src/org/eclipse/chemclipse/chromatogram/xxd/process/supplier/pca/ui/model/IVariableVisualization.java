@@ -9,23 +9,17 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization;
+package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVaribleExtracted;
 
-public class VariableExtractedVisualization extends AbstractVariableVisualization implements IVariableExtractedVisalization {
+import javafx.beans.Observable;
+import javafx.util.Callback;
 
-	private IVaribleExtracted variable;
+public interface IVariableVisualization extends IColor, IVariable {
 
-	public VariableExtractedVisualization(IVaribleExtracted variableModel) {
-		super(variableModel);
-		this.variable = variableModel;
-	}
+	static <V extends IVariableVisualization> Callback<V, Observable[]> extractor() {
 
-	@Override
-	public IVariable getVariableOrigin() {
-
-		return variable.getVariableOrigin();
+		return (V v) -> new Observable[]{v.descriptionProperty(), v.valueProperty(), v.typeProperty(), v.selectedProperty(), v.colorProperty()};
 	}
 }

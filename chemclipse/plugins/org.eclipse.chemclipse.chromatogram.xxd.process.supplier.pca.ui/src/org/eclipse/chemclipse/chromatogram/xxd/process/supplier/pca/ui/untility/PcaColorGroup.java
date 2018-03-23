@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility
 
 import java.awt.Color;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IColor;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IColor;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVisualization;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 

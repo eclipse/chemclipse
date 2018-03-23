@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,18 +9,27 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization;
+package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.ux.fx.ui.SelectionManagerProto;
 
-import javafx.beans.Observable;
-import javafx.util.Callback;
+public class SelectionManagerSample extends SelectionManagerProto<ISample<? extends ISampleData>> {
 
-public interface ISampleVisualization<D extends ISampleData> extends ISample<D>, IColor {
+	private static SelectionManagerSample instance;
 
-	static <S extends ISampleVisualization<? extends ISampleData>> Callback<S, Observable[]> extractor() {
+	public static SelectionManagerSample getInstance() {
 
-		return (S s) -> new Observable[]{s.nameProperty(), s.groupNameProperty(), s.selectedProperty(), s.sampleDataHasBeenChangedProperty(), s.colorProperty()};
+		synchronized(SelectionManagerSample.class) {
+			if(instance == null) {
+				instance = new SelectionManagerSample();
+			}
+		}
+		return instance;
+	}
+
+	private SelectionManagerSample() {
+		super();
 	}
 }

@@ -30,7 +30,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	};
 	// General settings
 	public static final String P_ALGORITHM_TYPE = "algorithmType";
-	public static final String DEF_ALGORITHM_TYPE = IPcaSettings.PCA_ALGO_NIPALS;
+	public static final String DEF_ALGORITHM_TYPE = IPcaSettings.PCA_ALGO_SVD;
 	public static final String P_NUMBER_OF_COMPONENTS = "numberOfComponents";
 	public static final int MIN_NUMBER_OF_COMPONENTS = 1;
 	public static final int MAX_NUMBER_OF_COMPONENTS = 1000;
@@ -45,14 +45,14 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int MIN_SCORE_PLOT_2D_SYMBOL_SIZE = 1;
 	public static final int MAX_SCORE_PLOT_2D_SYMBOL_SIZE = 100;
 	public static final String P_SCORE_PLOT_2D_SYMBOL_TYPE = "scorePlot2dSymbolType";
-	public static final String DEF_SCORE_PLOT_2D_SYMBOL_TYPE = "Square";
+	public static final String DEF_SCORE_PLOT_2D_SYMBOL_TYPE = "CIRCLE";
 	// Loading Plot general Settings
 	public static final String P_LOADING_PLOT_2D_SYMBOL_SIZE = "loadingPlot2dSymbolSize";
 	public static final int DEF_LOADING_PLOT_2D_SYMBOL_SIZE = 6;
 	public static final int MIN_LOADING_PLOT_2D_SYMBOL_SIZE = 1;
 	public static final int MAX_LOADING_PLOT_2D_SYMBOL_SIZE = 100;
 	public static final String P_LOADING_PLOT_2D_SYMBOL_TYPE = "loadingPlot2dSymbolType";
-	public static final String DEF_LOADING_PLOT_2D_SYMBOL_TYPE = "Circle";
+	public static final String DEF_LOADING_PLOT_2D_SYMBOL_TYPE = "CIRCLE";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 

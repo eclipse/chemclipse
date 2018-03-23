@@ -11,13 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts;
 
+import java.util.function.Consumer;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IPcaResultsVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.IVariableExtractedVisalization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.LoadingPlot;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableExtractedVisalization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceLoadingPlot2DPage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -54,8 +57,17 @@ public class LoadingPlotPart {
 		}
 	};
 	private ListChangeListener<IVariableExtractedVisalization> variableChanger;
+	private Consumer<IPcaSettingsVisualization> settingUpdateListener;
 
 	public LoadingPlotPart() {
+		settingUpdateListener = new Consumer<IPcaSettingsVisualization>() {
+
+			@Override
+			public void accept(IPcaSettingsVisualization t) {
+
+				Display.getDefault().timerExec(100, updateSelection);
+			}
+		};
 		variableChanger = new ListChangeListener<IVariableExtractedVisalization>() {
 
 			@Override
@@ -110,6 +122,7 @@ public class LoadingPlotPart {
 			this.pcaResults = pcaResults.get();
 			loadingPlot.update(this.pcaResults);
 			this.pcaResults.getExtractedVariables().addListener(variableChanger);
+			this.pcaResults.getPcaSettingsVisualization().addChangeListener(settingUpdateListener);
 		}
 	}
 
@@ -151,6 +164,7 @@ public class LoadingPlotPart {
 		SelectionManagerSamples.getInstance().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
 		if(pcaResults != null) {
 			pcaResults.getExtractedVariables().removeListener(variableChanger);
+			pcaResults.getPcaSettingsVisualization().removeChangeListener(settingUpdateListener);
 		}
 	}
 }

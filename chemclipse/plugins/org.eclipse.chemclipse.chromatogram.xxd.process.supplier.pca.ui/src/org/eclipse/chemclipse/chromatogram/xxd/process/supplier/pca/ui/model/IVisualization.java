@@ -9,7 +9,7 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization;
+package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
 public interface IVisualization {
 

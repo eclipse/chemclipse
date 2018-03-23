@@ -9,17 +9,10 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization;
+package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 
-import javafx.beans.Observable;
-import javafx.util.Callback;
-
-public interface IPcaResultVisualization extends IPcaResult, IColor {
-
-	static Callback<IPcaResultVisualization, Observable[]> extractor() {
-
-		return (IPcaResultVisualization r) -> new Observable[]{r.getSample().selectedProperty(), r.colorProperty()};
-	}
+public interface ISamplesVisualization<V extends IVariableVisualization, S extends ISampleVisualization<? extends ISampleData>> extends ISamples<V, S> {
 }

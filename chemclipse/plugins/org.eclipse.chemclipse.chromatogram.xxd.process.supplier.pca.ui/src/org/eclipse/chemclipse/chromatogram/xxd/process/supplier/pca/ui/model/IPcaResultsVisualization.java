@@ -9,10 +9,11 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization;
+package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 
-public interface ISamplesVisualization<V extends IVariableVisualization, S extends ISampleVisualization<? extends ISampleData>> extends ISamples<V, S> {
+public interface IPcaResultsVisualization extends IPcaResults<IPcaResultVisualization, IVariableExtractedVisalization> {
+
+	IPcaSettingsVisualization getPcaSettingsVisualization();
 }

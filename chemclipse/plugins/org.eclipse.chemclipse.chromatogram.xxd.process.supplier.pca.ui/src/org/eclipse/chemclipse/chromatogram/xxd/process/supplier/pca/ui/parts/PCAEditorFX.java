@@ -18,10 +18,12 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.managers.SelectionManagerSamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SampleVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.visualization.SamplesVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers.PCAEditorController;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.PCAController;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -91,7 +93,7 @@ public class PCAEditorFX {
 	@PreDestroy
 	public void preDestroy() {
 
-		Optional<SamplesVisualization> samples = controller.getSamples();
+		Optional<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>>> samples = controller.getSamples();
 		if(samples.isPresent()) {
 			boolean contains = SelectionManagerSamples.getInstance().getSelection().remove(samples.get());
 			if(contains) {
@@ -107,7 +109,7 @@ public class PCAEditorFX {
 
 		fxCanvas.setFocus();
 		if(controller != null && controller.getSamples().isPresent()) {
-			SampleVisualization sample = controller.getSelectedSamples();
+			ISampleVisualization<? extends ISampleData> sample = controller.getSelectedSamples();
 			SelectionManagerSamples.getInstance().getSelection().setAll(controller.getSamples().get());
 			if(sample != null) {
 				SelectionManagerSample.getInstance().getSelection().setAll(sample);

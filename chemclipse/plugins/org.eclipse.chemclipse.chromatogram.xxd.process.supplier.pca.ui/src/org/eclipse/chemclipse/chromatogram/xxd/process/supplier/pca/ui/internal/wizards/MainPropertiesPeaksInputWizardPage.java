@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -22,7 +20,6 @@ import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -35,15 +32,11 @@ public class MainPropertiesPeaksInputWizardPage extends WizardPage {
 
 	private DataBindingContext dbc = new DataBindingContext();
 	private IObservableValue<Double> retentionTimeWindow = new WritableValue<>();
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	protected MainPropertiesPeaksInputWizardPage(String pageName) {
 		super(pageName);
 		setTitle("Set Main Parameters");
-		retentionTimeWindow.setValue(preferenceStore.getDouble(PreferenceSupplier.P_RETENTION_TIME_WINDOW_PEAKS));
-		retentionTimeWindow.addChangeListener(e -> {
-			preferenceStore.setValue(PreferenceSupplier.P_RETENTION_TIME_WINDOW_PEAKS, retentionTimeWindow.getValue());
-		});
+		retentionTimeWindow.setValue(0.1);
 	}
 
 	@Override

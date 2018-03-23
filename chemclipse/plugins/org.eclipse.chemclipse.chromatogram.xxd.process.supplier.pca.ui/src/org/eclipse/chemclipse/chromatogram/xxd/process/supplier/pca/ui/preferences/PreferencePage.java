@@ -36,9 +36,9 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	protected void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceSupplier.P_ALGORITHM_TYPE, "Algorithm type:", PreferenceSupplier.ALGORITHM_TYPES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_ALGORITHM_TYPE, "Algorithm Type:", PreferenceSupplier.ALGORITHM_TYPES, getFieldEditorParent()));
 		addIntegerEditor(PreferenceSupplier.P_NUMBER_OF_COMPONENTS, "Number of Components", PreferenceSupplier.MIN_NUMBER_OF_COMPONENTS, PreferenceSupplier.MAX_NUMBER_OF_COMPONENTS);
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_AUTO_REEVALUATE, "Reevaluete after change", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_AUTO_REEVALUATE, "Auto Reevaluete after Change", getFieldEditorParent()));
 	}
 
 	private void addIntegerEditor(String name, String labelText, int min, int max) {
