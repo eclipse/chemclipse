@@ -27,7 +27,7 @@ import java.util.TreeSet;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.RetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.SampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakSampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
@@ -216,11 +216,11 @@ public class PcaExtractionPeaks implements IDataExtraction {
 				int retentionTime = it.next().getRetentionTime();
 				IPeak peak = extractPeak.get(retentionTime);
 				if(peak != null) {
-					SampleData sampleData = new SampleData(peak.getIntegratedArea());
+					PeakSampleData sampleData = new PeakSampleData(peak.getIntegratedArea());
 					sampleData.setPeak(peak);
 					sample.getSampleData().add(sampleData);
 				} else {
-					SampleData sampleData = new SampleData();
+					PeakSampleData sampleData = new PeakSampleData();
 					sample.getSampleData().add(sampleData);
 				}
 			}

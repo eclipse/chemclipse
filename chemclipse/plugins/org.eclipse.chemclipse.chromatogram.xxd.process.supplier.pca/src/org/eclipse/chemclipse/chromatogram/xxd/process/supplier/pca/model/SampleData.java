@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,31 +11,37 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import java.util.Optional;
+public class SampleData implements ISampleData {
 
-import org.eclipse.chemclipse.model.core.IPeak;
-
-public class SampleData extends AbstractSampleData implements ISampleData {
-
-	private Optional<IPeak> peak;
+	private double data;
+	private double normalizedData;
 
 	public SampleData() {
-		super();
-		peak = Optional.empty();
+		this.data = Double.NaN;
+		this.normalizedData = Double.NaN;
 	}
 
 	public SampleData(double data) {
-		super(data);
-		peak = Optional.empty();
+		this();
+		this.data = data;
+		this.normalizedData = data;
 	}
 
-	public Optional<IPeak> getPeak() {
+	@Override
+	public double getData() {
 
-		return peak;
+		return data;
 	}
 
-	public void setPeak(IPeak peak) {
+	@Override
+	public double getModifiedData() {
 
-		this.peak = Optional.of(peak);
+		return normalizedData;
+	}
+
+	@Override
+	public void setModifiedData(double normalizedData) {
+
+		this.normalizedData = normalizedData;
 	}
 }

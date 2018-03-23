@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-public class Sample extends AbstractSample<SampleData> {
+public class Sample extends AbstractSample<PeakSampleData> {
 
 	public Sample(IDataInputEntry dataInputEntry) {
 		super(dataInputEntry.getName());

@@ -12,15 +12,15 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.SampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakSampleData;
 
-public class SampleVisualization extends AbstractSampleVisualization<SampleData> {
+public class SampleVisualization extends AbstractSampleVisualization<PeakSampleData> {
 
-	public SampleVisualization(ISample<SampleData> sampleModel) {
+	public SampleVisualization(ISample<PeakSampleData> sampleModel) {
 		super(sampleModel);
 	}
 
-	public SampleVisualization(ISample<SampleData> sampleModel, int r, int g, int b, double alpha) {
+	public SampleVisualization(ISample<PeakSampleData> sampleModel, int r, int g, int b, double alpha) {
 		super(sampleModel, r, g, b, alpha);
 	}
 }

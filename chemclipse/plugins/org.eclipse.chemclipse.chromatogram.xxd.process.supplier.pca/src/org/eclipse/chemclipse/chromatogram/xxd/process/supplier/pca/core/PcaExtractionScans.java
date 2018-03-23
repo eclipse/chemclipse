@@ -28,7 +28,7 @@ import org.apache.commons.math3.analysis.interpolation.UnivariateInterpolator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.RetentionTime;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.SampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakSampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
@@ -123,7 +123,7 @@ public class PcaExtractionScans implements IDataExtraction {
 	private void interpolation(Samples samples, Map<String, TreeMap<Integer, Float>> extractScans, UnivariateInterpolator interpolator) {
 
 		for(Sample sample : samples.getSampleList()) {
-			List<SampleData> data = sample.getSampleData();
+			List<PeakSampleData> data = sample.getSampleData();
 			TreeMap<Integer, Float> scans = extractScans.get(sample.getName());
 			double[] retetnionTime = new double[scans.size()];
 			double[] scanValues = new double[scans.size()];
@@ -138,7 +138,7 @@ public class PcaExtractionScans implements IDataExtraction {
 			UnivariateFunction fun = interpolator.interpolate(retetnionTime, scanValues);
 			for(int i = beginRetentionTimeMax; i <= endRetentionTimeMin; i += retentionTimeWindow) {
 				double value = fun.value(i);
-				SampleData d = new SampleData(value);
+				PeakSampleData d = new PeakSampleData(value);
 				data.add(d);
 			}
 		}
@@ -183,11 +183,11 @@ public class PcaExtractionScans implements IDataExtraction {
 	private void setClosestScan(Samples samples, Map<String, TreeMap<Integer, Float>> extractScans) {
 
 		for(Sample sample : samples.getSampleList()) {
-			List<SampleData> data = sample.getSampleData();
+			List<PeakSampleData> data = sample.getSampleData();
 			TreeMap<Integer, Float> scans = extractScans.get(sample.getName());
 			for(int i = beginRetentionTimeMax; i <= endRetentionTimeMin; i += retentionTimeWindow) {
 				Float value = getClosestScans(scans, i);
-				SampleData d = new SampleData(value);
+				PeakSampleData d = new PeakSampleData(value);
 				data.add(d);
 			}
 		}
@@ -210,17 +210,17 @@ public class PcaExtractionScans implements IDataExtraction {
 		Collections.sort(retentionTimes);
 		for(Sample sample : samples.getSampleList()) {
 			Iterator<Integer> it = retentionTimes.iterator();
-			List<SampleData> data = sample.getSampleData();
+			List<PeakSampleData> data = sample.getSampleData();
 			TreeMap<Integer, Float> scans = extractScans.get(sample.getName());
 			while(it.hasNext()) {
 				Integer time = it.next();
 				Float value = scans.get(time);
-				SampleData d;
+				PeakSampleData d;
 				if(value != null) {
-					d = new SampleData(value);
+					d = new PeakSampleData(value);
 				} else {
 					value = getClosestScans(scans, time);
-					d = new SampleData(value);
+					d = new PeakSampleData(value);
 				}
 				data.add(d);
 			}
