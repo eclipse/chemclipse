@@ -72,12 +72,14 @@ public class ExtendedXIRScanUI {
 	private void updateScan() {
 
 		chartXIR.deleteSeries();
-		labelDataInfo.setText(showRawData ? "Raw Data" : "Processed Data");
+		String dataInfo = showRawData ? "Raw Data" : "Processed Data";
 		//
 		if(scanXIR != null) {
 			/*
 			 * Get the data.
 			 */
+			dataInfo += " Rotation Angle: " + scanXIR.getRotationAngle();
+			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			ILineSeriesData lineSeriesData;
 			ILineSeriesSettings lineSeriesSettings;
@@ -110,6 +112,8 @@ public class ExtendedXIRScanUI {
 			//
 			chartXIR.addSeriesData(lineSeriesDataList);
 		}
+		//
+		labelDataInfo.setText(dataInfo);
 	}
 
 	private ISeriesData getSeriesDataProcessed(IScanXIR scanXIR, String id) {
