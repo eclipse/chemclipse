@@ -199,10 +199,8 @@ public class PCAController {
 						final IPcaResultsVisualization results = SelectionManagerSamples.getInstance().evaluatePca(s, pcaSettings, pcaSettingsVisualization, progressMonitor, true);
 						pcaResults = Optional.of(results);
 					});
-				} catch(InvocationTargetException e) {
-					logger.warn(e);
-				} catch(InterruptedException e) {
-					logger.warn(e);
+				} catch(Exception e) {
+					logger.error(e.getLocalizedMessage(), e);
 				}
 			}
 		}
