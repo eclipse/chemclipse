@@ -78,7 +78,7 @@ public class ExtendedXIRScanUI {
 			/*
 			 * Get the data.
 			 */
-			dataInfo += " Rotation Angle: " + scanXIR.getRotationAngle() + "°";
+			dataInfo += " | Rotation Angle: " + scanXIR.getRotationAngle() + "°";
 			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			ILineSeriesData lineSeriesData;
