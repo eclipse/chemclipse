@@ -24,7 +24,7 @@
     <elements xsi:type="advanced:Placeholder" xmi:id="_IgjiQNSDEeWQk9amfPZ_4Q" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.placeholder.0"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_cgvnsN3IEee_Jr66fOQ3Hg" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
-    <elements xsi:type="advanced:Perspective" xmi:id="_gMoqoN3IEee_Jr66fOQ3Hg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective" label="PCA Perspective">
+    <elements xsi:type="advanced:Perspective" xmi:id="_gMoqoN3IEee_Jr66fOQ3Hg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective" label="PCA Perspective" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pca.gif">
       <children xsi:type="basic:PartSashContainer" xmi:id="_GKtbwPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.partsashcontainer.0">
         <children xsi:type="basic:PartSashContainer" xmi:id="_ISzwsPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.partsashcontainer.1" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_Nz4zoPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.partstack.0">
