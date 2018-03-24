@@ -15,6 +15,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -23,6 +24,8 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.ui.swt.ISelectionHandler;
 import org.eclipse.chemclipse.ux.extension.ui.swt.WelcomeTile;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -50,9 +53,11 @@ public class WelcomeView {
 	private static final String PERSPECTIVE_DATA_ANALYSIS = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main";
 	private static final String PERSPECTIVE_QUANTITATION = "org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.perspective";
 	private static final String PERSPECTIVE_LOGGING = "org.eclipse.chemclipse.logging.ui.perspective.main";
-	private static final String PERSPECTIVE_MSD = "org.eclipse.chemclipse.chromatogram.msd.perspective.ui.perspective.main";
-	private static final String PERSPECTIVE_CSD = "org.eclipse.chemclipse.ux.extension.csd.ui.perspective.main";
-	private static final String PERSPECTIVE_WSD = "org.eclipse.chemclipse.ux.extension.wsd.ui.perspective.main";
+	//
+	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.ux.extension.ui.welcometile";
+	private static final String SECTION = "Section";
+	private static final String DESCRIPTION = "Description";
+	private static final String PERSPECTIVE_ID = "PerspectiveId";
 	//
 	// private static final String CSS_ID = "org-eclipse-chemclipse-ux-extension-ui-views-welcomeview-background";
 	/*
@@ -71,34 +76,24 @@ public class WelcomeView {
 	 */
 	private List<WelcomeTile> welcomeTiles;
 
-	private class Component1 implements ISelectionHandler {
+	private class Component implements ISelectionHandler {
+
+		private String perspectiveId = "";
+
+		public Component(String perspectiveId) {
+			this.perspectiveId = perspectiveId;
+		}
 
 		@Override
 		public void handleEvent() {
 
-			switchPerspective(PERSPECTIVE_DATA_ANALYSIS);
+			if(perspectiveId != null && !"".equals(perspectiveId)) {
+				switchPerspective(perspectiveId);
+			}
 		}
 	}
 
-	private class Component2 implements ISelectionHandler {
-
-		@Override
-		public void handleEvent() {
-
-			switchPerspective(PERSPECTIVE_QUANTITATION);
-		}
-	}
-
-	private class Component3 implements ISelectionHandler {
-
-		@Override
-		public void handleEvent() {
-
-			switchPerspective(PERSPECTIVE_LOGGING);
-		}
-	}
-
-	private class Component4 implements ISelectionHandler {
+	private class ComponentDemo implements ISelectionHandler {
 
 		@Override
 		public void handleEvent() {
@@ -121,12 +116,12 @@ public class WelcomeView {
 							 * Create the input part and prepare it.
 							 */
 							MPart part = MBasicFactory.INSTANCE.createInputPart();
-							part.setElementId("org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramEditor");
-							part.setContributionURI("bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.editors.ChromatogramEditorMSD");
+							part.setElementId("org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramEditorMSD");
+							part.setContributionURI("bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorMSD");
 							part.setObject(file.getAbsolutePath());
 							part.setIconURI("platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif");
 							part.setLabel(file.getName());
-							part.setTooltip("Chromatogram - Detector Type: MSD");
+							part.setTooltip("Demo Chromatogram (MSD)");
 							part.setCloseable(true);
 							/*
 							 * Add it to the stack and show it.
@@ -139,33 +134,6 @@ public class WelcomeView {
 					}
 				}
 			});
-		}
-	}
-
-	private class Component5 implements ISelectionHandler {
-
-		@Override
-		public void handleEvent() {
-
-			switchPerspective(PERSPECTIVE_MSD);
-		}
-	}
-
-	private class Component6 implements ISelectionHandler {
-
-		@Override
-		public void handleEvent() {
-
-			switchPerspective(PERSPECTIVE_CSD);
-		}
-	}
-
-	private class Component7 implements ISelectionHandler {
-
-		@Override
-		public void handleEvent() {
-
-			switchPerspective(PERSPECTIVE_WSD);
 		}
 	}
 
@@ -199,24 +167,18 @@ public class WelcomeView {
 		 * of the contained components.
 		 */
 		parent.setBackgroundMode(SWT.INHERIT_FORCE);
-		//
+		/*
+		 * Default Tiles
+		 */
 		Image imageDataAnalysis = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_DATA_ANALYSIS, IApplicationImage.SIZE_128x128);
-		//
-		WelcomeTile composite1 = new WelcomeTile(parent, SWT.NONE);
-		WelcomeTile composite2 = new WelcomeTile(parent, SWT.NONE);
-		WelcomeTile composite3 = new WelcomeTile(parent, SWT.NONE);
-		WelcomeTile composite4 = new WelcomeTile(parent, SWT.NONE);
-		WelcomeTile composite5 = new WelcomeTile(parent, SWT.NONE);
-		WelcomeTile composite6 = new WelcomeTile(parent, SWT.NONE);
-		WelcomeTile composite7 = new WelcomeTile(parent, SWT.NONE);
-		//
-		initializeTile(composite1, 2, 2, new Component1(), imageDataAnalysis, "Data Analysis", "This is the main perspective. Most of the work is performed here.");
-		initializeTile(composite2, 1, 1, new Component2(), null, "Quantitation", "Used for ISTD and ESTD quantitation");
-		initializeTile(composite3, 1, 1, new Component3(), null, "Logging", "Have a look at the log files.");
-		initializeTile(composite4, 2, 1, new Component4(), null, "Demo", "Load a demo chromatogram.");
-		initializeTile(composite5, 2, 1, new Component5(), null, "MSD", "Mass Selective Detector (Quadrupole, IonTrap, TandenMS, HighRes)");
-		initializeTile(composite6, 1, 1, new Component6(), null, "CSD", "Current Selective Detector (FID, PPD, ...)");
-		initializeTile(composite7, 1, 1, new Component7(), null, "WSD", "Wavelength Selective Detector (UV/Vis, VWD, DAD)");
+		initializeTile(new WelcomeTile(parent, SWT.NONE, true), 2, 2, new Component(PERSPECTIVE_DATA_ANALYSIS), imageDataAnalysis, "Data Analysis", "This is the main perspective. Most of the work is performed here.");
+		initializeTile(new WelcomeTile(parent, SWT.NONE, true), 1, 1, new Component(PERSPECTIVE_QUANTITATION), null, "Quantitation", "Used for ISTD and ESTD quantitation");
+		initializeTile(new WelcomeTile(parent, SWT.NONE, true), 1, 1, new Component(PERSPECTIVE_LOGGING), null, "Logging", "Have a look at the log files.");
+		initializeTile(new WelcomeTile(parent, SWT.NONE, true), 2, 1, new ComponentDemo(), null, "Demo", "Load a demo chromatogram.");
+		/*
+		 * Registered Tiles
+		 */
+		addRegisteredTiles(parent);
 	}
 
 	private void initializeTile(WelcomeTile welcomeTile, int horizontalSpan, int verticalSpan, ISelectionHandler selectionHandler, Image image, String section, String description) {
@@ -268,6 +230,47 @@ public class WelcomeView {
 			if(eventBroker != null) {
 				eventBroker.send(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, perspective.getLabel());
 			}
+		}
+	}
+
+	private void addRegisteredTiles(Composite parent) {
+
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		IConfigurationElement[] elements = registry.getConfigurationElementsFor(EXTENSION_POINT);
+		/*
+		 * Display 4 tiles randomly.
+		 */
+		int maxTiles = 4;
+		int size = elements.length;
+		int availableTiles = (size < maxTiles) ? size : maxTiles;
+		int bound = size;
+		List<Integer> indices = new ArrayList<Integer>();
+		Random random = new Random();
+		int attempt = 0;
+		int maxAttempts = 1000; // Restrict to 1000 tries max.
+		while(indices.size() < availableTiles && attempt < maxAttempts) {
+			int index = random.nextInt(bound);
+			if(!indices.contains(index)) {
+				indices.add(index);
+			}
+			attempt++;
+		}
+		/*
+		 * Add the tiles.
+		 */
+		for(int index : indices) {
+			IConfigurationElement element = elements[index];
+			String section = element.getAttribute(SECTION);
+			String description = element.getAttribute(DESCRIPTION);
+			String perspectiveId = element.getAttribute(PERSPECTIVE_ID);
+			boolean highlight = (perspectiveId == null) ? false : true;
+			initializeTile(new WelcomeTile(parent, SWT.NONE, highlight), 1, 1, new Component(perspectiveId), null, section, description);
+		}
+		/*
+		 * Fill empty tiles if less than 4 have been added.
+		 */
+		for(int i = availableTiles; i < maxTiles; i++) {
+			initializeTile(new WelcomeTile(parent, SWT.NONE, false), 1, 1, new Component(""), null, "", "");
 		}
 	}
 }

@@ -38,9 +38,12 @@ public class WelcomeTile extends Composite {
 	private Label labelImage;
 	private Text textSection;
 	private Text textDesciption;
+	//
+	private boolean highlight;
 
-	public WelcomeTile(Composite parent, int style) {
+	public WelcomeTile(Composite parent, int style, boolean highlight) {
 		super(parent, style);
+		this.highlight = highlight;
 		initialize();
 	}
 
@@ -63,7 +66,9 @@ public class WelcomeTile extends Composite {
 
 	public void setActive() {
 
-		setBackgroundColor(colorActive);
+		if(highlight) {
+			setBackgroundColor(colorActive);
+		}
 	}
 
 	public void setInactive() {
