@@ -47,6 +47,9 @@ public class PcaResulDataProvider implements IDataProvider {
 		} else {
 			List<ISampleVisualization<?>> samples = tableProvider.getDataTable().getSamples();
 			ISample<?> sample = samples.get(columnIndex - TableProvider.NUMER_OF_DESCRIPTION_COLUMN);
+			if(sample.getSampleData().size() <= sortRowIndex) {
+				return Double.NaN;
+			}
 			double sampleData = sample.getSampleData().get(sortRowIndex).getModifiedData();
 			return sampleData;
 		}
