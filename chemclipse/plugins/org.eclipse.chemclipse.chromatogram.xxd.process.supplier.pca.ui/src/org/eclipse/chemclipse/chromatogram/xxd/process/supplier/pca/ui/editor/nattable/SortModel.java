@@ -12,14 +12,13 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
 import org.eclipse.nebula.widgets.nattable.sort.ISortModel;
 import org.eclipse.nebula.widgets.nattable.sort.SortDirectionEnum;
 
@@ -122,18 +121,18 @@ public class SortModel implements ISortModel {
 				/*
 				 * sort by retention time
 				 */
-				for(int i = 0; i < sortedRow.size(); i++) {
-					sortedRow.set(i, i);
-				}
-				// reverse sorting
-				if(direction == -1) {
-					Collections.reverse(sortedRow);
-				}
-			} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAK_NAMES) {
-				List<String> peaksNames = tableProvider.getDataTable().getVariables().stream().map(r -> r.getDescription()).collect(Collectors.toList());
-				Comparator<String> nullSafeStringComparator = Comparator.nullsFirst(String::compareTo);
+				List<IVariableVisualization> variableVisualizations = tableProvider.getDataTable().getVariables();
 				sortedRow.sort((i, j) -> {
-					return setDirection * nullSafeStringComparator.compare(peaksNames.get(i), peaksNames.get(j));
+					return setDirection * variableVisualizations.get(i).compareTo(variableVisualizations.get(j));
+				});
+			} else if(columnIndex == TableProvider.COLUMN_INDEX_PEAK_NAMES) {
+				/*
+				 * sort by variable description
+				 */
+				Comparator<String> nullSafeStringComparator = Comparator.nullsFirst(String::compareTo);
+				List<IVariableVisualization> variables = tableProvider.getDataTable().getVariables();
+				sortedRow.sort((i, j) -> {
+					return setDirection * nullSafeStringComparator.compare(variables.get(i).getDescription(), variables.get(j).getDescription());
 				});
 			} else {
 				/*
