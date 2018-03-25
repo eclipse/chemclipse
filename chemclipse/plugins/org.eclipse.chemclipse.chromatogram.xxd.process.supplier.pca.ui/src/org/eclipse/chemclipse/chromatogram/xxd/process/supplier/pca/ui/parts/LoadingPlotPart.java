@@ -86,10 +86,12 @@ public class LoadingPlotPart {
 						return;
 					if(oldValue != null) {
 						oldValue.getExtractedVariables().removeListener(variableChanger);
+						oldValue.getPcaSettingsVisualization().removeChangeListener(settingUpdateListener);
 					}
 					if(newValue != null) {
 						pcaResults = newValue;
 						pcaResults.getExtractedVariables().addListener(variableChanger);
+						pcaResults.getPcaSettingsVisualization().addChangeListener(settingUpdateListener);
 						loadingPlot.update(newValue);
 					} else {
 						pcaResults = null;
