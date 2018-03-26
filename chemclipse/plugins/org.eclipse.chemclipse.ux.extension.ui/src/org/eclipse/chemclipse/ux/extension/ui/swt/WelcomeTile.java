@@ -18,6 +18,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -26,7 +27,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 
 public class WelcomeTile extends Composite {
 
@@ -36,15 +36,31 @@ public class WelcomeTile extends Composite {
 	private ISelectionHandler selectionHandler;
 	//
 	private Label labelImage;
-	private Text textSection;
-	private Text textDesciption;
+	private Label textSection;
+	private Label textDesciption;
 	//
 	private boolean highlight;
+	private Cursor handCursor;
+	private Cursor waitCursor;
 
 	public WelcomeTile(Composite parent, int style, boolean highlight) {
 		super(parent, style);
 		this.highlight = highlight;
 		initialize();
+		if(highlight) {
+			handCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_HAND);
+		}
+		waitCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_WAIT);
+	}
+
+	@Override
+	public void dispose() {
+
+		super.dispose();
+		if(handCursor != null) {
+			handCursor.dispose();
+		}
+		waitCursor.dispose();
 	}
 
 	public void setSelectionHandler(ISelectionHandler selectionHandler) {
@@ -97,9 +113,9 @@ public class WelcomeTile extends Composite {
 		return label;
 	}
 
-	private Text addTextSection(Composite parent) {
+	private Label addTextSection(Composite parent) {
 
-		Text text = new Text(parent, SWT.NONE);
+		Label text = new Label(parent, SWT.NONE);
 		text.setForeground(Colors.WHITE);
 		text.setBackground(colorInactive);
 		Font font = new Font(Display.getDefault(), "Arial", 18, SWT.BOLD);
@@ -111,9 +127,9 @@ public class WelcomeTile extends Composite {
 		return text;
 	}
 
-	private Text addTextDescription(Composite parent) {
+	private Label addTextDescription(Composite parent) {
 
-		Text text = new Text(parent, SWT.CENTER | SWT.WRAP);
+		Label text = new Label(parent, SWT.CENTER | SWT.WRAP);
 		text.setBackground(colorInactive);
 		text.setText("");
 		text.setLayoutData(getGridData(SWT.CENTER, SWT.BEGINNING, 2));
@@ -172,8 +188,14 @@ public class WelcomeTile extends Composite {
 
 	private void handleSelection() {
 
-		if(selectionHandler != null) {
-			selectionHandler.handleEvent();
+		Cursor oldCursor = getCursor();
+		try {
+			setCursor(waitCursor);
+			if(selectionHandler != null) {
+				selectionHandler.handleEvent();
+			}
+		} finally {
+			setCursor(oldCursor);
 		}
 	}
 }
