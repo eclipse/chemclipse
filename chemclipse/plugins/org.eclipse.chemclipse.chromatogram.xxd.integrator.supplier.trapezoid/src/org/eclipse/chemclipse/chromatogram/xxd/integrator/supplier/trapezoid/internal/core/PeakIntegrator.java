@@ -51,6 +51,9 @@ import org.eclipse.chemclipse.msd.model.core.support.IonPercentages;
 import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
+import org.eclipse.chemclipse.wsd.model.core.IIntegrationEntryWSD;
+import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
+import org.eclipse.chemclipse.wsd.model.core.implementation.IntegrationEntryWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -195,10 +198,18 @@ public class PeakIntegrator implements IPeakIntegrator {
 			}
 		} else if(peak instanceof IPeakCSD) {
 			/*
-			 * FID
+			 * CSD
 			 */
 			IPeakCSD peakFID = (IPeakCSD)peak;
 			if(peakFID.getPeakModel() == null) {
+				throw new ValueMustNotBeNullException("The peak model must not be null.");
+			}
+		} else if(peak instanceof IPeakWSD) {
+			/*
+			 * WSD
+			 */
+			IPeakWSD peakWSD = (IPeakWSD)peak;
+			if(peakWSD.getPeakModel() == null) {
 				throw new ValueMustNotBeNullException("The peak model must not be null.");
 			}
 		}
@@ -306,6 +317,13 @@ public class PeakIntegrator implements IPeakIntegrator {
 			 */
 			double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport, includeBackground);
 			IIntegrationEntryCSD integrationEntry = new IntegrationEntryCSD(integratedAreaTIC);
+			integrationEntries.add(integrationEntry);
+		} else if(peak instanceof IPeakWSD) {
+			/*
+			 * WSD
+			 */
+			double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport, includeBackground);
+			IIntegrationEntryWSD integrationEntry = new IntegrationEntryWSD(integratedAreaTIC);
 			integrationEntries.add(integrationEntry);
 		}
 		//

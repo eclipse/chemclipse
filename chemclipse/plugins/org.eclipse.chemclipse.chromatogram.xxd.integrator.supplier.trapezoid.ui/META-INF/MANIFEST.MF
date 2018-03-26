@@ -35,4 +35,5 @@ Service-Component: OSGI-INF/chromatogramIntegratorHandlerMSD.xml,
  OSGI-INF/peakIntegratorHandlerMSD.xml,
  OSGI-INF/chromatogramIntegratorHandlerCSD.xml,
  OSGI-INF/combinedIntegratorHandlerCSD.xml,
- OSGI-INF/peakIntegratorHandlerCSD.xml
+ OSGI-INF/peakIntegratorHandlerCSD.xml,
+ OSGI-INF/peakIntegratorHandlerWSD.xml

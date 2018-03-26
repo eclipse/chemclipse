@@ -13,14 +13,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.in
 
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
-import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResult;
@@ -28,6 +20,15 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegratio
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.IPeakIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.PeakIntegrator;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class TrapezoidPeakIntegratorSupport implements ITrapezoidPeakIntegratorSupport {
 
@@ -60,9 +61,13 @@ public class TrapezoidPeakIntegratorSupport implements ITrapezoidPeakIntegratorS
 			IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogramMSD();
 			peaks = chromatogramMSD.getPeaks(chromatogramSelectionMSD);
 		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-			IChromatogramSelectionCSD chromatogramSelectionFID = (IChromatogramSelectionCSD)chromatogramSelection;
-			IChromatogramCSD chromatogramFID = chromatogramSelectionFID.getChromatogramCSD();
-			peaks = chromatogramFID.getPeaks(chromatogramSelectionFID);
+			IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
+			IChromatogramCSD chromatogramFID = chromatogramSelectionCSD.getChromatogramCSD();
+			peaks = chromatogramFID.getPeaks(chromatogramSelectionCSD);
+		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+			IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+			IChromatogramWSD chromatogramWSD = chromatogramSelectionWSD.getChromatogramWSD();
+			peaks = chromatogramWSD.getPeaks(chromatogramSelectionWSD);
 		}
 		//
 		return calculatePeakIntegrationResults(peaks, peakIntegrationSettings, monitor);
