@@ -16,20 +16,17 @@ import java.lang.reflect.InvocationTargetException;
 import javax.inject.Named;
 
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.internal.handlers.DetectorRunnable;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
@@ -37,6 +34,8 @@ public class DetectorHandler implements EventHandler {
 
 	private static final Logger logger = Logger.getLogger(DetectorHandler.class);
 	private static IChromatogramSelection chromatogramSelection;
+	//
+	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
@@ -53,18 +52,8 @@ public class DetectorHandler implements EventHandler {
 		 * IProgressMonitor.UNKNOWN) didn't showed a progress under linux.
 		 */
 		if(chromatogramSelection != null) {
-			/*
-			 * Try to select and show the perspective and view.
-			 */
-			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-				PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_PEAKS_MSD, IPerspectiveAndViewIds.VIEW_PEAK_LIST_MSD);
-			} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-				PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_CSD, IPerspectiveAndViewIds.VIEW_PEAK_LIST_CSD);
-			}
-			//
-			final Display display = Display.getCurrent();
 			DetectorRunnable runnable = new DetectorRunnable(chromatogramSelection);
-			ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
+			ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
 			try {
 				/*
 				 * Use true, true ... instead of false, true ... if the progress bar
@@ -84,9 +73,11 @@ public class DetectorHandler implements EventHandler {
 	public void handleEvent(Event event) {
 
 		if(event.getTopic().equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION)) {
-			chromatogramSelection = (IChromatogramSelectionMSD)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+			chromatogramSelection = (IChromatogramSelection)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
 		} else if(event.getTopic().equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION)) {
-			chromatogramSelection = (IChromatogramSelectionCSD)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+			chromatogramSelection = (IChromatogramSelection)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+		} else if(event.getTopic().equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION)) {
+			chromatogramSelection = (IChromatogramSelection)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
 		} else {
 			chromatogramSelection = null;
 		}

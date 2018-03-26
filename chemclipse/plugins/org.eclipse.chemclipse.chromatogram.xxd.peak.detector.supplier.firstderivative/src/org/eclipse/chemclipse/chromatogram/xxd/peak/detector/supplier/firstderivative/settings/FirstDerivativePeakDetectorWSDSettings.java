@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,17 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings;
 
-import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.AbstractPeakDetectorCSDSettings;
+import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.AbstractPeakDetectorWSDSettings;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
-public class FirstDerivativePeakDetectorCSDSettings extends AbstractPeakDetectorCSDSettings implements IFirstDerivativePeakDetectorCSDSettings {
+public class FirstDerivativePeakDetectorWSDSettings extends AbstractPeakDetectorWSDSettings implements IFirstDerivativePeakDetectorWSDSettings {
 
-	private Threshold threshold = IFirstDerivativePeakDetectorCSDSettings.INITIAL_THRESHOLD;
+	private Threshold threshold = IFirstDerivativePeakDetectorWSDSettings.INITIAL_THRESHOLD;
 	private boolean includeBackground = false;
 	private float minimumSignalToNoiseRatio;
 	private WindowSize windowSize;
 
-	public FirstDerivativePeakDetectorCSDSettings() {
+	public FirstDerivativePeakDetectorWSDSettings() {
 		windowSize = WindowSize.SCANS_5;
 	}
 
