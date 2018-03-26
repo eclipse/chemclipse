@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -144,7 +143,7 @@ public class PCAController {
 			}
 		});
 		autoReevaluate = new Button(composite, SWT.CHECK);
-		autoReevaluate.setText("Auto reevaluete");
+		autoReevaluate.setText("Auto Re-evaluate");
 		autoReevaluate.setSelection(preferenceStore.getBoolean(PreferenceSupplier.P_AUTO_REEVALUATE));
 		settings = new Button(composite, SWT.PUSH);
 		GridData gridData = new GridData();
