@@ -89,6 +89,27 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	@Override
 	public void adjustTotalSignal(float totalSignal) {
 
+		/*
+		 * If the total signal is 0 there would be no wavelength stored in
+		 * the list.<br/> That's not what we want.
+		 */
+		if(totalSignal < 0.0f || Float.isNaN(totalSignal) || Float.isInfinite(totalSignal)) {
+			return;
+		}
+		/*
+		 * Do not cause a division by zero exception :-).
+		 */
+		if(getTotalSignal() == 0.0f) {
+			return;
+		}
+		float base = 100.0f;
+		float correctionFactor = ((base / getTotalSignal()) * totalSignal) / base;
+		float abundance;
+		for(IScanSignalWSD scanSignal : scanSignals) {
+			abundance = scanSignal.getAbundance();
+			abundance *= correctionFactor;
+			scanSignal.setAbundance(abundance);
+		}
 	}
 
 	@Override

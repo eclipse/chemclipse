@@ -35,14 +35,14 @@ public interface IScan extends ISignal, IAdaptable, IScanSerializable {
 	 * Returns the chromatogram, where the mass spectrum is stored.<br/>
 	 * If there is no parent chromatogram, it will return null.
 	 */
-	IChromatogram getParentChromatogram();
+	IChromatogram<? extends IPeak> getParentChromatogram();
 
 	/**
 	 * Sets the chromatogram which stores the mass spectrum.
 	 * 
 	 * @param parentChromatogram
 	 */
-	void setParentChromatogram(IChromatogram parentChromatogram);
+	void setParentChromatogram(IChromatogram<? extends IPeak> parentChromatogram);
 
 	/**
 	 * Returns the scan number of the actual mass spectrum.<br/>
