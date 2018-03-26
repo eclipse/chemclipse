@@ -16,6 +16,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.INoiseCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -27,9 +30,33 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 	private static final long serialVersionUID = -7048942996283330150L;
 	//
 	private Set<IChromatogramTargetWSD> targets;
+	private INoiseCalculator noiseCalculator;
 
 	public AbstractChromatogramWSD() {
 		targets = new HashSet<IChromatogramTargetWSD>();
+		String noiseCalculatorId = PreferenceSupplier.getSelectedNoiseCalculatorId();
+		noiseCalculator = NoiseCalculator.getNoiseCalculator(noiseCalculatorId);
+		if(noiseCalculator != null) {
+			int segmentWidth = PreferenceSupplier.getSelectedSegmentWidth();
+			noiseCalculator.setChromatogram(this, segmentWidth);
+		}
+	}
+
+	@Override
+	public void recalculateTheNoiseFactor() {
+
+		if(noiseCalculator != null) {
+			noiseCalculator.recalculate();
+		}
+	}
+
+	@Override
+	public float getSignalToNoiseRatio(float abundance) {
+
+		if(noiseCalculator != null) {
+			return noiseCalculator.getSignalToNoiseRatio(abundance);
+		}
+		return 0;
 	}
 
 	@Override

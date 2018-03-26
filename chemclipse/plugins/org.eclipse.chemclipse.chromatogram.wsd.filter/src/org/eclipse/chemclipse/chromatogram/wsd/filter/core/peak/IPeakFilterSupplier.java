@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -9,13 +9,13 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.csd.filter.core.peak;
+package org.eclipse.chemclipse.chromatogram.wsd.filter.core.peak;
 
 public interface IPeakFilterSupplier {
 
 	/**
 	 * The id of the extension point: e.g.
-	 * (org.eclipse.chemclipse.chromatogram.csd.filter.supplier.backgroundRemover)
+	 * (org.eclipse.chemclipse.chromatogram.wsd.filter.supplier.backgroundRemover)
 	 * 
 	 * @return String
 	 */

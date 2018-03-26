@@ -43,6 +43,11 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.IPeakDetectorM
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.IPeakDetectorMSDSupport;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.PeakDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.NoPeakDetectorAvailableException;
+import org.eclipse.chemclipse.chromatogram.wsd.filter.core.chromatogram.ChromatogramFilterWSD;
+import org.eclipse.chemclipse.chromatogram.wsd.filter.core.chromatogram.IChromatogramFilterSupportWSD;
+import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.core.IPeakDetectorWSDSupplier;
+import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.core.IPeakDetectorWSDSupport;
+import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.core.PeakDetectorWSD;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.IPeakIntegratorSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.IPeakIntegratorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegrator;
@@ -340,8 +345,8 @@ public class ExtendedChromatogramUI {
 					IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
 					peak = chromatogramCSD.getPeak(retentionTime);
 				} else if(chromatogram instanceof IChromatogramWSD) {
-					// IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
-					// peak = chromatogramWSD.getPeak(retentionTime);
+					IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
+					peak = chromatogramWSD.getPeak(retentionTime);
 				}
 				if(peak != null) {
 					/*
@@ -509,7 +514,10 @@ public class ExtendedChromatogramUI {
 								}
 								break;
 							case TYPE_WSD:
-								//
+								if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+									IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+									ChromatogramFilterWSD.applyFilter(chromatogramSelectionWSD, filterId, monitor);
+								}
 								break;
 						}
 					}
@@ -574,7 +582,10 @@ public class ExtendedChromatogramUI {
 								}
 								break;
 							case TYPE_WSD:
-								//
+								if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+									IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+									PeakDetectorWSD.detect(chromatogramSelectionWSD, peakDetectorId, monitor);
+								}
 								break;
 						}
 					}
@@ -908,7 +919,7 @@ public class ExtendedChromatogramUI {
 			} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
 				addChartMenuEntriesFilterCSD(chartSettings);
 			} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-				//
+				addChartMenuEntriesFilterWSD(chartSettings);
 			}
 		}
 		//
@@ -963,6 +974,22 @@ public class ExtendedChromatogramUI {
 		}
 	}
 
+	private void addChartMenuEntriesFilterWSD(IChartSettings chartSettings) {
+
+		try {
+			IChromatogramFilterSupportWSD chromatogramFilterSupport = ChromatogramFilterWSD.getChromatogramFilterSupport();
+			for(String filterId : chromatogramFilterSupport.getAvailableFilterIds()) {
+				IChromatogramFilterSupplier filter = chromatogramFilterSupport.getFilterSupplier(filterId);
+				String name = filter.getFilterName();
+				FilterMenuEntry filterMenuEntry = new FilterMenuEntry(name, filterId, TYPE_WSD, chromatogramSelection);
+				chartMenuEntriesFilter.add(filterMenuEntry);
+				chartSettings.addMenuEntry(filterMenuEntry);
+			}
+		} catch(NoChromatogramFilterSupplierAvailableException e) {
+			logger.warn(e);
+		}
+	}
+
 	private void addChartMenuEntriesPeakDetectors() {
 
 		IChartSettings chartSettings = chromatogramChart.getChartSettings();
@@ -977,7 +1004,7 @@ public class ExtendedChromatogramUI {
 			} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
 				addChartMenuEntriesPeakDetectorCSD(chartSettings);
 			} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-				//
+				addChartMenuEntriesPeakDetectorWSD(chartSettings);
 			}
 		}
 		//
@@ -1008,6 +1035,22 @@ public class ExtendedChromatogramUI {
 				IPeakDetectorCSDSupplier peakDetecorSupplier = peakDetectorSupport.getPeakDetectorSupplier(peakDetectorId);
 				String name = peakDetecorSupplier.getPeakDetectorName();
 				PeakDetectorMenuEntry menuEntry = new PeakDetectorMenuEntry(name, peakDetectorId, TYPE_CSD, chromatogramSelection);
+				chartMenuEntriesPeakDetectors.add(menuEntry);
+				chartSettings.addMenuEntry(menuEntry);
+			}
+		} catch(NoPeakDetectorAvailableException e) {
+			logger.warn(e);
+		}
+	}
+
+	private void addChartMenuEntriesPeakDetectorWSD(IChartSettings chartSettings) {
+
+		try {
+			IPeakDetectorWSDSupport peakDetectorSupport = PeakDetectorWSD.getPeakDetectorSupport();
+			for(String peakDetectorId : peakDetectorSupport.getAvailablePeakDetectorIds()) {
+				IPeakDetectorWSDSupplier peakDetecorSupplier = peakDetectorSupport.getPeakDetectorSupplier(peakDetectorId);
+				String name = peakDetecorSupplier.getPeakDetectorName();
+				PeakDetectorMenuEntry menuEntry = new PeakDetectorMenuEntry(name, peakDetectorId, TYPE_WSD, chromatogramSelection);
 				chartMenuEntriesPeakDetectors.add(menuEntry);
 				chartSettings.addMenuEntry(menuEntry);
 			}

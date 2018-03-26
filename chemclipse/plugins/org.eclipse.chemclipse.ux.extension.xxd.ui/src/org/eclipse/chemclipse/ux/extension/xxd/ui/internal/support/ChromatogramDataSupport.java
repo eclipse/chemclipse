@@ -30,6 +30,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 
 public class ChromatogramDataSupport {
 
@@ -113,6 +114,9 @@ public class ChromatogramDataSupport {
 		List<? extends IPeak> peaks = new ArrayList<IPeak>();
 		if(chromatogram != null) {
 			if(chromatogram instanceof IChromatogramMSD) {
+				/*
+				 * MSD
+				 */
 				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
 				if(selectedRange instanceof IChromatogramSelectionMSD) {
 					peaks = chromatogramMSD.getPeaks((IChromatogramSelectionMSD)selectedRange);
@@ -120,6 +124,9 @@ public class ChromatogramDataSupport {
 					peaks = chromatogramMSD.getPeaks();
 				}
 			} else if(chromatogram instanceof IChromatogramCSD) {
+				/*
+				 * CSD
+				 */
 				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
 				if(selectedRange instanceof IChromatogramSelectionCSD) {
 					peaks = chromatogramCSD.getPeaks((IChromatogramSelectionCSD)selectedRange);
@@ -127,7 +134,15 @@ public class ChromatogramDataSupport {
 					peaks = chromatogramCSD.getPeaks();
 				}
 			} else if(chromatogram instanceof IChromatogramWSD) {
-				//
+				/*
+				 * WSD
+				 */
+				IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
+				if(selectedRange instanceof IChromatogramSelectionWSD) {
+					peaks = chromatogramWSD.getPeaks((IChromatogramSelectionWSD)selectedRange);
+				} else {
+					peaks = chromatogramWSD.getPeaks();
+				}
 			}
 		}
 		//
@@ -183,6 +198,9 @@ public class ChromatogramDataSupport {
 		if(chromatogramSelection != null) {
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
+				/*
+				 * MSD
+				 */
 				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
 				if(extractPeaksInSelectedRange) {
 					peaks = chromatogramMSD.getPeaks((IChromatogramSelectionMSD)chromatogramSelection);
@@ -190,6 +208,9 @@ public class ChromatogramDataSupport {
 					peaks = chromatogramMSD.getPeaks();
 				}
 			} else if(chromatogram instanceof IChromatogramCSD) {
+				/*
+				 * CSD
+				 */
 				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
 				if(extractPeaksInSelectedRange) {
 					peaks = chromatogramCSD.getPeaks((IChromatogramSelectionCSD)chromatogramSelection);
@@ -197,7 +218,15 @@ public class ChromatogramDataSupport {
 					peaks = chromatogramCSD.getPeaks();
 				}
 			} else if(chromatogram instanceof IChromatogramWSD) {
-				//
+				/*
+				 * WSD
+				 */
+				IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
+				if(extractPeaksInSelectedRange) {
+					peaks = chromatogramWSD.getPeaks((IChromatogramSelectionWSD)chromatogramSelection);
+				} else {
+					peaks = chromatogramWSD.getPeaks();
+				}
 			}
 		}
 		//

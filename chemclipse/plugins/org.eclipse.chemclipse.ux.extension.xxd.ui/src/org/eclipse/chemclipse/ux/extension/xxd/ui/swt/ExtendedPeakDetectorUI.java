@@ -45,6 +45,9 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ManualPeakDet
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaks;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
@@ -1077,13 +1080,26 @@ public class ExtendedPeakDetectorUI {
 			}
 		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
 			/*
-			 * Peak Detection FID
+			 * Peak Detection CSD
 			 */
 			try {
 				IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
 				ManualPeakDetector manualPeakDetector = new ManualPeakDetector();
 				IChromatogramCSD chromatogram = chromatogramSelectionCSD.getChromatogramCSD();
 				IChromatogramPeakCSD chromatogramPeak = manualPeakDetector.calculatePeak(chromatogram, startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
+				peak = chromatogramPeak;
+			} catch(PeakException e) {
+				logger.warn(e);
+			}
+		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+			/*
+			 * Peak Detection WSD
+			 */
+			try {
+				IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+				ManualPeakDetector manualPeakDetector = new ManualPeakDetector();
+				IChromatogramWSD chromatogram = chromatogramSelectionWSD.getChromatogramWSD();
+				IChromatogramPeakWSD chromatogramPeak = manualPeakDetector.calculatePeak(chromatogram, startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
 				peak = chromatogramPeak;
 			} catch(PeakException e) {
 				logger.warn(e);

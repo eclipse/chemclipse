@@ -22,6 +22,9 @@ import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.support.PeakBuilderMSD;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.support.PeakBuilderWSD;
 
 public class ManualPeakDetector {
 
@@ -70,6 +73,28 @@ public class ManualPeakDetector {
 		 * Return the peak or throw an exception.
 		 */
 		IChromatogramPeakCSD peak = PeakBuilderCSD.createPeak(chromatogram, scanRange, backgroundAbundanceRange, true);
+		if(peak != null) {
+			peak.setDetectorDescription(DETECTOR_DESCRIPTION);
+		}
+		return peak;
+	}
+
+	public IChromatogramPeakWSD calculatePeak(IChromatogramWSD chromatogram, int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance) throws PeakException {
+
+		if(chromatogram == null) {
+			throw new PeakException("The chromatogram instance must be not null.");
+		}
+		/*
+		 * Create the peak.
+		 */
+		int startScan = chromatogram.getScanNumber(startRetentionTime);
+		int stopScan = chromatogram.getScanNumber(stopRetentionTime);
+		IScanRange scanRange = new ScanRange(startScan, stopScan);
+		IBackgroundAbundanceRange backgroundAbundanceRange = new BackgroundAbundanceRange(startAbundance, stopAbundance);
+		/*
+		 * Return the peak or throw an exception.
+		 */
+		IChromatogramPeakWSD peak = PeakBuilderWSD.createPeak(chromatogram, scanRange, backgroundAbundanceRange, true);
 		if(peak != null) {
 			peak.setDetectorDescription(DETECTOR_DESCRIPTION);
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -9,13 +9,16 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.csd.filter.core.peak;
+package org.eclipse.chemclipse.chromatogram.wsd.filter.core.chromatogram;
 
-public class PeakFilterSupplier implements IPeakFilterSupplier {
+import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
+
+public class ChromatogramFilterSupplierWSD implements IChromatogramFilterSupplierWSD {
 
 	private String id = "";
 	private String description = "";
 	private String filterName = "";
+	private Class<? extends IChromatogramFilterSettings> filterSettingsClass;
 
 	@Override
 	public String getDescription() {
@@ -24,7 +27,7 @@ public class PeakFilterSupplier implements IPeakFilterSupplier {
 	}
 
 	/**
-	 * Sets the description of the peak filter supplier.
+	 * Sets the description of the chromatogram filter supplier.
 	 * 
 	 * @param description
 	 */
@@ -42,7 +45,7 @@ public class PeakFilterSupplier implements IPeakFilterSupplier {
 	}
 
 	/**
-	 * Sets the name of the peak filter supplier.
+	 * Sets the name of the chromatogram filter supplier.
 	 * 
 	 * @param filterName
 	 */
@@ -60,8 +63,8 @@ public class PeakFilterSupplier implements IPeakFilterSupplier {
 	}
 
 	/**
-	 * Sets the peak filter supplier id like
-	 * "org.eclipse.chemclipse.chromatogram.csd.filter.supplier.backgroundRemover".
+	 * Sets the chromatogram filter supplier id like
+	 * "org.eclipse.chemclipse.chromatogram.wsd.filter.supplier.backgroundRemover".
 	 * 
 	 * @param id
 	 */
@@ -72,7 +75,17 @@ public class PeakFilterSupplier implements IPeakFilterSupplier {
 		}
 	}
 
-	// ------------------------------------hashCode, equals, toString
+	@Override
+	public Class<? extends IChromatogramFilterSettings> getFilterSettingsClass() {
+
+		return this.filterSettingsClass;
+	}
+
+	protected void setFilterSettingsClass(Class<? extends IChromatogramFilterSettings> filterSettingsClass) {
+
+		this.filterSettingsClass = filterSettingsClass;
+	}
+
 	@Override
 	public boolean equals(Object other) {
 
@@ -85,7 +98,7 @@ public class PeakFilterSupplier implements IPeakFilterSupplier {
 		if(this.getClass() != other.getClass()) {
 			return false;
 		}
-		IPeakFilterSupplier otherSupplier = (IPeakFilterSupplier)other;
+		IChromatogramFilterSupplierWSD otherSupplier = (IChromatogramFilterSupplierWSD)other;
 		return id.equals(otherSupplier.getId()) && description.equals(otherSupplier.getDescription()) && filterName.equals(otherSupplier.getFilterName());
 	}
 
@@ -109,5 +122,4 @@ public class PeakFilterSupplier implements IPeakFilterSupplier {
 		builder.append("]");
 		return builder.toString();
 	}
-	// ------------------------------------hashCode, equals, toString
 }

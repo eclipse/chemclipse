@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,22 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core.implementation;
 
-import org.eclipse.chemclipse.wsd.model.core.AbstractScanWSD;
-import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.AbstractIntegrationEntryWSD;
+import org.eclipse.chemclipse.wsd.model.core.IIntegrationEntryWSD;
 
-public class ScanWSD extends AbstractScanWSD implements IScanWSD {
+public class IntegrationEntryWSD extends AbstractIntegrationEntryWSD implements IIntegrationEntryWSD {
 
 	/**
-	 * Renew the serialVersionUID any time you have changed some fields or
-	 * methods.
+	 * Renew the UUID on change.
 	 */
-	private static final long serialVersionUID = -4018377154187209353L;
+	private static final long serialVersionUID = 8771833314816644824L;
 
-	public ScanWSD() {
-		super();
-	}
-
-	public ScanWSD(IScanWSD scanWSD, float actualPercentageIntensity) throws IllegalArgumentException {
-		super(scanWSD, actualPercentageIntensity);
+	public IntegrationEntryWSD(double integratedArea) {
+		super(integratedArea);
 	}
 }

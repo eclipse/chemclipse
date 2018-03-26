@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMS
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
+import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -63,7 +64,7 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 					chromatogramSelection = new ChromatogramSelectionCSD(ChromatogramConverterCSD.convert(file, monitor).getChromatogram(), fireUpdate);
 					break;
 				case WSD:
-					chromatogramSelection = new ChromatogramSelectionCSD(ChromatogramConverterWSD.convert(file, monitor).getChromatogram(), fireUpdate);
+					chromatogramSelection = new ChromatogramSelectionWSD(ChromatogramConverterWSD.convert(file, monitor).getChromatogram(), fireUpdate);
 					break;
 				default:
 					// No action

@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.eclipse.chemclipse.chromatogram.msd.filter" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="org.eclipse.chemclipse.chromatogram.csd.filter" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.eclipse.chemclipse.chromatogram.msd.filter" id="org.eclipse.chemclipse.chromatogram.msd.filter.chromatogramFilterSupplier" name="Chromatogram Filter Supplier"/>
+         <meta.schema plugin="org.eclipse.chemclipse.chromatogram.csd.filter" id="org.eclipse.chemclipse.chromatogram.csd.filter.chromatogramFilterSupplier" name="Chromatogram Filter Supplier"/>
       </appInfo>
       <documentation>
          This extension point enables plugins to register a chromatogram filter. The filter can for example remove background signals, mean normalize the stored scans and a lot more. It depends on the users to write their specific plugins.
@@ -52,7 +52,7 @@
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  Set a unique suppliers id, e.g. &quot;org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backgroundRemover&quot;.
+                  Set a unique suppliers id, e.g. &quot;org.eclipse.chemclipse.chromatogram.csd.filter.supplier.backgroundRemover&quot;.
                </documentation>
             </annotation>
          </attribute>
@@ -76,7 +76,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.chromatogram.msd.filter.base.AbstractChromatogramFilter:"/>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.chromatogram.csd.filter.base.AbstractChromatogramFilter:"/>
                </appInfo>
             </annotation>
          </attribute>

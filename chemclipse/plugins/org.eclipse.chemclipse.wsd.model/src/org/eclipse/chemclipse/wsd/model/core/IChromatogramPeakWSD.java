@@ -12,4 +12,36 @@
 package org.eclipse.chemclipse.wsd.model.core;
 
 public interface IChromatogramPeakWSD extends IPeakWSD {
+
+	/**
+	 * Returns the scan number of the peak maximum.
+	 * 
+	 * @return int
+	 */
+	int getScanMax();
+
+	/**
+	 * Returns the signal to noise ratio of the peak.
+	 * 
+	 * @return float
+	 */
+	float getSignalToNoiseRatio();
+
+	/**
+	 * Returns the chromatogram to which this peak belongs to.
+	 * 
+	 * @return {@link IChromatogramCSD}
+	 */
+	IChromatogramWSD getChromatogram();
+
+	/**
+	 * Returns the width of the actual peak at its absolute baseline.<br/>
+	 * The width is given in scan units.<br/>
+	 * The width is not measured at the points of inflection.<br/>
+	 * If the peak is out of limits or something has gone wrong, 0 will be
+	 * returned.
+	 * 
+	 * @return int
+	 */
+	int getWidthBaselineTotalInScans();
 }

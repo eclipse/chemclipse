@@ -37,6 +37,7 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IOffset;
 import org.eclipse.chemclipse.swt.ui.support.Offset;
 import org.eclipse.chemclipse.swt.ui.support.Sign;
+import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
@@ -88,12 +89,24 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 			IMassSpectra massSpectra = null;
 			//
 			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+				/*
+				 * MSD
+				 */
 				IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 				peaks = chromatogramSelectionMSD.getChromatogramMSD().getPeaks(chromatogramSelectionMSD);
 				massSpectra = SeriesConverterMSD.getIdentifiedScans(chromatogramSelectionMSD, false);
 			} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+				/*
+				 * CSD
+				 */
 				IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
 				peaks = chromatogramSelectionCSD.getChromatogramCSD().getPeaks(chromatogramSelectionCSD);
+			} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+				/*
+				 * WSD
+				 */
+				IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+				peaks = chromatogramSelectionWSD.getChromatogramWSD().getPeaks(chromatogramSelectionWSD);
 			}
 			/*
 			 * Chromatogram

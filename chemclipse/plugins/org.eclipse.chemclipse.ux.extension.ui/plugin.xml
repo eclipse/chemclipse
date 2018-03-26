@@ -39,6 +39,20 @@
          </with>
       </definition>
       <definition
+            id="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeCWSD">
+         <with
+               variable="org.eclipse.chemclipse.ux.extension.ui.definitions.chromatogramType">
+            <or>
+               <equals
+                     value="CHROMATOGRAM_TYPE_CSD">
+               </equals>
+               <equals
+                     value="CHROMATOGRAM_TYPE_WSD">
+               </equals>
+            </or>
+         </with>
+      </definition>      
+      <definition
             id="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD">
          <with
                variable="org.eclipse.chemclipse.ux.extension.ui.definitions.chromatogramType">
@@ -54,7 +68,7 @@
                </equals>
             </or>
          </with>
-      </definition>
+      </definition>      
       <definition
             id="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeNone">
          <with

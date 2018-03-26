@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.eclipse.chemclipse.chromatogram.csd.filter" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="org.eclipse.chemclipse.chromatogram.wsd.filter" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.eclipse.chemclipse.chromatogram.csd.filter" id="org.eclipse.chemclipse.chromatogram.csd.filter.peakFilterSupplier" name="Peak Filter Supplier"/>
+         <meta.schema plugin="org.eclipse.chemclipse.chromatogram.wsd.filter" id="org.eclipse.chemclipse.chromatogram.wsd.filter.chromatogramFilterSupplier" name="Chromatogram Filter Supplier"/>
       </appInfo>
       <documentation>
-         This extension point enables plugins to register a peak filter. The filter can for example remove background signals, mean normalize the stored scans and a lot more. It depends on the users to write their specific plugins.
+         This extension point enables plugins to register a chromatogram filter. The filter can for example remove background signals, mean normalize the stored scans and a lot more. It depends on the users to write their specific plugins.
       </documentation>
    </annotation>
 
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence minOccurs="1" maxOccurs="unbounded">
-            <element ref="PeakFilterSupplier"/>
+            <element ref="ChromatogramFilterSupplier"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,12 +47,12 @@
       </complexType>
    </element>
 
-   <element name="PeakFilterSupplier">
+   <element name="ChromatogramFilterSupplier">
       <complexType>
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  Set a unique suppliers id, e.g. &quot;org.eclipse.chemclipse.chromatogram.csd.filter.supplier.backgroundRemover&quot;.
+                  Set a unique suppliers id, e.g. &quot;org.eclipse.chemclipse.chromatogram.wsd.filter.supplier.backgroundRemover&quot;.
                </documentation>
             </annotation>
          </attribute>
@@ -76,7 +76,17 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.chromatogram.csd.filter.core.peak.AbstractPeakFilter:"/>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.chromatogram.wsd.filter.base.AbstractChromatogramFilter:"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="filterSettings" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings"/>
                </appInfo>
             </annotation>
          </attribute>
@@ -88,7 +98,7 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         0.8.0
+         0.0.1
       </documentation>
    </annotation>
 
@@ -125,7 +135,7 @@
       </appInfo>
       <documentation>
          /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0

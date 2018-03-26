@@ -64,7 +64,7 @@ public class ChromatogramFilterSupplierCSD implements IChromatogramFilterSupplie
 
 	/**
 	 * Sets the chromatogram filter supplier id like
-	 * "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backgroundRemover".
+	 * "org.eclipse.chemclipse.chromatogram.csd.filter.supplier.backgroundRemover".
 	 * 
 	 * @param id
 	 */

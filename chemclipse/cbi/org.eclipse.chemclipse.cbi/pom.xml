@@ -112,6 +112,8 @@
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.peak.detector.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector</module>
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.msd.peak.detector.ui</module>
+    <module>../../plugins/org.eclipse.chemclipse.chromatogram.wsd.peak.detector</module>
+    <module>../../plugins/org.eclipse.chemclipse.chromatogram.wsd.peak.detector.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.quantitation</module>
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.quantitation.ui</module>
     <module>../../plugins/org.eclipse.chemclipse.chromatogram.csd.quantitation</module>

@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.model.core.AbstractScan;
 import org.eclipse.chemclipse.wsd.model.comparator.WavelengthCombinedComparator;
 import org.eclipse.chemclipse.wsd.model.comparator.WavelengthComparatorMode;
 import org.eclipse.chemclipse.wsd.model.core.identifier.scan.IScanTargetWSD;
+import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.xwc.ExtractedWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 
@@ -32,12 +33,26 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	 * methods.
 	 */
 	private static final long serialVersionUID = -8298107894544692691L;
-	private List<IScanSignalWSD> scanSignals;
-	private Set<IScanTargetWSD> targets;
+	private List<IScanSignalWSD> scanSignals = new ArrayList<IScanSignalWSD>();
+	private Set<IScanTargetWSD> targets = new HashSet<IScanTargetWSD>();
 
 	public AbstractScanWSD() {
-		scanSignals = new ArrayList<IScanSignalWSD>();
-		targets = new HashSet<IScanTargetWSD>();
+	}
+
+	public AbstractScanWSD(IScanWSD scanWSD, float actualPercentageIntensity) throws IllegalArgumentException {
+		if(scanWSD == null) {
+			throw new IllegalArgumentException("The scanWSD must not be null");
+		}
+		if(actualPercentageIntensity <= 0.0f) {
+			throw new IllegalArgumentException("The percentageIntensity must not be > 0.");
+		}
+		/*
+		 * 
+		 */
+		for(IScanSignalWSD scanSignal : scanWSD.getScanSignals()) {
+			float abundance = (scanSignal.getAbundance() / actualPercentageIntensity) * 100.0f;
+			scanSignals.add(new ScanSignalWSD(scanSignal.getWavelength(), abundance));
+		}
 	}
 
 	@Override
