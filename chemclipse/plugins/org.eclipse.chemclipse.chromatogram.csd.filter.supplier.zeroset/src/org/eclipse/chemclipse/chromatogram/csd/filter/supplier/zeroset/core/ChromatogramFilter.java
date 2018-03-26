@@ -11,24 +11,24 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.core;
 
-import org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram.AbstractChromatogramFilterCSD;
 import org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.processing.ChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramFilter extends AbstractChromatogramFilterCSD {
+public class ChromatogramFilter extends AbstractChromatogramFilter {
 
 	@Override
-	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionCSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		IChromatogramFilterProcessingInfo processingInfo = new ChromatogramFilterProcessingInfo();
 		processingInfo.addMessages(validate(chromatogramSelection, chromatogramFilterSettings));
@@ -45,14 +45,14 @@ public class ChromatogramFilter extends AbstractChromatogramFilterCSD {
 	}
 
 	@Override
-	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelectionCSD chromatogramSelection, IProgressMonitor monitor) {
+	public IChromatogramFilterProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		IChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getChromatogramFilterSettings();
 		return applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 	}
 
 	@SuppressWarnings("unchecked")
-	private void applyFilter(IChromatogramSelectionCSD chromatogramSelection) {
+	private void applyFilter(IChromatogramSelection chromatogramSelection) {
 
 		IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
 		float minSignal = chromatogram.getMinSignal();

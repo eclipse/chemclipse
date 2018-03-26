@@ -13,9 +13,8 @@ package org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.ui.modif
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram.ChromatogramFilterCSD;
+import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilter;
 import org.eclipse.chemclipse.chromatogram.filter.processing.IChromatogramFilterProcessingInfo;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
@@ -25,7 +24,7 @@ import org.eclipse.swt.widgets.Display;
 
 public class FilterModifier extends AbstractChromatogramProcessor implements IRunnableWithProgress {
 
-	private static final String DESCRIPTION = "ZeroSet (CSD)";
+	private static final String DESCRIPTION = "ZeroSet";
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset";
 
 	public FilterModifier(IChromatogramSelection chromatogramSelection) {
@@ -35,9 +34,9 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 	@Override
 	public void execute(IProgressMonitor monitor) {
 
-		if(getChromatogramSelection() instanceof IChromatogramSelectionCSD) {
-			IChromatogramSelectionCSD chromatogramSelection = (IChromatogramSelectionCSD)getChromatogramSelection();
-			IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilterCSD.applyFilter(chromatogramSelection, FILTER_ID, monitor);
+		IChromatogramSelection chromatogramSelection = getChromatogramSelection();
+		if(chromatogramSelection != null) {
+			IChromatogramFilterProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, FILTER_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			Display.getDefault().asyncExec(new Runnable() {
 

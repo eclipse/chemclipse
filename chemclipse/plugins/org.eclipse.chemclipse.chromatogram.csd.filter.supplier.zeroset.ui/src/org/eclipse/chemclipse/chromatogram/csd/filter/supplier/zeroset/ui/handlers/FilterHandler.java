@@ -16,7 +16,6 @@ import java.lang.reflect.InvocationTargetException;
 import javax.inject.Named;
 
 import org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.ui.modifier.FilterModifier;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.progress.core.InfoType;
@@ -44,27 +43,24 @@ public class FilterHandler implements EventHandler {
 		 */
 		if(chromatogramSelection != null) {
 			final Display display = Display.getCurrent();
-			StatusLineLogger.setInfo(InfoType.MESSAGE, "Start CSD ZeroSet Filter");
+			StatusLineLogger.setInfo(InfoType.MESSAGE, "Start ZeroSet Filter");
 			/*
 			 * Do the operation.<br/> Open a progress monitor dialog.
 			 */
-			if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-				IChromatogramSelectionCSD chromatogramSelectionFID = (IChromatogramSelectionCSD)chromatogramSelection;
-				IRunnableWithProgress runnable = new FilterModifier(chromatogramSelectionFID);
-				ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
-				try {
-					/*
-					 * Use true, true ... instead of false, true ... if the progress bar
-					 * should be shown in action.
-					 */
-					monitor.run(true, true, runnable);
-				} catch(InvocationTargetException e) {
-					logger.warn(e);
-				} catch(InterruptedException e) {
-					logger.warn(e);
-				}
-				StatusLineLogger.setInfo(InfoType.MESSAGE, "CSD ZeroSet Filter finished");
+			IRunnableWithProgress runnable = new FilterModifier(chromatogramSelection);
+			ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
+			try {
+				/*
+				 * Use true, true ... instead of false, true ... if the progress bar
+				 * should be shown in action.
+				 */
+				monitor.run(true, true, runnable);
+			} catch(InvocationTargetException e) {
+				logger.warn(e);
+			} catch(InterruptedException e) {
+				logger.warn(e);
 			}
+			StatusLineLogger.setInfo(InfoType.MESSAGE, "ZeroSet Filter finished");
 		}
 	}
 
@@ -72,7 +68,9 @@ public class FilterHandler implements EventHandler {
 	public void handleEvent(Event event) {
 
 		if(event.getTopic().equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION)) {
-			chromatogramSelection = (IChromatogramSelectionCSD)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+			chromatogramSelection = (IChromatogramSelection)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+		} else if(event.getTopic().equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION)) {
+			chromatogramSelection = (IChromatogramSelection)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
 		} else {
 			chromatogramSelection = null;
 		}
