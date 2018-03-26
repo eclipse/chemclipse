@@ -8,7 +8,7 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kOqpoNamEeONfofmiBq3Xw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.filter.chromatogram">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_z2U7ANamEeONfofmiBq3Xw" elementId="org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.ui.handledmenuitem.filter" label="ZeroSet" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramZeroSet.gif" command="_yDmZINamEeONfofmiBq3Xw">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_kWMuIASAEeaL1b-1PIqZow" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeCSD"/>
+      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_kWMuIASAEeaL1b-1PIqZow" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeCWSD"/>
     </elements>
   </fragments>
 </fragment:ModelFragments>
