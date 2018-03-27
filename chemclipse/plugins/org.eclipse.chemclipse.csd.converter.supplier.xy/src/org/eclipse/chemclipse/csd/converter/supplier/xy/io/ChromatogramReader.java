@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.csd.converter.supplier.xy.model.IVendorChromatogra
 import org.eclipse.chemclipse.csd.converter.supplier.xy.model.IVendorScan;
 import org.eclipse.chemclipse.csd.converter.supplier.xy.model.VendorChromatogram;
 import org.eclipse.chemclipse.csd.converter.supplier.xy.model.VendorScan;
+import org.eclipse.chemclipse.csd.converter.supplier.xy.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -35,9 +36,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramReader extends AbstractChromatogramCSDReader {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramReader.class);
-	//
-	private static final String TAB = "\t";
-	private static final String WHITESPACE = " ";
 
 	@Override
 	public IChromatogramCSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -78,20 +76,64 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 
 		if(bufferedReader != null) {
 			try {
+				boolean autoDetectFormat = PreferenceSupplier.isAutoDetectFormat();
+				String delimiterFormat = PreferenceSupplier.getDelimiterFormat();
+				String retentionTimeFormat = PreferenceSupplier.getRetentionTimeFormat();
+				//
 				String line;
 				while((line = bufferedReader.readLine()) != null) {
-					String[] values = line.split(TAB); //
-					if(values.length != 2) {
-						values = line.split(WHITESPACE);
+					/*
+					 * Parse each line.
+					 */
+					String[] values = null;
+					if(autoDetectFormat) {
+						if(line.contains(PreferenceSupplier.TAB)) {
+							values = line.split(PreferenceSupplier.TAB);
+						} else if(line.contains(PreferenceSupplier.COMMA)) {
+							values = line.split(PreferenceSupplier.COMMA);
+						} else if(line.contains(PreferenceSupplier.SEMICOLON)) {
+							values = line.split(PreferenceSupplier.SEMICOLON);
+						} else {
+							values = line.split(PreferenceSupplier.WHITE_SPACE);
+						}
+					} else {
+						values = line.split(delimiterFormat);
 					}
 					//
-					if(values != null) {
+					if(values != null && values.length >= 2) {
 						try {
-							double retentionTimeInMinutes = Double.parseDouble(values[0]);
-							int retentionTime = (int)(retentionTimeInMinutes * IChromatogram.MINUTE_CORRELATION_FACTOR);
-							float totalSignal = Float.parseFloat(values[1]);
-							IVendorScan scan = new VendorScan(retentionTime, totalSignal);
-							chromatogram.addScan(scan);
+							String value = values[0].trim();
+							int retentionTime = -1;
+							//
+							if(autoDetectFormat) {
+								if(value.contains(".")) {
+									/*
+									 * Minutes
+									 */
+									double retentionTimeInMinutes = Double.parseDouble(value);
+									retentionTime = (int)(retentionTimeInMinutes * IChromatogram.MINUTE_CORRELATION_FACTOR);
+								} else {
+									/*
+									 * Milliseconds
+									 */
+									retentionTime = Integer.parseInt(value);
+								}
+							} else {
+								if(retentionTimeFormat.equals(PreferenceSupplier.MINUTES)) {
+									double retentionTimeInMinutes = Double.parseDouble(value);
+									retentionTime = (int)(retentionTimeInMinutes * IChromatogram.MINUTE_CORRELATION_FACTOR);
+								} else {
+									retentionTime = Integer.parseInt(value);
+								}
+							}
+							/*
+							 * Add the scan
+							 */
+							if(retentionTime >= 0) {
+								float totalSignal = Float.parseFloat(values[1]);
+								IVendorScan scan = new VendorScan(retentionTime, totalSignal);
+								chromatogram.addScan(scan);
+							}
 						} catch(NumberFormatException e) {
 							// logger.warn(e);
 						}

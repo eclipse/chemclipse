@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.csd.converter.ui.converterPreferencePage"
+            class="org.eclipse.chemclipse.csd.converter.supplier.xy.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.csd.converter.supplier.xy.ui.preferences.converterPreferencePage"
+            name="XY CSD Converter">
+      </page>
+   </extension>
+
+</plugin>

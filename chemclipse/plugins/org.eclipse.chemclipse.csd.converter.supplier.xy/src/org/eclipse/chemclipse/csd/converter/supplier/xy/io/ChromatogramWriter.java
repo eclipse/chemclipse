@@ -18,6 +18,7 @@ import java.io.PrintWriter;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.csd.converter.io.AbstractChromatogramCSDWriter;
+import org.eclipse.chemclipse.csd.converter.supplier.xy.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -28,13 +29,17 @@ public class ChromatogramWriter extends AbstractChromatogramCSDWriter {
 	@Override
 	public void writeChromatogram(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
+		String delimiterFormat = PreferenceSupplier.getDelimiterFormat();
+		String retentionTimeFormat = PreferenceSupplier.getRetentionTimeFormat();
+		//
 		PrintWriter printWriter = new PrintWriter(file);
 		/*
 		 * Write each scan to the file.
 		 */
 		for(IScan scan : chromatogram.getScans()) {
-			double retentionTimeInMinutes = scan.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR;
-			printWriter.println(retentionTimeInMinutes + "\t" + scan.getTotalSignal());
+			int retentionTime = scan.getRetentionTime();
+			String x = (retentionTimeFormat.equals(PreferenceSupplier.MINUTES)) ? Double.toString(retentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR) : Integer.toString(retentionTime);
+			printWriter.println(x + delimiterFormat + scan.getTotalSignal());
 		}
 		printWriter.flush();
 		printWriter.close();
