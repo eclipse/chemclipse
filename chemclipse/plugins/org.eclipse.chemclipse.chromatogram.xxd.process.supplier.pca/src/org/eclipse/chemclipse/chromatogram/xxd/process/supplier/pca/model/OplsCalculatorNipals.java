@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.OptionalDouble;
+import java.util.stream.DoubleStream;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
@@ -102,8 +103,10 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		CommonOps.multInner(y, yy);
 		CommonOps.multTransA(y, X, w);
 		CommonOps.divide(y.get(0), w);
-		System.out.println("matrix calc");
 		// #2
+		DoubleStream absStream = Arrays.stream(w.getData());
+		double wTemp[] = absStream.map(x -> Math.abs(x)).toArray();
+		System.out.println("matrix calc");
 		// w<-w/as.vector(sqrt(t(w)%*%w)) # Generates vector
 		// ##########################################################################
 		// ### Start calculation for ortho factors first and predictive in the end
