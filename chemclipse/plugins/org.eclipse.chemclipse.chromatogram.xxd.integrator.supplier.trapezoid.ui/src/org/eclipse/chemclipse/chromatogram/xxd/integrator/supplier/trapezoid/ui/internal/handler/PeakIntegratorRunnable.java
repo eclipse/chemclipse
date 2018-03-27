@@ -44,13 +44,8 @@ public class PeakIntegratorRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Integrator Trapezoid", IProgressMonitor.UNKNOWN);
-			/*
-			 * Detect Peaks in actual chromatogram selection.
-			 */
+			//
 			ITrapezoidPeakIntegrationSettings peakIntegrationSettings = PreferenceSupplier.getPeakIntegrationSettings();
-			/*
-			 * Show the processing view if error messages occurred.
-			 */
 			IPeakIntegratorProcessingInfo processingInfo = PeakIntegrator.integrate(chromatogramSelection, peakIntegrationSettings, PEAK_INTEGRATOR_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			/*

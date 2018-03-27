@@ -351,6 +351,9 @@ public class PeakIntegrator implements IPeakIntegrator {
 		} else if(peak instanceof IPeakCSD) {
 			peakModel = ((IPeakCSD)peak).getPeakModel();
 			retentionTimes = peakModel.getRetentionTimes();
+		} else if(peak instanceof IPeakWSD) {
+			peakModel = ((IPeakWSD)peak).getPeakModel();
+			retentionTimes = peakModel.getRetentionTimes();
 		} else {
 			return integratedArea;
 		}
