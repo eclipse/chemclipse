@@ -11,12 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui.provider;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
 public class PerspectiveSwitcherViewerFilter extends ViewerFilter {
 
+	private static final Logger logger = Logger.getLogger(PerspectiveSwitcherViewerFilter.class);
+	//
 	private String searchPattern;
 	private boolean caseInsensitive;
 
@@ -43,9 +46,14 @@ public class PerspectiveSwitcherViewerFilter extends ViewerFilter {
 		}
 		if(element instanceof MPerspective) {
 			MPerspective perspective = (MPerspective)element;
-			String label = (caseInsensitive) ? perspective.getLabel().toLowerCase() : perspective.getLabel();
-			if(label.contains(searchPattern)) {
-				return true;
+			String perspectiveLabel = perspective.getLabel();
+			if(perspectiveLabel != null) {
+				String label = (caseInsensitive) ? perspectiveLabel.toLowerCase() : perspectiveLabel;
+				if(label.contains(searchPattern)) {
+					return true;
+				}
+			} else {
+				logger.warn("Please add a perspective label: " + perspective.getElementId());
 			}
 		}
 		return false;

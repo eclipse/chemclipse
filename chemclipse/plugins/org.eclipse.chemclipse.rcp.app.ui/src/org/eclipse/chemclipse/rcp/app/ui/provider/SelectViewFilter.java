@@ -11,12 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui.provider;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
 public class SelectViewFilter extends ViewerFilter {
 
+	private static final Logger logger = Logger.getLogger(SelectViewFilter.class);
 	private String searchPattern;
 	private boolean caseInsensitive;
 
@@ -43,9 +45,14 @@ public class SelectViewFilter extends ViewerFilter {
 		}
 		if(element instanceof MPart) {
 			MPart part = (MPart)element;
-			String label = (caseInsensitive) ? part.getLabel().toLowerCase() : part.getLabel();
-			if(label.contains(searchPattern)) {
-				return true;
+			String partLabel = part.getLabel();
+			if(partLabel != null) {
+				String label = (caseInsensitive) ? partLabel.toLowerCase() : partLabel;
+				if(label.contains(searchPattern)) {
+					return true;
+				}
+			} else {
+				logger.warn("Please add a part label: " + part.getElementId());
 			}
 		}
 		return false;
