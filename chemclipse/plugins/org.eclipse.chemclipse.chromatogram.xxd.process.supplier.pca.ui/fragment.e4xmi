@@ -20,9 +20,6 @@
     <elements xsi:type="basic:Part" xmi:id="_kz9dAPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pcavariablesfiltration" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.VariablesFiltrationPart" label="Variables Filtration"/>
     <elements xsi:type="basic:Part" xmi:id="_XHRhEPryEeeUXrQl0oXm7w" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pcaeditorfx" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.PCAEditorFX" label="PCA Editor FX"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_fsFVENSAEeWQk9amfPZ_4Q" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.partstack.chromatogramOverlay" positionInList="">
-    <elements xsi:type="advanced:Placeholder" xmi:id="_IgjiQNSDEeWQk9amfPZ_4Q" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.placeholder.0"/>
-  </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_cgvnsN3IEee_Jr66fOQ3Hg" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_gMoqoN3IEee_Jr66fOQ3Hg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective" label="PCA Perspective" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pca.gif">
       <children xsi:type="basic:PartSashContainer" xmi:id="_GKtbwPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.partsashcontainer.0">
