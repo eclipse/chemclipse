@@ -11,26 +11,23 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.internal.support;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import org.eclipse.core.runtime.IProgressMonitor;
 
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.internal.core.IPeakMaxPeakIntegrator;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.internal.core.PeakMaxPeakIntegrator;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakMaxPeakIntegratorSupport implements IPeakMaxPeakIntegratorSupport {
 
 	@Override
-	public IPeakIntegrationResults calculatePeakIntegrationResults(List<IPeakMSD> peaks, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
+	public IPeakIntegrationResults calculatePeakIntegrationResults(List<? extends IPeak> peaks, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
 
 		/*
 		 * Get the peak integration results.
@@ -41,27 +38,17 @@ public class PeakMaxPeakIntegratorSupport implements IPeakMaxPeakIntegratorSuppo
 		return peakIntegrationResults;
 	}
 
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
-	public IPeakIntegrationResults calculatePeakIntegrationResults(IChromatogramSelectionMSD chromatogramSelection, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
+	public IPeakIntegrationResults calculatePeakIntegrationResults(IChromatogramSelection chromatogramSelection, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
 
-		/*
-		 * Get the chromatogram.
-		 */
-		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
-		List<IChromatogramPeakMSD> peaks = chromatogram.getPeaks(chromatogramSelection);
-		/*
-		 * TODO make generic
-		 * May use a better generic supertype, e.g <? extends IPeak>???
-		 */
-		List<IPeakMSD> peakList = new ArrayList<IPeakMSD>();
-		for(IChromatogramPeakMSD chromatogramPeak : peaks) {
-			peakList.add(chromatogramPeak);
-		}
-		return calculatePeakIntegrationResults(peakList, peakIntegrationSettings, monitor);
+		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		List<? extends IPeak> peaks = chromatogram.getPeaks(chromatogramSelection);
+		return calculatePeakIntegrationResults(peaks, peakIntegrationSettings, monitor);
 	}
 
 	@Override
-	public IPeakIntegrationResult calculatePeakIntegrationResult(IPeakMSD peak, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
+	public IPeakIntegrationResult calculatePeakIntegrationResult(IPeak peak, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
 
 		monitor.subTask("Integrate the peak");
 		IPeakMaxPeakIntegrator peakIntegrator = new PeakMaxPeakIntegrator();

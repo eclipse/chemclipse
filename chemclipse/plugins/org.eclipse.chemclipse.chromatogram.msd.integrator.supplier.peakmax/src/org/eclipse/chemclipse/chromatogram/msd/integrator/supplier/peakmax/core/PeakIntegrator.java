@@ -11,18 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.core;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.internal.support.IPeakMaxPeakIntegratorSupport;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.internal.support.PeakMaxPeakIntegratorSupport;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.AbstractPeakIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
@@ -32,7 +25,10 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegratio
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResults;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakIntegrator extends AbstractPeakIntegrator {
 
@@ -44,16 +40,11 @@ public class PeakIntegrator extends AbstractPeakIntegrator {
 		IPeakIntegratorProcessingInfo processingInfo = new PeakIntegratorProcessingInfo();
 		try {
 			super.validate(peak, peakIntegrationSettings);
-			if(peak instanceof IPeakMSD) {
-				IPeakMSD peakMSD = (IPeakMSD)peak;
-				IPeakMaxPeakIntegratorSupport peakMaxPeakIntegratorSupport = new PeakMaxPeakIntegratorSupport();
-				IPeakIntegrationResult peakIntegrationResult = peakMaxPeakIntegratorSupport.calculatePeakIntegrationResult(peakMSD, peakIntegrationSettings, monitor);
-				IPeakIntegrationResults peakIntegrationResults = new PeakIntegrationResults();
-				peakIntegrationResults.add(peakIntegrationResult);
-				processingInfo.setPeakIntegrationResults(peakIntegrationResults);
-			} else {
-				addIntegratorExceptionInfo(processingInfo);
-			}
+			IPeakMaxPeakIntegratorSupport peakMaxPeakIntegratorSupport = new PeakMaxPeakIntegratorSupport();
+			IPeakIntegrationResult peakIntegrationResult = peakMaxPeakIntegratorSupport.calculatePeakIntegrationResult(peak, peakIntegrationSettings, monitor);
+			IPeakIntegrationResults peakIntegrationResults = new PeakIntegrationResults();
+			peakIntegrationResults.add(peakIntegrationResult);
+			processingInfo.setPeakIntegrationResults(peakIntegrationResults);
 		} catch(ValueMustNotBeNullException e) {
 			logger.warn(e);
 			addIntegratorExceptionInfo(processingInfo);
@@ -75,16 +66,7 @@ public class PeakIntegrator extends AbstractPeakIntegrator {
 		try {
 			super.validate(peaks, peakIntegrationSettings);
 			IPeakMaxPeakIntegratorSupport peakMaxPeakIntegratorSupport = new PeakMaxPeakIntegratorSupport();
-			//
-			List<IPeakMSD> peaksMSD = new ArrayList<IPeakMSD>();
-			for(IPeak peak : peaks) {
-				if(peak instanceof IPeakMSD) {
-					IPeakMSD peakMSD = (IPeakMSD)peak;
-					peaksMSD.add(peakMSD);
-				}
-			}
-			//
-			IPeakIntegrationResults peakIntegrationResults = peakMaxPeakIntegratorSupport.calculatePeakIntegrationResults(peaksMSD, peakIntegrationSettings, monitor);
+			IPeakIntegrationResults peakIntegrationResults = peakMaxPeakIntegratorSupport.calculatePeakIntegrationResults(peaks, peakIntegrationSettings, monitor);
 			processingInfo.setPeakIntegrationResults(peakIntegrationResults);
 		} catch(ValueMustNotBeNullException e) {
 			logger.warn(e);
@@ -106,13 +88,9 @@ public class PeakIntegrator extends AbstractPeakIntegrator {
 		IPeakIntegratorProcessingInfo processingInfo = new PeakIntegratorProcessingInfo();
 		try {
 			super.validate(chromatogramSelection, peakIntegrationSettings);
-			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-				IPeakMaxPeakIntegratorSupport peakMaxPeakIntegratorSupport = new PeakMaxPeakIntegratorSupport();
-				IPeakIntegrationResults peakIntegrationResults = peakMaxPeakIntegratorSupport.calculatePeakIntegrationResults((IChromatogramSelectionMSD)chromatogramSelection, peakIntegrationSettings, monitor);
-				processingInfo.setPeakIntegrationResults(peakIntegrationResults);
-			} else {
-				addIntegratorExceptionInfo(processingInfo);
-			}
+			IPeakMaxPeakIntegratorSupport peakMaxPeakIntegratorSupport = new PeakMaxPeakIntegratorSupport();
+			IPeakIntegrationResults peakIntegrationResults = peakMaxPeakIntegratorSupport.calculatePeakIntegrationResults(chromatogramSelection, peakIntegrationSettings, monitor);
+			processingInfo.setPeakIntegrationResults(peakIntegrationResults);
 		} catch(ValueMustNotBeNullException e) {
 			logger.warn(e);
 			addIntegratorExceptionInfo(processingInfo);

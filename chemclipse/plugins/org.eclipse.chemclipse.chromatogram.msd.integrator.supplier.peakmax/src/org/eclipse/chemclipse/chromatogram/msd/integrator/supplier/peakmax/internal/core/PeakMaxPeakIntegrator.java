@@ -26,30 +26,33 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegratio
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResults;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
+import org.eclipse.chemclipse.model.core.IIntegrationEntry;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IPeakModel;
+import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IIntegrationEntryMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IIonPercentages;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.IonPercentages;
 import org.eclipse.chemclipse.msd.model.implementation.IntegrationEntryMSD;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 
 	@Override
-	public IPeakIntegrationResult integrate(IPeakMSD peak, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
+	public IPeakIntegrationResult integrate(IPeak peak, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
 
 		validatePeak(peak);
 		validateSettings(peakIntegrationSettings);
 		ISettingStatus settingStatus;
 		PeakIntegrationResult result = null;
 		IBaselineSupport baselineSupport = peakIntegrationSettings.getBaselineSupport();
-		List<IIntegrationEntryMSD> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getSelectedIons());
+		List<IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getSelectedIons());
 		addPeakAreaAndDescription(peak, peakIntegrationSettings, integrationEntries);
 		/*
 		 * Get the peak area if the peak should be reported.
@@ -63,7 +66,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 	}
 
 	@Override
-	public IPeakIntegrationResults integrate(List<IPeakMSD> peaks, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
+	public IPeakIntegrationResults integrate(List<? extends IPeak> peaks, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
 
 		validatePeakList(peaks);
 		validateSettings(peakIntegrationSettings);
@@ -75,7 +78,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		/*
 		 * Iterate through all peaks and decide if they should be reported.
 		 */
-		for(IPeakMSD peak : peaks) {
+		for(IPeak peak : peaks) {
 			monitor.subTask("Integrate Peak " + peakNumber++);
 			try {
 				peakIntegrationResult = integrate(peak, peakIntegrationSettings, monitor);
@@ -128,14 +131,13 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		return peakIntegrationResults;
 	}
 
-	// ------------------------------------------------private methods
 	/**
 	 * Checks that the peak list is not null.
 	 * 
 	 * @param peaks
 	 * @throws ValueMustNotBeNullException
 	 */
-	private void validatePeakList(List<IPeakMSD> peaks) throws ValueMustNotBeNullException {
+	private void validatePeakList(List<? extends IPeak> peaks) throws ValueMustNotBeNullException {
 
 		if(peaks == null) {
 			throw new ValueMustNotBeNullException("The peak list must not be null.");
@@ -148,7 +150,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 	 * @param peak
 	 * @throws ValueMustNotBeNullException
 	 */
-	private void validatePeak(IPeakMSD peak) throws ValueMustNotBeNullException {
+	private void validatePeak(IPeak peak) throws ValueMustNotBeNullException {
 
 		if(peak == null) {
 			throw new ValueMustNotBeNullException("The peak instance must not be null.");
@@ -178,7 +180,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 	 * @param peakIntegrationSettings
 	 * @param integratedArea
 	 */
-	private void addPeakAreaAndDescription(IPeakMSD peak, IPeakIntegrationSettings peakIntegrationSettings, List<IIntegrationEntryMSD> integrationEntries) {
+	private void addPeakAreaAndDescription(IPeak peak, IPeakIntegrationSettings peakIntegrationSettings, List<IIntegrationEntry> integrationEntries) {
 
 		/*
 		 * Set the peak area and its description independently of the report.
@@ -222,13 +224,13 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 	 * 
 	 * @return List<IIntegrationEntry>
 	 */
-	private List<IIntegrationEntryMSD> calculateIntegratedArea(IPeakMSD peak, IBaselineSupport baselineSupport, IMarkedIons selectedIons) {
+	private List<IIntegrationEntry> calculateIntegratedArea(IPeak peak, IBaselineSupport baselineSupport, IMarkedIons selectedIons) {
 
-		List<IIntegrationEntryMSD> integrationEntries = new ArrayList<IIntegrationEntryMSD>();
-		IIntegrationEntryMSD integrationEntry;
+		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
+		IIntegrationEntry integrationEntry;
 		//
-		IPeakModelMSD peakModel = peak.getPeakModel();
-		IPeakMassSpectrum massSpectrum = peakModel.getPeakMassSpectrum();
+		IPeakModel peakModel = peak.getPeakModel();
+		IScan scan = peakModel.getPeakMaximum();
 		double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport);
 		Set<Integer> selectedIonsNominal = selectedIons.getIonsNominal();
 		/*
@@ -237,8 +239,8 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		 * ions does not contain IIon.TIC_Ion, which means,
 		 * the TIC signal should be integrated.
 		 */
-		if(selectedIonsNominal.size() > 0 && !selectedIonsNominal.contains(IIon.TIC_ION)) {
-			IIonPercentages ionPercentages = new IonPercentages(massSpectrum);
+		if(selectedIonsNominal.size() > 0 && !selectedIonsNominal.contains(IIon.TIC_ION) && scan instanceof IScanMSD) {
+			IIonPercentages ionPercentages = new IonPercentages((IScanMSD)scan);
 			/*
 			 * Calculate the percentage integrated area for each selected ion.
 			 */
@@ -249,7 +251,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 				integrationEntries.add(integrationEntry);
 			}
 		} else {
-			integrationEntry = new IntegrationEntryMSD(AbstractIon.TIC_ION, integratedAreaTIC);
+			integrationEntry = new IntegrationEntry(integratedAreaTIC);
 			integrationEntries.add(integrationEntry);
 		}
 		return integrationEntries;
@@ -261,16 +263,16 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 	 * @param peak
 	 * @return double
 	 */
-	private double calculateTICPeakArea(IPeakMSD peak, IBaselineSupport baselineSupport) {
+	private double calculateTICPeakArea(IPeak peak, IBaselineSupport baselineSupport) {
 
 		double integratedArea = 0.0d;
-		IPeakModelMSD peakModel = peak.getPeakModel();
+		IPeakModel peakModel = peak.getPeakModel();
 		/*
 		 * Integrates the max scan of the peak model.
 		 * There is currently no option to support the settings like "baseline hold".
 		 * In case it is needed, please have a look at the Integrator Trapezoid.
 		 */
-		integratedArea = peakModel.getPeakMassSpectrum().getTotalSignal();
+		integratedArea = peakModel.getPeakMaximum().getTotalSignal();
 		/*
 		 * The calculations are not as precise as they could be.<br/> If the
 		 * area is lower than 1 it could be assumed, that the area is 0.
@@ -284,7 +286,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 	/**
 	 * Returns a valid PeakMaxPeakIntegrationResult
 	 */
-	private PeakIntegrationResult getPeakIntegrationResult(IPeakMSD peak, double integratedArea, IPeakIntegrationSettings peakIntegrationSettings) {
+	private PeakIntegrationResult getPeakIntegrationResult(IPeak peak, double integratedArea, IPeakIntegrationSettings peakIntegrationSettings) {
 
 		/*
 		 * Selected ions.
@@ -296,13 +298,25 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		result.setIntegratorType(IPeakMaxPeakIntegrator.DESCRIPTION);
 		result.setPeakType(peak.getPeakType().toString());
 		/*
-		 * TODO optimize
+		 * Specific values.
 		 */
+		float purity = 0.0f;
+		float sn = 0.0f;
 		if(peak instanceof IChromatogramPeakMSD) {
 			IChromatogramPeakMSD chromatogramPeak = (IChromatogramPeakMSD)peak;
-			result.setPurity(chromatogramPeak.getPurity());
-			result.setSN(chromatogramPeak.getSignalToNoiseRatio());
+			purity = chromatogramPeak.getPurity();
+			sn = chromatogramPeak.getSignalToNoiseRatio();
+		} else if(peak instanceof IChromatogramPeakCSD) {
+			IChromatogramPeakCSD chromatogramPeak = (IChromatogramPeakCSD)peak;
+			sn = chromatogramPeak.getSignalToNoiseRatio();
+		} else if(peak instanceof IChromatogramPeakWSD) {
+			IChromatogramPeakWSD chromatogramPeak = (IChromatogramPeakWSD)peak;
+			purity = chromatogramPeak.getPurity();
+			sn = chromatogramPeak.getSignalToNoiseRatio();
 		}
+		result.setPurity(purity);
+		result.setSN(sn);
+		//
 		result.setStartRetentionTime(peak.getPeakModel().getStartRetentionTime());
 		result.setStopRetentionTime(peak.getPeakModel().getStopRetentionTime());
 		result.setTailing(peak.getPeakModel().getTailing());
@@ -311,10 +325,10 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		return result;
 	}
 
-	private double calculateIntegratedArea(List<IIntegrationEntryMSD> integrationEntries) {
+	private double calculateIntegratedArea(List<IIntegrationEntry> integrationEntries) {
 
 		double result = 0.0d;
-		for(IIntegrationEntryMSD integrationEntry : integrationEntries) {
+		for(IIntegrationEntry integrationEntry : integrationEntries) {
 			result += integrationEntry.getIntegratedArea();
 		}
 		return result;
@@ -354,5 +368,4 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		}
 		return result;
 	}
-	// ------------------------------------------private methods
 }

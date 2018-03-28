@@ -13,13 +13,12 @@ package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.inte
 
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IPeakMaxPeakIntegrator {
 
@@ -35,7 +34,7 @@ public interface IPeakMaxPeakIntegrator {
 	 * @param integrationSettings
 	 * @return {@link PeakMaxPeakIntegrationResult}
 	 */
-	IPeakIntegrationResult integrate(IPeakMSD peak, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException;
+	IPeakIntegrationResult integrate(IPeak peak, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException;
 
 	/**
 	 * Integrates a list of peaks and returns a results object.
@@ -44,5 +43,5 @@ public interface IPeakMaxPeakIntegrator {
 	 * @param integrationSettings
 	 * @return {@link PeakMaxPeakIntegrationResults}
 	 */
-	IPeakIntegrationResults integrate(List<IPeakMSD> peaks, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException;
+	IPeakIntegrationResults integrate(List<? extends IPeak> peaks, IPeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException;
 }
