@@ -44,4 +44,6 @@ public interface IChromatogramPeakWSD extends IPeakWSD {
 	 * @return int
 	 */
 	int getWidthBaselineTotalInScans();
+
+	float getPurity();
 }
