@@ -35,7 +35,8 @@ public class DetectorHandler implements EventHandler {
 	private static final Logger logger = Logger.getLogger(DetectorHandler.class);
 	private static IChromatogramSelection chromatogramSelection;
 	//
-	private Shell shell = Display.getDefault().getActiveShell();
+	@Inject
+	private Shell shell;
 
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
