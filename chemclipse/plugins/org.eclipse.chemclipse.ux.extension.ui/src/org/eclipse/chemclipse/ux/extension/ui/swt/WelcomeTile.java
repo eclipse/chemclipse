@@ -30,6 +30,8 @@ import org.eclipse.swt.widgets.Label;
 
 public class WelcomeTile extends Composite {
 
+	public static final int LARGE_TITLE = (1 << 1);
+	public static final int HIGHLIGHT = (1 << 2);
 	private Color colorInactive = Colors.getColor(74, 142, 142);
 	private Color colorActive = Colors.getColor(5, 100, 100);
 	//
@@ -39,27 +41,22 @@ public class WelcomeTile extends Composite {
 	private Label textSection;
 	private Label textDesciption;
 	//
-	private boolean highlight;
 	private Cursor handCursor;
 	private Cursor waitCursor;
 
-	public WelcomeTile(Composite parent, int style, boolean highlight) {
-		super(parent, style);
-		this.highlight = highlight;
+	public WelcomeTile(Composite parent, int style) {
+		super(parent, SWT.NONE);
 		initialize();
-		if(highlight) {
-			handCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_HAND);
-		}
 		waitCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_WAIT);
+		handCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_HAND);
+		updateStyle(style);
 	}
 
 	@Override
 	public void dispose() {
 
 		super.dispose();
-		if(handCursor != null) {
-			handCursor.dispose();
-		}
+		handCursor.dispose();
 		waitCursor.dispose();
 	}
 
@@ -78,13 +75,13 @@ public class WelcomeTile extends Composite {
 		}
 		textSection.setText(section);
 		textDesciption.setText(description);
+		this.layout(true);
+		this.redraw();
 	}
 
 	public void setActive() {
 
-		if(highlight) {
-			setBackgroundColor(colorActive);
-		}
+		setBackgroundColor(colorActive);
 	}
 
 	public void setInactive() {
@@ -118,11 +115,8 @@ public class WelcomeTile extends Composite {
 		Label text = new Label(parent, SWT.NONE);
 		text.setForeground(Colors.WHITE);
 		text.setBackground(colorInactive);
-		Font font = new Font(Display.getDefault(), "Arial", 18, SWT.BOLD);
-		text.setFont(font);
 		text.setText("");
 		text.setLayoutData(getGridData(SWT.BEGINNING, SWT.END, 1));
-		font.dispose();
 		addControlListener(text);
 		return text;
 	}
@@ -143,6 +137,7 @@ public class WelcomeTile extends Composite {
 		gridData.horizontalAlignment = horizontalAlignment;
 		gridData.verticalAlignment = verticalAlignment;
 		gridData.horizontalSpan = horizontalSpan;
+		gridData.grabExcessHorizontalSpace = true;
 		return gridData;
 	}
 
@@ -162,8 +157,6 @@ public class WelcomeTile extends Composite {
 		GridData gridDataText = (GridData)textSection.getLayoutData();
 		gridDataText.horizontalAlignment = (exclude) ? SWT.CENTER : SWT.BEGINNING;
 		gridDataText.horizontalSpan = (exclude) ? 2 : 1;
-		this.layout(false);
-		this.redraw();
 	}
 
 	private void addControlListener(Control control) {
@@ -197,5 +190,25 @@ public class WelcomeTile extends Composite {
 		} finally {
 			setCursor(oldCursor);
 		}
+	}
+
+	public void updateStyle(int style) {
+
+		if((style & HIGHLIGHT) != 0) {
+			setCursor(handCursor);
+			colorActive = Colors.getColor(5, 100, 100);
+		} else {
+			setCursor(null);
+			colorActive = colorInactive;
+		}
+		int fontSize;
+		if((style & LARGE_TITLE) != 0) {
+			fontSize = 40;
+		} else {
+			fontSize = 18;
+		}
+		Font font = new Font(Display.getDefault(), "Arial", fontSize, SWT.BOLD);
+		textSection.setFont(font);
+		font.dispose();
 	}
 }

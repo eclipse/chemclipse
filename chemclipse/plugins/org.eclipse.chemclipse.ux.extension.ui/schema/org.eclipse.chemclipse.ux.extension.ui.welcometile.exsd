@@ -70,6 +70,13 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="defaultShow" type="boolean" use="default" value="false">
+            <annotation>
+               <documentation>
+                  if true this tile is initially display if not removed by the user if there is space left in the tile menu
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

@@ -15,7 +15,6 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -24,8 +23,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.ui.swt.ISelectionHandler;
 import org.eclipse.chemclipse.ux.extension.ui.swt.WelcomeTile;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -53,11 +50,6 @@ public class WelcomeView {
 	private static final String PERSPECTIVE_DATA_ANALYSIS = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main";
 	private static final String PERSPECTIVE_QUANTITATION = "org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.perspective";
 	private static final String PERSPECTIVE_LOGGING = "org.eclipse.chemclipse.logging.ui.perspective.main";
-	//
-	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.ux.extension.ui.welcometile";
-	private static final String SECTION = "Section";
-	private static final String DESCRIPTION = "Description";
-	private static final String PERSPECTIVE_ID = "PerspectiveId";
 	//
 	// private static final String CSS_ID = "org-eclipse-chemclipse-ux-extension-ui-views-welcomeview-background";
 	/*
@@ -171,28 +163,30 @@ public class WelcomeView {
 		 * Default Tiles
 		 */
 		Image imageDataAnalysis = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_DATA_ANALYSIS, IApplicationImage.SIZE_128x128);
-		initializeTile(new WelcomeTile(parent, SWT.NONE, true), 2, 2, new Component(PERSPECTIVE_DATA_ANALYSIS), imageDataAnalysis, "Data Analysis", "This is the main perspective. Most of the work is performed here.");
-		initializeTile(new WelcomeTile(parent, SWT.NONE, true), 1, 1, new Component(PERSPECTIVE_QUANTITATION), null, "Quantitation", "Used for ISTD and ESTD quantitation");
-		initializeTile(new WelcomeTile(parent, SWT.NONE, true), 1, 1, new Component(PERSPECTIVE_LOGGING), null, "Logging", "Have a look at the log files.");
-		initializeTile(new WelcomeTile(parent, SWT.NONE, true), 2, 1, new ComponentDemo(), null, "Demo", "Load a demo chromatogram.");
+		initializeTile(new WelcomeTile(parent, WelcomeTile.HIGHLIGHT), 2, 2, new Component(PERSPECTIVE_DATA_ANALYSIS), imageDataAnalysis, "Data Analysis", "This is the main perspective. Most of the work is performed here.");
+		initializeTile(new WelcomeTile(parent, WelcomeTile.HIGHLIGHT), 1, 1, new Component(PERSPECTIVE_QUANTITATION), null, "Quantitation", "Used for ISTD and ESTD quantitation");
+		initializeTile(new WelcomeTile(parent, WelcomeTile.HIGHLIGHT), 1, 1, new Component(PERSPECTIVE_LOGGING), null, "Logging", "Have a look at the log files.");
+		initializeTile(new WelcomeTile(parent, WelcomeTile.HIGHLIGHT), 2, 1, new ComponentDemo(), null, "Demo", "Load a demo chromatogram.");
 		/*
 		 * Registered Tiles
 		 */
-		addRegisteredTiles(parent);
+		new WelcomeViewExtensionHandler(parent, this);
 	}
 
 	private void initializeTile(WelcomeTile welcomeTile, int horizontalSpan, int verticalSpan, ISelectionHandler selectionHandler, Image image, String section, String description) {
 
-		welcomeTiles.add(welcomeTile);
-		//
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.horizontalSpan = horizontalSpan;
-		gridData.verticalSpan = verticalSpan;
-		welcomeTile.setLayoutData(gridData);
-		//
 		welcomeTile.setSelectionHandler(selectionHandler);
 		welcomeTile.setContent(image, section, description);
-		//
+		addWelcomeTile(welcomeTile);
+		GridData gridData = (GridData)welcomeTile.getLayoutData();
+		gridData.horizontalSpan = horizontalSpan;
+		gridData.verticalSpan = verticalSpan;
+	}
+
+	void addWelcomeTile(WelcomeTile welcomeTile) {
+
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		welcomeTile.setLayoutData(gridData);
 		welcomeTile.addMouseMoveListener(new MouseMoveListener() {
 
 			@Override
@@ -201,6 +195,7 @@ public class WelcomeView {
 				highlightComposite(welcomeTile);
 			}
 		});
+		welcomeTiles.add(welcomeTile);
 	}
 
 	private void highlightComposite(WelcomeTile welcomeTileHighlight) {
@@ -221,56 +216,25 @@ public class WelcomeView {
 	 * Furthermore, this is only a workaround, because setting an initial
 	 * perspective doesn't work.
 	 */
-	private void switchPerspective(String perspectiveId) {
+	void switchPerspective(String perspectiveId) {
 
-		MUIElement element = modelService.find(perspectiveId, application);
-		if(element instanceof MPerspective) {
-			MPerspective perspective = (MPerspective)element;
-			partService.switchPerspective(perspective);
+		MPerspective model = getPerspectiveModel(perspectiveId);
+		if(model != null) {
+			partService.switchPerspective(model);
 			if(eventBroker != null) {
-				eventBroker.send(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, perspective.getLabel());
+				eventBroker.send(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, model.getLabel());
 			}
 		}
 	}
 
-	private void addRegisteredTiles(Composite parent) {
+	MPerspective getPerspectiveModel(String perspectiveId) {
 
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elements = registry.getConfigurationElementsFor(EXTENSION_POINT);
-		/*
-		 * Display 4 tiles randomly.
-		 */
-		int maxTiles = 4;
-		int size = elements.length;
-		int availableTiles = (size < maxTiles) ? size : maxTiles;
-		int bound = size;
-		List<Integer> indices = new ArrayList<Integer>();
-		Random random = new Random();
-		int attempt = 0;
-		int maxAttempts = 1000; // Restrict to 1000 tries max.
-		while(indices.size() < availableTiles && attempt < maxAttempts) {
-			int index = random.nextInt(bound);
-			if(!indices.contains(index)) {
-				indices.add(index);
+		if(perspectiveId != null) {
+			MUIElement element = modelService.find(perspectiveId, application);
+			if(element instanceof MPerspective) {
+				return (MPerspective)element;
 			}
-			attempt++;
 		}
-		/*
-		 * Add the tiles.
-		 */
-		for(int index : indices) {
-			IConfigurationElement element = elements[index];
-			String section = element.getAttribute(SECTION);
-			String description = element.getAttribute(DESCRIPTION);
-			String perspectiveId = element.getAttribute(PERSPECTIVE_ID);
-			boolean highlight = (perspectiveId == null) ? false : true;
-			initializeTile(new WelcomeTile(parent, SWT.NONE, highlight), 1, 1, new Component(perspectiveId), null, section, description);
-		}
-		/*
-		 * Fill empty tiles if less than 4 have been added.
-		 */
-		for(int i = availableTiles; i < maxTiles; i++) {
-			initializeTile(new WelcomeTile(parent, SWT.NONE, false), 1, 1, new Component(""), null, "", "");
-		}
+		return null;
 	}
 }
