@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderi
 
 import java.lang.reflect.InvocationTargetException;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.internal.handlers.DetectorRunnable;
@@ -36,8 +35,7 @@ public class DetectorHandler implements EventHandler {
 	private static final Logger logger = Logger.getLogger(DetectorHandler.class);
 	private static IChromatogramSelection chromatogramSelection;
 	//
-	@Inject
-	private Shell shell;
+	private Shell shell = Display.getDefault().getActiveShell();
 
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
