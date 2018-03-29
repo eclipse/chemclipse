@@ -34,4 +34,8 @@ public interface IMultivariateCalculator {
 	ArrayList<String> getGroupNames();
 
 	void initialize(int numObs, int numVars);
+
+	double getSummedVariance();
+
+	double getExtractedVariance(int var);
 }

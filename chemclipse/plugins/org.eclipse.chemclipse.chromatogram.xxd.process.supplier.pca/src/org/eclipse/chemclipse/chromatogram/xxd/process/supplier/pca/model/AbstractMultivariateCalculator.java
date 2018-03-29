@@ -132,6 +132,38 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		return loadingVector.data;
 	}
 
+	public double getSummedVariance() {
+
+		// calc col means
+		DenseMatrix64F colMeans = new DenseMatrix64F(1, sampleData.numCols);
+		CommonOps.sumCols(sampleData, colMeans);
+		CommonOps.divide(colMeans, sampleData.numRows);
+		// subtract col means from col values and squares it
+		DenseMatrix64F varTemp = sampleData.copy();
+		DenseMatrix64F colTemp = new DenseMatrix64F(varTemp.numRows, 1);
+		CommonOps.changeSign(colMeans);
+		for(int i = 0; i < varTemp.numCols; i++) {
+			CommonOps.extractColumn(varTemp, i, colTemp);
+			CommonOps.add(colTemp, colMeans.get(i));
+			for(int j = 0; j < varTemp.numRows; j++) {
+				varTemp.set(j, i, Math.pow(colTemp.get(j), 2));
+			}
+		}
+		// sum along Columns and divide by 1-N
+		DenseMatrix64F colSums = new DenseMatrix64F(1, sampleData.numCols);
+		CommonOps.sumCols(varTemp, colSums);
+		CommonOps.divide(colSums, (1.0 / sampleData.numRows));
+		// sum all column variances
+		double summedVariance = CommonOps.elementSum(colSums);
+		return summedVariance;
+	}
+
+	@Override
+	public double getExtractedVariance(int var) {
+
+		return 0;
+	}
+
 	public double[] getMean() {
 
 		return mean;

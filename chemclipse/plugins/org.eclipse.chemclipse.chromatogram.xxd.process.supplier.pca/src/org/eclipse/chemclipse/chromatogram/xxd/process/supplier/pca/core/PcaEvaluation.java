@@ -85,6 +85,16 @@ public class PcaEvaluation {
 		return loadingVectors;
 	}
 
+	private List<double[]> getExplainedVariance(IMultivariateCalculator principalComponentAnalysis, int numberOfPrincipalComponents) {
+
+		principalComponentAnalysis.getSummedVariance();
+		List<double[]> explainedVariance = new ArrayList<double[]>();
+		for(int principalComponent = 0; principalComponent < numberOfPrincipalComponents; principalComponent++) {
+			// calculate explained variance in principalComponentAnalysis
+		}
+		return explainedVariance;
+	}
+
 	private int getSampleSize(Map<ISample<?>, double[]> extractData) {
 
 		Iterator<Map.Entry<ISample<?>, double[]>> it = extractData.entrySet().iterator();
@@ -152,6 +162,7 @@ public class PcaEvaluation {
 		 * Collect PCA results
 		 */
 		List<double[]> loadingVectors = getLoadingVectors(principalComponentAnalysis, numberOfPrincipalComponents);
+		double summedVariance = principalComponentAnalysis.getSummedVariance();
 		pcaResults.setLoadingVectors(loadingVectors);
 		setEigenSpaceAndErrorValues(principalComponentAnalysis, extractData, pcaResults);
 		// setGroups(pcaResults, samples);
