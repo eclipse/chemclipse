@@ -15,10 +15,4 @@ import org.eclipse.chemclipse.wsd.model.core.AbstractChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 
 public class ChromatogramWSD extends AbstractChromatogramWSD implements IChromatogramWSD {
-
-	@Override
-	public double getPeakIntegratedArea() {
-
-		return 0;
-	}
 }

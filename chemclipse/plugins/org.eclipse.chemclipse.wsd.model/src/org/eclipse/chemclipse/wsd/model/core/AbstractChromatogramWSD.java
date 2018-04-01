@@ -115,4 +115,14 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 		List<IChromatogramTargetWSD> targetList = new ArrayList<IChromatogramTargetWSD>(targets);
 		return targetList;
 	}
+
+	@Override
+	public double getPeakIntegratedArea() {
+
+		double integratedArea = 0.0d;
+		for(IChromatogramPeakWSD peak : getPeaks()) {
+			integratedArea += peak.getIntegratedArea();
+		}
+		return integratedArea;
+	}
 }
