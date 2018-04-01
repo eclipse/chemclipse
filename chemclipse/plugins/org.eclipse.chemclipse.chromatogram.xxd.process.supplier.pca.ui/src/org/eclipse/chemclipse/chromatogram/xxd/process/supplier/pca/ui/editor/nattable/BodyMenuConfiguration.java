@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable;
 
+import java.util.Set;
+
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.AbstractUiBindingConfiguration;
+import org.eclipse.nebula.widgets.nattable.coordinate.Range;
 import org.eclipse.nebula.widgets.nattable.ui.binding.UiBindingRegistry;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.MouseEventMatcher;
 import org.eclipse.nebula.widgets.nattable.ui.menu.IMenuItemProvider;
@@ -49,18 +52,42 @@ public class BodyMenuConfiguration extends AbstractUiBindingConfiguration {
 			public void addMenuItem(final NatTable natTable, Menu popupMenu) {
 
 				MenuItem menuItem = new MenuItem(popupMenu, SWT.PUSH);
-				menuItem.setText("Export Table");
+				menuItem.setText("Check Selected Variables");
 				menuItem.setEnabled(true);
 				menuItem.addSelectionListener(new SelectionAdapter() {
 
 					@Override
 					public void widgetSelected(SelectionEvent event) {
 
-						peakListNatTable.exportTableDialog(Display.getDefault());
+						Set<Range> ranges = peakListNatTable.selectionLayer.getSelectedRowPositions();
+						for(Range range : ranges) {
+							for(int index : range.getMembers()) {
+								int variableIndex = peakListNatTable.sortModel.getOrderRow().get(index);
+								peakListNatTable.tableData.getVariables().get(variableIndex).setSelected(true);
+							}
+						}
 					}
 				});
 				menuItem = new MenuItem(popupMenu, SWT.PUSH);
-				menuItem.setText("Select All Variables");
+				menuItem.setText("Uncheck Selected Variables");
+				menuItem.setEnabled(true);
+				menuItem.addSelectionListener(new SelectionAdapter() {
+
+					@Override
+					public void widgetSelected(SelectionEvent event) {
+
+						Set<Range> ranges = peakListNatTable.selectionLayer.getSelectedRowPositions();
+						for(Range range : ranges) {
+							for(int index : range.getMembers()) {
+								int variableIndex = peakListNatTable.sortModel.getOrderRow().get(index);
+								peakListNatTable.tableData.getVariables().get(variableIndex).setSelected(false);
+							}
+						}
+					}
+				});
+				menuItem = new MenuItem(popupMenu, SWT.SEPARATOR);
+				menuItem = new MenuItem(popupMenu, SWT.PUSH);
+				menuItem.setText("Check All Variables");
 				menuItem.setEnabled(true);
 				menuItem.addSelectionListener(new SelectionAdapter() {
 
@@ -71,7 +98,7 @@ public class BodyMenuConfiguration extends AbstractUiBindingConfiguration {
 					}
 				});
 				menuItem = new MenuItem(popupMenu, SWT.PUSH);
-				menuItem.setText("Deselect All Variables");
+				menuItem.setText("Uncheck All Variables");
 				menuItem.setEnabled(true);
 				menuItem.addSelectionListener(new SelectionAdapter() {
 
@@ -79,6 +106,18 @@ public class BodyMenuConfiguration extends AbstractUiBindingConfiguration {
 					public void widgetSelected(SelectionEvent event) {
 
 						peakListNatTable.tableData.getVariables().forEach(v -> v.setSelected(false));
+					}
+				});
+				menuItem = new MenuItem(popupMenu, SWT.SEPARATOR);
+				menuItem = new MenuItem(popupMenu, SWT.PUSH);
+				menuItem.setText("Export Table");
+				menuItem.setEnabled(true);
+				menuItem.addSelectionListener(new SelectionAdapter() {
+
+					@Override
+					public void widgetSelected(SelectionEvent event) {
+
+						peakListNatTable.exportTableDialog(Display.getDefault());
 					}
 				});
 			}

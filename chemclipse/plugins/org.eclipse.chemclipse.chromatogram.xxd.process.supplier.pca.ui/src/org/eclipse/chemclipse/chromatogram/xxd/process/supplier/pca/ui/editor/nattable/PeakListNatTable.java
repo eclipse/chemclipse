@@ -76,6 +76,7 @@ public class PeakListNatTable {
 	SortModel sortModel;
 	TableData tableData;
 	TableProvider tableProvider;
+	SelectionLayer selectionLayer;
 
 	public PeakListNatTable(Composite parent, Object layoutData) {
 		tableData = new TableData();
@@ -150,7 +151,7 @@ public class PeakListNatTable {
 		columnHideShowLayer = new ColumnHideShowLayer(rowHideShowLayer);
 		ColumnGroupModel columnGroupModel = new ColumnGroupModel();
 		ColumnGroupExpandCollapseLayer columnGroupExpandCollapseLayer = new ColumnGroupExpandCollapseLayer(columnHideShowLayer, columnGroupModel, columnGroupModel);
-		SelectionLayer selectionLayer = new SelectionLayer(columnGroupExpandCollapseLayer);
+		selectionLayer = new SelectionLayer(columnGroupExpandCollapseLayer);
 		final ViewportLayer viewportLayer = new ViewportLayer(selectionLayer);
 		final FreezeLayer freezeLayer = new FreezeLayer(selectionLayer);
 		final CompositeFreezeLayer compositeFreezeLayer = new CompositeFreezeLayer(freezeLayer, viewportLayer, selectionLayer);
