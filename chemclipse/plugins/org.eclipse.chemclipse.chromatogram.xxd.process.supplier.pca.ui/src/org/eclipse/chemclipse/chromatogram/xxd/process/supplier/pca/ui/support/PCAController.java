@@ -184,7 +184,7 @@ public class PCAController {
 				pcz.setMaximum(maxPC);
 				int pcX = pcx.getSelection();
 				int pcY = pcy.getSelection();
-				int pcZ = pcy.getSelection();
+				int pcZ = pcz.getSelection();
 				try {
 					monitor.run(false, false, progressMonitor -> {
 						progressMonitor.setTaskName("Initialization");
