@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.ArrayList;
+import java.util.stream.DoubleStream;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
@@ -134,33 +135,35 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 
 	public double getSummedVariance() {
 
-		// calc col means
-		DenseMatrix64F colMeans = new DenseMatrix64F(1, sampleData.numCols);
-		CommonOps.sumCols(sampleData, colMeans);
-		CommonOps.divide(colMeans, sampleData.numRows);
-		// subtract col means from col values and squares it
+		// calculate row means
+		DenseMatrix64F rowMeans = new DenseMatrix64F(sampleData.numRows, 1);
+		CommonOps.sumRows(sampleData, rowMeans);
+		CommonOps.divide(rowMeans, sampleData.numCols);
+		// subtract row means from row values and square them
 		DenseMatrix64F varTemp = sampleData.copy();
-		DenseMatrix64F colTemp = new DenseMatrix64F(varTemp.numRows, 1);
-		CommonOps.changeSign(colMeans);
-		for(int i = 0; i < varTemp.numCols; i++) {
-			CommonOps.extractColumn(varTemp, i, colTemp);
-			CommonOps.add(colTemp, colMeans.get(i));
-			for(int j = 0; j < varTemp.numRows; j++) {
-				varTemp.set(j, i, Math.pow(colTemp.get(j), 2));
+		DenseMatrix64F rowTemp = new DenseMatrix64F(1, varTemp.numCols);
+		// CommonOps.changeSign(rowMeans);
+		for(int i = 0; i < varTemp.numRows; i++) {
+			CommonOps.extractRow(varTemp, i, rowTemp);
+			CommonOps.add(rowTemp, (Math.abs(rowMeans.get(i))) * -1);
+			for(int j = 0; j < varTemp.numCols; j++) {
+				varTemp.set(i, j, Math.pow(rowTemp.get(j), 2));
 			}
 		}
-		// sum along Columns and divide by 1-N
-		DenseMatrix64F colSums = new DenseMatrix64F(1, sampleData.numCols);
-		CommonOps.sumCols(varTemp, colSums);
-		CommonOps.divide(colSums, (1.0 / sampleData.numRows));
-		// sum all column variances
-		double summedVariance = CommonOps.elementSum(colSums);
+		// sum along Rows and divide by 1-N
+		DenseMatrix64F rowSums = new DenseMatrix64F(sampleData.numRows, 1);
+		CommonOps.sumRows(varTemp, rowSums);
+		CommonOps.divide(rowSums, (1.0 / (sampleData.numCols - 1)));
+		// sum all row variances
+		double summedVariance = CommonOps.elementSum(rowSums);
 		return summedVariance;
 	}
 
 	@Override
 	public double getExtractedVariance(int var) {
 
+		double colMean = DoubleStream.of(getLoadingVector(var)).sum();
+		// colMean /= colMean /
 		return 0;
 	}
 
