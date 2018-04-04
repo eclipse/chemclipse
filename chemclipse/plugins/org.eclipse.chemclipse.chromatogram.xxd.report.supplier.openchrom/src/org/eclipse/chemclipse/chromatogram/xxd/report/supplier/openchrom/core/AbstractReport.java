@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.core;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,28 +19,26 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.chromatogram.AbstractChrom
 import org.eclipse.chemclipse.chromatogram.xxd.report.processing.ChromatogramReportProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.report.processing.IChromatogramReportProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramReportSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.internal.support.SpecificationValidator;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.io.ChromatogramReport;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IChemClipseChromatogramReportSettings;
-import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IReportSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramReportGenerator extends AbstractChromatogramReportGenerator {
+public abstract class AbstractReport extends AbstractChromatogramReportGenerator {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramReportGenerator.class);
+	public IChromatogramReportProcessingInfo report(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
 
-	public ChromatogramReportGenerator() {
+		IChromatogramReportProcessingInfo processingInfo = new ChromatogramReportProcessingInfo();
+		processingInfo.addErrorMessage("ChemClipse Chromatogram Report", "Please override this method");
+		return processingInfo;
 	}
 
 	@Override
 	public IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
 
 		List<IChromatogram<? extends IPeak>> chromatograms = getChromatogramList(chromatogram);
-		IChemClipseChromatogramReportSettings settings = getSettings(chromatogramReportSettings);
+		IReportSettings settings = getSettings(chromatogramReportSettings);
 		return report(file, append, chromatograms, settings, monitor);
 	}
 
@@ -49,48 +46,22 @@ public class ChromatogramReportGenerator extends AbstractChromatogramReportGener
 	public IChromatogramReportProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
 
 		List<IChromatogram<? extends IPeak>> chromatograms = getChromatogramList(chromatogram);
-		IChemClipseChromatogramReportSettings settings = getSettings(null);
+		IReportSettings settings = getSettings(null);
 		return report(file, append, chromatograms, settings, monitor);
 	}
 
 	@Override
 	public IChromatogramReportProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
 
-		IChemClipseChromatogramReportSettings settings = getSettings(chromatogramReportSettings);
+		IReportSettings settings = getSettings(chromatogramReportSettings);
 		return report(file, append, chromatograms, settings, monitor);
 	}
 
 	@Override
 	public IChromatogramReportProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IProgressMonitor monitor) {
 
-		IChemClipseChromatogramReportSettings settings = getSettings(null);
+		IReportSettings settings = getSettings(null);
 		return report(file, append, chromatograms, settings, monitor);
-	}
-
-	private IChromatogramReportProcessingInfo report(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChemClipseChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) {
-
-		IChromatogramReportProcessingInfo processingInfo = new ChromatogramReportProcessingInfo();
-		/*
-		 * Validate the file.
-		 */
-		file = SpecificationValidator.validateSpecification(file);
-		IProcessingInfo processingInfoValidate = super.validate(file);
-		/*
-		 * Don't process if errors have occurred.
-		 */
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
-			ChromatogramReport chromatogramReport = new ChromatogramReport();
-			try {
-				chromatogramReport.generate(file, append, chromatograms, chromatogramReportSettings, monitor);
-				processingInfo.setFile(file);
-			} catch(IOException e) {
-				logger.warn(e);
-				processingInfo.addErrorMessage("ChemClipse Chromatogram Report", "The report couldn't be created. An error occured.");
-			}
-		}
-		return processingInfo;
 	}
 
 	private List<IChromatogram<? extends IPeak>> getChromatogramList(IChromatogram<? extends IPeak> chromatogram) {
@@ -100,13 +71,13 @@ public class ChromatogramReportGenerator extends AbstractChromatogramReportGener
 		return chromatograms;
 	}
 
-	private IChemClipseChromatogramReportSettings getSettings(IChromatogramReportSettings chromatogramReportSettings) {
+	private IReportSettings getSettings(IChromatogramReportSettings chromatogramReportSettings) {
 
 		if(chromatogramReportSettings == null) {
 			return PreferenceSupplier.getChromatogramReportSettings();
 		}
-		if(chromatogramReportSettings instanceof IChemClipseChromatogramReportSettings) {
-			return (IChemClipseChromatogramReportSettings)chromatogramReportSettings;
+		if(chromatogramReportSettings instanceof IReportSettings) {
+			return (IReportSettings)chromatogramReportSettings;
 		} else {
 			return PreferenceSupplier.getChromatogramReportSettings();
 		}

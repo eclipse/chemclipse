@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IChemClipseChromatogramReportSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IReportSettings;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
@@ -59,7 +59,7 @@ import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramReport {
+public class ReportWriter1 {
 
 	private static final int NUMBER_OF_IONS_TO_PRINT = 5;
 	private static final String DELIMITER = "\t";
@@ -74,7 +74,7 @@ public class ChromatogramReport {
 	private PeakRetentionTimeComparator chromatogramPeakRTComparator;
 	private ChromatogramPeakCSDComparator chromatogramPeakCSDComparator;
 
-	public ChromatogramReport() {
+	public ReportWriter1() {
 		peakQuantitationsExtractor = new PeakQuantitationsExtractor();
 		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0####");
 		dateFormat = ValueFormat.getDateFormatEnglish();
@@ -84,7 +84,7 @@ public class ChromatogramReport {
 		chromatogramPeakCSDComparator = new ChromatogramPeakCSDComparator(SortOrder.ASC);
 	}
 
-	public void generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChemClipseChromatogramReportSettings chromatogramReportSettings, IProgressMonitor monitor) throws IOException {
+	public void generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IReportSettings chromatogramReportSettings, IProgressMonitor monitor) throws IOException {
 
 		FileWriter fileWriter = new FileWriter(file, append);
 		PrintWriter printWriter = new PrintWriter(fileWriter);

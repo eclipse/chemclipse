@@ -8,10 +8,19 @@
             fileExtension=".txt"
             fileName="OpenChromReport"
             id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.chromatogramReportASCII"
-            reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.core.ChromatogramReportGenerator"
+            reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.core.Report1"
             reportName="OpenChrom Report (*.txt)"
-            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ChemClipseChromatogramReportSettings">
+            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings">
       </ChromatogramReportSupplier>
+      <ChromatogramReportSupplier
+            description="Chromatogram Report Area%."
+            fileExtension=".txt"
+            fileName="AreaPercentReport"
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.areapercentreport"
+            reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.core.Report2"
+            reportName="Area Percent Report (*.txt)"
+            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings">
+      </ChromatogramReportSupplier>      
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

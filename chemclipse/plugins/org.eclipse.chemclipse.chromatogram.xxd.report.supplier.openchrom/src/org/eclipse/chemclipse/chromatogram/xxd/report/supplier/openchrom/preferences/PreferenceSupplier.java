@@ -19,8 +19,8 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ChemClipseChromatogramReportSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IChemClipseChromatogramReportSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IReportSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
@@ -64,9 +64,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static IChemClipseChromatogramReportSettings getChromatogramReportSettings() {
+	public static IReportSettings getChromatogramReportSettings() {
 
-		IChemClipseChromatogramReportSettings settings = new ChemClipseChromatogramReportSettings();
+		IReportSettings settings = new ReportSettings();
 		/*
 		 * Set specific settings.
 		 */

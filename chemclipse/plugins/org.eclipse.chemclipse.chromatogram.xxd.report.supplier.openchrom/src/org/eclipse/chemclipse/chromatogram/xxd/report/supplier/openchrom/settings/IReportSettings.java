@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings;
 
-import org.eclipse.chemclipse.chromatogram.xxd.report.settings.AbstractChromatogramReportSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramReportSettings;
 
-public class ChemClipseChromatogramReportSettings extends AbstractChromatogramReportSettings implements IChemClipseChromatogramReportSettings {
+public interface IReportSettings extends IChromatogramReportSettings {
 }
