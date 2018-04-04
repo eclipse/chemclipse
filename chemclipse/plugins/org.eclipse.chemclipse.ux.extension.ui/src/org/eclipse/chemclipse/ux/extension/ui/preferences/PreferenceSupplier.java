@@ -69,4 +69,10 @@ public class PreferenceSupplier {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setValue(PreferenceConstants.P_USER_LOCATION_PATH, directoryPath);
 	}
+
+	public static boolean isOpenFirstDataMatchOnly() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getBoolean(PreferenceConstants.P_OPEN_FIRST_DATA_MATCH_ONLY);
+	}
 }

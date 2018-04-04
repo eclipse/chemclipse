@@ -328,16 +328,48 @@ public abstract class AbstractSupplierFileExplorer {
 	private void openEditor(File file, boolean batch) {
 
 		if(file != null) {
-			for(ISupplierFileEditorSupport supplierFileEditorSupport : supplierFileEditorSupportList) {
-				/*
-				 * Open the supplier file.
-				 */
-				if(supplierFileEditorSupport.isMatchMagicNumber(file)) {
-					saveDirectoryPath(file);
-					supplierFileEditorSupport.openEditor(file, batch);
+			/*
+			 * Get the settings and the
+			 * responsible file supplier list.
+			 */
+			boolean openFirstDataMatchOnly = PreferenceSupplier.isOpenFirstDataMatchOnly();
+			List<ISupplierFileEditorSupport> activeFileSupplierList = getActiveFileSupplier(file);
+			//
+			if(activeFileSupplierList.size() > 0) {
+				if(openFirstDataMatchOnly) {
+					/*
+					 * Opens the first match.
+					 */
+					ISupplierFileEditorSupport activeFileSupplier = activeFileSupplierList.get(0);
+					openEditor(file, activeFileSupplier, batch);
+				} else {
+					/*
+					 * Opens all matches.
+					 */
+					batch = (activeFileSupplierList.size() > 1) ? true : batch; // Prevent SWT thread deadlocks
+					for(ISupplierFileEditorSupport activeFileSupplier : activeFileSupplierList) {
+						openEditor(file, activeFileSupplier, batch);
+					}
 				}
 			}
 		}
+	}
+
+	private void openEditor(File file, ISupplierFileEditorSupport activeFileSupplier, boolean batch) {
+
+		saveDirectoryPath(file);
+		activeFileSupplier.openEditor(file, batch);
+	}
+
+	private List<ISupplierFileEditorSupport> getActiveFileSupplier(File file) {
+
+		List<ISupplierFileEditorSupport> activeFileSupplierList = new ArrayList<>();
+		for(ISupplierFileEditorSupport supplierFileEditorSupport : supplierFileEditorSupportList) {
+			if(supplierFileEditorSupport.isMatchMagicNumber(file)) {
+				activeFileSupplierList.add(supplierFileEditorSupport);
+			}
+		}
+		return activeFileSupplierList;
 	}
 
 	@Focus

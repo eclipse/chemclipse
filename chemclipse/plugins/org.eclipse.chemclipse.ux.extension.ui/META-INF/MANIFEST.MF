@@ -45,6 +45,7 @@ Export-Package: org.eclipse.chemclipse.ux.extension.ui.definitions,
  org.eclipse.chemclipse.ux.extension.ui.dialogs,
  org.eclipse.chemclipse.ux.extension.ui.editors,
  org.eclipse.chemclipse.ux.extension.ui.explorer,
+ org.eclipse.chemclipse.ux.extension.ui.preferences,
  org.eclipse.chemclipse.ux.extension.ui.provider,
  org.eclipse.chemclipse.ux.extension.ui.support,
  org.eclipse.chemclipse.ux.extension.ui.views

@@ -18,6 +18,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.EditorSupportFactory;
@@ -102,11 +103,15 @@ public class SupplierFileExplorerPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePage = new PreferencePageFileExplorer();
-				preferencePage.setTitle("File Explorer Settings");
+				IPreferencePage preferencePage1 = new PreferencePageFileExplorer();
+				preferencePage1.setTitle("File Explorer Settings");
+				//
+				IPreferencePage preferencePage2 = new PreferencePage();
+				preferencePage2.setTitle("Data Settings");
 				//
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
+				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage1));
+				preferenceManager.addToRoot(new PreferenceNode("2", preferencePage2));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
 				preferenceDialog.create();
