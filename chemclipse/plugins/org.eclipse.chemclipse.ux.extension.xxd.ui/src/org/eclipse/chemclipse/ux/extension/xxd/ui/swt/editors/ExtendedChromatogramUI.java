@@ -2013,20 +2013,26 @@ public class ExtendedChromatogramUI {
 			int i = 1;
 			for(IChromatogram referencedChromatogram : referencedChromatograms) {
 				IChromatogramSelection referencedChromatogramSelection = null;
+				String type = "";
 				try {
 					if(referencedChromatogram instanceof IChromatogramMSD) {
 						referencedChromatogramSelection = new ChromatogramSelectionMSD(referencedChromatogram);
+						type = "[MSD]";
 					} else if(referencedChromatogram instanceof IChromatogramCSD) {
 						referencedChromatogramSelection = new ChromatogramSelectionCSD(referencedChromatogram);
+						type = "[CSD]";
 					} else if(referencedChromatogram instanceof IChromatogramWSD) {
 						referencedChromatogramSelection = new ChromatogramSelectionWSD(referencedChromatogram);
+						type = "[WSD]";
 					}
 				} catch(ChromatogramIsNullException e) {
 					logger.warn(e);
 				}
 				//
-				referenceChromatogramSelections.add(referencedChromatogramSelection);
-				references.add("Chromatogram Reference #" + i++);
+				if(referencedChromatogramSelection != null) {
+					referenceChromatogramSelections.add(referencedChromatogramSelection);
+					references.add("Chromatogram Reference #" + i++ + " " + type);
+				}
 			}
 		}
 		/*
