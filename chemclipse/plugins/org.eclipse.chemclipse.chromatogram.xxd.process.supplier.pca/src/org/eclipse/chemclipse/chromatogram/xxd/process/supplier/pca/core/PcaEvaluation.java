@@ -163,6 +163,10 @@ public class PcaEvaluation {
 		 */
 		List<double[]> loadingVectors = getLoadingVectors(principalComponentAnalysis, numberOfPrincipalComponents);
 		double summedVariance = principalComponentAnalysis.getSummedVariance();
+		List<Double> extractedVariances = new ArrayList<>();
+		for(int i = 0; i < numberOfPrincipalComponents; i++) {
+			extractedVariances.add(principalComponentAnalysis.getExtractedVariance(i));
+		}
 		pcaResults.setLoadingVectors(loadingVectors);
 		setEigenSpaceAndErrorValues(principalComponentAnalysis, extractData, pcaResults);
 		// setGroups(pcaResults, samples);
