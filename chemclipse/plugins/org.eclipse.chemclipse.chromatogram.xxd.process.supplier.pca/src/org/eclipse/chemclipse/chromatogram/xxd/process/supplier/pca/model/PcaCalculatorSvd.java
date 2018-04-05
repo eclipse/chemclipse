@@ -44,7 +44,8 @@ public class PcaCalculatorSvd extends AbstractMultivariateCalculator {
 			System.arraycopy(getMean(), 0, concatMeans, i * getSampleData().getNumCols(), getSampleData().getNumCols());
 		}
 		DenseMatrix64F means = DenseMatrix64F.wrap(getSampleData().getNumRows(), getSampleData().getNumCols(), concatMeans);
-		DenseMatrix64F sample = DenseMatrix64F.wrap(getSampleData().getNumRows(), getSampleData().getNumCols(), getSampleData().data);
+		// DenseMatrix64F sample = DenseMatrix64F.wrap(getSampleData().getNumRows(), getSampleData().getNumCols(), getSampleData().data);
+		DenseMatrix64F sample = getSampleData().copy();
 		DenseMatrix64F rotated = new DenseMatrix64F(getNumComps(), getSampleData().getNumRows());
 		CommonOps.subtract(sample, means, sample);
 		DenseMatrix64F loadings = new DenseMatrix64F(getLoadings());

@@ -25,7 +25,7 @@ public class PcaCalculatorNipals extends AbstractMultivariateCalculator {
 		int numberOfVariables = getSampleData().getNumCols();
 		final double threshold = 0.00001;
 		setNumComps(numComps);
-		DenseMatrix64F E = getSampleData();
+		DenseMatrix64F E = getSampleData().copy();
 		double scoreDotOld = 0;
 		double scoreDotNew = 0;
 		DenseMatrix64F p = new DenseMatrix64F(1, numberOfVariables);
