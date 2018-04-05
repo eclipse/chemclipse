@@ -36,6 +36,20 @@ public class ChromatogramDataSupport {
 
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 
+	public String getChromatogramType(IChromatogramSelection chromatogramSelection) {
+
+		String type = "";
+		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+			type = " [MSD]";
+		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+			type = " [CSD]";
+		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+			type = " [WSD]";
+		}
+		//
+		return type;
+	}
+
 	public String getChromatogramLabel(IChromatogram chromatogram) {
 
 		return getChromatogramLabel((IChromatogramOverview)chromatogram);

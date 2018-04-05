@@ -200,8 +200,8 @@ public class ExtendedChromatogramUI {
 	private Combo comboTargetTransfer;
 	//
 	private IChromatogramSelection chromatogramSelection = null;
-	private List<IChromatogramSelection> referenceChromatogramSelections = null; // Might be null ... no references.
-	private List<IChromatogramSelection> editorChromatogramSelections = new ArrayList<IChromatogramSelection>(); // Is filled dynamically.
+	private List<IChromatogramSelection> referencedChromatogramSelections = null; // Might be null ... no references.
+	private List<IChromatogramSelection> targetChromatogramSelections = new ArrayList<IChromatogramSelection>(); // Is filled dynamically.
 	//
 	private List<IChartMenuEntry> chartMenuEntriesFilter = new ArrayList<IChartMenuEntry>();
 	private List<IChartMenuEntry> chartMenuEntriesPeakDetectors = new ArrayList<IChartMenuEntry>();
@@ -810,8 +810,9 @@ public class ExtendedChromatogramUI {
 			 */
 			addChartMenuEntries();
 			updateChromatogram();
-			if(referenceChromatogramSelections == null) {
+			if(referencedChromatogramSelections == null) {
 				updateChromatogramCombo();
+				updateChromatogramTargetTransferCombo();
 			}
 		} else {
 			comboChromatograms.setItems(new String[0]);
@@ -821,7 +822,6 @@ public class ExtendedChromatogramUI {
 
 	public void updateChromatogramTargetTransferSelections() {
 
-		editorChromatogramSelections = editorUpdateSupport.getChromatogramSelections();
 		updateChromatogramTargetTransferCombo();
 	}
 
@@ -1699,7 +1699,7 @@ public class ExtendedChromatogramUI {
 				/*
 				 * Modify chromatograms.
 				 */
-				for(IChromatogramSelection chromatogramSelection : editorChromatogramSelections) {
+				for(IChromatogramSelection chromatogramSelection : targetChromatogramSelections) {
 					if(realignChromatogram(modifyLengthType, chromatogramSelection, chromatogram)) {
 						IRunnableWithProgress runnable = new ChromatogramLengthModifier(chromatogramSelection, scanDelay, chromatogramLength);
 						ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
@@ -1767,7 +1767,7 @@ public class ExtendedChromatogramUI {
 
 		IChromatogram chromatogram = null;
 		int maxRetentionTime = Integer.MAX_VALUE;
-		for(IChromatogramSelection chromatogramSelection : editorChromatogramSelections) {
+		for(IChromatogramSelection chromatogramSelection : targetChromatogramSelections) {
 			if(chromatogramSelection.getChromatogram().getStopRetentionTime() < maxRetentionTime) {
 				maxRetentionTime = chromatogramSelection.getChromatogram().getStopRetentionTime();
 				chromatogram = chromatogramSelection.getChromatogram();
@@ -1785,7 +1785,7 @@ public class ExtendedChromatogramUI {
 
 		IChromatogram chromatogram = null;
 		int minRetentionTime = Integer.MIN_VALUE;
-		for(IChromatogramSelection chromatogramSelection : editorChromatogramSelections) {
+		for(IChromatogramSelection chromatogramSelection : targetChromatogramSelections) {
 			if(chromatogramSelection.getChromatogram().getStopRetentionTime() > minRetentionTime) {
 				minRetentionTime = chromatogramSelection.getChromatogram().getStopRetentionTime();
 				chromatogram = chromatogramSelection.getChromatogram();
@@ -1821,7 +1821,7 @@ public class ExtendedChromatogramUI {
 		/*
 		 * Editor
 		 */
-		for(IChromatogramSelection selection : editorChromatogramSelections) {
+		for(IChromatogramSelection selection : targetChromatogramSelections) {
 			if(selection != chromatogramSelection) {
 				/*
 				 * Don't fire an update. The next time the selection is on focus,
@@ -1841,8 +1841,8 @@ public class ExtendedChromatogramUI {
 	private void transferPeakTargets() {
 
 		int index = comboTargetTransfer.getSelectionIndex();
-		if(index >= 0 && index < editorChromatogramSelections.size()) {
-			IChromatogramSelection selection = editorChromatogramSelections.get(index);
+		if(index >= 0 && index < targetChromatogramSelections.size()) {
+			IChromatogramSelection selection = targetChromatogramSelections.get(index);
 			if(selection != null && selection != chromatogramSelection) {
 				/*
 				 * Question
@@ -1954,7 +1954,7 @@ public class ExtendedChromatogramUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(referenceChromatogramSelections != null) {
+				if(referencedChromatogramSelections != null) {
 					int index = comboChromatograms.getSelectionIndex();
 					selectChromatogram(index);
 				}
@@ -1984,7 +1984,7 @@ public class ExtendedChromatogramUI {
 	private void selectChromatogram(int index) {
 
 		comboChromatograms.select(index);
-		IChromatogramSelection chromatogramSelection = referenceChromatogramSelections.get(index);
+		IChromatogramSelection chromatogramSelection = referencedChromatogramSelections.get(index);
 		if(chromatogramSelection != null) {
 			updateChromatogramSelection(chromatogramSelection);
 		}
@@ -1992,48 +1992,14 @@ public class ExtendedChromatogramUI {
 
 	private void updateChromatogramCombo() {
 
+		referencedChromatogramSelections = new ArrayList<IChromatogramSelection>();
 		List<String> references = new ArrayList<String>();
 		/*
 		 * Get the original and the referenced data.
 		 */
 		if(chromatogramSelection != null) {
-			/*
-			 * Initialize
-			 */
-			referenceChromatogramSelections = new ArrayList<IChromatogramSelection>();
-			/*
-			 * Original Data
-			 */
-			referenceChromatogramSelections.add(chromatogramSelection);
-			references.add("Original Data");
-			/*
-			 * References
-			 */
-			List<IChromatogram> referencedChromatograms = chromatogramSelection.getChromatogram().getReferencedChromatograms();
-			int i = 1;
-			for(IChromatogram referencedChromatogram : referencedChromatograms) {
-				IChromatogramSelection referencedChromatogramSelection = null;
-				String type = "";
-				try {
-					if(referencedChromatogram instanceof IChromatogramMSD) {
-						referencedChromatogramSelection = new ChromatogramSelectionMSD(referencedChromatogram);
-						type = "[MSD]";
-					} else if(referencedChromatogram instanceof IChromatogramCSD) {
-						referencedChromatogramSelection = new ChromatogramSelectionCSD(referencedChromatogram);
-						type = "[CSD]";
-					} else if(referencedChromatogram instanceof IChromatogramWSD) {
-						referencedChromatogramSelection = new ChromatogramSelectionWSD(referencedChromatogram);
-						type = "[WSD]";
-					}
-				} catch(ChromatogramIsNullException e) {
-					logger.warn(e);
-				}
-				//
-				if(referencedChromatogramSelection != null) {
-					referenceChromatogramSelections.add(referencedChromatogramSelection);
-					references.add("Chromatogram Reference #" + i++ + " " + type);
-				}
-			}
+			referencedChromatogramSelections.addAll(getChromatogramReferences(chromatogramSelection));
+			references.addAll(getChromatogramReferences(referencedChromatogramSelections));
 		}
 		/*
 		 * Set the items.
@@ -2046,21 +2012,17 @@ public class ExtendedChromatogramUI {
 
 	private void updateChromatogramTargetTransferCombo() {
 
+		targetChromatogramSelections = new ArrayList<>();
 		List<String> references = new ArrayList<String>();
-		int index = 1;
-		for(IChromatogramSelection chromatogramSelection : editorChromatogramSelections) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			String type = "";
-			if(chromatogram instanceof IChromatogramMSD) {
-				type = " [MSD]";
-			} else if(chromatogram instanceof IChromatogramCSD) {
-				type = " [CSD]";
-			} else if(chromatogram instanceof IChromatogramWSD) {
-				type = " [WSD]";
-			}
-			//
-			references.add(chromatogramSelection.getChromatogram().getName() + type + " " + "(Tab#: " + index++ + ")");
-		}
+		/*
+		 * Get the editor and reference chromatograms.
+		 */
+		List<IChromatogramSelection> editorChromatogramSelections = editorUpdateSupport.getChromatogramSelections();
+		targetChromatogramSelections.addAll(editorChromatogramSelections);
+		references.addAll(getEditorReferences(editorChromatogramSelections));
+		//
+		targetChromatogramSelections.addAll(referencedChromatogramSelections);
+		references.addAll(getChromatogramReferences(referencedChromatogramSelections));
 		/*
 		 * Set the items.
 		 */
@@ -2068,6 +2030,75 @@ public class ExtendedChromatogramUI {
 		if(references.size() > 0) {
 			comboTargetTransfer.select(0);
 		}
+	}
+
+	private List<IChromatogramSelection> getChromatogramReferences(IChromatogramSelection chromatogramSelection) {
+
+		List<IChromatogramSelection> chromatogramSelections = new ArrayList<IChromatogramSelection>();
+		/*
+		 * Current selection
+		 */
+		chromatogramSelections.add(chromatogramSelection);
+		/*
+		 * Reference
+		 */
+		List<IChromatogram> referencedChromatograms = chromatogramSelection.getChromatogram().getReferencedChromatograms();
+		int i = 1;
+		for(IChromatogram referencedChromatogram : referencedChromatograms) {
+			IChromatogramSelection referencedChromatogramSelection = null;
+			try {
+				if(referencedChromatogram instanceof IChromatogramMSD) {
+					referencedChromatogramSelection = new ChromatogramSelectionMSD(referencedChromatogram);
+				} else if(referencedChromatogram instanceof IChromatogramCSD) {
+					referencedChromatogramSelection = new ChromatogramSelectionCSD(referencedChromatogram);
+				} else if(referencedChromatogram instanceof IChromatogramWSD) {
+					referencedChromatogramSelection = new ChromatogramSelectionWSD(referencedChromatogram);
+				}
+				//
+				if(referencedChromatogramSelection != null) {
+					chromatogramSelections.add(referencedChromatogramSelection);
+				}
+			} catch(ChromatogramIsNullException e) {
+				logger.warn(e);
+			}
+		}
+		//
+		return chromatogramSelections;
+	}
+
+	private List<String> getChromatogramReferences(List<IChromatogramSelection> referencedChromatogramSelections) {
+
+		List<String> references = new ArrayList<String>();
+		//
+		int i = 1;
+		for(IChromatogramSelection referencedChromatogramSelection : referencedChromatogramSelections) {
+			/*
+			 * Get the label.
+			 */
+			String type = chromatogramDataSupport.getChromatogramType(chromatogramSelection);
+			if(referencedChromatogramSelection != null) {
+				if(chromatogramSelection == referencedChromatogramSelection) {
+					references.add("Current Chromatogram " + type);
+				} else {
+					references.add("Chromatogram Reference #" + i++ + " " + type);
+				}
+			}
+		}
+		//
+		return references;
+	}
+
+	private List<String> getEditorReferences(List<IChromatogramSelection> editorChromatogramSelections) {
+
+		List<String> references = new ArrayList<String>();
+		//
+		int index = 1;
+		for(IChromatogramSelection chromatogramSelection : targetChromatogramSelections) {
+			String type = chromatogramDataSupport.getChromatogramType(chromatogramSelection);
+			references.add(chromatogramSelection.getChromatogram().getName() + type + " " + "(Tab#: " + index++ + ")");
+		}
+		//
+		return references;
 	}
 
 	private void createChromatogramChart(Composite parent) {
