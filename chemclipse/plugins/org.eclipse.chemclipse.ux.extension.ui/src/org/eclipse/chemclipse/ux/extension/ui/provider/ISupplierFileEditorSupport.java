@@ -40,9 +40,9 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 	String MAP_FILE = "File";
 	String MAP_BATCH = "Batch";
 
-	void openEditor(final File file);
+	boolean openEditor(final File file);
 
-	void openEditor(final File file, boolean batch);
+	boolean openEditor(final File file, boolean batch);
 
 	void openOverview(final File file);
 

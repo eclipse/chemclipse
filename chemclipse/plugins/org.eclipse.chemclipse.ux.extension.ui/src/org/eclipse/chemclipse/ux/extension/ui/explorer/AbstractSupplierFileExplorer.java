@@ -337,36 +337,31 @@ public abstract class AbstractSupplierFileExplorer {
 			 */
 			boolean openFirstDataMatchOnly = PreferenceSupplier.isOpenFirstDataMatchOnly();
 			List<ISupplierFileEditorSupport> activeFileSupplierList = getActiveFileSupplier(file);
-			//
+			/*
+			 * Log the editor support info.
+			 */
+			logger.info("Modus Open First Data Match Only: " + openFirstDataMatchOnly);
 			for(ISupplierFileEditorSupport activeFileSupplier : activeFileSupplierList) {
 				logger.info(file.getName() + " Supplier Found: " + activeFileSupplier.getType());
 			}
-			logger.info("Modus Open First Data Match Only: " + openFirstDataMatchOnly);
-			//
-			if(activeFileSupplierList.size() > 0) {
-				if(openFirstDataMatchOnly) {
-					/*
-					 * Opens the first match.
-					 */
-					ISupplierFileEditorSupport activeFileSupplier = activeFileSupplierList.get(0);
-					openEditor(file, activeFileSupplier, batch);
-				} else {
-					/*
-					 * Opens all matches.
-					 */
-					batch = (activeFileSupplierList.size() > 1) ? true : batch; // Prevent SWT thread deadlocks
-					for(ISupplierFileEditorSupport activeFileSupplier : activeFileSupplierList) {
-						openEditor(file, activeFileSupplier, batch);
-					}
+			/*
+			 * Open the file(s).
+			 */
+			batch = (!openFirstDataMatchOnly && activeFileSupplierList.size() > 1) ? true : batch; // Prevent SWT thread deadlocks
+			exitloop:
+			for(ISupplierFileEditorSupport activeFileSupplier : activeFileSupplierList) {
+				boolean success = openEditor(file, activeFileSupplier, batch);
+				if(success && openFirstDataMatchOnly) {
+					break exitloop;
 				}
 			}
 		}
 	}
 
-	private void openEditor(File file, ISupplierFileEditorSupport activeFileSupplier, boolean batch) {
+	private boolean openEditor(File file, ISupplierFileEditorSupport activeFileSupplier, boolean batch) {
 
 		saveDirectoryPath(file);
-		activeFileSupplier.openEditor(file, batch);
+		return activeFileSupplier.openEditor(file, batch);
 	}
 
 	private List<ISupplierFileEditorSupport> getActiveFileSupplier(File file) {

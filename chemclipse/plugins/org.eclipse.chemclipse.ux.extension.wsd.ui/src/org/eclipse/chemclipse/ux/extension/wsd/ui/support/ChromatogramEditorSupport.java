@@ -37,19 +37,22 @@ public class ChromatogramEditorSupport extends AbstractSupplierFileEditorSupport
 	}
 
 	@Override
-	public void openEditor(File file) {
+	public boolean openEditor(File file) {
 
-		openEditor(file, false);
+		return openEditor(file, false);
 	}
 
 	@Override
-	public void openEditor(File file, boolean batch) {
+	public boolean openEditor(File file, boolean batch) {
 
 		/*
 		 * Check that the selected file or directory is a valid chromatogram.
 		 */
 		if(ChromatogramIdentifier.isChromatogram(file) || ChromatogramIdentifier.isChromatogramDirectory(file)) {
 			openEditor(file, null, ChromatogramEditorWSD.ID, ChromatogramEditorWSD.CONTRIBUTION_URI, ChromatogramEditorWSD.ICON_URI, ChromatogramEditorWSD.TOOLTIP, batch);
+			return true;
+		} else {
+			return false;
 		}
 	}
 

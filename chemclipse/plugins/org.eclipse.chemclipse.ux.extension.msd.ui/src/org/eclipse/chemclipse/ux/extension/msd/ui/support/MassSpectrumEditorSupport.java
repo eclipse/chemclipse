@@ -34,19 +34,22 @@ public class MassSpectrumEditorSupport extends AbstractSupplierFileEditorSupport
 	}
 
 	@Override
-	public void openEditor(File file) {
+	public boolean openEditor(File file) {
 
-		openEditor(file, false);
+		return openEditor(file, false);
 	}
 
 	@Override
-	public void openEditor(final File file, boolean batch) {
+	public boolean openEditor(final File file, boolean batch) {
 
 		/*
 		 * Check that the selected file or directory is a valid database.
 		 */
 		if(isSupplierFile(file) || isSupplierFileDirectory(file)) {
 			openEditor(file, null, MassSpectrumEditor.ID, MassSpectrumEditor.CONTRIBUTION_URI, MassSpectrumEditor.ICON_URI, MassSpectrumEditor.TOOLTIP, batch);
+			return true;
+		} else {
+			return false;
 		}
 	}
 
