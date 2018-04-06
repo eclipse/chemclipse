@@ -143,7 +143,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		DenseMatrix64F colTemp = new DenseMatrix64F(varTemp.numRows, 1);
 		for(int i = 0; i < varTemp.numCols; i++) {
 			CommonOps.extractColumn(varTemp, i, colTemp);
-			CommonOps.add(colTemp, Math.abs(colMeans.get(i)) * -1);
+			CommonOps.add(colTemp, colMeans.get(i) * -1);
 			for(int j = 0; j < varTemp.numRows; j++) {
 				varTemp.set(j, i, Math.pow(colTemp.get(j), 2));
 			}
@@ -163,7 +163,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		DenseMatrix64F component = new DenseMatrix64F(sampleData.getNumRows(), 1);
 		CommonOps.extractColumn(getScores(), var, component);
 		double colMean = CommonOps.elementSum(component) / sampleData.getNumRows();
-		CommonOps.add(component, Math.abs(colMean) * -1);
+		CommonOps.add(component, colMean * -1);
 		for(int i = 0; i < component.numRows; i++) {
 			component.set(i, 0, Math.pow(component.get(i), 2));
 		}
