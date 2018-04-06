@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -52,6 +53,8 @@ import org.eclipse.swt.widgets.TabItem;
 
 public abstract class AbstractSupplierFileExplorer {
 
+	private static final Logger logger = Logger.getLogger(AbstractSupplierFileExplorer.class);
+	//
 	@Inject
 	private IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 	//
@@ -334,6 +337,11 @@ public abstract class AbstractSupplierFileExplorer {
 			 */
 			boolean openFirstDataMatchOnly = PreferenceSupplier.isOpenFirstDataMatchOnly();
 			List<ISupplierFileEditorSupport> activeFileSupplierList = getActiveFileSupplier(file);
+			//
+			for(ISupplierFileEditorSupport activeFileSupplier : activeFileSupplierList) {
+				logger.info(file.getName() + " Supplier Found: " + activeFileSupplier.getType());
+			}
+			logger.info("Modus Open First Data Match Only: " + openFirstDataMatchOnly);
 			//
 			if(activeFileSupplierList.size() > 0) {
 				if(openFirstDataMatchOnly) {
