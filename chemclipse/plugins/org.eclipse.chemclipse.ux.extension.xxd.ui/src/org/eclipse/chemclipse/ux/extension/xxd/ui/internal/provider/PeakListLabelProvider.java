@@ -40,6 +40,7 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String ACTIVE_FOR_ANALYSIS = "Active for Analysis";
 	public static final String RT = "RT";
 	//
+	private double chromatogramPeakArea = 0.0d;
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	//
 	public static final String[] TITLES = { //
@@ -56,8 +57,8 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 			"Tailing", //
 			"Model Description", //
 			"Suggested Components", //
-			"Name" //
-	};
+			"Name", //
+			"Area Percent"};
 	//
 	public static final int[] BOUNDS = { //
 			30, //
@@ -73,8 +74,14 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 			100, //
 			100, //
 			100, //
+			100, //
 			100 //
 	};
+
+	public void setChromatogramPeakArea(double chromatogramPeakArea) {
+
+		this.chromatogramPeakArea = chromatogramPeakArea;
+	}
 
 	@Override
 	public Color getBackground(final Object element) {
@@ -196,6 +203,14 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 				case 13:
 					if(libraryInformation != null) {
 						text = libraryInformation.getName();
+					}
+					break;
+				case 14:
+					if(chromatogramPeakArea > 0) {
+						double peakAreaPercent = (100.0d / chromatogramPeakArea) * peak.getIntegratedArea();
+						text = decimalFormat.format(peakAreaPercent);
+					} else {
+						text = decimalFormat.format(0.0d);
 					}
 					break;
 			}

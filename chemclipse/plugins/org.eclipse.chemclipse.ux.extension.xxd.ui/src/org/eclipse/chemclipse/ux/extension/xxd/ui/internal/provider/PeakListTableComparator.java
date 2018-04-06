@@ -30,9 +30,15 @@ import org.eclipse.jface.viewers.Viewer;
 public class PeakListTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 
 	private TargetExtendedComparator targetExtendedComparator;
+	private double chromatogramPeakArea = 0.0d;
 
 	public PeakListTableComparator() {
 		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
+	}
+
+	public void setChromatogramPeakArea(double chromatogramPeakArea) {
+
+		this.chromatogramPeakArea = chromatogramPeakArea;
 	}
 
 	@Override
@@ -112,6 +118,16 @@ public class PeakListTableComparator extends AbstractRecordTableComparator imple
 				case 13:
 					if(libraryInformation1 != null && libraryInformation2 != null) {
 						sortOrder = libraryInformation2.getName().compareTo(libraryInformation1.getName());
+					}
+					break;
+				case 14:
+					if(chromatogramPeakArea > 0) {
+						double factor = 100.0d / chromatogramPeakArea;
+						double peakAreaPercent1 = factor * peak1.getIntegratedArea();
+						double peakAreaPercent2 = factor * peak2.getIntegratedArea();
+						return Double.compare(peakAreaPercent2, peakAreaPercent1);
+					} else {
+						sortOrder = 0;
 					}
 					break;
 			}

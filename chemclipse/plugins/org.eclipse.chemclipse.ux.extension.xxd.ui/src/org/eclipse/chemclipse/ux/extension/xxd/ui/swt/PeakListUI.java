@@ -13,26 +13,50 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakListEditingSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakListFilter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakListLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.PeakListTableComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsTableComparator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
 public class PeakListUI extends ExtendedTableViewer {
 
+	private PeakListLabelProvider peakListLabelProvider;
 	private PeakListTableComparator peakListTableComparator;
 	private PeakListFilter peakListFilter;
+	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 
 	public PeakListUI(Composite parent, int style) {
 		super(parent, style);
+		peakListLabelProvider = new PeakListLabelProvider();
 		peakListTableComparator = new PeakListTableComparator();
 		createColumns();
+	}
+
+	public void setInput(IChromatogramSelection chromatogramSelection) {
+
+		if(chromatogramSelection != null) {
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			double chromatogramPeakArea = chromatogram.getPeakIntegratedArea();
+			peakListLabelProvider.setChromatogramPeakArea(chromatogramPeakArea);
+			peakListTableComparator.setChromatogramPeakArea(chromatogramPeakArea);
+			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+			boolean showPeaksInSelectedRange = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_PEAKS_IN_SELECTED_RANGE);
+			super.setInput(chromatogramDataSupport.getPeaks(chromatogramSelection, showPeaksInSelectedRange));
+		} else {
+			clear();
+		}
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
@@ -43,7 +67,7 @@ public class PeakListUI extends ExtendedTableViewer {
 
 	public void clear() {
 
-		setInput(null);
+		super.setInput(null);
 	}
 
 	public void sortTable() {
@@ -61,7 +85,7 @@ public class PeakListUI extends ExtendedTableViewer {
 	private void createColumns() {
 
 		createColumns(PeakListLabelProvider.TITLES, PeakListLabelProvider.BOUNDS);
-		setLabelProvider(new PeakListLabelProvider());
+		setLabelProvider(peakListLabelProvider);
 		setContentProvider(new ListContentProvider());
 		setComparator(peakListTableComparator);
 		peakListFilter = new PeakListFilter();
