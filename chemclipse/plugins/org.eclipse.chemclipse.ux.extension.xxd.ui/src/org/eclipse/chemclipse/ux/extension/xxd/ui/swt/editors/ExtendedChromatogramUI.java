@@ -2075,7 +2075,7 @@ public class ExtendedChromatogramUI {
 			/*
 			 * Get the label.
 			 */
-			String type = chromatogramDataSupport.getChromatogramType(chromatogramSelection);
+			String type = chromatogramDataSupport.getChromatogramType(referencedChromatogramSelection);
 			if(referencedChromatogramSelection != null) {
 				if(chromatogramSelection == referencedChromatogramSelection) {
 					references.add("Current Chromatogram " + type);
@@ -2093,9 +2093,9 @@ public class ExtendedChromatogramUI {
 		List<String> references = new ArrayList<String>();
 		//
 		int index = 1;
-		for(IChromatogramSelection chromatogramSelection : targetChromatogramSelections) {
-			String type = chromatogramDataSupport.getChromatogramType(chromatogramSelection);
-			references.add(chromatogramSelection.getChromatogram().getName() + type + " " + "(Tab#: " + index++ + ")");
+		for(IChromatogramSelection targetChromatogramSelection : targetChromatogramSelections) {
+			String type = chromatogramDataSupport.getChromatogramType(targetChromatogramSelection);
+			references.add(targetChromatogramSelection.getChromatogram().getName() + type + " " + "(Tab#: " + index++ + ")");
 		}
 		//
 		return references;
