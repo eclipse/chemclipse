@@ -196,7 +196,6 @@ public class MassSpectrumComparator {
 
 	public static IMassSpectrumComparatorSupport getMassSpectrumComparatorSupport() {
 
-		MassSpectrumComparisonSupplier supplier;
 		MassSpectrumComparatorSupport massSpectrumComparisonSupport = new MassSpectrumComparatorSupport();
 		/*
 		 * Search in the extension registry and fill the comparison support
@@ -205,31 +204,39 @@ public class MassSpectrumComparator {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] extensions = registry.getConfigurationElementsFor(EXTENSION_POINT);
 		for(IConfigurationElement element : extensions) {
-			supplier = new MassSpectrumComparisonSupplier();
-			supplier.setId(element.getAttribute(ID));
-			supplier.setDescription(element.getAttribute(DESCRIPTION));
-			supplier.setComparatorName(element.getAttribute(COMPARATOR_NAME));
-			supplier.setSupportsNominalMS(Boolean.valueOf(element.getAttribute(SUPPORTS_NOMINAL_MS)));
-			supplier.setSupportsTandemMS(Boolean.valueOf(element.getAttribute(SUPPORTS_TANDEM_MS)));
-			supplier.setSupportsHighResolutionMS(Boolean.valueOf(element.getAttribute(SUPPORTS_HIGH_RESOLUTION_MS)));
-			massSpectrumComparisonSupport.add(supplier);
+			IMassSpectrumComparisonSupplier massSpectrumComparisonSupplier = getMassSpectrumComparisonSupplier(element);
+			massSpectrumComparisonSupport.add(massSpectrumComparisonSupplier);
 		}
 		return massSpectrumComparisonSupport;
 	}
 
 	public static IMassSpectrumComparator getMassSpectrumComparator(final String comparatorId) {
 
-		IConfigurationElement element;
-		element = getConfigurationElement(comparatorId);
+		IConfigurationElement element = getConfigurationElement(comparatorId);
 		IMassSpectrumComparator instance = null;
 		if(element != null) {
 			try {
 				instance = (IMassSpectrumComparator)element.createExecutableExtension(MASS_SPECTRUM_COMPARATOR);
+				IMassSpectrumComparisonSupplier massSpectrumComparisonSupplier = new MassSpectrumComparisonSupplier();
+				((AbstractMassSpectrumComparator)instance).setMassSpectrumComparisonSupplier(massSpectrumComparisonSupplier);
 			} catch(CoreException e) {
 				logger.error(e.getLocalizedMessage(), e);
 			}
 		}
 		return instance;
+	}
+
+	private static IMassSpectrumComparisonSupplier getMassSpectrumComparisonSupplier(IConfigurationElement element) {
+
+		MassSpectrumComparisonSupplier massSpectrumComparisonSupplier = new MassSpectrumComparisonSupplier();
+		massSpectrumComparisonSupplier.setId(element.getAttribute(ID));
+		massSpectrumComparisonSupplier.setDescription(element.getAttribute(DESCRIPTION));
+		massSpectrumComparisonSupplier.setComparatorName(element.getAttribute(COMPARATOR_NAME));
+		massSpectrumComparisonSupplier.setSupportsNominalMS(Boolean.valueOf(element.getAttribute(SUPPORTS_NOMINAL_MS)));
+		massSpectrumComparisonSupplier.setSupportsTandemMS(Boolean.valueOf(element.getAttribute(SUPPORTS_TANDEM_MS)));
+		massSpectrumComparisonSupplier.setSupportsHighResolutionMS(Boolean.valueOf(element.getAttribute(SUPPORTS_HIGH_RESOLUTION_MS)));
+		//
+		return massSpectrumComparisonSupplier;
 	}
 
 	/**

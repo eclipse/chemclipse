@@ -27,7 +27,7 @@ public interface IMassSpectrumComparatorSupport {
 	 * @return String
 	 * @throws NoMassSpectrumComparatorAvailableException
 	 */
-	String getConverterId(int index) throws NoMassSpectrumComparatorAvailableException;
+	String getComparatorId(int index) throws NoMassSpectrumComparatorAvailableException;
 
 	/**
 	 * Returns an IMassSpectrumComparisonSupplier object.<br/>

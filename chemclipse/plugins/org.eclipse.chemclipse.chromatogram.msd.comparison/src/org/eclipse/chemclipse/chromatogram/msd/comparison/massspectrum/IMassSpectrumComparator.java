@@ -42,4 +42,6 @@ public interface IMassSpectrumComparator {
 	 * @return {@link IProcessingInfo}
 	 */
 	IProcessingInfo validate(IScanMSD unknown, IScanMSD reference);
+
+	IMassSpectrumComparisonSupplier getMassSpectrumComparisonSupplier();
 }

@@ -86,7 +86,7 @@ public class MassSpectrumComparator_1_Test extends TestCase {
 		}
 		String id;
 		for(int i = 0; i < rcs.size(); i++) {
-			id = support.getConverterId(i);
+			id = support.getComparatorId(i);
 			assertEquals("getComparatorId", id, rcs.get(i));
 		}
 	}

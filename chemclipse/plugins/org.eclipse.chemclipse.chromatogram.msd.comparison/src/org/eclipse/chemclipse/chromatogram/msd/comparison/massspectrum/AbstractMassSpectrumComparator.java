@@ -21,6 +21,8 @@ public abstract class AbstractMassSpectrumComparator implements IMassSpectrumCom
 
 	private static final String DESCRIPTION = "MassSpectrum Comparator";
 	private final static Logger logger = Logger.getLogger(AbstractMassSpectrumComparator.class);
+	//
+	private IMassSpectrumComparisonSupplier massSpectrumComparisonSupplier;
 
 	@Override
 	public IProcessingInfo validate(final IScanMSD unknown, final IScanMSD reference) {
@@ -50,5 +52,16 @@ public abstract class AbstractMassSpectrumComparator implements IMassSpectrumCom
 			}
 		}
 		return processingInfo;
+	}
+
+	protected void setMassSpectrumComparisonSupplier(IMassSpectrumComparisonSupplier massSpectrumComparisonSupplier) {
+
+		this.massSpectrumComparisonSupplier = massSpectrumComparisonSupplier;
+	}
+
+	@Override
+	public IMassSpectrumComparisonSupplier getMassSpectrumComparisonSupplier() {
+
+		return massSpectrumComparisonSupplier;
 	}
 }

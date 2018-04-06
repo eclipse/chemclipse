@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.exceptions.NoMassSpectrumComparatorAvailableException;
 
@@ -43,12 +43,12 @@ public class MassSpectrumComparatorSupport implements IMassSpectrumComparatorSup
 	}
 
 	@Override
-	public String getConverterId(int index) throws NoMassSpectrumComparatorAvailableException {
+	public String getComparatorId(int index) throws NoMassSpectrumComparatorAvailableException {
 
 		/*
 		 * Test if the suppliers ArrayList is empty.
 		 */
-		areConvertersStored();
+		areComparatorsStored();
 		/*
 		 * Test if the index is out of range.
 		 */
@@ -60,28 +60,28 @@ public class MassSpectrumComparatorSupport implements IMassSpectrumComparatorSup
 	}
 
 	@Override
-	public IMassSpectrumComparisonSupplier getMassSpectrumComparisonSupplier(String converterId) throws NoMassSpectrumComparatorAvailableException {
+	public IMassSpectrumComparisonSupplier getMassSpectrumComparisonSupplier(String comparatorId) throws NoMassSpectrumComparatorAvailableException {
 
 		IMassSpectrumComparisonSupplier comparisonSupplier = null;
 		/*
 		 * Test if the suppliers ArrayList is empty.
 		 */
-		areConvertersStored();
+		areComparatorsStored();
 		/*
 		 * Test if the index is out of range.
 		 */
-		if(converterId == null || converterId.equals("")) {
-			throw new NoMassSpectrumComparatorAvailableException("There is no mass spectrum comparator available with the following id: " + converterId + ".");
+		if(comparatorId == null || comparatorId.equals("")) {
+			throw new NoMassSpectrumComparatorAvailableException("There is no mass spectrum comparator available with the following id: " + comparatorId + ".");
 		}
 		endsearch:
 		for(IMassSpectrumComparisonSupplier supplier : suppliers) {
-			if(supplier.getId().equals(converterId)) {
+			if(supplier.getId().equals(comparatorId)) {
 				comparisonSupplier = supplier;
 				break endsearch;
 			}
 		}
 		if(comparisonSupplier == null) {
-			throw new NoMassSpectrumComparatorAvailableException("There is no mass spectrum comparator available with the following id: " + converterId + ".");
+			throw new NoMassSpectrumComparatorAvailableException("There is no mass spectrum comparator available with the following id: " + comparatorId + ".");
 		} else {
 			return comparisonSupplier;
 		}
@@ -93,12 +93,12 @@ public class MassSpectrumComparatorSupport implements IMassSpectrumComparatorSup
 		/*
 		 * Test if the suppliers ArrayList is empty.
 		 */
-		areConvertersStored();
-		List<String> availableConverters = new ArrayList<String>();
+		areComparatorsStored();
+		List<String> availableComparators = new ArrayList<String>();
 		for(IMassSpectrumComparisonSupplier supplier : suppliers) {
-			availableConverters.add(supplier.getId());
+			availableComparators.add(supplier.getId());
 		}
-		return availableConverters;
+		return availableComparators;
 	}
 
 	public String[] getComparatorNames() throws NoMassSpectrumComparatorAvailableException {
@@ -106,10 +106,10 @@ public class MassSpectrumComparatorSupport implements IMassSpectrumComparatorSup
 		/*
 		 * Test if the suppliers ArrayList is empty.
 		 */
-		areConvertersStored();
+		areComparatorsStored();
 		/*
 		 * If the ArrayList is not empty, return the registered chromatogram
-		 * converter filter names.<br/>
+		 * comparator filter names.<br/>
 		 */
 		ArrayList<String> comparatorNames = new ArrayList<String>();
 		for(IMassSpectrumComparisonSupplier supplier : suppliers) {
@@ -125,7 +125,7 @@ public class MassSpectrumComparatorSupport implements IMassSpectrumComparatorSup
 	 * 
 	 * @throws NoMassSpectrumComparatorAvailableException
 	 */
-	private void areConvertersStored() throws NoMassSpectrumComparatorAvailableException {
+	private void areComparatorsStored() throws NoMassSpectrumComparatorAvailableException {
 
 		if(suppliers.size() < 1) {
 			throw new NoMassSpectrumComparatorAvailableException();
