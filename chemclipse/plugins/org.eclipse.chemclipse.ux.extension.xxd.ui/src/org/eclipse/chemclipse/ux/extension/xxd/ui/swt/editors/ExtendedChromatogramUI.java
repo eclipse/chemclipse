@@ -91,7 +91,6 @@ import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.IdentificationLabelMarker;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramLengthModifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
@@ -99,6 +98,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakChartSupp
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ScanChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.RetentionTimeValidator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;

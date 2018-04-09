@@ -14,8 +14,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.AbstractOverviewUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts.IOverviewUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractOverviewUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IOverviewUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedHeaderDataUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;

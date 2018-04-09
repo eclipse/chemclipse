@@ -9,17 +9,11 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.parts;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 
-import java.util.List;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 
-public interface IDataUpdateSupport extends IUpdateSupport {
+public interface IOverviewUpdateSupport extends IDataUpdateSupport {
 
-	void registerEvents();
-
-	void updateObjects(List<Object> objects, String topic);
-
-	List<Object> getObjects();
-
-	String getTopic();
+	void updateChromatogramOverview(IChromatogramOverview chromatogramOverview);
 }
