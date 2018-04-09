@@ -217,7 +217,7 @@ public class MassSpectrumComparator {
 		if(element != null) {
 			try {
 				instance = (IMassSpectrumComparator)element.createExecutableExtension(MASS_SPECTRUM_COMPARATOR);
-				IMassSpectrumComparisonSupplier massSpectrumComparisonSupplier = new MassSpectrumComparisonSupplier();
+				IMassSpectrumComparisonSupplier massSpectrumComparisonSupplier = getMassSpectrumComparisonSupplier(element);
 				((AbstractMassSpectrumComparator)instance).setMassSpectrumComparisonSupplier(massSpectrumComparisonSupplier);
 			} catch(CoreException e) {
 				logger.error(e.getLocalizedMessage(), e);
