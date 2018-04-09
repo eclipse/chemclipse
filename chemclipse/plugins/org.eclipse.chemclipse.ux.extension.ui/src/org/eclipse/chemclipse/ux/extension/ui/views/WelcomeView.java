@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - fix bug with local perspectives
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.views;
 
@@ -27,7 +28,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.model.application.ui.MUIElement;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -230,9 +230,15 @@ public class WelcomeView {
 	MPerspective getPerspectiveModel(String perspectiveId) {
 
 		if(perspectiveId != null) {
-			MUIElement element = modelService.find(perspectiveId, application);
-			if(element instanceof MPerspective) {
-				return (MPerspective)element;
+			List<MPerspective> elements = modelService.findElements(application, null, MPerspective.class, null);
+			if(elements != null && !elements.isEmpty()) {
+				for(MPerspective perspective : elements) {
+					String elementId = perspective.getElementId();
+					String elementLabel = perspective.getLabel();
+					if(perspectiveId.equals(elementId) || elementId.equals(perspectiveId + "." + elementLabel)) {
+						return perspective;
+					}
+				}
 			}
 		}
 		return null;

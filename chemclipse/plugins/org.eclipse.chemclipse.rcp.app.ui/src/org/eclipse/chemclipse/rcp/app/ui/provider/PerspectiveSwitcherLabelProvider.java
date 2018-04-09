@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - fix bug with local perspectives
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui.provider;
 
@@ -16,13 +17,12 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-
-import org.eclipse.chemclipse.logging.core.Logger;
 
 public class PerspectiveSwitcherLabelProvider extends LabelProvider implements ITableLabelProvider {
 
@@ -85,6 +85,9 @@ public class PerspectiveSwitcherLabelProvider extends LabelProvider implements I
 					text = perspective.getLabel();
 					if(text == null || text.equals("")) {
 						text = "Nameless perspective";
+					}
+					if(text.startsWith("<") && text.endsWith(">")) {
+						text = text.substring(1, text.length() - 1);
 					}
 					break;
 				default:
