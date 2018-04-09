@@ -9,7 +9,7 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.untility;
+package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility;
 
 import java.util.ArrayList;
 import java.util.List;
