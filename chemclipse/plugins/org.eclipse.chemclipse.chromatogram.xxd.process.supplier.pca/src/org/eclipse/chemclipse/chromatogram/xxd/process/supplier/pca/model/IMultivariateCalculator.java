@@ -37,5 +37,5 @@ public interface IMultivariateCalculator {
 
 	double getSummedVariance();
 
-	double getExtractedVariance(int var);
+	double getExplainedVariance(int var);
 }

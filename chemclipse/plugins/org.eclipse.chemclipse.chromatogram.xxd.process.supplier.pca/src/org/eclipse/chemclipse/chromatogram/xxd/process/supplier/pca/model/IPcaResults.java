@@ -17,7 +17,7 @@ import javafx.collections.ObservableList;
 
 public interface IPcaResults<R extends IPcaResult, V extends IVaribleExtracted> {
 
-	List<double[]> getBasisVectors();
+	List<double[]> getLoadingVectors();
 
 	ObservableList<V> getExtractedVariables();
 

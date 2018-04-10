@@ -39,9 +39,9 @@ public class PcaResultsVisualization<R extends IPcaResult, V extends IVaribleExt
 	}
 
 	@Override
-	public List<double[]> getBasisVectors() {
+	public List<double[]> getLoadingVectors() {
 
-		return delegator.getBasisVectors();
+		return delegator.getLoadingVectors();
 	}
 
 	@Override

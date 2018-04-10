@@ -31,7 +31,7 @@ public class PcaResults implements IPcaResults<IPcaResult, IVaribleExtracted> {
 	}
 
 	@Override
-	public List<double[]> getBasisVectors() {
+	public List<double[]> getLoadingVectors() {
 
 		return loadingVectors;
 	}

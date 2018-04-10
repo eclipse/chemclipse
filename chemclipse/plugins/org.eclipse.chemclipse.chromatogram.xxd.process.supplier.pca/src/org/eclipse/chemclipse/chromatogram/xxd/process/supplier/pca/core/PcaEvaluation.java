@@ -167,7 +167,7 @@ public class PcaEvaluation {
 		List<Double> extCumVar = new ArrayList<>();
 		double priorValue = 0.0;
 		for(int i = 0; i < numberOfPrincipalComponents; i++) {
-			extractedVariancesPerComp.add(100.0 / summedVariance * principalComponentAnalysis.getExtractedVariance(i));
+			extractedVariancesPerComp.add(100.0 / summedVariance * principalComponentAnalysis.getExplainedVariance(i));
 			priorValue = extCumVar.isEmpty() ? 0 : extCumVar.get(extCumVar.size() - 1);
 			extCumVar.add(priorValue + extractedVariancesPerComp.get(i));
 		}
@@ -191,11 +191,8 @@ public class PcaEvaluation {
 			IPcaResult pcaResult = new PcaResult(sample);
 			pcaResult.setName(sample.getName());
 			pcaResult.setGroupName(sample.getGroupName());
-			scoreVector = principalComponentAnalysis.getScoreVector(sample);
-			errorMemberShip = principalComponentAnalysis.getErrorMetric(sampleData);
-			pcaResult.setSampleData(sampleData);
-			pcaResult.setScoreVector(scoreVector);
-			pcaResult.setErrorMemberShip(errorMemberShip);
+			pcaResult.setScoreVector(principalComponentAnalysis.getScoreVector(sample));
+			pcaResult.setErrorMemberShip(principalComponentAnalysis.getErrorMetric(sampleData));
 			pcaResult.setSampleData(sampleData);
 			resultsList.add(pcaResult);
 		}

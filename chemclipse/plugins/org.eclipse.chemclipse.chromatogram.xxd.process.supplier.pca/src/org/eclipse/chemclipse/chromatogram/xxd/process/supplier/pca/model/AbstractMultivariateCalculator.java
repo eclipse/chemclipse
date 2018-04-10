@@ -158,7 +158,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	}
 
 	@Override
-	public double getExtractedVariance(int var) {
+	public double getExplainedVariance(int var) {
 
 		DenseMatrix64F component = new DenseMatrix64F(sampleData.getNumRows(), 1);
 		CommonOps.extractColumn(getScores(), var, component);

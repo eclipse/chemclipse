@@ -47,11 +47,11 @@ public class SeriesConverter {
 			extractedValues.put(name, variables.get(i));
 			double x = 0;
 			if(pcX != 0) {
-				x = pcaResults.getBasisVectors().get(pcX - 1)[i];
+				x = pcaResults.getLoadingVectors().get(pcX - 1)[i];
 			} else {
 				x = i;
 			}
-			double y = pcaResults.getBasisVectors().get(pcY - 1)[i];
+			double y = pcaResults.getLoadingVectors().get(pcY - 1)[i];
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();
@@ -86,11 +86,11 @@ public class SeriesConverter {
 			extractedValues.put(name, variables.get(i));
 			double x = 0;
 			if(pcX != 0) {
-				x = pcaResults.getBasisVectors().get(pcX - 1)[i];
+				x = pcaResults.getLoadingVectors().get(pcX - 1)[i];
 			} else {
 				x = i;
 			}
-			double y = pcaResults.getBasisVectors().get(pcY - 1)[i];
+			double y = pcaResults.getLoadingVectors().get(pcY - 1)[i];
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getScatterSeriesSettings();
