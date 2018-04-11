@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaEvaluation;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaModelResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
@@ -84,10 +85,10 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisua
 		actualSelectedPcaResults = new SimpleObjectProperty<>();
 	}
 
-	public <V extends IVariableVisualization, S extends ISampleVisualization<? extends ISampleData>> IPcaResultsVisualization evaluatePca(ISamplesVisualization<V, S> samples, IPcaSettings settings, IPcaSettingsVisualization pcaSettingsVisualization, IProgressMonitor monitor, boolean setSelected) {
+	public <V extends IVariableVisualization, S extends ISampleVisualization<? extends ISampleData>> IPcaResultsVisualization evaluatePca(ISamplesVisualization<V, S> samples, IPcaSettings settings, IPcaModelResult modelResults, IPcaSettingsVisualization pcaSettingsVisualization, IProgressMonitor monitor, boolean setSelected) {
 
 		monitor.setTaskName("Evaluation");
-		PcaResults results = evaluatePca(samples, settings, monitor);
+		PcaResults results = evaluatePca(samples, settings, modelResults, monitor);
 		IPcaResultsVisualization pcaResultsVisualization = new PcaResultsVisualization<>(results, pcaSettingsVisualization);
 		pcaResultsVisualization.getPcaResultList().forEach(r -> {
 			Optional<S> sample = samples.getSampleList().stream().filter(s -> r.getSample() == s).findAny();
@@ -111,10 +112,10 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisua
 		return pcaResultsVisualization;
 	}
 
-	private <V extends IVariableVisualization, S extends ISampleVisualization<? extends ISampleData>> PcaResults evaluatePca(ISamplesVisualization<V, S> samples, IPcaSettings settings, IProgressMonitor monitor) {
+	private <V extends IVariableVisualization, S extends ISampleVisualization<? extends ISampleData>> PcaResults evaluatePca(ISamplesVisualization<V, S> samples, IPcaSettings settings, IPcaModelResult modelResults, IProgressMonitor monitor) {
 
 		PcaEvaluation pcaEvaluation = new PcaEvaluation();
-		return pcaEvaluation.process(samples, settings, monitor);
+		return pcaEvaluation.process(samples, settings, modelResults, monitor);
 	}
 
 	public ReadOnlyObjectProperty<IPcaResultsVisualization> getActualSelectedPcaResults() {

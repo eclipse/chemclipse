@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaModelResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
@@ -72,5 +73,11 @@ public class PcaResultsVisualization<R extends IPcaResult, V extends IVaribleExt
 	public void setLoadingVectors(List<double[]> loadingVectors) {
 
 		delegator.setLoadingVectors(loadingVectors);
+	}
+
+	@Override
+	public IPcaModelResult getPcaModelResult() {
+
+		return null;
 	}
 }

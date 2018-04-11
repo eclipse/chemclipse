@@ -23,9 +23,11 @@ public class PcaResults implements IPcaResults<IPcaResult, IVaribleExtracted> {
 	private ObservableList<IPcaResult> pcaResultList;
 	//
 	private IPcaSettings pcaSettings;
+	private IPcaModelResult pcaModelResults;
 
-	public PcaResults(IPcaSettings pcaSettings) {
+	public PcaResults(IPcaSettings pcaSettings, IPcaModelResult pcaModelResults) {
 		this.pcaSettings = pcaSettings;
+		this.pcaModelResults = pcaModelResults;
 		extractedVariables = FXCollections.observableArrayList(IVaribleExtracted.extractor());
 		pcaResultList = FXCollections.observableArrayList(IPcaResult.extractor());
 	}
@@ -58,5 +60,11 @@ public class PcaResults implements IPcaResults<IPcaResult, IVaribleExtracted> {
 	public void setLoadingVectors(List<double[]> loadingVectors) {
 
 		this.loadingVectors = loadingVectors;
+	}
+
+	@Override
+	public IPcaModelResult getPcaModelResult() {
+
+		return pcaModelResults;
 	}
 }

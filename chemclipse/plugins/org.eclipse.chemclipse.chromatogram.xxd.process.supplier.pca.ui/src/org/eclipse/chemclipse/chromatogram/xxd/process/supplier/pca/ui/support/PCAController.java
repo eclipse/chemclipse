@@ -11,12 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaModelResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaModelResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
@@ -195,7 +198,8 @@ public class PCAController {
 						}
 						IPcaSettings pcaSettings = new PcaSettings(maxPC, pcaAlgorithm);
 						IPcaSettingsVisualization pcaSettingsVisualization = new PcaSettingsVisualization(pcX, pcY, pcZ);
-						final IPcaResultsVisualization results = SelectionManagerSamples.getInstance().evaluatePca(s, pcaSettings, pcaSettingsVisualization, progressMonitor, true);
+						IPcaModelResult pcaModelResult = new PcaModelResult(new ArrayList<Double>());
+						final IPcaResultsVisualization results = SelectionManagerSamples.getInstance().evaluatePca(s, pcaSettings, pcaModelResult, pcaSettingsVisualization, progressMonitor, true);
 						pcaResults = Optional.of(results);
 					});
 				} catch(Exception e) {

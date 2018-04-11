@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IMultivariateCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaModelResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
@@ -141,12 +142,12 @@ public class PcaEvaluation {
 		return principalComponentAnalysis;
 	}
 
-	public <V extends IVariable, S extends ISample<? extends ISampleData>> PcaResults process(ISamples<V, S> samples, IPcaSettings settings, IProgressMonitor monitor) {
+	public <V extends IVariable, S extends ISample<? extends ISampleData>> PcaResults process(ISamples<V, S> samples, IPcaSettings settings, IPcaModelResult modelResults, IProgressMonitor monitor) {
 
 		monitor.subTask("Run PCA");
 		int numberOfPrincipalComponents = settings.getNumberOfPrincipalComponents();
 		String pcaAlgorithm = settings.getPcaAlgorithm();
-		PcaResults pcaResults = new PcaResults(settings);
+		PcaResults pcaResults = new PcaResults(settings, modelResults);
 		Map<ISample<?>, double[]> extractData = extractData(samples, pcaAlgorithm);
 		setRetentionTime(pcaResults, samples);
 		int sampleSize = getSampleSize(extractData);
