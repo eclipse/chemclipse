@@ -164,15 +164,15 @@ public class PcaEvaluation {
 		 */
 		List<double[]> loadingVectors = getLoadingVectors(principalComponentAnalysis, numberOfPrincipalComponents);
 		double summedVariance = principalComponentAnalysis.getSummedVariance();
-		List<Double> extractedVariancesPerComp = new ArrayList<>();
-		List<Double> extCumVar = new ArrayList<>();
-		double priorValue = 0.0;
+		double[] explainedVariances = new double[numberOfPrincipalComponents];
+		double[] explainedCumulativeVariances = new double[numberOfPrincipalComponents];
+		double cumVarTemp = 0.0;
 		for(int i = 0; i < numberOfPrincipalComponents; i++) {
-			extractedVariancesPerComp.add(100.0 / summedVariance * principalComponentAnalysis.getExplainedVariance(i));
-			priorValue = extCumVar.isEmpty() ? 0 : extCumVar.get(extCumVar.size() - 1);
-			extCumVar.add(priorValue + extractedVariancesPerComp.get(i));
+			explainedVariances[i] = 100.0 / summedVariance * principalComponentAnalysis.getExplainedVariance(i);
+			explainedCumulativeVariances[i] = cumVarTemp + explainedVariances[i];
 		}
 		pcaResults.setLoadingVectors(loadingVectors);
+		pcaResults.setExplainedVariances(explainedVariances);
 		setEigenSpaceAndErrorValues(principalComponentAnalysis, extractData, pcaResults);
 		// setGroups(pcaResults, samples);
 		return pcaResults;

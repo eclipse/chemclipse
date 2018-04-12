@@ -19,6 +19,7 @@ import javafx.collections.ObservableList;
 public class PcaResults implements IPcaResults<IPcaResult, IVaribleExtracted> {
 
 	private List<double[]> loadingVectors;
+	private double[] explainedVariances;
 	private ObservableList<IVaribleExtracted> extractedVariables;
 	private ObservableList<IPcaResult> pcaResultList;
 	//
@@ -66,5 +67,17 @@ public class PcaResults implements IPcaResults<IPcaResult, IVaribleExtracted> {
 	public IPcaModelResult getPcaModelResult() {
 
 		return pcaModelResults;
+	}
+
+	@Override
+	public double[] getExplainedVariance() {
+
+		return this.explainedVariances;
+	}
+
+	@Override
+	public void setExplainedVariances(double[] explainedVariances) {
+
+		this.explainedVariances = explainedVariances;
 	}
 }
