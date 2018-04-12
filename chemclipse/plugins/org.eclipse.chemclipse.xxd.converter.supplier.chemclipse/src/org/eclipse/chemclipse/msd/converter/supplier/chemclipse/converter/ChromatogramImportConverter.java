@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IConstants;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.SpecificationValidator;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 public class ChromatogramImportConverter extends AbstractChromatogramMSDImportConverter implements IChromatogramImportConverter {
 
@@ -36,29 +37,36 @@ public class ChromatogramImportConverter extends AbstractChromatogramMSDImportCo
 	@Override
 	public IChromatogramMSDImportConverterProcessingInfo convert(File file, IProgressMonitor monitor) {
 
-		IChromatogramMSDImportConverterProcessingInfo processingInfo = new ChromatogramMSDImportConverterProcessingInfo();
-		/*
-		 * Validate the file.
-		 */
-		IProcessingInfo processingInfoValidate = super.validate(file);
-		if(processingInfoValidate.hasErrorMessages()) {
-			processingInfo.addMessages(processingInfoValidate);
-		} else {
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Convert file " + file.getName(), 100);
+		try {
+			IChromatogramMSDImportConverterProcessingInfo processingInfo = new ChromatogramMSDImportConverterProcessingInfo();
 			/*
-			 * Read the chromatogram.
+			 * Validate the file.
 			 */
-			file = SpecificationValidator.validateSpecification(file);
-			IChromatogramMSDReader reader = new ChromatogramReaderMSD();
-			monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
-			try {
-				IChromatogramMSD chromatogram = reader.read(file, monitor);
-				processingInfo.setChromatogram(chromatogram);
-			} catch(Exception e) {
-				logger.warn(e);
-				processingInfo.addErrorMessage(IConstants.DESCRIPTION_IMPORT, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());
+			subMonitor.subTask("Validate");
+			IProcessingInfo processingInfoValidate = super.validate(file);
+			if(processingInfoValidate.hasErrorMessages()) {
+				processingInfo.addMessages(processingInfoValidate);
+			} else {
+				/*
+				 * Read the chromatogram.
+				 */
+				file = SpecificationValidator.validateSpecification(file);
+				subMonitor.worked(1);
+				IChromatogramMSDReader reader = new ChromatogramReaderMSD();
+				monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
+				try {
+					IChromatogramMSD chromatogram = reader.read(file, subMonitor.split(99));
+					processingInfo.setChromatogram(chromatogram);
+				} catch(Exception e) {
+					logger.warn(e);
+					processingInfo.addErrorMessage(IConstants.DESCRIPTION_IMPORT, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());
+				}
 			}
+			return processingInfo;
+		} finally {
+			SubMonitor.done(monitor);
 		}
-		return processingInfo;
 	}
 
 	@Override
