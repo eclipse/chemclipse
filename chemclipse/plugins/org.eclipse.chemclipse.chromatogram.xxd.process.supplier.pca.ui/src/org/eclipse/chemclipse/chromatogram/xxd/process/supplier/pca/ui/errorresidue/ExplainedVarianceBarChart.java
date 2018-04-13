@@ -18,17 +18,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Optional;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableExtractedVisalization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.PcaColorGroup;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -37,8 +34,6 @@ import com.sun.javafx.charts.Legend;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.embed.swt.FXCanvas;
 import javafx.event.EventHandler;
@@ -53,7 +48,6 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -78,30 +72,6 @@ public class ExplainedVarianceBarChart {
 		fxCanvas.setLayoutData(layoutData);
 		contextMenu = createContextMenu();
 		createScene();
-	}
-
-	/**
-	 * set color bar according to group name
-	 */
-	private String barStyle(IPcaResultVisualization pcaResult) {
-
-		Color c = PcaColorGroup.getSampleColorFX(pcaResult);
-		if(SelectionManagerSample.getInstance().getSelection().contains(pcaResult.getSample())) {
-			c = PcaColorGroup.getActualSelectedColor(c);
-		} else if(!pcaResult.getSample().isSelected()) {
-			c = PcaColorGroup.getUnselectedColor(c);
-		}
-		StringBuilder sb = new StringBuilder();
-		sb.append("-fx-bar-fill: rgb(");
-		sb.append((int)(255 * c.getRed()));
-		sb.append(",");
-		sb.append((int)(255 * c.getGreen()));
-		sb.append(",");
-		sb.append((int)(255 * c.getBlue()));
-		sb.append(");");
-		sb.append("-fx-opacity: ");
-		sb.append(c.getOpacity());
-		return sb.toString();
 	}
 
 	private BarChart<String, Number> createBarChart() {
@@ -160,52 +130,27 @@ public class ExplainedVarianceBarChart {
 	private XYChart.Series<String, Number> getSerie() {
 
 		XYChart.Series<String, Number> series = new XYChart.Series<>();
-		for(int i = 0; i < data2.size(); i++) {
+		ListIterator<Double> iter = data2.listIterator();
+		double variance = 0;
+		while(iter.hasNext()) {
 			StringBuilder name = new StringBuilder("Comp ");
-			name.append(Integer.toString(i));
-			final XYChart.Data<String, Number> d2 = new XYChart.Data<>(name.toString(), data2.get(i));
-		}
-		for(IPcaResultVisualization pcaResult : data) {
-			if(!pcaResult.isDisplayed()) {
-				continue;
-			}
-			String name = pcaResult.getName();
-			final XYChart.Data<String, Number> d = new XYChart.Data<>(name, pcaResult.getErrorMemberShip());
+			name.append(Integer.toString(iter.nextIndex()));
+			variance = iter.next();// data2.get(iter.nextIndex());
+			final XYChart.Data<String, Number> d3 = new XYChart.Data<>(name.toString(), variance);
 			/*
-			 * set bar color and add tooltip
+			 * d3.nodeProperty().addListener(new ChangeListener<Node>() {
+			 * @Override
+			 * public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+			 * if(node != null) {
+			 * DecimalFormat format = new DecimalFormat("#.###E0", new DecimalFormatSymbols(Locale.US));
+			 * Tooltip t = new Tooltip(name.toString() + '\n' + format.format(iter.next()));
+			 * Tooltip.install(node, t);
+			 * }
+			 * }
+			 * });
 			 */
-			d.nodeProperty().addListener(new ChangeListener<Node>() {
-
-				@Override
-				public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-
-					if(node != null) {
-						node.setStyle(barStyle(pcaResult));
-						DecimalFormat format = new DecimalFormat("#.###E0", new DecimalFormatSymbols(Locale.US));
-						Tooltip t = new Tooltip(pcaResult.getName() + '\n' + format.format(pcaResult.getErrorMemberShip()));
-						Tooltip.install(node, t);
-						node.setOnMouseClicked(e -> {
-							if(e.getButton().equals(MouseButton.PRIMARY)) {
-								if(e.getClickCount() == 2) {
-									ISample<? extends ISampleData> s = pcaResult.getSample();
-									if(e.isControlDown()) {
-										s.setSelected(!s.isSelected());
-									} else {
-										ObservableList<ISample<? extends ISampleData>> selection = SelectionManagerSample.getInstance().getSelection();
-										if(!selection.contains(s)) {
-											selection.setAll(s);
-										} else {
-											selection.remove(s);
-										}
-									}
-								}
-							}
-						});
-					}
-				}
-			});
-			d.setExtraValue(pcaResult);
-			series.getData().add(d);
+			// d2.setExtraValue(pcaResult);
+			series.getData().add(d3);
 		}
 		return series;
 	}
@@ -255,6 +200,7 @@ public class ExplainedVarianceBarChart {
 	public void removeData() {
 
 		data.clear();
+		data2.clear();
 		createScene();
 	}
 
@@ -414,9 +360,6 @@ public class ExplainedVarianceBarChart {
 			final XYChart.Series<String, Number> s = it.next();
 			for(XYChart.Data<String, Number> d : s.getData()) {
 				Node n = d.getNode();
-				if(n != null) {
-					n.setStyle(barStyle((IPcaResultVisualization)d.getExtraValue()));
-				}
 			}
 		}
 	}
