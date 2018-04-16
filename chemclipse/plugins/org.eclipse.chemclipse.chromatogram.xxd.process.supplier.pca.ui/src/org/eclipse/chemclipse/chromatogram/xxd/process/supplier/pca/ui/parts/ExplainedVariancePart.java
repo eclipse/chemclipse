@@ -70,18 +70,6 @@ public class ExplainedVariancePart {
 				});
 			}
 		};
-		/*
-		 * actualSelectionChangeListener = new ListChangeListener<ISample<? extends ISampleData>>() {
-		 * @Override
-		 * public void onChanged(javafx.collections.ListChangeListener.Change<? extends ISample<? extends ISampleData>> c) {
-		 * Display.getDefault().asyncExec(() -> {
-		 * if(partHasBeenDestroy)
-		 * return;
-		 * explainedVarianceChart.updateSelection();
-		 * });
-		 * }
-		 * };
-		 */
 	}
 
 	@PostConstruct

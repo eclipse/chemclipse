@@ -168,8 +168,8 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 			component.set(i, 0, Math.pow(component.get(i), 2));
 		}
 		CommonOps.divide(component, (sampleData.numRows - 1));
-		double extractedVariance = CommonOps.elementSum(component);
-		return extractedVariance;
+		double explainedVariance = CommonOps.elementSum(component) / 100;
+		return explainedVariance;
 	}
 
 	public double[] getMean() {

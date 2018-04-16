@@ -165,11 +165,11 @@ public class ExplainedVarianceBarChart {
 	private Axis<Number> getYAxis() {
 
 		NumberAxis yAxis = new NumberAxis();
-		yAxis.setLabel("Explained Variance");
+		yAxis.setLabel("Explained Variance (cumulative)");
 		/*
 		 * set format
 		 */
-		DecimalFormat format = new DecimalFormat("#.##E0", new DecimalFormatSymbols(Locale.US));
+		DecimalFormat format = new DecimalFormat("#.##%", new DecimalFormatSymbols(Locale.US));
 		yAxis.setTickLabelFormatter(new StringConverter<Number>() {
 
 			@Override
@@ -343,7 +343,7 @@ public class ExplainedVarianceBarChart {
 		 */
 		this.pcaResults = Optional.of(pcaResults);
 		removeData();
-		Double[] doubleArray = ArrayUtils.toObject(pcaResults.getExplainedVariance());
+		Double[] doubleArray = ArrayUtils.toObject(pcaResults.getCumulativeExplainedVariances());
 		List<Double> list = Arrays.asList(doubleArray);
 		data2.addAll(list);
 		data.addAll(pcaResults.getPcaResultList());

@@ -19,7 +19,7 @@ public interface IPcaResults<R extends IPcaResult, V extends IVaribleExtracted> 
 
 	List<double[]> getLoadingVectors();
 
-	double[] getExplainedVariance();
+	double[] getExplainedVariances();
 
 	ObservableList<V> getExtractedVariables();
 
@@ -31,5 +31,9 @@ public interface IPcaResults<R extends IPcaResult, V extends IVaribleExtracted> 
 
 	void setLoadingVectors(List<double[]> loadingVectors);
 
-	void setExplainedVariances(double[] explainedVariance);
+	void setExplainedVariances(double[] explainedVariances);
+
+	double[] getCumulativeExplainedVariances();
+
+	void setCumulativeExplainedVariances(double[] cumulativeExplainedVariances);
 }

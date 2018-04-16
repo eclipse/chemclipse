@@ -82,14 +82,26 @@ public class PcaResultsVisualization<R extends IPcaResult, V extends IVaribleExt
 	}
 
 	@Override
-	public double[] getExplainedVariance() {
+	public double[] getExplainedVariances() {
 
-		return delegator.getExplainedVariance();
+		return delegator.getExplainedVariances();
 	}
 
 	@Override
 	public void setExplainedVariances(double[] explainedVariances) {
 
 		delegator.setExplainedVariances(explainedVariances);
+	}
+
+	@Override
+	public double[] getCumulativeExplainedVariances() {
+
+		return delegator.getCumulativeExplainedVariances();
+	}
+
+	@Override
+	public void setCumulativeExplainedVariances(double[] cumulativeExplainedVariances) {
+
+		delegator.setCumulativeExplainedVariances(cumulativeExplainedVariances);
 	}
 }

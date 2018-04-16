@@ -20,6 +20,7 @@ public class PcaResults implements IPcaResults<IPcaResult, IVaribleExtracted> {
 
 	private List<double[]> loadingVectors;
 	private double[] explainedVariances;
+	private double[] cumulativeExplainedVariances;
 	private ObservableList<IVaribleExtracted> extractedVariables;
 	private ObservableList<IPcaResult> pcaResultList;
 	//
@@ -70,7 +71,7 @@ public class PcaResults implements IPcaResults<IPcaResult, IVaribleExtracted> {
 	}
 
 	@Override
-	public double[] getExplainedVariance() {
+	public double[] getExplainedVariances() {
 
 		return this.explainedVariances;
 	}
@@ -79,5 +80,17 @@ public class PcaResults implements IPcaResults<IPcaResult, IVaribleExtracted> {
 	public void setExplainedVariances(double[] explainedVariances) {
 
 		this.explainedVariances = explainedVariances;
+	}
+
+	@Override
+	public double[] getCumulativeExplainedVariances() {
+
+		return this.cumulativeExplainedVariances;
+	}
+
+	@Override
+	public void setCumulativeExplainedVariances(double[] cumulativeExplainedVariances) {
+
+		this.cumulativeExplainedVariances = cumulativeExplainedVariances;
 	}
 }
