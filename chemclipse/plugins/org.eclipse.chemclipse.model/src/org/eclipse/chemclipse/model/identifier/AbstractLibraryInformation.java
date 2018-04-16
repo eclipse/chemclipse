@@ -36,6 +36,8 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	private String contributor = "";
 	private String hit;
 	private String classification;
+	private int retentionTime = 0;
+	private float retentionIndex = 0.0f;
 
 	public AbstractLibraryInformation() {
 		synonyms = new HashSet<String>();
@@ -254,6 +256,30 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	public void setClassification(String classification) {
 
 		this.classification = classification;
+	}
+
+	@Override
+	public int getRetentionTime() {
+
+		return retentionTime;
+	}
+
+	@Override
+	public void setRetentionTime(int retentionTime) {
+
+		this.retentionTime = retentionTime;
+	}
+
+	@Override
+	public float getRetentionIndex() {
+
+		return retentionIndex;
+	}
+
+	@Override
+	public void setRetentionIndex(float retentionIndex) {
+
+		this.retentionIndex = retentionIndex;
 	}
 
 	@Override

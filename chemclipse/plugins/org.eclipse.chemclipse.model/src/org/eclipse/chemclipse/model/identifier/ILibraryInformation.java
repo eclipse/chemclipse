@@ -174,4 +174,12 @@ public interface ILibraryInformation extends Serializable {
 	String getHit();
 
 	String getClassification();
+
+	int getRetentionTime();
+
+	void setRetentionTime(int retentionTime);
+
+	float getRetentionIndex();
+
+	void setRetentionIndex(float retentionIndex);
 }
