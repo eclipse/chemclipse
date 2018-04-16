@@ -37,6 +37,7 @@ public class Activator implements BundleActivator {
 		System.out.println("Alex - Compound Class + Identification");
 		System.out.println("ScanWSD - Targets");
 		System.out.println("ChromatogramWSD - Targets");
+		System.out.println("ILibraryInformation - retention time and retention index");
 	}
 
 	/*
