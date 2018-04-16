@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
@@ -80,6 +81,7 @@ public class ReportWriter2 {
 		printWriter.println("Miscellaneous: " + chromatogram.getMiscInfo());
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void printAreaPercentList(PrintWriter printWriter, IChromatogram<? extends IPeak> chromatogram) {
 
 		/*
@@ -108,6 +110,9 @@ public class ReportWriter2 {
 		/*
 		 * Data
 		 */
+		List<IChromatogram> referencedChromatograms = chromatogram.getReferencedChromatograms();
+		double[] peakAreaSumArray = new double[1 + referencedChromatograms.size()];
+		//
 		for(IPeak peak : chromatogram.getPeaks()) {
 			//
 			IPeakModel peakModel = peak.getPeakModel();
@@ -121,27 +126,29 @@ public class ReportWriter2 {
 			printWriter.print(DELIMITER);
 			printWriter.print((libraryInformation != null) ? libraryInformation.getReferenceIdentifier() : "");
 			printWriter.print(DELIMITER);
-			printWriter.print(""); // "TIC%"
+			peakAreaSumArray[0] += peak.getIntegratedArea();
+			printWriter.print(decimalFormat.format(getPercentagePeakArea(chromatogram, peak))); // "TIC%"
 			printWriter.print(DELIMITER);
-			printWriter.print(""); // "FID1A%"
+			//
+			int i = 1;
+			for(IChromatogram referencedChromatogram : referencedChromatograms) {
+				IPeak referencedPeak = getReferencedPeak(libraryInformation, referencedChromatogram);
+				double peakArea = (referencedPeak != null) ? referencedPeak.getIntegratedArea() : 0.0d;
+				peakAreaSumArray[i] += peakArea;
+				printWriter.print(decimalFormat.format(getPercentagePeakArea(referencedChromatogram, referencedPeak))); // "FID1A%"
+				printWriter.print(DELIMITER);
+				i++;
+			}
+			//
+			printWriter.print(decimalFormat.format(libraryInformation.getRetentionIndex())); // "RI Library"
 			printWriter.print(DELIMITER);
-			printWriter.print(""); // "RI Library"
-			printWriter.print(DELIMITER);
-			printWriter.print(""); // "RI DA"
+			printWriter.print(getRetentionIndex(peakModel)); // "RI DA"
 			printWriter.print(DELIMITER);
 			printWriter.print(chromatogram.getScanNumber(retentionTime));
 			printWriter.print(DELIMITER);
 			printWriter.print(decimalFormat.format(retentionTime / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
 			printWriter.print(DELIMITER);
-			if(peak instanceof IChromatogramPeakMSD) {
-				IChromatogramPeakMSD peakMSD = (IChromatogramPeakMSD)peak;
-				printWriter.print(decimalFormat.format(peakMSD.getPurity()));
-			} else if(peak instanceof IChromatogramPeakMSD) {
-				IChromatogramPeakWSD peakWSD = (IChromatogramPeakWSD)peak;
-				printWriter.print(decimalFormat.format(peakWSD.getPurity()));
-			} else {
-				printWriter.print(decimalFormat.format(1.0f));
-			}
+			printWriter.print(decimalFormat.format(getPurity(peak)));
 			printWriter.println("");
 		}
 		//
@@ -152,10 +159,11 @@ public class ReportWriter2 {
 		printWriter.print(DELIMITER);
 		printWriter.print("");
 		printWriter.print(DELIMITER);
-		printWriter.print("100");
-		printWriter.print(DELIMITER);
-		printWriter.print("100");
-		printWriter.print(DELIMITER);
+		//
+		for(double peakAreaSum : peakAreaSumArray) {
+			printWriter.print(decimalFormat.format(peakAreaSum));
+			printWriter.print(DELIMITER);
+		}
 		printWriter.print("");
 		printWriter.print(DELIMITER);
 		printWriter.print("");
@@ -166,6 +174,63 @@ public class ReportWriter2 {
 		printWriter.print(DELIMITER);
 		printWriter.print("");
 		printWriter.println("");
+	}
+
+	@SuppressWarnings("null")
+	private IPeak getReferencedPeak(ILibraryInformation libraryInformation, IChromatogram<? extends IPeak> referencedChromatogram) {
+
+		IPeak peak = null;
+		//
+		exitloop:
+		for(IPeak referencedPeak : referencedChromatogram.getPeaks()) {
+			List<IPeakTarget> peakTargets = peak.getTargets();
+			ILibraryInformation referencedLibraryInformation = getBestLibraryInformation(peakTargets);
+			if(referencedLibraryInformation.getName().equals(referencedLibraryInformation.getName())) {
+				peak = referencedPeak;
+				break exitloop;
+			}
+		}
+		//
+		return peak;
+	}
+
+	private float getPurity(IPeak peak) {
+
+		float purity = 1.0f;
+		if(peak instanceof IChromatogramPeakMSD) {
+			IChromatogramPeakMSD peakMSD = (IChromatogramPeakMSD)peak;
+			purity = peakMSD.getPurity();
+		} else if(peak instanceof IChromatogramPeakMSD) {
+			IChromatogramPeakWSD peakWSD = (IChromatogramPeakWSD)peak;
+			purity = peakWSD.getPurity();
+		}
+		//
+		return purity;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private double getPercentagePeakArea(IChromatogram chromatogram, IPeak peak) {
+
+		double peakAreaPercent = 0.0d;
+		if(chromatogram != null && peak != null) {
+			double chromatogramPeakArea = chromatogram.getPeakIntegratedArea();
+			if(chromatogramPeakArea > 0) {
+				peakAreaPercent = (100.0d / chromatogramPeakArea) * peak.getIntegratedArea();
+			}
+		}
+		//
+		return peakAreaPercent;
+	}
+
+	private float getRetentionIndex(IPeakModel peakModel) {
+
+		float retentionIndex = 0.0f;
+		if(peakModel instanceof IPeakModelMSD) {
+			IPeakModelMSD peakModelMSD = (IPeakModelMSD)peakModel;
+			retentionIndex = peakModelMSD.getPeakMassSpectrum().getRetentionIndex();
+		}
+		//
+		return retentionIndex;
 	}
 
 	private ILibraryInformation getBestLibraryInformation(List<IPeakTarget> targets) {
