@@ -14,19 +14,25 @@ package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.prefer
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IReportSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings;
+import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.IReportSettings;
-import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_APPEND_FILES = "appendFiles";
 	public static final boolean DEF_APPEND_FILES = false;
+	//
+	public static final String P_DELTA_RETENTION_TIME = "appendFiles";
+	public static final int MIN_DELTA_RETENTION_TIME = 0;
+	public static final int MAX_DELTA_RETENTION_TIME = Integer.MAX_VALUE;
+	public static final int DEF_DELTA_RETENTION_TIME = 1000;
+	public static final String P_USE_BEST_MATCH = "useBestMatch";
+	public static final boolean DEF_USE_BEST_MATCH = true;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -55,6 +61,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_APPEND_FILES, Boolean.toString(DEF_APPEND_FILES));
+		defaultValues.put(P_DELTA_RETENTION_TIME, Integer.toString(DEF_DELTA_RETENTION_TIME));
+		defaultValues.put(P_USE_BEST_MATCH, Boolean.toString(DEF_USE_BEST_MATCH));
 		return defaultValues;
 	}
 
@@ -77,5 +85,17 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getBoolean(P_APPEND_FILES, DEF_APPEND_FILES);
+	}
+
+	public static int getDeltaRetentionTime() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_DELTA_RETENTION_TIME, DEF_DELTA_RETENTION_TIME);
+	}
+
+	public static boolean isUseBestMatch() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_USE_BEST_MATCH, DEF_USE_BEST_MATCH);
 	}
 }
