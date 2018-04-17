@@ -9,7 +9,7 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.errorresidue;
+package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.barchart;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
