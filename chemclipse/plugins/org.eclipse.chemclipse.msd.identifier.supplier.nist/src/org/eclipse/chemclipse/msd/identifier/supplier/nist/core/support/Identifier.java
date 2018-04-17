@@ -707,7 +707,7 @@ public class Identifier {
 		 * Get the library information.
 		 */
 		IPeakLibraryInformation libraryInformation = new PeakLibraryInformation();
-		libraryInformation.setName(hit.getName());
+		libraryInformation.setName(getName(hit.getName()));
 		libraryInformation.setCasNumber(hit.getCAS());
 		libraryInformation.setMiscellaneous(COMPOUND_IN_LIB_FACTOR + compound.getCompoundInLibraryFactor());
 		libraryInformation.setContributor(LIBRARY);
@@ -722,6 +722,13 @@ public class Identifier {
 			logger.warn(e);
 		}
 		return identificationEntry;
+	}
+
+	private String getName(String name) {
+
+		name = name.replaceAll("à", ".alpha.");
+		name = name.replaceAll("á", ".beta.");
+		return name;
 	}
 
 	/**
@@ -820,7 +827,7 @@ public class Identifier {
 		 * Get the library information.
 		 */
 		libraryInformation = new MassSpectrumLibraryInformation();
-		libraryInformation.setName(hit.getName());
+		libraryInformation.setName(getName(hit.getName()));
 		libraryInformation.setCasNumber(hit.getCAS());
 		libraryInformation.setMiscellaneous(COMPOUND_IN_LIB_FACTOR + compound.getCompoundInLibraryFactor());
 		libraryInformation.setContributor(LIBRARY);
