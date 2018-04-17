@@ -79,6 +79,7 @@ public class Identifier {
 	private static final String MSL_CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msl";
 	private static final String MSP_CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.massspectrum.msp";
 	private static final String DESCRIPTION = "NIST Peak Identifier";
+	private static final String LIBRARY = "NIST";
 	private static final String COMPOUND_IN_LIB_FACTOR = "InLib Factor: ";
 	//
 	private TargetCombinedComparator targetCombinedComparator;
@@ -709,6 +710,8 @@ public class Identifier {
 		libraryInformation.setName(hit.getName());
 		libraryInformation.setCasNumber(hit.getCAS());
 		libraryInformation.setMiscellaneous(COMPOUND_IN_LIB_FACTOR + compound.getCompoundInLibraryFactor());
+		libraryInformation.setContributor(LIBRARY);
+		libraryInformation.setReferenceIdentifier(LIBRARY);
 		/*
 		 * Get the match factor and reverse match factor values.
 		 */
@@ -777,6 +780,7 @@ public class Identifier {
 		int numberOfTargets = massSpectrumIdentifierSettings.getNumberOfTargets();
 		List<IScanTargetMSD> massSpectrumTargets = new ArrayList<IScanTargetMSD>();
 		IMassSpectrumIdentificationResult identificationResult = new MassSpectrumIdentificationResult();
+		//
 		for(int index = 1; index <= compound.size(); index++) {
 			/*
 			 * The targets shall not be stored in the peak in all cases.
@@ -819,6 +823,8 @@ public class Identifier {
 		libraryInformation.setName(hit.getName());
 		libraryInformation.setCasNumber(hit.getCAS());
 		libraryInformation.setMiscellaneous(COMPOUND_IN_LIB_FACTOR + compound.getCompoundInLibraryFactor());
+		libraryInformation.setContributor(LIBRARY);
+		libraryInformation.setReferenceIdentifier(LIBRARY);
 		/*
 		 * Get the match factor and reverse match factor values.
 		 */
