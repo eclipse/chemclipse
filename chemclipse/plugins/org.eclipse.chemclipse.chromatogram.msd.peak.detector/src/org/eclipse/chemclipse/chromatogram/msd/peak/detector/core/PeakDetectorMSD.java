@@ -129,7 +129,7 @@ public class PeakDetectorMSD {
 					IPeakDetectorMSDSettings instance = (IPeakDetectorMSDSettings)element.createExecutableExtension(PEAK_DETECTOR_SETTINGS);
 					supplier.setPeakDetectorSettingsClass(instance.getClass());
 				} catch(CoreException e) {
-					logger.warn(e);
+					logger.error(e.getLocalizedMessage(), e);
 					// settings class is optional, set null instead
 					supplier.setPeakDetectorSettingsClass(null);
 				}
@@ -148,7 +148,7 @@ public class PeakDetectorMSD {
 			try {
 				instance = (IPeakDetectorMSD)element.createExecutableExtension(PEAK_DETECTOR);
 			} catch(CoreException e) {
-				logger.warn(e);
+				logger.error(e.getLocalizedMessage(), e);
 			}
 		}
 		return instance;
