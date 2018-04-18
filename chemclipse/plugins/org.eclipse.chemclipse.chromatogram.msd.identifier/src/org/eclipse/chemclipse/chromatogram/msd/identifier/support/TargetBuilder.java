@@ -131,17 +131,25 @@ public class TargetBuilder {
 		if(reference instanceof IRegularLibraryMassSpectrum) {
 			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)reference;
 			ILibraryInformation libraryInformationReference = libraryMassSpectrum.getLibraryInformation();
-			//
+			/*
+			 * Reference
+			 */
 			libraryInformation.setName(libraryInformationReference.getName());
 			libraryInformation.setCasNumber(libraryInformationReference.getCasNumber());
 			libraryInformation.setMiscellaneous(libraryInformationReference.getComments());
 			libraryInformation.setSmiles(libraryInformationReference.getSmiles());
 			libraryInformation.setReferenceIdentifier(libraryInformationReference.getReferenceIdentifier());
 		} else {
+			/*
+			 * Unknown
+			 */
 			libraryInformation.setName(UNKNOWN);
 			libraryInformation.setCasNumber(UNKNOWN);
 			libraryInformation.setMiscellaneous(UNKNOWN);
 		}
+		//
+		libraryInformation.setRetentionTime(reference.getRetentionTime());
+		libraryInformation.setRetentionIndex(reference.getRetentionIndex());
 	}
 
 	private ILibraryInformation getLibraryInformationUnknown(List<IIon> ions) {

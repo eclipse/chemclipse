@@ -801,6 +801,11 @@ public class ExtendedChromatogramUI {
 		initialize(parent);
 	}
 
+	public BaseChart getBaseChart() {
+
+		return chromatogramChart.getBaseChart();
+	}
+
 	public synchronized void updateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
 
 		this.chromatogramSelection = chromatogramSelection;

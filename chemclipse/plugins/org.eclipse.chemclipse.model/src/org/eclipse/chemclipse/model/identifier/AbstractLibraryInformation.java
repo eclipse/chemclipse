@@ -67,6 +67,8 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 			contributor = libraryInformation.getContributor();
 			hit = libraryInformation.getHit();
 			classification = libraryInformation.getClassification();
+			retentionTime = libraryInformation.getRetentionTime();
+			retentionIndex = libraryInformation.getRetentionIndex();
 		}
 	}
 
