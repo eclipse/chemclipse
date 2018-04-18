@@ -27,8 +27,6 @@ public interface IPcaResults<R extends IPcaResult, V extends IVaribleExtracted> 
 
 	IPcaSettings getPcaSettings();
 
-	IPcaModelResult getPcaModelResult();
-
 	void setLoadingVectors(List<double[]> loadingVectors);
 
 	void setExplainedVariances(double[] explainedVariances);

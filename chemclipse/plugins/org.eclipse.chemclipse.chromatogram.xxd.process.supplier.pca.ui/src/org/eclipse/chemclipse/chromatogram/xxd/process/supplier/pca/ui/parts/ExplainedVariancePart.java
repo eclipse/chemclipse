@@ -85,14 +85,12 @@ public class ExplainedVariancePart {
 			explainedVarianceChart.update(pcaresults.getValue());
 			pcaResults.getPcaResultList().addListener(selectionChangeListener);
 		}
-		// SelectionManagerSample.getInstance().getSelection().addListener(actualSelectionChangeListener);
 	}
 
 	@PreDestroy
 	public void preDestroy() {
 
 		partHasBeenDestroy = true;
-		// SelectionManagerSample.getInstance().getSelection().removeListener(actualSelectionChangeListener);
 		SelectionManagerSamples.getInstance().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
 		if(pcaResults != null) {
 			pcaResults.getPcaResultList().removeListener(selectionChangeListener);
