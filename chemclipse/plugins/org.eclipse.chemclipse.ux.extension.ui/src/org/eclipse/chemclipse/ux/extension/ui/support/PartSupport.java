@@ -82,6 +82,29 @@ public class PartSupport {
 		hiddenPartStacks.add(PARTSTACK_RIGHT_TOP);
 	}
 
+	/**
+	 * Might return null.
+	 * Use this method e.g. to get a 3.x editor part.
+	 * The 3.x partId is the part id that is used in the plugin.xml
+	 * to define the editor.
+	 * 
+	 * @param partId
+	 * @return MPart
+	 */
+	public static MPart getPart(String partId) {
+
+		MPart part = null;
+		//
+		exitloop:
+		for(MPart mpart : partService.getParts()) {
+			if(mpart.getElementId().equals(partId)) {
+				part = mpart;
+				break exitloop;
+			}
+		}
+		return part;
+	}
+
 	public static MPart getPart(String partId, String partStackId) {
 
 		MPart part = null;

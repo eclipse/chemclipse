@@ -39,6 +39,9 @@ public abstract class AbstractUpdateSupport implements IUpdateSupport {
 		 * is thrown here sometimes.
 		 */
 		try {
+			/*
+			 * TODO Update when a 3.x editor part is active.
+			 */
 			IEclipseContext activeWindowContext = application.getContext().getActiveChild();
 			if(activeWindowContext != null && partService.isPartVisible(part)) {
 				return true;
