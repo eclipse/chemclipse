@@ -78,6 +78,20 @@ public class LabeledPeakChromatogramUI extends AbstractViewChromatogramUI {
 	}
 
 	@Override
+	protected void finalize() throws Throwable {
+
+		super.finalize();
+		disposeTransform();
+	}
+
+	private void disposeTransform() {
+
+		if(transform != null) {
+			transform.dispose();
+		}
+	}
+
+	@Override
 	public void setViewSeries() {
 
 		IChromatogramSelection chromatogramSelection = getChromatogramSelection();
