@@ -67,6 +67,8 @@ public class PartSupport {
 	public static final String PARTSTACK_BOTTOM_CENTER = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.bottom.center";
 	public static final String PARTSTACK_BOTTOM_RIGHT = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.bottom.right";
 	//
+	private static final String COMPATIBILITY_EDITOR_ELEMENT_ID = "org.eclipse.e4.ui.compatibility.editor";
+	//
 	private static Set<String> hiddenPartStacks = new HashSet<String>();
 	//
 	private static MApplication application = ModelSupportAddon.getApplication();
@@ -85,19 +87,19 @@ public class PartSupport {
 	/**
 	 * Might return null.
 	 * Use this method e.g. to get a 3.x editor part.
-	 * The 3.x partId is the part id that is used in the plugin.xml
-	 * to define the editor.
+	 * The 3.x editorId is the id that is used in the plugin.xml
+	 * to declare the editor.
 	 * 
 	 * @param partId
 	 * @return MPart
 	 */
-	public static MPart getPart(String partId) {
+	public static MPart get3xEditorPart(String editorId) {
 
 		MPart part = null;
 		//
 		exitloop:
 		for(MPart mpart : partService.getParts()) {
-			if(mpart.getElementId().equals(partId)) {
+			if(mpart.getElementId().equals(COMPATIBILITY_EDITOR_ELEMENT_ID) && mpart.getTags().contains(editorId)) {
 				part = mpart;
 				break exitloop;
 			}
