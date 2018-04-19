@@ -188,8 +188,8 @@ public class ExtendedChromatogramUI {
 	private static final String MODIFY_LENGTH_LONGEST = "MODIFY_LENGTH_LONGEST";
 	private static final String MODIFY_LENGTH_ADJUST = "MODIFY_LENGTH_ADJUST";
 	//
-	private static final int FIVE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 5);
 	private static final int THREE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 3);
+	private static final int FIVE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 5);
 	//
 	private Composite toolbarInfo;
 	private Label labelChromatogramInfo;
@@ -1503,11 +1503,14 @@ public class ExtendedChromatogramUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(1, false));
 		//
-		createButtonSelectPreviousChromatogram(composite);
-		createComboChromatograms(composite);
-		createButtonSelectNextChromatogram(composite);
+		Label label = new Label(composite, SWT.NONE);
+		label.setText("Show methods and peak detection, ... items here ... simple workflow.");
+		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		// createButtonSelectPreviousChromatogram(composite);
+		// createComboChromatograms(composite);
+		// createButtonSelectNextChromatogram(composite);
 		//
 		return composite;
 	}
@@ -1517,8 +1520,11 @@ public class ExtendedChromatogramUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(11, false));
+		composite.setLayout(new GridLayout(14, false));
 		//
+		createButtonSelectPreviousChromatogram(composite);
+		createComboChromatograms(composite);
+		createButtonSelectNextChromatogram(composite);
 		createComboTargetTransfer(composite);
 		createTextTargetDelta(composite);
 		createCheckBoxTransferTargets(composite);
@@ -2022,7 +2028,13 @@ public class ExtendedChromatogramUI {
 		/*
 		 * Get the editor and reference chromatograms.
 		 */
-		List<IChromatogramSelection> editorChromatogramSelections = editorUpdateSupport.getChromatogramSelections();
+		List<IChromatogramSelection> editorChromatogramSelections = new ArrayList<IChromatogramSelection>();
+		for(IChromatogramSelection editorChromatogramSelection : editorUpdateSupport.getChromatogramSelections()) {
+			if(editorChromatogramSelection.getChromatogram() != chromatogramSelection.getChromatogram()) {
+				editorChromatogramSelections.add(editorChromatogramSelection);
+			}
+		}
+		//
 		targetChromatogramSelections.addAll(editorChromatogramSelections);
 		references.addAll(getEditorReferences(editorChromatogramSelections));
 		//
@@ -2039,32 +2051,32 @@ public class ExtendedChromatogramUI {
 
 	private List<IChromatogramSelection> getChromatogramReferences(IChromatogramSelection chromatogramSelection) {
 
+		/*
+		 * Current selection / Reference
+		 */
 		List<IChromatogramSelection> chromatogramSelections = new ArrayList<IChromatogramSelection>();
-		/*
-		 * Current selection
-		 */
 		chromatogramSelections.add(chromatogramSelection);
-		/*
-		 * Reference
-		 */
+		//
 		List<IChromatogram> referencedChromatograms = chromatogramSelection.getChromatogram().getReferencedChromatograms();
 		int i = 1;
 		for(IChromatogram referencedChromatogram : referencedChromatograms) {
-			IChromatogramSelection referencedChromatogramSelection = null;
-			try {
-				if(referencedChromatogram instanceof IChromatogramMSD) {
-					referencedChromatogramSelection = new ChromatogramSelectionMSD(referencedChromatogram);
-				} else if(referencedChromatogram instanceof IChromatogramCSD) {
-					referencedChromatogramSelection = new ChromatogramSelectionCSD(referencedChromatogram);
-				} else if(referencedChromatogram instanceof IChromatogramWSD) {
-					referencedChromatogramSelection = new ChromatogramSelectionWSD(referencedChromatogram);
+			if(referencedChromatogram != chromatogramSelection.getChromatogram()) {
+				IChromatogramSelection referencedChromatogramSelection = null;
+				try {
+					if(referencedChromatogram instanceof IChromatogramMSD) {
+						referencedChromatogramSelection = new ChromatogramSelectionMSD(referencedChromatogram);
+					} else if(referencedChromatogram instanceof IChromatogramCSD) {
+						referencedChromatogramSelection = new ChromatogramSelectionCSD(referencedChromatogram);
+					} else if(referencedChromatogram instanceof IChromatogramWSD) {
+						referencedChromatogramSelection = new ChromatogramSelectionWSD(referencedChromatogram);
+					}
+					//
+					if(referencedChromatogramSelection != null) {
+						chromatogramSelections.add(referencedChromatogramSelection);
+					}
+				} catch(ChromatogramIsNullException e) {
+					logger.warn(e);
 				}
-				//
-				if(referencedChromatogramSelection != null) {
-					chromatogramSelections.add(referencedChromatogramSelection);
-				}
-			} catch(ChromatogramIsNullException e) {
-				logger.warn(e);
 			}
 		}
 		//
