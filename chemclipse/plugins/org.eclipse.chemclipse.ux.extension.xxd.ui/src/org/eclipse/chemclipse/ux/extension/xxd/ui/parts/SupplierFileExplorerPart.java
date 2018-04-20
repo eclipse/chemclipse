@@ -183,6 +183,10 @@ public class SupplierFileExplorerPart {
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_NMR)) {
 			editorSupportList.add(new EditorSupportFactory(DataType.NMR).getInstanceEditorSupport());
 		}
+		/*
+		 * CAL - TODO
+		 */
+		// editorSupportList.add(new ProjectExplorerSupportFactory().getInstanceEditorSupport());
 		//
 		supplierFileExplorerUI.setSupplierFileEditorSupportList(editorSupportList);
 	}
