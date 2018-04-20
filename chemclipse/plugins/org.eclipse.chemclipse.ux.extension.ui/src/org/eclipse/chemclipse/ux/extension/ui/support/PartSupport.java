@@ -211,6 +211,11 @@ public class PartSupport {
 	public static void setPartVisibility(String partId, String partStackId, boolean visible) {
 
 		MPart part = getPart(partId, partStackId);
+		setPartVisibility(part, visible);
+	}
+
+	public static void setPartVisibility(MPart part, boolean visible) {
+
 		if(part != null) {
 			part.setVisible(visible);
 		}
