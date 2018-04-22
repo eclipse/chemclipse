@@ -56,7 +56,7 @@ public class CalibrationFileSupplier implements ISupplier {
 	@Override
 	public boolean isExportable() {
 
-		return false;
+		return true;
 	}
 
 	@Override

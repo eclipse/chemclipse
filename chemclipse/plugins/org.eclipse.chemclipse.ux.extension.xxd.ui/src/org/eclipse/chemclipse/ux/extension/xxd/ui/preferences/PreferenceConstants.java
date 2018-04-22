@@ -297,4 +297,6 @@ public class PreferenceConstants {
 	public static final boolean DEF_SHOW_DATA_XIR = false;
 	public static final String P_SHOW_DATA_NMR = "showDataNMR";
 	public static final boolean DEF_SHOW_DATA_NMR = false;
+	public static final String P_SHOW_DATA_CAL = "showDataCAL";
+	public static final boolean DEF_SHOW_DATA_CAL = false;
 }

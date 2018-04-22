@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.EditorSupportFactory;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ProjectExplorerSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageFileExplorer;
@@ -184,9 +185,11 @@ public class SupplierFileExplorerPart {
 			editorSupportList.add(new EditorSupportFactory(DataType.NMR).getInstanceEditorSupport());
 		}
 		/*
-		 * CAL - TODO
+		 * CAL
 		 */
-		// editorSupportList.add(new ProjectExplorerSupportFactory().getInstanceEditorSupport());
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_CAL)) {
+			editorSupportList.add(new ProjectExplorerSupportFactory().getInstanceEditorSupport());
+		}
 		//
 		supplierFileExplorerUI.setSupplierFileEditorSupportList(editorSupportList);
 	}
