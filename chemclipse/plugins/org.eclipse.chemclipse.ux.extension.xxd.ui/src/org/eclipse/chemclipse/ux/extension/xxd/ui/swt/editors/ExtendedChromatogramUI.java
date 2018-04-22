@@ -1959,6 +1959,7 @@ public class ExtendedChromatogramUI {
 	private void createComboChromatograms(Composite parent) {
 
 		comboChromatograms = new Combo(parent, SWT.READ_ONLY);
+		comboChromatograms.setToolTipText("Select a referenced chromatogram.");
 		comboChromatograms.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comboChromatograms.addSelectionListener(new SelectionAdapter() {
 
