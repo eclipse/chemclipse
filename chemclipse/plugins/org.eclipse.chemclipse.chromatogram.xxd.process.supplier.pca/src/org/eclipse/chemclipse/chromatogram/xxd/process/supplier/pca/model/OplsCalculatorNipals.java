@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.OptionalDouble;
-import java.util.stream.DoubleStream;
 
 import org.ejml.data.DenseMatrix64F;
 import org.ejml.ops.CommonOps;
@@ -102,10 +101,13 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		DenseMatrix64F yy = new DenseMatrix64F(1, 1);
 		CommonOps.multInner(y, yy);
 		CommonOps.multTransA(y, X, w);
-		CommonOps.divide(y.get(0), w);
+		CommonOps.divide(w, yy.get(0));
 		// #2
-		DoubleStream absStream = Arrays.stream(w.getData());
-		double wTemp[] = absStream.map(x -> Math.abs(x)).toArray();
+		DenseMatrix64F ww = new DenseMatrix64F(1, 1);
+		CommonOps.transpose(w);
+		CommonOps.multInner(w, ww);
+		double absW = Math.sqrt(yy.get(0));
+		CommonOps.divide(w, absW);
 		System.out.println("matrix calc");
 		// w<-w/as.vector(sqrt(t(w)%*%w)) # Generates vector
 		// ##########################################################################
