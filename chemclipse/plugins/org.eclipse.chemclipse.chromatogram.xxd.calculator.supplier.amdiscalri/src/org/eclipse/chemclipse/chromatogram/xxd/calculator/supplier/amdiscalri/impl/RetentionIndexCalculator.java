@@ -19,30 +19,39 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.processing.CalculatorProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.processing.ICalculatorProcessingInfo;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.IRetentionIndexEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.RetentionIndexEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ISupplierCalculatorSettings;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
+import org.eclipse.chemclipse.model.columns.ISeparationColumn;
+import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
+import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
+import org.eclipse.chemclipse.model.columns.SeparationColumn;
+import org.eclipse.chemclipse.model.columns.SeparationColumnIndices;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class RetentionIndexCalculator {
 
 	private static final Logger logger = Logger.getLogger(RetentionIndexCalculator.class);
-	private static final String DELIMITER = " ";
+	//
+	private static final String HEADER_VALUE_DELIMITER = "=";
+	private static final String RI_VALUE_DELIMITER = " ";
 	private static final String FILE_EXTENSION = ".cal";
+	//
+	private static final String COLUMN_MARKER = "#";
+	//
+	private static final String COLUMN_NAME = "#COLUMN_NAME";
+	private static final String COLUMN_LENGTH = "#COLUMN_LENGTH";
+	private static final String COLUMN_DIAMETER = "#COLUMN_DIAMETER";
+	private static final String COLUMN_PHASE = "#COLUMN_PHASE";
 
 	public ICalculatorProcessingInfo apply(IChromatogramSelection chromatogramSelection, ISupplierCalculatorSettings supplierCalculatorSettings, IProgressMonitor monitor) {
 
@@ -60,6 +69,9 @@ public class RetentionIndexCalculator {
 				calibrationMap.put(key, retentionIndexFile);
 			}
 		}
+		/*
+		 * Use the miscellaneous info to auto-detect the column.
+		 */
 		String miscInfo = chromatogramSelection.getChromatogram().getMiscInfo();
 		String pathRetentionIndexFile;
 		if(calibrationMap.containsKey(miscInfo)) {
@@ -79,14 +91,20 @@ public class RetentionIndexCalculator {
 		return processingInfo;
 	}
 
-	public TreeMap<Integer, IRetentionIndexEntry> getRetentionIndexEntries(File file) {
+	public ISeparationColumnIndices getSeparationColumnIndices(File file) {
 
-		TreeMap<Integer, IRetentionIndexEntry> retentionIndices = new TreeMap<Integer, IRetentionIndexEntry>();
-		/*
-		 * TODO: Cache the tree map so that it don't need to be reloaded.
-		 */
+		ISeparationColumnIndices separationColumnIndices = new SeparationColumnIndices();
+		//
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+			/*
+			 * Column Secification
+			 */
+			String name = "";
+			String length = "";
+			String diameter = "";
+			String phase = "";
+			//
 			String line;
 			while((line = bufferedReader.readLine()) != null) {
 				/*
@@ -94,40 +112,82 @@ public class RetentionIndexCalculator {
 				 * see: AMDIS - User Guide
 				 * https://www.nist.gov/sites/default/files/documents/srd/AMDISMan.pdf
 				 */
-				try {
-					String[] values = line.split(DELIMITER);
-					if(values.length >= 5) {
-						int retentionTime = (int)(Double.parseDouble(values[0]) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR); // Retention Time: 1.908
-						float retentionIndex = Float.parseFloat(values[1]); // Retention Index: 600.0
-						// values[2] ... Net - the computed Net value
-						// values[3] ... S/N - the computed "S/N (total)" value
-						String peakName = values[4].trim(); // C6
-						for(int i = 5; i < values.length; i++) {
-							peakName += " " + values[i];
-						}
-						//
-						IRetentionIndexEntry retentionIndexEntry = new RetentionIndexEntry(retentionTime, retentionIndex, peakName);
-						retentionIndices.put(retentionTime, retentionIndexEntry);
-					} else {
-						throw new IOException("Unexpected column count: " + Arrays.asList(values).toString());
+				if(line.startsWith(COLUMN_MARKER)) {
+					/*
+					 * Column data
+					 * #COLUMN_NAME=DB5
+					 * ...
+					 */
+					if(line.startsWith(COLUMN_NAME)) {
+						name = getValue(line);
+					} else if(line.startsWith(COLUMN_LENGTH)) {
+						length = getValue(line);
+					} else if(line.startsWith(COLUMN_DIAMETER)) {
+						diameter = getValue(line);
+					} else if(line.startsWith(COLUMN_PHASE)) {
+						phase = getValue(line);
 					}
-				} catch(NumberFormatException e) {
-					logger.warn(e);
+				} else {
+					/*
+					 * RI data
+					 */
+					try {
+						String[] values = line.split(RI_VALUE_DELIMITER);
+						if(values.length >= 5) {
+							int retentionTime = (int)(Double.parseDouble(values[0]) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR); // Retention Time: 1.908
+							float retentionIndex = Float.parseFloat(values[1]); // Retention Index: 600.0
+							/*
+							 * The folowing values are used by AMDIS but are not needed here.
+							 */
+							// values[2] ... Net - the computed Net value
+							// values[3] ... S/N - the computed "S/N (total)" value
+							/*
+							 * It's assumed, that all other values belong to the peak name.
+							 */
+							String peakName = values[4].trim(); // C6
+							for(int i = 5; i < values.length; i++) {
+								peakName += " " + values[i];
+							}
+							//
+							IRetentionIndexEntry retentionIndexEntry = new RetentionIndexEntry(retentionTime, retentionIndex, peakName);
+							separationColumnIndices.put(retentionTime, retentionIndexEntry);
+						} else {
+							throw new IOException("Unexpected column count: " + Arrays.asList(values).toString());
+						}
+					} catch(NumberFormatException e) {
+						logger.warn(e);
+					}
 				}
 			}
+			/*
+			 * Create and set the column.
+			 */
+			ISeparationColumn separationColumn = new SeparationColumn(name, length, diameter, phase);
+			separationColumnIndices.setSeparationColumn(separationColumn);
+			//
 			bufferedReader.close();
 		} catch(IOException e) {
 			logger.error(e);
 		}
 		//
-		return retentionIndices;
+		return separationColumnIndices;
 	}
 
-	public float calculateRetentionIndex(int retentionTime, TreeMap<Integer, IRetentionIndexEntry> retentionIndices) {
+	private String getValue(String line) {
+
+		String value = "";
+		String[] values = line.split(HEADER_VALUE_DELIMITER);
+		if(values.length == 2) {
+			value = values[1].trim();
+		}
+		return value;
+	}
+
+	public float calculateRetentionIndex(int retentionTime, ISeparationColumnIndices separationColumnIndices) {
 
 		float retentionIndex = 0;
-		Map.Entry<Integer, IRetentionIndexEntry> floorEntry = retentionIndices.floorEntry(retentionTime);
-		Map.Entry<Integer, IRetentionIndexEntry> ceilingEntry = retentionIndices.ceilingEntry(retentionTime);
+		Map.Entry<Integer, IRetentionIndexEntry> floorEntry = separationColumnIndices.floorEntry(retentionTime);
+		Map.Entry<Integer, IRetentionIndexEntry> ceilingEntry = separationColumnIndices.ceilingEntry(retentionTime);
 		/*
 		 * Calculate the value if both entries exists.
 		 * See AMDIS manual:
@@ -166,13 +226,13 @@ public class RetentionIndexCalculator {
 		return retentionIndex;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void calculateIndex(IChromatogramSelection chromatogramSelection, String pathRetentionIndexFile) {
 
 		File calibrationFile = new File(pathRetentionIndexFile);
 		if(calibrationFile.exists()) {
-			TreeMap<Integer, IRetentionIndexEntry> retentionIndices = getRetentionIndexEntries(calibrationFile);
-			//
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			ISeparationColumnIndices separationColumnIndices = getSeparationColumnIndices(calibrationFile);
+			IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
 			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
 			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
 			int startScan = chromatogram.getScanNumber(startRetentionTime);
@@ -183,8 +243,11 @@ public class RetentionIndexCalculator {
 			for(int scan = startScan; scan <= stopScan; scan++) {
 				IScan supplierScan = chromatogram.getScan(scan);
 				int retentionTime = supplierScan.getRetentionTime();
-				float retentionIndex = calculateRetentionIndex(retentionTime, retentionIndices);
+				float retentionIndex = calculateRetentionIndex(retentionTime, separationColumnIndices);
 				supplierScan.setRetentionIndex(retentionIndex);
+				/*
+				 * Calculate RI also for the optimized MS.
+				 */
 				if(supplierScan instanceof IScanMSD) {
 					IScanMSD scanMSD = (IScanMSD)supplierScan;
 					IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
@@ -196,25 +259,13 @@ public class RetentionIndexCalculator {
 			/*
 			 * Peaks
 			 */
-			if(chromatogram instanceof IChromatogramMSD) {
-				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-				for(IChromatogramPeakMSD peak : chromatogramMSD.getPeaks()) {
-					IScan scan = peak.getPeakModel().getPeakMaximum();
-					int retentionTime = scan.getRetentionTime();
-					if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
-						float retentionIndex = calculateRetentionIndex(retentionTime, retentionIndices);
-						scan.setRetentionIndex(retentionIndex);
-					}
-				}
-			} else if(chromatogram instanceof IChromatogramCSD) {
-				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-				for(IChromatogramPeakCSD peak : chromatogramCSD.getPeaks()) {
-					IScan scan = peak.getPeakModel().getPeakMaximum();
-					int retentionTime = scan.getRetentionTime();
-					if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
-						float retentionIndex = calculateRetentionIndex(retentionTime, retentionIndices);
-						scan.setRetentionIndex(retentionIndex);
-					}
+			List<? extends IPeak> peaks = chromatogram.getPeaks();
+			for(IPeak peak : peaks) {
+				IScan scan = peak.getPeakModel().getPeakMaximum();
+				int retentionTime = scan.getRetentionTime();
+				if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
+					float retentionIndex = calculateRetentionIndex(retentionTime, separationColumnIndices);
+					scan.setRetentionIndex(retentionIndex);
 				}
 			}
 		}
