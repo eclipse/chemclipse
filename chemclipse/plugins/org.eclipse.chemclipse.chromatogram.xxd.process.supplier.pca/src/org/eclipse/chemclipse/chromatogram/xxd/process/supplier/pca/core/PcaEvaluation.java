@@ -13,13 +13,12 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,11 +41,36 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaEvaluation {
 
-	private <V extends IVariable, S extends ISample<? extends ISampleData>> Map<ISample<?>, double[]> extractData(ISamples<V, S> samples, String algorithm) {
+	private <V extends IVariable, S extends ISample<? extends ISampleData>> Map<ISample<?>, double[]> extractData(ISamples<V, S> samples, String algorithm, IPcaSettings settings, boolean[] isSelectedVariable) {
 
 		Map<ISample<? extends ISampleData>, double[]> selectedSamples = new HashMap<>();
 		List<? extends IVariable> retentionTimes = samples.getVariables();
-		int numSelected = (int)retentionTimes.stream().filter(r -> r.isSelected()).count();
+		/*
+		 * get variables
+		 */
+		for(int i = 0; i < isSelectedVariable.length; i++) {
+			isSelectedVariable[i] = isSelectedVariable[i] & retentionTimes.get(i).isSelected();
+			if(settings.IsRemoveUselessVariables()) {
+				int numEmptyValues = 0;
+				for(ISample<? extends ISampleData> sample : samples.getSampleList()) {
+					if(!sample.getSampleData().get(i).isEmpty()) {
+						numEmptyValues++;
+					}
+				}
+				if(numEmptyValues <= 1) {
+					isSelectedVariable[i] = false;
+				}
+			}
+		}
+		/*
+		 * collect variables
+		 */
+		int numSelected = 0;
+		for(boolean b : isSelectedVariable) {
+			if(b) {
+				numSelected++;
+			}
+		}
 		final Set<String> groups = samples.getSampleList().stream().map(s -> s.getGroupName()).distinct().collect(Collectors.toList()).stream().limit(2).collect(Collectors.toSet());
 		for(ISample<? extends ISampleData> sample : samples.getSampleList()) {
 			double[] selectedSampleData = null;
@@ -55,7 +79,7 @@ public class PcaEvaluation {
 				selectedSampleData = new double[numSelected];
 				int j = 0;
 				for(int i = 0; i < data.size(); i++) {
-					if(retentionTimes.get(i).isSelected()) {
+					if(isSelectedVariable[i]) {
 						selectedSampleData[j] = data.get(i).getModifiedData();
 						j++;
 					}
@@ -65,11 +89,33 @@ public class PcaEvaluation {
 		}
 		if(algorithm.equals(IPcaSettings.OPLS_ALGO_NIPALS)) {
 			Map<ISample<? extends ISampleData>, double[]> groupSelected = selectedSamples.entrySet().stream().filter(e -> groups.contains(e.getKey().getGroupName())).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
-			setNaNValues(groupSelected);
 			return groupSelected;
 		}
-		setNaNValues(selectedSamples);
 		return selectedSamples;
+	}
+
+	private <V extends IVariable, S extends ISample<? extends ISampleData>> boolean[] selectedVariables(ISamples<V, S> samples, IPcaSettings settings) {
+
+		List<? extends IVariable> retentionTimes = samples.getVariables();
+		boolean[] isSelectedVariable = new boolean[retentionTimes.size()];
+		Arrays.fill(isSelectedVariable, true);
+		for(int i = 0; i < isSelectedVariable.length; i++) {
+			isSelectedVariable[i] = isSelectedVariable[i] & retentionTimes.get(i).isSelected();
+			if(settings.IsRemoveUselessVariables()) {
+				int numEmptyValues = 0;
+				for(ISample<? extends ISampleData> sample : samples.getSampleList()) {
+					if(sample.isSelected()) {
+						if(!sample.getSampleData().get(i).isEmpty()) {
+							numEmptyValues++;
+						}
+					}
+				}
+				if(numEmptyValues <= 1) {
+					isSelectedVariable[i] = false;
+				}
+			}
+		}
+		return isSelectedVariable;
 	}
 
 	private List<double[]> getLoadingVectors(IMultivariateCalculator principalComponentAnalysis, int numberOfPrincipalComponents) {
@@ -147,8 +193,9 @@ public class PcaEvaluation {
 		int numberOfPrincipalComponents = settings.getNumberOfPrincipalComponents();
 		String pcaAlgorithm = settings.getPcaAlgorithm();
 		PcaResults pcaResults = new PcaResults(settings);
-		Map<ISample<?>, double[]> extractData = extractData(samples, pcaAlgorithm);
-		setRetentionTime(pcaResults, samples);
+		boolean[] isSelectedVariables = selectedVariables(samples, settings);
+		Map<ISample<?>, double[]> extractData = extractData(samples, pcaAlgorithm, settings, isSelectedVariables);
+		setRetentionTime(pcaResults, samples, isSelectedVariables);
 		int sampleSize = getSampleSize(extractData);
 		/*
 		 * Prepare PCA Calculation
@@ -201,35 +248,11 @@ public class PcaEvaluation {
 		pcaResults.getPcaResultList().setAll(resultsList);
 	}
 
-	private void setNaNValues(Map<ISample<?>, double[]> selectedSamples) {
-
-		Collection<double[]> values = selectedSamples.values();
-		Optional<double[]> v = values.stream().findFirst();
-		if(v.isPresent()) {
-			for(int i = 0; i < v.get().length; i++) {
-				double sum = 0;
-				int count = 0;
-				for(double[] value : values) {
-					if(!Double.isNaN(value[i])) {
-						sum += value[i];
-						count++;
-					}
-				}
-				double mean = count != 0 ? sum / count : 0;
-				for(double[] value : values) {
-					if(Double.isNaN(value[i])) {
-						value[i] = mean;
-					}
-				}
-			}
-		}
-	}
-
-	private void setRetentionTime(IPcaResults pcaResults, ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
+	private void setRetentionTime(IPcaResults pcaResults, ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples, boolean[] isSeletedVariables) {
 
 		List<IVaribleExtracted> variables = new ArrayList<>();
 		for(int i = 0; i < samples.getVariables().size(); i++) {
-			if(samples.getVariables().get(i).isSelected()) {
+			if(isSeletedVariables[i]) {
 				IVariable variable = samples.getVariables().get(i);
 				variables.add(new Variable(variable));
 			}

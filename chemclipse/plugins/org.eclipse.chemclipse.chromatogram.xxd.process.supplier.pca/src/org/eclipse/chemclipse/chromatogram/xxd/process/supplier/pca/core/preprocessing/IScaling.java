@@ -13,10 +13,5 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.prepro
 
 public interface IScaling extends ICentering {
 
-	int CENTERING_MEADIAN = 2;
-	int CENTERING_MEAN = 1;
-
-	int getCenteringType();
-
 	void setCenteringType(int centeringType);
 }

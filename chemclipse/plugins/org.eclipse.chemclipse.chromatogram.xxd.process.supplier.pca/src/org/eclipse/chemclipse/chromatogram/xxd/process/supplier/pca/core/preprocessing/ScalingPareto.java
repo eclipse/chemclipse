@@ -48,12 +48,10 @@ public class ScalingPareto extends AbstaractScaling {
 			final double deviationSqrt = Math.sqrt(getStandartDeviation(samplesList, i, centeringType));
 			for(ISample<?> sample : samplesList) {
 				ISampleData sampleData = sample.getSampleData().get(i);
-				if(!sampleData.isEmpty() && (sample.isSelected() || !onlySeleted)) {
+				if((sample.isSelected() || !onlySeleted)) {
 					double data = sampleData.getModifiedData();
-					if(deviationSqrt != 0) {
-						double scaleData = (data - mean) / deviationSqrt;
-						sampleData.setModifiedData(scaleData);
-					}
+					double scaleData = (data - mean) / deviationSqrt;
+					sampleData.setModifiedData(scaleData);
 				}
 			}
 		}

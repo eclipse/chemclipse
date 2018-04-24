@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaEvaluation;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
@@ -77,11 +79,27 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisua
 
 	private ObjectProperty<IPcaResultsVisualization> actualSelectedPcaResults;
 	private Map<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>, IPcaResultsVisualization> pcaResults;
+	private Map<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>, PcaPreprocessingData> preprocessings;
 
 	private SelectionManagerSamples() {
 		super();
 		pcaResults = new HashMap<>();
 		actualSelectedPcaResults = new SimpleObjectProperty<>();
+		preprocessings = new HashMap<>();
+		getElements().addListener(new ListChangeListener<ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>>() {
+
+			@Override
+			public void onChanged(ListChangeListener.Change<? extends ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>>> c) {
+
+				while(c.next()) {
+					synchronized(preprocessings) {
+						for(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples : c.getRemoved()) {
+							preprocessings.remove(samples);
+						}
+					}
+				}
+			}
+		});
 	}
 
 	public <V extends IVariableVisualization, S extends ISampleVisualization<? extends ISampleData>> IPcaResultsVisualization evaluatePca(ISamplesVisualization<V, S> samples, IPcaSettings settings, IPcaSettingsVisualization pcaSettingsVisualization, IProgressMonitor monitor, boolean setSelected) {
@@ -120,6 +138,24 @@ public class SelectionManagerSamples extends SelectionManagerProto<ISamplesVisua
 	public ReadOnlyObjectProperty<IPcaResultsVisualization> getActualSelectedPcaResults() {
 
 		return actualSelectedPcaResults;
+	}
+
+	public PcaPreprocessingData getPreprocessoringData(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {
+
+		if(samples instanceof IDataPreprocessing) {
+			IDataPreprocessing dataPreprocessing = (IDataPreprocessing)samples;
+			return dataPreprocessing.getPcaPreprocessingData();
+		} else {
+			synchronized(preprocessings) {
+				if(preprocessings.containsKey(samples)) {
+					return preprocessings.get(samples);
+				} else {
+					PcaPreprocessingData pcaPreprocessingData = new PcaPreprocessingData();
+					preprocessings.put(samples, pcaPreprocessingData);
+					return pcaPreprocessingData;
+				}
+			}
+		}
 	}
 
 	public Optional<IPcaResultsVisualization> getPcaResults(ISamples<? extends IVariable, ? extends ISample<? extends ISampleData>> samples) {

@@ -35,9 +35,7 @@ public class TransformationPower extends AbstractPreprocessing implements ITrans
 
 		samples.getSampleList().stream().filter(s -> s.isSelected() || !isOnlySelected()).forEach(s -> {
 			for(ISampleData data : s.getSampleData()) {
-				if(!data.isEmpty()) {
-					data.setModifiedData(Math.sqrt(Math.abs(data.getModifiedData())));
-				}
+				data.setModifiedData(Math.sqrt(Math.abs(data.getModifiedData())));
 			}
 		});
 	}

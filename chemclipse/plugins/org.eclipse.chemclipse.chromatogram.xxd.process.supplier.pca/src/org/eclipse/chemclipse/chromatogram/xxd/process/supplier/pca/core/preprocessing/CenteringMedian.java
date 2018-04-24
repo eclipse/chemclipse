@@ -37,14 +37,18 @@ public class CenteringMedian extends AbstractCentering {
 
 		List<V> variables = samples.getVariables();
 		for(int i = 0; i < variables.size(); i++) {
-			final double value = getCenteringValue(samples.getSampleList(), i, 2);
+			final double value = getCenteringValue(samples.getSampleList(), i, CENTERING_MEADIAN);
 			final int j = i;
 			samples.getSampleList().stream().forEach(s -> {
 				ISampleData data = s.getSampleData().get(j);
-				if(!data.isEmpty()) {
-					data.setModifiedData(data.getModifiedData() - value);
-				}
+				data.setModifiedData(data.getModifiedData() - value);
 			});
 		}
+	}
+
+	@Override
+	public int getCenteringType() {
+
+		return CENTERING_MEADIAN;
 	}
 }

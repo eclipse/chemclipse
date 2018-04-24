@@ -1,16 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 jan.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
- * Jan Holy - initial API and implementation
+ * jan - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
@@ -18,41 +19,48 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariable;
 
-public class ScalingAuto extends AbstaractScaling {
-
-	public ScalingAuto(int centeringType) {
-		super(centeringType);
-	}
+public class MedianValuesReplacer extends AbstractPreprocessing {
 
 	@Override
 	public String getDescription() {
 
-		return "";
+		return "Repleace NAN value with median";
 	}
 
 	@Override
 	public String getName() {
 
-		return "AutoScaling";
+		return "Median Value Setter";
 	}
 
 	@Override
 	public <V extends IVariable, S extends ISample<? extends ISampleData>> void process(ISamples<V, S> samples) {
 
-		boolean onlySeleted = isOnlySelected();
-		int centeringType = getCenteringType();
 		List<V> variables = samples.getVariables();
-		List<S> samplesList = samples.getSampleList();
+		List<S> sampleList = samples.getSampleList();
 		for(int i = 0; i < variables.size(); i++) {
-			final double mean = getCenteringValue(samplesList, i, centeringType);
-			final double deviation = getStandartDeviation(samplesList, i, centeringType);
-			for(ISample<?> sample : samplesList) {
-				ISampleData sampleData = sample.getSampleData().get(i);
-				if((sample.isSelected() || !onlySeleted)) {
-					double data = sampleData.getModifiedData();
-					double scaleData = 0;
-					scaleData = (data - mean) / deviation;
-					sampleData.setModifiedData(scaleData);
+			List<Double> collectedValues = new ArrayList<>();
+			for(S sample : sampleList) {
+				if(sample.isSelected() || !isOnlySelected()) {
+					double sampleData = sample.getSampleData().get(i).getModifiedData();
+					if(!Double.isNaN(sampleData)) {
+						collectedValues.add(sampleData);
+					}
+				}
+			}
+			int lenght = collectedValues.size();
+			collectedValues.sort((d1, d2) -> Double.compare(d1, d2));
+			double median = 0;
+			if(lenght != 0) {
+				median = lenght % 2 == 0 ? (collectedValues.get(lenght / 2 - 1) + collectedValues.get(lenght / 2)) / 2.0 // even
+						: collectedValues.get(lenght / 2); //
+			}
+			for(S sample : sampleList) {
+				if(sample.isSelected() || !isOnlySelected()) {
+					ISampleData sampleData = sample.getSampleData().get(i);
+					if(Double.isNaN(sampleData.getModifiedData())) {
+						sampleData.setModifiedData(median);
+					}
 				}
 			}
 		}

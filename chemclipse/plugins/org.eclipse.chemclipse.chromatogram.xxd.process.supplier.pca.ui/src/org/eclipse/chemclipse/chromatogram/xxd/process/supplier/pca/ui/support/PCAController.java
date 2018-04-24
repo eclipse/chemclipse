@@ -13,7 +13,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampleData;
@@ -31,6 +35,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferenc
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -58,6 +63,7 @@ public class PCAController {
 	private Spinner numerPrincipalComponents;
 	private CCombo pcaAlgo;
 	private Optional<IPcaResultsVisualization> pcaResults;
+	private PcaPreprocessingData pcaPreprocessingData;
 	private Spinner pcx;
 	private Spinner pcy;
 	private Spinner pcz;
@@ -66,16 +72,31 @@ public class PCAController {
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private Button autoReevaluate;
 	private Button settings;
+	private AtomicBoolean evaluateRun = new AtomicBoolean(false);
 	private Runnable autoreevaluete = () -> {
-		if(samples.isPresent() && autoReevaluate.getSelection()) {
-			evaluatePCA();
+		boolean start = evaluateRun.compareAndSet(false, true);
+		if(samples.isPresent() && start) {
+			preprocessData();
+			if(autoReevaluate.getSelection()) {
+				evaluatePCA();
+			}
 		}
+		evaluateRun.set(false);
 	};
 	private ListChangeListener<? super ISampleVisualization<? extends ISampleData>> reevaluationSamplesChangeListener = e -> {
-		Display.getDefault().timerExec(100, autoreevaluete);
+		if(!evaluateRun.get()) {
+			Display.getDefault().timerExec(100, autoreevaluete);
+		}
 	};
 	private ListChangeListener<? super IVariableVisualization> reevaluationRetentionTimeChangeListener = e -> {
-		Display.getDefault().timerExec(100, autoreevaluete);
+		if(!evaluateRun.get()) {
+			Display.getDefault().timerExec(100, autoreevaluete);
+		}
+	};
+	private Consumer<IPreprocessing> changePreprocessing = (p) -> {
+		if(!evaluateRun.get()) {
+			Display.getDefault().timerExec(100, autoreevaluete);
+		}
 	};
 
 	public PCAController(Composite parent, Object layoutData) {
@@ -194,6 +215,7 @@ public class PCAController {
 							el.add(s);
 						}
 						IPcaSettings pcaSettings = new PcaSettings(maxPC, pcaAlgorithm);
+						pcaSettings.setRemoveUselessVariables(pcaPreprocessingData.isRemoveUselessVariables());
 						IPcaSettingsVisualization pcaSettingsVisualization = new PcaSettingsVisualization(pcX, pcY, pcZ);
 						final IPcaResultsVisualization results = SelectionManagerSamples.getInstance().evaluatePca(s, pcaSettings, pcaSettingsVisualization, progressMonitor, true);
 						pcaResults = Optional.of(results);
@@ -203,6 +225,11 @@ public class PCAController {
 				}
 			}
 		}
+	}
+
+	private void preprocessData() {
+
+		pcaPreprocessingData.process(samples.get(), new NullProgressMonitor());
 	}
 
 	public Optional<IPcaResultsVisualization> getPcaResults() {
@@ -221,12 +248,15 @@ public class PCAController {
 			ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> samplesVisualizationOld = this.samples.get();
 			samplesVisualizationOld.getSampleList().removeListener(reevaluationSamplesChangeListener);
 			samplesVisualizationOld.getVariables().removeListener(reevaluationRetentionTimeChangeListener);
+			this.pcaPreprocessingData.removeListener(changePreprocessing);
 		}
 		this.samples = Optional.of(samples);
 		if(this.samples.isPresent()) {
 			ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization<? extends ISampleData>> samplesVisualizationNew = this.samples.get();
 			samplesVisualizationNew.getSampleList().addListener(reevaluationSamplesChangeListener);
 			samplesVisualizationNew.getVariables().addListener(reevaluationRetentionTimeChangeListener);
+			this.pcaPreprocessingData = SelectionManagerSamples.getInstance().getPreprocessoringData(this.samples.get());
+			this.pcaPreprocessingData.addListener(changePreprocessing);
 		}
 		Display.getDefault().timerExec(100, autoreevaluete);
 	}

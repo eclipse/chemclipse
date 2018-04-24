@@ -15,15 +15,12 @@ public class PcaSettings implements IPcaSettings {
 
 	public int numberOfPrincipalComponents;
 	public String pcaAlgorithm;
-
-	public PcaSettings() {
-		this.numberOfPrincipalComponents = 3;
-	}
+	private boolean removeUselessVariables;
 
 	public PcaSettings(int numberOfPrincipalComponents, String pcaAlgorithm) {
-		this();
 		this.numberOfPrincipalComponents = numberOfPrincipalComponents;
 		this.pcaAlgorithm = pcaAlgorithm;
+		this.removeUselessVariables = true;
 	}
 
 	@Override
@@ -42,5 +39,17 @@ public class PcaSettings implements IPcaSettings {
 	public void setPcaAlgorithm(String pcaAlgo) {
 
 		this.pcaAlgorithm = pcaAlgo;
+	}
+
+	@Override
+	public boolean IsRemoveUselessVariables() {
+
+		return removeUselessVariables;
+	}
+
+	@Override
+	public void setRemoveUselessVariables(boolean b) {
+
+		removeUselessVariables = b;
 	}
 }

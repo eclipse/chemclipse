@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.AbstractCentering;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.CenteringMean;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.CenteringMedian;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.ICentering;
@@ -226,7 +227,7 @@ public class DataPreprocessingSelection {
 		centeringCombo.setEnabled(true);
 		scalingButton.setSelection(true);
 		scalingCombo.setEnabled(true);
-		if(scaling.getCenteringType() == IScaling.CENTERING_MEAN) {
+		if(scaling.getCenteringType() == AbstractCentering.CENTERING_MEAN) {
 			centeringCombo.select(CENTERING_MEAN);
 		} else {
 			centeringCombo.select(CENTERING_MEDIAN);
@@ -350,10 +351,10 @@ public class DataPreprocessingSelection {
 		int centering = 1;
 		switch(centeringCombo.getSelectionIndex()) {
 			case CENTERING_MEAN:
-				centering = IScaling.CENTERING_MEAN;
+				centering = AbstractCentering.CENTERING_MEAN;
 				break;
 			case CENTERING_MEDIAN:
-				centering = IScaling.CENTERING_MEADIAN;
+				centering = AbstractCentering.CENTERING_MEADIAN;
 		}
 		switch(scalingCombo.getSelectionIndex()) {
 			case SCALING_AUTO:

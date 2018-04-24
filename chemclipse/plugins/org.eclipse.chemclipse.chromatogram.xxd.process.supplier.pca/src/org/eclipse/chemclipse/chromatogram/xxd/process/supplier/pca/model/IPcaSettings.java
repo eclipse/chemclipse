@@ -22,4 +22,8 @@ public interface IPcaSettings {
 	String getPcaAlgorithm();
 
 	void setPcaAlgorithm(String pcaAlgo);
+
+	boolean IsRemoveUselessVariables();
+
+	void setRemoveUselessVariables(boolean b);
 }

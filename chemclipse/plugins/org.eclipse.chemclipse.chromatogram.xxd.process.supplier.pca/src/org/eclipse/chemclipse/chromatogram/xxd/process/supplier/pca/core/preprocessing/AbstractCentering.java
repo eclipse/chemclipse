@@ -26,16 +26,20 @@ public abstract class AbstractCentering extends AbstractPreprocessing implements
 	protected <S extends ISample<? extends ISampleData>> double getCenteringValue(List<S> list, int position, int type) {
 
 		boolean onlySelected = isOnlySelected();
-		DoubleStream selectedData = list.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(position)).filter(d -> !d.isEmpty()).mapToDouble(d -> d.getModifiedData());
+		DoubleStream selectedData = list.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(position)).mapToDouble(d -> d.getModifiedData());
 		switch(type) {
-			case 1:
+			case CENTERING_MEAN:
 				return selectedData.summaryStatistics().getAverage();
-			case 2:
+			case CENTERING_MEADIAN:
 				List<Double> data = selectedData.sorted().boxed().collect(Collectors.toList());
 				int lenght = data.size();
-				double median = lenght % 2 == 0 ? (data.get(lenght / 2 - 1) + data.get(lenght / 2)) / 2.0 // even
-						: data.get(lenght / 2); //
-				return median;
+				if(lenght == 0) {
+					return 0;
+				} else {
+					double median = lenght % 2 == 0 ? (data.get(lenght / 2 - 1) + data.get(lenght / 2)) / 2.0 // even
+							: data.get(lenght / 2); //
+					return median;
+				}
 			default:
 				throw new RuntimeException("undefine centering");
 		}
@@ -49,11 +53,11 @@ public abstract class AbstractCentering extends AbstractPreprocessing implements
 	protected <S extends ISample<? extends ISampleData>> double getVariance(List<S> samples, int position, int type) {
 
 		boolean onlySelected = isOnlySelected();
-		List<ISampleData> sampleData = samples.stream().filter(s -> s.isSelected() || onlySelected).map(s -> s.getSampleData().get(position)).collect(Collectors.toList());
+		List<ISampleData> sampleData = samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(position)).collect(Collectors.toList());
 		int count = sampleData.size();
 		if(count > 1) {
 			final double mean = getCenteringValue(samples, position, type);
-			double sum = sampleData.stream().filter(d -> !d.isEmpty()).mapToDouble(d -> {
+			double sum = sampleData.stream().mapToDouble(d -> {
 				double data = d.getModifiedData();
 				return (data - mean) * (data - mean);
 			}).sum();

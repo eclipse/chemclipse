@@ -45,15 +45,12 @@ public class ScalingLevel extends AbstaractScaling {
 		List<S> samplesList = samples.getSampleList();
 		for(int i = 0; i < variables.size(); i++) {
 			final double mean = getCenteringValue(samplesList, i, centeringType);
-			final double deviation = getStandartDeviation(samplesList, i, centeringType);
 			for(ISample<?> sample : samplesList) {
 				ISampleData sampleData = sample.getSampleData().get(i);
-				if(!sampleData.isEmpty() && (sample.isSelected() || !onlySeleted)) {
+				if((sample.isSelected() || !onlySeleted)) {
 					double data = sampleData.getModifiedData();
-					if(deviation != 0) {
-						double scaleData = (data - mean) / mean;
-						sampleData.setModifiedData(scaleData);
-					}
+					double scaleData = (data - mean) / mean;
+					sampleData.setModifiedData(scaleData);
 				}
 			}
 		}

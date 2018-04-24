@@ -12,4 +12,9 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing;
 
 public interface ICentering extends IPreprocessing {
+
+	int CENTERING_MEADIAN = 2;
+	int CENTERING_MEAN = 1;
+
+	int getCenteringType();
 }
