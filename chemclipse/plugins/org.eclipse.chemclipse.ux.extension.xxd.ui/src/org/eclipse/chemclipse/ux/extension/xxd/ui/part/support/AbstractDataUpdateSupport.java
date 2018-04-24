@@ -18,11 +18,8 @@ import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
-import org.eclipse.chemclipse.ux.extension.ui.support.PartListenerAdapter;
-import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
@@ -79,21 +76,32 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 
 	private void handlePartCloseEvent(MPart myPart) {
 
-		if(myPart != null) {
-			EPartService ePartService = myPart.getContext().get(EPartService.class);
-			ePartService.addPartListener(new PartListenerAdapter() {
-
-				@Override
-				public void partHidden(MPart part) {
-
-					if(part.getElementId().equals(myPart.getElementId())) {
-						if(part.isCloseable()) {
-							PartSupport.setPartVisibility(part, false);
-						}
-					}
-				}
-			});
-		}
+		/*
+		 * See example: SubtractScanUI
+		 * #
+		 * We need to find a way how to react on a part close event,
+		 * ... when the user clicks on the (x) to close a part or part created from a part descriptor.
+		 * #
+		 * At the moment, the user has to click twice on the set visible button to show a part, cause
+		 * part flag is not set to visibility == false.
+		 * #
+		 * The following code make problems when opening another editor.
+		 */
+		// if(myPart != null) {
+		// EPartService ePartService = myPart.getContext().get(EPartService.class);
+		// ePartService.addPartListener(new PartListenerAdapter() {
+		//
+		// @Override
+		// public void partHidden(MPart part) {
+		//
+		// if(part.getElementId().equals(myPart.getElementId())) {
+		// if(part.isCloseable()) {
+		// PartSupport.setPartVisibility(part, false);
+		// }
+		// }
+		// }
+		// });
+		// }
 	}
 
 	private EventHandler registerEventHandler(IEventBroker eventBroker, String topic, String[] properties) {
