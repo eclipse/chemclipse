@@ -1,0 +1,46 @@
+/*******************************************************************************
+ * Copyright (c) 2018 Lablicate GmbH.
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Dr. Philip Wenig - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.chemclipse.model.columns;
+
+public class SeparationColumnFactory {
+
+	public static final String TYPE_NA = "N.A.";
+	public static final String TYPE_DB1 = "DB1";
+	public static final String TYPE_DB5 = "DB5";
+	public static final String TYPE_DB1701 = "DB1701";
+
+	public static ISeparationColumn getSeparationColumn(String name) {
+
+		/*
+		 * TODO - Extend
+		 */
+		ISeparationColumn separationColumn;
+		switch(name) {
+			case TYPE_NA:
+				separationColumn = new SeparationColumn(name, "", "", "");
+				break;
+			case TYPE_DB1:
+				separationColumn = new SeparationColumn(name, "30m", "25µm", "");
+				break;
+			case TYPE_DB5:
+				separationColumn = new SeparationColumn(name, "30m", "25µm", "");
+				break;
+			case TYPE_DB1701:
+				separationColumn = new SeparationColumn(name, "30m", "25µm", "");
+				break;
+			default:
+				separationColumn = new SeparationColumn(name, "30m", "25µm", "");
+				break;
+		}
+		return separationColumn;
+	}
+}
