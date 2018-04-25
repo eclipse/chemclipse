@@ -81,6 +81,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_ION = "ion.gif";
 	String IMAGE_REPORT = "report.gif";
 	String IMAGE_CHROMATOGRAM_REPORT = "chromatogramReport.gif";
+	String IMAGE_CHROMATOGRAM_REPORT_ADD = "chromatogramReportAdd.gif";
 	String IMAGE_BATCHPROCESS = "batchprocess.gif";
 	String IMAGE_BATCHPROCESS_PEAKIDENT = "batchprocessPeakIdent.gif";
 	String IMAGE_CONFIGURE = "configure.gif";
@@ -219,6 +220,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_ORIGIN_DOCUMENT = "originDocument.gif";
 	String IMAGE_REFERENCE_PEAK = "referencePeak.gif";
 	String IMAGE_CHROMATOGRAM_DATABASE = "chromatogramDatabase.gif";
+	String IMAGE_CHROMATOGRAM_DATABASE_ADD = "chromatogramDatabaseAdd.gif";
 	String IMAGE_SUBSTANCE_HIT_RESULT = "substanceHitResult.gif";
 	String IMAGE_PLUS = "plus.gif";
 	String IMAGE_MINUS = "minus.gif";
