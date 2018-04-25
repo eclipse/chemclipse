@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preproc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.ScalingPareto;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.ScalingRange;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.ScalingVast;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.SmallValuesReplacer;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.TransformationLOG10;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.TransformationPower;
 
@@ -352,6 +353,7 @@ public class PreprocessingController {
 		});
 		cReplaceEmptyValue.getItems().add(new ComboItem<>("Mean", "", () -> new MeanValuesReplacer()));
 		cReplaceEmptyValue.getItems().add(new ComboItem<>("Median", "", () -> new MedianValuesReplacer()));
+		cReplaceEmptyValue.getItems().add(new ComboItem<>("Small Random", "", () -> new SmallValuesReplacer()));
 		cReplaceEmptyValue.valueProperty().addListener(new ChangeListener<ComboItem<IPreprocessing>>() {
 
 			@Override
