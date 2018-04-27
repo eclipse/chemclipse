@@ -103,46 +103,71 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		CommonOps.multTransA(y, X, w);
 		CommonOps.divide(w, yy.get(0));
 		// #2
+		// w<-w/as.vector(sqrt(t(w)%*%w)) # Generates vector
 		DenseMatrix64F ww = new DenseMatrix64F(1, 1);
 		CommonOps.transpose(w);
 		CommonOps.multInner(w, ww);
 		double absW = Math.sqrt(yy.get(0));
 		CommonOps.divide(w, absW);
 		System.out.println("matrix calc");
-		// w<-w/as.vector(sqrt(t(w)%*%w)) # Generates vector
 		// ##########################################################################
 		// ### Start calculation for ortho factors first and predictive in the end
 		// #3
 		// for (counterLVs in 1:nLVs){
-		// te<-X%*%w/as.vector(t(w)%*%w) # Generates vector
-		// #4
-		// ce<-(t(te)%*%y)/as.vector(t(te)%*%te) # Generates scalar
-		// ce<-t(ce)
-		// #5
-		// u<-(y%*%ce)/as.vector(t(ce)%*%ce) # Generates vector
-		// #6
-		// p<-t(te)%*%X/as.vector(t(te)%*%te)
-		// p<-t(p)
-		// ### End of calculation of predictive vector
-		// ### The algorithms will stop here after having already calculated the orthogonol components
+		for(int i = 0; i < numComps; i++) {
+			// te<-X%*%w/as.vector(t(w)%*%w) # Generates vector
+			DenseMatrix64F wTemp = new DenseMatrix64F(1, 1);
+			CommonOps.multInner(w, wTemp);
+			DenseMatrix64F te = new DenseMatrix64F(numberOfSamples, 1);
+			CommonOps.mult(X, w, te);
+			CommonOps.divide(te.get(0), wTemp);
+			// #4
+			// ce<-(t(te)%*%y)/as.vector(t(te)%*%te) # Generates scalar
+			// ce<-t(ce)
+			DenseMatrix64F ce = new DenseMatrix64F(1, 1);
+			DenseMatrix64F tTemp = new DenseMatrix64F(1, 1);
+			CommonOps.multInner(te, tTemp);
+			CommonOps.multTransA(te, y, ce);
+			CommonOps.divide(ce, tTemp.get(0));
+			// #5
+			// u<-(y%*%ce)/as.vector(t(ce)%*%ce) # Generates vector
+			DenseMatrix64F cTemp = new DenseMatrix64F(1, 1);
+			CommonOps.multInner(ce, cTemp);
+			DenseMatrix64F u = new DenseMatrix64F(numberOfSamples, 1);
+			CommonOps.mult(y, ce, u);
+			CommonOps.divide(u, cTemp.get(0));
+			// #6
+			// p<-t(te)%*%X/as.vector(t(te)%*%te)
+			// p<-t(p)
+			DenseMatrix64F p = new DenseMatrix64F(1, numberOfVariables);
+			CommonOps.multTransA(te, X, p);
+			CommonOps.divide(p, tTemp.get(0));
+			// ### End of calculation of predictive vector
+			// ### The algorithms will stop here after having already calculated the orthogonol components
+			if(i < numComps - 1) {
+				// #7
+				// w_ortho<-p-(as.vector(t(w)%*%p)/as.vector(t(w)%*%w))*(w)
+				DenseMatrix64F wTmp = new DenseMatrix64F(1, 1);
+				CommonOps.multTransAB(w, p, wTmp);
+				CommonOps.divide(wTmp, wTemp.get(0));
+				// #8
+				// w_ortho<-w_ortho/as.vector((sqrt(t(w_ortho)%*%w_ortho)))
+				// #9
+				// t_ortho<-(X%*%w_ortho)/as.vector(t(w_ortho)%*%w_ortho)
+				// #10
+				// p_ortho<-(t(t_ortho)%*%X)/as.vector(t(t_ortho)%*%t_ortho) # Generates a row vector
+				// p_ortho<-t(p_ortho)
+				// #11
+				// Eo_PLS<-X-as.vector(t_ortho%*%t(p_ortho))
+				// #12
+				// T_ortho<-c(T_ortho,t_ortho)
+				// P_ortho<-c(P_ortho,p_ortho)
+				// W_ortho<-c(W_ortho,w_ortho)
+				// X<-Eo_PLS
+			}
+		}
 		//
 		// if (counterLVs<nLVs){
-		// #7
-		// w_ortho<-p-(as.vector(t(w)%*%p)/as.vector(t(w)%*%w))*(w)
-		// #8
-		// w_ortho<-w_ortho/as.vector((sqrt(t(w_ortho)%*%w_ortho)))
-		// #9
-		// t_ortho<-(X%*%w_ortho)/as.vector(t(w_ortho)%*%w_ortho)
-		// #10
-		// p_ortho<-(t(t_ortho)%*%X)/as.vector(t(t_ortho)%*%t_ortho) # Generates a row vector
-		// p_ortho<-t(p_ortho)
-		// #11
-		// Eo_PLS<-X-as.vector(t_ortho%*%t(p_ortho))
-		// #12
-		// T_ortho<-c(T_ortho,t_ortho)
-		// P_ortho<-c(P_ortho,p_ortho)
-		// W_ortho<-c(W_ortho,w_ortho)
-		// X<-Eo_PLS
 		// }
 		// }
 		//
