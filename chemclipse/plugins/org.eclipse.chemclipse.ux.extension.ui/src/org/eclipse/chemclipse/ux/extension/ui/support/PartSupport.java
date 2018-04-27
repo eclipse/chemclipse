@@ -208,19 +208,6 @@ public class PartSupport {
 		}
 	}
 
-	public static void setPartVisibility(String partId, String partStackId, boolean visible) {
-
-		MPart part = getPart(partId, partStackId);
-		setPartVisibility(part, visible);
-	}
-
-	public static void setPartVisibility(MPart part, boolean visible) {
-
-		if(part != null) {
-			part.setVisible(visible);
-		}
-	}
-
 	public static MPartStack getPartStack(String partStackId) {
 
 		return (MPartStack)modelService.find(partStackId, application);
@@ -269,6 +256,26 @@ public class PartSupport {
 		//
 		parent.layout(true);
 		parent.redraw();
+	}
+
+	public static void setPartVisibility(String partId, String partStackId, boolean visible) {
+
+		MPart part = getPart(partId, partStackId);
+		setPartVisibility(part, visible);
+	}
+
+	public static void setPartVisibility(MPart part, boolean visible) {
+
+		if(part != null) {
+			part.setVisible(visible);
+			String partId = part.getElementId();
+			//
+			if(visible) {
+				eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_TRUE, partId);
+			} else {
+				eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_FALSE, partId);
+			}
+		}
 	}
 
 	/**

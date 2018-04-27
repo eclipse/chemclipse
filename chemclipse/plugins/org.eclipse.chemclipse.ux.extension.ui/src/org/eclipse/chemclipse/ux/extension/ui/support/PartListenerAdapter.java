@@ -11,33 +11,33 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.support;
 
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.workbench.modeling.IPartListener;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPart;
 
 public class PartListenerAdapter implements IPartListener {
 
 	@Override
-	public void partActivated(MPart part) {
+	public void partActivated(IWorkbenchPart part) {
 
 	}
 
 	@Override
-	public void partBroughtToTop(MPart part) {
+	public void partBroughtToTop(IWorkbenchPart part) {
 
 	}
 
 	@Override
-	public void partDeactivated(MPart part) {
+	public void partClosed(IWorkbenchPart part) {
 
 	}
 
 	@Override
-	public void partHidden(MPart part) {
+	public void partDeactivated(IWorkbenchPart part) {
 
 	}
 
 	@Override
-	public void partVisible(MPart part) {
+	public void partOpened(IWorkbenchPart part) {
 
 	}
 }

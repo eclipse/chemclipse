@@ -18,8 +18,10 @@ import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.UIEvents;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
@@ -34,9 +36,27 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 	private List<EventHandler> registeredEventHandler;
 
 	public AbstractDataUpdateSupport(MPart part) {
+		this(part, false);
+	}
+
+	/**
+	 * Don't use this method for editors!
+	 *
+	 * Be careful when using this method. It should be used for parts only, which
+	 * are closeable.
+	 * 
+	 * @param part
+	 * @param handlePartCloseEvent
+	 */
+	public AbstractDataUpdateSupport(MPart part, boolean handlePartCloseEvent) {
 		super(part);
-		handlePartCloseEvent(part);
+		/*
+		 * Additional events.
+		 */
 		registeredEventHandler = new ArrayList<EventHandler>();
+		if(handlePartCloseEvent) {
+			handlePartCloseEvent(part);
+		}
 		registerEvents();
 	}
 
@@ -74,7 +94,7 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 		}
 	}
 
-	private void handlePartCloseEvent(MPart myPart) {
+	private void handlePartCloseEvent(final MPart myPart) {
 
 		/*
 		 * See example: SubtractScanUI
@@ -87,21 +107,32 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 		 * #
 		 * The following code make problems when opening another editor.
 		 */
-		// if(myPart != null) {
-		// EPartService ePartService = myPart.getContext().get(EPartService.class);
-		// ePartService.addPartListener(new PartListenerAdapter() {
-		//
-		// @Override
-		// public void partHidden(MPart part) {
-		//
-		// if(part.getElementId().equals(myPart.getElementId())) {
-		// if(part.isCloseable()) {
-		// PartSupport.setPartVisibility(part, false);
-		// }
-		// }
-		// }
-		// });
-		// }
+		if(myPart != null) {
+			EventHandler partCloseHandler = new EventHandler() {
+
+				@Override
+				public void handleEvent(Event event) {
+
+					Object object = event.getProperty(UIEvents.EventTags.ELEMENT);
+					boolean toBeRendered = (Boolean)event.getProperty(UIEvents.EventTags.NEW_VALUE);
+					if(object instanceof MPart) {
+						MPart part = (MPart)object;
+						if(part.getElementId().equals(myPart.getElementId())) {
+							if(part.isCloseable()) {
+								if(!toBeRendered) {
+									PartSupport.setPartVisibility(part, false);
+								}
+							}
+						}
+					}
+				}
+			};
+			/*
+			 * Subscribe
+			 */
+			eventBroker.subscribe(UIEvents.UIElement.TOPIC_TOBERENDERED, partCloseHandler);
+			registeredEventHandler.add(partCloseHandler);
+		}
 	}
 
 	private EventHandler registerEventHandler(IEventBroker eventBroker, String topic, String[] properties) {
