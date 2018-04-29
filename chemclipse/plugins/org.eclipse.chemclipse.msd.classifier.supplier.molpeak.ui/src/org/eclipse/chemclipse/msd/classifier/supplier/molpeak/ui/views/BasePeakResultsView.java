@@ -16,7 +16,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.model.core.IChromatogramResult;
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.model.ILigninRatios;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.results.IChromatogramResultBasePeak;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.internal.provider.BasePeakResultsContentProvider;
@@ -82,9 +82,9 @@ public class BasePeakResultsView extends AbstractChromatogramSelectionMSDView {
 		 * selection is not null.
 		 */
 		if(doUpdate(chromatogramSelection)) {
-			Object object = chromatogramSelection.getChromatogram().getChromatogramResult(IChromatogramResultBasePeak.IDENTIFIER);
-			if(object instanceof IChromatogramResult) {
-				IChromatogramResult chromatogramResult = (IChromatogramResult)object;
+			Object object = chromatogramSelection.getChromatogram().getMeasurementResult(IChromatogramResultBasePeak.IDENTIFIER);
+			if(object instanceof IMeasurementResult) {
+				IMeasurementResult chromatogramResult = (IMeasurementResult)object;
 				Object result = chromatogramResult.getResult();
 				if(result instanceof ILigninRatios) {
 					ILigninRatios ligninRatios = (ILigninRatios)result;

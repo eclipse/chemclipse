@@ -14,5 +14,6 @@ package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.results;
 
 public interface IChromatogramResultBasePeak {
 
+	String NAME = "Base Peak Classifier";
 	String IDENTIFIER = "org.eclipse.chemclipse.msd.classifier.supplier.basepeak";
 }

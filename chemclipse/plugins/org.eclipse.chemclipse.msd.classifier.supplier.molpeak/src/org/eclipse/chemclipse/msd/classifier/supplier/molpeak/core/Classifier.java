@@ -20,8 +20,8 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.processing.IChromatogr
 import org.eclipse.chemclipse.chromatogram.msd.classifier.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.IChromatogramResult;
-import org.eclipse.chemclipse.model.implementation.ChromatogramResult;
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
+import org.eclipse.chemclipse.model.implementation.MeasurementResult;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.classifier.BasePeakClassifier;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.model.ILigninRatios;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.preferences.PreferenceSupplier;
@@ -34,7 +34,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class Classifier extends AbstractChromatogramClassifier {
 
 	private static final Logger logger = Logger.getLogger(Classifier.class);
-	private static final String DESCRIPTION = "Base Peak Classifier";
 
 	@Override
 	public IChromatogramClassifierProcessingInfo applyClassifier(IChromatogramSelectionMSD chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {
@@ -45,15 +44,15 @@ public class Classifier extends AbstractChromatogramClassifier {
 			BasePeakClassifier basePeakClassifier = new BasePeakClassifier();
 			ILigninRatios ligninRatios = basePeakClassifier.calculateLigninRatios(chromatogramSelection);
 			IBasePeakClassifierResult chromatogramClassifierResult = new BasePeakClassifierResult(ResultStatus.OK, "The chromatogram has been classified.", ligninRatios);
-			IChromatogramResult chromatogramResult = new ChromatogramResult(IChromatogramResultBasePeak.IDENTIFIER, "This is ratio of lignins calculated by the base peak.", ligninRatios);
-			chromatogramSelection.getChromatogram().addChromatogramResult(chromatogramResult);
+			IMeasurementResult measurementResult = new MeasurementResult(IChromatogramResultBasePeak.NAME, IChromatogramResultBasePeak.IDENTIFIER, "This is ratio of lignins calculated by the base peak.", ligninRatios);
+			chromatogramSelection.getChromatogram().addMeasurementResult(measurementResult);
 			processingInfo.setChromatogramClassifierResult(chromatogramClassifierResult);
 		} catch(ChromatogramSelectionException e) {
 			logger.warn(e);
-			processingInfo.addErrorMessage(DESCRIPTION, "The chromatogram selection was wrong.");
+			processingInfo.addErrorMessage(IChromatogramResultBasePeak.NAME, "The chromatogram selection was wrong.");
 		} catch(ClassifierSettingsException e) {
 			logger.warn(e);
-			processingInfo.addErrorMessage(DESCRIPTION, "Settings were wrong.");
+			processingInfo.addErrorMessage(IChromatogramResultBasePeak.NAME, "Settings were wrong.");
 		}
 		return processingInfo;
 	}
