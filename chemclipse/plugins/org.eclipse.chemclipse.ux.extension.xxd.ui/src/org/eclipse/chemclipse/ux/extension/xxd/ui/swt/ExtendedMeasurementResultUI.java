@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.e4.ui.di.Focus;
@@ -42,7 +43,7 @@ public class ExtendedMeasurementResultUI {
 	private Composite toolbarChromatogramInfo;
 	private Composite toolbarMeasurementResultInfo;
 	private ComboViewer comboMeasurementResults;
-	private ScanTableUI scanTableUI;
+	private ExtendedTableViewer extendedTableViewer;
 	//
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 
@@ -54,7 +55,6 @@ public class ExtendedMeasurementResultUI {
 	@Focus
 	public void setFocus() {
 
-		updateMeasurementResult();
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -62,20 +62,16 @@ public class ExtendedMeasurementResultUI {
 
 		labelChromatogramInfo.setText("");
 		labelMeasurementResultInfo.setText("");
+		Object input = null;
 		//
 		if(object instanceof IChromatogramSelection) {
 			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			labelChromatogramInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogram));
-			comboMeasurementResults.setInput(chromatogram.getMeasurementResults());
+			input = chromatogram.getMeasurementResults();
 		}
 		//
-		updateMeasurementResult();
-	}
-
-	private void updateMeasurementResult() {
-
-		updateMeasurementResultData();
+		comboMeasurementResults.setInput(input);
 	}
 
 	private void initialize(Composite parent) {
@@ -133,8 +129,8 @@ public class ExtendedMeasurementResultUI {
 
 	private void createResultSection(Composite parent) {
 
-		scanTableUI = new ScanTableUI(parent, SWT.VIRTUAL | SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		scanTableUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		extendedTableViewer = new ExtendedTableViewer(parent, SWT.VIRTUAL | SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		extendedTableViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	private Button createButtonToggleChromatogramToolbarInfo(Composite parent) {
@@ -238,14 +234,19 @@ public class ExtendedMeasurementResultUI {
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof IMeasurementResult) {
 					IMeasurementResult measurementResult = (IMeasurementResult)object;
-					labelMeasurementResultInfo.setText(measurementResult.getDescription());
+					updateMeasurementResultData(measurementResult);
 				}
 			}
 		});
 		return comboViewer;
 	}
 
-	private void updateMeasurementResultData() {
+	private void updateMeasurementResultData(IMeasurementResult measurementResult) {
 
+		labelMeasurementResultInfo.setText(measurementResult.getDescription());
+		// extendedTableViewer.setContentProvider(provider);
+		// extendedTableViewer.setLabelProvider(labelProvider);
+		// extendedTableViewer.setComparator(comparator);
+		// extendedTableViewer.setInput(input);
 	}
 }
