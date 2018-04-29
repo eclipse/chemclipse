@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.core;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.core.AbstractChromatogramClassifier;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.exceptions.ChromatogramSelectionException;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.exceptions.ClassifierSettingsException;
@@ -26,12 +25,13 @@ import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.result.IDurbinWatsonClassifierResult;
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.settings.IDurbinWatsonClassifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.IChromatogramResult;
-import org.eclipse.chemclipse.model.implementation.ChromatogramResult;
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
+import org.eclipse.chemclipse.model.implementation.MeasurementResult;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class Classifier extends AbstractChromatogramClassifier {
 
@@ -54,17 +54,17 @@ public class Classifier extends AbstractChromatogramClassifier {
 			IDurbinWatsonClassifierResult durbinWatsonClassifierResult = new DurbinWatsonClassifierResult(ResultStatus.OK, "The chromatogram has been classified.");
 			durbinWatsonProcessor.run(chromatogramSelection, classifierSettings, durbinWatsonClassifierResult, monitor);
 			//
-			IChromatogramResult chromatogramResult = new ChromatogramResult(IChromatogramResultDurbinWatson.IDENTIFIER, "This is the Durbin-Watson classifier result.", durbinWatsonClassifierResult);
-			chromatogramSelection.getChromatogram().addChromatogramResult(chromatogramResult);
+			IMeasurementResult measurementResult = new MeasurementResult(IChromatogramResultDurbinWatson.NAME, IChromatogramResultDurbinWatson.IDENTIFIER, "This is the Durbin-Watson classifier result.", durbinWatsonClassifierResult);
+			chromatogramSelection.getChromatogram().addMeasurementResult(measurementResult);
 			//
 			processingInfo.setChromatogramClassifierResult(durbinWatsonClassifierResult);
 		} catch(ChromatogramSelectionException e1) {
 			logger.warn(e1);
-			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Durbin-Watson Classifier", "The chromatogram selection is invalid.");
+			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, IChromatogramResultDurbinWatson.NAME, "The chromatogram selection is invalid.");
 			processingInfo.addMessage(processingMessage);
 		} catch(ClassifierSettingsException e1) {
 			logger.warn(e1);
-			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Durbin-Watson Classifier", "The settings are invalid.");
+			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, IChromatogramResultDurbinWatson.NAME, "The settings are invalid.");
 			processingInfo.addMessage(processingMessage);
 		}
 		return processingInfo;

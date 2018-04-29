@@ -13,5 +13,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson
 
 public interface IChromatogramResultDurbinWatson {
 
+	String NAME = "Durbin-Watson Classifier";
 	String IDENTIFIER = "org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson";
 }

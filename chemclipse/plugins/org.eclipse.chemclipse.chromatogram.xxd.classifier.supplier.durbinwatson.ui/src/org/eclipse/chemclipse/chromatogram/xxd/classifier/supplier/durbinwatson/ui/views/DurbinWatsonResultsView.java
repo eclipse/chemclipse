@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.internal.provider.ClassifierResultContentProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.internal.provider.ClassifierResultLabelProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.internal.provider.ClassifierResultTableComparator;
-import org.eclipse.chemclipse.model.core.IChromatogramResult;
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.msd.ui.views.AbstractChromatogramSelectionMSDView;
@@ -83,9 +83,9 @@ public class DurbinWatsonResultsView extends AbstractChromatogramSelectionMSDVie
 		 * selection is not null.
 		 */
 		if(doUpdate(chromatogramSelection)) {
-			Object object = chromatogramSelection.getChromatogram().getChromatogramResult(IChromatogramResultDurbinWatson.IDENTIFIER);
-			if(object instanceof IChromatogramResult) {
-				IChromatogramResult chromatogramResult = (IChromatogramResult)object;
+			Object object = chromatogramSelection.getChromatogram().getMeasurementResult(IChromatogramResultDurbinWatson.IDENTIFIER);
+			if(object instanceof IMeasurementResult) {
+				IMeasurementResult chromatogramResult = (IMeasurementResult)object;
 				Object result = chromatogramResult.getResult();
 				if(result instanceof IDurbinWatsonClassifierResult) {
 					update((IDurbinWatsonClassifierResult)result, forceReload);
