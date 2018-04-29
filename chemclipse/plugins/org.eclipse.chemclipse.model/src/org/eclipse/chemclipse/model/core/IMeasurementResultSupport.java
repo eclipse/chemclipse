@@ -13,40 +13,40 @@ package org.eclipse.chemclipse.model.core;
 
 import java.util.Collection;
 
-public interface IChromatogramResultSupport {
+public interface IMeasurementResultSupport {
 
 	/**
-	 * An existing result will be replaced if a chromatogram result with the same id
+	 * An existing result will be replaced if a measurement result with the same id
 	 * is still stored.
 	 * 
 	 * @param chromatogramResult
 	 */
-	void addChromatogramResult(IChromatogramResult chromatogramResult);
+	void addMeasurementResult(IMeasurementResult chromatogramResult);
 
 	/**
 	 * Returns the result stored by the given identifier.
 	 * 
 	 * @param identifier
-	 * @return {@link IChromatogramResult}
+	 * @return {@link IMeasurementResult}
 	 */
-	IChromatogramResult getChromatogramResult(String identifier);
+	IMeasurementResult getMeasurementResult(String identifier);
 
 	/**
-	 * Delete the chromatogram result stored by the given identifier.
+	 * Delete the measurement result stored by the given identifier.
 	 * 
 	 * @param identifier
 	 */
-	void deleteChromatogramResult(String identifier);
+	void deleteMeasurementResult(String identifier);
 
 	/**
-	 * Deletes all chromatogram results.
+	 * Deletes all measurement results.
 	 */
-	void removeAllChromatogramResults();
+	void removeAllMeasurementResults();
 
 	/**
-	 * Returns a collection of all chromatogram results.
+	 * Returns a collection of all measurement results.
 	 * 
 	 * @return Collection
 	 */
-	Collection<IChromatogramResult> getChromatogramResults();
+	Collection<IMeasurementResult> getMeasurementResults();
 }

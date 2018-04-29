@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import org.eclipse.chemclipse.model.core.IChromatogramResult;
-import org.eclipse.chemclipse.model.implementation.ChromatogramResult;
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
+import org.eclipse.chemclipse.model.implementation.MeasurementResult;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 
 import junit.framework.TestCase;
@@ -20,7 +20,7 @@ import junit.framework.TestCase;
 public class ChromatogramResult_1_Test extends TestCase {
 
 	private IChromatogramMSD chromatogram;
-	private IChromatogramResult chromatogramResult;
+	private IMeasurementResult chromatogramResult;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -43,25 +43,25 @@ public class ChromatogramResult_1_Test extends TestCase {
 
 	public void testChromatogramResult_2() {
 
-		chromatogramResult = new ChromatogramResult("result1.id", "Description 1", "TestObject 1");
+		chromatogramResult = new MeasurementResult("result1.id", "Description 1", "TestObject 1");
 		chromatogram.addChromatogramResult(chromatogramResult);
 		assertEquals(1, chromatogram.getChromatogramResults().size());
 	}
 
 	public void testChromatogramResult_3() {
 
-		chromatogramResult = new ChromatogramResult("result1.id", "Description 1", "TestObject 1");
+		chromatogramResult = new MeasurementResult("result1.id", "Description 1", "TestObject 1");
 		chromatogram.addChromatogramResult(chromatogramResult);
-		chromatogramResult = new ChromatogramResult("result2.id", "Description 2", "TestObject 2");
+		chromatogramResult = new MeasurementResult("result2.id", "Description 2", "TestObject 2");
 		chromatogram.addChromatogramResult(chromatogramResult);
 		assertEquals(2, chromatogram.getChromatogramResults().size());
 	}
 
 	public void testChromatogramResult_4() {
 
-		chromatogramResult = new ChromatogramResult("result1.id", "Description 1", "TestObject 1");
+		chromatogramResult = new MeasurementResult("result1.id", "Description 1", "TestObject 1");
 		chromatogram.addChromatogramResult(chromatogramResult);
-		chromatogramResult = new ChromatogramResult("result1.id", "Description 2", "TestObject 2");
+		chromatogramResult = new MeasurementResult("result1.id", "Description 2", "TestObject 2");
 		chromatogram.addChromatogramResult(chromatogramResult);
 		assertEquals(1, chromatogram.getChromatogramResults().size());
 		chromatogramResult = chromatogram.getChromatogramResult("result1.id");
@@ -71,9 +71,9 @@ public class ChromatogramResult_1_Test extends TestCase {
 
 	public void testChromatogramResult_5() {
 
-		chromatogramResult = new ChromatogramResult("result1.id", "Description 1", "TestObject 1");
+		chromatogramResult = new MeasurementResult("result1.id", "Description 1", "TestObject 1");
 		chromatogram.addChromatogramResult(chromatogramResult);
-		chromatogramResult = new ChromatogramResult("result2.id", "Description 2", "TestObject 2");
+		chromatogramResult = new MeasurementResult("result2.id", "Description 2", "TestObject 2");
 		chromatogram.addChromatogramResult(chromatogramResult);
 		assertEquals(2, chromatogram.getChromatogramResults().size());
 		chromatogram.deleteChromatogramResult("result2.id");
@@ -85,9 +85,9 @@ public class ChromatogramResult_1_Test extends TestCase {
 
 	public void testChromatogramResult_6() {
 
-		chromatogramResult = new ChromatogramResult("result1.id", "Description 1", "TestObject 1");
+		chromatogramResult = new MeasurementResult("result1.id", "Description 1", "TestObject 1");
 		chromatogram.addChromatogramResult(chromatogramResult);
-		chromatogramResult = new ChromatogramResult("result2.id", "Description 2", "TestObject 2");
+		chromatogramResult = new MeasurementResult("result2.id", "Description 2", "TestObject 2");
 		chromatogram.addChromatogramResult(chromatogramResult);
 		assertEquals(2, chromatogram.getChromatogramResults().size());
 		chromatogram.removeAllChromatogramResults();
@@ -102,7 +102,7 @@ public class ChromatogramResult_1_Test extends TestCase {
 
 	public void testChromatogramResult_8() {
 
-		chromatogramResult = new ChromatogramResult("result1.id", "Description 1", "TestObject 1");
+		chromatogramResult = new MeasurementResult("result1.id", "Description 1", "TestObject 1");
 		chromatogram.addChromatogramResult(chromatogramResult);
 		chromatogramResult = chromatogram.getChromatogramResult(null);
 		assertNull(chromatogramResult);
@@ -110,7 +110,7 @@ public class ChromatogramResult_1_Test extends TestCase {
 
 	public void testChromatogramResult_9() {
 
-		chromatogramResult = new ChromatogramResult("result1.id", "Description 1", "TestObject 1");
+		chromatogramResult = new MeasurementResult("result1.id", "Description 1", "TestObject 1");
 		chromatogram.addChromatogramResult(chromatogramResult);
 		chromatogram.deleteChromatogramResult(null);
 		assertEquals(1, chromatogram.getChromatogramResults().size());

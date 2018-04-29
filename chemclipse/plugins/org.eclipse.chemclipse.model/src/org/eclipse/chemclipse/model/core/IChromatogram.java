@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.model.versioning.IChromatogramVersioning;
 import org.eclipse.chemclipse.support.history.ISupplierEditHistory;
 import org.eclipse.core.runtime.IAdaptable;
 
-public interface IChromatogram<T extends IPeak> extends IMeasurement, IChromatogramOverview, IAdaptable, IChromatogramPeaks<T>, IChromatogramVersioning, ISupplierEditHistory, IChromatogramBaseline, IUpdater, IChromatogramResultSupport, IChromatogramIntegrationSupport, IChromatogramProcessorSupport {
+public interface IChromatogram<T extends IPeak> extends IMeasurement, IChromatogramOverview, IAdaptable, IChromatogramPeaks<T>, IChromatogramVersioning, ISupplierEditHistory, IChromatogramBaseline, IUpdater, IChromatogramIntegrationSupport, IChromatogramProcessorSupport {
 
 	String DEFAULT_CHROMATOGRAM_NAME = "Chromatogram";
 	int MIN_SCANDELAY = 0;

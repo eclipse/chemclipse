@@ -13,5 +13,5 @@ package org.eclipse.chemclipse.model.core;
 
 import java.io.Serializable;
 
-public interface IMeasurement extends IMeasurementInfo, Serializable {
+public interface IMeasurement extends IMeasurementInfo, IMeasurementResultSupport, Serializable {
 }

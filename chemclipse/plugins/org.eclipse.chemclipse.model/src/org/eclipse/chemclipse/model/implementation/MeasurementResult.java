@@ -11,12 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.implementation;
 
-import org.eclipse.chemclipse.model.core.AbstractChromatogramResult;
-import org.eclipse.chemclipse.model.core.IChromatogramResult;
+import org.eclipse.chemclipse.model.core.AbstractMeasurementResult;
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
 
-public class ChromatogramResult extends AbstractChromatogramResult implements IChromatogramResult {
+public class MeasurementResult extends AbstractMeasurementResult implements IMeasurementResult {
 
-	public ChromatogramResult(String identifier, String description, Object result) {
-		super(identifier, description, result);
+	public MeasurementResult(String name, String identifier, String description, Object result) {
+		super(name, identifier, description, result);
 	}
 }

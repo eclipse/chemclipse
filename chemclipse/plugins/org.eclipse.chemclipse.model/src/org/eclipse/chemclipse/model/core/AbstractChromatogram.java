@@ -21,10 +21,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
@@ -92,10 +89,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	 */
 	private List<IScan> scans;
 	/*
-	 * Chromatogram results map
-	 */
-	private Map<String, IChromatogramResult> chromatogramResults;
-	/*
 	 * Some vendors store several chromatograms in one file.
 	 */
 	private List<IChromatogram> referencedChromatograms;
@@ -125,7 +118,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		editHistory = new EditHistory();
 		baselineModel = new BaselineModel(this);
 		scans = new ArrayList<IScan>();
-		chromatogramResults = new HashMap<String, IChromatogramResult>();
 		referencedChromatograms = new ArrayList<IChromatogram>();
 		chromatogramIntegrationEntries = new ArrayList<IIntegrationEntry>();
 		backgroundIntegrationEntries = new ArrayList<IIntegrationEntry>();
@@ -707,39 +699,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		return nameDefault;
 	}
 
-	// -----------------------------------------------IChromatogramResultSupport
-	@Override
-	public void addChromatogramResult(IChromatogramResult chromatogramResult) {
-
-		if(chromatogramResult != null) {
-			chromatogramResults.put(chromatogramResult.getIdentifier(), chromatogramResult);
-		}
-	}
-
-	@Override
-	public IChromatogramResult getChromatogramResult(String identifier) {
-
-		return chromatogramResults.get(identifier);
-	}
-
-	@Override
-	public void deleteChromatogramResult(String identifier) {
-
-		chromatogramResults.remove(identifier);
-	}
-
-	@Override
-	public void removeAllChromatogramResults() {
-
-		chromatogramResults.clear();
-	}
-
-	@Override
-	public Collection<IChromatogramResult> getChromatogramResults() {
-
-		return chromatogramResults.values();
-	}
-
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List<IChromatogram> getReferencedChromatograms() {
@@ -897,7 +856,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 			if(isDataModifying) {
 				removeAllPeaks();
 				removeAllTargets();
-				removeAllChromatogramResults();
+				removeAllMeasurementResults();
 				IBaselineModel baselineModel = getBaselineModel();
 				if(baselineModel != null) {
 					baselineModel.removeBaseline();

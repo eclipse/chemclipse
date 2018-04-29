@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.implementation;
 
-import org.eclipse.chemclipse.model.core.IChromatogramResult;
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
 
 import junit.framework.TestCase;
 
@@ -43,14 +43,14 @@ public class Chromatogram_1_Test extends TestCase {
 		String identifier = "test1.identifier";
 		String description = "test1.description";
 		String result = "Hello World!";
-		IChromatogramResult chromatogramResult = new ChromatogramResult(identifier, description, result);
+		IMeasurementResult chromatogramResult = new MeasurementResult(identifier, description, result);
 		assertEquals(0, chromatogram.getChromatogramResults().size());
 		chromatogram.addChromatogramResult(chromatogramResult);
 		assertEquals(1, chromatogram.getChromatogramResults().size());
 		Object object = chromatogram.getChromatogramResult(identifier);
-		assertTrue(object instanceof ChromatogramResult);
-		assertEquals(((ChromatogramResult)object).getIdentifier(), identifier);
-		assertEquals(((ChromatogramResult)object).getDescription(), description);
-		assertEquals(((ChromatogramResult)object).getResult().toString(), result);
+		assertTrue(object instanceof MeasurementResult);
+		assertEquals(((MeasurementResult)object).getIdentifier(), identifier);
+		assertEquals(((MeasurementResult)object).getDescription(), description);
+		assertEquals(((MeasurementResult)object).getResult().toString(), result);
 	}
 }

@@ -11,33 +11,30 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
-public abstract class AbstractChromatogramResult implements IChromatogramResult {
+public interface IMeasurementResult {
 
-	String identifier = "";
-	String description = "";
-	Object result = null;
+	String getName();
 
-	public AbstractChromatogramResult(String identifier, String description, Object result) {
-		this.identifier = identifier;
-		this.description = description;
-		this.result = result;
-	}
+	/**
+	 * Returns the result identifier, used to store in the chromatogram hash map.
+	 * Prefer to use the IDN of the plug-in that supports the result.
+	 * 
+	 * @return String
+	 */
+	String getIdentifier();
 
-	@Override
-	public String getIdentifier() {
+	/**
+	 * Returns a short description of the result.
+	 * 
+	 * @return String
+	 */
+	String getDescription();
 
-		return identifier;
-	}
-
-	@Override
-	public String getDescription() {
-
-		return description;
-	}
-
-	@Override
-	public Object getResult() {
-
-		return result;
-	}
+	/**
+	 * Each plug-in may store its own result object, hence it returns a generic object.
+	 * Plug-ins are responsible to cast it.
+	 * 
+	 * @return Object
+	 */
+	Object getResult();
 }

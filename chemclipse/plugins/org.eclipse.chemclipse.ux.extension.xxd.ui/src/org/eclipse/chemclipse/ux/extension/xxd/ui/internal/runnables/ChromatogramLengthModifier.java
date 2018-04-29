@@ -48,7 +48,7 @@ public class ChromatogramLengthModifier implements IRunnableWithProgress {
 				chromatogram.getBaselineModel().removeBaseline();
 				chromatogram.removeAllBackgroundIntegrationEntries();
 				chromatogram.removeAllChromatogramIntegrationEntries();
-				chromatogram.removeAllChromatogramResults();
+				chromatogram.removeAllMeasurementResults();
 				chromatogram.removeAllPeaks();
 				chromatogram.removeAllTargets();
 				/*
