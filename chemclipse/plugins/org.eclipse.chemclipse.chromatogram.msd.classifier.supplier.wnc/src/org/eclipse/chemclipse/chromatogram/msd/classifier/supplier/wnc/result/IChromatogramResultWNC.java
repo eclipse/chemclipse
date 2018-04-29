@@ -13,5 +13,6 @@ package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.result;
 
 public interface IChromatogramResultWNC {
 
+	String NAME = "WNC Classifier";
 	String IDENTIFIER = "org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc";
 }

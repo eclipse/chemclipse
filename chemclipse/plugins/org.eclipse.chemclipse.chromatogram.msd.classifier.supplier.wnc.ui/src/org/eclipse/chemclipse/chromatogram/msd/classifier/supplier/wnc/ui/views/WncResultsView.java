@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.result.IC
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider.WncResultsContentProvider;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider.WncResultsLabelProvider;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider.WncResultsTableComparator;
-import org.eclipse.chemclipse.model.core.IChromatogramResult;
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.msd.ui.views.AbstractChromatogramSelectionMSDView;
@@ -83,9 +83,9 @@ public class WncResultsView extends AbstractChromatogramSelectionMSDView {
 		 * selection is not null.
 		 */
 		if(doUpdate(chromatogramSelection)) {
-			Object object = chromatogramSelection.getChromatogram().getChromatogramResult(IChromatogramResultWNC.IDENTIFIER);
-			if(object instanceof IChromatogramResult) {
-				IChromatogramResult chromatogramResult = (IChromatogramResult)object;
+			Object object = chromatogramSelection.getChromatogram().getMeasurementResult(IChromatogramResultWNC.IDENTIFIER);
+			if(object instanceof IMeasurementResult) {
+				IMeasurementResult chromatogramResult = (IMeasurementResult)object;
 				Object result = chromatogramResult.getResult();
 				if(result instanceof IWncIons) {
 					IWncIons wncIons = (IWncIons)result;
