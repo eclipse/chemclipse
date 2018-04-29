@@ -85,6 +85,8 @@ public class PreferenceConstants {
 	public static final String DEF_STACK_POSITION_COMBINED_SCAN_PART = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_COMPARISON_SCAN_CHART = "stackPositionComparisonScanChart";
 	public static final String DEF_STACK_POSITION_COMPARISON_SCAN_CHART = PartSupport.PARTSTACK_RIGHT_TOP;
+	public static final String P_STACK_POSITION_MS_LIBRARY_STACK = "stackPositionMSLibraryStack";
+	public static final String DEF_STACK_POSITION_MS_LIBRARY_STACK = PartSupport.PARTSTACK_NONE;
 	public static final String P_STACK_POSITION_QUANTITATION = "stackPositionQuantitation";
 	public static final String DEF_STACK_POSITION_QUANTITATION = PartSupport.PARTSTACK_RIGHT_TOP;
 	public static final String P_STACK_POSITION_INTEGRATION_AREA = "stackPositionIntegrationArea";

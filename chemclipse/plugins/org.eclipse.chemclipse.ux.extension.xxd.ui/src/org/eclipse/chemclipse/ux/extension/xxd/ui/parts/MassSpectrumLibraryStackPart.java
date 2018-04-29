@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.msd.ui.views;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumStackUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
+import org.eclipse.chemclipse.ux.extension.msd.ui.views.AbstractMassSpectrumLibraryView;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -26,7 +27,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class MassSpectrumLibraryStackView extends AbstractMassSpectrumLibraryView {
+public class MassSpectrumLibraryStackPart extends AbstractMassSpectrumLibraryView {
 
 	@Inject
 	private Composite parent;
@@ -34,7 +35,7 @@ public class MassSpectrumLibraryStackView extends AbstractMassSpectrumLibraryVie
 	private MassSpectrumStackUI libraryMassSpectrumStackUI;
 
 	@Inject
-	public MassSpectrumLibraryStackView(MPart part, EPartService partService, IEventBroker eventBroker) {
+	public MassSpectrumLibraryStackPart(MPart part, EPartService partService, IEventBroker eventBroker) {
 		super(part, partService, eventBroker);
 	}
 

@@ -40,6 +40,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_SUBTRACT_SCAN_PART, "Subtract Scan:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_COMBINED_SCAN_PART, "Combined Scan:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_COMPARISON_SCAN_CHART, "Comparison Scan:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_MS_LIBRARY_STACK, "Mass Spectrum Library Stack:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_QUANTITATION, "Quantitation:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_INTEGRATION_AREA, "Integration Area:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_INTERNAL_STANDARDS, "Internal Standards:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
