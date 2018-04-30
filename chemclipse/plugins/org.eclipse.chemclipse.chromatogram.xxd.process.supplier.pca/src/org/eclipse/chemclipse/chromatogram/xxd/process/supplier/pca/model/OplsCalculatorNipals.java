@@ -109,7 +109,6 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		CommonOps.multInner(w, ww);
 		double absW = Math.sqrt(yy.get(0));
 		CommonOps.divide(w, absW);
-		System.out.println("matrix calc");
 		// ##########################################################################
 		// ### Start calculation for ortho factors first and predictive in the end
 		// #3
@@ -120,7 +119,7 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 			CommonOps.multInner(w, wTemp);
 			DenseMatrix64F te = new DenseMatrix64F(numberOfSamples, 1);
 			CommonOps.mult(X, w, te);
-			CommonOps.divide(te.get(0), wTemp);
+			CommonOps.divide(te, wTemp.get(0));
 			// #4
 			// ce<-(t(te)%*%y)/as.vector(t(te)%*%te) # Generates scalar
 			// ce<-t(ce)
@@ -147,9 +146,13 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 			if(i < numComps - 1) {
 				// #7
 				// w_ortho<-p-(as.vector(t(w)%*%p)/as.vector(t(w)%*%w))*(w)
-				DenseMatrix64F wTmp = new DenseMatrix64F(1, 1);
-				CommonOps.multTransAB(w, p, wTmp);
-				CommonOps.divide(wTmp, wTemp.get(0));
+				DenseMatrix64F wTemp2 = new DenseMatrix64F(1, 1);
+				DenseMatrix64F w_ortho_temp = new DenseMatrix64F(numberOfVariables, 1);
+				DenseMatrix64F wTemp3 = new DenseMatrix64F(1, numberOfVariables);
+				CommonOps.multTransAB(w, p, wTemp2);
+				CommonOps.divide(wTemp2, wTemp.get(0));
+				CommonOps.mult(w, wTemp2, w_ortho_temp);
+				System.out.println("matrix calc");
 				// #8
 				// w_ortho<-w_ortho/as.vector((sqrt(t(w_ortho)%*%w_ortho)))
 				// #9
