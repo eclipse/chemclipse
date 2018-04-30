@@ -38,7 +38,6 @@ public interface IPerspectiveAndViewIds {
 	String PERSPECTIVE_PEAKS_MSD = "org.eclipse.chemclipse.chromatogram.msd.perspective.ui.perspective.chromatogramPeaks";
 	String PERSPECTIVE_OVERLAY = "org.eclipse.chemclipse.ux.extension.ui.perspective.chromatogramOverlay";
 	String PERSPECTIVE_SUBTRACT = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.perspective.main";
-	String PERSPECTIVE_WSD = "org.eclipse.chemclipse.ux.extension.wsd.ui.perspective.main";
 	String PERSPECTIVE_MS_LIBRARY = "org.eclipse.chemclipse.ux.extension.msd.ui.perspective.massSpectrumLibrary";
 	/*
 	 * Views
