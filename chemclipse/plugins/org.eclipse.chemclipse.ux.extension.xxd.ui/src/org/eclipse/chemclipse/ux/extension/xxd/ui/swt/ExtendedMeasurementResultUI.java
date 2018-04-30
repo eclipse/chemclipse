@@ -70,6 +70,7 @@ public class ExtendedMeasurementResultUI {
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	//
 	private String resultProviderId = "";
+	List<IMeasurementResult> measurementResults = null;
 
 	@Inject
 	public ExtendedMeasurementResultUI(Composite parent) {
@@ -79,11 +80,13 @@ public class ExtendedMeasurementResultUI {
 	@Focus
 	public void setFocus() {
 
+		updateMeasurementResults(measurementResults);
 	}
 
 	public void update(Object object) {
 
-		updateMeasurementResults(object);
+		measurementResults = getMeasurementResult(object);
+		updateMeasurementResults(measurementResults);
 	}
 
 	private void initialize(Composite parent) {
@@ -253,14 +256,20 @@ public class ExtendedMeasurementResultUI {
 		return comboViewer;
 	}
 
+	private void updateMeasurementResults(List<IMeasurementResult> measurementResults) {
+
+		labelMeasurementResultInfo.setText("");
+		IMeasurementResult measurementResult = getMeasurementResult(measurementResults);
+		comboMeasurementResults.setInput(measurementResults);
+		setComboMeasurementResultSelection(measurementResults);
+		updateMeasurementResult(measurementResult);
+	}
+
 	@SuppressWarnings("rawtypes")
-	private void updateMeasurementResults(Object object) {
+	private List<IMeasurementResult> getMeasurementResult(Object object) {
 
 		List<IMeasurementResult> measurementResults = null;
-		IMeasurementResult measurementResult = null;
-		//
 		labelChromatogramInfo.setText("");
-		labelMeasurementResultInfo.setText("");
 		//
 		if(object instanceof IChromatogramSelection) {
 			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
@@ -268,15 +277,36 @@ public class ExtendedMeasurementResultUI {
 			labelChromatogramInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogram));
 			measurementResults = new ArrayList<>(chromatogram.getMeasurementResults());
 		}
+		return measurementResults;
+	}
+
+	private IMeasurementResult getMeasurementResult(List<IMeasurementResult> measurementResults) {
+
+		IMeasurementResult measurementResult = null;
+		int index = getMeasurementResultIndexInList(measurementResults);
+		if(index >= 0) {
+			measurementResult = measurementResults.get(index);
+		}
 		//
-		comboMeasurementResults.setInput(measurementResults);
+		return measurementResult;
+	}
+
+	private void setComboMeasurementResultSelection(List<IMeasurementResult> measurementResults) {
+
+		int index = getMeasurementResultIndexInList(measurementResults);
+		if(index >= 0) {
+			comboMeasurementResults.getCombo().select(index);
+		}
+	}
+
+	private int getMeasurementResultIndexInList(List<IMeasurementResult> measurementResults) {
+
+		int index = -1;
 		if(measurementResults != null) {
 			/*
 			 * If a provider has been selected already,
 			 * set the combo box.
 			 */
-			int index = -1;
-			//
 			if(resultProviderId.equals("") && measurementResults.size() > 0) {
 				index = 0;
 			} else {
@@ -288,16 +318,8 @@ public class ExtendedMeasurementResultUI {
 					}
 				}
 			}
-			//
-			if(index >= 0) {
-				comboMeasurementResults.getCombo().select(index);
-				measurementResult = measurementResults.get(index);
-			}
 		}
-		/*
-		 * Could be null.
-		 */
-		updateMeasurementResult(measurementResult);
+		return index;
 	}
 
 	private void updateMeasurementResult(IMeasurementResult measurementResult) {
@@ -336,7 +358,9 @@ public class ExtendedMeasurementResultUI {
 			}
 		}
 		/*
-		 * Could be null to clear the table
+		 * Could be null.
+		 * Set Input null should clear the table.
+		 * Somehow, it doesn't!
 		 */
 		extendedTableViewer.setInput(measurementResult);
 	}
