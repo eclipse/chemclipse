@@ -11,21 +11,33 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.ui.support.IMeasurementResultTitles;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -35,9 +47,19 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Table;
 
 public class ExtendedMeasurementResultUI {
 
+	private static final Logger logger = Logger.getLogger(ExtendedMeasurementResultUI.class);
+	//
+	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.ux.extension.ui.measurementResultVisualization";
+	private static final String ATTRIBUTE_IDENTIFIER = "Identifier";
+	private static final String ATTRIBUTE_TITLES = "Titles";
+	private static final String ATTRIBUTE_CONTENT_PROVIDER = "ContentProvider";
+	private static final String ATTRIBUTE_LABEL_PROVIDER = "LabelProvider";
+	private static final String ATTRIBUTE_COMPARATOR = "Comparator";
+	//
 	private Label labelChromatogramInfo;
 	private Label labelMeasurementResultInfo;
 	private Composite toolbarChromatogramInfo;
@@ -46,6 +68,8 @@ public class ExtendedMeasurementResultUI {
 	private ExtendedTableViewer extendedTableViewer;
 	//
 	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
+	//
+	private String resultProviderId = "";
 
 	@Inject
 	public ExtendedMeasurementResultUI(Composite parent) {
@@ -57,21 +81,9 @@ public class ExtendedMeasurementResultUI {
 
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void update(Object object) {
 
-		labelChromatogramInfo.setText("");
-		labelMeasurementResultInfo.setText("");
-		Object input = null;
-		//
-		if(object instanceof IChromatogramSelection) {
-			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			labelChromatogramInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogram));
-			input = chromatogram.getMeasurementResults();
-		}
-		//
-		comboMeasurementResults.setInput(input);
+		updateMeasurementResults(object);
 	}
 
 	private void initialize(Composite parent) {
@@ -234,19 +246,112 @@ public class ExtendedMeasurementResultUI {
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof IMeasurementResult) {
 					IMeasurementResult measurementResult = (IMeasurementResult)object;
-					updateMeasurementResultData(measurementResult);
+					updateMeasurementResult(measurementResult);
 				}
 			}
 		});
 		return comboViewer;
 	}
 
-	private void updateMeasurementResultData(IMeasurementResult measurementResult) {
+	@SuppressWarnings("rawtypes")
+	private void updateMeasurementResults(Object object) {
 
-		labelMeasurementResultInfo.setText(measurementResult.getDescription());
-		// extendedTableViewer.setContentProvider(provider);
-		// extendedTableViewer.setLabelProvider(labelProvider);
-		// extendedTableViewer.setComparator(comparator);
-		// extendedTableViewer.setInput(input);
+		List<IMeasurementResult> measurementResults = null;
+		//
+		labelChromatogramInfo.setText("");
+		labelMeasurementResultInfo.setText("");
+		//
+		if(object instanceof IChromatogramSelection) {
+			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			labelChromatogramInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogram));
+			measurementResults = new ArrayList<>(chromatogram.getMeasurementResults());
+		}
+		//
+		comboMeasurementResults.setInput(measurementResults);
+		if(measurementResults != null) {
+			/*
+			 * If a provider has been selected already,
+			 * set the combo box.
+			 */
+			int index = -1;
+			//
+			if(resultProviderId.equals("") && measurementResults.size() > 0) {
+				index = 0;
+			} else {
+				exitloop:
+				for(int i = 0; i < measurementResults.size(); i++) {
+					IMeasurementResult measurementResult = measurementResults.get(i);
+					if(resultProviderId.equals(measurementResult.getIdentifier())) {
+						index = i;
+						break exitloop;
+					}
+				}
+			}
+			//
+			if(index >= 0) {
+				comboMeasurementResults.getCombo().select(index);
+				updateMeasurementResult(measurementResults.get(index));
+			}
+		}
+	}
+
+	private void updateMeasurementResult(IMeasurementResult measurementResult) {
+
+		if(measurementResult != null) {
+			/*
+			 * Get the UI provider and display the results.
+			 */
+			if(!resultProviderId.equals(measurementResult.getIdentifier())) {
+				resultProviderId = measurementResult.getIdentifier();
+				IConfigurationElement provider = getMeasurementResultVisualizationProvider(resultProviderId);
+				if(provider != null) {
+					try {
+						labelMeasurementResultInfo.setText(measurementResult.getDescription());
+						/*
+						 * Clear
+						 */
+						Table table = extendedTableViewer.getTable();
+						if(table.getItemCount() > 0) {
+							extendedTableViewer.setInput(null);
+						}
+						table.clearAll();
+						// extendedTableViewer.setContentProvider(null);
+						// extendedTableViewer.setLabelProvider(null);
+						extendedTableViewer.setComparator(null);
+						/*
+						 * Initialize
+						 */
+						IMeasurementResultTitles titles = (IMeasurementResultTitles)provider.createExecutableExtension(ATTRIBUTE_TITLES);
+						extendedTableViewer.createColumns(titles.getTitles(), titles.getBounds());
+						extendedTableViewer.setContentProvider((IStructuredContentProvider)provider.createExecutableExtension(ATTRIBUTE_CONTENT_PROVIDER));
+						extendedTableViewer.setLabelProvider((ITableLabelProvider)provider.createExecutableExtension(ATTRIBUTE_LABEL_PROVIDER));
+						extendedTableViewer.setComparator((ViewerComparator)provider.createExecutableExtension(ATTRIBUTE_COMPARATOR));
+					} catch(CoreException e) {
+						logger.warn(e);
+					}
+				}
+			}
+		}
+		/*
+		 * Could be null to clear the table
+		 */
+		extendedTableViewer.setInput(measurementResult);
+	}
+
+	public IConfigurationElement getMeasurementResultVisualizationProvider(String providerId) {
+
+		IConfigurationElement provider = null;
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		IConfigurationElement[] elements = registry.getConfigurationElementsFor(EXTENSION_POINT);
+		exitloop:
+		for(IConfigurationElement element : elements) {
+			String identifier = element.getAttribute(ATTRIBUTE_IDENTIFIER);
+			if(identifier.equals(providerId)) {
+				provider = element;
+				break exitloop;
+			}
+		}
+		return provider;
 	}
 }
