@@ -259,9 +259,9 @@ public class ExtendedMeasurementResultUI {
 	private void updateMeasurementResults(List<IMeasurementResult> measurementResults) {
 
 		labelMeasurementResultInfo.setText("");
-		IMeasurementResult measurementResult = getMeasurementResult(measurementResults);
 		comboMeasurementResults.setInput(measurementResults);
 		setComboMeasurementResultSelection(measurementResults);
+		IMeasurementResult measurementResult = getMeasurementResult(measurementResults);
 		updateMeasurementResult(measurementResult);
 	}
 
