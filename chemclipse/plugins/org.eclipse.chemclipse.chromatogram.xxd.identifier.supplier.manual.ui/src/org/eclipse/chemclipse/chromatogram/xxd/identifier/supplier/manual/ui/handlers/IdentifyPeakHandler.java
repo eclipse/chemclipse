@@ -71,11 +71,6 @@ public class IdentifyPeakHandler implements EventHandler {
 					}
 				}
 			} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-				/*
-				 * CSD
-				 */
-				PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_CSD, IPerspectiveAndViewIds.VIEW_PEAK_TARGETS_CSD);
-				//
 				final IChromatogramSelectionCSD chromatogramSelectionFID = (IChromatogramSelectionCSD)chromatogramSelection;
 				IChromatogramPeakCSD peakFID = chromatogramSelectionFID.getSelectedPeak();
 				if(peakFID != null) {
