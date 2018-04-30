@@ -26,14 +26,14 @@
             description="This plugin tries to identify library mass spectra given by the target."
             id="org.eclipse.chemclipse.msd.identifier.supplier.molpeak.libraryservice"
             identifier="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core.LibraryService"
-            identifierName="MolPeak Library Service">
+            identifierName="BasePeak Library Service">
       </LibraryServiceSupplier>
    </extension>
    <extension
          point="org.eclipse.chemclipse.chromatogram.msd.classifier.chromatogramClassifierSupplier">
       <ChromatogramClassifierSupplier
             classifier="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core.Classifier"
-            classifierName="MolPeak Classifier"
+            classifierName="BasePeak Classifier"
             description="This classifier calculates the lignin ratio in a chromatogram."
             id="org.eclipse.chemclipse.msd.classifier.supplier.molpeak">
       </ChromatogramClassifierSupplier>
