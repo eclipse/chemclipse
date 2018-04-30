@@ -22,9 +22,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -55,16 +53,6 @@ public class DetectorHandler implements EventHandler {
 		 * IProgressMonitor.UNKNOWN) didn't showed a progress under linux.
 		 */
 		if(chromatogramSelection != null) {
-			//
-			/*
-			 * Try to select and show the perspective and view.
-			 */
-			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-				PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_MSD, IPerspectiveAndViewIds.VIEW_BASELINE);
-			} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-				PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_CSD, IPerspectiveAndViewIds.VIEW_BASELINE);
-			}
-			//
 			final Display display = Display.getCurrent();
 			StatusLineLogger.setInfo(InfoType.MESSAGE, "Start SNIP Baseline Detector");
 			IRunnableWithProgress runnable = new DetectorRunnable(chromatogramSelection);
