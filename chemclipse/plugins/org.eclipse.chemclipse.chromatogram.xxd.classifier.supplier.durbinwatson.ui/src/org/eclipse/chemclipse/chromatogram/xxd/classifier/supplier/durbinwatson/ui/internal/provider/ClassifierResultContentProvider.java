@@ -11,22 +11,28 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.internal.provider;
 
+import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.result.IDurbinWatsonClassifierResult;
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-
-import org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.result.IDurbinWatsonClassifierResult;
 
 public class ClassifierResultContentProvider implements IStructuredContentProvider {
 
 	@Override
 	public Object[] getElements(Object inputElement) {
 
-		if(inputElement instanceof IDurbinWatsonClassifierResult) {
+		if(inputElement instanceof IMeasurementResult) {
+			IMeasurementResult measurementResult = (IMeasurementResult)inputElement;
+			Object object = measurementResult.getResult();
+			if(object instanceof IDurbinWatsonClassifierResult) {
+				IDurbinWatsonClassifierResult result = (IDurbinWatsonClassifierResult)object;
+				return result.getSavitzkyGolayFilterRatings().toArray();
+			}
+		} else if(inputElement instanceof IDurbinWatsonClassifierResult) {
 			IDurbinWatsonClassifierResult result = (IDurbinWatsonClassifierResult)inputElement;
 			return result.getSavitzkyGolayFilterRatings().toArray();
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	@Override

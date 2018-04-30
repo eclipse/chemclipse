@@ -23,5 +23,15 @@
             file="toc_classifier.xml">
       </toc>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.ux.extension.ui.measurementResultVisualization">
+      <MeasurementResultVisualization
+            Comparator="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.internal.provider.ClassifierResultTableComparator"
+            ContentProvider="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.internal.provider.ClassifierResultContentProvider"
+            Identifier="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson"
+            LabelProvider="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.internal.provider.ClassifierResultLabelProvider"
+            Titles="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.ui.internal.provider.MeasurementResultTitles">
+      </MeasurementResultVisualization>
+   </extension>
 
 </plugin>
