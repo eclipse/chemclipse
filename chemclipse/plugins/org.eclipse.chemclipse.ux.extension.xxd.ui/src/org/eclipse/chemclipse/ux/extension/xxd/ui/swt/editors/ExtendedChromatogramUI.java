@@ -33,6 +33,10 @@ import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.Chromatogram
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilterSupplier;
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.IChromatogramFilterSupport;
 import org.eclipse.chemclipse.chromatogram.filter.exceptions.NoChromatogramFilterSupplierAvailableException;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.core.ChromatogramClassifier;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.core.IChromatogramClassifierSupplier;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.core.IChromatogramClassifierSupport;
+import org.eclipse.chemclipse.chromatogram.msd.classifier.exceptions.NoChromatogramClassifierSupplierAvailableException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.ChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterSupportMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.exceptions.NoIdentifierAvailableException;
@@ -203,6 +207,7 @@ public class ExtendedChromatogramUI {
 	private List<IChromatogramSelection> referencedChromatogramSelections = null; // Might be null ... no references.
 	private List<IChromatogramSelection> targetChromatogramSelections = new ArrayList<IChromatogramSelection>(); // Is filled dynamically.
 	//
+	private List<IChartMenuEntry> chartMenuEntriesClassifier = new ArrayList<IChartMenuEntry>();
 	private List<IChartMenuEntry> chartMenuEntriesFilter = new ArrayList<IChartMenuEntry>();
 	private List<IChartMenuEntry> chartMenuEntriesPeakDetectors = new ArrayList<IChartMenuEntry>();
 	private List<IChartMenuEntry> chartMenuEntriesPeakIntegrators = new ArrayList<IChartMenuEntry>();
@@ -456,6 +461,77 @@ public class ExtendedChromatogramUI {
 		public void handleEvent(BaseChart baseChart, Event event) {
 
 			handleArrowMoveWindowSelection(keyCode);
+		}
+	}
+
+	private class ClassifierMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
+
+		private String name;
+		private String classifierId;
+		private String type;
+		private IChromatogramSelection chromatogramSelection;
+
+		public ClassifierMenuEntry(String name, String classifierId, String type, IChromatogramSelection chromatogramSelection) {
+			this.name = name;
+			this.classifierId = classifierId;
+			this.type = type;
+			this.chromatogramSelection = chromatogramSelection;
+		}
+
+		@Override
+		public String getCategory() {
+
+			return "Classifier";
+		}
+
+		@Override
+		public String getName() {
+
+			return name;
+		}
+
+		@Override
+		public void execute(Shell shell, ScrollableChart scrollableChart) {
+
+			if(chromatogramSelection != null) {
+				/*
+				 * Create the runnable.
+				 */
+				IRunnableWithProgress runnable = new IRunnableWithProgress() {
+
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						switch(type) {
+							case TYPE_GENERIC:
+								//
+								break;
+							case TYPE_MSD:
+								if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+									IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
+									ChromatogramClassifier.applyClassifier(chromatogramSelectionMSD, classifierId, monitor);
+								}
+								break;
+							case TYPE_CSD:
+								if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+									IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
+									//
+								}
+								break;
+							case TYPE_WSD:
+								if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+									IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+									//
+								}
+								break;
+						}
+					}
+				};
+				/*
+				 * Execute
+				 */
+				processChromatogram(runnable);
+			}
 		}
 	}
 
@@ -899,11 +975,45 @@ public class ExtendedChromatogramUI {
 
 	private void addChartMenuEntries() {
 
+		addChartMenuEntriesClassifier();
 		addChartMenuEntriesFilter();
 		addChartMenuEntriesPeakDetectors();
 		addChartMenuEntriesPeakIntegrators();
 		addChartMenuEntriesPeakIdentifier();
 		addChartMenuEntriesReport();
+	}
+
+	private void addChartMenuEntriesClassifier() {
+
+		IChartSettings chartSettings = chromatogramChart.getChartSettings();
+		cleanChartMenuEntries(chartSettings, chartMenuEntriesClassifier);
+		//
+		if(chromatogramSelection != null) {
+			/*
+			 * MSD
+			 */
+			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+				addChartMenuEntriesClassifierMSD(chartSettings);
+			}
+		}
+		//
+		chromatogramChart.applySettings(chartSettings);
+	}
+
+	private void addChartMenuEntriesClassifierMSD(IChartSettings chartSettings) {
+
+		try {
+			IChromatogramClassifierSupport chromatogramClassifierSupport = ChromatogramClassifier.getChromatogramClassifierSupport();
+			for(String filterId : chromatogramClassifierSupport.getAvailableClassifierIds()) {
+				IChromatogramClassifierSupplier classifier = chromatogramClassifierSupport.getClassifierSupplier(filterId);
+				String name = classifier.getClassifierName();
+				ClassifierMenuEntry classifierMenuEntry = new ClassifierMenuEntry(name, filterId, TYPE_MSD, chromatogramSelection);
+				chartMenuEntriesClassifier.add(classifierMenuEntry);
+				chartSettings.addMenuEntry(classifierMenuEntry);
+			}
+		} catch(NoChromatogramClassifierSupplierAvailableException e) {
+			logger.warn(e);
+		}
 	}
 
 	private void addChartMenuEntriesFilter() {
