@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider;
 
 import org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.model.IWncIons;
-
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -24,9 +23,9 @@ public class WncIonContentProvider implements IStructuredContentProvider {
 		if(inputElement instanceof IWncIons) {
 			IWncIons wncIons = (IWncIons)inputElement;
 			return wncIons.toArray();
-		} else {
-			return null;
 		}
+		//
+		return null;
 	}
 
 	@Override

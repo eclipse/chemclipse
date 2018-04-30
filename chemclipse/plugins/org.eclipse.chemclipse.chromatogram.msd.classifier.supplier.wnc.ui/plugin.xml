@@ -23,5 +23,15 @@
             file="toc_classifier.xml">
       </toc>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.ux.extension.ui.measurementResultVisualization">
+      <MeasurementResultVisualization
+            Comparator="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider.WncResultsTableComparator"
+            ContentProvider="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider.WncResultsContentProvider"
+            Identifier="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc"
+            LabelProvider="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider.WncResultsLabelProvider"
+            Titles="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.internal.provider.MeasurementResultTitles">
+      </MeasurementResultVisualization>
+   </extension>
 
 </plugin>
