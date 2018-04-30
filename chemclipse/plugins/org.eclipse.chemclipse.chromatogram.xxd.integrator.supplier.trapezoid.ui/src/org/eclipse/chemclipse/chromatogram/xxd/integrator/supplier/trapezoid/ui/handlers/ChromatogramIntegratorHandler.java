@@ -22,9 +22,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -42,14 +40,6 @@ public class ChromatogramIntegratorHandler implements EventHandler {
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
-		/*
-		 * Try to select and show the perspective and view.
-		 */
-		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_PEAKS_MSD, IPerspectiveAndViewIds.VIEW_INTEGRATION_RESULTS);
-		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-			PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_CSD, IPerspectiveAndViewIds.VIEW_INTEGRATION_RESULTS);
-		}
 		/*
 		 * Get the actual cursor, create a new wait cursor and show the wait
 		 * cursor.<br/> Show the origin cursor when finished.<br/> Use the
