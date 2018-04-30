@@ -257,6 +257,7 @@ public class ExtendedMeasurementResultUI {
 	private void updateMeasurementResults(Object object) {
 
 		List<IMeasurementResult> measurementResults = null;
+		IMeasurementResult measurementResult = null;
 		//
 		labelChromatogramInfo.setText("");
 		labelMeasurementResultInfo.setText("");
@@ -281,8 +282,7 @@ public class ExtendedMeasurementResultUI {
 			} else {
 				exitloop:
 				for(int i = 0; i < measurementResults.size(); i++) {
-					IMeasurementResult measurementResult = measurementResults.get(i);
-					if(resultProviderId.equals(measurementResult.getIdentifier())) {
+					if(resultProviderId.equals(measurementResults.get(i).getIdentifier())) {
 						index = i;
 						break exitloop;
 					}
@@ -291,9 +291,13 @@ public class ExtendedMeasurementResultUI {
 			//
 			if(index >= 0) {
 				comboMeasurementResults.getCombo().select(index);
-				updateMeasurementResult(measurementResults.get(index));
+				measurementResult = measurementResults.get(index);
 			}
 		}
+		/*
+		 * Could be null.
+		 */
+		updateMeasurementResult(measurementResult);
 	}
 
 	private void updateMeasurementResult(IMeasurementResult measurementResult) {
@@ -302,12 +306,12 @@ public class ExtendedMeasurementResultUI {
 			/*
 			 * Get the UI provider and display the results.
 			 */
+			labelMeasurementResultInfo.setText(measurementResult.getDescription());
 			if(!resultProviderId.equals(measurementResult.getIdentifier())) {
 				resultProviderId = measurementResult.getIdentifier();
 				IConfigurationElement provider = getMeasurementResultVisualizationProvider(resultProviderId);
 				if(provider != null) {
 					try {
-						labelMeasurementResultInfo.setText(measurementResult.getDescription());
 						/*
 						 * Clear
 						 */
@@ -316,16 +320,14 @@ public class ExtendedMeasurementResultUI {
 							extendedTableViewer.setInput(null);
 						}
 						table.clearAll();
-						// extendedTableViewer.setContentProvider(null);
-						// extendedTableViewer.setLabelProvider(null);
 						extendedTableViewer.setComparator(null);
 						/*
 						 * Initialize
 						 */
 						IMeasurementResultTitles titles = (IMeasurementResultTitles)provider.createExecutableExtension(ATTRIBUTE_TITLES);
 						extendedTableViewer.createColumns(titles.getTitles(), titles.getBounds());
-						extendedTableViewer.setContentProvider((IStructuredContentProvider)provider.createExecutableExtension(ATTRIBUTE_CONTENT_PROVIDER));
 						extendedTableViewer.setLabelProvider((ITableLabelProvider)provider.createExecutableExtension(ATTRIBUTE_LABEL_PROVIDER));
+						extendedTableViewer.setContentProvider((IStructuredContentProvider)provider.createExecutableExtension(ATTRIBUTE_CONTENT_PROVIDER));
 						extendedTableViewer.setComparator((ViewerComparator)provider.createExecutableExtension(ATTRIBUTE_COMPARATOR));
 					} catch(CoreException e) {
 						logger.warn(e);
