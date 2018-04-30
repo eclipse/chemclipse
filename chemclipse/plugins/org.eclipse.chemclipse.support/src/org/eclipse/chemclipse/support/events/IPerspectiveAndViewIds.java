@@ -32,7 +32,6 @@ public interface IPerspectiveAndViewIds {
 	 * Perspectives
 	 */
 	String PERSPECTIVE_WELCOME = "org.eclipse.chemclipse.ux.extension.ui.perspective.welcome";
-	String PERSPECTIVE_CSD = "org.eclipse.chemclipse.ux.extension.csd.ui.perspective.main";
 	String PERSPECTIVE_LOGGING = "org.eclipse.chemclipse.logging.ui.perspective.main";
 	String PERSPECTIVE_MSD = "org.eclipse.chemclipse.chromatogram.msd.perspective.ui.perspective.main";
 	String PERSPECTIVE_PEAKS_MSD = "org.eclipse.chemclipse.chromatogram.msd.perspective.ui.perspective.chromatogramPeaks";
