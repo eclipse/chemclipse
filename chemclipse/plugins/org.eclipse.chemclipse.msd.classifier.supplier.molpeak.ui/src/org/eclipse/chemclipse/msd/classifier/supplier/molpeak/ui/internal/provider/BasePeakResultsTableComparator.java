@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
-public class MolPeakResultsTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
+public class BasePeakResultsTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 
 	@SuppressWarnings("unchecked")
 	@Override

@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.internal.provider;
 
+import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.model.ILigninRatios;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -21,12 +22,19 @@ public class BasePeakResultsContentProvider implements IStructuredContentProvide
 	@Override
 	public Object[] getElements(Object inputElement) {
 
-		if(inputElement instanceof ILigninRatios) {
+		if(inputElement instanceof IMeasurementResult) {
+			IMeasurementResult measurementResult = (IMeasurementResult)inputElement;
+			Object object = measurementResult.getResult();
+			if(object instanceof ILigninRatios) {
+				ILigninRatios ligninRatios = (ILigninRatios)object;
+				return ligninRatios.getResults().entrySet().toArray();
+			}
+		} else if(inputElement instanceof ILigninRatios) {
 			ILigninRatios ligninRatios = (ILigninRatios)inputElement;
 			return ligninRatios.getResults().entrySet().toArray();
-		} else {
-			return null;
 		}
+		//
+		return null;
 	}
 
 	@Override

@@ -17,5 +17,15 @@
             name="BasePeak Identifier">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.ux.extension.ui.measurementResultVisualization">
+      <MeasurementResultVisualization
+            Comparator="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.internal.provider.BasePeakResultsTableComparator"
+            ContentProvider="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.internal.provider.BasePeakResultsContentProvider"
+            Identifier="org.eclipse.chemclipse.msd.classifier.supplier.basepeak"
+            LabelProvider="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.internal.provider.BasePeakResultsLabelProvider"
+            Titles="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.internal.provider.MeasurementResultTitles">
+      </MeasurementResultVisualization>
+   </extension>
 
 </plugin>

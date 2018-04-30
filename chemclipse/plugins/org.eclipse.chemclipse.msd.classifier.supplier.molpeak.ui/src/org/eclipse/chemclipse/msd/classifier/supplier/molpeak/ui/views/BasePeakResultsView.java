@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.model.ILigninRatio
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.results.IChromatogramResultBasePeak;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.internal.provider.BasePeakResultsContentProvider;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.internal.provider.BasePeakResultsLabelProvider;
-import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.internal.provider.MolPeakResultsTableComparator;
+import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.internal.provider.BasePeakResultsTableComparator;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.msd.ui.views.AbstractChromatogramSelectionMSDView;
@@ -57,7 +57,7 @@ public class BasePeakResultsView extends AbstractChromatogramSelectionMSDView {
 		/*
 		 * Sorting the table.
 		 */
-		MolPeakResultsTableComparator wncResultsTableComparator = new MolPeakResultsTableComparator();
+		BasePeakResultsTableComparator wncResultsTableComparator = new BasePeakResultsTableComparator();
 		tableViewer.setComparator(wncResultsTableComparator);
 	}
 
