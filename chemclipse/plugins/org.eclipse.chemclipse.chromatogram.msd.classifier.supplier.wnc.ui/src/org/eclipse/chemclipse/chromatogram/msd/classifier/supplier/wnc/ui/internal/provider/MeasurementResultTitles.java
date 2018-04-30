@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.ux.extension.ui.support.IMeasurementResultTitles;
 public class MeasurementResultTitles extends AbstractMeasurementResultTitles implements IMeasurementResultTitles {
 
 	private static final String[] titles = {"Name", "Ion", "Percentage Sum Intensity [%]", "Percentage Max Intensity [%]"};
-	private static final int bounds[] = {100, 100, 100, 100};
+	private static final int bounds[] = {250, 100, 100, 100};
 
 	public MeasurementResultTitles() throws InvalidAttributesException {
 		super(titles, bounds);
