@@ -335,17 +335,9 @@ public class ExtendedMeasurementResultUI {
 				if(provider != null) {
 					try {
 						/*
-						 * Clear
+						 * Clear / Initialize
 						 */
-						Table table = extendedTableViewer.getTable();
-						if(table.getItemCount() > 0) {
-							extendedTableViewer.setInput(null);
-						}
-						table.clearAll();
-						extendedTableViewer.setComparator(null);
-						/*
-						 * Initialize
-						 */
+						clearTable();
 						IMeasurementResultTitles titles = (IMeasurementResultTitles)provider.createExecutableExtension(ATTRIBUTE_TITLES);
 						extendedTableViewer.createColumns(titles.getTitles(), titles.getBounds());
 						extendedTableViewer.setLabelProvider((ITableLabelProvider)provider.createExecutableExtension(ATTRIBUTE_LABEL_PROVIDER));
@@ -362,7 +354,21 @@ public class ExtendedMeasurementResultUI {
 		 * Set Input null should clear the table.
 		 * Somehow, it doesn't!
 		 */
-		extendedTableViewer.setInput(measurementResult);
+		if(measurementResult != null) {
+			extendedTableViewer.setInput(measurementResult);
+		} else {
+			clearTable();
+		}
+	}
+
+	private void clearTable() {
+
+		Table table = extendedTableViewer.getTable();
+		if(table.getItemCount() > 0) {
+			extendedTableViewer.setInput(null);
+		}
+		// table.clearAll();
+		table.removeAll();
 	}
 
 	public IConfigurationElement getMeasurementResultVisualizationProvider(String providerId) {
