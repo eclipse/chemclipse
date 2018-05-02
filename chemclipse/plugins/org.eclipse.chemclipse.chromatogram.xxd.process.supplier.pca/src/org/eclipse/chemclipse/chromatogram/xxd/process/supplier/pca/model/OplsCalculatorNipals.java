@@ -82,9 +82,12 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 
 		int numberOfSamples = getSampleData().getNumRows();
 		int numberOfVariables = getSampleData().getNumCols();
-		DenseMatrix64F t_ortho = new DenseMatrix64F(numberOfSamples, numComps - 1);
-		DenseMatrix64F p_ortho = new DenseMatrix64F(numComps - 1, numberOfVariables);
-		DenseMatrix64F w_ortho = new DenseMatrix64F(numComps - 1, numberOfVariables);
+		DenseMatrix64F T_ortho = new DenseMatrix64F(numberOfSamples, numComps - 1);
+		DenseMatrix64F P_ortho = new DenseMatrix64F(numComps - 1, numberOfVariables);
+		DenseMatrix64F W_ortho = new DenseMatrix64F(numComps - 1, numberOfVariables);
+		DenseMatrix64F t_ortho = new DenseMatrix64F(numberOfSamples, 1);
+		DenseMatrix64F p_ortho = new DenseMatrix64F(1, numberOfVariables);
+		DenseMatrix64F w_ortho = new DenseMatrix64F(1, numberOfVariables);
 		DenseMatrix64F X = getSampleData();
 		DenseMatrix64F y = getYVector();
 		DenseMatrix64F y_avg = getAvgYVector();
@@ -152,11 +155,20 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 				CommonOps.multTransAB(w, p, wTemp2);
 				CommonOps.divide(wTemp2, wTemp.get(0));
 				CommonOps.mult(w, wTemp2, w_ortho_temp);
-				System.out.println("matrix calc");
+				CommonOps.transpose(w_ortho_temp);
+				CommonOps.subtract(p, w_ortho_temp, w_ortho);
 				// #8
 				// w_ortho<-w_ortho/as.vector((sqrt(t(w_ortho)%*%w_ortho)))
+				DenseMatrix64F ww_ortho = new DenseMatrix64F(1, 1);
+				CommonOps.transpose(w_ortho);
+				CommonOps.multInner(w_ortho, ww_ortho);
+				double absW_ortho = Math.sqrt(ww_ortho.get(0));
+				CommonOps.divide(w_ortho, absW_ortho);
+				System.out.println("matrix calc");
 				// #9
 				// t_ortho<-(X%*%w_ortho)/as.vector(t(w_ortho)%*%w_ortho)
+				CommonOps.multInner(w_ortho_temp, ww_ortho);
+				CommonOps.mult(X, w_ortho, t_ortho);
 				// #10
 				// p_ortho<-(t(t_ortho)%*%X)/as.vector(t(t_ortho)%*%t_ortho) # Generates a row vector
 				// p_ortho<-t(p_ortho)
