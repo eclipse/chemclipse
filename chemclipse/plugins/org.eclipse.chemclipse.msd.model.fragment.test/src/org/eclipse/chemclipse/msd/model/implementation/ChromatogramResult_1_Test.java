@@ -90,7 +90,7 @@ public class ChromatogramResult_1_Test extends TestCase {
 		chromatogramResult = new MeasurementResult("name", "result2.id", "Description 2", "TestObject 2");
 		chromatogram.addMeasurementResult(chromatogramResult);
 		assertEquals(2, chromatogram.getMeasurementResults().size());
-		chromatogram.removeAllChromatogramResults();
+		chromatogram.removeAllMeasurementResults();
 		assertEquals(0, chromatogram.getMeasurementResults().size());
 	}
 

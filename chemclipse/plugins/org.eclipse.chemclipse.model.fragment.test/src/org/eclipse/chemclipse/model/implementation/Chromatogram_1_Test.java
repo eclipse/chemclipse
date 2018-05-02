@@ -46,7 +46,7 @@ public class Chromatogram_1_Test extends TestCase {
 		String result = "Hello World!";
 		IMeasurementResult chromatogramResult = new MeasurementResult(name, identifier, description, result);
 		assertEquals(0, chromatogram.getMeasurementResults().size());
-		chromatogram.addChromatogramResult(chromatogramResult);
+		chromatogram.addMeasurementResult(chromatogramResult);
 		assertEquals(1, chromatogram.getMeasurementResults().size());
 		Object object = chromatogram.getMeasurementResult(identifier);
 		assertTrue(object instanceof MeasurementResult);
