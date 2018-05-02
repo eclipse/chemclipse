@@ -38,32 +38,32 @@ public class ChromatogramResult_1_Test extends TestCase {
 
 	public void testChromatogramResult_1() {
 
-		assertEquals(0, chromatogram.getChromatogramResults().size());
+		assertEquals(0, chromatogram.getMeasurementResults().size());
 	}
 
 	public void testChromatogramResult_2() {
 
-		chromatogramResult = new MeasurementResult("result1.id", "Description 1", "TestObject 1");
-		chromatogram.addChromatogramResult(chromatogramResult);
-		assertEquals(1, chromatogram.getChromatogramResults().size());
+		chromatogramResult = new MeasurementResult("name", "result1.id", "Description 1", "TestObject 1");
+		chromatogram.addMeasurementResult(chromatogramResult);
+		assertEquals(1, chromatogram.getMeasurementResults().size());
 	}
 
 	public void testChromatogramResult_3() {
 
-		chromatogramResult = new MeasurementResult("result1.id", "Description 1", "TestObject 1");
-		chromatogram.addChromatogramResult(chromatogramResult);
-		chromatogramResult = new MeasurementResult("result2.id", "Description 2", "TestObject 2");
-		chromatogram.addChromatogramResult(chromatogramResult);
-		assertEquals(2, chromatogram.getChromatogramResults().size());
+		chromatogramResult = new MeasurementResult("name", "result1.id", "Description 1", "TestObject 1");
+		chromatogram.addMeasurementResult(chromatogramResult);
+		chromatogramResult = new MeasurementResult("name", "result2.id", "Description 2", "TestObject 2");
+		chromatogram.addMeasurementResult(chromatogramResult);
+		assertEquals(2, chromatogram.getMeasurementResults().size());
 	}
 
 	public void testChromatogramResult_4() {
 
-		chromatogramResult = new MeasurementResult("result1.id", "Description 1", "TestObject 1");
-		chromatogram.addChromatogramResult(chromatogramResult);
-		chromatogramResult = new MeasurementResult("result1.id", "Description 2", "TestObject 2");
-		chromatogram.addChromatogramResult(chromatogramResult);
-		assertEquals(1, chromatogram.getChromatogramResults().size());
+		chromatogramResult = new MeasurementResult("name", "result1.id", "Description 1", "TestObject 1");
+		chromatogram.addMeasurementResult(chromatogramResult);
+		chromatogramResult = new MeasurementResult("name", "result1.id", "Description 2", "TestObject 2");
+		chromatogram.addMeasurementResult(chromatogramResult);
+		assertEquals(1, chromatogram.getMeasurementResults().size());
 		chromatogramResult = chromatogram.getChromatogramResult("result1.id");
 		assertEquals("Description 2", chromatogramResult.getDescription());
 		assertEquals("TestObject 2", chromatogramResult.getResult());
@@ -71,13 +71,13 @@ public class ChromatogramResult_1_Test extends TestCase {
 
 	public void testChromatogramResult_5() {
 
-		chromatogramResult = new MeasurementResult("result1.id", "Description 1", "TestObject 1");
-		chromatogram.addChromatogramResult(chromatogramResult);
-		chromatogramResult = new MeasurementResult("result2.id", "Description 2", "TestObject 2");
-		chromatogram.addChromatogramResult(chromatogramResult);
-		assertEquals(2, chromatogram.getChromatogramResults().size());
-		chromatogram.deleteChromatogramResult("result2.id");
-		assertEquals(1, chromatogram.getChromatogramResults().size());
+		chromatogramResult = new MeasurementResult("name", "result1.id", "Description 1", "TestObject 1");
+		chromatogram.addMeasurementResult(chromatogramResult);
+		chromatogramResult = new MeasurementResult("name", "result2.id", "Description 2", "TestObject 2");
+		chromatogram.addMeasurementResult(chromatogramResult);
+		assertEquals(2, chromatogram.getMeasurementResults().size());
+		chromatogram.deleteMeasurementResult("result2.id");
+		assertEquals(1, chromatogram.getMeasurementResults().size());
 		chromatogramResult = chromatogram.getChromatogramResult("result1.id");
 		assertEquals("Description 1", chromatogramResult.getDescription());
 		assertEquals("TestObject 1", chromatogramResult.getResult());
@@ -85,34 +85,34 @@ public class ChromatogramResult_1_Test extends TestCase {
 
 	public void testChromatogramResult_6() {
 
-		chromatogramResult = new MeasurementResult("result1.id", "Description 1", "TestObject 1");
-		chromatogram.addChromatogramResult(chromatogramResult);
-		chromatogramResult = new MeasurementResult("result2.id", "Description 2", "TestObject 2");
-		chromatogram.addChromatogramResult(chromatogramResult);
-		assertEquals(2, chromatogram.getChromatogramResults().size());
+		chromatogramResult = new MeasurementResult("name", "result1.id", "Description 1", "TestObject 1");
+		chromatogram.addMeasurementResult(chromatogramResult);
+		chromatogramResult = new MeasurementResult("name", "result2.id", "Description 2", "TestObject 2");
+		chromatogram.addMeasurementResult(chromatogramResult);
+		assertEquals(2, chromatogram.getMeasurementResults().size());
 		chromatogram.removeAllChromatogramResults();
-		assertEquals(0, chromatogram.getChromatogramResults().size());
+		assertEquals(0, chromatogram.getMeasurementResults().size());
 	}
 
 	public void testChromatogramResult_7() {
 
-		chromatogram.addChromatogramResult(null);
-		assertEquals(0, chromatogram.getChromatogramResults().size());
+		chromatogram.addMeasurementResult(null);
+		assertEquals(0, chromatogram.getMeasurementResults().size());
 	}
 
 	public void testChromatogramResult_8() {
 
-		chromatogramResult = new MeasurementResult("result1.id", "Description 1", "TestObject 1");
-		chromatogram.addChromatogramResult(chromatogramResult);
+		chromatogramResult = new MeasurementResult("name", "result1.id", "Description 1", "TestObject 1");
+		chromatogram.addMeasurementResult(chromatogramResult);
 		chromatogramResult = chromatogram.getChromatogramResult(null);
 		assertNull(chromatogramResult);
 	}
 
 	public void testChromatogramResult_9() {
 
-		chromatogramResult = new MeasurementResult("result1.id", "Description 1", "TestObject 1");
-		chromatogram.addChromatogramResult(chromatogramResult);
-		chromatogram.deleteChromatogramResult(null);
-		assertEquals(1, chromatogram.getChromatogramResults().size());
+		chromatogramResult = new MeasurementResult("name", "result1.id", "Description 1", "TestObject 1");
+		chromatogram.addMeasurementResult(chromatogramResult);
+		chromatogram.deleteMeasurementResult(null);
+		assertEquals(1, chromatogram.getMeasurementResults().size());
 	}
 }
