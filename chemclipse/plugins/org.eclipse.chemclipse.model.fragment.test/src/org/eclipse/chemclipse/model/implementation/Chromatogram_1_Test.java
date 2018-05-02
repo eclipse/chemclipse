@@ -35,19 +35,20 @@ public class Chromatogram_1_Test extends TestCase {
 
 	public void testChromatogram_1() {
 
-		assertEquals(0, chromatogram.getChromatogramResults().size());
+		assertEquals(0, chromatogram.getMeasurementResults().size());
 	}
 
 	public void testChromatogram_2() {
 
+		String name = "test1.name";
 		String identifier = "test1.identifier";
 		String description = "test1.description";
 		String result = "Hello World!";
-		IMeasurementResult chromatogramResult = new MeasurementResult(identifier, description, result);
-		assertEquals(0, chromatogram.getChromatogramResults().size());
+		IMeasurementResult chromatogramResult = new MeasurementResult(name, identifier, description, result);
+		assertEquals(0, chromatogram.getMeasurementResults().size());
 		chromatogram.addChromatogramResult(chromatogramResult);
-		assertEquals(1, chromatogram.getChromatogramResults().size());
-		Object object = chromatogram.getChromatogramResult(identifier);
+		assertEquals(1, chromatogram.getMeasurementResults().size());
+		Object object = chromatogram.getMeasurementResult(identifier);
 		assertTrue(object instanceof MeasurementResult);
 		assertEquals(((MeasurementResult)object).getIdentifier(), identifier);
 		assertEquals(((MeasurementResult)object).getDescription(), description);
