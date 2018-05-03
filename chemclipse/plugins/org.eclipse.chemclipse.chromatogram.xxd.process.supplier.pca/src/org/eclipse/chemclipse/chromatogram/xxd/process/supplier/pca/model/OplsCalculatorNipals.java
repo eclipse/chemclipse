@@ -88,13 +88,14 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		DenseMatrix64F t_ortho = new DenseMatrix64F(numberOfSamples, 1);
 		DenseMatrix64F p_ortho = new DenseMatrix64F(1, numberOfVariables);
 		DenseMatrix64F w_ortho = new DenseMatrix64F(1, numberOfVariables);
-		DenseMatrix64F X = getSampleData();
-		DenseMatrix64F y = getYVector();
+		DenseMatrix64F X = new DenseMatrix64F(1, 1);
+		X.set(getSampleData());
+		DenseMatrix64F y = new DenseMatrix64F(1, 1);
+		y.set(getYVector());
 		DenseMatrix64F y_avg = getAvgYVector();
 		DenseMatrix64F x_avg = getAvgXVector();
 		DenseMatrix64F x_sd = getSDXVector();
 		DenseMatrix64F w = new DenseMatrix64F(1, numberOfVariables);
-		DenseMatrix64F Eo_PLS = getSampleData();
 		//
 		// ##########################################################################
 		// ### Start algorithm
@@ -164,38 +165,40 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 				CommonOps.multInner(w_ortho, ww_ortho);
 				double absW_ortho = Math.sqrt(ww_ortho.get(0));
 				CommonOps.divide(w_ortho, absW_ortho);
-				System.out.println("matrix calc");
 				// #9
 				// t_ortho<-(X%*%w_ortho)/as.vector(t(w_ortho)%*%w_ortho)
+				CommonOps.transpose(w_ortho_temp);
 				CommonOps.multInner(w_ortho_temp, ww_ortho);
 				CommonOps.mult(X, w_ortho, t_ortho);
+				CommonOps.divide(t_ortho, ww_ortho.get(0));
 				// #10
 				// p_ortho<-(t(t_ortho)%*%X)/as.vector(t(t_ortho)%*%t_ortho) # Generates a row vector
 				// p_ortho<-t(p_ortho)
+				DenseMatrix64F tt_temp = new DenseMatrix64F(1, 1);
+				CommonOps.multInner(t_ortho, tt_temp);
+				CommonOps.multTransA(t_ortho, X, p_ortho);
 				// #11
 				// Eo_PLS<-X-as.vector(t_ortho%*%t(p_ortho))
+				DenseMatrix64F X_temp = new DenseMatrix64F(numberOfSamples, numberOfVariables);
+				CommonOps.mult(t_ortho, p_ortho, X_temp);
+				CommonOps.subtract(X, X_temp, X);
 				// #12
 				// T_ortho<-c(T_ortho,t_ortho)
 				// P_ortho<-c(P_ortho,p_ortho)
 				// W_ortho<-c(W_ortho,w_ortho)
-				// X<-Eo_PLS
+				// X<-Eo_PLS (was in this case already conducted in #11
+				for(int j = 0; j < numberOfSamples; j++) {
+					T_ortho.set(j, i, t_ortho.get(j));
+				}
+				for(int k = 0; k < numberOfVariables; k++) {
+					P_ortho.set(i, k, p_ortho.get(k));
+					W_ortho.set(i, k, w_ortho.get(k));
+				}
+				System.out.println("matrix calc");
 			}
 		}
-		//
-		// if (counterLVs<nLVs){
-		// }
-		// }
-		//
-		// if(nLVs>1){
-		// T_ortho<-matrix(T_ortho,ncol=(nLVs-1)) ### reforming the vectors to matrices
-		// }
-		//
-		// if(nLVs>1){P_ortho<-matrix(P_ortho,ncol=(nLVs-1))}
-		// if(nLVs>1){W_ortho<-matrix(W_ortho,ncol=(nLVs-1))}
-		//
-		// #if(nLVs>1){T_ortho<-matrix(T_ortho,nrow=(nLVs-1),byrow=TRUE)}
-		// #if(nLVs>1){P_ortho<-matrix(P_ortho,nrow=(nLVs-1),byrow=TRUE)}
-		// #if(nLVs>1){W_ortho<-matrix(W_ortho,nrow=(nLVs-1),byrow=TRUE)}
+		setScores(new DenseMatrix64F(numberOfSamples, numComps));
+		setLoadings(new DenseMatrix64F(numComps, numberOfVariables));
 		//
 		// b<-w%*%ce
 		//
