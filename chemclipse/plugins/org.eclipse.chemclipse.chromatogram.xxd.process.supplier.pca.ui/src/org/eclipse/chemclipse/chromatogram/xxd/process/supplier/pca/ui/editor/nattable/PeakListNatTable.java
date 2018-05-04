@@ -130,6 +130,7 @@ public class PeakListNatTable {
 	public void clearTable() {
 
 		tableData.clear();
+		natTable.update();
 		natTable.refresh();
 	}
 
@@ -251,7 +252,6 @@ public class PeakListNatTable {
 	public void exportTableDialog(Display display) {
 
 		exportData.exportTableDialog(display);
-		;
 	}
 
 	/**
@@ -328,6 +328,7 @@ public class PeakListNatTable {
 		sortModel.update();
 		generateGroup();
 		hideCompoundColumn();
+		natTable.update();
 		natTable.refresh();
 	}
 }
