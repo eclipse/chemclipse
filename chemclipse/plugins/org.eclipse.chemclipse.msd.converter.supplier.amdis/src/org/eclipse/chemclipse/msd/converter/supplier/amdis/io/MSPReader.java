@@ -188,9 +188,15 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 
 		IVendorLibraryMassSpectrum massSpectrum = new VendorLibraryMassSpectrum();
 		ILibraryInformation libraryInformation = massSpectrum.getLibraryInformation();
-		//
+		/*
+		 * Extract name and reference identifier.
+		 * Additionally, add the reference identifier if it is stored as a pattern.
+		 */
 		String name = extractContentAsString(massSpectrumData, namePattern, 2);
 		extractNameAndReferenceIdentifier(massSpectrum, name, referenceIdentifierMarker, referenceIdentifierPrefix);
+		String referenceIdentifier = extractContentAsString(massSpectrumData, referenceIdentifierPattern, 2);
+		massSpectrum.getLibraryInformation().setReferenceIdentifier(referenceIdentifier);
+		//
 		String formula = extractContentAsString(massSpectrumData, formulaPattern, 2);
 		libraryInformation.setFormula(formula);
 		double molWeight = extractContentAsDouble(massSpectrumData, molweightPattern);
@@ -205,8 +211,6 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 		libraryInformation.setCasNumber(casNumber);
 		String database = extractContentAsString(massSpectrumData, databaseNamePattern, 3);
 		libraryInformation.setDatabase(database);
-		String referenceIdentifier = extractContentAsString(massSpectrumData, referenceIdentifierPattern, 2);
-		massSpectrum.getLibraryInformation().setReferenceIdentifier(referenceIdentifier);
 		String smiles = extractContentAsString(massSpectrumData, smilesPattern, 2);
 		libraryInformation.setSmiles(smiles);
 		int retentionTime = extractContentAsInt(massSpectrumData, retentionTimePattern, 2);

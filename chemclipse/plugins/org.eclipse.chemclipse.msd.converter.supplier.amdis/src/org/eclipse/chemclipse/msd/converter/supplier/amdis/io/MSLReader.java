@@ -162,17 +162,19 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 		IVendorLibraryMassSpectrum massSpectrum = new VendorLibraryMassSpectrum();
 		/*
 		 * Extract name and reference identifier.
+		 * Additionally, add the reference identifier if it is stored as a pattern.
 		 */
 		String name = extractContentAsString(massSpectrumData, namePattern, 2);
 		extractNameAndReferenceIdentifier(massSpectrum, name, referenceIdentifierMarker, referenceIdentifierPrefix);
+		String referenceIdentifier = extractContentAsString(massSpectrumData, referenceIdentifierPattern, 2) + massSpectrum.getLibraryInformation().getReferenceIdentifier();
+		massSpectrum.getLibraryInformation().setReferenceIdentifier(referenceIdentifier);
+		//
 		String comments = extractContentAsString(massSpectrumData, commentsPattern, 2);
 		massSpectrum.getLibraryInformation().setComments(comments);
 		String casNumber = extractContentAsString(massSpectrumData, casNumberPattern, 3);
 		massSpectrum.getLibraryInformation().setCasNumber(casNumber);
 		String database = extractContentAsString(massSpectrumData, databaseNamePattern, 3);
 		massSpectrum.getLibraryInformation().setDatabase(database);
-		String referenceIdentifier = extractContentAsString(massSpectrumData, referenceIdentifierPattern, 2);
-		massSpectrum.getLibraryInformation().setReferenceIdentifier(referenceIdentifier);
 		String smiles = extractContentAsString(massSpectrumData, smilesPattern, 2);
 		massSpectrum.getLibraryInformation().setSmiles(smiles);
 		int retentionTime = extractContentAsInt(massSpectrumData, retentionTimePattern, 2);
