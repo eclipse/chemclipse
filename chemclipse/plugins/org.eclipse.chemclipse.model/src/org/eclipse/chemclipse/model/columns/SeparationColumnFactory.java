@@ -11,12 +11,24 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.columns;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SeparationColumnFactory {
 
 	public static final String TYPE_NA = "N.A.";
 	public static final String TYPE_DB1 = "DB1";
 	public static final String TYPE_DB5 = "DB5";
 	public static final String TYPE_DB1701 = "DB1701";
+
+	public static List<ISeparationColumn> getSeparationColumns() {
+
+		List<ISeparationColumn> separationColumns = new ArrayList<>();
+		separationColumns.add(getSeparationColumn(TYPE_DB1));
+		separationColumns.add(getSeparationColumn(TYPE_DB5));
+		separationColumns.add(getSeparationColumn(TYPE_DB1701));
+		return separationColumns;
+	}
 
 	public static ISeparationColumn getSeparationColumn(String name) {
 

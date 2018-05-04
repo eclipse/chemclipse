@@ -66,6 +66,8 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.columns.ISeparationColumn;
+import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -89,6 +91,7 @@ import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.ui.support.AbstractLabelProvider;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ChromatogramChart;
@@ -130,6 +133,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -185,11 +190,12 @@ public class ExtendedChromatogramUI {
 	//
 	private Composite toolbarInfo;
 	private Label labelChromatogramInfo;
-	private Composite toolbarChromatograms;
+	private Composite toolbarAnalyze;
 	private Combo comboChromatograms;
 	private Composite toolbarEdit;
 	private ChromatogramChart chromatogramChart;
 	private Combo comboTargetTransfer;
+	private ComboViewer comboViewerSeparationColumn;
 	//
 	private IChromatogramSelection chromatogramSelection = null;
 	private List<IChromatogramSelection> referencedChromatogramSelections = null; // Might be null ... no references.
@@ -981,12 +987,14 @@ public class ExtendedChromatogramUI {
 		//
 		createToolbarMain(parent);
 		toolbarInfo = createToolbarInfo(parent);
-		toolbarChromatograms = createToolbarChromatograms(parent);
+		toolbarAnalyze = createToolbarAnalyze(parent);
 		toolbarEdit = createToolbarEdit(parent);
 		createChromatogramChart(parent);
 		//
+		comboViewerSeparationColumn.setInput(SeparationColumnFactory.getSeparationColumns());
+		//
 		PartSupport.setCompositeVisibility(toolbarInfo, false);
-		PartSupport.setCompositeVisibility(toolbarChromatograms, false);
+		PartSupport.setCompositeVisibility(toolbarAnalyze, false);
 		PartSupport.setCompositeVisibility(toolbarEdit, false);
 	}
 
@@ -999,7 +1007,7 @@ public class ExtendedChromatogramUI {
 		composite.setLayout(new GridLayout(8, false));
 		//
 		createButtonToggleToolbarInfo(composite);
-		createButtonToggleToolbarChromatograms(composite);
+		createButtonToggleToolbarAnalyze(composite);
 		createButtonToggleToolbarEdit(composite);
 		createToggleChartSeriesLegendButton(composite);
 		createToggleLegendMarkerButton(composite);
@@ -1022,21 +1030,155 @@ public class ExtendedChromatogramUI {
 		return composite;
 	}
 
-	private Composite createToolbarChromatograms(Composite parent) {
+	private Composite createToolbarAnalyze(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		composite.setLayout(new GridLayout(10, false));
 		//
-		Label label = new Label(composite, SWT.NONE);
-		label.setText("Show methods and peak detection, ... items here ... simple workflow.");
-		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		// createButtonSelectPreviousChromatogram(composite);
-		// createComboChromatograms(composite);
-		// createButtonSelectNextChromatogram(composite);
+		comboViewerSeparationColumn = createComboViewerSeparationColumn(composite);
+		createVerticalSeparator(composite);
+		createComboPredefinedMethod(composite);
+		createButtonExecuteMethod(composite);
+		createVerticalSeparator(composite);
+		createComboFilter(composite);
+		createComboPeakDetector(composite);
+		createComboPeakIntegrator(composite);
+		createComboPeakIdentifier(composite);
+		createButtonExecuteMethodItems(composite);
 		//
 		return composite;
+	}
+
+	private ComboViewer createComboViewerSeparationColumn(Composite parent) {
+
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof ISeparationColumn) {
+					ISeparationColumn separationColumn = (ISeparationColumn)element;
+					return separationColumn.getName();
+				}
+				return null;
+			}
+		});
+		combo.setToolTipText("Select a chromatogram column.");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+		//
+		return comboViewer;
+	}
+
+	private void createComboPredefinedMethod(Composite parent) {
+
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		combo.setToolTipText("Select a chromatogram method.");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createButtonExecuteMethod(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Apply the method to the selected chromatogram.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createComboFilter(Composite parent) {
+
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		combo.setToolTipText("Select a chromatogram filter method.");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createComboPeakDetector(Composite parent) {
+
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		combo.setToolTipText("Select a chromatogram peak detector method.");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createComboPeakIntegrator(Composite parent) {
+
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		combo.setToolTipText("Select a chromatogram peak integrator method.");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createComboPeakIdentifier(Composite parent) {
+
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		combo.setToolTipText("Select a chromatogram peak detector method.");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createButtonExecuteMethodItems(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Apply the method items to the selected chromatogram.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
 	}
 
 	private Composite createToolbarEdit(Composite parent) {
@@ -1700,10 +1842,10 @@ public class ExtendedChromatogramUI {
 		return button;
 	}
 
-	private Button createButtonToggleToolbarChromatograms(Composite parent) {
+	private Button createButtonToggleToolbarAnalyze(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle chromatograms toolbar.");
+		button.setToolTipText("Toggle the chromatogram analyze toolbar.");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -1711,7 +1853,7 @@ public class ExtendedChromatogramUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarChromatograms);
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarAnalyze);
 				if(visible) {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
 				} else {

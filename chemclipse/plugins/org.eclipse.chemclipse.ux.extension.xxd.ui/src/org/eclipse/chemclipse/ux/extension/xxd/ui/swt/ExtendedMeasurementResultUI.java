@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.ui.support.AbstractLabelProvider;
 import org.eclipse.chemclipse.ux.extension.ui.support.IMeasurementResultTitles;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
@@ -33,18 +34,16 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
@@ -197,29 +196,9 @@ public class ExtendedMeasurementResultUI {
 	private ComboViewer createResultCombo(Composite parent) {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.PUSH);
+		Combo combo = comboViewer.getCombo();
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
-		comboViewer.setLabelProvider(new ILabelProvider() {
-
-			@Override
-			public void removeListener(ILabelProviderListener listener) {
-
-			}
-
-			@Override
-			public boolean isLabelProperty(Object element, String property) {
-
-				return false;
-			}
-
-			@Override
-			public void dispose() {
-
-			}
-
-			@Override
-			public void addListener(ILabelProviderListener listener) {
-
-			}
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 
 			@Override
 			public String getText(Object element) {
@@ -230,18 +209,12 @@ public class ExtendedMeasurementResultUI {
 				}
 				return null;
 			}
-
-			@Override
-			public Image getImage(Object element) {
-
-				return null;
-			}
 		});
-		comboViewer.getCombo().setToolTipText("Show the available measurement results.");
+		combo.setToolTipText("Show the available measurement results.");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
-		comboViewer.getCombo().setLayoutData(gridData);
-		comboViewer.getCombo().addSelectionListener(new SelectionAdapter() {
+		combo.setLayoutData(gridData);
+		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
