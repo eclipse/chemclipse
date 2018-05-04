@@ -337,7 +337,11 @@ public class ExtendedMeasurementResultUI {
 						/*
 						 * Clear / Initialize
 						 */
-						clearTable();
+						Table table = extendedTableViewer.getTable();
+						if(table.getItemCount() > 0) {
+							extendedTableViewer.setInput(null);
+						}
+						table.clearAll();
 						IMeasurementResultTitles titles = (IMeasurementResultTitles)provider.createExecutableExtension(ATTRIBUTE_TITLES);
 						extendedTableViewer.createColumns(titles.getTitles(), titles.getBounds());
 						extendedTableViewer.setLabelProvider((ITableLabelProvider)provider.createExecutableExtension(ATTRIBUTE_LABEL_PROVIDER));
@@ -357,18 +361,12 @@ public class ExtendedMeasurementResultUI {
 		if(measurementResult != null) {
 			extendedTableViewer.setInput(measurementResult);
 		} else {
-			clearTable();
+			Table table = extendedTableViewer.getTable();
+			if(table.getItemCount() > 0) {
+				extendedTableViewer.setInput(null);
+			}
+			table.removeAll();
 		}
-	}
-
-	private void clearTable() {
-
-		Table table = extendedTableViewer.getTable();
-		if(table.getItemCount() > 0) {
-			extendedTableViewer.setInput(null);
-		}
-		// table.clearAll();
-		table.removeAll();
 	}
 
 	public IConfigurationElement getMeasurementResultVisualizationProvider(String providerId) {
