@@ -1722,11 +1722,12 @@ public class ExtendedChromatogramUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(14, false));
+		composite.setLayout(new GridLayout(15, false));
 		//
 		createButtonSelectPreviousChromatogram(composite);
 		createComboChromatograms(composite);
 		createButtonSelectNextChromatogram(composite);
+		createVerticalSeparator(composite);
 		createComboTargetTransfer(composite);
 		createTextTargetDelta(composite);
 		createCheckBoxTransferTargets(composite);
