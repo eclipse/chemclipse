@@ -36,7 +36,22 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	public boolean preWindowShellClose() {
 
 		if(ModelSupportAddon.saveDirtyParts()) {
-			Shell shell = Display.getCurrent().getActiveShell();
+			Display display = Display.getCurrent();
+			Shell shell = display.getActiveShell();
+			if(shell == null) {
+				// see Bug 534346, try to find an alternative shell
+				Shell[] shells = display.getShells();
+				for(Shell other : shells) {
+					if(other.isDisposed() || !other.isVisible()) {
+						continue;
+					}
+					shell = other;
+				}
+			}
+			if(shell == null) {
+				// we can't ask the user then
+				return true;
+			}
 			MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 			messageBox.setText("Close the application");
 			messageBox.setMessage("Do you want to close the application now?");
