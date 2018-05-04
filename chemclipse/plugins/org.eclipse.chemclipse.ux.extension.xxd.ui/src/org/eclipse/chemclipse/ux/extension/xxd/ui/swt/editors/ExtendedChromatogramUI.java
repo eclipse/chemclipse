@@ -52,6 +52,10 @@ import org.eclipse.chemclipse.chromatogram.wsd.filter.core.chromatogram.IChromat
 import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.core.IPeakDetectorWSDSupplier;
 import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.core.IPeakDetectorWSDSupport;
 import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.core.PeakDetectorWSD;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram.ChromatogramCalculator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram.IChromatogramCalculatorSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram.IChromatogramCalculatorSupport;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.exceptions.NoChromatogramCalculatorSupplierAvailableException;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.IPeakIntegratorSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.IPeakIntegratorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegrator;
@@ -207,6 +211,7 @@ public class ExtendedChromatogramUI {
 	private List<IChromatogramSelection> referencedChromatogramSelections = null; // Might be null ... no references.
 	private List<IChromatogramSelection> targetChromatogramSelections = new ArrayList<IChromatogramSelection>(); // Is filled dynamically.
 	//
+	private List<IChartMenuEntry> chartMenuEntriesCalculators = new ArrayList<IChartMenuEntry>();
 	private List<IChartMenuEntry> chartMenuEntriesClassifier = new ArrayList<IChartMenuEntry>();
 	private List<IChartMenuEntry> chartMenuEntriesFilter = new ArrayList<IChartMenuEntry>();
 	private List<IChartMenuEntry> chartMenuEntriesPeakDetectors = new ArrayList<IChartMenuEntry>();
@@ -464,6 +469,68 @@ public class ExtendedChromatogramUI {
 		}
 	}
 
+	private class CalculatorMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
+
+		private String name;
+		private String calculatorId;
+		private String type;
+		private IChromatogramSelection chromatogramSelection;
+
+		public CalculatorMenuEntry(String name, String calculatorId, String type, IChromatogramSelection chromatogramSelection) {
+			this.name = name;
+			this.calculatorId = calculatorId;
+			this.type = type;
+			this.chromatogramSelection = chromatogramSelection;
+		}
+
+		@Override
+		public String getCategory() {
+
+			return "Calculator";
+		}
+
+		@Override
+		public String getName() {
+
+			return name;
+		}
+
+		@Override
+		public void execute(Shell shell, ScrollableChart scrollableChart) {
+
+			if(chromatogramSelection != null) {
+				/*
+				 * Create the runnable.
+				 */
+				IRunnableWithProgress runnable = new IRunnableWithProgress() {
+
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						switch(type) {
+							case TYPE_GENERIC:
+								ChromatogramCalculator.applyCalculator(chromatogramSelection, calculatorId, monitor);
+								break;
+							case TYPE_MSD:
+								//
+								break;
+							case TYPE_CSD:
+								//
+								break;
+							case TYPE_WSD:
+								//
+								break;
+						}
+					}
+				};
+				/*
+				 * Execute
+				 */
+				processChromatogram(runnable);
+			}
+		}
+	}
+
 	private class ClassifierMenuEntry extends AbstractChartMenuEntry implements IChartMenuEntry {
 
 		private String name;
@@ -513,16 +580,10 @@ public class ExtendedChromatogramUI {
 								}
 								break;
 							case TYPE_CSD:
-								if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-									IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
-									//
-								}
+								//
 								break;
 							case TYPE_WSD:
-								if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-									IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
-									//
-								}
+								//
 								break;
 						}
 					}
@@ -975,12 +1036,43 @@ public class ExtendedChromatogramUI {
 
 	private void addChartMenuEntries() {
 
+		addChartMenuEntriesCalculators();
 		addChartMenuEntriesClassifier();
 		addChartMenuEntriesFilter();
 		addChartMenuEntriesPeakDetectors();
 		addChartMenuEntriesPeakIntegrators();
 		addChartMenuEntriesPeakIdentifier();
 		addChartMenuEntriesReport();
+	}
+
+	private void addChartMenuEntriesCalculators() {
+
+		IChartSettings chartSettings = chromatogramChart.getChartSettings();
+		cleanChartMenuEntries(chartSettings, chartMenuEntriesCalculators);
+		//
+		if(chromatogramSelection != null) {
+			if(chromatogramSelection instanceof IChromatogramSelection) {
+				addChartMenuEntriesCalculators(chartSettings);
+			}
+		}
+		//
+		chromatogramChart.applySettings(chartSettings);
+	}
+
+	private void addChartMenuEntriesCalculators(IChartSettings chartSettings) {
+
+		try {
+			IChromatogramCalculatorSupport chromatogramCalculatorSupport = ChromatogramCalculator.getChromatogramCalculatorSupport();
+			for(String calculatorId : chromatogramCalculatorSupport.getAvailableCalculatorIds()) {
+				IChromatogramCalculatorSupplier calculator = chromatogramCalculatorSupport.getCalculatorSupplier(calculatorId);
+				String name = calculator.getCalculatorName();
+				CalculatorMenuEntry calculatorMenuEntry = new CalculatorMenuEntry(name, calculatorId, TYPE_GENERIC, chromatogramSelection);
+				chartMenuEntriesCalculators.add(calculatorMenuEntry);
+				chartSettings.addMenuEntry(calculatorMenuEntry);
+			}
+		} catch(NoChromatogramCalculatorSupplierAvailableException e) {
+			logger.warn(e);
+		}
 	}
 
 	private void addChartMenuEntriesClassifier() {
