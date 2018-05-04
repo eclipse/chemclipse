@@ -17,10 +17,15 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.StandardsReader;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
+import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
+import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -51,6 +56,7 @@ public class ExtendedRetentionIndexTableViewerUI extends Composite {
 	private Button buttonDelete;
 	private Button buttonAdd;
 	//
+	private ComboViewer comboViewerSeparationColumn;
 	private Combo comboReferences;
 	private Button buttonAddReference;
 	private Text textRetentionTime;
@@ -86,36 +92,36 @@ public class ExtendedRetentionIndexTableViewerUI extends Composite {
 
 		setLayout(new FillLayout());
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setLayout(new GridLayout(6, false));
+		composite.setLayout(new GridLayout(1, false));
 		//
 		retentionIndexEntries = new ArrayList<IRetentionIndexEntry>(); // default list
 		StandardsReader standardsReader = new StandardsReader();
 		availableRetentionIndexEntries = standardsReader.getStandardsList();
 		//
 		createButtonField(composite);
-		createAddReferenceField(composite);
+		createReferenceField(composite);
 		createTableField(composite);
 		//
+		comboViewerSeparationColumn.setInput(SeparationColumnFactory.getSeparationColumns());
 		enableButtonFields(ACTION_INITIALIZE);
 	}
 
-	private void createButtonField(Composite composite) {
+	private void createButtonField(Composite parent) {
 
-		Label label = new Label(composite, SWT.NONE);
-		label.setText("");
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 5;
-		label.setLayoutData(gridData);
-		/*
-		 * Buttons
-		 */
-		Composite compositeButtons = new Composite(composite, SWT.NONE);
-		compositeButtons.setLayout(new GridLayout(3, true));
-		GridData gridDataComposite = new GridData();
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(3, true));
+		GridData gridDataComposite = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataComposite.horizontalAlignment = SWT.RIGHT;
-		compositeButtons.setLayoutData(gridDataComposite);
+		composite.setLayoutData(gridDataComposite);
 		//
-		buttonCancel = new Button(compositeButtons, SWT.PUSH);
+		createButtonCancel(composite);
+		createButtonDelete(composite);
+		createButtonAdd(composite);
+	}
+
+	private void createButtonCancel(Composite parent) {
+
+		buttonCancel = new Button(parent, SWT.PUSH);
 		buttonCancel.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CANCEL, IApplicationImage.SIZE_16x16));
 		buttonCancel.addSelectionListener(new SelectionAdapter() {
 
@@ -127,8 +133,11 @@ public class ExtendedRetentionIndexTableViewerUI extends Composite {
 				enableButtonFields(ACTION_CANCEL);
 			}
 		});
-		//
-		buttonDelete = new Button(compositeButtons, SWT.PUSH);
+	}
+
+	private void createButtonDelete(Composite parent) {
+
+		buttonDelete = new Button(parent, SWT.PUSH);
 		buttonDelete.setEnabled(false);
 		buttonDelete.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		buttonDelete.addSelectionListener(new SelectionAdapter() {
@@ -158,8 +167,11 @@ public class ExtendedRetentionIndexTableViewerUI extends Composite {
 				}
 			}
 		});
-		//
-		buttonAdd = new Button(compositeButtons, SWT.PUSH);
+	}
+
+	private void createButtonAdd(Composite parent) {
+
+		buttonAdd = new Button(parent, SWT.PUSH);
 		buttonAdd.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		buttonAdd.addSelectionListener(new SelectionAdapter() {
 
@@ -171,9 +183,54 @@ public class ExtendedRetentionIndexTableViewerUI extends Composite {
 		});
 	}
 
-	private void createAddReferenceField(Composite composite) {
+	private void createReferenceField(Composite parent) {
 
-		comboReferences = new Combo(composite, SWT.BORDER);
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(7, false));
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		comboViewerSeparationColumn = createComboViewerSeparationColumn(composite);
+		createComboReferences(composite);
+		createLabelRetentionTime(composite);
+		createTextRetentionTime(composite);
+		createLabelRetentionIndex(composite);
+		createTextRetentionIndex(composite);
+		createButtonAddReference(composite);
+	}
+
+	private ComboViewer createComboViewerSeparationColumn(Composite parent) {
+
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof ISeparationColumn) {
+					ISeparationColumn separationColumn = (ISeparationColumn)element;
+					return separationColumn.getName();
+				}
+				return null;
+			}
+		});
+		combo.setToolTipText("Select a chromatogram column.");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+		//
+		return comboViewer;
+	}
+
+	private void createComboReferences(Composite parent) {
+
+		comboReferences = new Combo(parent, SWT.BORDER);
 		comboReferences.setText("");
 		comboReferences.setItems(getAvailableStandards());
 		comboReferences.addSelectionListener(new SelectionAdapter() {
@@ -190,22 +247,37 @@ public class ExtendedRetentionIndexTableViewerUI extends Composite {
 				}
 			}
 		});
-		//
-		Label labelRetentionTime = new Label(composite, SWT.NONE);
+	}
+
+	private void createLabelRetentionTime(Composite parent) {
+
+		Label labelRetentionTime = new Label(parent, SWT.NONE);
 		labelRetentionTime.setText("RT:");
-		//
-		textRetentionTime = new Text(composite, SWT.BORDER);
+	}
+
+	private void createTextRetentionTime(Composite parent) {
+
+		textRetentionTime = new Text(parent, SWT.BORDER);
 		textRetentionTime.setText("");
 		textRetentionTime.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		Label labelRetentionIndex = new Label(composite, SWT.NONE);
+	}
+
+	private void createLabelRetentionIndex(Composite parent) {
+
+		Label labelRetentionIndex = new Label(parent, SWT.NONE);
 		labelRetentionIndex.setText("RI:");
-		//
-		textRetentionIndex = new Text(composite, SWT.BORDER);
+	}
+
+	private void createTextRetentionIndex(Composite parent) {
+
+		textRetentionIndex = new Text(parent, SWT.BORDER);
 		textRetentionIndex.setText("");
 		textRetentionIndex.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		buttonAddReference = new Button(composite, SWT.PUSH);
+	}
+
+	private void createButtonAddReference(Composite parent) {
+
+		buttonAddReference = new Button(parent, SWT.PUSH);
 		buttonAddReference.setText("");
 		buttonAddReference.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_ADD, IApplicationImage.SIZE_16x16));
 		buttonAddReference.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -249,9 +321,7 @@ public class ExtendedRetentionIndexTableViewerUI extends Composite {
 	private void createTableField(Composite composite) {
 
 		retentionIndexTableViewerUI = new RetentionIndexTableViewerUI(composite, SWT.BORDER | SWT.MULTI);
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.horizontalSpan = 6;
-		retentionIndexTableViewerUI.getTable().setLayoutData(gridData);
+		retentionIndexTableViewerUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		retentionIndexTableViewerUI.getTable().addSelectionListener(new SelectionAdapter() {
 
 			@Override
