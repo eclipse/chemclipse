@@ -18,4 +18,6 @@ public interface ISeparationColumnIndices extends NavigableMap<Integer, IRetenti
 	ISeparationColumn getSeparationColumn();
 
 	void setSeparationColumn(ISeparationColumn separationColumn);
+
+	void put(IRetentionIndexEntry retentionIndexEntry);
 }

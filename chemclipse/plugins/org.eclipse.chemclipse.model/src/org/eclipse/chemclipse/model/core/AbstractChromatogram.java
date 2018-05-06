@@ -29,6 +29,8 @@ import java.util.TreeSet;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.BaselineModel;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
+import org.eclipse.chemclipse.model.columns.ISeparationColumn;
+import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.implementation.TripleQuadMethod;
 import org.eclipse.chemclipse.model.notifier.IChromatogramSelectionUpdateNotifier;
@@ -101,6 +103,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	private List<IIntegrationEntry> backgroundIntegrationEntries;
 	//
 	private IMethod method;
+	private ISeparationColumn separationColumn;
 	/*
 	 * This set contains all the peaks of the chromatogram.
 	 * Specific chromatogram implementations might define
@@ -122,6 +125,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		chromatogramIntegrationEntries = new ArrayList<IIntegrationEntry>();
 		backgroundIntegrationEntries = new ArrayList<IIntegrationEntry>();
 		method = new TripleQuadMethod();
+		separationColumn = SeparationColumnFactory.getSeparationColumn(SeparationColumnFactory.TYPE_NONE);
 	}
 
 	@Override
@@ -989,9 +993,21 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 
 		return method;
 	}
-	// -----------------------------------------------IChromatogramProcessorSupport
 
-	// -----------------------------------------------IChromatogramPeaks
+	@Override
+	public ISeparationColumn getSeparationColumn() {
+
+		return separationColumn;
+	}
+
+	@Override
+	public void setSeparationColumn(ISeparationColumn separationColumn) {
+
+		if(separationColumn != null) {
+			this.separationColumn = separationColumn;
+		}
+	}
+
 	@Override
 	public void removeAllPeaks() {
 

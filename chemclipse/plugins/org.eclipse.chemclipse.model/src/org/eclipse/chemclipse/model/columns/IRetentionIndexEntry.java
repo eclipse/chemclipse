@@ -18,4 +18,6 @@ public interface IRetentionIndexEntry {
 	float getRetentionIndex();
 
 	String getName();
+
+	void setName(String name);
 }

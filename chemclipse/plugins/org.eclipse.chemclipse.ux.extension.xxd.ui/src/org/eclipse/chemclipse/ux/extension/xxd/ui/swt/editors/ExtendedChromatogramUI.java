@@ -1035,7 +1035,7 @@ public class ExtendedChromatogramUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(10, false));
+		composite.setLayout(new GridLayout(11, false));
 		//
 		comboViewerSeparationColumn = createComboViewerSeparationColumn(composite);
 		createVerticalSeparator(composite);
@@ -1046,6 +1046,7 @@ public class ExtendedChromatogramUI {
 		createComboPeakDetector(composite);
 		createComboPeakIntegrator(composite);
 		createComboPeakIdentifier(composite);
+		createComboCalculator(composite);
 		createButtonExecuteMethodItems(composite);
 		//
 		return composite;
@@ -1156,6 +1157,20 @@ public class ExtendedChromatogramUI {
 
 		Combo combo = new Combo(parent, SWT.READ_ONLY);
 		combo.setToolTipText("Select a chromatogram peak detector method.");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+	}
+
+	private void createComboCalculator(Composite parent) {
+
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		combo.setToolTipText("Select a chromatogram calculator method.");
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
 

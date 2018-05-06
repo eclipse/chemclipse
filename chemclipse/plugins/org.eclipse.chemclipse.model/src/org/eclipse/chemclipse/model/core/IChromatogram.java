@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.model.core;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.baseline.IChromatogramBaseline;
+import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.updates.IUpdater;
 import org.eclipse.chemclipse.model.versioning.IChromatogramVersioning;
 import org.eclipse.chemclipse.support.history.ISupplierEditHistory;
@@ -204,4 +205,8 @@ public interface IChromatogram<T extends IPeak> extends IMeasurement, IChromatog
 	 * @return IMethod
 	 */
 	IMethod getMethod();
+
+	ISeparationColumn getSeparationColumn();
+
+	void setSeparationColumn(ISeparationColumn separationColumn);
 }

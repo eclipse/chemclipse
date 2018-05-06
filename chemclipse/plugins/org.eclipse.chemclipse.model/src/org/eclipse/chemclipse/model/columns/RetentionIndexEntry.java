@@ -41,6 +41,16 @@ public class RetentionIndexEntry implements IRetentionIndexEntry {
 		return name;
 	}
 
+	@Override
+	public void setName(String name) {
+
+		if(name == null) {
+			this.name = "";
+		} else {
+			this.name = name;
+		}
+	}
+
 	// -----------------------------equals, hashCode, toString
 	@Override
 	public boolean equals(Object otherObject) {
