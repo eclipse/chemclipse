@@ -17,6 +17,8 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.StandardsReader;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
+import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
+import org.eclipse.chemclipse.model.columns.SeparationColumnIndices;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
@@ -40,7 +42,7 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 	//
 	private IChromatogramSelectionMSD chromatogramSelectionMSD;
 	private IChromatogramSelectionCSD chromatogramSelectionCSD;
-	private List<IRetentionIndexEntry> extractedRetentionIndexEntries;
+	private ISeparationColumnIndices separationColumnIndices;
 	//
 	private boolean retentionIndexDataIsValidated;
 
@@ -212,15 +214,15 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 	}
 
 	@Override
-	public List<IRetentionIndexEntry> getExtractedRetentionIndexEntries() {
+	public ISeparationColumnIndices getSeparationColumnIndices() {
 
-		return extractedRetentionIndexEntries;
+		return separationColumnIndices;
 	}
 
 	@Override
-	public void setExtractedRetentionIndexEntries(List<IRetentionIndexEntry> extractedRetentionIndexEntries) {
+	public void setSeparationColumnIndices(ISeparationColumnIndices separationColumnIndices) {
 
-		this.extractedRetentionIndexEntries = extractedRetentionIndexEntries;
+		this.separationColumnIndices = separationColumnIndices;
 	}
 
 	@Override
@@ -254,7 +256,7 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 		stopIndexName = "";
 		useAlreadyDetectedPeaks = false;
 		//
-		extractedRetentionIndexEntries = new ArrayList<IRetentionIndexEntry>();
+		separationColumnIndices = new SeparationColumnIndices();
 		//
 		retentionIndexDataIsValidated = false;
 	}

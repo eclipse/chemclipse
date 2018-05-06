@@ -11,10 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.editors;
 
-import java.util.List;
-
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.ExtendedRetentionIndexTableViewerUI;
-import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.ExtendedRetentionIndexListUI;
+import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -23,7 +21,7 @@ import org.eclipse.swt.widgets.Display;
 public class PageCalibration {
 
 	private Composite control;
-	private ExtendedRetentionIndexTableViewerUI extendedTableViewer;
+	private ExtendedRetentionIndexListUI extendedTableViewer;
 
 	public PageCalibration(Composite container) {
 		createControl(container);
@@ -34,14 +32,9 @@ public class PageCalibration {
 		return control;
 	}
 
-	public void showData(List<IRetentionIndexEntry> retentionIndexEntries) {
+	public void showData(ISeparationColumnIndices separationColumnIndices) {
 
-		extendedTableViewer.setInput(retentionIndexEntries);
-	}
-
-	public List<IRetentionIndexEntry> getRetentionIndexEntries() {
-
-		return extendedTableViewer.getRetentionIndexEntries();
+		extendedTableViewer.setInput(separationColumnIndices);
 	}
 
 	private void createControl(Composite container) {
@@ -50,6 +43,6 @@ public class PageCalibration {
 		control.setLayout(new FillLayout());
 		control.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		//
-		extendedTableViewer = new ExtendedRetentionIndexTableViewerUI(control, SWT.NONE);
+		extendedTableViewer = new ExtendedRetentionIndexListUI(control, SWT.NONE);
 	}
 }

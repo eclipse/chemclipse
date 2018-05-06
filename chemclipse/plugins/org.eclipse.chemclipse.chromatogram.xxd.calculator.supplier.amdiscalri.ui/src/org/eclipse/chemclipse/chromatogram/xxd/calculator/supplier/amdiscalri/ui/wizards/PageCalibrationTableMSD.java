@@ -11,12 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
-import java.util.List;
-
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.RetentionIndexExtractor;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.ExtendedRetentionIndexTableViewerUI;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.ExtendedRetentionIndexListUI;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.RetentionIndexTableViewerUI;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
+import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -39,7 +38,7 @@ public class PageCalibrationTableMSD extends AbstractExtendedWizardPage {
 	//
 	private Button checkBoxValidateRetentionIndices;
 	private SelectedPeakChromatogramUI selectedPeakChromatogramUI;
-	private ExtendedRetentionIndexTableViewerUI extendedRetentionIndexTableViewerUI;
+	private ExtendedRetentionIndexListUI extendedRetentionIndexTableViewerUI;
 
 	public PageCalibrationTableMSD(IRetentionIndexWizardElements wizardElements) {
 		//
@@ -74,9 +73,9 @@ public class PageCalibrationTableMSD extends AbstractExtendedWizardPage {
 				IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogramMSD();
 				selectedPeakChromatogramUI.updateSelection(chromatogramSelectionMSD, true);
 				RetentionIndexExtractor retentionIndexExtractor = new RetentionIndexExtractor();
-				List<IRetentionIndexEntry> extractedRetentionIndexEntries = retentionIndexExtractor.extract(chromatogramMSD);
-				wizardElements.setExtractedRetentionIndexEntries(extractedRetentionIndexEntries);
-				extendedRetentionIndexTableViewerUI.setInput(extractedRetentionIndexEntries);
+				ISeparationColumnIndices separationColumnIndices = retentionIndexExtractor.extract(chromatogramMSD);
+				wizardElements.setSeparationColumnIndices(separationColumnIndices);
+				extendedRetentionIndexTableViewerUI.setInput(separationColumnIndices);
 			}
 			validateSelection();
 		}
@@ -123,7 +122,7 @@ public class PageCalibrationTableMSD extends AbstractExtendedWizardPage {
 
 	private void createTableField(Composite composite) {
 
-		extendedRetentionIndexTableViewerUI = new ExtendedRetentionIndexTableViewerUI(composite, SWT.NONE);
+		extendedRetentionIndexTableViewerUI = new ExtendedRetentionIndexListUI(composite, SWT.NONE);
 		extendedRetentionIndexTableViewerUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		RetentionIndexTableViewerUI retentionIndexTableViewerUI = extendedRetentionIndexTableViewerUI.getRetentionIndexTableViewerUI();
 		retentionIndexTableViewerUI.getTable().addSelectionListener(new SelectionAdapter() {

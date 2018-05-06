@@ -12,11 +12,10 @@
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.editors;
 
 import java.io.File;
-import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileReader;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileWriter;
-import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
+import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
@@ -34,6 +33,8 @@ public class EditorCalibration extends MultiPageEditorPart {
 	private File file;
 	private boolean isDirty = false;
 	private boolean initialize = true;
+	//
+	private ISeparationColumnIndices separationColumnIndices;
 
 	@Override
 	protected void createPages() {
@@ -48,7 +49,7 @@ public class EditorCalibration extends MultiPageEditorPart {
 	public void doSave(IProgressMonitor monitor) {
 
 		CalibrationFileWriter calibrationFileWriter = new CalibrationFileWriter();
-		calibrationFileWriter.write(file, pageCalibration.getRetentionIndexEntries());
+		calibrationFileWriter.write(file, separationColumnIndices);
 		setDirty(false);
 	}
 
@@ -63,7 +64,7 @@ public class EditorCalibration extends MultiPageEditorPart {
 		if(pathRetentionIndexFile != null) {
 			File file = new File(pathRetentionIndexFile);
 			CalibrationFileWriter calibrationFileWriter = new CalibrationFileWriter();
-			calibrationFileWriter.write(file, pageCalibration.getRetentionIndexEntries());
+			calibrationFileWriter.write(file, separationColumnIndices);
 			setDirty(false);
 		}
 	}
@@ -80,8 +81,8 @@ public class EditorCalibration extends MultiPageEditorPart {
 		if(initialize) {
 			initialize = false;
 			CalibrationFileReader calibrationFileReader = new CalibrationFileReader();
-			List<IRetentionIndexEntry> retentionIndexEntries = calibrationFileReader.parse(file);
-			pageCalibration.showData(retentionIndexEntries);
+			separationColumnIndices = calibrationFileReader.parse(file);
+			pageCalibration.showData(separationColumnIndices);
 		}
 	}
 

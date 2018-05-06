@@ -15,10 +15,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
-import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
+import org.eclipse.chemclipse.model.columns.ISeparationColumn;
+import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
@@ -31,23 +32,38 @@ public class CalibrationFileWriter {
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
-	public void write(File file, List<IRetentionIndexEntry> retentionIndexEntries) {
+	public void write(File file, ISeparationColumnIndices separationColumnIndices) {
 
 		try {
 			PrintWriter printWriter = new PrintWriter(file);
-			for(IRetentionIndexEntry retentionIndexEntry : retentionIndexEntries) {
+			/*
+			 * Column data
+			 * #COLUMN_NAME=DB5
+			 * ...
+			 */
+			ISeparationColumn separationColumn = separationColumnIndices.getSeparationColumn();
+			if(separationColumn != null) {
+				printWriter.println(IFormat.COLUMN_NAME + IFormat.HEADER_VALUE_DELIMITER + separationColumn.getName());
+				printWriter.println(IFormat.COLUMN_LENGTH + IFormat.HEADER_VALUE_DELIMITER + separationColumn.getLength());
+				printWriter.println(IFormat.COLUMN_DIAMETER + IFormat.HEADER_VALUE_DELIMITER + separationColumn.getDiameter());
+				printWriter.println(IFormat.COLUMN_PHASE + IFormat.HEADER_VALUE_DELIMITER + separationColumn.getPhase());
+			}
+			/*
+			 * RI data
+			 */
+			for(IRetentionIndexEntry retentionIndexEntry : separationColumnIndices.values()) {
 				/*
 				 * e.g.
 				 * 11.336 1700.0 100 937 Heptadecane
 				 */
 				printWriter.print(decimalFormat.format(retentionIndexEntry.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
-				printWriter.print(" ");
+				printWriter.print(IFormat.RI_VALUE_DELIMITER);
 				printWriter.print(retentionIndexEntry.getRetentionIndex());
-				printWriter.print(" ");
+				printWriter.print(IFormat.RI_VALUE_DELIMITER);
 				printWriter.print(100);
-				printWriter.print(" ");
+				printWriter.print(IFormat.RI_VALUE_DELIMITER);
 				printWriter.print(999);
-				printWriter.print(" ");
+				printWriter.print(IFormat.RI_VALUE_DELIMITER);
 				printWriter.println(retentionIndexEntry.getName());
 			}
 			printWriter.flush();

@@ -16,22 +16,25 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.StandardsReader;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
+import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
+import org.eclipse.chemclipse.model.columns.SeparationColumnIndices;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 
 public class RetentionIndexExtractor {
 
-	public List<IRetentionIndexEntry> extract(IChromatogram chromatogram) {
+	@SuppressWarnings("rawtypes")
+	public ISeparationColumnIndices extract(IChromatogram chromatogram) {
 
 		StandardsReader standardsReader = new StandardsReader();
 		Map<String, Integer> nameIndexMap = standardsReader.getNameIndexMap();
 		//
-		List<IRetentionIndexEntry> retentionIndexEntries = new ArrayList<IRetentionIndexEntry>();
+		ISeparationColumnIndices separationColumnIndices = new SeparationColumnIndices();
+		separationColumnIndices.setSeparationColumn(chromatogram.getSeparationColumn());
+		//
 		List<? extends IPeak> peaks = getPeaks(chromatogram);
 		for(IPeak peak : peaks) {
 			List<IPeakTarget> peakTargets = peak.getTargets();
@@ -41,23 +44,18 @@ public class RetentionIndexExtractor {
 					int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
 					float retentionIndex = nameIndexMap.get(name);
 					IRetentionIndexEntry retentionIndexEntry = new RetentionIndexEntry(retentionTime, retentionIndex, name);
-					retentionIndexEntries.add(retentionIndexEntry);
+					separationColumnIndices.put(retentionIndexEntry);
 				}
 			}
 		}
-		return retentionIndexEntries;
+		return separationColumnIndices;
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private List<? extends IPeak> getPeaks(IChromatogram chromatogram) {
 
 		List<IPeak> peaks = new ArrayList<IPeak>();
-		if(chromatogram instanceof IChromatogramMSD) {
-			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-			peaks.addAll(chromatogramMSD.getPeaks());
-		} else if(chromatogram instanceof IChromatogramCSD) {
-			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-			peaks.addAll(chromatogramCSD.getPeaks());
-		}
+		peaks.addAll(chromatogram.getPeaks());
 		return peaks;
 	}
 }

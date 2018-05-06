@@ -11,16 +11,24 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt;
 
+import java.util.List;
+
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.comparator.RetentionIndexTableComparator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider.RetentionIndexContentProvider;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider.RetentionIndexEditingSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider.RetentionIndexLabelProvider;
-import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.provider.RetentionIndexListFilter;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
 public class RetentionIndexTableViewerUI extends ExtendedTableViewer {
 
-	private String[] titles = {"Retention Time (Minutes)", "Retention Index", "Name"};
+	public static final String NAME = "Name";
+	private String[] titles = {"Retention Time (Minutes)", "Retention Index", NAME};
 	private int[] bounds = {200, 150, 200};
+	private RetentionIndexListFilter retentionIndexListFilter;
 
 	public RetentionIndexTableViewerUI(Composite parent) {
 		super(parent);
@@ -32,12 +40,32 @@ public class RetentionIndexTableViewerUI extends ExtendedTableViewer {
 		createColumns();
 	}
 
+	public void setSearchText(String searchText, boolean caseSensitive) {
+
+		retentionIndexListFilter.setSearchText(searchText, caseSensitive);
+		refresh();
+	}
+
 	private void createColumns() {
 
 		createColumns(titles, bounds);
 		//
 		setLabelProvider(new RetentionIndexLabelProvider());
-		setContentProvider(new ListContentProvider());
+		setContentProvider(new RetentionIndexContentProvider());
 		setComparator(new RetentionIndexTableComparator());
+		retentionIndexListFilter = new RetentionIndexListFilter();
+		setFilters(new ViewerFilter[]{retentionIndexListFilter});
+		setEditingSupport();
+	}
+
+	private void setEditingSupport() {
+
+		List<TableViewerColumn> tableViewerColumns = getTableViewerColumns();
+		for(TableViewerColumn tableViewerColumn : tableViewerColumns) {
+			String columnLabel = tableViewerColumn.getColumn().getText();
+			if(columnLabel.equals(NAME)) {
+				tableViewerColumn.setEditingSupport(new RetentionIndexEditingSupport(this));
+			}
+		}
 	}
 }

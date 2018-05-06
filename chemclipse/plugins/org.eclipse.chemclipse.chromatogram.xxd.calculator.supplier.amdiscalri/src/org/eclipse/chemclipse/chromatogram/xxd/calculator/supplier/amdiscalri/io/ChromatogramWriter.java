@@ -14,11 +14,10 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.i
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.RetentionIndexExtractor;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
-import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
+import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -35,9 +34,8 @@ public class ChromatogramWriter extends AbstractChromatogramMSDWriter {
 		 * Write the cal specifiation.
 		 */
 		RetentionIndexExtractor retentionIndexExtractor = new RetentionIndexExtractor();
-		List<IRetentionIndexEntry> retentionIndexEntries = retentionIndexExtractor.extract(chromatogram);
-		//
+		ISeparationColumnIndices separationColumnIndices = retentionIndexExtractor.extract(chromatogram);
 		CalibrationFileWriter calibrationFileWriter = new CalibrationFileWriter();
-		calibrationFileWriter.write(file, retentionIndexEntries);
+		calibrationFileWriter.write(file, separationColumnIndices);
 	}
 }

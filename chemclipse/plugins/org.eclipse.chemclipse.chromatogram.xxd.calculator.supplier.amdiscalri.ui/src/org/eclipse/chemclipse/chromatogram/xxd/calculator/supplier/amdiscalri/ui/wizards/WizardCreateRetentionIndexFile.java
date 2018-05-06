@@ -13,13 +13,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 
 import java.io.File;
 import java.util.Date;
-import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileWriter;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractFileWizard;
@@ -168,10 +166,6 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 		final IFile file = super.prepareProject(monitor);
 		try {
 			/*
-			 * Export
-			 */
-			List<IRetentionIndexEntry> retentionIndexEntries = wizardElements.getExtractedRetentionIndexEntries();
-			/*
 			 * Calibration File.
 			 */
 			File calibrationFile = file.getLocation().toFile();
@@ -179,7 +173,7 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 				calibrationFile = new File(calibrationFile.getAbsolutePath() + CALIBRATION_FILE_EXTENSION);
 			}
 			CalibrationFileWriter calibrationFileWriter = new CalibrationFileWriter();
-			calibrationFileWriter.write(calibrationFile, retentionIndexEntries);
+			calibrationFileWriter.write(calibrationFile, wizardElements.getSeparationColumnIndices());
 			/*
 			 * Chromatogram File
 			 * Export the chromatogram.

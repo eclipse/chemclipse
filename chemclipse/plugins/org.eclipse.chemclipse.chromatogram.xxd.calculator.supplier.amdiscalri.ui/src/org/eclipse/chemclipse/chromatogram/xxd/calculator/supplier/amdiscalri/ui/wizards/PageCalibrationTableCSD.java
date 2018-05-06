@@ -11,15 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
-import java.util.List;
-
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.RetentionIndexExtractor;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.ExtendedRetentionIndexTableViewerUI;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.ExtendedRetentionIndexListUI;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.RetentionIndexTableViewerUI;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
+import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.chemclipse.swt.ui.components.chromatogram.SelectedPeakChromatogramUI;
 import org.eclipse.swt.SWT;
@@ -39,7 +38,7 @@ public class PageCalibrationTableCSD extends AbstractExtendedWizardPage {
 	//
 	private Button checkBoxValidateRetentionIndices;
 	private SelectedPeakChromatogramUI selectedPeakChromatogramUI;
-	private ExtendedRetentionIndexTableViewerUI extendedRetentionIndexTableViewerUI;
+	private ExtendedRetentionIndexListUI extendedRetentionIndexTableViewerUI;
 
 	public PageCalibrationTableCSD(IRetentionIndexWizardElements wizardElements) {
 		//
@@ -74,9 +73,9 @@ public class PageCalibrationTableCSD extends AbstractExtendedWizardPage {
 				IChromatogramCSD chromatogramCSD = chromatogramSelectionCSD.getChromatogramCSD();
 				selectedPeakChromatogramUI.updateSelection(chromatogramSelectionCSD, true);
 				RetentionIndexExtractor retentionIndexExtractor = new RetentionIndexExtractor();
-				List<IRetentionIndexEntry> extractedRetentionIndexEntries = retentionIndexExtractor.extract(chromatogramCSD);
-				wizardElements.setExtractedRetentionIndexEntries(extractedRetentionIndexEntries);
-				extendedRetentionIndexTableViewerUI.setInput(extractedRetentionIndexEntries);
+				ISeparationColumnIndices separationColumnIndices = retentionIndexExtractor.extract(chromatogramCSD);
+				wizardElements.setSeparationColumnIndices(separationColumnIndices);
+				extendedRetentionIndexTableViewerUI.setInput(separationColumnIndices);
 			}
 			validateSelection();
 		}
@@ -123,7 +122,7 @@ public class PageCalibrationTableCSD extends AbstractExtendedWizardPage {
 
 	private void createTableField(Composite composite) {
 
-		extendedRetentionIndexTableViewerUI = new ExtendedRetentionIndexTableViewerUI(composite, SWT.NONE);
+		extendedRetentionIndexTableViewerUI = new ExtendedRetentionIndexListUI(composite, SWT.NONE);
 		extendedRetentionIndexTableViewerUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		RetentionIndexTableViewerUI retentionIndexTableViewerUI = extendedRetentionIndexTableViewerUI.getRetentionIndexTableViewerUI();
 		retentionIndexTableViewerUI.getTable().addSelectionListener(new SelectionAdapter() {
