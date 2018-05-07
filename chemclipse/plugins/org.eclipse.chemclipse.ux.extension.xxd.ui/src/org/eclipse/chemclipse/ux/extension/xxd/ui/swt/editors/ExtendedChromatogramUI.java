@@ -196,6 +196,8 @@ public class ExtendedChromatogramUI {
 	private ChromatogramChart chromatogramChart;
 	private Combo comboTargetTransfer;
 	private ComboViewer comboViewerSeparationColumn;
+	private Button executeMethod;
+	private Button executeMethodItems;
 	//
 	private IChromatogramSelection chromatogramSelection = null;
 	private List<IChromatogramSelection> referencedChromatogramSelections = null; // Might be null ... no references.
@@ -993,6 +995,8 @@ public class ExtendedChromatogramUI {
 		createChromatogramChart(parent);
 		//
 		comboViewerSeparationColumn.setInput(SeparationColumnFactory.getSeparationColumns());
+		executeMethod.setEnabled(false);
+		executeMethodItems.setEnabled(false);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, false);
 		PartSupport.setCompositeVisibility(toolbarAnalyze, false);
@@ -1041,14 +1045,14 @@ public class ExtendedChromatogramUI {
 		comboViewerSeparationColumn = createComboViewerSeparationColumn(composite);
 		createVerticalSeparator(composite);
 		createComboPredefinedMethod(composite);
-		createButtonExecuteMethod(composite);
+		executeMethod = createButtonExecuteMethod(composite);
 		createVerticalSeparator(composite);
 		createComboFilter(composite);
 		createComboPeakDetector(composite);
 		createComboPeakIntegrator(composite);
 		createComboPeakIdentifier(composite);
 		createComboCalculator(composite);
-		createButtonExecuteMethodItems(composite);
+		executeMethodItems = createButtonExecuteMethodItems(composite);
 		//
 		return composite;
 	}
@@ -1103,7 +1107,7 @@ public class ExtendedChromatogramUI {
 		});
 	}
 
-	private void createButtonExecuteMethod(Composite parent) {
+	private Button createButtonExecuteMethod(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -1116,6 +1120,8 @@ public class ExtendedChromatogramUI {
 
 			}
 		});
+		//
+		return button;
 	}
 
 	private void createComboFilter(Composite parent) {
@@ -1188,7 +1194,7 @@ public class ExtendedChromatogramUI {
 		});
 	}
 
-	private void createButtonExecuteMethodItems(Composite parent) {
+	private Button createButtonExecuteMethodItems(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -1201,6 +1207,8 @@ public class ExtendedChromatogramUI {
 
 			}
 		});
+		//
+		return button;
 	}
 
 	private Composite createToolbarEdit(Composite parent) {
