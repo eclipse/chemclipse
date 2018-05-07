@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.processing.ICalculator
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileReader;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ISupplierCalculatorSettings;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
+import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -31,8 +32,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class RetentionIndexCalculator {
 
-	private static final String FILE_EXTENSION = ".cal";
-
 	public ICalculatorProcessingInfo apply(IChromatogramSelection chromatogramSelection, ISupplierCalculatorSettings supplierCalculatorSettings, IProgressMonitor monitor) {
 
 		ICalculatorProcessingInfo processingInfo = new CalculatorProcessingInfo();
@@ -40,47 +39,39 @@ public class RetentionIndexCalculator {
 		/*
 		 * Create a calibration map for different column polarities.
 		 */
-		Map<String, String> calibrationMap = new HashMap<String, String>();
+		CalibrationFileReader calibrationFileReader = new CalibrationFileReader();
+		Map<String, ISeparationColumnIndices> calibrationMap = new HashMap<String, ISeparationColumnIndices>();
 		for(String retentionIndexFile : retentionIndexFiles) {
 			File file = new File(retentionIndexFile);
-			if(file.exists() && retentionIndexFile.toLowerCase().endsWith(FILE_EXTENSION)) {
-				String name = file.getName();
-				String key = name.substring(0, name.length() - 4);
-				calibrationMap.put(key, retentionIndexFile);
-			}
-		}
-		/*
-		 * Use the miscellaneous info to auto-detect the column.
-		 */
-		String miscInfo = chromatogramSelection.getChromatogram().getMiscInfo();
-		String pathRetentionIndexFile;
-		if(calibrationMap.containsKey(miscInfo)) {
-			pathRetentionIndexFile = calibrationMap.get(miscInfo);
-		} else {
-			if(retentionIndexFiles.size() > 0) {
-				pathRetentionIndexFile = retentionIndexFiles.get(0);
-			} else {
-				pathRetentionIndexFile = "";
-			}
+			ISeparationColumnIndices separationColumnIndices = calibrationFileReader.parse(file);
+			ISeparationColumn separationColumn = separationColumnIndices.getSeparationColumn();
+			calibrationMap.put(separationColumn.getName(), separationColumnIndices);
 		}
 		/*
 		 * Run the calculation.
+		 * Use the separation column info to get the correct RI file.
 		 */
-		calculateIndex(chromatogramSelection, pathRetentionIndexFile);
+		//
+		ISeparationColumn separationColumn = chromatogramSelection.getChromatogram().getSeparationColumn();
+		ISeparationColumnIndices separationColumnIndices = calibrationMap.get(separationColumn.getName());
+		if(separationColumnIndices != null) {
+			calculateIndex(chromatogramSelection, separationColumnIndices);
+		}
 		//
 		return processingInfo;
 	}
 
+	/**
+	 * Calculate the value if both entries exists.
+	 * See AMDIS manual:
+	 * RIcomp = RIlo + ( (RIhi - RIlo) * (RTact - RTlo) / (RThi - RTlo) )
+	 */
 	public float calculateRetentionIndex(int retentionTime, ISeparationColumnIndices separationColumnIndices) {
 
 		float retentionIndex = 0;
 		Map.Entry<Integer, IRetentionIndexEntry> floorEntry = separationColumnIndices.floorEntry(retentionTime);
 		Map.Entry<Integer, IRetentionIndexEntry> ceilingEntry = separationColumnIndices.ceilingEntry(retentionTime);
-		/*
-		 * Calculate the value if both entries exists.
-		 * See AMDIS manual:
-		 * RIcomp = RIlo + ( (RIhi - RIlo) * (RTact - RTlo) / (RThi - RTlo) )
-		 */
+		//
 		if(floorEntry != null && ceilingEntry != null) {
 			/*
 			 * Get the values.
@@ -115,12 +106,9 @@ public class RetentionIndexCalculator {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void calculateIndex(IChromatogramSelection chromatogramSelection, String pathRetentionIndexFile) {
+	private void calculateIndex(IChromatogramSelection chromatogramSelection, ISeparationColumnIndices separationColumnIndices) {
 
-		File calibrationFile = new File(pathRetentionIndexFile);
-		if(calibrationFile.exists()) {
-			CalibrationFileReader calibrationFileReader = new CalibrationFileReader();
-			ISeparationColumnIndices separationColumnIndices = calibrationFileReader.parse(calibrationFile);
+		if(separationColumnIndices != null) {
 			IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
 			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
 			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
