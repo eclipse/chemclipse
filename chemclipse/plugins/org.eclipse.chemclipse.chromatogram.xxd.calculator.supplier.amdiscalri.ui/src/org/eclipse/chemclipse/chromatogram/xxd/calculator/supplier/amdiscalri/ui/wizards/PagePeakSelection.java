@@ -16,13 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.internal.runnables.ChromatogramImportRunnable;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
@@ -42,21 +45,22 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
-public class PagePeakSelectionMSD extends AbstractExtendedWizardPage {
+public class PagePeakSelection extends AbstractExtendedWizardPage {
 
-	private static final Logger logger = Logger.getLogger(PagePeakSelectionMSD.class);
+	private static final Logger logger = Logger.getLogger(PagePeakSelection.class);
 	private IRetentionIndexWizardElements wizardElements;
 	private SelectedPeakChromatogramUI selectedPeakChromatogramUI;
+	private Composite massSpectrumComposite;
 	private SimpleMassSpectrumUI simpleMassSpectrumUI;
 	private PeakTableRetentionIndexViewerUI peakTableViewerUI;
 	//
 	private static final int PEAK_SHOW = 1;
 	private static final int PEAKS_DELETE = 2;
 
-	public PagePeakSelectionMSD(IRetentionIndexWizardElements wizardElements) {
+	public PagePeakSelection(IRetentionIndexWizardElements wizardElements) {
 		//
-		super(PagePeakSelectionMSD.class.getName());
-		setTitle("Peak Selection MSD");
+		super(PagePeakSelection.class.getName());
+		setTitle("Peak Selection");
 		setDescription("Please select the peaks that shall be used.");
 		this.wizardElements = wizardElements;
 	}
@@ -76,22 +80,37 @@ public class PagePeakSelectionMSD extends AbstractExtendedWizardPage {
 
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void setVisible(boolean visible) {
 
 		super.setVisible(visible);
 		if(visible) {
-			IChromatogramSelectionMSD chromatogramSelectionMSD = getChromatogramSelectionMSD();
-			wizardElements.setChromatogramSelectionMSD(chromatogramSelectionMSD);
-			if(chromatogramSelectionMSD != null) {
-				IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogramMSD();
-				List<IChromatogramPeakMSD> peaks = chromatogramMSD.getPeaks();
+			IChromatogramSelection chromatogramSelection = getChromatogramSelection();
+			wizardElements.setChromatogramSelection(chromatogramSelection);
+			if(chromatogramSelection != null) {
+				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				/*
+				 * Hide the mass spectrum view if it is CSD data.
+				 */
+				boolean isVisible = (chromatogram instanceof IChromatogramMSD) ? true : false;
+				GridData gridData = (GridData)massSpectrumComposite.getLayoutData();
+				gridData.exclude = !isVisible;
+				massSpectrumComposite.setVisible(isVisible);
+				Composite parent = massSpectrumComposite.getParent();
+				parent.layout(false);
+				parent.redraw();
+				//
+				List<? extends IPeak> peaks = chromatogram.getPeaks();
 				peakTableViewerUI.setInput(peaks);
 				if(peaks.size() > 0) {
-					IChromatogramPeakMSD selectedPeak = peaks.get(0);
-					chromatogramSelectionMSD.setSelectedPeak(selectedPeak);
-					selectedPeakChromatogramUI.updateSelection(chromatogramSelectionMSD, true);
-					simpleMassSpectrumUI.update(selectedPeak.getExtractedMassSpectrum(), true);
+					IPeak selectedPeak = peaks.get(0);
+					chromatogramSelection.setSelectedPeak(selectedPeak);
+					selectedPeakChromatogramUI.updateSelection(chromatogramSelection, true);
+					if(selectedPeak instanceof IPeakMSD) {
+						IPeakMSD peakMSD = (IPeakMSD)selectedPeak;
+						simpleMassSpectrumUI.update(peakMSD.getExtractedMassSpectrum(), true);
+					}
 				}
 			}
 			validateSelection();
@@ -112,25 +131,25 @@ public class PagePeakSelectionMSD extends AbstractExtendedWizardPage {
 		setControl(composite);
 	}
 
-	private void createChromatogramField(Composite composite) {
+	private void createChromatogramField(Composite parent) {
 
-		Composite parent = new Composite(composite, SWT.NONE);
-		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
-		parent.setLayout(new FillLayout());
-		selectedPeakChromatogramUI = new SelectedPeakChromatogramUI(parent, SWT.BORDER);
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		composite.setLayout(new FillLayout());
+		selectedPeakChromatogramUI = new SelectedPeakChromatogramUI(composite, SWT.BORDER);
 	}
 
-	private void createMassSpectrumField(Composite composite) {
+	private void createMassSpectrumField(Composite parent) {
 
-		Composite parent = new Composite(composite, SWT.NONE);
-		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
-		parent.setLayout(new FillLayout());
-		simpleMassSpectrumUI = new SimpleMassSpectrumUI(parent, SWT.BORDER, MassValueDisplayPrecision.NOMINAL);
+		massSpectrumComposite = new Composite(parent, SWT.NONE);
+		massSpectrumComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		massSpectrumComposite.setLayout(new FillLayout());
+		simpleMassSpectrumUI = new SimpleMassSpectrumUI(massSpectrumComposite, SWT.BORDER, MassValueDisplayPrecision.NOMINAL);
 	}
 
-	private void createPeakTableField(Composite composite) {
+	private void createPeakTableField(Composite parent) {
 
-		peakTableViewerUI = new PeakTableRetentionIndexViewerUI(composite, SWT.BORDER | SWT.MULTI);
+		peakTableViewerUI = new PeakTableRetentionIndexViewerUI(parent, SWT.BORDER | SWT.MULTI);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.heightHint = 100;
@@ -164,37 +183,42 @@ public class PagePeakSelectionMSD extends AbstractExtendedWizardPage {
 		});
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void propagateChange(int option) {
 
 		Table table = peakTableViewerUI.getTable();
 		int index = table.getSelectionIndex();
 		Object object = peakTableViewerUI.getElementAt(index);
-		IChromatogramSelectionMSD chromatogramSelectionMSD = wizardElements.getChromatogramSelectionMSD();
-		if(chromatogramSelectionMSD != null && object instanceof IChromatogramPeakMSD) {
+		IChromatogramSelection chromatogramSelection = wizardElements.getChromatogramSelection();
+		if(chromatogramSelection != null && object instanceof IPeak) {
 			/*
 			 * Get the selected peak.
 			 */
-			IChromatogramPeakMSD selectedPeak = (IChromatogramPeakMSD)object;
+			IPeak selectedPeak = (IPeak)object;
 			switch(option) {
 				case PEAK_SHOW:
-					chromatogramSelectionMSD.setSelectedPeak(selectedPeak);
-					simpleMassSpectrumUI.update(selectedPeak.getExtractedMassSpectrum(), true);
+					chromatogramSelection.setSelectedPeak(selectedPeak);
+					if(selectedPeak instanceof IPeakMSD) {
+						IPeakMSD peakMSD = (IPeakMSD)selectedPeak;
+						simpleMassSpectrumUI.update(peakMSD.getExtractedMassSpectrum(), true);
+					}
 					break;
 				case PEAKS_DELETE:
-					List<IChromatogramPeakMSD> peaksToDelete = getSelectionChromatogramPeakList();
-					IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogramMSD();
-					chromatogramMSD.removePeaks(peaksToDelete);
-					chromatogramSelectionMSD.reset();
-					peakTableViewerUI.setInput(chromatogramMSD.getPeaks());
+					List<? extends IPeak> peaksToDelete = getSelectionChromatogramPeakList();
+					IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+					chromatogram.removePeaks(peaksToDelete);
+					chromatogramSelection.reset();
+					peakTableViewerUI.setInput(chromatogram.getPeaks());
 					break;
 			}
-			selectedPeakChromatogramUI.updateSelection(chromatogramSelectionMSD, true);
+			selectedPeakChromatogramUI.updateSelection(chromatogramSelection, true);
 		}
 	}
 
-	private IChromatogramSelectionMSD getChromatogramSelectionMSD() {
+	@SuppressWarnings({"rawtypes"})
+	private IChromatogramSelection getChromatogramSelection() {
 
-		IChromatogramSelectionMSD chromatogramSelectionMSD = null;
+		IChromatogramSelection chromatogramSelection = null;
 		ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(wizardElements);
 		//
 		try {
@@ -202,7 +226,10 @@ public class PagePeakSelectionMSD extends AbstractExtendedWizardPage {
 			IChromatogram chromatogram = runnable.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
 				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-				chromatogramSelectionMSD = new ChromatogramSelectionMSD(chromatogramMSD);
+				chromatogramSelection = new ChromatogramSelectionMSD(chromatogramMSD);
+			} else if(chromatogram instanceof IChromatogramCSD) {
+				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+				chromatogramSelection = new ChromatogramSelectionCSD(chromatogramCSD);
 			}
 		} catch(InterruptedException e) {
 			logger.warn(e);
@@ -212,13 +239,13 @@ public class PagePeakSelectionMSD extends AbstractExtendedWizardPage {
 			logger.warn(e);
 		}
 		//
-		return chromatogramSelectionMSD;
+		return chromatogramSelection;
 	}
 
-	private List<IChromatogramPeakMSD> getSelectionChromatogramPeakList() {
+	private List<? extends IPeak> getSelectionChromatogramPeakList() {
 
 		Table table = peakTableViewerUI.getTable();
-		List<IChromatogramPeakMSD> peakList = new ArrayList<IChromatogramPeakMSD>();
+		List<IPeak> peakList = new ArrayList<>();
 		int[] indices = table.getSelectionIndices();
 		for(int index : indices) {
 			/*
@@ -226,30 +253,37 @@ public class PagePeakSelectionMSD extends AbstractExtendedWizardPage {
 			 */
 			TableItem tableItem = table.getItem(index);
 			Object object = tableItem.getData();
-			if(object instanceof IChromatogramPeakMSD) {
-				IChromatogramPeakMSD chromatogramPeak = (IChromatogramPeakMSD)object;
+			if(object instanceof IPeak) {
+				IPeak chromatogramPeak = (IPeak)object;
 				peakList.add(chromatogramPeak);
 			}
 		}
 		return peakList;
 	}
 
+	@SuppressWarnings({"rawtypes"})
 	private void validateSelection() {
 
 		String message = null;
-		if(wizardElements.getChromatogramWizardElementsMSD().getSelectedChromatograms().size() == 0) {
-			message = "No chromatogram has been selected.";
+		if(wizardElements.isUseMassSpectrometryData()) {
+			if(wizardElements.getChromatogramWizardElementsMSD().getSelectedChromatograms().size() == 0) {
+				message = "No chromatogram has been selected.";
+			}
+		} else {
+			if(wizardElements.getChromatogramWizardElementsCSD().getSelectedChromatograms().size() == 0) {
+				message = "No chromatogram has been selected.";
+			}
 		}
 		//
 		if(message == null) {
-			if(wizardElements.getChromatogramSelectionMSD() == null) {
+			if(wizardElements.getChromatogramSelection() == null) {
 				message = "The chromatogram couldn't be loaded.";
 			}
 		}
 		//
 		if(message == null) {
-			IChromatogramMSD chromatogramMSD = wizardElements.getChromatogramSelectionMSD().getChromatogramMSD();
-			if(chromatogramMSD == null || chromatogramMSD.getPeaks().size() == 0) {
+			IChromatogram chromatogram = wizardElements.getChromatogramSelection().getChromatogram();
+			if(chromatogram == null || chromatogram.getPeaks().size() == 0) {
 				message = "There is no peak available.";
 			}
 		}

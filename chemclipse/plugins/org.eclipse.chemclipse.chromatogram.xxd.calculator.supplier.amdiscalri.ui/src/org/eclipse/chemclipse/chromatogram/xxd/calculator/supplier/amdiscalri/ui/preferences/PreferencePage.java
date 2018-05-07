@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.pr
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.Activator;
 import org.eclipse.chemclipse.support.ui.preferences.editors.FileListEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -40,6 +41,9 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		String[] filterNames = new String[]{"AMDIS Calibration *.cal", "AMDIS Calibration *.CAL"};
 		fileListEditor.setFilterExtensionsAndNames(filterExtensions, filterNames);
 		addField(fileListEditor);
+		//
+		addField(new DirectoryFieldEditor(PreferenceSupplier.DEF_FILTER_PATH_MODELS_MSD, "Path MSD Files:", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.DEF_FILTER_PATH_MODELS_CSD, "Path CSD Files:", getFieldEditorParent()));
 	}
 
 	/*

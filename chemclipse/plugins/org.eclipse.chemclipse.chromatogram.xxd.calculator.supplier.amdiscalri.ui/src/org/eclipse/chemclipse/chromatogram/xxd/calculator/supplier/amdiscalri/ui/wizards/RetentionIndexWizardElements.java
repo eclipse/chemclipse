@@ -15,11 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.StandardsReader;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.SeparationColumnIndices;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 
@@ -40,8 +39,7 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 	private String stopIndexName;
 	private boolean useAlreadyDetectedPeaks;
 	//
-	private IChromatogramSelectionMSD chromatogramSelectionMSD;
-	private IChromatogramSelectionCSD chromatogramSelectionCSD;
+	private IChromatogramSelection chromatogramSelection;
 	private ISeparationColumnIndices separationColumnIndices;
 	//
 	private boolean retentionIndexDataIsValidated;
@@ -190,27 +188,15 @@ public class RetentionIndexWizardElements extends ChromatogramWizardElements imp
 	}
 
 	@Override
-	public IChromatogramSelectionMSD getChromatogramSelectionMSD() {
+	public IChromatogramSelection getChromatogramSelection() {
 
-		return chromatogramSelectionMSD;
+		return chromatogramSelection;
 	}
 
 	@Override
-	public void setChromatogramSelectionMSD(IChromatogramSelectionMSD chromatogramSelectionMSD) {
+	public void setChromatogramSelection(IChromatogramSelection chromatogramSelection) {
 
-		this.chromatogramSelectionMSD = chromatogramSelectionMSD;
-	}
-
-	@Override
-	public IChromatogramSelectionCSD getChromatogramSelectionCSD() {
-
-		return chromatogramSelectionCSD;
-	}
-
-	@Override
-	public void setChromatogramSelectionCSD(IChromatogramSelectionCSD chromatogramSelectionCSD) {
-
-		this.chromatogramSelectionCSD = chromatogramSelectionCSD;
+		this.chromatogramSelection = chromatogramSelection;
 	}
 
 	@Override

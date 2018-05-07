@@ -13,10 +13,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 
 import java.util.List;
 
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 
 public interface IRetentionIndexWizardElements extends IChromatogramWizardElements {
@@ -59,13 +58,9 @@ public interface IRetentionIndexWizardElements extends IChromatogramWizardElemen
 
 	void setUseAlreadyDetectedPeaks(boolean useAlreadyDetectedPeaks);
 
-	IChromatogramSelectionMSD getChromatogramSelectionMSD();
+	IChromatogramSelection getChromatogramSelection();
 
-	void setChromatogramSelectionMSD(IChromatogramSelectionMSD chromatogramSelectionMSD);
-
-	IChromatogramSelectionCSD getChromatogramSelectionCSD();
-
-	void setChromatogramSelectionCSD(IChromatogramSelectionCSD chromatogramSelectionCSD);
+	void setChromatogramSelection(IChromatogramSelection chromatogramSelection);
 
 	ISeparationColumnIndices getSeparationColumnIndices();
 

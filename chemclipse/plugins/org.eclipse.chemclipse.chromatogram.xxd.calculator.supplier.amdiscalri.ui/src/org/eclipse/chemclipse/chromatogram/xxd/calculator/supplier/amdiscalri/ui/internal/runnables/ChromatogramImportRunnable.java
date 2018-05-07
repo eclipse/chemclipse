@@ -15,21 +15,23 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.AlkanePatternDetectorCSD;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.AlkanePatternDetectorMSD;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards.IRetentionIndexWizardElements;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class ChromatogramImportRunnable implements IRunnableWithProgress {
 
 	private IRetentionIndexWizardElements wizardElements;
-	private IChromatogram chromatogram;
+	private IChromatogram<? extends IPeak> chromatogram;
 
 	public ChromatogramImportRunnable(IRetentionIndexWizardElements wizardElements) {
 		this.wizardElements = wizardElements;
 	}
 
-	public IChromatogram getChromatogram() {
+	public IChromatogram<? extends IPeak> getChromatogram() {
 
 		return chromatogram;
 	}
@@ -52,10 +54,12 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 			String chromatogramPath = wizardElements.getChromatogramWizardElementsMSD().getSelectedChromatograms().get(0);
 			AlkanePatternDetectorMSD alkanePatternDetector = new AlkanePatternDetectorMSD();
 			chromatogram = alkanePatternDetector.parseChromatogram(chromatogramPath, pathRetentionIndexFile, useAlreadyDetectedPeaks, monitor);
+			PreferenceSupplier.setFilterPathModelsMSD(chromatogramPath);
 		} else {
 			String chromatogramPath = wizardElements.getChromatogramWizardElementsCSD().getSelectedChromatograms().get(0);
 			AlkanePatternDetectorCSD alkanePatternDetector = new AlkanePatternDetectorCSD();
 			chromatogram = alkanePatternDetector.parseChromatogram(chromatogramPath, pathRetentionIndexFile, useAlreadyDetectedPeaks, monitor);
+			PreferenceSupplier.setFilterPathModelsCSD(chromatogramPath);
 		}
 	}
 }

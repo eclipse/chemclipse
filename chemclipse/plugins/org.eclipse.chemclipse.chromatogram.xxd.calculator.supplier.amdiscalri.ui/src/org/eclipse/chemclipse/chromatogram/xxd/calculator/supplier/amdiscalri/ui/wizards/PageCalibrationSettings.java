@@ -22,7 +22,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
@@ -32,7 +31,6 @@ import org.eclipse.swt.widgets.Text;
 public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 
 	private IRetentionIndexWizardElements wizardElements;
-	private String[] availableStandards;
 	//
 	private Button checkBoxUseExistingCalibrationFile;
 	private Text textPathRetentionIndexFile;
@@ -41,8 +39,6 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 	private Button buttonMSD;
 	private Button buttonCSD;
 	//
-	private Combo comboStartIndexName;
-	private Combo comboStopIndexName;
 	private Button checkBoxUseExistingPeaks;
 
 	public PageCalibrationSettings(IRetentionIndexWizardElements wizardElements) {
@@ -51,7 +47,6 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		setTitle("Calibration Settings");
 		setDescription("Please select the calibration settings.");
 		this.wizardElements = wizardElements;
-		availableStandards = wizardElements.getAvailableStandards();
 	}
 
 	@Override
@@ -76,8 +71,6 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		if(visible) {
 			checkBoxUseExistingCalibrationFile.setSelection(wizardElements.isUseExistingRetentionIndexFile());
 			setCalibrationFileSelection(wizardElements.isUseExistingRetentionIndexFile());
-			comboStartIndexName.select(getComboIndex(wizardElements.getStartIndexName()));
-			comboStopIndexName.select(getComboIndex(wizardElements.getStopIndexName()));
 			checkBoxUseExistingPeaks.setSelection(wizardElements.isUseAlreadyDetectedPeaks());
 			validateSelection();
 		}
@@ -93,8 +86,6 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		createLabelDataField(composite);
 		createButtonMSDField(composite);
 		createButtonCSDField(composite);
-		createStartRetentionIndexField(composite);
-		createStopRetentionIndexField(composite);
 		createPeakIdentificationField(composite);
 		//
 		validateSelection();
@@ -193,46 +184,6 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		});
 	}
 
-	private void createStartRetentionIndexField(Composite composite) {
-
-		Label label = new Label(composite, SWT.NONE);
-		label.setText("Start Index");
-		label.setLayoutData(getGridData());
-		//
-		comboStartIndexName = new Combo(composite, SWT.NONE);
-		comboStartIndexName.setLayoutData(getGridData());
-		comboStartIndexName.setItems(availableStandards);
-		comboStartIndexName.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				wizardElements.setStartIndexName(comboStartIndexName.getText().trim());
-				validateSelection();
-			}
-		});
-	}
-
-	private void createStopRetentionIndexField(Composite composite) {
-
-		Label label = new Label(composite, SWT.NONE);
-		label.setText("Stop Index");
-		label.setLayoutData(getGridData());
-		//
-		comboStopIndexName = new Combo(composite, SWT.NONE);
-		comboStopIndexName.setLayoutData(getGridData());
-		comboStopIndexName.setItems(availableStandards);
-		comboStopIndexName.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				wizardElements.setStopIndexName(comboStopIndexName.getText().trim());
-				validateSelection();
-			}
-		});
-	}
-
 	private void createPeakIdentificationField(Composite composite) {
 
 		checkBoxUseExistingPeaks = new Button(composite, SWT.CHECK);
@@ -264,16 +215,6 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 		buttonSelectCalibrationFile.setEnabled(enabled);
 	}
 
-	private int getComboIndex(String name) {
-
-		for(int i = 0; i < availableStandards.length; i++) {
-			if(availableStandards[i].equals(name)) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
 	private void validateSelection() {
 
 		String message = null;
@@ -288,32 +229,6 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 				File file = new File(pathCalibrationFile);
 				if(!file.exists()) {
 					message = "The selected *.cal doesn't exist.";
-				}
-			}
-		}
-		/*
-		 * Start index
-		 */
-		if(message == null) {
-			String startIndexName = wizardElements.getStartIndexName();
-			if(startIndexName.equals("")) {
-				message = "Please select and start index.";
-			} else {
-				if(getComboIndex(startIndexName) == -1) {
-					message = "The select start index is not valid.";
-				}
-			}
-		}
-		/*
-		 * Stop index
-		 */
-		if(message == null) {
-			String stopIndexName = wizardElements.getStopIndexName();
-			if(stopIndexName.equals("")) {
-				message = "Please select and stop index.";
-			} else {
-				if(getComboIndex(stopIndexName) == -1) {
-					message = "The select stop index is not valid.";
 				}
 			}
 		}

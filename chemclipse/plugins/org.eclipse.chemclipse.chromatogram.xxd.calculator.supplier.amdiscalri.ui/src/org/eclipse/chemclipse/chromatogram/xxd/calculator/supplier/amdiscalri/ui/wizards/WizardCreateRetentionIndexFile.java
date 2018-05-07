@@ -15,11 +15,15 @@ import java.io.File;
 import java.util.Date;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileWriter;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractFileWizard;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -45,12 +49,9 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 	private PageCalibrationSettings pageCalibrationSettings;
 	private org.eclipse.chemclipse.ux.extension.msd.ui.wizards.ChromatogramInputEntriesWizardPage pageChromatogramInputEntriesMSD;
 	private org.eclipse.chemclipse.ux.extension.csd.ui.wizards.ChromatogramInputEntriesWizardPage pageChromatogramInputEntriesCSD;
-	private PagePeakSelectionMSD pagePeakSelectionMSD;
-	private PagePeakSelectionCSD pagePeakSelectionCSD;
-	private PagePeakAssignmentMSD pagePeakAssignmentMSD;
-	private PagePeakAssignmentCSD pagePeakAssignmentCSD;
-	private PageCalibrationTableMSD pageCalibrationTableMSD;
-	private PageCalibrationTableCSD pageCalibrationTableCSD;
+	private PagePeakSelection pagePeakSelection;
+	private PagePeakAssignment pagePeakAssignment;
+	private PageCalibrationTable pageCalibrationTable;
 
 	public WizardCreateRetentionIndexFile() {
 		super("RetentionIndices_" + new Date().getTime(), CALIBRATION_FILE_EXTENSION);
@@ -66,22 +67,16 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 		pageCalibrationSettings = new PageCalibrationSettings(wizardElements);
 		pageChromatogramInputEntriesMSD = new org.eclipse.chemclipse.ux.extension.msd.ui.wizards.ChromatogramInputEntriesWizardPage(wizardElements.getChromatogramWizardElementsMSD());
 		pageChromatogramInputEntriesCSD = new org.eclipse.chemclipse.ux.extension.csd.ui.wizards.ChromatogramInputEntriesWizardPage(wizardElements.getChromatogramWizardElementsCSD());
-		pagePeakSelectionMSD = new PagePeakSelectionMSD(wizardElements);
-		pagePeakSelectionCSD = new PagePeakSelectionCSD(wizardElements);
-		pagePeakAssignmentMSD = new PagePeakAssignmentMSD(wizardElements);
-		pagePeakAssignmentCSD = new PagePeakAssignmentCSD(wizardElements);
-		pageCalibrationTableMSD = new PageCalibrationTableMSD(wizardElements);
-		pageCalibrationTableCSD = new PageCalibrationTableCSD(wizardElements);
+		pagePeakSelection = new PagePeakSelection(wizardElements);
+		pagePeakAssignment = new PagePeakAssignment(wizardElements);
+		pageCalibrationTable = new PageCalibrationTable(wizardElements);
 		//
 		addPage(pageCalibrationSettings);
 		addPage(pageChromatogramInputEntriesMSD);
 		addPage(pageChromatogramInputEntriesCSD);
-		addPage(pagePeakSelectionMSD);
-		addPage(pagePeakSelectionCSD);
-		addPage(pagePeakAssignmentMSD);
-		addPage(pagePeakAssignmentCSD);
-		addPage(pageCalibrationTableMSD);
-		addPage(pageCalibrationTableCSD);
+		addPage(pagePeakSelection);
+		addPage(pagePeakAssignment);
+		addPage(pageCalibrationTable);
 	}
 
 	@Override
@@ -95,22 +90,22 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 			 */
 			if(wizardElements.isUseMassSpectrometryData()) {
 				nextPage = pageChromatogramInputEntriesMSD;
+				pageChromatogramInputEntriesMSD.expandTree(PreferenceSupplier.getFilterPathModelsMSD());
 			} else {
 				nextPage = pageChromatogramInputEntriesCSD;
+				pageChromatogramInputEntriesCSD.expandTree(PreferenceSupplier.getFilterPathModelsCSD());
 			}
 		} else if(page == pageChromatogramInputEntriesMSD) {
-			nextPage = pagePeakSelectionMSD;
+			nextPage = pagePeakSelection;
 		} else if(page == pageChromatogramInputEntriesCSD) {
-			nextPage = pagePeakSelectionCSD;
-		} else if(page == pagePeakSelectionMSD) {
-			nextPage = pagePeakAssignmentMSD;
-		} else if(page == pagePeakSelectionCSD) {
-			nextPage = pagePeakAssignmentCSD;
-		} else if(page == pagePeakAssignmentMSD) {
-			nextPage = pageCalibrationTableMSD;
-		} else if(page == pagePeakAssignmentCSD) {
-			nextPage = pageCalibrationTableCSD;
-		} else if(page == pageCalibrationTableMSD || page == pageCalibrationTableCSD) {
+			nextPage = pagePeakSelection;
+		} else if(page == pagePeakSelection) {
+			nextPage = pagePeakAssignment;
+		} else if(page == pagePeakAssignment) {
+			nextPage = pageCalibrationTable;
+		} else if(page == pagePeakAssignment) {
+			nextPage = pageCalibrationTable;
+		} else if(page == pageCalibrationTable) {
 			nextPage = null;
 		}
 		//
@@ -121,16 +116,13 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 	private void setPreviousPages() {
 
 		if(wizardElements.isUseMassSpectrometryData()) {
-			pageCalibrationTableMSD.setPreviousPage(pagePeakAssignmentMSD);
+			pagePeakSelection.setPreviousPage(pageChromatogramInputEntriesMSD);
 		} else {
-			pageCalibrationTableCSD.setPreviousPage(pagePeakAssignmentCSD);
+			pagePeakSelection.setPreviousPage(pageChromatogramInputEntriesCSD);
 		}
 		//
-		pagePeakAssignmentMSD.setPreviousPage(pagePeakSelectionMSD);
-		pagePeakAssignmentCSD.setPreviousPage(pagePeakSelectionCSD);
-		//
-		pagePeakSelectionMSD.setPreviousPage(pageChromatogramInputEntriesMSD);
-		pagePeakSelectionCSD.setPreviousPage(pageChromatogramInputEntriesCSD);
+		pageCalibrationTable.setPreviousPage(pagePeakAssignment);
+		pagePeakAssignment.setPreviousPage(pagePeakSelection);
 		//
 		pageChromatogramInputEntriesMSD.setPreviousPage(pageCalibrationSettings);
 		pageChromatogramInputEntriesCSD.setPreviousPage(pageCalibrationSettings);
@@ -148,10 +140,10 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 			}
 		}
 		if(canFinish) {
-			canFinish = pagePeakSelectionMSD.canFinish();
+			canFinish = pagePeakSelection.canFinish();
 		}
 		if(canFinish) {
-			canFinish = pagePeakAssignmentMSD.canFinish();
+			canFinish = pagePeakAssignment.canFinish();
 		}
 		if(canFinish) {
 			canFinish = wizardElements.isRetentionIndexDataValidated();
@@ -180,12 +172,17 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 			 */
 			String path = calibrationFile.getAbsolutePath();
 			File chromatogramFile = new File(path.substring(0, path.length() - CALIBRATION_FILE_EXTENSION.length()) + CHROMATOGRAM_FILE_EXTENSION);
+			IChromatogramSelection chromatogramSelection = wizardElements.getChromatogramSelection();
 			if(wizardElements.isUseMassSpectrometryData()) {
-				IChromatogramMSD chromatogramMSD = wizardElements.getChromatogramSelectionMSD().getChromatogramMSD();
-				ChromatogramConverterMSD.convert(chromatogramFile, chromatogramMSD, CHROMATOGRAM_CONVERTER_ID, monitor);
+				if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+					IChromatogramMSD chromatogramMSD = ((IChromatogramSelectionMSD)chromatogramSelection).getChromatogramMSD();
+					ChromatogramConverterMSD.convert(chromatogramFile, chromatogramMSD, CHROMATOGRAM_CONVERTER_ID, monitor);
+				}
 			} else {
-				IChromatogramCSD chromatogramCSD = wizardElements.getChromatogramSelectionCSD().getChromatogramCSD();
-				ChromatogramConverterCSD.convert(chromatogramFile, chromatogramCSD, CHROMATOGRAM_CONVERTER_ID, monitor);
+				if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+					IChromatogramCSD chromatogramCSD = ((IChromatogramSelectionCSD)chromatogramSelection).getChromatogramCSD();
+					ChromatogramConverterCSD.convert(chromatogramFile, chromatogramCSD, CHROMATOGRAM_CONVERTER_ID, monitor);
+				}
 			}
 		} catch(Exception e) {
 			logger.warn(e);

@@ -16,16 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.AlkaneIdentifier;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IPeakLibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakComparisonResult;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.model.targets.PeakTarget;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -43,20 +43,25 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
-public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
+public class PagePeakAssignment extends AbstractExtendedWizardPage {
 
-	private static final Logger logger = Logger.getLogger(PagePeakAssignmentCSD.class);
+	private static final Logger logger = Logger.getLogger(PagePeakAssignment.class);
 	//
 	private IRetentionIndexWizardElements wizardElements;
 	private PeakTableRetentionIndexViewerUI peakTableViewerUI;
 	private PeakTargetsViewerUI targetsViewerUI;
+	private Combo comboStartIndexName;
+	private Label labelIndexRange;
+	private Combo comboStopIndexName;
 	private Button buttonPrevious;
 	private Text textCurrentIndexName;
 	private Button buttonNext;
@@ -68,9 +73,9 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 	private static final int ACTION_INCREASE_INDEX = 1;
 	private static final int ACTION_DECREASE_INDEX = 2;
 
-	public PagePeakAssignmentCSD(IRetentionIndexWizardElements wizardElements) {
+	public PagePeakAssignment(IRetentionIndexWizardElements wizardElements) {
 		//
-		super(PagePeakAssignmentCSD.class.getName());
+		super(PagePeakAssignment.class.getName());
 		setTitle("Peak Assigment");
 		setDescription("Please assign the alkanes.");
 		this.wizardElements = wizardElements;
@@ -100,8 +105,8 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 
 		super.setVisible(visible);
 		if(visible) {
-			IChromatogramSelectionCSD chromatogramSelectionCSD = wizardElements.getChromatogramSelectionCSD();
-			if(chromatogramSelectionCSD != null && chromatogramSelectionCSD.getChromatogramCSD() != null) {
+			IChromatogramSelection chromatogramSelection = wizardElements.getChromatogramSelection();
+			if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
 				/*
 				 * Set the start index.
 				 */
@@ -114,13 +119,13 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 				/*
 				 * Set the first selection.
 				 */
-				IChromatogramCSD chromatogramCSD = chromatogramSelectionCSD.getChromatogramCSD();
-				List<IChromatogramPeakCSD> peaks = chromatogramCSD.getPeaks();
+				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				List<? extends IPeak> peaks = chromatogram.getPeaks();
 				peakTableViewerUI.setInput(peaks);
 				peakTableViewerUI.getTable().setSelection(0);
 				//
 				if(peaks.size() > 0) {
-					IChromatogramPeakCSD peak = peaks.get(0);
+					IPeak peak = peaks.get(0);
 					List<IPeakTarget> targets = peak.getTargets();
 					targetsViewerUI.setInput(targets);
 					targetsViewerUI.getTable().setSelection(0);
@@ -129,6 +134,8 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 				peakTableViewerUI.setInput(null);
 				textCurrentIndexName.setText("");
 			}
+			//
+			updateLabel();
 			validateSelection();
 		}
 	}
@@ -139,6 +146,7 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(3, false));
 		//
+		createRetentionIndexField(composite);
 		createAutoAssignField(composite);
 		createPeakTableField(composite);
 		createTargetSpinnerField(composite);
@@ -149,15 +157,63 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 		setControl(composite);
 	}
 
-	private void createAutoAssignField(Composite composite) {
+	private void createRetentionIndexField(Composite parent) {
 
-		Button button = new Button(composite, SWT.PUSH);
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridDataComposite = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataComposite.grabExcessHorizontalSpace = true;
+		gridDataComposite.horizontalSpan = 3;
+		composite.setLayoutData(gridDataComposite);
+		composite.setLayout(new GridLayout(2, true));
+		//
+		comboStartIndexName = new Combo(composite, SWT.NONE);
+		comboStartIndexName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboStartIndexName.setItems(availableStandards);
+		comboStartIndexName.setToolTipText("Select the start index.");
+		comboStartIndexName.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				wizardElements.setStartIndexName(comboStartIndexName.getText().trim());
+				validateIndexSelection();
+				updateLabel();
+			}
+		});
+		//
+		comboStopIndexName = new Combo(composite, SWT.NONE);
+		comboStopIndexName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboStopIndexName.setItems(availableStandards);
+		comboStopIndexName.setToolTipText("Select the stop index.");
+		comboStopIndexName.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				wizardElements.setStopIndexName(comboStopIndexName.getText().trim());
+				validateIndexSelection();
+				updateLabel();
+			}
+		});
+		//
+		labelIndexRange = new Label(composite, SWT.NONE);
+		labelIndexRange.setText("");
+		GridData gridDataLabel = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataLabel.grabExcessHorizontalSpace = true;
+		gridDataLabel.horizontalSpan = 2;
+		labelIndexRange.setLayoutData(gridDataLabel);
+	}
+
+	private void createAutoAssignField(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Auto Assign Standards");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 3;
 		button.setLayoutData(gridData);
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@SuppressWarnings({"rawtypes", "unchecked"})
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
@@ -165,15 +221,15 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 				messageBox.setText("Auto assign standards");
 				messageBox.setMessage("Would you like to set all standards automatically?");
 				if(messageBox.open() == SWT.YES) {
-					IChromatogramSelectionCSD chromatogramSelectionCSD = wizardElements.getChromatogramSelectionCSD();
-					if(chromatogramSelectionCSD != null && chromatogramSelectionCSD.getChromatogramCSD() != null) {
-						IChromatogramCSD chromatogramCSD = chromatogramSelectionCSD.getChromatogramCSD();
-						List<IChromatogramPeakCSD> chromatogramPeaks = chromatogramCSD.getPeaks();
+					IChromatogramSelection chromatogramSelection = wizardElements.getChromatogramSelection();
+					if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
+						IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+						List<? extends IPeak> chromatogramPeaks = chromatogram.getPeaks();
 						List<IRetentionIndexEntry> retentionIndexEntries = wizardElements.getSelectedRetentionIndexEntries();
 						//
 						if(chromatogramPeaks.size() == retentionIndexEntries.size()) {
 							for(int i = 0; i < chromatogramPeaks.size(); i++) {
-								IChromatogramPeakCSD chromatogramPeak = chromatogramPeaks.get(i);
+								IPeak chromatogramPeak = chromatogramPeaks.get(i);
 								IRetentionIndexEntry retentionIndexEntry = retentionIndexEntries.get(i);
 								setPeakTarget(chromatogramPeak, retentionIndexEntry.getName(), true);
 							}
@@ -181,8 +237,8 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 							 * Set the first peak.
 							 */
 							peakTableViewerUI.getTable().setSelection(0);
-							chromatogramSelectionCSD.reset();
-							IChromatogramPeakCSD selectedPeak = getSelectedPeak();
+							chromatogramSelection.reset();
+							IPeak selectedPeak = getSelectedPeak();
 							if(selectedPeak != null) {
 								targetsViewerUI.setInput(selectedPeak.getTargets());
 								targetsViewerUI.getTable().setSelection(0);
@@ -197,9 +253,9 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 		});
 	}
 
-	private void createPeakTableField(Composite composite) {
+	private void createPeakTableField(Composite parent) {
 
-		peakTableViewerUI = new PeakTableRetentionIndexViewerUI(composite, SWT.BORDER);
+		peakTableViewerUI = new PeakTableRetentionIndexViewerUI(parent, SWT.BORDER);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 3;
 		gridData.grabExcessHorizontalSpace = true;
@@ -210,7 +266,7 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 
-				IChromatogramPeakCSD selectedPeak = getSelectedPeak();
+				IPeak selectedPeak = getSelectedPeak();
 				if(selectedPeak != null) {
 					targetsViewerUI.setInput(selectedPeak.getTargets());
 					targetsViewerUI.getTable().setSelection(0);
@@ -219,9 +275,9 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 		});
 	}
 
-	private void createTargetSpinnerField(Composite composite) {
+	private void createTargetSpinnerField(Composite parent) {
 
-		buttonPrevious = new Button(composite, SWT.PUSH);
+		buttonPrevious = new Button(parent, SWT.PUSH);
 		buttonPrevious.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PREVIOUS, IApplicationImage.SIZE_16x16));
 		buttonPrevious.addSelectionListener(new SelectionAdapter() {
 
@@ -232,13 +288,13 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 			}
 		});
 		//
-		textCurrentIndexName = new Text(composite, SWT.BORDER);
+		textCurrentIndexName = new Text(parent, SWT.BORDER);
 		textCurrentIndexName.setText("");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		textCurrentIndexName.setLayoutData(gridData);
 		//
-		buttonNext = new Button(composite, SWT.PUSH);
+		buttonNext = new Button(parent, SWT.PUSH);
 		buttonNext.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_NEXT, IApplicationImage.SIZE_16x16));
 		buttonNext.addSelectionListener(new SelectionAdapter() {
 
@@ -250,9 +306,9 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 		});
 	}
 
-	private void createAssignIndexField(Composite composite) {
+	private void createAssignIndexField(Composite parent) {
 
-		Button buttonAdd = new Button(composite, SWT.PUSH);
+		Button buttonAdd = new Button(parent, SWT.PUSH);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 3;
 		buttonAdd.setLayoutData(gridData);
@@ -263,7 +319,7 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IChromatogramPeakCSD selectedPeak = getSelectedPeak();
+				IPeak selectedPeak = getSelectedPeak();
 				if(selectedPeak != null) {
 					String name = textCurrentIndexName.getText().trim();
 					setPeakTarget(selectedPeak, name, true);
@@ -272,13 +328,13 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 		});
 	}
 
-	private void setPeakTarget(IChromatogramPeakCSD chromatogramPeak, String name, boolean deleteOtherTargets) {
+	private void setPeakTarget(IPeak peak, String name, boolean deleteOtherTargets) {
 
 		/*
 		 * Delete all other targets.
 		 */
 		if(deleteOtherTargets) {
-			chromatogramPeak.removeAllTargets();
+			peak.removeAllTargets();
 		}
 		//
 		try {
@@ -289,8 +345,8 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 			IPeakComparisonResult comparisonResult = new PeakComparisonResult(FACTOR, FACTOR, FACTOR, FACTOR, FACTOR);
 			IPeakTarget peakTarget = new PeakTarget(libraryInformation, comparisonResult);
 			peakTarget.setIdentifier(AlkaneIdentifier.IDENTIFIER);
-			chromatogramPeak.addTarget(peakTarget);
-			targetsViewerUI.setInput(chromatogramPeak.getTargets());
+			peak.addTarget(peakTarget);
+			targetsViewerUI.setInput(peak.getTargets());
 			/*
 			 * Go to the next index.
 			 */
@@ -300,15 +356,14 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 		}
 	}
 
-	private void createPeakTargetsField(Composite composite) {
+	private void createPeakTargetsField(Composite parent) {
 
-		targetsViewerUI = new PeakTargetsViewerUI(composite, SWT.BORDER | SWT.MULTI);
+		targetsViewerUI = new PeakTargetsViewerUI(parent, SWT.BORDER | SWT.MULTI);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 3;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.heightHint = 100;
 		targetsViewerUI.getTable().setLayoutData(gridData);
-		//
 		targetsViewerUI.getControl().addKeyListener(new KeyAdapter() {
 
 			@Override
@@ -325,13 +380,13 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 						/*
 						 * Delete the identifications.
 						 */
-						IChromatogramPeakCSD chromatogramPeakCSD = getSelectedPeak();
-						if(chromatogramPeakCSD != null) {
+						IPeak chromatogramPeakMSD = getSelectedPeak();
+						if(chromatogramPeakMSD != null) {
 							Table table = targetsViewerUI.getTable();
 							int[] indices = table.getSelectionIndices();
 							List<IPeakTarget> targetsToRemove = getPeakTargetList(table, indices);
-							chromatogramPeakCSD.removeTargets(targetsToRemove);
-							targetsViewerUI.setInput(chromatogramPeakCSD.getTargets());
+							chromatogramPeakMSD.removeTargets(targetsToRemove);
+							targetsViewerUI.setInput(chromatogramPeakMSD.getTargets());
 							validateSelection();
 						}
 					}
@@ -343,13 +398,13 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 	/*
 	 * May return null.
 	 */
-	private IChromatogramPeakCSD getSelectedPeak() {
+	private IPeak getSelectedPeak() {
 
 		Table table = peakTableViewerUI.getTable();
 		int index = table.getSelectionIndex();
 		Object object = peakTableViewerUI.getElementAt(index);
-		if(object instanceof IChromatogramPeakCSD) {
-			return (IChromatogramPeakCSD)object;
+		if(object instanceof IPeak) {
+			return (IPeak)object;
 		} else {
 			return null;
 		}
@@ -416,5 +471,57 @@ public class PagePeakAssignmentCSD extends AbstractExtendedWizardPage {
 		 * Updates the status
 		 */
 		updateStatus(message);
+	}
+
+	private void updateLabel() {
+
+		List<IRetentionIndexEntry> retentionIndexEntries = wizardElements.getSelectedRetentionIndexEntries();
+		int size = wizardElements.getChromatogramSelection().getChromatogram().getPeaks().size();
+		labelIndexRange.setText("Number of peaks (" + size + ") -> Selected Standards (" + retentionIndexEntries.size() + ")");
+	}
+
+	private void validateIndexSelection() {
+
+		String message = null;
+		/*
+		 * Start index
+		 */
+		if(message == null) {
+			String startIndexName = wizardElements.getStartIndexName();
+			if(startIndexName.equals("")) {
+				message = "Please select and start index.";
+			} else {
+				if(getComboIndex(startIndexName) == -1) {
+					message = "The select start index is not valid.";
+				}
+			}
+		}
+		/*
+		 * Stop index
+		 */
+		if(message == null) {
+			String stopIndexName = wizardElements.getStopIndexName();
+			if(stopIndexName.equals("")) {
+				message = "Please select and stop index.";
+			} else {
+				if(getComboIndex(stopIndexName) == -1) {
+					message = "The select stop index is not valid.";
+				}
+			}
+		}
+		/*
+		 * Updates the status
+		 */
+		updateStatus(message);
+	}
+
+	private int getComboIndex(String name) {
+
+		for(int i = 0; i < availableStandards.length; i++) {
+			if(availableStandards[i].equals(name)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 }

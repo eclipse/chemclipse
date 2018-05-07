@@ -35,6 +35,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_RETENTION_INDEX_FILES = "retentionIndexFiles";
 	public static final String DEF_RETENTION_INDEX_FILES = "";
 	//
+	public static final String P_FILTER_PATH_MODELS_MSD = "filterPathModelsMSD";
+	public static final String DEF_FILTER_PATH_MODELS_MSD = "";
+	//
+	public static final String P_FILTER_PATH_MODELS_CSD = "filterPathModelsCSD";
+	public static final String DEF_FILTER_PATH_MODELS_CSD = "";
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -62,6 +68,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_RETENTION_INDEX_FILES, DEF_RETENTION_INDEX_FILES);
+		defaultValues.put(P_FILTER_PATH_MODELS_MSD, DEF_FILTER_PATH_MODELS_MSD);
+		defaultValues.put(P_FILTER_PATH_MODELS_CSD, DEF_FILTER_PATH_MODELS_CSD);
 		return defaultValues;
 	}
 
@@ -100,6 +108,43 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 			String items[] = retentionIndexFiles.toArray(new String[retentionIndexFiles.size()]);
 			preferences.put(P_RETENTION_INDEX_FILES, fileListUtil.createList(items));
 			preferences.flush();
+		} catch(BackingStoreException e) {
+			logger.warn(e);
+		}
+	}
+
+	public static String getFilterPathModelsMSD() {
+
+		return getFilterPath(P_FILTER_PATH_MODELS_MSD, DEF_FILTER_PATH_MODELS_MSD);
+	}
+
+	public static void setFilterPathModelsMSD(String filterPath) {
+
+		setFilterPath(P_FILTER_PATH_MODELS_MSD, filterPath);
+	}
+
+	public static String getFilterPathModelsCSD() {
+
+		return getFilterPath(P_FILTER_PATH_MODELS_CSD, DEF_FILTER_PATH_MODELS_CSD);
+	}
+
+	public static void setFilterPathModelsCSD(String filterPath) {
+
+		setFilterPath(P_FILTER_PATH_MODELS_CSD, filterPath);
+	}
+
+	private static String getFilterPath(String key, String def) {
+
+		IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
+		return eclipsePreferences.get(key, def);
+	}
+
+	private static void setFilterPath(String key, String filterPath) {
+
+		try {
+			IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
+			eclipsePreferences.put(key, filterPath);
+			eclipsePreferences.flush();
 		} catch(BackingStoreException e) {
 			logger.warn(e);
 		}

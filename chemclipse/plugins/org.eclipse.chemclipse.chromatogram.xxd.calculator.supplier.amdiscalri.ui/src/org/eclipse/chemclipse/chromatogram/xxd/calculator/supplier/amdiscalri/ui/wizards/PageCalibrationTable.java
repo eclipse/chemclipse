@@ -14,11 +14,12 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.RetentionIndexExtractor;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.ExtendedRetentionIndexListUI;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.RetentionIndexTableViewerUI;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.chemclipse.swt.ui.components.chromatogram.SelectedPeakChromatogramUI;
 import org.eclipse.swt.SWT;
@@ -32,7 +33,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
-public class PageCalibrationTableCSD extends AbstractExtendedWizardPage {
+public class PageCalibrationTable extends AbstractExtendedWizardPage {
 
 	private IRetentionIndexWizardElements wizardElements;
 	//
@@ -40,9 +41,9 @@ public class PageCalibrationTableCSD extends AbstractExtendedWizardPage {
 	private SelectedPeakChromatogramUI selectedPeakChromatogramUI;
 	private ExtendedRetentionIndexListUI extendedRetentionIndexTableViewerUI;
 
-	public PageCalibrationTableCSD(IRetentionIndexWizardElements wizardElements) {
+	public PageCalibrationTable(IRetentionIndexWizardElements wizardElements) {
 		//
-		super(PageCalibrationTableCSD.class.getName());
+		super(PageCalibrationTable.class.getName());
 		setTitle("Calibration Table");
 		setDescription("Please verify the calibration table.");
 		this.wizardElements = wizardElements;
@@ -68,12 +69,12 @@ public class PageCalibrationTableCSD extends AbstractExtendedWizardPage {
 
 		super.setVisible(visible);
 		if(visible) {
-			IChromatogramSelectionCSD chromatogramSelectionCSD = wizardElements.getChromatogramSelectionCSD();
-			if(chromatogramSelectionCSD != null && chromatogramSelectionCSD.getChromatogramCSD() != null) {
-				IChromatogramCSD chromatogramCSD = chromatogramSelectionCSD.getChromatogramCSD();
-				selectedPeakChromatogramUI.updateSelection(chromatogramSelectionCSD, true);
+			IChromatogramSelection chromatogramSelection = wizardElements.getChromatogramSelection();
+			if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
+				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				selectedPeakChromatogramUI.updateSelection(chromatogramSelection, true);
 				RetentionIndexExtractor retentionIndexExtractor = new RetentionIndexExtractor();
-				ISeparationColumnIndices separationColumnIndices = retentionIndexExtractor.extract(chromatogramCSD);
+				ISeparationColumnIndices separationColumnIndices = retentionIndexExtractor.extract(chromatogram);
 				wizardElements.setSeparationColumnIndices(separationColumnIndices);
 				extendedRetentionIndexTableViewerUI.setInput(separationColumnIndices);
 			}
@@ -137,13 +138,13 @@ public class PageCalibrationTableCSD extends AbstractExtendedWizardPage {
 				if(object instanceof IRetentionIndexEntry) {
 					IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)object;
 					int retentionTime = retentionIndexEntry.getRetentionTime();
-					IChromatogramSelectionCSD chromatogramSelectionCSD = wizardElements.getChromatogramSelectionCSD();
-					if(chromatogramSelectionCSD != null && chromatogramSelectionCSD.getChromatogramCSD() != null) {
-						IChromatogramCSD chromatogramCSD = chromatogramSelectionCSD.getChromatogramCSD();
-						IChromatogramPeakCSD selectedPeak = getSelectedPeak(chromatogramCSD, retentionTime);
+					IChromatogramSelection chromatogramSelection = wizardElements.getChromatogramSelection();
+					if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
+						IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+						IPeak selectedPeak = getSelectedPeak(chromatogram, retentionTime);
 						if(selectedPeak != null) {
-							chromatogramSelectionCSD.setSelectedPeak(selectedPeak);
-							selectedPeakChromatogramUI.updateSelection(chromatogramSelectionCSD, true);
+							chromatogramSelection.setSelectedPeak(selectedPeak);
+							selectedPeakChromatogramUI.updateSelection(chromatogramSelection, true);
 						}
 					}
 				}
@@ -154,13 +155,13 @@ public class PageCalibrationTableCSD extends AbstractExtendedWizardPage {
 	/**
 	 * May return null.
 	 * 
-	 * @param chromatogramCSD
+	 * @param chromatogramMSD
 	 * @param retentionTime
-	 * @return {@link IChromatogramPeakCSD}
+	 * @return {@link IChromatogramPeakMSD}
 	 */
-	private IChromatogramPeakCSD getSelectedPeak(IChromatogramCSD chromatogramCSD, int retentionTime) {
+	private IPeak getSelectedPeak(IChromatogram<? extends IPeak> chromatogram, int retentionTime) {
 
-		for(IChromatogramPeakCSD peak : chromatogramCSD.getPeaks()) {
+		for(IPeak peak : chromatogram.getPeaks()) {
 			if(peak.getPeakModel().getRetentionTimeAtPeakMaximum() == retentionTime) {
 				return peak;
 			}
