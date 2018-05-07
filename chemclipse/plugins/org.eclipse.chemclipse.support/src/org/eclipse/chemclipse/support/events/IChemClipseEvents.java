@@ -159,6 +159,12 @@ public interface IChemClipseEvents {
 	String TOPIC_LIBRARY_MSD_ADD_TO_DB_SEARCH = "library/msd/add/dbsearch";
 	String TOPIC_LIBRARY_MSD_REMOVE_FROM_DB_SEARCH = "library/msd/remove/dbsearch";
 	/*
+	 * RI Library
+	 */
+	String PROPERTY_RI_CALIBRATION_LIBRARY = IEventBroker.DATA; // File
+	String TOPIC_RI_LIBRARY_ADD_ADD_TO_PROCESS = "ri/library/add/process";
+	String TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS = "ri/library/remove/process";
+	/*
 	 * Toggle Part Visibility
 	 */
 	String PROPERTY_TOGGLE_PART_VISIBILITY = IEventBroker.DATA;
