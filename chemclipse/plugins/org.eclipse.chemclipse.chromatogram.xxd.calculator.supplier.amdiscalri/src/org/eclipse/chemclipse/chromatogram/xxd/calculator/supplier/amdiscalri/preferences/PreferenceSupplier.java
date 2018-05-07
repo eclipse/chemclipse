@@ -20,14 +20,18 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.se
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ISupplierCalculatorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.RetentionIndexFilterSettingsPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.SupplierCalculatorSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.osgi.service.prefs.BackingStoreException;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
+	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
+	//
 	public static final String P_RETENTION_INDEX_FILES = "retentionIndexFiles";
 	public static final String DEF_RETENTION_INDEX_FILES = "";
 	//
@@ -86,5 +90,18 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		FileListUtil fileListUtil = new FileListUtil();
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		return fileListUtil.getFiles(preferences.get(P_RETENTION_INDEX_FILES, DEF_RETENTION_INDEX_FILES));
+	}
+
+	public static void setRetentionIndexFiles(List<String> retentionIndexFiles) {
+
+		try {
+			FileListUtil fileListUtil = new FileListUtil();
+			IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+			String items[] = retentionIndexFiles.toArray(new String[retentionIndexFiles.size()]);
+			preferences.put(P_RETENTION_INDEX_FILES, fileListUtil.createList(items));
+			preferences.flush();
+		} catch(BackingStoreException e) {
+			logger.warn(e);
+		}
 	}
 }

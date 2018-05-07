@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.editors;
 
+import java.io.File;
+
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.ExtendedRetentionIndexListUI;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.swt.SWT;
@@ -32,8 +34,9 @@ public class PageCalibration {
 		return control;
 	}
 
-	public void showData(ISeparationColumnIndices separationColumnIndices) {
+	public void showData(File file, ISeparationColumnIndices separationColumnIndices) {
 
+		extendedTableViewer.setFile(file);
 		extendedTableViewer.setInput(separationColumnIndices);
 	}
 

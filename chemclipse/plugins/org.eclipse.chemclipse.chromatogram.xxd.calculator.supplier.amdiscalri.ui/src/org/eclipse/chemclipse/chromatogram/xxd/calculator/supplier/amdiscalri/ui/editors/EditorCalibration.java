@@ -82,7 +82,7 @@ public class EditorCalibration extends MultiPageEditorPart {
 			initialize = false;
 			CalibrationFileReader calibrationFileReader = new CalibrationFileReader();
 			separationColumnIndices = calibrationFileReader.parse(file);
-			pageCalibration.showData(separationColumnIndices);
+			pageCalibration.showData(file, separationColumnIndices);
 		}
 	}
 

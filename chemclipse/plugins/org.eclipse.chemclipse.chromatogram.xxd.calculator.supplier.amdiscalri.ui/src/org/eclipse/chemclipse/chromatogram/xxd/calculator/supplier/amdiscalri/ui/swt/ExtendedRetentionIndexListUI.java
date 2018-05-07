@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt;
 
+import java.io.File;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.StandardsReader;
@@ -25,6 +26,7 @@ import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.msd.swt.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
@@ -79,6 +81,9 @@ public class ExtendedRetentionIndexListUI extends Composite {
 	private Button buttonDelete;
 	private Button buttonAdd;
 	//
+	private Button buttonAddLibrary;
+	private Button buttonRemoveLibrary;
+	//
 	private ComboViewer comboViewerSeparationColumn;
 	private Combo comboReferences;
 	private Button buttonAddReference;
@@ -87,6 +92,7 @@ public class ExtendedRetentionIndexListUI extends Composite {
 	//
 	private RetentionIndexTableViewerUI retentionIndexListUI;
 	//
+	private File retentionIndexFile;
 	private ISeparationColumnIndices separationColumnIndices = new SeparationColumnIndices();
 	private List<IRetentionIndexEntry> availableRetentionIndexEntries;
 
@@ -97,6 +103,14 @@ public class ExtendedRetentionIndexListUI extends Composite {
 		availableRetentionIndexEntries = standardsReader.getStandardsList();
 		//
 		initialize();
+	}
+
+	public void setFile(File file) {
+
+		retentionIndexFile = file;
+		boolean enabled = (file != null);
+		buttonAddLibrary.setEnabled(enabled);
+		buttonRemoveLibrary.setEnabled(enabled);
 	}
 
 	public void setInput(ISeparationColumnIndices separationColumnIndices) {
@@ -147,10 +161,14 @@ public class ExtendedRetentionIndexListUI extends Composite {
 		//
 		comboViewerSeparationColumn.setInput(SeparationColumnFactory.getSeparationColumns());
 		retentionIndexListUI.setEditEnabled(false);
+		buttonAddLibrary.setEnabled(false);
+		buttonRemoveLibrary.setEnabled(false);
+		//
 		PartSupport.setCompositeVisibility(toolbarInfoTop, true);
 		PartSupport.setCompositeVisibility(toolbarSearch, false);
 		PartSupport.setCompositeVisibility(toolbarModify, false);
 		PartSupport.setCompositeVisibility(toolbarInfoBottom, true);
+		//
 		enableButtonFields(ACTION_INITIALIZE);
 	}
 
@@ -168,8 +186,8 @@ public class ExtendedRetentionIndexListUI extends Composite {
 		createButtonToggleToolbarSearch(composite);
 		createButtonToggleToolbarModify(composite);
 		createButtonToggleToolbarEdit(composite);
-		createButtonAddLibraryToSearch(composite);
-		createButtonRemoveLibraryFromSearch(composite);
+		buttonAddLibrary = createButtonAddLibraryToProcess(composite);
+		buttonRemoveLibrary = createButtonRemoveLibraryFromProcess(composite);
 		createSettingsButton(composite);
 	}
 
@@ -299,7 +317,7 @@ public class ExtendedRetentionIndexListUI extends Composite {
 		return button;
 	}
 
-	private Button createButtonAddLibraryToSearch(Composite parent) {
+	private Button createButtonAddLibraryToProcess(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Add the library to the list of searched databases.");
@@ -311,15 +329,15 @@ public class ExtendedRetentionIndexListUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				// eventBroker.post(IChemClipseEvents.TOPIC_LIBRARY_MSD_ADD_TO_DB_SEARCH, massSpectrumFile);
-				// MessageDialog.openConfirm(Display.getDefault().getActiveShell(), "DB Search", "The library has been added.");
+				eventBroker.post(IChemClipseEvents.TOPIC_RI_LIBRARY_ADD_ADD_TO_PROCESS, retentionIndexFile);
+				MessageDialog.openConfirm(Display.getDefault().getActiveShell(), "RI Calculator", "The RI library has been added.");
 			}
 		});
 		//
 		return button;
 	}
 
-	private Button createButtonRemoveLibraryFromSearch(Composite parent) {
+	private Button createButtonRemoveLibraryFromProcess(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Remove the library from the list of searched databases.");
@@ -331,8 +349,8 @@ public class ExtendedRetentionIndexListUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				// eventBroker.post(IChemClipseEvents.TOPIC_LIBRARY_MSD_REMOVE_FROM_DB_SEARCH, massSpectrumFile);
-				// MessageDialog.openConfirm(Display.getDefault().getActiveShell(), "DB Search", "The library has been removed.");
+				eventBroker.post(IChemClipseEvents.TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS, retentionIndexFile);
+				MessageDialog.openConfirm(Display.getDefault().getActiveShell(), "RI Calculator", "The RI library has been removed.");
 			}
 		});
 		//
