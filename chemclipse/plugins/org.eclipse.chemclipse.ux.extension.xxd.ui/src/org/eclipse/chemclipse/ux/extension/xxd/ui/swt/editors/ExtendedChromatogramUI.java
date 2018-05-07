@@ -267,6 +267,7 @@ public class ExtendedChromatogramUI {
 			updateChromatogramTargetTransferSelections();
 			updateChromatogram();
 			adjustChromatogramSelectionRange();
+			setSeparationColumnSelection();
 		}
 	}
 
@@ -1076,6 +1077,12 @@ public class ExtendedChromatogramUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				Object object = comboViewer.getStructuredSelection().getFirstElement();
+				if(object instanceof ISeparationColumn && chromatogramSelection != null) {
+					ISeparationColumn separationColumn = (ISeparationColumn)object;
+					chromatogramSelection.getChromatogram().setSeparationColumn(separationColumn);
+					updateLabel();
+				}
 			}
 		});
 		//
@@ -2073,6 +2080,28 @@ public class ExtendedChromatogramUI {
 		if(chromatogramSelection != null) {
 			chromatogramChart.setRange(IExtendedChart.X_AXIS, chromatogramSelection.getStartRetentionTime(), chromatogramSelection.getStopRetentionTime());
 			chromatogramChart.setRange(IExtendedChart.Y_AXIS, chromatogramSelection.getStartAbundance(), chromatogramSelection.getStopAbundance());
+		}
+	}
+
+	private void setSeparationColumnSelection() {
+
+		if(chromatogramSelection != null) {
+			ISeparationColumn separationColumn = chromatogramSelection.getChromatogram().getSeparationColumn();
+			if(separationColumn != null) {
+				String name = separationColumn.getName();
+				int index = -1;
+				exitloop:
+				for(String item : comboViewerSeparationColumn.getCombo().getItems()) {
+					index++;
+					if(item.equals(name)) {
+						break exitloop;
+					}
+				}
+				//
+				if(index >= 0) {
+					comboViewerSeparationColumn.getCombo().select(index);
+				}
+			}
 		}
 	}
 }
