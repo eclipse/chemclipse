@@ -103,6 +103,18 @@ public class ExtendedRetentionIndexListUI extends Composite {
 
 		this.separationColumnIndices = separationColumnIndices;
 		ISeparationColumn separationColumn = separationColumnIndices.getSeparationColumn();
+		setSeparationColumnSelection(separationColumn);
+		retentionIndexListUI.setInput(separationColumnIndices);
+		updateLabel();
+	}
+
+	public RetentionIndexTableViewerUI getRetentionIndexTableViewerUI() {
+
+		return retentionIndexListUI;
+	}
+
+	private void setSeparationColumnSelection(ISeparationColumn separationColumn) {
+
 		if(separationColumn != null) {
 			String name = separationColumn.getName();
 			int index = -1;
@@ -118,13 +130,6 @@ public class ExtendedRetentionIndexListUI extends Composite {
 				comboViewerSeparationColumn.getCombo().select(index);
 			}
 		}
-		retentionIndexListUI.setInput(separationColumnIndices);
-		updateLabel();
-	}
-
-	public RetentionIndexTableViewerUI getRetentionIndexTableViewerUI() {
-
-		return retentionIndexListUI;
 	}
 
 	private void initialize() {
@@ -216,7 +221,12 @@ public class ExtendedRetentionIndexListUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				updateLabel();
+				Object object = comboViewer.getStructuredSelection().getFirstElement();
+				if(object instanceof ISeparationColumn && separationColumnIndices != null) {
+					ISeparationColumn separationColumn = (ISeparationColumn)object;
+					separationColumnIndices.setSeparationColumn(separationColumn);
+					updateLabel();
+				}
 			}
 		});
 		//
