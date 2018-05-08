@@ -80,6 +80,7 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 	@Override
 	public void compute(int numComps) {
 
+		setNumComps(numComps);
 		int numberOfSamples = getSampleData().getNumRows();
 		int numberOfVariables = getSampleData().getNumCols();
 		DenseMatrix64F T_ortho = new DenseMatrix64F(numberOfSamples, numComps - 1);
@@ -95,7 +96,10 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		DenseMatrix64F y_avg = getAvgYVector();
 		DenseMatrix64F x_avg = getAvgXVector();
 		DenseMatrix64F x_sd = getSDXVector();
+		DenseMatrix64F te = new DenseMatrix64F(numberOfSamples, 1);
+		DenseMatrix64F p = new DenseMatrix64F(1, numberOfVariables);
 		DenseMatrix64F w = new DenseMatrix64F(1, numberOfVariables);
+		DenseMatrix64F u = new DenseMatrix64F(numberOfSamples, 1);
 		//
 		// ##########################################################################
 		// ### Start algorithm
@@ -111,7 +115,7 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		DenseMatrix64F ww = new DenseMatrix64F(1, 1);
 		CommonOps.transpose(w);
 		CommonOps.multInner(w, ww);
-		double absW = Math.sqrt(yy.get(0));
+		double absW = Math.sqrt(ww.get(0));
 		CommonOps.divide(w, absW);
 		// ##########################################################################
 		// ### Start calculation for ortho factors first and predictive in the end
@@ -121,7 +125,7 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 			// te<-X%*%w/as.vector(t(w)%*%w) # Generates vector
 			DenseMatrix64F wTemp = new DenseMatrix64F(1, 1);
 			CommonOps.multInner(w, wTemp);
-			DenseMatrix64F te = new DenseMatrix64F(numberOfSamples, 1);
+			// DenseMatrix64F te = new DenseMatrix64F(numberOfSamples, 1);
 			CommonOps.mult(X, w, te);
 			CommonOps.divide(te, wTemp.get(0));
 			// #4
@@ -136,13 +140,13 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 			// u<-(y%*%ce)/as.vector(t(ce)%*%ce) # Generates vector
 			DenseMatrix64F cTemp = new DenseMatrix64F(1, 1);
 			CommonOps.multInner(ce, cTemp);
-			DenseMatrix64F u = new DenseMatrix64F(numberOfSamples, 1);
+			// DenseMatrix64F u = new DenseMatrix64F(numberOfSamples, 1);
 			CommonOps.mult(y, ce, u);
 			CommonOps.divide(u, cTemp.get(0));
 			// #6
 			// p<-t(te)%*%X/as.vector(t(te)%*%te)
 			// p<-t(p)
-			DenseMatrix64F p = new DenseMatrix64F(1, numberOfVariables);
+			// DenseMatrix64F p = new DenseMatrix64F(1, numberOfVariables);
 			CommonOps.multTransA(te, X, p);
 			CommonOps.divide(p, tTemp.get(0));
 			// ### End of calculation of predictive vector
@@ -177,6 +181,7 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 				DenseMatrix64F tt_temp = new DenseMatrix64F(1, 1);
 				CommonOps.multInner(t_ortho, tt_temp);
 				CommonOps.multTransA(t_ortho, X, p_ortho);
+				CommonOps.divide(p_ortho, tt_temp.get(0));
 				// #11
 				// Eo_PLS<-X-as.vector(t_ortho%*%t(p_ortho))
 				DenseMatrix64F X_temp = new DenseMatrix64F(numberOfSamples, numberOfVariables);
@@ -194,11 +199,20 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 					P_ortho.set(i, k, p_ortho.get(k));
 					W_ortho.set(i, k, w_ortho.get(k));
 				}
+				CommonOps.transpose(w_ortho);
 				System.out.println("matrix calc");
 			}
 		}
-		setScores(new DenseMatrix64F(numberOfSamples, numComps));
-		setLoadings(new DenseMatrix64F(numComps, numberOfVariables));
+		double combinedScores[] = new double[numberOfSamples * numComps];
+		System.arraycopy(te.getData(), 0, combinedScores, 0, numberOfSamples);
+		System.arraycopy(T_ortho.getData(), 0, combinedScores, numberOfSamples, numberOfSamples * (numComps - 1));
+		DenseMatrix64F scores = new DenseMatrix64F(numberOfSamples, numComps, false, combinedScores);
+		setScores(scores);
+		double combinedLoadings[] = new double[numComps * numberOfVariables];
+		System.arraycopy(p.getData(), 0, combinedLoadings, 0, numberOfVariables);
+		System.arraycopy(P_ortho.getData(), 0, combinedLoadings, numberOfVariables, (numComps - 1) * numberOfVariables);
+		DenseMatrix64F loadings = new DenseMatrix64F(numComps, numberOfVariables, true, combinedLoadings);
+		setLoadings(loadings);
 		//
 		// b<-w%*%ce
 		//
