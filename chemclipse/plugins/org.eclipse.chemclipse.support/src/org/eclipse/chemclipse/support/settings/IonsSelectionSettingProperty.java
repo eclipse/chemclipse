@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Jan Holy - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.support.settings;
 
@@ -18,32 +18,8 @@ import java.lang.annotation.Target;
 
 import com.fasterxml.jackson.annotation.JacksonAnnotation;
 
-@Target({ElementType.ANNOTATION_TYPE, ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
+@Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @JacksonAnnotation
-public @interface SettingsProperty {
-
-	/*
-	 * @SettingsProperty(value = "Number of Targets", defaultValue = "15", minValue = "1", maxValue = "30")
-	 */
-	public final static String USE_DEFAULT_NAME = "";
-	public final static int INDEX_UNKNOWN = -1;
-
-	String value() default USE_DEFAULT_NAME;
-
-	boolean required() default false;
-
-	int index() default INDEX_UNKNOWN;
-
-	String defaultValue() default "";
-
-	Access access() default Access.AUTO;
-
-	String minValue() default "";
-
-	String maxValue() default "";
-
-	public enum Access {
-		AUTO, READ_ONLY, WRITE_ONLY, READ_WRITE;
-	}
+public @interface IonsSelectionSettingProperty {
 }
