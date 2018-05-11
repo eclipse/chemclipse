@@ -21,27 +21,27 @@ public class WncResultsTableComparator extends AbstractRecordTableComparator imp
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
-		IWncIon wnc1 = (IWncIon)e1;
-		IWncIon wnc2 = (IWncIon)e2;
-		int sortOrder;
-		switch(getPropertyIndex()) {
-			case 0: // Name
-				sortOrder = wnc2.getName().codePointAt(0) - wnc1.getName().codePointAt(0);
-				break;
-			case 1: // ion
-				sortOrder = wnc2.getIon() - wnc1.getIon();
-				break;
-			case 2: // Percentage Sum Intensity
-				sortOrder = Double.compare(wnc2.getPercentageSumIntensity(), wnc1.getPercentageSumIntensity());
-				break;
-			case 3: // Percentage Max Intensity
-				sortOrder = Double.compare(wnc2.getPercentageMaxIntensity(), wnc1.getPercentageMaxIntensity());
-				break;
-			default:
-				sortOrder = 0;
-		}
-		if(getDirection() == ASCENDING) {
-			sortOrder = -sortOrder;
+		int sortOrder = 0;
+		if(e1 instanceof IWncIon && e2 instanceof IWncIon) {
+			IWncIon wnc1 = (IWncIon)e1;
+			IWncIon wnc2 = (IWncIon)e2;
+			switch(getPropertyIndex()) {
+				case 0: // Name
+					sortOrder = wnc2.getName().codePointAt(0) - wnc1.getName().codePointAt(0);
+					break;
+				case 1: // ion
+					sortOrder = wnc2.getIon() - wnc1.getIon();
+					break;
+				case 2: // Percentage Sum Intensity
+					sortOrder = Double.compare(wnc2.getPercentageSumIntensity(), wnc1.getPercentageSumIntensity());
+					break;
+				case 3: // Percentage Max Intensity
+					sortOrder = Double.compare(wnc2.getPercentageMaxIntensity(), wnc1.getPercentageMaxIntensity());
+					break;
+			}
+			if(getDirection() == ASCENDING) {
+				sortOrder = -sortOrder;
+			}
 		}
 		return sortOrder;
 	}
