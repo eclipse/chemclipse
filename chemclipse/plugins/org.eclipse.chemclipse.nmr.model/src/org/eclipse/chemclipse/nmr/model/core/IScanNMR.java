@@ -13,7 +13,9 @@ package org.eclipse.chemclipse.nmr.model.core;
 
 import java.util.Set;
 
-public interface IScanNMR extends Set<ISignalNMR> {
+import org.eclipse.chemclipse.model.core.IMeasurementInfo;
+
+public interface IScanNMR extends Set<ISignalNMR>, IMeasurementInfo {
 
 	double[] getRawSignals();
 

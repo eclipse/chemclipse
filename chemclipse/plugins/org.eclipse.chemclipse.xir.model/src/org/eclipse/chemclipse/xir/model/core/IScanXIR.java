@@ -13,7 +13,9 @@ package org.eclipse.chemclipse.xir.model.core;
 
 import java.util.Set;
 
-public interface IScanXIR extends Set<ISignalXIR> {
+import org.eclipse.chemclipse.model.core.IMeasurementInfo;
+
+public interface IScanXIR extends Set<ISignalXIR>, IMeasurementInfo {
 
 	double getRotationAngle();
 
