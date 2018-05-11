@@ -21,27 +21,27 @@ public class ClassifierResultTableComparator extends AbstractRecordTableComparat
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
-		ISavitzkyGolayFilterRating result1 = (ISavitzkyGolayFilterRating)e1;
-		ISavitzkyGolayFilterRating result2 = (ISavitzkyGolayFilterRating)e2;
-		int sortOrder;
-		switch(getPropertyIndex()) {
-			case 0: // Rating
-				sortOrder = Double.compare(result2.getRating(), result1.getRating());
-				break;
-			case 1: // Derivative
-				sortOrder = result2.getSupplierFilterSettings().getDerivative() - result1.getSupplierFilterSettings().getDerivative();
-				break;
-			case 2: // Order
-				sortOrder = result2.getSupplierFilterSettings().getOrder() - result1.getSupplierFilterSettings().getOrder();
-				break;
-			case 3: // Width
-				sortOrder = result2.getSupplierFilterSettings().getWidth() - result1.getSupplierFilterSettings().getWidth();
-				break;
-			default:
-				sortOrder = 0;
-		}
-		if(getDirection() == ASCENDING) {
-			sortOrder = -sortOrder;
+		int sortOrder = 0;
+		if(e1 instanceof ISavitzkyGolayFilterRating && e2 instanceof ISavitzkyGolayFilterRating) {
+			ISavitzkyGolayFilterRating result1 = (ISavitzkyGolayFilterRating)e1;
+			ISavitzkyGolayFilterRating result2 = (ISavitzkyGolayFilterRating)e2;
+			switch(getPropertyIndex()) {
+				case 0: // Rating
+					sortOrder = Double.compare(result2.getRating(), result1.getRating());
+					break;
+				case 1: // Derivative
+					sortOrder = result2.getSupplierFilterSettings().getDerivative() - result1.getSupplierFilterSettings().getDerivative();
+					break;
+				case 2: // Order
+					sortOrder = result2.getSupplierFilterSettings().getOrder() - result1.getSupplierFilterSettings().getOrder();
+					break;
+				case 3: // Width
+					sortOrder = result2.getSupplierFilterSettings().getWidth() - result1.getSupplierFilterSettings().getWidth();
+					break;
+			}
+			if(getDirection() == ASCENDING) {
+				sortOrder = -sortOrder;
+			}
 		}
 		return sortOrder;
 	}
