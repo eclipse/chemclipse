@@ -24,21 +24,21 @@ public class BasePeakResultsTableComparator extends AbstractRecordTableComparato
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
-		Map.Entry<String, Double> ligninEntry1 = (Map.Entry<String, Double>)e1;
-		Map.Entry<String, Double> ligninEntry2 = (Map.Entry<String, Double>)e2;
-		int sortOrder;
-		switch(getPropertyIndex()) {
-			case 0:
-				sortOrder = ligninEntry2.getKey().compareTo(ligninEntry1.getKey());
-				break;
-			case 1:
-				sortOrder = Double.compare(ligninEntry2.getValue(), ligninEntry1.getValue());
-				break;
-			default:
-				sortOrder = 0;
-		}
-		if(getDirection() == ASCENDING) {
-			sortOrder = -sortOrder;
+		int sortOrder = 0;
+		if(e1 instanceof Map.Entry && e2 instanceof Map.Entry) {
+			Map.Entry<String, Double> ligninEntry1 = (Map.Entry<String, Double>)e1;
+			Map.Entry<String, Double> ligninEntry2 = (Map.Entry<String, Double>)e2;
+			switch(getPropertyIndex()) {
+				case 0:
+					sortOrder = ligninEntry2.getKey().compareTo(ligninEntry1.getKey());
+					break;
+				case 1:
+					sortOrder = Double.compare(ligninEntry2.getValue(), ligninEntry1.getValue());
+					break;
+			}
+			if(getDirection() == ASCENDING) {
+				sortOrder = -sortOrder;
+			}
 		}
 		return sortOrder;
 	}
