@@ -27,7 +27,6 @@ import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.ui.support.IMeasurementResultTitles;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
@@ -297,6 +296,30 @@ public class ExtendedMeasurementResultUI {
 
 	private void updateMeasurementResult(IMeasurementResult measurementResult) {
 
+		/*
+		 * TODO
+		 * Somehow, setContentProvider fails when switching to a new
+		 * measurement result. I definitively don't understand why it happens,
+		 * cause it shouldn't. That's why it's called twice on error.
+		 */
+		try {
+			prepareMeasurementResultTable(measurementResult);
+			extendedTableViewer.setInput(measurementResult);
+		} catch(Exception e) {
+			logger.warn(e);
+			try {
+				prepareMeasurementResultTable(measurementResult);
+				extendedTableViewer.setInput(measurementResult);
+			} catch(Exception e1) {
+				logger.warn(e1);
+			}
+		}
+		//
+		extendedTableViewer.setInput(measurementResult);
+	}
+
+	private void prepareMeasurementResultTable(IMeasurementResult measurementResult) throws Exception {
+
 		if(measurementResult != null) {
 			/*
 			 * Get the UI provider and display the results.
@@ -306,34 +329,32 @@ public class ExtendedMeasurementResultUI {
 				resultProviderId = measurementResult.getIdentifier();
 				IConfigurationElement provider = getMeasurementResultVisualizationProvider(resultProviderId);
 				if(provider != null) {
-					try {
-						/*
-						 * Clear / Initialize
-						 */
-						Table table = extendedTableViewer.getTable();
-						if(table.getItemCount() > 0) {
-							extendedTableViewer.setInput(null);
-						}
-						table.clearAll();
-						IMeasurementResultTitles titles = (IMeasurementResultTitles)provider.createExecutableExtension(ATTRIBUTE_TITLES);
-						extendedTableViewer.createColumns(titles.getTitles(), titles.getBounds());
-						extendedTableViewer.setLabelProvider((ITableLabelProvider)provider.createExecutableExtension(ATTRIBUTE_LABEL_PROVIDER));
-						extendedTableViewer.setContentProvider((IStructuredContentProvider)provider.createExecutableExtension(ATTRIBUTE_CONTENT_PROVIDER));
-						extendedTableViewer.setComparator((ViewerComparator)provider.createExecutableExtension(ATTRIBUTE_COMPARATOR));
-					} catch(CoreException e) {
-						logger.warn(e);
+					/*
+					 * Clear / Initialize
+					 */
+					Table table = extendedTableViewer.getTable();
+					extendedTableViewer.setComparator(null);
+					if(table.getItemCount() > 0) {
+						extendedTableViewer.setInput(null);
 					}
+					table.clearAll();
+					//
+					IMeasurementResultTitles titles = (IMeasurementResultTitles)provider.createExecutableExtension(ATTRIBUTE_TITLES);
+					IStructuredContentProvider contentProvider = (IStructuredContentProvider)provider.createExecutableExtension(ATTRIBUTE_CONTENT_PROVIDER);
+					ITableLabelProvider tableLableProvider = (ITableLabelProvider)provider.createExecutableExtension(ATTRIBUTE_LABEL_PROVIDER);
+					ViewerComparator viewerComparator = (ViewerComparator)provider.createExecutableExtension(ATTRIBUTE_COMPARATOR);
+					//
+					extendedTableViewer.createColumns(titles.getTitles(), titles.getBounds());
+					extendedTableViewer.setLabelProvider(tableLableProvider);
+					extendedTableViewer.setContentProvider(contentProvider);
+					extendedTableViewer.setComparator(viewerComparator);
 				}
 			}
-		}
-		/*
-		 * Could be null.
-		 * Set Input null should clear the table.
-		 * Somehow, it doesn't!
-		 */
-		if(measurementResult != null) {
-			extendedTableViewer.setInput(measurementResult);
 		} else {
+			/*
+			 * Reset
+			 */
+			extendedTableViewer.setComparator(null);
 			Table table = extendedTableViewer.getTable();
 			if(table.getItemCount() > 0) {
 				extendedTableViewer.setInput(null);
