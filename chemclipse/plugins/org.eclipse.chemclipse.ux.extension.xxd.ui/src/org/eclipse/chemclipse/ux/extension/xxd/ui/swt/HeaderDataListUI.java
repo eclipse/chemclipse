@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.HeaderDataEditingSupport;
@@ -29,7 +29,7 @@ public class HeaderDataListUI extends ExtendedTableViewer {
 
 	private HeaderDataTableComparator headerDataTableComparator;
 	private HeaderDataListFilter headerDataListFilter;
-	private IChromatogramOverview chromatogramOverview;
+	private IMeasurementInfo measurementInfo;
 
 	public HeaderDataListUI(Composite parent, int style) {
 		super(parent, style);
@@ -43,11 +43,11 @@ public class HeaderDataListUI extends ExtendedTableViewer {
 		refresh();
 	}
 
-	public void setInput(IChromatogramOverview chromatogramOverview) {
+	public void setInput(IMeasurementInfo measurementInfo) {
 
-		this.chromatogramOverview = chromatogramOverview;
-		if(chromatogramOverview != null) {
-			super.setInput(chromatogramOverview.getHeaderDataMap());
+		this.measurementInfo = measurementInfo;
+		if(measurementInfo != null) {
+			super.setInput(measurementInfo.getHeaderDataMap());
 		} else {
 			clear();
 		}
@@ -70,9 +70,9 @@ public class HeaderDataListUI extends ExtendedTableViewer {
 		// headerDataTableComparator.setColumn(column);
 	}
 
-	public IChromatogramOverview getChromatogramOverview() {
+	public IMeasurementInfo getMeasurementInfo() {
 
-		return chromatogramOverview;
+		return measurementInfo;
 	}
 
 	private void createColumns() {

@@ -18,7 +18,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.model.exceptions.InvalidHeaderModificationException;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -28,7 +28,6 @@ import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramDataSupport;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -61,8 +60,7 @@ public class ExtendedHeaderDataUI {
 	private Button buttonDeleteHeaderEntry;
 	private HeaderDataListUI headerDataListUI;
 	//
-	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
-	private IChromatogramOverview chromatogramOverview;
+	private IMeasurementInfo measurementInfo;
 	private boolean editable;
 	//
 	private Display display = Display.getDefault();
@@ -79,9 +77,9 @@ public class ExtendedHeaderDataUI {
 		updateHeaderData();
 	}
 
-	public void update(IChromatogramOverview chromatogramOverview, boolean editable) {
+	public void update(IMeasurementInfo measurementInfo, boolean editable) {
 
-		this.chromatogramOverview = chromatogramOverview;
+		this.measurementInfo = measurementInfo;
 		this.editable = editable;
 		updateHeaderData();
 	}
@@ -343,18 +341,18 @@ public class ExtendedHeaderDataUI {
 
 	private void addHeaderEntry() {
 
-		if(chromatogramOverview != null) {
+		if(measurementInfo != null) {
 			String key = textHeaderKey.getText().trim();
 			String value = textHeaderValue.getText().trim();
 			//
 			if("".equals(key)) {
 				MessageDialog.openError(shell, HEADER_ENTRY, "The header key must be not empty.");
-			} else if(chromatogramOverview.headerDataContainsKey(key)) {
+			} else if(measurementInfo.headerDataContainsKey(key)) {
 				MessageDialog.openError(shell, HEADER_ENTRY, "The header key already exists.");
 			} else if("".equals(value)) {
 				MessageDialog.openError(shell, HEADER_ENTRY, "The header value must be not empty.");
 			} else {
-				chromatogramOverview.putHeaderData(key, value);
+				measurementInfo.putHeaderData(key, value);
 				textHeaderKey.setText("");
 				textHeaderValue.setText("");
 				updateHeaderData();
@@ -372,17 +370,17 @@ public class ExtendedHeaderDataUI {
 			/*
 			 * Delete Target
 			 */
-			if(chromatogramOverview != null) {
+			if(measurementInfo != null) {
 				Iterator iterator = headerDataListUI.getStructuredSelection().iterator();
 				Set<String> keysNotRemoved = new HashSet<String>();
 				while(iterator.hasNext()) {
 					Object mapObject = iterator.next();
 					if(mapObject instanceof Map.Entry) {
-						if(chromatogramOverview != null) {
+						if(measurementInfo != null) {
 							Map.Entry<String, String> entry = (Map.Entry<String, String>)mapObject;
 							String key = entry.getKey();
 							try {
-								chromatogramOverview.removeHeaderData(key);
+								measurementInfo.removeHeaderData(key);
 							} catch(InvalidHeaderModificationException e) {
 								keysNotRemoved.add(key);
 							}
@@ -414,14 +412,14 @@ public class ExtendedHeaderDataUI {
 
 	private void updateLabel() {
 
-		if(chromatogramOverview != null) {
-			labelInfo.setText(chromatogramDataSupport.getChromatogramLabel(chromatogramOverview));
-			headerDataListUI.setInput(chromatogramOverview);
+		if(measurementInfo != null) {
+			labelInfo.setText("Number of Entries: " + measurementInfo.getHeaderDataMap().size());
+			headerDataListUI.setInput(measurementInfo);
 			String editInformation = headerDataListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
 			labelInfo.setText(labelInfo.getText() + " - " + editInformation);
 		} else {
+			labelInfo.setText("");
 			headerDataListUI.setInput(null);
-			labelInfo.setText(chromatogramDataSupport.getChromatogramLabel(null));
 		}
 	}
 

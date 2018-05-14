@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.util.Map;
 
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.HeaderDataListUI;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -69,12 +69,12 @@ public class HeaderDataEditingSupport extends EditingSupport {
 	protected void setValue(Object element, Object value) {
 
 		if(element instanceof Map.Entry) {
-			IChromatogramOverview chromatogramOverview = tableViewer.getChromatogramOverview();
-			if(chromatogramOverview != null) {
+			IMeasurementInfo measurementInfo = tableViewer.getMeasurementInfo();
+			if(measurementInfo != null) {
 				Map.Entry<String, String> entry = (Map.Entry<String, String>)element;
 				switch(column) {
 					case HeaderDataLabelProvider.VALUE:
-						chromatogramOverview.putHeaderData(entry.getKey(), (String)value);
+						measurementInfo.putHeaderData(entry.getKey(), (String)value);
 						break;
 				}
 				tableViewer.refresh();
