@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.nmr.model.core.IScanNMR;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
-import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ScanNMRImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
@@ -43,7 +43,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-public class ScanEditorNMR extends AbstractDataUpdateSupport implements IChemClipseEditor, IDataUpdateSupport {
+public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEditorNMR, IDataUpdateSupport {
 
 	private static final Logger logger = Logger.getLogger(ScanEditorNMR.class);
 	//
@@ -59,6 +59,8 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IChemCli
 	//
 	private File scanFile;
 	private ExtendedNMRScanUI extendedNMRScanUI;
+	//
+	private IScanNMR scanNMR = null;
 	//
 	private Shell shell;
 
@@ -136,9 +138,15 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IChemCli
 		return true;
 	}
 
+	@Override
+	public IScanNMR getScanSelection() {
+
+		return scanNMR;
+	}
+
 	private void initialize(Composite parent) {
 
-		IScanNMR scanNMR = loadScan();
+		scanNMR = loadScan();
 		createEditorPages(parent);
 		extendedNMRScanUI.update(scanNMR);
 	}

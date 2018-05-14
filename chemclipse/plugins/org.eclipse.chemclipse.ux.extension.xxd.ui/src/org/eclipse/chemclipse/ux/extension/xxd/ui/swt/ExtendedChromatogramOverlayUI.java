@@ -106,7 +106,7 @@ public class ExtendedChromatogramOverlayUI {
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
 	//
-	private List<IChromatogramSelection> chromatogramSelections;
+	private List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
 
 	@Inject
 	public ExtendedChromatogramOverlayUI(Composite parent) {
@@ -679,11 +679,11 @@ public class ExtendedChromatogramOverlayUI {
 				IPreferencePage preferencePageOverlay = new PreferencePageOverlay();
 				preferencePageOverlay.setTitle("Overlay Settings");
 				IPreferencePage preferencePageChromatogram = new PreferencePageChromatogram();
-				preferencePageOverlay.setTitle("Chromatogram Settings");
+				preferencePageChromatogram.setTitle("Chromatogram Settings");
 				//
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageOverlay));
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageChromatogram));
+				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageChromatogram));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(shell, preferenceManager);
 				preferenceDialog.create();

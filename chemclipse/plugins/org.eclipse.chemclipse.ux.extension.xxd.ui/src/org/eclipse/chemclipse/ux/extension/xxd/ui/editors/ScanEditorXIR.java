@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
-import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorXIR;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ScanXIRImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
@@ -43,7 +43,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-public class ScanEditorXIR extends AbstractDataUpdateSupport implements IChemClipseEditor, IDataUpdateSupport {
+public class ScanEditorXIR extends AbstractDataUpdateSupport implements IScanEditorXIR, IDataUpdateSupport {
 
 	private static final Logger logger = Logger.getLogger(ScanEditorXIR.class);
 	//
@@ -59,6 +59,8 @@ public class ScanEditorXIR extends AbstractDataUpdateSupport implements IChemCli
 	//
 	private File scanFile;
 	private ExtendedXIRScanUI extendedScanXIREditorUI;
+	//
+	private IScanXIR scanXIR = null;
 	//
 	private Shell shell;
 
@@ -136,9 +138,15 @@ public class ScanEditorXIR extends AbstractDataUpdateSupport implements IChemCli
 		return true;
 	}
 
+	@Override
+	public IScanXIR getScanSelection() {
+
+		return scanXIR;
+	}
+
 	private void initialize(Composite parent) {
 
-		IScanXIR scanXIR = loadScan();
+		scanXIR = loadScan();
 		createEditorPages(parent);
 		extendedScanXIREditorUI.update(scanXIR);
 	}
@@ -146,6 +154,7 @@ public class ScanEditorXIR extends AbstractDataUpdateSupport implements IChemCli
 	private synchronized IScanXIR loadScan() {
 
 		IScanXIR scanXIR = null;
+		//
 		try {
 			Object object = part.getObject();
 			if(object instanceof Map) {
