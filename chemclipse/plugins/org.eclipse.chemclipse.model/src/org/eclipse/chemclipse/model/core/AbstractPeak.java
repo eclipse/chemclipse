@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
@@ -40,7 +42,7 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	private boolean activeForAnalysis = true;
 	private List<IIntegrationEntry> integrationEntries;
 	private IIntegrationConstraints integrationConstraints;
-	private List<IQuantitationEntry> quantitationEntries;
+	private Set<IQuantitationEntry> quantitationEntries;
 	private List<IInternalStandard> internalStandards;
 
 	public AbstractPeak() {
@@ -49,7 +51,7 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 		 */
 		integrationConstraints = new IntegrationConstraints();
 		integrationEntries = new ArrayList<IIntegrationEntry>();
-		quantitationEntries = new ArrayList<IQuantitationEntry>();
+		quantitationEntries = new HashSet<IQuantitationEntry>();
 		internalStandards = new ArrayList<IInternalStandard>();
 	}
 
@@ -211,7 +213,7 @@ public abstract class AbstractPeak extends AbstractPeakTargets implements IPeak 
 	@Override
 	public List<IQuantitationEntry> getQuantitationEntries() {
 
-		return Collections.unmodifiableList(quantitationEntries);
+		return Collections.unmodifiableList(new ArrayList<IQuantitationEntry>(quantitationEntries));
 	}
 
 	@Override

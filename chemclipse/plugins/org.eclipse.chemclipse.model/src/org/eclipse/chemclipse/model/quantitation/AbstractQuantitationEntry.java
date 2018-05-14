@@ -18,11 +18,11 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 	 */
 	private static final long serialVersionUID = -6312658397485712262L;
 	//
-	private String name;
+	private String name = "";
 	private String chemicalClass = "";
-	private double concentration;
-	private String concentrationUnit;
-	private double area;
+	private double concentration = 0.0d;
+	private String concentrationUnit = "";
+	private double area = 0.0d;
 	private String calibrationMethod = "";
 	private boolean usedCrossZero = true;
 	private String description = "";
@@ -108,30 +108,55 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 		this.description = description;
 	}
 
-	// -----------------------------equals, hashCode, toString
-	@Override
-	public boolean equals(Object otherObject) {
-
-		if(this == otherObject) {
-			return true;
-		}
-		if(otherObject == null) {
-			return false;
-		}
-		if(getClass() != otherObject.getClass()) {
-			return false;
-		}
-		/*
-		 * Object comparison
-		 */
-		IQuantitationEntry other = (IQuantitationEntry)otherObject;
-		return getName().equals(other.getName()) && getChemicalClass().equals(other.getChemicalClass()) && getConcentration() == other.getConcentration() && getConcentrationUnit().equals(other.getConcentrationUnit()) && getArea() == other.getArea() && getCalibrationMethod().equals(other.getCalibrationMethod()) && getUsedCrossZero() == other.getUsedCrossZero() && getDescription().equals(other.getDescription());
-	}
-
 	@Override
 	public int hashCode() {
 
-		return 7 * name.hashCode() + 11 * chemicalClass.hashCode() + 13 * Double.valueOf(concentration).hashCode() + 11 * concentrationUnit.hashCode() + Double.valueOf(area).hashCode() + calibrationMethod.hashCode() + Boolean.valueOf(usedCrossZero).hashCode() + description.hashCode();
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(area);
+		result = prime * result + (int)(temp ^ (temp >>> 32));
+		result = prime * result + ((calibrationMethod == null) ? 0 : calibrationMethod.hashCode());
+		result = prime * result + ((chemicalClass == null) ? 0 : chemicalClass.hashCode());
+		temp = Double.doubleToLongBits(concentration);
+		result = prime * result + (int)(temp ^ (temp >>> 32));
+		result = prime * result + ((concentrationUnit == null) ? 0 : concentrationUnit.hashCode());
+		result = prime * result + (usedCrossZero ? 1231 : 1237);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+
+		if(this == obj)
+			return true;
+		if(obj == null)
+			return false;
+		if(getClass() != obj.getClass())
+			return false;
+		AbstractQuantitationEntry other = (AbstractQuantitationEntry)obj;
+		if(Double.doubleToLongBits(area) != Double.doubleToLongBits(other.area))
+			return false;
+		if(calibrationMethod == null) {
+			if(other.calibrationMethod != null)
+				return false;
+		} else if(!calibrationMethod.equals(other.calibrationMethod))
+			return false;
+		if(chemicalClass == null) {
+			if(other.chemicalClass != null)
+				return false;
+		} else if(!chemicalClass.equals(other.chemicalClass))
+			return false;
+		if(Double.doubleToLongBits(concentration) != Double.doubleToLongBits(other.concentration))
+			return false;
+		if(concentrationUnit == null) {
+			if(other.concentrationUnit != null)
+				return false;
+		} else if(!concentrationUnit.equals(other.concentrationUnit))
+			return false;
+		if(usedCrossZero != other.usedCrossZero)
+			return false;
+		return true;
 	}
 
 	@Override
@@ -158,5 +183,4 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 		builder.append("]");
 		return builder.toString();
 	}
-	// -----------------------------equals, hashCode, toString
 }
