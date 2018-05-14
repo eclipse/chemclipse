@@ -128,7 +128,7 @@ public class ExtendedChromatogramOverlayUI {
 		toolbarType = createToolbarType(parent);
 		toolbarProfile = createToolbarProfile(parent);
 		toolbarShift = createToolbarShift(parent);
-		createChromatogramChart(parent);
+		createOverlayChart(parent);
 		/*
 		 * Hide both toolbars initially.
 		 * Enable/disable widgets.
@@ -753,7 +753,7 @@ public class ExtendedChromatogramOverlayUI {
 		modifyDataStatusLabel();
 	}
 
-	private void createChromatogramChart(Composite parent) {
+	private void createOverlayChart(Composite parent) {
 
 		chromatogramChart = new ChromatogramChart(parent, SWT.BORDER);
 		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));

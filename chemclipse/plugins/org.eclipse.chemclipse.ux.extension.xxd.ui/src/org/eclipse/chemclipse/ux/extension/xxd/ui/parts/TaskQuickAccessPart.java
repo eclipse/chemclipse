@@ -141,12 +141,13 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY);
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERLAY, partStackId);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_OVERLAY_CHROMATOGRAM, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_OVERLAY_NMR, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY_NMR));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_OVERLAY_XIR, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY_XIR));
 			}
 		});
 		//
-		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERLAY, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_OVERLAY_CHROMATOGRAM, button, imageActive, imageDefault);
 	}
 
 	private void createScansTask(Composite parent) {
