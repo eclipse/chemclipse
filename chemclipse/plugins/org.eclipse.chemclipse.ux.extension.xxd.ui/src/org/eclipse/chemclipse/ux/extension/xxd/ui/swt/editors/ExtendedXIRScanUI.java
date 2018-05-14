@@ -63,7 +63,7 @@ public class ExtendedXIRScanUI {
 
 		this.scanXIR = scanXIR;
 		if(scanXIR != null) {
-			showRawData = (scanXIR.size() > 0) ? false : true;
+			showRawData = (scanXIR.getProcessedSignals().size() > 0) ? false : true;
 		}
 		chartXIR.modifyChart(showRawData);
 		updateScan();
@@ -122,11 +122,11 @@ public class ExtendedXIRScanUI {
 		double[] ySeries;
 		//
 		if(scanXIR != null) {
-			int size = scanXIR.size();
+			int size = scanXIR.getProcessedSignals().size();
 			xSeries = new double[size];
 			ySeries = new double[size];
 			int index = 0;
-			for(ISignalXIR scanSignal : scanXIR) {
+			for(ISignalXIR scanSignal : scanXIR.getProcessedSignals()) {
 				xSeries[index] = scanSignal.getWavelength();
 				ySeries[index] = scanSignal.getIntensity();
 				index++;

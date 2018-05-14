@@ -11,11 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xir.model.core;
 
-import java.util.Set;
+import java.util.TreeSet;
 
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 
-public interface IScanXIR extends Set<ISignalXIR>, IMeasurementInfo {
+public interface IScanXIR extends IMeasurementInfo {
+
+	TreeSet<ISignalXIR> getProcessedSignals();
 
 	double getRotationAngle();
 

@@ -63,7 +63,7 @@ public class ExtendedNMRScanUI {
 
 		this.scanNMR = scanNMR;
 		if(scanNMR != null) {
-			showRawData = (scanNMR.size() > 0) ? false : true;
+			showRawData = (scanNMR.getProcessedSignals().size() > 0) ? false : true;
 		}
 		chartNMR.modifyChart(showRawData);
 		updateScan();
@@ -113,11 +113,11 @@ public class ExtendedNMRScanUI {
 		double[] ySeries;
 		//
 		if(scanNMR != null) {
-			int size = scanNMR.size();
+			int size = scanNMR.getProcessedSignals().size();
 			xSeries = new double[size];
 			ySeries = new double[size];
 			int index = 0;
-			for(ISignalNMR scanSignal : scanNMR) {
+			for(ISignalNMR scanSignal : scanNMR.getProcessedSignals()) {
 				xSeries[index] = scanSignal.getChemicalShift();
 				ySeries[index] = scanSignal.getIntensity();
 				index++;

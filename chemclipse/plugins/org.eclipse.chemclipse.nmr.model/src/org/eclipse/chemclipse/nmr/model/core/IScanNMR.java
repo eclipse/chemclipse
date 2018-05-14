@@ -11,11 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.core;
 
-import java.util.Set;
+import java.util.TreeSet;
 
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 
-public interface IScanNMR extends Set<ISignalNMR>, IMeasurementInfo {
+public interface IScanNMR extends IMeasurementInfo {
+
+	TreeSet<ISignalNMR> getProcessedSignals();
 
 	double[] getRawSignals();
 
