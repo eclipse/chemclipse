@@ -59,7 +59,7 @@ public class ScanConverterNMR {
 
 	public static IProcessingInfo convert(final File file, final IProgressMonitor monitor) {
 
-		return getChromatogram(file, false, monitor);
+		return getScan(file, false, monitor);
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class ScanConverterNMR {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	private static IProcessingInfo getChromatogram(final File file, boolean overview, IProgressMonitor monitor) {
+	private static IProcessingInfo getScan(final File file, boolean overview, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		IScanConverterSupport converterSupport = getScanConverterSupport();

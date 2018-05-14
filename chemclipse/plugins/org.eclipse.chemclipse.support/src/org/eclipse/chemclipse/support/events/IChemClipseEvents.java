@@ -25,6 +25,8 @@ public interface IChemClipseEvents {
 	String PROPERTY_CHROMATOGRAM_CSD_RAWFILE = IEventBroker.DATA; // File
 	String PROPERTY_CHROMATOGRAM_WSD_RAWFILE = IEventBroker.DATA; // File
 	String PROPERTY_CHROMATOGRAM_XXD_RAWFILE = IEventBroker.DATA; // File
+	String PROPERTY_SCAN_NMR_RAWFILE = IEventBroker.DATA; // File
+	String PROPERTY_SCAN_XIR_RAWFILE = IEventBroker.DATA; // File
 	//
 	String PROPERTY_CHROMATOGRAM_MSD_OVERVIEW = IEventBroker.DATA; // IChromatogramOverview - no map
 	String PROPERTY_CHROMATOGRAM_CSD_OVERVIEW = IEventBroker.DATA; // IChromatogramOverview - no map

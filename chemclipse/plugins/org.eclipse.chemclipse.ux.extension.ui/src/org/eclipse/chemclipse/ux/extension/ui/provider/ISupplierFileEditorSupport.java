@@ -51,6 +51,7 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 		openEditor(file, object, elementId, contributionURI, iconURI, tooltip, false);
 	}
 
+	@SuppressWarnings("rawtypes")
 	default void openEditor(File file, Object object, String elementId, String contributionURI, String iconURI, String tooltip, boolean batch) {
 
 		EModelService modelService = ModelSupportAddon.getModelService();
@@ -109,6 +110,7 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 			part.setObject(map);
 			part.setLabel(file.getName());
 		}
+		//
 		part.setIconURI(iconURI);
 		part.setTooltip(tooltip);
 		part.setCloseable(true);

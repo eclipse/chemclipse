@@ -51,13 +51,14 @@ public class ChromatogramOverviewPart extends AbstractOverviewUpdateSupport impl
 	}
 
 	@Override
-	public void updateChromatogramOverview(IChromatogramOverview chromatogramOverview) {
+	public void update(Object object) {
 
 		chromatogramOverviewChart.deleteSeries();
-		if(chromatogramOverview != null) {
+		if(object instanceof IChromatogramOverview) {
 			/*
 			 * Create series.
 			 */
+			IChromatogramOverview chromatogramOverview = (IChromatogramOverview)object;
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			ISeriesData seriesData = getSeriesData(chromatogramOverview);
 			ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);

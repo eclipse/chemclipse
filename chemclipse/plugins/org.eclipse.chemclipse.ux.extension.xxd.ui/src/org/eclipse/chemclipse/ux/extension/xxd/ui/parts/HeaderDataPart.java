@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractOverviewUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IOverviewUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedHeaderDataUI;
@@ -38,10 +38,11 @@ public class HeaderDataPart extends AbstractOverviewUpdateSupport implements IOv
 	}
 
 	@Override
-	public void updateChromatogramOverview(IChromatogramOverview chromatogramOverview) {
+	public void update(Object object) {
 
-		if(chromatogramOverview != null) {
-			extendedHeaderDataUI.update(chromatogramOverview, false);
+		if(object instanceof IMeasurementInfo) {
+			IMeasurementInfo measurementInfo = (IMeasurementInfo)object;
+			extendedHeaderDataUI.update(measurementInfo, false);
 		} else {
 			extendedHeaderDataUI.update(null, false);
 		}
