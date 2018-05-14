@@ -15,7 +15,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ChromatogramChart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.ChartNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -35,7 +35,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class ExtendedNMROverlayUI {
 
-	private ChromatogramChart chromatogramChart;
+	private ChartNMR nmrChart;
 	//
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
@@ -122,8 +122,8 @@ public class ExtendedNMROverlayUI {
 
 	private void createOverlayChart(Composite parent) {
 
-		chromatogramChart = new ChromatogramChart(parent, SWT.BORDER);
-		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));
+		nmrChart = new ChartNMR(parent, SWT.BORDER);
+		nmrChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	private void applyOverlaySettings() {
