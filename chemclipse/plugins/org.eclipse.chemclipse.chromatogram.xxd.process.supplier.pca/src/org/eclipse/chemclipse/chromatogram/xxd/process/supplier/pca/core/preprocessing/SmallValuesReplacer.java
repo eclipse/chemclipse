@@ -38,21 +38,20 @@ public class SmallValuesReplacer extends AbstractPreprocessing {
 
 		List<V> variables = samples.getVariables();
 		List<S> sampleList = samples.getSampleList();
+		final Random rand = new Random();
 		for(int i = 0; i < variables.size(); i++) {
-			final Random rand = new Random();
-			double replacement = -1.0;
-			while(replacement < 0) {
-				replacement = Double.longBitsToDouble(rand.nextLong());
-				if(!(replacement < Double.POSITIVE_INFINITY && replacement > 0)) {
-					replacement = -1.0;
-				}
-			}
-			double smallRandomValue = 1d - Math.random();
 			for(S sample : sampleList) {
 				if(sample.isSelected() || !isOnlySelected()) {
 					ISampleData sampleData = sample.getSampleData().get(i);
 					if(Double.isNaN(sampleData.getModifiedData())) {
-						sampleData.setModifiedData(smallRandomValue);
+						double replacement = -1.0;
+						while(replacement < 0) {
+							replacement = Double.longBitsToDouble(rand.nextLong());
+							if(!(replacement > 1.e-20 && replacement > 0 && replacement < 1.e-19)) {
+								replacement = -1.0;
+							}
+						}
+						sampleData.setModifiedData(replacement);
 					}
 				}
 			}
