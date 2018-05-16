@@ -131,14 +131,25 @@ public class PcaEvaluation {
 		return loadingVectors;
 	}
 
-	private List<double[]> getExplainedVariance(IMultivariateCalculator principalComponentAnalysis, int numberOfPrincipalComponents) {
+	private double[] getExplainedVariances(IMultivariateCalculator principalComponentAnalysis, int numberOfPrincipalComponents) {
 
-		principalComponentAnalysis.getSummedVariance();
-		List<double[]> explainedVariance = new ArrayList<double[]>();
-		for(int principalComponent = 0; principalComponent < numberOfPrincipalComponents; principalComponent++) {
-			// calculate explained variance in principalComponentAnalysis
+		double summedVariance = principalComponentAnalysis.getSummedVariance();
+		double[] explainedVariances = new double[numberOfPrincipalComponents];
+		for(int i = 0; i < numberOfPrincipalComponents; i++) {
+			explainedVariances[i] = 100.0 / summedVariance * principalComponentAnalysis.getExplainedVariance(i);
 		}
-		return explainedVariance;
+		return explainedVariances;
+	}
+
+	private double[] getCumulativeExplainedVariances(double[] explainedVariances) {
+
+		double[] cumulativeExplainedVariances = new double[explainedVariances.length];
+		double cumVarTemp = 0.0;
+		for(int i = 0; i < explainedVariances.length; i++) {
+			cumulativeExplainedVariances[i] = cumVarTemp + explainedVariances[i];
+			cumVarTemp = cumulativeExplainedVariances[i];
+		}
+		return cumulativeExplainedVariances;
 	}
 
 	private int getSampleSize(Map<ISample<?>, double[]> extractData) {
@@ -209,15 +220,17 @@ public class PcaEvaluation {
 		 * Collect PCA results
 		 */
 		List<double[]> loadingVectors = getLoadingVectors(principalComponentAnalysis, numberOfPrincipalComponents);
-		double summedVariance = principalComponentAnalysis.getSummedVariance();
-		double[] explainedVariances = new double[numberOfPrincipalComponents];
-		double[] cumulativeExplainedVariances = new double[numberOfPrincipalComponents];
-		double cumVarTemp = 0.0;
-		for(int i = 0; i < numberOfPrincipalComponents; i++) {
-			explainedVariances[i] = 100.0 / summedVariance * principalComponentAnalysis.getExplainedVariance(i);
-			cumulativeExplainedVariances[i] = cumVarTemp + explainedVariances[i];
-			cumVarTemp = cumulativeExplainedVariances[i];
-		}
+		// double summedVariance = principalComponentAnalysis.getSummedVariance();
+		double[] explainedVariances = this.getExplainedVariances(principalComponentAnalysis, numberOfPrincipalComponents);
+		double[] cumulativeExplainedVariances = this.getCumulativeExplainedVariances(explainedVariances);
+		/*
+		 * double cumVarTemp = 0.0;
+		 * for(int i = 0; i < numberOfPrincipalComponents; i++) {
+		 * explainedVariances[i] = 100.0 / summedVariance * principalComponentAnalysis.getExplainedVariance(i);
+		 * cumulativeExplainedVariances[i] = cumVarTemp + explainedVariances[i];
+		 * cumVarTemp = cumulativeExplainedVariances[i];
+		 * }
+		 */
 		pcaResults.setLoadingVectors(loadingVectors);
 		pcaResults.setExplainedVariances(explainedVariances);
 		pcaResults.setCumulativeExplainedVariances(cumulativeExplainedVariances);
