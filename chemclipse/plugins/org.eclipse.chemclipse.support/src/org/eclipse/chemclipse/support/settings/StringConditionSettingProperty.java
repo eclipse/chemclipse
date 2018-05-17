@@ -11,21 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.settings;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public @interface StringConditionSettingProperty {
 
-import com.fasterxml.jackson.annotation.JacksonAnnotation;
+	String idSource() default "";
 
-@Target({ElementType.FIELD})
-@Retention(RetentionPolicy.RUNTIME)
-@JacksonAnnotation
-public @interface FileSettingProperty {
-
-	String[] validExtensions() default {};
-
-	DialogType dialogType() default DialogType.OPEN_DIALOG;
-
-	boolean onlyDirectory() default false;
+	boolean condition() default true;
 }
