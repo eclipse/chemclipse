@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
@@ -39,7 +40,7 @@ public class CVFilter implements IFilter {
 	@Override
 	public <V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples) {
 
-		List<S> samplesList = samples.getSampleList();
+		List<S> samplesList = samples.getSampleList().stream().filter(s -> s.isSelected() || !onlySelected).collect(Collectors.toList());
 		List<Boolean> selection = new ArrayList<>();
 		List<V> variables = samples.getVariables();
 		for(int i = 0; i < variables.size(); i++) {

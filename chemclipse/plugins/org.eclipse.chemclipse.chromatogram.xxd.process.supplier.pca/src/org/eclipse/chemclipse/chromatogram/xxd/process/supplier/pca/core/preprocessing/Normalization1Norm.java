@@ -44,9 +44,7 @@ public class Normalization1Norm implements INormalization {
 		for(ISample<?> sample : samples.getSampleList()) {
 			if(sample.isSelected() || !isOnlySelected) {
 				double sum = sample.getSampleData().stream().filter(d -> !d.isEmpty()).mapToDouble(d -> Math.abs(d.getModifiedData())).sum();
-				if(sum != 0) {
-					sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> d.setModifiedData(d.getModifiedData() / sum));
-				}
+				sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> d.setModifiedData(d.getModifiedData() / sum));
 			}
 		}
 	}

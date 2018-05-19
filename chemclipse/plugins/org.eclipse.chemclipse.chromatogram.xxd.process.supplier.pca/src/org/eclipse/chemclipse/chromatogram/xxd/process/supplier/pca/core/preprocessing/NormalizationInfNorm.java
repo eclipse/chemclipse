@@ -43,10 +43,8 @@ public class NormalizationInfNorm implements INormalization {
 
 		for(ISample<?> sample : samples.getSampleList()) {
 			if(sample.isSelected() || !isOnlySelected) {
-				double max = sample.getSampleData().stream().filter(d -> !d.isEmpty()).mapToDouble(d -> d.getModifiedData()).summaryStatistics().getMax();
-				if(max != 0) {
-					sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> d.setModifiedData(d.getModifiedData() / max));
-				}
+				double max = sample.getSampleData().stream().filter(d -> !d.isEmpty()).mapToDouble(d -> Math.abs(d.getModifiedData())).summaryStatistics().getMax();
+				sample.getSampleData().stream().filter(d -> !d.isEmpty()).forEach(d -> d.setModifiedData(d.getModifiedData() / max));
 			}
 		}
 	}

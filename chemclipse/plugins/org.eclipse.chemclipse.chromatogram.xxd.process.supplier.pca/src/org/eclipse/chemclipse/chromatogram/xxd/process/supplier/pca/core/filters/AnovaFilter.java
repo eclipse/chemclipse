@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.apache.commons.math3.stat.inference.OneWayAnova;
@@ -40,7 +41,7 @@ public class AnovaFilter implements IFilter {
 	@Override
 	public <V extends IVariable, S extends ISample<? extends ISampleData>> List<Boolean> filter(ISamples<V, S> samples) {
 
-		List<S> samplesList = samples.getSampleList();
+		List<S> samplesList = samples.getSampleList().stream().filter(s -> s.isSelected() || !onlySelected).collect(Collectors.toList());
 		List<V> variables = samples.getVariables();
 		List<Boolean> selection = new ArrayList<>(variables.size());
 		for(int i = 0; i < variables.size(); i++) {
