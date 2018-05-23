@@ -21,11 +21,7 @@ import com.fasterxml.jackson.annotation.JacksonAnnotation;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @JacksonAnnotation
-public @interface FileSettingProperty {
+public @interface EnumSelectionSettingProperty {
 
-	String[] validExtensions() default {};
-
-	DialogType dialogType() default DialogType.OPEN_DIALOG;
-
-	boolean onlyDirectory() default false;
+	Class<? extends Enum> enumClass() default Enum.class;
 }
