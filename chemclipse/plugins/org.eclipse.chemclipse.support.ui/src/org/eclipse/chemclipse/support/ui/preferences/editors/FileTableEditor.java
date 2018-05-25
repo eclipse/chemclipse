@@ -44,7 +44,7 @@ public class FileTableEditor extends TableViewerFieldEditor<File> {
 	}
 
 	@Override
-	protected String converColumnValue(File value, int indexColumn) {
+	protected String convertColumnValue(File value, int indexColumn) {
 
 		if(indexColumn == 0) {
 			return value.getName();

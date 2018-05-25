@@ -64,7 +64,7 @@ public abstract class TableViewerFieldEditor<Value> extends FieldEditor {
 
 	protected abstract List<Value> parseSavePreferences(String data);
 
-	protected abstract String converColumnValue(Value value, int indexColumn);
+	protected abstract String convertColumnValue(Value value, int indexColumn);
 
 	protected abstract List<Value> getNewInputObject();
 
@@ -234,7 +234,7 @@ public abstract class TableViewerFieldEditor<Value> extends FieldEditor {
 			@Override
 			public String getText(Object element) {
 
-				return converColumnValue((Value)element, order);
+				return convertColumnValue((Value)element, order);
 			}
 		});
 		return culumn;
@@ -292,6 +292,7 @@ public abstract class TableViewerFieldEditor<Value> extends FieldEditor {
 		return Collections.unmodifiableList(getInput());
 	}
 
+	@SuppressWarnings("unchecked")
 	private List<Value> getInput() {
 
 		return (List<Value>)tableViewer.getInput();

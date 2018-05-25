@@ -38,7 +38,7 @@ public abstract class StringTableFieldEditor extends TableViewerFieldEditor<Stri
 	}
 
 	@Override
-	protected String converColumnValue(String[] value, int indexColumn) {
+	protected String convertColumnValue(String[] value, int indexColumn) {
 
 		return value[indexColumn];
 	}

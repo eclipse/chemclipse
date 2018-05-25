@@ -39,7 +39,7 @@ public class IonTableEditor extends TableViewerFieldEditor<String> {
 	}
 
 	@Override
-	protected String converColumnValue(String value, int numberColumn) {
+	protected String convertColumnValue(String value, int numberColumn) {
 
 		return value;
 	}
