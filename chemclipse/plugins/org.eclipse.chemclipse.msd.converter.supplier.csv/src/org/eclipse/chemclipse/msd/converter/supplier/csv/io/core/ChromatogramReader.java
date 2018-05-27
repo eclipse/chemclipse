@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -30,21 +33,16 @@ import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.model.VendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.model.VendorScan;
-import org.eclipse.chemclipse.msd.converter.supplier.csv.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.supercsv.io.CsvListReader;
-import org.supercsv.io.ICsvListReader;
 
 /**
  * This class is responsible to read a Agilent Chromatogram from its binary
  * file.
- * 
- * @author eselmeister
  */
 public class ChromatogramReader extends AbstractChromatogramMSDReader implements IChromatogramMSDReader {
 
@@ -75,22 +73,22 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 
 	private boolean isValidFileFormat(File file) throws IOException {
 
-		FileReader reader = new FileReader(file);
-		ICsvListReader csvListReader = new CsvListReader(reader, PreferenceSupplier.getCsvPreference());
-		String[] header = csvListReader.getHeader(true);
 		/*
 		 * Check the first column header.
 		 */
-		String firstColumn = header[0];
-		csvListReader.close();
+		FileReader reader = new FileReader(file);
+		char[] chars = new char[ChromatogramWriter.RT_MILLISECONDS_COLUMN.length()];
+		reader.read(chars);
+		reader.close();
+		//
+		String firstColumn = new String(chars);
 		return firstColumn.equals(ChromatogramWriter.RT_MILLISECONDS_COLUMN);
 	}
 
 	private IChromatogramMSD readChromatogram(File file, boolean overview) throws IOException {
 
 		FileReader reader = new FileReader(file);
-		@SuppressWarnings("resource")
-		ICsvListReader csvListReader = new CsvListReader(reader, PreferenceSupplier.getCsvPreference());
+		CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL);
 		IChromatogramMSD chromatogram = new VendorChromatogram();
 		if(!overview) {
 			/*
@@ -102,11 +100,9 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 		/*
 		 * Get the header inclusive ion description.
 		 */
-		String[] header = csvListReader.getHeader(true);
-		Map<Integer, Float> ionsMap = getIonMap(header);
-		List<String> lineEntries;
-		while((lineEntries = csvListReader.read()) != null) {
-			IVendorMassSpectrum supplierMassSpectrum = getScan(lineEntries, ionsMap, overview);
+		Map<Integer, Float> ionsMap = getIonMap(csvParser);
+		for(CSVRecord csvRecord : csvParser.getRecords()) {
+			IVendorMassSpectrum supplierMassSpectrum = getScan(csvRecord, ionsMap, overview);
 			chromatogram.addScan(supplierMassSpectrum);
 		}
 		int scanDelay = chromatogram.getScan(1).getRetentionTime();
@@ -114,32 +110,37 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 		return chromatogram;
 	}
 
-	private Map<Integer, Float> getIonMap(String[] header) {
+	private Map<Integer, Float> getIonMap(CSVParser csvParser) {
 
 		Map<Integer, Float> ions = new HashMap<Integer, Float>();
-		for(int index = 3; index < header.length; index++) {
-			float ion = Float.valueOf(header[index]);
-			ions.put(index, ion);
+		Map<String, Integer> csvHeaderMap = csvParser.getHeaderMap();
+		for(Map.Entry<String, Integer> entry : csvHeaderMap.entrySet()) {
+			int index = entry.getValue();
+			try {
+				ions.put(index, Float.valueOf(entry.getKey()));
+			} catch(NumberFormatException e) {
+				logger.warn(e);
+			}
 		}
 		return ions;
 	}
 
-	private IVendorMassSpectrum getScan(List<String> lineEntries, Map<Integer, Float> ionsMap, boolean overview) {
+	private IVendorMassSpectrum getScan(CSVRecord csvRecord, Map<Integer, Float> ionsMap, boolean overview) {
 
 		IVendorMassSpectrum massSpectrum = new VendorScan();
-		String retentionTimeInMilliseconds = lineEntries.get(0);
+		String retentionTimeInMilliseconds = csvRecord.get(0);
 		int retentionTime = Integer.valueOf(retentionTimeInMilliseconds);
 		massSpectrum.setRetentionTime(retentionTime);
 		/*
 		 * The retention time in minutes will be not used.
 		 */
 		// String retentionTimeInMinutes = lineEntries.get(1);
-		String retentionIndexValue = lineEntries.get(2);
+		String retentionIndexValue = csvRecord.get(2);
 		float retentionIndex = Float.valueOf(retentionIndexValue);
 		massSpectrum.setRetentionIndex(retentionIndex);
 		if(overview) {
 			try {
-				IIon ion = getIonsOverview(lineEntries);
+				IIon ion = getIonsOverview(csvRecord);
 				massSpectrum.addIon(ion);
 			} catch(AbundanceLimitExceededException e) {
 				logger.warn(e);
@@ -147,7 +148,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 				logger.warn(e);
 			}
 		} else {
-			List<IIon> ions = getIons(lineEntries, ionsMap);
+			List<IIon> ions = getIons(csvRecord, ionsMap);
 			for(IIon ion : ions) {
 				massSpectrum.addIon(ion);
 			}
@@ -155,11 +156,11 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 		return massSpectrum;
 	}
 
-	private IIon getIonsOverview(List<String> lineEntries) throws AbundanceLimitExceededException, IonLimitExceededException {
+	private IIon getIonsOverview(CSVRecord csvRecord) throws AbundanceLimitExceededException, IonLimitExceededException {
 
 		float abundanceTotalSignal = 0.0f;
-		for(int index = Ion_COLUMN_START; index < lineEntries.size(); index++) {
-			String abundanceValue = lineEntries.get(index);
+		for(int index = Ion_COLUMN_START; index < csvRecord.size(); index++) {
+			String abundanceValue = csvRecord.get(index);
 			if(!abundanceValue.equals(ZERO_VALUE)) {
 				float abundance = Float.valueOf(abundanceValue);
 				abundanceTotalSignal += abundance;
@@ -169,11 +170,11 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 		return ion;
 	}
 
-	private List<IIon> getIons(List<String> lineEntries, Map<Integer, Float> ionsMap) {
+	private List<IIon> getIons(CSVRecord csvRecord, Map<Integer, Float> ionsMap) {
 
 		List<IIon> ions = new ArrayList<IIon>();
-		for(int index = Ion_COLUMN_START; index < lineEntries.size(); index++) {
-			String abundanceValue = lineEntries.get(index);
+		for(int index = Ion_COLUMN_START; index < csvRecord.size(); index++) {
+			String abundanceValue = csvRecord.get(index);
 			if(!abundanceValue.equals(ZERO_VALUE)) {
 				float abundance = Float.valueOf(abundanceValue);
 				float ion = ionsMap.get(index);

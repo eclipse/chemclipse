@@ -20,13 +20,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
-import org.eclipse.chemclipse.msd.converter.supplier.csv.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -35,8 +36,6 @@ import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.supercsv.io.CsvListWriter;
-import org.supercsv.io.ICsvListWriter;
 
 /**
  * Writes a simple peaklist into a text file.
@@ -81,10 +80,10 @@ public class MassSpectrumExtendedWriter implements IMassSpectraWriter {
 	private void writeMassSpectrumToCsv(IMassSpectra massSpectra, FileWriter fileWriter) throws IOException {
 
 		if(massSpectra != null) {
-			ICsvListWriter csvListWriter = null;
+			CSVPrinter csvFilePrinter = null;
 			try {
-				csvListWriter = new CsvListWriter(fileWriter, PreferenceSupplier.getCsvPreference());
-				csvListWriter.writeHeader("Retention Time", "Retention Index", "Base Peak", "Base Peak Abundance", "Number of Ions", "Name", "CAS", "MW", "Formula", "Reference Identifier");
+				csvFilePrinter = new CSVPrinter(fileWriter, CSVFormat.EXCEL);
+				csvFilePrinter.printRecord("Retention Time", "Retention Index", "Base Peak", "Base Peak Abundance", "Number of Ions", "Name", "CAS", "MW", "Formula", "Reference Identifier");
 				//
 				for(IScanMSD massSpectrum : massSpectra.getList()) {
 					/*
@@ -127,11 +126,11 @@ public class MassSpectrumExtendedWriter implements IMassSpectraWriter {
 					String formula = (libraryInformation != null) ? libraryInformation.getFormula() : "";
 					String referenceIdentifier = (libraryInformation != null) ? libraryInformation.getReferenceIdentifier() : "";
 					//
-					csvListWriter.write(retentionTime, retentionIndex, retentionIndex, basePeak, basePeakAbundance, numberOfIons, name, cas, mw, formula, referenceIdentifier);
+					csvFilePrinter.printRecord(retentionTime, retentionIndex, retentionIndex, basePeak, basePeakAbundance, numberOfIons, name, cas, mw, formula, referenceIdentifier);
 				}
 			} finally {
-				if(csvListWriter != null) {
-					csvListWriter.close();
+				if(csvFilePrinter != null) {
+					csvFilePrinter.close();
 				}
 			}
 		}

@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
@@ -32,14 +34,9 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.supercsv.io.CsvListWriter;
-import org.supercsv.io.ICsvListWriter;
-import org.supercsv.prefs.CsvPreference;
 
 public class ChromatogramWriter extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
 
-	private static final String DELIMITER = ",";
-	//
 	private PeakRetentionTimeComparator chromatogramPeakComparator;
 	private TargetExtendedComparator targetExtendedComparator;
 	private DecimalFormat decimalFormat;
@@ -57,8 +54,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 		 * Create the list writer.
 		 */
 		FileWriter writer = new FileWriter(file);
-		CsvPreference csvPreference = new CsvPreference.Builder('"', DELIMITER.charAt(0), "\n").build();
-		ICsvListWriter csvListWriter = new CsvListWriter(writer, csvPreference);
+		CSVPrinter csvFilePrinter = new CSVPrinter(writer, CSVFormat.EXCEL);
 		/*
 		 * Header
 		 */
@@ -72,7 +68,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 		headerValues.add("identification");
 		headerValues.add("matchFactor");
 		headerValues.add("reverseMatchFactor");
-		csvListWriter.write(headerValues);
+		csvFilePrinter.printRecord(headerValues);
 		/*
 		 * Data
 		 */
@@ -102,12 +98,14 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 					targetValues.add(""); // matchFactor
 					targetValues.add(""); // reverseMatchFactor
 				}
-				csvListWriter.write(targetValues);
+				csvFilePrinter.printRecord(targetValues);
 			}
 		} catch(Exception e) {
 			throw new IOException(e);
 		} finally {
-			csvListWriter.close();
+			if(csvFilePrinter != null) {
+				csvFilePrinter.close();
+			}
 		}
 	}
 }

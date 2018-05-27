@@ -18,18 +18,17 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
-import org.eclipse.chemclipse.msd.converter.supplier.csv.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.supercsv.io.CsvListWriter;
-import org.supercsv.io.ICsvListWriter;
 
 /**
  * Writes a simple peaklist into a text file.
@@ -69,9 +68,9 @@ public class MassSpectrumWriter implements IMassSpectraWriter {
 	private void writeMassSpectrumToCsv(IMassSpectra massSpectra, FileWriter fileWriter) throws IOException {
 
 		if(massSpectra != null) {
-			ICsvListWriter csvListWriter = null;
+			CSVPrinter csvFilePrinter = null;
 			try {
-				csvListWriter = new CsvListWriter(fileWriter, PreferenceSupplier.getCsvPreference());
+				csvFilePrinter = new CSVPrinter(fileWriter, CSVFormat.EXCEL);
 				//
 				for(IScanMSD massSpectrum : massSpectra.getList()) {
 					/*
@@ -86,18 +85,18 @@ public class MassSpectrumWriter implements IMassSpectraWriter {
 						massSpectrumExport = massSpectrum;
 					}
 					//
-					csvListWriter.writeHeader("m/z", "intensity");
+					csvFilePrinter.printRecord("m/z", "intensity");
 					List<IIon> ions = massSpectrum.getIons();
 					for(IIon ion : ions) {
 						String mz = decimalFormat.format(ion.getIon());
 						String intensity = decimalFormat.format(ion.getAbundance());
-						csvListWriter.write(mz, intensity);
+						csvFilePrinter.printRecord(mz, intensity);
 					}
-					csvListWriter.write("");
+					csvFilePrinter.printRecord("");
 				}
 			} finally {
-				if(csvListWriter != null) {
-					csvListWriter.close();
+				if(csvFilePrinter != null) {
+					csvFilePrinter.close();
 				}
 			}
 		}

@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.supercsv.prefs.CsvPreference;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
@@ -70,12 +69,5 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getBoolean(P_USE_TIC, DEF_USE_TIC);
-	}
-
-	public static CsvPreference getCsvPreference() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		char delimiter = preferences.get(P_DELIMITER, DEF_DELIMITER.toString()).charAt(0);
-		return new CsvPreference.Builder('"', delimiter, "\n").build();
 	}
 }

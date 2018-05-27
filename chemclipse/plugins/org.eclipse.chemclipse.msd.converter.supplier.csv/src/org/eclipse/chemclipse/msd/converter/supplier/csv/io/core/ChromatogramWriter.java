@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -33,8 +35,6 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
 import org.eclipse.chemclipse.msd.model.xic.ITotalIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.TotalIonSignalExtractor;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.supercsv.io.CsvListWriter;
-import org.supercsv.io.ICsvListWriter;
 
 public class ChromatogramWriter extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
 
@@ -53,7 +53,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 		 * Create the list writer.
 		 */
 		FileWriter writer = new FileWriter(file);
-		ICsvListWriter csvListWriter = new CsvListWriter(writer, PreferenceSupplier.getCsvPreference());
+		CSVPrinter csvFilePrinter = new CSVPrinter(writer, CSVFormat.EXCEL);
 		/*
 		 * Get the chromatographic data.
 		 */
@@ -64,24 +64,26 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 			if(PreferenceSupplier.isUseTic()) {
 				ITotalIonSignalExtractor totalIonSignalExtractor = new TotalIonSignalExtractor(chromatogram);
 				ITotalScanSignals totalScanSignals = totalIonSignalExtractor.getTotalScanSignals();
-				writeHeaderTIC(csvListWriter);
-				writeScansTIC(csvListWriter, totalScanSignals);
+				writeHeaderTIC(csvFilePrinter);
+				writeScansTIC(csvFilePrinter, totalScanSignals);
 			} else {
 				IExtractedIonSignalExtractor extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogram);
 				IExtractedIonSignals extractedIonSignals = extractedIonSignalExtractor.getExtractedIonSignals();
 				int startIon = extractedIonSignals.getStartIon();
 				int stopIon = extractedIonSignals.getStopIon();
-				writeHeaderXIC(csvListWriter, startIon, stopIon);
-				writeScansXIC(csvListWriter, extractedIonSignals, startIon, stopIon);
+				writeHeaderXIC(csvFilePrinter, startIon, stopIon);
+				writeScansXIC(csvFilePrinter, extractedIonSignals, startIon, stopIon);
 			}
 		} catch(ChromatogramIsNullException e) {
 			throw new IOException("The chromatogram is null.");
 		} finally {
-			csvListWriter.close();
+			if(csvFilePrinter != null) {
+				csvFilePrinter.close();
+			}
 		}
 	}
 
-	private void writeHeaderTIC(ICsvListWriter csvListWriter) throws IOException {
+	private void writeHeaderTIC(CSVPrinter csvFilePrinter) throws IOException {
 
 		/*
 		 * Write the header.
@@ -92,11 +94,10 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 		headerList.add(RT_MINUTES_COLUMN);
 		headerList.add(RI_COLUMN);
 		headerList.add(TIC_COLUMN);
-		String[] header = headerList.toArray(new String[]{});
-		csvListWriter.writeHeader(header);
+		csvFilePrinter.printRecord(headerList);
 	}
 
-	private void writeHeaderXIC(ICsvListWriter csvListWriter, int startIon, int stopIon) throws IOException {
+	private void writeHeaderXIC(CSVPrinter csvFilePrinter, int startIon, int stopIon) throws IOException {
 
 		/*
 		 * Write the header.
@@ -109,11 +110,10 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 		for(Integer ion = startIon; ion <= stopIon; ion++) {
 			headerList.add(ion.toString());
 		}
-		String[] header = headerList.toArray(new String[]{});
-		csvListWriter.writeHeader(header);
+		csvFilePrinter.printRecord(headerList);
 	}
 
-	private void writeScansTIC(ICsvListWriter csvListWriter, ITotalScanSignals totalScanSignals) throws IOException {
+	private void writeScansTIC(CSVPrinter csvFilePrinter, ITotalScanSignals totalScanSignals) throws IOException {
 
 		/*
 		 * Write the data.
@@ -131,11 +131,11 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 			scanValues.add(milliseconds / IChromatogramMSD.MINUTE_CORRELATION_FACTOR);
 			scanValues.add(totalScanSignal.getRetentionIndex());
 			scanValues.add(totalScanSignal.getTotalSignal());
-			csvListWriter.write(scanValues);
+			csvFilePrinter.printRecord(scanValues);
 		}
 	}
 
-	private void writeScansXIC(ICsvListWriter csvListWriter, IExtractedIonSignals extractedIonSignals, int startIon, int stopIon) throws IOException {
+	private void writeScansXIC(CSVPrinter csvFilePrinter, IExtractedIonSignals extractedIonSignals, int startIon, int stopIon) throws IOException {
 
 		/*
 		 * Write the data.
@@ -158,7 +158,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 			for(int ion = startIon; ion <= stopIon; ion++) {
 				scanValues.add(extractedIonSignal.getAbundance(ion));
 			}
-			csvListWriter.write(scanValues);
+			csvFilePrinter.printRecord(scanValues);
 		}
 	}
 }
