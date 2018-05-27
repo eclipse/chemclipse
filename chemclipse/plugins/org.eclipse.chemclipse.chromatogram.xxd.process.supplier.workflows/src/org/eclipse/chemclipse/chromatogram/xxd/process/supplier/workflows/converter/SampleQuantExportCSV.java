@@ -15,13 +15,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.text.DecimalFormat;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.ISampleQuantReport;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.ISampleQuantSubstance;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.supercsv.io.CsvListWriter;
-import org.supercsv.io.ICsvListWriter;
-import org.supercsv.prefs.CsvPreference;
 
 public class SampleQuantExportCSV {
 
@@ -29,19 +28,19 @@ public class SampleQuantExportCSV {
 
 	public void write(File file, ISampleQuantReport sampleQuantReport, IProgressMonitor monitor) throws Exception {
 
-		ICsvListWriter csvListWriter = null;
+		CSVPrinter csvFilePrinter = null;
 		try {
 			FileWriter fileWriter = new FileWriter(file);
-			csvListWriter = new CsvListWriter(fileWriter, CsvPreference.TAB_PREFERENCE);
+			csvFilePrinter = new CSVPrinter(fileWriter, CSVFormat.TDF);
 			//
-			csvListWriter.write("Name", sampleQuantReport.getName());
-			csvListWriter.write("Data Name", sampleQuantReport.getDataName());
-			csvListWriter.write("Date", sampleQuantReport.getDate());
-			csvListWriter.write("Operator", sampleQuantReport.getOperator());
-			csvListWriter.write("Misc Info", sampleQuantReport.getMiscInfo());
-			csvListWriter.write("");
+			csvFilePrinter.printRecord("Name", sampleQuantReport.getName());
+			csvFilePrinter.printRecord("Data Name", sampleQuantReport.getDataName());
+			csvFilePrinter.printRecord("Date", sampleQuantReport.getDate());
+			csvFilePrinter.printRecord("Operator", sampleQuantReport.getOperator());
+			csvFilePrinter.printRecord("Misc Info", sampleQuantReport.getMiscInfo());
+			csvFilePrinter.printRecord("");
 			//
-			csvListWriter.writeHeader("ID", "CAS#", "Name", "Max Scan", "Concentration", "Unit", "Misc", "Type", "Min Match Quality", "Match Quality", "Validated");
+			csvFilePrinter.printRecord("ID", "CAS#", "Name", "Max Scan", "Concentration", "Unit", "Misc", "Type", "Min Match Quality", "Match Quality", "Validated");
 			for(ISampleQuantSubstance sampleQuantSubstance : sampleQuantReport.getSampleQuantSubstances()) {
 				//
 				String id = Integer.toString(sampleQuantSubstance.getId());
@@ -56,11 +55,11 @@ public class SampleQuantExportCSV {
 				String matchQuality = decimalFormat.format(sampleQuantSubstance.getMatchQuality());
 				String validated = Boolean.toString(sampleQuantSubstance.isValidated());
 				//
-				csvListWriter.write(id, casNumber, name, maxScan, concentration, unit, misc, type, minMatchQuality, matchQuality, validated);
+				csvFilePrinter.printRecord(id, casNumber, name, maxScan, concentration, unit, misc, type, minMatchQuality, matchQuality, validated);
 			}
 		} finally {
-			if(csvListWriter != null) {
-				csvListWriter.close();
+			if(csvFilePrinter != null) {
+				csvFilePrinter.close();
 			}
 		}
 	}
