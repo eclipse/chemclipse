@@ -11,19 +11,30 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
+import java.net.URL;
+
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.DataPreprocessingSelection;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers.PreprocessingController;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class ModificationDataWizardPage extends WizardPage {
+import javafx.application.Platform;
+import javafx.embed.swt.FXCanvas;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+
+public class PreprocessingDataWizardPage extends WizardPage {
 
 	private PcaPreprocessingData pcaPreprocessingData;
+	private FXCanvas fxCanvas;
+	private PreprocessingController controller;
 
-	protected ModificationDataWizardPage(String pageName) {
+	protected PreprocessingDataWizardPage(String pageName) {
 		super(pageName);
 		setTitle("Preprocess Data");
 		setDescription("Data can be also preprocessed later in the process in Data Preprocessing page");
@@ -35,9 +46,27 @@ public class ModificationDataWizardPage extends WizardPage {
 
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new GridLayout(1, false));
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		new DataPreprocessingSelection(composite, gridData, pcaPreprocessingData);
+		fxCanvas = new FXCanvas(composite, SWT.NONE);
+		fxCanvas.setLayoutData(new GridData(GridData.FILL_BOTH));
+		Platform.setImplicitExit(false);
+		Platform.runLater(() -> createScene(parent));
 		setControl(composite);
+	}
+
+	protected void createScene(final Composite parent) {
+
+		try {
+			final URL location = getClass().getResource("/fxml/Preprocessing.fxml");
+			final FXMLLoader fXMLLoader = new FXMLLoader();
+			fXMLLoader.setLocation(location);
+			fXMLLoader.setBuilderFactory(new JavaFXBuilderFactory());
+			final Parent root = fXMLLoader.load(location.openStream());
+			controller = fXMLLoader.getController();
+			controller.setPreprecessing(pcaPreprocessingData);
+			final Scene scene = new Scene(root);
+			fxCanvas.setScene(scene);
+		} catch(final Exception e) {
+		}
 	}
 
 	public PcaPreprocessingData getPcaPreprocessingData() {
