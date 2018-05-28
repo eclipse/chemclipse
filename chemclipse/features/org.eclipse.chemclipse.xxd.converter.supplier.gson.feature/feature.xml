@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.eclipse.chemclipse.xxd.converter.supplier.gson.feature"
-      label="Feature"
+      label="GSON Converter"
       version="1.2.0.qualifier"
       provider-name="OpenChrom">
 
