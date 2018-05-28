@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -33,7 +32,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -54,9 +52,9 @@ public abstract class TableViewerFieldEditor<Value> extends FieldEditor {
 	//
 
 	protected TableViewerFieldEditor(String name, String labelText, String[] columnNames, int[] columnWidth, Composite parent) {
-		init(name, labelText);
 		this.columnNames = columnNames;
 		this.columnWidth = columnWidth;
+		init(name, labelText);
 		createControl(parent);
 	}
 
@@ -81,43 +79,29 @@ public abstract class TableViewerFieldEditor<Value> extends FieldEditor {
 	@Override
 	protected void doFillIntoGrid(Composite parent, int numColumns) {
 
-		GridLayout layout = new GridLayout();
-		layout.numColumns = getNumberOfControls();
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		layout.horizontalSpacing = HORIZONTAL_GAP;
-		parent.setLayout(layout);
-		Label control = getLabelControl(parent);
-		GridDataFactory.swtDefaults().span(numColumns, 1).applyTo(control);
-		tableViewer = getTableControl(parent);
-		for(int i = 0; i < columnNames.length; i++) {
-			TableViewerColumn column = createColumn(columnNames[i], columnWidth[i], i);
-			column.getColumn().addSelectionListener(getSelectionAdapter(column.getColumn(), i));
-		}
+		Control control = getLabelControl(parent);
 		GridData gd = new GridData();
+		gd.horizontalSpan = numColumns;
+		control.setLayoutData(gd);
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
+		gridData.horizontalSpan = 2;
+		gridData.widthHint = 500;
+		gridData.heightHint = 200;
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(2, false));
+		tableViewer = getTableControl(composite);
+		Table table = tableViewer.getTable();
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.verticalAlignment = GridData.FILL;
 		gd.horizontalSpan = numColumns - 1;
 		gd.grabExcessHorizontalSpace = true;
-		tableViewer.getTable().setLayoutData(gd);
-		tableViewer.getTable().addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				update();
-			}
-		});
-		buttonBox = getButtonControl(parent);
-		tableViewer.setComparator(new ViewerComparator() {
-
-			@Override
-			public int compare(Viewer viewer, Object e1, Object e2) {
-
-				return sortDirection * compareValue((Value)e1, (Value)e2, sortColumn);
-			}
-		});
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.BEGINNING).applyTo(buttonBox);
+		gd.grabExcessVerticalSpace = true;
+		table.setLayoutData(gd);
+		buttonBox = getButtonControl(composite);
+		gd = new GridData();
+		gd.verticalAlignment = GridData.BEGINNING;
+		buttonBox.setLayoutData(gd);
 	}
 
 	private SelectionAdapter getSelectionAdapter(final TableColumn column, final int index) {
@@ -191,6 +175,7 @@ public abstract class TableViewerFieldEditor<Value> extends FieldEditor {
 	private void removeItem() {
 
 		IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection();
+		@SuppressWarnings("unchecked")
 		List<Value> selections = selection.toList();
 		for(Value value : selections) {
 			getInput().remove(value);
@@ -200,7 +185,10 @@ public abstract class TableViewerFieldEditor<Value> extends FieldEditor {
 
 	private Composite getButtonControl(Composite parent) {
 
-		Composite box = new Composite(parent, SWT.NONE);
+		Composite box = new Composite(parent, SWT.NULL);
+		GridLayout layout = new GridLayout();
+		layout.marginWidth = 0;
+		box.setLayout(layout);
 		GridLayoutFactory.fillDefaults().applyTo(box);
 		newButton = createButton(box, "New");
 		newButton.addListener(SWT.Selection, e -> addItem());
@@ -217,13 +205,14 @@ public abstract class TableViewerFieldEditor<Value> extends FieldEditor {
 
 		Button button = new Button(box, SWT.PUSH);
 		button.setText(text);
-		button.setEnabled(false);
-		int widthHint = Math.max(convertHorizontalDLUsToPixels(button, IDialogConstants.BUTTON_WIDTH), button.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).x);
-		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).hint(widthHint, SWT.DEFAULT).applyTo(button);
+		GridData data = new GridData(GridData.FILL_HORIZONTAL);
+		int widthHint = convertHorizontalDLUsToPixels(button, IDialogConstants.BUTTON_WIDTH);
+		data.widthHint = Math.max(widthHint, button.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).x);
+		button.setLayoutData(data);
 		return button;
 	}
 
-	private TableViewerColumn createColumn(String name, int width, int order) {
+	private TableViewerColumn createColumn(TableViewer tableViewer, String name, int width, int order) {
 
 		TableViewerColumn culumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		culumn.getColumn().setWidth(width);
@@ -247,6 +236,27 @@ public abstract class TableViewerFieldEditor<Value> extends FieldEditor {
 		Table table = tableViewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
+		for(int i = 0; i < columnNames.length; i++) {
+			TableViewerColumn column = createColumn(tableViewer, columnNames[i], columnWidth[i], i);
+			column.getColumn().addSelectionListener(getSelectionAdapter(column.getColumn(), i));
+		}
+		tableViewer.getTable().addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				update();
+			}
+		});
+		tableViewer.setComparator(new ViewerComparator() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public int compare(Viewer viewer, Object e1, Object e2) {
+
+				return sortDirection * compareValue((Value)e1, (Value)e2, sortColumn);
+			}
+		});
 		return tableViewer;
 	}
 
