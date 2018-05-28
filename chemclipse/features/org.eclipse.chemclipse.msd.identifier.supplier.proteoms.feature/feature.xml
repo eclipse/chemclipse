@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.feature"
-      label="Feature"
+      label="Proteomics Support"
       version="1.2.0.qualifier"
       provider-name="OpenChrom">
 
