@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="297.0" prefWidth="436.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers.PreprocessingController">
+<AnchorPane prefHeight="297.0" prefWidth="436.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers.PreprocessingController">
    <children>
       <BorderPane prefHeight="454.0" prefWidth="857.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
@@ -23,7 +23,7 @@
                <children>
                   <TitledPane animated="false" collapsible="false" prefHeight="85.0" prefWidth="432.0" text="Step  1: Data Normalization">
                      <content>
-                        <GridPane>
+                        <GridPane style="-fx-background-color: white;">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="434.0" minWidth="10.0" prefWidth="200.0" />
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="667.0" minWidth="10.0" prefWidth="232.0" />
@@ -40,7 +40,7 @@
                      </content></TitledPane>
                   <TitledPane animated="false" collapsible="false" prefHeight="213.0" prefWidth="422.0" text="Step 2: Data Transformation Centering and Scaling">
                      <content>
-                        <GridPane>
+                        <GridPane style="-fx-background-color: white;">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="434.0" minWidth="10.0" prefWidth="200.0" />
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="667.0" minWidth="10.0" prefWidth="232.0" />
@@ -66,7 +66,7 @@
                   </TitledPane>
                   <TitledPane animated="false" collapsible="false" prefHeight="63.0" prefWidth="425.0" text="Step 3: Before evaluation">
                      <content>
-                        <GridPane prefHeight="53.0" prefWidth="428.0">
+                        <GridPane prefHeight="53.0" prefWidth="428.0" style="-fx-background-color: white;">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="434.0" minWidth="10.0" prefWidth="200.0" />
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="667.0" minWidth="10.0" prefWidth="232.0" />
