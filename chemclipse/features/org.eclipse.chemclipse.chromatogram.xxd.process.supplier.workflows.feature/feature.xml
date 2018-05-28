@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.feature"
-      label="Feature"
+      label="OpenChrom Workflows"
       version="1.2.0.qualifier"
       provider-name="OpenChrom">
 
