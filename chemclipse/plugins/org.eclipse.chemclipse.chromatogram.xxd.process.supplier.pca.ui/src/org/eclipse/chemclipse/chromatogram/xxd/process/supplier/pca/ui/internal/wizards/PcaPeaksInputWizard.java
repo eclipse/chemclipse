@@ -26,7 +26,7 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 	private FiltrationDataWizardPage filtrationDataPage;
 	private MainPropertiesPeaksInputWizardPage mainPropertiesPage;
 	private MassSetGroupNamesWizardPage massSetGroupNamesWizardPage;
-	private ModificationDataWizardPage modificationDataWizardPage;
+	private PreprocessingDataWizardPage preprocessingData;
 	private PcaExtractionPeaks pcaExtractionData;
 
 	public PcaPeaksInputWizard() {
@@ -34,7 +34,7 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 		mainPropertiesPage = new MainPropertiesPeaksInputWizardPage("MainProperites");
 		dataInputFromPeakFilesPage = new DataInputFromPeakFilesPageWizard("DataInputFiles");
 		massSetGroupNamesWizardPage = new MassSetGroupNamesWizardPage("MassSetGroup");
-		modificationDataWizardPage = new ModificationDataWizardPage("NormalizationData");
+		preprocessingData = new PreprocessingDataWizardPage("NormalizationData");
 		filtrationDataPage = new FiltrationDataWizardPage("FiltrationData");
 	}
 
@@ -44,7 +44,7 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 		addPage(mainPropertiesPage);
 		addPage(dataInputFromPeakFilesPage);
 		addPage(massSetGroupNamesWizardPage);
-		addPage(modificationDataWizardPage);
+		addPage(preprocessingData);
 		addPage(filtrationDataPage);
 	}
 
@@ -69,7 +69,7 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 	@Override
 	public PcaPreprocessingData getPcaPreprocessingData() {
 
-		return modificationDataWizardPage.getPcaPreprocessingData();
+		return preprocessingData.getPcaPreprocessingData();
 	}
 
 	@Override

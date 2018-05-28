@@ -26,7 +26,7 @@ public class PcaChromatogramsMSDInputWizard extends Wizard implements IPcaInputW
 	private FiltrationDataWizardPage filtrationDataPage;
 	private MainPropertiesScansInputWizardPage mainPropertiesPage;
 	private MassSetGroupNamesWizardPage massSetGroupNamesWizardPage;
-	private ModificationDataWizardPage modificationDataWizardPage;
+	private PreprocessingDataWizardPage preprocessingDataWizardPage;
 	private PcaExtractionScans pcaExtractionData;
 
 	public PcaChromatogramsMSDInputWizard() {
@@ -34,7 +34,7 @@ public class PcaChromatogramsMSDInputWizard extends Wizard implements IPcaInputW
 		mainPropertiesPage = new MainPropertiesScansInputWizardPage("MainProperites");
 		dataInputFromScanFilesPage = new DataInputFromChromatogramMSDFilesPageWizard("DataInputFiles");
 		massSetGroupNamesWizardPage = new MassSetGroupNamesWizardPage("MassSetGroup");
-		modificationDataWizardPage = new ModificationDataWizardPage("NormalizationData");
+		preprocessingDataWizardPage = new PreprocessingDataWizardPage("NormalizationData");
 		filtrationDataPage = new FiltrationDataWizardPage("FiltrationData");
 	}
 
@@ -44,7 +44,7 @@ public class PcaChromatogramsMSDInputWizard extends Wizard implements IPcaInputW
 		addPage(mainPropertiesPage);
 		addPage(dataInputFromScanFilesPage);
 		addPage(massSetGroupNamesWizardPage);
-		addPage(modificationDataWizardPage);
+		addPage(preprocessingDataWizardPage);
 		addPage(filtrationDataPage);
 	}
 
@@ -69,7 +69,7 @@ public class PcaChromatogramsMSDInputWizard extends Wizard implements IPcaInputW
 	@Override
 	public PcaPreprocessingData getPcaPreprocessingData() {
 
-		return modificationDataWizardPage.getPcaPreprocessingData();
+		return preprocessingDataWizardPage.getPcaPreprocessingData();
 	}
 
 	@Override
