@@ -326,9 +326,9 @@ public class PeakListNatTable {
 
 		tableData.update(samples);
 		sortModel.update();
-		generateGroup();
-		hideCompoundColumn();
 		natTable.update();
 		natTable.refresh();
+		generateGroup();
+		hideCompoundColumn();
 	}
 }
