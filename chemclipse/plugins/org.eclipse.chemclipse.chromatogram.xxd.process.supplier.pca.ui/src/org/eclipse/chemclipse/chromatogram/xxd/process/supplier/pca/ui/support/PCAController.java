@@ -43,12 +43,12 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -61,7 +61,7 @@ public class PCAController {
 
 	private static final Logger logger = Logger.getLogger(PCAController.class);
 	private Spinner numerPrincipalComponents;
-	private CCombo pcaAlgo;
+	private Combo pcaAlgo;
 	private Optional<IPcaResultsVisualization> pcaResults;
 	private PcaPreprocessingData pcaPreprocessingData;
 	private Spinner pcx;
@@ -104,23 +104,25 @@ public class PCAController {
 		pcaResults = Optional.empty();
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(layoutData);
-		composite.setLayout(new GridLayout(12, false));
+		composite.setLayout(new GridLayout(13, false));
 		runAnalysis = new Button(composite, SWT.PUSH);
 		runAnalysis.setText("RUN");
 		runAnalysis.addListener(SWT.Selection, e -> {
 			evaluatePCA();
 		});
 		int maxPC = preferenceStore.getInt(PreferenceSupplier.P_NUMBER_OF_COMPONENTS);
-		numerPrincipalComponents = new Spinner(composite, SWT.None);
+		Label label = new Label(composite, SWT.None);
+		label.setText("Number of PC:");
+		numerPrincipalComponents = new Spinner(composite, SWT.BORDER);
 		numerPrincipalComponents.setMinimum(PreferenceSupplier.MIN_NUMBER_OF_COMPONENTS);
 		numerPrincipalComponents.setIncrement(1);
 		numerPrincipalComponents.setSelection(maxPC);
 		numerPrincipalComponents.setMaximum(PreferenceSupplier.MAX_NUMBER_OF_COMPONENTS);
 		numerPrincipalComponents.addListener(SWT.Selection, e -> Display.getDefault().timerExec(100, autoreevaluete));
 		// Selection PCA calculation algorithm
-		Label label = new Label(composite, SWT.None);
+		label = new Label(composite, SWT.None);
 		label.setText("Algorithm:");
-		pcaAlgo = new CCombo(composite, SWT.READ_ONLY);
+		pcaAlgo = new Combo(composite, SWT.READ_ONLY | SWT.BORDER);
 		pcaAlgo.setBounds(50, 50, 150, 65);
 		String items[] = {IPcaSettings.PCA_ALGO_SVD, IPcaSettings.PCA_ALGO_NIPALS, IPcaSettings.OPLS_ALGO_NIPALS};
 		pcaAlgo.setItems(items);
@@ -129,7 +131,7 @@ public class PCAController {
 		// Selection Principal Component for X-axis
 		label = new Label(composite, SWT.None);
 		label.setText("PCX:");
-		pcx = new Spinner(composite, SWT.None);
+		pcx = new Spinner(composite, SWT.BORDER);
 		pcx.setMinimum(1);
 		pcx.setIncrement(1);
 		pcx.setSelection(1);
@@ -141,7 +143,7 @@ public class PCAController {
 		});
 		label = new Label(composite, SWT.None);
 		label.setText("PCY:");
-		pcy = new Spinner(composite, SWT.None);
+		pcy = new Spinner(composite, SWT.BORDER);
 		pcy.setMinimum(1);
 		pcy.setIncrement(1);
 		pcy.setSelection(2);
@@ -153,7 +155,7 @@ public class PCAController {
 		});
 		label = new Label(composite, SWT.None);
 		label.setText("PCZ:");
-		pcz = new Spinner(composite, SWT.None);
+		pcz = new Spinner(composite, SWT.BORDER);
 		pcz.setMinimum(1);
 		pcz.setIncrement(1);
 		pcz.setSelection(3);

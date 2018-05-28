@@ -123,6 +123,7 @@ public class ExplainedVarianceBarChart {
 		 */
 		Point p = fxCanvas.getParent().getSize();
 		Scene scene = new Scene(pane, p.x, p.y);
+		scene.getStylesheets().add("css/error_residue_chart.css");
 		fxCanvas.setScene(scene);
 		fxCanvas.getParent().layout(true);
 	}
