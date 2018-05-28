@@ -25,7 +25,8 @@ public class ChromatogramIntegratorProcessingInfo extends AbstractProcessingInfo
 		if(object instanceof IChromatogramIntegrationResults) {
 			return (IChromatogramIntegrationResults)object;
 		} else {
-			throw createTypeCastException("Chromatogram Integrator", object.getClass(), IChromatogramIntegrationResults.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("Chromatogram Integrator", actualClass, IChromatogramIntegrationResults.class);
 		}
 	}
 

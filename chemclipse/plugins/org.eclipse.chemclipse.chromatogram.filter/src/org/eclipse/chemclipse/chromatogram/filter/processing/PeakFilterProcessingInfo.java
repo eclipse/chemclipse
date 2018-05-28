@@ -25,7 +25,8 @@ public class PeakFilterProcessingInfo extends AbstractProcessingInfo implements 
 		if(object instanceof IPeakFilterResult) {
 			return (IPeakFilterResult)object;
 		} else {
-			throw createTypeCastException("Peak Filter", object.getClass(), IPeakFilterResult.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("Peak Filter", actualClass, IPeakFilterResult.class);
 		}
 	}
 

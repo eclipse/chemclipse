@@ -25,7 +25,8 @@ public class ChromatogramOverviewImportConverterProcessingInfo extends AbstractP
 		if(object instanceof IChromatogramOverview) {
 			return (IChromatogramOverview)object;
 		} else {
-			throw createTypeCastException("ChromatogramOverview Import Converter", object.getClass(), IChromatogramOverview.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("ChromatogramOverview Import Converter", actualClass, IChromatogramOverview.class);
 		}
 	}
 

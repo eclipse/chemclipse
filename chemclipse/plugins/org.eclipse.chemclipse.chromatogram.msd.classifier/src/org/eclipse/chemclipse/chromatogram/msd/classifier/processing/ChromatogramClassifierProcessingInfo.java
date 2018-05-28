@@ -25,7 +25,8 @@ public class ChromatogramClassifierProcessingInfo extends AbstractProcessingInfo
 		if(object instanceof IChromatogramClassifierResult) {
 			return (IChromatogramClassifierResult)object;
 		} else {
-			throw createTypeCastException("Chromatogram Classifier", object.getClass(), IChromatogramClassifierResult.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("Chromatogram Classifier", actualClass, IChromatogramClassifierResult.class);
 		}
 	}
 

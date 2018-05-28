@@ -25,7 +25,8 @@ public class MassSpectraIdentifierProcessingInfo extends AbstractProcessingInfo 
 		if(object instanceof IMassSpectra) {
 			return (IMassSpectra)object;
 		} else {
-			throw createTypeCastException("MassSpectra", object.getClass(), IMassSpectra.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("MassSpectra", actualClass, IMassSpectra.class);
 		}
 	}
 

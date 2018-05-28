@@ -24,7 +24,8 @@ public class ReportImportConverterProcessingInfo extends AbstractProcessingInfo 
 		if(object instanceof IReportRowModel) {
 			return (IReportRowModel)object;
 		} else {
-			throw createTypeCastException("Report Import Converter", object.getClass(), IReportRowModel.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("Report Import Converter", actualClass, IReportRowModel.class);
 		}
 	}
 

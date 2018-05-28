@@ -24,7 +24,8 @@ public class DatabaseImportConverterProcessingInfo extends AbstractProcessingInf
 		if(object instanceof IMassSpectra) {
 			return (IMassSpectra)object;
 		} else {
-			throw createTypeCastException("Database Import Converter", object.getClass(), IMassSpectra.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("Database Import Converter", actualClass, IMassSpectra.class);
 		}
 	}
 

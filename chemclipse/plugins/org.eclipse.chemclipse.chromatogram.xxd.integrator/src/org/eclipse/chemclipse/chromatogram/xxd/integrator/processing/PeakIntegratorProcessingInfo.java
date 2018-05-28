@@ -25,7 +25,8 @@ public class PeakIntegratorProcessingInfo extends AbstractProcessingInfo impleme
 		if(object instanceof IPeakIntegrationResults) {
 			return (IPeakIntegrationResults)object;
 		} else {
-			throw createTypeCastException("Peak Integrator", object.getClass(), IPeakIntegrationResults.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("Peak Integrator", actualClass, IPeakIntegrationResults.class);
 		}
 	}
 

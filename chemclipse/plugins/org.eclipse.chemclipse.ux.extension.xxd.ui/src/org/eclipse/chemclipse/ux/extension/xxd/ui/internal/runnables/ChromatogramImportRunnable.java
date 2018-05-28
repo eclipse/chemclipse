@@ -15,13 +15,20 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
+import org.eclipse.chemclipse.csd.converter.processing.chromatogram.IChromatogramCSDImportConverterProcessingInfo;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+import org.eclipse.chemclipse.msd.converter.processing.chromatogram.IChromatogramMSDImportConverterProcessingInfo;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
+import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
+import org.eclipse.chemclipse.wsd.converter.processing.chromatogram.IChromatogramWSDImportConverterProcessingInfo;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -52,22 +59,32 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 			/*
 			 * Don't fire an update.
 			 */
-			boolean fireUpdate = false;
-			switch(dataType) {
-				case MSD_NOMINAL:
-				case MSD_TANDEM:
-				case MSD_HIGHRES:
-				case MSD:
-					chromatogramSelection = new ChromatogramSelectionMSD(ChromatogramConverterMSD.convert(file, monitor).getChromatogram(), fireUpdate);
-					break;
-				case CSD:
-					chromatogramSelection = new ChromatogramSelectionCSD(ChromatogramConverterCSD.convert(file, monitor).getChromatogram(), fireUpdate);
-					break;
-				case WSD:
-					chromatogramSelection = new ChromatogramSelectionWSD(ChromatogramConverterWSD.convert(file, monitor).getChromatogram(), fireUpdate);
-					break;
-				default:
-					// No action
+			try {
+				boolean fireUpdate = false;
+				switch(dataType) {
+					case MSD_NOMINAL:
+					case MSD_TANDEM:
+					case MSD_HIGHRES:
+					case MSD:
+						IChromatogramMSDImportConverterProcessingInfo processingInfoMSD = ChromatogramConverterMSD.convert(file, monitor);
+						IChromatogramMSD chromatogramMSD = processingInfoMSD.getChromatogram();
+						chromatogramSelection = new ChromatogramSelectionMSD(chromatogramMSD, fireUpdate);
+						break;
+					case CSD:
+						IChromatogramCSDImportConverterProcessingInfo processingInfoCSD = ChromatogramConverterCSD.convert(file, monitor);
+						IChromatogramCSD chromatogramCSD = processingInfoCSD.getChromatogram();
+						chromatogramSelection = new ChromatogramSelectionCSD(chromatogramCSD, fireUpdate);
+						break;
+					case WSD:
+						IChromatogramWSDImportConverterProcessingInfo processingInfoWSD = ChromatogramConverterWSD.convert(file, monitor);
+						IChromatogramWSD chromatogramWSD = processingInfoWSD.getChromatogram();
+						chromatogramSelection = new ChromatogramSelectionWSD(chromatogramWSD, fireUpdate);
+						break;
+					default:
+						// No action
+				}
+			} catch(TypeCastException e) {
+				// No action - can't parse the chromatogram.
 			}
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);

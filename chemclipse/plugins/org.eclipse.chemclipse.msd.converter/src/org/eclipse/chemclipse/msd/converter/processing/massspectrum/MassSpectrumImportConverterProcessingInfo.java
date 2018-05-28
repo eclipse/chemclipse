@@ -25,7 +25,8 @@ public class MassSpectrumImportConverterProcessingInfo extends AbstractProcessin
 		if(object instanceof IMassSpectra) {
 			return (IMassSpectra)object;
 		} else {
-			throw createTypeCastException("MassSpectra Import Converter", object.getClass(), IMassSpectra.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("MassSpectra Import Converter", actualClass, IMassSpectra.class);
 		}
 	}
 

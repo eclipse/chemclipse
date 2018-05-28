@@ -346,23 +346,25 @@ public class ExtendedChromatogramUI {
 
 	private void adjustMinuteScale() {
 
-		int startRetentionTime = chromatogramSelection.getStartRetentionTime();
-		int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
-		int deltaRetentionTime = stopRetentionTime - startRetentionTime + 1;
-		IChartSettings chartSettings = chromatogramChart.getChartSettings();
-		List<ISecondaryAxisSettings> axisSettings = chartSettings.getSecondaryAxisSettingsListX();
-		for(ISecondaryAxisSettings axisSetting : axisSettings) {
-			if(axisSetting.getTitle().equals("Minutes")) {
-				if(deltaRetentionTime >= FIVE_MINUTES) {
-					axisSetting.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
-				} else if(deltaRetentionTime >= THREE_MINUTES) {
-					axisSetting.setDecimalFormat(new DecimalFormat(("0.000"), new DecimalFormatSymbols(Locale.ENGLISH)));
-				} else {
-					axisSetting.setDecimalFormat(new DecimalFormat(("0.0000"), new DecimalFormatSymbols(Locale.ENGLISH)));
+		if(chromatogramSelection != null) {
+			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+			int deltaRetentionTime = stopRetentionTime - startRetentionTime + 1;
+			IChartSettings chartSettings = chromatogramChart.getChartSettings();
+			List<ISecondaryAxisSettings> axisSettings = chartSettings.getSecondaryAxisSettingsListX();
+			for(ISecondaryAxisSettings axisSetting : axisSettings) {
+				if(axisSetting.getTitle().equals("Minutes")) {
+					if(deltaRetentionTime >= FIVE_MINUTES) {
+						axisSetting.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
+					} else if(deltaRetentionTime >= THREE_MINUTES) {
+						axisSetting.setDecimalFormat(new DecimalFormat(("0.000"), new DecimalFormatSymbols(Locale.ENGLISH)));
+					} else {
+						axisSetting.setDecimalFormat(new DecimalFormat(("0.0000"), new DecimalFormatSymbols(Locale.ENGLISH)));
+					}
 				}
 			}
+			chromatogramChart.applySettings(chartSettings);
 		}
-		chromatogramChart.applySettings(chartSettings);
 	}
 
 	private void addChartMenuEntries() {
@@ -1727,17 +1729,21 @@ public class ExtendedChromatogramUI {
 		 * Get the editor and reference chromatograms.
 		 */
 		List<IChromatogramSelection> editorChromatogramSelections = new ArrayList<IChromatogramSelection>();
-		for(IChromatogramSelection editorChromatogramSelection : editorUpdateSupport.getChromatogramSelections()) {
-			if(editorChromatogramSelection.getChromatogram() != chromatogramSelection.getChromatogram()) {
-				editorChromatogramSelections.add(editorChromatogramSelection);
+		if(chromatogramSelection != null) {
+			for(IChromatogramSelection editorChromatogramSelection : editorUpdateSupport.getChromatogramSelections()) {
+				if(editorChromatogramSelection.getChromatogram() != chromatogramSelection.getChromatogram()) {
+					editorChromatogramSelections.add(editorChromatogramSelection);
+				}
 			}
 		}
 		//
 		targetChromatogramSelections.addAll(editorChromatogramSelections);
 		references.addAll(getEditorReferences(editorChromatogramSelections));
 		//
-		targetChromatogramSelections.addAll(referencedChromatogramSelections);
-		references.addAll(getChromatogramReferences(referencedChromatogramSelections));
+		if(referencedChromatogramSelections != null) {
+			targetChromatogramSelections.addAll(referencedChromatogramSelections);
+			references.addAll(getChromatogramReferences(referencedChromatogramSelections));
+		}
 		/*
 		 * Set the items.
 		 */

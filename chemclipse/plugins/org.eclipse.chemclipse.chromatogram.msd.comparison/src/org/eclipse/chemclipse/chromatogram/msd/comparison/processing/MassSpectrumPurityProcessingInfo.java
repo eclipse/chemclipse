@@ -25,7 +25,8 @@ public class MassSpectrumPurityProcessingInfo extends AbstractProcessingInfo imp
 		if(object instanceof IMassSpectrumPurityResult) {
 			return (IMassSpectrumPurityResult)object;
 		} else {
-			throw createTypeCastException("MassSpectrum Purity", object.getClass(), IMassSpectrumPurityResult.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("MassSpectrum Purity", actualClass, IMassSpectrumPurityResult.class);
 		}
 	}
 

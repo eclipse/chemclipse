@@ -28,7 +28,8 @@ public class MassSpectrumComparatorProcessingInfo extends AbstractProcessingInfo
 		if(object instanceof IMassSpectrumComparisonResult) {
 			return (IMassSpectrumComparisonResult)object;
 		} else {
-			throw createTypeCastException("MassSpectrum Comparator", object.getClass(), IMassSpectrumComparisonResult.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("MassSpectrum Comparator", actualClass, IMassSpectrumComparisonResult.class);
 		}
 	}
 

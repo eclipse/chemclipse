@@ -25,7 +25,8 @@ public class PeakIdentifierProcessingInfo extends AbstractProcessingInfo impleme
 		if(object instanceof IPeakIdentificationResults) {
 			return (IPeakIdentificationResults)object;
 		} else {
-			throw createTypeCastException("Peak Identifier", object.getClass(), IPeakIdentificationResults.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("Peak Identifier", actualClass, IPeakIdentificationResults.class);
 		}
 	}
 

@@ -25,7 +25,8 @@ public class CombinedIntegratorProcessingInfo extends AbstractProcessingInfo imp
 		if(object instanceof ICombinedIntegrationResult) {
 			return (ICombinedIntegrationResult)object;
 		} else {
-			throw createTypeCastException("Combined Integrator", object.getClass(), ICombinedIntegrationResult.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("Combined Integrator", actualClass, ICombinedIntegrationResult.class);
 		}
 	}
 

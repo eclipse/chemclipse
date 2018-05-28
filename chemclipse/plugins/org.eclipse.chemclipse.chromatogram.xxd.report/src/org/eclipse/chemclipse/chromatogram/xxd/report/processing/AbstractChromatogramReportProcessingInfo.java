@@ -26,7 +26,8 @@ public abstract class AbstractChromatogramReportProcessingInfo extends AbstractP
 		if(object instanceof File) {
 			return (File)object;
 		} else {
-			throw createTypeCastException("Report Generator", object.getClass(), File.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("Report Generator", actualClass, File.class);
 		}
 	}
 

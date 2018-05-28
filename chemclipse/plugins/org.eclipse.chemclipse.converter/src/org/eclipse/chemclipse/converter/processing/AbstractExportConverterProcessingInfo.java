@@ -26,7 +26,8 @@ public abstract class AbstractExportConverterProcessingInfo extends AbstractProc
 		if(object instanceof File) {
 			return (File)object;
 		} else {
-			throw createTypeCastException("Export Converter", object.getClass(), File.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("Export Converter", actualClass, File.class);
 		}
 	}
 

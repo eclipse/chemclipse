@@ -25,7 +25,8 @@ public class PeakImportConverterProcessingInfo extends AbstractProcessingInfo im
 		if(object instanceof IPeaks) {
 			return (IPeaks)object;
 		} else {
-			throw createTypeCastException("Peak Import Converter", object.getClass(), IPeaks.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("Peak Import Converter", actualClass, IPeaks.class);
 		}
 	}
 

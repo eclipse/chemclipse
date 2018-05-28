@@ -25,7 +25,8 @@ public class ChromatogramCSDImportConverterProcessingInfo extends AbstractProces
 		if(object instanceof IChromatogramCSD) {
 			return (IChromatogramCSD)object;
 		} else {
-			throw createTypeCastException("Chromatogram Import Converter", object.getClass(), IChromatogramCSD.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("Chromatogram Import Converter", actualClass, IChromatogramCSD.class);
 		}
 	}
 

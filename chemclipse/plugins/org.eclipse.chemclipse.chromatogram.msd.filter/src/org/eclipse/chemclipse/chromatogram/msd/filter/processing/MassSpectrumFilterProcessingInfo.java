@@ -25,7 +25,8 @@ public class MassSpectrumFilterProcessingInfo extends AbstractProcessingInfo imp
 		if(object instanceof IMassSpectrumFilterResult) {
 			return (IMassSpectrumFilterResult)object;
 		} else {
-			throw createTypeCastException("Mass Spectrum Filter", object.getClass(), IMassSpectrumFilterResult.class);
+			Class<?> actualClass = (object == null) ? new Exception("NULL").getClass() : object.getClass();
+			throw createTypeCastException("Mass Spectrum Filter", actualClass, IMassSpectrumFilterResult.class);
 		}
 	}
 
