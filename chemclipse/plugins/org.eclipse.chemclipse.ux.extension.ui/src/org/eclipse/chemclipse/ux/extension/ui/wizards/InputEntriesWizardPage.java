@@ -83,12 +83,12 @@ public class InputEntriesWizardPage extends WizardPage {
 	private void createDrivesTreeViewer(TabFolder tabFolder) {
 
 		TabItem tabDrives = new TabItem(tabFolder, SWT.NONE);
-		tabDrives.setText("Drivers");
+		tabDrives.setText("Drives");
 		//
 		String directoryPath = selectedDrivePath;
 		Composite composite = new Composite(tabFolder, SWT.None);
 		composite.setLayout(new FillLayout());
-		createDirectoryTree(composite, getDrives(), directoryPath, TreeSelection.DRIVER);
+		createDirectoryTree(composite, getDrives(), directoryPath, TreeSelection.DRIVES);
 		//
 		tabDrives.setControl(composite);
 	}

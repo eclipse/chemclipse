@@ -28,7 +28,7 @@ public class InputEntriesWizard extends Wizard {
 	private final static String DEFAULT_TREE_SELECTION = "DEFAULT_TREE_SELECTION";
 
 	public enum TreeSelection {
-		DRIVER, HOME, USER_LOCATION, NONE;
+		DRIVES, HOME, USER_LOCATION, NONE;
 	}
 
 	private InputEntriesWizardPage inputEntriesPage;
@@ -70,10 +70,10 @@ public class InputEntriesWizard extends Wizard {
 		if(eclipsePreferences != null && nodeName != null) {
 			this.eclipsePreferences = eclipsePreferences;
 			this.nodeName = nodeName;
-			this.selectedDrivePath = eclipsePreferences.node(nodeName).get(TreeSelection.DRIVER.name(), "");
+			this.selectedDrivePath = eclipsePreferences.node(nodeName).get(TreeSelection.DRIVES.name(), "");
 			this.selectedHomePath = eclipsePreferences.node(nodeName).get(TreeSelection.HOME.name(), "");
 			this.selectedUserLocationPath = eclipsePreferences.node(nodeName).get(TreeSelection.USER_LOCATION.name(), "");
-			this.defaultTree = TreeSelection.valueOf(eclipsePreferences.node(nodeName).get(DEFAULT_TREE_SELECTION, TreeSelection.DRIVER.name()));
+			this.defaultTree = TreeSelection.valueOf(eclipsePreferences.node(nodeName).get(DEFAULT_TREE_SELECTION, TreeSelection.DRIVES.name()));
 		}
 	}
 
