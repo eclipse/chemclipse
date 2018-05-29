@@ -25,8 +25,10 @@ import org.osgi.service.prefs.BackingStoreException;
 
 public class InputEntriesWizard extends Wizard {
 
+	private final static String DEFAULT_TREE_SELECTION = "DEFAULT_TREE_SELECTION";
+
 	public enum TreeSelection {
-		NONE, USER_LOCATION, DRIVER, HOME;
+		DRIVER, HOME, USER_LOCATION, NONE;
 	}
 
 	private InputEntriesWizardPage inputEntriesPage;
@@ -41,6 +43,7 @@ public class InputEntriesWizard extends Wizard {
 	private String selectedUserLocationPath;
 	private IEclipsePreferences eclipsePreferences;
 	private String nodeName;
+	private TreeSelection defaultTree;
 
 	public InputEntriesWizard(String title, String description, IBaseLabelProvider labelProvider, IContentProvider contentProvider) {
 		super();
@@ -50,6 +53,7 @@ public class InputEntriesWizard extends Wizard {
 		this.description = (description == null) ? "" : description;
 		this.labelProvider = labelProvider;
 		this.contentProvider = contentProvider;
+		this.defaultTree = TreeSelection.NONE;
 	}
 
 	public InputEntriesWizard(IChromatogramWizardElements chromatogramWizardElements, String title, String description, IBaseLabelProvider labelProvider, IContentProvider contentProvider) {
@@ -65,13 +69,14 @@ public class InputEntriesWizard extends Wizard {
 			this.selectedDrivePath = eclipsePreferences.node(nodeName).get(TreeSelection.DRIVER.name(), "");
 			this.selectedHomePath = eclipsePreferences.node(nodeName).get(TreeSelection.HOME.name(), "");
 			this.selectedUserLocationPath = eclipsePreferences.node(nodeName).get(TreeSelection.USER_LOCATION.name(), "");
+			this.defaultTree = TreeSelection.valueOf(eclipsePreferences.node(nodeName).get(DEFAULT_TREE_SELECTION, TreeSelection.DRIVER.name()));
 		}
 	}
 
 	@Override
 	public void addPages() {
 
-		inputEntriesPage = new InputEntriesWizardPage(chromatogramWizardElements, title, description, labelProvider, contentProvider, selectedDrivePath, selectedHomePath, selectedUserLocationPath);
+		inputEntriesPage = new InputEntriesWizardPage(chromatogramWizardElements, title, description, labelProvider, contentProvider, selectedDrivePath, selectedHomePath, selectedUserLocationPath, defaultTree);
 		addPage(inputEntriesPage);
 	}
 
@@ -102,6 +107,11 @@ public class InputEntriesWizard extends Wizard {
 		this.selectedUserLocationPath = selectedUserLocationPath;
 	}
 
+	public void setDefaultTree(TreeSelection defaultTree) {
+
+		this.defaultTree = defaultTree;
+	}
+
 	public TreeSelection getTreeSelection() {
 
 		return inputEntriesPage.getTreeSelection();
@@ -117,6 +127,7 @@ public class InputEntriesWizard extends Wizard {
 					File file = new File(files.get(0));
 					if(file.isFile()) {
 						eclipsePreferences.node(nodeName).put(inputEntriesPage.getTreeSelection().name(), file.getParent());
+						eclipsePreferences.node(nodeName).put(DEFAULT_TREE_SELECTION, inputEntriesPage.getTreeSelection().name());
 						try {
 							eclipsePreferences.flush();
 						} catch(BackingStoreException e) {

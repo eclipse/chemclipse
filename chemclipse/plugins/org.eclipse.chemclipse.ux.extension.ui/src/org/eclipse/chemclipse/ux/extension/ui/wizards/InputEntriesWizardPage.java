@@ -47,8 +47,9 @@ public class InputEntriesWizardPage extends WizardPage {
 	private String selectedHomePath;
 	private String selectedUserLocationPath;
 	private TreeSelection treeSelection;
+	private TreeSelection defaultTree;
 
-	public InputEntriesWizardPage(IChromatogramWizardElements chromatogramWizardElements, String title, String description, IBaseLabelProvider labelProvider, IContentProvider contentProvider, String selectedDrivePath, String selectedHomePath, String selectedUserLocationPath) {
+	public InputEntriesWizardPage(IChromatogramWizardElements chromatogramWizardElements, String title, String description, IBaseLabelProvider labelProvider, IContentProvider contentProvider, String selectedDrivePath, String selectedHomePath, String selectedUserLocationPath, TreeSelection defaultTree) {
 		//
 		super(InputEntriesWizardPage.class.getName());
 		setTitle(title);
@@ -60,6 +61,7 @@ public class InputEntriesWizardPage extends WizardPage {
 		this.selectedHomePath = selectedHomePath;
 		this.selectedUserLocationPath = selectedUserLocationPath;
 		this.treeSelection = TreeSelection.NONE;
+		this.defaultTree = defaultTree;
 	}
 
 	@Override
@@ -72,6 +74,9 @@ public class InputEntriesWizardPage extends WizardPage {
 		createDrivesTreeViewer(tabFolder);
 		createHomeTreeViewer(tabFolder);
 		createUserLocationTreeViewer(tabFolder);
+		if(!defaultTree.equals(TreeSelection.NONE)) {
+			tabFolder.setSelection(defaultTree.ordinal());
+		}
 		setControl(composite);
 	}
 
