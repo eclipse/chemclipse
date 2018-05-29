@@ -37,12 +37,17 @@ public class TreeViewerFilesystemSupport {
 	 */
 	public static void retrieveAndSetLocalFileSystem(final TreeViewer treeViewer, final String expandToDirectoryPath) {
 
+		retrieveAndSetLocalFileSystem(treeViewer, EFS.getLocalFileSystem(), expandToDirectoryPath);
+	}
+
+	public static void retrieveAndSetLocalFileSystem(final TreeViewer treeViewer, Object input, final String expandToDirectoryPath) {
+
 		Display.getCurrent().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
 
-				treeViewer.setInput(EFS.getLocalFileSystem());
+				treeViewer.setInput(input);
 				if(expandToDirectoryPath != null && !expandToDirectoryPath.equals("")) {
 					File elementOrTreePath = new File(expandToDirectoryPath);
 					if(elementOrTreePath.exists()) {
