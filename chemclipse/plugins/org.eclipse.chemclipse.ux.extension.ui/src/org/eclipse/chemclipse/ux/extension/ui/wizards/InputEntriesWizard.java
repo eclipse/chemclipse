@@ -45,20 +45,24 @@ public class InputEntriesWizard extends Wizard {
 	private String nodeName;
 	private TreeSelection defaultTree;
 
-	public InputEntriesWizard(String title, String description, IBaseLabelProvider labelProvider, IContentProvider contentProvider) {
+	public InputEntriesWizard() {
 		super();
 		setNeedsProgressMonitor(true);
+	}
+
+	public InputEntriesWizard(IChromatogramWizardElements chromatogramWizardElements) {
+		this();
+		this.chromatogramWizardElements = chromatogramWizardElements;
+	}
+
+	protected void init(String title, String description, IBaseLabelProvider labelProvider, IContentProvider contentProvider) {
+
 		this.chromatogramWizardElements = new ChromatogramWizardElements();
 		this.title = (title == null) ? "" : title;
 		this.description = (description == null) ? "" : description;
 		this.labelProvider = labelProvider;
 		this.contentProvider = contentProvider;
 		this.defaultTree = TreeSelection.NONE;
-	}
-
-	public InputEntriesWizard(IChromatogramWizardElements chromatogramWizardElements, String title, String description, IBaseLabelProvider labelProvider, IContentProvider contentProvider) {
-		this(title, description, labelProvider, contentProvider);
-		this.chromatogramWizardElements = chromatogramWizardElements;
 	}
 
 	public void setEclipsePreferes(IEclipsePreferences eclipsePreferences, String nodeName) {

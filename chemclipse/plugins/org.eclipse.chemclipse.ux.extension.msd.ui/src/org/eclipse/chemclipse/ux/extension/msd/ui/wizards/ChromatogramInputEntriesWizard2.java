@@ -20,10 +20,12 @@ import org.eclipse.chemclipse.ux.extension.ui.wizards.InputEntriesWizard;
 public class ChromatogramInputEntriesWizard2 extends InputEntriesWizard {
 
 	public ChromatogramInputEntriesWizard2() {
-		super("Chromatogram MSD Input Files", "This wizard lets you select several chormatogram MSD input files.", new SupplierFileExplorerLabelProvider(ChromatogramSupport.getInstanceIdentifier()), new SupplierFileExplorerContentProvider(ChromatogramSupport.getInstanceIdentifier()));
+		super();
+		init("Chromatogram MSD Input Files", "This wizard lets you select several chormatogram MSD input files.", new SupplierFileExplorerLabelProvider(ChromatogramSupport.getInstanceIdentifier()), new SupplierFileExplorerContentProvider(ChromatogramSupport.getInstanceIdentifier()));
 	}
 
 	public ChromatogramInputEntriesWizard2(IChromatogramWizardElements chromatogramWizardElements) {
-		super(chromatogramWizardElements, "Chromatogram MSD Input Files", "This wizard lets you select several chormatogram MSD input files.", new SupplierFileExplorerLabelProvider(ChromatogramSupport.getInstanceIdentifier()), new SupplierFileExplorerContentProvider(ChromatogramSupport.getInstanceIdentifier()));
+		super(chromatogramWizardElements);
+		init("Chromatogram MSD Input Files", "This wizard lets you select several chormatogram MSD input files.", new SupplierFileExplorerLabelProvider(ChromatogramSupport.getInstanceIdentifier()), new SupplierFileExplorerContentProvider(ChromatogramSupport.getInstanceIdentifier()));
 	}
 }
