@@ -16,6 +16,8 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.ux.extension.msd.ui.wizards.ChromatogramInputEntriesWizard2;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 
@@ -30,12 +32,13 @@ public class DataInputFromChromatogramMSDFilesPageWizard extends DataInputPageWi
 	@Override
 	protected void addFiles() {
 
-		ChromatogramMSDInputFilesWizard inputWizard = new ChromatogramMSDInputFilesWizard();
+		ChromatogramInputEntriesWizard2 inputWizard = new ChromatogramInputEntriesWizard2();
+		inputWizard.setEclipsePreferes(PreferenceSupplier.INSTANCE().getPreferences(), PreferenceSupplier.N_INPUT_FILE);
 		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getCurrent().getActiveShell(), inputWizard);
 		wizardDialog.create();
 		int returnCode = wizardDialog.open();
 		if(returnCode == Window.OK) {
-			List<String> selectedPeakFiles = inputWizard.getSelectedChromatogramFiles();
+			List<String> selectedPeakFiles = inputWizard.getChromatogramWizardElements().getSelectedChromatograms();
 			List<IDataInputEntry> dataInputEntries = new ArrayList<>();
 			for(String selectedPeakFile : selectedPeakFiles) {
 				IDataInputEntry dataInputEntry = new DataInputEntry(selectedPeakFile);

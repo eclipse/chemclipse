@@ -23,12 +23,16 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
+	// Nodes
+	public static final String N_INPUT_FILE = "INPUT_FILE";
+	// General settings
 	public static final String[][] ALGORITHM_TYPES = new String[][]{//
 			{IPcaSettings.PCA_ALGO_SVD, IPcaSettings.PCA_ALGO_SVD}, //
 			{IPcaSettings.PCA_ALGO_NIPALS, IPcaSettings.PCA_ALGO_NIPALS}, //
 			{IPcaSettings.OPLS_ALGO_NIPALS, IPcaSettings.OPLS_ALGO_NIPALS}//
 	};
-	// General settings
+	public static final String P_FILES_PATH_IMPORT_CHROMATOGRAMS = "filePathImportChromatograms";
+	public static final String DEF_FILES_PATH_IMPORT_CHROMATOGRAMS = "";
 	public static final String P_ALGORITHM_TYPE = "algorithmType";
 	public static final String DEF_ALGORITHM_TYPE = IPcaSettings.PCA_ALGO_SVD;
 	public static final String P_NUMBER_OF_COMPONENTS = "numberOfComponents";
@@ -80,6 +84,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
+		defaultValues.put(P_FILES_PATH_IMPORT_CHROMATOGRAMS, DEF_FILES_PATH_IMPORT_CHROMATOGRAMS);
 		defaultValues.put(P_ALGORITHM_TYPE, DEF_ALGORITHM_TYPE);
 		defaultValues.put(P_NUMBER_OF_COMPONENTS, Integer.toString(DEF_NUMBER_OF_COMPONENTS));
 		defaultValues.put(P_AUTO_REEVALUATE, Boolean.toString(DEF_AUTO_REEVALUATE));
