@@ -19,10 +19,12 @@ import org.eclipse.chemclipse.ux.extension.ui.wizards.InputEntriesWizard;
 public class PeakInputEntriesWizard extends InputEntriesWizard {
 
 	public PeakInputEntriesWizard() {
-		super("Peak Input Files", "This wizard lets you select several peak input files.", new PeakFileExplorerLabelProvider(), new PeakFileExplorerContentProvider());
+		super();
+		init("Peak Input Files", "This wizard lets you select several peak input files.", new PeakFileExplorerLabelProvider(), new PeakFileExplorerContentProvider());
 	}
 
 	public PeakInputEntriesWizard(IChromatogramWizardElements chromatogramWizardElements) {
-		super(chromatogramWizardElements, "Peak Input Files", "This wizard lets you select several peak input files.", new PeakFileExplorerLabelProvider(), new PeakFileExplorerContentProvider());
+		super(chromatogramWizardElements);
+		init("Peak Input Files", "This wizard lets you select several peak input files.", new PeakFileExplorerLabelProvider(), new PeakFileExplorerContentProvider());
 	}
 }
