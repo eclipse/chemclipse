@@ -32,12 +32,17 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerLabel
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -47,6 +52,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -220,11 +226,53 @@ public abstract class AbstractSupplierFileExplorer {
 				openEditor(file, false);
 			}
 		});
-		//
+		createContextMenu(treeViewer);
 		return treeViewer;
 	}
 
-	private void setTreeViewerProvider(TreeViewer treeViewer) {
+	private void createContextMenu(Viewer viewer) {
+
+		MenuManager contextMenu = new MenuManager("#ViewerMenu"); //$NON-NLS-1$
+		contextMenu.setRemoveAllWhenShown(true);
+		contextMenu.addMenuListener(new IMenuListener() {
+
+			@Override
+			public void menuAboutToShow(IMenuManager mgr) {
+
+				File file = (File)((IStructuredSelection)viewer.getSelection()).getFirstElement();
+				List<ISupplierFileEditorSupport> activeFileSupplierList = getActiveFileSupplier(file);
+				for(ISupplierFileEditorSupport activeFileSupplier : activeFileSupplierList) {
+					contextMenu.add(new Action("Open as: " + activeFileSupplier.getType()) {
+
+						@Override
+						public void run() {
+
+							if(file != null) {
+								Iterator<?> it = ((IStructuredSelection)viewer.getSelection()).iterator();
+								while(it.hasNext()) {
+									File f = (File)it.next();
+									if(f != null && f.isFile() && activeFileSupplier.isMatchMagicNumber(f)) {
+										display.asyncExec(new Runnable() {
+
+											@Override
+											public void run() {
+
+												openEditor(f, activeFileSupplier, true);
+											}
+										});
+									}
+								}
+							}
+						}
+					});
+				}
+			}
+		});
+		Menu menu = contextMenu.createContextMenu(viewer.getControl());
+		viewer.getControl().setMenu(menu);
+	}
+
+	void setTreeViewerProvider(TreeViewer treeViewer) {
 
 		treeViewer.setContentProvider(new SupplierFileExplorerContentProvider(supplierFileEditorSupportList));
 		treeViewer.setLabelProvider(new SupplierFileExplorerLabelProvider(supplierFileEditorSupportList));
