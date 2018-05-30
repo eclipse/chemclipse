@@ -39,9 +39,6 @@ public class ClassifierHandler implements EventHandler {
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
-		/*
-		 * Run the handler.
-		 */
 		if(chromatogramSelection != null) {
 			final Display display = Display.getCurrent();
 			StatusLineLogger.setInfo(InfoType.MESSAGE, "Start Base Peak Classifier");
