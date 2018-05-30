@@ -302,9 +302,9 @@ public class PreferenceConstants {
 	public static final String P_SHOW_SCANS_MSD = "showScansMSD";
 	public static final boolean DEF_SHOW_SCANS_MSD = true;
 	public static final String P_SHOW_DATA_XIR = "showDataXIR";
-	public static final boolean DEF_SHOW_DATA_XIR = false;
+	public static final boolean DEF_SHOW_DATA_XIR = true;
 	public static final String P_SHOW_DATA_NMR = "showDataNMR";
-	public static final boolean DEF_SHOW_DATA_NMR = false;
+	public static final boolean DEF_SHOW_DATA_NMR = true;
 	public static final String P_SHOW_DATA_CAL = "showDataCAL";
 	public static final boolean DEF_SHOW_DATA_CAL = false;
 }
