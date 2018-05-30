@@ -59,6 +59,7 @@ public class SupplierFileExplorerContentProvider extends FileExplorerContentProv
 								if(supplierFileIdentifier.isSupplierFile(file)) {
 									if(supplierFileIdentifier.isMatchMagicNumber(file)) {
 										files.add(file);
+										break;
 									}
 								}
 							}
