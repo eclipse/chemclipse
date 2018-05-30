@@ -24,7 +24,7 @@ public class SmallValuesReplacer extends AbstractPreprocessing {
 	@Override
 	public String getDescription() {
 
-		return "Repleace NAN value with small random values";
+		return "Replace NAN value with small random values";
 	}
 
 	@Override

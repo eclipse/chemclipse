@@ -23,7 +23,7 @@ public class MeanValuesReplacer extends AbstractPreprocessing {
 	@Override
 	public String getDescription() {
 
-		return "Repleace NAN value with mean";
+		return "Replace NAN value with mean";
 	}
 
 	@Override

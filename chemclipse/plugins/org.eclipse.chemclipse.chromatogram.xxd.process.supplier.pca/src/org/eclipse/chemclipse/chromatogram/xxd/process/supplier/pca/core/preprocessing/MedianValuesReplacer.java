@@ -24,7 +24,7 @@ public class MedianValuesReplacer extends AbstractPreprocessing {
 	@Override
 	public String getDescription() {
 
-		return "Repleace NAN value with median";
+		return "Replace NAN value with median";
 	}
 
 	@Override

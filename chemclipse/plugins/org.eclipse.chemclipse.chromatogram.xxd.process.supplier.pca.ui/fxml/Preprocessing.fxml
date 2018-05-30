@@ -53,7 +53,7 @@
                            </rowConstraints>
                            <children>
                               <ComboBox fx:id="cReplaceEmptyValue" prefWidth="200.0" GridPane.columnIndex="1" />
-                              <Label text="Repleace empty value with" />
+                              <Label text="Replace empty value with" />
                               <CheckBox fx:id="bTransformData" mnemonicParsing="false" text="Transform Data" GridPane.rowIndex="1" />
                               <ComboBox fx:id="cTransformData" disable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <CheckBox fx:id="bCenterData" mnemonicParsing="false" text="Center Data" GridPane.rowIndex="2" />
@@ -75,7 +75,7 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <CheckBox fx:id="bRemoveVariables" mnemonicParsing="false" text="Remove Variables, which conteins non or one value" GridPane.columnSpan="2" />
+                              <CheckBox fx:id="bRemoveVariables" mnemonicParsing="false" text="Remove Variables, which contains none or one value" GridPane.columnSpan="2" />
                            </children>
                         </GridPane>
                      </content>
