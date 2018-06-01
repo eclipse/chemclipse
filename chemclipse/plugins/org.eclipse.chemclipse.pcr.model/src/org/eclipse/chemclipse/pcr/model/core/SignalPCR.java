@@ -9,26 +9,26 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.nmr.model.core;
+package org.eclipse.chemclipse.pcr.model.core;
 
 import org.eclipse.chemclipse.model.core.AbstractSignal;
 
-public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<ISignalNMR> {
+public class SignalPCR extends AbstractSignal implements ISignalPCR, Comparable<ISignalPCR> {
 
-	private static final long serialVersionUID = 6450313862258177287L;
+	private static final long serialVersionUID = 4011351889173887912L;
 	//
-	private double chemicalShift = 0.0d;
+	private double cycle = 0.0d;
 	private double intensity = 0.0d;
 
-	public SignalNMR(double chemicalShift, double intensity) {
-		this.chemicalShift = chemicalShift;
+	public SignalPCR(double chemicalShift, double intensity) {
+		this.cycle = chemicalShift;
 		this.intensity = intensity;
 	}
 
 	@Override
 	public double getX() {
 
-		return chemicalShift;
+		return cycle;
 	}
 
 	@Override
@@ -38,15 +38,15 @@ public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<
 	}
 
 	@Override
-	public double getChemicalShift() {
+	public double getCycle() {
 
-		return chemicalShift;
+		return cycle;
 	}
 
 	@Override
-	public void setChemicalShift(double chemicalShift) {
+	public void setCycle(double cycle) {
 
-		this.chemicalShift = chemicalShift;
+		this.cycle = cycle;
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<
 		final int prime = 31;
 		int result = 1;
 		long temp;
-		temp = Double.doubleToLongBits(chemicalShift);
+		temp = Double.doubleToLongBits(cycle);
 		result = prime * result + (int)(temp ^ (temp >>> 32));
 		return result;
 	}
@@ -81,8 +81,8 @@ public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<
 			return false;
 		if(getClass() != obj.getClass())
 			return false;
-		SignalNMR other = (SignalNMR)obj;
-		if(Double.doubleToLongBits(chemicalShift) != Double.doubleToLongBits(other.chemicalShift))
+		SignalPCR other = (SignalPCR)obj;
+		if(Double.doubleToLongBits(cycle) != Double.doubleToLongBits(other.cycle))
 			return false;
 		return true;
 	}
@@ -90,14 +90,14 @@ public class SignalNMR extends AbstractSignal implements ISignalNMR, Comparable<
 	@Override
 	public String toString() {
 
-		return "SignalNMR [chemicalShift=" + chemicalShift + ", intensity=" + intensity + "]";
+		return "SignalNMR [cycle=" + cycle + ", intensity=" + intensity + "]";
 	}
 
 	@Override
-	public int compareTo(ISignalNMR signalNMR) {
+	public int compareTo(ISignalPCR signalNMR) {
 
 		if(signalNMR != null) {
-			return Double.compare(chemicalShift, signalNMR.getChemicalShift());
+			return Double.compare(cycle, signalNMR.getCycle());
 		} else {
 			return 0;
 		}

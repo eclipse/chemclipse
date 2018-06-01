@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.nmr.model;
+package org.eclipse.chemclipse.pcr.model;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -18,7 +18,7 @@ public class Activator implements BundleActivator {
 
 	private static BundleContext context;
 
-	public static BundleContext getContext() {
+	static BundleContext getContext() {
 
 		return context;
 	}
