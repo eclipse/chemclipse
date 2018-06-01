@@ -11,14 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.converter.core;
 
-import java.io.File;
+import org.eclipse.chemclipse.converter.core.AbstractExportConverter;
 
-import org.eclipse.chemclipse.converter.core.IExportConverter;
-import org.eclipse.chemclipse.pcr.model.core.IScanPCR;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.core.runtime.IProgressMonitor;
-
-public interface IScanExportConverter extends IExportConverter {
-
-	IProcessingInfo convert(File file, IScanPCR scan, IProgressMonitor monitor);
+public abstract class AbstractPlateExportConverter extends AbstractExportConverter implements IPlateExportConverter {
 }

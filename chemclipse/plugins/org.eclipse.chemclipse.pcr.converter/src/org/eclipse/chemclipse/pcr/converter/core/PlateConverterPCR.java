@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.converter.scan.IScanConverterSupport;
 import org.eclipse.chemclipse.converter.scan.ScanConverterSupport;
 import org.eclipse.chemclipse.converter.scan.ScanSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IScanPCR;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -30,15 +31,15 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 
-public class ScanConverterPCR {
+public class PlateConverterPCR {
 
-	private static final Logger logger = Logger.getLogger(ScanConverterPCR.class);
-	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.pcr.converter.scanSupplier";
+	private static final Logger logger = Logger.getLogger(PlateConverterPCR.class);
+	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.pcr.converter.plateSupplier";
 
 	/**
 	 * This class has only static methods.
 	 */
-	private ScanConverterPCR() {
+	private PlateConverterPCR() {
 	}
 
 	public static IProcessingInfo convert(final File file, final String converterId, final IProgressMonitor monitor) {
@@ -48,7 +49,7 @@ public class ScanConverterPCR {
 		 * Do not use a safe runnable here, because an object must
 		 * be returned or null.
 		 */
-		IScanImportConverter importConverter = getScanImportConverter(converterId);
+		IPlateImportConverter importConverter = getPlateImportConverter(converterId);
 		if(importConverter != null) {
 			processingInfo = importConverter.convert(file, monitor);
 		} else {
@@ -59,7 +60,7 @@ public class ScanConverterPCR {
 
 	public static IProcessingInfo convert(final File file, final IProgressMonitor monitor) {
 
-		return getScan(file, false, monitor);
+		return getPlate(file, false, monitor);
 	}
 
 	/**
@@ -70,7 +71,7 @@ public class ScanConverterPCR {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	private static IProcessingInfo getScan(final File file, boolean overview, IProgressMonitor monitor) {
+	private static IProcessingInfo getPlate(final File file, boolean overview, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		IScanConverterSupport converterSupport = getScanConverterSupport();
@@ -81,7 +82,7 @@ public class ScanConverterPCR {
 				 * Do not use a safe runnable here, because an object must
 				 * be returned or null.
 				 */
-				IScanImportConverter importConverter = getScanImportConverter(converterId);
+				IPlateImportConverter importConverter = getPlateImportConverter(converterId);
 				if(importConverter != null) {
 					processingInfo = importConverter.convert(file, monitor);
 					if(!processingInfo.hasErrorMessages()) {
@@ -98,30 +99,30 @@ public class ScanConverterPCR {
 		return getProcessingError(file);
 	}
 
-	public static IProcessingInfo convert(final File file, final IScanPCR scan, final String converterId, final IProgressMonitor monitor) {
+	public static IProcessingInfo convert(final File file, final IPlate plate, final String converterId, final IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		/*
 		 * Do not use a safe runnable here, because an object must
 		 * be returned or null.
 		 */
-		IScanExportConverter exportConverter = getScanExportConverter(converterId);
+		IPlateExportConverter exportConverter = getPlateExportConverter(converterId);
 		if(exportConverter != null) {
-			processingInfo = exportConverter.convert(file, scan, monitor);
+			processingInfo = exportConverter.convert(file, plate, monitor);
 		} else {
 			processingInfo = getProcessingError(file);
 		}
 		return processingInfo;
 	}
 
-	private static IScanImportConverter getScanImportConverter(final String converterId) {
+	private static IPlateImportConverter getPlateImportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IScanImportConverter instance = null;
+		IPlateImportConverter instance = null;
 		if(element != null) {
 			try {
-				instance = (IScanImportConverter)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
+				instance = (IPlateImportConverter)element.createExecutableExtension(Converter.IMPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.warn(e);
 			}
@@ -129,14 +130,14 @@ public class ScanConverterPCR {
 		return instance;
 	}
 
-	private static IScanExportConverter getScanExportConverter(final String converterId) {
+	private static IPlateExportConverter getPlateExportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IScanExportConverter instance = null;
+		IPlateExportConverter instance = null;
 		if(element != null) {
 			try {
-				instance = (IScanExportConverter)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
+				instance = (IPlateExportConverter)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.warn(e);
 			}
@@ -208,7 +209,7 @@ public class ScanConverterPCR {
 	private static IProcessingInfo getProcessingError(File file) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addErrorMessage("Scan Converter", "No suitable converter was found for: " + file);
+		processingInfo.addErrorMessage("Plate Converter", "No suitable converter was found for: " + file);
 		return processingInfo;
 	}
 }
