@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Converter
-Bundle-SymbolicName: org.eclipse.chemclipse.pcr.converter
+Bundle-SymbolicName: org.eclipse.chemclipse.pcr.converter;singleton:=true
 Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.pcr.converter.Activator
 Bundle-Vendor: ChemClipse
