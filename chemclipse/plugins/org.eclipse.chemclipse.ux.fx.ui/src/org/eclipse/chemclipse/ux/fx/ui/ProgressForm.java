@@ -10,7 +10,7 @@ package org.eclipse.chemclipse.ux.fx.ui;
 
 import java.util.function.Consumer;
 
-import org.eclipse.chemclipse.logging.core.Logger;
+import org.apache.log4j.Logger;
 
 import javafx.application.Platform;
 import javafx.concurrent.Service;
