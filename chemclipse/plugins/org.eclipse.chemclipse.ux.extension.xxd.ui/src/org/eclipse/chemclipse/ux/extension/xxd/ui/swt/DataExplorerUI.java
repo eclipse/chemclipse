@@ -14,9 +14,9 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 import org.eclipse.chemclipse.ux.extension.ui.explorer.AbstractSupplierFileExplorer;
 import org.eclipse.swt.widgets.Composite;
 
-public class SupplierFileExplorerUI extends AbstractSupplierFileExplorer {
+public class DataExplorerUI extends AbstractSupplierFileExplorer {
 
-	public SupplierFileExplorerUI(Composite parent) {
+	public DataExplorerUI(Composite parent) {
 		super(parent);
 	}
 }

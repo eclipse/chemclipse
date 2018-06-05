@@ -13,15 +13,16 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors;
 
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 
 public class ProjectExplorerSupportFactory {
 
 	private ISupplierFileIdentifier supplierFileIdentifier;
 	private ISupplierEditorSupport supplierEditorSupport;
 
-	public ProjectExplorerSupportFactory() {
-		supplierFileIdentifier = new ProjectExplorerFileIdentifier();
-		supplierEditorSupport = new ProjectExplorerEditorSupport();
+	public ProjectExplorerSupportFactory(DataType dataType) {
+		supplierFileIdentifier = new ProjectExplorerFileIdentifier(dataType);
+		supplierEditorSupport = new ProjectExplorerEditorSupport(dataType);
 	}
 
 	public ISupplierFileIdentifier getInstanceIdentifier() {

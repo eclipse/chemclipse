@@ -306,5 +306,7 @@ public class PreferenceConstants {
 	public static final String P_SHOW_DATA_NMR = "showDataNMR";
 	public static final boolean DEF_SHOW_DATA_NMR = true;
 	public static final String P_SHOW_DATA_CAL = "showDataCAL";
-	public static final boolean DEF_SHOW_DATA_CAL = false;
+	public static final boolean DEF_SHOW_DATA_CAL = true;
+	public static final String P_SHOW_DATA_PCR = "showDataPCR";
+	public static final boolean DEF_SHOW_DATA_PCR = true;
 }

@@ -20,5 +20,7 @@ public enum DataType {
 	CSD, // current selective data
 	WSD, // wavelength selective data
 	XIR, // Infrared detectors, FTIR, NIR, MIR
-	NMR // Nuclear magnetic resonance
+	NMR, // Nuclear magnetic resonance
+	CAL, // Retention Index Calibration
+	PCR // Polymerase Chain Reaction
 }

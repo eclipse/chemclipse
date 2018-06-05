@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -36,25 +37,43 @@ public class ProjectExplorerEditorSupport extends AbstractSupplierFileEditorSupp
 
 	private static final Logger logger = Logger.getLogger(ProjectExplorerEditorSupport.class);
 	//
-	private static final String SUPPLIER_FILE_EXPLORER = "Supplier File Explorer";
+	private String type = "";
+	private static final String DATA_EXPLORER = "Data Explorer";
 
-	public ProjectExplorerEditorSupport() {
-		super(getSupplier());
+	public ProjectExplorerEditorSupport(DataType dataType) {
+		super(getSupplier(dataType));
+		initialize(dataType);
 	}
 
-	private static List<ISupplier> getSupplier() {
+	private static List<ISupplier> getSupplier(DataType dataType) {
 
 		List<ISupplier> supplier = new ArrayList<ISupplier>();
-		//
-		supplier.add(new CalibrationFileSupplier());
+		switch(dataType) {
+			case CAL:
+				supplier.add(new CalibrationFileSupplier());
+				break;
+			default:
+				// No action
+		}
 		//
 		return supplier;
+	}
+
+	private void initialize(DataType dataType) {
+
+		switch(dataType) {
+			case CAL:
+				type = TYPE_CAL;
+				break;
+			default:
+				type = "";
+		}
 	}
 
 	@Override
 	public String getType() {
 
-		return TYPE_CAL;
+		return type;
 	}
 
 	@Override
@@ -69,7 +88,7 @@ public class ProjectExplorerEditorSupport extends AbstractSupplierFileEditorSupp
 		boolean success = false;
 		try {
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();
-			IProject project = workspace.getRoot().getProject(SUPPLIER_FILE_EXPLORER);
+			IProject project = workspace.getRoot().getProject(DATA_EXPLORER);
 			/*
 			 * Create and open the file explorer project to link the files from the
 			 * local file system.

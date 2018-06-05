@@ -26,7 +26,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ProjectExplor
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageFileExplorer;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.SupplierFileExplorerUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.DataExplorerUI;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -44,15 +44,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-public class SupplierFileExplorerPart {
+public class DataExplorerPart {
 
-	private SupplierFileExplorerUI supplierFileExplorerUI;
+	private DataExplorerUI dataExplorerUI;
 	//
 	private Display display = Display.getDefault();
 	private Shell shell = display.getActiveShell();
 
 	@Inject
-	public SupplierFileExplorerPart(Composite parent) {
+	public DataExplorerPart(Composite parent) {
 		initialize(parent);
 	}
 
@@ -134,7 +134,7 @@ public class SupplierFileExplorerPart {
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		composite.setLayout(new FillLayout());
 		//
-		supplierFileExplorerUI = new SupplierFileExplorerUI(composite);
+		dataExplorerUI = new DataExplorerUI(composite);
 		setSupplierFileEditorSupport();
 	}
 
@@ -188,9 +188,15 @@ public class SupplierFileExplorerPart {
 		 * CAL
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_CAL)) {
-			editorSupportList.add(new ProjectExplorerSupportFactory().getInstanceEditorSupport());
+			editorSupportList.add(new ProjectExplorerSupportFactory(DataType.CAL).getInstanceEditorSupport());
+		}
+		/*
+		 * PCR
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_PCR)) {
+			editorSupportList.add(new EditorSupportFactory(DataType.PCR).getInstanceEditorSupport());
 		}
 		//
-		supplierFileExplorerUI.setSupplierFileEditorSupportList(editorSupportList);
+		dataExplorerUI.setSupplierFileEditorSupportList(editorSupportList);
 	}
 }

@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
+import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
@@ -55,6 +56,9 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 			case NMR:
 				supplier = ScanConverterNMR.getScanConverterSupport().getSupplier();
 				break;
+			case PCR:
+				supplier = PlateConverterPCR.getScanConverterSupport().getSupplier();
+				break;
 			default:
 				// No action
 		}
@@ -82,6 +86,9 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 				break;
 			case NMR:
 				type = TYPE_NMR;
+				break;
+			case PCR:
+				type = TYPE_PCR;
 				break;
 			default:
 				type = "";

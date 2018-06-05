@@ -17,25 +17,45 @@ import java.util.List;
 import org.eclipse.chemclipse.converter.core.ISupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
 
 public class ProjectExplorerFileIdentifier extends AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
 
-	public ProjectExplorerFileIdentifier() {
-		super(getSupplier());
+	private String type = "";
+
+	public ProjectExplorerFileIdentifier(DataType dataType) {
+		super(getSupplier(dataType));
+		initialize(dataType);
 	}
 
-	private static List<ISupplier> getSupplier() {
+	private static List<ISupplier> getSupplier(DataType dataType) {
 
 		List<ISupplier> supplier = new ArrayList<ISupplier>();
-		//
-		supplier.add(new CalibrationFileSupplier());
+		switch(dataType) {
+			case CAL:
+				supplier.add(new CalibrationFileSupplier());
+				break;
+			default:
+				// No action
+		}
 		//
 		return supplier;
+	}
+
+	private void initialize(DataType dataType) {
+
+		switch(dataType) {
+			case CAL:
+				type = TYPE_CAL;
+				break;
+			default:
+				type = "";
+		}
 	}
 
 	@Override
 	public String getType() {
 
-		return TYPE_CAL;
+		return type;
 	}
 }

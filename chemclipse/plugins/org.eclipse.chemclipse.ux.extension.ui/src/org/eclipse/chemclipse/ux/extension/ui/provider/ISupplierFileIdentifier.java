@@ -26,6 +26,7 @@ public interface ISupplierFileIdentifier {
 	String TYPE_DATABASE_NMR = "DATABASE_NMR";
 	String TYPE_FILE_MSD = "FILE_MSD";
 	String TYPE_CAL = "CAL";
+	String TYPE_PCR = "PCR";
 
 	/**
 	 * Returns the identifier type.

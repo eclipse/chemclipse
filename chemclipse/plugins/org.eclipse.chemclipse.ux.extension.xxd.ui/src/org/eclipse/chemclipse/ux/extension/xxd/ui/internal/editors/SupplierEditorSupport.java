@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
+import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
@@ -28,6 +29,7 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorCSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorMSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorWSD;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.PlateEditorPCR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.DataType;
@@ -72,6 +74,9 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				break;
 			case NMR:
 				supplier = ScanConverterNMR.getScanConverterSupport().getSupplier();
+				break;
+			case PCR:
+				supplier = PlateConverterPCR.getScanConverterSupport().getSupplier();
 				break;
 			default:
 				// No action
@@ -130,6 +135,15 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				tooltip = ScanEditorNMR.TOOLTIP;
 				topicUpdateRawfile = IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_RAWFILE;
 				topicUpdateOverview = IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_OVERVIEW;
+				break;
+			case PCR:
+				type = TYPE_PCR;
+				elementId = PlateEditorPCR.ID;
+				contributionURI = PlateEditorPCR.CONTRIBUTION_URI;
+				iconURI = PlateEditorPCR.ICON_URI;
+				tooltip = PlateEditorPCR.TOOLTIP;
+				topicUpdateRawfile = IChemClipseEvents.TOPIC_PLATE_PCR_UPDATE_RAWFILE;
+				topicUpdateOverview = IChemClipseEvents.TOPIC_PLATE_PCR_UPDATE_OVERVIEW;
 				break;
 			default:
 				type = "";
