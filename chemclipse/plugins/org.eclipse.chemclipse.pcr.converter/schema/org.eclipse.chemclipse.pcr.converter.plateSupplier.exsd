@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.eclipse.chemclipse.xir.converter" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="org.eclipse.chemclipse.pcr.converter" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.eclipse.chemclipse.xir.converter" id="org.eclipse.chemclipse.xir.converter.scanSupplier" name="Scan Supplier XIR"/>
+         <meta.schema plugin="org.eclipse.chemclipse.pcr.converter" id="org.eclipse.chemclipse.pcr.converter.plateSupplier" name="Plate Supplier PCR"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="ScanSupplier"/>
+            <element ref="PlateSupplier"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,7 +47,7 @@
       </complexType>
    </element>
 
-   <element name="ScanSupplier">
+   <element name="PlateSupplier">
       <complexType>
          <attribute name="id" type="string" use="required">
             <annotation>
@@ -100,7 +100,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.nmr.converter.core.AbstractScanExportConverter:org.eclipse.chemclipse.nmr.converter.core.IScanExportConverter"/>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.pcr.converter.core.AbstractPlateExportConverter:org.eclipse.chemclipse.pcr.converter.core.IPlateExportConverter"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -110,7 +110,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.nmr.converter.core.AbstractScanImportConverter:org.eclipse.chemclipse.nmr.converter.core.IScanImportConverter"/>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.pcr.converter.core.AbstractPlateImportConverter:org.eclipse.chemclipse.pcr.converter.core.IPlateImportConverter"/>
                </appinfo>
             </annotation>
          </attribute>

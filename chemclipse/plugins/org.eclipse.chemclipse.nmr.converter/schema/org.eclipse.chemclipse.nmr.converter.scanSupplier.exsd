@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.eclipse.chemclipse.xir.converter" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="org.eclipse.chemclipse.nmr.converter" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.eclipse.chemclipse.xir.converter" id="org.eclipse.chemclipse.xir.converter.scanSupplier" name="Scan Supplier XIR"/>
+         <meta.schema plugin="org.eclipse.chemclipse.nmr.converter" id="org.eclipse.chemclipse.nmr.converter.scanSupplier" name="Scan Supplier NMR"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
