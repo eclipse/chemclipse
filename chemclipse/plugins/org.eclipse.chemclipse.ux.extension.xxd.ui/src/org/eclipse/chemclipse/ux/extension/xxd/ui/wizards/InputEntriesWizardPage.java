@@ -21,8 +21,6 @@ import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard.TreeSelection;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileSystem;
-import org.eclipse.jface.viewers.IBaseLabelProvider;
-import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -39,28 +37,27 @@ import org.eclipse.swt.widgets.TabItem;
 
 public class InputEntriesWizardPage extends WizardPage {
 
-	private final IChromatogramWizardElements chromatogramWizardElements;
-	private IBaseLabelProvider labelProvider;
-	private IContentProvider contentProvider;
-	private String selectedDrivePath;
-	private String selectedHomePath;
-	private String selectedUserLocationPath;
+	private InputWizardSettings inputWizardSettings;
 	private TreeSelection treeSelection;
-	private TreeSelection defaultTree;
 
-	public InputEntriesWizardPage(IChromatogramWizardElements chromatogramWizardElements, String title, String description, IBaseLabelProvider labelProvider, IContentProvider contentProvider, String selectedDrivePath, String selectedHomePath, String selectedUserLocationPath, TreeSelection defaultTree) {
+	public InputEntriesWizardPage(InputWizardSettings inputWizardSettings) {
 		//
 		super(InputEntriesWizardPage.class.getName());
-		setTitle(title);
-		setDescription(description);
-		this.labelProvider = labelProvider;
-		this.contentProvider = contentProvider;
-		this.chromatogramWizardElements = chromatogramWizardElements;
-		this.selectedDrivePath = selectedDrivePath;
-		this.selectedHomePath = selectedHomePath;
-		this.selectedUserLocationPath = selectedUserLocationPath;
+		this.inputWizardSettings = inputWizardSettings;
+		//
+		setTitle(inputWizardSettings.getTitle());
+		setDescription(inputWizardSettings.getDescription());
 		this.treeSelection = TreeSelection.NONE;
-		this.defaultTree = defaultTree;
+	}
+
+	public void saveSelectedPath() {
+
+		inputWizardSettings.saveSelectedPath(getTreeSelection());
+	}
+
+	public IChromatogramWizardElements getChromatogramWizardElements() {
+
+		return inputWizardSettings.getChromatogramWizardElements();
 	}
 
 	@Override
@@ -73,6 +70,7 @@ public class InputEntriesWizardPage extends WizardPage {
 		createDrivesTreeViewer(tabFolder);
 		createHomeTreeViewer(tabFolder);
 		createUserLocationTreeViewer(tabFolder);
+		TreeSelection defaultTree = inputWizardSettings.getDefaultTree();
 		if(!defaultTree.equals(TreeSelection.NONE)) {
 			tabFolder.setSelection(defaultTree.ordinal());
 		}
@@ -84,7 +82,7 @@ public class InputEntriesWizardPage extends WizardPage {
 		TabItem tabDrives = new TabItem(tabFolder, SWT.NONE);
 		tabDrives.setText("Drives");
 		//
-		String directoryPath = selectedDrivePath;
+		String directoryPath = inputWizardSettings.getSelectedDrivePath();
 		Composite composite = new Composite(tabFolder, SWT.None);
 		composite.setLayout(new FillLayout());
 		createDirectoryTree(composite, getDrives(), directoryPath, TreeSelection.DRIVES);
@@ -97,7 +95,7 @@ public class InputEntriesWizardPage extends WizardPage {
 		TabItem tabHome = new TabItem(tabFolder, SWT.NONE);
 		tabHome.setText("Home");
 		//
-		String directoryPath = selectedHomePath;
+		String directoryPath = inputWizardSettings.getSelectedHomePath();
 		Composite composite = new Composite(tabFolder, SWT.None);
 		composite.setLayout(new FillLayout());
 		createDirectoryTree(composite, new File(UserManagement.getUserHome()), directoryPath, TreeSelection.HOME);
@@ -110,7 +108,7 @@ public class InputEntriesWizardPage extends WizardPage {
 		TabItem tabUserLocation = new TabItem(tabFolder, SWT.NONE);
 		tabUserLocation.setText("User Location");
 		//
-		String directoryPath = selectedUserLocationPath;
+		String directoryPath = inputWizardSettings.getSelectedUserLocationPath();
 		Composite composite = new Composite(tabFolder, SWT.None);
 		composite.setLayout(new FillLayout());
 		createDirectoryTree(composite, getUserLocation(), directoryPath, TreeSelection.USER_LOCATION);
@@ -137,19 +135,19 @@ public class InputEntriesWizardPage extends WizardPage {
 
 		//
 		TreeViewer chromatogramViewer = new TreeViewer(composite, SWT.MULTI);
-		chromatogramViewer.setLabelProvider(labelProvider);
-		chromatogramViewer.setContentProvider(contentProvider);
+		chromatogramViewer.setLabelProvider(inputWizardSettings.getLabelProvider());
+		chromatogramViewer.setContentProvider(inputWizardSettings.getContentProvider());
 		chromatogramViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 
 				treeSelection = actuelSelection;
-				chromatogramWizardElements.clearSelectedChromatograms();
+				inputWizardSettings.getChromatogramWizardElements().clearSelectedChromatograms();
 				ISelection selection = chromatogramViewer.getSelection();
 				IStructuredSelection structuredSelection = (IStructuredSelection)selection;
 				for(Object element : structuredSelection.toList()) {
-					chromatogramWizardElements.addSelectedChromatogram(element.toString());
+					inputWizardSettings.getChromatogramWizardElements().addSelectedChromatogram(element.toString());
 				}
 			}
 		});

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,17 +9,13 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.support.ui.wizards;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
-import java.util.List;
+import org.eclipse.chemclipse.support.preferences.AbstractExtendedPreferenceInitializer;
 
-public interface IChromatogramWizardElements extends IWizardElements {
+public class PreferenceSupplierInitializer extends AbstractExtendedPreferenceInitializer {
 
-	void addElements(IChromatogramWizardElements chromatogramWizardElements);
-
-	List<String> getSelectedChromatograms();
-
-	void clearSelectedChromatograms();
-
-	void addSelectedChromatogram(String selectedChromatogram);
+	public PreferenceSupplierInitializer() {
+		super(PreferenceSupplier.INSTANCE());
+	}
 }

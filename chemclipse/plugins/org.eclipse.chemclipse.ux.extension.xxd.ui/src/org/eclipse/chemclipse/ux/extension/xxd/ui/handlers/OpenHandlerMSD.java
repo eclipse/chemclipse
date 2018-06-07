@@ -9,48 +9,45 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.csd.ui.handlers;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.handlers;
 
 import java.io.File;
 import java.util.List;
 
 import javax.inject.Named;
 
-import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
-import org.eclipse.chemclipse.ux.extension.csd.ui.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport;
-import org.eclipse.chemclipse.ux.extension.csd.ui.wizards.ChromatogramInputEntriesWizard;
+import org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings.DataType;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 
-public class OpenHandler {
+public class OpenHandlerMSD {
 
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
 
-		String expandToDirectoryPath = PreferenceSupplier.getPathOpenChromatograms();
-		IChromatogramWizardElements chromatogramWizardElements = new ChromatogramWizardElements();
-		ChromatogramInputEntriesWizard inputWizard = new ChromatogramInputEntriesWizard(chromatogramWizardElements, "Open Chromatogram(s) [CSD]", "You can select one or more chromatograms to be opened.", expandToDirectoryPath);
+		InputWizardSettings inputWizardSettings = new InputWizardSettings(DataType.MSD_CHROMATOGRAM);
+		inputWizardSettings.setTitle("Open Chromatogram(s) [MSD]");
+		inputWizardSettings.setDescription("You can select one or more chromatograms to be opened.");
+		inputWizardSettings.setPathPreferences(PreferenceSupplier.INSTANCE().getPreferences(), PreferenceSupplier.P_FILTER_PATH_CHROMATOGRAM_MSD);
+		//
+		InputEntriesWizard inputWizard = new InputEntriesWizard(inputWizardSettings);
 		WizardDialog wizardDialog = new WizardDialog(shell, inputWizard);
 		wizardDialog.create();
-		/*
-		 * If OK
-		 */
+		//
 		if(wizardDialog.open() == WizardDialog.OK) {
-			/*
-			 * Get the list of selected chromatograms.
-			 */
+			IChromatogramWizardElements chromatogramWizardElements = inputWizard.getChromatogramWizardElements();
 			List<String> selectedChromatograms = chromatogramWizardElements.getSelectedChromatograms();
 			if(selectedChromatograms.size() > 0) {
 				/*
 				 * If it contains at least 1 element, add it to the input files list.
 				 */
-				String parentDirectory = new File(selectedChromatograms.get(0)).getParentFile().getAbsolutePath();
-				PreferenceSupplier.setPathOpenChromatograms(parentDirectory);
-				//
 				for(String chromatogram : selectedChromatograms) {
 					File file = new File(chromatogram);
 					ChromatogramSupport.getInstanceEditorSupport().openEditor(file);

@@ -23,6 +23,14 @@ public class ChromatogramWizardElements extends WizardElements implements IChrom
 	}
 
 	@Override
+	public void addElements(IChromatogramWizardElements chromatogramWizardElements) {
+
+		if(chromatogramWizardElements != null) {
+			selectedChromatograms.addAll(chromatogramWizardElements.getSelectedChromatograms());
+		}
+	}
+
+	@Override
 	public List<String> getSelectedChromatograms() {
 
 		return selectedChromatograms;
