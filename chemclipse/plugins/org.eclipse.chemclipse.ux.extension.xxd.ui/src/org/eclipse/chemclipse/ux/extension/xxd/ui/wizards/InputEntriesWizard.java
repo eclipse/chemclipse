@@ -9,14 +9,14 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.ui.wizards;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 
 import java.io.File;
 import java.util.List;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
-import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
@@ -25,10 +25,14 @@ import org.osgi.service.prefs.BackingStoreException;
 
 public class InputEntriesWizard extends Wizard {
 
-	private final static String DEFAULT_TREE_SELECTION = "DEFAULT_TREE_SELECTION";
+	private static final Logger logger = Logger.getLogger(InputEntriesWizard.class);
+	private static final String DEFAULT_TREE_SELECTION = "DEFAULT_TREE_SELECTION";
 
 	public enum TreeSelection {
-		DRIVES, HOME, USER_LOCATION, NONE;
+		DRIVES, //
+		HOME, //
+		USER_LOCATION, //
+		NONE;
 	}
 
 	private InputEntriesWizardPage inputEntriesPage;
@@ -45,36 +49,9 @@ public class InputEntriesWizard extends Wizard {
 	private String nodeName;
 	private TreeSelection defaultTree;
 
-	public InputEntriesWizard() {
-		super();
+	public InputEntriesWizard(InputWizardSettings inputWizardSettings) {
 		setNeedsProgressMonitor(true);
-	}
-
-	public InputEntriesWizard(IChromatogramWizardElements chromatogramWizardElements) {
-		this();
-		this.chromatogramWizardElements = chromatogramWizardElements;
-	}
-
-	protected void init(String title, String description, IBaseLabelProvider labelProvider, IContentProvider contentProvider) {
-
-		this.chromatogramWizardElements = new ChromatogramWizardElements();
-		this.title = (title == null) ? "" : title;
-		this.description = (description == null) ? "" : description;
-		this.labelProvider = labelProvider;
-		this.contentProvider = contentProvider;
-		this.defaultTree = TreeSelection.NONE;
-	}
-
-	public void setEclipsePreferes(IEclipsePreferences eclipsePreferences, String nodeName) {
-
-		if(eclipsePreferences != null && nodeName != null) {
-			this.eclipsePreferences = eclipsePreferences;
-			this.nodeName = nodeName;
-			this.selectedDrivePath = eclipsePreferences.node(nodeName).get(TreeSelection.DRIVES.name(), "");
-			this.selectedHomePath = eclipsePreferences.node(nodeName).get(TreeSelection.HOME.name(), "");
-			this.selectedUserLocationPath = eclipsePreferences.node(nodeName).get(TreeSelection.USER_LOCATION.name(), "");
-			this.defaultTree = TreeSelection.valueOf(eclipsePreferences.node(nodeName).get(DEFAULT_TREE_SELECTION, TreeSelection.DRIVES.name()));
-		}
+		init(inputWizardSettings);
 	}
 
 	@Override
@@ -84,41 +61,9 @@ public class InputEntriesWizard extends Wizard {
 		addPage(inputEntriesPage);
 	}
 
-	public void setDefaultFilePath() {
-
-		selectedDrivePath = PreferenceSupplier.getSelectedDrivePath();
-		selectedHomePath = PreferenceSupplier.getSelectedHomePath();
-		selectedUserLocationPath = PreferenceSupplier.getSelectedUserLocationPath();
-	}
-
 	public IChromatogramWizardElements getChromatogramWizardElements() {
 
 		return chromatogramWizardElements;
-	}
-
-	public void setSelectedDrivePath(String selectedDrivePath) {
-
-		this.selectedDrivePath = selectedDrivePath;
-	}
-
-	public void setSelectedHomePath(String selectedHomePath) {
-
-		this.selectedHomePath = selectedHomePath;
-	}
-
-	public void setSelectedUserLocationPath(String selectedUserLocationPath) {
-
-		this.selectedUserLocationPath = selectedUserLocationPath;
-	}
-
-	public void setDefaultTree(TreeSelection defaultTree) {
-
-		this.defaultTree = defaultTree;
-	}
-
-	public TreeSelection getTreeSelection() {
-
-		return inputEntriesPage.getTreeSelection();
 	}
 
 	@Override
@@ -128,18 +73,59 @@ public class InputEntriesWizard extends Wizard {
 			List<String> files = chromatogramWizardElements.getSelectedChromatograms();
 			if(files != null && !files.isEmpty()) {
 				if(!inputEntriesPage.getTreeSelection().equals(TreeSelection.NONE)) {
+					/*
+					 * Get the parent directory.
+					 */
 					File file = new File(files.get(0));
+					File directory = null;
 					if(file.isFile()) {
-						eclipsePreferences.node(nodeName).put(inputEntriesPage.getTreeSelection().name(), file.getParent());
+						directory = file.getParentFile();
+					} else if(file.isDirectory()) {
+						directory = file;
+					}
+					/*
+					 * Save the directory.
+					 */
+					if(directory != null) {
+						eclipsePreferences.node(nodeName).put(inputEntriesPage.getTreeSelection().name(), directory.getAbsolutePath());
 						eclipsePreferences.node(nodeName).put(DEFAULT_TREE_SELECTION, inputEntriesPage.getTreeSelection().name());
 						try {
 							eclipsePreferences.flush();
 						} catch(BackingStoreException e) {
+							logger.warn(e);
 						}
 					}
 				}
 			}
 		}
 		return true;
+	}
+
+	private void init(InputWizardSettings inputWizardSettings) {
+
+		/*
+		 * The wizard elements are used to store the selected files.
+		 */
+		this.chromatogramWizardElements = new ChromatogramWizardElements();
+		/*
+		 * Title, etc.
+		 */
+		this.title = (inputWizardSettings.getTitle() == null) ? "" : (inputWizardSettings.getTitle());
+		this.description = (inputWizardSettings.getDescription() == null) ? "" : inputWizardSettings.getDescription();
+		this.labelProvider = inputWizardSettings.getLabelProvider();
+		this.contentProvider = inputWizardSettings.getContentProvider();
+		this.defaultTree = TreeSelection.NONE;
+		/*
+		 * Persist the path of the selected file.
+		 */
+		this.eclipsePreferences = inputWizardSettings.getEclipsePreferences();
+		this.nodeName = inputWizardSettings.getNodeName();
+		//
+		if(eclipsePreferences != null && nodeName != null) {
+			this.selectedDrivePath = eclipsePreferences.node(nodeName).get(TreeSelection.DRIVES.name(), "");
+			this.selectedHomePath = eclipsePreferences.node(nodeName).get(TreeSelection.HOME.name(), "");
+			this.selectedUserLocationPath = eclipsePreferences.node(nodeName).get(TreeSelection.USER_LOCATION.name(), "");
+			this.defaultTree = TreeSelection.valueOf(eclipsePreferences.node(nodeName).get(DEFAULT_TREE_SELECTION, TreeSelection.DRIVES.name()));
+		}
 	}
 }

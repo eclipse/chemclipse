@@ -40,10 +40,8 @@ public class EditorUpdateSupport {
 
 		List<IChromatogramSelection> chromatogramSelections = new ArrayList<IChromatogramSelection>();
 		if(partService != null) {
-			/*
-			 * TODO: see message
-			 */
 			try {
+				//
 				Collection<MPart> parts = partService.getParts();
 				for(MPart part : parts) {
 					Object object = part.getObject();

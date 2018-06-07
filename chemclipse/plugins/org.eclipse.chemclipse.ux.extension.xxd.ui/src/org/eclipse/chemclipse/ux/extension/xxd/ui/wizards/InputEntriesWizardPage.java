@@ -10,7 +10,7 @@
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.ui.wizards;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 
 import java.io.File;
 
@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
 import org.eclipse.chemclipse.support.ui.wizards.TreeViewerFilesystemSupport;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.ux.extension.ui.wizards.InputEntriesWizard.TreeSelection;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard.TreeSelection;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileSystem;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
@@ -39,7 +39,6 @@ import org.eclipse.swt.widgets.TabItem;
 
 public class InputEntriesWizardPage extends WizardPage {
 
-	//
 	private final IChromatogramWizardElements chromatogramWizardElements;
 	private IBaseLabelProvider labelProvider;
 	private IContentProvider contentProvider;

@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -36,6 +37,8 @@ import org.eclipse.swt.widgets.Control;
 
 public class PartSupport {
 
+	private static final Logger logger = Logger.getLogger(PartSupport.class);
+	//
 	public static final String PERSPECTIVE_DATA_ANALYSIS = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main";
 	//
 	public static final String AREA = "org.eclipse.chemclipse.rcp.app.ui.editor";
@@ -100,12 +103,20 @@ public class PartSupport {
 	public static MPart get3xEditorPart(String editorId) {
 
 		MPart part = null;
-		//
-		exitloop:
-		for(MPart mpart : partService.getParts()) {
-			if(mpart.getElementId().equals(COMPATIBILITY_EDITOR_ELEMENT_ID) && mpart.getTags().contains(editorId)) {
-				part = mpart;
-				break exitloop;
+		/*
+		 * Exception "Application does not have an active window"
+		 */
+		if(partService != null) {
+			try {
+				exitloop:
+				for(MPart mpart : partService.getParts()) {
+					if(mpart.getElementId().equals(COMPATIBILITY_EDITOR_ELEMENT_ID) && mpart.getTags().contains(editorId)) {
+						part = mpart;
+						break exitloop;
+					}
+				}
+			} catch(Exception e) {
+				logger.warn(e);
 			}
 		}
 		return part;
