@@ -68,6 +68,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_EVALUATION_PEAK_IDENTIFIER = PeakIdentifierTypeSupplier.CATEGORY;
 	public static final String DEF_EVALUATION_PEAK_IDENTIFIER = "";
 	//
+	public static final String P_SAMPLEQUANT_FILTER_PATH_CHROMATOGRAM = "samplequantFilterPathChromatogram";
+	public static final String DEF_SAMPLEQUANT_FILTER_PATH_CHROMATOGRAM = "";
 	public static final String P_SAMPLEQUANT_FILTER_PATH_RTERES = "samplequantFilterPathRteres";
 	public static final String DEF_SAMPLEQUANT_FILTER_PATH_RTERES = "";
 	public static final String P_SAMPLEQUANT_FILTER_PATH_SUMRPT = "samplequantFilterPathSumRpt";
@@ -118,6 +120,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_EVALUATION_CHROMATOGRAM_CALCULATOR, DEF_EVALUATION_CHROMATOGRAM_CALCULATOR);
 		defaultValues.put(P_EVALUATION_PEAK_IDENTIFIER, DEF_EVALUATION_PEAK_IDENTIFIER);
 		//
+		defaultValues.put(P_SAMPLEQUANT_FILTER_PATH_CHROMATOGRAM, DEF_SAMPLEQUANT_FILTER_PATH_CHROMATOGRAM);
 		defaultValues.put(P_SAMPLEQUANT_FILTER_PATH_RTERES, DEF_SAMPLEQUANT_FILTER_PATH_RTERES);
 		defaultValues.put(P_SAMPLEQUANT_FILTER_PATH_SUMRPT, DEF_SAMPLEQUANT_FILTER_PATH_SUMRPT);
 		defaultValues.put(P_SAMPLEQUANT_FILTER_PATH_TARGETS, DEF_SAMPLEQUANT_FILTER_PATH_TARGETS);

@@ -16,11 +16,15 @@ import java.util.Date;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.core.SampleQuantProcessor;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.ISampleQuantReport;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractFileWizard;
-import org.eclipse.chemclipse.ux.extension.msd.ui.wizards.ChromatogramInputEntriesWizardPage;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizardPage;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings.DataType;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.wizard.IWizardPage;
 
 public class WizardSampleQuant extends AbstractFileWizard {
 
@@ -29,7 +33,7 @@ public class WizardSampleQuant extends AbstractFileWizard {
 	//
 	private ISampleQuantWizardElements wizardElements = new SampleQuantWizardElements();
 	//
-	private ChromatogramInputEntriesWizardPage pageChromatogramInputEntries;
+	private InputEntriesWizardPage pageInputEntries;
 	private PageReportDataSelection pageReportDataSelection;
 	private PageDataVerification pageDataVerification;
 
@@ -44,13 +48,32 @@ public class WizardSampleQuant extends AbstractFileWizard {
 		/*
 		 * Pages must implement IExtendedWizardPage / extend AbstractExtendedWizardPage
 		 */
-		pageChromatogramInputEntries = new ChromatogramInputEntriesWizardPage(wizardElements);
+		InputWizardSettings inputWizardSettings = new InputWizardSettings(DataType.MSD_CHROMATOGRAM);
+		inputWizardSettings.setTitle("Open Chromatogram (MSD) File(s)");
+		inputWizardSettings.setDescription("Select a chromatogram/chromatograms file to open.");
+		inputWizardSettings.setPathPreferences(PreferenceSupplier.INSTANCE().getPreferences(), PreferenceSupplier.P_SAMPLEQUANT_FILTER_PATH_CHROMATOGRAM);
+		//
+		pageInputEntries = new InputEntriesWizardPage(inputWizardSettings);
 		pageReportDataSelection = new PageReportDataSelection(wizardElements);
 		pageDataVerification = new PageDataVerification(wizardElements);
 		//
-		addPage(pageChromatogramInputEntries);
+		addPage(pageInputEntries);
 		addPage(pageReportDataSelection);
 		addPage(pageDataVerification);
+	}
+
+	@Override
+	public IWizardPage getNextPage(IWizardPage page) {
+
+		IWizardPage nextPage = super.getNextPage(page);
+		//
+		if(page == pageInputEntries) {
+			wizardElements.clearSelectedChromatograms();
+			wizardElements.addElements(pageInputEntries.getChromatogramWizardElements());
+			pageInputEntries.saveSelectedPath();
+		}
+		//
+		return nextPage;
 	}
 
 	@Override

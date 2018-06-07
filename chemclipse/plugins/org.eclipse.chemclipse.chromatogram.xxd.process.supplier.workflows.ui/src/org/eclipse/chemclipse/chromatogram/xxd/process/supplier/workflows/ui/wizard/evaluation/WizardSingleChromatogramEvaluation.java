@@ -17,18 +17,22 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.process.model.IChromatogramProcessEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.core.EvaluationProcessor;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractFileWizard;
-import org.eclipse.chemclipse.ux.extension.msd.ui.wizards.ChromatogramInputEntriesWizardPage;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizardPage;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings.DataType;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.wizard.IWizardPage;
 
 public class WizardSingleChromatogramEvaluation extends AbstractFileWizard {
 
 	private IEvaluationWizardElements wizardElements = new EvaluationWizardElements();
 	//
 	private PageDescription pageDescription;
-	private ChromatogramInputEntriesWizardPage pageChromatogramInputEntries;
+	private InputEntriesWizardPage pageInputEntries;
 	private PageNotes pageNotes;
 	private PageProcessing pageProcessing;
 
@@ -43,15 +47,34 @@ public class WizardSingleChromatogramEvaluation extends AbstractFileWizard {
 		/*
 		 * Pages must implement IExtendedWizardPage / extend AbstractExtendedWizardPage
 		 */
+		InputWizardSettings inputWizardSettings = new InputWizardSettings(DataType.MSD_CHROMATOGRAM);
+		inputWizardSettings.setTitle("Open Chromatogram (MSD) File(s)");
+		inputWizardSettings.setDescription("Select a chromatogram/chromatograms file to open.");
+		inputWizardSettings.setPathPreferences(PreferenceSupplier.INSTANCE().getPreferences(), PreferenceSupplier.P_SAMPLEQUANT_FILTER_PATH_CHROMATOGRAM);
+		//
 		pageDescription = new PageDescription(wizardElements);
-		pageChromatogramInputEntries = new ChromatogramInputEntriesWizardPage(wizardElements);
+		pageInputEntries = new InputEntriesWizardPage(inputWizardSettings);
 		pageProcessing = new PageProcessing(wizardElements);
 		pageNotes = new PageNotes(wizardElements);
 		//
 		addPage(pageDescription);
-		addPage(pageChromatogramInputEntries);
+		addPage(pageInputEntries);
 		addPage(pageProcessing);
 		addPage(pageNotes);
+	}
+
+	@Override
+	public IWizardPage getNextPage(IWizardPage page) {
+
+		IWizardPage nextPage = super.getNextPage(page);
+		//
+		if(page == pageInputEntries) {
+			wizardElements.clearSelectedChromatograms();
+			wizardElements.addElements(pageInputEntries.getChromatogramWizardElements());
+			pageInputEntries.saveSelectedPath();
+		}
+		//
+		return nextPage;
 	}
 
 	@Override
