@@ -17,13 +17,18 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.ux.extension.msd.ui.wizards.PeakInputEntriesWizard;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings.DataType;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 
-public class DataInputFromPeakFilesPageWizard extends DataInputPageWizard {
+public class PeakFilesInputPageWizard extends DataInputPageWizard {
 
-	public DataInputFromPeakFilesPageWizard(String pageName) {
+	private Shell shell = Display.getDefault().getActiveShell();
+
+	public PeakFilesInputPageWizard(String pageName) {
 		super(pageName);
 		setTitle("Peak Input Files");
 		setDescription("This wizard lets you select peak input files and set bulk group name.");
@@ -32,12 +37,17 @@ public class DataInputFromPeakFilesPageWizard extends DataInputPageWizard {
 	@Override
 	protected void addFiles() {
 
-		PeakInputEntriesWizard inputWizard = new PeakInputEntriesWizard();
-		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getCurrent().getActiveShell(), inputWizard);
-		inputWizard.setEclipsePreferes(PreferenceSupplier.INSTANCE().getPreferences(), PreferenceSupplier.N_INPUT_FILE);
+		InputWizardSettings inputWizardSettings = new InputWizardSettings(DataType.MSD_PEAKS);
+		inputWizardSettings.setTitle("Peak Input Files");
+		inputWizardSettings.setDescription("This wizard lets you select several peak input files.");
+		inputWizardSettings.setEclipsePreferences(PreferenceSupplier.INSTANCE().getPreferences());
+		inputWizardSettings.setNodeName(PreferenceSupplier.N_INPUT_FILE);
+		//
+		InputEntriesWizard inputWizard = new InputEntriesWizard(inputWizardSettings);
+		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(shell, inputWizard);
 		wizardDialog.create();
-		int returnCode = wizardDialog.open();
-		if(returnCode == Window.OK) {
+		//
+		if(wizardDialog.open() == Window.OK) {
 			List<String> selectedPeakFiles = inputWizard.getChromatogramWizardElements().getSelectedChromatograms();
 			List<IDataInputEntry> dataInputEntries = new ArrayList<>();
 			for(String selectedPeakFile : selectedPeakFiles) {

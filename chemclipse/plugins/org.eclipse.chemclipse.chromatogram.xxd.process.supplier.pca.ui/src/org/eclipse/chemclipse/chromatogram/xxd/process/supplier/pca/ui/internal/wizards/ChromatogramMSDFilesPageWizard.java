@@ -17,13 +17,15 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.ux.extension.msd.ui.wizards.ChromatogramInputEntriesWizard2;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings.DataType;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 
-public class DataInputFromChromatogramMSDFilesPageWizard extends DataInputPageWizard {
+public class ChromatogramMSDFilesPageWizard extends DataInputPageWizard {
 
-	public DataInputFromChromatogramMSDFilesPageWizard(String pageName) {
+	public ChromatogramMSDFilesPageWizard(String pageName) {
 		super(pageName);
 		setTitle("Chromatogram MSD Input Files");
 		setDescription("This wizard lets you select chromatogram MSD input files and set bulk group name.");
@@ -32,8 +34,13 @@ public class DataInputFromChromatogramMSDFilesPageWizard extends DataInputPageWi
 	@Override
 	protected void addFiles() {
 
-		ChromatogramInputEntriesWizard2 inputWizard = new ChromatogramInputEntriesWizard2();
-		inputWizard.setEclipsePreferes(PreferenceSupplier.INSTANCE().getPreferences(), PreferenceSupplier.N_INPUT_FILE);
+		InputWizardSettings inputWizardSettings = new InputWizardSettings(DataType.MSD_CHROMATOGRAM);
+		inputWizardSettings.setTitle("Chromatogram MSD Input Files");
+		inputWizardSettings.setDescription("This wizard lets you select several chormatogram MSD input files.");
+		inputWizardSettings.setEclipsePreferences(PreferenceSupplier.INSTANCE().getPreferences());
+		inputWizardSettings.setNodeName(PreferenceSupplier.N_INPUT_FILE);
+		//
+		InputEntriesWizard inputWizard = new InputEntriesWizard(inputWizardSettings);
 		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getCurrent().getActiveShell(), inputWizard);
 		wizardDialog.create();
 		int returnCode = wizardDialog.open();

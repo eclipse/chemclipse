@@ -22,7 +22,7 @@ import org.eclipse.jface.wizard.Wizard;
 
 public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 
-	private DataInputFromPeakFilesPageWizard dataInputFromPeakFilesPage;
+	private PeakFilesInputPageWizard dataInputFromPeakFilesPage;
 	private FiltrationDataWizardPage filtrationDataPage;
 	private MainPropertiesPeaksInputWizardPage mainPropertiesPage;
 	private MassSetGroupNamesWizardPage massSetGroupNamesWizardPage;
@@ -32,7 +32,7 @@ public class PcaPeaksInputWizard extends Wizard implements IPcaInputWizard {
 	public PcaPeaksInputWizard() {
 		super();
 		mainPropertiesPage = new MainPropertiesPeaksInputWizardPage("MainProperites");
-		dataInputFromPeakFilesPage = new DataInputFromPeakFilesPageWizard("DataInputFiles");
+		dataInputFromPeakFilesPage = new PeakFilesInputPageWizard("DataInputFiles");
 		massSetGroupNamesWizardPage = new MassSetGroupNamesWizardPage("MassSetGroup");
 		preprocessingData = new PreprocessingDataWizardPage("NormalizationData");
 		filtrationDataPage = new FiltrationDataWizardPage("FiltrationData");

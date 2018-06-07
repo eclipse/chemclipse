@@ -22,7 +22,7 @@ import org.eclipse.jface.wizard.Wizard;
 
 public class PcaChromatogramsMSDInputWizard extends Wizard implements IPcaInputWizard {
 
-	private DataInputFromChromatogramMSDFilesPageWizard dataInputFromScanFilesPage;
+	private ChromatogramMSDFilesPageWizard dataInputFromScanFilesPage;
 	private FiltrationDataWizardPage filtrationDataPage;
 	private MainPropertiesScansInputWizardPage mainPropertiesPage;
 	private MassSetGroupNamesWizardPage massSetGroupNamesWizardPage;
@@ -32,7 +32,7 @@ public class PcaChromatogramsMSDInputWizard extends Wizard implements IPcaInputW
 	public PcaChromatogramsMSDInputWizard() {
 		super();
 		mainPropertiesPage = new MainPropertiesScansInputWizardPage("MainProperites");
-		dataInputFromScanFilesPage = new DataInputFromChromatogramMSDFilesPageWizard("DataInputFiles");
+		dataInputFromScanFilesPage = new ChromatogramMSDFilesPageWizard("DataInputFiles");
 		massSetGroupNamesWizardPage = new MassSetGroupNamesWizardPage("MassSetGroup");
 		preprocessingDataWizardPage = new PreprocessingDataWizardPage("NormalizationData");
 		filtrationDataPage = new FiltrationDataWizardPage("FiltrationData");
