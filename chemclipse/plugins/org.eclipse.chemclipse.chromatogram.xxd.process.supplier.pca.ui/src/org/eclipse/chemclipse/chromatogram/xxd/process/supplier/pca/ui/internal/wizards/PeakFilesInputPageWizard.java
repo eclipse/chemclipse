@@ -40,8 +40,7 @@ public class PeakFilesInputPageWizard extends DataInputPageWizard {
 		InputWizardSettings inputWizardSettings = new InputWizardSettings(DataType.MSD_PEAKS);
 		inputWizardSettings.setTitle("Peak Input Files");
 		inputWizardSettings.setDescription("This wizard lets you select several peak input files.");
-		inputWizardSettings.setEclipsePreferences(PreferenceSupplier.INSTANCE().getPreferences());
-		inputWizardSettings.setNodeName(PreferenceSupplier.N_INPUT_FILE);
+		inputWizardSettings.setPathPreferences(PreferenceSupplier.INSTANCE().getPreferences(), PreferenceSupplier.N_INPUT_FILE);
 		//
 		InputEntriesWizard inputWizard = new InputEntriesWizard(inputWizardSettings);
 		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(shell, inputWizard);

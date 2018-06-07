@@ -37,8 +37,7 @@ public class ChromatogramMSDFilesPageWizard extends DataInputPageWizard {
 		InputWizardSettings inputWizardSettings = new InputWizardSettings(DataType.MSD_CHROMATOGRAM);
 		inputWizardSettings.setTitle("Chromatogram MSD Input Files");
 		inputWizardSettings.setDescription("This wizard lets you select several chormatogram MSD input files.");
-		inputWizardSettings.setEclipsePreferences(PreferenceSupplier.INSTANCE().getPreferences());
-		inputWizardSettings.setNodeName(PreferenceSupplier.N_INPUT_FILE);
+		inputWizardSettings.setPathPreferences(PreferenceSupplier.INSTANCE().getPreferences(), PreferenceSupplier.N_INPUT_FILE);
 		//
 		InputEntriesWizard inputWizard = new InputEntriesWizard(inputWizardSettings);
 		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getCurrent().getActiveShell(), inputWizard);
