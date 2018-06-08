@@ -24,6 +24,7 @@ public interface ISupplierFileIdentifier {
 	String TYPE_DATABASE_CSD = "DATABASE_CSD";
 	String TYPE_DATABASE_WSD = "DATABASE_WSD";
 	String TYPE_DATABASE_NMR = "DATABASE_NMR";
+	String TYPE_PEAKLIST_MSD = "PEAKLIST MSD"; // e.g. Matlab Parafac Peaklist *.mpl
 	String TYPE_FILE_MSD = "FILE_MSD";
 	String TYPE_CAL = "CAL";
 	String TYPE_PCR = "PCR";

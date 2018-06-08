@@ -12,13 +12,13 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.ui.wizards.ChromatogramWizardElements;
 import org.eclipse.chemclipse.support.ui.wizards.IChromatogramWizardElements;
-import org.eclipse.chemclipse.ux.extension.msd.ui.provider.PeakFileExplorerContentProvider;
-import org.eclipse.chemclipse.ux.extension.msd.ui.provider.PeakFileExplorerLabelProvider;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.SupplierFileExplorerLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard.TreeSelection;
@@ -54,26 +54,37 @@ public class InputWizardSettings {
 	private TreeSelection defaultTree = TreeSelection.NONE;
 
 	public InputWizardSettings(DataType dataType) {
-		switch(dataType) {
-			case MSD_CHROMATOGRAM:
-				this.labelProvider = new SupplierFileExplorerLabelProvider(org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport.getInstanceIdentifier());
-				this.contentProvider = new SupplierFileExplorerContentProvider(org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport.getInstanceIdentifier());
-				break;
-			case MSD_PEAKS:
-				this.labelProvider = new PeakFileExplorerLabelProvider();
-				this.contentProvider = new PeakFileExplorerContentProvider();
-				break;
-			case CSD_CHROMATOGRAM:
-				this.labelProvider = new SupplierFileExplorerLabelProvider(org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport.getInstanceIdentifier());
-				this.contentProvider = new SupplierFileExplorerContentProvider(org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport.getInstanceIdentifier());
-				break;
-			case WSD_CHROMATOGRAM:
-				this.labelProvider = new SupplierFileExplorerLabelProvider(org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramSupport.getInstanceIdentifier());
-				this.contentProvider = new SupplierFileExplorerContentProvider(org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramSupport.getInstanceIdentifier());
-				break;
-			default:
-				break;
+		this(new DataType[]{dataType});
+	}
+
+	public InputWizardSettings(DataType[] dataTypes) {
+		/*
+		 * Collect the items.
+		 */
+		List<ISupplierFileIdentifier> supplierFileIdentifierList = new ArrayList<>();
+		for(DataType dataType : dataTypes) {
+			switch(dataType) {
+				case MSD_CHROMATOGRAM:
+					supplierFileIdentifierList.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport.getInstanceIdentifier());
+					break;
+				case MSD_PEAKS:
+					supplierFileIdentifierList.add(org.eclipse.chemclipse.ux.extension.msd.ui.support.ChromatogramSupport.getInstanceIdentifier());
+					break;
+				case CSD_CHROMATOGRAM:
+					supplierFileIdentifierList.add(org.eclipse.chemclipse.ux.extension.csd.ui.support.ChromatogramSupport.getInstanceIdentifier());
+					break;
+				case WSD_CHROMATOGRAM:
+					supplierFileIdentifierList.add(org.eclipse.chemclipse.ux.extension.wsd.ui.support.ChromatogramSupport.getInstanceIdentifier());
+					break;
+				default:
+					break;
+			}
 		}
+		/*
+		 * Assign the label and content provider.
+		 */
+		this.labelProvider = new SupplierFileExplorerLabelProvider(supplierFileIdentifierList);
+		this.contentProvider = new SupplierFileExplorerContentProvider(supplierFileIdentifierList);
 	}
 
 	public void saveSelectedPath(TreeSelection treeSelection) {
