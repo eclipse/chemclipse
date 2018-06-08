@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.zip.ZipInputStream;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
@@ -41,7 +42,7 @@ import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader implements IChromatogramCSDReader {
+public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader implements IChromatogramCSDZipReader {
 
 	@Override
 	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -54,25 +55,7 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 		 * the *.ocb format.
 		 * TODO Optimize
 		 */
-		IChromatogramCSDReader chromatogramReader = null;
-		if(version.equals(IFormat.VERSION_1001)) {
-			chromatogramReader = new ChromatogramReader_1001();
-		} else if(version.equals(IFormat.VERSION_1002)) {
-			chromatogramReader = new ChromatogramReader_1002();
-		} else if(version.equals(IFormat.VERSION_1003)) {
-			chromatogramReader = new ChromatogramReader_1003();
-		} else if(version.equals(IFormat.VERSION_1004)) {
-			chromatogramReader = new ChromatogramReader_1004();
-		} else if(version.equals(IFormat.VERSION_1005)) {
-			chromatogramReader = new ChromatogramReader_1005();
-		} else if(version.equals(IFormat.VERSION_1006)) {
-			chromatogramReader = new ChromatogramReader_1006();
-		} else if(version.equals(IFormat.VERSION_1007)) {
-			chromatogramReader = new ChromatogramReader_1007();
-		} else if(version.equals(IFormat.VERSION_1100)) {
-			chromatogramReader = new ChromatogramReader_1100();
-		}
-		//
+		IChromatogramCSDReader chromatogramReader = getChromatogramReader(version);
 		if(chromatogramReader != null) {
 			try {
 				chromatogramOverview = chromatogramReader.readOverview(file, monitor);
@@ -95,7 +78,40 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 		 * It's used to support older versions of
 		 * the *.ocb format.
 		 */
-		IChromatogramCSDReader chromatogramReader = null;
+		IChromatogramCSDReader chromatogramReader = getChromatogramReader(version);
+		if(chromatogramReader != null) {
+			try {
+				chromatogramFID = chromatogramReader.read(file, monitor);
+			} catch(Exception e) {
+				chromatogramFID = createChromatogramFIDFromMSD(file, monitor);
+			}
+		} else {
+			chromatogramFID = createChromatogramFIDFromMSD(file, monitor);
+		}
+		return chromatogramFID;
+	}
+
+	@Override
+	public IChromatogramCSD read(ZipInputStream zipInputStream, IProgressMonitor monitor) throws IOException {
+
+		IChromatogramCSDZipReader chromatogramReader = null;
+		IChromatogramCSD chromatogramCSD = null;
+		ReaderHelper readerHelper = new ReaderHelper();
+		//
+		String version = readerHelper.getVersion(zipInputStream);
+		chromatogramReader = getChromatogramReader(version);
+		//
+		if(chromatogramReader != null) {
+			chromatogramCSD = chromatogramReader.read(zipInputStream, monitor);
+		}
+		//
+		return chromatogramCSD;
+	}
+
+	private IChromatogramCSDZipReader getChromatogramReader(String version) {
+
+		IChromatogramCSDZipReader chromatogramReader = null;
+		//
 		if(version.equals(IFormat.VERSION_1001)) {
 			chromatogramReader = new ChromatogramReader_1001();
 		} else if(version.equals(IFormat.VERSION_1002)) {
@@ -114,16 +130,7 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 			chromatogramReader = new ChromatogramReader_1100();
 		}
 		//
-		if(chromatogramReader != null) {
-			try {
-				chromatogramFID = chromatogramReader.read(file, monitor);
-			} catch(Exception e) {
-				chromatogramFID = createChromatogramFIDFromMSD(file, monitor);
-			}
-		} else {
-			chromatogramFID = createChromatogramFIDFromMSD(file, monitor);
-		}
-		return chromatogramFID;
+		return chromatogramReader;
 	}
 
 	@SuppressWarnings("unchecked")

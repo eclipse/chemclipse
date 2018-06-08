@@ -23,7 +23,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
-import org.eclipse.chemclipse.csd.converter.io.IChromatogramCSDWriter;
+import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io.IChromatogramCSDZipWriter;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IIntegrationEntryCSD;
@@ -42,7 +42,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implements IChromatogramCSDWriter {
+public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implements IChromatogramCSDZipWriter {
 
 	@Override
 	public void writeChromatogram(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
@@ -58,13 +58,19 @@ public class ChromatogramWriter_1002 extends AbstractChromatogramWriter implemen
 		/*
 		 * Write the data
 		 */
-		writeVersion(zipOutputStream, monitor);
-		writeChromatogramFolder(zipOutputStream, chromatogram, monitor);
+		writeChromatogram(zipOutputStream, chromatogram, monitor);
 		/*
 		 * Flush and close the output stream.
 		 */
 		zipOutputStream.flush();
 		zipOutputStream.close();
+	}
+
+	@Override
+	public void writeChromatogram(ZipOutputStream zipOutputStream, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		writeVersion(zipOutputStream, monitor);
+		writeChromatogramFolder(zipOutputStream, chromatogram, monitor);
 	}
 
 	private void writeVersion(ZipOutputStream zipOutputStream, IProgressMonitor monitor) throws IOException {

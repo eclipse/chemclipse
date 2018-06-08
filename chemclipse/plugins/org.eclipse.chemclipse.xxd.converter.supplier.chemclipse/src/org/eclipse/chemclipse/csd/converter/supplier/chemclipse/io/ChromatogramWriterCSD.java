@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.zip.ZipOutputStream;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
@@ -31,13 +32,26 @@ import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramWriterCSD extends AbstractChromatogramWriter implements IChromatogramCSDWriter {
+public class ChromatogramWriterCSD extends AbstractChromatogramWriter implements IChromatogramCSDWriter, IChromatogramCSDZipWriter {
 
 	@Override
 	public void writeChromatogram(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
+		IChromatogramCSDZipWriter chromatogramWriter = getChromatogramWriter(chromatogram, monitor);
+		chromatogramWriter.writeChromatogram(file, chromatogram, monitor);
+	}
+
+	@Override
+	public void writeChromatogram(ZipOutputStream zipOutputStream, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		IChromatogramCSDZipWriter chromatogramWriter = getChromatogramWriter(chromatogram, monitor);
+		chromatogramWriter.writeChromatogram(zipOutputStream, chromatogram, monitor);
+	}
+
+	private IChromatogramCSDZipWriter getChromatogramWriter(IChromatogramCSD chromatogram, IProgressMonitor monitor) {
+
 		String versionSave = PreferenceSupplier.getVersionSave();
-		IChromatogramCSDWriter chromatogramWriter;
+		IChromatogramCSDZipWriter chromatogramWriter;
 		/*
 		 * Check the requested version of the file to be exported.
 		 * TODO Optimize
@@ -60,6 +74,6 @@ public class ChromatogramWriterCSD extends AbstractChromatogramWriter implements
 			chromatogramWriter = new ChromatogramWriter_1100();
 		}
 		//
-		chromatogramWriter.writeChromatogram(file, chromatogram, monitor);
+		return chromatogramWriter;
 	}
 }

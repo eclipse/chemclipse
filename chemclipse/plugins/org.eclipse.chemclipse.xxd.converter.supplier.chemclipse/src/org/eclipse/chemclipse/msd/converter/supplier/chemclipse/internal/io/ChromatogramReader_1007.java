@@ -354,7 +354,6 @@ public class ChromatogramReader_1007 extends AbstractChromatogramReader implemen
 			baselineModel.addBaseline(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance, false);
 		}
 		//
-		//
 		if(closeStream) {
 			dataInputStream.close();
 		}
