@@ -21,12 +21,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
-/**
- * Imports a msl file.
- * 
- * @author eselmeister
- */
-public class MassSpectrumImportConverterTestCase extends TestCase {
+public class ImportConverterMslTestCase extends TestCase {
 
 	protected File importFile;
 	protected IMassSpectra massSpectra;

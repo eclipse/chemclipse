@@ -29,6 +29,7 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_DB_1 = "testData/files/import/msl/DB1.msl";
 	public static final String TESTFILE_IMPORT_DB_2 = "testData/files/import/msl/DB2.msl";
 	public static final String TESTFILE_IMPORT_DB_3 = "testData/files/import/msl/DB3.msl";
+	public static final String TESTFILE_IMPORT_GOLMDB_TEST_MSL = "testData/files/import/msl/GolmDB-Test.MSL";
 	/*
 	 * IMPORT MSP
 	 */
@@ -44,6 +45,7 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_LIB_3_MSP = "testData/files/import/msp/Lib3.MSP";
 	public static final String TESTFILE_IMPORT_LIB_4_MSP = "testData/files/import/msp/Lib4.MSP";
 	public static final String TESTFILE_IMPORT_SYNONYMS = "testData/files/import/msp/Synonyms.MSP";
+	public static final String TESTFILE_IMPORT_GOLMDB_TEST_MSP = "testData/files/import/msp/GolmDB-Test.MSP";
 	/*
 	 * IMPORT ELU
 	 */

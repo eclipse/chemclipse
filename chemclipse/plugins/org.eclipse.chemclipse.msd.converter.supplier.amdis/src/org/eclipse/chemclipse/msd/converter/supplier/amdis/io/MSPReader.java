@@ -66,6 +66,7 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 	private static final Pattern retentionTimePattern = Pattern.compile("(RT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern relativeRetentionTimePattern = Pattern.compile("(RRT:)(.*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern retentionIndexPattern = Pattern.compile("(RI:)(.*)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern dataPattern = Pattern.compile("(.*)(Num Peaks:)(\\s*)(\\d*)(.*)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 	private static final Pattern ionPattern = Pattern.compile("([+]?\\d+\\.?\\d*)([\t ,;:]+)([+-]?\\d+\\.?\\d*([eE][+-]?\\d+)?)");
 	//
 	private static final String RETENTION_INDICES_DELIMITER = ", ";
@@ -244,10 +245,17 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 	 */
 	private void extractIons(IVendorLibraryMassSpectrum massSpectrum, String massSpectrumData) {
 
+		String ionData = "";
+		Matcher data = dataPattern.matcher(massSpectrumData);
+		data.find();
+		if(data.matches()) {
+			ionData = data.group(5);
+		}
+		//
 		IIon amdisIon = null;
 		double ion;
 		float abundance;
-		Matcher ions = ionPattern.matcher(massSpectrumData);
+		Matcher ions = ionPattern.matcher(ionData);
 		while(ions.find()) {
 			try {
 				/*
@@ -258,8 +266,10 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 				/*
 				 * Create the ion and store it in mass spectrum.
 				 */
-				amdisIon = new Ion(ion, abundance);
-				massSpectrum.addIon(amdisIon);
+				if(abundance > 0) {
+					amdisIon = new Ion(ion, abundance);
+					massSpectrum.addIon(amdisIon);
+				}
 			} catch(AbundanceLimitExceededException e) {
 				logger.warn(e);
 			} catch(IonLimitExceededException e) {

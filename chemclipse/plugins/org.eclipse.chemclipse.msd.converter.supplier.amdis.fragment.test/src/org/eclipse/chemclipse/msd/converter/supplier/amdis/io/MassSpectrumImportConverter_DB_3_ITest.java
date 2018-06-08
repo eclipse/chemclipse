@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.amdis.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.IVendorLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
-public class MassSpectrumImportConverter_DB_3_ITest extends MassSpectrumImportConverterTestCase {
+public class MassSpectrumImportConverter_DB_3_ITest extends ImportConverterMslTestCase {
 
 	@Override
 	protected void setUp() throws Exception {
