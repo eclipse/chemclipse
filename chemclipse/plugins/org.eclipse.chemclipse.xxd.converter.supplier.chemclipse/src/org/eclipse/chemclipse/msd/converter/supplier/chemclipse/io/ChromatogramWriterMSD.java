@@ -18,7 +18,6 @@ import java.util.zip.ZipOutputStream;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
-import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_0701;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_0801;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_0802;
@@ -39,7 +38,7 @@ import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramWriterMSD extends AbstractChromatogramWriter implements IChromatogramMSDWriter, IChromatogramMSDZipWriter {
+public class ChromatogramWriterMSD extends AbstractChromatogramWriter implements IChromatogramMSDZipWriter {
 
 	@Override
 	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {

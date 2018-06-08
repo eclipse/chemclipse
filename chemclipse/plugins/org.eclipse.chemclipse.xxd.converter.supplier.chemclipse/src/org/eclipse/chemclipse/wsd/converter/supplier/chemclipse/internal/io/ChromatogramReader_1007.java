@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
@@ -29,7 +30,7 @@ import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
-import org.eclipse.chemclipse.wsd.converter.io.IChromatogramWSDReader;
+import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.IChromatogramWSDZipReader;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.IVendorChromatogram;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.VendorChromatogram;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatogram.VendorScan;
@@ -47,7 +48,24 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class ChromatogramReader_1007 extends AbstractChromatogramReader implements IChromatogramWSDReader {
+public class ChromatogramReader_1007 extends AbstractChromatogramReader implements IChromatogramWSDZipReader {
+
+	@Override
+	public IChromatogramWSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+
+		IChromatogramWSD chromatogram = null;
+		ZipFile zipFile = new ZipFile(file);
+		try {
+			if(isValidFileFormat(zipFile)) {
+				monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
+				chromatogram = readFromZipFile(zipFile, file, monitor);
+			}
+		} finally {
+			zipFile.close();
+		}
+		//
+		return chromatogram;
+	}
 
 	@Override
 	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -61,7 +79,19 @@ public class ChromatogramReader_1007 extends AbstractChromatogramReader implemen
 		} finally {
 			zipFile.close();
 		}
+		//
 		return chromatogramOverview;
+	}
+
+	@Override
+	public IChromatogramWSD read(ZipInputStream zipInputStream, IProgressMonitor monitor) throws IOException {
+
+		return readZipData(zipInputStream, null, monitor);
+	}
+
+	private IChromatogramWSD readFromZipFile(ZipFile zipFile, File file, IProgressMonitor monitor) throws IOException {
+
+		return readZipData(zipFile, file, monitor);
 	}
 
 	private IChromatogramOverview readOverviewFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
@@ -72,6 +102,46 @@ public class ChromatogramReader_1007 extends AbstractChromatogramReader implemen
 		readScansOverview(dataInputStream, chromatogram, monitor);
 		//
 		dataInputStream.close();
+		//
+		return chromatogram;
+	}
+
+	/*
+	 * Object = ZipFile or ZipInputStream
+	 * @param object
+	 * @param file
+	 * @return
+	 */
+	private IChromatogramWSD readZipData(Object object, File file, IProgressMonitor monitor) throws IOException {
+
+		boolean closeStream;
+		if(object instanceof ZipFile) {
+			/*
+			 * ZipFile
+			 */
+			closeStream = true;
+		} else if(object instanceof ZipInputStream) {
+			/*
+			 * ZipInputStream
+			 */
+			closeStream = false;
+		} else {
+			return null;
+		}
+		//
+		IVendorChromatogram chromatogram = null;
+		/*
+		 * Read the chromatographic information.
+		 */
+		monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
+		chromatogram = new VendorChromatogram();
+		readMethod(getDataInputStream(object, IFormat.FILE_SYSTEM_SETTINGS_WSD), closeStream, chromatogram, monitor);
+		readScans(getDataInputStream(object, IFormat.FILE_SCANS_WSD), closeStream, chromatogram, monitor);
+		readBaselines(getDataInputStream(object, IFormat.FILE_BASELINE_WSD), closeStream, chromatogram, monitor);
+		readHistory(getDataInputStream(object, IFormat.FILE_HISTORY_WSD), closeStream, chromatogram, monitor);
+		readMiscellaneous(getDataInputStream(object, IFormat.FILE_MISC_WSD), closeStream, chromatogram, monitor);
+		//
+		setAdditionalInformation(file, chromatogram, monitor);
 		//
 		return chromatogram;
 	}
@@ -110,40 +180,8 @@ public class ChromatogramReader_1007 extends AbstractChromatogramReader implemen
 		}
 	}
 
-	@Override
-	public IChromatogramWSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	private void readMethod(DataInputStream dataInputStream, boolean closeStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		IChromatogramWSD chromatogram = null;
-		ZipFile zipFile = new ZipFile(file);
-		try {
-			if(isValidFileFormat(zipFile)) {
-				monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
-				chromatogram = readFromZipFile(zipFile, file, monitor);
-			}
-		} finally {
-			zipFile.close();
-		}
-		return chromatogram;
-	}
-
-	private IChromatogramWSD readFromZipFile(ZipFile zipFile, File file, IProgressMonitor monitor) throws IOException {
-
-		IVendorChromatogram chromatogram = new VendorChromatogram();
-		/*
-		 * Read chromatographic information... :-)
-		 */
-		readMethod(zipFile, chromatogram, monitor);
-		readScans(zipFile, chromatogram, monitor);
-		readBaselines(zipFile, chromatogram, monitor);
-		readHistory(zipFile, chromatogram, monitor);
-		readMiscellaneous(zipFile, chromatogram, monitor);
-		//
-		return chromatogram;
-	}
-
-	private void readMethod(ZipFile zipFile, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
-
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_SYSTEM_SETTINGS_WSD);
 		IMethod method = chromatogram.getMethod();
 		//
 		method.setInstrumentName(readString(dataInputStream));
@@ -155,13 +193,13 @@ public class ChromatogramReader_1007 extends AbstractChromatogramReader implemen
 		method.setStopTime(dataInputStream.readInt());
 		method.setTimeFilterPeakWidth(dataInputStream.readInt());
 		//
-		dataInputStream.close();
+		if(closeStream) {
+			dataInputStream.close();
+		}
 	}
 
-	private void readScans(ZipFile zipFile, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readScans(DataInputStream dataInputStream, boolean closeStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_SCANS_WSD);
-		//
 		int scans = dataInputStream.readInt();
 		for(int scan = 1; scan <= scans; ++scan) {
 			monitor.subTask(IConstants.IMPORT_SCAN + scan);
@@ -205,15 +243,13 @@ public class ChromatogramReader_1007 extends AbstractChromatogramReader implemen
 			chromatogram.addScan(scanWSD);
 		}
 		//
-		dataInputStream.close();
+		if(closeStream) {
+			dataInputStream.close();
+		}
 	}
 
-	private void readBaselines(ZipFile zipFile, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readBaselines(DataInputStream dataInputStream, boolean closeStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_BASELINE_WSD);
-		/*
-		 * Baselines
-		 */
 		int scans = dataInputStream.readInt();
 		List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
 		for(int scan = 1; scan <= scans; ++scan) {
@@ -242,13 +278,14 @@ public class ChromatogramReader_1007 extends AbstractChromatogramReader implemen
 			 */
 			baselineModel.addBaseline(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance, false);
 		}
-		dataInputStream.close();
+		//
+		if(closeStream) {
+			dataInputStream.close();
+		}
 	}
 
-	private void readHistory(ZipFile zipFile, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readHistory(DataInputStream dataInputStream, boolean closeStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_HISTORY_WSD);
-		//
 		IEditHistory editHistory = chromatogram.getEditHistory();
 		int numEntries = dataInputStream.readInt();
 		for(int i = 1; i <= numEntries; ++i) {
@@ -260,13 +297,13 @@ public class ChromatogramReader_1007 extends AbstractChromatogramReader implemen
 			editHistory.add(editInformation);
 		}
 		//
-		dataInputStream.close();
+		if(closeStream) {
+			dataInputStream.close();
+		}
 	}
 
-	private void readMiscellaneous(ZipFile zipFile, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readMiscellaneous(DataInputStream dataInputStream, boolean closeStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_MISC_WSD);
-		//
 		long time = dataInputStream.readLong();
 		String miscInfo = readString(dataInputStream);
 		String miscInfoSeparated = readString(dataInputStream);
@@ -280,7 +317,9 @@ public class ChromatogramReader_1007 extends AbstractChromatogramReader implemen
 		chromatogram.setDataName(dataName);
 		chromatogram.setOperator(operator);
 		//
-		dataInputStream.close();
+		if(closeStream) {
+			dataInputStream.close();
+		}
 	}
 
 	private boolean isValidFileFormat(ZipFile zipFile) throws IOException {
@@ -295,5 +334,19 @@ public class ChromatogramReader_1007 extends AbstractChromatogramReader implemen
 		dataInputStream.close();
 		//
 		return isValid;
+	}
+
+	private void setAdditionalInformation(File file, IChromatogramWSD chromatogram, IProgressMonitor monitor) {
+
+		chromatogram.setConverterId(IFormat.CONVERTER_ID);
+		chromatogram.setFile(file);
+		// Delay
+		int startRetentionTime = chromatogram.getStartRetentionTime();
+		int scanDelay = startRetentionTime;
+		chromatogram.setScanDelay(scanDelay);
+		// Interval
+		int endRetentionTime = chromatogram.getStopRetentionTime();
+		int scanInterval = endRetentionTime / chromatogram.getNumberOfScans();
+		chromatogram.setScanInterval(scanInterval);
 	}
 }

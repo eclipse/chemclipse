@@ -71,7 +71,7 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 	@Override
 	public IChromatogramCSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
-		IChromatogramCSD chromatogramFID = null;
+		IChromatogramCSD chromatogramCSD = null;
 		ReaderHelper readerHelper = new ReaderHelper();
 		String version = readerHelper.getVersion(file);
 		/*
@@ -81,14 +81,14 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 		IChromatogramCSDReader chromatogramReader = getChromatogramReader(version);
 		if(chromatogramReader != null) {
 			try {
-				chromatogramFID = chromatogramReader.read(file, monitor);
+				chromatogramCSD = chromatogramReader.read(file, monitor);
 			} catch(Exception e) {
-				chromatogramFID = createChromatogramFIDFromMSD(file, monitor);
+				chromatogramCSD = createChromatogramFIDFromMSD(file, monitor);
 			}
 		} else {
-			chromatogramFID = createChromatogramFIDFromMSD(file, monitor);
+			chromatogramCSD = createChromatogramFIDFromMSD(file, monitor);
 		}
-		return chromatogramFID;
+		return chromatogramCSD;
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 			ChromatogramReaderMSD chromatogramReaderMSD = new ChromatogramReaderMSD();
 			IChromatogramOverview chromatogramOverview = chromatogramReaderMSD.readOverview(file, monitor);
 			if(chromatogramOverview instanceof IChromatogram) {
-				IChromatogram<? extends IPeak> chromatogram = (IChromatogram)chromatogramOverview;
+				IChromatogram<? extends IPeak> chromatogram = (IChromatogram<? extends IPeak>)chromatogramOverview;
 				chromatogramFID = new VendorChromatogram();
 				for(IScan scan : chromatogram.getScans()) {
 					IVendorScan scanFID = new VendorScan(scan.getRetentionTime(), scan.getTotalSignal());

@@ -28,7 +28,7 @@ import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
-import org.eclipse.chemclipse.wsd.converter.io.IChromatogramWSDWriter;
+import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.IChromatogramWSDZipWriter;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
@@ -37,7 +37,7 @@ import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramWriter_1006 extends AbstractChromatogramWriter implements IChromatogramWSDWriter {
+public class ChromatogramWriter_1006 extends AbstractChromatogramWriter implements IChromatogramWSDZipWriter {
 
 	@Override
 	public void writeChromatogram(File file, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
@@ -53,14 +53,20 @@ public class ChromatogramWriter_1006 extends AbstractChromatogramWriter implemen
 		/*
 		 * Write the data
 		 */
-		writeVersion(zipOutputStream, monitor);
-		writeOverviewFolder(zipOutputStream, chromatogram, monitor);
-		writeChromatogramFolder(zipOutputStream, chromatogram, monitor);
+		writeChromatogram(zipOutputStream, chromatogram, monitor);
 		/*
 		 * Flush and close the output stream.
 		 */
 		zipOutputStream.flush();
 		zipOutputStream.close();
+	}
+
+	@Override
+	public void writeChromatogram(ZipOutputStream zipOutputStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+
+		writeVersion(zipOutputStream, monitor);
+		writeOverviewFolder(zipOutputStream, chromatogram, monitor);
+		writeChromatogramFolder(zipOutputStream, chromatogram, monitor);
 	}
 
 	private void writeVersion(ZipOutputStream zipOutputStream, IProgressMonitor monitor) throws IOException {
