@@ -230,6 +230,20 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 				String directoryExtension = supplier.getDirectoryExtension();
 				if(fileName.endsWith(directoryExtension) || fileName.endsWith(directoryExtension.toLowerCase()) || fileName.endsWith(directoryExtension.toUpperCase())) {
 					availableConverters.add(supplier.getId());
+				} else {
+					if(directoryExtension.contains(IConverterSupport.WILDCARD_NUMBER)) {
+						//
+						if(directoryExtension.startsWith(".")) {
+							directoryExtension = directoryExtension.substring(1, directoryExtension.length());
+						}
+						//
+						String[] directoryParts = directoryExtension.split("#");
+						if(directoryParts.length > 0) {
+							if(file.getName().matches(directoryParts[0])) {
+								availableConverters.add(supplier.getId());
+							}
+						}
+					}
 				}
 			} else {
 				/*

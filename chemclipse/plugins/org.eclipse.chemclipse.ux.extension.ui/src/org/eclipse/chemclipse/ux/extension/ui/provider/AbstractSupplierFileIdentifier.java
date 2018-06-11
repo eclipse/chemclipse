@@ -107,10 +107,24 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 		 * Check each supplier.
 		 */
 		for(ISupplier supplier : suppliers) {
-			directoryExtension = supplier.getDirectoryExtension().toUpperCase();
-			if(directoryExtension != "" && directory.endsWith(directoryExtension)) {
-				if(supplier.isImportable()) {
-					return true;
+			directoryExtension = supplier.getDirectoryExtension();
+			if(!"".equals(directoryExtension)) {
+				if(directoryExtension.contains(IConverterSupport.WILDCARD_NUMBER)) {
+					/*
+					 * (0_[a-zA-Z][0-9]+)#([1-9]+)#1SLin
+					 */
+					if(directoryExtension.startsWith(".")) {
+						directoryExtension = directoryExtension.substring(1, directoryExtension.length());
+					}
+					String[] directoryParts = directoryExtension.split("#");
+					return isDirectoryPatternMatch(file, directoryParts, 0);
+				} else {
+					directoryExtension = directoryExtension.toUpperCase();
+					if(directoryExtension != "" && directory.endsWith(directoryExtension)) {
+						if(supplier.isImportable()) {
+							return true;
+						}
+					}
 				}
 			}
 		}
@@ -118,6 +132,26 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 		 * If no converter was found, return false.
 		 */
 		return false;
+	}
+
+	private boolean isDirectoryPatternMatch(File file, String[] directoryParts, int index) {
+
+		boolean isMatch = false;
+		if(file.isDirectory()) {
+			if(index < directoryParts.length) {
+				if(file.getName().matches(directoryParts[index])) {
+					index++;
+					if(index == directoryParts.length) {
+						return true;
+					} else {
+						for(File subFile : file.listFiles()) {
+							isMatch = isDirectoryPatternMatch(subFile, directoryParts, index);
+						}
+					}
+				}
+			}
+		}
+		return isMatch;
 	}
 
 	@Override
