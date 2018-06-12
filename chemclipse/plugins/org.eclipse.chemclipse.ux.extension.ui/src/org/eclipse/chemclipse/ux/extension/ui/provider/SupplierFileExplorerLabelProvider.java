@@ -130,7 +130,7 @@ public class SupplierFileExplorerLabelProvider extends LabelProvider implements 
 				case ISupplierFileIdentifier.TYPE_MSD:
 					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_MSD, IApplicationImage.SIZE_16x16);
 					break;
-				case ISupplierFileIdentifier.TYPE_FILE_MSD:
+				case ISupplierFileIdentifier.TYPE_SCAN_MSD:
 					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_MASS_SPECTRUM_FILE, IApplicationImage.SIZE_16x16);
 					break;
 				case ISupplierFileIdentifier.TYPE_DATABASE_MSD:

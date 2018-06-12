@@ -30,7 +30,7 @@ public class MassSpectrumEditorSupport extends AbstractSupplierFileEditorSupport
 	@Override
 	public String getType() {
 
-		return TYPE_FILE_MSD;
+		return TYPE_SCAN_MSD;
 	}
 
 	@Override

@@ -24,6 +24,6 @@ public class MassSpectrumIdentifier extends AbstractSupplierFileIdentifier imple
 	@Override
 	public String getType() {
 
-		return TYPE_FILE_MSD;
+		return TYPE_SCAN_MSD;
 	}
 }
