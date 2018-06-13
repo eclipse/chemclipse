@@ -200,5 +200,77 @@ http://www.eclipse.org/legal/epl-v10.html
    <includes
          id="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.feature"
          version="0.0.0"/>
+         
+   <includes
+         id="org.eclipse.chemclipse.msd.identifier.supplier.nist.feature"
+         version="0.0.0"/>
+         
+   <includes
+         id="org.eclipse.chemclipse.thirdpartylibraries.apache.pdfbox.feature"
+         version="0.0.0"/>
+         
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.feature"
+         version="0.0.0"/>
+         
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.identifier.supplier.triplequad.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.feature"
+         version="0.0.0"/>                                
+
+   <includes
+         id="org.eclipse.ease.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.ease.ui.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.ease.python.feature"
+         version="0.0.0"/>
 
 </feature>
