@@ -272,5 +272,29 @@ http://www.eclipse.org/legal/epl-v10.html
    <includes
          id="org.eclipse.ease.python.feature"
          version="0.0.0"/>
+         
+   <includes
+         id="org.eclipse.chemclipse.xxd.converter.supplier.gson.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.xxd.converter.supplier.ascii.feature"
+         version="0.0.0"/>
+         
+   <includes
+         id="org.eclipse.chemclipse.csd.converter.supplier.arw.feature"
+         version="0.0.0"/>
+         
+   <includes
+         id="org.eclipse.chemclipse.xxd.converter.supplier.zip.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.chemclipse.msd.converter.supplier.csv.feature"
+         version="0.0.0"/>
+         
+   <includes
+         id="org.eclipse.chemclipse.msd.converter.supplier.excel.feature"
+         version="0.0.0"/>                                    
 
 </feature>
