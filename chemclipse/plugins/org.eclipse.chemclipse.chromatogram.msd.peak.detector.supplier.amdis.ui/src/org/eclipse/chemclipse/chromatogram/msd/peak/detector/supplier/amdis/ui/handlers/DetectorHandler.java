@@ -15,15 +15,12 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.inject.Named;
 
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.internal.handlers.DetectorRunnable;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -40,21 +37,6 @@ public class DetectorHandler implements EventHandler {
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
-		/*
-		 * Try to select and show the perspective and view.
-		 */
-		PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_PEAKS_MSD, IPerspectiveAndViewIds.VIEW_PEAK_LIST_MSD);
-		/*
-		 * Get the actual cursor, create a new wait cursor and show the wait
-		 * cursor.<br/> Show the origin cursor when finished.<br/> Use the
-		 * Display.asyncExec instances to show the messages properly.<br/> I
-		 * really don't like the GUI stuff, maybe there is a smarter way to
-		 * inform the user.<br/> So, i thought also on Eclipse "jobs", but there
-		 * will be problems, when the operation method updates the
-		 * chromatogramSelection.<br/> A progress bar would be also applicable,
-		 * but the IProgressMonitorDialog (monitor.beginTask(TASK_NAME,
-		 * IProgressMonitor.UNKNOWN) didn't showed a progress under linux.
-		 */
 		if(chromatogramSelection != null) {
 			final Display display = Display.getCurrent();
 			DetectorRunnable runnable = new DetectorRunnable(chromatogramSelection);

@@ -16,6 +16,12 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.inject.Named;
 
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.internal.handlers.DetectorByFileRunnable;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.progress.core.InfoType;
+import org.eclipse.chemclipse.progress.core.StatusLineLogger;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -26,15 +32,6 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
-
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.internal.handlers.DetectorByFileRunnable;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.progress.core.InfoType;
-import org.eclipse.chemclipse.progress.core.StatusLineLogger;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 
 public class DetectorByFileHandler implements EventHandler {
 
@@ -48,11 +45,6 @@ public class DetectorByFileHandler implements EventHandler {
 		 * Try to select and show the perspective and view.
 		 */
 		if(chromatogramSelection != null) {
-			/*
-			 * Get the ELU file and parse the result.
-			 */
-			PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_PEAKS_MSD, IPerspectiveAndViewIds.VIEW_PEAK_LIST_MSD);
-			//
 			Shell shell = Display.getCurrent().getActiveShell();
 			FileDialog fileDialog = new FileDialog(shell, SWT.READ_ONLY);
 			fileDialog.setText("Import ELU file");
