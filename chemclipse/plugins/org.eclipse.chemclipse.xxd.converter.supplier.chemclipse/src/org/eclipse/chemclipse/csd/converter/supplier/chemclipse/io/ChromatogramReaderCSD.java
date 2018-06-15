@@ -92,7 +92,7 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 	}
 
 	@Override
-	public IChromatogramCSD read(ZipInputStream zipInputStream, IProgressMonitor monitor) throws IOException {
+	public IChromatogramCSD read(ZipInputStream zipInputStream, String directoryPrefix, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramCSDZipReader chromatogramReader = null;
 		IChromatogramCSD chromatogramCSD = null;
@@ -102,7 +102,7 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 		chromatogramReader = getChromatogramReader(version);
 		//
 		if(chromatogramReader != null) {
-			chromatogramCSD = chromatogramReader.read(zipInputStream, monitor);
+			chromatogramCSD = chromatogramReader.read(zipInputStream, directoryPrefix, monitor);
 		}
 		//
 		return chromatogramCSD;

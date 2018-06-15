@@ -113,7 +113,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 		try {
 			if(isValidFileFormat(zipFile)) {
 				monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
-				chromatogram = readFromZipFile(zipFile, file, monitor);
+				chromatogram = readFromZipFile(zipFile, "", file, monitor);
 			}
 		} finally {
 			zipFile.close();
@@ -129,7 +129,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 		ZipFile zipFile = new ZipFile(file);
 		try {
 			if(isValidFileFormat(zipFile)) {
-				chromatogramOverview = readOverviewFromZipFile(zipFile, monitor);
+				chromatogramOverview = readOverviewFromZipFile(zipFile, "", monitor);
 			}
 		} finally {
 			zipFile.close();
@@ -139,14 +139,14 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 	}
 
 	@Override
-	public IChromatogramMSD read(ZipInputStream zipInputStream, IProgressMonitor monitor) throws IOException {
+	public IChromatogramMSD read(ZipInputStream zipInputStream, String directoryPrefix, IProgressMonitor monitor) throws IOException {
 
-		return readZipData(zipInputStream, null, monitor);
+		return readZipData(zipInputStream, directoryPrefix, null, monitor);
 	}
 
-	private IChromatogramMSD readFromZipFile(ZipFile zipFile, File file, IProgressMonitor monitor) throws IOException {
+	private IChromatogramMSD readFromZipFile(ZipFile zipFile, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
 
-		return readZipData(zipFile, file, monitor);
+		return readZipData(zipFile, directoryPrefix, file, monitor);
 	}
 
 	/*
@@ -155,7 +155,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 	 * @param file
 	 * @return
 	 */
-	private IChromatogramMSD readZipData(Object object, File file, IProgressMonitor monitor) throws IOException {
+	private IChromatogramMSD readZipData(Object object, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read compressed data", 100);
 		try {
@@ -180,18 +180,18 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 			}
 			subMonitor.worked(10);
 			IVendorChromatogram chromatogram = new VendorChromatogram();
-			readMethod(getDataInputStream(object, IFormat.FILE_SYSTEM_SETTINGS_MSD), closeStream, chromatogram, subMonitor.split(10));
+			readMethod(getDataInputStream(object, directoryPrefix + IFormat.FILE_SYSTEM_SETTINGS_MSD), closeStream, chromatogram, subMonitor.split(10));
 			if(useScanProxies) {
-				readScanProxies((ZipFile)object, file, chromatogram, subMonitor.split(10));
+				readScanProxies((ZipFile)object, directoryPrefix, file, chromatogram, subMonitor.split(10));
 			} else {
-				readScans(getDataInputStream(object, IFormat.FILE_SCANS_MSD), closeStream, chromatogram, subMonitor.split(10));
+				readScans(getDataInputStream(object, directoryPrefix + IFormat.FILE_SCANS_MSD), closeStream, chromatogram, subMonitor.split(10));
 			}
-			readBaseline(getDataInputStream(object, IFormat.FILE_BASELINE_MSD), closeStream, chromatogram, subMonitor.split(10));
-			readPeaks(getDataInputStream(object, IFormat.FILE_PEAKS_MSD), closeStream, chromatogram, subMonitor.split(10));
-			readArea(getDataInputStream(object, IFormat.FILE_AREA_MSD), closeStream, chromatogram, subMonitor.split(10));
-			readIdentification(getDataInputStream(object, IFormat.FILE_IDENTIFICATION_MSD), closeStream, chromatogram, subMonitor.split(10));
-			readHistory(getDataInputStream(object, IFormat.FILE_HISTORY_MSD), closeStream, chromatogram, subMonitor.split(10));
-			readMiscellaneous(getDataInputStream(object, IFormat.FILE_MISC_MSD), closeStream, chromatogram, subMonitor.split(10));
+			readBaseline(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE_MSD), closeStream, chromatogram, subMonitor.split(10));
+			readPeaks(getDataInputStream(object, directoryPrefix + IFormat.FILE_PEAKS_MSD), closeStream, chromatogram, subMonitor.split(10));
+			readArea(getDataInputStream(object, directoryPrefix + IFormat.FILE_AREA_MSD), closeStream, chromatogram, subMonitor.split(10));
+			readIdentification(getDataInputStream(object, directoryPrefix + IFormat.FILE_IDENTIFICATION_MSD), closeStream, chromatogram, subMonitor.split(10));
+			readHistory(getDataInputStream(object, directoryPrefix + IFormat.FILE_HISTORY_MSD), closeStream, chromatogram, subMonitor.split(10));
+			readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_MSD), closeStream, chromatogram, subMonitor.split(10));
 			setAdditionalInformation(file, chromatogram, subMonitor.split(10));
 			//
 			return chromatogram;
@@ -218,9 +218,9 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 		}
 	}
 
-	private IChromatogramOverview readOverviewFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
+	private IChromatogramOverview readOverviewFromZipFile(ZipFile zipFile, String directoryPrefix, IProgressMonitor monitor) throws IOException {
 
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_TIC_MSD);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, directoryPrefix + IFormat.FILE_TIC_MSD);
 		//
 		IVendorChromatogram chromatogram = new VendorChromatogram();
 		readScansOverview(dataInputStream, chromatogram, monitor);
@@ -269,11 +269,11 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 		chromatogram.setScanInterval(scanInterval);
 	}
 
-	private void readScanProxies(ZipFile zipFile, File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
+	private void readScanProxies(ZipFile zipFile, String directoryPrefix, File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
 
 		IIonTransitionSettings ionTransitionSettings = chromatogram.getIonTransitionSettings();
 		//
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_SCANPROXIES_MSD);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, directoryPrefix + IFormat.FILE_SCANPROXIES_MSD);
 		/*
 		 * Scans
 		 */

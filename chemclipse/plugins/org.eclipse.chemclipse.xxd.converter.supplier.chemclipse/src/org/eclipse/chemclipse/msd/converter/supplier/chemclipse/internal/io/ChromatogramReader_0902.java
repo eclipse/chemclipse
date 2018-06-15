@@ -97,7 +97,7 @@ public class ChromatogramReader_0902 extends AbstractChromatogramReader implemen
 		try {
 			if(isValidFileFormat(zipFile)) {
 				monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
-				chromatogram = readFromZipFile(zipFile, file, monitor);
+				chromatogram = readFromZipFile(zipFile, "", file, monitor);
 			}
 		} finally {
 			zipFile.close();
@@ -113,7 +113,7 @@ public class ChromatogramReader_0902 extends AbstractChromatogramReader implemen
 		ZipFile zipFile = new ZipFile(file);
 		try {
 			if(isValidFileFormat(zipFile)) {
-				chromatogramOverview = readOverviewFromZipFile(zipFile, monitor);
+				chromatogramOverview = readOverviewFromZipFile(zipFile, "", monitor);
 			}
 		} finally {
 			zipFile.close();
@@ -123,14 +123,14 @@ public class ChromatogramReader_0902 extends AbstractChromatogramReader implemen
 	}
 
 	@Override
-	public IChromatogramMSD read(ZipInputStream zipInputStream, IProgressMonitor monitor) throws IOException {
+	public IChromatogramMSD read(ZipInputStream zipInputStream, String directoryPrefix, IProgressMonitor monitor) throws IOException {
 
-		return readZipData(zipInputStream, null, monitor);
+		return readZipData(zipInputStream, directoryPrefix, null, monitor);
 	}
 
-	private IChromatogramMSD readFromZipFile(ZipFile zipFile, File file, IProgressMonitor monitor) throws IOException {
+	private IChromatogramMSD readFromZipFile(ZipFile zipFile, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
 
-		return readZipData(zipFile, file, monitor);
+		return readZipData(zipFile, directoryPrefix, file, monitor);
 	}
 
 	/*
@@ -139,7 +139,7 @@ public class ChromatogramReader_0902 extends AbstractChromatogramReader implemen
 	 * @param file
 	 * @return
 	 */
-	private IChromatogramMSD readZipData(Object object, File file, IProgressMonitor monitor) throws IOException {
+	private IChromatogramMSD readZipData(Object object, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
 
 		boolean closeStream;
 		//
@@ -159,21 +159,21 @@ public class ChromatogramReader_0902 extends AbstractChromatogramReader implemen
 		//
 		IVendorChromatogram chromatogram = new VendorChromatogram();
 		//
-		readScans(getDataInputStream(object, IFormat.FILE_SCANS), closeStream, chromatogram, monitor);
-		readBaseline(getDataInputStream(object, IFormat.FILE_BASELINE), closeStream, chromatogram, monitor);
-		readPeaks(getDataInputStream(object, IFormat.FILE_PEAKS), closeStream, chromatogram, monitor);
-		readArea(getDataInputStream(object, IFormat.FILE_AREA), closeStream, chromatogram, monitor);
-		readIdentification(getDataInputStream(object, IFormat.FILE_IDENTIFICATION), closeStream, chromatogram, monitor);
-		readHistory(getDataInputStream(object, IFormat.FILE_HISTORY), closeStream, chromatogram, monitor);
-		readMiscellaneous(getDataInputStream(object, IFormat.FILE_MISC), closeStream, chromatogram, monitor);
+		readScans(getDataInputStream(object, directoryPrefix + IFormat.FILE_SCANS), closeStream, chromatogram, monitor);
+		readBaseline(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE), closeStream, chromatogram, monitor);
+		readPeaks(getDataInputStream(object, directoryPrefix + IFormat.FILE_PEAKS), closeStream, chromatogram, monitor);
+		readArea(getDataInputStream(object, directoryPrefix + IFormat.FILE_AREA), closeStream, chromatogram, monitor);
+		readIdentification(getDataInputStream(object, directoryPrefix + IFormat.FILE_IDENTIFICATION), closeStream, chromatogram, monitor);
+		readHistory(getDataInputStream(object, directoryPrefix + IFormat.FILE_HISTORY), closeStream, chromatogram, monitor);
+		readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC), closeStream, chromatogram, monitor);
 		setAdditionalInformation(file, chromatogram, monitor);
 		//
 		return chromatogram;
 	}
 
-	private IChromatogramOverview readOverviewFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
+	private IChromatogramOverview readOverviewFromZipFile(ZipFile zipFile, String directoryPrefix, IProgressMonitor monitor) throws IOException {
 
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_TIC);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, directoryPrefix + IFormat.FILE_TIC);
 		//
 		IVendorChromatogram chromatogram = new VendorChromatogram();
 		readScansOverview(dataInputStream, chromatogram, monitor);

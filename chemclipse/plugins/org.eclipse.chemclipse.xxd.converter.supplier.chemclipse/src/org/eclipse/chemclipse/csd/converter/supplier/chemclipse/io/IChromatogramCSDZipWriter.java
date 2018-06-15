@@ -20,5 +20,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IChromatogramCSDZipWriter extends IChromatogramCSDWriter {
 
-	void writeChromatogram(ZipOutputStream zipOutputStream, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException;
+	/**
+	 * The directoryPrefix could be "" to write the data to the root of the zip file.
+	 * 
+	 * @param zipOutputStream
+	 * @param directoryPrefix
+	 * @param chromatogram
+	 * @param monitor
+	 * @throws IOException
+	 */
+	void writeChromatogram(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws IOException;
 }

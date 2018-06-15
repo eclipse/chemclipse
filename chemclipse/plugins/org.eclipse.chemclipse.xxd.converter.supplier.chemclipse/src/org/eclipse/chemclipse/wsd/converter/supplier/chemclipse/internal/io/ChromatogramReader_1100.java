@@ -58,7 +58,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 		try {
 			if(isValidFileFormat(zipFile)) {
 				monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
-				chromatogram = readFromZipFile(zipFile, file, monitor);
+				chromatogram = readFromZipFile(zipFile, "", file, monitor);
 			}
 		} finally {
 			zipFile.close();
@@ -74,7 +74,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 		ZipFile zipFile = new ZipFile(file);
 		try {
 			if(isValidFileFormat(zipFile)) {
-				chromatogramOverview = readOverviewFromZipFile(zipFile, monitor);
+				chromatogramOverview = readOverviewFromZipFile(zipFile, "", monitor);
 			}
 		} finally {
 			zipFile.close();
@@ -84,19 +84,19 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 	}
 
 	@Override
-	public IChromatogramWSD read(ZipInputStream zipInputStream, IProgressMonitor monitor) throws IOException {
+	public IChromatogramWSD read(ZipInputStream zipInputStream, String directoryPrefix, IProgressMonitor monitor) throws IOException {
 
-		return readZipData(zipInputStream, null, monitor);
+		return readZipData(zipInputStream, directoryPrefix, null, monitor);
 	}
 
-	private IChromatogramWSD readFromZipFile(ZipFile zipFile, File file, IProgressMonitor monitor) throws IOException {
+	private IChromatogramWSD readFromZipFile(ZipFile zipFile, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
 
-		return readZipData(zipFile, file, monitor);
+		return readZipData(zipFile, directoryPrefix, file, monitor);
 	}
 
-	private IChromatogramOverview readOverviewFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
+	private IChromatogramOverview readOverviewFromZipFile(ZipFile zipFile, String directoryPrefix, IProgressMonitor monitor) throws IOException {
 
-		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_TIC_WSD);
+		DataInputStream dataInputStream = getDataInputStream(zipFile, directoryPrefix + IFormat.FILE_TIC_WSD);
 		//
 		IVendorChromatogram chromatogram = new VendorChromatogram();
 		readScansOverview(dataInputStream, chromatogram, monitor);
@@ -112,7 +112,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 	 * @param file
 	 * @return
 	 */
-	private IChromatogramWSD readZipData(Object object, File file, IProgressMonitor monitor) throws IOException {
+	private IChromatogramWSD readZipData(Object object, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
 
 		boolean closeStream;
 		if(object instanceof ZipFile) {
@@ -135,11 +135,11 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 		 */
 		monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
 		chromatogram = new VendorChromatogram();
-		readMethod(getDataInputStream(object, IFormat.FILE_SYSTEM_SETTINGS_WSD), closeStream, chromatogram, monitor);
-		readScans(getDataInputStream(object, IFormat.FILE_SCANS_WSD), closeStream, chromatogram, monitor);
-		readBaselines(getDataInputStream(object, IFormat.FILE_BASELINE_WSD), closeStream, chromatogram, monitor);
-		readHistory(getDataInputStream(object, IFormat.FILE_HISTORY_WSD), closeStream, chromatogram, monitor);
-		readMiscellaneous(getDataInputStream(object, IFormat.FILE_MISC_WSD), closeStream, chromatogram, monitor);
+		readMethod(getDataInputStream(object, directoryPrefix + IFormat.FILE_SYSTEM_SETTINGS_WSD), closeStream, chromatogram, monitor);
+		readScans(getDataInputStream(object, directoryPrefix + IFormat.FILE_SCANS_WSD), closeStream, chromatogram, monitor);
+		readBaselines(getDataInputStream(object, directoryPrefix + IFormat.FILE_BASELINE_WSD), closeStream, chromatogram, monitor);
+		readHistory(getDataInputStream(object, directoryPrefix + IFormat.FILE_HISTORY_WSD), closeStream, chromatogram, monitor);
+		readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_WSD), closeStream, chromatogram, monitor);
 		//
 		setAdditionalInformation(file, chromatogram, monitor);
 		//

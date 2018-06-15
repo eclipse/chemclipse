@@ -38,10 +38,10 @@ public class ChromatogramWriterWSD extends AbstractChromatogramWriter implements
 	}
 
 	@Override
-	public void writeChromatogram(ZipOutputStream zipOutputStream, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
+	public void writeChromatogram(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramWSDZipWriter chromatogramWriter = getChromatogramWriter(chromatogram, monitor);
-		chromatogramWriter.writeChromatogram(zipOutputStream, chromatogram, monitor);
+		chromatogramWriter.writeChromatogram(zipOutputStream, "", chromatogram, monitor);
 	}
 
 	private IChromatogramWSDZipWriter getChromatogramWriter(IChromatogramWSD chromatogram, IProgressMonitor monitor) {

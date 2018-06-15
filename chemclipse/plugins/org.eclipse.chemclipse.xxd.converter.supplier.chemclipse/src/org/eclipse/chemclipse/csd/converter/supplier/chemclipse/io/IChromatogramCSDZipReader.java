@@ -20,5 +20,5 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IChromatogramCSDZipReader extends IChromatogramCSDReader {
 
-	IChromatogramCSD read(ZipInputStream zipInputStream, IProgressMonitor monitor) throws IOException;
+	IChromatogramCSD read(ZipInputStream zipInputStream, String directoryPrefix, IProgressMonitor monitor) throws IOException;
 }

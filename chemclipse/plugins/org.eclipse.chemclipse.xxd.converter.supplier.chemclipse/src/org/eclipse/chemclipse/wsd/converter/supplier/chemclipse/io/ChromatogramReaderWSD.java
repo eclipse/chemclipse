@@ -77,7 +77,7 @@ public class ChromatogramReaderWSD extends AbstractChromatogramWSDReader impleme
 	}
 
 	@Override
-	public IChromatogramWSD read(ZipInputStream zipInputStream, IProgressMonitor monitor) throws IOException {
+	public IChromatogramWSD read(ZipInputStream zipInputStream, String directoryPrefix, IProgressMonitor monitor) throws IOException {
 
 		IChromatogramWSDZipReader chromatogramReader = null;
 		IChromatogramWSD chromatogramWSD = null;
@@ -87,7 +87,7 @@ public class ChromatogramReaderWSD extends AbstractChromatogramWSDReader impleme
 		chromatogramReader = getChromatogramReader(version);
 		//
 		if(chromatogramReader != null) {
-			chromatogramWSD = chromatogramReader.read(zipInputStream, monitor);
+			chromatogramWSD = chromatogramReader.read(zipInputStream, directoryPrefix, monitor);
 		}
 		//
 		return chromatogramWSD;
