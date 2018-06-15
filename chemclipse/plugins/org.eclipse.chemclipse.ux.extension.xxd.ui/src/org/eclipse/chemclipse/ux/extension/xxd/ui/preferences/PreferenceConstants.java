@@ -61,8 +61,10 @@ public class PreferenceConstants {
 	public static final String DEF_STACK_POSITION_CHROMATOGRAM_OVERVIEW = PartSupport.PARTSTACK_LEFT_CENTER;
 	public static final String P_STACK_POSITION_HEADER_DATA = "stackPositionMeasurementHeader";
 	public static final String DEF_STACK_POSITION_MEASUREMENT_HEADER = PartSupport.PARTSTACK_BOTTOM_LEFT;
-	public static final String P_STACK_POSITION_OVERLAY_CHROMATOGRAM = "stackPositionOverlayChromatogram";
-	public static final String DEF_STACK_POSITION_OVERLAY_CHROMATOGRAM = PartSupport.PARTSTACK_BOTTOM_LEFT;
+	public static final String P_STACK_POSITION_OVERLAY_CHROMATOGRAM_DEFAULT = "stackPositionOverlayChromatogramDefault";
+	public static final String DEF_STACK_POSITION_OVERLAY_CHROMATOGRAM_DEFAULT = PartSupport.PARTSTACK_BOTTOM_LEFT;
+	public static final String P_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA = "stackPositionOverlayChromatogramExtra";
+	public static final String DEF_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA = PartSupport.PARTSTACK_BOTTOM_LEFT;
 	public static final String P_STACK_POSITION_OVERLAY_NMR = "stackPositionOverlayNMR";
 	public static final String DEF_STACK_POSITION_OVERLAY_NMR = PartSupport.PARTSTACK_NONE;
 	public static final String P_STACK_POSITION_OVERLAY_XIR = "stackPositionOverlayXIR";

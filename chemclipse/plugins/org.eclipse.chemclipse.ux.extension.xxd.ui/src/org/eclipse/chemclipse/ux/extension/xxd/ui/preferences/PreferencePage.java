@@ -29,7 +29,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_OVERVIEW, "Chromatogram Overview:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_HEADER_DATA, "Header Data:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM, "Overlay Chromatogram:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_DEFAULT, "Overlay Chromatogram Default:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA, "Overlay Chromatogram Extra:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_OVERLAY_NMR, "Overlay NMR:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_OVERLAY_XIR, "Overlay XIR:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_TARGETS, "Targets:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));

@@ -42,7 +42,13 @@ public class PartSupport {
 	public static final String PERSPECTIVE_DATA_ANALYSIS = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main";
 	//
 	public static final String AREA = "org.eclipse.chemclipse.rcp.app.ui.editor";
-	//
+	/*
+	 * Parts
+	 */
+	public static final String PART_OVERLAY_CHROMATOGRAM = "org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ChromatogramOverlayPart";
+	/*
+	 * Part Descriptors
+	 */
 	public static final String PARTDESCRIPTOR_OVERLAY_CHROMATOGRAM = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramOverlayPartDescriptor";
 	public static final String PARTDESCRIPTOR_OVERLAY_NMR = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.nmrOverlayPartDescriptor";
 	public static final String PARTDESCRIPTOR_OVERLAY_XIR = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.xirOverlayPartDescriptor";

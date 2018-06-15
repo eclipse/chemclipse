@@ -40,6 +40,9 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChro
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.eavp.service.swtchart.core.BaseChart;
 import org.eclipse.eavp.service.swtchart.core.IAxisScaleConverter;
 import org.eclipse.eavp.service.swtchart.core.IChartSettings;
@@ -145,7 +148,7 @@ public class ExtendedChromatogramOverlayUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(8, false));
+		composite.setLayout(new GridLayout(9, false));
 		//
 		createDataStatusLabel(composite);
 		createButtonToggleToolbarType(composite);
@@ -154,6 +157,7 @@ public class ExtendedChromatogramOverlayUI {
 		createToggleChartLegendButton(composite);
 		createResetButton(composite);
 		createButtonPseudo3D(composite);
+		createNewOverlayPartButton(composite);
 		createSettingsButton(composite);
 	}
 
@@ -663,6 +667,40 @@ public class ExtendedChromatogramOverlayUI {
 				applyOverlaySettings();
 			}
 		});
+	}
+
+	private void createNewOverlayPartButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Open a new Overlay");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PLUS, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				String bundle = Activator.getDefault().getBundle().getSymbolicName();
+				String classPath = PartSupport.PART_OVERLAY_CHROMATOGRAM;
+				String name = "Chromatogram Overlay";
+				createNewPart(bundle, classPath, name);
+			}
+		});
+	}
+
+	private void createNewPart(String bundle, String classPath, String name) {
+
+		String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA);
+		if(!partStackId.equals(PartSupport.PARTSTACK_NONE)) {
+			MPart part = MBasicFactory.INSTANCE.createPart();
+			part.setLabel(name);
+			part.setCloseable(true);
+			part.setContributionURI("bundleclass://" + bundle + "/" + classPath);
+			//
+			MPartStack partStack = PartSupport.getPartStack(partStackId);
+			partStack.getChildren().add(part);
+			PartSupport.showPart(part);
+		}
 	}
 
 	private void createSettingsButton(Composite parent) {
