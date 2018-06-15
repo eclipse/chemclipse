@@ -50,16 +50,13 @@ public interface IPerspectiveAndViewIds {
 	String VIEW_PROCESSING_INFO = "org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart";
 	String VIEW_CHROMATOGRAM_TARGETS = "org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramTargetsView";
 	String VIEW_EXCLUDED_ION_CHROMATOGRAM_NOMINAL = "org.eclipse.chemclipse.ux.extension.msd.ui.part.excludedIonChromatogramView";
-	String VIEW_SCAN_EXACT = "org.eclipse.chemclipse.ux.extension.msd.ui.part.scanExact";
 	String VIEW_SCAN_ACCURATE = "org.eclipse.chemclipse.ux.extension.msd.ui.part.scanAccurate";
 	String VIEW_MASS_SPECTRUM_IONS_LIST = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumIonsListView";
 	String VIEW_MASS_SPECTRUM_IONS_LIST_NOMINAL = "org.eclipse.chemclipse.ux.extension.msd.ui.part.simpleNominalMassSpectrumIonListView";
 	String VIEW_PEAK_MASS_SPECTRUM_IONS_LIST = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakMassSpectrumIonsListView";
 	String VIEW_PEAK_MASS_SPECTRUM = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakMassSpectrumView";
-	String VIEW_PEAK_VALUES_LIST = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakValuesListView";
 	String VIEW_PEAK_MSD = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakMSDView";
 	String VIEW_PEAK_CSD = "org.eclipse.chemclipse.ux.extension.csd.ui.part.peakCSDView";
-	String VIEW_PEAK_WITH_BACKGROUND = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakWithBackgroundView";
 	String VIEW_SELECTED_ION_CHROMATOGRAM_ACCURATE = "org.eclipse.chemclipse.ux.extension.msd.ui.part.selectedAccurateIonChromtogramView";
 	String VIEW_SELECTED_ION_CHROMATOGRAM_EXACT = "org.eclipse.chemclipse.ux.extension.msd.ui.part.selectedExactIonChromtogramView";
 	String VIEW_SELECTED_ION_CHROMATOGRAM_NOMINAL_COMBINED = "org.eclipse.chemclipse.ux.extension.msd.ui.part.selectedIonCombinedChromtogramView";
@@ -73,7 +70,6 @@ public interface IPerspectiveAndViewIds {
 	String VIEW_INTEGRATION_RESULTS = "org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.views.integrationResultView";
 	String VIEW_MASS_SPECTRUM_IDENTIFICATION_RESULTS = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumTargetsView";
 	String VIEW_CHROMATOGRAM_FILE_EXPLORER_MSD = "org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramFileExplorerView";
-	String VIEW_CHROMATOGRAM_OVERVIEW_MSD = "org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramOverviewView";
 	String VIEW_CHROMATOGRAM_FILE_EXPLORER_CSD = "org.eclipse.chemclipse.ux.extension.csd.ui.part.chromatogramFileExplorerView";
 	String VIEW_CHROMATOGRAM_OVERVIEW_CSD = "org.eclipse.chemclipse.ux.extension.csd.ui.part.chromatogramOverviewView";
 	String VIEW_CHROMATOGRAM_FILE_EXPLORER_WSD = "org.eclipse.chemclipse.ux.extension.wsd.ui.part.chromatogramFileExplorerView";
@@ -89,10 +85,4 @@ public interface IPerspectiveAndViewIds {
 	 * Legacy
 	 */
 	String VIEW_CONSOLE = "org.eclipse.ui.console.ConsoleView";
-	/*
-	 * Browser
-	 */
-	String VIEW_BROWSER_MASSBANK = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massBankBrowserView";
-	String VIEW_BROWSER_SCIFINDER = "org.eclipse.chemclipse.ux.extension.msd.ui.part.sciFinderBrowserView";
-	String VIEW_BROWSER_MASC = "org.eclipse.chemclipse.ux.extension.msd.ui.part.mascBrowserView";
 }
