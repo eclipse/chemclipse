@@ -16,15 +16,12 @@ import java.lang.reflect.InvocationTargetException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.handlers.FilterHandler;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.modifier.FilterModifier;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -45,15 +42,6 @@ public class FilterHandler implements EventHandler {
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
-		/*
-		 * Try to select and show the perspective and view.
-		 */
-		String perspectiveId = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.perspective";
-		String viewId = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.part.interactiveDenoisingFilterMassSpectrumView";
-		PerspectiveSwitchHandler.focusPerspectiveAndView(perspectiveId, viewId);
-		/*
-		 * Run the handler.
-		 */
 		if(chromatogramSelection != null) {
 			final Display display = Display.getCurrent();
 			StatusLineLogger.setInfo(InfoType.MESSAGE, "Start Denoising Filter");
