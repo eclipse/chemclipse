@@ -14,10 +14,8 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.IBatchProcessJob;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.internal.runnables.BatchProcessRunnable;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -54,6 +52,7 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 	private static final Logger logger = Logger.getLogger(BatchProcessEditorPage.class);
 	private FormToolkit toolkit;
 	private int pageIndex;
+	private Display display = Display.getDefault();
 
 	public BatchProcessEditorPage(BatchProcessJobEditor editorPart, Composite container) {
 		createPage(editorPart, container);
@@ -349,11 +348,6 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
 
-				/*
-				 * Try to select and show the perspective and view.
-				 */
-				PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_MSD, IPerspectiveAndViewIds.VIEW_PROCESSING_INFO);
-				Display display = Display.getCurrent();
 				/*
 				 * The file must be saved.
 				 * Don't show a progress monitor.
