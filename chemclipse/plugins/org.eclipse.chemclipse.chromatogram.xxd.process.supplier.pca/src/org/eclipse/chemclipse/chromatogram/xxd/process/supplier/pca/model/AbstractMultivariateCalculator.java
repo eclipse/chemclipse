@@ -26,6 +26,9 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	private ArrayList<ISample<?>> sampleKeys = new ArrayList<>();
 	private ArrayList<String> groupNames = new ArrayList<>();
 	private int sampleIndex;
+	private boolean computeSuccess;
+	private boolean sampleDataComplete;
+	private boolean sampleDataSane;
 
 	@Override
 	public void initialize(int numObs, int numVars) {
@@ -34,15 +37,23 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		mean = new double[numVars];
 		sampleIndex = 0;
 		numComps = -1;
+		computeSuccess = false;
+		sampleDataComplete = false;
+		sampleDataSane = true;
 	}
 
 	@Override
-	public void addObservation(double[] obsData) {
+	public void addObservation(double[] obsData, ISample<?> sampleKey, String groupName) {
 
 		for(int i = 0; i < obsData.length; i++) {
 			sampleData.set(sampleIndex, i, obsData[i]);
 		}
+		sampleKeys.add(sampleKey);
+		groupNames.add(groupName);
 		sampleIndex++;
+		if(sampleIndex == sampleData.numRows) {
+			sampleDataComplete = true;
+		}
 	}
 
 	public void addObservationKey(ISample<?> sampleKey) {

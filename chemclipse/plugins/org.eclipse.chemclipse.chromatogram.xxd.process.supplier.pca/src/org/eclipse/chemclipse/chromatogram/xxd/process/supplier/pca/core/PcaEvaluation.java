@@ -152,7 +152,7 @@ public class PcaEvaluation {
 		return cumulativeExplainedVariances;
 	}
 
-	private int getSampleSize(Map<ISample<?>, double[]> extractData) {
+	private int getNumSampleVars(Map<ISample<?>, double[]> extractData) {
 
 		Iterator<Map.Entry<ISample<?>, double[]>> it = extractData.entrySet().iterator();
 		if(it.hasNext()) {
@@ -189,11 +189,7 @@ public class PcaEvaluation {
 		 * Add the samples.
 		 */
 		for(Map.Entry<ISample<?>, double[]> entry : pcaPeakMap.entrySet()) {
-			double[] sampleData = entry.getValue();
-			ISample<?> sampleKey = entry.getKey();
-			principalComponentAnalysis.addObservation(sampleData);
-			principalComponentAnalysis.addObservationKey(sampleKey);
-			principalComponentAnalysis.addGroupName(entry.getKey().getGroupName());
+			principalComponentAnalysis.addObservation(entry.getValue(), entry.getKey(), entry.getKey().getGroupName());
 		}
 		return principalComponentAnalysis;
 	}
@@ -207,11 +203,11 @@ public class PcaEvaluation {
 		boolean[] isSelectedVariables = selectedVariables(samples, settings);
 		Map<ISample<?>, double[]> extractData = extractData(samples, pcaAlgorithm, settings, isSelectedVariables);
 		setRetentionTime(pcaResults, samples, isSelectedVariables);
-		int sampleSize = getSampleSize(extractData);
+		int numVars = getNumSampleVars(extractData);
 		/*
 		 * Prepare PCA Calculation
 		 */
-		IMultivariateCalculator principalComponentAnalysis = setupPCA(extractData, sampleSize, numberOfPrincipalComponents, pcaAlgorithm);
+		IMultivariateCalculator principalComponentAnalysis = setupPCA(extractData, numVars, numberOfPrincipalComponents, pcaAlgorithm);
 		/*
 		 * Compute PCA
 		 */

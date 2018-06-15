@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public interface IMultivariateCalculator {
 
-	void addObservation(double[] obsData);
+	void addObservation(double[] obsData, ISample<?> sampleKey, String groupName);
 
 	void addObservationKey(ISample<?> sampleKey);
 
