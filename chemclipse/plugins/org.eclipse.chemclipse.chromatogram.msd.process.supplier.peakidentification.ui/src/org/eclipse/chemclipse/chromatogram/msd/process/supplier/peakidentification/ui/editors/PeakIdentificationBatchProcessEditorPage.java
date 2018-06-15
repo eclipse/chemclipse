@@ -13,6 +13,14 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentificat
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.support.IdentificationSupport;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.support.IntegrationSupport;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.editors.PeakIdentificationResultsPage.SelectionUpdateListener;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.runnables.PeakIdentificationBatchRunnable;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -46,17 +54,6 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
-
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.support.IdentificationSupport;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.support.IntegrationSupport;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.editors.PeakIdentificationResultsPage.SelectionUpdateListener;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.runnables.PeakIdentificationBatchRunnable;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 
 /**
  * @author Dr. Philip Wenig
@@ -634,12 +631,6 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 				if(editorPart.isDirty()) {
 					editorPart.doSave(new NullProgressMonitor());
 				}
-				/*
-				 * Try to select and show the perspective and view.
-				 */
-				String perspectiveId = "org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.perspective";
-				String viewId = IPerspectiveAndViewIds.VIEW_MASS_SPECTRUM;
-				PerspectiveSwitchHandler.focusPerspectiveAndView(perspectiveId, viewId);
 				/*
 				 * Run the batch process.
 				 */
