@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.views;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
@@ -28,11 +25,9 @@ import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNoti
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
 import org.eclipse.chemclipse.msd.swt.ui.converter.SeriesConverterMSD;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -130,13 +125,6 @@ public class MassSpectraIdentifiedList extends AbstractChromatogramSelectionMSDV
 
 				Object firstElement = ((IStructuredSelection)event.getSelection()).getFirstElement();
 				if(firstElement != null && firstElement instanceof IVendorMassSpectrum) {
-					/*
-					 * Activate the views.
-					 */
-					List<String> viewIds = new ArrayList<String>();
-					viewIds.add(IPerspectiveAndViewIds.VIEW_OPTIMIZED_MASS_SPECTRUM);
-					viewIds.add(IPerspectiveAndViewIds.VIEW_MASS_SPECTRUM_TARGETS);
-					PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_MSD, viewIds);
 					/*
 					 * Fire an update if an identified scan has been selected.
 					 */

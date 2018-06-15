@@ -97,28 +97,6 @@
         </children>
       </children>
     </elements>
-    <elements xsi:type="advanced:Perspective" xmi:id="_ockm0JZjEeO5BpQgSEg8jQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.perspective.massSpectrumLibrary" label="Mass Spectrum / Library" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/massSpectrumLibrary.gif">
-      <children xsi:type="basic:PartSashContainer" xmi:id="_RF1-sJZoEeO5BpQgSEg8jQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partsashcontainer.massSpectrumLibrary.0">
-        <children xsi:type="basic:PartSashContainer" xmi:id="_d09DsJZqEeO5BpQgSEg8jQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partsashcontainer.massSpectrumLibrary.1" horizontal="true">
-          <children xsi:type="basic:PartStack" xmi:id="_l6TaMJZqEeO5BpQgSEg8jQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partstack.massSpectrumLibrary.0" containerData="2500">
-            <children xsi:type="advanced:Placeholder" xmi:id="_nkgSMJZqEeO5BpQgSEg8jQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.6" ref="_mXsd0H3IEeKLHK6ubewAjQ"/>
-            <children xsi:type="advanced:Placeholder" xmi:id="_NLPVACnOEeSLt4vR48x5qQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.11" ref="_CZYU8CnOEeSLt4vR48x5qQ"/>
-          </children>
-          <children xsi:type="advanced:Placeholder" xmi:id="_29tiwJZoEeO5BpQgSEg8jQ" elementId="org.eclipse.ui.editorss" ref="_kGjWIEnJEeKP49-EnXatSw"/>
-        </children>
-        <children xsi:type="basic:PartSashContainer" xmi:id="_USjLQJZoEeO5BpQgSEg8jQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partsashcontainer.massSpectrumLibrary.2" horizontal="true">
-          <children xsi:type="basic:PartStack" xmi:id="_zrlqsJZoEeO5BpQgSEg8jQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partstack.massSpectrumLibrary.1">
-            <children xsi:type="advanced:Placeholder" xmi:id="_4xmiQJZoEeO5BpQgSEg8jQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.massSpectrumLibrary.7" ref="_Mak6ADf3EeKBwZX34jl_1A"/>
-          </children>
-          <children xsi:type="basic:PartStack" xmi:id="_0ACQsJZoEeO5BpQgSEg8jQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partstack.massSpectrumLibrary.2">
-            <children xsi:type="advanced:Placeholder" xmi:id="_RGpP4JmdEeOF9INBfny5tA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.9" ref="_BwtAoJmdEeOF9INBfny5tA"/>
-          </children>
-          <children xsi:type="basic:PartStack" xmi:id="_ORMswJmdEeOF9INBfny5tA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.partstack.massSpectrumLibrary.3">
-            <children xsi:type="advanced:Placeholder" xmi:id="_TvXGwJb5EeOL3K1vM5ox2Q" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.placeholder.7" ref="_K6pI0Jb5EeOL3K1vM5ox2Q"/>
-          </children>
-        </children>
-      </children>
-    </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_5gIQ8DfwEeKBwZX34jl_1A" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
     <elements xsi:type="basic:Part" xmi:id="_UhBO8DfyEeKBwZX34jl_1A" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.scanNominal" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.NominalMassSpectrumView" label="Scan (Nominal)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/selectedScan.gif"/>
@@ -153,7 +131,6 @@
     <elements xsi:type="basic:Part" xmi:id="_K6pI0Jb5EeOL3K1vM5ox2Q" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.synonymsView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.SynonymsView" label="Synonyms" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_jitr0JibEeOY7ZqVhGnKxQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.pinnedScanNominal" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.PinnedNominalMassSpectrumView" label="Pinned Scan (Nominal)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/selectedScan.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_BwtAoJmdEeOF9INBfny5tA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.simpleNominalMassSpectrumIonListView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.SimpleNominalMassSpectrumIonListView" label="Nominal Mass Spectrum Ion List" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/massSpectrum.gif"/>
-    <elements xsi:type="basic:Part" xmi:id="_BwtAoJmdEeOF9INBfny5tA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumEditListView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.MassSpectrumEditListView" label="Mass Spectrum Edit List" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/massSpectrum.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_BNgZAMuaEeOtT4qEJiN-Qw" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.peakMassSpectrumWithLabelView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.NominalPeakMassSpectrumView" label="Peak Mass Spectrum With Label" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peakMassSpectrum.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_CZYU8CnOEeSLt4vR48x5qQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumLibraryExplorerView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.MassSpectrumLibraryExplorer" label="Mass Spectrum Library Explorer (MSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/massSpectrumFileExplorer.gif"/>
     <elements xsi:type="basic:Part" xmi:id="__IRvMGQmEeSlDuFT8RyH7A" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.mirroredScanNominal" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.MirroredNominalMassSpectrumView" label="Mirrored Scan (Nominal)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/mirroredMassSpectrum.gif"/>
