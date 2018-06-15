@@ -25,7 +25,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	/*
 	 * This is the default perspective.
 	 */
-	private static final String PERSPECTIVE_ID = "org.eclipse.chemclipse.chromatogram.msd.perspective.ui.perspective.main";
+	private static final String PERSPECTIVE_ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main";
 
 	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
 
