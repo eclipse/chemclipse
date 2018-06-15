@@ -12,8 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.editors;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.converter.SampleQuantExportCSV;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.converter.SampleQuantExportPDF;
@@ -21,8 +19,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.conver
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.converter.SampleQuantWriter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.ISampleQuantReport;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
@@ -54,16 +50,6 @@ public class EditorSampleQuant extends MultiPageEditorPart {
 		int pageIndex = addPage(pageSampleQuant.getControl());
 		setPageText(pageIndex, "Sample Quant Report (*.sqr)");
 		setDirty(true);
-		/*
-		 * Show perspective and views.
-		 * See fragment.e4xmi
-		 */
-		String perspective = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.perspective.samplequantitationworkflow";
-		List<String> viewIds = new ArrayList<String>();
-		viewIds.add(IPerspectiveAndViewIds.VIEW_MASS_SPECTRUM_LIBRARY_COMPARISON);
-		viewIds.add(IPerspectiveAndViewIds.VIEW_MASS_SPECTRUM_IONS_LIST_NOMINAL);
-		viewIds.add(IPerspectiveAndViewIds.VIEW_MASS_SPECTRUM_TARGETS);
-		PerspectiveSwitchHandler.focusPerspectiveAndView(perspective, viewIds);
 	}
 
 	@Override
