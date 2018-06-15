@@ -288,8 +288,19 @@ public class PreferenceConstants {
 	public static final int MIN_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH = 10;
 	public static final int MAX_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH = 36000000; // = 600.0 minutes
 	public static final int DEF_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH = 6000000; // = 100.0 minutes
-	public static final String P_CHROMATOGRAM_OVERLAY_ION_USERS_CHOICE = "chromatogramOverlayIonUsersChoice";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_ION_USERS_CHOICE = "18 28 32 84 207";
+	//
+	public static final String P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE = "chromatogramOverlayIonsUsersChoice";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE = "18 28 32 84 207";
+	public static final String P_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS = "chromatogramOverlayIonsHydrocarbons";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS = "57 71 85";
+	public static final String P_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS = "chromatogramOverlayIonsFattyAcids";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS = "74 84";
+	public static final String P_CHROMATOGRAM_OVERLAY_IONS_FAME = "chromatogramOverlayIonsFAME";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_FAME = "79 81";
+	public static final String P_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING = "chromatogramOverlayIonsSolventTailing";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING = "84";
+	public static final String P_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED = "chromatogramOverlayIonsColumnBleed";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED = "207";
 	/*
 	 * File Explorer
 	 */

@@ -137,7 +137,13 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY, PreferenceConstants.DEF_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY);
 		store.setDefault(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY, PreferenceConstants.DEF_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY);
 		store.setDefault(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH, PreferenceConstants.DEF_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH);
-		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_ION_USERS_CHOICE, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_ION_USERS_CHOICE);
+		//
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FAME, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_FAME);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED);
 		/*
 		 * File Explorer
 		 */

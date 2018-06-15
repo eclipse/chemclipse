@@ -30,7 +30,12 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 
 		addField(new DoubleFieldEditor(PreferenceConstants.P_MINUTES_SHIFT_X, "Shift X (Minutes):", getFieldEditorParent()));
 		addField(new DoubleFieldEditor(PreferenceConstants.P_ABSOLUTE_SHIFT_Y, "Shift Y (Absolute):", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_ION_USERS_CHOICE, "Overlay Ions User Choice:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE, "Overlay Ions User Choice:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS, "Overlay Ions Hydrocarbons:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS, "Overlay Ions Fatty Acids:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FAME, "Overlay Ions FAME:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING, "Overlay Ions Solvent Tailing:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED, "Overlay Ions Column Bleed:", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

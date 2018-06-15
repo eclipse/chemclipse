@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -42,7 +39,6 @@ public class OverlayChartSupport {
 	private String[] derivativeTypes;
 	private String[] selectedIons;
 	private String[] displayModi;
-	private Map<String, String> selectedIonsMap;
 	//
 
 	public OverlayChartSupport() {
@@ -67,11 +63,6 @@ public class OverlayChartSupport {
 	public String[] getDisplayModi() {
 
 		return displayModi;
-	}
-
-	public Map<String, String> getSelectedIonsMap() {
-
-		return selectedIonsMap;
 	}
 
 	public double getSettingsMinutesShiftX() {
@@ -129,12 +120,5 @@ public class OverlayChartSupport {
 				DISPLAY_MODUS_NORMAL, //
 				DISPLAY_MODUS_MIRRORED //
 		};
-		//
-		selectedIonsMap = new HashMap<String, String>();
-		selectedIonsMap.put(SELECTED_IONS_HYDROCARBONS, "57 71 85");
-		selectedIonsMap.put(SELECTED_IONS_FATTY_ACIDS, "74 84");
-		selectedIonsMap.put(SELECTED_IONS_FAME, "79 81");
-		selectedIonsMap.put(SELECTED_IONS_SOLVENT_TAILING, "84");
-		selectedIonsMap.put(SELECTED_IONS_COLUMN_BLEED, "207");
 	}
 }
