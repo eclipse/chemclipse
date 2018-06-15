@@ -37,11 +37,9 @@ import org.eclipse.chemclipse.msd.model.support.FilterSupport;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -146,12 +144,6 @@ public class PeakMassSpectrumEditUIWithLabel extends Composite implements IChrom
 
 				if(chromatogramSelection != null) {
 					/*
-					 * Show the subtract MS session view.
-					 */
-					String perspectiveId = IPerspectiveAndViewIds.PERSPECTIVE_PEAKS_MSD;
-					String viewId = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.part.sessionSubtractMassSpectrum";
-					PerspectiveSwitchHandler.focusPerspectiveAndView(perspectiveId, viewId);
-					/*
 					 * Clears the currently used subtract mass spectrum
 					 */
 					PreferenceSupplier.setSessionSubtractMassSpectrum(null);
@@ -219,7 +211,6 @@ public class PeakMassSpectrumEditUIWithLabel extends Composite implements IChrom
 						 * Switch to mass spectrum target view.
 						 */
 						IPeakMSD peakMSD = chromatogramSelection.getSelectedPeak();
-						PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_PEAKS_MSD, IPerspectiveAndViewIds.VIEW_PEAK_TARGETS_MSD);
 						/*
 						 * Run the identification.
 						 */

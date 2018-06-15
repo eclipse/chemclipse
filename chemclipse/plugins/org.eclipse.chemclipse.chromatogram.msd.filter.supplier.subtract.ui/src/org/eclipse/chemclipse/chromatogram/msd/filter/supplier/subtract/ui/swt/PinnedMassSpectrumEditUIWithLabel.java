@@ -34,11 +34,9 @@ import org.eclipse.chemclipse.msd.model.support.FilterSupport;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassValueDisplayPrecision;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.SimpleMassSpectrumUI;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -163,12 +161,6 @@ public class PinnedMassSpectrumEditUIWithLabel extends Composite implements IMas
 
 				if(clonedMassSpectrum != null) {
 					/*
-					 * Show the subtract MS session view.
-					 */
-					String perspectiveId = IPerspectiveAndViewIds.PERSPECTIVE_MSD;
-					String viewId = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.part.sessionSubtractMassSpectrum";
-					PerspectiveSwitchHandler.focusPerspectiveAndView(perspectiveId, viewId);
-					/*
 					 * Clears the currently used subtract mass spectrum
 					 */
 					PreferenceSupplier.setSessionSubtractMassSpectrum(null);
@@ -231,13 +223,6 @@ public class PinnedMassSpectrumEditUIWithLabel extends Composite implements IMas
 				if(index >= 0 && index < massSpectrumIdentifierIds.size()) {
 					final String identifierId = massSpectrumIdentifierIds.get(index);
 					if(clonedMassSpectrum != null) {
-						/*
-						 * Switch to mass spectrum target view.
-						 */
-						PerspectiveSwitchHandler.focusPerspectiveAndView(IPerspectiveAndViewIds.PERSPECTIVE_MSD, IPerspectiveAndViewIds.VIEW_MASS_SPECTRUM_TARGETS);
-						/*
-						 * Run the identification.
-						 */
 						IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
 							@Override
