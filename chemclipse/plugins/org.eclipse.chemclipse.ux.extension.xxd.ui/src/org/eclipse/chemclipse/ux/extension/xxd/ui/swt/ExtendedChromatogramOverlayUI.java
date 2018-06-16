@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -37,6 +38,11 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSuppo
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.xwc.ExtractedWavelengthSignalExtractor;
+import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignals;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
@@ -923,10 +929,9 @@ public class ExtendedChromatogramOverlayUI {
 			Set<String> availableSeriesIds = new HashSet<String>();
 			BaseChart baseChart = chromatogramChart.getBaseChart();
 			List<Integer> ions = getSelectedIons();
-			//
 			comboDisplayModus.setText(OverlayChartSupport.DISPLAY_MODUS_NORMAL);
-			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			//
 			for(int i = 0; i < chromatogramSelections.size(); i++) {
 				IChromatogramSelection chromatogramSelection = chromatogramSelections.get(i);
 				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
@@ -945,9 +950,8 @@ public class ExtendedChromatogramOverlayUI {
 						if(chromatogram instanceof IChromatogramMSD) {
 							for(int ion : ions) {
 								//
-								String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_ION_DERIVATIVE + derivativeType + OverlayChartSupport.DELIMITER_ION_DERIVATIVE + ion + OverlayChartSupport.OVERLAY_STOP_MARKER;
+								String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + ion + OverlayChartSupport.OVERLAY_STOP_MARKER;
 								Color color = chromatogramChartSupport.getSeriesColor(seriesId, overlayType);
-								//
 								availableSeriesIds.add(seriesId);
 								if(!baseChart.isSeriesContained(seriesId)) {
 									List<Integer> sic = new ArrayList<Integer>();
@@ -956,9 +960,29 @@ public class ExtendedChromatogramOverlayUI {
 								}
 							}
 						}
+					} else if(overlayType.equals(ChromatogramChartSupport.DISPLAY_TYPE_SWC)) {
+						/*
+						 * SWC
+						 */
+						if(chromatogram instanceof IChromatogramWSD) {
+							//
+							IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
+							Set<Integer> wavelengths = getContainedWavelengths(chromatogramWSD);
+							ExtractedWavelengthSignalExtractor signalExtractor = new ExtractedWavelengthSignalExtractor(chromatogramWSD);
+							IExtractedWavelengthSignals extractedWavelengthSignals = signalExtractor.getExtractedWavelengthSignals();
+							for(int wavelength : wavelengths) {
+								//
+								String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
+								availableSeriesIds.add(seriesId);
+								//
+								if(!baseChart.isSeriesContained(seriesId)) {
+									lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(extractedWavelengthSignals, wavelength, seriesId, overlayType));
+								}
+							}
+						}
 					} else {
 						//
-						String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_ION_DERIVATIVE + derivativeType + OverlayChartSupport.OVERLAY_STOP_MARKER;
+						String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivativeType + OverlayChartSupport.OVERLAY_STOP_MARKER;
 						Color color = chromatogramChartSupport.getSeriesColor(chromatogramName, overlayType);
 						//
 						if(overlayType.equals(ChromatogramChartSupport.DISPLAY_TYPE_BPC) || overlayType.equals(ChromatogramChartSupport.DISPLAY_TYPE_XIC) || overlayType.equals(ChromatogramChartSupport.DISPLAY_TYPE_TSC)) {
@@ -1022,6 +1046,21 @@ public class ExtendedChromatogramOverlayUI {
 			modifyDataStatusLabel();
 			chromatogramChart.adjustRange(true);
 		}
+	}
+
+	private Set<Integer> getContainedWavelengths(IChromatogramWSD chromatogramWSD) {
+
+		Set<Integer> wavelengths = new HashSet<>();
+		for(IScan scan : chromatogramWSD.getScans()) {
+			if(scan instanceof IScanWSD) {
+				IScanWSD scanWSD = (IScanWSD)scan;
+				for(IScanSignalWSD scanSignal : scanWSD.getScanSignals()) {
+					wavelengths.add((int)scanSignal.getWavelength());
+				}
+			}
+		}
+		//
+		return wavelengths;
 	}
 
 	private List<Integer> getSelectedIons() {

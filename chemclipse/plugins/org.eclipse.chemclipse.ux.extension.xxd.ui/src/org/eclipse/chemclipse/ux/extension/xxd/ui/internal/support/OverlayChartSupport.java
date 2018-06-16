@@ -23,7 +23,7 @@ public class OverlayChartSupport {
 	public static final String EDITOR_TAB = "_EditorTab#";
 	public static final String OVERLAY_START_MARKER = "_(";
 	public static final String OVERLAY_STOP_MARKER = ")";
-	public static final String DELIMITER_ION_DERIVATIVE = ",";
+	public static final String DELIMITER_SIGNAL_DERIVATIVE = ",";
 	//
 	public static final String SELECTED_IONS_USERS_CHOICE = "Users Choice";
 	public static final String SELECTED_IONS_HYDROCARBONS = "Hydrocarbons";
@@ -106,6 +106,7 @@ public class OverlayChartSupport {
 				ChromatogramChartSupport.DISPLAY_TYPE_XIC, //
 				ChromatogramChartSupport.DISPLAY_TYPE_SIC, //
 				ChromatogramChartSupport.DISPLAY_TYPE_TSC, //
+				ChromatogramChartSupport.DISPLAY_TYPE_SWC, //
 				ChromatogramChartSupport.DISPLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + ChromatogramChartSupport.DISPLAY_TYPE_BPC, //
 				ChromatogramChartSupport.DISPLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + ChromatogramChartSupport.DISPLAY_TYPE_XIC, //
 				ChromatogramChartSupport.DISPLAY_TYPE_TIC + OVERLAY_TYPE_CONCATENATOR + ChromatogramChartSupport.DISPLAY_TYPE_SIC, //

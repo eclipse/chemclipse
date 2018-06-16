@@ -30,6 +30,10 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
+import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignals;
 import org.eclipse.eavp.service.swtchart.core.ISeriesData;
 import org.eclipse.eavp.service.swtchart.core.SeriesData;
 import org.eclipse.eavp.service.swtchart.linecharts.ILineSeriesData;
@@ -51,6 +55,7 @@ public class ChromatogramChartSupport {
 	public static final String DISPLAY_TYPE_TSC = "TSC"; // Total Substracted Chromatogram
 	public static final String DISPLAY_TYPE_SRM = "SRM"; // Single Reaction Monitoring
 	public static final String DISPLAY_TYPE_MRM = "MRM"; // Single Reaction Monitoring
+	public static final String DISPLAY_TYPE_SWC = "SWC"; // Selected Wavelength Chromatogram
 	//
 	public static final String DERIVATIVE_NONE = "--";
 	public static final String DERIVATIVE_FIRST = "1st";
@@ -61,17 +66,21 @@ public class ChromatogramChartSupport {
 	private Map<String, Color> usedColorsNormal;
 	private IColorScheme colorSchemeSIC;
 	private Map<String, Color> usedColorsSIC;
+	private IColorScheme colorSchemeSWC;
+	private Map<String, Color> usedColorsSWC;
 	//
 	private LineStyle lineStyleTIC;
 	private LineStyle lineStyleBPC;
 	private LineStyle lineStyleXIC;
 	private LineStyle lineStyleSIC;
 	private LineStyle lineStyleTSC;
+	private LineStyle lineStyleSWC;
 	private LineStyle lineStyleDefault;
 
 	public ChromatogramChartSupport() {
 		usedColorsNormal = new HashMap<String, Color>();
 		usedColorsSIC = new HashMap<String, Color>();
+		usedColorsSWC = new HashMap<String, Color>();
 		loadUserSettings();
 	}
 
@@ -81,11 +90,13 @@ public class ChromatogramChartSupport {
 		//
 		colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_NORMAL));
 		colorSchemeSIC = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SIC));
+		colorSchemeSWC = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SWC));
 		lineStyleTIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_TIC));
 		lineStyleBPC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_BPC));
 		lineStyleXIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_XIC));
 		lineStyleSIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_SIC));
 		lineStyleTSC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_TSC));
+		lineStyleSWC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_SWC));
 		lineStyleDefault = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_DEFAULT));
 		//
 		resetColorMaps();
@@ -103,6 +114,16 @@ public class ChromatogramChartSupport {
 				color = colorSchemeSIC.getColor();
 				colorSchemeSIC.incrementColor();
 				usedColorsSIC.put(seriesId, color);
+			}
+		} else if(DISPLAY_TYPE_SWC.equals(overlayType)) {
+			/*
+			 * SIC
+			 */
+			color = usedColorsSWC.get(seriesId);
+			if(color == null) {
+				color = colorSchemeSWC.getColor();
+				colorSchemeSWC.incrementColor();
+				usedColorsSWC.put(seriesId, color);
 			}
 		} else {
 			/*
@@ -125,6 +146,7 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogramSelection, seriesId, overlayType, derivativeType, color, null, false);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesDataChromatogram(IChromatogram chromatogram, String seriesId, Color color) {
 
 		String overlayType = DISPLAY_TYPE_TIC;
@@ -139,6 +161,7 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogramSelection, seriesId, overlayType, derivativeType, color, null, true);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesDataBaseline(IChromatogram chromatogram, String seriesId, Color color) {
 
 		String overlayType = DISPLAY_TYPE_TIC;
@@ -146,6 +169,7 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogram, seriesId, overlayType, derivativeType, color, null, true);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesData(IChromatogramSelection chromatogramSelection, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions, boolean baseline) {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
@@ -154,6 +178,7 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, overlayType, derivativeType, color, ions, baseline);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions, boolean baseline) {
 
 		int startScan = 1;
@@ -161,6 +186,38 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, overlayType, derivativeType, color, ions, baseline);
 	}
 
+	public ILineSeriesData getLineSeriesData(IExtractedWavelengthSignals extractedWavelengthSignals, int wavelength, String seriesId, String overlayType) {
+
+		Color color = getSeriesColor(seriesId, overlayType);
+		LineStyle lineStyle = getLineStyle(overlayType);
+		//
+		int length = extractedWavelengthSignals.getExtractedWavelengthSignals().size();
+		double[] xSeries = new double[length];
+		double[] ySeries = new double[length];
+		//
+		int index = 0;
+		for(IExtractedWavelengthSignal extractedWavelengthSignal : extractedWavelengthSignals.getExtractedWavelengthSignals()) {
+			/*
+			 * X,Y array
+			 */
+			xSeries[index] = extractedWavelengthSignal.getRetentionTime();
+			ySeries[index] = extractedWavelengthSignal.getAbundance(wavelength);
+			index++;
+		}
+		//
+		ISeriesData seriesData = new SeriesData(xSeries, ySeries, seriesId);
+		ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
+		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getLineSeriesSettings();
+		lineSeriesSettings.setLineColor(color);
+		lineSeriesSettings.setLineStyle(lineStyle);
+		lineSeriesSettings.setEnableArea(false);
+		ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
+		lineSeriesSettingsHighlight.setLineWidth(2);
+		//
+		return lineSeriesData;
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, String overlayType, String derivativeType, Color color, List<Integer> ions, boolean baseline) {
 
 		IBaselineModel baselineModel = chromatogram.getBaselineModel();
@@ -288,6 +345,19 @@ public class ChromatogramChartSupport {
 					}
 				}
 			}
+		} else if(overlayType.equals(DISPLAY_TYPE_SWC)) {
+			/*
+			 * SWC
+			 */
+			if(scan instanceof IScanWSD) {
+				IScanWSD scanWSD = (IScanWSD)scan;
+				List<IScanSignalWSD> scanSignalsWSD = scanWSD.getScanSignals();
+				if(scanSignalsWSD != null) {
+					for(IScanSignalWSD scanSignalWSD : scanSignalsWSD) {
+						intensity += scanSignalWSD.getAbundance();
+					}
+				}
+			}
 		}
 		//
 		return intensity;
@@ -306,6 +376,8 @@ public class ChromatogramChartSupport {
 			lineStyle = lineStyleSIC;
 		} else if(overlayType.equals(DISPLAY_TYPE_TSC)) {
 			lineStyle = lineStyleTSC;
+		} else if(overlayType.equals(DISPLAY_TYPE_SWC)) {
+			lineStyle = lineStyleSWC;
 		} else {
 			lineStyle = lineStyleDefault;
 		}
@@ -348,5 +420,7 @@ public class ChromatogramChartSupport {
 		usedColorsNormal.clear();
 		colorSchemeSIC.reset();
 		usedColorsSIC.clear();
+		colorSchemeSWC.reset();
+		usedColorsSWC.clear();
 	}
 }

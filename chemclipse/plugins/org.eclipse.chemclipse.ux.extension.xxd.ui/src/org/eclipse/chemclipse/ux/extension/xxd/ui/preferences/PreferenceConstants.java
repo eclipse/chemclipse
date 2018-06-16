@@ -58,10 +58,12 @@ public class PreferenceConstants {
 	/*
 	 * General / Task Quick Access
 	 */
-	public static final String P_STACK_POSITION_CHROMATOGRAM_OVERVIEW = "stackPositionChromatogramOverview";
-	public static final String DEF_STACK_POSITION_CHROMATOGRAM_OVERVIEW = PartSupport.PARTSTACK_LEFT_CENTER;
 	public static final String P_STACK_POSITION_HEADER_DATA = "stackPositionMeasurementHeader";
 	public static final String DEF_STACK_POSITION_MEASUREMENT_HEADER = PartSupport.PARTSTACK_BOTTOM_LEFT;
+	public static final String P_STACK_POSITION_CHROMATOGRAM_OVERVIEW = "stackPositionChromatogramOverview";
+	public static final String DEF_STACK_POSITION_CHROMATOGRAM_OVERVIEW = PartSupport.PARTSTACK_LEFT_CENTER;
+	public static final String P_STACK_POSITION_MISCELLANEOUS_INFO = "stackPositionMiscellaneousInfo";
+	public static final String DEF_STACK_POSITION_MISCELLANEOUS_INFO = PartSupport.PARTSTACK_BOTTOM_CENTER;
 	public static final String P_STACK_POSITION_OVERLAY_CHROMATOGRAM_DEFAULT = "stackPositionOverlayChromatogramDefault";
 	public static final String DEF_STACK_POSITION_OVERLAY_CHROMATOGRAM_DEFAULT = PartSupport.PARTSTACK_BOTTOM_LEFT;
 	public static final String P_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA = "stackPositionOverlayChromatogramExtra";
@@ -201,6 +203,8 @@ public class PreferenceConstants {
 	public static final String DEF_COLOR_SCHEME_DISPLAY_NORMAL = Colors.COLOR_SCHEME_RED;
 	public static final String P_COLOR_SCHEME_DISPLAY_SIC = "colorSchemeDisplaySIC";
 	public static final String DEF_COLOR_SCHEME_DISPLAY_SIC = Colors.COLOR_SCHEME_HIGH_CONTRAST;
+	public static final String P_COLOR_SCHEME_DISPLAY_SWC = "colorSchemeDisplaySWC";
+	public static final String DEF_COLOR_SCHEME_DISPLAY_SWC = Colors.COLOR_SCHEME_HIGH_CONTRAST;
 	public static final String P_LINE_STYLE_DISPLAY_TIC = "lineStyleDisplayTIC";
 	public static final String DEF_LINE_STYLE_DISPLAY_TIC = LineStyle.SOLID.toString();
 	public static final String P_LINE_STYLE_DISPLAY_BPC = "lineStyleDisplayBPC";
@@ -211,6 +215,8 @@ public class PreferenceConstants {
 	public static final String DEF_LINE_STYLE_DISPLAY_SIC = LineStyle.SOLID.toString();
 	public static final String P_LINE_STYLE_DISPLAY_TSC = "lineStyleDisplayTSC";
 	public static final String DEF_LINE_STYLE_DISPLAY_TSC = LineStyle.SOLID.toString();
+	public static final String P_LINE_STYLE_DISPLAY_SWC = "lineStyleDisplaySWC";
+	public static final String DEF_LINE_STYLE_DISPLAY_SWC = LineStyle.SOLID.toString();
 	public static final String P_LINE_STYLE_DISPLAY_DEFAULT = "lineStyleDisplayDefault";
 	public static final String DEF_LINE_STYLE_DISPLAY_DEFAULT = LineStyle.SOLID.toString();
 	public static final String P_COLOR_CHROMATOGRAM = "colorChromatogram";

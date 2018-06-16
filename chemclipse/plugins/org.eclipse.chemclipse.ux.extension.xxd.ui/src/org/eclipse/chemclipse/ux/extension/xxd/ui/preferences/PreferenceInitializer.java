@@ -23,8 +23,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		/*
 		 * General
 		 */
-		store.setDefault(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_OVERVIEW, PreferenceConstants.DEF_STACK_POSITION_CHROMATOGRAM_OVERVIEW);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_HEADER_DATA, PreferenceConstants.DEF_STACK_POSITION_MEASUREMENT_HEADER);
+		store.setDefault(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_OVERVIEW, PreferenceConstants.DEF_STACK_POSITION_CHROMATOGRAM_OVERVIEW);
+		store.setDefault(PreferenceConstants.P_STACK_POSITION_MISCELLANEOUS_INFO, PreferenceConstants.DEF_STACK_POSITION_MISCELLANEOUS_INFO);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_DEFAULT, PreferenceConstants.DEF_STACK_POSITION_OVERLAY_CHROMATOGRAM_DEFAULT);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA, PreferenceConstants.DEF_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_OVERLAY_NMR, PreferenceConstants.DEF_STACK_POSITION_OVERLAY_NMR);
@@ -100,11 +101,13 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_CHART_COMPRESSION_TYPE, PreferenceConstants.DEF_CHROMATOGRAM_CHART_COMPRESSION_TYPE);
 		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_NORMAL, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_NORMAL);
 		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SIC, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_SIC);
+		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SWC, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_SWC);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_TIC, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_TIC);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_BPC, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_BPC);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_XIC, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_XIC);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_SIC, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_SIC);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_TSC, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_TSC);
+		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_SWC, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_SWC);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_DEFAULT, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_DEFAULT);
 		store.setDefault(PreferenceConstants.P_COLOR_CHROMATOGRAM, PreferenceConstants.DEF_COLOR_CHROMATOGRAM);
 		store.setDefault(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA, PreferenceConstants.DEF_ENABLE_CHROMATOGRAM_AREA);
