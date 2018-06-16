@@ -24,7 +24,7 @@
             name="Peptide Tandem Mass Spectra">
       </category>
       <wizard
-            category="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui"
+            category="org.eclipse.chemclipse.processors"
             class="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.project.CreateProjectWizard"
             icon="icons/16x16/demo.gif"
             id="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.wizards.CreateProjectWizard"
