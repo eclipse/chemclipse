@@ -96,11 +96,6 @@ public class SampleQuantTableViewerUI extends ExtendedTableViewer {
 
 		TableViewerColumn tableViewerColumn;
 		List<TableViewerColumn> tableViewerColumns = getTableViewerColumns();
-		/*
-		 * Disabled.
-		 */
-		// tableViewerColumn = tableViewerColumns.get(INDEX_MIN_MATCH_QUALITY); // Min Match Quality
-		// tableViewerColumn.setEditingSupport(new SampleQuantTextEditingSupport(this));
 		//
 		tableViewerColumn = tableViewerColumns.get(INDEX_OK); // Check/Uncheck
 		tableViewerColumn.setEditingSupport(new SampleQuantCheckBoxEditingSupport(this));
