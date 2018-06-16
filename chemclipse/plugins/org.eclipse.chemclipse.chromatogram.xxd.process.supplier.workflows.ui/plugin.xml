@@ -45,5 +45,34 @@
             id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.preferences.preferencePageEvaluation"
             name="Single Chromatogram Evaluation">
       </page>               
-   </extension>   
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="Processors"
+            id="org.eclipse.chemclipse.processors">
+      </category>
+      <wizard
+            name="Sample Quant Report"
+            icon="icons/16x16/chromatogram.gif"
+            category="org.eclipse.chemclipse.processors"
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wizard.samplequant.WizardSampleQuant"
+            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wizard.samplequant.WizardSampleQuant">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="Processors"
+            id="org.eclipse.chemclipse.processors">
+      </category>
+      <wizard
+            name="Chromatogram Evaluation"
+            icon="icons/16x16/chromatogram.gif"
+            category="org.eclipse.chemclipse.processors"
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wizard.evaluation.WizardEvaluation"
+            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wizard.evaluation.WizardEvaluation">
+      </wizard>
+   </extension>             
+    
 </plugin>

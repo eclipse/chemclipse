@@ -27,7 +27,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.wizard.IWizardPage;
 
-public class WizardSingleChromatogramEvaluation extends AbstractFileWizard {
+public class WizardEvaluation extends AbstractFileWizard {
 
 	private IEvaluationWizardElements wizardElements = new EvaluationWizardElements();
 	//
@@ -36,7 +36,7 @@ public class WizardSingleChromatogramEvaluation extends AbstractFileWizard {
 	private PageNotes pageNotes;
 	private PageProcessing pageProcessing;
 
-	public WizardSingleChromatogramEvaluation() {
+	public WizardEvaluation() {
 		super("SingleChromatogramEvaluation_" + new Date().getTime(), EvaluationProcessor.REPORT_FILE_EXTENSION);
 	}
 
