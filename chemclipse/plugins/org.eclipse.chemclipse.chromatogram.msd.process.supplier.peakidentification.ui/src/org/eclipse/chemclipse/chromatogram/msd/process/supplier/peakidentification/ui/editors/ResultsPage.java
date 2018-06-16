@@ -14,9 +14,11 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentificat
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.msd.model.notifier.PeakSelectionUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.peak.PeakListUI;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -27,11 +29,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-/**
- * @author Dr. Philip Wenig
- * 
- */
-public class PeakIdentificationResultsPage implements IMultiEditorPage {
+public class ResultsPage implements IMultiEditorPage {
 
 	private FormToolkit toolkit;
 	private int pageIndex;
@@ -39,21 +37,18 @@ public class PeakIdentificationResultsPage implements IMultiEditorPage {
 	private IPeakIdentificationBatchJob peakIdentificationBatchJob;
 	private PeakListUI peakListUI;
 	private SelectionUpdateListener selectionUpdateListener;
-	private PeakIdentificationBatchProcessEditor editorPart;
+	private BatchProcessEditor editorPart;
 
-	public PeakIdentificationResultsPage(PeakIdentificationBatchProcessEditor editorPart, Composite container) {
+	public ResultsPage(BatchProcessEditor editorPart, Composite container) {
 		createPage(editorPart, container);
 		this.editorPart = editorPart;
-		selectionUpdateListener = new PeakIdentificationResultsPage.SelectionUpdateListener();
+		selectionUpdateListener = new ResultsPage.SelectionUpdateListener();
 		selectionUpdateListener.setParent(this);
 	}
 
 	@Override
 	public void setFocus() {
 
-		/*
-		 * It could be that the focus get lost on long running operations, hence load the list on focus.
-		 */
 		IPeaks peaks = selectionUpdateListener.getPeaks();
 		if(peaks != null) {
 			update(peaks, true);
@@ -94,12 +89,7 @@ public class PeakIdentificationResultsPage implements IMultiEditorPage {
 		peakListUI.clear();
 	}
 
-	// ---------------------------------------private methods
-	/**
-	 * Creates the page.
-	 * 
-	 */
-	private void createPage(PeakIdentificationBatchProcessEditor editorPart, Composite container) {
+	private void createPage(BatchProcessEditor editorPart, Composite container) {
 
 		/*
 		 * Create the parent composite.
@@ -137,39 +127,31 @@ public class PeakIdentificationResultsPage implements IMultiEditorPage {
 				if(selection instanceof IStructuredSelection) {
 					IStructuredSelection structuredSelection = (IStructuredSelection)selection;
 					Object element = structuredSelection.getFirstElement();
-					/*
-					 * Is the element an instance of IPeakMSD?
-					 */
+					//
 					if(element instanceof IPeakMSD) {
-						/*
-						 * Update View : Mass Spectrum
-						 */
 						IPeakMSD peakMSD = (IPeakMSD)element;
-						PeakSelectionUpdateNotifier.fireUpdateChange(peakMSD, true);
+						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+						eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peakMSD);
 					}
 				}
 			}
 		});
 	}
 
-	// -----------------------------------------inner class to retrieve updates
 	public static class SelectionUpdateListener {
 
-		private static PeakIdentificationResultsPage parentWidget;
+		private static ResultsPage parentWidget;
 		private static IPeaks evaluatedPeaks = null;
 
 		public void setParent(IMultiEditorPage parent) {
 
-			if(parent instanceof PeakIdentificationResultsPage) {
-				parentWidget = (PeakIdentificationResultsPage)parent;
+			if(parent instanceof ResultsPage) {
+				parentWidget = (ResultsPage)parent;
 			}
 		}
 
 		public void update(IPeaks peaks, boolean forceReload) {
 
-			/*
-			 * Set the actual chromatogram selection.
-			 */
 			evaluatedPeaks = peaks;
 			if(parentWidget != null) {
 				parentWidget.update(peaks, forceReload);

@@ -16,8 +16,8 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.support.IdentificationSupport;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.support.IntegrationSupport;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.editors.PeakIdentificationResultsPage.SelectionUpdateListener;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.runnables.PeakIdentificationBatchRunnable;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.editors.ResultsPage.SelectionUpdateListener;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.runnables.BatchRunnable;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -59,9 +59,9 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
  * @author Dr. Philip Wenig
  * 
  */
-public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPage {
+public class BatchProcessEditorPage implements IMultiEditorPage {
 
-	private static final Logger logger = Logger.getLogger(PeakIdentificationBatchProcessEditorPage.class);
+	private static final Logger logger = Logger.getLogger(BatchProcessEditorPage.class);
 	private FormToolkit toolkit;
 	private int pageIndex;
 	private IPeakIdentificationBatchJob peakIdentificationBatchJob;
@@ -74,7 +74,7 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 	private IntegrationSupport integrationSupport;
 	private IdentificationSupport identifiationSupport;
 
-	public PeakIdentificationBatchProcessEditorPage(PeakIdentificationBatchProcessEditor editorPart, Composite container) {
+	public BatchProcessEditorPage(BatchProcessEditor editorPart, Composite container) {
 		integrationSupport = new IntegrationSupport();
 		identifiationSupport = new IdentificationSupport();
 		createPage(editorPart, container);
@@ -116,7 +116,7 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 	 * Creates the page.
 	 * 
 	 */
-	private void createPage(PeakIdentificationBatchProcessEditor editorPart, Composite container) {
+	private void createPage(BatchProcessEditor editorPart, Composite container) {
 
 		/*
 		 * Create the parent composite.
@@ -147,7 +147,7 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 	/**
 	 * Creates the properties section.
 	 */
-	private void createPropertiesSection(Composite parent, final PeakIdentificationBatchProcessEditor editorPart) {
+	private void createPropertiesSection(Composite parent, final BatchProcessEditor editorPart) {
 
 		Section section;
 		Composite client;
@@ -195,7 +195,7 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 	 * @param editorPart
 	 * @param client
 	 */
-	private void createReportFolderSelection(final PeakIdentificationBatchProcessEditor editorPart, Composite client) {
+	private void createReportFolderSelection(final BatchProcessEditor editorPart, Composite client) {
 
 		GridData gridData;
 		Button button;
@@ -235,7 +235,7 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 	 * @param editorPart
 	 * @param client
 	 */
-	private void createOverrideReportsCheckBox(final PeakIdentificationBatchProcessEditor editorPart, Composite client) {
+	private void createOverrideReportsCheckBox(final BatchProcessEditor editorPart, Composite client) {
 
 		GridData gridData;
 		gridData = new GridData();
@@ -266,7 +266,7 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 	 * 
 	 * @param parent
 	 */
-	private void createIntegratorAndIdentifierSection(Composite parent, PeakIdentificationBatchProcessEditor editorPart) {
+	private void createIntegratorAndIdentifierSection(Composite parent, BatchProcessEditor editorPart) {
 
 		Section section;
 		Composite client;
@@ -316,7 +316,7 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 		toolkit.paintBordersFor(client);
 	}
 
-	private void createIntegratorSelection(Composite client, GridData gridData, GridData gridDataLabel, final PeakIdentificationBatchProcessEditor editorPart) {
+	private void createIntegratorSelection(Composite client, GridData gridData, GridData gridDataLabel, final BatchProcessEditor editorPart) {
 
 		Label label = toolkit.createLabel(client, "Select an integrator:");
 		label.setLayoutData(gridDataLabel);
@@ -381,7 +381,7 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 		reportIntegrationResultsCheckBox.setSelection(peakIdentificationBatchJob.getPeakIntegrationEntry().isReport());
 	}
 
-	private void createIdentifierSelection(Composite client, GridData gridData, GridData gridDataLabel, final PeakIdentificationBatchProcessEditor editorPart) {
+	private void createIdentifierSelection(Composite client, GridData gridData, GridData gridDataLabel, final BatchProcessEditor editorPart) {
 
 		Label label = toolkit.createLabel(client, "Select an identifier:");
 		label.setLayoutData(gridDataLabel);
@@ -466,7 +466,7 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 	 * 
 	 * @param parent
 	 */
-	private void createExecuteSection(Composite parent, PeakIdentificationBatchProcessEditor editorPart) {
+	private void createExecuteSection(Composite parent, BatchProcessEditor editorPart) {
 
 		Section section;
 		Composite client;
@@ -532,7 +532,7 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 	 * @param client
 	 * @param gridData
 	 */
-	private void createInputFilesPageHyperlink(final PeakIdentificationBatchProcessEditor editorPart, Composite client, GridData gridData) {
+	private void createInputFilesPageHyperlink(final BatchProcessEditor editorPart, Composite client, GridData gridData) {
 
 		ImageHyperlink imageHyperlink;
 		/*
@@ -546,7 +546,7 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 
 			public void linkActivated(HyperlinkEvent e) {
 
-				editorPart.setActivePage(PeakIdentificationBatchProcessEditor.PEAK_INPUT_FILES_PAGE);
+				editorPart.setActivePage(BatchProcessEditor.PEAK_INPUT_FILES_PAGE);
 			}
 		});
 	}
@@ -558,7 +558,7 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 	 * @param client
 	 * @param gridData
 	 */
-	private void createOutputFilesPageHyperlink(final PeakIdentificationBatchProcessEditor editorPart, Composite client, GridData gridData) {
+	private void createOutputFilesPageHyperlink(final BatchProcessEditor editorPart, Composite client, GridData gridData) {
 
 		ImageHyperlink imageHyperlink;
 		/*
@@ -572,7 +572,7 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 
 			public void linkActivated(HyperlinkEvent e) {
 
-				editorPart.setActivePage(PeakIdentificationBatchProcessEditor.PEAK_OUTPUT_FILES_PAGE);
+				editorPart.setActivePage(BatchProcessEditor.PEAK_OUTPUT_FILES_PAGE);
 			}
 		});
 	}
@@ -584,7 +584,7 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 	 * @param client
 	 * @param gridData
 	 */
-	private void createBatchResultsPageHyperlink(final PeakIdentificationBatchProcessEditor editorPart, Composite client, GridData gridData) {
+	private void createBatchResultsPageHyperlink(final BatchProcessEditor editorPart, Composite client, GridData gridData) {
 
 		ImageHyperlink imageHyperlink;
 		/*
@@ -598,7 +598,7 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 
 			public void linkActivated(HyperlinkEvent e) {
 
-				editorPart.setActivePage(PeakIdentificationBatchProcessEditor.PEAK_IDENTIFICATION_RESULTS_PAGE);
+				editorPart.setActivePage(BatchProcessEditor.PEAK_IDENTIFICATION_RESULTS_PAGE);
 			}
 		});
 	}
@@ -609,7 +609,7 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 	 * @param client
 	 * @param gridData
 	 */
-	private void createProcessHyperlink(final PeakIdentificationBatchProcessEditor editorPart, Composite client, GridData gridData) {
+	private void createProcessHyperlink(final BatchProcessEditor editorPart, Composite client, GridData gridData) {
 
 		ImageHyperlink imageHyperlink;
 		/*
@@ -637,19 +637,19 @@ public class PeakIdentificationBatchProcessEditorPage implements IMultiEditorPag
 				IPath path = ((IFileEditorInput)editorPart.getEditorInput()).getFile().getLocation();
 				String filePath = path.toFile().toString();
 				if(filePath != null && !filePath.equals("")) {
-					IRunnableWithProgress runnable = new PeakIdentificationBatchRunnable(filePath);
+					IRunnableWithProgress runnable = new BatchRunnable(filePath);
 					ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
 					try {
 						/*
 						 * Clear the results in the results page.
 						 */
-						SelectionUpdateListener updateListener = new PeakIdentificationResultsPage.SelectionUpdateListener();
+						SelectionUpdateListener updateListener = new ResultsPage.SelectionUpdateListener();
 						updateListener.clear();
 						/*
 						 * Show the results page, run and refresh the workspace
 						 */
-						editorPart.setActivePage(PeakIdentificationBatchProcessEditor.PEAK_IDENTIFICATION_RESULTS_PAGE);
 						monitor.run(true, true, runnable);
+						editorPart.setActivePage(BatchProcessEditor.PEAK_IDENTIFICATION_RESULTS_PAGE);
 						refreshWorkspace(path);
 					} catch(InvocationTargetException ex) {
 						logger.warn(ex);

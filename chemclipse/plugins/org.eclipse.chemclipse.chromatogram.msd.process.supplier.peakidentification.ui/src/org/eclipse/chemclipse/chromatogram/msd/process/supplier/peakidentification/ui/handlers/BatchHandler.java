@@ -15,14 +15,14 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.wizards.PeakIdentificationBatchJobWizard;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.wizards.BatchJobWizard;
 
-public class PeakIdentificationBatchHandler {
+public class BatchHandler {
 
 	@Execute
 	public void execute() {
 
-		WizardDialog wizardDialog = new WizardDialog(Display.getCurrent().getActiveShell(), new PeakIdentificationBatchJobWizard());
+		WizardDialog wizardDialog = new WizardDialog(Display.getCurrent().getActiveShell(), new BatchJobWizard());
 		wizardDialog.open();
 	}
 }

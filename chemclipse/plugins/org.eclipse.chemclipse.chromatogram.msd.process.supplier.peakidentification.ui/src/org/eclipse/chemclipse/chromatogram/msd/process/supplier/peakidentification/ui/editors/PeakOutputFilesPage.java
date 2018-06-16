@@ -51,7 +51,7 @@ public class PeakOutputFilesPage implements IMultiEditorPage {
 	private IPeakIdentificationBatchJob peakIdentificationBatchJob;
 	private Table outputFilesTable;
 
-	public PeakOutputFilesPage(PeakIdentificationBatchProcessEditor editorPart, Composite container) {
+	public PeakOutputFilesPage(BatchProcessEditor editorPart, Composite container) {
 		createPage(editorPart, container);
 	}
 
@@ -88,7 +88,7 @@ public class PeakOutputFilesPage implements IMultiEditorPage {
 	 * Creates the page.
 	 * 
 	 */
-	private void createPage(PeakIdentificationBatchProcessEditor editorPart, Composite container) {
+	private void createPage(BatchProcessEditor editorPart, Composite container) {
 
 		/*
 		 * Create the parent composite.
@@ -114,7 +114,7 @@ public class PeakOutputFilesPage implements IMultiEditorPage {
 		pageIndex = editorPart.addPage(parent);
 	}
 
-	private void createOutputFilesSection(Composite parent, final PeakIdentificationBatchProcessEditor editorPart) {
+	private void createOutputFilesSection(Composite parent, final BatchProcessEditor editorPart) {
 
 		Section section;
 		Composite client;
@@ -169,7 +169,7 @@ public class PeakOutputFilesPage implements IMultiEditorPage {
 	 * 
 	 * @param client
 	 */
-	private void createButtons(Composite client, final PeakIdentificationBatchProcessEditor editorPart) {
+	private void createButtons(Composite client, final BatchProcessEditor editorPart) {
 
 		createAddButton(client, editorPart);
 		createRemoveButton(client, editorPart);
@@ -181,7 +181,7 @@ public class PeakOutputFilesPage implements IMultiEditorPage {
 	 * @param client
 	 * @param editorPart
 	 */
-	private void createAddButton(Composite client, final PeakIdentificationBatchProcessEditor editorPart) {
+	private void createAddButton(Composite client, final BatchProcessEditor editorPart) {
 
 		Button add;
 		add = toolkit.createButton(client, "Add", SWT.PUSH);
@@ -224,7 +224,7 @@ public class PeakOutputFilesPage implements IMultiEditorPage {
 	 * @param client
 	 * @param editorPart
 	 */
-	private void createRemoveButton(Composite client, final PeakIdentificationBatchProcessEditor editorPart) {
+	private void createRemoveButton(Composite client, final BatchProcessEditor editorPart) {
 
 		Button remove;
 		remove = toolkit.createButton(client, "Remove", SWT.PUSH);

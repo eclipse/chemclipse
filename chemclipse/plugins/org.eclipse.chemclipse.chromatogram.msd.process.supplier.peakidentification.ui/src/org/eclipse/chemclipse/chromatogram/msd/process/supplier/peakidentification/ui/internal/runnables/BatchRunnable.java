@@ -21,8 +21,8 @@ import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentificati
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.processing.IPeakIdentificationProcessingInfo;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.report.IPeakIdentificationBatchProcessReport;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.editors.PeakIdentificationResultsPage;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.editors.PeakIdentificationResultsPage.SelectionUpdateListener;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.editors.ResultsPage;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.editors.ResultsPage.SelectionUpdateListener;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -31,14 +31,14 @@ import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-public class PeakIdentificationBatchRunnable implements IRunnableWithProgress {
+public class BatchRunnable implements IRunnableWithProgress {
 
-	private static final Logger logger = Logger.getLogger(PeakIdentificationBatchRunnable.class);
+	private static final Logger logger = Logger.getLogger(BatchRunnable.class);
 	private File file;
 	private String filePath;
 	private PeakIdentificationBatchJobReader reader;
 
-	public PeakIdentificationBatchRunnable(String filePath) {
+	public BatchRunnable(String filePath) {
 		this.filePath = filePath;
 	}
 
@@ -58,7 +58,7 @@ public class PeakIdentificationBatchRunnable implements IRunnableWithProgress {
 				/*
 				 * Update the peak results page
 				 */
-				SelectionUpdateListener selectionUpdateListener = new PeakIdentificationResultsPage.SelectionUpdateListener();
+				SelectionUpdateListener selectionUpdateListener = new ResultsPage.SelectionUpdateListener();
 				selectionUpdateListener.update(report.getPeaks(), true);
 			} catch(TypeCastException e) {
 				logger.warn(e);

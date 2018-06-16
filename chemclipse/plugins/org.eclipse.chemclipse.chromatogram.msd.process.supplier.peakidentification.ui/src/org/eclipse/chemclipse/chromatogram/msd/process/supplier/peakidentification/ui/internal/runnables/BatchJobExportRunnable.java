@@ -16,47 +16,43 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+import javax.xml.stream.XMLStreamException;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.io.IPeakIdentificationBatchJobReader;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.io.PeakIdentificationBatchJobReader;
+import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.io.PeakIdentificationBatchJobWriter;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
 
 /**
  * @author Dr. Philip Wenig
  * 
  */
-public class PeakIdentificationBatchJobImportRunnable implements IRunnableWithProgress {
+public class BatchJobExportRunnable implements IRunnableWithProgress {
 
 	private File file;
-	private IPeakIdentificationBatchJob peakIdentificationBatchJob = null;
+	private IPeakIdentificationBatchJob peakIdentificationBatchJob;
 
-	public PeakIdentificationBatchJobImportRunnable(File file) {
+	public BatchJobExportRunnable(File file, IPeakIdentificationBatchJob peakIdentificationBatchJob) {
 		this.file = file;
-	}
-
-	public IPeakIdentificationBatchJob getPeakIdentificationBatchJob() {
-
-		return peakIdentificationBatchJob;
+		this.peakIdentificationBatchJob = peakIdentificationBatchJob;
 	}
 
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		IPeakIdentificationBatchJobReader reader = new PeakIdentificationBatchJobReader();
+		PeakIdentificationBatchJobWriter writer = new PeakIdentificationBatchJobWriter();
 		try {
-			peakIdentificationBatchJob = reader.read(file, monitor);
+			writer.writeBatchProcessJob(file, peakIdentificationBatchJob, monitor);
 		} catch(FileNotFoundException e) {
 			throw new InterruptedException("The file " + file.getPath() + " couldn't be found.");
-		} catch(FileIsNotReadableException e) {
-			throw new InterruptedException("The file " + file.getPath() + " is not readable.");
-		} catch(FileIsEmptyException e) {
-			throw new InterruptedException("The file " + file.getPath() + " is empty.");
+		} catch(FileIsNotWriteableException e) {
+			throw new InterruptedException("The file " + file.getPath() + " is not writable.");
 		} catch(IOException e) {
-			throw new InterruptedException("An I/O error has occured using the file " + file.getPath());
+			throw new InterruptedException("The file " + file.getPath() + " makes problems.");
+		} catch(XMLStreamException e) {
+			throw new InterruptedException("There is a problem writing the file " + file.getPath());
 		}
 	}
 }

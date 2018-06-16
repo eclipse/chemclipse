@@ -38,14 +38,14 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.io.PeakIdentificationBatchJobWriter;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.runnables.PeakIdentificationBatchJobExportRunnable;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.runnables.PeakIdentificationBatchJobImportRunnable;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.runnables.BatchJobExportRunnable;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.runnables.BatchJobImportRunnable;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 
-public class PeakIdentificationBatchProcessEditor extends MultiPageEditorPart {
+public class BatchProcessEditor extends MultiPageEditorPart {
 
-	private static final Logger logger = Logger.getLogger(PeakIdentificationBatchProcessEditor.class);
+	private static final Logger logger = Logger.getLogger(BatchProcessEditor.class);
 	/*
 	 * A reference to the file kept by the actual editor.
 	 */
@@ -55,7 +55,7 @@ public class PeakIdentificationBatchProcessEditor extends MultiPageEditorPart {
 	/*
 	 * Pages.
 	 */
-	private PeakIdentificationBatchProcessEditorPage batchProcessEditorPage;
+	private BatchProcessEditorPage batchProcessEditorPage;
 	private List<IMultiEditorPage> pages = new ArrayList<IMultiEditorPage>();
 	/*
 	 * Indices of the pages.
@@ -136,7 +136,7 @@ public class PeakIdentificationBatchProcessEditor extends MultiPageEditorPart {
 		if(input instanceof IFileEditorInput) {
 			editorBatchProcessJobFile = ((IFileEditorInput)input).getFile();
 			Display display = Display.getCurrent();
-			PeakIdentificationBatchJobImportRunnable runnable = new PeakIdentificationBatchJobImportRunnable(editorBatchProcessJobFile.getLocation().toFile());
+			BatchJobImportRunnable runnable = new BatchJobImportRunnable(editorBatchProcessJobFile.getLocation().toFile());
 			ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
 			try {
 				monitor.run(false, true, runnable);
@@ -192,7 +192,7 @@ public class PeakIdentificationBatchProcessEditor extends MultiPageEditorPart {
 		 */
 		if(fileName != null) {
 			File file = new File(fileName);
-			IRunnableWithProgress runnable = new PeakIdentificationBatchJobExportRunnable(file, peakIdentificationBatchJob);
+			IRunnableWithProgress runnable = new BatchJobExportRunnable(file, peakIdentificationBatchJob);
 			ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
 			try {
 				monitor.run(true, true, runnable);
@@ -228,7 +228,7 @@ public class PeakIdentificationBatchProcessEditor extends MultiPageEditorPart {
 	 */
 	private void createPeakIdentificationBatchProcessEditorPage() {
 
-		batchProcessEditorPage = new PeakIdentificationBatchProcessEditorPage(this, getContainer());
+		batchProcessEditorPage = new BatchProcessEditorPage(this, getContainer());
 		pages.add(batchProcessEditorPage);
 		pagesMap.put(BATCHPROCESS_EDITOR_PAGE, batchProcessEditorPage.getPageIndex());
 		setPageText(pagesMap.get(BATCHPROCESS_EDITOR_PAGE), "Peak Identification Batch Editor");
@@ -261,7 +261,7 @@ public class PeakIdentificationBatchProcessEditor extends MultiPageEditorPart {
 	 */
 	private void createPeakIdentificationResultsPage() {
 
-		PeakIdentificationResultsPage page = new PeakIdentificationResultsPage(this, getContainer());
+		ResultsPage page = new ResultsPage(this, getContainer());
 		pages.add(page);
 		pagesMap.put(PEAK_IDENTIFICATION_RESULTS_PAGE, page.getPageIndex());
 		setPageText(pagesMap.get(PEAK_IDENTIFICATION_RESULTS_PAGE), "Peak Identification Results");

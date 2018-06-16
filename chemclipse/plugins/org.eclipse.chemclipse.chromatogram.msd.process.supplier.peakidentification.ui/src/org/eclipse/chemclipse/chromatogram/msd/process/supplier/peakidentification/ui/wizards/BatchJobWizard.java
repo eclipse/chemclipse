@@ -27,11 +27,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PeakIdentificationBatchJobWizard extends AbstractFileWizard {
+public class BatchJobWizard extends AbstractFileWizard {
 
-	private static final Logger logger = Logger.getLogger(PeakIdentificationBatchJobWizard.class);
+	private static final Logger logger = Logger.getLogger(BatchJobWizard.class);
 
-	public PeakIdentificationBatchJobWizard() {
+	public BatchJobWizard() {
 		super("PeakIdentificationBatchJob", ".opi");
 	}
 
