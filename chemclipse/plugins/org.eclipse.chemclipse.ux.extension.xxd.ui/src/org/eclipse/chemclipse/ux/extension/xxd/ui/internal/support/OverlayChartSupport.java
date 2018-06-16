@@ -32,6 +32,15 @@ public class OverlayChartSupport {
 	public static final String SELECTED_IONS_SOLVENT_TAILING = "Solvent Tailing";
 	public static final String SELECTED_IONS_COLUMN_BLEED = "Column Bleed";
 	//
+	public static String[][] SELECTED_IONS_CHOICES = new String[][]{//
+			{"Users Choice", SELECTED_IONS_USERS_CHOICE}, //
+			{"Hydrocarbons", SELECTED_IONS_HYDROCARBONS}, //
+			{"Fatty Acids", SELECTED_IONS_FATTY_ACIDS}, //
+			{"FAME", SELECTED_IONS_FAME}, //
+			{"Solvent Tailing", SELECTED_IONS_SOLVENT_TAILING}, //
+			{"Column Bleed", SELECTED_IONS_COLUMN_BLEED}//
+	};
+	//
 	public static final String DISPLAY_MODUS_NORMAL = "Normal";
 	public static final String DISPLAY_MODUS_MIRRORED = "Mirrored";
 	//

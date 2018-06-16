@@ -188,6 +188,9 @@ public class ExtendedChromatogramOverlayUI {
 		createSelectedIonsCombo(composite);
 		createIonsFromText(composite);
 		//
+		String ionSelection = comboSelectedIons.getText().trim();
+		setSelectedIonsText(ionSelection);
+		//
 		return composite;
 	}
 
@@ -226,12 +229,12 @@ public class ExtendedChromatogramOverlayUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				modifyWidgetStatus();
-				refreshUpdateOverlayChart();
-				//
 				int index = combo.getSelectionIndex();
 				comboOverlayType1.select(index);
 				comboOverlayType2.select(index);
+				//
+				modifyWidgetStatus();
+				refreshUpdateOverlayChart();
 			}
 		});
 		//
@@ -283,16 +286,16 @@ public class ExtendedChromatogramOverlayUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				int index = combo.getSelectionIndex();
+				comboSelectedSeries1.select(index);
+				comboSelectedSeries2.select(index);
+				//
 				String selectedSeriesId = combo.getText().trim();
 				BaseChart baseChart = chromatogramChart.getBaseChart();
 				baseChart.resetSeriesSettings();
 				baseChart.selectSeries(selectedSeriesId);
 				baseChart.redraw();
 				modifyWidgetStatus();
-				//
-				int index = combo.getSelectionIndex();
-				comboSelectedSeries1.select(index);
-				comboSelectedSeries2.select(index);
 			}
 		});
 		//
@@ -352,10 +355,23 @@ public class ExtendedChromatogramOverlayUI {
 
 	private void createSelectedIonsCombo(Composite parent) {
 
+		/*
+		 * Get the settings.
+		 */
+		String[] items = overlayChartSupport.getSelectedIons();
+		String overlaySelection = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SELECTION);
+		int index = 0;
+		for(int i = 0; i < items.length; i++) {
+			String item = items[i];
+			if(overlaySelection.equals(item)) {
+				index = i;
+			}
+		}
+		//
 		comboSelectedIons = new Combo(parent, SWT.READ_ONLY);
 		comboSelectedIons.setToolTipText("Select the overlay ions.");
 		comboSelectedIons.setItems(overlayChartSupport.getSelectedIons());
-		comboSelectedIons.select(0);
+		comboSelectedIons.select(index);
 		comboSelectedIons.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comboSelectedIons.addSelectionListener(new SelectionAdapter() {
 
@@ -365,33 +381,44 @@ public class ExtendedChromatogramOverlayUI {
 				boolean extractedIonsModusEnabled = isExtractedIonsModusEnabled();
 				textIonsFromSettings.setEnabled(extractedIonsModusEnabled);
 				String ionSelection = comboSelectedIons.getText().trim();
-				switch(ionSelection) {
-					case OverlayChartSupport.SELECTED_IONS_USERS_CHOICE:
-						textIonsFromSettings.setText(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE));
-						break;
-					case OverlayChartSupport.SELECTED_IONS_HYDROCARBONS:
-						textIonsFromSettings.setText(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS));
-						break;
-					case OverlayChartSupport.SELECTED_IONS_FATTY_ACIDS:
-						textIonsFromSettings.setText(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS));
-						break;
-					case OverlayChartSupport.SELECTED_IONS_FAME:
-						textIonsFromSettings.setText(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FAME));
-						break;
-					case OverlayChartSupport.SELECTED_IONS_SOLVENT_TAILING:
-						textIonsFromSettings.setText(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING));
-						break;
-					case OverlayChartSupport.SELECTED_IONS_COLUMN_BLEED:
-						textIonsFromSettings.setText(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED));
-						break;
-					default:
-						textIonsFromSettings.setText("");
-						break;
-				}
+				setSelectedIonsText(ionSelection);
 				chromatogramChart.deleteSeries();
 				refreshUpdateOverlayChart();
 			}
 		});
+	}
+
+	private void setSelectedIonsText(String ionSelection) {
+
+		switch(ionSelection) {
+			case OverlayChartSupport.SELECTED_IONS_USERS_CHOICE:
+				textIonsFromSettings.setText(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE));
+				preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SELECTION, OverlayChartSupport.SELECTED_IONS_USERS_CHOICE);
+				break;
+			case OverlayChartSupport.SELECTED_IONS_HYDROCARBONS:
+				textIonsFromSettings.setText(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS));
+				preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SELECTION, OverlayChartSupport.SELECTED_IONS_HYDROCARBONS);
+				break;
+			case OverlayChartSupport.SELECTED_IONS_FATTY_ACIDS:
+				textIonsFromSettings.setText(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS));
+				preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SELECTION, OverlayChartSupport.SELECTED_IONS_FATTY_ACIDS);
+				break;
+			case OverlayChartSupport.SELECTED_IONS_FAME:
+				textIonsFromSettings.setText(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FAME));
+				preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SELECTION, OverlayChartSupport.SELECTED_IONS_FAME);
+				break;
+			case OverlayChartSupport.SELECTED_IONS_SOLVENT_TAILING:
+				textIonsFromSettings.setText(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING));
+				preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SELECTION, OverlayChartSupport.SELECTED_IONS_SOLVENT_TAILING);
+				break;
+			case OverlayChartSupport.SELECTED_IONS_COLUMN_BLEED:
+				textIonsFromSettings.setText(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED));
+				preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SELECTION, OverlayChartSupport.SELECTED_IONS_COLUMN_BLEED);
+				break;
+			default:
+				textIonsFromSettings.setText("");
+				break;
+		}
 	}
 
 	private void createIonsFromText(Composite parent) {
