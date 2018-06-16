@@ -29,21 +29,5 @@
             class="org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferenceInitializer">
       </initializer>
    </extension>
-   <extension
-         point="org.eclipse.ui.newWizards">
-      <category
-            id="org.eclipse.chemclipse.chromatogram.msd.ui.perspective.msProjectsCategory"
-            name="MS Projects">
-      </category>
-      <wizard
-            category="org.eclipse.chemclipse.chromatogram.msd.ui.perspective.msProjectsCategory"
-            class="org.eclipse.chemclipse.ux.extension.msd.ui.wizards.AnalysisProjectWizard"
-            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif"
-            id="org.eclipse.chemclipse.chromatogram.msd.ui.perspective.analysisProjectWizard"
-            name="Analysis Project"
-            preferredPerspectives="org.eclipse.chemclipse.chromatogram.msd.ui.perspective.perspectives.ChromatogramMSPerspective"
-            project="true">
-      </wizard>
-   </extension>
 
 </plugin>
