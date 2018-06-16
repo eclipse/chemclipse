@@ -26,8 +26,8 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.identifier.massspectrum.IScanTargetMSD;
@@ -106,19 +106,19 @@ public class DatabaseFileSupport {
 
 	public static void savePeaks(Shell shell, List<IPeak> peaks, String fileName) throws NoConverterAvailableException {
 
-		List<IChromatogramPeakMSD> chromatogramPeaks = new ArrayList<IChromatogramPeakMSD>();
+		List<IPeakMSD> peaksMSD = new ArrayList<IPeakMSD>();
 		for(IPeak peak : peaks) {
-			if(peak instanceof IChromatogramPeakMSD) {
-				chromatogramPeaks.add((IChromatogramPeakMSD)peak);
+			if(peak instanceof IPeakMSD) {
+				peaksMSD.add((IPeakMSD)peak);
 			}
 		}
-		saveMassSpectra(shell, chromatogramPeaks, fileName);
+		saveMassSpectra(shell, peaksMSD, fileName);
 	}
 
-	public static void saveMassSpectra(List<IChromatogramPeakMSD> chromatogramPeaks) throws NoConverterAvailableException {
+	public static void saveMassSpectra(List<IPeakMSD> peaks) throws NoConverterAvailableException {
 
 		Shell shell = Display.getDefault().getActiveShell();
-		saveMassSpectra(shell, chromatogramPeaks, "MassSpectra");
+		saveMassSpectra(shell, peaks, "MassSpectra");
 	}
 
 	/**
@@ -127,10 +127,10 @@ public class DatabaseFileSupport {
 	 * @param chromatogram
 	 * @throws NoConverterAvailableException
 	 */
-	public static void saveMassSpectra(Shell shell, List<IChromatogramPeakMSD> chromatogramPeaks, String fileName) throws NoConverterAvailableException {
+	public static void saveMassSpectra(Shell shell, List<IPeakMSD> peaks, String fileName) throws NoConverterAvailableException {
 
 		IMassSpectra massSpectra = new MassSpectra();
-		for(IChromatogramPeakMSD peak : chromatogramPeaks) {
+		for(IPeakMSD peak : peaks) {
 			try {
 				/*
 				 * Make a deep copy.

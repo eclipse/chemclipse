@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.targets.IPeakTarget;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -130,38 +131,42 @@ public class PeakListUI {
 		return titles;
 	}
 
-	/**
-	 * Deletes the selected peaks
-	 * 
-	 */
 	public void deleteSelectedPeaks(IChromatogramSelectionMSD chromatogramSelection) {
 
-		/*
-		 * Delete the selected items.
-		 */
-		Table table = tableViewer.getTable();
-		int[] indices = table.getSelectionIndices();
-		List<IChromatogramPeakMSD> peaksToDelete = getChromatogramPeakList(table, indices);
-		/*
-		 * Delete peaks in table.
-		 */
-		table.remove(indices);
-		/*
-		 * Delete peak in chromatogram.
-		 */
-		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
-		chromatogram.removePeaks(peaksToDelete);
-		/*
-		 * Is the chromatogram updatable? IChromatogramSelection
-		 * at itself isn't.
-		 */
-		if(chromatogramSelection instanceof ChromatogramSelectionMSD) {
-			ChromatogramSelectionMSD chromSelection = (ChromatogramSelectionMSD)chromatogramSelection;
-			List<IChromatogramPeakMSD> peaks = chromatogram.getPeaks();
-			if(peaks.size() > 0) {
-				chromSelection.setSelectedPeak(peaks.get(0));
+		if(chromatogramSelection != null) {
+			/*
+			 * Delete the selected items.
+			 */
+			Table table = tableViewer.getTable();
+			int[] indices = table.getSelectionIndices();
+			List<IPeakMSD> peaksToDelete = getPeakList(table, indices);
+			List<IChromatogramPeakMSD> chromatogramPeaksToDelete = new ArrayList<IChromatogramPeakMSD>();
+			for(IPeakMSD peakMSD : peaksToDelete) {
+				if(peakMSD instanceof IChromatogramPeakMSD) {
+					chromatogramPeaksToDelete.add((IChromatogramPeakMSD)peakMSD);
+				}
 			}
-			chromSelection.update(true); // true: forces the editor to update
+			/*
+			 * Delete peaks in table.
+			 */
+			table.remove(indices);
+			/*
+			 * Delete peak in chromatogram.
+			 */
+			IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
+			chromatogram.removePeaks(chromatogramPeaksToDelete);
+			/*
+			 * Is the chromatogram updatable? IChromatogramSelection
+			 * at itself isn't.
+			 */
+			if(chromatogramSelection instanceof ChromatogramSelectionMSD) {
+				ChromatogramSelectionMSD chromSelection = (ChromatogramSelectionMSD)chromatogramSelection;
+				List<IChromatogramPeakMSD> peaks = chromatogram.getPeaks();
+				if(peaks.size() > 0) {
+					chromSelection.setSelectedPeak(peaks.get(0));
+				}
+				chromSelection.update(true); // true: forces the editor to update
+			}
 		}
 	}
 
@@ -169,9 +174,9 @@ public class PeakListUI {
 
 		Table table = tableViewer.getTable();
 		int[] indices = table.getSelectionIndices();
-		List<IChromatogramPeakMSD> chromatogramPeaks = getChromatogramPeakList(table, indices);
-		for(IChromatogramPeakMSD chromatogramPeak : chromatogramPeaks) {
-			chromatogramPeak.setActiveForAnalysis(activeForAnalysis);
+		List<IPeakMSD> peaks = getPeakList(table, indices);
+		for(IPeakMSD peak : peaks) {
+			peak.setActiveForAnalysis(activeForAnalysis);
 		}
 		tableViewer.refresh();
 		chromatogramSelection.update(true);
@@ -182,8 +187,8 @@ public class PeakListUI {
 		try {
 			Table table = tableViewer.getTable();
 			int[] indices = table.getSelectionIndices();
-			List<IChromatogramPeakMSD> chromatogramPeaks = getChromatogramPeakList(table, indices);
-			DatabaseFileSupport.saveMassSpectra(chromatogramPeaks);
+			List<IPeakMSD> peaks = getPeakList(table, indices);
+			DatabaseFileSupport.saveMassSpectra(peaks);
 		} catch(NoConverterAvailableException e1) {
 			logger.warn(e1);
 		}
@@ -212,9 +217,17 @@ public class PeakListUI {
 		compositeButtons.setLayoutData(gridDataComposite);
 		compositeButtons.setLayout(new GridLayout(3, false));
 		//
-		Button uncheckAllButton = new Button(compositeButtons, SWT.PUSH);
-		uncheckAllButton.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_UNCHECK_ALL, IApplicationImage.SIZE_16x16));
-		uncheckAllButton.addSelectionListener(new SelectionAdapter() {
+		createUncheckAllButton(compositeButtons);
+		createCheckAllButton(compositeButtons);
+		createSaveButton(compositeButtons);
+	}
+
+	private void createUncheckAllButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Uncheck the selected peaks.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_UNCHECK_ALL, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -222,10 +235,14 @@ public class PeakListUI {
 				setActiveForAnalysis(false);
 			}
 		});
-		//
-		Button checkAllButton = new Button(compositeButtons, SWT.PUSH);
-		checkAllButton.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHECK_ALL, IApplicationImage.SIZE_16x16));
-		checkAllButton.addSelectionListener(new SelectionAdapter() {
+	}
+
+	private void createCheckAllButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Check the selected peaks.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHECK_ALL, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -233,17 +250,21 @@ public class PeakListUI {
 				setActiveForAnalysis(true);
 			}
 		});
-		//
-		Button saveButton = new Button(compositeButtons, SWT.PUSH);
-		saveButton.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImage.SIZE_16x16));
-		saveButton.addSelectionListener(new SelectionAdapter() {
+	}
+
+	private void createSaveButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Save the peaks");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				try {
-					List<IChromatogramPeakMSD> chromatogramPeaks = getChromatogramPeakList();
-					DatabaseFileSupport.saveMassSpectra(chromatogramPeaks);
+					List<IPeakMSD> peaks = getPeakList();
+					DatabaseFileSupport.saveMassSpectra(peaks);
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
 				}
@@ -280,40 +301,40 @@ public class PeakListUI {
 
 	private void setActiveForAnalysis(boolean activeForAnalysis) {
 
-		List<IChromatogramPeakMSD> peaks = getChromatogramPeakList();
-		for(IChromatogramPeakMSD peak : peaks) {
+		List<IPeakMSD> peaks = getPeakList();
+		for(IPeakMSD peak : peaks) {
 			peak.setActiveForAnalysis(activeForAnalysis);
 		}
 		tableViewer.refresh();
 		chromatogramSelection.update(true);
 	}
 
-	private List<IChromatogramPeakMSD> getChromatogramPeakList() {
+	private List<IPeakMSD> getPeakList() {
 
-		List<IChromatogramPeakMSD> peakList = new ArrayList<IChromatogramPeakMSD>();
+		List<IPeakMSD> peakList = new ArrayList<IPeakMSD>();
 		Table table = tableViewer.getTable();
 		for(TableItem tableItem : table.getItems()) {
 			Object object = tableItem.getData();
-			if(object instanceof IChromatogramPeakMSD) {
-				IChromatogramPeakMSD chromatogramPeak = (IChromatogramPeakMSD)object;
-				peakList.add(chromatogramPeak);
+			if(object instanceof IPeakMSD) {
+				IPeakMSD peak = (IPeakMSD)object;
+				peakList.add(peak);
 			}
 		}
 		return peakList;
 	}
 
-	private List<IChromatogramPeakMSD> getChromatogramPeakList(Table table, int[] indices) {
+	private List<IPeakMSD> getPeakList(Table table, int[] indices) {
 
-		List<IChromatogramPeakMSD> peakList = new ArrayList<IChromatogramPeakMSD>();
+		List<IPeakMSD> peakList = new ArrayList<IPeakMSD>();
 		for(int index : indices) {
 			/*
 			 * Get the selected item.
 			 */
 			TableItem tableItem = table.getItem(index);
 			Object object = tableItem.getData();
-			if(object instanceof IChromatogramPeakMSD) {
-				IChromatogramPeakMSD chromatogramPeak = (IChromatogramPeakMSD)object;
-				peakList.add(chromatogramPeak);
+			if(object instanceof IPeakMSD) {
+				IPeakMSD peak = (IPeakMSD)object;
+				peakList.add(peak);
 			}
 		}
 		return peakList;
