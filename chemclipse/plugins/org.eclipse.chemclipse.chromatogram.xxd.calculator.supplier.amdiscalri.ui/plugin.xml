@@ -33,4 +33,18 @@
             file="toc_filter.xml">
       </toc>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="Processors"
+            id="org.eclipse.chemclipse.processors">
+      </category>
+      <wizard
+            name="Retention Index Calculator"
+            icon="icons/16x16/chromatogram.gif"
+            category="org.eclipse.chemclipse.processors"
+            class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards.WizardCreateRetentionIndexFile"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards.WizardCreateRetentionIndexFile">
+      </wizard>
+   </extension>    
 </plugin>
