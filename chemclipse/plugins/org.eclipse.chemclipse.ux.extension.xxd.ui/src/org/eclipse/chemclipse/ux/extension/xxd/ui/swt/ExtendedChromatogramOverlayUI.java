@@ -82,9 +82,11 @@ public class ExtendedChromatogramOverlayUI {
 	private Composite toolbarShift;
 	private ChromatogramChart chromatogramChart;
 	//
-	private Combo comboOverlayType;
+	private Combo comboOverlayType1;
+	private Combo comboOverlayType2;
 	private Combo comboDerivativeType;
-	private Combo comboSelectedSeries;
+	private Combo comboSelectedSeries1;
+	private Combo comboSelectedSeries2;
 	private Combo comboDisplayModus;
 	private Combo comboSelectedIons;
 	private Text textIonsFromSettings;
@@ -167,9 +169,9 @@ public class ExtendedChromatogramOverlayUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(4, false));
 		//
-		createOverlayTypeCombo(composite);
+		comboOverlayType1 = createOverlayTypeCombo(composite);
 		createDerivativeTypeCombo(composite);
-		createSelectedSeriesCombo(composite);
+		comboSelectedSeries1 = createSelectedSeriesCombo(composite);
 		createDisplayModusCombo(composite);
 		//
 		return composite;
@@ -182,7 +184,7 @@ public class ExtendedChromatogramOverlayUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(3, false));
 		//
-		createOverlayTypeCombo(composite);
+		comboOverlayType2 = createOverlayTypeCombo(composite);
 		createSelectedIonsCombo(composite);
 		createIonsFromText(composite);
 		//
@@ -194,8 +196,9 @@ public class ExtendedChromatogramOverlayUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(8, false));
+		composite.setLayout(new GridLayout(9, false));
 		//
+		comboSelectedSeries2 = createSelectedSeriesCombo(composite);
 		createTextShiftX(composite);
 		createComboScaleX(composite);
 		createButtonLeft(composite);
@@ -208,25 +211,31 @@ public class ExtendedChromatogramOverlayUI {
 		return composite;
 	}
 
-	private void createOverlayTypeCombo(Composite parent) {
+	private Combo createOverlayTypeCombo(Composite parent) {
 
-		comboOverlayType = new Combo(parent, SWT.READ_ONLY);
-		comboOverlayType.setToolTipText("Select the overlay type");
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		combo.setToolTipText("Select the overlay type");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.minimumWidth = 150;
 		gridData.grabExcessHorizontalSpace = true;
-		comboOverlayType.setLayoutData(gridData);
-		comboOverlayType.setItems(overlayChartSupport.getOverlayTypes());
-		comboOverlayType.select(0);
-		comboOverlayType.addSelectionListener(new SelectionAdapter() {
+		combo.setLayoutData(gridData);
+		combo.setItems(overlayChartSupport.getOverlayTypes());
+		combo.select(0);
+		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				modifyWidgetStatus();
 				refreshUpdateOverlayChart();
+				//
+				int index = combo.getSelectionIndex();
+				comboOverlayType1.select(index);
+				comboOverlayType2.select(index);
 			}
 		});
+		//
+		return combo;
 	}
 
 	private void createDerivativeTypeCombo(Composite parent) {
@@ -259,29 +268,35 @@ public class ExtendedChromatogramOverlayUI {
 		});
 	}
 
-	private void createSelectedSeriesCombo(Composite parent) {
+	private Combo createSelectedSeriesCombo(Composite parent) {
 
-		comboSelectedSeries = new Combo(parent, SWT.READ_ONLY);
-		comboSelectedSeries.setToolTipText("Highlight the selected series");
+		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		combo.setToolTipText("Highlight the selected series");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.minimumWidth = 250;
+		gridData.minimumWidth = 150;
 		gridData.grabExcessHorizontalSpace = true;
-		comboSelectedSeries.setLayoutData(gridData);
-		comboSelectedSeries.setItems(new String[]{BaseChart.SELECTED_SERIES_NONE});
-		comboSelectedSeries.select(0);
-		comboSelectedSeries.addSelectionListener(new SelectionAdapter() {
+		combo.setLayoutData(gridData);
+		combo.setItems(new String[]{BaseChart.SELECTED_SERIES_NONE});
+		combo.select(0);
+		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				String selectedSeriesId = comboSelectedSeries.getText().trim();
+				String selectedSeriesId = combo.getText().trim();
 				BaseChart baseChart = chromatogramChart.getBaseChart();
 				baseChart.resetSeriesSettings();
 				baseChart.selectSeries(selectedSeriesId);
 				baseChart.redraw();
 				modifyWidgetStatus();
+				//
+				int index = combo.getSelectionIndex();
+				comboSelectedSeries1.select(index);
+				comboSelectedSeries2.select(index);
 			}
 		});
+		//
+		return combo;
 	}
 
 	private void createDisplayModusCombo(Composite parent) {
@@ -298,7 +313,7 @@ public class ExtendedChromatogramOverlayUI {
 
 				BaseChart baseChart = chromatogramChart.getBaseChart();
 				String displayModus = comboDisplayModus.getText().trim();
-				String selectedSeriesId = comboSelectedSeries.getText().trim();
+				String selectedSeriesId = getSelectedSeriesId();
 				String derivativeType = comboDerivativeType.getText();
 				IChartSettings chartSettings = chromatogramChart.getChartSettings();
 				//
@@ -474,7 +489,7 @@ public class ExtendedChromatogramOverlayUI {
 
 				BaseChart baseChart = chromatogramChart.getBaseChart();
 				double shiftX = getShiftValuePrimary(IExtendedChart.X_AXIS) * -1.0d;
-				String selectedSeriesId = comboSelectedSeries.getText().trim();
+				String selectedSeriesId = getSelectedSeriesId();
 				baseChart.shiftSeries(selectedSeriesId, shiftX, 0.0d);
 				baseChart.redraw();
 				persistShiftXSelection();
@@ -495,7 +510,7 @@ public class ExtendedChromatogramOverlayUI {
 
 				BaseChart baseChart = chromatogramChart.getBaseChart();
 				double shiftX = getShiftValuePrimary(IExtendedChart.X_AXIS);
-				String selectedSeriesId = comboSelectedSeries.getText().trim();
+				String selectedSeriesId = getSelectedSeriesId();
 				baseChart.shiftSeries(selectedSeriesId, shiftX, 0.0d);
 				baseChart.redraw();
 				persistShiftXSelection();
@@ -539,7 +554,7 @@ public class ExtendedChromatogramOverlayUI {
 
 				BaseChart baseChart = chromatogramChart.getBaseChart();
 				double shiftY = getShiftValuePrimary(IExtendedChart.Y_AXIS);
-				String selectedSeriesId = comboSelectedSeries.getText().trim();
+				String selectedSeriesId = getSelectedSeriesId();
 				baseChart.shiftSeries(selectedSeriesId, 0.0d, shiftY);
 				baseChart.redraw();
 				persistShiftYSelection();
@@ -560,7 +575,7 @@ public class ExtendedChromatogramOverlayUI {
 
 				BaseChart baseChart = chromatogramChart.getBaseChart();
 				double shiftY = getShiftValuePrimary(IExtendedChart.Y_AXIS) * -1.0d;
-				String selectedSeriesId = comboSelectedSeries.getText().trim();
+				String selectedSeriesId = getSelectedSeriesId();
 				baseChart.shiftSeries(selectedSeriesId, 0.0d, shiftY);
 				baseChart.redraw();
 				persistShiftYSelection();
@@ -805,7 +820,7 @@ public class ExtendedChromatogramOverlayUI {
 		/*
 		 * Selected Series
 		 */
-		String selectedSeries = comboSelectedSeries.getText().trim();
+		String selectedSeries = getSelectedSeriesId();
 		boolean isSeriesSelected = !selectedSeries.equals(BaseChart.SELECTED_SERIES_NONE);
 		comboDisplayModus.setEnabled(isSeriesSelected);
 		textShiftX.setEnabled(isSeriesSelected);
@@ -820,7 +835,7 @@ public class ExtendedChromatogramOverlayUI {
 
 	private boolean isExtractedIonsModusEnabled() {
 
-		String overlayType = comboOverlayType.getText().trim();
+		String overlayType = getOverlayType();
 		return (overlayType.contains(ChromatogramChartSupport.DISPLAY_TYPE_XIC) || //
 				overlayType.contains(ChromatogramChartSupport.DISPLAY_TYPE_SIC) || //
 				overlayType.contains(ChromatogramChartSupport.DISPLAY_TYPE_TSC));
@@ -865,7 +880,8 @@ public class ExtendedChromatogramOverlayUI {
 			@Override
 			public void handleSeriesSelectionEvent(String seriesId) {
 
-				comboSelectedSeries.setText(seriesId);
+				comboSelectedSeries1.setText(seriesId);
+				comboSelectedSeries2.setText(seriesId);
 				modifyWidgetStatus();
 			}
 		});
@@ -891,7 +907,7 @@ public class ExtendedChromatogramOverlayUI {
 				/*
 				 * Select which series shall be displayed.
 				 */
-				String[] overlayTypes = comboOverlayType.getText().trim().split(OverlayChartSupport.ESCAPE_CONCATENATOR + OverlayChartSupport.OVERLAY_TYPE_CONCATENATOR);
+				String[] overlayTypes = getOverlayType().split(OverlayChartSupport.ESCAPE_CONCATENATOR + OverlayChartSupport.OVERLAY_TYPE_CONCATENATOR);
 				String derivativeType = comboDerivativeType.getText().trim();
 				//
 				for(String overlayType : overlayTypes) {
@@ -974,9 +990,7 @@ public class ExtendedChromatogramOverlayUI {
 			for(String seriesId : availableSeriesIds) {
 				items[index++] = seriesId;
 			}
-			//
-			comboSelectedSeries.setItems(items);
-			comboSelectedSeries.setText(BaseChart.SELECTED_SERIES_NONE);
+			setSelectedSeries(items, BaseChart.SELECTED_SERIES_NONE);
 			//
 			modifyDataStatusLabel();
 			chromatogramChart.adjustRange(true);
@@ -1085,5 +1099,24 @@ public class ExtendedChromatogramOverlayUI {
 		}
 		//
 		return shiftValue;
+	}
+
+	private String getSelectedSeriesId() {
+
+		return comboSelectedSeries1.getText().trim();
+	}
+
+	private void setSelectedSeries(String[] items, String text) {
+
+		comboSelectedSeries1.setItems(items);
+		comboSelectedSeries1.setText(text);
+		//
+		comboSelectedSeries2.setItems(items);
+		comboSelectedSeries2.setText(text);
+	}
+
+	private String getOverlayType() {
+
+		return comboOverlayType1.getText().trim();
 	}
 }
