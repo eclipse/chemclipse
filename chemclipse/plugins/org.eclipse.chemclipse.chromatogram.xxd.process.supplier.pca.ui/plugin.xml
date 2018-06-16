@@ -35,7 +35,7 @@
       <WelcomeTile
             Description="Starts a new PCA Analysis"
             PerspectiveId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective"
-            Section="New PCA Analysis"
+            Section="PCA Analysis"
             defaultShow="false">
       </WelcomeTile>         
    </extension>   
