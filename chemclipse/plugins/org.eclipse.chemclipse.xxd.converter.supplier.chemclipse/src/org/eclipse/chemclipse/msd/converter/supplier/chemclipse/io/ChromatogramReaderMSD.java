@@ -139,7 +139,7 @@ public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader impleme
 		IChromatogramMSD chromatogramMSD = null;
 		ReaderHelper readerHelper = new ReaderHelper();
 		//
-		String version = readerHelper.getVersion(zipInputStream);
+		String version = readerHelper.getVersion(zipInputStream, directoryPrefix);
 		chromatogramReader = getChromatogramReader(version);
 		//
 		if(chromatogramReader != null) {

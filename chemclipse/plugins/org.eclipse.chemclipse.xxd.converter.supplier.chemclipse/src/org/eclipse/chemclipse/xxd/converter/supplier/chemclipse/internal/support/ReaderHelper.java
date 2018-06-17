@@ -25,14 +25,14 @@ public class ReaderHelper {
 
 		FileInputStream fileInputStream = new FileInputStream(file);
 		ZipInputStream zipInputStream = new ZipInputStream(new BufferedInputStream(fileInputStream));
-		String version = getVersion(zipInputStream);
+		String version = getVersion(zipInputStream, "");
 		zipInputStream.close();
 		return version;
 	}
 
-	public String getVersion(ZipInputStream zipInputStream) throws IOException {
+	public String getVersion(ZipInputStream zipInputStream, String directoryPrefix) throws IOException {
 
-		DataInputStream dataInputStream = getDataInputStream(zipInputStream, IFormat.FILE_VERSION);
+		DataInputStream dataInputStream = getDataInputStream(zipInputStream, directoryPrefix + IFormat.FILE_VERSION);
 		String version = readString(dataInputStream);
 		return version;
 	}

@@ -83,7 +83,7 @@ public class ChromatogramReaderWSD extends AbstractChromatogramWSDReader impleme
 		IChromatogramWSD chromatogramWSD = null;
 		ReaderHelper readerHelper = new ReaderHelper();
 		//
-		String version = readerHelper.getVersion(zipInputStream);
+		String version = readerHelper.getVersion(zipInputStream, directoryPrefix);
 		chromatogramReader = getChromatogramReader(version);
 		//
 		if(chromatogramReader != null) {

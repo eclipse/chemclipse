@@ -98,7 +98,7 @@ public class ChromatogramReaderCSD extends AbstractChromatogramCSDReader impleme
 		IChromatogramCSD chromatogramCSD = null;
 		ReaderHelper readerHelper = new ReaderHelper();
 		//
-		String version = readerHelper.getVersion(zipInputStream);
+		String version = readerHelper.getVersion(zipInputStream, directoryPrefix);
 		chromatogramReader = getChromatogramReader(version);
 		//
 		if(chromatogramReader != null) {
