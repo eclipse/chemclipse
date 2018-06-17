@@ -215,23 +215,16 @@ public class PcaEvaluation {
 		/*
 		 * Collect PCA results
 		 */
+		if(!principalComponentAnalysis.getComputeStatus()) {
+			return null;
+		}
 		List<double[]> loadingVectors = getLoadingVectors(principalComponentAnalysis, numberOfPrincipalComponents);
-		// double summedVariance = principalComponentAnalysis.getSummedVariance();
 		double[] explainedVariances = this.getExplainedVariances(principalComponentAnalysis, numberOfPrincipalComponents);
 		double[] cumulativeExplainedVariances = this.getCumulativeExplainedVariances(explainedVariances);
-		/*
-		 * double cumVarTemp = 0.0;
-		 * for(int i = 0; i < numberOfPrincipalComponents; i++) {
-		 * explainedVariances[i] = 100.0 / summedVariance * principalComponentAnalysis.getExplainedVariance(i);
-		 * cumulativeExplainedVariances[i] = cumVarTemp + explainedVariances[i];
-		 * cumVarTemp = cumulativeExplainedVariances[i];
-		 * }
-		 */
 		pcaResults.setLoadingVectors(loadingVectors);
 		pcaResults.setExplainedVariances(explainedVariances);
 		pcaResults.setCumulativeExplainedVariances(cumulativeExplainedVariances);
 		setEigenSpaceAndErrorValues(principalComponentAnalysis, extractData, pcaResults);
-		// setGroups(pcaResults, samples);
 		return pcaResults;
 	}
 

@@ -17,13 +17,11 @@ public interface IMultivariateCalculator {
 
 	void addObservation(double[] obsData, ISample<?> sampleKey, String groupName);
 
-	void addObservationKey(ISample<?> sampleKey);
-
-	void addGroupName(String groupName);
-
 	double[] applyLoadings(double[] obs);
 
 	void compute(int numComps);
+
+	boolean getComputeStatus();
 
 	double getErrorMetric(double[] obs);
 

@@ -42,9 +42,20 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		sampleDataSane = true;
 	}
 
+	public void setComputeSuccess() {
+
+		computeSuccess = true;
+	}
+
+	public boolean getComputeStatus() {
+
+		return computeSuccess;
+	}
+
 	@Override
 	public void addObservation(double[] obsData, ISample<?> sampleKey, String groupName) {
 
+		sampleDataSane = obsData.length < sampleData.getNumCols() ? false : true;
 		for(int i = 0; i < obsData.length; i++) {
 			sampleData.set(sampleIndex, i, obsData[i]);
 		}
@@ -54,17 +65,6 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 		if(sampleIndex == sampleData.numRows) {
 			sampleDataComplete = true;
 		}
-	}
-
-	public void addObservationKey(ISample<?> sampleKey) {
-
-		sampleKeys.add(sampleKey);
-	}
-
-	@Override
-	public void addGroupName(String groupName) {
-
-		groupNames.add(groupName);
 	}
 
 	@Override

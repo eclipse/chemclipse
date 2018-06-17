@@ -64,5 +64,6 @@ public class PcaCalculatorNipals extends AbstractMultivariateCalculator {
 			CommonOps.mult(tMatrix, pMatrix, E_sub);
 			CommonOps.subtractEquals(E, E_sub);
 		}
+		this.setComputeSuccess();
 	}
 }

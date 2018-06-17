@@ -25,6 +25,7 @@ public class PcaCalculatorSvd extends AbstractMultivariateCalculator {
 		setNumComps(numComps);
 		computeLoadings();
 		computeScores();
+		setComputeSuccess();
 	}
 
 	private void computeLoadings() {

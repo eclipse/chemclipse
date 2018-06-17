@@ -93,9 +93,9 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		X.set(getSampleData());
 		DenseMatrix64F y = new DenseMatrix64F(1, 1);
 		y.set(getYVector());
-		DenseMatrix64F y_avg = getAvgYVector();
-		DenseMatrix64F x_avg = getAvgXVector();
-		DenseMatrix64F x_sd = getSDXVector();
+		// DenseMatrix64F y_avg = getAvgYVector();
+		// DenseMatrix64F x_avg = getAvgXVector();
+		// DenseMatrix64F x_sd = getSDXVector();
 		DenseMatrix64F te = new DenseMatrix64F(numberOfSamples, 1);
 		DenseMatrix64F p = new DenseMatrix64F(1, numberOfVariables);
 		DenseMatrix64F w = new DenseMatrix64F(1, numberOfVariables);
@@ -184,5 +184,6 @@ public class OplsCalculatorNipals extends AbstractMultivariateCalculator {
 		System.arraycopy(P_ortho.getData(), 0, combinedLoadings, numberOfVariables, (numComps - 1) * numberOfVariables);
 		DenseMatrix64F loadings = new DenseMatrix64F(numComps, numberOfVariables, true, combinedLoadings);
 		setLoadings(loadings);
+		this.setComputeSuccess();
 	}
 }
