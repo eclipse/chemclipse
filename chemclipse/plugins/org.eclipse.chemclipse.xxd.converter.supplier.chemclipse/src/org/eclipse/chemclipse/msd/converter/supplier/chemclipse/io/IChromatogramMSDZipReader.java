@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io;
 
 import java.io.IOException;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
@@ -21,4 +22,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public interface IChromatogramMSDZipReader extends IChromatogramMSDReader {
 
 	IChromatogramMSD read(ZipInputStream zipInputStream, String directoryPrefix, IProgressMonitor monitor) throws IOException;
+
+	IChromatogramMSD read(ZipFile zipFile, String directoryPrefix, IProgressMonitor monitor) throws IOException;
 }

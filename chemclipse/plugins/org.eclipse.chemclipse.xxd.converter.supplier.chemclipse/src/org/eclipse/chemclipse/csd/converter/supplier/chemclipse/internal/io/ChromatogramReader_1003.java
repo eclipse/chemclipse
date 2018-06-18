@@ -95,6 +95,12 @@ public class ChromatogramReader_1003 extends AbstractChromatogramReader implemen
 		return readZipData(zipInputStream, directoryPrefix, null, monitor);
 	}
 
+	@Override
+	public IChromatogramCSD read(ZipFile zipFile, String directoryPrefix, IProgressMonitor monitor) throws IOException {
+
+		return readFromZipFile(zipFile, directoryPrefix, null, monitor);
+	}
+
 	private IChromatogramCSD readFromZipFile(ZipFile zipFile, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
 
 		return readZipData(zipFile, directoryPrefix, file, monitor);

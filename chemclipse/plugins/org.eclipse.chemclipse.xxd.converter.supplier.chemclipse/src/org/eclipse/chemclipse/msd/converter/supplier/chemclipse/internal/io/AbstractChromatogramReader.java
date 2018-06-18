@@ -20,9 +20,9 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDReader;
-import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
+import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.IChromatogramMSDZipReader;
 
-public abstract class AbstractChromatogramReader extends AbstractChromatogramMSDReader implements IChromatogramMSDReader {
+public abstract class AbstractChromatogramReader extends AbstractChromatogramMSDReader implements IChromatogramMSDZipReader {
 
 	/**
 	 * Object = ZipFile or ZipInputStream

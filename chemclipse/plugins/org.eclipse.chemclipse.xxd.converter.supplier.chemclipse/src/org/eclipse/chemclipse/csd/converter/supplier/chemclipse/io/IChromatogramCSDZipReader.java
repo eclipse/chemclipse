@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.csd.converter.supplier.chemclipse.io;
 
 import java.io.IOException;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import org.eclipse.chemclipse.csd.converter.io.IChromatogramCSDReader;
@@ -21,4 +22,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public interface IChromatogramCSDZipReader extends IChromatogramCSDReader {
 
 	IChromatogramCSD read(ZipInputStream zipInputStream, String directoryPrefix, IProgressMonitor monitor) throws IOException;
+
+	IChromatogramCSD read(ZipFile zipFile, String directoryPrefix, IProgressMonitor monitor) throws IOException;
 }

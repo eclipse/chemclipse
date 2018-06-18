@@ -144,6 +144,12 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 		return readZipData(zipInputStream, directoryPrefix, null, monitor);
 	}
 
+	@Override
+	public IChromatogramMSD read(ZipFile zipFile, String directoryPrefix, IProgressMonitor monitor) throws IOException {
+
+		return readFromZipFile(zipFile, directoryPrefix, null, monitor);
+	}
+
 	private IChromatogramMSD readFromZipFile(ZipFile zipFile, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
 
 		return readZipData(zipFile, directoryPrefix, file, monitor);
@@ -157,6 +163,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 	 */
 	private IChromatogramMSD readZipData(Object object, String directoryPrefix, File file, IProgressMonitor monitor) throws IOException {
 
+		IVendorChromatogram chromatogram = new VendorChromatogram();
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read compressed data", 100);
 		try {
 			boolean closeStream;
@@ -179,7 +186,7 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 				return null;
 			}
 			subMonitor.worked(10);
-			IVendorChromatogram chromatogram = new VendorChromatogram();
+			//
 			readMethod(getDataInputStream(object, directoryPrefix + IFormat.FILE_SYSTEM_SETTINGS_MSD), closeStream, chromatogram, subMonitor.split(10));
 			if(useScanProxies) {
 				readScanProxies((ZipFile)object, directoryPrefix, file, chromatogram, subMonitor.split(10));
@@ -193,11 +200,11 @@ public class ChromatogramReader_1100 extends AbstractChromatogramReader implemen
 			readHistory(getDataInputStream(object, directoryPrefix + IFormat.FILE_HISTORY_MSD), closeStream, chromatogram, subMonitor.split(10));
 			readMiscellaneous(getDataInputStream(object, directoryPrefix + IFormat.FILE_MISC_MSD), closeStream, chromatogram, subMonitor.split(10));
 			setAdditionalInformation(file, chromatogram, subMonitor.split(10));
-			//
-			return chromatogram;
 		} finally {
 			SubMonitor.done(monitor);
 		}
+		//
+		return chromatogram;
 	}
 
 	private void readMethod(DataInputStream dataInputStream, boolean closeStream, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {

@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io;
 
 import java.io.IOException;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import org.eclipse.chemclipse.wsd.converter.io.IChromatogramWSDReader;
@@ -21,4 +22,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public interface IChromatogramWSDZipReader extends IChromatogramWSDReader {
 
 	IChromatogramWSD read(ZipInputStream zipInputStream, String directoryPrefix, IProgressMonitor monitor) throws IOException;
+
+	IChromatogramWSD read(ZipFile zipFile, String directoryPrefix, IProgressMonitor monitor) throws IOException;
 }

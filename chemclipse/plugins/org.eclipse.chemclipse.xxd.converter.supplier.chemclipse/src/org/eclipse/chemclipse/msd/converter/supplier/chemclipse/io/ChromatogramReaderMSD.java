@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
@@ -135,15 +136,30 @@ public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader impleme
 	@Override
 	public IChromatogramMSD read(ZipInputStream zipInputStream, String directoryPrefix, IProgressMonitor monitor) throws IOException {
 
+		return readChromatogram(zipInputStream, directoryPrefix, monitor);
+	}
+
+	@Override
+	public IChromatogramMSD read(ZipFile zipFile, String directoryPrefix, IProgressMonitor monitor) throws IOException {
+
+		return readChromatogram(zipFile, directoryPrefix, monitor);
+	}
+
+	private IChromatogramMSD readChromatogram(Object object, String directoryPrefix, IProgressMonitor monitor) throws IOException {
+
 		IChromatogramMSDZipReader chromatogramReader = null;
 		IChromatogramMSD chromatogramMSD = null;
 		ReaderHelper readerHelper = new ReaderHelper();
 		//
-		String version = readerHelper.getVersion(zipInputStream, directoryPrefix);
+		String version = readerHelper.getVersion(object, directoryPrefix);
 		chromatogramReader = getChromatogramReader(version);
 		//
 		if(chromatogramReader != null) {
-			chromatogramMSD = chromatogramReader.read(zipInputStream, directoryPrefix, monitor);
+			if(object instanceof ZipInputStream) {
+				chromatogramMSD = chromatogramReader.read((ZipInputStream)object, directoryPrefix, monitor);
+			} else if(object instanceof ZipFile) {
+				chromatogramMSD = chromatogramReader.read((ZipFile)object, directoryPrefix, monitor);
+			}
 		}
 		//
 		return chromatogramMSD;

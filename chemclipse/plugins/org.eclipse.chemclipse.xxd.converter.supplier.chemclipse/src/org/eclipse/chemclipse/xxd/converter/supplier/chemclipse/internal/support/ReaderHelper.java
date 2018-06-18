@@ -16,7 +16,9 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 public class ReaderHelper {
@@ -30,10 +32,21 @@ public class ReaderHelper {
 		return version;
 	}
 
-	public String getVersion(ZipInputStream zipInputStream, String directoryPrefix) throws IOException {
+	public String getVersion(Object object, String directoryPrefix) throws IOException {
 
-		DataInputStream dataInputStream = getDataInputStream(zipInputStream, directoryPrefix + IFormat.FILE_VERSION);
-		String version = readString(dataInputStream);
+		String entryName = directoryPrefix + IFormat.FILE_VERSION;
+		String version = "";
+		DataInputStream dataInputStream = null;
+		if(object instanceof ZipInputStream) {
+			dataInputStream = getDataInputStream((ZipInputStream)object, entryName);
+		} else if(object instanceof ZipFile) {
+			dataInputStream = getDataInputStream((ZipFile)object, entryName);
+		}
+		//
+		if(dataInputStream != null) {
+			version = readString(dataInputStream);
+		}
+		//
 		return version;
 	}
 
@@ -55,6 +68,24 @@ public class ReaderHelper {
 				String name = zipEntry.getName();
 				if(name.equals(entryName)) {
 					return new DataInputStream(zipInputStream);
+				}
+			}
+		}
+		throw new IOException("There could be found no entry given with the name: " + entryName);
+	}
+
+	public DataInputStream getDataInputStream(ZipFile zipFile, String entryName) throws IOException {
+
+		Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
+		while(zipEntries.hasMoreElements()) {
+			/*
+			 * Check each file.
+			 */
+			ZipEntry zipEntry = zipEntries.nextElement();
+			if(!zipEntry.isDirectory()) {
+				String name = zipEntry.getName();
+				if(name.equals(entryName)) {
+					return new DataInputStream(new BufferedInputStream(zipFile.getInputStream(zipEntry)));
 				}
 			}
 		}
