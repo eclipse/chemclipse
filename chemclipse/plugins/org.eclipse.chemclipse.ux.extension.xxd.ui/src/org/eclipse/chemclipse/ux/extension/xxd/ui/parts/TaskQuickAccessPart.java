@@ -101,6 +101,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 		createCombinedScanTask(parent);
 		createComparisonScanTask(parent);
 		createMeasurementResultTask(parent);
+		createHeatmapTask(parent);
 		createSettingsTask(parent);
 	}
 
@@ -328,6 +329,27 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			public void widgetSelected(SelectionEvent e) {
 
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_MEASUREMENT_RESULTS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_MEASUREMENT_RESULTS));
+			}
+		});
+		//
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_MEASUREMENT_RESULTS, button, imageActive, imageDefault);
+	}
+
+	private void createHeatmapTask(Composite parent) {
+
+		Image imageActive = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEATMAP_ACTIVE, IApplicationImage.SIZE_16x16);
+		Image imageDefault = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEATMAP_DEFAULT, IApplicationImage.SIZE_16x16);
+		//
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Toggle the heatmap modus");
+		button.setImage(imageDefault);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEATMAP, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_HEATMAP));
 			}
 		});
 		//

@@ -293,6 +293,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_QUANTITATION_ACTIVE = "quantitationActive.gif";
 	String IMAGE_SCAN_PEAK_LIST_DEFAULT = "scanPeakListDefault.gif";
 	String IMAGE_SCAN_PEAK_LIST_ACTIVE = "scanPeakListActive.gif";
+	String IMAGE_HEATMAP_ACTIVE = "heatmapActive.gif";
+	String IMAGE_HEATMAP_DEFAULT = "heatmapDefault.gif";
 	//
 	String IMAGE_PROCESS_CONTROL = "processControl.gif";
 	String IMAGE_START_PROCESSING = "startProcessing.gif";

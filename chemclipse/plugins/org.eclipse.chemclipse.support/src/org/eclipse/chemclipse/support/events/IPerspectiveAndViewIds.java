@@ -44,7 +44,6 @@ public interface IPerspectiveAndViewIds {
 	String VIEW_PEAK_TARGETS_CSD = "org.eclipse.chemclipse.ux.extension.csd.ui.part.peakTargetsView";
 	String VIEW_BASELINE = "org.eclipse.chemclipse.ux.extension.ui.part.baselineAndChromatogramView";
 	String VIEW_SELECTED_ION_CHROMATOGRAM_NOMINAL = "org.eclipse.chemclipse.ux.extension.msd.ui.part.selectedNominalIonChromtogramView";
-	String VIEW_CHROMATOGRAM_HEATMAP = "org.eclipse.chemclipse.ux.extension.msd.ui.part.chromatogramHeatmapView";
 	String VIEW_PEAK_LIST_MSD = "org.eclipse.chemclipse.ux.extension.msd.ui.part.peakListView";
 	String VIEW_PEAK_LIST_CSD = "org.eclipse.chemclipse.ux.extension.csd.ui.part.peakListView";
 	String VIEW_PROCESSING_INFO = "org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart";

@@ -49,6 +49,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_INTEGRATION_AREA, "Integration Area:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_INTERNAL_STANDARDS, "Internal Standards:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_MEASUREMENT_RESULTS, "Measurement Results:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_HEATMAP, "Chromatogram Heatmap:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {
